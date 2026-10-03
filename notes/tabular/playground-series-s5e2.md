@@ -45,8 +45,31 @@
 - 本场证明特征工程的极致可以免去集成（单模型夺冠）——先榨干特征，再谈 ensemble。
 - 对怪异数据，去读社区的"信号解释帖"，比盲目调参快得多（本场解释帖直接给出 KNN/groupby 的理论依据）。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**："目标几乎随机"的背包价格赛，信号藏在**孪生行/复制结构**（原数据 10% 重复、合成每行约 80 份副本）——1st 用**单模型 XGBoost + 500 个手工特征**（groupby 全组合 + 自创直方图分桶聚合）夺冠，138 特征的 T4 版同样第一；3rd 用距离/COMBO/外部统计 + 自编码器潜变量 + BayesianRidge 栈；5th 用 CV–LB gap 选提交并与公开 notebook 混合。
+
+- 1st（565539）：300+ XGB、上千 FE 想法/月；直方图分桶、分位数、全 NaN 二进制列、Weight Capacity 分箱/小数位、28 个类别组合、原数据当 MSRP、除法特征。
+- 信号解释（564056，76 票）：原数据 10% 行有重复；合成 ~80 副本/行；groupby/KNN 都是找同源行。
+- 3rd（565653）：距离特征、COMBO=类别×100+WeightCapacity、外部价格统计、cuML TE、AE 潜变量、4 树+BayesianRidge、10 折。
+- 5th（565583）：CV–LB gap 0.2 vs 0.26 的选择；与公开 notebook 混合后私榜 38.63455（第 5）。
+- 赛制：中途追加 `training_extra.csv`（12 倍数据）；"目标是否噪声"讨论。
+
+**裁决**：先逆向生成过程找复制结构；信号集中时把 FE 做透（单模可夺冠）；CV–LB gap 可作为选择标准；合成技巧与通用技巧分开归档。
+
+**悬案**：2nd/4th/6th–10th 未收录；分桶数最优值未知。
+
+## 9. 图表证据
+
+![直方图分桶聚合特征](../../intel/playground-series-s5e2/bodies/565539_img/01.png)
+
+**图 1**（topic 565539）：Weight Capacity=21.067673 组的 7 桶直方图计数特征。
+
+## 10. 出处
 
 - 1st：单模型 + 特征工程（含直方图分桶等）：https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565539
 - 5th：噪声堆里找信号针（CV–LB 差分析）：https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565583
 - 背包数据信号解释（孪生行）：https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564056
+- 3rd：完整管线：https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565653
+- RAPIDS starter（70 票）：https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563743
+- 追加训练数据（37 票）：https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561008
