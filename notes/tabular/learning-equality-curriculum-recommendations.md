@@ -44,7 +44,26 @@
 2. **主办方发布的 notebook 与 tips 是最高优先级阅读材料**。
 3. 遇到"效率赛道"，要把它当成第二场比赛来规划。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：一对多的多语言检索匹配——**主题树上下文注入 + 训练期负样本/批次设计 + 与候选质量耦合的阈值**是三大支点；重排的价值取决于召回器质量。
+
+- 1st（209 票）：TFIDF+3 模型嵌入召回（ArcFace）+ 23 特征 LightGBM + 相对概率缺口后处理；val 0.764/LB 0.727；效率版 0.740 priv。
+- 2nd（79 票）：**单阶段检索、零重排**；对称 InfoNCE + 定制 batch（禁止同批共享内容、难负样本过采样）；语言切换 +0.01~0.02；**动态阈值 +0.02**；单模 priv 0.696；蒸馏+量化打效率榜。
+- 3rd（59 票）：无监督 SimCSE 召回 + mdeberta 重排（加载 SimCSE 权重 val 0.7149 vs 从零 0.6378）；FGM+EMA +0.01；12 模型×50 召回 = **priv 0.751**。
+- 6th（47 票）：ArcFace+KNN+GBDT 树特征重排；"stage1 单独 <0.6，必须补树结构"。
+
+**裁决**：先投召回器与负样本设计，再考虑二阶段；阈值用"相对/动态"而非全局静态；一对多任务的 CV 必须按共享内容分组。
+
+**悬案**：4th/5th 方案缺失；低资源语言（bn 0.15 / swa 0.09）策略未展开；效率奖完整排名未入库。
+
+## 7. 图表证据
+
+![2nd 的动态阈值计算](../../intel/learning-equality-curriculum-recommendations/bodies/395110_img/05.jpg)
+
+**图 1**（topic 395110）：`dyn_th = max_sim − margin·max_sim`——窗口随行内最高相似度缩放，保证每行至少选一个；这是"阈值必须与候选质量耦合"的直接证据。
+
+## 8. 出处
 
 - 讨论区索引：`intel/learning-equality-curriculum-recommendations/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -53,3 +72,4 @@
   - 3rd（59 票，含主办方 tips 与文本预处理链接）：https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394838
   - 6th（47 票）：https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394813
   - 主办方欢迎与说明（52 票）：https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372362
+- 轻读全本：`analysis/deep/learning-equality-curriculum-recommendations.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）
