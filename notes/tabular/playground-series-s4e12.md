@@ -42,7 +42,26 @@
 - 特征搜索可以工程化：写个 for 循环让 GPU 过夜筛组合，比人工想特征高效一个量级。
 - 同一方案给"简化版"是种美德：别人能跑得动，才可能被复用与引用（1st 提供 T4 版）。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：本场 FE > 集成——1st 用**单 XGBoost + 611 特征**夺冠，核心是把类别编码做成可组合、可自动搜索的空间（原始列 + 6 种编码 → 2–6 列组合 → 再编码 → 数值也当类别），并用 **GPU cuDF-Pandas 连跑数天**筛出 170 个有效组合；同时 **NaN 本身是信息**（Annual Income 的 NaN 平均保费 ≈485，低于所有非 NaN 的 560–820）。
+
+- 1st（554328）：完整版 CV **1.016**（611 特征、lr 0.001、2 万棵树、TE kfold=10、A100 6h）；简化版 CV 1.019（229 特征、lr 0.01、2000 棵树、TE kfold=5、T4 2h）；Policy Start Date 分解后 23 个基础列，全组合空间约 14.5 万。
+- NAN 与目标（126 票 / 87 评论）：NaN 期望目标常不在任何非 NaN 取值范围内 → 不填补（交给 GBDT）/ 填特殊值 / 加 `is_na` 指示列。
+- Rank2（27 票）：118 个 OOF 暴力集成；7th：10 模型集成；9th：借鉴公开方案。
+- 社区：Magic Middle（62 票，RMSLE 目标/聚合尺度）、竞争算法（36 票）、关于评测指标（32 票）、train/original 差异（26 票）。
+
+**裁决**：类别型数据的 FE 要把"编码"当搜索空间并用 GPU 放大搜索量；NaN 先做与目标的联合分析；RMSLE 先定尺度；单模深挖 vs 大池按"FE 是否有效"决定。
+
+**悬案**：2nd–6th/8th 方案缺失；170 个组合只公开 20 个；GPU 搜索评分标准未量化。
+
+## 8. 图表证据
+
+![Annual Income 的 NaN 与平均保费](../../intel/playground-series-s4e12/bodies/552165_img/01.png)
+
+**图 1**（topic 552165）：Annual Income 各分箱平均保费（560–820）与 NaN（≈485）——缺失携带信息。
+
+## 9. 出处
 
 - 1st：单模型与编码乘法（611 特征）：https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554328
 - NAN 与目标的关系分析：https://www.kaggle.com/competitions/playground-series-s4e12/discussion/552165

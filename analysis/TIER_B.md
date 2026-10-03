@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**100/204**（2026-10-03；B01–B10 完成；下一批 B11）
+> 进度：**103/204**（2026-10-03；B01–B10 完成；B11 进行中 3/10）
 
 ## 批次 B01（1–10）
 
@@ -159,9 +159,9 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 101 | `dfl-bundesliga-data-shootout` | cv | Featured | 6/21 | 35.0 | ⬜ |
-| 102 | `playground-series-s4e12` | tabular | Playground | 6/7 | 34.9 | ⬜ |
-| 103 | `playground-series-s3e19` | tabular | Playground | 6/11 | 34.8 | ⬜ |
+| 101 | `dfl-bundesliga-data-shootout` | cv | Featured | 6/21 | 35.0 | ✅ |
+| 102 | `playground-series-s4e12` | tabular | Playground | 6/7 | 34.9 | ✅ |
+| 103 | `playground-series-s3e19` | tabular | Playground | 6/11 | 34.8 | ✅ |
 | 104 | `playground-series-s6e3` | tabular | Playground | 6/4 | 34.7 | ⬜ |
 | 105 | `march-machine-learning-mania-2024` | tabular | Featured | 6/0 | 34.6 | ⬜ |
 | 106 | `stanford-rna-3d-folding` | science | Featured | 6/2 | 34.6 | ⬜ |
