@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**110/204**（2026-10-03；B01–B11 完成；B12 待开始）
+> 进度：**113/204**（2026-10-03；B01–B11 完成；B12 进行中 3/10）
 
 ## 批次 B01（1–10）
 
@@ -174,9 +174,9 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 111 | `playground-series-s3e13` | tabular | Playground | 6/3 | 31.7 | ⬜ |
-| 112 | `mitsui-commodity-prediction-challenge` | tabular | Featured | 6/1 | 31.7 | ⬜ |
-| 113 | `recodai-luc-scientific-image-forgery-detection` | cv | Research | 6/12 | 31.5 | ⬜ |
+| 111 | `playground-series-s3e13` | tabular | Playground | 6/3 | 31.7 | ✅ |
+| 112 | `mitsui-commodity-prediction-challenge` | tabular | Featured | 6/1 | 31.7 | ✅ |
+| 113 | `recodai-luc-scientific-image-forgery-detection` | cv | Research | 6/12 | 31.5 | ✅ |
 | 114 | `playground-series-s4e2` | tabular | Playground | 6/0 | 31.3 | ⬜ |
 | 115 | `neurips-2023-machine-unlearning` | cv | Research | 6/8 | 31.3 | ⬜ |
 | 116 | `playground-series-s4e1` | tabular | Playground | 6/1 | 31.1 | ⬜ |

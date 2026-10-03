@@ -51,11 +51,34 @@
 2. **验证方法要能处理时间清洗**（purge/embargo）。
 3. 与 Enefit、Optiver、Jane Street 对照可确认：**在线学习是跨年度的稳定规律**。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本场最反直觉的结论是"**越简单越强**"——5th 只用 4 天窗 RNN + 单日 MLP 平均（私 0.532）；10th 用正则化 naive（标准化排名 + 正则化协方差）拿 0.479 进奖区；89th 直接提交训练标签的排名均值也到 0.387；而 50 万次随机提交模拟显示 std≈0.107，(-0.302, 0.302) 内分数与运气无法区分。
+
+- 5th（670526）：4 天窗 RNN + 单日 MLP 简单平均；原始特征 + 缺失填 -1 + LayerNorm；T4 上 3–4 分钟/模型；单 RNN 0.509。
+- 15th（668673）：推理期每 7 个新标签重训一组模型；CombinatorialPurgedGroupKFold；attention/residual/autoencoder 集成；2658→800（互信息）；损失 0.2×MSE+0.8×(1−Spearman)；0.134→0.110→0.445（轮次分数，归因需谨慎）。
+- 10th（668589）：正则化 naive 终榜 0.479；判断"~3 个月测试窗 + 收益型价差结构 → ML 难有统计优势"。
+- 89th（668781）：常量排名均值预测 −0.273 → 0.171 → 0.387（抗故障保险提交）。
+- 规则/基础设施：54 票澄清帖（1 分钟推理、状态缓存、warm-up、批处理）、数据集中途更新、4 个 target 对含退市股票、最后一轮大量提交失败。
+
+**裁决**：低信噪比 + 短测试窗 + 高噪声指标 → 稳健简单解常常最优；推理期"能跑完"优先于"跑得好"；在线重训练的增益在本场无法与噪声分离（15th 的分数跳变不能单独作为证据）。
+
+**悬案**：1st–4th 方案未收录；官方指标与负分机制未整理；图证仅 1 张。
+
+## 9. 图表证据
+
+![随机提交的分数分布](../../intel/mitsui-commodity-prediction-challenge/bodies/599772_img/01.png)
+
+**图 1**（topic 599772）：50 万次随机提交分数直方图（均值≈0、std≈0.107）——幸运区间与真实技能区间重叠。
+
+## 10. 出处
 
 - 讨论区索引：`intel/mitsui-commodity-prediction-challenge/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 15th 在线训练（16 票）：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668673
+  - 5th ZLF（8 票）：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/670526
+  - 10th regularized-naive（17 票）：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668589
+  - 运气模拟（33 票）：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/599772
   - 26th：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/669234
   - 89th：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668781
   - 97th：https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668698

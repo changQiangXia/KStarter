@@ -40,8 +40,40 @@
 - 测试集大小决定比赛"玩法"：小测试集下 CV 噪声大、榜单可被探——先识别赛制风险再谈模型。
 - MAP@k 类任务要理解"排序到前 k 位"的得分结构，后处理（重排/校准）价值高。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：小测试集 + MAP@3 → 公榜几乎不可信（#1 公 0.37196 → 私 0.53179；#5 纯合成版私榜反超混合数据版 0.51535 vs 0.500），并出现机器人探榜；技术主线是"症状 one-hot 的组合逻辑特征 + 稳健重复 CV"。
+
+- #2（407829）：XGB + 4 折 CV；症状聚类 + 两两 AND/OR/XOR 生成 6000+ 特征，按 MAP@3 筛到 17 个组合特征 → 私榜 0.52521。
+- #3（406409）：RepeatedStratifiedKFold 10×10；SVC 基线 0.367 → 疼痛类求和 0.375 → 多项式对 0.3937 → 0.3989；VarianceThreshold 0.1；五模型无权重集成 → 私榜 0.52302。
+- #4（406812）：不用 CV，RandomForest + OOB + Optuna，自述 OOB 与公私榜完全相关。
+- #5（406313）：纯合成数据版公榜更低（0.41501）但私榜 0.51535（第 5）；混合数据版公 0.43598 / 私 0.500。
+- 探榜事件（405480，47 票 / 53 评论）：截图多名 [Deleted] 账号；社区建议加大测试集。
+- 领域警告："DO NOT use medical knowledge on this data!"（35 票）——合成数据的标签机制优先于医学先验。
+
+**裁决**：小测试集赛先把选择建立在重复 CV 上并留稳健提交；one-hot 症状数据优先做组合逻辑特征；原始数据是否加入必须用重复 CV 验证。
+
+**悬案**：#1 正文未收录；探榜处置结果未知；图证仅截图与代码，无分布/位移图。
+
+## 9. 图表证据
+
+![探榜截图](../../intel/playground-series-s3e13/bodies/405480_img/01.png)
+
+**图 1**（topic 405480）：榜单中多名 [Deleted] 账号——机器人探榜证据。
+
+![症状聚类特征](../../intel/playground-series-s3e13/bodies/407829_img/01.PNG)
+
+**图 2**（topic 407829）：症状名聚类求和生成 cluster_0–3。
+
+![成对逻辑特征](../../intel/playground-series-s3e13/bodies/407829_img/02.PNG)
+
+**图 3**（topic 407829）：两两 AND/OR/XOR 生成 6000+ 候选特征。
+
+## 10. 出处
 
 - 探榜事件与赛制讨论：https://www.kaggle.com/competitions/playground-series-s3e13/discussion/405480
 - #4：没有 CV 的简单模型：https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406812
 - MAP@3 指标解释：https://www.kaggle.com/competitions/playground-series-s3e13/discussion/402411
+- #2 方案（13 票）：https://www.kaggle.com/competitions/playground-series-s3e13/discussion/407829
+- #3 方案（19 票）：https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406409
+- #5 双提交对照（36 票）：https://www.kaggle.com/competitions/playground-series-s3e13/discussion/406313
