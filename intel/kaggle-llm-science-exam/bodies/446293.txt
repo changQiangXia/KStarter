@@ -1,0 +1,263 @@
+# https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446293
+
+Topic #446293: 5th place solution: Llama 2 70B meets Sparse & Dense Retrievals from Own parsed wikipedia dataset
+  Author: corochann
+  Posted: 2023-10-11 04:02:39.468000
+  Votes: 81  Comments: 28
+
+Thank you to the organizers and congratulations to all the participants.
+
+There are really lots of things that can be done from dataset preparation, model training to post-processing (how to utilize trained LLM model), and it was a very tough competition for me. But I enjoyed the competition overall!
+I would like to thank my team members @zaburo, @qhapaq49, @charmq, @flowlight for their hard work too. 
+
+The figure shows our retrieval to the model overall pipeline.
+
+
+
+ --&gt; Write-up Updated!
+
+Short summary
+
+
+
+We successfully run Llama 70B model on kaggle notebook
+
+We used BM-25 based sparse retrieval (using pyserini library whose backend is Apache Lucene) to search all the wikipedia pages.
+
+We parsed wikipedia dataset by ourselves to cover most of the pages with number information.
+
+
+Dataset creation
+
+Wikipedia dataset
+
+In the early stage of the competition when I checked the given train.csv and tried to answer manually, I felt this competition is a “retrieval” competition rather than a model training competition. We also noticed some pages or numbers are missing in the publicly available dataset. So I decided to parse our wikipedia dump manually. 
+
+Below are comparison tables of datasets:
+
+
+
+
+Dataset
+Parser
+Page
+Text info
+
+
+
+
+Kaggle published dataset by @jjinho  jjinho/wikipedia-20230701
+wikitextparser
+Some pages are dropped
+All templates are dropped.All the “\n” are dropped (difficult to read by human).
+
+
+Huggingface dataset - wikipedia  - graelo/wikipedia
+mwparserfromhell
+Better coverage
+All templates are dropped. &lt;math&gt;, &lt;ref&gt;, &lt;table&gt; tags are dropped.
+
+
+Our dataset
+wikitextparser + custom template processing
+Better coverage
+{val} and {math} templates text are kept (Other templates are dropped). Keep &lt;math&gt; tag, but &lt;ref&gt;, &lt;table&gt; tags are dropped.
+
+
+
+
+Huggingface's Wikipedia dataset covers most of the pages but numbers are missing, it seems due to the mwparserfromhell parser issue. So, I replaced the parser with wikitextparser from the graelo/wikipedia code base (There was a helpful instruction on how to run the code at the bottom of the dataset description!).
+I believe our dataset covers most of the pages with numbers or math expression information.
+
+QA dataset creation
+
+Many datasets were shared publically during the competition, but we also tried to make it by ourselves as well. Below is the prompt for ChatGPT 3.5 that I used to generate the QA dataset.
+
+system_content = 
+
+user_content_template_qa = Template(
+    new lineWhat  ...Which   following statements ...What did ` person` doWhat was ...skipmissing baryonic mass
+) MOND  a theory  reduces  observed missing baryonic mass  galaxy clusters  postulating  existence  a new form  matter called 
+) MOND  a theory  increases  discrepancy   observed missing baryonic mass  galaxy clusters   measured velocity dispersions  a factor     a factor   
+) MOND  a theory  explains  missing baryonic mass  galaxy clusters  was previously considered dark matter  demonstrating   mass    form  neutrinos  axions.
+) MOND  a theory  reduces  discrepancy   observed missing baryonic mass  galaxy clusters   measured velocity dispersions  a factor     a factor   
+) MOND  a theory  eliminates  observed missing baryonic mass  galaxy clusters  imposing a new mathematical formulation  gravity    require  existence  dark matter.
+A) 
+
+Let's start. Here  TEXT: $title\n$
+
+
+I only give ChatGPT 3.5 an abstract and 1 paragraph from specific page as $text.
+
+Since we can achieve very high scores like 0.995 for train.csv at the end of the competition. We used our generated 1000 dataset for local validation.
+
+Retrieval
+
+Sparse retrieval
+
+I'm not professional to the NLP field. I surveyed existing research, especially related to retrieval-based LLMs. And ORQA paper affected our approach, it reported that “On datasets where the questioner already knows the answer, a traditional IR system such as BM25 is sufficient.”. Since ChatGPT 3.5 was given the sentence to generate QA, we thought the same applies in this competition too.
+So we read BERTserini paper and decided to use pyserini library, which is Python wrapper of anserini that uses Apache Lucene in the backend. 
+
+This notebook by @strifonov was really helpful to run pyserini on kaggle notebook (thank you!).
+
+Apache Lucene was very efficient and convenient. It was easy to index all the wikipedia dataset and search through BM25 score.
+We splitted each wikipedia page to the paragraph (by “\n\n”). It only required several hours to index in total of 74M records. In the inference time, searching is accelerated by multi-threading, 200 searches are finished in 2 min or so.
+
+Dense retrieval
+
+We created 2 types of dense retrieval.
+
+1. All the Wikipedia contents split by sentence wise block
+
+We used instructor-xl for the embedding calculation and used faiss to create index.
+The original index is too big (300GB) to run on memory, so we quantized the index (300GB → 10GB) for this approach.
+
+2. STEM 270k contents split by paragraph wise block
+
+We used bge-large-en for the embedding calculation.
+And only used same pages published in STEM270k dataset by @mbanaei.
+
+We added “title” information in each block, so that we can obtain correct search result even when “it/he/she” is used to refer to the title.
+
+In total, we used 3 types of retrievals, and combined them as a context to input to the LLM.
+
+Model (written by @zaburo)
+
+Our team used Llama-2 7B, 13B, 70B and Mistral 7B. Since Mistral 7B was achieving better scores compared to Llama-2 of the same size, we used Mistral 7B and Llama-70B in our final submission. Based on the scores from MMLU and the results of our preliminary experiments, we used models without Instruction Tuning, such as Llama-2-70b-hf and Mistral-7B-v0.1.
+
+For each model, we input the problem in the following format and had the model output the probability that the token corresponding to "▁A", "▁B", "▁C", "▁D", "▁E" comes immediately after this sentence. This yielded decent performance even with models without any fine-tuning.
+
+
+
+Fine-tuning was done using QLoRA. We incorporated bitsandbytes' 4bit quantization and PEFT's LoRAModel into our training pipeline. The hyperparameters of QLoRA were almost exactly the ones in QLoRA's paper, except for the batch size which had to be lowered due to long input and the GPU memory constraint.
+
+We expected that running Llama 70B on Kaggle Notebook would be challenging, so we started working on it from the early stages of the competition. We registered quantized weights (less than 40GB) for each layer as a dataset, and performed inference layer-by-layer. By applying xformers' memory_efficient_attention to the attention layers, we were able to keep memory consumption linear even with long contexts, leaving plenty of room in the GPU memory. We used only approximately 6GB of GPU memory for inference.
+
+LLM can considerably change inference results depending on the order of choices, so we used a test time augmentation strategy in which we rotated the order of choices 5 times to average this effect. This TTA was most effective with pretrained models without any retrieval, and although the effect drastically decreased with retrievals or QLoRA, it remained effective to the end.
+
+Naively carrying out TTA inference would increase the execution time 5 times, but rather than inferring the entire set 5 times, we concatenated all patterns of choice order like {context} {Q} {A B C D E} {B C D E A} … {E A B C D} and set the attention_mask appropriately to reduce the inference of the long common part to only once. By applying this technique, a 70B model with 5 times TTA worked within time for the full test set, and using a single 70B + BM25 Top2 + 5 times TTA resulted in a Private 0.925 score.
+
+Validation
+
+We noticed MAP@3 is a bit unstable metric, and can fluctuate a bit. Below are our strategy not to overfit to the public LB.
+
+
+
+We used 3 datasets, train.csv (200), @yalickj dataset (300), and our own dataset (1000, described above), for the local validation.
+
+
+We did not use these data in the training, even in the final submission.
+
+We tried to run various experiments with local dataset validation. We did not submit methods which do not work well in our local dataset. I think it prevents us from adopting various methods that overfit the public LB.
+
+
+For example, a custom query like this did not work well in our experiment, so we did not adopt this.
+
+Also, we tried embedding model fine tuning, but it did not work well in our local dataset, so we did not submit this too.
+
+
+Final Pipeline - Multi Stage Inference (written by @charmq)
+
+We noticed that putting multiple contexts in a prompt at the same time improves the performance of the model. However, because simultaneous input of contexts increases inference time, we used a multi-stage inference pipeline in which easy problems are answered by small models (mistral-7B) and difficult problems are answered by large models (llama2-70B). The final submission consists of three stages as follows:
+
+1st stage: ensemble of mistral-7B models
+mistral-7B with BM25 top2 contexts + mistral-7B with instructor and bge contexts
+Inference on all data
+
+2nd stage: llama2-70B
+llama2-70B with BM25 top2, instructor and bge contexts
+Inference on bottom 40% data with low confidence in the 1st stage
+
+3rd stage llama2-70B
+llama2-70B with bge contexts (2~3 times longer than bge contexts used in the 1st and 2nd stage)
+Inference on bottom 5% data with low confidence in the 1st and 2nd stage
+
+This multi stage pipeline achieved private:0.926, public:0.928.
+
+Comments:
+├─ Chris Deotte (2023-10-12 00:52:09.780000) [+3]
+│  Congratulations Corochann and team for achieving cash gold finish! I love your simple solution with few RAG and few QA models. Nice use of GPT style models versus BERT style models. What are your o...
+  ├─ corochann (2023-10-12 02:57:18.073000) [+3]
+  │  Thank you Chris.
+  │  We simply successfully trained the GPT style model with LoRA and got a good performance at the early stage, so we didn't go deeper with the BERT style models.
+  │  When I look at other ...
+├─ Chan Kha Vu (2023-10-11 04:09:15.807000) [+3]
+│  Wow, another solution based on LLMs (and not some DeBERTa)! Congratulations on the strong finish, would love to see the code.
+│  
+│  I have a question about your QLoRA fine-tuning: what hardware did you ...
+  ├─ KaizaburoChubachi (2023-10-11 04:24:01.350000) [+5]
+  │  Thank you! 
+  │  
+  │  
+  │    
+  │  what hardware did you use? I wonder how different is its performance comparing to 16-bit LoRA?
+  │  
+  │  
+  │  We used the A100 80GB for model training. A 70B model does not fit into one GPU whe...
+    ├─ Chan Kha Vu (2023-10-11 04:43:47.433000) [+2]
+    │  Thanks a lot for the detailed answer! Seems like all LLM-based solutions at the top are using LoRA/QLoRA!
+    │  
+    │  I tried LoRA on my little deberta-large, but as many has pointed out in this competition, ...
+    ├─ KaizaburoChubachi (2023-10-11 13:37:59.763000) [+0]
+    │  Thanks for sharing your experience!
+├─ CPMP (2023-10-11 07:49:02.147000) [+4]
+│  Awesome work! Lots to learn from your solution.
+  ├─ corochann (2023-10-12 02:51:06.203000) [+0]
+  │  Thank you! I always learn from you @cpmpml too!
+├─ DJ_Xia (2023-10-24 08:08:01.433000) [+1]
+│  Thank u for sharing the inference code, but I have a question about how to efficiently combine the contexts obtained through the three types of retrieval in the training session input to the LLM model
+  ├─ corochann (2023-10-24 12:08:24.313000) [+1]
+  │  We have generated training dataset with BM25 retrieved context and instructor-xl retrieved context. So the number of dataset will be twice (same prompt, but different context).
+    ├─ DJ_Xia (2023-10-24 13:19:56.790000) [+1]
+    │  BM25 and instructor-xl both retrieve context is in the model output logits mean? we use hugging face datasets Interleave
+    ├─ corochann (2023-10-26 01:30:17.350000) [+2]
+    │  We just made csv files which contains
+    │  
+    │  
+    │  
+    │  1. BM25 retrieved context
+    │  
+    │  2. instructor-xl retrieved context
+    │  separately. 
+    │  
+    │  
+    │  And used these csv files to train the model. Does it answer your question?
+    ├─ DJ_Xia (2023-10-26 02:33:53.787000) [+1]
+    │  so is the BM25 context and the instructor-xl context training the model separately and then ensemble? consider using two retrieval types of context to train the model inference time is also double,...
+    ├─ corochann (2023-10-27 05:02:26.217000) [+0]
+    │  Only one model is trained and both dataset are used for the training data.
+    │  
+    │  We did not use huggingface training library, but it is more close to concatenating dataset. In this case I guess interlea...
+    ├─ Gaurav Rawat (2023-10-29 16:08:01.387000) [+0]
+    │  Yup interleave . Xiaoyi and us tried as thought will generalize better on the two contexts but your idea rightly achieves the same
+├─ Gaurav Rawat (2023-10-15 17:36:39.300000) [+1]
+│  congrats nice work overall and on wiki dataset parsing .. we did try something like below to parse templates with mwparserfromhell somehow I got some issues with wikitextparser which looks like wor...
+  ├─ corochann (2023-10-16 20:19:51.413000) [+1]
+  │  We didn't parse Latex code, we thought LLM is wise enough to understand the contents only if the information exists.
+  │  So we tried not to skip the number or math expression contents, but we dit not t...
+    ├─ Gaurav Rawat (2023-10-16 20:26:48.607000) [+1]
+    │  Ahh ya  CirrusSearch dump  should certainly have helped and saved a lot of time , just was checking the dumps https://dumps.wikimedia.org/other/cirrussearch/.. Thanks
+├─ KaizaburoChubachi (2023-10-24 07:00:00.597000) [+2]
+│  We have shared our 5th place solution notebook with 0.926279 Private
+│  https://www.kaggle.com/code/zaburo/llm-sience-exam-5th-place-solution/
+├─ Yongdam Kim (2023-10-11 17:46:57.060000) [+2]
+│  I thought there would be a 70B solution, but this is a much better approach!
+│  It's so cool that you took the IR approach and divided the pipeline into sparse retrieval &amp; dense retrieval!
+│  I study...
+├─ mp (2023-10-11 08:11:27.863000) [+2]
+│  YESS! I'm so happy to see someone got such a high place with Llama 2 70B. I had the idea of trying the 70B version but I didn't have enough time to make it work. Congratulations on your result!
+├─ mwonpt (2023-10-11 07:38:07.403000) [+2]
+│  Nice work and congratulations. What was your score when working with Mistral 7B alone?
+  ├─ charmq (2023-10-11 10:36:58.877000) [+1]
+  │  We didn't have many mistral-only submissions, but one of them was public: 0.916, private: 0.919
+├─ SOUMENDRA PRASAD MOHANTY (2023-10-11 05:12:19.753000) [+2]
+│  @zaburo , Congrats for the gold medal . The techniques you used to run Llama 70B on Kaggle Notebook is quite impressive .
+├─ Ravi Ramakrishnan (2023-10-11 04:45:05.667000) [+2]
+│  Hearty congratulations for the gold medal @zaburo 
+│  Looking forward to reading the complete article!
+├─ treesky (2023-10-14 11:31:48.050000) [+0]
+│  We registered quantized weights (less than 40GB) for each layer as a dataset, and performed inference layer-by-layer. By applying xformers' memory_efficient_attention to the attention layers, we we...
+  ├─ KaizaburoChubachi (2023-10-15 12:32:24.897000) [+1]
+  │  We had been trying 70B long before that notebook was published, so we have our own implementation. However, while there are some minor differences, such as uploading the layers after quantizing the...
+    ├─ treesky (2023-10-15 21:56:24.427000) [+0]
+    │  Legends!

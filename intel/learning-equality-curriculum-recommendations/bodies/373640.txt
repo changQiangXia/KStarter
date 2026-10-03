@@ -1,0 +1,138 @@
+# https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373640
+
+Topic #373640: How did I get LB 0.30+
+  Author: Martin Kovacevic Buvinic
+  Posted: 2022-12-22 13:36:55.526000
+  Votes: 129  Comments: 34
+
+This is how I reach lb 0.30+, cv is also 0.40+ (there is statistical reason why the gab exist, I can explain later)
+
+
+
+
+Use transformer to extract embeddings for topics and contents (both using only the title, we could add more features but in my case best embeddings comes only from the title)
+
+
+Train a KNN nearest neighbors algorithm (using rapids is a good idea because it will be much faster) using the content embeddings and get neighbors for each of the topics. In this step try to get a lot of neighbors, the more the better because you increase the probability that a neighbor can be match (more neighbors -&gt; more possible matches)
+
+
+Because we extract a lot of neighbors in our previous step, we will have far more no matches than matches, this is not a problem but trying to get a lot of matches is important and this will depend on how good is our unsupervised model (transformer model on step1)
+
+
+Now that we have our neighbors for each topic, we can merge with correlation.csv to extract ground truths contents. With this new dataframe we can make a processing function to transform it into a binary classification task. For each topic id iterate on each neighbor and if the neighbor is found on contents_ids (ground truth column extracted from correlations.csv) then we label it as 1, if it is not found label it as 0. 
+
+
+We can also extract the titles on previous steps, we need features to train our classification task, in this case I only use the title of the topic and the content. 
+
+
+Here are the columns you would need for your classification model:
+
+topic_id, topic_title, content_id, content_title, label
+
+You need both topic_id and content_id because the idea is to predict with this model the probability that a topic_id will be a match for a content_id based on the topic title and the content_title (we could add more features and maybe we can improve our supervised model). 
+
+
+
+
+Now that we have the probabilities we use a threshold to say if the target is 1 or 0, we can look for the best threshold based on the CV
+
+
+Final step would be to filter all the matches (target == 1) and groupby topic_id and get the unique content_ids, then add all the topic_id that did not have a match with an empty content recomendation.
+
+
+The idea is to use an unsupervised model to get good candidates for our supervised model, why do we use a unsupervised model to do this?, because if we don't do this the supervised classification model would have unique topics ids x unique content_ids rows, this is more or less 9000000000 training rows (that would take a lot of resources, also in inference we can't predict a really big amount of observations).
+
+I hope this explanation help you on building a nice baseline pipeline for this problem. If you have any question please ask I will try to answer the best as I can.
+
+Comments:
+├─ Minh Tri Phan (2022-12-22 14:28:27.493000) [+3]
+│  Nice! I think your approach is somewhat similar to a recommendation system approach, we choose some candidates, and train a model to choose the correct candidates, isn't it?
+│  
+│  Have you thought about...
+  ├─ Martin Kovacevic Buvinic (2022-12-22 16:00:19.993000) [+5]
+  │  Exactly, it is similar to recommendation systems. Well when we train the supervised model the embedding are learned. It is a nice idea to learn the embeddings, maybe this will improve the unsupervi...
+    ├─ Minh Tri Phan (2022-12-22 17:28:22.773000) [+2]
+    │  Thank you for your info. I don't know if how you trained the embeddings, but I observe the same story. Fine-tuned embeddings give worse results than pretrained embeddings. If you have plan to submi...
+    ├─ Martin Kovacevic Buvinic (2022-12-22 17:58:50.180000) [+1]
+    │  Based on CV score it is worst, so I don't think I will submit.
+    ├─ Minh Tri Phan (2022-12-22 18:12:46.803000) [+1]
+    │  Okay, so if I have a chance to submit my model, I will let you know, but it's not in my near plan, tbh, maybe in the later phase of the competition.
+    ├─ Minh Tri Phan (2022-12-28 18:17:06.577000) [+4]
+    │  @ragnar123, the method of learning embeddings strongly boosts the LB score, turns out, I made a silly mistake in my code before.
+    ├─ Martin Kovacevic Buvinic (2022-12-28 18:31:25.660000) [+1]
+    │  Nice, good job!!.
+    ├─ Jaideep (2023-01-09 08:47:18.260000) [+2]
+    │  @shinomoriaoshi  could you throw some more light on learning of embeddings ?
+  ├─ Leon (2022-12-26 10:06:38.780000) [+13]
+  │  Just learning the embeddings, I can get 0.38+ without reranking(0/1 classification).
+    ├─ Martin Kovacevic Buvinic (2022-12-26 11:38:13.893000) [+0]
+    │  That is very interesting, thanks for sharing.
+    ├─ Minh Tri Phan (2022-12-26 11:44:45.190000) [+2]
+    │  it's good to know you made it work, thanks for sharing!
+    ├─ Martin Kovacevic Buvinic (2022-12-26 20:13:01.057000) [+1]
+    │  I tried MLM (masked language modeling) using the concatenation of content and topics title and if I train for 1 epoch the performance is worst compred to not training. If I train for 2 epochs it is...
+    ├─ Liam Nguyen (2022-12-27 08:47:00.043000) [+0]
+    │  what is the target for 'learn the embedding'? Is your approach similar to metric learning problem when you minimize distances between contents of the same topic ? @zzy990106
+    ├─ Leon (2022-12-27 09:24:53.050000) [+2]
+    │  Yes, currently the most famous methods are sentence bert and simcse.
+    ├─ Michael Huang (2023-01-19 04:41:24.717000) [+0]
+    │  @ragnar123 Hmm, imo I prob wouldn't do MLM for finetuning the embeddings. I would've tried to finetune using a sentence similarity objective such as the one they use to finetune SBERT.
+├─ Jyot Makadiya (2022-12-25 06:05:33.793000) [+1]
+│  Thanks for the awesome post! 
+│  Can you share your CV strategy if you don't mind? and if I understand correctly from your post, the gap between CV and LB exists because we are explicitly optimizing t...
+  ├─ Martin Kovacevic Buvinic (2022-12-26 14:28:52.687000) [+4]
+  │  StratifiedGroupKFold using the target of the binary classification for stratification and for group the topic_id. The gab exist because I am doing undersample on the training set, meaning that I re...
+    ├─ Atharva Ingle (2022-12-26 17:30:33.037000) [+1]
+    │  Hi @ragnar123, thanks for sharing your approach. From what I understood, we get a dataframe with topic_id, content_id, label (denoting whether the content match the topic or not), and other feature...
+    ├─ Martin Kovacevic Buvinic (2022-12-26 20:10:51.487000) [+2]
+    │  Yes only for supervised I am using computing CV, nevertheless I do compute the amount of ground truth my unsupervised model extract (another way to measure how good is the unsupervised model)
+    ├─ Atharva Ingle (2022-12-27 11:40:46.327000) [+2]
+    │  Thanks for the answer. One more question, doesn't the supervised dataframe depend on the unsupervised model, the number of neighbors you choose during the unsupervised step? Due to this, we might h...
+    ├─ Martin Kovacevic Buvinic (2022-12-27 15:04:31.160000) [+1]
+    │  Exactly, supervised dataframe will depend on the unsupervised model, more neighbors will increase the chance that you get a ground truth but it will also change the distribution of the target.
+    ├─ Martin Kovacevic Buvinic (2023-01-06 11:56:13.750000) [+1]
+    │  I compute CV on both models to check how much boost the supervised model gives. I try to use as much data as I can for training.
+├─ Kaizen (2022-12-27 20:03:56.210000) [+2]
+│  We can also use syntactic matching algorithms to boost correct results. I used the fuzzy match to boost F2 score from 0.177 to 0.223. 
+│  
+│  I wanted to get top matches by doing a syntactic search using...
+├─ ieBoytsov (2022-12-27 08:30:20.070000) [+2]
+│  Hey Martin, thanks for sharing. How do use use this classifier on inference?
+│  
+│  As I understand that to get predicts for a particular topic id, you need to apply your supervised model against all con...
+  ├─ Martin Kovacevic Buvinic (2022-12-27 21:13:38.527000) [+2]
+  │  That is why we use unsupervised model first, to get x nearest neighbors and don't apply supervised model against all content, just neighbors
+├─ Ram S Ram (2023-01-09 06:02:51.290000) [+0]
+│  Hey Martin, 
+│  Great suggestion. I think I am also following slightly the same path but getting the error "Notebook Threw Exception" Not sure what mistake I am making. I tried several methods, but no...
+  ├─ YeonwooSung (2023-01-23 06:57:17.353000) [+1]
+  │  In general, most notebook-based kaggle competitions use own private test dataset for LB scoring. This means that the private test dataset might be much bigger than you expected.
+  │  I also experienced ...
+├─ Dan Ofer (2023-01-05 13:56:21.883000) [+0]
+│  Useful!
+│  You don't take advantage of language as well when making the binary labels?
+  ├─ Martin Kovacevic Buvinic (2023-01-05 22:06:40.280000) [+3]
+  │  Well the title already has the language included, the pre-trained multilingual transformer model knows which language it is
+├─ tksan666 (2022-12-28 23:22:56.283000) [+0]
+│  Thanks for the great post!
+│  I am taking the same approach of creating a candidate first and then a binary model. 
+│  The problem now is that the data is unbalanced so the models do not train well. I ha...
+├─ SoupMonster (2022-12-26 09:33:36.313000) [+0]
+│  Thx @ragnar123 this is helpful! When you say you only use the title as a feature to train the classifier: do you mean you use the embeddings (used for knn before) of the topic title and the content...
+  ├─ Martin Kovacevic Buvinic (2022-12-26 11:38:57.220000) [+0]
+  │  No, you train a classification model using the title as a feature
+    ├─ SoupMonster (2022-12-26 12:03:43.760000) [+3]
+    │  but it has to be a numeric feature, that is: 
+    │  
+    │  
+    │  
+    │  embedding of title
+    │  
+    │  categorical encoding of title (but titles are not a category) 
+    │  
+    │  similarity measure between title a and b
+    │  
+    │  
+    │  or did i get somethin...
+    ├─ Martin Kovacevic Buvinic (2022-12-26 12:12:11.350000) [+2]
+    │  When you train a transformer you use the title topic and the title content as inputs, this inputs which are strings are converted by the tokenizer into numeric representation where the model can un...

@@ -1,0 +1,181 @@
+# https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/414344
+
+Topic #414344: some successful/fail experiment
+  Author: lyu
+  Posted: 2023-06-01 09:59:58.307000
+  Votes: 112  Comments: 26
+
+Hello everyone, I have been participating in this competition for almost a week now. This week, I have conducted a lot of experiments, from the initial confusion about how to calculate CV to the subsequent parameter tuning, training models, and so on.
+
+Here, I would like to share some of my experimental records. I find some experimental results very strange, and I hope everyone can communicate together!
+
+My first  baseline model is unet+efficientnet-b0, with a score of around 610 for both cv and lb, and all the following experiments were conducted based on this.
+
+
+
+
+ALL data augmentation do not works for me. It's vert strange. I have tried simple flipping, rotating, and other operations, as well as advanced methods such as mixup, which can cause a decrease in my CV and LB
+
+
+I tried to fuse images from multiple times to create a 2.5D image, but cv droped…
+
+
+I replaced efficientnet with mit, but the cv was even worse. eficientnet seems to performe very well in this competition
+
+
+I simply tried models such as Segformer and Deeplabv3, the results were even worse. but, I did not perform detailed parameter tuning on them. This competition is like those medical image segmentation tasks in Kaggle, where simple unet can achieve good results…
+
+
+A larger backbone can bring great improvements, similarly, a larger resolution can also bring great improvements. With a larger backbone and a larger resolution, my baseline can be improved to 650+
+
+
+6.The improvement that pseudo labels  is also very significant. I simply tried some methods of pseudo labels and the trained model has a score of nearly 670
+
+
+
+Post processing is very important, and an appropriate threshold generally increases  2% -3%. And I think maybe we can consider implementing this paragraph in the post processing , but currently I don't have a very suitable idea
+
+
+
+  
+Some key labeling guidance:
+  Contrails must contain at least 10 pixels
+  At some time in their life, Contrails must be at least 3x longer than they are wide
+  Contrails must either appear suddenly or enter from the sides of the image
+  Contrails should be visible in at least two image
+
+
+
+
+
+I have tried many losses, bce and dice achieve the best results, but the combination of the two has not improved😟
+
+
+Adding auxiliary classification header, failed
+
+
+As the experiment progresses, my CV seems to be somewhat inconsistent with LB…
+
+
+Is anyone willing to share their model and scores？
+
+
+
+
+cv
+lb
+
+
+
+
+584
+589
+
+
+607
+604
+
+
+639
+643
+
+
+643
+665
+
+
+648
+673
+
+
+653
+675
+
+
+653
+670
+
+
+656
+682
+
+
+657
+678
+
+
+
+
+
+
+update:
+so upset…I already get 0.682 lb. these days, I get new 0.681cv, but lb only 0.680…
+Although I know it's because there are too few images in lb, the fact that the score hasn't improved is still very disappointing.
+
+Comments:
+├─ Nirjhar Roy (2023-06-01 10:35:30.830000) [+17]
+│  First of all thank you @zhuwanglju so much for writing so much details about your solution when you are already Number 1 in the current public LB . It takes lot of courage to do so . Therefore let ...
+  ├─ lyu (2023-06-01 11:36:40.223000) [+5]
+  │  Thank you for your so detailed reply! Your notebook also helped me a lot in the early stages! The competition time is still long, and I just want to learn more from it.💪
+  │  
+  │  some reply:
+  │  I didn't use t...
+    ├─ Arunodhayan (2023-06-01 17:00:09.323000) [+-2]
+    │  can you share  your dice function
+    ├─ Nirjhar Roy (2023-06-01 17:49:05.030000) [+0]
+    │  Thanks @zhuwanglju  .. Got it .
+    ├─ Md Hasan Shahriar (2023-06-04 16:03:16.757000) [+-1]
+    │  If you got dice function then share, please.
+  ├─ Jan H (2023-06-01 20:26:08.207000) [+6]
+  │  A baseline with Unet and effnet b0 using 256 as size with a score of 0.643 is crazy! With the same setup (I am using segmentation models pytorch implementation of unet and effnetb0 as backbone) my ...
+├─ Kostiantyn Maksymov (2023-06-01 10:09:47.343000) [+11]
+│  I face same problems, augmentations did not help at all and scaling x2 helps and low threshold also helps
+  ├─ lyu (2023-06-01 11:37:51.667000) [+4]
+  │  thanks for your reply.  We have the same situation😂
+    ├─ Bartley (2023-06-28 21:44:15.937000) [+1]
+    │  @maksimovka How are you scaling up the size of the images by x2? 
+    │  
+    │  -
+    │  
+    │  Just found the answer. In the preprint, the authors "perform bilinear resampling to enlarge the input image". Looks likes this ...
+    ├─ Kostiantyn Maksymov (2023-07-04 19:39:30.577000) [+1]
+    │  Yes, I have used the same
+├─ Kenni (2023-06-01 11:58:13.747000) [+5]
+│  Hi everyone,
+│  
+│  My initial approach was U-Net(Vgg-16 then Efficientnet-b7) with 12 channels as  output used in combination with CrossEntropy loss. This pushed my score to public lb 5 in the beginning...
+  ├─ 豆柴金鯱 (2023-06-27 08:38:00.237000) [+0]
+  │  I'm a little bit surprised IoU can work on a segmentation task👀
+    ├─ Kenni (2023-07-04 16:17:31.273000) [+0]
+    │  @fuckvenkatraman, I was just as surprised as you are. I was following the enclosed notebook. I have seen some good results by taking IOU into consideration apart from DICE Co-efficient alone. Let m...
+├─ Jan H (2023-06-01 16:46:25.240000) [+1]
+│  Hey Lyu,
+│  
+│  thanks for your very valuable insights! Currently I am also pursuing Unet+effnetb0 from Segmentation Models Pytorch.
+│  I also experimented with different augmentations (also with my earlier...
+  ├─ lyu (2023-06-02 01:53:26.113000) [+3]
+  │  reply :
+  │  1.yes,  using the train and validation folders for train/val  use the train and validation folders for train/val 
+  │  2.I have not  try different lr-scheduler ,just use CosineAnnealingLR
+├─ dmitrykonovalov (2023-06-04 00:54:06.890000) [+2]
+│  Unet+B0,…B6 gets LB0.60-0.62. Albu augments rot90, hv-flips. Could not find other augmentations which improved LB. Interestingly, averaging multiple folds makes only a tiny LB improvement.
+  ├─ Shashwat Raman (2023-06-04 17:35:45.977000) [+5]
+  │  I think you should train on full data for a single type of model and then try ensembling different backbones. It should bring a big boost.
+├─ MD Mushfirat Mohaimin (2023-06-01 15:24:42.597000) [+1]
+│  As I said in this thread, the public LB is based on just 264-292 samples. That is why CV is not consistent with LB.
+├─ Arunodhayan (2023-06-01 12:11:22.070000) [+-3]
+│  is segformer allowed here?
+├─ DaydaycodingDaydayup (2023-07-29 14:18:05.213000) [+0]
+│  thank you all for sharing! useful for me
+├─ Kostiantyn Maksymov (2023-07-05 19:32:05.337000) [+0]
+│  @zhuwanglju I have a question about point 6 - you have used pseudo labels to relabel the training data?
+  ├─ lyu (2023-07-06 14:35:13.197000) [+0]
+  │  just predict  the unlabeled train data.
+    ├─ Patchef (2023-07-06 15:01:45.323000) [+0]
+    │  Where did you get unlabeled train data from?
+├─ dmitrykonovalov (2023-06-04 01:00:27.617000) [+0]
+│  Has anyone tried to train only on images with non-zero labels? On my todo list.
+  ├─ Shashwat Raman (2023-06-04 17:33:55.787000) [+6]
+  │  Ya I tried this, it has a worse score than training on all images.
+├─ JEANMPIA (2023-06-01 14:51:18.327000) [+0]
+│  Very interesting, thank you all for sharing

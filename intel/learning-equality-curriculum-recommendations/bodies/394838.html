@@ -1,0 +1,240 @@
+<p>First of all, I would like to thank the organizers for hosting this high-quality competion, and my awesome teammates <a href="https://www.kaggle.com/xiamaozi11" target="_blank">@xiamaozi11</a> <a href="https://www.kaggle.com/syzong" target="_blank">@syzong</a> <a href="https://www.kaggle.com/sayoulala" target="_blank">@sayoulala</a> <a href="https://www.kaggle.com/yzheng21" target="_blank">@yzheng21</a>, we all worked hard for this competion. And I learned a lot from the great notebooks and discussions, basically all the methods we used are from the kaggle community. Thanks to these generous and smart kagglers!</p>
+<ul>
+<li>tips from hosts: <a href="https://www.kaggle.com/code/jamiealexandre/tips-and-recommendations-from-hosts" target="_blank">https://www.kaggle.com/code/jamiealexandre/tips-and-recommendations-from-hosts</a></li>
+<li>text pre-processing: <a href="https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376873" target="_blank">https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376873</a></li>
+<li>stage1 and stage2 train and submit pipeline: <a href="https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373640" target="_blank">https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373640</a></li>
+<li>stage1 and stage2 modeling: <a href="https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/381509" target="_blank">https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/381509</a>, <a href="https://www.kaggle.com/code/ragnar123/lecr-xlm-roberta-base-baseline" target="_blank">https://www.kaggle.com/code/ragnar123/lecr-xlm-roberta-base-baseline</a></li>
+</ul>
+<h3>Summary</h3>
+<ul>
+<li>CV strategy</li>
+<li>Stage1: Retriever</li>
+<li>Stage2: Ranker</li>
+<li>Finding threshold</li>
+<li>Post-Processing</li>
+<li>Ensemble</li>
+</ul>
+<h3>training pipeline</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1197382%2F47f76a52a49058f4f234858cfba9969f%2F1_training_pipeline.png?generation=1678844482527465&amp;alt=media" alt=""></p>
+<h3>CV strategy</h3>
+<p>We only used 4,000 random topics which <strong>category != 'source'</strong> as hold out data. Those topics were as the validation data and never used in any training process. This simple CV strategy was unexpectedly stable. </p>
+<p>In the last month of the competition, we changed 4,000 topics to 1,000, which was still relatively consistent until we started to ensemble.</p>
+<h3>Retriever</h3>
+<p>We used unsupervised SIMCSE (Simple Contrastive Learning of Sentence Embeddings: <a href="https://github.com/princeton-nlp/SimCSE" target="_blank">https://github.com/princeton-nlp/SimCSE</a>) method for training retriever models.</p>
+<h4>training retriever</h4>
+<ul>
+<li>only used positive samples from correlations.csv for unsupervised simcse training</li>
+<li>random choice 100 negative samples per validation topic from same language, for validation set </li>
+<li>content text format: <code>title [SEP] kind [SEP] description [SED] text</code>, maxlen =  256 (string level)</li>
+<li>topic text format: <code>title [SEP] channel [SEP] category [SEP] level [SEP] language [SEP] description [SEP] context [SEP] parent_description [SEP] children_description</code>, maxlen = 256 (string level)</li>
+<li><code>simcse_unsup_loss</code></li>
+</ul>
+<blockquote>
+<pre><code>def simcse_unsup_loss(feature_topic, feature_content) -&gt; 'tensor':
+    y_true = torch.arange(0, feature_topic.size(0), device=device)
+    sim = F.cosine_similarity(feature_topic.unsqueeze(1), feature_content.unsqueeze(0), dim=2)
+    sim = sim / 0.05
+    loss = F.cross_entropy(sim, y_true)
+    loss = torch.mean(loss)
+    return loss
+</code></pre>
+  <p>from: <a href="https://github.com/yangjianxin1/SimCSE/blob/master/model.py" target="_blank">https://github.com/yangjianxin1/SimCSE/blob/master/model.py</a></p>
+</blockquote>
+<ul>
+<li>train code like:</li>
+</ul>
+<blockquote>
+<pre><code>for step, (inputs_topic, inputs_content, labels) in enumerate(train_loader):
+        inputs_topic = collate(inputs_topic)
+        for k, v in inputs_topic.items():
+            inputs_topic[k] = v.to(device)
+        inputs_content = collate(inputs_content)
+        for k, v in inputs_content.items():
+            inputs_content[k] = v.to(device)
+        batch_size = labels.size(0)
+        with torch.cuda.amp.autocast(enabled=CFG.apex):
+            feature_topic = model(inputs_topic)
+            feature_content = model(inputs_content)
+            loss = simcse_unsup_loss(feature_topic, feature_content)
+</code></pre>
+</blockquote>
+<p>Performance on 1,000 topics validation data:</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>F2@5</th>
+<th>max positive score top50</th>
+<th>max positive score top100</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>paraphrase-multilingual-mpnet-base-v2</td>
+<td>0.5250</td>
+<td>0.9135</td>
+<td>0.9443</td>
+</tr>
+<tr>
+<td>all-MiniLM-L6-v2</td>
+<td>0.4879</td>
+<td>0.9045</td>
+<td>0.9353</td>
+</tr>
+<tr>
+<td>mdeberta-v3-base</td>
+<td>0.4689</td>
+<td>0.8938</td>
+<td>0.9187</td>
+</tr>
+</tbody>
+</table>
+<h4>recall</h4>
+<p>We didn't use KNN to clusting, simply calculate cosine similarity for each topic and all content samples of the topic's language and then choose topN samples.</p>
+<p>We also tested the retriever ensemble (weighted cosine similarity). Although the max positive score top50 score has been improved to 0.9235, but there is basically no change on the LB score. So we only used a single retriever model (paraphrase-multilingual-mpnet-base-v2) in the final submit.</p>
+<h3>Ranker</h3>
+<p>The ranker in stage2 basically is a binary classification model.</p>
+<p>We used our best simcse finetuned model (paraphrase-multilingual-mpnet-base-v2) to infer on train set topics, calculate cosine similarity for each topic and all content samples of the topic's language and then choose top100 samples. We also added all positive samples from correlations.csv.</p>
+<p>texts were prepared as same as stage1. Pair format: <code>content [SEP] topic</code>, maxlen = 256 (token level)</p>
+<p>Hard negative samples from retriever model can greatly improve the performance of ranker models.</p>
+<table>
+<thead>
+<tr>
+<th>retrieve model (max positive score top100)</th>
+<th>ranker f2 score (LB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.80</td>
+<td>0.585</td>
+</tr>
+<tr>
+<td>0.94</td>
+<td>0.688</td>
+</tr>
+</tbody>
+</table>
+<p>We have used two model initialization methods. One is to directly load the model weight from huggingface, and the other is to load the model weight after simcse finetuning. The performance of the two methods is basically the same, while the latter is slightly higher and can converge faster.</p>
+<p>We also used FGM, EMA on training. FGM+EMA can impove score by 0.01. </p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>validation (1,000 topics)</th>
+<th>LB score</th>
+<th>PB score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mdeberta-v3-base (loading simcse weights)</td>
+<td>0.7149</td>
+<td>0.688</td>
+<td>0.727</td>
+</tr>
+<tr>
+<td>mdeberta-v3-base</td>
+<td>0.6378</td>
+<td>0.669</td>
+<td>0.693</td>
+</tr>
+<tr>
+<td>xlm-roberta-large (loading simcse weights)</td>
+<td>0.6987</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>xlm-roberta-base (loading simcse weights)</td>
+<td>0.6780</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>paraphrase-multilingual-mpnet-base-v2 (loading simcse weights)</td>
+<td>0.6299</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3>Finding threshold</h3>
+<p>We set the threshold in loop to calculate the f2 metric on the 1,000 topics validation data, codes like:</p>
+<pre><code>best_thres = 0.
+best_score = 0.
+best_n_rec = 10
+for thres in tqdm(np.arange(0.01, 0.2, 0.005)):
+    for n_rec in range(30, 50):
+        test_sub = test_data[test_data['score'] &gt;= thres].reset_index(drop=True)
+        sub_df = test_sub.groupby('topic_id').apply(lambda g: g.head(n_rec)).reset_index(drop=True)
+        score = calc_f2(sub_df, label_df)
+        if score &gt; best_score:
+            best_score = score
+            best_thres = thres
+            best_n_rec = n_rec
+</code></pre>
+<p>When submitting a single model, this method basically CV-LB consistency (CV is about 0.02-0.03 higher than LB).</p>
+<p>But When it came to the last two weeks of the competition, when started to ensemble, we lost the CV-LB consistency, and I think the reason may be that 1,000 topics validation data is not big enough.</p>
+<h3>Post-Processing</h3>
+<p>When dividing the threshold, we will have a small number of topics that do not match any contents. We just simply using top4 contents ranked by the original scores.</p>
+<p>We tried recalling more contents for this part of topics, but LB score didn't improve.</p>
+<p>We also tried different languages using different threshold, both CV and LB score dropped a little.</p>
+<h3>Ensemble</h3>
+<p>We had trained 20+ ranker models, trained on different number of recall samples per topic, like 50, 70, 100. </p>
+<ul>
+<li>mdeberta (simcse weights, 4,000 validate topics)</li>
+<li>mdeberta (simcse weights, 4,000 validate topics, with FGM,EMA)</li>
+<li>mdeberta (simcse weights, 1,000 validate topics)</li>
+<li>mdeberta (simcse weights, 1,000 validate topics, with FGM,EMA)</li>
+<li>mdeberta (1,000 validate topics, with FGM,EMA)</li>
+<li>xlm-roberta-large (simcse weights, 1,000 validate topics, with FGM,EMA)</li>
+<li>xlm-roberta-base (simcse weights, 1,000 validate topics, with FGM,EMA)</li>
+</ul>
+<p>We used LinearRegression to fit on 1,000 topics validation model output score to get coef_ array, and then used as blending weights:</p>
+<pre><code>pcols = [c for c in valid_data.columns if c.startswith('score')]
+for cols in tqdm([i for i in combinations(pcols, 10)]):
+    cols = list(cols)
+    X = valid_data[cols].values
+    y = valid_data['label'].values
+    lr = LinearRegression().fit(X, y)
+    coef = lr.coef_
+    print(get_score(valid_data, df_target_metric, cols, coef))
+</code></pre>
+<p>We started with 100 recall samples per topic, but due to time limits, we can only use up to 6 models. So we tried 70 and 50 recall samples in the later stage of the competition.</p>
+<table>
+<thead>
+<tr>
+<th>number of recall samples per topic</th>
+<th>models</th>
+<th>validation (1,000 topics)</th>
+<th>LB score</th>
+<th>PB score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>6</td>
+<td>0.725</td>
+<td>0.705</td>
+<td>0.738</td>
+</tr>
+<tr>
+<td>70</td>
+<td>10</td>
+<td>0.738</td>
+<td>0.715</td>
+<td>0.751</td>
+</tr>
+<tr>
+<td>50</td>
+<td>12</td>
+<td>0.743</td>
+<td>0.715</td>
+<td>0.751</td>
+</tr>
+</tbody>
+</table>
+<h3>Train Code:</h3>
+<p><a href="https://github.com/syzong/2023-Kaggle-LECR-Top3-TrainCode" target="_blank">https://github.com/syzong/2023-Kaggle-LECR-Top3-TrainCode</a></p>

@@ -1,0 +1,122 @@
+# learning-agency-lab-automated-essay-scoring-2 讨论区（按票数排序，共 120 条）
+
+- [DeBERTa Starter Suggestions and Tips - LB 0.800+](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/497832) — 218 票 / 84 评论 / 2024-04-25 
+- [More Train Data Available!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/496906) — 176 票 / 24 评论 / 2024-04-22 
+- [RAPIDS SVR starter - [CV 0.830, LB 0.804]](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502554) — 140 票 / 33 评论 / 2024-05-13 
+- [Mistral 7B Instruct Baseline](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494935) — 119 票 / 56 评论 / 2024-04-19 
+- [What CV strategy should you use?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499959) — 110 票 / 93 评论 / 2024-05-03 
+- [Optimized thresholds for regression](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502279) — 99 票 / 32 评论 / 2024-05-12 
+- [4th place solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516639) — 95 票 / 27 评论 / 2024-07-03 **write-up?**
+- [What are the essays about? - Topics modeling](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/498478) — 91 票 / 22 评论 / 2024-04-28 
+- [2nd Place Solution Overview](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516582) — 88 票 / 65 评论 / 2024-07-03 **write-up?**
+- [1st Place Solution - Trust CV (and LB a bit)](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516791) — 86 票 / 22 评论 / 2024-07-04 **write-up?**
+- [Best Single Model CV LB thread](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/491101) — 77 票 / 135 评论 / 2024-04-04 
+- [Linking essays in train.csv to PERSUADE 2.0 corpus](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/493962) — 70 票 / 19 评论 / 2024-04-15 
+- [HuggingFace Models With Max Tokens 1024+](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/498571) — 67 票 / 11 评论 / 2024-04-28 
+- [What New Features can Boost Best Public LB 0.820?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499770) — 61 票 / 29 评论 / 2024-05-03 
+- [Adversarial Validation Probe (Train vs Test)](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/501319) — 59 票 / 13 评论 / 2024-05-08 
+- [2nd Place Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516790) — 57 票 / 28 评论 / 2024-07-16 **write-up?**
+- [References and onboarding materials](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/490843) — 55 票 / 7 评论 / 2024-04-03 
+- [Using newer hugging face libraries than the kaggle defaults? Here's a convenient dataset for you](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/497287) — 53 票 / 5 评论 / 2024-04-24 
+- [How to save the fitted TfidfVectorizer result.](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/492463) — 52 票 / 5 评论 / 2024-04-09 
+- [Back-Translation Dataset with 136k Texts](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/509802) — 50 票 / 19 评论 / 2024-06-03 
+- [More Feature Ideas for GBDT's](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502905) — 49 票 / 20 评论 / 2024-05-15 
+- [Papers of Deep-neural Automated Essay Scoring](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/492583) — 48 票 / 4 评论 / 2024-04-10 
+- [Meme Thread](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/515277) — 48 票 / 16 评论 / 2024-06-27 
+- [New feature from previous competition!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502643) — 47 票 / 3 评论 / 2024-05-14 
+- [Sharing the Custom CatBoost QWK Objective and Metric Function](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/511130) — 47 票 / 9 评论 / 2024-06-09 
+- [Another Possible CV Approach](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/501202) — 43 票 / 25 评论 / 2024-05-08 
+- [Best NN only CV and LB Thread](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/508159) — 42 票 / 141 评论 / 2024-05-28 
+- [10.000 New Student Essays With Score](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/498046) — 41 票 / 9 评论 / 2024-04-26 
+- [4th->433th Quick Sol](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516589) — 40 票 / 19 评论 / 2024-07-03 
+- [6th place solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516814) — 40 票 / 18 评论 / 2024-07-04 **write-up?**
+- [3rd Place Solution Overview](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516631) — 39 票 / 16 评论 / 2024-07-03 **write-up?**
+- [Share how I custom XGBoost metric and objective](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/498786) — 36 票 / 2 评论 / 2024-04-29 
+- [CatBoost versus LGBM versus XGBoost](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/497578) — 36 票 / 17 评论 / 2024-04-25 
+- [AES2 Extracted Features Dataset](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/513957) — 36 票 / 9 评论 / 2024-06-22 
+- [Finally solveed the problem about lightgbm warnings!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502231) — 34 票 / 1 评论 / 2024-05-12 
+- [Returned Quadratic Weighted Kappa!!!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/491079) — 33 票 / 3 评论 / 2024-04-04 
+- [3rd Place Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/517014) — 32 票 / 7 评论 / 2024-07-14 **write-up?**
+- [Inferring from the churn](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516586) — 30 票 / 12 评论 / 2024-07-03 
+- [NEW! Loss Function For Ordinal Text Classification](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494873) — 30 票 / 9 评论 / 2024-04-18 
+- [Can we use persuade_corpus_2.0?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/513018) — 30 票 / 10 评论 / 2024-06-18 
+- [10k New Student Essays With Score - V2](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/500079) — 29 票 / 15 评论 / 2024-05-04 
+- [Fast QWK computation](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/512494) — 28 票 / 6 评论 / 2024-06-15 
+- [New Possible Threshold And Features](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/506045) — 28 票 / 10 评论 / 2024-05-20 
+- [How can I submit my Notebook for LB](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/491479) — 28 票 / 20 评论 / 2024-04-06 
+- [[8.22 LB] add text feedbacks as features](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502848) — 28 票 / 3 评论 / 2024-05-15 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/490853) — 27 票 / 1 评论 / 2024-04-03 
+- [Cleaning logs in the training pipeline](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/493099) — 27 票 / 0 评论 / 2024-04-12 
+- [5th Place Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516922) — 25 票 / 0 评论 / 2024-07-04 **write-up?**
+- [Feature Selection Effect on CV](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/512753) — 25 票 / 8 评论 / 2024-06-16 
+- [[0.817]misspelled word+feature selection](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/497017) — 25 票 / 3 评论 / 2024-04-23 
+- [text regression using autotrain](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/500881) — 25 票 / 0 评论 / 2024-05-07 
+- [What loss function do you think is best?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494930) — 25 票 / 7 评论 / 2024-04-19 
+- [Greetings from the Organizers!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/489512) — 24 票 / 18 评论 / 2024-04-02 
+- [Feedback prize competition labels as features](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/503025) — 24 票 / 3 评论 / 2024-05-15 
+- [Recap LB score Table 🏆](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502001) — 24 票 / 1 评论 / 2024-05-11 
+- [Understanding QWK (Quadratic Weighted Kappa) with examples](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/495134) — 24 票 / 3 评论 / 2024-04-19 
+- [Problem with "adjacent classes"](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/492654) — 24 票 / 4 评论 / 2024-04-10 
+- [Shakeup again? 👀](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/512857) — 23 票 / 29 评论 / 2024-06-17 
+- [7th Place Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516872) — 23 票 / 4 评论 / 2024-07-04 **write-up?**
+- [Applicability of different LLM models](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/496624) — 22 票 / 8 评论 / 2024-04-22 
+- [15th Place Solution: utilizing discourse type](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516642) — 22 票 / 1 评论 / 2024-07-04 **write-up?**
+- [A simple submission blending snippet](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/510556) — 21 票 / 3 评论 / 2024-06-06 
+- [Where Do The DeBERTa OOF Predictions Come From?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/502448) — 21 票 / 13 评论 / 2024-05-13 
+- [How much do you trust CV and LB?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/508963) — 20 票 / 2 评论 / 2024-05-31 
+- [1st Place Efficiency Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516967) — 20 票 / 5 评论 / 2024-07-15 **write-up?**
+- [12th place - first solo gold](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516654) — 20 票 / 8 评论 / 2024-07-03 **write-up?**
+- [Be care of 0.822 lb public notebook](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/512160) — 20 票 / 16 评论 / 2024-06-13 
+- [Llama 3 8B Instruct Baseline [CV: 0.79+/LB:0.773]](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/496469) — 19 票 / 5 评论 / 2024-04-21 
+- [Kaggle Staff or Organizers could you please update the Efficiency LB?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/509870) — 19 票 / 3 评论 / 2024-06-04 
+- [Tuning public notebook?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/515642) — 19 票 / 33 评论 / 2024-06-29 
+- [AES2 Leaderboard Shake Up Visualisation | Locate your team on the plot.](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516579) — 19 票 / 2 评论 / 2024-07-03 
+- [Overfitting is all you need: One most simple way to get 0.840 / Top 3 on private LB](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516585) — 19 票 / 7 评论 / 2024-07-03 
+- [AES-2 | Starter Pack 🚀🚀🚀](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/490891) — 18 票 / 2 评论 / 2024-04-03 
+- [Do pseudo labels work?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/509180) — 18 票 / 6 评论 / 2024-06-01 
+- [Best features found with Random Forrest and Lasso Regression ](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/515397) — 17 票 / 9 评论 / 2024-06-28 
+- [New trend of sharing high scoring kernels?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499096) — 17 票 / 7 评论 / 2024-04-30 
+- [Similar Competitions in the past important kernels and winning solutions](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/490997) — 17 票 / 0 评论 / 2024-04-04 **write-up?**
+- [Can the grading rubric be taken into account: A detailed report ✍️](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/491265) — 17 票 / 4 评论 / 2024-04-05 
+- [2nd Place Efficiency Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/517015) — 17 票 / 2 评论 / 2024-07-04 **write-up?**
+- [How much score boost do you get with NN + GBDT stacking?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/511363) — 17 票 / 17 评论 / 2024-06-10 
+- [Unintentional private sharing](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494725) — 17 票 / 4 评论 / 2024-04-18 
+- [Deberta solo CV vs LB classical thread](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/498083) — 16 票 / 22 评论 / 2024-04-26 
+- [is Pseudo Targets helps?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494604) — 16 票 / 4 评论 / 2024-04-17 
+- [Customizing our logs in XGB with an altered loss function and eval metrics ](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/498933) — 16 票 / 0 评论 / 2024-04-30 
+- [Training LLAMA3 8B with torchtune and QLora](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/500477) — 16 票 / 6 评论 / 2024-05-05 
+- [What is your experience with mixing Persuade 2.0?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/503206) — 15 票 / 6 评论 / 2024-05-16 
+- [Congratulations to new Kaggle Competitions GM!!!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516906) — 15 票 / 3 评论 / 2024-07-04 
+- [AES with pretrained embeddings: Large-Scale benchmark (28 pretrained models, with various pooling strats)](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/512956) — 15 票 / 5 评论 / 2024-06-17 
+- [Save GPU during inference](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/495292) — 15 票 / 1 评论 / 2024-04-20 
+- [classification or regression](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/492758) — 14 票 / 5 评论 / 2024-04-10 
+- [Can Kaggle Add More Digits on LB?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516833) — 14 票 / 1 评论 / 2024-07-03 
+- [Potential ways to improve leaderboards and giving medals in kaggle ](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/517311) — 13 票 / 6 评论 / 2024-07-05 
+- [Synthetic Essays Improved CV By ~0.1](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499433) — 13 票 / 14 评论 / 2024-05-01 
+- [3rd Place Efficiency Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/517054) — 12 票 / 3 评论 / 2024-07-15 **write-up?**
+- [Get started here](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/487169) — 11 票 / 2 评论 / 2024-03-27 
+- [Brief overview of the 7th place solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516598) — 11 票 / 3 评论 / 2024-07-03 **write-up?**
+- [Conservative kfold grouping vs eager kfold grouping](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/509639) — 11 票 / 11 评论 / 2024-06-03 
+- [The limitation of public dataset](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499843) — 11 票 / 11 评论 / 2024-05-03 
+- [Experiment shows test set (LB) deviate from the training set by prompt](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/506955) — 10 票 / 1 评论 / 2024-05-23 
+- [0.82 Public To 0.835 Private](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516661) — 10 票 / 8 评论 / 2024-07-03 
+- [Clean code deberta baseline ](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/491097) — 10 票 / 1 评论 / 2024-04-04 
+- [Contrastive learning for embedding generation](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/514611) — 10 票 / 13 评论 / 2024-06-24 
+- [Train cluster view](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/493001) — 10 票 / 3 评论 / 2024-04-11 
+- [6th Place Efficiency Solution](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/517059) — 9 票 / 0 评论 / 2024-07-04 **write-up?**
+- [ LLama-3 & Phi-3 Released](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494996) — 9 票 / 4 评论 / 2024-04-19 
+- [More than 8000 samples in the LB dataset?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/494096) — 9 票 / 3 评论 / 2024-04-16 
+- [How Do We Handle 1s, 2s, 5s & 6s?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/501906) — 9 票 / 3 评论 / 2024-05-11 
+- [12th→18th - Blending by Item Response Theory](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516668) — 9 票 / 7 评论 / 2024-07-03 
+- [Efficiency LB Notebook](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/505814) — 8 票 / 1 评论 / 2024-05-19 
+- [The bag of words model is still competing!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/491419) — 8 票 / 0 评论 / 2024-04-05 
+- [How about using a different tokenization?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/497294) — 8 票 / 3 评论 / 2024-04-24 
+- [Private Score 4th Place Overview-0.83990](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/518426) — 8 票 / 1 评论 / 2024-07-06 **write-up?**
+- [Proposal for forks of public notebooks](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516952) — 8 票 / 5 评论 / 2024-07-04 
+- [Do you get gain from training more then 2 epochs using deberta-v3-large?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/515239) — 8 票 / 18 评论 / 2024-06-27 
+- [A silver medalist's analysis of what happened in this competition](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/520375) — 7 票 / 1 评论 / 2024-07-15 **write-up?**
+- [HF Tokenizers problem ](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499968) — 7 票 / 10 评论 / 2024-05-03 
+- [Why we can set the num_label to 1? What is the objetive function?](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/506084) — 7 票 / 5 评论 / 2024-05-20 
+- [Please consider the impact of this competition before participating](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/492136) — 7 票 / 27 评论 / 2024-04-08 
+- [We Shouldn't Forget The Holistic Scoring Rubric](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/503453) — 7 票 / 1 评论 / 2024-05-17 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/519137) — 5 票 / 0 评论 / 2024-07-09 

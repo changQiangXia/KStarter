@@ -1,0 +1,269 @@
+<h1>10th Place Solution</h1>
+<p>Thank you for holding this competition. We enjoyed a lot, as well as a lot of leaning experience. This was also really tough competition we ever participated. We literary training the model and making ensemble few hours before the competition closed, and finally we managed to win a gold medal.</p>
+<p>The following is the summary of 10th place solution by team Updraft. More detailed writeup might be shared by each members.</p>
+<h2>Team Members</h2>
+<ul>
+<li><a href="https://www.kaggle.com/tatamikenn" target="_blank">@tatamikenn</a> (team leader)</li>
+<li><a href="https://www.kaggle.com/tereka" target="_blank">@tereka</a></li>
+<li><a href="https://www.kaggle.com/phalanx" target="_blank">@phalanx</a></li>
+<li><a href="https://www.kaggle.com/ryches" target="_blank">@ryches</a></li>
+</ul>
+<h2>Glossary</h2>
+<ul>
+<li>low resolution data = LR</li>
+<li>high resolution data = HR</li>
+</ul>
+<h2>Summary</h2>
+<p>Our solution is ensemble of each 4 member's regression models.<br>
+The models in the final submission contains 23 models with different architectures and learning conditions.<br>
+We developed the following architectures.</p>
+<ul>
+<li>Conv + Transformer (+ LSTM)</li>
+<li>CNN / U-Net</li>
+<li>LSTM</li>
+</ul>
+<h2>Train/Validation Data</h2>
+<p>We basically trained our models using 1-7y LR data, and evaluate with 1/6 subsample of 8y LR data.<br>
+Some model also use:</p>
+<ul>
+<li>8y LR data</li>
+<li>1-8y HR data</li>
+<li>pseudo labeled old/new test data.</li>
+</ul>
+<h2>Evaluation Metrics</h2>
+<p>We used 1-MSE instead of R2 after std normalized target.<br>
+We use this metrics because some member reported R2 loses correlation after host replaced the test dataset.<br>
+(However, later we found both are correlated when using sufficiently small eps for normalization.)<br>
+In normalization, we used the following formula:</p>
+<pre><code>eps =  ** (-)
+target = target / maximum(std(target), eps)
+</code></pre>
+<h2>Model Design</h2>
+<h3>Bilzard's Pipeline</h3>
+<p>Basically 1/7 ~ 1/6 subsample of LR data is used because of relatively <em>poor</em> machine resource (RTX4090 x 1).<br>
+What worked most was:</p>
+<ul>
+<li>feature extraction of Climate-invariant features (RH, plume buoyancy, normalized Heat Flux etc.)[1]</li>
+<li>confidence-aware MSE loss</li>
+<li>doping hard sample of 1/1 full LR data</li>
+</ul>
+<h4>Climate-invariant feature extraction</h4>
+<p>We extracted climate-invariant features which is suggested by Tom Beucler et. al. [1].</p>
+<ul>
+<li>Relative Humidity (RH)</li>
+<li>Plume buoyancy</li>
+<li>normalized Heat Flux</li>
+</ul>
+<p>Conceptually, these features are invariant under both cool and warm temperature.<br>
+So these features are expected to cancel out the effect of yearly warm-up in ClimSim dataset (which I observed by EDA).</p>
+<p>During the competition, we couldn't train models with this features on the full LR dataset, but it showed a significant gain of ~1% on a 1/7 to 1/6 subsample of LR dataset.</p>
+<p>Note that the late submission results shows this features still have a significant gain on the full LR dataset (see Appendix A1).</p>
+<h4>Confidence-aware MSE loss</h4>
+<p>We used the following loss which we called <em>confidence-aware MSE loss</em> instead of MSE.<br>
+Intuitively it has the effect of loosening the contributions of the large error by hard samples.<br>
+This idea was variant of the <a href="https://www.kaggle.com/ryomak" target="_blank">@ryomak</a> 's previously shared solution[2].<br>
+Note that variance of target was regressed by model in addition to mean value. So our model's output variable is 2x larger than basic models.</p>
+<pre><code>loss =  * (target - pred) **  / var +  * torch.log(var)
+</code></pre>
+<h4>Doping Hard Examples</h4>
+<p>As we shared on a public discussion[3], most of error came from extreme outliers. So we came to think that hard samples are good representatives of all dataset: if we doped small amount of hard samples from 1/1 full LR data, it would help to reduces regression error even if we used 1/n sub-sampled LR data.</p>
+<p>We extracted ~14% of hard samples which have the squared error greater than threshold using one of our best models, and doped to train other models. We found this has ~0.x% gain using this method.<br>
+We also found adding tiny amount of neighbor time-frame sample from the same location also helps gaining accuracy.</p>
+<h4>Model Architecture</h4>
+<p>Basically we used the following two architecture</p>
+<ol>
+<li>Conv-Transformer (variant of <a href="https://www.kaggle.com/hoyso48" target="_blank">@hoyso48</a> 's architecture[4])</li>
+<li>Pixel-Shuffle stacked UNet</li>
+</ol>
+<p>The second architecture was inspired by stacked hourglass architecture[5] which stacks U-Net and gradually improves the accuracy of output variable by regressing error of previous stack (like boosting). In addition, replacing ConvTranspose decoder in the usual U-Net to PixelShuffle gained ~0.x%.</p>
+<h4>Other modeling Tips</h4>
+<h5>Tanh normalization</h5>
+<p>We often encounter gradient explosion when training deeper transformers (~8-12 layers).<br>
+We mitigated this issue by utilizing trick we called <em>tanh normalization</em>.<br>
+It is just inserting tanh activation before calculating softmax attention:</p>
+<pre><code>     ():
+        x = rearrange(x, )
+
+        qkv = self.qkv(x)
+        qkv = rearrange(qkv, , h=self.num_heads)
+        q, k, v = qkv.chunk(, dim=-)
+
+        attn = (q @ k.transpose(-, -)) * self.scale
+        attn = attn.tanh() * self.attn_clip_val  
+        attn = F.softmax(attn, dim=-)
+
+        x = attn @ v
+        x = rearrange(x, )
+
+        x = self.proj(x)
+        x = rearrange(x, )
+         x
+</code></pre>
+<h5>Removing Dropout</h5>
+<p>In the previous competition, some Kagglers reported removing Dropout layer has significant improvement on regression tasks[6]. We observed similar phenomena on this competition.</p>
+<h3>Tereka's Pipeline</h3>
+<pre><code>Public/Private LB: 0.77784/0.77023
+
+Model
+ Transformer + Convolution + LSTM
+ Architecture Points
+ Learnable Positional Embedding(nn.Embedding 60)
+ several Transformer Layers
+ Final Layer LSTM
+
+Features
+ Original Dataset(standard scaler)
+
+Dataset
+ 70M(full low resolution dataset)
+
+Loss
+ Huber Loss(&gt; MSE)
+
+Not Worked
+ Mixup
+ EMA
+ Deeper model, I tried some experiment, but it’s not stable.
+ pretrained High resolution model, but low resolution and some high resolution data is worked in public LB.
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4910466%2F0d32daa11aecc54e4573a294b244ec79%2F21_architecture_tereka.png?generation=1722302269909845&amp;alt=media" alt=""></p>
+<h3>Phalanx's Pipeline</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4910466%2F194b6d4d267ae9c693f3fba5ab444cad%2F21_architecture_phalanx.png?generation=1722302291403618&amp;alt=media" alt=""></p>
+<h3>Ryches' Pipeline</h3>
+<p>TBD</p>
+<h2>Ensemble Method</h2>
+<p>We used tree type of ensemble method and final submission is weighted ensemble of these:</p>
+<ul>
+<li>type1) Stacking using models trained with 1-7y low resolution data</li>
+<li>type2) Stacking using models trained with 1-8y low resolution data</li>
+<li>type3) Mean ensemble of models trained with 1-8y models</li>
+</ul>
+<p>For type2, basically we can't use the data which trained the seed model to fit parameter in the stacking.<br>
+So we take the following scheme:</p>
+<ol>
+<li>calculate the ensemble weight using model trained with 1-7y data</li>
+<li>re-train the model of the same architecture, same training condition except swapping train data to 1-8y data</li>
+<li>using ensemble weight calculated on step2, but replacing the model from 1-7y to 1-8y data to make the test prediction</li>
+</ol>
+<p>For the final submission, we ensemble the type-1 ~ type-3 model with manually fitted weight:</p>
+<pre><code>final_prediction = type1 * w1 + type2 * w2 + type3 * w3
+</code></pre>
+<p>The late submission result shows assigning 100% weight for type1 model performs the best on the private LB.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>LB(Public)</th>
+<th>LB(Private)</th>
+<th>final submission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type1 * 0.5 + type2 * 0.3 + type3 * 0.2</td>
+<td>0.78803</td>
+<td>0.78503</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>type1 * 0.75 + type3 * 0.25</td>
+<td>0.78801</td>
+<td>0.78487</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>type1 * 0.6 * type2 * 0.4</td>
+<td>0.78777</td>
+<td>0.78535</td>
+<td></td>
+</tr>
+<tr>
+<td>type1</td>
+<td>0.78771</td>
+<td><strong>0.78536</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>Detail of Stacking</h2>
+<p>We trained ensemble weight per (target, model). This is based on the study of EDA where we found each model has their expertize: some models performs good at regressing mixing ratio and some are good at regressing wind velocity etc.</p>
+<p>We tested the following variations and found ensemble without normalization and with bias performs the best.</p>
+<table>
+<thead>
+<tr>
+<th>normalize weight?</th>
+<th>with bias?</th>
+<th>LB(Public)</th>
+<th>LB(Private)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✔️</td>
+<td>-</td>
+<td>0.78727</td>
+<td>0.78532</td>
+</tr>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>0.78739</td>
+<td>0.78563</td>
+</tr>
+<tr>
+<td>-</td>
+<td>✔️</td>
+<td>0.78740</td>
+<td><strong>0.78569</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>Appendix</h2>
+<h3>A1. LR full data + Climate Invariant Feature</h3>
+<p>During the competition, we only trained our models using climate-invariant features on a subsample of the LR data.However, after the competition ended, we successfully trained Phalanx's lightweight CNN model train model with climate-invariant features on the full sample of the LR dataset in feasible training time (~1 day) with  a relatively "low-throughput" GPU (RTX 4090).</p>
+<p>The result of late submission shows it has significant gain of 0.05% on private LB. So climate-invariant feature has actually significant impact on this task.</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>CV(1-MSE)</th>
+<th>LB(Public)</th>
+<th>LB(Private)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>single w/o LR-full-clim-invariant</td>
+<td>0.78231</td>
+<td>0.78025</td>
+<td>0.77721</td>
+</tr>
+<tr>
+<td>single w LR-full-clim-invariant</td>
+<td><strong>0.78434</strong></td>
+<td><strong>0.7814</strong></td>
+<td><strong>0.78017</strong></td>
+</tr>
+<tr>
+<td>ensemble w/o LR-full-clim-invariant</td>
+<td>0.79192</td>
+<td>0.78740</td>
+<td>0.78569</td>
+</tr>
+<tr>
+<td>ensemble w LR-full-clim-invariant</td>
+<td><strong>0.79218</strong></td>
+<td><strong>0.78771</strong></td>
+<td><strong>0.78618</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>Reference</h2>
+<ul>
+<li>[1] <a href="https://arxiv.org/abs/2112.08440" target="_blank">Climate-Invariant Machine Learning</a></li>
+<li>[2] <a href="https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285353" target="_blank">9th solution(with github code): Laplace distribution noise likelihood optimization</a></li>
+<li>[3] <a href="https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/511274" target="_blank">Is Tropical Cylones Key to Win this Competition?</a></li>
+<li>[4] <a href="https://www.kaggle.com/competitions/asl-signs/discussion/406684" target="_blank">1st place solution - 1DCNN combined with Transformer</a></li>
+<li>[5] <a href="https://arxiv.org/abs/1603.06937" target="_blank">Stacked Hourglass Networks for Human Pose Estimation</a></li>
+<li>[6] <a href="https://www.kaggle.com/competitions/commonlitreadabilityprize/discussion/260729" target="_blank">The Magic of No Dropout</a></li>
+</ul>

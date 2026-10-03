@@ -1,0 +1,26 @@
+<p><strong>Note, this post is not a wining solution. Simply a summary of what I did with my code. I see people reporting CVs, but it is really hard to tell what exactly they did. So here I update my codes with figures. hope it helps.</strong> </p>
+<p><strong>1. CV</strong><br>
+I build two models, XGB and GRU.</p>
+<ul>
+<li>XGB: I train three XGBs separately. Each one has a unique <strong>GAP between the train data and labels</strong>. For example, for the <strong>GAP-2</strong> model, we jump 2 months to make predictions. I used TS=29~40 (2022-01-01 ~ 2022-12-01) as 12 validation folds, you can see each fold SMAPE and the overall SMAPE in the fig.1. The average SMAPE is 2.34. The CV for <strong>GAP-3</strong> and <strong>GAP-4</strong> models are 2.79 and 3.18. The OVERALL three month CV is 2.76±0.06. As for inference, I use GAP-2 model to infer March 2023, GAP-3 for April, GAP-4 for May. <a href="https://www.kaggle.com/code/joshuascj/godaddy-final-xgb-3-gap-models-with-blacklists" target="_blank">Code is HERE</a></li>
+</ul>
+<p><strong>One thing I noticed by checking the preditions by XGB is that the model usually predict 'increase' comparing to months before the GAP. That means, if you select large population cfips as mine and then use <code>last value*1.010, last value*1.015, last_value*1.020</code>, you may get a similar CV as mine. It seems the model only discover the general linear trend.</strong></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10745109%2F35701740ed656ec9d004be60bd6a06ab%2FIMG_2089.jpg?generation=1678841906922179&amp;alt=media" alt=""></p>
+<ul>
+<li>GRU: I use <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> CV design. Basically, for each cfips, cut the mbd time sequences into 24-time-point sub-sequences. The label is the 3-month-density with a two month GAP as shown in Fig.2. I also use GroupKFold, so all the sub-sequences from the same cfips are in the same fold. After I get the predictions for the validation sets, I calculate SMAPE for each three-time-point labels, i.e., TS=26~28, 27~29, 28~30, …, 38~40. The overall SMAPE is 2.84. <a href="https://www.kaggle.com/code/joshuascj/godaddy-final-gru-full-cv-with-blacklists" target="_blank">Code is HERE</a></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10745109%2F8feff954535976171c0410ee8e879c56%2FIMG_2088.jpg?generation=1678841945924949&amp;alt=media" alt=""></p>
+<p><strong>2. Preprocessing</strong></p>
+<ul>
+<li>Code Section 1.1: Adjust mbd based on 2021 population. <a href="https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389215#2154044" target="_blank">Details</a>. </li>
+<li>Code Section 1.3: Outlier detection and smooth. I use the code from <a href="https://www.kaggle.com/titericz" target="_blank">@titericz</a> . But remember that the outlier detection is a dangerous weapon. For example, if you apply it to all the cfips with a small TH, then you will get a small CV which is not the ture CV. But, there are outliers, what can I do? So, I decide to apply smoothing only on the cfips with large population (Top 70%) and a mbd density bigger than 0.5. I plot the distribution of the month change of the mbd, and take the tail 0.005% area as outliers. I get about 300 outliers which are mainly in 2021-01-01. I think it is ok, but not sure…</li>
+<li>Blacklists for <a href="https://www.kaggle.com/code/joshuascj/godaddy-final-xgb-gap-models-find-blacklist" target="_blank">XGB model</a> and <a href="https://www.kaggle.com/code/joshuascj/godaddy-final-gru-find-blacklist" target="_blank">GRU model</a>. <a href="https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/384860#2149382" target="_blank">my explaination</a>. The original idea is in the Giba's notebook.</li>
+</ul>
+<p><strong>3.  Model training</strong></p>
+<ul>
+<li>XGB: relative targets with MAE. For example, the GAP2 model give prediction mbd_43/mbd_40, the GAP3 model give prediction mbd_44/mbd_40, the GAP4 model give prediction mbd_45/mbd_40.</li>
+<li>GRU: adjusted mbd with SMAPE loss.</li>
+</ul>
+<p>Final words: <strong>Again, This post is not a wining solution. But I prefer to write it down.</strong> Any suggestions and comments are welcome! If I can win a medal with luck, I am happy. But If not, I will change the title to 'how I fail the GoDaddy comp ;)'. For you, maybe a good failure case to follow?<br>
+I also want to take the opportunity to thank <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> for your kind explanation and notebooks, thank <a href="https://www.kaggle.com/titericz" target="_blank">@titericz</a> for the XGB notebook(I learn a lot), thank <a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a> for the GRU suggestions, thank <a href="https://www.kaggle.com/kaggleqrdl" target="_blank">@kaggleqrdl</a> for many interesting posts.</p>
+<p>NOTE: if you run my notebooks, you will get a SMAPE=200. Because I set all the preds in Jan to zero (omg, I am the last place hhhhhhh). I only predict March, April and May.</p>

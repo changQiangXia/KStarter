@@ -1,0 +1,82 @@
+# google-tunix-hackathon 讨论区（按票数排序，共 80 条）
+
+- [Welcome to the Tunix hackathon](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/617813) — 29 票 / 59 评论 / 2025-11-12 
+- [Request: Small deadline extension due to TPU availability](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667200) — 23 票 / 5 评论 / 2026-01-11 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/617697) — 22 票 / 10 评论 / 2025-11-11 
+- [Evaluation progress](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/670878) — 19 票 / 29 评论 / 2026-01-30 
+- [[Important] submission template and FAQs](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/651560) — 13 票 / 77 评论 / 2025-12-04 
+- [Critical TPU Access Issue - Queue Times Exceeding 6+ Hours](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/666198) — 11 票 / 13 评论 / 2026-01-05 
+- [Finally the winners are ...](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/691572) — 10 票 / 9 评论 / 2026-04-15 
+- [Hackathon for the Battle of Available TPUs?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/663707) — 9 票 / 12 评论 / 2025-12-19 
+- [Good Luck to All!](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667587) — 8 票 / 0 评论 / 2026-01-13 
+- [3hrs of waiting in queue for TPUs.. what should be done?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665744) — 6 票 / 2 评论 / 2026-01-03 
+- [Taking a leak is expensive.](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665032) — 6 票 / 3 评论 / 2025-12-29 
+- [Raise TPU Kaggle Quota?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/666506) — 5 票 / 14 评论 / 2026-01-07 
+- [Request: Leniency with Notebook Evals](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667536) — 5 票 / 13 评论 / 2026-01-13 
+- [Optimized Tunix with Cut-Cross Entropy and Flash Attention](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664755) — 4 票 / 2 评论 / 2025-12-27 
+- [Train on TPU, inference everywhere aka "jax_to_safetensors" (or how to not waste precious TPU 20hr/week)](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/660686) — 4 票 / 2 评论 / 2025-12-12 
+- [No Leaderboard](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/629568) — 4 票 / 3 评论 / 2025-11-17 
+- [[Evaluation Clarification]: Model quality for a single Kaggle session](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/619613) — 4 票 / 4 评论 / 2025-11-14 
+- [Accepting Google Colab Notebooks? ](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665946) — 3 票 / 2 评论 / 2026-01-04 
+- [TPU availability issues](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/663975) — 3 票 / 0 评论 / 2025-12-21 
+- [save_lora_merged_model_as_safetensors issue](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664934) — 2 票 / 0 评论 / 2025-12-29 
+- [How to Load Tunix trained Model?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664842) — 2 票 / 0 评论 / 2025-12-28 
+- [session metrics not showing no any sign of progress for over 8 hrs ](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664649) — 2 票 / 3 评论 / 2025-12-27 
+- [The GRPO example only works in a TPU environment, any alternatives to get started with Tunix?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664594) — 2 票 / 1 评论 / 2025-12-26 
+- [How many Writeups can you submit?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664187) — 2 票 / 2 评论 / 2025-12-23 **write-up?**
+- [TPU Not Being Utilized in Kaggle Notebook](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/662595) — 2 票 / 6 评论 / 2025-12-13 
+- [Gemini API Usage and Key Submission](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/654997) — 2 票 / 3 评论 / 2025-12-08 
+- [Optimal Reward Function Composition for Multi-Domain Reasoning Under 9h TPU Constraint?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/619422) — 2 票 / 2 评论 / 2025-11-14 
+- [TPU runtime is down?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/666827) — 2 票 / 0 评论 / 2026-01-09 
+- [using colab vs kaggle notebooks](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/627477) — 2 票 / 1 评论 / 2025-11-16 
+- [Clarification on External Data: Synthetic Datasets & Sharing Timeline](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/622151) — 2 票 / 6 评论 / 2025-11-15 
+- [Clarification Needed on Submission Requirement and Evaluation](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/618645) — 2 票 / 5 评论 / 2025-11-13 
+- [Log grad norms in Tunix](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/637020) — 2 票 / 1 评论 / 2025-11-21 
+- [Looking for team ?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/618604) — 2 票 / 25 评论 / 2025-11-13 
+- [Feedback on Submissions](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667612) — 2 票 / 0 评论 / 2026-01-13 
+- [Fine-Tuning Clarification: System Prompt and Conversational Scope](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/650776) — 1 票 / 4 评论 / 2025-12-02 
+- [What is the approach for cross-domain training](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/650819) — 1 票 / 6 评论 / 2025-12-02 
+- [Question about required output format for all queries](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/644913) — 1 票 / 2 评论 / 2025-11-30 
+- [Question on SFT before RL](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/627616) — 1 票 / 1 评论 / 2025-11-17 
+- [Looking for a Team?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/641642) — 1 票 / 3 评论 / 2025-11-27 
+- [What's the over-under on the TPU shortage getting resolved before the deadline?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/650944) — 1 票 / 5 评论 / 2025-12-02 
+- [How should reasoning traces work in a creative writing context?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/651507) — 1 票 / 1 评论 / 2025-12-03 
+- [Question About Competition Scope: Validity of Multi-Domain Predictive Approach](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/619647) — 1 票 / 2 评论 / 2025-11-14 
+- [Clarification on Model Quality Evaluation Metric](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/633677) — 1 票 / 5 评论 / 2025-11-19 
+- [Potential Problematic Greedy Implementation in Submission Template?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/663588) — 1 票 / 1 评论 / 2025-12-18 
+- [0% accuracy for both pre training and post training evaluation Issue](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/638533) — 1 票 / 6 评论 / 2025-11-23 
+- [Where to download dataset ?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/619056) — 1 票 / 3 评论 / 2025-11-13 
+- [An environment for loading tunix that works with or without TPU?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664595) — 1 票 / 2 评论 / 2025-12-26 
+- [next step after publishing the project](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/619601) — 1 票 / 0 评论 / 2025-11-14 
+- [Can we meet any google internal team if we win this ?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664671) — 1 票 / 2 评论 / 2025-12-27 
+- [TPU Environment Issue: TypeError set_metadata - Training Fails After ~2 Minutes](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/633648) — 1 票 / 1 评论 / 2025-11-19 
+- [Usage of ODC-BY license datset](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664881) — 1 票 / 0 评论 / 2025-12-28 
+- [Can we use any other data set to train?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664923) — 1 票 / 1 评论 / 2025-12-28 
+- [Confusion on model and training](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/635001) — 1 票 / 2 评论 / 2025-11-20 
+- [Questions Regarding the Optional Bonus (Multi-Session / Private Data)](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664960) — 1 票 / 2 评论 / 2025-12-29 
+- [Compute constraint is mandatory?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/618887) — 1 票 / 1 评论 / 2025-11-13 
+- [Will the evaluation setup be released after the hackathon? ](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665019) — 1 票 / 1 评论 / 2025-12-29 
+- [What is the meaning of "loadable via modeling code" ?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/664822) — 1 票 / 5 评论 / 2025-12-28 
+- [i have no idea whats the point of this hackaton im confused help](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665100) — 1 票 / 1 评论 / 2025-12-30 
+- [Reward Function Design Strategies for GRPO Training](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/618578) — 1 票 / 1 评论 / 2025-11-13 
+- [Saving LoRA model with merge back to base model and then to Kaggle for multiple sessions](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665512) — 1 票 / 3 评论 / 2026-01-01 
+- [Clarification on the 15-point bonus for Multi-Session Training](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665714) — 1 票 / 0 评论 / 2026-01-03 
+- [Maths Understanding behind GRPO](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665679) — 1 票 / 1 评论 / 2026-01-03 
+- [Training Stalls and Gets Auto-Cancelled When Fine-Tuning on Coding Dataset](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665386) — 1 票 / 5 评论 / 2026-01-01 
+- [Train the model in Colab then upload to kaggle for multi-session?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665514) — 1 票 / 1 评论 / 2026-01-01 
+- [Important clarification regarding single session mode.](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665925) — 1 票 / 1 评论 / 2026-01-04 
+- [Total sampling steps 1536 must be less than the cache size 1024.](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665947) — 1 票 / 3 评论 / 2026-01-04 
+- [Session stops without any error - anyone else facing same?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/666106) — 1 票 / 3 评论 / 2026-01-05 
+- [TypeError: jit() got an unexpected keyword argument 'abstracted_axes'](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/665352) — 1 票 / 3 评论 / 2025-12-31 
+- [This machine is restarting for maintenance within the hour. Consider restarting or committing your notebook.](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667062) — 1 票 / 4 评论 / 2026-01-10 
+- [CPU issue when running Kaggle TPU notebook](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/666934) — 1 票 / 2 评论 / 2026-01-10 
+- [Is SFT enough or RL is compulsory](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/666752) — 1 票 / 1 评论 / 2026-01-08 
+- [Colab v6e-1 TPU Inference Of Gemma 3 1B](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667467) — 1 票 / 0 评论 / 2026-01-12 
+- [Results of Hackathon](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/670249) — 1 票 / 2 评论 / 2026-01-27 
+- [regarding winner announcement](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/668078) — 1 票 / 1 评论 / 2026-01-15 
+- [Tokenizer Configuration for Gemma3-1B and Runtime Considerations](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667584) — 1 票 / 2 评论 / 2026-01-13 
+- [Inquiry About "Max output token < 1K is fine"](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/645401) — 0 票 / 1 评论 / 2025-11-30 
+- [[Resource] Free Synthetic Reasoning Data Generator (Math + Logic)](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667140) — 0 票 / 2 评论 / 2026-01-11 
+- [Is It necessary to use WandB ?](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667233) — 0 票 / 1 评论 / 2026-01-11 
+- [Why my model keep input the final answer with \boxed](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/667262) — 0 票 / 0 评论 / 2026-01-11 
+- [Request: Working Baseline Submission](https://www.kaggle.com/competitions/google-tunix-hackathon/discussion/640716) — 0 票 / 4 评论 / 2025-11-26 

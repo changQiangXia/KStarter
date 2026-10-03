@@ -1,0 +1,82 @@
+# hubmap-hacking-the-human-vasculature 讨论区（按票数排序，共 80 条）
+
+- [(Public 1st/ Private 3rd) I did it at last!!! Finally became the Kaggle Competitions Grandmaster!!](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428296) — 219 票 / 122 评论 / 2023-08-01 
+- [1st place solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/429060) — 82 票 / 24 评论 / 2023-08-12 **write-up?**
+- [[LB 0.481] my experiment results](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419143) — 70 票 / 73 评论 / 2023-06-24 
+- [3 Weeks left! Here is everything that happened up to this point](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/422607) — 67 票 / 6 评论 / 2023-07-10 
+- [7th Place Solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428295) — 63 票 / 22 评论 / 2023-08-01 **write-up?**
+- [3rd Place Solution - How to properly utilise noisy annotations](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/430242) — 61 票 / 11 评论 / 2023-08-09 **write-up?**
+- [Dilation increases the score, who understands why?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/416901) — 48 票 / 30 评论 / 2023-06-13 
+- [🏆 HuBMAP last year winner solution 🏆](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412307) — 44 票 / 10 评论 / 2023-05-23 **write-up?**
+- [9th place solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428447) — 43 票 / 15 评论 / 2023-08-03 **write-up?**
+- [Adjutant resources and onboarding materials](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412237) — 34 票 / 0 评论 / 2023-05-22 
+- [public 9th / private 295th achieved private 0.575 with single modification](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428392) — 32 票 / 11 评论 / 2023-08-01 
+- [Welcome to the HuBMAP - Hacking the Human Vasculature Competition!](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412233) — 31 票 / 11 评论 / 2023-05-22 
+- [SOTA and Popular Segment method: OneFormer and UNet](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412316) — 30 票 / 4 评论 / 2023-05-23 
+- [4th Place Solution [SDSRV.AI] GoN](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428994) — 29 票 / 11 评论 / 2023-08-03 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/429240) — 28 票 / 2 评论 / 2023-08-13 **write-up?**
+- [StainTools for Augmentation](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412396) — 27 票 / 4 评论 / 2023-05-23 
+- [HubMap Meme Thread | Good luck everyone](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428205) — 24 票 / 18 评论 / 2023-07-31 
+- [Can you annotate this image accurately?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/417374) — 23 票 / 8 评论 / 2023-06-15 
+- [Mega Congratulations Nischay on Solo Gold](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428287) — 22 票 / 1 评论 / 2023-08-01 
+- [19th Place Solution: Repeated Pseudo Labeling](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428327) — 22 票 / 1 评论 / 2023-08-06 **write-up?**
+- [▲CV vs LB scores ▼](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/415508) — 21 票 / 12 评论 / 2023-06-06 
+- [let's hack mmdet3.0 and write our own training loop, etc](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/425175) — 20 票 / 10 评论 / 2023-07-17 
+- [segmentation_models_pytorch for instance segmentation](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419848) — 20 票 / 1 评论 / 2023-06-27 
+- [Does it make sense to train your model for identifying glomeruli?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/414896) — 19 票 / 14 评论 / 2023-06-03 
+- [suggestion for 100k solution writeup prize](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428326) — 19 票 / 0 评论 / 2023-08-01 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428319) — 18 票 / 21 评论 / 2023-08-01 **write-up?**
+- [Question about WSI, Dataset and Split](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/413038) — 18 票 / 7 评论 / 2023-05-26 
+- [10th place solutions!](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428301) — 18 票 / 8 评论 / 2023-08-04 **write-up?**
+- [yet another puzzle game?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/417314) — 18 票 / 5 评论 / 2023-06-15 
+- [Test data annotation](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/417012) — 17 票 / 13 评论 / 2023-06-13 
+- [Introduction to SAM (Segment Anything Model) by Meta AI](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412943) — 17 票 / 8 评论 / 2023-05-26 
+- [Revise Medical AI Image Classification Kernels](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/416393) — 16 票 / 0 评论 / 2023-06-11 
+- [how to avoid overfit to WSI 1&2?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/417267) — 16 票 / 16 评论 / 2023-06-15 
+- [write your own mmdet instance mask TTA](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/424919) — 15 票 / 1 评论 / 2023-07-16 
+- [Experimental results from LB: 0.515](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/424112) — 15 票 / 33 评论 / 2023-07-12 
+- [30th place solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428372) — 14 票 / 3 评论 / 2023-08-01 **write-up?**
+- [Some Insights](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419133) — 14 票 / 9 评论 / 2023-06-24 
+- [Dataset in JPG format.](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412278) — 13 票 / 2 评论 / 2023-05-23 
+- [Best private 0.597. Key is dataset 1?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428315) — 13 票 / 6 评论 / 2023-08-01 
+- [De-duplicated annotations - dataset](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/418009) — 13 票 / 2 评论 / 2023-06-18 
+- [Why this competition is structured as instance segmentation?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/418461) — 13 票 / 5 评论 / 2023-06-20 
+- [8th Place Solution: single model with heavy augmentation + tuned threshold](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/429352) — 12 票 / 0 评论 / 2023-08-05 **write-up?**
+- [(Best private 0.602) 297th Place Solution for the HuBMAP - Hacking the Human Vasculature Competition. How I lost the gold medal.](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/429409) — 12 票 / 0 评论 / 2023-08-05 **write-up?**
+- [[Metric]OpenImages Challenge Evaluation Metric](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/423624) — 12 票 / 1 评论 / 2023-07-10 
+- [14th Place solution: Yolov8](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/430062) — 12 票 / 7 评论 / 2023-08-08 **write-up?**
+- [[Metric] Code to compute segm-mAP  CV scores](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419309) — 12 票 / 11 评论 / 2023-06-25 
+- [ 📊Interactive visualization of tile annotations](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412683) — 11 票 / 4 评论 / 2023-05-24 
+- [How far can we push SAM? [LB 0.372]](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/416452) — 11 票 / 6 评论 / 2023-06-11 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/429014) — 10 票 / 1 评论 / 2023-08-03 
+- [onmipose demo: unet-based instance segmentation](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/420764) — 10 票 / 14 评论 / 2023-07-02 
+- [39th public/363th private](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428451) — 10 票 / 5 评论 / 2023-08-01 
+- [Duplication of "coordinates"?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/416380) — 10 票 / 4 评论 / 2023-06-11 
+- [An amazing guide for detectron2 Faster R-CNN](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419469) — 10 票 / 2 评论 / 2023-06-26 
+- [A Coordinate System to Map Human Cells. The Vasculature Common Coordinate Framework (VCCF).](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412429) — 9 票 / 0 评论 / 2023-05-23 
+- [Sharing model and LB](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419114) — 9 票 / 15 评论 / 2023-06-24 
+- [Losing & getting up?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428337) — 9 票 / 11 评论 / 2023-08-01 
+- [Public 12th / Private 26th Place Solution for the HuBMAP - Hacking the Human Vasculature Competition](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/430386) — 9 票 / 0 评论 / 2023-08-09 **write-up?**
+- [Inquiry | About mask format for submission](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/414002) — 9 票 / 2 评论 / 2023-05-31 
+- [I can't believe I'm experiencing the pain of a lost love on kaggle.](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428305) — 9 票 / 20 评论 / 2023-08-01 
+- [Possible shake-up?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428034) — 9 票 / 15 评论 / 2023-07-30 
+- [Clarity on what exactly is required by participants to submit as the result or output.](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412817) — 8 票 / 3 评论 / 2023-05-25 
+- [What is the maximum score for a yolo model?LB：0.514](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/424956) — 8 票 / 18 评论 / 2023-07-16 
+- [First Try on Kaggle| My thinking on Public rank27 dropping to Private rank800+](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428570) — 8 票 / 4 评论 / 2023-08-02 
+- [NISCHAY My buddy is now KAGGLE GRANDMASTER !!!!! ](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428678) — 8 票 / 3 评论 / 2023-08-02 
+- [5th place solution. Higher Resolution and Dataset1 is all you need.](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/429873) — 7 票 / 3 评论 / 2023-08-07 **write-up?**
+- [Did someone manage to reproduce the competition metric?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/418383) — 7 票 / 6 评论 / 2023-06-20 
+- [Introduction to SegFormer](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412258) — 7 票 / 2 评论 / 2023-05-23 
+- [Huge shake](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428290) — 7 票 / 13 评论 / 2023-08-01 
+- [[0.412] How can I improve my Score? ](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/420817) — 7 票 / 5 评论 / 2023-07-02 
+- [What versions of Yolo we can use in competitions?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/419825) — 7 票 / 5 评论 / 2023-06-27 
+- [Private 47th solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428644) — 7 票 / 2 评论 / 2023-08-02 **write-up?**
+- [Data: Legal Issue](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/413000) — 6 票 / 16 评论 / 2023-05-26 
+- [how to use mmdet==3.x with python=3.10 in kaggle notebooks?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/414513) — 6 票 / 7 评论 / 2023-06-02 
+- [ ViT Segmentation Overview for HuBMAP - Hacking the Kidney](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/412802) — 6 票 / 2 评论 / 2023-05-25 
+- [[LB 0.246] detectron2 inference](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/414525) — 6 票 / 6 评论 / 2023-06-02 
+- [What's the intuition behind this metric?](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/426067) — 6 票 / 0 评论 / 2023-07-21 
+- [13th place solution](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/431402) — 6 票 / 4 评论 / 2023-08-13 **write-up?**
+- [Things I have learned](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/428376) — 6 票 / 0 评论 / 2023-08-01 
+- [How to install Pycoco library.](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/416432) — 5 票 / 4 评论 / 2023-06-11 
+- [fast computation of 2 set of instance mask IOU](https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature/discussion/421363) — 5 票 / 2 评论 / 2023-07-05 

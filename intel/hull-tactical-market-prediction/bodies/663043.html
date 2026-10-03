@@ -1,0 +1,69 @@
+<p>Sup, kagglers! </p>
+<p>Since the results will be announced in 6 months, I would like to share my approach now, before I forget it :)</p>
+<p>Firstly I would like to thank <a href="https://www.kaggle.com/ambrosm" target="_blank">@ambrosm</a> and <a href="https://www.kaggle.com/morodertobias" target="_blank">@morodertobias</a> for their notebooks which assisted me to start thing quicker.</p>
+<p>I ve joined few weeks ago and didnt expect much to achieve, since, efficient market, you know, cant beat buy-n-hold. But maybe its possible, or, maybe I am delusional and gonna see negative sharp at the first update.</p>
+<h1>EDA</h1>
+<p>I made few experiments, didnt achieve much and decided to start looking into data. I made plots of features next to log SP500 to find patterns, examples below (red lines indicate FED rates cut periods):</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F1394574d0246a8a9f399f5275b75a949%2Ffeature_P11.jpg?generation=1765849653268982&amp;alt=media" alt="">
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2Fbb6652b0a6bd56f9ed1359f4307827aa%2Ffeature_v13.jpg?generation=1765849665728625&amp;alt=media" alt=""></p>
+<p>I also looked on index returns on trading websites, for example ETH chart
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2Fb900437aad70097b00b3819832105290%2FScreenshot_3.png?generation=1765849884987446&amp;alt=media" alt=""></p>
+<p>It gave some understanding of basic technical indicators and feature ideas</p>
+<h1>Initial features</h1>
+<p>I wont stop here for a while, but I had a total of ~6800 features calculated. Since values itself were not very meaningful and their scale changes over time I focused on volatilities, trends, deviations, ratios and so on. Most of the features were calculated in relative values, so, the distribution doesnt shift over time.</p>
+<p>In final submission I had ~130 selected, I think it could be less, but, for some reason my permutation experiments were not stable.</p>
+<h1>Target setup</h1>
+<p>I think I have seen this idea in <a href="https://www.kaggle.com/morodertobias" target="_blank">@morodertobias</a> notebook, to map allocations to returns and use it as a target. For example, instead of using actual returns you map negative returns to 0 and positive to 2.</p>
+<h2>Problem definition</h2>
+<p>After defining target this way you can solve the problem either as regression or classification. I ve decided to stick with regression, because, at the end of the day, classification here would be regression as well.</p>
+<h2>Target experiments</h2>
+<p>I made a total of 9 different targets, among them worth to notice:</p>
+<ol>
+<li>17.507 LB optimization way, I took the top scoring notebook and run an optimization function on the whole train, but it ended up with a pity values, most of them were very close to 0</li>
+<li>Kaplan-Meier function from CIBMTR:
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F72d1ffdeb3acd12bcab71c15ba206086%2FKM_function.png?generation=1765850820029709&amp;alt=media" alt=""></li>
+<li>After looking at hist of predictions I decided they are not enough extreme and lack values close to 0 or 2, so I decided to make top10% of positive returns 4 and bot10% of negative -2, but still clip predictions afterwards
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2Fa572452265f46d6accb42f89ce57f30a%2Ftarget_v7.png?generation=1765850934269516&amp;alt=media" alt=""></li>
+<li>There were more experiments, by changing positive top% values to 20 or 15, but both of them suffered from volatility penalty, so I decided to dump it.</li>
+</ol>
+<p>Also worth to notice that I was splitting 0 and 2, not by positive or negative return, but with positive or negative return compared to expected risk_free_rate of ~3.25%</p>
+<h1>Train-test split</h1>
+<p>Initially I planned to take only folds size of 90 with similar fed pattern as expected in the next 6 months into my test to overfit on expected rate cuts:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F1f7210d197098ccfe6518ef5da598d2c%2Frisk_free.png?generation=1765851555831689&amp;alt=media" alt=""></p>
+<p>But later I found performance dropped on some of my folds, those folds were periods of negative returns for SP500, so I switched to just last 20 folds size of 90, OOT, averaging their performace:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2Fa3aece17f4b01082b25f73d5a19fd11c%2Fsp_sectors.png?generation=1765851692629230&amp;alt=media" alt=""></p>
+<h1>Feature selection</h1>
+<p>After calculating feature longlist I have just fitted CatBoostRegressor on the whole dataset. From CatBoost I extracted PredictionValuesChange, LossFunctionChange, ShapValues, also Spearman correlation. After this I have calculated ranks of the features and by averaging ranks received final ranks which I used to pick features.</p>
+<p>Worth to say that later I excluded Spearman from calculation, because it ranks were very uncorrelated with other estimations.</p>
+<p>Here is an example of FI table head:
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F377dfbd85ef943db68976e5c998cdbc4%2FScreenshot_4.png?generation=1765851414735158&amp;alt=media" alt=""></p>
+<p>After this I ve just picked a subsets of 100/150/200/250 up to 400 features and ran an OOT estimation on my test folds. Except just a competition metric, I measured its components, distribution statistics, positive and &gt; 1 rates</p>
+<p>Example:
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F2846374f6c5b633d4c0fb01419ba75af%2FScreenshot_5.png?generation=1765852047788659&amp;alt=media" alt=""></p>
+<h1>Sample selection</h1>
+<p>Here, it was looking obvious to drop first ~1000 sample with a lot of missing values for features, but for me it didnt work. Sample weighting didnt work for me as well. Maybe those idead could work in right hands, but I could not do it.</p>
+<h1>Training</h1>
+<h2>Model selection:</h2>
+<p>Unfortunately, nothing fancy here, just a CatBoostRegressor(max_depth=5, iterations=2500). I have tried to run optimizer, but each experiment was about 10 minutes and I run only a hundred iterations and they didnt beat above setup after postprocessing.</p>
+<h2>Window selection (how often to retrain)</h2>
+<p>Since initially I have experimented with 90 window size, I have also tested an obvious idea of reducing the window size to something reasonable, like 10 or 20. Yeah, it gave good boost on backtest, but I could not use it for online training, since made everything the last day and all my subs failed because of me forgetting to comment debug cells.</p>
+<h1>Postprocessing</h1>
+<p>This is a fun part, since it gave a lot of boost to the competition metric.
+After looking at hist plot of raw prediction:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F013e1b1f010684e1ecb4272b10400ae1%2Fpred_hist.png?generation=1765852360930710&amp;alt=media" alt=""></p>
+<p>I thought, why not just put to 0 all prediction below threshold, same as we would do in classification. It gave big metric boost:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F409e446b11914f65d1f4e3407646058a%2Fpostproc_comparison.png?generation=1765852524952090&amp;alt=media" alt=""></p>
+<p>On this example raw strategy had a metric of 1.07 and postprocessed with a simple threshold 1.67.</p>
+<p>After this I decided to make more fancy postprocessings, like, finding an optimal allocation value in predictions bin - I have split prediction range into 6 bins [0.0, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0], 0-1 range always predicted as 0 and others had an options to pick from 0.5 to 1.5 with a step of 0.05. Sometimes it was better then simple threshold, but sometimes not, varied on experiment.</p>
+<p>I ve also made something similar, but with prediction multiplication.</p>
+<p>I decided to track strategy performance on rising markets and preferred them, to prevent overfitting for loss reduction. For example this one measured on public test, green had a lower competition metric:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F5e77b1def29c1a6d094c9aa963710880%2FScreenshot_6.png?generation=1765852935362295&amp;alt=media" alt=""> </p>
+<h1>Whad didnt work</h1>
+<p>There were a lot more experiments which ended as a failure. One of the most disappointing of them is permutation importance evaluation. Idk either I had a bug in my code, or results were not reproducible due to the some catboost randomness. Other which I had hopes, but had to dump due to the lack of time is regime prediction - idea was to predict periods of time when we expect higher negative or positive direction volatility to adjust allocations. I took an idea from different quant competition website, as you can see, at some periods returns are flat:
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2Ffb2f7997f7a12b0d02c9a626464e76d8%2Fquant.jpg?generation=1765853841149279&amp;alt=media" alt=""></p>
+<h1>Summary</h1>
+<p>Initial results have been achieved quite fast, but validating and polishing approaches took a while. It was very intense few weeks, but I liked the competition. I was very suspicious about my results, but they seem to be mediocre compared to the strategies I have seen, here is a backtest for last 4500 points:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F967ad1145ac3612737457cde9ac33dea%2FScreenshot_7.png?generation=1765853978118094&amp;alt=media" alt=""></p>
+<p>and here what some people achieve beating SP500:
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2453410%2F50331913b7481b414f3ff1e05ebd447d%2FScreenshot_8.png?generation=1765854038408298&amp;alt=media" alt=""></p>
+<p>Thx for reading, feel free to reach me if you would like to participate together in a future.</p>

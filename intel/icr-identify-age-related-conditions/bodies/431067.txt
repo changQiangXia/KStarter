@@ -1,0 +1,226 @@
+# https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431067
+
+Topic #431067: Silver Medal - LB=0.39 - Sliding Time Cross Validation!
+  Author: Chris Deotte
+  Posted: 2023-08-11 22:26:06.805000
+  Votes: 64  Comments: 51
+
+Exciting competition! Thanks Kaggle and ICR. I had three final submissions to choose from
+
+
+
+Time-CV Model with no funny business - Code published here and achieves Silver Medal
+
+LB Probing Pseudo Label model 😀 (probing explained here and here. And shown here)
+
+LB Probing Pseudo Label with conservative PP Threshold model 😀 (threshold analysis shown below)
+
+
+What do they say? "Go Big or Go Home!" For my final two submissions, I did not pick my first bullet point above (which I suspected would win a medal). Instead I chose the last 2 bullet points in an attempt to win 1st place! Note that using probed positive targets from public LB actually hurt my private LB score. And even a very conservative PP threshold (p[p&lt;0.1]=0) hurt my private LB score. Both risks failed 😀
+
+Let's discuss my solution which did not include any funny business.
+
+Sliding Time CV Scheme
+
+First we sort all the train data by date. Next we assign a random date to the train samples without a date. Afterward we slide a window with indexes START and END. Then our validation data each fold are all rows from START to END
+
+ fold  ():
+      fold  STEP
+      fold  STEP  VAL_SIZE
+    X_valid  train.iloc[:]
+
+
+
+
+Why Use Time CV?
+
+The purpose of a local validation is to mimic the relationship between train data and test data. In this competition the host tells us that all the test data occurs after (in time) of the train data. In other words, we must train a model on data from one time period and predict data from another time period.
+
+Normally i would not think that time would influence what the model learns about medical diagnosis, however in this competition if you train an XGB model with time as a feature column it becomes the most important feature even after fillna() with random dates for the train data without dates. 
+
+This means that the data is changing. Perhaps the data is collected in one location on set of machines during one time period and later collected by different machines that are calibrated differently. For some reason, the relationship between features and targets is changing over time!
+
+OOF Validation Scores
+
+We observe that different time periods have different difficulty when predicting. Notably easy time periods have a OOF validation balanced log loss of 0.15 whereas difficult time periods have 0.40. Since the host said this was a difficult problem, we can deduce that public test is easy time and private test is hard time:
+
+
+
+CV vs Public LB vs Private LB
+
+My time-CV model has an average local CV = 0.27 and public LB = 0.17 and private LB = 0.39. See notebook here. When using time CV improvements in CV lead to improvements in public and private LB.
+
+Analyze "Risky" Post Processing
+
+Once we have a local validation that mimics the LB, we can analyze PP. For each of the 25 OOF folds, we can find the best Top and Bottom thresholds and plot them. We notice that during some time periods, thresholding works and during others it does not. If we pick the median bottom threshold (i.e. pred[pred&lt;median_bottom]=0), then CV informs us that we have a 50% chance of it working if private test is a "random time period". 
+
+Note to find thresholds for private LB, we must redo the plot below using the size of private LB which is around 200 samples. Plot below is for 120 samples per validation fold and comes from my notebook here. The Yellow line is the best top threshold for each fold (i.e. time period). The Green is bottom. The Blue line is the validation fold balanced log loss metric. And the Red line is how much better each fold can become using the optimal thresholds. We note that the best validation fold with PP achieves 0.06 just like the public LB. And we note that the worst validation fold does not improve from PP just like private LB.
+
+
+
+Best Fold OOF Predictions - (Balanced Log Loss like Public LB)
+
+
+
+Worst Fold OOF Predictions - (Balanced Log Loss like Private LB)
+
+
+
+Post Competition Fun Fact
+
+After competition ended, I was curious why the private test is harder than public test and train data to predict. All three have approximately 17.5% target=1 which makes them seem similar. 
+
+First I checked categorical feature EJ (which equals A or B) and found that train, public, private have 64%, 62%, and 50% of EJ=B respectively. Next I checked NAN and found that two additional test columns EH and FD have a few NAN whereas train has no NAN in these columns. This NAN discrepency most likely caused many submission errors but neither of these two discoveries makes a big difference in model accuracy i think. (i.e. I did not find any weird test columns with 100% NAN or something crazy like that).
+
+Next using probing techniques in notebook here we see that private test has more of the difficult Alpha = D type of target=1 Class 1. I think this helps explains what changed over time to make private test more difficult than public test and train data.
+
+Comments:
+├─ Gyula Maloveczky4 (2023-08-14 13:16:03.073000) [+3]
+│  Something is unclear to me with the Time CV approach. Training on the early dates and testing on the late dates mimics the actual situation well, but does training on late data and testing on early...
+  ├─ Chris Deotte (2023-08-14 15:35:11.647000) [+1]
+  │  The reason I use bi-directional is because I assumed the reason time affects data is because the data was collected from different sources at different time periods. If that is the reason, then usi...
+├─ Tilii (2023-08-12 00:02:28.230000) [+3]
+│  Well done and super-detailed, as always. Nobody outworks @cdeotte !
+│  
+│  It didn't work out in this competition, but it is just a matter of time before you reach a quadruple #1. I am pretty sure you wi...
+  ├─ @kaggleqrdl (2023-08-12 00:20:16.653000) [+4]
+  │  I suspect quite a few people outwork cdeotte, but whether they have the talent + skill + effort of chris - that I doubt.
+  ├─ Chris Deotte (2023-08-12 06:38:05.800000) [+0]
+  │  Thanks Tilii and Kaggleqrdl
+├─ @kaggleqrdl (2023-08-11 23:16:54.963000) [+3]
+│  What about catboost??  heh..  you guys are and your xgb.
+│  
+│  Seriously, I just added catboost to all my pipelines… holy cow did I flub missing out on that
+│  
+│  symmetric trees ftw, I think.
+│  
+│  thankfully it...
+  ├─ Chris Deotte (2023-08-11 23:19:41.123000) [+5]
+  │  I tried CatBoost. It's weird if i add 10% CatBoost to the ensemble it does not improve the CV score. I tried a dozen models, the only combination that improved ensemble score was TabPFN + XGB + LGBM.
+    ├─ @kaggleqrdl (2023-08-12 00:21:30.003000) [+2]
+    │  @cdeotte I may have added the question after you replied.  I'm really curious what you think because you feel the probing is fair game - did you think probing for private Lb distribution a step too...
+    ├─ Chris Deotte (2023-08-12 00:58:01.007000) [+1]
+    │  @kaggleqrdl I was not able to probe the private LB because i did not identify all samples (both pos and neg) from public LB. I only identified all the positive samples from public LB. (Then to scor...
+    ├─ @kaggleqrdl (2023-08-12 01:15:44.867000) [+0]
+    │  Is it though?  :)
+    ├─ Chris Deotte (2023-08-13 15:25:57.913000) [+2]
+    │  @kaggleqrdl I published a notebook here with all the test index ids of the public test LB. Therefore if you want you can now probe the private LB by removing these rows from test data and computing...
+    ├─ @kaggleqrdl (2023-08-13 16:51:00.477000) [+0]
+    │  @cdeotte Well, proof by contradiction maybe, using the simplest distribution - if you had a rough idea of class balance, wouldn't it help scale your classifiers more accurately?
+    ├─ @kaggleqrdl (2023-08-13 16:52:23.757000) [+0]
+    │  Assuming that's true, other distribution parameters  could help.   There is a whole area of research under distribution robust  class validation.
+    ├─ Chris Deotte (2023-08-13 16:56:36.380000) [+0]
+    │  if you had a rough idea of class balance, wouldn't it help scale your classifiers more accurately?
+    │  
+    │  
+    │  I don't think so. Since the metric is balance log loss we scale to 0.5 regardless of Class mean....
+    ├─ Chris Deotte (2023-08-13 16:59:33.520000) [+0]
+    │  What may be helpful is trying to estimate the distribution of Alpha. We could train a multiclass CatBoost to predict. I wonder what are the proportions of the 3 diseases in private test versus publ...
+    ├─ @kaggleqrdl (2023-08-14 21:19:06.293000) [+0]
+    │  @cdeotte 
+    │  
+    │  "I don't think so"
+    │  
+    │  Then why does scale_pos_weight=5 beat out scale_pos_weight none?
+    │  
+    │  
+    │  
+    │  If you knew it was 17%, you could estimate the optimal spw.   It happened to be the same here as t...
+├─ YaGana Sheriff-Hussaini (2023-08-11 22:42:31.200000) [+3]
+│  Congrats @cdeotte and thanks for sharing.
+  ├─ Chris Deotte (2023-08-13 01:17:08.493000) [+0]
+  │  Thanks YaGana
+├─ grayjay (2023-08-12 15:58:08.310000) [+4]
+│  Timely post.  One additional suggestion: don't rely solely on the CV mean.  Look at the complete distribution of scores across folds. If one model does better than another on the tails, you really ...
+  ├─ Chris Deotte (2023-08-12 16:09:43.567000) [+1]
+  │  Great suggestion. It seems that private LB is like the two tails. So if i optimized my models for the tails that would have most likely improved my private LB. Thanks.
+  ├─ @kaggleqrdl (2023-08-13 23:04:55.887000) [+3]
+  │  @grayjay The issue I think is that Chris wanted a high std as he was looking for gold/top spot or nothing.
+  │  
+  │  Risk of ruin here doesn't really apply, right.  In fact, arguably a bronze/silver is splo...
+    ├─ Chris Deotte (2023-08-13 23:27:18.363000) [+5]
+    │  If i got first place in this competition with my crazy LB probe idea, I would have gained 60,000 points and become Kaggle Overall #1 in the Global Competition ranking 😀
+    ├─ grayjay (2023-08-14 02:28:13.173000) [+2]
+    │  @kaggleqrdl A different game indeed. But actually the comments were meant for the benefit of readers of Chris's CV analysis, not for Chris. We've all figured out he knows his stuff.  
+    │  
+    │  But there ar...
+    ├─ @kaggleqrdl (2023-08-14 20:41:06.667000) [+0]
+    │  @cdeotte Yeah, I guess that's at least true.
+    ├─ @kaggleqrdl (2023-08-14 20:42:08.697000) [+0]
+    │  @grayjay  likewise, as I'm sure you can imagine.
+├─ ls (2023-08-15 14:50:42.230000) [+1]
+│  Congrats and thanks for sharing Time CV
+  ├─ Chris Deotte (2023-08-19 22:54:16.200000) [+0]
+  │  Thank you ls
+├─ Wojciech "Victor" Fulmyk (2023-08-13 18:32:32.323000) [+1]
+│  This is a great discussion @cdeotte! I like how you discuss in details how to interpret the "Risky" Post Processing plots from your notebook. I was already studying that notebook since yesterday, t...
+  ├─ Chris Deotte (2023-08-13 18:40:44.570000) [+1]
+  │  @wisawesome thanks. I think there could be many reasons. The data can come from different sources that used different collection techniques etc. Another theory is from @lucasmorin post here. 
+  │  
+  │  It i...
+    ├─ Wojciech "Victor" Fulmyk (2023-08-13 18:56:01.643000) [+1]
+    │  This is a very interesting take, I did not consider the possibility that the same person might have occurred more than once in the dataset. If that was actually true then that would definitely expl...
+    ├─ Chris Deotte (2023-08-25 20:47:51.677000) [+0]
+    │  Yes, i'm very impressed with default CatBoost parameters. I will try default CatBoost in future comps.
+├─ Chris Deotte (2023-08-17 17:49:47.867000) [+2]
+│  UPDATE: I added a post comp fun fact to my solution writeup above
+  ├─ Wojciech "Victor" Fulmyk (2023-08-17 19:18:53.700000) [+1]
+  │  Next I checked NAN and found that two additional test columns EH and FD have a few NAN whereas train has no NAN in these columns. Neither of these two discoveries makes a big difference i think.
+  │  
+  │  
+  │  ...
+    ├─ Chris Deotte (2023-08-17 19:23:42.583000) [+2]
+    │  You are correct. This made a big difference about submission errors. I will update my comment to be more clear about the "difference" i was speaking about (namely model accuracy).
+    │  
+    │  For example, a p...
+├─ NDNam (2023-08-15 07:59:04.900000) [+2]
+│  Congrats @cdeotte and thanks for sharing this!
+  ├─ Chris Deotte (2023-08-19 02:23:57.050000) [+0]
+  │  Thanks Nam
+├─ Robert Hatch (2023-08-15 01:58:27.653000) [+2]
+│  Your use of "conservative" fooled me for half a second. So I'll ask: did you consider reweighting to be extra conservative, the opposite of going all in on the confident predictions? In other words...
+  ├─ Chris Deotte (2023-08-15 10:14:39.870000) [+1]
+  │  Great point @roberthatch , but no i did not optimize hyperparameters for worse case scenario but rather average case scenario. I built my model based on the mean behavior over the 25 time windows. ...
+    ├─ Robert Hatch (2023-08-15 18:58:29.400000) [+2]
+    │  This is very interesting. I didn't really compete in this competition (I think my ~2000 place is from a public notebook of TabPFN with no postprocessing. Haven't even checked lol), but I had planne...
+    ├─ Chris Deotte (2023-08-16 00:55:42.093000) [+2]
+    │  @roberthatch I have 25 folds. Each fold has validation data size 120 and train size 490. Each fold is represented by a tick mark on the x-axis with date. The corresponding validation data is all ro...
+    ├─ Robert Hatch (2023-08-17 02:42:34.197000) [+1]
+    │  Okay, now I get it. Thanks for the thorough explanation!
+    │  
+    │  Now that I understand it better, I think that's not quite what I was looking for. My plan, rephrased in terms of your 25 folds, had been to...
+    ├─ Robert Hatch (2023-08-17 02:48:18.110000) [+1]
+    │  Oh, duh, the better way to state it and the better way to implement it is:
+    │  Given a set of predictions, two post processing regimes are each implemented. (Or can be done with two completely differen...
+    ├─ Chris Deotte (2023-08-17 03:00:51.113000) [+1]
+    │  This builds directly into the CV score any gambles and any hedging you are doing with two complementary submissions.
+    │  
+    │  
+    │  @roberthatch That is a very smart approach to hedge for both cases. Both of my...
+    ├─ Robert Hatch (2023-08-17 03:07:33.310000) [+1]
+    │  Hindsight is 20/20, but it's actually reallllly interesting that public LB didn't 'work' on predicting the newest train data. That definitely hints at the increased possibility of 'what happened' h...
+    ├─ [deleted] (2023-08-17 03:10:17.487000) [+0]
+    │  [deleted]
+    ├─ Chris Deotte (2023-08-17 03:12:06.773000) [+1]
+    │  it's actually reallllly interesting that public LB didn't 'work' on predicting the newest train data
+    │  
+    │  
+    │  Yes this is very surprising especially because this seems to be time-dependent prediction and ...
+    ├─ Robert Hatch (2023-08-17 04:08:46.093000) [+2]
+    │  Seems like it could be one or both of:
+    │  
+    │  
+    │  
+    │  A hard point that just happens to only show up in that range(?)
+    │  
+    │  Extrapolating from Lucas's theory, it's very plausible they separated patients between tra...
+  ├─ Chris Deotte (2023-08-15 10:50:12.670000) [+1]
+  │  From the beginning of this competition, I decided that I would use an LB probing strategy which is a risk in itself. So for my model I designed it for "average case" to avoid more risk.
+  │  
+  │  I would lo...
+    ├─ @kaggleqrdl (2023-08-15 16:08:22.057000) [+0]
+    │  Time might only be somewhat important here because they artificially balanced out the data with the unknowns epsilon.
+├─ Ankur Limbashia (2023-08-12 03:36:17.500000) [+2]
+│  As usual, in the end, you surely get something very special from @cdeotte !
+  ├─ Chris Deotte (2023-08-12 15:07:19.517000) [+0]
+  │  Thanks Ankur

@@ -1,0 +1,48 @@
+<p>At First, thank kaggle staff and h&amp;m team for organizing this interesting competition. As a new kaggler (but an old RECSYSer), I enjoy this game very much and very very happy to get this place. And, thank all the competitors and the community, from whom I learned very very much, which is a bigger gain for me than the $8000🤓. At last, I must thank the covid-19 that isolated me at home for two months😂, which forced me to focus on the competition in the spare time because of no outting activities, especially during May day holiday.</p>
+<p>As my pipeline is very similar to others' (candidate generation + ranking) and I notice most part of my solution (either the recall methods or the ranking features/models) has been used and described in other guy's threads, I will just briefly introduce something different and useful in my case here. (LB scores in the following are all single model Private scores.)</p>
+<ul>
+<li><strong>Features about recall strategy</strong>:  whether this article is recalled by <code>strategy_name</code> and the rank of this article under the <code>strategy_name</code> (because I've ordered the candidate under each recall strategy by some metric, the rank num can reflact the relevance). These features, plus an expansion of candidates num for each user from dozens to hundred, boost my LB score <strong>from 0.02855 to 0.03262</strong>, which changes the color of medal from silver to near gold. In addition, if I only increase the recall num and don't adding the recall features, the CV score is very very poor. </li>
+<li><strong>BPR matrix factorization</strong>: The similarity of user and article is important for ranking. Features about item2item similarity, such as count of bought together and word2vec, are commonly used in most competitors' model and those also boost my score a lot, but what improves my model most is the user2item similarity obtained from BPR matrix factorization. This BPR model is trained with all the transactions before the target week (I've trained one BPR for each week) using <a href="https://implicit.readthedocs.io/en/latest/bpr.html" target="_blank">implicit</a>. The auc of BPR similarity is ~0.720, while the auc of the whole ranking model is ~0.806 and the best auc of other single feature is ~0.680. At last, this single similarity feature boost my LB score <strong>from 0.03363 to 0.03510</strong>, which takes me from gold medal area to the prize area.</li>
+</ul>
+<p>Any questions are welcome. Thank you for reading!</p>
+<p>-----------------------UPDATE 2022.05.15------------------------------</p>
+<h1>Recalling</h1>
+<ul>
+<li>the most popular items</li>
+<li>items that the user recently purchased</li>
+<li>relative items to what the user recently purchased</li>
+<li>popular items under user's attributes (age, gender and so on)</li>
+<li>items which have the same prod_name with what the user recently purchased</li>
+</ul>
+<h1>Ranking</h1>
+<h3>Samples</h3>
+<ul>
+<li>The generated candidates which the customer didn't purchase in the target week are labeled with 0 and those which the customer purchased are labeled with 1</li>
+<li>Because of big imbalance (pos:neg is about 1:300), downsampling is adopted. I just keep the negative samples with amount of <code>30*len(pos_samples)</code> </li>
+<li>The pos samples are only the ones which are recalled in the candidates and the other items that the user purchased in actual are not included.</li>
+</ul>
+<h3>Features</h3>
+<ul>
+<li>user and item static attributes</li>
+<li>counts of user-item and user-item attributes in the last 7 days, 30 days and all transactions. </li>
+<li>day diff of user-item and user-item attributes last seen in the transactions;</li>
+<li>similarities between user and item:<ul>
+<li>BPR matrix factorization user2item similarity</li>
+<li>word2vec item2item similarity</li>
+<li>jaccard similarity between the attributes of items that user purchased and the attributes of the target item</li>
+<li>txt similarity and image similarity by the embeddings obtained from public pre-trained models</li></ul></li>
+<li>item popularity:<ul>
+<li>counts of item/item attributes purchased  in the last 7 days, 30 days and all transactions;</li>
+<li>time weighted popularity, where the weight is 1/days of now minus purchased date</li>
+<li>weekly trend score from <a href="https://www.kaggle.com/code/byfone/h-m-trending-products-weekly" target="_blank">this kernal</a></li></ul></li>
+<li>features about recall strategy:<ul>
+<li>whether this article is recalled by <code>strategy_name</code> </li>
+<li>the rank of this article under the <code>strategy_name</code></li></ul></li>
+</ul>
+<h3>Models</h3>
+<p>The metric of each model is very similar. The final version is the average score of 16 models which were trained with different hyperparameters (learning rate, max_depth and even random seed).</p>
+<ul>
+<li>lightgbm</li>
+<li>catboost</li>
+<li>xgboost</li>
+</ul>

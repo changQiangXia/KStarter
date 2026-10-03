@@ -1,0 +1,135 @@
+<p>First of all, thanks to the host for this amazing competition! It was a rare and exciting opportunity to apply deep learning to tabular data and test how well models can adapt to new data in real-time, simulating real-world conditions. I really enjoyed participating and learning throughout the process. Thanks also to all the participants who contributed to public discussions - I learned a lot from you! <a href="https://www.kaggle.com/victorshlepov" target="_blank">@victorshlepov</a>, <a href="https://www.kaggle.com/lihaorocky" target="_blank">@lihaorocky</a>, <a href="https://www.kaggle.com/johnpayne0" target="_blank">@johnpayne0</a>, <a href="https://www.kaggle.com/shiyili" target="_blank">@shiyili</a></p>
+<p>Link to the code <a href="https://github.com/evgeniavolkova/kagglejanestreet" target="_blank">https://github.com/evgeniavolkova/kagglejanestreet</a><br>
+Link to the submission notebook <a href="https://www.kaggle.com/code/eivolkova/public-6th-place?scriptVersionId=217330222" target="_blank">https://www.kaggle.com/code/eivolkova/public-6th-place?scriptVersionId=217330222</a></p>
+<h2>1. Cross-validation</h2>
+<p>I used a time-series CV with two folds. The validation size was set to 200 dates, as in the public dataset. It correlated well with the public LB scores. Additionally, the model from the first fold was tested on the last 200 dates with a 200-day gap to simulate the private dataset scenario.</p>
+<h2>2. Feature engineering and data preparation</h2>
+<h2>2.1 Sample</h2>
+<p>I used data starting from <code>date_id = 700</code>, as this is when the number of <code>time_id</code>s stabilizes at 968. I experimented with using the entire dataset, but it did not result in any score improvement.</p>
+<h2>2.2 Data preparation</h2>
+<p>Simple standardization and NaN imputation with zero were applied. Other methods didn't provide any improvement.</p>
+<h2>2.3 Feature engeneering</h2>
+<p>I used all original features except for three categorical ones (features 09–11). I also selected 16 features that showed a high correlation with the target and created two groups of additional features:</p>
+<ul>
+<li>Market averages: Averages per <code>date_id</code> and <code>time_id</code>.</li>
+<li>Rolling statistics: Rolling averages and standard deviations over the last 1000 <code>time_id</code>s for each symbol.</li>
+</ul>
+<p>Besides that, I added <code>time_id</code> as a feature.</p>
+<p>Adding these features resulted in an improvement of about +0.002 on CV.</p>
+<h2>3. Model architecture</h2>
+<h2>3.1 Base model</h2>
+<p>Time-series GRU with sequence equal to one day. I ended up with two slightly different architectures:</p>
+<ul>
+<li>3-layer GRU</li>
+<li>1-layer GRU followed by 2 linear layers with ReLU activation and dropout.</li>
+</ul>
+<p>The second model worked better than the first model on CV (+0.001), but the first model still contributed to the ensemble, so I kept it.</p>
+<p>MLP, time-series transformers, cross-symbol attention and embeddings didn't work for me.</p>
+<h3>3.2 Responders</h3>
+<p>I used 4 responders as auxiliary targets: <code>responder_7</code> and <code>responder_8</code>, and two calculated ones:</p>
+<pre><code>df = df.with_columns(
+    (
+        pl.col()
+        + pl.col().shift(-).over()
+    ).fill_null().alias(),
+    (
+        pl.col()
+        + pl.col().shift(-).over()
+        + pl.col().shift(-).over()
+    ).fill_null().alias(),
+)
+</code></pre>
+<p>These are approximate rolling averages of the base target over 8 and 60 days, respectively. As described in detail in <a href="https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555562" target="_blank">this discussion</a> by <a href="https://www.kaggle.com/johnpayne0" target="_blank">@johnpayne0</a>, <code>responder_6</code> is a 20-day rolling average of some variable, while <code>responder_7</code> and <code>responder_8</code> are 120-day and 4-day rolling averages of the same variable, with some added noise. Given an N-day rolling average, we can easily calculate N*K-day rolling averages.</p>
+<p>A separate base model was used for each auxiliary target. The predictions from these models were then passed through a linear layer to produce the final target output, <code>responder_6</code>.</p>
+<p>The sum of losses (weighted zero-mean R²) for each responder was used to train the model.</p>
+<p>Adding auxiliary targets improved both CV and LB scores by about +0.001.</p>
+<p>Models were trained using a batch size of one day, with a learning rate of 0.0005.<br>
+For submission, I trained models on data up to the last date_id, using the number of epochs equal to the average optimal number of epochs on CV.</p>
+<h3>3.3 Ensemble</h3>
+<p>I ran both models on 3 seeds and took a simple unweighted average of predictions from those 6 models. This resulted in an LB score of 0.0112 (vs best single model LB 0.0105).</p>
+<h2>4. Online Learning</h2>
+<p>During inference, when new data with targets becomes available, I perform one forward pass to update the model weights with a learning rate of 0.0003. This approach significantly improved the model’s performance on CV (+0.008). Interestingly, for an MLP model, the score without online learning was higher than for the GRU, but lower with online learning.</p>
+<p>Updates are performed only with the <code>responder_6</code> loss, without auxiliary targets.</p>
+<p>Updates are applied for the entire dataset provided during submission, including rows with is_scored = False.</p>
+<p>I also considered performing a full online retraining on the data up to the start of the private dataset. This would make sense because there is a significant gap between the training data and the private dataset. However, retraining the model would require distributing the training process across multiple inference steps, as the one-minute time limit between dates would not be sufficient. I believe this would have been feasible but I decided not to spend time on it, although my tests suggested that it could provide a +0.001 improvement in the score. Still, I find it amazing that, instead of a full model retraining, performing one-day updates for almost a year is enough, and the model continues to perform well.</p>
+<h2>5. Technical details</h2>
+<h3>5.1 Inference Speed</h3>
+<p>Inference speed was critically important, so I spent a significant amount of time optimizing my code, particularly data processing and calculation of rolling features.</p>
+<p>For my final submission, it takes 0.06 seconds to run one inference step (<code>time_id</code>), 0.02 of which are spent on data processing. Updating model weights once per <code>date_id</code> takes 3.6 seconds.</p>
+<p>I used PyTorch, but since TensorFlow is said to be faster, I tried switching to it. However, after a few days of experimenting, I couldn't achieve better performance, so I decided to stick with PyTorch.</p>
+<h3>5.2 Technical stack</h3>
+<p>Due to RAM requirements, I switched from Google Colab to vast.ai and was extremely happy with the decision. I wrote code locally, enjoying all the perks of VSCode, and then ran a script to push the code to github, pull it on the server and execute scripts remotely.</p>
+<p>I also used WandB to monitor experiments, which helped me keep track of scores and easily revert to an older version of the code if something went wrong.</p>
+<p>To debug my submission notebook and estimate submission time I used <a href="https://www.kaggle.com/code/shiyili/js24-rmf-submission-api-debug-with-synthetic-test" target="_blank">synthetic dataset</a> by <a href="https://www.kaggle.com/shiyili" target="_blank">@shiyili</a>.</p>
+<h3>6. Scores</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CV fold 0</th>
+<th>CV fold 1v</th>
+<th>Fold 1 with 200 days gap</th>
+<th>CV avg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GRU 1 without both auxiliary targets and online learning</td>
+<td>0.0161</td>
+<td>0.0062</td>
+<td>0.0011</td>
+<td>0.0112</td>
+</tr>
+<tr>
+<td>GRU 1 without auxiliary targets</td>
+<td>0.0235</td>
+<td>0.0148</td>
+<td>0.0136</td>
+<td>0.0190</td>
+</tr>
+<tr>
+<td>GRU 1</td>
+<td>0.0249</td>
+<td>0.0153</td>
+<td>0.0147</td>
+<td>0.0201</td>
+</tr>
+<tr>
+<td>GRU 2</td>
+<td>0.0262</td>
+<td>0.0166</td>
+<td>0.0161</td>
+<td>0.0214</td>
+</tr>
+<tr>
+<td>GRU 1 + GRU 2</td>
+<td>0.0268</td>
+<td>0.0169</td>
+<td>0.0163</td>
+<td>0.0218</td>
+</tr>
+<tr>
+<td>GRU 1 3 seeds</td>
+<td>0.0258</td>
+<td>0.0164</td>
+<td>0.0152</td>
+<td>0.0211</td>
+</tr>
+<tr>
+<td>GRU 2 3 seeds</td>
+<td>0.0267</td>
+<td>0.0175</td>
+<td>0.0163</td>
+<td>0.0221</td>
+</tr>
+<tr>
+<td>GRU 1 + GRU 2 3 seeds</td>
+<td>0.0270</td>
+<td>0.0175</td>
+<td>0.0162</td>
+<td>0.0222</td>
+</tr>
+</tbody>
+</table>
+<p>Fold 0: <code>date_id</code>s from 1298 to 1498.<br>
+Fold 1: <code>date_id</code>s from 1499 to 1698.</p>

@@ -1,0 +1,78 @@
+<p>I’m very excited to have participated in this great competition.  <br>
+Huge thanks to the organizers and the Kaggle team for hosting such an amazing challenge. I also want to thank the Kaggle community and fellow participants for sharing valuable insights, discussions, and notebooks—it was a great opportunity to learn, experiment, and improve my skills.</p>
+<p>As someone relatively new to this type of competition, my implementation started from <a href="https://www.kaggle.com/code/octaviograu/baseline-dinov2-aliked-lightglue" target="_blank">Baseline: DINOV2+ALIKED+LightGLUE</a> by <a href="https://www.kaggle.com/octaviograu" target="_blank">@octaviograu</a>, and was inspired by previous solutions from <a href="https://www.kaggle.com/motono0223" target="_blank">@motono0223</a>, <a href="https://www.kaggle.com/tmyok1984" target="_blank">@tmyok1984</a>, <a href="https://www.kaggle.com/igorlashkov" target="_blank">@igorlashkov</a>, and their collaborators. Their work was incredibly helpful and is much appreciated.</p>
+<h3>Overview of the solution</h3>
+<p>The core of my solution is <a href="https://xtcpete.github.io/rdd/" target="_blank">RDD: Robust Feature Detector and Descriptor using Deformable Transformer</a> which will be presented at CVPR 2025.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11021856%2F9c7f411f856807f0bfcd1dbe476fdfd2%2FScreenshot%202025-06-03%20at%2012.39.09PM.png?generation=1748986598837167&amp;alt=media" alt=""></p>
+<h4>1. Orientation Fix</h4>
+<p>Similar to past solutions, I used <a href="https://github.com/ternaus/check_orientation" target="_blank">check_orientation</a> to correct image orientations. However, the model produced a relatively high number of false positives. To mitigate this, I applied a confidence threshold of 0.9; only predictions with confidence above this value were accepted.</p>
+<h4>2. Image Retrieval</h4>
+<p>The key challenge in this competition is to cluster a messy collection of images. This naturally leads to framing the problem as binary classification: determining whether a given image pair belongs to the same cluster.</p>
+<p>To tackle this, I built a classifier using a linear transformer to predict whether two images are from the same scene.</p>
+<p>Since the provided training data alone was insufficient to train a robust model, I augmented it with a much larger dataset, MegaDepth. I performed image retrieval over all combined images to generate candidate pairs, which included both true and false matches. Labels were derived based on the known scene structure.</p>
+<p>The trained model achieved 99% accuracy on a validation set composed of both IMC and MegaDepth samples.</p>
+<p>The model proved effective at pruning false matches. The image below shows an example of a cleaned image graph in scene ETs, after applying the model:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11021856%2F4316f7c8574454b2881f8f67a051f124%2Foutput.png?generation=1748983699984112&amp;alt=media" alt=""></p>
+<p>Initially, adding this pruning step decreased my public leaderboard score—it also removed some true pairs. To address this, I added NetVLAD-retrieved pairs to compensate. For each scene, I included:</p>
+<ul>
+<li>At least 20 pairs.</li>
+<li>At most 0.12 × n pairs, where n is the number of images in the scene.</li>
+</ul>
+<p>This didn't improve the public score but reduce the runtime significantly and allow other tricks that can actually improve the scores to run.</p>
+<h4>3. Image matching</h4>
+<ul>
+<li>I used RDD to extract 8192 features using image size 1024 and 1280.</li>
+<li>I used LightGlue to match RDD features with filter_threshold=0.2 and width_confidence=0.99.</li>
+<li>Matches from 2 image sizes are merged to generate final matches.</li>
+</ul>
+<h3>Things I tried that didn't work</h3>
+<ul>
+<li>Used doppelgängers and its followup work doppelgängers++ to distinguish pairs.</li>
+<li>Combine different keypoint locations(Superpoint, ALIKED, DaD) with RDD descriptors for matching.</li>
+</ul>
+<h3>Things I didn't have time to try but might work</h3>
+<ul>
+<li>ROI matching that crop the original images and then rematch.</li>
+<li>Rotation augmentation that rotate one image in 90° increments (4 times), match each version, and keep the best result.</li>
+</ul>
+<h3>Metrics</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Public Scores</th>
+<th>Private Scores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>46.27</td>
+<td>45.16</td>
+</tr>
+<tr>
+<td>+ Pair Removal</td>
+<td>44.89</td>
+<td>45.15</td>
+</tr>
+<tr>
+<td>+ Pair Removal  + netvlad (min:20; max: 0.12n)</td>
+<td>46.10</td>
+<td>45.48</td>
+</tr>
+<tr>
+<td>+ Pair Removal  + netvlad (min:20; max: 0.12n) + TTA</td>
+<td>48.02</td>
+<td>47.88</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Baseline: orientation fix + netvlad (up to 200 pairs) + RDD (8192 feature + imsize 1024) + LightGlue</li>
+<li>TTA: Run RDD+LG with two different image sizes 1024 and 1280 and then merge.</li>
+</ul>
+<h3>Code</h3>
+<p><a href="https://www.kaggle.com/code/xtcpete/merge-rdd-lightglue/notebook?scriptVersionId=243557064" target="_blank">Notebook</a><br>
+<a href="https://github.com/xtcpete/rdd" target="_blank">RDD</a><br>
+<a href="https://www.kaggle.com/datasets/xtcpete/kaggle-classifier" target="_blank">Pair Classifier</a><br>
+<a href="https://www.kaggle.com/models/xtcpete/hloc-with-rdd/" target="_blank">hloc with rdd and dino</a></p>

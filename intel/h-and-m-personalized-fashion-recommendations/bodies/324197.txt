@@ -1,0 +1,259 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324197
+
+Topic #324197: 2nd place solution
+  Author: (⊙﹏⊙)
+  Posted: 2022-05-10 13:28:58.891000
+  Votes: 80  Comments: 50
+
+Congrats to the 1st place winners and all the participants.  Thanks to the competition organizers for this interesting competition. Here is my team mate @paweljankiewicz and my solution.
+
+wht1996 solution
+
+I didn't do a good job of recalling the product candidate. At the beginning, I tried recalling methods such as itemCF, but later found that the effect was not even as good as directly selecting popular products. Therefore, my solution is to directly select aboout 600 most popular products for each user (there will be some very simple strategies to refer to the user's history). Then train a lgb model and select 130 candidates for each user according to the model score, and then add all the products purchased by the user in the history as the final candidate
+
+After that, train another lgb model to get the final result. Compare to the lgb model in recall stage, the features will be more complex, features can be mainly divided into the following groups:
+
+
+
+User basic features: including num, price, sales_channel_id.
+
+Product basic features: statistics based on each attribute of the product, including times, price, age, sales_channel_id, FN, Active, club_member_status, fashion_news_frequency, last purchase time, average purchase interval.
+
+User product combination features:  statistics based on each attribute of the product, including num, time, sales_channel_id, last purchase time, and average purchase interval.
+
+Age product combination features: products popularity under each age group.
+
+User product repurchase features: whether user will repurchase product and whether product will be repurchased.
+
+Higher-order combinatorial features: For example, predict when the user will next purchase the product.
+
+itemCF feature: calculate the similarity of each item through itemCF, and then calculate the score that  whether user will buy the product.
+
+
+The score of the single model on the Leaderboard is 0.0355, after adding @paweljankiewicz candidates can be promoted to 0.0362, and the ensemble score is 0.0368.
+
+@paweljankiewicz solution
+
+I followed my advice from the thread mostly. I'm happy that my intution was correct. Overall until the merge with wht1996 I focused on generating a diverse set of recall strategies. The most interesting part of the solution wouldn't be the logic but that I have written the feature engineering part in Rust and create a mini framework for parallel feature extraction. I thought that I could get away with much more complex rules that way and it was still pretty fast.
+
+Candidate strategies
+
+I used all sorts of counters to measure the popularity of items in different groups:
+
+
+
+customer attributes: different combinations (what boosted my score significantly was including postal_code)
+
+article attributes: different combinations and then intersect with the customer history - so if a customer bought an item with certain properties I looked for popular items with the same property
+The counters were used for different recency like: 1,3,7,30,90 days.
+
+
+Also I used:
+
+
+
+image similarities using MobileNet embedding
+
+cooccurences (inside basket and outside = basket to basket)
+
+random graph walk over item-user graph
+
+
+Features:
+
+
+
+customer / article attributes
+
+all sorts of similarity based measures for example I calculated average similarity of items vs the items that the customer bought
+
+streaks - this was inspired by some previous competitions posts - for many article attributes I calculated streaks measuring the number of times the customer bought a product, category, section etc in row.
+
+
+At the end I ended up with 1000 candidates per customer which was way too many. I had trouble to improve beyond 0.0340 but with wht1996 help I managed to improve the single model to 0.0348.
+
+Modeling
+
+I managed to write a lambdarankmap objective for LGBMRanker (mostly by copying the code from XGBoost) and it was slightly better than lambdarank (which uses NDCG objective). For the whole competition I trained the models using 2-3 months of transactions and last week to validate.
+
+What didn't work
+
+Deep learning models - I tried several recbole models but they weren't so good.
+
+How to improve competitions like this
+
+A large part of the competition was about predicting the availability of the products for different postal_codes. I think this was disguised as a recommendation system competition to some extent. For future competitions I would suggest:
+
+
+
+providing the state of articles - which are available and where
+
+to minimize the calculation needed to submit I would suggest to provide a list of customers with transactions in the subimission week. Predicting customers which didn't have transactions was very computation heavy task. The reason is that the models are the same but creating features and predicting takes time.
+
+
+How we cooperated
+
+The cooperation was smooth. We exchanged our solutions and candidates (with scores).
+
+Comments:
+├─ Aliciaworld (2022-05-13 14:57:19.023000) [+1]
+│  a very new beginner, can we get the winner's code to study?
+├─ Y-Haneji (2022-05-11 09:33:43.690000) [+1]
+│  @paweljankiewicz 
+│  Congratulations for your gold!!
+│  First, I want to say that your famous post helped me a lot with thinking about two stage prediction, generating candidates followed by ranking.
+│  
+│  I ...
+  ├─ Paweł Jankiewicz (2022-05-11 10:34:36.620000) [+4]
+  │  Glad my post was helpful to you.
+  │  
+  │  The actual comparison was actually simpler. I calculated average jaccard index of attributes. So when a customer had 3 items in the history:
+  │  
+  │  item_1 attributes A,B...
+  ├─ Y-Haneji (2022-05-12 08:35:33.407000) [+0]
+  │  @paweljankiewicz 
+  │  I understand how did you treat similarity.
+  │  
+  │  Could I ask you another question?
+  │  You said that you used "image similarities using MobileNet embedding". Do you mean that you used AVER...
+  ├─ Paweł Jankiewicz (2022-05-12 09:48:18.257000) [+2]
+  │  Yes exactly it is average similarity of items that someone bought (or only last basket) excluding the same item. I used it for generating candidates but it wasn't a very good strategy because it di...
+  ├─ Paweł Jankiewicz (2022-05-12 09:49:17.223000) [+3]
+  │  Actually interesting thing is that I used the tool I created in Rust to find similar images - it is open source https://github.com/recoai/visual-search.
+  ├─ Y-Haneji (2022-05-12 10:02:47.073000) [+0]
+  │  @paweljankiewicz
+  │  I see. Thank you for your answering!
+  │  New items' recommendation seems more difficult than transactions' one in this competition… (and maybe also in another recommendation system.)
+  ├─ Y-Haneji (2022-05-12 10:03:49.687000) [+0]
+  │  I stared your repo. I will try it in another competition. Thanks!
+├─ HAO (2022-05-11 02:36:11.333000) [+1]
+│  Congrats for the second place finish! Very thorough feature engeering work. Learn a lot. Thanks!
+├─ senkin13 (2022-05-11 01:59:42.967000) [+1]
+│  Congrats! your improvement in LB of last 3 days was impressive and worried us.
+  ├─ Paweł Jankiewicz (2022-05-11 07:32:00.867000) [+1]
+  │  That's because only at the end we combined our solutions fully. I'm quite happy about the synergy we got in our solutions.
+├─ sirius (2022-05-10 14:53:44.483000) [+1]
+│  Congrats! Cool work
+├─ Giba (2022-05-10 14:34:46.337000) [+1]
+│  Congrats @paweljankiewicz and  @wht1996 for the second place!  Thanks for sharing your great solution.
+├─ IgorMuniz (2022-05-10 13:41:02.637000) [+1]
+│  Congratulations to you both and many thanks to @paweljankiewicz, we all have learned a lot from you. When you say you used 2-3 months of transactions to train, is it mean you have 8-12 target weeks...
+  ├─ Paweł Jankiewicz (2022-05-10 13:48:56.963000) [+2]
+  │  Yes exactly. So it is not maybe precise to say that I used last 2-3 months of transactions.
+  │  I used all transactions until the observation date. And only for ranking model I used last 2-3 months.
+├─ Saber (2022-05-11 05:50:00.823000) [+2]
+│  Congrats on your 2nd place finish, especially for our new grandmaster @wht1996 .
+│  
+│  Two questions to @wht1996
+│  
+│  
+│  
+│  As you mentioned that the feature of your second lightgbm model is more complex, what ...
+  ├─ Paweł Jankiewicz (2022-05-11 07:30:32.347000) [+4]
+  │  Popularity in the last 1/3/7 days combined with postal_code + age or other item/customer attributes creates very precise candidates. Some combinations have 10-11% precision. About image embeddings ...
+  ├─ (⊙﹏⊙) (2022-05-11 11:59:56.940000) [+3]
+  │  1、For example, in the sorting stage, multiple windows of different sizes will be selected. In the recall stage, I only select a window of one size, and some complex features are missing, such as it...
+  ├─ Saber (2022-05-11 12:51:29.480000) [+1]
+  │  Thank you for the reply from you both, I have learned a lot from your solution!
+├─ ONODERA (2022-05-11 03:13:47.937000) [+2]
+│  to minimize the calculation needed to submit I would suggest to provide a list of customers with transactions in the subimission week.
+│  
+│  
+│  I raised that issue here, but nobody understood what I said,...
+  ├─ senkin13 (2022-05-11 04:24:38.927000) [+1]
+  │  I think if we know customers who have transactions at next week, we can create lots of features using future information to improve accuracy that will make this competition just become a competitio...
+  ├─ Paweł Jankiewicz (2022-05-11 07:52:32.207000) [+3]
+  │  The feature extraction is the same and model is the same so a large organization like H&amp;M shouldn't have any problems applying this to larger scale. I would say that the data in a real system i...
+  ├─ ONODERA (2022-05-11 08:20:14.840000) [+1]
+  │  we can create lots of features using future information to improve accuracy
+  │  
+  │  
+  │  I just can't imagine how we can utilize those "leak". So I think our prediction won't change even if we already know wh...
+  ├─ Paweł Jankiewicz (2022-05-11 09:02:40.070000) [+1]
+  │  It is not leakage it is optimization of testing time.
+  ├─ senkin13 (2022-05-11 09:50:47.800000) [+0]
+  │  just a hypothesis, we get strong features by training all the previous transactions' user-item bipartite graph,if we use next week's purchased user to train a subgraph,maybe have additional improve...
+  ├─ Clear n' Simple (2022-05-11 13:37:08.190000) [+0]
+  │  @onodera @paweljankiewicz  - Here's an idea:
+  │  
+  │  There may not be leakage, but if there was a subset of customers that were especially active during the evaluation period (i.e. a certain age, certain ...
+├─ flg (2022-05-10 15:37:29.553000) [+2]
+│  Thanks for sharing and congrats!
+│  Definitely agree with your improvement suggestions. Having to predict for all users was quite a slowdown.
+├─ Dan Ofer (2022-05-20 10:13:57.473000) [+0]
+│  Oh dang, I did NOt think about availability per post code (I assumed it was all online, and uniformly available). That's a good catch!
+├─ yc ding2001 (2022-05-14 13:14:24.963000) [+0]
+│  Wow congrats!
+├─ jontix (2022-05-12 22:53:54.030000) [+0]
+│  Congratulations both… well done!! Thanks for sharing this… really interesting!
+  ├─ Paweł Jankiewicz (2022-05-12 23:53:15.673000) [+1]
+  │  Hi @jontix. Long time no see :)
+  ├─ jontix (2022-05-13 00:25:38.367000) [+0]
+  │  Way too long @paweljankiewicz! Hope you and yours are well :)
+├─ Radek Osmulski (2022-05-12 22:29:27.257000) [+0]
+│  @paweljankiewicz and @wht1996, once again, huge congrats on your super stellar performance 🙂
+│  
+│  One question if I may ask you, please. How do you handle duplicate purchases? Do you ever predict dupli...
+  ├─ Paweł Jankiewicz (2022-05-12 22:40:52.680000) [+1]
+  │  A duplicate purchase doesn't change anything in my opinion. We considered unique pairs of user/item.
+  │  
+  │  We combined the results on multiple levels. For example @wht1996 found a way to use my candidat...
+  ├─ Radek Osmulski (2022-05-12 23:55:09.903000) [+0]
+  │  Thank you very much for your answer!!! 🙂
+├─ SOYOUNG PARK (2022-05-12 14:09:45.493000) [+0]
+│  Congrats for your winning! I didn't expect postal code would be a key!! Thanks for sharing
+├─ Radek Osmulski (2022-05-12 06:18:58.867000) [+0]
+│  Congrats! That is an amazing result!!!! 🥳
+│  
+│  @paweljankiewicz when you say that you used the last week for validation, does it mean that you had a single end-to-end pipeline? Something that took in t...
+  ├─ Paweł Jankiewicz (2022-05-12 07:06:10.360000) [+1]
+  │  I wouldn't call it a pipeline but indeed I had a script that did all of the things you mentioned.
+  ├─ Radek Osmulski (2022-05-12 10:47:02.497000) [+0]
+  │  Thank you for your reply! If I am understanding this right, your submissions was trained as follows:
+  │  
+  │  
+  │  
+  │  you trained on some number of weeks
+  │  
+  │  retained the last week for validation
+  │  
+  │  AND used that mod...
+  ├─ Radek Osmulski (2022-05-12 10:48:04.300000) [+0]
+  │  Apologies for the additional bother on this and huge congrats again, @paweljankiewicz! 🙂
+  ├─ Paweł Jankiewicz (2022-05-12 10:51:13.340000) [+1]
+  │  For submission I retrained the model including the last week.
+├─ Homoalways (2022-05-11 09:50:21.853000) [+0]
+│  How do you compute streaks? I stored the number of times a customer buy each type of product in dictionary and look up the dictionary with article features. Cudf dataframe cannot be used and it is ...
+  ├─ Paweł Jankiewicz (2022-05-11 10:44:50.273000) [+3]
+  │  This is the power of a fast language like Rust. It is a fairly simple calculation.
+  │  
+  │  The pseudo code was something like this:
+  │  
+  │  for each customer:
+  │          for each basket (in order):
+  │                  ...
+├─ Hyungeun Jo (2022-05-11 09:24:38.193000) [+0]
+│  Thanks for sharing great work. I'm deeply impressed about your work.
+│  @wht1996 Can you explain in more detail about how you select 600 most popular products for each user?
+  ├─ (⊙﹏⊙) (2022-05-11 12:03:27.673000) [+2]
+  │  In addition to the recent top-selling prodicts, I will also select the top-selling products under the section id that the user has historically purchased
+├─ Lachlan Gillian (2022-05-11 00:16:45.900000) [+0]
+│  @wht1996 thank you for this write up and congratulations!
+├─ [deleted] (2022-05-10 23:44:08.177000) [+0]
+│  Great work! Can you share some details on the feature engineering part written in Rust and the mini framework for parallel feature extraction?
+├─ Clear n' Simple (2022-05-10 19:04:06.100000) [+0]
+│  Thanks for sharing!
+│  
+│  @paweljankiewicz 
+│  I think this is the first place I saw someone mentioning postal code.
+│  Did you do something special that made it work for you?
+│  
+│  Also, you mentioned mid-competi...
+  ├─ Paweł Jankiewicz (2022-05-11 07:36:34.487000) [+1]
+  │  To be honest I didn't experiment too much with different periods. @wht1996 used fewer weeks with great results but when I wanted to use the same my score worsened.
+  │  
+  │  These are a couple of scores/can...
+  ├─ Clear n' Simple (2022-05-11 14:34:54.860000) [+0]
+  │  I looked into using it, but thought that it for sure wouldn't help.
+  │  
+  │  If you look at the last 7 days of transactions, (and ignore where postal_code=='2c29ae653a9282cce4151bd87643c907644e09541abc28ae...

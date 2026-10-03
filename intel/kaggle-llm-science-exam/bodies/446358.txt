@@ -1,0 +1,209 @@
+# https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446358
+
+Topic #446358: 3rd place solution [Update + Code links]
+  Author: Pavel Podberezko
+  Posted: 2023-10-11 10:23:47.190000
+  Votes: 84  Comments: 22
+
+First of all, I want to thank organizers for amazing competition which provided a nice chance to dive deep into LLMs and thanks to co-kagglers who shared their datasets and approaches. Specifically, thanks to @radek1 and @cdeotte for high quality datasets, which helped massively in training good question answering models. Thanks to @simjeg for showing how to do the impossible and to @cpmpml for developing these ideas and adding Xwin model weights. Special thanks to @sugupoko for sharing 70k dataset, which helped me to tune re-ranker model (the dataset contributed to qa models as well), which in turn gave huge boost to my scores. To contribute to knowledge sharing, I will publish my code, but it is going to take a few days.
+
+Important note before going into details about the solution: I used Platypus2, but still not sure if it is allowed or not due to its license restrictions. But the main reason why I kept it in final submissions is that organizers stated that winning models are not used for any business purpose, which, I guess, implies that commercial usage restrictions in license should not be a problem.
+
+[Update] Turns out it was fine to use Platypus2, but surprisingly additional ablation studies showed that slightly better scores could have been achieved without it! More details are in a table below.
+
+Diagram of the solution
+
+
+
+Some notes about the solution
+
+Wikipedia processing
+
+It starts with Wikipedia dump processing, because, as many noted before, available processed wikipedia data have numerous flaws from missing numbers to missing articles. I used https://github.com/attardi/wikiextractor and modified it to solve problem of deleted numerical values. Most likely some problems still remained, but some were solved.
+
+Search for context is performed in one stage on passage level as opposed to the search for articles first and then for sentences. The reason is that in some cases two stage search just has no chance to find necessary context. For example, in training data I saw a question about actions of a character from some play. But the title or beginning of the article about this play does not mention this character, so encoding of the article does not contain necessary information. Not sure how frequent such cases, but probably not negligible.
+
+Reranker training
+
+I saw some comments in other discussions that people tried to train reranker model, but without success. From what I understood in the process of tuning my reranker, there are two key ingredients here:
+
+
+
+Having candidates in pairs of (question, candidate), both positive and negative, from the same distribution as they appear during inference. In my case it was important to use wikipedia passages, that I got from wikipedia processing, and not the context from original 70k dataset.
+
+Train with hard negatives. Though there is a caveat here: a raw model, that was not pretrained for reranking task, will fail miserably on hard negatives. So it is important to take some pretrained one (ibm/re2g-reranker-nq in my case) or train it in two stages.
+
+
+Ablation studies
+
+It is interesting to see how each part of the solution contributes to overall score, but I have not done thorough ablation studies, because assembled all parts together very late. But there are some hints from earlier submissions:
+
+
+
+
+Pipeline configuration
+Private
+Public
+
+
+
+
+Inference only with 5 debertas (not final models), not tuned reranker
+0.894
+0.893
+
+
++answering 500 hard questions with Platypus
+0.91
+0.909
+
+
++replacing debertas with new ones and adding 3 electras and 5 robertas
+0.912
+0.914
+
+
++replacing reranker with tuned one
+0.927
+0.922
+
+
++adding Xwin to ensemble
+0.928
+0.926
+
+
+
+
+I think such results show that question answering part does its job very well if provided with correct context (boost from tuning reranker) and the weakest part of the solution is the initial retrieval. Which makes sense, since it is the part that is not tuned for competition data and also it consists of two very small models with very limited capacity, which are tasked to index huge dataset. Probably much higher score could have been achieved with tuned retrieval models.
+
+[Update]
+Table with measurements of each part's contribution to the final score
+
+
+
+
+Pipeline configuration
+Private
+Public
+
+
+
+
+Final submit
+0.9284
+0.9286
+
+
+Without Xwin
+0.9272
+0.9257
+
+
+Without Platypus2
+0.9288
+0.9309
+
+
+Without both LLMs
+0.9165
+0.9201
+
+
+Without bge-small in retrieval
+0.9272
+0.9261
+
+
+Without MiniLM-L6-v2 in retrieval
+0.9258
+0.9259
+
+
+Without Electra and Roberta in MLMs ensemble
+0.9246
+0.9268
+
+
+Without reranker
+0.9113
+0.9130
+
+
+
+
+
+Code:
+Reranker training
+Full pipeline inference
+
+Comments:
+├─ ZHANG Zhi (2023-10-12 00:52:45.727000) [+1]
+│  Congratulations on winning the gold medal!
+│  
+│  I am genuinely convinced by this solution! It employs a reranker and uses a 70B model to answer challenging questions. I had overlooked them.
+├─ Chris Deotte (2023-10-12 00:32:33.947000) [+1]
+│  Amazing job achieving solo gold cash Pavel! I love your solution and the intricate flow diagram! Using 70B model to answer difficult questions is very smart. Nice job tuning the reranker. And I'm e...
+  ├─ Pavel Podberezko (2023-10-12 11:18:35.230000) [+2]
+  │  Thanks!
+  │  Actually, while DeBERTa was a clear winner among BERT-like models, ELECTRA was not so far behind on local cv in the end. In early experiments - in the setting of closed book exam - DeBERTa ...
+├─ suguuuuu (2023-10-11 13:27:09.920000) [+1]
+│  Congratulations!
+│  I have created 70k dataset for you! Thank you for using it.
+├─ CPMP (2023-10-11 11:16:19.390000) [+1]
+│  Awesome work! How did you manage to run 70B models fast enough to ensemble them?  
+│  
+│  Edit: I see you apply them to 500 samples only. Great idea!
+│  
+│  I dropped Platypus in favor of Xwin because of the l...
+  ├─ Psi (2023-10-11 12:05:36.463000) [+2]
+  │  I locally checked several 70b models zero-shot capabilities and I did not find any improvement over the chat model from meta from all these finetunes. But you need to play a bit with the optimal ze...
+  ├─ Dipam Chakraborty (2023-10-11 12:56:46.040000) [+1]
+  │  I guess as the diagram says, he ran it on only 500 questions, which will take around 1 hour each.
+├─ Bilzard (2023-10-12 06:13:46.463000) [+0]
+│  @podpall Congratulations and thanks for the write-up.
+│  
+│  In context search, I also tried to retrieve from the full wikipedia dump, but it requires lot of memory for creating FAISS index, and gets OOM...
+  ├─ Pavel Podberezko (2023-10-12 12:09:56.480000) [+1]
+  │  Thanks!
+  │  With index there are two main options:
+  │  
+  │  
+  │  
+  │  Quantize it. Raw embeddings for all passages were 80GB in my case, but quantized index can be much smaller. But there is trade-off between its size...
+    ├─ @kaggleqrdl (2023-10-12 22:12:34.030000) [+0]
+    │  "I did not use faiss in the end (plain pytorch dot prod instead) because needed to get distances to all passages in index for ensembling two retrieval models. But faiss restricts the max number of ...
+    ├─ Bilzard (2023-10-13 03:31:46.050000) [+0]
+    │  @podpall Thank you for sharing the detail of the process.
+    │  
+    │  
+    │    
+    │  I did not use faiss in the end (plain pytorch dot prod instead) because needed to get distances to all passages in index for ensemblin...
+  ├─ [deleted] (2023-10-12 22:07:45.237000) [+0]
+  │  [deleted]
+├─ wqlun06 (2023-10-12 03:15:45.447000) [+0]
+│  Congratulations on winning the solo gold medal ! 👏
+│  How do you manage the runtime of the best code with ensemble models?
+  ├─ Pavel Podberezko (2023-10-12 11:40:15.407000) [+2]
+  │  Thanks!
+  │  Well, BERT-like models are relatively fast, so I ran them through all questions. 70b model are very slow, but the main reason of low speed for them is weight loading from slow kaggle storag...
+├─ @kaggleqrdl (2023-10-12 00:39:02.793000) [+0]
+│  Impressive work!  Very curious, detail wise, how you tuned the reranker.  I used bge-large-reranker which came out just a few weeks ago and was impressed with its capability - superior to any of th...
+  ├─ Pavel Podberezko (2023-10-12 11:30:23.900000) [+0]
+  │  Thanks!
+  │  Yes, this competition is all about trade-off between quality and speed and memory. I was also curious about what size of reranker to use. Went with this base-sized ibm/re2g-reranker-nq, whi...
+├─ corochann (2023-10-11 21:00:12.717000) [+0]
+│  Congrats @podpall. Amazing that you have done such work solo!
+│  
+│  We are also very interested in using reranker model, but it was too late for us. According to your ablation study, non-tuned (pretrain...
+  ├─ Pavel Podberezko (2023-10-12 11:05:44.903000) [+2]
+  │  Thanks!
+  │  Yes, fine-tuning reranker gave huge boost, but I cannot say that it was the main reason of high score. I think without 70b LLM in the ensemble, the gain from reranker would not be that big....
+├─ Yasmin Mulla (2023-10-11 14:56:32.993000) [+0]
+│  Congratulations!
+├─ Patrick Chan (2023-10-11 13:36:37.807000) [+0]
+│  Great sharing. Our team also used the Platypus 70b for a small percentage of the hardest question. Amazing you managed to use both 70b! Well done and congratulations.
+├─ Gaurav Rawat (2023-10-11 11:28:00.257000) [+0]
+│  Congratulations and a great solution. Like others we also tried same reranker which turns was better on private but great to learn how you used it.
+├─ Jude Hunt (2023-10-11 11:00:58.483000) [+0]
+│  Wow! Awesome work on the context reranker step @podpall, and a huge congratulations on the solo gold! Enjoy the prize 🤩

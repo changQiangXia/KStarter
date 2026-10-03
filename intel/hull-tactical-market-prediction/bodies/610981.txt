@@ -1,0 +1,535 @@
+# https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/610981
+
+Topic #610981: The Hull Tactical competition exploratory data analysis (EDA)
+  Author: Mahdi Wanna
+  Posted: 2025-10-07 23:11:38.332000
+  Votes: 47  Comments: 10
+
+This notebook [https://www.kaggle.com/code/mahdiwanna/eda-for-hull-tactical]  performs:
+
+
+
+
+A detailed exploratory data analysis (EDA) of Hull Tactical’s feature families
+
+
+Assessment of data quality, correlations, and statistical properties
+
+
+Baseline linear and simple rule-based models for allocation sizing
+
+
+Preliminary Sharpe and volatility evaluation.  
+
+
+ 
+
+THE GOAL: derive insights guiding future model iterations while staying aligned with the fund’s risk-managed approach.
+
+First our target variable is: 
+market_forward_excess_returns = (S&amp;P 500 forward return)−(rolling 5-year mean forward return), winsorized by a MAD criterion.
+
+It represents the risk-adjusted, forward-looking excess return of the market — i.e., how much above/below “normal” the next-day market return is expected to be.
+
+In plain terms: → Positive = market expected to outperform normal levels. → Negative = market expected to underperform.
+
+Our model’s goal is to predict this value, then convert that into an allocation (0–2) for exposure.
+
+Dataset Structure &amp; Overview:
+
+The Hull Tactical competition provides a robust financial time series dataset with 8,990 training samples and 98 features across 7 distinct categories :
+
+
+
+
+D Features (D1-D9): 9 technical indicators
+
+
+E Features (E1-E20): 20 economic indicators
+
+
+V Features (V1-V15): 15 volatility/variance signals
+
+
+S Features (S1-S15): 15 sentiment signals
+
+
+M Features (M1-M20): 20 market/momentum indicators
+
+
+T Features (T1-T10): 10 trend/timing signals
+
+
+P Features (P1-P9): 9 proprietary Hull Tactical signals
+
+
+ 
+
+Let’s inspect their structure and missingness next.
+
+Early periods in the dataset contain significant missingness, especially in macro and sentiment features.
+Later data (recent decades) is considerably more complete — suggesting that truncating or imputing selectively may be more robust.
+
+Target Variable Exploration:
+
+
+
+
+Distribution of Target (Histogram + KDE)
+
+
+
+The distribution of S&amp;P 500 forward excess returns is roughly bell-shaped but exhibits pronounced fat tails (leptokurtic), indicating that extreme positive and negative returns occur much more frequently than a normal distribution would predict.
+
+While the central peak suggests most returns cluster near zero, the heavy tails reflect heightened risk of outsized market moves. There is a slight rightward skew, meaning large positive excess returns may be somewhat more probable or larger than negative ones, although the overall asymmetry is modest.
+
+This shape is consistent with well-documented characteristics of financial returns: non-normality, excess kurtosis, and the presence of tail risk.
+
+
+ 
+
+Target Over Time (Time Series Plot)
+
+
+
+The time series of excess returns displays clear episodes of high and low volatility, demonstrating classic volatility clustering—where tranquil periods are punctuated by bursts of intense fluctuation.
+
+This heteroskedastic behavior is widely observed in financial markets and motivates the use of models like GARCH or various volatility-adjusted forecasting techniques that dynamically respond to changing risk conditions. Notably, there’s no sustained long-term drift in the series; excess returns oscillate around zero, suggesting the process is stationary and in line with the efficient market hypothesis, where no persistent predictability or bias in returns is evident.
+
+These features, fat tails, volatility clustering, and mean-reversion—should be carefully considered when selecting and validating predictive models for financial time series. They imply that traditional models assuming normality or constant volatility may underestimate both the likelihood of extreme outcomes and the need for robust risk management.
+
+
+ 
+
+Spearman Correlations
+
+Computed correlations for 94 features.
+Top 10 correlations:
+
+
+
+
+Feature
+Corr with Target
+
+
+
+
+M1
+0.053468
+
+
+V13
+0.046223
+
+
+V10
+0.043653
+
+
+S5
+0.039395
+
+
+V7
+0.036725
+
+
+E19
+0.034061
+
+
+V9
+0.032719
+
+
+S12
+0.031345
+
+
+D2
+0.030236
+
+
+D1
+0.030236
+
+
+
+
+#
+
+Bottom 10 correlations :
+
+
+
+
+Feature
+Corr with Target
+
+
+
+
+E12
+-0.021490
+
+
+S8
+-0.023820
+
+
+P8
+-0.025472
+
+
+M12
+-0.025538
+
+
+I2
+-0.027499
+
+
+S3
+-0.028454
+
+
+E11
+-0.030253
+
+
+P5
+-0.041320
+
+
+S2
+-0.044504
+
+
+M4
+-0.052769
+
+
+
+
+ 
+
+
+
+spearman correlation heatmap:
+
+
+From the Spearman correlations computed between 94 features and the target variable (market_forward_excess_returns), the following key insights emerge:
+
+1. Magnitude and Direction
+
+All correlations are very weak in absolute value. The strongest positive correlation is approximately 0.05 (M1), and the strongest negative is around -0.05 (M4).
+
+Values near zero indicate almost no monotonic relationship with the target variable.
+
+Both positive and negative correlations are small, suggesting that no single feature independently predicts returns.
+
+2. Implications of Weak Correlations
+
+No dominant predictors: Excess returns likely depend on many subtle signals rather than strong individual effects.
+
+Feature interactions matter: Since monotonic associations are weak, modeling nonlinear relationships or feature combinations will be key.
+
+Consistent with EMH: The weak correlations align with the Efficient Market Hypothesis, implying limited predictable structure in isolated features.
+
+Collinearity Analysis
+
+
+
+
+Feature
+VIF
+
+
+
+
+I5
+1741.732610
+
+
+I9
+1718.966991
+
+
+M14
+294.931473
+
+
+E2
+250.525494
+
+
+P10
+227.086083
+
+
+E3
+174.295403
+
+
+I7
+148.393637
+
+
+P11
+141.753574
+
+
+P8
+101.724791
+
+
+I8
+99.372322
+
+
+
+
+#
+
+
+
+
+We performed a Variance Inflation Factor (VIF) analysis on 94 numeric features to assess multicollinearity within the dataset. The VIF quantifies how much the variance of a regression coefficient is inflated due to linear dependencies with other features. Values exceeding 10 indicate severe multicollinearity.
+
+
+Our results revealed several features with extremely high VIF values, with the top 10 reaching from ~100 up to over 1700, signaling near-perfect linear dependencies among certain variables. This suggests that some features are redundant or represent linear combinations of others, potentially causing instability in linear models.
+
+
+High multicollinearity can distort model interpretations, inflate standard errors, and degrade prediction robustness, particularly in parametric models. To address this, we recommend dimensionality reduction techniques such as Principal Component Analysis (PCA), careful feature selection to remove redundant variables, and leveraging regularized or tree-based models that are more resilient to such correlations.
+
+
+Augmented Dickey-Fuller Test
+
+ADF p-value: 0.0000
+
+The Augmented Dickey-Fuller (ADF) test checks the null hypothesis:
+
+H₀: The series has a unit root (non-stationary)
+
+H₁: The series is stationary (no unit root)
+
+In our analysis, the ADF test returned a p-value of 0.0000, providing strong evidence against the null hypothesis. This indicates that the series is likely stationary.
+
+Stationarity implies that the mean, variance, and autocorrelation structure of the series remain roughly constant over time.
+
+
+Visual inspection further supports this conclusion:
+
+The rolling mean and standard deviation remain roughly constant, indicating that the series does not exhibit systematic trends or changing volatility.
+
+
+
+The autocorrelation function (ACF) decays rapidly, suggesting the absence of long-term dependencies typical of non-stationary processes. Overall, despite the stochastic and noisy nature of financial returns, our analysis confirms that excess forward returns are weakly stationary, meaning their statistical properties (mean, variance) remain stable over time.
+
+Why this is useful ?
+Knowing that your target is stationary is very important for modeling:
+
+
+
+
+Model choice: Stationarity of returns enables many statistical/machine learning models to be valid. Many time series models assume stationarity.
+
+
+Feature engineering: You can create lag features or rolling statistics (mean, std) directly on the series without worrying about introducing spurious correlations.
+
+
+Forecasting reliability: Stable mean and variance improve the reliability of statistical models, non-stationary data can produce misleading predictions, so confirming stationarity reduces that risk.
+
+
+Interpretation of results: Coefficients or relationships learned by your model are more stable over time because the underlying series does not drift.
+
+
+Outlier &amp; Distribution Tests (QQ Plot, Skewness, and Kurtosis)
+
+
+
+Skew: -0.17791864538186636
+Kurtosis: 2.236568952964638
+
+
+
+
+The QQ plot visually compares the empirically observed distribution of excess returns against a theoretical normal distribution. Data points hugging the diagonal line indicate normality, while systematic deviations reveal departures such as skewness or heavy tails. In our case, the plot showed moderate deviations from normality, especially in the tails, signaling that extreme positive or negative returns occur more frequently than a Gaussian would predict.
+
+
+The skewness value of approximately -0.18 indicates a slight asymmetry with a longer left tail, implying that negative returns, though infrequent, can be more extreme than positive returns. This aligns with the commonly observed phenomenon of downside risk in financial markets.
+
+
+The kurtosis of about 2.24, marginally below the normal value of 3, suggests the distribution is relatively platykurtic — somewhat flatter and thinner-tailed than normal. This unique characteristic might reflect the specific dataset or time period analyzed, but still highlights that the simple normality assumption does not hold perfectly.
+
+
+ 
+
+Why is this important? 
+
+
+
+
+Risk Assessment: Understanding the presence of skewness and kurtosis helps quantify the likelihood of extreme losses or gains (tail risk), which is critical for setting stop-loss limits, stress testing, and capital allocation.
+
+
+Modeling Strategy: Non-normality means classical models that assume Gaussian errors (e.g., OLS regression) may yield misleading inference and predictions. Robust or distribution-aware methods such as quantile regression, heavy-tailed distributions, or non-parametric approaches are recommended.
+
+
+Portfolio Optimization: Incorporating skewness and kurtosis metrics can improve portfolio construction rules by accounting for asymmetric risk preferences and tail dependence.
+
+
+Performance Evaluation: Return distributions influence the reliability of standard metrics like Sharpe ratio; alternative measures that consider higher moments (e.g., Sortino ratio) become more meaningful.
+
+
+Tail Risk Measures: Value at Risk (VaR) and Conditional Value at Risk (CVaR)
+
+To quantify the risk of extreme negative returns, we computed two key tail risk metrics at the 95% confidence level:
+
+
+
+
+Value at Risk (VaR 95%): -1.77% This means that, based on historical data, 95% of daily returns are better than -1.77%. Conversely, there is a 5% chance on any given day that returns will be worse than -1.77%. VaR provides a threshold for the worst expected loss under normal market conditions.
+
+
+Conditional Value at Risk (CVaR 95%): -2.54% CVaR, also known as Expected Shortfall, measures the average loss on the worst 5% of days. In this dataset, if a loss exceeds the VaR threshold, the average loss is -2.54%. CVaR is a more comprehensive measure of tail risk, as it accounts for the magnitude of extreme losses beyond the VaR cutoff.
+
+
+Why These Measures Matter?
+
+
+
+
+Risk Management: VaR and CVaR are widely used in finance to set risk limits, allocate capital, and design hedging strategies. They help quantify the potential for rare but severe losses that can threaten portfolio stability.
+
+
+Modeling Implications: The presence of significant tail risk (as shown by the gap between VaR and CVaR) highlights the limitations of models that assume normality or focus only on volatility. Models and strategies should be robust to rare, extreme events.
+
+
+Portfolio Construction: Understanding tail risk is crucial for stress testing, scenario analysis, and for investors with capital preservation mandates. It informs decisions on leverage, stop-losses, and diversification.
+
+
+#
+
+Practical Use
+
+
+
+
+Set risk limits: Use VaR and CVaR to define maximum acceptable daily losses.
+
+
+Stress test strategies: Simulate how portfolios would perform under repeated tail events.
+
+
+Communicate risk: These measures provide clear, quantitative risk metrics for stakeholders and regulators.
+
+
+Modeling
+
+In this analysis, we compared three distinct approaches for market allocation using the Hull Tactical dataset: Random allocation model, Simple Moving Average (SMA) crossover model and Regression-based allocation model.
+
+To robustly evaluate each approach, we ran 1000 Monte Carlo simulations per model, resampling the data to estimate the mean and variability of key risk-adjusted performance metrics. This protocol allows for transparent benchmarking and fair comparison across strategy types.
+
+Random Allocation Model :
+
+
+
+As a baseline, we simulated a random allocation strategy, drawing daily weights uniformly between 0 and 2. Over 1000 Monte Carlo simulations, this approach yielded a mean Sharpe ratio of 0.47 (standard deviation 0.09, 95% confidence interval [0.30, 0.64]) and an annualized volatility of 19.3%. These results highlight the importance of benchmarking any predictive or rule-based strategy against random allocation. In financial markets, it is not uncommon for random or naive strategies to achieve positive Sharpe ratios due to the inherent noise and volatility in returns. Therefore, any model or strategy must demonstrate consistent and significant outperformance over this random baseline to be considered robust and practically useful.
+
+SMA Crossover Model Example
+
+
+
+We implemented a simple moving average (SMA) crossover strategy, allocating 1.5x leverage when the 20-day rolling mean of returns was positive and 0.5x when negative. To robustly assess its performance, we ran 1000 Monte Carlo simulations using bootstrapped samples of the returns. This rule-based approach achieved a mean Sharpe ratio of 1.70 (standard deviation 0.14, 95% confidence interval [1.41, 1.98]) and an annualized volatility of 19.6%. These results substantially outperform both the random allocation and linear regression baselines. The findings demonstrate that even simple trend-following rules can extract meaningful signal from financial time series, providing a strong benchmark for more sophisticated models. This also highlights the importance of including robust, interpretable baselines in any systematic trading research.
+
+Regression-Based Allocation Model
+
+
+
+We implemented a regression-based allocation strategy, using the model’s predicted returns to dynamically adjust portfolio exposure. To robustly assess its performance, we ran 1000 Monte Carlo simulations with bootstrapped samples. This approach achieved a mean Sharpe ratio of 0.76 (standard deviation 0.17, 95% confidence interval [0.42, 1.07]) and an annualized volatility of 19.2%. While this outperforms the random allocation baseline, it falls short of the SMA crossover model’s performance. These results demonstrate that even a simple linear model can extract useful predictive signals from the feature set, but also highlight the need for more advanced modeling and risk management techniques to achieve stronger, more consistent results in financial time series.
+
+EDA Summary
+
+
+
+
+The dataset exhibits strong time-dependence, missing value patterns, and evidence of structural regime shifts.
+
+
+Momentum, valuation, and volatility feature groups show mild predictive value for excess returns.
+
+
+Missing data and multicollinearity are present and require careful preprocessing and feature selection.
+
+
+The target (excess returns) is nearly symmetric, slightly platykurtic, and stationary, with moderate tail risk.
+
+
+Linear models provide interpretable but modest baselines, with weak individual feature correlations.
+
+
+Random allocation yields a Sharpe ratio of ~0.4, setting a realistic benchmark for naive strategies.
+
+
+Simple rule-based strategies (e.g., SMA crossover) deliver strong risk-adjusted returns (Sharpe &gt; 1), outperforming random and linear baselines.
+
+
+These results highlight the importance of robust preprocessing, benchmarking, and risk-aware modeling in financial prediction.
+
+
+Next Steps
+
+
+
+
+Introduce feature lagging and scaling to capture temporal dependencies and normalize input distributions.
+
+
+Implement regularized regressors (Ridge, Lasso) to address multicollinearity and improve generalization.
+
+
+Develop volatility-adjusted Sharpe objectives to align model optimization with competition metrics.
+
+
+Transition to a LightGBM or ensemble meta-model for final competition submission, leveraging advanced feature engineering and robust validation.
+
+Comments:
+├─ Rishabh Pandey3353522 (2025-10-26 10:13:37.820000) [+1]
+│  great overall analysis super clarity of the concepts.
+├─ Ladipo Samson (2025-10-21 04:49:42.167000) [+1]
+│  Excellent deep-dive, Mahdi  I Loved the structure and clarity of this EDA, especially liked how you linked statistical properties (fat tails, volatility clustering) to modeling choices, which is ve...
+├─ Tim Bogomolov (2025-10-08 23:31:22.260000) [+1]
+│  Great work overall, thank you for sharing. 
+│  Please pay attention to details. Code print("Kurtosis:", stats.kurtosis(train_df[target])) calculates excess kurtosis. The result of 2.2 means that the t...
+  ├─ Mahdi Wanna (2025-10-09 00:41:38.243000) [+0]
+  │  Thanks for pointing that out! I actually addressed the kurtosis aspect in multiple parts of the analysis.
+  │  For example, in the section “Distribution of Target (Histogram + KDE)”, I noted that:
+  │  
+  │  
+  │    
+  │  ...
+├─ Tim Bogomolov (2025-10-08 23:48:26.360000) [+2]
+│  One more thing. Resample bootstrapping is incorrect. You cannot randomly reshuffle trading days. Your graphs show that returns are not stationary, there are clusters of higher and lower volatility....
+  ├─ Mahdi Wanna (2025-10-09 00:33:15.753000) [+0]
+  │  You are absouletly correct as each model has this block:
+  │  
+  │  idx = np.random.choice((returns), size=(returns), replace=)
+  │  returns_sample = returns[idx]
+  │  
+  │  
+  │  That’s a naive bootstrap, reshuffling individua...
+├─ Isaac Menard (2025-10-10 10:40:43.907000) [+-2]
+│  This is a fantastic analysis! The explanations accompanying each graph are incredibly clear and insightful. Great work! 👍
+│  
+│  One small suggestion: to maximize clarity for readers, I'd recommend using...
+  ├─ Mahdi Wanna (2025-10-10 22:45:25.653000) [+2]
+  │  The date_id represents individual trading days (Monday to Friday).
+  │  there is 8980 date_id (days) so it's roughly (8980/252)=36 years.
+  │  
+  │  All of this was mentioned and explained in the competition page.
+    ├─ Isaac Menard (2025-10-11 07:23:45.150000) [+-2]
+    │  Still, a data analysis notebook aim to explain data without having to go to the competition  page! But it's just a suggestion you do what you want!
+├─ Prit Kalariya (2025-10-29 22:52:54.170000) [+0]
+│  Very well done EDA. Very informative deep-dive.

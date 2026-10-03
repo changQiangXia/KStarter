@@ -1,0 +1,91 @@
+<p>Thanks to the organizers and congrats to all the winners!</p>
+<h2>Overview</h2>
+<p>From the top 1&amp;2 solutions of the <a href="https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation" target="_blank">Sartorius competition</a>, I decided to go with a two-stage pipeline of object detection and semantic segmentation instead of using a one-stage model (e.g. Mask-RCNN) in the early in the competition. I think that the main advantage of the two-stage pipeline is the ease of the ensemble and TTA.</p>
+<p><img src="https://i.postimg.cc/3xDzz1G0/hubmap1.png" alt=""></p>
+<h2>Detection part</h2>
+<h3>Update of dataset2 bbox-level annotation</h3>
+<p>As been pointed out in the discussion, the dilation significantly improved LB score in models trained from both dataset1 and dataset2. However, models trained only from dataset1 did not show this effect. This led me to believe that the annotations of dataset2 were made smaller than those of dataset1. Considering that there are several types of blood vessels and the possibility that the annotations of them are not uniformly small, I took the approach of updating the bbox-level annotations of dataset2 to dilate them by models trained only from dataset1.</p>
+<p><img src="https://i.postimg.cc/MK36b97C/hubmap2.png" alt=""></p>
+<p>The update was performed by replacing the original annotations with a predicted ones that met the following conditions. Basically, the updated bboxes is larger than the original ones. The total number of bboxes in dataset2 does not change by the updating.</p>
+<ol>
+<li>IoU &gt; 0.4</li>
+<li>FP / (TP + FP) &gt; 0.1</li>
+</ol>
+<p><img src="https://i.postimg.cc/jSGRBCkv/hubmap3.png" alt=""></p>
+<p>In the model trained from the updated dataset2 together with dataset1, the LB improvement by the dilation has almost disappeared and the LB score above 0.5 was achieved without the dilation.</p>
+<h3>CV strategy</h3>
+<p>The CV was carried out by the following special two-fold division.</p>
+<p><img src="https://i.postimg.cc/jSWs8yvL/hubmap4.png" alt=""></p>
+<h3>Model training</h3>
+<p>I trained 2-class (blood_vessel, glomerulus) detection models. "unsure" label was ignored. I modified the source code of YOLOv5/v7/v8 and add a 90 degree random rotation augmentation. The following 5 models x 2 folds (total 10 models) were used in the final submission.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Input size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YOLOv5x6</td>
+<td>512</td>
+</tr>
+<tr>
+<td>YOLOv7x</td>
+<td>512</td>
+</tr>
+<tr>
+<td>YOLOv8l</td>
+<td>512</td>
+</tr>
+<tr>
+<td>YOLOv8x</td>
+<td>512</td>
+</tr>
+<tr>
+<td>YOLOv8l</td>
+<td>768</td>
+</tr>
+</tbody>
+</table>
+<h3>Inference</h3>
+<p>I made a huge ensemble of 10 models x 16 TTAs since I considered the accuracy of detection to be more important than one of the segmentation. The small number of test images made it possible. 10 x 16 = 160 detection results were merged by WBF.</p>
+<ul>
+<li>16 TTAs: 8 for combinations of h-flip, v-flip, 90deg rotation, 2 for 2 scales (base size, base size + 64px), 8 x 2 = 16</li>
+<li>IoU threshold of each model's NMS: 0.6</li>
+<li>IoU threshold of WBF: 0.7</li>
+</ul>
+<h2>Segmentation part</h2>
+<h3>CV strategy</h3>
+<p>Almost the same as detection models, except that dataset2 is not updated.</p>
+<h3>Model training</h3>
+<p>As a mask of bboxes, I did not use the prediction results of the detection models, but used the bboxes obtained from the original annotations. Unlike the detection models, "unsure" label was also used for training. In the final submission, EfficientNetB1-Unet and EfficientNetB2-Unet was used (each 2 folds, total 4 models).</p>
+<h3>Inference</h3>
+<p>TTA was not used because of run-time constraints. A score threshold of 0.5 was used for binarization.</p>
+<h2>Strategy of final submission</h2>
+<p>The effect was smaller by updating dataset2, but the small dilation improved the LB score slightly. I implemented the dilation not by cv2.dilate for the final masks, but by increasing the size of bboxes by a percentage. In my final submission, 3% of bbox dilation increased my LB score about 0.005. I used 3% dilation in one of the two final submissions and not in the other (there are other differences besides the dilation).</p>
+<table>
+<thead>
+<tr>
+<th>Submission</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>w/ 3% dilation</td>
+<td>0.580</td>
+<td>0.549</td>
+</tr>
+<tr>
+<td>w/o 3% dilation</td>
+<td>0.572</td>
+<td>0.560</td>
+</tr>
+</tbody>
+</table>
+<h2>Things tried but not worked</h2>
+<ul>
+<li>Semi-supervised learning on dataset3</li>
+</ul>

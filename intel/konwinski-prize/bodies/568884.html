@@ -1,0 +1,69 @@
+<p>Before anything else I'd like to thank the Kaggle team and the host for this amazing competition. This is not only a very interesting problem to work but I can only imagine how difficult it must have been to prepare a competition as complex as this one in terms of infra/engineering.</p>
+<p>I joined this competition quite late (~1 month before finishing) so I knew I was probably better off trying to find some open-source solution that I could adapt instead of coding anything from scratch. After I bit of research, I decided to base my solution on top of Agentless 1.5.</p>
+<h1>TLDR:</h1>
+<p>Agentless 1.5 with a lot of modifications to support local models, optimize runtime and improve quality for "weaker" 32b models</p>
+<h2>Main Keypoints:</h2>
+<ul>
+<li>Improved context retrieval for generating F2P tests</li>
+<li>Patch rejection made by both F2P and P2P (unit) tests</li>
+<li>Qwen2.5 Coder 32B model</li>
+<li>Search/replace diff format for patch generation (much better than generating diff directly)</li>
+<li>Retry mechanism if no F2P manages to reproduce the GitHub issue</li>
+<li>Concurrent execution of package installation and tests execution</li>
+<li>Global and local time management system for controlling runtime</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1648129%2F11316e793c395dd89db8fef377a8677e%2Fkaggle%20solution.drawio.png?generation=1742302916782341&amp;alt=media" alt=""><br>
+(for better experience, click with right mouse button and open image in a new tab)</p>
+<h1>Solution in detail</h1>
+<h2>Patch Rejection</h2>
+<p>The first stage of my pipeline is to generate tests that are capable of reproduce the Github issue and, later, evaluate if a potential patch candidate actually fixes the issue. I'll share the prompt I used for this as it helps a lot with the explanation:</p>
+<pre><code>generate_tests_prompt_template_with_related_content = 
+</code></pre>
+<p>I used the prompt above to generate 5 F2P candidate test samples for the problem. Then, I would run all the tests and keep only those that actually reproduced the issue and nothing else. For example, if it printed both "Issue reproduced" and "Other issues" I would remove the tests as it looks suspicious.</p>
+<p>If none of the 5 F2P candidates managed to reproduce successfully, I would trigger a generation of a second batch of 5 tests but with higher temperature. If none of the 10 tests reproduced the issue, I simply skip the sample as there is no way to assess my candidate repair patches.</p>
+<h3>Main Differences from Agentless</h3>
+<p>Here is where I think my solution most improved Agentless. The original codebase does not include context for generating tests -- it simply provides the issue description and asks the model to generate a reproduction tests. After looking at a few samples, I quickly noticed that this strategy works quite well for HUUGE models like Claude/GPT that have an insane amount of memorization capabilities and know by heart how to make correct imports, instatiate the correct classes and proper usage of functions and methods.</p>
+<p>On the other hand, a "small" 32B model like Qwen2.5 Coder would most of the time have the correct idea for the tests but fail on importing modules or using the classes -- essentially, silly mistakes that could be corrected by simply providing context to the model.</p>
+<p>To find context I simply used a two stage approach: first ask the model to find relevant unit tests files that were important to the problem and, then, providing the model with the skeleton of all functions and classes in those files and ask for which classes/function/methods it wanted to inspect. I also extracted all the imports from those files so that the model could have an idea on how to import stuff.</p>
+<p>In order to increase diversity in the tests generation, I also used different levels of context. For example, out of the 5 generation requests, 1 would have example imports statements + all relevant classes/functions/methods. Another request would use only the import statements as context. Finally, the other 3 would be similar to original Agentless and have no context. Additionally, one sample would use greedy decoding and the others temperature/top_p/min_p sampling to maximize diversity.</p>
+<p>I also added some other small modifications to the original prompt that helped to guide small models in generating the tests. For example, being explicit about including imports, initialization if needed, etc.. I imagine that for SOTA models like Claude you don't need to be too explicit but for 32B I observed that it definitely helped.</p>
+<h2>Context localization</h2>
+<p>If at least 1 F2P test managed to reproduce the issue I would continue the pipeline to generate the fix patch. It started by localizating the relevant files and then finding the relevant classes/methods/functions in those files. Finally, a third stage to generate precise locations, e.g., line number, for the edits.</p>
+<p>First and second stages used greedy decoding and, for the fine-grain localization (third stage) I used sampling to generate 2x different edit locations.</p>
+<p>All of the steps above is quite similar to what Agentless originally does, I only made small improvements to the prompt and made the heuristic that parsers the model output and look for the files in the repo more generic and robust to small silly mistakes.</p>
+<p>Related to runtime, I refactored the code to only generate the repo structure (nested dict containing all the files, functions, classes and their methods, line start and end, etc..) once at the very beginning as the original code would generate at every step and this consumed 5-20s each time.</p>
+<h1>Repair Patch Generation</h1>
+<p>For each edit location, I generated 4 repair samples (first with greedy decoding, the others with temperature). So, in total I had 8x candidate repair patches. The prompt I used is the following:</p>
+<pre><code>repair_prompt_combine_topn_cot_diff = 
+</code></pre>
+<p>The output was later processed to obtain the Git diff. I tried generating the git diff directly and I noticed that in many cases it fails to generate a valid patches because if messes up the line counting or any other silly thing. After using a SEARCH/REPLACE scheme (similar to what VsCode does), I noticed the the amount of valid patches increased a LOT.</p>
+<h2>Evaluating candidate repair patches</h2>
+<p>After obtaining the 8 candidate repair patches, I started by validating them with a dry-run of git apply to make sure they were valid. Then, I ran them with each of the F2P tests and kept only patches that managed to fix at least one of the tests. Finally, I ran the P2P unit tests that were selected by the model in the very first localization step and compare that with the reference (unit tests result when no repair patch is applied). If the results or similar or better than the reference I submit the sample.</p>
+<p>All tests (F2P and P2P) had timeout and ran in parallel to save time.</p>
+<h2>Time management</h2>
+<p>I spent a lot of time doing runtime optimizations on the solution and, in the end, my best subs were running in ~5-7 hours (~3 to 10 minutes per sample). Regardless, I added two time protections, one to skip everything remaining if the global runtime was above 20 hours and another to skip the sample if we were more than 12 minutes on that sample.</p>
+<h2>Other improvements</h2>
+<p>Above, I tried to list all the most important details of my sub. However, there were countless other minor changes I made to Agentless to make it run faster and be better/more robust with "small" local models. I won't extensively list them here as it would be too much for a single post and, honestly, I didn't properly ablate many of them to be confident on how much they actually impacted the solution.</p>
+<h1>Thoughts on score and robustness</h1>
+<p>I submitted my best solution many times with different seeds or with small hparam changes and it always scored from 0.056LB to 0.098LB, so I believe it to be somewhat robust.</p>
+<p>That said, there was a time that it failed without me knowing why. It also executes code that is generated by the LLM, which is always a potential risk.</p>
+<p>Given how hard the dataset is and how heavily penalized mistakes are, I think luck will play a significant role in the end. My solution also has a lot of moving parts that are potential failure points (even with try-catching everything). So, being completely honest, I'm not very confident that I'll get a good result in the end but, at least, I had fun 🤣</p>
+<h1>Things I tried and didn't work</h1>
+<ul>
+<li>Agent mode, i.e., generating a test, running and then providing the error back to the model to fix (I only tried this very late so I still think it could work with more time)</li>
+<li>Reasoning models (a LOT of thinking and "but wait…" and solutions didn't prove much better than qwen coder)</li>
+<li>Local validation<ul>
+<li>I spent almost an week trying to set up a local validation with SweBench verified but in the end only manage to generate a few samples mostly for Django (other repos for some reason would not export the packages), which is what I used locally.</li>
+<li>I also only have a single RTX4090 so 24GB of vRAM does not allow me to test much stuff locally as the context is reduced to ~8K tokens. Thus, I gave up on local validation and used it mostly to code and debug stuff instead of actually trying to get a local score. This is definitively not ideal but it was what I found possible with the time I had left and with the hardware I have available</li></ul></li>
+</ul>
+<h1>Final thoughts</h1>
+<p>I really enjoyed this competition and learn a lot of stuff. I would most definitely like to participate in a second round if it happens in the future. My only two constructive feedback for the host would be:</p>
+<ol>
+<li>Share more "training" samples or share the exact code that is used to create new samples. I felt that there was a lot of (engineering) friction to create a local validation set. Most Kagglers would benefit of having, lets say, 25 training samples and 51 for public LB.</li>
+<li>A dataset with greater amount of easy samples. I know that the goal is to be "faithful" in terms of what we see in reality but, for a competition point of view, too many hard samples makes the LB too discrete and increases a lot the randomness in the evaluation process.</li>
+</ol>
+<p>Good luck everyone 😸</p>
+<h1>Post private LB disclosure (Edit: July 2025)</h1>
+<p>As pointed out by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>, the private result for my sub was 9 correct, 2 wrong and 109 skipped samples. Thinking outside the competition's constraints for a bit, I believe we could improve the results much further by using frontier models like Claude, Gemini and GPT as shown by the public benchmarks. However, even with those, I still think we are still quite far from the 90% score milestone when considering the negative penalty for wrong predictions! Super keen to see how this task develops in the future.</p>
+<p>Finally, thanks again to Kaggle and the host, Andy, for this amazing competition!</p>
+<p><a href="https://www.kaggle.com/code/arc144/custom-agentless-fork?scriptVersionId=226880215" target="_blank">Link to the code</a></p>

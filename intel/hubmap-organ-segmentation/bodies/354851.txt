@@ -1,0 +1,72 @@
+# https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354851
+
+Topic #354851: 4th place solution: Stain Normalization is all you need
+  Author: Rock
+  Posted: 2022-09-24 08:36:23.885000
+  Votes: 50  Comments: 12
+
+First, we'll thank organizers for their effort in this amazing competation. And then, we will thank @hengck23 , we learnt a lot from your code and notebook.
+
+This is my second competation in kaggle, and my first competation on image segmentation, I learnt a lot from this, thanks all of you.
+
+In this competation, we mainly rely on two-stream model and some tricks on models ensemble and stain normalization at infernce, without using any pseudo label or ext data, maybe that's why we missed prize hahaha :)
+
+Models
+
+At first, we followed the code share by @hengck23 that's an amazing baseline code. Besides, in our experience, we found that the knowledge learned from other organs may influence the performance in lung images, so we proposed two-stream model, one stream for lung images and the other model for other organs. And then we tried some other encoders and decoders, and the final ensemble models are shown as follows:
+
+
+
+Encoder: Coat-lite-medium; Decoder: daformer+unet
+
+Encoder: mit (Segformer); Decoder: daformer+unet
+
+Encoder: mpvit; Decoder: daformer+unet
+
+
+Stain Normalization
+
+That's the most import part in our training and inference step, for we think the biggest challenge in this competation is how to bridge the gap between HPA and HuBMAP images. The methods we used for stain normalization are from Staintools.
+
+Train
+
+First, in training step, we normalize the HPA image to the only one HuBMAP test image by using reinhard and vahadane normalization randomly. So that the model can study both features in HPA feature space and HuBMAP feature space.
+
+Inference
+
+However, just using stain normalization in training step is not enough, for stain normalization still can't transfer feature space perfectly, we also need using stain normalization in inference step for better bridging the gap between two datasets.
+
+In inference step, we select a representive image from training images for five organs respectively. And for all of HuBMAP images, we normalized them to HPA images according to their organ labels by using vahadane and reinhard methods, and then average their predictions to get the final predicted mask.
+
+The final codes will be released after a few days, thanks for reading!
+
+Comments:
+├─ Gunes Evitan (2022-09-24 09:20:11.670000) [+1]
+│  Congrats! I also did something similar. At test time, I was selecting a random HPA image with same organ type and normalizing HuBMAP image using that randomly selected image. This was implemented a...
+├─ JM (2022-09-24 20:56:59.073000) [+0]
+│  Curious if there are 5 people in your team, why is it all I and my?
+  ├─ Rock (2022-09-25 02:21:28.177000) [+2]
+  │  Sorry for the clerical error, I wrote it too hasty and didn't notice it, thanks for pointing.
+  ├─ Swikwislkdjc (2022-09-25 03:03:52.073000) [+-1]
+  │  The trick is you can register new kaggle accounts and add up submission times
+  ├─ Rock (2022-09-25 03:17:26.373000) [+5]
+  │  My teammates are all my classmates who want to take participate in deep learning competation and learn knowledge from it, I cannot achieve this without them, and you can see that our submission tim...
+├─ Rahma Samy (2022-11-04 00:20:38.120000) [+0]
+│  Thanks for sharing that! 
+│  Any refernces for explaining?
+├─ yoshoo (2022-10-05 03:30:50.013000) [+0]
+│  Thank you for sharing your wonderful solution!!
+│  
+│  you mentioned that you normalized all HubMAP images to training HPA images for five organs respectively at inference step.
+│  Are these HPA images proc...
+  ├─ Rock (2022-10-08 05:19:30.450000) [+0]
+  │  Yes, I just use the only one HuBMAP test image for normalization.
+  │  For resolution, I just resize these images to a fixed size, for example 1024x1024.
+├─ Miro (2022-09-29 01:00:49.717000) [+0]
+│  Congratulations! Amazing that you could achieve all this without external data.
+  ├─ Rock (2022-09-29 01:55:22.093000) [+0]
+  │  Thank you!
+├─ Salman Ahmed (2022-09-26 13:02:59.160000) [+0]
+│  How did you perform Stain Normalization?
+  ├─ Rock (2022-09-27 02:43:31.373000) [+0]
+  │  I just use staintools.https://github.com/Peter554/StainTools

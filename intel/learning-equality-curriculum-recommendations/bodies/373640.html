@@ -1,0 +1,17 @@
+<p>This is how I reach lb 0.30+, cv is also 0.40+ (there is statistical reason why the gab exist, I can explain later)</p>
+<ul>
+<li><p>Use transformer to extract embeddings for topics and contents (both using only the title, we could add more features but in my case best embeddings comes only from the title)</p></li>
+<li><p>Train a KNN nearest neighbors algorithm (using rapids is a good idea because it will be much faster) using the content embeddings and get neighbors for each of the topics. In this step try to get a lot of neighbors, the more the better because you increase the probability that a neighbor can be match (more neighbors -&gt; more possible matches)</p></li>
+<li><p>Because we extract a lot of neighbors in our previous step, we will have far more no matches than matches, this is not a problem but trying to get a lot of matches is important and this will depend on how good is our unsupervised model (transformer model on step1)</p></li>
+<li><p>Now that we have our neighbors for each topic, we can merge with correlation.csv to extract ground truths contents. With this new dataframe we can make a processing function to transform it into a binary classification task. For each topic id iterate on each neighbor and if the neighbor is found on contents_ids (ground truth column extracted from correlations.csv) then we label it as 1, if it is not found label it as 0. </p></li>
+<li><p>We can also extract the titles on previous steps, we need features to train our classification task, in this case I only use the title of the topic and the content. </p></li>
+</ul>
+<p>Here are the columns you would need for your classification model:</p>
+<p>topic_id, topic_title, content_id, content_title, label</p>
+<p>You need both topic_id and content_id because the idea is to predict with this model the probability that a topic_id will be a match for a content_id based on the topic title and the content_title (we could add more features and maybe we can improve our supervised model). </p>
+<ul>
+<li><p>Now that we have the probabilities we use a threshold to say if the target is 1 or 0, we can look for the best threshold based on the CV</p></li>
+<li><p>Final step would be to filter all the matches (target == 1) and groupby topic_id and get the unique content_ids, then add all the topic_id that did not have a match with an empty content recomendation.</p></li>
+</ul>
+<p>The idea is to use an unsupervised model to get good candidates for our supervised model, why do we use a unsupervised model to do this?, because if we don't do this the supervised classification model would have unique topics ids x unique content_ids rows, this is more or less 9000000000 training rows (that would take a lot of resources, also in inference we can't predict a really big amount of observations).</p>
+<p>I hope this explanation help you on building a nice baseline pipeline for this problem. If you have any question please ask I will try to answer the best as I can.</p>

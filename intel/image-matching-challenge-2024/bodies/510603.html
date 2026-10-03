@@ -1,0 +1,298 @@
+<p>First of all, thanks to the hosts for organizing the Image Matching Challenge for the third time on Kaggle. Also, congratulate the winners and wish the best to everyone who has gone through this tough journey safe and sound.</p>
+<p>I have to admit that I attended the competition quite late. Therefore, I just did whatever I “felt” right and improvised a lot. So, you might find my write-up a little bit tricky at some points :)). Let's go!</p>
+<h1>1. Overview</h1>
+<p>My solution architecture can be summarized in the following figure:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2198466%2F198ac7d486076bea7b708f4f0fc7682f%2Fimc24%20arch.png?generation=1717683469569615&amp;alt=media" alt="arch"></p>
+<p>I will split my summary into 4 main sections:</p>
+<ul>
+<li>Build local evaluation datasets</li>
+<li>Build a general SfM pipeline</li>
+<li>Customize the pipeline for each specific category</li>
+<li>Results</li>
+</ul>
+<h1>2. Local evaluation datasets</h1>
+<p>The original dataset is obviously too large and unrealistic to evaluate. To tackle this, I built 3 versions of subsets (by applying some random sampling strategies). The results on those 3 versions were highly correlated. Hence, I chose one as my main local validation dataset:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset/Scene</th>
+<th>Number of samples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pond</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Lizard</td>
+<td>90</td>
+</tr>
+<tr>
+<td>Church</td>
+<td>80</td>
+</tr>
+<tr>
+<td>Dioscuri</td>
+<td>70</td>
+</tr>
+<tr>
+<td>Multi-temporal-temple-baalshamin</td>
+<td>68</td>
+</tr>
+<tr>
+<td>Transp_obj_glass_cup</td>
+<td>36</td>
+</tr>
+<tr>
+<td>Transp_obj_glass_cylinder</td>
+<td>36</td>
+</tr>
+</tbody>
+</table>
+<p>I will report my local CV results on this dataset.</p>
+<h1>3. SfM pipeline</h1>
+<p>For a better explanation, I will divide the pipeline into 3 modules:</p>
+<ul>
+<li>Proposing pair candidates by global descriptors</li>
+<li>Matching pairs in the candidate list</li>
+<li>Reconstruction with Colmap</li>
+</ul>
+<h2>3.1. Finding pair candidates</h2>
+<p>I used 3 pretrained models from <a href="https://github.com/huggingface/pytorch-image-models" target="_blank">timm</a> to extract global features:</p>
+<pre><code>EVA-CLIP    \
+ConvNeXt     | --&gt;[]--&gt; [fc ]
+Dinov2 ViT  /
+</code></pre>
+<p>I also customized similarity thresholds for different types of scenes (note that I used cosine similarity instead of distance). For example, with highly diverse scenes like Lizard, I used a small threshold of 0.6. In contrast, for object scenes like Cylinder and Cup, a high threshold of 0.95 would make much more sense.</p>
+<h2>3.2. Image matching</h2>
+<p>Following the spirit of my last year’s solution, I only focused on <strong>detector-based</strong> methods, because they are much more lightweight than semi-dense or dense models. Due to the lack of experiments on both CV and LB, I cannot give detailed numbers for each method, but only tell the sense of their performance in general. Here are some combinations that I tried during the competitions:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>CV performance</th>
+<th>LB performance</th>
+<th>Remark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SuperPoint + SuperGlue</td>
+<td>good</td>
+<td>not good</td>
+<td>slow compared to LightGlue</td>
+</tr>
+<tr>
+<td>GlueStick</td>
+<td>normal</td>
+<td>-</td>
+<td>slow</td>
+</tr>
+<tr>
+<td><strong>SuperPoint + LightGlue</strong></td>
+<td><strong>very good</strong></td>
+<td>not good</td>
+<td>no ideas why it is not good on LB</td>
+</tr>
+<tr>
+<td><strong>ALIKED + LightGlue</strong></td>
+<td>good</td>
+<td><strong>very good</strong></td>
+<td>best on LB</td>
+</tr>
+<tr>
+<td>DISK + LightGlue</td>
+<td>good</td>
+<td>normal</td>
+<td></td>
+</tr>
+<tr>
+<td>OmniGlue</td>
+<td>not good</td>
+<td>-</td>
+<td>slow</td>
+</tr>
+</tbody>
+</table>
+<p>In addition, I also tried SIFT + NN as a light ensemble model added to LightGlue. It is claimed in <a href="https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/427143" target="_blank">IMC23 7th solution</a> that ensembling SIFT with LightGlue could boost the performance. I think it is the case in some scenes in CV, but it harmed the LB results a lot (-0.03).</p>
+<p>In summary, I could say that <strong>LightGlue</strong> is one of the best models in Image Matching problem at present (hats off to the authors)!</p>
+<h2>3.3. Reconstruction</h2>
+<p>This year I spent some time trying to make use of colmap better than the host baseline. Here are some of my trials:</p>
+<ul>
+<li><strong>Single camera for specific scenes</strong>: good on transparent object scenes in local CV, but worsens the result on LB.</li>
+<li><strong>Manual initial pair</strong>: I chose the pair with most matches and most keypoints and set it as the initial pair for colmap. But it made the results worse in my CV (maybe my code is wrong?!!).</li>
+<li><strong>Run Incremental Mapping multiple times</strong>: it made the results on my CV more consistent and a little better. However, I didn’t see it had any effect on LB.</li>
+</ul>
+<p>Sadly to say that I could not make any noticeable improvement with colmap.</p>
+<h1>4. Deal with specific categories</h1>
+<h2>4.1. Transparent objects</h2>
+<p>I think this category decides the <strong>gold medal</strong>. Because when I cracked the problem, I moved from top 300 to top 10 immediately!!!<br>
+First, I will present the process of how I created this solution, hope that it will be more vivid :).<br>
+If you open one image and move to the next image-by-image, you can easily see that it is like a sequence of frames cut from a video captured by only one camera.<br>
+What a human might do to match those images? If it were me, I would focus on the <strong>object</strong> only and ignore the whole background. In addition, I only need to match a <strong>sequence</strong> (or a <strong>ring</strong>) of frames: (0, 1), (1, 2),…,(35, 0), which means there is no need to match (1, 20) or (3, 29)!</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2198466%2Fbcdc3ca4607ce1c2b024a7e9b7f03aef%2Fimc24%20ring%20match.png?generation=1717692702373754&amp;alt=media" alt="ring"></p>
+<p>By adding these two lines of code before matching the cylinder, I went from ~0.0 to <strong>0.86</strong> on CV with LightGlue:</p>
+<pre><code> = [:, :, :]
+index_pairs = [(i, i+)  i  (len()-)] + [(len()-, )]
+</code></pre>
+<p>So the problem now can be broken down into 2 smaller problems:</p>
+<ul>
+<li>Detect the object</li>
+<li>Find consecutive pairs</li>
+</ul>
+<h3>4.1.1. Object detection</h3>
+<p><strong>Method 1</strong> (not worked): Use object detection models: I tried <strong>Yolo</strong> family. Nonetheless, it is hard to make the prompt for the model to find out the exact object location.</p>
+<ul>
+<li><strong>Approach 1</strong>: Use <strong>Yolov8</strong> to produce all bounding boxes =&gt; it found no boxes!</li>
+<li><strong>Approach 2</strong>: Use <strong>YoloWorld</strong> with keyword “transparent object” =&gt; not detect anything.</li>
+<li><strong>Approach 3</strong>: Use <strong>YoloWorld</strong> with keyword “cup” =&gt; it could detect the cup. Yet, it is not generalized enough to apply to LB dataset.</li>
+</ul>
+<p><strong>Method 2</strong> (final solution): Use segmentation models:</p>
+<ul>
+<li><strong>Step 1</strong>: Use <strong><a href="https://github.com/ChaoningZhang/MobileSAM" target="_blank">MobileSAM</a></strong> to detect all the masks in the images.</li>
+<li><strong>Step 2</strong>: Use keypoint extractors above (SuperPoint or ALIKED) to extract object keypoints. It will produce some noise in the background.</li>
+<li><strong>Step 3</strong>: Find the best mask: the smallest mask which contains most of the keypoints.</li>
+<li><strong>Step 4</strong>: Find the smallest bounding box which includes the best mask.</li>
+</ul>
+<p>I tried DBSCAN too. However, due to the limitation of development time, I did not go to the end to see if it could replace SAM.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2198466%2Fe3891c005ff8a58801e207f7f7e3309e%2Fimc24%20mask.png?generation=1717688739099600&amp;alt=media" alt="sam_mask"></p>
+<h3>4.1.2. Finding the best pairs</h3>
+<p><strong>Problem definition</strong>:</p>
+<ul>
+<li>Version 1: Find the perfect sequence of images.</li>
+<li>Version 2 (simplified): For each image, find out two other best images for matching.</li>
+</ul>
+<p><strong>Method 1</strong> (not good): Stem from the fact that two consecutive frames would have the smallest movement among pixels, I calculated Optical Flow with <a href="https://pytorch.org/vision/0.12/auto_examples/plot_optical_flow.html" target="_blank">RAFT</a> for every possible pairs, then got the average magnitudes. I further combined with cosine similarity of Global embeddings above to build an NxN matrix:</p>
+<pre><code>pair_score = -of_mag + cos_sim
+</code></pre>
+<p>TSP solver could not produce the perfect ring (~90% accuracy). Thus, I think it is not good enough.</p>
+<p><strong>Method 2</strong> (simpler but better): I performed exhaustive matching on all pairs. Then, build an NxN matrix with elements that are the number of matches between each pair:</p>
+<pre><code>pair_score = n_matches
+</code></pre>
+<p>Subsequently, I just picked out the top-2 largest values on each row. This simple approach astonishingly produced nearly 100% accuracy (I tried different matchers, and sometimes there were 1-2 wrong pairs).</p>
+<h2>4.2. Day-night</h2>
+<p><strong>Method 1</strong>: Find dark images and enhance them.<br>
+Dark detection is very easy, just find those images that have the mean value &lt; threshold (can be 65, 70).<br>
+I used <strong>CLAHE</strong> to enhance the dark images. Unfortunately, it downgraded my LB score by 0.01.<br>
+<strong>Method 2</strong>: Use <a href="https://github.com/THU-LYJ-Lab/DarkFeat" target="_blank">DarkFeat</a> matcher.<br>
+My idea is to ensemble LightGlue with a more robust matcher for dark images. I found out that DarkFeat might be a promising candidate. Unluckily, I didn’t see any benefits of using it.</p>
+<h2>4.3. Symmetries-and-repeats</h2>
+<p>I assume that these scenes may have plenty of false positive matches because of their natural properties. <br>
+<strong>Method 1</strong>: First, I tried tuning parameters with much more strict values (e.g., increasing the matching threshold to 0.5, etc.). Nonetheless, it didn’t show any improvement.</p>
+<p><strong>Method 2</strong>: Next, I move to a more promising method: <a href="https://github.com/RuojinCai/Doppelgangers" target="_blank">Doppelgangers: Learning to Disambiguate Images of Similar Structures</a>. The main idea of this method is:</p>
+<ul>
+<li>First, run SfM one time to get all the matching pairs.</li>
+<li>Use the Doppelganger model to filter out pairs that have high probabilities as false positives (doppelgangers).<br>
+It didn’t show any improvement on the church scene on my local CV.</li>
+</ul>
+<p>So basically, I could not make any improvement on this category.</p>
+<h2>4.4. Others</h2>
+<p>The remaining categories are nature, air-to-ground, historical_preservation, temporal.<br>
+Actually, it is hard to customize these scenes, since they seem too general.<br>
+Therefore, I just applied the <a href="https://github.com/ternaus/check_orientation" target="_blank">rotation checking method</a> to correct the image orientations. It made a huge boost on the Dioscuri scene in local CV, and added about +0.005 to the LB.</p>
+<h1>5. Results</h1>
+<p><strong>Cross validation</strong></p>
+<table>
+<thead>
+<tr>
+<th>Scene</th>
+<th>Method</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pond</td>
+<td>ALIKED+LightGlue</td>
+<td>0.46</td>
+</tr>
+<tr>
+<td>Lizard</td>
+<td>SP+LightGlue</td>
+<td>0.73</td>
+</tr>
+<tr>
+<td>Church</td>
+<td>ALIKED+LightGlue</td>
+<td>0.18</td>
+</tr>
+<tr>
+<td>Dioscuri</td>
+<td>ALIKED+LightGlue</td>
+<td>0.49</td>
+</tr>
+<tr>
+<td>Multi-temporal-temple-baalshamin</td>
+<td>ALIKED+LightGlue</td>
+<td>0.48</td>
+</tr>
+<tr>
+<td>Transp_obj_glass_cup</td>
+<td>DISK+LightGlue</td>
+<td>0.32</td>
+</tr>
+<tr>
+<td>Transp_obj_glass_cylinder</td>
+<td>ALIKED+LightGlue</td>
+<td>0.81</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leaderboard</strong></p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>My IMC23: SP+SG</td>
+<td>0.104</td>
+<td>0.111</td>
+</tr>
+<tr>
+<td>SP+LG</td>
+<td>0.099</td>
+<td>0.115</td>
+</tr>
+<tr>
+<td>SP+LG+rot</td>
+<td>0.103</td>
+<td>0.119</td>
+</tr>
+<tr>
+<td>ALIKED+LG+rot</td>
+<td>0.135</td>
+<td>0.147</td>
+</tr>
+<tr>
+<td>ALIKED+LG+rot+transparent_custom</td>
+<td>0.18</td>
+<td>0.19</td>
+</tr>
+<tr>
+<td><strong>ALIKED+LG+rot+transparent_custom+tuning</strong></td>
+<td><strong>0.186</strong></td>
+<td><strong>0.195</strong></td>
+</tr>
+<tr>
+<td>ALIKED+LG+rot+transparent_custom+tuning+dark_enhance</td>
+<td>0.179</td>
+<td>0.183</td>
+</tr>
+</tbody>
+</table>
+<h1>6. Conclusion</h1>
+<p>A fun fact: I participated in all three Image Matching Challenges on Kaggle and earned medals of all three different colors 😂:</p>
+<ul>
+<li>2022: bronze🥉</li>
+<li>2023: silver 🥈</li>
+<li>2024: gold 🥇</li>
+</ul>
+<p>I feel exhausted after going solo in a tough competition like this. But finally, the sweet fruits have come after tireless efforts 😁.</p>
+<p>Thank you for your reading. I hope you can find something interesting in my write-up.</p>
+<p>Happy Kaggling!</p>

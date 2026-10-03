@@ -1,0 +1,84 @@
+<p>Thanks to H&amp;M and Kaggle Team giving us such a wonderful competition.Thanks my team mate <a href="https://www.kaggle.com/h4211819" target="_blank">@h4211819</a> finally we got 1st place.This competition has no leak,stable cv-lb correlation,and infinite possibilities to improve, we really enjoyed exploring the accuracy boundaries of  infinite possibilities. </p>
+<h1>Overview</h1>
+<p>The most interesting part of this competition is we need to generate train and test by ourself, the candinate generation strategy is the key to beyond limitation of accuracy ,good feature engineering or modeling could be close to the limitation .Our solution is using various retrieval strategies + feature engineering + GBDT, seems simple but powerful.</p>
+<p>We mainly generate recent popular items because fashion changing fast and has seasonality,tried to add cold start items but they will never be ranked to top12 due to lacking of interaction information.<br>
+user and item interaction information are always the most important of recommendation problem,the features we created are almost interaction features,image and text features didn't help but should be useful for cold start problem.</p>
+<p>Almost 50% users have no transactions in recent 3months,so we created many cumulative features for them,and last week,last month,last season features for active users.</p>
+<p>We use 6 weeks data as train,last week as valid,retrieve 100 caninates for each user,it has stable cv-lb correlation.We focus on improving single lightgbm model to the last week, cv is 0.0430 and lb is 0.0362.At last week I have to rent gcp's big memory server and vast.ai's gpu server to run bigger models to get higher accuracy.</p>
+<p><a href="https://postimg.cc/xXLGHd2r" target="_blank"><img src="https://i.postimg.cc/bwBm7GVv/overview.png" alt="overview.png"></a></p>
+<h1>Retrieval(aka: candidate generation | recall)</h1>
+<p>At early stage,we focus on increasing the hit number of retrieved 100 candidates,try various strategies to cover more positive sample. </p>
+<table>
+<thead>
+<tr>
+<th>WeekNo</th>
+<th>HitNum@100</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2020-09-16</td>
+<td>39142</td>
+</tr>
+<tr>
+<td>2020-09-09</td>
+<td>38427</td>
+</tr>
+<tr>
+<td>2020-09-02</td>
+<td>41019</td>
+</tr>
+</tbody>
+</table>
+<h1>Ranking</h1>
+<ul>
+<li><p><strong>Feature Engineering</strong><br>
+basiclly,features are created base on retrieval strategies,create user-item interaction for repurchase,create collaborative filtering score for itemcf,create similarity for embedding retrieval,create item count for popularity……</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Count</td>
+<td>user-item, user-category of last week/month/season/same week of last year/all, time weighted count…</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>first,last days of tranactions…</td>
+</tr>
+<tr>
+<td>Mean/Max/Min</td>
+<td>aggregation of age,price,sales_channel_id…</td>
+</tr>
+<tr>
+<td>Difference/Ratio</td>
+<td>difference between age and mean age of who purchased item, ratio of one user's purchased item count and the item's count</td>
+</tr>
+<tr>
+<td>Similarity</td>
+<td>collaborative filtering score of  item2item, cosine similarity of item2item(word2vec), cosine similarity of user2item(ProNE)</td>
+</tr>
+</tbody>
+</table></li>
+<li><p><strong>Downsampling</strong><br>
+If we retrieve 100~500 candidates for each user,the negative samples number is very big,so negative downsampling is must,we found 1 million ~ 2 million negative samples for each week has better performace .<br>
+<code>neg_samples = 1000000;seed = 42
+train[train['label']&gt;0].append(train[train['label']==0].sample(neg_samples, random_state=seed))
+</code></p></li>
+<li><p><strong>Model</strong><br>
+Our best single model is a lightgbm(cv:0.0441,lb:0.0367),finally we trained 5 lightgbm classifier and 7 catboost classifier for ensemble(lb:0.0371).catboost's lb score is much worse than lightgbm,lightgbm has very stable cv-lb correlation.<br>
+<a href="https://postimg.cc/ZBmJRVLt" target="_blank"><img src="https://i.postimg.cc/V6rvKhr6/cv.png" alt="cv.png"></a></p></li>
+</ul>
+<h1>Optimization</h1>
+<ol>
+<li>we use TreeLite to accelerate lightgbm inference speed (2X faster),catboost-gpu is 30X faster than lightgbm-cpu inference.</li>
+<li>transform all the categorical features(including two way) to label encoding,use reduce_mem_usage,</li>
+<li>create a <strong>feature store</strong>,save intermediate features files to dictionary , final features to feather,exsiting features will not be create again</li>
+<li>split all the users to 28 group,inference simultaneously with multiple servers.</li>
+</ol>
+<h1>Machine</h1>
+<p>I have a desktop with 128G RAM,64 vcore CPU,TITAN RTX GPU.It's enough to run most of our models to win.My teammate has a desktop with 64G RAM.At last week ,we use 300G RAM gcp instances.</p>

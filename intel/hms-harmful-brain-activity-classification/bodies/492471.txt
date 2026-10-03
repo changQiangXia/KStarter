@@ -1,0 +1,295 @@
+# https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492471
+
+Topic #492471: 3rd place solution
+  Author: Dieter
+  Posted: 2024-04-09 17:09:55.308000
+  Votes: 133  Comments: 44
+
+Thanks to kaggle and everyone involved for hosting such an interesting competition. We learned a lot about EEG data and how to create strong models for it. Special thanks to @darraghdog who carried most of the workload in the last weeks of the competition, when I was busy with training my first real life neural network. 
+
+TLDR
+
+Our solution is an ensemble of multiple models from two diverse modeling approaches. The first approach is to apply pretrained 2d-CNN architectures to the MelSpectrogram transformation of the data. The second approach uses 1D-Convolutions to encode the raw eeg data before modeling with Squeezeformer blocks. 
+Key ingredients for our solution were a robust cross validation based on data selection and creative augmentations. 
+
+Cross validation and Data filtering
+
+Having a solid cross validation was certainly key to doing well in this competition! So we spend a lot of time figuring out a good validation scheme. In general we used a 4fold validation setup, split by patient id. One key ingredient was filtering the val dataset for those rows only having more than 9 votes. The SPaRCNet paper most likely explained how the data was created.
+
+
+
+Not only was the test data filtered by having more than 9 votes, but also the data has been augmented by using the same labels but shifting the eeg data. This means that the given 106k training rows are highly redundant and can/ should be filtered. 
+
+
+  
+We expanded the high- and low-quality sets of EEG segments by adding additional segments belonging to the
+  same stationary period of the EEG
+
+
+This basically means the authors applied a shift-like augmentation to the raw eeg data to create more data and used same labels for the newly created data. This explains why there were so many rows for the same EEG_id having the same label. We believe that separating the original data from the augmented data makes the data cleaner and improved our cross validation. So we put some effort into reverse-engineering this process and finding the original “true” data point belonging to a given label. So we ended up with a filtered dataset of only 6350 rows which we used not only for validation using our 4fold scheme but also mainly used that for training, and discarded the other 100k rows. At the end we had a quite good cv/ lb correlation
+
+
+
+Data sources
+
+For 2D models, we had pretrained weights and we observed high data quality was important and we got no benefit from using pseudo labels and data with &lt;8 votes in the label. All models were trained with high quality data. 
+
+Our 1D models were trained from scratch so it helped to also use the low count data. See below in the training procedure how low vote data was used in training. Pseudo labelling was not helpful for us - we tried a lot of things here.  
+
+In the end we did not use the 10 minute spectrograms. They may have helped slightly in the 2d model in some experiments but not in any major way. 
+
+Data preprocessing
+
+No preprocessing of the data to disk was made, which really sped up experiments and allowed flexibility in approaches. We used torchaudio‘s GPU implementation to create the MelSpectrogram on the fly and normalized the signal. 
+
+The double banana montage, explained by @cdeotte was used throughout our solution. As mentioned by others, stacking 16 signals next to one another had limitations in that the each node would interact more strongly in the model with it’s neighbours. We experimented with ordering and found this order worked well, which essentially looks at the left and right side of the brain for each node together, 
+Fp1&gt;F7 Fp2&gt;F8 F7&gt;T3 F8&gt;T4 T3&gt;T5 T4&gt;T6 T5&gt;O1 T6&gt;O2 Fp1&gt;F3 Fp2&gt;F4 F3&gt;C3 F4&gt;C4 C3&gt;P3 C4&gt;P4 P3&gt;O1 P4&gt;O2
+
+Scipy implementation of butter bandpass filter was used with an order of 2, and lowpass of between 0 and 1.5 Hz on different models, and a highpass of between 20 and 30 Hz. No notchfilter was used. 
+
+We observed it was important not to normalize the data batch-wise or sample-wise. We saw this in @medali1992 Resnet 1D GRU implementation -  Not sure if this is where the idea originally came from. Instead, after the butter filter, we used the logic implemented x = x.clip(-1024, 1024) / 32.. 
+
+Augmentations
+
+For 2D models, we had pretrained weights and we observed high data quality was more important - not all augmentations helped. Our 1D models were trained from scratch so heavy augmentations were used. In both models, augmentation was highly effective. 
+
+The following augmentations were used by boths models,
+
+
+
+Overwrite with zeros between 1 to 8 melspec nodes, from the total 16, in 50% of samples.
+
+Randomly choose a different narrower butter bandpass range in between 1 and 8 melspec nodes, from the total 16, in 20% of samples.
+
+In 50% of samples, randomly shift the 50s window around the center point by up to 20 seconds. 
+
+
+In the 1D models only, 
+
+
+
+In 50% of samples, left-right flip the signal time wise. 
+
+In 50% of samples, switch the sides of the brain left-right.   
+
+
+In the 2D models only, 
+
+
+
+In 50% of samples for the zoomed center, using a static 50s window, randomly shift the 10 second center point within the window by up to 5 seconds. 
+
+
+Models
+
+Melspec + 2D-CNN backbones
+
+Like most other competitors we used pretrained 2D CNN backbones which we fed with melspec transformation of the data. However, we made several improvements to publicly known approaches. The first major boost comes from not combining the data into regions of the EEG electrodes (LL, LP, RP, RL) but creating 16 individual mel spectrograms for the double banana montage. We then concatenated the 16 images into one large image. In the last week we found another big improvement, by “zooming” onto the center 10sec. Zooming was applied with different window and hop lengths to increase diversity.  Mel-Spectrogram transformation are done as part of the model directly on GPU using torchaudios Mel-Spectrogram. 
+
+
+
+1D-CNN + Squeezeformer blocks
+
+Our 1d CNN was heavily inspired by the work of Yuri Sun @sunyuri , and particularly his implementation of a lightweight CNN for seizure detection (code and paper here). As shown on the architecture the model focuses on grouped convolutions timewise and then channel wise. The first two blocks focus time-wise, keeping the channel information independent with grouped convolutions. After pooling the timewise information a channel wise convolution is made to interact across the nodes on the brain, and then another timewise convoltion. Technically we use conv2d, but the effect is like conv1d, only we can convolve over all channels in parallel. The original implementation used a CBAM attention block, we swapped this out and instead used 3 layers of squeezeformer. In addition we added pointwise convolutions before and after the depthwise convolutions which helped stabilite and learn better within the net. 
+As we train from scratch on relatively small data, keeping parameter count low was important. During ASL competition we had spent a lot of time on that, so leveraged our squeezeformer implementation from there. 
+
+
+
+Training procedure
+
+Melspec + 2d CNN backbones
+
+Training parameters used were generally 12 to 16 epochs, cosine learning rate decay with initial lr 0.0012 and batch size 32. Drop path was quite effective and set at 0.2. The main difference in the training was the granularity of the window lengths in the magnified 10 second window, different models were trained with different granularity and a mixnet_l and mixnet_xl backbones. 
+
+1D CNN + SqueezeFormer blocks
+
+Training parameters used were ~32 epochs, cosine learning rate decay with initial lr 0.001 and batch size 64. When we used low vote samples, we increased batch size to 256. We used a hidden dimension of 128 and dropout (attention, ff, head, conv) were all 0.1, going deeper on hidden dimension or more layers did not help. 
+We trained 3 different version of the 1d model with respect to data. 
+
+
+
+Only 8+ vote samples.
+
+3-8 vote count samples, and 8+ vote count samples. In each epoch the 3-8 votes dataset was subsampled; and a different loss was used for each set. We decayed the weight of the 3-8 batch over time, so it started with 0.8 weight and decayed with linear or cosine schedule to ~0.2 weight. This decay weighted loss was added to the loss of the 8+ vote dataset. 
+
+Finally, we added 1-2 votes as a separate decayed weight loss, and trained it in the same manner together with the 3-8 vote set and the 8+ set. The 1-2 vote set was very noisy and thus started with a weight on 0.5 and finished with 0. 
+
+
+For diversity, we trained some 1d models with butter bandpass order 0 and 1. They were not as strong but added some diversity in the blend. 
+
+Ensembling + Postprocessing
+
+Up until the last day we had been using mean blend of weights, with a higher weighting on 2d models. 15 hours before the end, with the help of GPT4, we created a simple neural net to learn the best blend weight on the 23 base models. 5 of the models were 1D CNN with different training procedures. 18 of the models were Mixnet 2d CNNs, with different backbones, and 10 second magnification windows. 
+On CV the learned blend weights lifted the score but affect on public LB was not so large. 
+Earlier, we had been thinking that the distribution of the predictions were different to the distribution seen in the &gt;8 votes portion of the training dataset. So about 10 hours from the end we added a bias term for each of the 6 classes to the nnet. This bias would be added to the logits. CV difference was small, but when the Public LB score came through it jumped us from 9th to 4th position which was exciting. The nnet is quite simple, see below. On private score, over the final days, we had been in the 0.27 LB prize zone with most of our blends even with mean weights. 
+
+ (nn.Module):
+     ():
+        (Net, ).__init__()
+        .fc = nn.Linear(n_models, , bias = False) 
+        .fc_c = torch.nn.Parameter(torch.zeros()[None,,None])
+     ():
+         . fc(x) + .fc_c
+
+
+Supplemental Data
+
+No supplemental data was used
+
+Ablation study (roughly)
+
+
+
+Ordering of the 16 nodes signals  -0.02 
+
+Including low votes samples in 1D model  -0.01
+
+Augmentations -0.03 or more
+
+Magnify annotated window -0.006; and more by blending different views
+
+Remove sample wise and batch wise normalisation -0.02
+
+FC layer to learn blend weights -0.003
+
+Postprocessing with bias term -0.001
+
+
+Best single 1D model - 4 folds, 2 seed per fold - CV/Public/Private 0.257 / 0.25 / 0.30
+Best single 2D model - 4 folds, 2 seed per fold - CV/Public/Private 0.232 / 0.24 / 0.29
+Final blend 4 folds, 2 seed, 23 model per fold - CV/Public/Private 0.207 / 0.22 / 0.27
+
+Used tools/ repos
+
+Pytorch
+Timm, huggingface, albumentations.
+@darraghdog used a 4090 GPU instance rented from runpod.io
+Neptune.ai was our MLOps stack to track, compare and share models. It was heavily used and allowed easy 4 fold grouped view of models and mean of the val scores for all folds - which made tracking a lot easier. 
+
+
+
+Thanks for reading. Questions are welcome. 
+
+Edit:
+Inference kernel: https://www.kaggle.com/code/darraghdog/3rd-place-solution 
+github: https://github.com/darraghdog/kaggle-hms-3rd-place-solution
+
+Comments:
+├─ Sohier Dane (2024-04-09 18:00:28.993000) [+9]
+│  I was busy with training my first real life neural network.
+│  Congratulations!
+  ├─ Kyle (2024-04-09 21:52:52.953000) [+3]
+  │  Lol it took me a sec to get what this meant 😂
+  ├─ nymfree (2024-04-10 07:58:38.797000) [+2]
+  │  Have fun with the little one
+├─ Mohamed Eltayeb (2024-04-09 20:33:31.737000) [+3]
+│  Thanks for sharing! 
+│  Regarding cv, we thought based on the data section that votes in test rounding from 3 to 20 so our validation was stratifiedgroupkfold stratifying on votes 3-20 and grouping by...
+  ├─ Darragh (2024-04-09 20:42:25.863000) [+3]
+  │  Thanks @mohammad2012191 and yes, we had similar experiences on normalisation. Also, the effort you spent will payoff in different ways with experience gained 💪🏻, I always find that the best learnin...
+├─ makio323 (2024-04-10 20:08:38.780000) [+4]
+│  Congratulations! I am so surprised that you understood that the authors applied a shift-like augmentation to the rEEGeeg data and identified 6350 original data. While the data section of the compet...
+  ├─ Idith Haber (2024-04-20 23:00:07.710000) [+0]
+  │  I know, right.  I even read the original paper and saw that chart, but discounted it in thinking "they surely have given us original data and would tell us if anything was augmentation."
+├─ Chris Deotte (2024-04-09 23:26:49.257000) [+4]
+│  Congratulations Dieter and Darragh
+│  
+│  
+│    
+│  Best single 1D model - 4 folds, 2 seed per fold - CV/Public/Private 0.257 / 0.25 / 0.30
+│  
+│  
+│  Wow. That's a very powerful 1D model. Great job!
+├─ Aaditya Porwal (2024-04-13 05:45:43.133000) [+1]
+│  Congratulations Dieter and Darragh!!!!!!!!
+├─ Gunes Evitan (2024-04-12 11:07:32.637000) [+1]
+│  Congrats! This is actually very similar to our solution. I tried melspectrograms but I couldn't make them work. They were way worse compared to cusignal STFT spectrograms. Our best models were MaxV...
+  ├─ Darragh (2024-04-14 15:01:38.833000) [+1]
+  │  Seems so 😏 will know next time. We had an idea in the final weeks that our 2d model was weaker but there were so many things to try. Congrats on your great work!
+├─ Yuri Sun (2024-04-11 06:20:51.543000) [+1]
+│  Congratulations! I have learned a lot.
+  ├─ Darragh (2024-04-11 07:45:47.973000) [+2]
+  │  The CBAM work from you &amp; your team really helped a lot. It is a clever way to approach the problem as 1D model.
+├─ zephyrus1 (2024-04-10 14:27:48.443000) [+1]
+│  Congratulations on 3rd place in this competition. It's very nice to sharing with us !
+├─ C R Suthikshn Kumar (2024-04-10 04:20:40.047000) [+1]
+│  Congratulations on 3rd place in this competition. Thanks for sharing the details of your solutions with colorful diagrams.
+├─ Koolo (2024-04-10 01:01:08.920000) [+1]
+│  Congrats! These single models are powerful. Excellent!
+├─ Rashid rk (2024-04-09 22:48:27.207000) [+1]
+│  Wow congratulations this is very helpful
+├─ Mahmoud Elshahed (2024-04-09 20:06:30.887000) [+1]
+│  Thank you very much for sharing this magnificent work,
+│  is there any chance for that final code released ?
+│  regards
+  ├─ Darragh (2024-04-09 20:44:01.273000) [+9]
+  │  A repo with source code will be added in the thread 🧵 in the couple of weeks
+├─ Adnan Alaref (2024-04-09 20:06:25.467000) [+1]
+│  Congrats @christofhenkel on achieveing 3rd place.
+├─ Özlem Gülsüm Kılıçkaya (2024-04-09 18:27:44.520000) [+1]
+│  Congrats! Thank you very much for sharing. Amazing work!
+├─ djtrainwreckx (2024-04-09 18:25:44.693000) [+1]
+│  thank you for the explanation post. Amazing work!
+├─ Horikita Saku (2024-04-09 18:06:34.663000) [+1]
+│  congratulations!
+│  Nice work and nice solution writing
+│  Thanks for your sharing
+├─ Bilzard (2024-04-11 01:40:44.590000) [+2]
+│  Congratulations. I especially liked idea of zooming center region of EEG.
+│  
+│  And our team also noticed the trick of processing test data, but only my team mate @yujiariyasu successfully squeezed gain...
+  ├─ Darragh (2024-04-11 07:43:26.430000) [+1]
+  │  When extra precision was released we saw the difference of the postprocessing bias term was CV/Public/Private 0.001 / 0.004 / 0.003
+  ├─ Bilzard (2024-04-11 07:44:41.950000) [+1]
+  │  So we put some effort into reverse-engineering this process and finding the original “true” data point belonging to a given label. So we ended up with a filtered dataset of only 6350 rows which we ...
+    ├─ Darragh (2024-04-11 08:10:01.037000) [+6]
+    │  Here is the main block.
+    │  
+    │    eeg_id with same votes
+    │  train = train + label_columns](str)(, axis=)
+    │  
+    │   each unique eeg  combination calculate  overlaping time frames of same label and take the one row th...
+    ├─ Dieter (2024-04-11 08:24:00.627000) [+5]
+    │  Most of the time take middle point of each sub-groups is good enough. But only if there is only one "true" point for the eeg_id. 
+    │  
+    │  This would be the resulting x from the block above for a more comp...
+    ├─ Bilzard (2024-04-11 10:18:02.617000) [+0]
+    │  Thanks. It all make sense.
+    ├─ YujiAriyasu (2024-04-11 12:16:26.790000) [+1]
+    │  btw, our pp got public: 0.0045 / private: 0.005 gain
+    ├─ Darragh (2024-04-11 14:44:32.913000) [+0]
+    │  that is a good jump!
+    ├─ vialactea (2024-04-12 12:44:33.380000) [+1]
+    │  Congratulations on the 3rd place and thanks for sharing!
+    │  
+    │  Very interesting approach with the split. I spent most of the competition using all data, because I could see no reason for using only samp...
+    ├─ Darragh (2024-04-12 20:30:31.283000) [+1]
+    │  @vialactea thanks for your comments; re: the pseudo, we had a very similar experience - very promising CV score, but then on LB the pseudo trained model did worse than the base model which generate...
+    ├─ Chris Deotte (2024-04-12 20:47:51.370000) [+4]
+    │  Hi @vialactea When you use pseudo are you careful to make 5 sets of pseudo labels? one for each fold?
+    │  
+    │  For example we use fold 1 to pseudo label the vote&lt;10 on fold 1 train data only (i.e don't ...
+    ├─ Bilzard (2024-04-12 22:47:25.597000) [+2]
+    │  I experienced the same experience (improve CV drastically and deteriorated LB) with pseudo label. I pseudo label to OOF: first, I trained fold0 train with all data and make pseudo label to fold0 va...
+    ├─ Chris Deotte (2024-04-12 23:13:03.373000) [+3]
+    │  Yes. Each fold has subset of patient_id. Therefore we cannot pseudo label all data. We must use fold 1 to only pseudo label the patient_id in fold 1. Otherwise there is a leak.
+    ├─ vialactea (2024-04-19 16:48:49.273000) [+0]
+    │  Hi @cdeote. Yes, I made sure that the pseudo labels for a stage 2 fold came from models trained without any of the patients in that fold. Moreover, all stage 1 and stage 2 models used the exact sam...
+├─ Gowri Shankar Penugonda (2024-04-10 15:16:42.643000) [+2]
+│  Congratulations!! 🎉🎉, Love to see Squeezeformer again…
+├─ CPMP (2024-04-09 17:27:04.860000) [+2]
+│  Great solution (as always). I'll reread in more details, but first reaction is that you explain why one hing I tried did not work: I tried to sample eeg raw data from other locations than the middl...
+├─ AbaoJiang (2024-05-07 15:17:56.083000) [+0]
+│  Congratulations on 3rd place! I'm sorry for the late question.
+│  
+│  Currently, I'm tracing your released code on github. And there's one thing I can't understand. I notice that you use masking in each ...
+  ├─ Darragh (2024-05-11 18:28:11.107000) [+1]
+  │  The masking is not used as our inputs have constant length. The mask was all 1, so just a dummy. We leveraged from a previous competition and discussed how it is used there.
+    ├─ AbaoJiang (2024-05-12 03:25:53.130000) [+1]
+    │  Hi @darraghdog,
+    │  
+    │  Thanks for your explanation. I'll check how it's used in the fingerspelling competition!
+├─ Haohan Tsao (2024-04-09 17:24:49.077000) [+2]
+│  Congrats! Thanks for sharing.
+├─ Ganesh Talwar (2024-04-11 12:18:47.060000) [+0]
+│  Thanks for sharing exciting report.

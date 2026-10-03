@@ -1,0 +1,133 @@
+# https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359271
+
+Topic #359271: 10th Place Solution
+  Author: Koo
+  Posted: 2022-10-11 12:45:06.050000
+  Votes: 22  Comments: 9
+
+Congrats to all the winners, and thanks to organizers and all participants. This is a joint writeup with my wonderful teammate @yamash73 and @ksork6s4 (thanks to awesome team work).
+
+Things that worked
+
+
+
+Selection of dataset
+
+BatchNorm1d in head
+
+Ensemble of OpenCLIP backbones
+
+
+Dataset
+We have noticed that Public LB scores vary greatly depending on the combination of datasets. Therefore, we are exploring the best combination of data sets in the early stages of the competition. Comparison of experimental results shows that "Inshop", "Instre" and "Consumer-to-shop" are effective. Based on these results, we have decided to use "Products10k", "Landmark", "Instre" and "Consumer-to-shop" as our basic dataset combination . Here "Inshop" and "Consumer-to-shop" are subsets of deepfashion, so only "Consumer-to-shop" is selected as our combination of datasets.
+
+
+
+NOTE:
+
+
+
+The results of separate experiments confirm that Products10k and Landmark contribute to the LB scores
+
+For Inshop, Stanford products, and Consumer2shop, classes with a sample size more than 5 are used
+
+
+Our final combination of datasets is as follows:
+
+
+
+Products10k 
+
+Landmark
+
+Instre
+
+Consumer-to-shop
+
+Food101 (added in the last week)
+
+
+Model
+The backbone of our final model is an ensemble of 3 OpenCLIP image encoders. OpenCLIP backbones contributed to the huge improvement of the LB score. We refered to the head/loss design from the past competitions (mainly Google Landmark Retrieval 2021).
+
+
+
+Backbone: OpenCLIP ViT-B + OpenCLIP ViT-L + OpenCLIP ViT-H
+
+Head: Linear + BatchNorm1d + PReLU + subcenter ArcFace(k=3)
+
+Loss: ArcFace Loss with dynamic margin (s=30.0, mx=0.65, my=0.15) + focal loss
+
+
+
+
+Training
+Only head is trained like other teams. At first, we set the total epochs to 20, but after experiments showed that we could achieve the same level of performance with 5 epochs, we were able to increase the number of trials.
+
+
+
+Total epochs: 5
+
+Batch size: 512
+
+Optimizer: Adam (lr=1e-2, weight decay=1e-4)
+
+Scheduler: CosineAnnealingLR (eta_min=1e-3, T_max=5)
+
+Augmentation: RandomResizedCrop, HorizontalFlip, ImageCompression, HueSaturationValue, RandomBrightnessContrast, Blur, ShiftScaleRotate, CoarseDropout
+
+
+Things that didn't work
+
+
+
+Dimensional reduction of embeddings using PCA
+
+Training OpenCLIP ViT without freezing backbones
+
+Cropping with saliency models (preprocess)
+
+TTA (horizontal flip)
+
+AutoEncoder
+
+Other architectures of head
+
+Comments:
+├─ Nanashi (2022-10-11 13:21:07.200000) [+5]
+│  @koheiumeki Interesting thanks for sharing, we also follow a similar structure. Did you have problems when using 3 backbones considering the 9hrs limit?
+  ├─ Koo (2022-10-12 04:39:13.497000) [+1]
+  │  @jesucristoe  
+  │  Thank you for your question and congratulations on 4th place!
+  │  
+  │  We could fit 3 models into 9 hours limit without any special changes.
+  │  The approximate submission times for each model a...
+├─ Man of the year (2022-10-11 14:58:02.553000) [+4]
+│  How did you fit OpenCLIP ViT-B + OpenCLIP ViT-L + OpenCLIP ViT-H into 9 hours of given submission time?
+  ├─ Koo (2022-10-12 04:40:39.520000) [+1]
+  │  @manwithaflower  
+  │  Thank you for your question!
+  │  
+  │  We could fit 3 models into 9 hours limit without any special changes.
+  │  The approximate submission times for each model are as follows:
+  │  
+  │  
+  │  
+  │  ViT-H: 5 hou...
+├─ KKY (2022-10-11 13:47:10.277000) [+1]
+│  BTW, what the LR do you use when unfreezing training?
+  ├─ Koo (2022-10-12 04:59:25.280000) [+0]
+  │  @evilpsycho42 
+  │  We tested 1e-3 or 1e-4 after head-only training and scores did not improve.
+  │  But we tried unfreezing training only in the beginning of the competition, so this may not be sufficient. ...
+├─ HIROFUMI OHTA (2022-10-15 10:52:54.593000) [+2]
+│  Congratulations to Gold medal.
+│  Congratulations to @ksork6s4 and @yamash73 for winning the master. I have to do my best too.
+├─ KKY (2022-10-11 13:39:01.723000) [+2]
+│  Congratulations!  Can you share the training loss after 5 epochs?
+  ├─ Koo (2022-10-12 04:46:55.440000) [+0]
+  │  @evilpsycho42 
+  │  Thank you for your comment and question!
+  │  
+  │  The training loss after 5 epochs is 18.2422.
+  │  This is the sum of ArcFace loss and focal loss.

@@ -1,0 +1,108 @@
+# https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359525
+
+Topic #359525: [2nd place] Solution
+  Author: DiamondH
+  Posted: 2022-10-12 12:52:56.532000
+  Votes: 26  Comments: 9
+
+Firstly, many thanks to @andrefaraujo for hosting such an interesting competition. And I'm glad that I moved from 3rd to 2nd place final in this competition.( sixsixsix scored higher than me actually!). I will introduce my approach in shot.
+
+Inference Notebook
+
+Dataset
+
+
+
+Aliproducts
+
+Art_MET
+
+DeepFashion(Consumer-to-shop)
+
+DeepFashion2(hard-triplets)
+
+Fashion200K
+
+ICCV 2021 LargeFineFoodAI
+
+Food Recognition 2022
+
+JD_Products_10K
+
+Landmark2021
+
+Grocery Store
+
+rp2k
+
+Shopee
+
+Stanford_Cars
+
+Stanford_Products
+
+
+I've used a large amount of data, but didn't do much selection.
+
+Model
+
+
+
+open_clip_torch: Vit-H14-224-visual as backbone
+
+fc with dropout rate=0.2 as neck
+
+arcface head.
+
+Freeze backbone to finetune get me 0.662+-, flip boost it to 0.666.
+
+
+Idea
+
+
+
+Data Sampling: Set maxnum_images_perclass=100, minnum_images_perclass=3.
+
+Data Resampling: Do lightly resampling to balance class weight, set a minnum_images_perclass=20.
+
+Dynamic Margin (0.666-&gt;0.670): From the 1st solution of shopee competition. Set init m=0.1, then m= m+0.1 *(cur_ep-1), max_m = 0.8.
+
+stratified lr(0.670-&gt;0.713): This is a huge leap in my experiments. To remain the representation ability of the pretrained  model, I set the init_lr to 1e-4, which is the lr for the none-backbone parts, and the lr for the backbone is init_lr*lr_factor(lr_factor is reasonably low), the experiments was still on the half way when competition ended. Anyway, lr_factor=0.001 is kind of a nice one, which gives me a score of 0.713 finally.(finetune with lr_factor=0.001 for 2epochs, then freeze backbone to finetune for another 1 epoch, do flipping finally.)
+
+
+Conclusion
+
+To do experiments more efficiently, I just sampled about 1M data for training in the early stage. during the journey to 0.670, I’ve tried many different architectures, more complex neck, sub-center arcface head(works well in open/clip_L_336), backbone ensemble, etc., but the scores just moved slowly. So I thought 0.670 is kind of a bottleneck for me, freezing backbone, keeping my eyes on the none-backbone parts. Then I decided to turn to the backbone after having done every experiments I thought I should do, even I once failed(I tried unfreezing backbone and finetune simply, the score just drop down rapidly). After thinking kind of deeply of how the backbone works, and also with luck, I succeeded in my first experiment, got a score of 0.688. I've just tried 3 different lr_factor due to time limitation, it took me about 12h+ to train one epoch. Performance: 0.001(0.707)&gt;0.005(0.700)&gt;0.01.
+
+Here I didn't do much explanation of why I did so, and there are some other interesting experiments I've done, maybe will even get a higher score. I'll include all these in paper, you are welcome to check out the fully solution if you are interested!🤗
+
+It's my first time to step into finegrained Image world, which is really interesting! I've learned a lot from this competition, and also have some further understanding on this kind of task.
+Finally, thanks to everyone that contribute to this competition!
+
+Code:
+https://github.com/XL-H/GUIE-2nd-Place-Solution
+
+Paper:
+https://arxiv.org/abs/2210.08735
+
+Comments:
+├─ Man of the year (2022-10-13 18:46:54.953000) [+0]
+│  I didn't really get the stratified lr part. Could you please describe again it? Do you use different lr for the backbone and for the head parts of the model? And are they both unfrozen for the firs...
+  ├─ DiamondH (2022-10-14 01:52:38.087000) [+1]
+  │  Yes, all components are unfrozen when using stratified lr for training. And it’s efficient, both backbone and non-backbone parts are conversing in a appropriate learning rate.
+├─ Wenxuan Ye (2022-10-12 20:42:07.937000) [+0]
+│  Do you try to use "model soups" to build an ensemble model as 4th solution players did?
+  ├─ DiamondH (2022-10-13 03:02:53.357000) [+0]
+  │  I didn’t do so. I was busy testing lr_factor, but didn’t find the optimal one still😅. This is an nice idea to avoid overfitting, worth trying!
+├─ Wenxuan Ye (2022-10-12 15:40:07.527000) [+0]
+│  How many epochs did you set to train the model? You said each epoch took 12h+.
+  ├─ DiamondH (2022-10-12 15:53:20.850000) [+1]
+  │  To achieve 0.707, only 2 epochs are needed, it's efficient. It's also based on your data scale, after preprocessing, I have about 7M data.
+  ├─ Wenxuan Ye (2022-10-12 18:22:08.233000) [+0]
+  │  Thanks, I would like to reproduce your idea by using smaller datasets. 
+  │  给大佬递🍵
+├─ Starry (2022-10-12 14:00:57.637000) [+0]
+│  Congrats! I used very similar training strategy with you, set low lr on backbone while large lr on non-backbone parts and it works well. 
+│  May I know how many GPUs you used? I just rent one single 3...
+  ├─ DiamondH (2022-10-12 14:05:18) [+0]
+  │  6*A40(Your message must have at least 10 characters.)

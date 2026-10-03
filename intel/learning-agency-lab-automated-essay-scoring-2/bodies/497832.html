@@ -1,0 +1,43 @@
+<p>Hi. I have been reading discussions and notebooks and running my own experiments. I plan to publish a DeBERTa starter notebook soon. In the meanwhile, here is some food for thought which has improved my CV score for local DeBERTa experiments!</p>
+<h1>Current Starter Notebooks</h1>
+<p>I reviewed the public notebooks and I see three great starter notebooks:</p>
+<ul>
+<li>Moth provides a pure PyTorch starter <a href="https://www.kaggle.com/code/alejopaullier/aes-2-multi-class-classification-train" target="_blank">here</a> using classification approach.</li>
+<li>Chicm provides a HuggingFace Trainer starter <a href="https://www.kaggle.com/code/idv2005/deberta-baseline-train" target="_blank">here</a> using classification approach</li>
+<li>Yuto provides a HuggingFace Trainer starter <a href="https://www.kaggle.com/code/hashidoyuto/deberta-baseline-aes2-0-train" target="_blank">here</a> using classification approach</li>
+<li><strong>UPDATE</strong> I published a starter <a href="https://www.kaggle.com/code/cdeotte/deberta-v3-small-starter-cv-0-820-lb-0-790" target="_blank">here</a>. It uses <strong>regression</strong> approach and tricks below! It achieves <strong>CV 0.822 LB 0.800!</strong></li>
+</ul>
+<h1>Regression versus Classification</h1>
+<p>An alternative to using <code>AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=6)</code> <strong>classification</strong> is using <strong>regression</strong>. </p>
+<p>It's simple, just use <code>AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=1)</code> and set the 1 target to the <code>train.csv</code>'s value of <code>score</code> converted to datatype <code>float32</code>. Then we have <strong>regression</strong>. </p>
+<h1>No Dropout for Regression</h1>
+<p>If we want to use <strong>regression</strong>, remember that we need to remove dropout from NLP transformers to prevent batch norm from destabilizing our regression prediction. Discussion <a href="https://www.kaggle.com/competitions/commonlitreadabilityprize/discussion/260729" target="_blank">here</a></p>
+<pre><code> = AutoConfig.from_pretrained(PATHS.model_path)
+ = 
+ = 
+ =  
+ = AutoModelForSequenceClassification.from_pretrained(MODEL, config=config)
+</code></pre>
+<h1>Is Regression better than Classification?</h1>
+<p>Currently I am achieving better CV score using regression than classification! What is everyone else experiencing! </p>
+<h1>Max Token Sequence Length</h1>
+<p>Most (actually, I think all) public notebooks use <code>tokenizer(essay, max_length=512)</code> with max=512. Below is a histogram of essay token length. The transformer DeBERTa can accept any length input. (Whereas other encoder models like BERT or RoBERTa can only accept 512). </p>
+<p>Using <code>max_length = 1024</code> or <code>max_length = 1536</code> for DeBERTa gives a nice CV score boost (versus 512). Consider doing this. If we want to use RoBERTa (which has different architecture and tokenizer), consider using the model LongFormer (which is a modified RoBERTa model) and can also accept any length input. (Also if we use RoBERTa or LongFormer, consider adding parameter <code>trim_offsets = False</code> to the tokenizer to give your model more information because it doesn't remove whitespace).</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Apr-2024/hist.png"></p>
+<h1>Batch Size</h1>
+<p>Note that different batch sizes achieve different CV score and LB score. It makes a big difference in this competition. So experiment with different batch sizes. For me, batch size = 8 (with starting LR 1e-5) is working best!</p>
+<h1>Fast Experimentation</h1>
+<p>For experiments, consider using <code>"microsoft/deberta-v3-small"</code> or <code>"microsoft/deberta-v3-xsmall"</code>. And then after developing your intuition and finding good hyperparameters, train <code>"microsoft/deberta-v3-large"</code> for boost in CV score and LB score.</p>
+<h1>Learning Schedule</h1>
+<p>We can train with <code>constant</code>, <code>linear</code>, <code>step</code>, and <code>cosine</code>. And we can vary the number of epochs. Make sure to find the best schedule and learning rate! For me, using <code>linear</code> with <code>epochs=4</code> is working best!</p>
+<h1>Add Special Tokens</h1>
+<p>Note that DeBERTa ignores characters ("\n") (carriage returns) and (" "*2) (double spaces). Consider adding extra tokens to the vocabulary before tokenization. (UPDATED code based on Nicholas comment below)</p>
+<pre><code>from tokenizers import AddedToken
+tokenizer.add])
+model = from
+model.resize)
+</code></pre>
+<h1>My Starter Notebook - CV 0.822 - LB 0.800</h1>
+<p><strong>UPDATE</strong> I published a HuggingFace Trainer starter <a href="https://www.kaggle.com/code/cdeotte/deberta-v3-small-starter-cv-0-820-lb-0-790" target="_blank">here</a> using <strong>regression</strong> approach and tricks above! It achieves <strong>CV = 0.822 and LB = 0.800!</strong> This beats all current public DeBERTa single model notebooks <strong>WOW!</strong> If we use these hyperparameters for DeBERTa large the CV score and LB score will be even better!</p>
+<h1>Enjoy!</h1>
+<p>Have fun experimenting!</p>

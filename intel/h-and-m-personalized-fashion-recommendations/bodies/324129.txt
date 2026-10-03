@@ -1,0 +1,243 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324129
+
+Topic #324129: 3rd place solution
+  Author: sirius
+  Posted: 2022-05-10 08:46:49.397000
+  Votes: 96  Comments: 40
+
+At First, thank kaggle staff and h&amp;m team for organizing this interesting competition. As a new kaggler (but an old RECSYSer), I enjoy this game very much and very very happy to get this place. And, thank all the competitors and the community, from whom I learned very very much, which is a bigger gain for me than the $8000🤓. At last, I must thank the covid-19 that isolated me at home for two months😂, which forced me to focus on the competition in the spare time because of no outting activities, especially during May day holiday.
+
+As my pipeline is very similar to others' (candidate generation + ranking) and I notice most part of my solution (either the recall methods or the ranking features/models) has been used and described in other guy's threads, I will just briefly introduce something different and useful in my case here. (LB scores in the following are all single model Private scores.)
+
+
+
+Features about recall strategy:  whether this article is recalled by strategy_name and the rank of this article under the strategy_name (because I've ordered the candidate under each recall strategy by some metric, the rank num can reflact the relevance). These features, plus an expansion of candidates num for each user from dozens to hundred, boost my LB score from 0.02855 to 0.03262, which changes the color of medal from silver to near gold. In addition, if I only increase the recall num and don't adding the recall features, the CV score is very very poor. 
+
+BPR matrix factorization: The similarity of user and article is important for ranking. Features about item2item similarity, such as count of bought together and word2vec, are commonly used in most competitors' model and those also boost my score a lot, but what improves my model most is the user2item similarity obtained from BPR matrix factorization. This BPR model is trained with all the transactions before the target week (I've trained one BPR for each week) using implicit. The auc of BPR similarity is ~0.720, while the auc of the whole ranking model is ~0.806 and the best auc of other single feature is ~0.680. At last, this single similarity feature boost my LB score from 0.03363 to 0.03510, which takes me from gold medal area to the prize area.
+
+
+Any questions are welcome. Thank you for reading!
+
+-----------------------UPDATE 2022.05.15------------------------------
+
+Recalling
+
+
+
+the most popular items
+
+items that the user recently purchased
+
+relative items to what the user recently purchased
+
+popular items under user's attributes (age, gender and so on)
+
+items which have the same prod_name with what the user recently purchased
+
+
+Ranking
+
+Samples
+
+
+
+The generated candidates which the customer didn't purchase in the target week are labeled with 0 and those which the customer purchased are labeled with 1
+
+Because of big imbalance (pos:neg is about 1:300), downsampling is adopted. I just keep the negative samples with amount of 30*len(pos_samples) 
+
+The pos samples are only the ones which are recalled in the candidates and the other items that the user purchased in actual are not included.
+
+
+Features
+
+
+
+user and item static attributes
+
+counts of user-item and user-item attributes in the last 7 days, 30 days and all transactions. 
+
+day diff of user-item and user-item attributes last seen in the transactions;
+
+similarities between user and item:
+
+
+BPR matrix factorization user2item similarity
+
+word2vec item2item similarity
+
+jaccard similarity between the attributes of items that user purchased and the attributes of the target item
+
+txt similarity and image similarity by the embeddings obtained from public pre-trained models
+
+item popularity:
+
+
+counts of item/item attributes purchased  in the last 7 days, 30 days and all transactions;
+
+time weighted popularity, where the weight is 1/days of now minus purchased date
+
+weekly trend score from this kernal
+
+features about recall strategy:
+
+
+whether this article is recalled by strategy_name 
+
+the rank of this article under the strategy_name
+
+
+Models
+
+The metric of each model is very similar. The final version is the average score of 16 models which were trained with different hyperparameters (learning rate, max_depth and even random seed).
+
+
+
+lightgbm
+
+catboost
+
+xgboost
+
+Comments:
+├─ Clear n' Simple (2022-05-10 16:06:24.883000) [+3]
+│  Features about recall strategy:
+│  
+│  So if I understand correctly, you have 2 features for each strategy you used, one binary feature for whether the candidate was retrieved using that strategy, and an...
+  ├─ sirius (2022-05-10 16:15:40.073000) [+3]
+  │  Yes
+  │  
+  │  Both the ranking features you described was used in my final model. But If only talking about the boosting from 0.02855 to 0.0326, it's the latter one（ranking num） contributing most. In that s...
+├─ SRK (2022-05-10 09:05:19.170000) [+3]
+│  Congrats on the solo gold @sirius81 
+│  
+│  Thanks for sharing the secret sauce on BPR similarity.
+├─ Giba (2022-05-10 14:28:23.273000) [+4]
+│  Congrats @sirius81 for top3 and solo prize/gold! Thanks for sharing your solution.
+├─ Paweł Jankiewicz (2022-05-10 13:03:22.920000) [+4]
+│  Congrats and nice work with BPR. I also used BPR from implicit package but only to generate limited candidates and not to score user-item pairs. I had some ideas to factorize user and item state bu...
+  ├─ sirius (2022-05-10 14:21:06.230000) [+1]
+  │  Congrats on your 2nd place. Thank you for this comment and lots of valuable and impressive discussion during the competition!
+├─ Radek Osmulski (2022-05-12 22:48:01.013000) [+1]
+│  Congrats on the solo win, @sirius81!!! And thank you for a wonderful write-up focusing on the key points! 🔥
+│  
+│  Could I please ask you how did you frame the competition and what did you do for duplica...
+  ├─ sirius (2022-05-15 14:14:12.777000) [+1]
+  │  Thank you!
+  │  
+  │  
+  │  
+  │  No, there aren't duplicated (customer_id, article_id) in my prediction. A customer may purchase the duplicated article in the next week (such as three pairs of sock), but it's really ...
+├─ biubiuG (2022-05-10 11:54:34.983000) [+1]
+│  Congrats! btw, I am curious about some details about your solution:
+│  
+│  
+│  
+│  how many weeks(or days) during the ranking phrase?
+│  
+│  what'r your ranking model?
+  ├─ sirius (2022-05-10 12:20:02.720000) [+1]
+  │  Thanks!
+  │  
+  │  
+  │  
+  │  18 weeks
+  │  
+  │  Xgboost, Catboost and Lightgbm give similar CV scores, so the final submission is a mix of these models.
+  ├─ biubiuG (2022-05-10 12:29:57.503000) [+0]
+  │  thanks for your sharing. btw, for the every week in the 18weeks, we need run all the methods to create candidate? so all the methods are run by 18+1(valid)+1(test)=20times?
+  ├─ sirius (2022-05-10 12:40:04.157000) [+1]
+  │  Yes. Totally right!
+  ├─ biubiuG (2022-05-11 12:36:56.890000) [+0]
+  │  thanks for your reply, for my information, how the performance improve by enlarging the training week? I just use one week for train, and I get 0.0277 on lb.
+  ├─ sirius (2022-05-11 14:43:13.700000) [+1]
+  │  That depends. More data can reduce overfitting. In my case, 18weeks vs 2weeks is about 0.0005-0.0010 up
+├─ [deleted] (2022-05-10 18:42:29.930000) [+2]
+│  This is an excellent solution! Well done on achieving a top 3 finish.
+│  
+│  It's great to see that you are using features from the recall strategy to improve your ranking model. This is something that I...
+├─ senkin13 (2022-05-10 10:35:56.443000) [+2]
+│  Congrats! your user2item similarity is very strong.
+├─ Ethan (2022-05-10 08:59:07.970000) [+2]
+│  Congrats! Thanks for sharing. BPR is really interesting.
+├─ Omar Abdulbagi (2023-08-23 09:21:50.400000) [+0]
+│  congrats on the placing!  A truly fascinating way to solve this problem.
+├─ Bartosz Pietrzak (2023-08-01 13:45:30.283000) [+0]
+│  I know it's been a year since your last update, but could you explain how did you generate negative samples for ranker training?
+├─ KKY (2022-11-18 08:47:00.960000) [+0]
+│  Great Job! Congrats!
+│  
+│  I am curious about how to calculate "word2vec item2item similarity" as a feature ?  Between a candidate artical and an user.  Look forward your feedback.
+  ├─ sirius (2022-11-19 14:56:27.243000) [+1]
+  │  It's about the similarity of the candidate artical and the user-purchased articals.
+  │  
+  │  For example, if a user has purchased [a1, a2, a3] in the history, "word2vec item2item similarity" is the mean/su...
+├─ Homoalways (2022-05-15 09:42:47.723000) [+0]
+│  By the way, are you from ecnu? I graduated from ecnu last year and I'm now at renmin university.
+  ├─ sirius (2022-05-15 14:17:03.607000) [+0]
+  │  Yes! Got the Master degree 4 years ago in ECNU🤝
+  ├─ Homoalways (2022-05-16 02:03:38.507000) [+0]
+  │  🤝Learn from you.
+├─ Homoalways (2022-05-15 09:40:58.330000) [+0]
+│  Simple ideas that work well, great job! A question: what machine do you use(how much memory), and do you use cpu or gpu to process features?
+  ├─ sirius (2022-05-15 14:16:02.837000) [+2]
+  │  Thanks!
+  │  
+  │  
+  │  
+  │  120GB
+  │  
+  │  Feature processing is only on cpu and model training is on gpu
+├─ Raj_B_IK (2022-05-13 00:50:04.630000) [+0]
+│  Congrats! Thanks for sharing your solution
+├─ Hyungeun Jo (2022-05-11 08:35:17.470000) [+0]
+│  Congrats for your solo gold! It's very impressive work.
+│  I have some questions for your great work in more detail.
+│  
+│  
+│  
+│  
+│  I think you used various candidate generation strategies including MFBPR model....
+  ├─ sirius (2022-05-11 14:38:08.883000) [+1]
+  │  Thanks！
+  │  1.Yes. But I haven't generate candidates using bpr, just being a feature in the ranking model (didn't have more spare time and felt enough high recall rate ~18％)
+  │  
+  │  2&amp;3. Busy with work no...
+  ├─ sirius (2022-05-15 14:12:10.043000) [+1]
+  │  updated Q2&amp;Q3  @hyungeunjo
+  ├─ Hyungeun Jo (2022-05-16 02:10:03.593000) [+0]
+  │  Thanks @sirius81 ! great update, I was looking forward to it. It's very helpful👍
+  │  
+  │  
+  │  
+  │  
+  │  So, in ranking part, did you set the target label in binary setting?(etc, if that candidate actually interacted ...
+  ├─ sirius (2022-05-16 03:46:42.570000) [+1]
+  │  Updated Ranking-Samples
+  │  
+  │  Feature 2 is like transaction_7days.groupby(['customer_id', 'article_id']).size(),  meaning the count of the user purchasing the target item in the last 7 days; 
+  │  Feature 3 ...
+  ├─ Hyungeun Jo (2022-05-16 07:01:24.153000) [+0]
+  │  Thanks for your reply!
+  ├─ Hyungeun Jo (2022-05-25 09:02:51.180000) [+0]
+  │  Hello, @sirius81 !
+  │  Could you give me some details about feature of the different recall strategies? If the candidates are came from strategies : 1. weekly popular items 2. previously purchased item...
+  ├─ sirius (2022-05-28 05:53:45.880000) [+1]
+  │  Both used the score described in this kernal. I only adjusted some parameters a very little. @hyungeunjo
+├─ Igor Kuivjogi Fernandes (2022-05-10 12:59:40.630000) [+0]
+│  Thanks for the readup! Congratz on solo gold!
+│  Can you explain this part, please?
+│  
+│  
+│    
+│  These features, plus an expansion of candidates num for each user from dozens to hundred, 
+│  
+│  
+│  What do you mean b...
+  ├─ sirius (2022-05-10 14:05:21.820000) [+3]
+  │  Thank you. My pipeline consists of two part: candidate generation and ranking. At the beginning, I generated dozens of candidate articles for each user. Then, for a higher recall rate, I tried to i...
+├─ [deleted] (2022-05-13 07:59:51.427000) [+0]
+│  [deleted]
+├─ Making TARS (2022-05-12 02:40:03.500000) [+0]
+│  Thank you for sharing strategy!
+├─ Dark Wang (2022-05-12 02:07:15.407000) [+0]
+│  Thanks for sharing !

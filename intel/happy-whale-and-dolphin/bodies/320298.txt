@@ -1,0 +1,198 @@
+# https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320298
+
+Topic #320298: 19th Place - Single Model LB 860 Without Pseudo
+  Author: Chris Deotte
+  Posted: 2022-04-21 01:20:16.395000
+  Votes: 71  Comments: 44
+
+19th Place HappyWhale Solution
+
+We're very happy to present our 19th place HappyWhale solution. Our team consists of @ragnar123 @mpware @bolkonsky It was a pleasure to work with and learn from all these Kaggle Grandmasters. Thank you Kaggle, Ted Cheeseman, collaborators, and everyone at Happywhale for a great competition!
+
+Summary
+
+
+
+Large Backbones like EffNetB7, Large Image sizes like 768x768
+
+Two ArcFace modules. One for species and one for individual_id both m=0.19, s=19
+
+Six datasets; Mpware fullbody, Mpware fin, Jan fullbody, Jan fin, Phalanx detic, Awsaf yolo
+
+Infer all six datasets and Bayesian optimize weighted average of six embeddings
+
+Eight fold CV. Tune new_individual threshold on CV. Best single model CV 0.865 LB 0.859
+
+
+Datasets
+
+We would love to train our models with only the original images and have the model learn to place attention on the dorsal fin and/or fullbody. However the images are very large like 2500x3500. So instead we used six datasets where important parts of the image were cropped and then resized to either 512x512, 640x640, or 768x768.
+
+
+
+
+Models
+
+
+
+Image Sizes 512x512, 640x640, 768x768
+
+EffNetV1-B5, EffNetV1-B6, EffNetV1-B7
+
+EffNetV2-L, EffNetV2-XL
+
+ConvNext-L
+
+Batchsize = 64
+
+TensorFlow trained with Nvidia 8xV100 GPU and CoLab TPU
+
+
+Train - One Model All Datasets
+
+We train one model on all 6 datasets for 20 epochs exponential learning rate decay with 5 epochs warmup. So the model sees every train image 120 times. We also use data augmentation and two ArcFace heads.
+
+
+Infer - Bayesian Optimized Average of Six Embeddings
+
+We infer the model on each dataset separately and get six embeddings for each train and test image. Next we use Bayesian optimization on CV score to find the optimal weighted average of these 6 embeddings to use for KNN matching.
+
+
+Ensemble
+
+Our best single model had 8-Fold CV 0.866 and LB 0.859. We trained about a dozen different models and then ensembled the 96 = 12 x 8 fold models by using a voting ensemble of each fold model's 5 predictions. Our ensemble result was LB 0.868.
+
+How To Improve
+
+After reading other top teams' winning solutions, we believe that the next step to boost our model's LB would be to pseudo label the test images and then retrain our models using train and pseudo labeled test. I believe this can boost LB as much as +0.010 to +0.020 !
+
+UPDATE
+
+After the competition ended, I retrained two of our 12 ensemble models using pseudo labels. The public LB boost +0.009 and the private LB boost +0.016. This confirms that pseudo labeling is very powerful in this competition. 
+
+Just adding pseudo to two of our 12 ensemble models boosts our final placement to Gold Medal finish! I assume if we add multiple rounds of pseudo to all our ensemble models, we can climb further into Gold Medal zone!
+
+Comments:
+├─ Bao Loc Pham (2022-04-21 03:22:35.737000) [+3]
+│  Can I ask how do you config the 6 datasets training phase? As a beginner, your solution was the most easy to understand and to try after this competition, but I still don't know how to do the datas...
+  ├─ Chris Deotte (2022-04-21 03:46:31.107000) [+4]
+  │  In popular public notebooks they use 1 dataset like this
+  │  
+  │  train_files = tf.io.gfile.glob(GCS_PATH + '/happywhale-2022-train*.tfrec')
+  │  train_dataset = get_training_dataset(train_files)
+  │  
+  │  
+  │  To use 2 dat...
+  ├─ Chris Deotte (2022-04-21 03:52:23.767000) [+3]
+  │  Then during inference just do this
+  │  
+  │  test_files1 = tf.io.gfile.glob(GCS_PATH1 + '/happywhale-2022-test*.tfrec')
+  │  test_dataset1 = get_test_dataset(test_files1)
+  │  test_embeddings1 = embed_model.predict(t...
+  ├─ Chris Deotte (2022-04-21 03:57:42.583000) [+2]
+  │  You can try this with the 4 datasets that Martin posted here and get a great CV LB score!
+  ├─ Bao Loc Pham (2022-04-21 03:58:08.617000) [+1]
+  │  Thanks for your explanation. ❤️
+├─ KhanhVD (2022-04-21 09:07:48.340000) [+4]
+│  This is nice score with single model, data diversity is work well. Congrats on results and thanks for sharing solution @cdeotte
+  ├─ Chris Deotte (2022-04-21 09:14:04.877000) [+1]
+  │  @duykhanh99 Thanks KhanhVD. Congratulations to you and your team's strong finish. You were very close to gold. You'll get gold next time!
+  │  
+  │  Did your team use pseudo labels? I'm curious because it se...
+├─ Chris Deotte (2022-04-26 03:08:18.093000) [+1]
+│  UPDATE: After the competition ended, I retrained two of our 12 ensemble models using pseudo labels. The public LB boost +0.009 and the private LB boost +0.016. This confirms that pseudo labeling is...
+  ├─ Remek Kinas (2022-04-26 12:04:25.277000) [+1]
+  │  Great result @cdeotte! Thank you for sharing.
+  │  Have you tried different tricks we can described by participants?
+  ├─ Chris Deotte (2022-04-26 14:10:56.637000) [+2]
+  │  No. I just did the simplest technique which is take the 66% most confident test predictions and make datasets with those test images and labels. Then i added all of those test images to every fold ...
+├─ [deleted] (2022-04-24 16:14:29.243000) [+1]
+│  Very nice job! I like that you guys used a lot of data augmentation. Your final ensemble model had a really good score!
+  ├─ Chris Deotte (2022-04-24 22:35:59.033000) [+1]
+  │  Thanks Satoshi
+├─ Making TARS (2022-04-24 09:33:14.810000) [+1]
+│  Congratulations ! and Thank for sharing!
+├─ Awsaf (2022-04-23 18:21:28.707000) [+1]
+│  Congratulations Chris! Glad to see my name in your solution 😁
+  ├─ Chris Deotte (2022-04-24 14:39:42.457000) [+2]
+  │  Thanks Awsaf! Thanks for your YOLO bbox dataset!
+  ├─ Awsaf (2022-04-24 15:03:13.190000) [+1]
+  │  Glad To Help :D
+├─ Alin Cijov (2022-04-22 00:42:06.833000) [+1]
+│  Only Nvidia 8xV100 GPUs 😄
+│  Well done @cdeotte !
+├─ Remek Kinas (2022-04-21 10:58:02.683000) [+1]
+│  Hi @chri0077 congratulations for your great score! Thank you for solution description. As always easy to understand after … but for me hard to invent during competition :)
+│  
+│  I am trying to understan...
+  ├─ Chris Deotte (2022-04-21 14:57:34.643000) [+1]
+  │  Thanks Remek. Congratulations to you and your team.
+  │  
+  │  Training on 6 datasets just means concatenating the six datasets and then training on all 6x50k = 300k images. So each epoch, the model will see...
+  ├─ Remek Kinas (2022-04-21 15:32:41.407000) [+1]
+  │  Thank you! I put a lot of effort in this competition and counted on higher position but …. unfortunately had really difficulties to find better solution. We have learned a lot but … whatever I did ...
+  ├─ Remek Kinas (2022-04-22 14:33:29.487000) [+0]
+  │  @cdeotte one more question - sorry for asking and asking but … I am trying to understand all solutiosn to get gold some day :) 
+  │  
+  │  I can not see explanations why did you use two heads - where did you...
+  ├─ Chris Deotte (2022-04-22 15:22:48.510000) [+1]
+  │  In general adding additional heads (auxiliary learning) challenges the model to do multiple learning tasks at once and usually makes the first head (the one we care about) smarter. This is a classi...
+  ├─ Remek Kinas (2022-04-22 15:26:38.667000) [+1]
+  │  Big thanks!!! 🙏🙏🙏🙏
+  ├─ Remek Kinas (2022-04-23 13:53:15.460000) [+1]
+  │  @cdeotte is any explanation you use for a classifier (for species classification) AfcFace instead of SoftMax? 
+  │  
+  │  Sorry for digging 😂 but since you are sharing knowledge I am going learn as much as p...
+  ├─ Chris Deotte (2022-04-23 16:17:31.843000) [+2]
+  │  Species classification uses both ArcFace and Softmax. To do classification, you need Softmax. Using ArcFace is optional. So the question is, why did we additionally use ArcFace?
+  │  
+  │  The reason comes f...
+  ├─ Remek Kinas (2022-04-23 20:23:32.087000) [+1]
+  │  👍👍👍👍 Thank you 💪💪💪
+├─ beluga (2022-04-21 08:51:47.910000) [+1]
+│  Really elegant solution and nice writeup! 
+│  I wonder why did not you tried pseudo labels.
+│  
+│  For us pseudo helped 0.01-0.02 indeed but we had weaker single models.
+  ├─ Chris Deotte (2022-04-21 09:19:03.570000) [+0]
+  │  Unfortunately, I thought it would not help and didn't want to waste 24 hours training a new model. 
+  │  
+  │  I read solutions from last year's comp where pseudo labels did not make a big difference and we ...
+  ├─ Chris Deotte (2022-04-21 09:25:34.940000) [+0]
+  │  @gaborfodor Can you describe the procedure you used to pseudo. I assume you took the X% most confident test predictions. 
+  │  
+  │  What i'm curious about is did you then train a model with these X% test an...
+  ├─ beluga (2022-04-21 09:56:30.300000) [+1]
+  │  We used small fixed validation 1 image for each individual id. Single training images we could not split so we just used them for training. For local validation we trained on 44704 images and valid...
+  ├─ beluga (2022-04-21 09:59:54.187000) [+1]
+  │  We used the simplest hackiest solution so once we added pseudo label to the train set it pretty much remained top1 for sure. The rest of the top 5 predictions could be corrected…
+├─ DeepUnderstanding (2022-04-21 05:34:08.393000) [+1]
+│  did you try concatenation of the 6 embeddings and whats the cv/lb score compared to the weighted average
+  ├─ Chris Deotte (2022-04-21 05:53:02.500000) [+1]
+  │  Great idea. We did try concatenation (of the 6 dataset embeddings) and it was worse CV. Perhaps the weighted average has less resultant columns (features) and generalizes better.
+  │  
+  │  Our final ensembl...
+  ├─ DeepUnderstanding (2022-04-21 06:50:11.160000) [+0]
+  │  thanks for the reply, any specific reason you used 8 folds instead of 5 or 10, I never heard someone using 8 folds so curious
+├─ Shreyansh Singh (2022-04-21 05:01:06.437000) [+1]
+│  Thanks for sharing! Could you elaborate a bit on the Bayesian optimization for getting the weights? I get the sense of the idea but want to understand what was the objective function you were using...
+  ├─ Chris Deotte (2022-04-21 05:51:40.087000) [+3]
+  │  The objective function is the CV score. Inside the Bayesian function, 6 weights are explored, both train and valid average embeddings are created, KNN is performed and CV score is calculated (over ...
+  ├─ Shreyansh Singh (2022-04-21 05:56:50.040000) [+1]
+  │  Helps. Thank you!
+├─ kaggler (2022-04-21 04:11:15.533000) [+1]
+│  Always thanks for sharing after competitions finish.
+│  Pseudo labelling incrased our score around 0.02 with 60% test set.
+│  The bayesian optimization seems nice.  I learned a lot from you.
+├─ liuzhangzhen (2022-04-21 04:01:13.213000) [+1]
+│  Thanks for sharing, great performance without pseudo
+  ├─ Chris Deotte (2022-04-21 04:02:14.450000) [+0]
+  │  Thanks @liuzhangzhen . Great job achieving solo 36th place Silver!
+├─ Robson (2022-04-24 22:39:58.520000) [+2]
+│  Thanks for sharing. My solution was practically the same as yours, except that I only used 4 different datasets (an experiment for a fold with TPU in colab was taking 2 and a half days). At least i...
+  ├─ Chris Deotte (2022-04-24 22:46:27.850000) [+2]
+  │  Great job Robson! Another trick that gave us a big boost was to replace the bbox in the dorsal fin dataset of the 3 species that don't have dorsal fin. For those 3 species we used the full body dat...
+  ├─ Robson (2022-04-24 22:58:06.677000) [+1]
+  │  Its a nice trick. Each new competition I learn to think out the box, what makes things more fun. Thanks for sharing with us
+├─ [deleted] (2022-04-21 02:56:56.683000) [+0]
+│  [deleted]

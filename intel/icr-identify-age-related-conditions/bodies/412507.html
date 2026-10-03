@@ -1,0 +1,31 @@
+<p>This competition's metric is <strong>balanced</strong> log loss. Therefore it is important to balance the classes during training. There are at least 4 ways to balance the classes</p>
+<h1>Method 1 - Add Class Weights</h1>
+<p>The first way to balance classes is to add weight to the positive class. In this competition's train data, the positive class is only 17%. Therefore when we train our models we can give the positive class 4.7x weight so that the positive class has the same importance as the negative class. (Try different weights to see what works best).</p>
+<p>Here is some example code provided by AmbrosM:</p>
+<pre><code>
+
+
+
+
+</code></pre>
+<p>An example notebook which uses "sample weights" is one of the top scoring notebooks <a href="https://www.kaggle.com/code/maverickss26/icr-age-related-conditions-eda-modelling" target="_blank">here</a>.</p>
+<h1>Method 2 - Downsample Negative Class (Or Upsample Positive)</h1>
+<p>A second way to balance the classes is to train with all the positive samples and only a fraction of the negative samples. This is called downsampling. Since we are not using all the negatives during training, we should train many models with different downsample each time. (i.e. bagging)</p>
+<p>Here is some example code provided by Ganzy:</p>
+<pre><code>from imblearn import RandomUnderSampler
+NUM_POS = df()
+sampler = (sampling_strategy={: NUM_POS, : NUM_POS})
+X_train, y_train = sampler(df, df)
+</code></pre>
+<p>I also provide an example of "downsampling" in my RAPIDS SVC notebook <a href="https://www.kaggle.com/code/cdeotte/rapids-cuml-svc-baseline-lb-cv-0-35" target="_blank">here</a>. The <code>CV 0.44 =&gt; CV 0.35</code> and <code>LB 0.35 =&gt; LB 0.27</code> </p>
+<h1>Method 3 - Post Process</h1>
+<p>A third way that has not been shown in public notebooks yet is post process. It works like this. If you train a model without adding more weight to the positive class, then you can boost the positive class as post process afterwards with the following code:</p>
+<pre><code> =  
+ = boost * preds / (-preds)
+ = odds / (+odds)
+</code></pre>
+<p>Here the variable <code>preds</code> is a NumPy array of your preditions for class 1. We convert the probabilities into odds then scale the odds to make the class 1 more important. Finally, we convert odds back to probabilities.</p>
+<h1>Method 4 - Use Balanced Log Loss</h1>
+<p>A fourth way suggested by Björn in the comments is to use a balanced log loss function instead of using basic log loss function during training. Then we can leave all the original data as is with class weight equal one. (Note we are referring to the <code>loss function</code> (i.e. GBT objective) not early stopping <code>metric function</code>)</p>
+<h1>Cross Validation</h1>
+<p>We can evaluate the effect of the above 4 methods by trying each and computing our OOF CV score. Then we can use whatever works best!</p>

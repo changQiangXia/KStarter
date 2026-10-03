@@ -1,0 +1,51 @@
+<h1>Acknowledgments</h1>
+<p>I want to thank the organizers and Kaggle staff for creating such a fun competition! Additionally, I want to thank <a href="https://www.kaggle.com/paweljankiewicz" target="_blank">@paweljankiewicz</a> for introducing me to Kaggle, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> and <a href="https://www.kaggle.com/cpmpml" target="_blank">@cpmpml</a> for their contributions to the community (I learned a lot from you!), <a href="https://www.kaggle.com/narsil" target="_blank">@narsil</a> for organizing Kaggle/hiking events in Poland, and <a href="https://www.kaggle.com/thedrcat" target="_blank">@thedrcat</a> for inspirations and ideas for the competition (I met Darek during the last event). Finally, I want to thank my wife for bearing with me.</p>
+<h1>Validation</h1>
+<p>I did a lot of LB probing and comparisons between 'pure' Kaggle and Persuade 2.0 datasets. Key findings:</p>
+<ul>
+<li>There were 5 topics in the test set with the following proportions (curious if I was right):</li>
+</ul>
+<ol>
+<li>Driverless cars - <code>35.6%</code></li>
+<li>Facial action coding system - <code>24.6%</code></li>
+<li>Exploring Venus - <code>19.6%</code></li>
+<li>The Face on Mars - <code>12.6%</code></li>
+<li>'A Cowboy Who Rode the Waves' - <code>7.6%</code></li>
+</ol>
+<ul>
+<li>Persuade 2.0 and Kaggle-only records are different.</li>
+<li>There were no records from the Persuade 2.0 dataset in the test set.</li>
+<li>All the topics were present in the public LB part of the test set. My assumption was that they are also present in the Private part of the dataset.</li>
+</ul>
+<p>I used the findings in the following way:</p>
+<ul>
+<li>I validated on the 5 topics Kaggle-only essays with weights adjusted to expected test set weights. You can find the weights calculation in this <a href="https://www.kaggle.com/code/piotrekga/prompt-model/notebook" target="_blank">notebook</a>. The <code>persuade</code> records and topics that I thought were not present in the test set had weight=0 for validation.</li>
+<li>I trained on all train data, but added a <code>persuade</code> binary flag as a feature. In the test set, all the records had <code>persuade=0</code>.</li>
+<li>I used <code>StratifiedKFold</code> stratified by score.</li>
+</ul>
+<p>Despite all the efforst described above I was not able to obtain strong CV-LB correlation. My <code>0.836</code> solution was chosen based on 50% CV and 50% LB score. I had one better PB solution with <code>0.837</code> score.</p>
+<h1>Solution</h1>
+<p>I used <a href="https://www.kaggle.com/code/batprem/aes2-modeling-with-fb-scoring" target="_blank">this</a> notebook as my baseline. My modifications:</p>
+<ol>
+<li>Validation as described above.</li>
+<li><code>persuade</code> flag.</li>
+<li>Training vectorizers (<code>TfidfVectorizer</code>, <code>CountVectorizer</code>) on the test set only.</li>
+<li>Increased DeBERTa max inference length to <code>1536</code>.</li>
+<li>Transformed DeBERTa OOF into CDF. My intuition was that it would be much easier to use for tree-based models optimizing <code>QWK</code> objective.</li>
+<li>Added <a href="https://github.com/textstat/textstat" target="_blank">texstat</a> and spaCy-based features (similarities between sentences in one text, words, sentences, and paragraphs stats).</li>
+<li>Relabeling - if the difference between DeBERTa OOF and the real label was higher than 2, then the label for LGBM training was modified (but the original one was kept for validation):</li>
+</ol>
+<pre><code>train_feats = deberta_oof() + 
+train_feats = train_feats
+train_feats = train_feats + 
+train_feats = train_feats - 
+</code></pre>
+<h1>What did not work (for me):</h1>
+<ol>
+<li>Data augmentation and new model training (I've spend 80% of my time here)</li>
+<li>Thresholds optimization</li>
+<li>Additional spell-check dictionaries</li>
+<li>Semi-supervised learning</li>
+</ol>
+<h1>Conclusions</h1>
+<p>I've spent a lot of time on data: EDA, reading essays, comparing Kaggle and Persuade 2.0 datasets, LB probing, trying various augmentation techniques, etc. This allowed me to improve the baseline (changes were subtle) and choose almost optimal submission (2nd best on PB). The 6th place solution scored <code>0.817</code> (1,200+ place on LB). The <code>0.824</code> solution (25th on LB) scored <code>0.832</code> (500+ on PB). I also want to acknowledge the role of luck here (possibly big one). Getting my first gold medal took me 6 years, and I feel thankful and proud I finally got it.</p>

@@ -1,0 +1,172 @@
+# https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470333
+
+Topic #470333: 3rd place solution
+  Author: Yevhenii Maslov
+  Posted: 2024-01-23 19:17:26.864000
+  Votes: 67  Comments: 42
+
+Many thanks to the organizers for creating the competition.
+
+Our solution is a weighted average of tfidf pipeline and 12 deberta-v3-large models.
+
+Transformers Ensemble
+
+As a preprocessing step, we used the deobfuscator shared by @sorokin (post), but we corrected only texts that had more than 15 errors. Also, we removed symbols that were not in the original train set and normalized the encodings of the remaining symbols.
+
+4 models were trained on 11k selected generated/rephrased (essay-level and sentence-level)/partially rephrased essays; some of the essays are from shared datasets, and some are custom-generated using several LLMs. 
+We selected training samples using the following algorithm:
+
+
+
+Train the initial model using @alejopaullier data
+
+At each iteration, add samples that the previous model failed to predict correctly - 500 human-written and 500 generated, with the highest distance from the true label.
+
+Train a new model and repeat again
+
+
+We evaluated each 4-th iteration on an LB. Once LB stopped improving we took the previous best dataset. A best single model trained on this data has a 0.927 public and 0.845 private score.
+
+Inspired by @jsday96 post we generated continuation for pile and slimpajama datasets. We filtered out text that was too short/too long, contained code or math, non-English text, and had a high non-letters/letters ratio. Then we used ~35 different open-source models with different combinations of parameters. We split sampling parameters into 3 scenarios depending on the temperature value and used random values for top_p/min_p and presence_penalty/frequency_penalty within bounds specified for each scenario. 
+We've trained 3 models using 500k, 1m, and 1.2m samples generated this way. All models were trained with default hyperparameters, max length 256 (1512 for inference), and high batch size - 48. The best single model trained with ~1m samples and has a 0.956 public and 0.967 private score.
+
+We also finetuned 5 models on the selected 11k dataset (weights are from the models trained on 500k+). The public LB for these models was slightly higher, but private worser by ~0.005. 
+
+Tfidf Pipeline
+
+We took one of the earliest public notebooks (link) and made a few adjustments. 
+
+
+
+Increased catboost and lightgbm number of iterations by 250, and used weights=[0.05, 0.225, 0.225, 0.5] for voting classifier
+
+Added 1k pseudo from the test set to @thedrcat dataset  - only samples in which the ensemble of transformers was most confident (probabilities lower than 0.01 or higher than 0.99)
+
+
+With these changes, the public score remained the same, but the private increased from 0.893 to 0.927. 
+Since it was a little gambling game, we selected both - the initial pipeline and the adjusted one, they have 0.970 and 0.974 private scores respectively.
+
+Final Ensemble
+
+We used a weighted average ensemble on probabilities in two steps:
+
+
+
+Firstly, we weighted tfidf and models trained on the 11k dataset - only the samples there transformers predictions were lower than 0.1 or higher than 0.9; for samples in the middle we used just tfidf probs
+
+Secondly, we used weighted averages without any conditions for step 1 and models trained on large datasets. 
+
+
+Averaging this way improved both private/public LB and local CV (but it was unreliable though).
+
+Postprocessing
+
+For each prompt_id, if the number of samples there greater than 1000, we fitted umap on tfidfs (the same as in tfidf-catboost pipeline, but per-prompt), calculated distance to 7 closest human-written and 7 generated samples, and scaled predictions by the ratio human_distance / generated_distance with clipping to (0.9, 1.1). It slightly improved public and private LB.
+
+Acknowledgements
+
+I want to say thank you to everyone who shared their ideas/assumptions/datasets. Especially @evilpsycho42 for your great work during this competition. 
+
+Links
+
+Inference: https://www.kaggle.com/code/evgeniimaslov2/llm-daig-3rd-place-solution?scriptVersionId=160663257
+Training: https://www.kaggle.com/datasets/evgeniimaslov2/llm-daig-src-code
+
+Comments:
+├─ Darragh (2024-01-24 11:36:24.387000) [+3]
+│  Congratulations @ivanisaev @evgeniimaslov2 @muhammad4hmed @dmitriikhizbullin @evilpsycho42  great work  👏 👏 and thanks for the detailed write up.
+│  The best single model trained with ~1m samples and ...
+  ├─ Yevhenii Maslov (2024-01-24 12:07:00.133000) [+1]
+  │  Thanks! We tested an ensemble of 8 models - it has 0.959 public/0.967 private (slightly higher than a single model). 
+  │  I would say that the ensemble of several models didn't help much, maybe because...
+    ├─ Darragh (2024-01-24 12:51:35.670000) [+1]
+    │  Interesting, thanks for that. Seems most of the boost is in the training data composition. We got similar public 0.96, but lower private 0.916. 
+    │  Nice idea 💡 to train on 256 len to speed it up.
+    ├─ MJeremy (2024-01-24 13:22:43.047000) [+1]
+    │  hi, where is the 1m samples coming from? Is it all self-generated? Thanks!
+    ├─ MJeremy (2024-01-24 13:26:51.177000) [+1]
+    │  We've trained 3 models using 500k, 1m, and 1.2m samples generated this way.
+    │    follow up here, as you mentioned, do you mean keep adding/repeating the data that previous model fail to perform well, ...
+    ├─ Yevhenii Maslov (2024-01-24 13:45:09.473000) [+1]
+    │  Hi. We generated 500-600k samples as a continuation for truncated slimpajama/pile texts. 1m is the concatenation of raw text and generated. 
+    │  
+    │  With "previous model failed to classify" approach we se...
+├─ Sunnyjiayi chen (2024-02-02 10:50:12.937000) [+1]
+│  Congratulations and thank you for sharing the solution! gained a lot from it!
+├─ Vinu Sebastian Thomas (2024-02-01 06:08:52.893000) [+1]
+│  Hey, can I ask you what tools or software did you use to train the model? Coz, I tried to look at your source code but not able to figure out what's happening
+  ├─ Yevhenii Maslov (2024-02-01 06:38:05.010000) [+0]
+  │  Hi, I am using a regular pytorch training loop
+    ├─ Vinu Sebastian Thomas (2024-02-05 08:19:52.340000) [+0]
+    │  Hey,sorry for my poor knowledge. But could you explain the difference between training and finetuning in your approach. For the initial 4 models you are calling it as training but for last 5 models...
+    ├─ Yevhenii Maslov (2024-02-05 11:04:39.013000) [+2]
+    │  Hi! Sorry for the confusion. What I tried to say is that we trained 4 models with the weights from hugging face, and 5 models with the weights from the models trained on 500k+ generated data. 
+    │  
+    │  Bot...
+├─ Uday Kiran Karusodi (2024-01-30 10:24:31.667000) [+1]
+│  Congratulations and thank you for the solution. Much appreciated.
+├─ Marcel Francke (2024-01-29 12:45:12.753000) [+1]
+│  Congratulations and thanks for sharing your solution!
+├─ Nico J. (2024-01-29 01:04:55.073000) [+1]
+│  Congrats! Nice of you to share those info.
+├─ Alex Udalov (2024-01-28 19:38:56.070000) [+1]
+│  Congratulations!
+├─ haipvh (2024-01-28 17:21:11.830000) [+1]
+│  Congrats and thanks for the insightful recaps.
+├─ Lida Song (2024-01-26 15:43:48.493000) [+1]
+│  Congratulations! Well deserved gold. Thank you for sharing your solution.
+├─ Daeeon_H (2024-01-25 12:15:14.693000) [+1]
+│  Congratulations and I appreciate to your work!
+├─ Laila (2024-01-25 06:35:35.010000) [+1]
+│  Congratulations 🎉 
+│  Thank you for sharing you solution
+├─ 忍者 (2024-01-25 00:11:02.097000) [+1]
+│  deberta, classic ml, data generation, deobfuscator, iterative training, distance measures, pseudo-labelling – what's not to like about your training pipeline? congrats to you and your team; deberta...
+├─ Aaditya Bansal (2024-01-24 12:59:41.787000) [+1]
+│  Thank you for sharing your approach, it helped me learn a lot of new concepts :) and congratulations on your results ✨🎉
+├─ Basit khan (2024-01-24 08:11:19.050000) [+1]
+│  Congratulations on achieving the 3rd place in this competition and thanks for sharing solution details..
+│  also waited for the training section.
+├─ C R Suthikshn Kumar (2024-01-24 04:01:16.010000) [+1]
+│  Congratulations on achieving 3rd position in this competition. Thanks for sharing your solution details.
+├─ Darek Kłeczek (2024-01-23 21:54:00.300000) [+1]
+│  Great job. Betting on a good idea and executing it flawlessly paid off well for you (taking a note for myself as I tried plenty of ideas but didn't execute so well). Congratulations!
+├─ Marek Wyborski (2024-01-23 19:59:06.747000) [+1]
+│  Congratulations!! Well deserved 3rd place.
+├─ Ravi Ramakrishnan (2024-01-23 19:25:31.687000) [+1]
+│  @evgeniimaslov2 congratulations on wining the 3rd prize in this competition! Best of luck for your future!!!
+  ├─ Yevhenii Maslov (2024-01-23 19:37:05.377000) [+0]
+  │  Thank you! Best of luck to you too!
+├─ Jignyas Anand (2024-02-05 07:56:28.290000) [+2]
+│  Congratulations and thanks for sharing a clear explanation of your solution
+├─ Huma Perveen (2024-01-27 02:29:30.277000) [+2]
+│  Congratulations
+├─ Gregor Lied (2024-01-24 08:55:46.453000) [+2]
+│  Congratulations to @evgeniimaslov2 and the team. Great work!
+│  I am glad you were able to secure another gold medal after our shake down in CommonLit :)
+  ├─ Yevhenii Maslov (2024-01-24 09:24:37.707000) [+2]
+  │  Hi Gregor, thanks! CommonLit was a very painful experience :)
+├─ KKY (2024-01-24 00:23:11.400000) [+2]
+│  Congratulations @evgeniimaslov2 , your outstanding work led the team to finally reach this position 🎉🎉🎉
+├─ Adithya (2024-06-28 10:17:06.007000) [+0]
+│  So I am kind of a beginner here as I was trying to approach the problem here I just thought of simple llm based solution how did you guys think this idea . I feel so anxious that I can't come up wi...
+  ├─ Yevhenii Maslov (2024-06-28 10:35:40.333000) [+0]
+  │  Hi, I think using LLM as a classifier should work too, it will take more time to train though. The biggest score boost would be from the data you use for training, I would concentrate on that.
+    ├─ Adithya (2024-06-28 10:51:11.543000) [+0]
+    │  How do you come up with crazy ideas like I see all top solutions and I will be demotivated that I can't think like that
+    ├─ Yevhenii Maslov (2024-06-28 11:28:31.723000) [+1]
+    │  From my experience, reading others solutions/ideas helps to develop your own. A lot of times you can reuse someone's ideas from a similar problem and improve from there. 
+    │  
+    │  I think that frustration ...
+├─ Uday Kiran Karusodi (2024-02-20 07:23:57.320000) [+0]
+│  Hi, could you share what hardware resources you used? or any other particular services for training and inference?
+  ├─ Yevhenii Maslov (2024-02-20 09:02:44.620000) [+1]
+  │  Hi. I am using 8 cores Intel Xeon, A6000 GPU with 48 GB RAM or A100-80GB GPU with 96 GB RAM, depending on availability
+├─ [deleted] (2024-01-25 12:01:36.137000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-25 00:27:02.130000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-24 03:21:09.297000) [+1]
+│  [deleted]
+├─ 旦DDDANNN (2024-01-25 10:43:13.653000) [+1]
+│  Thanks for sharing!

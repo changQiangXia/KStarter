@@ -1,0 +1,38 @@
+<p>Exciting competition! Thanks Kaggle and ICR. I had three final submissions to choose from</p>
+<ul>
+<li>Time-CV Model with no funny business - Code published <a href="https://www.kaggle.com/code/cdeotte/silver-medal-using-sliding-time-cv" target="_blank">here</a> and achieves Silver Medal</li>
+<li>LB Probing Pseudo Label model 😀 (probing explained <a href="https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430764#2386580" target="_blank">here</a> and <a href="https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431275" target="_blank">here</a>. And shown <a href="https://www.kaggle.com/code/cdeotte/use-public-lb-probing-data-lb-0-0" target="_blank">here</a>)</li>
+<li>LB Probing Pseudo Label with conservative PP Threshold model 😀 (threshold analysis shown below)</li>
+</ul>
+<p>What do they say? "Go Big or Go Home!" For my final two submissions, I did not pick my first bullet point above (which I suspected would win a medal). Instead I chose the last 2 bullet points in an attempt to win 1st place! Note that using probed positive targets from public LB actually hurt my private LB score. And even a very conservative PP threshold (<code>p[p&lt;0.1]=0</code>) hurt my private LB score. Both risks failed 😀</p>
+<p>Let's discuss my solution which did not include any funny business.</p>
+<h1>Sliding Time CV Scheme</h1>
+<p>First we sort all the train data by date. Next we assign a random date to the train samples without a date. Afterward we slide a window with indexes <code>START</code> and <code>END</code>. Then our validation data each fold are all rows from <code>START</code> to <code>END</code></p>
+<pre><code> fold  ():
+      fold  STEP
+      fold  STEP  VAL_SIZE
+    X_valid  train.iloc[:]
+</code></pre>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2023/time-cv.png" alt=""></p>
+<h1>Why Use Time CV?</h1>
+<p>The purpose of a local validation is to mimic the relationship between train data and test data. In this competition the host tells us that all the test data occurs after (in time) of the train data. In other words, we must train a model on data from one time period and predict data from another time period.</p>
+<p>Normally i would not think that time would influence what the model learns about medical diagnosis, however in this competition if you train an XGB model with time as a feature column it becomes the most important feature even after fillna() with random dates for the train data without dates. </p>
+<p>This means that the data is changing. Perhaps the data is collected in one location on set of machines during one time period and later collected by different machines that are calibrated differently. For some reason, the relationship between features and targets is changing over time!</p>
+<h1>OOF Validation Scores</h1>
+<p>We observe that different time periods have different difficulty when predicting. Notably easy time periods have a OOF validation balanced log loss of <code>0.15</code> whereas difficult time periods have <code>0.40</code>. Since the host said this was a difficult problem, we can deduce that public test is easy time and private test is hard time:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2023/val-date.png" alt=""></p>
+<h1>CV vs Public LB vs Private LB</h1>
+<p>My time-CV model has an average local <code>CV = 0.27</code> and <code>public LB = 0.17</code> and <code>private LB = 0.39</code>. See notebook <a href="https://www.kaggle.com/code/cdeotte/silver-medal-using-sliding-time-cv" target="_blank">here</a>. When using time CV improvements in CV lead to improvements in public and private LB.</p>
+<h1>Analyze "Risky" Post Processing</h1>
+<p>Once we have a local validation that mimics the LB, we can analyze PP. For each of the 25 OOF folds, we can find the best Top and Bottom thresholds and plot them. We notice that during some time periods, thresholding works and during others it does not. If we pick the median bottom threshold (i.e. <code>pred[pred&lt;median_bottom]=0</code>), then CV informs us that we have a 50% chance of it working if private test is a "random time period". </p>
+<p>Note to find thresholds for private LB, we must redo the plot below using the size of private LB which is around 200 samples. Plot below is for 120 samples per validation fold and comes from my notebook <a href="https://www.kaggle.com/code/cdeotte/silver-medal-using-sliding-time-cv" target="_blank">here</a>. The Yellow line is the best top threshold for each fold (i.e. time period). The Green is bottom. The Blue line is the validation fold balanced log loss metric. And the Red line is how much better each fold can become using the optimal thresholds. We note that the best validation fold with PP achieves <code>0.06</code> just like the public LB. And we note that the worst validation fold does not improve from PP just like private LB.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2023/time-thresholds2.png" alt=""></p>
+<h1>Best Fold OOF Predictions - (Balanced Log Loss like Public LB)</h1>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2023/best-fold.png" alt=""></p>
+<h1>Worst Fold OOF Predictions - (Balanced Log Loss like Private LB)</h1>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2023/worst-fold.png" alt=""></p>
+<h1>Post Competition Fun Fact</h1>
+<p>After competition ended, I was curious why the private test is harder than public test and train data to predict. All three have approximately 17.5% <code>target=1</code> which makes them seem similar. </p>
+<p>First I checked categorical feature <code>EJ</code> (which equals <code>A</code> or <code>B</code>) and found that train, public, private have 64%, 62%, and 50% of <code>EJ=B</code> respectively. Next I checked NAN and found that two additional test columns <code>EH</code> and <code>FD</code> have a few NAN whereas train has no NAN in these columns. This NAN discrepency most likely caused many submission errors but neither of these two discoveries makes a big difference in model accuracy i think. (i.e. I did not find any weird test columns with 100% NAN or something crazy like that).</p>
+<p>Next using probing techniques in notebook <a href="https://www.kaggle.com/code/cdeotte/probe-alpha-type-of-class-1-in-public-private" target="_blank">here</a> we see that private test has more of the difficult <code>Alpha = D</code> type of <code>target=1</code> Class 1. I think this helps explains what changed over time to make private test more difficult than public test and train data.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2023/class1.png" alt=""></p>

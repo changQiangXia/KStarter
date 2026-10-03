@@ -1,0 +1,113 @@
+# https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/496906
+
+Topic #496906: More Train Data Available!
+  Author: Chris Deotte
+  Posted: 2024-04-22 23:43:07.867000
+  Votes: 176  Comments: 24
+
+Has anyone tried using the more training data available in Persuade 2.0 corpus dataset here? This competition provides 17307 train samples. It has been shown that 12873 of these samples are exact duplicates (both essay and target) from the Persuade 2.0 corpus by Abdullah here and confirmed by me here.
+
+More Train Samples in Persuade 2.0 Corpus
+
+Since our train data overlaps the Persuade 2.0 corpus, has anyone tried training directly on the 25996 samples in Persuade corpus? It seems that the essays and targets are the same as provided as train data in this competition. This gives us an additional 8689 samples to train our models with. I suspect this will boost CV scores and LB scores!
+
+Auxiliary Training
+
+Furthermore, the Persuade corpus has additional columns: ['prompt_name', 'task', 'assignment', 'source_text', 'gender', 'grade_level', 'ell_status', 'race_ethnicity', 'economically_disadvantaged', 'student_disability_status']. We do not have these columns for test data but during training we can predict these columns as auxiliary targets. This can make our models smarter because we challenge our models to learn more things at once. Then during submission to LB, we ignore the prediction of these columns.
+
+Feature Engineering
+
+The best public notebook here creates many features and trains an LGBM model. Some features are the 6 target probabilities from training DeBERTa. Has anyone tried to predict the additional Persuade corpus columns of ['prompt_name', 'task', 'assignment', 'source_text', 'gender', 'grade_level', 'ell_status', 'race_ethnicity', 'economically_disadvantaged', 'student_disability_status'] and input the probability predictions for each of these columns into the LGBM as additional features?
+
+Is our Test Data LB Targets in Persuade Corpus?
+
+Since our train data overlaps with Persuade corpus, is it possible that some of the answers for the test data LB overlap with Persuade corpus (i.e. competition leak)? 
+
+Answer: NO, i don't think so.
+
+I have probed LB with the notebook here. During submission, this notebook compares our competition's test data to the Persuade corpus. If/When it finds any matches, it will use the target from the Persuade corpus as prediction. This notebook did not receive any benefit which supports the idea that our test data does not overlap the Persuade corpus.
+
+Comments:
+├─ Gerwyn (2024-04-29 11:54:31.537000) [+11]
+│  (persuade[].value_counts())
+│  task
+│  Independent       
+│  Text dependent    
+│  
+│  
+│  persuade corpus' matches in train.csv is exactly all "Text dependent" task, 12875. 
+│  
+│  coincidence?
+  ├─ Chris Deotte (2024-05-01 21:18:55.153000) [+0]
+  │  Great observation!
+├─ hiro (2024-04-26 10:13:33.233000) [+9]
+│  @cdeotte , thank you as always for the great information. 
+│  As I posted here, adding the Persuade 2.0 Corpus data has improved the score, albeit slightly.
+  ├─ Chris Deotte (2024-04-26 10:15:49.023000) [+2]
+  │  Great. Thanks for verifying.
+  ├─ Sabbir Ahmed (2024-04-27 03:21:12.607000) [+3]
+  │  @dsohonosom, how much did it improve?
+    ├─ hiro (2024-04-27 03:43:15.953000) [+9]
+    │  @sabbiracoustic1006 , LB improved from 0.807 to 0.809 for deberta-v3-base, and from 0.801 to 0.81 for deberta-v3-large.
+    │  LB score for deberta-v3-large was low, but it improved with the addition of d...
+    ├─ Sabbir Ahmed (2024-04-27 12:25:13.287000) [+3]
+    │  Thanks for sharing the information!
+├─ YiTou Nian (2024-04-25 06:16:36.153000) [+8]
+│  Persuade 2.0 corpus dataset has 15 different prompts.
+│  train.csv contains seven of them: 'Car-free cities', '"A Cowboy Who Rode the Waves"', 'Exploring Venus', 'The Face on Mars', 'Facial action cod...
+├─ Cyber Deep (2024-04-23 10:45:06.950000) [+3]
+│  Thanks for sharing the complete analysis
+├─ Hina Ismail (2024-04-23 02:15:33.330000) [+3]
+│  Great work!! Keep it up ✨
+├─ Liam Nguyen (2024-04-23 11:56:16.130000) [+1]
+│  Hi, thank you for a great analysis. However I don't think using features such as 'ell_status', 'race_ethnicity', 'economically_disadvantaged', 'student_disability_status' should be encouraged in te...
+  ├─ Timmy Juicehouse (2024-04-24 11:45:54.040000) [+2]
+  │  Of course you are right, but grades can reflect the teachers' hidden psychological state when meeting different essays (perhaps it is, just my guess, teachers also can make mistakes and show some b...
+├─ SLi (2024-04-23 15:15:41.520000) [+1]
+│  Great work! 
+│  I used your code for a finer LB probe and found that less than 10% (but definitely more than 0) test samples have Levenstein Distance &lt; 0.1. This somehow verified your observation t...
+  ├─ Chris Deotte (2024-04-23 15:21:47.687000) [+1]
+  │  Thanks. Yes we could do a binary prob like 
+  │  
+  │  
+  │    
+  │  If 10% of test data is less than Lev&lt;0.1 then output pred=3 else output pred=baseline. 
+  │  
+  │  
+  │  Then if LB score is 0.703 there are 10% or more matches...
+  ├─ Chris Deotte (2024-04-23 16:14:26.670000) [+5]
+  │  I confirm that less than 10% match. I just did another probe now where I add the following code immediately before sub = test[['essay_id','score']].copy()
+  │  
+  │  m = (test.lev&lt;MATCH_THRESHOLD)()
+  │  
+  │   m&l...
+├─ yuto_h (2024-04-29 09:47:28.107000) [+2]
+│  Thanks for sharing. This is great information. I sometimes wondered if there was some overlap in the hidden test data, but I assumed there wasn't any overlap because that would cause a data leak.
+├─ TheItCrow (2024-04-23 05:59:54.657000) [+2]
+│  I see, thank you!
+│  
+│  Do you see any sense in creating synthetic data through LLMs? As in writing essays and also scoring them, maybe giving them more context while doing so and randomizing them throu...
+  ├─ Chris Deotte (2024-04-23 23:04:20.243000) [+8]
+  │  Perhaps. If LLMs write and score essays. And then we train another model on the LLM output we will essentially be knowledge distilling the large LLM into a smaller encoder model like DeBERTa. There...
+    ├─ TheItCrow (2024-04-24 05:23:17.103000) [+1]
+    │  I see, that's interesting.
+    │  
+    │  
+    │    
+    │  Output information for us
+    │  
+    │  
+    │  as in maybe the topics of the essay? short summary?
+    ├─ TheItCrow (2024-04-26 17:51:44.070000) [+1]
+    │  Perhaps. If LLMs write and score essays
+    │  
+    │  
+    │  I created a dataset to test that. Please share your experience should you decide to use it - I shall too.
+├─ SeshuRaju 🧘‍♂️ (2024-04-23 03:00:59.403000) [+2]
+│  @cdeotte, Thanks for sharing the complete analysis of persuade 2.0 corpus
+├─ chumajin (2024-04-23 00:41:31.817000) [+2]
+│  Great work!! This must be useful. Thank you for sharing.
+├─ [deleted] (2024-05-01 18:48:17.857000) [+0]
+│  [deleted]
+├─ Tuan Nguyen (2024-04-27 03:32:13.897000) [+2]
+│  Thanks for your hard work.

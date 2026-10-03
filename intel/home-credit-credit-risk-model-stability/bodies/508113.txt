@@ -1,0 +1,197 @@
+# https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508113
+
+Topic #508113: 13th place solution - pmts_year_1139T postprocess
+  Author: Yuya Shintani
+  Posted: 2024-05-28 09:27:59.511000
+  Votes: 38  Comments: 9
+
+First of all, thanks to Kaggle and the host of the competition. To be honest, we don't fully understand what was effective, let me briefly describe our solution.
+
+Thanks @kentookumura @pegasus27 for the collaboration.
+
+Context
+
+Business context: https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/overview
+
+Data context: https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/data
+
+Overview of the approach
+
+In feature engineering, we created 772 handcrafted features using tables other than credit_bureau_b1, other_1, deposit_1, debitcard_1. We performed manual and correlation-based feature selection and reduced the number of features to 411. 
+
+In modeling, we built 10 models using LightGBM, XGBoost, CatBoost, and HistGradientBoostingClassifier. I stacked these outputs with a RidgeClassifier and applied probability calibration to create predicted values. Then, we created the final predicted values using random seed averaging.
+
+In postprocess, we added a simple process to take the maximum value of pmts_year_1139T in the credit_bureau_a_2 table and apply a negative correction to the score for each year.
+
+Details of the submission
+
+Feature Engineering
+
+The feature engineering was mainly done by @kentookumura. Initially, we decided not to use the credit_bureau_b_2, other_1, deposit_1, debitcard_1 tables which had a high rate of missing case_id. We created handcrafted features based on the results of EDA and the solutions from past competitions. We reduced the number of features from 772 to 411 through manual and correlation-based feature selection. Below, we will describe the points that we believe were effective.
+
+Era
+
+df_base = df_base.with_columns(
+        ((pl.col() / ).floor() * ).alias().cast(pl.Int32),
+)
+
+
+Age at Start of Employment
+
+df = df.with_columns(
+        ((pl.col() - pl.col()).dt.total_days() // ).cast(pl.Int32).alias(), 
+)
+
+
+Employment Period
+
+df_base = df_base.with_columns(
+        (pl.col() - pl.col()).alias(),
+)
+
+
+Date processing other than suffix D
+
+ ():
+     colin df.columns:
+         col[-] (,):
+            df = df.with_columns(pl.col(col) - pl.col())
+            df = df.with_columns(pl.col(col).dt.total_days())
+            df = df.with_columns(pl.col(col).cast(pl.Float32))
+
+                   col:
+            df = df.with_columns(pl.col(col) - pl.col().dt.year())
+            df = df.with_columns(pl.col(col).cast(pl.Int32))
+
+
+Merge tax_registry tables
+
+From some case_id with multiple provider information, we inferred the correspondence of each table column and made it into one table.
+
+Aggregation of String type (mode and n_unique)
+We used the process pl.col(col).drop_nans().drop_nulls().mode().sort().first() for reproducibility in polars.
+
+Removal of features that fluctuate greatly during the training data period
+
+We manually checked and removed features that fluctuate greatly with each WEEK_NUM.
+
+Modeling
+
+@uplus26e7 mainly handled the modeling. We used StratifiedGroupKFold(k=5) based on WEEK_NUM for CV. We tried multiple GBDT models that do not require scaling of features or missing value completion, as these did not go well. In order to create diverse models, we created 10 models with multiple parameters and stacked them with RidgeClassifier. Finally, we corrected the predicted values using Scikit-Learn's CalibratedClassifierCV.
+
+The above model performed random seed averaging (5 seeds) and used it for the final inference.
+
+
+
+
+Model
+Local CV AUC (average 5 seeds)
+Main Parameters
+
+
+
+
+XGBoost
+0.8569388045
+
+
+
+CatBoost
+0.8543810988
+
+
+
+LightGBM
+0.8576141787
+boosting=”gbdt”, extra_tree=True
+
+
+LightGBM
+0.8569003931
+boosting=”gbdt”
+
+
+LightGBM
+0.8068982316
+boosting=”rf”
+
+
+LightGBM
+0.7993733596
+boosting=”rf”, extra_tree=True
+
+
+LightGBM
+0.8546620954
+boosting=”dart”
+
+
+LightGBM
+0.8517172791
+boosting=”dart”, extra_tree=True
+
+
+HistGradientBoostingClassifier
+0.8496922895
+
+
+
+LightGBM
+0.8574351195
+boosting=”gbdt”, extra_tree=True, data_sample_strategy=”goss”
+
+
+CalibratedClassifierCV (RidgeClassifier)
+0.859322
+
+
+
+
+
+Postprocess
+
+@kentookumura's thorough EDA and experiments revealed that the 'pmts_year_1139T' in the 'credit_bureau_a_2' table is likely the most recent 'date_decision' year. It was also observed that no date column transformations were added in data changes. Based on these findings, we implemented post-processing to decrease the predicted value based on the maximum 'pmts_year_1139T' value.
+
+submission = pd.read_csv()
+pmts_year = ... 
+    submission.loc[pmts_year == , ] = (submission.loc[pmts_year == , ] - ).clip()
+    submission.loc[pmts_year == , ] = (submission.loc[pmts_year == , ] - ).clip()
+    submission.loc[pmts_year == , ] = (submission.loc[pmts_year==, ] - ).clip()
+    submission.to_csv(, index=)
+
+Comments:
+├─ NicholasYong216 (2024-05-28 17:15:21.063000) [+1]
+│  Thank you for your sharing.  I learned a lot from your post.
+│  However, apart from using pseudo-labeling, are there any techniques I can use?
+  ├─ Yuya Shintani (2024-05-28 22:14:28.570000) [+2]
+  │  In my opinion, this competition is not suitable for learning materials because the postprocess effects are too big.
+├─ Andreas Bisiadis (2024-05-28 09:49:18.473000) [+1]
+│  Nice writeup! However, I have some questions:
+│  
+│  
+│  
+│  Did you use pseudo-labeling/meta-features?
+│  
+│  For the LightGBM models, was 'dart' better than any other boosting method (gbdt, rf)? For how long did t...
+  ├─ Yuya Shintani (2024-05-28 11:28:28.860000) [+4]
+  │  Thank you for your comment.
+  │  
+  │  
+  │  
+  │  Did you use pseudo-labeling/meta-features?
+  │  We tried both, but since they didn't work on the public lb, we didn't include them in the final submission.
+  │  
+  │  For the LightG...
+    ├─ Andreas Bisiadis (2024-05-28 12:12:42.970000) [+1]
+    │  @uplus26e7 
+    │  How did you implement pseudo-labels? As OOF predictions on the validation or train set?
+    ├─ Yuya Shintani (2024-05-28 12:44:18.907000) [+3]
+    │  In each fold, we used the predictions of the base model to the validation data as targets.
+├─ C R Suthikshn Kumar (2024-05-30 04:25:25.197000) [+2]
+│  Congratulations on securing 14th place in this competition. Thanks for sharing details of your solution.
+├─ Varuni Rao (2024-05-28 14:37:14.003000) [+2]
+│  Glad to see you have used Calibrated results. My mistake was that I did not select the calibrated response for the final submission, else it would have boosted me up by at least 50. I learned a goo...
+├─ luyao.li (2024-06-23 03:55:04.310000) [+0]
+│  Thank you for your sharing，
+│  however i have one question： in Postprocess stage,how do you determine the decrease value
+│  Thank you for your response in advance.

@@ -1,0 +1,280 @@
+<p></p><h2>📂 Dataset Structure</h2><p></p>
+<p>Each dataset consists of multiple scenes. A scene is a group of related images that belong together (e.g., different viewpoints of the same object). Some images in a dataset may be <strong>outliers</strong>, meaning they don’t belong to any scene (e.g., random photos taken in the area).</p>
+<p>In the <strong>test data</strong>, all images are mixed in one folder. Your task is:</p>
+<ol>
+<li>Cluster the images into groups that represent scenes  </li>
+<li>Assign each image to a cluster or label it as an <code>outlier</code>  </li>
+<li>Reconstruct the camera pose (R, T) for each image (except outliers)</li>
+</ol>
+<hr>
+<p></p><h1>🧠 Camera Pose Estimation and mAA</h1><p></p>
+<ul>
+<li>A rotation matrix (3×3) - where the camera is pointing  </li>
+<li>A translation vector (3D) - where the camera is located  </li>
+</ul>
+<p><b>"Ground truth"</b> is the true known pose of the camera when the image was taken. In training data, this is given to you. In test data, you try to predict it.</p>
+<p>Camera center <b>C</b> in world coordinates is calculated as:  <br>
+<strong>C = −R · T</strong><br>
+This transforms the camera pose into a 3D point in space.</p>
+<p>Camera centres of one scene:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F25747348%2F61b7f20998538db19346d6d34c961920%2F2025-04-14%20083034.jpg?generation=1744608643370046&amp;alt=media" alt=""></p>
+<hr>
+<h3><b>Structure from Motion (SfM)</b> is a pipeline that reconstructs:</h3>
+<ul>
+<li>Camera poses for each image  </li>
+<li>A sparse 3D point cloud of the scene</li>
+</ul>
+<p>Your predicted camera centers may be rotated differently, shifted (translated), and scaled.  <br>
+This is normal in SfM - reconstructions can be geometrically correct but misaligned.</p>
+<p>So, to compare your predicted camera centers <b>C</b> to the ground truth centers <b>Cg</b>, a similarity transformation <b>T</b> (i.e. scale, rotation and translation altogether) is applied. This aligns your 3D camera predictions to the ground truth up to scale and orientation.  <br>
+(Some of your predicted camera poses may be wrong - far from ground truth - and we want to ignore bad data and only use good matches to compute the best alignment.)</p>
+<p>To compute a similarity transform (rotation, translation, and scale) between two sets of 3D points, you need at least 3 point correspondences that are not collinear.</p>
+<hr>
+<p>A <strong>triplet</strong> is a group of three matching camera centers. Each one has:</p>
+<ul>
+<li>A predicted 3D position <b>Ci</b>  </li>
+<li>A known ground-truth position <b>Cgi</b>  </li>
+</ul>
+<p>So a triplet is:  <br>
+<code>{(C1, Cg1), (C2, Cg2), (C3, Cg3)}</code></p>
+<p><b>RANSAC</b> = Random Sample Consensus - Algorithm to randomly test many triplets, ignore outliers, and find the best transformation.</p>
+<p>The <code>thresholds</code> column lists multiple numeric values per scene. These represent distance or error thresholds that are used to evaluate how accurate predicted 3D camera poses are (compared to ground truth). Each threshold is a maximum allowable error (in meters) to consider a pose prediction as correct.</p>
+<hr>
+<p>So use <b>Horn’s method</b> (algorithm used to compute the best similarity transformation between two sets of 3D points) to compute a similarity transformation.  <br>
+Find scale <b>s</b>, rotation <b>R</b>, translation <b>t</b> so that:</p>
+<pre><code> = s ⋅ R ⋅ Ci + t</code></pre>
+<p>This is our first estimate <b>T′</b>.  <br>
+Then apply <b>T′</b> to all predicted camera centers <b>Ci</b> and for each one count how many of your predictions become <b>registered cameras</b> (i.e., within error threshold of ground truth):</p>
+<pre><code> = (‖ T(Ci) − Cgi ‖ &lt; threshold)</code></pre>
+<p>Where <code>‖ · ‖</code> denotes Euclidean (L2) distance between two 3D points.</p>
+<p>Try many random triplets and get many candidate transformations <b>T′</b>.  <br>
+For each one, count how many registered cameras it produces and save the best one.  <br>
+Take the best transformation <b>T′</b>, and re-estimate it using all the inliers (not just the original triplet).</p>
+<hr>
+<p></p><h2>📊 mAA = mean Average Accuracy</h2><p></p>
+<p>It measures how accurately your predicted camera centers match the ground truth, after alignment with a similarity transformation.</p>
+<p>As discussed before, you use triplets and Horn’s method inside RANSAC.  <br>
+You find the best transformation:</p>
+<pre><code> = s ⋅ R ⋅ Ci + t</code></pre>
+<p>This aligns your predicted camera centers to the same coordinate frame as the ground-truth.  <br>
+Then apply this transformation - for each predicted camera center <b>Ci</b>, compute:  <br>
+<code>Ci_aligned = T(Ci)</code></p>
+<p>Now for each threshold <b>t_j</b>, check if the difference between <b>Ci_aligned</b> and ground-truth center <b>Cgi</b> is less than <b>t_j</b>:</p>
+<pre><code> = (‖ T(Ci) − Cgi ‖ &lt; threshold)</code></pre>
+<p>Then compute registration ratio per threshold for scene:  <br>
+For each <b>N' = N − 3</b> images of the scene and each threshold <b>t_j</b>, compute the percentage of registered cameras:</p>
+<pre><code>rj = ( / ') * (registered)</code></pre>
+<p>That gives you the <b>Average Accuracy (AA)</b> for that scene.  <br>
+Then find average across all thresholds:</p>
+<pre><code>  ( / k) * sum(rj)</code></pre>
+<p>Where:</p>
+<ul>
+<li><b>k</b> = number of thresholds</li>
+</ul>
+<p>Once you compute <b>mAA per scene</b>, you calculate final mAA for all scenes by averaging across scenes.</p>
+<hr>
+<p></p><h2>🧠 Clustering and Final Evaluation Score</h2><p></p>
+<p>Each scene from the ground-truth data is denoted as <code>S&lt;sub&gt;ki&lt;/sub&gt;</code>, and your predicted clusters are <code>C&lt;sub&gt;kj&lt;/sub&gt;</code>.</p>
+<p>The evaluation will:</p>
+<ul>
+<li>Compare your clusters with the true scenes  </li>
+<li>Check how well your clustering matches the original grouping  </li>
+<li>Measure how accurate your pose predictions are (as explained earlier with mAA)</li>
+</ul>
+<p>Each ground-truth scene <code>S&lt;sub&gt;ki&lt;/sub&gt;</code> is matched to the user-submitted cluster <code>C&lt;sub&gt;kj&lt;/sub&gt;</code> that gives the <b>highest mAA</b> after alignment.  <br>
+All images labeled as outliers are <b>excluded</b> from this matching step.</p>
+<hr>
+<h3>📊 Clustering Score (Precision)</h3>
+<p>After the best cluster <code>C&lt;sub&gt;kji&lt;/sub&gt;</code> is selected for each scene <code>S&lt;sub&gt;ki&lt;/sub&gt;</code>, compute the <b>clustering score</b> as:</p>
+<pre><code>clustering_score = ||||</code></pre>
+<p>Where:</p>
+<ul>
+<li><code>|S ∩ C|</code> is the number of images that correctly overlap between your predicted cluster and the real scene  </li>
+<li><code>|C|</code> is the total number of images in your predicted cluster</li>
+</ul>
+<p>This measures <b>how pure your cluster is</b> - i.e., out of everything you said belongs to this scene, how many actually do?</p>
+<hr>
+<h3>📈 Pose Score (mAA)</h3>
+<p>As explained earlier, for each image:</p>
+<ul>
+<li>Apply the best alignment transform T to your predicted camera centers  </li>
+<li>Check if each transformed pose is within the threshold of the ground-truth center  </li>
+<li>Count the number of registered cameras at each threshold  </li>
+<li>Compute registration ratios across thresholds  </li>
+<li>Average across thresholds → mAA per scene  </li>
+<li>Average over scenes → mAA for dataset</li>
+</ul>
+<p>This mAA represents <b>recall</b> - how many real scene images you found and aligned correctly.</p>
+<hr>
+<h3>🔗 Final Score Per Dataset</h3>
+<p>Now both mAA (recall-like) and clustering score (precision-like) are combined using the <b>harmonic mean</b>, similar to the F1-score in classification:</p>
+<pre><code> =  * (mAA * clustering_score) / (mAA + clustering_score)</code></pre>
+<p>This ensures that:</p>
+<ul>
+<li>If either clustering or pose accuracy is bad, your score is penalized  </li>
+<li>You must do <b>both clustering and reconstruction well</b> to score high</li>
+</ul>
+<hr>
+<h3>📊 Final Challenge Score</h3>
+<p>You will repeat this evaluation for each dataset <code>D&lt;sub&gt;k&lt;/sub&gt;</code>.  <br>
+The final score for your submission is:</p>
+<pre><code></code></pre>
+<p>i.e., the average harmonic mean across all datasets.</p>
+<hr>
+<p></p><h1>🧩 Scene Clustering &amp; Pose Estimation (SfM)</h1><p></p>
+<hr>
+<h4></h4><h3>📌 <b>1) Scene Clustering</b></h3>
+<hr>
+<h5></h5><h4>📘 <b>1.1) Unsupervised Clustering on Global Descriptors</b></h4>
+<p>Extract global embeddings using models like <code>CLIP</code>, <code>DINOv2</code>, etc., then cluster them using algorithms like <b>DBSCAN</b>, <b>KMeans</b>, <b>Agglomerative Clustering</b>…</p>
+<p>📌 <strong>Image features</strong> are compact vector representations of the visual content of the image.</p>
+<hr>
+<h5></h5><h4>📦 Global Descriptors</h4>
+<p>Global descriptors are single vectors that represent the entire image - its objects, textures, and layout.</p>
+<p>✅ <strong>Use cases</strong>:</p>
+<ul>
+<li>Image clustering  </li>
+<li>Image retrieval  </li>
+<li>Scene classification  </li>
+</ul>
+<p><br></p>
+<p><strong>DINOv2</strong> is part of the <strong>DINO</strong> (Distillation with No Labels) family of self-supervised vision transformers:</p>
+<ul>
+<li>Learns by matching feature vectors of different augmented views of the same image.</li>
+<li>Ensures different images are mapped to distant feature vectors.</li>
+<li>Requires no manual labels (contrastive learning).</li>
+</ul>
+<hr>
+<h4>🔧 How Global Descriptor Clustering Works</h4>
+<ul>
+<li>Extract a single embedding per image (e.g., using DINOv2).</li>
+<li>Compute pairwise distances (typically cosine distance) between all embeddings.</li>
+<li>Cluster embeddings using:<ul>
+<li><strong>DBSCAN</strong> - density-based clustering without needing the number of clusters.</li>
+<li><strong>Agglomerative Clustering</strong> - hierarchical grouping.</li>
+<li><strong>KMeans</strong> - if the number of clusters is approximately known.</li>
+<li><strong>Graph-based Clustering</strong> - (see below 👇).</li></ul></li>
+<li>The result: each cluster represents one predicted scene.</li>
+</ul>
+<hr>
+<h4></h4><h4>📘 <b> Graph-Based Clustering</b></h4>
+<p>✅ In our pipeline:</p>
+<ul>
+<li>Compute <strong>pairwise cosine distances</strong> between image embeddings extracted by <strong>DINOv2</strong>.</li>
+<li>Build a <strong>graph</strong> where:<ul>
+<li>Each node represents an image.</li>
+<li>An edge is created between two images if their distance is below a threshold (e.g., <code>0.3</code>).</li></ul></li>
+<li><strong>Connected components</strong> of this graph are treated as <strong>predicted scenes</strong>.</li>
+<li>Images with no edges (isolated nodes) are labeled as <strong>outliers</strong>.</li>
+</ul>
+<p>
+This approach is faster and more scalable than DBSCAN for large datasets, and does not require knowing the number of clusters beforehand.
+</p>
+<p>📌 <strong>Note</strong>:  <br>
+I do not use ALIKED or LightGlue at this stage.  <br>
+They are used later in the pipeline for <strong>local feature extraction and matching</strong> - when reconstructing 3D camera poses.</p>
+<hr>
+<h5></h5><h4>🔍 Local Keypoints &amp; Descriptors (General Theory)</h4>
+<p>While  my solution clusters images using global descriptors, another common approach in image matching is to use <strong>local features</strong>:</p>
+<p><strong>Keypoints</strong> are distinctive image regions (corners, blobs, edges) that:</p>
+<ul>
+<li>Are stable under changes in viewpoint and lighting.</li>
+<li>Can be reliably detected and matched across different images.</li>
+</ul>
+<p>🧠 <strong>Common keypoint detectors</strong>:</p>
+<ul>
+<li><strong>Hand-crafted</strong>: SIFT, ORB, AKAZE</li>
+<li><strong>Learned</strong>: SuperPoint, D2Net, R2D2</li>
+</ul>
+<p><strong>Local Descriptors</strong>:  <br>
+Small feature vectors extracted around keypoints describing their local visual neighborhood.  <br>
+Used for matching keypoints between different images.</p>
+<hr>
+<h4>⚡ Important Note</h4>
+<p>In our case:</p>
+<ul>
+<li><strong>Global features (DINOv2)</strong> are used for initial scene clustering via <strong>graph-based connected components</strong>.</li>
+<li><strong>Local features (ALIKED)</strong> and <strong>feature matching (LightGlue)</strong> are only used afterward for precise camera pose reconstruction (<strong>Structure-from-Motion</strong>, SfM).</li>
+</ul>
+<hr>
+<h4></h4><h3>📌 <b>2) Estimating Camera Poses (SfM)</b></h3>
+<hr>
+<h4>📐 What is Structure-from-Motion (SfM)?</h4>
+<p>
+<b>Structure-from-Motion (SfM)</b> is a computer vision pipeline that reconstructs:
+</p><ul>
+<li>📸 The pose of each camera (Rotation matrix <b>R</b> and Translation vector <b>T</b>).</li>
+<li>🧱 A sparse 3D point cloud of the scene (estimated 3D locations of keypoints).</li>
+</ul>
+
+Given only a set of 2D images - without depth, without camera poses - SfM **recovers** both the camera trajectories and the scene structure.
+<p></p>
+<hr>
+<h4>📐 Simplified SfM Pipeline (General)</h4>
+<ol>
+<li><b>Pairwise Matching</b> - Find correspondences between keypoints detected in different images.</li>
+<li><b>Relative Pose Estimation</b> - Estimate the relative rotation (R) and translation (T) between pairs of images using 2D matches (via Essential Matrix decomposition).</li>
+<li><b>Triangulation</b> - Estimate 3D coordinates of points by triangulating matched keypoints from multiple views.</li>
+<li><b>Incremental SfM</b> - Add images one-by-one by solving PnP (Perspective-n-Point) problems.</li>
+<li><b>Bundle Adjustment</b> - Optimize all camera poses and 3D points jointly to minimize reprojection errors.</li>
+</ol>
+<hr>
+<h4>ALIKED, LightGlue, pycolmap</h4>
+<p>
+</p><ul>
+<li><b>Local feature detection</b>:<strong>ALIKED</strong> - a fast, learned local feature detector and descriptor extractor based on deep learning.</li>
+<li><b>Feature matching</b>: <strong>LightGlue</strong> - an attention-based neural matcher that finds reliable correspondences even under strong viewpoint and illumination changes.</li>
+<li><b>3D reconstruction and camera pose estimation</b>: <strong>pycolmap</strong> - a Python wrapper over <strong>COLMAP</strong>, a powerful Structure-from-Motion software, to reconstruct the camera trajectories and sparse 3D point cloud automatically.</li>
+</ul>
+
+<p></p>
+<hr>
+<p><strong>Triangulation</strong>    - Estimating 3D coordinates of a point from two or more images of it (2D → 3D)  <br>
+<strong>PnP (Perspective-n-Point)</strong> - Given 2D-3D correspondences, estimate the camera pose (R, T)  <br>
+<strong>Incremental SfM</strong> - Build the scene step by step: triangulate → PnP → repeat</p>
+<h4>🔧 How It Works in Practice</h4>
+<ol>
+<li><b>Extract ALIKED local features</b> for each image - keypoints + descriptors are saved into .h5 files.</li>
+<li><b>Match features using LightGlue</b> - for selected image pairs (shortlisted by global similarity or exhaustively).</li>
+<li><b>Import features and matches into a COLMAP database</b> using <code>h5_to_db</code> utilities.</li>
+<li><b>Run exhaustive matching and geometric verification</b> inside COLMAP (pycolmap API).</li>
+<li><b>Perform incremental reconstruction</b> (triangulation + pose estimation + bundle adjustment).</li>
+<li><b>Output:</b> For each image: 
+<ul>
+<li>Rotation matrix <code>R</code></li>
+<li>Translation vector <code>T</code></li>
+</ul>
+</li>
+<li>If an image cannot be reconstructed (e.g., insufficient matches) - assign <code>NaN</code> to its pose fields.</li>
+</ol>
+<hr>
+<h4>📦 Tools Used</h4>
+<ul>
+<li><b>ALIKED</b> - lightweight keypoint extractor based on deep learning, efficient for fast and robust feature detection and description.</li>
+<li><b>LightGlue</b> - transformer-based feature matcher optimized for large viewpoint, scale, and illumination changes. Learns how to attend to correct matches.</li>
+<li><b>COLMAP (via pycolmap)</b> - one of the most powerful SfM engines, supporting incremental mapping, exhaustive matching, triangulation, PnP pose estimation, and bundle adjustment.</li>
+</ul>
+<hr>
+<h2></h2>
+<p>
+Using COLMAP, pycolmap, or another SfM engine, we perform the following:
+</p><ul>
+<li>Input: All images assigned to the same cluster.</li>
+<li>Process:
+    <ul>
+    <li>Extract ALIKED features.</li>
+    <li>Match using LightGlue.</li>
+    <li>Import data into COLMAP database.</li>
+    <li>Run incremental reconstruction via pycolmap.</li>
+    </ul>
+</li>
+<li>Output: For each image, recover:
+    <ul>
+    <li>Rotation matrix <code>R</code> (3x3)</li>
+    <li>Translation vector <code>T</code> (3x1)</li>
+    </ul>
+</li>
+<li>If reconstruction fails for some images: assign NaN values to their pose fields.</li>
+</ul>
+<p></p>
+<hr>

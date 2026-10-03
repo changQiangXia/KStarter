@@ -1,0 +1,157 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324076
+
+Topic #324076: 52nd place with 20 minute Kaggle Notebook
+  Author: Clear n' Simple
+  Posted: 2022-05-10 03:02:55.158000
+  Votes: 75  Comments: 24
+
+I was able to generate my final submission - including candidate retrieval, feature engineering, and training/predicting with two models - in just 20 minutes.
+
+Partially, it was from using cudf for whatever I could, and it's really amazing how much time it saves.
+
+But I think the main reason was that I used a light-weight candidate retrieval method that gave me a good result without needing many candidates per customer, and without needing collaborative filtering or image/text processing.
+
+I had 33 million candidates (which comes out to only ~25 per customer on average).
+
+I started with @cdeotte's notebooks - customers who bought this frequently bought this and Recommend Items Purchased Together.
+
+I refactored his first notebook in this notebook, so that I could get the same result in 3 minutes.
+
+Then I made several changes:
+
+
+
+I had it only look for "pairs" from articles that were sold in the past week
+
+I had it find 5 "pairs" for each article, instead of just 1
+
+I ignored any article that wasn't sold within the past week
+
+I ignored any "pair" purchased by less than 2 customers
+
+
+We get a very strong retrieval method, a sort of manual, time-aware collaborative filtering method - what customers with similar purchase interests were purchased in the past week - so it includes trend information as well.
+
+For the second part, I followed his method of recommending "pairs" of items a customer had purchased in their last few weeks of history.
+
+And I also kept features to feed to LGBMRanker about:
+
+
+
+the strength of the "match" (i.e. how many/what percentage of customers the "pair" was based on)
+
+the "source" of the pair (i.e. how recently the original article was purchased, how many times it was purchased)
+
+
+Of course, I also generated the regular, standard candidates: past purchases, and 12 most popular items (I generated those based on age group).
+
+I think this retrieval method was the main reason I was able to get a good result with relatively few candidates/resources.
+
+Update - code
+
+Some people asked for it, so I made a clean notebook (moved nearly all code to the repo).
+Here's the notebook, here's the repo, and here's the kaggle dataset that syncs with the repo.
+
+The notebook runs in 20 minutes, and gets the same private LB score (it varies a bit per run).
+
+My workflow was:
+
+
+
+I'd work with a function in the notebook (for example, a candidate generator)
+
+Once the function was working, I'd move it to the repo and point the notebook there.
+
+Any parameters of the function (for example, candidate threshold), I'd add to my params dictionary in the notebook.
+
+Each function had a **kwargs argument, so I could pass the same single params dictionary to every function, and the function would use the arguments it needed.
+
+If I needed to revisit a function, or work with the values generated in middle, I'd move the function/s back to the notebook. 
+
+
+Update #2 - cuML's FIL
+
+Afterwards, I refactored my code to use cuML's FIL for inference, and that brought notebook time down from 20 minutes to just 12 minutes!
+
+Comments:
+├─ I110143105 (2022-05-16 14:54:50.060000) [+1]
+│  Congratz! Awesome work. Thanks for sharing so many insights.
+├─ Ambuj Nayan Mishra (2022-05-15 05:11:40.777000) [+1]
+│  congratulations
+├─ Jingping Pei (2022-05-14 11:25:56.663000) [+1]
+│  Congrats:)
+├─ Marco Gorelli (2022-05-14 09:47:47.403000) [+1]
+│  Legend, mate, I've worked through your notebook, and it's really impressive - thanks a tonne for posting!
+│  
+│  For generating the set for LGBMRanker, my understanding is that if you're predicting on so...
+  ├─ Clear n' Simple (2022-05-15 14:02:06.757000) [+1]
+  │  Pleasure!
+  │  
+  │  Yes, that's correct.
+  │  
+  │  The reasoning is, we want to train the model to do well on the week of the LB (week 105 in my code) - for that week, we'll only have the candidates we generate.
+  │  
+  │  Yo...
+├─ Y-Haneji (2022-05-12 07:35:11.970000) [+1]
+│  @jacob34 
+│  Congratulations for your achievement!
+│  To complete such a resource-consuming competition in the kaggle environment is really challenging. 
+│  
+│  I have a question. I read some code in your repo...
+  ├─ Clear n' Simple (2022-05-12 13:41:06.820000) [+1]
+  │  Thanks for the feedback, @hanejiyuto!
+  │  
+  │  I wrote practically all of it for this competition.
+  │  Although I do hope to reuse parts of it in the future.
+  ├─ Y-Haneji (2022-05-13 03:26:52.507000) [+1]
+  │  @jacob34 
+  │  Oh, it is great!
+├─ Muhammed Tausif (2022-05-11 11:24:04.703000) [+1]
+│  Congratulations on a simple solution.
+├─ Ryo Asashi (2022-05-11 09:21:12.720000) [+1]
+│  Congrats and thanks for sharing a great work!
+│  I'm interested in what score we could achieve only using a kaggle notebook, and yours seems to be the best…!
+├─ Igor Kuivjogi Fernandes (2022-05-10 11:59:48.913000) [+1]
+│  Congratz! Awesome work. Thanks for sharing so many insights.
+├─ Hervind Philipe (2022-05-10 03:39:48.370000) [+1]
+│  your Job is epic
+│  
+│  I learn a lot from you, thanks for all the sharing in this competition
+  ├─ Clear n' Simple (2022-05-10 14:09:22.807000) [+0]
+  │  Thanks @hervind!
+  │  
+  │  I took inspiration from your notebook on the ability to speed things up with proper code design.
+├─ eggachecat (2022-05-10 03:38:27.080000) [+1]
+│  You are the best! Thanks for sharing! I learnt a lot from your notebook!
+├─ newbieclass (2022-05-10 03:08:24.780000) [+1]
+│  good work ! thanks for sharing !
+  ├─ Clear n' Simple (2022-05-10 14:25:50.687000) [+0]
+  │  Thanks!
+  │  Congratulations to you on your solo silver!
+├─ Marco Gorelli (2022-05-10 06:59:06.350000) [+2]
+│  Well done! And mate, I would love to able to see your code
+  ├─ Clear n' Simple (2022-05-10 18:52:01.140000) [+1]
+  │  Thanks @marcogorelli!
+  │  
+  │  I've cleaned up my notebook for you, and have updated my post with links to the code/repo/dataset.
+  │  Questions welcome!
+  ├─ Marco Gorelli (2022-05-10 18:54:57.070000) [+1]
+  │  legend, thanks a tonne!
+├─ Frank (2022-05-10 04:49:23.320000) [+2]
+│  Congrats! Will you share the code for your pipeline including candidates retrieval, training and prediction?
+  ├─ Clear n' Simple (2022-05-10 18:53:06.383000) [+1]
+  │  Thanks, @xfffrank!
+  │  
+  │  I've updated my post with links to a clean notebook and my repo/dataset.
+├─ Chris Deotte (2022-05-10 03:34:18.057000) [+2]
+│  Congratulations Clear n' Simple! Great job finishing solo Silver finish 52 out of 3000 teams. Impressive results for just focusing on pairs of purchased items. Great job achieving super fast speed ...
+  ├─ Clear n' Simple (2022-05-10 14:07:39.333000) [+1]
+  │  Thanks, Chris, means a lot to me!
+  │  
+  │  Thanks for coming out of retirement for this 😉.
+  │  
+  │  More seriously, I was happy you were taking part in the competition, and was hoping to continue to benefit from f...
+├─ Clear n' Simple (2022-05-15 18:28:04.410000) [+0]
+│  Update:
+│  
+│  By using cuML's FIL, notebook run time went down from 20 minutes to 12 minutes!

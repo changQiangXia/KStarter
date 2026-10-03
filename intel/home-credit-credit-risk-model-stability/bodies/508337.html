@@ -1,0 +1,74 @@
+<h2>Foreword</h2>
+<p>Hello, this is yuuniee.<br>
+Thank you to the competition host Home Credit and staff, Kaggle staff and everyone involved.</p>
+<p>The image below is a summary of my solution.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6960421%2F92721e389d44b29d04f931d244fed316%2F.png?generation=1716967303955938&amp;alt=media" alt="image_"></p>
+<p>The maximum Private LB Score for my model pool without Metric Hacking is close to about 0.53.</p>
+<p>As everyone knows, this competition takes place in two phases.<br>
+Phase 1 was ML (Machine Learning), and Phase 2 was MH (Metric Hack).<br>
+I will briefly introduce each part.<br>
+(If you are only curious about ML, please read only Phase 1.)</p>
+<h2>I. Phase 1 - ML (Machine Learning)</h2>
+<p>Thank you for writing a great notebook for EDA and solution construction at the beginning of the competition.<br>
+<a href="https://www.kaggle.com/sergiosaharovskiy" target="_blank">@sergiosaharovskiy</a> - <a href="https://www.kaggle.com/code/sergiosaharovskiy/home-credit-crms-2024-eda-and-submission" target="_blank">https://www.kaggle.com/code/sergiosaharovskiy/home-credit-crms-2024-eda-and-submission</a><br>
+<a href="https://www.kaggle.com/greysky" target="_blank">@greysky</a> - <a href="https://www.kaggle.com/code/greysky/home-credit-baseline" target="_blank">https://www.kaggle.com/code/greysky/home-credit-baseline</a><br>
+Additionally, I would like to thank the many participants who provided various insights.</p>
+<ol>
+<li><p>The CV strategy is StratifiedGroupKFold, and has been tested and trained in various forms: No Shuffle and Shuffle. In my case, differences in CV of around 0.001 to 0.005 had a low correlation with LB, while differences above 0.01 had a high correlation with LB. In addition, CV improvement through model parameter adjustment had a relatively low correlation with LB, and CV improvement through FE had a relatively high correlation with LB.</p></li>
+<li><p>There's nothing special about Feature Engineering. Max, Min, Avg, Var, First, Last and Max-Min Difference of each item were utilized. (I will release the code after cleaning it up.)</p></li>
+<li><p>LGBM was a bit lacking compared to Catboost, but was good for the ensemble. The reason why the number of features is smaller is because some items (mainly categorical types) were excluded because they caused performance degradation and overfitting in LGBM, and other slightly different types of features were added and deleted.</p></li>
+<li><p>DNN is a Denselight model and utilizes the LightAutoML library. There were some bugs, so I had to fix some of them myself, but overall, I think it is a good library. At first, I planned to lightly test with Denselight and then build the final model with a larger model (FT-Transformer, etc.). Surprisingly, I haven't created or found a model that beats Denselight performance. Perhaps I made a mistake, or the nature of the data is sensitive to overfitting, so I guess a simpler model worked better.</p></li>
+<li><p>Catboost was the model that performed best in this competition and I guess it performed well on a large number of categorical features (about 117).</p></li>
+</ol>
+<p>During this period, my public LB was close to top 5 and the competition seemed to be going very smoothly.<br>
+But…</p>
+<blockquote>
+  <h3>+ What didn't work</h3>
+  <ol>
+  <li>Transformer type models such as Tabnet, TabTransformer, FT-Transformer, etc.</li>
+  <li>Income, expenditure, and tax statistics by period (month, week, etc.).</li>
+  <li>Differences between individual income, expenses, and taxes.</li>
+  <li>K-means clustering</li>
+  </ol>
+</blockquote>
+<h2>II. Phase 2 - MH(Metric Hack)</h2>
+<p>Pointed out problems with MH at the beginning of the competition,<br>
+<a href="https://www.kaggle.com/at7459" target="_blank">@at7459</a> - <a href="https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476449" target="_blank">https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476449</a><br>
+Announced the revival of MH in the latter half of the competition,<br>
+<a href="https://www.kaggle.com/johnpateha" target="_blank">@johnpateha</a> - <a href="https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497167" target="_blank">https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497167</a></p>
+<p>Also, thanks to the many participants who suggested various other comments and solutions. Thanks to you, my knowledge has expanded.<br>
+In particular, the two people above are true scientists and journalists who could have hidden this discovery and profited from it, but pursued the public interest by exposing it to everyone. (Why not consider Kaggle giving a special award for this sharing?)<br>
+As a result, the problem was not solved, but we learned something(?) from it and at least I was able to take minimal measures.</p>
+<p>After <a href="https://www.kaggle.com/johnpateha" target="_blank">@johnpateha</a>'s "Metric hack again, sorry" post, I tried Data Reversing and found that the difference between date_decision and min_refreshdate_3813885D had a high correlation (about 0.9 or more) with WEEK_NUM.<br>
+(More information can be found at <a href="https://www.kaggle.com/code/eivolkova/how-to-restore-the-dates?scriptVersionId=180157891" target="_blank">https://www.kaggle.com/code/eivolkova/how-to-restore-the-dates?scriptVersionId=180157891</a>, published by <a href="https://www.kaggle.com/eivolkova" target="_blank">@eivolkova</a> immediately after the competition.)<br>
+And the way suggested by <a href="https://www.kaggle.com/at7459" target="_blank">@at7459</a>:</p>
+<pre><code>DEVIDE = /
+REDUCE = 
+condition = df[] &lt; (df[].()-df[].())*DEVIDE+df[].()
+df.loc[condition, ] = (df.loc[condition, ] - REDUCE).clip()
+</code></pre>
+<p>Based on this, the results of examining the score details submitted by changing the REDUCE and DEVIDE values ​​were as follows.</p>
+<ol>
+<li>The public/private division of test data spans the entire period and it is difficult to identify a specific distribution, and the optimal value in private will probably be distributed around 1/4 to 3/4.</li>
+<li>The optimal public LB value of REDUCE is 0.03 (at least in my model), and the optimal value in private is probably distributed around 0.02 to 0.04.</li>
+</ol>
+<p>The difference in pure model performance between top competitors was 0.00X,<br>
+Since the difference due to the above adjustment value was 0.0X,<br>
+At this stage it became gambling for me.</p>
+<p>Some will bet low, others will bet high.<br>
+Here, I trusted my model and chose neutral, and chose DEVIDE=1/2, REDUCE=0.03, which is the median of the expected distribution.<br>
+I expected someone who bet high or low to take the prize, and I expected about a 50% chance of finishing in the top 10.</p>
+<h2>III. Conclusion</h2>
+<ul>
+<li><p>The first selected submission is the No Hack model with CV Best Score created in Phase 1, and the second selected submission is the application of Metric Hack to it. (I thought there was a high probability that Metric Hack would work, but I also submitted No Hack just in case)</p></li>
+<li><p>Rather than simply sharing solutions, I thought it would be better to share my experience in detail. To improve the bad parts that happened in this competition.</p></li>
+<li><p>My ranking was due to luck, and although it is the Best Private Score submitted, it probably won't be Best Solution.</p></li>
+<li><p>Although the competition ended on a gloomy note due to the metric hacking issue, the host and staff worked hard to make it a meaningful and successful competition. </p></li>
+<li><p>Based on this, we expect a more developed system in the future.</p></li>
+</ul>
+<p>thank you</p>
+<blockquote>
+  <p>Edit : I posted the FE code here.<br>
+  644(for lgbm) - <a href="https://www.kaggle.com/code/yuuniekiri/fork-of-home-credit-risk-lightgbm" target="_blank">https://www.kaggle.com/code/yuuniekiri/fork-of-home-credit-risk-lightgbm</a><br>
+  661(for cat &amp; dnn) - <a href="https://www.kaggle.com/code/yuuniekiri/fork-of-home-credit-catboost-inference" target="_blank">https://www.kaggle.com/code/yuuniekiri/fork-of-home-credit-catboost-inference</a></p>
+</blockquote>

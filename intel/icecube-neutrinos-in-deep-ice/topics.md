@@ -1,0 +1,82 @@
+# icecube-neutrinos-in-deep-ice 讨论区（按票数排序，共 80 条）
+
+- [2nd place solution: Neutrino direction prediction with transformers](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402882) — 103 票 / 34 评论 / 2023-04-27 **write-up?**
+- [1st Place Solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402976) — 77 票 / 34 评论 / 2023-04-23 **write-up?**
+- [Welcome to the challenge!](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/355653) — 75 票 / 82 评论 / 2022-09-27 
+- [Neutrino Events Visualized](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381166) — 66 票 / 14 评论 / 2023-01-25 
+- [GraphNeT: DynEdge Baseline & Example](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/383524) — 66 票 / 18 评论 / 2023-02-04 
+- [Animated events with matplotlib](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381935) — 56 票 / 9 评论 / 2023-01-28 
+- [3rd Place - Attention + XGBoost Ensembler](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402888) — 56 票 / 25 评论 / 2023-04-21 **write-up?**
+- [9th Place Solution: GNNs Ensemble and MLP Stacking](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402849) — 41 票 / 4 评论 / 2024-10-06 **write-up?**
+- [Domain information - neutrino, anti-neutrino and spins](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379546) — 40 票 / 16 评论 / 2023-01-20 
+- [Derivation of Line-fit least squares ](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381747) — 40 票 / 5 评论 / 2023-01-28 
+- [11-th place solution: Attention, GNN, Ensemble](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402920) — 40 票 / 12 评论 / 2023-04-29 **write-up?**
+- [The logic used for 'auxiliary' column True vs False](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379677) — 39 票 / 10 评论 / 2023-01-20 
+- [∞ Explanation and Improvement von Mises-Fisher Loss](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/392096) — 39 票 / 13 评论 / 2023-03-03 
+- [Here are some open-source code or resources specifically related to neutrino direction prediction.](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379882) — 36 票 / 8 评论 / 2023-01-21 
+- [10th Place Solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402969) — 36 票 / 24 评论 / 2023-04-20 **write-up?**
+- [Early Sharing Prize - 1.046 Starter Kit](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/383546) — 33 票 / 11 评论 / 2023-02-04 
+- [Leaderboard progress](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402332) — 32 票 / 19 评论 / 2023-04-17 
+- [Theoretical Best Score with only auxiliary = False](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/382376) — 32 票 / 5 评论 / 2023-01-30 
+- [Chunk based data loading with caching](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/394596) — 31 票 / 0 评论 / 2023-03-14 
+- [Distribution of particles speeds in the detector](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/382131) — 30 票 / 11 评论 / 2023-01-29 
+- [4th place solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402854) — 29 票 / 4 评论 / 2023-04-20 **write-up?**
+- [Animations of events over time](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/388858) — 29 票 / 13 评论 / 2023-02-19 
+- [How many "bad samples" there are in the dataset?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/390873) — 28 票 / 3 评论 / 2023-02-27 
+- [An App That Animates Neutrino Events in 3D](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/386405) — 27 票 / 7 评论 / 2023-02-12 
+- [12th Place Solution Details - IceCube](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403000) — 25 票 / 6 评论 / 2023-04-27 **write-up?**
+- [17th place solution (silver)](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402861) — 24 票 / 1 评论 / 2023-04-20 **write-up?**
+- [⧲ Data anisotropy along the z-axis](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/394733) — 24 票 / 0 评论 / 2023-03-14 
+- [8th Place Solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403713) — 23 票 / 6 评论 / 2023-04-27 **write-up?**
+- [12th Place Solution IceCube](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402860) — 22 票 / 1 评论 / 2023-04-20 **write-up?**
+- [End of Competition](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403023) — 21 票 / 13 评论 / 2023-04-20 
+- [The loss function in the Graphnet paper (vMF)](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/388619) — 21 票 / 1 评论 / 2023-02-18 
+- [5th place solution: combining GraphNet and Transformer with LSTM meta-model](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403398) — 21 票 / 6 评论 / 2023-04-27 **write-up?**
+- [6th place solution : GNN and Transformer part](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402880) — 19 票 / 2 评论 / 2023-04-20 **write-up?**
+- [The IceCube Observatory Explained](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381373) — 19 票 / 4 评论 / 2023-01-26 
+- [Early sharing prize thread](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379465) — 19 票 / 18 评论 / 2023-01-19 
+- [26th Place Solution GRU Ensemble](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403044) — 18 票 / 9 评论 / 2023-04-20 **write-up?**
+- [20th place solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402864) — 18 票 / 2 评论 / 2023-05-02 **write-up?**
+- [ Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402996) — 18 票 / 13 评论 / 2023-04-20 
+- [🌍 LSTM round-up](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/390500) — 18 票 / 1 评论 / 2023-02-25 
+- [Dataset splitting train_meta](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/383734) — 17 票 / 1 评论 / 2023-02-04 
+- [Early sharing prize winner - datasaurus!](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403035) — 16 票 / 5 评论 / 2023-04-20 
+- [13th Place Solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/405563) — 16 票 / 2 评论 / 2023-05-03 **write-up?**
+- [Azimuth and Zenith Questions and Clarifications, Help!](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381648) — 16 票 / 8 评论 / 2023-01-27 
+- [Physics of collisions and detections?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/380364) — 16 票 / 5 评论 / 2023-01-23 
+- [Sort your submission by event_id](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/384967) — 15 票 / 5 评论 / 2023-02-10 
+- [Load 100+ training files on Kaggle [TPU VM] ](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/396363) — 15 票 / 1 评论 / 2023-03-21 
+- [What is accuracy of current state of the art?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/384191) — 15 票 / 21 评论 / 2023-02-07 
+- [667th place, but still happy :)](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403178) — 14 票 / 3 评论 / 2023-04-21 **write-up?**
+- [9th place solution. 0.983/0.982 GraphNet only (rusg77 part)](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402995) — 14 票 / 1 评论 / 2023-04-20 **write-up?**
+- [The GNN paper and a few interesting points/insights](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/382383) — 14 票 / 0 评论 / 2023-01-30 
+- [Are Events With A Perfectly Vertical Line an Error/Noise?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/380286) — 14 票 / 7 评论 / 2023-01-22 
+- [ Reproduce the provided illustrtaions](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379915) — 14 票 / 11 评论 / 2023-01-21 
+- [19th place solution, stacking 3 models](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402887) — 14 票 / 0 评论 / 2023-04-20 **write-up?**
+- [15th place solution](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/405034) — 13 票 / 5 评论 / 2023-04-27 **write-up?**
+- [6th solution ](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403153) — 13 票 / 2 评论 / 2023-04-21 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/355479) — 13 票 / 7 评论 / 2022-09-26 
+- [Most interesting write-up winners](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/409274) — 12 票 / 1 评论 / 2023-05-10 **write-up?**
+- [Cherenkov Light - Emission, Cone & Detection](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381511) — 12 票 / 5 评论 / 2023-01-27 
+- [Notebook takes ~8x longer when submitted](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/380601) — 12 票 / 17 评论 / 2023-01-23 
+- [14th place solution: transformer and GRU](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402973) — 12 票 / 4 评论 / 2023-04-20 **write-up?**
+- [Fast preprocessing with Polars and Numba](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/398608) — 12 票 / 4 评论 / 2023-03-30 
+- [33rd Place Solution - Geometry Aware Transformer](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402926) — 12 票 / 1 评论 / 2023-04-20 **write-up?**
+- [Azimuth/Zenith and Deep Convolutional Networks ](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379757) — 12 票 / 7 评论 / 2023-01-20 
+- [Intergarate infoes of data analysis and how to use them?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/401163) — 11 票 / 0 评论 / 2023-04-12 
+- [One Bad String in Dataset](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381863) — 11 票 / 10 评论 / 2023-01-28 
+- [Understanding the direction vector](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/382038) — 11 票 / 8 评论 / 2023-01-29 
+- [Polar origin aka where azimuth/zenith has its [0, 0]](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379857) — 11 票 / 16 评论 / 2023-01-21 
+- [Arxiv paper about core of task](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379675) — 11 票 / 4 评论 / 2023-01-20 
+- [Requirements for "Most Interesting Writeup?"](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402329) — 11 票 / 0 评论 / 2023-04-17 **write-up?**
+- [If I Win Can I Get a DOM ??](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381481) — 11 票 / 7 评论 / 2023-01-26 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403759) — 10 票 / 7 评论 / 2023-04-24 
+- [Neutrino Asymmetry. Spin-handedness. Left handed Neutrinos. ](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/379495) — 10 票 / 7 评论 / 2023-01-19 
+- [tips & tricks to deal with parquet files effectively ](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/380161) — 10 票 / 5 评论 / 2023-01-22 
+- [35th place solution (ensemble of public pre-trained models)](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/403013) — 10 票 / 0 评论 / 2023-04-20 **write-up?**
+- [Do we try to predict an algorithm?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/380319) — 10 票 / 7 评论 / 2023-01-22 
+- [Confused about the competition timeline](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/401322) — 9 票 / 9 评论 / 2023-04-12 
+- [Sensor IDs For 3 Sections of the IceCube Detector](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381702) — 9 票 / 5 评论 / 2023-01-27 
+- [Understanding Ice Transparency factors](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/388724) — 9 票 / 4 评论 / 2023-02-19 
+- [Leagrning GNN, how to define model using pytorch geometric?](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/398876) — 9 票 / 4 评论 / 2023-04-01 
+- [Paper on the winning solutions](https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/450650) — 5 票 / 1 评论 / 2023-10-25 **write-up?**

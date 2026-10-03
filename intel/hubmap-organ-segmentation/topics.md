@@ -1,0 +1,82 @@
+# hubmap-organ-segmentation 讨论区（按票数排序，共 80 条）
+
+- [[ placeholder  LB 0.81 single fold, coat-parallel-small at 1536 ] my experiment results](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332941) — 259 票 / 341 评论 / 2022-06-24 
+- [I’m now Kaggle Grandmaster 🎉🎉 🙂](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/352023) — 155 票 / 317 评论 / 2022-09-12 
+- [Some Insights](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333389) — 89 票 / 34 评论 / 2022-06-26 
+- [is there going to be a problem?  HPA data and HuBMAP data ](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332714) — 78 票 / 17 评论 / 2022-06-23 
+- [3d  place solution ](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354683) — 70 票 / 17 评论 / 2023-06-20 **write-up?**
+- [Good Visual Showing How Tissue Slice Thickness Impacts Staining Intensity](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333083) — 56 票 / 3 评论 / 2022-06-24 
+- [2nd Place Solution](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354857) — 56 票 / 11 评论 / 2022-09-24 **write-up?**
+- [External Data Sources](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333886) — 55 票 / 12 评论 / 2022-06-28 
+- [4th place solution: Stain Normalization is all you need](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354851) — 50 票 / 12 评论 / 2022-09-25 **write-up?**
+- [Previous HuBMAP - Solutions summary thread](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332664) — 50 票 / 10 评论 / 2022-06-22 **write-up?**
+- [1st place solution](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/356201) — 48 票 / 15 评论 / 2022-10-02 **write-up?**
+- [Make Histopathologic Models Robust To Domain Shift [Author: Heather D. Couture Ph.D.]](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/337992) — 47 票 / 5 评论 / 2022-07-18 
+- [CV vs LB  ](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333631) — 41 票 / 59 评论 / 2022-06-27 
+- [An overview: Stain Normalization (Style Transfer) Techniques](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/338525) — 40 票 / 4 评论 / 2022-07-20 
+- [Poor / Inconsistent Annotations](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332958) — 40 票 / 11 评论 / 2022-06-24 
+- [Understanding the Different Tissue Stains](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333704) — 40 票 / 2 评论 / 2022-06-27 
+- [Welcome to the HuBMAP + HPA - Hacking the Human Body Competition!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332666) — 39 票 / 17 评论 / 2022-06-22 
+- [7th place solution](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354859) — 37 票 / 13 评论 / 2022-12-30 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354701) — 36 票 / 7 评论 / 2022-09-25 **write-up?**
+- [My first impressions](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/336472) — 33 票 / 10 评论 / 2022-07-11 
+- [Congratulations to The Devastator for Becoming a Discussions Kaggle Grandmaster!!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/336490) — 32 票 / 40 评论 / 2022-07-11 
+- [HPA unlabeled data (notebook and dataset)](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/342245) — 31 票 / 6 评论 / 2022-08-06 
+- [The most copied helper function. Who is the Author? Have you Upvoted his work? ](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333134) — 31 票 / 12 评论 / 2022-06-24 
+- [Baseline Submissions](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333492) — 31 票 / 5 评论 / 2022-06-26 
+- [Dataset in JPG format](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332718) — 29 票 / 10 评论 / 2022-06-23 
+- [Is this competition worth it?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/344425) — 28 票 / 1 评论 / 2022-08-15 
+- [Data Augmentation: Gaussian-Laplacian Pyramid Blending](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/341235) — 25 票 / 4 评论 / 2022-08-02 
+- [[Private LB 20th]How did I reach 0.82 from 0.68 on the public LB?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354590) — 25 票 / 17 评论 / 2022-09-23 
+- [Clarification Regarding Pixel Size](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333081) — 24 票 / 15 评论 / 2022-06-24 
+- [Decompose image to tiles?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333614) — 23 票 / 10 评论 / 2022-06-27 
+- [Congratulations Grandmaster Darien Schettler!!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/337078) — 23 票 / 24 评论 / 2022-07-14 
+- [Tons of unsupervised data from HPA website](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/337692) — 22 票 / 8 评论 / 2022-07-17 
+- [[place holder] style trasnfer to create new train data](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/342848) — 21 票 / 14 评论 / 2022-08-09 
+- [More background information on lung FTUs](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/351356) — 21 票 / 8 评论 / 2022-09-09 
+- [A dumb mistake I did](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/341984) — 21 票 / 6 评论 / 2022-08-05 
+- [26th place solution | Recursive Gated Convolutions + Lung Tiling](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354671) — 20 票 / 2 评论 / 2022-09-25 **write-up?**
+- [25th Simple Solution](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354744) — 20 票 / 6 评论 / 2022-09-25 **write-up?**
+- [i think a few more decimal of the score can be revealed ...](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354583) — 19 票 / 5 评论 / 2022-09-23 
+- [Working with TIFF files](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332681) — 19 票 / 5 评论 / 2022-06-22 
+- [Too much cv vs lb gap..(CV 78 vs LB 60), also this will become my log book of this competition](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/343291) — 18 票 / 38 评论 / 2022-08-10 
+- [Augmentation with Generated Artifacts](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/334363) — 17 票 / 2 评论 / 2022-07-01 
+- [What's your HuBMAP only score?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/348888) — 17 票 / 38 评论 / 2022-08-30 
+- [Ground Truth: Are all functional units found in an image labeled? ](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/344276) — 17 票 / 16 评论 / 2022-08-14 
+- [Ways to work with small number of training samples](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332786) — 16 票 / 5 评论 / 2022-06-23 
+- [State-of-the-Art for Semantic Segmentation 2022](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333932) — 16 票 / 1 评论 / 2022-06-29 
+- [Beyond grateful to @hengck23 for his amazing posts!!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354791) — 16 票 / 1 评论 / 2022-09-23 
+- [Download HuBMAP unlabeled data](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/343615) — 16 票 / 2 评论 / 2022-08-12 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332652) — 15 票 / 16 评论 / 2022-06-22 
+- [Big thank you to all participants](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/362765) — 14 票 / 1 评论 / 2022-10-29 
+- [Leaderboard is Finalized - Congrats to our Winners, Recap](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/355458) — 14 票 / 0 评论 / 2022-09-26 
+- [Issue with one image](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332712) — 14 票 / 2 评论 / 2022-06-23 
+- [❌ WTF 6 Novice teams in MEDAL ZONE with the same name ❌](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354700) — 14 票 / 10 评论 / 2022-09-23 
+- [How to easily import `segmentation_models_pytorch` without Internet connection!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/348057) — 13 票 / 2 评论 / 2022-08-26 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332653) — 13 票 / 91 评论 / 2022-06-22 
+- [ is this a mistake ? 6.263 µm for prostate](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333552) — 13 票 / 12 评论 / 2022-06-27 
+- [[For newcomers] Things that may cause submission error](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/336582) — 13 票 / 5 评论 / 2022-07-12 
+- [Mask Dataset in PNG format](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332830) — 13 票 / 1 评论 / 2022-06-23 
+- [Competitions for image segmentation in the past](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332683) — 13 票 / 0 评论 / 2022-06-22 
+- [Plot Images with Masks](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333712) — 13 票 / 3 评论 / 2022-06-27 
+- [[Chai Time] Qishen Ha talks about his latest image segmentation gold medal](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/338250) — 12 票 / 2 评论 / 2022-07-19 **write-up?**
+- [Evaluating Semantic Segmentation: Dice Coefficient](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332693) — 12 票 / 0 评论 / 2022-06-22 
+- [Does anyone able to get any boost from external data?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/341130) — 12 票 / 13 评论 / 2022-08-01 
+- [Notebook Threw Exception when using SegFormer for inference](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/346952) — 12 票 / 5 评论 / 2022-08-22 
+- [Help with starting out](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/350293) — 11 票 / 6 评论 / 2022-09-05 
+- [Understanding run-length encoding (rle) and dice](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332838) — 11 票 / 1 评论 / 2022-06-23 
+- [Meme Thread](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/335281) — 11 票 / 7 评论 / 2022-07-05 
+- [H&E normalization with torchstain](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/338869) — 11 票 / 3 评论 / 2022-07-22 
+- [HuBMAP + HPA Starter kit](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/332921) — 11 票 / 2 评论 / 2022-06-23 
+- [Question for the hosts about rationale for the public (not private) LB](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/336766) — 11 票 / 4 评论 / 2022-07-12 
+- [Unable to previous version of notebook?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354048) — 10 票 / 7 评论 / 2022-09-20 
+- [Prediction on Test Image](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/343117) — 10 票 / 20 评论 / 2022-08-10 
+- [How to make my notebook public for the judges prize?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/353823) — 10 票 / 2 评论 / 2022-09-20 
+- [[171st solution] How far could I go with the UNeXt50 baseline?](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354757) — 10 票 / 0 评论 / 2022-10-26 **write-up?**
+- [Three digits leaderboard](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/333352) — 10 票 / 3 评论 / 2022-06-26 
+- [Notebook threw exception](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/352438) — 10 票 / 15 评论 / 2022-09-14 
+- [Pytorch/TF averaging between folds and within a fold](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/348188) — 10 票 / 2 评论 / 2022-08-27 
+- [Post-competition & future competition(s) survey [2min]](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/364488) — 6 票 / 0 评论 / 2022-11-06 
+- [Call for Judges Prize Submissions!!!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/354262) — 6 票 / 0 评论 / 2022-09-21 
+- [Last Call For Three Judges Prize Submissions!!!](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/355448) — 1 票 / 0 评论 / 2022-09-26 
+- [Publication for the competition results](https://www.kaggle.com/competitions/hubmap-organ-segmentation/discussion/563940) — 0 票 / 0 评论 / 2025-02-19 

@@ -1,0 +1,74 @@
+# kaggle-survey-2021 讨论区（按票数排序，共 72 条）
+
+- [7 tips to make your notebook better (perspective of last year's laureate)](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/279327) — 94 票 / 34 评论 / 2021-10-17 
+- [Competition Prize Announcements](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/295401) — 63 票 / 31 评论 / 2021-12-15 
+- [8 Popular Storytelling Themes from Past Competitions](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278727) — 63 票 / 14 评论 / 2021-10-15 
+- [Previous Year Winning Notebooks ](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278542) — 54 票 / 17 评论 / 2021-10-14 **write-up?**
+- [Notebook Award: $1,000 Prize for Outstanding Early Submissions](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/288495) — 47 票 / 20 评论 / 2021-11-17 
+- [Analytics Competitions -- Powerpoint & Storytelling](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291684) — 31 票 / 14 评论 / 2021-11-30 
+- [Suggestions for the 2022 Kaggle ML & DS Survey](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/276663) — 30 票 / 52 评论 / 2021-10-05 
+- [Tips from the (Kaggle Survey) Triple Winner. I'm a big fan of him.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278889) — 29 票 / 11 评论 / 2021-10-15 
+- [Advices for Improving your Visualizations](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/281675) — 25 票 / 9 评论 / 2021-10-25 
+- [21 Other Examples of Inspiring and Winning Notebooks from Analytics Competitions](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/281091) — 25 票 / 2 评论 / 2021-10-23 **write-up?**
+- [External Datasets ✨](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280726) — 24 票 / 2 评论 / 2021-10-22 
+- [I guessed four of you😂😁](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291070) — 23 票 / 10 评论 / 2021-11-27 
+- [Panel session: State of Machine Learning and Data Science 2021 (14th October 2021)](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/287400) — 22 票 / 1 评论 / 2021-11-13 
+- [Where do I learn storytelling like you guys? Blown away by the skill here..](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/282725) — 21 票 / 5 评论 / 2021-10-27 
+- [Happy Thanksgiving and Good Luck to everyone. ](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/290749) — 16 票 / 0 评论 / 2021-11-26 
+- [📊 Kaggle Survey 2021 : South Korea📋](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/333337) — 15 票 / 2 评论 / 2022-06-26 
+- [What do you think is more important? Visualization or Storytelling?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280692) — 14 票 / 21 评论 / 2021-10-22 
+- [9 uncommon questions to follow through](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/279409) — 14 票 / 1 评论 / 2021-10-18 
+- [2021 Kaggle Machine Learning & Data Science Survey - Next Steps and Suggestions](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/292765) — 13 票 / 6 评论 / 2021-12-03 
+- [Improve your visualization tips and tricks✨ (Categorical plots)](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/284768) — 13 票 / 4 评论 / 2021-11-02 
+- [Should I resubmit after my updates?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291109) — 13 票 / 6 评论 / 2021-11-27 
+- [Kaggle prizewinner data](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278913) — 13 票 / 2 评论 / 2021-10-15 
+- [ٍBreathtaking Color Collection Codes 💥](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/279803) — 12 票 / 6 评论 / 2021-10-19 
+- [New functions, styles and more (Updated 27 Nov)✨](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/288497) — 12 票 / 0 评论 / 2021-11-17 
+- [Visualizing Interactions Between Two or More Categorical Variables](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/284928) — 11 票 / 2 评论 / 2021-11-02 
+- [Q30_B responses are blank ?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280876) — 10 票 / 4 评论 / 2021-10-23 
+- [Submission Problem !! ](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/281010) — 10 票 / 12 评论 / 2021-10-23 
+- [The "now you see me" period of the competition](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/289502) — 10 票 / 1 评论 / 2021-11-20 
+- [Analysis using Tableau](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291654) — 9 票 / 5 评论 / 2021-11-30 
+- [Multiple notebooks](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280354) — 8 票 / 5 评论 / 2021-10-21 
+- [2022 timeline](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/355966) — 8 票 / 2 评论 / 2022-09-28 
+- [Salary Comparisons Misleading - Not adjusted by PPP](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280328) — 7 票 / 3 评论 / 2021-10-21 
+- [All color codes with examples (with complementary color if needed)](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/281008) — 7 票 / 0 评论 / 2021-10-23 
+- [Submission Form](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291338) — 7 票 / 4 评论 / 2021-11-28 
+- [Questions in A and B format](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/285829) — 7 票 / 2 评论 / 2021-11-06 
+- [Dynamic Dashboard ](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/279548) — 7 票 / 7 评论 / 2021-10-18 
+- [Helloooo! I am new to this site AND data science!  Seeking some advice -  -  -](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/281212) — 6 票 / 4 评论 / 2021-10-23 
+- [Kaggle winners or masters I've a single question](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/279810) — 6 票 / 2 评论 / 2021-10-19 
+- [What is the number of surveys sent out?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/285697) — 6 票 / 2 评论 / 2021-11-05 
+- [Drew a map of Russian](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280185) — 5 票 / 6 评论 / 2021-10-20 
+- [Kaggle Suvery 2021](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280896) — 5 票 / 3 评论 / 2021-10-23 
+- [How the time is measured here?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/284316) — 5 票 / 0 评论 / 2021-10-31 
+- [An error in the rules.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278795) — 5 票 / 1 评论 / 2021-10-15 
+- [Small Multiples for EDA](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/285411) — 5 票 / 2 评论 / 2021-11-04 
+- [Cannot Submit a Competition Notebook 🤔 !!](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/286290) — 5 票 / 4 评论 / 2021-11-08 
+- [How to get people to team up with me?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/286790) — 5 票 / 0 评论 / 2021-11-10 
+- [How to upload the notebook I made... for this activity](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/290913) — 5 票 / 5 评论 / 2021-11-26 
+- [Modifying summited notebook after deadline](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291230) — 5 票 / 0 评论 / 2021-11-28 
+- [How is this Kaggle Survey helpful ?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291457) — 5 票 / 2 评论 / 2021-11-29 
+- [Tableau/BI visualisation tools](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/285588) — 4 票 / 3 评论 / 2021-11-05 
+- [The relationship between a grade skipping and the age range of Kaggler.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/285613) — 4 票 / 1 评论 / 2021-11-05 
+- [I want to see three colors in DataFrame but don't see the error.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/281723) — 4 票 / 2 评论 / 2021-10-25 
+- [Unable to merge teams](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280739) — 4 票 / 4 评论 / 2021-10-22 
+- [Submission form clarification](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291362) — 4 票 / 2 评论 / 2021-11-28 
+- [Question about data?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/284278) — 3 票 / 3 评论 / 2021-10-30 
+- [thanks for analytics competition](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/288790) — 3 票 / 0 评论 / 2021-11-18 
+- [[What does "-A" mean]Some of Questions have "-A" in survey #Q*](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/290217) — 3 票 / 4 评论 / 2021-11-23 
+- [Can We use Tableau for analysis?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280075) — 3 票 / 4 评论 / 2021-10-20 
+- [Which Web-sites we can Scrape to get new useful datatset for Analysis and prediction](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/280067) — 3 票 / 0 评论 / 2021-10-20 
+- [🎉Welcome, 2022🎉. What Has Changed in Data Science in 2021? 📚](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/298333) — 3 票 / 2 评论 / 2022-01-02 
+- [Some of Question about [ConVLSTM] & answer.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/284277) — 2 票 / 2 评论 / 2021-10-30 
+- [Confused about the competition?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/284126) — 2 票 / 3 评论 / 2021-10-29 
+- [New Function, Style And many more.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/290226) — 2 票 / 0 评论 / 2021-11-23 
+- [Unable to form team](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/289491) — 2 票 / 7 评论 / 2021-11-20 
+- [Why have a difference bar chart between Kaggle and my notebook ?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291172) — 2 票 / 2 评论 / 2021-11-28 
+- [Looking for a Team Member](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278958) — 2 票 / 4 评论 / 2021-10-16 
+- [Suggest the ML model and method for this competition.](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/278563) — 2 票 / 3 评论 / 2021-10-14 
+- [[Eng&Jap:英語＆日本語]What should I do in this competition?](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/287555) — 1 票 / 4 评论 / 2021-11-14 
+- [Unable to Submit: No output Found](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/287610) — 1 票 / 4 评论 / 2021-11-14 
+- [Using excel chart for analysis](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291106) — 1 票 / 3 评论 / 2021-11-27 
+- [Submission Doubt](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291327) — 1 票 / 2 评论 / 2021-11-28 
+- [Submission question](https://www.kaggle.com/competitions/kaggle-survey-2021/discussion/291370) — 0 票 / 1 评论 / 2021-11-29 

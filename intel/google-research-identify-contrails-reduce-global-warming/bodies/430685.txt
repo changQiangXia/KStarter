@@ -1,0 +1,251 @@
+# https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430685
+
+Topic #430685: 3rd Place Solution: 2.5D U-Net
+  Author: knshnb
+  Posted: 2023-08-10 18:50:04.361000
+  Votes: 48  Comments: 14
+
+Thanks to the host and Kaggle staff for holding the competition, and congratulations to the winners! I also appreciate my teammates ( @charmq and @yoichi7yamakawa) a lot.
+
+Overview
+
+Our solution is an ensemble of three pipelines by each member. Here, let me mainly explain my pipeline, which was used as a main solution.
+My solution is based on a simple 2.5D U-Net (described below). I used 512x512 (256x256 for experimental phases) ash color images of the official notebook as input and predicted a mean value of human individual masks. I trained a model for 25 epochs by AdamW with a cosine annealing scheduler with warmup. The loss function I used was (-dice_coefficient + binary_cross_entropy) / 2.
+
+Validation
+
+At the early stage of the competition, I was doing 5-fold cross validation. The trends of out-of-fold scores and validation scores differed a little possibly because of the difference in positive-pixel ratios.
+After the training get computationally heavy, I decided to check only the validation score of the training of the entire training data. The validation score seemed correlated with a public LB with a small noise.
+
+Architecture
+
+Our main approach was so-called 2.5D: making 3D input 2D by stacking frames to a batch dimension and input to 2D backbones.
+I first tried 2.5D U-Net architecture with 3D convolutions after the whole U-Net and got a small gain compared to 2D models (around +0.01 in validation).
+Then I tried to move 3D convolutions to the middle of U-Net's skip connection layers, which have richer information of each downsampled feature. We used frames 2, 3, and 4 (0-indexed). In 3D convolution, we reduced the frame dimension from 3 to 1 by stacking two convolutions with kernel_size=2 and padding=0. With this, we got a big gain (around +0.02 in validation).
+The pseudo-code is as follows (depends heavily on segmentation_models.pytorch library):
+
+ (torch.nn.Sequential):
+     ():
+        ().__init__(
+            torch.nn.Conv3d(in_channels, out_channels, kernel_size, padding=padding, padding_mode=),
+            torch.nn.BatchNorm3d(out_channels),
+            torch.nn.LeakyReLU(),
+        )
+
+ (torch.nn.Module):
+     ():
+        ().__init__()
+        self.n_frames = 
+        self.backbone = smp.Unet(...)
+        conv3ds = [
+            torch.nn.Sequential(
+                Conv3dBlock(ch, ch, (, , ), (, , )), Conv3dBlock(ch, ch, (, , ), (, , ))
+            )
+             ch  self.backbone.encoder.out_channels[:]
+        ]
+        self.conv3ds = torch.nn.ModuleList(conv3ds)
+
+     () -&gt; torch.Tensor:
+        total_batch, ch, H, W = feature.shape
+        feat_3d = feature.reshape(total_batch // self.n_frames, self.n_frames, ch, H, W).transpose(, )
+         conv3d_block(feat_3d).squeeze()
+
+     () -&gt; torch.Tensor:
+        n_batch, in_ch, n_frame, H, W = x.shape
+        x = x.transpose(, ).reshape(n_batch * n_frame, in_ch, H, W)
+
+        self.backbone.check_input_shape(x)
+
+        features = self.backbone.encoder(x)
+        features[:] = [self._to2d(conv3d, feature)  conv3d, feature  (self.conv3ds, features[:])]
+        decoder_output = self.backbone.decoder(*features)
+
+        masks = self.backbone.segmentation_head(decoder_output)
+         masks
+
+
+Data augmentation
+
+While full flip and rotation augmentation did not work because of the pixel-shift issues pointed out by 1st place solution and 9th place solution, applying them by a small ratio enhanced the performance a little. The whole augmentation I used was as follows:
+
+ albumentations  A
+
+augments = [
+    A.HorizontalFlip(p=),
+    A.VerticalFlip(p=),
+    A.RandomRotate90(p=),
+    A.ShiftScaleRotate(, , , p=),
+    A.RandomResizedCrop(, , scale=(, ), ratio=(, ), p=),
+]
+
+
+Pseudo label
+
+We discretized by 0.25 the models' predictions for 2, 3, 5, 6, and 7 frames and used them as pseudo labels. Since there may be a distribution shift from the original training data, we used pseudo labels for pretraining and the original training data for finetuning.
+
+Threshold
+
+Since we used validation data for training some models, optimizing the threshold by validation data was not easy. We adopted a percentile threshold. We confirmed by validation data that the optimal percentile was almost equal to the ratio of positive pixels (=0.18%). Therefore, we identified the percentile in test data of the best threshold of some models in validation data by LB probing using submission time. It was about 0.16% and I hope it is a correct ratio.
+
+Other tips
+
+
+
+Setting grad_checkpointing saved more than half of memory usage.
+
+Increasing the number of decoder channels of U-Net slightly enhanced the performance.
+
+The mean of the batch-wise dice coefficient does not correspond to the global dice coefficient and is also unstable with small batch sizes. To mitigate this, I heuristically added 700000 to the numerator and 1000000 to the denominator.
+
+
+Final submission
+
+Our best single model was 0.706/0.71770/0.71629 (validation/private/public) by maxvit_large. This could still win 3rd place!
+By ensembling 18 2.5D models with different backbones (maxvit_large_tf_512, tf_efficientnet_l2, resnest269e, maxvit_base_tf_512, maxvit_xlarge_tf_512, tf_efficientnetv2_xl) and slightly different setups (use pseudo label, include validation data for training, finetune lr, etc), we achieved 0.72233 of private LB. Also, adding @yoichi7yamakawa and @charmq's models increased the private score to 0.72305, which could have won 2nd place by 0.00001!
+Unfortunately, we couldn't select that submission. On the last day, we added a model trained with full flip and rotation augmentation and test-time augmentation, which didn't change the validation score a lot. This lowered the generalization to private data probably because of the pixel-shift issue (or just a random fluctuation).
+Anyway, being unable to find out the pixel-shift issue was the reason for the loss, and I learned a lot.
+
+What did not work
+
+
+
+Double U-Net architecture (training was unstable…)
+
+Increasing image size by finetune
+
+Adding conv2d layers between conv3d layers
+
+
+Yiemon773 Part
+
+Results of my 2d models' ensemble
+Private LB: 0.709+  w/ pseudo labels
+Private LB: 0.705+  w/o pseudo labels
+
+Preprocess
+
+I changed the normalization process from normalize_range to normalize_mean_std. The mean and std of each band are calculated using the training data.
+
+backbone
+
+resnest269e, maxvit_base, maxvit_large, efficientnetv2_l
+
+Loss function
+
+Weighted mean of following losses: Hard-label Dice, Hard-label BCE, Soft-label Dice, Soft-label BCE
+
+What did not work
+
+
+
+Many augmentations    
+
+
+Mixup
+
+frame shuffle
+
+channel shuffle
+
+…
+
+Using bands other than 11, 13, 14, and 15 
+
+
+charmq Part
+
+Architecture
+
+2.5d models which are mentioned above and 2d models. 2.5d models performed better than 2d models.
+
+backbone
+
+resnest269e, resnetrs420, maxvit_base, maxvit_large, efficientnetv2_l
+
+image size
+
+2.5d models and 2d maxvit models were trained with (512, 512). (1024, 1024) was better than (512, 512) with 2d resnest269 but didn't work with other models.
+
+Loss function
+
+Weighted mean of following losses: Hard-label (pixel mask) Dice, Hard-label (1-(pixel mask))Dice, Soft-label (mean of individual mask) Dice, and Hard-label (min and max of individual mask) Dice
+
+What did not work
+
+
+
+augmentation cropping the area around the positive pixels
+
+UPerNet with convnext and swin transformer (mmsegmentation)
+
+
+Findings
+
+
+
+large architectures such as resnest269e, resnetrs420 and maxvit works well
+
+the training of maxvit with amp is unstable
+
+
+we turned off amp with maxvit
+
+gradient checkpointing contributes to reduce memory 
+
+efficientnet_l2 works well but sometimes output nan
+
+
+we simply replaced the nan output to 0
+
+ensemble boosts score
+
+
+e.g. 0.68 model + 0.68 model -&gt; 0.695
+
+even ensemble of 5 fold model boosts public score
+
+
+Acknowledgment
+
+We would like to appreciate Preferred Networks, Inc for allowing us to use computational resources.
+
+Comments:
+├─ Yousef Rabi (2023-08-10 20:29:37.863000) [+1]
+│  Amazing use of the temporal information. Thank you for sharing and congratulations on 3rd place!
+│  
+│  How do you set gradient checkpointing?
+  ├─ knshnb (2023-08-12 07:39:30.473000) [+4]
+  │  Thanks! If you are using segmentation_models.pytorch, you can set gradient checkpointing for most timm models by the following code:
+  │  
+  │  backbone = smp(...)
+  │  backbone()
+├─ corochann (2023-08-10 20:23:17.353000) [+1]
+│  Thank you for the write up and congrats! @knshnb @charmq @yoichi7yamakawa
+  ├─ knshnb (2023-08-12 07:39:44) [+1]
+  │  Thank you!!!
+├─ knshnb (2023-08-25 09:33:44.223000) [+0]
+│  We published our source code!
+│  
+│  https://github.com/knshnb/kaggle-contrails-3rd-place
+│  https://github.com/yoichi-yamakawa/kaggle-contrail-3rd-place-solution
+│  https://github.com/tyamaguchi17/contrails_c...
+├─ delai50 (2023-08-14 12:28:12.287000) [+0]
+│  Congratulations and thanks a lot for sharing! 😀
+│  What's the advantage of choosing the optimal threshold using the percentile vs optimizing the threshold value directly?
+  ├─ knshnb (2023-08-15 15:18:19.137000) [+1]
+  │  Thanks!
+  │  Choosing the optimal threshold value directly for validation data was fine, but we couldn't do that because we trained several models also on validation data. That's why we identified the b...
+├─ kongweihao (2023-08-11 06:24:19.807000) [+0]
+│  May I ask what tool you use for hyperparameter search? Is it NNI
+  ├─ knshnb (2023-08-12 07:41:35.080000) [+0]
+  │  I didn't use any hyperparameter optimization tool for this competition. I have used Optuna for the previous one: https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320192.
+    ├─ kongweihao (2023-08-13 05:15:21.170000) [+0]
+    │  So how did you determine the backbone and various parameters to use in this competition? It's really impressive
+    ├─ knshnb (2023-08-13 11:10:28.827000) [+0]
+    │  We just manually tried several parameters. There might still be some room for tuning, but we thought it was more worthwhile to spend our time and computational resources on other experiments.
+    ├─ kongweihao (2023-08-29 02:05:35.130000) [+0]
+    │  Thank you. I have been researching automl recently and have found that people rarely use it in the DL field, and the development of related tools is not as complete. I wonder if it is the reason wh...
+    ├─ knshnb (2023-09-01 10:19:36.413000) [+0]
+    │  Of course, it depends on the situation, but I think hyperparameter optimization of DL is too computationally heavy in many cases.
+├─ [deleted] (2023-08-29 01:48:06.093000) [+0]
+│  [deleted]

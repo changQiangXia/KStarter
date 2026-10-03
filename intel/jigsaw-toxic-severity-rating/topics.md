@@ -1,0 +1,122 @@
+# jigsaw-toxic-severity-rating 讨论区（按票数排序，共 120 条）
+
+- [1st place solution with code](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306274) — 212 票 / 65 评论 / 2022-02-08 **write-up?**
+- [If You Don't Understand Transformers: see these 3D charts](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286655) — 204 票 / 29 评论 / 2021-11-10 
+- [Maybe useful resources:pretrained models and datasets](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/289413) — 108 票 / 18 评论 / 2021-11-20 
+- [Metric understanding: perfect score is not 1](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287350) — 102 票 / 34 评论 / 2021-11-13 
+- [0.816 Starter Kit](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286471) — 91 票 / 21 评论 / 2021-11-09 
+- [Why your RoBERTa model isn't working](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287677) — 82 票 / 34 评论 / 2021-11-15 
+- [Best Training Datasets:](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/297515) — 74 票 / 6 评论 / 2021-12-27 
+- [Overfitting like hell](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/303092) — 71 票 / 52 评论 / 2022-01-25 
+- [14th place solution](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306063) — 64 票 / 29 评论 / 2022-02-08 **write-up?**
+- [List of Toxic Words and Phrases](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287173) — 64 票 / 4 评论 / 2021-11-12 
+- [[Tutorial] - The last NLP Augmentations guide you will ever need.](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286336) — 61 票 / 1 评论 / 2021-11-08 
+- [4th - This is Great! - Shared Solution](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306084) — 58 票 / 20 评论 / 2022-02-23 **write-up?**
+- [52nd - Silver Medal - RAPIDS Forest Inference Library!](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306074) — 57 票 / 23 评论 / 2022-02-09 **write-up?**
+- [[Solutions List] - Every single Jigsaw competition solution write up in history!](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286333) — 56 票 / 3 评论 / 2021-11-08 **write-up?**
+- [[Reading list] - Papers on Toxic Comment & Machine Learning](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286329) — 55 票 / 5 评论 / 2021-11-08 
+- [DeBERTa v3 - the new SotA](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/289761) — 54 票 / 18 评论 / 2021-11-22 
+- [[Reading List] - The NLP Reading list you should have! ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286334) — 53 票 / 4 评论 / 2021-11-08 
+- [The Big Problem with this Competition](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306181) — 53 票 / 37 评论 / 2022-02-08 
+- [Best way to select final 2 subs](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/305869) — 52 票 / 40 评论 / 2022-02-07 
+- [[Links List] - Everything you need related to BERT in one place (Papers, Articles, Reading, Code). ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286355) — 48 票 / 1 评论 / 2021-11-08 
+- [Something Interesting, Majority Rule?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287140) — 47 票 / 4 评论 / 2021-11-12 
+- [Memes thread : Jigsaw Rate Severity of Toxic Comments](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/304972) — 46 票 / 18 评论 / 2022-02-03 
+- [Some thoughts on CV vs LB](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/295648) — 44 票 / 17 评论 / 2021-12-17 
+- [Proper way of making folds to avoid leaks](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286830) — 42 票 / 12 评论 / 2021-11-10 
+- [Congratulations to Shivam Bansal, now a 3x GM!](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/297340) — 36 票 / 16 评论 / 2021-12-26 
+- [Becoming Notebooks Master :)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/290295) — 36 票 / 22 评论 / 2021-11-23 
+- [3rd Place Solution - A Detoxify Approach](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306235) — 35 票 / 13 评论 / 2022-02-08 **write-up?**
+- [HateBERT: The Best Performer of the Ruddit Dataset](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288788) — 34 票 / 5 评论 / 2021-11-18 
+- [Best single model scores (Val / CV and LB)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/291407) — 33 票 / 9 评论 / 2021-11-29 
+- [this dataset maybe useful](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/293328) — 33 票 / 8 评论 / 2021-12-05 
+- [BERT vs. TF-IDF+Ridge ...?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/300233) — 33 票 / 18 评论 / 2022-01-11 
+- [7th Place Solution](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306366) — 32 票 / 8 评论 / 2022-02-13 **write-up?**
+- [Carefull, LB is only 5%](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287033) — 32 票 / 15 评论 / 2021-11-11 
+- [Dataset release: Measuring Hate Speech](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/302060) — 32 票 / 14 评论 / 2022-01-20 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286343) — 29 票 / 5 评论 / 2021-11-08 
+- [Good luck!](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/305805) — 29 票 / 12 评论 / 2022-02-07 
+- [☣️ Pretrained weights from the huggingface hub](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288114) — 28 票 / 3 评论 / 2021-11-16 
+- [🏆🥇 Solutions Compilation 🏆🥇](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306092) — 27 票 / 10 评论 / 2022-02-08 **write-up?**
+- [I am Having a Crisis of Faith (in Deep Learning)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/295624) — 27 票 / 17 评论 / 2021-12-17 
+- [Congratulations to KGM Guanshao Xu-- Winning with 2 subs! ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306044) — 27 票 / 15 评论 / 2022-02-08 **write-up?**
+- [Some useful resources for NLP](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287513) — 26 票 / 2 评论 / 2021-11-14 
+- [ Now I have become a notebook master🙌🎉](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/289428) — 26 票 / 56 评论 / 2021-11-20 
+- [Why Scaling Worked - Public LB is Equal to Flipping Coin 46 Times!](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306212) — 26 票 / 4 评论 / 2022-02-08 
+- [OffensEval](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/291514) — 26 票 / 2 评论 / 2021-11-29 
+- [Make Bert great again](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/296703) — 26 票 / 49 评论 / 2021-12-23 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286341) — 25 票 / 163 评论 / 2021-11-08 
+- [Paired dataset](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/294936) — 24 票 / 10 评论 / 2021-12-13 
+- [[Simplest Gold medal ?]11th solution (Ridge + Detoxify + LightGBM)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306228) — 24 票 / 2 评论 / 2022-02-10 **write-up?**
+- [Broken leaderboard](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/302446) — 23 票 / 11 评论 / 2022-01-22 
+- [Real Toxic Competition](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306050) — 23 票 / 0 评论 / 2022-02-08 
+- [Everything is Toxic. Even ignoring can be impregnated by toxicity.](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286589) — 23 票 / 0 评论 / 2021-11-09 
+- [Best single model score on validation_data.csv](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/302813) — 23 票 / 38 评论 / 2022-01-24 
+- [Tips and tricks for training better Neural Networks](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287985) — 20 票 / 1 评论 / 2021-11-16 
+- [🔥 💥Some brilliant papers to refer for detecting the Severity of Toxicity in Comments ⚡🔥](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/294033) — 19 票 / 2 评论 / 2021-12-08 
+- [Data Leaks in Old Competition](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/290067) — 19 票 / 5 评论 / 2021-11-23 
+- [Jigsaw Past Competitions Tip](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/289485) — 19 票 / 2 评论 / 2021-11-20 
+- [From binary scores to rank - A fascinating journey](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286968) — 19 票 / 3 评论 / 2021-11-11 
+- [Delta TF-IDF](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/302886) — 18 票 / 9 评论 / 2022-01-24 
+- [Dataset for ranking loss 🤔](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288757) — 18 票 / 7 评论 / 2021-11-18 
+- [Text Augmentation Ideas from the Past Competitions](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287644) — 18 票 / 1 评论 / 2021-11-15 
+- [The role of "validation_data.csv"](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287722) — 18 票 / 4 评论 / 2021-11-15 
+- [Can we trust Ridge?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/301782) — 17 票 / 15 评论 / 2022-01-19 
+- [Classic CV vs LB Discussion](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287147) — 17 票 / 17 评论 / 2021-11-12 
+- [Ruddit - A supporting Dataset](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286483) — 17 票 / 7 评论 / 2021-11-09 
+- [Toxic Solution and Review (2nd Place)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/308938) — 17 票 / 7 评论 / 2022-02-21 **write-up?**
+- [ NLP augmentations](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/290636) — 16 票 / 2 评论 / 2021-11-25 
+- [LB issues thread](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/303976) — 16 票 / 16 评论 / 2022-01-30 
+- [[Tutorial] Steps to fine-tune GPT-3 for any NLP dataset and applications](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/300059) — 16 票 / 0 评论 / 2022-01-10 
+- [Two interesting new developments in NLP](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/295667) — 16 票 / 3 评论 / 2021-12-17 
+- [Competition launch email received 9 days after launch](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288491) — 16 票 / 8 评论 / 2021-11-17 
+- [Bullshit. Comp near to its end. Sorry It's Kaggle Jigsaw Toxic Comments. 7 days more.](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/304343) — 16 票 / 11 评论 / 2022-01-31 
+- [5th place solution](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306390) — 16 票 / 4 评论 / 2022-02-15 **write-up?**
+- [6th Place solution](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306926) — 16 票 / 2 评论 / 2022-02-20 **write-up?**
+- [41st solution](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306171) — 16 票 / 8 评论 / 2022-02-08 **write-up?**
+- [[9th solution] Ensemble of 5 external dataset transformers](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306187) — 16 票 / 1 评论 / 2022-02-08 **write-up?**
+- [Learning To Rank](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306160) — 16 票 / 3 评论 / 2023-01-27 
+- [My first silver? ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306032) — 16 票 / 7 评论 / 2022-02-08 
+- [Compilation of top solutions (4 years back)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286322) — 16 票 / 2 评论 / 2021-11-08 **write-up?**
+- [What is the point of having LB on 5% test data and 95% on final result?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/297642) — 15 票 / 13 评论 / 2021-12-28 
+- [Combined Jigsaw Comments Corpus Data](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286403) — 15 票 / 1 评论 / 2021-11-09 
+- [A modified training data from "jigsaw-toxic-comment-classification-challenge".](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/294255) — 15 票 / 10 评论 / 2021-12-09 
+- [☣️ Previous competitions datasets + Incredibly Simple Naive Bayes using one of them [LB=0.768]](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286856) — 15 票 / 1 评论 / 2021-11-11 
+- [Compilation of top solutions (2 years back)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286327) — 14 票 / 0 评论 / 2021-11-08 **write-up?**
+- [Become a 10x Deep Learning Engineer: Working at Scale 📦](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287685) — 14 票 / 2 评论 / 2021-11-15 
+- [Reranking with Late Interaction & More](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306205) — 14 票 / 3 评论 / 2023-08-01 
+- [A New Approach](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/296349) — 14 票 / 0 评论 / 2021-12-21 
+- [12th Solution – Trust Your CV](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306325) — 14 票 / 1 评论 / 2022-02-09 **write-up?**
+- [Pre-trained language family](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/294598) — 14 票 / 3 评论 / 2021-12-11 
+- [Linear SVC for ranking from comparisons](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306216) — 14 票 / 2 评论 / 2022-02-08 
+- [Model Cascades ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/290486) — 14 票 / 9 评论 / 2021-11-24 
+- [Jigsaw All Competition EDA at One Place](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/290355) — 14 票 / 5 评论 / 2021-11-24 
+- [Comparison Models and the Bradley-Terry Loss](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286358) — 14 票 / 1 评论 / 2021-11-08 
+- [Another approach...](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286837) — 14 票 / 2 评论 / 2021-11-11 
+- [CV Strategy](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286852) — 14 票 / 5 评论 / 2021-11-11 
+- [RoBERTa isn't the only one](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288239) — 14 票 / 0 评论 / 2021-11-17 
+- [NLP Renaissance? ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286352) — 13 票 / 2 评论 / 2021-11-08 
+- [Are you feeling lucky? ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/304552) — 13 票 / 3 评论 / 2022-02-01 
+- [Private score 0.81148. What could've been the 5th place solution (Single model)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306763) — 13 票 / 2 评论 / 2022-02-11 **write-up?**
+- [Ok Boomer, Time to Start Using TPUs](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286833) — 13 票 / 9 评论 / 2021-11-10 
+- [Idea: Bi-encoder with tanh (pseudo-retrieval approach)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286390) — 13 票 / 11 评论 / 2021-11-09 
+- [Overviewの日本語訳（Japanese translation）](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/294537) — 13 票 / 0 评论 / 2021-12-11 
+- [My First Silver Medal: Solution Approach (Simple & Single model)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306400) — 13 票 / 0 评论 / 2022-02-10 **write-up?**
+- [Tweet Offensive Language Detection](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288765) — 13 票 / 1 评论 / 2021-11-18 
+- [Pair-wise comparisons - A simple intuitive explanation](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286444) — 12 票 / 3 评论 / 2021-11-09 
+- [How do people judge toxicity?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/289901) — 12 票 / 10 评论 / 2021-11-22 
+- [Can Kaggle allocate more GPU hours than TPU hours?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286807) — 12 票 / 8 评论 / 2021-11-10 
+- [What does 5% of test data mean?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/295646) — 12 票 / 2 评论 / 2021-12-17 
+- [Fast spellchecker?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/303027) — 12 票 / 13 评论 / 2022-01-25 
+- [What distribution of weights is best?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/297030) — 12 票 / 7 评论 / 2021-12-24 
+- [Let's inject Steroids into the AdamW Optimizer](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/288996) — 12 票 / 0 评论 / 2021-11-18 
+- [Trust your CV?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306049) — 12 票 / 5 评论 / 2022-02-08 
+- [Watch out folks they did not give any training data for this competition](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/286397) — 12 票 / 4 评论 / 2021-11-09 
+- [Best possible score is 0.8239 ?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306203) — 12 票 / 3 评论 / 2022-02-08 
+- [Improving Bi-Encoders for Pairwise Sentence Scoring Tasks ](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/296358) — 12 票 / 1 评论 / 2021-12-21 
+- [Does Context Really Matter in Toxicity Detection?](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/289422) — 11 票 / 2 评论 / 2021-11-20 
+- [On Loss Functions (Margin Ranking, Aux Losses and more)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287980) — 11 票 / 1 评论 / 2021-11-16 
+- [Evaluation Method](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/290889) — 11 票 / 2 评论 / 2021-11-26 
+- [My First Blog - Rate Severity of Toxic Comments using RoBERTa in PyTorch Lightning](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/294088) — 11 票 / 2 评论 / 2021-12-08 
+- [Progressive Training (used in Chai 1st place)](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/287953) — 11 票 / 0 评论 / 2021-11-16 **write-up?**
+- [What could have been thread](https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/305965) — 11 票 / 26 评论 / 2022-02-07 

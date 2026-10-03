@@ -1,0 +1,56 @@
+<p>Great Thanks to kaggle and Godaddy to hold this competition. Congratulations to all the winners. And many thanks go to people who created some mazing public notebooks.<br>
+Here is my Solution:</p>
+<h1>Validation</h1>
+<ul>
+<li>Last 12 month data for validation. </li>
+<li>To evaluate any solution is validate, I additionally compute the number of improve months of the 12 valid month instead of simple average cv improve.Because some month have abnormal high/low raising rate:<code>mbd(curr_month+1)/mbd(curr_month)-1</code>,average cv may lead to overfit</li>
+</ul>
+<h1>Outlier smooth</h1>
+<ul>
+<li>Mean smoothing for 2022-06-&gt;2022-08 to handle the general sharp rise-fall phenomenon 
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F425081%2F97e293203e0ddc5a997612331e424658%2F2023-06-17%2017.54.47.png?generation=1686995741884356&amp;alt=media" alt=""><ul>
+<li>There are also other data points have the phenomenon like "origin-&gt;Sharp rise-&gt; Sharp fall-&gt;origin".But I haven't found the best way to deal with them yet.</li></ul></li>
+<li>Basic constant smoothing by fraction from giba</li>
+<li>Stable blacklist for those nearly unchanged cfips<ul>
+<li>[28055, 13101, 13265, 31009, 31115, 31149, 38047, 38087, 48033, 48301]</li></ul></li>
+</ul>
+<h1>features：</h1>
+<ul>
+<li>Action diff, Target shift, Target diff</li>
+<li>Target diff window <ul>
+<li>Sum</li>
+<li>Std</li></ul></li>
+<li>Target window<ul>
+<li>Sum</li>
+<li>Quantile 0.2</li>
+<li>Quantile 0.8</li>
+<li>Lowwer bound：<ul>
+<li>only have value when sign(Quantile 0.2)=sign(Quantile 0.8)，0 for other situations</li>
+<li>Quantile 0.8 for negative value</li>
+<li>Quantile 0.2 for positive value</li></ul></li></ul></li>
+<li>State cluster</li>
+</ul>
+<h1>Enhance modeling framework</h1>
+<p>construct the Enhance model frame, input 1)feature and 2) n_cross: number of future month to predict, output the raising rate of mbd in future n_cross month. In this way we can directly predict the public/private mbd by changing n_cross from 1-5<br>
+Detail structure:</p>
+<ul>
+<li>Enhance modeling frame features=features+n_corss</li>
+<li>n_corss=num of month to predict future mbd</li>
+<li>output target：[mbd(curr_month+n_corss)/mbd(curr_month)]**(1/n_corss)-1</li>
+<li>Model：Xgboost </li>
+</ul>
+<h1>Target_flatten：Train with flattened target, and do reverse transform in prediction</h1>
+<ul>
+<li>The distribution of target variables changes with the change of active base. The lower the active base is, the higher the absolute value of the target is.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F425081%2Fdac497d7f6b9266fcd2e81242c29cf3c%2FWechatIMG1604.jpeg?generation=1686995149378846&amp;alt=media" alt=""></li>
+<li>Do a simulate to transform all active base into same target distribution. We assume the distribution will be flatttened after the transformation, in this way we can construct the transform formula by testing:<ul>
+<li><code>coef=(1/(0.007*(active_series/10+105))+1)</code></li>
+<li><code>target_flatten=target_series/coef</code></li></ul></li>
+<li>Train with flattened target, and do reverse transform in prediction</li>
+</ul>
+<h1>Post process</h1>
+<ul>
+<li>I noticed that the trend of public leaderboard month is abnormal higher than normal months.This phenomenon also happends on other month like 2022-07, In my opnion, such whole month trend is unpredictable, our model should not overfit it.</li>
+<li>Considering that the mbd for the public month is the basis for the subsequent private month, I post-processed the forecast results like:<br>
+<code>prediction=prediction*(1+0.001)</code></li>
+</ul>

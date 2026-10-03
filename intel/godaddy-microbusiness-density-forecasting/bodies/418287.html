@@ -1,0 +1,54 @@
+<p>Thank you Kaggle and GoDaddy for an exciting forecasting competition!</p>
+<h1>Predict Multipliers with TensorFlow GRU</h1>
+<p>Our forecasting models need to predict 3135 county microbusiness density predictions per future month. The public LB is one future month and the private LB is three future months (with 2 month gap between train and test).</p>
+<p>From Kaggle's M5 competition <a href="https://www.kaggle.com/competitions/m5-forecasting-accuracy/discussion/163621" target="_blank">here</a> we learned that predicting multipliers (between the test time period and train time period) was most important. For example in M5, we could take an average public notebook and multiply all predictions by <code>0.95</code> and win Gold medal !! Similarly in Kaggle's GoDaddy competition, a simple last value baseline multiplied by the correct January/December multiplier of <code>1.0045</code> as shown in Vitaly's notebook <a href="https://www.kaggle.com/code/vitalykudelya/21-lines-of-code" target="_blank">here</a> achieved Gold medal public LB for many months!</p>
+<p>To predict multipliers, we convert train data into multipliers and then train a TensorFlow GRU. This simple model achieves 15th place Gold. Then if we post process the multipliers based on ratios learned from LB probing, we boost our solution to 3rd place Gold !!</p>
+<h1>Original Train Data</h1>
+<p>Kaggle gave us 41 historical months of data for each of 3135 USA counties. </p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jun-2023/data1.png" alt=""></p>
+<h1>Step 1 - Adjust Train Data</h1>
+<p>The definition of microbusiness density is <code>micro businesses per 100 people over age 18</code>. The value of microbusiness density changes when county population changes. So the first step is to convert all microbusiness density to use the same 2021 census. We use the formula</p>
+<pre><code> = microbusiness_density * (population / population_year_2021)
+</code></pre>
+<h1>Step 2 - Create 56,000 Time Series!</h1>
+<p>For each county, we create 18 time series. We use 13 consecutive months to train our GRU and predict the next 5 months. (Pictured below is only 3 time series per county for illustration purposes). Afterward, we have 56,000 time series to train with!</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jun-2023/data2.png" alt=""></p>
+<h1>Step 3 - Use Only Top 90% Largest Counties</h1>
+<p>We notice that the smallest 10% counties have nearly the same microbusiness density from month to month, so we only train our GRU using the largest 90% counties. During inference, we will use the last known value as prediction for small counties.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Mar-2023/growth.png" alt=""></p>
+<h1>Step 4 - Convert to Multipliers</h1>
+<p>Each county has 13 months of train and 5 months of valid. We will convert the raw micro business data into ratios by replacing each value with the ratio of current month divided by previous month. Afterward we will have 12 months of train ratios and 5 months of valid ratios</p>
+<pre><code>
+ k in range():
+    [:,k+] = old_data[:,k+] / old_data[:,k]
+</code></pre>
+<h1>Step 5 - Train GRU with GroupKFold</h1>
+<p>When creating KFold we need to use GroupKFold and keep all time series for each county (from the possible 18 time series per each county) within the same fold. Otherwise CV score will be inaccurate and we cannot optimize our models hyperparameters correctly. Below is our TensorFlow GRU model which takes an input of 12 ratios and predicts 5 ratios:</p>
+<pre><code>def build_model():
+
+    inp = tf.keras.Input(shape=(12,1)) # INPUT SHAPE IS 12
+    x = tf.keras.layers.GRU(=8, =)(inp)
+    x = tf.keras.layers.GRU(=8, =)(x)
+    x = tf.keras.layers.GRU(=8, =)(x)
+    x = tf.keras.layers.Dense(5,=)(x) # OUTPUT SHAPE IS 5
+    model = tf.keras.Model(=inp, =x)
+
+    opt = tf.keras.optimizers.Adam(=1e-4)
+    loss = tf.keras.losses.MeanSquaredError()
+    model.compile(=loss, optimizer = opt)
+
+    return model
+</code></pre>
+<h1>Step 6 - Infer and Post Process</h1>
+<p>We predict each county individually. To make predictions for January 2023. We begin with the last known value (of the county we are predicting) from December 2022 and multiply by the first ratio predicted by our model. To predict Feb 2023, we take our Jan 2023 prediction and multiply by the second ratio predicted by our model. To predict Mar 2023, we multiply Feb 2023 by third ratio. To predict Apr 2023, we multiply by fourth ratio. And finally to predict May 2023, we multiply by fifth ratio.</p>
+<p>We can improve our predictions by modifying the first ratio (which is the ratio of January 2023 divided by December 2022) by information from probing the public LB.  Probing informs us that the best January/December average ratio for the largest 90% counties is <code>1.0045</code>. Similarly, we can improve our predictions for small counties by probing the public LB to find ratios for different sized small counties.</p>
+<p>Post process boosts our GRU solution from 12th place Gold to 3rd place Gold !!</p>
+<h1>GRU Solution Code Published</h1>
+<p>Full solution code with preprocess, train, and infer is published <a href="https://www.kaggle.com/code/cdeotte/gru-model-3rd-place-gold" target="_blank">here</a>. </p>
+<h1>More Solution Models</h1>
+<p>My final two submissions were</p>
+<ul>
+<li>GRU with PP - 3rd place</li>
+<li>Linear Model with PP - 10th place</li>
+</ul>
+<p>More information about my linear model is <a href="https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395098" target="_blank">here</a>. Enjoy!</p>

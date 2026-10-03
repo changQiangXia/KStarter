@@ -1,0 +1,58 @@
+<p>Thanks to the organizers for hosting competition and congrats to all the winners.</p>
+<h1>The key finding</h1>
+<p>Many people have likely noticed that flip/rot90 augmentation doesn't work well on this dataset.</p>
+<p>My guess is that during the conversion of polygon annotations to binary masks, the leftmost point is not included while the rightmost point is, causing a misalignment between the image and the mask.</p>
+<ul>
+<li>original<ul>
+<li>img:    [0, 128,   128,    3,   4, 5, 6]</li>
+<li>mask: [0, 255a, 255b, 255pad, 0, 0, 0]</li></ul></li>
+<li>normal flip that does not work<ul>
+<li>img: [6, 5, 4, 3,      128,  128,    0]</li>
+<li>mask: [0, 0, 0, 255pad, 255b, 255a, 0]</li></ul></li>
+<li>consistent flip should be<ul>
+<li>img: [6, 5, 4, 3, 128,  128,    0]</li>
+<li>mask: [0, 0, 0, 0, 255b, 255a, 255pad]</li></ul></li>
+</ul>
+<p>I tried two solutions to address this issue.</p>
+<h3>solution 1, train with misaligned (img ,mask)</h3>
+<ul>
+<li>training<ul>
+<li>img: normal flip</li>
+<li>mask: consistent flip</li></ul></li>
+<li>inference<ul>
+<li>flip tta: normal img flip -&gt; predict -&gt; consistent mask flip</li></ul></li>
+</ul>
+<p>training/test time augmentation is a bit tricky in this case.</p>
+<h3>solution 2, train with aligned (img, mask)</h3>
+<ul>
+<li>training<ul>
+<li>shift img by +0.5 pixel</li></ul></li>
+<li>inference<ul>
+<li>shift img by +0.5 pixel</li></ul></li>
+</ul>
+<p>training/test time augmentation is as normal in this case.</p>
+<p>Both solutions worked. For simplicity, I chose solution 2. I use the following code to apply resize512&amp;shift1</p>
+<pre><code>img_affine_matrix = np.array([[2.0, 0.0, 1.5], [0.0, 2.0, 1.5]], =np.float64)
+img = cv2.warpAffine(
+    img,
+    img_affine_matrix,
+    (512, 512),
+    =cv2.INTER_LINEAR,
+    =cv2.BORDER_CONSTANT,
+    =0,
+)
+</code></pre>
+<p>Note that you need to calibrate M for warpAffine. So it's 1.5 in the final affine matrix.</p>
+<pre><code> calibrate(M):
+    
+    [:, ] += M[:, ] * . + M[:, ] * . - .
+     M
+</code></pre>
+<h1>Models</h1>
+<p>My submission notebook is pubic <a href="https://www.kaggle.com/code/tascj0/contrail-submit?scriptVersionId=139432132" target="_blank">here</a>.</p>
+<p>I joined the competition quite late and only briefly explored other bands and 2.5D before giving up on them. In the end, I only used false_color images and UNet models.</p>
+<ul>
+<li>Strong backbone were very helpful.</li>
+<li>train with all individual annotations is helpful.</li>
+</ul>
+<p>I had some success with pseudo-labeling on a small model, but unfortunately, I didn't have time to apply it on larger models.</p>

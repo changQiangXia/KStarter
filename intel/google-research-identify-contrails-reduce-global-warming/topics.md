@@ -1,0 +1,82 @@
+# google-research-identify-contrails-reduce-global-warming 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430618) — 164 票 / 53 评论 / 2023-08-20 **write-up?**
+- [some successful/fail experiment](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/414344) — 112 票 / 26 评论 / 2023-06-01 
+- [2nd place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430491) — 111 票 / 73 评论 / 2023-08-20 **write-up?**
+- [One month to go! Summary of everything that happened.](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420629) — 110 票 / 2 评论 / 2023-07-01 
+- [9th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430479) — 76 票 / 37 评论 / 2023-08-15 **write-up?**
+- [Main Findings after the first two Competition Weeks](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/413068) — 55 票 / 12 评论 / 2023-05-26 
+- [3rd Place Solution: 2.5D U-Net](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430685) — 48 票 / 14 评论 / 2023-08-18 **write-up?**
+- [Single Model CV-LB Thread](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/413153) — 47 票 / 86 评论 / 2023-05-27 
+- [Load numpy arrays 1.7x faster](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/414549) — 42 票 / 14 评论 / 2023-06-02 
+- [5th place solution (best single model, private LB 0.71443)](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430549) — 41 票 / 15 评论 / 2023-08-15 **write-up?**
+- [Notes about what worked and didnt](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430471) — 41 票 / 15 评论 / 2023-08-09 
+- [Some ideas for competitions beginner](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409437) — 41 票 / 12 评论 / 2023-05-11 
+- [U-Net is missing something](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/413767) — 40 票 / 7 评论 / 2023-05-30 
+- [meme time ? ](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/429859) — 39 票 / 27 评论 / 2023-08-07 
+- [6th place solution (CV: 0.7069 / Public LB: 0.706 / Private LB: 0.713) ](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430581) — 39 票 / 13 评论 / 2023-08-11 **write-up?**
+- [Many Many Duplicate Images [v2]. Contradicting Dup Labels in Training.](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420644) — 38 票 / 17 评论 / 2023-07-01 
+- [I found a tornado! ](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/425586) — 36 票 / 4 评论 / 2023-07-19 
+- [8th place solution (OneFormer works)](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430543) — 32 票 / 2 评论 / 2023-08-10 **write-up?**
+- [Unet Baseline using PyTorch - [LB - 0.628]](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/415176) — 31 票 / 3 评论 / 2023-06-05 
+- [How misalignment of label occures?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430749) — 31 票 / 0 评论 / 2023-08-11 
+- [25th Place Solution for the Google Research Identify Contrails to Reduce Global Warming Competition](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430794) — 29 票 / 10 评论 / 2023-08-17 **write-up?**
+- [7th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430691) — 28 票 / 3 评论 / 2023-08-10 **write-up?**
+- [14th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430904) — 28 票 / 8 评论 / 2023-08-11 **write-up?**
+- [Are 3D models worth?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/419816) — 27 票 / 18 评论 / 2023-06-27 
+- [I visualized every training image so you don't have to.](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/415603) — 27 票 / 7 评论 / 2023-06-07 
+- [Architectural Exploration Based on Top Solutions](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/432871) — 27 票 / 7 评论 / 2023-08-19 **write-up?**
+- [Pytorch Lightning baseline](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/416746) — 27 票 / 14 评论 / 2023-06-12 
+- [Post-Processing](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/416436) — 25 票 / 11 评论 / 2023-06-11 
+- [18th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430540) — 25 票 / 8 评论 / 2023-08-10 **write-up?**
+- [Segformer models usage question](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/413280) — 24 票 / 9 评论 / 2023-05-27 
+- [calling out sus accounts](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/427420) — 24 票 / 17 评论 / 2023-07-27 
+- [Last helpful Competition Winner Solution 🏆](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409434) — 23 票 / 6 评论 / 2023-05-11 **write-up?**
+- [2nd Place Code](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/431875) — 23 票 / 0 评论 / 2023-08-15 **write-up?**
+- [26th Place Solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430684) — 23 票 / 8 评论 / 2023-08-10 **write-up?**
+- [Data Leakage: Duplicate Images and Masks in Training and Validation Sets](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/419994) — 22 票 / 4 评论 / 2023-06-28 
+- [Overlaid the metadata on the map](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/427068) — 22 票 / 9 评论 / 2023-07-26 
+- [I tried Unet with 15 encoders so you don't have to!](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/428817) — 22 票 / 6 评论 / 2023-08-03 
+- [28th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430476) — 22 票 / 10 评论 / 2023-08-10 **write-up?**
+- [15th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430483) — 22 票 / 8 评论 / 2023-08-10 **write-up?**
+- [what do you want to know?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430482) — 20 票 / 7 评论 / 2023-08-10 
+- [31th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430556) — 20 票 / 0 评论 / 2023-08-10 **write-up?**
+- [92nd Place Solution for the Google Research - Identify Contrails to Reduce Global Warming Competition](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/432502) — 19 票 / 1 评论 / 2023-08-17 **write-up?**
+- [For Those Who Consider Big Ensembles (Not)](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/414700) — 18 票 / 11 评论 / 2023-06-02 
+- [Solutions from another sky segmentation competiton:](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/416300) — 18 票 / 0 评论 / 2023-06-10 **write-up?**
+- [4th place solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/432998) — 18 票 / 11 评论 / 2023-08-20 **write-up?**
+- [Be careful when teaming up.](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/427353) — 18 票 / 4 评论 / 2023-07-27 
+- [helpful github & domain resources on Contrails science](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409442) — 18 票 / 2 评论 / 2023-05-11 
+- [Loss Fuction: Dice Loss or WCE?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/412554) — 17 票 / 12 评论 / 2023-05-24 
+- [Data description vs Preprint](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/417497) — 17 票 / 2 评论 / 2023-06-16 
+- [11th Place Solution Write-up](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/432690) — 16 票 / 2 评论 / 2023-08-18 **write-up?**
+- [My teammate's account is deleted. What should I do? 😟](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420740) — 15 票 / 22 评论 / 2023-07-02 
+- [Onboarding Materials ](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409454) — 15 票 / 2 评论 / 2023-05-11 
+- [Unet Pytorch Baseline (LB 0.608)](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/415327) — 15 票 / 1 评论 / 2023-06-06 
+- [Trust ur CV even though LB drops](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420135) — 15 票 / 0 评论 / 2023-06-29 
+- [Google Press Release related to Contrails](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430316) — 14 票 / 4 评论 / 2023-08-09 
+- [What kind of TTA works for this competition?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/425834) — 14 票 / 14 评论 / 2023-07-20 
+- [Augmentation Analysis](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420180) — 14 票 / 11 评论 / 2023-06-29 
+- [LB0.658，This is my parameter setting and I would like to discuss it with everyone. I have submitted it dozens of times without any progress, and I am not sure if there is a better way. Any suggestions are helpful. Thank you](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/428314) — 14 票 / 13 评论 / 2023-08-01 
+- [Preprocessed Data](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/411713) — 13 票 / 2 评论 / 2023-05-20 
+- [Exploring file size patterns of the data](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409624) — 13 票 / 1 评论 / 2023-05-11 
+- [🎉🎉 Congrats to new Competitions GM !!](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430497) — 13 票 / 3 评论 / 2023-08-10 
+- [Ash Color dataset with time frames 3, 4, [5], 6 and mask](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/426506) — 12 票 / 5 评论 / 2023-07-23 
+- [Means and Standard Deviation for Normalization](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409925) — 12 票 / 1 评论 / 2023-05-13 
+- [58th Place Solution (My first write-up!)](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430473) — 12 票 / 0 评论 / 2023-08-10 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409558) — 11 票 / 9 评论 / 2023-05-11 
+- [Increasing image size doesn't work for me on LB](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420079) — 11 票 / 3 评论 / 2023-06-29 
+- [[PB 0.685] Single Model Single Fold Imagesize 384](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430481) — 11 票 / 0 评论 / 2023-08-10 
+- [Did the labelers know about the test set ?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/415764) — 11 票 / 3 评论 / 2023-06-08 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409559) — 10 票 / 69 评论 / 2023-05-11 
+- [Is test data truly private?](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/419512) — 10 票 / 2 评论 / 2023-06-26 
+- [Adjutant references- domain background](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/409458) — 10 票 / 3 评论 / 2023-05-11 
+- [13th Place Solution](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/432254) — 10 票 / 0 评论 / 2023-08-16 **write-up?**
+- [Be Careful If You Use TTA for Segmentation Task](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/428163) — 9 票 / 5 评论 / 2023-07-31 
+- [New loss function to potentially boost the prediction](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/427540) — 9 票 / 2 评论 / 2023-07-28 
+- [📌 A byte sized primer on choosing the right segmentation model 🖼️](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/425901) — 9 票 / 1 评论 / 2023-07-20 
+- [30th Place Solution for the Google Research - Identify Contrails to Reduce Global Warming Competition](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/432282) — 8 票 / 0 评论 / 2023-08-17 **write-up?**
+- ["Could not check whether submission is allowed." [FIXED]](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/416688) — 8 票 / 4 评论 / 2023-06-12 
+- [Dual Thresholds are Slightly Better than Single Threshold](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/416630) — 8 票 / 4 评论 / 2023-06-12 
+- [Training at Paperspace Gradient (NaN loss values) [Solved]](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/420980) — 8 票 / 24 评论 / 2023-07-03 
+- [There will be no Discord Channel for this Competition](https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/429939) — 5 票 / 0 评论 / 2023-08-07 

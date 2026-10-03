@@ -1,0 +1,49 @@
+<p>Congrats to all the winners, and thanks to organizers and all participants. This is a joint writeup with my wonderful teammate <a href="https://www.kaggle.com/yamash73" target="_blank">@yamash73</a> and <a href="https://www.kaggle.com/ksork6s4" target="_blank">@ksork6s4</a> (thanks to awesome team work).</p>
+<p><strong>Things that worked</strong></p>
+<ul>
+<li>Selection of dataset</li>
+<li>BatchNorm1d in head</li>
+<li>Ensemble of OpenCLIP backbones</li>
+</ul>
+<p><strong>Dataset</strong><br>
+We have noticed that Public LB scores vary greatly depending on the combination of datasets. Therefore, we are exploring the best combination of data sets in the early stages of the competition. Comparison of experimental results shows that "Inshop", "Instre" and "Consumer-to-shop" are effective. Based on these results, we have decided to use "Products10k", "Landmark", "Instre" and "Consumer-to-shop" as our basic dataset combination . Here "Inshop" and "Consumer-to-shop" are subsets of deepfashion, so only "Consumer-to-shop" is selected as our combination of datasets.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4241674%2Fe153943075ee571c7b42182c0a3a41eb%2F2022-10-11%20214238.png?generation=1665492226981590&amp;alt=media" alt=""></p>
+<p>NOTE:</p>
+<ul>
+<li>The results of separate experiments confirm that Products10k and Landmark contribute to the LB scores</li>
+<li>For Inshop, Stanford products, and Consumer2shop, classes with a sample size more than 5 are used</li>
+</ul>
+<p>Our final combination of datasets is as follows:</p>
+<ul>
+<li>Products10k </li>
+<li>Landmark</li>
+<li>Instre</li>
+<li>Consumer-to-shop</li>
+<li>Food101 (added in the last week)</li>
+</ul>
+<p><strong>Model</strong><br>
+The backbone of our final model is an ensemble of 3 OpenCLIP image encoders. OpenCLIP backbones contributed to the huge improvement of the LB score. We refered to the head/loss design from the past competitions (mainly Google Landmark Retrieval 2021).</p>
+<ul>
+<li>Backbone: OpenCLIP ViT-B + OpenCLIP ViT-L + OpenCLIP ViT-H</li>
+<li>Head: Linear + BatchNorm1d + PReLU + subcenter ArcFace(k=3)</li>
+<li>Loss: ArcFace Loss with dynamic margin (s=30.0, mx=0.65, my=0.15) + focal loss</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4241674%2Fe9e01248f4d6655c00d75348c54aeda5%2F1.png?generation=1665490798502330&amp;alt=media" alt=""></p>
+<p><strong>Training</strong><br>
+Only head is trained like other teams. At first, we set the total epochs to 20, but after experiments showed that we could achieve the same level of performance with 5 epochs, we were able to increase the number of trials.</p>
+<ul>
+<li>Total epochs: 5</li>
+<li>Batch size: 512</li>
+<li>Optimizer: Adam (lr=1e-2, weight decay=1e-4)</li>
+<li>Scheduler: CosineAnnealingLR (eta_min=1e-3, T_max=5)</li>
+<li>Augmentation: RandomResizedCrop, HorizontalFlip, ImageCompression, HueSaturationValue, RandomBrightnessContrast, Blur, ShiftScaleRotate, CoarseDropout</li>
+</ul>
+<p><strong>Things that didn't work</strong></p>
+<ul>
+<li>Dimensional reduction of embeddings using PCA</li>
+<li>Training OpenCLIP ViT without freezing backbones</li>
+<li>Cropping with saliency models (preprocess)</li>
+<li>TTA (horizontal flip)</li>
+<li>AutoEncoder</li>
+<li>Other architectures of head</li>
+</ul>

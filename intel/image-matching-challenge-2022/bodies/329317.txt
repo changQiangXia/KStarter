@@ -1,0 +1,153 @@
+# https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329317
+
+Topic #329317: 2nd Place Solution, ensemble of old and new methods
+  Author: hkchkc
+  Posted: 2022-06-06 04:46:29.112000
+  Votes: 45  Comments: 15
+
+Thanks to all the teams and especially the organizers' excellent work for hosting this competition, which helps to push the performance of image matching to the limit. It's my first kaggle competition but not the first time to participate in IMC, and I find it's always exciting to learn from other participants' brilliant solutions :)
+
+Keypoints of my solution
+
+
+
+A novel single model baseline achieving 0.838/0.833 in private/public LB
+
+Ensemeble with other strong matchers further boosts baseline greatly
+
+Normalized postional encoding for transformer-based matcher
+
+No TTA/multi-resolution or post/pre processing is applied. 
+
+
+Start with a good baseline
+
+My very initial motivation to participate in this competition is to benchmark a matching model we developed recently. Our model shares similar paradigm with LoFTR, using a transformer-style network to generate matches from raw image pairs without kpt detection. Since our paper is still under double-blind review, we might not be able to share more information publicly, but I'm sure the code should be available in near future :)
+
+The model is submitted to IMC at a very early time and achieves an impressive score with 0.838/0.833 on private/public LB without any TTA. 
+
+Ensemble with other methods
+
+Starting from the initial baseline, I ensemble more strong matchers into the solution, which always seems helpful. The results are reproted as follows.
+
+
+
+
+Matcher
+Score(private/public)
+Input Resolution
+
+
+
+
+Baseline
+0.838/0.833
+(1472,832) or (832,1472)
+
+
+LoFTR
+0.783/0.772
+(1400,792) or (792,1400)
+
+
+SuperGlue+8k SuperPoint
+0.724/0.728
+longest dim 1600
+
+
+Baseline+QuadTree
+0.854/0.848
+--
+
+
+Baseline+QuadTree+LoFTR
+0.860/0.853
+--
+
+
+Baseline+QuadTree+LoFTR+SuperGlue
+0.862/0.859
+--
+
+
+
+
+Generally both LoFTR/Quadtree contrubutes largely to the final socre, SG boost the public score while the private score benefits less from it. For all transformer-based matcher, I keep two types of fixed resolution(chosen by aspect ratio) to maintain a roughly constant memory consumption. For all methods, I use cv2.findFundamentalMat(mkpts0, mkpts1, cv2.USAC_MAGSAC, 0.2, 0.99999, 100000) to get fundamental matrix.
+
+It also needs to be clarified that I use a normalized positional encoding for baseline, loftr and quadtree, which seems always boost performance by 0.003-0.005(sometimes even more) w/o additional cost. I will discuss it in the next section.
+
+Normalized Positional Encoding
+
+The original positional encoding of LoFTR is something like
+
+pe[0::4, :, :] = torch.sin(x_position * div_term), where the x_position is absolute pixel coordinate
+
+A potential issue with this implementation is that when test resolution deviates from training resolution, the pe will use unseen coordinate for encoding, which harms the network's abillity to recognize locations.  To alleviate this, we apply a simple normalization as,
+
+pe[0::4, :, :] = torch.sin(x_position * (training_dim/test_dim) * div_term), where training_dim/test_dim is a normalizing factor to ensure all coordinate ranges within the training resolution. For example, train with 840 resolution and test with 1472 resolution, then the factor will be 840/1472=0.5706. Emprically I find this modification more or less benefit all transformer-based matcher by around 0.005.
+
+Tried but didn't work
+
+
+
+
+Use semantic mask to filter out unmatchable objects (sky, cars , trees, pedestrians). This pre-processing is generally costly for me and doesn't deliever consistent improvements.
+
+
+Homography pre-filtering. Use a homography hypothesis to filter out some matches and then estimate F, which is adopted by a last year's IMC winning team. Generally this pre-filtering is theoretically confusing for me and empirically doesn't give me gain. 
+
+
+Replace LoFTR with SE2-LoFTR. At some point I guess there might be some mild rotation in the test set  (around 30-40 degree), so I try to replace LoFTR with SE2-LoFTR, but it turns out in-effective.
+
+
+Using larger resolution for all methods, I have tried to enlarge the input resolution (like &gt;1500), but the gain is limited and run-time largely increases.
+
+
+Using AdaLAM to filter matches. There are some hyper-params for AdaLAM and maybe I didn't tune it well :(
+
+
+Didn't try but may work
+
+
+
+TTA and multi-resolution input.
+
+Learned outlier filters, like OANet(https://github.com/zjhthu/OANet), LMCNet (https://liuyuan-pal.github.io/LMCNet/) and CLNet (https://github.com/sailor-z/CLNet).
+
+Two stage matching, cropping convisble regions/wrapping with an estimated homography at first and then matching again.
+
+Ensemble SOTA descriptors, like ASLFeat(https://github.com/lzx551402/ASLFeat), ALIKE(https://github.com/Shiaoming/ALIKE) and PoSFeat(https://github.com/The-Learning-And-Vision-Atelier-LAVA/PoSFeat)
+
+Comments:
+├─ old-ufo (2022-09-01 11:42:05.400000) [+10]
+│  And here is the paper, describing the model -"ASpanFormer: Detector-Free Image Matching with Adaptive Span Transformer"  https://arxiv.org/abs/2208.14201
+├─ old-ufo (2022-06-06 11:34:52.713000) [+2]
+│  Amazing results and w are looking forward to see more detailed description here and/or at workshop talk :)
+  ├─ hkchkc (2022-06-07 16:41:07.253000) [+1]
+  │  Thanks! After re-checking the submission policy, I think it's allowed to present our method to the workshop and I'll do it.
+├─ k_s (2022-06-06 10:24:03.033000) [+2]
+│  Congrats on the solo gold!
+│  I had not thought of Normalized Positional Encoding. I think it is a good idea.
+│  I look forward to seeing the Baseline model published.
+├─ ForcewithMe (2022-06-06 07:23:51.480000) [+2]
+│  Amazing, it’s great to see a new model in IMC. Will you introduce your novel method in the Workshop? @hkchkc
+  ├─ hkchkc (2022-06-06 11:20:52.183000) [+0]
+  │  Thanks :). But I guess I may not present it due to policy constraint.
+  ├─ old-ufo (2022-06-06 11:34:16.113000) [+3]
+  │  I don't recall any policy, which forbids you to share the method details in the talk, it is not a double submission. E.g. DISK was under review at NeurIPS when presented at IMC 2020 workshop.
+├─ Igor Lashkov (2022-06-06 06:43:06.367000) [+2]
+│  Congratulations with amazing result and baseline model score! Smart trick with normalized positional encoding. Can't wait to see your paper!
+  ├─ hkchkc (2022-06-06 11:36:36.923000) [+2]
+  │  Thanks! Your detailed solution report is also very insightful and I learn a lot from it :)
+├─ Hyeokjoon Kwon (권혁준) (2022-06-06 05:14:08.727000) [+2]
+│  Congratulations! Wonderful that your newly developed model outperformed other SOTA models. Looking forward to your paper being published ;) And, the normalized encoding seems a hidden key to improv...
+├─ tushar (2022-12-27 03:16:46.757000) [+0]
+│  @hkchkc I have a project that uses image matching. How can I contact you?
+├─ Quentin42fr (2022-09-07 19:11:42.597000) [+0]
+│  Congrats! Thx for sharing :)
+├─ chenchen (2022-08-16 08:53:10.427000) [+0]
+│  Congratulation! I'm confused about Normalized Positional Encoding. Is the normalization only used in testing? If not, the x_position is between [0, training_dim*training_dim/test_dim] when training...
+├─ Ibuki Tanaka (2022-06-08 02:26:03.467000) [+0]
+│  Congratulations! Thanks for sharing your ideas.
+├─ Making TARS (2022-06-08 01:32:37.587000) [+0]
+│  Congrats @hkchkc ! Amazing performance! Kagle badge seems no longer to have much to do with individual skills.

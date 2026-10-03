@@ -1,0 +1,225 @@
+# https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/469760
+
+Topic #469760: Magic Formula to Convert EEG to Spectrograms!
+  Author: Chris Deotte
+  Posted: 2024-01-21 23:13:37.717000
+  Votes: 233  Comments: 37
+
+Magic Formula
+
+Exciting news everyone. I think we found the magic formula to convert EEG waveforms into Kaggle Spectrograms.
+
+LL Spec = ( ( - F7) + spec( - T3) + spec( - T5) + spec( - O1) )/4
+LP Spec = ( ( - F3) + spec( - C3) + spec( - P3) + spec( - O1) )/4
+RP Spec = ( ( - F4) + spec( - C4) + spec( - P4) + spec( - O2) )/4
+RL Spec = ( ( - F8) + spec( - T4) + spec( - T6) + spec( - O2) )/4
+
+
+The trick is that we need to average four spectrograms to produce the LL (i.e. Left Temporal Chain) single spectrogram instead of combining Fp1, F7, T3, T5, O1 into a single waveform and computing a single spectrogram. If we combine waveforms first with W = (Fp1 - F7) + (F7 - T3) + (T3 - T5) + (T5 - O1) then this reduces to W = Fp1 - O1 and it doesn't use information from F7 , T3, T5. But the above magic formula does use information from all EEG waveforms.
+
+History
+
+One week ago, we started a discussion here to determine how the Kaggle spectrograms were made. Kaggle users @seshurajup and others have been active and helpful in this conversation. I tried various ways to combine the 19 EEG waveforms into the 4 spectrograms LL, LP, RL, RP. I have finally created spectrograms that achieve a better CV and LB score than the Kaggle spectrograms!
+
+Experiments
+
+We can review the following experiments in my EfficientNet starter notebook here
+
+
+
+
+Spectrogram
+EffNet 5Fold CV
+EffNet LB
+Notebook version
+Model
+Loss
+Epochs
+Data Augmention
+
+
+
+
+Kaggle Spectrograms
+0.73
+0.57
+ver 1
+EffNetB2
+CE
+3
+none
+
+
+Kaggle Spectrograms
+0.66
+???
+ver 4
+EffNetB0
+KL-Div
+4
+none
+
+
+EEG Spectrograms
+0.63
+???
+ver 3
+EffNetB0
+KL-Div
+4
+none
+
+
+Both Spectrograms
+0.59
+0.44
+ver 5
+EffNetB0
+KL-Div
+4
+none
+
+
+
+
+If we compare row 2 and row 3 above, we see that training EfficientNet B0 on only the Magic formula EEG spectrograms achieves a better CV score and LB score than training EfficientNet B0 on only the Kaggle spectrograms.
+
+Furthermore, training a single model with both spectrograms achieves the best CV score and LB score. I think this confirms that we have a powerful formula for converting 19 EEG waveforms into 4 spectrograms!
+
+How To Use EEG Spectrograms
+
+Examples of how to use new EEG spectrograms to boost CV score and LB score are published in recent versions of my EfficientNet starter notebook here and CatBoost starter notebook here.
+
+Kaggle Dataset
+
+The new EEG spectrograms using the Magic Formula have been uploaded to a Kaggle dataset here. We can attach this Kaggle dataset to our future Kaggle notebooks to boost our CV scores and LB scores! 
+
+If working offline, we can download one 7.5GB Python dictionary file that contains all 17089 EEG spectrograms with the command: 
+
+kaggle datasets download -f eeg_specs.npy cdeotte/brain-eeg-spectrograms
+
+
+And we can download all of Kaggle spectrograms in one 2.5GB Python dictionary that contains all 11138 Kaggle spectrograms with command:
+
+kaggle datasets download cdeotte/brain-spectrograms
+
+
+Future Work
+
+Since these new spectrograms help improve our model, this means we can try exploring more formulas and alternative ways to create images from EEG waveforms. For example @abebe9849 is exploring using different types of Fourier transform in his notebook here.
+
+Comments:
+├─ Raki (2024-02-02 09:09:53.267000) [+5]
+│  I found a visualization in a video of how the anterior-posterior bipolar montage is created (the names of a few electrode locations are different though).
+│  https://www.youtube.com/clip/UgkxqTZZRvcuS...
+├─ Aindriú (2024-01-24 15:31:01.580000) [+3]
+│  Spectrum is a linear transform. Sum of the spec should be equal to the spec of the sum which should reduce to spec(Fp1 - O1) similarly.
+  ├─ Chris Deotte (2024-01-24 15:42:02.533000) [+7]
+  │  I don't think so. The spectrogram ignores the phase of sine waves. If i have two 60Hz sine waves that are 180 degrees out of phase, then if i add up the raw waveforms, the result is zero everywhere...
+├─ Donghui Zhang (2024-01-22 06:19:56.927000) [+3]
+│  Good idea, in fact I used it to train the model on a data set you posted for making spectrograms, but the training loss deviated greatly from the validation loss.
+  ├─ HZM (2024-01-23 00:32:11.163000) [+2]
+  │  same issue, pytoch did not work as good as tensorflow
+├─ SeshuRaju 🧘‍♂️ (2024-01-22 00:02:28.667000) [+4]
+│  @cdeotte Thank you for sharing
+│  
+│  
+│    
+│  LOG TRANSFORM SPECTROGRAM
+│    
+│  img = np.clip(img,np.exp(-4),np.exp(8)) ==&gt; for Spectrogram 
+│  
+│  
+│  
+│  
+│  
+│    
+│  LOG TRANSFORM
+│    
+│  width = (mel_spec.shape[1]//32)*32
+│    mel_sp...
+  ├─ Chris Deotte (2024-01-22 19:10:47.443000) [+17]
+  │  Neural networks like input data to have a Gaussian distribution (i.e. normal bell shaped histogram with mean=0 and std=1). Therefore we transform inputs to transform the distribution.
+  │  
+  │  The most com...
+  ├─ Chris Deotte (2024-01-22 19:13:28.727000) [+13]
+  │  Another trick is using Gauss Rank Transform (shown here). Or using a Quantile Transform here. Both can transform any distribution into a nearly perfect Gaussian distribution afterward.
+    ├─ SeshuRaju 🧘‍♂️ (2024-01-23 00:46:18.267000) [+1]
+    │  @cdeotte thank you Chris, i will learn and explore. If i understood well, then will make a notebook about it.
+    │  
+    │  
+    │    
+    │  I will try to reverse engineer one of your magic formula np.clip(img,np.exp(-4),np...
+    ├─ SeshuRaju 🧘‍♂️ (2024-01-23 01:47:33.703000) [+0]
+    │  @cdeotte now i can see, what you seen (left skewed distribution). Thank you
+    │  
+    │  
+    │    
+    │  We eliminated outliers using np.clip from e^-4 to e^8 values, is the major improvement of LB 0.10 score by just addi...
+    ├─ Edward Tuck (2024-01-24 02:12:20.487000) [+1]
+    │  very helpful thanks!
+    ├─ SeshuRaju 🧘‍♂️ (2024-01-24 03:38:36.663000) [+1]
+    │  @cdeotte i'm able to do analysis only for few samples (so did with 1 sample) here, otherwise notebook crashing with memory limit. what is best way to do for complete data same analysis?.
+├─ Max Li (2024-02-27 01:44:04.243000) [+1]
+│  I'm creating dataset of EEGs &gt;20GB so I think I have to use the Kaggle API to upload a dataset. Has anyone successfully done this? I'm getting issues with this code:
+│  `from kaggle_secrets import ...
+  ├─ Chris Deotte (2024-02-27 02:06:09.980000) [+0]
+  │  I'm not sure. Another option is to make two notebooks and each notebook can have output less than 20GB (i.e. creates half of the spectrograms). Then you don't need to upload to a Kaggle dataset. Ju...
+├─ Adrian Tif (2024-02-16 18:07:13.297000) [+1]
+│  LL Spec = ( spec(Fp1 - F7) + spec(F7 - T3) + spec(T3 - T5) + spec(T5 - O1) )/4
+│  
+│  Sorry, what does spec mean here?
+  ├─ greySnow (2024-02-16 18:10:59.997000) [+2]
+  │  Spectrogram
+    ├─ Adrian Tif (2024-02-18 09:57:30.730000) [+0]
+    │  Ok, but spec(Fp1 - F7), for instance, does that mean spec(Fp1) - spec(F7)? I'm sorry, but I don't know how to interpret this expression.
+    ├─ Chris Deotte (2024-02-18 10:01:54.150000) [+3]
+    │  It means create a new column (i.e. waveform) from parquet column Fp1 minus column F7. Then create a spectrogram from this column (i.e. waveform). Now we have a NumPy array of size (128x256) which i...
+    ├─ Adrian Tif (2024-02-19 17:20:08.843000) [+1]
+    │  Thank you very much for the answer, now everything is much clearer.
+├─ N Sai Harshith Varma (2024-01-29 06:27:25.590000) [+1]
+│  Thank you!!…i will try to integrate this new information @cdeotte
+├─ zhiyue666 (2024-01-29 05:37:43.917000) [+1]
+│  Thank you for sharing @cdeotte 
+│  As a beginner of deep learning, I would like to ask you, for general classification task, what learning rate and epoch would you choose to achieve the best training ...
+  ├─ Chris Deotte (2024-01-29 09:39:47.643000) [+6]
+  │  Hi. Learning rate and epoch depends on your type of model. For example CatBoost, MLP, WaveNet, EfficientNet, and BERT all have different requirements. For NN, we can try Adam 1e-3, 1e-4, and 1e-5. ...
+    ├─ [deleted] (2024-01-29 10:37:28.860000) [+0]
+    │  [deleted]
+    ├─ zhiyue666 (2024-01-29 13:04:54.077000) [+1]
+    │  Thank you for your reply, these answers are enough
+    ├─ Aurora_blue (2024-02-13 12:51:12.713000) [+1]
+    │  This is very helpful for me as deep learning beginner.
+    │  Question about hyper parameter tuning.
+    │  
+    │  
+    │  
+    │  How do you tune hyper parameter in python code ? Do you use optimization library or just grid search...
+    ├─ Chris Deotte (2024-04-01 03:01:39.517000) [+0]
+    │  Hi @clearwaterkzk  Sorry for the late reply. I posted a discussion about tuning learning rates here
+    ├─ Aurora_blue (2024-04-01 04:13:42.730000) [+1]
+    │  Thank you very much.
+    │  I will definitely buy it if you would release a book on deep learning.😀
+├─ Virendra Kumar (2024-01-28 08:39:49.123000) [+1]
+│  This is very useful. Thank you for sharing @cdeotte
+├─ Daeeon_H (2024-01-25 12:14:33.130000) [+1]
+│  This is really nice! Thank you for sharing! @cdeotte
+├─ Reacher (2024-01-24 13:37:53.190000) [+1]
+│  Impressive! Thank you for sharing.
+│  I was able to reproduce your results with pytorch.
+├─ tomoo inubushi (2024-01-23 09:29:50.573000) [+1]
+│  Thank you for sharing!
+│  What is the difference between ['LL','LP','RP','RR'] in your code and ['LL','LP','RL','RP'] in spectrogram parquet columns?
+│  Is it just typo?
+  ├─ Chris Deotte (2024-01-23 09:36:02.097000) [+2]
+  │  Yes, just a typo. The RR should be RL
+├─ Devang Giri Goswami (2024-01-24 06:11:50.853000) [+0]
+│  Thank you for sharing the useful info 🤓
+├─ [deleted] (2024-02-20 03:38:42.863000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-25 12:02:29.453000) [+1]
+│  [deleted]
+├─ TheEventHorizons (2024-02-02 16:55:08.153000) [+1]
+│  Thank you for sharing the information !
+├─ Qianyi Zhao (2024-01-25 01:26:18.127000) [+1]
+│  Thanks Chris! This is so inspiring!

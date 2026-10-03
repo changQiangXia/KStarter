@@ -1,0 +1,234 @@
+# https://www.kaggle.com/competitions/jigsaw-toxic-severity-rating/discussion/306063
+
+Topic #306063: 14th place solution
+  Author: Adam Montgomerie
+  Posted: 2022-02-08 02:35:21.133000
+  Votes: 64  Comments: 29
+
+Overview
+
+The public LB didn't seem very useful so my strategy was to just maximise my validation score. My final submission is a weighted mean of 6 (5-fold) transformers. It was both my highest CV and highest private LB score, so I'm glad I trusted my CV this time.
+
+Data
+
+I tried to include as many different datasets as I could. For training I used:
+
+
+
+the validation set
+
+jigsaw 1: the data from the first jigsaw competition
+
+jigsaw 2: the data from the second jigsaw competition
+
+ruddit: the data from Ruddit: Norms of Offensiveness for English Reddit Comments
+
+offenseval2020: the data from OffensEval 2020: Multilingual Offensive Language Identification in Social Media. This dataset was uploaded to haggle by @vaby667 here
+
+
+CV strategy
+
+I used the Union-Find method by @columbia2131 to generate folds that didn't have any texts leaked across folds. I didn't use majority voting or any other method of removing disagreements from the data, as I thought this would just make the validation set artificially easier and less similar to the test data.
+
+Training
+
+Loss
+
+I used Margin Ranking Loss to train with the validation data, and tried both Margin Ranking and MSE with the other datasets. It was fairly easy to create large amounts of ranked paired data from the extra datasets, but I didn't find that this improved performance over just training them directly on the labels with MSE loss, and also required lower batch sizes.
+
+Evaluation
+
+When fine-tuning on the extra datasets, I computed average agreement with annotators on the validation set at each evaluation, and used early stopping. I trained for multiple epochs on the small datasets (jigsaw 1 and ruddit), evaluating once an epoch. For the large datasets (offenseval and jigsaw 2) I usually only trained for 1 epoch, evaluating every 10% the epoch's steps.
+
+When training on the validation data, I trained 5 models, using 4/5 folds for training and the remaining fold as validation for each one. I computed the CV at each epoch and used the model weights from the epoch that had the highest CV. 
+
+I had original started out using fold-wise early stopping, but I discovered that this leads to overly optimistic CV scores.
+
+Multi-stage fine-tuning
+
+I found that taking a model I had already fine-tuned, and fine-tuning it on another dataset improved performance. This worked across multiple fine-tuning stages. The order that worked best was to start by fine-tuning on the larger, and lower scoring, datasets first, and then on the smaller ones after. 
+
+For example:
+
+
+
+fine-tune a pretrained model on offenseval (validation: ~0.68)
+
+use #1 to fine-tune on jigsaw 2 (validation ~0.695)
+
+fine-tune #2 on jigsaw 1 (validation ~0.7)
+
+fine-tune #3 on ruddit (validation ~0.705)
+
+fine-tune 5 folds on the validation data, using #4 (CV: 0.71+)
+
+
+Hyperparameters
+
+I started out training most of the base-sized models with 1e-5 on earlier fine-tuning stages and reduced to 1-6 on the later ones. I used 1e-6 and then 5e-7 on the larger models. At each stage I also used warmup of 5% and linear LR decay. Even with mixed precision training, I could only fit batch size 8 on the GPU with the large models, so I used gradient accumulation to simulate batch sizes of 64.
+
+Models
+
+Here's a table of model results. 
+
+
+
+
+base model
+folds
+CV
+final submission
+
+
+
+
+deberta-v3-base
+5
+0.715
+yes
+
+
+distilroberta-base
+5
+0.714
+yes
+
+
+deberta-v3-large
+5
+0.714
+yes
+
+
+deberta-large
+10
+0.714
+yes
+
+
+deberta-large
+5
+0.713
+yes
+
+
+rembert
+5
+0.713
+yes
+
+
+roberta-base
+5
+0.711
+no
+
+
+roberta-large
+5
+0.708
+no
+
+
+
+
+
+
+I mostly stuck to using roberta and deberta variants because they always perform well. If I had had more time I would've tried some others, but I spent most of the time trying out different combinations of datasets.
+
+The reason I tried rembert was because I wanted to make use of the multilingual jigsaw 3 data. I wasn't able to get any improvement from including the extra data, but I was still able to get reasonably good performance out of rembert.
+
+Deberta-large (v1) is in there twice because I did an experiment with a 10 fold model which turned out quite well. I didn't want to keep training 10 fold models though because it took too long.
+
+I think all of the large models are slightly under-trained. Training on large datasets like offenseval and jigsaw 2 took over 24 hours so my colab instances timed-out. 
+
+
+Ensembling
+
+My final submission was a weighted mean of 6 models which were selected from a pool of models by trying to add each of them to the ensemble one at a time, tuning the weights with Optuna for each combination of models, and greedily selecting whichever model increased the OOF score the most. This was repeated until the OOF score stopped improving. My best score was 0.7196.
+
+Interestingly, the highest weighted models ended up being deberta-large and rembert, despite those having lower CV scores.
+
+Things which didn't work
+
+The measuring hate speech dataset
+
+The Measuring Hate Speech dataset by ucberkeley-dlab seemed like it was going to be useful, but the labels didn't seem to match the annotations in the validation set for this competition very well. I was unable to get more than 0.656 with this data.
+
+Binary labels
+
+I wanted to try to make use of the binary labelled data too (jigsaw 3 and toxic tweets). I tried fine-tuning on these datasets, and used the model's predicted probability of the positive class as an output for inference and evaluation. I was able to get 0.68 on the validation set with this method, but I found that it didn't chain together with my multi-stage fine-tuning approach as I had to modify the last layer of the model to switch between regression and classification tasks.
+
+TF-IDF with linear models
+
+I experimented with it a little bit, but wasn't able to get anything over 0.7 on the validation set so I gave up on it.
+
+Word vectors with linear models
+
+I tried encoding each comment as the average of spaCy word vectors, and using this as an input into various linear models. It did about as well as TF-IDF.
+
+Improvements
+
+As I've already mentioned, I think my large models are under-trained due to GPU limitations. I was surprised by how much rembert helped the ensemble, so think I could've made a stronger ensemble by choosing some more diverse model architectures instead of focusing on deberta and roberta so much.
+
+Comments:
+├─ Adam Montgomerie (2022-02-08 04:16:13.340000) [+7]
+│  I forgot to add that I made my github repo public too in case anyone wants to see my source code: https://github.com/AMontgomerie/jigsaw-toxic-severity-competition
+  ├─ Ma Yuan (2022-02-10 19:17:49.183000) [+1]
+  │  thank you!
+├─ N. Peker Çelik (2022-02-10 22:12:36.390000) [+1]
+│  Thanks for sharing! Inspiring @amontgomerie
+├─ Knightwing (2022-02-09 16:47:41.177000) [+1]
+│  Hi @amontgomerie, Congrats! I had the same idea of fine-tuning first on Ruddit and then on validation data. But sadly it had worse effect for me (which I did not expect). So, I had to go just with ...
+  ├─ Adam Montgomerie (2022-02-10 04:57:10.630000) [+0]
+  │  Thanks and congrats to you too! What would you like to know about the fine-tuning? I think I found that ruddit was less effective than jigsaw 1 or 2, but it did seem to have a positive effect in at...
+  ├─ Knightwing (2022-02-10 14:24:04.783000) [+0]
+  │  A brief about the architecture of how you did fine-tuning. eg.  MarginRankingLoss on the embedding or score? MSE loss or any other loss on ruddit?
+  ├─ Knightwing (2022-02-10 14:27:12.760000) [+0]
+  │  Feel like Ruddit had a good signal/feature for toxicity. I failed to incorporate both (Ruddit and validation data) in fine-tuning
+  ├─ Adam Montgomerie (2022-02-11 01:05:26.673000) [+1]
+  │  I tried both MSE loss with the original target values and MarginRankingLoss with paired comments and found that MSE worked better. When fine-tuning on ruddit I also found that training for lots of ...
+  ├─ Knightwing (2022-02-11 17:41:45.933000) [+0]
+  │  Thank you!
+├─ ChrisKennedy (2022-02-08 11:52:10.207000) [+1]
+│  For the measuring hate speech dataset, did you use the overall hate speech score as the output, the individual labels, or some combination?
+  ├─ Adam Montgomerie (2022-02-08 13:16:42.520000) [+2]
+  │  I tried using hate_speech_score as the target first, which produced the 0.656 score I mentioned. I also tried using the sum of a subset of the labels like ["insult", "humiliate, etc. ] and using th...
+  ├─ ChrisKennedy (2022-02-08 23:56:15.167000) [+1]
+  │  Gotcha, thanks for sharing 🙏
+├─ Shobhit Upadhyaya (2022-02-08 05:30:14.540000) [+1]
+│  Thanks for the detailed explanation. Many congratulations on earning the solo gold medal. 🎉🎉
+├─ Wilmer E. Henao (2022-02-08 04:44:28.763000) [+1]
+│  what about the second submission?
+  ├─ Adam Montgomerie (2022-02-08 05:01:32.417000) [+2]
+  │  The second submission was just my highest scoring single model: deberta-v3-base 0.715, which got 0.803 on private LB.
+  ├─ Wilmer E. Henao (2022-02-08 05:09:41) [+2]
+  │  Good job. It's nice to see that it wasn't about just good luck at the top.
+├─ YoungPaik (2022-02-08 03:27:13.047000) [+1]
+│  Everybody was talking about 'trust your cv', but I didn't know how. Your words enlightened me about that. Thanks for sharing your thorough insights, and congrats. 👍
+├─ Mr_KnowNothing (2022-02-08 03:17:20.263000) [+1]
+│  A big congratulations on solo gold my friend , really happy for you ❤️
+├─ Sergey Bochenkov (2022-02-08 03:16:35.690000) [+1]
+│  Great writing and congratulations for the good result!
+├─ Gaurav Rawat (2022-02-08 03:16:16.637000) [+1]
+│  Congrats for your solo gold, I also trained similar and also tried an weighted ensemble with optuna ,seems I didn't select the same 😄 but that seems to have bumped up the my cv scores and have good...
+├─ Lupin (2022-02-08 03:05:00.833000) [+1]
+│  Congrats! 
+│  I considered using some finetuning method like yours. But I thought it would consume too many variation testing effort so I didn't try it. I made a customed loss in the end and it worked...
+├─ @kaggleqrdl (2022-02-08 03:02:21.190000) [+1]
+│  Thanks for the solution and congratulations on your Competition Master title + solo gold!
+├─ CoderJun (2022-02-08 02:44:15.003000) [+1]
+│  I used the tfidf+linear and paid a lot of effort into it. I got 0.73+ on validation and 0.898 without Bert and 0.901 with Bert. The CV is meaningless for me…
+  ├─ Adam Montgomerie (2022-02-08 03:21:22.160000) [+0]
+  │  I guess the validation scores are not really comparable unless we used the same CV strategy and preprocessing
+├─ Julián Peller (dataista0) (2022-02-08 02:40:01.850000) [+1]
+│  Trust your CV, as the saying goes. Congratulations on your solo gold medal! 🎉🎉
+├─ Taran Marley (2022-02-08 02:38:34.300000) [+1]
+│  Thanks for your rundown of how you achieved what you did. The fine tuning process was particularly interesting.
+├─ Fatebinder (2022-02-08 03:46:14.903000) [+2]
+│  Congrats. I choose kind of same transfomers model like you, but not train or finetune really specifics like you. You do great job.
+│  My final sub is weight (CV0.76+) and a average sub, however averag...
+├─ Muhammad Ammar Jamshed (2022-02-13 07:52:43.413000) [+0]
+│  Guide me how to improve my CV Score
+├─ Abdul Manan (2022-02-11 15:14:35.083000) [+1]
+│  Thanks for sharing!

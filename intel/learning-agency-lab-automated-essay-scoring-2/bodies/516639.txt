@@ -1,0 +1,188 @@
+# https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516639
+
+Topic #516639: 4th place solution
+  Author: tascj
+  Posted: 2024-07-03 05:40:58.583000
+  Votes: 95  Comments: 27
+
+Firstly, I would like to thank Kaggle and the competition host for organizing this challenge.
+I would also like to thank all the participants. I found a lot of essential information through discussion posts.
+
+Key Points
+
+Incompatibility Between Persuade and Non-Persuade Data
+
+The key challenge in this competition lies in the composition of the training and test datasets. In train.csv, we have 12,875 samples from the persuade dataset and 4,432 samples from the non-persuade dataset.
+
+My DeBERTa-v3-large baseline training results are as follows: QWK: all (non-persuade, persuade)
+
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+
+
+If I add data source tags to the full_text, '[A] {full_text}' for non-persuade and '[B] {full_text}' for persuade, the results are as follows:
+
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+
+
+Based on the experimental results, I hypothesize that the scores from the two data sources are collected in different ways, thus not “compatible”. Mixing them together for training affected the model's fitting capability.
+
+Assumption: All Test Samples are Non-Persuade
+
+In the discussion Adversarial Validation Probe (Train vs Test), the AUC is between 0.65 and 0.675.
+I conducted local tests with a proportion of 51% persuade samples + 18% non-persuade samples as train, and 31% non-persuade samples as validation, resulting an AUC of 0.66x.
+
+Additionally, a probing discussion suggested that the test set contains almost only five prompts, which is consistent with non-persuade samples in train.csv.
+
+Based on the discussions, I believe all test samples are non-persuade.
+
+Modeling
+
+Knowing these key points, the modeling process is straightforward.
+
+During training:
+
+
+
+Add tags to inputs to distinguish data sources.
+
+Add a data source classification head to ensure the model's output features can differentiate between data sources.
+
+Use different classification heads for different data sources in some models.
+
+Use early stopping based on the scores of non-persuade samples.
+
+
+During submission:
+Assume all samples are non-persuade.
+
+Additionally, I tried swapping tags for pseudo-labeling and distillation, which seemed to provide a slight improvement. I hope this will be useful for the efficiency challenge, though I didn't manage to submit it in time.
+
+Final Submission
+
+My final submission was a large ensemble (average of 45 predictions):
+
+
+
+3 models: microsoft/deberta-large, microsoft/deberta-v3-large, Qwen/Qwen2-1.5B-Instruct
+
+5 folds
+
+3 runs (different random seeds)
+
+
+Thresholds were searched on out-of-fold predictions.
+
+OOF score is 0.818 for non-persuade samples, 0.827 after threshold searching.
+
+Some Useful Tips
+
+I used a few tricks to speed up training and inference, which you can find in my notebook.
+
+Dynamic Micro Batch Collation
+
+Since text lengths are variable, to reduce the impact of padding, I split a batch into micro batches with a limit of total number of tokens. This makes training faster and memory usage stable.
+The gradient accumulation training loop looks like this:
+
+ batch  dataloader:
+    optimizer.zero_grad()
+    total_batch_size = (micro_batch[]  micro_batch  batch)
+     micro_batch  batch:
+        micro_batch = to_gpu(micro_batch)
+        loss = model(micro_batch)
+        scale = micro_batch[] / total_batch_size
+        (loss * scale).backward()
+    optimizer.step()
+
+
+Faster DeBERTa Implementation
+
+I made some modifications to the DeBERTa implementation in transformers, resulting in 15%+ faster training and 30%+ faster inference in my environment. And memory usage is lower.
+
+Comments:
+├─ Nicholas Broad (2024-07-03 05:50:06.500000) [+5]
+│  Great job! Could you open a pull request in transformers so the more efficient version of deberta can be added to the library? I'm assuming your new implementation produces the same outputs as the ...
+  ├─ tascj (2024-07-03 23:25:22.193000) [+7]
+  │  Thank you. My version is not strictly equivalent in computation, but the results should be almost the same in practice. I'll try to make a PR.
+  │  
+  │  It is unfortunate that DeBERTa, despite being so prac...
+├─ MPWARE (2024-07-03 07:02:00.510000) [+4]
+│  Congratulations! I've followed another way: Rely on persuade 2.0 data and it was a big mistake. Public LB is bad and and private LB is worse. Thanks for your analysis.
+├─ Archanaa (2024-07-05 06:13:05.840000) [+1]
+│  Congratulations!!!! Keep up with this amazing journey
+  ├─ Archanaa (2024-07-05 06:27:05.243000) [+1]
+  │  You too do these journey in a good way
+├─ Raja Babu Kumar (2024-07-04 03:50:41.183000) [+1]
+│  Congratulations!You performed an amazing job.
+├─ Weichen Ma (2024-07-22 16:18:31.200000) [+0]
+│  Congrats! How much is the improvement in LB/PB by adding tags?
+├─ anni (2024-07-15 17:49:01.067000) [+0]
+│  congratulations!!! amazing job.
+├─ SrinivasR (2024-07-10 02:10:19.270000) [+0]
+│  Congratulations on your achievement. Could you possibly share more details of your training or fine-tuning of the Qwen/Qwen2-1.5B instruct model and did you use LORA techniques or quantization at a...
+├─ Archanaa (2024-07-05 06:20:11.830000) [+0]
+│  Amazing Job bro
+├─ Tasfiq Kamran (2024-07-05 05:50:27.637000) [+0]
+│  Congrats! and kudos. You really shared some valuable insights, which are really amazing.
+│  
+│  One question: Have you experimented with any feature engineering techniques for generating new features lik...
+├─ MrSimple (2024-07-04 13:57:20.870000) [+0]
+│  Congratulations!You performed an amazing job.
+├─ delai50 (2024-07-04 09:27:17.087000) [+0]
+│  Congratulations @tascj0! A couple of questions (well, more than 2):
+│  
+│  
+│  
+│  Are you planning to release your training code?
+│  
+│  What was the performance of the Qwen model compared with the DeBERTas? Did yo...
+  ├─ tascj (2024-07-04 23:05:04.110000) [+1]
+  │  Thank you.
+  │  
+  │  
+  │  
+  │  I'm not releasing the training code. I think all key components are included in the released inference notebook. The training part is no more than a regular AMP training loop.
+  │  
+  │  The Qw...
+├─ Gcdelgado (2024-07-04 01:42:24.700000) [+0]
+│  Congrats on your work! Amazing stuff!
+├─ hogehogekun (2024-07-04 00:30:30.890000) [+0]
+│  Thanks for your sharing!
+│  
+│  Can I ask you some basic things? (sorry, because I'm new)
+│  
+│  I see you adding the datasets of aes2-checkpoints-1, aes2-checkpoints-3 and aes2-checkpoints-5 into input. Each ...
+  ├─ tascj (2024-07-04 23:11:22.793000) [+1]
+  │  I simply use the CLI: kaggle datasets create and kaggle datasets version -m ''.
+  │  
+  │  I also find it inconvenient when adding more files to existing dataset. I don't know what's the best practice here.
+    ├─ hogehogekun (2024-07-05 02:06:48.247000) [+0]
+    │  Thanks for replying my question 😀 
+    │  Now, I understand top rankers train their models on NOT kaggle.
+├─ Yurinchi (2024-07-03 11:40:49.013000) [+0]
+│  Congratulations! Your solution has cleared up my confusion that has been bothering me for weeks.
+├─ Furkan Özdal (2024-07-03 11:09:09.673000) [+0]
+│  Efficient and amazing
+├─ Ryenhails (2024-07-03 09:10:31.140000) [+0]
+│  Master work!
+├─ huyidao (2024-07-03 08:39:40.377000) [+0]
+│  amazing！ this is how gm do competitions, really powerfull.
+├─ Jasonczh (2024-07-03 07:12:32.830000) [+0]
+│  Good analysis and conclusion: "All Test Samples are Non-Persuade". Learn a lesson from it.
+├─ Darek Kłeczek (2024-07-03 07:08:17.637000) [+0]
+│  Congratulations, as always a very insightful solution!
+├─ C R Suthikshn Kumar (2024-07-03 06:23:21.797000) [+0]
+│  Congratulations on getting the fourth position  in this competition. Thanks for sharing the insights of your solution.
+├─ Hassan Abedi (2024-07-03 06:05:45.727000) [+0]
+│  Great work! And thanks for sharing your work.
+│  
+│  What was your hardware setup for the training stage? In case you did the training outside Kaggle.
+  ├─ tascj (2024-07-03 23:26:11.233000) [+0]
+  │  I have RTX4090 x2 for most experiments, and some A100 hours for Qwen/Qwen2-1.5B-Instruct.

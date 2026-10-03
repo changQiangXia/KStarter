@@ -1,0 +1,74 @@
+<p>Hi everyone, I just want to share with everyone that I was successful in getting a very simple baseline DQN model using tf.js. It is capable of reaching turn 400 consistently against simple bot and sometimes winning the game. </p>
+<p>Here is the gist:</p>
+<h2>Input</h2>
+<p>A <code>2 * 8</code> matrix. </p>
+<ul>
+<li>2 for [player, enemies]. I group up all enemies together.</li>
+<li>8 for numeric/boolean values of basic information about player and enemies</li>
+<li>some of these values are log2 values</li>
+</ul>
+<p>details as follows:</p>
+<pre><code>const tensorIndexMap = {
+  kore: 0,
+  totalShipCount: 1,
+  outsideShipCount: 2,
+  insideShipCount: 3,
+  shipyardCount: 4,
+  earlyGame: 5,
+  middleGame: 6,
+  lateGame: 7,
+};
+</code></pre>
+<p>I tried to encode the traditional way of <code>31*31*N</code> board but it seems to be slow and I am not sure what's the best way to encode metadata / global data inside (player kore)</p>
+<h2>Output</h2>
+<p>A simple scalar of size 4 for the action keys as follows:</p>
+<pre><code>export const ALL_MOVES: MOVE_NAME[] = [
+  MOVE_NAME.DO_NOTHING, // 0
+  MOVE_NAME.MINE, // 1
+  MOVE_NAME.BUILD_SHIP, // 2
+  MOVE_NAME.BUILD_SHIPYARD, // 3
+];
+</code></pre>
+<p>Each of these actions lead to a rule-based strategy that tries best effort execute that action based on current board state (a little bit of decision logic inside). I intend to add more actions in the future.</p>
+<h2>Model architecture</h2>
+<p>A standard tf.js DQN baseline setup as follows:</p>
+<pre><code>______________________________________________________________
+Layer (type)                Input Shape               Output shape              Param #   
+==============================================================
+flatten_Flatten1 (Flatten)  [[null,2,8]]              [null,16]                 0         
+______________________________________________________________
+dense_Dense1 (Dense)        [[null,16]]               [null,100]                1700      
+______________________________________________________________
+dense_Dense2 (Dense)        [[null,100]]              [null,100]                10100     
+______________________________________________________________
+dense_Dense3 (Dense)        [[null,100]]              [null,4]                  404       
+==============================================================
+Total params: 12204
+Trainable params: 12204
+Non-trainable params: 0
+</code></pre>
+<h2>Hyper parameters</h2>
+<pre><code>const config = {
+  replayBufferSize: 10000,
+  epsilonInit: 0.4,
+  epsilonFinal: 0.01,
+  epsilonDecayFrames: 1000000,
+  learningRate: 0.0001,
+  batchSize: 64,
+  startTrainingSize: 64 * 4,
+  gamma: 0.95,
+  syncEveryFrames: 1000,
+};
+</code></pre>
+<h2>Reward function</h2>
+<p>This one is a little bit complicated. I encoded the following into the reward formula, each with a weight factor as parameter that I can tune:</p>
+<ul>
+<li>shipcount</li>
+<li>shipcount delta</li>
+<li>current kore</li>
+<li>special reward for losing/winning</li>
+<li>penalty for not enough ship</li>
+</ul>
+<p>Let me know if you any comments / suggestions on how to improve it. Or share what you have done if you have a different setup.</p>
+<p>I also have a series of livestream documenting how I developed the DQN model towards this baseline on YouTube:<br>
+<a href="https://www.youtube.com/playlist?list=PLjyg49kS3nt-MbwWyl2sSTKgrGN0LEsEr" target="_blank">https://www.youtube.com/playlist?list=PLjyg49kS3nt-MbwWyl2sSTKgrGN0LEsEr</a></p>

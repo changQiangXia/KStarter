@@ -1,0 +1,82 @@
+# llm-20-questions 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/llm-20-questions/discussion/531106) — 90 票 / 33 评论 / 2024-08-30 **write-up?**
+- [Starter Notebook - Llama3-8B - [LB 0.750+] - [Rank 59th]](https://www.kaggle.com/competitions/llm-20-questions/discussion/520429) — 60 票 / 14 评论 / 2024-07-16 
+- [7.7% of Private LB Keywords are Duplicates of Public LB Keywords](https://www.kaggle.com/competitions/llm-20-questions/discussion/529115) — 42 票 / 36 评论 / 2024-08-18 
+- [Llama 3.1 Hack - Confirmed to Work in Kaggle Environment (Notebooks and Competition)](https://www.kaggle.com/competitions/llm-20-questions/discussion/523619) — 41 票 / 34 评论 / 2024-08-01 
+- [Animation of Gold Medal Winners](https://www.kaggle.com/competitions/llm-20-questions/discussion/531062) — 39 票 / 11 评论 / 2024-08-30 **write-up?**
+- [How To View Both Your Private LB Submission Scores](https://www.kaggle.com/competitions/llm-20-questions/discussion/528087) — 35 票 / 11 评论 / 2024-08-14 
+- [what!? there is even paper on this.](https://www.kaggle.com/competitions/llm-20-questions/discussion/506924) — 35 票 / 6 评论 / 2024-05-23 
+- [Leaderboard reset and new keywords](https://www.kaggle.com/competitions/llm-20-questions/discussion/527853) — 33 票 / 120 评论 / 2024-08-14 
+- [9th Place Solution - LLM 20 Questions](https://www.kaggle.com/competitions/llm-20-questions/discussion/529525) — 30 票 / 17 评论 / 2024-08-31 **write-up?**
+- [Competition Update](https://www.kaggle.com/competitions/llm-20-questions/discussion/523198) — 29 票 / 73 评论 / 2024-07-30 
+- [11th place solution (majimekun)](https://www.kaggle.com/competitions/llm-20-questions/discussion/529931) — 26 票 / 11 评论 / 2024-10-16 **write-up?**
+- [2nd Place Solution for the LLM 20 Questions Competition](https://www.kaggle.com/competitions/llm-20-questions/discussion/529643) — 26 票 / 5 评论 / 2024-08-30 **write-up?**
+- [Q20 Game with Reinforcement Learning. Markov Decision Process (MDP).](https://www.kaggle.com/competitions/llm-20-questions/discussion/503079) — 23 票 / 4 评论 / 2024-05-16 
+- [3rd place solution](https://www.kaggle.com/competitions/llm-20-questions/discussion/531387) — 23 票 / 12 评论 / 2024-09-01 **write-up?**
+- [A proposal for a more reliable LB](https://www.kaggle.com/competitions/llm-20-questions/discussion/523317) — 22 票 / 14 评论 / 2024-07-31 
+- [The ranking in other stats](https://www.kaggle.com/competitions/llm-20-questions/discussion/529683) — 22 票 / 46 评论 / 2024-08-22 
+- [New Models (7B-14B) Released!](https://www.kaggle.com/competitions/llm-20-questions/discussion/522888) — 21 票 / 19 评论 / 2024-07-28 
+- [Upcoming changes to keywords.py](https://www.kaggle.com/competitions/llm-20-questions/discussion/509035) — 21 票 / 12 评论 / 2024-05-31 
+- [Scope of keywords.py](https://www.kaggle.com/competitions/llm-20-questions/discussion/503162) — 20 票 / 14 评论 / 2024-05-16 
+- [Leaderboard Confidence Reset](https://www.kaggle.com/competitions/llm-20-questions/discussion/529606) — 20 票 / 55 评论 / 2024-08-21 
+- [[LB 900+] Offline-Policy Questioner Agent](https://www.kaggle.com/competitions/llm-20-questions/discussion/524284) — 19 票 / 23 评论 / 2024-08-05 
+- [Evaluation with team reshuffle](https://www.kaggle.com/competitions/llm-20-questions/discussion/519400) — 19 票 / 6 评论 / 2024-07-11 
+- [[FIXED] - The Top 9 LB is the result Errors](https://www.kaggle.com/competitions/llm-20-questions/discussion/508415) — 19 票 / 24 评论 / 2024-05-29 
+- [108th place Full LLM Solution](https://www.kaggle.com/competitions/llm-20-questions/discussion/530999) — 17 票 / 4 评论 / 2024-08-30 **write-up?**
+- [How would you rate this competition?](https://www.kaggle.com/competitions/llm-20-questions/discussion/530968) — 17 票 / 17 评论 / 2024-08-29 
+- [Q. At what percentage does the current 1st place submission earn a bronze medal? A. 33%](https://www.kaggle.com/competitions/llm-20-questions/discussion/520928) — 16 票 / 11 评论 / 2024-07-18 **write-up?**
+- [Starting ideas: LLM, MDP, Decision-Trees & Optimizations](https://www.kaggle.com/competitions/llm-20-questions/discussion/503209) — 16 票 / 1 评论 / 2024-05-16 
+- [10th Place Solution | A 90% coverage keyword list is ALL you need](https://www.kaggle.com/competitions/llm-20-questions/discussion/531569) — 15 票 / 13 评论 / 2024-09-02 **write-up?**
+- [Alpha performance metric analysis](https://www.kaggle.com/competitions/llm-20-questions/discussion/530312) — 14 票 / 13 评论 / 2024-08-26 
+- [We're allowed to share our solutions, right?](https://www.kaggle.com/competitions/llm-20-questions/discussion/529493) — 14 票 / 12 评论 / 2024-08-21 **write-up?**
+- [52th place solution - Prompt control system](https://www.kaggle.com/competitions/llm-20-questions/discussion/531037) — 14 票 / 2 评论 / 2024-08-30 **write-up?**
+- [Code to follow score evolution](https://www.kaggle.com/competitions/llm-20-questions/discussion/528729) — 14 票 / 0 评论 / 2024-08-16 
+- [Get started here!](https://www.kaggle.com/competitions/llm-20-questions/discussion/503040) — 13 票 / 17 评论 / 2024-05-15 
+- [A few running stats](https://www.kaggle.com/competitions/llm-20-questions/discussion/528479) — 13 票 / 50 评论 / 2024-08-16 
+- [[21st]: Back to basics](https://www.kaggle.com/competitions/llm-20-questions/discussion/531104) — 13 票 / 2 评论 / 2024-08-30 
+- [[FIXED] - All Games Are Failing](https://www.kaggle.com/competitions/llm-20-questions/discussion/508278) — 13 票 / 4 评论 / 2024-05-29 
+- [LLM performance metric analysis](https://www.kaggle.com/competitions/llm-20-questions/discussion/530442) — 12 票 / 10 评论 / 2024-08-26 
+- [Another Starter Notebook - Qwen 2 7b Instruct ](https://www.kaggle.com/competitions/llm-20-questions/discussion/520650) — 12 票 / 2 评论 / 2024-07-16 
+- [Optimal strategy (can LLMs beat binary search?)](https://www.kaggle.com/competitions/llm-20-questions/discussion/503429) — 11 票 / 18 评论 / 2024-05-17 
+- [Is this competition a lottery, or is it not ?](https://www.kaggle.com/competitions/llm-20-questions/discussion/521385) — 11 票 / 14 评论 / 2024-07-20 
+- [Update: Changes to keywords.py](https://www.kaggle.com/competitions/llm-20-questions/discussion/512955) — 11 票 / 9 评论 / 2024-06-17 
+- [611th place full-llm solution... I've seen better days](https://www.kaggle.com/competitions/llm-20-questions/discussion/531077) — 11 票 / 6 评论 / 2024-10-23 **write-up?**
+- [The game can be subverted with non-LLMs](https://www.kaggle.com/competitions/llm-20-questions/discussion/511343) — 11 票 / 10 评论 / 2024-06-10 
+- [65th place solution - fine-tuning/knowledge distillation approach](https://www.kaggle.com/competitions/llm-20-questions/discussion/531121) — 11 票 / 4 评论 / 2024-08-30 **write-up?**
+- [93rd Place Solution: Cloning GPT-4o's Behavior](https://www.kaggle.com/competitions/llm-20-questions/discussion/532634) — 11 票 / 0 评论 / 2024-09-11 **write-up?**
+- [Should the agent logs be public?](https://www.kaggle.com/competitions/llm-20-questions/discussion/505835) — 11 票 / 4 评论 / 2024-05-19 
+- [New hidden keywords](https://www.kaggle.com/competitions/llm-20-questions/discussion/515102) — 10 票 / 28 评论 / 2024-06-27 
+- [Only One Day Left in the LLM Agent Competition - Wishing You the Best Results!](https://www.kaggle.com/competitions/llm-20-questions/discussion/530840) — 10 票 / 7 评论 / 2024-08-29 
+- [Things category is clearly much harder than places](https://www.kaggle.com/competitions/llm-20-questions/discussion/515751) — 10 票 / 7 评论 / 2024-06-29 
+- [LLM 20 Questions Competition: Relevant Research papers and Articles](https://www.kaggle.com/competitions/llm-20-questions/discussion/522925) — 10 票 / 2 评论 / 2024-07-29 
+- [5th Place Solution](https://www.kaggle.com/competitions/llm-20-questions/discussion/531128) — 10 票 / 2 评论 / 2024-09-10 **write-up?**
+- [Unofficial self-play benchmark](https://www.kaggle.com/competitions/llm-20-questions/discussion/528488) — 10 票 / 18 评论 / 2024-08-16 
+- [The frequency of matches is way too low](https://www.kaggle.com/competitions/llm-20-questions/discussion/528516) — 10 票 / 5 评论 / 2024-08-16 
+- [(88th place, 9th on public LB) Pure LLM Solution Team (AI)kinator](https://www.kaggle.com/competitions/llm-20-questions/discussion/532018) — 10 票 / 1 评论 / 2024-09-04 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/llm-20-questions/discussion/503054) — 9 票 / 0 评论 / 2024-05-15 
+- [45th place - Not bad as for first competition :)](https://www.kaggle.com/competitions/llm-20-questions/discussion/530996) — 9 票 / 4 评论 / 2024-08-30 **write-up?**
+- [58th Solution - Simple Rephrase Agent](https://www.kaggle.com/competitions/llm-20-questions/discussion/531183) — 9 票 / 0 评论 / 2024-09-02 **write-up?**
+- [Absurd Replays [Upload pics of funny/absurd/meme replays here]](https://www.kaggle.com/competitions/llm-20-questions/discussion/519297) — 9 票 / 38 评论 / 2024-07-10 
+- [Code snippet to generate factually correct answers](https://www.kaggle.com/competitions/llm-20-questions/discussion/524258) — 9 票 / 0 评论 / 2024-08-05 
+- [4th Place Solution](https://www.kaggle.com/competitions/llm-20-questions/discussion/531883) — 9 票 / 0 评论 / 2024-09-03 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/llm-20-questions/discussion/531939) — 8 票 / 0 评论 / 2024-09-03 
+- [Suggestions to avoid being stuck on 600's.](https://www.kaggle.com/competitions/llm-20-questions/discussion/516861) — 8 票 / 1 评论 / 2024-07-03 
+- [Some real concerns over the competition' scoring system (and proposals how to fix it)](https://www.kaggle.com/competitions/llm-20-questions/discussion/509839) — 8 票 / 11 评论 / 2024-06-04 
+- [[RESOLVED] Submissions pending and backlog](https://www.kaggle.com/competitions/llm-20-questions/discussion/509037) — 8 票 / 1 评论 / 2024-05-31 
+- [Are you able to provide more info about what types of words can be keywords?](https://www.kaggle.com/competitions/llm-20-questions/discussion/503049) — 8 票 / 7 评论 / 2024-05-15 
+- [Theoretical Analysis of the 20 Questions Game](https://www.kaggle.com/competitions/llm-20-questions/discussion/520021) — 8 票 / 0 评论 / 2024-07-14 
+- [Kaggle should reset the leaderboard multiple times](https://www.kaggle.com/competitions/llm-20-questions/discussion/528789) — 8 票 / 8 评论 / 2024-08-17 
+- [There is no safe place on the leaderboard!](https://www.kaggle.com/competitions/llm-20-questions/discussion/530066) — 8 票 / 15 评论 / 2024-08-24 
+- [Found something similar to the competition from Microsoft Research Asia researchers. ](https://www.kaggle.com/competitions/llm-20-questions/discussion/503143) — 8 票 / 0 评论 / 2024-05-16 
+- [Who are asker and answerer?](https://www.kaggle.com/competitions/llm-20-questions/discussion/519723) — 7 票 / 5 评论 / 2024-07-12 
+- [All Solutions in One Place](https://www.kaggle.com/competitions/llm-20-questions/discussion/530995) — 7 票 / 5 评论 / 2024-08-29 **write-up?**
+- [[26th] - 3rd (?) in non-Alpha group](https://www.kaggle.com/competitions/llm-20-questions/discussion/531081) — 7 票 / 6 评论 / 2024-08-30 
+- [I choose to believe Llama and abandon all offline strategy except AlphaAgent](https://www.kaggle.com/competitions/llm-20-questions/discussion/527898) — 7 票 / 0 评论 / 2024-08-14 
+- [[20th] A simple solution, attempts and thinking.](https://www.kaggle.com/competitions/llm-20-questions/discussion/531083) — 7 票 / 1 评论 / 2024-08-30 **write-up?**
+- [Urgent: Unfair Memory Err Strategy](https://www.kaggle.com/competitions/llm-20-questions/discussion/518959) — 7 票 / 5 评论 / 2024-07-09 
+- [Bug: Answerer is not provided the keyword in the first round](https://www.kaggle.com/competitions/llm-20-questions/discussion/506456) — 7 票 / 1 评论 / 2024-05-22 
+- [Exploring Non-Alpha Agent Strategies](https://www.kaggle.com/competitions/llm-20-questions/discussion/530889) — 7 票 / 8 评论 / 2024-08-29 
+- [The final play](https://www.kaggle.com/competitions/llm-20-questions/discussion/530217) — 7 票 / 9 评论 / 2024-08-25 
+- [List of questions seen on the LB that can be answered with a rule-based algorithm.](https://www.kaggle.com/competitions/llm-20-questions/discussion/515801) — 7 票 / 1 评论 / 2024-06-30 
+- [Leaderboard Confidence Update](https://www.kaggle.com/competitions/llm-20-questions/discussion/530444) — 5 票 / 42 评论 / 2024-08-26 

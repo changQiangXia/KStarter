@@ -1,0 +1,82 @@
+# kaggle-measuring-agi 讨论区（按票数排序，共 80 条）
+
+- [Great Concerns About Community Upvotes Contributing to Total Score](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683674) — 28 票 / 5 评论 / 2026-03-21 
+- [It's a wrap!](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692562) — 25 票 / 41 评论 / 2026-04-17 
+- [Update on results announcement: give us 1-2 more weeks!](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/716405) — 23 票 / 12 评论 / 2026-06-30 
+- [Announcing the Measuring Progress Toward AGI: Cognitive Abilities Hackathon Winners](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/724918) — 22 票 / 43 评论 / 2026-07-13 
+- [Important Update: Evaluation rubric change](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684184) — 22 票 / 2 评论 / 2026-03-24 
+- [Welcome to Measuring Progress Toward AGI - Cognitive Abilities](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682012) — 20 票 / 59 评论 / 2026-03-17 
+- [I built a benchmark that catches AI lying about what it knows — results are disturbing](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/681964) — 14 票 / 10 评论 / 2026-03-17 
+- [Important submission info: please read before you submit](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/689547) — 12 票 / 37 评论 / 2026-04-08 
+- [Action needed if your dataset is private](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/702378) — 10 票 / 66 评论 / 2026-05-22 
+- [New Kaggle Benchmarks feature: Task versions on your benchmark page](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684183) — 10 票 / 0 评论 / 2026-03-23 
+- [Measuring Progress Toward AGI - Cognitive Abilities -Results ?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/703599) — 10 票 / 0 评论 / 2026-06-01 
+- [[Live Q&A on Apr 1] Measuring Progress Toward AGI: A Cognitive Framework](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/685268) — 10 票 / 10 评论 / 2026-03-27 
+- [Kaggle Benchmarks FAQ](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682714) — 8 票 / 7 评论 / 2026-03-18 
+- [Kaggle Benchmarks - Product Feedback](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/681731) — 7 票 / 63 评论 / 2026-03-16 
+- [Result Announcement](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/703622) — 7 票 / 0 评论 / 2026-06-01 
+- [We just launched Gemma 4 in Kaggle Benchmarks :)](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/687230) — 5 票 / 3 评论 / 2026-04-02 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/681728) — 4 票 / 0 评论 / 2026-03-16 
+- [How many models should we run the benchmarks for?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683353) — 4 票 / 3 评论 / 2026-03-20 
+- [AttentionLens: A Cognitively-Grounded 3-Task Attention Benchmark [Attention Track]](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683441) — 4 票 / 12 评论 / 2026-03-20 
+- [Reminder: Hackathon livestream is happening in ~24 hours!](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/686504) — 4 票 / 3 评论 / 2026-03-31 
+- [Sufficient sample size to be statistically significant](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682821) — 3 票 / 6 评论 / 2026-03-19 
+- [AttentionLens results: DeepSeek-R1 scores 0.00 on selective attention — what does this reveal?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683514) — 3 票 / 3 评论 / 2026-03-20 
+- [Questions Concerning the Human-Baselines of the Benchmark](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/681911) — 3 票 / 1 评论 / 2026-03-17 
+- [Multiple score dimensions from a single benchmark task?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/687121) — 3 票 / 0 评论 / 2026-04-02 
+- [Social Cognition is the Most Underexplored Track — Here's Why It Matters Most](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682703) — 3 票 / 1 评论 / 2026-03-18 
+- [We Tested 16 Models on Metacognition. The Best Reasoning Model Failed the Easiest Test.](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/690621) — 3 票 / 8 评论 / 2026-04-12 
+- [Bettina - Behavioral Embedding via Topological Transformation and Iterative Nonlinear Attractors](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682605) — 3 票 / 2 评论 / 2026-03-18 
+- [Cross-Benchmark Convergence: All 5 Tracks May Be Measuring the Same Missing Primitive](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684133) — 3 票 / 5 评论 / 2026-03-23 
+- [I built a benchmark for precondition failures in LLMs, two scenarios broke all four models](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683817) — 3 票 / 12 评论 / 2026-03-22 
+- [Beware of anthropomorphic bias](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684834) — 3 票 / 1 评论 / 2026-03-26 
+- [What is taking so long? ](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/715824) — 3 票 / 7 评论 / 2026-06-29 
+- [Which track are you building your benchmark for, and what’s the main model flaw you're hoping to expose?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684008) — 3 票 / 2 评论 / 2026-03-23 
+- [Is every track in this competition measuring the same underlying failure?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684099) — 2 票 / 1 评论 / 2026-03-23 
+- [Social Cognition: Theory of Mind Battery — Updated with Task 4 (Coherence Gate Experiment)](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684117) — 2 票 / 0 评论 / 2026-03-23 
+- [CAB: Compositional Abstraction Benchmark — Real Inference on 5 Models via AWS Bedrock](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/686127) — 2 票 / 0 评论 / 2026-03-30 
+- [DeepSeek-R1 scores 0.00 on Social Cognition — cross-benchmark evidence for a unified Cognitive Control Failure](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683967) — 2 票 / 5 评论 / 2026-03-23 
+- [AMB-200 Benchmark: Why do models hallucinate with 100% confidence on MLOps traps?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684248) — 2 票 / 6 评论 / 2026-03-24 
+- [Adaptive Intelligence Benchmark for Dynamic Constraints](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683411) — 2 票 / 12 评论 / 2026-03-20 
+- [One Track Only or Multiple ](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683018) — 2 票 / 2 评论 / 2026-03-19 
+- [Two notebooks to help you get started — getting started guide + all 5 track designs](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/681993) — 2 票 / 1 评论 / 2026-03-17 
+- [Do LLMs actually follow instructions, or just kinda approximate them?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684848) — 2 票 / 4 评论 / 2026-03-26 
+- [MIRROR Benchmark: Testing "Epistemic Humility" & Bypassing CoT Hallucinations](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682587) — 2 票 / 2 评论 / 2026-03-18 
+- [ META-COG: AI scores ONLY 8.33% on self-awareness benchmark](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682752) — 2 票 / 0 评论 / 2026-03-18 
+- [Clarification on submission requirements](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/690821) — 2 票 / 0 评论 / 2026-04-13 
+- [My code, results and participation in the AGI - Cognitive Abilities competition was not graded?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/741884) — 2 票 / 0 评论 / 2026-09-18 
+- [Benchmarking Metacognitive Achievement in Frontier Models ](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682701) — 2 票 / 0 评论 / 2026-03-18 
+- [I missed the submission window ](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692776) — 2 票 / 0 评论 / 2026-04-17 
+- [We asked 20 LLMs "are you sure?" — the leaderboard flipped](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692553) — 2 票 / 0 评论 / 2026-04-17 
+- [Rethinking General Intelligence: Beyond Averaging](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682057) — 2 票 / 1 评论 / 2026-03-17 
+- [ Construct-validity question for the Metacognition track](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/691540) — 2 票 / 4 评论 / 2026-04-15 
+- [Looking for arXiv endorser for cs.LG — MetaTruth benchmark paper](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682518) — 2 票 / 0 评论 / 2026-03-18 
+- [Running kaggle-benchmarks locally.](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684823) — 1 票 / 1 评论 / 2026-03-26 
+- [How evaluation will done?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682578) — 1 票 / 4 评论 / 2026-03-18 
+- [MetaTruth = Benchmarking Metacognition in Frontier LLMs](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682023) — 1 票 / 0 评论 / 2026-03-17 
+- [What Can Dynamic Metacognition Tests Reveal That Static Ones Cannot?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/685217) — 1 票 / 2 评论 / 2026-03-27 
+- [Thank you  for  your paper](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684962) — 1 票 / 3 评论 / 2026-03-26 
+- [[Tutorial] Stop Your LLM Judge from Crashing the SDK: The RCCO Prompt Framework](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682245) — 1 票 / 0 评论 / 2026-03-18 
+- [No one likes a know-it-all](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682276) — 1 票 / 0 评论 / 2026-03-18 
+- [problem while submititng](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682282) — 1 票 / 0 评论 / 2026-03-18 
+- [general requirements and evaluation](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682072) — 1 票 / 1 评论 / 2026-03-17 
+- [CBB: I found a prompt-resistant metacognitive blindspot in frontier LLMs](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682478) — 1 票 / 0 评论 / 2026-03-18 
+- [17 models tested: Gemma collapses to <5% accuracy under misleading context, scale makes it worse](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684407) — 1 票 / 2 评论 / 2026-03-24 
+- [Do LLMs really follow instructions under conflict?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682892) — 1 票 / 2 评论 / 2026-03-19 
+- [GPT-5.4 Mini vs Claude Opus 4.6 — Head-to-Head on a 36-Hour SCADA Cyber Attack Benchmark](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/686837) — 1 票 / 0 评论 / 2026-04-01 
+- [Clarifications on Executive Functions Track, Novelty, and Evaluation Setup](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/686937) — 1 票 / 0 评论 / 2026-04-01 
+- [I learned a lot from this competition](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692555) — 1 票 / 2 评论 / 2026-04-17 
+- [Are we endangering the future of humanity by pushing AI towards AGI? ⚠️🌍🤖](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/684081) — 1 票 / 1 评论 / 2026-03-23 
+- [Generate Task failing repeatedly - duplicate task registration issue](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682654) — 1 票 / 5 评论 / 2026-03-18 
+- [JSON dialogue Visualizer Free Tool for this contest](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683894) — 1 票 / 3 评论 / 2026-03-22 
+- [ConceptProbe: a sample-efficiency benchmark that exposes retrieval-vs-induction in frontier models](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/691512) — 1 票 / 6 评论 / 2026-04-15 
+- [AttentionLens Early Results: Gemini 2.5 Flash tops attention tasks — but Haiku beats Opus](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683736) — 1 票 / 2 评论 / 2026-03-21 
+- [where to submit?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/682921) — 1 票 / 1 评论 / 2026-03-19 
+- [Unable to submit my writeup](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692560) — 1 票 / 0 评论 / 2026-04-17 **write-up?**
+- [What Makes a Good AI Benchmark?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683023) — 1 票 / 0 评论 / 2026-03-19 
+- [TPSR Benchmark: Decoding the "Literal Trap" in LLMs (Social Intelligence & Sarcasm)🚀](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/692094) — 1 票 / 0 评论 / 2026-04-16 
+- [help  me  ,  let  us  discuss   a    good   idea](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683995) — 1 票 / 0 评论 / 2026-03-23 
+- [Kinyarwex : A Constructed Language Benchmark for Social Cognition (Track 5)](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683087) — 1 票 / 0 评论 / 2026-03-19 
+- [Unable to save tasks notebook](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683975) — 1 票 / 0 评论 / 2026-03-23 
+- [Metacognitive Calibration Benchmark — does AI know how well it thinks?](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/683724) — 1 票 / 2 评论 / 2026-03-21 **write-up?**
+- [28,214 Real CNC G-code Programs — Free Dataset + What 11 LLMs Got Wrong](https://www.kaggle.com/competitions/kaggle-measuring-agi/discussion/689288) — 1 票 / 0 评论 / 2026-04-08 

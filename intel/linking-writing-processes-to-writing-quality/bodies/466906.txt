@@ -1,0 +1,211 @@
+# https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466906
+
+Topic #466906: [3rd place solution] Blend MLM pretrained DeBERTa & GBM
+  Author: Darragh
+  Posted: 2024-01-10 10:43:50.183000
+  Votes: 79  Comments: 38
+
+Thanks to kaggle and everyone involved for hosting this competition. It was interesting to see how good we can predict essay scores just from keystroke information. Special thanks to @kawaiicoderuwu for sharing the essay constructor we based much of our solution on.
+
+TLDR
+
+Our solution is an ensemble of two parts. Firstly, we build a Gradient Boosted Trees (GBT) ensemble based on popular public features on essay level. Secondly, we build an ensemble of deberta models using the final essay text, which have been mlm-pretrained on persuade corpus where we obscured the essays similar to the competitions train set. We weight GBT-Ensemble and deberta-ensemble by a ratio of 40/60.
+
+Cross validation
+
+We used 8fold cross validation and got a so-so correlation between CV and LB. One important insight is that GBM models have a way better LB/ CV ratio compared to deberta models. Or in other words, Deberta worked better on CV, while GBM were relatively bad on CV, but good on LB. That indicates a slight domain shift between LB and train set. Our guess is the essays might be split by topic or student year. 
+
+
+Data preprocessing
+
+Similar to most teams we extracted the final text for each essay, and trained a model to analyse it. Deberta models were quite strong when using the final obscured essay text. We found significant improvement by replacing the obscurification character q with i or X. For both cases one can understand that the pretrained debertas have a better tokenization compared to using q. For example a lot of texts the debertas originally have been trained on, have explicit tokens for i, ii, iii, or X, XX, XXX. This also meant the tokenized sequence was shorter than using q. Following that rationale, we also trained a custom tokenizer. Models based on that tokenizer helped the ensemble a bit.
+
+Model
+
+GBT ensemble
+
+For all models within the GBT ensemble we used the same 165 features as presented in the public kernel by @awqatak (who deserves another special thanks 🙏). We then trained a few models similar to public kernels on those features.
+
+The final components were as following
+
+
+
+LGB (params tuned with optuna)
+
+XGB (params tuned with optuna)
+
+CatBoost (params from public kernel)
+
+Lightautoml (params from public kernel)
+
+Shallow NN
+
+
+Deberta ensemble
+
+A key component of our solution is an ensemble of transformer models (Deberta) trained on the reconstructed essay text. 
+
+Training procedure:
+
+We found that pretraining the transformer on the persuade corpus with MLM-objective significantly improves CV and LB. For that, essays in the persuade corpus had to be obscured similar to the essays resulting from the train set. Then in a second step we fine-tuned those models on the training data, adding additional features like cursor position, etc and using a Squeezeformer layer to derive semantic features. Adding further keystroke features did not help, and we needed heavy dropout/augmentation on the three we added.
+
+
+The final components were as following
+
+
+
+deberta-v3-base trained with q replaced by i
+
+deberta-v3-large trained with q replaced by i (with first 12 layers frozen in finetuning, to avoid overfit)
+
+deberta-v3-base trained with q replaced by X
+
+deberta-v3-base trained with custom spm tokenizer 
+
+
+Postprocessing
+
+For some models we clipped predictions at [0.5,6.] but it did not really make a difference. 
+
+Ensembling
+
+Within the Deberta ensemble as well as within the GBM ensemble we used positive Ridge Regression on Out-of-fold (OOF) predictions to determine blending weights. The final weighting of both parts was done manually, and represented if we trust CV or LB more. For final submissions we selected 50/50 kernel and one 40/60 kernel. 
+
+What did not help
+
+
+
+Using the deleted text
+
+Stacking
+
+Adding more keystroke features to the deberta based model. 
+
+More squeezeformer layers
+
+
+Used tools/ repos
+
+
+
+Pytorch
+
+Huggingface
+
+Optuna
+
+Neptune.ai was our MLOps stack to track, compare and share models. 
+
+
+Code
+
+Training code repo here.
+Inference script here.
+
+Comments:
+├─ yao (2024-01-10 11:21:18.557000) [+3]
+│  Congratulations on the Gold! I missed the pretraining and external text data.
+│  
+│  Can I ask what's your CV of blend of GBM? My models not blend well with same feature set(even if I trained with differ...
+  ├─ Darragh (2024-01-10 11:44:31.313000) [+3]
+  │  As a reference point, I can give [Private/Public] of GBM blend (incl MLP) [0.571/0.584]; as well as Deberta only blend [0.565/0.578].
+  │  On CV - 8 fold - the individual Debertas were in the 0.584 +/- ...
+    ├─ yao (2024-01-10 12:27:01.610000) [+0]
+    │  Thanks for the reply!
+├─ Zhongkai Shangguan (2024-01-10 18:54:03.267000) [+4]
+│  Congrats and thanks for sharing! 
+│  I have one question: as you mentioned the "q" is replaced by "i" or "X", may I ask what is your motivation for doing so? 
+│  I found another discussion saying replaci...
+  ├─ Darragh (2024-01-10 19:55:24.610000) [+10]
+  │  Using the deberta tokenizer on the reconstructed essay with letter ‘q’ results in a very long sequence of tokens, as there is no ‘qqq’ or ‘qq’ token natively in the tokenizer. So we tried replacing...
+    ├─ Zhongkai Shangguan (2024-01-10 22:21:16.193000) [+1]
+    │  Wow this finding is amazing! Thank you!
+├─ MAT (2024-01-13 15:26:38.690000) [+1]
+│  In terms of post-mortem analysis, would you suggest why the shake was very small for you but larger for many others Perhaps, some tests are possible, Typical shake was estimated around 0.004
+│  
+│  @darr...
+  ├─ Darragh (2024-01-13 16:38:33.613000) [+0]
+  │  In our experiments the deberta based models were very stable on CV (8-fold score less than 0.001 variability) and relatively stable on LB (eg. we did not have surprises when submitting, single mode...
+    ├─ MAT (2024-01-13 17:28:35.507000) [+0]
+    │  ok, GBMs are noisy
+    │  
+    │  1st solution relied more on GBM it looks like, although external data/text was the key to both of your solutions. @tomooinubushi  I can see from the re-run that privateLB-public...
+    ├─ MAT (2024-01-15 13:31:07.367000) [+0]
+    │  did you use "external data" as per 1st place?
+    │  
+    │  It seems quite different routes to the top, yet the scores are reasonably close. Does it mean hitting some "ceiling for extractable information"? Afte...
+    ├─ Darragh (2024-01-15 20:35:01.093000) [+0]
+    │  We did not use external labelled data like 1st place. As mentioned, we used external data in an unsupervised fashion. 
+    │  We tested it earlier, but unfortunately did not bring it into the final blend.
+├─ Prithvi Jingade (2024-01-13 07:07:44.547000) [+1]
+│  Congratulations!
+├─ Ramzi REZKI (2024-01-12 21:31:50.060000) [+1]
+│  congratulations to achieve the 4 th position in this competition and thanks for sharing your model and solution
+├─ Nishant Singhal (2024-01-12 09:04:28.307000) [+1]
+│  congratulations! Had one question:
+│  
+│  How did obscuring the essays in the persuade corpus with a character replacement strategy impact the effectiveness of the transformer models' understanding of th...
+  ├─ Darragh (2024-01-12 09:35:33.833000) [+2]
+  │  The competition data is student essay's obscured by a character. eg. "I just got back from your class, so I decided" -&gt; "i iiii iii iiii iiii iiii iiiii, ii i iiiiiii". 
+  │  Deberta is pretrained on...
+    ├─ Nishant Singhal (2024-01-12 09:49:34.843000) [+0]
+    │  Thank you!
+├─ Athar Sayed (2024-01-12 02:45:41.907000) [+1]
+│  Congratulations for your placement and thanks for sharing it's amazing to see Deberta models ruling tabular competitions as well !!
+├─ Radek Osmulski (2024-01-12 01:57:54.847000) [+1]
+│  what a wonderful solution and a great write up! 🙏 Thank you so much for it and huge congrats on the 4th place!!!
+│  
+│  I really love how elegant your solution is and the clarity of your thinking, as you...
+├─ Xarta (2024-01-11 10:39:12.810000) [+1]
+│  Thanks for this wealth of information - incredibly useful!
+│  
+│  What is your opinion on training models using the entire train set?
+│  I'm asking because particularly in this competition we only had 2741 ...
+  ├─ Darragh (2024-01-11 10:48:04.927000) [+1]
+  │  Thanks for your kind words; yes we did not mention, the final models for submission were all trained on the full data. We did a quick test on a single deberta model - 16fullfit seeds gave a lift of...
+├─ narsil (jobs-in-data.com) (2024-01-11 08:38:58.520000) [+1]
+│  Amazing stuff. Thanks. I had a very similar intuition at the start of this competition (training deberta on a text obscured in a similar way to train), but it is the implementation that separates w...
+├─ C R Suthikshn Kumar (2024-01-11 07:23:54) [+1]
+│  Congratulations on achievng 4th position in this competition. Thanks for sharing the details of your solution.
+├─ Min-Hsien Weng (2024-01-10 23:35:12.990000) [+1]
+│  Congrats and thanks for sharing awesome solution.
+│  
+│  May I ask about the optimal blending weights for the Deberta and GBT models in the ensemble? 
+│  
+│  I tried using RMSE losses for determining the weigh...
+  ├─ Darragh (2024-01-11 07:53:44.543000) [+2]
+  │  We saved the individual out-of-fold (CV on 8 fold) predictions for each individual model. We then passed these as a features into a lassoo regressor, and trained that. The lasso regressor gives a w...
+    ├─ Min-Hsien Weng (2024-01-11 08:07:47.537000) [+1]
+    │  Wow, your suggestions are exactly what I needed. 
+    │  
+    │  I particularly appreciate the insight about simple blending of predictions and carefully selecting models through CV score and LB score. I already...
+├─ Sinan Calisir (2024-01-10 23:34:21.763000) [+1]
+│  It's a great idea to replace the anonymous character with i or X and usage of Deberta. Congratulations!
+├─ awqatak (2024-01-10 14:18:09.483000) [+1]
+│  Congratulations on the Gold medal!
+│  Thanks for the mention :)
+│  Great Writeup.
+├─ Roy Wei (2024-01-10 13:32:14.590000) [+1]
+│  I love your solution (it's just such a pro refinement on my preliminary thoughts). Great work can stand against any kind of shake! Congrats!🫡
+├─ Gaurav Rawat (2024-01-12 23:08:26.317000) [+2]
+│  The deberta implementation and squeezeformer usage is really creative kudos for your gold medal . COnsidering all the recent hype around LAM . It seems to me a like a smaller action model of kinds ...
+  ├─ Darragh (2024-01-20 07:50:29.180000) [+1]
+  │  See better explanation below.
+    ├─ ln (2024-01-20 10:19:48.550000) [+4]
+    │  I completely agree that monotonic transformation of any variable does not change the classification tree. With regression trees the situation is a bit different. Suppose you want to split the data ...
+    ├─ Darragh (2024-01-20 11:54:49.733000) [+1]
+    │  Ah, I had not considered it, this is a valuable learning for me. Thank you for explaining.
+  ├─ DJ_Xia (2024-01-20 10:58:27.500000) [+1]
+  │  @darraghdog I'm also interested in seeing the Squeezeformer code. Could it be shared, if possible?
+    ├─ Darragh (2024-01-20 12:06:42.540000) [+0]
+    │  The repo is not finalised but here is the squeezeformer block. We had the same implementation on the fingerspelling competition so it was one of the initial things we tried.
+    │  
+    │  Note, the squeezeforme...
+    ├─ DJ_Xia (2024-01-27 12:50:51.793000) [+1]
+    │  We also statistics grammatical errors  through simple rules (for example, the he number of times when the first letter of a sentence is not capitalized, and the number of times when the number of c...
+    ├─ Darragh (2024-01-30 13:29:44.777000) [+1]
+    │  Thanks for the heads up - training repo is public now.
+├─ LIUHAHA1888 (2024-01-11 04:37:07.373000) [+2]
+│  Congratulations on winning the gold medal! Every time I read your post-match plans, it feels as exquisite and beautiful as reading a poem! I admire that! Congratulations again!👍
+├─ KaiH (2024-01-10 14:27:16.693000) [+2]
+│  Wow your model seems to be one of the few who survived the Great Shakening! Also thank you for mentioning me!!!

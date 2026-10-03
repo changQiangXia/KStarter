@@ -1,0 +1,185 @@
+<h2>1. Introduction</h2>
+<p>First and foremost, I would like to express my gratitude to the organizers, the Kaggle team, and all the participants. The familiar theme of the 20 Questions game made this competition particularly enjoyable to work on! Despite the task's relatively high implementation complexity, I managed to effectively develop it by splitting it into more than ten loosely coupled Python scripts and creating nearly a hundred test cases.<br>
+This solution integrates rule-based logic, keyword matching, and LLM context-based responses to achieve a high level of accuracy in identifying keywords.<br>
+This solution achieved a public score of 1023.5 (highest) , securing 3rd place. The score was achieved with three wins as a guesser (Agent Alpha victories not included) , zero losses, and three draws. In a similar subsequent submission, it scored 982.9, remaining within the gold medal range, with three wins as a guesser (Agent Alpha victories not included) and one win as an answerer, consistently reaching the gold medal range.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F649b5c3decd99885a76355441dacd4ae%2Fpublic_3rd_place.png?generation=1724245081062100&amp;alt=media" alt=""><br>
+A few days before the evaluation period with the private keyword set ended, I reached a peak of 2nd place (with only a 0.7-point difference from 1st place, practically a margin of error). In the end, I finished 9th, but I’m very satisfied with earning a solo gold medal!<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2Fc94bb997ba4cb3f0ded3ed6e7fe7a4cc%2Ffinal_private_LB.png?generation=1725070432892749&amp;alt=media" alt=""></p>
+<h2>2. Answer Agent</h2>
+<p>I combined the following Answer agents, prioritized in the order of 1, 2, 3, and 4:</p>
+<ol>
+<li><strong>Rule-based Yes/No responses when matching specific protocols</strong>:<ul>
+<li>This method was responsible for approximately 15% of the Answers.</li>
+<li>All protocols identified from episodes were managed effectively.</li>
+<li>Ultimately, 23 types of protocols were included.</li>
+<li>To minimize implementation errors, I created multiple test cases for each protocol.</li>
+<li>The implementation was generalized to handle variations in uppercase, lowercase, double quotes, single quotes, and the absence of quotes.</li></ul></li>
+<li><strong>Pre-defined keyword-question pairs</strong>:<ul>
+<li>This method was responsible for approximately 5% of the Answers.</li>
+<li>If a keyword-question pair matched the pre-defined matrix, the corresponding answer was deemed appropriate.</li>
+<li>Keywords and questions were pre-processed using <code>.lower().strip()</code>.</li>
+<li>When this method was enabled, the success rate for self-play with most keywords was nearly 100%. This suggests that when the values of the Answer and Ask/Guess agents align perfectly, it is easy to arrive at the correct keyword. The discrepancy in values is what contributes to the task's difficulty. Despite the Answer agent being underrated compared to the Ask/Guess agents, the reduction factor(proposed in <a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/520021" target="_blank">this discussion</a>) for each round, raised to the power of 20, creates significant differences.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F8cfac4e18f2df0f48d63bd09c7d271d3%2FN1%20per%20reduction_factor%20%2020.png?generation=1724245097965091&amp;alt=media" alt=""></li></ul></li>
+<li><strong>LLM + Wikipedia Context-based responses</strong>:<ul>
+<li>This method was responsible for approximately 80% of the Answers.</li>
+<li>I used llama3.1-8B-IT with parameters: <code>do_sample=False</code>, <code>max_tokens=1</code>, and <code>bad_words_ids=["maybe", "Maybe", "none", "None", "Invalid", "invalid", "INVALID", "I", "can", "can't", "Can't", "CAN'T", "I'm", "I'll", "I've"]</code>. <a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/524258" target="_blank">The shared system prompt</a> was configured accordingly.</li>
+<li>The secret keyword was compared with titles from a pre-prepared Wikipedia dataset to retrieve relevant text, thereby extending the LLM's knowledge base and improving the CV score from 17.1 % to 31.4 %.</li>
+<li>Wikipedia titles were compared only up to the first parenthesis.<ul>
+<li>Priority 1: Exact match</li>
+<li>Priority 2: Case-insensitive match using <code>.lower().strip()</code></li>
+<li>Priority 3: Normalized match using the competition's GitHub comparison function</li></ul></li>
+<li>Context length restrictions:<ul>
+<li>Texts under 280 characters were not used.</li>
+<li>Texts over 2048 characters were truncated at a natural point.</li></ul></li></ul></li>
+<li><strong>Exception handling</strong>:<ul>
+<li>This method was responsible for approximately 0% of the Answers.</li>
+<li>Added exception handling for errors or issues in steps 1, 2, and 3.</li>
+<li>In case of exceptions, "no" was selected as the response since it is statistically more likely to occur than "yes".</li></ul></li>
+</ol>
+<h2>3. Asker/Guesser Flow</h2>
+<p>In Round 1, the question 'Is it Agent Alpha?' is posed. If the answer is No, follow these steps:</p>
+<h3>Asker Step</h3>
+<ol>
+<li>Set up a highest score keyword set.</li>
+<li>Calculate E (a metric related to the expected reduction in candidate keywords) for each question and select the question with the highest E.</li>
+<li>Remove the selected question from the question set.</li>
+</ol>
+<h3>Guesser Step</h3>
+<ol>
+<li>Obtain the Answer.</li>
+<li>Update the scores for the keyword set.</li>
+<li>Select the keyword with the highest score.</li>
+<li>Remove the selected keyword from the keyword set.<br>
+Repeat until the round limit is reached.</li>
+</ol>
+<h2>4. Asker Agent</h2>
+<h3>4.1. Question principles:</h3>
+<ol>
+<li><strong>Clarity</strong>: Questions should reliably elicit stable Yes/No answers regardless of the Answer. Verified by asking the LLM the same question and checking for consistent responses. Adjusted temperature and parameters for further stability evaluation. Clarity was prioritized over a hard semantic binary search, opting instead for a soft search of top answer candidates.</li>
+<li><strong>Independence</strong>: Questions with high independence were preferred, determined by Yes/No correlation coefficients. Redundant questions were excluded by focusing on keywords with split opinions and evaluating clarity.</li>
+<li><strong>High Information Gain</strong>: A question like "Is it an Asian country?" provides more information than "Is it in the Baltic States?" However, as rounds progress and keyword candidates narrow, this principle adjusts. Generally, the reduction factor for p(ratio of yes in total) is p^2 + (1-p)^2, minimized at p=0.5. In my observations, past popular questions like 'Is it a place?' have a p value closer to 0.33, rather than the expected 0.25.<br>
+These principles were also applied to an algorithm designed to select questions with high information gain from a pre-prepared keyword-question matrix. Even if a question has high information gain, if it lacks clarity, it is not selected. Therefore, an additional "Tie" option was introduced to factor in clarity when choosing questions. Instead of simply selecting questions with a p value close to 0.5, the algorithm calculates E and selects the question with the highest E.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F73c3829ec8d20a98eb8177b3e8f142e7%2FFormulas.png?generation=1724245121746432&amp;alt=media" alt=""><br>
+Here is the explanation of E:</li>
+</ol>
+<ul>
+<li><strong>y, n, t</strong>: These represent the total number of 'yes', 'no', and 'tie' responses for a given question.</li>
+<li>The first and second terms correspond to the expected number of keyword candidates that will be eliminated by a question with the counts y, n, and t.</li>
+<li>The third and fourth terms serve as tiebreakers. Thanks to the terms, if the expected values are the same, the question with fewer 't' responses and with more 'y' responses will be chosen (assuming that 'no' responses generally outnumber 'yes' responses).</li>
+</ul>
+<h2>5. Guesser Agent</h2>
+<ol>
+<li>Using the simple method of maintaining consistency between keywords and pre-determined Yes/No answers often exhausts keyword candidates by Round 10. This discrepancy arises from differences between pre-determined and actual answers. To buffer this, a scoring system was introduced.</li>
+<li>Scores are calculated for each keyword, with the highest score chosen each round.</li>
+<li>Initial scores are set by tier.</li>
+<li>Scores are adjusted based on consistency with Answers, with Yes/No matches increasing scores by 1. If a keyword answer is Tie, its score is not updated, avoiding unnecessary adjustments.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F84268465f39eee58e9ae5b76fe7de435%2Fsimulated_scores.png?generation=1724245228800750&amp;alt=media" alt=""></li>
+</ol>
+<h2>6. When Agent Alpha is Effective</h2>
+<p>If "Is it Agent Alpha?" yields a Yes in Round 1, fall back to a binary search approach using the following steps:</p>
+<ol>
+<li>Prepare primary keyword candidates (2,046) and supplementary keyword candidates (~100,000).</li>
+<li>Steps:<ul>
+<li>Binary search with primary keywords.</li>
+<li>Binary search with supplementary keywords using the information gathered.</li>
+<li>If not found, fall back to the standard approach, assuming the pair bot  is a false Agent Alpha.</li></ul></li>
+<li>Primary keyword candidates are set to 2046 to exhaust the search in exactly 10 turns.<br>
+(2046-&gt;1022-&gt;510-&gt;254-&gt;126-&gt;62-&gt;30-&gt;14-&gt;6-&gt;2-&gt;0)</li>
+<li>Dividing keywords into primary and supplementary sets increases the chances of winning in mirror matches against Agent Alpha, while still allowing success against other opponents around Round 17.</li>
+</ol>
+<h3>By the way, Should You Use Agent Alpha?</h3>
+<p>I thought the pros outweighed the cons.</p>
+<h4>Pros:</h4>
+<ul>
+<li>High success rate in identifying keywords.</li>
+<li>Not dependent on the responder's yes/no perspectives.</li>
+<li>Effective for escaping low-rating ranges.</li>
+</ul>
+<h4>Cons:</h4>
+<ul>
+<li>Consumes one turn.</li>
+<li>Often suffers significant losses against false Agent Alpha pair bots.</li>
+<li>Requires preparing keyword candidates.</li>
+</ul>
+<h2>7. Creating the Dataset</h2>
+<p>Like many other LLM competitions, dataset creation was a key factor in this competition. I followed these steps:</p>
+<h3>Keyword Collection:</h3>
+<ul>
+<li>Sample 10 keywords from the public 'Things' category. Use the LLM to iteratively generate 30 new keywords, continuing until no new keywords are produced.</li>
+<li>Added all keyword datasets shared in discussions.</li>
+<li>Used LLM to determine if English Wikipedia titles belong to the "Things" category (limited to binary search due to high false positives).</li>
+<li>Manually added all keywords that came to mind.<br>
+Below is the Embedding representations of Public keywords and Tier 1 keywords (the highest quality dataset among the generated keywords).<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2Ff583722735b728a731c1cc412478c34f%2FSemantic%20Visualization%20of%20Keywords%20with%20LLama3.1%20Embeddings.png?generation=1724245142843646&amp;alt=media" alt=""></li>
+</ul>
+<h3>Question Collection:</h3>
+<h4>Collection:</h4>
+<ul>
+<li>Gather questions from episodes of top Kagglers on the leaderboard.</li>
+<li>Use shared datasets from <a href="https://www.kaggle.com/code/khahuras/offline-policy-questioner-agent" target="_blank">here</a>.</li>
+<li>Manually add questions that seem missing types of questions.<ul>
+<li>My favorite question is <code>len(keyword.split()) == 2? # Is the length of the keyword two words?</code>. I think it’s excellent in terms of Clarity, Independence, and High Information Gain.</li></ul></li>
+</ul>
+<h4>Removal:</h4>
+<ul>
+<li>Remove questions lacking clarity or having high correlation with others.</li>
+<li>Finalized 521 questions, deemed sufficient for pre-evaluation.</li>
+</ul>
+<h3>Answer Creation:</h3>
+<ul>
+<li>Use LLM to create Yes/No answers, including Tie responses.<ul>
+<li>I initially used different temperatures for diverse answers. However, I modified the prompt to include "unsure" and "irrelevant" for Tie answers in a single inference.</li></ul></li>
+<li>Generated a final dataset with 15,113 keywords and 521 questions.<ul>
+<li>Created a similar dataset for 1,497 public keywords for initial algorithm development, used for CV and leaderboard validation.<br>
+Below are the counts of yes, no, and tie responses for each of the 1,497 public keywords (not whole questions included):<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F574d2247bb1b07d28675cf5f1f403d00%2Fthe%20counts%20of%20yes%20no%20and%20tie%20responses%20for%20each%20of%20the%201497%20public%20keywords%20(not%20whole%20questions%20included).png?generation=1724245172141051&amp;alt=media" alt=""></li></ul></li>
+</ul>
+<h3>Dataset Sorting:</h3>
+<ul>
+<li>Questions were ordered by the E in their initial values.</li>
+<li>Keywords dataset split into Tier 1, 2, 3, and 4 to avoid reliance on a single dataset.<ul>
+<li>You can check the definition of the Tier is <a href="https://www.kaggle.com/datasets/isakatsuyoshi/llm-20-questions-keyword-question-mapping" target="_blank">here</a></li>
+<li>Initial score 0.0 for Tier1, -0.5 for Tier2, -1.0 for Tier3 and -1.5 for Tier4</li>
+<li>Until Round 11, Tier 1 keywords mainly targeted .</li>
+<li>Later rounds involve a dynamic exchange among top-scoring keywords from all tiers, naturally expanding the dataset.</li></ul></li>
+</ul>
+<h4>Final Submissions:</h4>
+<p>I selected final submissions for the diversity:</p>
+<ul>
+<li>Submission ①: Tiers 1, 2, 3, 4</li>
+<li>Submission ②: Tiers 1+2 (Tier 2 treated as Tier 1), and Tiers 3, 4.</li>
+</ul>
+<h2>8. Sharing Source Code and Datasets</h2>
+<p>I'm happy to share the source code (on Kaggle, GitHub), test code, and datasets!</p>
+<h3>8.1 Source Code</h3>
+<h4>Kaggle</h4>
+<ul>
+<li><a href="https://www.kaggle.com/code/isakatsuyoshi/final-submission-llm-20-questions" target="_blank">Final Submission - LLM 20 Questions</a>: Final submission notebook</li>
+<li><a href="https://www.kaggle.com/code/isakatsuyoshi/llama-3-1-8b-instruct-fix-json" target="_blank">Llama 3.1 · 8b-instruct Fix Json</a>: This allows Llama 3.1-8B-IT to be used in the Kaggle environment (see the reference discussion <a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/523619" target="_blank">here</a>)</li>
+<li><a href="https://www.kaggle.com/code/isakatsuyoshi/semantic-visualization-of-keywords" target="_blank">Semantic Visualization of Keywords</a>: Visualizes the keyword embeddings using UMAP after dimensionality reduction with Llama 3.1-8B-IT</li>
+<li><a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/520021" target="_blank">Theoretical Analysis of the 20 Questions Game</a>: Discussion on simulating the reduction factor for each round of the 20 Questions game (with source code included)</li>
+</ul>
+<h4>GitHub</h4>
+<p><a href="https://github.com/Isaka-code/llm-20-questions" target="_blank">GitHub Repository Link</a></p>
+<ul>
+<li>src/llm20_main.py: The main script that serves as the entry point</li>
+<li>src/llm20_config.py: Class for setting parameters</li>
+<li>src/logger.py: Class for logging</li>
+<li>src/robot.py: Class for selecting algorithms</li>
+<li>src/keyword_question_mapping.py: Class for mapping keywords to questions</li>
+<li>src/formulas.py: Formula for calculating E</li>
+<li>src/dictionary_binary_search.py: Class for performing dictionary binary search</li>
+<li>src/llm20_llm_system.py: Class related to the LLM system</li>
+<li>src/wiki_data.py: Class for handling the Wikipedia dataset</li>
+<li>src/protocol.py: Script for handling protocols found in episodes using rule-based methods</li>
+<li>src/word_utils.py: Scripts including the official competition normalization functions</li>
+<li>src/simulate_score.py: Script for simulating score transitions</li>
+<li>tests/: Directory containing test codes for the scripts mentioned above</li>
+</ul>
+<h3>8.2 Datasets</h3>
+<ul>
+<li><a href="https://www.kaggle.com/datasets/isakatsuyoshi/llm-20-questions-wikipedia-context" target="_blank">LLM 20 Questions - Wikipedia Context</a></li>
+<li><a href="https://www.kaggle.com/datasets/isakatsuyoshi/llm-20-questions-dictionary-binary-search" target="_blank">LLM 20 Questions - Dictionary Binary Search</a></li>
+<li><a href="https://www.kaggle.com/datasets/isakatsuyoshi/llm-20-questions-keyword-question-mapping" target="_blank">LLM 20 Questions - Keyword Question Mapping</a></li>
+<li><a href="https://www.kaggle.com/code/isakatsuyoshi/nth-place-eda-of-the-datasets" target="_blank">EDA of LLM 20 Questions Solution Datasets</a>: This notebook presents an Exploratory Data Analysis (EDA) of the three datasets</li>
+</ul>

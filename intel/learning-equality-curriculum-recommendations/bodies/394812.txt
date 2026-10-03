@@ -1,0 +1,348 @@
+# https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394812
+
+Topic #394812: 1st Place Solution
+  Author: Ahmet Erdem
+  Posted: 2023-03-15 00:09:01.111000
+  Votes: 209  Comments: 84
+
+I had given a long break on Kaggle and came back with this competition because I thought it was very relevant to the app I am building, namely Epicurus. This break made me miss Kaggle and kept me motivated in this competition
+
+My actual solution and efficiency solution are very similar. So I will describe both of them at the same time. I hope I can refactor my code and share on Github soon.
+
+Pipeline:
+Candidate Selection (Retriever methods) -&gt; Feature Engineering -&gt; Lightgbm -&gt; Postprocessing
+
+Validation Scheme:
+
+
+
+1 fold validation
+
+All source topics and random 67% of the other topics are selected for the training set. The rest are validation topics.
+
+The contents which only match with validation topics are excluded from the training set.
+For evaluation, validation topics are matched with all the contents and competition metric is calculated.
+
+While training lightgbm model on the candidates, group4fold on topic_id is used on the validation set. Evaluation is done on the whole validation set afterwards.
+
+
+At the end of the competition, I had 0.764 validation score and 0.727 LB. While it is a big gap, improvements in my validation score were almost always correlated with LB. And I got my validation score as my Private LB score, which I didnt expect.
+
+Edit: Efficiency model got 0.718 validation, 0.688 Public LB, 0.740 Private LB and around 20 minutes CPU run-time.
+
+Topic/Content Representation
+
+Each topic is represented as a text using its title, its description and its ancestor titles up to 3 parents above in the tree. Example: 
+
+'Triangles and polygons @ Space, shape and measurement @ Form 1 @ Malawi Mathematics Syllabus | Learning outcomes: students must be able to solve problems involving angles, triangles and polygons including: types of triangles, calculate the interior and exterior angles of a triangle, different types of polygons, interior angles and sides of a convex polygon, the size and exterior angle of any convex polygon.'
+
+Each content is represented as a text using its title, its kind and its description (its text if it doesn’t have a description). Example:
+
+'Compare multi-digit numbers | exercise | Use your place value skills to practice comparing whole numbers.'
+
+Candidate Selection
+
+TFIDF
+Char 4gram TFIDF sparse vectors are created for each language and matched with sparse_dot_topn, which is a package I co-authered (https://github.com/ing-bank/sparse_dot_topn) It works very fast and memory efficient. For each topic, top 20 matches above 1% cosine similarity are retrieved.
+
+Transformer Models
+I used paraphrase-multilingual-MiniLM-L12-v2 for efficiency track and ensemble of bert-base-multilingual-uncased, paraphrase-multilingual-mpnet-base-v2 (it is actually a xlm-roberta-base) and xlm-roberta-large for the actual competition. 
+
+
+
+Sequence length: 64. But only the first half of the output is mean pooled for the representation vector. Last half is only fed for context. This worked the best for me.
+
+Arcface training: Training contents are used as classes. Therefore topics have multiple classes and l1-normalized target vectors. The margin starts with 0.1 and increases linearly to 0.5 at the end of 22 epochs. First 2 and last 2 epochs have significantly lower LR. Arcface class centers are initialized with content vectors extracted from pretrained models.
+
+Ensemble method: Concatenation after l2 normalization
+
+
+Edit: Models are re-trained with whole data for submission at the end.
+
+Top 20 matches within the same language contents are retrieved.
+
+In addition, for each topic, its closest train set topic is found and its content matches are retrieved as second degree matches.
+
+Matches from Same Title Topics
+
+For each topic, train set topics with the same title are found and their matched contents are retrieved.
+
+Matches from Same Representation Text Topics
+
+For each topic, train set topics with the same representation text are found and their matched contents are retrieved.
+
+Matches from Same Parent Topics
+
+For each topic, train set topics with the same parent are found and their matched contents are retrieved.
+
+All retrieved topic-content pairs are outer joined.
+
+Feature Engineering
+
+
+
+tfidf match score
+
+tfidf match score max by topic id
+
+tfidf match score min by topic id
+
+vector cosine distance
+
+vector cosine distance max by topic id
+
+vector cosine distance min by topic id
+
+topic title length
+
+topic description length
+
+content title length
+
+content description length
+
+content text length
+
+content same title match count
+
+content same title match count mean over topic id
+
+content same representation text match count
+
+content same representation text match count mean over topic id
+
+content same parent match count
+
+content same parent match count mean over topic id
+
+topic language
+
+topic category
+
+topic level
+
+content kind
+
+same chapter (number extracted from the text)
+
+starts same
+
+is content train
+
+content max train score
+
+topic max train score
+
+is content second degree match
+
+
+Lightgbm Model
+
+
+
+Hit or miss classification problem
+
+Overweight hit (minority) class
+
+Monotonic constraint and 2x feature contribution on most important feature: vector cosine distance
+
+2 diverse lightgbms: Excluded features which will potentially have different distribution on real test set in one of the models, vector cosine distance min by topic id. Also used slightly different parameters and kfold seed.
+
+
+Postprocess
+
+Postprocessing was very important. Using relative probabilities (gaps with highest matches) and using different conditions for train and test set contents were the key. While matching train set contents was like a classification problem, matching test set contents was like an assignment problem.
+
+Topic-content pairs are included if they have one of the conditions below:
+
+
+
+Content has the best matching probability among other contents for the given topic.
+
+Content is among the train set contents and has above 5% probability and has less than 25% gap with the highest matching probability in the given topic.
+
+Content is among the test set contents and has less than 5% gap with the highest matching probability in the given topic.
+
+Content is among the test set contents and the topic is its best match and its total gap* is less than 55%.
+
+
+Code
+
+All training notebooks: https://github.com/aerdem4/curriculum-recommendations
+My actual inference notebook (v15 selected): https://www.kaggle.com/code/aerdem4/lecr-ensemble-v03
+My best Efficiency notebook: https://www.kaggle.com/code/aerdem4/lecr-efficiency-minilm
+An alternative Efficiency solution: https://www.kaggle.com/code/aerdem4/lecr-efficiency-nobert
+
+Comments:
+├─ CPMP (2023-03-15 06:36:01.227000) [+5]
+│  Congrats Ahmet! I knew you would come back to kaggle!
+  ├─ Ahmet Erdem (2023-03-15 06:41:45.987000) [+2]
+  │  Thank you @cpmpml I couldn't stay away when the problem was very similar to the app I am building:)
+├─ Giba (2023-03-15 02:46:07.823000) [+5]
+│  Big congratulations @aerdem4! This is a well deserved solo win. Thanks for sharing your solution.
+  ├─ Ahmet Erdem (2023-03-15 06:33:15.913000) [+3]
+  │  Thank you @titericz ! Meeting you in real life helped me to stay motivated on Kaggle:)
+├─ chumajin (2023-03-15 01:30:55.557000) [+5]
+│  Congratulations @aerdem4 You are too strong. I also used Arcface and LGBM, but I couldn't raise the score as much as you did. I'll try a little more based on this article!
+  ├─ Ahmet Erdem (2023-03-15 06:20:57.240000) [+1]
+  │  Thanks @chumajin and congrats with your solo gold!
+├─ Chris Deotte (2023-03-15 00:11:07.410000) [+6]
+│  Great job @aerdem4 ! Awesome solo 1st place cash gold finish!
+  ├─ Ahmet Erdem (2023-03-15 06:27:22.070000) [+1]
+  │  Thank you @cdeotte !
+├─ Trushant Kalyanpur (2023-03-15 00:19:28.447000) [+3]
+│  Congratulations on the solo gold 1st @aerdem4 ! We tried GBM as well but it wasnt as good as our 2nd stage rerankers.
+  ├─ Ahmet Erdem (2023-03-15 06:30:50.447000) [+1]
+  │  Congrats to you too! I guess there were some key features to include.
+├─ Psi (2023-03-15 00:11:48.627000) [+4]
+│  Big congrats amazing job!
+│  
+│  We were very sure that your score can be achieved with a second stage LGB model but we couldn't get it working properly in the short time - for efficiency this is gold of...
+  ├─ Ahmet Erdem (2023-03-15 06:30:01.543000) [+1]
+  │  Thank you @philippsinger Congrats to you guys with your very successful sprint. Your momentum scared me:)
+├─ ‎ Srihari (2023-03-23 11:57:00.760000) [+1]
+│  Congratulations bhai
+├─ Kenneth Lo (2023-03-17 00:51:38.087000) [+1]
+│  congrats, going to try our this exercise soon!
+├─ reboot (2023-03-16 16:54:34.180000) [+1]
+│  Congratulations @aerdem4 ! Thank you for sharing
+├─ Darek Kłeczek (2023-03-16 09:39:01.510000) [+1]
+│  Congratulations Ahmet, what a way to come back! We were missing you on Kaggle, hope you stick around!
+  ├─ Ahmet Erdem (2023-03-16 10:11:32.410000) [+1]
+  │  Thank you @thedrcat I will Kaggle time to time, especially in winters:)
+    ├─ Maxim K. Surkov (2023-03-17 01:12:49.920000) [+0]
+    │  Oh, that makes sense, approximate number of topic and content ids is 2e5, the total dimension of your embedddings is about 2k (am I right think?) in ensemble setup and it should fit in the memory l...
+├─ Priyanshu1235 (2023-03-16 08:00:46.553000) [+1]
+│  congratulations ahmet!!
+├─ Maxim K. Surkov (2023-03-15 23:13:35.663000) [+1]
+│  Congratz! Awesome lightweight solution! Could you please explain how did cope with the "out of memory" problem with your ensemble method: "Ensemble method: Concatenation after l2 normalization" (I ...
+  ├─ Ahmet Erdem (2023-03-16 10:12:54.820000) [+0]
+  │  Thanks. It was keeping 2GB max. Did you keep them in float32 or 64?
+├─ Junrui Wang (2023-03-15 15:51:44.293000) [+1]
+│  Congratulation!
+├─ dragon zhang (2023-03-15 15:11:12.030000) [+1]
+│  thanks for sharing.  A lot to learn from.
+├─ Aditi Khare (2023-03-15 13:06:42.253000) [+1]
+│  Congratulations AHMET ERDEM on the solo win. Keep Going !! Thank you for the writeup.
+├─ Fatih Öztürk (2023-03-15 12:48:33.827000) [+1]
+│  Big congrats Ahmet! A solo win suits you well!
+│  
+│  Btw I've already signed up for your app (; https://epicurusapp.com/
+  ├─ Ahmet Erdem (2023-03-16 10:14:40.353000) [+1]
+  │  Thank you very much for your support:) @fatihozturk
+├─ ToYou2U (2023-03-15 07:25:27.423000) [+1]
+│  Congrats on solo 1st place! What is the recall rate of the top 20? If with second degree matches, what is the recall rate and average recall number?
+  ├─ Ahmet Erdem (2023-03-16 10:16:23.637000) [+0]
+  │  Thanks. I need to double check the recall on top20.
+├─ Ravi Shah (2023-03-15 03:48:42.847000) [+1]
+│  Congrats on first place @aerdem4! Fantastic solution! Thanks for the write up!
+├─ Meilism (2023-03-15 03:28:45.190000) [+1]
+│  Congratulation!
+├─ Ori Hanegby (2023-03-15 02:55:00.773000) [+1]
+│  Congrats on the solo win and for the great writeup about your solution!
+  ├─ Ahmet Erdem (2023-03-15 06:22:55.697000) [+1]
+  │  Thanks @ohanegby. Congrats with your solo gold and upcoming title!
+├─ Shujun (2023-03-15 00:22:52.987000) [+1]
+│  Congrats on this incredible solution and solo win! I'm amazed
+  ├─ Ahmet Erdem (2023-03-15 06:37:19.930000) [+3]
+  │  Thank you @shujun717 I just checked your profile, you seem to continue rocking when I was away. Congrats with your recent results!
+├─ Tevfik Erkut (2023-03-15 00:22:25.550000) [+1]
+│  Congrats @aerdem4 !! I felt bad after not receiving any medals, so I think I should download the Epicurus app and chat with people like me. 👀
+  ├─ Ahmet Erdem (2023-03-15 06:39:56.830000) [+1]
+  │  Thanks. I believe you will get a medal next time. You may still use Epicurus for teaming up with people:)
+├─ heng (2023-03-15 00:20:03.380000) [+1]
+│  beautiful solution, congrats!
+├─ AI Bushi (2023-03-15 00:16:32.077000) [+1]
+│  Congratulations! Thank you for the very informative writeup.
+├─ Anil Ozturk (2023-03-15 00:16:01.813000) [+1]
+│  Congrats! I've also tried GBDTs at the second stage but couldn't think of these comparison features and it performed almost the same, great job!
+├─ Tarik Karakas (2023-03-15 00:13:22.423000) [+1]
+│  Great job @aerdem4 ! Congrats 🎉
+├─ Nikita Churkin (2023-03-15 00:11:25.640000) [+1]
+│  Congrats, Ahmet, well deserved!
+  ├─ Ahmet Erdem (2023-03-15 06:23:59.090000) [+1]
+  │  Thank you @churkinnikita and congrats to you too!
+├─ Siddharth Kumar (2023-03-16 04:59:55.697000) [+2]
+│  Your validation scheme is robust, and the use of various features and ensemble of transformer models contributed to good results. The post-processing played a crucial role in handling classificatio...
+├─ Ertuğrul Demir (2023-03-15 12:19:17.943000) [+2]
+│  Congrats Ahmet! Thanks for sharing your solution, I enjoyed while reading it, and nice to see you around again :)
+├─ [deleted] (2023-03-15 01:14:56.043000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-03-15 06:26:29.637000) [+2]
+  │  [deleted]
+├─ [deleted] (2023-08-14 07:22:15.533000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-29 13:05:24.823000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-24 14:44:16.320000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-23 12:10:09.247000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-23 07:33:28.487000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-23 06:41:40.607000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-23 04:14:43.127000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-21 23:44:20.593000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-21 03:43:44.650000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 12:15:38.623000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 11:50:39.993000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 06:55:52.167000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 06:16:24.510000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-19 16:42:53.647000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-19 13:03:49.660000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-19 04:25:21.930000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-18 16:46:30.393000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-17 21:24:12.887000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-17 18:50:52.530000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-17 15:20:25.867000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-15 04:34:14.183000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-15 06:38:23.673000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-03-15 08:50:55.317000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-03-15 09:00:03.860000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-03-15 09:09:26.450000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-03-15 16:12:55.947000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-03-15 00:27:35.533000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-15 06:39:00.740000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-03-15 09:00:55.153000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-03-15 09:10:48.900000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-03-15 09:20:08.943000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-15 10:12:41.837000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-03-22 05:12:22.933000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-15 12:55:32.790000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-15 08:47:10) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-29 05:50:15.657000) [+1]
+│  [deleted]
+├─ [deleted] (2023-03-15 22:02:33.373000) [+1]
+│  [deleted]
+├─ [deleted] (2023-03-26 10:36:46.633000) [+1]
+│  [deleted]

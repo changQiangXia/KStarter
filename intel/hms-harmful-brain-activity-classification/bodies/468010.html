@@ -1,0 +1,55 @@
+<p>The data in this competition is confusing. <strong>Question:</strong> We are given <code>train.csv</code> with 106,800 rows but there are only 17089 unique <code>eeg_ids</code>, 11138 unique <code>spectrogram_ids</code>, and 1950 unique <code>patients</code>. What is going on?? <strong>Answer:</strong> Each <code>row</code> of train is a <code>window of time</code> from one specific <code>patient</code>. And the corresponding <code>eeg</code> and <code>spectrogram</code> can be found in the corresponding Kaggle <code>parquet</code> files.</p>
+<h1>Data Explained</h1>
+<p>Since each <code>row</code> of <code>train.csv</code> is a specific <code>window in time</code> (for a specific <code>patient_id</code>), each row has a specific middle timestamp in seconds. For example, maybe <code>row 235</code> has center timestamp <code>T = May 3 2023 19:30:06</code> exactly in the middle of both its <code>EEG time window</code> and <code>Spectrogram time window</code>. (Note that the dataframe does <strong>not</strong> give us the middle timestamp).</p>
+<p>The <code>EEG time window</code> is length 50 seconds and the <code>Spectrogram time window</code> is length 600 seconds. And both have the <strong>same center timestamp</strong>. In this competition, we are asked to predict the event occurring in the middle 10 seconds of both these time windows:</p>
+<ul>
+<li>Center is <code>T</code></li>
+<li>EEG is <code>[T-25:T+25]</code></li>
+<li>Spectrogram is <code>[T-300:T+300]</code></li>
+<li>We predict event in <code>[T-5:T+5]</code></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2024/brain8.png"></p>
+<h1>EEG Parquet Files</h1>
+<p>The <code>EEG parquet files</code> are longer than 50 seconds. One <code>EEG parquet file</code> has multiple rows of <code>time windows</code> inside it. Similarily, the <code>Spectrogram parquet files</code> are longer than 600 seconds. One <code>Spectrogram parquet file</code> has multiple rows of <code>time windows</code> inside it.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2024/brain9.png"></p>
+<h1>Spectrogram Parquet Files</h1>
+<p>There are fewer <code>Spectrogram parquet files</code> than <code>EEG parquet files</code>. This is because two rows may have the same <code>Spectrogram parquet file</code> but different <code>EEG parquet files</code>.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2024/brain11.png"></p>
+<h1>Code to Retrieve EEG and Spectrogram</h1>
+<p>For a specific row of <code>train.csv</code>, here is code to retrieve the corresponding EEG and Spectrogram. Note that <code>train.csv</code> does <strong>not</strong> give us the middle timestamp. Instead it gives us the beginning timestamp for each timewindow. The two beginnings are determined from <code>eeg_label_offset_seconds</code> and <code>spectrogram_label_offset_seconds</code>. These are offsets from the start of the parquet file which tells us where the <code>eeg</code> and <code>spectrogram</code> time windows begin respectively.</p>
+<pre><code> = 
+ = 
+ = 
+
+ = pd.read_csv()
+ = train.iloc[GET_ROW]
+
+ = pd.read_parquet(f)
+ = int( row.eeg_label_set_seconds )
+ = eeg.iloc[eeg_set*:(eeg_set+)*]
+
+ = pd.read_parquet(f)
+ = int( row.spectrogram_label_set_seconds )
+ = spectrogram.loc[(spectrogram.time&gt;=spec_set)
+                     &amp;(spectrogram.time&lt;spec_set+)]
+</code></pre>
+<h1>EfficientNetB2 Starter - CV 0.59 - LB 0.43 - (Deep Learning)</h1>
+<p>When training our models we have (at least) 4 choices of weighting train samples. For example the 4th bullet point says that our dataloader will give an equal chance of outputting a sample for each <code>patient</code>. Whereas bullet point 2 says that our dataloader will give an equal chance of outputting a sample for each <code>eeg id</code>.</p>
+<ul>
+<li>106,800 unique rows</li>
+<li>17,089 unique eeg ids</li>
+<li>11,138 unique spectrogram ids</li>
+<li>1950 unique patient ids</li>
+</ul>
+<p>From LB probing (discussed <a href="https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467021" target="_blank">here</a>), we achieve the best LB score using bullet point 2 (i.e. eeg ids). I published a TensorFlow EfficientNetB2 starter notebook <a href="https://www.kaggle.com/code/cdeotte/efficientnetb2-starter-lb-0-57" target="_blank">here</a> that trains with bullet point 2 and achieves CV 0.73 and LB 0.57. (UPDATE: <a href="https://www.kaggle.com/alejopaullier" target="_blank">@alejopaullier</a> converted to PyTorch <a href="https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/472092" target="_blank">here</a>)</p>
+<h1>CatBoost Starter - CV 0.74 - LB 0.60 - (Machine Learning)</h1>
+<p>I published a CatBoost starter <a href="https://www.kaggle.com/code/cdeotte/catboost-starter-lb-0-67" target="_blank">here</a> which achieves CV 0.74 and LB 0.60 (using bullet point 2 above).</p>
+<h1>WaveNet Starter - CV 0.81 - LB 0.52 - (Deep Learning)</h1>
+<p>I published a TensorFlow WaveNet starter <a href="https://www.kaggle.com/code/cdeotte/wavenet-starter-lb-0-66" target="_blank">here</a> which achieves CV 0.81 and LB 0.52 (using bullet point 2 above). And it only uses EEG data (and not spectrograms). (UPDATE: <a href="https://www.kaggle.com/alejopaullier" target="_blank">@alejopaullier</a> converted to PyTorch <a href="https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/477610" target="_blank">here</a>)</p>
+<h1>Spectrogram versus EEG</h1>
+<p>My EffNet and CatBoost starter notebooks currently only use information from Kaggle's spectrograms. We can improve CV and LB score by incorporating information from EEGs. <strong>UPDATE</strong>: I published a starter notebook <a href="https://www.kaggle.com/code/cdeotte/how-to-make-spectrogram-from-eeg" target="_blank">here</a> to convert EEG data into spectrograms (and we can incorporate these EEG spectrograms into my EffNet and CatBoost starters). My WaveNet starter above trains using the raw EEG waveforms. Consider combining my WaveNet and EffNet into a single model which accepts input of both EEG waveforms and Kaggle spectrograms! <strong>UPDATE</strong> Recent versions of EfficientNet starter and CatBoost starter now use both EEG spectrograms and Kaggle spectrograms.</p>
+<h1>Kaggle Dataset</h1>
+<p>Our dataloader needs to read 11138 spectrogram files. The most efficient way to design our dataloader is to first read all 11138 spectrogram files into memory once. Then our dataload uses RAM during epoch training instead of continually reading the parquets from disk.</p>
+<p>I created a Kaggle <a href="https://www.kaggle.com/datasets/cdeotte/brain-spectrograms" target="_blank">dataset</a> with one file that contains all 11138 spectrograms. First we load this one file (i.e. Python dictionary of parquets converted into NumPy arrays) into memory. (Reading one file is faster than reading 11k files). Then our dataloader speeds through training!</p>
+<p>UPDATE: Additionally, i have datasets <a href="https://www.kaggle.com/datasets/cdeotte/brain-eeg-spectrograms" target="_blank">here</a> and <a href="https://www.kaggle.com/datasets/cdeotte/brain-eegs" target="_blank">here</a> containing EEG spectrograms and EEG raw data respectively.</p>
+<h1>Enjoy - Have Fun!</h1>

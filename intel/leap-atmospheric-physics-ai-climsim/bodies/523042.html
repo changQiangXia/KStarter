@@ -1,0 +1,812 @@
+<p>First of all, we want to thank Kaggle and <a href="https://www.kaggle.com/jerrylin96" target="_blank">@jerrylin96</a> for hosting a competiton. And I would like to thank our teammate <a href="https://www.kaggle.com/takoihiraokazu" target="_blank">@takoihiraokazu</a> and <a href="https://www.kaggle.com/kami634" target="_blank">@kami634</a>! It was a pleasure to team up with you both.</p>
+<h1>1. Kurupical part</h1>
+<h2>1-1. Summary</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>model_name</th>
+<th>cv</th>
+<th>public</th>
+<th>private</th>
+<th>training time</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>convnext 64x3-128x3-256x27-512x3</td>
+<td>0.7881</td>
+<td>0.78577</td>
+<td>0.78147</td>
+<td>60h with 1xRTX4090</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>convnext 96x3-192x3-384x27-768x3</td>
+<td>0.7887</td>
+<td>0.78697</td>
+<td>0.78281</td>
+<td>120h with 1xRTX4090</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>convnext 128x3-256x3-512x27-1024x3</td>
+<td>0.78693</td>
+<td>0.78480</td>
+<td>0.78150</td>
+<td>132h with 1xRTX4090</td>
+<td>use 81.25% data</td>
+</tr>
+<tr>
+<td>4</td>
+<td>convnext 144x3-288x3-576x27-1152x3</td>
+<td>0.78547</td>
+<td>0.78317</td>
+<td>0.77903</td>
+<td>28h with 8xRTX4090</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>transformer 512x4</td>
+<td>0.7848</td>
+<td>0.78341</td>
+<td>0.77910</td>
+<td>54h with 1xRTX4090</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>transformer 768x4</td>
+<td>0.7843</td>
+<td>0.78350</td>
+<td>0.77966</td>
+<td>72h with 1xRTX4090</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>convnext 144x3-288x3-576x27-1152x3</td>
+<td>0.78769</td>
+<td>0.78622</td>
+<td>0.78137</td>
+<td>16h with 8xRTX4090</td>
+<td>training 4epochs</td>
+</tr>
+</tbody>
+</table>
+<h2>1-2. Feature Engineering / Preprocessing</h2>
+<p>I use all row-les datasets.</p>
+<h3>1-2-1. Feature Engineering</h3>
+<ul>
+<li>diff<ul>
+<li>x[i] - x[i-1]</li>
+<li>x[i] - x[i-2]</li></ul></li>
+<li>mean and diff_mean in similar features<ul>
+<li>q0002, q0003</li>
+<li>state_u, state_v</li>
+<li>pbuf_*</li></ul></li>
+</ul>
+<h3>1-2-2. Preprocessing</h3>
+<ul>
+<li>Standard Scaler for feature / label<ul>
+<li>Calculate feature mean/std with both train/test datasets.</li></ul></li>
+<li>Extremely large values can make model training unstable, so features are standardized and then clipped to the range of -100 to 100.</li>
+<li>To convert to the shape of (batch_size, n_feature, 60), scalar values (e.g., state_ps) are transformed into time series data by repeating the same value 60 times.</li>
+</ul>
+<h2>1-3. Training Methods</h2>
+<h3>1-3-1. Models</h3>
+<h4>1-3-1-1. ConvNeXt</h4>
+<p>A ConvNext with inputs of shape (batch_size, n_features, 60) and outputs of shape (batch_size, 368). The pseudocode is shown below.</p>
+<pre><code> (nn.Module):
+     ():
+        (Head1D, self).__init__()
+        self.final_layer = nn.LazyConv1d(out_channels=, kernel_size=, stride=, padding=)
+        self.fc = nn.Linear( * , )
+
+     ():
+        x = self.final_layer(x)  
+        x_out = torch.cat(
+            [
+                x[:, :, :].reshape(
+                    -,  * 
+                ),  
+                self.fc(x[:, :, :].reshape(-,  * )),  
+            ],
+            dim=,
+        )  
+         x_out
+
+ (nn.Module):
+     ():
+        self.head = Head1D()
+        ...
+
+     ():
+        
+        ...
+
+     ():
+        x = x[]  
+
+        
+        x_features = self.forward_feature(x)  
+
+        x_pred = self.head(x_features)  
+         x_pred
+
+model = ConvNeXt()
+x = torch.randn(, , )
+ model(x).shape == (, )
+</code></pre>
+<ul>
+<li>Based on <a href="https://github.com/facebookresearch/ConvNeXt/blob/d1fa8f6fef0a165b27399986cc2bdacc92777e40/models/convnext.py" target="_blank">https://github.com/facebookresearch/ConvNeXt/blob/d1fa8f6fef0a165b27399986cc2bdacc92777e40/models/convnext.py</a>  ,I've rewritten it for 1D inputs with the following considerations:<ul>
+<li>Adjusted to ensure the shape remains unchanged between input and output by setting stride=1 and padding="same".</li>
+<li>Replaced LayerNorm with BatchNorm since LayerNorm was not effective.</li></ul></li>
+</ul>
+<h4>1-3-1-2. Transformer</h4>
+<p>A Transformer with input of shape  <code>(batch_size, 60, n_features)</code> and outputs of shape <code>(batch_size, 368)</code>.  The pseudocode is shown below.</p>
+<pre><code> (nn.Module):
+     ():
+        (TransformerModel, self).__init__()
+
+        N_SEQUENTIAL_COLUMNS = 
+        
+        self.fc_stem = nn.Sequential(
+            nn.LazyLinear(hidden_dims),
+            nn.LayerNorm(hidden_dims),
+            nn.GELU(),
+            nn.LazyLinear(hidden_dims),
+            nn.LayerNorm(hidden_dims),
+            nn.GELU(),
+        )
+        self.position_encoder = nn.Embedding(, hidden_dims)
+
+        
+        layer = nn.TransformerEncoderLayer(
+            d_model=hidden_dims,
+            nhead=n_heads,
+            dim_feedforward=hidden_dims * ,
+            dropout=,
+            activation=,
+            batch_first=,
+        )
+        self.transformer = nn.TransformerEncoder(layer, num_layers=n_layers)        
+
+        
+        
+        self.fc_head_list_sequential = []
+        head_cnn_params = [{: , : }] * 
+         _  (N_SEQUENTIAL_COLUMNS):
+            fc_head = []
+             head_cnn_param  head_cnn_params:
+                fc_head.append(
+                    nn.LazyConv1d(
+                        stride=,
+                        padding=,
+                        **head_cnn_param,
+                    )
+                )
+                fc_head.append(nn.BatchNorm1d(head_cnn_param[]))
+                fc_head.append(nn.GELU())
+            fc_head.append(
+                nn.LazyConv1d(, kernel_size=, stride=, padding=)
+            )
+            fc_head = nn.Sequential(*fc_head)
+            self.fc_head_list_sequential.append(fc_head)
+        self.fc_head_list_sequential = nn.ModuleList(self.fc_head_list_sequential)
+
+        
+        self.fc_head_scalar = nn.Linear(hidden_dims, )
+
+     ():
+
+        
+        x = self.fc_stem(x)  
+        pe = self.position_encoder(
+            torch.arange(x.shape[], device=x.device).expand(x.shape[], -)
+        )  
+        x = x + pe
+
+        
+        x = self.transformer(x)  
+
+        
+        
+        x_out = []
+         i  ():
+            x_out_ = self.fc_head_list_sequential[i](
+                x.permute(, , )
+            )  
+            x_out_ = x_out_.squeeze()  
+            x_out.append(x_out_)        
+        
+        x_out_ = self.fc_head_scalar(x.mean(dim=))  
+        x_out.append(x_out_)
+        x_out = torch.cat(x_out, dim=)  
+         x_out        
+</code></pre>
+<h3>1-3-2. Hyper Parameter</h3>
+<table>
+<thead>
+<tr>
+<th>param_name</th>
+<th>#1</th>
+<th>#2</th>
+<th>#3</th>
+<th>#4</th>
+<th>#5</th>
+<th>#6</th>
+<th>#7</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>epochs</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>4</td>
+</tr>
+<tr>
+<td>lr</td>
+<td>2.5e-3</td>
+<td>2e-3</td>
+<td>2e-3</td>
+<td>1.5e-3</td>
+<td>1e-3</td>
+<td>1e-3</td>
+<td>2e-3</td>
+</tr>
+<tr>
+<td>batch_size</td>
+<td>384</td>
+<td>384</td>
+<td>384</td>
+<td>288</td>
+<td>384</td>
+<td>384</td>
+<td>288</td>
+</tr>
+<tr>
+<td>weight_decay</td>
+<td>0.05</td>
+<td>0.05</td>
+<td>0.05</td>
+<td>0.05</td>
+<td>0.01</td>
+<td>0.01</td>
+<td>0.075</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>other<ul>
+<li>optimizer: AdamW<ul>
+<li>cnn: AdamW(weight_decay=0.05 or 0.075)</li>
+<li>transformer: AdamW(weight_decay=0.01)</li></ul></li>
+<li>loss: <ul>
+<li>cnn: SmoothL1Loss(beta=0.01)</li>
+<li>transformer: SmoothL1Loss(beta=1)</li></ul></li>
+<li>scheduler<ul>
+<li>cnn: transformers.get_polynomial_decay_schedule_with_warmup(alpha=2, warmup_ratio=0.1)</li>
+<li>transformer: transformers.get_polynomial_decay_schedule_with_warmup(alpha=1, warmup_ratio=0.1), equals to get_linear_scheduler_with_warmup</li></ul></li>
+<li>The batch size of 384 is a remnant of using lat/lon leak.</li>
+<li>Transformers tend to diverge quickly with a high learning rate, so keep it as low as possible. CNNs were not as sensitive.</li>
+<li>Regarding the beta of SmoothL1Loss, smaller models tended to perform better with something close to Huber Loss, while larger models showed better performance with something closer to L1 Loss.</li></ul></li>
+</ul>
+<h2>1-4. Postprocessing</h2>
+<ul>
+<li>Set some values to state * (1 / -1200)<ul>
+<li>ptend_q0002_12 ~ ptend_q0002_28</li></ul></li>
+</ul>
+<h2>1-5. Others</h2>
+<p>This was the competition where we needed to rely on neural networks the most among all the competitions we've participated in so far.</p>
+<ul>
+<li>Common<ul>
+<li>Proper learning rate scheduling was crucial, and we spent a significant amount of time tuning it.</li>
+<li>We tested with a small amount of data (n=1.8m, n=9m) before using the full dataset (n=70m). There were cases where what worked with a small amount of data didn't work with the full dataset.</li>
+<li>The same issue occurred between small models (ConvNeXt 32x3-64x3-128x27-256x3) and large models (ConvNeXt 96x3-192x3-384x27-768x3).</li></ul></li>
+<li>ConvNeXt<ul>
+<li>Polynomial decay scheduler and high weight decay were effective.</li>
+<li>Observing the train loss on W&amp;B, it seemed that training progressed significantly when the learning rate was low. Therefore, we adopted a polynomial decay scheduler to stay at a low learning rate for a longer period. We found that training progressed too much and caused overfitting, so we controlled it with weight decay. (cv: +0.004)</li>
+<li>It seemed that the larger the model, the higher the accuracy, given proper hyperparameter settings.<ul>
+<li>Larger models converged faster, so we reduced the number of epochs.</li>
+<li>We didn't have time to test this thoroughly towards the end.</li></ul></li></ul></li>
+<li>Transformer<ul>
+<li>We tried various architectures, and attaching a CNN-head or adding positional encoding proved effective.</li>
+<li>We tested large models of 512x4 and above with n=9m, but found no significant improvement over 512x4 or even a decrease in accuracy. It is unclear whether this was due to poor hyperparameter tuning or if 512x4 was simply sufficient for this dataset.</li></ul></li>
+</ul>
+<h1>2. Kami part</h1>
+<ul>
+<li><strong>Model</strong><ul>
+<li>1D Unet-based model x 11</li></ul></li>
+<li>It is important to reshape the input to (batch, 60, dim) to explicitly input height relationships into the model.</li>
+<li>Performance improves with a lot of data and models with large parameters.</li>
+</ul>
+<h2>2-1. Features Selection / Engineering</h2>
+<ul>
+<li><strong>Data</strong><ul>
+<li>Low-resolution data<ul>
+<li>Train: Data excluding validation from [February of Year 1, February of Year 9)</li>
+<li>Validation: Approximately 641,280 instances until February of Year 8 (skipping every 7 instances similar to Kaggle data)</li></ul></li></ul></li>
+<li><strong>Input Normalization</strong><ul>
+<li>Subtract the mean and divide by the standard deviation.</li>
+<li>State_t, q0001, q0002, q0003, u, v, ozone, ch4, n2o use common normalization across all heights.<ul>
+<li>Reason: E3SM often performs operations by height, so it is preferable to standardize these features.</li></ul></li>
+<li>Only q0001, q0002, q0003 undergo exponential change and are normalized as follows: multiply by 1e9, apply log1p, then normalize.<ul>
+<li>Reason: Possibly related to the Clausius-Clapeyron equation, which is somewhat utilized by the model.</li></ul></li></ul></li>
+<li><strong>Output Normalization</strong><ul>
+<li>Subtract the mean and divide by the standard deviation.</li></ul></li>
+<li><strong>Feature Engineering</strong><ul>
+<li>Relative humidity (expresses the relative amount of q1)<ul>
+<li>Reference: <a href="https://www.science.org/doi/10.1126/sciadv.adj7250" target="_blank"><strong>Climate-invariant machine learning</strong></a> (<a href="https://pog.mit.edu/src/beucler_climate_invariant_ml_supplement_2024.pdf" target="_blank">supplementary material</a>)</li>
+<li>The calculation method for saturation vapor pressure in the paper did not align with E3SM results, so Bolton's method used in E3SM was adopted.</li></ul></li>
+<li>Ice rate: q0002 / (q0002 + q0003)</li>
+<li>Cloud water: (q2 + q3)</li>
+<li>Add categorical features such as height (0~59) information and whether q0002/q0003 are zero using a 5-dimensional embedding.</li></ul></li>
+</ul>
+<h2>2-2. Models</h2>
+<ul>
+<li><strong>GPU:</strong> V100</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Model Name</th>
+<th>CV</th>
+<th>LB</th>
+<th>Training Time</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>204_diff_last_all_lr</td>
+<td>0.7768</td>
+<td>0.77351</td>
+<td>1d 4h</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>201_unet_multi_all_n3_restart2</td>
+<td>0.7783</td>
+<td>-</td>
+<td>22h</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>201_unet_multi_all_512_n3</td>
+<td>0.7794</td>
+<td>-</td>
+<td>1d 9h</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>201_unet_multi_all_384_n2</td>
+<td>0.7801</td>
+<td>-</td>
+<td>22h</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>201_unet_multi_all</td>
+<td>0.7815</td>
+<td>-</td>
+<td>1d 7h</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>217_fix_transformer_leak_all_cos_head64</td>
+<td>0.7817</td>
+<td>-</td>
+<td>1d 7h</td>
+<td>With transformer head</td>
+</tr>
+<tr>
+<td>7</td>
+<td>217_fix_transformer_leak_all_cos_head64_n4</td>
+<td>0.7828</td>
+<td>-</td>
+<td>1d 20h</td>
+<td>With transformer head</td>
+</tr>
+<tr>
+<td>8</td>
+<td>222_wo_transformer_all</td>
+<td>0.7839</td>
+<td>-</td>
+<td>2d 21h</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>222_wo_transformer_all_004</td>
+<td>0.7830</td>
+<td>-</td>
+<td>2d 21h</td>
+<td>Parameter: 354 M</td>
+</tr>
+<tr>
+<td>10</td>
+<td>225_smoothl1_loss_all_005</td>
+<td>0.7833</td>
+<td>-</td>
+<td>3d 7h</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>225_smoothl1_loss_all_beta</td>
+<td>0.7828</td>
+<td>-</td>
+<td>2d 8h</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Base Structure:</strong> height mlp → shallow 1D Unet x 2 → height mlp</li>
+<li><strong>Initial Height MLP</strong><ul>
+<li>Apply a common weight MLP to each height.<ul>
+<li>Reason: E3SM often performs operations by height &amp; features should be easy to use later in 1D Unet.</li></ul></li></ul></li>
+<li><strong>1D Unet</strong><ul>
+<li>A 1D Unet with many channels.</li>
+<li>Start with 256 dimensions, doubling the number of channels with each convolution, repeated 3 times.</li></ul></li>
+<li><strong>Output Height MLP</strong><ul>
+<li>Apply a common weight MLP to each height.</li>
+<li>Prepare MLPs for ptend_t, q0001, q0002, q0003, u, v &amp; directly input related features with skip connections.<ul>
+<li>For example, include state_t with ptend_t.</li></ul></li></ul></li>
+<li><strong>Other Scalar Predictions</strong><ul>
+<li>Predict using the bottleneck of the 1D Unet with an MLP.</li></ul></li>
+<li><strong>Final Output</strong><ul>
+<li>The outputs of height MLP for state_t, q0001, q0002, q0003, u, v are given as 60x2 each, then expressed as x1.exp() - x2.exp() to slightly improve the score.<ul>
+<li>Reason: The exponential relationship in the Clausius-Clapeyron equation and the model aims to predict the difference before and after the change.</li></ul></li></ul></li>
+<li><strong>Training Method</strong><ul>
+<li>Ignore some labels during training.<ul>
+<li>Labels with weight 0 in the sample submission.</li>
+<li>Labels to be ignored in post-processing.</li></ul></li>
+<li>Optimizer: Adan (not Adam)</li>
+<li>Scheduler: Cosine schedule with warmup or reduce LR on plateau.</li></ul></li>
+<li><strong>Prediction</strong><ul>
+<li>Use EMA for prediction.</li></ul></li>
+</ul>
+<h2>2-3. Post-Processing</h2>
+<ul>
+<li>Set some values to state * (1 / -1200)<ul>
+<li>ptend_q0002_12 ~ ptend_q0002_28</li></ul></li>
+<li>Target: all values in some labels &amp; low or high temperature in some q2, q3 labels</li>
+</ul>
+<h1>3. Takoi part</h1>
+<h2>3-1. Summary</h2>
+<ul>
+<li>Used data from Hugging Face's LEAP/ClimSim_low-res for training</li>
+<li>Created features from the data in a time series format</li>
+<li>Developed 12 models based on LSTM</li>
+</ul>
+<h2>3-2. Features Selection / Engineering</h2>
+<ul>
+<li><p>Data</p>
+<ul>
+<li>Validation: Used the last 639,744 rows from Kaggle's train.csv</li>
+<li>Train: Used Hugging Face's LEAP/ClimSim_low-res data (excluding the 9th year and periods overlapping with the validation period)</li></ul></li>
+<li><p>Features</p>
+<ul>
+<li>Divided into time series parts and others</li>
+<li>Time series parts (considered as a series of length 60)<ul>
+<li>Original data</li>
+<li>Differences from the subsequent data points in the series</li></ul></li>
+<li>Other parts<ul>
+<li>Original data</li>
+<li>Sum of state_q0001, state_q0002, and state_q0003</li></ul></li></ul></li>
+<li><p>Preprocessing</p>
+<ul>
+<li>Features<ul>
+<li>StandardScaler<ul>
+<li>Applied StandardScaler to each column</li></ul></li></ul></li>
+<li>Target<ul>
+<li>Used the value after applying weight to the target</li>
+<li>StandardScaler<ul>
+<li>Applied StandardScaler to each column</li></ul></li></ul></li></ul></li>
+</ul>
+<h2>3-3. Models</h2>
+<ul>
+<li>The models are based on LSTM</li>
+<li>The following is the base model<ul>
+<li>Ultimately, multiple models were created by enlarging the base model or adding conv1d</li></ul></li>
+</ul>
+<pre><code> (nn.Module):
+     ():
+        (LeapRnnModel, self).__init__()
+        self.numerical_linear = nn.Sequential(
+            nn.Linear(input_numerical_size,
+                      numerical_linear_size),
+            nn.LayerNorm(numerical_linear_size)
+        )
+        self.numerical_linear2_list = nn.ModuleList(
+            [nn.Sequential(
+                nn.Linear(input_numerical_size2,
+                          numerical_linear_size2),
+                nn.LayerNorm(numerical_linear_size2)
+            )  _  ()]
+        )
+        self.numerical_linear2 = nn.Sequential(
+            nn.Linear(input_numerical_size2,
+                      numerical_linear_size2),
+            nn.LayerNorm(numerical_linear_size2)
+        )
+        self.rnn = nn.LSTM(numerical_linear_size + numerical_linear_size2,
+                           model_size,
+                           num_layers=,
+                           batch_first=,
+                           bidirectional=)
+        self.linear_out1 = nn.Sequential(
+            nn.Linear(model_size * ,
+                      linear_out),
+            nn.LayerNorm(linear_out),
+            nn.ReLU(),
+            nn.Linear(linear_out,
+                      out_size1))
+        self.layernorm = nn.LayerNorm(model_size * )
+        self.linear_out2 = nn.Sequential(
+            nn.Linear(model_size *  + numerical_linear_size2,
+                      linear_out),
+            nn.LayerNorm(linear_out),
+            nn.ReLU(),
+            nn.Linear(linear_out,
+                      out_size2))
+        self._reinitialize()
+
+     ():
+        
+         name, p  self.named_parameters():
+               name:
+                   name:
+                    nn.init.xavier_uniform_(p.data)
+                   name:
+                    nn.init.orthogonal_(p.data)
+                   name:
+                    p.data.fill_()
+                    
+                    n = p.size()
+                    p.data[(n // ):(n // )].fill_()
+                   name:
+                    p.data.fill_()
+
+     ():
+
+        numerical_embedding = self.numerical_linear(seq_array)
+        other_embedding = self.numerical_linear2(other_array)
+        numerical_embedding2_list = [
+            linear(other_array)  linear  self.numerical_linear2_list]
+        numerical_embedding2 = torch.stack(numerical_embedding2_list, dim=)
+        numerical_embedding_concat = torch.cat(
+            [numerical_embedding, numerical_embedding2], dim=)
+        output_seq, _ = self.rnn(numerical_embedding_concat)
+        output_other = torch.mean(output_seq, dim=)
+        output_other = self.layernorm(output_other)
+        output_other = torch.cat([output_other, other_embedding], dim=)
+        output_seq = self.linear_out1(output_seq)
+        output_other = self.linear_out2(output_other)
+         output_seq, output_other
+</code></pre>
+<h3>3-4. Training Method</h3>
+<ul>
+<li>loss : SmoothL1Loss</li>
+<li>scheduler : get_cosine_schedule_with_warmup</li>
+<li>optimizer : AdamW</li>
+<li>lr : 1e-3</li>
+</ul>
+<h3>3-5. Post-Processing</h3>
+<ul>
+<li>Replace values of ptend_q0002_0 to ptend_q0002_27 with the corresponding values of state_q0002_0 to state_q0002_27 divided by (-1200).</li>
+<li>Set columns with a weight of 0 in sample_submission.csv to 0.</li>
+</ul>
+<h3>3-6. Model Results</h3>
+<ul>
+<li>All the models below are trained using A100</li>
+<li>CV is evaluated using the validation data<ul>
+<li>Results after post-processing</li></ul></li>
+<li>Some experiments do not use the entire dataset mentioned above, so the approximate size of the training data is noted</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>exp no</th>
+<th>CV</th>
+<th>Training Time(h)</th>
+<th>Data Size</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>124</td>
+<td>0.7812</td>
+<td>24h</td>
+<td>about 45M</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>130</td>
+<td>0.7815</td>
+<td>30h</td>
+<td>about 45M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>3</td>
+<td>131</td>
+<td>0.7816</td>
+<td>34h</td>
+<td>about 60M</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>133</td>
+<td>0.7819</td>
+<td>40h</td>
+<td>about 60M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>5</td>
+<td>134</td>
+<td>0.7817</td>
+<td>36h</td>
+<td>about 60M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>6</td>
+<td>135</td>
+<td>0.7819</td>
+<td>42h</td>
+<td>about 70M</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>136</td>
+<td>0.7821</td>
+<td>45h</td>
+<td>about 70M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>8</td>
+<td>138</td>
+<td>0.7824</td>
+<td>51h</td>
+<td>about 70M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>9</td>
+<td>139</td>
+<td>0.7822</td>
+<td>59h</td>
+<td>about 70M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>10</td>
+<td>141</td>
+<td>0.7825</td>
+<td>116h</td>
+<td>about 70M</td>
+<td>add 1dcnn + large model</td>
+</tr>
+<tr>
+<td>11</td>
+<td>159</td>
+<td>0.7827</td>
+<td>52h</td>
+<td>about 70M</td>
+<td>add 1dcnn</td>
+</tr>
+<tr>
+<td>1２</td>
+<td>162</td>
+<td>0.7838</td>
+<td>47h</td>
+<td>about 70M</td>
+<td>add 1dcnn + large model</td>
+</tr>
+</tbody>
+</table>
+<h1>4. Ensemble/Stacking</h1>
+<h2>4-1. Summary</h2>
+<p>Ensemble 30 models.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>method</th>
+<th>public</th>
+<th>private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>nelder-mead</td>
+<td>0.79100</td>
+<td>0.78713</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1d-cnn stacking</td>
+<td>0.79193</td>
+<td>0.78774</td>
+</tr>
+</tbody>
+</table>
+<h2>4-2. Nelder-mead</h2>
+<ul>
+<li>The ensemble weights are determined using Nelder-Mead based on the predictions from team members.</li>
+<li>The weights are optimized for each target group (such as ptend_t or ptend_q0001).</li>
+<li>The ensemble results are used to replace the predictions from <code>4-3. 1D-CNN Stacking</code>.</li>
+</ul>
+<h2>4-3. 1D-CNN Stacking</h2>
+<p>Create simple 1d-cnn model with inputs of  <code>(batch_size, n_models, n_labels(=368))</code> and outputs of <code>(batch_size, n_labels)</code> and 10-folds ensemble.</p>
+<pre><code> (nn.Module):
+     ():
+        (Model1DCNN, self).__init__()
+
+        conv = []
+         hidden_dim, kernel_size  (hidden_dims, kernel_sizes):
+            conv.append(
+                nn.LazyConv1d(
+                    out_channels=hidden_dim,
+                    kernel_size=kernel_size,
+                    stride=,
+                    padding=,
+                )
+            )
+            conv.append(nn.BatchNorm1d(hidden_dim))
+            conv.append(nn.GELU())
+        conv.append(
+            nn.LazyConv1d(out_channels=, kernel_size=, stride=, padding=)
+        )
+        self.conv = nn.Sequential(*conv)
+
+     ():
+        
+        x = self.conv(
+            x
+        )  
+        x = x.mean(
+            dim=
+        )  
+         x
+</code></pre>
+<p>Hyperparameter is below: </p>
+<ul>
+<li>lr: 1e-3</li>
+<li>batch_size: 256</li>
+<li>hidden_size: <code>[256, 256, 256]</code></li>
+<li>kernel_size: <code>[3, 3, 3]</code></li>
+<li>epochs: 20</li>
+<li>optimizer: <code>AdamW(weight_decay=0)</code></li>
+<li>scheduler: <code>linear scheduler with warmup</code></li>
+<li>loss: <code>SmoothL1Loss(beta=1)</code></li>
+</ul>

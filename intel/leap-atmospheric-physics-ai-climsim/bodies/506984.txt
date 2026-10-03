@@ -1,0 +1,94 @@
+# https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/506984
+
+Topic #506984: Two tips to get LB0.7+
+  Author: phalanx
+  Posted: 2024-05-24 02:46:33.428000
+  Votes: 109  Comments: 28
+
+It seems that there are few participants with an LB score above 0.7, and many participants are struggling in this competition. Considering lowering the entry barrier, I thought about providing starter code. However, since there is limited knowledge about this competition and fairness as a competitive event is maintained,  I'd like to limit our support to sharing simple tips.
+By considering just the following two points, you should be able to easily achieve a score above 0.7.
+
+1. Pay attention to the data type of floating-point numbers
+
+The provided data is in float64. As shared in this discussion, converting to float32 poses a risk of underflow. You must not convert to float32.
+
+2. Model architecture
+
+Sharing detailed information while maintaining fairness is difficult, so I will limit it to a few tips. EDA and domain knowledge are extremely important. Methods from past competitions may not be useful (at least they are not useful for me). By refining my model architecture, I achieved CV 0.72+ from the first epoch.
+
+By focusing solely on improving the model architecture, I was able to achieve LB 0.766. I did not use pseudo labeling or add any additional training data. Since the model is extremely important, please review your data again and gather domain knowledge. 
+Have fun experimenting! Good luck!
+
+Comments:
+├─ Gunes Evitan (2024-05-24 04:14:09.160000) [+6]
+│  Thanks for sharing your strategy. Have you tried training with both float 32 and 64 and check the difference?
+  ├─ sroger (2024-05-24 07:53:51.353000) [+4]
+  │  Interested in this as well. By extension, is AMP (mixed precision) useless in this comp?
+  │  
+  │  Let me share my current fumbles:
+  │  
+  │  
+  │  
+  │  Model: transformer encoder (tried 1m-6m params)
+  │  
+  │  Data: F64 -&gt; rescal...
+    ├─ phalanx (2024-05-26 14:28:52.907000) [+6]
+    │  Sorry for late reply. 
+    │  I believe that float64 is sufficient for preprocessing, so I have only tried training with float32. 
+    │  Additionally, since I only have a 3090 GPU, I don't have the capacity to ...
+    ├─ sroger (2024-05-27 06:49:23.427000) [+1]
+    │  Gotcha, thanks for the tips.
+    │  Nice to have confirmation that downcasting after rescaling works (well)!
+    ├─ xj (2024-07-11 11:16:22.343000) [+1]
+    │  How much memory does your GPU have to run out of code?
+├─ Amedeo Biolatti (2024-05-25 10:56:49.283000) [+3]
+│  Any suggested material to get some domain knowledge?
+  ├─ HappyKiter (2024-05-25 18:04:04.910000) [+5]
+  │  I tried to find the papers where the implemented equations are shown. Unfortunately it is not so easy. Atmospheric codes are solving partial differential equations in the form d phi / dt = F(phi,x,...
+    ├─ HappyKiter (2024-05-25 18:09:16.250000) [+0]
+    │  What it one has also to mention is that variables at pressure levels which are far away (e.g. label 59 and label 40) are not very correlated. It is also very unlikely the velocity at label 40 will ...
+├─ Rio (2024-06-11 02:50:59.613000) [+1]
+│  Thank you for your great knowledge!
+│  I wonder why methods from past competitions might not be useful.
+│  Is there any fundamental difference compared to other competitions?
+├─ Vasilis (2024-06-05 16:29:20.040000) [+2]
+│  Hey phalanx, when you achieved 0.72 from the first epoch with what bach size? or how many training iterations ?
+├─ FarisML (2024-07-07 10:39:25.527000) [+0]
+│  Try Unet with attention block before the bottle neck
+├─ Juan D C F (2024-06-03 18:06:21.337000) [+0]
+│  how the heck are people getting 0.72!? I guess my models are pretty basic, I am getting 0.57 with a very simple MLP.
+├─ Fernando Melo (2024-05-27 14:13:55.240000) [+0]
+│  Thanks for sharing.
+│  
+│  I have one more question, in terms of NN architecture, which path do you think is best to start with? Seq2Seq as discussed in another thread, or is it possible to achieve 0.7+ ...
+  ├─ Zhuoqun Li (2024-05-28 04:30:46.220000) [+3]
+  │  I am confident of getting to 0.7+ using MLP, but I think mayde need to train with some techniques based on EDA
+    ├─ Vasilis (2024-06-05 09:55:01.927000) [+0]
+    │  which are these techniques?
+    ├─ Amedeo Biolatti (2024-06-05 16:45:04.350000) [+4]
+    │  "Did you ever hear the training of Darth Perceptron the Wide?"
+├─ Talha Barkaat Ahmad ☑️ (2024-05-27 11:23:08.620000) [+0]
+│  @muhammadawaistayyab
+├─ Vasilis (2024-05-26 09:39:56.940000) [+0]
+│  i have changed from float32 to float64 and i have reduced my batch_size from 2048 to 1024(because when i use float64 i was left out of memory) and now 100 steps of transformer from ~700 seconds tak...
+  ├─ Vasilis (2024-05-26 10:43:21.533000) [+1]
+  │  so i asked chatGPT and it seems very obvious that the train time went so up :(
+  ├─ Amedeo Biolatti (2024-05-26 11:39:55.077000) [+9]
+  │  Suggestion: float64 -&gt; normalize -&gt; float32 -&gt; train
+    ├─ Vasilis (2024-05-27 09:41:08.877000) [+0]
+    │  How did you do that, when i try that i get underflows, the loss functions sky rockets randomly so i need to train at float64. This happens only when i multiply y with the weights before training. I...
+    ├─ Amedeo Biolatti (2024-05-27 11:56:52.490000) [+5]
+    │  I have a baseline notebook where I directly train in float32 (also the normalization is in float32). My public score is also using the exact same logic, so it is possibile to get to at least 0.75 t...
+    ├─ Amedeo Biolatti (2024-05-27 14:57:27.603000) [+1]
+    │  Probably it generate some big gradient, I would try to clip the grad norm
+├─ Benjamin Atiemo (2024-05-25 00:14:06.407000) [+0]
+│  Great sharing
+├─ DennisSakva (2024-05-24 15:03:12.090000) [+0]
+│  " By refining my model architecture, I achieved CV 0.72+ from the first epoch."
+│  Incredible! Congrats :)
+  ├─ Youri Matiounine (2024-06-16 18:35:36.520000) [+1]
+  │  it seemed so impressive at the time, but now even i managed to get to CV of 0.726 after the first epoch . Only took me a month!
+├─ [deleted] (2024-05-26 13:04:36.287000) [+0]
+│  [deleted]
+├─ Benjamin Atiemo (2024-05-26 17:50:45.400000) [+0]
+│  Thank you very much

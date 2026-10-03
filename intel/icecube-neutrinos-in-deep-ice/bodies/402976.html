@@ -1,0 +1,99 @@
+<p>First and foremost, I would like to express my gratitude to the hosts and the Kaggle team for organizing such an engaging competition. <br>
+Additionally, I want to extend my appreciation to those who shared their valuable insights by publishing notebooks and participating in the discussions.<br>
+In particular, the following notebooks and posts have been incredibly helpful.</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/rasmusrse/graphnet-baseline-submission" target="_blank">graphnet_baseline_submission</a> by <a href="https://www.kaggle.com/rasmusrse" target="_blank">@rasmusrse</a></li>
+<li><a href="https://www.kaggle.com/code/rasmusrse/graphnet-example" target="_blank">graphnet_example</a> by <a href="https://www.kaggle.com/rasmusrse" target="_blank">@rasmusrse</a> and <a href="https://www.kaggle.com/pellerphys" target="_blank">@pellerphys</a></li>
+<li><a href="https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/392096" target="_blank">∞ Explanation and Improvement von Mises-Fisher Loss</a> by <a href="https://www.kaggle.com/synset" target="_blank">@synset</a></li>
+<li><a href="https://www.kaggle.com/code/anjum48/early-sharing-prize-dynedge-1-046" target="_blank">Early Sharing Prize - DynEdge - 1.046</a> by <a href="https://www.kaggle.com/anjum48" target="_blank">@anjum48</a></li>
+<li><a href="https://www.kaggle.com/code/seungmoklee/3-lstms-with-data-picking-and-shifting" target="_blank">3 LSTMs; with Data Picking and Shifting</a> by <a href="https://www.kaggle.com/seungmoklee" target="_blank">@seungmoklee</a></li>
+<li><a href="https://www.kaggle.com/code/dschettler8845/ndi-let-s-learn-together-eli5-and-eda" target="_blank">NDI – Let's Learn Together – ELI5 and EDA</a> by <a href="https://www.kaggle.com/dschettler8845" target="_blank">@dschettler8845</a></li>
+<li><a href="https://www.kaggle.com/code/rsmits/tensorflow-lstm-model-training-tpu" target="_blank">Tensorflow LSTM Model Training TPU</a> by <a href="https://www.kaggle.com/rsmits" target="_blank">@rsmits</a></li>
+</ul>
+<h3>Architecture</h3>
+<p>My model has a simple structure with EdgeConv and Transformer connected.<br>
+I aimed to combine EdgeConv and Transformers in my model to efficiently gather information. GNNs were employed to capture local neighborhood information, while Transformers were used to collect global context, ensuring a comprehensive understanding of the data.<br>
+This simple model achieves a public score of 0.9628 points and a private score of 0.9633 points as a single model.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F548996%2Ff28760ca31a4cedaebaad8cac80352ac%2Ficecube2.png?generation=1682000618971016&amp;alt=media" alt="model"></p>
+<h3>Static edge selection for GNN</h3>
+<p>In the <a href="https://arxiv.org/abs/1801.07829" target="_blank">original paper</a>, edges are calculated in each layer dynamically, but this edge selection is not differentiable and cannot be trained. This still works well for the segmentation task in the original paper, as points in the same segment are trained to be close in the latent space. However, the situation is different in this task, so I did not think it would make sense to dynamically select edges. Therefore, the edge selection used in EdgeConv is calculated at the input.</p>
+<h3>Simple modification of EdgeConv</h3>
+<p>Using <a href="https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.EdgeConv.html" target="_blank">EdgeConv</a>, the latent parameter \({x}_i\) of \({dom}_i\) is updated using the difference: \({x}_j-{x}_i\), where \({x}_j\) is the latent parameter of the \({dom}_i\)'s k-nearest neighbour \({dom}_j\).<br>
+This is fine for x, y, z and time, but for charge and auxiliary, the absolute values are meaningful, so I make \({x}_i\) be updated using not only \({x}_j-{x}_i\) but also \({x}_j\).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F548996%2F99153c1b48d05472673c6dcd1827d187%2Fedge4.png?generation=1682093716754213&amp;alt=media" alt="edgeConv"></p>
+<h3>Loss function</h3>
+<p>VMFLoss is a good and stable loss function, but θ is in the form of cos:</p>
+<pre><code>VMFLoss = -κ*cos(θ) + C(κ)
+</code></pre>
+<p>(where θ is the angle between the ground truth and the prediction and κ is the length of the 3D prediction).<br>
+On the other hand, the metric of this competition is the angle θ itself.<br>
+To minimise θ itself, I defined the loss function as follows:</p>
+<pre><code>MyLoss = -θ - κ*cos(θ) + C(κ)
+</code></pre>
+<p>This simple modification resulted in a 0.005👍 gain compared to VMFLoss.</p>
+<h3>Sequence Bucketing</h3>
+<p>In transformers, computational complexity is proportional to the square of the sequence length, making it essential to reduce the sequence length. As a result, it is effective to group data with similar sequence lengths and create mini-batches. This approach speeds up computation and further decreases the GPU memory usage, allowing for the utilization of larger mini-batche size.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F548996%2F3674d2af7f7552e176a208149f3ba2ec%2Fmini_batch.png?generation=1682128087385204&amp;alt=media" alt=""></p>
+<p>It is easy to implement by changing collate_fn in the DataLoader.</p>
+<pre><code> ():
+    graphs = [g  g  graphs  g.n_pulses &gt; ]
+    graphs.sort(key= x: x.n_pulses)
+    batch_list = []
+     minp, maxp  ([]+split_list[:-], split_list):
+        min_idx = (minp*(graphs))
+        max_idx = (maxp*(graphs))
+        this_graphs = graphs[min_idx:max_idx]
+        this_batch = Batch.from_data_list(this_graphs)
+        batch_list.append(this_batch)
+     batch_list
+</code></pre>
+<p>Note that even if gradients are calculated individually for each length-biased mini-mini-batch in the batch_list, the negative effects can be mitigated by updating the weights collectively afterwards.</p>
+<h3>Data loading</h3>
+<p>Because the data was huge and it was difficult to put everything in memory, I tried to load one batch per epoch.<br>
+The pseudo code is shown below.</p>
+<pre><code> ():
+     ():
+        
+        self.this_batch_id = self.get_next_batch_id()
+        
+        self.this_batch = pd.read_parquet()
+        
+        self.this_meta = self.meta[self.meta.batch_id == self.this_batch_id]
+
+     () -&gt; :
+         (self.this_meta)
+
+    ・・・
+
+ ():
+     ():
+        ・・・
+        self._dataset = dataset
+
+     ():
+        ・・・
+        
+        
+        self._dataset.reset_batch()
+</code></pre>
+<h3>Model parameters</h3>
+<p>This is some information about base models which are used for stacking. <br>
+4 Layters, 6M parameters seems to be smaller than other top solutions.</p>
+<ul>
+<li>Depth of EdgeConv+Transformer block layer: 3 or 4</li>
+<li>Embedding dimension: 256</li>
+<li>Used sequence length (train): 200 to 500</li>
+<li>Used sequence length (inference): 6000</li>
+<li>With/without global features</li>
+<li>Number of parameters: 6M</li>
+<li>Parameters used in kNN for GNN: x,y,z or x,y,z,time</li>
+<li>Training time: 10 to 14 hours/epoch (on 2x titan RTX)</li>
+<li>Inference time: 30 minutes/5 batches ( on Kaggle notebook)</li>
+</ul>
+<p>Inference time is relatively slow due to the use of 6000 sequences.</p>
+<h3>Stacking</h3>
+<p>The framework for stacking was primarily based on the original base model. <br>
+The main difference was that the model was replaced with a 3-layer MLP. <br>
+Through stacking, an improvement of +0.003 was achieved.</p>
+<h3>Code</h3>
+<p>Inference notebook is available <a href="https://www.kaggle.com/code/its7171/icecube-edgeconv-transformer-inference" target="_blank">here</a>.</p>

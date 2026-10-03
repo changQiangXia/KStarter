@@ -1,0 +1,58 @@
+# https://www.kaggle.com/competitions/leash-BELKA/discussion/519135
+
+Topic #519135: 988th Place solution (4th on Public) - GNN and domain adaption. 800Kb model.
+  Author: yamu_duck
+  Posted: 2024-07-09 20:37:48.568000
+  Votes: 29  Comments: 15
+
+I was holding 1st place for a week and dropped to 4th in the end and then to 988th in private LB, so this is a story full of sadness.
+
+**Baseline **
+As everyone else for the first month I played with ECFP and other fingerprints, XGboost et al. Then I concluded that it will not generalize well. After some poking around I found a solution that quickly took took me up - GNNs.
+
+The trick was to generate a training set with rich atom / bond properties annotation - charges, molecular weights, bond types, aromaticity, etc - basically everything you can squeeze from RDKit without heavy computation. Pack all this into pre-processed and pre-splitted CV folds and store on SSD. Took like 12 hours per split to generate and 1TB of storage, but made training GNNs quite fast on a single GPU that I used and model size was like 800kb.
+
+Shared BB
+
+Best result on shared BB was 0.344 for a single GAT based GNN (3 class classification). It was training on a CV split and then finetuned on full set. I just used one split, seems pretraining on others was giving worse results. It was a "lucky" fold. Seems not so lucky after all.
+
+** non-shared BB*
+
+For non-shared BB I used a domain adaptation loss function from https://arxiv.org/pdf/2306.04979 paper. I was doing classification loss on full set and domain adaption (basically soft labels generated based on embedding cosines) and this gave me additional public LB boost from 0.498 -&gt; 0.517
+
+I was quite sure that this domain adaptation protocol will save my *** from shake up.
+
+Comments:
+├─ Swikwislkdjc (2024-08-04 00:04:07.883000) [+0]
+│  This is very interesting, you may check this notebook or this one to see which group in the submission you get the highest score. 
+│  Will you share your code?
+├─ Yifan Wu (2024-07-10 06:14:22.410000) [+0]
+│  Thanks for your sharing! Did you try use the atom properties only? I have a GNN model using the atom properties only, for the bond I just use the adjacency matrix. This model have only 0.398 in pub...
+  ├─ joejeo1 (2024-07-10 08:01:19.453000) [+0]
+  │  I tried this model.  It's very slow to train.  I am not even sure this is real GNN.  There is no real graph in the model.  I think "adjacency matrix" might get updated after a few layers.  Zeros ma...
+    ├─ Yifan Wu (2024-07-10 10:58:38.943000) [+1]
+    │  My GNN is normal GCN, which use the adjacent matrices directly and the adjacent matrices are always adjacent matrices. In my experiments, the Transformer/GNN-based model can have a 100% usage of GP...
+    ├─ joejeo1 (2024-07-10 18:44:18.563000) [+0]
+    │  I guess I tried a different model.  dhttps://docs.dgl.ai/generated/dgl.nn.pytorch.gt.EGTLayer.html#dgl.nn.pytorch.gt.EGTLayer
+    ├─ yamu_duck (2024-07-11 23:20:57.413000) [+1]
+    │  https://github.com/crazyleg/belka-kaggle/blob/master/systematic/mega_ml/model.py -&lt; GATBasedMolecularGraphNeuralNetwork194 is my main model
+    │  
+    │  https://github.com/crazyleg/belka-kaggle/blob/master/...
+    ├─ yamu_duck (2024-07-11 23:22:04.470000) [+1]
+    │  it is super fast to train if you do data proprocessing right, take 1.4h per epoch on 2080 Ti.
+    ├─ Yifan Wu (2024-07-12 05:38:14.100000) [+0]
+    │  Do you store the characteristics of each molecule in a single file or all in one file? Use something like pickle.dump(…)?
+    ├─ yamu_duck (2024-07-12 10:14:51.033000) [+1]
+    │  I stored a full pre-processed batch of 1024 molecules and labels in a torch_geometric.Batch and used torch.save to save/load
+    ├─ Yifan Wu (2024-07-14 05:59:40.043000) [+0]
+    │  OK. I think that is the case. Dumping each batch of preprocessed data into a separate file is the most efficient way for IO. I was considering using lmdb/memmap to dump all preprocessed data into o...
+├─ joejeo1 (2024-07-09 20:56:21.747000) [+0]
+│  Interesting story.  How did you get public LB 0.498 score?
+  ├─ yamu_duck (2024-07-09 21:01:03.947000) [+2]
+  │  0.498 was a single GNN with no domain adaptation. 0.498 -&gt; 0.517 was when I added a Cross domain loss function from the paper mentioned. 0.344 mention is the same GNN result on a shared bb (non-...
+    ├─ joejeo1 (2024-07-09 23:10:47.850000) [+0]
+    │  That's pretty impressive to get 0.498.  Is this from one fold or the whole training data or averaging of a few folds?
+    ├─ yamu_duck (2024-07-11 23:22:21.760000) [+0]
+    │  pretrain on split, finetune on full
+├─ [deleted] (2024-07-10 02:20:03.587000) [+1]
+│  [deleted]

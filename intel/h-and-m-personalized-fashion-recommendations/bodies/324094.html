@@ -1,0 +1,35 @@
+<p>Thanks to H&amp;M and Kaggle Team&nbsp;for organizing such a great recommendation competition.<br>
+Thanks <a href="https://www.kaggle.com/paweljankiewicz" target="_blank">@paweljankiewicz</a>, <a href="https://www.kaggle.com/titericz" target="_blank">@titericz</a>, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> and many Kagglers for their great discussions and notebooks.<br>
+I hope to get a solo gold metal this time, so I decided to do this competition by myself in the beginning.</p>
+<h1>Overview</h1>
+<p>I followed the same pipeline as <a href="https://www.kaggle.com/paweljankiewicz" target="_blank">@paweljankiewicz</a> suggested in <a href="kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307288" target="_blank">Addressing common questions and what the competition is really about</a> . First, generate candidates using different recall models for each customers. Second, build a ranking model that ranks the candidates within customer.<br>
+<a href="https://postimg.cc/PNQsRDhB" target="_blank"><img src="https://i.postimg.cc/CMWhdC2L/arch.png" alt="arch.png"></a></p>
+<h1>CV setup</h1>
+<p>I mainly followed <a href="https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308919" target="_blank">How To Setup Local CV</a>, I created 5 folds and used 3 folds as training data. I also tried more training data, but it didn’t increase the local CV and LB.</p>
+<h1>Recall model</h1>
+<p>I developed 4 recall models in total.</p>
+<ul>
+<li>Item2item CF: the relationship between the pair of items (the user who bought Y, also bought Z).</li>
+<li>repurchase: latest 20 purchased products by each customers.</li>
+<li>popular: popular ranking in last week.</li>
+<li>Two Tower MMoE: I mainly focused on improving the performance of this model. Because it can generate candidates of arbitrary length for all users, and the user/item embeddings (similarity) can also be used as an important feature for ranking model.</li>
+</ul>
+<p>I used a gating network to make sure that the user tower can learn well by using different experts for recent active customers and non active customers.<br>
+<a href="https://postimg.cc/phyh6v5S" target="_blank"><img src="https://i.postimg.cc/j54HCdxR/user-tower.png" alt="user-tower.png"></a><br>
+<a href="https://postimg.cc/crGCQwh2" target="_blank"><img src="https://i.postimg.cc/RVNtxTHS/item-tower.png" alt="item-tower.png"></a><br>
+<a href="https://postimg.cc/kRQnjYsZ" target="_blank"><img src="https://i.postimg.cc/wMP7jSm6/loss.png" alt="loss.png"></a></p>
+<h1>Ranking model</h1>
+<p>I mainly used lightgbm with lambda-rank objective. I also implement DCN model described in <a href="https://arxiv.org/abs/2008.13535" target="_blank">https://arxiv.org/abs/2008.13535</a>. But I didn’t have enough time to tune it. The score of lightgbm is much better.</p>
+<h1>Cold-start users</h1>
+<p>Two Tower MMoE can also generate candidates using user demographic features for customers without purchase log.</p>
+<h1>Cold-start items</h1>
+<p>Besides product meta features, I also extracted the following features from text and image.</p>
+<ul>
+<li>Text: Extract TF-IDF features from product description, cluster products using SVD + K-means. Then use cluster id as feature.</li>
+<li>Image: Extract image vectors using pre-trained tf_efficientnet_b3_ns backbone, cluster products using PCA + K-means.  Then use cluster id as feature.</li>
+</ul>
+<h1>Submission</h1>
+<p>best local CV is 0.039, LB is 0.0349.<br>
+My final submission combined my previous submissions by<br>
+<a href="https://www.kaggle.com/code/titericz/h-m-ensembling-how-to" target="_blank">h-m-ensembling-how-to</a></p>
+<h1>to be updated</h1>

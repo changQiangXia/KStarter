@@ -1,0 +1,81 @@
+# https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394822
+
+Topic #394822: Competition Summary: my solutions with code. Need you suggestions!
+  Author: Hugo
+  Posted: 2023-03-15 00:59:42.302000
+  Votes: 24  Comments: 10
+
+Note, this post is not a wining solution. Simply a summary of what I did with my code. I see people reporting CVs, but it is really hard to tell what exactly they did. So here I update my codes with figures. hope it helps. 
+
+1. CV
+I build two models, XGB and GRU.
+
+
+
+XGB: I train three XGBs separately. Each one has a unique GAP between the train data and labels. For example, for the GAP-2 model, we jump 2 months to make predictions. I used TS=29~40 (2022-01-01 ~ 2022-12-01) as 12 validation folds, you can see each fold SMAPE and the overall SMAPE in the fig.1. The average SMAPE is 2.34. The CV for GAP-3 and GAP-4 models are 2.79 and 3.18. The OVERALL three month CV is 2.76±0.06. As for inference, I use GAP-2 model to infer March 2023, GAP-3 for April, GAP-4 for May. Code is HERE
+
+
+One thing I noticed by checking the preditions by XGB is that the model usually predict 'increase' comparing to months before the GAP. That means, if you select large population cfips as mine and then use last value*1.010, last value*1.015, last_value*1.020, you may get a similar CV as mine. It seems the model only discover the general linear trend.
+
+
+
+
+
+GRU: I use @cdeotte CV design. Basically, for each cfips, cut the mbd time sequences into 24-time-point sub-sequences. The label is the 3-month-density with a two month GAP as shown in Fig.2. I also use GroupKFold, so all the sub-sequences from the same cfips are in the same fold. After I get the predictions for the validation sets, I calculate SMAPE for each three-time-point labels, i.e., TS=26~28, 27~29, 28~30, …, 38~40. The overall SMAPE is 2.84. Code is HERE
+
+
+
+
+2. Preprocessing
+
+
+
+Code Section 1.1: Adjust mbd based on 2021 population. Details. 
+
+Code Section 1.3: Outlier detection and smooth. I use the code from @titericz . But remember that the outlier detection is a dangerous weapon. For example, if you apply it to all the cfips with a small TH, then you will get a small CV which is not the ture CV. But, there are outliers, what can I do? So, I decide to apply smoothing only on the cfips with large population (Top 70%) and a mbd density bigger than 0.5. I plot the distribution of the month change of the mbd, and take the tail 0.005% area as outliers. I get about 300 outliers which are mainly in 2021-01-01. I think it is ok, but not sure…
+
+Blacklists for XGB model and GRU model. my explaination. The original idea is in the Giba's notebook.
+
+
+3.  Model training
+
+
+
+XGB: relative targets with MAE. For example, the GAP2 model give prediction mbd_43/mbd_40, the GAP3 model give prediction mbd_44/mbd_40, the GAP4 model give prediction mbd_45/mbd_40.
+
+GRU: adjusted mbd with SMAPE loss.
+
+
+Final words: Again, This post is not a wining solution. But I prefer to write it down. Any suggestions and comments are welcome! If I can win a medal with luck, I am happy. But If not, I will change the title to 'how I fail the GoDaddy comp ;)'. For you, maybe a good failure case to follow?
+I also want to take the opportunity to thank @cdeotte for your kind explanation and notebooks, thank @titericz for the XGB notebook(I learn a lot), thank @tilii7 for the GRU suggestions, thank @kaggleqrdl for many interesting posts.
+
+NOTE: if you run my notebooks, you will get a SMAPE=200. Because I set all the preds in Jan to zero (omg, I am the last place hhhhhhh). I only predict March, April and May.
+
+Comments:
+├─ Siddharth Kumar (2023-03-16 05:07:00.773000) [+3]
+│  It's great to see that you're sharing your approach and code for this competition. Your transparency helps others learn from your experience and enables constructive discussion. I appreciate your d...
+├─ Shiner (2023-03-15 03:40:54.667000) [+1]
+│  Good solution, your GRU CV results is better than mine. Have you check the LB score? Does it work like CV? btw, you can check my solution as well. Maybe you can find something interesting.
+  ├─ Hugo (2023-03-15 03:50:06.683000) [+0]
+  │  I dont predict LB. I set all the pred to zero.
+  │  good luck!
+├─ DongYK (2023-03-15 01:19:07.750000) [+1]
+│  So impressive!!!
+│  I failed to build a XGB model to predict for 3 months with 2 gaps.
+│  It was possible!!
+│  
+│  Instead, I used a LSTM model (sequence to sequence model) to predict for 5 months.
+│  I trained t...
+  ├─ Hugo (2023-03-15 02:09:25.357000) [+1]
+  │  I think setting thr = 0.10*np.mean(var[:i]) is a bit low and it will erase useful trends…that's why I plot the hist first and take the tail 0.005% as outliers.
+├─ Joseph Zhou (2023-03-15 01:14:25.040000) [+1]
+│  My solution is same as yours(three XGBs separately for March, April and May), but I only use five months to validate. Wish you have a big jump.😃
+  ├─ Hugo (2023-03-15 02:06:31.997000) [+0]
+  │  thanks! hope we both can have a jump! 
+  │  you know what, sitting at the bottom is a new experience lol
+  ├─ Iurii Uspangaliev (2023-03-15 14:00:52.253000) [+2]
+  │  Now I regret not deleting Jan from submissions and having 200SMape on LB for the memes)
+├─ Yi Huang (2023-03-15 01:14:03.820000) [+1]
+│  Great summary and thank you so much for sharing! I applied the similar validation tricks learned from @cpmpml. Link:https://www.youtube.com/watch?v=y61MkqCw8_Q
+├─ xj (2023-03-15 01:09:26.170000) [+1]
+│  I used  some qualitative variable and embedding layer to train nn.model instead of GRU,and just used cfips that have a clear tred (see chris ' seasonal LR)  and bigger population to predict 5 month...

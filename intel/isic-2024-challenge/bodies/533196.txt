@@ -1,0 +1,283 @@
+# https://www.kaggle.com/competitions/isic-2024-challenge/discussion/533196
+
+Topic #533196: 1st Place Solution
+  Author: Ilya Novoselskiy
+  Posted: 2024-09-09 22:25:22.335000
+  Votes: 149  Comments: 53
+
+Congratulations to all the winners and participants! I can hardly believe I’m writing a post for the “1st Place Solution.” I’m incredibly grateful to the organizers for the competition itself, and to the kagglers, especially @greysky for his public notebook, which I used as the starting point for my experiments (ISIC 2024 | Only Tabular Data) about three weeks ago, shortly after the LMSYS competition ended. 
+
+Solution Overview
+
+My solution, like that of most participants, was based on ensembling various implementations of GBDT models along with image models. For the image models, I used two architectures: EVA02-small (eva02_small_patch14_336.mim_in22k_ft_in1k) and EdgeNeXt (edgenext_base.in21k_ft_in1k). A significant amount of time was also spent generating synthetic data and attempting to incorporate data from previous competitions into the current pipeline.
+
+Cross-Validation Strategy
+
+I used a simple 5-fold Stratified Group KFold without any specific tuning. For performance evaluation, I applied a strategy once described by @daniel89 for the Mercedes-Benz Greener Manufacturing competition. Just as he did, I ran CV 10 times with different seeds, calculated the t-statistic (using scipy.stats.ttest_rel), and used the p-value to guide my decisions. To address the multiple comparisons issue, I tested only the most significant changes using this approach. If CV showed any significant improvement, I tested it on the Public leaderboard, and if it improved there as well (which it almost always did), the changes were added to the final solution.
+However, towards the end of the competition, when I was stuck around a 0.185-0.186 score (0.173 on Private), I deviated from this rule (it was disheartening to see myself drop from 23rd place down) and started testing even small hypotheses, lowering the p-value threshold to 0.2 and mainly relying on the Public leaderboard. This led to my final solution performing better on the Public leaderboard, but slightly worse on the Private leaderboard.
+
+GBDT Models
+
+Parameters and Ensembling
+
+I used CatBoost, LGBM, and XGBoost. Each model was trained on a GPU using Group K-Fold (5-folds) 10 times with different seeds for the model and data splitting. This resulted in a total of 150 models. To be honest, this didn’t provide any significant improvement compared to the base setup with just 45 models, but since the models trained fairly quickly (the total training time was under 20 minutes), I decided to increase the ensemble size, even if the gains were minimal.
+For each model, the predictions were ranked (.rank(pct=True)) and averaged with equal weights. All models were trained with default parameters from @daniel89’s public notebook, including undersampling and oversampling. The only exception was CatBoost, which was trained for 1000 steps with early stopping based on the validation set (od_wait = 100). For CatBoost, I used the following parameters:
+
+ : 
+ : 
+ : 
+ : 
+ : 
+ : 
+ : 
+ :     
+
+
+The parameters were initially selected using Optuna, based solely on the tabular data. Unfortunately, I didn’t have time to retune them after introducing features based on CV-models. I also didn’t optimize the parameters for the other models.
+
+Feature Engineering
+
+Most techniques adopted from here
+Additionally, I’ve added:
+
+
+
+Total Area of lesion  per patient and per patient &amp; anatom_site_general
+
+
+While most of the features describe absolute lesion parameters, I aimed to add additional relative information (e.g., describing how abnormal a specific lesion is for the patient). To achieve this, I selected the top features based on CatBoost’s feature importance and calculated the Local Outlier Factor score for each patient’s lesion. This resulted in a significant improvement in my CV score (from 0.18149 to 0.18185) and was reflected on the leaderboard as well.
+
+Didn’t work
+
+Another attempt involved clustering the moles using the most important features and calculating the Z-score for each one within the cluster. This slightly improved the CV and public leaderboard scores but didn’t result in significant improvement on the private leaderboard.
+
+Vision-models
+
+
+
+The augmentations were taken from a previous competition. I used EVA02 small and EdgeNeXt base as the models. They demonstrated a good balance between metrics and inference time.
+
+To address the significant class imbalance, the examples from different classes in the training batches were balanced at a 1:1 ratio. Both architectures were trained with different seeds following the previously described 5-fold Stratified Group KFold scheme with early stopping based on the validation set (200 epochs, early stopping tolerance = 10 validation checks). In practice, most models rarely trained beyond 100 epochs.
+
+Additionally, since validating the model on the entire validation dataset takes considerably more time than training one epoch with weighted sampling, in most experiments, validation was performed every 5 epochs initially, then every 4 epochs, and so on, reducing the frequency of checks until validation was done every epoch by the 50th epoch. All the resulting models were used for inference on the test data. The obtained OOF predictions were used to train GBDT models.
+
+
+Integration of Model Predictions into the GBDT Model
+
+
+
+The best-performing approach involved using standardized model predictions, where the standardization was applied independently for each model’s predictions. The resulting feature varied within the range of p1: -0.44 and p99: 4.99. During inference, predictions from models of the same type were averaged.
+
+However, since models tend to slightly overfit to the test dataset due to early stopping based on validation data, normally distributed noise with a standard deviation of 0.1 was added to the model predictions when training the GBDT. I tested noise values of 0.02, 0.05, 0.08, and 0.12 via leaderboard probing (one of few things tested without cv).
+
+Additionally, the ratio of each prediction to the average prediction for all of a patient’s moles was calculated, which consistently improved CV and leaderboard performance. Noise was added to these features in the same way as described above.
+
+
+Didn’t work
+
+
+
+I attempted to more frequently select hard examples from the negative class when forming batches, where the probability of selection increased based on the difficulty. The difficulty was assessed using LogLoss from the OOF predictions.
+
+I also experimented with pretraining on data from previous competitions and other sources, but this did not yield significant improvements. 
+
+Averaging model predictions for several variations of augmented samples also did not produce any positive results.
+
+
+Using Data from Previous Competitions
+
+Due to the extremely small number of positive examples, it is expected that the model would struggle to recognize borderline cases of skin lesions. To address this, before integrating the models trained on the images from this competition, I trained a 3-class classification model (bkl/melanoma/nevus) using EVA02 small on data obtained from repo. I then applied the following rule based on diagnosis_pr:
+
+nevus -&gt; nevus
+melanoma -&gt; melanoma
+basal cell carcinoma -&gt; bkl
+seborrheic keratosis -&gt; bkl
+solar lentigo -&gt; bkl
+lentigo NOS -&gt; bkl
+
+
+All remaining samples were marked as benign_malignant == 'benign' but with diagnosis_pr != 'bkl' were labeled as ‘nevus’. 
+
+Adding the predictions from this model to the models based only on tabular data significantly improved both the CV and leaderboard scores. CV: 0.1756 -&gt; 0.1760, public LB: 0.180 -&gt; 0.182, private LB: 0.163 -&gt; 0.165.
+
+At the same time, in the final model, adding these features slightly improved the CV: 0.18185 -&gt; 0.18195. However, there was also a slight improvement in the public and private leaderboard scores.
+
+Synthetic Data (or where most of the time was spent)
+
+I was particularly interested in the potential of using synthetic positive examples to improve the model’s performance, and this idea was one of the main reasons I decided to participate in the competition. A similar approach was implemented in Derm-T2IM
+The process for generating synthetic data is outlined below.
+
+
+Below, you can compare real photographs of malignant lesions, examples generated by the Derm-T2IM model, and models trained on competition data. 
+
+
+The average metrics at the individual model level demonstrate the effectiveness of the synthetic data.
+
+
+It’s evident that the CV scores for models trained on synthetic data are consistently better. The leaderboard (public and private) results are slightly better, and on average, models trained on synthetic data perform better. 
+
+
+
+
+For example, an ensemble of models trained on synthetic data shows slightly better results on the Private LB (0.140 vs 0.142) and marginally better on the Public LB (within the range of 0.157). However, unfortunately, the addition of models trained on synthetic data did not improve the final ensemble, so they were not included in the final solution.
+If anyone is interested in continuing experiments in this direction, I’m attaching one of my datasets with synthetic mole images.
+
+P.S. All the source code for models training can be found here
+P.P.S. Submission code
+
+Comments:
+├─ shash (2024-10-03 10:35:54.847000) [+4]
+│  Do generative models like stable diffusion work the best for creating synthetic datasets now? Did you try using autoencoders and such as well?
+  ├─ Ilya Novoselskiy (2024-10-03 16:01:04.240000) [+3]
+  │  Most likely, several approaches are applicable here. Different diffusion models will also show different results. I just used what I was most confident in and what could be trained the fastest
+├─ yunsuxiaozi (2024-09-14 07:29:27.917000) [+1]
+│  Hello, I have attempted to synthesize some data. May I ask if this is considered successful? If there are any issues, please point them out to me. Thank you.
+│  
+│  Fine tune my Stable Diffusion
+  ├─ Ilya Novoselskiy (2024-09-16 09:19:19.467000) [+1]
+  │  Sorry for the delayed response! I trained the model at a low resolution of 128x128 since the original image resolution is quite low. I also used slightly different parameters, and I didn’t use Drea...
+    ├─ yunsuxiaozi (2024-09-20 03:09:47.420000) [+0]
+    │  ISIC2024 Finetune SD synthetic data.
+    │  I have a few questions to ask you.
+    │  
+    │  
+    │  
+    │  
+    │  Do you think the image I generated in the end is real?
+    │  
+    │  
+    │  What method do you use to determine the quality of the generated...
+    ├─ Ilya Novoselskiy (2024-09-22 09:11:23.490000) [+0]
+    │  Hi!
+    │      1.  I’m not an expert, but some images don’t look real to me, though some clearly have features of malignant moles. But they look much better comparing with old version of your notebook. Ha...
+├─ PhenomSG (2024-09-12 18:20:35.910000) [+1]
+│  Absolutely amazing work. Such detailed explanations helped me a lot. Thankyou !! :)
+├─ william.wu (2024-09-11 01:43:02.837000) [+1]
+│  Congratulations, I got one question:
+│  
+│  
+│    
+│  For performance evaluation, I applied a strategy once described by @daniel89 for the Mercedes-Benz Greener Manufacturing competition. Just as he did, I ran...
+  ├─ Ilya Novoselskiy (2024-09-16 09:14:46.223000) [+0]
+  │  Hmm, I’m not sure if I understood you correctly. Changes to the model were appled  only if both the CV and LB showed improvements. However, during submission, models from all seeds were blended tog...
+├─ Sumit_08 (2024-11-15 12:55:33.380000) [+0]
+│  Congratulations Bro. Really happy about your achievement and I love your code
+├─ Wanyi_Zhouzzz (2024-11-15 11:55:32.317000) [+0]
+│  Hello! I've tried to optimize the parameters of catboost several times(based on the tabular data) and private scores are around 0.1728-0.1729. Hope this helps!
+│  https://www.kaggle.com/code/wanyizhou...
+├─ Oleksandr Kharytonov (2024-11-13 14:21:09.173000) [+0]
+│  Great work! Congrats
+│  I have a bit general question about generation of synthetic medical data. What do you think about flow matching? And did you try using this approach in the competition?
+├─ Fábio Papais (2024-09-26 12:00:21.727000) [+0]
+│  Congratulations, great work!
+│  
+│  I have one question regarding the synthetic dataset. You said that you finetuned StableDiffusion 1.5 checkpoint, but the notebook on your repository shows that your pr...
+  ├─ Ilya Novoselskiy (2024-09-30 09:28:00.203000) [+0]
+  │  Hi! Yes, I've used ThisIsReal (downloaded from civiat.ai) which is a StableDiffusion 1.5 based finetune
+├─ tharun_01 (2024-09-23 18:01:36.370000) [+0]
+│  Great Work @ilya9711nov.
+│  
+│  I have a quick question, how did you come up with only these two models that work for you:
+│  For the image models, I used two architectures: EVA02-small (eva02_small_patch14...
+  ├─ Ilya Novoselskiy (2024-09-30 09:31:12.613000) [+0]
+  │  Thanks! Not that many, I've tried some EfficientNets and also MobileNetV3 but as a separate feature extractor. Also, I've tried bigger models of the same families (eg eva02_base / eva02_large)
+├─ FrostMagic (2024-09-19 15:00:51.413000) [+0]
+│  Hello, great work!
+│  Could you explain which approach you used to choose lof features below?
+│  top_lof_features = [
+│          'tbp_lv_H','hue_contrast',
+│         'age_normalized_nevi_confidence_2', 'tbp_lv...
+  ├─ Ilya Novoselskiy (2024-09-20 10:08:13.290000) [+1]
+  │  hey, based on permutation feature importance
+├─ Putu Kavya Santha Guna (2024-09-18 14:17:13.227000) [+0]
+│  damn, that's so cool bro
+├─ DC (2024-09-16 11:49:17.007000) [+0]
+│  Congrats and thank you for sharing - very insightful
+├─ Aastha_048 (2024-09-16 03:21:00.123000) [+0]
+│  Congratulations and thank you for attaching the datasets as well!
+├─ Min Sung Kim0 (2024-09-15 14:37:22.787000) [+0]
+│  Props and congratulations! Was the tabular data also augmented?
+├─ Rishan Hasan Tenis (2024-09-14 10:41:15.803000) [+0]
+│  Congratulation and thank you for sharing here!
+├─ [deleted] (2024-09-13 22:30:25.237000) [+0]
+│  very very good
+├─ [deleted] (2024-09-13 22:25:03.970000) [+0]
+│  very good
+├─ Kerin Payne (2024-09-13 15:40:08.883000) [+0]
+│  Great Explanations!
+├─ Nityanand Ghosh (2024-09-12 16:14:59.853000) [+0]
+│  Great work and thanks for sharing your work
+├─ Vijaari (2024-09-12 10:23:40.307000) [+0]
+│  Great work! Congratulations ✨
+├─ Abhishek Vijayan (2024-09-12 06:14:02.883000) [+0]
+│  Congratulations on the 1st place !
+│  Thanks for sharing your solution approach. 
+│  
+│  Could you please share what hardware / platform you used specifically for GPU ?
+│  (Just wondering if there's anyone wit...
+  ├─ Ilya Novoselskiy (2024-09-16 09:22:55.083000) [+1]
+  │  Thanks! I’ve rented an A6000/A40 from Runpod. :)
+  │  
+  │  But if I consider all the experiments I’ve been running, I think the two-month Kaggle GPU quota should just barely suffice, though it might be a cl...
+├─ Exalted Joseph (2024-09-12 05:16:36.477000) [+0]
+│  those who overfitted they are like way down, I didnt put much in the competition, discouraged by all those high score, GREAT WORK
+├─ Jannik Wirtheim (2024-09-11 13:57:54.580000) [+0]
+│  Great work! Congratulations 🎉
+├─ Mohammed Salem Lanqes (2024-09-10 18:36:08.963000) [+0]
+│  Congratulations,  synthetic data is the key. In addition, the approach you used in Vision-models was insightful
+├─ Vedant Singh Thakur (2024-09-10 17:03:24.400000) [+0]
+│  Congratulations and thanks for sharing!!!
+├─ delai50 (2024-09-10 16:21:48.497000) [+0]
+│  Congratulations and thanks for sharing! A couple of questions:
+│  
+│  
+│  
+│  How did you choose the value of the p-value for the t-test?
+│  
+│  Do you know how much the noise addition to the OOFs improved the score...
+  ├─ Ilya Novoselskiy (2024-09-10 21:33:49.933000) [+1]
+  │  Thank you!
+  │  
+  │  
+  │    
+  │  How did you choose the value of the p-value for the t-test?
+  │  
+  │  
+  │  Unfortunately, I don’t have any special secret. I used a threshold of 0.05 because it intuitively felt like the optimal...
+├─ PSI (2024-09-10 13:12:26.007000) [+0]
+│  Great work ! Will try to explore more on your approach 
+│  
+│  Thanks :)
+├─ kostopr4v (2024-09-10 12:41:59.420000) [+0]
+│  Wow! Very nice solution, especially approach with synthetic data.
+│  Congrats!!!🎉
+├─ Yusif İmamverdiyev (2024-09-10 10:01:56.143000) [+0]
+│  Great work. Do you have any advice for beginners?
+  ├─ Ilya Novoselskiy (2024-09-30 09:33:58.467000) [+0]
+  │  Hello! Thank you! I have nothing new to suggest. Continuously learn and read something new. Use all available sources of knowledge. Reinforce the theory you’ve learned with practice on real tasks (...
+├─ [deleted] (2024-09-10 05:12:20.567000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-10 05:12:01.637000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-10 02:12:13.290000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-10 01:10:12.757000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-10 00:53:47.370000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-09-10 08:02:16.487000) [+2]
+  │  [deleted]
+├─ [deleted] (2024-09-09 23:59:08.570000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-09 23:01:56.197000) [+0]
+│  [deleted]
+├─ [deleted] (2024-11-25 10:41:34.817000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-15 14:44:21.250000) [+1]
+│  [deleted]
+├─ [deleted] (2024-09-10 11:48:37.723000) [+1]
+│  [deleted]
+├─ [deleted] (2024-09-11 15:35:37.773000) [+2]
+│  [deleted]
+├─ [deleted] (2024-09-10 03:33:36.103000) [+0]
+│  [deleted]

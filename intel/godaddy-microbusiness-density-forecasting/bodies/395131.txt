@@ -1,0 +1,370 @@
+# https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395131
+
+Topic #395131: #1 solution - generalization with linear regression 
+  Author: @kaggleqrdl
+  Posted: 2023-03-16 01:45:36.755000
+  Votes: 48  Comments: 46
+
+New:  I've uploaded the formal model submit file that was required to receive the prize distribution: https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/425000
+
+Code here - https://www.kaggle.com/kaggleqrdl/first-place-code, see below for an explanation.
+
+Acknowledgements
+
+Let me first acknowledge Kaggle, the Venture Forward folks, and GoDaddy.   Not just for creating Kaggle itself, hosting the contest and providing the microbiz data - incredible feats of faith, truly -  but also for being patient with my fixation on transparency.  I am an egalitarian thru and thru, and firmly believe transparency is what gets us there.
+
+Introduction
+
+The contest was to predict microbusiness density 3,4,5 months lookahead for mar/apr/may 2023 per each of the 3135 US counties in the dataset.  Microbusiness density here is roughly equal to the # of GoDaddy internet domains registered / adult population in a county as measured by a 2 year lagging US census.  
+
+Eg: if a total of 10 GoDaddy domains were registered in De Kalb, MO  with 200 adult population according to the 2021 census in 2023 February, than microbusiness density for that county would increase by 10/200 or 0.05 in that month.
+
+We were given historical microbiz data for 2019 August -&gt; 2022 December to train with, and a not-so-secret 'public LB' of data for January to validate against.  Scores on the public LB were provided by Kaggle, and we were given 5 submissions per day.
+
+Method
+To win this, I took a baseline prediction for the january public leaderboard based on overfitting it, and used linear regression to project into mar/apr/may
+
+,  [, , ,]  -  month lookahead
+,  [, , ,] -  month lookahead
+,  [, , , , ] -  month lookahead
+
+
+
+
+l# here means lag # of months, shift is the actual value, just l#_ is pct_change
+
+shiftf1_l1_active_logit is whether there was a change in active over previous month (l1_active != 1)
+
+pct_college_2021 / pct_bb_2017 is from the census data the hosters shared
+
+uemp / lf / ur are from the dataset I shared here - https://www.kaggle.com/datasets/kaggleqrdl/gd2022datasets
+
+
+I selected these features by cross validating on the last possible window (2,3,4 month respectively) without overlap.  
+
+Insights
+The key ideas that seemed to help:
+
+
+
+LB overfitting / probing.  I did this by using the top public LB notebook plus focusing on the 10 or so counties that had recent significant volatility in the dataset.  This was done because in non stationary time series data, the last value is your most powerful and compelling signal.  It's worth noting that due to the dec22/jan23 snafu (we were given 60% incorrect data, as measured by SMAPE), this technique was severely impaired and my lead in the public LB went from ~0.2 to ~0.08 over the top 20.  Overfitting the LB doesn't work very well when the LB has wrong data.   
+More explanation here on this approach - https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/413109  I also explained these ideas early on in the contest here and here. The notebook has code used for SMAPE root solving and probing techniques
+
+LinearRegression - I tried practically every(*) other model and techniques, even dl/nn.  LR consistently resulted in more reliable CV scores.  Overfitting is always a concern with time series data and it's so easy to tune other models and convince yourself you found something superior.
+
+Early stopping on greedy feature selection.   This was done mostly on an intuition basis, but after running 1000s of experiments I developed a good feel for this I believe.  I noticed overfitting occurring when I did more than 4 or 5 features, plus the decreased rate of improvement was another signal that overfitting had occurred.  Certain features as well seemed to have more signal than others (eg, L10/11 employment, bb census) so I would keep going until they made it into the list but not much more.
+
+Last window CV for feature selection.  My hypothesis is that as a non stationary time series the relevant predictive features change and it's best to use the latest CV window (last few months of 2022).   This played out in the results I saw over the experiments I did, but I will say std deviation on the error term was quite high, even if the mean was superior to longer CV periods.  The risk was that so little CV time made it a bit of a gamble.
+
+Use as much original training data as possible - Generalizing through data sufficiency was a reoccurring theme in this comp, and any technique that didn't appreciate it was degraded respectively.  I used everything up to the lag window as per above.  I didn't modify any of the data (beyond removing 3 problematic counties), even left the break in 2021 alone.  I tried doing all sorts of things to clean up that data, but they just seemed to degrade results.    
+
+rounding based on active/population of course was a must.  I found clipping, in the end, didn't help.
+
+
+*every regression model in sklearn, various arima libraries (a lot of time here, wasted I feel), hierarchical, xgb, catboost, lgbm, pytorch/dll.  I tried both manually tuning the previous as well as various auto approaches like grid search/optuna.  Lots of very exciting results, but eventually it occurred to me I was probably just overfitting.
+
+It's worth observing that my lead against the #2 and #3 spots increased significantly from the public LB versus the private LB.  I believe this was due to superior predictions for apr/may as my march results were somewhat lackluster.   My lead over the top 20 spots also increased, though it is less clear how much of the public LB influenced their models.
+
+Ideas that didn't seem as important
+
+I also tried a lot of different datasets (including all the ones I shared publicly) up to and including google keyword trends for 'godaddy'.  :)  The above worked best when combined with early stopping.  There would be sparks of good CV scores when using other features, but adding them frequently felt like overfitting.  
+
+I briefly looked into using zone files and whois databases, but these were not openly available so of course I didn't use them. 
+
+Crawling/Scraping would have in theory been public data, but I had committed to myself not to use any data that I didn't share openly, so I figured it wouldn't be worth the effort required. 
+
+Everything I used I shared in the dataset I made publically available at the beginning of the comp.
+
+I did a lot of initial work around per county models, work I eventually decided was wasted.  There was barely enough data to validate the models and features above.  There might be a way of segregate the counties, the question is - Would you have to segregate your training data as well? Would the increased complexity be worth what might potentially be only incremental improvements?   Hard to say, especially since observing incremental improvements is mostly impossible when your CV scores are so volatile.  
+
+Future directions
+One thing I spent time looking at was correlation between the counties.  There is an argument to be made I think that different counties may follow similar trends at potential lag times.  There might be more to do here, but it would need to be done globally rather than individually, and your models would require appropriate data sufficiency. 
+
+Another feature I didn't plumb carefully enough was 1/2/3/etc annual renewal on GoDaddy domains, an idea I got by chatting with some domain resellers recently on a reseller domain community forum.  I suspect they would provide a well of ideas around this that could be leveraged more.
+
+Final thoughts
+
+As I mentioned above, and others have mentioned, the data was non stationary except for some global linear growth coefficients.  It's also been said that the smaller counties added a lot of noise, but I believe it was the right choice to try to see if we could do something there.  There is a paucity of stats and analysis around more rural areas and emergent issues are hard to detect because of it.
+
+Another way of looking at the data might be volatility instead of direction.  The wild fluctuations in active domains could just be due to data errors but they could also be due to underlying social and economic factors. In the latter case, we need to consider: could the volatility be an opportunity, like the first sparks of a fire? Could these counties benefit from more targeted and opportune investment? If volatile counties have increased potential, what are the triggers for volatility?  These are questions and experiments (signal + intervention) worth considering
+
+If the VF folks would like to contact me (heh), feel free to reach out.  As you may have noticed, I could talk about this stuff all day long with folks who are equally interested.
+
+..
+
+There was a bug in the team update that didn't let me change the LB pointer which I had originally pointed to the message below, so you're stuck with both.  I originally pointed it here as I was more interested in what other folks did as I wasn't really that optimistic about my simplistic approach above.  In retrospect, I probably should have trusted the process of elimination that I went through.
+
+previous thread title: What is your mean active change over december for mar/apr/may?
+
+Edit - to make clear up front, you can share your results from your submission by just executing this code.  It uses microbusiness density and not active, but that should be fine for comparison.
+
+dfc = pd.read_csv()
+rt = pd.read_csv().set_index()
+dfc[] = dfc[].apply( x:x[-:])
+dfc[] = dfc[].apply( x:(x[:x.index()]))
+dfc = dfc.reset_index().set_index()
+dfc[] = dfc.apply( r:(r[] - rt.loc[, ])/rt.loc[, ], axis = )
+display(dfc.groupby().mean()[])
+
+
+….
+
+It's going to be awhile before we get final results, and I think May results might play a large role in determining the eventual winners.  While we wait, it might fun to share what we actually predicted.  We could compare our actual results, which would be good and I've uploaded my two here -  but for those who don't want to and perhaps simpler might just be sharing mean % change over active.
+
+Here's the code I used.  It requires having accurate values for december in your dataframe and also have calculated 'active' as one of your columns.  
+
+If you don't want to use active, you can also share microbusiness density as well, but I found it less interesting because of the pop shift.  There were some outliers in the pop shift that made it harder to ensure that nothing went awry, so I liked having active available.   I've shared both below.
+
+You can calculate cfips/first day with this code:
+
+dfc[] = dfc[].apply( x:x[-:])
+dfc[] = dfc[].apply( x:(x[:x.index()]))
+
+
+Calculate active_chg values with this code:
+
+dfc = dfc.reset_index().set_index()
+dfc[] = dfc.apply( r:(r[] - dfc.loc[, ])/dfc.loc[, ], axis = )
+dfc.groupby().mean()[]
+
+
+This is my seasonal model 
+
+first_day_of_month
+--01   - 
+--01    
+-01-01    
+-02-01    
+-03-01    
+-04-01    
+-05-01    
+Name: active_chg, dtype: float64
+
+
+This is my long trend
+
+first_day_of_month
+--01   -
+--01    
+-01-01    
+-02-01    
+-03-01    
+-04-01    
+-05-01    
+Name: active_chg, dtype: float64
+
+
+Using mbd code if you didn't have an active column:
+
+dfc = dfc.reset_index().set_index()
+dfc[] = dfc.apply( r:(r[] - dfc.loc[, ])/dfc.loc[, ], axis = )
+dfc.groupby().mean()[]
+
+
+Seasonal sub
+
+first_day_of_month
+--01   -
+--01    
+-01-01    
+-02-01    
+-03-01    
+-04-01    
+-05-01    
+Name: mbd_chg, dtype: float64
+
+
+Long trend sub
+
+first_day_of_month
+--01   -
+--01    
+-01-01    
+-02-01    
+-03-01    
+-04-01    
+-05-01    
+Name: mbd_chg, dtype: float64
+
+
+Note for february I just used the january values. Sharing january isn't really that helpful of course, I just do it for fun here.
+
+Comments:
+├─ Chris Deotte (2023-03-24 20:30:58.880000) [+3]
+│  Here are the 3 history sequences for "Dec, Jan, Feb, Mar, Apr, May" in the train data. After we adjust for census population changes. It appears that May decreases in 2022 and 2021. And May increas...
+  ├─ Iurii Uspangaliev (2023-03-25 10:41:12.427000) [+1]
+  │  In 2020 it was short term big drop and then huge economic recovery from COVID, so imo it was not general trend, but anomaly. 
+  │  I didn't apply and seasonality/trend , just used one value for all 3 mo...
+├─ @kaggleqrdl (2023-03-16 03:57:08.010000) [+3]
+│  For folks looking for a description of my model, I posted it here - https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394810#2182222   
+│  
+│  However, my experienc...
+├─ tarick.morty (2023-03-17 16:55:39.503000) [+1]
+│  Hi @kaggleqrdl since you worked on the trend and seasonal model, any reason why you went for a far more aggressive growth? Do you feel that we will get to see such a significant uptick in the comin...
+  ├─ @kaggleqrdl (2023-03-18 02:51:36.543000) [+1]
+  │  Well, I let it run a little wild because of the layoffs in the tech sector.  I sort of felt those folks might try to start up microbiz.   Historically the tech sector has seen full employment, but ...
+    ├─ Sireesh Limbu (2023-03-18 03:00:17.070000) [+0]
+    │  I also thought the same last minute haha inspired from @uspangaliev's post here
+├─ Shiner (2023-03-17 13:25:43.397000) [+1]
+│  Share my 2 submissions:
+│  
+│  first_day_of_month
+│  2023-03-01    0.010246
+│  2023-04-01    0.012392
+│  2023-05-01    0.017704
+│  
+│  
+│  first_day_of_month
+│  2023-03-01    0.009916
+│  2023-04-01    0.011304
+│  2023-05-01    0.0...
+├─ Sireesh Limbu (2023-03-17 12:14:56.547000) [+1]
+│  Hi! Nice that you came up with this! Fun! Following are mine:
+│  
+│  
+│  
+│  The top one is with some multipliers for Mar, Apr and May along with a small functionality for increasing/decreasing trend for the l...
+├─ tarick.morty (2023-03-17 09:41:32.537000) [+1]
+│  mbd_chg with respect to December:
+│  
+│  first_day_of_month
+│  2022-11-01   -0.006355
+│  2022-12-01    0.000000
+│  2023-01-01    0.008735
+│  2023-02-01    0.007559
+│  2023-03-01    0.011393
+│  2023-04-01    0.013531
+│  2023-...
+├─ CPMP (2023-03-17 08:52:46.850000) [+1]
+│  Using @cdeotte mbd from his last value submission and your code, I get this. Jan, Feb, and June predictions are from a single model while the others are from my blend.  I did not tune January, Febr...
+├─ chen (2023-03-16 16:22:08.423000) [+1]
+│  Congratulations and thanks for sharing your thoughts!!
+  ├─ @kaggleqrdl (2023-03-16 17:24:12.857000) [+0]
+  │  Thanks Chen.  I was hoping some folks might share their results, but so far everyone seems a bit shy.  Ah well.
+    ├─ CPMP (2023-03-16 17:31:06.883000) [+1]
+    │  Not shy, but it requires some coding for me for instance. And there is little incentive to do so.  I will try to find time.
+    ├─ @kaggleqrdl (2023-03-16 17:41:43.140000) [+0]
+    │  Actually, I did provide some code above for just using microbusiness density.  
+    │  
+    │  Perhaps I should make this more clear.
+    │  
+    │  If you run this, it should work.  
+    │  
+    │  dfc = pd.read_csv()
+    │  dfc[] = dfc[].apply(...
+    ├─ Chris Deotte (2023-03-16 17:54:45.253000) [+1]
+    │  Note that we cannot compare different Kagglers' microbusiness density ratios because everyone can have different Dec 2022 MD predictions. For example do people use Dec 2022 as is from the train dat...
+    ├─ Chris Deotte (2023-03-16 17:59:37.700000) [+2]
+    │  The most consistent and easiest approach to compare different Kagglers' submissions is to download "last value baseline" submission.csv file from notebook here. Then you can provide code to merge t...
+    ├─ CPMP (2023-03-16 18:05:59.240000) [+1]
+    │  Actually, I did provide some code above for just using microbusiness density. 
+    │  
+    │  
+    │  Sure, but your asked for active change. If i use mbd from revealed test, then the change is inflated by the populati...
+    ├─ @kaggleqrdl (2023-03-16 18:27:42.923000) [+0]
+    │  Yes, it does require having accurate december values.  The pop shift problem should be OK as we'll all have it for comparison.
+    ├─ @kaggleqrdl (2023-03-16 18:33:21.120000) [+1]
+    │  You can use this, I'll add it above
+    │  
+    │  rt = pd.read_csv().set_index()
+    │  dfc[] = dfc.apply( r:(r[] - rt.loc[, ])/rt.loc[, ], axis = )
+├─ Luca Sharp (2023-03-16 06:54:56.473000) [+1]
+│  Hi! thanks for sharing your thoughts and good luck 🎉
+  ├─ @kaggleqrdl (2023-03-16 17:25:01.563000) [+0]
+  │  Thanks Luca, good luck to you as well.
+├─ Shiner (2023-03-16 05:58:31.843000) [+1]
+│  An interesting question, I just checked your submission files. Why you omit the big changes of some counties? Any reason, I feel a little confusing, because it seems a little bit dangerous.
+│  
+│  For in...
+  ├─ @kaggleqrdl (2023-03-16 05:59:38.317000) [+0]
+  │  I'll answer if you share your averages ;p  @judith007
+├─ Krisztián Boros (2023-03-16 02:32:31.303000) [+1]
+│  Wow, congrats!
+  ├─ @kaggleqrdl (2023-03-16 03:05:08.847000) [+2]
+  │  Just to be clear, the public leaderboard here is nonsense as it frequently is in most Kaggle contests.  I enjoy overfitting them to show why that is the case.  That said, there may be some advantag...
+├─ Nic Vicol (2023-03-16 18:31:34.337000) [+2]
+│  Given that the naive model was hard to beat, I was conservative about growth and damped further horizons. These are my average rates for active with respect to the actuals as of 2022-12-01. 
+│  
+│  ┌────...
+  ├─ @kaggleqrdl (2023-03-16 23:43:36.453000) [+0]
+  │  Thanks Nic!  Good luck on your results.
+├─ CoreyJamesLevinson (2023-03-16 22:55:17.237000) [+0]
+│  My results:
+  ├─ @kaggleqrdl (2023-03-16 23:36:59.553000) [+1]
+  │  :(  Not very kaggly, I think.
+  │  
+  │  Did you execute this code?  Getting the mbd chg over data from revealed test should be fairly straightforward.  
+  │  
+  │  dfc = pd.read_csv()
+  │  rt = pd.read_csv().set_index()
+  │  d...
+    ├─ [deleted] (2023-03-17 02:22:04.457000) [+0]
+    │  [deleted]
+    ├─ CoreyJamesLevinson (2023-03-17 02:26:04.647000) [+1]
+    │  I was running 
+    │  
+    │  dfc = dfc.reset_index().set_index("row_id")
+    │  dfc['mbd_chg'] = dfc.apply(lambda r:(r['microbusiness_density'] - dfc.loc[f"{r['cfips']}_2022-12-01", 'microbusiness_density'])/dfc.loc[f...
+    ├─ @kaggleqrdl (2023-03-17 02:45:40.143000) [+0]
+    │  Similar to my long trend prediction, though my may numbers might be a bit aggressive.  My seasonal is very aggressive, but I figured why not in case things change dramatically.  Also similar to the...
+    ├─ Sireesh Limbu (2023-03-17 13:40:57.070000) [+1]
+    │  Ah quite similar to mine as well! :)
+    ├─ @kaggleqrdl (2023-03-18 03:00:58.810000) [+0]
+    │  @sireesh
+    │  
+    │  Can you share them?  Did you use fairly simple models?
+    ├─ Sireesh Limbu (2023-03-18 03:07:08.267000) [+1]
+    │  I've already shared my mbd_change in this thread :) 
+    │  I used a blend of 2 catboost models along with Last Value blacklisting I have explained briefly here
+├─ Vitaly Kudelya (2023-03-18 18:06:47.057000) [+0]
+│  My Positive scenario submission
+│  
+│  -01-01    
+│  -02-01    
+│  -03-01    
+│  -04-01    
+│  -05-01    
+│  
+│  
+│  My Negative scenario submission
+│  
+│  -01-01    
+│  -02-01    
+│  -03-01    
+│  -04-01    
+│  -05-01
+  ├─ Sireesh Limbu (2023-03-18 18:19:26.137000) [+1]
+  │  Ah. There's the famous May drop. Looks great! Good luck!
+    ├─ CPMP (2023-03-20 09:58:45.930000) [+0]
+    │  I have a drop for May too, see my numbers. It surprises me. Why would the drop be good?
+    ├─ Sireesh Limbu (2023-03-20 11:59:42.643000) [+0]
+    │  Hi again. I think a lot of people with good CV scores were getting this drop, I was also a bit worried, but in the end I just went with what I got (And I don't have this drop). Here is the mention ...
+    ├─ Vitaly Kudelya (2023-03-22 14:34:09.267000) [+0]
+    │  As I remember the drop in May happened in 2022 and 2021, may be it somehow related to tax declaration in April in USA or any other seasonal reason (or just coincidence).
+    │  For me it seems that in May...
+├─ Hugo (2023-03-17 00:53:55.627000) [+0]
+│  Do you have a last_value group and a model prediction group? the result above is the average? Or you predict all cfips?
+  ├─ @kaggleqrdl (2023-03-17 01:03:19.807000) [+0]
+  │  I predict all cfips.  Manual blacklisting didn't seem to improve my scores, but I also had features which were similar in purpose, such as whether there was a change over some threshold in the last...
+    ├─ Hugo (2023-03-17 01:12:20.653000) [+1]
+    │  thanks. 
+    │  For the XGB model I built, if I only calculate the prediction part, 
+    │  
+    │  
+    │  
+    │  March: 1.01157
+    │  
+    │  April: 1.01702
+    │  
+    │  May: 1.02149
+    │  But if average over the prediction part(60%) and the last_value part(40...
+├─ @kaggleqrdl (2023-03-16 06:16:20.820000) [+0]
+│  I pulled this from another contestants submission that they shared publicly.  I won't give any names, but I found it interesting
+│  
+│  -03-01    
+│  -04-01    
+│  -05-01
+  ├─ [deleted] (2023-03-16 18:31:00.290000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-03-16 06:57:26.240000) [+0]
+│  [deleted]

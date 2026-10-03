@@ -1,0 +1,144 @@
+# https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516814
+
+Topic #516814: 6th place solution
+  Author: Piotr Gabrys
+  Posted: 2024-07-03 17:28:58.249000
+  Votes: 40  Comments: 18
+
+Acknowledgments
+
+I want to thank the organizers and Kaggle staff for creating such a fun competition! Additionally, I want to thank @paweljankiewicz for introducing me to Kaggle, @cdeotte and @cpmpml for their contributions to the community (I learned a lot from you!), @narsil for organizing Kaggle/hiking events in Poland, and @thedrcat for inspirations and ideas for the competition (I met Darek during the last event). Finally, I want to thank my wife for bearing with me.
+
+Validation
+
+I did a lot of LB probing and comparisons between 'pure' Kaggle and Persuade 2.0 datasets. Key findings:
+
+
+
+There were 5 topics in the test set with the following proportions (curious if I was right):
+
+
+
+
+Driverless cars - 35.6%
+
+Facial action coding system - 24.6%
+
+Exploring Venus - 19.6%
+
+The Face on Mars - 12.6%
+
+'A Cowboy Who Rode the Waves' - 7.6%
+
+
+
+
+Persuade 2.0 and Kaggle-only records are different.
+
+There were no records from the Persuade 2.0 dataset in the test set.
+
+All the topics were present in the public LB part of the test set. My assumption was that they are also present in the Private part of the dataset.
+
+
+I used the findings in the following way:
+
+
+
+I validated on the 5 topics Kaggle-only essays with weights adjusted to expected test set weights. You can find the weights calculation in this notebook. The persuade records and topics that I thought were not present in the test set had weight=0 for validation.
+
+I trained on all train data, but added a persuade binary flag as a feature. In the test set, all the records had persuade=0.
+
+I used StratifiedKFold stratified by score.
+
+
+Despite all the efforst described above I was not able to obtain strong CV-LB correlation. My 0.836 solution was chosen based on 50% CV and 50% LB score. I had one better PB solution with 0.837 score.
+
+Solution
+
+I used this notebook as my baseline. My modifications:
+
+
+
+Validation as described above.
+
+persuade flag.
+
+Training vectorizers (TfidfVectorizer, CountVectorizer) on the test set only.
+
+Increased DeBERTa max inference length to 1536.
+
+Transformed DeBERTa OOF into CDF. My intuition was that it would be much easier to use for tree-based models optimizing QWK objective.
+
+Added texstat and spaCy-based features (similarities between sentences in one text, words, sentences, and paragraphs stats).
+
+Relabeling - if the difference between DeBERTa OOF and the real label was higher than 2, then the label for LGBM training was modified (but the original one was kept for validation):
+
+
+train_feats = deberta_oof() + 
+train_feats = train_feats
+train_feats = train_feats + 
+train_feats = train_feats - 
+
+
+What did not work (for me):
+
+
+
+Data augmentation and new model training (I've spend 80% of my time here)
+
+Thresholds optimization
+
+Additional spell-check dictionaries
+
+Semi-supervised learning
+
+
+Conclusions
+
+I've spent a lot of time on data: EDA, reading essays, comparing Kaggle and Persuade 2.0 datasets, LB probing, trying various augmentation techniques, etc. This allowed me to improve the baseline (changes were subtle) and choose almost optimal submission (2nd best on PB). The 6th place solution scored 0.817 (1,200+ place on LB). The 0.824 solution (25th on LB) scored 0.832 (500+ on PB). I also want to acknowledge the role of luck here (possibly big one). Getting my first gold medal took me 6 years, and I feel thankful and proud I finally got it.
+
+Comments:
+├─ Darek Kłeczek (2024-07-04 15:53:06.167000) [+1]
+│  Amazing, solo gold is a huge achievement, congrats! Looking at the data always pays off :D
+  ├─ Piotr Gabrys (2024-07-04 16:06:17.750000) [+0]
+  │  Thank you! Your presentation in Karpacz gave me a lot of energy and ideas!
+├─ narsil (jobs-in-data.com) (2024-07-04 07:23:35.963000) [+1]
+│  Transformed DeBERTa OOF into CDF. My intuition was that it would be much easier to use for tree-based models optimizing QWK objective. =&gt; could you elaborate on that one?
+  ├─ Piotr Gabrys (2024-07-04 09:24:57.847000) [+4]
+  │  Sure. This was a regression competition with 6 distinct values. Like with most regression metrics, for QWK, making a big mistake is penalized much more than making a small one. The DeBERTa OOFs are...
+    ├─ Piotr Gabrys (2024-07-04 16:13:16.480000) [+0]
+    │  To iterate more about this idea. Imagine a regression tree trying to decide the score based on PDF: [0.166, 0.166, 0.166, 0.166, 0.166, 0.166] or equivalent CDF [0.166, 0.333, 0.5, 0.666, 0.833]. Y...
+    ├─ Paweł Jankiewicz (2024-07-04 19:24:26.350000) [+1]
+    │  It almost looks like a grading on a curve. I remember one of successful techniques in the essay scoring competition was to treat the scores as continuous and reassign them based on the distribution...
+    ├─ Piotr Gabrys (2024-07-04 19:33:22.627000) [+0]
+    │  I thought about it, but since train distribution was very different from the test one I thought it's not a good idea. Have not tested it thought.
+├─ Paweł Jankiewicz (2024-07-03 19:53:49.947000) [+1]
+│  Huge results! Congrats!
+  ├─ Piotr Gabrys (2024-07-03 20:00:39.363000) [+0]
+  │  Thank you Paweł!
+├─ narsil (jobs-in-data.com) (2024-07-03 18:30:52.183000) [+1]
+│  Great stuff @piotrekga !!! the road to GM is open now!
+├─ Prashant Limba (2024-07-03 18:18:03.870000) [+1]
+│  Congratulations! @piotrekga on your winning 🎉, 
+│  I also probed out those event rates, but wasn't sure either. 
+│  Can you tell how exactly you build the CV. I didn't quiet followed it 
+│  
+│  
+│    
+│  "I've valid...
+  ├─ Piotr Gabrys (2024-07-03 19:33:14.380000) [+1]
+  │  Thanks!
+  │  Good questions. I used StratifiedKFold stratified by score. I've made it with sample weights, so no sampling here. You can find it in this notebook. You can see that persuade records and to...
+├─ Kennedy Bwire (2024-07-13 13:45:49.627000) [+0]
+│  Congratulations for the great work
+├─ USAGI (2024-07-07 13:43:55.910000) [+0]
+│  I'll use it as a reference.
+├─ Md. Hasibur Rahman (2024-07-07 00:47:56.463000) [+0]
+│  Wow! good work. continue success
+├─ SwekeRR (2024-07-04 17:02:39.840000) [+0]
+│  Congratulations sir
+│  And thanks for sharing ur approach ☺️
+├─ Tejaswy (2024-07-03 19:28:12.190000) [+0]
+│  Thanks for sharing!
+├─ work work (2024-07-03 18:56:17.650000) [+0]
+│  thank you for sharing your approach

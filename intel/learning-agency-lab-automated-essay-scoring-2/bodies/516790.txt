@@ -1,0 +1,364 @@
+# https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516790
+
+Topic #516790: 2nd Place Solution
+  Author: yao
+  Posted: 2024-07-03 15:18:52.021000
+  Votes: 57  Comments: 28
+
+First of all, I would like to thank Kaggle and the organizers for hosting this interesting competition. Thanks @abdullahmeda, @cdeotte and @ragnar123, … for finding that the training set are compose of two datasets, and the text of test set is more similar to Kaggle-Only set (I confirm this privately), this finding is one of the key to have strong models.
+
+Congratulations to all the winners. Also sorry for who shake down, good luck for your next competition. :)
+
+1. Overview
+
+My final best selected sub is a voting of 5 models, this is a overview of my final best selected solution:
+
+
+
+All the models are trained with:
+
+
+
+Two-Stage Training. Training on Kaggle-Persuade first, load the weights and training on Kaggle-Only with same loss function.
+
+10 epochs of MLM on all the training set.
+
+CV: 4 folds SKF. Validate on both Kaggle-Persuade and Kaggle-Only data.
+
+Save the checkpoints for the last epoch. (On both stage1 and stage2)
+
+Random seed.
+
+
+Some models trained with Ordinal Regression.
+
+Whose I think are the keys to have high PB.
+
+Why we need two-stage training? IMO, If we train with all the training set, the model will learn the distribution of Kaggle-Persuade more (because it's have big size? I think), this will lead to do bad on Kaggle-Only set. So, use two-stage training to let the model learn the knowledge from Kaggle-Persuade first, then finetine on Kaggle-Only to learn the distribution of Kaggle-Only, which is more similar to our hidden test set.
+
+2. Threshold Search
+
+I use OptimizedRounder here to search best thresholds for every single model and blend models. After some experiment, I found the last threshold of 5 and 6 is sub-optimized. So I create a for-loop to search the best last threshold, which boost both CV, LB and PB.
+
+A simple though is to search thresholds on Kaggle-Only dataset only as the texts are more similar to test set. Although it gives much good CV, but LB drop a lot, so I assume the distribution of the score of hidden test set is similar to our full training set. Then I do threshold search on all the training set only, which lead to good LB/PB.
+
+3. Models
+
+
+
+
+Exp name
+Description
+CV
+LB/PB
+
+
+
+
+
+exp302 cope
+add CoPE which I edit from paper to simple two-stage training
+0.8194/0.8158
+0.827/0.833
+
+
+
+exp306
+Ordinal Regression
+0.8243/0.8148
+0.829/0.840
+
+
+
+exp306 clean
+Ordinal Regression with clean text via Feedback1's code
+0.8248/0.8179
+0.826/0.836
+
+
+
+exp320
+Pet like training.
+0.8201/0.8174
+0.828/0.841
+
+
+
+exp321
+Mean pool of sentences to get paragraph representation, then mean pool of paragraph to get full text representation.
+0.8209/0.8201
+0.824/0.836
+
+
+
+
+
+exp306
+
+This model is trained with:
+
+
+
+backbone: deberta-v3-large mlm10
+
+lr: 1e-5
+
+head_lr: 5e-5
+
+pooling: attention
+
+differential learning rate
+
+scheduler: linear, warmup: 0.1
+
+loss: bce
+
+max_length: 1024
+
+batch_size: 32
+
+epochs: 3
+
+
+
+I use BCEWithLogitsLoss to train ordinal regression model
+
+@torch.no
+def :
+    labels = labels.clone
+    labels = labels - 
+    B = labels.shape
+    outputs = torch.zeros((B, num_labels - ), dtype=torch.float32, device=labels.device)
+    cols = torch.arange(outputs.shape, device=labels.device)
+    mask = cols &lt; labels.unsqueeze()
+    outputs = 
+    return outputs
+
+
+ :
+    def get:
+        return nn.
+
+    def forward(self, x):
+        feature = self.get
+        logits = self.head(feature)
+        return logits
+
+    def compute:
+        new_labels = 
+        loss = self.criterion(logits.reshape(-, ), new_labels.reshape(-, ))
+        loss = loss.mean
+        return loss
+
+
+exp320
+
+
+
+backbone: deberta-v3-large mlm10
+
+lr: 2e-5
+
+head_lr: 5e-5
+
+pooling: attention
+
+differential learning rate
+
+scheduler: cosine, warmup: 0.1
+
+loss: bce
+
+max_length: 1024
+
+batch_size: 16
+
+epochs: 2
+
+
+The model structure is from my previous teammate @conjuring92 @trushk , they used and shared in Feedback3 here. My prompt for pet model is:  Data Source: {topic}\n\nStudent Writing Evaluate\n\nThe score(1 to 6) of the following essay is: [MASK].
+
+Different from exp302, I scale the score from 1-6 to 0-1 and use bce loss to train. When evaluation, I simple do: pred * 5 + 1 to transform the prediction to original scale, which works quiet well.
+
+exp321
+
+
+
+backbone: deberta-v3-large mlm10
+
+lr: 1e-5
+
+head_lr: 1e-5
+
+pooling: attention
+
+differential learning rate
+
+scheduler: linear, warmup: 0.1
+
+loss: mse
+
+max_length: 1024
+
+batch_size: 16
+
+epochs: 2
+
+
+Mean pool of sentences to get paragraph representation, then mean pool of paragraph to get full text representation. 
+
+I also use ordinal regression here.
+
+4. Submission Selection
+
+It's very difficult to select the best sub, CV/LB only have good correlation with some of my single models.
+
+For this competition, I wanted the sub to be as robust as possible. So I chose one for best LB (voting). For the other sub, I focused on Kaggle-Only CV, (because CV/LB correlate good for tree-based only models(CV/PB correlate very well!) and some of my single models), which is a weighted blend and have CV around 0.828+. The result is not bad.
+
+5. Things doesn't work
+
+
+
+classification
+
+weighted blend. yes… although I finally select sub with ensemble, many high PB subs are simple mean blend(all 0.842 to 0.844). and I have single best model 0.841, but ensemble drop to 0.840…
+
+Reina. I like reina, but it didn't work here. That's search the most similar text B of focus text A, and concat B, score of B and A to train.
+
+Add elements of each token
+
+Separated head training.
+
+Stacking
+
+MoE
+
+Ranking loss
+
+AWP
+
+
+Training code update: https://github.com/Syhen/2nd-Place-Solution-Kaggle-Learning-Agency-Lab-Automated-Essay-Scoring-2.0
+
+Inference notebook: https://www.kaggle.com/code/syhens/aes2-voting?scriptVersionId=184408611
+
+Welcome to star if you find it helpful :)
+
+Comments:
+├─ ln (2024-07-05 13:01:11.857000) [+3]
+│  Congrats on solo gold! Great solution and writeup!
+│  Could you please answer a few questions regarding your solution?
+│  
+│  
+│  
+│  Did you add any new tokens as @cdeotte suggested?
+│  
+│  With what lr and batch size...
+  ├─ yao (2024-07-05 16:54:23.943000) [+5]
+  │  Thank you! Let me answer your questions.
+  │  
+  │  
+  │    
+  │  Did you add any new tokens as @cdeotte suggested?
+  │  
+  │  
+  │  Yes. I add \n\n and \n in my experiment.
+  │  
+  │  
+  │    
+  │  With what lr and batch size were you training MLM for...
+├─ Optimo (2024-07-03 16:33:50.417000) [+4]
+│  Congratulations! Well done!
+│  
+│  Could you tell me what MLM means in "10 epochs of MLM on all the training set." ?
+  ├─ yao (2024-07-03 16:42:18.060000) [+3]
+  │  Thank you! That means applying Masked Language Model (MLM) task, which used to pretrain the BERT model, on the train set of competition for further pretrain. You can reference to the BERT paper or ...
+    ├─ Optimo (2024-07-03 16:46:07.753000) [+2]
+    │  Thanks! Did you monitor the gain of this MLM pretraining ? Do you have a rule of thumb of the logloss score you expect when doing this kind of pretraining ?
+    ├─ yao (2024-07-04 11:32:48.493000) [+1]
+    │  During my early experiments w/o two-stage training, its about 0.005/0.008 on CV/LB. I dont compare when using two-stage. 
+    │  
+    │  I will monitor the loss curve of training to make sure I set a not bad lea...
+├─ xyy (2024-07-05 23:56:58.383000) [+1]
+│  Quite a nice job! Congrats!!!
+├─ Jaydev (2024-07-07 04:15:55.720000) [+2]
+│  Congratulations @syhens for competition gold with 2nd place 🎉.
+│  I have one question :
+│  How did you get to know that the data distribution of persuade data is different from kaggle only data?.
+  ├─ yao (2024-07-07 06:17:37.823000) [+2]
+  │  Thank you Jaydev!
+  │  You can reference to this great discussion to find more information about how we find they are different. https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-s...
+    ├─ Jaydev (2024-07-07 07:52:38.510000) [+0]
+    │  Okay, thank you for the source 🙂
+├─ Piotr Gabrys (2024-07-06 17:42:02.377000) [+2]
+│  Congrats on the second place! Great write-up and discussion! This is surprising to me that stacking did not work. For me a model that optimizes the metric directly has to be &gt;= than ensebling. A...
+  ├─ yao (2024-07-07 06:15:37.623000) [+1]
+  │  Thank you! Congratulations on your 6 place!
+  │  I don't pay much attention on stacking by optimizes the metric directly so maybe this is our different. But my thresholds search helped much, and I think...
+    ├─ Piotr Gabrys (2024-07-07 10:09:52.820000) [+0]
+    │  Thank you too!
+    │  
+    │  Yes, I think they are mostly similar. For sure for simple decisions i.e. 3 vs 4 score they are. I'm not sure about more multimodal probabilites distributions like [0.05, 0.3, 0.15, ...
+├─ ttkk22 (2024-07-06 13:12:34.063000) [+2]
+│  Congratulations  and nice solution!!
+│  
+│  I would like to confirm if my understanding is correct. Is it correct that you first conducted MLM pre-training using only Kaggle-Persuade data and then fine-t...
+  ├─ yao (2024-07-06 13:23:07.250000) [+2]
+  │  Thank you!
+  │  I would say NO. The two stages are all trained by save loss function. I finetuned the model with Kaggle-Persuade then the second stage finetune with Kaggle-Only data. The second stage I ...
+    ├─ ttkk22 (2024-07-06 13:29:01.063000) [+1]
+    │  Thank you!  So does that mean you did MLM pre-training by deberta-v3-large with all training data before 2-step training?
+    ├─ yao (2024-07-06 15:56:32.243000) [+2]
+    │  Yes.
+    ├─ ttkk22 (2024-07-07 02:21:36.727000) [+1]
+    │  Thank you! Congratulations again!
+├─ Shiner (2024-07-05 12:54:36.777000) [+2]
+│  Congrats! Seems MLM played a big role in your solution and 3rd place winner's. Are you considering share more details about your MLM?
+  ├─ yao (2024-07-05 17:01:58.453000) [+3]
+  │  It's a public notebook created and shared by @nbroad here. https://www.kaggle.com/code/nbroad/deberta-mlm-tests-nbme . My hyper parameters: lr=1e-5, max_sequence_length=1024, batch_size=2.
+├─ delai50 (2024-07-04 11:17:19.523000) [+2]
+│  Congratulations and thanks for sharing!
+│  
+│  In the write up you mentioned:
+│  
+│  
+│    
+│  Then finetune on Kaggle-Only to learn the distribution of Kaggle-Only, which is more similar to our hidden test set.
+│  
+│  
+│  B...
+  ├─ yao (2024-07-04 11:45:26.337000) [+2]
+  │  This always bothered me. The contradiction is the distribution of text of Kaggle-Only(let's say  KO) and hidden test set is more similar, but I found the distribution of score of full training set ...
+├─ flg (2024-07-03 15:45:22.967000) [+2]
+│  Great solution and congrats!
+│  
+│  
+│    
+│  weighted blend. yes… although I finally select sub with ensemble, many high PB subs are simple mean blend(all 0.842 to 0.844). and I have single best model 0.841, ...
+  ├─ yao (2024-07-03 15:58:13.120000) [+1]
+  │  Thank you!
+  │  
+  │  
+  │    
+  │  MLM pre-training
+  │  
+  │  
+  │  I only experiment this in the early stage (w/o two stage training), and have around 0.005/0.008 improvement for LB/PB.
+  │  
+  │  
+  │    
+  │  for hard voting
+  │  
+  │  
+  │  I don't have much CV...
+├─ sun (2024-07-03 15:40:29.360000) [+2]
+│  Congratulations to the 2nd place !!
+│  I see you are using Ordinal regression loss as main loss. In your experiments, how is it performed when compared to typical MSELoss?
+  ├─ yao (2024-07-03 16:12:34.983000) [+2]
+  │  Thank you! Contratulations to your solo gold!!
+  │  
+  │  In my experiments, Ordinal regression loss &gt;(better than) MSELoss &gt; bce loss on CV/LB. PB says, bce loss can do well too. Ordinal regression lo...
+    ├─ sun (2024-07-03 16:23:27.137000) [+1]
+    │  Thank you! I tried Ordinal regression loss once or twice. However, no such significantly difference in my case. It must be 2-stage pretrain and finetune that make it shine. Just guessing
+├─ SUPERadonai (2024-10-10 11:14:08.717000) [+0]
+│  great solution

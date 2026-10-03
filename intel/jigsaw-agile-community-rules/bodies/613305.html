@@ -1,0 +1,95 @@
+<p>Link to code is <a href="https://www.kaggle.com/code/wowfattie/notebookc4e4a9206d" target="_blank">here</a>.</p>
+<p>I would like to thank Kaggle and Jigsaw for organizing and hosting this interesting competition. It's an excellent opportunity to explore practical aspects of LLM finetuning.</p>
+<p><strong>Validation strategy</strong></p>
+<p>What we know:</p>
+<ul>
+<li>train.csv contains two rules with comments (bodies).</li>
+<li>test.csv includes six rules, four of them are new.</li>
+<li>The four new rules have already been identified. </li>
+</ul>
+<p>However, to build a strong local validation, we still need to generate realistic comments for the four new rules — a nontrivial task.</p>
+<p>I believe the Public LB is a better choice for validation because of the following:</p>
+<ul>
+<li>The host mentioned that the public/private LB split is random, which means the public LB serves as an unbiased estimator of the private LB.</li>
+<li>The total test data size is not small, with the public LB representing about 30% of it. This ensures low variance in score estimation.</li>
+</ul>
+<p>Therefore, all models were finetuned online and validated using the public LB.</p>
+<p><strong>Data processing</strong></p>
+<p>This <a href="https://www.kaggle.com/code/neibyr/lb-0-878-train-on-test-data-qwen2-5-0-5b" target="_blank">notebook</a> provides an excellent baseline for data processing and finetuning.&nbsp;The idea is to use positive and negative examples in the test.csv as training data. The main modifications I made to the data processing pipeline are as follows:</p>
+<ul>
+<li>Used the LLM built-in chat templates.</li>
+<li>I excluded the subreddit column before deduplication, since including it can create unnecessary duplicates across different subreddits. The performance improvement is significant after this change!</li>
+</ul>
+<p><strong>Finetuning</strong></p>
+<p>Initially, I used vanilla transformers + pytorch code, which works great, achieved 0.931 on public LB early with an ensemble of Qwen3-4b-instruct-2507, llama3.2-3b, and phi-4-mini-instruct. However, I couldn’t scale beyond 7B models due to memory limitations. Later, I switched to Unsloth, which is much more memory-efficient — it can easily fit a 14B model within 16GB of GPU memory.
+Before finetuning, I upsampled examples from test.csv once to increase their weight, and then finetuned for one epoch. This is equivalent to one epoch for train.csv and two epochs for test.csv. 
+Chat templates can introduce unnecessary tokens before and after the the "Yes" or "No" targets, such as "\n\n\n\n" in Qwen3 models, as well as one or more tokens following the "Yes" or "No" targets. By default, finetuning will also apply loss to these extra tokens which is unnecessary and can slow down training. 
+To address this, I manually excluded these tokens from the loss computation, ensuring that only the "Yes" or "No" token contributes to the loss. An additional benefit of this step is that it standardizes the training behavior across different models, leading to more consistent convergence speeds and allowing me to use a single set of hyperparameters across models.</p>
+<p><strong>Inference</strong></p>
+<p>Since the last linear layer maps to the whole vocabulary, even after finetuning on the Yes/No tokens, there could still be a non-trival probabilitiy that the probs will be scattered on other tokens. So I constructed a candidate set of first tokens for many variants:</p>
+<ul>
+<li>["Yes","YES","Y","yes","True"] -&gt; Yes_ids </li>
+<li>["No","NO","N","no","False"] -&gt; No_ids</li>
+<li>plus their space-prefixed&nbsp;forms. </li>
+</ul>
+<p>The variants are obtained by local experiments outputting&nbsp;the most frequent topK predicted tokens. 
+For scoring, I output probs equivalent to the sigmoid of log-odds of Yes_ids vs No_ids.</p>
+<p>Other tricks to speed up inference is:</p>
+<ul>
+<li>Sort test data by length</li>
+<li>Use forward() only. Avoids all the other operations during generation because all we need is the logits of the last token.</li>
+</ul>
+<p><strong>Postprocessing</strong></p>
+<p>For each model’s output, I computed per-rule rankings, normalized the scores to the range [0, 1], and then&nbsp;ensembled based on these normalized values. This postprocessing step provided a consistent improvement, increasing the public LB score from 0.929 to 0.931 in early tests.</p>
+<p><strong>Model performance and final ensemble</strong></p>
+<ul>
+<li>Larger models generally performed better. </li>
+<li>Qwen3 is better than the other common LLMs.</li>
+<li>The final ensemble is a weighted average of these six models.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qwen3-14b</td>
+<td>0.9297</td>
+<td>0.9239</td>
+</tr>
+<tr>
+<td>Qwen2.5-14b</td>
+<td>0.9287</td>
+<td>0.9232</td>
+</tr>
+<tr>
+<td>Qwen3-8b</td>
+<td>0.9272</td>
+<td>0.9236</td>
+</tr>
+<tr>
+<td>Qwen3-4b-instruct-2507</td>
+<td>0.9258</td>
+<td>0.9198</td>
+</tr>
+<tr>
+<td>llama3.1-8b</td>
+<td>0.9257</td>
+<td>0.9202</td>
+</tr>
+<tr>
+<td>Ettin-400M</td>
+<td>0.8991</td>
+<td>0.8944</td>
+</tr>
+<tr>
+<td>ensemble</td>
+<td>0.9344</td>
+<td>0.9293</td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,216 @@
+<p>First, I would like to thank Kaggle and competition's host for another interesting challenge, which bring me headaches for a long time :D
+Thank you to all participants, especially who actively discuss and provide many good insights/code in the forum. As usual on Kaggle, I have a great time learning new things.</p>
+<h2>First impression</h2>
+<ul>
+<li>I trained an Embedding + MLP models on building block id only, e.g [BB1, BB2, BB3] = [100, 200, 300]. Yes, it just see the ID. This model scores shared_AP=65.5 on StratifiedKFold(n_splits=20), which indeed surpass some of my SMILES+CNN1d without looking for what each building block looks like. This strongly indicate that model could memorize target binding and overfiting is nearby.</li>
+<li>Many attempts but actually I failed to setup a trustworthy CV scheme. In such situation, I decided to be blind at all and try to focus the fancy word "diversity": Multiple models, multiple input representations and SSL pretraining. I think that strategy indeed survived me in this shuffle competition.</li>
+</ul>
+<h2>How to Cross-Validate?</h2>
+<p>As mentioned above, I don't know.</p>
+<p>My split strategy for each fold:</p>
+<pre><code>1. [11k samples] Hold out a number of building blocks for validation: 17 BB1 + 36 BB2 with positive-fraction-aware balance on each fold.
+2. [78k samples] Leave 20% molecules with most regular scaffolds (&gt; 6116 mols/scaffold) for training, then do a Scaffold Split on the remaining 80% molecules
+3. [103k samples] Stratified Random split on the remaining
+</code></pre>
+<p>Total: 11k non-shared + 181k share, simulate the LB
+This strategy create a little "harder" than pure random split on the shared part.</p>
+<p>The hard part lie in 11k non-shared. Some observation on non-shared CV:</p>
+<ul>
+<li><p>CV scores vary largely between different folds. I find it hard to identify a trend/correlation, or which is work/not work</p></li>
+<li><p>Early stopping should help, but it also hard to answer WHEN? Usually best score is found in first 2 epochs, but also could be much longer
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10254700%2Fa266b63c8b17261dc0768365c16b09ab%2Fnonshare-cv.png?generation=1720515545119485&amp;alt=media" alt="">
+<em>Each column in form: <code>score (best_epoch)</code>. All results belong to a single split, with nonshare positive rate <code>[0.571, 0.638, 0.714] %</code></em></p></li>
+<li><p>Suitable hyperparams also vary largely between folds. It looks like best setting with best score in fold A could give worst score on fold B :(</p></li>
+<li><p>For one particular fold: score also change significantly due to just small change in hyperparams like random seed, validate interval, .etc. (13.5 -&gt; 32.4, what?)</p></li>
+<li><p>Overfit a model on LB-nonshared-similar building blocks improve nonshared LB score. <code>Building block ECFP6 -&gt; Tanimoto similarity -&gt; Linear Assignment Matching</code> to select most similar/disimilar 170 BB1 + 360 BB2/3, then overfit a 1D-CNN on this subset. LB score for similar=8.8, disimilar=3.9. This indicate that we can improve LB by focusing more on these similar samples. I later select most similar 17 BB1 + 36 BB2/3 as validation set and try to improve CV on this split, but improved CV led to decrease in non-shared LB, which confused me</p></li>
+</ul>
+<p>In conclusion, more and more experiments messed up my mind. The variation is too large and seem to be random for me. I gave up and focus on <strong>SSL pretraining</strong>, improve the diversity by using <strong>multiple models</strong> and <strong>multiple input representations</strong>, and allmost all models were <strong>blindly train on all competition data with no cross-validation</strong>, since I did not trust a single CV split alone and train on multiple CV splits seem to be too time-intensive</p>
+<h2>SSL Pretraining</h2>
+<p>2 pretraining tasks:</p>
+<ul>
+<li>MLM (Masked Language Modeling) with standard setting: 15% masked tokens, 80%-10%-10% replaced with <code>[MASK]</code>/random tokens/keep unchanged.</li>
+<li>MTR (Multi-Task Regression): regress 189 pre-calculated RDKIT Descriptors. These target values are min-max normalized in contrast to CDF Transform in literature.</li>
+</ul>
+<p><code>Joint MTR + MLM pretraining</code> + <code>SMILES Enumeration</code> has success as mentioned in <a href="https://github.com/BenevolentAI/MolBERT" target="_blank">MolBERT</a>, which inspired me to give it a try</p>
+<p>Pretraining using all data (both train + test), with larger sampling weights to test dataset to equalize the frequency of each building blocks and be "more familiar" with new domain test dataset.</p>
+<p>I trained 3 models to be finetuned on competition task:</p>
+<ul>
+<li>Squeezeformer + <code>MTR</code></li>
+<li>Squeezeformer + <code>Joint MTR + MLM</code></li>
+<li>Roberta + <code>Joint MTR + MLM</code></li>
+</ul>
+<h2>Modeling</h2>
+<p>All models simultaneously predict 3 targets. Some models are not converged in the last day, and training must be terminated to finish in time:</p>
+<ul>
+<li><p><strong>Molecule Fingerprint + MLP</strong></p>
+<ul>
+<li>Fingerprints: ECFP6, Topological Torsion, MHFP</li>
+<li>MLP with hidden channels [1024, 1024], dropout = 0.3</li>
+<li>Tried KAN but did not outperform MLP</li>
+<li><a href="https://openreview.net/forum?id=NLFqlDeuzt" target="_blank">Independent Feature Matching (IFM)</a> gave no boost</li>
+<li>Feature Selection based on SHAP also gave no boost. For a long time I had believe Feature Selection is the key to reduce share-nonshare gap and overfitting caused by noisy signal, but had no success with it.</li></ul></li>
+<li><p><strong>String-based 1D-CNN</strong></p>
+<ul>
+<li>Input representations: SMILES, Atom-In-Smiles (AIS), SELFIES, DeepSMILES</li>
+<li>Model: Improved from the <a href="https://www.kaggle.com/code/ahmedelfazouan/belka-1dcnn-starter-with-all-data" target="_blank">awesome public notebook</a>, just add MaskedBatchNorm, MaskedAttentionPooling and scale to larger size (depth = 6, dim=128)</li>
+<li>All input representations give equally good result on shared part. SELFIES give slightly worse results on non-shared and converge slower than other input representations</li>
+<li>Deeper -&gt; better generalisation. <code>(depth=8, dim=64)</code> is <code>&gt;</code> <code>(depth=3, dim=512)</code> on non-shared, but <code>&lt;</code> on shared. <code>(depth=3, dim=512)</code> also better remember the training set (higher train AP) while archive similar share AP. This need more experiments to confirm.</li></ul></li>
+<li><p><strong>String-based Hybrid CNN-Transformer</strong></p>
+<ul>
+<li>Input representation: SMILES, Atom-In-Smiles</li>
+<li>Model: Squeezeformer, depth = 6, dim=64/96/128</li>
+<li>No positional encoding, CNN do the job. ROPE decrease CV score</li>
+<li>Pretrain: <code>No pretrain</code> or <code>MTR</code> or <code>MLM+MTR</code></li></ul></li>
+<li><p><strong>String-based Transformer</strong></p>
+<ul>
+<li>Input representation: SMILES</li>
+<li>Model: Roberta, depth=6, dim=256, Absolute PE</li>
+<li>Pretrain: <code>MLM+MTR</code></li></ul></li>
+<li><p><strong>String-based MAMBA</strong></p>
+<ul>
+<li>Input representation: SMILES</li>
+<li>Model: Mamba, depth=8, dim=128</li></ul></li>
+<li><p><strong>GNNs</strong></p>
+<ul>
+<li>GIN with depth=5, dim=300, finetune from public pretrained <a href="https://github.com/junxia97/Mole-BERT" target="_blank">Mole-BERT</a> (pretrained on ZINC)</li>
+<li>GCN/GraphSAGE with depth=5, dim=128</li></ul></li>
+<li><p><strong>Catboost</strong></p>
+<ul>
+<li>Ensemble of 12 folds, covering all train dataset. Each fold contain all positive samples and 5.0 times of negative samples.</li>
+<li>Max_depth=10, lr=0.2, iterations=4000, bootstrap_type='No'</li></ul></li>
+</ul>
+<p>Some modeling results used in final ensemble. I think analyze share/nonshared/new library scores is needed for further analysis, and I will update that results later.</p>
+<table>
+<thead>
+<tr>
+<th>File Name</th>
+<th>Private Leaderboard</th>
+<th>Public Leaderboard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>final_roberta-mtr-mlm_chartokenize-all_ep11.2_na_0.668808_all</code></td>
+<td><strong>0.301</strong></td>
+<td>0.399</td>
+</tr>
+<tr>
+<td><code>final_squeeze-mtr_chartokenize-02_ep11_0.033802_0.651412_all</code></td>
+<td>0.290</td>
+<td>0.373</td>
+</tr>
+<tr>
+<td><code>ensemble_v2</code></td>
+<td><strong><em>0.278</em></strong></td>
+<td><strong><em>0.448</em></strong></td>
+</tr>
+<tr>
+<td><code>ensemble_v1</code></td>
+<td>0.277</td>
+<td>0.435</td>
+</tr>
+<tr>
+<td><code>ensemble_v0</code></td>
+<td>0.274</td>
+<td>0.438</td>
+</tr>
+<tr>
+<td><code>final_smileschar-pregen_cnn1d-8-64_all</code></td>
+<td>0.270</td>
+<td>0.389</td>
+</tr>
+<tr>
+<td><code>final_smileschar-pregen_cnn1d-3-512_all</code></td>
+<td>0.257</td>
+<td>0.386</td>
+</tr>
+<tr>
+<td><code>final_selfies-pregen_cnn1d-3-512_all</code></td>
+<td>0.253</td>
+<td>0.367</td>
+</tr>
+<tr>
+<td><code>final_squeeze-mtr-mlm_chartokenize-02_ep11_0.11199_0.648898_all</code></td>
+<td>0.251</td>
+<td>0.407</td>
+</tr>
+<tr>
+<td><code>final_selfies-pregen_cnn1d-6-128_all</code></td>
+<td>0.244</td>
+<td>0.365</td>
+</tr>
+<tr>
+<td><code>final_ais-pregen_cnn1d-6-128_all</code></td>
+<td>0.244</td>
+<td>0.395</td>
+</tr>
+<tr>
+<td><code>final_sage_all</code></td>
+<td>0.242</td>
+<td><strong>0.433</strong></td>
+</tr>
+<tr>
+<td><code>final_deepsmiles-pregen_cnn1d-6-128_all</code></td>
+<td>0.242</td>
+<td>0.388</td>
+</tr>
+<tr>
+<td><code>final_pretrain-gin_all</code></td>
+<td>0.240</td>
+<td>0.385</td>
+</tr>
+<tr>
+<td><code>topo_mlp_all</code></td>
+<td>0.236</td>
+<td>0.377</td>
+</tr>
+<tr>
+<td><code>final_smileschar-pregen_cnn1d-6-128_all</code></td>
+<td>0.235</td>
+<td>0.392</td>
+</tr>
+<tr>
+<td><code>final_ais_squeeze_all</code></td>
+<td>0.235</td>
+<td>0.388</td>
+</tr>
+<tr>
+<td><code>final_gcn_all</code></td>
+<td>0.233</td>
+<td>0.396</td>
+</tr>
+<tr>
+<td><code>final_mamba_smileschar_all</code></td>
+<td>0.233</td>
+<td>0.394</td>
+</tr>
+<tr>
+<td><code>squeezeformer_0.1033_0.6376_all</code></td>
+<td>0.230</td>
+<td>0.410</td>
+</tr>
+<tr>
+<td><code>catboost_12chunks_all</code></td>
+<td>0.224</td>
+<td>0.385</td>
+</tr>
+<tr>
+<td><code>ecfp6_mlp_all</code></td>
+<td>0.218</td>
+<td>0.359</td>
+</tr>
+<tr>
+<td><code>mhfp_mlp_all</code></td>
+<td>0.193</td>
+<td>0.307</td>
+</tr>
+</tbody>
+</table>
+<p>Best single model was a <strong>Roberta with join MLM + MTR pretraining</strong>, scored <strong>0.301</strong> on Private Leaderboard and 0.399 on Public Leaderboard.</p>
+<p>Simple weighted ensemble with heuristic weights scores <strong>PB=27.8 and LB=44.8</strong>
+Indeed there are some single model with higher PB scores, but ensemble reduce variance and give more stable/trustworthy results. This result is luckily enough for a gold medal.</p>
+<h2>Code</h2>
+<ul>
+<li>Training code: <a href="https://github.com/dangnh0611/kaggle_leash_belka" target="_blank">https://github.com/dangnh0611/kaggle_leash_belka</a></li>
+</ul>
+<p>Thanks for your attention !</p>

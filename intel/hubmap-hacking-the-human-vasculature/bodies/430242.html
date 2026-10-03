@@ -1,0 +1,244 @@
+<p>Hi everyone, sorry for taking a bit longer to publish the complete solution. Thanks to the Kaggle team and HubMap team for hosting the competition. In this post I’m going to explain my winning solution in detail. Again I am really happy that I became one of the youngest GrandMaster after this competition. This competition also taught how important it is to keep your updated and trying out the recent researches made in the field. </p>
+<p>Also, we have already made our inference notebook along with model weights public: you may visit that with this <a href="https://www.kaggle.com/code/nischaydnk/cv-wala-mega-ensemble-hubmap-2023" target="_blank">notebook link</a></p>
+<p>All codes related to training or preprocessing data codes are also made public (In Progress): <a href="https://github.com/Nischaydnk/HubMap-2023-3rd-Place-Solution" target="_blank">https://github.com/Nischaydnk/HubMap-2023-3rd-Place-Solution</a> </p>
+<p>You may find most of the configs I used in all_configs folder. I will clean up the repo in upcoming days.</p>
+<p>Here you can refer to the coco annotations used for training the model:  <a href="https://www.kaggle.com/datasets/nischaydnk/hubmap-coco-datasets" target="_blank">dataset link</a></p>
+<h2>Overview</h2>
+<p><strong>Winning solution consists of :</strong></p>
+<p><strong>5</strong> MMdet based models with different architectures.<br>
+<strong>2x ViT-Adapter-L</strong> (<a href="https://github.com/czczup/ViT-Adapter/tree/main/detection" target="_blank">https://github.com/czczup/ViT-Adapter/tree/main/detection</a>)<br>
+<strong>1x CBNetV2 Base</strong> (<a href="https://github.com/VDIGPKU/CBNetV2" target="_blank">https://github.com/VDIGPKU/CBNetV2</a>)<br>
+<strong>1x Detectors ResNeXt-101-32x4d</strong> (<a href="https://github.com/joe-siyuan-qiao/DetectoRS" target="_blank">https://github.com/joe-siyuan-qiao/DetectoRS</a>)<br>
+<strong>1x Detectors Resnet 50</strong> </p>
+<p>I also had few Vit Adapter based single models which could have placed me on 1st/2nd ranks but I didn't select. No regrets :))</p>
+<h2>Image Data Used</h2>
+<p>I only used competition for training models. <em>No external image data was used.</em> </p>
+<h2>How to use dataset 2??</h2>
+<p>Making the best use of dataset 2 was one of the key things to figure out in the competition. For me multi stage approach turned to be giving the highest boost. Basically during stage 1, A coco pretrained model will be loaded and pretrained on all the WSIs present in noisy annotations (dataset 2) for less epochs (~10), using really high learning rate (0.02+), with a cosine scheduler with minimum lr around (0.01), light augmentations.  </p>
+<p>In stage 2, we will load the pretained model from stage 1 and fine-tune it on dataset 1 with higher number of epochs (15-25), heavy augmentations, higher image resolution (for some models), slightly lower starting learning rate and minimum LR till 1e-7. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2Fdfbae6a6f634c755d9ea39ca2daa9751%2FScreenshot%202023-08-09%20at%203.36.59%20AM.png?generation=1691532480119818&amp;alt=media" alt=""></p>
+<p><em>I have used Pseudo labels using dataset 3 in training few models of final ensemble solution, although I didn't find any boost using them in the leaderboard scores, I will still talk about it as they were used in final solution</em></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2Facf9ee081989a328c9f150458b4fce95%2FScreenshot%202023-08-09%20at%204.01.34%20AM.png?generation=1691533922010932&amp;alt=media" alt=""></p>
+<p>Using multistage approach gave around consistent 2-3% boost on validation and 4-6% improvement in leaderboard scores which is quite huge. The gap between cv &amp; lb scores was quite obvious as models were now learning on WSI 3 &amp; 4. Also, I never had to worry about using dilation or not as my later stage was just fine-tuned on dataset 1 (noise free annotations), so dilation doesn't help if applied directly on the masks.</p>
+<h1>Models Summary</h1>
+<h2>Vit Adapter: These models were published in recent ICLR 2023 &amp; turned out to be highest scoring architectures.</h2>
+<ul>
+<li>Pretrained coco weights were used. </li>
+<li>1400 x 1400 Image size (dataset fold-1 with pseudo threshold 0.5) &amp; (full data dataset 1 with pseudo threshold 0.6)</li>
+<li>Loss fnc: Mask Head loss multiplied by 2x in decoder.</li>
+<li>1200 x 1200 Image size used in stage 1.</li>
+<li>Cosine Scheduler with warmup were used.</li>
+<li>SGD optimizer for fold 1 model &amp; AdamW for full data model</li>
+<li>Higher Image Size + Multi Scale Inference (1600x1600, 1400x1400)</li>
+</ul>
+<p><strong>Best Public Leaderboard single model: 0.600</strong><br>
+<strong>Best Private Leaderboard single model: 0.589</strong></p>
+<h2>CBNetV2: Another popular set of architectures based on Swin transformers.</h2>
+<ul>
+<li>Pretrained coco weights were used. </li>
+<li>1600 x 1600 Image size (dataset 1 fold-5 without Pseudo)</li>
+<li>1400 x 1400 Image size used in stage 1.</li>
+<li>Cosine Scheduler with warmup were used.</li>
+<li>Higher Image Size during Inference (2048x2048)</li>
+<li>SGD optimizer </li>
+</ul>
+<p><strong>Best Public Leaderboard single model: 0.567</strong></p>
+<h2>Detectors HTC based models:  CNN based encoders for more diversity</h2>
+<ul>
+<li>Pretrained coco weights were used. </li>
+<li>2048 x 2048 image size (Resnet50 fold 1 w/ pseudo threshold 0.5 , Resnext101d without pseudo)</li>
+<li>Loss fnc: Mask Head loss 4x for Resnext101, 1x for Resnet50 </li>
+<li>Cosine Scheduler with warmup were used.</li>
+<li>SGD optimizer </li>
+</ul>
+<p><strong>Public Leaderboard single model: 0.573 ( resnext 101) , 0.558 (resnet50)</strong></p>
+<h2><strong>Techniques which provided consistent boost:</strong></h2>
+<ol>
+<li>Multi Stage Training</li>
+<li>Flip based Test Time Augmentation</li>
+<li>Higher weights to Mask head in HTC based models</li>
+<li>SGD optimizer </li>
+<li>Weighted Box Fusion for Ensemble</li>
+<li>Post Processing</li>
+</ol>
+<h2>Post Processing &amp; Ensemble</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2F0fb5299755c5bfa0d6da43263a8be223%2FScreenshot%202023-08-09%20at%204.38.49%20AM.png?generation=1691536182102653&amp;alt=media" alt=""></p>
+<p>As mentioned earlier, I used WBF to do ensemble. To increase the diversity, I kept NMS for TTA and WBF for ensemble. Also, using both CNN / Transformer based encoders helped in increasing higher diversity and hence more impactful ensemble. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2F764ea7995470a76b07549107c4b531a2%2FScreenshot%202023-08-09%20at%204.26.47%20AM.png?generation=1691536206638981&amp;alt=media" alt=""></p>
+<p>After the ensemble, I think some of my mask predictions got a little distorted. Therefore, I applied erosion followed by single iteration of dilation. This Post-processing gave me a decent amount of boost in both cross validation score as well as on leaderboard (+ 0.005)</p>
+<h2>Light Augmentations</h2>
+<pre><code>dict(
+    =,
+    direction=[, ],
+    =0.5),
+dict(
+    =,
+    policies=[[{
+        : ,
+        : 0.4,
+        : 0
+    }], [{
+        : ,
+        : 0.4,
+        : 5
+    }],
+              [{
+                  : ,
+                  : 1.0,
+                  : 6
+              }, {
+                  : 
+              }]]),
+dict(
+    =,
+    transforms=[
+        dict(
+            =,
+            =0.0625,
+            =0.15,
+            =15,
+            =0.4)
+    ],
+    =dict(
+        =,
+        =,
+        label_fields=[],
+        =0.0,
+        =)
+</code></pre>
+<h2>Heavy Augmentations</h2>
+<pre><code>dict(
+                =,
+                direction=[, ],
+                =0.5),
+            dict(
+                =,
+                policies=[[{
+                    : ,
+                    : 0.4,
+                    : 0
+                }], [{
+                    : ,
+                    : 0.4,
+                    : 5
+                }],
+                          [{
+                              : ,
+                              : 0.6,
+                              : 10
+                          }, {
+                              : ,
+                              : 0.6,
+                              : 3
+                          }],
+                          [{
+                              : ,
+                              : 0.6,
+                              : 10
+                          }, {
+                              : ,
+                              : 0.6,
+                              : 5
+                          }],
+                          [{
+                              : ,
+                              : 32,
+                              : (0.5, 1.5),
+                              : 15
+                          }],
+                          [{
+                              : ,
+                              : (0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+                              : 0.2
+                          }],
+                          [{
+                              :
+                              ,
+                              : (3, 8),
+                              : [(4, 4), (4, 8), (8, 4), (8, 8),
+                                               (16, 32), (32, 16), (32, 32),
+                                               (32, 48), (48, 32), (48, 48)]
+                          }],
+                          [{
+                              : ,
+                              : 0.6
+                          }, {
+                              : ,
+                              : 0.6,
+                              : 3
+                          }],
+                          [{
+                              : ,
+                              : 32,
+                              : (0.5, 1.5),
+                              : 18
+                          }],
+                          [{
+                              : ,
+                              : (0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+                              : 0.3
+                          }],
+                          [{
+                              :
+                              ,
+                              : (5, 10),
+                              : [(4, 4), (4, 8), (8, 4), (8, 8),
+                                               (16, 32), (32, 16), (32, 32),
+                                               (32, 48), (48, 32), (48, 48)]
+                          }],
+                          [{
+                              : ,
+                              : 0.6,
+                              : 4
+                          }, {
+                              : ,
+                              : 0.6,
+                              : 6
+                          }, {
+                              : ,
+                              : 0.6,
+                              : 10
+                          }],
+                          [{
+                              : ,
+                              : 1.0,
+                              : 6
+                          }, {
+                              : 
+                          }]]),
+            dict(
+                =,
+                transforms=[
+                    dict(
+                        =,
+                        =0.0625,
+                        =0.15,
+                        =15,
+                        =0.5),
+                    dict(=, =0.5),
+                    dict(
+                        =,
+                        transforms=[
+                            dict(
+                                =,
+                                =120,
+                                =6.0,
+                                =3.5999999999999996,
+                                =1),
+                            dict(=, =1),
+                            dict(
+                                =,
+                                =2,
+                                =0.5,
+                                =1)
+                        ],
+                        =0.3)
+                ],
+                =dict(
+                    =,
+                    =,
+                    label_fields=[],
+                    =0.0,
+                    =) 
+</code></pre>
+<p>Thank you all, I've tried my best to cover most part of my solution. Again, I am super happy to win the solo gold, feel free to reach out in case you find difficulty understanding any part of it.</p>

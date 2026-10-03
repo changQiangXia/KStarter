@@ -1,0 +1,82 @@
+# image-matching-challenge-2024 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution – High Image Resolution ALIKED/LightGlue + Transparent Trick [Prize Eligible]](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510084) — 96 票 / 27 评论 / 2024-06-14 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509902) — 58 票 / 4 评论 / 2024-06-04 **write-up?**
+- [Welcome to the 2024 Image Matching Challenge!](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/486584) — 55 票 / 29 评论 / 2024-03-25 
+- [Starting references and materials](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/486636) — 52 票 / 6 评论 / 2024-03-25 
+- [4th Place Solution: ALIKED+LightGlue is all you need [Prize Eligible]](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510611) — 46 票 / 8 评论 / 2024-06-06 **write-up?**
+- [2nd Place Solution: MST-Aided SfM & Transparent Scene Solution [Prize Eligible]](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510499) — 44 票 / 7 评论 / 2024-07-01 **write-up?**
+- [Strange Behavior in IMC?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509696) — 35 票 / 44 评论 / 2024-06-03 
+- [5th Place Solution: Customized Scene Matching](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510603) — 31 票 / 8 评论 / 2024-06-06 **write-up?**
+- [3rd Place Solution: VGGSfM](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510338) — 31 票 / 5 评论 / 2024-06-05 **write-up?**
+- [Inferring the leaderboard and churn at the end of the competition](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509854) — 29 票 / 0 评论 / 2024-06-04 
+- [LightGlue vs SuperGlue performance](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/490723) — 28 票 / 0 评论 / 2024-04-03 
+- [IMC2023 winner code ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/500715) — 27 票 / 3 评论 / 2024-05-06 
+- [Leaderboard finalization expected to take a few days](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510031) — 26 票 / 19 评论 / 2024-06-04 
+- [XFeat: Accelerated Features for Lightweight Image Matching](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/500366) — 25 票 / 2 评论 / 2024-05-05 
+- [Plot a 3D map of the Scenes with Bin files? Competition 2023 (camera, images and points3D) were txt extension.](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/486878) — 21 票 / 2 评论 / 2024-03-26 
+- [13th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510295) — 21 票 / 0 评论 / 2024-06-11 **write-up?**
+- [IMC 2024 materials](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487430) — 19 票 / 0 评论 / 2024-03-29 
+- [[39th place] Superpoint+Lightglue & Keynet_Affnet_Hardnet_Adalam](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510373) — 19 票 / 2 评论 / 2024-06-11 **write-up?**
+- [[Prize Eligible] 16th place solution  - ALIKED4Khh+DISKh+SIFT](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509883) — 19 票 / 1 评论 / 2024-09-13 **write-up?**
+- [26th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509918) — 19 票 / 0 评论 / 2024-06-10 **write-up?**
+- [Shiny & glass objects](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/501721) — 18 票 / 10 评论 / 2024-05-10 
+- [Thank you Kaggle Staff!](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/511453) — 17 票 / 5 评论 / 2024-06-10 
+- [6th Place Solution: Detector-Free SfM & Transparent Scene Trick](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/511291) — 17 票 / 0 评论 / 2024-06-10 **write-up?**
+- [Here we go! ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/486614) — 16 票 / 2 评论 / 2024-03-25 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/511481) — 15 票 / 4 评论 / 2024-06-10 
+- [Request for write-ups (top50)](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509939) — 15 票 / 0 评论 / 2024-06-04 **write-up?**
+- [Has anyone successfully calculate the metric for full training set?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/494789) — 15 票 / 17 评论 / 2024-04-18 
+- [What I learned from IMC 2024](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509514) — 14 票 / 2 评论 / 2024-06-02 
+- [What a masterclass! ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/508471) — 14 票 / 5 评论 / 2024-05-29 
+- [Overlap Detection](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/495304) — 14 票 / 6 评论 / 2024-04-20 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/486624) — 14 票 / 0 评论 / 2024-03-25 
+- [IMC2024 Starter [LB 0.13]](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/493948) — 13 票 / 7 评论 / 2024-04-15 
+- [Question about license](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/490622) — 13 票 / 4 评论 / 2024-04-03 
+- [17th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510596) — 11 票 / 0 评论 / 2024-06-06 **write-up?**
+- [Reproducibility of CV and LB scores](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/494921) — 11 票 / 4 评论 / 2024-04-18 
+- [Choose good practice](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/506669) — 11 票 / 1 评论 / 2024-05-22 
+- [13th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510664) — 10 票 / 2 评论 / 2024-06-07 **write-up?**
+- [OmniGlue: Generalizable Feature Matching with Foundation Model Guidance](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/507536) — 10 票 / 0 评论 / 2024-05-26 
+- [Get started here!](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/483344) — 10 票 / 2 评论 / 2024-03-12 
+- [is this paper relevant for this competition? - Paper: Matching 2D Images in 3D](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/492676) — 9 票 / 6 评论 / 2024-04-10 
+- [Correction to `train_labels.csv` file extensions](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487151) — 9 票 / 0 评论 / 2024-03-27 
+- [Asking for help](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/501940) — 9 票 / 4 评论 / 2024-05-11 
+- [Exists in train csv but no actual image data. Is this a bug or a specification?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487806) — 8 票 / 4 评论 / 2024-03-30 
+- [Notebook Successfully ran but Failed as a submission](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/491321) — 8 票 / 9 评论 / 2024-04-05 
+- [How are we dealing with these unique types of scenes?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/497350) — 8 票 / 0 评论 / 2024-04-24 
+- [Shakeup Potential?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/497141) — 8 票 / 3 评论 / 2024-04-23 
+- [12th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510673) — 8 票 / 0 评论 / 2024-06-07 **write-up?**
+- [Image Matching Challenge 2024 - Hexathlon magical behavior and consistent situations](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510232) — 8 票 / 11 评论 / 2024-06-05 
+- [47th Place Solution: A Novel Transparent Scene Trick!](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/511507) — 8 票 / 0 评论 / 2024-06-11 **write-up?**
+- [Will our models add value?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/494606) — 7 票 / 5 评论 / 2024-04-17 
+- [Train image filename cleanup](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/491111) — 7 票 / 1 评论 / 2024-04-04 
+- [Categories in test set](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/493937) — 6 票 / 5 评论 / 2024-04-15 
+- [[10th] Place Solution for the  Image Matching Challenge 2024 - Hexathlon](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/515089) — 5 票 / 0 评论 / 2024-06-27 **write-up?**
+- [Congratulations for the new Kaggle GrandMaster Yumeneko! ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/514892) — 5 票 / 1 评论 / 2024-06-26 
+- [More decimal places?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509822) — 5 票 / 4 评论 / 2024-06-04 
+- [62rd solutioin write up](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/511533) — 5 票 / 0 评论 / 2024-06-11 **write-up?**
+- [[help] score 0.00 by just a few change in detect_keypoints](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/499101) — 5 票 / 8 评论 / 2024-04-30 
+- [Camera Pose for the Transparent Category](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/505818) — 4 票 / 1 评论 / 2024-05-19 
+- [Are there any overlaps between the scenes in the test set and the training set?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/492347) — 4 票 / 14 评论 / 2024-04-09 
+- [Non-RGB images in testset?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/503090) — 4 票 / 1 评论 / 2024-05-16 
+- [submission change ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509843) — 4 票 / 5 评论 / 2024-06-04 
+- [Is 3D model reconstruction strictly necessary?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487622) — 4 票 / 3 评论 / 2024-03-29 
+- [transparent or symmetry-and-repeats is a key to get high score in LB ? ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509825) — 4 票 / 3 评论 / 2024-06-04 
+- [How is the world coordinate system defined?  ](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/499282) — 4 票 / 3 评论 / 2024-05-01 
+- [Question regarding Rotation matrix and Translation vector](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/488325) — 4 票 / 4 评论 / 2024-04-02 
+- [GOOD LUCK to EVERYONE](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/507889) — 4 票 / 0 评论 / 2024-05-27 
+- [What's the relation between the mean_reprojection_error and the final submission score ( mean Average Accuracy).](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/490984) — 4 票 / 4 评论 / 2024-04-04 
+- [Distributions of the test set](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/493569) — 3 票 / 0 评论 / 2024-04-14 
+- [image extensions in train csv file doesn't match with image in folders](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487132) — 3 票 / 4 评论 / 2024-03-27 
+- [A Question About the World Coordinate System](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/493268) — 3 票 / 0 评论 / 2024-04-12 
+- [Anyone up to the challenge of joining a computer vision startup?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/509382) — 3 票 / 2 评论 / 2024-06-02 
+- [LoftR exceed time limit](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/501778) — 3 票 / 0 评论 / 2024-05-10 
+- [Looking for a team](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487054) — 3 票 / 4 评论 / 2024-03-27 
+- [Whats Working for you?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/506874) — 3 票 / 1 评论 / 2024-05-23 
+- [Should the SfM pipeline be from scratch?](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487015) — 3 票 / 2 评论 / 2024-03-27 
+- [Suppress the log output of pycolmap.incremental_mapping](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/496638) — 2 票 / 6 评论 / 2024-04-22 
+- [DIM-package-submission-example Submission Error](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/491051) — 2 票 / 1 评论 / 2024-04-04 
+- [Looking for teammates](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/487975) — 2 票 / 3 评论 / 2024-03-31 
+- [fail to reproduce the result](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/497090) — 2 票 / 4 评论 / 2024-04-23 
+- [Why the 'mp' parameter does not increase code speed in LightGlueMatcher.](https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/498051) — 2 票 / 2 评论 / 2024-04-26 

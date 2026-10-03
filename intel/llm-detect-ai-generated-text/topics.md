@@ -1,0 +1,122 @@
+# llm-detect-ai-generated-text 讨论区（按票数排序，共 120 条）
+
+- [📝 500 LLM generated essays specifically for this competition! 🚀🚀🚀](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452155) — 282 票 / 113 评论 / 2023-11-01 
+- [1st place short solution summary [Updated with code link]](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470121) — 203 票 / 78 评论 / 2024-01-23 **write-up?**
+- [[LLM] A "7 Prompts" training dataset](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453410) — 189 票 / 36 评论 / 2023-11-06 
+- [New prompts, new models, new train dataset 😀](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455517) — 170 票 / 52 评论 / 2023-11-15 
+- [0.963 with BERT - Transformers love diverse data](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/465882) — 155 票 / 95 评论 / 2024-01-06 
+- [Using Custom Tokenizers to Boost Your Score](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/458522) — 140 票 / 18 评论 / 2023-11-30 
+- [There's no real train dataset 😱 so I created one ⚡️](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452401) — 139 票 / 21 评论 / 2023-11-02 
+- [🎄 Santa brings new data 🎄](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/463087) — 132 票 / 27 评论 / 2023-12-23 
+- [2nd place solution with code and data](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470395) — 115 票 / 36 评论 / 2024-01-24 **write-up?**
+- [To newcomers](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/465227) — 105 票 / 60 评论 / 2024-01-03 
+- [Comprehensive 1st Place Write-Up](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/473295) — 99 票 / 26 评论 / 2024-02-04 **write-up?**
+- [Who wants more data? V4 dataset with a little bit of magic 🦄](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/468246) — 97 票 / 33 评论 / 2024-01-15 
+- [Superfast Unsupervised Baseline [0.91 LB]](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/465156) — 96 票 / 45 评论 / 2024-01-03 
+- [Train prompts exact match with PERSUADE corpus / Feedback prize](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452172) — 95 票 / 9 评论 / 2023-11-01 
+- [Greetings from the Organizers!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452097) — 94 票 / 110 评论 / 2023-10-31 
+- [[21th Solution] Secret Sauce [0.986 Public - Selected Private: 0.932 Best:0.957]](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470148) — 87 票 / 33 评论 / 2024-01-23 **write-up?**
+- [T5 deobfuscator](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/457819) — 85 票 / 17 评论 / 2023-11-27 
+- [5th place solution: 1.7 million training examples + domain adaptation](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470093) — 84 票 / 28 评论 / 2024-01-25 **write-up?**
+- [[score 0.854] Simple baseline using Mistral-7B, LoRA, and 4-bit quantization](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452362) — 82 票 / 7 评论 / 2023-11-01 
+- [More data (GPT-4 this time) + a new Datasets GM 👀](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452649) — 79 票 / 28 评论 / 2023-11-03 
+- [The curse of early success](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470154) — 77 票 / 23 评论 / 2024-01-23 
+- [Be generous :) ](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455698) — 76 票 / 7 评论 / 2023-11-16 
+- [LLM: [Dataset] Created 4900 Mistral-7B  LLM texts](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456878) — 73 票 / 13 评论 / 2023-11-22 
+- [Find Typos - 0.714 LB in 14 lines of code](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452750) — 72 票 / 20 评论 / 2023-11-03 
+- [[8th LB Solution] Linguistic Features: PPL & GLTR](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470224) — 68 票 / 20 评论 / 2024-01-25 **write-up?**
+- [New dataset: 200k+ external essays 🚀](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453372) — 67 票 / 22 评论 / 2023-11-06 
+- [3rd place solution](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470333) — 67 票 / 42 评论 / 2024-02-05 **write-up?**
+- [0.961 -> 0.963 by using Levenshtein distance for error correction](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/468767) — 67 票 / 135 评论 / 2024-01-17 
+- [[4th Place Solution] A Summary of Combined Arms Approach](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470179) — 66 票 / 14 评论 / 2024-01-31 **write-up?**
+- [How was the data processed? Strange findings](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452279) — 63 票 / 10 评论 / 2023-11-01 
+- [External Dataset - Persuade Corpus (26k argumentative essays)](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452127) — 62 票 / 2 评论 / 2023-10-31 
+- [Linking essays in train_essays.csv to PERSUADE corpus](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455711) — 60 票 / 16 评论 / 2023-11-16 
+- [[1st Public/9th Private] LLMLab - Solution Summary](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470255) — 56 票 / 22 评论 / 2024-01-23 **write-up?**
+- [[7th Place Solution in Efficiency Prize]](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/479428) — 53 票 / 8 评论 / 2024-04-16 **write-up?**
+- [19th place solution](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470181) — 53 票 / 14 评论 / 2024-01-23 **write-up?**
+- [🦙 Llama 70b and 🦅Falcon 180b generated data!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452464) — 51 票 / 3 评论 / 2023-11-02 
+- [On the performance of non-NN detectors](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/454448) — 50 票 / 23 评论 / 2023-11-10 
+- [The difference in prompts' significance in public. ](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/460845) — 48 票 / 16 评论 / 2023-12-11 
+- [🦙 🦅 7k more samples generated by Llama 70b and Falcon 180b 🦙 🦅 ](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/457791) — 48 票 / 15 评论 / 2023-11-26 
+- [New huge dataset (800,000 samples of text)](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/467001) — 48 票 / 32 评论 / 2024-01-10 
+- [Insights / Findings till now in the competition](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/457889) — 47 票 / 10 评论 / 2023-11-27 
+- [Overfitting Or Not Overfitting?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/465247) — 46 票 / 30 评论 / 2024-01-03 
+- [[0.960] Public Notebook Update Record](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/457155) — 45 票 / 9 评论 / 2023-11-23 
+- [[7th Place Solution] Generate Data with Non-Instruction-Tuned Models](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470643) — 45 票 / 6 评论 / 2024-02-05 **write-up?**
+- [[LB0.918] Remove typos in test.csv](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456140) — 44 票 / 29 评论 / 2023-11-18 
+- [Meme Thread](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/466469) — 44 票 / 49 评论 / 2024-01-08 
+- [Papers on Detecting AI Generated Text](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452383) — 42 票 / 5 评论 / 2023-11-02 
+- [DAIGT | Starter Pack 🚀](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452600) — 41 票 / 4 评论 / 2023-11-02 
+- [Augmented data for LLM - Detect AI Generated Text (more than 400k texts)](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456729) — 41 票 / 8 评论 / 2023-11-21 
+- [Typos in the dataset - A first clue](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456142) — 40 票 / 13 评论 / 2023-11-18 
+- [Why did the host shared that exactly 7 prompts were used?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/458111) — 40 票 / 22 评论 / 2023-11-28 
+- [Another Gemini Pro LLM - DAIGT - DataSet ](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462528) — 39 票 / 13 评论 / 2023-12-20 
+- [Offline pip install](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455681) — 39 票 / 17 评论 / 2023-11-15 
+- [Guide: A day's worth of learning about optimizing RAM usage in Python](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/466022) — 39 票 / 12 评论 / 2024-01-06 
+- [Installing packages permanently in Kaggle notebooks](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/458105) — 37 票 / 2 评论 / 2023-11-28 
+- [Analysing collective behavioral biases from LB dynamics](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470066) — 37 票 / 10 评论 / 2024-01-23 
+- [A fully unsupervised method based on clustering](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/465465) — 36 票 / 12 评论 / 2024-01-04 
+- [XGBoost beats top LLM Models - here are the features!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/454702) — 36 票 / 10 评论 / 2023-11-11 
+- [A easy way to 0.962+](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/467820) — 36 票 / 21 评论 / 2024-01-14 
+- [Let the game begin - CV vs LB scores](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452624) — 36 票 / 15 评论 / 2023-11-02 
+- [I found some source texts 🔍🗒️](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456698) — 34 票 / 5 评论 / 2023-11-21 
+- [Last Puzzle - Relabeling and Post Processing](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/468363) — 34 票 / 27 评论 / 2024-01-16 
+- [18th place solution Generating Adversarial Data](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470061) — 34 票 / 9 评论 / 2024-01-23 **write-up?**
+- [[paper] "A large-scale comparison of human-written versus ChatGPT-generated essays"](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/458000) — 34 票 / 2 评论 / 2023-11-27 
+- [[16th -> 2254th Losing solution]](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470198) — 33 票 / 13 评论 / 2024-01-23 **write-up?**
+- [Probing LB with 4-bit of data.](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470319) — 33 票 / 4 评论 / 2024-01-23 
+- [An experiment with LLM and log probabilities](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/458342) — 32 票 / 10 评论 / 2023-11-29 
+- [New to Machine Learning or Kaggle? Start here.](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452138) — 31 票 / 18 评论 / 2023-11-01 
+- [Show appreciation for those Professionals & their work on the last LLMs Competition. Don't miss that Golden Opportunity.](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452085) — 31 票 / 1 评论 / 2023-10-31 
+- [LLAMA 13B on TPU for Detect AI - no quantazation, no lora!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453014) — 30 票 / 4 评论 / 2023-11-04 
+- [Results from DNN & TFIDF Experiments Without Fitting on Test Data 0.923](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456563) — 30 票 / 9 评论 / 2023-11-20 
+- [Every morning](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/459244) — 30 票 / 37 评论 / 2023-12-04 
+- [Hello, Claude! 1000 essays from Anthropic... 💥🚀](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453101) — 30 票 / 5 评论 / 2023-11-04 
+- [Characteristics of LLM vs Human generated essays](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/454673) — 29 票 / 1 评论 / 2023-11-11 
+- [[0.908] Overfitting the test set, the right way 😛](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455969) — 29 票 / 27 评论 / 2023-11-17 
+- [Does TF-IDF Feature Extraction Constitute Data Leakage?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455701) — 29 票 / 20 评论 / 2023-11-16 
+- [Fake Accounts?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/469636) — 28 票 / 48 评论 / 2024-01-21 
+- [GPT4 Rephrased LLM DAIGT Dataset](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462438) — 28 票 / 18 评论 / 2023-12-19 
+- [ArguGPT: +4000 AI-generated essays!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452641) — 28 票 / 1 评论 / 2023-11-02 
+- [🔥Papers with Code for this Competition](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452508) — 27 票 / 2 评论 / 2023-11-02 
+- [Mixtral 8x7b Unveiled: Leverage ~4,000 AI generated essays mimicking students style for transforming your model!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/466280) — 27 票 / 8 评论 / 2024-01-08 
+- [Demystifying the ROC Curve  📈](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452236) — 27 票 / 3 评论 / 2023-11-01 
+- [More Generated Essays by Gemini-Pro (8.5K)](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462757) — 27 票 / 5 评论 / 2023-12-21 
+- [Interpretable methods shows the non-adversarial setup is very easy?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/464562) — 27 票 / 6 评论 / 2023-12-31 
+- [You can use Gemini Pro to Generate Examples](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/461421) — 26 票 / 15 评论 / 2023-12-14 
+- [13th place solution - Transformers only ](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470593) — 26 票 / 10 评论 / 2024-03-28 **write-up?**
+- [Censorhip on Kaggle [Reversed]](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462307) — 25 票 / 32 评论 / 2023-12-19 
+- [Observation: Humans don't use "don’t"](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/469503) — 25 票 / 17 评论 / 2024-01-20 
+- [Tricks for AUC metric!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/468150) — 25 票 / 7 评论 / 2024-01-15 
+- [Relevant Top Solutions](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/454563) — 24 票 / 1 评论 / 2023-11-10 **write-up?**
+- [Be careful with AUC metric](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452259) — 24 票 / 2 评论 / 2023-11-01 
+- [Just Because](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/454947) — 24 票 / 6 评论 / 2023-11-12 
+- [Reasonable tips for ranking up and some personal reflections](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/464540) — 24 票 / 17 评论 / 2023-12-31 
+- [Lack of good EDA notebooks](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/459269) — 24 票 / 19 评论 / 2023-12-04 
+- [24th solution: DeBERTa & TF-IDF Vectorizer Ensemble](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470077) — 23 票 / 17 评论 / 2024-01-23 **write-up?**
+- [Fix grammar mistakes for an easy score boost!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452793) — 23 票 / 4 评论 / 2023-11-03 
+- [Final day speculation thread 🤔](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/469848) — 23 票 / 25 评论 / 2024-01-22 
+- [Competition based Wake-Up Alarm !](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/468809) — 23 票 / 11 评论 / 2024-01-18 
+- [Modeling or Data? ](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/467781) — 23 票 / 16 评论 / 2024-01-14 
+- [LLM: Last day competition recap](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/469766) — 22 票 / 15 评论 / 2024-01-22 
+- [What has just happened!?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470052) — 22 票 / 7 评论 / 2024-01-23 
+- [Get inspiration from top solutions!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/468226) — 21 票 / 3 评论 / 2024-01-15 **write-up?**
+- [More on ROC-AUC](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462327) — 21 票 / 10 评论 / 2023-12-19 
+- [💎 GEMINI PRO LLM DAIGT Dataset](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462347) — 21 票 / 7 评论 / 2023-12-19 
+- [Ertuğrul Demir deserves more than just gold medals](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/459236) — 21 票 / 14 评论 / 2023-12-04 **write-up?**
+- [25th Place Solution for DAIGT (Public LB: 0.966 Private LB: 0.927)](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470134) — 21 票 / 12 评论 / 2024-01-23 **write-up?**
+- [Usage of the winning pipelines.](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/463834) — 20 票 / 35 评论 / 2023-12-27 **write-up?**
+- [A note on the languagetool license](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/456696) — 20 票 / 4 评论 / 2023-11-21 
+- [6nd place solution with code](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/471831) — 20 票 / 14 评论 / 2024-02-03 **write-up?**
+- [Introducing JAX for high speed essay generation](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/457853) — 20 票 / 7 评论 / 2023-11-27 
+- [shakeup PTSD (11th->2797th)](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470135) — 20 票 / 7 评论 / 2024-01-23 
+- [Is Llama2 license acceptable in this competition?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/454009) — 20 票 / 6 评论 / 2023-11-08 
+- [Does a higher score justify bad craftsmanship?](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455964) — 19 票 / 14 评论 / 2023-11-17 
+- [The most human sentence](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455562) — 19 票 / 4 评论 / 2023-11-15 
+- [Ghostbuster: Detecting text ghostwritten by LLMS](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/455640) — 19 票 / 1 评论 / 2023-11-15 
+- [Caution: The difference between 0.95 and 0.96+ public notebooks are just GBDT model parameters](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/461901) — 19 票 / 16 评论 / 2023-12-17 
+- [Need some help:  daughter getting unfairly flagged](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/462442) — 19 票 / 9 评论 / 2023-12-19 
+- [[0.941] - Alternative approach - Simulating hidden dataset](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/458343) — 19 票 / 5 评论 / 2023-11-29 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/452128) — 17 票 / 5 评论 / 2023-10-31 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/472642) — 6 票 / 0 评论 / 2024-02-01 

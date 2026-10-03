@@ -1,0 +1,163 @@
+<p>The last few weeks have been intense, but in the end I am super happy that I've finally got my first solo gold medal. Great competition overall! It was great to see the stability between local validation and LB scores (even with using only <strong>1.5%</strong> of the data as <strong>validation</strong>).</p>
+<p>The model training process involved a train-validation split, wherein <strong>batches 11-660</strong> were utilized for <strong>training</strong>, and <strong>batches 1-10</strong> were allocated for <strong>validation</strong>. An ensemble of 8 models was formed using <strong>hill climbing</strong> or <strong>Nelder-Mead</strong> optimization techniques, with a submission time of approximately 3-3.5 hours. The inclusion of more models in the ensemble resulted in a better score; however, since I was submitting the best blend only a few hours before the end of the competition, there was not enough time to do inference on a bigger ensemble. The same model architectures were trained multiple times and blended.</p>
+<p>The ensemble's local validation score was <strong>0.97747</strong>, while the public and private LB scores were <strong>0.976</strong>.</p>
+<p>Input data for the model consisted of the following 9 features per event: <strong>sensor_x, sensor_y, sensor_z, time, charge, auxiliary, is_main_sensor, is_deep_veto, and is_deep_core</strong>.</p>
+<p>Four model architectures have been selected for the final submission.</p>
+<p><strong>Model 1</strong>:</p>
+<p>Validation score 1: <strong>1.0016</strong><br>
+Validation score 2: <strong>1.0005</strong><br>
+Loss function: <strong>CrossEntropyLoss</strong></p>
+<p>Data preprocessing steps:</p>
+<ul>
+<li>sensor_x, sensor_y, and sensor_z are divided by 600</li>
+<li>time is divided by 1000 and subtracted by its minimum value</li>
+<li>charge is divided by 300</li>
+</ul>
+<pre><code> (pl.LightningModule):
+     ():
+
+    self.bin_num = 
+
+        self.gru = nn.GRU(, , num_layers=, dropout=, batch_first=, bidirectional=)
+        self.fc1 = nn.Sequential(nn.Linear(, ), nn.ReLU())
+        self.fc2 = nn.Linear(, bin_num*bin_num)
+
+     ():
+
+        batch_sizes = batch_sizes.cpu()
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.gru(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        x = self.fc2(x)
+
+         x
+</code></pre>
+<p>Output bins were generated using <a href="https://www.kaggle.com/code/rsmits/tensorflow-lstm-model-training-tpu" target="_blank">code</a> from <a href="https://www.kaggle.com/rsmits" target="_blank">@rsmits</a>. </p>
+<p><strong>Models 2-4</strong>:</p>
+<p>Loss function: <strong>VonMisesFisher3DLoss</strong></p>
+<p>Data preprocessing steps:</p>
+<ul>
+<li>sensor_x, sensor_y, and sensor_z are divided by 500</li>
+<li>time is scaled by subtracting 1.0e04 and dividing by 3.0e4</li>
+<li>charge is transformed using the logarithm base 10 and then divided by 3.0</li>
+</ul>
+<p>Validation score 3: <strong>0.9847</strong><br>
+Validation score 4: <strong>0.9859</strong></p>
+<pre><code> (pl.LightningModule):
+     ():
+
+        self.bilstm = nn.LSTM(, , num_layers=, dropout=, batch_first=, bidirectional=)
+
+        self.fc1 = nn.Sequential(nn.Linear(, ), nn.ReLU())
+        self.dropout = nn.Dropout()
+        self.fc2 = nn.Linear(, )
+
+     ():
+
+        batch_sizes = batch_sizes.cpu()
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.bilstm(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        x = self.dropout(x)
+        pred = self.fc2(x)
+
+        kappa = pred.norm(dim=, p=) + 
+        pred_x = pred[:, ] / kappa
+        pred_y = pred[:, ] / kappa
+        pred_z = pred[:, ] / kappa
+        pred = torch.stack([pred_x, pred_y, pred_z, kappa], dim=)
+
+         pred
+</code></pre>
+<p>Validation score 5: <strong>0.9872</strong><br>
+Validation score 6: <strong>0.9887</strong></p>
+<pre><code> (pl.LightningModule):
+     ():
+        ().__init__()
+
+        self.embedding = nn.Linear(, )
+        self.bilstm = nn.LSTM(, , num_layers=, dropout=, batch_first=, bidirectional=)
+
+        self.fc1 = nn.Sequential(nn.Linear(, ), nn.ReLU())
+        self.fc2 = nn.Linear(, )
+
+     ():
+
+        x = self.embedding(x)
+
+        batch_sizes = batch_sizes.cpu()
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.bilstm(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        pred = self.fc2(x)
+
+        kappa = pred.norm(dim=, p=) + 
+        pred_x = pred[:, ] / kappa
+        pred_y = pred[:, ] / kappa
+        pred_z = pred[:, ] / kappa
+        pred = torch.stack([pred_x, pred_y, pred_z, kappa], dim=)
+
+         pred 
+</code></pre>
+<p>Validation score 7: <strong>0.9842</strong><br>
+Validation score 8: <strong>0.9841</strong></p>
+<pre><code> (pl.LightningModule):
+     ():
+
+        self.embedding = nn.Linear(, )
+
+        self.bilstm = nn.LSTM(, , num_layers=, dropout=, batch_first=, bidirectional=)
+
+        self.fc1 = nn.Sequential(nn.Linear(lstm_units, ), nn.ReLU())
+        self.fc2 = nn.Linear(, )
+
+     ():
+
+        batch_sizes = batch_sizes.cpu()
+
+        x = self.embedding(x)
+
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.bilstm(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        pred = self.fc2(x)
+
+        kappa = pred.norm(dim=, p=) + 
+        pred_x = pred[:, ] / kappa
+        pred_y = pred[:, ] / kappa
+        pred_z = pred[:, ] / kappa
+        pred = torch.stack([pred_x, pred_y, pred_z, kappa], dim=)
+
+         pred
+</code></pre>
+<p>Hyperparameters:<br>
+Optimizer: <strong>Adam</strong><br>
+Scheduler: <strong>CosineAnnealingLR</strong><br>
+Batch size: <strong>2048</strong><br>
+Max pulses: <strong>128</strong><br>
+Max LR: <strong>1e-3</strong> or <strong>5e-4</strong><br>
+Min LR: <strong>1e-6</strong><br>
+Warmup steps: <strong>2000</strong><br>
+Epochs: <strong>10-15</strong> (possibly a few extra fine tuning epochs)</p>
+<p>The DL library used for the competition was PyTorch (Lightning), which delivered better results than TensorFlow. While blending multiple models in TensorFlow, the code produced some unanticipated errors which I wasn't able to debug. It was just simpler to switch to PyTorch.</p>
+<p>I tried a few different transformer architectures, but didn't have enough time to push it through the end. I retrained a few models similar to graphnet (<a href="https://www.kaggle.com/code/amoshuangyc/icecube-gnn-baseline-rewrite" target="_blank">code</a> from <a href="https://www.kaggle.com/amoshuangyc" target="_blank">@amoshuangyc</a> was very useful), but it didn't give a boost to the final ensemble.</p>

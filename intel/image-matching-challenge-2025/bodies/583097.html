@@ -1,0 +1,87 @@
+<h1>Overview</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8163878%2Fa1a8238d8943872b2cd95d87778af334%2FScreenshot%202025-06-05%2001.46.42.png?generation=1749055688789666&amp;alt=media" alt=""></p>
+<h1>Notebook</h1>
+<ul>
+<li><a href="https://www.kaggle.com/code/motono0223/imc2025-11th-place-solution" target="_blank">https://www.kaggle.com/code/motono0223/imc2025-11th-place-solution</a><ul>
+<li>private lb = 43.34</li>
+<li>public lb = 43.53</li></ul></li>
+</ul>
+<h1>Descriptions</h1>
+<h2>Create image pairs</h2>
+<ul>
+<li>global feature extractor: DinoV2/Base</li>
+<li>Topk = 150</li>
+</ul>
+<h2>Rerank image pairs</h2>
+<ul>
+<li><p>Due to the large number of image pairs, it is necessary to reduce the processing time for image matching.</p></li>
+<li><p>To address this, image pairs are re-ranked and filtered using the ALIKED model (local features) in this process.</p></li>
+<li><p>Specifically, the procedure is as follows:</p>
+<ul>
+<li>For each image, local descriptors are extracted using the ALIKED model.<ul>
+<li>The image size is set to 2048 pixels, with 2048 keypoints and a detection threshold of 0.01.</li>
+<li>All descriptors are normalized with norm=1.</li></ul></li>
+<li>A Euclidean distance matrix is computed between the local descriptors of each image pair.<ul>
+<li>If image1 has N descriptors and image2 has M descriptors, an NxM distance matrix is calculated using the GPU.</li></ul></li>
+<li>For each row in the distance matrix, the minimum value is extracted (resulting in N minimum values).</li>
+<li>If these minimum values are below the threshold of 1.0, they are counted as valid matches.<br>
+Image pairs with 15 or fewer valid matches are discarded.</li></ul></li>
+<li><p>The key point is that since LightGlue (GNN) is computationally expensive, a fast simulation of image matching is performed using the distance matrix as a lightweight approximation.</p></li>
+</ul>
+<h2>Image Matching</h2>
+<ul>
+<li>Local feature extractor: Aliked (n16)<ul>
+<li>resize_to: 1536 pixel</li>
+<li>max_num_keypoints: 8192 points</li>
+<li>detection_threshold: 0.01</li></ul></li>
+<li>Matcher: LighGlue</li>
+<li>post process<ul>
+<li>the number of matches &gt; 15 matches</li></ul></li>
+</ul>
+<h2>Filter image pairs</h2>
+<ul>
+<li><p>This step filters image pairs whose matches are not critical for SfM. The pruning accelerates the reconstruction and gives COLMAP’s incremental mapping more opportunities to reconstruct small clusters.</p></li>
+<li><p>Image-matching results can be expressed as a network in which images are nodes and match counts are edges; the number of edges connected to each node can then be counted.</p></li>
+<li><p>Non-essential pairs are removed by capping the number of edges per image node (threshold = 6). If a node has more than six edges, those with the fewest matches are discarded until only six remain.</p>
+<ul>
+<li>In COLMAP’s incremental mapping, an initial pair is chosen and additional images are registered one by one; the initial pair is selected statistically from the matches stored in the database.[1]</li>
+<li>Match results sometimes concentrate on a handful of images, causing the incremental mapping output to favor certain clusters.</li>
+<li>Pruning pairs connected to images with many matches increases the likelihood that initial pairs will be formed inside smaller clusters.</li></ul></li>
+</ul>
+<h2>Rough clustering</h2>
+<ul>
+<li>A lightweight clustering routine is implemented with NetworkX.</li>
+<li>For every image pair, the number of matches is read from <code>matches.h5</code>; edges with 150 or more matches are added to <code>G = nx.Graph()</code>.</li>
+<li>Clusters are then obtained via <code>nx.weakly_connected_components(G)</code>.</li>
+</ul>
+<h2>colmap (exhaustive matching)</h2>
+<ul>
+<li>Computation is performed with <strong>pycolmap</strong>’s <code>exhaustive_matching</code>.</li>
+<li>All settings remain at their defaults (pycolmap 0.6.1).</li>
+</ul>
+<h2>colmap (incremental mapping)</h2>
+<ul>
+<li>For each clustered image set, <code>incremental_mapping</code> in <strong>pycolmap</strong> is executed four times.</li>
+<li>Parameters:</li>
+</ul>
+<pre><code>mapper_options = pycolmap.IncrementalPipelineOptions()
+mapper_options.multiple_models   = 
+mapper_options.min_model_size    = 
+mapper_options.max_num_models = 
+mapper_options.init_num_trials   = 
+</code></pre>
+<h2>Merge maps</h2>
+<ul>
+<li>For every cluster, maps are merged.</li>
+<li>Maps are selected for merging when:<ul>
+<li>Six or more images are shared between the maps, and</li>
+<li>Each map’s <code>mean_reproj_error</code> is ≤ 2.0.</li></ul></li>
+<li>Merging is carried out with <strong>COLMAP</strong>’s native APIs (not pycolmap):<ul>
+<li><code>model_merger</code> combines the models.</li>
+<li><code>bundle_adjuster</code> optimizes camera parameters.<ul>
+<li>--BundleAdjustment.refine_focal_length = 1</li>
+<li>--BundleAdjustment.refine_principal_point = 1</li>
+<li>--BundleAdjustment.refine_extra_params = 1</li></ul></li></ul></li>
+</ul>
+<p>[1] pycolmap.incremental mapping()<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8163878%2F19d0e899b13ff451ce99c550dea94422%2FScreenshot%202025-06-05%2001.35.24.png?generation=1749055849424519&amp;alt=media" alt=""></p>

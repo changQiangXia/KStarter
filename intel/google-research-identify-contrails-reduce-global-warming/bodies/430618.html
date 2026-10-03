@@ -1,0 +1,80 @@
+<p>I thank the organizer and Kaggle for hosting this interesting competition. I also thank many Kagglers who wrote solutions in past competitions, without which I could not compete for segmentation tasks.</p>
+<h2>Overview</h2>
+<ul>
+<li>U-Net with MaxViT encoder</li>
+<li>Input is the standard ash color image</li>
+<li>Target y is soft; the average of individual masks</li>
+<li>BCE (binary cross entropy) loss</li>
+<li>U-Net trained for symmetrized label, y_sym, which is the label shifted by 0.5 pixels</li>
+<li>Shift-scale-rotate augmentation</li>
+<li>Additional tiny convolution trained to map y_sym to y</li>
+</ul>
+<h2>Rotation augmentation</h2>
+<p>Augmentation is extremely important in this competition to suppress overfit and train longer. With rotation augmentation I could train 40-50 epochs, compared to 10-20 epochs without augmentation. The test-time augmentation (TTA) is also very effective, adding ~0.006 to the score for free.</p>
+<p>This is basic but does not work as usual in this competition because the label is shifted 0.5 pixels to the right and bottom with respect to the contrails. Random rotation augmentation would shift the label to random directions and make the model impossible to learn the right-bottom aligned ground-truth labels.</p>
+<h2>Discover the 0.5-pixel shift</h2>
+<p>I was very confused when the score dropped with flip and rot90 (multiples of 90° rotation) augmentations. In physics, what symmetry the system has is the first thing to consider, and although westerly winds or Coriolis force could make the physics asymmetric under flip or rotation, I could not believe that those affect the contrail detection. I visualized a prediction with a model trained without augmentation and applied it to a 180°-rotated input image to see why the augmentation did not work.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F954117%2Ffe56c0bee942eb6591adabafbe0daf39%2Fcontrail_label_shift.png?generation=1691669316963209&amp;alt=media" alt=""> </p>
+<p>The blue-green-red stripe pattern from top to bottom shows false negative, true positive, and false positive, which means that the rotated label is shifted up compared to the predicted label; that is, the original labels are shifted down compared to the contrails. I also observed the same pattern for left and right.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F954117%2Fbb92508e8a6b1d8392819ac63cb36cd6%2Fcontrail_fish.png?generation=1691669701057157&amp;alt=media" alt=""></p>
+<p>If the labels are shifted 0.5 pixels to top left (right panel in the figure above), then the rotated label is consistent with the original label in terms of the contrail-label offset.</p>
+<ul>
+<li>I first shift the label by 0.5 pixels and create y_sym</li>
+<li>y_sym has size 512×512 and is sampled from y on a shifted regular grid with bilinear interpolation</li>
+<li>U-Net is trained with y_sym </li>
+<li>Additional tiny convolution of 5x5 with stride 2 is trained to learn the mapping from y_sym to right-bottom aligned y, using 5% of the data when the augmentations are not applied randomly (note that y cannot be augmented).</li>
+<li>At inference time, y_sym is averaged for 8 patterns of rot90 and flip TTAs. The conv5x5 is applied after the y_sym.</li>
+</ul>
+<p>The augmentation is,</p>
+<pre><code>import albumentations as A
+
+A.Compose([
+    A.RandomRotate90(=1),
+    A.HorizontalFlip(=0.5),
+    A.ShiftScaleRotate(=30, =0.2)
+])
+</code></pre>
+<p>I refer to my public notebook for the details:</p>
+<p><a href="https://www.kaggle.com/junkoda/base-unet-model-for-the-1st-place" target="_blank">https://www.kaggle.com/junkoda/base-unet-model-for-the-1st-place</a></p>
+<h2>Models</h2>
+<p>The final prediction is the weighted mean of two models with a threshold ~0.45. I tuned the threshold and the weights using the validation set. Both models are U-Net using maxvit_tiny_tf_512.in1k as the encoder, but one uses single time t=4, and the other use four times t = 1 - 4. The input image size is 1024×1024 for both models.</p>
+<h2>Single-time model</h2>
+<ul>
+<li>Upscale the input image to 1024×1024</li>
+<li>Drop the final decoder layer of upscale and output 512×512</li>
+</ul>
+<h2>4-panel model</h2>
+<p>In order to use the time information, I tried 3D ResNet and ConvLSTM, but I was not able to make them work at all. The only thing I could do was to pack four 512×512 image at t=1,2,3,4 into one 1024×1024 image and hope that self attention in MaxViT look at different times.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F954117%2F291ed2fb89c1e4b492f0d5890ad06868%2Fimg4.png?generation=1691671228909061&amp;alt=media" alt=""></p>
+<p>In the U-Net, I only pass the quarter of the features (H/2, W/2) to the decoder, which corresponds to the t=4 quarter. The rest is the same as the single-time model. Concatenating images in the spacial direction appear in Kaggle once in a while. I remember <a href="https://www.kaggle.com/competitions/g2net-gravitational-wave-detection/discussion/275433" target="_blank">CPMP's solution</a> for the G2Net blackhole merger competition, in which he stacked 3 detector data horizontally rather than stacking them as 3 channels. </p>
+<p>Training details:</p>
+<ul>
+<li>Train 5 out of k=10 folds, using the out-of-fold to monitor the validation loss</li>
+<li>0.5 epochs of linear warmup to learning rate 8e-4, followed by cosine annealing</li>
+<li>batch size 4 × gradient accumulation 2</li>
+<li>AdamW with weight_decay = 0.01</li>
+<li>35 or 40 epochs of training</li>
+</ul>
+<pre><code>Scores
+                    CV     Public  Private
+       input size
+
+Single time   512  0.697   0.707   0.712
+Single time  1024  0.703   0.719   0.716
+4-panel      1024  0.704   0.719   0.722
+Ensemble           0.706   0.725   0.724
+</code></pre>
+<p>All scores are for 5-fold × 8 TTA mean.</p>
+<h2>Things I was not able to do</h2>
+<ul>
+<li>I did not use pseudo labeling. I tried pseudo labeling at an early stage. It boosted the single model score a lot, but the benefit was unimpressive after 5-fold mean.</li>
+<li>I was not able to train large models. I tried MaxViT small and base, and many other models, but the improvement was unclear. I increased the input image size instead. This failure must be due to my insufficient experience. </li>
+<li>I used only positive data (dropping data with no positive labels) for model evaluation because it takes 1/2 time to train. However, I was not able to use it in the real prediction; it performs very bad for negative samples, and my classifier was not good enough to exclude such false negatives.</li>
+<li>Removing small masks is a basic technique in segmentation competition, but here, removing even 1-pixel clusters (connected components) was not a good idea. I tried to remove false positive clusters based on some cluster statistics (size, density, max density, etc), but U-Net was cleverer than my post processing.</li>
+</ul>
+<h2>Codes</h2>
+<ul>
+<li>Training: <a href="https://github.com/junkoda/kaggle_contrails_solution" target="_blank">https://github.com/junkoda/kaggle_contrails_solution</a></li>
+<li>Inference notebook: <a href="https://www.kaggle.com/code/junkoda/contrails-submit" target="_blank">https://www.kaggle.com/code/junkoda/contrails-submit</a></li>
+</ul>
+<p>Update 2023-08-20: Add links to the codes and minor english corrections.</p>

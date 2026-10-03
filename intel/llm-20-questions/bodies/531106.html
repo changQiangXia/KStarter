@@ -1,0 +1,124 @@
+<p>I would like to express my sincere gratitude to the organizers for creating this competition, tirelessly working to fix bugs in the matching system, and striving to ensure fairness for all competitors.</p>
+<p>It's worth noting, however, that the leaderboard remained somewhat unstable until the end, and any competitor in the gold zone could have potentially secured the win.</p>
+<p>Thus, I present this solution with a mix of humility and gratitude for my fortunate outcome.</p>
+<h1>Results</h1>
+<ul>
+<li>Agent 1: 1259.9 (1st place)</li>
+<li>Agent 2: 1228.2 (equivalent to 4th place)</li>
+</ul>
+<h1>Guesser Strategy</h1>
+<p>Recognizing that top-performing Answerers were likely to implement Agent Alpha mode, I decided to incorporate it into my Guesser strategy for competitive play.</p>
+<p>The next question was whether to ask "Is it Agent Alpha?" as the first question, or to force the Agent Alpha mode to reduce a turn.</p>
+<p>Ultimately, I chose to ask "Is it Agent Alpha?" due to the significant advantage it provided in non-Agent Alpha matchups. This approach was necessary to recover from the "pit of dumbness" caused by the small percentage of Agent Alpha Answerers in the low score region. Additionally, losing when at the top of the leaderboard but paired with a low-scoring agent results in a substantial point loss.</p>
+<p>In hindsight, a Force Agent Alpha approach might have been viable, given the final competition landscape.</p>
+<h2>Agent Alpha</h2>
+<p><strong>Keyword List:</strong> I created a list of potential keywords (116,937 nouns) using Python's NLTK library. Only nouns were selected as the competition specified that keywords would be "things."</p>
+<p><strong>Keyword Probability Estimation:</strong> To optimize Agent Alpha's reward expectation, I estimated the likelihood of each keyword appearing in the test data by considering:</p>
+<ol>
+<li>Number of words in the keyword</li>
+<li>English word frequency using the <a href="https://www.kaggle.com/datasets/rtatman/english-word-frequency" target="_blank">English Word Frequency dataset</a></li>
+<li>"Thing-ness" probability estimated using GPT-4o mini</li>
+</ol>
+<p>The "thing-ness" was calculated by asking GPT-4o mini the following question and then obtaining the probability that the next token would be "Yes" or "No":</p>
+<p>"Would the word '{keyword}' generally be considered a thing?"</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6624777%2Fb3e468f4bc8f9da52f5d7ff1c5d7a52a%2Fscatter.png?generation=1725032484048482&amp;alt=media" alt=""></p>
+<p>The scatter plot demonstrates the impact of the probability calculation. Public keywords tend to have a lower thing probability rank (meaning high probability) and a low frequency rank (meaning high frequency). The ranks and values are inverted because I ranked the keywords from high value to low value.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6624777%2F798d60bf764599a824e1af8e8f39a2f0%2Fheatmap.png?generation=1725033082865389&amp;alt=media" alt=""></p>
+<p>Using this heatmap, we can calculate the probability of each keyword being included in the private keyword list, based on the observation that the public keyword list closely resembles the private one.</p>
+<p>In the actual calculation, a smoothing factor was introduced, but the essence remains the same.</p>
+<p>For keywords not found in the English Word Frequency dataset (primarily compound words), only the thing-ness was used to determine the probability.</p>
+<p>Below is a table of a few examples:</p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>towel</td>
+<td>0.222</td>
+</tr>
+<tr>
+<td>titanium</td>
+<td>0.130</td>
+</tr>
+<tr>
+<td>chocolate egg</td>
+<td>0.050</td>
+</tr>
+<tr>
+<td>axis</td>
+<td>0.046</td>
+</tr>
+<tr>
+<td>mindset</td>
+<td>0.012</td>
+</tr>
+<tr>
+<td>banana boat</td>
+<td>0.005</td>
+</tr>
+<tr>
+<td>toolmaker</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td>celastrus</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td>ticktacktoo</td>
+<td>0.002</td>
+</tr>
+</tbody>
+</table>
+<p>With the probability of each keyword being in the private list established, we can perform an efficient binary search that always narrows down the probability by half, rather than focusing solely on the number of keywords. This results in a more efficient search.</p>
+<p>My first-place agent uses this biased keyword probability, while the fourth-place agent assumes equal probability for every keyword. The impact of the biased probability method is evident in the average win reward as a Guesser calculated by <a href="https://www.kaggle.com/lohmaa" target="_blank">@lohmaa</a> [<a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/529683" target="_blank">post</a>].</p>
+<p>I did not come up with dynamically generated keywords that were not in the prepared keyword list, so a huge applause for those who achieved it.</p>
+<h2>Natural Questions</h2>
+<p>I employed an entropy-based approach quite similar to the <a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/529931" target="_blank">maejimakun solution</a>, selecting questions that minimized expected entropy. For the specific equations, please refer to their solution (and don't forget to upvote!).</p>
+<p>The main difference lies in how the keywords and questions were chosen:</p>
+<ul>
+<li>The final list comprised the top ~35,000 keywords ranked by their estimated probability (as described earlier). They were actually constructed in a different way, but it seemed that it is almost equivalent to this explanation.</li>
+<li>Three types of questions were used:<ol>
+<li>26 alphabet-specific questions (e.g., "Does the keyword begin with the letter 'a'?")</li>
+<li>~3,000 from winning games in the public leaderboard</li>
+<li>~10,000 generated using GPT-4o mini</li></ol></li>
+</ul>
+<p>To generate questions using GPT-4o mini, I simulated matches and prompted the model to create questions that could effectively differentiate between likely keywords at each stage of the game.</p>
+<p>For example, to distinguish between "apple," "banana," "orange," and "mango," I would ask GPT-4o:</p>
+<p>"You are playing the 20 Question Game, and currently have to ask a question to guess the keyword. The current keyword candidates are 'apple, banana, orange, mango'. What question would narrow down the keyword candidates to half? Output only the question."</p>
+<p>A typical response might be: "Is the fruit typically yellow when ripe?"</p>
+<p>To construct the probability table, a strategy similar to the maejimakun team was used. Three LLMs (Meta-Llama-3-8B-Instruct, Phi-3-small-8k-instruct, and gemma-7b-it) were used to estimate p(keyword, question) for each keyword-question pair. The results from the LLMs were averaged at the end.</p>
+<p>Each LLM was prompted with: "The keyword is {keyword}. {question} Answer the question above with 'Yes' or 'No'." The probabilities were derived from the likelihood of "Yes" and "No" being the next token.</p>
+<p>Given the final table's massive size (approximately 35,000 x 13,000 = 455,000,000), I leveraged vllm for faster processing. Initially working with a 4090 GPU locally, I scaled up to a rented 8x RTX 4090 setup on Runpod for the final week of the competition when I realized time was running short.</p>
+<p>This approach proved highly effective, securing a top position on the public leaderboard when there were fewer Agent Alpha Answerers at the top. The investment in computational resources (approximately $500 in server costs) was well justified by the final results.</p>
+<h1>Answerer</h1>
+<p>For the Answerer component, I employed a dual-LLM approach, leveraging two distinct models to handle different types of questions:</p>
+<ol>
+<li><strong>General-Purpose LLM:</strong><ul>
+<li>Model: meta-llama/Meta-Llama-3-8B-Instruct</li>
+<li>Purpose: Handling a wide range of general questions about the keyword</li></ul></li>
+<li><strong>Specialized Mathematical LLM:</strong><ul>
+<li>Model: DeepSeek-Math</li>
+<li>Background: This model gained popularity during the recent <a href="https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize" target="_blank">"AI Mathematical Olympiad - Progress Prize 1" competition</a>, which focused on solving mathematical problems using LLMs.</li>
+<li>Functionality: DeepSeek-Math takes mathematical problems as input and outputs Python programs to solve them. For simpler queries, it provides direct answers without generating code.</li>
+<li>Purpose: Addressing complex, mathematically-oriented questions about the keyword</li></ul></li>
+</ol>
+<p>The integration of DeepSeek-Math significantly enhanced the Answerer's capability to handle intricate queries such as:</p>
+<ul>
+<li>"Does the keyword contain the letter 'a'?"</li>
+<li>"Does the keyword have two or more vowels?"</li>
+</ul>
+<p>This specialized model allowed for high-accuracy responses to questions requiring precise letter counting or pattern recognition within the keyword.</p>
+<p><strong>Model Selection Logic:</strong><br>
+The choice between the two models was determined by a rule-based system, primarily triggered by the presence of specific keywords like "letter" in the question. While this approach proved effective, I believe there might be room for improvement in the model selection process.</p>
+<h1>Final Thoughts</h1>
+<p>I thoroughly enjoyed this competition, despite some challenges such as the inclusion of public keywords during the evaluation period, the slow convergence of scores, and the continuous oscillation of scores at the top of the leaderboard.</p>
+<p>As noted by <a href="https://www.kaggle.com/jeannkouagou" target="_blank">@jeannkouagou</a> [<a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/530931" target="_blank">post</a>], the final day of the evaluation period was particularly stressful, making it difficult to sleep (the competition ended at 9:00 AM here in Japan).</p>
+<p>I'm relieved that the competition has finally concluded, and I'm looking forward to getting some well-deserved rest.</p>
+<p>Thank you for reading, and once again, my sincere gratitude to the hosts for organizing this competition.</p>
+<h1>Code</h1>
+<p>The code is available <a href="https://www.kaggle.com/datasets/cnumber/llm-20-questions-final-submissions" target="_blank">here</a>. If you wish to test Agent Alpha and don't have a GPU, you may need to change <code>device="cuda"</code> to <code>device="cpu"</code> in the <code>utils/beta.py</code> file.</p>

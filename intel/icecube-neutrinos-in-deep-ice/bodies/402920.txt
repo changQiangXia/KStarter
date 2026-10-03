@@ -1,0 +1,488 @@
+# https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402920
+
+Topic #402920: 11-th place solution: Attention, GNN, Ensemble
+  Author: AndreyBeyn
+  Posted: 2023-04-20 08:23:41.984000
+  Votes: 40  Comments: 12
+
+First of all, we are very happy to be a part of such profound and interesting competition, many thanks to the organizers for their support and to all competitors who selflessly shared their knowledge and insights, @rasmusrse, @rsmits, @solverworld, @edguy99, @iafoss, @pellerphys… Forgive me if I've missed someone, just so many people helped us so much with going forward.  
+
+Many thanks to my great team QuData @synset, @alexz0 and @semenb, you are awesome! We all come from Ukraine, and we wish to thank everyone who is supporting our people now!
+
+This competition was a great opportunity to unite a bit of relevant domain knowledge, as two of us were doing theoretical physics in the past, with the whole team's data science skills and knowledge. 
+Taking part in a big astrophysics experiment was novel and exciting, and we hope we made a useful contribution to finding out how the Universe works.
+
+ Source Code and Expanded Write-up 
+
+Our report turned out to be quite large to comfortably fit in one post, so here are the links to
+
+
+
+More detailed version of the solution description and background
+
+Source code for data preparation, training and inference
+
+
+General architecture
+
+ 
+The solution has the following structure:
+
+
+
+
+Here is the important milestones in our progress during the competition:
+
+
+
+
+Model
+Score LB
+
+
+
+
+Training base GNN model
+1.012
+
+
+Adding another layer to GNN
+1.007
+
+
+Increasing the number of neighbors
+1.003
+
+
+GNN - Expanding Layers MLP
+0.996
+
+
+GNN - Replacing regression with classification
+0.992
+
+
+Transformer (aggregated pulses)
+1.002
+
+
+Transformer (separate pulses)
+0.995
+
+
+GNN-Transformer Ensemble (trained MLP)
+0.976
+
+
+
+
+We list only one score for each model, as due to high  quality data, the validation, public and private scores are all very close.
+
+ 
+"GNN" is a modification of the graph neural network architecture for Neutrino Telescope Event Reconstruction GraphNet
+(public score: 0.992)
+
+
+ 
+"Transformer" is a combination of architectures including fully connected blocks, an attention mechanism, and a recurrent layer
+(public score: 0.995)
+
+
+ 
+"Ensemble" is a neural network that agregates outputs from "GNN" and "Transformer" models and predict direction.
+(public score: 0.976) 
+
+
+GNN
+
+Model
+
+During the competition, we made many changes to the architecture of the graph neural network (described in detail on the https://qudata.com/projects/icecube-neutrino/en/gnn.html), its final state:
+
+
+
+The input for this model is the graph. Each node corresponds to the pulse, and the features are the features of the pulse combined with the aggregated features of the event. To construct the topology of the graph, the knn algorithm is used. The resulting graph sequentially passes through layers, each of which modifies the feature space and also updates its topology. The outputs of all layers are combined and fed to the layer Layers MLP in which the number of features is reduced to 256. Then a pooling operation is performed in which the features of all nodes of the graph are aggregated by functions min, max, mean. At the last node Classification MLP the resulting embedding is converted into class id and each class is responsible for its own direction.
+
+Below is described our progress that led to this architecture.
+
+Training and enchancing the model
+
+
+Training base model (1.018 → 1.012)
+
+Since we were limited in computational resources, we decided to proceed with retraining the best public GNN model from a notebook GraphNeT Baseline Submission (special thanks to @rasmusrse) which gave LB score 1.018.
+
+We retrained the model on all batches, except for the last one; wich we were used for validation. During training, the learning rate was reduced in steps, at those moments when the validation did not improve for about 100 epochs. As a result, after 956 epochs, the value of the metric dropped to 1.0127.
+
+Adding another layer (1.012 → 1.007)
+
+Having a trained network, we tried to add another layer EdgeConv to it. In order not to learn from scratch, all layers in the new architecture were frozen except for the new one.
+
+
+
+In the frozen layers, weights were loaded from the model retrained at the previous stage and training continued.
+The model in this mode  learns quickly, and the metric also quickly reaches the level of the model from which the weights are borrowed. Then, unfreezing was performed, the learning rate was reduced, and the entire model was retrained in this mode. After 1077 epochs, we reached the metric 1.007
+
+Increasing the number of neighbors (1.007 → 1.003)
+
+In the original Graphnet library, the number of neighbors for building a graph is chosen as 8.
+We have tried increasing this value to 16. In the module EdgeConv the same MLP model is applied to all neighbors, and then the result is summed. Therefore, with an increase in the number of neighbors, the number of network parameters does not change, but at the same time it learns and works twice as slowly.
+
+Thus, we retrained the trained model from the previous stage with a new number of neighbors and after the 1444 epochs, the metric reached a new low of 1.003
+
+Expanding Layers MLP(1.003 → 0.9964)
+
+Since the number of layers was increased, we thought it reasonable that the number of parameters of Layers MLP which receives concatenated input of the outputs of each level, should also be increased. The first layer of the module Layers MLP was increased from 336 to 2048. Similarly, all levels were frozen, the weights of the model of the previous stage were loaded, and training was continued. After 1150 epochs, the metric dropped to 0.9964
+
+Replacing regression with classification (0.9964 → 0.9919)
+
+Studying the best solutions, we paid attention to the notebook Tensorflow LSTM Model Training TPU (thanks to @rsmits) From it we borrowed the idea to move from a regression problem to a classification one.
+
+The azimuth angle was uniformly divided into 24 bins. The zenith angle was also divided into 24 bins; here we warked with cosine of zenith, since it is the cosine that has a uniform distribution (as is seen from the statistics of all training events).
+
+Accordingly we received a total of 24x24=576 classes. The the last layer of MLP was increased from [128,3] to [512,576], and the loss-function was changed to CrossEntropyLoss.
+We froze the entire model except for the last module and loaded the weights obtained at the previous stage and continued training. After 967 epochs, the metric reached the value of 0.9919.
+This was the best result that we achieved for a standalone GNN model, and it was then used for
+ensembling with other models.
+
+What didn't help
+
+
+During the competition we tried many other things that did not yield a noticeable improvement
+of the metric, or none at all. Some of the things we did:
+
+
+
+
+ separately predicting zenith and azimuth angles;
+
+ changing the type of convolution to SAGE, GAT;
+
+ inserting transformer after Layers MLP;
+
+ replacing pooling with RNN (GRU);
+
+ inserting a TopKPooling layer;
+
+ using 4 or more features to build the event graph.
+
+
+What have not been done
+
+
+There are also several approaches which we thought over but did not pursued to the end, 
+mainly because of lack of time and hardware resources,
+to mention just a few:
+
+
+
+
+ training the GNN from scratch, with scattering, absorption and DOM-embedding features;
+
+ training a classifier with a larger number of bins;
+
+ parallel training of transformer and GNN models.
+
+
+Transformer
+
+
+The model, which we named "Transformer", is a combination of architectures that include fully connected blocks, an attention mechanism, and a recurrent layer.
+The typical metric achieved by this model was 0.995.
+
+
+
+The general architecture of the Transformer model looked like this.
+It receives two tensors as input: (B,T,PF) and (B,EF),
+where B is the index of the sample in the minibatch and T is the index of the pulse number in the sequence.
+Each pulse was characterized by PF=9 features.
+The second tensor (B,EF) characterized the properties of the entire event with EF more 
+features.
+These features were calculated for all pulses of the event (24 features) and inaddition only for the pulses marked with the auxiliary=0 flag (we'll shorten it to "aux"), 24 more.
+
+
+
+In some modifications of the architecture, aggregated features with aux=0, using a fully connected MLP block
+(multilayer perceptron) with one hidden layer, were compressed to a smaller dimension and then combined with the pulse feature tensor (B,T,PF).
+The motivation for compression is related to the fact that the number of event features (24) was significantly greater than the number of more significant pulse features (9).
+In other architectures, only features of pulses were used.
+
+
+
+
+After concatenation, the resulting tensor (B,T,F) was fed to  the second MLP block (below the Feature Generator).
+Its task was to increase the number of features to E=128.
+The resulting tensor (B,T,E) was fed to a chain of 10–12 transformer blocks.
+Each pulse, as a result of the mechanism of attention, "interacted" with all the pulses in the sequence.
+As a result of the work of the transformer, the pulses received new features in the space of the same dimension.
+
+
+
+
+Next, the Integrator block converted the transformer output tensor (B,T,E) into a tensor of (B,E') dimensions.
+At the initial stage of training, the concatenation of the operation of averaging and obtaining the maximum according to the features of all pulses acted as the Integrator block.
+At the final stage, this block was replaced by an RNN layer  integrating the event pulses.
+One unidirectional recurrent layer with GRU cells was chosen as RNN.
+In this case, the pulses of the event were sorted in reverse order by time.
+As a result, the input of the last GRU cell (the output of which was used by the Integrator) received the most significant, that is the first, pulse.
+
+
+
+
+The event feature tensor for all pulses and pulses with aux=0 was attached to the (B,E') tensor obtained after the Integrator.
+The resulting tensor (B,E'+2*EF) was fed to an MLP whose three outputs were Cartesian components
+of the direction vector predicted by the regression model.
+
+
+
+The transformer had a standard architecture with 16 heads in the attention block and trainable weights on skip-connections:
+Position embedding was not used (although we experimented with it early on).
+Time was one of the features of a pulse, and apparently that was enough.
+Numerous, but not final :) experiments were carried out on various modifications of this architecture.
+In particular, we studied the version where the final layer was a classifier in 10k directions in space, 
+as well as a version in which the transformer consisted of two parallel chains of blocks that were eventually merged together.
+The feasibility of such architectural modifications requires further research.
+
+
+
+
+Dataset
+
+
+The  transformer training requires the same number of pulses for all examples in the minibatch.
+The standard solution to this problem is masking tokens to align sequence lengths.
+However, given our computational capabilities, this was a very wasteful method.
+So we went the other way.
+Every 5 training batches were collected in a pack of 1m examples.
+These examples were sorted by sequence length and combined into groups of the same length.
+Accordingly, the data were divided into minibatches within each group.
+After that, the minibatches of all groups were mixed.
+One learning epoch consisted of one pack. Then the next pack was loaded.
+
+
+
+Another idea that allows you to cope with limited memory was related to the variable size of the minibatch.
+The memory requirements increase quadratically with the length of the sequence T.
+Therefore, long sequences can be collected into shorter mini-batch, and short sequences into longer batches.
+Thus, several hyperparameters were set: T_max - the maximum length of the sequence,
+batch_size - batch size for maximum length and batch_max - upper limit of minibatch size for short sequences.
+For examples of length T, the minibatch size was determined by the following formula:
+
+batch_size = min(int(batch_size * (T_max/T)**2),  batch_max)
+
+This led to approximately the same memory consumption for batches with long and short sequences.
+
+
+
+
+
+Training implementation
+
+
+Let's show a typical training start schedule (pulses are DOM-aggregated).
+An error of the order of 1.020 when learning from scratch is achieved in 60-70 million examples (300 batches, not necessarily new ones).
+The total time on the standard T4 card is about 12 hours.
+This stage was done at a constant learning rate lr=1e-3 with the Adam optimizer:
+
+
+
+
+
+It took significantly longer to get close to error 1.002.
+To achieve it, the learning rate was gradually decreased to 1e-5 (below, the dotted brown line).
+At the level of 1.004, there was a transition to large maxima of the sequence lengths.
+This immediately reduced the error by 1-1.5 points.
+
+
+
+Further training required a transition to non-DOM-aggregated pulses and took a few more days on the A100 card.
+
+
+
+During the training process, we analyzed the value of the weights on various blocks of the model
+and  gradient propagation through them. A typical analysis chart looked like this
+(see details in our report):
+
+
+
+
+Ensemble set-up
+
+
+
+The results of the architectures we trained (Transformer and GNN) were not strongly correlated with each other.
+This made it possible to form ensembles of models, which gave a significant improvement in the final metric.
+In addition, thanks to the remarkably large dataset provided by the organizers, additional progress in the metric could be obtained using the trained ensemble.
+The general architecture of the ensemble looked like:
+
+
+
+
+
+Ensemble Models
+
+
+In each architecture, several models were selected, obtained with different hyperparameters or architecture options.
+80 batches were passed through these models, the results of which formed a dataset for the ensemble.
+
+
+
+Below are the initial data of the selected models. The first column of numbers is the base metric of the competition (mean angular error).
+The second two columns are the azimuth error and the module of the zenith error of the model (all validations were carried out on the first 5 batches):
+
+
+id   ang_err  az_err  ze_err   model
+ 0   0.9935   1.035   0.606  | gnn_1
+ 1   0.9922   1.033   0.595  | gnn_2
+ 2   0.9963   1.039   0.598  | gnn_3
+ 3   0.9954   1.018   0.612  | att_1
+ 4   0.9993   1.022   0.636  | att_2
+---------------------------------------------------------------
+     0.9846   1.021   0.540  | simple mean 
+
+
+
+The criterion for selecting models for the ensemble was the angular error and coefficients of correlations of the angular error between different models:
+
+
+     0        1        2        3        4
+ 0            0.959    0.950    0.807    0.781
+ 1   0.959             0.934    0.820    0.795
+ 2   0.950    0.940             0.808    0.783
+ 3   0.807    0.820    0.808             0.940
+ 4   0.782    0.795    0.783    0.940    
+
+
+
+Simply averaging the vectors predicted by each model resulted in a 0.9846 error.
+
+
+
+Next, we built an ensemble with trainable weights (the multiplier of each model):
+
+n = w n + ... + w n
+
+This reduced the error to 0.9827.
+In this case, the regression weights of the models had the form:
+
+
+gnn_1: 0.934,  gnn_2: 1.346,  gnn_3: 0.753, att_1: 1.466, att_2: 0.477
+
+
+
+
+Training Ensemble
+
+
+
+Further advancement of the metric was achieved by a trained ensemble based on a neural network.
+Several architectures were considered, including a transformer and adding aggregated event features to the model outputs.
+However, they turned out to be no better than conventional MLP with one hidden layer.
+The tensor (B,N,3) was fed at the input of this network, where B is the number of examples in the batch, N is the number of models,
+each of which produced three components of the direction vector.
+This tensor was converted into dimension (B,3*N).
+After MLP, its dimension became equal to (B,3).
+
+
+The number of neurons in the hidden layer ranged from 128 to 2048. However, all these models gave approximately the same results.
+For training, the best loss appeared to be the cosine between the predicted and the target vector.
+The learning rate was quite high lr = 1e-3 - 1e-4 and the Adam optimizer was used.
+
+
+
+The best metric, as determined by the validation on the first 5 batches, gave the result 0.9796.
+Below are some typical learning curves:
+
+
+
+
+Source code
+
+
+
+The source code of our solutions can be found on https://github.com/QuDataAI/IceCube and in Kaggle public notebooks.
+Below are links to modules:
+
+
+
+ IceCube-Dataset-kaggle - сreating a dataset for transformer;
+
+ IceCube-Transformer-kaggle - transformer train;
+
+ IceCube-GNN-train-colab - GNN train;
+
+ IceCube-Ensemble-kaggle - Ensemble train;
+
+ IceCube-Ensemble-submit - Ensemble submission;,
+
+ IceCube_QuData_Line-fit_Method - modifications of Line-fit method;
+
+ IceCube_QuData_Anisotropy - anisotropy analyses;
+
+
+ 
+
+What have not been done
+
+
+There are also several approaches which we thought over but did not pursued to the end, 
+mainly because of lack of time and hardware resources,
+to mention just a few:
+
+
+
+
+ Training the GNN from scratch, with scattering, absorption and DOM-embedding features;
+
+ Training a GNN classifier with a larger number of bins;
+
+ Parallel training of transformer and GNN models.
+
+ Use a bidirectional recurrent layer as integrator in transformer.
+
+ Use the transformer pre-trained on the regression task to detect noise pulses, for their subsequent filtering.
+
+ Replace the regressor with a classifier in transformer, for a large set of directions (points on a sphere).
+      A similar model got to error 1.012, but there was not enough time to retrain it and include it in the ensemble.
+
+ Train a model on a subset of the data (for example, single-string events, two-string events, etc.) by obtaining a set of models that specialize in specific event patterns.
+
+ Add position embedding in transformer.
+
+
+
+Conclusions
+
+Thanks to the organizers for large dataset, without which we would not have been able to train complicated architectures and combine them into an ensemble.
+
+Comments:
+├─ Ruslan Guseynov (2023-04-20 16:25:57.270000) [+1]
+│  Congrats, guys! Well deserved!
+├─ Ravi Shah (2023-04-20 15:14:18.457000) [+1]
+│  Congrats @andreybeyn! Fascinating solution! Thanks for sharing such a detailed write up!
+├─ Remek Kinas (2023-04-20 14:14:01.887000) [+1]
+│  Mind blowing 🙉 Congratulations. I have strong feeling that competition host is in different place after this event.
+├─ Wen Lihong (2023-04-20 12:45:45.577000) [+1]
+│  Congratulations
+├─ SolverWorld (2023-04-20 11:28:31) [+1]
+│  You just set a very high bar for a writeup!  Congratulations on the Gold medal.
+├─ Robin Smits (2023-04-20 21:08:19.150000) [+2]
+│  @andreybeyn Nice work and interresting to see how you combined the various models and other influences.
+├─ serangu (2023-04-20 10:45:49.450000) [+2]
+│  @andreybeyn very complex solution. I congrats you on the 11 position. And I hope that you will get 1 place next time!
+  ├─ Sergey Stepanov (2023-04-20 16:06:26.183000) [+0]
+  │  Undoubtedly :)
+  │  Although it was difficult to take the first place in this competition without serious computing power.
+├─ Dipam Chakraborty (2023-04-20 10:33:43.037000) [+2]
+│  Further advancement of the metric was achieved by a trained ensemble based on a neural network.
+│  
+│  
+│  I see ensembling models with another model works pretty well after all.
+│  
+│  Congrats on the gold, than...
+  ├─ AndreyBeyn (2023-04-20 15:34:22.320000) [+0]
+  │  Yes, GNN better predicts zenith anglе while Attention better with azimuth. So, ensemble gave significant (-0.0159) boost in compare with a best single model.
+├─ Shyamaray Aravattu (2023-04-21 14:51:49.883000) [+0]
+│  I don't know anything give me vote only 😂
+├─ Benjamin DavisISRL (2023-04-22 12:55:56.087000) [+0]
+│  thanks for posting

@@ -1,0 +1,222 @@
+<p>First, we want to thank the organizers for hosting such a competition and all the participants for battling it out with us. The past three months were exciting for us.</p>
+<p>Our team’s background is mainly in competitive programming and CTF. So this competition was a step into unfamiliar territory, since we had little experience with code golf and almost none with Kaggle. In fact, it looked like many teams in this competition were also new to Kaggle. We’re a student team (someone questioned our odd team name, it's an inside pun related to <a href="https://www.tsukuba.ac.jp/en/about/public-branding/future/" target="_blank">our university</a>), and we worked especially hard during our summer break in August and September.</p>
+<p>This writeup explains our approach and highlights a few interesting solutions. The visualization tool we used and our GitHub repository are listed at the end.</p>
+<h1>Overview of Our Solutions</h1>
+<p>Our approach was 90% grinding code golf, 9% tooling, and 1% weird hacks. Since the 90% grind was something many teams did, we’ll just showcase two of our most memorable solutions.</p>
+<h2>1. task 111 (62 bytes, best+2)</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2F010fa1d41f9b192b5216869ad868be59%2FScreenshot%20from%202025-11-02%2015-02-06.png?generation=1762063336648581&amp;alt=media" alt=""></p>
+<pre><code>p= g:[[*((g,g).pop,)][-i:-i:-] i  ]
+</code></pre>
+<p><code>iter(l.pop, n)</code> walks <code>l</code> in reverse until it pops <code>n</code>. This task was the only one where we could exploit that behavior.</p>
+<pre><code>a = [,,,,,,]
+([*(,(a.pop,))]) 
+(a) 
+</code></pre>
+<h2>2. task 270 (115 bytes, best+2)</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2Fd59ef4bdb80a7ea4ffc107f84afe9bca%2FScreenshot%20from%202025-11-02%2015-02-29.png?generation=1762063355613187&amp;alt=media" alt=""></p>
+<pre><code> re;p= g,c=-:c*g [*(*(re.sub(,,(p(g,c+)))))][::-]
+</code></pre>
+<p>This solution was the only one we saw that used the conditional-group syntax <code>(?(id/name)yes-pattern|no-pattern)</code> to change the regex pattern depending on whether a group matched.</p>
+<h1>Tooling and Some Odd Hacks</h1>
+<p>Here are the tools and odd hacks we built along the way.</p>
+<h2>Compression Optimizations</h2>
+<p>Even before the contest started, we suspected there would be cases where compression strategy might be used. That hunch turned out to be right. We built our own compressor and optimizer stronger than Zopfli, which is a better zlib compressor developed by Google, and lifted our score by about 700 points relative to the native zlib.</p>
+<h3>Compression Basics</h3>
+<p>First, a quick overview of the compressed-code setup. Compressed code needs to be decompressed and executed at runtime. A key consideration is how to embed the compressed payload into the source. Python byte literals cannot contain characters ≥ 0x80, so we need to convert from another format.</p>
+<p>We handled this by embedding the payload in a string literal and converting it to bytes. In Python, the file encoding can be specified with a comment like <code># -*- coding: latin-1 -*-</code> (<a href="https://peps.python.org/pep-0263/" target="_blank">PEP 263</a>). The shortest form that matches the regex <code>^[ \t\f]*#.*?coding[:=][ \t]*([-_.a-zA-Z0-9]+)</code> is <code>#coding:L1</code>. <code>L1</code> is an alias of the <code>latin_1</code> encoding (<a href="https://docs.python.org/3/library/codecs.html#standard-encodings" target="_blank">Documentation</a>), which maps every character from <code>ord(0)</code> to <code>ord(255)</code> directly to its byte value. Using this, the decompression stub becomes:</p>
+<pre><code>
+ zlib
+(zlib.decompress((,)))
+</code></pre>
+<p>We used zlib because it fit our use case best. Python gives you zlib, lzma, and bzip. zlib and lzma are LZ77-family compressors, and bzip is based on the Burrows–Wheeler Transform. BWT can be weaker on these inputs compared to LZ77, and lzma is strong but its header overhead is large, so it didn’t beat zlib unless the code exceeded about 1000 bytes. The newer zstd will be available in Python 3.14 (<a href="https://docs.python.org/3/library/compression.zstd.html" target="_blank">Documentation</a>), but sadly it was out of reach this time.</p>
+<p>zlib is basically deflate plus a 2-byte header and a 4-byte CRC checksum. <code>zlib.decompress()</code> supports raw deflate when you pass a negative second argument, so <code>zlib.decompress(code,-15)</code> saved 6 bytes at the cost of 4 extra bytes, netting a win. For small zlib streams, <code>zlib.decompress(code,-9)</code> sometimes also worked, shaving another byte. Our final decompression stub looked like this:</p>
+<pre><code>
+ zlib
+(zlib.decompress((,),-))
+</code></pre>
+<h3>The Structure of deflate</h3>
+<p>Before talking about deflate-specific optimizations, here’s the bare minimum structure. Deflate encodes data as copies of previous substrings plus single-character additions. For instance, <code>abracadabra</code> becomes <code>[a][b][r][a][c][a][d][copy(distance=7,length=4)]</code>. Think of each piece as a factor. Minimizing the number of factors is easy with a greedy approach. In practice, we must also encode those factors into a bitstream, and that coding step complicates matters. Minimizing factor count alone doesn’t always minimize the final deflate size.</p>
+<p>For coding, deflate uses Huffman codes for literals, and for length/distance pairs. You can either use a preset Huffman tree or embed your own. In our use case, presets were inefficient, so we mostly embedded our own. Switching trees midstream is possible, but embedding a tree costs about 300 bits (~40 bytes), so one tree is typically best here. (Rarely, using the preset tree for the last block is better. But you can brute-force the boundary to easily compensate this.)</p>
+<p>There are two Huffman trees, one for literals/lengths and one for distances. These trees are themselves run-length encoded (RLE) and then encoded by another Huffman tree (the "cl-code") and inserted as a header.</p>
+<p>We built a visualization app for deflate(<a href="https://key-moon.github.io/deflate-viz/" target="_blank">deflate-viz</a>, <a href="https://github.com/key-moon/deflate-viz" target="_blank">repository</a>). By attaching a deflate or zlib payload via query parameters, you can inspect the internals.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2Fe8762c54471c6f6c8d3f9595273d1001%2Fdeflate-viz.png?generation=1762062312506864&amp;alt=media" alt=""></p>
+<h3>Code-Level Optimizations</h3>
+<p>By exploring the visualization, we got a few key insights.</p>
+<h4>Make the same code fragments appear as much as possible</h4>
+<p>Obvious, but the golden rule of compression golf. Also loop unrolling sometimes produce better results than loops.</p>
+<h4>Avoid uppercase variable names / Reuse names that appear in keywords</h4>
+<p>As mentioned, the Huffman tree is represented by code lengths ordered by byte value and then RLE-compressed. Longer runs help. Python syntax doesn’t use uppercase letters, so those bytes would ideally be all zeros in the code-length stream; introducing uppercase disrupts RLE. Also, to help the literal Huffman distribution, it’s better to reuse letters that appear in common keywords like <code>def</code> and <code>return</code>, or built-ins like <code>zip</code>, and avoid introducing stray characters.</p>
+<h4>Prefer tabs over spaces for indentation / Prefer <code>'</code> over <code>"</code></h4>
+<p>Again, RLE awareness. Tabs sit next to newline in ASCII and tend to disrupt RLE less than spaces. Single quotes tend to work better because <code>'</code> is adjacent to <code>(</code>.</p>
+<h3>Optimizing the Compressed Payload</h3>
+<p>We first set out to produce an encoding-friendly deflate payload. Since the payload is embedded as a string, some characters require escaping, e.g., the quote characters used for the string delimiter, or <code>\x00</code>. Each such character costs an extra byte; we want to avoid them. Empirically, roughly 1/100 of bytes tended to need escaping.</p>
+<p>So we tried randomly perturbing parts of the deflate payload to dodge those characters. The most leverage comes from the embedded Huffman tree, which influences many bytes. Under an optimistic assumption that all bytes randomize independently, a ~200-byte payload would avoid escapes with probability about <code>(99/100)^200 ≈ 0.13</code>. Reality is less kind, so it took more trials.</p>
+<p>We implemented a deflate parser and performed hill climbing on top of Zopfli’s output (<a href="https://github.com/key-moon/golf/blob/2568f97b8677aa1898c5dee6c4ec240a37f578ae/deflate_optimizer/optimizer.py#L261" target="_blank">implementation</a>). This worked well in practice and often reduced the number of escapes to zero.</p>
+<h3>Beyond Zopfli</h3>
+<p>Along the way, we generated payloads that beat Zopfli’s size, initially as a side effect of hill climbing to remove escapes. That suggested we might actually build a compressor that outperforms Zopfli.</p>
+<p>The full story is long, so details are in a teammate’s writeup(To Be Written). Here is a broad, high-level overview of the approach.</p>
+<p>We first tried improving the Huffman tree with metaheuristics like genetic algorithms and simulated annealing, but this underperformed. We suspect that this because of the search landscape wasn’t smooth, and the objective (bits) is discrete.</p>
+<p>The big breakthrough was realizing that when <strong>everything except</strong> the Huffman tree is fixed, we can compute the optimal Huffman code lengths by dynamic programming (DP). Concretely, fixing the factorization and the cl-code (the Huffman code for the Huffman codes) allows a DP to find optimal code lengths. Implementing this let us shrink the Huffman trees that Zopfli produced (<a href="https://github.com/key-moon/golf/blob/2568f97b8677aa1898c5dee6c4ec240a37f578ae/deflate_optimizer_cpp/optimal_lit_code_lengths.hpp#L14" target="_blank">implementation</a>). Here’s a comparison:</p>
+<ul>
+<li><a href="https://deflate-viz.pages.dev/?deflate=le9FlgIwDAUArNODzGuGFHeHY%2BAOFdz16rg7u8jXSrUGHV7HIINEZM4lKay1eyBBtqBXbNWr3FRb2%2F%2F%2Bqu6uaXsWUdagnpbZtMr%2BOZehZMTFYNyQpgqOIAMoU58kqUizOOG8P2xyLi0rUSz1uRYO%2FDekzqtzu%2BLWIAE7L33xcu%2FNzeWgo3bqI5Lo0ylw%2F%2FJNkufXDrjNLfoMQNagHHYEe9XBsNeCOoPHLLtW8CSQ6O9fO40vOgYTIjL%2FgFvu5apmG%2BpQIHqLjwpH%2BJYSPlcK1tO34Gz6FpqN%2BDc%3D" target="_blank">Zopfli, 218 bytes</a></li>
+<li><a href="https://deflate-viz.pages.dev/?deflate=le9FDkMhEAUArIeDNNBCUne%2FBmHx3ZW6nb3uvht5qhsmxNgiTQSDzhI71CVmlIIDTgipEloG9o1w9z9c3YcrzwtCHBMs7gjuikxx3Rp2SgimtuMbUGgiAI1K6lC3EygzjOU4wNjJbZiiSuyxAsn61L2sxd1KdgYD2Ht5V6%2Fywdy%2FHrxunkpCKJP0HFhev0Na%2BbcD2eVmEgE4JmjtQjM1RuM0BAvBc5Z9K3gRiMnDa6%2FxQ8fmgHWWX3Drg5zh70IdC3Tv8V1WaN9T2pdKTYvfgwW%2Fh4pOfQs%3D" target="_blank">DP-optimized Huffman tree, 215 bytes</a></li>
+</ul>
+<h4>Automatic Variable-Name Optimization</h4>
+<p>Observation suggested variable-name assignment strongly affects compression. To mechanize this, we statically analyzed code to extract dependencies and then added a routine that reassigns variable names to improve compressibility. This was the single most impactful optimization, netting several hundred bytes overall.</p>
+<h4>Genetic Algorithm</h4>
+<p>We also ran a GA whose state combined variable-name assignments and the deflate payload itself, interleaving factorization and Huffman optimizations. This gained around 100 bytes (<a href="https://github.com/key-moon/golf/blob/main/deflate_optimizer_cpp/geneticalgo.cpp" target="_blank">implementation</a>).</p>
+<h2>Recovering the Random Seeds for Test Cases</h2>
+<p>It was disclosed that test cases were generated using <a href="https://github.com/google/ARC-GEN/" target="_blank">ARC-GEN</a>. The generator is deterministic given a seed. From <code>arc_gen.py</code>:</p>
+<pre><code>
+ ():
+  
+  task_info = task_list.task_list()[task_num]
+  _, generator, _ = task_info
+  examples = []
+   example_id  (num_examples):
+    random.seed(task_num + example_id)
+    examples.append(generator())
+  (examples)
+</code></pre>
+<p>However, running arc_gen didn’t reproduce the exact test cases.</p>
+<p>When the anomaly in task100 was fixed and the test cases remains as same in almost all cases, it suggested some seed mechanism was in play. We reasoned that the high quality source to leak randomness is via <code>randint</code>. Skipping the nerdy details, if a generator uses only calls like <code>randint(a, b)</code> where <code>b - a + 1</code> is a power of two, those outputs can leak clean bits of the PRNG state.</p>
+<p>We filtered ARC-GEN and identified three tasks, which is task043, task127, task142, as good candidates. From each ARC-GEN case we extracted the random sequences used.</p>
+<pre><code>LEAK_CASES = 
+
+
+
+
+
+cases = get_task()[]
+leak_43 = []
+   cases[:LEAK_CASES]:
+  g = []  
+  leak = [*(==r[-]) r  g[:]] + [*(==c) c  g[][:-]]
+  leak_43.append(leak)
+
+
+
+
+cases = get_task()[]
+leaks_127 = []
+   cases[:LEAK_CASES]:
+  g = []
+  leak = []
+  leak.append([, ][(g)==])
+  leak.extend([v-  v  g[][::]])
+   (g) == :
+    leak.extend([v-  v  g[][::]])
+  leaks_127.append(leak)
+
+
+
+
+
+
+
+cases = get_task()[]
+leaks_142 = []
+   cases[:LEAK_CASES]:
+  g = []
+  leak = []
+   s  g:
+     v  s:
+      leak.append(v)
+  leaks_142.append(leak)
+
+(leaks_127)
+(leaks_142)
+
+
+</code></pre>
+<p>A bit of inspection shows the random sequences share the same prefixes. In other words, across all tasks, the same seed was used per index!</p>
+<p>With that in mind, we searched for seeds that would produce the sequences above.</p>
+<pre><code> i  ():
+  random.seed(i)
+  r = [random.randint(,)  i  ()]
+   r  leak_43:
+    (i, leak_43.index(r))
+
+
+
+</code></pre>
+<p>So the seeds were <code>2025 + i</code>. This hinted we might compress some tasks dramatically by regenerating from the seed. For this to be useful, the following criteria had to be met:</p>
+<ol>
+<li>It’s hard to extract the vital information in Python directly (easier to regenerate from randomness).</li>
+<li>The generation code is simple.</li>
+<li>Both train and test are derivable from a same algorithm and a short seed.</li>
+<li>The seed is recoverable from available information.</li>
+<li>Constructing the solution from the recovered information is straightforward.</li>
+</ol>
+<p>By scouting tasks, only task096 fit these criteria. This tasks has tons of corner cases and was one of the hardest to optimize.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2F07f32fcee52b745d1bfaa82d9c4a9397%2FScreenshot%20from%202025-11-02%2014-55-16.png?generation=1762062925269548&amp;alt=media" alt=""></p>
+<p>In this task, the grid width/height, background color, reticle colors, and each segment length are generated randomly. Here is a simplified version of the algorithm for those:</p>
+<pre><code>
+width, height = random.randint(, ), random.randint(, )
+b = random.randint(, ) 
+colors = random.sample((((, ))-{b}), random.randint(, ))
+lengths = []
+ i  ((colors)):
+  min_length, max_length = (i + , ), i + (  i &gt;   )
+  lengths.append(random.randint(min_length, max_length))
+</code></pre>
+<p>These are exactly the pieces of information you need to determine the seed and construct the output. Our experiments showed that width, height, the set of colors, and the background color suffice to identify the seed. And, for non-ARC-GEN train and test cases, we also found seeds via exhaustive search.</p>
+<p>Here’s the code we built using this strategy:</p>
+<pre><code> random *
+ ():
+ seed([-l,,,,][l*(&lt;l)])
+ d,t,f=randrange(,)==(r[]),randrange(,)==(r),randrange(,)
+ s=sample([*{*(,)}^{f*(l&lt;)}],o:=randrange(,))
+ u=[+randrange(&lt;m,(m&lt;)+m) m  (o)]
+ n=[(o*-)*[f] m  (o)]
+  m  (o):
+   e  (u[m]):e-=m;n[e-][o+m-]=n[e-][o-m-]=n[-m-][o+e-]=n[-m-][o-e-]=s[m]
+  ([d,t,{*(r,[])}=={*s,f},f  r[]]) n+n[:-][::-] p(r,l-)
+</code></pre>
+<p>After compression this ended up at best+48, which is not quite we are looking for, but we’re proud we had this kind of solution.</p>
+<h2>GX (Golf Experience) / QoL Features</h2>
+<p>Given the marathon nature of the contest, we built QoL tooling: mainly CI/CD and a local Web UI.</p>
+<h3>CI/CD</h3>
+<p>On every push (and on schedules) we ran jobs to do the following.</p>
+<h4>Generate README</h4>
+<p>We generated a stats summary in Markdown as the README. Later the Web UI replaced it, but it was handy on the go.</p>
+<h4>Generate per-file banners</h4>
+<p>We auto-updated banners in files to show size targets like this:</p>
+<pre><code>
+
+</code></pre>
+<h4>Discord Integration</h4>
+<p>We notified our Discord on every teammate push. This made it easy to spot missed shrink opportunities and pick the low-hanging fruit.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2F90c30fbaaf30f328ef51bfaf7c12565a%2FScreenshot%20from%202025-11-02%2004-48-08.png?generation=1762063444300991&amp;alt=media" alt=""></p>
+<h4>Watch Standings / Spreadsheet</h4>
+<p>We automatically updated the best-known sizes referenced by the banners and Web UI.</p>
+<h3>Web UI</h3>
+<p>We've created(99% vibe-coded) local Web UI for daily golfing.</p>
+<h4>Top Page</h4>
+<p>We could track our progress. A histogram highlighted which tasks deserved compression attention.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2Fc90f52efe70694f4c7f046da468feb80%2FScreenshot%20from%202025-11-02%2014-58-05.png?generation=1762063098220077&amp;alt=media" alt=""></p>
+<h4>Task List</h4>
+<p>Thumbnail overview, color-coded by delta from best. We added manual tags and search.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2F92816db89d2e92b34f4b87b2c796d66d%2FScreenshot%20from%202025-11-02%2014-58-59.png?generation=1762063151089124&amp;alt=media" alt=""></p>
+<h4>Task Detail</h4>
+<p>As shown: tags and code, all cases, and score trajectories by team. We also added a “Open current best in VSCode” button.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2Fc0dac6489524be375907ed0ad9b9008a%2FScreenshot%20from%202025-11-02%2014-59-49.png?generation=1762063195601066&amp;alt=media" alt=""></p>
+<h4>Judge View</h4>
+<p>Integrated with <a href="https://github.com/key-moon/golf/blob/main/checker.py" target="_blank">checker.py</a> to show the latest run results. Passing values through the identity function <a href="https://github.com/key-moon/golf/blob/main/checker.py#L83" target="_blank"><code>DUMP</code></a> printed its argument, which helped debug recursive solutions.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1953252%2Fd2a18ffb82a338e5ac9eb4576d4aaaf6%2FScreenshot%20from%202025-11-02%2015-00-06.png?generation=1762063212521821&amp;alt=media" alt=""></p>
+<h2>Other Things We Tried</h2>
+<ul>
+<li>Early on, we auto-generated solutions with GPT-o4-mini, which is why we ranked high at the start. Those codes live in <a href="https://github.com/key-moon/golf/tree/main/_junkyard/old_base/base_code" target="_blank">base_code</a>. None of the final surviving solutions relied on AI, though.</li>
+<li>We also discovered the universal solution via <code>__eq__</code> that was published in mid-August. Our short version was:<ul>
+<li><code>class p:__init__=help;__eq__=any</code></li></ul></li>
+<li>Until late August we used minified versions of <a href="https://github.com/michaelhodel/arc-dsl" target="_blank">arc-dsl</a> and <a href="https://github.com/michaelhodel/re-arc" target="_blank">re-arc</a> to chase 400/400. Some compressed to ~2000 bytes. By early September, we removed them all and replaced them with handwritten solutions.</li>
+</ul>
+<h1>Data</h1>
+<p>Our competition repository (very messy; it wasn’t meant to be public) is here:</p>
+<p><a href="https://github.com/key-moon/golf" target="_blank">https://github.com/key-moon/golf</a></p>
+<p>Repository overview:</p>
+<ul>
+<li><code>dist</code>: results</li>
+<li><code>base_[name]</code>: each member’s “golf course”</li>
+</ul>
+<p>If you want to run anything, execute <code>source tools/setup.sh</code> to set up the environment.</p>

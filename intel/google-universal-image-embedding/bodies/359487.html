@@ -1,0 +1,72 @@
+<h1>GUIE 4th Place Solution</h1>
+<p>A quick thank you to my teammates <a href="https://www.kaggle.com/simjeg" target="_blank">@simjeg</a> and Marcos it was great working with you. It was a lot of fun exploring different datasets and dimensionality reduction techniques as a part of a team. Finally, thank you to the team of people that hosted this competition.</p>
+<p>Repository : <strong><a href="https://github.com/IvanAer/G-Universal-CLIP" target="_blank">G-Universal-CLIP</a></strong> 🔥  🚀</p>
+<h3>TLDR Brief Summary</h3>
+<p>We use as baseline the content from the famous repo <a href="https://github.com/mlfoundations/open_clip" target="_blank">https://github.com/mlfoundations/open_clip</a></p>
+<p>Our solution is an ensemble of 2 CLIP models trained using sub-center ArcFace with adaptive margin loss, each model produces a 512D descriptor. A total of 9 models were trained consisting of 4 ViT-L-14-336 models and 5 ViT-H-14 models. <br>
+The weights of these 9 models were then averaged to make 2 “model soups”. </p>
+<p>We created a 1024 dimensional embedding using the concatenated outputs of both models. We then used PCA to reduce the dimensionality from 1024 to 64.</p>
+<h4>CLIP Models</h4>
+<p>Pre-trained models from <a href="https://github.com/mlfoundations/open_clip" target="_blank">open_clip</a><br>
+ViT-L-14-336 : openai<br>
+ViT-H/14 on LAION-2B laion_s32b_b79k</p>
+<h4>Training Data</h4>
+<p>Google Landmarks 2020 : <a href="https://www.kaggle.com/competitions/landmark-recognition-2020/data" target="_blank">https://www.kaggle.com/competitions/landmark-recognition-2020/data</a></p>
+<p>Products-10k : <a href="https://www.kaggle.com/competitions/products-10k/data" target="_blank">https://www.kaggle.com/competitions/products-10k/data</a></p>
+<p>We did not find it beneficial to use more data for finetuning. Products and landmarks already represent 50% of this challenge data distribution.</p>
+<h4>Training Routine</h4>
+<p>We provide the details in <strong><a href="https://github.com/IvanAer/G-Universal-CLIP" target="_blank">G-Universal-CLIP</a></strong> and our paper! Stay tuned</p>
+<p>Keep in mind we use ObjectNet for offline validation only, as discussed in this post : <a href="url" target="_blank">https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/352644</a></p>
+<h3>Single Model</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5116959%2Fec7ebd70ca3c485ef7d1f2606845fc1f%2FViT-Model.jpg?generation=1665563516204970&amp;alt=media" alt=""></p>
+<h3>Model Ensemble</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5116959%2F0bf93302aa021538c8e454e742778477%2FViT-Model-Ensemble.jpg?generation=1665563545588984&amp;alt=media" alt=""></p>
+<h4>Model Soup / Ensembles</h4>
+<p>When creating the model soup we had to find a way to diversify the models before averaging their weights. It was decided that we would train each model with a different augmentation technique on each run, then train one model without augmentations. For the final ensemble we used the following augmentation methods:</p>
+<p>These augmentations were taken from this solution : <a href="https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319896" target="_blank">https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319896</a></p>
+<pre><code>def transforms_happy_whale(image_path, image_size):
+   image = cv2.imread(image_path)
+   image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.uint8)
+   aug8p3 = A.OneOf([
+           A.Sharpen(p=0.3),
+           A.ToGray(p=0.3),
+           A.CLAHE(p=0.3),
+       ], p=0.5)
+
+   train_transforms = A.Compose([
+           A.ShiftScaleRotate(rotate_limit=15, scale_limit=0.1, border_mode=cv2.BORDER_REFLECT, p=0.5),
+           A.Resize(image_size, image_size),
+           aug8p3,
+           A.HorizontalFlip(p=0.5),
+           A.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
+           ToTensorV2(),
+       ])
+   return train_transforms(image=image)['image']
+</code></pre>
+<p>These augmentations were taken from this solution : <a href="https://www.kaggle.com/competitions/landmark-recognition-2020/discussion/187757" target="_blank">https://www.kaggle.com/competitions/landmark-recognition-2020/discussion/187757</a></p>
+<pre><code>def transforms_cutout(image_path, image_size):
+   image = cv2.imread(image_path)
+   image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.uint8)
+   train_transforms = A.Compose([
+           A.HorizontalFlip(p=0.5),
+           A.ImageCompression(quality_lower=99, quality_upper=100),
+           A.ShiftScaleRotate(shift_limit=0.2, scale_limit=0.2, rotate_limit=10, border_mode=0, p=0.7),
+           A.Resize(image_size, image_size),
+           A.Cutout(max_h_size=int(image_size * 0.4), max_w_size=int(image_size * 0.4), num_holes=1, p=0.5),
+           ToTensorV2(),
+       ])
+   return train_transforms(image=image)['image']
+</code></pre>
+<p>These augmentations are taken from this paper : <a href="https://arxiv.org/abs/1805.09501" target="_blank">https://arxiv.org/abs/1805.09501</a></p>
+<pre><code>def transforms_auto_augment(image_path, image_size):
+   image = Image.open(image_path).convert('RGB')
+   train_transforms = transforms.Compose([transforms.AutoAugment(transforms.AutoAugmentPolicy.IMAGENET), transforms.PILToTensor()])
+   return train_transforms(image)
+</code></pre>
+<p>We created 4 ViT-L-14-336 models using the above augmentation methods with one model trained without augmentations (all 1 epoch).</p>
+<p>We created 5 ViT-H-14 models using the above augmentation methods with one model trained without augmentations (all 1 epoch) and an extra model trained on the auto augment transforms for 2 epochs. </p>
+<p>We then averaged these weights and were left with a single ViT-L-14-336 and a single ViT-H-14.</p>
+<h3>Final Remarks</h3>
+<p>CLIP has a lot of potential in the future and it will be interesting to see where it goes. I am excited to share with everyone the full details in the paper that will soon be published. If you want to learn more, please make sure you check out the repository we have set up. It contains the training code used by our team.</p>
+<p>The paper will be available by Monday : <a href="https://arxiv.org/abs/2210.11141" target="_blank">https://arxiv.org/abs/2210.11141</a><br>
+Repository : <strong><a href="https://github.com/IvanAer/G-Universal-CLIP" target="_blank">G-Universal-CLIP</a></strong></p>

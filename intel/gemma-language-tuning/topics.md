@@ -1,0 +1,82 @@
+# gemma-language-tuning 讨论区（按票数排序，共 80 条）
+
+- [References from across Kaggle](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537422) — 27 票 / 12 评论 / 2024-10-03 
+- [Competition has concluded! Submission review underway](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/556897) — 23 票 / 17 评论 / 2025-01-15 
+- [Quick update on the competition](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/562683) — 22 票 / 24 评论 / 2025-02-12 
+- [Learn how we adapted Gemma 2 for Japanese](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/541342) — 22 票 / 10 评论 / 2024-10-18 **write-up?**
+- [Gemma2 Language Capabilities and its Multilingual Abilities.](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537385) — 19 票 / 5 评论 / 2024-10-03 
+- [Get Started Here!](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/536249) — 15 票 / 21 评论 / 2024-09-26 
+- [Resources : How to Fine-tune Gemma (With Example Code)](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537387) — 15 票 / 2 评论 / 2024-10-03 
+- [License type of training datasets](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537717) — 14 票 / 4 评论 / 2024-10-04 
+- [And the winners are…](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/575770) — 13 票 / 14 评论 / 2025-04-30 
+- [Questions Concerning Eligible Languages](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537435) — 10 票 / 3 评论 / 2024-10-03 
+- [A Starter for Advanced Chinese Language Understanding](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540239) — 10 票 / 1 评论 / 2024-10-13 
+- [Google – AI Assistants for Data Tasks with Gemma : Winning Solutions](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537393) — 9 票 / 1 评论 / 2024-10-03 **write-up?**
+- [Gemma 2 is now available in torchtune!](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/545714) — 8 票 / 7 评论 / 2024-11-11 
+- [Complete guide to adapting Gemma to Russian on TPU](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/544169) — 6 票 / 0 评论 / 2024-11-03 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/538120) — 5 票 / 2 评论 / 2024-10-07 
+- [is any plans for Google Credits for this competition ( as it need synthetic data generation using Large models )?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537398) — 5 票 / 1 评论 / 2024-10-03 
+- [How to publish Gemma model variant on Competition "Models" Tab](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/555593) — 5 票 / 4 评论 / 2025-01-08 
+- [Related Work For Multilingual LLMs](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537807) — 5 票 / 2 评论 / 2024-10-05 
+- [New Gemma Model for South-East Asian Languages ](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/546437) — 5 票 / 2 评论 / 2024-11-15 
+- [New Gemma variant for South East Asian languages](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/543872) — 4 票 / 0 评论 / 2024-11-01 
+- [How many languages can one work on?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537517) — 3 票 / 2 评论 / 2024-10-03 
+- [Finding a team](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537670) — 3 票 / 1 评论 / 2024-10-04 
+- [Google Fine-Tuning Guides for Beginners](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/538067) — 3 票 / 0 评论 / 2024-10-06 
+- [Prevent Switching languages](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/553368) — 3 票 / 2 评论 / 2024-12-25 
+- [Looking for teammates to participate in the competition](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537586) — 3 票 / 6 评论 / 2024-10-04 
+- [GemmaLM-Chinese](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/552551) — 3 票 / 0 评论 / 2024-12-20 
+- [Eligible Languages](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/551562) — 3 票 / 0 评论 / 2024-12-13 
+- [Do entries have to be for multiple languages/cultural contexts?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/544301) — 3 票 / 1 评论 / 2024-11-04 
+- [Looking for team members](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537434) — 2 票 / 3 评论 / 2024-10-03 
+- [Fine-Tuning and Adapting LLMs](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/539722) — 2 票 / 0 评论 / 2024-10-10 
+- [Fine Tuning Gemma using Hugging Face ( transformers )](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540222) — 2 票 / 0 评论 / 2024-10-13 
+- [Looking For Teammates? ](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540081) — 2 票 / 3 评论 / 2024-10-12 
+- [Possibility of expanding the list of eligible languages](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537690) — 2 票 / 2 评论 / 2024-10-04 
+- [Version of Gemma 2 to use.](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/542201) — 2 票 / 2 评论 / 2024-10-23 
+- [General Questions ](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/542393) — 2 票 / 2 评论 / 2024-10-24 
+- [i wondering that...](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/543197) — 2 票 / 1 评论 / 2024-10-29 
+- [CSV file in Hindi](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/541553) — 2 票 / 3 评论 / 2024-10-20 
+- [In which category to submit](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/553254) — 2 票 / 0 评论 / 2024-12-24 
+- [Incorporating cultural context into the fine-tuning process](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/549821) — 2 票 / 0 评论 / 2024-12-04 
+- [What are the categories?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/551540) — 2 票 / 1 评论 / 2024-12-13 
+- [Model biases restrictions](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537471) — 1 票 / 1 评论 / 2024-10-03 
+- [Why my chatmodel is generating nonsenses response.](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/561219) — 1 票 / 2 评论 / 2025-02-04 
+- [Can somebody help?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537838) — 1 票 / 1 评论 / 2024-10-05 
+- [Submission Valid?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/556819) — 1 票 / 5 评论 / 2025-01-15 
+- [Team Enquires ](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537917) — 1 票 / 2 评论 / 2024-10-05 
+- [Is the Cost of Fine-Tuning Gemma-2-9b-it on Cloud GPUs Covered by Kaggle or Google?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/538022) — 1 票 / 1 评论 / 2024-10-06 
+- [Emergent Ability of Gemma 2 Model variant fine tuned for Hindi  for  generating Urdu text ](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/556782) — 1 票 / 2 评论 / 2025-01-15 
+- [Fixing the Gemma Access Error](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/555596) — 1 票 / 0 评论 / 2025-01-08 
+- [Why it is saying No to fine tunable](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/554010) — 1 票 / 4 评论 / 2024-12-29 
+- [Using Gemma for translation to create Dataset](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/553996) — 1 票 / 3 评论 / 2024-12-29 
+- [From Dialect to an eligible language](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/554503) — 1 票 / 0 评论 / 2025-01-01 
+- [Novel approach](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/553316) — 1 票 / 0 评论 / 2024-12-25 
+- [Gemma runtime scaling](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540089) — 1 票 / 0 评论 / 2024-10-12 
+- [Request for Clarification Regarding Data Publication Requirements](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537596) — 1 票 / 1 评论 / 2024-10-04 
+- [Fine-Tuning Gemma with Lora approach resources](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540220) — 1 票 / 0 评论 / 2024-10-13 
+- [Can Cantonese Be an Eligible Language or Is It Considered Part of Traditional Chinese?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540263) — 1 票 / 1 评论 / 2024-10-13 
+- [Arabic dialects](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/547802) — 1 票 / 2 评论 / 2024-11-23 
+- [Is there a time limit for the notebook?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/541330) — 1 票 / 0 评论 / 2024-10-18 
+- [Finetuning Gemma on Brain rot language for fun](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/550690) — 1 票 / 0 评论 / 2024-12-09 
+- [Scala and Gemini](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/550527) — 1 票 / 0 评论 / 2024-12-08 
+- [Aming win this competition!!!](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/538128) — 1 票 / 2 评论 / 2024-10-07 
+- [Fine-tuned Gemma 2 with Tamil Alpaca Dataset](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/543396) — 1 票 / 1 评论 / 2024-10-30 
+- [Some info about prompt engineering](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/544952) — 1 票 / 0 评论 / 2024-11-07 
+- [Some doubts](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/545888) — 1 票 / 0 评论 / 2024-11-12 
+- [Does the model need to perform best or just a small fine-tuning is ok?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/546281) — 1 票 / 0 评论 / 2024-11-14 
+- [Please Review My Plan](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/539532) — 0 票 / 1 评论 / 2024-10-09 
+- [AILuminate Safety Benchmark for LLM Chat Models: Gemma 2 9b  Scores Very Good](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/552324) — 0 票 / 0 评论 / 2024-12-19 
+- [Request for Clarification Regarding Participation Certificate](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540906) — 0 票 / 1 评论 / 2024-10-16 
+- [Could we fine-tune a language that's not in the list?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/540804) — 0 票 / 0 评论 / 2024-10-16 
+- [Can I use AI do this as i in learning phase and just and beginner?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/551653) — 0 票 / 1 评论 / 2024-12-14 
+- [is math dataset eligible to be submitted?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/541605) — 0 票 / 0 评论 / 2024-10-20 
+- [What you guys think first and how you approach these competitions??](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/541614) — 0 票 / 0 评论 / 2024-10-20 
+- [Dataset curation (self-curation vs using datasets curated by others)](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/549897) — 0 票 / 1 评论 / 2024-12-04 
+- [let's win this price](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/537914) — 0 票 / 3 评论 / 2024-10-05 
+- [What does this mean "publish their trained models on Kaggle Models"?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/552407) — 0 票 / 3 评论 / 2024-12-19 
+- [Ideas for Gemma](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/543324) — 0 票 / 4 评论 / 2024-10-29 
+- [System requirements for deployment of Gemma2 variants? ](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/547387) — 0 票 / 0 评论 / 2024-11-21 
+- [Try using a different Approach??](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/538223) — 0 票 / 0 评论 / 2024-10-07 
+- [Why should the notebook be public ?](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/538147) — 0 票 / 1 评论 / 2024-10-07 
+- [Official Gemma Cookbook](https://www.kaggle.com/competitions/gemma-language-tuning/discussion/545818) — 0 票 / 0 评论 / 2024-11-12 

@@ -1,0 +1,52 @@
+<p>Thanks to kaggle and everyone involved for hosting this competition. It was interesting to see how good we can predict essay scores just from keystroke information. Special thanks to <a href="https://www.kaggle.com/kawaiicoderuwu" target="_blank">@kawaiicoderuwu</a> for sharing the <a href="https://www.kaggle.com/code/kawaiicoderuwu/essay-contructor" target="_blank">essay constructor</a> we based much of our solution on.</p>
+<h3>TLDR</h3>
+<p>Our solution is an ensemble of two parts. Firstly, we build a Gradient Boosted Trees (GBT) ensemble based on popular public features on essay level. Secondly, we build an ensemble of deberta models using the final essay text, which have been mlm-pretrained on persuade corpus where we obscured the essays similar to the competitions train set. We weight GBT-Ensemble and deberta-ensemble by a ratio of 40/60.</p>
+<h3>Cross validation</h3>
+<p>We used 8fold cross validation and got a so-so correlation between CV and LB. One important insight is that GBM models have a way better LB/ CV ratio compared to deberta models. Or in other words, Deberta worked better on CV, while GBM were relatively bad on CV, but good on LB. That indicates a slight domain shift between LB and train set. Our guess is the essays might be split by topic or student year. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F213493%2Ff9a9768c6bbb99469e6ba717be941bbb%2Fcv_lb.png?generation=1704882140038566&amp;alt=media"></p>
+<h3>Data preprocessing</h3>
+<p>Similar to most teams we extracted the final text for each essay, and trained a model to analyse it. Deberta models were quite strong when using the final obscured essay text. We found significant improvement by replacing the obscurification character <code>q</code> with <code>i</code> or <code>X</code>. For both cases one can understand that the pretrained debertas have a better tokenization compared to using <code>q</code>. For example a lot of texts the debertas originally have been trained on, have explicit tokens for i, ii, iii, or X, XX, XXX. This also meant the tokenized sequence was shorter than using <code>q</code>. Following that rationale, we also trained a custom tokenizer. Models based on that tokenizer helped the ensemble a bit.</p>
+<h3>Model</h3>
+<h4>GBT ensemble</h4>
+<p>For all models within the GBT ensemble we used the same <a href="https://www.kaggle.com/code/awqatak/silver-bullet-single-model-165-features" target="_blank">165 features</a> as presented in the public kernel by <a href="https://www.kaggle.com/awqatak" target="_blank">@awqatak</a> (who deserves another special thanks 🙏). We then trained a few models similar to public kernels on those features.</p>
+<p>The final components were as following</p>
+<ul>
+<li>LGB (params tuned with optuna)</li>
+<li>XGB (params tuned with optuna)</li>
+<li>CatBoost (params from public kernel)</li>
+<li>Lightautoml (params from public kernel)</li>
+<li>Shallow NN</li>
+</ul>
+<h4>Deberta ensemble</h4>
+<p>A key component of our solution is an ensemble of transformer models (Deberta) trained on the reconstructed essay text. </p>
+<h5>Training procedure:</h5>
+<p>We found that pretraining the transformer on the persuade corpus with MLM-objective significantly improves CV and LB. For that, essays in the persuade corpus had to be obscured similar to the essays resulting from the train set. Then in a second step we fine-tuned those models on the training data, adding additional features like cursor position, etc and using a Squeezeformer layer to derive semantic features. Adding further keystroke features did not help, and we needed heavy dropout/augmentation on the three we added.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F213493%2F5b7318584e25c3af0099f99b368606ab%2FScreenshot%202024-01-10%20at%2010.28.21.png?generation=1704882528155672&amp;alt=media"></p>
+<p>The final components were as following</p>
+<ul>
+<li>deberta-v3-base trained with q replaced by i</li>
+<li>deberta-v3-large trained with q replaced by i (with first 12 layers frozen in finetuning, to avoid overfit)</li>
+<li>deberta-v3-base trained with q replaced by X</li>
+<li>deberta-v3-base trained with custom spm tokenizer </li>
+</ul>
+<h3>Postprocessing</h3>
+<p>For some models we clipped predictions at [0.5,6.] but it did not really make a difference. </p>
+<h3>Ensembling</h3>
+<p>Within the Deberta ensemble as well as within the GBM ensemble we used positive Ridge Regression on Out-of-fold (OOF) predictions to determine blending weights. The final weighting of both parts was done manually, and represented if we trust CV or LB more. For final submissions we selected 50/50 kernel and one 40/60 kernel. </p>
+<h3>What did not help</h3>
+<ul>
+<li>Using the deleted text</li>
+<li>Stacking</li>
+<li>Adding more keystroke features to the deberta based model. </li>
+<li>More squeezeformer layers</li>
+</ul>
+<h3>Used tools/ repos</h3>
+<ul>
+<li>Pytorch</li>
+<li>Huggingface</li>
+<li>Optuna</li>
+<li>Neptune.ai was our MLOps stack to track, compare and share models. </li>
+</ul>
+<h3>Code</h3>
+<p>Training code repo <a href="https://github.com/darraghdog/kaggle-linking-writing-3rd-place-solution" target="_blank">here</a>.<br>
+Inference script <a href="https://www.kaggle.com/code/darraghdog/3rd-place-lwq/notebook?scriptVersionId=160142140" target="_blank">here</a>.</p>

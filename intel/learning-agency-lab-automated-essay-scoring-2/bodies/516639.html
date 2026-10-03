@@ -1,0 +1,63 @@
+<p>Firstly, I would like to thank Kaggle and the competition host for organizing this challenge.<br>
+I would also like to thank all the participants. I found a lot of essential information through discussion posts.</p>
+<h1>Key Points</h1>
+<h2>Incompatibility Between Persuade and Non-Persuade Data</h2>
+<p>The key challenge in this competition lies in the composition of the training and test datasets. In train.csv, we have 12,875 samples from the persuade dataset and 4,432 samples from the non-persuade dataset.</p>
+<p>My DeBERTa-v3-large baseline training results are as follows: <code>QWK: all (non-persuade, persuade)</code></p>
+<pre><code> : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+</code></pre>
+<p>If I add data source tags to the full_text, <code>'[A] {full_text}'</code> for non-persuade and <code>'[B] {full_text}'</code> for persuade, the results are as follows:</p>
+<pre><code> : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+ : QWK: . (., .)
+</code></pre>
+<p>Based on the experimental results, I hypothesize that the scores from the two data sources are collected in different ways, thus not “compatible”. Mixing them together for training affected the model's fitting capability.</p>
+<h2>Assumption: All Test Samples are Non-Persuade</h2>
+<p>In the discussion <a href="https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/501319" target="_blank">Adversarial Validation Probe (Train vs Test)</a>, the AUC is between 0.65 and 0.675.<br>
+I conducted local tests with a proportion of 51% persuade samples + 18% non-persuade samples as train, and 31% non-persuade samples as validation, resulting an AUC of 0.66x.</p>
+<p>Additionally, a <a href="https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/499959#2802315" target="_blank">probing discussion</a> suggested that the test set contains almost only five prompts, which is consistent with non-persuade samples in <code>train.csv</code>.</p>
+<p>Based on the discussions, I believe all test samples are non-persuade.</p>
+<h1>Modeling</h1>
+<p>Knowing these key points, the modeling process is straightforward.</p>
+<p>During training:</p>
+<ol>
+<li>Add tags to inputs to distinguish data sources.</li>
+<li>Add a data source classification head to ensure the model's output features can differentiate between data sources.</li>
+<li>Use different classification heads for different data sources in some models.</li>
+<li>Use early stopping based on the scores of non-persuade samples.</li>
+</ol>
+<p>During submission:<br>
+Assume all samples are non-persuade.</p>
+<p>Additionally, I tried swapping tags for pseudo-labeling and distillation, which seemed to provide a slight improvement. I hope this will be useful for the efficiency challenge, though I didn't manage to submit it in time.</p>
+<h1>Final Submission</h1>
+<p>My final submission was a large ensemble (average of 45 predictions):</p>
+<ol>
+<li>3 models: <code>microsoft/deberta-large</code>, <code>microsoft/deberta-v3-large</code>, <code>Qwen/Qwen2-1.5B-Instruct</code></li>
+<li>5 folds</li>
+<li>3 runs (different random seeds)</li>
+</ol>
+<p>Thresholds were searched on out-of-fold predictions.</p>
+<p>OOF score is 0.818 for non-persuade samples, 0.827 after threshold searching.</p>
+<h1>Some Useful Tips</h1>
+<p>I used a few tricks to speed up training and inference, which you can find in my <a href="https://www.kaggle.com/code/tascj0/aes2-submit" target="_blank">notebook</a>.</p>
+<h2>Dynamic Micro Batch Collation</h2>
+<p>Since text lengths are variable, to reduce the impact of padding, I split a batch into micro batches with a limit of total number of tokens. This makes training faster and memory usage stable.<br>
+The gradient accumulation training loop looks like this:</p>
+<pre><code> batch  dataloader:
+    optimizer.zero_grad()
+    total_batch_size = (micro_batch[]  micro_batch  batch)
+     micro_batch  batch:
+        micro_batch = to_gpu(micro_batch)
+        loss = model(micro_batch)
+        scale = micro_batch[] / total_batch_size
+        (loss * scale).backward()
+    optimizer.step()
+</code></pre>
+<h2>Faster DeBERTa Implementation</h2>
+<p>I made some modifications to the DeBERTa implementation in <code>transformers</code>, resulting in 15%+ faster training and 30%+ faster inference in my environment. And memory usage is lower.</p>

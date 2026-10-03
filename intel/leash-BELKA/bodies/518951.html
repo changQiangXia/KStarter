@@ -1,0 +1,95 @@
+<p>Congratulations to all the winners and thanks to the organizers for hosting this interesting competition.<br>
+As we all know, shared targets and nonshared targets have completely different tendencies, so we built different pipelines.</p>
+<h1>Nonshared Target Part (<a href="https://www.kaggle.com/ren4yu" target="_blank">yu4u</a>)</h1>
+<p>The most important observation in the nonshared target part is that the validation score of the nonshared target overfits very quickly, even within just one epoch of training.<br>
+Therefore, we changed the validation interval to 0.01 epoch, and as a result, successfully obtained a checkpoint that does not overfit.</p>
+<h2>CV Strategy</h2>
+<p>CV strategy to simulate the nonshared targets is also important.<br>
+We used a 5-fold CV strategy, where BB1, BB2, and BB3 (with the BB2 building blocks removed) building blocks were split into 5 folds. Then we removed the other data so that the training data contains only the training building blocks and the validation data contains only the validation building blocks.<br>
+We released the notebook that generates the CV folds <a href="https://www.kaggle.com/code/ren4yu/leash-split-for-noshare/" target="_blank">here</a>.</p>
+<h2>Model</h2>
+<p><a href="https://huggingface.co/DeepChem/ChemBERTa-77M-MTR" target="_blank">ChemBERTa-77M-MTR</a></p>
+<h2>Training</h2>
+<ul>
+<li>5-fold CV.</li>
+<li>AdamW optimizer with LR=1e-3 (fixed), weight_decay=1e-5, batch_size=512.</li>
+<li>Train for one epoch and validate at each 0.01 epoch interval.</li>
+</ul>
+<h2>Selecting the Best Checkpoints</h2>
+<ul>
+<li>We found some folds have different TP distributions from whole training data, so we used only fold0 and fold2 that have similar TP distributions to the whole training data.</li>
+<li>In our training, we do not complete even one epoch of learning, so there is data that is not used in a single training run. By training with multiple seeds (11 seeds for each fold), we utilize all the data.</li>
+<li>Finally, we excluded seeds with extremely low CV scores and used an ensemble of 19 models for the final results.</li>
+<li>In selecting the best checkpoints, we used two strategies: (1) a single checkpoint is selected based on the average score of the three targets, and (2) select three checkpoints based on the scores of each of the three targets. In the private LB score, the former strategy was better.</li>
+</ul>
+<h1>Shared Target Part (<a href="https://www.kaggle.com/fuumin621" target="_blank">monnu</a>)</h1>
+<p>The main strategy was to improve the <a href="https://www.kaggle.com/code/ahmedelfazouan/belka-1dcnn-starter-with-all-data" target="_blank">public 1DCNN model</a> by concatenating features from ECFP.<br>
+As an option, we also trained models with additional features from ChemBERTa.</p>
+<h2>CV Strategy</h2>
+<ul>
+<li>We used 5-fold Stratified Kfold splits.</li>
+<li>We released the notebook that generates the CV folds for share <a href="https://www.kaggle.com/code/fuumin621/leash-split-for-share/notebook" target="_blank">here</a>.</li>
+</ul>
+<h2>Preprocess</h2>
+<ul>
+<li>ECFP: Used rdkit. r = 4, bit = 2048 or 3072</li>
+<li>1DCNN: Encoded SMILES strings into numerical values and converted them into fixed-length vectors</li>
+<li>chemberta_feature (optional): Used the ChemBERTa model to infer the SMILES strings and used the 384-dimensional output as features.</li>
+</ul>
+<h2>Model</h2>
+<ul>
+<li>SMILES are passed through an embedding layer, followed by 4 layers of 1D convolution</li>
+<li>ECFP is passed through an FC layer to 128 dim</li>
+<li>The outputs above are concatenated and passed through an FC layer to output binary classification scores for 3 targets</li>
+<li>Optionally, the 384-dimensional output of ChemBERTa can be passed through an FC layer and then concatenated</li>
+</ul>
+<h2>Training</h2>
+<ul>
+<li>5-fold CV.</li>
+<li>AdamW optimizer with LR=1e-3, weight_decay=0.05, batch_size=4096.</li>
+<li>num_epochs=25</li>
+</ul>
+<h2>Score</h2>
+<p>The scores of the trained models are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Model Name</th>
+<th>ECFP</th>
+<th>chemberta_feature</th>
+<th>CV</th>
+<th>PublicLB(mask noshare)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exp031</td>
+<td>r=4, bit=2048</td>
+<td>No</td>
+<td>0.6589</td>
+<td>0.352</td>
+</tr>
+<tr>
+<td>exp032</td>
+<td>r=4, bit=2048</td>
+<td>Yes</td>
+<td>0.65934</td>
+<td>0.351</td>
+</tr>
+<tr>
+<td>exp039</td>
+<td>r=4, bit=3072</td>
+<td>No</td>
+<td>0.66001</td>
+<td>0.350</td>
+</tr>
+<tr>
+<td>average ensemble</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>0.352</td>
+</tr>
+</tbody>
+</table>
+<p>In the end, we submitted the average ensemble.</p>

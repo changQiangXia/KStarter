@@ -1,0 +1,402 @@
+# https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467154
+
+Topic #467154: 1st place solution before team disqualification
+  Author: ln
+  Posted: 2024-01-11 10:00:12.749000
+  Votes: 58  Comments: 29
+
+1st Place Solution for the Linking Writing Processes to Writing Quality Competition
+
+First of all, I would like to express my gratitude to Kaggle and The Learning Agency Lab for organizing this wonderful competition. Thanks to the Kaggle community for sharing beautiful code and great ideas.
+I would like to thank my teammates @kurokurob, @ayaanjang, @takuji, @alansmithe for the great team work. Congrats @kurokurob with the GM title! He was our team leader and generated many valuable ideas.
+
+Summary
+
+Our "Private LB 0.557, Public LB 0.575" submission used the following 8 models.
+
+MODELS = [  
+   {: ,:},   
+   {: ,:},   
+   {: ,:},    
+   {: , :[], :[]},    
+   {: ,:},    
+   {: ,: },  
+   {: ,: },  
+   {: ,: },  
+]  
+INTERCEPT = -
+
+
+CV Strategy
+
+All models' CVs have been created with the following split. 
+This allows for proper weighting of the ensemble.
+
+skf = StratifiedKFold(n_splits=,shuffle=,random_state=)
+fold = np.zeros((train),dtype=)
+ n, (_, val_idx)  (skf.split(train, (train[] * ).astype())):
+   fold[val_idx] = n
+train[] = fold
+
+
+Ayaan part
+
+I created the following 3 models.
+
+
+
+ayaan-v8-LGBM.py
+
+
+LGBM model, CV 0.59759
+
+ayaan-v8-MLP.py
+
+
+MLP model, CV 0.59716
+
+ayaan-v9-LGBM.py
+
+
+LGBM model, CV 0.58993
+
+
+ayaan-v8-LGBM.py
+
+
+
+Model: LGBM (CV 0.59759)
+
+Total Feature number: 1,339
+
+Feature Engineering
+
+
+Solution based on "https://www.kaggle.com/code/alexryzhkov/lgbm-and-nn-on-sentences"
+
+get Essay() Ref.
+
+sentence aggregations features
+
+paragraphs aggregations features
+
+nonspace ngram features
+
+CountVectorizer features
+
+TFidfVectorizer features (「analyzer="char"」 is important.They boost CV by +0.005 and public by +0.003 depending on models. Thanks for finding, @alansmithe)
+
+class Preprocessor features Ref.
+
+Lagged Features (up_time_lagged, down_time_lagged, down_time_minus1_lagged)
+
+Time Differences and Aggregated Statistics
+
+
+logs[] = (logs[] - logs[]) / 
+group = logs.groupby()[]
+largest_lantency = group.()
+smallest_lantency = group.()
+...
+logs[] = (logs[] - logs[]) / 
+group = logs.groupby()[]
+iki_max = group.()
+iki_min = group.()
+
+
+
+
+Pause Durations
+
+
+pauses_half_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+pauses_1_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+pauses_1_half_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+pauses_2_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+pauses_3_sec = group.apply( x: (x &gt; ).())
+iki_pauses_half_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+iki_pauses_1_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+iki_pauses_1_half_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+iki_pauses_2_sec = group.apply( x: ((x &gt; ) &amp; (x &lt; )).())
+iki_pauses_3_sec = group.apply( x: (x &gt; ).())
+
+
+ayaan-v8-MLP.py
+
+
+
+Model: LightAutoML MLP (CV 0.59716)
+
+Total Feature number: 1,339
+
+Feature Engineering
+
+
+Same feature as “ayaan-v8-LGBM.py”
+
+
+ayaan-v9-LGBM.py
+
+
+
+Model: LGBM (CV 0.58993)
+
+Total Feature number: 1,390
+
+Feature Engineering
+
+
+Same feature as “ayaan-v8-LGBM.py”
+
+Added @nazarov, @takuji’s feature (This is a very powerful feature. Boosted CV 0.007+. More on this in the @nazarov and @takuji parts.)
+
+
+kuro_B part
+
+KAA_model2/KAA_model2_infer.py
+
+
+
+Model: LightAutoML denselight(CV0.6135 / public0.59)
+
+Total Feature number: 865
+
+Feature Engineering
+
+
+Based on this notebook. 
+
+Add some features. 
+
+
+a variant of split_essays_into_paragraphs /  compute_paragraph_aggregations(functions that splits essays by "\n\n" and make features for each segment.)
+
+
+This improved both cv &amp; public by + 0.001.
+
+Other features slightly improved  cv &amp; public.
+
+Important setting
+
+
+nn_params={"cont_embedder": "plr"}
+
+
+This setting improved cv by +0.01 and  public by +0.004.
+
+It's plr embedder mentioned in this paper.
+
+
+esprit part
+
+NLP model
+
+I created NLP models with reconstructed essays as input and scores as output.
+
+
+
+
+Essay reconstructor
+
+
+[Updated - 75.35% acc] Revealing hidden words
+
+Model
+
+
+Backbone: deberta-v3-base
+
+GPU I used: single RTX 3090
+
+Train time: 27 minutes / epoch
+
+What didn't work
+
+
+Using the constructor that does not output uppercase made the score slightly worse.
+
+Adding tokens like ["q" * n for i in range(16)] made the score worse.
+
+Adding pseudo-labeled Feedback 2 or Feedback 3 data to the training data did not improve scores.
+
+Changing the base model to the large model did little to improve scores.
+
+Best CV: 0.61083
+In the end, I created 8 models with 10 epochs training with all essays.
+
+
+ln part
+
+Ridge
+
+I was lucky to find my key to this competition early. It was a Ridge model.
+The ensemble, consisting of LGBM with 165 public and 51 of my features, a simple NN with two layers trained on the same features, and a Ridge model scored 0.561 on Private, which is strong gold. So I begin the description with Ridge. It was applied to Tfidf features with the following settings.
+
+ ():
+    text.split()
+all_essays = all_essays..replace(,,regex=)
+vec = TfidfVectorizer(tokenizer=word_tokenize, lowercase=, 
+                     token_pattern=,min_df=,ngram_range=(,upper))
+X = vec.fit_transform(all_essays)
+model = Ridge(alpha=)
+model.fit(X[:(target)],target)
+
+
+For upper from 7 to 4 the models CVs are {7:0.62832, 6:0.62829, 5:0.62964, 4:0.63795:}. The scores are not impressive, but they significantly improve the ensemble in both CV and LB.
+
+Feature engineering
+
+I will only describe the features that I created in the hope that they will differ from the publicly available ones.
+
+GridFeatureMaker
+
+While most of the public notebooks calculate statistics for gaps, this class makes the same for fixed 60 time intervals 30 seconds each. PCA factors are calculated for selected statistics. I used PCA in order to 
+
+
+
+Limit the number of features;
+
+Make features different from those calculated for gaps.
+
+
+KNNFeatureMaker
+
+Only 3 but rather strong features. KNN regressor predictions based on 
+
+
+
+statistics of the lengths of words;
+
+statistics of text_change;
+
+TfidfVectorizer features generated only by punctuation.
+
+
+External data features
+
+I fitted models to the following datasets with letters replaced by "q".
+
+
+
+FB3
+
+FB2
+
+AES
+
+IELTS
+The models' predictions for the competition dataset are very strong features. When @kurokurob added them to his model, the boost was 0.008. There were 10 days left until the end and all the models were already quite strong by this time. I fitted Ridge, text-CNN model and Deberta-v3-xsmall. In the final version FB2 and FB3 are predicted by Deberta-v3-xsmall, AES and IELTS by Ridge.
+
+
+Nonlinear models
+
+LGBM
+
+I started with the brilliant notebook of @awqatak  Silver-bullet. Special thanks to him. After adding my features and additional tuning I got 10-fold CV 0.58880.
+
+Simple NN with 2 FC layers and skip connection
+
+It was trained on the same features as LGBM, 10-fold CV 0.59084
+
+Deberta-v3-xsmall
+
+After teaming up with @takuji, I modified his training code and achieved with deberta-v3-xsmall trained on lowercase reconstructed essays (the output of fast essay constructor) performance close to base and large models, 5-fold CV 0.611-0.613. This model was used for fitting to external datasets and obtaining external data features.
+
+What didn’t work
+
+Training LM with small vocabulary from scratch
+
+Deberta tokenizer vocabulary doesn't contain tokens 'qqq','qqqq',… Here is the example
+
+tokenizer.tokenize()
+
+
+
+That’s why tokenizing essays we get very long sequences. We used max_len 2048 in our models. I created vocabulary consisting from punctuation, tokens like ‘q’*n and special tokens (55 tokens total), made a custom tokenizer for it, and tried to train deberta-v3-xsmall (and its variants with reduced dimension) from scratch on a large corpus with letters replaced by ‘q’ as MLM. I spent a lot of time on this project but failed. I couldn’t push the score below 0.63.
+
+Text CNN
+
+Best 5-fold CV was about 0.63 and it didn’t improve ensemble
+
+Other NN architectures
+
+I tried RNN, different variants of Transformer including the one presented by @pdnartreb in his winning solution with no success.
+PS. See this post about the reason of the team disqualification.
+
+Comments:
+├─ Marcus Chan (2024-01-11 14:16:41.763000) [+3]
+│  Great work - congratulations on the win!
+│  
+│  It really seems that most top teams had some combination of
+│  
+│  
+│  
+│  passing the anonymized text into a LLM, usually deberta
+│  
+│  used the silver bullet in their sol...
+├─ Gaurav Rawat (2024-01-12 01:31:38.040000) [+4]
+│  Congrats team other than the models nice work on deberta which think turned out as the secret sauce .Also we thought maybe assumed bert models will not work on anonymized data , though had this ide...
+  ├─ Donghoon Jang (2024-01-12 02:29:13.160000) [+5]
+  │  Thank you for your congratulations. @gauravbrills 
+  │  
+  │  I had a great teammate and had a lot of fun during the competition. Thank you to all the team members @nazarov @takuji @kurokurob @alansmithe bei...
+    ├─ Gaurav Rawat (2024-01-12 18:15:33.900000) [+0]
+    │  For tfidf did u guys use as meta feature via KNNFeatureMaker . As adding them directly didnt work well on our end .
+    ├─ yunsuxiaozi (2024-01-13 08:46:12.263000) [+0]
+    │  @Ayaan Jang Hello, I saw that your team has been removed from the leaderboard. Did you touch any rules? Our team has also encountered a similar situation. Can you communicate with us?
+    ├─ [deleted] (2024-01-13 12:58:57.867000) [+0]
+    │  [deleted]
+    ├─ ln (2024-01-13 12:59:36.283000) [+1]
+    │  @gauravbrills The KNN regressors were too weak to add to the ensemble as is, but their predictions turned out to be useful features.
+├─ RB (2024-01-11 16:05:04.903000) [+4]
+│  Congratulations and Thank you for sharing your solution. 
+│  
+│  Can you please elaborate more on the following part ? - 
+│  
+│  External data features
+│  I fitted models  the following datasets  letters replaced...
+  ├─ ln (2024-01-11 16:37:57.103000) [+4]
+  │  Suppose we have FB2. I replace letters with "q" and train deberta-v3-xsmall using the  columns ['content','wording'] as the target. Then I make predictions for reconstructed essays and obtain two f...
+    ├─ RB (2024-01-11 16:50:05.493000) [+1]
+    │  Thank you so much for clarification, I understand now.  Using FB2 dataset, you were able to add "content" and "wording" features for  this competition dataset.
+├─ Darragh (2024-01-11 10:54:53.213000) [+4]
+│  Great team work and write up; congratulations, despite any shake for teams, you deserve the win!
+  ├─ ln (2024-01-11 11:34:22.870000) [+1]
+  │  Thanks @darraghdog. Though being fourth might be frustrating for you and @christofhenkel, congrats with another gold!
+├─ DivineEmperor (2024-01-13 20:19:11.977000) [+1]
+│  Great work!
+├─ Athar Sayed (2024-01-12 02:49:29.180000) [+1]
+│  Congratulations on your win . Thanks for sharing . This is 3rd solution involving Deberta models , it seems like Deberta model is required to get top placement in this competition.
+├─ MrSimple (2024-01-13 13:50:27.547000) [+2]
+│  Congrats! Its interesting solution
+├─ yunsuxiaozi (2024-01-13 08:45:36.263000) [+2]
+│  Hello, I saw that your team has been removed from the leaderboard. Did you touch any rules? Our team has also encountered a similar situation. Can you communicate with us?
+├─ Nishant Singhal (2024-01-12 09:07:40.667000) [+2]
+│  Love the use of external datasets for additional model training, and creating strong features that further boosted your model's performance!!
+├─ Jason Heesang Lee (2024-01-11 15:54:31.573000) [+2]
+│  Congratulations!!
+  ├─ ln (2024-01-12 16:51:19.313000) [+0]
+  │  Thank you for your congratulations @jasonheesanglee, and thank you for your amazing notebook! BTW did you manage to improve accuracy compare to the public version?
+    ├─ Jason Heesang Lee (2024-01-12 18:37:32.557000) [+3]
+    │  @nazarov unfortunately nope…! It is shame to say but I was too busy with the final project for the course I was taking… couldn't concentrate on reconstruction anymore😢
+    │  I was actually curious if spe...
+├─ Anamika kumari (2024-01-11 14:57:37.910000) [+2]
+│  Great Going- Many many congratulation on the win!
+│  Thanks for your helpul notebook.
+  ├─ yunsuxiaozi (2024-01-13 08:46:50.367000) [+0]
+  │  Hello, I found that your team has been removed from the leaderboard. Did you touch any rules? Our team has also encountered a similar situation. Can you communicate with us?Thank you.
+├─ awqatak (2024-01-11 14:29:23.300000) [+2]
+│  Congratulations on the first place!
+│  Thanks for the mention :)
+├─ Anamika kumari (2024-02-09 22:05:08.423000) [+0]
+│  I find your notebook very intuitive. Thanks that you do bit elaboration on almost every part. I just want to ask a little doubt on this part that what is the intuition  behind doing it , actually i...
+  ├─ yunsuxiaozi (2024-02-10 10:32:06.447000) [+1]
+  │  There is a paper that mentions conducting experiments: https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/445545
+    ├─ Anamika kumari (2024-02-10 16:10:57.320000) [+0]
+    │  Thank YOU!
+├─ Verjin Vargheese (2024-02-03 04:44:31.713000) [+0]
+│  Great work
+├─ MAT (2024-01-12 22:14:56.270000) [+0]
+│  what happened to your 1st place? Just to understand rough reason
+  ├─ ln (2024-02-01 06:58:05.573000) [+1]
+  │  @mihailturlakov, see this post about the reason of the team disqualification.

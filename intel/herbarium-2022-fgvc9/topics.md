@@ -1,0 +1,41 @@
+# herbarium-2022-fgvc9 讨论区（按票数排序，共 39 条）
+
+- [ 💥 💥Useful Notebooks from Previous Herbarium Competitions 🔥🔥](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307745) — 38 票 / 18 评论 / 2022-02-15 
+- [JSON -> PANDAS📊](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307804) — 18 票 / 8 评论 / 2022-02-15 
+- [🥇🏆Prev Winning Solutions](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307624) — 18 票 / 9 评论 / 2022-02-15 **write-up?**
+- [Interpretable Fine-Grained Models and Machine teaching](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308406) — 16 票 / 2 评论 / 2022-02-18 
+- [Notebooks To Help You Get Started!](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/323794) — 15 票 / 7 评论 / 2022-05-08 
+- [🍀🌾🌼 Nice papers / References to know more about Herbarium☘🌳🌺](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307932) — 14 票 / 3 评论 / 2022-02-16 
+- [Welcome to Herbarium 2022!](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307792) — 13 票 / 12 评论 / 2022-02-15 
+- [Human-in-the-loop and Machine Learning.](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307851) — 13 票 / 0 评论 / 2022-02-15 
+- [839772 images in the training dataset!!](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307615) — 11 票 / 17 评论 / 2022-02-15 
+- [Some relevant papers on using deep learning for identifying Herbarium specimens](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307810) — 10 票 / 3 评论 / 2022-02-15 
+- [genus_id0 don't have 61 number how to solve it? ](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307877) — 10 票 / 2 评论 / 2022-02-16 
+- [Taxonomy Prediction](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308836) — 9 票 / 0 评论 / 2022-02-20 
+- [Adding ranking points and tiers ?](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/310277) — 8 票 / 5 评论 / 2022-02-28 
+- [How to extract plant from background - Salient Object Detection](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/311522) — 8 票 / 11 评论 / 2022-03-07 
+- [Please update the data description](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307729) — 8 票 / 1 评论 / 2022-02-15 
+- [[Paper] Herbarium sheet segmentation](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/315103) — 7 票 / 1 评论 / 2022-03-26 
+- [Feature matching LoFTR - Kornia (Open CV - SURF comparision)](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/311370) — 6 票 / 3 评论 / 2022-03-06 
+- [Long-tailed Learning in Machine Learning.](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/309087) — 6 票 / 2 评论 / 2022-02-21 
+- [Why all score are 0.00000 ?](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308181) — 6 票 / 9 评论 / 2022-02-17 
+- [Papers on Plant Image Detection](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308394) — 6 票 / 1 评论 / 2022-02-18 
+- [Summary of plant specimen classification outcomes from the previous literature ](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308713) — 6 票 / 1 评论 / 2022-02-19 
+- [CALL FOR PAPERS: 9th Annual Workshop on Fine-Grained Visual Categorization at CVPR 2022](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307777) — 5 票 / 0 评论 / 2022-02-15 
+- [1st place solution](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/329299) — 5 票 / 1 评论 / 2022-06-06 **write-up?**
+- [Papers on Plant Identification Deep Learning Techniques](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/321733) — 5 票 / 1 评论 / 2022-04-28 
+- [If you are presenting at CVPR 2022, here's how you can save on costs](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/315751) — 5 票 / 2 评论 / 2022-03-29 
+- [ResNet50 Result from Notebook Provided for PyTorch (Public F1=0.612 at Epoch 12)](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/312904) — 5 票 / 4 评论 / 2022-03-14 
+- [strong meta vision-transformer architechture pretrain support](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/312238) — 5 票 / 1 评论 / 2022-03-11 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307849) — 4 票 / 1 评论 / 2022-02-15 
+- [Competition Wrap Up](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/329802) — 4 票 / 2 评论 / 2022-06-08 
+- [Human Experts, Computational Models. ML and Human Knowledge.](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308258) — 3 票 / 0 评论 / 2022-02-17 
+- [TFrecords public dataset & example code for TPU training and inference](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/323811) — 2 票 / 3 评论 / 2022-05-08 
+- [Fascinating Competition](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/320436) — 2 票 / 0 评论 / 2022-04-21 
+- [step by step defreezing layers (idea)](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/326285) — 1 票 / 0 评论 / 2022-05-21 
+- [ResourceExhaustedError:  OOM when allocating tensor with shape[2097152,512]](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/310870) — 1 票 / 3 评论 / 2022-03-03 
+- [WeightedRandomSampler](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/326850) — 0 票 / 0 评论 / 2022-05-24 
+- [Data leakage (image duplicates)](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/323906) — 0 票 / 7 评论 / 2022-05-09 
+- [Question About The Test Data Labels](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/312875) — 0 票 / 4 评论 / 2022-03-14 
+- [How to properly address class imbalance? Class reweighting techinques for training long-tailed data.](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/316249) — 0 票 / 0 评论 / 2022-04-01 
+- [Team join for competition](https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/314725) — 0 票 / 1 评论 / 2022-03-24 

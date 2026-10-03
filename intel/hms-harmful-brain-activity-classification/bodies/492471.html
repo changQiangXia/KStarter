@@ -1,0 +1,98 @@
+<p>Thanks to kaggle and everyone involved for hosting such an interesting competition. We learned a lot about EEG data and how to create strong models for it. Special thanks to <a href="https://www.kaggle.com/darraghdog" target="_blank">@darraghdog</a> who carried most of the workload in the last weeks of the competition, when I was busy with training my first real life neural network. </p>
+<h2>TLDR</h2>
+<p>Our solution is an ensemble of multiple models from two diverse modeling approaches. The first approach is to apply pretrained 2d-CNN architectures to the MelSpectrogram transformation of the data. The second approach uses 1D-Convolutions to encode the raw eeg data before modeling with Squeezeformer blocks. <br>
+Key ingredients for our solution were a robust cross validation based on data selection and creative augmentations. </p>
+<h2>Cross validation and Data filtering</h2>
+<p>Having a solid cross validation was certainly key to doing well in this competition! So we spend a lot of time figuring out a good validation scheme. In general we used a 4fold validation setup, split by patient id. One key ingredient was filtering the val dataset for those rows only having more than 9 votes. The <a href="https://github.com/bdsp-core/IIIC-SPaRCNet/blob/main/IIIC_Classification-Supplemental.pdf" target="_blank">SPaRCNet paper</a> most likely explained how the data was created.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F3690bc48fab4ed74631ebd292ad0e421%2FScreenshot%202024-04-09%20at%2018.39.18.png?generation=1712680785774576&amp;alt=media"></p>
+<p>Not only was the test data filtered by having more than 9 votes, but also the data has been augmented by using the same labels but shifting the eeg data. This means that the given 106k training rows are highly redundant and can/ should be filtered. </p>
+<blockquote>
+  <p>We expanded the high- and low-quality sets of EEG segments by adding additional segments belonging to the<br>
+  same stationary period of the EEG</p>
+</blockquote>
+<p>This basically means the authors applied a shift-like augmentation to the raw eeg data to create more data and used same labels for the newly created data. This explains why there were so many rows for the same EEG_id having the same label. We believe that separating the original data from the augmented data makes the data cleaner and improved our cross validation. So we put some effort into reverse-engineering this process and finding the original “true” data point belonging to a given label. So we ended up with a filtered dataset of <strong>only 6350 rows</strong> which we used not only for validation using our 4fold scheme but also mainly used that for training, and discarded the other 100k rows. At the end we had a quite good cv/ lb correlation</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fccecc2d899a329f4d796640a966d5f53%2FScreenshot%202024-04-09%20at%2018.47.16.png?generation=1712681252795117&amp;alt=media"></p>
+<h2>Data sources</h2>
+<p>For 2D models, we had pretrained weights and we observed high data quality was important and we got no benefit from using pseudo labels and data with &lt;8 votes in the label. All models were trained with high quality data. </p>
+<p>Our 1D models were trained from scratch so it helped to also use the low count data. See below in the training procedure how low vote data was used in training. Pseudo labelling was not helpful for us - we tried a lot of things here.  </p>
+<p>In the end we did not use the 10 minute spectrograms. They may have helped slightly in the 2d model in some experiments but not in any major way. </p>
+<h2>Data preprocessing</h2>
+<p>No preprocessing of the data to disk was made, which really sped up experiments and allowed flexibility in approaches. We used torchaudio‘s GPU implementation to create the MelSpectrogram on the fly and normalized the signal. </p>
+<p>The double banana montage, explained by <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> was used throughout our solution. As mentioned by others, stacking 16 signals next to one another had limitations in that the each node would interact more strongly in the model with it’s neighbours. We experimented with ordering and found this order worked well, which essentially looks at the left and right side of the brain for each node together, <br>
+Fp1&gt;F7 Fp2&gt;F8 F7&gt;T3 F8&gt;T4 T3&gt;T5 T4&gt;T6 T5&gt;O1 T6&gt;O2 Fp1&gt;F3 Fp2&gt;F4 F3&gt;C3 F4&gt;C4 C3&gt;P3 C4&gt;P4 P3&gt;O1 P4&gt;O2</p>
+<p>Scipy implementation of butter bandpass filter was used with an order of 2, and lowpass of between 0 and 1.5 Hz on different models, and a highpass of between 20 and 30 Hz. No notchfilter was used. </p>
+<p>We observed it was important not to normalize the data batch-wise or sample-wise. We saw this in <a href="https://www.kaggle.com/medali1992" target="_blank">@medali1992</a> Resnet 1D GRU implementation -  Not sure if this is where the idea originally came from. Instead, after the butter filter, we used the logic implemented <code>x = x.clip(-1024, 1024) / 32.</code>. </p>
+<h2>Augmentations</h2>
+<p>For 2D models, we had pretrained weights and we observed high data quality was more important - not all augmentations helped. Our 1D models were trained from scratch so heavy augmentations were used. In both models, augmentation was highly effective. </p>
+<p>The following augmentations were used by boths models,</p>
+<ul>
+<li>Overwrite with zeros between 1 to 8 melspec nodes, from the total 16, in 50% of samples.</li>
+<li>Randomly choose a different narrower butter bandpass range in between 1 and 8 melspec nodes, from the total 16, in 20% of samples.</li>
+<li>In 50% of samples, randomly shift the 50s window around the center point by up to 20 seconds. </li>
+</ul>
+<p>In the 1D models only, </p>
+<ul>
+<li>In 50% of samples, left-right flip the signal time wise. </li>
+<li>In 50% of samples, switch the sides of the brain left-right.   </li>
+</ul>
+<p>In the 2D models only, </p>
+<ul>
+<li>In 50% of samples for the zoomed center, using a static 50s window, randomly shift the 10 second center point within the window by up to 5 seconds. </li>
+</ul>
+<h2>Models</h2>
+<h3>Melspec + 2D-CNN backbones</h3>
+<p>Like most other competitors we used pretrained 2D CNN backbones which we fed with melspec transformation of the data. However, we made several improvements to publicly known approaches. The first major boost comes from not combining the data into regions of the EEG electrodes (LL, LP, RP, RL) but creating 16 individual mel spectrograms for the double banana montage. We then concatenated the 16 images into one large image. In the last week we found another big improvement, by “zooming” onto the center 10sec. Zooming was applied with different window and hop lengths to increase diversity.  Mel-Spectrogram transformation are done as part of the model directly on GPU using torchaudios Mel-Spectrogram. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F2088a92e1f8bf11dbff9735ce5c9be94%2FScreenshot%202024-04-09%20at%2018.53.19.png?generation=1712681633116409&amp;alt=media"></p>
+<h3>1D-CNN + Squeezeformer blocks</h3>
+<p>Our 1d CNN was heavily inspired by the work of Yuri Sun <a href="https://www.kaggle.com/sunyuri" target="_blank">@sunyuri</a> , and particularly his implementation of a lightweight CNN for seizure detection (<a href="https://github.com/ThreePoundUniverse/2023JNE/blob/main/The_proposed_model.py" target="_blank">code and paper here</a>). As shown on the architecture the model focuses on grouped convolutions timewise and then channel wise. The first two blocks focus time-wise, keeping the channel information independent with grouped convolutions. After pooling the timewise information a channel wise convolution is made to interact across the nodes on the brain, and then another timewise convoltion. Technically we use conv2d, but the effect is like conv1d, only we can convolve over all channels in parallel. The original implementation used a CBAM attention block, we swapped this out and instead used 3 layers of squeezeformer. In addition we added pointwise convolutions before and after the depthwise convolutions which helped stabilite and learn better within the net. <br>
+As we train from scratch on relatively small data, keeping parameter count low was important. During ASL competition we had spent a lot of time on that, so leveraged our squeezeformer implementation from <a href="https://github.com/ChristofHenkel/kaggle-asl-fingerspelling-1st-place-solution/tree/main" target="_blank">there</a>. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fdc57c62c4a5e83a98435a20b780b6860%2FScreenshot%202024-04-09%20at%2018.55.46.png?generation=1712681758605758&amp;alt=media"></p>
+<h2>Training procedure</h2>
+<h3>Melspec + 2d CNN backbones</h3>
+<p>Training parameters used were generally 12 to 16 epochs, cosine learning rate decay with initial lr 0.0012 and batch size 32. Drop path was quite effective and set at 0.2. The main difference in the training was the granularity of the window lengths in the magnified 10 second window, different models were trained with different granularity and a mixnet_l and mixnet_xl backbones. </p>
+<h3>1D CNN + SqueezeFormer blocks</h3>
+<p>Training parameters used were ~32 epochs, cosine learning rate decay with initial lr 0.001 and batch size 64. When we used low vote samples, we increased batch size to 256. We used a hidden dimension of 128 and dropout (attention, ff, head, conv) were all 0.1, going deeper on hidden dimension or more layers did not help. <br>
+We trained 3 different version of the 1d model with respect to data. </p>
+<ul>
+<li>Only 8+ vote samples.</li>
+<li>3-8 vote count samples, and 8+ vote count samples. In each epoch the 3-8 votes dataset was subsampled; and a different loss was used for each set. We decayed the weight of the 3-8 batch over time, so it started with 0.8 weight and decayed with linear or cosine schedule to ~0.2 weight. This decay weighted loss was added to the loss of the 8+ vote dataset. </li>
+<li>Finally, we added 1-2 votes as a separate decayed weight loss, and trained it in the same manner together with the 3-8 vote set and the 8+ set. The 1-2 vote set was very noisy and thus started with a weight on 0.5 and finished with 0. </li>
+</ul>
+<p>For diversity, we trained some 1d models with butter bandpass order 0 and 1. They were not as strong but added some diversity in the blend. </p>
+<h2>Ensembling + Postprocessing</h2>
+<p>Up until the last day we had been using mean blend of weights, with a higher weighting on 2d models. 15 hours before the end, with the help of GPT4, we created a simple neural net to learn the best blend weight on the 23 base models. 5 of the models were 1D CNN with different training procedures. 18 of the models were Mixnet 2d CNNs, with different backbones, and 10 second magnification windows. <br>
+On CV the learned blend weights lifted the score but affect on public LB was not so large. <br>
+Earlier, we had been thinking that the distribution of the predictions were different to the distribution seen in the &gt;8 votes portion of the training dataset. So about 10 hours from the end we added a bias term for each of the 6 classes to the nnet. This bias would be added to the logits. CV difference was small, but when the Public LB score came through it jumped us from 9th to 4th position which was exciting. The nnet is quite simple, see below. On private score, over the final days, we had been in the 0.27 LB prize zone with most of our blends even with mean weights. </p>
+<pre><code> (nn.Module):
+     ():
+        (Net, ).__init__()
+        .fc = nn.Linear(n_models, , bias = False) 
+        .fc_c = torch.nn.Parameter(torch.zeros()[None,,None])
+     ():
+         . fc(x) + .fc_c
+</code></pre>
+<h2>Supplemental Data</h2>
+<p>No supplemental data was used</p>
+<h2>Ablation study (roughly)</h2>
+<ul>
+<li>Ordering of the 16 nodes signals  -0.02 </li>
+<li>Including low votes samples in 1D model  -0.01</li>
+<li>Augmentations -0.03 or more</li>
+<li>Magnify annotated window -0.006; and more by blending different views</li>
+<li>Remove sample wise and batch wise normalisation -0.02</li>
+<li>FC layer to learn blend weights -0.003</li>
+<li>Postprocessing with bias term -0.001</li>
+</ul>
+<p>Best single 1D model - 4 folds, 2 seed per fold - CV/Public/Private 0.257 / 0.25 / 0.30<br>
+Best single 2D model - 4 folds, 2 seed per fold - CV/Public/Private 0.232 / 0.24 / 0.29<br>
+Final blend 4 folds, 2 seed, 23 model per fold - CV/Public/Private 0.207 / 0.22 / 0.27</p>
+<h2>Used tools/ repos</h2>
+<p>Pytorch<br>
+Timm, huggingface, albumentations.<br>
+<a href="https://www.kaggle.com/darraghdog" target="_blank">@darraghdog</a> used a 4090 GPU instance rented from runpod.io<br>
+Neptune.ai was our MLOps stack to track, compare and share models. It was heavily used and allowed easy 4 fold <strong>grouped</strong> view of models and mean of the val scores for all folds - which made tracking a lot easier. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F7ef0101b2bb47fdcc1b99688221b47b9%2FScreenshot%202024-04-09%20at%2019.02.09.png?generation=1712682149182806&amp;alt=media"></p>
+<p>Thanks for reading. Questions are welcome. </p>
+<p>Edit:<br>
+Inference kernel: <a href="https://www.kaggle.com/code/darraghdog/3rd-place-solution" target="_blank">https://www.kaggle.com/code/darraghdog/3rd-place-solution</a> <br>
+github: <a href="https://github.com/darraghdog/kaggle-hms-3rd-place-solution" target="_blank">https://github.com/darraghdog/kaggle-hms-3rd-place-solution</a></p>

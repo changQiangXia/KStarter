@@ -1,0 +1,37 @@
+<p>Thanks for organizers hosting a nice competition.<br>
+I was really enjoined it!</p>
+
+<p>My initial plan was imitation learning first and then moving on to reinforcement learning. But due to the complicated action space of kore_2022, it took really long time for me to establish a successful model of imitation learning. Although my final solution was still on imitation learning phase,  I think this model could be applied to reinforcement learning.</p>
+<h2>Overview</h2>
+<ul>
+<li>Defining action space as causal language modeling(next word prediction) with "action strings tokenization".</li>
+<li>Model: Use encoder-decoder architecture.</li>
+<li>Need long training for getting imitation learning worked.</li>
+</ul>
+<h2>Action strings tokenization</h2>
+<p>It was really hard to define action space for neural network at this competition. I treated this problem as NLP, causal language modeling(next word prediction) with  the following "action strings tokenization".</p>
+
+<p><img src="https://user-images.githubusercontent.com/61892693/179348471-8547dfba-aeda-4d91-a38d-cd58ac6ddebd.png" alt="action_strings_tokenization"><br>
+Basically I used original characters at the action strings as token, but I added some modifications like below.</p>
+<ul>
+<li>Adding fleet destination tokens,  "<strong>HOME</strong>" (back to launched shipyard), "<strong>FRIEND</strong>"(go to a friend shipyard), "<strong>ENEMY</strong>"(go to a enemy shipyard),"<strong>CONSTRUCTION</strong>"constructing  shipyard),  and "<strong>DRIFT</strong>"( no shipyard destination).<br>
+At this competition, these destinations are fundamental choice for each launch action. And  I think a successful model can explicitly learn such a strategy, that's why I added this destination token on the <em>beginning</em> of the launch sequence  under causal language modeling.</li>
+<li>Splitting num_ships into  2 token positions. This increases the total sequence length, but reduce total token dimension or ids. By reducing the token dimension we could expect faster training convergence.</li>
+<li>"<strong>DO_NOTHING</strong>" token was introduced  for separating each shipyard action.</li>
+</ul>
+
+<p>This tokenization is inspired from the object detection method, "<a href="https://arxiv.org/abs/2109.10852" target="_blank">pix2seq</a>". At that study the coordinate of  object bounding box is discretized and then tokenized along with class label for solving object detection with language model.</p>
+<h2>Model</h2>
+<ul>
+<li>Based on the tokenization above, I can formulate the imitation learning of this competition as <a href="https://paperswithcode.com/task/image-captioning" target="_blank">image captioning task</a>, which is the mixture of  computer vision and NLP task.</li>
+</ul>
+
+<p><img src="https://user-images.githubusercontent.com/61892693/179348486-b0230c06-7d6b-42a7-ad66-38346f8eac95.png" alt="kore_2022_model"></p>
+<ul>
+<li><p>I basically used  the architecture of "<a href="https://arxiv.org/abs/2109.10852" target="_blank">pix2seq</a>" . </p>
+<ul>
+<li>pix2seq architecture: Vision-Encoder + Transformer-Encoder + Transformer-Decoder.</li></ul>
+<p>I modified the positional encoding from this architecture. At the vanilla transformer, positional encoding is added on only its input.  I followed the positional encoding usage of <a href="https://arxiv.org/abs/2005.12872" target="_blank">detr</a>,  at which positional encoding is added for each attention layer input(query and value).  By this modification, training convergence was improved.</p></li>
+<li><p>Before transformer layers, encoding kore board feature with custom <a href="https://arxiv.org/abs/2201.03545" target="_blank">ConvNeXt Block</a> with kernel size(3, 3) and TorusConv2d. TorusConv2d was used at hungry geese <a href="https://www.kaggle.com/competitions/hungry-geese/discussion/263279" target="_blank">1st place solution</a>.</p></li>
+<li><p>Unlike typical image captioning,  we have positional information for the target object, "shipyard" beforehand. So I added shipyard position (x, y) and shipyard internal sequence index on decoder input.</p></li>
+</ul>

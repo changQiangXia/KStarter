@@ -1,0 +1,255 @@
+# https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402969
+
+Topic #402969: 10th Place Solution
+  Author: CroDoc
+  Posted: 2023-04-20 13:45:12.795000
+  Votes: 36  Comments: 24
+
+The last few weeks have been intense, but in the end I am super happy that I've finally got my first solo gold medal. Great competition overall! It was great to see the stability between local validation and LB scores (even with using only 1.5% of the data as validation).
+
+The model training process involved a train-validation split, wherein batches 11-660 were utilized for training, and batches 1-10 were allocated for validation. An ensemble of 8 models was formed using hill climbing or Nelder-Mead optimization techniques, with a submission time of approximately 3-3.5 hours. The inclusion of more models in the ensemble resulted in a better score; however, since I was submitting the best blend only a few hours before the end of the competition, there was not enough time to do inference on a bigger ensemble. The same model architectures were trained multiple times and blended.
+
+The ensemble's local validation score was 0.97747, while the public and private LB scores were 0.976.
+
+Input data for the model consisted of the following 9 features per event: sensor_x, sensor_y, sensor_z, time, charge, auxiliary, is_main_sensor, is_deep_veto, and is_deep_core.
+
+Four model architectures have been selected for the final submission.
+
+Model 1:
+
+Validation score 1: 1.0016
+Validation score 2: 1.0005
+Loss function: CrossEntropyLoss
+
+Data preprocessing steps:
+
+
+
+sensor_x, sensor_y, and sensor_z are divided by 600
+
+time is divided by 1000 and subtracted by its minimum value
+
+charge is divided by 300
+
+
+ (pl.LightningModule):
+     ():
+
+    self.bin_num = 
+
+        self.gru = nn.GRU(, , num_layers=, dropout=, batch_first=, bidirectional=)
+        self.fc1 = nn.Sequential(nn.Linear(, ), nn.ReLU())
+        self.fc2 = nn.Linear(, bin_num*bin_num)
+
+     ():
+
+        batch_sizes = batch_sizes.cpu()
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.gru(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        x = self.fc2(x)
+
+         x
+
+
+Output bins were generated using code from @rsmits. 
+
+Models 2-4:
+
+Loss function: VonMisesFisher3DLoss
+
+Data preprocessing steps:
+
+
+
+sensor_x, sensor_y, and sensor_z are divided by 500
+
+time is scaled by subtracting 1.0e04 and dividing by 3.0e4
+
+charge is transformed using the logarithm base 10 and then divided by 3.0
+
+
+Validation score 3: 0.9847
+Validation score 4: 0.9859
+
+ (pl.LightningModule):
+     ():
+
+        self.bilstm = nn.LSTM(, , num_layers=, dropout=, batch_first=, bidirectional=)
+
+        self.fc1 = nn.Sequential(nn.Linear(, ), nn.ReLU())
+        self.dropout = nn.Dropout()
+        self.fc2 = nn.Linear(, )
+
+     ():
+
+        batch_sizes = batch_sizes.cpu()
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.bilstm(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        x = self.dropout(x)
+        pred = self.fc2(x)
+
+        kappa = pred.norm(dim=, p=) + 
+        pred_x = pred[:, ] / kappa
+        pred_y = pred[:, ] / kappa
+        pred_z = pred[:, ] / kappa
+        pred = torch.stack([pred_x, pred_y, pred_z, kappa], dim=)
+
+         pred
+
+
+Validation score 5: 0.9872
+Validation score 6: 0.9887
+
+ (pl.LightningModule):
+     ():
+        ().__init__()
+
+        self.embedding = nn.Linear(, )
+        self.bilstm = nn.LSTM(, , num_layers=, dropout=, batch_first=, bidirectional=)
+
+        self.fc1 = nn.Sequential(nn.Linear(, ), nn.ReLU())
+        self.fc2 = nn.Linear(, )
+
+     ():
+
+        x = self.embedding(x)
+
+        batch_sizes = batch_sizes.cpu()
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.bilstm(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        pred = self.fc2(x)
+
+        kappa = pred.norm(dim=, p=) + 
+        pred_x = pred[:, ] / kappa
+        pred_y = pred[:, ] / kappa
+        pred_z = pred[:, ] / kappa
+        pred = torch.stack([pred_x, pred_y, pred_z, kappa], dim=)
+
+         pred 
+
+
+Validation score 7: 0.9842
+Validation score 8: 0.9841
+
+ (pl.LightningModule):
+     ():
+
+        self.embedding = nn.Linear(, )
+
+        self.bilstm = nn.LSTM(, , num_layers=, dropout=, batch_first=, bidirectional=)
+
+        self.fc1 = nn.Sequential(nn.Linear(lstm_units, ), nn.ReLU())
+        self.fc2 = nn.Linear(, )
+
+     ():
+
+        batch_sizes = batch_sizes.cpu()
+
+        x = self.embedding(x)
+
+        x = pack_padded_sequence(x, batch_sizes, batch_first=, enforce_sorted=)
+        x, _ = self.bilstm(x)
+        x, _ = pad_packed_sequence(x, batch_first=)
+
+        x = x.(dim=)
+        x = x.div(batch_sizes.unsqueeze(-).cuda())
+
+        x = self.fc1(x)
+        pred = self.fc2(x)
+
+        kappa = pred.norm(dim=, p=) + 
+        pred_x = pred[:, ] / kappa
+        pred_y = pred[:, ] / kappa
+        pred_z = pred[:, ] / kappa
+        pred = torch.stack([pred_x, pred_y, pred_z, kappa], dim=)
+
+         pred
+
+
+Hyperparameters:
+Optimizer: Adam
+Scheduler: CosineAnnealingLR
+Batch size: 2048
+Max pulses: 128
+Max LR: 1e-3 or 5e-4
+Min LR: 1e-6
+Warmup steps: 2000
+Epochs: 10-15 (possibly a few extra fine tuning epochs)
+
+The DL library used for the competition was PyTorch (Lightning), which delivered better results than TensorFlow. While blending multiple models in TensorFlow, the code produced some unanticipated errors which I wasn't able to debug. It was just simpler to switch to PyTorch.
+
+I tried a few different transformer architectures, but didn't have enough time to push it through the end. I retrained a few models similar to graphnet (code from @amoshuangyc was very useful), but it didn't give a boost to the final ensemble.
+
+Comments:
+├─ DrHB (2023-04-20 14:40:20.383000) [+4]
+│  double congrats, on solo gold and also becoming GM!
+  ├─ CroDoc (2023-04-20 14:47:01.843000) [+3]
+  │  Thanks @drhabib! Great job on the 2nd position :)
+├─ junseonglee11 (2023-04-20 21:59:41.463000) [+1]
+│  Congratulations! It's very weird because I also saw many cases that the performance of the TensorFlow was worse than the PyTorch. Did you use CosineAnnealing lr schedule and were all other details ...
+  ├─ CroDoc (2023-04-20 22:04:34.667000) [+2]
+  │  @junseonglee11 This is the first time I tried TF. Not sure if I will try it again anytime soon. Wasted too much time.
+├─ SolverWorld (2023-04-20 17:55:13.153000) [+1]
+│  Congrats on solo gold finish!  How long did training 10 epochs x 650 batches take?
+  ├─ CroDoc (2023-04-20 20:09:54.017000) [+0]
+  │  I think the smallest model was 3.5h per epoch and the largest maybe 7h. It was a lot of electricity.
+    ├─ vialactea (2023-04-20 20:42:31.173000) [+1]
+    │  Congratulations on the solo gold and becoming Grand Master!
+    │  
+    │  What hardware did you use to run that: Kaggle, Colab, your own GPU, …?
+    ├─ CroDoc (2023-04-20 21:20:14.097000) [+1]
+    │  I have 6 RTX 3090s. I also rented a few A100s in the last 2 days.
+    ├─ SolverWorld (2023-04-20 23:00:36.383000) [+1]
+    │  Are the RTX 3090s in 6 separate cases?  Or did you find a magical way to cram them together.  I am really curious 🙄
+    ├─ CroDoc (2023-04-21 08:29:26.633000) [+3]
+    │  2 are in 2 prebuild gamer PCs. The last 4 are in the same case. @init27 helped me build the machine. You can see it in this post.
+    ├─ SolverWorld (2023-04-21 13:19:20.127000) [+1]
+    │  Wow, that's a nice build.  Too bad they discontinued the 3090 Turbos.
+    ├─ CroDoc (2023-04-21 13:39:34.607000) [+1]
+    │  Yea, it wasn't easy to find them. They seemed to be best buy at time. Maybe A5000 is a decent buy now?
+├─ Ravi Ramakrishnan (2023-04-20 17:40:40.690000) [+1]
+│  Hearty congratulations to you @crodoc for the excellent performance and a special congratulations for becoming a competitions grandmaster.
+  ├─ CroDoc (2023-04-21 08:40:28.087000) [+0]
+  │  Thanks @ravi20076 :) very happy to join the club :)
+├─ Ruslan Guseynov (2023-04-20 16:23:13.723000) [+1]
+│  Congrats with solo gold. Amazing improvement over the last week!
+  ├─ CroDoc (2023-04-20 20:18:36.970000) [+2]
+  │  @rusg77 this sub was late only by a few minutes. I started to blend models a few hours before the end (I went to do a short crossfit session instead of blending right away). This sub is 0.000001 be...
+├─ PSI (2023-04-20 16:13:33.313000) [+1]
+│  Congrats @crodoc ! this is just insane solo GOLD
+├─ KhanhVD (2023-04-20 16:04:37.693000) [+1]
+│  Congrats on solo gold and becoming GM @crodoc! Thanks for sharing your solution.
+├─ Man of the year (2023-04-20 15:14:38.613000) [+1]
+│  @crodoc congratulations on becoming GM!
+│  
+│  The solution is very similar to what we did with LSTMs. Were there any additional tricks with these models, that predicted a XYZ vector? Did you predict a n...
+  ├─ CroDoc (2023-04-20 15:20:31.353000) [+2]
+  │  @manwithaflower did you use TF or PyTorch? I was getting a worse score in TF. No idea why.
+  │  
+  │  For the xyz prediction, I used it practically the same as they suggested in graphnet.
+    ├─ Man of the year (2023-04-20 15:30:06.103000) [+2]
+    │  Yes, TF. Maybe that was the problem. Very strange. But this is so funny, when I read this yours code and hyperparams, I'm just saying "wow, literally me 😂". Congrats again! I'll remember that I nee...
+    ├─ CroDoc (2023-04-20 15:33:54.340000) [+1]
+    │  I really had a negative experience with TF in this competiton. At some point even submission inference was crashing non-stop. 🤷‍♂️
+├─ Ravi Shah (2023-04-20 15:10:26.847000) [+1]
+│  Congrats on becoming a GM @crodoc! Thanks for sharing the write up!
+  ├─ CroDoc (2023-04-20 15:22:27.790000) [+1]
+  │  Thank you 🎉

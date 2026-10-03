@@ -1,0 +1,82 @@
+# google-code-golf-2025 讨论区（按票数排序，共 80 条）
+
+- [Parallel Sampling + Rule-based Prompt Generation (4th place)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614124) — 52 票 / 11 评论 / 2025-11-01 **write-up?**
+- [Share individual task scores here!](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596679) — 44 票 / 4 评论 / 2025-08-04 
+- [Link to solutions](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613968) — 41 票 / 19 评论 / 2025-10-31 **write-up?**
+- [8th place write-up: import itertools](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/615039) — 36 票 / 5 评论 / 2025-11-08 **write-up?**
+- [Getting to Rank 25 by Teaching LLMs to Golf](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614024) — 34 票 / 13 评论 / 2025-10-31 
+- [Final 3 Days: Could People Pause Solution Releases?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613583) — 31 票 / 9 评论 / 2025-10-28 **write-up?**
+- [5th-Place writeup (with Better Compression Algorithm and Seed Cracking)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614225) — 27 票 / 4 评论 / 2025-11-02 **write-up?**
+- [1st place write-up: Code Golf International](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614092) — 27 票 / 2 评论 / 2025-11-08 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/618673) — 24 票 / 3 评论 / 2025-11-13 **write-up?**
+- [Fun Competition - What is better? - "Solutions By Hand" or "Solutions By LLM"?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/608310) — 24 票 / 16 评论 / 2025-09-19 **write-up?**
+- [🎯 ARC Starter Solutions - All 400 Tasks](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/608190) — 20 票 / 1 评论 / 2025-09-18 **write-up?**
+- [All 400 tasks verify locally but 1 fails during submit :-(](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/612305) — 19 票 / 21 评论 / 2025-10-18 
+- [[Resolved] Instructions for Reporting a Vulnerability (Found a method to achieve 960K+)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/599368) — 18 票 / 1 评论 / 2025-08-15 
+- [Critical Scoring Exploit and a Call for a Fair Leaderboard](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/597956) — 18 票 / 5 评论 / 2025-08-08 
+- [See scores for individual problems](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594070) — 18 票 / 3 评论 / 2025-08-01 
+- [Is private LB different than public LB?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/608312) — 18 票 / 4 评论 / 2025-09-19 
+- [Disappointment for golfers](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594000) — 18 票 / 1 评论 / 2025-08-01 
+- [19th Place Yuchen20 part of write up (a LLM agentic solution)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614729) — 17 票 / 2 评论 / 2025-11-06 **write-up?**
+- [9th place write-up](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614150) — 17 票 / 2 评论 / 2025-11-01 **write-up?**
+- [[RESOLVED] Fix Scoring Metric](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/599918) — 16 票 / 7 评论 / 2025-08-19 
+- [ARC-AGI Workbench - Open Source Tool for ARC Prize Contestants](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/607514) — 15 票 / 10 评论 / 2025-09-14 
+- [Google code golf championship 2026 ?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613857) — 14 票 / 1 评论 / 2025-10-30 
+- [7th place write-up: LogicLynx](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/619321) — 13 票 / 2 评论 / 2025-11-13 **write-up?**
+- [Solution time limit](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596328) — 13 票 / 3 评论 / 2025-08-02 **write-up?**
+- [Question about Compression and Decompression.](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/612226) — 13 票 / 8 评论 / 2025-10-17 
+- [GCGC @ NeurIPS 2025](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/655077) — 12 票 / 0 评论 / 2025-12-08 
+- [GGWP to all, and where you can find more code golf competitions](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613948) — 12 票 / 1 评论 / 2025-10-31 
+- [Our worst 20 solutions lol](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613437) — 12 票 / 5 评论 / 2025-10-26 **write-up?**
+- [Metric hack?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594027) — 12 票 / 3 评论 / 2025-08-01 
+- [[Completed] Leaderboard update in process to reflect metric overhaul](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/599897) — 11 票 / 46 评论 / 2025-08-19 
+- [15th Place Solution](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614727) — 11 票 / 0 评论 / 2025-11-06 **write-up?**
+- [Memorable solutions](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614199) — 11 票 / 4 评论 / 2025-11-01 **write-up?**
+- [NeurIPS 2025 Special Session](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/611954) — 10 票 / 1 评论 / 2025-10-15 
+- [Golf Tasks 2 AGI ARC 1 Ids ( We can copy old solutions )](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594035) — 10 票 / 0 评论 / 2025-08-01 **write-up?**
+- [Is calling other langauges from python accepted?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594030) — 10 票 / 3 评论 / 2025-08-01 
+- [6th Place Solution for Google Code Golf Championship](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/615145) — 10 票 / 0 评论 / 2025-11-09 **write-up?**
+- [ 🎯 Top 100 Tasks Worth Optimizing](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/608435) — 10 票 / 7 评论 / 2025-09-20 
+- [Guess the Final Winning Score of Code Golf 2025](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/599060) — 10 票 / 13 评论 / 2025-08-14 **write-up?**
+- [Task 076 - problematic validation test cases](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596884) — 9 票 / 5 评论 / 2025-08-05 
+- [What does "functionally correct" mean?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596727) — 9 票 / 3 评论 / 2025-08-05 
+- [ARC-AGI Manual Solver Playground](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596225) — 9 票 / 0 评论 / 2025-08-02 
+- [Code Golfers Assemble! ⛳](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/593942) — 8 票 / 14 评论 / 2025-07-31 
+- [Inconsistency in Task 363](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/597688) — 8 票 / 5 评论 / 2025-08-07 
+- [Visualization I Used](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613942) — 8 票 / 1 评论 / 2025-10-31 
+- [Golfed Programs + Golfing Tricks](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613959) — 8 票 / 1 评论 / 2025-10-31 
+- [Contest Notebook Updated!](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/600440) — 8 票 / 0 评论 / 2025-08-22 
+- [ARC-AGI Workbench v2.0 - Update](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/609844) — 8 票 / 2 评论 / 2025-09-30 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/591657) — 7 票 / 5 评论 / 2025-07-29 
+- [Strict type requirements in solutions](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596469) — 7 票 / 1 评论 / 2025-08-03 **write-up?**
+- [ARC-AGI Workbench v3.0 - Compression Metrics & Smarter Ordering!](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613448) — 7 票 / 5 评论 / 2025-10-26 
+- [Public notebooks locked?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/604940) — 7 票 / 5 评论 / 2025-09-07 
+- [How many problems can be solved with regular expressions?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/612624) — 7 票 / 3 评论 / 2025-10-21 
+- [3rd place submission: ox jam! 🎤🐂🎸🐂🎷🐂🥁🐂🎹🐂](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/619624) — 7 票 / 0 评论 / 2025-11-14 **write-up?**
+- [Using sh In Solutions](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/608989) — 7 票 / 10 评论 / 2025-09-23 **write-up?**
+- [The `Data` doesn't match with the Submissions Server Data?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/600010) — 6 票 / 5 评论 / 2025-08-20 
+- [Reusable functions](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/597909) — 6 票 / 5 评论 / 2025-08-07 
+- [Python version?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596322) — 6 票 / 2 评论 / 2025-08-02 
+- [We have the solutions of all 400 tasks though](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594072) — 6 票 / 8 评论 / 2025-08-01 **write-up?**
+- [Personal summary of Code Golf competition](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614376) — 6 票 / 1 评论 / 2025-11-03 
+- [How do you golf neighbor checks? (task279)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/611930) — 6 票 / 6 评论 / 2025-10-15 
+- [Security issue in the evaluation system and the "Longest Leader" prize](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594023) — 6 票 / 1 评论 / 2025-08-01 
+- [Google Code Golf 2025 — TOP 78 Tricks (all top combined - score 963064)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614082) — 6 票 / 0 评论 / 2025-11-01 
+- [Contributions from non-competitors outside the team](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596468) — 5 票 / 7 评论 / 2025-08-03 
+- [ A NeurIPS 2023 paper that is strongly correlated with this competition](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/597797) — 5 票 / 0 评论 / 2025-08-07 
+- [Separate (non-prize worthy) submission for solutions that don't use zlib compression?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/604947) — 5 票 / 1 评论 / 2025-09-07 **write-up?**
+- [Will uncaught exploits be tolerated?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594093) — 5 票 / 4 评论 / 2025-08-01 
+- [Diagonal Extention (task034)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/612504) — 5 票 / 15 评论 / 2025-10-20 
+- [Play Golf (ARC) or Jump to Playground S.5 Ep.8?  Big Decision on my Mind 😁](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/593991) — 5 票 / 0 评论 / 2025-07-31 
+- [Coloured Debugging Tool in Command Line](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/600638) — 5 票 / 0 评论 / 2025-08-24 
+- [Team Merge Deadline Approaching — Looking for Teammates!](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/611549) — 4 票 / 3 评论 / 2025-10-12 
+- [🌱 [Off-topic] As a Beginner: How Do You Balance Kaggle Competitions with Other Work?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/611311) — 4 票 / 7 评论 / 2025-10-10 
+- [Exploring ARC-DSL Performance on Unsolved 59 ARC Tasks](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/607272) — 4 票 / 3 评论 / 2025-09-12 
+- [The community hit 963,360 (all time high score)](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614146) — 4 票 / 13 评论 / 2025-11-01 
+- [Import required in submission but not in verify_program?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/594052) — 4 票 / 15 评论 / 2025-08-01 
+- [Are null bytes allowed in submissions?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596337) — 4 票 / 0 评论 / 2025-08-03 
+- [All of my solutions to this competition](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/614023) — 4 票 / 0 评论 / 2025-10-31 **write-up?**
+- [Congratulations to everyone who participated in this competition!](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613949) — 4 票 / 2 评论 / 2025-10-31 
+- [Surprisingly, I hadn't fallen 100's of ranks behind this time](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/613877) — 4 票 / 7 评论 / 2025-10-30 
+- [Alternative ARC like datasets](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596560) — 3 票 / 1 评论 / 2025-08-04 
+- [Is it allowed to import submodules from permitted standard libraries?](https://www.kaggle.com/competitions/google-code-golf-2025/discussion/596512) — 3 票 / 1 评论 / 2025-08-04 

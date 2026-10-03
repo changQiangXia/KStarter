@@ -1,0 +1,82 @@
+# leap-atmospheric-physics-ai-climsim 讨论区（按票数排序，共 80 条）
+
+- [Two tips to get LB0.7+](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/506984) — 109 票 / 28 评论 / 2024-05-24 
+- [1st place solution for the LEAP competition](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523063) — 82 票 / 20 评论 / 2024-07-30 **write-up?**
+- [[Confirmation Request]: Availability of Reverse-engineered Timestamp & Location Data on the Test Set](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/511911) — 76 票 / 118 评论 / 2024-06-12 
+- [Let’s Share Domain Knowledge!](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/508630) — 64 票 / 11 评论 / 2024-05-30 
+- [A formal request from the host to disqualify leak-based solutions](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519249) — 51 票 / 144 评论 / 2024-07-10 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523055) — 47 票 / 4 评论 / 2024-07-30 **write-up?**
+- [The secret for beating baseline](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/501829) — 46 票 / 43 评论 / 2024-05-10 
+- [Starter references and onboarding materials ](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/494968) — 43 票 / 14 评论 / 2024-04-19 
+- [max=2523σ: How Extreme this Competition's Setup is](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/506490) — 42 票 / 25 评论 / 2024-05-22 
+- [Dealing with Large Datasets. Kaggle Notebooks, Topics and Competitions.](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/494928) — 37 票 / 4 评论 / 2024-04-19 
+- [A severely underrated comment which raises a lot of questions](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/502484) — 37 票 / 14 评论 / 2024-05-13 
+- [4th place solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523042) — 34 票 / 1 评论 / 2024-07-29 **write-up?**
+- [Hack the Planet (Simulator)](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519184) — 34 票 / 46 评论 / 2024-07-10 
+- [10th Place Solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523041) — 33 票 / 2 评论 / 2024-07-30 **write-up?**
+- [[5th solution]: Ensemble of Bidirectional LSTM based Models](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523040) — 32 票 / 1 评论 / 2024-07-29 **write-up?**
+- [A reminder for top teams to refrain from publishing solutions](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/520084) — 32 票 / 21 评论 / 2024-07-14 **write-up?**
+- [The risk of underflow when converting to FP32](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/500816) — 32 票 / 4 评论 / 2024-05-07 
+- [Visualization of overfitting (?)](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/514698) — 31 票 / 9 评论 / 2024-06-25 
+- [Kaggle Competition Update [IMPORTANT]](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/513193) — 31 票 / 36 评论 / 2024-06-19 
+- [Why location and timestamps are not provided?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495258) — 30 票 / 22 评论 / 2024-04-20 
+- [3rd place solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523077) — 29 票 / 8 评论 / 2024-07-30 **write-up?**
+- [Viewing the leaderboards](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/520417) — 28 票 / 5 评论 / 2024-07-16 
+- [Is Tropical Cylones Key to Win this Competition?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/511274) — 26 票 / 25 评论 / 2024-06-10 
+- [CONFUSION and POTENTIAL issue about evaluation metric](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495255) — 26 票 / 10 评论 / 2024-04-20 
+- [8th solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523223) — 25 票 / 5 评论 / 2024-08-01 **write-up?**
+- [New paper relevant to this competition](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/516605) — 25 票 / 8 评论 / 2024-07-03 
+- [[COMPLETE] Data update is in progress](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/513142) — 22 票 / 4 评论 / 2024-06-18 
+- [Let's share CV-LB Insights  here 🔥](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/498194) — 22 票 / 21 评论 / 2024-04-27 
+- [I got my worst score ever in my Kaggle life.](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495125) — 21 票 / 12 评论 / 2024-04-19 
+- [Request for clarity on how rules will be enforced](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519720) — 20 票 / 48 评论 / 2024-07-12 
+- [Zero Variance Columns](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/496455) — 20 票 / 4 评论 / 2024-04-21 
+- [[9th place] brief solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523271) — 20 票 / 2 评论 / 2024-07-31 **write-up?**
+- [Useful code and comparison result of save speeds between Polars and Pandas](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495128) — 20 票 / 8 评论 / 2024-04-19 
+- [LEAP memes thread](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519372) — 19 票 / 10 评论 / 2024-07-10 
+- [Are Conservation Laws Important?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/515535) — 19 票 / 9 评论 / 2024-06-28 
+- [Some good practices for experiment tracking](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/500042) — 18 票 / 0 评论 / 2024-05-04 
+- [Dataset introductory video from [NeurIPS 2023]](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/496712) — 18 票 / 2 评论 / 2024-04-22 
+- [Best Single Model](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/511548) — 18 票 / 56 评论 / 2024-06-11 
+- [Understanding the E3SM-MMF climate model](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495137) — 18 票 / 1 评论 / 2024-04-19 
+- [27th Place Solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523129) — 17 票 / 0 评论 / 2024-07-30 **write-up?**
+- [HDF5 training data](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/497304) — 16 票 / 2 评论 / 2024-04-24 
+- [How many targets can we predict?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/499896) — 16 票 / 8 评论 / 2024-05-03 
+- [7th place solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/524111) — 15 票 / 0 评论 / 2024-10-14 **write-up?**
+- [Can model with 1M parameters achieve R2 score greater than 0.76?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/513675) — 15 票 / 21 评论 / 2024-06-21 
+- [Conservation laws](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/508272) — 14 票 / 8 评论 / 2024-05-29 
+- [Does the low-resolution data amount to 744GB?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495109) — 14 票 / 4 评论 / 2024-04-19 **write-up?**
+- [Kaggle Competition Update [NEW]](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519772) — 13 票 / 45 评论 / 2024-07-12 
+- [Ok, top guys, TELL US WHAT YOU DID ALREADY!](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/520794) — 13 票 / 2 评论 / 2024-07-17 
+- [⚠️ Remember to multiply by sample submission ⚠️](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495127) — 13 票 / 10 评论 / 2024-04-19 
+- [Lots of negative r2 scores after multiplying with new weights](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/513220) — 13 票 / 17 评论 / 2024-06-19 
+- [How can Zhang San be penalized?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519623) — 12 票 / 17 评论 / 2024-07-12 
+- [We are lifting the solutions embargo.](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523033) — 11 票 / 2 评论 / 2024-07-29 **write-up?**
+- [Big distribution differences between features in train and test set](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/506427) — 11 票 / 2 评论 / 2024-05-21 
+- [Many columns with one unique value in the training set.](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495301) — 11 票 / 7 评论 / 2024-04-20 
+- [ [47th place solution] Pytorch Lightning Framework + Column-wise Ensemble](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523105) — 11 票 / 3 评论 / 2024-07-30 **write-up?**
+- [11th Place Solution for the LEAP - Atmospheric Physics using AI (ClimSim) Competition](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/523087) — 11 票 / 1 评论 / 2024-07-30 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/494924) — 9 票 / 6 评论 / 2024-04-18 
+- [Get started here!](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/488278) — 9 票 / 3 评论 / 2024-04-01 
+- [High temperature values](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/496886) — 9 票 / 0 评论 / 2024-04-22 
+- [About new test set](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/514200) — 9 票 / 6 评论 / 2024-06-23 
+- [Ensemble of models improvement](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/515017) — 9 票 / 26 评论 / 2024-06-26 
+- [Number of Medals](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/513282) — 9 票 / 5 评论 / 2024-06-19 
+- [Where to send your scripts for verification](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/520378) — 9 票 / 10 评论 / 2024-07-15 
+- [Questions about the criteria for leaks](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519575) — 8 票 / 25 评论 / 2024-07-11 
+- [14th place solution](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/529393) — 8 票 / 1 评论 / 2024-08-20 **write-up?**
+- [Leaky Solutions](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/520424) — 8 票 / 2 评论 / 2024-07-16 **write-up?**
+- [Question about team removal](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/498959) — 8 票 / 9 评论 / 2024-04-30 
+- [Is this an inverse problem?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/502880) — 7 票 / 4 评论 / 2024-05-15 
+- [Does 'pseudo labeling' correspond to inference from multiple rows?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519233) — 7 票 / 11 评论 / 2024-07-10 
+- [How to submit parquet file to Kaggle?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/501903) — 7 票 / 1 评论 / 2024-05-11 
+- [The baseline and goal are 2D, but the data is 1D?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/497823) — 7 票 / 5 评论 / 2024-04-25 
+- [A theoretically interesting approach](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/495129) — 6 票 / 2 评论 / 2024-04-19 
+- [How to scale input features and targets? ](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/498806) — 6 票 / 6 评论 / 2024-04-29 
+- [What's your first epoch validation R2?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/514020) — 6 票 / 12 评论 / 2024-06-22 
+- [Large negative values when predicting with new test data&weights](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/513514) — 6 票 / 12 评论 / 2024-06-20 
+- [How did you get good at building NN models?](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/519513) — 5 票 / 14 评论 / 2024-07-11 
+- [Some thoughts from an analysis of R2 per target](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/503219) — 5 票 / 4 评论 / 2024-05-16 
+- [This competition has officially pushed science forward. Congrats!!!](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/611375) — 3 票 / 0 评论 / 2025-10-10 
+- [The test set for this competition is now publicly available!](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/524695) — 3 票 / 0 评论 / 2024-08-07 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/leap-atmospheric-physics-ai-climsim/discussion/521750) — 3 票 / 7 评论 / 2024-07-22 

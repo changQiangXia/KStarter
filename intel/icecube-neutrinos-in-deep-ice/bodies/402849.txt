@@ -1,0 +1,65 @@
+# https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402849
+
+Topic #402849: 9th Place Solution: GNNs Ensemble and MLP Stacking
+  Author: Dmitriy Ukrainskiy
+  Posted: 2023-04-20 00:07:28.834000
+  Votes: 41  Comments: 4
+
+First of all, we want to thank Kaggle and IceCube Collaboration for providing this spectacular competition!
+
+Our solution is based on an MLP stack with shared weights of 6 DynEdge models + a blend of 4 GNNs inside the segments by pulse number.
+
+1. Model Zoo
+
+We took the GraphNeT model with DynEdge architecture as a baseline and modified it in different ways. Main variations and their nicknames:
+
+
+
+v1 Vanilla. Changed the KNN value and included additional pooling schemes. Replaced Adam optimizer with QHAdam.
+
+v2 Bigman. Added more layers and made them wider. Changed activation functions to SiLU (they proved to be very powerful in various domains). Added Batch Normalization layers.
+
+v3 DynEmb. To account for ice heterogeneity, we integrated sensor embeddings into the model (embeddings are initialized by XYZ coordinates). This approach can be generalized and used with any type of Observatory that has sensors distributed in ice or water. We also added Weight Normalization and switched to FP16 training with the new Lion optimizer. For this model, we published a submission example that gives the top 20 LB in solo for 1 hour 20 minutes.
+
+
+2. Training Protocol
+
+Every model had longrun training from scratch with von Mises-Fisher Loss on events up to 600 pulses. Then a couple of additional epochs were trained with Euclidean Distance Loss and up to 200 pulses. As @rusg77 noted below, this loss works much better than the original one for second-stage training. The details on the optimizer choice and second-stage training strategy are presented by @churkinnikita in the comment section.
+
+3. Ensembling
+
+Finally, SWA was applied to the best checkpoints of each model for better robustness. As a result, we had v1, v2, v3 models with performance &lt; 1.000 LB and v1, v2, v3 models with performance &lt; 0.990 LB. These 6 models were blended and stacked. Stack showed better performance ~ 0.977 LB in the very final version, @simakov added the details below.
+
+4. Alternative Approach
+
+Another part of our solution consists of several GNN models for different neutrino events. The dataset was segmented by ten uniformly bins on pulse number (that represents energy levels of neutrino), and 4 new models were trained on their compositions. Eventually, the models were blended segment by segment, @rusg77 added the details on this part of the solution in the post here.
+
+5. Results
+
+The final model is a 60 / 40 blend of 6-stacked / 4-segmented GNNs and shows 0.975 LB (0.976 Private). We used a blend of stacked models to improve the overall stability of the ensemble and reduce the variance of individual models. We also hope this approach leads to better resilience of the model to possible noise in the data.
+
+For sure, Transformer-based models have great performance on the task, but a diversified ensemble of properly tuned GNNs can also show a keen score on the considered reconstruction problem.
+
+Comments:
+├─ DmitryS (2023-04-20 00:13:56.137000) [+10]
+│  Stack Model:
+│  
+│   (nn.Module):
+│       ():
+│          (MLPShared, self).__init__()
+│  
+│          self.fc1 = nn.Linear(, ) 
+│          self.fc2 = nn.Linear(+, )
+│          self.fc3 = nn.Linear(+, )
+│  
+│          self.act = ...
+├─ Ruslan Guseynov (2023-04-20 00:22:36.920000) [+7]
+│  EuclideanDistanceLoss shows better performance for pretrained models
+├─ Nikita Churkin (2023-04-20 16:49:24.413000) [+6]
+│  GNN Training Process.
+│  
+│  Inital loss is von Mises-Fisher 3D Loss. For initial network learning we used QHAdam, AdamW and Lion optimizers.
+│  
+│  I have already touched Lion in my previous competition. Lear...
+├─ DS_Blonde_Sofa (2023-04-20 15:17:11.103000) [+3]
+│  Congratulations on your gold medals! Solid purely-GNN score.

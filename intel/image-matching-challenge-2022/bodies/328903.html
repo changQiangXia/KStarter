@@ -1,0 +1,88 @@
+<p>First of all, I'd like to thank Kaggle staff and the organizers for  organizing this very practical and challenging competition. <br>
+Our team is ranked 10th on the private leader board. </p>
+<h2><strong>Overview</strong></h2>
+<p><a href="https://postimg.cc/64yWk0Kn" target="_blank"><img src="https://i.postimg.cc/QCqFW4n4/IMC2022-10th.png" alt="IMC2022-10th.png"></a></p>
+<p>The solution can be summarized as below.</p>
+<h2><strong>Key Points</strong></h2>
+<ul>
+<li>Ensemble with DKM-ROI</li>
+<li>Make Faster and Better Estimation</li>
+<li>Outlier Handling</li>
+<li>Trust CV</li>
+</ul>
+<h2>Ensemble with DKM-ROI</h2>
+<p>DKM showed a robust tendency in our experiments. It can find many correspondence points almost all the time, but peak performance was a shortage as compared with another algorithm. </p>
+<p>From this tendency, we regarded DKM as an “Average Hitter”. And used it for making cropped images as ROI in the following steps.</p>
+<ol>
+<li>Inference with DKM and calculate confidence threshold using Otsu's method</li>
+<li>Filtering correspondence points using calculated threshold</li>
+<li>Making a bounding box with filtered correspondence points  </li>
+<li>Cropping image from bounding box region</li>
+<li>Ensemble with LoFTR, SE2-LoFTR, and SuperGlue</li>
+</ol>
+<p>A sample result of ROI extraction by DKM-ROI is shown below</p>
+<p><a href="https://postimg.cc/HjZz0yhy" target="_blank"><img src="https://i.postimg.cc/TYGs6jjC/Untitled.png" alt="Untitled.png"></a></p>
+<p>Figure.1 confidence map of points confirmed by DKM</p>
+<p><a href="https://postimg.cc/Whc3H9CL" target="_blank"><img src="https://i.postimg.cc/3JdvWVZR/Untitled.png" alt="Untitled.png"></a></p>
+<p>Figure.2 Binarized result of the confidence map by Otsu’s method</p>
+<p><a href="https://postimg.cc/62ds2h0n" target="_blank"><img src="https://i.postimg.cc/C12w2PnP/Untitled-1.png" alt="Untitled-1.png"></a></p>
+<p>Figure.3 bbox of the corresponding point on the original image</p>
+<p>Basically Ensemble with DKM-ROI worked well. It makes finding key points easier. But sometimes it missed important regions. As a simple countermeasure for this issue, our solution does not only ensemble with DKM-ROI ensemble and also inference with the original image using LoFTR and ensemble with it. </p>
+<h2>Make Faster and Better Estimation</h2>
+<p>As with usual competition, one of the important points of this competition is increasing inference time somehow or other. Typical ideas of our solutions are below:</p>
+<ul>
+<li>Pipelining:<ul>
+<li>We optimized the overall process as a multithreading implementation. It can be described as three components. 1. Preprocess(e.g. load image), 2. Inference(e.g. matcher), 3 . Postprocess(e.g. RANSAC) . Our solution ran multithread to process those parallels. Especially for the tasks in this competition, pipelining is very effective, because GPU processing and CPU processing are highly loaded with different processes.</li></ul></li>
+<li>Key points NMS: <ul>
+<li>Detected key points are usually noisy and redundant. It makes time to calculate. To avoid this issue, we used NMS algorithms for key points.  The name SSC (Suppression via Square Covering). SSC could reduce processing time while maintaining accuracy.</li></ul></li>
+<li>Weighted Random sampling:<ul>
+<li>For the same reason, we tried to reduce the number of key points fed to RANSAC in a way that would maintain estimation accuracy. As an approach, we applied the weighted random sampling algorithm used in DKM to the key point ensemble results.</li></ul></li>
+</ul>
+<h2>Outlier Handling</h2>
+<p>The input images in this competition are expected to be very diverse. </p>
+<p>In a difficult case, such as with no texture and far distance and very different viewpoints, the effect of a simple ensemble was limited because few correspondence points could be found. Therefore, the following measures were taken for these pairs that should be called outliers.</p>
+<ul>
+<li>Outlier case 1: When only a few dozen percent of the usual number of correspondence points are found.<ul>
+<li>Boosting key points by incorporating methods that differ in tendency from those used in the previous stage of the ensemble. We used SGMNet as an additional ensemble.</li></ul></li>
+<li>Outlier case 2: When only a few percent of the usual number of correspondence points are found.<ul>
+<li>Judging the scene to be extremely difficult to find sufficient correspondence points with the usual approach, search for correspondence points with DKM alone, not with an ensemble.</li></ul></li>
+</ul>
+<p>These conditions were derived by analyzing the tendency in the output of the ensemble from image pairs of validation data.</p>
+<h2>Trust CV</h2>
+<p>To my best knowledge, some candidates for this competition said “this competition is not Trust CV”. But actually validating with CV was a fundamental process for our team with original validation settings.<br>
+I posted about this one as a separated thread.</p>
+<p><a href="https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328999" target="_blank">https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328999</a></p>
+<h2>Plot results for test images</h2>
+<p>We also agree with this post same as the 11th place solution.<br>
+<a href="https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328715" target="_blank">https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328715</a><br>
+<a href="https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328887" target="_blank">https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328887</a></p>
+<p>The results are here.<br>
+<a href="https://postimg.cc/9RgQNbKM" target="_blank"><img src="https://i.postimg.cc/GtdTtSjk/image-7.png" alt="image-7.png"></a><br>
+<a href="https://postimg.cc/H8514tCF" target="_blank"><img src="https://i.postimg.cc/90gX2xgX/image-8.png" alt="image-8.png"></a><br>
+<a href="https://postimg.cc/tY3HsDkx" target="_blank"><img src="https://i.postimg.cc/QxPNnyW0/image-9.png" alt="image-9.png"></a></p>
+<hr>
+<h2>Acknowledgment</h2>
+<p>We deeply acknowledge great OSS such as PyTorch, Kornia, OpenCV, etc.<br>
+Special thanks go to authors of these great papers and pretrained models that we used in our final submission:</p>
+<p>・DKM</p>
+<p><a href="https://github.com/Parskatt/DKM" target="_blank">https://github.com/Parskatt/DKM</a></p>
+<p>Edstedt, J., Wadenbäck, M. and Felsberg, M., 2022. Deep Kernelized Dense Geometric Matching. arXiv preprint arXiv:2202.00667.</p>
+<p>・LoFTR</p>
+<p><a href="https://github.com/zju3dv/LoFTR" target="_blank">https://github.com/zju3dv/LoFTR</a></p>
+<p>Sun, Jiaming, Zehong Shen, Yuang Wang, Hujun Bao, and Xiaowei Zhou. "LoFTR: Detector-free local feature matching with transformers." In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition, pp. 8922-8931. 2021.</p>
+<p>・SE2-LoFTR</p>
+<p><a href="https://github.com/georg-bn/se2-loftr" target="_blank">https://github.com/georg-bn/se2-loftr</a></p>
+<p>Bokman, Georg and Kahl, Fredrik “A case for using rotation invariant features in state of the art feature matchers” ,CVPRW, 2022</p>
+<p>・SuperGlue</p>
+<p><a href="https://github.com/magicleap/SuperGluePretrainedNetwork" target="_blank">https://github.com/magicleap/SuperGluePretrainedNetwork</a></p>
+<p>Sarlin, Paul-Edouard, et al. "Superglue: Learning feature matching with graph neural networks." Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. 2020.</p>
+<p>・SGMNet</p>
+<p><a href="https://github.com/vdvchen/SGMNet" target="_blank">https://github.com/vdvchen/SGMNet</a></p>
+<p>Hongkai Chen, Zixin Luo, Jiahui Zhang, Lei Zhou, Xuyang, Bai, Zeyu Hu, Chiew-Lan Tai, and Long, Quan. Learning to match features with seeded graph matching network. In <em>CVPR</em>, pages 6301–6310, 2021. 1, 2, 6</p>
+<p>・Otsu’s method</p>
+<p><a href="https://cw.fel.cvut.cz/b201/_media/courses/a6m33bio/otsu.pdf" target="_blank">https://cw.fel.cvut.cz/b201/_media/courses/a6m33bio/otsu.pdf</a></p>
+<p>Nobuyuki Otsu. A threshold selection method from gray-level histograms. <em>IEEE
+transactions on systems, man, and cybernetics</em>, 9(1):62–66, 1979.</p>
+<p>・SSC</p>
+<p><a href="https://github.com/BAILOOL/ANMS-Codes" target="_blank">https://github.com/BAILOOL/ANMS-Codes</a></p>
+<p>Oleksandr Bailo, Francois Rameau, Kyungdon Joo, Jin- sun Park, Oleksandr Bogdan, and In So Kweon. Efficient adaptive non-maximal suppression algorithms for homo- geneous spatial keypoint distribution. Pattern Recognit. Lett., 106:53–60, April 2018.</p>

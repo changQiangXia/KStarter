@@ -1,0 +1,86 @@
+# https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508588
+
+Topic #508588: 10th Place Solution
+  Author: Phạm Ngọc Thiên Ân
+  Posted: 2024-05-30 07:44:49.959000
+  Votes: 29  Comments: 5
+
+Hi all,
+
+Thank the hosts for organizing this competition.
+On behalf of my team, I'd like to share my team's approaches.
+
+CV:
+We tried many CV strategies, including StratifiedGroupKfold, MultilabelStratifiedKFold, RollOut, and HoldOut, but we couldn't find a good CV that aligns with LB. Therefore, we decided to use StratifiedGroupKfold (group=WEEK_NUM) which we trust the best.
+
+Feature engineering:
+
+
+
+Hand-crafted features: we spent almost three-quarters of our time on feature engineering. All new handcrafted features come from tables with depths 0 and 1. We generated and tested only one new feature at a time to make sure this feature aligned on both CV and LB. Then, we combined all worked features, which improved by 1e-2 on both CV and LB.
+
+Future information: while we did error analysis, we found that the train data contained some future information on some features (e.g., feature lastapplicationdate_877D). At that time, we remove all leaked rows before training because we expect that the test data will not contain any future information. However, at the end of the competition, the test data seems not to exclude future information.
+
+Category encode: additionally, we conducted some experiments about the category encoders. We found that using CountEncoder on the whole train data is better than using any encoders on each fold. It's about 3e-3 boosts up on CV.
+
+High correlation features: We used this code
+
+Collapse: The final key we used is to collapse categorical features whose distinct number of values is more than 200. Instead of removing these features, we merge some values with low frequencies into a group. We got a little jump, about 0.003.
+
+Process null: We filtered out columns with the percent of null values higher than 95%, built a model on those features, chose the top 10 important features, and put it back into the main model. LB increases about 2e-3.
+
+
+Modeling:
+
+
+
+Single model and ensemble: during the competition, ensemble models significantly improve the LB. Unfortunately, Catboost consumed a lot of time to do pseudo label training so we left it out. Our final submission is just a single XGB model.
+
+NN models: we also applied the tab transformer and distillation models, but their performance dropped unexpectedly on the LB even though they boosted the CV.
+
+Pseudo-label: about the pseudo-labeling technique, it worked! However, we had to filter users that we’re confident about, so we tuned the threshold for label 1 based on precision (i.e., we chose precision to be 90% because it's the best in CV) and that for label 0 based on the absolute number of users. We climbed up to 6e-3 on CV with this strategy.
+
+
+Post-process (metric hack):
+
+
+
+We just paid attention to hacking in 2 last weeks because its impact was much greater than that of traditional modeling. There are 2 available hacking methods: by reversing WEEK_NUM and adversarial models.
+
+Reversing WEEK_NUM: we found that the WEEK_NUM can be restored by the feature 'min_refreshdate_3813885D' due to the correlation up to 0.99. We built a simple linear regression for this feature to restore WEEK_NUM in the test data. The reversed WEEK_NUM can be divided into 3 groups:
+(1) null
+(2) From 92 -&gt; 142
+(3) From 0 -&gt; 53~55
+Hacking on group (2) significantly boosts the LB score. The group (3) is kinda weird but the host confirmed that test data is the future of training data. We decided to only hack on group (2) for safety.
+
+Adversarial model: another way to hack is to use the adversarial model to detect the continuous WEEK_NUM with the train data in the test data. This method seems to work best on public LB. We decided not to use this method at the last minute because the adversarial model only detects 3 or 4 weeks near the train data (e.i., we tested it on the RollOut CV). It's not even longer than 30% of the test data, then if the private data is shifted it won't affect the final score.
+
+
+Probing:
+I think probing the test data is the key to help us get a gold medal. We probed a lot to understand the test dataset. The table below shows some of our probing results:
+
+
+Final submission:
+On the last day of the competition, we decided to select 2 hacking submissions. The problem of this competition is the metric itself, not about the data. The metric hack will work regardless of the test data. If you can know/guess the starting weeks of the test data, you can hack it. We also concluded that the adversarial hacking method is not robust because it only edited some first few weeks, if the host changed the starting week of the private data (and they did it) the adversarial hack will not work. At the end, we choose to hack for a longer period (from week 92 to 130). We also applied a linear reduction (e.g., on week 92 we subtracted the score by 0.04, 93 by 0.0375, etc) but we don’t think it improves much.
+
+This is the first time I put more than 100% effort into a competition which was fun and challenging. Besides that, I’ve learned a lot from my teammates, it’s such a wonderful opportunity. Thank Mr. Duc @mathormad and Mr. Tu @minhtu123 for caring and teaching me a lot. I’m so grateful for that.
+
+HARD WORK PAYS OFF
+
+Thank you.
+
+Comments:
+├─ Phạm Ngọc Thiên Ân (2024-06-06 08:53:01.333000) [+0]
+│  Hi @addisonhoward ,
+│  
+│  Can you please attach my team's solution on the leaderboard?
+│  
+│  Thank you.
+  ├─ Addison Howard (2024-06-06 11:39:10.640000) [+0]
+  │  Hi there - you actually need to add it yourself! Here's a post to learn more.
+├─ Xianmin Wang (2024-06-04 11:39:14.210000) [+0]
+│  Such a good idea! Congratulations!
+├─ Sue Huynh (2024-06-03 17:20:35.513000) [+0]
+│  This is a such great method to learn from! I joined this competition as a learning experience, and I indeed learn so much from the competitors!
+├─ Linh Le (2024-05-31 08:11:45.963000) [+0]
+│  Congratulation!!! 🎉🎉🎉

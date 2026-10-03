@@ -1,0 +1,286 @@
+# https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430491
+
+Topic #430491: 2nd place solution
+  Author: Iafoss
+  Posted: 2023-08-10 03:22:46.512000
+  Votes: 111  Comments: 73
+
+Summary
+
+
+
+Customized U-shape network with CoaT, NeXtViT, SAM-B, and tf_efficientnetv2_s backbones
+
+×2 (with pixel shuffle up-scaling of predictions to 256×256) and ×4 input upscaling: pixel-level accuracy of predictions is critical
+
+Sequence of images: LSTM, Transformer, Convolutional temporal mixing
+
+No flip and 90-degree rotation augmentation (nor TTA) because masks are shifted
+
+Train on soft labels: label = average of all annotators
+
+BCE + dice Lovasz loss
+
+
+Code
+
+My and @drhabib 's part (includes the best performing CoaT_ULSTM model)
+@theoviel 's part
+Inference
+
+Introduction
+
+Our team would like to thank the organizers and Kaggle for making this competition possible. Also, I want to express my gratitude to my outstanding teammates @drhabib and @theoviel for their incredible contribution toward our final result. 
+
+Details
+
+This competition has two main challenges: (1) noisy labels and (2) pixel-level accuracy requirements. (1) If one checks the annotation from all annotators, a major disagreement is quite apparent. This label noise challenge may be partially addressed by using soft labels (the average of all annotator labels) during training. However, since the evaluation requires hard labels, the major model failure is the prediction of contrails near the decision boundary, which cannot be avoided. (2) The thing that could really be addressed by the models is achieving pixel-level accuracy of predictions. Pixel-level accuracy is quite important since contrails are only several pixels thick, and even a mistake by one pixel in the mask boundary in the lateral direction may result in a significant decrease in the dice score, used as a metric. For such a task, a typical solution is up-sampling the input of the model or replacing the final linear up-sampling in segmentation models with transposed convolution or pixel shuffle up-sampling. This modification gave us a substantial boost in initial experiments over the direct use of models on the original resolution.
+
+Data
+
+Following the organizer's publication, we used “ash” false color images considering the 12 μm band, the difference between 12 and 11 μm bands, and the difference between 11 and 8 μm bands, respectively. We also tried to consider all bands or expand the “ash” color images with 8, 10, and 12 μm, but it resulted in lower performance (the pre-trained weights of the first convolution were replicated). We hypothesize that the best performance of ash color images may be a consequence of the use of the ash color images by annotators, and biased label noise. In our experiments, we up-sample the input with bi-cubic interpolation by ×2 for CoaT and NeXtViT models, and by ×4 for SAM model. EfficientNet model uses the original input but the stride in the first convolutional block is set to 1, which is equivalent to ×4 input up-sampling.
+
+Model
+
+The interesting thing about this competition is that the model is required to do both (1) tracking the global pixel dependencies because contrails are quite elongated, and (2) capable of generating predictions with pixel-level accuracy because contrails are only several pixels thick. (1) can be addressed with transformers, while (2) is addressed with convolutional networks or local attention. In the competition, we tried to address these points independently with SAM-B ViT backbone and EfficientNet v2 purely convolutional network. In addition, there is a class of networks, transformers with a hierarchical structure, which addresses both aspects of the considered problem, (1) + (2), simultaneously. This class includes CoaT, which resulted in the best single model performance in our experiments, NeXtViT, MaxViT (which we missed), and MiT transformer from Segformer (unfortunately, it cannot be used in the competition because of the license).
+For the decoder we either considered a vanilla U-Net decoder (EfficientNet models) or a more customized set of U-blocks using pixel shuffle up-sampling and factorized FPN (CoaT, NeXtViT, SAM). In these blocks, we also replaced the BatchNorm with LayerNorm2d to have proper model convergence at the low batch size and used GELU instead of ReLU activation. 
+The models are schematically illustrated in the figure below.
+
+
+Temporal mixing
+
+In addition to our initial runs with single-frame models, we performed experiments with image sequences. In our best setup image, multi-frame models get ~0.01 improvement.
+Since the images are taken with a considerable temporal delay, and the displacement of clouds between frames is huge (~10-30 pixels) and is deteriorated by input up-sampling, video models based on 3D convolutions or window attention (VideoSwin) are not effective in the context of the considered problem. For the same reason, early mixing or mixing the predictions of sequential models is also not expected to work. Therefore, mixing at the intermediate feature map scales, such as res/32 and res/16, is most promising: even if clouds/contrails are misplaced, the feature maps at low resolution are reasonably aligned. In our experiments with the CoaT model, the best performance is achieved if two low-resolution feature maps (res/32 and res/16) are considered. The output of the temporal mixing modules as well as the output of the remaining feature maps are pooled at frame 4 and the decoder sees only the input corresponding to the considered frame, as illustrated in Figure 1.
+As temporal mixing modules, we considered LSTMs (which achieved the best performance), 1D temporal convolutions, and Transformers. LSTM (1 layer) and 1D temporal convolutions perform mixing along the temporal dimension only, while the spatial dependences between features are considered in the backbone and the decoder. The transformer-based mixing was proposed to perform an implicit feature map registration for a large displacement of contrails/clouds because it works with temporal and spatial mixing of features simultaneously and can match them even if they are not spatially aligned. 
+This mixing is performed in the following way. To each feature map, corresponding to a given frame, we add encoding to distinguish it from others, then we flatten tokens from all frames into a single sequence and process it with 2 transformer decoder blocks. Key and value input to the transformer is represented by the concatenated sequence of all frames, while the query is a sequence of tokens from the 4-th frame only. Unfortunately, transformer-based mixing ended up with slightly lower performance, and the training with it is less stable. However, we kept both approaches in the final ensemble, benefitting from the improved diversity.
+In our experiments with CoaT/NeXtViT we followed the organizer's publication and selected the first 5 frames as the input. Both LSTM and Transformer mixing were considered. In our experiments with EfficientNet we considered 4 frame input (2nd – 5th, 2 frames before and 1 frame after the annotated frame) with bi-directional LSTM. This frame selection is dictated by the instruction to annotators to have a contrail at least on two subsequent frames. With the SAM model, we considered 1D-convolutional mixing with 3 frames (1 frame before and 1 frame after the annotation) because of the heavy VRAM requirement for this model, which was also an issue in inference. 
+One idea we had is explicit registration of input frames to have contrails and clouds aligned between frames (temporal mixing is the most effective), for example considering optical flow. Unfortunately, the images contain not only clouds but also the Earth's surface, which does not move, or several layers of clouds moving in different directions. Therefore, we could not come up with any methods to proceed with the frame registration task. We were also considering performing registration based on the predicted contrails, but since contrails appear and disappear from frame to frame, this approach is also not feasible.
+
+Pseudo-labels (PL)
+
+In addition to the competition data, we have collected a dataset “Contrails GOES16 Images May” (single frame setup) [9]. We split the images into 256×256 tiles with partial overlap and generated the masks based on the ensemble of best single-frame models. This data is shared as a Kaggle dataset [10]. This data was used for pretraining the models in a single-frame setup in some experiments, followed by finetuning the models either in single-frame or multi-frame setups. The use of PL has drastically improved the performance of individual models (folds), but the diversity of the models is reduced even if each fold of the finetuned model uses an independently trained PL model. Therefore, the performance on the average prediction over all folds is comparable to one for the setup trained without PL.
+We also have experimented with PL training on both external data + unannotated competition frames, but it did not give any benefit in finetuning a single frame model. Since such pretraining could affect multi-frame models, in the production experiments we used only external data at the PL step.
+
+Training
+
+CoaT and NeXtViT models: Training is performed for 24 epochs with Over9000 (Radam+LAMB+LookAhead) optimizer, learning rate of 3.5e-4, weight decay of 0.01. It appeared that this optimizer has superior compatibility with CoaT. In the case of PL pretraining, it is performed for 12 epochs on the external data, and then the models are finetuned for 12 epochs for CoaT and 18 epochs for NeXtViT models.
+EfficientNet models: Pretraining is performed in a single frame setup for 100 epochs with additional CutMix augmentation, learning rate is 1e-3, AdamW optimizer, weight decay 0.2. During pretraining the fraction of PL data is linearly decreased to zero. Then the model is fine-tuned in the image sequence setup with 3e-5 for the encoder and 1e-4 for the decoder. The addition of external data for pretraining resulted in much stronger 2D models, hence multi-frame EfficientNet models were not considered in the final ensemble. For diversity, we also pre-trained models for 200 epochs, and in a full-fit setup (training on all data, including validation set).
+SAM models: Our final submission includes only single-frame SAM-B ViT-based models. During training, we, first, train the model with a frozen encoder for 10 epochs, and then we unfreeze the model and continue for 20 more epochs. AdamW optimizer is used with the learning rate of 4e-6 for the encoder and 4e-5 for the decoder.
+During training, we used ShiftRotateScale, RandomGamma, RandomBrightnessContrast, MotionBlur, and GaussianBlur augmentations. Flip and 90-rotate augmentation were not used because they resulted in worse performance. The training of all production models is performed for 5-6 folds our folds are trained on the entire train dataset with different random seeds, while the evaluation is performed on the provided validation set. This strategy is used because evaluation in a standard K-fold split of the training data overestimates CV (cross-validation), which may be caused by spatial overlaps of tiles in the training dataset.
+
+Loss
+
+As a loss function, we used BCE + dice Lovasz loss. The second term is a modified version of a Lovasz loss [12] where (1) ReLU is replaced with 1 + ELU, (2) a symmetric version is used, and (3) instead of IoU we use a surrogate function maximizing dice. The second term provides an insignificant boost to the individual model performance. However, this term gives a wider maximum of the dice with respect to the threshold selection, i.e. weaker dependence of the performance on the threshold selection. This property is vital to avoid shakeup at the private leaderboard because of the improper threshold and is preferable for more effective ensembling.
+
+Results
+
+The performance of our final models is summarized in the table below. Ex refers to models trained in PL setup (EfficientNet is trained with PL only). The postfix U refers to the single frame model, UT – transformer-based temporal mixing, and ULSTM – LSTM-based temporal mixing. The threshold is selected based on the search maximizing CV value. For most models, it is 0.46-0.50.
+
+
+Best Single model
+
+Our best single mode is CoaT, which for 5 folds gets 0.7039 CV, 0.71790 private, and 0.71243 public LB. Single fold CV is 0.6960+-0.0003 evaluated on val set (our folds are trained on the train set with different seeds because eval in a standard Kfold split of train data overestimates CV due to possible spatial overlaps). We could take top-4 in the competition with this single model. 
+
+Ensemble
+
+Our best ensemble consists of 8 models with weights selected to make approximately equal contributions from all components: CV is 0.7140 (on eval set), 0.72574 public and 0.72304 private LB. The models and their weight are summarized in the table below.
+
+EfficientNet includes 3 model setups (100 epochs, 200 epochs, and full-fit) with the total efficient weight equal to 1.
+
+Model Execution Time
+
+CoaT and NeXtViT models: Training time is 2 hours for single-frame and 8 hours for multi-frame models per fold on 2×RTX4090 GPUs. The inference time at Kaggle (P100) for multi-frame models is 35 minutes for 5 folds.
+EfficientNet models: Training time is 3 hours 45 minutes for 100 epochs on 8×V100 GPUs per fold. Inference at Kaggle (P100) takes 20 minutes for 6 folds including data loading.
+SAM models: Training time is 16 hours per fold on 2×A6000 GPUs. Inference at Kaggle (P100) takes 48 minutes for 5 folds including data loading.
+
+Things we missed
+
+(1) During the competition one surprising finding for us was that flips and 90-degree rotation augmentation in model training resulted in worse performance. It was quite surprising, but, unfortunately, we did not think sufficiently about the origin of this behavior and attributed it to prevailing winds and a particular shape of clouds and contrails. After the competition, it appeared that the masks were shifted by 0.5 pixels, which made any flips inapplicable, as we discovered. If the mask issue was fixed in our setup, flip/90-rotation augmentation could lead to an 8-fold increase of the effective training dataset size and enables further performance boost at the inference stage due to test time augmentation. So, potentially the performance of our models can be noticeably improved. 
+(2) PL single model pertaining on the external data gives moderate CV improvement to the single-frame model (interesting that at private LB this improvement is quite large). Meanwhile, this single-frame pretraining didn't give much to sequence models. So, external sequence data collection + proper reprojection could potentially server as a better pertaining strategy for sequence models, and we may expect a boost comparable to single-frame models.
+
+Comments:
+├─ Yousef Rabi (2023-08-10 05:28:09.093000) [+8]
+│  Congratulations! Beautiful solution, thank you for sharing it with us. Looking forward to studying your code.
+│  
+│  We knew you had a unique approach that gained your team a nice separation throughout. ...
+├─ hengck23 (2023-08-10 04:27:04.067000) [+5]
+│  thanks for the writeup.
+│  
+│  i am interested in usage of tempral information. how much did it increase your CV and LB.???
+│  
+│  
+│  
+│  I spent the last week in fusion of multiple frams, early fusion, late fusion...
+  ├─ Iafoss (2023-08-10 04:43:18.023000) [+6]
+  │  Here are some of the results from my notes (I list public CV):
+  │  CoaT_U (single image): 0.6887+-0.0014, avr pred 0.6983 (th 0.47), LB 0.706
+  │  ExCoaT_U (single image, PL): 0.6952+-0.0008, avr pred 0.700...
+    ├─ hengck23 (2023-08-10 04:54:55.670000) [+2]
+    │  thanks for the details.
+    │  
+    │  i will try again later. i actually use two stage approach: first model is just trained on single frame. second models uses features from first one. both models are u-net. t...
+    ├─ Iafoss (2023-08-10 05:07:46.827000) [+1]
+    │  Thanks so much. 
+    │  
+    │  In my experiments use of 4 scales was worse than use of 2 scales, but I didn't run this experiment in 5 folds.
+    │  
+    │  In PL training I used a kind of 2 stage approach: train single fram...
+    ├─ kongweihao (2023-08-29 13:14:19.903000) [+0]
+    │  Can you tell me how to reproduce these coat models? It seems that even hugging faces and https://www.semanticscholar.org/ cannot find them
+├─ knshnb (2023-08-13 14:02:45.770000) [+3]
+│  Congratulations on your 2nd place and thanks for the great writeup!
+│  I'm interested in temporal mixing by LSTM. Do you stack each pixel to a batch dimension as input to LSTM, i.e., (n_batch * H * W,...
+  ├─ Iafoss (2023-08-14 02:42:42.380000) [+3]
+  │  Thanks. Yes, exactly. I did it only at the last two, i.e. res/16 and res/32, feature maps because of too large change between input frames.
+    ├─ knshnb (2023-08-14 05:48:39.370000) [+3]
+    │  I see. That makes sense, and that's why I used conv3d temporal mixing. Did LSTM and attention perform much better than conv-based temporal mixing?
+    ├─ Iafoss (2023-08-14 14:54:35.713000) [+2]
+    │  I expect LSTM should perform pretty similarly to conv temporal mixing because it shares the same characteristics: mixing assuming that features are spatially aligned. 3d conv may have slightly bett...
+    ├─ delai50 (2023-08-14 17:07:37.523000) [+0]
+    │  In which sense features are not spatially aligned in this case? When you feed the LSTM with a sequence of images/frames, each pixel represent the same location on all images/frames of the sequence,...
+    ├─ Iafoss (2023-08-14 17:41:03.153000) [+2]
+    │  The simplistic spatial location here is not meaningful: you try to track contrails and clouds with the seq model. Cloud movement between frames is huge, and images are very far away from being prop...
+    ├─ knshnb (2023-08-15 15:31:24.950000) [+0]
+    │  Thanks for the detailed response! I learned a lot.
+├─ Swaroop Meher (2023-08-12 17:51:03.897000) [+3]
+│  Congratulations! A very unique solution.
+│  
+│  Quick question. Sorry, if I ask, but I don't understand how a transformer is used as a mixer here. Does it have anything to do with the MLP mixer idea or a...
+  ├─ Iafoss (2023-08-13 03:15:44.540000) [+2]
+  │  It is just (1) flattening the feature map into a list of tokens for res/16 and res/12 maps; then (2) adding encoding to represent the time for each considered feature map in the sequence; (3) rearr...
+    ├─ Swaroop Meher (2023-08-13 05:47:08.270000) [+0]
+    │  Wonderful. Thank you for clarifying my doubt and sharing the definition of the model.
+├─ delai50 (2023-08-11 14:46:02.233000) [+3]
+│  Congratulations to you three and thanks a lot for such a detailed summary of your solution. It is incredible the level of the top spot solutions, it makes me feel dumb and happy at the same time 😄:...
+  ├─ Iafoss (2023-08-11 16:30:38.503000) [+3]
+  │  LSTM worked the best for me, but we kept other things for diversity. My training was 24 epochs long, so it took just ~2 hours on 512 input, but you could accelerate the things at initial experiment...
+├─ Romain Hardy (2023-08-10 04:37:15.270000) [+3]
+│  Congrats @iafoss! Did you train on upsampled masks (i.e. 512x512 or 1024x1024), or did you downsample the predictions back to 256x256 after your conv/pixelshuffle upsampling? Regardless, thank you ...
+  ├─ Iafoss (2023-08-10 04:52:25.517000) [+6]
+  │  I just didn't up-sample the masks in the model keeping 256 size as the output.
+    ├─ Optimo (2023-08-10 13:05:30.923000) [+1]
+    │  How did you do that? simple torch.resize at the end ?
+    │  
+    │  I tried to add an extra conv layer in the final head so that the model outputs 256 even with images 512 as inputs, also tried to remove the la...
+    ├─ Iafoss (2023-08-10 14:36:32.400000) [+4]
+    │  One of the key things for this particular data (pixel accuracy of masks is needed) was to avoid using torch.resize at the end. Typical segmentation models do x4 linear resizing of masks to get the ...
+    ├─ Optimo (2023-08-10 14:52:41.417000) [+2]
+    │  Ok thank you! But what is a "pixel unshuffle x2 upscaling block" exactly? 😅
+    ├─ Iafoss (2023-08-10 15:07:37.300000) [+4]
+    │  You just unshuffle the input from Bx4CxHxW to BxCx2Hx2W in the way that 4 sequential values from the channel dimension go into 2x2 pixels. And I have conv + LayerNorm2D + GELU + conv after and befo...
+    ├─ FabienDaniel (2023-08-11 16:37:49.640000) [+1]
+    │  Quite tricky ! would you have a rough estimate on the impact of this wrt. to a simpler torch.resize ?
+    ├─ Iafoss (2023-08-16 22:32:55.410000) [+1]
+    │  I didn't check it in this competition, but the negative effect of linear upscaling should be quite strong here because you need to reproduce several pixel-wide masks with pixel accuracy(
+├─ Ioannis M (2023-08-18 13:12:36.827000) [+1]
+│  Congrats for the 2nd place guys! 
+│  Thanks for the awesome write-up, we have to study and learn from you. Especially, starting from how you describe the research challenges and explaining your way of...
+  ├─ Iafoss (2023-08-19 05:26:11.273000) [+2]
+  │  Thanks, congratulations on getting gold too.
+  │  
+  │  We selected the threshold based on CV, but it is very close to 0.5, like 0.48. Lovasz part of the loss was helpful to reduce the dependence of the dice...
+├─ Sambit Barik (2023-08-18 08:17:08.013000) [+1]
+│  Congratulations @iafoss on winning the second place and writing this fabulous writeup! 
+│  
+│  Can you also please explain the temporal mixing and what type of preprocessing did you use ?
+  ├─ Iafoss (2023-08-19 05:13:45.747000) [+0]
+  │  Thanks. I updated the write-up with more details. Regarding preprocessing, I do not think that we did anything spatial in addition to what we listed in the write-up.
+├─ Armin Azhdehnia (2023-08-17 06:32:51.023000) [+1]
+│  Hi, Could you please mention what hardware you have used to train your models?
+  ├─ Iafoss (2023-08-18 03:47:16.073000) [+1]
+  │  2x4090 in my experiments
+├─ Bananafin (2023-08-16 05:51:46.967000) [+1]
+│  Congratulations on your 2nd place and thanks for the great writeup!
+├─ Shailja Kant Tiwari (2023-08-10 14:24:46.777000) [+1]
+│  Congratulations! Nice way to do the work.
+├─ DennisSakva (2023-08-10 13:26:51.343000) [+1]
+│  Thanks for the write-up Iafoss and congrats on your impressive result.
+│  A quick question. Do you train your transformer-based models from scratch or do you modify the pre-trained model so as to make...
+  ├─ Iafoss (2023-08-10 14:50:47.597000) [+5]
+  │  SAM ViT encoder works with 1024x1024 input, and we just performed x4 upscaling. For CoaT and NeXtViT the resolution is not fixed, similar to conv models. Training a transformer from scratch is quit...
+├─ Yassine Alouini (2023-08-10 12:31:01.473000) [+1]
+│  Very detailed solution, thanks for the write-up. This is also the first time I hear about the Over9000 optimizer. Is that this repo: https://github.com/mgrankin/over9000 ?
+  ├─ Iafoss (2023-08-10 14:56:13.910000) [+3]
+  │  Yep. Previously I used it a lot because of the good compatibility of this optimizer with ssl_ResNeXt50 weights in fine-tuning, but later, working with transformers, I mostly switched to AdamW. It w...
+    ├─ Yassine Alouini (2023-08-10 15:44:19.370000) [+0]
+    │  Thanks for the insights. I will add this to my tools. Personally I mostly use AdamW or Adam since they work well most of the time (despite all the recent refinements 😁).
+├─ iadduk (2023-08-10 07:02:01.027000) [+1]
+│  Congratulations!
+│  Can you please show the exact formula for the dice Lovasz loss?
+│  How much did you gain from using CutMix strategy?
+│  I can't wait to see your code.
+  ├─ Theo Viel (2023-08-10 08:26:08.560000) [+3]
+  │  Cutmix gave +0.005 for v2-s models. It did not work that well for other models though
+  │  We will release the code soon, with the implementation of the loss.
+├─ franchesoni (2023-08-10 06:31:34.780000) [+1]
+│  thanks for sharing the solution this quickly. What was your postprocessing? single thresholding tuned on CV?
+  ├─ Iafoss (2023-08-10 06:35:36.767000) [+2]
+  │  yep, it worked the best. Since global dice is considered in this competition, I don't think that post-processing may really work well here.
+├─ Ted K (2023-08-10 06:22:39.653000) [+1]
+│  Congratulations @iafoss on 2nd and another gold!  Thank you for the thoughtful, detailed discussion of your solution, and for including a couple things that didn't work.  It's so nice to read such ...
+  ├─ Iafoss (2023-08-11 01:30:10.987000) [+1]
+  │  @socated you are very welcome
+├─ Suraj (2023-08-10 04:27:21.683000) [+1]
+│  Kudos @iafoss on this achievement. Thanks for the write up.
+  ├─ Iafoss (2023-08-11 01:30:45.743000) [+0]
+  │  Thank you so much
+├─ C R Suthikshn Kumar (2023-08-10 04:10:50.603000) [+1]
+│  Congratulations for winning the 2nd place.
+│  We appreciate your sharing info about the solution.
+  ├─ Iafoss (2023-08-11 01:32:26.420000) [+0]
+  │  You are welcome
+├─ NA (2023-08-10 03:57:01.853000) [+1]
+│  That is very interesting. Congratulations with the second place!
+├─ kongweihao (2023-08-29 01:21:19.613000) [+2]
+│  How can you get you backbone (CoaT, NeXtViT, SAM-B, and tf_efficientnetv2_s ) ? Did you use some automatic tools? Thank you very much.
+  ├─ Iafoss (2023-08-30 00:48:23.453000) [+2]
+  │  For tf_efficientnetv2_s  you can use timm, which is super convenient. For others, that are not shared through timm, I just go to the corresponding github, grab files with the model definition and r...
+    ├─ kongweihao (2023-09-01 03:10:54.947000) [+1]
+    │  It has inspired me a lot, thank you！
+├─ Bilzard (2023-08-17 03:25:34.907000) [+2]
+│  @iafoss Congratulations for 2nd place. 
+│  
+│  I have problem with training transformer T-Mixer because it is easy to get loss equal "nan".
+│  Did you experience same problem? And could you share some tips ...
+  ├─ Iafoss (2023-08-17 05:44:02.350000) [+3]
+  │  Thanks. Yep, training with it is less stable than LSTM. With CoaT model everything was ok, but the spread of the results between folds is large. For NeXtViT, meanwhile, I could not finish the train...
+    ├─ Bilzard (2023-08-17 05:55:23.233000) [+0]
+    │  Meanwhile, in the case of using a model pre-trained on single frame setup without mixing (both encoder and decoder), training of the transformer mixing is quite more stable, and I didn't have any i...
+    ├─ Iafoss (2023-08-18 03:46:37.783000) [+1]
+    │  The origin of this unstable behavior, to my understanding, is the label noise(
+    │  I was using 3e-4 lr, but what was more important in my case is Over9000 optimizer with epsilon=1e-4. As I remember, th...
+├─ Kabir_011 (2023-08-13 11:42:27.283000) [+2]
+│  Congratulation! Nice Work man.
+├─ Muhammad Usman (2023-08-13 08:31:39.507000) [+2]
+│  Congratulations @iafoss! You did a great job man. 
+│  
+│  Your solution is amazing, very detailed.
+  ├─ Iafoss (2023-08-13 13:54:05.457000) [+2]
+  │  Thanks.
+├─ kongweihao (2023-08-10 14:10:29.017000) [+2]
+│  May I ask, what configuration of machine did you use for these experiments? These experiments seem to have very high requirements for the machine
+  ├─ Iafoss (2023-08-10 14:45:50.633000) [+3]
+  │  For me it was 2x4090 machine, quite fast cards for deep learning but VRAM is an issue, like always. @drhabib used 2xA6000, and @theoviel used his V100 cluster.
+    ├─ kongweihao (2023-08-11 01:46:40.203000) [+1]
+    │  Your answer has been very enlightening to me, and I am very grateful
+├─ iadduk (2023-08-10 07:35:36.013000) [+2]
+│  Can you please share how codewise you combine coat encoder and Unet decoder?
+│  Coat (coatnet, right?) encoder is not in SMP repo, so you did it by yourself, right?
+  ├─ Theo Viel (2023-08-10 08:23:17.587000) [+6]
+  │  Exactly ! We will release the code later.
+    ├─ ynhuhu (2023-08-10 08:49:09.083000) [+0]
+    │  Thanks for your sharing. There are a few confusion to me in your details (2).
+├─ Nirjhar Roy (2023-08-10 04:14:23.157000) [+2]
+│  Hello @iafoss  congratulations for amazing result . Can you please give some more details on the temporal mixing ? We used only single frame model ..so curious to know about this solution.
+  ├─ Iafoss (2023-08-10 04:54:40.670000) [+5]
+  │  We will share the code a bit later, but the thing I considered is mixing at low res feature maps because images are poorly alighted (time between images is too large). Congratulations with getting ...
+├─ qdv206 (2023-08-10 03:56:26.883000) [+2]
+│  Congratulations on the strong finish! CoaT is my favorite backbone so glad to see it performs so well here.
+  ├─ Iafoss (2023-08-12 03:20:47.713000) [+4]
+  │  CoaT is a really good alternative to Segformer when a restrictive license is not acceptable. A combination of global attention and consideration of details at high-resolution feature maps (in contr...
+├─ Sourabh Singh (2023-08-10 03:40:47.567000) [+0]
+│  congrats @iafoss  for 2nd place. Try to get 1st place
+  ├─ Iafoss (2023-08-10 03:44:08.957000) [+4]
+  │  Thanks so much. It happens for us in the second time during last several months when we drop from 1st place at public to the 2nd place at private((( Getting the first place is quite a difficult thing.
+├─ [deleted] (2023-08-17 02:02:25.790000) [+1]
+│  [deleted]

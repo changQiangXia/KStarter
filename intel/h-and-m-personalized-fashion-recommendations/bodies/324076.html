@@ -1,0 +1,36 @@
+<h3>I was able to generate my final submission - including candidate retrieval, feature engineering, and training/predicting with two models - in just 20 minutes.</h3>
+<p>Partially, it was from using cudf for whatever I could, and it's really amazing how much time it saves.</p>
+<p>But I think the main reason was that I used a light-weight candidate retrieval method that gave me a good result without needing many candidates per customer, and without needing collaborative filtering or image/text processing.</p>
+<p>I had 33 million candidates (which comes out to only ~25 per customer on average).</p>
+<p>I started with <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>'s notebooks - <a href="https://www.kaggle.com/code/cdeotte/customers-who-bought-this-frequently-buy-this" target="_blank">customers who bought this frequently bought this</a> and <a href="https://www.kaggle.com/code/cdeotte/recommend-items-purchased-together-0-021" target="_blank">Recommend Items Purchased Together</a>.</p>
+<p>I refactored his first notebook in <a href="https://www.kaggle.com/code/jacob34/cdeotte-pairs-in-3-minutes" target="_blank">this notebook</a>, so that I could get the same result in 3 minutes.</p>
+<p>Then I made several changes:</p>
+<ol>
+<li>I had it only look for "pairs" from articles that were sold in the past week</li>
+<li>I had it find 5 "pairs" for each article, instead of just 1</li>
+<li>I ignored any article that wasn't sold within the past week</li>
+<li>I ignored any "pair" purchased by less than 2 customers</li>
+</ol>
+<p>We get a very strong retrieval method, a sort of manual, time-aware collaborative filtering method - what customers with similar purchase interests were purchased <em>in the past week</em> - so it includes trend information as well.</p>
+<p>For the second part, I followed his method of recommending "pairs" of items a customer had purchased in their last few weeks of history.</p>
+<p>And I also kept features to feed to LGBMRanker about:</p>
+<ul>
+<li>the strength of the "match" (i.e. how many/what percentage of customers the "pair" was based on)</li>
+<li>the "source" of the pair (i.e. how recently the original article was purchased, how many times it was purchased)</li>
+</ul>
+<p>Of course, I also generated the regular, standard candidates: past purchases, and 12 most popular items (I generated those based on age group).</p>
+<p>I think this retrieval method was the main reason I was able to get a good result with relatively few candidates/resources.</p>
+<h3>Update - code</h3>
+<p>Some people asked for it, so I made a clean notebook (moved nearly all code to the repo).<br>
+Here's <a href="https://www.kaggle.com/jacob34/clear-n-simple-final-shared-notebook" target="_blank">the notebook</a>, here's <a href="https://github.com/JacobCP/kaggle-handm-helpers" target="_blank">the repo</a>, and here's the <a href="https://www.kaggle.com/datasets/jacob34/handmhelpers" target="_blank">kaggle dataset</a> that syncs with the repo.</p>
+<p>The notebook runs in 20 minutes, and gets the same private LB score (it varies a bit per run).</p>
+<p>My workflow was:</p>
+<ol>
+<li>I'd work with a function in the notebook (for example, a candidate generator)</li>
+<li>Once the function was working, I'd move it to the repo and point the notebook there.</li>
+<li>Any parameters of the function (for example, candidate threshold), I'd add to my <code>params</code> dictionary in the notebook.</li>
+<li>Each function had a <code>**kwargs</code> argument, so I could pass the same single <code>params</code> dictionary to every function, and the function would use the arguments it needed.</li>
+<li>If I needed to revisit a function, or work with the values generated in middle, I'd move the function/s back to the notebook. </li>
+</ol>
+<h3>Update #2 - cuML's FIL</h3>
+<p>Afterwards, I refactored my code to use cuML's FIL for inference, and that brought notebook time down from 20 minutes to just 12 minutes!</p>

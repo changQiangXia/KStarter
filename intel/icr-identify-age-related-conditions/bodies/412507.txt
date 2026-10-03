@@ -1,0 +1,386 @@
+# https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/412507
+
+Topic #412507: How To Balance Training And Boost  CV and LB Score!
+  Author: Chris Deotte
+  Posted: 2023-05-24 02:14:50.705000
+  Votes: 382  Comments: 144
+
+This competition's metric is balanced log loss. Therefore it is important to balance the classes during training. There are at least 4 ways to balance the classes
+
+Method 1 - Add Class Weights
+
+The first way to balance classes is to add weight to the positive class. In this competition's train data, the positive class is only 17%. Therefore when we train our models we can give the positive class 4.7x weight so that the positive class has the same importance as the negative class. (Try different weights to see what works best).
+
+Here is some example code provided by AmbrosM:
+
+
+
+
+
+
+
+
+An example notebook which uses "sample weights" is one of the top scoring notebooks here.
+
+Method 2 - Downsample Negative Class (Or Upsample Positive)
+
+A second way to balance the classes is to train with all the positive samples and only a fraction of the negative samples. This is called downsampling. Since we are not using all the negatives during training, we should train many models with different downsample each time. (i.e. bagging)
+
+Here is some example code provided by Ganzy:
+
+from imblearn import RandomUnderSampler
+NUM_POS = df()
+sampler = (sampling_strategy={: NUM_POS, : NUM_POS})
+X_train, y_train = sampler(df, df)
+
+
+I also provide an example of "downsampling" in my RAPIDS SVC notebook here. The CV 0.44 =&gt; CV 0.35 and LB 0.35 =&gt; LB 0.27 
+
+Method 3 - Post Process
+
+A third way that has not been shown in public notebooks yet is post process. It works like this. If you train a model without adding more weight to the positive class, then you can boost the positive class as post process afterwards with the following code:
+
+ =  
+ = boost * preds / (-preds)
+ = odds / (+odds)
+
+
+Here the variable preds is a NumPy array of your preditions for class 1. We convert the probabilities into odds then scale the odds to make the class 1 more important. Finally, we convert odds back to probabilities.
+
+Method 4 - Use Balanced Log Loss
+
+A fourth way suggested by Björn in the comments is to use a balanced log loss function instead of using basic log loss function during training. Then we can leave all the original data as is with class weight equal one. (Note we are referring to the loss function (i.e. GBT objective) not early stopping metric function)
+
+Cross Validation
+
+We can evaluate the effect of the above 4 methods by trying each and computing our OOF CV score. Then we can use whatever works best!
+
+Comments:
+├─ AmbrosM (2023-05-24 04:59:29.637000) [+22]
+│  Method 4 is the simplest: Use the classifiers' built-in parameters for balancing:
+│  
+│  LGBMClassifier(class_weight='balanced')
+│  XGBClassifier(scale_pos_weight=4.71)
+│  CatBoostClassifier(auto_class_weights...
+  ├─ Gaurav Srivastava (2023-05-24 07:39:13.687000) [+3]
+  │  That's it ! Model can handle it internally also. ✔️
+  ├─ Chris Deotte (2023-05-24 14:47:41.540000) [+1]
+  │  Yes, this is my method 1
+  ├─ Chris Deotte (2023-05-24 14:48:51.797000) [+1]
+  │  The difference between my method 1 and method 2 is that method 1 keeps all the data and changes the weight per target. Whereas method 2 removes rows of data to balance classes.
+  │  
+  │  I have updated my p...
+    ├─ Ertuğrul Demir (2023-05-24 15:24:37.047000) [+2]
+    │  Method 2 didn't for me in my trials, at least CV wise. Didn't test it with LB though…
+    ├─ Chris Deotte (2023-05-24 15:27:40.300000) [+2]
+    │  Method 2 didn't for me in my trials
+    │  
+    │  
+    │  Didn't what? Method 2 is how everyone currently is achieving LB = 0.16. Yesterday a public notebook using method 2 was posted. It is very powerful.
+    │  
+    │  Method 2 h...
+    ├─ Ertuğrul Demir (2023-05-24 15:31:04.330000) [+2]
+    │  Oh I missed a word while writing, I meant didn't work for me :) Probably related to my pipeline. Interesting it's working for other people, might need to test it again.
+    │  
+    │  Edit: I just review my pipe...
+├─ end_of_night.17j03 (2023-09-15 13:15:59.603000) [+8]
+│  Really helpful
+├─ Daniel Dewey (2023-06-07 17:43:02.527000) [+11]
+│  Just for a fun visual, here's a simple example of the odds post processing described in Method 3 -- which I in no way encourage following @tilii7 's wise comment about post processing in general.😎
+│  ...
+  ├─ sir shen (2023-07-28 07:12:06.373000) [+0]
+  │  thanks，大哥，对我很有帮助
+├─ Nick Potter (2023-05-24 04:41:02.607000) [+12]
+│  Thanks Chris. Some great ideas here.
+│  
+│  For those interested in downsampling (or undersampling), the basic premise is that ML algorithms can struggle when prediction classes are unbalanced (i.e. far ...
+  ├─ Chirag Desai (2023-06-08 19:16:00.473000) [+1]
+  │  Wow.. this is helpful.. thanks for sharing notebook @nnjjpp
+├─ Björn (2023-05-24 05:13:05.783000) [+9]
+│  Just a warning if you assume that using weights (either higher weights for the minority class, but perhaps instead lower weights for the majority class) is exactly the same as having the competitio...
+  ├─ Chris Deotte (2023-05-24 15:26:43.080000) [+2]
+  │  Great suggestion. Thanks. I added it as method 4 in my discussion!
+    ├─ Amjad (2023-06-10 00:17:00.150000) [+0]
+    │  What's the gradient and hessian in that case?
+├─ David J. Slate (2023-06-04 03:53:12.347000) [+7]
+│  Thanks much for another useful post.
+│  
+│  Earlier today, for the first time in this contest, I tried a post processing algorithm (a bit different from your Method 3) that seems to work well so far. It'...
+  ├─ Chris Deotte (2023-06-04 09:35:00.987000) [+2]
+  │  Yes a power transform should work too. If you train a model using unbalanced class weights then a power transform helps boost the minor class of target=1 when 0 &lt; PRED_POW &lt; 1
+    ├─ David J. Slate (2023-06-07 08:56:00.667000) [+1]
+    │  I have since tuned a joint lightgbm+xgboost ensemble that produced a weighted average of 1/3 lightgbm predictions and 2/3 xgboost and is my new best in cross-validations and on LB (0.18). I tuned s...
+  ├─ Nick Potter (2023-06-19 00:16:36.400000) [+0]
+  │  This seems to me to be a kind of probability calibration? Different models have different probability biases so it's not surprising different models have different optimal parameters (although my u...
+├─ Chris Deotte (2023-05-25 00:15:19.527000) [+6]
+│  UPDATE: I submitted my downsampled SVC. The CV 0.44 =&gt; CV 0.35 and LB 0.35 =&gt; LB 0.27. Woot woot, downsampling works well !! And all of the other methods work just as well too!
+  ├─ Sixian Chen (2023-05-25 15:12:21.313000) [+1]
+  │  Thank you Chris! Method 1 is amazing.
+  ├─ EeyoreLee (2023-06-09 03:46:42.997000) [+0]
+  │  hi chris, does it mean you drop some data in per fold ?
+├─ Kumod Sharma (2023-06-13 08:13:24.600000) [+3]
+│  Thank you for sharing @cdeotte 
+│  I have a query.
+│  
+│  In the 3rd method, you have talked about the undersampling technique, which will reduce the negative category records and make them equal to the rec...
+  ├─ Chris Deotte (2023-06-21 01:45:07.837000) [+1]
+  │  Hi @kdsharma We can use oversampling too. Both are good methods. (I should name the 3rd method "Under or Over sampling")
+    ├─ Kumod Sharma (2023-06-23 16:01:16.217000) [+1]
+    │  Yes @cdeotte, you can do that it would be very helpful for beginners ho are exploring new stuffs related to class imbalance
+  ├─ tensorflop (2023-06-22 17:22:53.683000) [+1]
+  │  For what it's worth I tried using SMOTE to oversample. I was trying to implement an ensemble method where I had one model to predict each disease in the greeks Alpha. The dataset is already imbalan...
+    ├─ Kumod Sharma (2023-06-23 15:58:27.337000) [+1]
+    │  @matthewthompson72 Agreed even i didn't observe any major changes in the model
+  ├─ Chris Deotte (2023-06-23 16:56:05.550000) [+3]
+  │  Good suggestion @kdsharma I renamed the 2nd method to include both downsample and upsample
+├─ Anshul Yadav (2023-05-29 08:03:50.570000) [+3]
+│  Hi @cdeotte,
+│  
+│  Thanks for pointing out the data imbalance issue.
+│  
+│  I think we can also use more advanced sampling techniques. Like RandomOverSampler, SMOTE, or ADASYN to over-sample the minority clas...
+├─ Vladimir Simões da Luz Junior (2023-05-24 18:44:23.370000) [+3]
+│  Greetings, @cdeotte !
+│  
+│  Thank you for sharing! Curious to know if you have already tried hybrid sampling approaches, such as SMOTE, and if so what were the results?
+│  
+│  Keep up with the great work💪💥
+  ├─ Chris Deotte (2023-05-25 09:56:43.177000) [+2]
+  │  I have not tried approaches like SMOTE. We should try them
+    ├─ Vladimir Simões da Luz Junior (2023-05-25 19:47:27.900000) [+1]
+    │  Tried locally here, and it seems that under sampling methods similar to RandomUnderSampler or NearMiss, achieves greater results, when compared to SMOTE. At least in local CV, haven't tried in LB y...
+    ├─ Vritansh Kamal (2023-05-29 21:48:18.520000) [+2]
+    │  I tried SMOTE it gave better results as compared to UnserSampling , I removed correlated features initially and tried keeping correlated features as well and then applying smote, best was after rem...
+    ├─ Vladimir Simões da Luz Junior (2023-05-30 21:08:08.373000) [+1]
+    │  That is indeed interesting, @vritansh . Under Sampling is how everyone is currently achieving LB &lt;= 0.16….
+    │  
+    │  This could be due to the reason that we are not using all the negatives samples during...
+├─ MeiYuxin (2023-06-05 15:00:54.247000) [+4]
+│  As a beginner, I am truly grateful for Chris Deotte's sharing, which has greatly benefited my learning. In the following notebook, I have used LGBMClassifier and defined my own loss and evaluation ...
+  ├─ MeiYuxin (2023-06-06 11:34:22.470000) [+1]
+  │  I'm really sorry for my unfamiliarity with Kaggle operations, which led to the wrong link provided above. The correct link is provided below. I apologize for any inconvenience caused, especially fo...
+├─ Bernd Allmendinger (2023-05-26 04:51:02.227000) [+4]
+│  What is the optimal value for the number of outer folds when using nested cross-validation? 
+│  One possible approach is to choose the number of outer folds such that the ratio of test samples to trai...
+  ├─ Björn (2023-05-26 07:00:17.363000) [+0]
+  │  I'm not sure whether that ratio is a good argument. Even if it were, we also have to balance that vs. the amount of data in the training set (ideally similar sized to the full dataset used for trai...
+    ├─ Bernd Allmendinger (2023-05-26 07:38:49.990000) [+1]
+    │  I've noticed that my cross-validation (CV) results heavily depend on the number of folds I choose. When I utilize 3 outer folds and 5 inner folds, my CV values align most closely with the leaderboa...
+    ├─ Carl McBride Ellis (2023-05-26 10:10:18.793000) [+2]
+    │  Dear @allmendinger 
+    │  
+    │  Indeed; the train.csv only has 617 rows, so for example in 10-CV then 90% are used for training the model, and 10% are used for the test set each time, which is only around 62 ...
+    ├─ Jie Wu (2023-05-26 15:58:58.510000) [+0]
+    │  What's outer folds and inner folds? Can you elaborate what do you mean here? Thanks
+    ├─ Bernd Allmendinger (2023-05-26 16:31:10.970000) [+2]
+    │  @Jie Wu : Inner and outer folds are from nested cv. Chris explain this in this thread (How To Balance Training And Boost CV and LB Score!.)
+    │  Here is an excerpt from chris description:
+    │  
+    │  
+    │    
+    │  I began u...
+    ├─ Chris Deotte (2023-05-26 17:50:24.360000) [+5]
+    │  Using nested folds properly can help reduce overfitting (but it is also possible to use it improperly and receive no benefit from nested folds). Here is how to use it properly. I will start by expl...
+    ├─ Jun Bai (2023-05-30 08:58:09.530000) [+0]
+    │  NOTE we cannot run nested CV 1000 times and use the overall CV score to pick features because that uses all targets. And then nested is no better than un-nested.
+    │  Chris, thank you for your sharing. ...
+    ├─ Chris Deotte (2023-06-03 22:01:02.067000) [+0]
+    │  Hi @junbai2022 When we run nested CV, we run 5-Fold five times (each on its own 80% train data). Each of the five 5-Fold models can only use information from their CV score (which is based on only ...
+├─ ishiqi (2023-07-29 13:41:48.207000) [+1]
+│  Really helpful
+├─ intheflesh (2023-07-28 12:07:33.243000) [+1]
+│  This question has probably been answered somewhere but what's the difference between adding scale_pos_weight and weights (in the xgboost original xgb.DMatrix, or sample_weight in the sklearn one), ...
+  ├─ Chris Deotte (2023-07-31 13:52:09.783000) [+0]
+  │  One difference is that scale_pos_weights will apply the same weight to all target=1. And weights can apply any weight to any sample. (So for example, we may add more weight for T=1 with EJ=A then T...
+    ├─ intheflesh (2023-07-31 14:16:15.113000) [+1]
+    │  Got it, thanks!
+├─ PRASHANT SHUKLA91 (2023-07-26 09:47:40.843000) [+1]
+│  I have applied ensemble of xgboost &amp; tabpfn, but got stuck at LB=0.06. How to improve the LB score from 0.06 ? Is there need to remove outliers too?
+  ├─ [deleted] (2023-08-04 04:06:08.667000) [+3]
+  │  [deleted]
+    ├─ PRASHANT SHUKLA91 (2023-08-04 07:06:19.740000) [+0]
+    │  Thanks @tian31. But then model may overfit in private LB
+├─ PRASHANT SHUKLA91 (2023-07-23 11:08:09.370000) [+1]
+│  With this small dataset, how many models should be used as fitting it to avoid overfitting in private LB score?
+  ├─ Chris Deotte (2023-07-23 11:33:09.077000) [+3]
+  │  Overfitting is a different topic than balancing training. Ensembling models is one technique to prevent overfitting. Others include model selection, feature selection, model architecture, regulariz...
+    ├─ PRASHANT SHUKLA91 (2023-07-23 11:38:20.493000) [+1]
+    │  Thanks @cdeotte
+├─ Murugesan Narayanaswamy (2023-07-22 10:28:27.950000) [+1]
+│  Hi, The public 0.06 notebook uses both oversampling and also weighting of the probabilities while averaging the predictions of the classifiers. Will it result in better results if the weighing the ...
+├─ PRASHANT SHUKLA91 (2023-07-21 18:23:57.630000) [+1]
+│  How to use scale_pos_weight in ensemble of  2 XGB Classifier and 2 TabPFNClassifier. While fitting the model scale_pos_weight is not accepted by model. So how to balance the imbalance target data i...
+  ├─ Chris Deotte (2023-07-23 11:31:27.530000) [+1]
+  │  I don't know the details of TabPFN. We can definitely use methods 2 and 3 above with TabPFN (since they work with any model). We will need to read the API to determine if methods 1 and 4 works with...
+├─ PRASHANT SHUKLA91 (2023-07-12 09:06:21.157000) [+1]
+│  Hi! How to apply GridSearchCV in class self based method. Every time it is giving error. If it will get applied, it will give best results.. Plz assist
+  ├─ [deleted] (2023-07-28 13:41:16.560000) [+1]
+  │  Good Question. The same to me.Did you figure it out now？
+    ├─ PRASHANT SHUKLA91 (2023-07-28 17:25:28.187000) [+0]
+    │  Not yet, but I am sure it will improve the LB score from 0.06.
+├─ Jiaxu_W (2023-07-09 04:33:51.207000) [+1]
+│  thank you for providing such useful information
+├─ tomo (2023-06-21 01:33:17.353000) [+1]
+│  I’ｍ a beginner so this was very helpful. Thank you!
+├─ lminsl (2023-06-10 14:18:31.077000) [+1]
+│  Thank you so much for sharing! Helps a lot as a beginner :)
+├─ Octovalents (2023-06-08 03:57:08.583000) [+1]
+│  Thank you very much for sharing this post! A good learning for how to handle the imbalance and got my model predictions improved with these method ✨
+├─ FangPing Yu (2023-06-06 12:28:25.740000) [+1]
+│  Thank you for sharing the effective method!
+├─ Karthi Vijayakumaar (2023-06-06 06:25:38.427000) [+1]
+│  Thanks a lot, Chris! Your kernels and comments are a great starting point for beginners like me.
+├─ Jinyi Tang (2023-06-05 01:21:20.333000) [+1]
+│  Thank you for sharing the effective method.
+├─ PRASHANT SHUKLA91 (2023-08-01 15:08:01.093000) [+2]
+│  How to identify that our model is overfit or underfit. These public LB seems to be unreal, there might be drastic changes in private LB. It is very difficult to choose 2 best scores for evaluation ...
+  ├─ [deleted] (2023-08-02 06:28:44.797000) [+3]
+  │  [deleted]
+    ├─ PRASHANT SHUKLA91 (2023-08-02 09:11:20.730000) [+0]
+    │  Thanks @tian31
+├─ mh (2023-06-04 12:11:16.490000) [+1]
+│  Thank you for sharing the effective method. Is it reasonable to use multiple methods at the same time?
+  ├─ Andrey Kosintsev (2023-06-12 10:58:27.843000) [+1]
+  │  Yep, you can try all methods
+├─ Abdullah (2023-06-02 18:05:58.653000) [+1]
+│  Thank you very much for the information :)
+├─ [deleted] (2023-05-31 11:16:23.370000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-31 07:59:04.910000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-29 07:46:15.787000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-26 19:23:19.107000) [+1]
+│  [deleted]
+  ├─ [deleted] (2023-05-29 00:15:54.300000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-05-25 22:37:51.667000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-25 19:51:28.727000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-25 08:12:50.503000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-25 05:56:46.443000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-24 06:58:22.427000) [+1]
+│  [deleted]
+  ├─ [deleted] (2023-05-24 15:23:12.233000) [+14]
+  │  [deleted]
+    ├─ [deleted] (2023-05-24 17:39:18.183000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-05-24 17:46:23.407000) [+7]
+    │  [deleted]
+    ├─ [deleted] (2023-05-24 20:46:03.813000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-05-24 21:15:34.477000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2023-05-25 04:36:10.093000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-05-25 05:03:29.543000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-05-25 07:11:53.703000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-05-25 10:20:28.690000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-05-25 13:11:07.447000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-05-25 15:50:09.520000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-05-30 12:43:51.980000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-07-20 03:45:41.750000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-07-22 01:24:36.600000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2023-07-23 05:03:30.337000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-06-03 04:49:59.227000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-06-03 22:06:00.987000) [+2]
+  │  [deleted]
+├─ [deleted] (2023-06-01 13:53:35.693000) [+2]
+│  [deleted]
+├─ [deleted] (2023-06-01 03:13:51.043000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-30 20:55:42.850000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-30 05:23:29.630000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-29 20:53:55.657000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-29 16:58:32.747000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-27 04:53:26.670000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-25 17:59:50.587000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-24 20:49:17.243000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-24 17:27:53.657000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-24 07:23:08.033000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-05-24 14:46:22.120000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2023-05-25 10:33:41.450000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-05-25 03:46:04.410000) [+0]
+│  [deleted]
+├─ [deleted] (2023-06-24 10:52:22.833000) [+1]
+│  [deleted]
+├─ [deleted] (2023-07-28 13:44:52.220000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-28 15:20:40.420000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-25 13:34:47.493000) [+0]
+│  [deleted]
+├─ [deleted] (2023-06-10 00:13:40.433000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-06-10 00:24:52.520000) [+2]
+  │  [deleted]
+├─ [deleted] (2023-05-30 07:44:07.597000) [+6]
+│  [deleted]
+├─ [deleted] (2023-07-25 09:59:56.683000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-28 09:16:13.280000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-24 10:52:59.403000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-24 07:53:31.947000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-22 06:26:49.567000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-13 06:03:23.353000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-04 09:01:09.817000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-02 11:01:22.107000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-02 09:20:40.933000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-01 13:31:03.417000) [+1]
+│  [deleted]
+├─ [deleted] (2023-06-01 04:33:06.773000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-31 20:41:57.557000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-30 21:16:58.130000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-29 13:44:43.737000) [+1]
+│  [deleted]
+├─ [deleted] (2023-05-29 11:35:19.613000) [+1]
+│  [deleted]
+├─ [deleted] (2023-07-08 08:28:27.717000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-26 04:02:04.463000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-25 20:19:23.460000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-25 16:08:08.500000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-25 11:38:01.980000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-24 20:06:46.113000) [+2]
+│  [deleted]
+├─ [deleted] (2023-05-24 17:42:25.920000) [+2]
+│  [deleted]

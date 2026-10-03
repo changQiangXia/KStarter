@@ -1,0 +1,93 @@
+<p>Hi everyone,</p>
+<p>I can't even explain how I am feeling right now?!? I finally made it to the gold zone for the first time after almost 3.5 years of Kaggling and made it as a solo participant. I am quite happy my solution performed robustly in the private LB too.</p>
+<p>I would like to thank Kaggle and the organizers for creating this interesting challenge that will be beneficial and will improve the lives of many people worldwide. Also a big shout-out to the organizers who were extremely responsive during the competition which is appreciated a lot!</p>
+<p><strong>TLDR:</strong></p>
+<pre><code>I built  (+  public) different tabular pipelines  various features, data,  model combinations paired  predictions  various image model backbones. Then I blended  results  these pipelines  made my final predictions. Weights   different pipelines found via  hill-climbing algorithm.
+</code></pre>
+<p>I used a 5-fold StratifiedGroupKfold for each of the following experiments. For each feature I added, I tried them first with 5 different seed combinations. If they improved the score, I submitted it to the LB. And if they improved the score there as well, I kept that feature.</p>
+<p><strong>Tabular Pipelines</strong></p>
+<p>I am using the term pipeline here because each of the three pipelines uses different tabular models such as LGBM, Catboost, or XGBoost. In addition to the base features, I used the following features from my baseline  <a href="https://www.kaggle.com/code/snnclsr/lgbm-baseline-with-new-features" target="_blank">notebook</a>.</p>
+<ol>
+<li><p>Pipeline 1<br>
+This is my original script where I tried to extract as many contextual features as possible from the patient data. I extracted the Z-score, range of the features, skewness, kurtosis, and feature / max(feature). I subsampled the negatives with a ratio of 0.02. I also added the mean of efficient net predictions as an image feature (described below). I had one LGBM and one Catboost here.<br>
+This pipeline gave 18.3 on its own in the public LB with a CV of 17.7.</p></li>
+<li><p>Pipeline 2<br>
+With my own code, I was swinging between 10th to 20th place in the LB until <a href="https://www.kaggle.com/greysky" target="_blank">@greysky</a> 's <a href="https://www.kaggle.com/code/greysky/isic-2024-only-tabular-data" target="_blank">notebook</a> came out. Quite luckily, we were using the same CV setup. I wanted to try how the blend would perform, so I added a couple of my features to that notebook such as</p></li>
+</ol>
+<pre><code>        .with_columns(
+            n_images_per_location = pl.col().count().over([, ])
+        )
+</code></pre>
+<p>and my swin-transformer model's predictions as an image feature. On its own, this pipeline gave 17.5 CV and 18.3 LB. The blend with pipeline 1 gave my first significant boost of 18.6.</p>
+<ol>
+<li>Pipeline 3<br>
+With the motivation of adding the third image model and making the ensemble a bit more diverse, I created another pipeline with a different feature setup. I created rank, and different groupby features on top of the previous features and used a different subset of the data (0.05 negative sampling ratio). This pipeline gave a 17.5 CV and 18.0 LB on its own.</li>
+</ol>
+<p><strong>Image Models</strong></p>
+<p>My main focus was diversity so for each of the pipelines, I chose a different backbone.</p>
+<ol>
+<li>Two efficientnet_b0 with image size 256. LB: 15.5 and 15.8 with TTA 16.1</li>
+<li>swinv2_tiny_window8_256 with image size 256. LB: 15.9</li>
+<li>convnextv2_tiny.fcmae_ft_in22k_in1k with image size 224. LB: 15.8</li>
+</ol>
+<p>I did a bunch of experiments with different data, backbone, and optimizer setups. The following setup gave me the most consistent results for both CV and LB.</p>
+<p>I used only 5% of the negative images and upsampled the positives by 10. I trained only for 3 epochs as more epochs were making the results worse. I used constant lr:1e-4 for efficient-net and swin transformer models and used the following scheduler for the convnext model. For the optimizer, I just used Adam. For the loss function, I used BCE. </p>
+<pre><code>scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=, gamma=)
+</code></pre>
+<p>For the augmentations, I used the following setup similar to the previous competition's winners:</p>
+<pre><code>train_transforms = A.Compose([
+    A.VerticalFlip(p=),
+    A.HorizontalFlip(p=),
+    A.RandomBrightnessContrast(brightness_limit=,contrast_limit=, p=),
+    A.OneOf([
+        A.MotionBlur(blur_limit=),
+        A.MedianBlur(blur_limit=),
+        A.GaussianBlur(blur_limit=),
+        A.GaussNoise(var_limit=(, )),
+    ], p=),
+    A.OneOf([
+        A.OpticalDistortion(distort_limit=),
+        A.GridDistortion(num_steps=, distort_limit=),
+        A.ElasticTransform(alpha=),
+    ], p=),
+    A.CLAHE(clip_limit=, p=),
+    A.HueSaturationValue(hue_shift_limit=, sat_shift_limit=, val_shift_limit=, p=),
+    A.ShiftScaleRotate(shift_limit=, scale_limit=, rotate_limit=, border_mode=, p=),
+    A.CoarseDropout(p=),
+    A.Resize(CFG.img_size, CFG.img_size),
+    A.Normalize(mean=[, , ], std=[, , ]),
+    ToTensorV2()
+])
+valid_transforms = A.Compose([
+    A.Resize(CFG.img_size, CFG.img_size),
+    A.Normalize(mean=[, , ], std=[, , ]),
+    ToTensorV2()
+])
+</code></pre>
+<p>Something funny here at least for the people with a vision background, my image results were stuck at some point at 14.8, and whatever I tried did not work. While checking the code and looking for a solution for improvements, I realized that the <code>A.Resize</code> call was at the beginning of the list. While working on the image part of my solution I was not using any augmentations in the beginning and I was just appending new ones to the list as I experiment. Moving it to the end just before the normalization improved my scores to the 15.4-15.5 range.</p>
+<p><strong>Final Blend</strong><br>
+To find the weights of the final models I used the hill-climbing algorithm. Thanks to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> for the implementation <a href="https://www.kaggle.com/code/cdeotte/public-lb-1st-place-solution" target="_blank">here</a>.</p>
+<pre><code>    weight
+    pipe3_pred_lgb  .
+    pipe3_pred_xgb  .
+    pipe1_pred_lgb  .
+    pipe1_pred_cat  .
+    pipe_2_pred         .
+    pipe3_pred_cat  -.
+</code></pre>
+<p>The CV of this setup was 18.2 and the LB was 18.7 which was my best CV and LB at the same time.</p>
+<p><strong>Things did not work</strong></p>
+<ul>
+<li>I think similar to most of us, many many features</li>
+<li>For image models, I tried to use hard negatives where the models were making the highest errors, but it didn't work out.</li>
+<li>Focal loss performed always worse than BCE. Most probably because of my setup. </li>
+<li>Mixup was a nice addition for the diversity but performed usually poorly when added to the ensemble.</li>
+<li>Stacking additional ExtraTreeClassifier/LogisticRegression model on top of my solution</li>
+<li>Scaling predictions with ** 0.5 or rank ensemble.</li>
+<li>Fixing the <code>tbv_lv_y</code>. There were 5 patients in the dataset and each of them was from the same hospital with negative <code>tbv_lv_y</code> value. I added the min per patient to fix it. The CV was slightly better but there was no improvement on the LB.</li>
+<li>Dullrazor algorithm for hair removal</li>
+<li>Hair augmentations</li>
+<li>Sample weights based on lesion id</li>
+<li>Training image models from scratch with dataset mean&amp;std instead of imagenet init </li>
+</ul>
+<p>That was my summary. I will try to add more things in the upcoming days.</p>

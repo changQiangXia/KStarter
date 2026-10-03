@@ -1,0 +1,163 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324075
+
+Topic #324075: 6th place solution
+  Author: Ethan
+  Posted: 2022-05-10 03:02:53.693000
+  Votes: 71  Comments: 24
+
+First of all, thanks to competition organizers for hosting this interesting competition and my great teammates(@Giba, @qysx, @hyd). Secondly, thanks to the kaggle community, I have learned a lot from those great kernels and disscussions.
+
+In this competition, we were asked to recommend products to users based on their historical purchasing behavior. To solve this problem, our solution splits into two parts: recall&amp;rank. Good strategy for generating candidates and feature engineering are both important to win a good place.
+
+Recall
+
+We used several methods to generate different candidates, in order to improve the coverage of positive samples(both user and user-item).
+
+
+
+u2i: items that the user recently purchased
+
+i2i: item based collaborative filtering
+
+u2tag2i: tag can be "product_code", "product_type_no", "department_no", "section_no"
+
+hot: generate hot items for different age_bins's user
+
+
+Features
+
+Most important features are as follows,
+
+
+
+count: user, item, user-item based, it's important to use all historical data to generate the features of user.
+
+gap: user, item, user-item first/last purchase time to now. For item's first purchased time, it may  represent the "release time" of this item. So we can use "user" as key to calculate the statistics of "release time" , it may help us to get user's preference for new or old items.
+
+items' discount: use max/mean to represent the common price of the item. use the price for each row to calculate the discount of the item.So we can get user's preference for discounted items and the number of days which a item is on sale recently.
+
+tfidf: set user's historical purchased article/product_code/product_type_no to a sentence, then use tfidf+svd to generate feature. 
+
+item_sim: collaborative filtering score of i2i, calculate the items between the candidates and user's historical purchased.
+
+set categorical_features("department_no", "product_type_no", etc.) for lightgbm will improve cv score about 0.0005~0.0008. 
+
+
+Model
+
+We use last 9 weeks for training(last week for validation).Our best single model is catboost with cv score(0.00403) and lb score(0.0341). We use several models to ensemble(cv: 0.0412, lb: 0.0348). And we use the kernels(https://www.kaggle.com/code/titericz/h-m-ensembling-how-to )Giba shared before to handle the different candidates list when blending.
+
+
+
+
+model
+objective
+average num of candidates for each user
+cv map@12
+
+
+
+
+catboost
+binary
+120
+0.0403
+
+
+lightgbm
+binary
+120
+0.0395
+
+
+catboost
+binary
+220
+0.0402
+
+
+lightgbm
+binary
+220
+0.0396
+
+
+lightgbm
+lambdarank
+220
+0.0400
+
+
+lightgbm
+lambdarank
+1000
+0.0381
+
+
+
+
+The result of our best cv is the best one on PB. Trust your local cv is really importance in kaggle.
+
+Giba's solution
+
+Set around 10k article_id candidate list based in sales popularity of last 2 weeks. Build a binary dataset with all combinations of customer_id x 10k article_id . Build that huge dataset by batches and using cudf to speedup the entire process. Create a binary trainset from weeks 90 to 104. Train model on week 90-103, validate on week 104. To train the model select random 200, 300 or 500 negative candidates for each customer_id. Blend models trained using LightGBM lambdarank, LightGBM xendcg, XGBoost  lambdarank and CatBoost ranker. Best features based in the probability of purchase each article in a given period range and time passed since last purchase.
+More details on Giba Solution.
+
+To be continued
+
+Comments:
+├─ hyd (2022-05-10 04:07:09.937000) [+6]
+│  This is my first team up since 2017. I am deeply impressed by efforts of my teammates. Great finish and looking forward to next game.
+├─ qyxs (2022-05-10 03:20:46.090000) [+6]
+│  Great respect for all my teammates and thanks.
+├─ senkin13 (2022-05-10 10:34:18.227000) [+4]
+│  Congrats ,GM is on the way
+├─ heng (2022-05-10 03:13:04.313000) [+3]
+│  Congrats for another gold medal !
+├─ Homoalways (2022-05-11 09:28:55.123000) [+1]
+│  How do you compute tf-idf efficiently?
+  ├─ qyxs (2022-05-11 15:35:51.553000) [+1]
+  │  just use TfidfVectorizer in sklearn.
+  ├─ Homoalways (2022-05-12 04:14:36.117000) [+0]
+  │  Use concatenation of user's historically purchased article/product_code/product_type_no as term, and concatenation of article's article/product_code/product_type_no as document?
+  ├─ qyxs (2022-05-12 07:17:31.170000) [+1]
+  │  user's historically purchased article/product_code/product_type_no for user tfidf, article who bought by history users for article tfidf.
+  ├─ chuan (2022-05-13 13:20:11.310000) [+0]
+  │  could you explain how to use article who bought by history users to generate the article tfidf?
+  ├─ Ethan (2022-05-13 13:40:45.317000) [+1]
+  │  @cherrizhu 
+  │  docs = transactions.groupby(['customer_id'])['article_id'].apply(lambda x: ' '.join(list(x))).reset_index()
+  │  enc = tfidf()
+  │  enc.fit(docs)
+  │  something like this.
+  ├─ chuan (2022-05-13 15:37:19.963000) [+0]
+  │  Thanks for your reply!!
+  │  I have understood the use of tfidf,  and what's the effect of svd?
+  │  To generate the user / article embedding based of tfidf sequence ?
+  ├─ qyxs (2022-05-13 15:49:32.517000) [+1]
+  │  yes,just transform tfidf vectors to dense embedding.
+  ├─ chuan (2022-05-14 03:08:16.963000) [+0]
+  │  thank you very much for your reply!!!
+├─ Making TARS (2022-05-11 00:28:56.213000) [+1]
+│  Thank for sharing! I've learned a lot of from yours.
+├─ [deleted] (2022-05-10 19:26:18.320000) [+1]
+│  Amazing work as always, keep it up!
+├─ sirius (2022-05-10 15:03:04.673000) [+1]
+│  Congrats and thanks for sharing! Could you share some experience about the team work, plz？
+├─ Mohamed Annis SOUAMES (2022-05-10 09:11:00.293000) [+1]
+│  Congrats for this great win and explanation !
+│  Could you explain how did you use a binary classifier instead of a ranking model ? Like what was the target y representing ?
+  ├─ qyxs (2022-05-10 09:25:11.357000) [+1]
+  │  Because the cv and lb score of binary classifier is much better than ranking model in our case.
+  ├─ Ethan (2022-05-10 09:54:02.730000) [+1]
+  │  @souamesannis Target y represents whether the user purchase the item(candidates) or not in the week which need to predict.
+├─ tarick.morty (2022-05-10 04:21:41.720000) [+1]
+│  Congratulations for finishing in the money. Consistently you have improved your model's performance over the months which is great 👌
+├─ Lachlan Gillian (2022-05-10 07:49:52.820000) [+2]
+│  @chenxin1991 wow congratulations!
+├─ Turbo (2022-05-10 03:15:37.713000) [+2]
+│  Congrats @chenxin1991 @juzqyxs.  Nice write up.
+├─ Otar Jibladze (2022-05-13 09:35:35.907000) [+0]
+│  amazing work and keep it up
+├─ Rafia Islam (2022-05-14 07:54:56.473000) [+0]
+│  Very interesting! Thanks for sharing!

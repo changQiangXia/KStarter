@@ -1,0 +1,121 @@
+<p>Here is my efforts and final ensemble for this competition.</p>
+<table>
+<thead>
+<tr>
+<th>model*</th>
+<th>Features Qt.</th>
+<th>CV</th>
+<th>PublicLB</th>
+<th>PrivateLB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>catboost</td>
+<td>551</td>
+<td>0.688972</td>
+<td>0.589</td>
+<td>0.509</td>
+</tr>
+<tr>
+<td>lgbm</td>
+<td>697</td>
+<td>0.692120</td>
+<td>0.587</td>
+<td>0.505</td>
+</tr>
+<tr>
+<td>xgb</td>
+<td>718</td>
+<td>0.702661</td>
+<td>0.581</td>
+<td>0.504</td>
+</tr>
+<tr>
+<td>lgbm_no-dates</td>
+<td>601</td>
+<td>0.648829</td>
+<td>0.568</td>
+<td>0.494</td>
+</tr>
+<tr>
+<td>catboost_no-dates</td>
+<td>320</td>
+<td>0.632668</td>
+<td>0.566</td>
+<td>0.490</td>
+</tr>
+<tr>
+<td>lama_mlp</td>
+<td>433</td>
+<td>0.671007</td>
+<td>0.573</td>
+<td>0.488</td>
+</tr>
+<tr>
+<td>1dcnn</td>
+<td>570</td>
+<td>0.687478</td>
+<td>0.562</td>
+<td>0.476</td>
+</tr>
+<tr>
+<td>L3 ensemble</td>
+<td>-</td>
+<td>0.689244</td>
+<td>0.605</td>
+<td>0.528</td>
+</tr>
+</tbody>
+</table>
+<p>* All models are 5-fold ensembles using the same StratifiedGroupKFold.<br>
+<br><br>
+My initial sub-goal was to create a good enough diversity of models and datasets for the final ensemble. It's a common approach and I worked on it during the whole competition. Unfortunately, I didn't spend enough time on metric hacking, so my final position is not so good (only 62nd), although I was in top-10 before starting metric hacking.<br>
+My <a href="https://www.kaggle.com/code/andreynesterov/home-credit-inference-final/notebook" target="_blank">final ensemble</a> without metric hacking has a score of 0.528. The public metric hacking approach with adv classifier simply didn't work for PrivateLB.</p>
+<p><br><br>
+What helped improve the models:</p>
+<ol>
+<li>Sorting by numgroups before aggregations - at least it worked for "first" and "last" aggregators. For some models it was used with combination of aggregation by numgroup2 and then by numgroup1 (after that some tables can also be concatenated, for example applprev, credit_bureau_a, credit_bureau_b).</li>
+<li>Using a 10-fold meta-classifier (LinearRegression) instead of a simple weighted ensemble improved the score to about +0.002. Also, while training meta_cls, I added some noise to the OOF predictions of some models to match the LB scores.</li>
+<li>Models using datasets without date columns - the scores of these models weren't as big, but they complemented the ensemble well enough.</li>
+<li>Using "Coefficient of Variations" aggregator - it helped a lot to improve the score of the CatBoost model.</li>
+<li>LAMA-MLP model improved initial ensemble in early stages of competition, and I spent some time to select features to overcome OOM errors and overfitting.</li>
+<li>One place where I directly incorporated the stability approach was using the metric for ReduceLRonPlateau for training MLP and 1DCNN models.</li>
+<li>Count encoding of categorical columns (from public notebooks)</li>
+<li>Filtering of correlated columns (from public notebooks).</li>
+<li>Collapse rare categories in one group.</li>
+<li>To overcome OOM errors, creating separate datasets and then merging them helped. Also memory issue was a big problem for 1DCNN model, but I overcame it by training model on TPU and then inferencing on GPU. Also TPU was used for permutation importance.</li>
+<li>CatBoost model has best private and public scores among other models. Also in one of the experiments 5-fold CatBoost achieved score 0.520 (difference was on using early stopping 100 and lambda 10) but unfortunately I didn't include that model in the final ensemble (LB was the same and CV I didn't know because that was inference training).</li>
+<li>Tuning some models using Optuna.</li>
+<li>The inclusion of the XGB model was relatively important. I also had problems training this model, because (as I understand later) it is not so good at categorical features (unlike LGBM and CatBoost), and preprocessing was critical for this model. More specifically, after using TargetEncoder (and then CatBoostEncoder), the XGB score increased to good enough values. The same approach was also used for 1DCNN model.</li>
+<li>Using slightly different features for all the models (some tables, aggregators, types of columns, filtering approaches were not included for all the models).</li>
+<li>Replacing NaN in num columns with 0 helped for 1DCNN model.</li>
+<li>Aggregators used: max, min, first, last, mean, var, sum, std plus coef_var (distributed differently among all models, column types, or used only for certain columns).</li>
+</ol>
+<p><br><br>
+What didn't work (at least in my experiments):</p>
+<ol>
+<li>Feature selection based on adversarial validation (within train ds), permutation importance (including stability metric).</li>
+<li>I tried to create some loss functions (based on functions simpler than initial metric - from topics about metrics; incorporating weights and so on) for GBDT models, but without improvements.</li>
+<li>CV strategies based on splitting train ds on week numbers using distributions of some statistics.</li>
+<li>Tuning GBDT models using some specific parameters like dart for LGBM, ordered boosting_type for CatBoost and so on.</li>
+<li>Using IsolationForest with SMOTENC</li>
+<li>Different scalers for 1DCNN model like PowerTransformer, QuantileTransformer. Finally I used Log1p transformation only for columns with max_min-mean ratio greater than 100.</li>
+<li>Replace nums NaN with mean (or constant values like -99). BTW LAMA pipeline uses this approach, and I tried to use 0s, but LB didn't improve and I rejected this idea, but after deadline I saw that private score was improved for that submission.</li>
+<li>Compress some categories (e.g. by template P0_111_121 to P0 or P0_111)</li>
+<li>Some non-standard, custom aggregators such as entropy, mean-to-max, zero frequency, normalization within group, and so on. The goal was also to find aggragators with relative, not absolute, values.</li>
+<li>Additional feature engineering like ratios between some columns didn't improve models. As I understand after first competition was created very good features and squeezing out from dataset additional gains was not so simple task.</li>
+<li>By the results of previous competition I tried Regularized Greedy Forest (FastRGF version) but it has very poor performance and worsened final ensemble. Another idea from that competition was to train MLP only on some group of tables, but again without any results, so I discarded this idea as well. I also experimented with other models like DAE, TabTransformer, NN-cat_embeddings, packages like pytorch_tabular, but also I can't train them to good enough results.</li>
+<li>Combining some categorical features (similar to how CatBoost works).</li>
+<li>Balancing classes using parameters like scale_pos_weight.</li>
+<li>Include 1DCNN in the final ensemble. I struggled a lot to overcome the overfitting of this model, but eventually it is worsening the final ensemble from 0.529 to 0.528. Some variations of this model (with another ds) has relatively good private score (0.485) but LB was not so good (only 0.555), so I didn't include the best and maybe was digging in the wrong direction. Besides, without metric hacking this model will not contribute much to the final ensemble/position.</li>
+<li>Include some additional data such as FedFunds.</li>
+<li>Filter some weeks.</li>
+</ol>
+<p><br><br>
+Of course ideas from the community, discussions, public notebooks helped a lot.</p>
+<p><br><br>
+Update. 29.05.2024<br>
+Just out of curiosity, I tried adding the CatBoost model with score 0.520 to the final ensemble and the total private score increased to 0.536.</p>
+<p>Update. 5.06.2024<br>
+Feature importance by gain I used in selecting top-20 features from credit_bureau_a tables for lama-mlp model. This helped to avoid overfitting this model.</p>

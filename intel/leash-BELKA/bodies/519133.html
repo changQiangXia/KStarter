@@ -1,0 +1,86 @@
+<p>We would like to thank Kaggle for organizing such an interesting competition. We also appreciate <a href="https://www.kaggle.com/tetsuya3510" target="_blank">@tetsuya3510</a> , <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> , and <a href="https://www.kaggle.com/ahmedelfazouan" target="_blank">@ahmedelfazouan</a> for sharing notebooks that influenced our solution. A big thanks to my teammates <a href="https://www.kaggle.com/yyyu54" target="_blank">@yyyu54</a> , <a href="https://www.kaggle.com/Ogurtsov" target="_blank">@Ogurtsov</a>, and <a href="https://www.kaggle.com/antoninadolgorukova" target="_blank">@antoninadolgorukova</a> for fighting side by side until we used up all 480 submissions. We all reached the Competitions Master at the same time!</p>
+<h1>Approach Overview</h1>
+<p>We used separate approaches for molecules with shared building blocks and non-shared building blocks.</p>
+<h2>1. Shared Building Blocks</h2>
+<p>We used an ensemble of CNN, GBDT, and GNN models. </p>
+<h3>CNN models</h3>
+<p>It’s two variations of the great <a href="https://www.kaggle.com/code/ahmedelfazouan/belka-1dcnn-starter-with-all-data" target="_blank">public notebook</a> by <a href="https://www.kaggle.com/ahmedelfazouan" target="_blank">@ahmedelfazouan</a>. <br>
+<strong>Data:</strong> The same dataset that was used in the public notebook (<a href="https://www.kaggle.com/datasets/ahmedelfazouan/belka-enc-dataset" target="_blank">Link</a>). <br>
+<strong>Model architecture:</strong><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8574776%2Fd95ff2a9eaa0336ae9dd8ade52459721%2F2024-07-10%201.45.17.png?generation=1720553892516328&amp;alt=media"><br>
+<strong>The major changes:</strong> We doubled the filter sizes from 32, 64, 96, to 64, 128, 192; kernel sizes were increased from 3, 3, 3, to 19, 9, 3. The ReLU activations were replaced by SiLU. Moreover, for the second model, we added a bidirectional GRU layer after the embedding and concatenated it with the convolution layers after global max pooling. <br>
+<strong>Training parameters:</strong> See the table at the end.<br>
+We made a weighted average of the above two models trained with and without the validation set, using a total of four CNN models.</p>
+<h2>Other models:</h2>
+<h3>XGBoost (Written in R), LightGBM (Written in Python):</h3>
+<p>To achieve maximum diversity, the models were trained with different features on different subsets of the train data. All models were trained separately for each protein(<a href="https://www.kaggle.com/code/antoninadolgorukova/belka-gbdt-models-a-part-of-13th-place-solution" target="_blank">Code Link</a>).<br>
+<strong>Data:</strong> A sample with all binding molecules and a random sample of non-binding molecules (50M or 40M in total for GBDTs and 10M for chemprop )<br>
+<strong>Features:</strong> For one model we added predictions from chemprop (version 2.0, the output of the 3rd linear layer in the FFN) to SECFP4 (bits=1024), and for two we added BB activity features (the fraction of compounds that bind when a given BB smiles occurs at a given position) to ECFP4 (bits=1024). For LightGBM we used SECFP4 (bits=1024) and SECFP6 (bits=2048).<br>
+<strong>Training:</strong> One model was trained five times on 5 parts of the train data, each one without 20% of random BBs and others on the 50M sample (excluding validation and test subsets). <br>
+<strong>XGBoost training parameters:</strong> eta 0.05, max_depth: 25, subsample: 0.2, sampling_method: gradient_based, colsample_bytree: 0.4, min_child_weight: 4, gamma: 2, num_boost_round = 5000, early_stopping_rounds = 30.<br>
+<strong>LightGBM training parameters:</strong> max_depth: 11, bagging_fraction: 0.9, learning_rate: 0.05, colsample_bytree: 1, colsample_bynode: 0.5, lambda_l1: 1, lambda_l2: 1.5, num_leaves: 490, min_data_in_leaf': 50.</p>
+<h3>GNN:</h3>
+<p>We used this public notebook by <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> with minor changes (atom types list was truncated to actual atoms in train/test sets molecules).</p>
+<p>For this part, we used weighted average to ensemble the predictions for each protein separately, using local scores (perfect correlation with LB): BRD4: 4 models, HSA: 7 models, sEH: 5 models.</p>
+<h2>2. Non-shared Building Blocks</h2>
+<p>Creating a reliable cross-validation for the molecules with nonshared BBs was difficult, so we conducted two ensemble methods based on the public score, and used them in the final submissions.</p>
+<h3>Final submission 1 (public 0.488/private 0.275): Ranking ensemble</h3>
+<p>For this solution, in order to minimize the fluctuations due to the differences between the public and private scores, we performed an ensemble of the following two ChemBERTa-based models, which gave relatively good predictions for all proteins in the non-share block.We converted the predictions of each model into ranks to account for differences in scale between models. <br>
+<strong>Model architecture:</strong><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8574776%2Fc20ab5e45e27faa0636a1009813c52b2%2F2024-07-10%204.45.19.png?generation=1720555352029185&amp;alt=media"></p>
+<p><strong>Training parameters:</strong> See the table below.<br>
+For the two models mentioned above, predictions were made for each epoch over five random folds. The average of these predictions was calculated over a total of 5 epochs × 5 folds × 2 models.</p>
+<h3>Final submission 2 (public 0.529/private 0.277): Ranking ensemble by protein</h3>
+<p>We used one XGBoost model (ECFP4 features, trained as above on 5 subsets of train data, but with validation on subsets with non-shared BBs), and seven ChemBERTa models with different classification heads and training parameters. We scored each model for each protein, and considered the scores and diversity of predictions to select the weights (BRD4: 4 models, HSA: 3 models, sEH: 4 models). It is difficult to describe all eight models in detail, so the two models with the highest weights are described in the final submission 1 (feel free to ask anything!).</p>
+<h3>Training parameters:</h3>
+<table>
+<thead>
+<tr>
+<th>Settings</th>
+<th>CNN</th>
+<th>ChemBERTa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Optimizer</td>
+<td>Adam</td>
+<td>Adam</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>1e-3</td>
+<td>3e-4</td>
+</tr>
+<tr>
+<td>Optimizer momentum</td>
+<td>beta1, beta2 = 0.9, 0.999</td>
+<td>beta1, beta2 = 0.9, 0.999</td>
+</tr>
+<tr>
+<td>Optimizer weight decay</td>
+<td>0.05</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td>4096</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>Training epochs</td>
+<td>50</td>
+<td>5</td>
+</tr>
+<tr>
+<td>ReduceLROnPlateau</td>
+<td>patience, factor = 3, 0.05</td>
+<td>/</td>
+</tr>
+<tr>
+<td>EarlyStopping</td>
+<td>patience = 5</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>

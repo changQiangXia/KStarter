@@ -1,0 +1,153 @@
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2F49c8620b75967d6937284391f06d652f%2Fintro.webp?generation=1762596152173797&amp;alt=media" alt=""></p>
+<h1>Introduction</h1>
+<p>We’d like to begin by thanking the organizers <a href="https://www.kaggle.com/mmoffitt" target="_blank">@mmoffitt</a> and all our fellow competitors we’ve shared the last three months with. It’s been a lot of work—especially for a mostly manual, mostly non-expert benchmark team like us—but we’re very happy with where we ended up on the leaderboard. We genuinely worked our behinds off to get there.</p>
+<p>You can find our solutions, compression scripts and other interesting things at this link: <a href="https://github.com/Natanaelel/GoogleCodeGolf2025" target="_blank">https://github.com/Natanaelel/GoogleCodeGolf2025</a></p>
+<h1>Approach</h1>
+<p>Like many other teams, we manually worked on each task, so we didn’t have a secret trick that suddenly cut dozens of bytes. Our final result was the sum of many small insights we picked up along the way. Since most of us came into this with little to no code-golf experience, our first instinct was to lean heavily on LLMs. It didn’t take long to realize it was not going to get us anywhere near the top in what was already a very saturated field just a few weeks in.</p>
+<h1>Solutions / techniques overwiew</h1>
+<h3>Recursion, cell automata, pysearch - task002</h3>
+<p>In this task we have to fill all regions closed by green borders with yellow color. There are many ways to solve this task. The simplest way is straightforward DFS/Flood-fill algorithm. Another approach is to look only at 2 cells at a time and set value of current cell based on neighbor's value, almost like <a href="https://en.wikipedia.org/wiki/Cellular_automaton" target="_blank">Cellular automata</a>. You just need to do enough iterations (using recursion to save bytes) while rotating array after each step to take care of neighbor pairs in each orientation.</p>
+<pre><code>p= g,i=:-i*g  p([[-%(**i|b ~a%) a,b  ([]+r,r)]*r, (*g[::-])],i-)
+</code></pre>
+<p>There are 3 important parts here:</p>
+<ul>
+<li>recursion template <code>p=lambda g,i=67:-i*g or p(...,i-1)</code></li>
+<li>how do you access the neighbor pair, we used pretty simple <code>for a,b in zip([4]+r,r)</code></li>
+<li>how do you calculate new value based on condition, we flood from the side for all iterations except last one and then swap colors in the last step using <code>4-4%(0**i|b or~a%9</code> that was figured out with help of tool called <a href="https://github.com/lynn/pysearch" target="_blank">pysearch</a> by lynn.</li>
+</ul>
+<p>Those parts can be done in many different ways. And there are many more tricks to be used here that you can find by looking at top teams solutions.</p>
+<p>Task002 animation, keep in mind that rotations are not shown so it's easier to follow what is happening (steps go from 67 to -1).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2F3f69ef7107ea346cc045219307d0a345%2Ftask002.gif?generation=1762594915845044&amp;alt=media" alt=""></p>
+<h3>Loop trick instead of recursion template - task095</h3>
+<p>We used recursion template shown above in many tasks, but turns out that if number of iterations is smaller than grid size and we don't need to make calculations based on the counter we can use shorter template used below.
+What is also interesting here is that parameter <code>b</code> could be just lambda parameter even though technically it should be set to zero before processing each row.</p>
+<pre><code>p= g,b=:[g:=[[b%|(b:=a) a  r] r  (*g[::-])] _  g][]
+</code></pre>
+<h3>Iterating while mutating using pop() - task214</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2Fb22cf963e20068477aab8c59eab4fe78%2Fupload_a256e11de938e616f2c337573f5512da.png?generation=1762595057379835&amp;alt=media" alt=""></p>
+<p>In this task we have to finish pattern located in the left square.</p>
+<pre><code>p= g:[r+g.pop()[::-] r,*r[:] (g*,*g[::-])]
+</code></pre>
+<p>There are a couple of interesting tricks used here:</p>
+<ul>
+<li><code>g.pop()</code> that returns last row from <code>g</code></li>
+<li><code>g*1</code> to make a shallow copy so we can still iterate over full <code>g</code> even though <code>g.pop()</code> is mutating <code>g</code> (<code>zip(g*1,*g[::-1])</code> if resolved before any <code>pop()</code>)</li>
+</ul>
+<h3>Recursion with a*0==0 trick - task021</h3>
+<p>There were tasks that could be solved in a way that we perform the same operation both for whole row and for single number in a row. So we needed a way to test if current value is a row or a number.
+We can take advantage of the fact that:</p>
+<p><code>list * 0 = []</code></p>
+<p><code>number * 0 = 0</code></p>
+<pre><code>p= g:(g[g.count(a:=g[])-:])*[a*(a*==) p(a)]
+</code></pre>
+<p>If <code>a*0==0</code> is true then we return <code>a</code> (number)
+Otherwise we recurse with <code>or p(a)</code> branch.</p>
+<h3>Loop flattening and bitwise operations - task365.</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2F44cd40e20c943a053e05718145505088%2FScreenshot%20from%202025-11-08%2012-36-32.png?generation=1762601919168586&amp;alt=media" alt=""></p>
+<p>The goal of this task is to find the rectangle with the most red pixels. We can achieve it by simply brute forcing all possible candidates using 4 loops over coordinates <code>i,j</code> and sizes <code>w,h</code>. For this task it's enough if each loop is from 0 to 7, that means we can alias <code>R=range(8)</code> and use 4 loops.</p>
+<pre><code>R=()
+p= g:(((s:=(m:=[r[j:][:w] r  g[i:][:h]],[])).count()*(s),(s),m) i  R  j  R  w  R  h  R)[]
+</code></pre>
+<p>But we can also flatten all 4 loops into single one and take advantage of the fact that 8 is power of 2 so we can calculate <code>i,j,w,h</code> using bitwise operations (instead of <code>//</code> and <code>%</code> arithmetic).</p>
+<pre><code>p= g:(((s:=(m:=[x[t&amp;:][:t&gt;&gt;&amp;] x  g[t&gt;&gt;&amp;:][:t&gt;&gt;]],g))*s.count(),(s),m) t  ())[]
+</code></pre>
+<h3>Using hash to deal with edge cases - task070</h3>
+<p>There were tasks that could be solved simple way but failed 1 or 2 edge cases. So there were 2 options:</p>
+<ul>
+<li>use longer more reliable solution</li>
+<li>hash / hardcode that 1-2 edge cases and use the simpler solution</li>
+</ul>
+<p>Here we use <code>hash((*c,))%709==8</code> that calculates hash of column (as tuple) to detect that edge case so we can apply additional logic so solution pass all test cases.</p>
+<pre><code>p= g:[[x+*(x&lt; r)*(((*c,))%==  c)*c,x  (*g,r)] r  g]
+</code></pre>
+<h3>Flattening array - task286</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2Fcf0a1631f57ad8da512e479d693c4ef3%2Ftask286.gif?generation=1762595439433161&amp;alt=media" alt=""></p>
+<p>This is another task that uses recursion+rotation template.
+If the current cell is empty and neighbor has one of 2 maze colors, then current cell will have the other color.
+To find the other color we can flatten the 2D array into 1D array using <code>sum(g,[])</code>, then we can convert to set to figure out the color that we need (the only colors possible are black, cyan (wall color), neighbor color (that we know) and other color (that we are looking for)). Also interesting trick to save 1b is to set initial value of sum to e.g. <code>r</code> instead of <code>[]</code> to save a byte.</p>
+<pre><code>p= g,k=:-k*g  p([[b  a% ({*(g,r)})-a- a,b  ([]+r,r)]*r, (*g[::-])],k-)
+</code></pre>
+<h3>Iterating over raw bytes - task317</h3>
+<p>The most obvious solution for task317 is quite simple, we just use list comprehension and for each position we check the closest center of 3x3 square. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2F8d0bd0e9639dc400689d87dec370bf80%2FScreenshot%20from%202025-11-08%2012-39-28.png?generation=1762602000742974&amp;alt=media" alt=""></p>
+<pre><code>R=[,,,,,,,,]
+p= g:[[&lt;g[y][x] x  R] y  R]
+</code></pre>
+<p>That R array is quite long but we can use raw bytes intead.</p>
+<pre><code>R=
+p= g:[[&lt;g[y][x] x  R] y  R]
+</code></pre>
+<h3>Counting bits - task369</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2F7f0ab9372bbccde4f0d93a5e2591a216%2FScreenshot%20from%202025-11-08%2012-40-59.png?generation=1762602112385832&amp;alt=media" alt=""></p>
+<p>In this task we have to set color of black shapes based on the size of the shape.
+Initially we solved this task using DFS/Flood fill algorithm, but it was definitely too long.
+Next we tried regex but we still weren't happy with the result.</p>
+<p>The last solution used the following idea:</p>
+<ul>
+<li>initialize each black pixel with bits set on unique position</li>
+<li>then do enough iterations/rotations where we make bitwise OR operation for each neighbor pair</li>
+<li>in the last recursion step set the value based on number of bits set</li>
+</ul>
+<p>What is also interesting here:</p>
+<ul>
+<li>instead of using extra counter parameter, we reused recursion parameter <code>k</code> to save bytes, it made the program much slower but it worked</li>
+<li>instead of initializing with <code>1&lt;&lt;</code> we initialized with <code>3&lt;&lt;</code> (which set 2 unique bits instead of 1) because this way pysearch expression was 1 byte shorter</li>
+</ul>
+<pre><code>p= g,k=:-k*g  p([[**k*~//~a.bit_count() a|b*(a&gt;) &lt;&lt;(k:=k+) a,b  (r,[]+r)]*r, (*g[::-])],k-)
+</code></pre>
+<h3>Bruteforcing solution to avoid bad test cases - task346</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2Ff8deefd24f0ca2fdbf2814c5264c8a2b%2FScreenshot%20from%202025-11-08%2012-42-44.png?generation=1762602195690805&amp;alt=media" alt=""></p>
+<p>I
+In this task we have to return 1x1 array with color that is inside a different color square in input array.
+The simplest solution would be to try to return the least common color using this solution:</p>
+<pre><code>p= g:[[(S:=(g,[]),key=S.count)]]
+</code></pre>
+<p>But there is good news and bad news.
+The bad news is that it fails 3 test cases.
+The good news is that it fails 3 test cases, so maybe we can make a slight code modifications to make all tests pass.
+The general idea is to look at failing cases and try to figure out how we can modify parameters of sum function so it will produce expected result. We did it by trial and error with a help a tiny bruteforce script.</p>
+<pre><code>p= g:[[(S:=(g[:]+g[:],[]),key=S.count)]]
+</code></pre>
+<p>The simple script we used, we tried different templates.</p>
+<pre><code> i  ():
+     j  (i+,):
+        (i,j)
+         k  ():
+            solution=
+             verify_program(task_num, solution, task_data):
+                (solution)
+</code></pre>
+<p>Unfortunately we still missed the shortest possible solution that was really close.</p>
+<h3>Regex is quite powerful - task017</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2Fc3b9fa1f80cdd67e48ad92ca525e2f6a%2Ftask017.gif?generation=1762595807517392&amp;alt=media" alt=""></p>
+<p>The idea was to rotate the grid, then use a regex to look for a sequence of five non-zero values followed by a zero. If that exact 5-value pattern appears again later in the grid, we replace the zero with whatever value follows the second occurrence. We repeat this until all the gaps are filled.</p>
+<p>This solution was a kind of catalyst for the team to realize regex makes reasoning about some types of tasks a lot easier. It gave some of us the motivation to read the regex manual more carefully.</p>
+<pre><code> re
+p= g,k=:-k*g  p((re.sub(,,([*(*g[::-])]))),k-)
+</code></pre>
+<h3>Compression optimizations - task238</h3>
+<p>Many of our solutions ended up being long enough that compressing them was a viable way to shorten them. For this, we based our initial compression script on the ones that were shared publicly and improved them by adding more variants of <code>zlib</code> and <code>zopfli</code> compression levels, with or without blocksplitting, and setting the number of iterations to a specific value in the range 1-100. We also made heavy use of the variable optimization notebook <a href="https://www.kaggle.com/code/garrymoss/compressed-variable-name-optimization" target="_blank">https://www.kaggle.com/code/garrymoss/compressed-variable-name-optimization</a> by <a href="https://www.kaggle.com/garrymoss" target="_blank">@garrymoss</a>, thanks a lot for sharing it.</p>
+<p>While far from optimal (-28b) from diamond in the end. The solution for task238 is a very silly example of why compression golfing has a completely different approach than normal golfing.</p>
+<p>We had this code that compressed from the original 281b to 251b</p>
+<pre><code> ():
+ f= f:[[*e] e  (*(f,(*t))) f(e)];r=f( e:({*e}-{}))
+  f,e  (f( e: e)):
+   p,n  (e):d=(e);r[f+][p+]=n (f&lt;p&lt;d+~f)*r[][]+(d+~f&lt;p&lt;f)*r[-][]+(p&lt;f&lt;d+~p)*r[][]+(d+~p&lt;f&lt;p)*r[][-] n
+  r
+</code></pre>
+<p>But if you unpacked all the clever lambdas you would favor in the traditional golfing into this:</p>
+<pre><code> ():
+ e=n
+ e=[e *e, (*e) (n% n  e)]
+ e=[e *e, (*e) (n% n  e)]
+ n=[e *e, (*n)  e]
+ n=[e *e, (*n)  e]
+  f,n  (n):
+   a,t  (n):r=(n);e[f+][a+]=t (f&lt;a&lt;r+~f)*e[][]+(r+~f&lt;a&lt;f)*e[-][]+(a&lt;f&lt;r+~a)*e[][]+(r+~a&lt;f&lt;a)*e[][-] t
+  e
+</code></pre>
+<p>We have made the original far bigger 338b, but it now compressed to 223b. The same algorithm, just written in a DRY (Do repeat yourself) fashion yielded 28b.</p>
+<h1>Conclusion</h1>
+<p>We dedicated a lot of time and effort to manually improve our solutions for each task. We tried using LLMs but in most cases they were unhelpful, it was much easier for us to tackle the problems manually instead. We are very happy with our result, especially considering how little code-golfing experience some of us had prior to this competition.
+We would also like to thank all the people that shared helpful insights in kaggle discussions, especially <a href="https://www.kaggle.com/kayjoking" target="_blank">@kayjoking</a>, <a href="https://www.kaggle.com/hellopir2" target="_blank">@hellopir2</a>, <a href="https://www.kaggle.com/lukeg10081" target="_blank">@lukeg10081</a>, <a href="https://www.kaggle.com/kenkrige" target="_blank">@kenkrige</a> and <a href="https://www.kaggle.com/garrymoss" target="_blank">@garrymoss</a>.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F977970%2Fc97916c7bc78f2e87d3e3441ff00ab84%2Foutro.jpg?generation=1762597022697898&amp;alt=media" alt=""></p>

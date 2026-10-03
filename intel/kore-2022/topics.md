@@ -1,0 +1,82 @@
+# kore-2022 讨论区（按票数排序，共 80 条）
+
+- [Alternative episode visualizer](https://www.kaggle.com/competitions/kore-2022/discussion/323495) — 63 票 / 23 评论 / 2022-05-06 
+- [Gameplay Visualization](https://www.kaggle.com/competitions/kore-2022/discussion/320987) — 57 票 / 10 评论 / 2022-04-24 
+- [1st place solution](https://www.kaggle.com/competitions/kore-2022/discussion/340035) — 49 票 / 49 评论 / 2022-07-27 **write-up?**
+- [Understanding the Action Space](https://www.kaggle.com/competitions/kore-2022/discussion/319857) — 48 票 / 27 评论 / 2022-04-19 
+- [13th place solution,  Imitation learning with language modeling](https://www.kaggle.com/competitions/kore-2022/discussion/337476) — 38 票 / 7 评论 / 2022-07-16 **write-up?**
+- [Current 34th place. Graph Neural Networks.](https://www.kaggle.com/competitions/kore-2022/discussion/339774) — 30 票 / 9 评论 / 2022-07-26 **write-up?**
+- [Some things you can do to help the community](https://www.kaggle.com/competitions/kore-2022/discussion/321134) — 24 票 / 10 评论 / 2022-04-25 
+- [20th place solution: rule-based economic model](https://www.kaggle.com/competitions/kore-2022/discussion/339972) — 23 票 / 6 评论 / 2022-07-27 **write-up?**
+- [RL multiprocessing with SB3](https://www.kaggle.com/competitions/kore-2022/discussion/327460) — 20 票 / 3 评论 / 2022-05-27 
+- [Local evaluations and local scoreboard](https://www.kaggle.com/competitions/kore-2022/discussion/324150) — 19 票 / 15 评论 / 2022-05-10 
+- [[1 Musketeer] 5th place solution: Rules based](https://www.kaggle.com/competitions/kore-2022/discussion/339979) — 18 票 / 16 评论 / 2022-07-27 **write-up?**
+- [Simulation competitions from the past to checkout](https://www.kaggle.com/competitions/kore-2022/discussion/318665) — 18 票 / 0 评论 / 2022-04-13 
+- [10th place solution (Team Breakfast)](https://www.kaggle.com/competitions/kore-2022/discussion/340159) — 16 票 / 1 评论 / 2024-12-01 **write-up?**
+- [Attempting to build an Imitation Agent](https://www.kaggle.com/competitions/kore-2022/discussion/327977) — 15 票 / 6 评论 / 2022-05-30 
+- [Top 40 Team scores by day - New June 17](https://www.kaggle.com/competitions/kore-2022/discussion/327155) — 15 票 / 4 评论 / 2022-05-25 
+- [Submissions are closed - 2 week convergence](https://www.kaggle.com/competitions/kore-2022/discussion/336801) — 14 票 / 2 评论 / 2022-07-13 
+- [A solution for efficient computation of optimal paths](https://www.kaggle.com/competitions/kore-2022/discussion/336804) — 14 票 / 4 评论 / 2022-07-13 **write-up?**
+- [How to implement self-play with the kaggle-environments interface?](https://www.kaggle.com/competitions/kore-2022/discussion/323382) — 13 票 / 3 评论 / 2022-05-06 
+- [Recent Reinforcement Learning Ranked Competition Winner Result](https://www.kaggle.com/competitions/kore-2022/discussion/318649) — 12 票 / 3 评论 / 2022-04-13 
+- [4th place solution - rule based](https://www.kaggle.com/competitions/kore-2022/discussion/340157) — 12 票 / 11 评论 / 2022-07-27 **write-up?**
+- [Suggestion for future Competitions: Tutorials for the environments](https://www.kaggle.com/competitions/kore-2022/discussion/335901) — 12 票 / 3 评论 / 2022-07-08 
+- [Kore_fleets.functions](https://www.kaggle.com/competitions/kore-2022/discussion/318667) — 11 票 / 1 评论 / 2022-04-13 
+- [First Ranked Agent Competition in 2022 is coming!!!](https://www.kaggle.com/competitions/kore-2022/discussion/318643) — 11 票 / 3 评论 / 2022-04-13 
+- [Typescript, Java, and ? Starter Kits](https://www.kaggle.com/competitions/kore-2022/discussion/318546) — 11 票 / 8 评论 / 2022-04-12 
+- [Writing a fast simulator](https://www.kaggle.com/competitions/kore-2022/discussion/340404) — 11 票 / 2 评论 / 2022-07-28 
+- [Rule based solution (15~20th Place)](https://www.kaggle.com/competitions/kore-2022/discussion/336826) — 11 票 / 6 评论 / 2022-07-13 **write-up?**
+- [Sharing @paradite's great discussion posts from the Beta](https://www.kaggle.com/competitions/kore-2022/discussion/318738) — 10 票 / 2 评论 / 2022-04-13 
+- [3rd place solution - attack the opponent's second shipyard](https://www.kaggle.com/competitions/kore-2022/discussion/342296) — 10 票 / 2 评论 / 2022-08-07 **write-up?**
+- [Rule questions/clarifications](https://www.kaggle.com/competitions/kore-2022/discussion/318968) — 10 票 / 24 评论 / 2022-04-14 
+- [Lessons/knowledge learned ](https://www.kaggle.com/competitions/kore-2022/discussion/340088) — 10 票 / 2 评论 / 2022-07-27 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/kore-2022/discussion/318536) — 9 票 / 11 评论 / 2022-04-12 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/kore-2022/discussion/318537) — 9 票 / 20 评论 / 2022-04-12 
+- [2nd place solution - Rule based](https://www.kaggle.com/competitions/kore-2022/discussion/340994) — 9 票 / 4 评论 / 2022-07-31 **write-up?**
+- [How to submit an agent with external dependencies?](https://www.kaggle.com/competitions/kore-2022/discussion/320461) — 9 票 / 8 评论 / 2022-04-21 
+- [Sharing my new DQN baseline (reliably beats miner starter bot)](https://www.kaggle.com/competitions/kore-2022/discussion/323230) — 8 票 / 1 评论 / 2022-05-05 
+- [60th place solution : A* algorithm for pathfinding](https://www.kaggle.com/competitions/kore-2022/discussion/340115) — 7 票 / 3 评论 / 2022-07-27 **write-up?**
+- [How to deal with varying output sizes?](https://www.kaggle.com/competitions/kore-2022/discussion/321042) — 6 票 / 8 评论 / 2022-04-24 
+- [How to start this competition? ](https://www.kaggle.com/competitions/kore-2022/discussion/333759) — 6 票 / 5 评论 / 2022-06-28 
+- [Reinforcement Learning.  Markov Decision Process in RL. Bellman backup.](https://www.kaggle.com/competitions/kore-2022/discussion/318760) — 6 票 / 2 评论 / 2022-04-13 
+- [Any Reinforcement Learning Competitors?](https://www.kaggle.com/competitions/kore-2022/discussion/322810) — 6 票 / 3 评论 / 2022-05-04 
+- [Board size](https://www.kaggle.com/competitions/kore-2022/discussion/318710) — 6 票 / 3 评论 / 2022-04-13 
+- [Leaderboard trends since closing](https://www.kaggle.com/competitions/kore-2022/discussion/337524) — 6 票 / 0 评论 / 2022-07-16 
+- [Query regarding meta-data of game turn](https://www.kaggle.com/competitions/kore-2022/discussion/320184) — 6 票 / 6 评论 / 2022-04-20 
+- [Winning solutions of past  kaggle simulation challenges](https://www.kaggle.com/competitions/kore-2022/discussion/320833) — 6 票 / 0 评论 / 2022-04-23 **write-up?**
+- [Rl Open Source Projects You Should Check Out!](https://www.kaggle.com/competitions/kore-2022/discussion/323935) — 5 票 / 1 评论 / 2022-05-09 
+- [ A List Of Rl Resources](https://www.kaggle.com/competitions/kore-2022/discussion/324264) — 5 票 / 2 评论 / 2022-05-10 
+- [Agents in Elo Hell?](https://www.kaggle.com/competitions/kore-2022/discussion/325165) — 5 票 / 8 评论 / 2022-05-15 
+- [Collisions on adjacent squares](https://www.kaggle.com/competitions/kore-2022/discussion/321364) — 5 票 / 2 评论 / 2022-04-26 
+- [End of game](https://www.kaggle.com/competitions/kore-2022/discussion/319920) — 4 票 / 1 评论 / 2022-04-19 
+- [How do I create a good strategy?](https://www.kaggle.com/competitions/kore-2022/discussion/319785) — 4 票 / 1 评论 / 2022-04-19 
+- [submitting Neural Network weight model.](https://www.kaggle.com/competitions/kore-2022/discussion/326541) — 4 票 / 2 评论 / 2022-05-23 
+- [ Do you know how to linke notebook to this competition?](https://www.kaggle.com/competitions/kore-2022/discussion/321430) — 4 票 / 3 评论 / 2022-04-26 
+- [Start with StarCraft [RTS] Game](https://www.kaggle.com/competitions/kore-2022/discussion/318666) — 4 票 / 0 评论 / 2022-04-13 
+- [Regarding submission of results](https://www.kaggle.com/competitions/kore-2022/discussion/325642) — 4 票 / 5 评论 / 2022-05-17 
+- [Looking for team](https://www.kaggle.com/competitions/kore-2022/discussion/332511) — 4 票 / 0 评论 / 2022-06-22 
+- [About using RL in this competition](https://www.kaggle.com/competitions/kore-2022/discussion/323220) — 4 票 / 2 评论 / 2022-05-05 
+- [How to prepare a submission to load a pretrained model?](https://www.kaggle.com/competitions/kore-2022/discussion/334839) — 4 票 / 3 评论 / 2022-07-03 
+- [Kore State-Action pairs?](https://www.kaggle.com/competitions/kore-2022/discussion/321079) — 4 票 / 2 评论 / 2022-04-25 
+- [Save and load RL models/agents](https://www.kaggle.com/competitions/kore-2022/discussion/330007) — 3 票 / 0 评论 / 2022-06-09 
+- [Need Help getting started. Where to find observation specification?](https://www.kaggle.com/competitions/kore-2022/discussion/331060) — 3 票 / 1 评论 / 2022-06-15 
+- [How to actually access things like flight plan efficiently? ](https://www.kaggle.com/competitions/kore-2022/discussion/326093) — 3 票 / 6 评论 / 2022-05-20 
+- ["Could not find provided notebook"](https://www.kaggle.com/competitions/kore-2022/discussion/330917) — 3 票 / 1 评论 / 2022-06-14 
+- [When does the evaluation stop?](https://www.kaggle.com/competitions/kore-2022/discussion/339593) — 2 票 / 1 评论 / 2022-07-25 
+- [Has someone tried to encode individual shipyards into their environment?](https://www.kaggle.com/competitions/kore-2022/discussion/337362) — 2 票 / 5 评论 / 2022-07-15 
+- [Getting pictures of gameplay?](https://www.kaggle.com/competitions/kore-2022/discussion/321094) — 2 票 / 3 评论 / 2022-04-25 
+- [alphastar?](https://www.kaggle.com/competitions/kore-2022/discussion/326366) — 2 票 / 5 评论 / 2022-05-21 
+- [Can someone tell me where to find all of the data?](https://www.kaggle.com/competitions/kore-2022/discussion/331384) — 2 票 / 2 评论 / 2022-06-17 
+- [Question about kore count process at the end of game](https://www.kaggle.com/competitions/kore-2022/discussion/324741) — 2 票 / 5 评论 / 2022-05-13 
+- [How can I initialize the weights of a net to do reinforcement learning?](https://www.kaggle.com/competitions/kore-2022/discussion/319855) — 2 票 / 5 评论 / 2022-04-19 
+- [Function in Kore documentation](https://www.kaggle.com/competitions/kore-2022/discussion/319154) — 2 票 / 1 评论 / 2022-04-15 
+- [Are the agents communicating with each other via cached_property? ](https://www.kaggle.com/competitions/kore-2022/discussion/323644) — 2 票 / 13 评论 / 2022-05-07 
+- [Do Validation Episode Failed submissions not count as submission?](https://www.kaggle.com/competitions/kore-2022/discussion/336332) — 2 票 / 2 评论 / 2022-07-10 
+- [Is it possible that the board size is wrong in the description?](https://www.kaggle.com/competitions/kore-2022/discussion/333801) — 2 票 / 2 评论 / 2022-06-28 
+- [Frequency of episodes might be strange](https://www.kaggle.com/competitions/kore-2022/discussion/335806) — 2 票 / 7 评论 / 2022-07-08 
+- [How to attach NN weights?](https://www.kaggle.com/competitions/kore-2022/discussion/320764) — 2 票 / 5 评论 / 2022-04-23 
+- [Agent class](https://www.kaggle.com/competitions/kore-2022/discussion/320610) — 1 票 / 2 评论 / 2022-04-22 
+- [Any ideas for Reinforcement Learning ensembling?](https://www.kaggle.com/competitions/kore-2022/discussion/320069) — 1 票 / 2 评论 / 2022-04-19 
+- [How should the agent be trained?](https://www.kaggle.com/competitions/kore-2022/discussion/319786) — 1 票 / 4 评论 / 2022-04-19 
+- [new to this kind of competition, any baseline for beginner?](https://www.kaggle.com/competitions/kore-2022/discussion/322182) — 1 票 / 4 评论 / 2022-04-30 
+- [stdout truncation at 1024 chars](https://www.kaggle.com/competitions/kore-2022/discussion/324460) — 1 票 / 11 评论 / 2022-05-11 

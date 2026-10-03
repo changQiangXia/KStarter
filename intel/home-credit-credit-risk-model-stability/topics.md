@@ -1,0 +1,122 @@
+# home-credit-credit-risk-model-stability 讨论区（按票数排序，共 120 条）
+
+- [Understanding completion data](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473950) — 375 票 / 79 评论 / 2024-02-06 
+- [[1st Place Solution] My Betting Strategy](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508337) — 175 票 / 65 评论 / 2024-05-31 **write-up?**
+- [Problem with competition metric](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476449) — 130 票 / 47 评论 / 2024-02-12 
+- [Best Practices of Handling BigData-Scale Datasets in Code Competitions](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475485) — 106 票 / 19 评论 / 2024-02-08 
+- [Analysis of birthday](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476463) — 101 票 / 13 评论 / 2024-02-12 
+- [We are back - Submissions open on Monday, 11th March 2024](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/482474) — 96 票 / 125 评论 / 2024-03-07 
+- [Announcement regarding competition metric - UPDATED!](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476867) — 83 票 / 65 评论 / 2024-02-13 
+- [Starting materials and references](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473664) — 83 票 / 3 评论 / 2024-02-05 
+- [ Metric hack again, sorry](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497167) — 73 票 / 23 评论 / 2024-04-23 
+- [What a terrible competition !!!](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/504467) — 63 票 / 39 评论 / 2024-05-17 
+- [Public 8th/Private 253 solution ](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507946) — 60 票 / 13 评论 / 2024-05-28 **write-up?**
+- [Understanding the gini stability metric](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475878) — 57 票 / 0 评论 / 2024-02-10 
+- [Welcome note from Home Credit](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/472866) — 55 票 / 40 评论 / 2024-02-02 
+- [Chiming in with a few thoughts](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/483559) — 55 票 / 16 评论 / 2024-03-12 
+- [Faster ways to load competition's data](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475389) — 54 票 / 10 评论 / 2024-02-08 
+- [Creditworthiness: ScoreCards, FICO Score, Credit Scoring Techniques (AHP, DEMATEL). LB 2018 Fall.](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473704) — 52 票 / 6 评论 / 2024-02-05 
+- [Be careful with time features](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/484134) — 51 票 / 6 评论 / 2024-03-15 
+- [[ANSWERED] May we have a host clarification on the latest metric hack?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497337) — 51 票 / 35 评论 / 2024-04-24 
+- [How to cheat, I mean "improve" your score](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/496898) — 49 票 / 28 评论 / 2024-04-22 
+- [gini_stability_custom_metric used in lightgbm👀](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/500868) — 46 票 / 10 评论 / 2024-05-07 
+- [Visualizing the churn](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507951) — 45 票 / 16 评论 / 2024-05-28 
+- [[Dark Humor] Graphic Summary of this competition](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505712) — 45 票 / 9 评论 / 2024-05-18 
+- [Covid-19 Gonna make us dance again](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473765) — 44 票 / 11 评论 / 2024-02-06 
+- [A look into feature's dtypes](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475922) — 42 票 / 4 评论 / 2024-02-10 
+- [Improving model performance by handling data imbalance](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/478094) — 40 票 / 6 评论 / 2024-02-19 
+- [How to train with much more data in lightgbm without running out of ram](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/501170) — 40 票 / 10 评论 / 2024-05-08 
+- [Another way to hack the metric](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/501172) — 39 票 / 30 评论 / 2024-05-08 
+- [Proposed metrics](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/478699) — 39 票 / 63 评论 / 2024-02-21 
+- [Master sheet of all files and thier columns](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/487121) — 39 票 / 6 评论 / 2024-03-27 
+- [13th place solution - pmts_year_1139T postprocess](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508113) — 38 票 / 9 评论 / 2024-05-30 **write-up?**
+- [Conclusions from my experiments so far](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/477228) — 38 票 / 21 评论 / 2024-02-15 
+- [Similar competitions important kernels and discussions for references ](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473973) — 38 票 / 7 评论 / 2024-02-06 
+- [FAQ - Please read me before posting](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/477074) — 37 票 / 33 评论 / 2024-02-14 
+- [Instability of Public LB and Issues with Time-Series CV](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/488466) — 37 票 / 8 评论 / 2024-04-02 
+- [[placeholder] novel ideas (stability prize) and experiment results](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475516) — 37 票 / 7 评论 / 2024-02-08 
+- [Sudden accretion of novice/ contributor accounts at the top of the leaderboard](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505574) — 37 票 / 35 评论 / 2024-05-18 
+- [End of Competition - note from Home Credit](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508163) — 34 票 / 54 评论 / 2024-05-28 
+- [Announcement regarding competition metric - follow-up](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/478716) — 34 票 / 30 评论 / 2024-02-21 
+- [Initializing the GPU to good effect in your LGBM models](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/498970) — 34 票 / 2 评论 / 2024-04-30 
+- [Use the exit function in python to utilize GPU resources effectively upon submission](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497895) — 33 票 / 7 评论 / 2024-04-26 
+- [My team's viewpoint about metric hacking](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/501744) — 32 票 / 16 评论 / 2024-05-10 
+- [A Hard Lesson for Kaggle](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505664) — 32 票 / 15 评论 / 2024-05-18 
+- [Beware that the null count has a trend!](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/477075) — 30 票 / 5 评论 / 2024-02-14 
+- [53th Place Solution (without metric hack)](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508242) — 29 票 / 5 评论 / 2024-06-05 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508588) — 29 票 / 5 评论 / 2024-05-30 **write-up?**
+- [A silver medal approach ](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507971) — 29 票 / 5 评论 / 2024-05-28 **write-up?**
+- [First time participating in Non-Playground competition. Any helpful advice or tips?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475184) — 28 票 / 17 评论 / 2024-02-07 
+- [The Queen of All Competitions is Back](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473642) — 28 票 / 8 评论 / 2024-02-05 
+- [Handing common memory errors in submission](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/486259) — 27 票 / 9 评论 / 2024-03-24 
+- [Feature information in Chinese [字段中文介绍] by GPT3.5](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/485303) — 27 票 / 9 评论 / 2024-03-20 
+- [COMPLETED: Updating Data and Leaderboard](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/483254) — 25 票 / 1 评论 / 2024-03-11 
+- [Kudos to Hosts for their engagement](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476821) — 25 票 / 4 评论 / 2024-02-13 
+- [All you need is to hack further weeks](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507982) — 24 票 / 12 评论 / 2024-05-28 
+- [Federal reserve rate](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476522) — 24 票 / 8 评论 / 2024-02-12 
+- [57th place, 0.528. Without hack.](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508124) — 24 票 / 14 评论 / 2024-06-05 **write-up?**
+- ["persontype" is categorical feature](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497750) — 24 票 / 0 评论 / 2024-04-25 
+- [Trick to reduce memory usage](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/490931) — 24 票 / 5 评论 / 2024-04-04 
+- [Another simple metric hack can get  Public 0.626 / Private 0.616](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507959) — 23 票 / 5 评论 / 2024-05-28 
+- [Why getting Notebook Threw Exception?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475652) — 23 票 / 23 评论 / 2024-02-09 
+- [When LightGBM is run on a GPU, the results are not reproducible.](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/494257) — 23 票 / 1 评论 / 2024-04-16 
+- [I have never seen such a competition in kaggle](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/500848) — 22 票 / 11 评论 / 2024-05-07 
+- [Is the explosion of good scores related to restoring of WEEK_NUM?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/501654) — 22 票 / 24 评论 / 2024-05-10 
+- [An example of pattern change caused by COVID: Impact of the weekday](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/477470) — 22 票 / 4 评论 / 2024-02-16 
+- [[MEMORY MANAGEMENT] Function to clear max RAM and cache](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505491) — 22 票 / 1 评论 / 2024-05-17 
+- [Best luck to every competitor!](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507874) — 22 票 / 5 评论 / 2024-05-27 
+- [Don't Drop Columns With Many Categories, Instead Collapse](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/492989) — 21 票 / 11 评论 / 2024-04-11 
+- [Did this happen to you also?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507952) — 21 票 / 16 评论 / 2024-05-28 
+- [Train CatBoost faster using two gpus](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/498280) — 21 票 / 8 评论 / 2024-04-27 
+- [Competition Metric Behavior Case](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/499993) — 20 票 / 4 评论 / 2024-05-03 
+- [Income data discrepancies](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/491927) — 19 票 / 3 评论 / 2024-04-07 
+- [How to deal with imbalance data ? ](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475095) — 19 票 / 10 评论 / 2024-02-07 
+- [Submissions are now enabled](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/483262) — 18 票 / 28 评论 / 2024-03-11 
+- [The big(er) elephant: is stability regime dependent?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505852) — 18 票 / 9 评论 / 2024-05-19 
+- [strange metric?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475118) — 18 票 / 17 评论 / 2024-02-07 
+- [What about stability?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/498038) — 18 票 / 5 评论 / 2024-04-26 
+- [some tips to speed up your experiments](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/498336) — 17 票 / 2 评论 / 2024-04-27 
+- [How To Align The Number Of Columns For Train, Valid, And Test Data When Using 'get_dummies' ?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/495066) — 17 票 / 0 评论 / 2024-04-19 
+- [Try and make best use of your resources](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/498230) — 17 票 / 0 评论 / 2024-04-27 
+- [My recap of the competition](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507980) — 17 票 / 7 评论 / 2024-05-28 
+- [Confused about num_groupN](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476907) — 16 票 / 11 评论 / 2024-02-14 
+- [Techniques for Better Stability](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508122) — 16 票 / 16 评论 / 2024-05-28 
+- [What is the meaning of num_group1 and num_group2 in depth1 and 2 dataset?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476763) — 16 票 / 5 评论 / 2024-02-13 
+- [Impossible DPD values?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476968) — 16 票 / 3 评论 / 2024-02-14 
+- [Stability metric issue: probabilistic approach](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/501800) — 15 票 / 3 评论 / 2024-05-10 
+- [69th solution of this competition without hacking metrics](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508753) — 15 票 / 0 评论 / 2024-06-04 **write-up?**
+- [Best LB score with single model](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/496846) — 15 票 / 18 评论 / 2024-04-22 
+- [Summary of my first kaggle competition](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508326) — 15 票 / 1 评论 / 2024-05-29 
+- [Max features is all you need?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/494087) — 15 票 / 10 评论 / 2024-04-15 
+- [train_applprev_1_0](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475548) — 15 票 / 5 评论 / 2024-02-08 
+- [Lottery, no thanks](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/477014) — 14 票 / 6 评论 / 2024-02-14 
+- [CV vs LB - large difference?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475244) — 14 票 / 9 评论 / 2024-02-07 
+- [Way to understand "credit_bureau_a_1", Am I right?👀](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/493900) — 14 票 / 7 评论 / 2024-04-15 
+- [Will the competition hosts disqualify cheaters?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/499699) — 14 票 / 0 评论 / 2024-05-02 
+- [Shakeup is all you need!!](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507556) — 14 票 / 27 评论 / 2024-05-26 
+- [Overfitting period has started ](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/506347) — 14 票 / 2 评论 / 2024-05-21 
+- [What is num_group feature?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475373) — 14 票 / 11 评论 / 2024-02-08 
+- [Beware of using date-based features](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475123) — 14 票 / 0 评论 / 2024-02-07 
+- [The public leaderboard gets less and less reliable over time](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497003) — 14 票 / 4 评论 / 2024-04-23 
+- [Home Credit Competition : Research papers](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476616) — 14 票 / 0 评论 / 2024-02-13 
+- [Successful submissions are now failing with Memory Errors](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/506542) — 14 票 / 22 评论 / 2024-05-22 
+- [Finding it hard to improve on the benchmark (LGBM)](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/494915) — 13 票 / 5 评论 / 2024-04-18 
+- [Meaning of a55475b1](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475773) — 13 票 / 8 评论 / 2024-02-09 
+- [When could we expect metric to be fixed?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/478350) — 13 票 / 10 评论 / 2024-02-20 
+- [Has anyone managed to add Credit Bureau A data successfully?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/478360) — 13 票 / 15 评论 / 2024-02-20 
+- [The reality of this competition](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507976) — 13 票 / 5 评论 / 2024-05-28 
+- [Why the competition metric is well designed](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475459) — 13 票 / 1 评论 / 2024-02-08 
+- [My local metrics](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/475181) — 13 票 / 0 评论 / 2024-02-07 
+- [Anybody else hate the new user profile look on Kaggle as much as I do?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476946) — 13 票 / 20 评论 / 2024-02-14 
+- [Minimizng Memory Usage through Optimal Datatype Selection](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/473919) — 12 票 / 2 评论 / 2024-02-06 
+- [It's funny that the scores were way lower with the original version of the hack](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505646) — 12 票 / 19 评论 / 2024-05-18 
+- [How to find unstable features?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/491692) — 12 票 / 4 评论 / 2024-04-06 
+- [Why do LB scores vary so much?](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/490762) — 12 票 / 10 评论 / 2024-04-03 
+- [Optuna with integrated stability metric](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/501689) — 12 票 / 0 评论 / 2024-05-10 
+- [How do you clean up RAM after big data transformations](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/477246) — 11 票 / 2 评论 / 2024-02-15 
+- [why is the metic hacking so effective](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505987) — 11 票 / 2 评论 / 2024-05-20 
+- [What the Slope Term in the Metric Really Does](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/483125) — 11 票 / 7 评论 / 2024-03-11 
+- [Learning in non-stationary environment](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/499022) — 10 票 / 1 评论 / 2024-04-30 
+- [HomeCreditConpetitionsを盛り上げよう（日本語コミュニティ）](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/487434) — 10 票 / 14 评论 / 2024-03-29 
+- [The skyrocketing public  scores highlight just how bad of a competition this was](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/505620) — 10 票 / 2 评论 / 2024-05-18 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508733) — 6 票 / 0 评论 / 2024-05-30 

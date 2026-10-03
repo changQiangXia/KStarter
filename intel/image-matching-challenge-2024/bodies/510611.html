@@ -1,0 +1,157 @@
+<p>I am delighted to participate in the Image Matching Challenge again, two years after my last participation in 2022. I would like to extend my gratitude to the host and the Kaggle team for organizing the competition. I also pay my respects to all the competitors who competed against each other and completed the challenge together.</p>
+<p>This year's competition features scenes with challenging image quality compared to the previous IMC2022. It is worthwhile to evaluate the performance of the latest machine learning techniques. Additionally, I have learned that some of the distributed data includes scenes that have already been lost, such as the Temple of Baalshamin. This highlights the importance of digital archiving using 3D reconstruction technology and further underscores the social significance of this competition.</p>
+<h2>1. Specific Challenges Encountered</h2>
+<p>In explaining my solution, I would like to outline the key challenges encountered.</p>
+<h3>1.1 Rotated Images</h3>
+<p>In addition to conditions related to the shooting environment, there was a possibility that the host intentionally rotated some of the images. With the EXIF information removed, I had to rely solely on the images themselves to address this issue.</p>
+<h3>1.2 Transparent Scenes</h3>
+<p>The baseline code revealed that it could barely handle transparent objects. The images lacked texture and created reflections and specularities.</p>
+<h2>2. Solution</h2>
+<h3>2.1 Overview</h3>
+<p>Like other teams, my solution processes transparent and non-transparent scenes separately. After processing them separately, 3D reconstruction with COLMAP is performed using the matching results obtained from each.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F611870%2F159bf28bda8dbb0c83c394c2ec0f0e86%2Fsolution.jpg?generation=1717707107726771&amp;alt=media" alt="overview"></p>
+<h3>2.2 Non-Transparent Scenes</h3>
+<h4>2.2.1 Keypoint Detection</h4>
+<p>Keypoints were generated and cached while rotating the images by 90 degrees at a time. ALIKED-n16 was used, and keypoints for each rotation angle were retained.</p>
+<h4>2.2.2 Matching Stage</h4>
+<p>LightGlue was used for evaluating the matches. For a fixed key1, keypoints from key2 were evaluated in four patterns, and the combination with the highest number of matches was adopted. Referring to the IMC2023 2nd place solution (<a href="https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416873" target="_blank">link</a>), matches threshold was evaluated in two patterns: 100 and 125.</p>
+<h3>2.3 Transparent Scenes</h3>
+<h4>2.3.1 Foreground Segmentation - "bottle" class is all you need -</h4>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F611870%2Ffe4b9b8bdebbbd178b9b63388ce971e4%2Fcylinder_matching_initial.png?generation=1717707155993809&amp;alt=media" alt="cylinder_matching_initial"></p>
+<p>By closely observing failure cases in transparent scenes, it was noticed that many keypoints appeared in background areas, leading to failures in camera pose estimation. To suppress keypoints in background areas, I investigated foreground extraction methods. Using the DINOv2 Segmenter (<a href="https://github.com/facebookresearch/dinov2/blob/main/notebooks/semantic_segmentation.ipynb" target="_blank">link</a>), I discovered that the VOC2012 model assigned class5 to the foreground. According to the <a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/segexamples/index.html" target="_blank">link</a>, class5 is assigned to "bottle". By treating this class as "transparent", I hypothesized that I could achieve high-precision segmentation.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F611870%2F6dd026c50f87131ec407026c2d513bf9%2Fcylinder_segmented.png?generation=1717707179881772&amp;alt=media" alt="cylinder_segmented"></p>
+<h4>2.3.2 Keypoint Detection with Original Scale</h4>
+<p>The images in transparent scenes were relatively large and all of the same size, so I decided to detect keypoints at the original scale without resizing. Considering VRAM and processing time, keypoints were detected in 1024x1024 grid units. Combining this with the DINOv2 Segmenter, keypoints were detected only in the foreground area.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F611870%2F8b95ff498022a69cc46e32d6134a49e3%2Fcylinder_keypoints_initial.png?generation=1717707437917224&amp;alt=media" alt="keypoints initial"></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F611870%2Fff16f90a5b4ac647de3cbe3349b1cd41%2Fcylinder_keypoints_result.png?generation=1717707455484348&amp;alt=media" alt="keypoints proposed"></p>
+<h4>2.3.3 Feature Matching</h4>
+<p>Given the shooting conditions this time, I determined that there was no need to search extensively for matches. Therefore, corresponding points were searched only between corresponding grids during keypoint detection. This significantly reduced the search range.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F611870%2F206ad587a4bff93ef5eb97ce7367a2ac%2Fcylinder_matching_result.png?generation=1717707266905858&amp;alt=media" alt="cylinder_matching_proposed"></p>
+<h3>2.4 Other Tricks</h3>
+<h4>2.4.1 Get Pairs Exhaustive</h4>
+<p>Since the number of images per scene was not large in IMC2024, exhaustive matching for all pairs was performed instead of searching for pairs with DINOv2 or EfficientNet. This reduced the risk of missing matches due to low embedding-based similarity.</p>
+<h4>2.4.2 Use <em>ALL</em> Images</h4>
+<blockquote>
+  <p>I think it's natural for the score to increase if you increase the number of images, as it makes it easier to triangulate.</p>
+</blockquote>
+<p>Inspired by Camaro's comment (<a href="https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/494789#2768517" target="_blank">link</a>), I wondered if using images beyond those in submission.csv could facilitate easier 3D reconstruction. A simple LB probing revealed that there were images other than those listed in submission.csv in the test data's images folder. Using up to 100 image sets for validation significantly improved the validation score, so it was expected to be effective on the LB as well.</p>
+<h2>3. Results</h2>
+<p>After the competition ended, I conducted several late submissions to evaluate how much each additional technique contributed to improving the leaderboard (LB) score. For local validation, I used a subset of approximately 50 images generated with the following notebook.</p>
+<p><a href="https://www.kaggle.com/code/tmyok1984/imc2024-validation" target="_blank">https://www.kaggle.com/code/tmyok1984/imc2024-validation</a></p>
+<table>
+<thead>
+<tr>
+<th>No,</th>
+<th>Transparent trick</th>
+<th>Exhaustive matching</th>
+<th>Use all images</th>
+<th>Private LB</th>
+<th>Public LB</th>
+<th>Val (avg.)</th>
+<th>church</th>
+<th>dioscuri</th>
+<th>lizard</th>
+<th>temple-baalshamin</th>
+<th>pond</th>
+<th>glass_cup</th>
+<th>glass_cylinder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.149</td>
+<td>0.136</td>
+<td>0.26</td>
+<td>0.24</td>
+<td>0.47</td>
+<td>0.54</td>
+<td>0.42</td>
+<td>0.10</td>
+<td>0.02</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>2</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>0.184</td>
+<td>0.171</td>
+<td>0.32</td>
+<td>0.24</td>
+<td>0.47</td>
+<td>0.54</td>
+<td>0.40</td>
+<td>0.09</td>
+<td>0.02</td>
+<td>0.47</td>
+</tr>
+<tr>
+<td>3</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>0.186</td>
+<td>0.176</td>
+<td>0.34</td>
+<td>0.24</td>
+<td>0.52</td>
+<td>0.51</td>
+<td>0.42</td>
+<td>0.17</td>
+<td>0.02</td>
+<td>0.47</td>
+</tr>
+<tr>
+<td>4</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>0.197</td>
+<td>0.194</td>
+<td>0.43</td>
+<td>0.31</td>
+<td>0.56</td>
+<td>0.79</td>
+<td>0.41</td>
+<td>0.46</td>
+<td>0.02</td>
+<td>0.47</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Baseline (1) : Private LB=0.149 (around 300th place), Public LB=0.136 (around 300th place)</li>
+<li>Add Transparent trick (1+2) : Private LB=0.184 (around 8th place), Public LB=0.171 (around 50th place)</li>
+<li>Add Exhaustive matching (1+2+3) : Private LB=0.186 (around 7th place), Public LB=0.176 (around 30th place)</li>
+<li>Add ALL images (1+2+3+4) : Private LB=0.197 (4th place), Public LB=0.194 (around 7th place)</li>
+</ul>
+<p>This ablation study revealed the following points:</p>
+<ol>
+<li><p>Effect of Transparent trick: Adding the trick for transparent scenes significantly improved the Private LB score from 0.149 to 0.184. This demonstrated that handling transparent scenes greatly contributes to overall performance improvement.</p></li>
+<li><p>Effect of Exhaustive matching: Adding the exhaustive matching method for all pairs further improved the score slightly. This indicated that the risk of missing matches due to low embedding-based similarity was effectively reduced.</p></li>
+<li><p>Effect of Using All Images: Using images beyond those in submission.csv resulted in the most significant score improvement. This confirmed that utilizing additional image information greatly enhances the accuracy of 3D reconstruction.</p></li>
+</ol>
+<p>Overall, handling transparent scenes and using all available images were shown to be key factors for ranking high on the leaderboard.</p>
+<h2>4. Implementation</h2>
+<p>This section shares techniques related to implementation.</p>
+<h3>4.1 Multiple Process / Multiple GPUs</h3>
+<p>As highlighted in previous solutions, IMC is characterized by the substantial computational cost of both CPU and GPU processing. Running the CPU and GPU in parallel can potentially double the processing speed. Additionally, using GPUs with two T4 cards allows for parallelizing GPU processing, thereby doubling the processing capacity.</p>
+<p>Although the importance of these aspects has been mentioned in past solutions, it is very rare for reference code to be made public. As part of my contribution to the community, I have shared the code I used this time. The base part of the implementation can be used beyond IMC, so please refer to it.</p>
+<p><a href="https://www.kaggle.com/code/tmyok1984/imc2024-exp556" target="_blank">https://www.kaggle.com/code/tmyok1984/imc2024-exp556</a></p>
+<h3>4.2 Utility Script</h3>
+<p>When using packages not available in the Kaggle environment, offline installation is necessary. However, performing offline package installation in the submission notebook wastes submission time. To solve this problem, I always use the utility script feature. By adding a utility script notebook with pre-installed packages, necessary packages can be installed beforehand, making the submission notebook more efficient. The utility script I used this time is below.</p>
+<p><a href="https://www.kaggle.com/code/tmyok1984/imc2024-install-once" target="_blank">https://www.kaggle.com/code/tmyok1984/imc2024-install-once</a></p>
+<p>The following link provides detailed information on how to create utility scripts, so please refer to it.</p>
+<p><a href="https://www.kaggle.com/code/kononenko/pip-install-once" target="_blank">https://www.kaggle.com/code/kononenko/pip-install-once</a></p>
+<h2>5. What Did Not Work (For Me)</h2>
+<ul>
+<li>Symmetries-and-repeats: I spent most of the competition period on symmetries-and-repeats. Ultimately, I implemented a combination of a  <a href="https://github.com/RuojinCai/doppelgangers" target="_blank">Doppelgangers classifier</a> and 3D geometrical verification. Although I adopted it in the final submission and it worked well locally in some cases, the LB consistently worsened during the ablation study with the late submission. I experienced the Concorde effect firsthand.</li>
+<li>Overlap region：In our 10th place solution for IMC2022, we used DKM-ROI (<a href="https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328903" target="_blank">link1</a>, <a href="https://www.kaggle.com/code/tmyok1984/imc2022-ensemble-with-dkm-roi" target="_blank">link2</a>). This time, there was an excellent publicly available notebook (<a href="https://www.kaggle.com/code/nartaa/imc24-overlap-detection" target="_blank">link</a>), so I implemented it as well but did not achieve good results. While high matching accuracy was required in IMC2022, in IMC2024, high robustness was required, so its effectiveness was limited. Specifically, if the initial value for finding overlap was incorrect, the subsequent steps would break down significantly. In contrast, the 1st place solution  (<a href="https://www.kaggle.com/competitions/image-matching-challenge-2024/discussion/510084" target="_blank">link</a>) successfully estimated the ROI using multiple viewpoints robustly and achieved excellent results.</li>
+<li>Non-Maximum Suppression：This also strongly boosted our LB in IMC2022. However, ALIKED was strong enough this time that even when LoFTR, DeDoDe, and RoMa were ensembled, no improvement was observed in my local validation.</li>
+<li>COLMAP hyperparameters：Using the help(pycolmap) command, many configurable parameters could be seen. Various parameters were changed, but no significant effect was obtained.</li>
+</ul>

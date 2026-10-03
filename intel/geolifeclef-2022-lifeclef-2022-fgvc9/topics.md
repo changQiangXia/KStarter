@@ -1,0 +1,25 @@
+# geolifeclef-2022-lifeclef-2022-fgvc9 讨论区（按票数排序，共 23 条）
+
+- [🥇 1st place solution description](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/327055) — 11 票 / 5 评论 / 2022-05-26 **write-up?**
+- [.tif files - how to deal with it?](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/311983) — 11 票 / 3 评论 / 2022-03-09 
+- [Previous Year GeoLifeCLEF Challenge, Notebook and Paper](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/312112) — 10 票 / 1 评论 / 2022-03-10 
+- [🔥🌞💢 Resources for this contest - From ImageCLEF website and Kaggle ❄🎯🔥](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/312283) — 8 票 / 2 评论 / 2022-03-11 
+- [Welcome to GeoLifeCLEF 2022!](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/312093) — 6 票 / 3 评论 / 2022-03-10 
+- [Looking for a teammate](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/312788) — 6 票 / 5 评论 / 2022-03-14 
+- [Meaning of some filename codes. Environmental_vectors.csv file](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/313558) — 5 票 / 0 评论 / 2022-03-17 
+- [Sharing baselines ?](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/312696) — 5 票 / 4 评论 / 2022-03-13 
+- [What about SnakeCLEF 2022?](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/315024) — 4 票 / 5 评论 / 2022-03-25 
+- [2nd place solution description](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/328637) — 4 票 / 0 评论 / 2022-06-02 **write-up?**
+- [Final week and CLEF working notes submission information](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/325984) — 3 票 / 0 评论 / 2022-05-19 **write-up?**
+- [Sharing thoughts: Single class labeling is probably misleading models](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/325767) — 3 票 / 6 评论 / 2022-05-18 
+- [Time feature ? ](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/318426) — 3 票 / 1 评论 / 2022-04-12 
+- [Research papers on deep learning for image segmentation!](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/321452) — 3 票 / 1 评论 / 2022-04-26 
+- [Why these competitions don't have medals?](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/313714) — 3 票 / 1 评论 / 2022-03-18 
+- [GDAL-Geospatial Data Abstraction Library](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/312250) — 3 票 / 0 评论 / 2022-03-11 
+- [Cannot have my efficientnet to decrease top30 error rate](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/325902) — 2 票 / 3 评论 / 2022-05-19 
+- [Notebooks To Start From!](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/323140) — 2 票 / 0 评论 / 2022-05-05 
+- [Looking for team mates!](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/313968) — 2 票 / 1 评论 / 2022-03-20 
+- [The right Raster in the the right Lat/Long. Geotiff (.tif) Raster File Format. ](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/313562) — 2 票 / 0 评论 / 2022-03-17 
+- [Competition wrap-up](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/327037) — 1 票 / 6 评论 / 2022-05-25 
+- [Open Source Segmentation Projects](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/325095) — 1 票 / 0 评论 / 2022-05-14 
+- [Looking for teammate](https://www.kaggle.com/competitions/geolifeclef-2022-lifeclef-2022-fgvc9/discussion/315063) — 0 票 / 4 评论 / 2022-03-25 

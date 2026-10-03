@@ -1,0 +1,122 @@
+# jigsaw-agile-community-rules 讨论区（按票数排序，共 120 条）
+
+- [The rules are revealed](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/607941) — 127 票 / 58 评论 / 2025-09-17 
+- [1st place solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613305) — 118 票 / 33 评论 / 2025-10-25 **write-up?**
+- [6th Place Solution: Online Distillation via Deep Mutual Learning](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613150) — 107 票 / 53 评论 / 2025-10-24 **write-up?**
+- [Qwen2.5 LoRA Finetune Baseline LB : 0.872](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591445) — 68 票 / 55 评论 / 2025-07-28 
+- [18th Solution(public 11th)](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613071) — 62 票 / 15 评论 / 2025-10-24 **write-up?**
+- [Text Generation vs Sequence Classification](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591549) — 45 票 / 11 评论 / 2025-07-29 
+- [Public joint probing initiative](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/607118) — 41 票 / 42 评论 / 2025-09-11 
+- [7th place solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613215) — 40 票 / 8 评论 / 2025-10-25 **write-up?**
+- [Silver Medal - 120th - RAG + ReRanker](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613168) — 40 票 / 13 评论 / 2025-10-24 **write-up?**
+- [[8th] Qwen3-14B*3 + Llama2-13B*1 + bge-base-en-v1.5](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613195) — 40 票 / 3 评论 / 2025-10-24 
+- [12th place solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613096) — 39 票 / 4 评论 / 2025-10-24 **write-up?**
+- [LB probing the hidden rules](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/604092) — 37 票 / 48 评论 / 2025-09-06 
+- [3rd Place Solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613324) — 35 票 / 6 评论 / 2025-10-26 **write-up?**
+- [9th Place Solution: Bringing It All Together](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613185) — 33 票 / 3 评论 / 2025-10-24 **write-up?**
+- [Rule Violation Detected](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/600750) — 32 票 / 12 评论 / 2025-08-24 
+- [vllm update from 0.10.0 to 0.10.1 ](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/599824) — 30 票 / 7 评论 / 2025-08-19 
+- [When will the private leaderboard be public?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613055) — 27 票 / 58 评论 / 2025-10-24 
+- [Reddit Data and API](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591081) — 26 票 / 5 评论 / 2025-07-25 
+- [5th Place solution - Diverse Ensemble](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613421) — 25 票 / 0 评论 / 2025-10-27 **write-up?**
+- [Is LB 0.931 a Ceiling?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/610635) — 24 票 / 23 评论 / 2025-10-05 
+- [4th place writeup - Instruct LLM is all you need](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613473) — 24 票 / 5 评论 / 2025-10-27 **write-up?**
+- [Awaiting the Competition Final: Will There Be a Shake‑Up?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612952) — 21 票 / 31 评论 / 2025-10-23 
+- [Does this competition award medals? - Solved](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590880) — 21 票 / 1 评论 / 2025-07-23 
+- [Possible Grey Area in the Rules: Training on Test Data via Positive/Negative Examples](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/598099) — 20 票 / 44 评论 / 2025-08-08 
+- [Should hidden rules in test data be made public?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/606613) — 20 票 / 3 评论 / 2025-09-09 
+- [Let's discuss the goal of the competition](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/596670) — 18 票 / 12 评论 / 2025-08-04 
+- [Some references to top solutions from previous text and nlp comps](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591187) — 18 票 / 3 评论 / 2025-07-26 **write-up?**
+- [Using LLM for Probing](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/606665) — 17 票 / 13 评论 / 2025-09-09 
+- [Was the labeling synthetic?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613100) — 16 票 / 13 评论 / 2025-10-24 
+- [The best score for single model?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/601137) — 16 票 / 49 评论 / 2025-08-26 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590876) — 15 票 / 5 评论 / 2025-07-23 
+- [ New teams conquering medal rankings](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612538) — 15 票 / 30 评论 / 2025-10-20 
+- [How to easily install packages offline](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/599946) — 15 票 / 9 评论 / 2025-08-20 
+- [Test Data Count](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590898) — 15 票 / 17 评论 / 2025-07-23 
+- [13th Place Solution: Using Positive Examples from Other Rules as Negative Exampl](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613265) — 15 票 / 9 评论 / 2025-10-25 **write-up?**
+- [CV Strategy](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/593676) — 13 票 / 16 评论 / 2025-07-30 
+- [ 15th Place Solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613611) — 13 票 / 0 评论 / 2025-10-28 **write-up?**
+- [Deadline confirmation](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612204) — 13 票 / 4 评论 / 2025-10-17 
+- [Why did pseudo label not work?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613328) — 12 票 / 14 评论 / 2025-10-26 
+- [Clarification on External Data Usage - Chandrasekharan & Gilbert Reddit](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/599517) — 12 票 / 3 评论 / 2025-08-17 
+- [Solution Writeup: Jigsaw - Agile Community Rules Classification](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613131) — 11 票 / 1 评论 / 2025-10-24 **write-up?**
+- [train consistency](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591160) — 11 票 / 17 评论 / 2025-07-25 
+- [2nd place solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/614279) — 11 票 / 3 评论 / 2025-11-02 **write-up?**
+- [🥉 142th Bronze Medal](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613720) — 10 票 / 0 评论 / 2025-10-29 **write-up?**
+- [USE this notebook to probe！](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/606654) — 10 票 / 1 评论 / 2025-09-09 
+- [11th Place Solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613506) — 10 票 / 2 评论 / 2025-10-27 **write-up?**
+- [How to use url imformation?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/604432) — 10 票 / 0 评论 / 2025-09-07 
+- [Rules crawler subreddit](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/596367) — 10 票 / 1 评论 / 2025-08-03 
+- [Why Do Many Public Notebooks Skip Validation?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/598141) — 9 票 / 10 评论 / 2025-08-08 
+- [18th place solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/617588) — 9 票 / 0 评论 / 2025-11-11 **write-up?**
+- [[166th] Place Bronze Medal Solution : Deep Generalization using LLM](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613090) — 8 票 / 0 评论 / 2025-10-24 **write-up?**
+- [Tactics matter when probing](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/606742) — 7 票 / 6 评论 / 2025-09-10 
+- [Has anyone faced this problem ?Timeout while submitting a submission which was receiving score earlier ?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/603465) — 7 票 / 7 评论 / 2025-09-02 
+- [All in LLMs？](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612132) — 7 票 / 1 评论 / 2025-10-17 
+- [Does any team actually make use of the hidden rule?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/611644) — 6 票 / 11 评论 / 2025-10-13 
+- [Was anyone able to gain a lot from synthetic data using the private rules?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613059) — 6 票 / 9 评论 / 2025-10-24 
+- [Inconsistent Rule Labels for Identical Text in Training Data](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/593898) — 5 票 / 1 评论 / 2025-07-31 
+- [Private leaderboard data release](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/641107) — 5 票 / 0 评论 / 2025-11-26 
+- [Anyone used Unsloth to lora ？](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613063) — 5 票 / 12 评论 / 2025-10-24 
+- [175th Place Solution🥉](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613129) — 5 票 / 0 评论 / 2025-10-24 **write-up?**
+- [180->197st Place Bronze Medal Solution : Synthetic data](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613108) — 5 票 / 0 评论 / 2025-10-24 **write-up?**
+- [Awaiting pvt leaderboard](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613054) — 5 票 / 1 评论 / 2025-10-24 
+- [Model Ideas & Strategies – Jigsaw Agile Community Rules](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591162) — 5 票 / 2 评论 / 2025-07-25 
+- [Solved: Data Quality](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590893) — 5 票 / 11 评论 / 2025-07-23 
+- [Multi-LLMs Ranking Ensemble](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/665704) — 4 票 / 0 评论 / 2026-01-04 
+- [No legal advice in...r/legaladvice?!](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/598132) — 4 票 / 1 评论 / 2025-08-08 
+- [ How to Get Access to custom packages in Offline Mode](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591161) — 4 票 / 9 评论 / 2025-07-25 
+- [Can the Leaderboard Score extend to 4 decimal Digits?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/611061) — 4 票 / 0 评论 / 2025-10-08 
+- [Per Rule AUC Scores](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/641121) — 3 票 / 0 评论 / 2025-11-26 
+- [Can I save multiple submission file with same name?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591083) — 3 票 / 5 评论 / 2025-07-25 
+- [[251th] Ensemble Four Models](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613320) — 3 票 / 0 评论 / 2025-10-25 
+- ["Notebook threw exception", even after notebook runs. (Fixed)](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/596568) — 3 票 / 5 评论 / 2025-08-04 
+- [Prediction and Topic Generation Using FastText](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613057) — 3 票 / 0 评论 / 2025-10-24 
+- [subreddit information question](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/611286) — 3 票 / 5 评论 / 2025-10-10 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613533) — 2 票 / 0 评论 / 2025-10-27 
+- [Notebook timeout when ensemble](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/600380) — 2 票 / 4 评论 / 2025-08-22 
+- [Why my score calculation after submission is running for 6 hour and so?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591135) — 2 票 / 3 评论 / 2025-07-25 
+- [How much do you get better PB score from "full tuning" with quantization than Lora?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/609609) — 2 票 / 2 评论 / 2025-09-28 
+- [Data Augmentation Improvement for 6th Place Solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/614439) — 2 票 / 1 评论 / 2025-11-04 **write-up?**
+- [Are the example comments and the topic in the same subreddit?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/609633) — 2 票 / 3 评论 / 2025-09-28 
+- [Data Quality](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/607028) — 2 票 / 3 评论 / 2025-09-11 
+- [Unable to install online libraries or use finetuned model](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/602530) — 2 票 / 0 评论 / 2025-08-28 
+- [Notebook keeps throwing error ](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590961) — 2 票 / 7 评论 / 2025-07-24 
+- [rules and positive/negative examples in qwen3 0.6B embedding](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/601090) — 2 票 / 0 评论 / 2025-08-26 
+- [Using Positive and Negative Examples for Data Augmentation — Has Anyone Tried This?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591257) — 2 票 / 7 评论 / 2025-07-26 
+- [Question About Submission](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612946) — 2 票 / 8 评论 / 2025-10-23 
+- [Clarification regarding deadline and LB final scoring](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612817) — 2 票 / 2 评论 / 2025-10-22 
+- [Doubt related 'rule' column](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590929) — 2 票 / 1 评论 / 2025-07-24 
+- [Notebook Threw Error [Solved]](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591391) — 2 票 / 5 评论 / 2025-07-27 
+- [Is it possible to reach 0.94?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/612477) — 2 票 / 3 评论 / 2025-10-20 
+- [Not able to submit](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/600584) — 1 票 / 2 评论 / 2025-08-23 
+- [If the scoring exceeds 12 hours ?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/599915) — 1 票 / 4 评论 / 2025-08-19 
+- [The classification ability of the fine-tuning model deteriorates](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/604158) — 1 票 / 0 评论 / 2025-09-06 
+- [Submission CSV Not Found](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/603998) — 1 票 / 2 评论 / 2025-09-05 
+- [Can a Model Learn to Generate Better Augmented Data?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/600038) — 1 票 / 4 评论 / 2025-08-20 
+- [[SOLVED] An error occurred while saving the entity changes. See the inner exception for details.](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/599964) — 1 票 / 4 评论 / 2025-08-20 
+- [gpu crunch](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/606748) — 1 票 / 5 评论 / 2025-09-10 
+- [Is it possible to allow TPUs?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591567) — 1 票 / 0 评论 / 2025-07-29 
+- [Notebook timeout on 32B model](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/597228) — 1 票 / 2 评论 / 2025-08-06 
+- [Inference taking more than 12 hour please suggest some optimization](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/598477) — 1 票 / 2 评论 / 2025-08-11 
+- [Should the prediction returned by the model be a binary or a decimal value?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591150) — 1 票 / 5 评论 / 2025-07-25 
+- [WARNING: Dataset maybe upsetting to some.](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590897) — 1 票 / 0 评论 / 2025-07-23 
+- [leaderboard dataset](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590975) — 1 票 / 6 评论 / 2025-07-24 
+- [ Questions on LB Reliability &  Private Test Set Size](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/607598) — 1 票 / 7 评论 / 2025-09-15 
+- [probing of rules](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/607655) — 1 票 / 5 评论 / 2025-09-15 
+- [The notebook threw an exception.](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/607935) — 1 票 / 2 评论 / 2025-09-17 
+- [dependency build failure](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591554) — 1 票 / 2 评论 / 2025-07-29 
+- [Clarification on LLM Usage and External Preprocessing](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/593938) — 1 票 / 0 评论 / 2025-07-31 
+- [Too much time....](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/591393) — 1 票 / 4 评论 / 2025-07-27 
+- [What is the highest single model score using only the official training dataset?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/608374) — 1 票 / 0 评论 / 2025-09-19 
+- [Why timeout only on submitting?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/608305) — 1 票 / 2 评论 / 2025-09-19 
+- [Test just 10 rows](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/590884) — 1 票 / 1 评论 / 2025-07-23 
+- [Discussion on Runtime](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/599062) — 1 票 / 3 评论 / 2025-08-14 
+- [Train on positive and negative samples during submit?](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/593884) — 1 票 / 2 评论 / 2025-07-31 
+- [A previously trained model performs poorly when used independently for prediction.](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/611720) — 1 票 / 9 评论 / 2025-10-14 
+- [37th Ranked Solution](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/743184) — 1 票 / 0 评论 / 2026-09-25 **write-up?**
+- [How to find the best weights???](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/608584) — 1 票 / 5 评论 / 2025-09-21 
+- [Local CV 0.78 → LB 0.56 gap ](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/611470) — 1 票 / 2 评论 / 2025-10-11 
+- [Test set size when running the private LB](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/611897) — 1 票 / 1 评论 / 2025-10-15 
+- ["Submit to Competition" notebook timeout - unable to score any notebooks](https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/603389) — 1 票 / 12 评论 / 2025-09-02 

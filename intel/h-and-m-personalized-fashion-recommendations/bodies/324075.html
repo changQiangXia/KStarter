@@ -1,0 +1,75 @@
+<p>First of all, thanks to competition organizers for hosting this interesting competition and my great teammates(@Giba, <a href="https://www.kaggle.com/qysx" target="_blank">@qysx</a>, <a href="https://www.kaggle.com/hyd" target="_blank">@hyd</a>). Secondly, thanks to the kaggle community, I have learned a lot from those great kernels and disscussions.</p>
+<p>In this competition, we were asked to recommend products to users based on their historical purchasing behavior. To solve this problem, our solution splits into two parts: recall&amp;rank. Good strategy for generating candidates and feature engineering are both important to win a good place.</p>
+<h3>Recall</h3>
+<p>We used several methods to generate different candidates, in order to improve the coverage of positive samples(both user and user-item).</p>
+<ol>
+<li>u2i: items that the user recently purchased</li>
+<li>i2i: item based collaborative filtering</li>
+<li>u2tag2i: tag can be "product_code", "product_type_no", "department_no", "section_no"</li>
+<li>hot: generate hot items for different age_bins's user</li>
+</ol>
+<h3>Features</h3>
+<p>Most important features are as follows,</p>
+<ol>
+<li>count: user, item, user-item based, it's important to use all historical data to generate the features of user.</li>
+<li>gap: user, item, user-item first/last purchase time to now. For item's first purchased time, it may  represent the "release time" of this item. So we can use "user" as key to calculate the statistics of "release time" , it may help us to get user's preference for new or old items.</li>
+<li>items' discount: use max/mean to represent the common price of the item. use the price for each row to calculate the discount of the item.So we can get user's preference for discounted items and the number of days which a item is on sale recently.</li>
+<li>tfidf: set user's historical purchased article/product_code/product_type_no to a sentence, then use tfidf+svd to generate feature. </li>
+<li>item_sim: collaborative filtering score of i2i, calculate the items between the candidates and user's historical purchased.</li>
+<li>set categorical_features("department_no", "product_type_no", etc.) for lightgbm will improve cv score about 0.0005~0.0008. </li>
+</ol>
+<h3>Model</h3>
+<p>We use last 9 weeks for training(last week for validation).Our best single model is catboost with cv score(0.00403) and lb score(0.0341). We use several models to ensemble(cv: 0.0412, lb: 0.0348). And we use the kernels(<a href="url" target="_blank"></a><a href="https://www.kaggle.com/code/titericz/h-m-ensembling-how-to" target="_blank">https://www.kaggle.com/code/titericz/h-m-ensembling-how-to</a> )Giba shared before to handle the different candidates list when blending.</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>objective</th>
+<th>average num of candidates for each user</th>
+<th>cv map@12</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>catboost</td>
+<td>binary</td>
+<td>120</td>
+<td>0.0403</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>binary</td>
+<td>120</td>
+<td>0.0395</td>
+</tr>
+<tr>
+<td>catboost</td>
+<td>binary</td>
+<td>220</td>
+<td>0.0402</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>binary</td>
+<td>220</td>
+<td>0.0396</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>lambdarank</td>
+<td>220</td>
+<td>0.0400</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>lambdarank</td>
+<td>1000</td>
+<td>0.0381</td>
+</tr>
+</tbody>
+</table>
+<p>The result of our best cv is the best one on PB. Trust your local cv is really importance in kaggle.</p>
+<h3>Giba's solution</h3>
+<p>Set around 10k article_id candidate list based in sales popularity of last 2 weeks. Build a binary dataset with all combinations of customer_id x 10k article_id . Build that huge dataset by batches and using cudf to speedup the entire process. Create a binary trainset from weeks 90 to 104. Train model on week 90-103, validate on week 104. To train the model select random 200, 300 or 500 negative candidates for each customer_id. Blend models trained using LightGBM lambdarank, LightGBM xendcg, XGBoost  lambdarank and CatBoost ranker. Best features based in the probability of purchase each article in a given period range and time passed since last purchase.<br>
+More details on <a href="https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324278" target="_blank">Giba Solution</a>.</p>
+<h3>To be continued</h3>

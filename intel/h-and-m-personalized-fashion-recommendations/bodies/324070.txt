@@ -1,0 +1,590 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324070
+
+Topic #324070: 1st place solution
+  Author: senkin13
+  Posted: 2022-05-10 02:08:03.127000
+  Votes: 430  Comments: 222
+
+Thanks to H&amp;M and Kaggle Team giving us such a wonderful competition.Thanks my team mate @h4211819 finally we got 1st place.This competition has no leak,stable cv-lb correlation,and infinite possibilities to improve, we really enjoyed exploring the accuracy boundaries of  infinite possibilities. 
+
+Overview
+
+The most interesting part of this competition is we need to generate train and test by ourself, the candinate generation strategy is the key to beyond limitation of accuracy ,good feature engineering or modeling could be close to the limitation .Our solution is using various retrieval strategies + feature engineering + GBDT, seems simple but powerful.
+
+We mainly generate recent popular items because fashion changing fast and has seasonality,tried to add cold start items but they will never be ranked to top12 due to lacking of interaction information.
+user and item interaction information are always the most important of recommendation problem,the features we created are almost interaction features,image and text features didn't help but should be useful for cold start problem.
+
+Almost 50% users have no transactions in recent 3months,so we created many cumulative features for them,and last week,last month,last season features for active users.
+
+We use 6 weeks data as train,last week as valid,retrieve 100 caninates for each user,it has stable cv-lb correlation.We focus on improving single lightgbm model to the last week, cv is 0.0430 and lb is 0.0362.At last week I have to rent gcp's big memory server and vast.ai's gpu server to run bigger models to get higher accuracy.
+
+
+
+Retrieval(aka: candidate generation | recall)
+
+At early stage,we focus on increasing the hit number of retrieved 100 candidates,try various strategies to cover more positive sample. 
+
+
+
+
+WeekNo
+HitNum@100
+
+
+
+
+2020-09-16
+39142
+
+
+2020-09-09
+38427
+
+
+2020-09-02
+41019
+
+
+
+
+Ranking
+
+
+
+
+Feature Engineering
+basiclly,features are created base on retrieval strategies,create user-item interaction for repurchase,create collaborative filtering score for itemcf,create similarity for embedding retrieval,create item count for popularity……
+
+
+
+
+Type
+Description
+
+
+
+
+Count
+user-item, user-category of last week/month/season/same week of last year/all, time weighted count…
+
+
+Time
+first,last days of tranactions…
+
+
+Mean/Max/Min
+aggregation of age,price,sales_channel_id…
+
+
+Difference/Ratio
+difference between age and mean age of who purchased item, ratio of one user's purchased item count and the item's count
+
+
+Similarity
+collaborative filtering score of  item2item, cosine similarity of item2item(word2vec), cosine similarity of user2item(ProNE)
+
+
+
+
+
+Downsampling
+If we retrieve 100~500 candidates for each user,the negative samples number is very big,so negative downsampling is must,we found 1 million ~ 2 million negative samples for each week has better performace .
+neg_samples = 1000000;seed = 42
+train[train['label']&gt;0].append(train[train['label']==0].sample(neg_samples, random_state=seed))
+
+
+
+Model
+Our best single model is a lightgbm(cv:0.0441,lb:0.0367),finally we trained 5 lightgbm classifier and 7 catboost classifier for ensemble(lb:0.0371).catboost's lb score is much worse than lightgbm,lightgbm has very stable cv-lb correlation.
+
+
+
+Optimization
+
+
+
+we use TreeLite to accelerate lightgbm inference speed (2X faster),catboost-gpu is 30X faster than lightgbm-cpu inference.
+
+transform all the categorical features(including two way) to label encoding,use reduce_mem_usage,
+
+create a feature store,save intermediate features files to dictionary , final features to feather,exsiting features will not be create again
+
+split all the users to 28 group,inference simultaneously with multiple servers.
+
+
+Machine
+
+I have a desktop with 128G RAM,64 vcore CPU,TITAN RTX GPU.It's enough to run most of our models to win.My teammate has a desktop with 64G RAM.At last week ,we use 300G RAM gcp instances.
+
+Comments:
+├─ narsil (jobs-in-data.com) (2022-05-10 05:25:35.497000) [+24]
+│  It is an amazing win and huge congrats to you!
+│  
+│  Gradient Boosted Trees &gt;= NN in recommender systems.
+│  
+│  Gradient boosted trees do not receive nearly as much coverage in papers &amp; research compa...
+  ├─ senkin13 (2022-05-10 10:52:59.917000) [+13]
+  │  Totally agree with you, technology should be appropriate for business not just seems modern or fashionable
+  ├─ Homoalways (2022-05-11 08:01:50.383000) [+1]
+  │  @narsil I think one reason for success of gradient boosting models(over nns) for this competition is that we don't have as much compute power and as much time to try&amp;tune as engineering teams i...
+    ├─ canfaneat (2025-04-01 07:58:40.530000) [+0]
+    │  so you mean that gradient boosting models is better than nns ? I wonder if there are any stronger nn models can do better
+  ├─ narsil (jobs-in-data.com) (2022-05-13 05:58:54.443000) [+0]
+  │  @homoalways Even in big companies, Trees + Manual FE have some big advantages over NNs. Cost, where you point out, is one of them. Also, manually engineered features can be easily debugged. They pr...
+├─ Giba (2022-05-10 14:32:42.967000) [+10]
+│  Congrats @senkin13 &amp; @h4211819 !  Great solution. 
+│  
+│  Have you tried FIL library for LightGBM inference? In my tests it can be 10x faster than cpu inference.
+  ├─ senkin13 (2022-05-11 01:33:02.393000) [+0]
+  │  never heard of FIL library,thanks for sharing
+  ├─ [deleted] (2022-05-11 08:44:30.517000) [+0]
+  │  [deleted]
+├─ biubiuG (2022-05-10 04:25:05.173000) [+7]
+│  thanks for your great solution sharing…looking forward your code sharing..
+├─ sirius (2022-05-10 04:07:08.727000) [+5]
+│  Congratulations! Very solid work
+│  One question is what's the improvement of graph embedding in your recalling and ranking? That's a part which I wanna try but didn't have enough time.
+│  Thanks for you...
+  ├─ senkin13 (2022-05-10 10:55:16.380000) [+1]
+  │  about 0.002 up
+  ├─ sirius (2022-05-10 12:45:59.947000) [+0]
+  │  Wow, that's really powerful!
+├─ HAO (2022-05-11 02:15:10.040000) [+6]
+│  Very organized pipline and strong win. For some ideas, I also came up with, but because of the ineffeciency of the pipeline and I didn't organize everything as well as you did, so I came up so many...
+├─ tarick.morty (2022-05-10 04:17:28.887000) [+3]
+│  Congratulations on winning the competition, it's really amazing.
+│  We were having difficulty dealing with 6 weeks of data, so I can imagine how challenging it'd have been to manage so much of data.
+├─ Clear n' Simple (2022-05-15 18:39:57.153000) [+4]
+│  In your chart, where you write Top N, do you use the same N for each retrieval method?
+  ├─ senkin13 (2022-05-16 12:02:20.813000) [+2]
+  │  different N by adjusting manually to optimize the hit number
+  ├─ Clear n' Simple (2022-05-17 02:38:29.267000) [+0]
+  │  Thank you!
+  │  
+  │  What do you do if some customers don't have 'N' candidates for a given strategy?
+  │  For example, if you first take top 10 repurchase candidates, what do you do for customers who have less ...
+  ├─ senkin13 (2022-05-18 09:20:43.393000) [+0]
+  │  we don't need to take same N for each strategy,make sure total candidates is 100.At least we have top 100 popular items for all users.
+├─ Rohit Kumar (2022-05-12 00:37:25.930000) [+4]
+│  This was super helpful for a begginer like me. Thanks My Besto Friendo.
+├─ Paweł Jankiewicz (2022-05-10 08:24:33.553000) [+4]
+│  Congrats! I like the mention of a feature store. It seems very useful to not recalculate the features every time.
+  ├─ senkin13 (2022-05-10 10:38:47.730000) [+2]
+  │  Yes,although I spent much time on creating pipeline and feature store,it helped us do more experiments without bugs
+  ├─ biubiuG (2022-05-10 12:26:12.797000) [+1]
+  │  would you please sharing the " feature store" demo code ?
+  ├─ senkin13 (2022-05-11 01:34:12.703000) [+5]
+  │  it's just a concept.
+  │  What is a feature store?
+  │  The short version - a data management layer for machine learning that allows to share &amp; discover features and create more effective machine learnin...
+  ├─ biubiuG (2022-05-11 12:32:17.583000) [+0]
+  │  well, thanks
+├─ myaun (2022-05-10 02:52:55.223000) [+4]
+│  Congratulations! I didn't see anything special about it; just a great solution where every single process is deeply validated and refined, including optimizing the development! Thanks for sharing!
+├─ evancallaghan (2022-05-18 15:58:11.693000) [+1]
+│  Great work!
+├─ Ruiqi Gao (2022-05-17 11:33:26.203000) [+1]
+│  Congratulations!
+│  I have a very simple question to ask, how do you divide the time to get the data source for your ranking model? For example, train the recall model with the training set of the fir...
+  ├─ senkin13 (2022-05-18 09:14:51.193000) [+3]
+  │  the simplest model is using last week data as samples of ranking model,recall top N candidates from previous data by rules or model,the overlap of recall data and last week data is positive samples...
+├─ Clear n' Simple (2022-05-17 02:52:21.093000) [+1]
+│  Congratulations on your first place finish!
+│  
+│  Very happy for you - you've put in years of kaggle work, and hard work finally paid off!
+├─ Clear n' Simple (2022-05-17 02:48:10.570000) [+1]
+│  What retrieval did you use for customers without history?
+│  
+│  Just 12 most popular items, or something more?
+│  On your CV, do you know what part of the score was attributable to the new customers?
+  ├─ senkin13 (2022-05-18 09:17:34.847000) [+1]
+  │  just most popular items.I have not checked but I think everyone have no big difference of new customers' score because it's hard to predict.
+├─ Grzesiek Zyśk (2022-05-16 20:13:11.610000) [+1]
+│  Interesting :) Thx for sharing
+├─ Wahyu Dwi Prasetio (2022-05-16 11:53:33.487000) [+1]
+│  Great work! Thank you for this knowledge
+├─ I110143105 (2022-05-15 15:09:33.527000) [+1]
+│  Great Work!
+├─ KIYAKIM (2022-05-15 15:07:40.357000) [+1]
+│  Congratulations! Thank you for your sharing! This solution is really nice!
+├─ Rashmita Karak (2022-05-15 12:48:01.797000) [+1]
+│  Amazing job! Please share more soon.
+├─ Gargeya Sharma (2022-05-15 04:44:17.390000) [+1]
+│  Looks interesting. Thanks for sharing. 👊
+├─ Prakarn Kidngun (2022-05-15 04:32:38.947000) [+1]
+│  Congratulation and Thanks for the sharing 👍
+├─ Violence Detection (2022-05-14 19:15:04.820000) [+1]
+│  great work
+├─ Jingping Pei (2022-05-14 11:24:11.417000) [+1]
+│  THX for sharing!!!
+├─ ahmed samy (2022-05-14 03:00:26.503000) [+1]
+│  Great work.
+├─ Naomi Ugwumba (2022-05-13 19:47:01.180000) [+1]
+│  great work!
+├─ dxpNinja (2022-05-13 18:10:59.220000) [+1]
+│  Very well explained. Congratulations and thanks for sharing!
+├─ Sofía Cavallo (2022-05-13 16:05:51.927000) [+1]
+│  Hi, amazing work!! Thank so much for sharing!! 
+│  
+│  Could I ask you a question?
+│  In the case of cosine similarity, are you using the closest or another distance to the items bought in the previous week...
+  ├─ senkin13 (2022-05-16 12:07:44.490000) [+0]
+  │  cosine similarity between user's latest purchased ,2nd latest purchased items and candidate item
+├─ Edgar Sanchez (2022-05-13 16:03:00.137000) [+1]
+│  Hello, congratulations for the work.
+│  
+│  But I have a question. How does item2item integrate with lightgbm? Is it a feature engineering itself or an intermediate step for another process?
+│  
+│  Thanks for ...
+  ├─ senkin13 (2022-05-16 12:09:26.473000) [+0]
+  │  it's feature engineering, cosine similarity between user's latest purchased ,2nd latest purchased items and candidate item
+├─ Karol Szczukowski (2022-05-13 08:05:04.417000) [+1]
+│  great work!
+├─ [deleted] (2022-05-13 06:00:02.337000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 00:47:35.707000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 22:34:18.533000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-13 00:52:19.573000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-05-13 03:31:17.913000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-12 21:32:29.380000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 17:33:59.083000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 14:43:53.250000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 04:37:07.027000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 02:05:57.930000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 15:34:50.580000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 07:53:33.230000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-11 10:19:07.110000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-05-11 07:13:59.130000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 06:09:49.813000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 03:41:51.740000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 01:18:08.877000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 22:19:57.340000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 19:27:35.077000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 18:38:55.087000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 17:53:01.190000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 17:18:03.823000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 16:37:40.437000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 16:06:21.983000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 16:05:34.580000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-11 01:42:10.263000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-05-11 08:45:20.610000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-10 15:00:47.080000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-11 01:38:23.207000) [+2]
+  │  [deleted]
+├─ [deleted] (2022-05-10 14:02:15.153000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 13:48:31.497000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 12:41:04.543000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 12:03:10.640000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 11:06:09.973000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 11:02:44.767000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 10:34:53.040000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 09:24:48.520000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 08:45:10.657000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 08:22:01.833000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-10 10:42:12.550000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-05-10 07:50:45.507000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 07:49:40.873000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-10 10:45:48.653000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-05-10 07:49:02.593000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 07:25:27.993000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 06:43:10.087000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 06:42:47.877000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 05:21:00.677000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 05:16:21.503000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-10 06:27:49.520000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-06-02 06:13:16.267000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-10 05:16:02.860000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 04:21:06.443000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-05-10 04:59:34.687000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-05-10 06:24:51.923000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-05-12 06:12:30.360000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-05-10 03:18:39.157000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 03:11:54.747000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 02:17:46.007000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-16 03:11:00.140000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-05-16 12:01:05.593000) [+5]
+  │  [deleted]
+├─ [deleted] (2022-05-13 10:22:49.080000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-05-13 14:49:41.460000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-05-13 15:19:07.377000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-12 11:50:57.600000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-12 07:59:22.077000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-12 06:23:32.553000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-05-12 12:09:18.393000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-05-12 12:46:36.090000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-05-12 13:29:07.960000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-05-17 02:46:41.680000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-05-12 02:51:07.350000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-05-12 06:23:32.603000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-05-16 13:35:04.983000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-10 03:43:50.520000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-10 03:22:55.877000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-10 03:21:41.447000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-05-10 04:53:03.730000) [+3]
+  │  [deleted]
+├─ [deleted] (2022-05-11 13:29:01.560000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-05-11 14:57:47.697000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-05-11 15:28:22.700000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-10-13 10:59:43.283000) [+0]
+│  [deleted]
+├─ [deleted] (2022-12-22 04:01:27.960000) [+0]
+│  [deleted]
+├─ [deleted] (2022-10-27 13:01:46.703000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-12 23:42:26.090000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-29 09:22:37.897000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-14 08:31:14.303000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-15 13:02:06.233000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-06-13 02:51:52.237000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-12 15:38:13.343000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-06 01:46:42.633000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-15 13:14:43.173000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-23 01:39:51.827000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-22 19:00:47.940000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-22 08:20:01.243000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-21 15:14:17.043000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-20 17:14:13.357000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-20 09:23:27.103000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 21:43:24.257000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-02 13:12:44.207000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-19 10:32:22.193000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 06:02:10.687000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 02:41:28.217000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-11 07:41:22.707000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-05-11 10:21:07.613000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-06-14 17:46:28.353000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-03 03:36:33.067000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-06-15 13:18:26.810000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-05-22 11:55:38.407000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 13:07:18.980000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-14 01:36:41.713000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 19:26:27.290000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 08:15:03.570000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 14:47:12.070000) [+3]
+│  [deleted]
+├─ [deleted] (2022-05-17 21:44:43.107000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-17 15:14:33.400000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-17 13:13:01.813000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-16 21:24:12.073000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-16 12:09:45.757000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-16 05:04:12.707000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-15 22:08:06.473000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-15 16:34:08.380000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-15 15:24:29.420000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-15 06:35:45.070000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-15 05:37:07.670000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-14 11:48:31.233000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-14 08:38:33.440000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 15:14:59.287000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 14:53:04.400000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 09:50:07.967000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 07:39:37.583000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 21:07:51.630000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 19:34:15.123000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 14:05:18.793000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 04:29:20.957000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 02:55:06.087000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 00:13:32.433000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 15:09:57.753000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 15:02:16.900000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 14:55:19.300000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 11:14:08.687000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 08:14:56.973000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 05:49:29.063000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-11 04:12:58.667000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 11:05:10.007000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 09:07:08.440000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-10 02:33:04.197000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-12 13:21:59.097000) [+2]
+│  [deleted]
+├─ [deleted] (2025-02-19 09:27:26.320000) [+0]
+│  [deleted]
+├─ [deleted] (2022-12-23 11:52:54.073000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-05 18:46:59.183000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-24 14:02:40.420000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-23 13:49:01.917000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-23 06:43:33.357000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-23 01:21:15.830000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-22 12:18:31.197000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-22 09:24:33.283000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-22 02:56:18.583000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-21 01:21:04.537000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-20 12:31:17.847000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-20 10:23:41.220000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-20 02:07:44.863000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 15:42:47.023000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 15:33:59.543000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 13:08:05.720000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 10:46:10.380000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 08:50:58.320000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 08:04:30.847000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 07:53:39.327000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-19 04:46:06.110000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-18 14:07:33.073000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-18 12:08:09.197000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-18 11:05:52.813000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-18 09:48:37.720000) [+0]
+│  [deleted]

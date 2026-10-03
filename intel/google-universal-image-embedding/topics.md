@@ -1,0 +1,82 @@
+# google-universal-image-embedding 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359316) — 162 票 / 64 评论 / 2022-10-18 **write-up?**
+- [Custom Starter Dataset 📊 for Training ](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336574) — 110 票 / 32 评论 / 2022-07-11 
+- [External Data Thread](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337384) — 108 票 / 102 评论 / 2022-07-15 
+- [130k Images (128, 512) - Universal Image Embeddings](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/340489) — 76 票 / 29 评论 / 2022-07-29 
+- [Summary of some pretrained models](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/340043) — 65 票 / 23 评论 / 2022-07-27 
+- [5th place solution[NS embedding]](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359161) — 65 票 / 17 评论 / 2022-10-19 **write-up?**
+- [Research Papers on Image Embedding - I](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336616) — 63 票 / 12 评论 / 2022-07-12 
+- [Dataset Links](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336597) — 49 票 / 4 评论 / 2022-07-12 
+- [Clarification about dataset licenses](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336529) — 47 票 / 16 评论 / 2022-07-11 
+- [Welcome to the Universal Image Embedding challenge!](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336534) — 42 票 / 44 评论 / 2022-07-11 
+- [Admitting Defeat and Sharing Notebooks](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/341220) — 38 票 / 10 评论 / 2022-08-01 
+- [Summary of the current stage and recommendations for the next step.](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339554) — 34 票 / 8 评论 / 2022-07-25 
+- [Is this competition fair?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336599) — 34 票 / 7 评论 / 2022-07-12 
+- [How to Approach this Competition](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336768) — 33 票 / 5 评论 / 2022-07-12 
+- [Two public datasets (559K and 69M) will help your model.](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/346177) — 32 票 / 8 评论 / 2022-08-18 
+- [do you need real images as train data?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336746) — 28 票 / 4 评论 / 2022-07-12 
+- [General tricks for training DeepLearning Model](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/353282) — 27 票 / 0 评论 / 2022-09-17 
+- [Expanding the train dataset with a free API](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/353781) — 27 票 / 4 评论 / 2022-09-19 
+- [OWL-ViT - Simple Open-Vocabulary Object Detection with Vision Transformers](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/342779) — 26 票 / 7 评论 / 2022-08-08 
+- [GCViT FInal Pretrained Weights Released!](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/344295) — 26 票 / 6 评论 / 2022-08-14 
+- [Thanks to Kaggle for giving schedule notebook option :)](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/338337) — 26 票 / 3 评论 / 2022-07-20 
+- [GUIE 4th Place Solution](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359487) — 26 票 / 7 评论 / 2022-11-18 **write-up?**
+- [[2nd place] Solution](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359525) — 26 票 / 9 评论 / 2022-11-30 **write-up?**
+- [Will there be a large amount of teams get disqualified finally?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/344643) — 25 票 / 9 评论 / 2022-08-16 
+- [Dimensionality Reduction Techniques [to be updated]](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337527) — 25 票 / 0 评论 / 2022-07-16 
+- [📝 Resources on Image Matching and Visual Embedding](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336547) — 25 票 / 8 评论 / 2022-07-11 
+- [Datasets from previous competitions](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336628) — 23 票 / 0 评论 / 2022-07-12 
+- [10th Place Solution](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359271) — 22 票 / 9 评论 / 2022-10-12 **write-up?**
+- [Synthetic ImageNet-1K](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/351329) — 22 票 / 2 评论 / 2022-09-09 
+- [LAION-5B CLIP Model](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/353768) — 20 票 / 3 评论 / 2022-09-19 
+- [9th place solution: finetune CLIP ViT-H/14](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359351) — 20 票 / 5 评论 / 2022-10-12 **write-up?**
+- [Thanks Kaggle + CLIP-Art intro [from 4th place]](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359401) — 20 票 / 4 评论 / 2022-10-11 **write-up?**
+- [DATASET  Image Similarity Detection](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/343019) — 19 票 / 0 评论 / 2022-08-09 
+- [Similar Competition's (Shopee) Top Solution](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336716) — 19 票 / 1 评论 / 2022-07-12 **write-up?**
+- [Google AI blog post about this competition](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/342028) — 18 票 / 6 评论 / 2022-08-05 
+- [Weird behavior of the *former* (not the 4th place now) 4th of public LB [SOLVED]](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359148) — 18 票 / 18 评论 / 2022-10-11 **write-up?**
+- [Correlation Between Validation and Public Leaderboard](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/352644) — 17 票 / 9 评论 / 2022-09-15 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336516) — 16 票 / 66 评论 / 2022-07-11 
+- [How to gain 0.5+ score?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/342440) — 16 票 / 20 评论 / 2022-08-07 
+- [Random vs Avg/Max dim reduction](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339534) — 16 票 / 7 评论 / 2022-07-25 
+- [Summary of retrieval competition in 2021/2022 year](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/352879) — 16 票 / 0 评论 / 2022-09-16 
+- [Can I run the submitted model on a GPU?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339006) — 16 票 / 6 评论 / 2022-07-23 
+- [No training set](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336561) — 15 票 / 0 评论 / 2022-07-11 
+- [28th Place Solution](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359618) — 15 票 / 10 评论 / 2022-10-12 **write-up?**
+- [Ideas for training without labeled dataset](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/341893) — 15 票 / 10 评论 / 2022-08-04 
+- [Articles for a better understanding of the competition](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336571) — 15 票 / 6 评论 / 2022-07-11 
+- [LB 0.603 without data, a zero shot solution ](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359998) — 15 票 / 1 评论 / 2022-10-14 **write-up?**
+- [GCViT: Global Context Vision Transformer](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/340086) — 15 票 / 7 评论 / 2022-07-27 
+- [why  Notebook Running is so slow today?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/343457) — 14 票 / 15 评论 / 2022-08-11 
+- [Silver medal solution: ViT-L/14 with test time augmentations](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359371) — 13 票 / 0 评论 / 2022-10-11 **write-up?**
+- [DOLG - Deep Orthogonal Local and Global Features](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/347145) — 13 票 / 1 评论 / 2022-08-23 
+- [Inference time for Notebook Timeout](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339373) — 13 票 / 6 评论 / 2022-07-24 
+- [I'm Excited About This Competition](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336713) — 12 票 / 2 评论 / 2022-07-12 
+- [Why averaging of the embeddings from different models adds value?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/342167) — 12 票 / 8 评论 / 2022-08-05 
+- [ CLIP Technique Explained ](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/357207) — 12 票 / 0 评论 / 2022-10-03 
+- [Collecting your Own Dataset with Google Search](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337998) — 12 票 / 6 评论 / 2022-07-18 
+- [The Mean Average Precision @ 5 (MAP@5).  Explained? I hope so.](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336778) — 11 票 / 2 评论 / 2022-07-12 
+- [Google Universal Image Embedding Top Solutions & Helpful Curated Datasets reference](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359948) — 11 票 / 2 评论 / 2022-10-14 **write-up?**
+- [When you got 0.0 score,  check the output size.](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339898) — 11 票 / 1 评论 / 2022-07-26 
+- [To kaggle team: is it possible to add a support of models saved via torch trace?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339494) — 11 票 / 0 评论 / 2022-07-25 
+- [How to finetune? Got low score after cls finetune](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/338505) — 11 票 / 12 评论 / 2022-07-20 
+- [Can we images or pretrained model of the ImageNet dataset?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337190) — 11 票 / 0 评论 / 2022-07-15 
+- [CoCa: Contrastive Captioners are Image-Text Foundation Models](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/351592) — 10 票 / 2 评论 / 2022-09-11 
+- [Articles and Blogs - Kernels on Image Embedding](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336617) — 10 票 / 1 评论 / 2022-07-12 
+- [model exported by torch.jit.trace suffered error when computing scores ](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337975) — 10 票 / 6 评论 / 2022-07-18 
+- [Image-captions dataset from LAION5B](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/349813) — 10 票 / 2 评论 / 2022-09-02 
+- [Thoughts about 64D embedding size limit](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337360) — 10 票 / 5 评论 / 2022-07-15 
+- [13-th place solution [Knowledge Distillation helps a lot]](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/359341) — 10 票 / 13 评论 / 2022-10-13 **write-up?**
+- [Top large models by inference time](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/342034) — 10 票 / 0 评论 / 2022-08-05 
+- [Previous Image recognition based competition solutions](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336618) — 10 票 / 0 评论 / 2022-07-12 **write-up?**
+- [which image size is most suitable for GUIE?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/353890) — 10 票 / 3 评论 / 2022-09-20 
+- [If you want to be a Dataset master/ grandmaster this comp is for you XD](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336749) — 10 票 / 3 评论 / 2022-07-12 
+- [Metric patched for TensorFlow submissions](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/337186) — 10 票 / 3 评论 / 2022-07-14 
+- [efficientnet model size](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336665) — 10 票 / 3 评论 / 2022-07-12 
+- [Is it possible to submit models written in JAX?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/339705) — 9 票 / 2 评论 / 2022-07-26 
+- [Codes | MultiGrain | Meta Research | a unified image embedding for classes and instances](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/352798) — 9 票 / 0 评论 / 2022-09-15 
+- [How to break public baseline 0.535](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/354980) — 9 票 / 15 评论 / 2022-09-24 
+- [Is ensembling/blending possible?](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336644) — 9 票 / 6 评论 / 2022-07-12 
+- [Kaggle Dataset for Host Provided Universal Embedding Challenge Baseline Model Implementation Repo](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336740) — 9 票 / 1 评论 / 2022-07-12 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/google-universal-image-embedding/discussion/336515) — 8 票 / 5 评论 / 2022-07-11 

@@ -1,0 +1,112 @@
+# https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/507946
+
+Topic #507946: Public 8th/Private 253 solution 
+  Author: Evgeniia Grigoreva
+  Posted: 2024-05-28 00:15:54.779000
+  Votes: 60  Comments: 13
+
+Link to github repo with the code.
+
+This is the write-up for my part of the solution. My teammate Vitaly will add his solution later.
+
+What a great shakup! And it seems that the key to achieving a good score on private LB was using a correct approach to hack the metric. 
+
+I restored date information using the "refreshdate_3813885D" column from the credit_bureau_a1* files. The minimum value per case_id is almost always 3/1/2019. The difference between "refreshdate_3813885D" and "date_decision" has a near-perfect correlation with "date_decision". Since date differences are preserved in the test set, I restored the original date by subtracting this difference from 3/1/2019. See notebook for details.
+
+The percentage of correctly restored dates in the training dataset was 87%, with 3% errors and 10% missing values.
+
+This method helped me achieve a maximum score of 0.655 on the public LB. However, the publicly shared method worked better on LB, giving a +0.01 boost. On the private LB the original method worked better, giving a score of 0.560-0.617, while the public method gave only 0.510-0.520. My best private without hack was around 0.520, so the public version of the hack didn't help.
+
+Upd: for some reason, I was sure that the private LB included the public LB, so I thought any hack would work. It seems that's not the case, which explains why restoring the dates and reducing AUC for the first year worked, while the public hack didn’t.
+
+A few more words on the metric: hackability was a significant issue, but not the only one. The linear time trend penalty included in the metric can be substantial when there's no actual predictable trend in the ginis. I discussed this issue in more detail here. I strongly believe that the downward slope observed in the test set is related to changing market conditions rather than the deterioration of the model's prediction quality. These changes in market conditions create a stochastic trend, which is almost always observed in non-differentiated financial time series and is not predictable. Therefore, extrapolating this downward slope is not valid.
+
+CV strategy
+
+In this competition, it was incredibly difficult to match CV and LB scores. I tried various approaches: simple cross-validation, time series CV, time series CV with a gap, and using only hold-out samples from weeks 80, 65, 50… The problem was that nothing correlated with the LB, and there was no negative slope to estimate the model's stability. 
+
+The low correlation with LB could be due to the fact that the post-COVID period was different from the periods before. My hypothesis is that this might be because, at some point, government support started to reduce, which changed people's cash flows. Additionally, in 2022, the economy was hit by another shock. There could also have been distortions in the data due to changes in reporting because of the CARES Act: if a person was late in payments, the lender was required to maintain their delinquency status during the accommodation period but could not report them as more delinquent.
+
+My final approach was to split the data into five folds sequentially based on weeks, and drop slope term from the metric as it didn't have any meaning withing this CV scheme.
+
+Finding a slope
+
+I also tried a fancy approach to replicate the downward slope. I set aside the last 40 weeks (50-91) as a holdout set and trained two models: one on the first 25 weeks (0-25) and the second on the next 25 weeks (25-50). This was to estimate how much the model performance drops when trained on the most recent data compared to older data. Then I concatenated predictions from the second model with predictions from the first model and calculated the ginis stability metric, which now had a negative slope penalty. However, this approach also didn't correlate with LB scores, so I only considered it for feature selection purposes for a few models.
+
+Feature engineering
+
+
+
+First, I reviewed the data and all four hundred features provided, attempting to create meaningful features based on them (ratios, differences, etc.) and aggregations. I won't list them all here, but they can be found in my repo.
+
+Person Data: I noticed that when num_group1=0, the data pertains to the applicant, while other values correspond to related persons. Thus, I extracted data with num_group1=0 and added it to the feature set, applying aggregations for the rest.
+
+Credit Bureau Data: I noticed that there are duplicate columns for active and closed contracts, so I merged each pair into one to build aggregations based on all contracts, retaining active and closed contract aggregations as well.
+
+Time Aggregations: For credit bureau data, I created aggregations over different time intervals. For contracts data, I used contracts ending in the last 3, 5, or 7 years. For installment data, I used 1 month, 6 months, and 1, 2, or 3 years. This helped to improve the CV score significantly. I haven't tried aggregations based on the start of the credit, maybe it could yield even better results.
+
+Categorical Features Aggregations: I used mode, unique values count, and a measure of diversity (number of unique values divided by the total number per each case_id).
+
+Same Data from Different Source: I concatenated birth date, employment length, taxes, and other columns that were present in the dataset more than once. This improved CV scores; however, removing the original columns reduced CV scores. A better strategy might be to calculate the mode from all sources.
+
+Credit Bureau Sources Concatenation: As there are two sources for previous contracts data (a and b), I manually concatenated them. However, this didn't significantly improve results, so I kept this only in one model.
+
+DPD features: For previous applications and credit bureau data I created aggregations only for those rows where DPD is different from zero.
+
+
+Feature selection
+
+For feature selection, I used two approaches: forward feature selection and null feature importances (borrowed from previous competition notebook).
+
+Ensembling
+
+When I started ensembling models, the correlation between CV and LB improved. It wasn't perfect, but ensembling finally allowed me to achieve LB scores higher than 0.571. I realized that training a few different tree-based models like LightGBM, CatBoost, and XGBoost wasn't enough. Initially, I used around 300 features selected by forward feature selection and added random subsets of features with different parameters for LightGBM and various seeds. Then I understood that to achieve even greater diversity, I needed to repeat the feature engineering process from scratch, create a new dataset, train a model on it, and add it to the existing ensemble. This resulted in having six different data processors, significantly enhancing the diversity of the solutions. In the end, I used an ensemble which gave me a good CV score and the highest LB score I could achieve. 
+
+Models
+
+I used only LightGBM and CatBoost. I tried to build a few simple DL models, however, they didn't add anything to my ensemble, so I dropped them.
+
+What didn't work
+
+
+
+Submodels: I attempted to follow past Home Credit competition winners' approach by creating submodels for each dataset with depth &gt;0. For each dataset I added 'target' column from train_base, trained models on CV, and used different aggregations of OOF predictions as meta-features (see this discussion). This only worked for credit bureau data on CV, and it significantly increased time and RAM requirements, so I abandoned this approach.
+
+Scaling: I was concerned about the non-stationarity of many features, primarily due to inflation for amount columns. Scaling by inflation measures worsened CV. Scaling all amount columns by income didn't work as well, even when I used scaled features in addition to original ones. This might be due to unreliable data on income: I noticed low correlation between income data from person1 and static0 sources (see this discussion). This might be due to data provider post-processing or applicant mistakes.
+
+Other approaches that didn't work: average target for N closest neighbors; pseudo-labeling; augmenting the training dataset with data from previous applications; creating dummies for categorical features from depth&gt;0 files and summing up; weightning observations with higher weight on recent ones; excluding features based on adversarial validation; weighted average of depth&gt;0 columns based on time; creating seperate models for the case_ids with credit history and without it.
+
+Comments:
+├─ Savit Pawar (2024-05-28 19:44:20.787000) [+1]
+│  Nice work!!
+├─ Pham Thuc Hung (2024-05-28 00:39:54.320000) [+1]
+│  Your sharing will be a great momentum to help DS like me improve our skills. Thanks for sharing.
+│  
+│  May I ask how metric hacking impact to your both public LB and private LB? Did you spend time to op...
+  ├─ Evgeniia Grigoreva (2024-05-28 09:42:55.743000) [+0]
+  │  Public hack didn't help to increase the score (maybe it has even reduced a bit) on the private LB, but it increased the score on the public LB by ~0.6.
+  │  Recovering dates and reducing the accuracy of...
+    ├─ Andrey Nesterov (2024-05-28 17:50:54.500000) [+0]
+    │  So you had potential submissions for 1st place, but you and your teammate chose others?
+    ├─ Evgeniia Grigoreva (2024-05-28 18:07:01.593000) [+1]
+    │  Yeah, as many others, I think. I thought that public is a part of private, which means that any hack should work on private, if it works on public. From probling it looked like the split is more or...
+├─ Ismailov Elvin (2024-07-13 14:50:33.700000) [+0]
+│  totally love it.
+├─ Aditya kalsi (2024-05-29 08:18:19.107000) [+0]
+│  Nice Work!! The insights you provied are really valuable specially the part about the models that didnt work helped me understand the approach better.
+├─ ds.wook (2024-05-29 06:49:18.760000) [+0]
+│  Your github repo is very nice!
+├─ Kaixuan Chen (2024-05-28 08:09:26.903000) [+0]
+│  Nice work! Comment from bronze medal winner
+├─ Ttkuma (2024-05-28 03:59:24.880000) [+0]
+│  Very good analysis, I learned a lot from your post. Thank you for sharing your insights!
+│  My team was busted by the shake though…
+│  Just curious, do you believe this competition helped us to improve o...
+  ├─ Evgeniia Grigoreva (2024-05-28 09:39:05.573000) [+0]
+  │  I believe it helped me because I was in the competition from the start and tried to build good models before everyone started to use the hack.
+  │  
+  │  But yes, the hack spoiled everything. The key to winn...
+├─ patel jinal vinodbhai (2024-05-28 09:15:00.490000) [+0]
+│  Thank you for idea.
+├─ Wenqiang Li (2024-05-28 02:19:58.687000) [+0]
+│  Thank you for your detailed solution!

@@ -1,0 +1,82 @@
+# image-matching-challenge-2022 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329131) — 116 票 / 39 评论 / 2022-06-05 **write-up?**
+- [Intro to 3D Image Matching, what is a Fundamental Matrix?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/316975) — 94 票 / 22 评论 / 2022-04-04 
+- [Finetune LoFtr over competition dataset](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/320219) — 70 票 / 36 评论 / 2022-04-20 
+- [Youtube Playlist to Understand the Competition](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318319) — 58 票 / 4 评论 / 2022-04-11 
+- [4th Public LB 0.852 -> 6th Private LB 0.850](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328805) — 53 票 / 21 评论 / 2022-06-03 
+- [Experiments with pretrained models](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318143) — 51 票 / 39 评论 / 2022-04-10 
+- [[9th place] Detailed report](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328796) — 51 票 / 23 评论 / 2022-06-24 **write-up?**
+- [Welcome to the 2022 Image Matching Challenge!](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/316925) — 50 票 / 20 评论 / 2022-04-04 
+- [2nd Place Solution, ensemble of old and new methods](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329317) — 45 票 / 15 评论 / 2022-06-06 **write-up?**
+- [Sudden 30+ positions leaps on top of the LB are... interesting](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/327755) — 43 票 / 36 评论 / 2022-05-29 
+- [4th place solution (brief summary)](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328798) — 43 票 / 10 评论 / 2022-06-23 **write-up?**
+- [Additional dataset for this competition](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317969) — 37 票 / 5 评论 / 2022-04-09 
+- [A demo showing epipolar correspondences from a Fundamental matrix](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317292) — 35 票 / 2 评论 / 2022-04-06 
+- [10th Place solution (brief summary)](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328903) — 35 票 / 6 评论 / 2022-06-22 **write-up?**
+- [Detector-Free Local Feature Matching w Transformer - first experiment](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/316960) — 33 票 / 0 评论 / 2022-04-04 
+- [IMC 2021 winning solutions papers](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317302) — 31 票 / 1 评论 / 2022-04-06 **write-up?**
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/316921) — 30 票 / 6 评论 / 2022-04-04 
+- [IMC2022 is over! Recap + Workshop prep](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328854) — 29 票 / 6 评论 / 2022-06-03 
+- [17th place solution - Upscaling & Models](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328803) — 29 票 / 10 评论 / 2022-06-03 **write-up?**
+- [VSAC - anyone want to use on Kagle?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328820) — 27 票 / 11 评论 / 2022-06-03 
+- [Correspondence filtering methods & learned matching](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318267) — 26 票 / 3 评论 / 2022-04-11 
+- [Code and pretrained models for SOTA matcher released!](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/321177) — 26 票 / 13 评论 / 2022-04-25 
+- [Some resources for starting this competition](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317058) — 26 票 / 1 评论 / 2022-04-05 
+- [[28th] Baby Kagglers Deus Lab](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328817) — 25 票 / 8 评论 / 2022-06-03 
+- [LoFTR validation and submission score](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318577) — 25 票 / 16 评论 / 2022-04-13 
+- [7th place solution (brief summary)](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329015) — 24 票 / 9 评论 / 2022-06-04 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/316922) — 23 票 / 56 评论 / 2022-04-04 
+- [(a few) Starter Resources with TF.Keras.](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318209) — 23 票 / 7 评论 / 2022-04-11 
+- [21st place solution summary](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328896) — 23 票 / 5 评论 / 2022-06-03 **write-up?**
+- [Final day! Good luck everyone with the final work/submissions 😊](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328653) — 23 票 / 3 评论 / 2022-06-02 
+- [Competition is Finalized - Congrats to our Winners, Recap](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329650) — 22 票 / 2 评论 / 2022-06-07 
+- [A Concern about the Evaluation Metric](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318590) — 22 票 / 1 评论 / 2022-04-13 
+- [11th Place (Public: 0.847 / Private: 0.845)](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328887) — 20 票 / 3 评论 / 2022-06-08 **write-up?**
+- [18th place - Ensemble of 3 matchers + bonus crazy ideas that didn't work](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328982) — 20 票 / 0 评论 / 2022-06-05 **write-up?**
+- [Line matching approaches](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/322450) — 20 票 / 11 评论 / 2022-05-02 
+- [OpenGlue - Open Source Pipeline for Image Matching](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/321360) — 20 票 / 8 评论 / 2022-04-26 
+- [🏆 Recent Related Competition Winning Solution 🏆](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317051) — 19 票 / 4 评论 / 2022-04-05 **write-up?**
+- [3rd Place Solution 😎](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329540) — 19 票 / 2 评论 / 2022-06-07 **write-up?**
+- [TFMatch: Local features in TensorFlow](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318265) — 19 票 / 6 评论 / 2022-04-11 
+- [Trust CV: An effective use of prepared train data](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328999) — 18 票 / 1 评论 / 2022-06-04 
+- [The Fundamental Matrix Song](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317717) — 18 票 / 0 评论 / 2022-04-08 
+- [Sharing my project structure for Kaggle competitions](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/327504) — 18 票 / 3 评论 / 2022-05-27 
+- [A useful augmentation](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328865) — 17 票 / 4 评论 / 2022-06-03 
+- [Are the results of this competition aligned with initial goals of organizers?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328976) — 16 票 / 4 评论 / 2022-06-03 
+- [The World of RANSAC v2](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/324805) — 16 票 / 1 评论 / 2022-05-13 
+- [30th Place 827 Private LB with image size 840](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328844) — 15 票 / 2 评论 / 2022-06-03 **write-up?**
+- [Slightly off topic](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/323403) — 15 票 / 17 评论 / 2022-05-06 
+- [Information about the test set](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/325531) — 14 票 / 6 评论 / 2022-05-17 
+- [26th place](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328848) — 14 票 / 6 评论 / 2022-06-03 **write-up?**
+- [I updated the "EfficientNet" datasets for this (and future) competitions](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318126) — 13 票 / 0 评论 / 2022-04-10 
+- [37th place solution](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329012) — 13 票 / 0 评论 / 2022-06-04 **write-up?**
+- [How many pairs to use for validation?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/321758) — 13 票 / 7 评论 / 2022-04-28 
+- [The way to use training images](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318022) — 13 票 / 7 评论 / 2022-04-10 
+- [14th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329566) — 12 票 / 0 评论 / 2022-06-07 **write-up?**
+- [23rd place solution](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329002) — 12 票 / 8 评论 / 2022-06-04 **write-up?**
+- [ 3D Reconstruction🎉](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317076) — 12 票 / 1 评论 / 2022-04-05 
+- [An easy way saving GPU time when submitting](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/325955) — 12 票 / 0 评论 / 2022-05-19 
+- [How long does it take to get the score for your submission](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/322093) — 12 票 / 7 评论 / 2022-04-30 
+- [27th place 0.823 public lb - 0.828 private lb](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328888) — 12 票 / 0 评论 / 2022-06-03 **write-up?**
+- [Winning solutions of past kaggle challenges involving Retrieval & Recognition](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/320868) — 11 票 / 1 评论 / 2022-04-24 **write-up?**
+- [Benchmark score for this IMC 2022 ](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/322489) — 11 票 / 5 评论 / 2022-05-02 
+- [What's your best single model? 0.817 in private LB](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328861) — 11 票 / 5 评论 / 2022-06-03 
+- [Competition Rules: Use images other than pair?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/323364) — 11 票 / 6 评论 / 2022-05-06 
+- [RANSAC benchmark collection](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317176) — 10 票 / 0 评论 / 2022-04-05 
+- [Questions about previous challenge dataset](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317372) — 10 票 / 3 评论 / 2022-04-06 
+- [Notebook Threw Exception debugging?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/326110) — 10 票 / 37 评论 / 2022-05-20 
+- [Test Set Pairs Where Covisibility Is ~0.0](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/318138) — 10 票 / 1 评论 / 2022-04-10 
+- [[77th Place] Solo, LOFTR - SE - Matchformer / Thoughts on F calculation](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328868) — 10 票 / 11 评论 / 2022-06-03 **write-up?**
+- [3D Landmarks & 3D Position & Recgnition [awesome paper]](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317046) — 9 票 / 0 评论 / 2022-04-05 
+- [Have any teams improved their scores by using the training data?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328864) — 9 票 / 10 评论 / 2022-06-03 
+- [Don't forget to share your keypoints:)](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328715) — 9 票 / 0 评论 / 2022-06-02 
+- [Unstable score when inference](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/325118) — 9 票 / 3 评论 / 2022-05-15 
+- [Is the first place winner going to speak at CVPR?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/327320) — 9 票 / 2 评论 / 2022-05-26 **write-up?**
+- [What's the best way to computet F without droping outliers? ](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/327568) — 8 票 / 3 评论 / 2022-05-27 
+- [On- & offline installation of VSAC, MAGSAC++.....](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328877) — 8 票 / 0 评论 / 2022-06-03 
+- [Minor correction in the data description](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317433) — 8 票 / 1 评论 / 2022-04-07 
+- [Segmentation train dataset.](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/320463) — 8 票 / 2 评论 / 2022-04-21 
+- [End-to-end deep learning approach?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/320088) — 8 票 / 2 评论 / 2022-04-20 
+- [Notebook Exceeded Allowed Compute, Now What?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/317039) — 7 票 / 18 评论 / 2022-04-05 
+- [Question about LoFTR model fine-tuning?](https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/325198) — 7 票 / 3 评论 / 2022-05-15 

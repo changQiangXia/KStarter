@@ -1,0 +1,251 @@
+# https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430479
+
+Topic #430479: 9th place solution
+  Author: tascj
+  Posted: 2023-08-10 01:10:21.009000
+  Votes: 76  Comments: 37
+
+Thanks to the organizers for hosting competition and congrats to all the winners.
+
+The key finding
+
+Many people have likely noticed that flip/rot90 augmentation doesn't work well on this dataset.
+
+My guess is that during the conversion of polygon annotations to binary masks, the leftmost point is not included while the rightmost point is, causing a misalignment between the image and the mask.
+
+
+
+original
+
+
+img:    [0, 128,   128,    3,   4, 5, 6]
+
+mask: [0, 255a, 255b, 255pad, 0, 0, 0]
+
+normal flip that does not work
+
+
+img: [6, 5, 4, 3,      128,  128,    0]
+
+mask: [0, 0, 0, 255pad, 255b, 255a, 0]
+
+consistent flip should be
+
+
+img: [6, 5, 4, 3, 128,  128,    0]
+
+mask: [0, 0, 0, 0, 255b, 255a, 255pad]
+
+
+I tried two solutions to address this issue.
+
+solution 1, train with misaligned (img ,mask)
+
+
+
+training
+
+
+img: normal flip
+
+mask: consistent flip
+
+inference
+
+
+flip tta: normal img flip -&gt; predict -&gt; consistent mask flip
+
+
+training/test time augmentation is a bit tricky in this case.
+
+solution 2, train with aligned (img, mask)
+
+
+
+training
+
+
+shift img by +0.5 pixel
+
+inference
+
+
+shift img by +0.5 pixel
+
+
+training/test time augmentation is as normal in this case.
+
+Both solutions worked. For simplicity, I chose solution 2. I use the following code to apply resize512&amp;shift1
+
+img_affine_matrix = np.array([[2.0, 0.0, 1.5], [0.0, 2.0, 1.5]], =np.float64)
+img = cv2.warpAffine(
+    img,
+    img_affine_matrix,
+    (512, 512),
+    =cv2.INTER_LINEAR,
+    =cv2.BORDER_CONSTANT,
+    =0,
+)
+
+
+Note that you need to calibrate M for warpAffine. So it's 1.5 in the final affine matrix.
+
+ calibrate(M):
+    
+    [:, ] += M[:, ] * . + M[:, ] * . - .
+     M
+
+
+Models
+
+My submission notebook is pubic here.
+
+I joined the competition quite late and only briefly explored other bands and 2.5D before giving up on them. In the end, I only used false_color images and UNet models.
+
+
+
+Strong backbone were very helpful.
+
+train with all individual annotations is helpful.
+
+
+I had some success with pseudo-labeling on a small model, but unfortunately, I didn't have time to apply it on larger models.
+
+Comments:
+├─ hengck23 (2023-08-10 01:32:59.723000) [+25]
+│  just to put into picture on the annotation issues of flipping
+  ├─ hengck23 (2023-08-10 01:36:04.970000) [+7]
+  │  note this is an issue becuase our mask is very thin and has low area.
+  │  it is not an issue if the mask area is very big.
+  │  
+  │  i wonder if the other public benchmark dataset has this issue? e.g. coco-inst...
+    ├─ hengck23 (2023-08-10 01:51:50.947000) [+10]
+    │  i think of a way to prove that the obersvation is correct and how to detect this in future competition:
+    │  1) just train normal image + normal truth mask
+    │  2) apply model on flipped image and get predic...
+    ├─ ynhuhu (2023-08-10 02:26:21.773000) [+0]
+    │  Thanks for your explaination. I understand.
+    ├─ sahilsg (2023-08-10 04:44:19.610000) [+0]
+    │  Thank you on explaining how we can detect this in future competition, it really helps a lot. Is there any other way also ? (Just wanted to know)
+    ├─ william.wu (2023-08-10 05:52:04.357000) [+1]
+    │  Thanks for the illustration, however, I still don't get the relation between “faulty ground truth mask" and "created from polygon"
+    ├─ iadduk (2023-08-10 07:10:46.537000) [+0]
+    │  Thanks for the images!
+    │  Can you please specify it a bit more?
+    │  Does it mean flipping causes model confusion due to the symmetry of original image?
+    │  It would be cool to the image, which presents the is...
+    ├─ william.wu (2023-08-10 10:00:03.407000) [+2]
+    │  Finally I understood @tascj0 's words by reading it several times word by word. It's very clear using his example:
+    │  
+    │  original
+    │  : 
+    │  : [, a, b, pad, , , ]
+    │   flip that does not work
+    │  : 
+    │  : [, , , pad, b, a,...
+  ├─ tascj (2023-08-10 02:49:01.223000) [+0]
+  │  Thank you for the nice picture. I think it is either a pixel missing on top&amp;left or an extra pixel on bottom&amp;right. The idea is the same anyway.
+  ├─ Raki (2023-08-24 10:22:37.433000) [+0]
+  │  The visualization is great, but I wanted to ask if the shift displayed might be reversed. 
+  │  The write-ups mention a bottom-right shift of the label in relation to the image, the displayed label appe...
+├─ Theo Viel (2023-08-10 13:19:53.077000) [+3]
+│  Congratz on the solo submission gold, very impressive.
+│  
+│  We completely missed the issues with masks, great catch. I noticed very early that flips were hurting results and assumed that was because th...
+  ├─ tascj (2023-08-11 03:12:56.290000) [+1]
+  │  Congratulations on achieving 2nd place! Training a strong model without flip/rot90 augmentation is challenging, and it's incredible that you managed to achieve it.
+  │  
+  │  Yes, the model can learn such a ...
+  ├─ Optimo (2023-08-11 13:17:38.320000) [+0]
+  │  @theoviel do you think the transformer models were more likely to learn where the north was based on background image ? So that they can shift the predictions on the correct side? ^^
+    ├─ Theo Viel (2023-08-11 13:24:36.470000) [+0]
+    │  It's possible to learn where the North (and West) is since most images cover the same area of the planet (~central America), but fairly hard. Maybe transformers can but I'm not sure whether they ca...
+├─ JEANMPIA (2023-08-10 01:16:02.153000) [+3]
+│  Very impressive given the number of subs and the time you had. Congratulations
+├─ Remek Kinas (2023-08-10 09:35:11.883000) [+1]
+│  Impressive 👏👏👏👏
+│  Congratulations!
+├─ william.wu (2023-08-10 07:16:31.137000) [+1]
+│  Thanks for sharing @tascj0 , and congratulations on your solo gold with one sub.
+│  
+│  
+│    
+│  My guess is that during the conversion of polygon annotations to binary masks, the leftmost point is not includ...
+  ├─ tascj (2023-08-10 09:03:14.103000) [+4]
+  │  Why it's not "the leftmost point is included while the rightmost point isn't"?
+  │  
+  │  
+  │  I could be. It could also be both included but the rightmost coordinates+1.
+  │  I tried shift img by -0.5 and 0.5 and it...
+    ├─ william.wu (2023-08-10 09:55:39.130000) [+0]
+    │  Thanks for the detailed explanation. I didn't get any inspiration from these evidences😭
+├─ MPWARE (2023-08-10 06:37:12.993000) [+1]
+│  @tascj0 Congratulations for such results with a single efficient submission!
+├─ Tariq Mahmood (2023-08-10 05:07:57.027000) [+1]
+│  Thanks @tascj0 for sharing your work, which really helpful in our learning process.
+├─ C R Suthikshn Kumar (2023-08-10 04:16:02.177000) [+1]
+│  Congratulations on winning top position in the Competition.
+│  Thanks for sharing your notebook and useful inputs.
+├─ Man of the year (2023-08-10 01:51:58.053000) [+1]
+│  Can you share your validation strategy in this competition please? Also how did you do pseudo-labeling and did you used it in final ensemble for some models? As for training on the individual annot...
+  ├─ tascj (2023-08-10 02:56:50.680000) [+1]
+  │  Can you share your validation strategy in this competition please? 
+  │  
+  │  
+  │  I use the train/validation folders for as train/val set.
+  │  
+  │  
+  │    
+  │  did you used it in final ensemble for some models
+  │  
+  │  
+  │  I tried pseud...
+    ├─ sahilsg (2023-08-10 04:55:38.887000) [+0]
+    │  @tascj0 How human_individual_masks is helpfull, I mean why it performs better ?
+    ├─ iadduk (2023-08-10 07:12:57.720000) [+1]
+    │  Can you please share how did you use individual masks?
+    │  Did you use 4 individual masks for one image as more training data?
+    ├─ tascj (2023-08-10 09:07:37.297000) [+1]
+    │  when collating a batch, stack all individual masks and keep corresponding img batch indices.
+    │  
+    │  
+    │  def (samples):
+    │      out = ()
+    │      out[] = torch.([s[] for s in samples])
+    │      masks = [s[] for s in sampl...
+    ├─ Man of the year (2023-08-10 09:25:43.983000) [+0]
+    │  Well done! How did you come to the conclusion, that the validation set is trustworthy in this competition? Why didn't you use other validation strategies?
+├─ ynhuhu (2023-08-10 01:15:38.183000) [+1]
+│  Congratulations!
+├─ kongweihao (2023-08-29 07:46:38.083000) [+0]
+│  大神好，想请教3个问题:
+│  1、如果mask向右下偏移了0.5个像素，那水平翻转和垂直翻转的时候是否要把mask分别向右和向下偏移1个像素呢？
+│  2、在您的实验中，这个偏移0.5像素的发现对分数的改善有多大
+│  3、您笔记里的5个backbone是如何确定的，是用了某个类似automl自动搜参工具的吗，还是凭借丰富的经验。我是新手，同时也对自动搜参很感兴趣😅您觉得自动搜参帮助大吗以及能否给菜鸟们推荐...
+  ├─ tascj (2023-09-01 02:59:14.760000) [+0]
+  │  1、如果mask向右下偏移了0.5个像素，那水平翻转和垂直翻转的时候是否要把mask分别向右和向下偏移1个像素呢？
+  │  
+  │  
+  │  I believe the misalignment is not caused by some 0.5 pixel shift, it is caused by the 1-extra-pixel on the bottom-right. A shift of 0.5 p...
+├─ Muhammad Usman (2023-08-12 07:09:26.487000) [+0]
+│  Congrats @hengck23 on your solo gold. It's a great achievement.
+│  
+│  Your solution is really helpful to learn from.
+├─ Yousef Rabi (2023-08-11 23:21:11.030000) [+0]
+│  Congratulations @tascj0 !
+│  
+│  I have a question regarding the affine matrix.
+│  
+│  If the pixels were shifted by 0.5 pixel in the original image space and you upscale the image by 2, shouldn't the shift no...
+  ├─ tascj (2023-08-11 23:53:22.380000) [+1]
+  │  It's about the OpenCV coordinate system.
+  │  
+  │  In short, the rule is dst+0.5 = M(src+0.5). After calibration, the 1 becomes 1.5.
+├─ iadduk (2023-08-10 07:28:11.793000) [+0]
+│  Thanks so much for the writeup.
+│  Amazing single submission result! Takes guts to stick to your own CV.
+│  Do you have any plans on releasing your training code?
+├─ [deleted] (2023-08-29 07:36:26.743000) [+0]
+│  [deleted]
+├─ [deleted] (2023-08-29 07:34:13.710000) [+0]
+│  [deleted]

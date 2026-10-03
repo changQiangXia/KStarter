@@ -1,0 +1,264 @@
+# https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492254
+
+Topic #492254: 2nd place solution 
+  Author: coolz
+  Posted: 2024-04-09 03:01:28.941000
+  Votes: 133  Comments: 40
+
+First of all, I would like to thanks to Kaggle and the organizers. I have learned a lot from this experience.  
+
+1. model
+
+In early time, feeding a bsx4xHxW input to the 2D-CNN produce worse result than the one-image method.  I start to think why?
+
+Due to the position-sensitive nature of the labels (LPD, GPD, etc.), We should take care of the channel dimension. 2D-CNN is not well-equipped to capture positional information within the channels. Because there is not pad in channel direction. And that's why we need to concat the spectrum into one image for a vision model other than a bsx16xHxW image( double banana montage).
+So I decided to use 3d-CNN for spectrum, and 2d-CNN model for raw-eeg signal.
+
+diagram like:
+
+total solution like this:
+
+
+
+
+mne 0.5-20hz means use MNE-tool do filter.
+
+scipy.signal means use scipy.signal to do filter.
+
+For the reshape operator and the stft params please refer to the codes below.
+
+And the number in () means final weights of the ensemble.
+
+
+1.1 x3d-l (spectrum model)
+
+After double banana montage, +-1024 clip and 0.5-20hz filter,
+use stft to extract the spectrum, then feed to a 3d-CNN(x3d-l).
+
+
+
+The input data is a 16-channels spectrum image.
+
+X3d-l cv 0.21+, public lb0.25 private lb0.29.
+
+stft code like below, use it as a nn.Module :
+
+
+
+1.2 oneimage
+
+It's a 2d vision model, efficientnetb5, public lb 0.26 2490 private lb0.304877.
+
+For 2d model, I concat the 16-channels spectrum image like many people does.
+
+         = torch.reshape(image, shape=[n, , -, w])
+         = image[:, :, ...]
+         = image[:, :, ...]
+         = torch.cat([x1, x2], dim=-)
+         = torch.cat([image, image, image], dim=)
+
+
+I check the submission score, combine these two spectrum model, get 0.28 private lb.
+
+1.3 eeg model
+
+View eeg (bsx16x10000) as an image. So expand dim=1( bsx1x16x10000), but the time dimension is too large. Then I make a reshape.
+The model define as below
+
+rclass Net(nn.Module):
+     ():
+        (Net, self).__init__()
+        self.model = timm.create_model(, pretrained=, in_chans=)
+        self.pool = nn.AdaptiveAvgPool2d()
+        self.fc = nn.Linear(, out_features=, bias=)
+        self.dropout = nn.Dropout(p=)
+
+     ():
+        feature1 = self.model.forward_features(x)
+         feature1
+
+     ():
+        bs = x.size()
+        reshaped_tensor = x.view(bs, , , )
+        reshaped_and_permuted_tensor = reshaped_tensor.permute(, , , )
+        reshaped_and_permuted_tensor = reshaped_and_permuted_tensor.reshape(bs,  * , )
+        x = torch.unsqueeze(reshaped_and_permuted_tensor, dim=)
+
+        x = torch.cat([x, x, x], dim=)
+        bs = x.size()
+
+        x = self.extract_features(x)
+        x = self.pool(x)
+        x = x.view(bs, -)
+        x = self.dropout(x)
+        x = self.fc(x)
+         x
+
+
+Then, the eeg 'reshaped' to bsx3x160x1000.&nbsp; With efficinetnetb5, actives public lb 0.230 978, private lb 0.282 873.
+
+There are 3 models , but slightly different, mne-filter-efficinetnetb5, scipy.signal-filter-efficientnetb5 and mne-filter-hgnetb5. 
+And the scires are slightly different,also.
+
+1.4  doublehead (eeg+spectrum)
+
+I use x3d-l to extract the spectrum feature ( with Transform50s only ), efficientnetb5 to extract the raw eeg feature, 
+like the solution figure.
+concat the last feature. public lb 0.24, private lb 0.29 ? ? not sure
+
+2 Preprocess
+
+
+
+2.1.Double banana montage, eeg as 16x10000
+
+2.2.Filter with 0.5-20hz
+
+2.3.Clip by +-1024
+
+
+3. Train
+
+
+
+3.1 Stage1, 15 epochs, with loss weight voters_num/20, Adamw lr=0.001, cos scheduel
+
+3.2 Stage2, 5 epoch, loss weight=1, voters_num&gt;=6.   , Adamw lr=0.0001, cos scheduel
+
+3.3 use eeg_label_offset_seconds. I random choose an offset for each eegid, and the target is average according to eegid for each train iter.
+
+3.4 augmentation, mirror eeg, flip between left brain data and right brain data.
+
+3.5 10 folds, then move 1000 samples from val to train, left 709 samples in val set. And use vote_num&gt;=6 to do validation. 
+
+
+4. ensemble
+
+By combining these models, I think it could get my current score. However my score is 6 model emsemble, but not improvement that much (0.28-&gt;0.27 private lb). 
+Final ensemble including:  
+
+
+
+2 spectrum model (x3d, efficientnetb5), both use mne-filter
+
+3 raw eeg model( efficientnetb5 with-mne.filter, efficientnetb5 -butter filter, 1 hgnetb5 mne.filter),
+
+1 eeg-spectrum mix model, butter filter,   
+
+
+With weights=[0.1,0.1,0.2,0.2,0.2,0.2].
+
+ps. with-mne.filter means use mne lib to do filter, butter filter means use scipy.signal, just to add some diversity.
+
+Some thought
+
+I think raw eeg is more important in this task.  Feeding raw EEG data into a 2D visual model is somewhat similar to how humans observe EEG signals. Observe in time and channel  dimensions！
+
+Comments:
+├─ yu4u (2024-04-09 13:08:35.670000) [+5]
+│  @cooolz 
+│  
+│  Congratulations on your solo 2nd place. Very impressed with your very unique solution!
+│  
+│   = x.view(bs, , , )
+│   = reshaped_tensor.permute(, , , )
+│   = reshaped_and_permuted_tensor.reshape(bs, ...
+  ├─ coolz (2024-04-09 13:27:56.800000) [+5]
+  │  It should be bsx3x160x1000, Thanks for pointing out the mistake.
+    ├─ yu4u (2024-04-09 13:36:35.067000) [+1]
+    │  Thank you for your prompt reply!
+    ├─ ZACKY_ZAC (2024-04-09 14:43:52.207000) [+1]
+    │  thanks for the suggestion
+  ├─ Bartley (2024-04-09 13:45:29.900000) [+2]
+  │  Very nice solution. Did you see performance differences with 3-channels vs 1-channel images?
+  │  
+  │  x = torch.cat([x, x, x], dim=1)
+    ├─ coolz (2024-04-09 15:04:26.723000) [+3]
+    │  I didn't try. I think there should be no difference after some tuning.
+├─ Viktor Cikojevic (2024-04-09 06:15:00.850000) [+1]
+│  Great solution, congratulations!
+│  
+│  
+│    
+│  2D-CNN is not well-equipped to capture positional information within the channels
+│  
+│  
+│  What do you mean here, can you elaborate?
+  ├─ coolz (2024-04-09 06:21:42.780000) [+2]
+  │  In a paper（I forget which one）said, the position in the CNN is obtained through padding, but in general, padding is not done in the channel dimension for vision models.
+  ├─ coolz (2024-04-09 06:23:17.757000) [+4]
+  │  《Position, Padding and Predictions:
+  │  A Deeper Look at Position Information in CNNs》     this paper
+    ├─ Viktor Cikojevic (2024-04-09 06:41:54.477000) [+0]
+    │  Ah I see, thanks for clarifying and for the paper link.
+├─ MoZayed (2024-04-09 03:08:30.883000) [+1]
+│  In your opinion, would Vision transformer-based models for example CCT, CvT, and ViT do well on the spectrum stage?
+  ├─ coolz (2024-04-09 03:12:12.973000) [+1]
+  │  Vit not work well in this task in my experiments. I think there is 2 reason. 1. the patch embeding has no overlap. 2. It's the same with plain vision model, not care too much on the channel direction.
+  ├─ coolz (2024-04-09 05:45:45.023000) [+1]
+  │  However, because of the position encoding, vit should work better than the cnn arch. And it seems that  was approved in other teams.
+  ├─ Quan Vu (2024-04-09 06:50:16.687000) [+1]
+  │  I only using vit in all final submission. My single have CV 0.217, LB 0.22, Private 0.28.
+    ├─ [deleted] (2024-04-09 10:20:03.643000) [+0]
+    │  [deleted]
+    ├─ coolz (2024-04-09 10:25:04.437000) [+2]
+    │  Vit not work well, i mean there, with separate channel spectrum, not the one-image method. 
+    │  And congratulation !!!
+├─ CPMP (2024-04-10 05:14:54.910000) [+2]
+│  Using 3d cnn is a great idea. Like many I was puzzled by why using channels was not effective. But you moved past it and addressed it with 3d models. Well done, and well deserved 2nd prize!
+  ├─ coolz (2024-04-10 06:58:01.810000) [+1]
+  │  Thanks!
+  │  I actually spent a lot of time trying to figure out why using channels was not effective in the 2D vision model. Now i think it may because of the target. For example, lpd, gpd may have sam...
+├─ Darragh (2024-04-09 16:35:22.470000) [+2]
+│  Well done @cooolz  on solo 2nd. Impressive 💪
+│  I had not tried stft transform as preprocess; I am interested to see a snippet of the code for preprocessing the signal for input to the model; or under...
+  ├─ coolz (2024-04-10 05:06:50.670000) [+3]
+  │  Thanks. 
+  │  I update the stft codes in the post, torchaudio was used. I tried 50s-spectrum  and 10s-spectrum concat to 32 channels, but they not ouperform that much with just 50s-spectrum.
+  ├─ CPMP (2024-04-10 05:17:36.797000) [+4]
+  │  @darraghdog mel is really similar to stsft. The main difference is that with mel the frequency scale is logarithmic (or close to it depending on the settings you use) while it is linear for stft. M...
+    ├─ Darragh (2024-04-10 06:15:48.013000) [+0]
+    │  Got it, thanks !
+    ├─ gezi (2024-04-10 06:41:04.930000) [+1]
+    │  Yeah, from my experiments, they perform similar, actually stft is a bit better then mel, and interestingly is scipy.spectrogram still work best for me(better then torchaudio.stft).
+    ├─ Darragh (2024-04-10 15:47:47.723000) [+1]
+    │  ah, interesting - will know for next time to try them out. I guess log vs linear frequency scaling may give some diversity on what is learned.
+├─ Chris Deotte (2024-04-09 04:31:44.970000) [+2]
+│  View eeg (bsx16x10000) as an image. So expand dim=1( bsx1x16x10000), but the time dimension is too large. Then I make a reshape.
+│  
+│  
+│  Wow, brilliant. Great idea!
+├─ gezi (2024-04-09 04:27:03.787000) [+2]
+│  Thanks for sharing , 3d image model and your method of eeg reshape seems much better then juse simplly resize, thanks for sharing, learned a lot and congratulation on solo 2nd place!
+├─ DongLibin (2024-06-23 14:45:59.083000) [+0]
+│  I will learn it in future
+├─ Wachirawit Premthaisong-KMUTT (2024-05-20 16:41:02.520000) [+0]
+│  nice solution for me💝
+├─ Idith Haber (2024-04-20 20:54:56.797000) [+0]
+│  Congratulations! Thanks for sharing your work.  Are you using transfer learning or fitting these models from scratch.  As a beginner, can you please help me understand how you compare between model...
+├─ Suhasini Polampelly (2024-04-11 22:13:58.230000) [+0]
+│  Thank you for sharing your comprehensive approach and the detailed insights into your modeling techniques. Your innovative use of both spectral and raw EEG data with a blend of 3D and 2D CNNs provi...
+├─ Yuri Sun (2024-04-11 08:14:37.863000) [+0]
+│  Very helpful. 3D-CNN is a model structure that I have never thought of before, which has also inspired my personal research topic.
+├─ movieminer (2024-04-10 07:10:03.123000) [+0]
+│  Congratulations on second place and thanks for sharing this solution!
+│  We tried using 3D-CNN on the raw EEG data, but not on the spectrograms, so it is great to see that you tried it on the spectrog...
+├─ C R Suthikshn Kumar (2024-04-10 04:26:31.350000) [+0]
+│  Congratulations on winning the 2nd prize in this competition.
+├─ warrenkuo (2024-04-09 14:21:41.980000) [+0]
+│  Hello, congratulations on winning second place~~
+│  This competition is not an easy task for anyone.
+│  
+│  I would like to ask a question about the ensemble, which can shed some light on the technique and ...
+├─ Viji (2024-04-09 07:07:34.993000) [+0]
+│  Interesting approach to eeg model. Thanks for sharing and congratulations!
+├─ Andrij (2024-04-09 06:50:13.413000) [+0]
+│  An incredible solution! You have no idea how painful it is for me! At the very beginning of the competition, I tested the eeg as an image, but then it seemed to me that it was not working. I also t...
+├─ Timmy Juicehouse (2024-04-09 06:13:08.250000) [+0]
+│  Our team never thought of 3d architecture, and I learn a lot from your method. Congratulation !
+├─ Aaditya Porwal (2024-04-09 05:41:32.697000) [+0]
+│  Wow, great idea! Thanks for sharing your approach. It will be very helpful in the upcoming competitions.
+├─ [deleted] (2024-04-09 03:49:37.430000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-09 03:40:53.780000) [+0]
+│  [deleted]

@@ -1,0 +1,287 @@
+# https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532704
+
+Topic #532704: 2nd Place Solution
+  Author: Hiro_Oza
+  Posted: 2024-09-07 17:20:11.747000
+  Votes: 71  Comments: 17
+
+Hi Kagglers!!
+
+First and foremost, we would like to express our sincere gratitude to the competition organizers and the community. Throughout the competition, we had the opportunity to explore various discussions, which served as a valuable source of inspiration for our ideas. This experience has been incredibly educational, allowing us to learn a great deal.
+
+Personally, this was my first time collaborating with this particular group of team members. I was thoroughly impressed by their exceptional skills and found the experience to be highly stimulating.
+
+Overall Approach
+
+The fundamental structure of our model aligns with a commonly used approach in public notebooks: incorporating image model features into tabular data, followed by inference using multiple GBDTs. 
+We implemented several enhancements to both the GBDT and image models.
+
+GBDT Models
+
+Algorithms and Ensemble Strategy
+
+
+
+Used LGBM, XGBoost, and CatBoost
+
+Created 18 variations of each algorithm, resulting in a total of 54 models
+
+Employed seed averaging (n=5) using models trained on the full dataset
+
+
+Feature Engineering
+
+For our base features, we adopted feature engineering techniques from the following public notebooks:
+
+
+
+LGBM Baseline with New Features
+
+LightGBM CatBoost with New Features
+
+ISIC 2024 LGBM ImageNet v5a
+
+
+Additionally, we engineered several patient-related features to capture different aspects of the data:
+
+
+
+Patient-wise standardization
+
+Standardization by patient and tbp_lv_location
+
+Standardization by patient and tbp_lv_location_simple
+
+Standardization by patient and anatom_site_general
+
+Implemented the Tabular Ugly Ducklings technique (as described in this discussion in the competition forum)
+
+
+To introduce diversity, some models used only a subset of these features.
+
+Image Features Integration
+
+
+
+Models used varying numbers of image features (0-3) as meta-features
+
+This variation in feature usage contributed to model diversity
+
+
+Hyperparameter Tuning
+
+
+
+Set num_boost_round between 200-300
+
+Conducted separate hyperparameter tuning for different combinations of:
+
+
+Number of image features used
+
+Number of patient features used
+
+
+Model Diversity
+
+
+
+Slightly varied the tabular features used across models
+
+Combined with the varying number of image features, this approach ensured a diverse ensemble of models
+
+
+Image Models
+
+Overview
+
+We created a total of nine image models using five different training setups for diversity. Specifically, we integrated auxiliary losses for predicting tabular data and implemented self-supervised learning to enhance accuracy. Additionally, by selecting models with low variance across folds, we aimed for stable performance.
+
+Training Setups
+
+
+
+Standard Training: Models were trained using basic configurations.
+
+Mixup Augmentation: Mixup was added as a data augmentation technique during training.
+
+Auxiliary Loss for Predicting Tabular Data: We introduced an auxiliary task for predicting tabular data to encourage learning from multiple modalities.
+
+Auxiliary Loss for Predicting iddx_full Clusters: iddx_full was vectorized using tf-idf, followed by clustering via k-means. The model was trained to predict the distance from each data point to the cluster centroids as an auxiliary loss.
+
+Self-Supervised Pre-training with Tabular Data: Following a recent multimodal learning paper [1], we conducted self-supervised pre-training with tabular data, then fine-tuned the image models.
+
+
+Image Models
+
+The following nine models were trained with the respective setups and achieved the listed CV scores:
+
+
+
+
+Model
+Training Setup
+CV Score
+
+
+
+
+eva02_small
+Standard training
+0.1537
+
+
+deit3_small
+Standard training
+0.1534
+
+
+beitv2_base
+Mixup augmentation
+0.1594
+
+
+convnextv2_tiny
+Auxiliary loss for tabular data
+0.1548
+
+
+swinv2_small
+Auxiliary loss for iddx_full clusters
+0.1612
+
+
+eva02_small
+Auxiliary loss for iddx_full clusters
+0.1580
+
+
+resnext50
+Auxiliary loss for iddx_full clusters
+0.1515
+
+
+convnextv2_nano
+Self-supervised pre-training with tabular data
+0.1607
+
+
+swin_tiny
+Self-supervised pre-training with tabular data
+0.1596
+
+
+
+
+Common Training Configurations
+
+
+
+Undersampling: Each epoch applied undersampling at a ratio of 1:3 or 1:5.
+
+Epoch Count: Each model was trained for 50 to 200 epochs without early stopping to prevent overfitting to the validation set.
+
+Data Augmentation: Data augmentation strategies were adjusted based on the top solution from ISIC 2020 [2], with augmentation intensity varying depending on the model.
+
+Optimizer: AdamW was used with learning rates set to 1e-5 to 8e-6 for the backbone and 1e-3 for the head, alongside a warmup and cosine scheduler.
+
+
+Inference
+
+
+
+Models were trained on the full dataset and used for inference.
+
+Automatic Mixed Precision was enabled for faster inference.
+
+
+Cross-Validation Strategy
+
+In addition to the Public LB, our team heavily relied on the results from this CV strategy for model evaluation and selection. For this competition, we implemented a Triple Stratified Leak-Free KFold CV strategy, inspired by an approach used in a previous Kaggle competition. This method ensures robust model validation while preventing data leakage.
+
+The key aspects of this CV strategy are:
+
+
+
+Patient Isolation: All images from a single patient are kept in the same fold, preventing leakage during cross-validation.
+
+Malignant Image Balance: The stratification considers the proportion of malignant images for each patient.
+
+Patient Image Count Distribution: Patients are binned based on their number of images, which is used for stratification.
+
+
+We used a 5-fold Stratified Group KFold cross-validation for this competition, which implements all these aspects simultaneously.
+
+For the original inspiration and more detailed explanation, refer to: SIIM-ISIC Melanoma Classification - Triple Stratified CV
+
+What Didn't Work Out
+
+We attempted to incorporate data from past competitions. To align the tones, we applied techniques such as histogram matching, etc. However, unfortunately, this approach did not yield significant improvements in accuracy.
+For further validation, we conducted an experiment where we mixed data from ISIC2018 with the current competition data. We then built an image model to distinguish between the past data and the current data. The results showed that the model achieved an AUC of 0.99 with relative ease.
+Based on these results, we concluded that there must be distinct differences that we hadn't been able to identify visually. Consequently, we decided to forgo the use of past competition data in our approach.
+
+References
+
+[1] Du, Siyi, Zheng, Shaoming, Wang, Yinsong, Bai, Wenjia, O'Regan, Declan P., and Qin, Chen. "TIP: Tabular-Image Pre-training for Multimodal Classification with Incomplete Data." In 18th European Conference on Computer Vision (ECCV 2024).
+
+[2] https://www.kaggle.com/competitions/siim-isic-melanoma-classification/discussion/175412
+
+Code
+
+https://github.com/uchiyama33/isic-2024-2nd-place
+
+Comments:
+├─ Mohammed Salem Lanqes (2024-09-13 13:53:04.127000) [+1]
+│  congratulations guys @ozhiro @sh2967 @tomoon33 @shinaggle, great work thank you for sharing :)
+├─ Abhishek Vijayan (2024-09-12 06:18:20.800000) [+1]
+│  Congratulations on the 2nd place !
+│  Thanks for sharing your solution approach and the code.
+│  
+│  What hardware / platform did your team use (specifically for GPU ?)
+│  (Just wondering if there's anyone wit...
+  ├─ Hiro_Oza (2024-09-12 19:50:32.220000) [+1]
+  │  Thank you @abhivij !
+  │  I used Google colab, but the other members used their own GPUs, such as NVIDIA RTX-4090.
+├─ MengYe (2024-09-11 23:26:43.230000) [+1]
+│  congrats for the achievement
+  ├─ Hiro_Oza (2024-09-13 17:59:26.650000) [+0]
+  │  Thanks, @konohayui !
+  │  I hope I can team up with you again in a different competition!
+├─ Marius Vainauskis (2024-09-08 16:29:23.293000) [+1]
+│  Congratulations and great job!
+├─ C R Suthikshn Kumar (2024-09-08 14:41:38.737000) [+1]
+│  Congratulations on winning the second place in this competition. Thanks for very interesting description of your solution.
+├─ JK-Piece (2024-09-08 09:52:21.257000) [+1]
+│  Congratulations, clean and complete code available
+├─ Marlhex (2024-09-07 21:14:31.123000) [+1]
+│  my jaw left the chat.
+  ├─ Marlhex (2024-09-07 21:14:58.873000) [+1]
+  │  spectacular strategy
+├─ delai50 (2024-09-08 16:24:49.047000) [+2]
+│  Congratulations guys and thanks for sharing! A couple of questions:
+│  
+│  
+│  
+│  Does your CV correlate well with LB? (I used a simple StratifiedGroupKFold in the end and sometimes found no correlation). 
+│  
+│  H...
+  ├─ Hiro_Oza (2024-09-09 17:11:03.563000) [+2]
+  │  Thanks, @delai50!
+  │  
+  │  
+  │  
+  │  We tested three CV strategies: Stratified Group KFold, Group KFold (using patient_id), and Triple Stratified Group KFold. Among these, Triple Stratified Group KFold showed the ...
+    ├─ Apa (2024-09-19 08:58:13.567000) [+1]
+    │  I have two questions.
+    │  First: What is HPO?
+    │  Second: Can you illustrate the Triple Stratified Group KFold method or point out which part of your github code repository is the relevant code?
+    ├─ Hiro_Oza (2024-09-21 21:40:57.483000) [+0]
+    │  HPO is Hyper Parameter Optimization
+    │  
+    │  You can see the Triple Stratified Group KFold from line 95 in src/prepare_data.py
+├─ [deleted] (2024-09-08 04:22:56.757000) [+1]
+│  great work @ozhiro love your solution and write-up.
+  ├─ Hiro_Oza (2024-09-08 05:30:12.030000) [+0]
+  │  Thank you!
+├─ Timur Prokoshev (2024-09-11 20:47:43.193000) [+1]
+│  Wow! Thanks for notebook

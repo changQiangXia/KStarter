@@ -1,0 +1,82 @@
+# isic-2024-challenge 讨论区（按票数排序，共 80 条）
+
+- [More Training Data (Processed JPEGs) - Upsampling Malignant Images](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515356) — 296 票 / 82 评论 / 2024-06-27 
+- [1st Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/533196) — 149 票 / 53 评论 / 2024-09-16 **write-up?**
+- [Benchmarking Image Models for ISIC 2024](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/527023) — 145 票 / 45 评论 / 2024-08-09 
+- [[lb0.175] experimental results: CNN verus lightgbm](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/518818) — 133 票 / 129 评论 / 2024-07-08 
+- [LB probing results in ISIC 2024](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/517139) — 130 票 / 26 评论 / 2024-07-05 
+- [Has this image been diagnosed by a psychic?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/521145) — 102 票 / 13 评论 / 2024-07-19 
+- [Private 24th / Public 1st Approach](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532564) — 81 票 / 27 评论 / 2024-09-07 
+- [9th Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532577) — 81 票 / 26 评论 / 2024-09-10 **write-up?**
+- [A long-held dream come true!](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532730) — 77 票 / 42 评论 / 2024-09-07 
+- [2nd Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532704) — 71 票 / 17 评论 / 2024-09-07 **write-up?**
+- [Step 1: Literature Review : Related Papers](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515303) — 69 票 / 11 评论 / 2024-06-27 
+- [Image Augmentations from Winning Solutions](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/517141) — 67 票 / 7 评论 / 2024-07-05 **write-up?**
+- [12th Solution ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532642) — 65 票 / 22 评论 / 2024-09-08 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532760) — 60 票 / 24 评论 / 2024-09-23 **write-up?**
+- [Memes thread](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/523835) — 59 票 / 21 评论 / 2024-08-03 
+- [CV vs LB scores](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/528480) — 56 票 / 113 评论 / 2024-08-16 
+- [[lb0.151] single fold resnet18 image only](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/517230) — 55 票 / 17 评论 / 2024-07-05 
+- [A script to remove hair from skin images using OpenCV](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/519735) — 51 票 / 30 评论 / 2024-07-12 
+- [Onboarding materials and references](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515341) — 50 票 / 8 评论 / 2024-06-27 
+- [Sci Data article published describing the dataset](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/528081) — 49 票 / 15 评论 / 2024-08-14 
+- [AI in Dermoscopy. ADAE algorithm. Ensemble and Cropping on the previous ISIC. ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515369) — 46 票 / 3 评论 / 2024-06-27 
+- [Get started here!](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515315) — 44 票 / 137 评论 / 2024-06-27 
+- [you want to try mamba as image classifier for skin cancer?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/521886) — 43 票 / 6 评论 / 2024-07-23 
+- [7th Place Solution - A good CV is all you need](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532687) — 42 票 / 9 评论 / 2024-09-07 **write-up?**
+- [Role of color in skin cancer 🔴🔵⚪](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516588) — 42 票 / 0 评论 / 2024-07-03 
+- [13th Place Solution - God Bless CV](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532654) — 41 票 / 10 评论 / 2024-09-07 **write-up?**
+- [Hidden Test Set Hospital Distribution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/523024) — 39 票 / 6 评论 / 2024-07-29 
+- [Sharing my "best" ImageNet notebook](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/529457) — 38 票 / 11 评论 / 2024-08-20 
+- [3rd Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532919) — 36 票 / 16 评论 / 2024-09-12 **write-up?**
+- [Single NN(image+meta) model PB 171 and LB 177(PB 172 LB 178 late sub)](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532570) — 35 票 / 8 评论 / 2024-09-07 
+- [Sample Dataloader](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516031) — 34 票 / 14 评论 / 2024-07-01 
+- [Let us share cv and lb just using image](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/521543) — 33 票 / 86 评论 / 2024-07-21 
+- [54th place hardcore feature engineering approach](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532644) — 32 票 / 8 评论 / 2024-09-07 **write-up?**
+- [Sharing my "best" ImageNet->GBDT notebook](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/530183) — 30 票 / 8 评论 / 2024-08-25 
+- [8th Place solution (Trust your CV)](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532728) — 29 票 / 12 评论 / 2024-09-07 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532595) — 29 票 / 7 评论 / 2024-09-09 **write-up?**
+- [15th Place Solution(PB 0.173 Solution)](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532580) — 29 票 / 10 评论 / 2024-09-08 **write-up?**
+- [LB:0.157 Effcientnet-b3 Single Fold Image Only](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/520440) — 28 票 / 34 评论 / 2024-07-16 
+- [FAQ: Got problems? LOOK HERE! ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/520797) — 28 票 / 29 评论 / 2024-07-17 
+- [Why is tabular data producing better results compared to CNNs?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/518814) — 27 票 / 23 评论 / 2024-07-08 
+- [393 Positive samples out of 401k?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515281) — 26 票 / 3 评论 / 2024-06-27 
+- [Hard to choose best pb](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532560) — 25 票 / 33 评论 / 2024-09-07 
+- [Out-of-Fold Imagenet Preds -> Boosted Trees Pipeline](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/527208) — 24 票 / 11 评论 / 2024-08-10 
+- [Why Inaccurate CNN Predictions Yield Better Results ?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/524189) — 24 票 / 18 评论 / 2024-08-05 
+- [5th Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/533056) — 24 票 / 3 评论 / 2024-09-17 **write-up?**
+- [6th palce solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532868) — 24 票 / 4 评论 / 2024-09-08 **write-up?**
+- [Shake Up / LB Overfitting Simulator](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/529295) — 23 票 / 11 评论 / 2024-08-20 
+- [Shape features and the role in skin cancer 🔻🟩🟡](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/517147) — 23 票 / 0 评论 / 2024-07-05 
+- [14th place solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532786) — 22 票 / 2 评论 / 2024-09-08 **write-up?**
+- [MONET - clip base pretrained model -](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516068) — 21 票 / 9 评论 / 2024-07-01 
+- [10th Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/533179) — 21 票 / 0 评论 / 2024-12-26 **write-up?**
+- [ ABCDEs of skin cancer: Features useful for detecting skin cancer ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/529864) — 20 票 / 21 评论 / 2024-08-23 
+- [60th place solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532579) — 20 票 / 11 评论 / 2024-09-07 **write-up?**
+- [[LB: 0.165] - New Features Baseline ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515982) — 19 票 / 9 评论 / 2024-07-01 
+- [CV Score and additional datasets. ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516875) — 19 票 / 2 评论 / 2024-07-03 
+- [GBT models: increase features ->  decrease performance](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/527152) — 18 票 / 8 评论 / 2024-08-10 
+- [The reason for such a severe fall ( 3 - 722)](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532689) — 18 票 / 2 评论 / 2024-09-07 
+- [Does CNN performance affected by 'tbp_tile_type'?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/522653) — 17 票 / 2 评论 / 2024-07-27 
+- [Heads up! Different data type in test.csv before and submission](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516521) — 17 票 / 6 评论 / 2024-07-02 
+- [LGBM - Not what the Doctor Ordered](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516029) — 17 票 / 18 评论 / 2024-07-01 
+- [[COMPLETE] Submission will be rerun](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/519571) — 16 票 / 4 评论 / 2024-07-11 
+- [Role of Asymmetry features in skin cancer  📐](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/519611) — 16 票 / 0 评论 / 2024-07-12 
+- [Metric Implementation](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515319) — 16 票 / 11 评论 / 2024-06-27 
+- [Clarification about Efficiency Metric Secondary Prize](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/530647) — 15 票 / 10 评论 / 2024-08-27 
+- [Jynx worked](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532561) — 15 票 / 3 评论 / 2024-09-07 
+- [LB:0.155 efficientnet b0 Single Fold Image Only ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/520523) — 15 票 / 15 评论 / 2024-07-16 
+- [Does anyone able to get improvement from external images?](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/523686) — 15 票 / 6 评论 / 2024-08-02 
+- [Most prominent reason of the shake up](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532771) — 15 票 / 10 评论 / 2024-09-08 
+- [Mistake in tbp_lv_stdLExt Test column. Hosts pls pay attention ](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/516170) — 15 票 / 10 评论 / 2024-07-01 
+- [Model Efficiency Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/534106) — 15 票 / 0 评论 / 2024-09-14 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515349) — 14 票 / 8 评论 / 2024-06-27 
+- [Visualizing and inferring the churn](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532563) — 14 票 / 2 评论 / 2024-09-07 
+- [📊 EDA on demographic features in skin cancer](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/521561) — 14 票 / 2 评论 / 2024-07-21 
+- [Data Leakage, Meta Learning and Out-of-Fold predictions](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/529054) — 14 票 / 12 评论 / 2024-08-18 
+- [27th Place Solution](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532620) — 13 票 / 4 评论 / 2024-09-07 **write-up?**
+- [📆 Weekly plan for a kaggle](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515753) — 13 票 / 13 评论 / 2024-06-29 
+- [Expecting a lot of shakeup on the final leaderboard](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/515425) — 12 票 / 1 评论 / 2024-06-28 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/533201) — 11 票 / 4 评论 / 2024-09-09 
+- [Congratulations and Request for Challenge Feedback](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/533517) — 10 票 / 4 评论 / 2024-09-11 
+- [Announcement of prize winners](https://www.kaggle.com/competitions/isic-2024-challenge/discussion/534623) — 3 票 / 1 评论 / 2024-09-17 

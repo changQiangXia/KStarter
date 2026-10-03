@@ -1,0 +1,122 @@
+# icr-identify-age-related-conditions 讨论区（按票数排序，共 120 条）
+
+- [How To Balance Training And Boost  CV and LB Score!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/412507) — 382 票 / 144 评论 / 2023-05-24 
+- [How on Earth did I win this competetion?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430843) — 318 票 / 165 评论 / 2023-08-19 
+- [Balanced Log Loss Explained](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/422442) — 275 票 / 72 评论 / 2023-07-10 
+- [Dataset with integerized columns](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413198) — 224 票 / 35 评论 / 2023-05-27 
+- [Postprocessing risk explained](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414209) — 195 票 / 51 评论 / 2023-05-31 
+- [Congratulations Raddar on Becoming 4x Kaggle Grandmaster](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/420651) — 144 票 / 68 评论 / 2023-07-01 
+- [Things you should know in this competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/420342) — 138 票 / 45 评论 / 2023-06-30 
+- [The Good, the Bad and the Ugly of individual models, including TabPFN](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426536) — 103 票 / 50 评论 / 2023-07-24 
+- [🏆 A Similar Competition (medical analysis) competition winner solution 🏆](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409596) — 102 票 / 16 评论 / 2023-05-11 **write-up?**
+- [Do not worry about data points with missing values](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/410843) — 96 票 / 40 评论 / 2023-05-16 
+- [useful information compilation👀](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/417983) — 93 票 / 10 评论 / 2023-06-18 
+- [I'm AFRAID that some of the BEST public kernels may be OVERFITTING](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413220) — 83 票 / 40 评论 / 2023-05-27 
+- [Wow (and our solution)](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430860) — 80 票 / 39 评论 / 2025-05-26 **write-up?**
+- [The Goal Of Machine Learning](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/425145) — 74 票 / 43 评论 / 2023-07-17 
+- [Key discussion/ kernel references over the past 2 months](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/422475) — 73 票 / 6 评论 / 2023-07-10 
+- [Don't forget about Probability Calibration](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409775) — 71 票 / 8 评论 / 2023-05-12 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/407042) — 68 票 / 126 评论 / 2023-05-05 
+- [Silver Medal - LB=0.39 - Sliding Time Cross Validation!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431067) — 64 票 / 51 评论 / 2023-08-17 **write-up?**
+- [Loss function on evaluation page is incorrect](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/410864) — 62 票 / 17 评论 / 2023-05-16 
+- [Best Model CV vs LB](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/410474) — 53 票 / 74 评论 / 2023-05-15 
+- [About data drift and use of Epsilon](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/418398) — 51 票 / 13 评论 / 2023-06-20 
+- [Exploratory Data Analysis](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/418474) — 51 票 / 15 评论 / 2023-06-20 
+- [Some feature extraction methods for small sample analysis.](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411466) — 50 票 / 5 评论 / 2023-05-19 
+- [Ensembling works!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/427446) — 50 票 / 72 评论 / 2023-07-28 
+- [Brutal doesn't even begin to describe it](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430716) — 48 票 / 95 评论 / 2023-08-11 
+- [The ultimate way to prevent LB probing](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/428779) — 47 票 / 59 评论 / 2023-08-02 
+- [How to install TabPFN with "Internet off"](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413265) — 47 票 / 12 评论 / 2023-05-27 
+- [about balanced logarithmic metric ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409691) — 45 票 / 34 评论 / 2023-05-12 
+- [Should we post-process the predictions and engineer features?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/418120) — 41 票 / 24 评论 / 2023-06-18 
+- [Robust Validation Framework to avoid overfitting](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/412911) — 41 票 / 2 评论 / 2023-05-25 
+- [5. place solution](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430907) — 39 票 / 10 评论 / 2023-08-11 **write-up?**
+- [Old age ain't No Place for Sissies. Predict: Dementia, Heart disease, Stroke, Osteoarthritis,  Atherosclerosis, Cancer...](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409888) — 39 票 / 18 评论 / 2023-05-13 
+- [Reminders for last days!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/429689) — 37 票 / 14 评论 / 2023-08-06 
+- [Not even "overfitting"?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/419930) — 36 票 / 23 评论 / 2023-06-28 
+- [Submission error counts as 1 submission ?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409801) — 36 票 / 37 评论 / 2023-05-12 
+- [Baseline Models Comparison](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411479) — 36 票 / 12 评论 / 2023-05-19 
+- [A novel way to tackle the problem : Similarity CV[0.23] LB[0.24]](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414856) — 35 票 / 5 评论 / 2023-06-03 
+- [CatBoost is all you need?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431041) — 35 票 / 34 评论 / 2023-08-11 
+- [Ensembling and post-process thresholding fight the same battle but in opposite ways](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426751) — 34 票 / 11 评论 / 2023-07-24 
+- [Post Processing = MASSIVE SHAKEUP!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414076) — 33 票 / 12 评论 / 2023-05-31 
+- [🏁🚴‍♂️Useful Material from Previous Competitions ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/410139) — 32 票 / 6 评论 / 2023-05-14 
+- [See how Keras stacker separates data classes](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/428579) — 32 票 / 9 评论 / 2023-08-02 
+- [3rd Place Solution for the "ICR - Identifying Age-Related Conditions" Competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430978) — 32 票 / 5 评论 / 2023-08-11 **write-up?**
+- [Epsilon was the key](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430963) — 32 票 / 36 评论 / 2023-08-11 
+- [Competition Close Community Event!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430710) — 31 票 / 40 评论 / 2023-08-10 
+- [It's meme time?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430526) — 31 票 / 36 评论 / 2023-08-10 
+- [6th Position winner solution for the : ICR - Identifying Age-Related Conditions ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431048) — 30 票 / 12 评论 / 2023-08-11 **write-up?**
+- [CV score vs number of cross validation splits](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/424517) — 30 票 / 14 评论 / 2023-07-14 
+- [Clarification of Evaluation Metric](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/412650) — 29 票 / 10 评论 / 2023-05-24 
+- [Some ideas for features](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409894) — 28 票 / 7 评论 / 2023-05-13 
+- [Visualizing the shakeup to numb the pain](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430752) — 28 票 / 13 评论 / 2023-08-11 
+- [A wilder hypothese about data quality](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431149) — 28 票 / 34 评论 / 2023-08-12 
+- [Public lb 0.00 will be reached in July](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/421314) — 27 票 / 12 评论 / 2023-07-04 
+- [Using Gamma for CV and as Classification Target Instead of Class](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414902) — 27 票 / 5 评论 / 2023-06-04 
+- [Many strategies causing overfitting](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/419587) — 26 票 / 0 评论 / 2023-06-26 
+- [The average jump upwards in top 100 was 2914](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430735) — 26 票 / 42 评论 / 2023-08-11 
+- [Private Test has more Difficult Alpha=D than Train and Public](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/432500) — 25 票 / 19 评论 / 2023-08-17 
+- [What I learned in ICR competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430628) — 25 票 / 13 评论 / 2023-08-10 
+- [MVP for this competition goes to... Tilii !! ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430839) — 25 票 / 5 评论 / 2023-08-11 
+- [The number of positive data points in the public LB is 26(not 8)!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/425621) — 24 票 / 32 评论 / 2023-07-19 
+- [Can we make our dataset prettier? Will it help?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/419062) — 24 票 / 11 评论 / 2023-06-23 
+- [public high score dangerous operation](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413812) — 23 票 / 2 评论 / 2023-05-30 
+- [Predicting "Hard Cases"](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/421993) — 23 票 / 31 评论 / 2023-07-07 
+- [Extreme Bagging + Stacking](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431270) — 23 票 / 1 评论 / 2023-08-15 
+- [The revisionist history: XGBoost works just as well as CatBoost](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431152) — 22 票 / 28 评论 / 2023-08-12 
+- [What is the exact formula for the Log loss balanced in this competition?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/415000) — 22 票 / 12 评论 / 2023-06-04 
+- [One last look at difficult data points](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430475) — 22 票 / 9 评论 / 2023-08-10 
+- [4rd Place Solution for the "ICR - Identifying Age-Related Conditions"](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431173) — 22 票 / 7 评论 / 2023-08-19 **write-up?**
+- [It is getting interesting](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430353) — 22 票 / 23 评论 / 2023-08-09 
+- [Best score without post-processing after prediction](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/420027) — 22 票 / 31 评论 / 2023-06-29 
+- [Important Conclusions about Dangers of Over-fitting in This Game!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/417838) — 21 票 / 26 评论 / 2023-06-17 
+- [Are we over-fitting to the leaderboard? Sure we are.](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/425254) — 21 票 / 15 评论 / 2023-07-18 
+- [Dangers of early stopping with a small dataset](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413709) — 21 票 / 11 评论 / 2023-05-29 
+- [Some tricks to win the competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414638) — 21 票 / 11 评论 / 2023-06-02 
+- [What will shakeup look like?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426169) — 20 票 / 10 评论 / 2023-07-22 
+- [9th Place Solution for the "ICR - Identifying Age-Related Conditions" Competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430906) — 20 票 / 6 评论 / 2023-12-04 **write-up?**
+- [Using time aka Epsilon as a variable](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413672) — 20 票 / 7 评论 / 2023-05-29 
+- [Things that didn't work could still teach us something](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430781) — 20 票 / 37 评论 / 2023-08-11 
+- [1 submission per day?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409588) — 19 票 / 27 评论 / 2023-05-11 
+- [Why getting  Notebook Threw Exception?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/410213) — 19 票 / 22 评论 / 2023-05-14 
+- [ IMPORTANT FEATURES FOR BETTER RESULTS](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414085) — 19 票 / 11 评论 / 2023-05-31 
+- [Will people explain how they probed public test data to get a perfect public score?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430764) — 18 票 / 19 评论 / 2023-08-11 
+- [Using Public LB Probing Does Not Help](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431275) — 18 票 / 24 评论 / 2023-08-12 
+- [How to get better score ? Ensemble learning can help ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411868) — 18 票 / 4 评论 / 2023-05-21 
+- [Gold Medal [Top 4-8] 18 Lines of Code [Late Sub]](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431023) — 18 票 / 26 评论 / 2023-08-11 **write-up?**
+- ["Simple" and "Easy" Time Series approach but still have a medal for ICR-2023](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/432606) — 18 票 / 0 评论 / 2023-08-18 
+- [When the honesty of CV fails and (dis)advantages of feature elimination](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/423931) — 18 票 / 13 评论 / 2023-07-12 
+- [Some Reminders in This Competition!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/414115) — 18 票 / 1 评论 / 2023-05-31 
+- [What should you be focusing on?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/425399) — 18 票 / 17 评论 / 2023-07-18 
+- [Some 2D t-SNE data distributions](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/421571) — 18 票 / 4 评论 / 2023-07-05 
+- [Are we going to have awesome scores on private LB?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/428550) — 18 票 / 30 评论 / 2023-08-01 
+- [Evaluating the 0.09 Public Kernel : CV = 0.18, LB=0.16](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/418391) — 17 票 / 8 评论 / 2023-06-20 
+- [Should we consider it illegal to create an additional dataset from the LB probing?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426963) — 17 票 / 46 评论 / 2023-07-25 
+- [Code to validate submission / help solve submission errors](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/422194) — 17 票 / 12 评论 / 2023-07-08 
+- [Is EJ actually gender?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426535) — 17 票 / 24 评论 / 2023-07-24 
+- [🔍OUTLIERS IDENTIFICATION GUIDE 📈🚀](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/415710) — 17 票 / 2 评论 / 2023-06-07 
+- [Best single model ?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411743) — 16 票 / 21 评论 / 2023-05-20 
+- [Will you be disappointed if the top folks win by leaderboard probing?](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/428584) — 16 票 / 36 评论 / 2023-08-02 
+- [7th Place Solution](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431028) — 16 票 / 7 评论 / 2023-08-11 **write-up?**
+- [Train 1 Million Models in 1 Hour using TPU](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/420435) — 16 票 / 11 评论 / 2023-06-30 
+- [1699th Place Solution (partial) for the ICR - Identifying Age-Related Conditions Competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/431307) — 16 票 / 19 评论 / 2023-08-23 **write-up?**
+- [Public LB has 26 positive samples ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/425927) — 16 票 / 8 评论 / 2023-07-21 
+- [Request for official confirmation of competition metric](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411628) — 16 票 / 7 评论 / 2023-05-20 
+- [About features selection](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/417773) — 16 票 / 9 评论 / 2023-06-17 
+- [8th Place Solution for the "ICR - Identifying Age-Related Conditions" Competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430897) — 16 票 / 6 评论 / 2023-08-11 **write-up?**
+- [ Senseless Without Validation Metrics](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413624) — 15 票 / 13 评论 / 2023-05-29 
+- [EVALUATION METRICS - LOG LOSS V/S BALANCED LOG LOSS](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411202) — 15 票 / 1 评论 / 2023-05-18 
+- [table → image　テーブルデータを画像に変換する試み](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/412949) — 15 票 / 19 评论 / 2023-05-26 
+- [A Useful Notebook on Dealing With Small Datasets](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/415500) — 15 票 / 0 评论 / 2023-06-06 
+- [🥇🥈🥉Great chance to achieve a medal for every one even for beginners!!!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/409675) — 15 票 / 14 评论 / 2023-05-12 
+- [This competition is on track to become top 3 in participating teams count](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/427784) — 14 票 / 8 评论 / 2023-07-29 
+- [ICR: last day competition stats](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430450) — 14 票 / 4 评论 / 2023-08-09 
+- [Notebooks overview: public vs private LB scores](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/430782) — 14 票 / 14 评论 / 2023-08-11 
+- [(personal) missing value imputation](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/417250) — 14 票 / 6 评论 / 2023-06-14 
+- [A different cross validation strategy](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426193) — 14 票 / 9 评论 / 2023-07-22 
+- [CV vs LB Scores](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/424989) — 14 票 / 4 评论 / 2023-07-16 
+- [EJ and "default" values](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411150) — 14 票 / 3 评论 / 2023-05-18 
+- [Categorical variable EJ](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/411632) — 13 票 / 8 评论 / 2023-05-20 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/432285) — 9 票 / 1 评论 / 2023-08-16 
+- [There will be no Discord Channel for this Competition](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/429938) — 7 票 / 2 评论 / 2023-08-07 

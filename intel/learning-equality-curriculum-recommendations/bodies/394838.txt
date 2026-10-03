@@ -1,0 +1,436 @@
+# https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394838
+
+Topic #394838: 3rd solution
+  Author: heng
+  Posted: 2023-03-15 02:10:54.405000
+  Votes: 59  Comments: 41
+
+First of all, I would like to thank the organizers for hosting this high-quality competion, and my awesome teammates @xiamaozi11 @syzong @sayoulala @yzheng21, we all worked hard for this competion. And I learned a lot from the great notebooks and discussions, basically all the methods we used are from the kaggle community. Thanks to these generous and smart kagglers!
+
+
+
+tips from hosts: https://www.kaggle.com/code/jamiealexandre/tips-and-recommendations-from-hosts
+
+text pre-processing: https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376873
+
+stage1 and stage2 train and submit pipeline: https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373640
+
+stage1 and stage2 modeling: https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/381509, https://www.kaggle.com/code/ragnar123/lecr-xlm-roberta-base-baseline
+
+
+Summary
+
+
+
+CV strategy
+
+Stage1: Retriever
+
+Stage2: Ranker
+
+Finding threshold
+
+Post-Processing
+
+Ensemble
+
+
+training pipeline
+
+
+
+CV strategy
+
+We only used 4,000 random topics which category != 'source' as hold out data. Those topics were as the validation data and never used in any training process. This simple CV strategy was unexpectedly stable. 
+
+In the last month of the competition, we changed 4,000 topics to 1,000, which was still relatively consistent until we started to ensemble.
+
+Retriever
+
+We used unsupervised SIMCSE (Simple Contrastive Learning of Sentence Embeddings: https://github.com/princeton-nlp/SimCSE) method for training retriever models.
+
+training retriever
+
+
+
+only used positive samples from correlations.csv for unsupervised simcse training
+
+random choice 100 negative samples per validation topic from same language, for validation set 
+
+content text format: title [SEP] kind [SEP] description [SED] text, maxlen =  256 (string level)
+
+topic text format: title [SEP] channel [SEP] category [SEP] level [SEP] language [SEP] description [SEP] context [SEP] parent_description [SEP] children_description, maxlen = 256 (string level)
+
+simcse_unsup_loss
+
+
+
+
+def simcse_unsup_loss(feature_topic, feature_content) -&gt; 'tensor':
+    y_true = torch.arange(0, feature_topic.size(0), device=device)
+    sim = F.cosine_similarity(feature_topic.unsqueeze(1), feature_content.unsqueeze(0), dim=2)
+    sim = sim / 0.05
+    loss = F.cross_entropy(sim, y_true)
+    loss = torch.mean(loss)
+    return loss
+
+  
+from: https://github.com/yangjianxin1/SimCSE/blob/master/model.py
+
+
+
+
+train code like:
+
+
+
+
+for step, (inputs_topic, inputs_content, labels) in enumerate(train_loader):
+        inputs_topic = collate(inputs_topic)
+        for k, v in inputs_topic.items():
+            inputs_topic[k] = v.to(device)
+        inputs_content = collate(inputs_content)
+        for k, v in inputs_content.items():
+            inputs_content[k] = v.to(device)
+        batch_size = labels.size(0)
+        with torch.cuda.amp.autocast(enabled=CFG.apex):
+            feature_topic = model(inputs_topic)
+            feature_content = model(inputs_content)
+            loss = simcse_unsup_loss(feature_topic, feature_content)
+
+
+
+Performance on 1,000 topics validation data:
+
+
+
+
+model
+F2@5
+max positive score top50
+max positive score top100
+
+
+
+
+paraphrase-multilingual-mpnet-base-v2
+0.5250
+0.9135
+0.9443
+
+
+all-MiniLM-L6-v2
+0.4879
+0.9045
+0.9353
+
+
+mdeberta-v3-base
+0.4689
+0.8938
+0.9187
+
+
+
+
+recall
+
+We didn't use KNN to clusting, simply calculate cosine similarity for each topic and all content samples of the topic's language and then choose topN samples.
+
+We also tested the retriever ensemble (weighted cosine similarity). Although the max positive score top50 score has been improved to 0.9235, but there is basically no change on the LB score. So we only used a single retriever model (paraphrase-multilingual-mpnet-base-v2) in the final submit.
+
+Ranker
+
+The ranker in stage2 basically is a binary classification model.
+
+We used our best simcse finetuned model (paraphrase-multilingual-mpnet-base-v2) to infer on train set topics, calculate cosine similarity for each topic and all content samples of the topic's language and then choose top100 samples. We also added all positive samples from correlations.csv.
+
+texts were prepared as same as stage1. Pair format: content [SEP] topic, maxlen = 256 (token level)
+
+Hard negative samples from retriever model can greatly improve the performance of ranker models.
+
+
+
+
+retrieve model (max positive score top100)
+ranker f2 score (LB)
+
+
+
+
+0.80
+0.585
+
+
+0.94
+0.688
+
+
+
+
+We have used two model initialization methods. One is to directly load the model weight from huggingface, and the other is to load the model weight after simcse finetuning. The performance of the two methods is basically the same, while the latter is slightly higher and can converge faster.
+
+We also used FGM, EMA on training. FGM+EMA can impove score by 0.01. 
+
+
+
+
+model
+validation (1,000 topics)
+LB score
+PB score
+
+
+
+
+mdeberta-v3-base (loading simcse weights)
+0.7149
+0.688
+0.727
+
+
+mdeberta-v3-base
+0.6378
+0.669
+0.693
+
+
+xlm-roberta-large (loading simcse weights)
+0.6987
+-
+-
+
+
+xlm-roberta-base (loading simcse weights)
+0.6780
+-
+-
+
+
+paraphrase-multilingual-mpnet-base-v2 (loading simcse weights)
+0.6299
+-
+-
+
+
+
+
+Finding threshold
+
+We set the threshold in loop to calculate the f2 metric on the 1,000 topics validation data, codes like:
+
+best_thres = 0.
+best_score = 0.
+best_n_rec = 10
+for thres in tqdm(np.arange(0.01, 0.2, 0.005)):
+    for n_rec in range(30, 50):
+        test_sub = test_data[test_data['score'] &gt;= thres].reset_index(drop=True)
+        sub_df = test_sub.groupby('topic_id').apply(lambda g: g.head(n_rec)).reset_index(drop=True)
+        score = calc_f2(sub_df, label_df)
+        if score &gt; best_score:
+            best_score = score
+            best_thres = thres
+            best_n_rec = n_rec
+
+
+When submitting a single model, this method basically CV-LB consistency (CV is about 0.02-0.03 higher than LB).
+
+But When it came to the last two weeks of the competition, when started to ensemble, we lost the CV-LB consistency, and I think the reason may be that 1,000 topics validation data is not big enough.
+
+Post-Processing
+
+When dividing the threshold, we will have a small number of topics that do not match any contents. We just simply using top4 contents ranked by the original scores.
+
+We tried recalling more contents for this part of topics, but LB score didn't improve.
+
+We also tried different languages using different threshold, both CV and LB score dropped a little.
+
+Ensemble
+
+We had trained 20+ ranker models, trained on different number of recall samples per topic, like 50, 70, 100. 
+
+
+
+mdeberta (simcse weights, 4,000 validate topics)
+
+mdeberta (simcse weights, 4,000 validate topics, with FGM,EMA)
+
+mdeberta (simcse weights, 1,000 validate topics)
+
+mdeberta (simcse weights, 1,000 validate topics, with FGM,EMA)
+
+mdeberta (1,000 validate topics, with FGM,EMA)
+
+xlm-roberta-large (simcse weights, 1,000 validate topics, with FGM,EMA)
+
+xlm-roberta-base (simcse weights, 1,000 validate topics, with FGM,EMA)
+
+
+We used LinearRegression to fit on 1,000 topics validation model output score to get coef_ array, and then used as blending weights:
+
+pcols = [c for c in valid_data.columns if c.startswith('score')]
+for cols in tqdm([i for i in combinations(pcols, 10)]):
+    cols = list(cols)
+    X = valid_data[cols].values
+    y = valid_data['label'].values
+    lr = LinearRegression().fit(X, y)
+    coef = lr.coef_
+    print(get_score(valid_data, df_target_metric, cols, coef))
+
+
+We started with 100 recall samples per topic, but due to time limits, we can only use up to 6 models. So we tried 70 and 50 recall samples in the later stage of the competition.
+
+
+
+
+number of recall samples per topic
+models
+validation (1,000 topics)
+LB score
+PB score
+
+
+
+
+100
+6
+0.725
+0.705
+0.738
+
+
+70
+10
+0.738
+0.715
+0.751
+
+
+50
+12
+0.743
+0.715
+0.751
+
+
+
+
+Train Code:
+
+https://github.com/syzong/2023-Kaggle-LECR-Top3-TrainCode
+
+Comments:
+├─ Felix M Neumann (2023-03-16 21:31:24.960000) [+4]
+│  Thanks so much for sharing the training code. This is what really adds value. Lots of people have similar ideas and just from the writeups of solutions it is often very difficult to gauge whether a...
+├─ chumajin (2023-03-15 09:16:43.093000) [+1]
+│  @hengzheng Congratulation and thank you for sharing. Reading this, I thought that I might have improved my score if I had increased the number of ensembles in the ranker models as well! Thank you.
+  ├─ heng (2023-03-15 09:30:30.697000) [+1]
+  │  Congrats for your solo gold, I also learned a lot from your writeup!
+├─ Masaki Gotou (2023-03-15 08:35:08.170000) [+1]
+│  Congratulation! I will study with your solution.
+├─ chizhu (2023-03-15 06:22:53.103000) [+1]
+│  Congrats ！喜提绿头牌
+├─ HZM (2023-03-15 06:21:58.253000) [+1]
+│  Congrats, Could you please share the train code?
+  ├─ heng (2023-03-15 06:43:56.653000) [+0]
+  │  Thanks. 
+  │  
+  │  The stage1 train code we used are modified from https://github.com/yangjianxin1/SimCSE
+  │  The stage2 train code basically from https://www.kaggle.com/code/ragnar123/lecr-xlm-roberta-base-bas...
+  ├─ heng (2023-03-15 07:11:31.640000) [+0]
+  │  update: added briefly training code of stage1 simcse model.
+    ├─ HZM (2023-03-15 09:52:25.677000) [+1]
+    │  thks so much for your effort, hope can work with you in the future
+    ├─ Jaideep (2023-03-20 11:00:48.793000) [+0]
+    │  @leehann  Congrats &amp; Thanks for your write up.
+    │  Were you able to train Mdeberta on Fp16, as I read it dsnt supports same.
+    │  What boosted the score considerably ?
+├─ Ravi Shah (2023-03-15 03:53:17.690000) [+1]
+│  Congrats @hengzheng! Thanks for the detailed solution write up!
+  ├─ heng (2023-03-15 03:59:41.813000) [+0]
+  │  Thank you!
+├─ ADAM. (2023-03-15 03:22:24.267000) [+1]
+│  Congrats! GM coming soon.
+├─ sayoulala (2023-03-15 02:56:06.993000) [+1]
+│  nice job,mmd
+├─ xia (2023-03-15 02:43:05.137000) [+1]
+│  nice job! my bro,dddd!
+├─ Ori Hanegby (2023-03-15 02:39:26.770000) [+1]
+│  Congrats on the 3rd place and for thanks for sharing the solution!
+  ├─ heng (2023-03-15 02:43:31.357000) [+1]
+  │  Thanks! Congrats for your solo gold!
+├─ xbustc (2023-03-15 02:27:14.660000) [+1]
+│  good solution, congrats!
+│  
+│  by the way, the simcse you used is supervised version, right?
+  ├─ heng (2023-03-15 02:34:10.807000) [+0]
+  │  unsupervised version, we only used positive samples, supervised version (add negative samples) we tried but not success.
+    ├─ Jaideep (2023-03-15 02:40:43.073000) [+1]
+    │  @hengzheng congrats 
+    │  Max pos score is computed for only holdnout set or whole train data because ours top50 was reaching 95+ will be interesting to find out the deltas
+    ├─ heng (2023-03-15 02:42:12.600000) [+0]
+    │  Thanks. Max pos score is computed for only holdnout set (1,000 topics).
+    ├─ vegetable chicken (2023-03-19 12:27:31.840000) [+0]
+    │  I would like to ask, the samples you use have been clearly labeled as positive. Why did you say that you used an unsupervised version? From my understanding, you should use the unsupervised version...
+    ├─ heng (2023-03-19 14:49:47.293000) [+0]
+    │  OK, maybe you're right. This 'unsupervised' statement is indeed a bit confusing, but my main point is that we use the simcse unsupervised loss function (https://github.com/yangjianxin1/SimCSE/blob/...
+    ├─ Jaideep (2023-04-06 04:03:36.363000) [+0]
+    │  @hengzheng 
+    │  what is FGM EMA , where we can find the related code
+    ├─ heng (2023-04-06 05:53:09.523000) [+0]
+    │  FGM: fast gradient methods 
+    │  EMA: exponential moving average
+    │  
+    │  https://github.com/syzong/2023-Kaggle-LECR-Top3-TrainCode/blob/main/adv_utils.py
+├─ Turbo (2023-03-15 02:26:28.987000) [+1]
+│  Congratulations, Teacher Zheng! World Top 3.
+├─ gezi (2023-03-15 02:20:38.530000) [+1]
+│  Cool！Congratulations!
+│  Simcse based recall model work so well! And I think your strong recall model help a lot for stage2 model.
+│  But I still wonder your strong stage1 mode might not perform worse th...
+├─ Siddharth Kumar (2023-03-16 05:25:40.950000) [+2]
+│  Wow, fantastic work on your 3rd place solution! 🎉👏 It's incredible to see the level of detail and experimentation that went into your approach, especially with the retriever and ranker models. Your...
+├─ nayu555 (2023-03-24 11:11:21.743000) [+0]
+│  Congratulations and thank you for sharing!!
+│  May I ask why you have set maxlen = 256 (token level) in Ranker ?
+│  According to your explanation, you have set maxlen = 256 for both topic and content in ...
+  ├─ heng (2023-03-24 11:38:57.180000) [+1]
+  │  Thanks. In Retriever part 256 is string length. Later in the ranker part I concatenate them together, then truncated with token length 256.
+    ├─ nayu555 (2023-03-27 06:50:23.697000) [+0]
+    │  @hengzheng Thank you for your reply.
+    │  May I ask why you use string length in Retriever part?
+├─ Tariq Mahmood (2023-03-21 04:17:50.280000) [+0]
+│  Thanks @chizhu2018, for sharing your marvellous work and effort you have made to reach  that milestone. Your valuable efforts will prove a great source of inspiration and learning towards the commu...
+├─ Adrian Dip (2023-03-20 23:52:32.393000) [+0]
+│  Thanks for sharing your knowledge and the code. Very interesting and educational.
+├─ ktr (2023-03-19 14:12:24.443000) [+0]
+│  Congrats!, @hengzheng
+│  
+│  I have a similar training strategy, but your significant score improvement in the 2nd stage is impressive.
+│  
+│  I would like to confirm something.
+│  
+│  
+│  
+│  
+│  Is there no hard negative a...
+  ├─ heng (2023-03-19 14:59:04.203000) [+1]
+  │  Thanks!
+  │  
+  │  
+  │  
+  │  Yes, we only used positive samples, no any negative sample in the retriever training.
+  │  
+  │  We used the trained retriever to get 100 recalling contents per topic (hard negative from here), an...
+├─ heng (2023-03-16 10:10:01.070000) [+0]
+│  update: sharing training codes: https://github.com/syzong/2023-Kaggle-LECR-Top3-TrainCode
+├─ Frank (2023-03-15 13:28:53.197000) [+0]
+│  Thanks for sharing. How long does it take to train a reranker with top100 candidates per topic?
+  ├─ heng (2023-03-15 14:02:04.580000) [+2]
+  │  mdeberta about 3-4 days on A100 because fp16 not working on mdeberta, xlmr base about 1 day and large about 2-3 days.
+├─ wagege (2023-03-15 08:05:48.737000) [+0]
+│  old iron，six six six  。。
+├─ [deleted] (2023-03-22 01:25:35.310000) [+0]
+│  [deleted]
+├─ YashNikel (2023-03-21 20:04:22.270000) [+0]
+│  Thanks for the detailed solution!

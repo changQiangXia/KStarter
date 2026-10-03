@@ -1,0 +1,122 @@
+# leash-BELKA 讨论区（按票数排序，共 120 条）
+
+- [[LB0.613, low GPU resources!] my experimental results ](https://www.kaggle.com/competitions/leash-BELKA/discussion/492846) — 103 票 / 126 评论 / 2024-04-11 
+- [The train set is bloated. After shrinking it can be fully loaded in Kaggle.](https://www.kaggle.com/competitions/leash-BELKA/discussion/491472) — 90 票 / 7 评论 / 2024-04-06 
+- [1st place solution [UPDATED]](https://www.kaggle.com/competitions/leash-BELKA/discussion/519020) — 85 票 / 39 评论 / 2024-07-21 **write-up?**
+- [The groupings and permutations of the competition data, in terms of building blocks](https://www.kaggle.com/competitions/leash-BELKA/discussion/496576) — 75 票 / 11 评论 / 2024-04-21 
+- [Announcement: Changes to Scoring Metric in the Competition](https://www.kaggle.com/competitions/leash-BELKA/discussion/503232) — 68 票 / 44 评论 / 2024-05-16 
+- [2nd Public/13th Private Solution](https://www.kaggle.com/competitions/leash-BELKA/discussion/519133) — 68 票 / 7 评论 / 2024-07-09 **write-up?**
+- [14th Place Solution (7th in Public): All We Need is Frequent Checkpointing](https://www.kaggle.com/competitions/leash-BELKA/discussion/518951) — 61 票 / 15 评论 / 2024-07-09 **write-up?**
+- [background reading on DEL + binding prediction](https://www.kaggle.com/competitions/leash-BELKA/discussion/491908) — 48 票 / 12 评论 / 2024-04-07 
+- [Scaffold Hopping](https://www.kaggle.com/competitions/leash-BELKA/discussion/493294) — 48 票 / 9 评论 / 2024-04-12 
+- [Bioinformatics Competition is Back Again! Biopython. Bioinfo Material (Comps, Notebooks & Datasets) ](https://www.kaggle.com/competitions/leash-BELKA/discussion/491073) — 46 票 / 2 评论 / 2024-04-04 
+- [Closing Thoughts and Future Directions](https://www.kaggle.com/competitions/leash-BELKA/discussion/518936) — 42 票 / 27 评论 / 2024-07-09 
+- [[lb0.602] low-resource fast 2d GNN example is here!!!](https://www.kaggle.com/competitions/leash-BELKA/discussion/498858) — 40 票 / 48 评论 / 2024-04-29 
+- [Some perusal materials to get started including research papers](https://www.kaggle.com/competitions/leash-BELKA/discussion/491234) — 40 票 / 8 评论 / 2024-04-05 
+- [Score Calibration Problem](https://www.kaggle.com/competitions/leash-BELKA/discussion/501901) — 36 票 / 33 评论 / 2024-05-11 
+- [Viewing the churn ](https://www.kaggle.com/competitions/leash-BELKA/discussion/518942) — 35 票 / 6 评论 / 2024-07-09 
+- [[5th solution]: Ensemble of CNN1d, Transformer, Mamba models](https://www.kaggle.com/competitions/leash-BELKA/discussion/521894) — 34 票 / 3 评论 / 2024-07-26 **write-up?**
+- [11th place solution - SSL Pretraining, Multi-models, Multi-representations and Luck](https://www.kaggle.com/competitions/leash-BELKA/discussion/518993) — 33 票 / 3 评论 / 2024-07-10 **write-up?**
+- [Faster and more efficient fingerprint calculation](https://www.kaggle.com/competitions/leash-BELKA/discussion/499455) — 32 票 / 8 评论 / 2024-05-01 
+- [Sharing my CV split](https://www.kaggle.com/competitions/leash-BELKA/discussion/497510) — 31 票 / 12 评论 / 2024-04-24 
+- [988th Place solution (4th on Public) - GNN and domain adaption. 800Kb model.](https://www.kaggle.com/competitions/leash-BELKA/discussion/519135) — 29 票 / 15 评论 / 2024-07-09 **write-up?**
+- [Welcome to the BELKA competition!](https://www.kaggle.com/competitions/leash-BELKA/discussion/491075) — 28 票 / 5 评论 / 2024-04-04 
+- [CV/LB thread](https://www.kaggle.com/competitions/leash-BELKA/discussion/498983) — 28 票 / 28 评论 / 2024-04-30 
+- [[lb0.420 at train=40m] sphere-net: fast 3d-Graph-NN is here !](https://www.kaggle.com/competitions/leash-BELKA/discussion/505985) — 28 票 / 18 评论 / 2024-05-20 
+- [8th place private solution - a single SMILES-based transformer model is all we need. And a proper benchmarking](https://www.kaggle.com/competitions/leash-BELKA/discussion/519815) — 28 票 / 3 评论 / 2024-07-16 **write-up?**
+- [The train data has 295,246,830 rows !!](https://www.kaggle.com/competitions/leash-BELKA/discussion/491328) — 27 票 / 7 评论 / 2024-04-05 
+- [[place holder] experimental results after metric update ...](https://www.kaggle.com/competitions/leash-BELKA/discussion/503327) — 26 票 / 2 评论 / 2024-05-17 
+- [[Beware overfitting]Focus on more generalization capabilities](https://www.kaggle.com/competitions/leash-BELKA/discussion/516092) — 26 票 / 6 评论 / 2024-07-01 
+- [Useful papers on ML Molecule representations](https://www.kaggle.com/competitions/leash-BELKA/discussion/491388) — 25 票 / 3 评论 / 2024-04-05 
+- [[LB0.589]A Fast way to Tokenize (Encoding) and in line with chemistry principal.](https://www.kaggle.com/competitions/leash-BELKA/discussion/501670) — 24 票 / 0 评论 / 2024-05-10 
+- [Common Ways to Represent Molecules in ML](https://www.kaggle.com/competitions/leash-BELKA/discussion/494914) — 24 票 / 8 评论 / 2024-04-18 
+- [Videos: How DEL works? why 295,246,830 molecules in train? How protein binds to molecule ? (it explain all answers)](https://www.kaggle.com/competitions/leash-BELKA/discussion/492108) — 23 票 / 10 评论 / 2024-04-08 
+- [Are the Train and Test building blocks really not overlapping?](https://www.kaggle.com/competitions/leash-BELKA/discussion/492126) — 23 票 / 19 评论 / 2024-04-08 
+- [Video available . Webinar on related past competition - CAFA5 - by DeepGO paper authors](https://www.kaggle.com/competitions/leash-BELKA/discussion/509923) — 22 票 / 2 评论 / 2024-06-04 
+- [27th Place Solution (8th in Public):  1DCNN for share and ChemBERTa for non-share](https://www.kaggle.com/competitions/leash-BELKA/discussion/519191) — 21 票 / 0 评论 / 2024-07-10 **write-up?**
+- [Boost Your Sequence Models with AtomInSmiles (AIS) Tokenization](https://www.kaggle.com/competitions/leash-BELKA/discussion/512368) — 20 票 / 0 评论 / 2024-06-14 
+- [Video available. Webinar: BELKA Top8 solution  Vlad Vinogradov (@ BIOPTIC.io) ⌚️ Thursday, 18.00 (CET Time), 25 July 2024](https://www.kaggle.com/competitions/leash-BELKA/discussion/521969) — 19 票 / 2 评论 / 2024-07-23 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/leash-BELKA/discussion/491246) — 18 票 / 1 评论 / 2024-04-05 
+- [🧬 Papers: DNA-encoded chemical library (DEL) 🧬](https://www.kaggle.com/competitions/leash-BELKA/discussion/491401) — 18 票 / 1 评论 / 2024-04-05 
+- [Visualizing Chemical Space (t-SNE)](https://www.kaggle.com/competitions/leash-BELKA/discussion/516087) — 18 票 / 7 评论 / 2024-07-01 
+- [Video available. Webinar by Top13:  Antonina Dolgorukova  "Stable GOLD solution for NeurIPS 2024 - Predict New Medicines with BELKA competition"](https://www.kaggle.com/competitions/leash-BELKA/discussion/523088) — 18 票 / 1 评论 / 2024-07-30 **write-up?**
+- [ A script to extract a refined small subset](https://www.kaggle.com/competitions/leash-BELKA/discussion/493607) — 18 票 / 0 评论 / 2024-04-14 
+- [Fun Competition](https://www.kaggle.com/competitions/leash-BELKA/discussion/517018) — 18 票 / 1 评论 / 2024-07-04 
+- [PyTorch Lightning mAP metric - Trick to reduce RAM usage](https://www.kaggle.com/competitions/leash-BELKA/discussion/499757) — 17 票 / 0 评论 / 2024-05-02 
+- [Next generation seq model: transformer+flash attention2, mamba1/2, xlstm, Griffin ...](https://www.kaggle.com/competitions/leash-BELKA/discussion/510644) — 16 票 / 5 评论 / 2024-06-07 
+- [CV Strategy ](https://www.kaggle.com/competitions/leash-BELKA/discussion/491415) — 16 票 / 16 评论 / 2024-04-05 
+- [Get started here!](https://www.kaggle.com/competitions/leash-BELKA/discussion/490619) — 15 票 / 24 评论 / 2024-04-03 
+- [My GNN scores 0.5 CV / 0.42 LB - can I do better? ](https://www.kaggle.com/competitions/leash-BELKA/discussion/500591) — 15 票 / 9 评论 / 2024-05-06 
+- [Is it worth giving this competition a try using just Kaggle resources?](https://www.kaggle.com/competitions/leash-BELKA/discussion/498311) — 15 票 / 24 评论 / 2024-04-27 
+- [A brief note on using GNNs](https://www.kaggle.com/competitions/leash-BELKA/discussion/498385) — 15 票 / 11 评论 / 2024-04-28 
+- [Should Models be symmetric under the exchange of buildingblock2_smiles and buildingblock3_smiles?](https://www.kaggle.com/competitions/leash-BELKA/discussion/491324) — 15 票 / 9 评论 / 2024-04-05 
+- [Open Source Docking and Conformer Generating Libraries](https://www.kaggle.com/competitions/leash-BELKA/discussion/493297) — 14 票 / 15 评论 / 2024-04-12 
+- [Private dataset questions [Solved]](https://www.kaggle.com/competitions/leash-BELKA/discussion/491424) — 14 票 / 2 评论 / 2024-04-05 
+- [Protein crystal structures](https://www.kaggle.com/competitions/leash-BELKA/discussion/497826) — 13 票 / 0 评论 / 2024-04-25 
+- [How about we share our best private LB results here? (current best: 0.347 from @Maciej Sypetkowski)](https://www.kaggle.com/competitions/leash-BELKA/discussion/518943) — 13 票 / 68 评论 / 2024-07-09 
+- [Has anyone tried AlphaFold 3?](https://www.kaggle.com/competitions/leash-BELKA/discussion/501356) — 13 票 / 8 评论 / 2024-05-08 
+- [did anyone try apply block-aware models to validation dataset?](https://www.kaggle.com/competitions/leash-BELKA/discussion/499890) — 12 票 / 1 评论 / 2024-05-03 
+- [Controlling for DNA tag interference?](https://www.kaggle.com/competitions/leash-BELKA/discussion/497392) — 12 票 / 4 评论 / 2024-04-24 
+- [What model gives the best score for non-triazines?](https://www.kaggle.com/competitions/leash-BELKA/discussion/518967) — 12 票 / 3 评论 / 2024-07-09 
+- [0.310 Private LB solution [Did not submit].](https://www.kaggle.com/competitions/leash-BELKA/discussion/518957) — 12 票 / 10 评论 / 2024-07-09 **write-up?**
+- [A pre-trained molecular representation model incorporating conformational space and pharmacophore profile](https://www.kaggle.com/competitions/leash-BELKA/discussion/496995) — 12 票 / 9 评论 / 2024-04-23 
+- [Low cost (free-ish) compute resources](https://www.kaggle.com/competitions/leash-BELKA/discussion/498486) — 11 票 / 7 评论 / 2024-04-28 
+- [Local validation for molecules with nonshared BBs](https://www.kaggle.com/competitions/leash-BELKA/discussion/509015) — 11 票 / 9 评论 / 2024-05-31 
+- [xgboost  & ECFP . Filter 50% low variance ecfp columns get same score.](https://www.kaggle.com/competitions/leash-BELKA/discussion/499813) — 11 票 / 2 评论 / 2024-05-03 
+- [Public 44th Private 898th Solution](https://www.kaggle.com/competitions/leash-BELKA/discussion/518938) — 11 票 / 0 评论 / 2024-07-09 **write-up?**
+- [Leaderboard Dynamics Visualisation | Locate your team on the plot](https://www.kaggle.com/competitions/leash-BELKA/discussion/518948) — 11 票 / 4 评论 / 2024-07-09 
+- [What do we learn from this competition? Is the result meaningful?](https://www.kaggle.com/competitions/leash-BELKA/discussion/518939) — 11 票 / 21 评论 / 2024-07-09 
+- [is transformer model will capture molecule vs building blocks?](https://www.kaggle.com/competitions/leash-BELKA/discussion/492481) — 10 票 / 2 评论 / 2024-04-09 
+- [[Dy] in test compounds](https://www.kaggle.com/competitions/leash-BELKA/discussion/491431) — 10 票 / 17 评论 / 2024-04-05 
+- [Faster and more stable training solution](https://www.kaggle.com/competitions/leash-BELKA/discussion/506730) — 10 票 / 5 评论 / 2024-05-23 **write-up?**
+- [how to visualise grad CAM, attnetion map on SMILES string](https://www.kaggle.com/competitions/leash-BELKA/discussion/509274) — 10 票 / 0 评论 / 2024-06-01 
+- [Huge train dataset file.](https://www.kaggle.com/competitions/leash-BELKA/discussion/491402) — 10 票 / 7 评论 / 2024-04-05 
+- [RDKit handling of [Dy] in smiles](https://www.kaggle.com/competitions/leash-BELKA/discussion/500584) — 10 票 / 3 评论 / 2024-05-06 
+- [any reason for the poor performance of HSA (ap only about 0.40)?](https://www.kaggle.com/competitions/leash-BELKA/discussion/500852) — 10 票 / 3 评论 / 2024-05-07 
+- [how to deal with non-triazine core?](https://www.kaggle.com/competitions/leash-BELKA/discussion/508613) — 10 票 / 23 评论 / 2024-05-30 
+- [Using dask to handle this larger than life dataset. ](https://www.kaggle.com/competitions/leash-BELKA/discussion/496954) — 10 票 / 4 评论 / 2024-04-23 
+- [Average precision scores by protein and subgroup](https://www.kaggle.com/competitions/leash-BELKA/discussion/523779) — 9 票 / 10 评论 / 2024-08-02 
+- [📊📈🔍🧬 EDA & buildingblock SMILES](https://www.kaggle.com/competitions/leash-BELKA/discussion/491394) — 9 票 / 2 评论 / 2024-04-05 
+- [[maybe obsolete] are you overfitting model to sharing blocks?](https://www.kaggle.com/competitions/leash-BELKA/discussion/501140) — 9 票 / 20 评论 / 2024-05-08 
+- [Leaderboard Shakeup Stats: How many teams retained their medal zones.](https://www.kaggle.com/competitions/leash-BELKA/discussion/519503) — 9 票 / 2 评论 / 2024-07-11 
+- [SMILES description of proteins](https://www.kaggle.com/competitions/leash-BELKA/discussion/496601) — 9 票 / 7 评论 / 2024-04-21 
+- [Reading List [Mentioned in the description - Overview Page]](https://www.kaggle.com/competitions/leash-BELKA/discussion/496427) — 9 票 / 0 评论 / 2024-04-21 
+- [BROKEN Leaderboard! DISAPPOINTING Competition Experience!](https://www.kaggle.com/competitions/leash-BELKA/discussion/516249) — 9 票 / 14 评论 / 2024-07-01 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/leash-BELKA/discussion/519801) — 8 票 / 0 评论 / 2024-07-12 
+- [Tutorial Notebook](https://www.kaggle.com/competitions/leash-BELKA/discussion/497397) — 8 票 / 2 评论 / 2024-04-24 
+- [Submission evaluation metric question](https://www.kaggle.com/competitions/leash-BELKA/discussion/497412) — 8 票 / 2 评论 / 2024-04-24 
+- [low memory pytorch training ... remove dataloader and use in memory data + direct index](https://www.kaggle.com/competitions/leash-BELKA/discussion/500877) — 8 票 / 2 评论 / 2024-05-07 
+- [Took a gamble.  Didn't pay off.  1122th place.  😕](https://www.kaggle.com/competitions/leash-BELKA/discussion/519152) — 8 票 / 0 评论 / 2024-07-09 **write-up?**
+- [Data Imbalance - How to tackle? ](https://www.kaggle.com/competitions/leash-BELKA/discussion/498402) — 8 票 / 8 评论 / 2024-04-28 
+- [Competition metric](https://www.kaggle.com/competitions/leash-BELKA/discussion/492070) — 8 票 / 10 评论 / 2024-04-08 
+- [Full Answer Key](https://www.kaggle.com/competitions/leash-BELKA/discussion/523644) — 8 票 / 7 评论 / 2024-08-01 
+- [New rescore is underway - COMPLETED](https://www.kaggle.com/competitions/leash-BELKA/discussion/503297) — 8 票 / 13 评论 / 2024-05-16 
+- [[placeholder] experiments results with AutoDock Vina](https://www.kaggle.com/competitions/leash-BELKA/discussion/503096) — 8 票 / 3 评论 / 2024-05-16 
+- [Cheminformatics Help?](https://www.kaggle.com/competitions/leash-BELKA/discussion/507576) — 7 票 / 9 评论 / 2024-05-26 
+- [Models performace variance between the leaderboards, visual explanation take](https://www.kaggle.com/competitions/leash-BELKA/discussion/519068) — 7 票 / 7 评论 / 2024-07-09 
+- [Visualizing molecules and building blocks in 3D](https://www.kaggle.com/competitions/leash-BELKA/discussion/497871) — 7 票 / 7 评论 / 2024-04-26 
+- [SmilesEnumerator: Augmentation tool for SMILES](https://www.kaggle.com/competitions/leash-BELKA/discussion/501663) — 7 票 / 7 评论 / 2024-05-10 
+- [ICLR 2024 may paper: docking results on finding binders for sEH](https://www.kaggle.com/competitions/leash-BELKA/discussion/502852) — 7 票 / 1 评论 / 2024-05-15 
+- [Do I need a background in Biomedicines to join this competition?](https://www.kaggle.com/competitions/leash-BELKA/discussion/506664) — 7 票 / 1 评论 / 2024-05-22 
+- [How to Find the already known Binding Pockets?](https://www.kaggle.com/competitions/leash-BELKA/discussion/498333) — 7 票 / 4 评论 / 2024-04-27 
+- [New dataset with images of Building Blocks](https://www.kaggle.com/competitions/leash-BELKA/discussion/498608) — 7 票 / 3 评论 / 2024-04-29 
+- [Shakeup predictions?](https://www.kaggle.com/competitions/leash-BELKA/discussion/516227) — 7 票 / 13 评论 / 2024-07-01 
+- [Question for the organisers regarding SMILES generation](https://www.kaggle.com/competitions/leash-BELKA/discussion/493498) — 7 票 / 2 评论 / 2024-04-13 
+- [Results and representations](https://www.kaggle.com/competitions/leash-BELKA/discussion/519861) — 7 票 / 4 评论 / 2024-07-13 
+- [Good luck to everyone for the shake/shuffle in private LB](https://www.kaggle.com/competitions/leash-BELKA/discussion/518786) — 6 票 / 14 评论 / 2024-07-08 
+- [Nothing better than 5 models spinning at the same time](https://www.kaggle.com/competitions/leash-BELKA/discussion/518870) — 6 票 / 0 评论 / 2024-07-08 
+- [Models that could lead to shakeup](https://www.kaggle.com/competitions/leash-BELKA/discussion/518729) — 6 票 / 3 评论 / 2024-07-08 
+- [Thanks for the competition!](https://www.kaggle.com/competitions/leash-BELKA/discussion/508137) — 6 票 / 0 评论 / 2024-05-28 
+- [is Protein have SMILES string format? [solved - answer no]](https://www.kaggle.com/competitions/leash-BELKA/discussion/492458) — 6 票 / 6 评论 / 2024-04-09 
+- [Data Question: How were hits determined?](https://www.kaggle.com/competitions/leash-BELKA/discussion/509852) — 6 票 / 3 评论 / 2024-06-04 **write-up?**
+- [ViSNet setup](https://www.kaggle.com/competitions/leash-BELKA/discussion/499861) — 5 票 / 0 评论 / 2024-05-03 
+- [When prediction takes longer than training...](https://www.kaggle.com/competitions/leash-BELKA/discussion/492968) — 5 票 / 2 评论 / 2024-04-11 
+- [Late but intereasting thing about sEH positives](https://www.kaggle.com/competitions/leash-BELKA/discussion/518583) — 5 票 / 2 评论 / 2024-07-07 
+- [Transformers doesn't perform??](https://www.kaggle.com/competitions/leash-BELKA/discussion/500639) — 5 票 / 2 评论 / 2024-05-06 
+- [0.480 public LB solutions! (ensemble of 7 fingerprint/SMILES/atom-level features models)](https://www.kaggle.com/competitions/leash-BELKA/discussion/518956) — 5 票 / 1 评论 / 2024-07-10 **write-up?**
+- [Thank you Kaggle Compliance Team ](https://www.kaggle.com/competitions/leash-BELKA/discussion/523259) — 5 票 / 0 评论 / 2024-07-31 
+- [Docking Performance](https://www.kaggle.com/competitions/leash-BELKA/discussion/562096) — 5 票 / 3 评论 / 2025-02-09 
+- [134th solution](https://www.kaggle.com/competitions/leash-BELKA/discussion/519299) — 5 票 / 0 评论 / 2024-07-10 **write-up?**
+- [Pre-Processing SMILES Tutorial](https://www.kaggle.com/competitions/leash-BELKA/discussion/500401) — 5 票 / 1 评论 / 2024-05-05 
+- [Top Student Group Prize](https://www.kaggle.com/competitions/leash-BELKA/discussion/530644) — 3 票 / 8 评论 / 2024-08-27 
+- [See you at NeurIPS!](https://www.kaggle.com/competitions/leash-BELKA/discussion/549979) — 0 票 / 0 评论 / 2024-12-04 

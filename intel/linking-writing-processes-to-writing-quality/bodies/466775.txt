@@ -1,0 +1,173 @@
+# https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466775
+
+Topic #466775: [3rd place solution] Trust CV is all you need.
+  Author: Zhongkai Shangguan
+  Posted: 2024-01-10 00:38:24.395000
+  Votes: 117  Comments: 50
+
+I want to express my gratitude to the host for organizing this great competition, and I feel incredibly fortunate to have experienced such a significant shake-up!!!!!!😄
+I chose to trust my cv, which is about 0.580, and as I expected, the shake-up happened. While I anticipated some shake-up, I never expected to climb to the 3rd place.
+
+The key component of my method is to align context features generated using a pre-trained Deberta-based regressor. 
+
+Firstly, using the reconstructed essays e.g., Essays reconstructed, I trained a Deberta regressor by adding 3 nn layers at the bottom of Deberta. This procedure follows the NLP process like Feedback Prize - English Language Learning, except that the characters are replaced by "anonymous" character q. Please find the code for more details. Training the Deberta-based regressor can achieve a cv about 0.75.
+
+After that, I dropped the last layer of the Deberta regressor, and used the second last layer's output, which is a 128-dimensional vector as the context feature extracted by the language model (i.e., Deberta).
+
+Based on the features from public notebooks that performed well on the public leaderboard (mainly from Writing Quality(fusion_notebook) by @yunsuxiaozi), I trained lightgbm/xgboost/catboost and save the feature importance, then selected top 64/128/256 most important features from each model and take their union.
+
+Finally, the selected features from the public notebook and my context features generated using Deberta were concatenated. I trained lightgbm/xgboost/catboost models which give cv around 0.588 to 0.595, and nn models (mlp/autoint/denselight) which have cv around 0.580-0.590. For the nn models, thanks to this notebook by @alexryzhkov .
+
+Due to the time limit, I only trained a Deberta-base model as the context extractor, but I believe other language models (e.g., Bert) and even llms (e.g., llama) are worth trying as well. As Deberta and nn models require GPU resources, I didn't consider the efficient track. 
+
+All code are listed below:
+Feature generation and processing: GPU all in training with context fe generation The notebook shows feature engineering and tree-based model training. For convenience, I saved the processed features to a .csv and train nn/tree models separately.
+
+Training: For each model, I train with 10 to 15 different random seeds and 5 to 10 folds (StratifiedKFold). 
+Deberta-based regressor: Training Deberta-based regressor as fe extractor
+nn models: All fe of nn models training pipeline saved fe
+tree models: All fe of tree models training pipeline saved fe
+
+Inference: GPU all fe inference I didn't tune the weights for each model, just some random numbers based on cv. A simple postprocessing scores[scores&lt;0.5] = 0.5
+scores[scores&gt;6.0] = 6.0 was conducted before submission.
+
+Thank you all and feel free to comment if you have any questions
+
+Comments:
+├─ william.wu (2024-01-10 05:51:59.667000) [+3]
+│  Amazing solution! congratulations! Glad to see that we can use a pre-trained model in this task.
+├─ Meagan Burkhart (2024-01-10 01:24:46.707000) [+3]
+│  Congratulations! I wonder if you can provide a little more about the process you used? Do you have something more detailed planned for a solution write-up?
+  ├─ Zhongkai Shangguan (2024-01-10 01:41:51.253000) [+1]
+  │  sure, I have public all my code and please let me know if you have any questions.
+  ├─ Zhongkai Shangguan (2024-01-10 02:27:44.963000) [+0]
+  │  I have reorganized the write-up, hope that helps.
+├─ pranavkarthick43 (2024-01-13 07:16:31.317000) [+1]
+│  Congratulations
+├─ NKS1234 (2024-01-13 07:07:39.687000) [+1]
+│  Great job!
+├─ Tanishq dublish (2024-01-12 18:14:27.167000) [+1]
+│  well done and congratulations very useful
+├─ Mrigank Raj Dubey (2024-01-12 14:12:20.877000) [+1]
+│  That's amazing! Congrats mate :)
+├─ MrSimple (2024-01-12 12:42:14.350000) [+1]
+│  Congratulations! its really useful!
+├─ Nishant Singhal (2024-01-12 09:02:25.303000) [+1]
+│  Congratulations!
+│  What factors contributed most significantly to the stabilized performance of your machine learning model in the face of leaderboard shake-up?
+  ├─ Zhongkai Shangguan (2024-01-12 21:47:59.287000) [+1]
+  │  For the stabilization, I think it's because I trained a lot of models using different seeds. After fixing the features, I trained 45x10 folds for xgb and lgb models, 15x10fold catboost models, and ...
+├─ GundamPilot (2024-01-12 05:42:31.820000) [+1]
+│  Congrats, and I loved reading the commentaries in your code.
+├─ Alireza Falahat (2024-01-11 21:12:07.270000) [+1]
+│  Congratulations Mate. I have a question. how much time you put in work and learning to become what you are now. thanks
+  ├─ Zhongkai Shangguan (2024-01-11 22:38:30.003000) [+3]
+  │  For this competition I joined very late, my first submission was only 2weeks before the competition deadline. Thanks to the public notebooks, and I nearly used all my 5 submissions every day.
+├─ Haru (2024-01-11 10:30:36.860000) [+1]
+│  Thank you for sharing code! And Congratulations!
+│  I have a question. 
+│  How do you determine the hyperparameters of a tree model? For example, lgbm_params_1 or lgbm_params_2, and so on.
+  ├─ Zhongkai Shangguan (2024-01-11 21:15:43.080000) [+1]
+  │  I followed this notebook which uses Optuna to tune the hyperparameters.
+├─ Raki (2024-01-11 09:29:40.693000) [+1]
+│  The idea of using the transformer as feature extractor instead of another model in an ensemble is really good!
+│  
+│  I think your score might have been even higher with adding new tokens for the anonymi...
+  ├─ Zhongkai Shangguan (2024-01-11 21:20:34.683000) [+1]
+  │  Yes, I agree. My Deberta-base model performs not well with only 0.75 cv. If I could figure out how to improve the Deberta model (e.g., replace "q"s with "i" or numeric characters), I think the feat...
+├─ Ruhao ZHAO (2024-01-11 06:16:17.937000) [+1]
+│  Crazy. Congratulations!
+├─ Sinan Calisir (2024-01-10 23:20:55.550000) [+1]
+│  The usage of Deberta is pretty neat, and very well done. Congratulations!
+├─ LuminousC (2024-01-10 15:17:50.140000) [+1]
+│  Congratulations on your achievement! One question, what's the thought of adding post processing to clip the output within [0.5, 6.0]? Is it based on some data distribution study?
+  ├─ Zhongkai Shangguan (2024-01-10 18:41:12.547000) [+1]
+  │  yes it is based on the score distribution of the training data.
+    ├─ LuminousC (2024-01-11 21:32:19.530000) [+0]
+    │  thanks for the reply
+├─ Mikhail Chernyshev (2024-01-10 14:31:04.750000) [+1]
+│  Great job! Congratulations.
+│  Thank you so much for sharing the code.
+├─ Athar Sayed (2024-01-10 12:25:21.897000) [+1]
+│  Wow the idea of using Deberta Based regressor on anonymized text dataset for this task is really unique amazing idea ! Once again congragulations on 3rd Rank
+├─ Tree's Centroid (2024-01-10 09:12:58.513000) [+1]
+│  Thank you for sharing!
+│  I have two questions.
+│  
+│  
+│  
+│  
+│  How did you find out that the minimum score is 0.5?
+│  I’m curious because you wrote the code below.
+│  scores[scores&lt;0.5] = 0.5 scores[scores&gt;6.0] ...
+  ├─ Corey Lehmann (2024-01-10 10:41:27.147000) [+3]
+  │  Hi, welcome! Here's my takes:
+  │  
+  │  
+  │  
+  │  
+  │  This can be found from the training data. Simply find the minimum value in the scores column something like this:
+  │  train_df['scores'].min()
+  │  
+  │  
+  │  CV in machine learning...
+    ├─ Tree's Centroid (2024-01-10 11:30:44.277000) [+0]
+    │  Wow, I thought the lowest score would be 0, but it wasn't… I'll have to check next competition!
+    │  Thank you for replying!!
+├─ CMan9292 (2024-01-10 07:31:39.910000) [+1]
+│  Thanks for sharing!
+│  Could you tell us more about your CV strategy?
+  ├─ Zhongkai Shangguan (2024-01-10 18:43:11.670000) [+0]
+  │  Just simple stratified k-fold cross-validation with 5-10 folds like public notebooks.
+├─ DongSoo,SEO (2024-01-10 05:13:38.200000) [+1]
+│  Congratulations on achieving 3rd position in this competition. Thanks for sharing the details of your solution.
+├─ C R Suthikshn Kumar (2024-01-10 04:13:45.517000) [+1]
+│  Congratulations on achieving 3rd position in this competition. Thanks for sharing the details of your solution.
+├─ Haru (2024-01-10 03:56:53.677000) [+1]
+│  congratulations!
+├─ FrostMagic (2024-01-10 03:30:37.070000) [+1]
+│  Congratulations! Thanks for your ideas.
+│  
+│  
+│  
+│  What did you use as an objective function while optimizing hyperparameters? Mean or mean + std between all the validation scores?
+│  
+│  How did you select top ...
+  ├─ Zhongkai Shangguan (2024-01-10 04:25:47.360000) [+1]
+  │  I followed this notebook for tuning hyperparameters, which uses mse.
+  │  
+  │  simple gain.
+  │  
+  │  the final hyperparameters is based on all features, even after feature selection I still use the same hyperparame...
+├─ turtle (2024-01-10 01:30:29.107000) [+1]
+│  congratulations!
+├─ [deleted] (2024-01-10 01:15:40.647000) [+1]
+│  I noticed you in the leaderboard :) big congratulations!
+├─ Ramzi REZKI (2024-01-12 21:34:25.430000) [+2]
+│  congratulations and thank you for sharing
+├─ Rajendra K Pandey (2024-01-10 12:52:40.997000) [+2]
+│  "Congratulations @leonshangguan on your exceptional performance! Your strategic use of a Deberta-based regressor and feature fusion from top-performing public notebooks is commendable. The comprehe...
+├─ nyantacos (2024-01-10 06:22:26.763000) [+2]
+│  Congratulations !
+│  I feel I'm encouraged to trust my CV :)
+│  Thank you !
+├─ Marcus Chan (2024-01-10 01:44:08.743000) [+2]
+│  The Deberta approach is so smart - we thought about using transformers but we weren't sure how to use them best. Congratulations on the prize-winning submission!
+├─ [deleted] (2024-01-10 00:55:06.957000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-10 01:01:20.490000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-01-10 02:02:52.693000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-02-19 23:22:38.117000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-15 06:30:06.613000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-13 14:15:23.377000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-10 12:51:22.633000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-11 20:49:32.817000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-11 15:52:14.260000) [+0]
+│  [deleted]

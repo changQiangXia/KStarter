@@ -1,0 +1,111 @@
+<p>First of all, I want to thank organizers for amazing competition which provided a nice chance to dive deep into LLMs and thanks to co-kagglers who shared their datasets and approaches. Specifically, thanks to <a href="https://www.kaggle.com/radek1" target="_blank">@radek1</a> and <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> for high quality datasets, which helped massively in training good question answering models. Thanks to <a href="https://www.kaggle.com/simjeg" target="_blank">@simjeg</a> for showing how to do the impossible and to <a href="https://www.kaggle.com/cpmpml" target="_blank">@cpmpml</a> for developing these ideas and adding Xwin model weights. Special thanks to <a href="https://www.kaggle.com/sugupoko" target="_blank">@sugupoko</a> for sharing 70k dataset, which helped me to tune re-ranker model (the dataset contributed to qa models as well), which in turn gave huge boost to my scores. To contribute to knowledge sharing, I will publish my code, but it is going to take a few days.</p>
+<p>Important note before going into details about the solution: I used Platypus2, but still not sure if it is allowed or not due to its license restrictions. But the main reason why I kept it in final submissions is that organizers stated that winning models are not used for any business purpose, which, I guess, implies that commercial usage restrictions in license should not be a problem.</p>
+<p><strong>[Update]</strong> Turns out it was fine to use Platypus2, but surprisingly additional ablation studies showed that slightly better scores could have been achieved without it! More details are in a table below.</p>
+<h1>Diagram of the solution</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1210465%2F8f8a9a7095f0f75c61c687a8ff02eb62%2FSolution5.png?generation=1697013081108751&amp;alt=media" alt=""></p>
+<h1>Some notes about the solution</h1>
+<h2>Wikipedia processing</h2>
+<p>It starts with Wikipedia dump processing, because, as many noted before, available processed wikipedia data have numerous flaws from missing numbers to missing articles. I used <a href="https://github.com/attardi/wikiextractor" target="_blank">https://github.com/attardi/wikiextractor</a> and modified it to solve problem of deleted numerical values. Most likely some problems still remained, but some were solved.</p>
+<p>Search for context is performed in one stage on passage level as opposed to the search for articles first and then for sentences. The reason is that in some cases two stage search just has no chance to find necessary context. For example, in training data I saw a question about actions of a character from some play. But the title or beginning of the article about this play does not mention this character, so encoding of the article does not contain necessary information. Not sure how frequent such cases, but probably not negligible.</p>
+<h2>Reranker training</h2>
+<p>I saw some comments in other discussions that people tried to train reranker model, but without success. From what I understood in the process of tuning my reranker, there are two key ingredients here:</p>
+<ol>
+<li>Having candidates in pairs of (question, candidate), both positive and negative, from the same distribution as they appear during inference. In my case it was important to use wikipedia passages, that I got from wikipedia processing, and not the context from original 70k dataset.</li>
+<li>Train with hard negatives. Though there is a caveat here: a raw model, that was not pretrained for reranking task, will fail miserably on hard negatives. So it is important to take some pretrained one (ibm/re2g-reranker-nq in my case) or train it in two stages.</li>
+</ol>
+<h2>Ablation studies</h2>
+<p>It is interesting to see how each part of the solution contributes to overall score, but I have not done thorough ablation studies, because assembled all parts together very late. But there are some hints from earlier submissions:</p>
+<table>
+<thead>
+<tr>
+<th>Pipeline configuration</th>
+<th>Private</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inference only with 5 debertas (not final models), not tuned reranker</td>
+<td>0.894</td>
+<td>0.893</td>
+</tr>
+<tr>
+<td>+answering 500 hard questions with Platypus</td>
+<td>0.91</td>
+<td>0.909</td>
+</tr>
+<tr>
+<td>+replacing debertas with new ones and adding 3 electras and 5 robertas</td>
+<td>0.912</td>
+<td>0.914</td>
+</tr>
+<tr>
+<td>+replacing reranker with tuned one</td>
+<td>0.927</td>
+<td>0.922</td>
+</tr>
+<tr>
+<td>+adding Xwin to ensemble</td>
+<td>0.928</td>
+<td>0.926</td>
+</tr>
+</tbody>
+</table>
+<p>I think such results show that question answering part does its job very well if provided with correct context (boost from tuning reranker) and the weakest part of the solution is the initial retrieval. Which makes sense, since it is the part that is not tuned for competition data and also it consists of two very small models with very limited capacity, which are tasked to index huge dataset. Probably much higher score could have been achieved with tuned retrieval models.</p>
+<p><strong>[Update]</strong><br>
+Table with measurements of each part's contribution to the final score</p>
+<table>
+<thead>
+<tr>
+<th>Pipeline configuration</th>
+<th>Private</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final submit</td>
+<td>0.9284</td>
+<td>0.9286</td>
+</tr>
+<tr>
+<td>Without Xwin</td>
+<td>0.9272</td>
+<td>0.9257</td>
+</tr>
+<tr>
+<td>Without Platypus2</td>
+<td>0.9288</td>
+<td>0.9309</td>
+</tr>
+<tr>
+<td>Without both LLMs</td>
+<td>0.9165</td>
+<td>0.9201</td>
+</tr>
+<tr>
+<td>Without bge-small in retrieval</td>
+<td>0.9272</td>
+<td>0.9261</td>
+</tr>
+<tr>
+<td>Without MiniLM-L6-v2 in retrieval</td>
+<td>0.9258</td>
+<td>0.9259</td>
+</tr>
+<tr>
+<td>Without Electra and Roberta in MLMs ensemble</td>
+<td>0.9246</td>
+<td>0.9268</td>
+</tr>
+<tr>
+<td>Without reranker</td>
+<td>0.9113</td>
+<td>0.9130</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>
+Code:<br>
+<a href="https://www.kaggle.com/code/podpall/3rd-place-reranker-training" target="_blank">Reranker training</a><br>
+<a href="https://www.kaggle.com/code/podpall/3rd-place-full-inference" target="_blank">Full pipeline inference</a></p>

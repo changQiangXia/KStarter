@@ -1,0 +1,23 @@
+# geolifeclef-2024 讨论区（按票数排序，共 21 条）
+
+- [In case any Kaggler intend to work with Climate Environmental Rasters. I Uploaded/Published ClimateClef](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/481485) — 20 票 / 4 评论 / 2024-03-03 
+- [Research Competitions could be more accessible for beginners. Dur D'être Chercheuse. My initial issues.](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/481283) — 20 票 / 3 评论 / 2024-03-02 
+- [ Invitation to Submit Working Notes for GeoLifeCLEF 2024](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/506431) — 8 票 / 4 评论 / 2024-05-21 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/480782) — 7 票 / 0 评论 / 2024-03-01 
+- [Other competitions -- FGVC11 Workshop [CVPR]](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/486162) — 5 票 / 0 评论 / 2024-03-23 
+- [It may be useful](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/480732) — 4 票 / 3 评论 / 2024-02-29 
+- [Questions about final report submission and ranking](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/507399) — 2 票 / 5 评论 / 2024-05-25 
+- [what is landsat time series data?](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/497807) — 2 票 / 1 评论 / 2024-04-25 
+- [CLEF 2025 ?](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/561689) — 1 票 / 9 评论 / 2025-02-07 
+- [Use Transformer architecture to fuse multi-modal information](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/500432) — 1 票 / 1 评论 / 2024-05-05 
+- [Looking for a good team](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/497988) — 1 票 / 3 评论 / 2024-04-26 
+- [How to get lat/lon or surveyId for the .jpeg images from Kaggle data?](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/485630) — 1 票 / 4 评论 / 2024-03-21 
+- [Authorship/credit question](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/486171) — 1 票 / 2 评论 / 2024-03-23 
+- [prediction submission due date?](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/482948) — 1 票 / 2 评论 / 2024-03-10 
+- [Is the Cube Dataset Dimension Correct?](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/482176) — 1 票 / 2 评论 / 2024-03-06 
+- [Looking for a vacant team](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/501541) — 0 票 / 1 评论 / 2024-05-09 
+- [Names Provided for the Competition?](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/500860) — 0 票 / 1 评论 / 2024-05-07 
+- [Confusion about where pictures are stored](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/499850) — 0 票 / 2 评论 / 2024-05-03 
+- [Significance of satellite patches](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/499314) — 0 票 / 1 评论 / 2024-05-01 
+- [Relation between PA and PO datasets](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/487969) — 0 票 / 4 评论 / 2024-03-31 
+- [What is the input of the model](https://www.kaggle.com/competitions/geolifeclef-2024/discussion/487758) — 0 票 / 2 评论 / 2024-03-30 

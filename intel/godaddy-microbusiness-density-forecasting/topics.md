@@ -1,0 +1,122 @@
+# godaddy-microbusiness-density-forecasting 讨论区（按票数排序，共 120 条）
+
+- [Linear Regression Baseline [LB 1.092] [CV 1.098]](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373099) — 196 票 / 40 评论 / 2022-12-19 
+- [New Last Value Baseline is LB 1.4631 not LB 3.2776 - Read Why Here](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389215) — 141 票 / 74 评论 / 2023-02-21 
+- [Some time series resources - might come in handy :-) ](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372926) — 140 票 / 12 评论 / 2022-12-18 
+- [The Top Notebook - Explained](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/375802) — 102 票 / 38 评论 / 2023-01-03 
+- [Time Series Feature Engineering](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372780) — 95 票 / 9 评论 / 2022-12-18 
+- [3rd Place - Predict Multipliers with GRU](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/418287) — 84 票 / 27 评论 / 2023-06-30 **write-up?**
+- [Useful Data Sources Thread](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372604) — 79 票 / 92 评论 / 2022-12-16 
+- [Getting the most out of SMAPE](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373274) — 69 票 / 10 评论 / 2022-12-20 
+- [USA Counties Coordinates Dataset](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372747) — 59 票 / 8 评论 / 2022-12-17 
+- [CV Scores for Simple Models - SMAPE = 3.19, 3.05, 3.00](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395098) — 49 票 / 32 评论 / 2023-03-15 
+- [#1 solution - generalization with linear regression ](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395131) — 48 票 / 46 评论 / 2023-07-16 **write-up?**
+- [[Chai Time] Relevant Kaggle Grandmaster Interviews](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372629) — 48 票 / 16 评论 / 2022-12-17 
+- [What is public/private ratio split?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372625) — 46 票 / 25 评论 / 2022-12-17 
+- [How do you approach validation for such a small dataset?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/377699) — 45 票 / 24 评论 / 2023-01-12 
+- [Let's try GRU!](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/384232) — 43 票 / 28 评论 / 2023-02-07 
+- [Why is Giba's XGB notebook using MAE as metric?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/386796) — 40 票 / 32 评论 / 2023-02-14 
+- [The Top Time-series Resources on Kaggle](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372778) — 38 票 / 3 评论 / 2022-12-17 
+- [the Top XGB notebook (until 20230201) with my understanding](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/377829) — 36 票 / 9 评论 / 2023-01-13 
+- [Giba RAPIDS SVR Solution](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395011) — 36 票 / 6 评论 / 2023-03-15 **write-up?**
+- [Welcome to GoDaddy's Microbusiness Density Forecasting Challenge!](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372596) — 34 票 / 19 评论 / 2022-12-16 
+- [How I got to the Top of the leaderboard](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394810) — 34 票 / 21 评论 / 2023-03-15 
+- [Jan to Mar'23 Micro Businesses data is out!](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/411428) — 34 票 / 62 评论 / 2023-05-19 
+- [Time Series Augmentations](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/377065) — 33 票 / 5 评论 / 2023-01-09 
+- [GoDaddy quarterly resuts are out. What is delaying LB update now?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/407165) — 33 票 / 11 评论 / 2023-05-05 
+- [Review of kaggle time series forecasting competitions](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/374091) — 33 票 / 8 评论 / 2022-12-25 
+- [target is number of GoDaddy-registered domains with active websites in a geographic region (?)](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/374293) — 32 票 / 12 评论 / 2022-12-26 
+- [How many domains would you have to register in Loving County, Texas to win this competition?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/378002) — 31 票 / 3 评论 / 2023-01-13 
+- [Data update tentatively scheduled for next week](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/388523) — 28 票 / 0 评论 / 2023-02-17 
+- [A different XGBoost model](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394920) — 27 票 / 12 评论 / 2023-03-15 
+- [Leaderboard refresh pending to reflect the data update [complete]](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389762) — 26 票 / 19 评论 / 2023-02-22 
+- [6th Place Solution - Lightgbm with Target flattened](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417821) — 24 票 / 5 评论 / 2023-06-21 **write-up?**
+- [Competition Summary: my solutions with code. Need you suggestions!](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394822) — 24 票 / 10 评论 / 2023-03-15 **write-up?**
+- [Relationship between cfips and counties](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372595) — 24 票 / 4 评论 / 2022-12-16 
+- [Top 10 Most Similar Counties](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373501) — 24 票 / 3 评论 / 2022-12-21 
+- [Who believes we will get the final LB on June 14?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/413655) — 24 票 / 14 评论 / 2023-05-29 
+- [Petition to release Feb #s before Competition expiry (if not already the plan)](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/375244) — 23 票 / 1 评论 / 2022-12-31 
+- [Can you guess your final score?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/381043) — 23 票 / 85 评论 / 2023-01-24 
+- [Does blacklisting 'hide' new result during development?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/384860) — 22 票 / 25 评论 / 2023-02-09 
+- [Autoregressive, Moving Average, & Seasonal Models](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373855) — 22 票 / 8 评论 / 2022-12-23 
+- [Hybrid Forecasting with GRU and XGBoost](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/391733) — 22 票 / 4 评论 / 2023-03-02 
+- [I am lost, nothing is clear](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/388154) — 21 票 / 30 评论 / 2023-02-16 
+- [Open Source Time Series Packages ](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372791) — 21 票 / 3 评论 / 2022-12-18 
+- [Check if submission is valid](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/393556) — 21 票 / 3 评论 / 2023-03-09 
+- [Interesting External Datasets](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/375339) — 20 票 / 2 评论 / 2022-12-31 
+- [2nd Place solution: The Godaddy Microbusiness Data Cleaning Challenge](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395264) — 19 票 / 6 评论 / 2023-06-18 **write-up?**
+- [Web Visualizer](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/384856) — 19 票 / 9 评论 / 2023-02-09 
+- [62th Place Solution - Last Value and Rule-based Multiplier](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417791) — 19 票 / 4 评论 / 2023-06-21 **write-up?**
+- [Public 1034 -> Private 97 solution](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417842) — 19 票 / 7 评论 / 2023-06-17 **write-up?**
+- [My Forecasting Strategy](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394821) — 19 票 / 3 评论 / 2023-03-15 
+- [Godday's Solution that didn't Appear in Public Notebooks.](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394855) — 19 票 / 13 评论 / 2023-03-15 **write-up?**
+- [Data update posted](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389138) — 18 票 / 18 评论 / 2023-02-20 
+- [Is an LSTM model possible?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/381038) — 18 票 / 15 评论 / 2023-01-24 
+- [2, 3, or 4 Month Lookahead Scores](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/386184) — 18 票 / 11 评论 / 2023-02-11 
+- [Data cleaning: Doña Ana County, New Mexico](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/374691) — 18 票 / 0 评论 / 2022-12-28 
+- [SMAPE Approximation](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/375668) — 18 票 / 3 评论 / 2023-01-02 
+- [Report: Cheating on my first Kaggle using Math and Entropy](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395514) — 18 票 / 12 评论 / 2023-03-17 
+- [Some coordinate features that boosted my score](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/383818) — 18 票 / 3 评论 / 2023-02-05 
+- [County Pairwise Distance Dataset ](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372783) — 18 票 / 3 评论 / 2022-12-18 
+- [Final data update](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417725) — 17 票 / 14 评论 / 2023-06-16 
+- [Trust your CV](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389853) — 17 票 / 16 评论 / 2023-02-23 
+- [Is auto-regressive a good way to predict future months?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/388938) — 17 票 / 7 评论 / 2023-02-20 
+- [My Strategy & The Dangers of Public Notebooks](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394823) — 17 票 / 7 评论 / 2023-03-15 
+- [Reading these discussions improved my LB score: 4.95 --> 1.66](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/392668) — 17 票 / 6 评论 / 2023-03-06 
+- [13th Place Solution: Rolling + Direct Prediction using LGB/XGB/CAT](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417924) — 17 票 / 6 评论 / 2023-06-17 **write-up?**
+- [Outliers - is there anything to learn from them?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373149) — 17 票 / 26 评论 / 2022-12-19 
+- [Lower public interest](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/409944) — 16 票 / 7 评论 / 2023-05-13 
+- [How about a complete Leaderboard Reset?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389638) — 16 票 / 2 评论 / 2023-02-22 
+- [Using only 'state_i' feature yields public score 1.0888](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/383827) — 16 票 / 5 评论 / 2023-02-05 
+- [What objective loss for GBT based model (e.g. XGBoost, LightGBM) to optimize SMAPE ?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373548) — 16 票 / 2 评论 / 2022-12-21 
+- [Which CV strategy works for you?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/382042) — 15 票 / 5 评论 / 2023-01-29 
+- [Similar Counties Network](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373516) — 15 票 / 4 评论 / 2022-12-21 
+- [Will there be any leaderboard updates before mid June?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/405253) — 15 票 / 3 评论 / 2023-04-26 
+- [Discussion posts & code snippets presented to Ohio North Database Meetup](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/386419) — 15 票 / 1 评论 / 2023-02-13 
+- [Competition close postponed](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417251) — 15 票 / 21 评论 / 2023-06-14 
+- [December numbers in revealed test might be wrong](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/413974) — 14 票 / 27 评论 / 2023-05-30 
+- [County Total Population Data](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/374356) — 14 票 / 2 评论 / 2022-12-26 
+- [What was goin on in january of 2021](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/375715) — 14 票 / 14 评论 / 2023-01-03 
+- [Which model to be used for good results and why?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/378871) — 14 票 / 3 评论 / 2023-01-17 
+- [ Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/418482) — 13 票 / 11 评论 / 2023-06-20 
+- [ Evaluated on Symmetric mean absolute percentage error (SMAPE) Python [code]](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372635) — 13 票 / 5 评论 / 2022-12-17 
+- [Why averaging does not help much](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394975) — 13 票 / 4 评论 / 2023-03-15 
+- [Where is our submission selection](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/405371) — 13 票 / 6 评论 / 2023-04-27 
+- [Competition finalization on hold pending fix for all ranks being zero [resolved]](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417764) — 12 票 / 6 评论 / 2023-06-17 
+- [SMAPE on LB Probed results](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/413109) — 12 票 / 34 评论 / 2023-05-27 
+- [Are we allowed to use the map to check the adjacent areas?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/377671) — 12 票 / 3 评论 / 2023-01-12 
+- [GoDaddy. It's SMAPE! Topics, Competitions and Snippets.](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372694) — 12 票 / 0 评论 / 2022-12-17 
+- [Don’t share your solution to suspicious persons! (GoDaddy)](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/381971) — 12 票 / 5 评论 / 2023-01-29 **write-up?**
+- [Will we get January data?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/383264) — 12 票 / 18 评论 / 2023-02-02 
+- [Changing a single prediction improves the score from 1.1836 to 1.1078](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/384078) — 12 票 / 6 评论 / 2023-02-06 
+- [Who believes we will get the final LB on June 16?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417256) — 11 票 / 15 评论 / 2023-06-15 
+- [Public 1125 - > Private 48 solution](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417946) — 11 票 / 2 评论 / 2023-06-21 **write-up?**
+- [2021 population data?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373085) — 11 票 / 8 评论 / 2022-12-19 
+- [Impact of COVID-19 pandemic on microbusinesses](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/374713) — 11 票 / 0 评论 / 2022-12-28 
+- [Thanks for all the support! Had a lot to learn! All the best! [Also ML Memes?]](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394176) — 10 票 / 10 评论 / 2023-03-12 
+- [Volatility ](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/412424) — 10 票 / 15 评论 / 2023-05-23 
+- [11th Place Solution - Simplicity (Luck) Is All You Need](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417803) — 10 票 / 6 评论 / 2023-06-20 **write-up?**
+- [Why don't we see our selections?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/396091) — 10 票 / 4 评论 / 2023-03-20 
+- [Clustering and lots of features: unleashing LGB's power](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394891) — 9 票 / 7 评论 / 2023-03-15 
+- [Things new kaggler should pay attention to on LB before the end of the competition](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/394085) — 9 票 / 3 评论 / 2023-03-12 
+- [Submission button/option is missing from kaggle kernel for this competition.](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/391290) — 9 票 / 4 评论 / 2023-03-01 
+- [Any advices on how to blend/ensemble a GRU and Xgboost?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/391128) — 9 票 / 20 评论 / 2023-02-28 
+- [Time series forecasting series by GM Konrad](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/372777) — 9 票 / 1 评论 / 2022-12-17 
+- [what does feature "scale" mean?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/391353) — 9 票 / 5 评论 / 2023-03-01 
+- [Is it easy to over fit the results of the competition?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/376042) — 9 票 / 9 评论 / 2023-01-04 
+- [Probable trends we are likely to see?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/392417) — 9 票 / 11 评论 / 2023-03-05 
+- [Uploaded Datasets from USDA](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/374607) — 9 票 / 0 评论 / 2022-12-28 
+- [What does 'two year lag' mean for census data?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/377064) — 9 票 / 6 评论 / 2023-01-09 
+- [Baseline - Last Value Prediction ](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389344) — 8 票 / 5 评论 / 2023-02-21 
+- [CV vs LB ?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/389988) — 8 票 / 13 评论 / 2023-02-23 
+- [When does the timeline for public leaderboard update?](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/375875) — 8 票 / 2 评论 / 2023-01-03 
+- [Public 531st -> Private 10th: The Complete Solution Code](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/418770) — 8 票 / 3 评论 / 2024-03-13 **write-up?**
+- [Bluesky is using domain registration for user verification](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/400981) — 8 票 / 4 评论 / 2023-04-11 
+- [44th Place Solution - Simple LGBM](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/418355) — 8 票 / 0 评论 / 2023-06-21 **write-up?**
+- [18th Place Solution: LGM with the mean of 3 months as targets](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/418232) — 8 票 / 0 评论 / 2023-06-19 **write-up?**
+- [Counties population data on sensus is not complete](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373825) — 8 票 / 2 评论 / 2022-12-23 
+- [Some cfips are missing in train/test data](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/373547) — 8 票 / 2 评论 / 2022-12-21 
+- [About outlier](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/378108) — 8 票 / 1 评论 / 2023-01-14 
+- [Double Trouble CatBoost using DARTS With Feature Engine](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/395312) — 7 票 / 16 评论 / 2023-03-16 
+- [35th Place Solution - GRU+XGB](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/418657) — 7 票 / 0 评论 / 2023-06-22 **write-up?**
+- [Leaderboard update in progress - expect odd results for a bit [complete]](https://www.kaggle.com/competitions/godaddy-microbusiness-density-forecasting/discussion/417707) — 7 票 / 0 评论 / 2023-06-16 

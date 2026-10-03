@@ -1,0 +1,83 @@
+<p>Congratulations to all competitors. Here's a summary of my solution, which is entirely rules-based. I attempted to treat this as an economic modeling problem combined with path optimization (described at <a href="https://www.kaggle.com/competitions/kore-2022/discussion/336804" target="_blank">https://www.kaggle.com/competitions/kore-2022/discussion/336804</a>)</p>
+<p><strong>Momentum</strong></p>
+<ul>
+<li>Build a look-ahead "momentum" model of the board for the next 30 turns</li>
+<li>Build balance-of-power matrices which show maximum force projection for the players for each square over the 30 turn horizon</li>
+</ul>
+<p><strong>Valuation</strong></p>
+<ul>
+<li>Estimate the net present value (NPV) of a new ship, assuming no combat, using a 1% discount rate</li>
+<li>Estimate the NPV of a new base, assuming the new ship NPV, existing production capacity, estimated income, and kore</li>
+<li>Zero out the new base NPV if I already have more shipyards than the enemy but also fewer ships, to avoid over-extension </li>
+</ul>
+<p><strong>Priority Spawning</strong></p>
+<ul>
+<li>Create a priority queue for new ship construction</li>
+<li>Any shipyard which is under active capture threat gets critical priority for new production as well as kore set aside for production in future turns, if needed</li>
+<li>Neighboring shipyards which could reach the threatened yard get high priority for new production</li>
+<li>Assign normal priority to all other shipyards</li>
+<li>Create SPAWN actions for high and critical priority shipyards only. If we run out of kore, add those yards back to the launch queue.</li>
+<li>If there are any critical or high priority spawns going on, disable new base building</li>
+</ul>
+<p><strong>Launch vs. Normal Priority Spawning</strong></p>
+<ul>
+<li>In the early game, wait for enemy to make the first launch so we might be able to opportunistically get a bigger payoff from a foray into the mid-board</li>
+<li>If I have less than 21 ships at a shipyard and kore to spend, prioritize spawning over launching</li>
+<li>Otherwise, launch!</li>
+</ul>
+<p><strong>Risk Adjustment</strong></p>
+<ul>
+<li>If I have a numerical advantage, adjust the balance-of-power matrices in my favor so I begin taking more risks (i.e. penetrating deeper into enemy territory than I would normally deem safe).</li>
+</ul>
+<p><strong>Strategic Labelling of Home Bases</strong></p>
+<ul>
+<li>Estimate the economic value of each base (for me and the competitor).</li>
+<li>If the base is actively threatened, assign this value to the square for each time step prior to its capture</li>
+<li>Also assign the same value to destroying the inbound fleet</li>
+<li>If my current fleet is large enough to prevent the capture, ignore negative balance-of-power when defending home bases</li>
+</ul>
+<p><strong>Strategic Labelling of Enemy Bases</strong></p>
+<ul>
+<li>Estimate the economic value of each base (for me and the competitor).</li>
+<li>Assign the value to this square but use a 1% time discount to encourage my fleets to capture it sooner</li>
+</ul>
+<p><strong>Balance of Power Strategy Labelling</strong></p>
+<ul>
+<li>Note: this portion of the algorithm implemented in Cython for speed</li>
+<li>For each shipyard, including enemy shipyards, look at each arrival time step and its implications on the balance-of-power matrix for neighboring shipyards.</li>
+<li>If a home shipyard's balance-of-power is always positive, ignore it. It should be safe.</li>
+<li>If not, see if our arrival at a given destination in a given time step can shift the balance-of-power in our favor</li>
+<li>If it can shift it entirely positve, assign 50% of the yard's value to the destination</li>
+<li>If it can shift only some time steps positive, assign at most 5% of the base's value to the destination depending on the proportion of time steps which have flipped positive.</li>
+<li>Do the same for the enemy bases, however only assign the maximum value of the base which I am threatening since I can't simultaneously capture multiple bases with the same fleet.</li>
+</ul>
+<p><strong>Create Trial Paths</strong></p>
+<ul>
+<li>Create a list of possible fleet sizes: full size, half full, 21, 13, 8, 5, 3, and 2. If I already have a very large number of ships at the shipyard, skip some of the smaller sizes.</li>
+<li>Create a "zombie" fleet size of "full size". Zombie fleets try to avoid mining kore and hone in on enemy bases or fleets as quickly as possible.</li>
+<li>Calculate minimum efficient time to be "ships at shipyard" divided by "fleet size"</li>
+<li>Calculate minimum bottleneck time as the turn at which our kore reserves will run out if we produce every turn. I.e. try to avoid arriving back home in a turn when the base would like to be producing new ships.</li>
+<li>Run optimal path finding algorithm on each possible fleet size, constrained by the minimum efficient time and minimum bottleneck time</li>
+<li>If our new base NPV is positive but we don't have enough ships, create a maximum time constraint so that fleets will coalesce into larger sizes so we can build the base.</li>
+<li>There is also effectively a maximum time constraint applied in the strategy labelling step, depending on which shipyard destination the fleet is heading to.</li>
+<li>Select the best path among the trial options, optimizing for best kore-per-time-per-ship among the paths with maximal strategic value, constrained by the maximum and minimums described above. </li>
+</ul>
+<p><strong>Zombie conversion</strong></p>
+<ul>
+<li>If my best path is an attempted base capture but there's some possibility it will fail, re-run the algorithm using the same fleet size as a zombie and use this path instead.</li>
+</ul>
+<p><strong>Zombie march</strong></p>
+<ul>
+<li>Look for vulnerable enemy bases that my fleet ignored but which I could capture given enough air support from other fleets. </li>
+<li>Do another trial path using a zombie fleet targeted at this base only. If this gives me a higher value, use this path instead.</li>
+</ul>
+<p><strong>Base building</strong></p>
+<ul>
+<li>If my new base NPV is positive and greater than my best flight plan value, create a new base instead of my original plan</li>
+<li>Look for suitable base locations, ideally 6 squares away near lots of kore (by absolute value) and kore "seeds" of any size (i.e. future mining potential). Give higher weight to kore located on the same X or Y axis. Try to build dominance in the best areas (e.g. center, sides, corners) before expanding elsewhere.</li>
+<li>Use the path optimization algorithm to define the path to the new base location</li>
+</ul>
+<p><strong>Normal priority spawning</strong></p>
+<ul>
+<li>For any shipyard not launching fleets, create a SPAWN action if we still have kore left</li>
+</ul>

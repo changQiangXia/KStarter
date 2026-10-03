@@ -1,0 +1,37 @@
+# kore-2022-beta 讨论区（按票数排序，共 35 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/kore-2022-beta/discussion/317737) — 58 票 / 24 评论 / 2022-04-08 **write-up?**
+- [Sharing my experience and strategies in building agents in TS/JS](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315970) — 16 票 / 2 评论 / 2022-03-30 
+- [Sharing my DQN baseline setup using tf.js](https://www.kaggle.com/competitions/kore-2022-beta/discussion/317289) — 14 票 / 1 评论 / 2022-04-06 
+- [Welcome to Kore - Beta!](https://www.kaggle.com/competitions/kore-2022-beta/discussion/313582) — 12 票 / 29 评论 / 2022-03-17 
+- [My Reflections](https://www.kaggle.com/competitions/kore-2022-beta/discussion/317955) — 11 票 / 0 评论 / 2022-04-09 
+- [Switching to 2p for the remainder of the competition](https://www.kaggle.com/competitions/kore-2022-beta/discussion/316993) — 10 票 / 29 评论 / 2022-04-05 
+- [Beta extended for a week!](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315572) — 10 票 / 27 评论 / 2022-03-28 
+- [New missile defense](https://www.kaggle.com/competitions/kore-2022-beta/discussion/316848) — 7 票 / 3 评论 / 2022-04-04 
+- [From Connect-X (Halite, Hungry Geese, Santa 2020, Rock Paper Scissor) till Kore Fleets](https://www.kaggle.com/competitions/kore-2022-beta/discussion/313794) — 7 票 / 0 评论 / 2022-03-19 
+- [New version with bug fixes!](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314257) — 5 票 / 4 评论 / 2022-03-21 
+- [Fixed: Maximum length of flight plan](https://www.kaggle.com/competitions/kore-2022-beta/discussion/313989) — 5 票 / 2 评论 / 2022-03-20 
+- [Rule description](https://www.kaggle.com/competitions/kore-2022-beta/discussion/313751) — 5 票 / 1 评论 / 2022-03-18 
+- [Typescript and Java Sample Agents](https://www.kaggle.com/competitions/kore-2022-beta/discussion/313787) — 4 票 / 3 评论 / 2022-03-18 
+- [minor visualiser bug in collisions](https://www.kaggle.com/competitions/kore-2022-beta/discussion/321628) — 3 票 / 0 评论 / 2022-04-27 
+- [50 teams but only 1 public notebook?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315962) — 3 票 / 15 评论 / 2022-03-30 
+- [Make Kore as Gym Environment](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315350) — 3 票 / 0 评论 / 2022-03-27 
+- [How to record the history?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314305) — 3 票 / 2 评论 / 2022-03-22 
+- [Attacking and defending?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314061) — 3 票 / 0 评论 / 2022-03-20 
+- [How to make state key in Q-learning](https://www.kaggle.com/competitions/kore-2022-beta/discussion/316248) — 2 票 / 2 评论 / 2022-04-01 
+- [Unnatural Fleet + fleet + shipyard collision resolution](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315895) — 2 票 / 6 评论 / 2022-03-30 **write-up?**
+- [Syntax errors on Rules](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314344) — 2 票 / 1 评论 / 2022-03-22 
+- [Current Leaderboard Top is an... Official Baseline?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314671) — 2 票 / 0 评论 / 2022-03-23 
+- [Make some tweaks to the rating system?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/316935) — 1 票 / 5 评论 / 2022-04-04 
+- [How to submit tf.js models?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/316688) — 1 票 / 3 评论 / 2022-04-03 
+- [Kore distribution is not random](https://www.kaggle.com/competitions/kore-2022-beta/discussion/316092) — 1 票 / 2 评论 / 2022-03-31 
+- [Is classification possible?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315125) — 1 票 / 2 评论 / 2022-03-26 
+- [Turn formula for max spawn 10 wrong?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315271) — 1 票 / 2 评论 / 2022-03-27 
+- [Attacker bot attack target?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314979) — 1 票 / 5 评论 / 2022-03-25 
+- [Potential bug in allied fleet merging](https://www.kaggle.com/competitions/kore-2022-beta/discussion/314177) — 1 票 / 8 评论 / 2022-03-21 
+- [DQN: Unexpected jumps in Q values](https://www.kaggle.com/competitions/kore-2022-beta/discussion/317696) — 0 票 / 0 评论 / 2022-04-08 
+- [Populate board set the numpoy and random set global variables](https://www.kaggle.com/competitions/kore-2022-beta/discussion/317033) — 0 票 / 1 评论 / 2022-04-05 
+- [Multifile submissions](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315223) — 0 票 / 5 评论 / 2022-03-26 
+- [Keep State](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315461) — 0 票 / 2 评论 / 2022-03-28 
+- [How do I access an array of the board?](https://www.kaggle.com/competitions/kore-2022-beta/discussion/315341) — 0 票 / 1 评论 / 2022-03-27 
+- [Upload Error](https://www.kaggle.com/competitions/kore-2022-beta/discussion/313965) — 0 票 / 2 评论 / 2022-03-20 

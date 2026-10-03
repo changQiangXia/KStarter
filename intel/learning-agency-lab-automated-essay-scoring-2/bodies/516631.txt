@@ -1,0 +1,93 @@
+# https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/516631
+
+Topic #516631: 3rd Place Solution Overview
+  Author: hiro
+  Posted: 2024-07-03 05:21:11.619000
+  Votes: 39  Comments: 16
+
+I would like to thank Kaggle and the competition hosts for organizing this interesting competition. 
+The 3rd place submission showed a consistent correlation between CV, public, and private scores.
+
+CV: 0.836
+Public: 0.832
+Private: 0.839
+
+I will provide a detailed explanation of the solution separately, but here is a brief summary. The focus on the Kaggle-only data contributed to achieving stable scores.
+
+
+
+Pre-training with MLM
+
+Two-stage training:
+First stage: Train with Kaggle data and validate with Kaggle-only data.
+Second stage: Load the weights from the first stage model, train on the Kaggle-only data, and validate on the non-Kaggle-only data.
+　(Validation used data other than the Kaggle-only data to avoid overfitting to the Kaggle-only data)
+
+Ensemble using the following combinations of backbone, head, and max_length:
+Backbone: DeBERTa-v3-base / DeBERTa-v3-large
+Head: Mean&amp;Pool / Attention / LSTM
+Max_length: 1024 / 1536
+
+
+I did not use the Persuade Corpus 2.0 data in this submission because I did not receive a response regarding its licensing. Although I also submitted a version using Persuade Corpus 2.0, thinking it might positively impact the private score, there was almost no difference compared to the version without it, indicating no significant impact.
+
+Additionally, while the CV strategy using groupkfold by prompt_name showed good public scores, the private scores dropped significantly. This suggests that the private data might have had a similar data distribution to the Kaggle-only data rather than unknown prompt_name.
+
+MLM Training Notebook : https://www.kaggle.com/code/dsohonosom/lal-deberta-base-mlm
+Train Notebook : https://www.kaggle.com/code/dsohonosom/aes2-3rd-place-train
+Inference Notebook : https://www.kaggle.com/code/dsohonosom/aes2-3rd-place-submission
+
+Comments:
+├─ Shiner (2024-07-03 13:26:25.193000) [+1]
+│  Congrats! May I ask how does MLM impact your score? Without MLM, what's the CV and LB score?
+  ├─ hiro (2024-07-03 14:34:46.730000) [+1]
+  │  @judith007 , thank you!
+  │  cv/public/private scores for the initial stage model, showing the following improvements. Since then, I have only evaluated with MLM, so it's unverified how much it contribu...
+├─ Maksym Dolgikh (2024-07-03 08:16:08.327000) [+1]
+│  Congratulations! Good to see your hard work pay off! 🙂
+│  
+│  How did you choose LR and scheduler for 2nd stage training? Did you choose very low LR to preserve previously found weights more?
+  ├─ hiro (2024-07-03 09:23:57.253000) [+1]
+  │  @maksymdolgikh ,  thank you!
+  │  I used the same learning rate and scheduler for both the first and second stages. As you mentioned, reducing the learning rate in the second stage could potentially lea...
+    ├─ Maksym Dolgikh (2024-07-03 11:12:06.027000) [+1]
+    │  I was pretraining with frozen layers on just kaggle training data (including intersection with persuade) and then training more on persuade2. Lowering LR for second stage significantly helped to ke...
+├─ C R Suthikshn Kumar (2024-07-03 06:21:46.030000) [+1]
+│  Congratulations on getting the third rank in this competition. Thanks for  sharing the details of your solution.
+├─ Timmy Juicehouse (2024-07-03 06:12:50.443000) [+1]
+│  Congratulations @dsohonosom 
+│  
+│  
+│    
+│  First stage: Train with Kaggle data and validate with Kaggle-only data.
+│    Second stage: Load the weights from the first stage model, train on the Kaggle-only data
+│  ...
+  ├─ hiro (2024-07-03 06:21:51.500000) [+1]
+  │  @sweetyheehee , thank you!
+  │  Yes, the sampling strategy for Kaggle-only data is the same across both stages.
+  │  Using different sampling strategies could lead to leaks.
+├─ kenta_kikuchi (2024-07-03 05:49:38.937000) [+1]
+│  @dsohonosom 
+│  
+│  Congratulations on winning third place!!
+│  In my case, I was using LightGBM, but the correlations between CV, Public, and Private scores were very low. 
+│  The scores would fluctuate signi...
+  ├─ hiro (2024-07-03 06:19:31.093000) [+1]
+  │  @kentakikuhi , thank you!
+  │  In this competition, I didn't use ensemble with LightGBM because the scores were not stable. Instead, I opted for a simple ensemble using Nelder-Mead.
+├─ Jasonczh (2024-07-03 05:28:52.413000) [+1]
+│  Thanks for sharing the result of the group k fold cv strategy.  I think that's the reason why I can not get a good result in this competition.
+  ├─ hiro (2024-07-03 06:14:03.937000) [+1]
+  │  I was also primarily working with groupkfold initially, but I switched strategies due to concerns about the variation in scores across folds. In the end, I think this switch was beneficial.
+├─ Anil Ozturk (2024-07-03 09:01:24.183000) [+2]
+│  Thanks for the write-up! Seems like the MLM training did the trick. Are you planning to share your codebase?
+  ├─ hiro (2024-07-03 10:28:22.993000) [+2]
+  │  Yes, I plan to organize and publish the code as well.
+├─ ktokunaga (2024-07-03 08:50:28.797000) [+2]
+│  Congratulations !
+│  Your Public and Private LB score are both high, that's quite accomplisment in this competition with unstable metric.
+│  
+│  I would like to ask; is your CV: 0.836 is evaluated only on k...
+  ├─ hiro (2024-07-03 09:28:44.680000) [+1]
+  │  @kazuakitokunaga , thank you!
+  │  CV score evaluated on the entire training data.

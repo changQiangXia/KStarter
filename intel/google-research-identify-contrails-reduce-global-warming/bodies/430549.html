@@ -1,0 +1,57 @@
+<p>Thanks to the organizers for the great competition. Also thanks to my teammates: <a href="https://www.kaggle.com/imakarov" target="_blank">Ilya Makarov</a>. I had a lot of fun and learned a lot.<br>
+I'd like to share our solution and what I learned from this competition. I hope it will be helpful for you.</p>
+<h2>Solution overview of my part</h2>
+<h4>Models</h4>
+<p>I use 5 models as follows:</p>
+<ul>
+<li>Single frame model 1: EfficientNetV2L + UNet, 512x512, crop to 480x480 for training.</li>
+<li>Single frame model 2: EfficientNetV2L + UNet, 768x768, crop to 512x512 for training.</li>
+<li>Multi frames model 1: EfficientNetV2L + customized 3D UNet 1, 256x256, use all 8 frames.</li>
+<li>Multi frames model 2: EfficientNetV2L + customized 3D UNet 2, 512x512, crop to 480x480 for training, use 5 frames only.</li>
+<li>Multi frames model 3: EfficientNetV2L + customized 3D UNet 3, 512x512, crop to 480x480 for training, use 5 frames only.<br>
+<strong>(<a href="https://www.kaggle.com/wuliaokaola/icrgw-submission-single-model-lb-0-714-5th-place" target="_blank">Best single model, late submission, private LB: 0.71443, public LB 0.70803</a>)</strong></li>
+</ul>
+<p>About the customized 3D UNet<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2006644%2F2130a20eb0d042ac9d48d1ec2d7d88f9%2Funet3d_.png?generation=1691656552129914&amp;alt=media" alt=""></p>
+<ul>
+<li>Apply the same encoder(backbone) to each frame</li>
+<li>Combine the encoder outputs by Conv3D at each level. ConvLSTM2D also works, but it's slower.</li>
+<li>Use UNet as decoder to get the final output.</li>
+</ul>
+<h4>Augmentation</h4>
+<ul>
+<li>Filp LR, Filp UD, Rotate 90 (for TTA8)</li>
+<li>Noise by channel, noise by pixel</li>
+<li>Random dropout frame (multi frames model only)</li>
+<li>Random crop</li>
+</ul>
+<p>At the early stage of the competition, I noticed that if I don't use flip and rot90, the model will be overfitting quickly. But if I use the flip and rot90, the result became worse. I was confused for a long time. Finally, I found the reason. As mentioned in <a href="https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430479#2382723" target="_blank">other discussions</a>, The image and the mask are not aligned. The mask is a littel bit shifted to the bottom right. So if we use flip or rot90, we need to align them. The magic number for me is: x = 0.408, y = 0.453. </p>
+<p>Tried but not worked:</p>
+<ul>
+<li>Random rotate</li>
+<li>CoarseDropout</li>
+<li>Dropout by channel</li>
+</ul>
+<h4>Target and loss function</h4>
+<p>I used 2 targets:</p>
+<ul>
+<li>Target 1: Sigmoid to 1 channel. weight: 75% (human_pixel_masks.npy)</li>
+<li>Target 2: Softmax to 5 channel. weight: 25% (human_individual_masks.npy. 0 for not contrails, 1 for 25% of labelers, 2 for 50% of labelers, 3 for 75% of labelers, 4 for 100% of labelers) </li>
+</ul>
+<p>The loss function is weighted binary cross entropy + dice loss. <br>
+And use Lion for optimizer.　(Lion: <a href="https://github.com/keras-team/keras/blob/v2.13.1/keras/optimizers/lion.py" target="_blank">https://github.com/keras-team/keras/blob/v2.13.1/keras/optimizers/lion.py</a>)</p>
+<h4>Prediction</h4>
+<ul>
+<li>Ensemble by 5 models with TTA8 (flip LR, flip UD, rotate 90)<br>
+The TTA8 is very important. It can improve the score by 0.005~0.01.</li>
+</ul>
+<p>The best result is public LB: 0.71243, private LB: 0.71756. But unfortunately, we didn't choice it as our final submission. </p>
+<h4>Other experiments</h4>
+<ul>
+<li>I tried to use all bands, which can give a improvement of 0.000x. But it make the submission too complex, and take too much time. So I didn't use it in the final submission.</li>
+<li>UNet + Tranformer (256, 128: UNet, 64, 32: Transformer). Using the trasformer to get the information of other frames. It works but not better than UNet. Maybe because the transformer is not pretrained.</li>
+</ul>
+<h4>Update</h4>
+<ul>
+<li>20230811 Added a late submission score of the best single model.</li>
+</ul>

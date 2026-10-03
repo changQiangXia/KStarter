@@ -1,0 +1,100 @@
+# https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470395
+
+Topic #470395: 2nd place solution with code and data
+  Author: Guanshuo Xu
+  Posted: 2024-01-24 04:23:55.090000
+  Votes: 115  Comments: 36
+
+Thanks to Kaggle, Vanderbilt University, and The Learning Agency Lab for hosting this competition. Detecting AI-generated text has been an important research topic with the rise of LLMs, and I'm sure the methods developed in this competition will contribute to this research area.
+
+Link to inference code: https://www.kaggle.com/code/wowfattie/daigt-2nd-place
+Link to training code and data: https://www.kaggle.com/datasets/wowfattie/daigtpretraindata
+
+Here is my solution:
+
+I started working on this competition relatively late. At first, I did some finetuning with deberta models on datasets generously shared by other competitors, all my initial trials resulted in nearly perfect CV but much lower and unstable public LB score. After realizing this finetuning would not go anywhere, I started playing with the tfidf kernels and forming ideas to improve it. During this process, James's post on creating large and diverse dataset and training a more general model grabbed my attention, and I immediately realized this could be an important "pretraining" step in a winning solution. So I abandoned my to-do list and invested all my efforts and computing resources to reproduce his approach. In several days I created about half a million human/AI pairs from the SlimPajama dataset with various LLMs. After finetuning on this dataset using deberta-v3-large, public/private LB was at 0.916/0.967. This public score was much lower compared with what James reported, probably due to some difference in generation settings, the LLMs used, or data selection.
+
+After this "pretraining" step, the original "language" model was transformed to a general "human/AI text generation" classification model. Since we know the test prompts are from persuade corpus only, it's worth doing another finetuning to adapt the model to those essays. After looking into the persuade corpus csv, I noticed that all the 5 prompts in test data ask students to write essays based on the contents of some articles, but I could not find those articles anywhere  (other than the Venus one). The issue is if those articles were used for generating the test set by the host, the AI texts could be very similar to human texts. To close this gap, I did language model (LM) finetuning on the student essays so the LLMs could generate texts mimicking students' writing, including citations from the original articles and even typos. To perform the LM finetuning, llm-studio is the best tool, no code was required, just prepared the csv file and clicked on the GUIs, and the models were ready for essay generation. Finetuning the general classifier on this dataset improved the public/private LB to around 0.94/0.98. My final 2nd place kernel contains an ensemble of two deberta-v3-large models and one deberta-large model, I also finetuned the three models on the DAIGT-V4-TRAIN-DATASET and added them in the ensemble, the public/private LB score became 0.967/0.983. My best public score was achieved by blending the above deberta predictions with the 0.961 tfidf kernel, but the private score is lower.
+
+Comments:
+├─ Darragh (2024-01-24 09:27:31.187000) [+1]
+│  Impressive work @wowfattie it was a good move to finetune the LMs on persuade. 
+│  In several days I created about half a million human/AI pairs from the SlimPajama dataset with various LLMs
+│  Can you l...
+  ├─ Yassine Alouini (2024-01-24 09:32:10.680000) [+0]
+  │  I was about to ask the same question. What model have you used as well?
+  ├─ Guanshuo Xu (2024-01-24 13:14:53.770000) [+4]
+  │  Thanks. I will share all my data generation code today.
+    ├─ Yassine Alouini (2024-01-24 15:29:17.213000) [+0]
+    │  Awesome, thanks in advance!
+  ├─ Guanshuo Xu (2024-01-25 03:03:17.970000) [+2]
+  │  I updated the training code to include the generation code. Please read the updated description for more details.
+    ├─ Yassine Alouini (2024-01-25 08:21:27.663000) [+0]
+    │  Great work, thanks for the update!
+    ├─ avinashtrivedi (2024-12-26 07:55:52.853000) [+0]
+    │  was checking your code and i found that your Pre-training + Finetuning is basically 2 times finetuning, each finetuning on different data, correct me if i am wrong.
+├─ narsil (jobs-in-data.com) (2024-01-24 08:55:20.057000) [+2]
+│  Thanks for sharing - great work. Your intuition about what would be the key to winning is remarkable.
+├─ Anna Kruspe (2025-02-27 13:11:22.137000) [+0]
+│  Hi, I know it's been a while, but I am thinking about using your models in a downstream experiment. It's a lot of data, so I am wondering if you have any idea what I would lose without the ensembli...
+├─ Aleksandr Shumilov (2024-06-19 06:53:47.023000) [+0]
+│  Really nice and short solution, thank you!
+├─ Constantine Zen (2024-05-27 20:59:00.590000) [+0]
+│  good structure
+├─ Kaggler (2024-05-20 21:32:41.440000) [+0]
+│  Congratulations @wowfattie 
+│  I have one question to ask.
+│  Did you use the whole 5GB of train_neg_list.pickle and train_pos_list.pickle for fine-tuning the whole models?
+│  
+│  Thanks
+├─ Craig Rash (2024-04-24 00:02:20.933000) [+0]
+│  It's great to see how you were able to extrapolate the data that was used to train the AI which generated the text.
+├─ dangerous AI (2024-02-15 02:34:43.567000) [+0]
+│  Hello, may I ask how can I obtain those resource text used here:
+├─ dangerous AI (2024-02-10 14:15:16.937000) [+0]
+│  Hello, but where can I get your related datasets?
+├─ CroDoc (2024-01-30 08:08:25.107000) [+0]
+│  I was wondering when will you appear on the podium again. Well done! :)
+├─ Kenji (2024-01-26 11:17:11.680000) [+0]
+│  I am a beginner just starting in the data science space. If you could provide a quick comment on why you used DeBERTa instead of DistilBERT, it would be helpful. Lastly, thank you for sharing your ...
+  ├─ xckkcxxck (2024-01-27 03:17:18.863000) [+2]
+  │  It can be said that the DeBERTa model still performs the best among non-LLM transformers, which has been tested in many NLP-related Kaggle competitions.
+    ├─ Kenji (2024-01-27 04:46:18.387000) [+0]
+    │  Thank you!
+├─ Ehab Aboelnaga (2024-01-25 20:32:28.760000) [+0]
+│  impressive
+├─ Huiyun Hu (2024-01-25 06:29:54.973000) [+0]
+│  Hello, may I ask if the tf-idf kernel you mentioned refers to a model that extracts features using tf-idf methods and then predicts them using machine learning methods (such as lightgbm)?
+  ├─ Guanshuo Xu (2024-01-25 13:43:18.407000) [+0]
+  │  I think I just copied this notebook
+  │  https://www.kaggle.com/code/yongsukprasertsuk/llm-daigtext-0-961/notebook
+    ├─ Huiyun Hu (2024-01-26 06:14:08.430000) [+0]
+    │  okk, thank you for your reply. It is helpful.
+├─ 忍者 (2024-01-25 00:25:57.263000) [+0]
+│  deberta! deberta!! deberta!!! congrats on your win… deberta and a rich dataset are the "swiss army knife" of many winning solutions for nlp tasks. the "language model (LM) finetuning on the student...
+├─ RB (2024-01-24 08:39:04.987000) [+0]
+│  Congratulations and Thank you so much for sharing your solution. I also ended up with only transformers models for my best submission. But you have much better dataset. 
+│  
+│  May I ask for the followin...
+  ├─ Guanshuo Xu (2024-01-24 13:22:48.183000) [+3]
+  │  Thanks. I used llama2s and mistral. But I didn't try any instruct or chat version because I believe any further finetuning weakens the foundation models. I will share more today.
+    ├─ RB (2024-01-24 14:59:48.300000) [+0]
+    │  Thank you  🙏 so much for clarifying,  this was my mistake
+    ├─ Guanshuo Xu (2024-01-26 15:51:34.410000) [+1]
+    │  I want to apologize that I actually used some llama chat versions for the data generation, so my previous statement is wrong.😅
+  ├─ Guanshuo Xu (2024-01-25 03:04:20.610000) [+2]
+  │  I updated the training code to include the generation code.
+├─ [deleted] (2024-05-20 21:29:03) [+0]
+│  [deleted]
+├─ [deleted] (2024-05-12 14:00:55.337000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-25 17:21:59.293000) [+0]
+│  [deleted]
+  ├─ Guanshuo Xu (2024-01-25 18:38:14.643000) [+2]
+  │  I have NVIDIA RTX A6000 x 3
+    ├─ [deleted] (2024-01-26 16:05:49.857000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-01-25 11:59:26.043000) [+0]
+│  [deleted]
+├─ Constantine Zen (2024-05-27 20:57:53.150000) [+1]
+│  thanks a lot

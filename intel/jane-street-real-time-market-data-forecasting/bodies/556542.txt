@@ -1,0 +1,357 @@
+# https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556542
+
+Topic #556542: [Private LB 8th] solution
+  Author: Evgeniia Grigoreva
+  Posted: 2025-01-14 00:10:41.238000
+  Votes: 295  Comments: 66
+
+First of all, thanks to the host for this amazing competition! It was a rare and exciting opportunity to apply deep learning to tabular data and test how well models can adapt to new data in real-time, simulating real-world conditions. I really enjoyed participating and learning throughout the process. Thanks also to all the participants who contributed to public discussions - I learned a lot from you! @victorshlepov, @lihaorocky, @johnpayne0, @shiyili
+
+Link to the code https://github.com/evgeniavolkova/kagglejanestreet
+Link to the submission notebook https://www.kaggle.com/code/eivolkova/public-6th-place?scriptVersionId=217330222
+
+1. Cross-validation
+
+I used a time-series CV with two folds. The validation size was set to 200 dates, as in the public dataset. It correlated well with the public LB scores. Additionally, the model from the first fold was tested on the last 200 dates with a 200-day gap to simulate the private dataset scenario.
+
+2. Feature engineering and data preparation
+
+2.1 Sample
+
+I used data starting from date_id = 700, as this is when the number of time_ids stabilizes at 968. I experimented with using the entire dataset, but it did not result in any score improvement.
+
+2.2 Data preparation
+
+Simple standardization and NaN imputation with zero were applied. Other methods didn't provide any improvement.
+
+2.3 Feature engeneering
+
+I used all original features except for three categorical ones (features 09–11). I also selected 16 features that showed a high correlation with the target and created two groups of additional features:
+
+
+
+Market averages: Averages per date_id and time_id.
+
+Rolling statistics: Rolling averages and standard deviations over the last 1000 time_ids for each symbol.
+
+
+Besides that, I added time_id as a feature.
+
+Adding these features resulted in an improvement of about +0.002 on CV.
+
+3. Model architecture
+
+3.1 Base model
+
+Time-series GRU with sequence equal to one day. I ended up with two slightly different architectures:
+
+
+
+3-layer GRU
+
+1-layer GRU followed by 2 linear layers with ReLU activation and dropout.
+
+
+The second model worked better than the first model on CV (+0.001), but the first model still contributed to the ensemble, so I kept it.
+
+MLP, time-series transformers, cross-symbol attention and embeddings didn't work for me.
+
+3.2 Responders
+
+I used 4 responders as auxiliary targets: responder_7 and responder_8, and two calculated ones:
+
+df = df.with_columns(
+    (
+        pl.col()
+        + pl.col().shift(-).over()
+    ).fill_null().alias(),
+    (
+        pl.col()
+        + pl.col().shift(-).over()
+        + pl.col().shift(-).over()
+    ).fill_null().alias(),
+)
+
+
+These are approximate rolling averages of the base target over 8 and 60 days, respectively. As described in detail in this discussion by @johnpayne0, responder_6 is a 20-day rolling average of some variable, while responder_7 and responder_8 are 120-day and 4-day rolling averages of the same variable, with some added noise. Given an N-day rolling average, we can easily calculate N*K-day rolling averages.
+
+A separate base model was used for each auxiliary target. The predictions from these models were then passed through a linear layer to produce the final target output, responder_6.
+
+The sum of losses (weighted zero-mean R²) for each responder was used to train the model.
+
+Adding auxiliary targets improved both CV and LB scores by about +0.001.
+
+Models were trained using a batch size of one day, with a learning rate of 0.0005.
+For submission, I trained models on data up to the last date_id, using the number of epochs equal to the average optimal number of epochs on CV.
+
+3.3 Ensemble
+
+I ran both models on 3 seeds and took a simple unweighted average of predictions from those 6 models. This resulted in an LB score of 0.0112 (vs best single model LB 0.0105).
+
+4. Online Learning
+
+During inference, when new data with targets becomes available, I perform one forward pass to update the model weights with a learning rate of 0.0003. This approach significantly improved the model’s performance on CV (+0.008). Interestingly, for an MLP model, the score without online learning was higher than for the GRU, but lower with online learning.
+
+Updates are performed only with the responder_6 loss, without auxiliary targets.
+
+Updates are applied for the entire dataset provided during submission, including rows with is_scored = False.
+
+I also considered performing a full online retraining on the data up to the start of the private dataset. This would make sense because there is a significant gap between the training data and the private dataset. However, retraining the model would require distributing the training process across multiple inference steps, as the one-minute time limit between dates would not be sufficient. I believe this would have been feasible but I decided not to spend time on it, although my tests suggested that it could provide a +0.001 improvement in the score. Still, I find it amazing that, instead of a full model retraining, performing one-day updates for almost a year is enough, and the model continues to perform well.
+
+5. Technical details
+
+5.1 Inference Speed
+
+Inference speed was critically important, so I spent a significant amount of time optimizing my code, particularly data processing and calculation of rolling features.
+
+For my final submission, it takes 0.06 seconds to run one inference step (time_id), 0.02 of which are spent on data processing. Updating model weights once per date_id takes 3.6 seconds.
+
+I used PyTorch, but since TensorFlow is said to be faster, I tried switching to it. However, after a few days of experimenting, I couldn't achieve better performance, so I decided to stick with PyTorch.
+
+5.2 Technical stack
+
+Due to RAM requirements, I switched from Google Colab to vast.ai and was extremely happy with the decision. I wrote code locally, enjoying all the perks of VSCode, and then ran a script to push the code to github, pull it on the server and execute scripts remotely.
+
+I also used WandB to monitor experiments, which helped me keep track of scores and easily revert to an older version of the code if something went wrong.
+
+To debug my submission notebook and estimate submission time I used synthetic dataset by @shiyili.
+
+6. Scores
+
+
+
+
+
+CV fold 0
+CV fold 1v
+Fold 1 with 200 days gap
+CV avg
+
+
+
+
+GRU 1 without both auxiliary targets and online learning
+0.0161
+0.0062
+0.0011
+0.0112
+
+
+GRU 1 without auxiliary targets
+0.0235
+0.0148
+0.0136
+0.0190
+
+
+GRU 1
+0.0249
+0.0153
+0.0147
+0.0201
+
+
+GRU 2
+0.0262
+0.0166
+0.0161
+0.0214
+
+
+GRU 1 + GRU 2
+0.0268
+0.0169
+0.0163
+0.0218
+
+
+GRU 1 3 seeds
+0.0258
+0.0164
+0.0152
+0.0211
+
+
+GRU 2 3 seeds
+0.0267
+0.0175
+0.0163
+0.0221
+
+
+GRU 1 + GRU 2 3 seeds
+0.0270
+0.0175
+0.0162
+0.0222
+
+
+
+
+Fold 0: date_ids from 1298 to 1498.
+Fold 1: date_ids from 1499 to 1698.
+
+Comments:
+├─ Maciej Zawadzki (2025-01-14 00:39:53.840000) [+4]
+│  Congratulations Evgeniia! Nice solution and a great outcome. 
+│  
+│  I noticed that many people were stuck around 0.96 for a while before jumping to 1.06. I believe that this happened to you; and I know ...
+  ├─ [deleted] (2025-01-14 00:53:35.757000) [+0]
+  │  [deleted]
+  ├─ Evgeniia Grigoreva (2025-01-14 00:56:04.010000) [+3]
+  │  Thanks, Maciej!
+  │  
+  │  I tried to remember, but I couldn’t :) I think at that point I was tuning model parameters and online learning. My latest jumps were due to ensembling and introduction of auxiliary...
+├─ Sumen Zhang (2025-01-31 21:44:45.407000) [+1]
+│  Thanks for sharing your impressive work! Quick question: Is your sequence length 968? Also, what device did you use for training? I'm using an RTX 4090, but setting seq_len to 968 for one day's dat...
+  ├─ Maciej Zawadzki (2025-02-01 15:49:35.167000) [+1]
+  │  @sumenzhang evgeniia precomputes the features outside of torch. She also uses data with date_id &gt;= 700.  So that helps with memory. And, I haven’t tested this, but I think her DataSource loads e...
+├─ Sergei Fironov (2025-01-14 06:59:48.703000) [+1]
+│  Thank you so much for the great report! Very cool! Congratulations on the excellent result! 
+│  
+│  Interestingly, 3,700 teams participated in this competition. Surely many people have tried GRU. And I'm...
+├─ ZT (2025-01-14 04:58:49.157000) [+1]
+│  Thanks for sharing!
+│  Did you normalize per symbol or was it gloable normalization for the entire column?
+  ├─ Evgeniia Grigoreva (2025-01-14 10:15:54.943000) [+0]
+  │  Global standardization
+    ├─ [deleted] (2025-02-27 05:30:09.660000) [+0]
+    │  [deleted]
+├─ 鸽鸽257 (2025-01-14 01:36:13.180000) [+1]
+│  Thank you for sharing! Great Job !
+│  
+│  
+│    
+│  A separate base model was used for each auxiliary target. The predictions from these models were then passed through a linear layer to produce the final targ...
+  ├─ Evgeniia Grigoreva (2025-01-14 11:12:40.593000) [+1]
+  │  Because it worked better:) I suppose one model is not enough to fully capture different patterns associated with different responders
+├─ SLi (2025-01-14 00:57:24.983000) [+1]
+│  Big congrats and great solution! Thx for sharing! I find my solution is very much alike yours (model choice, training strategy, online learning, etc), but I wish I could have paid more attention to...
+├─ Haoze Hou (2025-01-14 00:48:19.470000) [+1]
+│  Thanks for sharing! Will the engineered features improve the performance in LB? I have tried to do some feature engineering, it has slightly improved the CV but no boost on LB.
+  ├─ Evgeniia Grigoreva (2025-01-14 00:57:15.880000) [+0]
+  │  Yes, they improved both LB and CV scores significantly
+├─ Thomas Dueholm Hansen (2025-01-14 00:35:33.250000) [+1]
+│  Thanks for sharing! I did not even consider using GRU, so that was a bit of a blind spot for me. I briefly tried LSTM, but transformers worked much better for me.
+  ├─ Evgeniia Grigoreva (2025-01-14 00:43:00.383000) [+1]
+  │  I did exactly the opposite :) I hope to see your solution with transformers!
+    ├─ Thomas Dueholm Hansen (2025-01-14 01:18:16.187000) [+2]
+    │  I am not currently planning to make a post about my solution, but I may change my mind if enough information becomes public knowledge.
+    ├─ leo (2025-01-14 05:49:28.137000) [+0]
+    │  Same here, adding attention on time axis didn't work for me. GRU with careful handling for hidden states give better results. However, adding attention on stock axis added some values. It's good to...
+    ├─ ponythewhite (2025-01-14 12:32:12.673000) [+1]
+    │  I have also used transformers exclusively. Did you do full fine-tuning for online training or some reduced parameter, like LoRa?
+    ├─ Thomas Dueholm Hansen (2025-01-14 13:09:38.697000) [+1]
+    │  I did full fine-tuning. But my transformers were also relatively small (about 570k parameters), so time and memory usage was less of an issue. I did not manage to get to a point where scaling up ju...
+    ├─ ponythewhite (2025-01-14 13:58:03.617000) [+3]
+    │  I did full fine-tuning as well, with a larger learning rate for the last layer and embeddings.
+    │  
+    │  I started out with the mission to make transformers suitable for on-line training from scratch (with ...
+    ├─ Thomas Dueholm Hansen (2025-01-14 14:45:42.713000) [+0]
+    │  Thanks! And you too. Your solution sounds more impressive! I am not familiar with the SOAP optimizer, but I'll check it out.
+    │  
+    │  My initial plan was also to retrain from scratch, but it did not work w...
+    ├─ Evgeniia Grigoreva (2025-01-14 15:03:23.713000) [+0]
+    │  That sounds very interesting! How many dates did you use to train your OL model? I also spent some time trying to develop a purely online learning model, but the scores ended up being far too infer...
+    ├─ ponythewhite (2025-01-14 15:42:00.547000) [+0]
+    │  All dates. Also tried with only post 700, but starting from scratch gave better results. Whether data from &lt;700 date_id helps or not probably depends on model capacity.
+    ├─ Evgeniia Grigoreva (2025-01-14 15:54:43.160000) [+0]
+    │  Ah, so does your model get retrained on the entire sample every date? Sorry if I misunderstood, I'm referring to 
+    │  
+    │  
+    │    
+    │  on-line training from scratch (with no pre-training)
+    ├─ ponythewhite (2025-01-14 17:17:48.853000) [+1]
+    │  not retrained, it just iterates through the dataset day by day, doing backprop on each day's batch of data in an online fashion, from day 0 to infinity. 1 update = backprop on 1 day
+├─ snehal (2025-01-14 00:29:55.127000) [+1]
+│  Wow amazing solution! I didn't think to use the lagged responder as another target that's so smart.
+├─ Marília Prata (2025-01-14 01:46:06.840000) [+0]
+│  Congratulations Grigoreva and thanks for sharing your 6th place Solution. 
+│  It's a huge achievement.
+├─ Wang Xiaokang (2025-07-26 02:21:33.803000) [+0]
+│  Thanks a lot. Would you explain how do you add the time_id as a feature? Since GRU needs a 3-dimensional data including a lookback window. If time_id itself is a feature, what would the structure o...
+├─ shanzhong8 (2025-07-16 11:40:08.163000) [+0]
+│  Congratulations on your solo gold! Cheers!
+├─ Mohamed Gamal (2025-06-26 15:52:05.527000) [+0]
+│  Incredible work and congratulations, your approach is a masterclass in adapting deep learning to tabular data under real-time constraints. I especially appreciate the clarity in how you handled tim...
+├─ Henry (2025-02-07 14:41:50.753000) [+0]
+│  fresh new codes, very useful!
+├─ [deleted] (2025-01-27 06:50:52.937000) [+0]
+│  Thanks for sharing and congratulations for the results!!
+├─ Gizachew Alemu (2025-01-26 23:38:09.090000) [+0]
+│  Thank you very much for the report andCongrats on the excellent result!
+├─ Mehdi Chardoli (2025-01-26 10:08:23.160000) [+0]
+│  Thank you so much for the great report! Very cool! Congratulations on the excellent result!
+├─ cue xie (2025-01-24 14:08:41.163000) [+0]
+│  I also selected 16 features that showed a high correlation with the target and created two groups of additional features
+│  
+│  
+│  Thanks for sharing. Really great solution! I'm curious how these sixteen f...
+├─ MJeremy (2025-01-23 03:54:10.217000) [+0]
+│  Hi @eivolkova thanks for sharing. Want to understand the reason behind using auxiliary target, while we know responder_6 is a 20 day rolling averages, but why setting a target of additions of (-20)...
+├─ doggysmallnose (2025-01-20 06:53:18.620000) [+0]
+│  nice read!
+├─ Natan Labarrère (2025-01-19 10:10:04.777000) [+0]
+│  Congratulations, Evgeniia. Impressive modeling and results.
+│  Could I ask, how do you set the input for the GRU? Given (as I understand) you have to pass previous time_id instances of the same symbol...
+├─ Lily K (2025-01-19 01:38:50.403000) [+0]
+│  Hi, I just wanted to say thank you for sharing this, that's something very helpful and inspiring, especially for those who are just beginners like me!
+├─ Akshat_Sharma_work (2025-01-18 17:30:25.377000) [+0]
+│  Only if I have gotten a gpu to work with, my submission wouldn't be late
+├─ Octavi Grau (2025-01-15 15:50:44.530000) [+0]
+│  Thank you very much for your post @eivolkova ! I've learned tons of new things around this topic
+├─ YMJA (2025-01-14 20:58:17.360000) [+0]
+│  Thanks for sharing your take on the competition.
+├─ Sinan Calisir (2025-01-14 19:12:25.963000) [+0]
+│  Amazing write-up, congratulations, and best of luck in the next phase! Also thank you for the code!
+├─ Alessandro Cappellacci (2025-01-14 14:24:00.553000) [+0]
+│  Insightful solution! I noticed the decision not to use categorical variables (9-11)—was this primarily due to the dataset's structure, or were there additional considerations influencing this choice?
+├─ Greg (2025-01-14 08:49:53.760000) [+0]
+│  Super helpful that you shared all these details about your model which achieved one of the best scores. I've never managed to make GRU work well so I'm curious to review your repo and see what I mi...
+├─ leo (2025-01-14 05:43:11.900000) [+0]
+│  Congrats on the final results! Our approaches are very similar in general, but you have much more interesting ideas :)
+│  
+│  
+│    
+│  best single model LB 0.0105
+│  
+│  
+│  Out of curiosity, by single model, do you m...
+  ├─ Evgeniia Grigoreva (2025-01-14 10:17:08.793000) [+0]
+  │  Thanks! Yes, one model with auxiliary targets trained on one seed
+    ├─ leo (2025-01-14 12:01:13.623000) [+0]
+    │  Impressive!
+├─ [deleted] (2025-01-14 03:16:33.397000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-14 01:12:55.133000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-14 00:54:24.090000) [+0]
+│  [deleted]
+  ├─ [deleted] (2025-01-14 01:00:40.327000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-01-14 04:18:34.080000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2025-01-14 14:23:23.893000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-01-14 00:19:25.783000) [+0]
+│  [deleted]
+├─ [deleted] (2025-02-02 07:15:55.317000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-24 14:08:04.297000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-27 10:59:23.957000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-18 18:40:21.967000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-18 14:09:44.640000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-18 01:39:22.400000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-17 22:46:19.863000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-17 13:56:52.050000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-20 06:31:50.563000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-15 19:19:11.507000) [+0]
+│  [deleted]

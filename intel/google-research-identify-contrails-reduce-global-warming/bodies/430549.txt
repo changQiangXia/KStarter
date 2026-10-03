@@ -1,0 +1,166 @@
+# https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430549
+
+Topic #430549: 5th place solution (best single model, private LB 0.71443)
+  Author: Johnny Lee
+  Posted: 2023-08-10 08:41:25.714000
+  Votes: 41  Comments: 15
+
+Thanks to the organizers for the great competition. Also thanks to my teammates: Ilya Makarov. I had a lot of fun and learned a lot.
+I'd like to share our solution and what I learned from this competition. I hope it will be helpful for you.
+
+Solution overview of my part
+
+Models
+
+I use 5 models as follows:
+
+
+
+Single frame model 1: EfficientNetV2L + UNet, 512x512, crop to 480x480 for training.
+
+Single frame model 2: EfficientNetV2L + UNet, 768x768, crop to 512x512 for training.
+
+Multi frames model 1: EfficientNetV2L + customized 3D UNet 1, 256x256, use all 8 frames.
+
+Multi frames model 2: EfficientNetV2L + customized 3D UNet 2, 512x512, crop to 480x480 for training, use 5 frames only.
+
+Multi frames model 3: EfficientNetV2L + customized 3D UNet 3, 512x512, crop to 480x480 for training, use 5 frames only.
+(Best single model, late submission, private LB: 0.71443, public LB 0.70803)
+
+
+About the customized 3D UNet
+
+
+
+
+Apply the same encoder(backbone) to each frame
+
+Combine the encoder outputs by Conv3D at each level. ConvLSTM2D also works, but it's slower.
+
+Use UNet as decoder to get the final output.
+
+
+Augmentation
+
+
+
+Filp LR, Filp UD, Rotate 90 (for TTA8)
+
+Noise by channel, noise by pixel
+
+Random dropout frame (multi frames model only)
+
+Random crop
+
+
+At the early stage of the competition, I noticed that if I don't use flip and rot90, the model will be overfitting quickly. But if I use the flip and rot90, the result became worse. I was confused for a long time. Finally, I found the reason. As mentioned in other discussions, The image and the mask are not aligned. The mask is a littel bit shifted to the bottom right. So if we use flip or rot90, we need to align them. The magic number for me is: x = 0.408, y = 0.453. 
+
+Tried but not worked:
+
+
+
+Random rotate
+
+CoarseDropout
+
+Dropout by channel
+
+
+Target and loss function
+
+I used 2 targets:
+
+
+
+Target 1: Sigmoid to 1 channel. weight: 75% (human_pixel_masks.npy)
+
+Target 2: Softmax to 5 channel. weight: 25% (human_individual_masks.npy. 0 for not contrails, 1 for 25% of labelers, 2 for 50% of labelers, 3 for 75% of labelers, 4 for 100% of labelers) 
+
+
+The loss function is weighted binary cross entropy + dice loss. 
+And use Lion for optimizer.　(Lion: https://github.com/keras-team/keras/blob/v2.13.1/keras/optimizers/lion.py)
+
+Prediction
+
+
+
+Ensemble by 5 models with TTA8 (flip LR, flip UD, rotate 90)
+The TTA8 is very important. It can improve the score by 0.005~0.01.
+
+
+The best result is public LB: 0.71243, private LB: 0.71756. But unfortunately, we didn't choice it as our final submission. 
+
+Other experiments
+
+
+
+I tried to use all bands, which can give a improvement of 0.000x. But it make the submission too complex, and take too much time. So I didn't use it in the final submission.
+
+UNet + Tranformer (256, 128: UNet, 64, 32: Transformer). Using the trasformer to get the information of other frames. It works but not better than UNet. Maybe because the transformer is not pretrained.
+
+
+Update
+
+
+
+20230811 Added a late submission score of the best single model.
+
+Comments:
+├─ Ilya Makarov (2023-08-10 16:01:17.137000) [+5]
+│  I would also like to thank the organizers and Kaggle for making this interesting competition! A particular thank you goes to my great teammate @wuliaokaola who have discovered many ingredients of t...
+├─ Optimo (2023-08-11 13:22:44.540000) [+1]
+│  @wuliaokaola congratulations on your results!
+│  
+│  May I ask how you ended up with such precise number for the mask shift ? x = 0.408, y = 0.453 ?
+  ├─ Johnny Lee (2023-08-11 15:31:13.933000) [+0]
+  │  Thank you. It came from a grid search.
+    ├─ Optimo (2023-08-11 15:49:22.633000) [+0]
+    │  You mean you treated like a parameter and see which one works best ?
+    ├─ Johnny Lee (2023-08-12 04:41:39.513000) [+1]
+    │  Train a small and simple model without any augmentation.
+    │  
+    │  Inference the flipped (LR) images with the model.
+    │  
+    │  Shift the prediction by 2x to get the maximum score. (grid search)
+    │  
+    │  
+    │  By using this metho...
+    ├─ kongweihao (2023-08-29 03:27:16.517000) [+0]
+    │  I`m sorry to ask may be a novice question, what  tool  did you used to implement grid search?
+    ├─ Johnny Lee (2023-08-30 03:48:31.313000) [+0]
+    │  It's nothing but just a for loop.
+├─ Ioannis M (2023-08-10 17:31:35.873000) [+1]
+│  congrats guys on the gold!! 
+│  did you train on full train set and eval on the validation.csv split from the hosts? 
+│  May I ask what is the CV of your best single model and your ensemble please? 
+│  
+│  
+│    ...
+  ├─ Ilya Makarov (2023-08-10 17:55:30.280000) [+2]
+  │  Thanks :-)
+  │  
+  │  Some models were trained on the train set only and some on both sets combined (in this case CV was OOF Dice).
+  │  
+  │  Regarding the CV for the best models, @wuliaokaola might answer this quest...
+  ├─ Johnny Lee (2023-08-11 01:23:37.627000) [+1]
+  │  did you train on full train set and eval on the validation.csv split from the hosts?
+  │  
+  │  
+  │  Yes, I used validation folder as OOF.
+  │  
+  │  
+  │    
+  │  May I ask what is the CV of your best single model and your ensembl...
+    ├─ Johnny Lee (2023-08-11 05:51:18.350000) [+0]
+    │  The LB score (late submission) of the best single model is private LB: 0.71443, public LB 0.70803.
+    ├─ Remek Kinas (2023-08-11 15:24:05.977000) [+0]
+    │  Which one configuration from your set?
+    ├─ Johnny Lee (2023-08-11 15:29:00.563000) [+0]
+    │  Multi frames model 3: EfficientNetV2L + customized 3D UNet 3, 512x512, crop to 480x480 for training, use 5 frames only.
+    │  (Best single model, late submission, private LB: 0.71443, public LB 0.70803)
+    ├─ delai50 (2023-08-14 13:38:01.090000) [+0]
+    │  So you crop the images to 480x480 during training but made inference with 512x512, right? Is this a trick to improve accuracy or just to reduce training time?
+    │  
+    │  Congratulations and thanks for sharing!
+    ├─ Johnny Lee (2023-08-15 08:44:07.177000) [+1]
+    │  Yes, cropping can reduce training time. I trained the base model with 512x512, and it takes 702S per epoch. When fine-tuning the model, I cropped the images to 480x480, and it takes 597S per epoch....

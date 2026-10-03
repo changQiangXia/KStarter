@@ -1,0 +1,474 @@
+# https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/468010
+
+Topic #468010: Understanding Competition Data and EfficientNetB2 Starter - LB 0.43 🎉
+  Author: Chris Deotte
+  Posted: 2024-01-15 02:17:55.586000
+  Votes: 603  Comments: 165
+
+The data in this competition is confusing. Question: We are given train.csv with 106,800 rows but there are only 17089 unique eeg_ids, 11138 unique spectrogram_ids, and 1950 unique patients. What is going on?? Answer: Each row of train is a window of time from one specific patient. And the corresponding eeg and spectrogram can be found in the corresponding Kaggle parquet files.
+
+Data Explained
+
+Since each row of train.csv is a specific window in time (for a specific patient_id), each row has a specific middle timestamp in seconds. For example, maybe row 235 has center timestamp T = May 3 2023 19:30:06 exactly in the middle of both its EEG time window and Spectrogram time window. (Note that the dataframe does not give us the middle timestamp).
+
+The EEG time window is length 50 seconds and the Spectrogram time window is length 600 seconds. And both have the same center timestamp. In this competition, we are asked to predict the event occurring in the middle 10 seconds of both these time windows:
+
+
+
+Center is T
+
+EEG is [T-25:T+25]
+
+Spectrogram is [T-300:T+300]
+
+We predict event in [T-5:T+5]
+
+
+
+
+EEG Parquet Files
+
+The EEG parquet files are longer than 50 seconds. One EEG parquet file has multiple rows of time windows inside it. Similarily, the Spectrogram parquet files are longer than 600 seconds. One Spectrogram parquet file has multiple rows of time windows inside it.
+
+
+
+Spectrogram Parquet Files
+
+There are fewer Spectrogram parquet files than EEG parquet files. This is because two rows may have the same Spectrogram parquet file but different EEG parquet files.
+
+
+
+Code to Retrieve EEG and Spectrogram
+
+For a specific row of train.csv, here is code to retrieve the corresponding EEG and Spectrogram. Note that train.csv does not give us the middle timestamp. Instead it gives us the beginning timestamp for each timewindow. The two beginnings are determined from eeg_label_offset_seconds and spectrogram_label_offset_seconds. These are offsets from the start of the parquet file which tells us where the eeg and spectrogram time windows begin respectively.
+
+ = 
+ = 
+ = 
+
+ = pd.read_csv()
+ = train.iloc[GET_ROW]
+
+ = pd.read_parquet(f)
+ = int( row.eeg_label_set_seconds )
+ = eeg.iloc[eeg_set*:(eeg_set+)*]
+
+ = pd.read_parquet(f)
+ = int( row.spectrogram_label_set_seconds )
+ = spectrogram.loc[(spectrogram.time&gt;=spec_set)
+                     &amp;(spectrogram.time&lt;spec_set+)]
+
+
+EfficientNetB2 Starter - CV 0.59 - LB 0.43 - (Deep Learning)
+
+When training our models we have (at least) 4 choices of weighting train samples. For example the 4th bullet point says that our dataloader will give an equal chance of outputting a sample for each patient. Whereas bullet point 2 says that our dataloader will give an equal chance of outputting a sample for each eeg id.
+
+
+
+106,800 unique rows
+
+17,089 unique eeg ids
+
+11,138 unique spectrogram ids
+
+1950 unique patient ids
+
+
+From LB probing (discussed here), we achieve the best LB score using bullet point 2 (i.e. eeg ids). I published a TensorFlow EfficientNetB2 starter notebook here that trains with bullet point 2 and achieves CV 0.73 and LB 0.57. (UPDATE: @alejopaullier converted to PyTorch here)
+
+CatBoost Starter - CV 0.74 - LB 0.60 - (Machine Learning)
+
+I published a CatBoost starter here which achieves CV 0.74 and LB 0.60 (using bullet point 2 above).
+
+WaveNet Starter - CV 0.81 - LB 0.52 - (Deep Learning)
+
+I published a TensorFlow WaveNet starter here which achieves CV 0.81 and LB 0.52 (using bullet point 2 above). And it only uses EEG data (and not spectrograms). (UPDATE: @alejopaullier converted to PyTorch here)
+
+Spectrogram versus EEG
+
+My EffNet and CatBoost starter notebooks currently only use information from Kaggle's spectrograms. We can improve CV and LB score by incorporating information from EEGs. UPDATE: I published a starter notebook here to convert EEG data into spectrograms (and we can incorporate these EEG spectrograms into my EffNet and CatBoost starters). My WaveNet starter above trains using the raw EEG waveforms. Consider combining my WaveNet and EffNet into a single model which accepts input of both EEG waveforms and Kaggle spectrograms! UPDATE Recent versions of EfficientNet starter and CatBoost starter now use both EEG spectrograms and Kaggle spectrograms.
+
+Kaggle Dataset
+
+Our dataloader needs to read 11138 spectrogram files. The most efficient way to design our dataloader is to first read all 11138 spectrogram files into memory once. Then our dataload uses RAM during epoch training instead of continually reading the parquets from disk.
+
+I created a Kaggle dataset with one file that contains all 11138 spectrograms. First we load this one file (i.e. Python dictionary of parquets converted into NumPy arrays) into memory. (Reading one file is faster than reading 11k files). Then our dataloader speeds through training!
+
+UPDATE: Additionally, i have datasets here and here containing EEG spectrograms and EEG raw data respectively.
+
+Enjoy - Have Fun!
+
+Comments:
+├─ Yan Teixeira (2024-01-15 02:24:35.027000) [+20]
+│  Chris, the Gandalf of Kaggle.
+├─ moth (2024-01-25 18:42:27.200000) [+8]
+│  @cdeotte are these offsets right? EEG offsets being measured with the "zero" placed on the begging of the EEG not from the start of the spectogram.
+  ├─ Chris Deotte (2024-01-25 20:34:55.213000) [+2]
+  │  Yes @alejopaullier that is correct. All offsets are relative to the specific parquet on disk.
+  │  
+  │  I like your diagram, I updated my post with new diagrams to make it clearer.
+├─ eugene (2024-01-15 11:49:27.293000) [+5]
+│  Thanks for the explanation. I understand your scheme for non-overlapping segments. I'm sorry, but I still don't understand the overlapping segments. Is my below diagram correctly? 
+│  
+│  For example EEG...
+  ├─ Chris Deotte (2024-01-15 12:02:17.503000) [+12]
+  │  Hi. The variable eeg_label_offset_seconds is the beginning, not the middle. (We are not given the middle). The file train_eegs/1628180742.parquet is 90 seconds long. (It is 18,000 rows and each row...
+  ├─ Chris Deotte (2024-01-15 12:03:14.740000) [+2]
+  │  I updated my discussion post with code to extract the eeg and spectrogram for a specific row of train.csv.
+├─ Sergio Henrique (2024-01-18 20:57:48.227000) [+6]
+│  Did you figured out all this alone? My first thought was that eeg_sub_id and spectogram_sub_id were foreign key to the corresponding files. 
+│  The eeg_offset*200 is also a tricky part.
+│  
+│  The competiti...
+├─ Yousef Rabi (2024-01-15 03:51:53.703000) [+6]
+│  I thought I understood, but now I understand, thank you! =)
+├─ Occccn (2024-01-24 11:40:14.957000) [+3]
+│  Thank you for your kind explanation. 
+│  I have a question. Why is there a difference in time between the provided spectrograms and the EEG data?
+│  50 sec vs 600 sec
+  ├─ Chris Deotte (2024-01-24 12:50:35.583000) [+11]
+  │  When doctors evaluate patients, they use the spectrograms to see the "big picture" of how the patient were feeling for 10 minute window. And they use the EEG waveforms to see the "zoom in picture" ...
+    ├─ Occccn (2024-01-25 05:32:07.160000) [+3]
+    │  Thank you!
+    │   I understand that the time of the EEG is different from that of the spectrogram because of the doctor's diagnostic method.
+├─ Athar Sayed (2024-01-22 03:02:19.187000) [+3]
+│  @cdeotte  Amazing discussion thanks for sharing .  Can you please explain why do we multiply by  200 while slicing the eeg_offset , Whereas while slicing spectogram we dont use the same formula . T...
+  ├─ Chris Deotte (2024-01-22 13:33:50.893000) [+5]
+  │  Hi. Each row of the eeg parquet is 1/200 of a second. And each row of the spectrogram parquet is 2 seconds.
+    ├─ Athar Sayed (2024-01-22 14:49:32.403000) [+0]
+    │  Thanks alot @cdeotte for reply I also noticed the data description which says eegs are sampled at the rate of 200 samples per second .
+    ├─ Akshat Singhal (2024-01-28 14:26:29.170000) [+3]
+    │  And each row of the spectrogram parquet is 2 seconds.
+    │    Hey Chris, how did you conclude this?
+    ├─ Chris Deotte (2024-01-29 20:10:52.900000) [+5]
+    │  In the spectrogram parquet files there is a column named time. And each subsequent row increases by 2. (i.e. first row is 1, second row is 3, third row is 5, etc)
+├─ Nishant Singhal (2024-01-16 08:34:25.933000) [+3]
+│  Chris, congratulations on your innovative approach to optimizing data loading for the Kaggle competition, particularly your method of loading all 11,138 spectrogram files into memory at once. This ...
+  ├─ Chris Deotte (2024-01-16 11:25:49.307000) [+3]
+  │  Hi. CatBoost has internal tricks to prevent overfitting. With EfficientNet, i am only training for 3 epochs (i.e. few epochs). Furthermore, we can improve EfficientNet using data augmentation. And ...
+├─ Zhenlan (2024-01-15 19:13:35.947000) [+3]
+│  @cdeotte Thank you for the explanation. I have one question. I see in your code that you aggregated the target across eeg_id. My understanding is that the fine-grained target for each row instead o...
+  ├─ Chris Deotte (2024-01-15 19:25:51.893000) [+3]
+  │  We can run train.groupby('eeg_id').expert_consensus.agg('nunique').value_counts() and get
+  │  
+  │     
+  │       
+  │        
+  │        
+  │         
+  │  
+  │  
+  │  Therefore if we naively just take 1 target to represent the entire eeg_i...
+├─ Konstantin Kozlovtsev (2024-01-15 15:32:11.020000) [+3]
+│  Thanks for the explanation, now it much cleaner for me, how to align the data. However I still do not understand, why the predictions are made by 50 seconds of the raw eeg and 10 minutes of spectro...
+  ├─ Chris Deotte (2024-01-15 15:47:22.113000) [+14]
+  │  The larger window provides context. Imagine if i asked you to predict what i will eat for lunch today. I can give you the 30 minute window of me sitting at my kitchen table. I can also give you the...
+    ├─ Haru (2024-01-16 03:07:38.793000) [+2]
+    │  Super great example.
+├─ moth (2024-01-24 18:28:52.277000) [+4]
+│  The relationship between spectogram_ids and eeg_id is 1:M? For example, 1 spectogram may have multiple eegs but 1 eeg is always "inside" 1 spectogram
+  ├─ Chris Deotte (2024-01-24 18:36:06.647000) [+5]
+  │  Yes. We can confirm this by doing groupby('eeg_id').spectrogram_id.agg('nunique').max() and vice versa (with train.csv)
+├─ Shaofeng Kang (2024-01-18 18:54:33.187000) [+4]
+│  What do the sub_ids do in the dataset?
+  ├─ Chris Deotte (2024-01-18 20:38:23.163000) [+5]
+  │  Ignore them. I think they are just identified unique rows of train.csv (Furthermore they do not exist in test.csv)
+    ├─ Shaofeng Kang (2024-01-21 23:55:18.610000) [+0]
+    │  ok. thanks
+├─ Nirjhar Roy (2024-01-17 17:59:34.393000) [+4]
+│  Hello @cdeotte @ttahara  -- I was trying to understand both of your baseline . My understanding is Chris you are taking  approach 2 and Tawara has taken approach 3 . Am I correct ?
+│  
+│  
+│  
+│  106,800 uniqu...
+  ├─ Chris Deotte (2024-01-17 18:08:48.187000) [+11]
+  │  Yes, I do 2 and Tawara does 3. My 256 is because I take the middle 512 seconds (instead of full 600 seconds). We both do 400x300.
+  │  
+  │  My data loader provides 128x256x4. There is padding on top 14 and ...
+  ├─ Tawara (2024-01-18 01:21:15.457000) [+8]
+  │  Yes, you are right. I use the first 600 seconds of each unique spectrogram id.
+├─ FarisML (2024-01-16 10:29:07.413000) [+4]
+│  Does time matters here?,
+│  So solutions like transformers or RNN, will it be effective ?
+  ├─ Chris Deotte (2024-01-16 11:24:08.080000) [+5]
+  │  Time matters for 2 reasons:
+  │  
+  │  
+  │  
+  │  we need time to determine what frequencies are in the signal. (i.e. without time, there is no such thing as 10Hz).
+  │  
+  │  in 3% of cases, the expert_consensus changes over ...
+├─ Tanishq dublish (2024-01-15 05:53:18.670000) [+4]
+│  Chris, the god of kaggle || thank you for giving such a great code
+├─ Awsaf (2024-01-15 04:27:27.297000) [+4]
+│  @cdeotte you are on fire in this comp 🔥.  Btw, loved your explanation about the dataset here. Also, glad to see DL beating ML 😅
+  ├─ Chris Deotte (2024-01-15 11:09:00.347000) [+2]
+  │  Thanks @awsaf49 . This is fun competition with lots to explore and learn. I see that you are competition host. Thanks for hosting.
+    ├─ Awsaf (2024-01-15 13:38:58.917000) [+5]
+    │  @cdoette, I wish I was hosting this amazing competition but sadly I'm not; I am working in this competition on behalf of the Keras Team to share starter notebooks.
+  ├─ SeshuRaju 🧘‍♂️ (2024-01-15 13:20:45.740000) [+1]
+  │  @awsaf49 Thanks for hosting this competition, many new topics explored recently (majorly eeg). 
+  │  
+  │  is it good to pin this topic for everyone to understand data better ? ( we have 5-6 discussions abou...
+    ├─ Awsaf (2024-01-15 13:34:58.517000) [+2]
+    │  @seshurajup I'm not the competition host per se; I am working in this competition on behalf of the Keras Team to share starter notebooks. You may need to contact the Kaggle Team. Sorry for the conf...
+    ├─ SeshuRaju 🧘‍♂️ (2024-01-15 13:36:56.043000) [+0]
+    │  @awsaf49 Sorry it is my mistake of miss understanding from the tag. @sohier is it good to keep this topic as pin
+├─ TkgglO (2024-04-10 10:20:31.303000) [+1]
+│  Chris, congratulations on your gold medal in this competition! I would also like to express my deep gratitude for sharing your various knowledge and insights. This was the first competition I atten...
+├─ Shi Luo (2024-04-09 18:20:41.433000) [+1]
+│  Congratulations and thank you again Chris for your invaluable guides!!
+├─ HB (2024-04-09 11:46:25.300000) [+1]
+│  Congratulations on your gold medal, Chris. I always appreciate your information sharing.  I was wondering why you used GroupKFold in the starter notebook? I'm sure I've seen this before but I can't...
+  ├─ Chris Deotte (2024-04-09 14:22:57.047000) [+1]
+  │  Thanks. Congratulations on your strong Silver finish.
+  │  
+  │  The purpose of CV is to make validation folds as similar to test data as possible. Then using this CV will optimize a model to perform its bes...
+    ├─ HB (2024-04-09 22:21:32.517000) [+1]
+    │  Thank you so much for your detailed answer!
+├─ BioniChaos (2024-04-08 06:10:16.413000) [+1]
+│  This is a very odd way of storing EEG data, I tried parsing this dataset but eventually gave up: https://bionichaos.com/SeizureFuz
+├─ nyl0522 (2024-04-05 08:42:59.267000) [+1]
+│  Very Helpful!!
+├─ Charlie Doan (2024-03-31 09:22:53.123000) [+1]
+│  Great explanation!
+├─ NGK (2024-03-24 18:01:20.250000) [+1]
+│  Great explanation…
+├─ qianmulin (2024-03-16 19:54:29.850000) [+1]
+│  Very helpful！
+├─ Y.S (2024-03-14 01:31:55.627000) [+1]
+│  Great explanation of the dataset！
+  ├─ Chris Deotte (2024-03-14 01:57:12.477000) [+0]
+  │  Thanks Y.S !
+├─ Megha (2024-03-06 22:13:59.137000) [+1]
+│  Thankyou so much @cdeotte for your detailed and dedicated explanation. I read all the comments, but still have 1 doubt unanswered. If we can create create the 50seconds spectrogram data using the E...
+  ├─ Chris Deotte (2024-03-06 23:28:00.613000) [+1]
+  │  The given spectrograms are 10 minute low resolution windows whereas the given EEG waveforms are 50 second high resolution windows. One is like a zoom out view and one is like the zoom in view. We c...
+├─ Rauf (2024-02-20 17:44:24.243000) [+1]
+│  why do different EEGs point to the same spectrogram? I mean the spectrograms are created by doing FFT over overlapping windows, wouldn't that have at some point overlapping windows between two diff...
+  ├─ Chris Deotte (2024-02-20 20:35:17.627000) [+1]
+  │  EEG-1 and EEG-2 may be eegs for the same patient-A for time 12:00p and time 3:00p respectively. Then Spectrogram-1 is the entire day for patient-A from 11a thru 6p. So both EEG-1 and EEG-2 point to...
+├─ Tsvetomira Krikoryan (2024-02-16 20:27:27.040000) [+1]
+│  Hi! I am a bit confused if a single EEG parquet file contains information only from a single EEG_ID or if there could be multiple EEG_IDs associated with it. The latter seems unlikely to me but I c...
+  ├─ Ángel Jacinto Sánchez Ruiz (2024-02-16 20:30:41.560000) [+1]
+  │  There is information about a single eeg_id. But can contain multiple subsamples with sub_eeg_id refering to a specific windows starting on eeg_offset.
+  ├─ Chris Deotte (2024-02-16 21:02:30.597000) [+1]
+  │  Each EEG parquet file only contains information about one eeg_id. Then in train.csv file, many rows have the same eeg_id but access a different time window within the associated EEG parquet file.
+├─ Bhoj Raj Thapa (2024-02-16 03:38:33.970000) [+1]
+│  How are you saying the prediction should be done for 10 seconds. The test EEG has a size of 50 seconds and unique ID. And the  submission also requires predicting each eeg_id with 50 seconds of tes...
+  ├─ Ángel Jacinto Sánchez Ruiz (2024-02-16 07:58:05.697000) [+2]
+  │  https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/data
+  │  "Files
+  │  train.csv Metadata for the train set. The expert annotators reviewed 50 second long EEG samples plus matche...
+  ├─ Chris Deotte (2024-02-16 13:43:21.030000) [+3]
+  │  We input the 50 second EEG and the 10 minute Spectrogram into our model. The model trains with the 6 target columns. The 6 target columns describe the central 10 seconds from both inputs. Therefore...
+    ├─ Ketan Jaltare (2024-03-03 14:47:08.663000) [+1]
+    │  @cdeotte Thank you for all your useful contributions! Somewhat related question. I notice that the submission must contain a prediction for each eeg_id. In the train set, each eeg_id is often repea...
+    ├─ Chris Deotte (2024-03-03 16:22:48.827000) [+0]
+    │  Hi @ketanjaltare the test set does not repeat eeg_id. In the test set each egg_id only appears once. This is stated in this competition's data page:
+    │  
+    │  
+    │    
+    │  Metadata for the test set. As there are no ...
+    ├─ Ketan Jaltare (2024-03-03 22:42:09.123000) [+0]
+    │  Great! Thanks a lot.
+    ├─ Simon Beck (2024-03-24 04:42:55.707000) [+0]
+    │  Therefore the model will learn during training that the most important region is the central 10 seconds. Hence the model learns to focus on the middle 10 seconds itself (and uses the extra time dat...
+├─ [deleted] (2024-02-14 16:29:25.353000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-02-14 16:48:34.773000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2024-03-06 05:58:26.197000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-03-06 08:53:33.810000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-02-13 11:09:48.847000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-02-13 14:40:15.493000) [+6]
+  │  [deleted]
+    ├─ [deleted] (2024-02-13 17:29:08.863000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-02-13 07:53:52.080000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-02-13 10:13:19.503000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-02-13 10:21:10.200000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-02-11 13:20:03.817000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-04 10:52:07.923000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-01 02:31:34.380000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-30 15:54:45.417000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-30 09:01:52.163000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-29 06:10:52.623000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-29 09:36:16.437000) [+2]
+  │  [deleted]
+├─ [deleted] (2024-01-29 05:12:54.563000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-29 04:30:10.583000) [+1]
+│  [deleted]
+├─ [deleted] (2024-03-14 08:27:06.313000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-03-14 10:00:26.403000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-03-14 14:33:54.533000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-27 10:46:35.157000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-26 09:06:07.147000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-26 09:24:16.390000) [+8]
+  │  [deleted]
+    ├─ [deleted] (2024-02-14 08:41:45.383000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-01-26 05:35:37.050000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-26 09:21:56.140000) [+4]
+  │  [deleted]
+    ├─ [deleted] (2024-01-27 00:15:49.300000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-01-27 02:49:41.930000) [+8]
+    │  [deleted]
+    ├─ [deleted] (2024-01-27 04:35:57.160000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-01-28 00:17:45.477000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-01-28 14:37:45.020000) [+4]
+    │  [deleted]
+    ├─ [deleted] (2024-01-28 19:58:25.623000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-24 13:22:18.400000) [+1]
+│  [deleted]
+├─ [deleted] (2024-03-09 07:06:53.667000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-03-09 07:08:37.427000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-22 02:04:03.023000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-21 18:07:35.110000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-21 12:50:39.987000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-21 06:56:09.403000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-20 14:49:10.133000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-18 08:44:09.723000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-18 10:52:27.507000) [+4]
+  │  [deleted]
+    ├─ [deleted] (2024-01-20 08:41:48.447000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-01-20 09:19:42.020000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2024-01-20 14:58:59.813000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-01-20 15:01:33.243000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-01-21 07:58:51.690000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-01-16 19:02:27.053000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-16 08:26:39.893000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-15 04:39:38.270000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-15 02:56:04.057000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-07 17:50:49.113000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-02-07 17:59:52.147000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-02-02 16:10:58.070000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-02-02 16:33:09.373000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-29 16:42:40.297000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-22 07:46:43.700000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-24 12:51:26.607000) [+4]
+  │  [deleted]
+  ├─ [deleted] (2024-02-03 23:59:25.720000) [+2]
+  │  [deleted]
+├─ [deleted] (2024-01-18 07:39:15.370000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-16 20:05:15.833000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-16 20:13:21.090000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2024-01-16 22:19:13.153000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-01-18 21:07:40.270000) [+5]
+    │  [deleted]
+    ├─ [deleted] (2024-01-19 05:47:37.210000) [+-1]
+    │  [deleted]
+    ├─ [deleted] (2024-01-19 08:39:09.413000) [+6]
+    │  [deleted]
+    ├─ [deleted] (2024-01-19 15:52:28.993000) [+-1]
+    │  [deleted]
+├─ [deleted] (2024-01-15 10:19:48.847000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-15 10:58:24.693000) [+5]
+  │  [deleted]
+    ├─ [deleted] (2024-01-15 12:59:23.360000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 13:11:36.480000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-15 06:10:28.003000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-15 11:03:46.047000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2024-01-15 12:10:46.663000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 12:14:25.740000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 12:23:36.587000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 12:26:50.993000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 12:37:15.447000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 12:45:38.443000) [+5]
+    │  [deleted]
+    ├─ [deleted] (2024-01-15 13:06:27.897000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-15 05:36:32.280000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-15 04:38:03.330000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-15 11:05:07.160000) [+2]
+  │  [deleted]
+├─ [deleted] (2024-01-25 12:04:41.250000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-29 19:14:16.140000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-20 04:02:03.177000) [+1]
+│  [deleted]
+├─ [deleted] (2024-04-01 04:54:03.887000) [+1]
+│  [deleted]
+├─ [deleted] (2024-03-25 14:08:48.423000) [+1]
+│  [deleted]
+├─ [deleted] (2024-03-18 15:42:43.513000) [+1]
+│  [deleted]
+├─ [deleted] (2024-03-15 05:52:28.433000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-26 16:24:54.187000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-09 15:28:26.127000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-04 22:16:54.167000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-30 13:10:09.553000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-20 06:54:35.577000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-18 19:25:50.213000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-15 11:22:14.050000) [+1]
+│  [deleted]

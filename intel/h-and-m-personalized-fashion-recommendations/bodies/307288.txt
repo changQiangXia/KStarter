@@ -1,0 +1,328 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307288
+
+Topic #307288: Addressing common questions and what the competition is really about
+  Author: Paweł Jankiewicz
+  Posted: 2022-02-13 16:40:50.791000
+  Votes: 431  Comments: 78
+
+Just to give you some background - my team won RecSys 2019 so I'm pretty familiar with problems like these. Now that we have this out of the way…
+
+To simplify the discussion I propose to call the set of articles that a customer bought on a given date a basket. And then this problem can be really summarized as predict next basket.
+
+General approach towards problems like this could be as follows. At least mine will be.
+
+1. For each customer generate candidates that they can buy.
+
+These candidates are your negative and positive examples. I'm saying this because someone on the forum asked where are the negative observations. And the answer is you generate them. 
+
+The strategies to generate those candidates are probably the most important aspect of this competition. The strategies can be based on:
+
+
+
+item to item similarities between customer previous baskets - so image similarity is not out of the question as somebody suggested
+
+user based collaborative filtering
+
+last baskets (with the hope that the user will buy them again)
+
+model based predictions with customers without the transaction history
+
+etc
+
+
+Coming up with different strategies is a fun challenge :). I cannot imagine that a winning solution will be based on a closed form model representing one strategy. Once you have all the different strategies ready for each customer then it is time to create a huge table with columns like these:
+
+
+
+observation_date - the date for which you are making predictions - submission should be based on all the data before 2020-09-22 (my birthday btw).
+
+customer_id
+
+article_id
+
+bought in the next week (this is your label)
+
+customer static attributes
+
+customer dynamic attributes
+
+article static attributes
+
+article dynamic attributes (maybe item popularity and such)
+
+whether the article exist in the strategies and which ones
+
+strategy score (whatever it is)
+
+many other features that relate the item to the user
+
+
+Once you have a table like this it all becomes very familiar. There were many competitions involving click through predictions. They have almost an identical structure the only difference is the source of observations.
+
+2. Build a ranking model that ranks the items within Customer
+
+Ranking is a different problem than classification but in general classification models can be used as well. My favourite ranking model is LightGBM (we used it in RecSys 2019) https://lightgbm.readthedocs.io/en/latest/pythonapi/lightgbm.LGBMRanker.html.
+
+The customer id can be treated as a query in ranking model because you are interested in optimizing the scores at a customer level.
+
+General tips
+
+
+
+
+Sample the data as much as possible - most of the competition you should spend validating your features on the sample. Increase the sample you are using when you are no longer seeing the correlation between local validation and the leaderboard.
+
+
+Test different ideas quickly. Fast local validation is key here because you must do as much experiments as possible.
+
+
+Good luck :)
+
+Update 1. Added code for sampling here https://www.kaggle.com/paweljankiewicz/hm-create-dataset-samples
+
+Comments:
+├─ Sanyam Bhutani (2022-02-13 17:03:05.520000) [+9]
+│  For anyone that might not be familiar RecSys is one of the most respected competitions in the Recommender space. 
+│  
+│  @paweljankiewicz I was trying to find your winning solution but I could only find ...
+  ├─ Paweł Jankiewicz (2022-02-13 17:12:18.343000) [+16]
+  │  Yeah here it is - https://github.com/logicai-io/recsys2019.
+  ├─ chuan (2022-02-18 12:47:09.383000) [+1]
+  │  Hi, @paweljankiewicz , i try to download the data in Recsys 2019 
+  │  
+  │  
+  │  
+  │  by code in recsys2019/data/download_data.sh. while it did not run. this is the response:
+  │  --2022-02-18 20:38:52--  https://storag...
+  ├─ Paweł Jankiewicz (2022-02-18 16:53:56.520000) [+5]
+  │  I don't have the original dataset. Also the code is written in such a way that it needs close to 500gb of ram to train the models.
+  ├─ Sanyam Bhutani (2022-02-18 16:57:10.007000) [+7]
+  │  For anyone else surprised by:
+  │  
+  │  
+  │    
+  │  Also the code is written in such a way that it needs close to 500gb of ram to train the models.
+  │  
+  │  
+  │  When I had the opportunity to do an interview for another RecSys...
+  ├─ Radek Osmulski (2022-02-18 19:52:49.823000) [+1]
+  │  BTW I found the data here on Kaggle (but don't seem to have the link to it now), it didn't seem to be available anywhere else.
+  │  
+  │  But I got the most mileage out of reading the code in the repo, didn'...
+  ├─ Sanyam Bhutani (2022-02-18 20:07:22.843000) [+2]
+  │  @radek1 I believe this is the link to the dataset?
+  ├─ Radek Osmulski (2022-02-18 22:30:40.160000) [+0]
+  │  yes, you found it! :) I think it was that one
+  │  
+  │  with the data I downloaded the preprocessing steps ran without issue
+  ├─ Paweł Jankiewicz (2022-02-18 23:16:10.543000) [+4]
+  │  @radek1 @init27 the most important concept in RecSys 2019 was the notion of accumulators classes which have 2 methods:
+  │  
+  │  
+  │  
+  │  update - updates the state of accumulator
+  │  
+  │  get - extracts the state of accu...
+  ├─ Radek Osmulski (2022-02-19 00:18:28.483000) [+1]
+  │  Ah, I see! @paweljankiewicz thank you very much for sharing this, this is wonderful! 😊
+  │  
+  │  If I am reading this right, the accumulators should be anything -- items of the given type purchased by a cus...
+  ├─ Radek Osmulski (2022-02-19 00:33:44.940000) [+1]
+  │  I think I might have understood it now! :)
+  │  
+  │  We don't reverse the loop in the sense that we run from end to finish, we just reverse it by moving the inside of the loop outside, like this:
+  │  
+  │  for accum...
+  ├─ chuan (2022-02-20 02:37:40.973000) [+0]
+  │  Great work!  Respect to all of you!
+  ├─ Homoalways (2022-03-10 12:21:07.620000) [+0]
+  │  So is it true that if I don't have a machine with lots of memory, I cannot become one of the winners😂
+├─ Daan Le (2022-05-03 21:35:19.013000) [+3]
+│  Hi, thank you so much for this post, it is very useful. I had one question about the generation of the positive examples you use to train the ranking model. Do you use the same method for finding t...
+  ├─ Paweł Jankiewicz (2022-05-03 22:24:40.767000) [+5]
+  │  That's a good question. I tried adding all positives but the score didn't improve. I'm using only positives which are associated with some strategy.
+├─ Ryota (2022-05-05 11:20:42.293000) [+1]
+│  Thank you for your posting. This post is very helpful.
+│  I would like to ask you positive-negative sample rate during training process.
+│  You said that about 1000 candidates are collected for each cust...
+  ├─ Paweł Jankiewicz (2022-05-05 13:30:48.177000) [+3]
+  │  You are right. At the time of writing I thought that increasing the number of candidates can be good. Then I got to a point where adding more candidates doesn't help. I have way too many candidates...
+  ├─ Piotr Gabrys (2022-05-05 14:58:26.153000) [+0]
+  │  Hi @paweljankiewicz ;) I'm optimizing number of candidates with Bayesian Optimization. For every candidate generation method I have a k parameter determining how many articles can be returned. Then...
+  ├─ Paweł Jankiewicz (2022-05-06 08:23:02.900000) [+3]
+  │  Interesting approach. I think that this competition shows very well that most cf recommendation algorithms are almost useless in this setting. It is more like a symbolic recommendation system where...
+  ├─ Clear n' Simple (2022-05-06 12:57:13.977000) [+0]
+  │  @paweljankiewicz - thanks for sharing that!
+  │  
+  │  What does top_50_articles_department mean?
+  ├─ Paweł Jankiewicz (2022-05-06 13:25:40.517000) [+1]
+  │  It is just an example of some strategy. In this case it would be something like: take popular items from some specific item category that the user has in the historical transactions.
+├─ Fnoa (2022-04-25 18:37:44.290000) [+1]
+│  Hi @paweljankiewicz, very very helpful post. Thanks 
+│  
+│  Just one question, what do you mean with “model based predictions with customers without the transaction history” ?
+├─ MohammedAlsayed (2022-04-20 10:22:19.840000) [+1]
+│  Hi Pawl, 
+│  
+│  thanks for your informative post. I would like to ask you what do you mean by dynamic/static attributes for customer and articles? if illustrated with an example will be more helpful. Th...
+├─ Y-Haneji (2022-04-01 12:44:09.713000) [+1]
+│  @paweljankiewicz 
+│  Thanks for great idea!
+│  I have a question.
+│  What does observation_date exactly mean? Please give me some example.
+  ├─ Paweł Jankiewicz (2022-04-03 22:50:51.283000) [+2]
+  │  Observation date is the date you treat as "now" so you can use all the data before this date. So for validation you need to take a date like 2020-09-15. For submission the observation date is of co...
+  ├─ Y-Haneji (2022-04-09 09:14:06.753000) [+0]
+  │  @paweljankiewicz 
+  │  Thanks! I have completely understood.
+├─ Pankaj Kumar (2022-02-22 10:00:18.293000) [+1]
+│  Thank you for sharing your idea. This is really a great approach. I am getting "run out of memory" problem. I am using my local PC which has 16GB RAM. Can you suggest how to deal with this situatio...
+  ├─ Paweł Jankiewicz (2022-02-22 10:18:45.013000) [+5]
+  │  16GB RAM is probably not enough to comfortably work with this dataset - at least the approach I suggested needs a lot more memory. You can experiment on a smaller dataset https://www.kaggle.com/paw...
+  ├─ Pankaj Kumar (2022-02-22 14:24:37.200000) [+0]
+  │  Thank you!
+  ├─ Faisal Alsrheed (2022-02-25 14:47:55.280000) [+1]
+  │  Hi @paweljankiewicz :)
+  │  
+  │  Thank you for sharing
+  │  
+  │  You might find this code useful to make a stratified Sample using many columns.
+  │  
+  │  https://github.com/flaboss/python_stratified_sampling/blob/master/str...
+├─ Mahamadi NIKIEMA (2022-02-20 07:42:19.007000) [+1]
+│  I am new to the recommender system, do you have any references for me? Thanks.
+  ├─ Paweł Jankiewicz (2022-02-20 21:36:41.370000) [+12]
+  │  I suggest to start with the most famous datasets for recommendations - something like movielens - https://grouplens.org/datasets/movielens/. Follow some tutorial using these datasets. This competit...
+├─ Jianing  (2022-02-18 21:03:01.053000) [+1]
+│  how could you create negative samples?
+  ├─ Paweł Jankiewicz (2022-02-18 22:52:07.610000) [+2]
+  │  As I have written there are many ways to create negative samples. For example items in the previous basket can be a source of negative samples. Popular items can be too. There are countless of exam...
+  ├─ HongweiLuan (2022-03-07 21:50:41.483000) [+0]
+  │  Thanks for the inspiring post @paweljankiewicz It is very helpful especially on the negative sampling. 
+  │  I have another question about negative sampling. Shall we sample from items which are not sim...
+  ├─ AI Diffusion (2022-03-09 23:19:48.607000) [+0]
+  │  He said 'use items in the previous basket', it might mean 'user other customer's basket as the negative samples for the current customer', make sense? I think it's ok.
+  │  
+  │  But what if these two custom...
+├─ Ethan Kershner (2022-02-28 13:49:40.003000) [+2]
+│  Pawel, thanks so much for putting this together, this is awesome! 🙏
+│  
+│  I have a question for you about search strategies. Is there any reason why, instead of separately implementing a search strategy...
+  ├─ Paweł Jankiewicz (2022-02-28 14:14:09.507000) [+1]
+  │  This is a good question. I think there are several problems
+  │  
+  │  1) For each customer you must consider 100k items if you really want to include all variables with which the strategy was created.
+  │  2) Wh...
+  ├─ Ethan Kershner (2022-02-28 16:23:25.903000) [+0]
+  │  That makes sense to me. Thanks!
+├─ Radek Osmulski (2022-02-20 20:11:23.767000) [+2]
+│  As I keep working on this and learning about it, I keep coming to this thread and rereading it. This is such a wealth of information!
+│  
+│  Thank you again @paweljankiewicz!
+│  
+│  What blew my mind today was...
+  ├─ Paweł Jankiewicz (2022-02-20 21:09:57.727000) [+2]
+  │  No you are right for more than 1 observation date the query should be customer_id + observation_dt. Because I have everything sorted by date I didn't notice that I'm implicitly including observatio...
+  ├─ Paweł Jankiewicz (2022-02-20 21:18:58.783000) [+3]
+  │  @radek1 I think you are missing something else. When you generate candidates, it is not 100% sure that you will find any transactions. Let's say your only strategy is to include the last basket ite...
+  ├─ Radek Osmulski (2022-02-21 00:08:45.827000) [+0]
+  │  Thank you so much for these additional details, @paweljankiewicz! 😊 All this is of great help
+├─ WENDY LIU (2022-04-18 06:50:27.390000) [+0]
+│  nice work!!
+├─ Y-Haneji (2022-04-17 06:43:41.253000) [+0]
+│  @paweljankiewicz 
+│  Inspired by you, I have been working on rank model these days.
+│  I have a question about mixing several strategy to make candidates. How can we put "strategy score" of candidate fro...
+  ├─ Paweł Jankiewicz (2022-04-17 13:40:48.827000) [+2]
+  │  I think it is worth having boolean flags for each strategy and of course you can use additional features from the strategy like counts and probabilities. The only thing you have to watch for is dat...
+  ├─ Y-Haneji (2022-04-17 16:43:06.213000) [+0]
+  │  @paweljankiewicz 
+  │  Thanks for reply!
+  │  I understand that to avoid leakage is important.
+  │  I have adopted naive strategies, but will develop some elaborate strategies from now on and mix them.
+├─ Clear n' Simple (2022-04-06 15:18:31.213000) [+0]
+│  @paweljankiewicz - I'm using LGBMRanker, and printing out the ndcg at each step, and I'm finding that as the model trains, it's getting worse, even on the training set!
+│  
+│  Same when using map.
+  ├─ Paweł Jankiewicz (2022-04-06 20:58:00.873000) [+1]
+  │  That's really strange. You probably have some sort of a bug. Are you sure you are providing a proper group parameter? I can vouch for LGBMRanker.
+  ├─ IgorMuniz (2022-04-06 21:36:46.240000) [+0]
+  │  We had the same problem and so far I couldn't find a solution for it. Not sure but I think it might be related to the way we are building our dataset which Idk if it's right. We are considering 1 w...
+  ├─ Clear n' Simple (2022-04-07 14:11:57.113000) [+0]
+  │  @paweljankiewicz - thanks for letting me know that it shouldn't be happening, I'll keep digging until I find out what's wrong.
+  │  
+  │  I went back and checked, the group parameter looks good.
+  │  
+  │  Maybe it's ...
+  ├─ Clear n' Simple (2022-04-07 14:37:02.650000) [+1]
+  │  @igormunizims, I'm also only considering one week as label for starters.
+  │  
+  │  I don't see why that should be a problem, though.
+  │  When you have very little data, you overfit quickly, but it should still ...
+  ├─ Paweł Jankiewicz (2022-04-07 15:27:42.110000) [+5]
+  │  @jacob34 there are some optimizations you can do when you are training the ranking model. For example you can consider only the queries with at least 1 positive example. For the ranking model the q...
+  ├─ Clear n' Simple (2022-04-07 16:29:31.913000) [+1]
+  │  Yes, I did follow your advice on that.
+  │  
+  │  For a single fold, I have 390k rows, for 12k customers, with 15k positives.
+  │  I realize it may be overfitting, but evaluation metric should still go down on th...
+  ├─ Paweł Jankiewicz (2022-04-07 18:15:37.703000) [+1]
+  │  Yes. It should go down. Are the results when you are checking the metric manually the same?
+  ├─ Clear n' Simple (2022-04-18 17:30:53.483000) [+0]
+  │  Yes, checking manually gives me the same.
+  │  
+  │  I find that after a few steps, it starts improving again (although never getting as good at it originally was), and at that point, the different evaluatio...
+  ├─ Clear n' Simple (2022-05-04 18:35:47.290000) [+0]
+  │  I finally figured it out - it was a nasty, silent leakage of the label, in the form of positive exampled getting put earlier than negative ones.
+  │  
+  │  The details are here.
+├─ G! (2022-03-13 07:52:42.817000) [+0]
+│  Thank you very much! But I have a question. Sampling 5% data could keep the original data distribution?
+├─ ctscsu (2022-03-11 09:58:46.230000) [+0]
+│  Great tips, Thanks a lot !  How do you think of transformer based model in this competition?
+│  just like riiid 2021。
+│  Does the Magnitudes of users 、items 、orders and dates  satisfy ？
+├─ Varun Jagannath (2022-03-09 08:43:21.993000) [+0]
+│  @paweljankiewicz , thanks for the great post and learned alot…
+│  wanted to know how do we emphasize on ranking/relevance of articles for the customer 
+│  because there are lot customers who are returnin...
+  ├─ AtulVerma (2022-03-13 08:19:09.790000) [+0]
+  │  I think ranking of relevance of articles to customers may take care of that.
+├─ AtulVerma (2022-02-23 11:29:44.417000) [+0]
+│  My apologies in advance but is it fair to tie a recommendation to purchase? Is it a given fact that if the Customer made a purchase, the attribution should go to the recommendation. Is it more of a...
+├─ kwalpratham (2022-02-21 05:13:50.970000) [+0]
+│  this was very helpful
+├─ Mohamed Annis SOUAMES (2022-02-15 10:38:22.437000) [+0]
+│  Thank you for these great tips, this is my first competition in Kaggle (I have experience in smaller scale competitions in another platform). I wanted to know what do you mean by sampling data as m...
+  ├─ Paweł Jankiewicz (2022-02-15 12:52:03.397000) [+1]
+  │  One sample is enough for quick tests. Added the code to sample the data https://www.kaggle.com/paweljankiewicz/hm-create-dataset-samples
+  ├─ Mohamed Annis SOUAMES (2022-02-15 22:10:10.660000) [+0]
+  │  Thank you so much, but the notebook is empty, I think it did not run :/
+  ├─ Paweł Jankiewicz (2022-02-16 14:38:29.617000) [+0]
+  │  It should be good now.
+├─ [deleted] (2022-03-18 15:51:18.240000) [+1]
+│  [deleted]
+  ├─ Paweł Jankiewicz (2022-03-18 18:21:30.870000) [+10]
+  │  Ad 1.
+  │  
+  │  In my setting I propose to convert the problem to a table where you have a list of item candidates and you mark the sales as either 0 or 1 depending whether the item was sold in the next wee...
+  ├─ oriori4244 (2022-04-08 00:35:29.250000) [+1]
+  │  I hava a question. 
+  │  
+  │  Did you mean I need to create 1000 most popular items  for each customer and label = whether it was bought or not by each customer?  Should the length of train table  be len(nu...
+  ├─ Paweł Jankiewicz (2022-04-08 14:38:42.747000) [+4]
+  │  Pretty much yes, except for training you can discard customers without transactions. Only for making the submission predictions you need to consider nunique(customer)×1000 candidates.
+├─ [deleted] (2022-02-14 18:09:42.267000) [+0]
+│  [deleted]
+  ├─ Ala Eddine Ayadi (2022-02-14 18:26:49.887000) [+4]
+  │  "articles" are products in french
+├─ Lukan (2022-05-09 13:13:07.437000) [+0]
+│  Thank you for sharing, learn a lot!
+├─ Zhicheng Wang (2022-04-21 12:25:22.520000) [+0]
+│  It is very nice! thanks for you advice!
+├─ amandus-kim (2022-04-20 11:57:43.520000) [+0]
+│  Thank you for sharing! nice work!
+├─ stallone (2022-04-03 01:26:36.553000) [+0]
+│  thanks for your sampling code
+├─ Tact Suetsugu (2022-03-15 05:27:28.673000) [+0]
+│  Thank you for sharing your great idea.

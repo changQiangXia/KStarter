@@ -1,0 +1,48 @@
+<p>Congrats to the 1st place winners and all the participants.  Thanks to the competition organizers for this interesting competition. Here is my team mate <a href="https://www.kaggle.com/paweljankiewicz" target="_blank">@paweljankiewicz</a> and my solution.</p>
+<h2>wht1996 solution</h2>
+<p>I didn't do a good job of recalling the product candidate. At the beginning, I tried recalling methods such as itemCF, but later found that the effect was not even as good as directly selecting popular products. Therefore, my solution is to directly select aboout 600 most popular products for each user (there will be some very simple strategies to refer to the user's history). Then train a lgb model and select 130 candidates for each user according to the model score, and then add all the products purchased by the user in the history as the final candidate</p>
+<p>After that, train another lgb model to get the final result. Compare to the lgb model in recall stage, the features will be more complex, features can be mainly divided into the following groups:</p>
+<ul>
+<li>User basic features: including num, price, sales_channel_id.</li>
+<li>Product basic features: statistics based on each attribute of the product, including times, price, age, sales_channel_id, FN, Active, club_member_status, fashion_news_frequency, last purchase time, average purchase interval.</li>
+<li>User product combination features:  statistics based on each attribute of the product, including num, time, sales_channel_id, last purchase time, and average purchase interval.</li>
+<li>Age product combination features: products popularity under each age group.</li>
+<li>User product repurchase features: whether user will repurchase product and whether product will be repurchased.</li>
+<li>Higher-order combinatorial features: For example, predict when the user will next purchase the product.</li>
+<li>itemCF feature: calculate the similarity of each item through itemCF, and then calculate the score that  whether user will buy the product.</li>
+</ul>
+<p>The score of the single model on the Leaderboard is 0.0355, after adding <a href="https://www.kaggle.com/paweljankiewicz" target="_blank">@paweljankiewicz</a> candidates can be promoted to 0.0362, and the ensemble score is 0.0368.</p>
+<h2><a href="https://www.kaggle.com/paweljankiewicz" target="_blank">@paweljankiewicz</a> solution</h2>
+<p>I followed my advice from the thread mostly. I'm happy that my intution was correct. Overall until the merge with wht1996 I focused on generating a diverse set of recall strategies. The most interesting part of the solution wouldn't be the logic but that I have written the feature engineering part in Rust and create a mini framework for parallel feature extraction. I thought that I could get away with much more complex rules that way and it was still pretty fast.</p>
+<h3>Candidate strategies</h3>
+<p>I used all sorts of counters to measure the popularity of items in different groups:</p>
+<ul>
+<li>customer attributes: different combinations (what boosted my score significantly was including postal_code)</li>
+<li>article attributes: different combinations and then intersect with the customer history - so if a customer bought an item with certain properties I looked for popular items with the same property<br>
+The counters were used for different recency like: 1,3,7,30,90 days.</li>
+</ul>
+<p>Also I used:</p>
+<ul>
+<li>image similarities using MobileNet embedding</li>
+<li>cooccurences (inside basket and outside = basket to basket)</li>
+<li>random graph walk over item-user graph</li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>customer / article attributes</li>
+<li>all sorts of similarity based measures for example I calculated average similarity of items vs the items that the customer bought</li>
+<li>streaks - this was inspired by some previous competitions posts - for many article attributes I calculated streaks measuring the number of times the customer bought a product, category, section etc in row.</li>
+</ul>
+<p>At the end I ended up with 1000 candidates per customer which was way too many. I had trouble to improve beyond 0.0340 but with wht1996 help I managed to improve the single model to 0.0348.</p>
+<h3>Modeling</h3>
+<p>I managed to write a lambdarankmap objective for LGBMRanker (mostly by copying the code from XGBoost) and it was slightly better than lambdarank (which uses NDCG objective). For the whole competition I trained the models using 2-3 months of transactions and last week to validate.</p>
+<h3>What didn't work</h3>
+<p>Deep learning models - I tried several recbole models but they weren't so good.</p>
+<h2>How to improve competitions like this</h2>
+<p>A large part of the competition was about predicting the availability of the products for different postal_codes. I think this was disguised as a recommendation system competition to some extent. For future competitions I would suggest:</p>
+<ul>
+<li>providing the state of articles - which are available and where</li>
+<li>to minimize the calculation needed to submit I would suggest to provide a list of customers with transactions in the subimission week. Predicting customers which didn't have transactions was very computation heavy task. The reason is that the models are the same but creating features and predicting takes time.</li>
+</ul>
+<h2>How we cooperated</h2>
+<p>The cooperation was smooth. We exchanged our solutions and candidates (with scores).</p>

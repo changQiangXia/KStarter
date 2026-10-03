@@ -1,0 +1,198 @@
+# https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446318
+
+Topic #446318: Top 100 Solution - Fast RAPIDS TF-IDF RAG - 2xT4 GPU Acceleration!
+  Author: Chris Deotte
+  Posted: 2023-10-11 06:38:29.199000
+  Votes: 73  Comments: 38
+
+Awesome competition! Thanks everyone for sharing many wonderful discussions and notebooks. This competition was so much fun. I'm ready for another LLM QA comp already!
+
+RAG Ensemble
+
+Early in the competition, I jumped into gold using a single DeBERTa-v3-large (trained on my 60k dataset here) and ensemble multiple RAG pipelines. Each RAG pipeline extracts context. Then we infer each context + question + choices with DeBERTa-v3-large. And finally ensemble the sets of logits and make predictions:
+
+
+
+GPU Speed Up
+
+I was surprised to discover that each new RAG pipeline I added above improved my CV and LB more than adding additional DeBERTa. Therefore I focused on accelerating the speed of RAG pipeline + DeBERTa inference (with the goal of ensemble in mind). I created lots of diverse RAG pipelines and I accelerated RAG with:
+
+
+
+Use GPU for Faiss
+
+Use GPU for TF-IDF with RAPIDS
+
+Use GPU (and fp16 on 2xT4) for Sentence Transformers
+
+
+Regarding DeBERTa, with 2xT4 GPU I was able to infer DeBERTa 4x faster than using 1xP100 GPU. This was accomplished using 
+
+
+
+from torch.cuda.amp import autocast (Note fp16 only speeds up T4 not P100 GPU) for 2x speed
+
+import threading where we infer half the test samples on each T4 GPU for 2x speed
+
+
+Example Notebook
+
+Example notebook with GPU Speed Up is here. Submit notebook single model takes only 30 minutes and achieves LB 0.900!
+UPDATE: After competition ended, I learned about the TF-IDF parameter sublinear_tf=True (here and here). This boost CV and LB by an amazing +0.010 WOW! I updated notebook version 2 with this parameter.
+
+Diverse RAGs
+
+The goal of RAG is to search Wikipedia and find text context. My final ensemble used the following diverse RAGs:
+
+
+
+Find top 5 articles out of 6M Wikipedia using title, key words, first paragraph. Then extract top 20 sentences.
+
+Find top 5 sections out of 128k STEM Wikipedia. Then extract top 20 sentences
+
+Find top 5 chunks out of 12M Wikipedia 512 token chunks. Then extract 20 sentences
+
+Use Question plus Choices to search Wikipedia.
+
+Use Question without Choices to search Wikipedia
+
+Use Choices without Questions to search Wikipedia
+
+Find top 5 sections out of 271k Wikipedia STEM using RAPIDs TF-IDF. Then use paragraphs
+
+Find top 5 sections out of 271k Wikipedia STEM using Sentence Transformers. Then use paragraphs.
+
+
+Memory Error
+
+Unfortunately I could only ensemble 7 of my dozens of RAG pipelines before receiving OOM errors. This ensemble submit took only 6 hours to infer 7x Wikipedia RAG and 7x three DeBERTa. If I could solve the OOM errors then I could infer more RAG + DeBERTa pipelines in the remaining 3 hours and boost CV and LB. (In retrospect, perhaps I should have focused on improved RAG quality over RAG quantity).
+
+Question Drop Out Augmentation
+
+My best DeBERTa-v3-large was trained on my 60k dataset and used Question Drop Out Augmentation. During training, samples typically use Question + 5 Choices to locate context. Then the DeBERTa is trained with context + question + 5 choices. The idea of Question Drop Out Augmentation is that randomly 50%, we only use 5 Choices to locate context. And the DeBERTa is trained with context + 5 choices without seeing the question.
+
+Using Question Drop Out Augmentation achieved my best MAP@3 loss for 200 train sample of 0.470. This single model achieved LB 0.904 in notebook here.
+
+Choice Permute TTA
+
+Another interesting technique that I observed was Choice Permute TTA. When extracting context we can concatenate question + choice A, B, C, D, E. Using sentence transformers, this gets context. If we use concatenate question + choice E, B, A, C, D where we randomly permute the choices, then sentence transformer extracts different context. If we infer both context with DeBERTa and ensemble the two sets of logits, we observe a boost in CV LB!
+
+Another 1.6x Speed Up Trick!
+
+We can achieve another 1.6x Speed Up for a total of 7x speed up when comparing 2xT4 vs. 1xP100 using Drop 2 Wrong Choice. After we infer a few DeBERTa, we can use the result to determine the 2 wrong choices for each test question. Then we can infer only the 3 best choices for a 5/3 = 1.6x speed up. (i.e. we only generate and infer tokens for top 3 choices). We set the prediction for unused choice 4 and 5 as the same logit as choice 3. Then we have 5 logits and we can ensemble this with our previous inference.
+
+My 60k, 40k, and 99k Datasets!
+
+Thank you Kagglers for sharing so many wonderful train datasets. To train OpenBook QA DeBERTa-v3-large, I added context to every public dataset and then published the resultant data with context column added in my three Kaggle datasets. Discussions here, here, and here. I trained many DeBERTa-v3-large models using all sorts of combinations of these three datasets in search for the best train procedure and data! However the success of my final solution was a result of having many diverse RAG pipelines and not because of having many (or a great) DeBERTa-v3-large.
+
+Comments:
+├─ william.wu (2023-10-11 06:53:27.470000) [+6]
+│  Thanks for sharing @cdeotte, I used the Trainer to inference on T4 x 2:
+│  
+│      tokenizer = AutoTokenizer.from_pretrained(args.model_path)
+│      model = AutoModelForMultipleChoice.from_pretrained(args.m...
+  ├─ Chris Deotte (2023-10-11 06:58:59.443000) [+1]
+  │  Nice. Congratulations on your great solo finish. Well done!
+  │  
+  │  Thanks for the code. I will experiment with trainer tomorrow and compare speed. It looks like you configured trainer to use fp16 and I b...
+    ├─ william.wu (2023-10-11 07:12:25.777000) [+2]
+    │  Thanks @cdeotte , 
+    │  
+    │  
+    │    
+    │  I'm curious if trainer splits half test samples on one GPU and half samples on the second GPU (which is fastest).
+    │  
+    │  
+    │  Indeed, refer to the source code, it uses accelerate to e...
+    ├─ Anil Ozturk (2023-10-11 14:02:15.460000) [+2]
+    │  We are getting there 👀
+  ├─ CPMP (2023-10-11 13:57:43.453000) [+1]
+  │  I also performed inference using trainer early on, then switched to Pytorch DDP. I am not sure there is much of a difference in speed.
+  ├─ JJ (2023-10-11 14:27:54.930000) [+1]
+  │  @wuwenmin thank you for sharing that. I see that you use torch.set_grad_enabled(False) after model.eval() and have seen other variations like with torch.no_grad() - do these do the same thing or is...
+    ├─ william.wu (2023-10-12 02:45:52.080000) [+1]
+    │  Hi @jj148304, same effect. with torch.no_grad() is implemented with torch.set_grad_enabled(False). When you __enter__ the torch.no_grad() context torch set torch.set_grad_enabled(False), and when y...
+    ├─ JJ (2023-10-12 03:52:22.193000) [+0]
+    │  Ah the last part makes it much clearer for me. Thank you.
+├─ Behrad Tabrizipour (2023-10-16 19:35:19.737000) [+1]
+│  perfect, my favorite one,
+  ├─ Chris Deotte (2023-10-24 19:16:05.657000) [+0]
+  │  Thanks Behrad!
+├─ Indra Sonowal (2023-10-15 02:57:15.187000) [+1]
+│  Thanks for providing such great resource @cdeotte
+├─ Amazingldl (2023-10-13 14:15:09.940000) [+1]
+│  Thank you@cdeotte , I have learned a lot from you in this competition, and I really appreciate your sharing.
+  ├─ Chris Deotte (2023-10-13 23:47:38.997000) [+0]
+  │  Thank you Kagggggllllle
+├─ Chris Deotte (2023-10-12 17:59:16.707000) [+1]
+│  UPDATE: After competition ended, I learned about the TF-IDF parameter sublinear_tf=True (here and here). This boost CV and LB by an amazing +0.010 WOW! I updated notebook version 2 here with this p...
+├─ Chan Kha Vu (2023-10-12 03:20:46.270000) [+1]
+│  Instead of threading, I have a simpler solution of using accelerate to run the same script on both CPU threads and both GPUs. Just split the data to 2 parts first, and (optionally) pre-tokenize. I ...
+  ├─ Chris Deotte (2023-10-12 15:25:24.410000) [+0]
+  │  Thanks for the tips, I'll experiment with these ideas.
+  ├─ Nikhil John (2023-10-12 15:44:29.860000) [+1]
+  │  @chankhavu That is a good way to make use of accelerate. Regarding what you said:
+  │  
+  │  
+  │    
+  │  Just split the data to 2 parts first, and (optionally) pre-tokenize.
+  │  
+  │  
+  │  Did you mean the test data? And how wou...
+    ├─ Chris Deotte (2023-10-14 19:25:13.600000) [+0]
+    │  Yes, i think he means the test data. Using multiple GPU for inference is easy because we just need to split the inference data (i.e. the test data) into parts. Then infer each part in its own threa...
+├─ Shiner (2023-10-11 18:01:23.150000) [+1]
+│  Congrats for your medal! @cdeotte . Really learnt a lot from you. 🥰 The most interesting part I found here is Question Drop Out Augmentation. (New technique got!) By the way, have you ever thought ...
+  ├─ Chris Deotte (2023-10-11 21:06:06.243000) [+1]
+  │  Good suggestion. I did not try too much more with DeBERTa training (besides using different subsets of my 60k+40k+99k). I came to the conclusion that my trained DeBERTa is basically as good as it g...
+├─ JJ (2023-10-11 14:23:45.343000) [+1]
+│  Thanks @cdeotte - always amazed what I learn from you. Going to have to add that inference code to my library.
+  ├─ Chris Deotte (2023-10-12 01:02:54.583000) [+1]
+  │  Thank you JJ. Thanks for sharing the OpenBook technique
+    ├─ JJ (2023-10-12 02:26:43.697000) [+1]
+    │  Just chuffed that people found it useful and seeing all the other amazing techniques people employed. I feel like I'm back to being a kid in a toy store.
+├─ Ruslan Guseynov (2023-10-11 10:11:44.610000) [+1]
+│  Thanks for sharing!
+│  I run an experiment.  SentenceTransformers fp16 on 2xT4 were worth then SentenceTransformers fp32 on 2xT4 (~0.003)
+│  And no difference for deberta
+  ├─ Chris Deotte (2023-10-13 05:21:22.430000) [+0]
+  │  Congratulations Ruslan on strong solo silver finish!
+├─ Jude Hunt (2023-10-11 09:50:19.137000) [+1]
+│  Awesome work Chris! Really interesting to see how effective it was to combine multiple RAGs, and such a simple trick to drop the 2 wrong choices after a few inference rounds. Love the idea of runni...
+  ├─ Chris Deotte (2023-10-12 21:15:30.530000) [+0]
+  │  Thanks Jude. Congratulations on solo bronze in a tough competition where going solo was difficult.
+├─ ZHANG Zhi (2023-10-11 07:27:27.433000) [+1]
+│  Thank you for sharing! Question Drop Out Augmentation is intriguing. There maybe  other augmentation techniques targeting context to improve the robustness of the RAG model.
+  ├─ Chris Deotte (2023-10-11 07:31:46.660000) [+3]
+  │  Yes. I also observed Choice Permute TTA. During inference, we can extract context using question + choice A + choice B + etc. Then infer this context with DeBERTa. Next we can extract context using...
+├─ no fit just luck (2023-10-11 08:08:27.620000) [+2]
+│  Your work is always excellent! I learn a lot of speeding up the inference by your thread.
+  ├─ Chris Deotte (2023-10-13 00:59:05.850000) [+0]
+  │  Thanks no fit just luck!
+├─ CPMP (2023-10-11 08:07:19.770000) [+2]
+│  Lots of good ideas here!  
+│  
+│  You write you used aDeberta trained on your 60k dataset but you posted that using more datasets improves CV and LB here. Why did you end up not using these extended data...
+  ├─ Chris Deotte (2023-10-11 13:47:56.843000) [+4]
+  │  Thanks CPMP!
+  │  
+  │  Great question. I trained over 100 DeBERTa-v3-large models!
+  │  
+  │  
+  │  
+  │  In beginning of comp, I trained using only 60k. Later I use more…
+  │  
+  │  Train DeBERTa using only RACE (from my 99k dataset he...
+    ├─ CPMP (2023-10-11 13:56:42.007000) [+1]
+    │  Makes sense. I wonder how well you would have fared without your 2 weeks absence.
+    │  
+    │  I did train a bunch of debertas using all these dataset variants and submitted an ensemble of them. But I see I di...
+    ├─ Chris Deotte (2023-10-11 14:22:26.037000) [+0]
+    │  My three Kaggle datasets included all public datasets shared by all Kagglers (with added context). The most helpful datasets are most likely the 12 datasets contained in my 60k dataset's CSV file. ...
+    ├─ CPMP (2023-10-12 21:19:47.717000) [+2]
+    │  I used the late 70k one too! What I did not use is your first dataset alone…
+    │  I am not sure that ensembling these deberta I trained helped a lot. It is clear now from other teams, including yourself...
+├─ [deleted] (2023-10-11 14:49:33.360000) [+1]
+│  Thank you @cdeotte for these insights. I have a question since I tried to use the 2*T4 but unfortunately my code was a mess and it didn't work. How were you able to do the RAG on both GPUs (if you ...
+  ├─ Chris Deotte (2023-10-11 15:00:42.373000) [+1]
+  │  The slowest thing during inference is inferring DeBERTa-v3-large. One DeBERTa using fp32 and 1xGPU on 4000 test samples could take 80 minutes. So it is most important to speed this up. My sample no...

@@ -1,0 +1,148 @@
+<h1>Summary</h1>
+<ul>
+<li><strong>Transformer-based solution</strong></li>
+<li>Chunk-based data loading with caching and length matching</li>
+<li>Fourier encoder</li>
+<li>Relative spacetime interval bias</li>
+<li>von Mises-Fisher Loss + the competition metric</li>
+</ul>
+<p><strong>Our code is available at <a href="https://github.com/DrHB/icecube-2nd-place" target="_blank">this repo</a></strong>.</p>
+<h1>Introduction</h1>
+<p>While neutrinos are one the most abundant particles in the universe that may bring information about violent astrophysical events, their fundamental properties make them difficult to detect and requires a huge volume of material to interact with. The IceCube Neutrino Observatory is the first detector of its kind, which consists of a cubic kilometer of ice and is designed to search for nearly massless neutrinos. The rare interaction of neutrinos with the matter may produce high-energy particles emitting Cherenkov radiation, which is recorded with photo-detectors immersed in ice. The objective of this challenge was a reconstruction of the neutrino trace direction based on the photon detections. <br>
+To begin with, I would really like to express my gratitude to the organizers and Kaggle team for making this competition possible. Reading the description of the competition I immediately realized that transformers may be a really good approach for it. Since I wanted to experiment with transformers in depth, I decided to join this competition. Meanwhile, my outstanding teammate <a href="https://www.kaggle.com/drhabib" target="_blank">@drhabib</a> has joined this competition <a href="https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/381481#2117294" target="_blank">hoping to visit Antarctica</a>. </p>
+<h1>Details</h1>
+<p>Our solution is based on transformers, which appeared to be ideal for the considered task. Below we provide the key components of our approach.</p>
+<h2>Why transformers</h2>
+<p>Graph Neural Networks (GNNs) exhibit limitations in certain areas:<br>
+(1)    GNNs function primarily on a local level, as updates are performed based on neighboring nodes. Meanwhile, these models are expected to predict global quantities, such as the direction of a track. Organizers have attempted to address this issue through dynamic edge building, but this method falls short in comparison to the multi-head self-attention mechanism found in transformers. Moreover, dynamic edge building does not provide gradient feedback for neighbor selection.<br>
+(2)    Upon initial examination, GNNs might appear faster than transformers due to their consideration of only a fixed number of neighbors. Nevertheless, extensive sparse operations and data rearrangements in GNNs can be significantly slower than the highly optimized dense tensor operations in transformers for a reasonable sequence length and considering all possible interactions. In our experiments, the organizers’ baseline has the same computational cost as our reference T model (discussed below) while having only 1.4M parameters vs. 7.4M for T model.<br>
+<strong>Transformer is a GNN on steroids</strong>. It may be considered as GNN on a fully connected graph using attention to estimate the edge weights dynamically. But this power comes with the need for huge training data.</p>
+<h2>Data</h2>
+<p>The organizers generously provided a sizable training dataset, which may be somewhat challenging to manage. Since transformers require massive data for training, it was vital to set up a proper data pipeline at the very beginning. Our approach consists of three primary components: (1) caching the selected data chunks to minimize the substantial cost of data loading and preprocessing, (2) employing chunk-based random sampling to effectively utilize caching, and (3) <strong>implementing length-matched data sampling</strong> (sapling batches with approximately equal lengths) to reduce the computational overhead associated with padding tokens when truncating the batch at the longest sequence. Components (1) and (2) offer a computationally efficient and RAM-friendly handling of the data and were shared through the <a href="https://www.kaggle.com/code/iafoss/chunk-based-data-loading-with-caching/notebook" target="_blank">"Chunk-based Data Loading with Caching" notebook</a> during the competition to facilitate the setup of a comprehensive training data pipeline for participants. <strong>Component (3) considerably expedited training and allowed us to use the maximum sequence length of 192 for training and 768 for inference (without a noticeable increase in inference time)</strong>. Inference at a 768 -length led to a 25 bps improvement over the 192-length. Initially, we also attempted to use Hugging Face datasets, which offered the ability to utilize chunked data but required additional file conversion; ultimately, we settled on a chunk caching pipeline.<br>
+In our study, we observed no significant difference between utilizing only basic features (time, sensor position, charge, auxiliary, and the total number of detections) and incorporating additional features related to ice transparency and absorption. This outcome is expected, as for sufficiently large training datasets, the extra features merely offer an alternate representation of the z-coordinate, with the corresponding transparency and absorption distributions being explicitly learned. To ensure a diverse range of models, we employed both the base and extended feature sets in our experiments. The features are normalized in a similar way as in the organizers' baseline. <strong>It is important to consider detections with both auxiliary true and false.</strong> For events exceeding the maximum considered sequence length, we implemented the following selection process: Initially, we randomly selected detections from the auxiliary false subset, and if this subset proved insufficient to create a sequence of the required length, we then randomly sampled noisy auxiliary true detections. It is interesting that this random selection approach outperformed more complex methods, such as selecting based on charge or considering only events within a specific temporal boundary (IceCube size divided by the speed of light) surrounding the detection with the maximum charge.</p>
+<h2>Model</h2>
+<p>The model is schematically illustrated in the plot below:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1212661%2F552b4994e2931207aa2267c170d6044d%2FModel2.png?generation=1681961703319090&amp;alt=media" alt=""><br>
+<em>Fourier encoder</em>. Our solution is based on a transformer model, which considers each event as a sequence of detections. It is crucial to process the provided continuous input, such as time or charge, into a form suitable for transformers. We use <a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank">Fourier encoding representation</a>, often used to describe the position in the sequence in language models. This method can be viewed as a soft digitization of the continuous input signal into a set of codes determined by Fourier frequencies. This procedure is applied for all continuous input variables, while the discrete auxiliary flag is encoded with learnable embedding. We multiply the normalized input variables by 1024-4096 to have a sufficient resolution after digitizing. For example, after multiplying the normalized time by 4096, the temporal resolution becomes 7.3 ns, and the model may understand smaller time variations because of the continuous nature of the Fourier encoding. This multiplication is critical, and even a change of the coefficient from 128 to 4096 gives 20 bps boost.<br>
+The encoding of all variables is concatenated, passed through one GELU layer, and reprojected into the transformer dimension. An alternative to Fourier encoding may be a multilayer network that learns the corresponding representation of continuous variables, but it may require many more layers than we consider in our setup. <br>
+<em>GraphNet encoder</em>. In addition to the use of Fourier encoding, in several of our models, we incorporated GraphNet feature extractor. In addition to learning the representation of input variables, it also constructs features accounting for the neighbors. <br>
+<em>Relative spacetime interval bias</em>. In the special theory of relativity there is a quantity called spacetime interval: ds^2=c^2 dt^2-dx^2-dy^2-dz^2. For particles moving with a speed close to the speed of light, it is close to zero. What is more useful is that all particles and photons produced in the reactions caused by a single neutrino should have ds^2 close to zero too (it is not fully precise because the refractive index of ice is about 1.3, and the speed of light in it is lower than c).  Therefore, by <strong>computing ds^2 between all pairs of detections in the given event, it is relatively straightforward to distinguish between detections originating from the same neutrino and those that are merely noise</strong>, as demonstrated in the figure below. This criterion can be naturally introduced to a transformer as a <a href="https://arxiv.org/pdf/1803.02155v2.pdf" target="_blank">relative bias</a>. Therefore, during the construction of the attention matrix, the transformer automatically groups detections based on the source event effectively filtering out noise. We use Fourier encoding representation of ds^2 to build the bias term. <strong>Use of relative bias boosts the performance by 40 bps</strong>.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1212661%2Fa96019c14603b2c54be402d9d960464f%2Fds.png?generation=1681961957521492&amp;alt=media" alt=""><br>
+<em>Model</em>. We use the standard <a href="https://arxiv.org/pdf/2208.06366.pdf" target="_blank">BEiT building blocks</a>  (transformer with learnable shortcuts). To incorporate relative bias, the first transformer blocks are modified according to <a href="https://arxiv.org/pdf/1803.02155v2.pdf" target="_blank">this paper</a>. The model size is characterized with a standard ViT notation: T – tiny (dim 192), S – small (dim 384), B – base (dim 768). We use 16 transformer blocks in total: 4 blocks with relative bias + 12 blocks with cls token. The use of an additional cls token, included in the input sequence, enables the gradual collection of information about the track direction throughout the entire model. The attention head size is varied between 32 and 64: the smaller head size gives better performance, especially for the T model (10 bps). The details of the considered models are summarized below.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>dimension</th>
+<th>number of heads</th>
+<th>depth</th>
+<th>number of parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T</td>
+<td>192</td>
+<td>3-6</td>
+<td>4+12</td>
+<td>7.57M</td>
+</tr>
+<tr>
+<td>S</td>
+<td>384</td>
+<td>6-12</td>
+<td>4+12</td>
+<td>29.3M</td>
+</tr>
+<tr>
+<td>B</td>
+<td>768</td>
+<td>12-24</td>
+<td>4+12</td>
+<td>115.6M</td>
+</tr>
+</tbody>
+</table>
+<p><em>Training setup</em>. The models are trained with AdamW optimizer (weight decay 0.05) for 4-5 epochs (all data is considered). The learning rate is changed with a cosine annealing scheduler with a warmup. The maximum learning rate at the first epoch is 5e-4 for T and S models, and 1e-4 for B models. The following epochs are trained with the maximum learning rate of 0.5e-5 - 2e-5. The effective batch size is 4096 in all experiments (with the use of gradient accumulation). Starting from the second epoch Stochastic Weight Average is used. <br>
+We perform training for the first 2-3 epochs with von Mises-Fisher Loss (the model predicts 3d vectors, and kappa is computed based on the length of the produced vector), and the remaining epochs are performed with using the competition metric as the objective function + 0.05 von Mises-Fisher Loss (to give the model feedback on the vector length vs. confidence relation and simplify ensembling step). Use of the competition metric as the loss gives 55 bps boost. </p>
+<h1>Results</h1>
+<p>The table below summarizes the performance of our finalized models. CV is evaluated at L=512. (*) refers to models trained on 2×A6000, which in contrast to rtx4090 enables larger actual batch size. Further finetuning with L=256 may result in about 5 bps boost.</p>
+<table>
+<thead>
+<tr>
+<th>Model setup</th>
+<th>CV512</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T d32</td>
+<td>0.9704</td>
+<td>0.9693</td>
+<td>0.9698</td>
+</tr>
+<tr>
+<td>S d32</td>
+<td>0.9671</td>
+<td>0.9654</td>
+<td>0.9659</td>
+</tr>
+<tr>
+<td>B d32</td>
+<td>0.9642</td>
+<td>0.9623</td>
+<td>0.9632</td>
+</tr>
+<tr>
+<td>B d64</td>
+<td>0.9645</td>
+<td>0.9635</td>
+<td>0.9629</td>
+</tr>
+<tr>
+<td>B+gnn d48</td>
+<td>0.9643</td>
+<td>0.9624</td>
+<td>0.9627</td>
+</tr>
+<tr>
+<td>* S+gnn d32</td>
+<td>0.9639</td>
+<td>0.9620</td>
+<td>0.9628</td>
+</tr>
+<tr>
+<td>* B+gnn d32</td>
+<td>0.9633</td>
+<td>0.9609</td>
+<td>0.9621</td>
+</tr>
+</tbody>
+</table>
+<p>Each increase of the model to the next size T-&gt;S-&gt;B gives approximately 30 bps but is accompanied by an ×4 increase in the number of model parameters. However, the provided data may be insufficient for training models larger than B. Meanwhile, the results of the use GNN in addition to the Fourier extractor are rather contradictive and may be affected by the difference in the hardware configuration.  <br>
+So, even <strong>the smallest considered T model with only 7.53M parameters and fast training (under 12 hours on rtx4090 per epoch) can take the top-5 in this competition</strong> by itself. Meanwhile, with additional finetuning at L=256, <strong>our best model, B+gnn d32, reaches 0.9628 CV512, 0.9608 public, and 0.9618 private LB as a single model</strong>. </p>
+<h2>Model ensemble</h2>
+<p>With the use of von Mises-Fisher Loss, the vector length corresponds to the model confidence. Therefore, a weighted average of the predicted vectors automatically incorporates the confidence and biases the prediction towards the most confident direction. <br>
+Our best final submission in the linear ensemble of 6 models gives 0.9594 at public and 0.9602  at private LB (the contribution of each model is evaluated as an average of weights fitted in 5 random 5-fold splits). Ensembling gives only an insignificant improvement over our best single model submission of 0.9608 public and 0.9618 at private LB. We also tried to consider more elaborated ensembling by utilizing additional features such as sequence length, first detection time, total charge, etc., but without any improvement over the simple linear ensemble</p>
+<h2>Training and inference time</h2>
+<p><strong>On rtx4090 the inference time can be as short as 3 min per 1M samples for the T model</strong> (without inference optimization) and may increase to 8-10 min for the B model. On outdated GPUs several generations behind, such as P100 at Kaggle, the inference time may increase by x10. The training time varies from 12 hours per epoch for the T model to 56 hours per epoch for the B+gnn model. On a machine with 2×A6000 the speed is approximately the same (~10% faster) than running the model on a single rtx4090.</p>
+<h2>Robustness</h2>
+<p>Regarding the robustness of model predictions with respect to perturbation of the input parameters, we have considered the following cases: (1) <strong>temporal noise</strong>: add normally distributed random variable to detection time of each event; (2) <strong>charge noise</strong>: multiply charge by 10^ normally distributed randomly with variance reported at the horizontal axis; (3) <strong>auxiliary noise</strong>: randomly flip auxiliary flag with a given probability; and (4) <strong>length reduction</strong>: remove a given percentage of detections. The plot below reports results for our reference T model (noise-free CV512 is 0.9704).<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1212661%2Ffdbfc788586698d1965af8a024868dd7%2FNoise.png?generation=1681963294066000&amp;alt=media" alt=""><br>
+Although the model was not explicitly trained to consider the abovementioned types of noise, the predictions in most cases do not degrade by more than 15% at the largest magnitude of the considered noise, e.g. adding 200 ns random time error or ×2 reduction of the number of detected events. Training the model with specific data augmentation during training may improve the robustness of the model. However, there may be a limit when the error starts rapidly increasing, e.g. 10 ns temporal noise or a change in the value of detected charge by 40%.<br>
+The considered model is versatile enough to apply to any neutrino telescope with a similar detector concept as IceCube, regardless of the number of detectors and their arrangement. However, since during the training of our models, the positions of the detectors are fixed, the model may not have a complete understanding of the geometry and experience the degradation of the performance if the detectors are moved. For example, the performance of T model drops from 0.9704 to 1.004 under flip of all detector positions along X or Y axes. To avoid such performance degradation and improve the understanding of geometry by the model, the training could be performed at randomly generated configurations of detectors at each detection event. Incorporation of geometry augmentation, such as shifts, flips, and rotation, would also improve the model robustness to the change of the detector geometry. The less optimal solution is the generation of new training data for a new neutrino telescope. Consideration of <a href="https://arxiv.org/pdf/2006.10503.pdf" target="_blank">3D Roto-Translation Equivariant Attention</a> models, in which detector positions are incorporated through attention rather than direct input, could potentially address the issue of detector geometry. However, this improvement may come with both the computational cost and VRAM requirement increase, and, therefore, a more practical solution may be training a simple model with spatial augmentation and randomized detector positions.<br>
+The plot below visualizes the distribution of error for confident and unconfident prediction.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1212661%2Fd1fe483e3972b5ae6aafa7c4db3f4ea9%2Fdist.png?generation=1681963384438419&amp;alt=media" alt=""></p>
+<h2>Interesting findings</h2>
+<p>It appeared that <strong>the majority of participants of the competition are unconsciously using the following leak</strong>. The provided data is the result of a simulation, and 0 time has a particular meaning revealing some details of the generation process (the time of the first detection with respect to 0 time may probably give such information as the energy and approximate direction limitations based on the traveling time of the neutrino from the box boundary to the detector). The models learn how to utilize this leak and improve its performance. For example, one of our experiments with the T model trained (1) on data with keeping 0-time-reference and (2) subtracting the time of the first detection from all detections gives the performance gap of 145 bps at the end of the first epoch. <br>
+In the real detector data, the 0-time-reference is not available, and the time might be considered with the reference to the first detected event only. For models trained using 0-time-reference, such experimental data should be shifted by the average first detection time. However, in this case, the performance may drop by 150+ bps, comparable to the results of the model trained without the 0-time leak. </p>
+<h2>Things that did not work</h2>
+<p>In this competition, we have experimented with a number of things that, unfortunately, did not give an improvement:<br>
+<strong>Graph Neural Networks</strong>. After building the first transformer-based pipeline it becomes apparent that GNNs are well behind (0.98-0.99 vs. 1.0 LB for first models). One interesting comparison we ran at that moment is dividing the predictions based on the kappa by 30% of confident and 70% of unconfident (noisy input and very small number of detections for track reconstruction). The performance of both models on unconfident predictions was comparable, while the improvement on confident predictions was the thing giving the performance gap between transformers and GNNs. It is fully in line with our initial expectation that transformers with global consideration of the input data are more appropriate for the prediction of the global quantity as the track direction in contrast to local GNNs. So further efforts were spent on enhancing the transformer setup. So, in the end, we used GNN as an optional addition to our Fourier feature extractor for diversity.<br>
+<strong>Ice properties</strong>. We did not see that use of additional input, such as ice properties, helps to improve model performance.<br>
+<strong>Local attention</strong>. We spent several weeks experimenting with local attention. The basic idea is simple: before giving a sequence of detections to the transformer model, which considers all-vs-all interactions between detections, process the features within the local neighbors. In theory, local attention is expected to be fast and memory efficient since it examines only a small number of k=8 neighbors instead of requiring L×L attention. However, in practice, local attention appears to be quite slow because of extensive data shuffling (similar to GNN), and in some naïve implementations, it also may consume significantly more VRAM than highly optimized transformers. Surprisingly, the fastest local attention is just regular transformer attention with masking attention for elements beyond k neighbors. Such masking helps at the beginning of training, but at the later stage, full attention outperforms it or gives comparable results. We also tried to consider configurations with alternating global-local attention (sandwich) or parallel blocks of local and global attention in the part of the model preceding the regular 12-layer transformer. However, a simple configuration with consideration of 4 layers with full attention and rel bias + 12-layer regular transformer outperformed the setups with local attention.<br>
+<strong>Classification loss</strong>. We tried to subdivide the angle space into bins and utilize classification loss to fight against angle uncertainty. The ground truth is represented as a 2D Gaussian around the provided label, as illustrated in the figure below. We introduced 8 cls tokens to predict the probability for a 64×128 angular bin map (32×32 per token). Unfortunately, this model ended up at approximately 1.0 CV, and we did not perform any further checks on this approach. However, this model is quite interesting to mention, and it may provide a good visualization of the predictions.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1212661%2F1a2b2b993bb6a79ad13babb00ea689dc%2Fcls.png?generation=1681963515503826&amp;alt=media" alt=""><br>
+<strong>L and H models</strong> (400 and 800M parameters). Because of  Nvidia virtual address space driver bug, 2×rtx4090 could not be used together until 1-2 weeks before the end of the competition. And even after this bug was fixed, disabled p2p makes multi-GPU training with these cards to be quite inefficient. Therefore, we were unable to scale up our runs and stopped at relatively small B models. The expected boost at each model size increase is about 30 bps, and L and H single models could likely reach 0.958 and 0.955-0.956 LB as a single model but with a massive increase of the required compute for both training and inference.</p>

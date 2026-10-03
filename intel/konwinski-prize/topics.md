@@ -1,0 +1,82 @@
+# konwinski-prize 讨论区（按票数排序，共 80 条）
+
+- [This is the most gigachad competition ever held on this website](https://www.kaggle.com/competitions/konwinski-prize/discussion/551229) — 84 票 / 22 评论 / 2024-12-12 
+- [1st Place Solution Write Up](https://www.kaggle.com/competitions/konwinski-prize/discussion/568884) — 75 票 / 36 评论 / 2025-03-18 **write-up?**
+- [🤩 80 036 freely available trajectories from SWE-agent & 6411 GitHub issues](https://www.kaggle.com/competitions/konwinski-prize/discussion/552605) — 43 票 / 4 评论 / 2024-12-20 
+- [Public 2nd Place Solution](https://www.kaggle.com/competitions/konwinski-prize/discussion/568888) — 42 票 / 6 评论 / 2025-03-18 **write-up?**
+- [The first published notebook not scoring -1](https://www.kaggle.com/competitions/konwinski-prize/discussion/561695) — 39 票 / 31 评论 / 2025-02-07 
+- [How to compute (n_correct, n_wrong, n_skipped) given leaderboard score](https://www.kaggle.com/competitions/konwinski-prize/discussion/557148) — 38 票 / 12 评论 / 2025-01-17 
+- [SWE-Bench+. Background on SWE-bench. LLMs to solve Real-World Software/GitHub Issues?](https://www.kaggle.com/competitions/konwinski-prize/discussion/551356) — 31 票 / 0 评论 / 2024-12-12 
+- [Starter notebook with LLMs](https://www.kaggle.com/competitions/konwinski-prize/discussion/553294) — 29 票 / 12 评论 / 2024-12-25 
+- [Competition closing plan: time spent queueing will be ignored](https://www.kaggle.com/competitions/konwinski-prize/discussion/567896) — 24 票 / 31 评论 / 2025-03-12 
+- [Public 4th Place / Private 15th Place Solution - Konwinski Prize](https://www.kaggle.com/competitions/konwinski-prize/discussion/568799) — 23 票 / 5 评论 / 2025-03-18 **write-up?**
+- [Stuck L4x4 Pool](https://www.kaggle.com/competitions/konwinski-prize/discussion/567890) — 22 票 / 0 评论 / 2025-03-12 
+- [Competition Upgrade Plan Details](https://www.kaggle.com/competitions/konwinski-prize/discussion/552449) — 21 票 / 12 评论 / 2024-12-19 
+- [Proposition: allow submission queue to go through and extend sub selection period.](https://www.kaggle.com/competitions/konwinski-prize/discussion/567842) — 21 票 / 2 评论 / 2025-03-12 
+- [Delay Submission Selection (Not submission period)](https://www.kaggle.com/competitions/konwinski-prize/discussion/567824) — 19 票 / 15 评论 / 2025-03-12 
+- [Requests for the Forecasting Phase](https://www.kaggle.com/competitions/konwinski-prize/discussion/563314) — 18 票 / 13 评论 / 2025-02-16 
+- [Open Sourcing a notebook, a library, four agents, and two UIs for this competition!](https://www.kaggle.com/competitions/konwinski-prize/discussion/566234) — 17 票 / 9 评论 / 2025-03-04 
+- [Temporary increase to the daily submission limit](https://www.kaggle.com/competitions/konwinski-prize/discussion/561218) — 16 票 / 7 评论 / 2025-02-04 
+- [Qwen QwQ 32B](https://www.kaggle.com/competitions/konwinski-prize/discussion/566517) — 16 票 / 14 评论 / 2025-03-05 
+- [OpenAI o3 on SWE-Bench](https://www.kaggle.com/competitions/konwinski-prize/discussion/552648) — 16 票 / 4 评论 / 2024-12-20 
+- [The public test set has 71 instances](https://www.kaggle.com/competitions/konwinski-prize/discussion/557158) — 16 票 / 3 评论 / 2025-01-17 
+- [Competition updates scheduled for Monday- Now Thursday](https://www.kaggle.com/competitions/konwinski-prize/discussion/555892) — 16 票 / 5 评论 / 2025-01-09 
+- [Next competition suggestion: Why not host an LLM?](https://www.kaggle.com/competitions/konwinski-prize/discussion/568934) — 15 票 / 6 评论 / 2025-03-18 
+- [How software engineers solve issues](https://www.kaggle.com/competitions/konwinski-prize/discussion/553443) — 14 票 / 1 评论 / 2024-12-26 
+- [a recent paper for reference and extra dataset](https://www.kaggle.com/competitions/konwinski-prize/discussion/556855) — 14 票 / 1 评论 / 2025-01-15 
+- [8th place solution](https://www.kaggle.com/competitions/konwinski-prize/discussion/590920) — 13 票 / 0 评论 / 2025-07-24 **write-up?**
+- [How random is your submission?](https://www.kaggle.com/competitions/konwinski-prize/discussion/568626) — 13 票 / 21 评论 / 2025-03-17 
+- [Changes that you could have made to the Select-Patch-Verify notebook](https://www.kaggle.com/competitions/konwinski-prize/discussion/568634) — 12 票 / 9 评论 / 2025-03-17 
+- [3rd Place Solution](https://www.kaggle.com/competitions/konwinski-prize/discussion/597207) — 11 票 / 0 评论 / 2025-08-06 **write-up?**
+- [Deadline Extension?](https://www.kaggle.com/competitions/konwinski-prize/discussion/565724) — 11 票 / 6 评论 / 2025-03-01 
+- [Forecasting phase extension](https://www.kaggle.com/competitions/konwinski-prize/discussion/582799) — 11 票 / 7 评论 / 2025-06-02 
+- [Evaluation API quality of life update](https://www.kaggle.com/competitions/konwinski-prize/discussion/566117) — 10 票 / 0 评论 / 2025-03-03 
+- [Submission running for 11 hours](https://www.kaggle.com/competitions/konwinski-prize/discussion/567839) — 10 票 / 18 评论 / 2025-03-12 
+- [Agent2 Replicator: Report + Monologue](https://www.kaggle.com/competitions/konwinski-prize/discussion/568707) — 10 票 / 1 评论 / 2025-03-17 
+- [Agent system using Langgraph, Vllm, Elasticsearch, Qwen](https://www.kaggle.com/competitions/konwinski-prize/discussion/554790) — 10 票 / 7 评论 / 2025-01-03 
+- [Why no positive scores in the leaderboard?](https://www.kaggle.com/competitions/konwinski-prize/discussion/552709) — 10 票 / 2 评论 / 2024-12-21 
+- [Submission Count and Kaggle wasting them](https://www.kaggle.com/competitions/konwinski-prize/discussion/560254) — 9 票 / 12 评论 / 2025-01-30 
+- [Anatomy of a patch](https://www.kaggle.com/competitions/konwinski-prize/discussion/553335) — 9 票 / 1 评论 / 2024-12-25 
+- [Has anyone used the best public notebook on swe-bench verified?](https://www.kaggle.com/competitions/konwinski-prize/discussion/568861) — 8 票 / 1 评论 / 2025-03-18 
+- [Can I submit if I ran out of GPU usage?](https://www.kaggle.com/competitions/konwinski-prize/discussion/567501) — 8 票 / 11 评论 / 2025-03-10 
+- [Metric Update and Leaderboard Rescore](https://www.kaggle.com/competitions/konwinski-prize/discussion/557133) — 8 票 / 7 评论 / 2025-01-17 
+- [Dataset & Submission Updates: predict() signature changed](https://www.kaggle.com/competitions/konwinski-prize/discussion/557125) — 8 票 / 9 评论 / 2025-01-17 
+- [Guidelines from DeepSeek on how to use R1 models](https://www.kaggle.com/competitions/konwinski-prize/discussion/563242) — 8 票 / 0 评论 / 2025-02-16 
+- [Reminder about the per-prediction 30 minute deadline](https://www.kaggle.com/competitions/konwinski-prize/discussion/561563) — 8 票 / 16 评论 / 2025-02-06 
+- [A better way compute (n_correct, n_wrong, n_skipped) given leaderboard score](https://www.kaggle.com/competitions/konwinski-prize/discussion/563798) — 8 票 / 19 评论 / 2025-02-19 
+- [Ongoing Evaluation Upgrades](https://www.kaggle.com/competitions/konwinski-prize/discussion/551218) — 8 票 / 0 评论 / 2024-12-12 
+- [sample repositories](https://www.kaggle.com/competitions/konwinski-prize/discussion/552126) — 7 票 / 9 评论 / 2024-12-17 
+- [Correct Answers Crowd Source](https://www.kaggle.com/competitions/konwinski-prize/discussion/567686) — 7 票 / 3 评论 / 2025-03-11 
+- [Get started here](https://www.kaggle.com/competitions/konwinski-prize/discussion/551219) — 7 票 / 1 评论 / 2024-12-12 
+- [[Replication + Analysis] Notebook Env Setup Most Assuredly Fails](https://www.kaggle.com/competitions/konwinski-prize/discussion/567132) — 7 票 / 10 评论 / 2025-03-08 
+- [Evaluation Bug after the recent update](https://www.kaggle.com/competitions/konwinski-prize/discussion/557147) — 7 票 / 3 评论 / 2025-01-17 
+- [We're looking into the bug reports [Updated]](https://www.kaggle.com/competitions/konwinski-prize/discussion/558014) — 7 票 / 9 评论 / 2025-01-22 
+- [Questions regarding Data. Tests. Format and Evaluation.](https://www.kaggle.com/competitions/konwinski-prize/discussion/551617) — 7 票 / 1 评论 / 2024-12-14 
+- [Claude Code](https://www.kaggle.com/competitions/konwinski-prize/discussion/566893) — 7 票 / 3 评论 / 2025-03-07 
+- [Konwinski is the new March Madness](https://www.kaggle.com/competitions/konwinski-prize/discussion/566180) — 7 票 / 4 评论 / 2025-03-04 
+- [Timeout Wrapper Functionality ... So Far So Good](https://www.kaggle.com/competitions/konwinski-prize/discussion/565266) — 7 票 / 1 评论 / 2025-02-27 
+- [5th Place Solution](https://www.kaggle.com/competitions/konwinski-prize/discussion/596375) — 7 票 / 0 评论 / 2025-08-03 **write-up?**
+- [[Out of date] Leaderboard ops in progress to prepare for closing](https://www.kaggle.com/competitions/konwinski-prize/discussion/590895) — 7 票 / 5 评论 / 2025-07-23 
+- [Clarifying Question About Predict Function and KPRIZE Package](https://www.kaggle.com/competitions/konwinski-prize/discussion/555890) — 6 票 / 1 评论 / 2025-01-09 
+- [Competition updates are in complete: you can resume your submissions](https://www.kaggle.com/competitions/konwinski-prize/discussion/557116) — 6 票 / 0 评论 / 2025-01-17 
+- [[deprecated] micromamba bug in kprize script](https://www.kaggle.com/competitions/konwinski-prize/discussion/557081) — 6 票 / 2 评论 / 2025-01-16 
+- [How-To Create a Similar Dataset to Train Dataset (With Envs, Repos, Configs, etc)](https://www.kaggle.com/competitions/konwinski-prize/discussion/557525) — 6 票 / 1 评论 / 2025-01-19 
+- [My Attempt at UV Environment Creation in Kaggle (Kind of a fail TBH)](https://www.kaggle.com/competitions/konwinski-prize/discussion/559628) — 6 票 / 9 评论 / 2025-01-26 
+- [New Patch Published: Submissions should function as intended again](https://www.kaggle.com/competitions/konwinski-prize/discussion/559824) — 6 票 / 4 评论 / 2025-01-27 
+- [SWE Bench Papers ](https://www.kaggle.com/competitions/konwinski-prize/discussion/552345) — 6 票 / 1 评论 / 2024-12-19 
+- [SWE-RL: Advancing LLM Reasoning via Reinforcement Learning on Open Software Evolution ](https://www.kaggle.com/competitions/konwinski-prize/discussion/565193) — 6 票 / 0 评论 / 2025-02-27 
+- [Are the 4x L4 GPUs adequate for a medal?](https://www.kaggle.com/competitions/konwinski-prize/discussion/551294) — 6 票 / 2 评论 / 2024-12-12 
+- [4th Place Solution](https://www.kaggle.com/competitions/konwinski-prize/discussion/596181) — 6 票 / 1 评论 / 2025-08-04 **write-up?**
+- [Reminder - odd leaderboard state expected until Friday](https://www.kaggle.com/competitions/konwinski-prize/discussion/567939) — 6 票 / 0 评论 / 2025-03-12 
+- [Will forecasting dataset samples be manually verified?](https://www.kaggle.com/competitions/konwinski-prize/discussion/564884) — 6 票 / 9 评论 / 2025-02-25 
+- [Useful feedback for GEN AI Code Assistants ?](https://www.kaggle.com/competitions/konwinski-prize/discussion/568489) — 6 票 / 7 评论 / 2025-03-16 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/konwinski-prize/discussion/593762) — 5 票 / 0 评论 / 2025-07-30 
+- [Has anyone gotten something to submit?](https://www.kaggle.com/competitions/konwinski-prize/discussion/567889) — 5 票 / 8 评论 / 2025-03-12 
+- [Is there any notebook demonstrating running the unit tests?](https://www.kaggle.com/competitions/konwinski-prize/discussion/564522) — 5 票 / 22 评论 / 2025-02-23 
+- [Congratulations ](https://www.kaggle.com/competitions/konwinski-prize/discussion/590904) — 5 票 / 0 评论 / 2025-07-24 
+- [Parallelized predict](https://www.kaggle.com/competitions/konwinski-prize/discussion/561132) — 5 票 / 7 评论 / 2025-02-04 
+- [Submission selection window is open until March 16th ](https://www.kaggle.com/competitions/konwinski-prize/discussion/568248) — 5 票 / 0 评论 / 2025-03-14 
+- [Show problems solved | failed | skipped on leaderboard](https://www.kaggle.com/competitions/konwinski-prize/discussion/556563) — 5 票 / 3 评论 / 2025-01-14 
+- [Writeup + Notebook: Running Custom Unit Tests](https://www.kaggle.com/competitions/konwinski-prize/discussion/566444) — 5 票 / 14 评论 / 2025-03-05 **write-up?**
+- [Where is the submission tab?](https://www.kaggle.com/competitions/konwinski-prize/discussion/568801) — 5 票 / 9 评论 / 2025-03-18 
+- [Recap and results - Thanks for participating! ](https://www.kaggle.com/competitions/konwinski-prize/discussion/609204) — 4 票 / 1 评论 / 2025-09-24 

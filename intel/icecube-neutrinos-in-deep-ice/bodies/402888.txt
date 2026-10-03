@@ -1,0 +1,274 @@
+# https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402888
+
+Topic #402888: 3rd Place - Attention + XGBoost Ensembler
+  Author: Dipam Chakraborty
+  Posted: 2023-04-20 05:08:18.464000
+  Votes: 56  Comments: 25
+
+3rd place Solution writeup - Attention + XGBoost
+
+Participated on Kaggle after 3 years, first gold for me, had a really exciting time. 😃
+
+Check the TL;Dr at the end for a short summary - The post is long with a mixture of model information and personal lessons.
+
+The bitter lesson - Attention is all you need
+
+This data is not a natural graph, I'm confused by all the graph models being trained on it. The graph edges are artificially selected based on criteria such as time or distance, which I didn't think was the right approach. Hence I spent my time on LSTM and later moved to Self-Attention.
+
+Base Model
+
+The base model is a simple self-attention model. Most of the model code is from Andrej Karpathy's NanoGPT https://github.com/karpathy/nanoGPT.git
+
+The inputs are normalized pulse data with transparency information from Datasaurus' Dynedge baseline https://www.kaggle.com/code/anjum48/early-sharing-prize-dynedge-1-046 - Sequences are sampled upto a max length of 256, prioritizing sampling of the pulses where auxiliary=False
+
+The outputs are two classification heads for each angle with 128 bins each. - I train it with a custom loss that locally smoothens the one hot target vectors, more on that below.
+
+A small version of the model can be trained on an RTX 3060 to give a score close to ~1.02 in 1 hour. (Embedding size 128 - 6 layers).
+
+The bitter lesson - Scale beats everything
+
+The competition was undoubtedly compute-heavy, but I only had access to my home PC with an RTX 3060. Naturally, I spent a lot of time hand-designing features, optimizing the code, and trying ideas that felt like they should help. Only to have to throw out most of the experiments which help a smaller model but get washed out when training a big model with more data.
+
+Notable ideas that helped but later got discarded:
+
+
+
+Simple augmentation like moving the points slightly, changing the charges etc.
+
+Supervised contrastive loss style training to predict the angle between two events.
+
+Mutliple pooling instead of just average pooling at the end. (in fact this caused overfitting)
+
+Angle classifier on sphere coorindates instead of two classifiers.
+
+
+All of the above individually helped get better performance on a small model trained for 2-3 hours, but reach the same performance with bigger models. There is no overfitting in the models even with 20 batches of training data.
+
+The real improvements in score came from scaling the model. Training on more data was crucial as well, the final models I use train on 650 batches of data. They finally start to overfit after 4 cycles through the entire data. 
+
+All the wasted days on experimentation reminds me of Richard Sutton's blog on "The Bitter Lesson". http://www.incompleteideas.net/IncIdeas/BitterLesson.html - Haha GPUs go bitterrrrrrr.
+
+Scaling and engineering tricks
+
+At the start of April, I decided to buy a new GPU just seeing how much compute is needed. Upgraded to RTX 4080, which is 3x faster. (No this is not the only scaling I did 😅, but more compute was crucial)
+
+Final submitted model has 18 self attention layers, embedding size 512. This reaches a LB score of 0.982, and I'm sure training a bigger model will get even better. I trained the same model with 15 layers, but had worse performance due to mixed precision instability.
+
+Engineering tricks
+
+
+
+Mixed precision training is much faster, I train with FP16 with FlashAttention. However this started getting unstable after reaching a score of 0.990, so I switched to FP32 after that. Only the bigger models showed this instability and I didn't get to investigate how to continue on FP16, probably the scales of the inputs or the loss can be managed.
+
+The sequence lengths in the dataset has high variance. After sampling the data upto 256 pulses, the average length of each event is close of 100. This means a lot of attention processing (when not using FlashAttention) is wasted on padding. To speed up training I group the batches by event length. This gives a 1.5x speedup over FlashAttention and 3.5x speedup over normal attention implementation. Packing also speeds up inference in the same ratios.
+
+Loading a portion of the training data for each "epoch". This is straightforward, switch out the bathces in the dataloader after each epoch, or do it as a background process for prefetch.
+
+
+Scaling worked incredibly well:
+
+
+
+128 Embedding - 9 Layers - 200 batches - Score ~1.001
+
+256 Embedding - 12 Layers - 400 batches - Score ~0.990
+
+512 Embedding - 18 Layers - 650 batches - Score ~0.982 (Some overfitting at the end)
+
+
+Further, I fine tuned the model for sequence lengths upto 3072, which gives a slight imporvement of 0.002.
+
+Smoothed cross entropy loss
+
+The Von Mises-Fisher Loss proved unstable with Attention model, and I never got it to go beyond 1.04 when training end to end.
+
+For the classifier I digitize the angles to 128 bins. Cross entropy loss works well, but I wanted to introduce inductive bias in the model that the clases are ordered, and not independent. To do so, I apply 1D convolution with a gaussian kernel to the target one hot vectors. For azimuth this covolution has wraparound, for zenith I extend the bins based on the length of the kernel. (Notebook explaining the loss will be released later). This gives slightly more stable training, though with good hyperparam tuning even cross entropy might work just as well.
+
+The sweet ending - Attention is not all you need
+
+Obviously attention was not enough to win, 0.982 isn't even gold zone (cries in corner). However, the base model was cruicial for the next ideas to work.
+
+Stack vMF model
+
+Training an MLP with vMF loss on top of the encoder embeddings works. I dump 100 batches of average pooled encoder embeddings and train the stack model with it, achieves a score of ~0.978. Simple average ensemble of vMF and base model gives a score ~0.976.
+
+The magic - Ensembling using XGBoost 🔥
+
+I know the standard ensembling tricks, but this is the first time I have ensembled using another model. If you are aware of this used in practice, please let me know if there is literature on this. I got the idea just 3 days before the end of the competition, barely got to test it properly, yet it worked like magic.
+
+My hypothesis on why this worked - The classifier and vMF models are far from perfect scores, and have high disagreement. Here's a histogram of the zenith angles.
+
+Both the model have its own biases, and its not obvious how to combine them.
+
+
+
+First I tried a simple voting rule - If they're too far then don't average:
+This already bumped the score from 0.976 -&gt; 0.973, already a top 5 solution.
+
+avg_zenith = (zn_stack + zn_base) / 
+vote_zenith = avg_zenith.clone()
+voter = torch.(zn_stack - zn_base) &gt; 
+vote_zenith[voter] = zn_stack[voter].clone()
+
+
+Both the models have some way of indicating "confidence" in prediction. Probabilty of bin for classifier, and kappa for vMF. I played around with some thresholding for those, along with event lengths and z coordinates, and it bumped score to 0.9715, so I decided to try XGBoost. On the first try the score went straight to 0.969. 🚀
+
+Further, I tried another boosting classifier to "predict which predictions are bad". And used it to flip the angles, this also gives a slight improvement in score.
+
+Adding some more simple features the final score for the 18 layer model was 0.965 (I made a submission with the 15 layer model which got 0.967).
+
+I used sklearn's HistGradientBoostingClassifier for the final setup, but XGBoost has similar results.
+
+Inference timing stat
+
+The inference time for the base model is around 4 minutes per batch, and another 4 minutes for the long sequence model, which only gives a small boost. So its possible to get a score of 0.967 within 25 minutes.
+
+Final submission
+
+The final submission has 3 models. The 18 layer, 15 layer, and another checkpoint from same 18 layer run.
+
+Another boosting classifier to merge 18 layer and 15 layer. And then simple voting to merge the 3.
+
+Here's the inference notebooks for final submission and single attention model.
+
+
+
+Final - https://www.kaggle.com/code/dipamc77/3rd-place-attention-xgboost-ensembler
+
+Attention only - https://www.kaggle.com/code/dipamc77/single-attention-model-inference
+
+
+Summary of learnings
+
+
+
+Test the model for scaling, especially if its underfitting, before trying feature engineering/other ideas.
+
+Spend the initial engineering effort to optimize the pipeline, to test ideas fast.
+
+If models have high disagreement and not close to max score, try to train a classifier to ensemble to models.
+
+Even though the final improvement came from ensembling tricks, scaling was the most important. Bigger models will likely give even better results.
+
+Don't give up, I really threw everything in the kitchen sink to improve scores at the end!
+
+Buy more GPUs. 💸
+
+
+In hindsight, I should have tried some of the graph models as they might have disagreed with the classifier, and ensembling them might give a good improvement.
+
+Notable Failed ideas
+
+Didn't expect these to fail, and didn't abandon prematurely, but couldn't make them work.
+
+
+
+
+Finding noise in the dataset to ignore during training.
+
+
+vMF loss training with attention model.
+
+
+
+Edit - From reading the 2nd place solution, this might be because I didn't encode the inputs properly. Perhaps it was lack of understanding on my part. I thought encoding continuous variables with a normal FC layer is good enough. Clearly it did work with the classification loss though.
+
+
+Reducing bias in zenith predictions by class weightage and oversampling.
+
+
+TL;Dr - Final Solution summary
+
+Pulses as tokens, sequence length upto 256, priority sampling for "real" pulses.
+
+
+
+(Self Attention (512 embedding, 18 layer, Avg pool, 2048 FF) + 2 Angle classifier heads) -&gt; ~0.982
+
+(Fine tuned attention model for sequence length upto 3072) -&gt; 0.980
+
+(MLP with vMF loss on attention model embeddings) -&gt; ~0.976
+
+(Combine classifier and vMF angles with boosting classifier) -&gt; ~0.965 🔥
+
+(15 layer + 18 layer + 1 checkpoint from same 18 layer run - combine with another boosting classifier) -&gt; ~0.962
+
+
+
+
+P.S - Doesn't matter what your rank is, please share your learnings and also failed ideas. It helps you organize what you learnt and get better insights, I'll make sure to read all of them.
+
+Training Code - Please share your feedback.
+
+https://github.com/dipamc/kaggle-icecube-neutrinos
+
+Comments:
+├─ Johan Abdullah Holm (2023-04-23 19:26:31.647000) [+1]
+│  Very good that you share this.
+├─ CroDoc (2023-04-22 10:38:45.820000) [+1]
+│  @dipamc77 well done! Thanks for the detailed write-up and sharing your code on git.
+├─ Wen Lihong (2023-04-21 08:09:40.200000) [+1]
+│  Congrats, guys! Well deserved!
+├─ Iafoss (2023-04-21 00:19:49.303000) [+1]
+│  Big congratulations on solo gold! It is quite interesting to read your writeup and follow the steps you made to get the improvement. Really great work!
+├─ Remek Kinas (2023-04-20 20:40:50.190000) [+1]
+│  First of all - congratulations! You made important step - solo gold. This is really amazing achievement. 
+│  Your solution is true magic. I saw your submission time during the last day of competition ...
+  ├─ Remek Kinas (2023-04-20 20:58:49.680000) [+1]
+  │  If you look for Enseble books I recommend you books I have:
+  │  
+  │  
+  │  
+  │  https://www.manning.com/books/ensemble-methods-for-machine-learning
+  │  
+  │  https://machinelearningmastery.com/ensemble-learning-algorithms-w...
+    ├─ Dipam Chakraborty (2023-04-20 21:47:41.783000) [+1]
+    │  Thank you so much for these.
+  ├─ Dipam Chakraborty (2023-04-20 21:47:06.187000) [+1]
+  │  Thanks.
+  │  
+  │  I remember going like, wrote some for hacky loops for test "if kappa &gt; k and zenith_prob &lt; p and zenith_base - zenith_stack &gt; d and z_first &gt; z" etc, and score were improving. ...
+├─ Ruslan Guseynov (2023-04-20 16:17:33.633000) [+1]
+│  Congrats for winning! I knew that GNN only approach is not all I need :)
+├─ Wenrui Kong (2023-04-20 09:15:21.673000) [+1]
+│  Congratulations. From what I read, you trained the final model on 650 batches of data for 4 epochs, is that correct? How much time does it take on a 4080? What about the learning rate, did you use ...
+  ├─ Dipam Chakraborty (2023-04-20 10:17:36.790000) [+0]
+  │  I use OneCycle learning rate scheduler, max rate 5e-5 for the largest model, final learning rate is 2e-6. The scheduler is certainly important.
+  │  
+  │  The final model I trained on a 4080 for 5 days, swit...
+    ├─ Wenrui Kong (2023-04-20 10:49:41.750000) [+0]
+    │  Impressive, learned a lot from this competition. Interested to see the data pipeline. I got lazy and just stuck with 200 batches of data loaded into the memory. In the past, when training rnn based...
+├─ datasaurus (2023-04-20 07:02:22.677000) [+2]
+│  Congratulations on the solo gold! We were all amazed by your progress and hoping you would get the win!
+  ├─ Dipam Chakraborty (2023-04-20 07:26:02.373000) [+3]
+  │  Thank you so much for the kind words.
+  │  
+  │  A week ago I thought the max score I can get is probably around 0.973, the boosting model ensembler really did the magic!
+    ├─ Walter BD (2023-04-23 06:58:35.127000) [+1]
+    │  Do you recommend any material to know more about boosting model ensembler  🙌
+  ├─ Dipam Chakraborty (2023-04-20 12:23:34.697000) [+3]
+  │  Also, I just realized, congratulations on soon becoming a Competitions Grandmaster.
+├─ Ericka42 (2023-04-23 22:27:56.407000) [+0]
+│  Congratulations)
+├─ Mohamed Eltayeb (2023-04-20 07:49:44.213000) [+0]
+│  Congratulations and thanks for sharing!
+│  I realized that scaling was the key to advance. That's why I honestly almost gave up the competition. I used Kaggle TPU with 330 GB RAM, but I found the trai...
+  ├─ Dipam Chakraborty (2023-04-20 08:07:45.700000) [+1]
+  │  Pays off to make a machine at home, I'm definitely buying another GPU before the next competition. 😅
+    ├─ Mohamed Eltayeb (2023-04-20 08:13:33.377000) [+0]
+    │  Well, can't say no after getting such a prize.😂 You deserve it👏
+├─ Inar Timiryasov (2023-04-20 07:36:30.687000) [+0]
+│  Congratulations on the solo gold! Thank you so much for providing an in-depth report and sharing the notebooks! There's a wealth of valuable information here.
+├─ JM (2023-04-20 06:33:31.090000) [+0]
+│  This is awesome, self attention is one of the first things I went to try but could not get it to work so nice to see you solved it, thanks for the write up!
+│  
+│  Congratulations on solo gold and (soon)...
+  ├─ Dipam Chakraborty (2023-04-20 10:19:33.903000) [+0]
+  │  Thanks, attention definitely, seemed like a more promising idea than using a graphnet, for the reason I described above. Making it work took some time.
+├─ Horikita Saku (2023-04-20 06:21:45.373000) [+0]
+│  Thanks for sharing! I heard the magic of Ensembling using XGBoost for the first time! This is very valuable to learn
+│  Looking forward to your train code.
+│  
+│  (going to sleep before exploring the code
+  ├─ Dipam Chakraborty (2023-04-20 07:41:40.987000) [+1]
+  │  Truly it was quite unexpected, really want to if generally ensembling using decision trees is a thing.

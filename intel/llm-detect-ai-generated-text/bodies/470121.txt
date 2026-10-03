@@ -1,0 +1,227 @@
+# https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/470121
+
+Topic #470121: 1st place short solution summary [Updated with code link]
+  Author: Raja Biswas
+  Posted: 2024-01-23 05:06:25.240000
+  Votes: 203  Comments: 78
+
+Big thanks to the kaggle community for the insightful discussions and innovative ideas, many of which are integrated into our solution. We are pleasantly surprised by the unexpected outcome.  
+
+Links
+
+Please refer to the following resources for our code, config and datasets:
+
+
+
+Repo: https://github.com/rbiswasfc/llm-detect-ai
+
+Inference: https://www.kaggle.com/code/nbroad/r100-ensemble
+
+Datamix: https://www.kaggle.com/datasets/conjuring92/ai-mix-v26
+
+
+Here is a brief writeup on our approach:
+
+
+
+
+Our models are trained on a carefully curated datamix comprising of all prompts in the Persuade corpus, balanced with a significant proportion of general texts.
+
+
+
+For LLM generated essays, we focused on size, diversity and complexity.
+
+We explored a wide range of LLMs, prompts and generation configs to promote diversity. Additionally, we incorporated a subset of the publicly shared datasets into our datamix. Special thanks to @thedrcat and everyone who contributed to the public dataset collection.
+
+Complexity wise, it was important to (1) instruction tune the LLMs on Persuade corpus and (2) generate essays with contrastive decoding.
+
+It was very helpful to include the t5-generated synthetic dataset created and shared as a part of the Feedback 2 competition.
+
+Our datamix contained ~160k examples, out of which ~40k were human written.
+
+
+We used an ensemble of diverse approaches. Instead of raw predictions, we converted them to ranks before blending.
+
+
+Our best model was a (Q)LoRA finetuned mistral model (mistralai/Mistral-7B-v0.1) achieving 0.984 on private &amp; 0.966 on public LB. We used LoRA on QKVO with r=64. We experimented with other LLMs but mistral performed best.
+
+
+We implemented a variation of the ghostbuster approach that produced state-of-the-art results on various LLM text detection benchmarks. The original paper used davinci and ada, but we used llama 7b and tiny llama 1.1B. It scored 0.974 on private &amp; 0.957 on public LB.
+
+
+Inspired by this excellent post by @datafan07 , we decided to train a randomly initialized deberta-v3-small with custom vocabulary from scratch during inference run. We derived a custom tokenizer using train + test essays, performed MLM pre-training &amp; subsequent fine-tuning on training datamix enriched with test set pseudo labels generated with our mistral model. It scored 0.943 on private &amp; 0.942 on public LB.
+
+
+Deberta-v3-large models with ranking loss.  It scored 0.963 on private and 0.961 on public LB.
+
+
+A variation of Ahmet's approach. We used confident predictions from the mistral model to do the weak labelling. It scored 0.971 on private &amp; 0.957 on public LB.
+
+
+Thank you @ubamba98 and @nbroad for great collaboration and excellent teamwork!!
+
+Comments:
+├─ Darragh (2024-01-23 08:12:04.867000) [+7]
+│  Really great work @ubamba98 @conjuring92 @nbroad 👏👏
+  ├─ Darragh (2024-01-23 09:40:52.323000) [+5]
+  │  A special request 🙏 … I'd like to test the mistralai/Mistral-7B-v0.1. It would be great if you could share the LORA config, the LR &amp; num_steps or epochs you used to finetune the classifier in t...
+    ├─ Raja Biswas (2024-01-23 10:09:55.857000) [+4]
+    │  yes, we basically used MistralForSequenceClassification. Will share the configs on detailed writeup! 🙂
+    ├─ Raja Biswas (2024-02-03 13:01:08.457000) [+1]
+    │  Hi @darraghdog We shared the solution code and configs here. Sorry for the delay…
+├─ Valentin Werner (2024-01-23 05:56:05.823000) [+5]
+│  Seeing that most your models performed better on private than on lb: what is the key for this? I would not say the private lb had "easier" data, as most my models - even the transformers trained on...
+  ├─ Udbhav Bamba (2024-01-23 06:28:31.307000) [+8]
+  │  I think instruction tuning LLMs to generate diverse data with various decoding methods like contrastive search helped us to build robust models.
+    ├─ Raja Biswas (2024-01-23 06:53:44.723000) [+13]
+    │  During our evaluations, we found that our models consistently performed slightly better on private test prompts vs public ones. I think this is mainly due to the dataset composition, where we prior...
+├─ end_of_night.17j03 (2024-01-30 18:51:26.277000) [+3]
+│  Impresive!!!!!!!!
+├─ Ellison (2024-01-23 15:05:43.123000) [+3]
+│  Congratulations and thanks for all the great insights!
+│  Interesting to see that all the success was a result of curating a good set of training data, and not some special tricks or forensic explorat...
+├─ moth (2024-01-23 12:45:08.797000) [+4]
+│  Congratulations Raja and team! I had this same idea but I didn't know how to do it:
+│  
+│  
+│    
+│  Inspired by this excellent post by @datafan07 , we decided to train a randomly initialized deberta-v3-small ...
+  ├─ Raja Biswas (2024-01-23 15:05:52.027000) [+2]
+  │  Thanks @alejopaullier! Indeed, I just noticed your PL idea as well here. For the custom tokenizer, we used a small persuade specific vocabulary (4096 tokens) and trained DebertaV2Embeddings layer w...
+    ├─ moth (2024-01-23 15:07:51.690000) [+1]
+    │  Awesome, I look forward to it!
+├─ Amed (2024-01-23 08:57:43.247000) [+4]
+│  Congratz  @conjuring92 and your team! 
+│  Thanks for the short summary (the finetuned Mistral model seems to be the key, can't wait to read more about it)
+├─ AmartyaPandey76 (2024-01-30 09:13:40.727000) [+1]
+│  congratulations
+├─ Shubham soni111 (2024-01-29 13:38:23.693000) [+1]
+│  congratulations
+├─ Panda-monium (2024-01-29 13:13:23.833000) [+1]
+│  Congratulations!🎉
+├─ Dudler (2024-01-29 08:21:40.870000) [+1]
+│  Congratulations!
+├─ wajyjpku (2024-01-29 06:54:35.600000) [+1]
+│  Looking forward to the latest public plan
+├─ Ashikha (2024-01-29 06:04:25.593000) [+1]
+│  Congrats!! Great going
+├─ STEPHENCAI (2024-01-29 02:57:58.810000) [+1]
+│  Congratulations Congratulations
+├─ dirkphilip (2024-01-28 20:33:22.947000) [+1]
+│  Congratulations!
+├─ Reera Shivani (2024-01-28 14:08:10.123000) [+1]
+│  Congratulations
+├─ yash bhaskar (2024-01-28 00:48:33.113000) [+1]
+│  Congratulations!!!
+├─ Disha Agarwal (2024-01-27 18:23:49.047000) [+1]
+│  Congratulations
+├─ Alex (2024-01-27 12:30:37.373000) [+1]
+│  Congratulations!
+├─ swordsman (2024-01-26 14:35:59.803000) [+1]
+│  Congratulations
+├─ uzimihs (2024-01-26 10:53:57.787000) [+1]
+│  Congratulations
+├─ Chrysotil (2024-01-24 23:55:59.993000) [+1]
+│  Congratulations!
+├─ Daeeon_H (2024-01-24 13:20:30.877000) [+1]
+│  This is great. Thank you for sharing it.
+├─ Zinu Will (2024-01-24 06:44:53.897000) [+1]
+│  Wow, incredible work, team! Excited to see your detailed write-up and learn from your method. Congrats on the well-deserved win!
+├─ Sanidhya Madhav Shukla (2024-01-24 05:46:29.680000) [+1]
+│  Congratulations
+├─ Yaroslav Khnykov (2024-01-23 18:46:37.157000) [+1]
+│  Congratulations! Your team has done an amazing job
+│  
+│  Could you explain how the ranking problem was set and what kind of loss was used for deberta models training?
+  ├─ Udbhav Bamba (2024-01-23 19:02:52.923000) [+3]
+  │  We made random Human vs AI pairs ~200K then Margin Ranking Loss was used to segregate Human from AI.
+    ├─ DJ_Xia (2024-01-25 13:58:45.233000) [+0]
+    │  We have the same Margin Ranking Loss pipline, but with prompts for training. Eager to see how your pipline works
+├─ AIFIRST (2024-01-23 16:23:27.383000) [+1]
+│  Congratulations to you, and thank you for sharing. Could you open-source your training dataset?
+├─ Marek Nurzynski (2024-01-23 16:21:25.137000) [+1]
+│  Congratulations, Gratulacje :) Marek
+├─ Patrick Chan (2024-01-23 14:53:50.013000) [+1]
+│  Congratulations Raja and team! We also tried ghostbuster and deepfake in the wild models early but do not have the time to explore deeper. Had to focus on diversity in feature and models to have st...
+  ├─ Raja Biswas (2024-01-23 15:11:40.210000) [+0]
+  │  Thanks @drpatrickchan! Congratulations to you too!
+├─ Ms. Nancy Al Aswad (2024-01-23 14:27:44.947000) [+1]
+│  Congrats @conjuring92 and to your team!
+├─ [deleted] (2024-01-23 14:22:38.003000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 14:06:49.457000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 12:08:29) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 11:58:38.517000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 11:18:03.510000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 10:58:39.097000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-23 11:48:21.453000) [+3]
+  │  [deleted]
+├─ [deleted] (2024-01-23 09:49:04.160000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-23 12:14:33.460000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-23 09:35:55.957000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-01-23 12:05:38.650000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-01-23 12:09:01.443000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-23 09:28:26.680000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 09:23:19.567000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-23 09:13:53.920000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-02 09:31:23.780000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-02-03 13:11:40.270000) [+5]
+  │  [deleted]
+├─ [deleted] (2024-01-24 22:49:32.810000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-23 14:22:43.790000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-23 15:09:24.180000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-23 08:49:21.910000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-23 10:18:26.250000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-23 06:35:45.223000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-23 06:01:13.817000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-23 05:51:11.283000) [+2]
+│  [deleted]
+├─ [deleted] (2024-01-23 05:14:53.683000) [+2]
+│  [deleted]
+├─ [deleted] (2024-09-27 04:33:28.587000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-11 12:48:07.447000) [+0]
+│  [deleted]
+├─ [deleted] (2024-03-13 13:57:42.723000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-31 22:25:18.140000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-24 17:31:42.623000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-01-24 18:28:56.567000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-01-25 11:57:10.323000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-24 15:21:05.607000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-23 08:22:17.590000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-26 01:33:26.423000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-25 09:01:06.390000) [+1]
+│  [deleted]
+├─ [deleted] (2024-01-24 15:22:57.760000) [+1]
+│  [deleted]
+├─ [deleted] (2024-09-25 18:56:46.747000) [+0]
+│  [deleted]

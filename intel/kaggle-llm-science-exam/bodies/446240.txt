@@ -1,0 +1,269 @@
+# https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446240
+
+Topic #446240: 1st place Short Solution Summary
+  Author: Psi
+  Posted: 2023-10-11 00:26:22.532000
+  Votes: 239  Comments: 79
+
+Wow, what an insane win for us, and what a relief after being so long on top. This was probably one of our most competitive competitions we have participated in.
+
+We discovered the RAG approach very early in the comp, which is why we were up high from the start. We had a 0.930 private LB sub 30 days ago! We had 0.99+ CV score on the 200 samples also very early - they are too easy to be reliable.
+
+The issue is that there is a theoretical limit of score you can achieve, because GPT 3.5 makes a certain percentage of errors when marking the answers. It was for us even easier to go to 0.93x on public LB than going to 0.940, this was a very hard effort to grind these last points out and took us several weeks, but paid off to get us the win.
+
+This score ceiling did not make it a fun thing to watch everyone climb close to us :)
+
+Here are some rough details:
+
+
+
+RAG on Wikipedia chunks
+
+Public embedding models, e5 worked best for us
+
+Custom pytorch cosine similarity code, no need for FAISS etc. - can just do it without any memory issue in chunks on GPU
+
+Using five chunks as context was best for us with 1k max_length
+
+Mostly ensemble of 7B LLMs, one 13B is also in, but larger ones were not useful
+
+We tried to make Deberta work, but LLMs were superior, not even helpful in ensemble
+
+Ensemble of different wiki/chunking/embedding techniques with late fusion (i.e. each llm gets a different technique)
+
+All LLMs fine-tuned with H2O LLM Studio with binary classification head
+
+Training data was not too important, we tried a lot there, but just using the early data shared from @radek1 (thanks!) or generating similar one yourself does the job quite well
+
+Two types of model head architectures (details will follow)
+
+Managed to select highest private LB, which is also our highest CV (on a set of 6k samples)
+
+
+Congrats all competitors!
+
+Longer solution writeup: https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446422
+
+Comments:
+├─ CPMP (2023-10-11 01:00:39.527000) [+16]
+│  It is great that the competition is not won by a Deberta pipeline. This would have been depressing to me!
+  ├─ Chan Kha Vu (2023-10-11 02:31:32.127000) [+2]
+  │  Fully agree @CPMP! I knew they were doing something different, and this might be the most exciting write-up in a while.
+    ├─ Pascal Pfeiffer (2023-10-11 05:40:37.273000) [+12]
+    │  I was super excited to finally have a worthy oppenent to deberta. Even crazier, that with caching, the inference is quicker for a 7B autoregressive model than for the much smaller deberta. 
+    │  
+    │  We wer...
+    ├─ CPMP (2023-10-11 08:13:57.403000) [+4]
+    │  I tried both Deberta and 70B, and I was stupid enough to not explore the middle sweet spot. Well done again!
+    │  
+    │  Well, to be accurate I tried to finetune a 13B model and could not improved it really, ...
+    ├─ CPMP (2023-10-11 13:45:55) [+1]
+    │  the inference is quicker for a 7B autoregressive model than for the much smaller deberta. 
+    │  
+    │  
+    │  Really?  I run Deberta in 15 minutes on the test data here. Psi said your 7B take 1 hour to run.
+    ├─ Psi (2023-10-11 14:32:32.543000) [+2]
+    │  Deberta-large in 15min with long context? Runtime depends a lot on context max_len. My reference is around 1hr for 5 chunk context with 1k max_len and another 1k max_len for answers.
+    ├─ CPMP (2023-10-11 17:23:08.670000) [+0]
+    │  ok, I think I have 1k max total. 2k leads to 4x time, but not for all input. Anyway, this would move deberta closer to your 7B model running time. I'm not motivated enough to test now…
+    ├─ Pascal Pfeiffer (2023-10-11 17:46:17.783000) [+0]
+    │  Take my statement with a bit of doubt. I am sure both approaches were not optimized to the very end and we certainly optimized our LLM pipeline more than the deberta pipeline. 
+    │  
+    │  Still, the runtime ...
+├─ Yauhen Babakhin (2023-10-16 16:43:14.957000) [+13]
+│  We have shared our inference code:
+│  
+│  
+│  
+│  A winning kernel with 0.939 Public and 0.933 Private: https://www.kaggle.com/code/ybabakhin/1st-place-team-h2o-llm-studio
+│  
+│  A single model with 0.930 Public and...
+  ├─ Cody_Null (2023-10-16 16:57:29.930000) [+3]
+  │  Being able to win the competition with a single model WOW! I cant wait to dive into this. Thank you for sharing and congrats on the win!
+    ├─ Yauhen Babakhin (2023-10-16 17:01:35.797000) [+5]
+    │  Thanks!
+    │  
+    │  Yeah, it is a single Mistral-7B-OpenOrca, but it uses two retrieval models: e5-large and gte-large
+  ├─ Chan Kha Vu (2023-10-16 20:27:08.543000) [+2]
+  │  The code for single model is so short, that's incredible!
+  ├─ corochann (2023-10-16 20:35:02.763000) [+3]
+  │  Surprised to see such a clean code with only 2 embeddings + 1 model can already achieve top 1 score…
+  │  Thanks for sharing!
+├─ Sanyam Bhutani (2023-10-11 03:02:23.770000) [+9]
+│  What a legendary win by Team H2O LLM Studio! 🙏
+│  
+│  Congratulations on absolutely dominating the top from start to end-this is so rare to witness
+├─ @kaggleqrdl (2023-10-11 00:35:24.753000) [+8]
+│  Congratulations!
+│  
+│  Part of the problem we're going to run into here, is that we don't know which is doing which.  Was the score mostly retrieval, mostly llm?   Or a balance of both?  The conflation ...
+  ├─ @kaggleqrdl (2023-10-11 00:42:05.507000) [+0]
+  │  Not sure why the downvote.  This wasn't meant as a criticism for philip, or even the comp.  
+  │  
+  │  It's just how do we evaluate the contribution to the final score of each part of the pipeline?
+    ├─ CPMP (2023-10-11 00:51:33.233000) [+0]
+    │  Why don't you wait for the full writeup before criticizing?
+    ├─ @kaggleqrdl (2023-10-11 01:01:41.773000) [+1]
+    │  @cpmpml You don't like reading my posts before replying, do you.  
+    │  
+    │  " This wasn't meant as a criticism for philip, or even the comp."
+    │  
+    │  How is it possible to disentangle the contribution?  I'm not s...
+    ├─ CPMP (2023-10-11 01:38:46.690000) [+2]
+    │  I read your post. Sorry.
+    │  
+    │  You replied to Philipp with some criticism. Then you ask why you get some downvote. I then tried to explain why you get downvoted.
+    │  
+    │  Anyway, I am not the one who downvoted ...
+  ├─ Pascal Pfeiffer (2023-10-11 07:07:32.883000) [+5]
+  │  Every part was important somehow. Though, you can get good results without RAG, it definitely gave a huge boost (maybe ~0.1) to treat it as an open book task. 
+  │  Using LLM over deberta was around the...
+├─ Chris Deotte (2023-10-12 00:24:16.193000) [+1]
+│  Amazing job Psi and team. Impressive performance maintaining 1st place public LB for the entire competition and avoiding shakeup to achieve 1st place private LB!
+│  
+│  I like your solution and use of GP...
+  ├─ Pascal Pfeiffer (2023-10-12 08:35:34.547000) [+4]
+  │  Thank you @cdeotte !
+  │  We explored both, deberta models and various LLMs. Deberta usually was ~0.01 worse for us on LB while not being faster if caching was used for the LLMs. So, at some point we ju...
+├─ Muhammed Tausif (2023-10-11 15:10:55.173000) [+1]
+│  Congr Legend @philippsinger 🥳
+├─ Zirui Song (2023-10-11 12:00:28.323000) [+1]
+│  Congratulations! we still struggled on deberta-v3. Waiting for you LLM fine-tune solution.🥺
+├─ Konrad Wojtasik (2023-10-11 10:51:43.980000) [+1]
+│  Great Job! Congratulations! I was nearly sure that deberta with some extra training data would win this competition, happy that I was wrong.
+├─ Yutao (2023-10-11 01:00:23.380000) [+1]
+│  Congrats! You will probably write this up with details later. But keen to see what is the 6k samples you use for CV.
+├─ william.wu (2023-10-11 00:33:02.267000) [+1]
+│  Congrats @philippsinger! Ensembling of 7B LLMs! That's amazing! How do you manage to do this given the 9-hour running time?
+  ├─ Gaurav Rawat (2023-10-11 00:43:57.363000) [+0]
+  │  had same question .. infer took like us with similar classification head like 5 hours for 1 7b
+  ├─ @kaggleqrdl (2023-10-11 00:48:48.153000) [+0]
+  │  Maybe different finetune heads.  Makes sense.   Though, if that's the case, it's more like 1 6B model and 7 different 1B models.  
+  │  
+  │  Or perhaps they just execute them very quickly.  I think we could...
+    ├─ Psi (2023-10-11 00:50:29.580000) [+2]
+    │  one 7b is around 1hr, all separate models
+  ├─ CPMP (2023-10-11 00:52:45.257000) [+5]
+  │  If we can run one 70B model then I would expect we could run 10 7B models.
+  ├─ Yutao (2023-10-11 00:52:51.147000) [+0]
+  │  Wondering the same
+  ├─ Psi (2023-10-11 00:55:11.277000) [+10]
+  │  You can cache the context, the beauty of decoder only models for such use cases.
+    ├─ william.wu (2023-10-11 01:36:19.363000) [+3]
+    │  Thanks @philippsinger , will you share the inference code? That would be an awesome resource for us to learn
+    ├─ Psi (2023-10-11 08:08:51.043000) [+3]
+    │  Yeah, planning on.
+    ├─ CPMP (2023-10-11 08:15:55.533000) [+1]
+    │  @wuwenmin The notebook shared by @simjeg (70B mode) uses the k,v caching that speedups up computation enormously. It enables doing the inference once for the prefix, then a fast inference for each ...
+    ├─ william.wu (2023-10-11 08:35:13.867000) [+2]
+    │  Thanks @cpmpml
+    ├─ [deleted] (2023-10-11 14:39:07.333000) [+0]
+    │  [deleted]
+├─ Cody_Null (2023-10-11 00:30:27.427000) [+1]
+│  The solution we have all been waiting for! I look forward to your writeup and congratulations on your win Team H2O!
+├─ CPMP (2023-10-11 00:29:50.037000) [+1]
+│  Congrats!
+│  
+│  
+│    
+│  Custom pytorch cosine similarity code, no need for FAISS 
+│  
+│  
+│  I started like you but I found that Faiss code is 2x faster than Pytorch
+│  
+│  
+│    
+│  e5 worked best for us
+│  
+│  
+│  Same for me|
+│  
+│  
+│    
+│  Mo...
+  ├─ Psi (2023-10-11 00:32:21.680000) [+12]
+  │  We finetuned all LLMs with LORA and classification head with certain types of poolings. Will try to elaborate on this with more detail in next 1-2 days.
+    ├─ Gaurav Rawat (2023-10-11 00:43:01.160000) [+1]
+    │  congrats some of these approaches we also tried , torch cosine sim , just not able fit on time and got mem isseus on our side and,
+    │   Llama 7b with finetuned with custom classification head, that wor...
+├─ Psi (2023-10-11 16:17:28.703000) [+2]
+│  Please find the more thorough solution now here: https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446422
+├─ corochann (2023-10-11 07:17:39.777000) [+2]
+│  Congrats! @philippsinger @ybabakhin @ilu000 
+│  
+│  Your scores were so high even at the end of the competition. I'm waiting for the thorough write-up to see what was the biggest difference!
+├─ Jaideep (2023-10-11 05:22:14.773000) [+2]
+│  @philippsinger  congrats ! for your emphatic win  i always knew LLM are used in top solutions, when I read your discussion regarding the LLM in beginning :) 
+│  Unfortunately we spent too long on debe...
+  ├─ Psi (2023-10-11 15:40:34.640000) [+0]
+  │  I have to admit, I was not confident LLMs can outperform Deberta at the beginning of the competition :)
+├─ Yongdam Kim (2023-10-11 00:49:54.233000) [+2]
+│  Congrats!
+│  I think most of us were using deberta-v3, but it's impressive that you came out on top with a 7B LLM ensemble. I look forward to seeing your solution soon!
+│  
+│  I can't wait to study LLM fine...
+├─ Yasmin Mulla (2023-10-11 15:13:38.453000) [+0]
+│  **Congrats!  @ybabakhin @ilu000  @philippsinger **
+├─ Shivansh Jha (2025-07-03 07:50:23.777000) [+0]
+│  wow you make is sound so easy , I wish to work with people like your team and  become a ML enthu like you one day ❤️
+├─ Atefehnourmohammadi (2023-10-20 18:41:37.270000) [+0]
+│  The code is so short, that's very prctical!
+├─ Stephanie Zhou (2023-10-17 13:08:16.797000) [+0]
+│  Congratulations! Amazing work!
+├─ Gelivi Jagadeesh (2023-10-17 07:52:55.703000) [+0]
+│  Congrats for the team @Team H2O LLM Studio
+├─ Gabor Rozsa (2023-10-17 05:59:53.880000) [+0]
+│  Congratulations!
+├─ Yaohui Han (2023-10-17 00:29:23.500000) [+0]
+│  Congratulations!
+│  And I think that is the solution we are all searching for!
+├─ Diego Cardona Pineda (2023-10-16 21:38:28.330000) [+0]
+│  Congratulation H2O team! can you tell me how were the tasks distributed? for me that is a important point for work in group and I want learn about that. @philippsinger
+├─ Geordan Sanchez (2023-10-16 20:30:08.423000) [+0]
+│  Well done!
+├─ Explorer (2023-10-16 09:27:03.647000) [+0]
+│  Great one !!
+├─ Gopal Choudhary1 (2023-10-16 05:23:15.807000) [+0]
+│  Congratulations…
+├─ Muhammad Saad Khan (2023-10-13 16:03:19.300000) [+0]
+│  Congratulations Psi and Team
+├─ mayank dhunna (2023-10-13 05:49:32.913000) [+0]
+│  Congrats!
+├─ [deleted] (2023-10-13 03:46:18.993000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-12 18:19:30.967000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 23:13:20.100000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 19:29:35.637000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 17:43:09.370000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 16:05:11.010000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 02:48:05.063000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 02:39:26.560000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 02:17:27.130000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 02:13:30.433000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 01:51:25.407000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 01:38:47.723000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 01:28:01.110000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 01:14:33.277000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 00:47:17.537000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 00:30:08.777000) [+0]
+│  [deleted]
+├─ [deleted] (2023-11-04 13:34:35.367000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-21 09:07:12.983000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-11 14:29:27.873000) [+0]
+│  [deleted]

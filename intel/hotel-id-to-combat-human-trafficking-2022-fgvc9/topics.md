@@ -1,0 +1,31 @@
+# hotel-id-to-combat-human-trafficking-2022-fgvc9 讨论区（按票数排序，共 29 条）
+
+- [1st place solution - New augmentation method + 5 model ensemble](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/328281) — 30 票 / 8 评论 / 2022-05-31 **write-up?**
+- [No medals, points, prizes for this serious issue?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/314885) — 26 票 / 8 评论 / 2022-03-25 
+- [Public/Private 3rd Solution](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/328237) — 16 票 / 8 评论 / 2022-05-31 **write-up?**
+- [Has past versions of this competition been useful for combatting human trafficking?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/316799) — 16 票 / 3 评论 / 2022-04-04 
+- [✨ Previous Human Trafficking Resource ✨](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/313362) — 16 票 / 1 评论 / 2022-03-16 
+- [Res-Net, U-Net, CNN. Image Segmentation.](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/314475) — 12 票 / 9 评论 / 2022-03-22 
+- [2nd solution](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/328345) — 11 票 / 0 评论 / 2022-06-01 **write-up?**
+- [Separation of Room Types](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/321484) — 8 票 / 2 评论 / 2022-04-27 
+- [Starter notebook - classification](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/314862) — 7 票 / 5 评论 / 2022-03-24 
+- [Use of External Data Sets](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/317922) — 7 票 / 8 评论 / 2022-04-09 
+- [A truly spectacularly failed approach](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/318260) — 7 票 / 3 评论 / 2022-04-11 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/314422) — 6 票 / 2 评论 / 2022-03-22 
+- [How do you use the masks provided in the dataset?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/313547) — 6 票 / 12 评论 / 2022-03-17 
+- [Can Kaggle give credit to such competitions?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/327993) — 5 票 / 7 评论 / 2022-05-30 
+- [Duplicate images in dataset?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/324699) — 5 票 / 3 评论 / 2022-05-12 
+- [Source for Hotels-50K](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/319203) — 4 票 / 2 评论 / 2022-04-15 
+- [How to build the submission.csv with secret dataset](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/314661) — 4 票 / 5 评论 / 2022-03-23 
+- [Score of 0.175](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/317540) — 3 票 / 0 评论 / 2022-04-07 
+- [What are your augmentations, and how fast?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/316410) — 3 票 / 2 评论 / 2022-04-01 
+- [All masks have Retangular/Square shape?  Kaggle Segmentation Masks competitions.](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/313946) — 3 票 / 0 评论 / 2022-03-19 
+- [Similar Past Kaggle Competitions](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/318327) — 2 票 / 0 评论 / 2022-04-11 
+- [How do you approach the gap in scoring performance?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/317630) — 2 票 / 2 评论 / 2022-04-08 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/313397) — 2 票 / 0 评论 / 2022-03-16 
+- [Submission Blocked](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/326713) — 1 票 / 3 评论 / 2022-05-24 
+- ["Submission scoring error": use "image_id", not "image"](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/324704) — 1 票 / 0 评论 / 2022-05-12 
+- [Submitted notebook can't access any test images except abc.jpg](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/322383) — 1 票 / 3 评论 / 2022-05-01 
+- [The Mask R-CNN Method. Is it supported by TensorFlow 2.0?](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/314028) — 1 票 / 2 评论 / 2022-03-20 
+- [Submission title](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/320132) — 0 票 / 0 评论 / 2022-04-20 
+- [How to use so many masks](https://www.kaggle.com/competitions/hotel-id-to-combat-human-trafficking-2022-fgvc9/discussion/318679) — 0 票 / 1 评论 / 2022-04-13 

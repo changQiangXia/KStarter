@@ -1,0 +1,108 @@
+<p>First of all, I’d like to express my gratitude to Kaggle and Jigsaw ACRC for organizing and hosting this fascinating competition.</p>
+<p>I made public my top submission: <a href="https://www.kaggle.com/code/socom20/t73t74-ens-7b-9b-unsloth-qwen14bx4-qwen8bx1-qwen7" target="_blank">notebook</a>.</p>
+<h1>This solution is based on these ideas</h1>
+<ul>
+<li>Since many rules were hidden, I relied on Test-Time Training (TTT) to fit models during inference time.</li>
+<li>I built a strong ensemble of models that can outperform every single model and can withstand the score variations between the public and private leaderboards.</li>
+<li>All the models and the final ensemble were validated against the Public LB.</li>
+<li>I fitted as many models as possible during the 12-hour inference window.</li>
+<li>The final ensemble was composed of 2 sub-ensembles:</li>
+</ul>
+<ol>
+<li><em>slow ensemble</em>: composed of LLMs: 2x<code>Qwen2.5-instruct-14b</code>, 2x<code>Qwen2.5-instruct-7b</code>, 2x<code>Qwen3-instruct-14b</code> and 2x<code>Qwen3-instruct-8b</code>.</li>
+<li><em>fast ensemble</em>: composed of faster models: 2x<code>bge-base-v1.5</code>, <code>Qwen3-embedding-0.6b</code> and <code>DeBERTa-v3-small</code>.</li>
+</ol>
+<h1>Training Methods</h1>
+<ul>
+<li>To perform the pretraining and the TTT a new dataset was built using all the rules, bodies/examples and their corresponding known target.</li>
+<li>The column <code>subreddit</code> was discarded. It proved to be unhelpful during both the pretraining and TTT phases.</li>
+<li>The pretraining phase was carried out using this <a href="https://www.kaggle.com/code/socom20/jigsaw-pretraining-v82?scriptVersionId=271410187" target="_blank">notebook</a>.</li>
+</ul>
+<h2>Slow ensemble</h2>
+<ul>
+<li>The LLMs were pretrained during 1 epoch of training using the public dataset.</li>
+<li>The LLMs pretraining was done in a zero-shot fashion, using the following prompt:<ul>
+<li>System prompt: <code>"You are given a comment on reddit. Your task is to classify if it violates the given rule. Only respond Yes or No.\nRule: {rule_str}"</code></li>
+<li>User prompt: <code>“1. ```{example_body_str}```\nViolation:{answer_str}”</code></li></ul></li>
+<li>The outputs of the pretraining phase were LoRA weights. These weights were used later to set the starting point of the TTT phase. This approach helped the models to achieve a better performance during TTT since all the LoRAs already knew the competition’s task and the prompt used. </li>
+<li>I used Unsloth lib to train the LLMs during pretraining and TTT. Unsloth gave me the opportunity to place one model per GPU (T4) and to perform training in parallel.</li>
+<li>Inference was performed using vLLM, and the outputs consisted of the embeddings of the last token.</li>
+<li>To fit all the models within the 12-hour inference window, I merged the weights of the two LoRAs for <code>Qwen2.5-instruct-7b</code> and ran inference as a single model. The same approach was applied to the two <code>Qwen3-instruct-7b</code> models.</li>
+<li>During TTT, I used the final LoRAs to perform inference on both the training and test datasets. The outputs were the embeddings of the final "Violation:" token.</li>
+<li>These embeddings were used to fit a cross-validated batch of classic machine learning (ML) models (<code>LightGBM</code>, <code>XGBoost</code> and <code>SVC</code>). The idea behind this was to use the training dataset (used during TTT) to train these ML models to output a probability that could be ensembled with the corresponding probabilities from the other models.</li>
+</ul>
+<h2>Fast ensemble</h2>
+<ul>
+<li>All the models in the fast ensemble didn’t have a pretraining phase and they were only trained during TTT.</li>
+</ul>
+<h3>bge-base-en-v1.5:</h3>
+<ul>
+<li><code>bge-base-en-v1.5</code> model was trained using Triplet Loss as suggested in the public <a href="https://www.kaggle.com/code/datafan07/jigsaw-speed-run-10-min-triplet-and-faiss" target="_blank">notebook</a>.</li>
+<li>I trained two versions of this model: one using the rules as given (<em>NormalRules</em>) and the other with the rules flipped (<em>FlippedRules</em>) (for example, instead of saying “do not give legal advice,” I negated the rule to “give legal advice”).<ul>
+<li><em>NormalRules</em> version: the positive sample in the triplet loss was an example with no rule violation, the negative sample was an example with rule violation, and the anchor was the rule.</li>
+<li><em>FlippedRules</em> version: the examples were inverted: the positive sample in the triplet loss was an example with rule violation, the negative sample was an example with no rule violation, and the anchor was the inverted rule.</li></ul></li>
+<li>After the training, the final model was used to produce embedding for all the examples and the bodies in the dataset. I calculated the positive and negative centroid embeddings and compose the final embedding as:
+<code>final_embedding = concat([body_embeddings - positive_examples_centroid_embedding, body_embeddings - negative_examples_centroid_embedding])</code></li>
+<li>Using these embeddings a new set of ML models was fitted to predict rule violations. The final predictions were used to feed the fast ensemble.</li>
+</ul>
+<h3>Qwen3 embedding 0.6b</h3>
+<ul>
+<li>I trained a LoRA to predict rule violation using ArcFace loss, the output classes were only two: <code>rule_violation</code>, <code>no_rule_violation</code> (I also tried other configurations with more classes, for instance, one class per rule, but these didn’t work well in my tests).</li>
+<li>As input for this model I used only the body (I also trained to use <code>'{rule}: {body}'</code> as input,  but it didn’t improve the score).</li>
+<li>I used mean pooling to extract embeddings from all bodies and examples in both the training and test datasets.</li>
+<li>Using these embeddings, a new set of ML models was trained to predict rule violations for each rule. The resulting predictions were then used as input for the fast ensemble.</li>
+</ul>
+<h3>DeBERTa v3 small</h3>
+<ul>
+<li>To train the DeBERTa v3 small model I used cross entropy loss and extracted embeddings from the first token (<code>[CLS]</code> token).</li>
+<li>As input for this model I used <code>'{rule}[SEP]{body}'</code>.</li>
+<li>Using these embeddings a new set of ML models was fitted to predict rule violations. </li>
+<li>The probabilities obtained from the ML model were averaged with the output probabilities of the DeBERTa model. The final predictions were used to feed the fast ensemble.</li>
+</ul>
+<h2>Partial Ensemble Scores</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Public Score</th>
+<th>Private Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2x<code>Qwen2.5-instruct-14b</code></td>
+<td>0.90828</td>
+<td>0.90248</td>
+</tr>
+<tr>
+<td>2x<code>Qwen3-instruct-14b</code></td>
+<td>0.92571</td>
+<td>0.92049</td>
+</tr>
+<tr>
+<td>2x<code>Qwen2.5-instruct-7b</code></td>
+<td>0.91024</td>
+<td>0.90637</td>
+</tr>
+<tr>
+<td>2x<code>Qwen3-instruct-8b</code></td>
+<td>0.89598</td>
+<td>0.88969</td>
+</tr>
+<tr>
+<td>2x<code>bge-base-v1.5</code></td>
+<td>0.90952</td>
+<td>0.89714</td>
+</tr>
+<tr>
+<td><code>Qwen3-embedding-0.6b</code></td>
+<td>0.88856</td>
+<td>0.88021</td>
+</tr>
+<tr>
+<td><code>DeBERTa-v3-small</code></td>
+<td>0.89546</td>
+<td>0.88946</td>
+</tr>
+</tbody>
+</table>

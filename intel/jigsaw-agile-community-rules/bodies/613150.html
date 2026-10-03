@@ -1,0 +1,136 @@
+<p>First, I’d like to thank the organizers for hosting such an amazing LLM competition. Huge thanks also to my teacher, <a href="https://www.kaggle.com/justmarkham" target="_blank">@justmarkham</a> - your online data science education has been invaluable, and I couldn’t have done this without you.</p>
+<h1>Summary</h1>
+<p>For this competition, I fine-tuned 3 LLMs from the Qwen3 family for text classification using <strong>Deep Mutual Learning (DML)</strong>, and applied weighted ensembling to improve robustness and stability.</p>
+<h1>Input Data</h1>
+<p>Test positive and negative examples, along with their rules, were used for training and formatted into the following prompt template:</p>
+<pre><code>prompt = f"""&lt;|im_start|&gt;user
+You are given a Reddit comment and a specific subreddit rule. Your task is to decide if the comment violates the rule. Respond only with "Yes" or "No".
+
+Rule: {RULE_HERE}
+
+Now, here is the comment to classify:
+"{COMMENT_HERE}"
+
+Answer "Yes" if it violates the rule, otherwise "No".&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+&lt;think&gt;
+
+&lt;/think&gt;
+
+Answer:"""
+</code></pre>
+<h1>Models</h1>
+<ul>
+<li><strong>Models for experimentation:</strong> <code>Qwen3-14B</code> and <code>Qwen2.5-14B-Instruct</code></li>
+<li><strong>Models for final submission:</strong> <code>Qwen3-14B</code>, <code>Qwen3-8B</code>, and <code>Qwen3Guard-Gen-4B</code></li>
+</ul>
+<h1>Early Competitive Submission</h1>
+<p>Training single Qwen3-14B on test examples, quickly get </p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Public Score</th>
+<th>Private Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qwen3-14B</td>
+<td>0.925</td>
+<td>0.921</td>
+</tr>
+</tbody>
+</table>
+<h1>Deep Mutual Learning</h1>
+<p>Paper: <a href="https://arxiv.org/abs/1706.00384" target="_blank">Deep Mutual Learning (arXiv:1706.00384)</a></p>
+<p>With only 2 T4 GPUs, using a larger teacher model to improve the 14B model’s performance is not feasible. Offline distillation could be attempted, but it only covers 2 out of the 6 known rules in the training set. To achieve the best overall score, knowledge distillation needs to incorporate all rules.</p>
+<p>Classic logits-based knowledge distillation poses a challenge in this competition because the teacher’s softmax outputs are extremely sharp, almost identical to one-hot labels. Applying temperature scaling to soften them is ineffective.</p>
+<p>Under these constraints, a more practical approach is <strong>Deep Mutual Learning (DML)</strong>, an online distillation method where multiple peer student models of similar or smaller size learn from each other simultaneously. This enables effective knowledge transfer without a larger teacher, simply by adding a <strong>Kullback-Leibler (KL) divergence loss</strong> to the standard classification cross-entropy.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10714081%2Fa5804528660ba5def70f98e39c3e1f17%2Fdml.PNG?generation=1761313506467940&amp;alt=media" alt=""></p>
+<p>The advantage of DML is that it removes the need for a larger and stronger teacher by allowing models to learn from each other’s soft predictions rather than hard labels. This process enriches supervision, adds implicit regularization, and encourages smoother decision boundaries. Each peer model effectively gains extra capacity from the knowledge shared by the other, leading to more stable optimization and better generalization. This makes DML especially valuable in LLM competitions or modern industry environments, where hardware constraints often prevent training or deploying a large teacher model, yet effective knowledge transfer and robust performance remain essential.</p>
+<h1>Effect of DML on Qwen3-14B &amp; Qwen2.5-14B Performance</h1>
+<p><em>Peer Students: Qwen3-14B, Qwen2.5-14B-Instruct</em></p>
+<table>
+<thead>
+<tr>
+<th>Training Type</th>
+<th>Model</th>
+<th>Public Score</th>
+<th>Private Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Independent</td>
+<td>Qwen3-14B</td>
+<td>0.925</td>
+<td>0.921</td>
+</tr>
+<tr>
+<td>Independent</td>
+<td>Qwen2.5-14B-Instruct</td>
+<td>0.923</td>
+<td>0.919</td>
+</tr>
+<tr>
+<td>DML</td>
+<td>Qwen3-14B</td>
+<td><strong>0.929</strong></td>
+<td><strong>0.925</strong></td>
+</tr>
+<tr>
+<td>DML</td>
+<td>Qwen2.5-14B-Instruct</td>
+<td><strong>0.929</strong></td>
+<td><strong>0.924</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>Ensembles</h2>
+<table>
+<thead>
+<tr>
+<th>Ensemble Type</th>
+<th>Public Score</th>
+<th>Private Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DML models</td>
+<td><strong>0.932</strong></td>
+<td><strong>0.9271</strong></td>
+</tr>
+<tr>
+<td>Independently trained models</td>
+<td>0.929</td>
+<td>0.925</td>
+</tr>
+</tbody>
+</table>
+<p>DML consistently improves performance for both Qwen3-14B and Qwen2.5-14B, with notable gains in private scores and ensemble results, demonstrating its effectiveness in boosting model generalization.</p>
+<h1>Final Submission</h1>
+<p>While DML adds extra capacity to each model, its co-training process can introduce correlations in the models’ errors. Since diversity is crucial for a strong ensemble,  2 days before the deadline, I decided to create a cohort of 3 models for DML. This approach enhances ensemble diversity and further helps mitigate the one-off mistakes of each “peer” model.</p>
+<p><strong>Performance of the 3-peer ensemble</strong>  </p>
+<p>Peer Students:  <code>Qwen3-14B</code>, <code>Qwen3-8B</code>, <code>Qwen3Guard-Gen-4B</code></p>
+<table>
+<thead>
+<tr>
+<th>Public Score</th>
+<th>Private Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.93237</td>
+<td>0.92781</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F10714081%2F229abd026bb5a70d8b942325659ecc89%2Fselected_submission.PNG?generation=1761904642285377&amp;alt=media" alt=""></p>
+<h1>Model Execution Time</h1>
+<ul>
+<li><strong>Training:</strong> Three models were trained together in a single DML process, taking about 5 hours.  </li>
+<li><strong>Inference:</strong> After training, each model was run sequentially to generate predictions for ensembling. The test data was split in half, keeping the distribution of sequence lengths similar in both halves to balance GPU workloads. Each half was then sorted by length for efficient batch processing and run in parallel across 2 GPUs. The entire inference process took around 5 hours.</li>
+</ul>

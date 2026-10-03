@@ -1,0 +1,104 @@
+<p><em>First, we would like to thank the Armed Forces of Ukraine, Security Service of Ukraine, Defence Intelligence of Ukraine, State Emergency Service of Ukraine for providing safety and security to participate in this great competition, complete this work, and help science, technology, and business not stop and move forward.</em></p>
+<p>Also thanks to my teammates (@sakvaua , <a href="https://www.kaggle.com/igorkrashenyi" target="_blank">@igorkrashenyi</a>, <a href="https://www.kaggle.com/alexkirnas" target="_blank">@alexkirnas</a>), Kaggle team and competition organizers for this year HuBMAP + HPA event. It was a great pleasure to compete in order to bring benefit in biomedical sphere!<br>
+According to hosts the main challenge was:</p>
+<pre><code>Adapting models to function properly  presented with  that was prepared using a different protocol will be one of the core challenges of  competition. While   expected to make the problem more difficult, developing models that generalize  a key goal of  endeavor.
+</code></pre>
+<p><br>
+And it was really a key point to Hacking the Human Body this year :) So here is our approach </p>
+<h1>Data</h1>
+<ul>
+<li>Drop some completely (to our point of view) mislabeled lungs. IDS. Later the organizers clarified that those ids are not mislabeled but rather represent a different way to section alveoli. Anyway there were too few of them to be useful and they confused our models without providing any meaningful new data. So we decided to focus on the horizontally sectioned alveoli that look like bubbles.</li>
+</ul>
+<pre><code>, , , , , , , , ,,, ,, , 
+</code></pre>
+<p>Lately we have pseudo-labeled it and added again to training </p>
+<ul>
+<li>One of key points was adapting to wildly varying pixel sizes. The images scales ranged from 6.3um for prostate and down to 0.2um/pixel for large intestine. We tackled this issue by rescaling our train dataset to the target HuBMAP resolution. Though to increase the model’s receptive field we applied additional downscalers for larger images and upscalers for the prostate. <br>
+We used one dataset rescaled to HuBMAP scales and another dataset with the original HPA scales. The latter one was not only important for HPA predictions (absent in the private LB) but also to provide some additional scaling information to the model. <br>
+Here is our additional rescaling dict (original scale / additional scale). </li>
+</ul>
+<pre><code>:  * ,
+:  * ,
+:  * ,
+:  * ,
+:  * ,
+</code></pre>
+<ul>
+<li>One important aug was CutMix. We have used pretty aggressive CutMix ("prob": 0.5, "alpha": 1.0)  though the trick here was to apply CutMix only within the single organ class.</li>
+<li>We have trained CNN based models on 512 crops and segformer on 1024 crop. As for segformer bigger training crop it was pretty important, because results on 512 crop were much worse. While increasing training crop size for CNN - increased local validation but decreased HubMap LB score. Also we have sampled Non Empty Mask with probability 0.5</li>
+<li>Also we have used pretty heavy augs - Geometric, Color, Distortions, Scales. The overall pipeline is really long :). And it might be the key point to model performance and stability on. The main idea behind the color augmentation was to suggest the model that the color is not important and it had to look for the other clues</li>
+<li>To deal with the color shift between the DAB and H&amp;E stains we used Histogram Matching of training pictures to H&amp;E stained GTEX and HubMap images. We have used Historgram Matchin for all the images.</li>
+</ul>
+<h2>Pseudo/Additional Data</h2>
+<p>We used additional data from GTEX and HPA portals to complement the initial training data. The GTEX data was especially important here because it was stained, similar to HuBMAP slides, with H&amp;E. From GTEX we downloaded prostate, large intestine, kidneys and spleen data for patients with no apparent pathologies. We ignored lungs from GTEX as we couldn’t figure out how to segment those (and neither did our model). We were progressively adding GTEX images to our pipeline ending up with around 140 at the end of the competition. And pseudo labeled them with the same ensemble, as HPA<br>
+From the HPA site we used a plethora of DAB stained slide very similar to those provided by organizers. Overall, we have added between 57-61K of additional HPA images for each organ. <br>
+We pseudo labeled all the external data with our ensamples, which scored 0.59 on HubMap and 0.81 on HPA+HubMap LB.<br>
+For selecting particular pseudo images for labeling we were inspired by <a href="https://arxiv.org/pdf/1904.04445.pdf%3C/p%3E" target="_blank">Semi-Supervised Segmentation of Salt Bodies in Seismic Images using an Ensemble of Convolutional Neural Networks</a>. We did not select best labels but just randomly sample the same dataset as training one from HPA pseudo and all GTEX dataset for training.<br>
+We have repeated pseudo labeling twice </p>
+<h2>Composed training dataset</h2>
+<p>All our training dataset was composed from 3 subsets:</p>
+<ol>
+<li>HPA train fold + HPA pseudo with Pixel Size rescale and Hist Matching - repeated X8</li>
+<li>HPA train fold + HPA pseudo - repeated X4</li>
+<li>GTEX pseudo with Pixel Size rescale - repeated X16</li>
+</ol>
+<h1>Models</h1>
+<p>We have used <a href="https://github.com/qubvel/segmentation_models.pytorch" target="_blank">SMP</a>. And final ensemble :</p>
+<ul>
+<li>Unet ++. Encoder Effnet B7 (noisy student pretrain). First HPA pseudo iteration. X5 - folds</li>
+<li>Unet. Encoder Mit B5 (imagenet pretrain). Second HPA pseudo iteration. X5 - folds</li>
+<li>Unet . Encoder Effnet B7 (noisy student pretrain) + Point Rand only for training. First HPA pseudo iteration. X5 - folds  </li>
+<li>Unet . Encoder Effnet B7 (noisy student pretrain) + Point Rand only for training. Second HPA pseudo iteration. X5 - folds  <br>
+Public Hubmap: 0.61453<br>
+Public Hubmap+HPA: 0.83983<br>
+Private: 0.83266<br>
+Local OOF: 0.8493729371691843<br>
+Local organ scores:<br>
+kidney: 0.954695<br>
+largeintestine: 0.913645<br>
+lung: 0.488490<br>
+prostate: 0.833822<br>
+spleen: 0.834292<br>
+As for <a href="https://arxiv.org/abs/1912.08193" target="_blank">PointRand</a> we have used it only as additional loss as regularization while training </li>
+</ul>
+<p>Interesting Point is that CNNs showed better performance on public HubMap ~ 0.61 comparing to Segformers ~ 0.60, while Segformers outperformed CNNs on local validation ~0.85-0.86, while CNNs ~0.83-0.84. BUT on Private Segformers outperformed CNNs and our best Private submit (not selected) includes:</p>
+<ul>
+<li>Unet ++. Encoder Effnet B7 (noisy student pretrain). First HPA pseudo iteration. X5 - folds</li>
+<li>Unet. Encoder Mit B5 (imagenet pretrain). Second HPA pseudo iteration. X5 - folds</li>
+<li>Unet. Encoder Mit B3 (imagenet pretrain). First HPA pseudo iteration. X5 - folds<br>
+Public Hubmap: 0.60931<br>
+Public Hubmap+HPA: ???<br>
+Private: 0.83419<br>
+Local OOF: 0.8542834156960896<br>
+Local organ scores:<br>
+kidney: 0.956776<br>
+largeintestine: 0.917554<br>
+lung: 0.488331<br>
+prostate: 0.838744<br>
+spleen: 0.848721<br>
+It may granted us second place :) </li>
+</ul>
+<h1>Training</h1>
+<ul>
+<li>We used one channel output</li>
+<li>Adam 1e-3</li>
+<li>ReduceLROnPlateau : patience=3; factor=0.5; min_lr=1e-7 by valid dice</li>
+<li>losses: softbce + tversky + focal + jaccard + (for some models) point rand loss * 2</li>
+<li>fp16</li>
+</ul>
+<h1>Validation</h1>
+<ul>
+<li>5 folds CV with stratification by organs </li>
+<li>Predict image by image (batch size 1) in full scale with rescale to HubMap scale</li>
+</ul>
+<h1>Inference</h1>
+<ul>
+<li>Average 3 best checkpoints for each fold - just average model weights</li>
+<li>Mean Fold prediction</li>
+<li>4 Flips TTA</li>
+<li>Remove small regions - compute relative area on HPA data and take as threshold - &lt;0.5 quantile</li>
+<li>Predict image in full scale. We have only used sliding window for Segformers (1024 and 0.75 overlap) just because of cuda out of memory problem</li>
+</ul>
+<p><strong>Inference Kernel</strong> : <a href="https://www.kaggle.com/code/vladimirsydor/hubmap-2021-inference-v1/notebook?scriptVersionId=106283407" target="_blank">https://www.kaggle.com/code/vladimirsydor/hubmap-2021-inference-v1/notebook?scriptVersionId=106283407</a><br>
+<strong>GitHub</strong> : <a href="https://github.com/VSydorskyy/hubmap_2022_htt_solution" target="_blank">https://github.com/VSydorskyy/hubmap_2022_htt_solution</a> <br>
+<strong>Paper</strong> : <a href="https://arxiv.org/abs/2305.02148" target="_blank">https://arxiv.org/abs/2305.02148</a></p>

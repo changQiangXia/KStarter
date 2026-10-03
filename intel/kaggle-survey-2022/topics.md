@@ -1,0 +1,65 @@
+# kaggle-survey-2022 讨论区（按票数排序，共 63 条）
+
+- [Past Winning Notebooks](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359064) — 53 票 / 16 评论 / 2022-10-10 **write-up?**
+- [Useful additional data sources for your story!](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359047) — 35 票 / 6 评论 / 2022-10-10 
+- [Competition Prize Announcements](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/372587) — 33 票 / 40 评论 / 2022-12-16 
+- [Pinned Q&A Thread (for questions about the competition and/or the data)](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/358116) — 25 票 / 41 评论 / 2022-10-06 
+- [Charts don't talk for themselves. Provide a vivid description of yours ideas and experience.  ](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359342) — 20 票 / 35 评论 / 2022-10-11 
+- [1st place solution approach "behind the scenes" - part I: before development](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/374157) — 19 票 / 7 评论 / 2022-12-25 **write-up?**
+- [Kaggle Survey 2022 current kernel stats](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/365662) — 16 票 / 5 评论 / 2022-11-12 
+- [Congratulations to me ](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/363732) — 14 票 / 4 评论 / 2022-11-02 
+- [Lessons,Tips & sample question list, resource you need to present your story in best way](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359954) — 14 票 / 2 评论 / 2022-10-14 
+- [1st place solution approach "behind the scenes" - part II: idea](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/374969) — 12 票 / 1 评论 / 2022-12-29 **write-up?**
+- [I'll be doing a livecoding data analysis on 10/18 (recording will be avaliable)](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/360674) — 12 票 / 0 评论 / 2022-10-17 
+- [What Changed from 2021 to 2022 in ML and DS?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/364104) — 11 票 / 4 评论 / 2022-11-04 
+- [Suggestions for the 2023 Kaggle ML & DS Survey](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/358114) — 10 票 / 18 评论 / 2022-10-06 
+- [Use of *Bloxs* in your visualizations](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/362112) — 10 票 / 8 评论 / 2022-10-25 
+- [1st place solution approach "behind the scenes" - part V: summary](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/377522) — 10 票 / 6 评论 / 2023-01-11 **write-up?**
+- [Kaggle swags for the "honorable mentions" ?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/366943) — 10 票 / 4 评论 / 2022-11-18 
+- [Free Online Image Editing Tools](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/362525) — 10 票 / 2 评论 / 2022-10-27 
+- [Previous year’s Kaggle Machine Learning & Data Science Survey Competitions and top solutions](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359075) — 9 票 / 2 评论 / 2022-10-10 **write-up?**
+- [The state of DS and ML in 2022 by Kaggle.](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359639) — 9 票 / 6 评论 / 2022-10-12 
+- [Dataset with prize money earnings for competitions](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359046) — 8 票 / 0 评论 / 2022-10-10 
+- [No "Notebook Award" this year?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359071) — 8 票 / 2 评论 / 2022-10-10 
+- [It's Kaggle World Morty!](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368259) — 8 票 / 0 评论 / 2022-11-24 
+- [How to save an R Code](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368532) — 7 票 / 17 评论 / 2022-11-25 
+- [Data Science Salary Benchmarks](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/363336) — 7 票 / 2 评论 / 2022-11-01 
+- [When is the latest date to make a notebook public?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/365528) — 7 票 / 3 评论 / 2022-11-11 
+- [1st place solution approach "behind the scenes" - part III: charts](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/375837) — 6 票 / 3 评论 / 2023-01-03 **write-up?**
+- [1st place solution approach "behind the scenes" - part IV: narrative and descriptions](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/376645) — 6 票 / 0 评论 / 2023-01-07 **write-up?**
+- [Kaggle Survey our End-of-year Celebration. Why publishing on the last moments?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368652) — 6 票 / 7 评论 / 2022-11-26 
+- [Meta Tip for doing well in Analytics Competitions](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359050) — 6 票 / 1 评论 / 2022-10-10 
+- [Column Descriptions](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/360073) — 5 票 / 0 评论 / 2022-10-14 
+- [Strong Kaggle Profile Helps Your Job Search? ](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/364508) — 5 票 / 2 评论 / 2022-11-06 
+- [All the best!](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359073) — 4 票 / 0 评论 / 2022-10-10 
+- [Kaggle Survey 2022-2018 | Single questions](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359595) — 4 票 / 0 评论 / 2022-10-12 
+- [Are all the people who answered Kagglers?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/361436) — 4 票 / 2 评论 / 2022-10-21 
+- [Tell a compelling story without any charts or visualizations](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/362139) — 4 票 / 2 评论 / 2022-10-25 
+- [Created 💥Kaggle's all completed competition  Dataset💥with attached EDA notebook 📓to strengthen this community](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/364059) — 4 票 / 0 评论 / 2022-11-04 
+- [The Hackathon is About StoryTelling](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/361526) — 4 票 / 1 评论 / 2022-10-22 
+- [Are the footnotes to question 17 correct?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/362206) — 3 票 / 3 评论 / 2022-10-26 
+- [NA Values in columns like Q8 (formal education) ](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/366815) — 3 票 / 11 评论 / 2022-11-17 
+- [Compensation Prediction: What Else Can I add?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/361373) — 3 票 / 4 评论 / 2022-10-21 
+- [Data paradoxes need to be fixed:"Anyone who exits the survey is unable to continue answering." (12% of the dataset of Kaggle ML Survey2022)](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368159) — 3 票 / 2 评论 / 2022-11-23 
+- [AI 🌍 Domination! 😱 (Kaggle 2022 ML Survey Submission)](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368839) — 3 票 / 1 评论 / 2022-11-28 
+- [Submission Confusion](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/364823) — 2 票 / 5 评论 / 2022-11-08 
+- [Kaggle Ranking Dataset and Ranking EDA of 2022](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/363861) — 2 票 / 0 评论 / 2022-11-03 
+- ["Binder/JupyterHub" removed from answers in 2022?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/363093) — 2 票 / 2 评论 / 2022-10-31 
+- [Choice of theme](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/362158) — 2 票 / 1 评论 / 2022-10-25 
+- [submission not showing ](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368123) — 2 票 / 6 评论 / 2022-11-23 
+- [Types of sampling in data science](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/359975) — 2 票 / 1 评论 / 2022-10-14 
+- [Can notebooks be edited?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/369261) — 2 票 / 1 评论 / 2022-11-29 
+- [Data Professionals compensation prediction tool](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/366755) — 1 票 / 0 评论 / 2022-11-17 
+- [Issue with competition submission](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/367626) — 1 票 / 4 评论 / 2022-11-21 
+- [ONE HOUR TO GO!!!!](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368823) — 1 票 / 0 评论 / 2022-11-27 
+- [A Quantum leap in Hi-tech adoption in 2021-22!💥⚡️💫](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368867) — 1 票 / 0 评论 / 2022-11-28 
+- [I have nightmares of Plotly at night!](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368824) — 1 票 / 6 评论 / 2022-11-27 
+- [Some Questions:](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/370471) — 1 票 / 1 评论 / 2022-12-04 
+- [Feedback on Notebooks](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/361588) — 0 票 / 1 评论 / 2022-10-22 
+- [question about the data](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/361445) — 0 票 / 2 评论 / 2022-10-21 
+- [How to submit the final Google Colab Notebook ?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368590) — 0 票 / 1 评论 / 2022-11-26 
+- [Reach out if you want animated charts and data stories in your submission](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368184) — 0 票 / 2 评论 / 2022-11-24 
+- [Feedback on Notebook](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/360961) — 0 票 / 2 评论 / 2022-10-19 
+- [How to add output file](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/368733) — 0 票 / 1 评论 / 2022-11-27 
+- [ My Kaggle Competition not visible on my profile](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/369298) — 0 票 / 5 评论 / 2022-11-29 
+- [Why not using Tableau or power bi to show the result ?](https://www.kaggle.com/competitions/kaggle-survey-2022/discussion/437824) — 0 票 / 0 评论 / 2023-09-08 

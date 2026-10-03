@@ -1,0 +1,151 @@
+<p>First and foremost, I would like to express my gratitude to my teammates ( <a href="https://www.kaggle.com/kazukishida" target="_blank">@kazukishida</a> , <a href="https://www.kaggle.com/nozomiyamamoto" target="_blank">@nozomiyamamoto</a> ), the organizer Andy, the Kaggle operations team, and everyone who participated in this competition.<br><br>
+The three of us on the team have been long-time friends and will continue to participate in many competitions in the future.</p>
+<p><strong>Key Differences Between the Konwinski Prize and the Original SWE-bench</strong></p>
+<ul>
+<li>Completely new data without any leakage</li>
+<li>High penalty for incorrect answers, necessitating an effective skipping mechanism</li>
+<li>Cannot use APIs, requiring the use of open-source LLMs</li>
+</ul>
+<p>Our best Public LB score was LB = +0.056243 (4 correct, 0 incorrect), ranking 4th place!<br>
+To achieve this score—and to maximize our winning chances on the Private LB—we implemented the following strategies.</p>
+<h2>1. Validation Strategy</h2>
+<p>In summary, the dataset consists of:<br><br>
+<strong>Training Data</strong>: Very small (only 6 instances)<br><br>
+<a href="https://www.kaggle.com/competitions/konwinski-prize/discussion/552605" target="_blank"><strong>External Data</strong></a>: About 6,400 instances, but with a slightly different distribution from the LB<br><br>
+<strong>Public LB</strong>: 71 clean instances<br><br>
+<strong>Private LB</strong>: <a href="https://www.kaggle.com/competitions/konwinski-prize/discussion/564884#3142741" target="_blank">Even cleaner</a>, with 150-200 instances<br></p>
+<p><a href="https://www.kaggle.com/competitions/prostate-cancer-grade-assessment/discussion/169230" target="_blank">So our strategy is IGNORE CV, CARE ABOUT PUBLIC LB, AND TRUST METHODOLOGY.</a></p>
+<p>While the competition's metric is undeniably unstable, we hoped it was not purely a lottery.<br><br>
+Furthermore, <a href="https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494438" target="_blank">in the "LLM Prompt Recovery" competition, which had 0 training data, the distribution difference between Public and Private LB was minimal</a>.<br></p>
+<h2>2. Improving Accuracy</h2>
+<p>First and foremost, we aimed to increase the number of correct answers. We started by building on the excellent <a href="https://www.kaggle.com/code/huikang/starter-notebook-select-patch-verify?scriptVersionId=223324126" target="_blank">public notebook Version 94</a> shared by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> , which achieved 7 correct answers. Thank you so much—you are undoubtedly the MVP of this competition!</p>
+<h3>2.1. Model</h3>
+<p>We used <a href="https://www.kaggle.com/models/shelterw/deepseek-r1/Transformers/deepseek-r1-distill-qwen-32b-awq" target="_blank">DeepSeek-R1 · deepseek-r1-distill-qwen-32b-awq</a>. Interestingly, the non-AWQ quantized model did not perform well. We tried various other models, but none were satisfactory. We had high expectations for QwQ-32B, which was recently released, but neither the AWQ-quantized nor non-quantized versions performed well. If any team successfully utilized this model, we'd love to hear about it.</p>
+<h3>2.2. Model Parameters</h3>
+<p>For the reading, patching, and verifying steps, we set the temperature parameters to 0.6/0.6/0.0. For the final step, based on my <a href="https://www.kaggle.com/competitions/llm-20-questions/discussion/529525" target="_blank">experience in LLM 20 Questions</a>, we set a lower temperature.<br></p>
+<h3>2.3. Prompt Engineering</h3>
+<p>Based on the prompt from the public notebook, we devised an improved version incorporating the following enhancements. Our goal was to reduce the number of incorrect answers by allowing the model to output "None" when it lacks confidence, in addition to "Yes" and "No." However, since the difference was not significant, we decided not to include it in the final submission. We’re sharing this for reference.</p>
+<pre><code>verifying_prompt:  = .strip()
+</code></pre>
+<h3>2.4. Candidate Text Selection: Edit Distance Selection</h3>
+<p>We applied some refinements when selecting the final candidate texts.  </p>
+<ol>
+<li>First, we selected only those cases where at least one final candidate text was available.  </li>
+<li>Next, we filtered out generated patches where <code>len</code> exceeded 1000.  </li>
+<li>Finally, we devised an algorithm called <strong>Edit Distance Selection</strong>. Specifically, for each candidate text, we calculated the total sum of edit distances to all other candidate texts.  </li>
+</ol>
+<p>By selecting the text with the <strong>smallest total edit distance</strong>, we ensured that the most representative and averaged text was chosen, effectively filtering out outliers.  </p>
+<p>Earlier in the competition, a submission that initially resulted in LB=-1 was improved to a valid LB score using Edit Distance Selection, suggesting that this approach may be effective.</p>
+<pre><code>=== Edit Distance Selection Check ===
+Candidate Texts:
+1: I like cats.
+2: I love cats.
+3: I love animals.
+4: Animals are great.
+5: Dogs are wonderful so much.
+
+Selected (Most Average) Text: I love cats.
+</code></pre>
+<h2>3. Skip Mechanism</h2>
+<h3>3.1. Consideration of the Scoring Function</h3>
+<p>As a fundamental premise, achieving at least one correct answer is crucial, followed by the importance of the value of <code>correct - incorrect</code>. After securing correct answers, actively skipping is necessary to reduce incorrect answers. Therefore, we worked diligently on refining the skip mechanism.<br></p>
+<p>The possibility of LB=-1 is concerning, but since the Private dataset has approximately 2.5 times more instances than the Public dataset, we believe the likelihood of LB=-1 is low.<br></p>
+<p>Our goal is to win a gold medal.<br><br>
+One month before the competition ended, we noticed that many teams in the gold medal range had <code>correct=1, incorrect=0</code>. <a href="https://www.kaggle.com/competitions/konwinski-prize/discussion/564639" target="_blank">This score is expected to be a popular sweet spot in the Private LB as well</a>. Three days before the competition ended, only 63 teams had achieved a Public LB score where correct answers exceeded incorrect answers (i.e., <code>correct=1, incorrect=0</code> or higher).<br></p>
+<p>Thus, to maximize the probability of surpassing this score, we simulated the winning probability.<br><br>
+If the numbers of correct, incorrect, and extracted instances are determined, the probability of surpassing <code>correct=1, incorrect=0</code> can be calculated using the hypergeometric distribution.<br><br>
+For example, let’s simulate the winning probability based on different numbers of challenges (draw attempts, non-skipped attempts) when the total of correct and incorrect answers is 10.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F64babc47b8987bb15fede1afa76fac5c%2Ffig1.png?generation=1742266762135271&amp;alt=media" alt=""></p>
+<p>Odd numbers tend to show better winning probabilities compared to their adjacent even-numbered extractions. This is because even-numbered extractions include even results (e.g., <code>correct=2, incorrect=2</code>), which are considered a losing score in this scenario. To address this, we implemented a strategy to ensure that the challenge count more frequently ends as an odd number. See Section 3.5 for more details.</p>
+<p>Initially, we hypothesized a scenario where <code>correct &lt; incorrect</code>, planning to set <code>challenges=3</code>. A secondary benefit of this approach was that it provided a significant time buffer.<br></p>
+<p>P.S. If the goal were to achieve <code>correct=1, incorrect=0</code>, it could be reduced to the <a href="https://en.wikipedia.org/wiki/Secretary_problem" target="_blank">"Secretary Problem"</a>. However, we chose to overcome this challenge.<br></p>
+<p>However, an event occurred around March 2. <a href="https://www.kaggle.com/code/huikang/starter-notebook-select-patch-verify/comments#3132127" target="_blank">Version 113 of the public notebook achieved a score equivalent to 5th place at the time (<code>correct=3, incorrect=0</code>)</a>.<br></p>
+<p>Most of the time, this notebook resulted in LB=-1, but in rare cases, it achieved such a high score. Nevertheless, some participants copied and submitted this high-score notebook, and we anticipated that a few of them would achieve <code>correct=3, incorrect=0</code>.<br></p>
+<p>Therefore, we shifted our meta-target to this score. As a result, we changed <code>challenges=5</code>.<br><br>
+Achieving <code>correct=5, incorrect=0</code> or <code>correct=4, incorrect=1</code> would very likely secure a gold medal, and even <code>correct=3, incorrect=2</code> might be sufficient.<br></p>
+<p>The assumed scores above allowed us to compete favorably against teams within particularly common score ranges three days before the competition ended:<br></p>
+<ul>
+<li>(5,0) Our assumed score</li>
+<li>(4,1) Our assumed score</li>
+<li>(3,0) 12 teams ranked 6th-15th</li>
+<li>(3,2) Our assumed score</li>
+<li>(2,1) 18 teams ranked 35th-52nd</li>
+<li>(1,0) 11 teams ranked 53rd-63rd</li>
+</ul>
+<p>We decided against using <code>challenges ≥ 7</code>, considering cases where correct answers were fewer than incorrect ones.<br></p>
+<p>To support this decision, we used the following simulation, considering the increase in instances from Public LB to Private LB, setting the total number of correct and incorrect answers to 15.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F32b51cfad402c694bf7be47fd13df524%2Ffig2.png?generation=1742266901479774&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F6a9d73253b66f60509041c268a5f2d7d%2Ffig3.webp?generation=1742266921974907&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F2034490aa1292a0a4a76d533d01c3a70%2Ffig4.webp?generation=1742266943009304&amp;alt=media" alt=""> </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F58641295a80bcd3076c0c43ebc1dfde2%2Ffig5.webp?generation=1742266949226861&amp;alt=media" alt=""></p>
+<h3>3.2. Time Management</h3>
+<p>Interval Time Limits: Inference with LLM is particularly time-consuming. We set interval limits of 7 minutes, 15 minutes, and 19 minutes for reading, patching, and verifying, respectively. If these limits are exceeded, skipping the issue is a strong option.<br><br>
+Global Time Limits: We set global time limits of 8 hours for Public LB and 23 hours for Private LB. The reason for allowing a 1-hour margin is that the penalty for skipping is minimal in this competition.<br><br>
+By the way, I likely lost one of my final submissions in <a href="https://www.kaggle.com/competitions/ai-mathematical-olympiad-prize/discussion/516936" target="_blank">AIMO1 due to a time overrun</a>😂.</p>
+<h3>3.3. Problem Length</h3>
+<p>According to the <a href="https://arxiv.org/abs/2310.06770" target="_blank">SWE-bench paper</a>, problem length correlates with difficulty. Also, the penalty for skipping in this competition is extremely small.<br><br>
+Therefore, we initially skipped issues with a length outside 1200-3800 characters. This approach provided additional time flexibility.<br><br>
+By focusing only on lengths within this range, we reached (5,8), which corresponded to LB=-0.042335 (ranked 18th at the time).<br><br>
+Further analysis showed that issues exceeding 3400 characters never resulted in correct answers.<br><br>
+Shorter issues (under 1200 characters) also yielded only a single correct answer.<br><br>
+We believe shorter issues performed worse because they lacked sufficient information or contained noisy issues.<br><br>
+However, since <a href="https://www.kaggle.com/competitions/konwinski-prize/discussion/564884#3140753" target="_blank">Private LB should be curated</a>, our judgment might have been incorrect.<br></p>
+<p>For the final submission, further tuning (including parameter adjustments) resulted in skipping issues outside 1802-3400 characters. This achieved LB=+0.056243 (<code>correct=4, incorrect=0</code>), ranking us 4th.<br></p>
+<h3>3.4. Number of File Contents</h3>
+<p>By skipping instances where the number of file contents exceeded <strong>500</strong>, our score changed from (5, 8) to (5, 4), improving to LB=+0.013997 (rank 7 at the time).  </p>
+<p>We further explored the threshold for file content count:  </p>
+<ul>
+<li>By skipping instances with more than <strong>388</strong> file contents, our score changed to (4, 2), improving to LB=+0.028077 (rank 6 at the time).  </li>
+<li>However, when loosening the restriction to <strong>403</strong>, the score became (5, 4), meaning one additional correct answer but two more incorrect ones.  </li>
+</ul>
+<p>Therefore, we set the file contents threshold to <strong>388</strong> for the final submission.</p>
+<p>By plotting problem statement length (x-axis) against file content count (y-axis), we estimated the dataset distribution based on our submission results. Given that there were only six training instances, tuning on the 71 public LB instances seemed reasonable, though there was a risk of overfitting.  </p>
+<p>To better illustrate our approach, we simulated the distribution of correct, incorrect, and skipped instances based on multiple submission results.  <br>
+Since we only had range-based data, we sampled from a uniform distribution. The scatter plot is a conceptual visualization and may contain errors.  </p>
+<p>The figures below show simulation results:  </p>
+<ul>
+<li><strong>Top:</strong> Full range (x-axis = problem statement length, y-axis = file content count).  </li>
+<li><strong>Bottom:</strong> Restricted y-axis (file content count = 1–500).  </li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F354be36ae17e4e18aa5ae9ba4f03f096%2FScatter%20Plot%20Of%20Problem%20Length%20Vs%20File%20Num%20With%20Labels.png?generation=1753319329605873&amp;alt=media" alt="file_num vs len"></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5927283%2F3e621d0685b1c6c9e7605f1f08dbd90d%2FScatter%20Plot%20Of%20Problem%20Length%20Vs%20File%20Num%20With%20Labels(fn_range1-500).png?generation=1753319380379679&amp;alt=media" alt="file_num vs len (limited)"></p>
+<h3>3.5. Contingency Plan</h3>
+<p>If a certain number of turns (<code>limit_turn</code>) passes without reaching the target challenge count, a method updates the parameters.<br></p>
+<pre><code> ():
+   .challenge_count %  == :
+    .cfg.max_challenge_num = .challenge_count  
+  :
+    .cfg.max_challenge_num = .challenge_count +   
+     .challenge_count == :
+      .cfg.max_file_contents_num = .calc_bottom_20(.file_contents_num_list)
+</code></pre>
+<p><code>limit_turn=100</code> allows an extra issue attempt if needed. In most cases, 5 challenges were completed within 100 turns, preventing the contingency plan from triggering.</p>
+<h2>4. Development Strategy</h2>
+<p>As many of you may have felt, the implementation difficulty of this competition is extremely high. Therefore, we have carefully devised our development strategy.  <br>
+Thanks to the following strategic improvements, we encountered <strong>only one critical bug</strong>: an instance where we exceeded the interval limit per prediction. (Even this was quickly addressed by implementing the time management strategy described in <strong>Section 3.2</strong>.)  </p>
+<h3>4.1. Team Role Allocation</h3>
+<p>We broadly divided our roles as follows:  </p>
+<ul>
+<li><strong>@isakatsuyoshi</strong> focused on <strong>Kaggle</strong>,  </li>
+<li><strong>@kazukishida</strong> handled <strong>Development</strong>,  </li>
+<li><strong>@nozomiyamamoto</strong> took charge of <strong>Research</strong>.  </li>
+</ul>
+<p>Of course, there were some overlaps in responsibilities, but this structure allowed us to work efficiently.  <br>
+We are proud that we were able to demonstrate outstanding teamwork, as we are long-time friends who have shared many experiences together.  </p>
+<h3>4.2. Development Using GitHub</h3>
+<p>We actively conducted <strong>code reviews</strong>. <a href="https://www.kaggle.com/isakatsuyoshi" target="_blank">@isakatsuyoshi</a> and <a href="https://www.kaggle.com/kazukishida" target="_blank">@kazukishida</a> reviewed each other’s pull requests to ensure code quality.  </p>
+<ul>
+<li><strong>@kazukishida</strong> transformed an excellent publicly available notebook into modular, loosely coupled scripts, making development more manageable.  </li>
+<li><strong>@isakatsuyoshi</strong> conducted numerous trial experiments, paving the way for victory in this competition.  </li>
+<li>While <strong>@isakatsuyoshi</strong> focused on aggressive innovation, <strong>@kazukishida</strong> ensured system stability, allowing us to develop effectively.  </li>
+<li>Additionally, <strong>@nozomiyamamoto</strong> provided comprehensive support through research-based ideation, prompt engineering, and code validation.  </li>
+</ul>
+<h3>4.3. Test Code</h3>
+<p>The <strong>submission limits</strong> in this competition are extremely strict, making any bugs potentially catastrophic. To mitigate this risk, we wrote thorough <strong>test code</strong>.  </p>
+<ul>
+<li>We developed <strong>12 modular scripts</strong> with <strong>98 test cases</strong>, achieving <strong>80% code coverage</strong>.  </li>
+<li>Our testing approach included <strong>parallelized testing, fixtures, and parameterization</strong>, among other optimizations.  </li>
+</ul>
+<p>In summary, we wrote extensive test code, implemented exception handling and time management strategies, and developed a deep understanding of the limitations of LLMs. Our ultimate goal was to <strong>maximize our chances of winning a gold medal</strong>.  </p>
+<p>We eagerly await the results in three months.  <br>
+Glory to all Kagglers! 🚀✨  </p>

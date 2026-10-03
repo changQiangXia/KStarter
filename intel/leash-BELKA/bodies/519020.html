@@ -1,0 +1,28 @@
+<p>[UPDATE]</p>
+<p>a) Here is the <a href="https://www.kaggle.com/datasets/victorshlepov/belka2024-finalsolution" target="_blank">dataset</a> with the (i) code  - model and data processing utils (ii) SMILES encoder vocabulary. I will upload processed training data too (just to save ones time). Once I recover the the trained weights I will add them as well - I have only the light version of the model left (tf.keras.export), so I will likely retrain it from scratch. For those of you who prefer Kaggle notebooks - here is <a href="https://www.kaggle.com/code/victorshlepov/belka2024-1stplacesolution/edit" target="_blank">one</a> (but I would not really process data here - it should take close to infinity). </p>
+<p>b) The architecture is fairly simple and model is very flat - just 4 encoder layers with 8 heads. With a vocabulary size of just 43 tokens I end-up with a fixed dimensionality of 32. I've tried 64 and 16 too - they do not perform.</p>
+<p>c) I guess I used <a href="https://pypi.org/project/atomInSmiles/" target="_blank">atomInSmiles</a> in a somewhat incorrect way and end up with a schema where separate tokens are either, atom (C, H, S, etc)  or digits, or anything in square brackets, like [C@@] are distinct tokens. I leave it to chemistry practitioners to decide what this mess really means :)</p>
+<p>d) Pre-training. I pre-trained model from scratch in two stages:</p>
+<ul>
+<li><p>MLM - the standard prediction of masked tokens (15% of which 80% are masked, 10% are replaced with random token and 10% are retained - classics from "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"). I used dynamic mini-batch alpha weights for CategoricalFocalCrossEntropy, but it was just for fun. Not sure it contributed much. II've trained for about 100 epochs 10K steps each with 2028 samples per batch - the model processed dataset for about 20 times. Note that I've combined all the data here - train, test and external data (reference is in the original text below).</p></li>
+<li><p>SMILES-to-ECFP (size=2048, include_chirality=True). Same model, just a different head (Dense layer with sigmoid activation) and locked embeddings. Some 20-50 epochs, if I recall correctly. The model did not performed great (there's many papers saying that SMILES encoders generally have a difficult time to predict topological fingerprints, and it was exactly the case) with MAP around 0.4, however, I guess that's exactly where it learned some useful representations.</p></li>
+<li><p>My motivation here was to train model on some general task without taking a major overfitting risk. I picked ECFP for 2 reasons (a) performance - they were fast enough to compute, especially with <a href="https://scikit-fingerprints.github.io/scikit-fingerprints/index.html" target="_blank">scikit-fingerprints</a> library, and (b) predicting fingerprints with no predefined meanings for each bit position (unlike MACCS or PubChem) is a challenging task for SMILES transformer, which is good - "no pain - no gain", as they say…</p>
+<p>And, yes, I still wonder what "chirality" is :)</p></li>
+</ul>
+<p>e) Training. Combined BELKA train set and external data. Masked loss and metrics since external data has labels just for sEH protein.</p>
+<p>f) Validation. I put aside 3% of blocks from train set so my validation set included molecules with one ore more non-shared blocks - some 9 million of samples.</p>
+<p>g) Tech - A100 on google collab.</p>
+<p>That's it. As being said - no magic, just a pure luck and randomness…</p>
+<hr>
+<p>Frankly speaking, the final LB results came as a bit of a surprise to me. The winning model is a very basic encoder: Self-Attention -&gt; FeedForward with 4 layers and 8 heads per layer and  key/value dimension of 32. The classics from the Transformers chapter of Tensorflow tutorials :)</p>
+<p>I used the <a href="https://pypi.org/project/atomInSmiles/" target="_blank">atomInSmiles</a> tokenizer, but I did it incorrectly, so my tokenization scheme was almost character-based. I have not used any pre-trained models like ChemBERTa or similar.</p>
+<p>The difference might have come from a two-stage pre-training schedule: (a) MLM - with 15% masking rate (b) SMILES to ECFP prediction. I'm not good at chemistry, to tell the truth, but I guess the second stage is where the encoder "learned" to extract some meaningful results from the SMILES.</p>
+<p>Oh, last but not least: I used the data provided by the competition host and the dataset from <a href="https://chemrxiv.org/engage/chemrxiv/article-details/6438943f08c86922ffeffe57" target="_blank">"Building Block-Based Binding Predictions for DNA-Encoded Libraries"</a>, sited by <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> and preprocessed by <a href="https://www.kaggle.com/chemdatafarmer" target="_blank">@chemdatafarmer</a> early in the competition.</p>
+<p>Now, the list of things that didn't work out as expected:<br>
+1) Complex tokenization schemes: bi- and tri-grams, atomInSmiles<br>
+2) Any model with a depth above 32 and more than 6 encoder layers<br>
+3) Multi-input models (SMILES + fingerprints)<br>
+4) Pre-training on a larger dataset—I spent about a month experimenting with ZINC…<br>
+5) Custom loss functions—BinaryFocusLoss was just fine<br>
+6) Gated fusion of building blocks<br>
+7) And many more—I will update the list.</p>

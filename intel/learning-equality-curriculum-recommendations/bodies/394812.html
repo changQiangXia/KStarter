@@ -1,0 +1,90 @@
+<p>I had given a long break on Kaggle and came back with this competition because I thought it was very relevant to the app I am building, namely Epicurus. This break made me miss Kaggle and kept me motivated in this competition</p>
+<p>My actual solution and efficiency solution are very similar. So I will describe both of them at the same time. I hope I can refactor my code and share on Github soon.</p>
+<p><strong>Pipeline:</strong><br>
+Candidate Selection (Retriever methods) -&gt; Feature Engineering -&gt; Lightgbm -&gt; Postprocessing</p>
+<p><strong>Validation Scheme:</strong></p>
+<ul>
+<li>1 fold validation</li>
+<li>All source topics and random 67% of the other topics are selected for the training set. The rest are validation topics.</li>
+<li>The contents which only match with validation topics are excluded from the training set.<br>
+For evaluation, validation topics are matched with all the contents and competition metric is calculated.</li>
+<li>While training lightgbm model on the candidates, group4fold on topic_id is used on the validation set. Evaluation is done on the whole validation set afterwards.</li>
+</ul>
+<p>At the end of the competition, I had 0.764 validation score and 0.727 LB. While it is a big gap, improvements in my validation score were almost always correlated with LB. And I got my validation score as my Private LB score, which I didnt expect.</p>
+<p>Edit: Efficiency model got 0.718 validation, 0.688 Public LB, 0.740 Private LB and around 20 minutes CPU run-time.</p>
+<p><strong>Topic/Content Representation</strong></p>
+<p>Each topic is represented as a text using its title, its description and its ancestor titles up to 3 parents above in the tree. Example: </p>
+<p>'Triangles and polygons @ Space, shape and measurement @ Form 1 @ Malawi Mathematics Syllabus | Learning outcomes: students must be able to solve problems involving angles, triangles and polygons including: types of triangles, calculate the interior and exterior angles of a triangle, different types of polygons, interior angles and sides of a convex polygon, the size and exterior angle of any convex polygon.'</p>
+<p>Each content is represented as a text using its title, its kind and its description (its text if it doesn’t have a description). Example:</p>
+<p>'Compare multi-digit numbers | exercise | Use your place value skills to practice comparing whole numbers.'</p>
+<p><strong>Candidate Selection</strong></p>
+<p><strong>TFIDF</strong><br>
+Char 4gram TFIDF sparse vectors are created for each language and matched with sparse_dot_topn, which is a package I co-authered (<a href="https://github.com/ing-bank/sparse_dot_topn" target="_blank">https://github.com/ing-bank/sparse_dot_topn</a>) It works very fast and memory efficient. For each topic, top 20 matches above 1% cosine similarity are retrieved.</p>
+<p><strong>Transformer Models</strong><br>
+I used paraphrase-multilingual-MiniLM-L12-v2 for efficiency track and ensemble of bert-base-multilingual-uncased, paraphrase-multilingual-mpnet-base-v2 (it is actually a xlm-roberta-base) and xlm-roberta-large for the actual competition. </p>
+<ul>
+<li>Sequence length: 64. But only the first half of the output is mean pooled for the representation vector. Last half is only fed for context. This worked the best for me.</li>
+<li>Arcface training: Training contents are used as classes. Therefore topics have multiple classes and l1-normalized target vectors. The margin starts with 0.1 and increases linearly to 0.5 at the end of 22 epochs. First 2 and last 2 epochs have significantly lower LR. Arcface class centers are initialized with content vectors extracted from pretrained models.</li>
+<li>Ensemble method: Concatenation after l2 normalization</li>
+</ul>
+<p>Edit: Models are re-trained with whole data for submission at the end.</p>
+<p>Top 20 matches within the same language contents are retrieved.</p>
+<p>In addition, for each topic, its closest train set topic is found and its content matches are retrieved as second degree matches.</p>
+<p><strong>Matches from Same Title Topics</strong></p>
+<p>For each topic, train set topics with the same title are found and their matched contents are retrieved.</p>
+<p><strong>Matches from Same Representation Text Topics</strong></p>
+<p>For each topic, train set topics with the same representation text are found and their matched contents are retrieved.</p>
+<p><strong>Matches from Same Parent Topics</strong></p>
+<p>For each topic, train set topics with the same parent are found and their matched contents are retrieved.</p>
+<p>All retrieved topic-content pairs are outer joined.</p>
+<p><strong>Feature Engineering</strong></p>
+<ul>
+<li>tfidf match score</li>
+<li>tfidf match score max by topic id</li>
+<li>tfidf match score min by topic id</li>
+<li>vector cosine distance</li>
+<li>vector cosine distance max by topic id</li>
+<li>vector cosine distance min by topic id</li>
+<li>topic title length</li>
+<li>topic description length</li>
+<li>content title length</li>
+<li>content description length</li>
+<li>content text length</li>
+<li>content same title match count</li>
+<li>content same title match count mean over topic id</li>
+<li>content same representation text match count</li>
+<li>content same representation text match count mean over topic id</li>
+<li>content same parent match count</li>
+<li>content same parent match count mean over topic id</li>
+<li>topic language</li>
+<li>topic category</li>
+<li>topic level</li>
+<li>content kind</li>
+<li>same chapter (number extracted from the text)</li>
+<li>starts same</li>
+<li>is content train</li>
+<li>content max train score</li>
+<li>topic max train score</li>
+<li>is content second degree match</li>
+</ul>
+<p><strong>Lightgbm Model</strong></p>
+<ul>
+<li>Hit or miss classification problem</li>
+<li>Overweight hit (minority) class</li>
+<li>Monotonic constraint and 2x feature contribution on most important feature: vector cosine distance</li>
+<li>2 diverse lightgbms: Excluded features which will potentially have different distribution on real test set in one of the models, vector cosine distance min by topic id. Also used slightly different parameters and kfold seed.</li>
+</ul>
+<p><strong>Postprocess</strong></p>
+<p>Postprocessing was very important. Using relative probabilities (gaps with highest matches) and using different conditions for train and test set contents were the key. While matching train set contents was like a classification problem, matching test set contents was like an assignment problem.</p>
+<p>Topic-content pairs are included if they have one of the conditions below:</p>
+<ul>
+<li>Content has the best matching probability among other contents for the given topic.</li>
+<li>Content is among the train set contents and has above 5% probability and has less than 25% gap with the highest matching probability in the given topic.</li>
+<li>Content is among the test set contents and has less than 5% gap with the highest matching probability in the given topic.</li>
+<li>Content is among the test set contents and the topic is its best match and its total gap* is less than 55%.</li>
+</ul>
+<p><strong>Code</strong></p>
+<p>All training notebooks: <a href="https://github.com/aerdem4/curriculum-recommendations" target="_blank">https://github.com/aerdem4/curriculum-recommendations</a><br>
+My actual inference notebook (v15 selected): <a href="https://www.kaggle.com/code/aerdem4/lecr-ensemble-v03" target="_blank">https://www.kaggle.com/code/aerdem4/lecr-ensemble-v03</a><br>
+My best Efficiency notebook: <a href="https://www.kaggle.com/code/aerdem4/lecr-efficiency-minilm" target="_blank">https://www.kaggle.com/code/aerdem4/lecr-efficiency-minilm</a><br>
+An alternative Efficiency solution: <a href="https://www.kaggle.com/code/aerdem4/lecr-efficiency-nobert" target="_blank">https://www.kaggle.com/code/aerdem4/lecr-efficiency-nobert</a></p>

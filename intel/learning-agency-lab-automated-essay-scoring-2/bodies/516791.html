@@ -1,0 +1,215 @@
+<p>Thanks a lot for the great competition to Kaggle and the hosts! It was good fun even though I was sweating until the end.</p>
+<p>Congrats to <a href="https://www.kaggle.com/syhens" target="_blank">@syhens</a> and <a href="https://www.kaggle.com/dsohonosom" target="_blank">@dsohonosom</a> who were leading most of the time! Until the very end I wondered if you overfit the public LB with such high scores - but apparently you just had some very good solutions! </p>
+<p>Thanks to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> for carrying this competition from the start and sharing so many resources. Thanks <a href="https://www.kaggle.com/cpmpml" target="_blank">@cpmpml</a> for sharing a faster QWK calculation.</p>
+<h3>TLDR:</h3>
+<ol>
+<li>Data analysis + experiments to find "new" data scoring patterns and get CV-LB-correlation.</li>
+<li>Train Deberta ensemble reflecting these scores.</li>
+<li>Two rounds of pseudo labelling to get "old" data with "new" scores.</li>
+<li>Transform float predictions via thresholding to ints.</li>
+<li>Ensemble without overfitting.</li>
+</ol>
+<h2>Getting CV-LB-correlation</h2>
+<p>The dataset contained essays written by 8-12th graders from ~12 years ago. The competition used text-dependent essays, but most of the data was taken from the persuade corpus which included additional independent writing tasks. There are ~13k Persuade essays ("old") and 4.5k unseen ("new") essays in the competition data.</p>
+<p>When comparing new and old data it was obvious there was quite a divide: two prompts were only present in "old" and the score distributions of same prompts were very different.<br>
+All texts seem to have been written at the same time (12-13 years ago), as even the "newer" texts didn't mention any recent events, politicians or billionaires when writing about exploring Venus/Mars and self-driving cars.</p>
+<p>Some texts in persuade were written by students from different grades which could explain the score differences (maybe they were just worse?!). To test this (and other slight changes in scoring thresholds) I trained models on old or new data only and evaluated them on the other. I used ensembles of Debertas to rank the texts and calculated a "cheating" score that used the exact label distribution of the test data to turn the rankings into predictions. It helped close the gap but quite a sizeable difference remained. <br>
+This made me believe there were actual differences in the criteria that the raters used.</p>
+<p>Since the new data was clearly using slightly different scoring criteria, I set up my training as a pre-train -&gt; fine-tune, two-staged process. Pre-train on the old data (+ maybe aux data) and fine-tune on the new. This gave a boost of at least 0.015 on public LB and made CV-LB-correlation much better.<br>
+Within each stage I used stratified 5-fold split using prompt_id+score as labels.</p>
+<h2>Train Deberta</h2>
+<p>With the two-staged approach training Deberta was fairly straightforward: find a decent baseline using Deberta base, find a set of working hyperparams for Deberta large and then generate a diverse set of models that can be used for creating ensembles. All models used regression and I evaluated the initial models mostly for MSE since I wanted to use them only for pseudo labelling (PL).</p>
+<p>Best params:</p>
+<table>
+<thead>
+<tr>
+<th>Param</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base model</td>
+<td>Deberta large, base</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>MSE, BinaryCrossEntropy (scale targets to [0, 1])</td>
+</tr>
+<tr>
+<td>Pooling</td>
+<td>CLS, Gem</td>
+</tr>
+<tr>
+<td>Context length</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td>8</td>
+</tr>
+<tr>
+<td>LR torso</td>
+<td>1e-5, 5e-6 (pre-train / fine-tune)</td>
+</tr>
+<tr>
+<td>LR head</td>
+<td>2e-5, 1e-5</td>
+</tr>
+<tr>
+<td>Epochs</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Warmup</td>
+<td>15% of pre-train</td>
+</tr>
+<tr>
+<td>Decay</td>
+<td>cosine</td>
+</tr>
+<tr>
+<td>Grad clip</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Weight decay</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Dropout</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Added tokens</td>
+<td>"\n", "  " (as <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> shared)</td>
+</tr>
+<tr>
+<td>Init</td>
+<td><code>normal_(mean=0.0, std=0.02), bias=0</code></td>
+</tr>
+</tbody>
+</table>
+<p>To create an ensemble with a bit of variety I mostly changed pooling, loss, context length and rarely LR. iirc shorter context length only ever made it into an ensemble if the weight was negative… But Deberta base was sometimes selected.</p>
+<p>The fine-tuning dataset only contained ~4.5k samples. Spread over five prompts with six possible scores meant that data was quite scarce. Model performance varried a lot for different seeds, especially when using thresholding to get int predictions. To counteract this I 3-seed-averaged everything. This made a big difference in predictability.<br>
+Training three times as many models was very expensive but I found that only redoing the fine-tuning phase with a different seed made hardly any difference in performance and saved a lot of time. Still the model folder is around 2TB.</p>
+<h2>Pseudo labelling</h2>
+<p>Since the criteria for scoring seemed to differ, I used an ensemble fine-tuned on the new data to get better scores for the old data. I did two rounds: the first used <code>mean(score, ensemble_pred)</code> and the second used the prediction exclusively (after retraining an ensemble on the first round data). I always used the exact float prediction, no rounding.</p>
+<p>This is where it got a bit messy, the first round improved CV quite a bit but LB only slightly. The second round, however, improved CV even more, making a huge jump, but LB went down. The CV seemed not to correlated very well - I feared there was a leak that I missed (I didn't change the fine-tuning stage, only used the original labels) and didn't use the second round much. However one of the "bad" models scored 0.839 on private, single model, single seed (it was also the one with best CV). Maybe I could have trusted CV even more here but it seemed too risky.</p>
+<h2>Thresholding (float -&gt; int)</h2>
+<p>Many people found that rounding at custom values (1.67 instead of 1.5) could improve results a lot. From my testing it seemed to do a couple of things at once:</p>
+<ol>
+<li>(over-) fit the targets</li>
+<li>correct errors caused by impalanced score labels</li>
+<li>Optimize quadratic weighted cohen's kappa (QWK).</li>
+</ol>
+<p>1 is obvious and 2 is caused by regression loss and imbalanced data - errors of <code>true_label==2</code> are always biased towards the majority class 3 instead of 1, causing the latter to be underrepresented. The last point, 3, is important because Cohen's Kappa can often be increased by moving predictions around (often towards minority classes) even if it decreases accuracy / MSE, <a href="https://www.knime.com/blog/cohens-kappa-an-overview" target="_blank">see example</a>. Typical thresholds for 1/2 were 1.7 and for 5/6 even 4.9 (there were very few 6s and some prompts had none!)</p>
+<p>Data at the tails was very sparse and rounding thresholds could vary a lot between model seeds. I always used three seeds to calculate thresholds, without this it was too much gambling. </p>
+<p>All my submissions are full-fits (train model on all data), which meant they always behaved somewhat differently from the OOFs even when using the same seed. Averaging probably helped because of this too.</p>
+<p>To find the thresholds, I used <code>minimize</code> from <code>scikit.optimize</code> with "Powell", evaluating on <code>1 - qwk</code>. Results seemed more reliable and much faster than guessing methods like Optuna. The found thresholds vary a bit based on the starting point of optimization, I average 15 different starting points.</p>
+<h2>Ensemble</h2>
+<p>From trained models I created ensembles via simple averaging, Nelder-Mead and a Hill-climbing method (first seen from <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> iirc). With PL, thresholding and fitted ensemble weights with just 4.5k samples, there was a huge chance of overfitting. Especially when fitting thresholds and weights independently even small ensembles fit the data way too well. I counteracted this by pre-calculating each model's thresholds individually (3-seeds) and using the ensemble weights for the thresholds too.</p>
+<p>On top of this many subs were simple averages, squeezing out another 0.001 didn't seem as important as preventing overfitting.</p>
+<h2>Submissions and luck</h2>
+<p>Almost all models I submitted were 3-seed-average at inference too. My largest chosen ensemble therefore was 7 models with 3 seeds each (21 Deberta large).</p>
+<p>My three submissions were: </p>
+<table>
+<thead>
+<tr>
+<th>Models</th>
+<th>Pseudo labelling</th>
+<th>Weights</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4 large, 1 base</td>
+<td>no PL</td>
+<td>fitted, non-negative</td>
+</tr>
+<tr>
+<td>7 large</td>
+<td>1st round</td>
+<td>fitted, negative</td>
+</tr>
+<tr>
+<td>4 large</td>
+<td>1st + 2nd round</td>
+<td>simple average</td>
+</tr>
+</tbody>
+</table>
+<p>Only the last one (which came in at 0.841) was chosen by best CV, the others were selected for diversity (no model overlap, not using PL …). They did much worse: 0.838 and 0.837 on private.</p>
+<p>Some of the best CV models:</p>
+<table>
+<thead>
+<tr>
+<th>Models</th>
+<th>Pseudo labeling</th>
+<th>Weights</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Best ensemble, 4x large</td>
+<td>3x1st, 1x2nd</td>
+<td>average</td>
+<td>0.832</td>
+<td>0.824</td>
+<td>0.841</td>
+</tr>
+<tr>
+<td>Only 1st round PL models from best, 3x large</td>
+<td>1st</td>
+<td>average</td>
+<td>0.831</td>
+<td>0.823</td>
+<td>0.840</td>
+</tr>
+<tr>
+<td>Only 2nd round PL model, 1x large</td>
+<td>2nd</td>
+<td>-</td>
+<td>0.830</td>
+<td>0.820</td>
+<td>0.836</td>
+</tr>
+<tr>
+<td>Best single model</td>
+<td>2nd</td>
+<td>-</td>
+<td>0.833</td>
+<td>0.814</td>
+<td>0.839</td>
+</tr>
+</tbody>
+</table>
+<p>The second round of PL gave a couple of models like the last one, very good CV (like an ensemble) but LB went down. I feared a leak but they did fine on Private LB, so maybe just bad luck on Public ¯_(ツ)_/¯</p>
+<h2>What worked</h2>
+<h4>Worked (rough order of importance)</h4>
+<ol>
+<li>Trust CV when you're rank 619</li>
+<li>Pretrain -&gt; finetune on new data (+0.015)</li>
+<li>Pseudo-label old data (+0.004-0.007)</li>
+<li>3-seed-average everything (mostly reduced variance, lucky seeds could still work well)</li>
+<li>Spend a lot of time analysing score dists and sensitivity (esp. for thresholding)</li>
+<li>Limit overfitting in ensembling (simple average, don't post-fit thresholds…)</li>
+<li>Deberta large (base was ok on public but CV and private was 98% large)</li>
+</ol>
+<h4>Neutral / unsure</h4>
+<ol>
+<li>Additional data (Persuade, Ellipse) - non-text-dependent essays seemed to make little difference</li>
+<li>Differential LR - tiny difference</li>
+</ol>
+<h4>Did not work</h4>
+<ol>
+<li>GBDT, weak as a model by itself for me, 2nd stage seemed not to add anything over ensemble + thresholding (didn't spend that much time though).</li>
+<li>Adding prompt to input</li>
+<li>Backtranslation</li>
+<li>Classification with Deberta</li>
+<li>Attention pooling</li>
+<li>Rushing efficiency solution in the last 48 hours -&gt; even half layer xsmall ONNX was too slow here, and it was the only thing I could produce quickly</li>
+</ol>

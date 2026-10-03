@@ -1,0 +1,111 @@
+<p>Thank you to the organizers and congratulations to all the participants.</p>
+<p>There are really lots of things that can be done from dataset preparation, model training to post-processing (how to utilize trained LLM model), and it was a very tough competition for me. But I enjoyed the competition overall!<br>
+I would like to thank my team members <a href="https://www.kaggle.com/zaburo" target="_blank">@zaburo</a>, <a href="https://www.kaggle.com/qhapaq49" target="_blank">@qhapaq49</a>, <a href="https://www.kaggle.com/charmq" target="_blank">@charmq</a>, <a href="https://www.kaggle.com/flowlight" target="_blank">@flowlight</a> for their hard work too. </p>
+<p>The figure shows our retrieval to the model overall pipeline.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F518134%2F8f34b4a6918523b94b9ff6fec9b10da1%2Fkaggle-llm-5th-overall.jpg?generation=1697001871726670&amp;alt=media" alt=""></p>
+<p> --&gt; Write-up Updated!</p>
+<h2>Short summary</h2>
+<ul>
+<li>We successfully run Llama 70B model on kaggle notebook</li>
+<li>We used BM-25 based sparse retrieval (using <a href="https://github.com/castorini/pyserini" target="_blank">pyserini</a> library whose backend is <a href="https://lucene.apache.org/" target="_blank">Apache Lucene</a>) to search all the wikipedia pages.</li>
+<li>We parsed wikipedia dataset by ourselves to cover most of the pages with number information.</li>
+</ul>
+<h2>Dataset creation</h2>
+<h3>Wikipedia dataset</h3>
+<p>In the early stage of the competition when I checked the given train.csv and tried to answer manually, I felt this competition is a “retrieval” competition rather than a model training competition. We also noticed some pages or numbers are missing in the publicly available dataset. So I decided to parse our wikipedia dump manually. </p>
+<p>Below are comparison tables of datasets:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Parser</th>
+<th>Page</th>
+<th>Text info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kaggle published dataset by <a href="https://www.kaggle.com/jjinho" target="_blank">@jjinho</a> <br> <a href="https://www.kaggle.com/datasets/jjinho/wikipedia-20230701" target="_blank">jjinho/wikipedia-20230701</a></td>
+<td><code>wikitextparser</code></td>
+<td>Some pages are dropped</td>
+<td>All templates are dropped.<br>All the “\n” are dropped (difficult to read by human).</td>
+</tr>
+<tr>
+<td>Huggingface dataset<br> - <a href="https://huggingface.co/datasets/wikipedia" target="_blank">wikipedia</a> <br> - <a href="https://huggingface.co/datasets/graelo/wikipedia" target="_blank">graelo/wikipedia</a></td>
+<td><code>mwparserfromhell</code></td>
+<td>Better coverage</td>
+<td>All templates are dropped.<br> <code>&lt;math&gt;</code>, <code>&lt;ref&gt;</code>, <code>&lt;table&gt;</code> tags are dropped.</td>
+</tr>
+<tr>
+<td>Our dataset</td>
+<td><code>wikitextparser</code> + custom template processing</td>
+<td>Better coverage</td>
+<td><code>{val}</code> and <code>{math}</code> templates text are kept (Other templates are dropped).<br> Keep <code>&lt;math&gt;</code> tag, but <code>&lt;ref&gt;</code>, <code>&lt;table&gt;</code> tags are dropped.</td>
+</tr>
+</tbody>
+</table>
+<p>Huggingface's Wikipedia dataset covers most of the pages but numbers are missing, it seems due to the <code>mwparserfromhell</code> parser issue. So, I replaced the parser with <code>wikitextparser</code> from the <a href="https://huggingface.co/datasets/graelo/wikipedia" target="_blank">graelo/wikipedia</a> code base (There was a helpful instruction on how to run the code at the bottom of the dataset description!).<br>
+I believe our dataset covers most of the pages with numbers or math expression information.</p>
+<h3>QA dataset creation</h3>
+<p>Many datasets were shared publically during the competition, but we also tried to make it by ourselves as well. Below is the prompt for ChatGPT 3.5 that I used to generate the QA dataset.</p>
+<pre><code>system_content = 
+
+user_content_template_qa = Template(
+    new lineWhat  ...Which   following statements ...What did ` person` doWhat was ...skipmissing baryonic mass
+) MOND  a theory  reduces  observed missing baryonic mass  galaxy clusters  postulating  existence  a new form  matter called 
+) MOND  a theory  increases  discrepancy   observed missing baryonic mass  galaxy clusters   measured velocity dispersions  a factor     a factor   
+) MOND  a theory  explains  missing baryonic mass  galaxy clusters  was previously considered dark matter  demonstrating   mass    form  neutrinos  axions.
+) MOND  a theory  reduces  discrepancy   observed missing baryonic mass  galaxy clusters   measured velocity dispersions  a factor     a factor   
+) MOND  a theory  eliminates  observed missing baryonic mass  galaxy clusters  imposing a new mathematical formulation  gravity    require  existence  dark matter.
+A) 
+
+Let's start. Here  TEXT: $title\n$
+</code></pre>
+<p>I only give ChatGPT 3.5 an abstract and 1 paragraph from specific page as <code>$text</code>.</p>
+<p>Since we can achieve very high scores like 0.995 for train.csv at the end of the competition. We used our generated 1000 dataset for local validation.</p>
+<h2>Retrieval</h2>
+<h3>Sparse retrieval</h3>
+<p>I'm not professional to the NLP field. I surveyed existing research, especially related to retrieval-based LLMs. And <a href="https://aclanthology.org/P19-1612/" target="_blank">ORQA</a> paper affected our approach, it reported that “On datasets where the questioner already knows the answer, a traditional IR system such as BM25 is sufficient.”. Since ChatGPT 3.5 was given the sentence to generate QA, we thought the same applies in this competition too.<br>
+So we read <a href="https://aclanthology.org/N19-4013/" target="_blank">BERTserini</a> paper and decided to use <a href="https://github.com/castorini/pyserini" target="_blank">pyserini</a> library, which is Python wrapper of <a href="https://github.com/castorini/anserini" target="_blank">anserini</a> that uses Apache Lucene in the backend. </p>
+<p><a href="https://www.kaggle.com/code/strifonov/pyserini-scibert" target="_blank">This notebook</a> by <a href="https://www.kaggle.com/strifonov" target="_blank">@strifonov</a> was really helpful to run pyserini on kaggle notebook (thank you!).</p>
+<p>Apache Lucene was very efficient and convenient. It was easy to index all the wikipedia dataset and search through BM25 score.<br>
+We splitted each wikipedia page to the paragraph (by “\n\n”). It only required several hours to index in total of 74M records. In the inference time, searching is accelerated by multi-threading, 200 searches are finished in 2 min or so.</p>
+<h3>Dense retrieval</h3>
+<p>We created 2 types of dense retrieval.</p>
+<p><strong>1. All the Wikipedia contents split by sentence wise block</strong></p>
+<p>We used <a href="https://huggingface.co/hkunlp/instructor-xl" target="_blank">instructor-xl</a> for the embedding calculation and used <a href="https://github.com/facebookresearch/faiss" target="_blank">faiss</a> to create index.<br>
+The original index is too big (300GB) to run on memory, so we quantized the index (300GB → 10GB) for this approach.</p>
+<p><strong>2. STEM 270k contents split by paragraph wise block</strong></p>
+<p>We used <a href="https://huggingface.co/BAAI/bge-large-en" target="_blank">bge-large-en</a> for the embedding calculation.<br>
+And only used same pages published in <a href="https://www.kaggle.com/datasets/mbanaei/all-paraphs-parsed-expanded" target="_blank">STEM270k</a> dataset by <a href="https://www.kaggle.com/mbanaei" target="_blank">@mbanaei</a>.</p>
+<p>We added “title” information in each block, so that we can obtain correct search result even when “it/he/she” is used to refer to the title.</p>
+<p>In total, we used 3 types of retrievals, and combined them as a context to input to the LLM.</p>
+<h2>Model (written by <a href="https://www.kaggle.com/zaburo" target="_blank">@zaburo</a>)</h2>
+<p>Our team used Llama-2 7B, 13B, 70B and <a href="https://huggingface.co/mistralai/Mistral-7B-v0.1" target="_blank">Mistral 7B</a>. Since Mistral 7B was achieving better scores compared to Llama-2 of the same size, we used Mistral 7B and Llama-70B in our final submission. Based on the scores from MMLU and the results of our preliminary experiments, we used models without Instruction Tuning, such as Llama-2-70b-hf and Mistral-7B-v0.1.</p>
+<p>For each model, we input the problem in the following format and had the model output the probability that the token corresponding to "▁A", "▁B", "▁C", "▁D", "▁E" comes immediately after this sentence. This yielded decent performance even with models without any fine-tuning.</p>
+<pre><code></code></pre>
+<p>Fine-tuning was done using QLoRA. We incorporated bitsandbytes' 4bit quantization and PEFT's LoRAModel into our training pipeline. The hyperparameters of QLoRA were almost exactly the ones in QLoRA's paper, except for the batch size which had to be lowered due to long input and the GPU memory constraint.</p>
+<p>We expected that running Llama 70B on Kaggle Notebook would be challenging, so we started working on it from the early stages of the competition. We registered quantized weights (less than 40GB) for each layer as a dataset, and performed inference layer-by-layer. By applying xformers' <code>memory_efficient_attention</code> to the attention layers, we were able to keep memory consumption linear even with long contexts, leaving plenty of room in the GPU memory. We used only approximately 6GB of GPU memory for inference.</p>
+<p>LLM can considerably change inference results depending on the order of choices, so we used a test time augmentation strategy in which we rotated the order of choices 5 times to average this effect. This TTA was most effective with pretrained models without any retrieval, and although the effect drastically decreased with retrievals or QLoRA, it remained effective to the end.</p>
+<p>Naively carrying out TTA inference would increase the execution time 5 times, but rather than inferring the entire set 5 times, we concatenated all patterns of choice order like <code>{context} {Q} {A B C D E} {B C D E A} … {E A B C D}</code> and set the <code>attention_mask</code> appropriately to reduce the inference of the long common part to only once. By applying this technique, a 70B model with 5 times TTA worked within time for the full test set, and using a single 70B + BM25 Top2 + 5 times TTA resulted in a Private 0.925 score.</p>
+<h2>Validation</h2>
+<p>We noticed MAP@3 is a bit unstable metric, and can fluctuate a bit. Below are our strategy not to overfit to the public LB.</p>
+<ul>
+<li>We used 3 datasets, train.csv (200), <a href="https://www.kaggle.com/yalickj" target="_blank">@yalickj</a> <a href="https://www.kaggle.com/datasets/yalickj/dataset-wiki-new-1" target="_blank">dataset</a> (300), and our own dataset (1000, described above), for the local validation.<ul>
+<li>We did not use these data in the training, even in the final submission.</li></ul></li>
+<li>We tried to run various experiments with local dataset validation. We did not submit methods which do not work well in our local dataset. I think it prevents us from adopting various methods that overfit the public LB.<ul>
+<li>For example, a custom query like <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/442595#2454966" target="_blank">this</a> did not work well in our experiment, so we did not adopt this.</li>
+<li>Also, we tried embedding model fine tuning, but it did not work well in our local dataset, so we did not submit this too.</li></ul></li>
+</ul>
+<h2>Final Pipeline - Multi Stage Inference (written by <a href="https://www.kaggle.com/charmq" target="_blank">@charmq</a>)</h2>
+<p>We noticed that putting multiple contexts in a prompt at the same time improves the performance of the model. However, because simultaneous input of contexts increases inference time, we used a multi-stage inference pipeline in which easy problems are answered by small models (mistral-7B) and difficult problems are answered by large models (llama2-70B). The final submission consists of three stages as follows:</p>
+<p><strong>1st stage: ensemble of mistral-7B models</strong><br>
+mistral-7B with BM25 top2 contexts + mistral-7B with instructor and bge contexts<br>
+Inference on all data</p>
+<p><strong>2nd stage: llama2-70B</strong><br>
+llama2-70B with BM25 top2, instructor and bge contexts<br>
+Inference on bottom 40% data with low confidence in the 1st stage</p>
+<p><strong>3rd stage llama2-70B</strong><br>
+llama2-70B with bge contexts (2~3 times longer than bge contexts used in the 1st and 2nd stage)<br>
+Inference on bottom 5% data with low confidence in the 1st and 2nd stage</p>
+<p>This multi stage pipeline achieved private:0.926, public:0.928.</p>

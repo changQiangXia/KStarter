@@ -1,0 +1,179 @@
+<p>We would like to express our gratitude to the Kaggle community and the organizers from Czech Technical University in Prague for their contributions to this competition. We also appreciate enthusiastic discussions from all participants. Congratulations to all the participating teams!<br>
+The work described here is actually a joint effort by <a href="https://www.kaggle.com/sunnyykk" target="_blank">@sunnyykk</a>, <a href="https://www.kaggle.com/gdchenhao" target="_blank">@gdchenhao</a>, <a href="https://www.kaggle.com/mayunchaoamap" target="_blank">@mayunchaoamap</a> and <a href="https://www.kaggle.com/wangshengyi96" target="_blank">@wangshengyi96</a>. We especially thank our mentor Zhang Tao for his strong support and guidance.<br>
+I'm very glad to have been part of such an excellent team participating in IMC-2024. Throughout the competition, we have gained a lot and learned a lot.<br>
+It is an honor to share our solution with you now.</p>
+<h2>1. Overview</h2>
+<p>Undoubtedly, the biggest difference between this year's competition and previous competitions is the appearence of transparent and reflective scenes. After many trials, we found it challenging to develop a general solution that could handle both transparent and conventional scenes simultaneously. Therefore, we designed different methods to tackle the two types of scenes.<br>
+<strong>Conventional Scenes</strong>: We designed an iterative optimization SfM scheme based on the Minimum Spanning Tree (MST). We use the coarse model reconstructed from the most concise data association as a skeleton and iteratively add redundant associations to optimize the accuracy of the coarse model.<br>
+<strong>Transparent and Reflective Scenes</strong>: We assume that the camera captures a transparent object in a circumferential manner and focus on calculating the shooting sequence of the images. Then we place the images in the corresponding positions and orientations. Notably, we designed a new global descriptor that can effectively capture detailed information in these scenes, enabling accurate camera pose estimation.<br>
+Moreover, our code is based on the open-source solution of the 7th team <a href="https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/427143" target="_blank">RMD-3DV</a> from IMC-2023. This robust baseline, which combines technologies like feature ensemble, pixsfm, and reloc with colmap, allowed us to build upon their framework without starting from scratch. We appreciate their generous contribution.</p>
+<h2>2. Method</h2>
+<p>This is the pipeline of our solution:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F15672041%2F42d7d2c74bfa064e7f18da3a4a575c8c%2F2024-07-01%2020.54.59.png?generation=1719838528246968&amp;alt=media"></p>
+<h3>2.1 Preprocessing</h3>
+<p>We start by performing rotation detection on the images and determine whether the scene is transparent or not.</p>
+<ul>
+<li><strong>Rotation Detection</strong>:&nbsp;We use a rotation detection model to predict and correct the image rotation. However, recognizing that the model's predictions are not always accurate, we retain the original rotations if less than 10% of the images are predicted rotated.</li>
+<li><strong>Shared Camera Intrinsics</strong>:&nbsp;If all the image dimensions are identical, we set all cameras to share the same internal parameters, occasionally bringing a 0.01 improvement in results.</li>
+<li><strong>Transparency Detection</strong>:&nbsp;We calculate the average difference between different images to determine whether the scene is transparent or not for separate handling.</li>
+</ul>
+<h3>2.2 Global Features</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F15672041%2Fca78e1978e7ceb711ec0f41a64e1e27b%2F2024-07-01%2020.56.14.png?generation=1719838610536552&amp;alt=media"></p>
+<p>We designed a stronger global feature descriptor that yields more reliable image pairs during the image retrieval phase.<br>
+Specifically, we developed a global descriptor combining point and patch features. The basic approach involves extracting point features (ALIKED) and patch features (DINO) from an image, then establishing a one-to-one correspondence based on their spatial relationships. Using clustering and the VLAD algorithm, we generate global descriptors. This approach allows the clustering algorithm to achieve unsupervised learning of scene features, and incorporating DINO further elevates the learning potential.<br>
+Our method outperforms NetVLAD, AnyLoc, DINO (GAP or GMP), and SALAD on VPR-related datasets. While the image retrieval in the SfM pipeline typically results in many candidate matches (30+), which provides robustness to high recall rates, distinguishing retrieval capabilities becomes less pronounced. Compared to other configurations and excluding transparent scenes, the scores of NetVLAD and our global features are as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Global Descriptor</th>
+<th>Private</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NetVLAD</td>
+<td>0.241</td>
+<td>0.230</td>
+</tr>
+<tr>
+<td><strong>Ours</strong></td>
+<td><strong>0.245</strong></td>
+<td><strong>0.247</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>2.3 Local Features</h3>
+<p>We utilized three types of local features and use the ensemble of their matching results:</p>
+<ul>
+<li><strong>Dedode v2 + Dual Softmax</strong></li>
+<li><strong>DISK + LightGlue</strong></li>
+<li><strong>SIFT + Nearest Neighbor</strong></li>
+</ul>
+<p>The v2 version of the Dedode detector produces richer and more evenly distributed feature points. We selected the pre-trained G-upright as the descriptor and dual softmax as the matcher.</p>
+<table>
+<thead>
+<tr>
+<th>Local Feature Configuration</th>
+<th>Private</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ALIKED + DISK + SIFT</td>
+<td><strong>0.184</strong></td>
+<td>0.169</td>
+</tr>
+<tr>
+<td>SuperPoint + DISK + SIFT</td>
+<td>0.178</td>
+<td>0.172</td>
+</tr>
+<tr>
+<td>Dedode v1 + DISK + SIFT</td>
+<td>0.179</td>
+<td>0.177</td>
+</tr>
+<tr>
+<td><strong>Dedode v2 + DISK + SIFT</strong></td>
+<td><strong>0.184</strong></td>
+<td><strong>0.185</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>2.4 MST-Aided Coarse-to-Fine SfM Solution</h3>
+<p>In the data association phase of SfM, extensive feature matching is typically undertaken to enhance the robustness and accuracy of SfM. However, increasing data associations in scenes with repetitive textures can result in more incorrect matches. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F15672041%2Fd7468879e081409467ad74f5fc895c83%2F2024-06-06%2020.17.12.png?generation=1717676240666535&amp;alt=media"><br>
+This issue was evident in the reconstruction result of church scene in the train set.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F15672041%2F06b5b48d023cc71d8183039d0902750b%2F2024-06-06%2020.02.28.png?generation=1717675369117964&amp;alt=media"> <br>
+To address this, we proposed a coarse-to-fine SfM solution based on the Minimum Spanning Tree (MST)</p>
+<p></p><ul><br>
+<li><strong>Stage 1</strong>:&nbsp;We construct a similarity graph where vertices represent images, and edges represent similarity. By computing the MST, we obtain a globally optimal data association linking all image nodes, which is used for the first SfM. Experiments showed this method removes a large amount of incorrect associations, significantly improving coarse-grained accuracy but somewhat losing fine-grained accuracy.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F15672041%2Ff2258dbcc3d0707a98f7db089871a659%2F1.png?generation=1717675415406880&amp;alt=media"></li><br>
+<li><strong>Stage 2</strong>:&nbsp;We use full data associations and the coarse model from Stage 1 providing initial camera pose priors for geometric verification. This filters out incorrect feature matches in the full data association, leading to the final model. The data redundancy maintains the coarse-grained advantages of Stage 1 while compensating for its fine-grained accuracy losses.<br><p></p>
+<table>
+<thead>
+<tr>
+<th>SfM Solution</th>
+<th>Private</th>
+<th>Public</th>
+<th><br></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct SfM</td>
+<td>0.240</td>
+<td>0.253</td>
+<td><br></td>
+</tr>
+<tr>
+<td>MST-Aided SfM (Stage 1 Only)</td>
+<td>0.216</td>
+<td>0.218</td>
+<td><br></td>
+</tr>
+<tr>
+<td><strong>MST-Aided SfM (Stage 1 + 2)</strong></td>
+<td><strong>0.258</strong></td>
+<td><strong>0.268</strong></td>
+<td></td></tr></tbody></table></li>
+
+
+</ul>
+
+
+
+
+
+<h3>2.5 Post-Processing</h3>
+
+
+
+
+
+
+<p>Following the experiences from previous competitions, we employed pixsfm to optimize the SfM model. Additionally, we deployed an HLoc-based relocalization module to process unregistered images, which typically resulted in a 0~0.01 score improvement.</p>
+<h3>2.6 Transparent Scenes</h3>
+<p>For transparent scenes, we tried to use various local features, including ALIKED, DISK, LoFTR, and DKMV3, but unfortunately none delivered satisfactory results. By observing the training set, we assumed circumferential camera capture of transparent targets. Using similarity graphs from global features, we calculate the min-cost path to determine the image shooting sequence, arranging all cameras in a closed loop to calculate their positions and orientations.<br>
+Interestingly, visualizing the global features of a cylinder also revealed a highly ordered 2D plan layout, aiding significantly in recovering the image capture sequence. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F15672041%2F8625f3098ae89ad3ebfb6f7202344376%2F2024-06-06%2020.37.07.png?generation=1717677454710544&amp;alt=media"><br>
+The solution for transparent scenes improved scores by approximately <strong>0.06</strong> eventually.</p>
+<table>
+<thead>
+<tr>
+<th>Solution</th>
+<th>Private</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Without Transparent Solution</td>
+<td>0.184</td>
+<td>0.185</td>
+</tr>
+<tr>
+<td><strong>With Transparent Solution</strong></td>
+<td><strong>0.242</strong></td>
+<td><strong>0.249</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>3. Other Ideas</h2>
+<h3>3.1 Methods that did not work</h3>
+<ul>
+<li><strong>Enhanced First Phase of MST-Aided SfM</strong>:&nbsp;By adding more redundant edges (e.g., top-k, alternative key paths) to MST, aiming to balance recall and precision in the first reconstruction phase. While private score reached a high of <strong>0.263</strong>, the public score was only <strong>0.249</strong>, so this was not selected.</li>
+<li><strong>Lightglue Matcher for Dedode</strong>:&nbsp;We tested Kornia's lightglue matcher for dedode (b/g), but it performed worse than dual softmax.</li>
+<li><strong>Day-Night Challenge</strong>:&nbsp;To tackle day-night challenges in pond and lizard datasets, we attempted brightness-based day/night classification, normalized feature distribution, but encountered unknown "Throw Exception" obstacles.</li>
+<li><strong>Dense Matchers</strong>:&nbsp;We tested dense matchers like LoFTR, EfficientLoFTR, and DKMV3 in conventional scenes but saw no score improvement, likely due to our unoptimized parameters (matching threshold, grid size, etc.).</li>
+<li><strong>Neural Network-Based SfM</strong>:&nbsp;We explored neural network-based SfM methods like Dust3R for transparent scenes, but results were not pretty well.</li>
+<li><strong>Dense Optical Flow</strong>:&nbsp;Using dense optical flow to restore the image capture sequence in transparent scenes also worked but was less effective than our proposed global feature.</li>
+</ul>
+<h3>3.2 Methods that we haven't tried</h3>
+<ul>
+<li><strong>TTA</strong>:&nbsp;We didn't try TTA methods due to runtime considerations.</li>
+<li><strong>Multi-Scale Matching</strong>:&nbsp;We didn't detect covisible regions or perform multi-scale local feature matching.<br>
+﻿</li>
+</ul>

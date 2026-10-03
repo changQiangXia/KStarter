@@ -1,0 +1,134 @@
+<h1>Summary</h1>
+<ul>
+<li>Retriever and reranker</li>
+<li>Transformer-based model for retriever</li>
+<li>GBDT-based model for reranker</li>
+<li>Inference code <a href="https://www.kaggle.com/code/iiyamaiiyama/llecr-ens8910-125128-149154-155157" target="_blank">https://www.kaggle.com/code/iiyamaiiyama/llecr-ens8910-125128-149154-155157</a></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2304617%2Fa101ba6640b7753f57c8d362e540c16a%2Flecr-reranker.png?generation=1678838816684059&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2304617%2Fe6c650f31f8520c19cb6e34b825d6ded%2Flecr-reranker2.png?generation=1678838830446492&amp;alt=media" alt=""></p>
+<h1>CV strategy</h1>
+<p>Simple 5fold random split with topic-id.<br>
+For stage 1 I used all data, including "source".<br>
+For stage 2, I used the same fold split as for stage 1, and created several models with and without "source" to ensure diversity.<br>
+CV and LB were well correlated.</p>
+<p>I trained a model based on channel GroupKFold and select it for one of my final submissions, but a simple random kfold gave slightly better results for CV and LB.</p>
+<h1>Retriever(stage1)</h1>
+<h2>Text</h2>
+<p>The training text was created as follows:</p>
+<ul>
+<li>Topics  <br>
+Recursively traversed to the root node and added titles. Finally, the topic description was added. For example, (root title + parent1 title + … + topic title + topic description).  </li>
+<li>Contents  <br>
+The title and description were concatenated. The "text" column was discarded.</li>
+</ul>
+<p>model    max positive score@50   CV F2@stage1    CV F2@stage2    public LB@stage2<br>
+sentence-transformers/LaBSE    0.8887  0.5462  0.6727  0.676<br>
+sentence-transformers/paraphrase-multilingual-mpnet-base-v2    0.8891  0.5429  0.6698  0.678<br>
+facebook/xlm-v-base    0.8869  0.532   0.669   0.671<br>
+xlm-roberta-base    0.8832  0.5388  0.6666  0.676<br>
+naive ensemble above four    0.9336  -   0.6916  (I didn't sub this)<br>
+my published submission     -   -   0.7152  0.707</p>
+<h2>Model</h2>
+<p>Each topic and its correlated contents were grouped together as one class. <br>
+The model was trained with ArcFace. Each model produces 768-dimensional embeddings. <br>
+Trained for 30 or 60 epochs, which took about 5 hours per fold. <br>
+The margin was gradually increased from 0.2 to 0.6 during training.<br>
+The following models were used for the final submission.</p>
+<ul>
+<li><a href="https://huggingface.co/sentence-transformers/LaBSE" target="_blank">sentence-transformers/LaBSE</a></li>
+<li><a href="https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2" target="_blank">sentence-transformers/paraphrase-multilingual-mpnet-base-v2</a></li>
+<li><a href="https://huggingface.co/facebook/xlm-v-base" target="_blank">facebook/xlm-v-base</a></li>
+<li><a href="https://huggingface.co/xlm-roberta-base" target="_blank">xlm-roberta-base</a></li>
+</ul>
+<h2>KNN</h2>
+<p>For each topic, find 50 nearest neighbor contents and these pairs are passed to the reranker(stage2).</p>
+<h1>Reranker(stage2)</h1>
+<p>When I submitted stage1 model only, I coudn't reach 0.6 on the public LB. I think this is because stage1 model doesn't have any topic-tree structure information. So I added many tree-based features for stage2 model.</p>
+<h2>Model</h2>
+<p>CatBoost and XGBoost were used for reranker.<br>
+Features were created for each pair, then GBDT model predicts probability that the pairs were correlated or not.</p>
+<h2>Example of features</h2>
+<ul>
+<li>Embeddings distance</li>
+<li>TF-IDF distance</li>
+<li>Whether the topic's siblings correlated the target content</li>
+<li>How many times the content was correlated in the channel</li>
+</ul>
+<h2>Ensemble</h2>
+<ul>
+<li>stage1  <br>
+Concatenate embeddings then find KNN</li>
+<li>stage2  <br>
+Average GDBT predictions, then select pairs as positive predictions above the threshold.</li>
+</ul>
+<h1>Post-processing</h1>
+<ul>
+<li>After stage2, if there were no predictions for a topic, the content with the highest predicted score was added.</li>
+<li>If two contents that were always correrated together in "correlations.csv", and one of them appeared in the prediciton, add the other one.</li>
+<li>Search best threshold for each channel<br>
+For channels not included in the training data, a fixed threshold was used. (based on CV across all channels)</li>
+</ul>
+<h1>Not worked</h1>
+<ul>
+<li>"text" information of contents  <br>
+I cannot find good way to use "text" column.</li>
+<li>Transformer-based reranker  <br>
+They were very prone to overfitting. </li>
+</ul>
+<h1>Appendix: my models</h1>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>max positive score@50</th>
+<th>CV F2@stage1</th>
+<th>CV F2@stage2</th>
+<th>public LB@stage2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sentence-transformers/LaBSE</td>
+<td>0.8887</td>
+<td>0.5462</td>
+<td>0.6727</td>
+<td>0.676</td>
+</tr>
+<tr>
+<td>sentence-transformers/paraphrase-multilingual-mpnet-base-v2</td>
+<td>0.8891</td>
+<td>0.5429</td>
+<td>0.6698</td>
+<td>0.678</td>
+</tr>
+<tr>
+<td>facebook/xlm-v-base</td>
+<td>0.8869</td>
+<td>0.5320</td>
+<td>0.6690</td>
+<td>0.671</td>
+</tr>
+<tr>
+<td>xlm-roberta-base</td>
+<td>0.8832</td>
+<td>0.5388</td>
+<td>0.6666</td>
+<td>0.676</td>
+</tr>
+<tr>
+<td>Naive ensemble above four</td>
+<td>0.9336</td>
+<td>-</td>
+<td>0.6916</td>
+<td>(I didn't sub this)</td>
+</tr>
+<tr>
+<td>My published submission</td>
+<td>-</td>
+<td>-</td>
+<td>0.7152</td>
+<td>0.707</td>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,42 @@
+<p>Awesome competition! Thanks everyone for sharing many wonderful discussions and notebooks. This competition was so much fun. I'm ready for another LLM QA comp already!</p>
+<h1>RAG Ensemble</h1>
+<p>Early in the competition, I jumped into gold using a single DeBERTa-v3-large (trained on my 60k dataset <a href="https://www.kaggle.com/datasets/cdeotte/60k-data-with-context-v2" target="_blank">here</a>) and ensemble multiple RAG pipelines. Each RAG pipeline extracts context. Then we infer each <code>context + question + choices</code> with DeBERTa-v3-large. And finally ensemble the sets of logits and make predictions:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Sep-2023/rag-ensemble2.png" alt=""></p>
+<h1>GPU Speed Up</h1>
+<p>I was surprised to discover that each new RAG pipeline I added above improved my CV and LB more than adding additional DeBERTa. Therefore I focused on accelerating the speed of RAG pipeline + DeBERTa inference (with the goal of ensemble in mind). I created lots of diverse RAG pipelines and I accelerated RAG with:</p>
+<ul>
+<li>Use <strong>GPU</strong> for Faiss</li>
+<li>Use <strong>GPU</strong> for TF-IDF with <strong>RAPIDS</strong></li>
+<li>Use <strong>GPU</strong> (and fp16 on 2xT4) for Sentence Transformers</li>
+</ul>
+<p>Regarding DeBERTa, with 2xT4 GPU I was able to infer DeBERTa <strong>4x faster</strong> than using 1xP100 GPU. This was accomplished using </p>
+<ul>
+<li><code>from torch.cuda.amp import autocast</code> (Note fp16 only speeds up T4 not P100 GPU) for 2x speed</li>
+<li><code>import threading</code> where we infer half the test samples on each T4 GPU for 2x speed</li>
+</ul>
+<h1>Example Notebook</h1>
+<p>Example notebook with GPU Speed Up is <a href="https://www.kaggle.com/code/cdeotte/rapids-tf-idf-lb-0-900" target="_blank">here</a>. Submit notebook single model takes only <strong>30 minutes</strong> and achieves <strong>LB 0.900</strong>!<br>
+<strong>UPDATE:</strong> After competition ended, I learned about the TF-IDF parameter <code>sublinear_tf=True</code> (<a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446558" target="_blank">here</a> and <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446693" target="_blank">here</a>). This boost CV and LB by an amazing <code>+0.010</code> WOW! I updated notebook version 2 with this parameter.</p>
+<h1>Diverse RAGs</h1>
+<p>The goal of RAG is to search Wikipedia and find text context. My final ensemble used the following diverse RAGs:</p>
+<ul>
+<li>Find top 5 articles out of 6M Wikipedia using title, key words, first paragraph. Then extract top 20 sentences.</li>
+<li>Find top 5 sections out of 128k STEM Wikipedia. Then extract top 20 sentences</li>
+<li>Find top 5 chunks out of 12M Wikipedia 512 token chunks. Then extract 20 sentences</li>
+<li>Use Question plus Choices to search Wikipedia.</li>
+<li>Use Question without Choices to search Wikipedia</li>
+<li>Use Choices without Questions to search Wikipedia</li>
+<li>Find top 5 sections out of 271k Wikipedia STEM using <strong>RAPIDs TF-IDF</strong>. Then use paragraphs</li>
+<li>Find top 5 sections out of 271k Wikipedia STEM using Sentence Transformers. Then use paragraphs.</li>
+</ul>
+<h1>Memory Error</h1>
+<p>Unfortunately I could only ensemble 7 of my dozens of RAG pipelines before receiving OOM errors. This ensemble submit took only 6 hours to infer 7x Wikipedia RAG and 7x three DeBERTa. If I could solve the OOM errors then I could infer more RAG + DeBERTa pipelines in the remaining 3 hours and boost CV and LB. (In retrospect, perhaps I should have focused on improved RAG quality over RAG quantity).</p>
+<h1>Question Drop Out Augmentation</h1>
+<p>My best DeBERTa-v3-large was trained on my 60k dataset and used <strong>Question Drop Out Augmentation</strong>. During training, samples typically use <code>Question + 5 Choices</code> to locate <code>context</code>. Then the DeBERTa is trained with <code>context + question + 5 choices</code>. The idea of <strong>Question Drop Out Augmentation</strong> is that randomly 50%, we only use <code>5 Choices</code> to locate <code>context</code>. And the DeBERTa is trained with <code>context + 5 choices</code> without seeing the question.</p>
+<p>Using <strong>Question Drop Out Augmentation</strong> achieved my best <code>MAP@3</code> loss for 200 train sample of <code>0.470</code>. This single model achieved <code>LB 0.904</code> in notebook <a href="https://www.kaggle.com/code/cdeotte/rapids-tf-idf-lb-0-900" target="_blank">here</a>.</p>
+<h1>Choice Permute TTA</h1>
+<p>Another interesting technique that I observed was <strong>Choice Permute TTA</strong>. When extracting context we can concatenate <code>question + choice A, B, C, D, E</code>. Using sentence transformers, this gets context. If we use concatenate <code>question + choice E, B, A, C, D</code> where we randomly permute the choices, then sentence transformer extracts different context. If we infer both context with DeBERTa and ensemble the two sets of logits, we observe a boost in CV LB!</p>
+<h1>Another 1.6x Speed Up Trick!</h1>
+<p>We can achieve another 1.6x Speed Up for a total of <strong>7x speed up</strong> when comparing 2xT4 vs. 1xP100 using <strong>Drop 2 Wrong Choice</strong>. After we infer a few DeBERTa, we can use the result to determine the 2 wrong choices for each test question. Then we can infer only the 3 best choices for a <code>5/3 = 1.6x</code> speed up. (i.e. we only generate and infer tokens for top 3 choices). We set the prediction for unused choice 4 and 5 as the same logit as choice 3. Then we have 5 logits and we can ensemble this with our previous inference.</p>
+<h1>My 60k, 40k, and 99k Datasets!</h1>
+<p>Thank you Kagglers for sharing so many wonderful train datasets. To train OpenBook QA DeBERTa-v3-large, I added context to every public dataset and then published the resultant data with context column added in my three Kaggle datasets. Discussions <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436383" target="_blank">here</a>, <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/440908" target="_blank">here</a>, and <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444202" target="_blank">here</a>. I trained many DeBERTa-v3-large models using all sorts of combinations of these three datasets in search for the best train procedure and data! However the success of my final solution was a result of having many diverse RAG pipelines and not because of having many (or a great) DeBERTa-v3-large.</p>

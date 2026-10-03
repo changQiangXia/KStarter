@@ -1,0 +1,286 @@
+# https://www.kaggle.com/competitions/learning-agency-lab-automated-essay-scoring-2/discussion/497832
+
+Topic #497832: DeBERTa Starter Suggestions and Tips - LB 0.800+
+  Author: Chris Deotte
+  Posted: 2024-04-25 23:10:32.550000
+  Votes: 218  Comments: 84
+
+Hi. I have been reading discussions and notebooks and running my own experiments. I plan to publish a DeBERTa starter notebook soon. In the meanwhile, here is some food for thought which has improved my CV score for local DeBERTa experiments!
+
+Current Starter Notebooks
+
+I reviewed the public notebooks and I see three great starter notebooks:
+
+
+
+Moth provides a pure PyTorch starter here using classification approach.
+
+Chicm provides a HuggingFace Trainer starter here using classification approach
+
+Yuto provides a HuggingFace Trainer starter here using classification approach
+
+UPDATE I published a starter here. It uses regression approach and tricks below! It achieves CV 0.822 LB 0.800!
+
+
+Regression versus Classification
+
+An alternative to using AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=6) classification is using regression. 
+
+It's simple, just use AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=1) and set the 1 target to the train.csv's value of score converted to datatype float32. Then we have regression. 
+
+No Dropout for Regression
+
+If we want to use regression, remember that we need to remove dropout from NLP transformers to prevent batch norm from destabilizing our regression prediction. Discussion here
+
+ = AutoConfig.from_pretrained(PATHS.model_path)
+ = 
+ = 
+ =  
+ = AutoModelForSequenceClassification.from_pretrained(MODEL, config=config)
+
+
+Is Regression better than Classification?
+
+Currently I am achieving better CV score using regression than classification! What is everyone else experiencing! 
+
+Max Token Sequence Length
+
+Most (actually, I think all) public notebooks use tokenizer(essay, max_length=512) with max=512. Below is a histogram of essay token length. The transformer DeBERTa can accept any length input. (Whereas other encoder models like BERT or RoBERTa can only accept 512). 
+
+Using max_length = 1024 or max_length = 1536 for DeBERTa gives a nice CV score boost (versus 512). Consider doing this. If we want to use RoBERTa (which has different architecture and tokenizer), consider using the model LongFormer (which is a modified RoBERTa model) and can also accept any length input. (Also if we use RoBERTa or LongFormer, consider adding parameter trim_offsets = False to the tokenizer to give your model more information because it doesn't remove whitespace).
+
+
+
+Batch Size
+
+Note that different batch sizes achieve different CV score and LB score. It makes a big difference in this competition. So experiment with different batch sizes. For me, batch size = 8 (with starting LR 1e-5) is working best!
+
+Fast Experimentation
+
+For experiments, consider using "microsoft/deberta-v3-small" or "microsoft/deberta-v3-xsmall". And then after developing your intuition and finding good hyperparameters, train "microsoft/deberta-v3-large" for boost in CV score and LB score.
+
+Learning Schedule
+
+We can train with constant, linear, step, and cosine. And we can vary the number of epochs. Make sure to find the best schedule and learning rate! For me, using linear with epochs=4 is working best!
+
+Add Special Tokens
+
+Note that DeBERTa ignores characters ("\n") (carriage returns) and (" "*2) (double spaces). Consider adding extra tokens to the vocabulary before tokenization. (UPDATED code based on Nicholas comment below)
+
+from tokenizers import AddedToken
+tokenizer.add])
+model = from
+model.resize)
+
+
+My Starter Notebook - CV 0.822 - LB 0.800
+
+UPDATE I published a HuggingFace Trainer starter here using regression approach and tricks above! It achieves CV = 0.822 and LB = 0.800! This beats all current public DeBERTa single model notebooks WOW! If we use these hyperparameters for DeBERTa large the CV score and LB score will be even better!
+
+Enjoy!
+
+Have fun experimenting!
+
+Comments:
+├─ Nicholas Broad (2024-04-26 06:21:54.420000) [+19]
+│  Due to the preprocessor in the tokenizer, your approach won't work for adding the newline token.
+│  
+│  Here is how you can do it:
+│  
+│   tokenizers  AddedToken
+│  
+│  tokenizer.add_tokens([AddedToken(, normalized=)])
+  ├─ Sandy (2024-04-26 06:41:55.303000) [+1]
+  │  What does the normalised parameter achieve, if I may ask?
+    ├─ Nicholas Broad (2024-04-26 06:49:29.143000) [+8]
+    │  The normalization step of the deberta tokenizer will change all consecutive whitespace (" ", "\n", "\r", "\t", etc.) to a single space.  This is why tokenizer.encode("hello\tthere")  will be the sa...
+    ├─ Sandy (2024-04-26 10:27:37.870000) [+1]
+    │  Thanks a lot.
+  ├─ Chris Deotte (2024-04-26 09:05:58.920000) [+1]
+  │  Thanks. I will update the code in my post.
+├─ Chris Deotte (2024-04-27 05:37:05.563000) [+5]
+│  UPDATE: I published a DeBERTa-v3-small regression notebook here. Single model is CV 0.822 and LB 0.800. Enjoy!
+  ├─ hongyao hongyao (2024-04-27 09:07:35.897000) [+2]
+  │  Great! Did you have some experiments on weight_decay and new special token?
+    ├─ Chris Deotte (2024-04-27 12:41:17.160000) [+0]
+    │  No not yet. I have not done experimenting with changing these yet.
+    │  
+    │  Currently i have only tried weight_decay = 0.01 and I have only tried adding new tokens ("\n") and (" "*2). So we can try differe...
+├─ Ertuğrul Demir (2024-04-26 11:46:15.917000) [+5]
+│  Nice tricks! I'm using the deberta-v3-xsmall model for my trials, and it's giving me decent results. If you want
+│  even faster trials, I can recommend it. Additionally, consider freezing some early e...
+  ├─ Chris Deotte (2024-04-26 18:27:23.837000) [+2]
+  │  CommonLit was fun working together. I learned the dropout trick there. I forgot there is an xsmall DeBERTa. I will experiment with that one, thanks.
+    ├─ Maksym Dolgikh (2024-04-27 13:21:45.783000) [+2]
+    │  I think xsmall might be newer than small too. At least it beats deberta v3 small on some benchmarks.
+├─ Yang Yundan (2024-04-28 15:17:12.040000) [+3]
+│  Thanks for your analysis. You made me want to join this competition. I'm joining!
+├─ Zhecheng Li (2024-04-25 23:35:32.013000) [+3]
+│  Hello Chris. I can achieve a CV score close to 0.85 using 5-fold deberta-v3-large, but on the lb it's only 0.798, which is far worse than the result of LGBM now. Do you expect NLP-related models ca...
+  ├─ Chris Deotte (2024-04-25 23:40:20.243000) [+6]
+  │  The current (best public LB notebooks) tree models are not single stage 1 models. They are stacking stage 2 models. They take NLP DeBERTa predictions are inputs, then add more features then make pr...
+    ├─ Zhecheng Li (2024-04-25 23:42:42.657000) [+2]
+    │  Thanks for your reply, Chris. I'll try to explore more.
+  ├─ Timmy Juicehouse (2024-04-26 00:42:17.640000) [+2]
+  │  My best LGBM without stacking is 0.800, cv got 0.799.
+    ├─ Chris Deotte (2024-04-26 00:44:54.410000) [+2]
+    │  That's great. Good work @sweetyheehee . After I tune my DeBERTa, i will post my best DeBERTa here
+    ├─ Chris Deotte (2024-04-26 01:05:58.760000) [+3]
+    │  My first DeBERTa submission is DeBERTa small. It has CV 0.815 and LB 0.788 (and beats all public notebook DeBERTa single models). It uses regression. I suspect that DeBERTa large LB will be similar...
+    ├─ Timmy Juicehouse (2024-04-26 01:14:36.957000) [+3]
+    │  Thank you for your message, Chris @cdeotte. I'm focusing on GBDT model now and see what limit it is, then I'll train and finetune LLM.
+├─ superslon (2024-04-26 11:43:40.423000) [+4]
+│  Hi Chris, very cool tips!
+│  
+│  I think last layers reinitialization, first layers freezing and gradient clipping can be added as next level tricks.
+│  
+│  P.S I tried them all for deberta-v3-base, but unfort...
+  ├─ superslon (2024-04-26 11:55:35.590000) [+2]
+  │  I also tried adding a dropout with p=0.1 before the fully connected layer and got a terrible score on one of the folds, although all the others were pretty good
+  │  
+  │  
+  │  
+  │  
+  │  exp
+  │  fold 1
+  │  fold 2
+  │  fold 3
+  │  fold 4
+  │  ...
+    ├─ DJ_Xia (2024-04-26 14:21:43.770000) [+22]
+    │  During training, dropout randomly omits neurons with a probability of \(p\) while adjusting the weights of the remaining neurons by a factor of \(\frac{1}{1-p}\) to maintain the expected output val...
+    ├─ Sabbir Ahmed (2024-04-29 02:21:08.940000) [+1]
+    │  @tonymarkchris great explanation!
+├─ STEPHENCAI (2024-06-03 16:53:11.350000) [+1]
+│  I wonder if we use the text generated by other LLM like Mamba, GPT or something else, would that make any different?
+  ├─ Bao Loc Pham (2024-06-27 06:44:02.327000) [+0]
+  │  In my case, increase in CV, but LB stay the same. :V
+├─ Thopmann (2024-06-02 04:34:41.747000) [+1]
+│  whether when using gemma, the implementation is the same as using deberta?
+  ├─ STEPHENCAI (2024-06-08 01:11:06.557000) [+1]
+  │  Pretty much the same. Depends on how you modify the dataset and model structure.
+├─ qianc (2024-05-25 11:27:01.303000) [+1]
+│  Excuse me, I trained a deberta-v3-large model with a cv of 0.825, fold 5, and each fold was 4epoch. Like the previous public notebook, I created my own deberta-v3_oof.pkl file. I took My best noteb...
+  ├─ Roschild.Rui (2024-05-31 14:46:01.730000) [+1]
+  │  Cause there are maybe 4 fold which you have used this fold for train is zero mistake and just one fold which you used other 4 for train and this fold for valid is true metrics , and when you mean t...
+├─ qianc (2024-05-11 14:27:28.363000) [+1]
+│  cv 0.867 lb0.805
+  ├─ Chris Deotte (2024-05-11 15:34:58.610000) [+0]
+  │  Great CV and LB. Well done!
+    ├─ qianc (2024-05-14 09:13:52.817000) [+0]
+    │  I got cv0.926, LB??? with deberta-v3-large，
+    ├─ qianc (2024-05-14 09:14:00.733000) [+0]
+    │  I don't know if it's a data leak, but the same code as my previous deberta-v3-small, cv is 0.867 and lb is 0.805
+    ├─ qianc (2024-05-14 09:14:44.483000) [+0]
+    ├─ qianc (2024-05-14 11:33:51.073000) [+0]
+    │  lb 0.791😂
+    ├─ Chris Deotte (2024-05-14 12:26:38.203000) [+3]
+    │  That's weird. It looks like a data leak. Are you adding Persuade 2.0 corpus data? (It overlaps with train data).
+    ├─ qianc (2024-05-14 12:54:25.210000) [+0]
+    │  yes,adding Persuade 2.0 corpus data
+    ├─ qianc (2024-05-14 12:55:09.300000) [+0]
+    │  Thank you for your answer
+├─ shige (2024-05-09 12:02:04.660000) [+1]
+│  Thanks for always providing  information!
+│  
+│  I have a question regarding the tokenizer. 
+│  Do you think it would be beneficial to add two tokens ('\n', ' '*2) to the tokenizer and perform pre-training ...
+  ├─ Chris Deotte (2024-05-09 14:20:01.343000) [+1]
+  │  When you say "pre training" are you referring to the typical way that DeBERTa is pretrained using billions of text from internet with tasks like MLM?
+    ├─ shige (2024-05-09 14:22:55.967000) [+1]
+    │  Yes. I assumed that the MLM.
+    ├─ Chris Deotte (2024-05-09 14:40:41.510000) [+1]
+    │  Yes it would probably help to teach the model about "\n" and " "*2 with finetuning. But we must be careful not to erase DeBERTa's previous learning from billions of text. So we would probably need ...
+├─ Molly Croes (2024-05-01 23:30:24.600000) [+1]
+│  New to this, thank you for an in depth analysis. Very informative!
+├─ Rishan Hasan Tenis (2024-05-01 16:47:51.317000) [+1]
+│  I would like to participate this completion! Thanks for sharing! @cdeotte
+├─ Raahim Siddiqi (2024-05-01 12:16:28.807000) [+1]
+│  I see alot of people using Deberta OOF predictions as meta-features, but don't see anyone using deberta embeddings as a feature to the regression/classification model. Why?
+  ├─ Chris Deotte (2024-05-01 15:26:45.217000) [+10]
+  │  We should try both. However note that OOF is 6 more features whereas the embeddings are 1024 new features which are a lot and most are probably not helpful. Maybe we can use PCA to reduce the deber...
+  ├─ Ertuğrul Demir (2024-05-09 19:22:37.723000) [+2]
+  │  I am using them, getting around 0.83 cv in combination with other features
+├─ Hina Ismail (2024-05-01 07:54:20.777000) [+1]
+│  Amazing analysis!
+│  Great work in the notebook!!
+├─ SrinivasR (2024-04-29 02:11:47.623000) [+1]
+│  Thanks Chris (@cdeotte) for another outstanding set of observations and suggestions for experiments and the starter nb. Much appreciated. I did notice though that the link you provided for "No Drop...
+  ├─ SrinivasR (2024-04-29 02:13:05.730000) [+2]
+  │  Think I found the relevant link. It is here https://www.kaggle.com/competitions/commonlitreadabilityprize/discussion/260729
+  ├─ Chris Deotte (2024-04-29 02:14:48.570000) [+0]
+  │  Yes, that is the correct link. Thanks for letting me know. I fixed the link above. Also here is the link
+├─ HappyOldMan (2024-04-28 13:57:01.960000) [+1]
+│  You always offer us a lot of great instruction! I have learnt much from your! Best regards!❤️
+├─ Sabbir Ahmed (2024-04-28 02:40:15.417000) [+1]
+│  @cdeotte Thanks for sharing such details. Very informative.
+├─ Taimo (2024-04-27 07:59:40.727000) [+1]
+│  Thank you for sharing the informative report and notebook, Chris!
+│  As far as I remember, the embedding layer of DeBERTa also has a dropout layer.
+│  Did you try turning off the dropout as well?
+  ├─ Chris Deotte (2024-04-27 15:47:01.177000) [+2]
+  │  I was not aware of this. Thanks for pointing this out. I will investigate.
+├─ Sergey Bryansky (2024-04-26 20:14:42.350000) [+1]
+│  It seems deberta-large from best stacking deberta + lgb public notebooks achieves 0.794 public as solo classification model blended along 5 folds. I've tested it. Let start the classical thread.
+  ├─ Chris Deotte (2024-04-26 20:59:47.620000) [+4]
+  │  Thanks for checking. Your discussion thread is helpful. It will be good to know what is achievable using DeBERTa only. My starter notebook using DeBERTa-v3-small regression is running now. It achie...
+├─ hongyao hongyao (2024-04-26 09:30:33.507000) [+1]
+│  Thanks for sharing. I'm curious about what's your best single deberta model submitted?
+  ├─ Chris Deotte (2024-04-26 10:19:00.867000) [+1]
+  │  I am training some DeBERTa now. I will update my discussion post with my best CV score and LB score in a few days. So far, my best CV with DeBERTa large and regression is CV=0.834. I have not submi...
+├─ Peter (2024-04-26 05:15:58.650000) [+1]
+│  I didn't know to use Regression from deberta. I always learn from you:D, Thanks for sharing!
+├─ Hina Ismail (2024-04-26 03:45:56.463000) [+1]
+│  Everything you shared Amazing!!
+├─ Boris Polishchuk (2024-05-23 12:35:16.640000) [+2]
+│  First of all, thanks Chris for this insightful, dense and very useful post!
+│  
+│  My observations:
+│  
+│  I used microsoft/deberta-v3-base, max.len = 1024 (both for training and inference), metric_for_best_mo...
+├─ ghatotkachh (2024-05-11 13:52:38.320000) [+0]
+│  Thanks,I trained Deberta large using these hyperparameters and got a CV of 0.84 but the LB did not improve
+  ├─ wendigo245 (2024-05-21 11:30:37.773000) [+1]
+  │  Hi, ghatotkachh, how did you fit deberta large into the GPU of Kaggle. Have you trained the deberta large somewhere else?
+├─ Sabbir Ahmed (2024-04-29 02:18:04.700000) [+2]
+│  @cdeotte training DeBERTa base with the same set of hyperparameters does not improve the LB score. But the CV score increases. Should we trust CV score more than LB score?
+  ├─ Chris Deotte (2024-04-29 03:05:14.793000) [+1]
+  │  I don't know. This is confusing to me too. I also trained a DeBERTa-v3-large with the same parameters and achieved CV 0.835 (i.e. +0.013) but LB 0.799 (i.e. -0.001). We need to discover what the di...
+    ├─ Sabbir Ahmed (2024-04-29 03:33:35.467000) [+1]
+    │  @cdeotte any idea on how to ensemble classification and regression models. One is probability score and another is regression score. Don't know what is the best strategy to ensemble these two types...
+    ├─ Sergey Bryansky (2024-04-29 03:38:23.057000) [+1]
+    │  It seems stacking strategy with nested validation is the best or voting strategy if there are more models.
+    ├─ Sergey Bryansky (2024-04-29 03:42:11.220000) [+1]
+    │  I have question for you Chris. I was afk for some years on kaggle and now see trend - in every competition big amount high score gold blended kernels, it was not typical in the past. Am I right and...
+├─ MPWARE (2024-04-27 15:43:57.083000) [+2]
+│  @cdeotte Thanks for your analysis. You made me want to join this competition. I'm joining!
+  ├─ Chris Deotte (2024-04-27 15:46:39.827000) [+1]
+  │  Great to see you here @mpware ! Have fun!
+├─ ttkk22 (2024-04-27 04:53:27.463000) [+2]
+│  Hi Chris, this was very informative for me. Thank you very much. 
+│  
+│  After training and optimizing on deberta-v3-small model, can I use the hyperparameters for deberta-v3-large or another deberta lar...
+  ├─ Chris Deotte (2024-04-27 04:58:00.447000) [+7]
+  │  Yes parameters could change when going from small to large but after finding parameters on small, we can try those first on large. Then we adjust the learning rates slightly up and slightly down to...
+    ├─ ttkk22 (2024-04-27 05:04:29.677000) [+1]
+    │  Thank you! Very clear and informative.
+├─ Peter (2024-04-26 05:23:51.153000) [+2]
+│  I have a question that is it bad option before learning DL Model,  use dataPreprocessing? If it is silly question, sorry😅
+├─ [deleted] (2024-04-26 03:08:34.333000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-26 21:12:52.520000) [+3]
+│  [deleted]
+  ├─ [deleted] (2024-04-26 21:18:27.473000) [+5]
+  │  [deleted]
+    ├─ [deleted] (2024-04-26 21:27:09.690000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-04-26 02:03:44.327000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-27 00:18:29.437000) [+1]
+│  [deleted]
+├─ [deleted] (2024-04-26 15:18:49.700000) [+2]
+│  [deleted]
+├─ [deleted] (2024-06-27 05:29:31.527000) [+0]
+│  [deleted]
+├─ [deleted] (2024-05-01 09:57:31.087000) [+0]
+│  [deleted]

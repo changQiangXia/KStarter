@@ -1,0 +1,99 @@
+# https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324094
+
+Topic #324094: 4th place solution
+  Author: Hongwei Zhang
+  Posted: 2022-05-10 05:11:23.994000
+  Votes: 65  Comments: 12
+
+Thanks to H&amp;M and Kaggle Team&nbsp;for organizing such a great recommendation competition.
+Thanks @paweljankiewicz, @titericz, @cdeotte and many Kagglers for their great discussions and notebooks.
+I hope to get a solo gold metal this time, so I decided to do this competition by myself in the beginning.
+
+Overview
+
+I followed the same pipeline as @paweljankiewicz suggested in Addressing common questions and what the competition is really about . First, generate candidates using different recall models for each customers. Second, build a ranking model that ranks the candidates within customer.
+
+
+CV setup
+
+I mainly followed How To Setup Local CV, I created 5 folds and used 3 folds as training data. I also tried more training data, but it didn’t increase the local CV and LB.
+
+Recall model
+
+I developed 4 recall models in total.
+
+
+
+Item2item CF: the relationship between the pair of items (the user who bought Y, also bought Z).
+
+repurchase: latest 20 purchased products by each customers.
+
+popular: popular ranking in last week.
+
+Two Tower MMoE: I mainly focused on improving the performance of this model. Because it can generate candidates of arbitrary length for all users, and the user/item embeddings (similarity) can also be used as an important feature for ranking model.
+
+
+I used a gating network to make sure that the user tower can learn well by using different experts for recent active customers and non active customers.
+
+
+
+
+Ranking model
+
+I mainly used lightgbm with lambda-rank objective. I also implement DCN model described in https://arxiv.org/abs/2008.13535. But I didn’t have enough time to tune it. The score of lightgbm is much better.
+
+Cold-start users
+
+Two Tower MMoE can also generate candidates using user demographic features for customers without purchase log.
+
+Cold-start items
+
+Besides product meta features, I also extracted the following features from text and image.
+
+
+
+Text: Extract TF-IDF features from product description, cluster products using SVD + K-means. Then use cluster id as feature.
+
+Image: Extract image vectors using pre-trained tf_efficientnet_b3_ns backbone, cluster products using PCA + K-means.  Then use cluster id as feature.
+
+
+Submission
+
+best local CV is 0.039, LB is 0.0349.
+My final submission combined my previous submissions by
+h-m-ensembling-how-to
+
+to be updated
+
+Comments:
+├─ Abhishek Atul Wani (2022-05-12 10:23:04.860000) [+1]
+│  Thanks a lot for sharing! Great explanation
+├─ Lachlan Gillian (2022-05-12 06:14:42.380000) [+1]
+│  @hongweizhang congratulations! and thanks for the detailed write up :)
+├─ biubiuG (2022-05-10 12:17:13.973000) [+1]
+│  Congrats! your tow tower MMoE model is very interesting.  to get greater user representation your gated NN learn from users' profile to control the "importance" between user static profile and user...
+  ├─ Hongwei Zhang (2022-05-10 12:32:44.277000) [+1]
+  │  @biubiug 
+  │  
+  │  
+  │    
+  │  how is LB or oof score of this mmoe model?
+  │  
+  │  
+  │  I didn't submit it. Actually I mainly focused on improving the recall of this model instead of mAP. I only calculated mAP@12 local as a r...
+├─ LG (2022-05-10 10:55:48.037000) [+1]
+│  Thanks a lot for sharing this with us! Great explanation!
+├─ Smuch (2022-05-10 08:07:49.037000) [+1]
+│  Amazing! Congratulations!
+├─ senkin13 (2022-05-10 11:00:20.370000) [+2]
+│  Congrats!Two Tower MMoE recall should have much fun
+  ├─ Hongwei Zhang (2022-05-10 11:50:26.640000) [+0]
+  │  Thanks! But honestly it is really challenge to train a NN model with so many cold users.
+├─ newbieclass (2022-05-10 06:43:14.047000) [+2]
+│  Congratulations！
+├─ Russell Kim (2022-05-10 06:18:05.837000) [+2]
+│  Congratulations! Great work!
+├─ Qishen Ha (2022-05-10 05:20:04.117000) [+2]
+│  Congratulations to my former colleague for winning solo gold and taking a big step forward on the path to becoming a GM!
+├─ laimc01 (2022-05-18 23:15:48.810000) [+0]
+│  @hongweizhang Hi, the design of MMoE tower is very interesting. Can you give more details? What's the input of the gate? How to get time embedding? Is it one feature you designed?

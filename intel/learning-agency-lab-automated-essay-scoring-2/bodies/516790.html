@@ -1,0 +1,159 @@
+<p>First of all, I would like to thank Kaggle and the organizers for hosting this interesting competition. Thanks <a href="https://www.kaggle.com/abdullahmeda" target="_blank">@abdullahmeda</a>, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> and <a href="https://www.kaggle.com/ragnar123" target="_blank">@ragnar123</a>, … for finding that the training set are compose of two datasets, and <strong>the text of test set is more similar to Kaggle-Only set</strong> (I confirm this privately), this finding is one of the key to have strong models.</p>
+<p>Congratulations to all the winners. Also sorry for who shake down, good luck for your next competition. :)</p>
+<h2>1. Overview</h2>
+<p>My final best selected sub is a voting of 5 models, this is a overview of my final best selected solution:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F691449%2Fd534af74126dcc7f5cab2f0dc0377461%2Fsolution.png?generation=1720019038124061&amp;alt=media"></p>
+<p><strong>All the models are trained with:</strong></p>
+<ol>
+<li><strong>Two-Stage Training. Training on Kaggle-Persuade first, load the weights and training on Kaggle-Only with same loss function.</strong></li>
+<li><strong>10 epochs of MLM on all the training set.</strong></li>
+<li><strong>CV: 4 folds SKF. Validate on both Kaggle-Persuade and Kaggle-Only data.</strong></li>
+<li>Save the checkpoints for the last epoch. (On both stage1 and stage2)</li>
+<li>Random seed.</li>
+</ol>
+<p>Some models trained with Ordinal Regression.</p>
+<p>Whose I think are the keys to have high PB.</p>
+<p><strong>Why we need two-stage training?</strong> IMO, If we train with all the training set, the model will learn the distribution of Kaggle-Persuade more (because it's have big size? I think), this will lead to do bad on Kaggle-Only set. So, use two-stage training to let the model learn the knowledge from Kaggle-Persuade first, then finetine on Kaggle-Only to learn the distribution of Kaggle-Only, which is more similar to our hidden test set.</p>
+<h2>2. Threshold Search</h2>
+<p>I use OptimizedRounder <a href="https://www.kaggle.com/competitions/petfinder-adoption-prediction/discussion/76107" target="_blank">here</a> to search best thresholds for every single model and blend models. After some experiment, I found the last threshold of 5 and 6 is sub-optimized. So I create a for-loop to search the best last threshold, which boost both CV, LB and PB.</p>
+<p>A simple though is to search thresholds on Kaggle-Only dataset only as the texts are more similar to test set. Although it gives much good CV, but LB drop a lot, so I assume the distribution of the score of hidden test set is similar to our full training set. Then I do threshold search on all the training set only, which lead to good LB/PB.</p>
+<h2>3. Models</h2>
+<table>
+<thead>
+<tr>
+<th>Exp name</th>
+<th>Description</th>
+<th>CV</th>
+<th>LB/PB</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exp302 cope</td>
+<td>add CoPE which I edit from <a href="https://arxiv.org/pdf/2405.18719" target="_blank">paper</a> to simple two-stage training</td>
+<td>0.8194/0.8158</td>
+<td>0.827/0.833</td>
+<td></td>
+</tr>
+<tr>
+<td>exp306</td>
+<td>Ordinal Regression</td>
+<td>0.8243/0.8148</td>
+<td>0.829/0.840</td>
+<td></td>
+</tr>
+<tr>
+<td>exp306 clean</td>
+<td>Ordinal Regression with clean text via Feedback1's code</td>
+<td>0.8248/0.8179</td>
+<td>0.826/0.836</td>
+<td></td>
+</tr>
+<tr>
+<td>exp320</td>
+<td>Pet like training.</td>
+<td>0.8201/0.8174</td>
+<td>0.828/0.841</td>
+<td></td>
+</tr>
+<tr>
+<td>exp321</td>
+<td>Mean pool of sentences to get paragraph representation, then mean pool of paragraph to get full text representation.</td>
+<td>0.8209/0.8201</td>
+<td>0.824/0.836</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>exp306</h3>
+<p>This model is trained with:</p>
+<ul>
+<li>backbone: deberta-v3-large mlm10</li>
+<li>lr: 1e-5</li>
+<li>head_lr: 5e-5</li>
+<li>pooling: attention</li>
+<li>differential learning rate</li>
+<li>scheduler: linear, warmup: 0.1</li>
+<li>loss: bce</li>
+<li>max_length: 1024</li>
+<li>batch_size: 32</li>
+<li>epochs: 3</li>
+</ul>
+<p><br>
+I use BCEWithLogitsLoss to train ordinal regression model</p>
+<pre><code>@torch.no
+def :
+    labels = labels.clone
+    labels = labels - 
+    B = labels.shape
+    outputs = torch.zeros((B, num_labels - ), dtype=torch.float32, device=labels.device)
+    cols = torch.arange(outputs.shape, device=labels.device)
+    mask = cols &lt; labels.unsqueeze()
+    outputs = 
+    return outputs
+
+
+ :
+    def get:
+        return nn.
+
+    def forward(self, x):
+        feature = self.get
+        logits = self.head(feature)
+        return logits
+
+    def compute:
+        new_labels = 
+        loss = self.criterion(logits.reshape(-, ), new_labels.reshape(-, ))
+        loss = loss.mean
+        return loss
+</code></pre>
+<h3>exp320</h3>
+<ul>
+<li>backbone: deberta-v3-large mlm10</li>
+<li>lr: 2e-5</li>
+<li>head_lr: 5e-5</li>
+<li>pooling: attention</li>
+<li>differential learning rate</li>
+<li>scheduler: cosine, warmup: 0.1</li>
+<li>loss: bce</li>
+<li>max_length: 1024</li>
+<li>batch_size: 16</li>
+<li>epochs: 2</li>
+</ul>
+<p>The model structure is from my previous teammate <a href="https://www.kaggle.com/conjuring92" target="_blank">@conjuring92</a> <a href="https://www.kaggle.com/trushk" target="_blank">@trushk</a> , they used and shared in Feedback3 <a href="https://github.com/rbiswasfc/feedback-ells/tree/main/rb_code" target="_blank">here</a>. My prompt for pet model is:  <code>Data Source: {topic}\n\nStudent Writing Evaluate\n\nThe score(1 to 6) of the following essay is: [MASK].</code></p>
+<p>Different from exp302, I scale the score from 1-6 to 0-1 and use bce loss to train. When evaluation, I simple do: pred * 5 + 1 to transform the prediction to original scale, which works quiet well.</p>
+<h3>exp321</h3>
+<ul>
+<li>backbone: deberta-v3-large mlm10</li>
+<li>lr: 1e-5</li>
+<li>head_lr: 1e-5</li>
+<li>pooling: attention</li>
+<li>differential learning rate</li>
+<li>scheduler: linear, warmup: 0.1</li>
+<li>loss: mse</li>
+<li>max_length: 1024</li>
+<li>batch_size: 16</li>
+<li>epochs: 2</li>
+</ul>
+<p>Mean pool of sentences to get paragraph representation, then mean pool of paragraph to get full text representation. </p>
+<p>I also use ordinal regression here.</p>
+<h2>4. Submission Selection</h2>
+<p>It's very difficult to select the best sub, CV/LB only have good correlation with some of my single models.</p>
+<p>For this competition, I wanted the sub to be as robust as possible. So I chose one for best LB (voting). For the other sub, I focused on Kaggle-Only CV, (because CV/LB correlate good for tree-based only models(CV/PB correlate very well!) and some of my single models), which is a weighted blend and have CV around 0.828+. The result is not bad.</p>
+<h2>5. Things doesn't work</h2>
+<ul>
+<li>classification</li>
+<li>weighted blend. <strong>yes… although I finally select sub with ensemble, many high PB subs are simple mean blend(all 0.842 to 0.844). and I have single best model 0.841, but ensemble drop to 0.840…</strong></li>
+<li>Reina. I like reina, but it didn't work here. That's search the most similar text B of focus text A, and concat B, score of B and A to train.</li>
+<li>Add elements of each token</li>
+<li>Separated head training.</li>
+<li>Stacking</li>
+<li>MoE</li>
+<li>Ranking loss</li>
+<li>AWP</li>
+</ul>
+<p>Training code update: <a href="https://github.com/Syhen/2nd-Place-Solution-Kaggle-Learning-Agency-Lab-Automated-Essay-Scoring-2.0" target="_blank">https://github.com/Syhen/2nd-Place-Solution-Kaggle-Learning-Agency-Lab-Automated-Essay-Scoring-2.0</a></p>
+<p>Inference notebook: <a href="https://www.kaggle.com/code/syhens/aes2-voting?scriptVersionId=184408611" target="_blank">https://www.kaggle.com/code/syhens/aes2-voting?scriptVersionId=184408611</a></p>
+<p>Welcome to star if you find it helpful :)</p>

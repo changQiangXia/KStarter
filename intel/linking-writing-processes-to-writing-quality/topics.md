@@ -1,0 +1,82 @@
+# linking-writing-processes-to-writing-quality 讨论区（按票数排序，共 80 条）
+
+- [[3rd place solution] Trust CV is all you need.](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466775) — 117 票 / 50 评论 / 2024-01-11 **write-up?**
+- [[1st place solution] Data Cleaning+FE+External Data+Model Ensemble](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466873) — 94 票 / 29 评论 / 2024-01-21 **write-up?**
+- [Research Papers, Articles and Key Ideas](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/445545) — 84 票 / 6 评论 / 2023-10-07 
+- [[3rd place solution] Blend MLM pretrained DeBERTa & GBM](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466906) — 79 票 / 38 评论 / 2024-01-24 **write-up?**
+- [[LB: 0.586] LGBM + NN still can boost your score](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/454955) — 71 票 / 25 评论 / 2023-11-12 
+- [How classification can help regression?](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/451852) — 59 票 / 1 评论 / 2023-10-30 
+- [1st place solution before team disqualification](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467154) — 58 票 / 29 评论 / 2024-02-01 **write-up?**
+- [Score Distribution of Public Test Dataset from LB Probing](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/456467) — 51 票 / 13 评论 / 2023-11-20 
+- [23th Place Solution](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466771) — 47 票 / 19 评论 / 2024-01-12 **write-up?**
+- [Language Bursts. Working Memory. Measures of Quality.](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444659) — 46 票 / 6 评论 / 2023-10-03 
+- [CountVectorizer vs TF-IDF - what is better?](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/451795) — 46 票 / 6 评论 / 2023-10-30 
+- [Be wary of edge scores](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/446665) — 42 票 / 6 评论 / 2023-10-12 
+- [Starting references and materials](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444664) — 41 票 / 8 评论 / 2023-10-03 
+- [Visualizing the shakeup](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466778) — 40 票 / 9 评论 / 2024-01-10 
+- [No 😞 place solution ](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466945) — 39 票 / 11 评论 / 2024-01-14 **write-up?**
+- [5th Place Solution: Features are all you need!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466961) — 37 票 / 14 评论 / 2024-01-10 **write-up?**
+- [The most likely reason why the 1st place team was removed from LB](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/469199) — 35 票 / 1 评论 / 2024-01-19 **write-up?**
+- [Please go upvote zhengheng's notebook!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/451081) — 35 票 / 4 评论 / 2023-10-27 
+- [What happened so far? A quick summary of the discussions](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/460290) — 33 票 / 0 评论 / 2023-12-08 
+- [[7th place solution] Essays predictions as features](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466941) — 33 票 / 10 评论 / 2024-01-13 **write-up?**
+- [Single model CV - LB correlation](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444947) — 32 票 / 36 评论 / 2023-10-04 
+- [SAT Essay 4 Prompts + Paper + Target Score ](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444617) — 30 票 / 2 评论 / 2023-10-02 
+- [Rubric for score calculation (response from organizer!)](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447933) — 27 票 / 5 评论 / 2023-10-17 
+- [Down_time Issues](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447238) — 27 票 / 4 评论 / 2023-10-14 
+- [Private 20th Solution](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466789) — 27 票 / 7 评论 / 2024-01-10 **write-up?**
+- [A friendly reminder. Feature Engineering!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/453886) — 27 票 / 14 评论 / 2023-11-08 
+- [Meme Thread](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466131) — 23 票 / 21 评论 / 2024-01-07 
+- [Writing Quality: Last day competition recap](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466480) — 22 票 / 4 评论 / 2024-01-08 
+- [Place 46 Solution, Place 11 Efficiency](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466774) — 22 票 / 4 评论 / 2024-01-10 **write-up?**
+- [Unseen events in the public test data](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/457385) — 22 票 / 3 评论 / 2023-11-24 
+- [[14th place solution] Keras ensemble](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466993) — 21 票 / 8 评论 / 2024-01-11 **write-up?**
+- [Beware of chasing the public LB!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/461078) — 21 票 / 17 评论 / 2023-12-12 
+- [Greetings from the Organizers](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444592) — 20 票 / 17 评论 / 2023-10-02 
+- [Down Time Goes Back In Time](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447110) — 20 票 / 6 评论 / 2023-10-14 
+- [[77th LB Solution] Silver by a Hair 👱](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466776) — 19 票 / 11 评论 / 2024-01-15 **write-up?**
+- [[42nd Place Solution] Ensemble + Classification](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466862) — 19 票 / 4 评论 / 2024-01-10 **write-up?**
+- [A few important papers on keystroke analysis](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/462198) — 19 票 / 2 评论 / 2023-12-18 
+- [38th Place Solution (3rd Public)](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466839) — 19 票 / 0 评论 / 2024-01-10 **write-up?**
+- [Careful Selecting Submissions!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/465885) — 19 票 / 13 评论 / 2024-01-06 
+- [Why our 6th place not visible now?](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467519) — 18 票 / 13 评论 / 2024-01-12 **write-up?**
+- [5th Place Solution Overview, Looked till 100th but was right at 5th :) ](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466813) — 18 票 / 1 评论 / 2024-01-10 **write-up?**
+- [How to be efficient in this competition](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/445142) — 17 票 / 1 评论 / 2023-10-05 
+- [(Improved?) Essay Constructor](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447735) — 17 票 / 10 评论 / 2023-10-17 
+- [LB Shake Estimation with Nested Cross Validation](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/463525) — 17 票 / 14 评论 / 2023-12-25 
+- [Framing it as a classification problem? ](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444905) — 17 票 / 12 评论 / 2023-10-04 
+- [Check out awqatak's latest work: 0.582 LB with a single model](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/459883) — 16 票 / 11 评论 / 2023-12-06 
+- [A possible hypothesis on the low essay scores](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/455909) — 16 票 / 9 评论 / 2023-11-17 
+- [Why LGBM is so underappreciated in the industry?](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444745) — 16 票 / 6 评论 / 2023-10-03 
+- [0.582 Baseline Ensembling](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/457308) — 16 票 / 0 评论 / 2023-11-24 
+- [Be cautious of an optimistic public LB!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447885) — 15 票 / 12 评论 / 2023-10-17 
+- [[64th Place Solution] - 60 Features Ensemble](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466927) — 15 票 / 3 评论 / 2024-01-13 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467328) — 15 票 / 4 评论 / 2024-01-24 **write-up?**
+- [Update on CV/LB scores?](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/458254) — 14 票 / 11 评论 / 2023-11-29 
+- [Congrats to new Competitions GM!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467219) — 14 票 / 9 评论 / 2024-01-11 
+- [🏆🥇Good articles to refer for the competition!🏆🥇](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444914) — 14 票 / 3 评论 / 2023-10-04 
+- [[LB 0.585] New best public score!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/456395) — 14 票 / 5 评论 / 2023-11-19 
+- [15th solution feature selection and trust your CV](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467674) — 14 票 / 1 评论 / 2024-01-13 **write-up?**
+- [🔴 Youtube Video 🔴 writing-quality-lgbm 🔥🔥](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/451518) — 14 票 / 0 评论 / 2023-10-29 
+- [Explaination of "down_event" and "up_event" column? Need Organizers clarification.](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444931) — 13 票 / 2 评论 / 2023-10-04 
+- [Good l(d)uck everyone!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466653) — 12 票 / 5 评论 / 2024-01-09 
+- [I would appreciate any "reasonable" explanation.](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/457051) — 12 票 / 5 评论 / 2023-11-22 
+- [Some insights on LB finalization](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467879) — 12 票 / 8 评论 / 2024-01-14 
+- [What I learned in Linking Writing Comp](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466722) — 11 票 / 6 评论 / 2024-01-09 
+- [Constructed essays across training ids](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/446972) — 11 票 / 5 评论 / 2023-10-13 
+- [Compilation of Winning Solutions and  Some Noteworthy Contributions to learn from – Linking Writing Processes to Writing Quality Competition](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467658) — 11 票 / 5 评论 / 2024-01-13 **write-up?**
+- [Lleaves - Faster Inference for the LightGBMers](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/448275) — 11 票 / 0 评论 / 2023-10-19 
+- [Is word_count wrong??](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/446802) — 11 票 / 7 评论 / 2023-10-13 
+- [Action Time Of Several Minutes](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444918) — 11 票 / 4 评论 / 2023-10-04 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/468441) — 10 票 / 2 评论 / 2024-01-16 
+- [Some about feature selection that I still don't understand.](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/459640) — 10 票 / 13 评论 / 2023-12-06 
+- [Version control with git and work with multiple python files](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/445630) — 10 票 / 1 评论 / 2023-10-08 
+- [[CPU Only]６th Place Solution for "Linking Writing Processes to Writing Quality"](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467848) — 10 票 / 0 评论 / 2024-01-25 **write-up?**
+- [One single trick to get 0.630 CV with reconstructed text only](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466868) — 9 票 / 7 评论 / 2024-01-10 
+- [[48th place solution] Multi-label K-Fold for CV Strategy](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466965) — 9 票 / 1 评论 / 2024-01-10 **write-up?**
+- [Can students use short cut keys in the web app?](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/445631) — 9 票 / 1 评论 / 2023-10-08 
+- [81st Place Solution for the "Linking Writing Processes to Writing Quality" Competition](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466942) — 9 票 / 2 评论 / 2024-01-10 **write-up?**
+- [[66th Place Solution] LightGBM and Public Notebook](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466946) — 9 票 / 0 评论 / 2024-01-13 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444788) — 6 票 / 44 评论 / 2023-10-03 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444787) — 6 票 / 0 评论 / 2023-10-03 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/445418) — 2 票 / 2 评论 / 2023-10-06 

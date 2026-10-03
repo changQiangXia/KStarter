@@ -1,0 +1,82 @@
+# learning-equality-curriculum-recommendations 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394812) — 209 票 / 84 评论 / 2023-03-21 **write-up?**
+- [How did I get LB 0.30+](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373640) — 129 票 / 34 评论 / 2022-12-22 
+- [10 Days In. What do we know so far?](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373958) — 88 票 / 10 评论 / 2022-12-24 
+- [Topic Context Matters in Supervised Pipeline](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376873) — 81 票 / 77 评论 / 2023-01-09 
+- [2nd Place Solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395110) — 79 票 / 19 评论 / 2023-03-28 **write-up?**
+- [Stage 1 / Stage 2 CV vs LB](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/381509) — 74 票 / 155 评论 / 2023-01-27 
+- [Sharing my baseline CV LB 0.30+](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/375313) — 66 票 / 11 评论 / 2022-12-31 
+- [3rd solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394838) — 59 票 / 41 评论 / 2023-03-16 **write-up?**
+- [Reverse Engineering the Top Pipeline](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/388215) — 53 票 / 8 评论 / 2023-02-16 
+- [Welcome to the competition, from your friendly hosts!](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372362) — 52 票 / 59 评论 / 2022-12-15 
+- [Solution by ChatGPT: Transformer based ranking model](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372384) — 52 票 / 19 评论 / 2022-12-15 **write-up?**
+- [Multiple Negatives Ranking Loss (MNRL) - with results](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/383969) — 50 票 / 3 评论 / 2023-02-06 
+- [6th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394813) — 47 票 / 20 评论 / 2023-03-15 **write-up?**
+- [4th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394984) — 46 票 / 16 评论 / 2023-03-24 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394886) — 44 票 / 18 评论 / 2023-04-01 **write-up?**
+- [Text Cleaning Methods](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373832) — 44 票 / 13 评论 / 2022-12-23 
+- [What is Adversarial Training?](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372892) — 43 票 / 2 评论 / 2022-12-18 
+- [5th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394827) — 41 票 / 8 评论 / 2023-03-18 **write-up?**
+- [Notebook with tips and recommendations from your hosts [Q&A]](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372612) — 39 票 / 14 评论 / 2022-12-16 
+- [My first 100 experiments (sentence transformers)](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376651) — 38 票 / 2 评论 / 2023-01-07 
+- [31st Place Solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394807) — 38 票 / 7 评论 / 2023-03-15 **write-up?**
+- [Detailed summary and tips of general top score approaches](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/388533) — 36 票 / 3 评论 / 2023-02-18 
+- [Multilingual Language Models](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372428) — 32 票 / 5 评论 / 2022-12-15 
+- [Thoughts about CV Setup](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372459) — 31 票 / 12 评论 / 2022-12-16 
+- [Same title exists between content and topic](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373350) — 30 票 / 2 评论 / 2022-12-21 
+- [CV Score vs Public Score](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372875) — 30 票 / 2 评论 / 2022-12-18 
+- [Number of Scored Submissions is Now Three](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/377951) — 29 票 / 4 评论 / 2023-01-13 
+- [Learning From Last Three Feedback Competition](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372460) — 29 票 / 0 评论 / 2022-12-16 
+- [Previous Feedback Winning Solution Walkthroughs](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372360) — 28 票 / 10 评论 / 2022-12-15 **write-up?**
+- [Wouldn't 3 final submissions be better than 2 final submissions? ](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/377633) — 27 票 / 8 评论 / 2023-01-12 
+- [The Best NLP Resources on Kaggle](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372782) — 24 票 / 4 评论 / 2022-12-18 
+- [Thanks for participating!](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395082) — 23 票 / 10 评论 / 2023-03-15 
+- [A personal World Cup moment](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394805) — 22 票 / 9 评论 / 2023-03-14 
+- [10th place Solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395190) — 22 票 / 6 评论 / 2023-03-31 **write-up?**
+- [32th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395018) — 21 票 / 2 评论 / 2023-03-15 **write-up?**
+- [9th Place Solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395263) — 21 票 / 5 评论 / 2023-03-17 **write-up?**
+- [Sharing My Understanding of this Competition](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/382461) — 20 票 / 3 评论 / 2023-01-31 
+- [7th Place Solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394946) — 20 票 / 3 评论 / 2023-03-15 **write-up?**
+- [Google's Deep Learning Tuning Playbook](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/379670) — 19 票 / 1 评论 / 2023-01-20 
+- [[15th Place] A way to make hard training easier: Combination of arc loss and multiple ranking loss.](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394915) — 19 票 / 4 评论 / 2023-03-15 **write-up?**
+- [Don’t share your solution to suspicious persons! (LECR)](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/382414) — 17 票 / 6 评论 / 2023-01-30 **write-up?**
+- [Top Solutions from previous Feedback Learning Challanges](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372364) — 17 票 / 0 评论 / 2022-12-15 **write-up?**
+- [Training large model with limited memory](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376183) — 17 票 / 1 评论 / 2023-01-05 
+- [73rd place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394819) — 16 票 / 2 评论 / 2023-03-15 **write-up?**
+- [26th short solution（Listwise stage2 model to transform stage1 scores)](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394825) — 16 票 / 0 评论 / 2023-03-15 **write-up?**
+- [Evaluated on F2 score Python [code]](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372386) — 16 票 / 9 评论 / 2022-12-15 
+- [What do we know about the datasets?](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/382078) — 15 票 / 1 评论 / 2023-01-29 
+- [18th place Solution -Thank You !](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394910) — 15 票 / 0 评论 / 2023-03-15 **write-up?**
+- [39th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394896) — 13 票 / 0 评论 / 2023-03-17 **write-up?**
+- [ Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395164) — 13 票 / 3 评论 / 2023-03-16 
+- [Simple Unsupervised Baseline](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372451) — 13 票 / 0 评论 / 2022-12-16 
+- [Winners Tricks from all Feedback Competitions](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372972) — 13 票 / 0 评论 / 2022-12-19 
+- [F2 score Heatmap](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/383825) — 12 票 / 5 评论 / 2023-02-05 
+- [Feedback competitions hosts are back!!!](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372358) — 11 票 / 0 评论 / 2022-12-15 
+- [Question about test set channels](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/377381) — 10 票 / 2 评论 / 2023-01-11 
+- [28th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394955) — 10 票 / 0 评论 / 2023-03-15 **write-up?**
+- [📌 Pairwise Distances Memory Error Solution 🧐](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373791) — 9 票 / 1 评论 / 2022-12-23 **write-up?**
+- [Anyone experienced GBDT Classifier/Ranker for Stage 2?](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/389966) — 9 票 / 2 评论 / 2023-02-23 
+- [Some questions about stage 1:recall](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/383656) — 9 票 / 18 评论 / 2023-02-04 
+- [Become One with Data (Semantic EDA)](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/376864) — 9 票 / 4 评论 / 2023-01-08 
+- [How to train our fine tuning model for better generating candidates?(Updated)](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/384593) — 9 票 / 15 评论 / 2023-02-08 
+- [Are top scorers Resource rich ?](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/377646) — 9 票 / 19 评论 / 2023-01-12 
+- [M2M Translation Experiment](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/379143) — 9 票 / 9 评论 / 2023-01-18 
+- [Understanding the problem](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/378946) — 9 票 / 8 评论 / 2023-01-17 
+- [better stage1, worse stage2](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/391278) — 8 票 / 6 评论 / 2023-02-28 
+- [Opensource stage1 single model with PB739(train on all data with 800 epochs, more epochs is all you need)](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395401) — 8 票 / 3 评论 / 2023-03-17 
+- [GPU kernel can't find cuML and cuDF](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/388932) — 8 票 / 6 评论 / 2023-02-20 
+- [Are we all badly overfitting](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/380164) — 8 票 / 9 评论 / 2023-01-22 
+- [Understanding the Metric : F2 score](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373242) — 8 票 / 0 评论 / 2022-12-20 
+- [24th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394811) — 8 票 / 2 评论 / 2023-03-19 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372355) — 8 票 / 66 评论 / 2022-12-15 
+- [60th place solution](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/394857) — 8 票 / 1 评论 / 2023-03-15 **write-up?**
+- [Don't Forget About the Efficiency Prize!](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/392679) — 8 票 / 13 评论 / 2023-03-06 
+- [Is the test set composed only of new channels?](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373693) — 7 票 / 0 评论 / 2022-12-22 
+- [Quick Trick For Saving GPU on Inference Notebook](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/373544) — 7 票 / 0 评论 / 2022-12-21 
+- [Question about number of submission that will count towards final LB score](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/375394) — 7 票 / 2 评论 / 2023-01-01 
+- [25th (8th efficiency) Place Solution without ensembling  ](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395478) — 7 票 / 0 评论 / 2023-03-17 **write-up?**
+- [Inference Notebook of Nicho's Multiple Negatives Ranking Loss](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/390746) — 7 票 / 5 评论 / 2023-02-27 
+- [📌 License Definitions and Limitations 📝](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/372846) — 7 票 / 0 评论 / 2022-12-18 
+- [Requesting Feedback on the Learning Equality - Curriculum Recommendations Competition! ](https://www.kaggle.com/competitions/learning-equality-curriculum-recommendations/discussion/395072) — 4 票 / 2 评论 / 2023-03-15 

@@ -1,0 +1,120 @@
+# https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417045
+
+Topic #417045: 6th Place Solution -  [ --- ]AffNetHardNet8 + AdaLAM
+  Author: MaxChen303
+  Posted: 2023-06-14 00:38:58.549000
+  Votes: 29  Comments: 5
+
+I would like to express my thanks to the competition organizers and Kaggle staff for hosting this amazing competition. I would also like to thank the competition hosts (@oldufo , @eduardtrulls) for providing helpful materials and a great example submission, which allowed me to quickly get up to speed with the competition.
+Participating in this competition and IMC2022 has taught me a lot about image matching, Kornia, and SfM. 
+
+1. Overview
+
+My final solution was based on the submission example, but I pushed the limits of KeyNetAffNetHardNet + AdaLAM matcher with Colmap. 
+
+
+
+I implemented four local feature detectors that are similar to KeynetAffnetHardnet (Example from Kornia), and each detector extracted local features for all the images (with limited size) in a scene. See more info about other non-learning based keypoint detectors here. 
+
+Using HardNet8 rather than HardNet although I didn't see a performance difference.
+
+AdaLAM matcher was used to match all the pairs and get the matches for the scene. Only pair with an average matching distance &lt; 0.5 were kept. 'force_seed_mnn' was set to True and 'ransac_iters' was increased to 256 compared with the submission example.
+
+The matches from the four detectors were then combined.
+
+I used USAC_MAGSAC to get the fundamental matrix for each pair and only kept the inlier matches. The results are written to the database as two-view geometry. incremental_mapping is then performed without match_exhaustive.
+
+
+
+
+
+1.1. How I reached this solution
+
+After running the submission example a few times, I thought that the key to finding a good solution was to identify a good shortlist of image pairs and apply similar solutions from IMC2022. I noticed that the KeyNetAffNetHardNet solution only needed to run the slower local feature detection once for each image, and the matching using AdaLAM matcher was fast enough to match each pair. Therefore, I decided to use KeyNetAffNetHardNet and the matching distance of AdaLAM to find the matching/pairing shortlist. However, with some optimizations, it ended up being the final solution in the last week.
+
+1.2. KeyNetAffNetHardNet
+
+I was surprised by the performance of KeyNetAffNetHardNet after using AdaLAM to match all possible pairs. With an increased number of features to 8000 and a maximum longer edge of 1600, I was able to achieve a score of 0.414/0.457 (Public/Private).
+
+During my experimentation, I discovered that the matching distance can be used to determine whether two images have overlapping areas or not. See my Test Notebook for some experiments using KeyNetAffNetHardNet + Adalam for pairing.
+Disabling the Upright option (enabling OriNet) can make the Adalam matching more robust in handling rotated images.
+
+2. Implementation details with Colmap
+
+2.1. Using focal length
+
+In the submission example, there is a section that extracts the focal length from image exif. However, the "FocalLengthIn35mmFilm" property may not be found using the image.get_exif() method. In some cases, the focal length information may exist in the exif_ifd (as described in this Stack Overflow post). 
+To extract the focal length from the exif_ifd, I used the following code:
+
+exif = image.getexif()
+exif_ifd = exif.get_ifd()
+exif.update(exif_ifd)
+
+
+If the focal length is found in the exif, I also set the "prior_focal_length" flag to true when adding the camera to the database. This improved the mAA for some scenes (mAA of urban / kyiv-puppet-theater 0.764 -&gt; 0.812).
+
+According to the  Colmap tutorial:
+
+
+  
+By setting the prior_focal_length flag to 0 or 1, you can give a hint whether the reconstruction algorithm should trust the focal length value.
+
+
+2.2. Handling Randomness: Bypass match_exhaustive()
+
+
+
+
+
+2.3. Multiprocessing
+
+I discovered that adding matches from other AffNetHardNet detectors could increase the overall mAA score. To fit more similar detectors into the process, I used multiprocessing to ensure that the second CPU core was fully utilized. The final solution takes about 7.5 hours to run using four detectors with edges no longer than 1600.
+
+To optimize the process, I sorted all the scenes by the number of images before processing, from greater to smaller. For each scene, there were two stages: matching to generate the database and reconstruction from the database. The reconstruction of different scenes is allowed to run in parallel with the matchings. Ideally, the pipeline should look like the following:
+
+
+3. Other things I tried
+
+
+
+After discovering that KeyNetAffNetHardNet was good at finding matching/pairing shortlists, I spent a lot of time exploring pair-wise matching such as LoFTR, SE-LoFTR, and DKMv3. However, these methods were slow even just running on the selected pairs and did not improve the mAAs in my implementations.
+
+Use AdaLAM matcher with other keypoint detectors such as DISK, SiLK, and ALIKE: I also used OriNet and AffNet to convert the keypoints from these detectors to Lafs and get the HardNet8 descriptors. I then tried matching on the native descriptors, HardNet8 descriptors, or concatenated descriptors. This approach seemed to perform better than matching on the native descriptors without Lafs. If I had more time, I would like to explore this direction further.
+
+Running local feature detection without resizing by splitting large images into smaller images that could fit into the GPU memory. However, this approach was extremely slow and did not improve performance. I found that the mAAs did not improve beyond a certain resolution. Allowing the longer edge to be 1600 or 2048 yielded similar scores.
+
+Tuning Colmap mapping options: Too many options and difficult to evaluate the outcomes.
+
+
+4. Local Validation Score
+
+ / kyiv-puppet-theater ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ -&gt; mAA=.
+
+ / dioscuri ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ / cyprus ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ / wall ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ -&gt; mAA=.
+
+ / bike ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ / chairs ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ / fountain ( images,  pairs) -&gt; mAA=., mAA_q=., mAA_t=.
+ -&gt; mAA=.
+
+ metric -&gt; mAA=. (t: . sec.)
+
+Comments:
+├─ old-ufo (2023-06-14 08:50:18.317000) [+4]
+│  Wow, man! I never thought that kornia local features could be pushed to this limit!
+├─ Yuxiang Huang (2023-06-15 17:57:19.263000) [+1]
+│  I have a question though, theoretically how does including the focal length in the Colmap parameter improve the accuracy of calculating the camera poses?
+  ├─ MaxChen303 (2023-06-15 20:35:48.393000) [+1]
+  │  I am actually new to SfM but I found something from the Colmap source code that may answer your question:
+  │  
+  │  
+  │  
+  │  When the "estimate_focal_length" option is True,  the absolute pose estimator will quadr...
+  ├─ Jaafar Mahmoud (2023-06-16 09:42:55.483000) [+2]
+  │  Some Images contain Exif data which you can get the true value of the focal length… Adding a prior in optimization with the correct value of the focal length would help into making the optimization...
+├─ Yuxiang Huang (2023-06-14 04:23:47.130000) [+2]
+│  Thank you for sharing your brilliant ideas and congrats to getting a solo gold! The tricks to use camera focal length, cache the keypoints and use MAGSAC directly are really impressive.

@@ -1,0 +1,290 @@
+# https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/508337
+
+Topic #508337: [1st Place Solution] My Betting Strategy
+  Author: yuuniee
+  Posted: 2024-05-29 08:24:57.734000
+  Votes: 175  Comments: 65
+
+Foreword
+
+Hello, this is yuuniee.
+Thank you to the competition host Home Credit and staff, Kaggle staff and everyone involved.
+
+The image below is a summary of my solution.
+
+
+
+The maximum Private LB Score for my model pool without Metric Hacking is close to about 0.53.
+
+As everyone knows, this competition takes place in two phases.
+Phase 1 was ML (Machine Learning), and Phase 2 was MH (Metric Hack).
+I will briefly introduce each part.
+(If you are only curious about ML, please read only Phase 1.)
+
+I. Phase 1 - ML (Machine Learning)
+
+Thank you for writing a great notebook for EDA and solution construction at the beginning of the competition.
+@sergiosaharovskiy - https://www.kaggle.com/code/sergiosaharovskiy/home-credit-crms-2024-eda-and-submission
+@greysky - https://www.kaggle.com/code/greysky/home-credit-baseline
+Additionally, I would like to thank the many participants who provided various insights.
+
+
+
+
+The CV strategy is StratifiedGroupKFold, and has been tested and trained in various forms: No Shuffle and Shuffle. In my case, differences in CV of around 0.001 to 0.005 had a low correlation with LB, while differences above 0.01 had a high correlation with LB. In addition, CV improvement through model parameter adjustment had a relatively low correlation with LB, and CV improvement through FE had a relatively high correlation with LB.
+
+
+There's nothing special about Feature Engineering. Max, Min, Avg, Var, First, Last and Max-Min Difference of each item were utilized. (I will release the code after cleaning it up.)
+
+
+LGBM was a bit lacking compared to Catboost, but was good for the ensemble. The reason why the number of features is smaller is because some items (mainly categorical types) were excluded because they caused performance degradation and overfitting in LGBM, and other slightly different types of features were added and deleted.
+
+
+DNN is a Denselight model and utilizes the LightAutoML library. There were some bugs, so I had to fix some of them myself, but overall, I think it is a good library. At first, I planned to lightly test with Denselight and then build the final model with a larger model (FT-Transformer, etc.). Surprisingly, I haven't created or found a model that beats Denselight performance. Perhaps I made a mistake, or the nature of the data is sensitive to overfitting, so I guess a simpler model worked better.
+
+
+Catboost was the model that performed best in this competition and I guess it performed well on a large number of categorical features (about 117).
+
+
+During this period, my public LB was close to top 5 and the competition seemed to be going very smoothly.
+But…
+
+
+  
++ What didn't work
+  
+
+  
+Transformer type models such as Tabnet, TabTransformer, FT-Transformer, etc.
+  
+Income, expenditure, and tax statistics by period (month, week, etc.).
+  
+Differences between individual income, expenses, and taxes.
+  
+K-means clustering
+  
+
+
+II. Phase 2 - MH(Metric Hack)
+
+Pointed out problems with MH at the beginning of the competition,
+@at7459 - https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/476449
+Announced the revival of MH in the latter half of the competition,
+@johnpateha - https://www.kaggle.com/competitions/home-credit-credit-risk-model-stability/discussion/497167
+
+Also, thanks to the many participants who suggested various other comments and solutions. Thanks to you, my knowledge has expanded.
+In particular, the two people above are true scientists and journalists who could have hidden this discovery and profited from it, but pursued the public interest by exposing it to everyone. (Why not consider Kaggle giving a special award for this sharing?)
+As a result, the problem was not solved, but we learned something(?) from it and at least I was able to take minimal measures.
+
+After @johnpateha's "Metric hack again, sorry" post, I tried Data Reversing and found that the difference between date_decision and min_refreshdate_3813885D had a high correlation (about 0.9 or more) with WEEK_NUM.
+(More information can be found at https://www.kaggle.com/code/eivolkova/how-to-restore-the-dates?scriptVersionId=180157891, published by @eivolkova immediately after the competition.)
+And the way suggested by @at7459:
+
+DEVIDE = /
+REDUCE = 
+condition = df[] &lt; (df[].()-df[].())*DEVIDE+df[].()
+df.loc[condition, ] = (df.loc[condition, ] - REDUCE).clip()
+
+
+Based on this, the results of examining the score details submitted by changing the REDUCE and DEVIDE values ​​were as follows.
+
+
+
+The public/private division of test data spans the entire period and it is difficult to identify a specific distribution, and the optimal value in private will probably be distributed around 1/4 to 3/4.
+
+The optimal public LB value of REDUCE is 0.03 (at least in my model), and the optimal value in private is probably distributed around 0.02 to 0.04.
+
+
+The difference in pure model performance between top competitors was 0.00X,
+Since the difference due to the above adjustment value was 0.0X,
+At this stage it became gambling for me.
+
+Some will bet low, others will bet high.
+Here, I trusted my model and chose neutral, and chose DEVIDE=1/2, REDUCE=0.03, which is the median of the expected distribution.
+I expected someone who bet high or low to take the prize, and I expected about a 50% chance of finishing in the top 10.
+
+III. Conclusion
+
+
+
+
+The first selected submission is the No Hack model with CV Best Score created in Phase 1, and the second selected submission is the application of Metric Hack to it. (I thought there was a high probability that Metric Hack would work, but I also submitted No Hack just in case)
+
+
+Rather than simply sharing solutions, I thought it would be better to share my experience in detail. To improve the bad parts that happened in this competition.
+
+
+My ranking was due to luck, and although it is the Best Private Score submitted, it probably won't be Best Solution.
+
+
+Although the competition ended on a gloomy note due to the metric hacking issue, the host and staff worked hard to make it a meaningful and successful competition. 
+
+
+Based on this, we expect a more developed system in the future.
+
+
+thank you
+
+
+  
+Edit : I posted the FE code here.
+  644(for lgbm) - https://www.kaggle.com/code/yuuniekiri/fork-of-home-credit-risk-lightgbm
+  661(for cat &amp; dnn) - https://www.kaggle.com/code/yuuniekiri/fork-of-home-credit-catboost-inference
+
+Comments:
+├─ Alexander Ryzhkov (2024-05-30 13:42:48.920000) [+5]
+│  Hi @yuuniekiri,
+│  
+│  Congrats with the great performance and amazing solution! Also I would like to thank you for using LightAutoML models in your solution 😎
+│  
+│  
+│    
+│  DNN is a Denselight model and utilizes...
+  ├─ yuuniee (2024-05-31 02:27:56.787000) [+2]
+  │  Thank you so much.
+  │  
+  │  LightAutoML is a really convenient and useful library.
+  │  The problem I had was not fatal, but I will share it there soon. :)
+├─ JK-Piece (2024-07-04 11:27:27.330000) [+3]
+│  Hi @yuuniekiri, I cannot find the final submission notebook for the first place. Can you please share it?
+├─ MKRC7 ⵣ (2024-06-05 09:14:15.740000) [+3]
+│  Congrats @yuuniekiri for the winning. May I ask you what approach did you choose to find the best ensemble weights?
+  ├─ yuuniee (2024-06-05 10:01:55.410000) [+4]
+  │  Thank you for your congrats.
+  │  My approach is linear regression and weighted testing in OOF.
+  │  Interestingly, the optimal weights of OOF score was close to the optimal weights of LB.
+├─ nonchokablexd (2024-06-25 16:53:07.067000) [+1]
+│  Congratulations
+├─ troostiticgh (2024-06-10 17:01:02.083000) [+1]
+│  Congratulations
+├─ Krens (2024-06-06 12:04:12.840000) [+1]
+│  Thank you for sharing such a detailed and insightful breakdown of your solution, yuuniee! Your approach to combining LGBM, DNN, and Catboost models with a weighted ensemble clearly highlights the i...
+├─ Cheng Zhao (2024-06-03 21:18:45.220000) [+1]
+│  thank you for the summary. Very inspiring
+├─ kerenshang (2024-06-03 08:58:11.387000) [+1]
+│  Thanks! Very useful article for fresh man.
+├─ Mr RRR (2024-06-02 17:02:24.843000) [+1]
+│  Thanks! Very useful article for fresh man
+├─ Manav Trivedi (2024-06-02 00:10:08.097000) [+1]
+│  Smart way of using the hacks!
+├─ catdoghu (2024-05-31 23:36:47.723000) [+1]
+│  helpful for me!
+├─ TomarAman (2024-05-31 19:05:04.630000) [+1]
+│  Great approach
+├─ Matous Famera (2024-05-31 17:14:49.730000) [+1]
+│  Congratulations! My team had similar idea - Ensemble model of LightGBM, CatBoost and Tensorflow. We were really close to developing the ensemble model. However after the change of rules and allowin...
+├─ Nirav (2024-05-31 14:39:11.707000) [+1]
+│  Interesting
+├─ Anthony (2024-05-31 06:00:01.617000) [+1]
+│  great hacking man
+├─ Anil Kumar Reddy (2024-05-30 09:13:23.270000) [+1]
+│  Congratulations , thanks for sharing your wonderfull journay!!
+├─ narsil (jobs-in-data.com) (2024-05-30 07:29:12.023000) [+1]
+│  Thanks for sharing - this is great. One question out of curiosity: have you managed to use credit bureau A data successfully?
+│  (for context - I haven't - my post with details here https://www.kaggle...
+  ├─ yuuniee (2024-05-30 10:05:57.823000) [+2]
+  │  This is quite a mystery to me too. 
+  │  As you can see from the code and comments for LGBM posted above, I had quite a bit of trouble with it.
+  │  As a result, many features were deleted from bureau A and ...
+    ├─ Eduardo Toloza (2024-05-30 11:42:27.913000) [+1]
+    │  From Credit Bureau data I just used the feature related to the financial institution that approved the loan. Other features degraded the stability metric. I also thought it was better not to use de...
+    ├─ narsil (jobs-in-data.com) (2024-05-30 16:28:55.503000) [+1]
+    │  My interpretation is that hosts downsampled this source of data heavily for the test set, and hence it led to overfitting.
+    ├─ Tomas Jelinek (2024-05-31 07:08:27.537000) [+2]
+    │  Hi, we will have to look into it, in production models credit bureau contributes quite significantly…
+    │  in dataset should be data as they are in our real processes (except for anonymization/masking),...
+  ├─ Andrey Nesterov (2024-05-30 17:34:24.480000) [+3]
+  │  Let me add my 5 cents. With MLP model I also had problems with overfitting, so I used only top 20 features (by gain importance of LGBM). But GBDT models worked pretty well with cred_b_a_* tables, e...
+  ├─ THUNDER THUNDER (2024-05-30 17:48:55.920000) [+1]
+  │  I use credit_bureau_a_1_3 for training instead of credit_bureau_a_1_*.
+    ├─ Eduardo Toloza (2024-05-30 19:45:05.643000) [+1]
+    │  Can you elaborate?
+├─ ishlove7 (2024-05-30 06:39:27.073000) [+1]
+│  Your idea is so amazing. Thank you for sharing awesome idea.
+├─ Doyeong (2024-05-30 04:30:15.747000) [+1]
+│  Congratulations! I learn a lot~
+├─ C R Suthikshn Kumar (2024-05-30 04:19:02.727000) [+1]
+│  Congratulations on winning this competition. Thanks for detailed explanation of your solution and sharing valuable comments on topic of Metric Hacking. Can you comment on execution time of your not...
+  ├─ yuuniee (2024-05-30 06:03:01.940000) [+0]
+  │  Thank you very much. 
+  │  
+  │  
+  │  
+  │  
+  │  The execution time of my notes is approximately 2 to 3 hours. (I have never measured it accurately.)
+  │  
+  │  
+  │  Best practice - I don't know if I'm qualified to comment on this. It...
+├─ ChrisChan0204 (2024-05-29 23:59:54.627000) [+1]
+│  Congratulations! This notebook is very impressive for me.
+├─ Vishrut Grover (2024-05-29 21:02:01.293000) [+1]
+│  This is awesome! I'll be reading this in detail soon! :) Great work @yuuniekiri!
+├─ xianZ_waikato (2024-06-20 08:49:52.650000) [+2]
+│  Nice share, Congratulations for your first solo gold.
+├─ wajyjpku (2024-06-17 01:10:07.703000) [+2]
+│  Congrats @yuuniekiri for the winning. How do we filter out effective features and toxic features?Thank you for your response in advance.
+  ├─ yuuniee (2024-06-17 02:01:37.780000) [+1]
+  │  As you can see in the article above, features that have a significant advantage in the CV score are kept, and features that have no advantage are removed.
+  │  Additionally, even if there is no signific...
+├─ wuuthraad (2024-06-01 13:28:13.860000) [+2]
+│  Great work man!
+├─ Arjun M97 (2024-06-01 12:33:17.527000) [+2]
+│  Congratulations on your award!
+│  Thank you for the solution! Very interesting approach
+├─ Muhammed Tausif (2024-05-31 02:21:03.410000) [+2]
+│  Congratulations, thanks for sharing. @yuuniekiri
+├─ Suzuki Yuto - W (2024-05-31 00:03:40.470000) [+2]
+│  Congratulations on your award! 
+│  Thank you for the solution!  I will keep this in mind for future reference.
+├─ Josmar Augusto Fonseca Barbosa (2024-05-30 15:52:55.980000) [+2]
+│  Wow! Quite a nice job! Congrats!!!
+├─ [deleted] (2024-05-30 13:57:36.773000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-05-31 02:40:09.913000) [+4]
+  │  [deleted]
+├─ [deleted] (2024-05-30 09:28:31.003000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-05-30 09:55:52.723000) [+3]
+  │  [deleted]
+├─ [deleted] (2024-05-30 07:26:14.080000) [+2]
+│  [deleted]
+├─ [deleted] (2024-05-29 20:57:16.307000) [+2]
+│  [deleted]
+├─ [deleted] (2024-05-29 13:35:53.330000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-05-29 14:02:29.670000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2024-05-29 14:22:38.227000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-05-29 22:38:52.943000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-05-30 06:49:12.967000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-05-31 07:23:09.540000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-05-31 07:39:50.280000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2024-05-31 18:37:21.163000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-06-03 12:29:02.420000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-06-03 14:24:27.227000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2024-06-03 14:26:11.443000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-05-29 10:37:11.400000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-05-29 11:24:24.503000) [+1]
+  │  [deleted]
+├─ [deleted] (2025-11-08 08:47:50.353000) [+0]
+│  [deleted]
+├─ [deleted] (2025-02-27 03:49:04.967000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-03 04:24:18.697000) [+1]
+│  [deleted]
+├─ [deleted] (2024-05-31 04:01:16.770000) [+0]
+│  [deleted]
+├─ [deleted] (2024-05-31 03:03:17.207000) [+0]
+│  [deleted]
+├─ [deleted] (2024-10-09 14:54:37.660000) [+0]
+│  [deleted]

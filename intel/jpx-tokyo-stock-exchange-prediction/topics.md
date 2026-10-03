@@ -1,0 +1,82 @@
+# jpx-tokyo-stock-exchange-prediction 讨论区（按票数排序，共 80 条）
+
+- [📈Market Prediction - 🏆Winning Solutions from other competitions - Useful for JPX: Tokyo Stock Exchange Prediction📈❓](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317038) — 178 票 / 35 评论 / 2022-04-05 **write-up?**
+- [Ongoing leaderboard redactions](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317413) — 116 票 / 78 评论 / 2022-04-07 
+- [Interesting competitions from the past to checkout](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317027) — 91 票 / 12 评论 / 2022-04-05 
+- [My summary of this competition](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/335393) — 86 票 / 20 评论 / 2022-07-06 
+- [Silly mistakes to avoid when doing stocks forecasting](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318294) — 82 票 / 17 评论 / 2022-04-11 
+- [Welcome from the Competition Hosts](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/316856) — 79 票 / 97 评论 / 2022-04-04 
+- [Let's share Leak-Free CV](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/324217) — 74 票 / 72 评论 / 2022-05-10 
+- [Notebooks to understand the competition easily](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317091) — 70 票 / 17 评论 / 2022-04-05 
+- [Could this competition have a lucky winner?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320323) — 67 票 / 17 评论 / 2022-04-21 
+- [Introduction to Options](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318956) — 60 票 / 4 评论 / 2022-04-14 
+- [Leaderboard in temporary bad state (clearing now)](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/338961) — 51 票 / 9 评论 / 2022-07-22 
+- [Shorting dividend days = easy score boost](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320836) — 45 票 / 10 评论 / 2022-04-23 
+- [If we are predicting only 2 days in advance, how will we predict 3 months?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320076) — 43 票 / 9 评论 / 2022-04-20 
+- [Past JPX Competition on Stock Price Prediction](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317476) — 41 票 / 2 评论 / 2022-04-07 
+- [Papers on Predicting Future Stock Returns 📈💰](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317117) — 39 票 / 2 评论 / 2022-04-05 
+- [Some pointers on time series](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317393) — 37 票 / 5 评论 / 2022-04-06 
+- [4th place solution](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/359151) — 37 票 / 4 评论 / 2022-10-12 **write-up?**
+- [Tutorials for getting started: Time Series + Stock Prediction](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317367) — 36 票 / 0 评论 / 2022-04-06 
+- [Winner Solutions from the Previous JQuants Competition](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317250) — 35 票 / 2 评论 / 2022-04-06 **write-up?**
+- [Recalculating Target](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318356) — 33 票 / 10 评论 / 2022-04-12 
+- [Good luck to everyone!](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/335236) — 32 票 / 19 评论 / 2022-07-05 
+- [First score update expected on the 25th (now 28th)](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/337385) — 31 票 / 56 评论 / 2022-07-15 
+- [Stock price prediction using LSTM](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317024) — 30 票 / 9 评论 / 2022-04-05 
+- [Price and Volume Data Aren't Adjusted Correctly](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317395) — 30 票 / 6 评论 / 2022-04-06 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/316977) — 27 票 / 24 评论 / 2022-04-04 
+- [Efficient Backtest window](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/323830) — 27 票 / 7 评论 / 2022-05-08 
+- [Papers on Deep Learning and Trading](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/321451) — 27 票 / 0 评论 / 2022-04-26 
+- [NVIDIA TFT code](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/329800) — 26 票 / 6 评论 / 2022-06-08 
+- [ Leaderbord after 1tst update - chart](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/340549) — 25 票 / 6 评论 / 2022-07-29 
+- [Market, Future Contracts and Investments Glossary](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317429) — 25 票 / 0 评论 / 2022-04-07 
+- [This is not necessarly a daily forecasting competition](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/323390) — 25 票 / 7 评论 / 2022-05-06 
+- [各カラムの詳細について / Detailed column explanations such as OptionsCode](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317528) — 24 票 / 0 评论 / 2022-04-07 
+- [Introducing rolling sharp ratio](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320185) — 23 票 / 4 评论 / 2022-04-20 
+- [The Failure of Equity Trading System on October 1, 2020](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317108) — 23 票 / 3 评论 / 2022-04-05 
+- [Why competition Sharpe ratio scores may outperform real market Sharpe ratios](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/329197) — 22 票 / 10 评论 / 2022-06-05 
+- [Last Update Distribution](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/358260) — 22 票 / 2 评论 / 2022-10-07 
+- [Long-Short Strategy Paper](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320886) — 21 票 / 1 评论 / 2022-04-24 
+- [Observations for `OptionsCode`](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318048) — 21 票 / 5 评论 / 2022-04-10 
+- [Leaderboard after 4th update - chart](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/350652) — 20 票 / 2 评论 / 2022-09-06 
+- [Second interim data update posted](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/329437) — 19 票 / 31 评论 / 2022-06-06 
+- [Are you confident you can beat random submissions ? ](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/333222) — 19 票 / 16 评论 / 2022-06-25 
+- [💡 Turn on your curiosity 🧠 | *IDEAS* to try](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320561) — 19 票 / 2 评论 / 2022-04-22 
+- [Guessing The Future Winning Solutions!](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/324051) — 19 票 / 1 评论 / 2022-05-09 **write-up?**
+- [The sky is the limit](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318055) — 19 票 / 7 评论 / 2022-04-10 
+- [Can less data be better than more ?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/325068) — 19 票 / 12 评论 / 2022-05-14 
+- [First Score Update Posted](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/340545) — 19 票 / 71 评论 / 2022-07-29 
+- [More than 40 people with LB > 2850.993 ¿why?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/319496) — 18 票 / 9 评论 / 2022-04-17 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/316978) — 18 票 / 197 评论 / 2022-04-04 
+- [8th Place Solution](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/359227) — 18 票 / 1 评论 / 2022-10-15 **write-up?**
+- [Leaderboard after 5th update - chart](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/353074) — 17 票 / 1 评论 / 2022-09-16 
+- [Leaderboard redactions halted for remainder of competition](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/333661) — 17 票 / 8 评论 / 2022-06-27 
+- [ALT LB: sensible scores only please](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/319556) — 17 票 / 18 评论 / 2022-04-17 
+- [Leaderbord after 2nd update - chart](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/342634) — 17 票 / 3 评论 / 2022-08-08 
+- [Final Score Update Posted!](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/358188) — 16 票 / 13 评论 / 2022-10-06 
+- [Column name correction](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/319757) — 16 票 / 0 评论 / 2022-04-18 
+- [Local API use](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/323917) — 16 票 / 11 评论 / 2022-05-09 
+- [Second leaderboard update posted](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/342160) — 16 票 / 10 评论 / 2022-08-05 
+- [Third score update posted](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/347059) — 16 票 / 6 评论 / 2022-08-22 
+- [Fourth score update posted](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/350439) — 16 票 / 7 评论 / 2022-09-05 
+- [List of published top solutions](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/358938) — 16 票 / 4 评论 / 2022-10-10 **write-up?**
+- [J-Quants API (Beta) has come!!](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/349642) — 15 票 / 1 评论 / 2022-09-02 
+- [Fix for missing trades Date column in the API](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/328956) — 15 票 / 0 评论 / 2022-06-03 
+- [Fifth score update posted](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/353056) — 15 票 / 5 评论 / 2022-09-16 
+- [Leaderboard after 3rd update - chart](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/347159) — 15 票 / 2 评论 / 2022-08-23 
+- [The target has a lag of one day.](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317005) — 15 票 / 5 评论 / 2022-04-05 
+- [Why do so many people train on "target" instead of the Sharpe ratio?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/330022) — 15 票 / 16 评论 / 2022-06-10 
+- [Quant Funds at the time of the COVID Shock](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/321479) — 15 票 / 2 评论 / 2022-04-27 
+- [Introduction of famous stock anomalies](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320702) — 14 票 / 3 评论 / 2022-04-23 
+- [The Sharpe Ratio. JPX Tokyo Kaggle Competition Evaluation.](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317386) — 14 票 / 0 评论 / 2022-04-06 
+- [The overfitting score is invalid, it will be canceled and get error in public score !](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/320101) — 14 票 / 4 评论 / 2022-04-20 
+- [[JPX] Meme_Thread_Baseline [LB ≃ 💯.0]](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/334677) — 14 票 / 9 评论 / 2022-07-02 
+- [How to create a test set for evaluation so that it is not confused with the LB score](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318015) — 14 票 / 6 评论 / 2022-04-10 
+- [Public Score: Error](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/355590) — 13 票 / 10 评论 / 2022-09-27 
+- [Insights from ML Trading Experience](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/330081) — 13 票 / 2 评论 / 2022-06-10 
+- [Leaderboard Shakeup](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/342695) — 13 票 / 1 评论 / 2022-08-08 
+- [Getting Started with Modeling (DNN & LGBM)](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/317918) — 13 票 / 0 评论 / 2022-04-09 
+- [Machine Learning models, deep learning models, simple linear models, and technical indicators](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/359475) — 13 票 / 4 评论 / 2022-10-12 
+- [Sharing external data (from JPX trading rules)](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/332065) — 12 票 / 0 评论 / 2022-06-20 
+- [Will there be a time interval between the training data and testing data?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/325408) — 12 票 / 10 评论 / 2022-05-16 
+- [How do I link the options data to a particular security code?](https://www.kaggle.com/competitions/jpx-tokyo-stock-exchange-prediction/discussion/318086) — 12 票 / 8 评论 / 2022-04-10 

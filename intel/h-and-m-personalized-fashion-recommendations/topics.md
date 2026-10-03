@@ -1,0 +1,122 @@
+# h-and-m-personalized-fashion-recommendations 讨论区（按票数排序，共 120 条）
+
+- [Addressing common questions and what the competition is really about](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307288) — 431 票 / 78 评论 / 2022-02-13 
+- [1st place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324070) — 430 票 / 222 评论 / 2022-05-23 **write-up?**
+- [Memory Trick - Reduce Memory 8x or 16x!](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308635) — 337 票 / 42 评论 / 2022-02-19 
+- [How To Setup Local CV](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308919) — 251 票 / 51 评论 / 2022-02-20 
+- [Important comments from the Host](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307001) — 242 票 / 18 评论 / 2022-02-11 
+- [Quick tip: dropped zero values in article id](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306057) — 116 票 / 7 评论 / 2022-02-08 
+- [💥 💥 Deep Learning Research Papers in Product Matching 💥 💥 ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305998) — 116 票 / 17 评论 / 2022-02-07 
+- [[LB 0.19] LGBM Starter Pack](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/309220) — 115 票 / 16 评论 / 2022-02-22 
+- [5 Reduced Resolution Image Datasets (128, 256, 384, 512, 1024) 👔👖](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306152) — 100 票 / 21 评论 / 2022-02-08 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324129) — 96 票 / 40 评论 / 2022-05-16 **write-up?**
+- [Greetings!](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305952) — 92 票 / 68 评论 / 2022-02-07 
+- [Tradition approach outperforms deep learning model when data has cold-start/inactive users](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/312653) — 88 票 / 9 评论 / 2022-03-13 
+- [2nd place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324197) — 80 票 / 50 评论 / 2022-05-10 **write-up?**
+- [Customers and Articles Visualization app](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/316666) — 78 票 / 8 评论 / 2022-04-03 
+- [Setup Local CV – for Modeling](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/316386) — 77 票 / 25 评论 / 2022-04-01 
+- [Scale of the price column](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/310496) — 75 票 / 9 评论 / 2022-03-01 
+- [52nd place with 20 minute Kaggle Notebook](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324076) — 75 票 / 24 评论 / 2022-05-15 **write-up?**
+- [important screenshots from Google recommendation systems course.](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306547) — 74 票 / 3 评论 / 2022-02-09 
+- [Feature Engineering Tricks | Thanks GM Chris and Giba](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/311747) — 73 票 / 9 评论 / 2022-03-08 
+- [6th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324075) — 71 票 / 24 评论 / 2022-05-12 **write-up?**
+- [▲CV vs LB ▼](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/310365) — 67 票 / 24 评论 / 2022-03-01 
+- [Don't get yourself fooled. This is not similarity problem.](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306946) — 66 票 / 16 评论 / 2022-02-11 
+- [4th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324094) — 65 票 / 12 评论 / 2022-05-10 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324098) — 64 票 / 36 评论 / 2022-05-10 **write-up?**
+- [Care to share?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/314458) — 60 票 / 28 评论 / 2022-03-22 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305976) — 55 票 / 38 评论 / 2022-02-07 
+- [Summarize top-10 place solutions](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324486) — 52 票 / 8 评论 / 2022-05-12 **write-up?**
+- [👝 I've looked at all images so you don't have to](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/316362) — 52 票 / 12 评论 / 2022-04-01 
+- [9th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324127) — 50 票 / 16 评论 / 2022-05-10 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324084) — 49 票 / 16 评论 / 2022-05-12 **write-up?**
+- [6th Place - Giba's Part Solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324278) — 49 票 / 12 评论 / 2022-05-10 **write-up?**
+- [Single Model Traditional Machine Learning Approaches](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/313749) — 48 票 / 2 评论 / 2022-03-18 
+- [1% on public LB - is this a record? ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305986) — 48 票 / 11 评论 / 2022-02-07 
+- [Part of 22nd solution - single LGBM (Private:0.03038)](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324152) — 45 票 / 11 评论 / 2022-05-10 **write-up?**
+- [How to get customer's "sex" feature](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308555) — 45 票 / 9 评论 / 2022-02-19 
+- [What does "7-day period immediately after the training data ends" exactly mean?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306380) — 43 票 / 8 评论 / 2022-02-09 
+- [LGBMRanker - evaluation metric not improving](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/317374) — 43 票 / 53 评论 / 2022-04-06 
+- [Online vs. Stores : The difference of predictability](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/313565) — 42 票 / 14 评论 / 2022-03-17 
+- [👨‍🎓 Learning resources for Recommender systems](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305999) — 39 票 / 11 评论 / 2022-02-07 
+- [23th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324085) — 39 票 / 4 评论 / 2022-05-10 **write-up?**
+- [12th place Writeup](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324310) — 39 票 / 9 评论 / 2022-05-11 **write-up?**
+- [8th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324185) — 39 票 / 22 评论 / 2022-05-10 **write-up?**
+- [Shopee - Price Match Guarantee Solutions](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305990) — 38 票 / 3 评论 / 2022-02-07 **write-up?**
+- [Recommender systems - Evaluation hell](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307153) — 38 票 / 0 评论 / 2022-02-12 
+- [17th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324595) — 37 票 / 10 评论 / 2022-05-12 **write-up?**
+- [[Resolved] Question regarding evaluation metric](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306007) — 34 票 / 24 评论 / 2022-02-07 
+- [👗👚Some nice Fashion recommendation resources for this competition🥼👝🛍](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306078) — 33 票 / 2 评论 / 2022-02-08 
+- [TorchRec: PyTorch for Recommendation Systems! ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/309550) — 32 票 / 0 评论 / 2022-02-24 
+- [Competition metric (MAP) code](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307041) — 32 票 / 4 评论 / 2022-02-12 
+- [As expected almost no shakeup at all. Congrats to all participants. What a competition!](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324056) — 30 票 / 8 评论 / 2022-05-10 
+- [Best single model](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/316205) — 29 票 / 17 评论 / 2022-03-31 
+- [13th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324207) — 28 票 / 4 评论 / 2022-05-10 **write-up?**
+- [Kangol Collaboration Item](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/315843) — 28 票 / 3 评论 / 2022-03-30 
+- [A few notes...](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324118) — 28 票 / 1 评论 / 2022-05-10 
+- [16th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324158) — 28 票 / 2 评论 / 2022-05-10 **write-up?**
+- [How many recall methods are available?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/321660) — 27 票 / 12 评论 / 2022-04-28 
+- [⭐️ Interesting information about AI in H&M ⭐️](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306000) — 27 票 / 4 评论 / 2022-02-07 
+- [🔥 Projector Visualisation Of Clothing Images + Product name](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307048) — 26 票 / 4 评论 / 2022-02-12 
+- [[Blog] Mean Average Precision for Recommender Systems](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305997) — 26 票 / 2 评论 / 2022-02-07 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305977) — 25 票 / 172 评论 / 2022-02-07 
+- [10th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324223) — 25 票 / 3 评论 / 2022-05-10 **write-up?**
+- [Data Quality Issues - Missing Transactions](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306016) — 24 票 / 7 评论 / 2022-02-07 
+- [FN feature meaning? 👀](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306481) — 23 票 / 6 评论 / 2022-02-09 
+- [[To host] please check "csci567_id*" accounts for private sharing](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324073) — 23 票 / 7 评论 / 2022-05-10 
+- [Embedding the products](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308917) — 21 票 / 1 评论 / 2022-02-20 
+- [Huge num of customers with one postal code](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306488) — 21 票 / 3 评论 / 2022-02-09 
+- [Recommender System using turicreate library](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/316903) — 21 票 / 0 评论 / 2022-04-04 
+- [Why last items and the most popular items are better then ALS?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307517) — 21 票 / 7 评论 / 2022-02-14 
+- [effective way for postal_code encoding method](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308931) — 21 票 / 3 评论 / 2022-02-21 
+- [Curated papers, articles, and blogs on Recommendations by Eugene Yan](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/318852) — 20 票 / 7 评论 / 2022-04-14 
+- [Personal thank yous and takeaways](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324078) — 19 票 / 5 评论 / 2022-05-10 
+- [22th solution (Moro part)](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324224) — 18 票 / 6 评论 / 2022-05-10 **write-up?**
+- [How to do CV on time series data?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306562) — 18 票 / 4 评论 / 2022-02-09 
+- [Recommendations? Or more than that...](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306588) — 18 票 / 6 评论 / 2022-02-10 
+- [3 week challenge | update everyday](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/319891) — 18 票 / 5 评论 / 2022-04-19 
+- [Multiple Recall Methods---evaluation metric by GBMRanker not improving](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/321672) — 18 票 / 21 评论 / 2022-04-28 
+- [Data misleading: For finding image of article_id, let change article_id from "number" to "string" type when reading dataframe](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307390) — 17 票 / 0 评论 / 2022-02-14 
+- [make the most of RAM/memory](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/314829) — 17 票 / 3 评论 / 2022-03-24 
+- [I like this new word: emsembling](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/322863) — 17 票 / 7 评论 / 2022-05-04 
+- [Not a Code Competition?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306537) — 17 票 / 6 评论 / 2022-02-09 
+- [Non Negative Matrix Factorization for Recommendation systems](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/314559) — 16 票 / 3 评论 / 2022-03-23 
+- [Competition Metric - in English](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307828) — 16 票 / 9 评论 / 2022-02-15 
+- [Similar Kaggle competition launched 6 years ago (Coupon Purchase Prediction) ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307713) — 15 票 / 0 评论 / 2022-02-15 
+- [Congrats and Gold Medal Solutions Compilation 🥇 ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324103) — 15 票 / 2 评论 / 2022-05-10 **write-up?**
+- [Sharing - Session-based Recommendation with Multi-Modal Features ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306069) — 14 票 / 0 评论 / 2022-02-08 
+- [No deep learning approach here?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/319267) — 14 票 / 6 评论 / 2022-04-16 
+- [💥 Create 391 features in a few minutes! Multiple, customizable and scalable feature stores with kedro & featuretools.](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/320756) — 14 票 / 8 评论 / 2022-04-23 
+- [46th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324205) — 14 票 / 6 评论 / 2022-06-06 **write-up?**
+- [Taking into account if a product is still available](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/310867) — 13 票 / 7 评论 / 2022-03-03 
+- [The reason for price banding pattern ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308974) — 13 票 / 7 评论 / 2022-02-21 
+- [Users that bought more than 12 items during the test period](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307202) — 13 票 / 3 评论 / 2022-02-13 
+- [26th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324350) — 13 票 / 0 评论 / 2022-05-11 **write-up?**
+- [Do we need to think about "Recommendetion"?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306669) — 12 票 / 1 评论 / 2022-02-10 
+- [Papers on Machine Learning + Product Recommendations? Nah, don't need 'em](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/321442) — 12 票 / 1 评论 / 2022-04-26 
+- [Youtube Videos and Blogs on Recommendation System](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308316) — 12 票 / 4 评论 / 2022-02-18 
+- [nasty, silent leakage...](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/323081) — 12 票 / 13 评论 / 2022-05-04 
+- [What (techniques/methods) won't work on this Kaggle Competition? And what works?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306793) — 12 票 / 6 评论 / 2022-02-10 
+- [Leaderboard story - a snowball becoming an avalanche](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324244) — 12 票 / 0 评论 / 2022-05-10 
+- [Detailed article on the Metric used in the competition!!](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/315891) — 12 票 / 1 评论 / 2022-03-30 
+- [Patterns in Missing Data for Customers](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/307022) — 12 票 / 0 评论 / 2022-02-12 
+- [63th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324220) — 12 票 / 2 评论 / 2022-07-12 **write-up?**
+- [Cold Start](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/309235) — 12 票 / 5 评论 / 2022-02-22 
+- [Same Transaction with Different Prices or Channels](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/314035) — 12 票 / 3 评论 / 2022-03-20 
+- [What is "Divided" in "index_name" of "customers.csv"?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/310081) — 11 票 / 4 评论 / 2022-02-27 
+- [How to choose negative samples](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/322322) — 11 票 / 6 评论 / 2022-05-01 
+- [What's the logic behind recommending the same articles](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/308795) — 11 票 / 8 评论 / 2022-02-20 
+- [Merged Data in parquet format](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306572) — 11 票 / 3 评论 / 2022-02-10 
+- [Evaluation metrics and map@K](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306860) — 11 票 / 1 评论 / 2022-02-11 
+- [Why are recommendation system competitions so popular?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/323327) — 11 票 / 11 评论 / 2022-05-06 
+- [Be careful! Returns are not excluded from the data!](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/309020) — 10 票 / 3 评论 / 2022-02-21 
+- [Similar competition launched last year ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/305980) — 10 票 / 1 评论 / 2022-02-07 
+- [RecSys 2022 challenge & this task](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/312654) — 10 票 / 7 评论 / 2022-03-13 
+- [Product launches and relevant articles](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/315571) — 10 票 / 2 评论 / 2022-03-28 
+- [Congratulations (⊙﹏⊙) on Competitions KGM ](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324107) — 10 票 / 3 评论 / 2022-05-10 
+- [25th place solution](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/324293) — 10 票 / 3 评论 / 2022-05-11 **write-up?**
+- [Sequence matters?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/313725) — 9 票 / 10 评论 / 2022-03-18 
+- [any idea to split the train dataset for validating the model?](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/306558) — 9 票 / 3 评论 / 2022-02-09 
+- [How to Score Candidate Generation](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/320126) — 9 票 / 0 评论 / 2022-04-20 
+- [Recap of the Top Solutions from a Similar Competition (Shopee)](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/311933) — 9 票 / 4 评论 / 2022-03-09 **write-up?**
+- [Understand individual customer by micro-EDA](https://www.kaggle.com/competitions/h-and-m-personalized-fashion-recommendations/discussion/311181) — 9 票 / 0 评论 / 2022-03-05 

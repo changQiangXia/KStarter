@@ -1,0 +1,122 @@
+# hull-tactical-market-prediction 讨论区（按票数排序，共 120 条）
+
+- [Stop wasting your time here!](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608088) — 139 票 / 55 评论 / 2025-09-17 
+- [The Hull Tactical competition exploratory data analysis (EDA)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/610981) — 47 票 / 10 评论 / 2025-10-07 
+- [the possiblity of a random submission winning](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608135) — 44 票 / 23 评论 / 2025-09-18 **write-up?**
+- [[4th Place] Technical Model, No Learning: Short Term Reversal](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/718664) — 39 票 / 12 评论 / 2026-07-03 **write-up?**
+- [Important Notice on Training Data Usage](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608087) — 38 票 / 33 评论 / 2025-09-17 
+- [Data update posted](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614576) — 30 票 / 40 评论 / 2025-11-04 
+- [Micro Alphas (paper by Hull Tactical)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614618) — 25 票 / 6 评论 / 2025-11-05 
+- [Public leaderboard: 17 is possible](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608349) — 24 票 / 38 评论 / 2025-09-19 
+- [If you have a method to beat the market](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608056) — 22 票 / 14 评论 / 2025-09-17 
+- [The REAL "do-nothing" baseline is 0.469](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/611071) — 20 票 / 12 评论 / 2025-10-08 
+- [Clarification Needed: Forecasting Constraints and Inference Time — Let’s Make It Clear for Everyone](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608673) — 20 票 / 10 评论 / 2025-09-21 
+- [Momentum features are missing](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608469) — 18 票 / 5 评论 / 2025-09-20 
+- [Should competition metric on last 180 days of train *exactly* match LB score?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614978) — 16 票 / 5 评论 / 2025-11-07 
+- [2.6 public LB solution writeup (dec 25)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663043) — 16 票 / 17 评论 / 2025-12-16 **write-up?**
+- [Welcome to the Competition! ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/605531) — 14 票 / 8 评论 / 2025-09-08 
+- [Weekly seasonality](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608260) — 14 票 / 7 评论 / 2025-09-18 
+- [Probabilistic Forecasting + Stochastic Optimization (CVaR)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/664108) — 14 票 / 3 评论 / 2025-12-22 
+- [Hull Tactical – Market Prediction: Project Discussion](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/617704) — 12 票 / 7 评论 / 2025-11-11 
+- [Single Model, Simple Decision - 61st Place Silver](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/715547) — 11 票 / 0 评论 / 2026-06-28 **write-up?**
+- [Hull Tactical Market Prediction Leaderboard EDA (Updated 2026-02-19)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663201) — 11 票 / 12 评论 / 2025-12-16 
+- [Training Data updates?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608577) — 11 票 / 8 评论 / 2025-09-20 
+- [Struggling to match the data against the S&P500 price history](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608630) — 10 票 / 5 评论 / 2025-09-21 
+- [Hull Tactical's real world performance](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608013) — 10 票 / 7 评论 / 2025-09-17 
+- [Did the organizers forget about this competition? ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/682932) — 10 票 / 3 评论 / 2026-03-19 
+- [How aggressive should we be regarding current shutdown and fed rate cuts?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613230) — 10 票 / 2 评论 / 2025-10-25 
+- [[Obsolete] Final leaderboard update underway - expect no visible results until the closing time](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714206) — 9 票 / 9 评论 / 2026-06-25 
+- [Metric issue: negative Sharpe is plausible... and broken](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/611256) — 9 票 / 5 评论 / 2025-10-09 
+- [Helping Others Fix Submission Bugs (Let’s Make It Fair for Everyone!)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613380) — 9 票 / 3 评论 / 2025-10-26 
+- [What was your validation strategy?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663022) — 9 票 / 13 评论 / 2025-12-15 
+- [1st Update on Private leaderboard ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/668365) — 9 票 / 9 评论 / 2026-01-16 
+- [Online learning questions ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/617660) — 8 票 / 5 评论 / 2025-11-11 
+- [Trading with the Momentum Transformer](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/615301) — 8 票 / 0 评论 / 2025-11-10 
+- [Temporal Fusion Transformer and its Variable Selection Networks to capture Micro Alpha's noisy signals  ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614796) — 8 票 / 0 评论 / 2025-11-06 
+- [Has anyone beat the noise ceiling for medals?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613875) — 8 票 / 5 评论 / 2025-10-30 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714630) — 7 票 / 1 评论 / 2026-06-26 
+- [Any (real) scores to share?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/629625) — 7 票 / 24 评论 / 2025-11-17 
+- [YOLOing for the win?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608713) — 7 票 / 3 评论 / 2025-09-21 
+- [Random Walk, Sharpe Ratio, and Why Leverage Can Be Misleading in This Competition](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608262) — 7 票 / 10 评论 / 2025-09-18 
+- [Any possibility to allow for shorting?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608037) — 7 票 / 2 评论 / 2025-09-17 
+- [Details about forward returns](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612396) — 6 票 / 2 评论 / 2025-10-19 
+- [Leaderboard 297 teams with 17.396 score](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612073) — 6 票 / 2 评论 / 2025-10-16 
+- [Second data update posted - train.csv is now current through early December.](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/656884) — 6 票 / 17 评论 / 2025-12-09 
+- [Dropped from the Leaderboard After First Update — Anyone Else?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/669368) — 6 票 / 21 评论 / 2026-01-21 
+- [Constant Allocation baseline](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/611023) — 6 票 / 0 评论 / 2025-10-08 
+- [Confirming availability of date/time during live phase](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/651402) — 6 票 / 7 评论 / 2025-12-03 
+- [Leaderboard Update](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/674265) — 6 票 / 30 评论 / 2026-02-19 
+- [Continously getting Kaggle error](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608178) — 6 票 / 12 评论 / 2025-09-18 
+- [163th Place Solution: Sharpe ratio 2.16](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714278) — 6 票 / 0 评论 / 2026-06-26 **write-up?**
+- [Do you believe the stock market can actually be predicted, or is it all just luck?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/609848) — 5 票 / 12 评论 / 2025-09-30 
+- [What's Kaggle Error? Can somebody help?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612819) — 5 票 / 6 评论 / 2025-10-22 
+- [First round of leaderboard updates completed](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/669360) — 5 票 / 9 评论 / 2026-01-21 
+- [how the 'def predict' works](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/611871) — 5 票 / 6 评论 / 2025-10-15 
+- [Is it guaranteed that the data I receive after submission will be in chronological order?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612779) — 5 票 / 5 评论 / 2025-10-22 
+- [kaggle error](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612942) — 5 票 / 3 评论 / 2025-10-23 
+- [Pip usage in notebook](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/609552) — 5 票 / 5 评论 / 2025-09-27 
+- [Should I predict the processed target market_forward_excess_returns directly?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/609287) — 5 票 / 7 评论 / 2025-09-25 
+- [Will the Test Period Be Extended if Random Models Lead the Leaderboard?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/652186) — 5 票 / 20 评论 / 2025-12-05 
+- [Is there any possibility to allow the use of external data?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608102) — 5 票 / 5 评论 / 2025-09-17 
+- [Financial Time Series - Different from Regular Time Series?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608380) — 5 票 / 1 评论 / 2025-09-19 
+- [Why the features might be 100% noise](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608409) — 5 票 / 4 评论 / 2025-09-19 
+- [[225th Bronze | 1st Try] Simple Single LGBM & Volatility Control](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714777) — 5 票 / 0 评论 / 2026-06-27 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/605537) — 4 票 / 10 评论 / 2025-09-08 
+- [Traing Data Update Schedule](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613020) — 4 票 / 1 评论 / 2025-10-23 
+- [Test Dataset During the Forecasting Phase ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608995) — 4 票 / 3 评论 / 2025-09-23 
+- [Can we apply time-series features (lags, moving averages, cumulative returns) to the test data?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/615116) — 4 票 / 4 评论 / 2025-11-09 
+- [Post-competition analysis](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/693242) — 4 票 / 4 评论 / 2026-04-20 
+- [What are everyone's local scores without considering data leakage?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/609219) — 4 票 / 2 评论 / 2025-09-25 
+- [Constant Submission Scoring Error](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/615269) — 4 票 / 2 评论 / 2025-11-10 
+- [Is the test set data continuous?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/648723) — 4 票 / 3 评论 / 2025-12-01 
+- [[Bug?] Inconsistent date_id behavior between local testing and submission](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/611551) — 3 票 / 4 评论 / 2025-10-12 
+- [competetive sumission failed issue ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612281) — 3 票 / 3 评论 / 2025-10-18 
+- [All Public Score = 17.396](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614464) — 3 票 / 6 评论 / 2025-11-04 
+- [How to Calculate Score on Leaderboard Locally](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613106) — 3 票 / 6 评论 / 2025-10-24 
+- [Upgrading sklearn to 1.7.2](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/637261) — 3 票 / 4 评论 / 2025-11-22 
+- [Does using the closed-form ‘ideal position’ formula count as leakage?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/615024) — 3 票 / 5 评论 / 2025-11-08 
+- [Features deanonymization](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/642296) — 3 票 / 0 评论 / 2025-11-27 
+- [is_scored?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/656906) — 3 票 / 1 评论 / 2025-12-09 
+- [Are the Current Leaderboard Scores Trustworthy?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/669402) — 3 票 / 8 评论 / 2026-01-22 
+- [Where are the top solutions?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/717746) — 3 票 / 2 评论 / 2026-07-02 **write-up?**
+- [Any more periodic run?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/701101) — 3 票 / 1 评论 / 2026-05-18 
+- [Leaderboard update](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714167) — 3 票 / 2 评论 / 2026-06-25 
+- [Timeline extension ?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/705402) — 3 票 / 6 评论 / 2026-06-09 
+- [Subject: Stuck at "Preparing for initial leaderboard update"](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/669396) — 3 票 / 2 评论 / 2026-01-22 
+- [Daily dataset now available on our website, updated after each close](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/737498) — 2 票 / 0 评论 / 2026-08-25 
+- [`lagged_(forward_returns, risk_free_rate, forward_excess_returns)` will be automatically included in the input test samples?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/650823) — 2 票 / 1 评论 / 2025-12-02 
+- [So how's the forecasting organized](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/610895) — 2 票 / 3 评论 / 2025-10-07 
+- [When I submit my file, I get a 'Submission Scoring / Format Error'. Why does this happen?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/615085) — 2 票 / 5 评论 / 2025-11-08 
+- [[Beginner Question] How to Use the Dummy/Binary Features D*?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612831) — 2 票 / 0 评论 / 2025-10-22 
+- [Submission Error](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/634861) — 2 票 / 6 评论 / 2025-11-19 
+- [Missing value imputation](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/612812) — 2 票 / 4 评论 / 2025-10-22 
+- [Hi everyone, I have a question.](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663943) — 2 票 / 2 评论 / 2025-12-21 
+- [Will the test-set scores of non-selected submissions be released after the competition ends?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714257) — 2 票 / 1 评论 / 2026-06-25 
+- [Breaking down the Forecasting Phase](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/630422) — 2 票 / 4 评论 / 2025-11-18 
+- [Automating rescores](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/609207) — 2 票 / 1 评论 / 2025-09-25 
+- [why I can not run this code successfully?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/617539) — 2 票 / 0 评论 / 2025-11-11 
+- ["Once the competition ends, we will periodically publish our data on our website, and you're welcome to use it for your own trading"](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/709668) — 2 票 / 1 评论 / 2026-06-19 
+- [Scoring metrics](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/609230) — 2 票 / 5 评论 / 2025-09-25 
+- [First Competition? Here’s What Happens Next](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663013) — 2 票 / 5 评论 / 2025-12-15 
+- [What if the market has emotions? A psychology-based approach (live system, 36-year backtest)](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/702403) — 2 票 / 5 评论 / 2026-05-23 
+- [Are there which scored rows in forecasting test.csv?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613458) — 2 票 / 0 评论 / 2025-10-27 
+- [How do you see this competition ending?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/659337) — 2 票 / 13 评论 / 2025-12-11 
+- [Public LB Is Broken, How Do We Benchmark Now?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/617649) — 2 票 / 0 评论 / 2025-11-11 
+- [On Model Robustness and Upcoming Market Regime Shift](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/690084) — 2 票 / 3 评论 / 2026-04-10 
+- [Computing Geometric Means](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/610991) — 2 票 / 2 评论 / 2025-10-08 
+- [Should the metric code account for a shift(1) operation to ensure proper temporal alignment?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613571) — 2 票 / 1 评论 / 2025-10-28 
+- [Any Update on Leaderboard](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/701319) — 1 票 / 1 评论 / 2026-05-18 
+- [Susbmission, global variables and adding lag to the test](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614537) — 1 票 / 5 评论 / 2025-11-04 
+- [Can previous data be used?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/610158) — 1 票 / 0 评论 / 2025-10-02 
+- [How can `risk_free_rate` be negative? ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614882) — 1 票 / 2 评论 / 2025-11-07 
+- [Using extra modules/packages](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614721) — 1 票 / 3 评论 / 2025-11-05 
+- [Massive discrepancies between local and LB scores](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614479) — 1 票 / 2 评论 / 2025-11-04 
+- [External Data & Pre-Trained Models ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/614017) — 1 票 / 2 评论 / 2025-10-31 
+- [About Sharpe ratio 2.20](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663061) — 1 票 / 0 评论 / 2025-12-16 
+- [Trend Reversal Risk in Forecasting Phase](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663044) — 1 票 / 2 评论 / 2025-12-16 
+- [submission ](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613731) — 1 票 / 0 评论 / 2025-10-29 
+- [About Feature Engineering](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613244) — 1 票 / 5 评论 / 2025-10-25 
+- [Looking to Learn: Features Worth Adding or Removing?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613531) — 1 票 / 0 评论 / 2025-10-27 
+- [2 questions regd. competition](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/613345) — 1 票 / 2 评论 / 2025-10-26 
+- [Is training data updated towards end of training or before prediction starts?](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/611315) — 1 票 / 2 评论 / 2025-10-10 
+- [Suggestion for the next forecasting competition](https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/670684) — 1 票 / 2 评论 / 2026-01-29 

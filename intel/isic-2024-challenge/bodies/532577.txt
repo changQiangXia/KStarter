@@ -1,0 +1,216 @@
+# https://www.kaggle.com/competitions/isic-2024-challenge/discussion/532577
+
+Topic #532577: 9th Place Solution
+  Author: Sinan Calisir
+  Posted: 2024-09-07 01:55:01.676000
+  Votes: 81  Comments: 26
+
+Hi everyone,
+
+I can't even explain how I am feeling right now?!? I finally made it to the gold zone for the first time after almost 3.5 years of Kaggling and made it as a solo participant. I am quite happy my solution performed robustly in the private LB too.
+
+I would like to thank Kaggle and the organizers for creating this interesting challenge that will be beneficial and will improve the lives of many people worldwide. Also a big shout-out to the organizers who were extremely responsive during the competition which is appreciated a lot!
+
+TLDR:
+
+I built  (+  public) different tabular pipelines  various features, data,  model combinations paired  predictions  various image model backbones. Then I blended  results  these pipelines  made my final predictions. Weights   different pipelines found via  hill-climbing algorithm.
+
+
+I used a 5-fold StratifiedGroupKfold for each of the following experiments. For each feature I added, I tried them first with 5 different seed combinations. If they improved the score, I submitted it to the LB. And if they improved the score there as well, I kept that feature.
+
+Tabular Pipelines
+
+I am using the term pipeline here because each of the three pipelines uses different tabular models such as LGBM, Catboost, or XGBoost. In addition to the base features, I used the following features from my baseline  notebook.
+
+
+
+
+Pipeline 1
+This is my original script where I tried to extract as many contextual features as possible from the patient data. I extracted the Z-score, range of the features, skewness, kurtosis, and feature / max(feature). I subsampled the negatives with a ratio of 0.02. I also added the mean of efficient net predictions as an image feature (described below). I had one LGBM and one Catboost here.
+This pipeline gave 18.3 on its own in the public LB with a CV of 17.7.
+
+
+Pipeline 2
+With my own code, I was swinging between 10th to 20th place in the LB until @greysky 's notebook came out. Quite luckily, we were using the same CV setup. I wanted to try how the blend would perform, so I added a couple of my features to that notebook such as
+
+
+        .with_columns(
+            n_images_per_location = pl.col().count().over([, ])
+        )
+
+
+and my swin-transformer model's predictions as an image feature. On its own, this pipeline gave 17.5 CV and 18.3 LB. The blend with pipeline 1 gave my first significant boost of 18.6.
+
+
+
+Pipeline 3
+With the motivation of adding the third image model and making the ensemble a bit more diverse, I created another pipeline with a different feature setup. I created rank, and different groupby features on top of the previous features and used a different subset of the data (0.05 negative sampling ratio). This pipeline gave a 17.5 CV and 18.0 LB on its own.
+
+
+Image Models
+
+My main focus was diversity so for each of the pipelines, I chose a different backbone.
+
+
+
+Two efficientnet_b0 with image size 256. LB: 15.5 and 15.8 with TTA 16.1
+
+swinv2_tiny_window8_256 with image size 256. LB: 15.9
+
+convnextv2_tiny.fcmae_ft_in22k_in1k with image size 224. LB: 15.8
+
+
+I did a bunch of experiments with different data, backbone, and optimizer setups. The following setup gave me the most consistent results for both CV and LB.
+
+I used only 5% of the negative images and upsampled the positives by 10. I trained only for 3 epochs as more epochs were making the results worse. I used constant lr:1e-4 for efficient-net and swin transformer models and used the following scheduler for the convnext model. For the optimizer, I just used Adam. For the loss function, I used BCE. 
+
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=, gamma=)
+
+
+For the augmentations, I used the following setup similar to the previous competition's winners:
+
+train_transforms = A.Compose([
+    A.VerticalFlip(p=),
+    A.HorizontalFlip(p=),
+    A.RandomBrightnessContrast(brightness_limit=,contrast_limit=, p=),
+    A.OneOf([
+        A.MotionBlur(blur_limit=),
+        A.MedianBlur(blur_limit=),
+        A.GaussianBlur(blur_limit=),
+        A.GaussNoise(var_limit=(, )),
+    ], p=),
+    A.OneOf([
+        A.OpticalDistortion(distort_limit=),
+        A.GridDistortion(num_steps=, distort_limit=),
+        A.ElasticTransform(alpha=),
+    ], p=),
+    A.CLAHE(clip_limit=, p=),
+    A.HueSaturationValue(hue_shift_limit=, sat_shift_limit=, val_shift_limit=, p=),
+    A.ShiftScaleRotate(shift_limit=, scale_limit=, rotate_limit=, border_mode=, p=),
+    A.CoarseDropout(p=),
+    A.Resize(CFG.img_size, CFG.img_size),
+    A.Normalize(mean=[, , ], std=[, , ]),
+    ToTensorV2()
+])
+valid_transforms = A.Compose([
+    A.Resize(CFG.img_size, CFG.img_size),
+    A.Normalize(mean=[, , ], std=[, , ]),
+    ToTensorV2()
+])
+
+
+Something funny here at least for the people with a vision background, my image results were stuck at some point at 14.8, and whatever I tried did not work. While checking the code and looking for a solution for improvements, I realized that the A.Resize call was at the beginning of the list. While working on the image part of my solution I was not using any augmentations in the beginning and I was just appending new ones to the list as I experiment. Moving it to the end just before the normalization improved my scores to the 15.4-15.5 range.
+
+Final Blend
+To find the weights of the final models I used the hill-climbing algorithm. Thanks to @cdeotte for the implementation here.
+
+    weight
+    pipe3_pred_lgb  .
+    pipe3_pred_xgb  .
+    pipe1_pred_lgb  .
+    pipe1_pred_cat  .
+    pipe_2_pred         .
+    pipe3_pred_cat  -.
+
+
+The CV of this setup was 18.2 and the LB was 18.7 which was my best CV and LB at the same time.
+
+Things did not work
+
+
+
+I think similar to most of us, many many features
+
+For image models, I tried to use hard negatives where the models were making the highest errors, but it didn't work out.
+
+Focal loss performed always worse than BCE. Most probably because of my setup. 
+
+Mixup was a nice addition for the diversity but performed usually poorly when added to the ensemble.
+
+Stacking additional ExtraTreeClassifier/LogisticRegression model on top of my solution
+
+Scaling predictions with ** 0.5 or rank ensemble.
+
+Fixing the tbv_lv_y. There were 5 patients in the dataset and each of them was from the same hospital with negative tbv_lv_y value. I added the min per patient to fix it. The CV was slightly better but there was no improvement on the LB.
+
+Dullrazor algorithm for hair removal
+
+Hair augmentations
+
+Sample weights based on lesion id
+
+Training image models from scratch with dataset mean&amp;std instead of imagenet init 
+
+
+That was my summary. I will try to add more things in the upcoming days.
+
+Comments:
+├─ Optimo (2024-09-07 07:59:23.457000) [+3]
+│  Congratulations on the solo gold!
+│  
+│  
+│    
+│  this interesting challenge that will be beneficial and will improve the lives of many people worldwide
+│  
+│  
+│  Unfortunately I don't think that is true, as I explai...
+  ├─ Sinan Calisir (2024-09-07 14:37:21.137000) [+1]
+  │  Thank you so much! 🙏
+  │  
+  │  Interesting work, I will check it out.
+├─ Apa (2024-09-19 14:36:47.277000) [+1]
+│  When I use the hill-climbing algorithm, a score of 0.00 appears (negative weights are allowed); I wonder if you have encountered this problem and can provide the code for this part? I want to see w...
+  ├─ Sinan Calisir (2024-09-20 18:29:27.713000) [+2]
+  │  Hi,
+  │  
+  │  For the second question, I ensembled my pipeline with this one and it got boosted to 18.6. Individually they were both 18.3.
+  │  
+  │  For the first one, here is the code modified from here. I think th...
+    ├─ Apa (2024-09-27 10:38:11.003000) [+0]
+    │  Can you open source the code for single-mode 0186? I want to learn it.😀
+├─ Oscar Aguilar (2024-09-10 13:36:08.947000) [+1]
+│  @snnclsr, congrats on the solo gold medal!
+├─ 何贤 (2024-09-09 17:35:13.323000) [+1]
+│  Congratulations on the solo gold!
+├─ Nurettin ABACI (2024-09-08 09:53:23.563000) [+1]
+│  Tebrikler mutluluğunuzu paylaşıyoruz 🥳 daha nice başarılara
+  ├─ Sinan Calisir (2024-09-08 11:45:59.487000) [+0]
+  │  Cok tesekkurler 🙏🥳
+├─ chan-mina (2024-09-07 18:36:01.800000) [+1]
+│  Congratulations on the solo gold! I can see your accumulated knowledge over 3.5 years in this post! Thank you for sharing your knowledge and experience. By the way, how much time did you spend on t...
+  ├─ Sinan Calisir (2024-09-07 20:33:23.047000) [+2]
+  │  Thank you so much for your kind words! I appreciate that 🙏
+  │  
+  │  I would say at least 2-3 hours per day and a bit more during the weekends for the last two months.
+├─ Tianxu Tong (2024-09-07 12:36:16.947000) [+1]
+│  Congratulations on the solo gold!
+├─ Feida Wei (2024-09-07 08:58:10.543000) [+1]
+│  Congratulations on the solo gold!
+│  Your solution managed to be resistant to the shakeup.
+  ├─ Sinan Calisir (2024-09-07 14:36:30.220000) [+0]
+  │  thank you so much! I am quite happy about that as well! 🙏
+├─ MrSimple (2024-09-07 06:02:52.170000) [+1]
+│  nice work! I was impressed !
+  ├─ Sinan Calisir (2024-09-07 14:33:45.027000) [+0]
+  │  Thank you!
+├─ Rich Olson (2024-09-07 04:13:01.140000) [+1]
+│  nice work!  I was impressed with your public tabular notebook from early in the competition.  great to see you come out on top!
+  ├─ Sinan Calisir (2024-09-07 14:35:15.743000) [+0]
+  │  Thank you so much! It's funny that my solution is just an extension of the notebooks I shared during the competition. I am happy that it worked!
+├─ Tanishk Patil (2024-09-07 03:30:29.373000) [+1]
+│  Congratulation on winning the competition.
+├─ LHK (2024-09-07 02:51:53.440000) [+1]
+│  Congra !! I've seen you through a few competition. You deserve a GM for this perseverance.
+  ├─ Sinan Calisir (2024-09-07 14:33:36.177000) [+0]
+  │  Thank you so much! Hopefully one day! 🙏
+├─ Ravi Ramakrishnan (2024-09-07 04:51:47.607000) [+2]
+│  Fantastic work @snnclsr 
+│  Congratulations for the solo gold!
+  ├─ Sinan Calisir (2024-09-07 14:34:02.820000) [+0]
+  │  Thank you so much! 🙏
+├─ Sheikh Muhammad Abdullah (2024-09-07 02:30:50.133000) [+2]
+│  Congratlations ✨ You Deserve it
+├─ GhostyData (2024-09-09 19:45:54.417000) [+1]
+│  Good work!
+├─ Pooja Singh (2024-09-07 15:09:02.910000) [+1]
+│  Congratulations !

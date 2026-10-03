@@ -1,0 +1,33 @@
+<p>Firstly, I would like to thank kaggle, the hosts, and everyone who participated in this enjoyable competition. I learned a great deal along the way, and it was quite refreshing during this emerging era of large language models. </p>
+<p>I would also like to extend my gratitude to my teammate, <a href="https://www.kaggle.com/chasembowers" target="_blank">@chasembowers</a>. Although we merged in the last day of team merging, the integration process was quite smooth and productive. We were able to quickly sync our approaches, utilizing the strong points of both pipelines together. </p>
+<p>I am also sorry for those who worked hard during the competition but were affected by the final shakeup. I wish you better luck next time!</p>
+<p><strong>Overview</strong></p>
+<p>Since it was really hard to implement a reliable CV scheme —although we had separate CV's for each piece— we wanted to have a generalized model as possible. Developing a generalized model in uncharted waters presented its own challenges, as we were uncertain which approaches would be successful. With our custom approach, we could have a resilient final model where each piece is strong in some aspect of the data and could help each other where another one fails. You can refer to this as a simple ensemble, somewhat of a mixture of experts, or a combined arms approach if you prefer.</p>
+<p>So I'd like to explain each important piece individually:</p>
+<p><strong>Classical ML Approach:</strong></p>
+<p>This is a section where many of you are already familiar, as it is similar to my public notebook with only minor parameter adjustments, such as:</p>
+<ul>
+<li>Wider ngram range (3,7)</li>
+<li>Limited feature space, such as max_df and max_features…</li>
+<li>Extra tokenizer preprocessor steps like normalizers etc.</li>
+<li>The use of the DAIGT V2 training dataset, for which I am grateful to <a href="https://www.kaggle.com/thedrcat" target="_blank">@thedrcat</a>, with some post-processing.<ul>
+<li>Instead of fixing/removing typos, we embraced them. But they were causing some degree of overfitting between human and LLM-generated essays, so we decided to replicate artificial typos. </li>
+<li>At first, we believed these obfuscations followed certain patterns, such as keyboard typos where a typo character is typically near its neighbors. However, after further analysis, we discovered that character-level obfuscations were completely random. So we chose that approach as well and inserted/replaced artificial typos randomly to 30% of the generated data.</li></ul></li>
+<li>This piece itself was an sub-ensemble of different linear models and gradient boosting models. </li>
+</ul>
+<p>In the end, the solution was not significantly different from what I had shared a few weeks prior.  It was a flagship piece and alone it was a public lb gold zone solution for a long time. We utilized this piece in other pieces too as I'll explain in next section. However it was a risky pipeline alone in terms of overfitting. It needed more generalized models around it to mitigate this effect…</p>
+<p><strong>LLM Approach:</strong></p>
+<p>I will briefly discuss this aspect, as my teammate <a href="https://www.kaggle.com/chasembowers" target="_blank">@chasembowers</a> explained the details in depth <a href="https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/471934" target="_blank">here</a>. Essentially, we developed mistral-7b based features (think of token probabilities, features over logprobs, perplexity etc.), to train a discriminator and make predictions with it.</p>
+<p>But we took it further by pseudo-labeling the test set using the previous TF-IDF approach and retraining a bunch of ML models based on these labels using the mistral features, such as linear and gradient boosting models. This helped us find a good balance between the LLM's generalization capabilities and TF-IDF's token based, task-specific strong indicators.</p>
+<p><strong>Transformer-1: Longformer</strong>  </p>
+<p>In this complimentary experimental piece, we trained a longformer model, but instead of predicting binary outcome, we set the training set source as the target. Then we merged these predictions with previous predictions to create a feature space and trained another set of models over them.</p>
+<p><strong>Transformer-2: Deberta Large:</strong></p>
+<p>In this final piece, we trained a DebertaV3 model using a vast merge of publicly available data, amounting to around 700k instances. This model served as our regularizer and a fallback option for instances when TF-IDF based models were uncertain, such as cases involving data drift in private data.  It also assisted in softening overly confident predictions.</p>
+<p>We trained this model for 1 epoch (it was already achieving 0.999 CV early on) with 1024 sequence length, without early stopping and with minimal or no learnable parameters in the first layers of the model.</p>
+<p><strong>Final Ensemble:</strong></p>
+<p>In final part of ensemble each model had it's own weight, but most importantly we didn't gave weights over their public lb scores since it was too risky, we used common sense and balanced  approach while manually setting the weights since they all had perfect CV scores.</p>
+<p>Here's the training(most of it) and inference <a href="https://www.kaggle.com/code/chasembowers/4th-place-solution/notebook" target="_blank">notebook</a>. [It should be public pretty soon.]</p>
+<p><strong>Final Thoughts:</strong></p>
+<p>I truly enjoyed this competition, particularly the collaborative spirit of sharing ideas, sources, and working together. Surviving this intense shakeup is truly rewarding, as is sharing our findings in discussions and notebooks.</p>
+<p>Throughout the competition, as a team and individually, we explored a vast number of ideas, and while many did not work out, the final week was particularly exhausting as we wrapped up and finalized our work.</p>
+<p>I've tried to keep this post simple, and I apologize if I missed any crucial details. Please feel free to ask any questions you may have in this thread, and I will be more than happy to provide answers when I have time.</p>

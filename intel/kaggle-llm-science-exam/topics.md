@@ -1,0 +1,122 @@
+# kaggle-llm-science-exam 讨论区（按票数排序，共 120 条）
+
+- [60k Dataset Achieves LB 0.830+](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436383) — 282 票 / 212 评论 / 2023-09-02 
+- [1st place Short Solution Summary](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446240) — 239 票 / 79 评论 / 2023-10-11 **write-up?**
+- [1st Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446422) — 219 票 / 89 评论 / 2023-10-23 **write-up?**
+- [[LB 0.836] Zero-shot 70B model + RAG](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/440620) — 182 票 / 61 评论 / 2023-09-15 
+- [levelling the playing field - 6000 new high quality train examples! 🚀🚀🚀](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/426174) — 159 票 / 49 评论 / 2023-07-22 
+- [Bonus 40k Dataset - Boost CV and LB](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/440908) — 156 票 / 68 评论 / 2023-09-16 
+- [LLM finetuning tutorial](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424519) — 144 票 / 36 评论 / 2023-07-14 
+- [[86.2%] Retrieval with 270K Wiki STEM articles + long context support!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/442595) — 137 票 / 167 评论 / 2023-09-23 
+- [📊 new 15k high-quality examples! 🥳🚀](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/431786) — 108 票 / 28 评论 / 2023-08-15 
+- [Simple loss/perplexity LLM baseline](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424242) — 95 票 / 8 评论 / 2023-07-13 
+- [10th(11th) Place Solution: This is my first solo gold medal !!!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446248) — 93 票 / 26 评论 / 2023-10-14 **write-up?**
+- [Add MAP@3 Metric to Hugging Face Trainer!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/435602) — 91 票 / 41 评论 / 2023-08-30 
+- [Is your LLM truthful? Bonus 99k Dataset. Good Luck!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444202) — 89 票 / 32 评论 / 2023-09-30 
+- [Acceptable Model/Data Use Clarification](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/425681) — 86 票 / 32 评论 / 2023-07-20 
+- [(0.771) OpenBook Single DeBERTaV3-Large Baseline](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/433589) — 85 票 / 27 评论 / 2023-08-22 
+- [3rd place solution [Update + Code links]](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446358) — 84 票 / 22 评论 / 2023-10-21 **write-up?**
+- [5th place solution: Llama 2 70B meets Sparse & Dense Retrievals from Own parsed wikipedia dataset](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446293) — 81 票 / 28 评论 / 2023-10-11 **write-up?**
+- [Meme Thread](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446016) — 74 票 / 82 评论 / 2023-10-10 
+- [Top 100 Solution - Fast RAPIDS TF-IDF RAG - 2xT4 GPU Acceleration!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446318) — 73 票 / 38 评论 / 2023-10-13 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446307) — 72 票 / 14 评论 / 2023-10-23 **write-up?**
+- [13th(14th) place solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446231) — 71 票 / 14 评论 / 2023-10-17 **write-up?**
+- [another 5900 examples 🥳 | summary of all the data I shared 📝](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/432316) — 69 票 / 18 评论 / 2023-08-16 
+- [openAI ChatGPT/GPT 4 is NOT Accessible for everyone ｜ care about fairness](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423962) — 59 票 / 49 评论 / 2023-07-12 
+- [A useful trick to help with memory errors](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/441074) — 58 票 / 11 评论 / 2023-09-17 
+- [Kudos for Kaggle spirit! ](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444562) — 58 票 / 20 评论 / 2023-10-02 
+- [📚 Wikipedia pages used to generate the training data!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/425242) — 56 票 / 9 评论 / 2023-07-17 
+- [[LB 0.872] Zero-shot 70B model + improved RAG](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/443334) — 55 票 / 35 评论 / 2023-09-26 
+- [How to: LLAMAv2 7B finetuning in Kaggle Notebooks](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/430614) — 54 票 / 11 评论 / 2023-08-10 
+- [17th Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446242) — 53 票 / 10 评论 / 2023-10-12 **write-up?**
+- [0.894 without training any model (+ 56th solution)](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446232) — 53 票 / 19 评论 / 2023-10-11 **write-up?**
+- [GPT4 MAP@1 : 0.87](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/429908) — 52 票 / 18 评论 / 2023-08-07 
+- [60k Dataset Modification!!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/438808) — 51 票 / 43 评论 / 2023-09-12 
+- [Upload models quantized to 8 bit](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424334) — 48 票 / 28 评论 / 2023-07-13 
+- [6th Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/447647) — 48 票 / 13 评论 / 2023-10-25 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/448256) — 47 票 / 8 评论 / 2023-10-18 **write-up?**
+- [[0.806] Sharing my trained-with-context model](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/434760) — 47 票 / 20 评论 / 2023-08-26 
+- [Learn everything about LLMs (Finetuning, Vector Databases, ...) - Notebooks + Labs](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/426284) — 46 票 / 8 评论 / 2023-07-22 
+- [Demystifying FAISS, Vector indexing, and ANN](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436210) — 45 票 / 20 评论 / 2023-09-01 
+- [Best starting open source LLM models and ecosystem](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423896) — 44 票 / 11 评论 / 2023-07-11 
+- [New training examples 🥳 Currently highest rated public notebook! 🚀🚀🚀 [LB 0.723]](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/425941) — 44 票 / 15 评论 / 2023-07-21 
+- [💡 Does training on science related questions help or not? The results are in!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/432621) — 43 票 / 16 评论 / 2023-08-18 
+- [Another wikipedia dataset, but filtered for STEM articles](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/425106) — 43 票 / 5 评论 / 2023-07-17 
+- [Automatic Data Gathering from Wikipedia with LLM and STEM Categories](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424627) — 41 票 / 4 评论 / 2023-07-14 
+- [Do you what a kaggle LLM competition version 2?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/445448) — 40 票 / 27 评论 / 2023-10-07 
+- [🚀🚀🚀 Pretrained model weights 🥳 [LB: 0.737]](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/429546) — 39 票 / 14 评论 / 2023-08-06 
+- [Why the 10th team was deleted from the competition? This is the reason and a meaningful lesson.](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446797) — 39 票 / 31 评论 / 2023-10-13 
+- [What is the best single RAG? What is the best single LLM?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/447230) — 39 票 / 28 评论 / 2023-10-14 
+- [New 270K Wikipedia STEM articles!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/442483) — 38 票 / 15 评论 / 2023-09-22 
+- [[8th Public / 18th Private] - Full Wikipedia Passage-level Retrieval](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446261) — 38 票 / 13 评论 / 2023-10-12 
+- [Billion parameters Open LLM Models](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423906) — 38 票 / 13 评论 / 2023-07-11 
+- [📊 New data for this phase of the competition 🚀🚀🚀](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/434495) — 38 票 / 13 评论 / 2023-08-25 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/429943) — 36 票 / 23 评论 / 2023-08-07 
+- [Is this a Data Competition?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423885) — 36 票 / 7 评论 / 2023-07-11 
+- [21st place private LB solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/447589) — 35 票 / 2 评论 / 2023-10-16 **write-up?**
+- [Tribute to MGöksu and MB](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446377) — 35 票 / 12 评论 / 2023-10-11 
+- [Faiss GPU/CPU benchmark](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/441130) — 34 票 / 5 评论 / 2023-09-17 
+- [Submission timing](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/442499) — 33 票 / 17 评论 / 2023-09-22 
+- [13th place solution: Ensemble context ensemble model](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446301) — 33 票 / 20 评论 / 2023-10-11 **write-up?**
+- [ChatGPT is All You Need : Generating Effective Training Samples.](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424197) — 33 票 / 8 评论 / 2023-07-13 
+- [📢 Introducing a Tailored Dataset (100k+) for LLM_Science Competition!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/433168) — 33 票 / 10 评论 / 2023-08-20 
+- [300 Validation Samples Corrected by GPT4](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444933) — 32 票 / 6 评论 / 2023-10-04 
+- [I became 2x Grandmaster](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446766) — 32 票 / 8 评论 / 2023-10-13 
+- [[LB 0.914] Epilogue: finetuned 70B model](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446414) — 32 票 / 29 评论 / 2023-10-11 
+- [Encapsulating collective learnings over the first fortnight](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/426806) — 32 票 / 8 评论 / 2023-07-25 
+- [Training and Inference for DeBERTa-v3-large Model using Wikipedia STEM 1k Dataset](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424712) — 32 票 / 3 评论 / 2023-07-15 
+- [Faster 70B model inference](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444740) — 32 票 / 121 评论 / 2023-10-03 
+- [📊 New dataset -- multiple-choice questions ONLY related to science! 🚀🚀🚀](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/432607) — 31 票 / 6 评论 / 2023-08-18 
+- [7th Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/447155) — 30 票 / 10 评论 / 2023-10-15 **write-up?**
+- [Better Wiki data?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/434913) — 29 票 / 8 评论 / 2023-08-27 
+- [Qwen-7B-8K is Released](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/429052) — 29 票 / 32 评论 / 2023-08-03 
+- [Is allowed ChatGPT for data creation?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423915) — 27 票 / 5 评论 / 2023-07-11 
+- [Great learning experience](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446086) — 27 票 / 11 评论 / 2023-10-10 
+- [Leveraging all available resources](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/443166) — 27 票 / 9 评论 / 2023-09-25 
+- [🎯 The Most Powerful Open Source LLM starter pack 🚀🚀🚀](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/427083) — 26 票 / 16 评论 / 2023-07-26 
+- [EduQG Dataset (~3.4K Multi-Choice Questions From Educational Domain)](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/430988) — 26 票 / 5 评论 / 2023-08-11 
+- [Prefix Tuning](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/429368) — 26 票 / 8 评论 / 2023-08-05 
+- [Public Top3 -> Private Top15 Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446816) — 25 票 / 10 评论 / 2023-10-13 **write-up?**
+- [Seems the RACE Dataset is Super Valuable!!!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/445089) — 25 票 / 12 评论 / 2023-10-05 
+- [14th place solution: An attempt to reverse-engineer the dataset](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446484) — 25 票 / 13 评论 / 2023-10-13 **write-up?**
+- [How to get better at tuning LLMs](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/440197) — 25 票 / 32 评论 / 2023-09-14 
+- [70k dataset with context and reference sentence, Corrected by gpt-3.5](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/445438) — 25 票 / 10 评论 / 2023-10-07 
+- [Wikipedia Plaintext Data](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424821) — 25 票 / 4 评论 / 2023-07-16 
+- [Allen AI 13k Dataset](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/432182) — 24 票 / 3 评论 / 2023-08-16 
+- [Thank Goodness for Weekly GPU Quota Reset!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/445435) — 24 票 / 23 评论 / 2023-10-07 
+- [The Art of Prompt Engineering](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/433311) — 24 票 / 4 评论 / 2023-08-21 
+- [🏅Top 6% - 149 Rank solution (Ensembling techniques + Training/inferencing)](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/448309) — 24 票 / 0 评论 / 2023-10-19 **write-up?**
+- [A semi-supervised approach for finding 270K Wikipedia STEM articles!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/441128) — 23 票 / 4 评论 / 2023-09-17 
+- [FYI: GPT3.5-turbo-16k-0613 scored 0.78 on the train set.](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424490) — 23 票 / 15 评论 / 2023-07-14 
+- [did google paper just solve this kaggle competition?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/442358) — 23 票 / 10 评论 / 2023-09-22 
+- [19th Place Solution - Semantic Retrieval, TF-IDF Reranking and Model Ensemble](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446395) — 23 票 / 11 评论 / 2023-10-14 **write-up?**
+- [70th place solution (PB:0.907) and PB:0.911 solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446330) — 22 票 / 2 评论 / 2023-10-11 **write-up?**
+- [Open Book LLM Science Exam](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/425082) — 22 票 / 12 评论 / 2023-07-17 
+- [running time variability is an issue](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444742) — 22 票 / 37 评论 / 2023-10-03 
+- [✍ How to fine-tune a Transformer? 🤖💡🚀](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/429606) — 21 票 / 6 评论 / 2023-08-06 
+- [Fast map in numpy](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436249) — 21 票 / 4 评论 / 2023-09-01 
+- [I learned a lot through the competition!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446501) — 21 票 / 8 评论 / 2023-10-12 
+- [New error type: Kaggle error](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446076) — 20 票 / 17 评论 / 2023-10-10 
+- [Insights from retrieval experiments](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/438100) — 20 票 / 13 评论 / 2023-09-09 
+- [Increase stop_words in TfidVectorizer](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/445185) — 20 票 / 6 评论 / 2023-10-05 
+- [Is it about quality over quantity?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/427246) — 20 票 / 19 评论 / 2023-07-27 
+- [Wikipedia embeddings of all-mpnet-base-v2](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436506) — 19 票 / 25 评论 / 2023-09-02 
+- [What I learned in this competition!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446168) — 19 票 / 2 评论 / 2023-10-10 
+- [Unfairness in rule application](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446737) — 19 票 / 2 评论 / 2023-10-12 
+- [28th-place solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446610) — 19 票 / 0 评论 / 2023-10-12 **write-up?**
+- [ARC and QASC Datasets](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/424195) — 19 票 / 2 评论 / 2023-07-13 
+- [[LB 0.825] Xwin-LM (LLama2 license) + RAG Zero shot](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/442559) — 19 票 / 4 评论 / 2023-09-23 
+- [Zero shot results for license friendly 70B models](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/441802) — 19 票 / 9 评论 / 2023-09-20 
+- [sublinear_tf = True in TfIdfVectorizer is key to improving PrivateLB score](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446558) — 19 票 / 9 评论 / 2023-10-12 
+- [No RAG leaderboard : the revenge of 70B](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446633) — 19 票 / 7 评论 / 2023-10-12 
+- [31th Place Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446233) — 18 票 / 7 评论 / 2023-10-11 **write-up?**
+- [Anyone testing Mistral 7B?](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/443516) — 18 票 / 10 评论 / 2023-09-27 
+- [20th Place (Top 1%, Solo Silver) Solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/448114) — 18 票 / 7 评论 / 2023-10-18 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446660) — 18 票 / 3 评论 / 2024-04-25 **write-up?**
+- [💡 Voting Ensemble -- a great way to hop up the leaderboard! 🦘💣🏆](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/430013) — 18 票 / 3 评论 / 2023-08-08 
+- [How the 300 validation dataset is generated & 57th place solution](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/446260) — 17 票 / 13 评论 / 2023-10-13 **write-up?**
+- [The order of options may affect the accuracy of multiple choice questions with LLMs](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/435929) — 17 票 / 15 评论 / 2023-08-31 
+- [45th Place solutions , learnings , trials and what could have been | 0.919/0.917 submitted too late :D ](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/447245) — 17 票 / 13 评论 / 2023-10-18 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423884) — 13 票 / 145 评论 / 2023-07-11 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/447929) — 10 票 / 3 评论 / 2023-10-17 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/423883) — 6 票 / 13 评论 / 2023-07-11 

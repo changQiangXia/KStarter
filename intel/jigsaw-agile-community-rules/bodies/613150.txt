@@ -1,0 +1,338 @@
+# https://www.kaggle.com/competitions/jigsaw-agile-community-rules/discussion/613150
+
+Topic #613150: 6th Place Solution: Online Distillation via Deep Mutual Learning
+  Author: ducnh279
+  Posted: 2025-10-24 14:16:34.047000
+  Votes: 107  Comments: 53
+
+First, I’d like to thank the organizers for hosting such an amazing LLM competition. Huge thanks also to my teacher, @justmarkham - your online data science education has been invaluable, and I couldn’t have done this without you.
+
+Summary
+
+For this competition, I fine-tuned 3 LLMs from the Qwen3 family for text classification using Deep Mutual Learning (DML), and applied weighted ensembling to improve robustness and stability.
+
+Input Data
+
+Test positive and negative examples, along with their rules, were used for training and formatted into the following prompt template:
+
+prompt = f"""&lt;|im_start|&gt;user
+You are given a Reddit comment and a specific subreddit rule. Your task is to decide if the comment violates the rule. Respond only with "Yes" or "No".
+
+Rule: {RULE_HERE}
+
+Now, here is the comment to classify:
+"{COMMENT_HERE}"
+
+Answer "Yes" if it violates the rule, otherwise "No".&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+&lt;think&gt;
+
+&lt;/think&gt;
+
+Answer:"""
+
+
+Models
+
+
+
+Models for experimentation: Qwen3-14B and Qwen2.5-14B-Instruct
+
+Models for final submission: Qwen3-14B, Qwen3-8B, and Qwen3Guard-Gen-4B
+
+
+Early Competitive Submission
+
+Training single Qwen3-14B on test examples, quickly get 
+
+
+
+
+Model
+Public Score
+Private Score
+
+
+
+
+Qwen3-14B
+0.925
+0.921
+
+
+
+
+Deep Mutual Learning
+
+Paper: Deep Mutual Learning (arXiv:1706.00384)
+
+With only 2 T4 GPUs, using a larger teacher model to improve the 14B model’s performance is not feasible. Offline distillation could be attempted, but it only covers 2 out of the 6 known rules in the training set. To achieve the best overall score, knowledge distillation needs to incorporate all rules.
+
+Classic logits-based knowledge distillation poses a challenge in this competition because the teacher’s softmax outputs are extremely sharp, almost identical to one-hot labels. Applying temperature scaling to soften them is ineffective.
+
+Under these constraints, a more practical approach is Deep Mutual Learning (DML), an online distillation method where multiple peer student models of similar or smaller size learn from each other simultaneously. This enables effective knowledge transfer without a larger teacher, simply by adding a Kullback-Leibler (KL) divergence loss to the standard classification cross-entropy.
+
+
+
+The advantage of DML is that it removes the need for a larger and stronger teacher by allowing models to learn from each other’s soft predictions rather than hard labels. This process enriches supervision, adds implicit regularization, and encourages smoother decision boundaries. Each peer model effectively gains extra capacity from the knowledge shared by the other, leading to more stable optimization and better generalization. This makes DML especially valuable in LLM competitions or modern industry environments, where hardware constraints often prevent training or deploying a large teacher model, yet effective knowledge transfer and robust performance remain essential.
+
+Effect of DML on Qwen3-14B &amp; Qwen2.5-14B Performance
+
+Peer Students: Qwen3-14B, Qwen2.5-14B-Instruct
+
+
+
+
+Training Type
+Model
+Public Score
+Private Score
+
+
+
+
+Independent
+Qwen3-14B
+0.925
+0.921
+
+
+Independent
+Qwen2.5-14B-Instruct
+0.923
+0.919
+
+
+DML
+Qwen3-14B
+0.929
+0.925
+
+
+DML
+Qwen2.5-14B-Instruct
+0.929
+0.924
+
+
+
+
+Ensembles
+
+
+
+
+Ensemble Type
+Public Score
+Private Score
+
+
+
+
+DML models
+0.932
+0.9271
+
+
+Independently trained models
+0.929
+0.925
+
+
+
+
+DML consistently improves performance for both Qwen3-14B and Qwen2.5-14B, with notable gains in private scores and ensemble results, demonstrating its effectiveness in boosting model generalization.
+
+Final Submission
+
+While DML adds extra capacity to each model, its co-training process can introduce correlations in the models’ errors. Since diversity is crucial for a strong ensemble,  2 days before the deadline, I decided to create a cohort of 3 models for DML. This approach enhances ensemble diversity and further helps mitigate the one-off mistakes of each “peer” model.
+
+Performance of the 3-peer ensemble  
+
+Peer Students:  Qwen3-14B, Qwen3-8B, Qwen3Guard-Gen-4B
+
+
+
+
+Public Score
+Private Score
+
+
+
+
+0.93237
+0.92781
+
+
+
+
+
+
+Model Execution Time
+
+
+
+Training: Three models were trained together in a single DML process, taking about 5 hours.  
+
+Inference: After training, each model was run sequentially to generate predictions for ensembling. The test data was split in half, keeping the distribution of sequence lengths similar in both halves to balance GPU workloads. Each half was then sorted by length for efficient batch processing and run in parallel across 2 GPUs. The entire inference process took around 5 hours.
+
+Comments:
+├─ QinhaoYang (2025-11-05 07:36:52.610000) [+1]
+│  Thank you for your thoughtful solutions and patient replies—I've learned a lot from this post!
+  ├─ ducnh279 (2025-11-05 08:25:09.777000) [+0]
+  │  Thank you, Qinhao!
+├─ Aic (2025-10-25 11:52:13.813000) [+1]
+│  Congratulations on winning the solo gold medal!
+│  I learned a lot from reading your solution.
+│  
+│  You mentioned:
+│  Since diversity is crucial for a strong ensemble, I decided, two days before the deadline...
+  ├─ ducnh279 (2025-10-25 11:58:13.553000) [+0]
+  │  when you introduced the third model to enhance diversity, did you perform pairwise mutual learning between the models, or did all three models learn from each other simultaneously during DML and th...
+    ├─ Aic (2025-10-25 12:03:37.193000) [+1]
+    │  Thank you for your reply! I’ll keep learning and improving!
+├─ Aic (2025-10-25 10:46:51.417000) [+1]
+│  First of all, congratulations on your outstanding achievement of winning the gold medal!
+│  Reading your solution has taught me so much. Before this, I only knew about model distillation, and I had no...
+  ├─ ducnh279 (2025-10-25 11:53:30.697000) [+0]
+  │  Thank @gunianxue for your encourging words! Honestly I dont think I'm a good one to share best practices on tuning LoRA. 
+  │  
+  │  But I know some good resources that might be useful to answer your questio...
+    ├─ Aic (2025-10-25 12:04:48.660000) [+0]
+    │  You’re being too modest! I really appreciate your generous sharing. I believe I’ll be able to learn it with time. Thank you again!
+    ├─ Aic (2025-10-26 09:01:31.080000) [+1]
+    │  @ducnh279 Hello! As I’m still a sophomore undergraduate student, I’m not quite sure where to find and read the most up-to-date AI research papers. May I ask for your advice on which platforms or fo...
+    ├─ ducnh279 (2025-10-26 12:33:22.463000) [+0]
+    │  Hi @gunianxue, really admire your learning spirit!
+    │  
+    │  
+    │    
+    │  where to find and read the most up-to-date AI research papers
+    │  
+    │  
+    │  These days, I often browse Daily Papers on Hugging Face.
+    │  
+    │  
+    │    
+    │  May I ask for y...
+    ├─ Aic (2025-10-26 12:58:57.783000) [+1]
+    │  Wow!Thank you so much for your detailed reply! The resources you shared are really helpful — I’ll definitely check them out. I really appreciate your advice and hope to keep learning from you in th...
+├─ Athar Sayed (2025-10-25 06:02:58.737000) [+1]
+│  Amazing writeup the concept of using Deep Mutual Learning instead of Knowledge distillation is really interesting I would definitely give this a try in next LLM competition
+  ├─ ducnh279 (2025-10-25 06:19:54.157000) [+0]
+  │  Great, you might want to create a cohort of more than 2 models and ensemble them 😊
+├─ Tanmay (2025-10-25 00:22:09.330000) [+1]
+│  Learnt a lot from this competition and your description especially! Thank you for sharing!
+  ├─ ducnh279 (2025-10-25 05:51:03.033000) [+0]
+  │  Thank you for your kind words! It's very motivating to me!
+├─ Kevin Markham (2025-10-24 23:15:21.060000) [+1]
+│  Congratulations, Duc! 🎉 Wonderful work and writeup!
+  ├─ ducnh279 (2025-10-25 05:51:59.160000) [+1]
+  │  @justmarkham Thank you so much, teacher! It’s incredibly meaningful coming from you!!
+├─ Bao Loc Pham (2025-10-24 22:51:59.963000) [+1]
+│  Thanks for sharing @ducnh279 and congrats to your first solo gold.
+│  I know that you will probably win gold in this comp from the early day. 
+│  Hard work finally payoff. 😘
+  ├─ ducnh279 (2025-10-25 05:48:02.410000) [+1]
+  │  Thank you @locbaop! Congratulations to you on the new title and to your team for winning gold as well!
+├─ WOOSUNG YOON (2025-10-24 17:58:10.930000) [+1]
+│  I have learned a lot from your notebook.
+│  I can sense the detailed experimentation and thoughtfulness in your solution.
+  ├─ ducnh279 (2025-10-24 18:31:33.767000) [+1]
+  │  Thank you so much for your kind words! It's very motivating!!
+├─ BokingChen (2025-10-24 17:46:26.537000) [+1]
+│  Thanks for sharing ! A highly efficient and innovative solution! After reviewing your solution code, does your training only utilize positive and negative examples? Additionally, what is the total ...
+  ├─ ducnh279 (2025-10-24 17:50:38.723000) [+1]
+  │  does your training only utilize positive and negative examples
+  │  
+  │  
+  │  Yes, I ultilize all pos and neg examples for training!
+  │  
+  │  
+  │    
+  │  Additionally, what is the total time for training and inference for your...
+├─ Raviksh Singh Dikola (2025-10-24 17:13:54.560000) [+1]
+│  So you have said that you replaced the head of llm model like qwen 14b.
+│  
+│  Does that customized model of your is compatible for vllm inferencing framework?
+  ├─ ducnh279 (2025-10-24 17:19:24.877000) [+2]
+  │  Thanks for your question! I did not use vllm. Maybe with my current setup, it will be not compatible with vllm. But Unsloth has a trick on this topic! You may want to check out the notebook. It sho...
+    ├─ [deleted] (2025-10-25 05:17:32.573000) [+0]
+    │  [deleted]
+    ├─ Raviksh Singh Dikola (2025-10-25 05:18:30.603000) [+1]
+    │  Thank you for your helpful explanation and for sharing the Unsloth notebook reference — it really clarified things!
+    │  Congratulations as well on your remarkable 6th place finish in the Kaggle competi...
+├─ Pavel Kazlou (2025-10-24 16:08:59.290000) [+1]
+│  Huge respect for such an interesting solution! And congrats for the top place!
+│  In the code I can see that the KL loss is symmetric between the models, despite their different size. Does it make sen...
+  ├─ ducnh279 (2025-10-24 16:18:48.550000) [+1]
+  │  Great question!!! I actually experimented with weighted DML, but it performed worse than symmetric DML (with λₖₗ = 1), so I followed the paper’s original approach. One takeaway is that all pretrain...
+├─ ShadowCoder (2025-10-24 14:35:35.677000) [+1]
+│  Can you make your model training code public?
+  ├─ ducnh279 (2025-10-24 14:52:14.370000) [+0]
+  │  Everything is public in the shared code!
+├─ Hiểu Vy (2025-10-24 14:34:40.793000) [+1]
+│  Thanks for sharing!
+│  I learn a lot from you.
+│  congratulations (Chúc mừng nhé :D)
+│  why are all rule_violation in test &lt;0.32 so good? 🤔
+  ├─ ducnh279 (2025-10-24 14:54:41.463000) [+2]
+  │  It's fake predictions from qwen3 0.6B model, trained with 10 samples. Just for quick saving. When the test set is replaced during submission. It will run everything as expected. You could read my t...
+├─ mango (2025-10-24 14:31:17.583000) [+1]
+│  Congrats on your solo gold! Learnt a lot from your DML approach, what an elegant solution!
+  ├─ ducnh279 (2025-10-24 14:56:23.183000) [+1]
+  │  Thanks, mangoo! I also hope DML gets widely used in future Kaggle competitions! 🤗
+├─ Chew Kok Wah (2025-10-24 18:10:43.880000) [+2]
+│  May I know whether the type of quantization of the based model (BnB, GPTQ, AWQ etc) we used will affect the result of the training?
+│  
+│  I saw your code is using quantization on the fly into BnB, is it...
+  ├─ ducnh279 (2025-10-24 18:34:36.233000) [+1]
+  │  There isn’t much difference in performance between training with LoRA + bnb quantized model and LoRA + quantized gptq model. I chose bnb simply because I’ve been using it since my early days of fin...
+├─ Nikita Babych (2025-10-24 17:52:59.263000) [+2]
+│  Congrats on the solo and your first gold!
+│  Using DML is an interesting approach, but I’m curious how much better Qwen3-14B (DML) with Peer Students: Qwen3-14B, Qwen2.5-14B performs compared to ensem...
+  ├─ ducnh279 (2025-10-24 18:27:57.137000) [+2]
+  │  Thanks @nikitababich for your questions! First, I want to share that I was inspired by your solution using Noisy Student Training. I actually tried it in this competition, but unfortunately didn’t ...
+  ├─ ducnh279 (2025-10-25 17:53:58.303000) [+1]
+  │  @nikitababich Hi Nikita, I just saw your newly edited comment.
+  │  
+  │  
+  │    
+  │  p.s. I see that despite mutual training and high correlation, their ensemble still produces a higher score of 0.932 than separate...
+├─ Shivam A. (2025-10-24 15:15:59.417000) [+2]
+│  Congratulations! Great Solution. Thanks for sharing it. 
+│  
+│  Do you have any advice regarding finding optimal configuration (LORA config, learning rate etc.) for LLMs ?
+  ├─ ducnh279 (2025-10-24 15:37:13.543000) [+6]
+  │  I actually wanted to include this in my post, but decided to keep the focus on the main factors of my solution, so I left it out. Thanks for asking!  
+  │  
+  │  Here are some of my personal experiences with...
+    ├─ Ankith Savio (2025-10-25 12:58:46.487000) [+1]
+    │  Thanks for the solutions and tips @ducnh279 . Could you also share your CV strategy? I remember your early post on it and would be nice to know what setup provided incremental results for your expe...
+    ├─ ducnh279 (2025-10-25 13:14:34.560000) [+1]
+    │  The LB turned out to be more reliable, so I decided to trust it more for this competition. That said, I did use a CV strategy. 
+    │  
+    │  
+    │  
+    │  
+    │  I combined all positive, negative, and original training samples ...
+├─ DaylightH (2025-10-24 15:00:04.820000) [+2]
+│  That’s so cool! Actually, during the competition, when I was checking the leaderboard, I noticed that you participated in a similar contest: KAChallenges Series 1: Classifying Math Problems.
+│  At tha...
+  ├─ ducnh279 (2025-10-24 15:02:22.277000) [+1]
+  │  No worries, Thanks DaylightH! Btw I saw you upvoted my KACS1 kernel! Thanks for your support!
+├─ Dimpi Mittal (2025-10-29 20:32:21.160000) [+0]
+│  congratulations on securing 6th place!
+│  Really liked how you used Deep Mutual Learning with Qwen models to boost performance even with limited GPUs.
+├─ Irakoze Ntawigenga Kelly (2025-10-26 16:45:00.263000) [+0]
+│  it was nice to learn from this!
+├─ annette atchley (2025-10-26 16:25:04.530000) [+0]
+│  awersome! fantastic
+├─ Khushi Yadav (2025-10-25 18:24:13.970000) [+0]
+│  Amazing , Congratulations on winning the solo gold medal!
+├─ Rohit Labade (2025-10-24 19:37:50.340000) [+0]
+│  got to learn a lot from your notebook.
+├─ [deleted] (2025-10-25 23:48:44.297000) [+0]
+│  [deleted]
+├─ Sepide Naderi (2025-10-24 19:12:55.097000) [+0]
+│  Thanks for sharing 🙏

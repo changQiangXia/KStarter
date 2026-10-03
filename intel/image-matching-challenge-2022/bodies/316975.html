@@ -1,0 +1,67 @@
+<h1>Structure-from-Motion, F Matrix and Image Matching</h1>
+<p><a href="https://www.kaggle.com/competitions/image-matching-challenge-2022/overview/problem-definition" target="_blank">Here</a> you can read a brief intro to the problem by the competition host, in this post I will try to add more useful information to understand it.</p>
+<hr>
+<p>Using the same notation from the host:</p>
+<ul>
+<li>The calibration matrix 𝐊 captures camera properties that determine the transformation between 3D points and 2D (pixel) coordinates. It is also known as the <strong>camera intrinsics.</strong></li>
+<li>The rotation matrix 𝐑 and the translation vector 𝐓 capture the 6-degree-of-freedom pose (position and orientation) of the camera in a global reference frame. They are collectively known as the camera extrinsics or <strong>camera pose</strong>. (example below).</li>
+<li>The fundamental matrix 𝐅 encapsulates the projective geometry between two views of the same scene. It is not affected by the contents in the scene, and depends only on the intrinsics and extrinsics of the two cameras.</li>
+</ul>
+<p>Therefore this is a <strong>calibrated</strong> scenerario. We have the 2D images and  𝐊, 𝐑 (3x3) and 𝐓 (3,) as ground truth. We are asked to estimate 𝐅 , the fundamental matrix.</p>
+<p>In 3D computer vision there are 2 holy matrices: the Essential Matrix (E) and the Fundamental Matrix (F). Both are 3x3 matrices that encode the epipolar geometry of the scene.</p>
+<p><img src="https://i.postimg.cc/LYtpqCMw/372px-Epipolar-geometry-svg.png" alt=""></p>
+<hr>
+<p>The most common problems in 3D reconstruction are:</p>
+<ul>
+<li><p>Triangulation: we know the camera parameters (pose) <code>P</code> and we have points <code>x</code> in an image. We can compute the real-world coordinate 3D points <code>X</code> using the following equation <code>x = PX</code>.<br>
+(Note that in this case <code>X</code> is missing, is what we want to calculate).</p></li>
+<li><p>The Perspective-n-Point (PnP) Problem: Supposing we know the 3D points <code>X</code>, and we also have the matches between these points and the 2D points <code>x</code> in the image (this implies we have calibration) , how can we calculate the camera parameters <code>P</code>? Same equation :) <code>x = PX</code> but now P is missing.</p></li>
+</ul>
+<p>We can see this matrix <code>P</code> as a map between 2D and 3D points.<br>
+<strong>How can we obtain P?</strong> we can do it from 𝐊, 𝐑 and 𝐓 ! that is the part of the training info that we have:</p>
+<pre><code>P = K [R | t]
+</code></pre>
+<p>where 𝐊 is (3x3) and [R | t] corresponds to 𝐑 (3x3) and the last column is the translation vector (3, ) 𝐓. Therefore <code>P</code> is a 3x4 matrix. Remember that  𝐑  and 𝐓 are the external parameters of the camera: position and orientation of the camera in the reference system of the world (aka camera pose).</p>
+<p>For example, if you ever head about the <strong>pose estimation problem</strong> (in 3D vision or robotics), that problem is about finding 𝐑  and 𝐓, knowing 𝐊. <br>
+This is an example of <strong>camera pose</strong> (each pyramid represents a camera and its pose):</p>
+<p><img src="https://i.ibb.co/KsqSN06/Screenshot-from-2022-04-05-22-19-58.png" alt=""></p>
+<hr>
+<p>What is then <strong>Structure-from-Motion (or SLAM in robotics)</strong>? From 2D images, recover the 3D geometry and sometimes also its motion (6 d.o.f) So basically just from points <code>x</code> you can solve the problems and equation above.</p>
+<p>In this case, since we are working with facades and buildings, solid objects, this problem is "well-posed".<br>
+What is the <strong>key</strong> to solve this problem? the points <code>x</code> that you use to find correspondences between images, these are also known as <strong>keypoints</strong>. You can use traditional algorithms like SIFT to get this keypoints.</p>
+<hr>
+<p><strong>More info about 𝐅 the target:</strong></p>
+<ul>
+<li>3x3 matrix with 7 degrees of freedom, det(F)=0. Therefore F is singular (rank 2). <strong>possible question</strong> <em>what happens if the predicted matrix does not follow these rules?</em> It might work, in the sense that it might produce a reasonable result, but is not mathematically acceptable. I guess the host does not care about this. An approximation of F can later be optimized :)</li>
+<li>This matrix is defined <strong>up-to-scale</strong></li>
+<li>We know that for a 3D point (real world) <code>X</code>, the 2D correspondence in each view/image (in pixel coordinates/homogeneous coordinates) <code>x1</code> and <code>x2</code> correspond to the same 3D point <code>X</code> only if: <code>x1.T * F * x2 = 0</code>.</li>
+</ul>
+<p>There are also 2 concepts related to this problem that are pretty relevant:</p>
+<ul>
+<li><code>x</code> (2d point) is an <strong>epipole</strong> <code>e</code> if <code>F*e = 0</code>.</li>
+<li>Similar we can find <strong>epipolar lines</strong> <code>l=F.T * x1</code></li>
+</ul>
+<p><strong>Why good 𝐅 is worth 10k $ ?</strong></p>
+<p>Only with this simple 3x3 matrix, you have all the necessary information about the epipolar geometry of 2 views and the  camera parameters.  F gives constraints on how the scene changes under different view points! It is really powerful for 3D reconstruction and other cool applications.</p>
+<hr>
+<p><img src="https://i.postimg.cc/WFLV1Rx0/epiresult.jpg" alt=""></p>
+<p><img src="https://i.postimg.cc/BPNfpjbC/results-8-3.png" alt=""></p>
+<p><strong>Summary</strong></p>
+<p>We have 𝐊, 𝐑 and 𝐓 , using them we can map points between 2D and 3D using the matrix <code>P</code>.<br>
+We also have 2 views and this is a calibrated scenerario, therefore the main challenge is to <strong>find keypoints !</strong> It is important to find as many correspondences as possible to choose, most probably due to occlusions many matches will get lost.</p>
+<p><strong>How to solve this problem?</strong></p>
+<p>Taking as baseline <a href="https://www.kaggle.com/code/oldufo/imc2022-baseline-submission-kornia" target="_blank">imc2022-baseline-submission-kornia</a> we can see:</p>
+<pre><code>F, inlier_mask = cv2.findFundamentalMat(cur_kp1[match_idxs[:, 0]], cur_kp2[match_idxs[:, 1]], cv2.USAC_MAGSAC, ransacReprojThreshold=0.5, confidence=0.9, maxIters=20000)
+</code></pre>
+<p>As I mentioned in this post, we can estimate 𝐅  from pairs of matching points from each view. I could not find much info about <code>cv2.findFundamentalMat</code> but probably runs the "7-point algorithm". It takes as input N 2D-keypoints <code>x1</code> from the image1 (<code>cur_kp1[match_idxs[:, 0]]</code>) and N 2D-keypoints <code>x2</code> from the image2 (<code>cur_kp2[match_idxs[:, 1]]</code>).</p>
+<p>These points are <strong>matches</strong> (that's why he uses <code>match_idxs</code> ), meaning that they correspond to the same 3D point <code>X</code> in the real world, therefore we know that: <code>x1.T * F * x2 = 0</code>. Finding 𝐅 is just running a system of equations.</p>
+<p>The matches are found from the 2k 128-D descriptors of each image:</p>
+<pre><code>dists, idxs  = matcher(descriptors_1[0], descriptors_2[0])
+</code></pre>
+<p>Finally (or initially, depending how you read this), how do we obtain the descriptors? The author proposes here a simple network that implements KeyNet detector + AffNet + HardNet descriptor.</p>
+<pre><code>lafs1, resps1, descriptors_1 = keynet_affnet_hardnet8(timg1)
+</code></pre>
+<p>These descriptors are essential to find good matches and therefore estimate the fundamental matrix  𝐅.  At the <a href="https://www.kaggle.com/c/landmark-retrieval-2021" target="_blank">Google Landmark Retrieval 2021</a> we can see how to obtain global descriptors from landmark images, however, it is not the same as this task.</p>
+<hr>
+<p>I will try to add images, for some reason kaggle does not allow me. Also if you notice some definition/notation mistake please let me know and I will keep the post updated.</p>
+<p>Thank you :)</p>

@@ -1,0 +1,82 @@
+# happy-whale-and-dolphin 讨论区（按票数排序，共 80 条）
+
+- [cropped&resized(512x512) dataset using detic](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305503) — 212 票 / 26 评论 / 2022-02-05 
+- [1st Place Solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320192) — 198 票 / 83 评论 / 2022-05-24 **write-up?**
+- [🐧 Things to know before starting image preprocessing](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308026) — 191 票 / 51 评论 / 2022-02-16 
+- [Fix all known species column problems](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305574) — 176 票 / 20 评论 / 2022-02-05 
+- [9 Computer Vision Tricks to Improve Performance](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310105) — 168 票 / 31 评论 / 2022-02-27 
+- [Releasing my Dorsal Fin Dataset & Code](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310153) — 142 票 / 12 评论 / 2022-02-27 
+- [Miracle of Coinscedence ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319650) — 136 票 / 77 评论 / 2022-04-18 
+- [7 More Computer Vision Tricks to Improve Score](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/311211) — 117 票 / 38 评论 / 2022-03-05 
+- [Reduced Resolution Image Data (128 x 128, 256 x 256, 384 x 384) 🐋](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304686) — 108 票 / 23 评论 / 2022-02-02 **write-up?**
+- [Previous Happywhale Competition Solutions](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304504) — 105 票 / 17 评论 / 2022-02-01 **write-up?**
+- [🔥 DATASET - dorsal fins for all IDs without background   🔥 ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/309214) — 97 票 / 34 评论 / 2022-02-22 
+- [Duplicate names in species, can be merged together](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304633) — 96 票 / 2 评论 / 2022-02-02 
+- [[SHORTCUT] Competition logbook - updated everyday](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308991) — 93 票 / 12 评论 / 2022-02-21 
+- [LB probing and train/test split](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305428) — 92 票 / 19 评论 / 2022-02-05 
+- [Congratulations Kumar Shubham on Becoming Kaggle GrandMaster](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319782) — 90 票 / 64 评论 / 2022-04-19 
+- [My best result](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310119) — 88 票 / 55 评论 / 2022-02-27 
+- [Resources for fast start! ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/306246) — 82 票 / 12 评论 / 2022-02-08 
+- [All my tf records datasets in one place](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/315524) — 75 票 / 18 评论 / 2022-03-28 
+- [Full Body Annotations and cropped Dataset](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/311184) — 74 票 / 5 评论 / 2022-03-05 
+- [This is Silly... But I Named All The Whales/Dolphins 😅😅](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308280) — 72 票 / 26 评论 / 2022-02-18 
+- [19th Place - Single Model LB 860 Without Pseudo](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320298) — 71 票 / 44 评论 / 2022-04-26 **write-up?**
+- [Grandmaster Series - How to Perform Large-Scale Image Classification](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304966) — 68 票 / 6 评论 / 2022-02-03 
+- [Tips for improving the score in my case](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/315079) — 65 票 / 37 评论 / 2022-03-26 
+- [3rd solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319896) — 64 票 / 3 评论 / 2022-04-19 **write-up?**
+- [This repo will make Tensorflow great again!](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305718) — 64 票 / 5 评论 / 2022-02-06 
+- [3rd solution【Part】](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319789) — 61 票 / 37 评论 / 2022-04-19 **write-up?**
+- [sharing my CV vs LB score ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308599) — 60 票 / 103 评论 / 2022-02-19 
+- [4th place solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320040) — 59 票 / 15 评论 / 2022-04-19 **write-up?**
+- [Thank you Kaggle Community! ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/315161) — 59 票 / 15 评论 / 2022-03-26 
+- [Welcome to whale and dolphin photo-identification](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304525) — 58 票 / 0 评论 / 2022-02-01 
+- [some of the modeling of arcface public kernel  are wrong](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/315129) — 58 票 / 8 评论 / 2022-03-26 
+- [Stratified KFold v. Group KFold (aka. I'm a dummy)](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/306521) — 58 票 / 20 评论 / 2022-02-09 
+- [6th place solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319829) — 57 票 / 22 评论 / 2022-04-21 **write-up?**
+- [What do the species look like?](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305919) — 57 票 / 6 评论 / 2022-02-07 
+- [Interesting photos in dataset ... we have to deal with ... 😄](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308779) — 54 票 / 14 评论 / 2022-02-20 
+- [How to do a cool Similarity Matrix in matplotlib](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/307525) — 53 票 / 5 评论 / 2022-02-14 
+- [Salient Object Detection (SOD) - how to remove background from whales images](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/311389) — 52 票 / 7 评论 / 2022-03-06 
+- [That's what I expected from embeddings](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/317344) — 49 票 / 4 评论 / 2022-04-06 
+- [2nd place solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320502) — 48 票 / 10 评论 / 2022-04-22 **write-up?**
+- [Recap of the Top Solutions from the Previous Whale Identification Competition](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/311033) — 46 票 / 4 评论 / 2022-03-04 **write-up?**
+- [Create your own Cropped Dataset with [YOLOv5]](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305942) — 45 票 / 10 评论 / 2022-02-07 
+- [Let's crowd-source a bounding box dataset !](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310101) — 44 票 / 14 评论 / 2022-02-27 
+- [How to calculate validation score on Nearest Neighbors](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310103) — 43 票 / 8 评论 / 2022-02-27 
+- [Jan Bre: the real hero of HappyWhale](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319918) — 43 票 / 5 评论 / 2022-04-19 
+- [Data Distribution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304961) — 43 票 / 8 评论 / 2022-02-03 
+- [Avoid flipping the images!](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305843) — 40 票 / 13 评论 / 2022-02-07 
+- [11th Place Solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319916) — 39 票 / 23 评论 / 2022-04-20 **write-up?**
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304500) — 38 票 / 26 评论 / 2022-02-01 
+- [DATASET - Background removed 512x512 Happywhale dataset using State of the Art Salient Object Detector](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/312499) — 38 票 / 18 评论 / 2022-03-12 
+- [The Dataset seems to have good "Inter-Species" Separation](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305341) — 38 票 / 8 评论 / 2022-02-04 
+- [TF records with Detic Crop](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/309611) — 37 票 / 14 评论 / 2022-02-24 
+- [Papers on Whale and Dolphin Identification 🐬🐋](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304973) — 36 票 / 6 评论 / 2022-02-03 
+- ["backfin" = dorsal fin](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/314496) — 35 票 / 6 评论 / 2022-03-22 
+- [Main Booster - Dataset](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/313987) — 32 票 / 19 评论 / 2022-03-20 
+- [DOLG Army: 7th Place Solution Summary](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320026) — 32 票 / 9 评论 / 2022-04-21 **write-up?**
+- [10th place solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319941) — 32 票 / 21 评论 / 2022-04-20 **write-up?**
+- [Competition is Finalized - Congratulations to our Winners; Recap](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320310) — 31 票 / 5 评论 / 2022-04-21 
+- [ Google Landmark 2021 Winning Solution Code by GM Dieter](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/306352) — 31 票 / 9 评论 / 2022-02-09 **write-up?**
+- [Fin detect, extract and identify pipeline with paper and code](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305607) — 31 票 / 5 评论 / 2022-02-06 
+- [Ensembling techniques for this competition](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/315788) — 31 票 / 11 评论 / 2022-03-29 
+- [The MAP@5 metric](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304615) — 30 票 / 0 评论 / 2022-02-01 
+- [Congrats Isamu with GM](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320180) — 30 票 / 20 评论 / 2022-04-20 
+- [How to take the ArcFace Baseline from private lb: 0.470 (public: 0.522) to 0.804 (public: 0.834)](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319787) — 29 票 / 7 评论 / 2022-04-19 
+- [Whales feature matching LoFTR - Kornia (Open CV - SURF comparision)](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310092) — 29 票 / 14 评论 / 2022-02-27 
+- [Dataset Dataset Dataset](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/309691) — 29 票 / 5 评论 / 2022-02-24 
+- [🤗 PyTorch on TPU: Hugging Face Accelerate](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308778) — 29 票 / 3 评论 / 2022-02-20 
+- [This is the first time that I am in first place in the competition!](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/306774) — 28 票 / 8 评论 / 2022-02-10 **write-up?**
+- [Pytorch implementation](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308389) — 28 票 / 0 评论 / 2022-02-18 
+- [Starting with domain knowledge and FIN-PRINT - inspiration how to approach problem](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/308573) — 27 票 / 12 评论 / 2022-02-19 
+- [cropped dataset using TokenCut](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/310779) — 26 票 / 2 评论 / 2022-03-03 
+- [18th place solution](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319828) — 26 票 / 5 评论 / 2022-04-21 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304501) — 25 票 / 170 评论 / 2022-02-01 
+- [25th summary |  Happywhale ?... No, this is DATASET competition 😅😅😅 ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319806) — 25 票 / 9 评论 / 2022-04-19 
+- [Human-in-the-loop](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319813) — 25 票 / 3 评论 / 2022-04-19 
+- [My solution - 29th rank [part]](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/319851) — 25 票 / 7 评论 / 2022-04-20 **write-up?**
+- [How to install a newer version of tf or how I solved the problem that Embeddings contains Nan](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/315363) — 24 票 / 7 评论 / 2022-03-27 
+- [The most famous Whales! ](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/304509) — 24 票 / 12 评论 / 2022-02-01 
+- [Image sizes makes Whales and Dolphins Happy](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/305630) — 23 票 / 0 评论 / 2022-02-06 
+- [Congratulations to All](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/320098) — 23 票 / 4 评论 / 2022-04-20 
+- [Things that improve performance](https://www.kaggle.com/competitions/happy-whale-and-dolphin/discussion/309582) — 22 票 / 3 评论 / 2022-02-24 

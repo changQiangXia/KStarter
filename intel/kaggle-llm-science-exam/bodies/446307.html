@@ -1,0 +1,47 @@
+<p>First and foremost, we would like to express our gratitude to the hosts and the Kaggle team for arranging this wonderful competition. Also, a huge shout-out to all the participants for fighting through this intense competition. It was an extremely educational and exciting competition.<br>
+Below, we present our solutions.</p>
+<p>Our solution is based on the high-quality combination of retrieval + deberta v3 models. The implementation of high-quality retrieval and how it can be incorporated as context was critically important.</p>
+<h1>Retrieval Part</h1>
+<p>Example code: <a href="https://www.kaggle.com/code/linshokaku/4th-elasticsearch-retrieval-example" target="_blank">https://www.kaggle.com/code/linshokaku/4th-elasticsearch-retrieval-example</a></p>
+<h2>Retrieval Workflow</h2>
+<ul>
+<li>Stage 1 <ul>
+<li>Sentence-wise keyword retrieval</li>
+<li>Using Elasticsearch  </li></ul></li>
+<li>Stage 2<ul>
+<li>Version 3: Elasticsearch score</li>
+<li>Version 5: Edit distance score</li>
+<li>Version 7: Semantic search score </li></ul></li>
+</ul>
+<h2>Validation (Retrieval)</h2>
+<p>Implemented multiple retrieval rules and evaluated scores in a zero-shot manner without intervening model training. Initially, evaluations were carried out with llama2 7b and train.csv. After the performance of the pre-trained model using context significantly improved, this model was used to evaluate using a validation dataset drawn from the 60k dataset at <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436383" target="_blank">https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/436383</a>, taking out 2000 instances. As no model training was inserted, it was possible to execute improvement cycles at a relatively high speed.</p>
+<h2>Details</h2>
+<p>We believed the following elements to be necessary for high-quality retrieval:</p>
+<ul>
+<li>As much as possible, clean Wikipedia data</li>
+<li>Search relating to all elements of the prompt, options</li>
+<li>Comprehensive search  </li>
+</ul>
+<p>Acquiring clean Wikipedia data is possible through the cirrussearch dump, which can be referenced from the Wikiextractor document at <a href="https://github.com/attardi/wikiextractor#wikipedia-cirrus-extractor" target="_blank">https://github.com/attardi/wikiextractor#wikipedia-cirrus-extractor</a>. We built an Elasticsearch server with the texts contained in the cirrussearch dump divided into sentences and ran it on the Kaggle kernel.</p>
+<p>The searches are always performed sentence by sentence. For each prompt or option divided into sentences, we extract all the words, eliminate duplicates and stop words, access the Elasticsearch server, and extract similar sentences. Based on the Wikipedia sentences fetched in this way, we generate three types of contexts: v3, v5, and v7. Each context involves basic processing such as concatenating surrounding sentences of the target sentence and concatenating consecutive sentences. The differences are as follows:</p>
+<ul>
+<li>v3: Sorts context based on the score at the time of Elasticsearch search.</li>
+<li>v5: Sorts context based on the edit distance with the question sentence.</li>
+<li>v7: Sorts context using semantic search, implemented using sentence-transformers.<br>
+For the embedding between the prompt and Wikipedia, we used msmarco-bert-base-dot-v5. For the embedding between the option and Wikipedia, we used all-mpnet-base-v2.</li>
+</ul>
+<h3>Tips:</h3>
+<p>Elasticsearch requires writing at startup, so it needs to be copied and run on /kaggle/temp. As discussed in the discussion at <a href="https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444742" target="_blank">https://www.kaggle.com/competitions/kaggle-llm-science-exam/discussion/444742</a>, the I/O speed of /kaggle/temp became unstable, so we added an innovation to directly perform data I/O from the file system on /kaggle/input by linking files in the Elasticsearch database that only perform reading with a symbolic link.</p>
+<h1>Modeling Part</h1>
+<h2>Validation</h2>
+<p>Since it was important to train a model that could effectively reference context irrespective of the domain, we randomly extracted 2,000 instances as validation data from the open dataset without limiting to a specific domain. The raw train.csv was too easy for validation and was hardly useful; therefore, we did not use it much in the later stages.We were able to avoid overfitting by trusting the obtained correlation between validation scores  (2,000 samples) and LB.<br>
+Here is an illustration of the correlation between validation scores and LB: </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F520183%2Fef62d0c56d959b1d341c72ac5d9a266f%2F2023-10-11%2014.37.50.png?generation=1697002694325672&amp;alt=media"></p>
+<h2>training</h2>
+<p>Model: Deberta v3 Large <br>
+Datasets: Our main training datasets were 60k and 40k. <br>
+Improvement in accuracy was noted by extending the number of tokens from 512 to 768 and 1280.</p>
+<h3>Method to include context:</h3>
+<p>We realized that the performance improved as more tokens were included as context. Thus, we implemented a method where we first positioned the prompt &amp; choices and then packed the remaining portions with as much context as possible.</p>
+<h2>Context Ensemble</h2>
+<p>There were questions that matched the retrieval and some that did not. Ensembling the results inferred by each of the three types of contexts for a single model improved the score (Even during training, v7 only was good, but ensembling with multiple contexts during inference improved performance). This likely indicates that the diversity of the retrievers ensures the search results.</p>

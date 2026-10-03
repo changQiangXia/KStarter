@@ -1,0 +1,56 @@
+<h1>Thank You Kaggle and Hosts!</h1>
+<p>Very fun competition! I love competitions with opportunities to be creative, explore, and make discoveries! In the past 3 months, I enthusiastically conducted 1000+ experiments!</p>
+<p>I also love competitions where a single model can achieve Gold medal (instead of a large ensemble).</p>
+<p>Thank you Kagglers for all the great discussion shares and notebook shares!</p>
+<h1>Understand Test Data - What is Competition Task?</h1>
+<p>The task in this competition is to <strong>predict annotator opinions</strong>. By reading the host's paper <a href="https://github.com/bdsp-core/IIIC-SPaRCNet/blob/main/IIIC_Classification-Supplemental.pdf" target="_blank">here</a>, we learn that there are <strong>119 overall annotators</strong> in train data and <strong>20 expert annotators</strong> in test data. The paper shows the average Seizure prediction from 119 annotators is 18.8% whereas the 20 experts are less likely to classify as Seizure and their average is 1.5%. </p>
+<p>Wow, this is a big difference therefore we need to train our models with <strong>expert opinions</strong> instead of <strong>overall opinions</strong>. We can locate the expert annotators in the train data with the filter <code>expert annotators = train.loc[train.vote_count&gt;=10]</code>.</p>
+<h1>Which Features Do Annotators See?</h1>
+<p>From the paper we see that the annotators see 2D spectrograms and 2D plots of waveforms. So let's input 2D spectrograms and 2D plots of waveforms into our models. (Also inputting 1D raw waveform helped too).</p>
+<h1>Train 3 Separate Models with Vote&gt;=10</h1>
+<p>First we train 3 separate models using train data with <code>vote_count &gt;= 10</code> (i.e. the <strong>expert annotator opinions</strong>). </p>
+<ul>
+<li>One model receives 2D spectrograms (created from EEG) as input and uses <code>tiny_vit_21m_512</code> to classify into 6 targets. </li>
+<li>Second model receives 2D matplotlib plots of the montage waveforms converted into a 2D image and uses <code>tiny_vit_21m_224</code> to classify into 6 targets. </li>
+<li>And third model receives 1D raw time series waveform and uses <code>EegNet-1D</code> <a href="https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471666" target="_blank">here</a> to classify into 6 targets.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Apr-2024/single1.png"></p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Apr-2024/single2.png"></p>
+<h1>Pseudo Label Vote&lt;10</h1>
+<p>Using our 3 single models above, we pseudo label the train data with <code>vote&lt;10</code>. We set the new labels as <code>new_label = 0.1 * old_label + 0.3 * model1 + 0.3 * model2 + 0.3 * model3</code>.</p>
+<h1>Build One Mega Model and Train with Vote&gt;=10 plus Pseudo Vote&lt;10</h1>
+<p>We load our 3 pretrained models above and remove the 3 heads. We combine them into one model, concatenate the final embeddings and add 1 new head. Then we train with 2x copies of <code>vote&gt;=10</code> data concatenated with 1x copy of <code>vote&lt;10 with pseudo</code> data. (Note the 2D spectrogram model above actually trains with both 10 sec spectrograms and 50 spectrograms in one image as depicted below):</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Apr-2024/mega_model.png"></p>
+<h1>Single Model Performance</h1>
+<h2>==&gt; 🎉 CV = 0.246, Public LB = 0.243, Private LB = 0.290 🎉</h2>
+<h1>More Details</h1>
+<p>To successfully accomplish the above and achieve <strong>single model Gold Medal</strong> Hooray!, there are many small details. Here are some:</p>
+<ul>
+<li><p>Preprocess all raw waveform with MNE library </p>
+<pre><code>     mne.filter import filter_data, notch_filter
+    sample = data.T[[0,4,5,6, 11,15,16,17, 0,1,2,3, 11,12,13,14]]\
+             - data.T[[4,5,6,7, 15,16,17,18, 1,2,3,7, 12,13,14,18]]
+    sample = notch_filter(sample.astype(), 200, 60, =32, =)
+    sample = filter_data(sample.astype(), 200, 0.5, 40, =32, =) 
+    sample = np.clip(sample,-500,500)
+    sample = np.nan_to_num(sample, =0)
+</code></pre></li>
+<li><p>Use all 107k rows of train data (instead of only 1 row per eeg_id).</p></li>
+<li><p>Read all eeg parquets into CPU RAM and create spectrograms inside dataloader with <code>torchaudio.transforms.MelSpectrogram</code> and crop with <code>eeg_label_offset_seconds</code>.</p>
+<pre><code>import torchaudio.transforms as T
+
+make_spec1 = T.MelSpectrogram
+
+make_spec2 = T.MelSpectrogram
+</code></pre></li>
+<li><p>Each epoch train with 1 sample from each unique <code>eeg_id</code>. But randomly select 1 sample from all <code>eeg_id</code> samples with <code>train = train.loc[train.eeg_id == EEG_ID].sample(1)</code>.</p></li>
+<li><p>Apply data augmentations to raw waveform (not spectrogram) inside dataloader before creating spectrogram.</p></li>
+<li><p>Use data augmentation "brain-right-left flip", "brain-temporal-parasagittal-flip", "waveform-crop-rescale", "waveform-invert", "frequency-dropout"</p></li>
+<li><p>Use <code>tiny_vit_21m_512</code> for 2D spectrograms and <code>tiny_vit_21m_224</code> for 2D wave plots.</p></li>
+<li><p>Use Nischay EegNet-1D <a href="https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471666" target="_blank">here</a> for 1D raw wave data model.</p></li>
+<li><p>Tune LR and learning schedule of each model individually using my discussion post <a href="https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/488083" target="_blank">here</a></p></li>
+<li><p>Cross validate with train <code>vote&gt;=10</code> and observe perfect correlation between CV and LB.</p></li>
+</ul>
+<h1>Inference Code Published</h1>
+<p>My single model inference notebook is published <a href="https://www.kaggle.com/code/cdeotte/single-model-gold-solution-cv-0-24-lb-0-24" target="_blank">here</a>. This single model achieves <strong>Gold 14th place</strong>. My final submission is an ensemble of this model with some other models and achieves <strong>Gold 8th place</strong>.</p>
+<p>The code describes the PyTorch model details, the preprocess details, PyTorch data loader details, and data augmentation details. Enjoy!</p>

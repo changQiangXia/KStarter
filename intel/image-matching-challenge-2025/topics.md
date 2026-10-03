@@ -1,0 +1,72 @@
+# image-matching-challenge-2025 讨论区（按票数排序，共 70 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583058) — 66 票 / 18 评论 / 2025-06-15 **write-up?**
+- [All the THEORY you need to start Image Matching](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/573183) — 57 票 / 6 评论 / 2025-04-14 
+- [Public LB and Local Score](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/575160) — 52 票 / 5 评论 / 2025-04-26 
+- [Top solutions from the past editions](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571280) — 42 票 / 5 评论 / 2025-04-02 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582959) — 35 票 / 4 评论 / 2025-06-04 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583097) — 33 票 / 2 评论 / 2025-06-04 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582898) — 32 票 / 1 评论 / 2025-06-10 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582844) — 32 票 / 12 评论 / 2025-06-05 **write-up?**
+- [6th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583076) — 30 票 / 11 评论 / 2025-06-04 **write-up?**
+- [15th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582810) — 29 票 / 7 评论 / 2025-06-03 **write-up?**
+- [Memory-Efficient VGGT Tracking with Pose Refinement](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582968) — 28 票 / 0 评论 / 2025-06-04 
+- [12th Place Solution - Pushing Limits of COLMAP](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583185) — 26 票 / 2 评论 / 2025-06-05 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583401) — 25 票 / 9 评论 / 2025-06-07 **write-up?**
+- [7th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583184) — 25 票 / 3 评论 / 2025-06-05 **write-up?**
+- [pycolmap API List](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/576642) — 24 票 / 1 评论 / 2025-05-06 
+- [2nd Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583683) — 23 票 / 1 评论 / 2025-06-08 **write-up?**
+- [9th Place Solution: DINOv2-Optimized Filtering](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583464) — 23 票 / 0 评论 / 2025-06-07 **write-up?**
+- [Welcome to the 2025 Image Matching Challenge!](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/570752) — 21 票 / 7 评论 / 2025-03-30 
+- [🖼️🔮 3D Image Matching Challenge Resources 🔮🖼️](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571312) — 20 票 / 13 评论 / 2025-04-02 
+- [Cluster score vulnerability](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/579625) — 20 票 / 10 评论 / 2025-05-19 
+- [Submissions have been rescored due to metric bug](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580298) — 19 票 / 7 评论 / 2025-05-23 
+- [5th Place Solution : MASt3R is All You Need](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583711) — 18 票 / 1 评论 / 2025-06-08 **write-up?**
+- [Should the resize parameter for ALIKED be modified through class variables?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/575742) — 17 票 / 2 评论 / 2025-04-30 
+- [Congrats to New Competitions GM!](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583418) — 14 票 / 1 评论 / 2025-06-06 
+- [14th place solution](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583977) — 14 票 / 0 评论 / 2025-06-10 **write-up?**
+- [CVPR workshop: Request for write-ups (top 25)](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582841) — 14 票 / 2 评论 / 2025-06-03 **write-up?**
+- [83rd Rank Solution ](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583032) — 14 票 / 0 评论 / 2025-06-04 **write-up?**
+- [Get Started Here](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571204) — 13 票 / 12 评论 / 2025-04-01 
+- [Viewing the churn at the end of the competition](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582828) — 11 票 / 3 评论 / 2025-06-03 
+- [17th Place Solution: Connected Component Clustering ](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583877) — 11 票 / 0 评论 / 2025-06-10 **write-up?**
+- [Continuing Image Matching Challenge 2025](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582834) — 9 票 / 2 评论 / 2025-06-03 
+- [80th Place Solution: Two-Stage ALIKED+LightGlue Pipeline and Adaptive OmniGlue-Enhancement Pipeline](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583575) — 9 票 / 0 评论 / 2025-06-07 **write-up?**
+- [Regarding the Metric Bug](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580378) — 8 票 / 1 评论 / 2025-05-23 
+- ["outliers" present in train scenes — how should we treat them?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571224) — 6 票 / 8 评论 / 2025-04-02 
+- [Very similar scenes](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/572794) — 6 票 / 5 评论 / 2025-04-11 
+- [Splitting datasets into scenes](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571783) — 6 票 / 2 评论 / 2025-04-05 
+- [Launching an ongoing version of IMC2025!](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/616519) — 5 票 / 1 评论 / 2025-11-10 
+- [About test data directory structure](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/576529) — 5 票 / 3 评论 / 2025-05-05 
+- [Participation Certificate ](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580284) — 5 票 / 0 评论 / 2025-05-23 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583275) — 4 票 / 0 评论 / 2025-06-05 
+- [Looking for feedback on automatic RANSAC threshold estimation :)](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/574660) — 4 票 / 0 评论 / 2025-04-23 
+- [Help Needed: How Do Threshold Points Work in IMC 2025?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/573028) — 4 票 / 4 评论 / 2025-04-13 
+- [My submission gives me an invalid submission error](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/579064) — 4 票 / 5 评论 / 2025-05-14 
+- [Score Error After Metric Bug Fix?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580801) — 3 票 / 1 评论 / 2025-05-26 
+- [Submission scoring errors](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580624) — 3 票 / 10 评论 / 2025-05-25 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/570434) — 2 票 / 1 评论 / 2025-03-27 
+- [Test dataset has the same images as train dataset](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/579652) — 2 票 / 1 评论 / 2025-05-19 
+- [DINOv2 version](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/576089) — 2 票 / 2 评论 / 2025-05-02 
+- [Kaggle Leaderboard Scoring Explained for Beginners](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582454) — 2 票 / 4 评论 / 2025-05-31 
+- [A Kaggle-Friendly MASt3R Demo Notebook for Robust Image Matching!](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/583488) — 2 票 / 0 评论 / 2025-06-07 
+- [How to adjust the parameters when there is random fluctuation in the model score?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571702) — 2 票 / 1 评论 / 2025-04-05 
+- [Clarification on Rotation/Translation Reference and Ground Truth Availability](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571771) — 2 票 / 2 评论 / 2025-04-05 
+- [Notebook timeout issue](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571436) — 2 票 / 2 评论 / 2025-04-03 
+- [Can I download the LightGlue and SuperGlue libraries from the Github page ??????????](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/578056) — 1 票 / 1 评论 / 2025-05-08 
+- [Error committing notebook](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/573805) — 1 票 / 1 评论 / 2025-04-18 
+- [HDBSCAN on kaggle](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/572995) — 1 票 / 4 评论 / 2025-04-12 
+- [The data section is a bit difficult to parse](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571250) — 1 票 / 5 评论 / 2025-04-02 
+- [shared scenes across datasets](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580440) — 0 票 / 0 评论 / 2025-05-24 
+- [did anyone manually label the train/test set outliers yet?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580972) — 0 票 / 0 评论 / 2025-05-27 
+- [submission duration](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/580915) — 0 票 / 5 评论 / 2025-05-27 
+- [local score rises LB score decreased](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/575684) — 0 票 / 2 评论 / 2025-04-30 
+- [what is the best camera model for sfm algorithm?](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582312) — 0 票 / 0 评论 / 2025-05-30 
+- [How to address fluctuations？](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582320) — 0 票 / 1 评论 / 2025-05-30 
+- [Trying to understand how test scenes should look like](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/575871) — 0 票 / 2 评论 / 2025-05-01 
+- [Search for teammate](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/575661) — 0 票 / 0 评论 / 2025-04-30 
+- [Packages for Submission](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/582482) — 0 票 / 3 评论 / 2025-05-31 
+- [I am looking for one partner to form a team](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571443) — 0 票 / 3 评论 / 2025-04-03 
+- [Transformation and rotation matrices](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/573001) — 0 票 / 2 评论 / 2025-04-12 
+- [Error in image labeling in training data](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/572714) — -1 票 / 7 评论 / 2025-04-10 
+- [Let's Collaborate Early! Share Your Approaches for the Image Matching Challenge 2025](https://www.kaggle.com/competitions/image-matching-challenge-2025/discussion/571785) — -11 票 / 0 评论 / 2025-04-05 **write-up?**

@@ -1,0 +1,188 @@
+<p>[Note for latecomers] My rank was originally 2nd, but finalized to be 1st due to <a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/469199" target="_blank">some reasons</a>. I believe <a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467154" target="_blank">the original 1st place solution</a> is still worth reading.</p>
+<h1>Thank You Everyone!</h1>
+<p>I'd like to thank the organizers and all participants. This is my first solo gold and monetary prize in four years of kaggle experience. I am so happy with it 🤩. </p>
+<p>The training and inference code is available <a href="https://www.kaggle.com/code/tomooinubushi/2nd-place-solution-training-and-inference-code" target="_blank">here</a>. This code includes so many redundant and/or unnecessary parts, but I opened it as is to avoid additional errors.</p>
+<h1>Solution summary</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3754725%2Ff49ce3374a234e1333b60bd5b6067eb9%2FMicrosoft%20PowerPoint%20.jpg?generation=1704865612111526&amp;alt=media" alt="Summary of my solution"></p>
+<h1>Data cleaning</h1>
+<p>In the era of deeplearning, data cleaning is one of the most under-emphasized parts of DS/ML. Since the training dataset of this competition is very small, I conducted data cleaning to reduce noises in train and unseen test dataset.</p>
+<p>In summary, I conducted….</p>
+<ul>
+<li>Discard events ten minutes before first input.</li>
+<li>Correct up times from zero and consistently increasing (see <a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447238" target="_blank">this discussion</a>).</li>
+<li>Correct up times and down times so that gap times and action times are not too large (ten minutes and five minutes, respectively).</li>
+<li>Fix unicode errors in up events, down events, and text change columns with <a href="https://ftfy.readthedocs.io/en/latest/#" target="_blank">ftfy</a> fix texts. <a href="https://www.kaggle.com/code/tomooinubushi/reduce-unseen-test-events-with-ftfy" target="_blank">It reduced unseen up events (29 -&gt; 24) and down events (30 -&gt; 26)</a> revealed by <a href="https://www.kaggle.com/kononenko" target="_blank">@kononenko</a> in <a href="https://www.kaggle.com/code/kononenko/lwp-unseen-test-activities-events" target="_blank">this notebook</a></li>
+<li>Discard events with Unidentified (see user ID 2f74828d)</li>
+</ul>
+<h1>Sentence reconstruction and feature engineering</h1>
+<p>The first thing I did in this competition is to reconstruct sentences from keyboard activities. Since the scores are determined solely based on final text, I thought this is the most important point in this competition.<br>
+<a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447735" target="_blank">This very early discussion topic</a> by <a href="https://www.kaggle.com/kawaiicoderuwu" target="_blank">@kawaiicoderuwu</a> and <a href="https://www.kaggle.com/code/jasonheesanglee/updated-75-35-acc-revealing-hidden-words?scriptVersionId=148517101" target="_blank">this public notebook</a> by <a href="https://www.kaggle.com/jasonheesanglee" target="_blank">@jasonheesanglee</a> were very helpful for me.<br>
+For better reconstruction, I improve some points.</p>
+<ul>
+<li>If cursor position and text change information do not match with reconstructed text, search sequence with nearest fuzzy match.</li>
+<li>Correct Undo (ctrl+Z) operation if cursor position and text change information do not match with reconstructed text</li>
+</ul>
+<p>I did my best, but there are still 142 events with unexpected errors in training logs.</p>
+<p>For feature engineering, <a href="https://www.kaggle.com/code/hengzheng/link-writing-simple-lgbm-baseline" target="_blank">this public notebook</a> by <a href="https://www.kaggle.com/hengzheng" target="_blank">@hengzheng</a> was a good starting point. Learning from other notebook (especially this <a href="https://www.kaggle.com/code/awqatak/silver-bullet-single-model-165-features" target="_blank">public notebook</a> by <a href="https://www.kaggle.com/awqatak" target="_blank">@awqatak</a> was so impressive!), I used 378 features in total.<br>
+In summary, I used….</p>
+<ul>
+<li>Stats of Inter Key Latency, Press Latency, and Release Latency with gap 1</li>
+<li>Total counts of each activity and event</li>
+<li>Time to first reach 200, 300, 400, and 500 words</li>
+<li>Pause related features</li>
+<li>Word-time ratio, word-event ratio, etc.</li>
+<li>Stats of reconstructed text (e.g., words per sentence, word length etc.)</li>
+<li>Total counts of punctuation errors in reconstructed text (e.g., sequence like "qq qqq ,qqq" should be "qq qqq, qqq", and "qq qqq .qqq" should be "qq qqq. Qqq")</li>
+<li>Pause and revision burst related features.</li>
+<li>Tf-idf features of activities, events, and categorized Inter Key Latency.</li>
+<li>Word-level and char-level tf-idf features of reconstructed text</li>
+<li>Predictions of external essay scores based on word-level and char-level tf-idf features (explain later)</li>
+</ul>
+<p>Once tf-idf features are extracted, I used truncated SVD to reduce their dimensions to 64.</p>
+<p>Here is a (part of) feature importance plot of light GBM, though I never checked it throughout this competition <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3754725%2F5baca557e7cfa1525fdeeed4412b989b%2Foutput_.png?generation=1704957648886814&amp;alt=media"></p>
+<h1>Use external data</h1>
+<p>As the training dataset is very small, I used external data about essay evaluation. I anonymized all essays and extracted tf-idf features with the same feature extractor with the training dataset. Then, I trained light GBM  models to predict external scores.  <br>
+The below scatter plot is the result of the model trained with <a href="https://www.kaggle.com/c/commonlit-evaluate-student-summaries" target="_blank">commonlit-evaluate-student-summaries</a> data. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3754725%2Fb8d576705b1ce7b1f1ac6ef7da8c5a76%2Foutput.png?generation=1704865890059267&amp;alt=media"><br>
+To my surprise, the predicted external scores (x-axis) are well correlated with the scores of this competition (y-axis). Please note that light GBM models are trained only with anonymized external essays. I use these predicted external scores as features to increase generalizability of the models. I tried transformer models (e.g., deverta-v3), but they are never better than tf-idf+light GBM models.</p>
+<p>I used eight datasets composed of 24 essay types.</p>
+<ul>
+<li><a href="https://www.kaggle.com/c/commonlit-evaluate-student-summaries" target="_blank">https://www.kaggle.com/c/commonlit-evaluate-student-summaries</a></li>
+<li><a href="https://www.kaggle.com/competitions/asap-aes" target="_blank">https://www.kaggle.com/competitions/asap-aes</a></li>
+<li><a href="https://www.kaggle.com/competitions/asap-sas" target="_blank">https://www.kaggle.com/competitions/asap-sas</a></li>
+<li><a href="https://huggingface.co/datasets/whateverweird17/essay_grade_v1" target="_blank">https://huggingface.co/datasets/whateverweird17/essay_grade_v1</a></li>
+<li><a href="https://huggingface.co/datasets/whateverweird17/essay_grade_v2" target="_blank">https://huggingface.co/datasets/whateverweird17/essay_grade_v2</a> (from <a href="https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453372" target="_blank">this discussion</a> by <a href="https://www.kaggle.com/thedrcat" target="_blank">@thedrcat</a>)</li>
+<li><a href="https://www.kaggle.com/competitions/feedback-prize-english-language-learning/overview" target="_blank">https://www.kaggle.com/competitions/feedback-prize-english-language-learning/overview</a></li>
+<li><a href="https://www.kaggle.com/datasets/mazlumi/ielts-writing-scored-essays-dataset" target="_blank">https://www.kaggle.com/datasets/mazlumi/ielts-writing-scored-essays-dataset</a></li>
+<li><a href="https://www.kaggle.com/datasets/nbroad/persaude-corpus-2/" target="_blank">https://www.kaggle.com/datasets/nbroad/persaude-corpus-2/</a></li>
+</ul>
+<p>I also tried <a href="https://www.cs.cmu.edu/~keystroke/" target="_blank">keystroke dataset</a>, but never worked.</p>
+<h1>Construct various models and ensemble them</h1>
+<p>Using both tree and NN models is important to improve the score. I learned light autoML in this <a href="https://www.kaggle.com/code/alexryzhkov/lgbm-and-nn-on-sentences" target="_blank">public notebook</a> by <a href="https://www.kaggle.com/alexryzhkov" target="_blank">@alexryzhkov</a>. For classifier models, I used the framework shown in <a href="https://www.kaggle.com/code/alexryzhkov/lgbm-and-nn-on-sentences" target="_blank">this discussion</a></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>public LB</th>
+<th>private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LGBRegressor</td>
+<td>0.576</td>
+<td>0.576995 (late submission)</td>
+<td>0.558459 (late submission)</td>
+</tr>
+<tr>
+<td>LGBClassifier</td>
+<td>0.582</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>XGBRegressor</td>
+<td>0.580</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>XGBClassifier</td>
+<td>0.583</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>CatBoostRegressor</td>
+<td>0.582</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>BaggingRegressor</td>
+<td>0.594</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>tabnet</td>
+<td>0.609</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>light autoML densenet</td>
+<td>0.593</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>light autoML resnet</td>
+<td>0.587</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>light autoML fttransformer</td>
+<td>0.603</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>Ensemble</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>public LB</th>
+<th>private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LinearRegressor</td>
+<td>0.572</td>
+<td>0.579468 (late submission)</td>
+<td>0.557741 (late submission)</td>
+</tr>
+<tr>
+<td>LogisticClassifier</td>
+<td>0.575</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Mean</td>
+<td>0.573</td>
+<td>0.578796</td>
+<td>0.559289</td>
+</tr>
+</tbody>
+</table>
+<p>For ensembling, I also tried forward ensembling shown in <a href="https://www.kaggle.com/code/cdeotte/forward-selection-oof-ensemble-0-942-private" target="_blank">this public notebook</a>. Actually, forward ensembling gave me better public LB score of 0.575, but CV (0.575) and private LB score (0.560) were worse. I used nested CV of six bags x five folds stratified with score for final submission.</p>
+<h1>Postprocessing</h1>
+<p>I just clipped predictions from 0.5 to 6.0. Rounding to 0.5, 1.0… never worked.</p>
+<h1>Some remarks</h1>
+<p>Unlike <a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444947" target="_blank">many people in the CV-LB thread</a>, my LB scores were always worse than CV scores. <a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/456467" target="_blank">As I have shown that score distribution of public LB dataset is similar to that of train set</a>, I always trust CV score in this competition.<br>
+Since I decided to use external data which impose extra inference time, I gave up efficiency prize. I selected three GPU models for submission. From these three models, the winning one is the model with the worst public LB score (0.578). Though I did my best for model generalizability, I have to admit that I am too lucky 😅. </p>
+<p>I learned a lot from many public notebooks and discussions. I listed them below, but there would be some missing ones.</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/hengzheng/link-writing-simple-lgbm-baseline" target="_blank">https://www.kaggle.com/code/hengzheng/link-writing-simple-lgbm-baseline</a></li>
+<li><a href="https://www.kaggle.com/code/dangnguyen97/feature-eng-clean-outlier-lgbm-with-optuna#Train-OOF-LGBM-Models" target="_blank">https://www.kaggle.com/code/dangnguyen97/feature-eng-clean-outlier-lgbm-with-optuna#Train-OOF-LGBM-Models</a></li>
+<li><a href="https://www.kaggle.com/code/ulrich07/tabpfn-and-xgboost-cv-0-19-lb-0-17" target="_blank">https://www.kaggle.com/code/ulrich07/tabpfn-and-xgboost-cv-0-19-lb-0-17</a></li>
+<li><a href="https://www.kaggle.com/code/awqatak/silver-bullet-single-model-165-features" target="_blank">https://www.kaggle.com/code/awqatak/silver-bullet-single-model-165-features</a></li>
+<li><a href="https://www.kaggle.com/code/hiarsl/feature-engineering-sentence-paragraph-features" target="_blank">https://www.kaggle.com/code/hiarsl/feature-engineering-sentence-paragraph-features</a></li>
+<li><a href="https://www.kaggle.com/code/jasonheesanglee/updated-75-35-acc-revealing-hidden-words" target="_blank">https://www.kaggle.com/code/jasonheesanglee/updated-75-35-acc-revealing-hidden-words</a></li>
+<li><a href="https://www.kaggle.com/code/alexryzhkov/lgbm-and-nn-on-sentences" target="_blank">https://www.kaggle.com/code/alexryzhkov/lgbm-and-nn-on-sentences</a></li>
+<li><a href="https://www.kaggle.com/code/abdullahmeda/enter-ing-the-timeseries-space-sec-3-new-aggs" target="_blank">https://www.kaggle.com/code/abdullahmeda/enter-ing-the-timeseries-space-sec-3-new-aggs</a></li>
+<li><a href="https://www.kaggle.com/code/cdeotte/forward-selection-oof-ensemble-0-942-private" target="_blank">https://www.kaggle.com/code/cdeotte/forward-selection-oof-ensemble-0-942-private</a></li>
+<li><a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447238" target="_blank">https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447238</a></li>
+<li><a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/457385" target="_blank">https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/457385</a></li>
+<li><a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444905" target="_blank">https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/444905</a></li>
+<li><a href="https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447735" target="_blank">https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/447735</a></li>
+<li><a href="https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453372" target="_blank">https://www.kaggle.com/competitions/llm-detect-ai-generated-text/discussion/453372</a> </li>
+</ul>

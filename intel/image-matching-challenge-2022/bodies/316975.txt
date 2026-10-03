@@ -1,0 +1,190 @@
+# https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/316975
+
+Topic #316975: Intro to 3D Image Matching, what is a Fundamental Matrix?
+  Author: Nanashi
+  Posted: 2022-04-04 22:53:39.853000
+  Votes: 94  Comments: 22
+
+Structure-from-Motion, F Matrix and Image Matching
+
+Here you can read a brief intro to the problem by the competition host, in this post I will try to add more useful information to understand it.
+
+
+
+Using the same notation from the host:
+
+
+
+The calibration matrix 𝐊 captures camera properties that determine the transformation between 3D points and 2D (pixel) coordinates. It is also known as the camera intrinsics.
+
+The rotation matrix 𝐑 and the translation vector 𝐓 capture the 6-degree-of-freedom pose (position and orientation) of the camera in a global reference frame. They are collectively known as the camera extrinsics or camera pose. (example below).
+
+The fundamental matrix 𝐅 encapsulates the projective geometry between two views of the same scene. It is not affected by the contents in the scene, and depends only on the intrinsics and extrinsics of the two cameras.
+
+
+Therefore this is a calibrated scenerario. We have the 2D images and  𝐊, 𝐑 (3x3) and 𝐓 (3,) as ground truth. We are asked to estimate 𝐅 , the fundamental matrix.
+
+In 3D computer vision there are 2 holy matrices: the Essential Matrix (E) and the Fundamental Matrix (F). Both are 3x3 matrices that encode the epipolar geometry of the scene.
+
+
+
+
+
+The most common problems in 3D reconstruction are:
+
+
+
+
+Triangulation: we know the camera parameters (pose) P and we have points x in an image. We can compute the real-world coordinate 3D points X using the following equation x = PX.
+(Note that in this case X is missing, is what we want to calculate).
+
+
+The Perspective-n-Point (PnP) Problem: Supposing we know the 3D points X, and we also have the matches between these points and the 2D points x in the image (this implies we have calibration) , how can we calculate the camera parameters P? Same equation :) x = PX but now P is missing.
+
+
+We can see this matrix P as a map between 2D and 3D points.
+How can we obtain P? we can do it from 𝐊, 𝐑 and 𝐓 ! that is the part of the training info that we have:
+
+P = K [R | t]
+
+
+where 𝐊 is (3x3) and [R | t] corresponds to 𝐑 (3x3) and the last column is the translation vector (3, ) 𝐓. Therefore P is a 3x4 matrix. Remember that  𝐑  and 𝐓 are the external parameters of the camera: position and orientation of the camera in the reference system of the world (aka camera pose).
+
+For example, if you ever head about the pose estimation problem (in 3D vision or robotics), that problem is about finding 𝐑  and 𝐓, knowing 𝐊. 
+This is an example of camera pose (each pyramid represents a camera and its pose):
+
+
+
+
+
+What is then Structure-from-Motion (or SLAM in robotics)? From 2D images, recover the 3D geometry and sometimes also its motion (6 d.o.f) So basically just from points x you can solve the problems and equation above.
+
+In this case, since we are working with facades and buildings, solid objects, this problem is "well-posed".
+What is the key to solve this problem? the points x that you use to find correspondences between images, these are also known as keypoints. You can use traditional algorithms like SIFT to get this keypoints.
+
+
+
+More info about 𝐅 the target:
+
+
+
+3x3 matrix with 7 degrees of freedom, det(F)=0. Therefore F is singular (rank 2). possible question what happens if the predicted matrix does not follow these rules? It might work, in the sense that it might produce a reasonable result, but is not mathematically acceptable. I guess the host does not care about this. An approximation of F can later be optimized :)
+
+This matrix is defined up-to-scale
+
+We know that for a 3D point (real world) X, the 2D correspondence in each view/image (in pixel coordinates/homogeneous coordinates) x1 and x2 correspond to the same 3D point X only if: x1.T * F * x2 = 0.
+
+
+There are also 2 concepts related to this problem that are pretty relevant:
+
+
+
+x (2d point) is an epipole e if F*e = 0.
+
+Similar we can find epipolar lines l=F.T * x1
+
+
+Why good 𝐅 is worth 10k $ ?
+
+Only with this simple 3x3 matrix, you have all the necessary information about the epipolar geometry of 2 views and the  camera parameters.  F gives constraints on how the scene changes under different view points! It is really powerful for 3D reconstruction and other cool applications.
+
+
+
+
+
+
+
+Summary
+
+We have 𝐊, 𝐑 and 𝐓 , using them we can map points between 2D and 3D using the matrix P.
+We also have 2 views and this is a calibrated scenerario, therefore the main challenge is to find keypoints ! It is important to find as many correspondences as possible to choose, most probably due to occlusions many matches will get lost.
+
+How to solve this problem?
+
+Taking as baseline imc2022-baseline-submission-kornia we can see:
+
+F, inlier_mask = cv2.findFundamentalMat(cur_kp1[match_idxs[:, 0]], cur_kp2[match_idxs[:, 1]], cv2.USAC_MAGSAC, ransacReprojThreshold=0.5, confidence=0.9, maxIters=20000)
+
+
+As I mentioned in this post, we can estimate 𝐅  from pairs of matching points from each view. I could not find much info about cv2.findFundamentalMat but probably runs the "7-point algorithm". It takes as input N 2D-keypoints x1 from the image1 (cur_kp1[match_idxs[:, 0]]) and N 2D-keypoints x2 from the image2 (cur_kp2[match_idxs[:, 1]]).
+
+These points are matches (that's why he uses match_idxs ), meaning that they correspond to the same 3D point X in the real world, therefore we know that: x1.T * F * x2 = 0. Finding 𝐅 is just running a system of equations.
+
+The matches are found from the 2k 128-D descriptors of each image:
+
+dists, idxs  = matcher(descriptors_1[0], descriptors_2[0])
+
+
+Finally (or initially, depending how you read this), how do we obtain the descriptors? The author proposes here a simple network that implements KeyNet detector + AffNet + HardNet descriptor.
+
+lafs1, resps1, descriptors_1 = keynet_affnet_hardnet8(timg1)
+
+
+These descriptors are essential to find good matches and therefore estimate the fundamental matrix  𝐅.  At the Google Landmark Retrieval 2021 we can see how to obtain global descriptors from landmark images, however, it is not the same as this task.
+
+
+
+I will try to add images, for some reason kaggle does not allow me. Also if you notice some definition/notation mistake please let me know and I will keep the post updated.
+
+Thank you :)
+
+Comments:
+├─ Eduard Trulls (2022-04-05 12:51:53.420000) [+10]
+│  A couple points:
+│  
+│  cv2.findFundamentalMat does two things. First, it uses RANSAC (you have a choice of different algorithms, check out this post for details) to remove outliers. This is an iterative...
+  ├─ Nanashi (2022-04-05 13:20:49.547000) [+3]
+  │  thank you for the feedback Dr. Trulls @eduardtrulls I did check the descriptor size from the Kornia baseline torch.Size([1, 2048, 128]) I misunderstood the structure, so it is not 128 descriptors o...
+  ├─ Eduard Trulls (2022-04-05 13:50:34.613000) [+6]
+  │  Yes, that's correct, those are 2k features size 128. Regressing F directly is quite difficult, most works on this problem focus on learning better features or inlier filters.
+  │  
+  │  We don't have follow-...
+  ├─ old-ufo (2022-04-05 13:52:54.363000) [+5]
+  │  As I posted somewhere in other topic, here is IMC2020 recap:
+  │  
+  │  https://ducha-aiki.github.io/wide-baseline-stereo-blog/2021/05/14/IMC2020-competition-recap.html
+  │  
+  │  You also may find relevant other post...
+  ├─ Nanashi (2022-04-05 18:11:01.710000) [+0]
+  │  @oldufo could you share what is the meaning of the different matching methods in Kornia? I could not find their meaning int the documentation nor the paper. I mean
+  │  match_mode: type of matching, can...
+  ├─ old-ufo (2022-04-06 07:40:20.723000) [+3]
+  │  Here is a blogpost about all this methods:
+  │  https://ducha-aiki.medium.com/how-to-match-to-learn-or-not-to-learn-part-2-1ab52ede2022
+  │  
+  │  But note, that post is from 2019, so its conclusion that learning...
+  ├─ feedforward (2022-04-11 11:48:38.873000) [+0]
+  │  The most activate competition host!
+├─ Gunes Evitan (2022-04-05 18:58:20.460000) [+1]
+│  Calibration matrix K (camera intrinsics) is explained thoroughly in problem definition tab but rotation matrix R and translation vector T aren't. What does each of their each element represent?
+  ├─ Nanashi (2022-04-05 20:12:06.767000) [+2]
+  │  @gunesevitan good question. we have 𝐊, 𝐑 and 𝐓 with them we can build the camera matrix P as follows:
+  │  P = K [R | t]
+  │  
+  │  where 𝐊 is (3x3) and [R | t] corresponds to 𝐑 (3x3) and the last column is the t...
+  ├─ Gunes Evitan (2022-04-06 07:24:46.677000) [+0]
+  │  Thanks for the explanation. I saw other camera extrinsics examples as 4x4 matrices and it confused me, but now I understand the last column is the translation vector. In some cases, there is an ext...
+├─ Yingle Yu (2022-05-22 15:31:34.640000) [+0]
+│  Good work!!!!!!!!!
+├─ wafflebufflo (2022-04-19 17:27:40.437000) [+0]
+│  Is there an equation between P1, P2, and F, like there's one between x1, x2, and F?
+├─ feedforward (2022-04-11 11:47:59.980000) [+0]
+│  Amazing work
+├─ Anshu Chaudhary (2022-04-06 04:42:43.413000) [+0]
+│  very helpful
+├─ Francis Brempong (2022-04-05 16:45:05.600000) [+0]
+│  @jesucristo, Excellent image of the 3D printing matrices that encode the epipolar geometry. Thats a strong product portfolio for a competition preview. 👌
+├─ Jogno Vezu Junior (2022-04-05 15:49:33.070000) [+0]
+│  Nice introduction
+├─ Karan Sapkota (2022-04-05 15:29:22.530000) [+0]
+│  My first comment: Finally verified the account with my phone number.Gone through some issues and gain some new ideas to fix them.
+├─ ME2MLE (2022-04-05 12:35:17.233000) [+0]
+│  Very clear and useful introduction. Thanks so much @jesucristo
+├─ [deleted] (2022-04-16 02:44:51.403000) [+0]
+│  [deleted]
+├─ Anton.Tit (2024-05-01 12:50:56.367000) [+0]
+│  Thank you for your great job!
+├─ Kento Yamasaki (2022-04-13 01:13:31.923000) [+0]
+│  Thank you for great information!
+├─ Deepak Singh (2022-04-07 06:28:55.483000) [+0]
+│  Thank you for sharing this.

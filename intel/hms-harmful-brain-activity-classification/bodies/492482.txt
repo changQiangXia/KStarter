@@ -1,0 +1,296 @@
+# https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492482
+
+Topic #492482: 8th Place Gold - One Mega Model
+  Author: Chris Deotte
+  Posted: 2024-04-09 18:08:31.937000
+  Votes: 159  Comments: 62
+
+Thank You Kaggle and Hosts!
+
+Very fun competition! I love competitions with opportunities to be creative, explore, and make discoveries! In the past 3 months, I enthusiastically conducted 1000+ experiments!
+
+I also love competitions where a single model can achieve Gold medal (instead of a large ensemble).
+
+Thank you Kagglers for all the great discussion shares and notebook shares!
+
+Understand Test Data - What is Competition Task?
+
+The task in this competition is to predict annotator opinions. By reading the host's paper here, we learn that there are 119 overall annotators in train data and 20 expert annotators in test data. The paper shows the average Seizure prediction from 119 annotators is 18.8% whereas the 20 experts are less likely to classify as Seizure and their average is 1.5%. 
+
+Wow, this is a big difference therefore we need to train our models with expert opinions instead of overall opinions. We can locate the expert annotators in the train data with the filter expert annotators = train.loc[train.vote_count&gt;=10].
+
+Which Features Do Annotators See?
+
+From the paper we see that the annotators see 2D spectrograms and 2D plots of waveforms. So let's input 2D spectrograms and 2D plots of waveforms into our models. (Also inputting 1D raw waveform helped too).
+
+Train 3 Separate Models with Vote&gt;=10
+
+First we train 3 separate models using train data with vote_count &gt;= 10 (i.e. the expert annotator opinions). 
+
+
+
+One model receives 2D spectrograms (created from EEG) as input and uses tiny_vit_21m_512 to classify into 6 targets. 
+
+Second model receives 2D matplotlib plots of the montage waveforms converted into a 2D image and uses tiny_vit_21m_224 to classify into 6 targets. 
+
+And third model receives 1D raw time series waveform and uses EegNet-1D here to classify into 6 targets.
+
+
+
+
+
+
+Pseudo Label Vote&lt;10
+
+Using our 3 single models above, we pseudo label the train data with vote&lt;10. We set the new labels as new_label = 0.1 * old_label + 0.3 * model1 + 0.3 * model2 + 0.3 * model3.
+
+Build One Mega Model and Train with Vote&gt;=10 plus Pseudo Vote&lt;10
+
+We load our 3 pretrained models above and remove the 3 heads. We combine them into one model, concatenate the final embeddings and add 1 new head. Then we train with 2x copies of vote&gt;=10 data concatenated with 1x copy of vote&lt;10 with pseudo data. (Note the 2D spectrogram model above actually trains with both 10 sec spectrograms and 50 spectrograms in one image as depicted below):
+
+
+
+Single Model Performance
+
+==&gt; 🎉 CV = 0.246, Public LB = 0.243, Private LB = 0.290 🎉
+
+More Details
+
+To successfully accomplish the above and achieve single model Gold Medal Hooray!, there are many small details. Here are some:
+
+
+
+
+Preprocess all raw waveform with MNE library 
+
+     mne.filter import filter_data, notch_filter
+    sample = data.T[[0,4,5,6, 11,15,16,17, 0,1,2,3, 11,12,13,14]]\
+             - data.T[[4,5,6,7, 15,16,17,18, 1,2,3,7, 12,13,14,18]]
+    sample = notch_filter(sample.astype(), 200, 60, =32, =)
+    sample = filter_data(sample.astype(), 200, 0.5, 40, =32, =) 
+    sample = np.clip(sample,-500,500)
+    sample = np.nan_to_num(sample, =0)
+
+
+
+Use all 107k rows of train data (instead of only 1 row per eeg_id).
+
+
+Read all eeg parquets into CPU RAM and create spectrograms inside dataloader with torchaudio.transforms.MelSpectrogram and crop with eeg_label_offset_seconds.
+
+import torchaudio.transforms as T
+
+make_spec1 = T.MelSpectrogram
+
+make_spec2 = T.MelSpectrogram
+
+
+
+Each epoch train with 1 sample from each unique eeg_id. But randomly select 1 sample from all eeg_id samples with train = train.loc[train.eeg_id == EEG_ID].sample(1).
+
+
+Apply data augmentations to raw waveform (not spectrogram) inside dataloader before creating spectrogram.
+
+
+Use data augmentation "brain-right-left flip", "brain-temporal-parasagittal-flip", "waveform-crop-rescale", "waveform-invert", "frequency-dropout"
+
+
+Use tiny_vit_21m_512 for 2D spectrograms and tiny_vit_21m_224 for 2D wave plots.
+
+
+Use Nischay EegNet-1D here for 1D raw wave data model.
+
+
+Tune LR and learning schedule of each model individually using my discussion post here
+
+
+Cross validate with train vote&gt;=10 and observe perfect correlation between CV and LB.
+
+
+Inference Code Published
+
+My single model inference notebook is published here. This single model achieves Gold 14th place. My final submission is an ensemble of this model with some other models and achieves Gold 8th place.
+
+The code describes the PyTorch model details, the preprocess details, PyTorch data loader details, and data augmentation details. Enjoy!
+
+Comments:
+├─ CPMP (2024-04-09 18:15:33.080000) [+11]
+│  Using plots is an intriguing idea. I never saw it before.
+│  
+│  Glad you ended in top 10 despite sharing so much. Congrats!
+  ├─ Chris Deotte (2024-04-09 18:21:59.520000) [+5]
+  │  Thanks. I thought about using plots a month ago but didn't try it because it seemed silly. I tried it in the last week and it boost CV LB 0.01. I'm surprised that it works.
+    ├─ CPMP (2024-04-09 18:42:51.900000) [+1]
+    │  Solution 20th also uses plots! I tagged you there.
+├─ Fang Zitao (2024-04-12 06:28:13.390000) [+3]
+│  Hi Chris! 🎉Congratulations on your gold medal, and thank you for your selfless sharing.
+│  
+│  As a novice, I am now confused about choosing PyTorch or TensorFlow. Many baselines were produced during the...
+  ├─ Chris Deotte (2024-04-12 14:50:18.047000) [+4]
+  │  Hi. I still like to use both TensorFlow and PyTorch. My final ensemble (which improves my single model 14th place Gold to 8th place Gold) has models from both libraries. The main reason that I ofte...
+├─ DennisSakva (2024-04-09 19:59:24.500000) [+3]
+│  "Second model receives 2D matplotlib plots of the montage waveforms converted into a 2D image" 🤯 mind blown
+  ├─ nymfree (2024-04-10 07:54:38.703000) [+4]
+  │  Same here. Congratulations Chris. you should get another gold medal just for sharing alone. I have to admit that I only joined this competition because you were in it and I knew that I would learn ...
+    ├─ Chris Deotte (2024-04-14 08:42:51.957000) [+0]
+    │  Thank you Dennis and Nymfree!
+├─ Chris Deotte (2024-04-10 23:27:25.713000) [+4]
+│  UPDATE I published my single model inference notebook here. It achieves 🎉 CV = 0.246, Public LB = 0.243, Private LB = 0.290 🎉 It describes the PyTorch model details, the preprocess details, PyTorch...
+├─ Idith Haber (2024-04-09 18:39:12.913000) [+4]
+│  Hi Chris, Congratulations!  I do have to say that my brian has exploded :  from this "The task in this competition is to predict annotator opinions. By reading the host's paper here, we learn that ...
+  ├─ Chris Deotte (2024-04-09 18:42:05.470000) [+6]
+  │  Personally, this is my biggest complaint about Kaggle. They never tell us what the real task is. In other words, the real task is about predicting the test data but they never tell us what the test...
+    ├─ CPMP (2024-04-09 20:16:43.360000) [+6]
+    │  Let's look from the host point of view. What they want is to evaluate ML pipeline quality. Kaggle makes that evaluation through the use of a test dataset. Host designed the test dataset that will p...
+    ├─ Idith Haber (2024-04-09 21:00:00.613000) [+2]
+    │  In the Coursera couses I took, Andrew Ng emphasized the the test and validation/dev set have to come from the same distribution.  This makes sense to me from a theoretical perspective as well.  So ...
+  ├─ gezi (2024-04-09 22:42:39.847000) [+2]
+  │  Agree, actually though I splitted data by nvotes durting the game, but the same as CPMP I tought the novtes &lt; 10 dataset just means data distribtuion diff not by mean of lower quality…
+├─ Superman (2024-05-06 10:29:54.577000) [+1]
+│  Thank you for your sharings throughout the competition.
+├─ Datevik (2024-04-29 13:06:57.963000) [+1]
+│  @cdeotte Hi, thanks a lot for this post, I highly appreciate the work you have done here.
+│  I have the following question.
+│  As I understand from this post tiny_vit_21m_224
+│  uses that 10seconds data as ...
+  ├─ Datevik (2024-04-29 13:13:26.023000) [+1]
+    ├─ Chris Deotte (2024-04-29 15:22:57.157000) [+0]
+    │  We download the pretrained tiny_vit_21m_224 model from Timm. Then we finetune it by itself in stage 1. Then we use it to make pseudo label. Then we finetune it again as part of the Mega model in st...
+    ├─ Datevik (2024-04-29 15:28:06.593000) [+1]
+    │  ok, got it, I want to create an additional model, I want to fine tune this model based on tiny_vit_21m_224, and the difference is that this model is gonna be trained on different slice of eeg, not ...
+├─ franticXu (2024-04-18 06:36:22.543000) [+1]
+│  I ran into some issues where data enhancement became a bottleneck for the training network. I used some data enhancement methods to increase network generalization, which resulted in my cpu running...
+├─ nynyny67 (2024-04-16 10:23:17.137000) [+1]
+│  As described comment here, the eeg net 1D model seems to have a GRU layer which treats the batch dimension as sequence dimension because the layer is instantiated with the default setting batch_fir...
+  ├─ Chris Deotte (2024-04-16 22:16:33.503000) [+1]
+  │  Interesting. I was not aware of this. I will need to think about this and perform some tests to fully understand this. Thanks for sharing.
+├─ Chenghao Peng1013 (2024-04-16 09:31:33.417000) [+1]
+│  thank you for sharing this, very helpful
+├─ SeongwookLee (2024-04-15 05:44:30.063000) [+1]
+│  Thank you for your sharings.
+│  I have a question about "Then we train with 2x copies of vote&gt;=10 data concatenated with 1x copy of vote&lt;10 with pseudo data.".
+│  what is the meaning of copies ?? 
+│  ...
+  ├─ Chris Deotte (2024-04-15 06:14:36.583000) [+1]
+  │  We give vote&gt;=10 weight=2 and vote&lt;10 weight=1 like this. (And for vote&gt;=10 we use original labels and vote&lt;10 we use pseudo labels):
+  │  
+  │  train = pd()
+  │  train = train(axis=)
+  │  df1 = train
+  │  df2 ...
+├─ Ki Kwang Min (2024-04-14 09:02:05.577000) [+1]
+│  thank you for sharing this, very helpful
+├─ Aditya Srivastava (2024-04-12 10:44:36.703000) [+1]
+│  Very helpful
+├─ Anmol gupta (2024-04-11 04:03:59.177000) [+1]
+│  the graphs is looking little dangerous and attracting me to know more!!
+│  congratulations for the gold @cdeotte !!
+  ├─ Chris Deotte (2024-04-12 01:29:25.420000) [+1]
+  │  haha thank you.
+├─ Hoonsuk Bae (2024-04-10 23:55:37.827000) [+1]
+│  Very helpful!!
+├─ Aaditya Porwal (2024-04-10 19:09:06.373000) [+1]
+│  Thanks for sharing this solution it will be very helpful to us.
+├─ Atefeh Mirnaseri (2024-04-10 18:25:07.657000) [+1]
+│  Great and helpful work👌🏻 congrats☘️
+├─ Yugandhar Dasari (2024-04-10 07:46:52.740000) [+1]
+│  Great work on HMS - Harmful Brain Activity Classification! Your approach was clear and effective. Have you considered [specific suggestion] for even better results?
+├─ Mikhail Kotyushev (2024-04-10 06:04:12.897000) [+1]
+│  Hi Chris! Congrats with the gold, and thank you for your early stages posts and especially 50s spectrogramms, those were very handy! 
+│  
+│  I also used 1D -&gt; 2D plot with the same motivation to show ...
+  ├─ Chris Deotte (2024-04-10 06:27:37.483000) [+5]
+  │  Pseudo labeling gave large boosts like +0.03. Here is how i performed clean (leakfree) CV. First train 5 KFold models on vote&gt;=10. Then we pseudo label each fold separately. So we take fold 1 mo...
+  ├─ Chris Deotte (2024-04-10 06:34:11.353000) [+8]
+  │  Also note that pseudo labels allows us to perform knowledge distillation which gives even more boost than simple pseudo labels.
+  │  
+  │  With knowledge distillation, we use pseudo labels from one model (li...
+    ├─ nynyny67 (2024-04-14 23:26:22.273000) [+2]
+    │  Hi @cdeotte , thank you for your detailed explanation about pseudo labeling!
+    │  I have a question about this part. Why is it necessary to pseudo label each fold separately?
+    │  When you train 5 KFold mode...
+    ├─ Chris Deotte (2024-04-15 02:22:56.820000) [+5]
+    │  @nynyny67 For stage 1, let's imagine that we have Folds A, B, C, D, E. When we train fold 1 model, we train with Folds B, C, D, E and validation with Fold A. Now let's pseudo label ANY DATA with th...
+    ├─ nynyny67 (2024-04-15 12:27:56.873000) [+1]
+    │  @cdeotte
+    │  Thank you so much for answering my question!
+    │  I understood why it's necessary to keep K separate pseudo label!
+    │  Once we use a pseudo label from a model trained with some ground truth informa...
+├─ Yijie Xu (2024-04-09 22:36:51.187000) [+1]
+│  I believe ViT here refers to visual transformers? I had started training one from scratch, should have known better to rely on pre-trained solutions, very nice!
+  ├─ Chris Deotte (2024-04-09 22:44:59.817000) [+1]
+  │  Yes VIT is Vision Transformer. We can print out a full list of the 1000 pretrained models available in timm library with:
+  │  
+  │  import timm
+  │  m = timm()
+  │       ,k  (m):
+  │      (,k)
+  │  
+  │  
+  │  Then we can try lots of th...
+├─ Adnan Alaref (2024-04-09 20:08:18.267000) [+1]
+│  Congrats @cdeotte on achieve 8th Place.
+  ├─ Chris Deotte (2024-04-10 15:40:35.260000) [+1]
+  │  Thank you Adnan
+├─ Bartu Hacılar (2024-04-15 02:38:09.147000) [+2]
+│  Thank you for your sharings throughout the competition.
+│  
+│  Did you use larger models instead of tiny-vit and get worse results, or is there a specific reason for using smaller models?
+  ├─ Chris Deotte (2024-04-15 02:43:18.823000) [+3]
+  │  Yes. I tried many sized models and always got the best performance with tiny vision transformers. Furthermore, tiny-vit is special (among tiny models). It is pretrained with knowledge transfer from...
+├─ warrenkuo (2024-04-10 16:28:24.923000) [+2]
+│  Thank you for sharing your process selflessly from beginning to end.
+│  You are a true benevolent person who is admired by kagglers.
+│  THX ! !
+  ├─ Chris Deotte (2024-04-12 22:16:30.300000) [+2]
+  │  Thank you Warrenkuo!
+├─ C R Suthikshn Kumar (2024-04-10 04:19:05.450000) [+2]
+│  Congratulations on securing 8th place in this competition. Thanks for sharing your solution details.
+  ├─ Chris Deotte (2024-04-10 05:19:58.700000) [+1]
+  │  Thank you.
+├─ gezi (2024-04-09 22:45:03.073000) [+2]
+│  Great work, your sharing early in the game make this game much more interesting and helped so much people to join.
+│   Could you help share your cv results of your first step 3 models?
+  ├─ Chris Deotte (2024-04-09 23:14:59.050000) [+3]
+  │  Thanks. I enjoyed sharing and engaging in discussions with the community. It did make this competition more challenging.
+  │  
+  │  
+  │  
+  │  
+  │  Model
+  │  CV
+  │  Public LB
+  │  Private LB
+  │  
+  │  
+  │  
+  │  
+  │  2D Eeg Plot Image
+  │  0.280
+  │  0.256
+  │  0.317
+  │  
+  │  
+  │  ...
+├─ Andrij (2024-04-09 20:51:57.857000) [+2]
+│  Great solution Chris! I also tried to use similar graphs implemented through matplotlib at the very beginning, but gave up on this idea because I couldn't get good results, and all the articles I s...
+├─ CPMP (2024-04-09 20:11:10.023000) [+2]
+│  What post processing did you use? You aid you used some in a past yesterday.
+  ├─ Chris Deotte (2024-04-09 22:40:24.320000) [+5]
+  │  My final solution is an ensemble of multiple diverse models (and increases my private rank from 15th to 8th). The model shown in this discussion post by itself achieves gold medal and does not requ...
+    ├─ CPMP (2024-04-10 07:00:34.250000) [+1]
+    │  ok, I did not have the distribution shift issue indeed.
+    ├─ Kazuma143 (2024-04-15 18:14:55.937000) [+1]
+    │  Very Nice!!
+├─ Vaishno Kumar Tiwari (2024-05-19 16:24:54.180000) [+0]
+│  Hi Chris … Congratulations on your goldmedal!
+├─ [deleted] (2024-04-29 13:12:27.030000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-16 19:59:23.567000) [+1]
+│  [deleted]
+├─ [deleted] (2024-04-15 10:36:46.610000) [+1]
+│  [deleted]
+├─ [deleted] (2024-04-11 12:19:20.697000) [+1]
+│  [deleted]
+├─ [deleted] (2024-04-23 04:40:32.933000) [+0]
+│  [deleted]

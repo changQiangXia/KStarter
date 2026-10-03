@@ -1,0 +1,82 @@
+# hms-harmful-brain-activity-classification 讨论区（按票数排序，共 80 条）
+
+- [Understanding Competition Data and EfficientNetB2 Starter - LB 0.43 🎉](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/468010) — 603 票 / 165 评论 / 2024-01-15 
+- [Magic Formula to Convert EEG to Spectrograms!](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/469760) — 233 票 / 37 评论 / 2024-01-21 
+- [How To Tune Learning Schedule](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/488083) — 181 票 / 39 评论 / 2024-04-01 
+- [1D ResNet Based Architecture Baseline - Achieve 0.4x LB with Raw Signals in 2 minutes](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471666) — 177 票 / 26 评论 / 2024-01-29 
+- [Grad Cam - What is important in Spectrograms?](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/472976) — 174 票 / 37 评论 / 2024-02-03 
+- [How To Create Spectrogram From Eeg? SOLVED? Boost CV and LB!](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467877) — 169 票 / 50 评论 / 2024-01-14 
+- [8th Place Gold - One Mega Model](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492482) — 159 票 / 62 评论 / 2024-04-11 **write-up?**
+- [UPDATED - WaveNet Starter Notebook - LB 0.52 - Raw EEG Features Only!](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/468684) — 142 票 / 47 评论 / 2024-01-17 
+- [2nd place solution ](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492254) — 133 票 / 40 评论 / 2024-06-11 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492471) — 133 票 / 44 评论 / 2024-04-30 **write-up?**
+- [UPDATED - CatBoost Starter Notebook and Kaggle Dataset - LB 0.60](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467576) — 132 票 / 33 评论 / 2024-01-13 
+- [Understanding terminologies with examples](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467000) — 129 票 / 9 评论 / 2024-01-10 
+- [EffNetB0 model trained twice, once for each of two training populations - [LB 0.39]](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/477135) — 120 票 / 17 评论 / 2024-02-14 
+- [Hard samples are more important - [LB 0.37]](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/477461) — 114 票 / 33 评论 / 2024-02-16 
+- [1st place solution, team Sony](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492560) — 114 票 / 29 评论 / 2024-04-23 **write-up?**
+- [EDA Train.csv](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467021) — 100 票 / 27 评论 / 2024-01-10 
+- [Chris Deotte Appreciation and gratitude Post](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/468277) — 99 票 / 13 评论 / 2024-01-16 
+- [4th place solution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492240) — 99 票 / 18 评论 / 2024-05-09 **write-up?**
+- [Getting into MultiModal Approach Raw Signals + Spectrograms CV: 0.607 LB: 0.41 ](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/476000) — 87 票 / 9 评论 / 2024-02-10 
+- [Chris' EfficientNetB0 PyTorch Version](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/472092) — 85 票 / 27 评论 / 2024-01-30 
+- [LB probing results in HMS-HBAC](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471890) — 85 票 / 9 评论 / 2024-01-30 
+- [Large Pretrained Models for EEGs?](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/483621) — 76 票 / 19 评论 / 2024-03-13 
+- [There are ~2640 unique EEG ids in the hidden test data!](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471287) — 74 票 / 14 评论 / 2024-01-27 
+- [Time and Frequency masking augmentations in Albumentations](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/477825) — 67 票 / 10 评论 / 2024-02-18 
+- [[CV 0.68 | LB 0.46] with Only Raw EEG Signals in PyTorch](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/478195) — 66 票 / 26 评论 / 2024-02-19 
+- [Proper Augmentations is a Key!](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/479776) — 63 票 / 14 评论 / 2024-02-25 
+- [Resources for getting started with Brain Data - EEG](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/466768) — 63 票 / 16 评论 / 2024-01-09 
+- [train.csv is empty](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/466705) — 63 票 / 11 评论 / 2024-01-09 
+- [33th solution : Crazy 10 days sprint with 2D pipeline](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492211) — 62 票 / 23 评论 / 2024-04-09 **write-up?**
+- [[0.34] LB Gatekeeping](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/478602) — 61 票 / 19 评论 / 2024-02-21 
+- [15th Place Solution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492193) — 60 票 / 11 评论 / 2024-04-09 **write-up?**
+- [CV vs LB Scores](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467915) — 60 票 / 57 评论 / 2024-01-14 
+- [10th solution, good input image can generate a good single model (Opensource single model with LB233 PB287)](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492207) — 56 票 / 24 评论 / 2024-04-12 **write-up?**
+- [Sorry Rapids, not this time](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/487110) — 52 票 / 44 评论 / 2024-03-27 
+- [7th Place solution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492281) — 51 票 / 6 评论 / 2024-04-09 **write-up?**
+- [Background of this competition](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471439) — 50 票 / 8 评论 / 2024-01-28 
+- [Single Model Best LB Discussion](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/482775) — 49 票 / 65 评论 / 2024-03-09 
+- [Why shake-up didn't happen](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492262) — 49 票 / 15 评论 / 2024-04-09 
+- [Chris' WaveNet PyTorch Version](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/477610) — 47 票 / 13 评论 / 2024-02-17 
+- [Preprocessing in the Labeling Done by Experts](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/479207) — 47 票 / 21 评论 / 2024-02-23 
+- [11th Place Solution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492301) — 47 票 / 2 评论 / 2024-04-09 **write-up?**
+- [Kullback Leibler Divergence Applications, Limitations and KL Divergence on Kaggle.](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/466731) — 45 票 / 0 评论 / 2024-01-09 
+- [How are your experience with Augmentation ?](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/469953) — 44 票 / 40 评论 / 2024-01-22 
+- [Previous Competitions Top Solutions](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467979) — 43 票 / 3 评论 / 2024-01-14 **write-up?**
+- [Team BNR: 12th Place Solution, Exploring Various Custom Architectures ](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492603) — 43 票 / 1 评论 / 2024-04-10 **write-up?**
+- [Dataset: The Temple University Hospital Seizure Detection Corpus](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/479244) — 43 票 / 4 评论 / 2024-02-23 
+- [9th Place Solution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492429) — 43 票 / 8 评论 / 2024-04-09 **write-up?**
+- [An ebook for learning spectrograms and filters](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/483839) — 42 票 / 6 评论 / 2024-03-14 
+- [16th place write-up: EEG montages -> 2D image + specs](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492251) — 42 票 / 5 评论 / 2024-04-09 **write-up?**
+- [Same-Class-CutMix: The Only Data Aug that worked for me](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/479446) — 42 票 / 10 评论 / 2024-02-24 
+- [Details in 1D model in 4th place solution (bilzard's part)](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492388) — 40 票 / 12 评论 / 2024-04-09 **write-up?**
+- [5th place solution, team KTMUD](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492652) — 40 票 / 12 评论 / 2024-04-11 **write-up?**
+- [MixUp augmentation in Albumentations](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/481764) — 40 票 / 21 评论 / 2024-03-05 
+- [6th Place Solution for the HMS - Harmful Brain Activity Classification Competition](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492619) — 40 票 / 3 评论 / 2024-04-10 **write-up?**
+- [*UPDATE* [CV 0.715, LB 0.5] ResNet34-D Baseline](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467863) — 39 票 / 3 评论 / 2024-01-14 
+- [Papers & Model Architectures](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/468771) — 39 票 / 2 评论 / 2024-01-17 
+- [What I learned in HMS](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/491462) — 38 票 / 18 评论 / 2024-04-06 
+- [Data Drift Caution](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/483299) — 38 票 / 10 评论 / 2024-03-11 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/458864) — 37 票 / 39 评论 / 2023-12-02 
+- [💥About the characteristics of EEG💥](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/473406) — 36 票 / 0 评论 / 2024-02-04 
+- [EEG signal denosing using Wavelet transform](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467839) — 35 票 / 0 评论 / 2024-01-14 
+- [Raw EEG CV vs LB](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/473821) — 33 票 / 30 评论 / 2024-02-06 
+- [Before it colapse](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/483949) — 32 票 / 37 评论 / 2024-03-14 
+- [Faulty spectrogram and EEG data?](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467909) — 30 票 / 14 评论 / 2024-01-14 
+- [The Importance of Sharing: A Bug-to-LB 0.31 ](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/491070) — 30 票 / 13 评论 / 2024-04-04 
+- [Nilearn, MNE-Python - toolkits for EEG signals data processing ](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/466746) — 30 票 / 1 评论 / 2024-01-09 
+- [Features+Head TF Starter - LB 0.34 (ENSEMBLE)](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/469666) — 29 票 / 4 评论 / 2024-01-21 
+- [Who has the best single CV and LB model for 5 folds?](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/475138) — 29 票 / 48 评论 / 2024-02-07 
+- [Need for New Insights](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/480674) — 28 票 / 13 评论 / 2024-02-29 
+- [Patients - might have some valuable features to extract](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/471783) — 28 票 / 13 评论 / 2024-01-29 
+- [38th solution: 1d models and 1d+2d models](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492234) — 28 票 / 3 评论 / 2024-04-10 **write-up?**
+- [Resources for getting started with Heart Data - ECG/EKG](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467129) — 27 票 / 3 评论 / 2024-01-11 
+- [KL Divergence Observations](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/472395) — 27 票 / 1 评论 / 2024-02-01 
+- [EEG Column Name Explanation](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/466743) — 27 票 / 0 评论 / 2024-01-09 
+- [Correct way to merge targets](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467127) — 26 票 / 13 评论 / 2024-01-11 
+- [EEG-Based Machine Learning Theory](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/467552) — 26 票 / 0 评论 / 2024-01-13 
+- [Channel Attention Hybrid Transformer](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/481700) — 26 票 / 20 评论 / 2024-03-04 
+- [Converting non-competition EEG signals to 10-minute spectrograms](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/479001) — 26 票 / 5 评论 / 2024-02-22 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/480281) — 18 票 / 4 评论 / 2024-02-28 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/hms-harmful-brain-activity-classification/discussion/492532) — 7 票 / 6 评论 / 2024-04-10 

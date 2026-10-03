@@ -1,0 +1,122 @@
+# jane-street-real-time-market-data-forecasting 讨论区（按票数排序，共 120 条）
+
+- [[Private LB 8th] solution](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556542) — 295 票 / 66 评论 / 2025-01-14 **write-up?**
+- [Useful references and starter materials ](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540437) — 172 票 / 44 评论 / 2024-10-14 
+- [Reverse Engineering the Responders](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555562) — 165 票 / 42 评论 / 2025-01-08 
+- [Few lessons learned](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/547060) — 106 票 / 90 评论 / 2024-11-19 
+- [Some domain knowledge](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/548636) — 77 票 / 18 评论 / 2024-11-28 
+- [Save time and resources with train data imports](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540508) — 62 票 / 29 评论 / 2024-10-15 
+- [Tricks to make CatBoost online training great again~](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556544) — 60 票 / 32 评论 / 2025-01-14 
+- [Insights from EDA (Day 0 and Feature Importance)](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542985) — 59 票 / 25 评论 / 2024-10-28 
+- [[Public LB 17th] Solution](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556541) — 57 票 / 18 评论 / 2025-01-14 **write-up?**
+- [Public Test Set Extension and Leaderboard Update](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/550790) — 54 票 / 86 评论 / 2024-12-09 
+- [🏆Top Solutions of Previous Financial Quantitative Competitions on Kaggle🏆](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541003) — 48 票 / 0 评论 / 2024-10-17 **write-up?**
+- [Welcome Kagglers!](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540436) — 46 票 / 43 评论 / 2024-10-14 
+- [How to 1.8 times [updated → 2.0 times] speed up of inference in LGBM !](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542697) — 45 票 / 17 评论 / 2024-10-26 
+- [Join Jane Street - Recruiting & Hiring Questions](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/546397) — 41 票 / 72 评论 / 2024-11-15 
+- [[Public LB 12th] Competition Wrap-up: Great Journey and Thank you all! ](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556548) — 41 票 / 7 评论 / 2025-01-14 
+- [1-month gone, what's your key takeaway?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/546165) — 36 票 / 42 评论 / 2024-11-14 
+- [[Public LB 13th] Our Journey to 0.0096](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556701) — 36 票 / 14 评论 / 2025-01-14 
+- [[Public LB 26th] TabM, AutoencoderMLP with online training & GBDT offline models](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556610) — 33 票 / 21 评论 / 2025-01-14 
+- [How good can a simple solution get?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/550849) — 32 票 / 47 评论 / 2024-12-09 **write-up?**
+- [Lags - creation, explanation, ideas](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/543567) — 32 票 / 15 评论 / 2024-10-31 
+- [[updated 20241025] Simulator for the time series API!](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541619) — 32 票 / 8 评论 / 2024-10-20 
+- [Online learning](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/549746) — 32 票 / 43 评论 / 2024-12-03 
+- [Experimental Design](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/551161) — 31 票 / 10 评论 / 2024-12-11 
+- [Is this cheating?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555273) — 30 票 / 46 评论 / 2025-01-06 
+- [A lot of cheating in the game](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/586090) — 30 票 / 8 评论 / 2025-06-25 
+- [How to keep historical cache in the submission for time-series modelling](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/543081) — 30 票 / 9 评论 / 2024-10-28 
+- [Features Clustering and Tag Analysis results](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542209) — 29 票 / 7 评论 / 2024-10-23 
+- [Some final remarks](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556686) — 28 票 / 13 评论 / 2025-01-14 
+- [CV and leaderboard thread](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540845) — 27 票 / 35 评论 / 2024-10-16 
+- [Use Polars-SQL to improve your workflows](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542997) — 27 票 / 13 评论 / 2024-10-28 
+- [Use scikit-learn for the custom metric with ease](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541228) — 25 票 / 4 评论 / 2024-10-18 
+- [Easy to understand New time series API](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541171) — 24 票 / 4 评论 / 2024-10-18 
+- [Normalization](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/548136) — 24 票 / 36 评论 / 2024-11-25 
+- [Final Leaderboard Update](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/589672) — 22 票 / 18 评论 / 2025-07-14 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540471) — 22 票 / 9 评论 / 2024-10-14 
+- [968 Time IDs = 16 Hours?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/549223) — 22 票 / 16 评论 / 2024-12-01 
+- [Big difference between local submission time estimate and actual API submission](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542022) — 21 票 / 23 评论 / 2024-10-22 
+- [About a lag sample(lags.parquet)](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541106) — 21 票 / 15 评论 / 2024-10-17 
+- [Are metrics like MAE or MSE superior to R-squared for clipped targets ?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540554) — 21 票 / 12 评论 / 2024-10-15 
+- [Link for checking score of individual submissions](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/561325) — 20 票 / 1 评论 / 2025-02-05 
+- [April07 update analysis](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/572179) — 19 票 / 8 评论 / 2025-04-08 
+- [Submission runtime issues - we're working on it](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555505) — 19 票 / 9 评论 / 2025-01-07 
+- [When is the first LB update?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/560152) — 19 票 / 6 评论 / 2025-01-29 
+- [Be careful and test your code](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540608) — 18 票 / 3 评论 / 2024-10-15 
+- [Why lags may not be helpful](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/549053) — 18 票 / 16 评论 / 2024-11-30 
+- [Leaderboard Updates](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/560509) — 17 票 / 3 评论 / 2025-01-31 
+- [Questions Regarding the Test data (both public and private(Forecasting Phase) ).](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540510) — 17 票 / 14 评论 / 2024-10-15 
+- [Can someone help me with the meaning of tags here?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541065) — 17 票 / 3 评论 / 2024-10-17 
+- [Mar9 update analysis - almost complete churn across bronze zone!](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/567316) — 17 票 / 7 评论 / 2025-03-09 
+- [May12 update analysis ](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/578717) — 17 票 / 4 评论 / 2025-05-12 
+- [Basic Insights on Missing Values](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541783) — 16 票 / 2 评论 / 2024-10-21 
+- [Submission time variability: What the hell with the scoring servers?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555401) — 15 票 / 10 评论 / 2025-01-07 
+- [Visualizing the churn across updates ](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/562435) — 15 票 / 0 评论 / 2025-02-11 
+- [The way to use Lag from API](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/545073) — 15 票 / 9 评论 / 2024-11-08 
+- [Symbol Cross-Attention Animations](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556750) — 15 票 / 11 评论 / 2025-01-14 
+- [[Private 58th] TabM, AutoencoderMLP with online training & GBDT offline models](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/603767) — 14 票 / 0 评论 / 2025-09-04 
+- [Update to the Synthetic Test Data](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/554604) — 14 票 / 19 评论 / 2025-01-02 
+- [ARIMA Online Learning](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/549550) — 14 票 / 7 评论 / 2024-12-02 
+- [June 16 update analysis](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/584920) — 14 票 / 0 评论 / 2025-06-16 
+- [Public 195th: Our Efforts Behind a Modest Score](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556558) — 14 票 / 18 评论 / 2025-01-14 
+- [Leaderboard Update - February 11](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/562409) — 14 票 / 11 评论 / 2025-02-11 
+- [LB Change Track & Shake Monitoring](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/562419) — 14 票 / 1 评论 / 2025-02-11 
+- [Get started here](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/539786) — 13 票 / 2 评论 / 2024-10-10 
+- [Leaderboard Updated](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/561302) — 13 票 / 12 评论 / 2025-02-05 
+- [Some Tips for Debugging Online Learning](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/550680) — 13 票 / 27 评论 / 2024-12-09 
+- [Lightgbm online training ideas](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556627) — 12 票 / 2 评论 / 2025-01-14 
+- [Reference to last Jane Street competition](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540421) — 12 票 / 4 评论 / 2024-10-14 
+- [Step 1 : Literature Review : Related Papers & Tutorial Articles](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540442) — 11 票 / 1 评论 / 2024-10-14 
+- [Do anyone have any insights / general tips about using neural networks?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/550453) — 11 票 / 11 评论 / 2024-12-07 
+- [Speculation on the Problem Setting](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/550920) — 11 票 / 5 评论 / 2024-12-10 
+- [Sequence Dataset](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/553598) — 11 票 / 19 评论 / 2024-12-27 
+- [An assumption about the test data](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/544277) — 11 票 / 5 评论 / 2024-11-04 
+- [[Private LB 162nd] solution](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/589829) — 11 票 / 2 评论 / 2025-07-15 **write-up?**
+- [Solution Sharing](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/590606) — 11 票 / 2 评论 / 2025-07-21 **write-up?**
+- [We cannot Late Sub until July?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556622) — 10 票 / 11 评论 / 2025-01-14 
+- [How many date_id's are expected to be in the test set after extension of public test set?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541314) — 10 票 / 4 评论 / 2024-10-18 
+- [Leaderboard Update - May 12](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/578654) — 10 票 / 16 评论 / 2025-05-12 
+- [Leaderboard Update - April 7](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/572070) — 10 票 / 24 评论 / 2025-04-07 
+- [The time limit: 10 minutes or 1 minutes?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/544893) — 10 票 / 12 评论 / 2024-11-07 
+- [Ways to improve R2](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/548978) — 10 票 / 13 评论 / 2024-11-30 
+- [Why Does Responder 6 Reset at Time_ID 369?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/549568) — 10 票 / 3 评论 / 2024-12-02 
+- [maybe useful information](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/544604) — 9 票 / 9 评论 / 2024-11-06 
+- [Numeration of date_id: question to the competition Host](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/543047) — 9 票 / 10 评论 / 2024-10-28 
+- [Best Solutions Of the  Previous Jane Street Real-Time :](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540599) — 9 票 / 1 评论 / 2024-10-15 **write-up?**
+- [2 lines to speed up your notebook](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/543570) — 9 票 / 4 评论 / 2024-10-31 
+- [Assumptions on time_id](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542184) — 9 票 / 2 评论 / 2024-10-23 
+- [Share some ideas of online learning](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/554934) — 9 票 / 3 评论 / 2025-01-04 
+- [Online Learning with LightGBM](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/547375) — 8 票 / 21 评论 / 2024-11-21 
+- [Any Luck Finding a CV Strategy That Aligns with the LB?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/543838) — 8 票 / 10 评论 / 2024-11-01 
+- [Much slower of online inference due to platform issue?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/554336) — 8 票 / 10 评论 / 2025-01-01 
+- [Previous Market Data forecasting competition and resources](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540570) — 8 票 / 1 评论 / 2024-10-15 
+- [What is the correct file path? (If you get an error, please check it)](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540552) — 8 票 / 0 评论 / 2024-10-15 
+- [Regarding CPU, GPU and TPU runtime hours](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540430) — 8 票 / 2 评论 / 2024-10-14 
+- [Leaderboard Update - March 9](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/567288) — 8 票 / 7 评论 / 2025-03-09 
+- [Dealing with clunky logs in boosted tree models with custom eval metrics ](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540472) — 8 票 / 0 评论 / 2024-10-14 
+- [Any success submitting with tensorflow : Need Help](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541396) — 8 票 / 18 评论 / 2024-10-19 
+- [Miracle of the Leaderboard: Quant Geniuses Everywhere, Cheaters Still Rewarded😶](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/589677) — 8 票 / 9 评论 / 2025-07-14 
+- [What is the key to a successful sequence model? ](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/556859) — 8 票 / 29 评论 / 2025-01-15 
+- [Thank you for your submissions!](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/565445) — 7 票 / 3 评论 / 2025-02-28 
+- [Question about competition data](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540449) — 7 票 / 3 评论 / 2024-10-14 
+- [Bad dates?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/545430) — 7 票 / 6 评论 / 2024-11-10 
+- [The lags feature in API is HARD to understand](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/544838) — 7 票 / 11 评论 / 2024-11-07 
+- [Correlations between symbols](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/544733) — 7 票 / 6 评论 / 2024-11-06 
+- [Discussion prompts for the week of 25.11 - 01.12](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/547644) — 7 票 / 33 评论 / 2024-11-22 
+- [Neural Networks](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/545696) — 7 票 / 24 评论 / 2024-11-11 
+- [Unexpected Private Leaderboard Behavior in Submission Selection](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/567421) — 7 票 / 2 评论 / 2025-03-10 
+- [Solved | OOM | out of memory | How many RAM usage do we need? 128G is not even enough](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/544145) — 7 票 / 11 评论 / 2024-11-03 
+- [Helpful submission debugging code](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555226) — 7 票 / 2 评论 / 2025-01-06 
+- [Regarding date_id on test and forecast data](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/541199) — 7 票 / 4 评论 / 2024-10-18 
+- [Using dask to handle this large dataset.](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540551) — 7 票 / 4 评论 / 2024-10-15 
+- [uv talk at Jane Street](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542349) — 7 票 / 4 评论 / 2024-10-24 
+- [Does the 1-Minute Constraint Reflect Real-World Requirements?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/542550) — 6 票 / 10 评论 / 2024-10-25 
+- [Issue with Private LB Evaluation – Submissions Not Properly Scored](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/565026) — 6 票 / 19 评论 / 2025-02-26 
+- [Data Understanding](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540556) — 6 票 / 2 评论 / 2024-10-15 
+- [Any hypothesis about what features 9, 10, and 11 are?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/552980) — 6 票 / 4 评论 / 2024-12-22 
+- [Is Tensorflow.keras inference speed very slow?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/553291) — 6 票 / 11 评论 / 2024-12-25 
+- [Online learning fail for batchnorm1d?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/555919) — 6 票 / 23 评论 / 2025-01-10 
+- [Submissions Marked “Error” After Latest Update](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/583646) — 6 票 / 4 评论 / 2025-06-08 
+- [Can we use the weight as a feature?](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/540890) — 6 票 / 3 评论 / 2024-10-16 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/jane-street-real-time-market-data-forecasting/discussion/593758) — 5 票 / 0 评论 / 2025-07-30 

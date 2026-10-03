@@ -1,0 +1,188 @@
+<h1>4th Place Solution — Hull Tactical Market Prediction</h1>
+<p>First of all, thanks to the organizers for designing such an interesting competition. I particularly enjoyed that success depended as much on portfolio construction and risk management as on prediction itself.</p>
+<p>This solution is somewhat unusual compared to a typical Kaggle workflow. There is <strong>no machine learning model</strong>, only walk-forward validation and almost no hyperparameter optimization. Instead, the final submission consists of a simple rule-based alpha combined with a fairly sophisticated portfolio construction framework.</p>
+<p>The alpha itself predates this competition, so I won't discuss its exact construction, but I hope the portfolio engineering ideas are useful to others.</p>
+<hr>
+<h1>High-level philosophy</h1>
+<p>Very early on I stopped thinking of the competition as a forecasting problem.</p>
+<p>Instead, I viewed it as solving</p>
+<p>$$
+\text{Portfolio} = \text{Alpha} + \text{Risk Management}.
+$$</p>
+<p>The evaluation metric strongly rewards maintaining market-like returns while penalizing excessive volatility. Under this scoring function, improving portfolio construction often contributes more than marginal improvements in predictive accuracy.</p>
+<p>This observation guided almost every design decision.</p>
+<p>Instead of asking</p>
+<blockquote>
+  <p>"Can I predict tomorrow's return better?"</p>
+</blockquote>
+<p>I found it more useful to ask</p>
+<blockquote>
+  <p>"Given the alpha I already have, what is the best possible portfolio I can build?"</p>
+</blockquote>
+<hr>
+<h1>Starting point</h1>
+<p>Unlike many participants, I did not search for alpha inside the competition data.</p>
+<p>The core signal had been researched before the competition as part of my personal quantitative research. It belongs to the family of short-horizon mean-reversion indicators, and had already been validated outside the Kaggle environment.</p>
+<p>Because of that, I deliberately avoided tuning the signal specifically for the competition.</p>
+<p>Only a handful of complete experiments were run during the entire competition.</p>
+<p>In my experience, once a signal already has a convincing economic rationale and survives multiple market environments, additional optimization is much more likely to fit noise than improve genuine performance.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11146709%2F176f21d189fc7b2ee5d6300c534488ef%2Foutput.png?generation=1783114520988826&amp;alt=media" alt="Mean Reverting indicator"></p>
+<hr>
+<h1>Portfolio construction</h1>
+<p>Most of my work actually went into transforming a relatively sparse alpha signal into a robust allocation process.</p>
+<p>This ended up being considerably more important than improving the alpha itself.</p>
+<h2>Inverse-volatility weighting</h2>
+<p>The primary alpha is naturally sparse. During long periods it may remain inactive, producing an unstable estimate of realized portfolio volatility.</p>
+<p>To stabilize the resulting allocation, I combined it with a few additional low-alpha signals whose objective was <strong>not</strong> to improve prediction but to provide a smoother exposure profile.</p>
+<p>Rather than fitting weights through regression or optimization, I used inverse-volatility weighting.</p>
+<p>For each signal (i),</p>
+<p>$$
+w_i = \frac{\sigma_i^{-1}}{\sum_j \sigma_j^{-1}},
+$$
+where</p>
+<p>$$
+\sigma_i
+$$
+is the rolling volatility of signal (i).</p>
+<p>This has several desirable properties:</p>
+<ul>
+<li>no optimization problem to solve;</li>
+<li>no covariance matrix estimation;</li>
+<li>automatic downweighting of unstable signals;</li>
+<li>adaptive allocations across different market regimes.</li>
+</ul>
+<p>While simple, this approach produced remarkably stable allocations.</p>
+<p>An interesting consequence is that the strongest alpha signal does <strong>not</strong> necessarily receive the largest portfolio weight. Since it is relatively sparse, its standalone volatility is low, and inverse-vol weighting naturally balances it against the more persistent auxiliary components.</p>
+<p>The additional signals should therefore be viewed primarily as <strong>portfolio stabilizers</strong> rather than independent alpha sources.</p>
+<hr>
+<h2>Volatility targeting</h2>
+<p>The second major component was a volatility targeting overlay.</p>
+<p>After combining the signals, the portfolio exposure is rescaled to target a desired level of realized volatility.</p>
+<p>Conceptually,</p>
+<p>$$
+L_t =
+\frac{\sigma_{\text{target}}}
+{\hat{\sigma}_{\text{portfolio},t}},
+$$</p>
+<p>where</p>
+<p>$$(L_t)$$ is the leverage multiplier,
+$$(\hat{\sigma}_{\text{portfolio},t})$$ is the estimated realized portfolio volatility.</p>
+<p>The final allocation becomes</p>
+<p>$$
+w_t^{\text{final}} = 
+\text{clip}\left(
+L_tw_t,
+0,
+2
+\right),
+$$</p>
+<p>where clipping enforces the competition's leverage constraints.</p>
+<p>The volatility estimate is intentionally computed over a relatively long window and only updated periodically, preventing the leverage from reacting excessively to short-lived market noise.</p>
+<p>I found that this overlay contributed more to the final leaderboard score than almost any modification to the alpha itself.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11146709%2F3fe35e903326c91b822ac4b0c9cdbb4b%2Fvol_scaling.png?generation=1783114228407698&amp;alt=media" alt="Scaling factor of the main alpha across time"></p>
+<hr>
+<h2>Why not optimize weights?</h2>
+<p>One natural question is why I did not solve something like</p>
+<p>$$
+\max_w
+\frac{\mu^\top w}
+{\sqrt{w^\top\Sigma w}}.
+$$</p>
+<p>There were two reasons.</p>
+<p>First, the number of signals is very small, making a fully optimized solution unnecessarily complex.</p>
+<p>Second, estimating covariance matrices from relatively short financial time series introduces estimation error that often dominates the theoretical gains from optimization.</p>
+<p>Inverse-volatility weighting is well known to be an excellent compromise between robustness and performance.</p>
+<p>In practice, I found it more reliable than more sophisticated allocation schemes.</p>
+<hr>
+<h1>Feature engineering</h1>
+<p>The competition provided a fairly rich feature set.</p>
+<p>Rather than manually inspecting every feature, I applied the same transformation pipeline to all candidates before evaluating them.</p>
+<p>Most engineered features were discarded.</p>
+<p>Only a very small number survived into the final portfolio, and even those were selected primarily because they improved the stability of the allocation process rather than because they generated large standalone returns.</p>
+<p>This is probably one of the biggest lessons I learned during the competition:</p>
+<blockquote>
+  <p>A feature does not need to predict returns to improve a trading strategy.</p>
+</blockquote>
+<p>Sometimes its greatest contribution is reducing estimation noise elsewhere in the pipeline.</p>
+<hr>
+<h1>Simplicity over optimization</h1>
+<p>One aspect I'm happiest with is how little tuning the final solution required.</p>
+<p>There was:</p>
+<ul>
+<li>no grid search;</li>
+<li>no Bayesian optimization;</li>
+<li>no cross-validation;</li>
+<li>no ensembling (retrospectively this would have been a good idea: Ensembling slight variations of the signal. But I didn't think of it at that time).</li>
+</ul>
+<p>The entire solution is essentially a deterministic pipeline with a small number of parameters inherited from prior research.</p>
+<p>This greatly reduced the risk of overfitting to the historical data.</p>
+<hr>
+<h1>Limitations</h1>
+<p>The strategy is built around a short-term mean-reverting alpha.</p>
+<p>Consequently, it is expected to underperform during persistent low-volatility trending markets while performing relatively better during volatile or range-bound environments.</p>
+<p>This is not a weakness specific to the competition—it is an inherent property of this class of strategies.</p>
+<p>You can see in equity curves below, that the strategy does not work very well in Bull Markets (Nothing usually beats the market in bull markets).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11146709%2F1de0bb29008ce3adda427fe9c3d9af78%2Fcomparison_pnl.png?generation=1783114617407984&amp;alt=media" alt="PnL comparison"></p>
+<hr>
+<h1>Useful plots</h1>
+<ul>
+<li><p>Drawdown Profile of Strategy vs the market
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11146709%2F08287958272df4a540e9395533b69e0e%2Fdrawdown.png?generation=1783114670643588&amp;alt=media" alt="Drawdown"></p></li>
+<li><p>Rolling Sharpe ratio and volatility vs competition limit
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11146709%2F7de3890705050e8d6f43fe32b4ea45a8%2Fsharpe.png?generation=1783114730159617&amp;alt=media" alt="Rolling Sharpe"></p></li>
+</ul>
+<hr>
+<h1>Performance Summary</h1>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Total Return</th>
+<th>Ann. Return</th>
+<th>Ann. Volatility</th>
+<th>Sharpe</th>
+<th>Max Drawdown</th>
+<th>Hit Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stage A — Vanilla signal (no volatility targeting)</td>
+<td>258.7%</td>
+<td>5.2%</td>
+<td>7.7%</td>
+<td>0.68</td>
+<td>-13.6%</td>
+<td>59.6%</td>
+</tr>
+<tr>
+<td><strong>Stage B — Competition signal + volatility targeting</strong></td>
+<td><strong>776.9%</strong></td>
+<td><strong>9.4%</strong></td>
+<td><strong>14.3%</strong></td>
+<td><strong>0.66</strong></td>
+<td><strong>-25.8%</strong></td>
+<td><strong>59.6%</strong></td>
+</tr>
+<tr>
+<td>Buy &amp; Hold Benchmark</td>
+<td>215.4%</td>
+<td>6.3%</td>
+<td>19.2%</td>
+<td>0.33</td>
+<td>-63.8%</td>
+<td>53.9%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>Takeaways</h1>
+<p>This competition reinforced several ideas that I already believed:</p>
+<ul>
+<li>Good portfolio construction can matter more than marginal improvements in forecasting.</li>
+<li>Simple, interpretable models are often harder to overfit.</li>
+<li>Existing domain knowledge is a powerful regularizer.</li>
+<li>Robust risk management can create more value than adding increasingly sophisticated predictive models.</li>
+</ul>
+<p>Overall, I think this competition rewarded disciplined quantitative engineering more than predictive complexity, which made it especially enjoyable.</p>
+<p>Thanks again to the organizers, and congratulations to everyone who participated. I'm looking forward to reading the other solution write-ups.</p>

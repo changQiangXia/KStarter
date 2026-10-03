@@ -1,0 +1,82 @@
+# image-matching-challenge-2023 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution: Sparse + Dense matching, confidence-based merge, SfM, and then iterative refinement](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417407) — 84 票 / 11 评论 / 2023-06-15 **write-up?**
+- [Learning Materials for Completely New to Structure from Motion](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401497) — 75 票 / 6 评论 / 2023-04-13 
+- [Medals sellers are always there](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416647) — 51 票 / 28 评论 / 2023-06-12 
+- [2nd Place Solution for the IMC 2023 – Win Over COLMAP Randomness?!](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416873) — 49 票 / 12 评论 / 2023-11-08 **write-up?**
+- [5th place solution: kNN shortlist and rotation correction](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416816) — 44 票 / 24 评论 / 2023-06-13 **write-up?**
+- [Recent promising CVPR2023 papers on image matching.](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/412806) — 42 票 / 4 评论 / 2023-05-25 
+- [Welcome to the 2023 Image Matching Challenge!](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401087) — 35 票 / 36 评论 / 2023-04-11 
+- [4th place solution](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416918) — 30 票 / 8 评论 / 2023-07-01 **write-up?**
+- [6th Place Solution -  [ --- ]AffNetHardNet8 + AdaLAM](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417045) — 29 票 / 5 评论 / 2023-06-22 **write-up?**
+- [3rd Place Solution - Significantly Reduced the Fluctuations caused by Randomness!](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417191) — 29 票 / 6 评论 / 2023-06-15 **write-up?**
+- [9th Solution](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416842) — 29 票 / 5 评论 / 2023-06-21 **write-up?**
+- [39th place solution - SuperGlue + SIFT](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416847) — 29 票 / 0 评论 / 2023-06-21 **write-up?**
+- [Visually explore the dataset!](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/402619) — 27 票 / 8 评论 / 2023-04-19 
+- [Validation vs LB scores](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/412958) — 27 票 / 57 评论 / 2023-05-26 
+- [Last year's image matching competition winning solutions](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401183) — 27 票 / 6 评论 / 2023-04-12 **write-up?**
+- [46th solution](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416777) — 22 票 / 4 评论 / 2023-06-13 **write-up?**
+- [Delayed leaderboard finalization](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417208) — 20 票 / 9 评论 / 2023-06-14 
+- [16th Place Solution](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417002) — 20 票 / 0 评论 / 2023-06-21 **write-up?**
+- [28th Solution - KeyNetAffNetHardNet + AdaLAM](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417001) — 17 票 / 0 评论 / 2023-06-13 **write-up?**
+- [Important! Please check the licenses to be prize-eligible](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401115) — 17 票 / 19 评论 / 2023-04-11 
+- [Tutorial from CVPR 2017](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/402078) — 16 票 / 0 评论 / 2023-04-16 
+- [COLMAP parameters documentation](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/410408) — 16 票 / 2 评论 / 2023-05-15 
+- [(Prize Eligible) 7th place Solution using a novel matcher LightGlue](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/427143) — 15 票 / 1 评论 / 2023-07-27 **write-up?**
+- [Dockerfile for your PCs](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/402501) — 14 票 / 0 评论 / 2023-04-18 
+- [Request for writeups from top-50](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416737) — 13 票 / 3 评论 / 2023-06-12 **write-up?**
+- [30th place solution](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417186) — 11 票 / 0 评论 / 2023-06-21 **write-up?**
+- [This competition attracts a lot of people from the same region to Kaggle](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416622) — 11 票 / 8 评论 / 2023-06-12 
+- [New to COLMAP? This is how you visualize your model... ](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401129) — 10 票 / 0 评论 / 2023-04-11 
+- [Past image matching or similar competitions](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401181) — 10 票 / 0 评论 / 2023-04-12 
+- [34th place solution](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/417126) — 10 票 / 0 评论 / 2023-06-14 **write-up?**
+- [To install Colmap check Trulls or Kulyk Notebooks. Git vcpkg returned SyntaxError. ](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401372) — 9 票 / 3 评论 / 2023-04-13 
+- [Resize strategy](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/408128) — 8 票 / 1 评论 / 2023-05-09 
+- [Example solution is updated](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401566) — 8 票 / 11 评论 / 2023-04-13 **write-up?**
+- [Help with COLMAP randomness](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/403568) — 7 票 / 12 评论 / 2023-04-23 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/396763) — 7 票 / 1 评论 / 2023-03-22 
+- [Did the Kaggle server slow down ? ](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416343) — 7 票 / 3 评论 / 2023-06-10 
+- [Competition Recap (mostly IMW2023 slides in article format)](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/421552) — 7 票 / 0 评论 / 2023-07-05 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/420269) — 6 票 / 0 评论 / 2023-06-30 
+- [Set 1 camera's rotation and translation to 0?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/405407) — 6 票 / 1 评论 / 2023-04-27 
+- [About the submission score error](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/408055) — 6 票 / 22 评论 / 2023-05-09 
+- [About images_full data](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/411511) — 6 票 / 3 评论 / 2023-05-19 
+- [Run Time on Private Dataset](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/412283) — 6 票 / 6 评论 / 2023-05-23 
+- [Different columns order in "evaluation page submission file" and "data page sample_submission.csv file".](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401227) — 5 票 / 4 评论 / 2023-04-12 
+- [LAF - What are they?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/414847) — 5 票 / 4 评论 / 2023-06-03 
+- [What is different from previous year?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401864) — 5 票 / 10 评论 / 2023-04-15 
+- [How is the public/private leaderboard splitted?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/411778) — 5 票 / 6 评论 / 2023-05-21 
+- [Is there a global SFM method for python available? ](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/407828) — 4 票 / 1 评论 / 2023-05-08 
+- [Cannot submit an entry](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416683) — 4 票 / 8 评论 / 2023-06-12 
+- [12nd Place Solution: SP+SG](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/420471) — 4 票 / 1 评论 / 2023-07-01 **write-up?**
+- [How to use gpus on colmap?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/406927) — 4 票 / 4 评论 / 2023-05-04 
+- [Data Augmentation](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/410949) — 4 票 / 3 评论 / 2023-05-17 
+- [How to start ](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401317) — 3 票 / 4 评论 / 2023-04-12 
+- [Question: translation scale](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/404899) — 3 票 / 2 评论 / 2023-04-25 
+- [the way of getting the GT data](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401312) — 3 票 / 2 评论 / 2023-04-12 
+- [Actual mAA thresholds](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/401273) — 3 票 / 2 评论 / 2023-04-12 
+- [How can I see how long a submitted task has been inferred?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/410443) — 3 票 / 2 评论 / 2023-05-15 
+- [some questions about public and private leaderboard](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/411768) — 3 票 / 5 评论 / 2023-05-21 
+- [26th Place Solution: SP&SG + Rotation](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/418139) — 3 票 / 0 评论 / 2023-06-19 **write-up?**
+- [How to use GPU to run PyCOLMAP to reduce runtime](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/413591) — 3 票 / 3 评论 / 2023-05-29 
+- [Image augmentation](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/413911) — 3 票 / 0 评论 / 2023-05-30 
+- [LoFTR performs differently on Kaggle vs on my local machine](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/414392) — 3 票 / 2 评论 / 2023-06-01 
+- [The effect of TTA](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/415178) — 3 票 / 0 评论 / 2023-06-05 
+- [Missing ground truth for phototourism dataset](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/411606) — 2 票 / 5 评论 / 2023-05-20 
+- [Questions about COLMAP database](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/411477) — 2 票 / 1 评论 / 2023-05-19 
+- [Does the model in the example need to be trained, or just use the pre-trained weights?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/413354) — 2 票 / 6 评论 / 2023-05-28 
+- [How to improve the efficiency of the code?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/413551) — 2 票 / 2 评论 / 2023-05-29 
+- [How to supress output of pycolmap.incremental_mapping?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416333) — 2 票 / 2 评论 / 2023-06-10 
+- [Does all types of camera models are'simple radial', 'simple pinhole' or 'opencv'?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/402048) — 2 票 / 1 评论 / 2023-04-16 
+- [Can we train two models, one each for rotation matrix and translation vector?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/414175) — 2 票 / 1 评论 / 2023-05-31 
+- [Evaluation: Averaging datasets](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/403314) — 2 票 / 5 评论 / 2023-04-22 
+- [How to deal with scenes with a lot of camera rotation but little camera translation (like Cyprus)?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/414465) — 2 票 / 3 评论 / 2023-06-01 
+- [Remember to set a random seed](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/411974) — 1 票 / 2 评论 / 2023-05-21 
+- [lost a label on train_labels.csv](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/412106) — 1 票 / 0 评论 / 2023-05-22 
+- [Can you build a local evaluation pipeline?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/409419) — 1 票 / 4 评论 / 2023-05-10 
+- [Will the private evaluation still be available after the competition ends?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416635) — 1 票 / 2 评论 / 2023-06-12 
+- [Submission CSV Not Found,please help!](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/412548) — 1 票 / 6 评论 / 2023-05-24 
+- [What do we need to submit?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/407787) — 1 票 / 4 评论 / 2023-05-08 
+- [This is my first time to participate in the competition, may I ask when the medal will be handed out after the competition](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/416763) — 1 票 / 2 评论 / 2023-06-13 
+- [Frame of reference for each scene](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/402497) — 1 票 / 3 评论 / 2023-04-18 
+- [What to do if there are missing packages in the environment when submitting?](https://www.kaggle.com/competitions/image-matching-challenge-2023/discussion/409253) — 1 票 / 1 评论 / 2023-05-10 
