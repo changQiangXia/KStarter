@@ -78,7 +78,9 @@
 
 > 路径相对本文件（`notes/cv/`）：`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/<topic>_img/NN.png`
 
-**图 1：4th 方案完整管线（三路输入 → 定位 → 四个分级子模型 → 融合）**——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/01.png`
+![4th 方案完整管线：三路输入 → 定位 → 四个分级子模型 → 融合](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/01.png)
+
+**图 1：4th 方案完整管线（三路输入 → 定位 → 四个分级子模型 → 融合）**
 
 *图：4th place solution 的完整管线（原帖 https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539443 ）*
 
@@ -88,7 +90,9 @@
 - 融合：MLP + LGBM + XGBoost 三个元模型之上，再用 **Nelder-Mead** 搜权重——比正文的"元分类器融合"更具体；
 - 启示：把"多部位多类别"拆成"每条件独立子模型 + 条件特异融合"。
 
-**图 2：1st 的 3 模型 2 阶段总管线**——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/01.png`
+![1st 的 3 模型 2 阶段总管线](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/01.png)
+
+**图 2：1st 的 3 模型 2 阶段总管线**
 
 *图：1st place 的 Pipeline Overview（原帖 https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/540091 ）*
 
@@ -96,7 +100,9 @@
 - SS 的 instance_number 由 sagt2 坐标经 hengck23 方法转到 axial，再单独预测 SS 坐标——**轴向层面归属继承自矢状面**；
 - CSV 统一喂养三类 severity（MIL）模型；这是"中间产物落盘 + 多模型并行"的标准两阶段施工图。
 
-**图 3：1st 的 SCS 分级模型（bi-LSTM + Attention MIL + 双流 aux）**——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/08.png`
+![1st 的 SCS 分级模型：bi-LSTM + Attention MIL + 双流 aux](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/08.png)
+
+**图 3：1st 的 SCS 分级模型（bi-LSTM + Attention MIL + 双流 aux）**
 
 *图：Severity prediction model (SCS)；橙框为共享权重（原帖 topic 540091）*
 
@@ -104,7 +110,9 @@
 - 每流在 LSTM 后挂 aux depth 头（bs,5），在加权后接共享权重 aux 分类头（bs,3）——**每个视角先单独学会预测，再做跨流融合**；
 - concat 双流特征 → 主分类头；这正是 1st 所说"aux loss 有效"的结构原因（深监督 + 层间上下文）。
 
-**图 4：3rd 的完整两阶段管线（CenterNet 定位 + Center/Side 分类）**——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539453_img/01.png`
+![3rd 的完整两阶段管线：CenterNet 定位 + Center/Side 分类](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539453_img/01.png)
+
+**图 4：3rd 的完整两阶段管线（CenterNet 定位 + Center/Side 分类）**
 
 *图：RSNA2024 Pipeline Overview（原帖 https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539453 ）*
 
@@ -112,7 +120,9 @@
 - Stage 2：Center Classifier 出 SCS；Split LR 后 Side Classifier 出 NFN/SS（左右两路共享分类器）；
 - 关键标注："同分类器用于所有层面"——层面无关的共享分类器 + 层面特异的输入裁剪。
 
-**图 5：4th 的多视角多条件模型（Transformer + condition-separated attention pooling）**——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/02.png`
+![4th 的多视角多条件模型：Transformer + condition-separated attention pooling](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/02.png)
+
+**图 5：4th 的多视角多条件模型（Transformer + condition-separated attention pooling）**
 
 *图：tattaka 的多视角多条件模型（原帖 topic 539443）*
 

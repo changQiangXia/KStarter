@@ -170,27 +170,39 @@
 
 > 路径相对本文件（`analysis/deep/`）：`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/<topic>_img/NN.png`
 
-**图 1：1st 的 3 模型 2 阶段总管线**（topic 540091）——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/01.png`
+![1st 的 3 模型 2 阶段总管线（topic 540091）](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/01.png)
+
+**图 1：1st 的 3 模型 2 阶段总管线**（topic 540091）
 
 *读图结论*：3D 模型（instance_number）→ 2D 模型（coordinate）→ `test_label_coordinates.csv` → 三类 severity（MIL 框）；SS 的 instance_number 由 sagt2 坐标经 hengck23 方法转到 axial——**SS 没有独立 3D 定位模型，轴向层面归属继承自矢状面**。这是"跨视角信息传递"的施工细节，正文文字未直说。
 
-**图 2：1st 的 SCS 分级模型（bi-LSTM + Attention MIL + 双流 aux）**（topic 540091）——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/08.png`
+![1st 的 SCS 分级模型：bi-LSTM + Attention MIL + 双流 aux（topic 540091）](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/540091_img/08.png)
+
+**图 2：1st 的 SCS 分级模型（bi-LSTM + Attention MIL + 双流 aux）**（topic 540091）
 
 *读图结论*：axial 与 sagt2 两条流各自 encoder→bi-LSTM→attention 加权；每流在 LSTM 后挂 aux depth 头（bs,5），在加权后有**共享权重**的 aux 分类头（橙框，bs,3）；最后 concat 双流特征进主头。这解释了"aux loss 为什么有效"：每个视角必须先单独学会预测（深监督），再做融合。
 
-**图 3：3rd 的完整两阶段管线**（topic 539453）——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539453_img/01.png`
+![3rd 的完整两阶段管线（topic 539453）](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539453_img/01.png)
+
+**图 3：3rd 的完整两阶段管线**（topic 539453）
 
 *读图结论*：矢状 T1、T2/STIR 各自 CenterNet 层面关键点→crop 5 层；axial 经"世界坐标层面分配"后由第二个 CenterNet 找椎管→crop；Stage 2 由 Center Classifier 出 SCS，Split LR 后 Side Classifier 出 NFN/SS（左右两路共享分类器）；标注"同分类器用于所有层面"——**层面无关的共享分类器 + 层面特异的输入裁剪**。
 
-**图 4：4th 的多视角多条件模型（Transformer + condition-separated attention pooling）**（topic 539443）——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/02.png`
+![4th 的多视角多条件模型：Transformer + condition-separated attention pooling（topic 539443）](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/02.png)
+
+**图 4：4th 的多视角多条件模型（Transformer + condition-separated attention pooling）**（topic 539443）
 
 *读图结论*：4 组输入（30 片×2 序列 + 5 片×2）共享 2D backbone → 每片 512 维特征 → 位置编码 → Transformer → 每条件独立 attention pooling+linear 出主损失；另有从预 Transformer 特征直接接出的 aux loss 分支。**同一 backbone 上"每条件一套 attention head"，比多模型更省地实现条件分离**（正文称 attention pooling 前置与 aux loss 是关键技巧）。
 
-**图 5：2nd 的轴向 YOLOX 区域检测**（topic 539452）——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539452_img/01.png`
+![2nd 的轴向 YOLOX 区域检测（topic 539452）](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539452_img/01.png)
+
+**图 5：2nd 的轴向 YOLOX 区域检测**（topic 539452）
 
 *读图结论*：两行共 10 张轴向切片（每组 5 片）上的小白框 = YOLOX 检测的椎管区域；该区域仅用于 spinal 类预测，non-spinal 用左右半图。**用检测框兜住关键解剖结构替代坐标回归**，是轻量定位方案。
 
-**图 6：3rd 的后处理参数搜索（Optuna slice plot）**（topic 539453）——`../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539453_img/05.png`
+![3rd 的后处理参数搜索：Optuna slice plot（topic 539453）](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539453_img/05.png)
+
+**图 6：3rd 的后处理参数搜索（Optuna slice plot）**（topic 539453）
 
 *读图结论*：纵轴 objective≈0.3685–0.3725，最优约 0.3685；右图 spinal_t≈0.91 与正文温度 0.91 吻合；左图 lr_t≈0.95–0.97 的第二个缩放参数正文未提——**图里信息多于文字**：后处理是两参数联合搜索，且最优区平缓（收益为小数点后第 3–4 位量级）。
 
