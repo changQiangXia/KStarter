@@ -43,8 +43,29 @@
 - "库里看起来怪的地方"（这里是 49 组件）常藏着数据真相。
 - 指标不是模型 loss：ARI 类指标需要"结构正确 + 标签映射"两个环节都对。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：Kaggle 首个无监督聚类赛（ARI）：1st 把结构完全逆向出来——**42 个高斯子簇 = 7 组 × 6 子簇**，只有 14 个变量相关（7 整数 + 7 浮点），浮点 5 个相关（均值 ±1）+ 2 个标准正态；据此写"硬编码浮点均值的自定义 EM"夺冠；整数列来自未公开的混合泊松，只能 power transform（作者自评最大改进空间）。
+
+- 1st（341023）：`GaussianMixture(42)` 发现结构；线索来自 BayesianGMMClassifier 源码（7×7=49）；整数均值/协方差只随 7 组变化。
+- 收官经验（340874）：ARI 定义、缩放、Elbow、丢特征、分布检验、可视化、聚类算法清单、聚类集成内存难题、伪标签转监督。
+- 聚类集成（335078）：共现稀疏矩阵 → 均值/中位数 → 阈值 0.5 → 重建标签。
+- 社区：七簇可视化（73 票）、UMAP 更细结构（63 票）、丢 15 列提分（35 票）、ARI 直觉（34 票）。
+
+**裁决**：先诊断真实簇数（Elbow/混合分量）；精简特征；聚类集选用共现矩阵；整数生成机制登记缺口。
+
+**悬案**：2nd–5th 未收录；整数生成模型未定论。
+
+## 9. 图表证据
+
+![聚类集成流程](../../intel/tabular-playground-series-jul-2022/bodies/335078_img/01.png)
+
+**图 1**（topic 335078）：多基聚类 → 集成 → 共识划分 P*。
+
+## 10. 出处
 
 - 1st：逆向结构与自定义 EM：https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/341023
 - 聚类集成方法：https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335078
 - ARI 与聚类分析：https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334541
+- 收官经验（66 票）：https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/340874
+- 丢掉 15 个特征（35 票）：https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334875
