@@ -19,8 +19,23 @@
 - 图文检索的指标（NDCG@K）需要按 k 截断评估与候选排序设计。
 - 同类任务（Shopee、Flickr、COCO 系）的公开方案可横向复用。
 
+## 轻读结论（2026-10 补）
+
+- **任务**：Wikipedia 图像 ↔ 多语言标题/描述匹配（NDCG@K，105 队）；直接复用对象是 **Shopee 图文匹配赛 1st–161st 方案总汇**（283917 / 272091）。
+- **数据工程为主**：图片走 URL，需分批下载 + feather/parquet/datatable/LMDB/HDF5 存储与并发读取（272204 / 273309 / 272531）。
+- **主线方法**：多语言 BERT + 图像 embedding 对齐的双塔检索（277601），captioning 论文/实现作为参考（272172）。
+- **常见坑**：test 图下载失败、内存不足、TSV 读错、binary classification 提交难、test embedding 疑似错误、大量 0.0000 分（287955 / 272846 / 272294 / 286451）。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**。
+
 ## 出处
 
 - 官方欢迎帖：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272023
 - 大尺寸 URL 图片数据处理经验：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272204
 - 相似竞赛方案汇总（Shopee Mega Thread）：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/283917
+- starter notebook 汇编：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/273309
+- captioning 论文与实现：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272172
+- 多语言 BERT + 图像 embedding：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/277601
+- test 图片下载问题：https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/287955

@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**199/204**（2026-10-03；B01–B19 完成；B20 进行中 9/10）
+> 进度：**202/204**（2026-10-03；B01–B20 完成；B21 进行中 2/10）
 
 ## 批次 B01（1–10）
 
@@ -303,13 +303,13 @@
 | 197 | `nfl-big-data-bowl-2023` | other | Community | 6/0 | 10.4 | ✅ |
 | 198 | `kore-2022-beta` | sim-agent | Playground | 6/0 | 10.2 | ✅ |
 | 199 | `gan-getting-started` | cv | Getting Started | 6/1 | 10.2 | ✅ |
-| 200 | `fathomnet-out-of-sample-detection` | cv | Research | 6/2 | 10.1 | ⬜ |
+| 200 | `fathomnet-out-of-sample-detection` | cv | Research | 6/2 | 10.1 | ✅ |
 
 ## 批次 B21（201–204）
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 201 | `wikipedia-image-caption` | cv | Playground | 6/0 | 9.8 | ⬜ |
-| 202 | `autonomous-agent-prediction-beta` | sim-agent | Playground | 6/0 | 9.2 | ⬜ |
+| 201 | `wikipedia-image-caption` | cv | Playground | 6/0 | 9.8 | ✅ |
+| 202 | `autonomous-agent-prediction-beta` | sim-agent | Playground | 6/0 | 9.2 | ✅ |
 | 203 | `geolifeclef-2024` | cv | Research | 6/1 | 8.5 | ⬜ |
 | 204 | `scrabble-player-rating` | tabular | Playground | 6/0 | 6.3 | ⬜ |

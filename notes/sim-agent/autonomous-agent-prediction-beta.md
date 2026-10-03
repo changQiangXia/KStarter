@@ -24,6 +24,17 @@
 - 用 OOF 决定融合与否——自动化流程的核心决策仍需统计纪律。
 - 任何 agent 提交类任务：**先过本地验证器，再消耗正式提交次数**。
 
+## 轻读结论（2026-10 补）
+
+- **赛制**：570 队；提交 Agent Config，由评测编译成 Google ADK agent；每 session 60 分钟、LLM 预算 **$2.00**（723806 / 723907）。
+- **3rd 方案（首次参赛）**：LGBM + XGBoost + CatBoost（原生类别）+ LR 基线；用诚实 OOF 在最佳单模与 blend 间选择；流程=定向→CV→早交快基线拿锚点→特征迭代后复查 blending；强调用 `validate_submission.py` 本地校验（737407）。
+- **官方失败清单**：gemini-2.5-* 仅单工具、deepseek-r1-0528 不支持工具；skill 名要 kebab-case；思考死循环烧 token；ADK 把 `{x}` 当会话变量（LaTeX 花括号会报错）；新版 Anthropic 传 temperature 报错（723907）。
+- **其他**：0.823 fallback 模板（730539）；select_submission 上限 +0.0005/最差 −0.0166（730605）；单提交是否太少（723813）；疑似月度系列（723810）。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**。
+
 ## 出处
 
 - 3rd：首赛即前三的 Agent Config 方案：https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/737407
