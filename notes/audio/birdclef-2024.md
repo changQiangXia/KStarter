@@ -35,10 +35,29 @@
 1. **BirdCLEF 系列四年方法连续**（2023→2026），是"同一系列逐年演进"的完整样本。
 2. 该系列的代码/notebook 公开度很高（4th 赛后补充训练代码）——**学习材料充足**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：声景识别 = **log-mel CNN + soundscape 伪标 + CPU 推理预算 + 邻居平均/min 降噪**；额外数据与损失选择出现明显分歧。
+
+- 1st（107 票）：仅 2024 数据；fold0 信号统计更低→更好，用 fold0+0.8 分位构造集成；Google 分类器清洗/重标/PL0.05；**CE 训练（BCE 差）→ sigmoid 推理 → 邻居 chunk mean → 跨模型 min()**（图 1）；OpenVINO 18 分钟/模型；183 nocall 类私榜 0.655→0.671。
+- 3rd NVBird（78 票）：Xeno+往年数据封顶 500/物种取最近 + 低频上采样；两级伪标+蒸馏；EfficientViT/AVES。
+- 4th（48 票）：melspec+raw signal 集成 + TTA + OpenVINO；公 0.731/私 0.667。
+
+**裁决**：伪标核心；CPU 预算先行；长尾与 nocall 专治；折划分要审计响度/站点；额外数据受控可用、失控有害；CE/BCE 取决于标签结构。
+
+**悬案**：2nd/5th 未细读；min() 的机制缺消融。
+
+## 7. 图表证据
+
+![1st 的集成推理流程](../../intel/birdclef-2024/bodies/512197_img/03.png)
+
+**图 1**（topic 512197）：模型×3 → 5 chunk sigmoid → mean → min() → mean()。
+
+## 8. 出处
 
 - 讨论区索引：`intel/birdclef-2024/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st（107 票）：https://www.kaggle.com/competitions/birdclef-2024/discussion/512197
   - 3rd（78 票）：https://www.kaggle.com/competitions/birdclef-2024/discussion/511905
   - 4th Team Cerberus（48 票）：https://www.kaggle.com/competitions/birdclef-2024/discussion/511845
+- 轻读全本：`analysis/deep/birdclef-2024.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

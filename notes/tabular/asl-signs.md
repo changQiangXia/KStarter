@@ -38,10 +38,31 @@
 2. 与 ASL Fingerspelling、HMS-EEG 对照：**序列任务的通用套路 = 表示转换 + 强增强 + 分组验证**。
 3. 手语/无障碍是 Kaggle 的稳定赛题方向（Google 系列已办两届）。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：孤立手语词分类的胜负点 = **输入表示（序列 vs 类频谱图像）× 强正则 × 变长/掩码处理**。
+
+- 1st（191 票）：1D CNN+Transformer（1.85M）；drop_path0.2+dropout **0.8**+AWP 缺一掉分；causal padding 保持 mask 并让 BN/GAP 感知；lag1/2 运动特征；4 seed；CV/公 0.80、私 **0.88**（图证在 deep 文件的 2nd 图）。
+- 2nd Google（118 票）：关键点插值成 160×80×3"频谱"→ EfficientNet-B0 + BERT/DeBERTa helpers；finger-tree rotate、mixup、时频掩码；单折 CV 0.898/LB ~0.8。
+- 6th（406537）：MLP+帧 Transformer 双模型；去无手指帧；landmark 类型嵌入；首个 Transformer 缩小+输出缩放（便于融合）；**预训练 DeBERTa 权重无效**。
+
+**裁决**：三种表示都能到前 3；显式几何特征提升注意力路；变长一致性必须处理；预训练迁移不适用。
+
+**系列延续**：同系列下一届（Fingerspelling）转向序列解码，1st 为同一位选手（Christof Henkel）。
+
+**悬案**：44th/实验帖未细读；公私榜 gap 成因与指标实现未入库。
+
+## 7. 图表证据
+
+![2nd 的关键点图像化](../../intel/asl-signs/bodies/406306_img/01.jpg)
+
+**图 1**（topic 406306）：9 帧骨架 → 160×80×3 类频谱张量。
+
+## 8. 出处
 
 - 讨论区索引：`intel/asl-signs/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st 1DCNN + Transformer（191 票）：https://www.kaggle.com/competitions/asl-signs/discussion/406684
   - 2nd 频谱图式方案（118 票）：https://www.kaggle.com/competitions/asl-signs/discussion/406306
   - 44th 银牌（73 票）：https://www.kaggle.com/competitions/asl-signs/discussion/406302
+- 轻读全本：`analysis/deep/asl-signs.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

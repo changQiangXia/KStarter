@@ -38,10 +38,29 @@
 2. 数据管线的工程能力常决定能否跑起来（本场尤其明显）。
 3. 与 Waveform Inversion、ARIEL 对照：科学反演任务的通用配方 = 物理编码 + 专用损失 + 工程管线。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：中微子方向回归 = **点云注意力（几何/物理先验注入）+ 长度分桶效率工程 + 角度专用损失**；GNN 与纯 Transformer 两条路线同登顶。
+
+- 1st（77 票）：EdgeConv+Transformer（静态 kNN 边）；自定义损失 −θ−κcosθ+C（+0.005 over VMF）；序列分桶；6M 参数/4 层；训练 200–500、推理 6000；MLP stacking +0.003；私 0.9633。
+- 2nd（103 票）：Fourier 编码（128→4096 乘数 +20 bps）+ **相对时空间隔偏置 ds²（+40 bps）** + **指标当损失（+55 bps）**；T/S/B（7.6M–116M）；训练 192/推理 768（+25 bps）；图 1。
+- 3rd（56 票）：NanoGPT 式 self-attention；128 bin 角度分类+平滑标签；**Bitter Lesson**（手工特征被规模冲掉）；长度分组 batch 1.5–3.5×；18 层/512 维。
+
+**裁决**：长度打包是效率第一杠杆；VMF 是起点而非终点；ds² 类物理相对偏置值得注入；规模与先验可兼得。
+
+**悬案**：9th–11th 未细读；FP16 不稳定原因未解。
+
+## 7. 图表证据
+
+![2nd 的 Transformer 模型](../../intel/icecube-neutrinos-in-deep-ice/bodies/402882_img/01.png)
+
+**图 1**（topic 402882）：命中序列 → Fourier 编码 + ds² 相对偏置（+GraphNet 可选）→ 带偏置 Transformer → CLS → 方向。
+
+## 8. 出处
 
 - 讨论区索引：`intel/icecube-neutrinos-in-deep-ice/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 2nd Transformer + vMF（103 票）：https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402882
   - 1st（77 票）：https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402976
   - 3rd Attention + XGBoost（56 票）：https://www.kaggle.com/competitions/icecube-neutrinos-in-deep-ice/discussion/402888
+- 轻读全本：`analysis/deep/icecube-neutrinos-in-deep-ice.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
