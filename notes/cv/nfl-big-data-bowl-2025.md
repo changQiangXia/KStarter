@@ -17,7 +17,23 @@ NFL 数据碗的**社区配套条目**（0 支队伍）：讨论区提供往届�
 - 系列赛事的"社区配套条目"本身是**汇总索引**，值得纳入学习路径。
 - 体育追踪类任务的入门资源（EDA + 可视化）在此类条目中集中。
 
+## 轻读结论（2026-10 补）
+
+- **第七届 BDB（pre-snap 主题）**：官方三建议——保持简单选小切口、足球语境越多越好、足球背景 × 编码能力组队最有效（539921）。
+- **数据变化**：2025 比 2024 **新增 66 特征、删除 7 特征**；unique seasons 仍为 2022（数据滞后被吐槽）；`line_set`/motionSinceLineset/inMotionAtBallSnap/audible 等新事件口径是讨论区主线（539787 / 539822 / 541143 / 548627）。
+- **数据质量**：球轨迹不准、输入数据互相矛盾、plays.csv 问题（551782 / 551328 / 543709 / 543119）。
+- **提交/社区**：coaching track 格式、2000 词附录、提交失败、notebook spam（548189 / 555070 / 555197 / 540670）。
+- 获奖仅附件公告，方案正文未归档（560137）。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**。
+
 ## 出处
 
 - 讨论区索引：`intel/nfl-big-data-bowl-2025/topics.md`
-- 入门资源汇编：见该比赛讨论区 "Onboarding references and starter materials"
+- 入门资源汇编：https://www.kaggle.com/competitions/nfl-big-data-bowl-2025/discussion/539795
+- 官方欢迎与建议：https://www.kaggle.com/competitions/nfl-big-data-bowl-2025/discussion/539921
+- 历届方案索引：https://www.kaggle.com/competitions/nfl-big-data-bowl-2025/discussion/539785
+- 2025 vs 2024 特征变化：https://www.kaggle.com/competitions/nfl-big-data-bowl-2025/discussion/539787
+- 获奖公布：https://www.kaggle.com/competitions/nfl-big-data-bowl-2025/discussion/560137

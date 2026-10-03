@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**187/204**（2026-10-03；B01–B18 完成；B19 进行中 7/10）
+> 进度：**190/204**（2026-10-03；B01–B19 完成；B20 待开始）
 
 ## 批次 B01（1–10）
 
@@ -286,9 +286,9 @@
 | 185 | `lux-ai-season-2-neurips-stage-2` | sim-agent | Featured | 6/12 | 15.5 | ✅ |
 | 186 | `nfl-big-data-bowl-2024` | other | Community | 6/1 | 15.5 | ✅ |
 | 187 | `playground-series-s3e25` | tabular | Playground | 6/1 | 15.1 | ✅ |
-| 188 | `herbarium-2022-fgvc9` | cv | Research | 6/0 | 14.8 | ⬜ |
-| 189 | `planttraits2024` | cv | Research | 6/3 | 14.5 | ⬜ |
-| 190 | `nfl-big-data-bowl-2025` | cv | Community | 6/0 | 14.4 | ⬜ |
+| 188 | `herbarium-2022-fgvc9` | cv | Research | 6/0 | 14.8 | ✅ |
+| 189 | `planttraits2024` | cv | Research | 6/3 | 14.5 | ✅ |
+| 190 | `nfl-big-data-bowl-2025` | cv | Community | 6/0 | 14.4 | ✅ |
 
 ## 批次 B20（191–200）
 

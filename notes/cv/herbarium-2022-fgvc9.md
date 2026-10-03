@@ -19,8 +19,23 @@
 - **长尾类别**需要重采样/损失重加权/分类头调整（与 ISIC、Leap 的不平衡处理同源）。
 - FGVC 系列有稳定的往届方案可参考。
 
+## 轻读结论（2026-10 补）
+
+- **1st 单模消融链（private）**：Swin-B224 0.78442 → 多级 CE（family/genus/species）0.79544 → LR 5e-4 0.80501 → 5crop 0.80981 → **subcenter-ArcFace 动态 margin 0.82267** → 额外 CE 头 0.82929 → Swin 增强 0.83554 → SwinB384 0.85245 → 5crop@384 0.85654 → 冻结层 100→0 0.86055 → square resize 0.86201 → **SwinV2 0.86282**；8 骨干按公榜分数融合到 **0.87662**（329299）。
+- **无效项**：class-aware sampling 与 data cleaning 都没用——长尾靠度量损失/多级监督，而非重采样。
+- **规模**：839,772 张训练图、Macro F1；社区有图像重复/泄漏帖（307615 / 323906）。
+- 社区设施：往届 notebook 合集 38 票、JSON→Pandas 18 票、往届获奖 18 票、可解释细粒度综述 16 票。
+
+## 图表证据
+
+本场 0 张归档图（0/0），**图证缺口已登记**（1st 的增益均为表格）。
+
 ## 出处
 
 - 讨论区索引：`intel/herbarium-2022-fgvc9/topics.md`
 - 起步 notebook 清单（15 票）：https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/323794
 - 1st（5 票）：https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/329299
+- 往届 notebook 合集（38 票）：https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307745
+- JSON→Pandas（18 票）：https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307804
+- 可解释细粒度与 machine teaching（16 票）：https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/308406
+- 训练图规模 839,772（11 票）：https://www.kaggle.com/competitions/herbarium-2022-fgvc9/discussion/307615
