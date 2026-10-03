@@ -29,6 +29,7 @@ def main() -> int:
     parser.add_argument("--meta", default=str(ROOT / "data" / "competitions_last5y.csv"))
     parser.add_argument("--out", default=str(ROOT / "people" / "claims" / "p1_coverage.csv"))
     parser.add_argument("--min-votes", type=int, default=50)
+    parser.add_argument("--min-coverage", type=float, default=0.9, help="验收门禁：done 比例下限")
     args = parser.parse_args()
 
     meta = {r["name"]: r for r in csv.DictReader(open(args.meta, encoding="utf-8"))}
@@ -79,6 +80,12 @@ def main() -> int:
     print("top people (posts):", ", ".join(f"{p} {n}" for p, n in by_person.most_common(8)))
     print("domains:", ", ".join(f"{d} {n}" for d, n in by_domain.most_common(8)))
     print(f"coverage -> {out}")
+    coverage = done / len(rows)
+    print(f"coverage: {coverage:.0%} (target >= {args.min_coverage:.0%})")
+    if coverage < args.min_coverage:
+        print("coverage below target: P1 未完成")
+        return 1
+    print("coverage gate: PASS ✅")
     return 0
 
 
