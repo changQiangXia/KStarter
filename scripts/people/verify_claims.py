@@ -49,10 +49,18 @@ def main() -> int:
 
     topics_cache: dict[str, set[int]] = {}
     rows = list(csv.DictReader(open(args.claims, encoding="utf-8")))
+    expected_fields = {
+        "claim_id", "person", "role", "slug", "domain", "stage", "action_class", "condition",
+        "action", "mechanism", "result", "evidence_type", "evidence_level", "quote", "topic_id",
+        "source_url", "date", "votes", "figures", "flags", "notes",
+    }
     problems: list[str] = []
     seen: set[str] = set()
 
     for lineno, row in enumerate(rows, start=2):
+        if set(row) != expected_fields or any(v is None for v in row.values()):
+            problems.append(f"L{lineno}: 字段数与列名不匹配（列数 {len(row)}）")
+            continue
         cid = row.get("claim_id", "")
         if not cid:
             problems.append(f"L{lineno}: 缺少 claim_id")
