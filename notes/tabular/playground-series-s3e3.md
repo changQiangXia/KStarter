@@ -39,8 +39,39 @@
 - `.apply()` 换成向量化运算——写特征时顺手做的事。
 - 公开榜下滑不等于没戏（本场冠军就是下滑中夺冠的）。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：34 个正例的小公榜 + 洗牌赛：**原始数据"训练加、CV 不计"是稳定增益**（54th 含原数据 54 名 vs 纯竞赛数据 ~407 名），**领域风险因子特征是最大单点增益**（14th 的风险计数在 CatBoost/XGB 中重要性第一），1st 只在公开 notebook 上加几个比值/阈值/风险因子求和就意外夺冠。
+
+- 1st（380920）：公开三模型 + 比值/阈值/风险因子求和 FE；"没认真选提交"仍第 1。
+- 8th（381052）：XGBoost + 10 折只在合成数据上算 AUC；原数据仅入训练；Winsorization + 序数/one-hot。
+- 14th（380757）：Number of Risk Factors（15+ 条件计数）重要性第一；`is_generated`；CatBoost depth=1；等权略优于 0.55/0.25/0.2。
+- 54th（380744）：2,385 模型；最佳单模 XGB（LOO+UMAP）私 0.8981 优于 7 模型秩融合 0.89706（未提交单模）。
+- 技巧：Hill Climbing 含负权重（CV +0.01，61 票）；避免 apply、用向量化（39 票，快两个数量级）。
+
+**裁决**：小表格赛把领域知识编码成风险计数/阈值交互；原数据入训练但不入 CV；提交组合保留"强单模 + 稳健融合"两份；HC 与向量化纳入工具箱。
+
+**悬案**：2nd–7th/9th–13th 未收录；伪标签讨论未细读。
+
+## 9. 图表证据
+
+![Hill Climbing 的 CV 增益](../../intel/playground-series-s3e3/bodies/379690_img/01.png)
+
+**图 1**（topic 379690）：HC 把 CV 从 0.848 提到 0.856，前 3 个模型贡献最大。
+
+![三模型 CDF 对比](../../intel/playground-series-s3e3/bodies/380757_img/01.png)
+
+**图 2**（topic 380757）：CatBoost/XGB/LGBM 预测 CDF 对比。
+
+![apply vs 向量化](../../intel/playground-series-s3e3/bodies/379959_img/01.png)
+
+**图 3**（topic 379959）：apply 与向量化算子的耗时差距（数量级）。
+
+## 10. 出处
 
 - 1st：意外夺冠与风险因子 FE：https://www.kaggle.com/competitions/playground-series-s3e3/discussion/380920
 - 8th：常规线：https://www.kaggle.com/competitions/playground-series-s3e3/discussion/381052
 - 性能纪律：Avoid .apply()：https://www.kaggle.com/competitions/playground-series-s3e3/discussion/379959
+- 14th：https://www.kaggle.com/competitions/playground-series-s3e3/discussion/380757
+- 54th：https://www.kaggle.com/competitions/playground-series-s3e3/discussion/380744
+- Hill Climbing（61 票）：https://www.kaggle.com/competitions/playground-series-s3e3/discussion/379690

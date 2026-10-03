@@ -40,9 +40,35 @@
 - 原数据拼接在本场是稳定正收益（+0.002），但每场都要验证。
 - 极简流程（1 个 CatBoost + 3 个交互）也能进前 20——别在调参上过早烧时间。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：物理仿真数据上的故障二分类：**Product ID 正确接入类别接口（17th +0.013）与重复行的 out-of-sample 目标编码（4th）**是最大亮点；模型侧单 CatBoost（私 0.98426）与 5 个 AutoML 的元模型（私 0.98541）几乎打平。
+
+- 17th（419648）：单 CatBoost；train+原数据（+0.002）；pid 作 `cat_features`（+0.013）；CPU 确定性优于 GPU；lr 0.025；3 个比值特征公榜 +0.004/私榜约 0。
+- 11th（419643）：MultilabelStratifiedKFold 10 折（保 5 类故障比例）；编码/原数据全放 pipeline 内防泄漏；6 模型 + LR 权重；CV 0.98006。
+- 4th（419698）：公开 notebook 排名混合 + **重复行 TE + 计数**（仅用于测试集中有训练同行的样本，out-of-sample）。
+- 3rd（419730）：90% 权重的多 AutoML（LightAutoML/ISoft/H2O 贡献最大）+ 10% 公开提交；私 0.98541。
+- 社区：故障计数 TWF 13.5 万 vs 其余数百（图 2）；45 票帖请求赛制多样化。
+
+**裁决**：类别接口与折内编码优先；原数据入训练有稳定小增益；重复行统计是可挖捷径但必须 out-of-sample；AutoML 是省力选项而非胜负手。
+
+**悬案**：1st/2nd/5th–10th 未收录；重复行 TE 增益未量化。
+
+## 9. 图表证据
+
+![产品类型分布](../../intel/playground-series-s3e17/bodies/416765_img/01.png)
+
+**图 1**（topic 416765）：L/M/H = 60/30/10%。
+
+![故障类型计数](../../intel/playground-series-s3e17/bodies/416765_img/02.png)
+
+**图 2**（topic 416765）：TWF 独占绝大多数故障，其余四类仅数百。
+
+## 10. 出处
 
 - 领域知识与字段表：https://www.kaggle.com/competitions/playground-series-s3e17/discussion/416765
 - 17th：Only 1 Catboost：https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419648
 - 4th：target encoding rows：https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419698
 - 3rd：90% AutoML 方案：https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419730
+- 11th：多标签分层 CV：https://www.kaggle.com/competitions/playground-series-s3e17/discussion/419643
+- 赛制多样性请求（45 票）：https://www.kaggle.com/competitions/playground-series-s3e17/discussion/417785

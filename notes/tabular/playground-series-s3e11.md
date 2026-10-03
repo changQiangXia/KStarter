@@ -42,8 +42,38 @@
 - 用偏依赖图审"低基数数值列"：它们常是伪装类别。
 - KS 检验是"特征能否跨 train/test 使用"的体检工具。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：门店成本回归：**特征子集不确定性 → 多子集模型 Zoo + Ridge 加权**（1st），而单点最大增益来自 **store_score/store_score_ratio**（4th 单 LGBM 私榜 0.29326）；`store_sqft` 应按类别、目标用 log1p、原数据只入训练不入验证；去重分组（36 万行→约 3000 组）能数量级加速迭代。
+
+- 1st（399401）：18 模型 Ridge；去重分组；多子集建模；树状图分析多样性（4 簇）。
+- 3rd（399571）：KS 检验 + 逐模型 LOFO；23 模型 Optuna 权重；stacking 无效、伪标签有效。
+- 4th（399489）：store_score 5 项设施求和 + 面积比；类别传入 LGBM；原数据 fold=-1。
+- 17th（399393）：三人独立方案集成；手调参；按 store 分组均值特征。
+- 社区：去掉部分特征即有 0.2945（34 票）；FE 合集（57 票）；对人工数据的质疑（26 票）。
+
+**裁决**：把特征不确定性变成集成多样性；零售数据先做设施聚合分；RMSLE 统一对数目标；重复行先聚合再训练；权重 blend 优先于 stacking。
+
+**悬案**：2nd/5th–16th 未收录；伪标签增益未量化。
+
+## 9. 图表证据
+
+![store_sqft 的部分依赖图](../../intel/playground-series-s3e11/bodies/399401_img/01.png)
+
+**图 1**（topic 399401）：store_sqft 的 PDP 呈阶梯状 → 类别特征。
+
+![模型多样性树状图](../../intel/playground-series-s3e11/bodies/399401_img/02.png)
+
+**图 2**（topic 399401）：18 模型聚成 4 簇。
+
+![原数据只入训练不入验证](../../intel/playground-series-s3e11/bodies/399489_img/01.png)
+
+**图 3**（topic 399489）：fold=-1 的验证协议。
+
+## 10. 出处
 
 - 1st：A Zoo of Models（去重与树状图分析）：https://www.kaggle.com/competitions/playground-series-s3e11/discussion/399401
 - 3rd：KS 检验 + LOFO + 伪标签：https://www.kaggle.com/competitions/playground-series-s3e11/discussion/399571
 - 特征工程 Ideas 合集：https://www.kaggle.com/competitions/playground-series-s3e11/discussion/396291
+- 4th：FE 决定成败：https://www.kaggle.com/competitions/playground-series-s3e11/discussion/399489
+- 去掉特征即 0.2945（34 票）：https://www.kaggle.com/competitions/playground-series-s3e11/discussion/396508
