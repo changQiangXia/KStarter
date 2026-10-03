@@ -1,0 +1,173 @@
+# https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571289
+
+Topic #571289: 21st Place Solution
+  Author: JK-Piece
+  Posted: 2025-04-02 12:00:01.207000
+  Votes: 24  Comments: 13
+
+Thanks to all participants, especially those who created awesome notebooks, models and engaging discussions. I learned a lot. Thanks to Kaggle and the Host for their continued support throughout this long, challenging but exciting competition.
+
+I developed many approaches some of which drew inspiration from discussions and public notebooks. Below I mainly share my successful approach so far with public score 28.
+
+Final Approach: Logits Distillation from Qwen-QWQ 32B into DeepSeekR1-Distill-Qwen14B
+
+Since the idea is to learn how  Qwen-QWQ 32B solves problems, I needed problems that are relevant for the AIMO2 competition. Hence, I included the reference set as well, see below
+
+Datasets
+
+
+
+Random 6% (random seed 42) of Problems from OpenR1 Dataset where DeepSeek-R1 found the right answer + AIMO2 Reference Set + AIME2024 + AIME2025.
+
+Total Dataset Size: 5274
+
+
+Main Methodology
+
+1. Initialize three models on shared GPUs as follows
+
+
+
+Qwen-QWQ 32B-AWQ loaded via vLLM (teacher model for text generation)
+
+Qwen-QWQ 32B-AWQ loaded with AutoModelForCausalLM (teacher for logits computation)
+
+DeepSeekR1-Distill-Qwen14B (student model)
+
+
+2. Generate text, form inputs, forward and compute loss
+
+
+
+For each input problem, create a prompt, including system message and ask Teacher Model to solve the problem (using vLLM for faster inference)
+
+Use Teacher Model (AutoModelForCausalLM instance) to get logits of tokens present in the generated text + prompt
+
+Call Student Model to compute logits for the same input text (again, the prompt and solution are included as inputs for logits computation)
+
+Compute KL divergence between student logits and teacher logits
+
+
+Training Details
+
+SYSTEM_PROMPT = 
+
+MAX_SEQ_LEN =  
+
+sampling_params = SamplingParams(max_tokens=MAX_SEQ_LEN, temperature=, skip_special_tokens=)
+
+generated_text = teacher_model.generate(
+            prompts=teacher_prompt,
+            sampling_params=sampling_params
+        )
+
+
+
+teacher_logits = teacher_logits_model(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
+
+student_logits = model(input_ids=student_input_ids, attention_mask=student_attention_mask).logits
+
+student_log_logits = torch.nn.functional.log_softmax(student_logits, dim=-).to()
+teacher_log_logits = torch.nn.functional.log_softmax(teacher_logits, dim=-).to()
+
+loss = torch.nn.functional.kl_div(student_log_logits, teacher_log_logits, log_target=, reduction=)
+
+training_args = TrainingArguments(
+    output_dir=,
+    per_device_train_batch_size=,
+    num_train_epochs=,
+    logging_dir=,
+    logging_steps=,
+    learning_rate=,
+    weight_decay=,
+    save_strategy=,
+    save_steps=,
+    remove_unused_columns=,
+    report_to=,
+)
+
+
+Linear Weight Ensembling: This is what really stood out
+
+
+
+I kept checkpoints at different training steps and averaged model weights from those
+
+Averaged checkpoints are: 0.1*ckpt-20 + 0.1*ckpt-180 + 0.1*ckpt-260 + 0.1*ckpt-280 + 0.1*ckpt-360 + 0.1*ckpt-640 + 0.1*ckpt-1840 + 0.1*ckpt-2300 + 0.2*last-ckpt
+
+
+Evaluation with Quantized Distilled Qwen14B Model
+
+
+
+
+AIME2024/2025: 43/60
+
+
+Reference Set: 7/10
+
+
+Public LB: 28 (with max_seq_len=8192*3//2 + 1024, top_p=0.9, min_p=0.05, temperature=1.0). I also used vLLM Engine class (not LLM) and could cancel requests when a given answer reaches 33% (frequency) w.r.t. max_num_seqs=12
+
+
+Final Thoughts
+
+
+
+I could have trained longer. Unfortunately, I got the idea during the last week of the competition
+
+Training longer could improve performance
+
+Larger learning rate (1e-5) resulted in a poor-performing 7B model. Did not try it with the 14B model
+
+
+What Did Not Work:
+
+
+
+Supervised Finetuning with DeepSeek-R1-Distill-Qwen7B
+
+GRPO with DeepSeek-R1-Distill-Qwen7B
+
+Mergekit (slerp, sce) with my 14B model checkpoints, score dropped to 20
+
+Comments:
+├─ 白夜 (2025-04-02 14:33:11.467000) [+1]
+│  Did distillation and linear weighting improve stability? We can also achieve 27 points using the early stopping strategy of vLLM Engine.
+  ├─ 白夜 (2025-04-02 14:41:32.160000) [+0]
+  │  Based on my understanding, the distillation here seems to be a method for controlling the generation length in low-resource scenarios. What inspired you to use distillation in this competition?
+    ├─ JK-Piece (2025-04-02 15:29:46.023000) [+0]
+    │  Not only generation length in my settings. Also the "approach to problem solving"
+  ├─ JK-Piece (2025-04-02 15:30:54.900000) [+0]
+  │  Unfortunately I only had 2 trials with my model. Training completed in the last days of the competition. So stability has not been fully tested
+    ├─ JK-Piece (2025-04-02 15:33:20.793000) [+0]
+    │  First trial scored 28. Then in second trial I used top_k=20 and got a score of 25. I believe distillation worked. This is why:
+    │  1- I was not able to achieve 28 before training, with my evaluation se...
+├─ CaspianZero (2025-08-23 16:47:39.683000) [+0]
+│  Very good idea, would like to learn from you, may I ask how the Linear Weight Ensembling part code is implemented.
+├─ ducnh279 (2025-04-02 15:19:20.573000) [+0]
+│  Averaged checkpoints are: 0.1ckpt-20 + 0.1ckpt-180 + 0.1ckpt-260 + 0.1ckpt-280 + 0.1ckpt-360 + 0.1ckpt-640 + 0.1ckpt-1840 + 0.1ckpt-2300 + 0.2*last-ckpt
+│  
+│  
+│  Simple and beautiful solution using knowle...
+  ├─ JK-Piece (2025-04-04 05:58:23.947000) [+1]
+  │  Yes. I did that. Last epoch scored 22 though I didn't have time to evaluate further
+    ├─ ducnh279 (2025-04-04 06:49:14.727000) [+0]
+    │  Wow, weighted averaging of checkpoints seems to be quite effective! Thanks for sharing this technique!
+├─ jyf (2025-04-02 15:04:09.030000) [+0]
+│  How did you implement early stopping based on consensus? I tried the asynchronous engine and it was not faster.
+  ├─ JK-Piece (2025-04-02 15:47:32.417000) [+2]
+  │  So this is how I implemented early stopping:
+  │  
+  │   ():
+  │      
+  │      request_id = 
+  │      outputs = []
+  │      output_lengths = []
+  │      inner_start_time = time.time()
+  │      killed_req_id = MAX_NUM_SEQS - 
+  │       prompt...
+    ├─ AI-Cat (2025-04-03 08:59:44.360000) [+0]
+    │  Great code!
+    ├─ JK-Piece (2025-04-03 11:47:35.060000) [+0]
+    │  Thanks. Looking forward to your code too

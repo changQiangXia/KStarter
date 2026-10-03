@@ -1,0 +1,261 @@
+<p>First of all, congratulations to all the participants for making it through this long and challenging competition. We’d also like to express our sincere appreciation to the organizers for designing such an interesting competition with a high-quality dataset, and to the Kaggle team for providing the extensive computational resources that made this possible.</p>
+<p>Our team identified the main challenge of this competition as the redundancy in the reasoning process of the DeepSeek R1 series models — specifically, their long output token lengths, which made it difficult to solve 50 problems within the 5-hour time limit. To address this, we aimed to fine-tune a distilled version of the R1 model to reason more efficiently.</p>
+<p>Our final model scored <strong>29 on public LB and 28 on private LB</strong>.</p>
+<h2>Paper</h2>
+<p>ICML2025 AI for Math Workshop<br>
+<a href="https://arxiv.org/abs/2507.08267" target="_blank">A Practical Two-Stage Recipe for Mathematical LLMs: Maximizing Accuracy with SFT and Efficiency with Reinforcement Learning</a></p>
+<h2>Github</h2>
+<p><a href="https://github.com/analokmaus/kaggle-aimo2-fast-math-r1" target="_blank">https://github.com/analokmaus/kaggle-aimo2-fast-math-r1</a></p>
+<h2>Model</h2>
+<p><a href="https://huggingface.co/RabotniKuma/Fast-Math-R1-14B" target="_blank">https://huggingface.co/RabotniKuma/Fast-Math-R1-14B</a><br>
+<a href="https://www.kaggle.com/models/analokamus/fast_math_r1_14b/" target="_blank">https://www.kaggle.com/models/analokamus/fast_math_r1_14b/</a></p>
+<h2>Dataset</h2>
+<p><a href="https://huggingface.co/datasets/RabotniKuma/Fast-Math-R1-SFT" target="_blank">https://huggingface.co/datasets/RabotniKuma/Fast-Math-R1-SFT</a><br>
+<a href="https://huggingface.co/datasets/RabotniKuma/Fast-Math-R1-GRPO" target="_blank">https://huggingface.co/datasets/RabotniKuma/Fast-Math-R1-GRPO</a></p>
+<h1>First stage: intensive SFT using a high-difficulty dataset</h1>
+<h2>Dataset</h2>
+<p><a href="https://huggingface.co/datasets/open-r1/OpenR1-Math-220k" target="_blank">OpenR1 Math</a>: We randomly sampled 3000 examples where the R1’s trace had more than 12800 tokens and an accuracy of over 50%, along with another 3000 examples where the accuracy ranged between 50% and 75%.<br>
+<a href="https://huggingface.co/datasets/hoanganhpham/openr1_hard" target="_blank">openr1_hard</a>:  "~2.5k hard samples from open-r1-math-220k. Samples deemed as hard were unsolvable by r1-distill-32b after 4 tries." (Thank you for the dataset, <a href="https://www.kaggle.com/andy2709" target="_blank">@andy2709</a> )<br>
+<a href="https://huggingface.co/datasets/qihoo360/Light-R1-SFTData" target="_blank">Light-R1-SFTData</a>: We used the 2nd stage data from Light-R1-SFTData. (Big thanks to LightR1 team, <a href="https://www.kaggle.com/zouhaosheng" target="_blank">@zouhaosheng</a> )</p>
+<p>We merged all the datasets mentioned above, removed duplicates, and selected the correct generation with the shortest token length. For samples in the Light-R1 dataset where ground truth answers were not provided, we extracted and substituted the answers from the R1 traces. As a result, we constructed a <strong>high-difficulty dataset consisting of 7900 problem - R1 trace - answer sets</strong>.</p>
+<h2>Training</h2>
+<p>Based on our prior experiments, we observed that the 14B models demonstrated more stable performance. Therefore, we chose DeepSeek-R1-Distill-Qwen-14B as our starting point. A full-parameter supervised fine-tuning training was conducted on a machine with 8 H200 GPUs, using the SFTTrainer from the trl library.</p>
+<h3>Key parameters</h3>
+<ul>
+<li>per_device_train_batch_size = 1</li>
+<li>gradient_accumulation_steps = 8</li>
+<li>num_train_epochs = 20 <ul>
+<li>This number is unusually big, but we found that meaningful performance gains only emerged after long long training</li></ul></li>
+<li>max_seq_length = 24000</li>
+<li>packing = True</li>
+<li>learning_rate = 1e-5</li>
+<li>lr_scheduler_type = cosine</li>
+<li>system_prompt = "Please reason step by step, and put your final answer within \boxed{{}}."</li>
+</ul>
+<p>Training time: approx. 10 hours (8× H200 GPUs)</p>
+<h2>Evaluation</h2>
+<p>We evaluated the model’s performance using a dataset of 40 problems, consisting of <strong>10 reference problems and 30 from AIME 2025</strong>.<br>
+Initially, we generated answers using 16k tokens × 32 prompts. We then applied post-hoc filtering based on token length and the number of prompts to assess performance under various inference conditions.</p>
+<h2>Results</h2>
+<table>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Token budget</th>
+<th>Accuracy (majority@32)</th>
+<th>Accuracy (pass@32)</th>
+<th>Num of answers collected</th>
+<th>Average generation length</th>
+<th>Public LB (quantized model)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-14B</td>
+<td>16384</td>
+<td>0.700</td>
+<td>0.775</td>
+<td>21.775</td>
+<td>9684</td>
+<td>25</td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-14B</td>
+<td>12800</td>
+<td>0.675</td>
+<td>0.775</td>
+<td>16.775</td>
+<td>8331</td>
+<td></td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-14B</td>
+<td>9000</td>
+<td>0.525</td>
+<td>0.600</td>
+<td>12.500</td>
+<td>4725</td>
+<td></td>
+</tr>
+<tr>
+<td>SFT</td>
+<td>16384</td>
+<td>0.750</td>
+<td>0.825</td>
+<td>20.725</td>
+<td>10396</td>
+<td>23</td>
+</tr>
+<tr>
+<td>SFT</td>
+<td>12800</td>
+<td>0.725</td>
+<td>0.725</td>
+<td>15.700</td>
+<td>7024</td>
+<td></td>
+</tr>
+<tr>
+<td>SFT</td>
+<td>9000</td>
+<td>0.550</td>
+<td>0.550</td>
+<td>11.600</td>
+<td>4387</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Our local validation scores improved remarkably after the first-stage SFT. However, we observed that the Public LB scores tended to be slightly lower.<br>
+We believe this was <strong>due to increased reasoning redundancy introduced by SFT, causing many examples to fail to reach a conclusion within the time limit</strong>.<br>
+To address this, our next objective was to apply reinforcement learning to encourage the model to reach accurate conclusions using fewer tokens, while maintaining performance.</p>
+<h1>Second stage: GRPO for more efficient reasoning</h1>
+<h2>Dataset</h2>
+<p><a href="https://huggingface.co/datasets/qihoo360/Light-R1-SFTData" target="_blank">Light-R1-SFTData</a>: We used the 2nd stage data from Light-R1-SFTData.</p>
+<h2>Training</h2>
+<p>We used the <a href="https://github.com/nhannguyen2709/open-r1" target="_blank">faster version of trl GRPOTrainer</a> created by <a href="https://www.kaggle.com/andy2709" target="_blank">@andy2709</a> (again, thank you so much!).</p>
+<p>We used the following reward function:</p>
+<ol>
+<li>Format reward<br>
+In our submission, generation is stopped at the <code>&lt;/think&gt;</code> tag to save time, therefore we designed the reward to match the pattern <code>r"^.*?oxed{(.*?)}.*?&lt;/think&gt;.*?$"</code>.</li>
+<li>Cosine reward (correct [1.0, 0.1], incorrect [-0.1, -1.0], max_len=30000)<br>
+Compared to a normal accuracy-based reward, cosine reward applies a continuous penalty to longer correct reasoning traces and shorter incorrect ones.</li>
+<li>Length reward<br>
+Length-based rewards to discourage overthinking and promote token efficiency.<br>
+Paper: <a href="https://arxiv.org/abs/2501.12599" target="_blank">https://arxiv.org/abs/2501.12599</a></li>
+</ol>
+<h3>Key parameters</h3>
+<ul>
+<li>num_generations = 8</li>
+<li>beta = 0.04</li>
+<li>per_device_train_batch_size = 2</li>
+<li>gradient_accumulation_steps = 8</li>
+<li>num_train_epochs = 1 </li>
+<li>max_completion_length = 16384</li>
+<li>learning_rate = 4e-6</li>
+<li>lr_scheduler_type = cosine</li>
+<li>system_prompt = (<br>
+    'You are a helpful and harmless assistant. You are Qwen developed by Alibaba. '<br>
+    'You should think step-by-step. Return final answer within \boxed{{}}.'<br>
+)</li>
+</ul>
+<p>Training time: approx. 10 hours (8× H200 GPUs)</p>
+<h2>Evaluation</h2>
+<p>Same as first stage.</p>
+<h2>Results</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1973217%2Fdbd9dd1814ade77cc5c840319d36cf72%2FScreenshot%202025-04-02%20at%2016.55.07.png?generation=1743580526542546&amp;alt=media" alt=""><br>
+The reward was optimized steadily throughout training, but after step 60, catastrophic shifts occurred, causing a substantial decline in performance. We thus decided to use checkpoints from earlier steps for evaluation.</p>
+<table>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Token budget</th>
+<th>Accuracy (majority@32)</th>
+<th>Accuracy (pass@32)</th>
+<th>Num of answers collected</th>
+<th>Average generation length</th>
+<th>Public LB (quantized model)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-14B</td>
+<td>12800</td>
+<td>0.675</td>
+<td>0.775</td>
+<td>16.775</td>
+<td>8331</td>
+<td>25</td>
+</tr>
+<tr>
+<td>DeepSeek-R1-Distill-Qwen-14B</td>
+<td>9000</td>
+<td>0.525</td>
+<td>0.600</td>
+<td>12.5</td>
+<td>4725</td>
+<td></td>
+</tr>
+<tr>
+<td>SFT</td>
+<td>12800</td>
+<td>0.725</td>
+<td>0.725</td>
+<td>15.7</td>
+<td>7024</td>
+<td>23</td>
+</tr>
+<tr>
+<td>SFT</td>
+<td>9000</td>
+<td>0.550</td>
+<td>0.550</td>
+<td>11.6</td>
+<td>4387</td>
+<td></td>
+</tr>
+<tr>
+<td>SFT + GRPO (best checkpoint)</td>
+<td>12800</td>
+<td><strong>0.725</strong></td>
+<td><strong>0.775</strong></td>
+<td><strong>18.5</strong></td>
+<td>6817</td>
+<td><strong>29</strong></td>
+</tr>
+<tr>
+<td>SFT + GRPO (best checkpoint)</td>
+<td>9000</td>
+<td><strong>0.625</strong></td>
+<td><strong>0.700</strong></td>
+<td><strong>15.25</strong></td>
+<td>4759</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>GRPO enabled us to train a model that preserved accuracy while significantly improving inference efficiency through shorter token lengths. </p>
+<h1>Submission inference setup</h1>
+<h2>Quantization</h2>
+<p>We applied 4-bit quantization using <a href="https://github.com/casper-hansen/AutoAWQ" target="_blank">AutoAWQ</a>.<br>
+We observed some degradation in validation performance after quantization, and attempted to recover it through calibration on a math-specific dataset. Unfortunately, this approach did not succeed in preserving the original performance.</p>
+<h2>Inference time scheduling</h2>
+<p>We trained a ModernBERT model to predict the shortest token length of correct R1 traces for each problem in the OpenR1 Math dataset, thereby quantifying problem difficulty.<br>
+On the validation set, we observed a moderate correlation between the predicted difficulty and the actual number of tokens generated, as shown in the figure below.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1973217%2F75f9af2011608c982ac21ca1bd091464%2Flongcontext_tokenlength_scatter.png?generation=1743582693786625&amp;alt=media" alt=""></p>
+<p>Using this model, we scaled the output token length dynamically during inference. This approach stabilized the Public LB scores and led to an improvement of approx. +1 point (though it could be placebo).</p>
+<h2>Misc.</h2>
+<ul>
+<li>Prompts: prompt_config0 * 8 + prompt_config1 * 2 (10 prompts in total)</li>
+</ul>
+<pre><code>prompt_config0 = (
+    system=(
+        
+        
+    ),
+    prompt=
+)
+
+prompt_config1 = (
+    system=(
+        
+        
+    ),
+    prompt=
+)
+</code></pre>
+<ul>
+<li>Output token length: 10500 - 13300 (dynamic scaling described above)</li>
+<li>vLLM version 0.7.3 with V1</li>
+</ul>
+<h1>What didn’t work</h1>
+<h2>Constrained decoding</h2>
+<p>Many studies have explored controlling the reasoning processes of LLMs through constrained decoding methods, such as:</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/2501.18585" target="_blank">https://arxiv.org/pdf/2501.18585</a></li>
+<li><a href="https://arxiv.org/pdf/2412.21187" target="_blank">https://arxiv.org/pdf/2412.21187</a></li>
+</ul>
+<p>We experimented extensively with these approaches and tuned various parameters; however, none of them proved effective on our validation dataset. Our hypothesis is that these methods might only be suitable for relatively simple problems.</p>
+<h2>Rewritiing the reasoning process and retraining</h2>
+<p>We also experimented with rewriting the original R1-Qwen model’s reasoning process into a more compact one, following the <a href="https://github.com/NovaSky-AI/SkyThought" target="_blank">SkyThought</a> approach, and retraining the model via SFT and DPO. Although this method significantly reduced the number of tokens generated before reaching an answer, it also caused a substantial drop in accuracy.</p>
+<p>For highly capable LLMs, forcibly altering their natural reasoning process externally might not be an effective strategy, particularly when dealing with complex problem-solving scenarios like ours.</p>

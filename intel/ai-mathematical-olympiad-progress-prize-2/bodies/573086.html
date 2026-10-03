@@ -1,0 +1,106 @@
+<p>I’m grateful to Kaggle and the competition organizers for hosting this challenge. I’d also like to extend my thanks to the participants who shared insightful discussions and valuable datasets.</p>
+<h1>Summary</h1>
+<p>Using <a href="https://www.kaggle.com/models/huikang/deepseek-r1/Transformers/deepseek-r1-distill-qwen-14b-awq-casperhansen/1" target="_blank"><strong>deepseek-r1-distill-qwen-14B-awq-casperhansen</strong></a> with <strong>SC-TIR</strong>.<br>
+By <strong>modifying vllm</strong>, the inference can end early when Self-Consistency (SC) converges or diverges.  <br>
+Evaluation is done using the <strong>most recent 100 AIME problems</strong>. No machine resources were available to do GRPO. </p>
+<h1>Strategy</h1>
+<h3>1. Model</h3>
+<ul>
+<li>Adopted <strong>deepseek-r1-distill-qwen-14B-awq-casperhansen</strong>  </li>
+<li>Compared 7B, 14B, and 32B:<ul>
+<li>32B is too slow and not perfect.</li>
+<li>14B &gt; 7B (in terms of accuracy), 14B &lt; 7B (in terms of speed)  </li>
+<li>Increasing the number of generations for 14B made it more competitive</li></ul></li>
+</ul>
+<h3>2. Self-Consistency</h3>
+<ul>
+<li>Its effectiveness was already demonstrated in AIMO1.  </li>
+<li>It was also a standard approach in AIMO2.</li>
+</ul>
+<h3>3. Custom vllm</h3>
+<ul>
+<li>Employed 14B and modified <strong>vllm</strong> to allow as many generates as possible.</li>
+<li>For easy problems → outputs don’t vary much, so there’s no need to generate up to <code>max_num_seqs</code>.  </li>
+<li>For overly difficult problems → the output often ends up being 0 and -1 or diverging (no unique solution). Even generating the full <code>max_num_seqs</code> won't lead to a correct answer in many such cases.  </li>
+<li>As a result, the number of problems that actually require the full <code>max_num_seqs</code> length to determine the outcome is surprisingly small.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16562148%2F2e93dcdb0b0c106ea78145d8054ee7e2%2F2025-04-13%2020.31.32.png?generation=1744546636576459&amp;alt=media" alt=""></p>
+<ul>
+<li><p><strong>There are too many -1 and 0</strong>  </p>
+<ul>
+<li>If there are a certain number of -1 or 0 (invalid responses), it ends inference early.  </li>
+<li>5 ~ 7 responses → terminate if 5 or more are -1/0  </li>
+<li>8 ~ 11 responses → terminate if 4 or more are -1/0  </li>
+<li>12 ~ 16 responses → terminate if 6 or more are -1/0</li></ul></li>
+<li><p><strong>There responses have diverged</strong>  </p>
+<ul>
+<li>Once there are at least 8 responses, if there are 6 or more different valid responses, I consider it too scattered and terminate.</li></ul></li>
+<li><p><strong>The winner has been decided</strong>  </p>
+<ul>
+<li>If the difference in counts between the most frequent answer and the second-most frequent answer exceeds a certain threshold, the winner is considered determined, and inference stops.  </li>
+<li>4 ~ 7 responses → difference ≥ 3  </li>
+<li>8 ~ 11 responses → difference ≥ 2  </li>
+<li>12 ~ 16 responses → difference ≥ 1  </li></ul></li>
+</ul>
+<h3>4. Validation dataset</h3>
+<ul>
+<li>Used the 100 most recent AIME problems.</li>
+<li>Because the score varies, I tested several times and took the average for pipeline evaluation.</li>
+<li>The <a href="https://www.kaggle.com/code/huikang/thought-engineering-r1-distill-qwen-7b-awq" target="_blank">public notebook</a> score was about 63–68, while my pipeline scored around 75–79.</li>
+</ul>
+<h3>5. one-shot</h3>
+<ul>
+<li>Even problems that are mathematically difficult to solve might still be solved by a <strong>TIR</strong> exhaustive search.</li>
+<li>I included the <strong>exhaustive search approach</strong> in the few-shot prompt.</li>
+<li>Prompts such as <code>Let's have Python do the tedious calculations for us!</code> and  <br>
+<code>There are multiple ways to solve this problem, so find the most efficient one.</code>  <br>
+contributed slightly to improved scores.</li>
+</ul>
+<pre><code>You are a Python code assistant. 
+
+You will be  a mathematical problem  has  solutions.
+Your task   convert this complex math problem  Python code.
+Let's have Python do  tedious calculations  us!
+
+There are multiple ways  solve this problem, so find  most efficient one.
+
+- The final answer should be an .
+- The final answer should be modulo 
+- Please  Python code only following  format .
+
+\`\`\`python
+import math 
+
+...
+
+...
+
+print(&lt;answer&gt; % )
+\`\`\`
+
+Here  an example.
+
+User:
+Find    ordered pairs $(m, n)$ such  $m$  $n$ are positive integers    $\{, , ..., \}$   greatest common divisor  $^m + $  $^n - $   $$ .
+
+Assistant:
+\`\`\`python
+import math
+
+answer = 
+
+
+ m  range(, ):
+     n  range(, ):
+        
+         math.gcd(**m + , **n - ) != :
+            answer += 
+
+
+print(answer % )
+\`\`\`
+</code></pre>
+<p>Public LB: 29<br>
+Private LB: 28<br>
+Inference Notebook: <a href="https://www.kaggle.com/code/farsail/aimo2-inference" target="_blank">https://www.kaggle.com/code/farsail/aimo2-inference</a><br>
+Custom vllm: <a href="https://www.kaggle.com/code/farsail/pip-install-aimo2-custom-vllm" target="_blank">https://www.kaggle.com/code/farsail/pip-install-aimo2-custom-vllm</a></p>

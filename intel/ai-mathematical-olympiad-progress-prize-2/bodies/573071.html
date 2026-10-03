@@ -1,0 +1,96 @@
+<p>LLM used:<br>
+ <a href="https://www.kaggle.com/models/huikang/deepseek-r1/Transformers/deepseek-r1-distill-qwen-14b-awq-casperhansen/1" target="_blank">deepseek-r1-distill-qwen-14b-awq-casperhansen</a></p>
+<p>I thought some of the questions can be solved much more efficiently by running Python code— so I explored generating code with DeepSeek R1. However, simply adding "Make python code." to the prompt did not work well.<br>
+Here is what I found that worked well with DeepSeek and QWQ,</p>
+<h1>To get code and fix it with LLM:</h1>
+<p>Step 1: Initial Prompting</p>
+<p>Provide the question text as a prompt to the model.<br>
+Set output length between 2000 to 4000 tokens. <br>
+With this, get output in 1-2 min.<br>
+Output text are always truncated but no problem for further use for code generation.</p>
+<p>Step 2: Prompt for Code Generation</p>
+<p>Construct a new retry_prompt using the model's earlier output:<br>
+Structure:</p>
+<pre><code>    content = &lt;Instruction text  make code  previous thought&gt;
+     (e.g.)
+    content += question
+    content += output
+
+    prompt = [{: , : content}]
+    prompt = tokenizer.apply_chat_template(
+                        =retry_prompt,
+                        =,
+                        =)
+</code></pre>
+<p>Then, add either of the following:</p>
+<p>For better code (more verbose, with reasoning):</p>
+<pre><code>    prompt += '&lt;/think&gt;'
+    prompt += "Here's a structured approach to solve the problem:### Approach"
+</code></pre>
+<p>For fast (but sometimes lower-quality) code:</p>
+<pre><code>     += 
+    prompt += 
+</code></pre>
+<p>With this, get code within another ~1 min.</p>
+<p>Step 3: Error Fixing Prompt</p>
+<p>If generated code fails when run via subprocess, build a new error-fixing prompt:</p>
+<pre><code>    content = &lt;Some instructions to fix the code&gt;
+     (e.g.&gt;
+    content +=  question
+    content += &lt;Code with error&gt;
+    content += &lt;Error message&gt;
+</code></pre>
+<p>Retry generation with this new prompt.<br>
+Sometime works, but sometimes encounters another error and repeat this fixing process.</p>
+<p>Notebook demonstrating code generation and error fixing using the reference set:<br>
+<a href="https://www.kaggle.com/code/ippeiogawa/generate-code-from-deepseekr1" target="_blank">https://www.kaggle.com/code/ippeiogawa/generate-code-from-deepseekr1</a></p>
+<h1>Summary of strategy</h1>
+<ul>
+<li><p>Samples:<br>
+Total of 16 samples —<br>
+→ 4 used to get code (as mentioned above)<br>
+→ 12 used to get boxed answers</p></li>
+<li><p>Chunked Reasoning:<br>
+Output every 2000 tokens → combine 3–4 outputs → prompt with:<br>
+"Please think again from combined previous thought."</p></li>
+<li><p>vLLM.LLMEngine:<br>
+Used to stream results as soon as a sample finishes.<br>
+LLMEngine Code Snippet:</p>
+<pre><code> vllm import EngineArgs, LLMEngine, SamplingParams
+
+
+engine_args = EngineArgs(
+    llm_model_path,
+    =max_len,
+    =,
+    =4,
+    =0.96,
+    =2025,
+)
+engine = LLMEngine.from_engine_args(engine_args)
+
+
+ &lt;Some conditions  continue generation   stop it&gt;:
+     prompt:
+        engine.add_request(str(request_id), prompt, sampling_params)
+        request_id +=1
+
+    request_outputs = engine.()
+
+     request_output  request_outputs:
+         request_output.finished:
+            output_text = request_output[0].text
+            # Extract an answer
+            # Process output
+             Code  output_text:
+                 via subprocess
+
+            # Build new prompts  generating  fixing code   think again with combined thought.
+            new_prompt = &lt;construct new prompt&gt;
+            engine.add_request(str(request_id), new_prompt, new_sampling_params)
+            request_id +=1
+</code></pre></li>
+<li><p>Early stopping: <br>
+If 3 identical answers are produced, I treat that as the final answer and move on to the next question.</p></li>
+</ul>
+<p>Thank you for reading!</p>

@@ -1,0 +1,261 @@
+<p>First, I would like to express my sincere gratitude to XTX Markets and Kaggle for hosting this excellent competition. Organizing an event of this quality and scale is a significant undertaking. I also extend my appreciation to all the participants for their dedication and contributions.<br>
+<strong>Solution Details (luck + 14b-awq + lmdeploy):</strong></p>
+<ul>
+<li><strong>Public Score:</strong> 28</li>
+<li><strong>Private Score:</strong> 29</li>
+<li><strong>Model:</strong> Deepseek-R1 Distill-Qwen-14B-AWQ (<a href="https://huggingface.co/casperhansen/deepseek-r1-distill-qwen-14b-awq" target="_blank">https://huggingface.co/casperhansen/deepseek-r1-distill-qwen-14b-awq</a> - MIT License)</li>
+<li><strong>Inference Server:</strong> lmdeploy (<a href="https://github.com/InternLM/lmdeploy" target="_blank">https://github.com/InternLM/lmdeploy</a> - Apache 2.0 License)</li>
+<li><strong>Notebook:</strong> <a href="https://www.kaggle.com/code/stuveee/aimo-lmdeploy" target="_blank">https://www.kaggle.com/code/stuveee/aimo-lmdeploy</a></li>
+<li><strong>Key References:</strong> <a href="https://www.kaggle.com/code/yekenot/aimo-2-deepseek-r1-distill-qwen-7b-awq" target="_blank">https://www.kaggle.com/code/yekenot/aimo-2-deepseek-r1-distill-qwen-7b-awq</a> (public notebook of Vladimir Demidov)</li>
+<li><strong>E2E handler for HF Endpoints:</strong> <a href="https://huggingface.co/usernameeeeeeee/r1-distill-14b-awq-casperhansen-e2e-solution-handler" target="_blank">https://huggingface.co/usernameeeeeeee/r1-distill-14b-awq-casperhansen-e2e-solution-handler</a></li>
+<li><strong>Computational Resources (to reach the winning submission):</strong> Kaggle's L4x4 GPU (15h/week)</li>
+</ul>
+<h2>Overview</h2>
+<p>Compared to Vladimir Demidov's public notebook, I utilized the 14B-AWQ version of the DeepSeek-R1 Distill-Qwen model and implemented inference using lmdeploy, resulting in a 28% throughput gain over vllm. I learned these from the public model and discussion shared by the imagination-research team – whose insights were greatly appreciated.<br>
+I attribute my 5th place finish largely to fortunate circumstances, as a near identical submission achieved a public score of only 23. I share this outcome with those who may have more contributions or developed stronger models, yet did not experience the same favorable results. I hope everyone has the opportunity to benefit from a similar stroke of luck in future events.<br>
+Finally, I am also sharing a simulation technique applied during this competition, which reduces evaluation compute from O(N) to O(1). To avoid potential submission waste or a slight performance downgrade, I directly adopted answer extraction/voting codes and prompts from Vladimir Demidov's notebook (though I had my own version). I am very grateful for the original author(s) for their work.</p>
+<h2>Throughput</h2>
+<p>Compared to vllm, lmdeploy increases the throughput by 28% in the 14b-awq setting.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th>lmdeploy</th>
+<th>sglang</th>
+<th>vllm 0.7.2</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14b-awq bs 9 seqlen 13500</td>
+<td>Question Time</td>
+<td>400s</td>
+<td>462s</td>
+<td>511s</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Throughput</td>
+<td>304 token/s</td>
+<td>263 tokens/s</td>
+<td>238 tokens/s</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>32b-awq bs 9 seqlen 9000</td>
+<td>Question Time</td>
+<td>355s</td>
+<td>374s</td>
+<td>396s</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Throughput</td>
+<td>228 token/s</td>
+<td>193 tokens/s</td>
+<td>183 tokens/s</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>7b-awq bs 32 seqlen 13500</td>
+<td>Question Time</td>
+<td>403s</td>
+<td>391s</td>
+<td>505s</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Throughput</td>
+<td>1073 token/s</td>
+<td>1103 tokens/s</td>
+<td>856 tokens/s</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Throughput testing code: <a href="https://www.kaggle.com/code/stuveee/aimo2-throughput-sglang-lmdeploy-vllm" target="_blank">https://www.kaggle.com/code/stuveee/aimo2-throughput-sglang-lmdeploy-vllm</a></li>
+<li>I gave up on vllm engine v1 during the competition because I couldn't reproduce Vladimir Demidov's score on public lb with engine v1 and there were also accuracy downgrade problems reported in the forum. (Later, it seemed that overfitting was the actual cause.)</li>
+<li>note: according to team imagination-research's and tascj's great solution writeups, using int8 kv quantization can further enhance throughput without sacrificing accuracy.</li>
+</ul>
+<h2>Details and Strategies</h2>
+
+<h3>Running details:</h3>
+<ul>
+<li>temperature: 0.9</li>
+<li>top_p: 0.9</li>
+<li>min_p: 0.05</li>
+<li>stop_words: ['&lt;/think&gt;']</li>
+<li>batchsize: 9</li>
+<li>seqlen: 13500</li>
+</ul>
+<h3>Strategies:</h3>
+<ul>
+<li>To avoid complexity, I use the same batchsize and cutoff length for all questions, just to ensure the entire run to complete in about 4.5~4.7h.</li>
+<li>For each question, 9 requests run concurrently, and cutoff at seqlen 13500. Majority vote is applied to get the answer.</li>
+<li>Note: a question-level early stop strategy saves about 4.5~9% tokens without losing accuracy (see next section). However, it might bring bugs and implementing it in lmdeploy turbomind seemed effort consuming during the competition, so I didn't apply it.</li>
+</ul>
+<h2>Simulations</h2>
+<h3>Overview:</h3>
+<p>Doing simulations can help saving compute resource from O(N) to O(1) by alternating the evaluation steps. It helped me to save a lot of submissions and compute resources during the competition.<br>
+Vanilla Evaluation:</p>
+<pre><code>For each new scheme:
+   Use llm to generate sufficient samples of this scheme
+   Obtain evaluation result
+</code></pre>
+<p>Simulation:</p>
+<pre><code>Use llm to generate sufficient samples as the 'groundtruth' 
+For each new scheme:
+   Sample from the 'groundtruth' the outputs of this scheme (until the evaluation result converges)
+   Obtain evaluation result
+</code></pre>
+<p>Note that step 1 of simulation only needs to be conducted once, and there is no need to generate new outputs when evaluating new schemes. Also, more samples lead to a more accurate 'groundtruth'.<br>
+code: <a href="https://www.kaggle.com/code/stuveee/aimo2-simulation" target="_blank">https://www.kaggle.com/code/stuveee/aimo2-simulation</a><br>
+I conducted simulations for the purposes including:</p>
+<ul>
+<li>grid search - batchsize &amp; seqlen</li>
+<li>grid search - temperature</li>
+<li>estimate early stop benefits and losses</li>
+</ul>
+<h2>Grid Search - Batchsize &amp; Seqlen:</h2>
+<p>I empirically used max_question_time = 410s to estimate the seqlen and batchsize that ensures the entire run to finish in 4.5~4.7h, resulting in:</p>
+<table>
+<thead>
+<tr>
+<th>Batchsize</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seqlen</td>
+<td>20000</td>
+<td>17000</td>
+<td>15500</td>
+<td>14500</td>
+<td>13800</td>
+<td>13300</td>
+<td>12800</td>
+<td>12200</td>
+<td>11600</td>
+<td>11100</td>
+<td>10600</td>
+<td>10200</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>The simulation runs show that the optimal (batchsize, seqlen) is at (10, 13300) or (9, 13800).<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2988556%2F9089026a7616f70127aa745c9c533bbb%2Fimage-14.png?generation=1745164795971663&amp;alt=media" alt=""></li>
+</ul>
+<h3>Grid Search - Temperature:</h3>
+<ul>
+<li>Temperature 0.9 seems to have an observable advantage over temperature 0.8 for the 14b model:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2988556%2Fc34fb7d42207f0867510bc34f098ad69%2Fimage-15.png?generation=1745164761238215&amp;alt=media" alt=""></li>
+<li>In the meantime, temperature 0.85/0.95 do not seem better than 0.9:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2988556%2F0ef08ba151431a6433aedd6206417a40%2Fimage-16.png?generation=1745164883466768&amp;alt=media" alt=""></li>
+</ul>
+<h3>Estimate Early Stop Benefits and Losses:</h3>
+<ul>
+<li>According to the simulation, at batchsize 9, a radical early stop strategy saves about 9% tokens, while a conservative strategy saves about 4.5%. Both the radical strategy and the conservative strategy have no accuracy loss when batchsize &lt; 12.
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2988556%2Faea29449ae85ce167a6f3ecc6393392f%2Fimage-11.png?generation=1745164981705719&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2988556%2F8ecc3aa403e71d259834161dbe44269f%2Fimage-17.png?generation=1745164842429171&amp;alt=media" alt=""><br>
+Details of the strategies are as follows:</li>
+<li>conservative<ul>
+<li>stop when: running_requests + 2nd_most_answer &lt;= 1st_most_answer</li></ul></li>
+<li>radical<ul>
+<li>In addition, stop when: 1st_most_answer &gt;= current_answers * (80% - (current_answers - 5) / (batchsize - 5) * 30%)</li>
+<li>i.e., linearly interpolate between:<ul>
+<li>4 consistent answers when 5 are obtained</li>
+<li>50% consistent answers when all obtained</li></ul></li></ul></li>
+</ul>
+<h2>Failed Attempts</h2>
+<h3>AWQ enhancement</h3>
+<p><strong>groupsize 128 -&gt; 32:</strong> not supported by lmdeploy<br>
+<strong>customized AWQ:</strong></p>
+<ol>
+<li>calib_data: <ul>
+<li>mit-han-lab/pile-val-backup -&gt; selective samples from lightr1-stage2.json (I appreciate LightR1 team for their work), question + solution</li></ul></li>
+<li>max_calib_data_seqlen: <ul>
+<li>512 -&gt; 20000</li></ul></li>
+<li>increasing sample num<br>
+&nbsp;<br>
+Note: though the original AWQ paper shows that AWQ is robust to and don't need a large scale of calibration data, I still made an attempt.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2988556%2F58aee13b07eb3405e32fdb082952597b%2Fimage-19.png?generation=1745164814021926&amp;alt=media" alt=""><br>
+The AIME25 result shows that 14b-awqv2 (i.e., customized AWQ) with 8 calibration samples performs better than 14b-awq-casperhansen. However, it couldn't outperform 14b-awq-casperhansen in my few submission attempts.</li>
+</ol>
+<h3>SFT</h3>
+<p>I failed to conduct SFT because the sequence lengths for reasoning tasks were too large, and there was not enough GPU memory to fit, causing GPU OOMs even with lora.</p>
+<h3>failure of reproducing the public notebook</h3>
+<p>I could not reproduce the score of Vladimir Demidov's notebook in my own code. I spent 20 submissions, bisected the code differences, and ended up finding that either change below leads to a score downgrade from 23~26 to 18~21:</p>
+<ol>
+<li>merely changing vllm engine from v0 to v1</li>
+<li>merely using vllm-0.6.3.post1 engine v0 without seed</li>
+</ol>
+<h2>Appreciation</h2>
+<p>Finally, I would like to once again thank XTX Markets and Kaggle for hosting this wonderful competition, and to all the participants for their incredible effort and dedication. I am also deeply grateful to everyone who supported me throughout this journey. Their encouragement was truly invaluable.</p>

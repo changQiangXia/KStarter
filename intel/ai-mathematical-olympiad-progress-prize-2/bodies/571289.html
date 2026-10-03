@@ -1,0 +1,83 @@
+<p>Thanks to all participants, especially those who created awesome notebooks, models and engaging discussions. I learned a lot. Thanks to Kaggle and the Host for their continued support throughout this long, challenging but exciting competition.</p>
+<p>I developed many approaches some of which drew inspiration from discussions and public notebooks. Below I mainly share my successful approach so far with <strong>public score 28</strong>.</p>
+<h2>Final Approach: Logits Distillation from Qwen-QWQ 32B into DeepSeekR1-Distill-Qwen14B</h2>
+<p>Since the idea is to learn how  Qwen-QWQ 32B solves problems, I needed problems that are relevant for the AIMO2 competition. Hence, I included the reference set as well, see below</p>
+<h3>Datasets</h3>
+<ul>
+<li>Random 6% (random seed 42) of Problems from <a href="https://huggingface.co/datasets/open-r1/OpenR1-Math-220k" target="_blank">OpenR1 Dataset</a> where DeepSeek-R1 found the right answer + AIMO2 Reference Set + <a href="https://huggingface.co/datasets/Maxwell-Jia/AIME_2024" target="_blank">AIME2024</a> + <a href="https://huggingface.co/datasets/opencompass/AIME2025" target="_blank">AIME2025</a>.</li>
+<li>Total Dataset Size: 5274</li>
+</ul>
+<h3>Main Methodology</h3>
+<p><strong>1. Initialize three models on shared GPUs as follows</strong></p>
+<ul>
+<li>Qwen-QWQ 32B-AWQ loaded via vLLM (teacher model for text generation)</li>
+<li>Qwen-QWQ 32B-AWQ loaded with AutoModelForCausalLM (teacher for logits computation)</li>
+<li>DeepSeekR1-Distill-Qwen14B (student model)</li>
+</ul>
+<p><strong>2. Generate text, form inputs, forward and compute loss</strong></p>
+<ul>
+<li>For each input problem, create a prompt, including system message and ask Teacher Model to solve the problem (using vLLM for faster inference)</li>
+<li>Use Teacher Model (AutoModelForCausalLM instance) to get logits of tokens present in the generated text + prompt</li>
+<li>Call Student Model to compute logits for the same input text (again, the prompt and solution are included as inputs for logits computation)</li>
+<li>Compute KL divergence between student logits and teacher logits</li>
+</ul>
+<h3>Training Details</h3>
+<pre><code>SYSTEM_PROMPT = 
+
+MAX_SEQ_LEN =  
+
+sampling_params = SamplingParams(max_tokens=MAX_SEQ_LEN, temperature=, skip_special_tokens=)
+
+generated_text = teacher_model.generate(
+            prompts=teacher_prompt,
+            sampling_params=sampling_params
+        )
+
+
+
+teacher_logits = teacher_logits_model(input_ids=teacher_input_ids, attention_mask=teacher_attention_mask).logits
+
+student_logits = model(input_ids=student_input_ids, attention_mask=student_attention_mask).logits
+
+student_log_logits = torch.nn.functional.log_softmax(student_logits, dim=-).to()
+teacher_log_logits = torch.nn.functional.log_softmax(teacher_logits, dim=-).to()
+
+loss = torch.nn.functional.kl_div(student_log_logits, teacher_log_logits, log_target=, reduction=)
+
+training_args = TrainingArguments(
+    output_dir=,
+    per_device_train_batch_size=,
+    num_train_epochs=,
+    logging_dir=,
+    logging_steps=,
+    learning_rate=,
+    weight_decay=,
+    save_strategy=,
+    save_steps=,
+    remove_unused_columns=,
+    report_to=,
+)
+</code></pre>
+<h3>Linear Weight Ensembling: <strong>This is what really stood out</strong></h3>
+<ul>
+<li>I kept checkpoints at different training steps and averaged model weights from those</li>
+<li>Averaged checkpoints are: 0.1*ckpt-20 + 0.1*ckpt-180 + 0.1*ckpt-260 + 0.1*ckpt-280 + 0.1*ckpt-360 + 0.1*ckpt-640 + 0.1*ckpt-1840 + 0.1*ckpt-2300 + 0.2*last-ckpt</li>
+</ul>
+<h3>Evaluation with Quantized Distilled Qwen14B Model</h3>
+<ul>
+<li><p>AIME2024/2025: 43/60</p></li>
+<li><p>Reference Set: 7/10</p></li>
+<li><p>Public LB: 28 (with max_seq_len=8192*3//2 + 1024, top_p=0.9, min_p=0.05, temperature=1.0). I also used vLLM Engine class (not LLM) and could cancel requests when a given answer reaches 33% (frequency) w.r.t. <code>max_num_seqs=12</code></p></li>
+</ul>
+<h2>Final Thoughts</h2>
+<ul>
+<li>I could have trained longer. Unfortunately, I got the idea during the last week of the competition</li>
+<li>Training longer could improve performance</li>
+<li>Larger learning rate (1e-5) resulted in a poor-performing 7B model. Did not try it with the 14B model</li>
+</ul>
+<h2>What Did Not Work:</h2>
+<ul>
+<li>Supervised Finetuning with DeepSeek-R1-Distill-Qwen7B</li>
+<li>GRPO with DeepSeek-R1-Distill-Qwen7B</li>
+<li>Mergekit (slerp, sce) with my 14B model checkpoints, score dropped to 20</li>
+</ul>

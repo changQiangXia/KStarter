@@ -1,0 +1,178 @@
+# https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573086
+
+Topic #573086: 11th place solution
+  Author: wang
+  Posted: 2025-04-13 12:17:55.396000
+  Votes: 19  Comments: 5
+
+I’m grateful to Kaggle and the competition organizers for hosting this challenge. I’d also like to extend my thanks to the participants who shared insightful discussions and valuable datasets.
+
+Summary
+
+Using deepseek-r1-distill-qwen-14B-awq-casperhansen with SC-TIR.
+By modifying vllm, the inference can end early when Self-Consistency (SC) converges or diverges.  
+Evaluation is done using the most recent 100 AIME problems. No machine resources were available to do GRPO. 
+
+Strategy
+
+1. Model
+
+
+
+Adopted deepseek-r1-distill-qwen-14B-awq-casperhansen  
+
+Compared 7B, 14B, and 32B:
+
+
+32B is too slow and not perfect.
+
+14B &gt; 7B (in terms of accuracy), 14B &lt; 7B (in terms of speed)  
+
+Increasing the number of generations for 14B made it more competitive
+
+
+2. Self-Consistency
+
+
+
+Its effectiveness was already demonstrated in AIMO1.  
+
+It was also a standard approach in AIMO2.
+
+
+3. Custom vllm
+
+
+
+Employed 14B and modified vllm to allow as many generates as possible.
+
+For easy problems → outputs don’t vary much, so there’s no need to generate up to max_num_seqs.  
+
+For overly difficult problems → the output often ends up being 0 and -1 or diverging (no unique solution). Even generating the full max_num_seqs won't lead to a correct answer in many such cases.  
+
+As a result, the number of problems that actually require the full max_num_seqs length to determine the outcome is surprisingly small.
+
+
+
+
+
+
+
+There are too many -1 and 0  
+
+
+
+If there are a certain number of -1 or 0 (invalid responses), it ends inference early.  
+
+5 ~ 7 responses → terminate if 5 or more are -1/0  
+
+8 ~ 11 responses → terminate if 4 or more are -1/0  
+
+12 ~ 16 responses → terminate if 6 or more are -1/0
+
+
+There responses have diverged  
+
+
+
+Once there are at least 8 responses, if there are 6 or more different valid responses, I consider it too scattered and terminate.
+
+
+The winner has been decided  
+
+
+
+If the difference in counts between the most frequent answer and the second-most frequent answer exceeds a certain threshold, the winner is considered determined, and inference stops.  
+
+4 ~ 7 responses → difference ≥ 3  
+
+8 ~ 11 responses → difference ≥ 2  
+
+12 ~ 16 responses → difference ≥ 1  
+
+
+4. Validation dataset
+
+
+
+Used the 100 most recent AIME problems.
+
+Because the score varies, I tested several times and took the average for pipeline evaluation.
+
+The public notebook score was about 63–68, while my pipeline scored around 75–79.
+
+
+5. one-shot
+
+
+
+Even problems that are mathematically difficult to solve might still be solved by a TIR exhaustive search.
+
+I included the exhaustive search approach in the few-shot prompt.
+
+Prompts such as Let's have Python do the tedious calculations for us! and  
+There are multiple ways to solve this problem, so find the most efficient one.  
+contributed slightly to improved scores.
+
+
+You are a Python code assistant. 
+
+You will be  a mathematical problem  has  solutions.
+Your task   convert this complex math problem  Python code.
+Let's have Python do  tedious calculations  us!
+
+There are multiple ways  solve this problem, so find  most efficient one.
+
+- The final answer should be an .
+- The final answer should be modulo 
+- Please  Python code only following  format .
+
+\`\`\`python
+import math 
+
+...
+
+...
+
+print(&lt;answer&gt; % )
+\`\`\`
+
+Here  an example.
+
+User:
+Find    ordered pairs $(m, n)$ such  $m$  $n$ are positive integers    $\{, , ..., \}$   greatest common divisor  $^m + $  $^n - $   $$ .
+
+Assistant:
+\`\`\`python
+import math
+
+answer = 
+
+
+ m  range(, ):
+     n  range(, ):
+        
+         math.gcd(**m + , **n - ) != :
+            answer += 
+
+
+print(answer % )
+\`\`\`
+
+
+Public LB: 29
+Private LB: 28
+Inference Notebook: https://www.kaggle.com/code/farsail/aimo2-inference
+Custom vllm: https://www.kaggle.com/code/farsail/pip-install-aimo2-custom-vllm
+
+Comments:
+├─ xz (2025-04-13 16:49:04.263000) [+1]
+│  I am not seeing python code extraction and execution from the inference notebook. Am I missing something?
+  ├─ wang (2025-04-14 02:52:41.223000) [+2]
+  │  Thank you for your question. I forgot to include the custom vllm. here it is.
+    ├─ [deleted] (2025-04-14 02:57:57.767000) [+0]
+    │  [deleted]
+  ├─ wang (2025-04-14 02:58:22.910000) [+1]
+  │  I mainly made improvements to the def _run_engine function.
+├─ [deleted] (2025-04-13 19:33:50.780000) [+0]
+│  [deleted]

@@ -1,0 +1,100 @@
+# https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572760
+
+Topic #572760: 7th place solution (pure luck)
+  Author: tascj
+  Posted: 2025-04-11 08:24:01.079000
+  Votes: 46  Comments: 23
+
+I was surprised that my "just give it a try" submission made within a week ended up in the gold zone for this competition. Though this is pure luck (public 23 -&gt; private 29), I would like to share what I learned from this competition.
+
+The task and GPU resources
+
+In this competition, we were given L4x4 GPUs for inference. The good is we didn’t have to suffer with the ancient T4s in 2025. The bad is L4s aren't ideal for LLM decoding either—they only provide 300GB/s on paper memory bandwidth each, totaling 1200GB/s with 4 GPUs.
+
+Long-context decoding (for reasoning) and batched decoding (for majority voting) were both important for this task. Under this kind of inference settings, as context length grows, KV cache can become the main bottleneck (larger than the model weights), further increasing the demand on GPU bandwidth.
+
+Inference engines
+
+I tested the inference speeds of LMDeploy, SGLang, and vLLM. With 4-bit quantized weights and fp16 KV cache, the speed ranking was: LMDeploy &gt; SGLang &gt; vLLM v1 &gt;&gt; vLLM.
+LMDeploy supports int8/int4 KV cache quantization, while SGLang and vLLM offer FP8 KV cache quantization. Using KV cache quantization enables larger decoding batch size within the same time budget.
+Unfortunately, int4 KV cache quantization caused too much accuracy loss, so I ended up choosing LMDeploy with int8 KV cache quantization for inference.
+
+Submission strategy
+
+Before submission, I profiled inference time of decoding to 16k tokens (worst case scenario) under different batch sizes. During the actual submission, I tracked the actual inference time for each question, then add planned time - actual time into the time budget for the next question. Batch size for the next question was selected on that new time budget and my earlier profiling results.
+
+This is a fairly conservative strategy, using smaller batch sizes for first received questions. And I didn’t profile for longer max decoding lengths, so there’s room for improvement.
+
+The inference notebook is public here. Simply a rushed implementation using casperhansen/deepseek-r1-distill-qwen-14b-awq and my submission strategy. I haven’t done enough testing so there might be bugs.
+
+Comments:
+├─ submodular (2025-04-18 06:14:23.243000) [+1]
+│  Gz! Your submission strategy, dynamically adjusting batch size based on real-time inference performance and remaining time budget, is quite clever and resource-conscious. It's a practical approach ...
+├─ Tong Hui Kang (2025-04-11 10:23:12.353000) [+1]
+│  Apparently you only had 1 public LB submission?
+│  
+│  https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572784
+  ├─ Wanderer (2025-04-11 10:28:17.673000) [+3]
+  │  This is what he does.😂 He often joins competitions near the deadline, submits only a few times, and then ranks very high on the private leaderboard.
+  ├─ john (2025-04-11 10:49:01.060000) [+0]
+  │  Take a look at  eedi 72nd place.  I also joined eedi, so i remember this. Habit? 😀 
+  │  https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/leaderboard
+├─ C R Suthikshn Kumar (2025-04-11 09:18:18.040000) [+1]
+│  Congratulations on 7th place in this competition.
+│   I also tried 14b model couple of times  with vLLM, however, I got Notebook Timeout.
+│  Whats your opinion for  the model  update  from 7b to 14b.
+  ├─ tascj (2025-04-11 10:02:21.780000) [+5]
+  │  I think validation should be done like this:
+  │  
+  │  
+  │  
+  │  Prepare a sufficiently reliable dataset (which is quite difficult in this competition).
+  │  
+  │  For each question, sample multiple responses (e.g., 128).
+  │  
+  │  C...
+├─ john (2025-04-11 09:10:07.803000) [+1]
+│  With 4-bit quantized weights and fp16 KV cache, the speed ranking was: LMDeploy &gt; SGLang &gt; vLLM v1 &gt;&gt; vLLM.
+│  Can you show us the comparison results?
+├─ corochann (2025-04-13 17:19:30.817000) [+2]
+│  Congrats and thank you for sharing!
+│  Now not only the training optimization, but the inference speed optimization becomes more important.
+├─ xz (2025-04-11 21:42:57.330000) [+2]
+│  Congrats! I tried 14b with lmdeploy and int8 kv quant once and got 26 on the public LB. The performance degradation seem to be minimal. vLLM's fp8 kv quant on the other hand gave me gibberish (coul...
+├─ Sarah Arshad (2025-04-20 06:40:10.260000) [+0]
+│  Congratulations on your well-deserved success…. Thanks for inspiring us with your hard work and dedication.
+├─ Optimo (2025-04-11 08:39:08.860000) [+0]
+│  Amazingly simple! Congrats!
+│  
+│  What was your public score ?
+  ├─ tascj (2025-04-11 09:52:39.547000) [+1]
+  │  It was 23. That's why I call it pure luck.
+    ├─ Optimo (2025-04-11 11:52:17.590000) [+-2]
+    │  The private LB did not seem too random to me, you had a strong solution! Congrats!
+    ├─ Man of the year (2025-04-11 20:22:45.220000) [+2]
+    │  I've seen that you usually win medals with just 1-2 submissions. Could you please share any tips about your strategy or advice? How do you do this? 
+    │  
+    │  Personally, I cannot really call it "luck", whe...
+    ├─ tascj (2025-04-14 12:30:12.200000) [+7]
+    │  "Luck" is specifically referring to this competition.
+    │  
+    │  For me, making fewer submissions helps me better balance work-Kaggle-life. I enjoy problem solving but don't enjoy leaderboard climbing much. ...
+    ├─ Man of the year (2025-04-14 19:22:35.803000) [+0]
+    │  Thank you very much, your approach is very cool. I also wanted to ask you about your general validation strategy. As I understood, during your experiments you rely on your validation score. How do ...
+    ├─ Chan Kha Vu (2025-04-16 08:08:35.643000) [+0]
+    │  Exactly, whenever I see @tascj0 in the gold zone solo, they usually have less than 10 subs
+    ├─ tascj (2025-04-18 04:21:05.223000) [+3]
+    │  @manwithaflower 
+    │  I don't have any special validation strategies. I fail in trust LB competitions.
+    │  
+    │  As long as local validation enough for the my planned experiments, I'm comfortable with it. What I...
+├─ Quickpanda (2025-04-11 08:37:07.573000) [+0]
+│  Thanks for sharing — your solution looks very clean, and the budget planning seems well thought out!
+├─ [deleted] (2025-04-13 19:27:49.460000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-11 09:32:06.237000) [+0]
+│  [deleted]
+├─ Palvinder (2025-04-16 15:29:02.453000) [+0]
+│  Congratulations! Thank you for sharing!
+├─ [deleted] (2025-04-15 16:02:41.577000) [+0]
+│  Thanks for wonderful solutions
