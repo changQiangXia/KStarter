@@ -44,8 +44,34 @@
 - 外部事件（封城）是数据里的"外来物种"：模型分不清季节与事件，人必须先剪掉。
 - 地理数据别用原始经纬度直接建模——嵌入/聚类/类别化三选一。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：领域先验打败通用 ML——卫星特征无用、位置必须降维/聚类/类别化、**2020 封城周必须当异常处理**；3rd 用周比率把 2020 W8–32 折算回正常水平后拿第 3；4th 用 PCA6+XGB 建模，却在 5 个后处理乘子里**选了最差的一份提交**（9.44126），不加乘子的版本私榜 8.77676 本可第 1。
+
+- 432294（64 票）：为什么常规方法失效的三条解释 + 三种疫情处理法 + 用 2021 下半年自建验证。
+- 3rd（433822）：月度 YoY 定位 2020 W8–32；周均值比率折算；特征只用 lat/lon/week_no；×1.07；修 longitude bug。
+- 4th（433567）：PCA1/PCA2/PCA_SARIMA 三流水线；PCA2+XGB 最优；乘子选择失误。
+- 429278（78 票）：位置 SVD 2 维 >98%、5 维近满。
+- 社区：外推 vs 丢弃（50 票）、NMF 生成机制（34 票）、Holt-Winters（25 票）。
+
+**裁决**：奇异事件显式建模为异常；位置用嵌入/聚类/类别；后处理乘子需独立验证并保留无乘子提交；公榜不足信。
+
+**悬案**：1st/2nd/5th–6th 未收录；疫情折算细节有差异。
+
+## 9. 图表证据
+
+![位置 SVD 的累计解释方差](../../intel/playground-series-s3e20/bodies/429278_img/01.png)
+
+**图 1**（topic 429278）：2 维 >98%、5 维近 100%。
+
+![4th 的提交乘子对照](../../intel/playground-series-s3e20/bodies/433567_img/03.png)
+
+**图 2**（topic 433567）：×1.00 的 8.77676 未被选，勾选的是 9.44126。
+
+## 10. 出处
 
 - 为什么常规方法失效（三问三答）：https://www.kaggle.com/competitions/playground-series-s3e20/discussion/432294
 - 4th：PCA 降维：https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433567
 - 3rd：封城周排放转换：https://www.kaggle.com/competitions/playground-series-s3e20/discussion/433822
+- 降维：5 维足够（78 票）：https://www.kaggle.com/competitions/playground-series-s3e20/discussion/429278
+- 外推还是丢 Covid（50 票）：https://www.kaggle.com/competitions/playground-series-s3e20/discussion/428791

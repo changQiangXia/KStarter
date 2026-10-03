@@ -40,8 +40,36 @@
 - "少即是多"的又一案例：删掉 FE、集成与外部数据后反而夺冠。
 - 阈值必须在验证集上拟合并防泄漏（逐折），不能拿全量 OOF 一刀切。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：QWK + 稀有类（3/4/8）→ **保守预测 + 回归/取整**是最优形态：1st 用单 XGBoost（GPU）+ OptimizedRounder 阈值拿第 1；3rd 用 6 份公开 notebook 的加权众数拿第 3；4th 造了 1,466 个模型、最终用 25 模型 Ridge 栈，却弃用了私榜 0.60201（=第 1）的 CatBoost。
+
+- 1st（387882）：单 RAPIDS XGB、StratifiedKFold 10、无 FE、不用原始数据；每折在验证预测上拟合 Rounder；Optuna 直接优化 QWK。
+- 4th（386645）：对抗验证 AUC 0.6321（去重后）→ 混合训练、竞赛评估；FE 用相关"分散评级"（density/alcohol）；混淆矩阵证明保守 > 冒险。
+- 3rd（386683）：加权众数（一份 notebook 双权重 + 类别权重）；另一份提交本可第 1。
+- 14th（386627）：NN + 类别权重 CE `[1.10,1.5,1,1,1.5,1.5]`。
+- 社区：FE 帖（67 票）、QWK 解释（56 票）、"这是彩票吗"（36 票）、4 特征 XGB（31 票）、回归化（29 票）、Rounder（34 票）。
+
+**裁决**：序数指标先回归再拟合切分点；稀有类预测要按期望扣分把关（宁保守）；提交保留"最强保守 + 结构不同"两条线；原始数据先对抗验证。
+
+**悬案**：2nd、5th–13th 未收录；彩票讨论的统计细节未读。
+
+## 9. 图表证据
+
+![Density/Alcohol 的评级分布](../../intel/playground-series-s3e5/bodies/386645_img/02.png)
+
+**图 1**（topic 386645）：density/alcohol 把评级摊开。
+
+![最优模型的混淆矩阵](../../intel/playground-series-s3e5/bodies/386645_img/04.png)
+
+**图 2**（topic 386645）：预测集中在 5/6/7。
+
+## 10. 出处
 
 - 1st：单模型 + 阈值优化（RAPIDS XGB）：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/387882
 - 3rd：公开 notebook 众数集成：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386683
 - QWK 指标理解：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382421
+- 4th（48 票）：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386645
+- 14th NN（21 票）：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/386627
+- FE 合集（67 票）：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/382698
+- 这是彩票吗（36 票）：https://www.kaggle.com/competitions/playground-series-s3e5/discussion/383429
