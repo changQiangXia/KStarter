@@ -1,0 +1,221 @@
+# https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663029
+
+Topic #663029: 7th Place Gold - CNN Transformer with Invariant Features
+  Author: Chris Deotte
+  Posted: 2025-12-16 00:08:59.584000
+  Votes: 92  Comments: 37
+
+I really enjoyed participating in this competition. Two months ago, I was immediately attracted when I saw that there were no public deep learning public notebooks because this challenge is exactly what deep learning loves! I joined this competition with the simple goal of beating the best public XGBoost notebook with an NN.
+
+XGBoost Public Notebook - Top 100!
+
+Thank you Mahdi Ravaghi for the strong XGBoost baseline here (and thank you other Kagglers whose ideas are contained within). After changing that notebook to build one model per lab_id per action. And training on 100% train data. The notebook achieved CV = 0.475, Public LB = 0.477, Private LB 0.450, (88th place) top 100 rank, wow!
+
+Local Validation Score
+
+In this competition, we observe a near perfect CV LB relationship when using the correct validation score. (i.e. when XGB CV was 0.475 then XGB Public LB was 0.477). The correct CV is computed using only 15 lab_id which excludes labs MABe22, CalMS21, and CRIM13 because the host said these labs did not exist in test data. So all CV scores discussed in this write up, use the correct local validation score. (UPDATE: relationship with Private LB isn't as good)
+
+How To Build an NN
+
+The power of NN is transfer learning from one lab to another! To make NN shine, we need to preprocess the data in some invariant way because the labs are different. Also we need to define the target labels correctly. Lastly we use data augmentation to unlock NN's full potential 🔥
+
+We train our NN on all labs together. From seeing one lab, the NN will learn to make better predictions on another lab. To accomplish this, we need to make input features lab_id invariant. We can further encourage transfer learning by using data augmentation to minimize lab_id feature differences. (i.e. if mice are difference sizes between labs, then we data augment randomly scale sizes of mice up and down).
+
+=&gt; Positive, Negative, and Masked Targets
+
+Our NN has 37 output neurons to predict the probability of each of the 37 possible actions. However not all videos nor labs contain all 37 actions as seen below:
+
+
+
+When training our NN, we need to define the targets correctly. For every video frame, the target=1 if train_annotation says 1. Otherwise it is either negative or masked. We set target=0 when train.csv says behavior_labeled but the target is missing in train_annotation. And we set target=MASK if an action is both missing from train_annotation and not included in the behavior_labeled list. "Mask" means that we do not include loss for this action in this video frame. (And t=0 and t=1 applies loss).
+
+=&gt; Invariant Mouse Positions
+
+If we input the mice body parts x,y as they are in the train_tracking files, the NN will get confused. Because the arena sizes and shapes are different for each lab. The position x,y = 10,10 in one lab will not mean the same thing as position x,y = 10,10 in another lab. Below we see the variation among 3 lab arenas by making a scatter plot of 1 mouse's nose over 5 videos. We see that the labs are different shapes and sizes:
+
+
+
+There are at least 3 ways to make invariant mouse body part positions for our NN:
+
+
+
+Agent centric coordinate system - Shift the agent mouse to the origin with midpoint between ears at (0,0) and rotate tail_base pointed down negative y axis. (All other mice in the video get shifted and rotated with the same transformation).
+
+Min max scale (using 5% and 95% quantiles) all the x,y so that left side of arena is 0 and right side of arena is 1. And bottom is 0 and top is 1. (Also provide NN the pixels_per_cm feature).
+
+Use distances instead of absolute x,y. Instead of saying nose is at (10,10), we use the distance between nose and other body parts such as tail_base. We can compute distance as either a vector or a magnitude.
+
+
+The above bullet points make positions invariant. Regarding velocity, we note that velocity vector and velocity magnitude are already invariant. And we note that all distances (as vector or magnitude) between agent mouse body part and target mouse body part are already invariant. 
+
+Below is an example of agent mouse nose position scatterplot after we transform with agent centric coordinate system. We observe in the scatter plot that all noses positions are now around (0,2) and when the mouse turns it head left it goes to (-2,2) and when it turns right it goes to (2,2):
+
+
+
+=&gt; Invariant Mouse Body Parts
+
+Another challenge for transfer learning between labs is body parts. We observe that different labs track different body parts:
+
+
+
+We observe that all labs have ["nose", "ear_left", "ear_right", "tail_base"]. Then about half of the labs use ["hip_left", "hip_right"] and the other half use ["lateral_left", "lateral_right"]. It turns out that hip and lateral are similar enough that we can rename them both ["side_left", "side_right"] to maximize transfer learning!
+
+Build CNN Transformer
+
+We train our NN using all labs together! Using the 8 body parts listed above and the method of positive, negative, masked loss. We build a CNN Transformer using invariant position, velocity, and distance features. The CNN layers come first and convolute in the time direction. They learn to make features based on how everything is changing. Next the NN feeds these features into layers of attention. Using cross (mouse) attention and self (mouse) attention, the transformer layers learn to compare agent and target mice and compare body parts within a single mouse. Finally the head layer outputs 37 outputs giving a probability for each of the 37 possible actions!
+
+
+
+Different Time Scales
+
+We train the same CNN Transformer multiple times and use a different length sliding window each time (i.e. vary from 2 seconds to 16 seconds). We also add more dilated convolution layers to the longer time windows to capture the larger time scale. Afterward we have four different trained NN and we can ensemble them:
+
+
+
+window = 64 frames, stride = 16 (approx 2 second window), CNN layers = 6
+
+window = 128 frames, stride = 32 (approx 4 second), CNN layers = 8
+
+window = 256 frames, stride = 64 (approx 8 second), CNN layers = 10
+
+window = 512 frames, stride = 128 (approx 16 second), CNN layers = 12
+
+
+Data Augmentation
+
+Using data augmentation gives a huge boost in performance. Data augmentation helps for two reasons. First is makes it harder for the NN to overfit (i.e. memorize instead of generalize the data) and we can train for more epochs. Second, it helps transfer learning between labs because all the labs start looking the same. For example if one lab had larger mice than another lab, after random scaling up and down, the model receives all sizes mice from every lab. We use
+
+
+
+time augmentation - (randomly change 30 fps to 15 or 60)
+
+rotation augmentation 
+
+x scale augmentation
+
+y scale augmentation
+
+horizontal flip
+
+relabel right with left body parts
+
+body part drop out
+
+
+Inference
+
+We predict using the same slide window scheme that we train with. Then each video frame predicts 37 probabilities. Next we smooth probs in time and filter actions that were not in behaviors_labeled (per video_id, agent_id, target_id triplet). Lastly we apply a dictionary of action thresholds per lab_id. Each action under threshold gets set to prob=0. Lastly we take argmax to pick the frame action. (UPDATE: I have an unselected submission which achieves +0.004 private LB (rank 4th or 5th) that uses better tie breaking logic to decide what happens when multiple actions exceed threshold).
+
+Ensemble of NN - CV 0.546 - Public LB 0.551 - Private LB 0.518 (8th Place)
+
+We take an equal weighted average of all our different time scale NN and achieve CV = 0.546 and Public LB = 0.551 and Private LB = 0.518 (rank 8th). In this ensemble we include 3 families of NN. Each family uses a different set of invariant features and a range of time windows. In total our final ensemble use 2xNN from family one, 5xNN from family two, and 3xNN from family three (for a total of 10 NN).
+
+Stack XGB over NN - CV 0.559 - Public LB 0.562 - Private LB 0.523 (7th Place)
+
+To boost our NN score, we train an XGB using one OOF from each of the 3 families of NN and all the features from Mahdi Ravaghi public notebook here. We train one XGB per lab per action. This XGB's CV achieves CV = 0.528 and Public LB = 0.536 and Private LB = 0.508 (rank 12th). And when we blend it with our Ensemble NN, the result is CV = 0.559 and Public LB = 0.562 and Private LB = 0.523 (rank 7th), wow!
+
+Comments:
+├─ Cody_Null (2025-12-16 00:48:51.633000) [+3]
+│  Hey Chris, could you explain the "After changing that notebook to build one model per lab_id per action. And training on 100% train data." to me? I personally did one model per (section, action) ac...
+  ├─ Chris Deotte (2025-12-16 02:02:12.950000) [+3]
+  │  Hi. There is no need to use group aware CV (if your only goal is to submit to LB) because i didn't tune anything. I kept the XGB parameters as they were. Instead of training on 9 sections like the ...
+    ├─ Cody_Null (2025-12-16 02:09:16.547000) [+1]
+    │  Thank you! That one is going to hurt for a bit. My plan since about month 1 of the competition was to make tabular ensemble, add tabm, and then move into CNN. I knew I had something missing with cv...
+    ├─ Chris Deotte (2025-12-16 02:50:11.973000) [+1]
+    │  @cody11null There is one more important detail I forgot to say. We need to use the thresholds.pkl file that was generated by the original 3 KFold public notebook because when we train 100% the new ...
+├─ Khushi Yadav (2025-12-29 21:53:33.977000) [+1]
+│  Very very Congrats! for getting 7th place.✨🥳
+├─ Sheraz (2025-12-24 16:05:56.670000) [+1]
+│  congrats bro 7 place just amazing
+  ├─ Chris Deotte (2025-12-29 20:35:48.080000) [+0]
+  │  Thanks Sheraz
+├─ Eddie B (2025-12-23 02:49:19.240000) [+1]
+│  That's awesome. Thank you for the great work!
+├─ Sudhanshu Singh (2026-01-03 18:45:16.870000) [+2]
+│  Amazing write-up and solution, thanks for breaking everything down so clearly. How much of the final gain do you think came from invariance + augmentation vs. the NN architecture itself? @cdeotte
+  ├─ Chris Deotte (2026-01-03 19:28:08.557000) [+3]
+  │  Thanks! The NN architecture itself was similar to XGB performance CV 0.475. Using invariance and augmentation was the key to boost (single model NN) performance to CV 0.520 ! Then using a blend of ...
+    ├─ Sudhanshu Singh (2026-01-04 08:17:27.793000) [+1]
+    │  Really appreciate the breakdown. Definitely a good reminder to focus more on feature space than just architecture.
+├─ Irakoze Ntawigenga Kelly (2025-12-18 06:58:32.367000) [+1]
+│  A lot to be learnt in this write up, thanks!
+├─ Crafty Code (2025-12-17 21:31:37.883000) [+1]
+│  Congrats! Bro for getting 7th place.
+├─ tanaz setayesh (2025-12-16 23:57:58.197000) [+1]
+│  very good plots.
+├─ Samith Chimminiyan (2025-12-16 17:26:40.857000) [+1]
+│  Congratulations @cdeotte, Thanks a lot for the detailed write-up!! There are a lot of things to learn from this write-up and the discussions.
+  ├─ Chris Deotte (2025-12-16 20:25:42.163000) [+1]
+  │  Thank you
+├─ Musa Peker (2025-12-16 06:29:52.750000) [+1]
+│  Congrats on the 7th place!
+│  
+│  Your approach to handling lab variations using invariant features (especially the agent-centric coordinate system) is brilliant. The architecture combining CNN-Transform...
+  ├─ Chris Deotte (2025-12-16 11:15:26.147000) [+1]
+  │  Thank you Musa
+├─ Mahog (2025-12-16 01:37:31.697000) [+1]
+│  Congrats! I knew NNs would be in the winning solutions but as I joined late I didn't have time to explore them
+│  
+│  
+│    
+│  After changing that notebook to build one model per lab_id per action. And traini...
+  ├─ Chris Deotte (2025-12-16 02:14:59.680000) [+1]
+  │  Hi @mahoganybuttstrings , to submit to LB we don't need to compute the CV. We just train the notebook as is with 100% train. To force the notebook to only put 1 lab in each section, we just do this...
+    ├─ Mahog (2025-12-16 02:22:58.263000) [+1]
+    │  Ah, ok, thanks for the explanation!
+    ├─ Chris Deotte (2025-12-16 02:48:52.707000) [+0]
+    │  @mahoganybuttstrings One other comment. We need to use the thresholds.pkl file that was generated by the original public notebook because when we train 100% the new thresholds.pkl will be meaningless.
+├─ common-people (2025-12-16 00:18:45.917000) [+1]
+│  can not agree more
+├─ Tom (2025-12-16 02:18:32.167000) [+2]
+│  Congrats Chris, your engineering on the target building and data transformation developments are really impressed. Also really thanks for the write-up I learn a new lesson for tabular competition.
+├─ !!!!! (2025-12-16 01:34:06.767000) [+2]
+│  Congratulations ！ Your solution is truly impressive，I learned a lot. 
+│  if I might ask a few questions regarding the training setup：
+│  
+│  
+│  
+│  
+│  During training, for self actions, is the input still structur...
+  ├─ Chris Deotte (2025-12-16 01:55:36.573000) [+1]
+  │  Thanks.
+  │  
+  │  
+  │  
+  │  
+  │  Yes, the model always receives agent and target features. For self actions, it receives duplicates of all these features (and the relationship differences are all zero).
+  │  
+  │  
+  │  I only train ...
+├─ Ahmet Erdem (2025-12-16 01:02:46.027000) [+2]
+│  Congrats Chris! Solo gold and 7x GM, well deserved! Your NN performance seems great. It was especially challenging in this competition due to sparsity of some labels and differences between the labs.
+  ├─ Chris Deotte (2025-12-16 02:07:15.720000) [+1]
+  │  Thanks @aerdem4 Congratulations winning 4th place Cash Gold! I remember how you stayed same or greater on private LB in CIBMTR comp. I am impressed once again how your team stays the same or improv...
+├─ Eduardo Rocha de Andrade (2025-12-16 00:35:39.680000) [+2]
+│  Congratulations Chris! And thanks a lot for the writeup!
+│  
+│  Your NN-only score is super impressive! If you don't mind a few questions..
+│  
+│  
+│  
+│  How did you deal with the sparsity in the data? Did you inte...
+  ├─ Chris Deotte (2025-12-16 00:47:28.777000) [+2]
+  │  Hi, congratulations winning 4th! I train a single NN on all 847 labeled videos. The secret is invariant features and data augmentations. 
+  │  
+  │  My NN can train on one lab and successfully infer a good C...
+    ├─ dan4o (2025-12-17 15:25:59.020000) [+1]
+    │  Is this single NN a CV-fold training or a single run? How did you prevent overfitting/know when to stop when you trained on the full 847labeled videos?
+    ├─ Chris Deotte (2025-12-17 15:48:00.603000) [+3]
+    │  My submissions to LB train on 100% train data. And for each NN, I ensemble 6 of the same NN trained with different seeds. I compute the CV using 3 GroupKFold (by video_id). After finding the optima...
+  ├─ Chris Deotte (2025-12-16 16:02:53.523000) [+1]
+  │  @arc144 One other thing I did was add positive weights to rare actions in loss calculation to boost them. And I used 37 multi-label loss instead of 38 multi-class loss. Even though this is a 38 mul...
+    ├─ Eduardo Rocha de Andrade (2025-12-19 15:00:06.660000) [+1]
+    │  That makes total sense! There are many underrepresented classes in the dataset. Thanks for the explanation!
+    │  
+    │  Btw, did you get a chance to try FocalLoss vs. just adding the positive weights to BCE?
+├─ Navneet (2025-12-22 03:49:11.417000) [+1]
+│  Thanks a lot for the details @cdeotte
+├─ Hassan Gasim (2025-12-16 00:47:53.953000) [+1]
+│  Totally agree 👍 👏
+├─ Evan Arlen Handy (2025-12-16 00:13:09.617000) [+2]
+│  Great work!

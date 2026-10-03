@@ -1,0 +1,82 @@
+# UBC-OCEAN 讨论区（按票数排序，共 80 条）
+
+- [Pathologist's perspective of the ovarian cancer subtype classification task](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445804) — 112 票 / 27 评论 / 2023-10-09 
+- [baseline with Lightning⚡TIMM scores 0.4+ on LB become TOP 5%](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/452165) — 86 票 / 28 评论 / 2023-11-01 
+- [Tiled Images dataset (256x256)](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/446104) — 85 票 / 27 评论 / 2023-10-10 
+- [1st Place Solution 🥇 [Owkin]](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/466455) — 65 票 / 37 评论 / 2024-01-08 **write-up?**
+- [Please fix the many quality issues with the competition data and leaderboard](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/447886) — 57 票 / 25 评论 / 2023-10-17 
+- [[8th Place Solution] Understanding Data Before Designing Methods](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465382) — 49 票 / 28 评论 / 2024-01-04 **write-up?**
+- [13th Place Solution for the UBC-OCEAN Competition](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465358) — 48 票 / 16 评论 / 2024-01-04 **write-up?**
+- [Why image format of PNG must be changed or competition solution quality will suffer](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/452027) — 45 票 / 8 评论 / 2023-10-31 **write-up?**
+- [Dealing with Large Image Size of Carcinomas Subtypes (HGSC, LGSC, MC, EC) and Outliers.](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445449) — 44 票 / 6 评论 / 2023-10-07 
+- [2nd Place Solution - UBC-OCEAN](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465410) — 43 票 / 26 评论 / 2024-10-11 **write-up?**
+- [3th on Public and 6th on Private, A Very Simple Solution: Big Pretrained-Model is All You Need! ](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465379) — 39 票 / 25 评论 / 2024-01-04 **write-up?**
+- [Supplemental annotations now available](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/455890) — 38 票 / 30 评论 / 2023-11-16 
+- [Adjutant reference materials and resources ](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445472) — 37 票 / 4 评论 / 2023-10-07 
+- [7th place solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465697) — 36 票 / 12 评论 / 2024-03-21 **write-up?**
+- [Error in LB metric](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/446760) — 35 票 / 5 评论 / 2023-10-13 
+- [Memory increased for GPU notebooks](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/448252) — 33 票 / 4 评论 / 2023-10-18 
+- [Data updated to fix flawed masks](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/451892) — 33 票 / 31 评论 / 2023-10-30 
+- [Overview of Published Research in Ovarian Cancer Subtyping AI ](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/448414) — 31 票 / 2 评论 / 2023-10-19 
+- [Broken data?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/447063) — 30 票 / 0 评论 / 2023-10-14 
+- [UBC-OCEAN Challenge Presentation: Insights and Tips](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/452360) — 28 票 / 29 评论 / 2023-11-01 
+- [10th place solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465455) — 28 票 / 19 评论 / 2024-01-04 **write-up?**
+- [Competition Starter Pack](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/448573) — 28 票 / 3 评论 / 2023-10-20 
+- [🔮💥✔Good Resources to leverage for this competition📚💥🔮](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445470) — 28 票 / 2 评论 / 2023-10-07 
+- [3rd Place Solution for the UBC-OCEAN UBC Ovarian Cancer Subtype Classification and Outlier Detection (UBC-OCEAN)](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465527) — 26 票 / 8 评论 / 2024-01-29 **write-up?**
+- [Tiled Images dataset (512x512) scale 0.25 all-in-one](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/451908) — 26 票 / 18 评论 / 2023-10-31 
+- [Why WSIs are uploaded as PNGs?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/446688) — 25 票 / 9 评论 / 2023-10-12 
+- [External dataset with subtypes](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/461793) — 24 票 / 4 评论 / 2023-12-16 
+- [Save your GPU quota and Memory. Fast & large GPU cards helps too : )](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445629) — 23 票 / 10 评论 / 2023-10-08 
+- [Solution file patch and rescore](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/448205) — 20 票 / 0 评论 / 2023-10-18 **write-up?**
+- [Using External Data for Validation](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/457249) — 20 票 / 8 评论 / 2023-11-23 
+- [20th Place Solution - UBC-OCEAN](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465356) — 19 票 / 14 评论 / 2024-01-04 **write-up?**
+- [How to deal with outliers?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/460890) — 19 票 / 7 评论 / 2023-12-11 
+- [Balanced Accuracy Pytorch Implementation](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/459363) — 18 票 / 5 评论 / 2023-12-04 
+- [Highest score without predicting Other](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/464186) — 16 票 / 18 评论 / 2023-12-29 
+- [🏆🔮UBC 0varian Cancer classification - Reference Kernels, Posts and materials for similar events 🔮🏆](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445473) — 16 票 / 5 评论 / 2023-10-07 
+- [4th place solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465811) — 16 票 / 4 评论 / 2024-01-05 **write-up?**
+- [Some suspicious teams](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465466) — 15 票 / 6 评论 / 2024-01-04 
+- [9th place solution ](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465815) — 15 票 / 3 评论 / 2024-01-05 **write-up?**
+- [BE AWARE of the misleading info from the competition description on TMA thumbnail](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/461556) — 14 票 / 1 评论 / 2023-12-15 
+- [What exactly are duplicate regions on WSIs?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/448354) — 14 票 / 9 评论 / 2023-10-19 
+- [Thumbnails are not provided for test TMAs?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/449079) — 14 票 / 11 评论 / 2023-10-23 
+- [Any one want to join with me ?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445440) — 14 票 / 5 评论 / 2023-10-07 
+- [5th place solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/466017) — 14 票 / 4 评论 / 2024-01-11 **write-up?**
+- [38th solution (Private 0.52, Hight score 0.55)](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465368) — 14 票 / 9 评论 / 2024-01-05 **write-up?**
+- [[📚Recourses] For beginner to learn ovarian cancer classification](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/454872) — 14 票 / 0 评论 / 2023-11-12 
+- [Segmentations Tumor Only (Code Implementation)](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/460691) — 14 票 / 2 评论 / 2023-12-10 
+- [Learning Recap](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/464900) — 13 票 / 0 评论 / 2024-01-02 
+- [About the Other label](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/454113) — 13 票 / 6 评论 / 2023-11-09 
+- [83rd solusion and this is my firstintroduction of solution !](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465461) — 12 票 / 6 评论 / 2024-01-04 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/443349) — 12 票 / 29 评论 / 2023-09-26 
+- [Validity of image level labels for patch level analysis](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/449209) — 12 票 / 25 评论 / 2023-10-23 
+- [[14th Place Notes]  Image Agumentation + Domain Adaptation + ABMIL](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465476) — 11 票 / 0 评论 / 2024-01-06 **write-up?**
+- [Is the storage of kaggle submission notebook change in the last 24 hours?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/461362) — 11 票 / 30 评论 / 2023-12-14 
+- [A Bronze Solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465719) — 11 票 / 0 评论 / 2024-01-05 **write-up?**
+- [Are Stanford Tissue Microarray Database TMAs Fair Game? (with PNG dataset)](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/464220) — 11 票 / 1 评论 / 2023-12-29 
+- [[Solved] Loss isn't correlated with the metric too much](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/463245) — 11 票 / 8 评论 / 2023-12-24 
+- [CV vs LB Thread](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/447825) — 11 票 / 16 评论 / 2023-10-17 
+- [Please record scoring time during submission and not just notebook time](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/450313) — 10 票 / 3 评论 / 2023-10-24 
+- [💡7 ovarian cancer datasets + TCGA💡](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445526) — 10 票 / 3 评论 / 2023-10-07 
+- [perfect prediction of "is_tma"](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/447025) — 10 票 / 3 评论 / 2023-10-14 
+- [[Our Solution] UBC-OCEAN](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465415) — 10 票 / 6 评论 / 2024-01-06 **write-up?**
+- [50th Place Solution (Simple Solution) ](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465593) — 10 票 / 0 评论 / 2024-01-04 **write-up?**
+- [Has anyone tried the Pseudo-labelling?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/456819) — 9 票 / 6 评论 / 2023-11-21 
+- [My Competition Recap](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465030) — 9 票 / 0 评论 / 2024-01-02 
+- [How to correctly convert from 40x to 20x magnification](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/453096) — 9 票 / 10 评论 / 2023-11-04 
+- [Survived the shake-up! (Public 538 -> Private 90)](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465360) — 9 票 / 3 评论 / 2024-01-04 
+- [Incorrect image size in train.csv](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/459375) — 8 票 / 3 评论 / 2023-12-04 
+- [Submissions timing for code competitions](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/453922) — 8 票 / 0 评论 / 2023-11-08 
+- [TMA images dataset](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/450451) — 8 票 / 2 评论 / 2023-10-24 
+- [28th solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465425) — 8 票 / 0 评论 / 2024-01-05 **write-up?**
+- [Is image magnification a factor to be concerned about?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/447605) — 8 票 / 11 评论 / 2023-10-16 
+- [30th place solution](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465619) — 8 票 / 0 评论 / 2024-01-05 **write-up?**
+- [submission `Notebook Out of Disk` with pyVips](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/451907) — 7 票 / 18 评论 / 2023-10-31 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445420) — 7 票 / 11 评论 / 2023-10-06 
+- [I have created JPEG dataset using UBC-OCEAN -JPEG Dataset Pipeline](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/450924) — 7 票 / 1 评论 / 2023-10-26 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465806) — 6 票 / 0 评论 / 2024-01-05 
+- [What does 40x magnification exactly means?](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/450641) — 6 票 / 2 评论 / 2023-10-25 
+- [When i submit the  notebook , getting Notebook Threw Exception error ? How to solve that problem while submitting notebook to the compitition ? ](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/447261) — 6 票 / 9 评论 / 2023-10-15 
+- ['Other' class - outlier identification](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/445592) — 6 票 / 9 评论 / 2023-10-07 
+- [Embargo Lifted on Competition Dataset](https://www.kaggle.com/competitions/UBC-OCEAN/discussion/497790) — 4 票 / 1 评论 / 2024-04-25 

@@ -1,0 +1,82 @@
+# 2023-kaggle-ai-report 讨论区（按票数排序，共 80 条）
+
+- [Discussion about points and medals for this competition](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409784) — 73 票 / 37 评论 / 2023-05-12 
+- [Competition Prize Announcements](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/429989) — 51 票 / 30 评论 / 2023-08-07 
+- [I worked alone with No help. I want to disband a team that I didn't joined. Help!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/419232) — 34 票 / 8 评论 / 2023-06-24 
+- [Congrats to Winners AI 2023, all Participants , the 7 GMs and Kaggle team!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/429988) — 32 票 / 19 评论 / 2023-08-07 
+- [An update regarding points and medals](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/410802) — 29 票 / 15 评论 / 2023-05-16 
+- [Categories on Kaggle AI Report: AP, SK and NiDS. Analytics Competition Suggestion.](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/424437) — 24 票 / 2 评论 / 2023-07-14 
+- [AI Principles, Ethics, and Responsible AI Systems](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409817) — 23 票 / 6 评论 / 2023-05-12 
+- [The final 2023 Kaggle AI Report is available now!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/446174) — 22 票 / 2 评论 / 2023-10-10 
+- [Plagiarism and AI-generated content policy](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409388) — 21 票 / 24 评论 / 2023-05-10 
+- [State-of-the-art methods: Curved text detection, Multi-oriented text detection and End-to-end text recognition.](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/413486) — 20 票 / 1 评论 / 2023-05-28 
+- [That's Genious: Even the coolest Kaggler shall make reviews (Kaggle AI Report 2023)](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421593) — 19 票 / 7 评论 / 2023-07-06 
+- [Fantastic "Beginners" contributions AI Report 2023. Kagglers: Watch and Yearn!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422335) — 17 票 / 5 评论 / 2023-07-09 
+- [Pinned Q&A Thread](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/400084) — 13 票 / 156 评论 / 2023-04-06 
+- [Q: Teaming up and medals/upvotes](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409714) — 13 票 / 1 评论 / 2023-05-12 
+- [Be kind, review early](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422312) — 12 票 / 3 评论 / 2023-07-09 
+- [Some more clarity on what exactly to peer-review?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421717) — 12 票 / 15 评论 / 2023-07-06 
+- ['2023 Kaggle AI Report'  Contest Successes](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/425194) — 11 票 / 3 评论 / 2023-07-17 
+- [Helpful listing of essays by topic](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422613) — 11 票 / 2 评论 / 2023-07-10 
+- [Seeking Transparency on Results](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/429994) — 11 票 / 4 评论 / 2023-08-07 
+- [Q: Prize distribution on topics](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409703) — 11 票 / 13 评论 / 2023-05-12 
+- [Finally medals and ranking points for analytics competition!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409708) — 10 票 / 3 评论 / 2023-05-12 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/414659) — 10 票 / 70 评论 / 2023-06-02 
+- [Competition Cards & Recent NLP competitions](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421482) — 9 票 / 3 评论 / 2023-07-05 
+- [Find/Register Kaggler who is willing to conduct peer review](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409652) — 8 票 / 1 评论 / 2023-05-12 
+- [Some question about the Peer-Feedback](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409663) — 8 票 / 5 评论 / 2023-05-12 
+- [Clarification on "Kaggle Competitions" topic](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409717) — 8 票 / 6 评论 / 2023-05-12 
+- [A New type of Competition (Rule understanding)](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409645) — 8 票 / 2 评论 / 2023-05-12 
+- [Run your essay through ZeroGPT ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/419618) — 7 票 / 21 评论 / 2023-06-26 
+- [Winning Report in the  Generative AI Category](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/430488) — 7 票 / 1 评论 / 2023-08-10 **write-up?**
+- [Scores over ranking? ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/430034) — 7 票 / 6 评论 / 2023-08-08 
+- [Topics wishlist](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409716) — 7 票 / 1 评论 / 2023-05-12 
+- [Submitting Academic Papers to Competition](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422617) — 7 票 / 3 评论 / 2023-07-10 
+- [Essay - Word Limit](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409661) — 7 票 / 5 评论 / 2023-05-12 
+- [Medals for Notebook + medals for competition?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409943) — 6 票 / 4 评论 / 2023-05-13 
+- [Improvements ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/430209) — 6 票 / 3 评论 / 2023-08-08 
+- [🎯 Ace Your Peer Feedback with Paper Review Structure! 💡](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421491) — 6 票 / 2 评论 / 2023-07-05 
+- [Act like a Kaggler. Not like a Bot (Peer Reviews).](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421046) — 6 票 / 9 评论 / 2023-07-03 
+- [Forbes AI50 List Insights](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/418204) — 5 票 / 8 评论 / 2023-06-19 
+- [Post-Peer-Feedback Updates After July 5th - Yea or Nay?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/419952) — 5 票 / 4 评论 / 2023-06-28 
+- [The progress of AI hardware](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421581) — 5 票 / 1 评论 / 2023-07-05 
+- [A report on the progress and developments in Generative AI](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421535) — 5 票 / 2 评论 / 2023-07-05 
+- [Kaggle Winning Solutions Dataset](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421036) — 5 票 / 2 评论 / 2023-07-03 **write-up?**
+- [Feedback URL, which one is it?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422400) — 4 票 / 4 评论 / 2023-07-09 
+- [Confusion About Peer-Review](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/418708) — 4 票 / 4 评论 / 2023-06-22 
+- [Question regarding evaluation](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409643) — 4 票 / 2 评论 / 2023-05-12 
+- [Don't forget to follow the submission guidelines!!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421798) — 4 票 / 5 评论 / 2023-07-06 
+- [State of AI Report](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/417634) — 3 票 / 4 评论 / 2023-06-16 
+- [Strategy of creating columns](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409945) — 3 票 / 0 评论 / 2023-05-13 
+- [Markdown writting skills.](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/412737) — 3 票 / 2 评论 / 2023-05-25 
+- [Category Confusion](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/419771) — 3 票 / 7 评论 / 2023-06-27 
+- [Working on an essay competition is harder than you think](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/425695) — 3 票 / 1 评论 / 2023-07-20 
+- [Attaching notebook to competition dataset](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/418805) — 2 票 / 2 评论 / 2023-06-22 
+- [Plagiarism Check with tools such as Turnitin for the Essay](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/419584) — 2 票 / 3 评论 / 2023-06-26 
+- [A submit question.  ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/420203) — 2 票 / 1 评论 / 2023-06-29 
+- [Q) pinpoint for this competition](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/410595) — 2 票 / 2 评论 / 2023-05-15 
+- [Comments and Suggestion for Essay on Generative AI](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/420323) — 2 票 / 1 评论 / 2023-06-30 
+- [Format of the essay](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/420299) — 2 票 / 2 评论 / 2023-06-30 
+- [If I continue publishing my old notebook this week will it affect winning?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/420122) — 2 票 / 2 评论 / 2023-06-29 **write-up?**
+- [Which category? (AI and cancer data)](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/420653) — 2 票 / 1 评论 / 2023-07-01 
+- [Potential Topic Overlaps and Topic Niches](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/409958) — 2 票 / 2 评论 / 2023-05-13 
+- [We welcome your feedback!](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/421449) — 2 票 / 0 评论 / 2023-07-05 
+- [Ranking order in "other" category](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/430133) — 2 票 / 5 评论 / 2023-08-08 
+- [The Winning Essays](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/430092) — 2 票 / 2 评论 / 2023-08-08 **write-up?**
+- [Results declared? ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/429553) — 2 票 / 2 评论 / 2023-08-06 
+- [Arxiv Metadata Analysis](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/420697) — 2 票 / 2 评论 / 2023-07-02 
+- [When will the result be available?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/425697) — 2 票 / 2 评论 / 2023-07-20 
+- [Competition not appearing in completed section](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/425406) — 2 票 / 2 评论 / 2023-07-18 
+- [What happens if you don't receive any peer-feedback review?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422053) — 2 票 / 2 评论 / 2023-07-08 
+- [Filtering essays as per category and with no comments](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422021) — 2 票 / 2 评论 / 2023-07-07 
+- [Advanced or confusing?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/422073) — 2 票 / 0 评论 / 2023-07-08 
+- [Variants of ensemble learning (in intrusion detection classification problems)](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/427497) — 1 票 / 0 评论 / 2023-07-28 
+- [Reference sites using G-AI](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/410127) — 1 票 / 1 评论 / 2023-05-14 
+- [Query regarding competition](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/411673) — 1 票 / 2 评论 / 2023-05-20 
+- [Kaggle Machine Learning & Data Science Survey](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/411664) — 1 票 / 1 评论 / 2023-05-20 
+- [Regarding peer-evaluation ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/412534) — 1 票 / 1 评论 / 2023-05-24 
+- [No of words and search based on domains](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/412706) — 1 票 / 1 评论 / 2023-05-24 
+- [Cómo saber quien es par a mi?](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/411996) — 1 票 / 2 评论 / 2023-05-21 
+- [(1) ensure your notebook is attached to the AI Report competition dataset;](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/425265) — 1 票 / 2 评论 / 2023-07-18 
+- [Limit to number of essays submitted](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/412479) — 1 票 / 3 评论 / 2023-05-23 
+- [URL of Submitted Write Ups ](https://www.kaggle.com/competitions/2023-kaggle-ai-report/discussion/413399) — 1 票 / 1 评论 / 2023-05-28 **write-up?**

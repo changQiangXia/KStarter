@@ -1,0 +1,56 @@
+<p>I really enjoyed participating in this competition. Two months ago, I was immediately attracted when I saw that there were no public deep learning public notebooks because this challenge is exactly what deep learning loves! I joined this competition with the simple goal of beating the best public XGBoost notebook with an NN.</p>
+<h1>XGBoost Public Notebook - Top 100!</h1>
+<p>Thank you Mahdi Ravaghi for the strong XGBoost baseline <a href="https://www.kaggle.com/code/ravaghi/social-action-recognition-in-mice-xgboost" target="_blank">here</a> (and thank you other Kagglers whose ideas are contained within). After changing that notebook to build one model per <code>lab_id</code> per action. And training on 100% train data. The notebook achieved <code>CV = 0.475, Public LB = 0.477, Private LB 0.450, (88th place)</code> top 100 rank, wow!</p>
+<h1>Local Validation Score</h1>
+<p>In this competition, we observe a near perfect CV LB relationship when using the correct validation score. (i.e. when XGB CV was 0.475 then XGB Public LB was 0.477). The correct CV is computed using only 15 <code>lab_id</code> which excludes labs <code>MABe22</code>, <code>CalMS21</code>, and <code>CRIM13</code> because the host said these labs did not exist in test data. So all CV scores discussed in this write up, use the correct local validation score. (UPDATE: relationship with Private LB isn't as good)</p>
+<h1>How To Build an NN</h1>
+<p>The power of NN is transfer learning from one lab to another! To make NN shine, we need to preprocess the data in some invariant way because the labs are different. Also we need to define the target labels correctly. Lastly we use data augmentation to unlock NN's full potential 🔥</p>
+<p>We train our NN on all labs together. From seeing one lab, the NN will learn to make better predictions on another lab. To accomplish this, we need to make input features <code>lab_id</code> invariant. We can further encourage transfer learning by using data augmentation to minimize <code>lab_id</code> feature differences. (i.e. if mice are difference sizes between labs, then we data augment randomly scale sizes of mice up and down).</p>
+<h1>=&gt; Positive, Negative, and Masked Targets</h1>
+<p>Our NN has 37 output neurons to predict the probability of each of the 37 possible actions. However not all videos nor labs contain all 37 actions as seen below:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2025/actions.png" alt=""></p>
+<p>When training our NN, we need to define the targets correctly. For every video frame, the <code>target=1</code> if <code>train_annotation</code> says 1. Otherwise it is either negative or masked. We set <code>target=0</code> when <code>train.csv</code> says <code>behavior_labeled</code> but the target is missing in <code>train_annotation</code>. And we set <code>target=MASK</code> if an action is both missing from <code>train_annotation</code> and not included in the <code>behavior_labeled</code> list. "Mask" means that we do not include loss for this action in this video frame. (And t=0 and t=1 applies loss).</p>
+<h1>=&gt; Invariant Mouse Positions</h1>
+<p>If we input the mice body parts x,y as they are in the train_tracking files, the NN will get confused. Because the arena sizes and shapes are different for each lab. The position <code>x,y = 10,10</code> in one lab will not mean the same thing as position <code>x,y = 10,10</code> in another lab. Below we see the variation among 3 lab arenas by making a scatter plot of 1 mouse's nose over 5 videos. We see that the labs are different shapes and sizes:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2025/arenas.png" alt=""></p>
+<p>There are at least 3 ways to make invariant mouse body part positions for our NN:</p>
+<ul>
+<li>Agent centric coordinate system - Shift the agent mouse to the origin with midpoint between <code>ears</code> at <code>(0,0)</code> and rotate <code>tail_base</code> pointed down negative y axis. (All other mice in the video get shifted and rotated with the same transformation).</li>
+<li>Min max scale (using 5% and 95% quantiles) all the <code>x,y</code> so that left side of arena is 0 and right side of arena is 1. And bottom is 0 and top is 1. (Also provide NN the <code>pixels_per_cm</code> feature).</li>
+<li>Use distances instead of absolute <code>x,y</code>. Instead of saying nose is at <code>(10,10)</code>, we use the distance between <code>nose</code> and other body parts such as <code>tail_base</code>. We can compute distance as either a vector or a magnitude.</li>
+</ul>
+<p>The above bullet points make positions invariant. Regarding velocity, we note that velocity vector and velocity magnitude are already invariant. And we note that all distances (as vector or magnitude) between agent mouse body part and target mouse body part are already invariant. </p>
+<p>Below is an example of agent mouse nose position scatterplot after we transform with agent centric coordinate system. We observe in the scatter plot that all noses positions are now around <code>(0,2)</code> and when the mouse turns it head left it goes to <code>(-2,2)</code> and when it turns right it goes to <code>(2,2)</code>:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2025/agent_centric.png" alt=""></p>
+<h1>=&gt; Invariant Mouse Body Parts</h1>
+<p>Another challenge for transfer learning between labs is body parts. We observe that different labs track different body parts:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2025/bodyparts.png" alt=""></p>
+<p>We observe that all labs have <code>["nose", "ear_left", "ear_right", "tail_base"]</code>. Then about half of the labs use <code>["hip_left", "hip_right"]</code> and the other half use <code>["lateral_left", "lateral_right"]</code>. It turns out that <code>hip</code> and <code>lateral</code> are similar enough that we can rename them both <code>["side_left", "side_right"]</code> to maximize transfer learning!</p>
+<h1>Build CNN Transformer</h1>
+<p>We train our NN using all labs together! Using the 8 body parts listed above and the method of positive, negative, masked loss. We build a CNN Transformer using invariant position, velocity, and distance features. The CNN layers come first and convolute in the time direction. They learn to make features based on how everything is changing. Next the NN feeds these features into layers of attention. Using cross (mouse) attention and self (mouse) attention, the transformer layers learn to compare agent and target mice and compare body parts within a single mouse. Finally the head layer outputs 37 outputs giving a probability for each of the 37 possible actions!</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2025/cnn_trans_model.png" alt=""></p>
+<h1>Different Time Scales</h1>
+<p>We train the same CNN Transformer multiple times and use a different length sliding window each time (i.e. vary from 2 seconds to 16 seconds). We also add more dilated convolution layers to the longer time windows to capture the larger time scale. Afterward we have four different trained NN and we can ensemble them:</p>
+<ul>
+<li>window = 64 frames, stride = 16 (approx 2 second window), CNN layers = 6</li>
+<li>window = 128 frames, stride = 32 (approx 4 second), CNN layers = 8</li>
+<li>window = 256 frames, stride = 64 (approx 8 second), CNN layers = 10</li>
+<li>window = 512 frames, stride = 128 (approx 16 second), CNN layers = 12</li>
+</ul>
+<h1>Data Augmentation</h1>
+<p>Using data augmentation gives a huge boost in performance. Data augmentation helps for two reasons. First is makes it harder for the NN to overfit (i.e. memorize instead of generalize the data) and we can train for more epochs. Second, it helps transfer learning between labs because all the labs start looking the same. For example if one lab had larger mice than another lab, after random scaling up and down, the model receives all sizes mice from every lab. We use</p>
+<ul>
+<li>time augmentation - (randomly change 30 fps to 15 or 60)</li>
+<li>rotation augmentation </li>
+<li>x scale augmentation</li>
+<li>y scale augmentation</li>
+<li>horizontal flip</li>
+<li>relabel right with left body parts</li>
+<li>body part drop out</li>
+</ul>
+<h1>Inference</h1>
+<p>We predict using the same slide window scheme that we train with. Then each video frame predicts 37 probabilities. Next we smooth probs in time and filter actions that were not in <code>behaviors_labeled</code> (per video_id, agent_id, target_id triplet). Lastly we apply a dictionary of action thresholds per lab_id. Each action under threshold gets set to prob=0. Lastly we take <code>argmax</code> to pick the frame action. (UPDATE: I have an unselected submission which achieves +0.004 private LB (rank 4th or 5th) that uses better tie breaking logic to decide what happens when multiple actions exceed threshold).</p>
+<h1>Ensemble of NN - CV 0.546 - Public LB 0.551 - Private LB 0.518 (8th Place)</h1>
+<p>We take an equal weighted average of all our different time scale NN and achieve <code>CV = 0.546</code> and <code>Public LB = 0.551</code> and <code>Private LB = 0.518</code> (rank 8th). In this ensemble we include 3 families of NN. Each family uses a different set of invariant features and a range of time windows. In total our final ensemble use 2xNN from family one, 5xNN from family two, and 3xNN from family three (for a total of 10 NN).</p>
+<h1>Stack XGB over NN - CV 0.559 - Public LB 0.562 - Private LB 0.523 (7th Place)</h1>
+<p>To boost our NN score, we train an XGB using one OOF from each of the 3 families of NN and all the features from Mahdi Ravaghi public notebook <a href="https://www.kaggle.com/code/ravaghi/social-action-recognition-in-mice-xgboost" target="_blank">here</a>. We train one XGB per lab per action. This XGB's CV achieves <code>CV = 0.528</code> and <code>Public LB = 0.536</code> and <code>Private LB = 0.508</code> (rank 12th). And when we blend it with our Ensemble NN, the result is <code>CV = 0.559</code> and <code>Public LB = 0.562</code> and <code>Private LB = 0.523</code> (rank 7th), wow!</p>

@@ -1,0 +1,104 @@
+# https://www.kaggle.com/competitions/AI4Code/discussion/328905
+
+Topic #328905: My understanding of the domain - Taking a step back
+  Author: Allohvk
+  Posted: 2022-06-03 15:10:27.057000
+  Votes: 100  Comments: 18
+
+This is a new domain to me. I couldn’t grasp the details of the neat solutions presented and had to take a step back to understand what was going on under-the-hood. I am documenting my findings in case it helps somebody in a position similar to mine. Credit goes to the original authors especially Yuanzhe Zhou and many others who have shared their brilliant ideas.
+
+AN INTERESTING GOAL
+
+The stated goal of this competition is somewhat interesting. The first line states that the goal is to understand the relationship between the code and comment cells. The second line challenges us to reconstruct the order of the markdown cells and this is purely how the winner is measured (the markdowns need to be ordered AND put in the right slots between the code…so the first goal does matter indirectly). We need to rank the markdown cells - identify which comes after the other &amp; put them in he right slot between the appropriate code cells (which are already ordered correctly). The evaluation is based on Kendell Tau - and since folks have already shared some good links explaining the same, we needn’t go deep into the same. It is just an indicator between -1 to +1 on how well the predicted and the actual ranks match.
+
+For a moment, keeping the code part aside, this essentially boils down to ranking a series of texts in the right order. In that sense, it can be reframed as a ranking problem. Now this provides a great relief as there is an extensive body of work under the “Learning to Rank” framework which can now be leveraged. Of course, language models also come into picture. Most of the solutions presented revolve around these 2 items - leveraging language models and leveraging the Learning to Rank framework. We now have a clear sense of direction and can dig into both these aspects and how they help us design a suitable model. But before that - What could be the intent of this competition? This was an interesting question posted https://www.kaggle.com/competitions/AI4Code/discussion/325205 in one of the discussions and my take on it is that this could just be an extension of Google search to cater more efficiently to Code results. We have a query (this is the equivalent of the markdown cell), we have content (this will be the code cell) and what we want is the code cell that is best matched to the query. This is an exciting area. Facebook is doing a lot of work in neural code search, Microsoft has CodeBert and is also neck-deep in the code search domain. Tying natural language to code has immense downstream possibilities. 
+
+Coming to the potential approaches, we have the following:
+
+
+
+Rank only the Markdowns without paying heed to the code cells. Use plain NLP for this combined with the LTR (Learning To Rank) frameworks. Surprisingly this seems to get OK results. When given a "context" in the form of code cells these work really well
+
+Tie the Markdown to the code. In this case we dont need to develop a model for ranking because the code cells are already ranked. As long as we are able to match the code to markdown, we directly get the markdown order. 
+
+See how we can leverage both the above approaches.
+
+
+Learning to Rank framework:
+
+
+
+Easiest is to treat this as a regression problem by assigning each markdown cell a score and ranking is obtained by a simple sort. MSE can be the loss function. This is the Pointwise approach. Basically each Markdown cell is scored separately. Though I say regression, we can use Classification, Ordinal regression etc as long as items to be ranked are treated in isolation. This can be further enhanced by providing a "context" in the form of code cells
+
+Then we have the Pair-wise approach: Here we take pairs of 2 markdowns and simply rank which comes first. We now bring relative scores into the picture. This seems cleaner. Cost function typically minimises misclassification of pairwise difference vectors. The challenge is we have too many permutations and combinations while training as well as inference. Moreover, during training we have to identify negative pairs and as of now, there is no great way to decide on what makes a good -ve pair. The interesting part is that in a normal scenario (like in a search query ranking), Pairwise models have a major disadvantage - Every document pair is treated equally important, such setting is not useful in real world scenario because we expect our search systems to answer correctly in top 10 items and not really care about the remaining 11-100 results that much. But in this comp, all the ranks are important and so pair-wise approach becomes much more powerful. 
+
+Then there is the Listwise approach: Idea is to take the whole set and rank every entry in the list at one shot by optimizing ranking metrics directly which is a great thought except that these usually are not continuous and back-prop will not work. So there are interesting proxy approaches to get gradients for these cases to enable us to compute loss and decide the best order.
+
+
+Lastly, let us look at how the language models can be leveraged:
+
+
+
+A plain vanilla approach is to take the query and document (which in our case is the markdown and the code cell), jointly encode the same and fine-tune the model’s classification component to provide a ranking score. Basically tuning is done in such a way that related markdown and code provide better scores compared to unrelated markdown and code. So basically the input to the model is: [ CLS, Markdown text, SEP, code snippet, EOS ]. The vector representation corresponding to the [CLS] token is the one that is used to infer a query-document relevance score. To project the vector of the [CLS] token into a scalar value a single-layer, a fully connected neural network is used which maps from (say) 768 Bert dimensions to one score. If the score is high, it means the markdown and code cells are linked else we check other combinations. In a sense this is like a pair-wise approach except that we are leveraging the language model here
+
+Point-wise approach as discussed above would be to use regression/MSE (or MAE which is better) to rank markdown cells. By giving it a context which contains the code cells this performs really well. So input = md+separator+context
+
+It might be interesting to see if we can bring in list-wise approaches to the language model. See for e.g. https://ai.googleblog.com/2021/07/advances-in-tf-ranking.html. There they learn an independent BERT representation for each&nbsp;&nbsp;pair, and apply a ranking loss&nbsp;to learn the whole list. But in this competition we just have one mapping ie a markdown cell could map to only one code cell. So there may not be much utility in learning the second best match, 3rd best etc. But can we tweak it in some way such that it takes an ordered code list, an un-ordered markdown list and outputs a sequence list? This has actually been done for plain NLP - see for e.g. https://arxiv.org/pdf/2001.00056v1.pdf but haven't seen any design for bi-modal data.
+
+
+SRK had suggested the approach of Entailment. Typically, entailment tasks involve a three-way classification of “entailment”, “contradiction”, or “neutral” (i.e., neither). In fact relevance, semantic equivalence, paraphrase, entailment are all similar tasks and with a language model like BERT, looks like the approach may not change much. The standard input template continues to be: [[CLS], s1, [SEP], s2, [SEP]] where s1 and s2 are the two inputs. As long as it is fine-tuned with annotated data that capture the nuances of the target task, the model should be able to figure out how to model the relevant relationship, be it entailment, paraphrase, or query–document relevance.
+
+Code-Aware Language Models
+
+Speaking of language models, this discussion is incomplete without CodeBERT and couple of its more recent peers. CodeBERT is a “bi-modal” pre-trained model where the language model (I think it is same as Roberta) is built using bi-modal data - one being natural language (NL) and the other being Programming Language (PL). The idea is to capture semantic connections between them and produce general purpose representations which can then be used for interesting applications like code-document generation, code search queries etc. In the past bi-modal data has been used in ViLBERT where the two inputs were pairs of language and image and the model learns the implicit alignment between them and predicts whether the caption describes the image content or not. A small difference is that CodeBERT leverages uni-modal data as well as part of training. In other words the inputs are not just pairs of NL/PL as we shall see but also includes raw code which does not have a NL counterpart. Bi-Modal data is processed with standard MLM objective. To process the uni-modal data (ie code without documentation), they use a RTD (replaced token detection objective) which also has side-effect of building generators. So we can generate excellent documentation from the code. The training input is: [ CLS, NLtext 1, NL text2….SEP, code snippet1, code snippet 2… EOS]. CLS is used for classification or ranking.  Maybe it is a great delight to have any of the authors of CodeBert participate and share their valuable insights at the end of the competition. Recently, GraphCodeBERT incorporates the data flow extracted from the code structure into CodeBERT.
+
+Most of the time we discussed about converting the 768 dimensions of the CLS vector into a single score. We could also use the same directly to measure cosine distance between them. For e.g. CodeBert is a great unified encoder. We could take a Late Fusion approach as follows - Use CodeBert to encode the Markdown cells and the code cells separately, and then calculate the similarity with a dot-product. In this way, code search is equivalent to find the nearest codes in the shared vector space. In this case, CodeBERT can be fine-tuned with the objective of maximizing the dot-product of the ground truth while minimizing the dot-product of distractors (see eq 15 of the CodeBERT paper for the exact loss). This part is not open-sourced but I guess it may not be too difficult to create it from scratch. 
+
+Around the same time as CodeBERT, we also had the release of CuBERT https://arxiv.org/pdf/2001.00059.pdf. This is trained on Python-only codes (originally, though now maybe other languages are added and originally used only MLM) and may prove to be a neat alternative to CodeBERT as far as this competition is concerned. Unlike CodeBERT, here the inputs i.e the code and comments are not separated with a SEP token but can be mixed freely. The original code is in Tensorflow.
+
+The latest alternative is Salesforce - CodeT5 https://arxiv.org/pdf/2109.00859.pdf which is more recent. In general, I haven't explored T5 series in the past, but I believe these series of models use denoising objectives that corrupt the source input and require the decoder to recover them (MSP - Masked Span Prediction objective). So it is pre-trained with both encoder and decoder pieces thereby giving certain advantages. On top of it they have neat techniques for custom tags in code as well as leverage the tree structure of code well. At the pre-training stage, the model receives either PL-only or NL-PL as inputs depending on whether the code snippet has accompanying NL descriptions or not. For the NL-PL bimodal inputs, they concatenate them into the standard sequence we saw earlier - ([CLS], w1, …, wn, [SEP], c1, …, cm, [SEP]), where n and m denote the number of NL word tokens and PL code tokens, respectively. The NL word sequence will be empty for PL-only unimodal inputs. On top of it they have neat ways to tokenize function names, tree syntax etc. My bets lie with this model
+
+This is an interesting competition and though it needs high end machine to process the whole data, a competitive attempt can be made with just 15-20% of the data and some neat tricks and hacks. All the very best to all the participants.
+
+Comments:
+├─ Chenglu (2022-06-12 03:48:18.483000) [+3]
+│  For a moment, keeping the code part aside, this essentially boils down to ranking a series of texts in the right order. In that sense, it can be reframed as a ranking problem
+│  
+│  
+│  Since the code has a...
+  ├─ Allohvk (2022-06-12 06:41:12.960000) [+1]
+  │  Yes, my bad. I explained general "Learn to Rank" framework in beginning. But coming specifically to Zhou code, I agree here pair-wise takes a slightly diff meaning. He does not rank 2 pieces of mar...
+  ├─ Chenglu (2022-06-12 07:06:30.060000) [+1]
+  │  Thank you too for this very informative post. It helps me a lot since I'm new to NLP and transformer(s)
+├─ Allohvk (2022-06-06 07:40:45.983000) [+3]
+│  Thanks all for your comments. I would like to share one additional info which happened recently. There was a community comp recently on analyzing software code where CodeBert was extensively used. ...
+├─ samu2505 (2022-07-05 11:43:06.340000) [+1]
+│  Insightful especially with the input consisting of code snippets and also I had been looking for alternatives to CodeBERT. Thanks for the information.
+├─ Teemo (2022-07-02 09:03:25.693000) [+1]
+│  Thank you for sharing! I wonder how could I use fully-trained pairwise model to generate a ordered notebook.
+  ├─ Allohvk (2022-07-02 09:44:05.277000) [+0]
+  │  Thanks. I didnt get time to work on this comp due to professional commitments. Maybe I will pick up in coming weeks. Both models have been shared publicly (Zhou and Khoi). If you filter on best sco...
+├─ Muhammad Irfan Azam (2022-06-06 20:10:05.383000) [+1]
+│  @allohvk Thanks for sharing such a valuable resource. Its a must read for anyone making an attempt for this challenge especially newbies. 🎉
+│  
+│  In my opinion, a plain vanilla approach combined with li...
+├─ Old Monk (2022-06-06 05:11:29.623000) [+1]
+│  Thanks for sharing @allohvk ! superb article ! I guess majority of us are new to this too :)
+├─ Sergey Dulikov (2022-06-05 22:27:02.203000) [+1]
+│  Thank you for sharing your thoughts! I tried to sort markdown cells at first and then spread them onto code ones. But what I didn't like in that approach is if for example kernel's author tries out...
+├─ TheStoneMX (2022-06-04 18:40:40.817000) [+1]
+│  Thanks! very informative! new to this too
+├─ Chirag Desai (2022-06-04 18:39:17.733000) [+1]
+│  Interesting and lot to take it!! I havent explored NLP much but highly interested. This is very helpful. Keeping all papers in my reading list.. thanks for sharing.🙏
+├─ Jose Carmona (2022-06-03 17:54:02.010000) [+1]
+│  Thanks for sharing @allohvk. This is a new domain for me too and I learned a lot from your post.
+├─ Diego (2022-06-06 06:34:00.470000) [+2]
+│  Very Informative, thanks for sharing. Bi-Modal/Multi-Modal could be an important topic in this competition. There are a lot research recently for both bimodal including visual-text pair and text-te...
+├─ [deleted] (2022-07-01 17:36:42.540000) [+1]
+│  I was wondering how to finetune the codeBert?We don't know which markdown is for which code cell, cus all the code cells are ranked before the markdown in the dataset
+  ├─ Allohvk (2022-07-02 09:41:11.980000) [+0]
+  │  Pl check https://www.kaggle.com/competitions/AI4Code/discussion/326970
+  ├─ [deleted] (2022-07-07 00:58:44.823000) [+1]
+  │  Tks!That really helps
+├─ Quyen Truong (2022-06-08 16:04:25.840000) [+1]
+│  Thank you very much for your sharing!

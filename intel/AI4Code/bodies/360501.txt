@@ -1,0 +1,193 @@
+# https://www.kaggle.com/competitions/AI4Code/discussion/360501
+
+Topic #360501: 1st Place Solution
+  Author: hyd
+  Posted: 2022-10-17 05:26:51.707000
+  Votes: 62  Comments: 28
+
+Overview
+
+I used single list-wise deberta-v3-large trained on all competition data. Input text is cells separated with [SEP] and [CLS] tokens.
+
+Code
+
+
+
+training code: https://github.com/hydantess/2022-Google-AI4Code-1st-Place-Solution
+
+inference notebook: https://www.kaggle.com/code/hydantess/ai4code0729?scriptVersionId=103060429
+
+
+What Worked
+
+
+
+MLM
+
+preprocessing
+
+
+Reasoning and context: It makes text shorter, so we can handle longer text. 
+
+use deberta rather than codebert
+
++lstm head
+
+bigger cell_cnt and seq_length
+
+
+Reasoning and context: metric function cares more about long text. 
+
++postprocessing: predict code and markdown both, then sort code by ground truth.
+
+
+Reasoning and context: more reasonable than only predict markdown, and concat with code cells. 
+
+
+What Didn’t Work
+
+
+
+translation: facebook/mbart-large-50-many-to-one-mmt
+
+
+Reasoning and context: most notebooks are in english. Or I did something wrong.
+
++code rank to dense layers
+
+
+Reasoning and context:  I should try to concat text with rank information. Model will learn better.
+
+extract embedding, then train a transformer model
+
+
+Reasoning and context: I should pre-train the extracting model first.
+
+xlm-robert-large or mdeberta-v3-base
+
+
+Reasoning and context: much worse than deberta-v3-large. so can not ensemble directly.
+
+
+Important Citations
+
+
+
+https://www.kaggle.com/code/ilyaryabov/fastttext-sorting-with-cosine-distance-algo by ilyaryabov
+
+https://www.kaggle.com/competitions/AI4Code/discussion/327626#1804178 by Nguyentuananh
+
+
+Additional Context
+
+
+
+loss is MAE.
+
+MLM on training data for 15 epochs,  max_length is 1024. It takes 3 days. 
+
+training for 10 epochs, max_length is 2048. It takes 7 days. I think set max_length to 5120 will greatly improve model performance but I have not enough A100~
+
+inference: max_length is 5120. It takes 6 hours.
+
+I used 1 * A100(80GB)  for the last two weeks and 1 * 3090(24GB) at the early stage. 
+
+Future work:
+
+
+concat text with rank information: flag + rank_1 + cell_1 + flag+ rank_2 + cell_2 + … + flag+ rank_n + cell_n
+
+multi languages
+
+extra training data
+
+Adversarial Weight Perturbations (AWP), but too time-consuming
+
+
+Thanks and Acknowledgements:
+
+Thanks to competition organizers for hosting such an amazing NLP competition. And thanks to the
+great notebooks and discussions, I learned a lot. 
+
+Team Members:
+
+
+
+@hydantess 
+.
+
+Comments:
+├─ Dmytro Poplavskiy (2022-11-12 00:58:48.160000) [+3]
+│  Congratulations on winning the challenge!
+│  
+│  An impressive result, especially for the single model without ensembling.
+  ├─ hyd (2022-11-12 03:19:04.687000) [+1]
+  │  Thanks. Your poly-encoder like approach is also very impressive. I tried translating and using xlm-roberta model but failed!
+├─ Leon (2022-11-12 14:51:55.123000) [+1]
+│  Congrats on entering top10! How do you deal with multiple languages, with deberta models?
+  ├─ hyd (2022-11-12 15:07:51.247000) [+1]
+  │  I didn't deal with multi languages situation, so just list it in feature work.
+  │  I think Dmytro Poplavskiy's poly-encoder like approach may help.
+  ├─ Leon (2022-11-13 03:45:56.250000) [+0]
+  │  Oh, I think it should be future work, hhh.
+  ├─ hyd (2022-11-13 03:49:43.840000) [+0]
+  │  I see, hhh.
+  ├─ Dmytro Poplavskiy (2022-11-19 02:20:50.997000) [+2]
+  │  I tried to address the multiple language notebooks, I used either the same shared codebert model for code and md cells or the codebert for code and sentence-transformers/paraphrase-multilingual-mpn...
+  ├─ hyd (2022-11-19 03:06:14.310000) [+0]
+  │  Did you try to use deberta rather than codebert. Deberta is much better in my exp even without MLM. 
+  │  Or maybe our approaches are too different.
+  ├─ Dmytro Poplavskiy (2022-11-20 01:07:56.793000) [+1]
+  │  I only tried the combination of codebert for code plus deberta-v3-large for markdown, it was usually the best performing model but it was 2-3x slower to train and predict. With my final configurati...
+  ├─ Dmytro Poplavskiy (2022-11-22 23:45:50.667000) [+1]
+  │  I tried to train with the deberta-v3-base and deberta-v3-large used for both code end markdown, deberta-v3-base performance seems to be similar to codebert but deberta-v3-large is significantly bet...
+  ├─ hyd (2022-11-23 00:52:11.083000) [+1]
+  │  Nice conclusion! Deberta-v3-base is slightly better than codebert in my exp. And deberta-v3-large is very slow, I have no time to do ensemble.
+├─ ShinSiang (2022-10-24 11:08:06.320000) [+1]
+│  Are you using percentile ranks or just the absolute ranks as target?
+  ├─ hyd (2022-10-24 12:36:12.940000) [+1]
+  │  percentile ranks.
+  ├─ ShinSiang (2022-10-24 14:51:14.097000) [+0]
+  │  Thanks! Another question: 
+  │  The texts are "flag + cell_1 + flag + cell_2 + … + flag + cell_n". Does each cell have a # tokens quota? Did you truncate certain cells if it is too long? Or did you sele...
+  ├─ hyd (2022-10-24 15:15:50.247000) [+2]
+  │  Cells are truncated and length is smaller than 128.
+  │  
+  │  Each cell's length starts from 1 and for-looper all cells, step = 4, then break when total length is greater than certain value.
+  ├─ ShinSiang (2022-10-24 18:44:32.983000) [+0]
+  │  When training, in the worst case (128 cells), max_length of a cell is just 2048/128 = 16?
+  ├─ hyd (2022-10-25 00:27:16.680000) [+1]
+  │  Yes, you are right.
+├─ Teemo (2022-10-24 07:43:34.690000) [+1]
+│  Congrats!
+│  Can you explain your listwise method more detailly? Or just throw me a document or website?
+├─ Fiem Fager (2022-10-22 13:24:58.253000) [+1]
+│  Now you are the top of the leaderboard. Great.
+├─ kyle (2022-10-17 16:08:50.197000) [+1]
+│  Congrats! and thank for sharing your solution.
+│  I have one question here.
+│  What's the output of the model? I am confused because from your code the output dimension is 1, and the previous context ind...
+  ├─ hyd (2022-10-17 16:24:53.117000) [+0]
+  │  List-wise.
+  ├─ Andrey Bazhan (2022-11-29 11:29:11.647000) [+0]
+  │  Thank you! Can you explain in more detail 
+  │  1) what is your input representation of a notebook (x)? 
+  │  2) what is model output (num_classes=1)? 
+  │  3) how this output converts to total ordering?
+  │  4) What ...
+├─ Jose A. R. Fonollosa (2022-11-12 10:22:12.830000) [+2]
+│  Congratulations to @hydantess and all the prize winners!
+│  You are the geniuses!!!
+  ├─ hyd (2022-11-12 11:38:01.707000) [+0]
+  │  You are the genius too! I am very happy competing with you~
+├─ Vadim Irtlach (2022-10-17 14:01:46.823000) [+2]
+│  Your solution, especially the max length of the input, blew up my mind 😄… I hope, you won't have an OOM error at the end 🙏
+  ├─ hyd (2022-10-17 14:35:28.633000) [+3]
+  │  I tested it before. So it's fine.
+├─ Gregor Lied (2022-10-17 12:26:16.863000) [+2]
+│  Congratulations on your solo gold and your current 1st place position. Good luck to you for the final reruns. 
+│  First of all, thank you for your solution write-up. I got two follow-up questions:
+│  (1)...
+  ├─ hyd (2022-10-17 12:43:33.037000) [+3]
+  │  1) It makes text shorter, so we can handle long text. Otherwise 5120 is not enough.
+  │  2) Yes. I only sample 30000 notebooks for fast experiment at the early stage.

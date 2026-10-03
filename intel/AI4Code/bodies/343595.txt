@@ -1,0 +1,119 @@
+# https://www.kaggle.com/competitions/AI4Code/discussion/343595
+
+Topic #343595: 4th solution
+  Author: gezi
+  Posted: 2022-08-12 00:27:54.592000
+  Votes: 43  Comments: 4
+
+Recall model   (infer 2h+, 1h using 2 T4)
+
+
+
+pairwise, two tower, with backbone sentence-transformers/all-mpnet-base-v2
+
+continued mlm on training data
+
+predicting for earch markdown wether a code is just after it (also a fake last code with content 'the end of notebook'  added) 
+
+9 negative selected withn the same notebook  (better comparing to using 4 both offline and online)
+
+for code, encode itsself and before 2 and after 2 codes  
+
+crossentropy loss  with cosine / learned temperature(finally about 0.002) as input logits
+
+offline tau score 897 (averge the recall score for each code position)
+
+late submission score is 8936
+
+recall model is a key model, as rank model and context rank model all using its output
+
+The main drawback here is the recall model if using 9 negatives will be gpu costly, I used 8*v100, and it cost about 30 h for 1 model training on all train data.  
+
+
+Pairwise rank model  (infer 2h+)
+
+
+
+pairwsie , concat , with backbone deberta-v3-small  
+
+only infer for those recall model max prob &lt; 0.8, so infer(rerank) about 50% markdowns.
+
+offline tau score 905
+
+
+Context rank model  (infer 2.5h+)
+Modified from  https://www.kaggle.com/code/suicaokhoailang/stronger-baseline-with-code-cells  
+
+
+
+backbone deberta-v3-small
+
+3 markdowns as a group (infer at once for each instance)   
+these groups slected using recall model, to select markdowns with similar code scores to a group.
+
+40 codes selected by recall model (train using recall model OOF)    
+this is also a key point, for training using neg sample with sample prob provided by recall model, for infer just choose top recall prob codes.  And after contest finish I learned that most top teams used much more codes, more context/codes is a key point for win.
+Train just using spaced selection of codes with some distoration (randomness) and then infer with recall model selected top codes can improve 0.1+.  I have tested 1 context model before online from 8806(without recall model) to 8892(using recall model)
+Then if train using recall model selected, or with probablity of sampling will be even better 0.05+.
+
+add  OOF recall model score as inputs to bert improve 0.004    
+not sure if overfit, so I selected 1 sub with it 9147 and another witout it 9143, I made some mistakes and no time to retrain, just finetune 3 epochs for models with OOF score, so this OOF method should have improved much more I think should be 2k+, you could see below huge improvement from just the first epoch .   
+Finally we see improment from 9162 to 9170.
+
+
+multiple losses( classification for num_classes 100 + MAE for regression to preidct the relative rank for each markdown)
+
+offline tau score 916(interesting, this is the classification output） and tau score 914(regression output)
+
+
+GBDT model to combine above 3 models score (infer 5m）   
+
+
+
+used catboost and lgb, it helps improve about 6k online.
+
+offline tau score 922, online 9147
+top features show below:  
+xpc means pairwise concat rank model  
+xc means context rank model  
+xp means pairwise two tower model (recall model)  
+
+
+
+Just learned deberta-v3-large with large inputs can be much better , more context(more codes like 128+) is a key for better result,^_^, next time will do more experiments at first to choose the correct direction.    
+I did not use external data finally, though I tried but not with much improvement, the direction is wrong I should have tried to use more kaggle notebooks, I found so much duplicates in the public kaggle dataset published so not try it also.
+Thanks kaggle , this is really an intersting game! Also want to thanks for wandb and tabnine, they make life easier for doing experiments and coding.
+
+code
+inference to get 9170 for 4th place:  https://www.kaggle.com/code/goldenlock/reproduce-v1
+pairwise inference to get 8936:   https://www.kaggle.com/code/goldenlock/pairwise-recall
+training:  https://www.kaggle.com/datasets/goldenlock/ai4code  
+https://github.com/chenghuige/Google-AI4Code-Understand-Code-in-Python-Notebooks
+
+Comments:
+├─ Cabbage972 (2022-08-12 21:14:01.787000) [+1]
+│  @goldenlock Thanks for the writeup! I hope you could answer a few questions.
+│  
+│  Recall model:
+│  
+│  
+│  
+│  For continued pretraining, did you use regular MLM or MPNet?
+│  
+│  Does the model learn separate weights fo...
+  ├─ gezi (2022-08-12 22:39:46.737000) [+2]
+  │  @cabbage972 
+  │  
+  │  
+  │  
+  │  regular mlm on mpnet
+  │  
+  │  Learn exactly the same weights for code and markdown, only difference is the inputs for bert 
+  │  
+  │  Like this  
+  │  code_cell-2[SEP]code_cell-1[SEP]int(code_cell_pct_ra...
+  ├─ Cabbage972 (2022-08-13 00:04:50.803000) [+1]
+  │  Thank you for the detailed answers!
+├─ Sanyam Bhutani (2022-08-12 00:31:41.250000) [+2]
+│  Congrats on the public 8th! 
+│  I'll ask clarification questions after I've gotten some sleep :D

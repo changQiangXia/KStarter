@@ -1,0 +1,285 @@
+# https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465382
+
+Topic #465382: [8th Place Solution] Understanding Data Before Designing Methods
+  Author: ForcewithMe
+  Posted: 2024-01-04 03:54:32.014000
+  Votes: 49  Comments: 28
+
+Acknowledgments
+
+I would like to express my gratitude to Kaggle, the organizers, and other participants in the community. I have learned a great deal from this competition and hope that it will promote the advancement of research in MIL，Classification and outliers detection of Human tissues, and the study of women's health.
+
+Introduction
+
+The first and most crucial step in this competition is to familiarize oneself with the feature of Whole Slide Images (WSI) and Tissue Microarray (TMA) images. A simple visual examination reveals that the features of TMA and WSI are presented at vastly different scales. TMA features are at the cellular level, while WSI features are several to tens of times larger than cell clusters. Hence, from the onset of the competition, I decided to tackle WSI and TMA with two completely distinct approaches.  
+
+Key points for the global approach:
+
+
+
+Address WSI and TMA separately .
+
+Align the magnification of TMA and WSI to enable the reuse of TMA training code for optimizing the WSI feature extractor.  
+
+
+WSI images are 20x magnified, while TMA images are 40x. Thus, TMA images need to be downsampled by a factor of 2 to align with the physical scale of WSI, which can also be observed with a visual inspection of the training data.  
+
+
+Architecture of the solution
+
+
+
+TMA Approach
+
+Summary of Key Points:
+
+
+
+Train with patches tiled with official masks (most important globally).  
+
+Train the model with healthy and death patches to predict some outliers.  
+
+Employ arcface to retrieve some outliers and part of the 5-class classification.  
+
+Heavy ensemble of 6 classification models to predict samples that arcface retrieval did not cover.  
+
+
+Inference:
+
+
+
+
+Use arcface retrieval with the training set's TMA as templates. Output 5-class results for samples with a close cosine distance, and consider those with a far cosine distance as outliers. Samples that are uncertain in the arcface stage are left for the subsequent phase.  
+
+
+
+Models: 5-fold effv2s + 5-fold convnext small with dynamic margin, subcenter=3.  
+
+Top1 threshold at 0.05, Other threshold at 0.2.  
+
+
+The 6-class model uses 2-fold effv2s + 5-fold effv2l + 4-fold convnext small + 3-fold convnext large.  
+
+
+
+
+
+Model
+Resolution
+
+
+
+
+Effv2s
+1280
+
+
+Effv2l
+1280
+
+
+Convnext Small
+1024
+
+
+Convnext Large
+1024
+
+
+
+
+Note: The arcface can tackle about 60% of the TMAs. So even the second stage is heavy, it doesn't cause timeout.
+
+Training:
+
+
+
+Tile patches using the official segmentation masks. In addition to the official 5 categories, classify patches of  healthy and dead as Other class. Instead of training with the official TMAs , which has limited number, use them for subsequent validation and retrieval.  
+
+Use the first-phase models to generate pseudo-label patches on the remaining 300+ WSIs without mask.  
+
+Inherit the weights from the first or second step, training only the last layer of the backbone and the arcface head.  
+
+
+WSI Approach
+
+Summary of Key Points:
+
+
+
+Train the feature extractor using the TMA pipeline.  
+
+Synthesize Other  WSI during the training process.  
+
+Integrate different magnification scales.  
+
+Rank the DataFrame of WSI with the number of pixels, and process the WSIs with multithread can greatly speed the the WSI processing  procedure.
+
+
+Inference:
+
+
+
+Ensemble of two resolutions of feature extractor: 3072 resized to 768, and 1024 without down-sampling. After extracting features, apply DTFD-MIL.  
+
+For speed up the image processing procedure, I only use the center region of each 3072 tile, so that I only need to crop patch from the WSI once. 
+
+
+
+
+
+Model
+Resolution
+Number folds
+
+
+
+
+Convnext Small
+3072 resize 768
+2
+
+
+Effv2s
+3072 resize 768
+3
+
+
+Effv2s
+1024
+4
+
+
+
+
+Training:
+
+
+
+Train the feature extractor using the TMA pipeline.  
+
+Extract features using the feature extractor.  
+
+Predict the probability of 'Other' on all patches using the feature extractor, and create an Other pool with patches that have a high probability of 'Other'.  
+
+During the training of DTFD-MIL, dynamically synthesize some WSI from the Other pool each epoch.  
+
+
+Training DTFD-MIL serves as a validation for whether the TMA pipeline models truly learned useful features. If  we use the pretrained weights from ImageNet, DTFD-MIL requires up to 200 epochs to converge. In contrast, using models trained on TMA, the MIL Head may take as little as 1 epoch and at most 20 epochs to converge.
+
+
+Something I don't have time to try but I think may work
+
+
+
+Arcface for WSI. 
+
+Large transformer pretrained on Large set of Slides. In fact I tried PLIP at the early stage of this competition,  But I didn't dig deeper.
+
+Better retrieve strategy for arcface.
+
+More resolution for WSI . I tried to add 6144 resize to 1024 into my final pipeline. But the notebook crashed.
+
+Ensemble of MIL head
+
+External data.
+
+
+Todo:
+
+This post is  almost completed :
+
+
+
+
+
+
+
+
+
+
+If possible, I may add more ablation study in two weeks.
+
+
+Discussion and Citation
+
+
+
+DTFD-MIL is a strong and robust baseline for MIL, which follows ABMIL. 
+
+I think MIL methods are not sensitive to the position and the number of patches, which is observed in my experiment. That's why I randomly synthesized some WSI from the Other pool each epoch for WSI. And reduce the number on 1024 resolution wo down-sample for submission.  This is also proved in this paper. 
+
+The reason why I ensemble multiple resolution for WSI: if you check the clarification on WHO. You will find that Pathologists distinguish the subtypes of Ovarian cancer on different magnification. So I believe ensemble multiple resolution for classifying a WSI should be very important. 
+
+About Larger transformer-based model: I believe the competition needs model with better generalization. And larger models are often more robust. At the early stage of this competition, I takes some time to test PLIP offline, but the CV is not good. Also, since I decide to solo this time, So I have to spend my limited time on the direction I am most confident about, solving this task in a more traditional and solid way. 
+
+
+Closing Thoughts: My Journey to Grandmaster
+
+The path to becoming a Grandmaster has been lengthy, filled with challenges, and an experience I will cherish for life. I am incredibly thankful for the support from my teammates in past competitions, as well as the unwavering encouragement from my family and girlfriend throughout my journey. The final step to becoming a Grandmaster, achieving a solo gold medal, has been particularly solitary and tough. This was my fourth attempt at a solo gold medal. if I failed this time, it might have been three years, ten years, or perhaps never before I'd have the chance again, as I am about to graduate with my master's degree and start my career in a busy company. Fortunately, I have realized the dream I had three years ago and have now brought my student years to a close with the title of Grandmaster. Wishing everyone a Happy New Year!
+
+Comments:
+├─ [deleted] (2024-01-04 07:07:08.817000) [+3]
+│  congratulation for GM!!
+├─ L-Lee (2024-01-08 05:42:03.237000) [+1]
+│  Congratulations!! I really love your graph of the Architecture of the solution. So clear and informative!!
+│  May I ask how you came up with the idea of "rough detection on outliers" with Arcface on m...
+  ├─ ForcewithMe (2024-02-15 15:52:28.347000) [+2]
+  │  Hi @lizzylee1111111111 ,
+  │  
+  │  
+  │  
+  │  
+  │  May I ask how you came up with the idea of "rough detection on outliers" with Arcface on medical images? . Arcface is usually used in Image Retrieval task. To detect ou...
+├─ Jin Niu (2024-01-04 15:38:11.577000) [+1]
+│  Congratulations on becoming a new kaggle GM! 祝贺来自土木老哥😆
+├─ Bartley (2024-01-04 15:11:31.650000) [+1]
+│  Congrats on becoming a GM, and thanks for the write-up! Some interesting ideas here.
+├─ MrSimple (2024-01-04 13:52:36.760000) [+1]
+│  Thanks for the solution! It is really good!
+├─ Seeing Times (2024-01-04 11:13:16.690000) [+1]
+│  Congrats for becoming Grandmaster🥳, I just wondering if the code is available for this solution?
+  ├─ ForcewithMe (2024-01-04 12:53:56.563000) [+1]
+  │  Thank you! There are nothing special in my code. I may make it available after I review them. But you remind me an important key points which I forget to write in my post. That is, Rank the DataFra...
+    ├─ Seeing Times (2024-01-04 13:28:33.390000) [+0]
+    │  Thanks for your sharing！
+├─ olivepicker (2024-01-04 09:15:56.323000) [+1]
+│  Great top solution. I learned a lot, thanks for the detailed method and congratulations becoming GM!
+├─ MOONMOON (2024-01-04 05:29:56.587000) [+1]
+│  Congratulations on winning your first solo gold and becoming a grandmaster!🎉🎉🎉
+  ├─ ForcewithMe (2024-01-04 05:56:11.157000) [+0]
+  │  @kevin1742064161 Thank you! You are an extraordinary teammate. Hope to have more cooperation with you in the future. Also, wish you to reach a grandmaster soon.
+├─ devchopin (2024-01-04 05:22:17.133000) [+1]
+│  Congratulations on becoming GM. I also became a Master through this competition and will work hard for GM.
+  ├─ ForcewithMe (2024-01-04 05:57:45.453000) [+0]
+  │  Congratulations! Wish you become a gm as you wish in the future.
+├─ lty (2024-01-04 05:20:04.443000) [+1]
+│  Congrats for becoming GM!
+  ├─ ForcewithMe (2024-01-04 05:24:49.917000) [+0]
+  │  Thank you LTY, working with you in previous competition is enjoyable.
+├─ shigengtian (2024-01-04 04:27:24.703000) [+1]
+│  Happy New Year!
+├─ C R Suthikshn Kumar (2024-01-04 04:00:10.760000) [+1]
+│  Congratulation on achieving the 8th position in this competition. Thanks for sharing the details of your solution.
+  ├─ ForcewithMe (2024-01-04 04:00:38.120000) [+0]
+  │  Thank you!
+├─ Jirka (2024-01-04 08:56:12.940000) [+0]
+│  Great work, I have noticed that all your models use very large resolutions, so was it trained on Kaggle or outside? and if on Kaggle how do you fit to limited P100 memory?
+  ├─ ForcewithMe (2024-01-04 12:31:47.060000) [+1]
+  │  I only use the GPU on Kaggle for inference debugging. I finish all my training on 1 A100 .
+    ├─ Jirka (2024-01-04 12:39:30.873000) [+0]
+    │  I though so :) and what was the batch size on A100?
+    ├─ ForcewithMe (2024-01-04 12:43:54.590000) [+0]
+    │  depends on the backbone and the resolution. For all my backbones and all the resolution, BS is from 16 to 64.
+├─ ForcewithMe (2024-01-04 08:43:39.003000) [+0]
+│  The architecture of my methods is updated.
+├─ Ali (2024-01-04 08:09:40.520000) [+0]
+│  congrat on solo gold and GM title!
+│  
+│  a question regarding inference, when you say "Models: 5-fold effv2s", does it mean you used 5 models trained on 5 fold of data? or it is a single model?
+  ├─ ForcewithMe (2024-01-04 08:14:04.337000) [+0]
+  │  Yes, it's a 5-folds cross validation.
+├─ Haoran Zhao (2024-01-04 06:37:46.160000) [+0]
+│  Congratulations！
+├─ [deleted] (2024-01-04 07:49:37.780000) [+1]
+│  [deleted]

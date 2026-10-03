@@ -1,0 +1,196 @@
+<p>We would like to sincerely thank the organizers and the Kaggle team for running such an engaging and enjoyable competition.</p>
+<h1>Overview</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F5547431%2Fc715804b314a45116d6faf883cf15cef%2Fkaggle%20mabe.jpg?generation=1765952024369758&amp;alt=media" alt="">
+We train <strong>separate models for solo and pair actions</strong>.</p>
+<ul>
+<li>Input: time-series of shape <strong>(T = 512, num_features)</strong></li>
+<li>Loss: <strong>Binary Cross Entropy</strong></li>
+<li>Final predictions are obtained using <strong>lab ×actions–specific thresholds</strong></li>
+</ul>
+<hr>
+<h2>Data Preprocessing</h2>
+<ul>
+<li>All tracking data are converted to <strong>30 FPS</strong><ul>
+<li>Features: linear interpolation</li>
+<li>Labels: nearest-neighbor interpolation</li></ul></li>
+<li>Distance / velocity / acceleration are standardized using precomputed statistics</li>
+<li>Missing values are filled by linear interpolation<ul>
+<li>Missing body-part features are replaced with the mean of existing body-part features in the same frame.</li></ul></li>
+</ul>
+<h3>Handling AdaptableSnail’s 25 FPS Tracking Data</h3>
+<p>Reference:
+<a href="https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612531#3305943" target="_blank">https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612531#3305943</a></p>
+<p>Issues:</p>
+<ul>
+<li>Labels are provided at <strong>30 FPS</strong></li>
+<li><strong>Mouse ID swapping</strong> occurs</li>
+</ul>
+<p>Fixes:</p>
+<ul>
+<li>Label frame rates were adjusted accordingly</li>
+<li>Mouse IDs were manually corrected by visually inspecting tracking visualization videos</li>
+</ul>
+<h2>Input Features</h2>
+<h3>Meta Features (shared across frames)</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Channels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sex</td>
+<td>solo=1, pair=2</td>
+</tr>
+<tr>
+<td>Frame-rate scale</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Lab ID(passed through an embedding layer)</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Candidate action label</td>
+<td>num_classes（solo=11, pair=26）</td>
+</tr>
+</tbody>
+</table>
+<h3>Per-frame Features</h3>
+<p><strong>Solo</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Channels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Body-part distances</td>
+<td>num_bodyparts²</td>
+</tr>
+<tr>
+<td>Velocity</td>
+<td>num_bodyparts</td>
+</tr>
+<tr>
+<td>Acceleration</td>
+<td>num_bodyparts</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+<strong>Pair</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Channels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cross-mouse body-part distances</td>
+<td>num_bodyparts²</td>
+</tr>
+<tr>
+<td>Velocity</td>
+<td>2 × num_bodyparts</td>
+</tr>
+<tr>
+<td>Acceleration</td>
+<td>2 × num_bodyparts</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Model Architectures</h2>
+<p>We used two architecture families.</p>
+<p><strong>CNN + RNN / Transformer</strong></p>
+<pre><code>Input
+ → Multi-scale Conv (k =3,5,7,9)
+ → Conv Fusion
+ → Bi-GRU or Transformer
+ → Linear
+ → Output
+</code></pre>
+<p><strong>SqueezeFormer</strong></p>
+<pre><code>Input
+ → SqueezeFormer
+ → Output
+</code></pre>
+<p>We trained <strong>5 variants</strong> with different depths and hyperparameters.</p>
+<hr>
+<h2>Training</h2>
+<ul>
+<li><strong>5-fold stratified cross-validation</strong><ul>
+<li>Folds are created using only data from lab IDs that appear in the test set</li>
+<li>Lab IDs are stratified so that their distributions are consistent across folds</li>
+<li>Labs from CalMS21* and CRIM13 are always included in the training set</li></ul></li>
+<li>One-vs-rest training per actions with BCE</li>
+<li>EMA with decay = 0.999</li>
+<li>Cosine LR schedule with warmup</li>
+<li>At each epoch, optimize the thresholds for each lab–action pair on the validation set and apply early stopping based on the resulting score.</li>
+</ul>
+<h2>Data Augmentation</h2>
+<ul>
+<li>Gaussian noise</li>
+<li>Time stretching</li>
+<li>Frame shift (shift features only; labels unchanged)</li>
+<li>Left/right body-part flipping</li>
+<li>Mixup</li>
+</ul>
+<hr>
+<h2>Inference</h2>
+<ul>
+<li>Sliding-window inference with <strong>stride = 128</strong></li>
+<li>We discard <strong>32 frames at both window boundaries</strong> and average the remaining predictions.</li>
+<li>Flip test-time augmentation (TTA) </li>
+</ul>
+<hr>
+<h2>Post-processing</h2>
+<h3>Thresholding</h3>
+<ol>
+<li>Optimal thresholds are computed independently for each fold and for each lab × action pair, and the final threshold is obtained by averaging the fold-specific thresholds.</li>
+<li>For each frame, among actions above threshold, the <strong>highest-scoring action</strong> is selected</li>
+</ol>
+<h3>AdaptableSnail 25 FPS Adjustment</h3>
+<ul>
+<li><code>start_frame</code> and <code>stop_frame</code> are multiplied by <strong>30 / 25</strong></li>
+<li>When mouse ID swaps are present in the tracking data, this adjustment is not meaningful</li>
+<li>The private dataset appears to include tracking sequences without mouse ID swaps<ul>
+<li>For these sequences, predictions are aligned to the 30 FPS labels</li>
+<li>This resulted in a <strong>+0.009 improvement in the private score</strong></li></ul></li>
+</ul>
+<hr>
+<h2>Results</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV (Solo)</th>
+<th>CV (Pair)</th>
+<th>Public</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ensemble</td>
+<td>0.069</td>
+<td>0.499</td>
+<td>0.542</td>
+<td>0.521</td>
+</tr>
+<tr>
+<td>+ AdaptableSnail post-processing</td>
+<td>—</td>
+<td>—</td>
+<td>0.542</td>
+<td><strong>0.530</strong></td>
+</tr>
+</tbody>
+</table>

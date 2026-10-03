@@ -1,0 +1,106 @@
+# https://www.kaggle.com/competitions/UBC-OCEAN/discussion/452165
+
+Topic #452165: baseline with Lightning⚡TIMM scores 0.4+ on LB become TOP 5%
+  Author: Jirka
+  Posted: 2023-11-01 04:40:35.024000
+  Votes: 86  Comments: 28
+
+Overall, it seems that we need to use detail from WSI (whole slice images)as shown in the illustration of this notebook. My first attempts and also naive training start with using the provided thumbnails Cancer🔬Subtype: baseline with Lightning⚡TIMM but that stored at most 0.27 on LB. With a swift switch to training on tiles, I got LB's score of 0.4 with the same model and AdamW, which at this moment is 5% submission.
+
+data 🗃️
+
+Competition provides WSi and thumbnails for the large images except for TMA, but by description, it seems TMA is a majority in the test dataset. So, training on provided thumbnails would miss these key images.
+
+So I created a notebook that was specialized for cutting tiles from all training images of size 2048px and scaled them down to 0.25. I have also pruned tiles without any information, such as background or edge cases.
+
+As this does not fit to single run storage, I had to do it three times and merge all results in a single dataset: Tiles 🖽 of 🔬 Cancer - 2048px | scale 0.25 which can be easily added to your training notebooks.
+
+training 💻
+
+I have used Lightning⚡, which absorbed most of the boilerplate code and allowed me seamlessly (without any code changes) switch between debugging on CPU and training on GPU.
+
+For models, I took TIMM and one of the simple vision transformers, which has a good balance between the size of its receptive field and the total number of parameters.
+
+For training, I randomly take one tile from training images and naively assume that it is fine representing the cancer subtypes.
+
+see the training notebook: Cancer🔬Subtype: tiles🖽 w/ Lightning⚡TIMM models
+
+inference 🚀
+
+it uses the trained model from the step above and with pyVips on-the-fly decomposes test images, cuts random 50 tiles, and as the final label sums probability predictions for each tile of a particular image.
+
+see the training notebook: Cancer🔬Subtype: Lightning⚡Torch [inference|tiles]
+
+🆙 Please consider upvoting my work - notebooks/dataset if you find them useful or forking it =) ⏫
+
+Comments:
+├─ Brian Yip (2023-11-06 20:21:19.960000) [+1]
+│  Hey, @jirkaborovec thanks for the awesome baseline! I think we've all learned a lot from your works here!
+├─ 阳光开朗大男孩 (2023-11-03 14:26:31.747000) [+1]
+│  Great job! Btw, what do you mean by the comment in your training code below? Also, what is your reason for using one-hot encoding? Looking forward to your reply.
+│  as validation is subsampled it may ...
+  ├─ Jirka (2023-11-03 14:32:24.860000) [+1]
+  │  in what notebook? it is possible it is an outdated comment :)
+    ├─ 阳光开朗大男孩 (2023-11-03 14:37:33.873000) [+1]
+    │  Just click on this in your discussion above…😂, in the class CancerSubtypeDM(pl.LightningDataModule).
+    ├─ Jirka (2023-11-03 14:48:48.370000) [+1]
+    │  ok, likely the story is such that we have 5 classes and the smallest have 8% so if we take only 10% or less as a validation subset it may happen that this rare class is missing so when you try to r...
+├─ sunil thite (2023-11-03 13:39:22.900000) [+1]
+│  Good work , Thanks for sharing valuable information.
+├─ David Roberts (2023-11-03 02:08:04.210000) [+1]
+│  Thank you for sharing your databases and notebooks @jirkaborovec. Really nice work!
+  ├─ Jirka (2023-11-03 02:16:08.340000) [+2]
+  │  you are welcome, hope you find them useful
+├─ Andreu Arderiu (2023-11-01 16:35:13.650000) [+1]
+│  Did you try tiles with high proportion of background in the inference? Or you just sum the probability predictions of all tiles and assume that noise from low-information tiles will just be random,...
+  ├─ Jirka (2023-11-01 16:42:08.930000) [+2]
+  │  So the tiles were filtered to reduce samples with mostly BG, but if you ask if I tried to weight tiles prediction by color intensity (a proxy measure to mount of background) - not yet :)
+├─ Andreu Arderiu (2023-11-01 07:57:15.157000) [+1]
+│  Really nice work, thanks for the baseline! Just one question: with this approach the inference will take a longer time as you need to decompose the images in tiles, right? In my case it took around...
+  ├─ Jirka (2023-11-01 08:07:56.567000) [+6]
+  │  got the the one with 0.4 score took about 11h
+├─ Huang Jin Feng (2023-11-01 05:49:11.943000) [+1]
+│  Valuable work! Initially, did you simply filter based on the background threshold to avoid selecting patches that are mostly meaningless background, and then randomly pick a patch with stained tiss...
+  ├─ Jirka (2023-11-01 06:05:37.250000) [+4]
+  │  That is correct, see the code in PyTorch dataset:
+  │  
+  │   () -&gt; :
+  │      random.shuffle(self.img_dirs[idx])
+  │       img_path  self.img_dirs[idx]:
+  │          
+  │          tile = np.array(Image.(img_path))[..., :]
+  │   ...
+├─ Remek Kinas (2023-11-02 12:35:56.570000) [+2]
+│  Thank you for providing great starting point. I will use your notebook as a baseline. Great sharing and contribution.
+├─ TensorKitty (2023-11-01 08:33:46.173000) [+2]
+│  Thanks for providing the baseline. Just started the competition. Will surely help me.
+  ├─ Jirka (2023-11-01 09:08:01.067000) [+2]
+  │  sure, pls check also the notebooks/implemntations
+├─ 阳光开朗大男孩 (2023-12-07 01:11:41.017000) [+0]
+│  Hi Jirka Borovec, I'm wondering if you've tried model ensemble or tta. l've found that the inference time of just single efficientnet_b0 model based on patch has been as high as 7-8 hours 😂 (with p...
+  ├─ Jirka (2023-12-07 06:28:58.370000) [+0]
+  │  From my experience, most of the time takes preprocessing (load WSI, cut and filter edge cases) so running ensambel on GPU shall be fine…
+    ├─ 阳光开朗大男孩 (2023-12-07 06:55:31.667000) [+0]
+    │  Thanks, I think that's too tough for us😂. I'll give it a try.
+├─ woodman718 (2023-11-16 01:56:46.633000) [+0]
+│  Hey, @jirkaborovec. Are you training like the following：
+│  for imgs in dataloader:
+│          with torch.no_grad():
+│              pred = model(imgs.to(device))
+│          preds += pred.cpu().numpy().tolist()...
+  ├─ Jirka (2023-11-16 03:50:24.840000) [+0]
+  │  Well, you refer inference code, but yes I trained with ratio 9:1
+├─ Patchef (2023-11-14 13:31:41.433000) [+0]
+│  Thank you for the excellent work! I have just a small note: The training dataset is not perfectly normally distributed (mean -0.5), because images with a lot of background are skipped. This should ...
+  ├─ Jirka (2023-11-14 16:51:22.907000) [+0]
+  │  About the color normalization, not really as I do the same background replacement and skipping also for predictions…
+    ├─ Patchef (2023-11-14 16:54:08.873000) [+0]
+    │  But you don't do it when you compute the normalization parameters :) Check the mean of your final dataset if you don't trust me
+├─ steffelf (2023-11-08 17:12:27.190000) [+0]
+│  Once cut you end up with some images that are 90% black, have you tried filtering a second time?
+│  I wonder if shifting the cut by 1024 px could improve the model.
+  ├─ Jirka (2023-11-08 17:15:30.993000) [+0]
+  │  Sure it is possible, or you can also consider random cut, not mosaic, but it requires more compute…..
+  │  also r read here somewhere you may navigate the best location y intensity in red channel
+├─ Martin Kovacevic Buvinic (2023-11-02 20:01:24.213000) [+2]
+│  Great work! Thanks for sharing.

@@ -1,0 +1,57 @@
+<h1>Overview</h1>
+<p>We called our network architecture "Nested Transformers", since it contains two levels of transformers:</p>
+<ul>
+<li>Cell transformer: A transformer encoder to encode cell tokens, this can be a typical transformer for NLP.</li>
+<li>Notebook transformer: A transformer encoder with cell*cell self-attention to learn the interaction among cells.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2202881%2Faad7b5931ba26287e467c535a69d595a%2Fnested_tfm.png?generation=1660286753619476&amp;alt=media" alt="Nested Transformers"></li>
+</ul>
+<p>Source codes: <a href="https://github.com/ShinSiangChoong/kaggle_ai4code_nested_transformers" target="_blank">https://github.com/ShinSiangChoong/kaggle_ai4code_nested_transformers</a></p>
+<h1>What Worked</h1>
+<h4>Modified Format of the Input to Cell Transformer</h4>
+<ul>
+<li>The input is in the following format: <code>&lt;code&gt;&lt;sep&gt;&lt;source_tokens&gt;</code> OR <code>&lt;mark&gt;&lt;sep&gt;&lt;source_tokens&gt;</code></li>
+<li>Thanks <a href="https://www.kaggle.com/cabbage972" target="_blank">@cabbage972</a> for verifying the usefulness of this idea. Please refer to this <a href="https://www.kaggle.com/competitions/AI4Code/discussion/343680#1907307" target="_blank">comment</a>. </li>
+</ul>
+<h4>Cell Features:</h4>
+<ul>
+<li>The code cell order is known, while the markdown order is unknown, hence a straightforward positional embedding scheme in the notebook transformer won't work. The cell features aim to inform the model about the known code cell positions/order.</li>
+<li>We use 2 features for each cell, i.e. cell type (code -&gt; 1, markdown -&gt; 0) and percentile rank among the code cells: If the cell is a markdown cell, this feature = 0</li>
+<li>The 2 features are "expanded" by FC layers, such that they are represented as an embedding that has the same dimension with that of the cell token embeddings. </li>
+<li>These cell feature embeddings are then concatenated with the token embeddings and passed into the Aggregation Attention Layer together.</li>
+</ul>
+<h4>Aggregation Attention</h4>
+<ul>
+<li>We believe different tokens (and the cell features) have different importance to represent the cell. An aggregation attention layer is used to learn the weights of each token embedding (and the cell feature embedding). </li>
+<li>The weights are normalized by a Softmax layer, such that the final cell embedding is a weighted average of its token and feature embeddings.</li>
+<li>Thanks <a href="https://www.kaggle.com/cabbage972" target="_blank">@cabbage972</a> for verifying the usefulness of this idea. Please refer to this <a href="https://www.kaggle.com/competitions/AI4Code/discussion/343680#1909812" target="_blank">comment</a>. </li>
+</ul>
+<h4>Double Head Architecture</h4>
+<ul>
+<li>Pointwise Head: output the percentile ranks of each cell. L1 Loss is applied.</li>
+<li>Pairwise Head: For each pair of cells A &amp; B, predict whether cell B is the next cell of cell A. Cross-entropy loss is applied.</li>
+<li>We only use the pointwise head for inference, i.e. the cells are ranked by the predicted percentile rank. </li>
+<li>The pairwise head is not used during inference, however, in our experiment, inclusion of the pairwise head helps in boosting the validation score by around 0.03.</li>
+</ul>
+<h4>Code Order Correction</h4>
+<ul>
+<li>Since our model predicts a percentile rank for each cell (including code cells), the code cell order (which is given) may be violated. </li>
+<li>If this happens, we swap the code cells based on the given order.</li>
+<li>This idea only marginally boosts the score. The model actually learns the code order pretty well given the cell features.</li>
+</ul>
+<h1>What Didn't Work</h1>
+<ul>
+<li>Make use of the pairwise head prediction in a greedy manner while fulfilling the code order constraint, i.e. keep determining the next cell by selecting the cell with the highest prediction score.</li>
+<li>Make use of the pairwise head prediction as a distance matrix, then use LKH to solve a Sequential Ordering Problem (TSP with precedence constraints)</li>
+<li>Train 2 cell transformer backbones together end to end, rely on the Aggregation Attention to aggregate the token embeddings from the 2 backbones.</li>
+</ul>
+<h1>Additional Context</h1>
+<ul>
+<li>The final model is an ensemble of 4 different cell transformer backbones, i.e. CodeBERT, Deberta-large, Deberta-base, and DistilBERT. </li>
+<li>For the notebook transformer, we used 6 transformer encoder layers here, each with 8 self-attention heads. This layer "adjusts" the embedding of each cell based on the embeddings of other cells using the self-attention mechanism.</li>
+</ul>
+<h1>Acknowledgements</h1>
+<p>We would like to thank the competition host(s) and Kaggle for organizing this interesting competition.</p>
+<h1>Team Members</h1>
+<p><a href="https://www.kaggle.com/css919" target="_blank">@css919</a> <br>
+<a href="https://www.kaggle.com/erniechiew" target="_blank">@erniechiew</a> <br>
+<a href="https://www.kaggle.com/hexomiter" target="_blank">@hexomiter</a></p>

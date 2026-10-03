@@ -1,0 +1,82 @@
+# MABe-mouse-behavior-detection 讨论区（按票数排序，共 80 条）
+
+- [7th Place Gold - CNN Transformer with Invariant Features](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663029) — 92 票 / 37 评论 / 2025-12-16 **write-up?**
+- [A note on sleeping mice 🐭💤](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608753) — 53 票 / 0 评论 / 2025-09-22 
+- [3rd place solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663026) — 52 票 / 10 评论 / 2025-12-16 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663083) — 46 票 / 7 评论 / 2025-12-16 **write-up?**
+- [Are some files corrupt?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608413) — 46 票 / 7 评论 / 2025-09-19 
+- [place holder: 1d object detection solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609063) — 42 票 / 14 评论 / 2025-09-23 **write-up?**
+- [Why isn't Private LB Updated?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663466) — 40 票 / 10 评论 / 2025-12-18 
+- [[PSA] Ghost / Leech Teammates](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609033) — 33 票 / 46 评论 / 2025-09-23 
+- [kaggle LB metric: What can be exploited (the “BUGs”) ???](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609211) — 33 票 / 12 评论 / 2025-09-25 
+- [Train has 90% behaviors_labeled = NAN](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/614429) — 30 票 / 5 评论 / 2025-11-03 
+- [Clarification on the hidden test set](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608621) — 30 票 / 4 评论 / 2025-09-21 
+- [Erroneous annotations. Case study: AdaptableSnail/1212811043 sample](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612531) — 28 票 / 18 评论 / 2025-10-20 
+- [Welcome to the Competition!](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608264) — 27 票 / 20 评论 / 2025-09-18 
+- [ 10th Place Solution (ST-GCN + Transformer)](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663063) — 27 票 / 1 评论 / 2025-12-16 **write-up?**
+- [🐁 Mouse Tracking Visualization Tool - Convert Parquet to Video](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/614781) — 26 票 / 0 评论 / 2025-11-06 
+- [Physical scale in the dataset](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608742) — 26 票 / 2 评论 / 2025-09-22 
+- [4th Place Solution - XGB + NN Ensemble](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663181) — 26 票 / 0 评论 / 2025-12-16 **write-up?**
+- [13th Public/12th Private Solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663108) — 26 票 / 2 评论 / 2025-12-16 **write-up?**
+- [No 1st place solution?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/665549) — 26 票 / 13 评论 / 2026-01-02 **write-up?**
+- [Mouse Action Recognition System (MARS) & Behavior Ensemble and Neural Trajectory Observatory (BENTO)](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609567) — 24 票 / 2 评论 / 2025-09-27 
+- [Wow, Removing AdaptableSnail fps=25 Wins 2nd Place!](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663198) — 24 票 / 11 评论 / 2025-12-16 **write-up?**
+- [Questions on tracking and annotation details](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609092) — 23 票 / 11 评论 / 2025-09-23 
+- [6th Place Solution (yu4u's Part)](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663028) — 23 票 / 2 评论 / 2025-12-16 **write-up?**
+- [5th place - GNN + Egocentric Squeezeformer](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663158) — 23 票 / 5 评论 / 2025-12-16 **write-up?**
+- [6th Place Solution (monnu's Part)](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663032) — 22 票 / 2 评论 / 2025-12-16 **write-up?**
+- [Why are annotations missing for lab_id "MABe22_keypoints" and "MABe22_movies"?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/611414) — 22 票 / 5 评论 / 2025-10-11 
+- [Anyone using Deep Learning Techniques? RNNs, CNNs, TCNs?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/623355) — 22 票 / 18 评论 / 2025-11-15 
+- [Data patch posted](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609470) — 22 票 / 11 评论 / 2025-09-26 
+- [Possible GNN Approach](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608319) — 21 票 / 0 评论 / 2025-09-19 
+- [27th place solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663049) — 18 票 / 2 评论 / 2025-12-16 **write-up?**
+- [15th place solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663073) — 18 票 / 3 评论 / 2025-12-16 **write-up?**
+- [Bad x/y data](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609519) — 18 票 / 2 评论 / 2025-09-27 
+- [The Final Day is Here! Wishing everyone the best. 🍀](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/662812) — 15 票 / 5 评论 / 2025-12-15 
+- [Questioning the Generalization Objective of the MABe Competition](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612517) — 15 票 / 6 评论 / 2025-10-20 
+- [ 52th Place Solution: Feature Engineering & Post-Processing Improvements](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663274) — 14 票 / 0 评论 / 2025-12-17 **write-up?**
+- [9th Place Gold - TCN+GBDT Ensemble](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663139) — 14 票 / 0 评论 / 2025-12-16 **write-up?**
+- [self-action and interaction label list](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608840) — 13 票 / 0 评论 / 2025-09-22 
+- [Duplicated behaviors_labeled](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/611879) — 13 票 / 1 评论 / 2025-10-15 
+- [New labs or not](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609904) — 9 票 / 4 评论 / 2025-09-30 
+- [19th place - 4 Body Parts Invariant Features with WaveNet + GRU](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/664120) — 9 票 / 0 评论 / 2025-12-22 **write-up?**
+- [No overlapping between top ranks](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/614317) — 8 票 / 5 评论 / 2025-11-03 
+- [Looking for team mates (ideally high silver & above)](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/639724) — 8 票 / 2 评论 / 2025-11-25 
+- [26th place solution](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663082) — 7 票 / 0 评论 / 2025-12-16 **write-up?**
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608257) — 6 票 / 4 评论 / 2025-09-18 
+- [Extra Arena Type/Shape or Typo in Hidden Test Data?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/614989) — 6 票 / 0 评论 / 2025-11-08 
+- [Please display the score with three decimal places.](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613570) — 6 票 / 4 评论 / 2025-10-28 
+- [How similar are `right_hip`and `right_lateral`?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/610249) — 5 票 / 6 评论 / 2025-10-02 
+- [Help the Beginner](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609487) — 5 票 / 1 评论 / 2025-09-27 
+- [Regarding the mislabelled 25fps AdaptableSnail videos in the test set](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/656090) — 5 票 / 3 评论 / 2025-12-09 
+- [Question about behavior labels in test data](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612550) — 5 票 / 2 评论 / 2025-10-20 
+- [[Solved] Submission Scoring Error and Strange behavior of my submission](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/624249) — 4 票 / 6 评论 / 2025-11-16 
+- [Public solutions lacking CV](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/611603) — 4 票 / 2 评论 / 2025-10-13 **write-up?**
+- [Can behaviors overlap?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613701) — 4 票 / 4 评论 / 2025-10-29 
+- [Hello everyone, the topic is training duration.](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/619628) — 4 票 / 3 评论 / 2025-11-14 
+- [New to Competitions – Need Guidance on Learning Path](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609173) — 4 票 / 0 评论 / 2025-09-24 
+- [Questions & approach on Semi Supervised Learning](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612782) — 4 票 / 1 评论 / 2025-10-22 
+- [What does it mean in action ?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/611649) — 3 票 / 1 评论 / 2025-10-13 
+- [Time series](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/611938) — 3 票 / 0 评论 / 2025-10-15 
+- [1375833299.parquet Not in train_annotation/PleasantMeerkat ？](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613253) — 3 票 / 3 评论 / 2025-10-25 
+- [How to merge Tracking & Annotation data for baseline](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613509) — 3 票 / 0 评论 / 2025-10-27 
+- [Bug Regarding /kaggle/tmp Disk Space](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/651748) — 3 票 / 2 评论 / 2025-12-05 
+- [Regarding the content of the dataset](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613115) — 2 票 / 2 评论 / 2025-10-24 
+- [lab_id in evaluation?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612699) — 2 票 / 2 评论 / 2025-10-21 
+- [比赛新手，请求建议指导](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612636) — 2 票 / 6 评论 / 2025-10-21 
+- [Looking for a team](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/609030) — 2 票 / 23 评论 / 2025-09-23 
+- [Hello everyone, is there a problem today?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/617614) — 2 票 / 0 评论 / 2025-11-11 
+- [looking for a teammate](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/627597) — 2 票 / 2 评论 / 2025-11-17 
+- [Question about MABe Score: Why is the score not 1.0 even when my answer is perfect?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/610204) — 2 票 / 3 评论 / 2025-10-02 
+- [F-Score clarification](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/610685) — 2 票 / 0 评论 / 2025-10-05 
+- [Will there be data from the MABe laboratory in the test set?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/651756) — 2 票 / 0 评论 / 2025-12-05 
+- [Spatio-temporal Transformer model](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/651809) — 2 票 / 2 评论 / 2025-12-05 
+- [[CV vs LB] - Single Model](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/655643) — 2 票 / 4 评论 / 2025-12-08 
+- [Why do my complex models consistently underperform simple ones in competitions?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663041) — 2 票 / 4 评论 / 2025-12-16 
+- [Score of 0.0](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608401) — 2 票 / 2 评论 / 2025-09-19 
+- [Link to metric implementation is broken](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/608281) — 2 票 / 2 评论 / 2025-09-18 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/663349) — 1 票 / 0 评论 / 2025-12-17 
+- [Regarding the Use of Pre-trained Models](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613296) — 1 票 / 2 评论 / 2025-10-25 
+- [Clarification on the Public Leaderbaord](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/613046) — 1 票 / 1 评论 / 2025-10-23 
+- [This leaderboard is chttps://www.kaggle.com/competitionsalculated with approximately 32% of the test data. The final results will be based on the other 68%, so the final standings may be different.](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612989) — 1 票 / 2 评论 / 2025-10-23 
+- [How long the submission takes?](https://www.kaggle.com/competitions/MABe-mouse-behavior-detection/discussion/612568) — 1 票 / 1 评论 / 2025-10-20 

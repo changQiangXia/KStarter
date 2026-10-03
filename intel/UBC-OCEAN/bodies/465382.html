@@ -1,0 +1,135 @@
+<h1>Acknowledgments</h1>
+<p>I would like to express my gratitude to Kaggle, the organizers, and other participants in the community. I have learned a great deal from this competition and hope that it will promote the advancement of research in MIL，Classification and outliers detection of Human tissues, and the study of women's health.</p>
+<h1>Introduction</h1>
+<p>The first and most crucial step in this competition is to familiarize oneself with the feature of Whole Slide Images (WSI) and Tissue Microarray (TMA) images. A simple visual examination reveals that <strong>the features of TMA and WSI are presented at vastly different scales.</strong> TMA features are at the cellular level, while WSI features are several to tens of times larger than cell clusters. Hence, from the onset of the competition, I decided to tackle WSI and TMA with two completely distinct approaches.  </p>
+<h2>Key points for the global approach:</h2>
+<ol>
+<li><strong>Address WSI and TMA separately</strong> .</li>
+<li><strong>Align the magnification of TMA and WSI</strong> to enable the reuse of TMA training code for optimizing the WSI feature extractor.  <ul>
+<li>WSI images are 20x magnified, while TMA images are 40x. Thus, TMA images need to be downsampled by a factor of 2 to align with the physical scale of WSI, which can also be observed with a visual inspection of the training data.  </li></ul></li>
+</ol>
+<h2>Architecture of the solution</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7285387%2F2ad9ed3ef7a2b0b9d8f8f13e1f30bc00%2FArch.png?generation=1704357989295647&amp;alt=media" alt=""></p>
+<h2>TMA Approach</h2>
+<h3>Summary of Key Points:</h3>
+<ol>
+<li><strong>Train with patches tiled with official masks</strong> (most important globally).  </li>
+<li>Train the model with <strong>healthy and death patches</strong> to predict some outliers.  </li>
+<li>Employ <strong>arcface</strong> to retrieve some outliers and part of the 5-class classification.  </li>
+<li>Heavy ensemble of 6 classification models to predict samples that arcface retrieval did not cover.  </li>
+</ol>
+<h3>Inference:</h3>
+<ol>
+<li><p>Use arcface retrieval with the training set's TMA as templates. Output 5-class results for samples with a close cosine distance, and consider those with a far cosine distance as outliers. Samples that are uncertain in the arcface stage are left for the subsequent phase.  </p>
+<ul>
+<li>Models: 5-fold effv2s + 5-fold convnext small with dynamic margin, subcenter=3.  </li>
+<li>Top1 threshold at 0.05, Other threshold at 0.2.  </li></ul></li>
+<li><p>The 6-class model uses 2-fold effv2s + 5-fold effv2l + 4-fold convnext small + 3-fold convnext large.  </p></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Effv2s</td>
+<td>1280</td>
+</tr>
+<tr>
+<td>Effv2l</td>
+<td>1280</td>
+</tr>
+<tr>
+<td>Convnext Small</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>Convnext Large</td>
+<td>1024</td>
+</tr>
+</tbody>
+</table>
+<p>Note: The arcface can tackle about 60% of the TMAs. So even the second stage is heavy, it doesn't cause timeout.</p>
+<h3>Training:</h3>
+<ol>
+<li>Tile patches using the official segmentation masks. In addition to the official 5 categories, classify patches of  <code>healthy</code> and <code>dead</code> as <code>Other</code> class. Instead of training with the official TMAs , which has limited number, use them for subsequent validation and retrieval.  </li>
+<li>Use the first-phase models to generate pseudo-label patches on the remaining 300+ WSIs without mask.  </li>
+<li>Inherit the weights from the first or second step, training only the last layer of the backbone and the arcface head.  </li>
+</ol>
+<h2>WSI Approach</h2>
+<h3>Summary of Key Points:</h3>
+<ol>
+<li><strong>Train the feature extractor using the TMA pipeline</strong>.  </li>
+<li><strong>Synthesize <code>Other</code>  WSI</strong> during the training process.  </li>
+<li><strong>Integrate different magnification scales.</strong>  </li>
+<li>Rank the DataFrame of WSI with the number of pixels, and process the WSIs with multithread can greatly speed the the WSI processing  procedure.</li>
+</ol>
+<h3>Inference:</h3>
+<ol>
+<li>Ensemble of two resolutions of feature extractor: 3072 resized to 768, and 1024 without down-sampling. After extracting features, apply DTFD-MIL.  </li>
+<li>For speed up the image processing procedure, I only use the center region of each 3072 tile, so that I only need to crop patch from the WSI once. </li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Resolution</th>
+<th>Number folds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Convnext Small</td>
+<td>3072 resize 768</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Effv2s</td>
+<td>3072 resize 768</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Effv2s</td>
+<td>1024</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<h3>Training:</h3>
+<ol>
+<li>Train the feature extractor using the TMA pipeline.  </li>
+<li>Extract features using the feature extractor.  </li>
+<li>Predict the probability of 'Other' on all patches using the feature extractor, and <strong>create an <code>Other pool</code></strong> with patches that have a high probability of 'Other'.  </li>
+<li>During the training of DTFD-MIL, dynamically synthesize some <code>WSI</code> from the <code>Other pool</code> each epoch.  <ul>
+<li>Training DTFD-MIL serves as a validation for whether the TMA pipeline models truly learned useful features. If  we use the pretrained weights from ImageNet, DTFD-MIL requires up to 200 epochs to converge. In contrast, using models trained on TMA, the MIL Head may take as little as 1 epoch and at most 20 epochs to converge.</li></ul></li>
+</ol>
+<h2>Something I don't have time to try but I think may work</h2>
+<ol>
+<li>Arcface for WSI. </li>
+<li>Large transformer pretrained on Large set of Slides. In fact I tried PLIP at the early stage of this competition,  But I didn't dig deeper.</li>
+<li>Better retrieve strategy for arcface.</li>
+<li>More resolution for WSI . I tried to add <code>6144 resize to 1024</code> into my final pipeline. But the notebook crashed.</li>
+<li>Ensemble of MIL head</li>
+<li>External data.</li>
+</ol>
+<h2>Todo:</h2>
+<p>This post is  almost completed :</p>
+<ol>
+<li></li>
+<li></li>
+<li></li>
+<li><br>
+If possible, I may add more ablation study in two weeks.</li>
+</ol>
+<h2>Discussion and Citation</h2>
+<ol>
+<li><a href="https://arxiv.org/abs/2203.12081" target="_blank">DTFD-MIL</a> is a strong and robust baseline for MIL, which follows ABMIL. </li>
+<li>I think MIL methods are not sensitive to the position and the number of patches, which is observed in my experiment. That's why I randomly synthesized some <code>WSI</code> from the <code>Other pool</code> each epoch for WSI. And reduce the number on <code>1024 resolution wo down-sample</code> for submission.  This is also proved in <a href="https://ieeexplore.ieee.org/document/10219719/authors#authors" target="_blank">this paper</a>. </li>
+<li>The reason why I ensemble multiple resolution for WSI: if you check the <a href="https://www.pathologyoutlines.com/topic/ovarytumorwhoclassif.html" target="_blank">clarification on WHO</a>. You will find that Pathologists distinguish the subtypes of Ovarian cancer on different magnification. So I believe ensemble multiple resolution for classifying a WSI should be very important. </li>
+<li>About Larger transformer-based model: I believe the competition needs model with better generalization. And larger models are often more robust. At the early stage of this competition, I takes some time to test PLIP offline, but the CV is not good. Also, since I decide to solo this time, So I have to spend my limited time on the direction I am most confident about, solving this task in a more traditional and solid way. </li>
+</ol>
+<h2>Closing Thoughts: My Journey to Grandmaster</h2>
+<p>The path to becoming a Grandmaster has been lengthy, filled with challenges, and an experience I will cherish for life. I am incredibly thankful for the support from my teammates in past competitions, as well as the unwavering encouragement from my family and girlfriend throughout my journey. The final step to becoming a Grandmaster, achieving a solo gold medal, has been particularly solitary and tough. This was my fourth attempt at a solo gold medal. if I failed this time, it might have been three years, ten years, or perhaps never before I'd have the chance again, as I am about to graduate with my master's degree and start my career in a busy company. Fortunately, I have realized the dream I had three years ago and have now brought my student years to a close with the title of Grandmaster. Wishing everyone a Happy New Year!</p>

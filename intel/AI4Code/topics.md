@@ -1,0 +1,82 @@
+# AI4Code 讨论区（按票数排序，共 80 条）
+
+- [Open sourcing my solution](https://www.kaggle.com/competitions/AI4Code/discussion/326970) — 134 票 / 24 评论 / 2022-05-25 **write-up?**
+- [My understanding of the domain - Taking a step back](https://www.kaggle.com/competitions/AI4Code/discussion/328905) — 100 票 / 18 评论 / 2022-06-03 
+- [Hint for a simple but stronger pairwise model baseline](https://www.kaggle.com/competitions/AI4Code/discussion/327197) — 94 票 / 3 评论 / 2022-05-26 
+- [Pairwise model baseline](https://www.kaggle.com/competitions/AI4Code/discussion/326473) — 84 票 / 23 评论 / 2022-05-22 
+- [2nd place solution](https://www.kaggle.com/competitions/AI4Code/discussion/343659) — 82 票 / 33 评论 / 2022-11-22 **write-up?**
+- [🎨How to create a Color Scheme for your Notebook](https://www.kaggle.com/competitions/AI4Code/discussion/327996) — 79 票 / 22 评论 / 2022-05-30 
+- [Some papers that might help](https://www.kaggle.com/competitions/AI4Code/discussion/325725) — 76 票 / 16 评论 / 2022-05-18 
+- [Most common kagglers in AI4Code Dataset](https://www.kaggle.com/competitions/AI4Code/discussion/324690) — 72 票 / 16 评论 / 2022-05-12 
+- [Pretraining on "Kaggle's Language"](https://www.kaggle.com/competitions/AI4Code/discussion/335294) — 62 票 / 5 评论 / 2022-07-05 
+- [Notebook Language Detection](https://www.kaggle.com/competitions/AI4Code/discussion/329783) — 62 票 / 14 评论 / 2022-06-08 
+- [1st Place Solution](https://www.kaggle.com/competitions/AI4Code/discussion/360501) — 62 票 / 28 评论 / 2023-12-12 **write-up?**
+- [Open Sourcing Lightning Fast 0.8137 Model: Train Your CodeBert in 4 Hours](https://www.kaggle.com/competitions/AI4Code/discussion/332646) — 57 票 / 12 评论 / 2022-06-22 
+- [I Created a Dataset with all the Training Data as a CSV (json --> csv)](https://www.kaggle.com/competitions/AI4Code/discussion/324483) — 52 票 / 17 评论 / 2022-05-12 
+- [15th Segment Ranking](https://www.kaggle.com/competitions/AI4Code/discussion/343714) — 52 票 / 23 评论 / 2022-11-12 
+- [ Kendall’s Tau (Kendall Rank Correlation Coefficient)](https://www.kaggle.com/competitions/AI4Code/discussion/324476) — 51 票 / 11 评论 / 2022-05-12 
+- [11th Place Solution: Nested Transformers](https://www.kaggle.com/competitions/AI4Code/discussion/343680) — 51 票 / 45 评论 / 2022-11-17 **write-up?**
+- [Additional Supporting Dataset 📊](https://www.kaggle.com/competitions/AI4Code/discussion/326520) — 50 票 / 6 评论 / 2022-05-22 
+- [Textual Similarity Approach](https://www.kaggle.com/competitions/AI4Code/discussion/324509) — 50 票 / 9 评论 / 2022-05-12 
+- [Ideas for Generating New Data 💡 ](https://www.kaggle.com/competitions/AI4Code/discussion/324554) — 50 票 / 18 评论 / 2022-05-12 
+- [ CodeBERT: A Pre-Trained Model for Programming and Natural Languages](https://www.kaggle.com/competitions/AI4Code/discussion/324570) — 46 票 / 8 评论 / 2022-05-12 
+- [What do we know so far? - A summary of the top discussions topics](https://www.kaggle.com/competitions/AI4Code/discussion/331207) — 44 票 / 2 评论 / 2022-06-16 
+- [4th solution](https://www.kaggle.com/competitions/AI4Code/discussion/343595) — 43 票 / 4 评论 / 2022-11-21 **write-up?**
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/AI4Code/discussion/324423) — 42 票 / 62 评论 / 2022-05-11 
+- [About loss function and better score](https://www.kaggle.com/competitions/AI4Code/discussion/325272) — 38 票 / 10 评论 / 2022-05-15 
+- [Things you can try to speed up training speed and preventing memory shortage if you are using transformers.](https://www.kaggle.com/competitions/AI4Code/discussion/327777) — 37 票 / 7 评论 / 2022-05-29 
+- [21st - A Bag of Words is All You Need](https://www.kaggle.com/competitions/AI4Code/discussion/343614) — 37 票 / 10 评论 / 2022-08-12 
+- [Pretrained Python Models on HuggingFace 🤗](https://www.kaggle.com/competitions/AI4Code/discussion/324470) — 36 票 / 10 评论 / 2022-05-11 
+- [Tricks From Winning Solutions Of Other Code Competitions](https://www.kaggle.com/competitions/AI4Code/discussion/330503) — 36 票 / 2 评论 / 2022-06-12 **write-up?**
+- [The code cells are not shuffled](https://www.kaggle.com/competitions/AI4Code/discussion/324813) — 32 票 / 7 评论 / 2022-05-13 
+- [A tiny hint for preprocessing](https://www.kaggle.com/competitions/AI4Code/discussion/330384) — 29 票 / 0 评论 / 2022-06-12 
+- [[New Pilot] Winning Solution Write Up](https://www.kaggle.com/competitions/AI4Code/discussion/365712) — 27 票 / 10 评论 / 2022-11-12 **write-up?**
+- [[Public 31st] CodeT5-base Encoder 1024](https://www.kaggle.com/competitions/AI4Code/discussion/343762) — 27 票 / 11 评论 / 2023-05-01 
+- [Public LB 14th Solution](https://www.kaggle.com/competitions/AI4Code/discussion/343730) — 24 票 / 8 评论 / 2022-08-12 **write-up?**
+- [My Part of Team's Solution (Punch Cards Are All You Need, LB Rank 24)](https://www.kaggle.com/competitions/AI4Code/discussion/343603) — 24 票 / 3 评论 / 2022-08-12 **write-up?**
+- [Good Luck Everyone! ](https://www.kaggle.com/competitions/AI4Code/discussion/343243) — 22 票 / 21 评论 / 2022-08-10 
+- [The trick (or, overfitting)](https://www.kaggle.com/competitions/AI4Code/discussion/343658) — 22 票 / 3 评论 / 2022-08-12 
+- [Code Understanding BERT](https://www.kaggle.com/competitions/AI4Code/discussion/336761) — 21 票 / 2 评论 / 2022-07-12 
+- [real world application for this model ?](https://www.kaggle.com/competitions/AI4Code/discussion/325205) — 21 票 / 9 评论 / 2022-05-15 
+- [Sharing some ideas: Feature Engineering!](https://www.kaggle.com/competitions/AI4Code/discussion/328979) — 21 票 / 6 评论 / 2022-06-03 
+- [CV vs LB thread](https://www.kaggle.com/competitions/AI4Code/discussion/328167) — 21 票 / 12 评论 / 2022-05-31 
+- [Fractal markdown distribution](https://www.kaggle.com/competitions/AI4Code/discussion/327740) — 21 票 / 4 评论 / 2022-05-28 
+- [A High Schooler’s Solo Journey to get a Silver Medal.](https://www.kaggle.com/competitions/AI4Code/discussion/354336) — 20 票 / 4 评论 / 2022-09-21 **write-up?**
+- [How to use CuBert](https://www.kaggle.com/competitions/AI4Code/discussion/336983) — 20 票 / 5 评论 / 2022-07-13 
+- [the LB is flooding, we need a solution.](https://www.kaggle.com/competitions/AI4Code/discussion/341456) — 20 票 / 12 评论 / 2022-08-03 **write-up?**
+- [Textual Entailment Approach](https://www.kaggle.com/competitions/AI4Code/discussion/325560) — 20 票 / 0 评论 / 2022-05-17 
+- [Second Leaderboard Update](https://www.kaggle.com/competitions/AI4Code/discussion/352846) — 19 票 / 23 评论 / 2022-09-15 
+- [Ideas for training better language models                               ](https://www.kaggle.com/competitions/AI4Code/discussion/335793) — 19 票 / 2 评论 / 2022-07-07 
+- [Extract all functions, variables... names](https://www.kaggle.com/competitions/AI4Code/discussion/330417) — 19 票 / 6 评论 / 2022-06-12 
+- [What if you don't have high-end GPU?](https://www.kaggle.com/competitions/AI4Code/discussion/329848) — 19 票 / 19 评论 / 2022-06-09 
+- [3rd Place Solution](https://www.kaggle.com/competitions/AI4Code/discussion/367600) — 19 票 / 0 评论 / 2023-07-11 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/AI4Code/discussion/324424) — 18 票 / 82 评论 / 2022-05-11 
+- [TensorFlow TPU Starter Notebook](https://www.kaggle.com/competitions/AI4Code/discussion/330121) — 18 票 / 8 评论 / 2022-06-10 
+- [41th Place Solution](https://www.kaggle.com/competitions/AI4Code/discussion/367280) — 17 票 / 1 评论 / 2022-11-20 **write-up?**
+- [Why won't Kaggle show submission time?](https://www.kaggle.com/competitions/AI4Code/discussion/342035) — 17 票 / 12 评论 / 2022-08-05 
+- [Python Datasets on HuggingFace 🤗](https://www.kaggle.com/competitions/AI4Code/discussion/324473) — 16 票 / 1 评论 / 2022-05-11 
+- [ATLEAST 1 code cell and markdown cell in every notebook](https://www.kaggle.com/competitions/AI4Code/discussion/324682) — 15 票 / 0 评论 / 2022-05-12 
+- [Need-to-know: Rerun competitions and datasets](https://www.kaggle.com/competitions/AI4Code/discussion/341780) — 15 票 / 3 评论 / 2022-08-04 
+- [Is there any more reruns?](https://www.kaggle.com/competitions/AI4Code/discussion/365364) — 15 票 / 13 评论 / 2022-11-11 
+- [Google AI4Code kernels stats](https://www.kaggle.com/competitions/AI4Code/discussion/365258) — 15 票 / 0 评论 / 2022-11-10 
+- [Fast and light ensemble model (37th after 2nd rerun)](https://www.kaggle.com/competitions/AI4Code/discussion/353085) — 15 票 / 0 评论 / 2022-09-18 
+- [9439 in 2 hours(maybe)! Amazing](https://www.kaggle.com/competitions/AI4Code/discussion/341920) — 14 票 / 18 评论 / 2022-08-04 
+- [🎨 Color Theory: Difference between a Beautiful and Ew Gradient](https://www.kaggle.com/competitions/AI4Code/discussion/335085) — 14 票 / 8 评论 / 2022-07-04 
+- [JuPyT5: The Key to Winning?](https://www.kaggle.com/competitions/AI4Code/discussion/336770) — 14 票 / 1 评论 / 2022-07-12 **write-up?**
+- [Dealing with multi languages in notebooks](https://www.kaggle.com/competitions/AI4Code/discussion/327626) — 14 票 / 5 评论 / 2022-05-28 
+- [Cleaning and Preprocessing Markdown cells](https://www.kaggle.com/competitions/AI4Code/discussion/325779) — 14 票 / 1 评论 / 2022-05-18 
+- [Language of markdowns](https://www.kaggle.com/competitions/AI4Code/discussion/324608) — 13 票 / 6 评论 / 2022-05-12 
+- [About negative sampling strategies for pairwise method](https://www.kaggle.com/competitions/AI4Code/discussion/326911) — 13 票 / 15 评论 / 2022-05-24 
+- [What hardware are you using for training?](https://www.kaggle.com/competitions/AI4Code/discussion/341988) — 13 票 / 21 评论 / 2022-08-05 
+- [Eager to see new results](https://www.kaggle.com/competitions/AI4Code/discussion/347917) — 13 票 / 5 评论 / 2022-08-26 
+- [10th place solution](https://www.kaggle.com/competitions/AI4Code/discussion/368997) — 13 票 / 1 评论 / 2022-11-28 **write-up?**
+- [📊 🔀 Analysis of the updates Public LB->4th rerun](https://www.kaggle.com/competitions/AI4Code/discussion/360218) — 13 票 / 3 评论 / 2022-10-15 
+- [Final reminder](https://www.kaggle.com/competitions/AI4Code/discussion/343439) — 12 票 / 7 评论 / 2022-08-11 
+- [Is cell_id not unique?](https://www.kaggle.com/competitions/AI4Code/discussion/335958) — 12 票 / 2 评论 / 2022-07-08 
+- [6th place solution](https://www.kaggle.com/competitions/AI4Code/discussion/368500) — 12 票 / 1 评论 / 2022-11-25 **write-up?**
+- [Quick Save with output data](https://www.kaggle.com/competitions/AI4Code/discussion/336775) — 12 票 / 2 评论 / 2022-07-12 
+- [9th Place Solution ](https://www.kaggle.com/competitions/AI4Code/discussion/368190) — 12 票 / 4 评论 / 2022-11-24 **write-up?**
+- [Final Leaderboard Update](https://www.kaggle.com/competitions/AI4Code/discussion/365556) — 11 票 / 3 评论 / 2022-11-11 
+- [Error Analysis: Visualize CodeBERT's Attention heads](https://www.kaggle.com/competitions/AI4Code/discussion/333408) — 11 票 / 2 评论 / 2022-06-26 
+- [just an idea](https://www.kaggle.com/competitions/AI4Code/discussion/327785) — 11 票 / 5 评论 / 2022-05-29 
+- [Metric Learning Approach](https://www.kaggle.com/competitions/AI4Code/discussion/329370) — 11 票 / 0 评论 / 2022-06-06 

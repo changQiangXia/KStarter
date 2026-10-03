@@ -1,0 +1,54 @@
+<p><strong>Recall model</strong>   (infer 2h+, 1h using 2 T4)</p>
+<ul>
+<li>pairwise, two tower, with backbone sentence-transformers/all-mpnet-base-v2</li>
+<li>continued mlm on training data</li>
+<li>predicting for earch markdown wether a code is just after it (also a fake last code with content 'the end of notebook'  added) </li>
+<li>9 negative selected withn the same notebook  (better comparing to using 4 both offline and online)</li>
+<li>for code, encode itsself and before 2 and after 2 codes  </li>
+<li><strong>crossentropy loss  with cosine / learned temperature</strong>(finally about 0.002) as input logits</li>
+<li>offline tau score 897 (averge the recall score for each code position)</li>
+<li>late submission score is 8936</li>
+<li><strong>recall model is a key model, as rank model and context rank model all using its output</strong></li>
+<li>The main drawback here is the recall model if using 9 negatives will be gpu costly, I used 8*v100, and it cost about 30 h for 1 model training on all train data.  </li>
+</ul>
+<p><strong>Pairwise rank model</strong>  (infer 2h+)</p>
+<ul>
+<li>pairwsie , concat , with backbone deberta-v3-small  </li>
+<li>only infer for those recall model max prob &lt; 0.8, so infer(rerank) about 50% markdowns.</li>
+<li>offline tau score 905</li>
+</ul>
+<p><strong>Context rank model</strong>  (infer 2.5h+)<br>
+Modified from  <a href="https://www.kaggle.com/code/suicaokhoailang/stronger-baseline-with-code-cells" target="_blank">https://www.kaggle.com/code/suicaokhoailang/stronger-baseline-with-code-cells</a>  </p>
+<ul>
+<li>backbone deberta-v3-small</li>
+<li><strong>3 markdowns as a group (infer at once for each instance)</strong>   <br>
+these groups slected using recall model, to select markdowns with similar code scores to a group.</li>
+<li><strong>40 codes selected by recall model (train using recall model OOF</strong>)    <br>
+this is also a key point, for training using neg sample with sample prob provided by recall model, for infer just choose top recall prob codes.  And after contest finish I learned that most top teams used much more codes, more context/codes is a key point for win.<br>
+Train just using spaced selection of codes with some distoration (randomness) and then infer with recall model selected top codes can improve 0.1+.  I have tested 1 context model before online from 8806(without recall model) to 8892(using recall model)<br>
+Then if train using recall model selected, or with probablity of sampling will be even better 0.05+.</li>
+<li>add  OOF recall model score as inputs to bert improve 0.004    <br>
+not sure if overfit, so I selected 1 sub with it 9147 and another witout it 9143, I made some mistakes and no time to retrain, just finetune 3 epochs for models with OOF score, so this OOF method should have improved much more I think should be 2k+, you could see below huge improvement from just the first epoch .   <br>
+Finally we see improment from 9162 to 9170.<br>
+<img src="https://i.postimg.cc/TYZ5hH0S/Qd-AG4-Bsuv-FVh-C5-M.png" alt=""></li>
+<li>multiple losses( classification for num_classes 100 + MAE for regression to preidct the relative rank for each markdown)</li>
+<li>offline tau score 916(interesting, this is the classification output） and tau score 914(regression output)</li>
+</ul>
+<p><strong>GBDT model to combine above 3 models score</strong> (infer 5m）   </p>
+<ul>
+<li>used catboost and lgb, it helps improve about 6k online.</li>
+<li>offline tau score 922, online 9147<br>
+top features show below:  <br>
+xpc means pairwise concat rank model  <br>
+xc means context rank model  <br>
+xp means pairwise two tower model (recall model)  <br>
+<img src="https://i.postimg.cc/kMYWbRSt/2.png" alt=""></li>
+</ul>
+<p>Just learned deberta-v3-large with large inputs can be much better , more context(more codes like 128+) is a key for better result,^_^, next time will do more experiments at first to choose the correct direction.    <br>
+I did not use external data finally, though I tried but not with much improvement, the direction is wrong I should have tried to use more kaggle notebooks, I found so much duplicates in the public kaggle dataset published so not try it also.<br>
+Thanks kaggle , this is really an intersting game! Also want to thanks for wandb and tabnine, they make life easier for doing experiments and coding.</p>
+<p><strong>code</strong><br>
+inference to get 9170 for 4th place:  <a href="https://www.kaggle.com/code/goldenlock/reproduce-v1" target="_blank">https://www.kaggle.com/code/goldenlock/reproduce-v1</a><br>
+pairwise inference to get 8936:   <a href="https://www.kaggle.com/code/goldenlock/pairwise-recall" target="_blank">https://www.kaggle.com/code/goldenlock/pairwise-recall</a><br>
+training:  <a href="https://www.kaggle.com/datasets/goldenlock/ai4code" target="_blank">https://www.kaggle.com/datasets/goldenlock/ai4code</a>  <br>
+<a href="https://github.com/chenghuige/Google-AI4Code-Understand-Code-in-Python-Notebooks" target="_blank">https://github.com/chenghuige/Google-AI4Code-Understand-Code-in-Python-Notebooks</a></p>

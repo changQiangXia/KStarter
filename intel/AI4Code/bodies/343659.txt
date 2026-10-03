@@ -1,0 +1,186 @@
+# https://www.kaggle.com/competitions/AI4Code/discussion/343659
+
+Topic #343659: 2nd place solution
+  Author: Dmytro Poplavskiy
+  Posted: 2022-08-12 03:41:04.489000
+  Votes: 82  Comments: 33
+
+The solution is based on the bi-encoder or poly-encoder like approach, when every cell is individually processed by the codebert, with the code/md interaction modelled with the pair of parallel TransformerDecoderLayer:
+
+
+
+I either used the shared CodeBERT based encoder for both code and markdown cells or CodeBERT for code and multi language bert for markdown. The resulting activations are averaged over tokens.
+
+The code cell activations are passed to 1D convolution with zero padding, to convert from the N code cell positions to N+1 positions between cells (bins to put mb cell to), with every point combined activations of the cell before and after.
+
+After adding the pos encoding to the code activations (the combination of the absolute and relative encodings).
+
+The next stage is a few layers (2 or 6) of transformer decoders, for code cell to use the self attention and attention to md cells as a memory, the same for markdown: self attention and the memory query over the output of the code cell:
+
+for step in range(self.num_decoder_layers):
+        x_code = self.code_decoders[step](x_code, x_md)
+        x_md = self.md_decoders[step](x_md, x_code)
+
+
+Output and loss
+
+Outputs of the code and markdown decoders are combined with matmul similarly to attention in a transformer,
+with 3 outputs:
+
+
+
+
+(nb_code+1) * nb_markdown  shape, is markdown cell i before the code bin j
+
+
+(nb_code+1) * nb_markdown  shape, is markdown cell i at the code bin j
+
+
+nb_markdown * nb_markdown is the markdown cell i before another markdown cell j
+
+
+
+
+The first two outputs are used to put the md cell to the right bin between the code cells, and the last output is used to sort md cells within the single bin. BCE loss was used during training.
+
+Post-processing
+
+MD cell is put to the right bin between code cells using the first prediction: probability of the MD cell i is before code bin j. The position is selected to minimize the sum of probabilities of the wrong placement over all bins:
+
+md_cell_bin_num = np.argmin([
+        -1 * md_after_code[md_idx, :i+1].sum() + md_after_code[md_idx, i+1:].sum()
+        for i in range(nb_bins)
+])
+
+
+Such approach to select the markdown cell position worked much better compared to the simple "is markdown cell i at the code bin j" output + softmax/argmax. The intuition behind the loss and sorting approach was to have a proxy for expected number of cell swaps used in the competition metric.
+
+The model was trained end to end, with the batch equal to a single notebook, I guess this makes the optimisation task harder due to the variable size of notebooks. Gradient clipping helped.
+
+The loss weighting and notebooks sampling also had a significant impact on the score. Large notebooks have a larger impact on the final score (due to the large number of position inversions for wrong predictions) but the wrong prediction error is averaged over a large number of nb_md * nb_code predictions. To address this I sampled larger notebooks more often (most useful) and for some models added avg_loss + a * max_loss + b * sum_loss (with a very small a of 0.02, adding sum_loss helped for initial experiments but was disabled later).
+
+Non-English notebooks handling
+
+I tried to address the multiple language notebooks, I used either the same shared codebert model for code and md cells or the codebert for code and sentence-transformers/paraphrase-multilingual-mpnet-base-v2 for md.
+
+Example of the performance difference between approaches (from the local validation, on one of folds):
+shared codebert: All notebooks: 0.9113; English notebooks: 0.9164; Non-English notebooks: 0.8652
+codebert+mpnet: All notebooks: 0.9088; English notebooks: 0.9117; Non-English notebooks: 0.8825
+
+The multilingual sentence ensembling mpnet model is trained on language pairs and allows to reduce the score gap between English and non-English notebooks but it has the worse combined score (most notebooks are English).
+
+I initially planned to do a different ensemble based on the language, but later I found the impact of ensembling codebert2 and codebert+mpnet models produces a much bigger score jump and decided to use the same large ensemble for all notebooks, regardless of the language.
+
+Ensembling
+
+To increase the ensemble side, I also trained the separate encoder models (using per-cell predictions from the first level transformers). Such encoder only parts of models were much faster to train (single per notebook transformer compared to multiple ber cell transformers, allowed to faster experiment with different architectures) and to predict (L1 per cell model predictions are re-used).
+
+The ensemble - to average 3 outputs between 4 folds and two models, including two versions of L2 encoders.
+For ensembling I used the simple weighted averaging of model predictions (weighting was not very important, used higher weight for better performing models but the result was almost the same as for unweighted average).
+
+External data
+
+Models have been trained on the original dataset.
+I tried to use the published external set of notebooks with acceptable licenses https://zenodo.org/record/6383115, it seems to improve results. The dataset was mentioned closer to the end of the challenge so I did not have enough time to re-train the full models. I trained the additional encoders using the external dataset notebooks, the result of individual improved, but the improvement of the final ensemble seems to be quite small.
+
+Time permitting, I would re-train models using the external data.
+
+The dataset converted to the challenge format: https://www.kaggle.com/datasets/dmytropoplavskiy/the-dataset-of-properlylicensed-jupyter-notebooks
+
+What did not work or had no significant impact
+
+
+
+
+T5 based models performed worse
+
+
+Different pre-processing of code and markdown cells had little impact, so used unprocessed.
+
+
+Different ways to combine per cell model outputs performed in a similar way (using average, avg+max, output of the special code token).
+
+
+Using GRU/LSTM instead of transformer, for the encoder part or GRU for code with transformer encoder for md/code. The performance was worse compared to the dual branch transformer decoder.
+
+
+Source code
+
+Comments:
+├─ gezi (2022-08-12 04:02:46.130000) [+3]
+│  Congratulations！ Really creative and elegant solution, thanks for sharing.
+├─ RoBi (2022-08-12 10:16:37.257000) [+4]
+│  Thank you. Will you share your code maybe after the competition ends? It will be helpful
+├─ li hui (2022-08-12 21:23:14.270000) [+1]
+│  Great job!
+├─ Subhadeep Debnath (2022-08-12 13:00:25.240000) [+1]
+│  Wow, learned something new. Thanks for sharing 😊
+├─ Bob Simth (2022-08-12 08:50:15.040000) [+1]
+│  Congratulations! An elegant end-to-end solution that takes into account the inherent order between Markdown cells. I learned a lot from it.
+├─ [START] (2022-08-12 06:20:37.760000) [+1]
+│  Amazing solution.
+├─ Ravi Ramakrishnan (2022-08-12 06:10:05.997000) [+1]
+│  Fantastic explanation!! Very new and innovative approach!! 
+│  Congrats for the results, your approach is a learning experience for people like me
+├─ Soheil Tehranipour (2022-08-12 04:49:30.420000) [+1]
+│  Congrats . This post was very helpful for AI4Code competition.
+├─ Cabbage972 (2022-08-13 01:49:57.083000) [+2]
+│  Super interesting architecture, thank you for sharing!
+│  
+│  I have a a couple of questions about the details:
+│  
+│  
+│  
+│  Why did you create model heads both for predicting if markdown cell i is before the code...
+  ├─ Dmytro Poplavskiy (2022-08-13 05:34:41.467000) [+5]
+  │  I experimented with using both md before code (implemented it first) and md exactly at the code bin.
+  │  
+  │  During inference the md before code approach worked much better (I select the bin which minimiz...
+├─ hyd (2022-08-12 06:24:01.977000) [+2]
+│  Great work. I can't believe it works.👍
+├─ Sarthak Bhatt (2022-10-10 12:09:11.460000) [+0]
+│  Congrats on the result! 
+│  Would you please mind citing my article from 3 months ago, in case that was the source of the design?
+├─ Cabbage972 (2022-09-21 02:08:59.727000) [+0]
+│  @dmytropoplavskiy I'm wondering if this solution was inspired by recent work in computer vision regarding decoders for multi-label classification, e.g. DETR, UNIT, Query2Label, ML-Decoder?
+  ├─ Dmytro Poplavskiy (2022-09-23 03:26:18.147000) [+1]
+  │  Hi, probably to some extent at least, I was impressed with how much DETR simplified the usual detection pipeline, with anchors, NMS etc. I tried to use something similar for the Lift challenge but ...
+├─ Igor Araújo de Melo Monticello (2022-08-16 23:26:41.423000) [+0]
+│  Great work!
+├─ Clément DECAUX (2022-08-15 19:14:15.893000) [+0]
+│  Great work!
+├─ Shivam (2022-08-15 18:20:39.770000) [+0]
+│  insightful
+├─ kyle (2022-08-15 16:52:37.123000) [+0]
+│  very interesting solution! And congrats! 
+│  And, I really like to learn from your code as well if you don't mind sharing it…
+├─ Leo Hominski (2022-08-15 14:18:10.293000) [+0]
+│  Wow this is a bit complex
+├─ AMAN BARKAT BHANVADIA (2022-08-15 06:42:13.200000) [+0]
+│  nice work
+├─ Kaijie Huang (2022-08-15 03:35:19.620000) [+0]
+│  Thank you for such useful sharing! Learned many things and can't wait to apply it
+├─ Oscar Aguilar (2022-08-14 23:25:12.700000) [+0]
+│  Thanks for sharing your approach. Very insightful.
+├─ Jasleen Sondhi (2022-08-14 10:56:40.903000) [+0]
+│  This was so insightful! Thanks for sharing💯
+├─ Harry Mapodile (2022-08-14 01:19:20.520000) [+0]
+│  Thanks for the explanation, very helpful.
+├─ Kiwiegg (2022-08-13 17:09:14.653000) [+0]
+│  Cool solution
+├─ Muhammed Tausif (2022-08-13 15:00:24.580000) [+0]
+│  Thanks for sharing, interesting @dmytropoplavskiy
+├─ [deleted] (2022-09-11 03:25:17.330000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-23 08:06:06.390000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-15 06:31:03.293000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-14 23:10:01.447000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-12 04:36:23.677000) [+0]
+│  [deleted]
+├─ [deleted] (2022-09-05 11:05:46.327000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-13 08:54:07.330000) [+0]
+│  [deleted]

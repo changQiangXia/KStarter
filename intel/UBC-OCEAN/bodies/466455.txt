@@ -1,0 +1,281 @@
+# https://www.kaggle.com/competitions/UBC-OCEAN/discussion/466455
+
+Topic #466455: 1st Place Solution 🥇 [Owkin]
+  Author: jibounet
+  Posted: 2024-01-08 17:22:46.265000
+  Votes: 65  Comments: 37
+
+1st Place Solution 🥇 [Owkin] -- Phikon &amp; Chowder
+
+Introduction
+
+First of all, we would like to thank the University of British Columbia (UBC) for this exceptional multi-centric cohort and the Kaggle staff for organizing this competition. We got into this competition to showcase the efficiency and robustness of Phikon (model card, paper, blog post), the foundation model (FM) for digital pathology made available to the community by Owkin last November. We are very pleased with the outcome and really enjoyed participating in this competition.
+
+Our solution is straightforward: we trained an ensemble of Chowder models on top of Phikon tile embeddings. We used high entropy predictions to detect outliers. We did not use extra training data nor annotations (other than the ones provided by the organizers). Our winning submission submission scored 0.64/0.66 (public/private) and our top submission scored 0.62/0.68. These submissions run in approximately 6 hours 🚀
+
+Our code is available here. We cleaned our code (removed comments, unused code, added sections…) and created the winning_submission notebook. After a late submission, this notebook scores 0.63/0.66. The slight difference on the public LB is likely due to differences in the sampling of patches.
+
+Our solution write-up is structured as follows:
+
+
+
+Main takeaways
+
+Matter detection and tiling
+
+Feature extraction
+
+Subtypes classification
+
+Outlier detection
+
+Some (un)successful ideas
+
+Notes
+
+
+
+
+1. Our main takeaways
+
+
+
+
+Foundation models (or domain-specific large vision models) are the way of the future. Our results further validate the effectiveness of Phikon, Owkin's foundation model for digital pathology. The next frontier is multimodality: combining spatial-omics, imaging, clinical data - from genotype to phenotype - and blending it with medical knowledge and reasoning powered by Large Language Models (LLMs).
+
+
+Occam's razor: our simple and efficient pipeline outperformed more complex approaches. In particular, Chowder - a Multiple Instance Learning (MIL) model - is still on par with more recent MIL models (e.g. TransMIL, DTFD-MIL), especially when combined with ensembling techniques. As opposed to more elaborate MIL models, Chowder is also interpretable.
+
+
+This competition was not easy! The PNG image format posed a major challenge: loading large PNG images with standard libraries (Pillow, OpenCV) was time consuming and used a lot of RAM. Standard formats in digital pathology (SVS, TIFF, NDPI) store data pyramidally to prevent the need for loading the entire images into RAM. Although Kaggle staff members acknowledged that PNG format was a bad choice, pyramidal images were not made available to the participants. Furthermore, either by design or as a result of converting pyramidal images to PNG, useful metadata such as mpp (image resolution in microns per pixels) and ICC profile (if available) were stripped from the images. In addition to this, working with images at different resolutions and dealing with outliers (rare variants and normal cases) in the test set made this competition challenging (and quite interesting!).
+
+
+How well do our models generalize? Locally, in cross-validation (CV), the balanced accuracy scores were in the (0.8, 0.9) range. However, the scores on the public/private LB were at least 20 points lower. Obviously, we can (partly) explain this discrepancy by our ability to predict the 'Other' class. However, it also raises the question of how well our models generalize to new data (i.e. data points from new centers/hospitals). Even when using Phikon, it is likely that differences in tissue preparation, tissue staining or differences in scanner type and magnification across centers still hinder generalization.
+
+
+2. Matter detection and tiling
+
+Whole Slide Images (WSI) in digital pathology are often too large and cannot be directly analyzed using convolutional neural networks. The WSI in this competition were no exception. A well-established workaround consists in splitting regions containing tissue into smaller patches (e.g. 224 x 224 px or 512 x 512 px). As a result, a WSI can be seen as a collection of hundreds, thousands of patches. Although Tissue Microarrays (TMA) were much smaller, these images were also split into patches.
+
+2.1. Matter detection
+
+In order to detect the regions of the WSI (or TMA) which contain tissue, we employed Otsu thresholding. This thresholding was applied to the thumbnail image, in the HSV color space. Although this method is not perfect, we found that it worked quite well on the images from this competition.
+
+
+
+2.2. Tiling
+
+Patch size
+
+We set the patch size to 224 x 224 px for WSI. According to the data description, the train set is composed of a majority of WSI at magnification 20x and few (25) TMA at magnification 40x. We hypothesized that given the low number of TMA in the train set, learning would be more efficient if we standardized all images (WSI or TMA) to a 20x resolution. Therefore, we set the patch size to 448 x 448 px for TMA; These patches were then resized to 224 x 224 px. As illustrated below [left: a 448 x 448 px patch from 91.png (TMA) resized to 224 x 224 px; Right: a 224 x 224 px patch from 4211.png (WSI)], cells have roughly the same size in resized tiles from TMA and tiles from WSI. At test time, we used a logistic regression (LR) to detect if an image is a TMA. The LR was trained on features extracted from the thumbnail of train images using a pretrained (ImageNet) ResNet18.
+
+
+
+Runtime 🕕
+
+
+
+
+For efficient tiling, we developed custom C code which splits a large PNG image into patches and saves them to disk (also as PNG images). This C code leverages the libpng library. In particular, it uses the png_read_row function to limit the amount of data read and loaded into RAM. This C code was easily compiled in a Kaggle notebook. The performance of the compiled code is likely to be similar to pyvips.
+
+
+With a patch size of 224 x 224 px, WSI have - on average - more than 10 000 patches. Processing that many patches was not feasible given the 12 hours runtime limit. With a limit of 200 patches per image, our first submissions successfully ran in approximately 10 hours. Later, we used ray to process images in pairs: matter detection + tiling + feature extraction for two images at a time on a single P100 GPU. Ray would spawn two processes, each using 0.5 GPU and 2 CPU cores. As a result, our submissions successfully ran in less than 7 hours. The limiting resource was the RAM; With more RAM, we could have processed 4 images at a time (on a single P100). Note that the 200 patches limit only applies to WSI. Given that TMA are small images, the number of 448 x 448 px patches hardly ever exceeded 50. Most TMA had less than 30 patches.
+
+
+3. Feature extraction
+
+Phikon is a ViT-Base pre-trained with iBOT on 40M tiles from the TCGA dataset (📝 see our paper for more detailed info). We benchmarked Phikon against multiple backbones including CTransPath, LUNIT and DinoV2. Phikon outperformed these models in our local cross-validation tests and showed no improvement when combined in an ensemble. For each input patch, a (3, 224, 224) tensor, Phikon outputs a 768-dimensional embedding vector. Therefore, a WSI or a TMA is represented as a 2D tensor with shape (n_patches, 768).
+
+
+
+4. Subtypes classification
+
+In order to predict the cancer subtypes from the extracted features, we considered several Multiple Instance Learning (MIL) models from our public GitHub repository HistoSSLScaling: Chowder, DeepMIL, DSMIL, TransMIL and MeanPool. Chowder outperformed others including DeepMIL, MeanPool, and DSMIL.
+
+Before the competition deadline, we selected two submissions. One submission scored 0.64/0.64 and consisted of an ensemble of 5 Chowder, 5 DeepMIL, 5 DSMIL and 5 MeanPool trained upon Phikon, CTranspath and LUNIT. We will detail the winning submission which only used Chowder and Phikon.
+
+4.1. Chowder's architecture
+
+The input dimension of Chowder was set to 768 (i.e. the dimension of Phikon embeddings) and its output dimension to 5. The first layer of Chowder is a TilesMLP layer with a hidden dimension of 192. The n_top and n_bottom values of its ExtremeLayer layer were both set to 10. The last layer of Chowder is a MLP with hidden dimension 96, a dropout rate of 30% and Sigmoid activation. We refer the reader to this Python file for an implementation of Chowder. These hyperparameters were manually selected (no hyperparameter tuning).
+
+4.2. Cross-validation
+
+Locally, we used stratified 5-fold cross-validation (CV) to estimate the predictive performance of our model. For each fold, four-fifths of the data were used to create a train-validation split (75%-25%) and the remaining fifth of the data was used as a test set. This stratified 5-fold CV was repeated 3 times (with different seeds changing how data was shuffled). We designed the stratified 5-fold CV to ensure that each test set would contain at least 60% of TMA. Hence, most of the TMA were used for evaluation and not for training.
+
+4.3. Training
+
+Our models were trained for a maximum of 30 epochs. The validation set was used for early stopping (using the validation balanced accuracy as stopping criterion) with a patience parameter of 4 epochs. In addition to this, we used the AdamW optimizer with a constant learning rate of 0.0001 and weight decay of 0.001. The loss was the Cross-Entropy (CE) loss.
+
+Two strategies were implemented to mitigate class imbalance:
+
+
+
+Weighted sampling to create balanced batches for training,
+
+Using class weights in CE loss.
+
+
+4.4. The ensembling trick
+
+Chowder can be quite sensitive to weight initialization. Instead of training a single Chowder model, we decided to train an ensemble of N=50 Chowder models. The Chowder models in the ensemble only differ by their initialization. We found the ensemble to be more stable during training - and more efficient - than a single Chowder model. The Python code below is copied from our winning submission:
+
+ (nn.ModuleList):
+
+     () -&gt; :
+        ().__init__(modules=models)
+
+     () -&gt; torch.Tensor:
+        
+        predictions, scores = [], []
+         model  self:
+            logits_, scores_ = model(x, mask)
+            predictions.append(logits_.unsqueeze(-))
+            scores.append(torch.mean(scores_, dim=, keepdim=).unsqueeze(-))
+        predictions = torch.cat(predictions, dim=)
+        scores = torch.cat(scores, dim=)
+         predictions, scores
+
+
+chowder_models = [Chowder(**chowder_kwargs)  _  ()]
+
+model = ModelEnsemble(chowder_models)
+
+
+4.5. Submissions
+
+Three repetitions of stratified 5-fold CV with an ensemble of 50 Chowder lead to a great number of Chowder models! Through several submissions, we noticed that it was more efficient to select specific repetitions and folds rather than ensembling all the 3 x 5 x 50 models. Our winning submission is the average prediction of 65 Chowder models trained on different data splits. We calibrated these models using a logistic regression on their internal validation set (CV), which appeared to yield a slight improvement on the public LB. After calibration, we added a “model filtering” step: we selected only a subset of the 50 Chowder models in an ensemble based on the performance of the calibrated models on their internal test set (CV).
+
+5. Outlier detection
+
+With balanced accuracy as the metric, correctly predicting the 'Other' category, worth 16.6 points (100/6), was key! Our strategy to identify outliers raised our public leaderboard score from 0.59 to 0.64, highlighting its importance as the most challenging class.
+
+We found that using a threshold on the entropy of predictions, calculated as H = -sum(p*log(p)), was most effective for us, with high entropy indicating uncertainty in predictions. As no outliers were provided, we calibrated this threshold based on the public leaderboard.
+
+6. Some (un)successful ideas
+
+
+
+
+To account for inter-center variability, we tried several color normalization schemes (Vahadane, Reinhard) but did not observe any improvement doing so. This finding is aligned with recent publications suggesting that staining normalization does not improve the performance of models for histopathological classification tasks.
+
+
+Increasing the number of patches for TMA using a sliding window (with 30% to 80% overlap between two consecutive patches). This method significantly increased the runtime of our submissions (most failing with Notebook Timeout) and did not provide any performance improvement.
+
+
+We explored the idea of identifying normal cases using a tumor detection model trained on the provided annotations. We binarized the annotations (tumor=1, stroma/necrosis=0) and trained a logistic regression on patch features to identify patches containing tumor. The percentage of tumor patches in a WSI/TMA would be used to identify normal cases. This idea did not provide any performance improvement on the public LB.
+
+
+We used the Ray Tune library to do hyperparameter tuning with Chowder and DeepMIL. The hyperparameters we optimized for were: batch size, number of training epochs, learning rate, dimensions of hidden layers in MLP, activation functions. The hyperparameter tuning resulted in an increase of our local CV scores, but in a decrease of our submissions scores on the public LB. We hypothesized that hyperparameter tuning led to overfitting the train set and dropped the idea.
+
+
+[Successful idea 💡] Fine-tuning Phikon. Here, we’re not talking about fine-tuning in a conventional way; Instead, we mean pretraining a ViT-Base, initialized with Phikon’s weights, using iBOT on patches from the images in the train set. To do so, we extracted a total of 6.5M patches (224 x 224 px RGB) from the images in the train set. Following the recent paper from Darcet et al. 2023 and the work of Dino V2, we added 4 register tokens to the ViT-Base. This ViT was trained for a single epoch with an initial learning rate of 0.0005 and batch size (per device) of 32. A single epoch took 2.5 days on 2 NVIDIA P100 GPUs. In a submission, we combined Chowder models trained on features extracted with the original Phikon and Chowder models trained on features extracted with the fine-tuned Phikon (with register tokens). This submission scored 0.62/0.67 (not selected for the final evaluation).
+
+
+[Successful idea 💡] Using the variance of predictions (across models in an ensemble of Chowder) to identify outliers. A submission implementing this idea (along with the entropy of predictions) scored 0.59/0.67 (not selected for the final evaluation).
+
+
+7. Notes
+
+The magnification of the images proved to be a key information. We found that resizing the TMA patches to match those from WSI allowed us to have consistent performance over all images in the test set. Keeping the original pyramidal image would have saved the participants from cumbersome image processing and could have led to overall better performances. 
+
+For each image (WSI or TMA), we converted the extracted patches to grayscale and applied contrast equalization; Phikon features were then averaged across all available patches. We applied UMAP dimension reduction to these averaged representations and noticed that 38 WSI could be told apart from the remaining 500 images. . Red cells can be used as a scale to compare the resolution levels. Comparing red-cells’ size in slide 431 (among the main group of slides) and slide 4 (among the 38 odd slides) shows there is a substantial difference in resolution between the two groups, with an estimated x12 magnification for the odd slides, instead of the normal x20 magnification. This could be the result of a failed conversion from the original .svs (or .tiff) format of the slide to .png, resulting from the selection of the wrong zoom level. 
+
+Such resolution variances are significant: 8% of all slides exhibited incorrect zoom levels impacting model performance. Notably, 20% (9 out of 47) of all LGSC slides had an incorrect zoom level. Finally, this UMAP also shows that after downsampling the TMA, their features are mixed with those of the WSI, this confirms our ability to use a single approach for these two data types.
+
+
+
+The ids of the odd looking slides are the following:    [4,970,1080,2097,3222,3511,3881,9509,12159,12244,13364,13387,15583,15871,25604,26124,29888,31300,31793,32035,32192,33839,34688,34720,40079,40639,41099,44432,44700,49995,51215,52308,52784,53402,61100,63298,63836,64629]
+
+jbschiratti, on behalf of Owkin's team
+
+Comments:
+├─ Optimo (2024-01-18 16:15:01.017000) [+3]
+│  Congratulations on this large win! Very impressive piece of work!
+│  
+│  I did not participate in this competition but I would like to understand why the Owkin non-commercial license of Phikon is valid f...
+  ├─ jibounet (2024-01-18 17:04:36.953000) [+2]
+  │  Thank you for your interest in our work. 
+  │  We are currently in the process of discussing this with the Kaggle staff and the organizing team (UBC).
+    ├─ Optimo (2024-01-24 09:16:55.597000) [+1]
+    │  Looks like the competition is finalized, what was the logic to accept this license?
+    ├─ jibounet (2024-02-01 08:34:54.453000) [+1]
+    │  Discussions are still ongoing.
+    ├─ Awais Ahmed (2025-05-22 07:22:44.880000) [+0]
+    │  Hi. Would you please update on the last question. Your response might be helpful for future
+├─ ForcewithMe (2024-01-09 02:06:54) [+4]
+│  This is the best advertisement of Phikon. @jbschiratti Congratulations on the championship and thank you for the contribution to the community.
+  ├─ ForcewithMe (2024-01-09 03:59:54.113000) [+0]
+  │  And the part of UMAP is very insightful. Thank you!
+  ├─ simjeg (2024-01-09 07:29:12.743000) [+6]
+  │  @forcewithme, we entered this competition to highlight Phikon. Among the top 10 teams, only we and @xdu4yangzhou (Team XDU YYDS!) utilized it, demonstrating the necessity for some advertising 😊
+    ├─ yang_zhou (2024-01-11 02:25:16.903000) [+1]
+    │  Haha, Phikon is all you need! Thanks a lot for making this excellent work open-sourced!
+├─ Pizzaboi (2024-02-06 20:50:50.970000) [+1]
+│  What would you say about LongVIT? Have you tried it for the task or for your startup purposes?
+  ├─ jibounet (2024-02-12 08:42:45.217000) [+0]
+  │  We did not look into it. Looks interesting, though! Did you make a (late) submission using this LongViT?
+    ├─ Pizzaboi (2024-02-12 11:03:53.723000) [+0]
+    │  I have not managed to run their code for this task as far as it was challenging to inference in 10 hours. But who knows, it could work
+├─ m1dsolo (2024-01-17 01:31:04.513000) [+1]
+│  Congratulations to your team for winning first place!
+│  Our team also tried using Phikon, but the performance was not very satisfactory. I think there may be two reasons:
+│  
+│  
+│  
+│  Our team mainly conducted...
+  ├─ jibounet (2024-01-18 17:12:41.150000) [+1]
+  │  Thank you for your comment.
+  │  
+  │  Indeed, it seems that working at 20x resolution is preferable with Phikon. As explained in the associated publication, Phikon was pretrained on tiles at mpp 0.5 (equiv....
+├─ Cristian Cuadrado (2024-01-15 13:22:18.380000) [+1]
+│  Congratulations! And thank you for that amazing explanation.
+│  I have a doubt regarding how did you choose the 200 patches to be analyzed for each image. It was a random selection over all of them or...
+  ├─ Etienne Andrier (2024-01-15 13:47:44.840000) [+2]
+  │  Thanks ! It was indeed a random selection over patches that are within the matter mask (computed using otsu thresholding). Once we got the inference time down to 6 hours we did try to add more patc...
+    ├─ Cristian Cuadrado (2024-01-20 21:46:29.647000) [+0]
+    │  Thank you for your answer! Totally clear now. I have another question, did you use other alternatives for outlier detection instead of entropy?
+    ├─ simjeg (2024-01-21 00:00:41.250000) [+1]
+    │  We also tried max(logits), L3(logits) and the variance over the models of the ensemble (average for each class). We finally tried to detect "normal" cases using a tumor detection model in addition ...
+├─ Leo (2024-01-14 23:33:49.100000) [+2]
+│  Congratulations and amazing work, I appreciate the thorough explanation of your solution and the effectiveness of domain-specific large vision models. As a student, it is very insightful and helpfu...
+├─ Jonas Gjerris (2024-01-14 21:37:57.447000) [+2]
+│  Huge congratulations on your win! I wish i would have known about Phikon before so thanks a lot for promoting it in such a great manner. Medical foundation models are definitely the future!
+│  Our tea...
+  ├─ jibounet (2024-01-15 06:52:42.743000) [+1]
+  │  Yes, at some point we developed our own segmentation model (trained on the annotated data) to identify tumor regions on new images and sample patches in them. It turns out that it didn't improve ou...
+├─ Nishant Singhal (2024-01-12 09:45:16.363000) [+2]
+│  Firstly, I must commend you and the entire Owkin team for the comprehensive and insightful breakdown of your winning solution. The strategic approach, from leveraging Phikon's foundation model to t...
+  ├─ jibounet (2024-01-12 13:16:24.413000) [+2]
+  │  "Fine-tuning Phikon" should be understood as: pre-train with iBOT a ViT-Base, initialized with Phikon's weights, on a large dataset of patches (extracted from the images in the train set). To do so...
+    ├─ Nishant Singhal (2024-01-12 13:26:45.810000) [+0]
+    │  Awesome. Thanks for the reply!
+├─ Dong - CUB (2024-01-12 09:31:01.257000) [+2]
+│  Great work, congratulation!
+│  When you say " in cross-validation (CV), the balanced accuracy scores were in the (0.8, 0.9)", when you do train/valid/test separation, have you mixed all patches and ra...
+  ├─ simjeg (2024-01-12 09:38:57.793000) [+2]
+  │  The split was performed at the image level not at the patch level so the shift in performance is more likely related to new centers or scanners / outliers
+    ├─ Dong - CUB (2024-01-12 11:31:35.983000) [+0]
+    │  Thanks for the answer, I will try it to see if I can also get such high CV scores with image level separation. 
+    │  Another question is seems you have not utilized the supplemental-mask data in the pro...
+    ├─ jibounet (2024-01-12 12:16:53.227000) [+1]
+    │  We did some experiments with the annotated data (masks) but it did not increase our score on the public LB. 
+    │  
+    │  For instance, we used the annotated data to train a tumor prediction model at the patch...
+├─ samu2505 (2024-01-09 13:44:21.497000) [+2]
+│  Wow congratulations, I guess more focus on domain specific models really helps.
+  ├─ jibounet (2024-01-09 14:26:05.770000) [+2]
+  │  Thanks! Indeed, we are convinced that domain-specific large vision models are the way to go. Andrew Ng shared a post on LinkedIn about a month ago with a similar point of view.
+├─ Awais Ahmed (2025-05-22 07:30:09.797000) [+0]
+│  First of all, congratulations on your victory! Hats off to your spirit and hard work. Could you please share your research paper? I am curious if you have prepared one based on your proposed solution.
+├─ Shahzad Hassan (2025-05-11 11:18:21.420000) [+0]
+│  Can we reverse engineer the final solution notebook on our laptops with 24GB ram ? or do we need to use google collab with GPUs and alot of ram ?
+├─ Metavers (2024-10-27 15:59:46.770000) [+0]
+│  There is an IEEE paper that is academic fraud. The title is "OCEAN - Ovarian Cancer subtypE clAssification and outlier detectionioN using DenseNet121". It claims that only convolutional networks we...
+├─ Kellen Guimaraes (2024-02-09 14:04:57.583000) [+0]
+│  Congratulations on the amazing work. I am new to Kaggle competitions, and I wanted to understand your strategy for working with huge datasets. Did you download it to work locally?
+  ├─ jibounet (2024-02-12 08:41:34.293000) [+1]
+  │  Indeed, we downloaded the training data locally. The models were trained locally.
+├─ [deleted] (2024-01-31 08:16:29.937000) [+3]
+│  [deleted]
+├─ Leo0081 (2024-08-22 11:06:22.823000) [+0]
+│  Thanks for sharing!
