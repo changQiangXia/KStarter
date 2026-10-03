@@ -18,9 +18,30 @@
 - **官方示例 notebook 是入门新领域的最短路径**。
 - 特征匹配领域的技术更替很快（SIFT → SuperGlue/LoFTR → ALIKED/LightGlue），**关注当年主流工具**比记忆具体算法重要。
 
+## 轻读结论（2026-10 补）
+
+**一句话**：主办方明说本赛考"**后处理**"——前列队伍全用预训练匹配器 + 多分辨率集成 + 关键点筛选；特征匹配赛的 ROI 排序是 集成 > 筛选/裁剪 > 求解器调参 > 训练。
+
+- 1st：两阶段 **mkpt_crop**（DBSCAN 保留 80~90% 匹配点簇 → 裁共视区 → 裁剪图上重匹配）→ 与阶段①关键点拼接 → RANSAC；7 个（模型×分辨率）组合。
+- 2nd：自研 transformer 匹配器单模 **0.833/0.838（无 TTA）**；+QuadTree 0.854/0.848。
+- 4th：多尺度（LoFTR 1000/1200/1400；SuperGlue 1200–2800；DKM 面积归一等）+ MAGSAC；**因 SuperGlue 许可证不能获奖，专门备"去 SuperGlue"路线**。
+- 9th：后处理为王——MAGSAC 并行线程 + 预取让 TTA 翻倍；**SuperGlue 的正确 TTA = SuperPoint 跑 N 次、SuperGlue 做 N² 交叉配对**；公开 notebook 普遍存在的"关键点未回缩放"是公共 bug。
+
+**裁决**：同模型多分辨率 ≈ 免费多样性；坐标回缩放要写成可测试的管线步骤；选型先核对许可证。
+
+**悬案**：3rd/5th–8th 缺失；1st 无 mkpt_crop 单项消融；2nd 自研模型未开源。
+
+## 图表证据
+
+![1st 的两阶段匹配框架](../../intel/image-matching-challenge-2022/bodies/329131_img/01.png)
+
+**图 1**（topic 329131）：关键点拼接 → DBSCAN → 共视区裁剪 → 多分辨率重匹配 → 拼接 → USAC_MAGSAC；阶段①关键点同时用于裁剪与最终集成。
+
 ## 出处
 
 - 讨论区索引：`intel/image-matching-challenge-2022/topics.md`
 - 1st（116 票）：https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329131
 - 2nd（45 票）：https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/329317
 - 9th 详细报告（51 票）：https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328796
+- 4th（43 票，含许可证路线）：https://www.kaggle.com/competitions/image-matching-challenge-2022/discussion/328798
+- 轻读全本：`analysis/deep/image-matching-challenge-2022.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
