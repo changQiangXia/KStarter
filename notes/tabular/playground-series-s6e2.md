@@ -48,7 +48,34 @@
 - 现代 tabular 深度学习（周期嵌入）已能打平 GBDT——工具箱里加上 RealMLP/TabM。
 - 赛后复盘（如 69th 的 TE 泄漏自检）是最被低估的提分环节。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：信号近线性的合成数据赛——"多样性 × 选择 × 简单融合"决定名次，而"信任 CV-LB 关系而不是最高 CV"是最重要的一课。
+
+- 1st：~150 OOF → Optuna 2500 trials（约 1/10 常被选中）→ 10 pattern × Ridge → 简单平均；最高 CV 0.955865 被主动放弃（CV>0.95578 后 CV-LB 关系恶化），选择 0.95578–0.95580 区间。
+- 4th：LR+OHE 基线 0.95550；对抗验证 train/test AUC 0.501（无漂移）；树用原始数据行、NN 只用原始数据聚合统计当 anchor；rank 集成。
+- 22nd：RealMLP 0.955747 vs XGB 0.955647；无 FE 的 FM 仅低 0.00009；公榜盲 blend 在前 300 名大量暴跌（图 3）。
+- 周期嵌入是 NN 侧最可复用的单点：+0.001309（3 折对照）vs 线性嵌入 +0.000027。
+
+**失败学**：伪标签（1st：soft/hard 均无效；3rd 仍用了一个变体—分歧）；深层 GBDT/高阶交互/非线性堆叠/无选择的 OOF 平均；公榜爬分。
+
+**悬案**：The Flipped Label Trap（673079）与 shake-up（679364）未收录；2nd/5th–21st 方案缺失。
+
+## 8. 图表证据
+
+![1st 的选择-融合流程](../../intel/playground-series-s6e2/bodies/679376_img/01.png)
+
+**图 1**（topic 679376）：100+ OOF → Optuna 选择 → 10 组 pattern（~20 OOF）→ Ridge×10 → 简单平均。
+
+![1st 的多表示特征管线](../../intel/playground-series-s6e2/bodies/679376_img/02.png)
+
+**图 2**（topic 679376）：原始特征 → 多表示（BASE/PBLD/TE/DIGIT/BIN/DVAE）→ MLP。
+
+![Public vs Private 位置散点](../../intel/playground-series-s6e2/bodies/679389_img/01.png)
+
+**图 3**（topic 679389）：前 300 名公榜 vs 私榜排名——大量点低于对角线，"盲 blend 陷阱"的直接证据。
+
+## 9. 出处
 
 - 1st place：Diversity, Selection, and Trusting the CV–LB Relation：https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679376
 - 3rd place：多特征集 + 秩集成 + 爬山：https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679428
@@ -56,3 +83,4 @@
 - 69th place：ChatGPT 协作 + 赛后泄漏复盘：https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679367
 - 22nd place：NN 再次优于 GBM 的论证：https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679389
 - 数值嵌入实验：线性 vs 周期：https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671783
+- 轻读全本：`analysis/deep/playground-series-s6e2.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 3 图证）

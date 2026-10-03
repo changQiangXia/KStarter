@@ -65,7 +65,24 @@
 3. **在线学习是"机制红利"**：看到测试期逐步揭示标签，第一反应应该是增量训练，而不是只做一次离线训练。
 4. **工程效率也是竞争力**：能在同样时间内试 10 倍特征的人，赢面大得多。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：稳定 CV 环境下的"特征 × 在线学习 × 后处理"三件套竞争——**在线学习是最大机制红利，后处理是免费增益，内存/时限倒推特征数**。
+
+- 1st 在线消融（集成）：不更新 5.4438 → 1 次 5.4157 → 5 次 **5.4030**；1 次更新已拿到大部分收益。
+- 后处理（减加权均值/零和）稳定 **−0.005 级**；来自 target 的合成指数约束（跨股票加权和=0）。
+- 内存约束：GBDT+在线最多 ~200 特征；6th 只用 35 特征也能到私 5.4285 —— 特征量不是胜负手，跨家族融合（树+序列模型）才是。
+- 30th 的 interim update 崩溃证明：在线学习的工程防护（形状校验/逐日加载）与算法同等重要。
+
+**数字账精选**：1st CV 5.8117/私 5.4030；6th 私 5.4285；特征加速 20×（推断 23.5s→1.04s）；9th 157 特征/最近 45 天权 1.5；30th 名次 18→37→41→39→40→30。
+
+**悬案**：2nd–5th/8th 方案未收录；合成指数权重（442851）与 Reverse Engineering（457721）未收录；NN 无特征 5.34X（462639）与最终分数关系未厘清。
+
+## 8. 图表证据
+
+**本场无归档图片**（`intel/optiver-trading-at-the-close/bodies/` 无 `*_img`），无法内嵌图证；证据均来自正文表格。
+
+## 9. 出处
 
 - 讨论区索引：`intel/optiver-trading-at-the-close/topics.md`（120 条）
 - 已收录 write-up（8 篇）：1st / 6th / 7th / 9th / 14th / 30th / 特征加速方案 / 前作 Optiver 比赛回顾
@@ -76,3 +93,4 @@
   - 14th（31 票）：https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485985
   - 30th（25 票）：https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462650
   - 特征加速：https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/451735
+- 轻读全本：`analysis/deep/optiver-trading-at-the-close.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案）
