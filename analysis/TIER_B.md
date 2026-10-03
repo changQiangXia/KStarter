@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**10/204**（2026-10-03；**批次 B01 全部完成**：5-day course、optiver-close、s6e2、feedback-effectiveness、march-mania-2026、santa-2023、llms-ycpta、blood-vessel、s4e9、AI4Code）
+> 进度：**14/204**（2026-10-03；B01 全部完成；B02 已完成 vesuvius、great-barrier-reef、lux-ai-season-3、rsna-miccai）
 
 ## 批次 B01（1–10）
 
@@ -24,10 +24,10 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 11 | `vesuvius-challenge-surface-detection` | cv | Research | 6/7 | 47.3 | ⬜ |
-| 12 | `tensorflow-great-barrier-reef` | cv | Research | 6/0 | 47.1 | ⬜ |
-| 13 | `lux-ai-season-3` | sim-agent | Featured | 6/16 | 47.1 | ⬜ |
-| 14 | `rsna-miccai-brain-tumor-radiogenomic-classification` | cv | Featured | 6/1 | 47.0 | ⬜ |
+| 11 | `vesuvius-challenge-surface-detection` | cv | Research | 6/7 | 47.3 | ✅ |
+| 12 | `tensorflow-great-barrier-reef` | cv | Research | 6/0 | 47.1 | ✅ |
+| 13 | `lux-ai-season-3` | sim-agent | Featured | 6/16 | 47.1 | ✅ |
+| 14 | `rsna-miccai-brain-tumor-radiogenomic-classification` | cv | Featured | 6/1 | 47.0 | ✅ |
 | 15 | `linking-writing-processes-to-writing-quality` | nlp | Featured | 6/6 | 46.9 | ⬜ |
 | 16 | `birdclef-2023` | audio | Research | 6/2 | 46.8 | ⬜ |
 | 17 | `lux-ai-season-2` | sim-agent | Featured | 2/8 | 46.8 | ⬜ |

@@ -39,7 +39,29 @@
 2. 与 Vesuvius 2023（墨迹检测）对照：同一系列从"检测墨迹"演进到"检测纸面层"，**方法从分类转向几何回归**。
 3. 与 CZII cryo-ET、Biohub、RSNA 系列并列：**3D 科学影像的方法论已趋统一**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：含拓扑项的 3D 表面分割——**SDF/概率软表示 + 全卷推理 + 拓扑后处理**决定分数；公私榜脱钩使提交选择成为运气环节。
+
+- 1st（66 票）：nnU-Net 4 模型集成（patch 128/192/256）；私 0.627；后处理链私 0.596→0.627（去小连通→补小洞→高度图补大洞→closing→fill_holes）。
+- 5th（51 票）：SDF 回归（高斯加权 L1 + mass Dice）；160³ 训练/320³ 全卷推理；**迭代 H1 隧道填充 0→13 轮 = 拓扑 +0.08**（持久同调 + 桥检测 + 组件数保护）。
+- 教训：融合用 logits 优于概率、阈值偏大私榜更好（1st）；CV/公榜/私榜均不相关（5th）。
+
+**失败学**：BCE 二值在拓扑项更差；滑窗推理产生拓扑伪影；"touching sheets" 全场未解决。
+
+**悬案**：2nd/3rd 方案与指标精确定义未收录；C++ 持久同调实现细节缺失。
+
+## 7. 图表证据
+
+![SDF 目标与高斯权重](../../intel/vesuvius-challenge-surface-detection/bodies/679360_img/01.png)
+
+**图 1**（topic 679360）：二值目标 / SDF 目标 / 高斯权重三联图——距离回归表示的动机。
+
+![高度图补大洞](../../intel/vesuvius-challenge-surface-detection/bodies/679238_img/01.jpg)
+
+**图 2**（topic 679238）：sheet 高度图线性插值补洞 before→after。
+
+## 8. 出处
 
 - 讨论区索引：`intel/vesuvius-challenge-surface-detection/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -47,3 +69,4 @@
   - 4th（31 票）：https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679222
   - 5th SDF 回归（51 票）：https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679360
   - 方案讨论（58 票）：https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/651532
+- 轻读全本：`analysis/deep/vesuvius-challenge-surface-detection.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）

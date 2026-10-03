@@ -41,10 +41,27 @@
 2. 检测类比赛的社区汇编帖是高效起点。
 3. 与 DFL（足球视频）、NFL 系列对照：视频任务的方法论（检测 + 跟踪 + 时序后处理）已高度统一。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：视频海星检测（F2@IoU0.8）——检测集成 + 跨帧后处理是基础盘；**"训练框松/公榜框紧/私榜又不同"的标注松紧域偏移**是本场最大教训。
+
+- 1st（192 票）：6×YOLOv5 集成 CV 0.716 → 7-bin IoU 分类重打分 0.727 → 集成 0.73+ → 注意力跨帧加分 **0.74+**；3 折按 video_id；跟踪 +0.002 弃用；同一 OOF 的 F2 三人实现差 0.62/0.66/0.68 → 统一用最低分实现。
+- 3rd（Team Hydrogen）：5 检测器家族 + WBF；**框紧度证据链**（高分辨率推理→框更紧→公榜涨；手动缩 3px 同样涨；训练框平均大 3px）——但私榜失效；轨迹置信提升 +0.01。
+- 5th：copy-paste + Poisson 融合 + 真假分类器；SuperPoint/SuperGlue 单应 + DeepSort；GAN 生成不涨分（受限于 unique 海星数）。
+
+**裁决**：分组 CV + 共享评测实现；对"测试集标注差异"的漏洞先对冲再押注；跟踪有效但超参敏感，优先无超参的跨帧后处理。
+
+**悬案**：2nd/4th 方案未收录；私榜标注为何不同无官方解释；本场无归档图（图证缺口）。
+
+## 7. 图表证据
+
+**本场无归档图片**（digest 内 5th 的三张图未落盘），无法内嵌图证。
+
+## 8. 出处
 
 - 讨论区索引：`intel/tensorflow-great-barrier-reef/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st "Trust CV"（192 票）：https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307878
   - 往届检测赛获奖方案汇编（256 票）：https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/289999
   - 单模型方案（152 票）：https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/300405
+- 轻读全本：`analysis/deep/tensorflow-great-barrier-reef.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案）

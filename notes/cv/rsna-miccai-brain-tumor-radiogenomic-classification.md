@@ -52,7 +52,25 @@
 2. **小样本比赛接受"简单方案"**：冠军就是自己的第一个基线。
 3. **工程细节（框架实现、预处理）会直接决定成败**。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：小数据弱信号医学分类——**验证/提交噪声是第一敌人**；1st 用"简单单模 + 数百次重复平均"夺冠，公榜高分多为随机或作弊。
+
+- 1st（103 票）：3D ResNet10+BCE、无集成；同设置重训 100 次 CV 0.53–0.62；两阶段筛选（100 模型 → 250 模型/想法）；"最佳中心图"（最大脑截面为中心）+0.01~0.02；>50% 模型去掉 T2w；**靠忘记选提交、自动选公榜最佳而夺冠**（运气极端例证）。
+- 12th：SegResNet 分割→分类无帮助；DenseNet121/169 每模态 5 折；val loss 0.66–0.67 的"幸运跑"才 >0.6 AUC。
+- 事件：DICOM→PNG 资源（369 票）；作弊/假账号（269396，107 票）；MRI 拍摄差异（252843，99 票）。
+
+**裁决**：小数据下用重复实验的均值/方差做决策；公榜不可信、防 shakeup 优先；集成收益被方差吞掉。
+
+**悬案**：2nd–11th 未收录；作弊处置与最终 shakeup 幅度未量化。
+
+## 8. 图表证据
+
+![12th 的预测相关性矩阵](../../intel/rsna-miccai-brain-tumor-radiogenomic-classification/bodies/279832_img/01.png)
+
+**图 1**（topic 279832）：各模态/骨干预测相关性（多 0.0–0.48），与 MGMT 相关最高约 0.33——弱信号可视化。
+
+## 9. 出处
 
 - 讨论区索引：`intel/rsna-miccai-brain-tumor-radiogenomic-classification/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -61,3 +79,4 @@
   - DICOM→PNG 数据集（369 票）：https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253000
   - 作弊账号讨论（107 票）：https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/269396
   - MRI 拍摄方法差异（99 票）：https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252843
+- 轻读全本：`analysis/deep/rsna-miccai-brain-tumor-radiogenomic-classification.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

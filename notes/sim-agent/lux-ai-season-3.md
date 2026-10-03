@@ -42,7 +42,26 @@
 2. **模仿学习与 RL 同样可行**，选熟悉的路线更实际。
 3. **工具选择服务于效率与正确性**（Rust vs Jax 的取舍值得体会）。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：部分可观测的多智能体对抗——**RL 自对弈（1st，20B 步）vs 从顶级回放做 IL（3rd/4th/9th）**两条路线；隐藏参数估计与"防模仿"的提交博弈是隐形战场。
+
+- 1st（74 票）：IMPALA+动态奖励缩放+动态熵（0.9/3.9→0，100M 步）+教师 KL+冻结对手池；~1000+/tile 特征、24 resblock+ConvLSTM+4 Transformer、双动作头（6 动作/15×15 sap）；**85/15 双模型 + 日志 + logits 噪声**防 IL 抄策略。
+- 3rd（57 票）：规则系被 IL 数小时训练击败 → 全面转 IL（Unit-UNet+SAP-UNet、丢 95% 全 Center 样本、镜像 (0,0)、学习 FP/FN 回放）。
+- 9th：两阶段 IL（FP 7,935 局仅胜局 → 1,550 局胜负都用）+ 最小费用流分配动作。
+- 4th：Action/SapTarget 双 IL 模型；估计 sap dropoff 后**切换模型**。
+
+**裁决**：可观测参数估计是硬前提；镜像归一化是标准工程；IL 是最快追赶路径，RL 靠规模与防模仿维持上限。
+
+**悬案**：Frog Parade 方案未细读；防模仿收益未受控量化；logits 噪声参数未公开。
+
+## 7. 图表证据
+
+![1st 的网络结构](../../intel/lux-ai-season-3/bodies/569562_img/01.png)
+
+**图 1**（topic 569562）：输入→两级压缩→24×24×128→24 残差块→ConvLSTM→4 Transformer→基线/预测/动作头（6 动作+sap 目标）。
+
+## 8. 出处
 
 - 讨论区索引：`intel/lux-ai-season-3/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -51,3 +70,4 @@
   - Frog Parade（53 票）：https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568621
   - 4th 模仿学习（36 票）：https://www.kaggle.com/competitions/lux-ai-season-3/discussion/569928
   - 14th 多智能体 RL（33 票）：https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567961
+- 轻读全本：`analysis/deep/lux-ai-season-3.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
