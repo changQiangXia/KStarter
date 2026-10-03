@@ -50,7 +50,26 @@
 2. **本地评测回路是所有黑盒优化的前提**。
 3. 社区共享的线索（评委家族、攻击方向）价值极高，但需要自己验证。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：LLM-as-a-Judge 的提示注入对抗赛——**攻击工程（000/999/099/909/990）+ 本地代理评委验证 + 公榜分区探针**三者叠加决定名次。
+
+- 5th：418 次提交（攻击 327）；用"e=0/1、相似度=0"的三类攻击**2 次提交**定出三分区公测索引数（i%3 实测 115/79/106）；最优 split 后 avg_s<0.2、补词过 avg_e≥5.0 阈值 → 30.050（6 seed 复测稳定）。
+- 3rd：本地 Gemma2B/9B + Llama3B（+8B）8bit 验证；消融：无验证 28.8（私）→ 3 模型 29.92 → 4 模型 30.01；seed 1143 近完美 split（102/100/98）；private 是随机 70%。
+- 1st：本地 Gemma/Qwen/Phi + Qwen 词表/NINE/韩文/Base64/白俄文注入；seed 1144；12 篇文章；承认运气。
+- 评委身份三队猜测不一致（gemma/gemma/llama vs Gemma/Qwen/Phi）——代理相关性取代真实身份。
+
+**数字账精选**：5th 30.050 六测；3rd 30.01（私）；1st 80 票方案；旧 metric 30.0 exploit（71 票，对新评委失效）。
+
+**事件**：20.293 notebook 泄漏争议（49+46 票）；平台治理与攻击资产扩散问题。
+
+**悬案**：指标精确公式；评委真实身份；999 零除假设；2nd/4th 方案未收录（4th 39 票在 digest 但未入库正文）。
+
+## 8. 图表证据
+
+**本场无归档图片**（`intel/llms-you-cant-please-them-all/bodies/` 无 `*_img`），无法内嵌图证。
+
+## 9. 出处
 
 - 讨论区索引：`intel/llms-you-cant-please-them-all/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -58,3 +77,4 @@
   - 3rd（39 票）：https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566515
   - 4th（39 票）：https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566479
   - 5th（52 票）：https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566322
+- 轻读全本：`analysis/deep/llms-you-cant-please-them-all.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案）

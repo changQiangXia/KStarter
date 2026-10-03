@@ -37,10 +37,38 @@
 1. **先问"这个问题有没有数学结构"**——有的话，代数方法常优于元启发式。
 2. **分而治之**：不同规模用不同方法（与 Santa 2021 的"先处理强约束"同理）。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：给定置换与动作表的谜题赛——**小状态精确搜索（BFS/BBFS/CP）+ 大状态代数构造（3-rot/commutator）+ 序列级算术（插入/抵消/orbit TSP）**决定分数；加权总分下要战略性放弃低权重谜题。
+
+- 1st（125 票）：3-rot 序列（cube `d3.f2.d2.-f2.-d3.f2.-d2.-f2`；globe `f0.r0.f0.r1.f0.-r1.f0.-r0`）；簇分解 + 特殊部件优先 + 偶置换调整；**3-rot 插到任意时间点**取最短；测试题 #272（10×10×10）454 步。
+- 16th（33 票）：BBFS 最优（wreath_12/12）、IBBFS/AIBBFS（中 globe）、大 globe 两阶段（BFS 单步贪心 1 步/格 + 数千万条 commutator 库）、cube 的 orbit 求解 + 背包（#277 176 wildcards）+ ATSP 排序抵消；总分 112,907。
+- 4th（64 票）：逐谜题分数表，总计 **64,423**（cube 50,651 / globe 12,610 / wreath 1,162）；小谜题与 16th 同为最优。
+- 最优帖（39 票）：wreath_6/6=150、wreath_7/7=128（ortools CP 可复现）。
+
+**失败学/对照**：直接 ML 预测距离（466399）只在小谜题初步可行，未成为获胜路线；A*（462317）、Heuristic Transformer（464694）等尚未形成可迁移结论。
+
+**悬案**：2nd/3rd 方案未收录；Santa 2023 Metric 权重细节未入库；4th 大谜题方法细节缺失（其总分显著优于 16th）。
+
+## 7. 图表证据
+
+![wreath 最优步数表](../../intel/santa-2023/bodies/463683_img/01.JPG)
+
+**图 1**（topic 463683）：wreath_6/6（2–11 步）与 wreath_7/7（3–10 步）逐题最优步数。
+
+![1st 的 10x10x10 解](../../intel/santa-2023/bodies/472405_img/01.gif)
+
+**图 2**（topic 472405，GIF）：1st 对 #272（cube_10）的 454 步解法动画。
+
+![16th 分数进展](../../intel/santa-2023/bodies/472489_img/01.png)
+
+**图 3**（topic 472489）：16th 的分数从 ~1.2M 到 ~12 万的阶梯下降。
+
+## 8. 出处
 
 - 讨论区索引：`intel/santa-2023/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st（125 票）：https://www.kaggle.com/competitions/santa-2023/discussion/472405
   - 4th（64 票，含仓库与分数表）：https://www.kaggle.com/competitions/santa-2023/discussion/472386
   - 16th 方案（33 票）：https://www.kaggle.com/competitions/santa-2023/discussion/472489
+- 轻读全本：`analysis/deep/santa-2023.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 3 图证）
