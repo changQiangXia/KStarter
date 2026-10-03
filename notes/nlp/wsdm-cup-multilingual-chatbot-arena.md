@@ -44,7 +44,26 @@
 2. **截断策略值得单独调**（比例、位置：保留首尾优于一味截尾）。
 3. **往届比赛的公开框架是最好的起点**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：多语言偏好预测的胜负 = **算力分配（不确定性级联）+ 软标签/伪标签的标签清洗**；3rd 发现"用 14B 自己的 logits 做**自蒸馏**与用 72B 蒸馏等效"，说明增益来自软标签而非教师知识。
+
+- 3rd（567584）：重实现 Eedi Rerank 管线；**只在 "A"/"B" 两个 token 上算交叉熵**；用 AutoModelForCausalLM + vLLM（而非分类模型）加速；Qwen2.5-14B（post-pretrain）+ Phi4，多 seed 合并；auto-round 量化；**按 token 长度排序**分配 TTA（25% 用 14B，其余 Phi4）；fasttext 判语言。
+- 2nd（567948，私榜 0.708）：tascj0 框架；prompt/两条回复**按长度比例中部截断**；gemma2-9b + ArmoRM-Llama3-8B（用上届模型初始化、分类头 3→2）；软标签伪标注（v1 8.5k + v2 13k，**v3 因模型差距太小会引入噪声而弃用**）→ hf-21k；TTA 用 PAB/PBA 交换、3.3:1 加权。
+- 7th（567589）：**不确定性级联**——15% 最不确定交 xlarge（+1.5×）、35% 交 large（+1.0×）、50% 保持 base（图 1）。
+- 社区：8.5k/13k 开源模型样本（54/29 票）、CV vs LB（31 票/105 评论）、LMSYS 往届方案（31 票）。
+
+**裁决**：偏好预测先做"小模型全量 + 大模型复查难例"；软标签用于洗标签（教师不必更大）；多语言按语言分层；把选择任务退化为两 token 分类以适配 vLLM。
+
+**悬案**：1st/4th–6th 方案缺失；3rd 的量化细节未展开；7th 的权重/阈值只给图。
+
+## 7. 图表证据
+
+![7th 的不确定性级联集成](../../intel/wsdm-cup-multilingual-chatbot-arena/bodies/567589_img/01.png)
+
+**图 1**（topic 567589）：base 全量打分 → 按不确定性排序 → 15% 最不确定用 xlarge（+1.5×）、35% 用 large（+1.0×）、50% 保持 base。
+
+## 8. 出处
 
 - 讨论区索引：`intel/wsdm-cup-multilingual-chatbot-arena/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -53,3 +72,8 @@
   - 6th（28 票）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567600
   - 7th（32 票）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567589
   - 开放数据集（54 票）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552166
+  - 3rd（52 票）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567584
+  - 2nd（29 票）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567948
+  - CV vs LB（31 票 / 105 评论）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552368
+  - LMSYS 往届方案（31 票）：https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547480
+- 轻读全本：`analysis/deep/wsdm-cup-multilingual-chatbot-arena.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
