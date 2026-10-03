@@ -102,3 +102,14 @@
 2. 再打 BDB 类数据丰富的分析赛（练领域型指标设计）。
 3. 音频方向从 BirdCLEF 近两届的公开方案学"切窗 + 伪标签"骨架。
 4. 多模态方向先掌握"分模态分支 + 后融合 + 缺失建模"三件套。
+
+## 5. v2 增补（Tier B 204 场，2026-10）
+
+1. **医疗基座五族（HAI-DEF）**：CXR Foundation（3×EfficientNet-L2，图像+报告）、Path Foundation（病理 ViT 自监督）、Derm Foundation（BiT ResNet-101x3，16K+ 图）、HeAR（音频 MAE，咳嗽/呼吸）、CT Foundation（VideoCoCa）；官方局限：分类优先、暂不支持分割/生成、端侧需蒸馏（med-gemma 667677）。
+2. **部署才是门槛**：MedGemma 27B 部署困难、VertexAI 被报故障、4B 微调塌缩成单 token 重复；先打通本地量化推理 + demo，再谈建模（med-gemma 673091/673230/673582）。
+3. **长上下文多模态**：Gemini 1.5 赛 4/4 冠军都做长视频（剪辑/广告曝光/家庭盘点/流程文档）；"Save & Run All"才会挂载模型（当时全站仅 4 人），配额/限流（429/503/504）贯穿赛程（L123，gemini-long-context）。
+4. **小模型数据助手**：Gemma 2B 有 Transformers/Keras/GemmaCPP 三种跑法；RAG 与 LoRA 互补；公开资产（Kaggle write-up/Wikipedia）是最低成本输入（data-assistants-with-gemma）。
+5. **融合架构**：CNN+表格 concat → 结构化自注意力（元数据）→ 回归+硬分类+软分类三头；身份辅助任务显著加分（L120/L121，planttraits2024）。
+6. **遥感多模态**：卫星时序 + 环境栅格 + 图像，各自合适骨干、概率层融合；数据获取（Seafile/打包数据）是隐形门槛（geolifeclef-2022/2024）。
+7. **安全多模态**：工具/通道与 CoT 伪造是系统级风险；输出验证必须跨通道一致（L119，gpt-oss）。
+8. **过程激励生态**：中期 notebook 奖 + 限量 swag + 冠军开源（补充数据/Transformer 基线/AMA）正在成为模型方 hackathon 的标准运营（L133，data-assistants / nfl-bdb-2026）。

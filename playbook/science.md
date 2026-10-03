@@ -120,3 +120,13 @@
 - WiDS Datathon Phase II（2022）：产出物是**研究论文**而非模型，无排行榜、无分数反馈回路；官方用月度 Office Hours（EPA / CCAI / MIT Critical Data）做导师制引导。
 - 这类赛的评审口味是**研究规范**：问题定义、数据来源、可复现性、写作质量；验证与论证全靠论文自身严谨性。
 - 对新手：适合已有领域问题但缺打榜经验的队伍；选题可借用官方提供的 research questions 清单，同题材历史赛（ASHRAE）的公开 notebook 是写法模板。
+
+## 7. v2 增补（Tier B 204 场，2026-10）
+
+1. **working note 是第二交付物**：GeoLifeCLEF 2022/2024 均要求可复现技术报告（2024 时间线 5/24→6/7→6/21→7/8），收入 CEUR-WS，择优进 Springer LNCS；不可复现的 run 可能被移出正式发表。
+2. **数据获取往往比建模贵**：Seafile 栅格 + `download.py` 报错 + `GLC.plotting` 不可用；社区自行打包 ClimateClef 才让新手起步（geolifeclef-2024 481283/481485）。
+3. **presence-only 标签松弛**：同 0.01° 网格内 10% 邻域换标 +2%；公榜只占 10% 测试数据，必须以验证分选模（L130，geolifeclef-2022）。
+4. **多模态融合主线**：卫星时序 + 环境栅格 + 图像；协变量用树模型/自注意力，影像用 CNN/Transformer，再概率层融合（geolifeclef-2022 1st/2nd）。
+5. **医疗基座**：HAI-DEF 五族（CXR/Path/Derm/HeAR/CT）面向分类、暂不支持分割/生成；MedGemma 27B 部署与提交流程是主要门槛（med-gemma）。
+6. **研究赛规则**：排名/作者归属/报告截止要在赛前确认；Office Hours 与里程碑录像是最低成本的"导师制"教材（wids-phase2、geolifeclef）。
+7. **生态赛群**：FGVC11/LifeCLEF 同届多赛共享数据格式，可一次准备多赛（geolifeclef-2024 486162）。

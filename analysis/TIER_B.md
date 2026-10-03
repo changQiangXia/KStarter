@@ -5,6 +5,7 @@
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
 > 进度：**204/204**（2026-10-03；B01–B21 全部完成 ✅）
 > 收尾：四件套已完成 —— `analysis/images_index.csv`（1666 行，P1 内嵌 502 / P2 1164）、`analysis/claims.csv`（1850 行）、`analysis/lineage.md`（52 节点）、`analysis/limitations.md` ✅
+> 经验回流：`analysis/THEORY.md` 已扩 **v0.7（L1–L133 + T1–T37）**；`playbook/` 七册均已追加 **v2 增补节**（2026-10）✅
 
 ## 批次 B01（1–10）
 

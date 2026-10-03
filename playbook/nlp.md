@@ -101,3 +101,14 @@
 7. **agent 与实战视野**：`llm-20-questions` → `konwinski-prize`、`ai-agent-security-multi-step-tool-attacks`。
 
 > 算力提示：第 1–4 步单卡可完成；第 5 步视方案需要多卡/长时推理；第 7 步更吃工程能力而非算力。
+
+## 8. v2 增补（Tier B 204 场，2026-10）
+
+1. **提示词工程评审赛**：最小可靠范式 = system prompt + 多组 input/output 示例；让输出可机读（JSON + rubric）能同时降低评审成本、提高复用价值（makersuite 457016）。
+2. **LLM 引用必须核验**：模型给出的来源/文献会幻觉（openai-to-z 584626）；把 LLM 输出当不可信输入，URL/事实/语义逐条核对（L132）。
+3. **多语言模型适配**：Gemma 2 官方路径 = 参考汇编 → LoRA/QLoRA/TPU 指南 → 发布 Kaggle Models + 公开 notebook；机会在低资源语言与文化语境（gemma-language-tuning）。
+4. **大规模图文检索**：图像走 URL 的数据集先做 I/O（feather/parquet/datatable/LMDB/HDF5 + 并发下载）；直接复用 Shopee 1st–161st 方案骨架（wikipedia-image-caption）。
+5. **安全红队**：CoT 可伪造、工具/通道不一致、`reasoning_effort=low` 可复现而 `high` 拒绝；危害按"增量"（超出基础搜索多少）评估（L119，gpt-oss）。
+6. **Agent 元竞赛**：提交的是 Agent Config（Google ADK）；60min/$2 预算下先本地 validate schema，再按"定向→CV→快基线锚点→迭代"工作流（L122/L123，autonomous-agent）。
+7. **评测设计赛**：好 benchmark 要"超越记忆"且能判别；社区投票入分（15%）会引入曝光/互赏偏差（kaggle-measuring-agi）。
+8. **长上下文应用**：赢家集中在长视频/代码库/大规模文本处理；注意模型挂载（Save&Run All）与配额限流（L123，gemini-long-context）。

@@ -22,7 +22,7 @@
 2. **图像层**：`analysis/images_index.csv`（每图：相对路径/来源帖/上下文/优先级）；截图与分数表批量 OCR
    （sidecar 存 `*_img/<file>.ocr.txt`，数字并入 claims.csv）；Tier A 候选图逐张视觉精读；
    不可达图床（imgur 等）保留 URL+alt 并登记缺口清单。
-3. **综合层**：`analysis/THEORY.md`（已 v0.3：L1–L42 + T1–T12；Batch 4 后扩 v0.4）；
+3. **综合层**：`analysis/THEORY.md`（已 v0.7：L1–L133 + T1–T37；Tier B 收官后扩定）；
    `analysis/claims.csv`（全量可量化断言台账：可复算/自述/矛盾）；`analysis/lineage.md`（方法谱系 ≥40 节点）；
    `analysis/limitations.md`（批判与局限）；对应修订各主题 playbook。
 
@@ -45,9 +45,10 @@
 ## 断点续跑指引
 
 - 当前进度（2026-10-03）：**Tier A 60/60 ✅ 收官**（Batch 1–6 全部完成并推送，含 #60 tps-dec-2021）；
-  **THEORY.md 已扩 v0.6（L1–L113 + T1–T27，Batch 6 归纳完成）**；**Tier B 轻读 204/204 全部完成 ✅**（B01–B21 收官）已推送；
+  **THEORY.md 已扩 v0.7（L1–L133 + T1–T37，Tier B 归纳完成）**；**Tier B 轻读 204/204 全部完成 ✅**（B01–B21 收官）已推送；
   **四件套已完成 ✅**：`analysis/images_index.csv`（1666 行）、`analysis/claims.csv`（1850 行）、`analysis/lineage.md`（52 节点）、`analysis/limitations.md`；
-  可选后续（非本轮验收项）：图内文字 OCR sidecar、playbook 尾节修订、THEORY v0.7。
+  **七册 playbook 已加 v2 增补节**（2026-10，Tier B 204 场 + 四件套回流）；
+  可选后续（非验收项）：图内文字 OCR sidecar、下一个采集周期（2026-10 之后）的增量场次。
 - 推送认证（2026-10-03 复核）：`/root/.gh_push_token`（600，PAT）+ 仓库级 credential.helper，直连 `git push` 可用；
   AutoDL 学术加速 = `source /etc/network_turbo`（代理 172.29.51.4:12798，仅 github/hf），用完 `unset http_proxy https_proxy`；直连失败时再走代理。
 - 进度看 `analysis/TIER_A.md`（⬜ 未开始 / 🔄 进行中 / ✅ 完成）；已完成深读在 `analysis/deep/<slug>.md`；

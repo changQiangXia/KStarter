@@ -97,3 +97,15 @@
 6. **视频 / 追踪**：DFL（相机补偿 + 轨迹优化）→ iWildCam（检测+关联+计数）。
 
 > 提示：每进入一个新子领域，先找该场的"任务检查清单/综述帖"（Mayo、PlantTraits），再进代码。
+
+## 7. v2 增补（Tier B 204 场，2026-10）
+
+1. **域适应组合拳**：多来源采集的细粒度分类 = 高分辨率 + IBN/直方图均衡 + 度量损失 + 外部数据/伪标签 + 集成/TTA。sorghum 3rd 的单项增益：直方图均衡 +0.03、IBN +0.05、ArcFace +0.015、512→1024 +0.04、FGVC8 +0.03、TTA +0.02（L129）。
+2. **无 GT 的检测/计数**：不训练也能靠过滤进前列——按"每图 >8 框"分密度切换阈值/NMS（1st public MAE 0.247 vs 9th 的跟踪 0.265/0.275）（L128，iwildcam）。
+3. **未知类检测（OSD）**：`1 − max(class prob)` + 集成标准差是强基线；<10 图类别并入 unknown + label smoothing 0.1（fathomnet 4th）。
+4. **标签病态松弛**：presence-only 单标签用同网格邻域换标（10%）+2%；长尾按测试分布决定是否处理（L130，geolifeclef-2022）。
+5. **长尾 + 层级错误**：先统计类别样本数与层级一致性，157/290 类无图时要归并 unknown，而不是硬训（fathomnet）。
+6. **身份辅助任务**：目标与"物种/群体身份"强相关时，硬分类 + 软分类 + 回归三头融合优于纯回归（L121，planttraits 1st）。
+7. **分层学习率**：头/融合权重高 LR 早 warmup，骨干按层组递减（L120，PlantHydra 调度图）。
+8. **提交契约**：列顺序必须与 sample_submission 完全一致；zip/images.zip 结构与 PostProcessorKernel 先跑通最小提交（L122，planttraits/gan）。
+9. **研究型 CV 赛**：GeoLifeCLEF 的 working note 是第二交付物（6/7→7/8，CEUR-WS/LNCS），数据获取（Seafile/ClimateClef）常比建模更耗时（geolifeclef-2022/2024）。
