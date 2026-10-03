@@ -117,3 +117,31 @@ $PY scripts/verify_links.py          # 讨论链接
 $PY scripts/notes_status.py          # 264/264
 git status --short | head            # 确认无敏感文件被跟踪
 ```
+
+## 7. 执行记录（2026-10-03，方案 A 已完成）
+
+**结果**：全部内容（710 MB / 6,243 文件）已推送至公开仓库
+`https://github.com/changQiangXia/KStarter`（main 分支）。
+
+**提交结构**（10 笔）：分析核心 1 笔 → 原始归档 8 批（每批 44 场）→ 收尾（digests + 清单）1 笔。
+
+**核验**：远端 HEAD == 本地 HEAD（`dd4f9c9`）；远端文件树 6,243 blob == 本地 `git ls-files` 6,243；
+工作区干净（0 未提交）。
+
+### 关键坑与对策（重要经验）
+
+1. **看不见的容器限额**：`free` 显示宿主机 755 GB，但本容器 **cgroup 内存上限 2 GB、CPU 0.5 核**
+   （`/sys/fs/cgroup/memory.max`、`cpu.max`）。一次性打包 630 MB 时 `pack-objects` 被 SIGKILL
+   （`died of signal 9`）。
+   → 对策：**分批 commit、逐段推送**（每批 ≤ ~100 MB）。
+2. **低内存打包参数**：
+
+   ```bash
+   GC="-c pack.threads=1 -c pack.window=5 -c pack.depth=10 \
+        -c pack.windowMemory=16m -c pack.deltaCacheSize=8m -c core.compression=1"
+   git $GC push origin HEAD:refs/heads/main
+   ```
+
+3. **直连推送不可用**（Empty reply / 131 s 超时），而 `curl` 下载直连正常——**推送必须走代理**：
+   `source /etc/network_turbo` 后 `git push` 稳定成功。
+4. 分批推送的中断代价小：git 按对象续传，失败重试即可（脚本内已带 3 次重试）。
