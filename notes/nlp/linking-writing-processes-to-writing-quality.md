@@ -52,7 +52,30 @@
 2. **CV 可信时就不必追榜**（3rd 的标题就是结论）。
 3. **规则合规与团队管理同样影响结果**（本场有队伍被取消资格）。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：击键日志→重建文本→大规模特征+外部作文数据迁移+异构集成；本场还有一次"冠军 DQ、亚军递补"的治理事件。
+
+- 新 1st（94 票，原 2nd 递补）：数据清洗（ftfy/时间修正/丢输入前 10 分钟）+ 句式重建（模糊匹配/Undo）+ 378 特征 + **8 个外部作文数据集训练的外部分数特征**；单模 CV 0.576–0.609；嵌套 CV 6 bags×5 folds；clip [0.5,6.0]；3 个 GPU 模型中公榜最差（0.578）的私榜胜出——自认幸运。
+- 被取消资格的 1st（58 票）：5 人 8 模型（LGBM 0.59759/denselight 0.6135，char tf-idf +0.005、plr embedder +0.01）；**DQ 原因未收录**。
+- 3rd（79/117 票）：GBT(165 特征)+DeBERTa(persuade MLM+q→i/X)；**GBM 的 LB/CV 比更好、DeBERTa CV 好 LB 差** → 域移。
+- No place（466945）：1356 特征 + 手动权重 65% LGBM/35% NN（Ridge 会高估低 CV 的 NN）。
+
+**裁决**：重建质量是地基；字符 tf-idf 稳；跨家族融合按"信任哪个域"定权，不要只用 OOF。
+
+**悬案**：DQ 原因与官方 recap（468441）未收录；外部数据泄漏边界/效率奖配置未展开。
+
+## 8. 图表证据
+
+![新 1st 的方案流程](../../intel/linking-writing-processes-to-writing-quality/bodies/466873_img/01.jpg)
+
+**图 1**（topic 466873）：比赛数据/外部数据双管线 → 重建文本+tf-idf+外部分数 → 多模型集成 → 后处理。
+
+![3rd 的 CV-LB 关系](../../intel/linking-writing-processes-to-writing-quality/bodies/466906_img/01.png)
+
+**图 2**（topic 466906）：单模型与融合的 CV vs LB（点在拟合线上方，LB>CV），展示域移。
+
+## 9. 出处
 
 - 讨论区索引：`intel/linking-writing-processes-to-writing-quality/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -60,3 +83,4 @@
   - 原 1st（队伍被 DQ，58 票）：https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/467154
   - 3rd "Trust CV"（117 票）：https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466775
   - 3rd 并列（79 票）：https://www.kaggle.com/competitions/linking-writing-processes-to-writing-quality/discussion/466906
+- 轻读全本：`analysis/deep/linking-writing-processes-to-writing-quality.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）

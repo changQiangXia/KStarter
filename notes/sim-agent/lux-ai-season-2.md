@@ -44,7 +44,32 @@
 2. **RL 不必端到端**：用在关键子决策上收益更稳、工程更可控。
 3. 与 Orbit Wars/Pokemon 对照：agent 类比赛的三条路线（启发式 / 检索统计 / RL）都有人拿名次。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：Lux S2 是"逻辑 bot + 前向模拟"战胜深度 RL 的一届——电力效率（动作队列）与开局选址（冰/矿/冰封锁）决定上限，策略多样性形成石头剪刀布。
+
+- 1st（43 票）：前向模拟 2.9s/次（5–50+ 步）、~10 种 role/goal 状态机、优先级动作锁定；**冰冲突+双轻单位封锁运水**，一度把对手分数推到 36k+ 破坏匹配算法；自认 conga 线（Tigga/Siesta）更优。
+- 4th FLG（51 票）：以 CPU 性能为第一约束；7 类 actor 简化动作空间；模仿+小地图 RL 选架构；电力算术：队列 20 dig = 1210 vs 逐回合 1400（省 ~15%）。
+- 5th（11 票）：选址评分/优先级规则；尝试全太阳能失败；"ryandy>deimos>我>ryandy"。
+- 10th Deimos（15 票）：PPO/RLlib + JAX 环境；忽略动作队列做实时控制（允许重复省电）。
+- 模仿帖（31 票）：模仿 Deimos 的 ~3000 胜局；忽略队列使动作空间简化；但 bid=0/朴素选址 + 初始条件分布不一致=隐患。
+- 事件：匹配/计分故障；跨赛社交工程诈骗警示（381975）。
+
+**裁决**：队列省电但放大动作空间；开局即战争；无单一统治策略；CPU 推理预算是隐藏约束。
+
+**悬案**：2nd/3rd（conga 线路线）方案未收录；故障官方说明缺失。
+
+## 7. 图表证据
+
+![FLG 的 RL 架构](../../intel/lux-ai-season-2/bodies/406702_img/01.png)
+
+**图 1**（topic 406702）：输入 48×48×105 → ResBlock/ DoubleConeBlock（stride-4 锥形）→ Critic + Actor Heads。
+
+![1st 的"可视化器"](../../intel/lux-ai-season-2/bodies/407982_img/01.jpg)
+
+**图 2**（topic 407982，玩笑）：实体棋盘照片——社区文化注脚。
+
+## 8. 出处
 
 - 讨论区索引：`intel/lux-ai-season-2/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -52,3 +77,4 @@
   - FLG 的 RL 方案（51 票）：https://www.kaggle.com/competitions/lux-ai-season-2/discussion/406702
   - 纯逻辑方案笔记（16 票）：https://www.kaggle.com/competitions/lux-ai-season-2/discussion/405245
   - 10th RL 方案（15 票）：https://www.kaggle.com/competitions/lux-ai-season-2/discussion/411725
+- 轻读全本：`analysis/deep/lux-ai-season-2.md`（Tier B 轻读；本场按"≤3 篇定点补采"原则改用本地已归档 12 篇 bodies + 2 图证）
