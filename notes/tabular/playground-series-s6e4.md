@@ -47,7 +47,32 @@
 - 若能拿到原数据，先逆向/拟合它的生成规则——既是特征工程金矿，也是理解噪声上限的标尺。
 - 本届最醒目的信号：**LLM Agent 把往届方案迁移到新赛的速度已成为竞争力本身**。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：三分类灌溉 + 平衡准确率 + 3.3% High 的组合催生两件事：社区**逆向出原始数据精确公式**（BA=1.0，115 票）；**Agent 迁移往届方案**成为竞争力——2nd 让 Claude Code 一天改写 150 个脚本，第 3 天私榜第一，最终提交是"Claude 集成 + Codex 集成"。技术侧主角是阈值/类别权重（1st 两次贪心阈值搜索）与"Low/High 不混淆"结构（两个二分类 + 概率分解）。
+
+- 1st（696040）：Low vs Rest + Medium vs High 两个二分类；`P(Med)=(1−p1)(1−p2)`、`P(High)=(1−p1)p2`；logits + LogRegCV 融合 61 个 OOF；CV 0.98155。
+- 2nd（696169）：Claude Code 迁移 150 脚本（第 3 天私 0.98160）；最终 Claude+Codex 混合（私 0.98151）；PyTorch GPU 多分类 LogReg（类别权重 + weight decay）；CV–私榜 Spearman 仅 0.54。
+- 4th（696054）：11 L1 + 4 L2 集成器；High 稀有 → 彩票效应；最佳私榜 0.98148 仅 9 模型；最终提交落在私榜 15–20 名外。
+- 200 模型堆叠（696104）：203 模型/16 族，N×3 概率特征，误差多样性为核心。
+- 24th（696016）：166 OOF + 神经元模型；发现离散化（分箱）增益大；提交失误损失约 13 名。
+- 社区：平衡准确率（45 票）、类别权重（26 票）、原数据漂移（25 票）、阈值调优（19 票）。
+
+**裁决**：不平衡指标先优化决策层（阈值/权重/投票）；用混淆矩阵决定分类结构（OVR/层级）；提交组合按稳健性与多样性挑选（CV–私榜排序弱）；合成赛尽头是逆向生成公式。
+
+**悬案**：3rd/5th–23th 未收录；公式自动发现细节未读。
+
+## 9. 图表证据
+
+![CV 与私榜相关性](../../intel/playground-series-s6e4/bodies/696169_img/01.png)
+
+**图 1**（topic 696169）：CV–私榜散点（Pearson 0.8135 / Spearman 0.5429）。
+
+![CV 与公榜相关性](../../intel/playground-series-s6e4/bodies/696169_img/02.png)
+
+**图 2**（topic 696169）：CV–公榜散点（Pearson 0.8293 / Spearman 0.7204）。
+
+## 10. 出处
 
 - 1st：OVR + 多分类模型的概率分解：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696040
 - 2nd：Claude Code/Codex 迁移 + GPU 逻辑回归堆叠：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696169
@@ -55,3 +80,5 @@
 - 误差多样性：200 模型堆叠：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696104
 - 24th：166 OOF 重堆叠：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696016
 - 原数据精确公式：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687460
+- 平衡准确率处理（45 票）：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/686709
+- 阈值调优（19 票）：https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687082
