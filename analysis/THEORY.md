@@ -3,6 +3,7 @@
 > v0.7（Batch 1–6 + Tier B B01–B21，133 条 + 37 组张力）｜ 目标：≥25 条（已达成；Tier A 60 场 + Tier B 204 场全部收官）
 > 来源：60 篇 Tier A 深读（Batch 1–6）+ 204 篇 Tier B 轻读（B01–B21，L114–L133 为新增）；并回流 `images_index.csv` / `claims.csv` / `lineage.md` / `limitations.md` 四件套的结论。每条附证据场次与数字。
 > 写法：命题 → 机制 → 适用范围 → 反例/张力 → 证据。
+> 配套（v0.7 新增）：失败模式见 `analysis/failures.md`（12 类 + 1964 条）；规律→数字证据见 `analysis/evidence_map.md`；开赛—收官步骤见 `analysis/SOP.md`。
 
 ## A. 数据生成与泄漏
 

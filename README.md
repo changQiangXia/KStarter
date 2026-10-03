@@ -11,7 +11,7 @@
 | `digests/<slug>.md` | 索引 + 正文纯文本汇总（写摘要的输入） |
 | `notes/<主题>/<slug>.md` | **逐场结构化摘要**（任务/数据、验证、模型家族、关键技巧、可迁移性、新手启示、出处） |
 | `notes/INDEX.md` | 全量索引（264 场） |
-| `analysis/` | **深读与分析层**：`deep/`（264 篇深读：Tier A 60 + Tier B 204）、`THEORY.md`（v0.7：L1–L133 + T1–T37）、`claims.csv`（1850 条断言）、`images_index.csv`（1666 张图索引）、`lineage.md`（52 节点）、`limitations.md` |
+| `analysis/` | **深读与分析层**：`deep/`（264 篇深读：Tier A 60 + Tier B 204）、`THEORY.md`（v0.7：L1–L133 + T1–T37）、`evidence_map.md`（规律×数字证据）、`failures.md` + `failures.csv`（失败学 1964 条）、`SOP.md`（开赛—收官操作手册）、`claims.csv`（1850 条断言）、`images_index.csv`（1666 张图索引）、`lineage.md`（52 节点）、`limitations.md` |
 | `playbook/` | **七册方法论**：通用方法论、表格/时序、CV、NLP/LLM、科学计算、优化博弈/Agent、多模态/音频/元类（2026-10 起含 v2 增补节） |
 | `LEARNING_PATH.md` | 面向新手的分阶段学习路径（含跨领域迁移清单、黑箱迭代搜索、提交与定稿） |
 | `scripts/` | 采集/摘要/校验工具链（可断点续跑、限流退避、链接与引用校验） |

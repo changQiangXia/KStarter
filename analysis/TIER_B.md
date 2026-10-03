@@ -6,6 +6,7 @@
 > 进度：**204/204**（2026-10-03；B01–B21 全部完成 ✅）
 > 收尾：四件套已完成 —— `analysis/images_index.csv`（1666 行，P1 内嵌 502 / P2 1164）、`analysis/claims.csv`（1850 行）、`analysis/lineage.md`（52 节点）、`analysis/limitations.md` ✅
 > 经验回流：`analysis/THEORY.md` 已扩 **v0.7（L1–L133 + T1–T37）**；`playbook/` 七册均已追加 **v2 增补节**（2026-10）✅
+> 三轮扫描强化：`analysis/failures.md`（12 失败模式 + 1964 条）、`analysis/evidence_map.md`（规律×数字证据 + 六册数字锚点）、`analysis/SOP.md`（操作手册）；七册 playbook 均含检查清单 ✅
 
 ## 批次 B01（1–10）
 

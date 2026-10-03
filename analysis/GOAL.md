@@ -48,6 +48,7 @@
   **THEORY.md 已扩 v0.7（L1–L133 + T1–T37，Tier B 归纳完成）**；**Tier B 轻读 204/204 全部完成 ✅**（B01–B21 收官）已推送；
   **四件套已完成 ✅**：`analysis/images_index.csv`（1666 行）、`analysis/claims.csv`（1850 行）、`analysis/lineage.md`（52 节点）、`analysis/limitations.md`；
   **七册 playbook 已加 v2 增补节**（2026-10，Tier B 204 场 + 四件套回流）；
+  **三份强化文档已完成**：`analysis/failures.md`（12 失败模式 + 1964 条，另附 failures.csv）、`analysis/evidence_map.md`（L114–L133/T28–T37 数字证据台账 + 六册数字锚点）、`analysis/SOP.md`（开赛—收官操作手册 + 通用检查清单）；七册 playbook 均含可打印检查清单。
   可选后续（非验收项）：图内文字 OCR sidecar、下一个采集周期（2026-10 之后）的增量场次。
 - 推送认证（2026-10-03 复核）：`/root/.gh_push_token`（600，PAT）+ 仓库级 credential.helper，直连 `git push` 可用；
   AutoDL 学术加速 = `source /etc/network_turbo`（代理 172.29.51.4:12798，仅 github/hf），用完 `unset http_proxy https_proxy`；直连失败时再走代理。

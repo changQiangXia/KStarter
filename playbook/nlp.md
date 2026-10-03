@@ -112,3 +112,17 @@
 6. **Agent 元竞赛**：提交的是 Agent Config（Google ADK）；60min/$2 预算下先本地 validate schema，再按"定向→CV→快基线锚点→迭代"工作流（L122/L123，autonomous-agent）。
 7. **评测设计赛**：好 benchmark 要"超越记忆"且能判别；社区投票入分（15%）会引入曝光/互赏偏差（kaggle-measuring-agi）。
 8. **长上下文应用**：赢家集中在长视频/代码库/大规模文本处理；注意模型挂载（Save&Run All）与配额限流（L123，gemini-long-context）。
+
+## 9. 检查清单（v2，可打印）
+
+- [ ] 任务形态判定：理解/生成/检索/安全/Agent，方法论完全不同（L119）
+- [ ] 输出可机读（JSON/结构化）+ 评分口径写进 prompt（makersuite）
+- [ ] few-shot 稳定性测试：同一 prompt 多次运行方差可接受
+- [ ] LLM 引用/来源逐条核验（L132/F9）
+- [ ] 大数据 I/O：URL→feather/parquet/LMDB + 并发下载（wikipedia）
+- [ ] 相似赛方案总汇盘点（Shopee 1st–161st 等）（L113）
+- [ ] Agent 赛：schema 本地校验、工具兼容、预算与超时（L122/L123）
+- [ ] 安全赛：CoT 伪造/工具通道/`reasoning_effort` 三面都测（L119）
+- [ ] 评测设计赛：判别力 + 社区投票偏差（kaggle-measuring-agi）
+- [ ] 多语言：域内预训练/低资源评测，先测 base 能力再适配
+- [ ] 提交字数/格式；模型挂载方式（Save&Run All）已演练（L123）

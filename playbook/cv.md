@@ -109,3 +109,19 @@
 7. **分层学习率**：头/融合权重高 LR 早 warmup，骨干按层组递减（L120，PlantHydra 调度图）。
 8. **提交契约**：列顺序必须与 sample_submission 完全一致；zip/images.zip 结构与 PostProcessorKernel 先跑通最小提交（L122，planttraits/gan）。
 9. **研究型 CV 赛**：GeoLifeCLEF 的 working note 是第二交付物（6/7→7/8，CEUR-WS/LNCS），数据获取（Seafile/ClimateClef）常比建模更耗时（geolifeclef-2022/2024）。
+
+## 8. 检查清单（v2，可打印）
+
+- [ ] 分辨率上限实验（512 vs 960/1024）（L129）
+- [ ] 域适应方案：IBN / 直方图均衡 / 颜色归一化，先用分布可视化选（L129）
+- [ ] 度量损失（ArcFace/subcenter/动态 margin）与分类头组合（L129）
+- [ ] 遮挡/掩码增强与测试分布对齐（hotel-id BlendFlip）
+- [ ] 无 GT 检测/计数：密度分层 + NMS + 阈值分桶（L128）
+- [ ] 未知类检测：1−max(prob) + 集成标准差 + 阈值校准（fathomnet）
+- [ ] 长尾：<N 图类别归 unknown + label smoothing；先确认测试分布（L130/F4）
+- [ ] 身份辅助任务（物种/聚类/软分类头）（L121）
+- [ ] 分层学习率与冻结/解冻计划（L120）
+- [ ] 外部数据先映射/对抗验证；伪标签同折对照（L131/T6）
+- [ ] TTA / 多尺度 / 多骨干融合（L129）
+- [ ] 提交契约：列顺序、zip、PostProcessorKernel（L122）
+- [ ] 架构/分数表/校准图截图入库 `images_index.csv`
