@@ -48,7 +48,26 @@
 3. 组合构建是独立的一门手艺，值得单独学习。
 4. 无模型的规则策略也能进前列，别把 Kaggle 等同于机器学习。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：Sharpe 指标 + 单资产 + 逐月真实数据 → **组合构建与风险管理 >> 预测精度**：**第 4 名完全不用 ML**，靠"赛前已有的短期反转 alpha + 逆波动率加权 + 波动率目标控制"拿到名次，并自评"vol overlay 的贡献大于任何 alpha 改动"。
+
+- 4th（718664）：`Portfolio = Alpha + Risk Management`；逆波动率加权（`w ∝ 1/σ`，回避协方差估计误差，稀疏 alpha 未必拿最大权重）；波动率目标 `L=σ_target/σ̂`、`clip(L·w, 0, 2)`、长窗口+定期更新；特征只留极少数且目的是**降噪**（"特征不必预测收益"）。
+- 2.6 公榜（663043）：6800→130 个相对化特征；目标工程把仓位映射回收益（负→0、正→2，尾部 10% 放大到 4/-2 后裁剪），0/2 分界用无风险利率 ≈3.25%；9 种目标实验（含 Kaplan-Meier）。
+- 61st（715547）：14 特征 + 滞后/滚动统计 = 224 特征；**单 LightGBM**（集成一致更差，奥卡姆剃刀）；理念=不预测精确值，只判相对正负并保守决策。
+- 社区：do-nothing 基线 0.469、随机提交可能夺冠、赛后"顶级方案在哪"（1177：无顶级 write-up）。
+
+**裁决**：风险预算（波动率目标/杠杆裁剪）优先于再挖 alpha；稳健的逆波动率优于均值方差优化；金融特征默认相对化+滚动化；赛后金融赛方法论文献稀缺，引用以可复现的组合构建为准。
+
+**悬案**：1st–3rd/5th–10th 方案未公开；4th 的 alpha 细节保密；vol overlay 参数未给具体值。
+
+## 8. 图表证据
+
+![训练数据缺失值热图](../../intel/hull-tactical-market-prediction/bodies/610981_img/01.png)
+
+**图 1**（topic 610981）：训练缺失结构——最前约 1000 行全列缺失、若干列成段缺失，决定特征可用区间，也是本场 EDA 帖成为最高票技术帖的原因。
+
+## 9. 出处
 
 - 讨论区索引：`intel/hull-tactical-market-prediction/topics.md`（120 条）
 - 已收录 write-up（8 篇）：
@@ -57,3 +76,7 @@
   - 榜单 EDA（11 票）：https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663201
   - 2.6 public 方案（16 票）：https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/663043
   - 61st 银牌（11 票）：https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/715547
+  - 163rd（Sharpe 2.16）：https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/714278
+  - 随机提交讨论（44 票）：https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/608135
+  - "顶级方案在哪"（1177）：https://www.kaggle.com/competitions/hull-tactical-market-prediction/discussion/717746
+- 轻读全本：`analysis/deep/hull-tactical-market-prediction.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

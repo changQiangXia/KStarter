@@ -54,7 +54,27 @@
 2. **最简单的表示（ID 嵌入）可能出乎意料地强**，先试再上复杂模型。
 3. **工程细节（checkpoint、提交预算）在真实赛程里会直接影响名次**。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：DEL 结合预测的三大要点——**共享/非共享构建块必须分开打**、**预训练任务（MLM→ECFP 预测）比模型结构重要**、**验证要高频（0.01 epoch）且按构建块切分**。
+
+- 1st（85 票）：4 层 8 头/dim32/43 token 的浅模型 + **两阶段自训预训练（MLM → SMILES→ECFP）**，把 train+test+外部数据全用于 MLM；留出 3% 构建块（~900 万样本）做验证；无效清单：复杂分词、>6 层、多输入、ZINC 预训练、自定义损失。
+- 14th（61 票）：共享/非共享分开；非共享"一个 epoch 内就过拟合"→ **每 0.01 epoch 存点**；CV 按 BB1/BB2/BB3 切 5 折；ChemBERTa-77M-MTR；11 seed × 2 折 → 19 模型集成。
+- 2nd 公榜/13th 私榜：共享块用 CNN+XGB+LGBM+GNN 逐蛋白加权；非共享块用**排名集成**（消除尺度差）；两份提交 pub 0.488/0.529，priv 0.275/0.277。
+- 5th：**字符分词 + 学习式 CNN 嵌入**（优于 BPE/atom 系）；CNN1d+Transformer+Mamba 集成；CNN1d 用高 eps/低 momentum 抗 BN 不稳；每网络用不同折换多样性。
+- 事件：**指标中途变更公告（68 票）**；训练集瘦身帖（90 票）。
+
+**裁决**：先按"构建块是否共享"分层，再谈模型；表示学习靠自监督目标设计；大样本快速过拟合时验证频率是超参；指标变更后必须重估全部历史结论。
+
+**悬案**：3rd–13th 方案缺失；非共享部分公榜-私榜巨差（0.529→0.277）机制未解释；1st 权重未完整恢复。
+
+## 8. 图表证据
+
+![2nd 的非共享块 ChemBERTa 模型](../../intel/leash-BELKA/bodies/519133_img/02.png)
+
+**图 1**（topic 519133）：ChemBERTa 两个变体（TabNet 版 / 64 维 FC 版）+ MLP Block 内部结构，用于非共享块的排名集成。
+
+## 9. 出处
 
 - 讨论区索引：`intel/leash-BELKA/topics.md`（120 条）
 - 已收录 write-up（8 篇）：
@@ -63,3 +83,7 @@
   - 14th（61 票）：https://www.kaggle.com/competitions/leash-BELKA/discussion/518951
   - 11th（33 票）：https://www.kaggle.com/competitions/leash-BELKA/discussion/518993
   - 5th（34 票）：https://www.kaggle.com/competitions/leash-BELKA/discussion/521894
+  - 88th GNN+域适应（42 票）：https://www.kaggle.com/competitions/leash-BELKA/discussion/519135
+  - 训练集瘦身（90 票）：https://www.kaggle.com/competitions/leash-BELKA/discussion/491472
+  - 指标变更公告（68 票）：https://www.kaggle.com/competitions/leash-BELKA/discussion/503232
+- 轻读全本：`analysis/deep/leash-BELKA.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
