@@ -1,0 +1,122 @@
+# otto-recommender-system 讨论区（按票数排序，共 120 条）
+
+- [How To Build a GBT Ranker Model](https://www.kaggle.com/competitions/otto-recommender-system/discussion/370210) — 335 票 / 224 评论 / 2022-12-03 
+- [Recommendation Systems for Large Datasets](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364721) — 275 票 / 39 评论 / 2022-11-07 
+- [local validation tracks public LB perfecty -- here is the setup](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364991) — 208 票 / 55 评论 / 2022-11-09 
+- [1st place solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384022) — 207 票 / 41 评论 / 2023-02-06 **write-up?**
+- [3rd Place - Using Only Rules Achieves LB 0.590!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383013) — 151 票 / 55 评论 / 2023-02-15 **write-up?**
+- [💡 For my friends from Twitter and LinkedIn -- here is how to dive into this competition 🐳](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368560) — 136 票 / 8 评论 / 2022-11-26 
+- [Abnormal scores of our team](https://www.kaggle.com/competitions/otto-recommender-system/discussion/381318) — 133 票 / 33 评论 / 2023-01-26 
+- [About my team's result and activities](https://www.kaggle.com/competitions/otto-recommender-system/discussion/381321) — 128 票 / 80 评论 / 2023-01-26 
+- [Surprising LB 0.587 !!!Share some experimental results ~~](https://www.kaggle.com/competitions/otto-recommender-system/discussion/370116) — 112 票 / 35 评论 / 2022-12-03 
+- [5th place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382802) — 103 票 / 32 评论 / 2023-02-01 **write-up?**
+- [3rd place(imaginary) solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382879) — 98 票 / 20 评论 / 2023-02-09 **write-up?**
+- [2nd Place Solution(ONODERA part)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382790) — 90 票 / 34 评论 / 2023-02-16 **write-up?**
+- [20th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382771) — 90 票 / 31 评论 / 2023-02-11 **write-up?**
+- [One Month Left - Here is what you need to know!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/374229) — 89 票 / 8 评论 / 2022-12-26 
+- [30x Faster Co-Visitation Matrices using RAPIDS cuDF!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/365369) — 88 票 / 32 评论 / 2022-11-11 
+- [How cheaters can steal tiers and reputations?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/381527) — 87 票 / 24 评论 / 2023-01-27 
+- [One more thread about cheaters](https://www.kaggle.com/competitions/otto-recommender-system/discussion/381360) — 84 票 / 47 评论 / 2023-01-26 
+- [7th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383769) — 84 票 / 11 评论 / 2023-02-14 **write-up?**
+- [📈 What do we know so far? ⚡Summary with  links to relevant resources](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364062) — 82 票 / 7 评论 / 2022-11-04 
+- [Locate Real Users and Real Sessions EDA](https://www.kaggle.com/competitions/otto-recommender-system/discussion/366138) — 80 票 / 12 评论 / 2022-11-15 
+- [The Story of User 13479136 and User 13710374](https://www.kaggle.com/competitions/otto-recommender-system/discussion/371678) — 79 票 / 15 评论 / 2022-12-11 
+- [📑 [Step-by-step guide] How I got to my current standing on the LB and how to improve going forward](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368278) — 78 票 / 20 评论 / 2022-11-24 
+- [Full dataset processed to CSV/parquet files with optimized memory footprint](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363843) — 77 票 / 28 评论 / 2022-11-03 
+- [2nd Place Solution(senkin13&30CrMnSiA part)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382839) — 69 票 / 16 评论 / 2023-02-01 **write-up?**
+- [Update on Competition Compliance](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384844) — 68 票 / 21 评论 / 2023-02-09 
+- [💡 What is the co-visitation matrix, really?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/365358) — 66 票 / 18 评论 / 2022-11-10 
+- [Thanks to all the participants!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383133) — 63 票 / 8 评论 / 2023-02-02 
+- [Andrew Ng Recommender Systems](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363624) — 62 票 / 15 评论 / 2022-11-02 
+- [How to thrive in this competition without going crazy -- 1 out of 2 important truths ❤️‍🔥](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367503) — 61 票 / 7 评论 / 2022-11-21 
+- [There are some bugs in evaluation](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363658) — 58 票 / 17 评论 / 2022-11-02 
+- [Welcome to the OTTO – RecSys Challenge 2022!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363973) — 55 票 / 62 评论 / 2022-11-03 
+- [Connecting more dots: private sharing & medal selling by top competitors in this competition.](https://www.kaggle.com/competitions/otto-recommender-system/discussion/381588) — 55 票 / 12 评论 / 2023-01-27 
+- [Increase your RAM to 330GB on kaggle.](https://www.kaggle.com/competitions/otto-recommender-system/discussion/375297) — 54 票 / 26 评论 / 2022-12-31 
+- [Yes, We Can Use Test Data Leakage.](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363939) — 51 票 / 17 评论 / 2022-11-03 
+- [Poteman and RunningZ removed from Kaggle](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384852) — 49 票 / 21 评论 / 2023-02-09 
+- [3rd Place Solution - Theo's Part](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382975) — 49 票 / 2 评论 / 2023-02-01 **write-up?**
+- [So cheater GrandMaster Survive? Great job](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384482) — 48 票 / 37 评论 / 2023-02-08 
+- [Resources for getting started with recommender systems](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363814) — 47 票 / 16 评论 / 2022-11-03 
+- [How to thrive in this competition without going crazy (part 2 of 2) ❤️‍🔥](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367754) — 47 票 / 3 评论 / 2022-11-22 
+- [A top-down perspective on the current metric values](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363874) — 46 票 / 24 评论 / 2022-11-03 
+- [6th place solution (single model LB 0.603)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384120) — 44 票 / 10 评论 / 2023-05-14 **write-up?**
+- [9th place solution🥇 [single model LB 0.602]](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383792) — 43 票 / 2 评论 / 2023-02-13 **write-up?**
+- [How to train a Word2Vec model for item embeddings - a simple code example 📖](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367234) — 43 票 / 9 评论 / 2022-11-19 
+- [9th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383130) — 43 票 / 6 评论 / 2023-02-09 **write-up?**
+- [Say NO to GPU: Nx Faster Co-Visitation Matrices using single CPU!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/365873) — 43 票 / 9 评论 / 2022-11-13 
+- [Be careful](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383566) — 42 票 / 25 评论 / 2023-02-04 
+- [Saving GPU memory when processing features == (Speedup + Efficiency)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/371058) — 42 票 / 4 评论 / 2022-12-07 
+- [Organized cheating again](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382782) — 41 票 / 15 评论 / 2023-02-01 
+- [Make NN Great Again!!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/370756) — 41 票 / 19 评论 / 2022-12-06 
+- [Winning solutions summary from H&M Recommendations comp](https://www.kaggle.com/competitions/otto-recommender-system/discussion/372976) — 40 票 / 1 评论 / 2022-12-19 **write-up?**
+- [I think word2vec is a nice choice.](https://www.kaggle.com/competitions/otto-recommender-system/discussion/370751) — 40 票 / 20 评论 / 2022-12-06 
+- [Metric Issue Resolved](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363772) — 38 票 / 1 评论 / 2022-11-03 
+- [5th place (yet) solution (Carno & 2U & Jiahong's part)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382783) — 38 票 / 5 评论 / 2023-02-01 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382834) — 37 票 / 17 评论 / 2023-02-10 **write-up?**
+- [116th place write up](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382772) — 36 票 / 6 评论 / 2023-02-01 **write-up?**
+- [Another Coincidence: Abnormally High Similarity of Submissions](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384562) — 35 票 / 8 评论 / 2023-02-08 
+- [Be careful of deadline teamup](https://www.kaggle.com/competitions/otto-recommender-system/discussion/380783) — 35 票 / 12 评论 / 2023-01-24 
+- [Dumb Question: so what do we actually need to predict?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367154) — 34 票 / 15 评论 / 2022-11-19 
+- [ex-27th place solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382776) — 34 票 / 15 评论 / 2023-02-08 **write-up?**
+- [📅 Dataset for local validation created using organizer's repository (parquet files)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364534) — 34 票 / 1 评论 / 2022-11-07 
+- [28th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382812) — 34 票 / 4 评论 / 2023-08-13 **write-up?**
+- [[Starter pack] LGBMRanker with polars 🚀🚀🚀](https://www.kaggle.com/competitions/otto-recommender-system/discussion/366194) — 34 票 / 2 评论 / 2022-11-15 
+- [[Starter Pack] Matrix Factorization [Pytorch + Merlin Dataloader] 🚀🚀🚀](https://www.kaggle.com/competitions/otto-recommender-system/discussion/366893) — 33 票 / 6 评论 / 2022-11-18 
+- [The Recommendation systems reading list you should have](https://www.kaggle.com/competitions/otto-recommender-system/discussion/373164) — 33 票 / 3 评论 / 2022-12-20 
+- [what does a session mean?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363554) — 32 票 / 10 评论 / 2022-11-02 
+- [The order of appearance of type in each aid](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364064) — 32 票 / 13 评论 / 2022-11-04 
+- [transformers4rec - Sequential and Session-Based Recommendation Systems](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363980) — 31 票 / 4 评论 / 2022-11-04 
+- [💡 how to move faster on an ML project and achieve more with less compute/time/energy (relevant to this competition)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368000) — 31 票 / 14 评论 / 2022-11-22 
+- [10th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382851) — 31 票 / 13 评论 / 2023-02-10 **write-up?**
+- [Co-visitation matrix with simplified code and improved logic! 🚀 [LB 0.558]](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364210) — 31 票 / 4 评论 / 2022-11-05 
+- [Some optimization tips for training ranker model](https://www.kaggle.com/competitions/otto-recommender-system/discussion/379952) — 31 票 / 7 评论 / 2023-01-21 
+- [RecBole - A framework for recommendation](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363603) — 31 票 / 1 评论 / 2022-11-02 
+- [💡A robust local validation framework 🚀🚀🚀](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364216) — 31 票 / 5 评论 / 2022-11-05 
+- [Checking the metric](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363671) — 30 票 / 3 评论 / 2022-11-02 
+- [Processed dataset](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363617) — 30 票 / 6 评论 / 2022-11-02 
+- [20th place solution (Transformer inside)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382924) — 29 票 / 4 评论 / 2023-02-08 **write-up?**
+- [💡How to improve the results of your Approximate Nearest Neighbor search! (annoy)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368385) — 29 票 / 0 评论 / 2022-11-25 
+- [Which metric is correct?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364530) — 29 票 / 5 评论 / 2022-11-07 
+- [💡 How to deal with this competition needing so much RAM -- a couple of things that worked for me](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368170) — 28 票 / 12 评论 / 2022-11-23 
+- [This was a really good competition](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382841) — 28 票 / 5 评论 / 2023-02-01 
+- [3rd Place Code ](https://www.kaggle.com/competitions/otto-recommender-system/discussion/384636) — 28 票 / 4 评论 / 2023-02-08 **write-up?**
+- [16th Place Solution (Association x UserCF x NN-based x Matrix Factorization x Covisit x LightGBM)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383382) — 28 票 / 2 评论 / 2023-02-07 **write-up?**
+- [Congratulations to Radek on becoming Kaggle Grandmaster 🙏](https://www.kaggle.com/competitions/otto-recommender-system/discussion/378947) — 27 票 / 10 评论 / 2023-01-17 
+- [13th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383229) — 27 票 / 5 评论 / 2023-02-12 **write-up?**
+- [🏆🏁💵Some Nice resources on Recommender systems for this contest🔮💰🏆](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363540) — 27 票 / 3 评论 / 2022-11-02 
+- [How to train a Word2Vec model 🚀🚀🚀](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368384) — 27 票 / 4 评论 / 2022-11-25 
+- [Matrix Factorization with GPU: 6.5x faster!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/371166) — 26 票 / 4 评论 / 2022-12-08 
+- [Is it time to change the evaluation metric?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363638) — 25 票 / 11 评论 / 2022-11-02 
+- [Co-Visitation Matrices and Matrix Factorization](https://www.kaggle.com/competitions/otto-recommender-system/discussion/365589) — 25 票 / 0 评论 / 2022-11-12 
+- [💡 Can you beat static rules with a ranker model without additional features?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/366474) — 24 票 / 11 评论 / 2022-11-16 
+- [【Maybe massive cheating】 Weird LB changes around silver](https://www.kaggle.com/competitions/otto-recommender-system/discussion/381495) — 24 票 / 28 评论 / 2023-01-27 
+- [Otto's Talk on Transformer Recommendation Systems](https://www.kaggle.com/competitions/otto-recommender-system/discussion/373224) — 24 票 / 2 评论 / 2022-12-20 
+- [💡 Best hyperparams for the co-visitation matrix based on HPO study with 30 runs](https://www.kaggle.com/competitions/otto-recommender-system/discussion/365153) — 24 票 / 2 评论 / 2022-11-10 
+- [Training GBDT Ranker based on Chris's discussion](https://www.kaggle.com/competitions/otto-recommender-system/discussion/379631) — 23 票 / 18 评论 / 2023-01-20 
+- [💡What is a good initial goal in the competition? How to improve beyond it? 📈](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368685) — 23 票 / 2 评论 / 2022-11-27 
+- [14th Place Solution(Ethan&qyxs part)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383374) — 23 票 / 3 评论 / 2023-02-03 **write-up?**
+- [💡 Do not disregard longer sessions -- they contribute disproportionately to the competition metric!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364375) — 23 票 / 1 评论 / 2022-11-06 
+- [46th Place Solution (Code and Journey)](https://www.kaggle.com/competitions/otto-recommender-system/discussion/383016) — 23 票 / 5 评论 / 2023-02-02 **write-up?**
+- [Kaggle's Top Recommender Systems Notebooks](https://www.kaggle.com/competitions/otto-recommender-system/discussion/372781) — 23 票 / 1 评论 / 2022-12-18 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363497) — 22 票 / 153 评论 / 2022-11-01 
+- [📖 What are some good resources to learn about how gradient boosted tree ranking models work?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/366477) — 22 票 / 6 评论 / 2022-11-16 
+- [💡 Training an XGBoost Ranker on the GPU with Merlin Models 🔥🔥🔥](https://www.kaggle.com/competitions/otto-recommender-system/discussion/368848) — 22 票 / 2 评论 / 2022-11-28 
+- [Idea about the "Cross Target Stacking" Method](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382955) — 22 票 / 7 评论 / 2023-02-01 
+- [I guess it's time for the pre-deadline meme thread](https://www.kaggle.com/competitions/otto-recommender-system/discussion/379860) — 22 票 / 5 评论 / 2023-01-21 
+- [A Case Study - How Youtube approaches the Candidate Generation and Ranking problems?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367282) — 22 票 / 1 评论 / 2022-11-20 
+- [from zero to 60 in 2 seconds or less 🏎️🚓🚓🚓](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367058) — 22 票 / 0 评论 / 2022-11-18 
+- [Recall@20 Explained](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363962) — 21 票 / 0 评论 / 2022-11-03 
+- [What happened so far? Full list of resources and discussions for a quick start to the competition 🚀](https://www.kaggle.com/competitions/otto-recommender-system/discussion/367463) — 21 票 / 5 评论 / 2022-11-20 
+- [Report Cheaters!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/380772) — 21 票 / 0 评论 / 2023-01-24 
+- [How much of your max-recall do you get?](https://www.kaggle.com/competitions/otto-recommender-system/discussion/376789) — 21 票 / 16 评论 / 2023-01-08 
+- [Important information regarding test data from competition repository](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363965) — 21 票 / 12 评论 / 2022-11-03 
+- [Why best model might not win RecSys competition](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364229) — 20 票 / 1 评论 / 2022-11-05 
+- [🐘 the elephant in the room -- high cardinality of targets and what to do about this](https://www.kaggle.com/competitions/otto-recommender-system/discussion/364722) — 20 票 / 2 评论 / 2022-11-07 
+- [To the people still hacking away on this competition...](https://www.kaggle.com/competitions/otto-recommender-system/discussion/369789) — 20 票 / 14 评论 / 2022-12-01 
+- [What is wrong with my GBT Ranker Pipeline? [LB = CV -> lower than expected]](https://www.kaggle.com/competitions/otto-recommender-system/discussion/372030) — 19 票 / 31 评论 / 2022-12-13 
+- [💡 ANN -> NN: get better results and run faster with NN search on the GPU 🔥🔥🔥](https://www.kaggle.com/competitions/otto-recommender-system/discussion/371111) — 19 票 / 0 评论 / 2022-12-08 
+- [recommenders - Best Practices on Recommendation Systems by Microsoft](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363730) — 19 票 / 1 评论 / 2022-11-02 
+- [15th Place Solution](https://www.kaggle.com/competitions/otto-recommender-system/discussion/382905) — 19 票 / 6 评论 / 2023-02-10 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/otto-recommender-system/discussion/363496) — 16 票 / 3 评论 / 2022-11-01 
+- [Complete OTTO Session Dataset Now Available!](https://www.kaggle.com/competitions/otto-recommender-system/discussion/411517) — 4 票 / 0 评论 / 2023-05-19 

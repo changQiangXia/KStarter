@@ -1,0 +1,157 @@
+<h1>Intro</h1>
+<p>Often when we try to reproduce results seen in a paper,  we often find that the exact setup fails to achieve the same results, mainly because the authors used some tricks that are too boring to write about in the paper. </p>
+<p>This post tries to list some of those tricks as well as some adjustments to be made to network architectures for boosting the performance for image-based models. </p>
+<hr>
+<h2>Training scheme</h2>
+<p><strong>Simple Augmentations to use during training</strong></p>
+<ul>
+<li>Randomly crop a rectangular area with [3/4,4/3] aspect ratio, then randomly sample with [8%,100%], and finally resize to an img_sizeXimg_size square. do this randomly on each batch. </li>
+<li>Add some probability of random horizontal flip (Example: 0.5..)</li>
+<li>Change randomly hue, saturation, and brightness and choose coefficients proportional to [0:6;1:4].</li>
+<li>Normalize the RGB channels by subtracting each channel by the mean value and dividing by it's std.</li>
+</ul>
+<hr>
+<p><strong>During test</strong></p>
+<ul>
+<li>Keep the same aspect ratio, resize the short side to img_size, and then cut out the (img_size-1)x(img_size-1) area in the center.</li>
+<li>Dont forget to standardizatize as above.</li>
+</ul>
+<p><strong>Weight initialization:</strong></p>
+<ul>
+<li>Init the convolutions and fully connected layers with the 'Xavier weights': take random values ​​uniformly in [-a,a] where: $$a=\sqrt( \frac{6}{d_in+d_out})$$<br>
+Where: d_in and d_out are the number of input and output channels of the layer respectively.</li>
+<li>Init biases to 0</li>
+<li>BatchNorms: init alpha and belta to <strong>1</strong> and <strong>0</strong> respectively</li>
+<li>If you don't have a fancy lr scheduler yet:  a good baseline is to init it to 0.1, and divided by 10 every couple of epochs. </li>
+</ul>
+<hr>
+<h2>Effective training</h2>
+<p><strong>Batch size</strong></p>
+<ul>
+<li>When training with Mini-batch SGD, if the batch size is too large, it will affect the convergence speed and reduce the accuracy. However, if the batchsize is too small it will never finish. </li>
+</ul>
+<p><strong>LR scheduler</strong><br>
+Gradient descent is a random process. Increasing the batch size will not affect the gradient itself, but it will reduce the variance, that is, reduce the noise. so you can think about it as a certain type of regularization. Use LR scheduler to compensate for larger batch size if you chose to train this way. <br>
+So when choosing batch size and lr to start searching from, use the following heuristic: if for example your baseline batch size is say..  256, and the initial baseline learning rate is 0.1, so when you is increased to "b" batch size, you should change the learning rate to "0.1 * b/256"</p>
+<p><strong>Learning rate warm-up</strong><br>
+Because the weights are random at the beginning, large learning rate will lead to unstable training on the first batches.<br>
+Therefore, a warm-up phase is advised, this means: use some data <code>m batches</code>, such as 5 epochs, to increase the learning rate from 0 to the initial learning rate. this simple tricks works well often. </p>
+<p><strong>Set BN alpha is initialized to 0</strong></p>
+<ul>
+<li>Initialize the alpha of BN to 0 on residual blocks, so that only the residual blocks will return their input, and the initial cold start will be easier to train.</li>
+</ul>
+<p><strong>Mixed-precision training</strong></p>
+<ul>
+<li>Use mixed precision if your hardware supports it. It is free training speed in simple terms. </li>
+</ul>
+<p><strong>Fine-tunning</strong></p>
+<ul>
+<li>After you are done training: train the last layer for couple more episode when all the other layers are frozen</li>
+</ul>
+<p><strong>Train an epoch more on the validation</strong><br>
+Yep. courage. be brave. </p>
+<p><strong>Use Learning rate cosine decay</strong></p>
+<ul>
+<li>This is a strong "out of the box" scheduler to use. It might not be optimal but it is a great place to start searching for the optimal. [see chris's solution for the ventilator competition] </li>
+</ul>
+<p><strong>Label smoothing</strong><br>
+If you use a classifier, try label smoothing. The deal is simple:<br>
+<strong>You do:</strong> y_true = y_true * (1.0 - ε) + 0.5 * ε [example: ε = 0.001]<br>
+<strong>You get:</strong> better model 🏆<br>
+And batchwise: <br>
+batch_labels = (1.0-label_smoothing)*batch_labels+label_smoothing/N_CLASSES</p>
+<p>BTW, you have it built-in tensorflow:   <code>loss =BinaryCrossentropy(label_smoothing = label_smoothing)</code></p>
+<p>And for pytroch you need to copy-paste the following loss:</p>
+<pre><code>from torch.nn.modules.loss import _WeightedLoss
+
+class SmoothBCEwLogits(_WeightedLoss):
+    def __init__(self, weight = None, reduction = 'mean', smoothing = 0.0, pos_weight = None):
+        super().__init__(weight=weight, reduction=reduction)
+        self.smoothing = smoothing
+        self.weight = weight
+        self.reduction = reduction
+        self.pos_weight = pos_weight
+
+    @staticmethod
+    def _smooth(targets, n_labels, smoothing = 0.0):
+        assert 0 &lt;= smoothing &lt; 1
+        with torch.no_grad(): targets = targets * (1.0 - smoothing) + 0.5 * smoothing
+        return targets
+
+    def forward(self, inputs, targets):
+        targets = SmoothBCEwLogits._smooth(targets, inputs.size(-1), self.smoothing)
+        loss = F.binary_cross_entropy_with_logits(inputs, targets,self.weight, pos_weight = self.pos_weight)
+        if  self.reduction == 'sum': loss = loss.sum()
+        elif  self.reduction == 'mean': loss = loss.mean()
+        return loss
+</code></pre>
+<p>Here is the original paper if you are interested: <a href="https://arxiv.org/pdf/1906.02629.pdf" target="_blank">https://arxiv.org/pdf/1906.02629.pdf</a></p>
+<hr>
+<h2>Advanced tricks</h2>
+<p><strong>Knowledge Distillation</strong><br>
+Use a large teacher network to guide the learning of a small network. This might be a"long shot" but sometimes this concept helps to squeeze just a bit more.  </p>
+<ol>
+<li>Train the large model: first use the hard target, which is the normal label to train the large model;</li>
+<li>Calculate soft target: use the trained large model to calculate soft target. That is, the output of the softmax after the large model is "softened"</li>
+<li>Train a small model, add an extra soft target loss function on the basis of the small model, and adjust the proportion of the two loss functions through interpulation .</li>
+<li>On inference, use the trained small model in the usual way</li>
+</ol>
+<p><strong>MixUp</strong></p>
+<ul>
+<li>Randomly select two pictures, and then generate a parameter of [0,1] to add the two pictures together, So the new sample becomes a "watermark" one on top of the other. it is typical to choose the const as 0.2</li>
+</ul>
+<p>Basiclly you just calculate: </p>
+<pre><code>x=lambda*x1+(1-lambda)x2
+y=lambda*x1+(1-lambda)y2
+</code></pre>
+<p><strong>Transfer learning</strong><br>
+Goes without saying. Always start from a pretrained model. It is better to use the one trained on the largest dataset you can find [like imagenet 22k] and if you can put your hands on "noisy-student" do it. </p>
+<p><strong>Optimizer</strong><br>
+Most NN models are using Adam. BUT something to consider is often times if you hyperparam-search SGD with momentum enough, you probably could get better results with it. </p>
+<p><strong>Denoising AudoEncoder branch</strong><br>
+You might get lucky if you start your training by doing some self-supervised Auto encoding just to get the weights up and running. It might help with performance. </p>
+<p><strong>Image size</strong><br>
+Usually: the biggest the better. but up to a certine point. there were some competitions in the past that above 512 didn't help the network. </p>
+<hr>
+<h2>About samples that mess with you</h2>
+<p><strong>Rare objects on the images - The metric is sensitive to outliers</strong></p>
+<p>These are samples that are messing your model up. you should love them! you are going to get a better model if you can detect them yourself and handle them. most kagglers on the leaderboard tend to score poorly specifically on them! and since this competition evaluation metric is RMSE: You only need a couple of poor samples to mess you up for your score to drop. </p>
+<p><strong>Why and How to deal with rare images</strong><br>
+Because it is so difficult to force "machine learning" on them try to come up with a "hard crafted" section of your pipeline to deal with them. Maybe even hand label them differently or even train a segmentation head on them. to extract some more information from them. </p>
+<p><strong>Size of the objects in the images</strong><br>
+Pay close attention to the size of the object in the image play a strong role on how "easy" it is to learn this sample. You can play with sample weights that are relational to the size of the object of interest. Maybe even "pre crop" the images so it will be easier for your model to extract them out of the background. </p>
+<p><strong>Balanced Batches</strong><br>
+Try to come up with a unique way to balance the batches: you can try: balanced sampling, balance between classes, between single/multiple labels, between external/kaggle data  based on the size of the object in the image.</p>
+<p><strong>Extract domain knowledge by looking at the images</strong><br>
+Try to find patterns that make the target high or low by hand. The color, the shape, the texture, the position. Then: Look for images that are "on the edge" and remove them from the training since as they mess with you up. they mess with your model even more!</p>
+<hr>
+<h2>Final Tricks</h2>
+<p><strong>Rocket Science the blending part</strong><br>
+You probably already know that you want your models to be as less correlated as possible since they willmake their mistakes on different samples this way. and then on emsebling you will get a strong pipeline overall. </p>
+<p>However, ensembling is a big word: you can Avg, you can take the Median, or you can start going even further into stacking or even some "rocket science" methods like there were on the ventilators competition [have a look there if you are interested]. You can get a-l-o-t simply by ensembling better. </p>
+<p><strong>Generate background train samples</strong><br>
+And then try to "copy paste" cats or dogs into them. If you can do this you get get a powerful augmentation from the simple training set of the competition. </p>
+<p><strong>Try some clustering magic</strong><br>
+Cluster similar images together by using some clustetring algorithm, on their latent representation extract with a deep net.  KNN neighbours can then be used in many creative ways both for pre and post processing maybe data augmentation or even balancing etc.</p>
+<p><strong>Want a very hard CV?</strong><br>
+Like above: cluster based on latent representation, then use the clusters as groups for Grouped KFold. Now you got a hard CV for your model with ease! </p>
+<p><strong>Ugly trick</strong><br>
+Train a simple regressor that takes you oof prediction vector and tries to predict the kaggle metric score (LB score) you will get submitting this kernel. no more words are going to be added about this! ;) </p>
+<p><strong>Smart cut-mix</strong><br>
+Like cut-mix but in a smart way that takes the whole object of interest with you to the other image. [Copy and pase "the dog" or "the cat" and not just a part of it] </p>
+<p><strong>Augment with CycleGAN</strong><br>
+I wanted to just copy-paste the code that is doing it since it is easy but I couldn't find it. Anyhow, this was done on some past winning solutions: You can transfer the style of the images onto themselves to create pretty much the same training set but distorted. This is "free" unique augmentation technique. </p>
+<p><strong>The big 4</strong><br>
+This had gone popular on some recent paper but these methods "just work" most of the times: pesudo-labeling, semi-suervised learning, knowledge distillation, adversarial training. Try them out. </p>
+<p><strong>Aux labels</strong><br>
+Try to come up with some aux labels. If you can add some information to the model through another label branch this might boost your model's performance greatly. </p>
+<p>Happy Kaggling! <br>
+Cheers^^</p>
+<hr>
+<p>References:</p>
+<ul>
+<li><a href="https://www.kaggle.com/c/tensorflow-speech-recognition-challenge/discussion/46945" target="_blank">https://www.kaggle.com/c/tensorflow-speech-recognition-challenge/discussion/46945</a></li>
+<li><a href="https://www.kaggle.com/c/tabular-playground-series-apr-2021/discussion/231738" target="_blank">https://www.kaggle.com/c/tabular-playground-series-apr-2021/discussion/231738</a></li>
+<li><a href="https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63984" target="_blank">https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63984</a></li>
+<li><a href="https://arxiv.org/abs/1812.01187" target="_blank">https://arxiv.org/abs/1812.01187</a></li>
+</ul>

@@ -1,0 +1,41 @@
+# lux-ai-2022-beta 讨论区（按票数排序，共 39 条）
+
+- [Lux Eye 2022 - Alternative episode visualizer](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/367091) — 29 票 / 8 评论 / 2022-11-19 
+- [Lux AI Challenge 2022 Beta - What to Expect and Resources](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/363366) — 17 票 / 5 评论 / 2022-11-01 
+- [Preview: Limiting active submissions](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/363479) — 15 票 / 10 评论 / 2022-11-01 
+- [Welcome to Lux AI 2022 - Beta](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/362825) — 14 票 / 5 评论 / 2022-10-29 
+- [Upcoming Changes](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365579) — 12 票 / 0 评论 / 2022-11-11 
+- [Validation episodes failing](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/363556) — 12 票 / 6 评论 / 2022-11-02 
+- [Massive Update and potential competition extension - v1.1.1](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/369935) — 9 票 / 0 评论 / 2022-12-02 
+- [v1.1.3 released](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/371409) — 8 票 / 4 评论 / 2022-12-09 
+- [Submissions are closed! Thanks to all that participated!](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/373378) — 7 票 / 3 评论 / 2022-12-21 
+- [Bug report](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/364240) — 7 票 / 2 评论 / 2022-11-05 
+- [how is it possible to keep factories alive for 1000 turns?](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365214) — 6 票 / 6 评论 / 2022-11-10 
+- [Error when the map is created](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365181) — 6 票 / 1 评论 / 2022-11-10 
+- [Action queue repeat](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/364472) — 6 票 / 1 评论 / 2022-11-06 
+- [Season 2 Launch](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/379232) — 5 票 / 0 评论 / 2023-01-18 
+- [Expanded Deadline - Dec 20th](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/370510) — 5 票 / 0 评论 / 2022-12-04 
+- [Ice doubled by repeated transfer](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/371151) — 5 票 / 1 评论 / 2022-12-08 
+- [One opinion on game balance](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/367319) — 5 票 / 6 评论 / 2022-11-20 
+- [Kaggle Twitch episode on Lux AI](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365749) — 5 票 / 0 评论 / 2022-11-12 
+- [Congratulations to our winners and thank you for competing!](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/373730) — 4 票 / 5 评论 / 2022-12-23 
+- [Upcoming v1.1.1 breaking changes](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/370514) — 4 票 / 5 评论 / 2022-12-05 
+- [The enviroment crash when factory spawn at row or col 0](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365465) — 4 票 / 1 评论 / 2022-11-11 
+- [Bit confused on this- What happens if i spawn both heavy and light robots together? ](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/364554) — 4 票 / 2 评论 / 2022-11-07 
+- [Starting Phase - placing a factory on the Raw Resources (Ice, Ore) tile. Possible?](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/364457) — 3 票 / 3 评论 / 2022-11-06 
+- [Abnormal lichen growth and decay](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/371031) — 2 票 / 1 评论 / 2022-12-07 
+- [Submission errors](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/369601) — 2 票 / 5 评论 / 2022-11-30 
+- [I get an error with the new starter kit on mac](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/370043) — 1 票 / 3 评论 / 2022-12-02 
+- [Cannot install luxai2022==1.1.4 under poetry](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/373803) — 1 票 / 2 评论 / 2022-12-23 
+- [GAME ENDED PREMATURELY](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/368360) — 1 票 / 4 评论 / 2022-11-24 
+- [Lose before turn 1000](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/367176) — 1 票 / 1 评论 / 2022-11-19 
+- [Recharge X command stupid question](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/366591) — 1 票 / 2 评论 / 2022-11-16 
+- [Moving center costs no power.](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365065) — 1 票 / 1 评论 / 2022-11-09 
+- [Some episodes show no info](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/364826) — 1 票 / 7 评论 / 2022-11-08 
+- [Odd Losses](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/373340) — 0 票 / 5 评论 / 2022-12-20 
+- [Reinforcement learning help](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/371413) — 0 票 / 2 评论 / 2022-12-09 
+- [factories to place issue? ](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/371611) — 0 票 / 4 评论 / 2022-12-11 
+- [Fixes to docs and starter notebooks](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/370051) — 0 票 / 0 评论 / 2022-12-02 
+- [Factory on ice](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/369787) — 0 票 / 1 评论 / 2022-12-01 
+- [Engine error when "watering" ?](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/366326) — 0 票 / 3 评论 / 2022-11-15 
+- [Faction Information. Is there a "Classified" list of them?](https://www.kaggle.com/competitions/lux-ai-2022-beta/discussion/365566) — 0 票 / 4 评论 / 2022-11-11 

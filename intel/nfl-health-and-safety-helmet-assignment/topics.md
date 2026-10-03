@@ -1,0 +1,82 @@
+# nfl-health-and-safety-helmet-assignment 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/284975) — 327 票 / 113 评论 / 2021-11-14 **write-up?**
+- [Welcome to the NFL Helmet Assignment competition!](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/263939) — 86 票 / 79 评论 / 2021-08-10 
+- [2nd place solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285112) — 76 票 / 19 评论 / 2021-11-14 **write-up?**
+- [9th place solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/284940) — 64 票 / 14 评论 / 2021-11-07 **write-up?**
+- [10th place solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/284945) — 61 票 / 22 评论 / 2021-11-03 **write-up?**
+- [Winning solutions from previous NFL competition ](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/263991) — 59 票 / 12 评论 / 2021-08-10 **write-up?**
+- [[3rd place solution] YOLOv5 + DeepSort + ICP + Hungarian algorithm](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285076) — 55 票 / 5 评论 / 2021-11-04 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285007) — 51 票 / 11 评论 / 2021-11-03 **write-up?**
+- [Debugging Tips [Notebook Threw Exception]](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/279046) — 42 票 / 8 评论 / 2021-10-16 
+- [Evaluate baseline detector](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264593) — 36 票 / 5 评论 / 2021-08-12 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/263936) — 34 票 / 27 评论 / 2021-08-10 
+- [5th Place Solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285286) — 32 票 / 2 评论 / 2021-11-04 **write-up?**
+- [Too hard/tedious to match tracking data and detection box?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264575) — 29 票 / 12 评论 / 2021-08-12 
+- [Beginner’s Guide to NFL Football](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264037) — 28 票 / 5 评论 / 2021-08-10 
+- [11th place solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285156) — 27 票 / 1 评论 / 2021-11-03 **write-up?**
+- [25th place solution (Trained DeepSort + Hyperparameter Sweep + Gmmreg + Hungarian Algorithm)](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285153) — 27 票 / 0 评论 / 2021-11-03 **write-up?**
+- [Competition is Finalized - Congratulations to our Winners; Recap](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285696) — 25 票 / 1 评论 / 2021-11-05 
+- [Tracking by detection approach. SORT/DeepSORT tracker. ](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/265800) — 25 票 / 20 评论 / 2021-08-17 
+- [21st Place Solution - Hungarian Algorithm, Frame Filling](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285065) — 23 票 / 0 评论 / 2021-11-03 **write-up?**
+- [Hand-annotated Camera rotation (when compared to tracking) Dataset](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/272480) — 22 票 / 1 评论 / 2021-09-15 
+- [Final Week! Good Luck Everyone.](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/282637) — 22 票 / 8 评论 / 2021-10-27 
+- [30th place solution. Affine transformation and voting deepsort cluster](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285127) — 19 票 / 1 评论 / 2021-11-04 **write-up?**
+- [How to use mmdetection and detectron2 with thier CLI interface](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264755) — 18 票 / 2 评论 / 2021-08-13 
+- [39th place solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285059) — 18 票 / 0 评论 / 2021-11-03 **write-up?**
+- [Report labeling errors](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/266670) — 17 票 / 7 评论 / 2021-08-20 
+- [What do you think about "great job" comments in Discussions?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/271847) — 17 票 / 13 评论 / 2021-09-12 
+- [22nd place solution: Yolov5l + Deepsort + CPD registration](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285179) — 17 票 / 0 评论 / 2021-11-03 **write-up?**
+- [Submission Scoring Error [help]](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/273391) — 16 票 / 24 评论 / 2021-09-20 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/263934) — 16 票 / 35 评论 / 2021-08-10 
+- [Is it OK to use last year's competition data??](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264154) — 16 票 / 15 评论 / 2021-08-11 
+- [Points but no tier?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/263932) — 16 票 / 4 评论 / 2021-08-10 
+- [Very few studies on Helmet Detection and Collisions](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264222) — 15 票 / 1 评论 / 2021-08-11 
+- [[Paper] Multi-task learning for jersey number recognition](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/272115) — 14 票 / 0 评论 / 2021-09-14 
+- [Thank you and Congratulations!](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285631) — 13 票 / 0 评论 / 2021-11-05 
+- [23th place solution](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285285) — 13 票 / 0 评论 / 2021-11-04 **write-up?**
+- [Articles, blogs, projects, journal papers about helmet detection in sports](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264536) — 13 票 / 1 评论 / 2021-08-12 
+- [Possible cause for Notebook Threw Exception ](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/277388) — 12 票 / 3 评论 / 2021-10-09 
+- [Detection model ensembling](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/273575) — 12 票 / 3 评论 / 2021-09-21 
+- [PNG Image Dataset for Helmet Detection (YOLO notation)](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264534) — 12 票 / 4 评论 / 2021-08-12 
+- [Validation vs LB score](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/281082) — 12 票 / 6 评论 / 2021-10-23 
+- [Motivational videos with relevant lessons in 8 minutes or less](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264980) — 11 票 / 5 评论 / 2021-08-14 
+- [Why are there missing tracking data?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/270439) — 11 票 / 4 评论 / 2021-09-05 
+- [Computational resources advice](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264093) — 11 票 / 7 评论 / 2021-08-11 
+- [Player traking sensors and prediction question](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/268646) — 10 票 / 4 评论 / 2021-08-28 
+- [Best Model using Baseline Boxes & Fastest Model?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285424) — 10 票 / 8 评论 / 2021-11-04 
+- [youtube video:top solutions from the 2020 "NFL 1st and Future - Impact Detection"](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/268281) — 10 票 / 2 评论 / 2021-08-26 **write-up?**
+- [Frame 0 on 57584_000336_Sideline](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/270842) — 9 票 / 3 评论 / 2021-09-07 
+- [An error occurred: Data not found](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/278974) — 8 票 / 10 评论 / 2021-10-16 
+- [Idea to match tracking data with sideline helmet](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/267756) — 8 票 / 4 评论 / 2021-08-24 
+- [[Compilation] Good baseline solutions](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/268448) — 8 票 / 4 评论 / 2021-08-27 **write-up?**
+- [Jersey Number Detection Using easyOCR](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/272402) — 8 票 / 0 评论 / 2021-09-15 
+- [Approaching the competition goal](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264549) — 7 票 / 6 评论 / 2021-08-12 
+- [Jersey Number for Mapping](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/267734) — 7 票 / 3 评论 / 2021-08-24 
+- [Why so many deepsort clusters?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/274539) — 7 票 / 3 评论 / 2021-09-26 
+- [Fine-tuning of the DeepSort Feature Extractor](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/275041) — 7 票 / 2 评论 / 2021-09-28 
+- [Public/Private Test Video Num](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/266765) — 7 票 / 2 评论 / 2021-08-20 
+- [How to match Time and Frame?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264361) — 6 票 / 5 评论 / 2021-08-11 
+- [Questions about submissions from Editor](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/274509) — 6 票 / 4 评论 / 2021-09-26 
+- [Other NFL Competitions](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/265813) — 6 票 / 1 评论 / 2021-08-17 
+- [Helmet color for match tracking data](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/269242) — 6 票 / 1 评论 / 2021-08-30 
+- [Looking at speeds did not work for me](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/274781) — 6 票 / 0 评论 / 2021-09-27 
+- [Submit to competition Error[help]](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/274901) — 6 票 / 8 评论 / 2021-09-28 
+- [What is the purpose of  train_baseline_helmets.csv and  test_baseline_helmets.csv?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/265014) — 5 票 / 1 评论 / 2021-08-14 
+- [Helmet detection error analysis in football videos using Amazon SageMaker 💯✔️](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/265812) — 5 票 / 2 评论 / 2021-08-17 
+- [Is there a proper training and inference notebook for this competition ?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/278183) — 5 票 / 3 评论 / 2021-10-13 
+- [Is there a difference between requirements of runtime and submission grading time?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/277548) — 5 票 / 0 评论 / 2021-10-10 
+- [[Guide] - How to ensemble object detectors ](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/284729) — 5 票 / 0 评论 / 2021-11-02 
+- [update ByteTracker in NFL](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/281984) — 5 票 / 4 评论 / 2021-10-26 
+- [Has anyone made a custom detection model?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/272133) — 5 票 / 12 评论 / 2021-09-14 
+- [Hardware rules: can I train a model outside a Kaggle notebook?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/269135) — 5 票 / 8 评论 / 2021-08-30 
+- [Top solutions collection](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285013) — 4 票 / 0 评论 / 2021-11-03 **write-up?**
+- [I encountered this error when running Deepsort. how can I solve it?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/284353) — 4 票 / 4 评论 / 2021-10-31 
+- [I successfully run my code in public kernel line by line but cause 'notebook threw exception' after submitting.](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/277989) — 4 票 / 5 评论 / 2021-10-12 
+- [Is there anyone try an ML approach to match helmets and players?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/265063) — 4 票 / 1 评论 / 2021-08-14 
+- [Holistic Approach - Future Options](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/266911) — 4 票 / 6 评论 / 2021-08-20 
+- [Occurred "Notebook Threw Exception" when using my own trained yolov5 csv.](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/277257) — 4 票 / 7 评论 / 2021-10-08 
+- [Help us crash notebooks](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/274828) — 4 票 / 1 评论 / 2021-09-27 
+- [Assign helmets to players](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/264441) — 3 票 / 2 评论 / 2021-08-12 
+- [ensamble object detectors](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/276392) — 3 票 / 0 评论 / 2021-10-04 
+- [home or visitor view?](https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/271169) — 3 票 / 2 评论 / 2021-09-08 

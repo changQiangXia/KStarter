@@ -1,0 +1,178 @@
+<p>I would like to express my gratitude to the organizers for hosting such an exciting competition.
+Now, all I can do is hope that the submission passes the final tests.</p>
+<p>As I mentioned in another discussion, my model is trained only on the data provided in the “NFL Big Data Bowl 2026 – Prediction” competition.
+Achieving strong performance with such a limited dataset required powerful data augmentation, well-designed loss functions, and an effective model architecture.</p>
+<p>Train and inference notebook are here.<br>
+<a href="https://www.kaggle.com/code/chack3/nfl2026-1st-place-inference" target="_blank">https://www.kaggle.com/code/chack3/nfl2026-1st-place-inference</a><br>
+<a href="https://www.kaggle.com/code/chack3/nfl2026-1st-place-train" target="_blank">https://www.kaggle.com/code/chack3/nfl2026-1st-place-train</a>  </p>
+<hr>
+<h1>Solution Overview</h1>
+<h2>1. Feature Engineering</h2>
+<h3>1.1 Dynamic Features</h3>
+<ul>
+<li><p>Use the <strong>20 frames</strong> immediately before the pass.</p></li>
+<li><p>Extract the following <strong>10-dimensional</strong> features for each frame:</p>
+<ul>
+<li><code>x, y</code></li>
+<li><code>sin(o), cos(o)</code></li>
+<li><code>sin(dir) * s, cos(dir) * s</code></li>
+<li><code>x - ball_land_x, y - ball_land_y</code></li>
+<li><code>x - receiver_x, y - receiver_y</code></li></ul></li>
+</ul>
+<h3>1.2 Static Features</h3>
+<ul>
+<li><p>Total <strong>12 dimensions</strong>:</p>
+<ul>
+<li>One-hot encoding of <code>player_role</code> (4 dims)</li>
+<li>Number of prediction frames (1)</li>
+<li>The number of frames before the pass used as input (1)</li>
+<li>Passer’s final-frame coordinates (2)</li>
+<li>Ball landing coordinates (2)</li>
+<li>Player’s final-frame coordinates (2)</li></ul></li>
+</ul>
+<h3>1.3 Target</h3>
+<ul>
+<li>Predict the <strong>displacement (Δx, Δy)</strong> from the final input frame.</li>
+<li>The final trajectory is obtained by adding the predicted displacement to the final input coordinates.</li>
+</ul>
+<hr>
+<h2>2. Model Architecture</h2>
+<h3>2.1 Overall Structure</h3>
+<ul>
+<li>A <strong>play-level model</strong> handling up to 22 players.</li>
+<li>Player dimension is frequently reshaped/transposed into the batch axis.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1630583%2Fad0c358c11eb57e4e48bfe8aae31c35e%2Fmodel.png?generation=1764969335701434&amp;alt=media" alt=""></p>
+<h3>2.2 Dynamic Feature Encoder</h3>
+<ul>
+<li><p><strong>Input:</strong> <code>(10, player, 20 frames)</code></p></li>
+<li><p><strong>Output:</strong> <code>(640, player, 1 frame)</code></p></li>
+<li><p>Depthwise Conv1d (kernel size = 3) × 7</p>
+<ul>
+<li>Each feature → 64 dims → concatenated into 640 dims</li></ul></li>
+<li><p>No padding (to emphasize the last frame)</p></li>
+<li><p>20 frames → 5 frames → only the <strong>final frame</strong> is used</p></li>
+</ul>
+<h3>2.3 Static Feature Encoder</h3>
+<ul>
+<li><strong>Input:</strong> <code>(10, player)</code></li>
+<li><strong>Output:</strong> <code>(64, player)</code></li>
+<li>Conv1d(kernel=1) → BatchNorm → SiLU</li>
+</ul>
+<h3>2.4 Merge Layer</h3>
+<ul>
+<li>Concatenate dynamic features (640) + static features (64)</li>
+<li>Project to <strong>256-dimensional</strong> player features</li>
+</ul>
+<h3>2.5 Inter-player Interaction Layer</h3>
+<ul>
+<li><strong>Input:</strong> <code>(256, player)</code></li>
+<li><strong>Output:</strong> <code>(256, player)</code></li>
+<li>Transformer Encoder × 3 layers</li>
+<li>Player masks for variable player counts</li>
+<li>FFN uses <strong>SwiGLU</strong></li>
+</ul>
+<h3>2.6 Decoder</h3>
+<ul>
+<li><strong>Input:</strong> <code>(256, player)</code></li>
+<li><strong>Output:</strong> <code>(2, player, 48 frames)</code> + 4 auxiliary outputs</li>
+<li>256 → 1536 → reshape → <code>(32, 48 frames)</code></li>
+<li>Apply multiple Conv1d (kernel size = 3)</li>
+<li>Final projection: 32 → 2 (xy) + 4 (auxiliary terms)</li>
+</ul>
+<hr>
+<h2>3. Training Setup</h2>
+<h3>3.1 Cross Validation</h3>
+<ul>
+<li>Group <strong>5-fold CV</strong> using <code>game_id</code></li>
+<li>Perform 5-fold CV <strong>three times</strong> with different splits</li>
+</ul>
+<h3>3.2 Optimization</h3>
+<ul>
+<li><strong>RAdam</strong> optimizer</li>
+<li><strong>EMA</strong> with decay = 0.9995</li>
+<li>210 epochs, evaluated every 6 epochs</li>
+</ul>
+<hr>
+<h2>4. Loss Functions</h2>
+<h3>4.1 Main Loss: GaussianNLLLoss</h3>
+<ul>
+<li>Predicts both mean and variance</li>
+<li>Automatically downweights samples with large variance → robust learning</li>
+<li>Performed better than SmoothL1</li>
+<li>Frame-wise weighting provided no meaningful improvements</li>
+<li>Variance is constrained to positive values using:
+<strong>softplus(var) + 1e-3</strong></li>
+</ul>
+<h3>4.2 Auxiliary Loss</h3>
+<ul>
+<li><p>Computed from predicted xy:</p>
+<ul>
+<li>Velocity (1st difference)</li>
+<li>Acceleration (2nd difference)</li></ul></li>
+<li><p>Also uses GaussianNLLLoss</p></li>
+<li><p>Helps stabilize and accelerate learning</p></li>
+</ul>
+<hr>
+<h2>5. Data Augmentation</h2>
+<h3>5.1 Rotation Augmentation</h3>
+<ul>
+<li>50% chance to randomly rotate the entire play around the mean player position</li>
+<li>Rotation angle sampled uniformly from <strong>0–360°</strong></li>
+<li>Initially used a Gaussian distribution (σ = 5°),
+but increasing variance improved performance → switched to uniform</li>
+<li>Likely beneficial because the target depends on <strong>rotation-invariant relative positions</strong></li>
+</ul>
+<h3>5.2 Predicting From Earlier Frames</h3>
+<ul>
+<li><p>Important for long-pass predictions</p></li>
+<li><p>Instead of starting prediction at pass-attempt frame,
+use up to <strong>20 frames earlier</strong></p></li>
+<li><p>The model thus predicts:</p>
+<ul>
+<li>(earlier frames) + (original prediction frames)</li></ul></li>
+<li><p>Improves long trajectories significantly</p></li>
+<li><p>Add a static feature indicating “how many frames earlier”</p>
+<ul>
+<li>(always 0 during test)</li></ul></li>
+</ul>
+<p>The upper diagram shows an example where the data consists of 30 input frames and 9 output frames.
+Blue indicates the portion of the input that is fed into the model, red indicates the data the model is asked to predict, and gray indicates data that is not used.</p>
+<p>When we want the model to start predicting from 5 frames before the pass, the configuration becomes as shown in the lower diagram.
+With this adjustment, the output becomes a 14-frame prediction.
+This procedure is applied to all players within a play using the same set of parameters.</p>
+<p>
+  <img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1630583%2F9a7df2828bba3ad2ebe6bb0fa65f857b%2Fframe_aug.png?generation=1764890503442923&amp;alt=media">
+</p>
+<h3>5.3 Vertical Flip</h3>
+<ul>
+<li>Flip the play along the X-axis</li>
+</ul>
+<hr>
+<h2>6. Data Processing</h2>
+<h3>6.1 Outlier Removal</h3>
+<p>Remove plays with abnormal length or missing passer:</p>
+<pre><code>too_long_ids  = ["2023091100_3167", "2023122100_1450"]
+no_passer_ids = ["2023091001_3216", "2023112606_4180", "2023121009_3594"]
+</code></pre>
+<h3>6.2 Other Processing</h3>
+<ul>
+<li>If <code>play_direction == left</code>, rotate the play by <strong>180 degrees</strong></li>
+</ul>
+<hr>
+<h2>7. Ensemble</h2>
+<ul>
+<li><p>Use an ensemble of <strong>100+ models</strong></p></li>
+<li><p>All models share the same architecture</p></li>
+<li><p>Diversity arises from:</p>
+<ul>
+<li>Different feature configurations</li>
+<li>Different CV splits</li></ul></li>
+<li><p>Ensemble method: <strong>simple average</strong></p></li>
+</ul>
+<hr>
+<h2>8. Ablation Study</h2>
+<p>Changes in scores across epochs for each of the 5 folds.</p>
+<p>Looking at the results side by side, it’s interesting to see that rotation augmentation and early-frame prediction help reduce overfitting, the auxiliary loss stabilizes training, and GaussianNLLLoss contributes to improving accuracy.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1630583%2Fe2a712f5d6e31dd8ab0d05c703463542%2Fabu.png?generation=1764846156985608&amp;alt=media" alt=""></p>
+<hr>

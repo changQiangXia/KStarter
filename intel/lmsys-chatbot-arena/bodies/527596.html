@@ -1,0 +1,85 @@
+<p>I enjoyed this competition! Thanks Kaggle and LMSYS! It was a great opportunity to learn about finetuning and inferring large LLM.</p>
+<p>I recently began learning how to finetune large LLM-4B+ four months ago. I posted my first notebook in Essay comp <a href="https://www.kaggle.com/code/cdeotte/mistral-7b-baseline-lb-0-7x" target="_blank">here</a> (LLM-7B) and Twenty Questions <a href="https://www.kaggle.com/code/cdeotte/starter-code-for-llama-8b-llm-lb-0-750" target="_blank">here</a> (LLM-8B). Then I practiced in KDD Cup 2024, explained <a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/521294" target="_blank">here</a> (LLM-72B). Then began applying what I learned to LMSYS comp and published starter notebook <a href="https://www.kaggle.com/code/cdeotte/infer-34b-with-vllm" target="_blank">here</a> (LLM-34B). Large language models are so exciting!</p>
+<h1>LoRA/QLoRA Efficient Training for LLM</h1>
+<p>Using LoRA/QLoRA allows us to train a <code>Gemma2-9B-IT</code> model like it is only <code>DeBERTa-v3-base</code> or <code>large</code> wow! If we finetuned the full <code>Gemma2-9B-IT</code>, we would need to update 9 billion parameters. Instead we can use LoRA/QLoRA with rank=64 and only finetune 200k parameters (or use <code>rank=16</code> and 50k parameters). </p>
+<p>For reference DeBERTa-v3-base has 90k parameters and DeBERTa-v3-large has 300k parameters. LoRA works based on linear algebra. If the weights of Gemma2 are <code>(m x n)</code> matrix where <code>m*n=9B</code>, we leave them as is and only find two LoRA matrices of sizes <code>(m x r)</code> and <code>(r x n)</code> where each is about 100k. Then our finetuned model is the product of these two matrices plus the original base matrix. (Of course Gemma2 weights are more than one matrix but you get the idea).</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2024/gemma2.png" alt=""></p>
+<h1>How To Tune LoRA/QLoRA</h1>
+<p>Using LoRA/QLoRA introduces more variables to tune. Namely we now have <code>r</code> (i.e. rank), <code>alpha</code>, and <code>modules</code>. This is in addition to our usual training parameters <code>learning rate</code>, <code>epochs</code> and <code>batch_size</code>. Here is a strategy to tune everything:</p>
+<ul>
+<li>First pick modules. If possible using all modules will yield best results: <br>
+<code>target_modules = ["q_proj", "k_proj", "v_proj", "down_proj","up_proj","o_proj","gate_proj"]</code>.</li>
+<li>Next pick a learning rate. This will be the learning rate of your model's head. Using <code>2e-4</code> or <code>2e-5</code> is a good choice. And using <code>full batch size = 8</code> is good (i.e. <code>bs per gpu</code> times <code>number of GPUs</code>). Use gradient accumulation, gradient checkpointing, or multiple GPU to achieve this <code>batch size</code>. (Note when using <code>model parallelism</code> with HuggingFace trainer then <code>per_device_train_batch_size</code> is actually the <code>full batch size</code> not per device. Also note gradient checkpointing didn't seem to work correctly with HuggingFace trainer).</li>
+<li>Next start with <code>r=16</code> and try different alphas. The parameter <code>alpha</code> determines the <code>learning rate of the backbone = alpha/rank * head_LR</code>. Do <code>alpha = 2, 4, 8, 16, 32, 64</code>. Train for 1 epoch (linear schedule with warmup). We now have <code>r=16</code> and corresponding best alpha.</li>
+<li>Keep the alpha we discovered fixed and try different ranks. Above if we used <code>LR=2e-4</code> then we will find <code>a=4</code> to be optimal. So now we try <code>r=4,a=4</code>, <code>r=8,a=4</code>, <code>r=16,a=4</code>, <code>r=32,a=4</code>, <code>r=64,a=4</code> etc (In this comp once we find optimal <code>alpha</code> for one rank, it is also the optimal <code>alpha</code> for all ranks when keeping <code>LR</code> (learning rate) the same).</li>
+<li>We will generally find there is a specific <code>rank r</code> which bisects performance. In this comp <code>rank&lt;16</code> performs poorly and <code>rank&gt;=16</code> performs well. (Increasing above <code>r=16</code> will generally yield slight improvement. For me using <code>r=1024</code> gave <code>+0.002</code> boost vs. <code>r=16</code>).</li>
+</ul>
+<p>(FYI, if we use <code>LR=2e-4</code> 1 epoch linear schedule with warmup, then <code>a=4</code> is best alpha for all rank. If we use <code>LR=2e-5</code>, then <code>a=192</code> is best alpha for all rank. If we use <code>LR=6e-5</code>, then <code>a=64</code> is best alpha for all rank).</p>
+<h1>Training with Multiple GPU</h1>
+<p>Training large LLM using multiple GPU helps with memory and speed. In this competition, I used <code>Nvidia 8xV100 32GB GPUs</code> and sometimes used <code>Nvidia 4xA100 80GB GPUs</code>. Thank you Nvidia for compute resources.</p>
+<p>We need to be aware that there are (at least) three ways to parallelize training LLM with multiple GPU. Search for blogs on these topics to learn more. We can use</p>
+<ul>
+<li>data parallelism (each GPU has a copy of LLM and batches are processed in parallel)</li>
+<li>model parallelism (LLM is split over GPUs and batches are processed sequentially)</li>
+<li>hybrid parallelism (LLM is split over GPUs and batches are processed in parallel)</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Aug-2024/parallel-types-2.gif" alt=""></p>
+<p>HuggingFace trainer uses the first two. More advanced libraries like Axolotl/DeepSpeed can use the most efficient third one. These affect our training speed and memory requirements. Ideally during training we want all GPUs to be utilized 100%. So we can run <code>nvidia-smi</code> or <code>gpustat -i</code> and adjust our parallel code until we achieve the most efficient use of GPU.</p>
+<h1>How To Achieve Silver Medal with Public Notebook</h1>
+<p>Kaggle user <a href="https://www.kaggle.com/emiz6413" target="_blank">@emiz6413</a> published an amazing starter notebook <a href="https://www.kaggle.com/code/emiz6413/training-gemma-2-9b-4-bit-qlora-fine-tuning" target="_blank">train here</a> and <a href="https://www.kaggle.com/code/emiz6413/inference-gemma-2-9b-4-bit-qlor" target="_blank">infer here</a> which achieved <code>LB = 0.941</code>! Thank you Eisuke Mizutani for sharing! With just a few changes, we can boost this public notebook to <code>LB &lt; 0.900</code> <strong>Silver Medal!</strong></p>
+<ul>
+<li>Use TTA! Change <code>tta = False</code> to <code>tta = True</code> boosts <code>LB 0.941 =&gt; 0.926</code></li>
+<li>Change LoRA <code>r=16, a=32, freeze=16</code> to <code>r=64, a=16, freeze=0</code> boosts <code>LB 0.926 =&gt; 0.913</code></li>
+<li>Add modules: <code>["down_proj","up_proj","o_proj","gate_proj"]</code> and use <code>r=64, a=4</code> boost <code>LB 0.913 =&gt; 0.903</code></li>
+<li>Add external <code>33k dedup dataset</code> <a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973" target="_blank">here</a> and train with <code>100%</code> data boost <code>LB 0.903 =&gt; 0.899</code> <strong>Silver Medal!</strong></li>
+</ul>
+<h1>How To Almost Achieve Gold Medal (i.e. 16th place)</h1>
+<p>Starting from above, we can almost achieve gold medal (i.e. 16th place) with the following updates:</p>
+<ul>
+<li>Train with <code>max=2048</code> vs <code>max=1024</code> boost <code>LB 0.899 =&gt; 0.895</code></li>
+<li>Change LoRA <code>r=64, a=4</code> to <code>r=1024, a=4</code> boost <code>LB 0.895 =&gt; 0.894</code></li>
+<li>Use <code>LoRA train fp16 infer 8bit</code> instead of <code>QLoRA train 4bit infer 4bit</code> =&gt; 10% inference speedup!</li>
+<li>Infer with <code>max=3072</code> (and avoid timeout with 8bit quant above) boost <code>LB 0.894 =&gt; 0.893</code></li>
+<li>TTA with two different Gemma2 boost <code>LB 0.893 =&gt; 0.891</code></li>
+<li>Infer 3 heads (preference, model_a, model_b discard last two) boost <code>LB 0.891 =&gt; 0.890</code></li>
+<li>Truncate from left vs right boost <code>LB 0.890 =&gt; 0.885</code> <strong>Almost Gold Medal!</strong></li>
+</ul>
+<h1>Truncate Left instead of Truncate Right</h1>
+<p>One of the biggest boosts came from truncating long text from the beginning (i.e. left side) instead of the ending (i.e. right side):</p>
+<pre><code> ():
+
+    prompts = json.loads(prompts)
+    responses_a = json.loads(responses_a)
+    responses_b = json.loads(responses_b)
+
+    rounds = [
+        
+        +
+        +
+         i  ((prompts))
+    ]
+
+     k  ((rounds)):
+        text = .join(rounds[k:])
+         ( self.tokenizer(text)[] )&lt;: 
+
+     text
+</code></pre>
+<h1>LLama3.1-405B-as-a-Judge</h1>
+<p>I read research papers that said LLM-as-a-Judge performed similar to humans. So during the competition I tried many times to use <code>Llama3.1-405B</code> to create synthetic data to improve CV and LB score. I tried 3 ideas but none of them worked. :-(</p>
+<p>In each scenario below, I employed few shot learning. I would show Llama 10 to 20 examples of real train data then ask Llama to create something. I would provide a detailed system prompt in addition to user prompt:</p>
+<ul>
+<li>Show Llama3.1-405B fifteen examples and ask Llama3.1 to create new train data</li>
+<li>Show Llama3.1-405B ten examples and <code>prompt-responseA</code> from <code>lmsys-1M-dataset</code> and ask Llama to create <code>responseB</code> and <code>target</code></li>
+<li>Show Llama3.1-405B twenty examples and <code>prompt-responseA-responseB</code> pairs from <code>lmsys-1M-dataset</code> and ask Llama to create <code>target</code>. Local validation showed that Llama was achieving around <code>logloss = 0.95</code> but this data did not help.</li>
+</ul>
+<h1>Post Competition Experiments</h1>
+<p>I'm curious to learn what I missed to achieve Gold Medal. I will read other top solutions and try to incorporate new ideas into my final solution and make late submissions to LB. I will update this section if I discover anything that boosts my CV and LB score into Gold Medal zone!</p>
+<h1>UPDATE: Published Single Model Code</h1>
+<p>I published the code to reproduce my best single model of <code>CV 0.878</code> and <code>LB 0.888</code> (on original public LB data). There are three Jupyter notebooks</p>
+<ul>
+<li>Train (1 of 3) <a href="https://www.kaggle.com/code/cdeotte/16th-place-train-1-of-3" target="_blank">here</a></li>
+<li>Quantize (2 of 3) <a href="https://www.kaggle.com/code/cdeotte/16th-place-quantize-2-of-3" target="_blank">here</a></li>
+<li>Infer (3 of 3) <a href="https://www.kaggle.com/code/cdeotte/16th-place-infer-3-of-3" target="_blank">here</a></li>
+</ul>
+<p>The first two public notebooks (1 and 2) use settings to train with QLoRA and quantize to 4bit in order to work within Kaggle's 2xT4 16GB GPUs. If we do this, then we can only infer with max token 2048 and achieve LB 0.889. If we train these notebooks offline, we can change the settings to use LoRA and quantize to 8bit and infer max token 3072 and achieve LB 0.888.</p>

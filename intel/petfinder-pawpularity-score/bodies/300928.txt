@@ -1,0 +1,253 @@
+# https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300928
+
+Topic #300928: [Public 1st/ Private 5th] Solution Overview
+  Author: kaerururu
+  Posted: 2022-01-15 00:09:22.836000
+  Votes: 87  Comments: 12
+
+Thank you all teams who competed with us, all the people who participated in this competition, and the organizer that hosts such a great competition.
+
+I'm very sorry to shake down and missed 1st … !
+
+Our final notebooks are available.
+
+
+
+sub1 : https://www.kaggle.com/kaerunantoka/offense-final?scriptVersionId=85192352
+
+sub2 : https://www.kaggle.com/yururoi/stacking-pp-avg-pp-34-defensive-breed-group?scriptVersionId=84896876
+
+2nd stage training code : https://www.kaggle.com/yururoi/offense-stacking-pp-avg-pp-36-b285-b103
+
+
+Overview
+
+our solution has 3 steps.
+
+
+
+
+1st : Make a lot of single models. (our final submittion has 14 single models)
+
+
+2nd : Calculate similarity score to detect the same images, previous competiton's train+test images (about 70000 images) and this competition's images.
+
+
+Final :  On overthreshold data, We can use previous competitions meta data. So, we made models for each adoptionspeed as post proccessing.
+
+
+
+
+Single Models
+
+We use below models.
+
+
+
+All models are trained with Only Images. (Without meta data!)
+
+Cut long side to make the aspect ratio fixed in Dataset class.
+
+
+
+
+
+Model
+Loss func
+CV
+LB (if any)
+
+
+
+
+swin_large_patch4_window12_384
+BCE
+17.484603
+18.02737
+
+
+swin_large_patch4_window12_384
+BCE
+17.3944997416399
+-
+
+
+swin_large_patch4_window12_384
+BCE
+17.7691509886505
+17.98811
+
+
+swin_large_patch4_window7_224
+BCE
+17.7937685311947
+17.97379
+
+
+swin_large_patch4_window7_224
+BCE
+17.7916477565051
+17.94652
+
+
+swin_large_patch4_window7_224
+BCE
+17.458288
+-
+
+
+swin_large_patch4_window7_224
+BCE
+17.5616612122726
+17.96412
+
+
+swin_large_patch4_window7_224
+BCE
+17.6927744617933
+17.98374
+
+
+swin_large_patch4_window7_224
+BCE
+17.52656
+17.90651
+
+
+vit_base_r50_s16_384
+BCE
+17.9787132114343
+-
+
+
+vit_large_r50_s32_384
+BCE
+17.705468
+-
+
+
+densenet121
+MSE
+18.811589
+-
+
+
+tf_efficientnet_b0_ns
+MSE
+18.1307282713156
+-
+
+
+resnext101_32x8d
+BCE
+18.4265347215127
+-
+
+
+
+
+Validation Strategy
+
+We used below 2 method
+
+
+
+
+GroupKfold … Add id to the same images, this id is used as group.
+
+
+StratifiedKfold … Drop the same images, and split fold.
+
+
+DataAugmentation
+
+CFG.get_transforms = {
+        'train' : A.Compose([
+            A.OneOf([
+                A.RandomResizedCrop(CFG.IMG_SIZE, CFG.IMG_SIZE, p=0.3, scale=(0.85, 0.95)),
+                A.Resize(CFG.IMG_SIZE, CFG.IMG_SIZE, p=0.4),
+                A.Compose([
+                    A.Resize(int(CFG.IMG_SIZE * 1.5), int(CFG.IMG_SIZE * 1.5), p=1.0),
+                    A.CenterCrop(p=1.0, height=CFG.IMG_SIZE, width=CFG.IMG_SIZE),
+                ], p=0.3),
+            ], p=1.0),
+            A.HorizontalFlip(p=0.5),
+            A.VerticalFlip(p=0.5),
+            A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0,),
+        ], p=1.0),
+        'valid' : A.Compose([
+            A.Resize(CFG.IMG_SIZE, CFG.IMG_SIZE, p=1),
+            A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0,),
+        ], p=1.0),    
+    }
+
+
+Detect similar (maybe the same) image
+
+
+
+Feature Extractor : EfficientNetB0
+
+Calculate cosine similarity
+
+
+Stacking
+
+
+
+Model … BayesianRidge
+
+fold … 4fold
+
+
+Post Processing
+
+
+
+Model … 5 BayesianRidge Models for each AdoptionSpeed (0~4)
+
+fold … 4fold
+
+Feature … oof, Age, Breed, TextLength, and so on.
+
+
+What didn't work
+
+
+
+Use Metadata
+
+Cropped images with Yolo v5
+
+Data augmentations on CNN models
+
+Image stats features
+
+Comments:
+├─ treeleaves30760 (2023-05-24 14:59:13.543000) [+3]
+│  Thank you for sharing, I have benefited a lot
+├─ Mongrel Jedi (2022-01-21 02:21:25.370000) [+1]
+│  Congratulations on your 5th place, @kaerunantoka! Great to see you joining our competition again!
+│  
+│  Thank you for your brilliant work, creativity and skills. We will get in touch with you to explore...
+├─ CPMP (2022-01-15 21:20:15.307000) [+1]
+│  Wow, well done! Very thorough solution.
+  ├─ kaerururu (2022-02-02 13:51:20.087000) [+0]
+  │  I'm grad to receive comment from legend kaggler as you.
+  │  I always learn from your solution and discussion comment !!
+├─ Takashi Tamura (2022-01-15 00:29:36.427000) [+1]
+│  Congrats on 5th finish! Thanks for sharing. I will read your solution many times to understand the ideas. お疲れ様でした！
+  ├─ kaerururu (2022-01-15 00:35:34.233000) [+1]
+  │  Thank you for comment! お疲れ様でした！
+├─ Gooneten (2022-01-15 16:37:40.250000) [+0]
+│  Congrats!
+├─ Charlie Craine (2022-01-15 13:30:52.103000) [+0]
+│  @kaerunantoka sorry for the shakedown but still incredibly impressive work. Congrats!
+├─ Niek van der Zwaag (2022-01-15 08:35:34.267000) [+0]
+│  Congrats on 5th, amazing work! 🙌
+├─ liuze (2022-01-15 03:24:33.047000) [+0]
+│  crongratulations, it's pity to shake down
+├─ AIFahim (2022-01-15 00:13:52.753000) [+0]
+│  Amazing work. Congratulation!
+  ├─ kaerururu (2022-01-15 00:35:48.750000) [+0]
+  │  Thank you!

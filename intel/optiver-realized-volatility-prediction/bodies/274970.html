@@ -1,0 +1,163 @@
+<p><em>2022-01-11 Updated the title.</em></p>
+<p>First of all, I would like to say a big thank you to Optiver and Kaggle for organizing a very interesting competition. I have never analyzed financial data before, but thanks to the very helpful tutorial notebook, I was able to fully immerse myself in the competition.</p>
+<p>I don't know where I rank on the final leaderboard, but the points of my public 2nd place solution are as follows:</p>
+<ul>
+<li>Time-series cross-validation by reverse engineering of time-id order</li>
+<li>Nearest neighbor aggregation features (boost from 0.21 to 0.19)</li>
+<li>Blend of LightGBM, MLP, and MoA’s 1D-CNN</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/nyanp/optiver-realized-volatility-prediction/master/img/pipeline.png" alt=""></p>
+<p>You can also see my notebook here:<br>
+<a href="https://www.kaggle.com/nyanpn/public-2nd-place-solution" target="_blank">https://www.kaggle.com/nyanpn/public-2nd-place-solution</a></p>
+<p>Now, I'd like to introduce the detailed solution.</p>
+<h2>Reverse engineering of time-id order</h2>
+<p>The prices in the competition data are normalized, but as someone pointed out in the discussion, you can use "tick size" to recover the real prices before normalization.<br>
+Furthermore, by compressing the time-id x stock-id price matrix to one dimension using t-SNE, I was able to recover the order of the time-id with sufficient accuracy.</p>
+<pre><code>import glob
+
+import numpy as np
+import pandas as pd
+from joblib import Parallel, delayed
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import minmax_scale
+
+
+def calc_price_from_tick(df):
+    tick = sorted(np.diff(sorted(np.unique(df.values.flatten()))))[0]
+    return 0.01 / tick
+
+
+def calc_prices(r):
+    df = pd.read_parquet(r.book_path,
+                         columns=[
+                             'time_id',
+                             'ask_price1',
+                             'ask_price2',
+                             'bid_price1',
+                             'bid_price2'
+                         ])
+    df = df.groupby('time_id') \
+        .apply(calc_price_from_tick).to_frame('price').reset_index()
+    df['stock_id'] = r.stock_id
+    return df
+
+
+def reconstruct_time_id_order():
+    paths = glob.glob('/kaggle/input/optiver-realized-volatility-prediction/book_train.parquet/**/*.parquet')
+
+    df_files = pd.DataFrame(
+        {'book_path': paths}) \
+        .eval('stock_id = book_path.str.extract("stock_id=(\d+)").astype("int")',
+              engine='python')
+
+    # build price matrix using tick-size
+    df_prices = pd.concat(
+        Parallel(n_jobs=4)(
+            delayed(calc_prices)(r) for _, r in df_files.iterrows()
+        )
+    )
+    df_prices = df_prices.pivot('time_id', 'stock_id', 'price')
+
+    # t-SNE to recovering time-id order
+    clf = TSNE(
+        n_components=1,
+        perplexity=400,
+        random_state=0,
+        n_iter=2000
+    )
+    compressed = clf.fit_transform(
+        pd.DataFrame(minmax_scale(df_prices.fillna(df_prices.mean())))
+    )
+
+    order = np.argsort(compressed[:, 0])
+    ordered = df_prices.reindex(order).reset_index(drop=True)
+
+    # correct direction of time-id order using known stock (id61 = AMZN)
+    if ordered[61].iloc[0] &gt; ordered[61].iloc[-1]:
+        ordered = ordered.reindex(ordered.index[::-1])\
+            .reset_index(drop=True)
+
+    return ordered[['time_id']]
+</code></pre>
+<p>The correctness of the recovery of the time-id order for the training data can be easily verified by comparing it with the real market data. By doing so, we know that the training data is for the period between 2020/1/1~2021/3/31.</p>
+<p><img src="https://raw.githubusercontent.com/nyanp/optiver-realized-volatility-prediction/master/img/tsne%20result.bmp" alt=""><br>
+Left: Stock price restored by t-SNE  Right: Actual stock price retrieved by yfinance (2020-01-01~2021-03-31)</p>
+<p>On the other hand, for the test data, I did not use the time-id information directly in the features and models because there is no guarantee that t-SNE will be able to sort the time-id order correctly. However, even if it cannot be used directly for features, the order of the time-id can be used in various ways.</p>
+<ul>
+<li><strong>Time series cross-validation</strong>. Now that we know the correct order of the timestamps, we can construct the validation sets as if they were normal time-series data.</li>
+<li><strong>Detection of covariate shifts</strong>. Using methods such as adversarial validation enables us to find features that change over time.</li>
+<li><strong>Data exclusion</strong>. I didn't do this because it didn't work for me, but we can exclude periods of specific market events from our data, for example, the stock market crash in early 2020.</li>
+</ul>
+<p>Time series CV was especially important. I used a 4-fold time-series CV, with 10% of<br>
+data used for validation for each fold. This allowed me to get a good enough (though not perfect) correlation between CV and LB throughout the competition.</p>
+<p><img src="https://raw.githubusercontent.com/nyanp/optiver-realized-volatility-prediction/master/img/cvlb.bmp" alt=""></p>
+<h2>How is the data being generated?</h2>
+<p>By the way, between 2020/1/1~2021/3/31, the stock market was open for 443 days, and there were 3833 time-ids during that period, which means that about 8.6 time-ids were recorded per day.</p>
+<p>If Optiver excludes (for some reason, perhaps it's hard to predict) the first and last hour of the time that the stock market is open, then the time from 10:30~15:00 can be used for competition data. If they divided this time period into 30-minute intervals, up to 9 time-ids will be recorded per day. </p>
+<p>In reality, given the case of circuit breakers and early closing days, the number of time-ids they can use for the data should be a little less than 9 per day. It's just a guess, but I figured this is how the data is generated.</p>
+<p><img src="https://raw.githubusercontent.com/nyanp/optiver-realized-volatility-prediction/master/img/timeline.png" alt=""></p>
+<h2>Feature engineering</h2>
+<p>In this competition to predict the next 10 minutes of realized volatility (RV) from the previous 10 minutes of data, the most important feature would obviously be the RV of the previous 10 minutes.</p>
+<p>However, if we consider how the data was generated, just 10 minutes after the target computation period for a time-id, the training data for the next time-id starts. This means that if the order of the time-id can be fully recovered, we can expect the RV at the next time-id to be a very powerful feature.</p>
+<p>If we generalize further, we can improve the prediction accuracy by using not only the next time-id, but also the information of time-ids that are "similar" in some distance metric. For example, the RV of the same stock when the market had similar price, volatility, and trading volume would be useful for predicting the RV at a certain time-id.</p>
+<p>So, I used NearestNeighbor with various distance metrics to find the similar N time-ids and calculate the average of features like RV and stock size (N=2,3,5,10,20,40).</p>
+<p>In addition to the time-id, I also calculated the aggregation between similar stock-ids. Furthermore, by combining these ideas, I calculated features such as "the average tau of 20 similar stocks with similar volatility in 5 closest time-ids".</p>
+<p><img src="https://raw.githubusercontent.com/nyanp/optiver-realized-volatility-prediction/master/img/nn%20feature.png" alt=""></p>
+<pre><code>target_feature = 'book.log_return1.realized_volatility'
+n_max = 40
+
+# make neighbors
+pivot = df.pivot('time_id', 'stock_id', 'price')
+pivot = pivot.fillna(pivot.mean())
+pivot = pd.DataFrame(minmax_scale(pivot))
+
+nn = NearestNeighbors(n_neighbors=n_max, p=1)
+nn.fit(pivot)
+neighbors = nn.kneighbors(pivot)
+
+# aggregate
+
+def make_nn_feature(df, neighbors, f_col, n=5, agg=np.mean, postfix=''):
+    pivot_aggs = pd.DataFrame(agg(neighbors[1:n,:,:], axis=0), 
+                              columns=feature_pivot.columns, 
+                              index=feature_pivot.index)
+    dst = pivot_aggs.unstack().reset_index()
+    dst.columns = ['stock_id', 'time_id', f'{f_col}_cluster{n}{postfix}_{agg.__name__}']
+    return dst
+
+feature_pivot = df.pivot('time_id', 'stock_id', target_feature)
+feature_pivot = feature_pivot.fillna(feature_pivot.mean())
+
+neighbor_features = np.zeros((n_max, *feature_pivot.shape))
+
+for i in range(n):
+    neighbor_features[i, :, :] += feature_pivot.values[neighbors[:, i], :]
+
+for n in [2, 3, 5, 10, 20, 40]:
+    dst = make_nn_feature(df, neighbors, feature_pivot, n)
+    df = pd.merge(df, dst, on=['stock_id', 'time_id'], how='left')
+</code></pre>
+<p>I created about 600 features in total, 360 of which were Nearest Neighbor features, and most of my score improvement was based on these NN features.</p>
+<p>I don't think we can use future information in a real Optiver’s scenario, but the idea of using Nearest Neighbor to aggregate nearby features can probably be used in a real model.</p>
+<h2>Feature processing</h2>
+<p>Now that we know the order of the time-id, we can detect features that are changing over time. By performing adversarial validation, I noticed that the features aggregated from <code>trade.order_count</code> and <code>book.total_volume</code> changed remarkably over time. Therefore, instead of using their raw features, I converted these features into ranks within the same time-id.</p>
+<p>I also applied <code>np.log1p</code> to features that have large skew, as they may degrade the predictions if large outliers come during the 2nd stage.</p>
+<p>These have little improvement on the LB scores, but I believe they help to reduce the risk of shakedown in private LB.</p>
+<h2>Modeling</h2>
+<p>I used three simple blends for prediction: LightGBM, 1D-CNN, and MLP. The 1D-CNN is a simplified version of the architecture used in MoA 2nd place solution. (This CNN worked surprisingly well in both the recent MLB and Optiver competition.)</p>
+<p><img src="https://raw.githubusercontent.com/nyanp/optiver-realized-volatility-prediction/master/img/1d%20cnn.png" alt=""><br>
+1D-CNN architecture</p>
+<p>I did not use the pretrained model because I wanted to use the test data for feature calculation, thus all the model training was done within a single notebook. My NN model was a bit unstable in training, so I trained 10 models with different seeds and cherry-picked the top 5 models with the best validation scores for prediction (oops, I forgot to use <a href="https://arxiv.org/abs/2109.08203" target="_blank">seed=3047</a> :) ).</p>
+<h2>What didn’t work</h2>
+<ul>
+<li>a lot of domain-specific features like beta coefficient</li>
+<li>TabNet (not bad, but too long training time)</li>
+<li>training NN on residual (target - book.log_return.realized_volatility)</li>
+<li>dimensionality reduction features</li>
+</ul>
+<h2>What I thought might work, but didn't have time for</h2>
+<ul>
+<li>300-sec model (split the training data into the first and second halves, and create a model that predicts the RV of the second half from the first half and use it as meta-feature or data augmentation)</li>
+<li>Ensembles with LSTMs and RNNs that do not create features</li>
+<li>Auto-encoder</li>
+</ul>

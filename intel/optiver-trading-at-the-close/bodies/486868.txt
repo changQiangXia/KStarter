@@ -1,0 +1,212 @@
+# https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486868
+
+Topic #486868: 9th Place Solution
+  Author: ADAM.
+  Posted: 2024-03-26 16:42:13.937000
+  Votes: 66  Comments: 36
+
+A big thanks to Optiver and Kaggle for hosting this competition. This competition has a really stable correlation between local cv and lb. 
+
+Actually I entered this game a little late, about 30 days before its ends and I am not good at NN, so I only focus on Gradient Boosting tree models and its feature engineering. I noticed there are many top solutions using NN and it is really a good opportunity for me to learn NN.
+
+Model
+
+
+
+Xgboost with 3 different seeds and same 157 features
+
+
+There is not much difference between Xgboost and Lightgbm in lb score. But GPU Xgboost trains faster than GPU Lightgbm.
+
+
+Feature Engineering
+
+
+
+Firstly, create some "basic features" based on raw features(i.e. add, subtract, multiply, divide from raw features). Also, create some median-scaled raw size features.
+
+
+size_col = [,,,]
+ _  size_col:
+    train[] = train[_] / train.groupby([])[_].transform()
+
+
+
+
+Secondly, do further feature engineering/aggregation on raw features and "basic features"
+
+
+imb1, imb2 features
+
+market_urgency feateures I copied from public notebook
+
+diff features on different time window
+
+shift features on different time window
+
+rolling_mean/std features on different time window
+
+using history wap to calculate target of 6 second before. Then, do some rolling_mean 
+
+some global date_id+seconds weighted features
+
+MACD feateures
+
+target rolliong_mean over stock_id + seconds_in_bucket
+
+
+Feature Selection
+
+
+
+Because we have limit on inference time and memory, it's essential to do some feature selection. I add features group by group and check whether the local cv improves. Each feature group usually have 10 - 30 features. If one groups make local cv improve, I add feature one by one insides this feature group and usually kept only 5-10 most effective features.
+
+I keep 157 features in my final model.
+
+
+Post-processing:
+
+
+
+Subtract weighted sum. From the definition of target, we can know weighted sum of target for all stocks should be zero.
+
+
+test_df[] = lgb_predictions
+test_df[] = test_df[] * test_df[]
+test_df[] = test_df.groupby([,])[].transform() / test_df.groupby([,])[].transform()
+test_df[] = test_df[] - test_df[]
+
+
+Others:
+
+
+
+xgb mae objective
+
+xgb sample_weight 1.5 weight for latest 45 days data 
+
+Online training. I only retrain model twice. one is N day (N is the start date of private lb), the other is N+30 day.
+
+polars and reduce_mem_usage function helps a lot
+
+
+Codes
+
+train: https://github.com/ChunhanLi/9th-kaggle-optiver-trading-close
+inference: https://www.kaggle.com/code/hookman/9th-submission
+
+Comments:
+├─ Demon_1023 (2024-06-05 09:51:10.727000) [+1]
+│  你好，请问特征生成时shift是不是写错了，-mock_period好像是用到未来信息了
+│  
+│  target mock系列
+│  
+│  for mock_period in :
+│  
+│      df = df.([
+│          pl.().(-mock_period).(,).(f)
+│      ])
+│      df = df.([
+│          (pl.(f)/pl.()).()
+│      ])
+  ├─ ADAM. (2024-06-05 10:32:15.920000) [+1]
+  │  应该不会出问题的。这里我仔细核对过的，具体细节确实有些忘了。 
+  │  
+  │  大致看了下是这个逻辑 
+  │  
+  │  比如10s 20s 30s
+  │  
+  │  shift(-3) -&gt; 30s的wap移到10s位置，做一些计算得到特征A。
+  │  
+  │  我后面要平移回去的
+  │  
+  │  pl.col("target_mock").shift(mock_period).over("stock_id","date_id").alias(f"targe...
+    ├─ Demon_1023 (2024-06-05 11:28:48.197000) [+1]
+    │  感谢你的回复，的确target_mock在你的代码里shift回去会得到target_mock_shift{mock_period}特征，他没有泄露信息。
+    │  pl.col("target_mock").shift(mock_period).over("stock_id","date_id").alias(f"target_mock_shift{mock_period}")
+    │  不过在构建targe...
+    ├─ ADAM. (2024-06-05 15:48:30.420000) [+2]
+    │  wap_shift_n{mock_period}和target_single这些特征没有加入我的模型的。可以看下add_cols变量，只有这里面的变量，我才会加入模型。
+├─ Ethan (2024-03-27 09:49:06.780000) [+1]
+│  Congrats! Let‘s look forward next new GM.
+  ├─ ADAM. (2024-03-27 15:38:49.873000) [+0]
+  │  Thanks. haha
+├─ WindClimber (2024-03-27 01:05:33.217000) [+1]
+│  Thank you for sharing! In my case, GPU XGboost trains much faster than GPU LightGBM as well.
+├─ Funny (2024-03-26 18:46:35.800000) [+1]
+│  Thanks for sharing. Do you have insight how important "1.5 weight for latest 45 days data" is? I tried to put weight for lgb model but did not succeeded. I think it might be one of the keys providi...
+  ├─ ADAM. (2024-03-27 02:22:28.847000) [+0]
+  │  As far as I remembered, setting sample weight can improve round 0.001 in my local cv.
+├─ hoo yuet (2024-03-27 03:20:09.520000) [+2]
+│  观摩学习！对于新手很大帮助
+├─ Zeyangh (2025-06-18 05:23:06.267000) [+0]
+│  😭跟着大佬就是能学到真东西
+├─ Naseem Ali (2024-04-26 21:31:46.473000) [+0]
+│  Can I ask you how you handle NaN value @hookman
+  ├─ ADAM. (2024-04-27 00:28:22.283000) [+0]
+  │  fillna(-9e10)
+├─ MengMai (2024-04-17 07:42:13.543000) [+0]
+│  请问最开始的权重
+│  
+│  
+│    
+│  weight_df['weight'] =  [
+│        0.004, 0.001, 0.002, 0.006, 0.004, 0.004, 0.002, 0.006, 0.006, 0.002, 0.002, 0.008,
+│        0.006, 0.002, 0.008, 0.006, 0.002, 0.006, 0.004, 0.002, 0.004,...
+  ├─ ADAM. (2024-04-17 07:54:03.273000) [+0]
+  │  Check this discussion.
+├─ MeiYuxin (2024-04-14 09:19:03.373000) [+0]
+│  Thanks for sharing。I have a question. Why do you build cv using days&gt;390。
+  ├─ ADAM. (2024-04-14 09:42:51.927000) [+0]
+  │  Actually, I forgot it. Maybe some public discussion or notebook use this and I want to compare with them. I think It doesn't matter you use 45/60/90 as cv. It is all aligned with lb.
+    ├─ MeiYuxin (2024-04-16 14:29:25.780000) [+0]
+    │  but I get result this:
+    │  15个特征时：
+    │  验证得分：5.89235
+    │  公榜得分：5.4095
+    │  
+    │  66个特征时：
+    │  验证得分：5.90648
+    │  调参后验证得分：5.89542
+    │  公榜得分：5.3968
+    ├─ MeiYuxin (2024-04-16 14:30:37.267000) [+0]
+    │  是因为进步或者退步比较小而产生的随机现象吗，该如何判断是不是和公榜对齐的呢
+    ├─ MeiYuxin (2024-04-16 14:33:12.473000) [+0]
+    │  我做这个比赛一个月 过程中很难受 我也是用了后90天的数据做验证但是结果和上面的一样，导致我怀疑是不是正确的。最后因为没时间加速推 两个提交的推理都超时 了😭
+    ├─ ADAM. (2024-04-16 14:42:53.283000) [+0]
+    │  感觉像有bug 5.4095-&gt;5.3968 0.01的提升再这个比赛应该是比较大的，感觉不是随机现象吧。
+├─ Felix Levesque (2024-04-09 20:14:28.300000) [+0]
+│  Any idea why your solution running on my computer crashes? It seems to work fine if I do something like :
+│  train = train[train["date_id"] &gt;= 350]
+│  to reduce the dataset size, but if not it crashes...
+  ├─ ADAM. (2024-04-10 01:50:50.990000) [+0]
+  │  I have 128GB RAM so I didn't spend time reducing memory in training phase. Maybe you can use reduce_mem_usage function on the featured dataframe before going into Xgboost. Besides, you can also cas...
+├─ Hina Ismail (2024-04-04 08:06:17.670000) [+0]
+│  Nice work sir
+├─ Naseem Ali (2024-04-02 22:47:03.110000) [+0]
+│  Can u explain why you do this step " # 阶段1
+│          (pl.col('ask_size') * pl.col('ask_price')).alias("ask_money"),
+│          (pl.col('bid_size') * pl.col('bid_price')).alias("bid_money"),
+│          (pl....
+  ├─ ADAM. (2024-04-10 01:53:29.043000) [+1]
+  │  I want to create some simple and useful features according to cross validation and business knowledge.
+├─ Yisak Birhanu Bule (2024-03-31 16:18:29.197000) [+0]
+│  thank you for your summary of solution, as well as code publication
+├─ achaosss (2024-03-31 07:30:57.333000) [+0]
+│  I still cannot understand "Subtract weighted sum" .Could you please provide more explanations?
+  ├─ ADAM. (2024-04-10 01:54:18.897000) [+1]
+  │  Check the definition of target. Weighted sum of target for all stocks is 0.
+    ├─ achaosss (2024-12-03 08:22:53.470000) [+0]
+    │  Thank you so much, I learn a lot from your code.
+├─ Naseem Ali (2024-03-27 23:17:14.653000) [+0]
+│  Are research papers published for this competition, especially for the leaders? I want to read more about the subject
+  ├─ Zi (2024-04-05 04:03:12.257000) [+0]
+  │  reading the code is like so much more efficient
+├─ [deleted] (2024-07-14 03:39:52.817000) [+0]
+│  [deleted]
+├─ [deleted] (2024-03-28 03:34:24.320000) [+0]
+│  [deleted]
+├─ Onelux (2024-03-26 19:04:02.287000) [+1]
+│  Congrats! and Thanks for sharing.
+├─ max riffi (2024-09-13 17:31:29.010000) [+0]
+│  Thanks for sharing

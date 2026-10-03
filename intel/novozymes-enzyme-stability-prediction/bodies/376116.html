@@ -1,0 +1,327 @@
+<p>Wow, big shakedown. It hurts! Congratulations to all teams that did well on private leaderboard. Impressive!</p>
+<p>I spent a lot of time on this competition, so I will share my approach. I did have an unselected submission that would have won 1st place private so I believe there are things to learn from my solution.</p>
+<h1>Solution Summary</h1>
+<p>Like everyone, I struggled to create a local validation. Since the test data was one enzyme, I decided to use public test as my validation. So my strategy was as follows:</p>
+<ul>
+<li>Generate as many strong single model/features as possible</li>
+<li>Probe LB to acquire the public test labels via mathematical optimization</li>
+<li>Train one model using my single models as features and public test labels as targets</li>
+</ul>
+<p>This approach worked well. But i had no way to know which trained model was best. For my final two submission, I chose to use (1) hill climbing with positive weights and (2) hill climbing with positive and negative weights because i felt these two model will not overfit and would do well on private. Their public LBs were 609 and 645 respectively which seemed good. </p>
+<p>During the competition, I also trained (3) a random forest with sklearn default settings but i suspected it was overfitting because RF allows for non-linearities and interactions. In retrospect, the random forest was the best and achieved private LB 546 first place. </p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2022/best.png" alt=""></p>
+<p>Another reason I didn't choose RF was because its public LB was 0.829 which also suggested overfitting. After the competition ended, i changed the random forest hyperparameters to <code>depth=4</code> and achieved public LB 655 and private LB 558! 🔥</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2022/best2.png" alt=""></p>
+<h1>Probe LB</h1>
+<p>Since Kaggle LB returns an error if all of public prediction is zeros (and does not count against submission quota), we can determine the exact public/private split using only 2 quota submissions. We slowly move where our non-zero predictions are.</p>
+<blockquote>
+  <p>Public LB data is exactly <code>df.iloc[:541]</code> and <code>df.iloc[1757:]</code> and <code>df.iloc[1169]</code>. Public LB is residuals 16 thru 123 inclusive plus wildtype and private LB is residuals 124 thru 221 inclusive. So the public LB is the first half of residuals while the private LB is the second half of the residuals.</p>
+</blockquote>
+<p>Once we know the public split exactly, it is a mathematical optimization problem to maximize public LB. Download all 350 public submission from all versions of public notebooks. Then find <code>X</code> such that the correlation of <code>X</code> with each of the 350 submission equals their LB score. Next create 5 new submission each day where <code>submission.csv</code> values are chosen to acquire the most information where your optimization is least confident. I ran my optimization algorithm 24 hours a day for 3 months, each day i uploaded my new 5 submissions and any new public notebooks to my optimization algorithm. My optimization algorithm achieved public LB 865 </p>
+<h1>Build Single Model/Features</h1>
+<p>While my optimization algorithm was running, I set out to discover new features and/or single models. I searched the internet, current research, etc. For each row of test data, compute feature (or infer model) and submit and observe LB score.</p>
+<h1>The Best Feature</h1>
+<p>The strongest feature on private LB was RSASA. No public notebooks nor discussions mentioned it. This is <strong>relative</strong> solvent accessible surface area. Robert posted a notebook <a href="https://www.kaggle.com/code/roberthatch/nesp-alphafold-getarea-exploration" target="_blank">here</a> which submits SASA to LB and achieves public LB 407 and private LB 466. (Also RopeOnMars published SASA <a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">here</a>). </p>
+<p>SASA is the surface area of an amino acid exposed to the outside (i.e. the solvent) of the enzyme. RSASA is the relative surface area (i.e. 50%, 75% etc of amino acid is exposed). This single feature (its not even a model, its just a single amino acid property but does require PDB structure) achieves public LB 442 and private LB 496. </p>
+<h1>Simplest 3rd Place Gold Medal Solution</h1>
+<p>The simplest gold medal solution is to blend 50% Rosetta energy scores with 50% RSASA (25% wildtype RSASA and 25% mutation RSASA). This simple model achieves public LB 556 private LB 542! <strong>3rd Place</strong> 🔥</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2022/best3.png" alt=""></p>
+<h1>Strong Single Models/Features (Public LB 300+)</h1>
+<p>Below is a list of all my single models and features which achieved LB 300+ on their own. Many of these were made public in notebooks and discussion. Note that the LB may be better than you expect. This is because i have corrected the <code>delete mutation</code> test rows as explained below.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Public LB</th>
+<th>Private LB</th>
+<th>links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Thermonet v2</td>
+<td>495</td>
+<td>460</td>
+<td><a href="https://www.kaggle.com/code/vslaykovsky/nesp-thermonet-v2" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Rosetta Energy</td>
+<td>471</td>
+<td>438</td>
+<td><a href="https://www.kaggle.com/code/shlomoron/nesp-relaxed-rosetta-scores" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>RASP</td>
+<td>454</td>
+<td>416</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/368270" target="_blank">link</a> <a href="https://www.kaggle.com/code/sgreiner/novo-esp-rasp-baseline" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>RSASA wt</td>
+<td>449</td>
+<td>484</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">link</a> <a href="https://folding.biofold.org/i-mutant+/index.html" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>RSASA mut</td>
+<td>428</td>
+<td>477</td>
+<td><a href="https://www.kaggle.com/code/homofaberus/novozymes-data-enrichement" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>SASA wt+mut</td>
+<td>420</td>
+<td>487</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>RMSD</td>
+<td>410</td>
+<td>350</td>
+<td><a href="https://www.kaggle.com/code/oxzplvifi/rmsd-from-molecular-dynamics" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>XGB v2</td>
+<td>408</td>
+<td>394</td>
+<td><a href="https://www.kaggle.com/code/cdeotte/xgboost-5000-mutations-200-pdb-files-lb-0-410" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>SASA wt</td>
+<td>407</td>
+<td>466</td>
+<td><a href="https://www.kaggle.com/code/roberthatch/nesp-alphafold-getarea-exploration" target="_blank">link</a> <a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>XGB v1</td>
+<td>397</td>
+<td>400</td>
+<td><a href="https://www.kaggle.com/code/cdeotte/xgboost-5000-mutations-200-pdb-files-lb-0-410" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>SA apolar</td>
+<td>395</td>
+<td>406</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Thermonet v1</td>
+<td>386</td>
+<td>428</td>
+<td><a href="https://www.kaggle.com/code/vslaykovsky/nesp-thermonet" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>SA sidechain</td>
+<td>377</td>
+<td>342</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>deepDDG</td>
+<td>364</td>
+<td>429</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354631" target="_blank">link</a> <a href="https://www.kaggle.com/code/hengck23/lb0-335-deepdgg-server-benchmark" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>DeMask score</td>
+<td>363</td>
+<td>340</td>
+<td><a href="https://demask.princeton.edu/query/" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>gemme</td>
+<td>352</td>
+<td>260</td>
+<td><a href="https://www.kaggle.com/code/geraseva/gemme/notebook" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>DeMask log2f var</td>
+<td>323</td>
+<td>259</td>
+<td><a href="https://demask.princeton.edu/about/" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>residue depth wt</td>
+<td>322</td>
+<td>326</td>
+<td><a href="https://www.kaggle.com/code/gehallak/nesp-3d-geometry-0-32-lb" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>residue depth mut</td>
+<td>320</td>
+<td>338</td>
+<td><a href="https://www.kaggle.com/code/gehallak/nesp-3d-geometry-0-32-lb" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>continuous Blosum62</td>
+<td>315</td>
+<td>207</td>
+<td><a href="https://www.kaggle.com/code/homofaberus/novozymes-data-enrichement" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>ESM finetune</td>
+<td>308</td>
+<td>352</td>
+<td><a href="https://www.kaggle.com/code/cdeotte/protein-bert-finetune-lb-0-20" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>SA backbone</td>
+<td>297</td>
+<td>420</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>pLDDT diff</td>
+<td>297</td>
+<td>287</td>
+<td><a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361816" target="_blank">link</a> <a href="https://www.kaggle.com/code/cdeotte/difference-features-lb-0-600" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>inps 3d</td>
+<td>293</td>
+<td>318</td>
+<td><a href="https://inpsmd.biocomp.unibo.it/inpsSuite/default/index3D" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>duet</td>
+<td>291</td>
+<td>406</td>
+<td><a href="https://www.kaggle.com/code/geraseva/duet-tool" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>pLDDT</td>
+<td>291</td>
+<td>209</td>
+<td><a href="https://www.kaggle.com/code/chinartist/fork-nesp-an-error-was-corrected" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>DeMask entropy</td>
+<td>285</td>
+<td>340</td>
+<td><a href="https://demask.princeton.edu/about/" target="_blank">link</a></td>
+</tr>
+</tbody>
+</table>
+<h1>Weak Single Models/Features (Public LB 200-300)</h1>
+<p>Below is a list of all my single models and features which achieved LB 200-300 on their own. Many of these were made public in notebooks and discussion. Note that the LB may be better than you expect. This is because i have corrected the <code>delete mutation</code> test rows as explained below.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Public LB</th>
+<th>Private LB</th>
+<th>links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ddgun seq</td>
+<td>281</td>
+<td>231</td>
+<td><a href="https://www.kaggle.com/code/homofaberus/novozymes-data-enrichement" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>sdm</td>
+<td>277</td>
+<td>328</td>
+<td><a href="https://www.kaggle.com/code/geraseva/sdm-tool" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>inps seq</td>
+<td>256</td>
+<td>244</td>
+<td><a href="https://inpsmd.biocomp.unibo.it/welcome/default/index" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>imut 3d</td>
+<td>246</td>
+<td>208</td>
+<td><a href="https://folding.biofold.org/i-mutant+/index.html" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>ESM entropy</td>
+<td>238</td>
+<td>134</td>
+<td><a href="https://www.kaggle.com/code/kaggleqrdl/esm-quick-start-lb237/comments#1981223" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>DeMask sub matrix</td>
+<td>236</td>
+<td>211</td>
+<td><a href="https://demask.princeton.edu/about/" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>ESM</td>
+<td>234</td>
+<td>107</td>
+<td><a href="https://www.kaggle.com/code/kaggleqrdl/esm-quick-start-lb237" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>dynamut</td>
+<td>226</td>
+<td>357</td>
+<td><a href="https://www.kaggle.com/code/geraseva/dynamut2" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>imut seq</td>
+<td>224</td>
+<td>191</td>
+<td><a href="https://folding.biofold.org/i-mutant+/index.html" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>mCSM</td>
+<td>214</td>
+<td>384</td>
+<td><a href="https://www.kaggle.com/code/geraseva/mcsmtool" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>ESM mut prob</td>
+<td>210</td>
+<td>065</td>
+<td><a href="https://www.kaggle.com/code/kaggleqrdl/esm-quick-start-lb237/comments#1981223" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>blosum 95</td>
+<td>203</td>
+<td>141</td>
+<td></td>
+</tr>
+<tr>
+<td>ddgun 3d</td>
+<td>199</td>
+<td>216</td>
+<td><a href="https://folding.biofold.org/ddgun/index.html" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>blosum 100</td>
+<td>197</td>
+<td>135</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>Meaningless Models/Features (Public LB 0-200)</h1>
+<p>I submitted a bunch of random submissions and was able to achieve LB 215 with pure randomness. Therefore I concluded that any model or feature with public LB less than 200 cannot be trusted on private LB. </p>
+<h1>Delete Mutation</h1>
+<p>The simplest way to predict <code>delete mutation</code> test rows is to predict the worst stability that occurs at that residual location. I learned this from Geraseva's notebooks and confirmed it works well.</p>
+<pre><code>test['min_pos'] = test.groupby('position').tm.transform('min')
+test.loc[test.seq_id.isin(DELETE),'tm'] =  test.loc[test.seq_id.isin(DELETE),'min_pos'] 
+</code></pre>
+<h1>Train Final Submission</h1>
+<p>Now we have 27 strong features and 14 weak features. All single features/models with LB 300+ I trusted to generalize to both public and private LB. All single features/models with LB 200-300 I partially trusted. And all single feaures/models with LB less than 200 I did not trust and I ignored. We train our final submission model using the public test labels from LB probe LB 865. We use features from the tables above.</p>
+<ul>
+<li>Random Forest trained with 27 strong features - Public LB 656 - Private LB 535 - <strong>5th Place</strong> 🔥</li>
+<li>Random Forest trained with 41 features - Public LB 655  - Private LB 558 - <strong>1st Place</strong> 🔥</li>
+<li>Hill Climb with 27 strong and pos and neg weights - Public 645 -  - Private LB 517 without bug <strong>227th place</strong></li>
+<li>Hill Climb with 27 strong and positive weights - Public 609 -  - Private LB 520 without bug <strong>198th place</strong></li>
+</ul>
+<p>Above illustrates the difficulty of model selection. Based only on public LB score, how can we tell which model generalizes the best to unseen data? Which will do best on private LB? My instincts chose hill climbing but apparently random forest modeled important feature interaction. Who knew??</p>
+<h1>Random Forest</h1>
+<p>To train random forest, first we normalize each single model/feature prediction with <code>pred = (pred - min) / std</code>. Then we normalize the LB 865 submission too. Then <code>x_train = np.zeros((1162,27))</code>. The shape of <code>x_train</code> are all the rows of public LB excluding the <code>delete mutation</code> and <code>wildtype row 1169</code>. We only fit our random forest to the <code>replace mutations</code>. Afterward we use the code above to predict the <code>delete mutation</code>. Below are total feature importance from the entire forest and below is a picture of one tree in the forest of 100 trees.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2022/f_imp.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2022/tree4.png" alt=""></p>
+<p>We can enlarge the image of tree above by right clicking and "open in new tab". We observe that many decisions in the tree are based on <code>SASA</code> and <code>RSASA</code>. Random forest learns to model interactions like "If amino acid has such and such SASA and Thermonet prediction is large, predict this". Or "If amino acid has such and such RSASA and  Rosetta energy is low, predict this" etc etc. </p>
+<p>Hill climbing has always been my favorite algorithm to create my final submission, but I will be more careful and open minded in the future…</p>
+<h1>UPDATE</h1>
+<p>I published my final solution <a href="https://www.kaggle.com/code/cdeotte/public-lb-1st-place-solution/notebook" target="_blank">here</a>. It shows the hill climbing with faulty preprocess that i selected. It shows how hill climbing could achieve private 0.525 with correct preprocess and it shows how random forest can achieve private 0.560. It also has a dataset containing my 41 features/models plus my LB 865 sub if others want to experiment.</p>
+<p>I did not share my LB probe code at this time because i want to use it to get a gold in a future competition. Once it succeeds, i will share the algorithm. </p>

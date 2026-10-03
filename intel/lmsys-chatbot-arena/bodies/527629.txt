@@ -1,0 +1,268 @@
+# https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629
+
+Topic #527629: 1st Place Solution ➡️ Distill is all you need🔥🔥🔥
+  Author: sayoulala
+  Posted: 2024-08-13 06:48:31.662000
+  Votes: 196  Comments: 67
+
+Introduction
+
+I am thrilled to have won first place in this competition, marking my first solo gold medal🏅.
+I would like to thank Kaggle and the organizers for hosting this competition.
+Despite the leakage issues that troubled many participants, I appreciate Kaggle's efforts to salvage the competition as much as possible. 
+In my view, the CV and LB in this competition were very consistent, making it a rare and excellent contest, especially in the current context of LLMs. 🔥
+Next, I will summarize my solution.
+
+Solution
+
+Dataset
+
+kaggle train data
+ut data(https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499756)
+33k data (https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973)
+
+Base models
+
+llama3 70b qwen2 72b gemma2-9b
+
+Base model architecture
+
+AutoModelForSequenceClassification
+lora(9b)
+qlora(llama3 and qwen2)
+all linear for lora 
+r=64,a=128
+max_len=1024
+epoch = 2
+global batch_size = 64 
+
+Post-pretrain
+
+To begin with, train one epoch on three models using the ut dataset.  （lr=1e-5）
+
+Get the logits distribution
+
+Load the weight from  Post-pretrain, split the dataset into 5 folds for training
+(eg:train➡️4/5 kaggle train data + 33k data,dev➡️1/5 kaggle train data) to train llama3 70b and qwen2 72b.
+Then infer the probability distribution of the training set.
+
+Distill to the 9b model with logits
+
+After obtaining the logits distribution, load the 9b model for fine-tuning and incorporate the distillation loss during the fine-tuning process. (at least three loss for trainning，lr=5e-5).
+
+Model ensemble
+
+Directly average the LoRA layers of the 5 folds.
+
+Get 8bit Model
+
+Quantize to 8-bit using GPTQ and use TTA (length 2000) during submission.
+
+CV/LB
+
+(Here, I will only provide my final results. There were too many experiments before, but these results are the most important.)
+
+
+
+qwen72b
+CV of 5 folds: 0.875, 0.881, 0.869, 0.880, 0.875
+
+llama3 70b
+CV of 5 folds: 0.874, 0.877, 0.877, 0.873, 0.873
+
+distill gemma 9b
+CV of 5 folds: 0.862, 0.876, 0.858, 0.872, 0.868
+
+merge lora and quantize to 8bit
+LB: 0.882 (With TTA 0.876) final PB:0.96898
+(In the final submission, I had one sub that also failed to run because I deleted another model that I had uploaded.)
+infer code: https://www.kaggle.com/code/sayoulala/v7-gemma-gptq?scriptVersionId=191029701
+train code:https://github.com/shyoulala/LMSYS_BlackPearl
+
+
+Summary
+
+In my solution, the most important aspect is distillation using larger models. There are also some other details that you can explore on your own if interested. I believe distillation is a very promising approach, especially in the current Kaggle competitions, where inference constraints are a limiting factor.
+
+A small recommendation
+
+BlackPearl also participated in this year's KDD Cup 2024 OAG-Challenge and swept all the championships in the track. The three challenges in this track include AQA, PST, and WhoIsWho-IND. In our solutions, we employed LLMs to tackle classification and vector recall problems, significantly outperforming traditional feature extraction and BERT-based approaches. We have also open-sourced our code, and we welcome you to star it (https://github.com/BlackPearl-Lab/KddCup-2024-OAG-Challenge-1st-Solutions).
+
+Comments:
+├─ Jason Dan (2024-11-23 05:41:16.947000) [+1]
+│  Your solution is really nice.
+├─ James Day (2024-08-13 11:51:42.133000) [+3]
+│  Congrats!
+│  
+│  Several questions:
+│  
+│  
+│  
+│  What loss function did you use during distillation? KL-divergence?
+│  
+│  What learning rate schedule(s) did you use? How much warmup?
+│  
+│  Did you experiment with any model ...
+  ├─ sayoulala (2024-08-13 15:08:34.383000) [+4]
+  │  1.KL loss  2.cosine schedule with  warm up 100 steps 3. No,just  linear averaging  😀
+├─ heng (2024-08-13 07:04:41.410000) [+4]
+│  Congratulations on your solo championship! I'm very proud to be your former teammate. 🎉
+├─ Chris Deotte (2024-08-13 11:56:12.510000) [+1]
+│  Awesome solution @sayoulala Congratulations on solo cash gold finish! Also congratulations on KDD Cup 2024 OAG!
+  ├─ Chris Deotte (2024-08-13 15:49:19.820000) [+1]
+  │  @sayoulala What software did you use to train your Qwen2-72B and Llama3-70B? (i.e. did it use hybrid parallelism?) Did you build a custom "LLM for sequence classification" or did you use "LLM for t...
+    ├─ sayoulala (2024-08-13 15:54:22.720000) [+6]
+    │  @cdeotte  A100 80G*8, zero2+dp, LLM for sequence classification, batch size=8, max length=1024  and qlora.
+    ├─ JamshaidSohail (2024-08-14 10:04:04.950000) [+0]
+    │  Hi @sayoulala. Thank you for sharing this. What is meant by zero2+dp ?
+├─ Nikhil Tumbde (2024-08-13 11:54:17.007000) [+1]
+│  Hi, thanks for sharing your approach.
+│  I am curious about "Post-pretrain". Can you explain the pre-training approach? Did you pretrain the models on some data before distillation and finetuning?
+  ├─ sayoulala (2024-08-13 15:12:36.630000) [+2]
+  │  Actually, it involves using some slightly inaccurate data for classification training. It's still a 3-class classification, specifically the ut dataset here.
+├─ william.wu (2024-08-13 07:29:30.087000) [+1]
+│  Congratulations, what's the hardware to finetune 70B models? How many A100?
+  ├─ sayoulala (2024-08-13 07:31:07.983000) [+5]
+  │  8*A100 80G qlora max_l=1024 b_size=8
+├─ Turbo (2024-08-13 07:14:37.843000) [+1]
+│  First of all, Congratulations for the solo top1.
+│  One question:
+│  
+│  
+│    
+│  After obtaining the logits distribution, load the 9b model for fine-tuning and incorporate the distillation loss during the fine-...
+  ├─ sayoulala (2024-08-13 07:16:17.023000) [+4]
+  │  I don't need to load my models during inference submission, as the test data doesn't require training. Maybe you can check out the principles of distillation; I remember it was covered in Hinton's ...
+    ├─ Turbo (2024-08-13 07:22:32.470000) [+0]
+    │  Thanks for your kind reply. I'll read the paper.
+├─ chuhac (2024-08-13 07:10:08.530000) [+1]
+│  Congratulations to you and BlackPearl Lab. I love your nice idea about distillation. Can see your A100 burning 🔥
+  ├─ sayoulala (2024-08-13 07:11:29.443000) [+1]
+  │  Haha,  that's true.
+├─ Varun Jagannath (2024-08-13 10:30:15.283000) [+2]
+│  Congratulations on your solo gold.
+│  Are you planning to publish training notebook ?
+  ├─ sayoulala (2024-08-13 15:14:46.027000) [+3]
+  │  The whole process is rather complex. My solution, to be honest, doesn’t involve complicated code logic. I will consider it. Thank you.
+├─ zhudong1949 (2024-08-13 10:15:09.557000) [+2]
+│  🎉Congratulations on the your great work! Can you share some high-quality code tutorials on LLM distillation practices?
+├─ ducnh279 (2024-08-13 08:22:36.727000) [+2]
+│  Congrats, your winning is impressive and convincing 💐 Thank for sharing new insights/techniques for making LLMs competitive in a competitive environment! 😄
+│  
+│  I thought about model distillation so mu...
+├─ Psi (2024-08-13 07:41:49.327000) [+2]
+│  Congrats!
+│  Im surprised this worked:
+│  
+│  
+│    
+│  Directly average the LoRA layers of the 5 folds.
+│  
+│  
+│  How do you average the classification head?
+  ├─ sayoulala (2024-08-13 07:47:56.163000) [+4]
+  │  Simply average the five matrices of the classification heads.
+  ├─ heartkilla (2024-08-13 08:11:39.230000) [+1]
+  │  I also tried this with no luck. Broadly speaking, weight averaging of different runs (full training runs, not SWA/EMA stuff) never worked for me in any competition so I am really surprised.
+    ├─ Psi (2024-08-13 08:26:25.413000) [+6]
+    │  Yes, specifically for such fine-grained classification I am very surprised this works. Does not match my experience as well.
+    ├─ Valentin Werner (2024-08-13 08:28:49.187000) [+1]
+    │  We tried it after training multiple models for creating pseudo labels. For us it simply did not affect scores a lot. The change was less than .001 so we scrapped the approach too. But since it did ...
+    ├─ sayoulala (2024-08-13 08:38:48.123000) [+6]
+    │  Previously, I also thought that directly merging parameters from multiple folds wouldn't work, but in this competition, I actually succeeded. I observed that the differences in parameters for each ...
+    ├─ ducnh279 (2024-08-13 08:44:14.087000) [+1]
+    │  I'm not really surprsied, just consider that as ensemble using weight averaging or linear model merging in LLMs (like Model soups paper: https://arxiv.org/abs/2203.05482)
+    ├─ heartkilla (2024-08-13 09:07:27.823000) [+2]
+    │  There are infinitely many approaches that are good on paper and never worked on Kaggle.
+    │  Nevertheless, I will try this with Lora again in the next LLM comp.
+    ├─ Psi (2024-08-13 09:15:13.280000) [+5]
+    │  Yes, but merging makes more sense when you just consider taking an argmax token. Here, with log loss, I am a bit more surprised it works.
+    ├─ spongebob (2024-08-13 09:47:35.563000) [+1]
+    │  LLama3.1 405B also used this tricks.
+  ├─ Khoi Nguyen (2024-08-13 11:14:42.810000) [+3]
+  │  Kaggle is a pathway to many abilities some consider to be… unnatural.
+├─ Valentin Werner (2024-08-13 06:54:20) [+0]
+│  First of all, Congratulations on your score and your amazing experiments! 
+│  
+│  Some questions from my side:
+│  
+│  
+│  
+│  
+│  The distillation scores are insane. Our team tried knowledge distillation but it mostly ...
+  ├─ sayoulala (2024-08-13 06:58:12.020000) [+2]
+  │  1.For distillation, a larger model should be used. When distilling smaller models, use the post-pretrained models. The learning rate also has a significant impact (a difference of 1e-5 to 5e-5 can ...
+    ├─ Valentin Werner (2024-08-13 07:02:36.870000) [+0]
+    │  Wondering about the timeout on 2nd. We did not use TTA, but did 2x4096 Gemma2-9b 8bit during inference, so I would assume that the same would be true for your TTA approach.
+    ├─ sayoulala (2024-08-13 07:05:12.420000) [+1]
+    │  My setup is 8-bit, 2000 max length, 2*T4. I think a longer length could yield more benefits, but the benefits from TTA (Test-Time Augmentation) outweigh those from a longer length.
+├─ Asher (2024-08-15 18:17:42.393000) [+-1]
+│  Great notebook
+├─ Honoured One (2024-08-14 13:05:07.493000) [+-1]
+│  Wow this notebook was really informative.
+├─ Dmitry Aspisov (2025-03-28 08:14:38.603000) [+0]
+│  Great solution!
+├─ Feng-3036198736 (2025-02-11 08:55:51.883000) [+0]
+│  真的好厉害，羡慕了，我是初学者，感觉完全不懂……
+├─ TheStoneMX (2024-09-02 17:45:32.333000) [+0]
+│  Hi There,
+│  Thanks for sharing. I guess you cannot win these types of competitions without investing heavily in a hardware provider. You are talking about an 8*A100 GPU. 
+│  
+│  I wondered what provider yo...
+  ├─ false matrix (2024-11-04 16:29:45.447000) [+0]
+  │  use vast.ai
+├─ Sahitya Setu (2024-08-27 14:46:06.337000) [+0]
+│  Congratulations on Gold ! Hats off ! thanks for the solution !
+├─ K-N (2024-08-26 11:13:34.513000) [+0]
+│  Congratulations on your 1st prize! It is very informative discussion, thank you.
+├─ SiddharthaBharadwaj2 (2024-08-24 17:34:59.413000) [+0]
+│  solid information
+├─ Tanishk Patil (2024-08-24 03:45:30.540000) [+0]
+│  Congratulations on your solo gold! It is very informative as a beginner.
+├─ Fae Gaze (2024-08-21 07:26:19.280000) [+0]
+│  @sayoulala , Also, could you elaborate on the process of obtaining the logits distribution after Post-pretrain? How did you manage the dataset splitting and the integration of the 33k data?
+  ├─ Valentin Werner (2024-08-21 14:13:15.617000) [+1]
+  │  I think you simply run predictions with your model. It will return the logits, which you can work with further. Saving the logits separately is key, as its a lot faster to retrieve a saved file, th...
+    ├─ Fae Gaze (2024-08-26 17:29:22.570000) [+0]
+    │  thank you for the information
+    ├─ [deleted] (2024-09-22 06:19:52.107000) [+0]
+    │  [deleted]
+├─ Fae Gaze (2024-08-21 07:23:44.270000) [+0]
+│  @sayoulala Congrats!
+│  I'm curious about the external data you used, particularly the 33k dataset and the UT dataset. How did you identify and select these datasets? Were they specifically curated to...
+├─ Aamir Raza (2024-08-14 11:09:36.567000) [+0]
+│  Congrats!
+│  Several questions:
+│  What loss function did you use during distillation? KL-divergence?
+│  What learning rate schedule(s) did you use? How much warmup?
+│  Did you experiment with any model mergin...
+├─ cloudwantyou@gmail.com (2024-08-14 10:53:53.167000) [+0]
+│  Hi,could you share you training&amp;inference notebook
+  ├─ Saiyan Warrior (2024-08-14 11:44:43.447000) [+0]
+  │  Hi @dlondmike He might -&gt; https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629#2958628
+├─ 박민욱peterminpark (2024-08-14 08:35:00.417000) [+0]
+│  Congrats! one more gold to become Grandmaster
+├─ Saiyan Warrior (2024-08-14 02:49:50.723000) [+0]
+│  Hi @sayoulala Congratulations on your win. if possible can you share the code to refer to all these steps?
+  ├─ sayoulala (2024-08-14 06:38:43.770000) [+3]
+  │  I will consider it, thank you.
+├─ karrar (2024-08-13 20:10:24.517000) [+0]
+│  I didn't imagine this competition was going to be the solo winner before a leakage, amazing solution and congrats @sayoulala.
+├─ [deleted] (2024-08-13 09:23:10.310000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-08-14 06:37:54.343000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-08-13 08:19:17.320000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-08-13 15:16:44.463000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2024-08-14 00:33:48.700000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-08-13 07:36:01.783000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-22 06:17:28.953000) [+0]
+│  [deleted]
+├─ [deleted] (2024-08-13 08:54:10.173000) [+-1]
+│  [deleted]
+├─ [deleted] (2024-08-16 13:29:31.210000) [+0]
+│  [deleted]

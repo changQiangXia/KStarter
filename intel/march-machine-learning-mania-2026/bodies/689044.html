@@ -1,0 +1,24 @@
+<h3>Overview</h3>
+<p>The core idea was to reframe game outcome prediction as a <strong>regression problem on point differential</strong> rather than a binary win/loss classification. Predicting the margin of victory produces a richer training signal and naturally encodes the strength of a result, which a binary label discards. Final win probabilities were then recovered through a post-hoc calibration step.</p>
+<p>The pipeline was applied jointly to both men's and women's NCAA basketball data, treating them as a single dataset with a gender indicator feature.</p>
+<hr>
+<h3>Feature Engineering</h3>
+<p>All features were derived from regular season box score data and aggregated at the season level per team. The feature set covered several complementary angles:</p>
+<p><strong>Season-averaged box score statistics:</strong> Points, field goals (overall and three-point), free throws, rebounds (offensive and defensive), assists, turnovers, steals, blocks, and personal fouls, computed from both the team's perspective and the opponent's perspective. Box score totals were adjusted to normalize for overtime length.</p>
+<p><strong>Possession-based efficiency metrics:</strong> Possessions were estimated using the standard formula (FGA, offensive rebounds, turnovers, free throw attempts). From there, offensive rating, defensive rating, and net rating were derived per team.</p>
+<p><strong>Shooting profile:</strong> Effective field goal percentage (eFG%), true shooting percentage (TS%), three-point attempt rate, and free throw rate captured each team's offensive style and efficiency.</p>
+<p><strong>Rebounding percentages:</strong> Offensive and defensive rebound percentages, accounting for opponent rebounding rates.</p>
+<p><strong>Venue splits:</strong> Separate averages and volatility statistics computed for home, road, and recent games, with fallback logic for small sample sizes.</p>
+<p><strong>Elo ratings:</strong> A simple Elo system was trained over all regular season games each season, producing a dynamic strength rating per team. The feature used was the Elo difference between the two matchup sides.</p>
+<p><strong>GLM team quality:</strong> A Gaussian GLM was fit each season using point differential as the response, with team fixed effects for both sides. This produced a latent quality score per team, grounded in a principled statistical model. The feature used was the quality difference between the two teams.</p>
+<p><strong>Seed difference:</strong> The numeric tournament seed difference, directly encoding the committee's seeding judgment.</p>
+<hr>
+<h3>Modeling</h3>
+<p>XGBoost was used as the base learner, trained to predict point differential directly. The training objective was regression, not classification.</p>
+<p><strong>Validation scheme:</strong> A leave-one-season-out cross-validation was applied over all seasons from 2003 onward. Each fold held out one complete tournament season, trained on all others, and produced out-of-fold (OOF) margin predictions for the held-out season. This respected the temporal structure of the data and provided unbiased OOF predictions spanning the full historical range.</p>
+<p><strong>Hyperparameter and feature selection:</strong> Optuna was used to jointly optimize XGBoost hyperparameters (learning rate, tree depth, subsampling ratios, regularization terms, number of trees, etc.) and perform feature selection, with the OOF Brier score as the objective.</p>
+<p><strong>Multi-seed ensemble:</strong> The full pipeline was run across six distinct random seeds. Each seed produced its own Optuna study, its own selected feature subset, and its own set of OOF-calibrated models. Final predictions were averaged across all seeds, providing diversity both in the feature subsets and in the stochastic aspects of the boosting procedure.</p>
+<hr>
+<h3>Probability Calibration</h3>
+<p>Raw XGBoost outputs are point differential predictions, not probabilities. To convert them, a calibrator was fit on each seed's OOF margin predictions against the binary win indicator derived from those same margins. A symmetric clipping (trim) was applied to the raw margins before fitting, with the trim value itself treated as an Optuna hyperparameter.</p>
+<p>At inference time, the same trim was applied to test predictions before passing them through the calibrator. Probabilities were clipped to the unit interval as a final safeguard. The ensemble prediction was the mean probability across all seeds and all season-specific models.</p>

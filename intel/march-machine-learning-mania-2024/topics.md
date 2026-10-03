@@ -1,0 +1,82 @@
+# march-machine-learning-mania-2024 讨论区（按票数排序，共 80 条）
+
+- [Leaderboard Updates](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485888) — 56 票 / 153 评论 / 2024-03-22 
+- [Starting references](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480346) — 52 票 / 11 评论 / 2024-02-28 
+- [2nd Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492761) — 46 票 / 23 评论 / 2024-04-11 **write-up?**
+- [About the Competition Design](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481750) — 35 票 / 51 评论 / 2024-03-04 
+- [1st Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/493793) — 33 票 / 7 评论 / 2024-04-15 **write-up?**
+- [Data Update 03/18/2024](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484889) — 28 票 / 16 评论 / 2024-03-18 
+- [17th place finish - description of my methodology](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492459) — 28 票 / 13 评论 / 2024-04-09 **write-up?**
+- [Regarding last-second problems with submission and/or selection](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485935) — 27 票 / 18 评论 / 2024-03-22 
+- [Understanding the competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480386) — 27 票 / 32 评论 / 2024-02-28 
+- [See your score and compare with the Experts Submission](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485971) — 24 票 / 80 评论 / 2024-03-22 
+- [Metric Bug Fix](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486625) — 21 票 / 11 评论 / 2024-03-25 
+- [45th place finish with BERT Text Classifiers](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492486) — 20 票 / 5 评论 / 2024-04-09 **write-up?**
+- [Thoughts on this Competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/488245) — 19 票 / 77 评论 / 2024-04-01 
+- [What's a good score?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481300) — 19 票 / 28 评论 / 2024-03-02 
+- [Return of the Experts Submission!](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485683) — 18 票 / 9 评论 / 2024-03-21 
+- [MAE on score difference next year?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/493530) — 17 票 / 16 评论 / 2024-04-13 
+- [Submission Format Update](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480308) — 16 票 / 10 评论 / 2024-02-28 
+- [8th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/493041) — 16 票 / 1 评论 / 2024-04-22 **write-up?**
+- [Get Started Here!](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/479996) — 15 票 / 30 评论 / 2024-02-26 
+- [Revert back to log-loss or brier-score?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480461) — 14 票 / 53 评论 / 2024-02-28 
+- [Two Submissions vs. One Submission](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492061) — 14 票 / 14 评论 / 2024-04-08 
+- [New to March Madness/NCAA basketball, check this. ](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481051) — 13 票 / 2 评论 / 2024-03-01 
+- [Visualization: You vs Everybody / Which Team to Root For ](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485551) — 13 票 / 45 评论 / 2024-03-21 
+- [Data Update 03/16/2024](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484376) — 13 票 / 8 评论 / 2024-03-16 
+- [Visualize your bracket (Ryan Armstrong notebook)](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485244) — 12 票 / 9 评论 / 2024-03-20 
+- [The 'Issue' with the Scoring System - Simulation](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481963) — 12 票 / 1 评论 / 2024-03-05 
+- [5th Place Submission](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/497162) — 11 票 / 0 评论 / 2024-04-23 **write-up?**
+- [How to submit if you did your work outside the notebook](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484453) — 11 票 / 6 评论 / 2024-03-16 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480280) — 11 票 / 0 评论 / 2024-02-28 
+- [Create Your Implied Probabilities Table and See Your Current & Best Possible Scores](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486895) — 10 票 / 12 评论 / 2024-03-26 
+- [494th Solution - Lessons Learned from submitting an Overfitted Model](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/493300) — 10 票 / 0 评论 / 2024-04-12 **write-up?**
+- [I liked the final scoring we settled on!](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492382) — 10 票 / 26 评论 / 2024-04-09 
+- [64th solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/496807) — 10 票 / 0 评论 / 2024-04-22 **write-up?**
+- [Thoughts on new scoring method](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480800) — 9 票 / 8 评论 / 2024-03-01 
+- [Failed submission on re-score discoveries](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/491751) — 9 票 / 5 评论 / 2024-04-07 
+- [Remember to select your 2 submissions!!](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485548) — 9 票 / 19 评论 / 2024-03-21 
+- [1 in 166 chance of perfect bracket filled by someone here](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480432) — 8 票 / 16 评论 / 2024-02-28 
+- [This is a terrible evaluation metric](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481668) — 8 票 / 8 评论 / 2024-03-04 
+- [Single-bracket vs. portfolio strategy (experiments only)](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481910) — 8 票 / 22 评论 / 2024-03-05 
+- [⚠️😟 How to  disable internet in the Notebook editor?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480486) — 7 票 / 6 评论 / 2024-02-28 
+- [External Data Rule Clarification](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/493992) — 7 票 / 4 评论 / 2024-04-15 
+- [Any Requests For Next Year's Data?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492843) — 7 票 / 16 评论 / 2024-04-11 
+- [How many brackets do you think are best/better?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/483869) — 7 票 / 4 评论 / 2024-03-14 
+- [Return of the Seed Benchmark!](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/482696) — 7 票 / 20 评论 / 2024-03-08 
+- [Scoring Too Convoluted ](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480299) — 7 票 / 4 评论 / 2024-02-28 
+- [538 abuse — solo cash gold solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/493841) — 7 票 / 1 评论 / 2024-04-20 **write-up?**
+- [no more 538?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480322) — 6 票 / 7 评论 / 2024-02-28 
+- [interesting format](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480321) — 6 票 / 1 评论 / 2024-02-28 
+- [How-to tips, for people who don't understand about notebooks?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481059) — 6 票 / 10 评论 / 2024-03-01 
+- [538-style probability matrices. Thoughts?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485084) — 6 票 / 7 评论 / 2024-03-19 
+- [First place is way ahead with 3 submissions?!](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486779) — 6 票 / 8 评论 / 2024-03-26 **write-up?**
+- [Leaderboard Scoring Method](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486590) — 6 票 / 4 评论 / 2024-03-25 
+- [March ML Mania 2024](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/494407) — 6 票 / 1 评论 / 2024-04-22 
+- [Leaderboard Movement](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486396) — 6 票 / 3 评论 / 2024-03-24 
+- [Rolling updates of Massey Ordinals for Day 133](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484955) — 6 票 / 14 评论 / 2024-03-18 
+- [NCAA NET Ratings](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484881) — 5 票 / 2 评论 / 2024-03-18 
+- [Visualizing brackets using Bracketeer](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485623) — 5 票 / 0 评论 / 2024-03-21 
+- [Team Win Probabilities by Round: Your Brackets Visualization](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485831) — 5 票 / 3 评论 / 2024-03-22 
+- [Do submissions have to be consistent?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481089) — 5 票 / 2 评论 / 2024-03-02 
+- [Live Leaderboard Updates](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485728) — 5 票 / 3 评论 / 2024-03-21 
+- [Code to generate 2023 brackets](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481026) — 5 票 / 0 评论 / 2024-03-01 
+- [Any issue with unofficial "traditional" competition on the side?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480344) — 5 票 / 1 评论 / 2024-02-28 
+- [Future Competitions: Should it be a requirement to post external data sources here before the submission deadline?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/494656) — 5 票 / 16 评论 / 2024-04-18 
+- [On `2024_tourney_seeds.csv` updates](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/485631) — 4 票 / 7 评论 / 2024-03-21 
+- [Tie breaker rules?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481404) — 4 票 / 1 评论 / 2024-03-03 
+- [Missing first round game in 2021 Men's Tournament Results](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481112) — 4 票 / 1 评论 / 2024-03-02 
+- [Submission File correct format](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/482743) — 4 票 / 6 评论 / 2024-03-09 
+- [AI techniques?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/483614) — 4 票 / 5 评论 / 2024-03-13 
+- [Will the Competition be as exciting/interesting as in past years?  Thoughts?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/480952) — 3 票 / 3 评论 / 2024-03-01 
+- [Only One entry (from selected Subs) was re-scored](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486130) — 3 票 / 13 评论 / 2024-03-23 
+- [How many brackets did you use?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/486129) — 3 票 / 15 评论 / 2024-03-23 
+- [Low turnout this year](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/488456) — 3 票 / 4 评论 / 2024-04-02 
+- [3rd Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/495101) — 3 票 / 1 评论 / 2024-04-22 **write-up?**
+- [Average Brier Bracket Score calculation](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/483529) — 3 票 / 2 评论 / 2024-03-12 
+- [In the "MNCAATourneySeeds" dataframe, why do some seeds in the "Seed" column have suffixes like 'a' or 'b'?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/483405) — 3 票 / 5 评论 / 2024-03-12 
+- [How can a portfolio be created?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484444) — 2 票 / 6 评论 / 2024-03-16 
+- [Submission Scoring Error, why is that?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481941) — 2 票 / 21 评论 / 2024-03-05 
+- [Leaderboard Calculations ](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/484429) — 2 票 / 2 评论 / 2024-03-16 
+- [MGameCities.csv -- Incorrect Data](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/483436) — 2 票 / 6 评论 / 2024-03-12 
+- [Do we need to predict the results of play-in games?](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/481409) — 2 票 / 15 评论 / 2024-03-03 

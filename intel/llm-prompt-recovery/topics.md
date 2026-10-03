@@ -1,0 +1,122 @@
+# llm-prompt-recovery 讨论区（按票数排序，共 120 条）
+
+- [1st place solution: adversarial attack](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494343) — 243 票 / 115 评论 / 2025-05-30 **write-up?**
+- [All Datasets at One Place](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481811) — 191 票 / 36 评论 / 2024-03-05 
+- [How This Competition Works](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480683) — 154 票 / 34 评论 / 2024-02-29 
+- [2nd place solution: Team Danube](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494497) — 107 票 / 17 评论 / 2024-04-25 **write-up?**
+- [Subjective Competition Learnings (or a list of problems I encountered and possible solutions)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483916) — 105 票 / 29 评论 / 2024-03-14 **write-up?**
+- [New Mistral 7B Public Notebook - .62 LB](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/488354) — 85 票 / 29 评论 / 2024-04-02 
+- [2k generated samples 🪄](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480262) — 83 票 / 15 评论 / 2024-02-27 
+- [i find the papers ...  most are 2024 published](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480390) — 62 票 / 24 评论 / 2024-02-28 
+- [4th Place: ST5 Tokenizer Attack!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494362) — 59 票 / 7 评论 / 2024-04-17 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480282) — 55 票 / 26 评论 / 2024-02-28 
+- [3rd place solution](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494621) — 51 票 / 12 评论 / 2024-04-19 **write-up?**
+- [Supplementary Texts Rewritten by GenAI Models](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480288) — 51 票 / 1 评论 / 2024-02-28 
+- [My thoughts on why the baseline is so hard to beat](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480703) — 49 票 / 19 评论 / 2024-02-29 
+- [Official Ask for Host or Kaggle Staff Help](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481959) — 46 票 / 5 评论 / 2024-03-05 
+- [Some rewritten_text are equal to original_text](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/484791) — 46 票 / 8 评论 / 2024-03-18 
+- [6th Place: Adversarial Attacks on langauge models for any task](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494348) — 44 票 / 18 评论 / 2024-04-17 **write-up?**
+- [[LB Probing Result] There are no rewritten texts in the test data which begin with “Sure”!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483374) — 44 票 / 16 评论 / 2024-03-12 
+- [Sharing my SFT baseline 0.61+](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/487698) — 43 票 / 12 评论 / 2024-03-30 
+- [Silver Solution [Prompt Engineering]](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494432) — 41 票 / 4 评论 / 2024-04-17 **write-up?**
+- [T5 Travesty (When good prompts score bad...)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/488128) — 38 票 / 20 评论 / 2024-04-01 
+- [Meme Thread](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/493778) — 37 票 / 16 评论 / 2024-04-15 
+- [What are your scores using fine-tuned models?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481322) — 37 票 / 43 评论 / 2024-03-03 
+- [Asking Gemma himself to generate rewrite_prompt [0.47 LB]](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480320) — 35 票 / 8 评论 / 2024-02-28 
+- [7th place solution: T5 decoding, iterative mean refinement, LLMs and a gold medal mean string](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494755) — 34 票 / 12 评论 / 2024-04-18 **write-up?**
+- [Starter materials for reference](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480351) — 34 票 / 2 评论 / 2024-02-28 
+- [Dataset experiments: first 10,000](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480414) — 33 票 / 21 评论 / 2024-02-28 
+- [Autobots roll out! Ensembling 4 transformers to reach position 20.](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494536) — 33 票 / 6 评论 / 2024-04-18 
+- [T5 vs the popular 0.61 mean prompt](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/484204) — 32 票 / 3 评论 / 2024-03-15 
+- [TPU for Fast Gemma 7B Inference](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481756) — 32 票 / 6 评论 / 2024-03-05 
+- [Get started here!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/477160) — 31 票 / 45 评论 / 2024-02-14 
+- [Merge the prompt to LB 0.61 (from LB 0.58 and LB 0.60)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481116) — 31 票 / 10 评论 / 2024-03-02 
+- [Try the Sharpened Cosine Similarity Demo Now!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480951) — 31 票 / 4 评论 / 2024-03-01 
+- [Some (interesting) samples from the Supplementary Kaggle Dataset](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/487419) — 31 票 / 5 评论 / 2024-03-29 
+- [12th place soluition🥇 : Modifying mean prompt using LLM, ML and logic-based approach](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494526) — 31 票 / 9 评论 / 2024-04-21 **write-up?**
+- [Why doesn't kaggle ban obvious cheaters?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/493789) — 31 票 / 39 评论 / 2024-04-15 
+- [What are the rules regarding ChatGPT and the like, exactly?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481661) — 30 票 / 7 评论 / 2024-03-04 
+- [Visualizing the leaderboard at the end of the challenge](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494358) — 28 票 / 5 评论 / 2024-04-17 
+- [Evaluation Metric Implementation](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480437) — 28 票 / 2 评论 / 2024-02-28 
+- [How people are at 0.63+](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/485287) — 25 票 / 37 评论 / 2024-03-20 
+- [[Keras] - Just Save/Load the LoRA Weights](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/484709) — 25 票 / 8 评论 / 2024-03-17 
+- [I'm confused](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483421) — 24 票 / 31 评论 / 2024-03-12 
+- [LLM-PR | Seq2seq + Retrieval](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481641) — 23 票 / 6 评论 / 2024-03-04 
+- [Gemma 7B-it Transformer Version Unstable on Kaggle](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/482607) — 23 票 / 9 评论 / 2024-03-08 
+- [RewriteLM - Recent paper by Google for rewriting](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481805) — 22 票 / 3 评论 / 2024-03-05 
+- [3000 Rewritten texts dataset 📚](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480831) — 21 票 / 7 评论 / 2024-03-01 
+- [Sharing strategy of LB 0.66](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/486124) — 21 票 / 15 评论 / 2024-03-23 
+- [More Gemma bugs ](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/482283) — 20 票 / 7 评论 / 2024-03-07 
+- [Mean prompts exploration with flow engineering](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/491275) — 20 票 / 0 评论 / 2024-04-05 
+- [Efficient Gemma inference on multiple GPUs](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/482990) — 20 票 / 0 评论 / 2024-03-10 
+- [A boring solution: Gemma-7b / Mistral SFT + Metric learning & Retrieval [0.66]](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494453) — 19 票 / 1 评论 / 2024-04-17 **write-up?**
+- [4343 Samples Dataset  containing : 2541 samples from Gemma and 1802 from Gemini ](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481151) — 19 票 / 0 评论 / 2024-03-02 
+- [Minor Rules Update on LLMs allowed for use.](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483119) — 19 票 / 0 评论 / 2024-03-11 
+- [Does rewrite_prompt contain original_text?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480466) — 19 票 / 6 评论 / 2024-02-28 
+- [rewrite_prompt column frustration..😕](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481141) — 17 票 / 11 评论 / 2024-03-02 
+- [waht kind of text are in the sample data](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481624) — 16 票 / 6 评论 / 2024-03-04 
+- [Proby McProbeFace: original_text/ rewritten_text possible average word counts](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/486628) — 16 票 / 9 评论 / 2024-03-25 
+- [11th place solution](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494569) — 15 票 / 4 评论 / 2024-04-17 **write-up?**
+- ["Convert this into a sea shanty"](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/493853) — 15 票 / 4 评论 / 2024-04-15 
+- [[Solved] Notebook Threw Exception](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/482008) — 15 票 / 5 评论 / 2024-03-06 
+- [7th place solution: Mastering mean prompt](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494650) — 15 票 / 0 评论 / 2024-04-30 **write-up?**
+- [Language Model Inversion](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480687) — 14 票 / 1 评论 / 2024-02-29 
+- [Poems, stories, letters, memos, paragraphs, recipes.. what else?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483670) — 14 票 / 9 评论 / 2024-03-13 
+- [Be careful of using the public leaderboard to evaluate your models!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480290) — 14 票 / 4 评论 / 2024-02-28 
+- [Findings from "Can Text Embeddings reveal a mean prompt?"](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/487111) — 14 票 / 3 评论 / 2024-03-27 
+- [New Dataset 300 Rewritten text by Gemma 7b](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483209) — 14 票 / 4 评论 / 2024-03-11 
+- [5th place solution](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/499079) — 13 票 / 2 评论 / 2024-04-30 **write-up?**
+- [So hard to beat mean prompt, but getting close!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/482025) — 13 票 / 12 评论 / 2024-03-06 
+- [Collection of mean prompts](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/488150) — 13 票 / 5 评论 / 2024-04-01 
+- [Getting 0.65 With *No* Mean Prompt](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494638) — 13 票 / 1 评论 / 2024-04-17 
+- [Competition emphasizes the importance of right metric for your Data Science/ GenAI use cases](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494508) — 12 票 / 13 评论 / 2024-04-17 
+- [Seems like some people got magic powers on the last day.](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/493857) — 12 票 / 5 评论 / 2024-04-15 
+- [How far can we go just with mean prompting ?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/487901) — 12 票 / 16 评论 / 2024-03-31 
+- [Nan in the test data](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/484710) — 12 票 / 5 评论 / 2024-03-17 
+- [Bot invasion - why?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/488449) — 12 票 / 7 评论 / 2024-04-02 
+- [11th Place Sol: 0.69 =  Mean prompt [0.67] + 0.02](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494689) — 12 票 / 0 评论 / 2024-04-18 **write-up?**
+- [Worst mean prompt?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494173) — 12 票 / 9 评论 / 2024-04-16 
+- [I releasd Condensed Prompt Dataset: Writing Style Extraction from Rewrite Prompt with GPT3.5](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/492624) — 11 票 / 14 评论 / 2024-04-10 
+- [A 26k dataset generated using Gemma-7b-it](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/484087) — 11 票 / 0 评论 / 2024-03-15 
+- [This competition in a nutshell ](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483853) — 11 票 / 12 评论 / 2024-03-14 
+- [Top solutions aren't just mean prompts](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494345) — 11 票 / 4 评论 / 2024-04-17 **write-up?**
+- [How to Reproduce train.csv Rewritten Text?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481500) — 11 票 / 1 评论 / 2024-03-03 
+- [silver solution](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494499) — 11 票 / 3 评论 / 2024-04-17 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/495100) — 10 票 / 0 评论 / 2024-04-19 
+- [Scoring is absurdly slow](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483180) — 10 票 / 3 评论 / 2024-03-11 
+- [All Solution Thread](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494361) — 10 票 / 1 评论 / 2024-04-17 **write-up?**
+- [Mistral Mean Modifier [.65LB]](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494637) — 10 票 / 0 评论 / 2024-04-17 
+- [0.66+ solution - mean prompt + SFT + text_type](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494641) — 10 票 / 0 评论 / 2024-04-17 **write-up?**
+- [Mistral 7B vs Mixtral 8x7B](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/486008) — 10 票 / 5 评论 / 2024-03-23 
+- [Data Generated With Gemini](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480316) — 10 票 / 2 评论 / 2024-02-28 
+- [Concerning the Evaluation](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480243) — 9 票 / 6 评论 / 2024-02-27 
+- [Silver Solution: Prompt Mining](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494525) — 9 票 / 1 评论 / 2024-04-17 **write-up?**
+- [Study Log: Reflecting on the Differences Between Top Solutions and My Approach](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494760) — 9 票 / 0 评论 / 2024-04-18 **write-up?**
+- [About non-deterministic outputs of LLM text-generation ](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481652) — 9 票 / 3 评论 / 2024-03-04 
+- [T5 Prompt Scoring Playground / 600 GPT4 Prompts](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/484247) — 9 票 / 0 评论 / 2024-03-15 
+- [What should a beginner be aware of before starting with this competition?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480379) — 8 票 / 4 评论 / 2024-02-28 
+- [Fine-tuning Mistral 7B (semi-successfully)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/486436) — 8 票 / 5 评论 / 2024-03-25 
+- [[Bronze solution] Llama2-13b Prompt Engineering](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494503) — 8 票 / 3 评论 / 2024-04-19 **write-up?**
+- [Mistral Mean Modifier [0.63 LB]](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/490999) — 8 票 / 29 评论 / 2024-04-04 
+- [2.5K rewrite prompts generated by Mistral](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/482755) — 8 票 / 0 评论 / 2024-03-09 
+- [Asking ChatGPT to recover the prompt](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480590) — 8 票 / 3 评论 / 2024-02-29 
+- [Gemma 1.1 released - and now not all replies start with "Sure"](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/491471) — 7 票 / 5 评论 / 2024-04-06 
+- [How to stop Gemma from saying "sure, here is your rewritten text"?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480581) — 7 票 / 3 评论 / 2024-02-29 
+- [Issue when "Save and Run All" or Submit that I can't replicate in interactive session](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481577) — 7 票 / 1 评论 / 2024-03-04 
+- [All comp data visualization](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/485232) — 7 票 / 2 评论 / 2024-03-20 
+- [Summary of my ideas(As a beginner)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480410) — 7 票 / 0 评论 / 2024-02-28 
+- [Clarification on original_text](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480335) — 7 票 / 0 评论 / 2024-02-28 
+- [High GPU queue waiting time](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/487765) — 7 票 / 9 评论 / 2024-03-30 
+- [LB=0.65 Solution (Simple ensemble: Mistral-7B + Phi2-7B + T5-base + mean prompt) for the Kaggle - LLM Prompt Recovery](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/495174) — 7 票 / 1 评论 / 2024-04-20 **write-up?**
+- [Circle of Gemma!](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/492467) — 7 票 / 16 评论 / 2024-04-09 
+- [Nous Hermes 2 zero shot example based prompting - LB 0.56](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483237) — 7 票 / 4 评论 / 2024-03-11 
+- [How Would Claude Opus Approach This Task?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481922) — 6 票 / 1 评论 / 2024-03-05 
+- [Which Gemma variation is used to generate the test set?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480637) — 6 票 / 8 评论 / 2024-02-29 
+- [[Private LB0.63] FewShot Prompt & Chain of Thought (CoT) Approach (No Mean Prompt or Model Training)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494382) — 6 票 / 5 评论 / 2024-04-17 
+- [Will we see test data?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494326) — 6 票 / 5 评论 / 2024-04-16 
+- [[Silver Solution, Private LB 0.66] Finetune Mistral 7B & Mean Prompt Customization with Sentence T5 (with notebooks)](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494528) — 6 票 / 0 评论 / 2024-04-17 **write-up?**
+- [Gemma 7b-it : Single Prompt based solutioning.[0.64]](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494519) — 6 票 / 0 评论 / 2024-04-17 **write-up?**
+- [Model load cache](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/493533) — 6 票 / 1 评论 / 2024-04-13 
+- [version of t5 encoder](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/481049) — 6 票 / 4 评论 / 2024-03-01 
+- [Could the inference configuration for the test set be provided?](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/480604) — 6 票 / 1 评论 / 2024-02-29 
+- [Helpful paper - Language Model Inversion](https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/492223) — 6 票 / 1 评论 / 2024-04-09 

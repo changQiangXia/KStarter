@@ -1,0 +1,252 @@
+<h1>March Machine Learning Mania 2026: Silver Medal Solution (19th / 3,462)</h1>
+<p>This was my first Kaggle competition (and my first real ML project). I'm a data engineer by trade, so I came at this from the "how do I build a reliable pipeline" angle rather than deep ML expertise. I built the model iteratively across 12 levels over about a week, adding one idea at a time and measuring the impact of each.</p>
+<p>The model correctly predicted <strong>Michigan as national champion</strong> and went <strong>87/104 (83.7%)</strong> across all tournament games. Final Brier score: <strong>0.12007</strong>.</p>
+<p>Full code is on <a href="https://github.com/jswansonco/march-machine-learning-mania" target="_blank">GitHub</a>.</p>
+<h2>Approach</h2>
+<p>The core idea: <strong>predict point differential, not win/loss.</strong> A 20-point blowout and a 1-point squeaker are both "wins" in binary classification, but they carry very different information about team strength. Regressing on margin gives the model a much richer training signal. I then recovered win probabilities with a calibration step.</p>
+<p>Men's and women's tournaments were treated as a single dataset with a binary gender indicator. All tournament games from 2003-2025 were used for training (~1,300 games, doubled to ~2,600 via symmetric augmentation).</p>
+<h2>Feature Engineering (53 features)</h2>
+<p>Every game in training was doubled symmetrically (Team A vs B and Team B vs A) with overtime stats normalized to 40-minute equivalents. This lets the model learn from both perspectives without directional bias.</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>#</th>
+<th>What</th>
+<th>Why it helps</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seeds</td>
+<td>3</td>
+<td>Seed for each team + diff</td>
+<td>Strongest single predictor (0.1671 Brier alone)</td>
+</tr>
+<tr>
+<td>Box scores</td>
+<td>18</td>
+<td>Season-avg points, rebounds, blocks, fouls (team + opponent)</td>
+<td>Baseline team quality signal</td>
+</tr>
+<tr>
+<td>Late-season form</td>
+<td>2</td>
+<td>Avg point diff in final 2 weeks</td>
+<td>Catches teams peaking/slumping into March</td>
+</tr>
+<tr>
+<td>Elo</td>
+<td>3</td>
+<td>Margin-weighted Elo per team + diff</td>
+<td>Dynamic strength with season carry-over</td>
+</tr>
+<tr>
+<td>GLM quality</td>
+<td>2</td>
+<td>Team quality scores from a statistical model</td>
+<td>Estimates strength from point diffs across all games</td>
+</tr>
+<tr>
+<td>Massey Ordinals</td>
+<td>4</td>
+<td>KenPom rank + avg of ~60 systems</td>
+<td>Consensus rankings are very predictive</td>
+</tr>
+<tr>
+<td>BartTorvik</td>
+<td>18</td>
+<td>AdjOE, AdjDE, Barthag, WAB, SOS, Tempo + diffs</td>
+<td><strong>Single biggest improvement (+3.1%)</strong></td>
+</tr>
+<tr>
+<td>Gender</td>
+<td>1</td>
+<td>Men's vs women's flag</td>
+<td>4th most important feature, different upset dynamics</td>
+</tr>
+</tbody>
+</table>
+<h3>Why BartTorvik Was the Breakthrough</h3>
+<p>Before Level 12, I was computing team strength from raw box scores: season-average points, rebounds, field goal attempts, etc. The problem is that raw box scores don't account for pace or opponent quality. A team that scores 85 points per game against a weak schedule in a fast conference looks the same as one that scores 85 against elite competition. You can try to correct for this with strength-of-schedule adjustments, but you're basically rebuilding what analytics sites like BartTorvik already do better.</p>
+<p><a href="https://www.kaggle.com/datasets/jswanson/barttorvik-t-rank-2015-2026" target="_blank">BartTorvik's T-Rank</a> provides tempo-adjusted, opponent-adjusted efficiency metrics. The key columns:</p>
+<ul>
+<li><strong>AdjOE / AdjDE</strong>: Offensive and defensive efficiency (points per 100 possessions, adjusted for opponent strength). This is the gold standard for measuring how good a team actually is on each end of the floor, stripped of pace and schedule effects.</li>
+<li><strong>Barthag</strong>: An overall power rating representing a team's expected win probability against an average D1 team. This ended up as the <strong>5th most important feature</strong> in the model.</li>
+<li><strong>WAB (Wins Above Bubble)</strong>: How many more wins a team has than a bubble-quality team would expect against the same schedule. This captures whether they're a legitimate tournament team or just beat up on a weak conference.</li>
+<li><strong>Tempo</strong>: Adjusted pace of play (possessions per 40 minutes). Fast teams and slow teams create fundamentally different game environments.</li>
+</ul>
+<p>The hypothesis was that these pre-computed, expert-quality metrics would give XGBoost strictly better signal than anything I could derive from raw box scores, and that turned out to be right. Adding Torvik features dropped the LOSO Brier from 0.1650 to 0.1599 (3.1% improvement), the single biggest jump in the entire model evolution. Once Torvik was in the mix, the box score Four Factors (eFG%, turnover rate, offensive rebound rate, free throw rate) became completely redundant.</p>
+<p>The key decision was feeding these as <strong>training features for XGBoost</strong> rather than building a separate Torvik-based model and ensembling. As direct features, the trees can learn interactions, like "a team with high AdjDE but a low seed is being underestimated" or "Barthag differences matter more in the women's tournament." You lose those interactions if you just average two models together.</p>
+<h3>Elo System</h3>
+<p>I used a margin-weighted Elo with 60% season-to-season carry-over. The update scales by <code>log(1 + |margin|)</code>, giving more credit to blowouts. (<a href="https://github.com/jswansonco/march-machine-learning-mania/blob/main/models/level12_torvik_features.py#L245-L265" target="_blank">code</a>)</p>
+<h3>GLM Team Quality</h3>
+<p>I wanted a simple way to distill all of a team's regular season results into one number. The idea: fit a statistical model where each team gets a "quality" coefficient, and the predicted point differential between two teams is just the difference in their coefficients. Teams that consistently beat good opponents by large margins get higher scores. It's a clean way to estimate strength without hand-crafting matchup features. (<a href="https://github.com/jswansonco/march-machine-learning-mania/blob/main/models/level12_torvik_features.py#L301-L314" target="_blank">code</a>)</p>
+<h2>Modeling</h2>
+<p>XGBoost regression on point differential. I spent a fair amount of time tuning hyperparameters. With only ~2,600 training rows (tournament games are scarce), overfitting was the main thing I kept running into. The final config leans heavily on regularization. (<a href="https://github.com/jswansonco/march-machine-learning-mania/blob/main/models/level12_torvik_features.py#L420-L426" target="_blank">code</a>)</p>
+<h3>Validation: Leave-One-Season-Out (LOSO)</h3>
+<p>Each of the 22 tournament seasons (2003-2025, minus 2020) gets held out in turn. The model trains on the other 21 seasons and predicts the held-out tournament. This respects temporal structure and avoids leakage.</p>
+<p>Crucially, <strong>all 22 models are kept for inference.</strong> For each 2026 matchup, every model makes a prediction and they're averaged. This is essentially a free ensemble that reduces variance. (<a href="https://github.com/jswansonco/march-machine-learning-mania/blob/main/models/level12_torvik_features.py#L428-L446" target="_blank">code</a>)</p>
+<h2>Probability Calibration</h2>
+<p>XGBoost outputs point differentials, not probabilities. I needed a way to convert "this team wins by 8 points" into "this team has a 72% chance of winning." I tried a few approaches and landed on fitting a degree-5 spline on the out-of-fold margin predictions against binary win indicators. It captures the natural S-curve of the relationship while staying smooth, and unlike a simple logistic function, it handles the tails well (very large margins have diminishing returns on win probability). (<a href="https://github.com/jswansonco/march-machine-learning-mania/blob/main/models/level12_torvik_features.py#L458-L463" target="_blank">code</a>)</p>
+<h3>Final Blend</h3>
+<p>When I tested different blend ratios, 80/20 gave the best LOSO Brier score. But the intuition also made sense: the raw Level 12 predictions could be quite aggressive. Michigan at 85% over Duke, Villanova at 83% over random mid-majors. The submission blended <strong>80% Level 12</strong> (full feature set with BartTorvik) and <strong>20% Level 9</strong> (same architecture but without BartTorvik, just box scores, Elo, GLM, Massey). The simpler model pulls the most confident predictions back toward center.</p>
+<p>In hindsight, Michigan demolished everyone on the way to the title, so maybe those extreme predictions weren't so extreme after all. But the blend still won on LOSO, so I'm glad I went with it. (<a href="https://github.com/jswansonco/march-machine-learning-mania/blob/main/submission/generate_final_submission.py#L62-L66" target="_blank">code</a>)</p>
+<h2>Feature Importance</h2>
+<p>XGBoost tracks how much each feature improves predictions across all trees, called "total gain." Higher gain means the feature was more useful for reducing prediction error. The top 10:</p>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Feature</th>
+<th>Source</th>
+<th>What it tells us</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Seed_diff</td>
+<td>Seeds</td>
+<td>Seed gap between teams, by far the strongest signal</td>
+</tr>
+<tr>
+<td>2</td>
+<td>elo2_diff</td>
+<td>Elo</td>
+<td>Elo rating gap, nearly as important as seeds</td>
+</tr>
+<tr>
+<td>3</td>
+<td>T2/T1_seed</td>
+<td>Seeds</td>
+<td>Individual team seeds (not just the diff)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>men_women</td>
+<td>Gender</td>
+<td>Men's vs women's: tournaments behave differently</td>
+</tr>
+<tr>
+<td>5</td>
+<td>tv_barthag_diff</td>
+<td>BartTorvik</td>
+<td>Power rating gap, the top Torvik feature</td>
+</tr>
+<tr>
+<td>6</td>
+<td>T1/T2_quality</td>
+<td>GLM</td>
+<td>Team quality gap</td>
+</tr>
+<tr>
+<td>7</td>
+<td>POM_diff</td>
+<td>KenPom</td>
+<td>KenPom ranking gap</td>
+</tr>
+<tr>
+<td>8</td>
+<td>T2_POM</td>
+<td>KenPom</td>
+<td>Opponent's KenPom rank on its own</td>
+</tr>
+<tr>
+<td>9</td>
+<td>MasseyAvg_diff</td>
+<td>Massey</td>
+<td>Average across ~60 ranking systems</td>
+</tr>
+<tr>
+<td>10</td>
+<td>tv_adjoe_diff</td>
+<td>BartTorvik</td>
+<td>Offensive efficiency gap</td>
+</tr>
+</tbody>
+</table>
+<p>The takeaway: seeds and Elo do the heavy lifting, but the model gets meaningful lift from having multiple independent views of team quality (Torvik, GLM, KenPom). Each captures something slightly different, and XGBoost figures out when to trust which signal.</p>
+<h2>Model Evolution</h2>
+<p>I built this iteratively, measuring each change honestly with LOSO. Some ideas helped, some made things worse, and both were useful:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>LOSO Brier</th>
+<th>What I tried</th>
+<th>What I learned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.1671</td>
+<td>Seed lookup table</td>
+<td>Surprisingly hard to beat with anything simple</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.2273</td>
+<td>Raw win percentage</td>
+<td>Made things worse. Win% without opponent quality is misleading</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.1679</td>
+<td>+ SOS + margin</td>
+<td>Basically just ties seeds</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.1809</td>
+<td>Elo on its own</td>
+<td>Also worse alone. Elo needs to combine with other features</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0.1655</td>
+<td>Replicated a prior 1st-place solution</td>
+<td>Gave me a baseline to try to beat</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0.1650</td>
+<td>Better Elo + Massey + late season</td>
+<td>Small wins stacking up</td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td><strong>0.1599</strong></td>
+<td><strong>+ BartTorvik as training features</strong></td>
+<td><strong>One big jump from bringing in external data</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The failed experiments (Levels 2 and 4) were actually some of the most instructive. Strong individual signals like win rate or Elo are worse than seeds when used alone. The power comes from combining complementary features that each capture something different about team quality.</p>
+<h2>What Worked</h2>
+<ol>
+<li><strong>BartTorvik as training features</strong>: 3.1% Brier improvement, the single biggest gain</li>
+<li><strong>Point-diff regression</strong> over classification: richer signal, better calibration</li>
+<li><strong>Margin-weighted Elo</strong> with carry-over: captures dynamic team strength</li>
+<li><strong>Massey Ordinals</strong>: consensus of ~60 ranking systems is hard to beat</li>
+<li><strong>Spline calibration</strong>: smooth conversion from predicted margins to probabilities</li>
+<li><strong>LOSO ensemble</strong> of 22 models: free variance reduction</li>
+<li><strong>80/20 blend</strong>: regularizes extreme predictions</li>
+</ol>
+<h2>What Didn't Work</h2>
+<ul>
+<li><strong>Conference strength</strong>: redundant with Elo and Massey</li>
+<li><strong>Box score Four Factors</strong> (eFG%, TO%, ORB%, FTR): redundant once BartTorvik is in the mix</li>
+<li><strong>Probability clipping</strong>: the spline already produced well-calibrated outputs</li>
+<li><strong>Post-hoc pace compression</strong> (Level 13 experiment): too blunt as a linear adjustment</li>
+<li><strong>Clutch factor</strong> (Level 13): low importance; probably needs play-by-play data to be useful</li>
+</ul>
+<h2>External Data</h2>
+<ul>
+<li><strong><a href="https://www.kaggle.com/datasets/jswanson/barttorvik-t-rank-2015-2026" target="_blank">BartTorvik T-Rank</a></strong> (barttorvik.com): men's 2015-2026, women's 2021-2026. Scraped and uploaded as a Kaggle dataset.</li>
+<li><strong>Massey Ordinals</strong>: included in competition data</li>
+<li>Everything else derived from competition-provided box scores and results</li>
+</ul>
+<h2>Tools</h2>
+<p>Python, XGBoost, pandas, statsmodels, scipy. Built iteratively with Claude Code as a coding assistant.</p>

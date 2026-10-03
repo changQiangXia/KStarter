@@ -1,0 +1,364 @@
+# https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/288896
+
+Topic #288896: Tricks for Image Classification / Regression with Neural Networks
+  Author: 
+  Posted: 2021-11-18 17:14:52.045000
+  Votes: 293  Comments: 49
+
+Intro
+
+Often when we try to reproduce results seen in a paper,  we often find that the exact setup fails to achieve the same results, mainly because the authors used some tricks that are too boring to write about in the paper. 
+
+This post tries to list some of those tricks as well as some adjustments to be made to network architectures for boosting the performance for image-based models. 
+
+
+
+Training scheme
+
+Simple Augmentations to use during training
+
+
+
+Randomly crop a rectangular area with [3/4,4/3] aspect ratio, then randomly sample with [8%,100%], and finally resize to an img_sizeXimg_size square. do this randomly on each batch. 
+
+Add some probability of random horizontal flip (Example: 0.5..)
+
+Change randomly hue, saturation, and brightness and choose coefficients proportional to [0:6;1:4].
+
+Normalize the RGB channels by subtracting each channel by the mean value and dividing by it's std.
+
+
+
+
+During test
+
+
+
+Keep the same aspect ratio, resize the short side to img_size, and then cut out the (img_size-1)x(img_size-1) area in the center.
+
+Dont forget to standardizatize as above.
+
+
+Weight initialization:
+
+
+
+Init the convolutions and fully connected layers with the 'Xavier weights': take random values ​​uniformly in [-a,a] where: $$a=\sqrt( \frac{6}{d_in+d_out})$$
+Where: d_in and d_out are the number of input and output channels of the layer respectively.
+
+Init biases to 0
+
+BatchNorms: init alpha and belta to 1 and 0 respectively
+
+If you don't have a fancy lr scheduler yet:  a good baseline is to init it to 0.1, and divided by 10 every couple of epochs. 
+
+
+
+
+Effective training
+
+Batch size
+
+
+
+When training with Mini-batch SGD, if the batch size is too large, it will affect the convergence speed and reduce the accuracy. However, if the batchsize is too small it will never finish. 
+
+
+LR scheduler
+Gradient descent is a random process. Increasing the batch size will not affect the gradient itself, but it will reduce the variance, that is, reduce the noise. so you can think about it as a certain type of regularization. Use LR scheduler to compensate for larger batch size if you chose to train this way. 
+So when choosing batch size and lr to start searching from, use the following heuristic: if for example your baseline batch size is say..  256, and the initial baseline learning rate is 0.1, so when you is increased to "b" batch size, you should change the learning rate to "0.1 * b/256"
+
+Learning rate warm-up
+Because the weights are random at the beginning, large learning rate will lead to unstable training on the first batches.
+Therefore, a warm-up phase is advised, this means: use some data m batches, such as 5 epochs, to increase the learning rate from 0 to the initial learning rate. this simple tricks works well often. 
+
+Set BN alpha is initialized to 0
+
+
+
+Initialize the alpha of BN to 0 on residual blocks, so that only the residual blocks will return their input, and the initial cold start will be easier to train.
+
+
+Mixed-precision training
+
+
+
+Use mixed precision if your hardware supports it. It is free training speed in simple terms. 
+
+
+Fine-tunning
+
+
+
+After you are done training: train the last layer for couple more episode when all the other layers are frozen
+
+
+Train an epoch more on the validation
+Yep. courage. be brave. 
+
+Use Learning rate cosine decay
+
+
+
+This is a strong "out of the box" scheduler to use. It might not be optimal but it is a great place to start searching for the optimal. [see chris's solution for the ventilator competition] 
+
+
+Label smoothing
+If you use a classifier, try label smoothing. The deal is simple:
+You do: y_true = y_true * (1.0 - ε) + 0.5 * ε [example: ε = 0.001]
+You get: better model 🏆
+And batchwise: 
+batch_labels = (1.0-label_smoothing)*batch_labels+label_smoothing/N_CLASSES
+
+BTW, you have it built-in tensorflow:   loss =BinaryCrossentropy(label_smoothing = label_smoothing)
+
+And for pytroch you need to copy-paste the following loss:
+
+from torch.nn.modules.loss import _WeightedLoss
+
+class SmoothBCEwLogits(_WeightedLoss):
+    def __init__(self, weight = None, reduction = 'mean', smoothing = 0.0, pos_weight = None):
+        super().__init__(weight=weight, reduction=reduction)
+        self.smoothing = smoothing
+        self.weight = weight
+        self.reduction = reduction
+        self.pos_weight = pos_weight
+
+    @staticmethod
+    def _smooth(targets, n_labels, smoothing = 0.0):
+        assert 0 &lt;= smoothing &lt; 1
+        with torch.no_grad(): targets = targets * (1.0 - smoothing) + 0.5 * smoothing
+        return targets
+
+    def forward(self, inputs, targets):
+        targets = SmoothBCEwLogits._smooth(targets, inputs.size(-1), self.smoothing)
+        loss = F.binary_cross_entropy_with_logits(inputs, targets,self.weight, pos_weight = self.pos_weight)
+        if  self.reduction == 'sum': loss = loss.sum()
+        elif  self.reduction == 'mean': loss = loss.mean()
+        return loss
+
+
+Here is the original paper if you are interested: https://arxiv.org/pdf/1906.02629.pdf
+
+
+
+Advanced tricks
+
+Knowledge Distillation
+Use a large teacher network to guide the learning of a small network. This might be a"long shot" but sometimes this concept helps to squeeze just a bit more.  
+
+
+
+Train the large model: first use the hard target, which is the normal label to train the large model;
+
+Calculate soft target: use the trained large model to calculate soft target. That is, the output of the softmax after the large model is "softened"
+
+Train a small model, add an extra soft target loss function on the basis of the small model, and adjust the proportion of the two loss functions through interpulation .
+
+On inference, use the trained small model in the usual way
+
+
+MixUp
+
+
+
+Randomly select two pictures, and then generate a parameter of [0,1] to add the two pictures together, So the new sample becomes a "watermark" one on top of the other. it is typical to choose the const as 0.2
+
+
+Basiclly you just calculate: 
+
+x=lambda*x1+(1-lambda)x2
+y=lambda*x1+(1-lambda)y2
+
+
+Transfer learning
+Goes without saying. Always start from a pretrained model. It is better to use the one trained on the largest dataset you can find [like imagenet 22k] and if you can put your hands on "noisy-student" do it. 
+
+Optimizer
+Most NN models are using Adam. BUT something to consider is often times if you hyperparam-search SGD with momentum enough, you probably could get better results with it. 
+
+Denoising AudoEncoder branch
+You might get lucky if you start your training by doing some self-supervised Auto encoding just to get the weights up and running. It might help with performance. 
+
+Image size
+Usually: the biggest the better. but up to a certine point. there were some competitions in the past that above 512 didn't help the network. 
+
+
+
+About samples that mess with you
+
+Rare objects on the images - The metric is sensitive to outliers
+
+These are samples that are messing your model up. you should love them! you are going to get a better model if you can detect them yourself and handle them. most kagglers on the leaderboard tend to score poorly specifically on them! and since this competition evaluation metric is RMSE: You only need a couple of poor samples to mess you up for your score to drop. 
+
+Why and How to deal with rare images
+Because it is so difficult to force "machine learning" on them try to come up with a "hard crafted" section of your pipeline to deal with them. Maybe even hand label them differently or even train a segmentation head on them. to extract some more information from them. 
+
+Size of the objects in the images
+Pay close attention to the size of the object in the image play a strong role on how "easy" it is to learn this sample. You can play with sample weights that are relational to the size of the object of interest. Maybe even "pre crop" the images so it will be easier for your model to extract them out of the background. 
+
+Balanced Batches
+Try to come up with a unique way to balance the batches: you can try: balanced sampling, balance between classes, between single/multiple labels, between external/kaggle data  based on the size of the object in the image.
+
+Extract domain knowledge by looking at the images
+Try to find patterns that make the target high or low by hand. The color, the shape, the texture, the position. Then: Look for images that are "on the edge" and remove them from the training since as they mess with you up. they mess with your model even more!
+
+
+
+Final Tricks
+
+Rocket Science the blending part
+You probably already know that you want your models to be as less correlated as possible since they willmake their mistakes on different samples this way. and then on emsebling you will get a strong pipeline overall. 
+
+However, ensembling is a big word: you can Avg, you can take the Median, or you can start going even further into stacking or even some "rocket science" methods like there were on the ventilators competition [have a look there if you are interested]. You can get a-l-o-t simply by ensembling better. 
+
+Generate background train samples
+And then try to "copy paste" cats or dogs into them. If you can do this you get get a powerful augmentation from the simple training set of the competition. 
+
+Try some clustering magic
+Cluster similar images together by using some clustetring algorithm, on their latent representation extract with a deep net.  KNN neighbours can then be used in many creative ways both for pre and post processing maybe data augmentation or even balancing etc.
+
+Want a very hard CV?
+Like above: cluster based on latent representation, then use the clusters as groups for Grouped KFold. Now you got a hard CV for your model with ease! 
+
+Ugly trick
+Train a simple regressor that takes you oof prediction vector and tries to predict the kaggle metric score (LB score) you will get submitting this kernel. no more words are going to be added about this! ;) 
+
+Smart cut-mix
+Like cut-mix but in a smart way that takes the whole object of interest with you to the other image. [Copy and pase "the dog" or "the cat" and not just a part of it] 
+
+Augment with CycleGAN
+I wanted to just copy-paste the code that is doing it since it is easy but I couldn't find it. Anyhow, this was done on some past winning solutions: You can transfer the style of the images onto themselves to create pretty much the same training set but distorted. This is "free" unique augmentation technique. 
+
+The big 4
+This had gone popular on some recent paper but these methods "just work" most of the times: pesudo-labeling, semi-suervised learning, knowledge distillation, adversarial training. Try them out. 
+
+Aux labels
+Try to come up with some aux labels. If you can add some information to the model through another label branch this might boost your model's performance greatly. 
+
+Happy Kaggling! 
+Cheers^^
+
+
+
+References:
+
+
+
+https://www.kaggle.com/c/tensorflow-speech-recognition-challenge/discussion/46945
+
+https://www.kaggle.com/c/tabular-playground-series-apr-2021/discussion/231738
+
+https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63984
+
+https://arxiv.org/abs/1812.01187
+
+Comments:
+├─ Mithil Salunkhe (2021-11-19 08:58:12.643000) [+5]
+│  Just one gold medal away from grandmaster guys. Lets make this post get that. He deserve it
+├─ Nallapaneni Venkatesh  (2022-01-04 05:39:32.867000) [+1]
+│  A lot of knowledge to gain here.. Thank you.
+├─ gao-hongnan (2021-12-16 13:06:53.797000) [+1]
+│  Thanks for sharing, may I check this:
+│  
+│  
+│    
+│  Change randomly hue, saturation, and brightness and choose coefficients proportional to [0:6;1:4].
+│  
+│  
+│  More concretely, is there an example to this?
+├─ LuckyDeer (2021-12-14 21:28:42.820000) [+1]
+│  Learning rate warm-up wins fit_one_cycle maybe, I found this in an article, it says maybe now a single-cycle Learning rate scheduler would work better, here's the title of the paper，《Super-Converge...
+├─ eryawww (2021-12-13 14:34:02.777000) [+1]
+│  Thats pretty solidd, thanks for sharing 👍
+├─ Innat (2021-11-19 09:51:32.517000) [+2]
+│  @yamqwe 
+│  For label smoothing in pytorch, you can refer to my answer here in detail. Also, you can include the gradient accumulation technique in your list.
+├─ Nadia Kalinina (2022-01-24 10:31:01.810000) [+0]
+│  Thanks a lot! But can you give more explanation please to Train an epoch more on the validation? Are you proposing use validation data to train last epoch, right??😳
+├─ Santhoshkumar (2021-12-12 14:21:17.297000) [+0]
+│  Excellent compilation of all the tricks in one place @yamqwe , Thanks for sharing👌
+├─ Tom (2021-12-11 13:29:56.343000) [+0]
+│  Ok I'll try it !
+├─ Vasu (2021-12-04 20:12:17.063000) [+0]
+│  Thanks for sharing this. Very informative!
+├─ AlexLeu (2021-11-28 17:54:07.877000) [+0]
+│  added upvote! very resourceful. til about xavier init :)
+├─ Adeyemi Adewole (2021-11-26 14:23:05.157000) [+0]
+│  This training was a really exhausting,
+│  but it's worth the trouble. Nice One!
+│  We need more good stuff like this.
+├─ Dmitry Dryomov (2021-11-26 10:35:00.207000) [+0]
+│  Long time no see :)
+├─ Sree Charan (2021-11-24 13:53:18.047000) [+0]
+│  This is really very helpful. Thanks for sharing
+├─ Teja Sangaru (2021-11-23 05:59:18.050000) [+0]
+│  you want  to improve
+├─ Vaibhav Channe (2021-11-22 07:29:01.967000) [+0]
+│  Much informative.
+├─ Artem_Man (2021-11-21 01:43:48.100000) [+0]
+│  This is very interesting. Thanks a lot for the useful information!
+├─ iDatura (2021-11-21 01:30:59.117000) [+0]
+│  Awesome！:)
+├─ Sabry_Tarek (2021-11-20 16:48:49.977000) [+0]
+│  Good Tricks
+├─ w842442862 (2021-11-20 12:35:50.870000) [+0]
+│  Very helpful!
+├─ Mohammed Ouahman (2021-11-19 20:48:33.893000) [+0]
+│  Hi guys can some help me, I have an aspx file, so I want to convert it to a csv or xlsx file
+├─ Lowell Niles (2021-11-19 18:19:19.920000) [+0]
+│  Awesome and useful. Thanks for sharing!
+├─ [deleted] (2022-01-13 08:39:40.543000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 12:57:44.080000) [+0]
+│  [deleted]
+├─ Matt00n (2022-01-02 14:53:04.887000) [+1]
+│  Thanks a lot! very helpful
+├─ Artem Blanar (2021-12-13 20:15:35.540000) [+1]
+│  Thanks for the great post!
+├─ shreevasa tantry (2021-11-22 15:56:08.263000) [+1]
+│  Thank you for sharing
+├─ Aishik Banerjee (2025-07-02 10:59:11.423000) [+0]
+│  thanks for the tricks!
+├─ Saw Chiou Ming (2024-01-25 01:57:23.507000) [+0]
+│  Thanks for sharing!
+├─ [deleted] (2022-02-18 05:13:39.117000) [+0]
+│  [deleted]
+├─ [deleted] (2021-12-04 04:33:33.607000) [+0]
+│  [deleted]
+├─ [deleted] (2021-12-01 14:18:32.637000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-30 19:39:17.447000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-29 02:55:42.383000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-25 14:09:00.990000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-25 01:08:16.090000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-24 22:59:03.870000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-24 14:36:10.143000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-23 16:59:06.407000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-23 13:14:56.700000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-23 06:57:13.510000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 18:48:12.147000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 15:56:44.437000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 14:38:00.013000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 10:55:40.937000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 07:07:14.647000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-18 18:15:15.573000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 15:54:59.673000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-22 09:07:27.603000) [+0]
+│  [deleted]

@@ -1,0 +1,309 @@
+# https://www.kaggle.com/competitions/otto-recommender-system/discussion/383013
+
+Topic #383013: 3rd Place - Using Only Rules Achieves LB 0.590!
+  Author: Chris Deotte
+  Posted: 2023-02-01 23:45:34.770000
+  Votes: 151  Comments: 55
+
+Team G &amp; B &amp; D &amp; T
+
+It was a pleasure to work with @titericz @benediktschifferer @theoviel . We each made individual models and then ensembled all our work together by adding the ranks of each of our predictions per user target type. Below I describe my individual single model. My teammates will describe their work in their own discussion posts. You can read about Theo's LB 0.6029 model here! You can read about Benny's LB 0.601 model here!
+
+Most of my solution was made public in my notebook here and discussion here during the competition. There were only 3 significant ideas missing from my public work. Let's discuss how to boost my public work to LB 0.601 single model. (UPDATE: All code published to GitHub here)
+
+How To Score LB 0.601 Single Model
+
+It was explained here and here that the best approach was "candidate rerank" model. My public notebook here shows how to achieve LB 0.575. And my discussion post here explains how to improve my public notebook by adding a GBT ranker model. Below are the three missing pieces labeled (1), (2), and (3) to achieve LB 0.601
+
+(1) Choosing Candidates
+
+To build a "candidate rerank", we need candidates. Where do we get candidates? The easiest way is to get them from my public notebook. In the def suggest_buys(df) and def suggest_clicks(df) function, the last lines are
+
+top_aids = [aid for aid, ct in aids_counter.most_common(20)] 
+return top_aids
+
+
+To generate 50 candidates, we change 20 to 50 as in
+
+top_aids = [aid for aid, ct in aids_counter.most_common(50)] 
+return top_aids
+
+
+(2) Choosing Interaction Features
+
+We now have 50 candidates per user from our public notebook above. Next we need to make features for our reranker model. The strongest and easiest way to make features is extract our co-visit counts by changing the last two lines of my public notebook to the following:
+
+top_counts = [ct for aid, ct in aids_counter.most_common(50)] 
+return top_counts
+
+
+When we merge these counts to our candidates, we now have an interaction feature for each user item pair. To make more interaction features, we can extract the counts for each co-visit matrix individually. For example, imagine that we have 3 co-visit matrices named covisit2, covisit3, and covist4. Then one by one, we extract each covisit's counts:
+
+EXTRACT = ['covisit2']
+aids_counter = Counter()
+if 'covisit2' in EXTRACT:
+    aids = list(itertools.chain(*[covisit2[aid] for aid in unique_aids if aid in covisit2]))
+    for a in aids: aids_counter[a] += 1
+if 'covisit3' in EXTRACT:
+    aids = list(itertools.chain(*[covisit3[aid] for aid in unique_aids if aid in covisit3]))
+    for a in aids: aids_counter[a] += 1
+if 'covisit4' in EXTRACT:
+    aids = list(itertools.chain(*[covisit4[aid] for aid in unique_aids if aid in covisit4]))
+    for a in aids: aids_counter[a] += 1
+top_counts = [ct for aid, ct in aids_counter.most_common(50)] 
+return top_counts
+
+
+Reranker Boost CV and LB +0.011
+
+First we use the technique above to generate candidates and the technique above to extract covisit counts. Next we add some simple item and user features like counting the number of times an item is click cart or order. When we apply the XGB reranker described here, our CV and LB will boost by +0.011. For example, the public notebook will boost to LB 0.586.
+
+Using Rules Only (without reranker) Scores LB 0.590
+
+To score over LB 0.600, we create more co-visit matrices to boost the original notebook's LB score. My public notebook uses 3 covisit matrices and achieves LB 0.575. If we make 17 more covisit matrices, we can boost my public "rules only" notebook to LB 0.590 (new notebook published here). Then when we extract the covisit counts explained above, the XGB reranker will boost +0.011 and achieve LB 0.601
+
+(3) Twenty Covisit Matrices
+
+Below are a description of my 20 covisit matrices. These covisit matrices are the secret sauce enabling my single XGB ranker model to achieve LB 0.601. The following variable names are from my new LB 0.590 notebook posted here. (Example code showing how to compute covisit matrices on GPU is here)
+
+
+
+top_20 - this covisit matrix is in my original notebook
+
+top_20b - all covisit pair counts are consecutive items. See code below.
+df['k'] = np.arange(len(df))
+df = df.merge(df, on=['session'])
+df = df.loc[ (df.k_y - df.k_x).abs()==1 ]
+
+top_20c - all covisit pair counts are (df.k_y - df.k_x).abs()&lt;=2
+
+top_20d - all covisit pairs are carts/orders and forward at most 3 consecutive
+df = df.loc[df['type'].isin(['carts','orders'])]
+df = df.merge(df, on=['session'])
+df = df.loc[ (df.k_y - df.k_x &gt; 0) &amp; (df.k_y - df.k_x &lt;= 3) ]
+
+top_20e - all covisit pairs are (df.k_y - df.k_x).abs()&lt;=3 and have time decay with
+df['wgt'] = (1/2)**( (df.ts_x - df.ts_y).abs() /60/60)
+
+top_20f - same as above but (df.k_y - df.k_x).abs()&lt;=6
+
+top_20_orders - this covisit matrix is in my original notebook
+
+top_20_buy2buy - this covisit matrix is in my original notebook
+
+top_20_buy2buy2 - use most recent 3 weeks data and only carts/orders. Apply time decay shown above.
+
+top_20_test - use most recent 3 weeks data. Only forward in time pairs. Use clicks/carts/orders to carts/orders. Add time decay
+df = df.loc[df.ts &gt;= LAST_3_WEEKS ]
+df2 = df.loc[df['type'].isin(['carts','orders'])]
+df = df.merge(df2, on=['session'])
+df = df.loc[ df.ts_y - df.ts_x &gt; 0 ]
+df['wgt'] = (1/2)**( (df.ts_x - df.ts_y).abs() /60/60)
+
+top_20_test2 - use most recent 2 weeks data with time decay.
+
+top_20_buy - Limit to forward 2 hours. Use clicks/carts/orders to carts/orders. Apply time decay.
+
+top_20_new - Find cold start users in train. Pairs using only their first history item. Use clicks/carts/orders to carts/orders.
+df['x'] = df.groupby('session').ts.transform('min')
+df = df.loc[df.x &gt; train.ts.min() + TWO_WEEKS ]
+df['n'] = df.groupby('session').cumcount()
+df2 = df.loc[df['n']==0]
+df3 = df.loc[df['type'].isin(['carts','orders'])]
+df = df2.merge(df3, on='session')
+
+top_20_new2 - Find cold start users in train. Pairs using only their first history item. Use clicks/carts/orders to clicks/carts/orders. Apply time decay.
+
+top_40_day - Use only last week data. Forward in time. Clicks/carts/orders to carts/orders. Time decay
+
+top_40_day2 - Use only last week data. Time decay
+
+top_40_less - Train users with less than 6 history and test users with less than 3
+df = df.loc[df[COUNT]&lt;THRESHOLD]
+df = df.merge(df, on='session')
+
+top_40_more - Train users with more than 6 history and test users with more than 3
+
+top_40_less2 - Use item pairs with first item before 2pm. Clicks/carts/orders to carts/orders. Time decay
+df2 = df.loc[df[HOUR]&lt;14]
+df = df2.merge(df, on='session')
+
+top_40_more2 - Use item pairs with first item after 2pm. Clicks/carts/orders to carts/orders. Time decay
+
+
+Fast Covisit Experiments With RAPIDS cuDF
+
+To find the above 20 covisit matrices, i computed hundreds of covisit matrices and then computed local CV score. To make covisit matrices quickly, I used RAPIDS cuDF to make each covisit matrix on GPU in under 1 minute. Code to make covisit matrix is shown here. Matrices were made using Nvidia 4xV100 32GB GPUs.
+
+UPDATE: GitHub Code!
+
+I published all 261 jupyter notebooks in my GitHub here. Specially we can review all the code used to generate co-visititation matices. And we can see the pipeline for building, training, inferring a GBT reranker model. Our team's final Kaggle inference submit notebook is here. My notebook to generate 100 candidates for reranker is here. By itself it scores 49th place LB 0.590!
+
+Comments:
+├─ Chris Deotte (2023-02-14 19:15:12.750000) [+7]
+│  UPDATE: I published all 261 jupyter notebooks to run my full single model LB 0.601 solution at GitHub here: https://github.com/cdeotte/Kaggle-OTTO-Comp
+├─ Artem Fedorov (2023-02-02 17:23:28.827000) [+3]
+│  Everything looks so easy when reading the describtion of your solution. I've even thought for a moment "how could it happen that I didn't try it myself?" 
+│  With just kaggle notebooks running all the...
+├─ Radek Osmulski (2023-02-02 21:45:54.857000) [+4]
+│  Great job @cdeotte and the rest of the team! 🥳 Amazing performance!
+│  
+│  This write up reads like a good detective story, the plot is so clearly explained! So cool to understand what you did to achieve...
+  ├─ Chris Deotte (2023-02-03 15:59:16.260000) [+0]
+  │  Thanks Radek. Thanks for all your sharing during the competition!
+├─ 马甲线来来来 (2023-03-18 03:42:24.003000) [+1]
+│  thx for sharing, really learn a lot from that
+├─ Girijesh (2023-02-16 05:38:22.827000) [+1]
+│  Congratulations @cdeotte excellent work.
+├─ Ryan (2023-02-13 05:00:00.417000) [+1]
+│  Wow, congratulations on taking 3rd place in the competition! Your solution is impressive OAO
+│  
+│  I learnt your approach to using RAPID cuDF to quickly compute hundreds of covisit matrices and then com...
+├─ Mayuri Deshpande (2023-02-10 23:35:14.827000) [+1]
+│  Congratulations! Great read!
+├─ Apa (2023-02-10 14:55:52.430000) [+1]
+│  I saw that in your open source code, the saved file name of the feature is gpu-116
+│  ;gpu-220 and so on, why are they named so?
+  ├─ Chris Deotte (2023-02-10 23:39:28.810000) [+1]
+  │  This was experiment 116 and experiment 220. I made hundreds of different co-visit matrices and computed validation score to see which were the best.
+├─ Nick Liu (2023-02-06 05:14:31.107000) [+1]
+│  Hello Chris,
+│  Great work and Congratulations.
+│  I try to implement your idea but feel a little confused in some covisit items.
+│  Could you slightly talk about if you don't mind: 
+│  
+│  
+│  
+│  What's the differenc...
+  ├─ Chris Deotte (2023-02-06 16:23:48.880000) [+2]
+  │  Thanks ChickenBoy,
+  │  
+  │  
+  │  
+  │  
+  │  top_20_new is clicks/carts/orders to carts/orders without time decay. And top_20_new2 is clicks/carts/orders to clicks/carts/orders with time decay.
+  │  
+  │  
+  │  Cold start is user_firs...
+    ├─ Nick Liu (2023-02-06 17:12:18.810000) [+2]
+    │  Thanks! Really helpful👍👍👍
+├─ ibrahim karatas (2023-02-04 22:50:36.573000) [+1]
+│  A useful share. Thanks I will use this in my project
+├─ ToriGlori (2023-02-04 20:51:34.087000) [+1]
+│  Nice write down
+├─ andrey bobrik (2023-02-03 19:47:20.930000) [+1]
+│  Great breakdown
+├─ S Victor Kumar (2023-02-02 21:03:21.687000) [+1]
+│  Congratulations! @cdeotte 
+│  And Thanks it helped me to understand  about Competition ranking in Kaggle.
+├─ Donghoon Jang (2023-02-02 07:34:08.147000) [+1]
+│  Thank you for sharing. It helped me a lot.
+│  
+│  Could you share the code for building a reank model using your CV notebook and LB notebook?
+│  
+│  I had a hard time making a reank model using candidates.
+│  
+│  Th...
+├─ Hoang Nguyen (2023-02-02 03:27:05.887000) [+1]
+│  Congratulations on your gold medal, and thanks for your great help - your code and suggestions were very influential (and have helped me get my first medal!)
+│  Your work actually introduced me to cuD...
+  ├─ Chris Deotte (2023-02-02 04:22:58.530000) [+1]
+  │  yes, sometimes memory usage does not decrease. In this situation, i save dataframe to disk as parquet. Then i shut down notebook and start a new notebook and read in the parquet. That will clear me...
+    ├─ Hoang Nguyen (2023-02-02 05:42:19.227000) [+1]
+    │  That's what I had to do to too! Also I google-ed around for an option to release unused GPU memory and found nothing related to cuDF but a few options for PyTorch (torch.cuda.empty_cache, if I'm co...
+    ├─ [deleted] (2023-02-02 05:47:43.680000) [+0]
+    │  [deleted]
+    ├─ Mohamed Eltayeb (2023-02-02 05:48:38.680000) [+3]
+    │  I think this can help:
+    │  #Free The GPU Memory
+    │  from numba import cuda
+    │  cuda.select_device(0)
+    │  cuda.close()
+    │  cuda.select_device(0)
+    ├─ Hoang Nguyen (2023-02-02 10:56:16.127000) [+1]
+    │  Thanks Mohamed! I have not tried this, but based on numba documentation this seems equivalent to restarting the kernel. Have you tried it?
+    ├─ Mohamed Eltayeb (2023-02-02 11:44:11.280000) [+1]
+    │  I used it several times in "American Express Competition". Sometimes I encounter a permission issue (Not sure honestly why it appears sometimes), but other than that, it works perfectly.
+    ├─ Hoang Nguyen (2023-02-02 15:04:20.790000) [+1]
+    │  Sounds like what I'm looking for - will make sure to try it next time. Thanks again!
+  ├─ Giba (2023-02-05 01:20:17.170000) [+4]
+  │  Put your cudf operations inside a function.  Then python releases GPU memory used inside the function after the return.
+├─ ADAM. (2023-02-02 01:24:28.653000) [+1]
+│  super cool!
+  ├─ Chris Deotte (2023-02-02 01:50:43.040000) [+0]
+  │  Thanks Adam
+├─ cooperation (2023-02-02 00:58:10.020000) [+1]
+│  Thank you Chris, I won't get current ranking wihtout your public notebook。
+│  
+│  I have some doubts in the your gbdt public notebook  ：
+│  I would like to know why there is no need to specify a group in In...
+  ├─ Chris Deotte (2023-02-02 01:08:33.187000) [+1]
+  │  Group is not needed during inference. The GBT will rank all rows during inference. So when we just look at each user during inference, the ranking will be correct.
+  │  
+  │  (Group is only needed during tra...
+    ├─ cooperation (2023-02-02 06:10:49.377000) [+1]
+    │  Thanks Chris!
+├─ Andrei Kavalenka (2023-02-05 15:20:20.370000) [+2]
+│  Nice work, it was very interesting to read!
+  ├─ Chris Deotte (2023-02-09 04:09:49.487000) [+1]
+  │  Thanks Andrew!
+├─ ibrahim karatas (2023-02-04 19:01:51.847000) [+2]
+│  The information you share is very valuable. Thanks for sharing. I will use it in my next rule based project
+├─ Taha Muhammad Haider (2023-02-03 16:05:20.163000) [+2]
+│  Congratulations, @cdeotte on your outstanding results! Your exceptional problem-solving skills and strong intuition have truly inspired me. I have gained so much valuable knowledge from you. I am g...
+├─ KhanhVD (2023-02-03 02:24:13.223000) [+2]
+│  Congrats @cdeotte and team on great results. Thanks for sharing throughout the competition, again learn alot from you!
+├─ Pietro Maldini (2023-02-02 13:01:10.733000) [+2]
+│  Congratulations! It's incredible how the rule based models could be pushed. My limit was 0.581 LB with rule based.
+│  Next time I'll try out some of the ideas you presented.
+│  
+│  Again congratulations!
+├─ Wonho Song (2023-02-02 09:08:12.020000) [+2]
+│  I love your way to explain solution starting from baseline notebook. 
+│  I really learned a lot from your notebook and discusssions.
+│  Congrats!
+├─ Aji Samudra (2023-02-02 04:10:10.003000) [+2]
+│  This is epic! Thanks for sharing @cdeotte!
+│  Out of curiosity, what makes you stick with rule-based and creating various different covisit matrix while there's other techniques such as CF, MF and wor...
+  ├─ Chris Deotte (2023-02-02 04:24:06.760000) [+1]
+  │  I did everything. I pushed rule-based as far as it would go. Afterward, i used word2vec and matrix factorization to create features for my GBT reranker. Both helped.
+    ├─ Mohamed Eltayeb (2023-02-02 04:52:08.560000) [+1]
+    │  Do you think LSTM Embeddings would help more than Word2Vec given that we have aids sorted by time? Just want to know if you made a similar experiment?
+    ├─ Chris Deotte (2023-02-02 05:08:53.167000) [+3]
+    │  I think all item embeddings would help. The trick was to first train some NN such as LSTM, Word2Vec, Matrix Factorization etc.
+    │  
+    │  Then we take the item embeddings and for each row in our candidate da...
+    ├─ Mohamed Eltayeb (2023-02-02 05:15:13.997000) [+1]
+    │  Nice! I tried a similar idea. I used Word2Vec, but calculated the cosine similarity between last, 2nd to last and 3rd to last interacted items and the last, 2nd to last and 3rd to last clicked/cart...
+    ├─ Aji Samudra (2023-02-02 05:17:55.547000) [+1]
+    │  as always thanks for sharing clear and details tricks
+    │  
+    │  I am curious about how do you compute multiple item comparisons in fast way?
+    │  I am stuck with for loop iteration with following steps
+    │  
+    │  
+    │  
+    │  in eac...
+    ├─ Chris Deotte (2023-02-02 05:59:29.677000) [+2]
+    │  I'm not sure what you're asking. I use cupy and GPU to perform the vector multiplication of user history item with candidate item embedding. It takes a few seconds to create a new column of cosine ...
+    ├─ Artem Fedorov (2023-02-02 17:12:44.323000) [+1]
+    │  I do not worry about making too many features. My pipeline can handle 1000+ features. (Because for XGB reranker i remove all users where no candidate has a positive target).
+    │  
+    │  
+    │  For us working with k...
+├─ EeyoreLee (2023-02-02 01:19:20.587000) [+2]
+│  Amazing ！0.590 without reranker.  Thanks so much for your all tutorial otherwise I didn't know how to play a recommend game.
+  ├─ Chris Deotte (2023-02-02 01:35:32.117000) [+2]
+  │  Thanks EeyoreLee. Congratulations on your solo Bronze medal finish. Your LB 0.593 was very close to Silver 0.594. You did great !
+├─ YuhaoWu123 (2024-09-28 16:12:23.177000) [+0]
+│  Hi，thanks for your contribution！I have a question：Why not directly read train.jsonl line by line and then determine whether each line should be added to the training set or validation set? What is ...
+├─ Siliva1799 (2023-03-02 09:16:21.490000) [+0]
+│  Congratulations !!!
+├─ [deleted] (2023-02-04 15:39:46.547000) [+0]
+│  [deleted]
+├─ [deleted] (2023-02-04 10:47:07.627000) [+1]
+│  [deleted]
+├─ [deleted] (2023-02-06 07:13:13.363000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-28 18:26:54.350000) [+0]
+│  [deleted]

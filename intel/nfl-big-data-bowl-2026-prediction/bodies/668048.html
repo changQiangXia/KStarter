@@ -1,0 +1,223 @@
+<p>First of all, thanks to NFL, Kaggle, and all organizers for the data and compute—this is the only place we could test our model on the field.</p>
+<p>And thanks to my teammates for grinding features, tuning hyper-params, and fixing bugs day and night; the 3rd-place trophy belongs to all of us.</p>
+<p>Below, I’ll walk through our solution in these parts: </p>
+<ol>
+<li>Feature Engineering</li>
+<li>Dataset Construction</li>
+<li>Data Augmentation</li>
+<li>Use of Additional Data</li>
+<li>Pre-training &amp; Fine-tuning</li>
+<li>Model Architecture</li>
+<li>Losses</li>
+<li>Training Regularization &amp; Optimization</li>
+<li>Test-Time Augmentation (TTA)</li>
+<li>Model Ensemble</li>
+<li>What Did NOT Help</li>
+</ol>
+<h1>Feature Engineering</h1>
+<h3>Raw Features</h3>
+<p>x, y, s, a, dir, o, ball_land_x, ball_land_y, num_frames_output</p>
+<h3>Velocity Decomposition</h3>
+<p>velocity_x, velocity_y</p>
+<h3>Angle / Motion Direction</h3>
+<p>angle_to_ball, dir_rad</p>
+<h3>Player Role / Mask</h3>
+<p>player_side_bool, is_passer, is_receiver</p>
+<h3>Geometric Distance</h3>
+<p>distance_to_passer, distance_to_receiver, distance_to_ball_land, passer_to_ball_land, receiver_to_ball_land</p>
+<h3>Geometric Projection / Area</h3>
+<p>distance_to_passing_line, projection_on_passing_line, triangle_area_ratio (area of triangle Player-QB-Receiver)</p>
+<h3>Time / Global Context</h3>
+<p>time_elapsed</p>
+<h1>Dataset Construction</h1>
+<p>We flatten each play along the time axis and lay out the 22 players as fixed slots (missing players are zero-padded). The slot assignment is done once per play:</p>
+<ul>
+<li>At the first frame (frame_id = 1) of every play_id</li>
+</ul>
+<blockquote>
+  <p>a. Offense: sort the 11 players by Euclidean distance to the passer (QB) ascending → slots 0 … 10</p>
+  <p>b. Defense: sort the 11 players by the same distance ascending → slots 11 … 21</p>
+</blockquote>
+<ul>
+<li>This ordering is frozen for the entire play: all later frames, features and labels are filled into the tensor using the “nfl_id → slot” map created in step 1.</li>
+<li>The dataset returns tensors of shape (batch_size, time_steps, players, features).</li>
+<li>Late in the competition we found that the exact player order hardly matters; randomly shuffling the players and randomly masking some of them as augmentation gave a solid boost (see “Data Augmentation” section).</li>
+</ul>
+<h1>Data Augmentation</h1>
+<ul>
+<li>Horizontal flip: mirror left/right across the midfield line (y); offense/defense labels stay the same, routes become symmetric.</li>
+<li>180° rotation (H + V): flip both x and y; offense/defense labels stay the same, routes stay symmetric.</li>
+<li>Random player dropout</li>
+</ul>
+<blockquote>
+  <p>a. Count valid players from the first frame; skip if ≤ 4.</p>
+  <p>b. Randomly pick 1–min(5, valid−4) players and zero-out their 36-frame tensor + set mask = False.</p>
+  <p>c. Push the remaining players to the first k slots and pad the rest with zeros.</p>
+</blockquote>
+<ul>
+<li>Random player reordering: apply randperm inside offense and defense zones to break the bias that “slot 0 = closest to QB”, forcing the model to rely on geometric features instead of slot id.</li>
+<li>Random input crop: if seq_len &gt; 12, drop 2–6 frames from the head, keep at least 7 tail frames, then pad back to 36 with zeros.</li>
+</ul>
+<p>All augmentations are disabled during validation; only raw data is used to keep metrics comparable.</p>
+<h1>Use of Additional Data</h1>
+<p>We incorporated the officially permitted 2018 tracking dataset (<a href="https://www.kaggle.com/competitions/nfl-big-data-bowl-2021/data" target="_blank">https://www.kaggle.com/competitions/nfl-big-data-bowl-2021/data</a>, hereafter “2018nfldata”) into training.</p>
+<h3>Data Filtering</h3>
+<p>The 2018nfldata contains an event column. Under NFL rules we treat the following three events as equivalent to the key moments in this competition:</p>
+<ul>
+<li>ball_snap – start of play</li>
+<li>pass_forward – ball leaves passer's hand</li>
+<li>pass_arrived – ball becomes reachable (ends flight)</li>
+</ul>
+<p>We therefore keep only plays whose event chain is
+<code>ball_snap → pass_forward → pass_arrived</code>.</p>
+<h3>Input / Output Split</h3>
+<ul>
+<li>Input frames: from ball_snap up to and including pass_forward</li>
+<li>Output frames: from pass_forward + 1 up to and including pass_arrived</li>
+</ul>
+<h3>ball_land_x / ball_land_y</h3>
+<p>Rows with <code>team == 'football'</code> give the ball's coordinates.</p>
+<p>We take</p>
+<ul>
+<li><code>ball_land_x = x</code> at the row where <code>event == 'pass_arrived' &amp; team == 'football'</code></li>
+<li><code>ball_land_y = y</code> at the same row</li>
+</ul>
+<h3>Player Roles</h3>
+<ul>
+<li>Passer: player whose <code>position == 'QB'</code> in 2018nfldata/players.csv</li>
+<li>Targeted Receiver: offensive player closest to (ball_land_x, ball_land_y) at <code>event == 'pass_arrived'</code></li>
+</ul>
+<h1>Pre-training &amp; Fine-tuning</h1>
+<p>We use a two-stage pipeline:</p>
+<ul>
+<li>Pre-train on 2018nfldata + 2026 competition data with a small, trusted feature set:
+<code>x, y, s, a, dir, o, ball_land_x, ball_land_y, distance_to_passer, num_frames_output, player_side_bool, velocity_x, velocity_y, time_elapsed</code> (The offline validation score of the Pretrain model ranges from 0.62 to 0.68)</li>
+<li>Build a new model that adds a small linear “bridge” layer (see Model Architecture section), load the pre-trained weights, then fine-tune with the full feature stack described in the Features section, again on 2018nfldata + 2026 competition data.</li>
+</ul>
+<h1>Model Architecture</h1>
+<h3>Key design points</h3>
+<ol>
+<li>Dual-path: Graph-Transformer path captures inter-player interactions (<a href="https://www.kaggle.com/competitions/nfl-big-data-bowl-2020/writeups/deep-snappers-public-5th-place-solution-overview" target="_blank">ref</a>); main path captures individual motion patterns. </li>
+<li>Positional encoding: separate time + player embeddings to keep spatio-temporal order.</li>
+<li>Masking: handles variable number of valid players per play.</li>
+<li>Multi-task: four output heads supply rich supervision.</li>
+<li>Residual links: every projection layer has skip connections to avoid vanishing gradients.</li>
+</ol>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1197382%2F663aaa0638595b6bfe03662b077cc620%2Fnfl_stt_model.png?generation=1768445325709430&amp;alt=media" alt=""></p>
+<h3>Other Notes</h3>
+<ol>
+<li>Dropout: set to 0 in every module; for pure regression, any dropout hurts.</li>
+<li>Width vs depth: wide &amp; shallow (hidden_size=384, num_layers=2) beats narrow &amp; deep (hidden_size=128, num_layers=6).</li>
+</ol>
+<h1>Losses</h1>
+<h3>Primary Loss</h3>
+<p>TemporalHuberAdapted </p>
+<ul>
+<li>Time-decay weight: e^(−0.03·t)</li>
+<li>Velocity smoothness (1st-order diff)</li>
+<li>Acceleration smoothness (2nd-order diff)</li>
+</ul>
+<h3>Auxiliary Losses</h3>
+<ul>
+<li>Inter-frame displacement loss</li>
+</ul>
+<p>Self-supervised next-frame prediction inside the input sequence.</p>
+<ol>
+<li>Predict changes from every input frame to later input frames</li>
+<li>Goal: temporal consistency</li>
+<li>Supervision: real frame-to-frame deltas already in the input</li>
+</ol>
+<blockquote>
+  <p>a. i = 0: predict whole sequence → global motion trend</p>
+  <p>b. i = T-1: predict from last frame → instantaneous change</p>
+  <p>c. mid frames: learn multi-scale motion</p>
+</blockquote>
+<ul>
+<li>End-point prediction loss</li>
+</ul>
+<p>Force the model to “know” the final target at every time step.</p>
+<ol>
+<li>Predict displacement from current input frame (i = n) to final target (o = T)</li>
+<li>End-point awareness at each step</li>
+<li>Path-planning prior</li>
+<li>Global convergence guarantee</li>
+</ol>
+<ul>
+<li>Full spatio-temporal correspondence loss</li>
+</ul>
+<ol>
+<li>Predict displacement from any input frame (i = n) to any output frame (o = m) – all pairs</li>
+<li>Dense supervision over every possible (n, m) pair</li>
+<li>Consistency constraint: predictions from different starting points must agree</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Inter-frame</th>
+<th>End-point</th>
+<th>Full spatio-temporal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Target</td>
+<td>input → later input</td>
+<td>input → final target</td>
+<td>input → any output</td>
+</tr>
+<tr>
+<td>Temporal link</td>
+<td>causal chain</td>
+<td>single direction (to end)</td>
+<td>fully connected</td>
+</tr>
+<tr>
+<td>Main role</td>
+<td>motion modeling</td>
+<td>end-point guidance</td>
+<td>spatio-temporal consistency</td>
+</tr>
+<tr>
+<td>Compute cost</td>
+<td>medium</td>
+<td>low</td>
+<td>high</td>
+</tr>
+<tr>
+<td>Improved (LB)</td>
+<td>0.02</td>
+<td>0.01</td>
+<td>0.003</td>
+</tr>
+</tbody>
+</table>
+<h3>Total loss</h3>
+<p>loss = 1 × primary + 1 × inter-frame + 0.1 × end-point + 0.1 × full-correspondence</p>
+<h1>Training Regularization &amp; Optimization</h1>
+<ol>
+<li>AdamW</li>
+<li>Layer-wise LR: linear layers 3e-4, Transformer 5e-5</li>
+<li>Cosine annealing down to 1e-5</li>
+<li>Gradient clipping max_norm = 1.0</li>
+<li>EMA (decay = 0.999) for validation &amp; final model – fine-tune stage only</li>
+</ol>
+<h1>Test-Time Augmentation (TTA)</h1>
+<p>At inference we apply two augmentations:</p>
+<ol>
+<li>Horizontal flip</li>
+<li>Random input crop</li>
+</ol>
+<p>Single-model prediction is a weighted average:</p>
+<p><code>pred = 0.50 * pred_orig + 0.25 * pred_tta1 + 0.25 * pred_tta2</code></p>
+<p>We did not achieve improvement by adding more augmentations.</p>
+<h1>Model Ensemble</h1>
+<p>We train seven models with game_id 7 GroupKFold offline: (50 epochs / model), cv is about 0.469. And we got LB score 0.458.</p>
+<p>In the end, we achieved a slight improvement by ensembling four 7-fold cross-validation models (difference seeds). Public LB score after simple averaging: 0.456.</p>
+<h1>What Did NOT Help</h1>
+<ol>
+<li>More Geometric Distance / Geometric Projection / Area features</li>
+<li>Re-ordering players by distance to receiver instead of QB</li>
+<li>Extra augmentations: small-angle rotation, per-step noise, temporal mask + linear fill</li>
+<li>Larger model</li>
+</ol>

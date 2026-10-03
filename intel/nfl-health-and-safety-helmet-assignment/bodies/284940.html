@@ -1,0 +1,93 @@
+<p>First of all, I would like to thank hosts for hosting such a nice competition! The problem was so interesting that I was absorbed to this competition for almost all 3 months.</p>
+<p>Here I will show you how I tackled this problem. The solution pipeline consists of 4 parts.</p>
+<ol>
+<li>YOLO-v5 helmet detection</li>
+<li>Tracking&lt;-&gt;bounding box homography matrix estimation<ol>
+<li>Homography matrix estimation using shape context in frame 1</li>
+<li>Modify homography matrix in previous frame to get that of current frame.</li></ol></li>
+<li>First helmet assignment using estimated homography matrices</li>
+<li>Second helmet assignment using deepsort and previously obtained homography matrices</li>
+</ol>
+<h1>1. YOLO v5 helmet detection</h1>
+<p>As you know, baseline helmet detections were provided by the host. At first I thought the performance of the detection was enough and I used them for a while. However, I noticed some helmets involving in impact were missing. So I tried training a YOLO detector to suppress this false negative. The training settings was:</p>
+<ul>
+<li>Training data: jpg images in "images" folder, with 1280px resolution</li>
+<li>Model: yolov5x</li>
+<li>Batch size: 16</li>
+<li>Epochs: 20 (fixed)</li>
+<li>Mixed precision: on</li>
+<li>Environment: AWS SageMaker p3.8xlarge</li>
+<li>No validation</li>
+<li>Other settings(learning rate, optimizer, etc): default</li>
+</ul>
+<p>It was quite effective and the score jumped up by about 0.1 at that time. <br>
+EDIT: I replaced detections in my final submission with baseline detections and did late submission. I got 0.803(private)/0.841(public), which indicates that YOLO improved the score by 0.057.</p>
+<h1>2.1 Initial frame homography matrix estimation using shape context</h1>
+<p>To match sensor data to bboxes in frame 1, I used shape context. Shape context is a histogram of relative position of points. It can be calculated for each points and can be used in point set registration. For details of shape context, please google it. The detailed procedure was:</p>
+<ol>
+<li>Normalize coordinates of bboxes (confidence&gt;0.25) and sensor data. As a normalization factor, I used np.median(np.sort(cdist(points,points),axis=1)[:,1]). This quantity means median distance between nearest players.</li>
+<li>Scale and rotate sensor data coordinates by some factor(mentioned later).</li>
+<li>Calculate shape context for each points in tracking data and centers of mass of bboxes.</li>
+<li>Calculate cosine distance matrix between sensor descriptors and bbox descriptors.</li>
+<li>Hungarian algorithm matching using scipy.optimize.linear_sum_assignment. At this point, the matching result is usually contaminated by wrongly assigned pairs.</li>
+<li>Homography matrix calculation using cv2.findHomography. I did this calculation like iterative closest point algorithm. During first several iterations I used cv2.LMEDS to repair wrongly assigned pairs. If the cost function stopped improving, LMEDS was turned off and switched to normal homography estimation.</li>
+<li>If the cost function stopped improving, stop iteration.</li>
+</ol>
+<p>The picture below describes the flow from 2.3 to 2.7.<br>
+<img src="https://user-images.githubusercontent.com/5365048/140308438-098c5d52-7378-4ac3-99bb-27f225c92379.png" alt=""></p>
+<h2>Cost function</h2>
+<p>I evaluated fitness of homography transform using the following code. This cost function can be interpreted as RMS distance between bboxes and transformed tracking coordinates.<br>
+dist=cdist(homography_transformed_tracking_points,bbox_points)**2<br>
+row_ind,col_ind=linear_sum_assignment(dist)<br>
+score=np.sqrt(dist[row_ind,col_ind].sum()/len(row_ind))</p>
+<h2>Brute force optimization of rotation/scaling factors</h2>
+<p>I optimized rotation/scaling factors used in 2.1.2. In other words, I did above procedure many times changing rotation/scaling factors and selected best factors. The optimization ranges are:</p>
+<ul>
+<li>Rotation angle: [0, 2pi] with resolution pi/500</li>
+<li>X scaling factor: {0.5,1.25, 3}</li>
+<li>Y scaling factor: {0.5,1.25, 3}</li>
+</ul>
+<h1>2.2 Modify homography transform in a preceding frame to get that of current frame</h1>
+<p>Since player positions of adjacent frames are similar, the homography matrix should be also similar. First, I applied homography transform in previous frame to the tracking data in current frame. Then I assigned players to bboxes(conf&gt;0.25) in current frame like aforementioned way to get current homography matrix. To improve robustness of the algorithm, I tried homography matrices in 60 preceding frames and selected one with best cost. To deal with false positive of helmet detections, I had to add rows full of zero in distance matrix (ignore false positive bboxes). The number of ignored helmets was adaptively selected by looking at cost function. If increasing ignore number from n to n+1 helped decreasing cost function by 10, the increase was accepted.</p>
+<p><img src="https://user-images.githubusercontent.com/5365048/140308464-0d072238-4757-4f13-a0d1-e283b746494b.png" alt=""></p>
+<p>The typical quality of obtained homography transform looks like this (57583_000082_Endzone.mp4):<br>
+<img src="https://user-images.githubusercontent.com/5365048/140337106-4e87606a-f2d3-411f-bfe9-5826078f542f.gif" alt=""><br>
+Blue: transformed tracking coordinates, Orange: BBox centers of mass</p>
+<h1>3. First helmet assignment using estimated homography transforms</h1>
+<p>Using homography matrix and ignore numbers in all frames, I assigned player label to each bboxes. The procedure is:</p>
+<ol>
+<li>Assign labels to helmets with confidence&gt;0.25. To assign them, I used aforementioned cost function and ignore number.</li>
+<li>If the number of assigned helmets is smaller than 22, the all remaining labels and helmets were matched using linear_sum_assignment.</li>
+</ol>
+<h1>4. Second helmet assignment using deepsort and previously obtained homography transforms</h1>
+<p>I ran deepsort to improve assignment. The basic procedure was almost the same as the notebook Rob posted.</p>
+<ol>
+<li>Run deepsort using bboxes which were labeled in first helmet assignment.</li>
+<li>Assign labels to output bboxes of deepsort. The homography matrices were those which were obtained in secion 2. Helmet ignore numbers were recalculated.</li>
+<li>For each deepsort cluster, calculate the number of assigned labels for each players.</li>
+<li>Try assigning the most voted label to each deepsort cluster. If there were label conflicts in a frame, only one cluster which was voted most was labeled. Remaining ones remain unlabeled here.</li>
+<li>Assign second most voted labels to unlabeled deepsort_clusters</li>
+<li>Repeat 4 and 5.</li>
+<li>If there were unlabeled clusters after 100 iterations, remaining labels were assigned to them using linear_sum_assignment.</li>
+</ol>
+<h2>Parameters of deepsort</h2>
+<p>ReID model was the same as Rob's notebook.</p>
+<ul>
+<li>MAX_DIST: 0.28743019816658505</li>
+<li>MIN_CONFIDENCE: 0.4857573798672442</li>
+<li>NMS_MAX_OVERLAP: 0.43969024230191284</li>
+<li>MAX_IOU_DISTANCE: 0.7320514748544789</li>
+<li>MAX_AGE: 2</li>
+<li>N_INIT: 1</li>
+<li>NN_BUDGET: 30</li>
+</ul>
+<h1>What I couldn't make it work</h1>
+<ul>
+<li>FairMOT, ByteTrack, Tracktor++</li>
+<li>YOLOX detector</li>
+<li>Exploiting speed/acceleration/orientation data</li>
+<li>Jersey number detection (did not try)</li>
+<li>Training ReID models using torchreid</li>
+<li>Camera matrix optimization to get initial assignment guess for frame 1<ul>
+<li>Actually it worked to some extent, but it tended to be trapped to local minima. This tendency became stronger in videos with a lot of sideline players(e.g. 57781_000252_Sideline.mp4). So I concluded that shape context was better.</li></ul></li>
+</ul>

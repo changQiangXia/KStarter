@@ -1,0 +1,428 @@
+<p><strong>Final Score:</strong> 0.1097454 (MSE/Brier Score) | <strong>Rank:</strong> 1st / 3,485 teams</p>
+<h1>Context</h1>
+<p>Business context: <a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/overview" target="_blank">https://www.kaggle.com/competitions/march-machine-learning-mania-2026/overview</a> <br>
+Data context: <a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data" target="_blank">https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data</a></p>
+<h1>Philosophy</h1>
+<ul>
+<li>Let the selection committee do the bulk of the work (i.e. trust seeding differential), then consider what they don't account for: continuous ranking of teams rather than strictly ordinal, some injuries (they're vague about how they account for injuries), matchup-specific advantages, etc.</li>
+<li>Treat the men's and women's tournaments as separate entities</li>
+<li>Play the game to win. Basically, work backwards from Brier Score and tweak the model towards a "finish in the money or bust" mentality (see: sharpening edges in post-processing).</li>
+</ul>
+<h1>Approach</h1>
+<ul>
+<li>Foundation: a blend of <a href="https://www.kaggle.com/code/raddar/vilnius-ncaa" target="_blank">raddar's 2025 kaggle model</a> and <a href="https://youtu.be/cHtAEWkvSMU?si=7YhhIa-TSux3CEQn" target="_blank">Rob Mulla's 2023 tutorial</a> as a starting point. For a novice, there's nothing quite like a great tutorial.</li>
+</ul>
+<h2>Data Preparation</h2>
+<h3>Efficiency Metrics</h3>
+<p>The following efficiency metrics calculations feed into a custom rating (harry_Rating). I ended up not using rebound and free throw rate as features.</p>
+<pre><code>df = df.assign(
+        WPoss = df["WFGA"] - df["WOR"] + df["WTO"] + (df["WFTA"] * .475),
+        LPoss = df["LFGA"] - df["LOR"] + df["LTO"] + (df["LFTA"] * .475),
+    ).assign(
+        Pace = lambda x: (200 / (x["WPoss"] + x["LPoss"])/2),
+        WOffEff = lambda x: (x["WScore"] / x["WPoss"]) * 70,
+        WDefEff = lambda x: (x["LScore"] / x["LPoss"]) * 70,
+        LOffEff = lambda x: (x["LScore"] / x["LPoss"]) * 70,
+        LDefEff = lambda x: (x["WScore"] / x["WPoss"]) * 70
+    ).assign(
+        WNetEff = lambda x: x["WOffEff"] - x["WDefEff"],
+        LNetEff = lambda x: x["LOffEff"] - x["LDefEff"]
+    ).assign(
+        WOffRebRate = df["WOR"] / (df["WOR"] + df["LDR"]),
+        LOffRebRate = df["LOR"] / (df["LOR"] + df["WDR"]),
+        WFTRate = df["WFTA"] / df["WFGA"],
+        LFTRate = df["LFTA"] / df["LFGA"]
+    )
+</code></pre>
+<h3>Injury Adjustments (Men's Only)</h3>
+<p>I think there are two main options: a) you can let Vegas do the work, as their lines are injury-adjusted (looks like <a href="https://www.kaggle.com/kevinermille" target="_blank">@kevinermille</a> had success with this), or b) do it manually, which was my approach. I tried to do the same process for the women but opted out of adjusting for early season injuries (e.g. Ice Brady), so I ended up with no women's adjustments.</p>
+<p>Injury Data Source: <a href="https://www.rotowire.com/cbasketball/injury-report.php" target="_blank">https://www.rotowire.com/cbasketball/injury-report.php</a></p>
+<p>Player Efficiency Data Source: <a href="https://evanmiya.com/?player_ratings" target="_blank">https://evanmiya.com/?player_ratings</a> (manual data entry)</p>
+<p>I just used basic assumptions for how much to prorate injuries based on their rotowire Status:</p>
+<pre><code>status_weights = {
+    "Out For Season": 1.0,
+    "Out": 0.75,
+    "Game Time Decision": 0.5,
+}
+</code></pre>
+<p><strong>Actual Adjustments</strong></p>
+<table>
+<thead>
+<tr>
+<th>Team</th>
+<th>Player</th>
+<th>Status</th>
+<th>Adj BPR</th>
+<th>Injury Deduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alabama</td>
+<td>Aden Holloway</td>
+<td>Out</td>
+<td>6.00</td>
+<td>4.50</td>
+</tr>
+<tr>
+<td>Arkansas</td>
+<td>Karter Knox</td>
+<td>Game Time Decision</td>
+<td>2.91</td>
+<td>1.46</td>
+</tr>
+<tr>
+<td>BYU</td>
+<td>Richie Saunders</td>
+<td>Out For Season</td>
+<td>6.05</td>
+<td>6.05</td>
+</tr>
+<tr>
+<td>Clemson</td>
+<td>Carter Welling</td>
+<td>Out For Season</td>
+<td>2.98</td>
+<td>2.98</td>
+</tr>
+<tr>
+<td>Duke</td>
+<td>Caleb Foster</td>
+<td>Out</td>
+<td>3.79</td>
+<td>2.84</td>
+</tr>
+<tr>
+<td>Duke</td>
+<td>Patrick Ngongba</td>
+<td>Game Time Decision</td>
+<td>7.07</td>
+<td>3.54</td>
+</tr>
+<tr>
+<td>Gonzaga</td>
+<td>Braden Huff</td>
+<td>Out</td>
+<td>5.36</td>
+<td>4.02</td>
+</tr>
+<tr>
+<td>Gonzaga</td>
+<td>Jalen Warley</td>
+<td>Game Time Decision</td>
+<td>4.71</td>
+<td>2.36</td>
+</tr>
+<tr>
+<td>Michigan</td>
+<td>L.J. Cason</td>
+<td>Out For Season</td>
+<td>3.16</td>
+<td>3.16</td>
+</tr>
+<tr>
+<td>North Carolina</td>
+<td>Caleb Wilson</td>
+<td>Out For Season</td>
+<td>6.27</td>
+<td>6.27</td>
+</tr>
+<tr>
+<td>SMU</td>
+<td>B.J. Edwards</td>
+<td>Out</td>
+<td>5.10</td>
+<td>3.82</td>
+</tr>
+<tr>
+<td>Texas Tech</td>
+<td>JT Toppin</td>
+<td>Out For Season</td>
+<td>6.20</td>
+<td>6.20</td>
+</tr>
+<tr>
+<td>Texas Tech</td>
+<td>LeJuan Watts</td>
+<td>Game Time Decision</td>
+<td>3.11</td>
+<td>1.55</td>
+</tr>
+<tr>
+<td>UCLA</td>
+<td>Tyler Bilodeau</td>
+<td>Game Time Decision</td>
+<td>4.40</td>
+<td>2.20</td>
+</tr>
+<tr>
+<td>Villanova</td>
+<td>Matthew Hodge</td>
+<td>Out For Season</td>
+<td>2.65</td>
+<td>2.65</td>
+</tr>
+<tr>
+<td>Wisconsin</td>
+<td>Nolan Winter</td>
+<td>Game Time Decision</td>
+<td>5.28</td>
+<td>2.64</td>
+</tr>
+</tbody>
+</table>
+<h2>Feature Engineering</h2>
+<ul>
+<li>The strategy is minimalist. I've done some modeling with NBA data, so I began there and then added a few college-specific features.</li>
+<li>Each feature is a calculated differential between Team 1 and Team 2</li>
+</ul>
+<h3>Seeding Differential</h3>
+<pre><code>tourney_data["seed_diff"] = tourney_data["T1_seed"] - tourney_data["T2_seed"]
+</code></pre>
+<p>This is self-evident, but it is worth understanding how the committee actually seeds teams.</p>
+<ul>
+<li><a href="https://www.ncaa.org/sports/2026/2/5/ncaa-mens-basketball-tournament-selections.aspx" target="_blank">Men's process</a></li>
+<li><a href="https://www.ncaa.org/sports/2026/2/6/ncaa-womens-basketball-tournament-selections.aspx" target="_blank">Women's process</a></li>
+</ul>
+<h3>Custom Rating (harry_Rating) Differential</h3>
+<p>The goal of creating this was two-fold:</p>
+<ul>
+<li>Account for some of the things seeding doesn't capture</li>
+<li>Have a way to hand-tune rankings based on my opinion of teams</li>
+</ul>
+<h4>Calculation</h4>
+<h5>Step 1: 2% Trim Mean Season Average Net Efficiency (calculated during data preparation)</h5>
+<pre><code># calculate season averages (2% trim)
+ss = regular_data.groupby(["Season", "T1_TeamID"])[boxcols].agg(
+    lambda x: trim_mean(x, 0.02)
+    ).reset_index()
+</code></pre>
+<h5>Step 2: Injury Deductions from Net Rating</h5>
+<p>All I did was subtract the Injury Deduction from the table above from those teams' Net Ratings.</p>
+<h5>Step 3: Hand-Tuning Custom Ratings with MinMax Scalers</h5>
+<p>This is where my greenness probably shows most (I'm in my first term of a Data Science Master's program), but this felt like a way I could inject my own opinion into the model.</p>
+<h6>Scalers</h6>
+<h6>Strength of Schedule (opp_pts)</h6>
+<p>I used tournament seeding and secondary tournament participation as a measure of team quality for that season.</p>
+<pre><code>conditions = [
+    regular_data["T2_seed"] &lt;= 4,
+    regular_data["T2_seed"] &lt;= 16,
+    regular_data["T2_Tourney"].notna(),
+]
+choices = [6, 4, 2]
+
+regular_data["T1_Opp_Qlty_Pts"] = np.select(conditions, choices, default=0.25)
+</code></pre>
+<p>So, 4 tiers of team quality:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Criterion</th>
+<th>Points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tier 1</td>
+<td>4 seed or better in this year's tournament</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Tier 2</td>
+<td>5 seed or worse in this year's tournament</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Tier 3</td>
+<td>Participating in secondary tournament</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Tier 4</td>
+<td>No tournament participation</td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table>
+<h6>Power Conferences (power_conf)</h6>
+<p>Forgot the old Pac-Ten.</p>
+<pre><code># split men and women in case the values differ
+M_conf["Power"] = np.where(
+    M_conf["ConfAbbrev"].isin(["big_ten", "acc", "sec", "big_twelve", "big_east", "pac_twelve"]),
+    1, 0
+)
+
+W_conf["Power"] = np.where(
+    W_conf["ConfAbbrev"].isin(["big_ten", "acc", "sec", "big_twelve", "big_east", "pac_twelve"]),
+    1, 0
+)
+</code></pre>
+<h6>AP Poll Week 6 Top 12 (top12)</h6>
+<p>Men-only classifier that shies away from recency. "Were they ranked in the AP Poll top 12 in week 6 or not?"</p>
+<h6>Full Calculation</h6>
+<pre><code>scaler_configs = {
+    1: {  # men
+        "opp_pts": (-0.55, 0.55),
+        "power_conf": (1, 1.3),
+        "top12": (1, 1.2),  # men only
+    },
+    0: {  # women
+        "opp_pts": (-0.5, 0.5),
+        "power_conf": (1, 1.1),
+    },
+}
+
+for gender, ranges in scaler_configs.items():
+    if gender == 1:
+        mask = ss["T1_TeamID"] &lt; 3000
+    else:
+        mask = ss["T1_TeamID"] &gt;= 3000
+
+    scaler_opp = MinMaxScaler(feature_range=ranges["opp_pts"])
+    scaler_conf = MinMaxScaler(feature_range=ranges["power_conf"])
+    ss.loc[mask, "T1_Opp_Qlty_Pts_MinMax"] = scaler_opp.fit_transform(ss.loc[mask, ["T1_Opp_Qlty_Pts"]])
+    ss.loc[mask, "T1_Power_MinMax"] = scaler_conf.fit_transform(ss.loc[mask, ["T1_Power"]])
+
+    if "top12" in ranges:
+        scaler_top12 = MinMaxScaler(feature_range=ranges["top12"])
+        ss.loc[mask, "T1_Top12_MinMax"] = scaler_top12.fit_transform(ss.loc[mask, ["T1_Top12"]])
+    else:
+        ss.loc[mask, "T1_Top12_MinMax"] = 1  # neutral multiplier for women
+
+ss["T1_harry_Rating"] = (
+    ss["T1_NetEff"]
+    * (1 + ss["T1_Opp_Qlty_Pts_MinMax"])
+    * ss["T1_Power_MinMax"]
+    * ss["T1_Top12_MinMax"]
+)
+</code></pre>
+<h3>Quality Wins Differential (Opp_Qlty_Pts)</h3>
+<p>I wanted to reward teams who had accomplished hard things throughout the season. This is an extension of the Opponent Quality Points system (explained the Strength of Schedule scaler section above) and calculated by summing the opp_qlty_pts for wins.</p>
+<h3>Feature Selection</h3>
+<h4>Men's Tournament</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Literal Name</th>
+<th>Correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seed Differential</td>
+<td>seed_diff</td>
+<td>r=-0.5937</td>
+</tr>
+<tr>
+<td>Quality Wins Differential</td>
+<td>opp_qlty_pts_won_diff</td>
+<td>r=0.4603</td>
+</tr>
+<tr>
+<td>harry_Rating Differential</td>
+<td>harry_diff</td>
+<td>r=0.5971</td>
+</tr>
+</tbody>
+</table>
+<h4>Women's Tournament</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Literal Name</th>
+<th>Correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seed Differential</td>
+<td>seed_diff</td>
+<td>r=-0.7560</td>
+</tr>
+<tr>
+<td>Quality Wins Differential</td>
+<td>opp_qlty_pts_won_diff</td>
+<td>r=0.6437</td>
+</tr>
+<tr>
+<td>harry_Rating Differential</td>
+<td>harry_diff</td>
+<td>r=0.7743</td>
+</tr>
+<tr>
+<td>Avg. Blocks Differential</td>
+<td>avg_blk_diff</td>
+<td>r=0.4373</td>
+</tr>
+</tbody>
+</table>
+<h2>Modeling</h2>
+<h3>XGBoost Regression on 'Win'</h3>
+<p>Raw prediction baseline</p>
+<pre><code>model = xgb.XGBRegressor(
+            eval_metric="rmse",
+            n_estimators=4_000,
+            learning_rate=0.003,
+            early_stopping_rounds=100,
+            **hparams[gender],
+        )
+
+hparams = {
+    "men":   dict(max_depth=2, min_child_weight=5, subsample=0.7, colsample_bytree=0.8, reg_alpha=0.1, reg_lambda=1.0),
+    "women": dict(max_depth=2, min_child_weight=3, subsample=0.8, colsample_bytree=0.8, reg_alpha=0.1, reg_lambda=1.0),
+}
+</code></pre>
+<h3>Cross-Validation</h3>
+<p>Leave One Season Out (2003-2025)</p>
+<h3>Isotonic Regression to Calibrate</h3>
+<p>Applied across all games, so not specific to season</p>
+<pre><code>men_calibrator = IsotonicRegression(y_min=0.001, y_max=0.999, out_of_bounds="clip")
+men_calibrator.fit(men_oof_preds, men_oof_labels)
+
+women_calibrator = IsotonicRegression(y_min=0.001, y_max=0.999, out_of_bounds="clip")
+women_calibrator.fit(women_oof_preds, women_oof_labels)
+</code></pre>
+<h3>Impact of Calibration</h3>
+<pre><code>Men's CV Brier (raw):           0.1850
+Men's CV Brier (calibrated):    0.1822
+Women's CV Brier (raw):         0.1390
+Women's CV Brier (calibrated):  0.1357
+Total CV Brier (raw):           0.1620
+Total CV Brier (calibrated):    0.1590
+</code></pre>
+<h2>Post-Processing</h2>
+<p><a href="https://www.kaggle.com/sqlrockstar" target="_blank">@sqlrockstar</a> started a <a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684446" target="_blank">nice dialogue</a> on this strategy, so you can read up there, but here's my piece of it:</p>
+<blockquote>
+  <p>I didn't hard-code any specific teams, but I did 'sharpen the edges' in post-processing, meaning I rounded predictions &gt;= 97% and &lt;= 3% to the extreme (see chart below). So my gamble was that no outcome with a 1 in 33.33 chance (3/100) would happen. I sharpened 28 first round games and projected to sharpen 35 total games, so that felt about right. Across 35 games P(at least one miss) is 65.6%. This is a negative expected value play but one way to gain an edge on the margins.</p>
+</blockquote>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4013222%2F3c96634d5072941bcba7a3aaef2e1284%2Fsharpened_edges_clean.png?generation=1775679624426569&amp;alt=media" alt=""></p>
+<h1>What Didn't Work Well</h1>
+<ul>
+<li>Pretty much every feature other than the ones I used. I tinkered quite a bit and the model just got worse (e.g. rebound and free throw rate)</li>
+<li>Rewarding recent performance</li>
+</ul>
+<h1>Mistakes &amp; Opportunities</h1>
+<ul>
+<li>Optuna: auto-tuning is sensible, but I was just learning how to use it.</li>
+<li>Impact of coaching: wondering if anyone had luck with this. I didn't take the time to explore it, but my hunch is it matters sometimes (looking at you, Jake Diebler…)</li>
+<li>Incorporating betting/predictive market odds. This makes a ton of sense, but I just didn't take the time to do it.</li>
+</ul>
+<h1>Sources</h1>
+<ul>
+<li>Competition Data: (<a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data" target="_blank">https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data</a>)</li>
+<li>AP Poll Data: (<a href="https://www.kaggle.com/datasets/nishaanamin/march-madness-data" target="_blank">Nishaan Amin</a>)</li>
+<li>Player Injuries: (<a href="https://www.rotowire.com/cbasketball/injury-report.php" target="_blank">rotowire</a>)</li>
+<li>Player Ratings: (<a href="https://evanmiya.com/?player_ratings" target="_blank">EvanMiya.com</a>)</li>
+<li>Bracket Visualizer: <a href="https://marksmath.org/visualization/data/NCAABrackets/KaggleBrackets/" target="_blank">https://marksmath.org/visualization/data/NCAABrackets/KaggleBrackets/</a></li>
+</ul>
+<h1>Acknowledgements</h1>
+<ul>
+<li><a href="https://www.kaggle.com/addisonhoward" target="_blank">@addisonhoward</a> and co. for hosting</li>
+<li><a href="https://www.kaggle.com/raddar" target="_blank">@raddar</a>, because obviously</li>
+<li><a href="https://www.kaggle.com/robikscube" target="_blank">@robikscube</a> for the tutorial (2023)</li>
+<li><a href="https://www.kaggle.com/mcmcclur" target="_blank">@mcmcclur</a> for the sweet bracket visualizer</li>
+<li><a href="https://www.kaggle.com/kevinermille" target="_blank">@kevinermille</a> for the solid writeup</li>
+</ul>

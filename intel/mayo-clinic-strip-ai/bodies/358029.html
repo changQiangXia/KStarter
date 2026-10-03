@@ -1,0 +1,48 @@
+<p>Thanks everyone for the competition, congratz to the winners &amp; kudos to the learners. </p>
+<p>Although this one is a controversial one because most people couldn't even beat the sample submission, I still believe it was an alright competition. The key is to understand that there is not a lot of signal, and that the competition metric is not friendly with overconfident models, more on that later.</p>
+<p>Because of the nature of the competition (not a lot of signal, and basically no public LB), I decided not too invest too much time on it, so I am very happy with the result !</p>
+<h3>Data</h3>
+<ul>
+<li>Color normalization : <ul>
+<li>Detect the background color</li>
+<li>Normalize all the image by  <code>𝑟 = 𝑏𝑎𝑐𝑘𝑔𝑟𝑜𝑢𝑛𝑑_𝑐𝑜𝑙𝑜𝑟/(255,   255,  255)</code></li></ul></li>
+<li>Simple Approach : <ul>
+<li>Remove all white chunks from the image </li>
+<li>Resize to 1024x1024</li></ul></li>
+<li>Advanced Approach (cf figure below): <ul>
+<li>Detect duplicated areas in the image</li>
+<li>Keep only one of them</li>
+<li>Resize to have the longest edge to 1024, preserving aspect ratio</li></ul></li>
+</ul>
+<p><a href="https://ibb.co/fpnzYN1"><img src="https://i.ibb.co/HzxfDPF/mayo-data-pipe.png" alt="mayo-data-pipe"></a></p>
+<p>You can see some examples <a href="https://www.kaggle.com/code/theoviel/inference-mayo" target="_blank">here</a>.</p>
+<h3>Models</h3>
+<ul>
+<li>3 Small Models  -  <strong>CV AUC 0.684</strong><ol>
+<li>Resnet10t – AUC 0.661</li>
+<li>EfficientNet-b0 – AUC 0.671</li>
+<li>EfficientNet-b0 using simple approach images - AUC 0.662</li></ol></li>
+<li>Training<ul>
+<li>Image size : 1024x1024</li>
+<li>Ranger + lr=5e-4 (a, b)   - Adam + lr = 1e-4 (c)</li>
+<li>Class-balanced BCE to mimic the metric + Label smoothing</li>
+<li>10 epochs, bs=16</li>
+<li>Flip &amp; color augmentations</li></ul></li>
+<li>Inference<ul>
+<li>4 flips TTA</li>
+<li>Simple average</li>
+<li>Scaling !</li></ul></li>
+</ul>
+<h3>Adapting to the Competition Metric</h3>
+<p><a href="https://ibb.co/C1BYWbF"><img src="https://i.ibb.co/LkScvxf/logloss.png" alt="logloss"></a></p>
+<ul>
+<li>The logloss heavily penalizes confident mistakes, comparatively to the reward for confident guesses<ul>
+<li>Since our models have low AUCs, we want to avoid the “Heavy Penalty” zone</li></ul></li>
+<li>My ensemble already outputs most of its scores in the “safe” range possibly because  my models were designed to underfit (Label smoothing, small model size, short training with low LRs)<ul>
+<li><strong>Ensemble CV : 0.655</strong></li></ul></li>
+<li>You can force your model to be safer ! (cf <a href="https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357877" target="_blank">this post</a>)<ul>
+<li>Linearly Rescale to the 0.15 / 0.85 range</li>
+<li>Clip to 0.25 / 0.75</li>
+<li><strong>Final CV : 0.640</strong> - <strong>Public LB 0.733</strong> - <strong>Private LB 0.666</strong></li></ul></li>
+</ul>
+<p>Thanks for reading :)</p>

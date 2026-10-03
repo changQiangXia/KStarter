@@ -1,0 +1,196 @@
+<h1>Chiral Invariance &amp; STTRE: A Physics-Informed Approach</h1>
+<h2>1. Executive Summary</h2>
+<p>Our solution achieves a Public LB of <strong>0.519</strong>  by prioritizing <strong>physics-informed inductive biases</strong> over brute-force model scaling. We successfully reproduced and adapted the <strong>STTRE (Spatio-Temporal Transformer with Relative Embeddings)</strong> architecture, originally proposed for multivariate time series forecasting [1], to the domain of NFL player tracking.
+Our key contribution lies in a novel <strong>Chiral Augmentation</strong> strategy that forces the model to learn field symmetry, significantly reducing overfitting. While our model excels at momentum-based trajectories, our error analysis reveals a fundamental limitation in handling "sharp cuts," pointing towards a need for play-outcome classification.</p>
+<h2>2. Data Engineering: Symmetry &amp; Chirality</h2>
+<p>The core of our improvement came from reducing the dimensionality of the problem by exploiting the geometric symmetries of the football field.</p>
+<h3>2.1 Unifying Play Direction (Halving the Space)</h3>
+<p>We standardized all plays to move from <strong>Left to Right</strong>. This effectively halves the prediction space. The model no longer needs to learn separate patterns for left-moving vs. right-moving plays, allowing it to focus purely on relative motion dynamics.</p>
+<pre><code>def unify_left_direction(df: pd.DataFrame) -&gt; pd.DataFrame:
+   if 'play_direction' not in df.columns: return df
+   df = df.copy(); right = df['play_direction'].eq('right')
+   # Invert X and Y for plays moving right
+   if 'x' in df.columns: df.loc[right, 'x'] = FIELD_LENGTH - df.loc[right, 'x']
+   if 'y' in df.columns: df.loc[right, 'y'] = FIELD_WIDTH  - df.loc[right, 'y']
+   # Adjust angles
+   for col in ('dir','o'):
+       if col in df.columns:
+            numeric_col = pd.to_numeric(df.loc[right, col], errors='coerce')
+            transformed_angles = (numeric_col + 180.0) % 360.0
+            df.loc[right, col] = transformed_angles
+            if df[col].isnull().any(): df[col] = df[col].fillna(0.0)
+   # Adjust ball landing spot
+   if 'ball_land_x' in df.columns: df.loc[right, 'ball_land_x'] = FIELD_LENGTH - df.loc[right, 'ball_land_x']
+   if 'ball_land_y' in df.columns: df.loc[right, 'ball_land_y'] = FIELD_WIDTH  - df.loc[right, 'ball_land_y']
+   return df
+</code></pre>
+<p><em>Note: This standardization logic was open-sourced by our team early in the competition and adopted by the community.</em></p>
+<h3>2.2 Random Y-Flip: Forcing Chiral Invariance (Key Innovation)</h3>
+<p>American football fields possess <strong>Chiral Symmetry</strong> (Mirror Symmetry) along the long axis. A route running towards the left sideline is physically identical to a mirrored route running towards the right sideline.
+To force the model to learn this <strong>invariance</strong>, we implemented a dynamic <strong>Random Y-Flip</strong> augmentation during training.
+<strong>Implementation Logic:</strong>
+In our <code>SpatioTemporalData</code> loader, with $p=0.5$ for every epoch, we invert the Y-axis logic:
+$$y' = W - y$$
+$$v_y', a_y' = -v_y, -a_y$$
+$$\theta' = -\theta \quad (\text{for orientation } o \text{ and direction } dir)$$</p>
+<pre><code># Inside __getitem__
+# --- [START] 1. Random Y-Flip (Chiral Augmentation) ---
+if self.is_train and np.random.rand() &lt; 0.5:
+   # Copy to avoid modifying cached data
+   seq_np = seq_np.copy() 
+
+   # 1. Flip Coordinate 'y' (y_new = FIELD_WIDTH - y)
+   if 'y' in self.feature_to_idx:
+       y_idx = self.feature_to_idx['y']
+       seq_np[..., y_idx] = FIELD_WIDTH - seq_np[..., y_idx]
+
+   # 2. Flip Vector Components (val_new = -val)
+   # Includes velocity_y, acceleration_y, jerk_y, etc.
+   if self.flip_indices_invert:
+       seq_np[..., self.flip_indices_invert] = -seq_np[..., self.flip_indices_invert]
+
+   # 3. Flip Angles (val_new = -val, then wrap)
+   # Includes dir, o
+   if self.flip_indices_angular:
+       seq_np[..., self.flip_indices_angular] = wrap_angle_deg(-seq_np[..., self.flip_indices_angular])
+
+   # 4. Flip Target Trajectory
+   target_dy_np = -target_dy_np
+</code></pre>
+<p>This strategy prevented the model from memorizing "hotspots" on specific sides of the field and significantly improved generalization on unseen plays.</p>
+<h3>2.3 Context Selection</h3>
+<p>Given the constraints of the STTRE architecture (which is designed for multivariate time series rather than graph structures) and the non-consistent number/roles/positions of players in training data, we had to be selective about which players to include in the context window.
+We employed a hard-coded selection logic to pick the <strong>4 most relevant entities</strong> (<code>MAX_SUBPLAY_SIZE = 4</code>):</p>
+<ol>
+<li><strong>Target Player</strong> (Always included)</li>
+<li><strong>Passer</strong> (Quarterback)</li>
+<li><strong>Nearest Teammate</strong></li>
+<li><strong>Nearest Defender</strong> (specifically prioritizing Defensive Backs)</li>
+</ol>
+<pre><code>def find_relevant_entities_v3_PositionFiltered(play_df: pd.DataFrame, target_nid: int, cfg: Config) -&gt; list:
+   # 1. Always include Target &amp; Passer
+   entities, ids_to_exclude, ... = _get_common_entities(play_df, target_nid, cfg)
+
+   # 2. Find Nearest Opponent (Prioritize DBs)
+   if not valid_opponent_ids.empty:
+       # ... filter for DBs ...
+       nearest_opp_nids = opponent_dist.nsmallest(cfg.N_OPPONENTS).index.tolist()
+       entities.extend(nearest_opp_nids)
+   # 3. Find Nearest Teammate
+   # ...
+   return _finalize_entities(entities, ...)[:cfg.MAX_SUBPLAY_SIZE]
+</code></pre>
+<h2>3. Model Architecture: STTRE with Gated Fusion</h2>
+<p>We reproduced the architecture from the paper <strong>"STTRE: A Spatio-Temporal Transformer with Relative Embeddings"</strong> [1] and adapted it for the NFL context.
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F25207474%2F1aa8a44dd00758e9bf9c3ae96e293472%2Fsttre_nv50_viz.png?generation=1764814279191984&amp;alt=media" alt="Model Architecture">
+Instead of a standard Transformer, we utilized a <strong>Three-Branch Encoder</strong> to decouple dependencies:</p>
+<ol>
+<li><strong>Temporal Branch:</strong> Captures individual player momentum (using Last Frame Pooling).</li>
+<li><strong>Spatial Branch:</strong> Captures interactions between players (using Mean Pooling over time).</li>
+<li><strong>Spatio-Temporal Branch:</strong> Captures complex evolving interactions.</li>
+</ol>
+<h3>Key Architectural Features:</h3>
+<ul>
+<li><strong>Relative Role Bias:</strong> We replaced standard embeddings with Relative Role Bias. The attention mechanism explicitly encodes the relationship between query and key (e.g., <em>Teammate-to-Teammate</em> vs. <em>Defender-to-Target</em>), allowing the model to "understand" coverage schemes.</li>
+<li><strong>Sigmoid Gated Fusion:</strong> Inspired by recent LLM research (e.g., Qwen), we used a <strong>Sigmoid Gating Network</strong> to dynamically fuse the spatial and temporal branches. This acts as a non-linear filter, allowing the model to ignore noisy spatial interactions when momentum is the dominant factor.</li>
+</ul>
+<h2>4. Training Strategy</h2>
+<p>We trained using an <strong>Auxiliary Velocity Loss</strong> alongside the standard Position Loss.
+$$L = L_{pos} + \lambda \cdot L_{vel}$$
+Standard MSE loss often leads to "lazy" predictions that lag behind the true trajectory. By penalizing errors in the first derivative (velocity), we forced the model to respect physical continuity and momentum.</p>
+<h2>5. Post-Processing &amp; TTA</h2>
+<p>To squeeze out every bit of performance, we employed a robust inference pipeline:</p>
+<ul>
+<li><strong>TTA (Test Time Augmentation):</strong> We ran inference on both the original sequence and its <strong>Y-Flipped</strong> version, averaging the results (after un-flipping).</li>
+<li><strong>Noisy Runs:</strong> We performed multiple forward passes with slight Gaussian noise injection (<code>std=0.02</code>) to smooth out model variance.</li>
+<li><strong>Extrapolation:</strong> For any missing frames at the end of a sequence, we used a physics-based linear extrapolation based on the last known velocity vector to prevent "snapping" to zero.</li>
+</ul>
+<h2>6. Error Analysis &amp; Potential Improvements</h2>
+<p>Despite our strong performance, visualizing our worst predictions reveals a clear limitation: <strong>Inertia Bias</strong>. Our model over-relies on inertia/momentum and predicts trajectories that preserves the <strong>direction</strong> of momentum in the first few frames. 
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F25207474%2F584fa9e7aae0c0ce9dcd2ea6e8b3a76d%2Fvizfv44.png?generation=1764814683626634&amp;alt=media" alt="J-turns and cuts"></p>
+<h3>6.1 The "Sharp Cut" Problem</h3>
+<p>As shown in the figure below, our model (Red) struggles with sharp cuts or "J-turns," often overshooting the trajectory along the original velocity vector. The model assumes players will continue their momentum (Inertia), failing to anticipate sudden braking or direction changes. This is an overfit because our training focuses on minimizing Mean square error of trajectories and overlooks hard samples.</p>
+<h3>6.2 The Missed Opportunity: Play Outcome Classification</h3>
+<p>Why do players make these sharp cuts? They are almost always reactions to the <strong>outcome of the pass</strong>.
+The competition description explicitly hints at this:
+<em>"The downfield pass is the crown jewel of American sports. When the ball is in the air, anything can happen, like a touchdown, an interception, or a contested catch. The uncertainty and the importance of the outcome of these plays is what helps keep audiences on the edge of its seat."</em>
+We treated tracking data as a deterministic sequence, but the trajectory is fundamentally <strong>conditional</strong>:</p>
+<ul>
+<li><strong>If Catch:</strong> Receiver maintains speed/direction to score.</li>
+<li><strong>If Interception:</strong> Receiver stops, turns, and tackles (Sharp Cut).</li>
+<li><strong>If Incomplete:</strong> Receiver slows down or breaks off.
+<strong>Future Improvement:</strong>
+We missed the opportunity to build a <strong>Multi-Task Learning</strong> framework. A better approach would be:</li>
+</ul>
+<ol>
+<li><strong>Classify Outcome:</strong> Train a head to predict $P(\text{Catch})$, $P(\text{Interception})$, $P(\text{Incomplete})$.</li>
+<li><strong>Condition Trajectory:</strong> Use these probabilities to condition the trajectory decoder.
+By ignoring this <em>outcome uncertainty</em>, our model essentially learned the "average" path between a catch and an interception—a path that physically exists in neither scenario. Addressing this classification task is likely the key to breaking the 0.480 Gold barrier.</li>
+</ol>
+<h2>7. Ensemble Strategy: Physics-Aware Vector Aggregation</h2>
+<p>Brute-force averaging of coordinates often leads to physically impossible trajectories (e.g., if Model A predicts a left turn and Model B predicts a right turn, a simple mean predicts the player running straight but at half speed).
+To address this, we implemented a <strong>Heterogeneous Ensemble</strong> combining three distinct architectures, aggregated via <strong>Polar Vector</strong> strategy.</p>
+<h3>7.1 Heterogeneous Architectures</h3>
+<p>Diversity was key to our ensemble's success. We combined:</p>
+<ol>
+<li><strong>STTRE (Transformer):</strong> Our main model (<code>nv50</code>). Excellent at long-term dependency and spatial interaction.</li>
+<li><strong>ESG (GNN):</strong> An Evolving Subgraph Graph Neural Network. It captures local spatial interactions (blocking/tackling) better than global attention.</li>
+<li><strong>Bi-GRU (RNN):</strong> A Bidirectional GRU model. While weaker at long horizons, it excels at capturing immediate momentum and short-term kinematics.</li>
+</ol>
+<h3>7.2 Polar Vector Ensemble (Key Innovation)</h3>
+<p>Standard ensembles average the $x$ and $y$ coordinates: $\bar{x} = \sum w_i x_i$. This often results in <strong>energy loss</strong>—the averaged trajectory has lower velocity than any of the individual models.
+We implemented <strong>Polar Vector Averaging</strong>. We decompose the prediction into <strong>Magnitude (Speed)</strong> and <strong>Direction (Unit Vector)</strong> and average them separately.
+$$\vec{v}_{final} = \left( \sum w_i \cdot \text{Speed}_i \right) \times \text{Norm}\left( \sum w_i \cdot \vec{u}_i \right)$$
+This ensures that if two models disagree on direction, the ensemble essentially "votes" on the angle, but <strong>maintains the kinetic energy (speed)</strong> of the player.
+<strong>Implementation:</strong></p>
+<pre><code>def polar_vector_ensemble(preds_list, weights_list):
+   """
+   Physics-Aware Ensemble:
+   Averages Speed (Magnitude) and Direction (Unit Vector) separately
+   to prevent kinetic energy loss during fusion.
+   """
+   magnitudes = []
+   unit_vectors = []
+
+   for p in preds_list:
+       # Calculate Speed
+       mag = np.linalg.norm(p, axis=-1, keepdims=True)
+       # Calculate Unit Direction Vector
+       mask = mag &gt; 1e-6
+       unit = np.zeros_like(p)
+       unit[mask[:,0]] = p[mask[:,0]] / mag[mask[:,0]]
+
+       magnitudes.append(mag)
+       unit_vectors.append(unit)
+   # 1. Weighted Average of Speed (Preserves Momentum)
+   avg_mag = np.zeros_like(magnitudes[0])
+   for mag, w in zip(magnitudes, weights_list):
+       avg_mag += mag * w
+   # 2. Vector Average of Direction
+   avg_dir_vec = np.zeros_like(unit_vectors[0])
+   for vec, w in zip(unit_vectors, weights_list):
+       avg_dir_vec += vec * w
+
+   # 3. Reconstruct Velocity Vector
+   avg_dir_norm = np.linalg.norm(avg_dir_vec, axis=-1, keepdims=True)
+   final_unit_vec = avg_dir_vec / (avg_dir_norm + 1e-6)
+
+   return final_unit_vec * avg_mag
+</code></pre>
+<h3>7.3 Dynamic Time-Decay Weighting</h3>
+<p>We observed that RNNs (GRU) degrade rapidly over long prediction horizons ($t &gt; 30$), while Transformers maintain consistency. To exploit this, we used a <strong>Linear Decay Weighting</strong> for the GRU component.</p>
+<ul>
+<li><strong>Frame 0:</strong> GRU weight = 0.15</li>
+<li><strong>Frame 30:</strong> GRU weight = 0.00</li>
+<li><strong>Frame 55:</strong> GRU weight = 0.00
+This allows the ensemble to utilize the RNN's superior "instantaneous reflex" for the immediate future while relying on the Transformer's "strategic planning" for the long term.</li>
+</ul>
+<pre><code># Dynamic Weighting Logic
+decay_curve = np.linspace(W_GRU_INIT, 0.0, DECAY_STEPS)
+w_gru_vec = np.concatenate([decay_curve, np.zeros(...)])
+</code></pre>
+<hr>
+<p><strong>References:</strong></p>
+<h2>[1] Deihim, A., Alonso, E., &amp; Apostolopoulou, D. (2023). <em>STTRE: A Spatio-Temporal Transformer with Relative Embeddings for multivariate time series forecasting</em>. Neural Networks, 168, 549-559. <a href="https://doi.org/10.1016/j.neunet.2023.09.039" target="_blank">DOI: 10.1016/j.neunet.2023.09.039</a></h2>
+<p>Thanks to the Kaggle team and NFL for hosting this challenging competition and providing high-quality telemetry data! We have learned a lot in this competition! Thanks to the authors of this paper for inspiring our model architecture. Thanks to GPT for recreation of the architecture and Gemini for all the code heavy-lifting, brainstorming, experiment analysis, and most crucially, <strong>emotional support</strong>.
+We have open-sourced our full training notebooks.</p>

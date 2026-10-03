@@ -1,0 +1,122 @@
+# march-machine-learning-mania-2026 讨论区（按票数排序，共 120 条）
+
+- [March Machine Learning Mania 2026: 1st Place Solution ](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689528) — 72 票 / 23 评论 / 2026-04-08 **write-up?**
+- [Interactive Bracket Visualizer](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681833) — 60 票 / 30 评论 / 2026-03-17 
+- [Built a Telegram bot for March Mania 2026. It tracks your submission live](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683355) — 44 票 / 28 评论 / 2026-03-20 
+- [3rd Place Solution — March Machine Learning Mania 2026](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689321) — 34 票 / 9 评论 / 2026-04-08 **write-up?**
+- [Format Update: Reducing to one selected submission in Stage 2](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/678938) — 30 票 / 34 评论 / 2026-02-25 
+- [My approach for this year](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683033) — 27 票 / 27 评论 / 2026-03-19 
+- [Getting ready for Selection Sunday!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680419) — 24 票 / 32 评论 / 2026-03-08 
+- [Latest Data Update!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681634) — 23 票 / 28 评论 / 2026-03-16 
+- [The Leaderboard is Complete](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683453) — 20 票 / 37 评论 / 2026-03-20 
+- [Errors in the Data](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680969) — 19 票 / 26 评论 / 2026-03-12 
+- [Visualization: You vs Everybody / Which Team to Root For](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683004) — 19 票 / 22 评论 / 2026-03-19 
+- [Wahoo!  I love this competition!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680520) — 18 票 / 3 评论 / 2026-03-09 
+- [What is new this year?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/674735) — 17 票 / 8 评论 / 2026-02-21 
+- [ March Mania 2026: 10th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689044) — 16 票 / 10 评论 / 2026-04-07 **write-up?**
+- [Getting Ready for the Experts Submission File!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682700) — 16 票 / 13 评论 / 2026-03-18 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/674331) — 15 票 / 9 评论 / 2026-02-19 
+- [2nd Place Solution for the March Machine Learning Mania 2026 Competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689537) — 15 票 / 3 评论 / 2026-04-08 **write-up?**
+- [Stage 2 is Now Open!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680226) — 14 票 / 13 评论 / 2026-03-06 
+- [Rescores and Debugging Underway](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683088) — 14 票 / 39 评论 / 2026-03-19 
+- [One submission = More gambling](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682915) — 14 票 / 25 评论 / 2026-03-19 
+- [Semi-Spherical Scoring Is The Go-To Evaluation Function](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/678383) — 13 票 / 11 评论 / 2026-02-24 
+- [Leaderboard situation as of Thursday evening](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683245) — 13 票 / 7 评论 / 2026-03-20 
+- [March Machine Learning Mania 2026 — Silver Medal Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689174) — 13 票 / 4 评论 / 2026-04-07 **write-up?**
+- [Getting Ready for Submission Thursday!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682165) — 11 票 / 8 评论 / 2026-03-18 
+- [🎯 0.15 is Good Score to Target for Now](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680191) — 11 票 / 4 评论 / 2026-03-06 
+- [I got strike for 'This year's Raddar notebook' as plagiarized](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680789) — 10 票 / 2 评论 / 2026-03-10 
+- [Good Luck and Have Fun](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683027) — 10 票 / 1 评论 / 2026-03-19 
+- [Experts Median Submission file](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683077) — 10 票 / 19 评论 / 2026-03-19 
+- [Interactive tool to check who you should root for](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684124) — 10 票 / 0 评论 / 2026-03-23 
+- [This Year's Public Forks](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683209) — 10 票 / 5 评论 / 2026-03-20 
+- [Submit to other competitions 🏆 too, no extra work required!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681311) — 10 票 / 1 评论 / 2026-03-14 
+- [Stop grouping your Rebounds! (And why "Live by the 3" is a trap in WNCAA)](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/676036) — 10 票 / 5 评论 / 2026-02-23 
+- [7th Place Solution - abobus team](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689808) — 10 票 / 1 评论 / 2026-04-09 **write-up?**
+- [Stop chasing upsets: Why adjusting predictions makes your Brier score worse](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684446) — 9 票 / 21 评论 / 2026-03-24 
+- [NET rankings for Women's teams](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679161) — 9 票 / 3 评论 / 2026-02-27 
+- [Some conference tourney bracket structures are crazy this year](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680126) — 8 票 / 3 评论 / 2026-03-05 
+- [Some Massey ordinals are just weird](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681526) — 8 票 / 5 评论 / 2026-03-15 
+- [ESPN box score data](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681049) — 8 票 / 1 评论 / 2026-03-12 
+- [Let's have the Leaderboard with sum of brier loss instead of avg brier loss per game](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684153) — 8 票 / 2 评论 / 2026-03-23 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689084) — 7 票 / 5 评论 / 2026-04-07 
+- [Massey Ordinals thread](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681640) — 7 票 / 11 评论 / 2026-03-16 
+- [Share Your CV Scores](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682136) — 7 票 / 19 评论 / 2026-03-17 
+- [Oh well... NCAAW UConn lost 😭](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/687929) — 6 票 / 4 评论 / 2026-04-04 
+- [The case for choosing and announcing next year's format this week](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683179) — 6 票 / 2 评论 / 2026-03-19 
+- [6th Place Solution March Machine Learning Mania 2026](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689849) — 6 票 / 4 评论 / 2026-04-09 **write-up?**
+- [Continuous vs. Binary Response Case Study: LSU vs. Jacksonville NCAAW R64](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681645) — 6 票 / 5 评论 / 2026-03-16 
+- [My approach overview](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684391) — 6 票 / 5 评论 / 2026-03-24 
+- [A series of 5 R labs ](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681852) — 5 票 / 3 评论 / 2026-03-17 
+- [Thoughts after 72 Games?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683829) — 5 票 / 16 评论 / 2026-03-22 
+- [NCAA Tournament Simulation & Brier Scoring](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689181) — 5 票 / 2 评论 / 2026-04-07 
+- [Kaggle Submission Error ](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683108) — 4 票 / 5 评论 / 2026-03-19 
+- [4th Place Solution for the March Machine Learning Mania 2026 Competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/691146) — 4 票 / 0 评论 / 2026-04-14 **write-up?**
+- [Predictability by Round](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680411) — 4 票 / 3 评论 / 2026-03-08 
+- [8th PLACE - MARCH MACHINE LEARNING MANIA 2026](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689961) — 4 票 / 0 评论 / 2026-04-10 **write-up?**
+- [Post Useful Data?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689829) — 4 票 / 3 评论 / 2026-04-09 
+- [2026 March Machine Learning Mania Leaderboard History Dataset](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689367) — 4 票 / 0 评论 / 2026-04-08 
+- [Logistic Brier community competition - A "what if" study on the leaderboard](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/685121) — 4 票 / 0 评论 / 2026-03-26 
+- [When will Stage 2 be evaluated? I cannot submit Stage 2](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/674586) — 4 票 / 6 评论 / 2026-02-21 
+- [Any top scorers shared their code?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/688948) — 4 票 / 3 评论 / 2026-04-07 
+- [28th place solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689184) — 4 票 / 0 评论 / 2026-04-07 **write-up?**
+- [A second community competition - The "Logistic Brier"](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681142) — 4 票 / 5 评论 / 2026-03-13 
+- [Is a score around 0.16 competitive enough for this competition?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681507) — 4 票 / 15 评论 / 2026-03-15 
+- [21st Place Solution: 5-Model Ensemble with Optuna Weight Optimization](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689432) — 3 票 / 0 评论 / 2026-04-08 **write-up?**
+- [NFL Draft 2026 prediction community competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/686935) — 3 票 / 5 评论 / 2026-04-01 
+- [2025 NCAA WGameCities.csv Corrections](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680116) — 3 票 / 2 评论 / 2026-03-05 
+- [March Machine Learning Mania 2026: 5nd Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/690523) — 3 票 / 1 评论 / 2026-04-12 **write-up?**
+- [March Mania 2026: Under 50 Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689285) — 3 票 / 0 评论 / 2026-04-08 **write-up?**
+- [Is it too late to switch to Semi Spherical Scoring!?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/688422) — 3 票 / 1 评论 / 2026-04-05 
+- [112th Place (Silver) — 20+ Experiments, and the First Model Won](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/696507) — 3 票 / 0 评论 / 2026-05-02 **write-up?**
+- [Confused how to start with so many Data tables](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/676185) — 3 票 / 2 评论 / 2026-02-23 
+- [My thoughts + Past prize-winning solution in the 2026 final results](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/688999) — 3 票 / 2 评论 / 2026-04-07 **write-up?**
+- [Is this competition recommended for beginner kaggle users?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681252) — 2 票 / 2 评论 / 2026-03-13 
+- [Curious about this error](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683110) — 2 票 / 3 评论 / 2026-03-19 
+- [Last Call for Submissions!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682955) — 2 票 / 16 评论 / 2026-03-19 
+- [Podcast on YouTube: Ken Pomeroy and Wharton Moneyball](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682147) — 2 票 / 2 评论 / 2026-03-18 
+- [CityID and WLoc corrections](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682705) — 2 票 / 2 评论 / 2026-03-18 
+- [Isotonic Calibration > Temperature Scaling for Brier Score](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681759) — 2 票 / 0 评论 / 2026-03-17 
+- [Adding Momentum Feature](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681211) — 2 票 / 4 评论 / 2026-03-13 
+- [Thread for sharing solution files](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682982) — 2 票 / 4 评论 / 2026-03-19 **write-up?**
+- [Why are there so many submissions this year?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/682994) — 2 票 / 16 评论 / 2026-03-19 
+- [Quick question on Women's First Four scoring](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/685392) — 2 票 / 10 评论 / 2026-03-27 
+- [Format ideas for next year - community edition](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/686221) — 2 票 / 28 评论 / 2026-03-30 
+- [March Mania 2026: Top 8% (304th Place) – Bronze Medal Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689274) — 2 票 / 0 评论 / 2026-04-08 **write-up?**
+- [Team Merging](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/688281) — 2 票 / 3 评论 / 2026-04-05 
+- [Bizarro World March Madness](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679021) — 2 票 / 4 评论 / 2026-02-26 
+- [Tournament expansion is official](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/698108) — 2 票 / 2 评论 / 2026-05-08 
+- [NCAA Tournament Bracket Simulator](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/701372) — 2 票 / 1 评论 / 2026-05-18 
+- [Download Live Solution Data](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681386) — 1 票 / 0 评论 / 2026-03-14 **write-up?**
+- [Historical injury data?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679965) — 1 票 / 3 评论 / 2026-03-05 
+- [DayNum and WLoc for 2026?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680209) — 1 票 / 1 评论 / 2026-03-06 
+- [Roster Data allowed?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/680219) — 1 票 / 1 评论 / 2026-03-06 
+- [Beginner Approach - Looking for Feedback](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679244) — 1 票 / 5 评论 / 2026-02-28 
+- [2026 Seeding Information](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679050) — 1 票 / 6 评论 / 2026-02-26 
+- [Discrepancy between local score and LB score](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679553) — 1 票 / 2 评论 / 2026-03-02 
+- [About Score?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679162) — 1 票 / 9 评论 / 2026-02-27 
+- [Regarding Super Sunday!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681632) — 1 票 / 1 评论 / 2026-03-16 
+- [Tip: Detect & Fix the TO/Stl/Blk Column Swap](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/681758) — 1 票 / 0 评论 / 2026-03-17 
+- [Submission row count confusion — SampleSubmissionStage2 has 132,133 rows but getting 519,144 error](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/674755) — 1 票 / 4 评论 / 2026-02-22 
+- [My 2026 Pipeline: CV Feature Selection and Market Blending](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683012) — 1 票 / 1 评论 / 2026-03-19 
+- [Number of games remaining](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683437) — 1 票 / 2 评论 / 2026-03-20 
+- [2026 March Machine Learning Mania Solution File Dataset](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689371) — 1 票 / 0 评论 / 2026-04-08 **write-up?**
+- [My SSD died.](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683746) — 1 票 / 2 评论 / 2026-03-22 
+- [Upset Analysis: Rounds 1 and 2](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684001) — 1 票 / 6 评论 / 2026-03-23 
+- [How well do past prize-winning (top 8) solutions carry over to this year?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684044) — 1 票 / 5 评论 / 2026-03-23 **write-up?**
+- [Post Mortem April Analysis ](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/684059) — 1 票 / 5 评论 / 2026-03-23 
+- [Welp it was fun!](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/683252) — 1 票 / 12 评论 / 2026-03-20 
+- [Rules on 538 Data](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/674684) — 0 票 / 1 评论 / 2026-02-21 
+- [External Data Clarifications](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/674794) — 0 票 / 1 评论 / 2026-02-22 
+- [LightGBM with Season-Based Validation for March Madness](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/704842) — 0 票 / 0 评论 / 2026-06-06 
+- [Clarification on datasets](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/678846) — 0 票 / 4 评论 / 2026-02-25 
+- [What is the PMW rating?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/697334) — 0 票 / 0 评论 / 2026-05-05 
+- [the link of Evaluation Page is not available](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679018) — 0 票 / 1 评论 / 2026-02-26 
+- [How to do submission of the  competition?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679306) — 0 票 / 4 评论 / 2026-02-28 
+- [Top 1%: goto_conversion + UCLA Women's Override](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/693479) — 0 票 / 0 评论 / 2026-04-21 
+- [Will competition's host set the capability of 'Late Submission' in Kaggle system ?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/689266) — 0 票 / 3 评论 / 2026-04-08 
+- [Score Ranges](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679397) — 0 票 / 1 评论 / 2026-03-01 
+- [Updated Dataset](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679401) — 0 票 / 2 评论 / 2026-03-01 
+- [Stage 1 and stage 2](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/679168) — 0 票 / 5 评论 / 2026-02-27 
+- [How to get the new data for second evaluation? to get the predictions from previous trained models?](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/687116) — 0 票 / 2 评论 / 2026-04-02 
+- [The Brier Scores on the site no longer match those of the Bracket Visualizer](https://www.kaggle.com/competitions/march-machine-learning-mania-2026/discussion/686219) — 0 票 / 5 评论 / 2026-03-30 

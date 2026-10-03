@@ -1,0 +1,112 @@
+# https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494497
+
+Topic #494497: 2nd place solution: Team Danube
+  Author: Psi
+  Posted: 2024-04-17 10:41:25.062000
+  Votes: 107  Comments: 17
+
+Thanks for hosting this competition, we had fun trying to optimize for the given t5 metric and incorporating some useful modeling approaches to our solution. As always, great teamwork with @ilu000 and @ybabakhin.
+
+Here we want to highlight the main chronological steps to come up with our solution and relevant thought processes.
+
+Mean prompts and bruteforce optimization
+
+When we joined together in the competition, mean prompts dominated the public and our individual solutions and seemed the most low hanging fruit going forward, specifically also after we figured out that t5 metric is very sensitive and just raw llm predictions will not be too useful. So we decided to keep exploring optimal mean prompts.
+
+We quickly saw that just manually trying things is not effective, so we started exploring how to brute force the actual tokens for optimal mean prompts. We took our training datasets, and tried to brute force each of the ~32k possible t5 tokens to form the most optimal mean prompt for the average of the target vectors. But after submitting that, we got bad results leaving us initially puzzled. Obviously, &lt;/s&gt; is an important token in the optimization given that it is appended to each of the target vectors. After exploring this further, we found out that tensorflow is using the original SentencePiece tokenizer, which has protection against special token injection, and thus does not directly tokenize the string &lt;/s&gt; as the correct eos token. 
+
+Given this insight, we excluded special tokens in the brute force optimization, and, as many others, the optimizer now really started to like tokens like lucrarea being close to eos token in embedding space. This allowed us to get much closer LB scores compared to our CV scores and we managed to get to around 0.65 with just optimizing the mean prompt that way.
+
+Embedding models
+
+However, we still wanted to directly find a model that can do parts of this job. Specifically, we tried to directly train a model predicting the expected embedding. A simple way of doing that, was to train a classification model in H2O LLM Studio, where we use the 768 output embedding dimensions as the target in our training data. We then also directly implemented a cosine similarity loss, so that the model would directly learn our target metric. With this approach, we managed to get to local scores of around 0.75+ with our embedding predictions. Our embedding models either used H2O-Danube / H2O-Danube2 models, or Mistral 7b with little difference only.
+
+However, the main issue still was that we need to go back from predicted embeddings, to the string representations that are then used in the metric for calculating the t5 sim. We thought of directly modeling this as well in some way, but then resorted back to the bruteforce optimization routine that greedily tries token combinations to match the predicted embedding as closely as possible. Within a certain runtime, we managed to lose around 3-4pts with this optimization, so getting to local scores of around 0.71 and LB scores of around 0.68 or 0.69 just bruteforcing each individual embedding prediction.
+
+LLM predictions and improvements
+
+This was bringing us into the gold zone. Now we tried to find ways of closing the gap between the bruteforce and predicted embeddings a bit further. The first thing we found, that it is actually helpful to initialize the optimization with raw llm predictions, but only predicting the actual change needed to make, such as “as a shanty”. So we prepared our data in that way, and trained llms and incorporated them into our solution as a starting point for the optimization, and also adding them to the embedding blend. Furthermore, for diversity, we also added few shot predictions to that mix. And to even further improve the quality and speed of the optimization, we also added a good working mean prompt there.
+
+This means that our final starting point for the optimization is:
+Few shot predictions + LLM predictions + Mean prompt
+
+And the final predicted string is:
+Few shot predictions + LLM predictions + Mean prompt + Optimized embedding string (20 tokens)
+
+The following figure summarizes our full pipeline:
+
+
+
+As another example, our final prediction for the single test sample would be:
+“Rephrase paragraph text by turning it into a shanty. shanty shanty.lucrarealucrarealucrarea sentence appealinglucrarea Improve respond storytelling tonelucrareaimplication. write someoneran. lucrarea]. Consider clarify paragraphlucrarea similarly serious themed way temporarily.! ElePT lyrics rhyme poem solve songlucrarea participating version Deliver tale Hum Cor slogan remake this pieceody”
+
+Data and CV
+
+For all the parts described above, we generated various kinds of data for training and optimization. We started with some public datasets, but quickly found out that supplementary texts provided by Kaggle were most useful. So we used different models (mostly gemma) for generating new original texts and rewrite prompts by using supplementary texts as few-shot examples. In the final data mix we included extra random original texts and random rewrite prompts for more diversity. We also crafted a validation set of ~350 samples where we saw good correlation between local mean prompt scores and submitted mean prompt scores and developed our solution on that. We had very good correlation between CV and LB in the end.
+
+Thankfully, public and private was a fair split, which we think is also the only reasonable thing to do in a competition without training data. And thus, our best LB sub was also our best CV sub and also private sub!
+
+Useful links:
+
+
+
+H2O LLM Studio
+
+h2o-danube2-1.8b-base
+
+
+Code:
+
+
+
+Inference kernel with all relevant code
+
+H2O LLM Studio training code
+
+Training data
+
+Comments:
+├─ tarick.morty (2024-04-17 10:55:33.243000) [+4]
+│  Many congratulations 🙌 
+│  The solution is truly a master blend of everything 💯
+├─ JSD (2024-04-20 15:21:23.460000) [+2]
+│  Hi, congratulations on your results and many thanks for sharing your solution!
+│  
+│  I am curious if I understand correctly the "greedy decoding part" of the schema. You are using the two models (Danube...
+  ├─ Psi (2024-04-20 15:31:10.850000) [+1]
+  │  Yes correct. The simplest way to do this is to just try all 32k tokens and find the one producing closest embedding to the predicted one. Then you add another one and so on. This is computationally...
+├─ Eduardo Rocha de Andrade (2024-04-17 19:10:08.747000) [+2]
+│  Really nice solution. Congratz guys!!
+├─ Yusef A. (2024-04-17 13:24:35.297000) [+2]
+│  Well done team - looks like a lot of very similar approaches ! Great result.
+├─ Kamil Baluk (2024-04-17 11:49:48.117000) [+2]
+│  This is very impressive, especially your framework on the image!
+├─ Pascal Pfeiffer (2024-04-17 10:49:17.990000) [+2]
+│  Thank you for the great teamwork @philippsinger and @ybabakhin !
+│  
+│  Despite the arguable metric, the competition was incredibly fun to test various ways to use LLMs. As can be seen from the figure, w...
+├─ flipchip167 (2024-04-24 21:10:15.093000) [+0]
+│  Nice solution, congratulations. 
+│  
+│  I would have thought that you didn't use a pool of 32k tokens for the Greddy decoder. Or am I wrong? 
+│  If you have reduced the size, I would be interested to know h...
+  ├─ Psi (2024-04-25 07:52:13.110000) [+0]
+  │  please take a look at the published code including the bruteforce optimization routine - in a nutshell we only run the initial step with all 32k and then reduce that candidate set
+├─ dbtmddn41 (2024-04-23 14:51:57.743000) [+0]
+│  What creative solutions! Congratulations!!
+│  I have a question about the data. What do you mean by "supplementary texts provided by Kaggle"?
+├─ Timmy Juicehouse (2024-04-19 06:55:46.997000) [+0]
+│  You H2O perform a great teamwork again.
+├─ Volodymyr Pivoshenko 🇺🇦 (2024-04-17 14:30:06.370000) [+0]
+│  @philippsinger  great work!
+├─ ivan (2024-04-17 11:14:08.220000) [+0]
+│  Great work! Congratulations! Do I understand correctly that you can get 0.68-0.69 with only greedy decoder?
+  ├─ Pascal Pfeiffer (2024-04-17 11:22:27.937000) [+1]
+  │  Yes, exactly. Blend of embedding prediction models that are then decoded greedily for ~50 tokens gives 0.68 - 0.69 score.
+  │  We tried quite a long time to fill the gap between the raw embedding predic...
+    ├─ Raki (2024-04-17 13:59:09.393000) [+2]
+    │  At one point we also used an embedding prediction + search approach (though we looked through word space which is much worse than token space). You can identify clusters in artificial datasets that...
+├─ Sinan Calisir (2024-04-17 11:04:40.933000) [+0]
+│  Great combination of everything! Congratulations!!
+├─ [deleted] (2024-04-17 19:00:38.307000) [+0]
+│  [deleted]

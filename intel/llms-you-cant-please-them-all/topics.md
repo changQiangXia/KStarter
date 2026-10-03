@@ -1,0 +1,82 @@
+# llms-you-cant-please-them-all 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566372) — 80 票 / 29 评论 / 2025-03-05 **write-up?**
+- [[Old Metric] 30.0 Exploit](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/555051) — 71 票 / 59 评论 / 2025-01-04 
+- [Top Secret LB 30 Attack Plan (or maybe LB 22.5)](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/560743) — 53 票 / 19 评论 / 2025-02-02 
+- [5th Place Solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566322) — 52 票 / 20 评论 / 2025-03-07 **write-up?**
+- [20.293 solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563137) — 49 票 / 35 评论 / 2025-02-15 **write-up?**
+- [Solution leak or Problem Statement too easy now?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/562972) — 46 票 / 110 评论 / 2025-02-14 **write-up?**
+- [#8: Nine essays are enough](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566333) — 43 票 / 14 评论 / 2025-03-08 
+- [Strategy Discussion](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/554673) — 41 票 / 22 评论 / 2025-01-02 
+- [3rd place solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566515) — 39 票 / 21 评论 / 2025-03-05 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566479) — 39 票 / 26 评论 / 2025-03-07 **write-up?**
+- [I hate this so much](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549884) — 36 票 / 6 评论 / 2024-12-04 
+- [Regarding the continuous leakage of high-scoring codes, I would like to say](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564535) — 35 票 / 25 评论 / 2025-02-23 
+- [High leaderboard scores (Dec 11 Rescore)](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550344) — 30 票 / 68 评论 / 2024-12-06 
+- [How to tackle this competition (time management guide from an expert™)](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/551999) — 28 票 / 13 评论 / 2024-12-17 
+- [Clarifying Some Points Noticed During the Competition](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/557538) — 28 票 / 29 评论 / 2025-01-19 
+- [Lucrarea - What is the secret?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549779) — 28 票 / 7 评论 / 2024-12-03 
+- [[2nd] path to the perfect score](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566602) — 27 票 / 2 评论 / 2025-03-26 
+- [Viewing the churn with some inferences](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566326) — 25 票 / 11 评论 / 2025-03-05 
+- [Guess the LLMs Judges ~](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/558117) — 24 票 / 52 评论 / 2025-01-23 
+- [Stable gold medal solution 29.303 public / 29.395 private](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566380) — 24 票 / 8 评论 / 2025-04-27 **write-up?**
+- [Could LLMs recognize themselves? Are they fair Evaluators? Linear correlation between self-recognition and self-preference.](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549796) — 23 票 / 0 评论 / 2024-12-03 
+- [11th Place Solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566386) — 22 票 / 1 评论 / 2025-03-07 **write-up?**
+- [Kaggle Models Baseline: Generating essays with Gemma 2](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549794) — 21 票 / 4 评论 / 2024-12-03 
+- [Metric discussion](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550778) — 21 票 / 24 评论 / 2024-12-09 
+- [Guess the LLMs Judges !!](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/553065) — 21 票 / 16 评论 / 2024-12-23 
+- [Vote for the best meme](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564269) — 18 票 / 25 评论 / 2025-02-21 
+- [Phi the Spicy Contrarian ](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/551861) — 18 票 / 4 评论 / 2024-12-16 
+- [Public LB split](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563151) — 18 票 / 56 评论 / 2025-02-15 
+- [Silver medal solution [25.8 score]](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566321) — 18 票 / 1 评论 / 2025-03-05 **write-up?**
+- [[86th place solution] How a beginner became a expert !](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566331) — 16 票 / 2 评论 / 2025-03-13 **write-up?**
+- [Question about submission essay length](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549874) — 16 票 / 13 评论 / 2024-12-04 
+- [Attacks Bank](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/559478) — 16 票 / 2 评论 / 2025-01-25 
+- [>20 LB Score without targeting specific LLMs?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/554909) — 16 票 / 28 评论 / 2025-01-04 
+- [7th Rank | Solution & Explanation](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566643) — 15 票 / 2 评论 / 2025-03-08 **write-up?**
+- [[placeholder] Chain of Lies: let's mislead LLM judges step-by-step](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550876) — 15 票 / 9 评论 / 2024-12-10 
+- [Add It Up!](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/552505) — 15 票 / 10 评论 / 2024-12-20 
+- [Mash It Up! / Choices Attack](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/556097) — 14 票 / 6 评论 / 2025-01-11 
+- [LLM Approach](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566866) — 14 票 / 10 评论 / 2025-03-07 
+- [[Edit: it's still max 30] 540.000 New Maximum Score?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/551147) — 13 票 / 18 评论 / 2024-12-11 
+- [39th solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566376) — 13 票 / 0 评论 / 2025-03-09 **write-up?**
+- [ Exploring Scoring Notebook](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/552993) — 13 票 / 8 评论 / 2024-12-23 
+- [10th place solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566469) — 13 票 / 0 评论 / 2025-03-05 **write-up?**
+- [What do you think is the competitive aspect of this competition?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563962) — 12 票 / 41 评论 / 2025-02-20 
+- [[Completed] Reproduce the 22.231 notebook](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564014) — 12 票 / 28 评论 / 2025-02-20 
+- [Evaluation Metric (Approx) ](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549830) — 11 票 / 3 评论 / 2024-12-04 
+- [You can Fail them all - attempts resulting in a 0.0000 score](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/551933) — 11 票 / 5 评论 / 2024-12-16 
+- [[32th solution] From public notebook](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566345) — 11 票 / 4 评论 / 2025-03-05 **write-up?**
+- [The evaluation metric: Self-similarity?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549872) — 11 票 / 9 评论 / 2024-12-04 
+- [Concerns on concerns](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550626) — 11 票 / 10 评论 / 2024-12-08 
+- [LLM essay gen + Approx Evaluation Metric --> for CV](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550973) — 10 票 / 1 评论 / 2024-12-10 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/567010) — 9 票 / 6 评论 / 2025-03-07 
+- [Initial Ideas: What Strategies Could Work?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549784) — 9 票 / 1 评论 / 2024-12-03 
+- [30.050 LB score ?? WHAT](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563931) — 9 票 / 34 评论 / 2025-02-19 
+- [Finally, a notebook with a score of 27+will be leaked.](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564125) — 9 票 / 5 评论 / 2025-02-21 
+- [13th place solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/567031) — 9 票 / 3 评论 / 2025-03-08 **write-up?**
+- [Combination of Attacks that would work..](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563817) — 9 票 / 13 评论 / 2025-02-19 
+- [24th place solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566404) — 9 票 / 0 评论 / 2025-03-07 **write-up?**
+- [How to make your solution "deterministic"?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/554108) — 9 票 / 20 评论 / 2024-12-30 **write-up?**
+- [Wow 30/30 Score in LB ( What is the Magic ? -  give a zero otherwise give 9 )[Old Metric]](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550789) — 9 票 / 9 评论 / 2024-12-09 
+- [Why long essays fail submission?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550076) — 8 票 / 1 评论 / 2024-12-05 
+- [[Private 24th, Public 30th solution] Prompt injection with random words](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566324) — 8 票 / 0 评论 / 2025-03-05 **write-up?**
+- [Max essay word / token count?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/552113) — 8 票 / 8 评论 / 2024-12-17 
+- [just an interesting idea (may be for future competition)](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549798) — 8 票 / 7 评论 / 2024-12-04 
+- [Get started here!](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549780) — 7 票 / 12 评论 / 2024-12-03 
+- [Hiding best score on LB](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564785) — 7 票 / 22 评论 / 2025-02-25 
+- [The Luck Factor in Private LB](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/565490) — 7 票 / 22 评论 / 2025-02-28 
+- [Exploring the Effectiveness and Limitations of Local Evaluation Systems](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/565382) — 7 票 / 7 评论 / 2025-02-28 
+- [Self-Evaluation with Gemini and OpenAI (Bring your own API)](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/555345) — 7 票 / 1 评论 / 2025-01-06 
+- [Does this count as cheating](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/554041) — 7 票 / 8 评论 / 2024-12-30 
+- [rescore = submission scoring error?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/551580) — 6 票 / 7 评论 / 2024-12-14 
+- [Updated metric and/or judges](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/551485) — 6 票 / 8 评论 / 2024-12-13 
+- [672nd solution](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/566431) — 6 票 / 0 评论 / 2025-03-05 **write-up?**
+- [20.293 problem [closed]](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563129) — 6 票 / 7 评论 / 2025-02-15 
+- [Judges' Identity](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/563885) — 6 票 / 22 评论 / 2025-02-19 
+- [The vocabulary choice !!!!](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564691) — 6 票 / 4 评论 / 2025-02-24 
+- [Guess the number of restarts for this competition](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549993) — 6 票 / 4 评论 / 2024-12-04 
+- [How to test and combine attacks properly?](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/564475) — 6 票 / 21 评论 / 2025-02-22 
+- [Just asking some questions.... (How many tokens?)](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/554778) — 5 票 / 0 评论 / 2025-01-03 
+- [PSA- Essays over 200 tokens fails scoring](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/550057) — 5 票 / 11 评论 / 2024-12-05 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/549777) — 4 票 / 3 评论 / 2024-12-03 

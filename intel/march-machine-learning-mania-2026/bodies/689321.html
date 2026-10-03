@@ -1,0 +1,538 @@
+<h1>3rd Place Solution — March Machine Learning Mania 2026</h1>
+<p><strong>Final Score:</strong> 0.1160374 (MSE/Brier, 126 games) | <strong>Rank:</strong> 3rd / 3,485 teams | <strong>Submission ID:</strong> 51062131</p>
+<h2>Summary</h2>
+<p>My approach combined <strong>Logistic Regression on team-level differential features</strong> with a <strong>triple-market probability blend</strong> (ESPN BPI, Vegas moneylines, Kalshi prediction markets). The core insight was that LR dramatically outperforms gradient-boosted trees for Stage 2 (unseen games) despite losing on Stage 1 leaderboard, and that prediction markets provide orthogonal information — especially for Round 1 games where injuries, travel, and matchup-specific factors matter.</p>
+<p>Separate models for men's and women's tournaments. 52 rounds of iteration over 4 weeks.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F32386536%2Fe71f7f49c5caf1199c1abaa1d7bbedc1%2F04_blend_tiers.png?generation=1775638622366282&amp;alt=media" alt="Tiered Market Blend Architecture"></p>
+<h2>What Worked</h2>
+<ol>
+<li><p><strong>Logistic Regression over XGBoost for Stage 2</strong> — LR CV Brier 0.124 vs XGB 0.157. With ~650 training rows and differential features, the true relationship is approximately logistic. LR has lower variance and generalizes better to unseen games. XGB won Stage 1 because it memorized ~536 known training games.</p></li>
+<li><p><strong>Aggressive feature pruning</strong> — Backward elimination from 33→23 men's features and 19→11 women's features was the single biggest CV improvement (-0.007 Brier in one round). Many "intuitively good" basketball features (talent, experience, height, coaching) added multicollinearity noise.</p></li>
+<li><p><strong>Triple-market blend for Round 1 games</strong> — ESPN BPI game-specific predictions (which account for injuries and matchup details) + Vegas no-vig moneylines + Kalshi championship odds, weighted 60/40 Vegas/BPI for consensus. Market weight: 90% for men's R1, 75% for women's R1, tapering for later rounds.</p></li>
+<li><p><strong>Carry-over Elo</strong> — Carrying 75% of end-of-season Elo into the next year (vs resetting) improved predictions by capturing multi-year program strength.</p></li>
+<li><p><strong>Colley Matrix + SRS as custom rating systems</strong> — Computing Colley Matrix rankings and Simple Rating System from regular-season results added orthogonal signal beyond Barttorvik/Massey.</p></li>
+<li><p><strong>Feature interactions</strong> — <code>SeedNum × massey_rank</code>, <code>ncsos × massey_rank</code>, <code>close_win_pct × pt_diff</code>, <code>srs × ap_rank</code> — these captured non-linear relationships that LR can't model directly.</p></li>
+</ol>
+<h2>What Didn't Work</h2>
+<ul>
+<li><strong>XGBoost/LightGBM for Stage 2</strong> — Great for Stage 1 memorization, terrible for generalization on 650 rows</li>
+<li><strong>Ensembling LR + XGB</strong> — Worsened both CV and LB. Don't blend fundamentally different model types on small data</li>
+<li><strong>Stacking individually-helpful features</strong> — Adding features that each helped alone often hurt combined (multicollinearity in small-data regime)</li>
+<li><strong>Recency weighting for LR</strong> — Helped XGB but hurt LR. LR already has low variance; downweighting older seasons reduces effective sample size</li>
+<li><strong>Extended training data pre-2015</strong> — Barttorvik features have NaN before 2015, creating distributional shift</li>
+<li><strong>Isotonic calibration</strong> — Trained on OOF distributions which differ from full-model predictions</li>
+<li><strong>MSE objective for XGBoost</strong> — binary:logistic produces better-calibrated probabilities even when scored on Brier/MSE</li>
+<li><strong>Polynomial features, ElasticNet, Bagging, KNN blend, Tier-split by seed</strong> — All noise or worse after 10+ rounds of ablation</li>
+</ul>
+<h2>Approach Details</h2>
+<h3>Data Sources</h3>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>What</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition data</td>
+<td>Regular season results (compact + detailed), tournament results, seeds</td>
+<td>1985-2026</td>
+</tr>
+<tr>
+<td>Barttorvik (live CSV)</td>
+<td>Adjusted efficiency (O/D), BARTHAG, WAB, SOS, tempo</td>
+<td>2015-2026, all D1</td>
+</tr>
+<tr>
+<td>Massey Ordinals</td>
+<td>Composite of 28 ranking systems (POM, MOR, KPK, NET, etc.)</td>
+<td>2003-2026, men's only</td>
+</tr>
+<tr>
+<td>nishaanamin/march-madness-data</td>
+<td>KenPom Barttorvik (talent, exp, height, FT%), EvanMiya, AP Poll, Coach Results, Resumes</td>
+<td>2008-2025, tournament teams</td>
+</tr>
+<tr>
+<td>WNCAA NET Rankings</td>
+<td>Women's NET rankings</td>
+<td>2021-2026</td>
+</tr>
+<tr>
+<td>ESPN BPI</td>
+<td>Game-specific R1 predictions + championship probabilities</td>
+<td>2026 only (scraped Mar 19)</td>
+</tr>
+<tr>
+<td>Vegas moneylines</td>
+<td>No-vig implied probabilities for R1 games</td>
+<td>2026 only (scraped Mar 19)</td>
+</tr>
+<tr>
+<td>Kalshi</td>
+<td>Championship futures odds (Bradley-Terry conversion)</td>
+<td>2026 only</td>
+</tr>
+</tbody>
+</table>
+<p>Team ID mapping files were constructed to link Barttorvik team names, ESPN team IDs, and nishaanamin team names to competition TeamIDs.</p>
+<h3>Feature Engineering</h3>
+<p>All features are computed as <strong>differentials</strong>: <code>feature_Team1 - feature_Team2</code> (where Team1 has the lower TeamID). This is the standard approach for pairwise prediction — it ensures the model learns symmetric relationships.</p>
+<p><strong>Men's features (25):</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Feature</th>
+<th>Source</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SeedNum</td>
+<td>Competition</td>
+<td>Tournament seed (1-16)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>win_pct</td>
+<td>Computed</td>
+<td>Regular season win percentage</td>
+</tr>
+<tr>
+<td>3</td>
+<td>adjoe</td>
+<td>Barttorvik</td>
+<td>Adjusted offensive efficiency</td>
+</tr>
+<tr>
+<td>4</td>
+<td>adjde</td>
+<td>Barttorvik</td>
+<td>Adjusted defensive efficiency</td>
+</tr>
+<tr>
+<td>5</td>
+<td>WAB</td>
+<td>Barttorvik</td>
+<td>Wins Above Bubble</td>
+</tr>
+<tr>
+<td>6</td>
+<td>sos</td>
+<td>Barttorvik</td>
+<td>Strength of schedule</td>
+</tr>
+<tr>
+<td>7</td>
+<td>adjt</td>
+<td>Barttorvik</td>
+<td>Adjusted tempo</td>
+</tr>
+<tr>
+<td>8</td>
+<td>efg_pct</td>
+<td>Computed (box scores)</td>
+<td>Effective field goal percentage</td>
+</tr>
+<tr>
+<td>9</td>
+<td>tov_pct</td>
+<td>Computed (box scores)</td>
+<td>Turnover percentage</td>
+</tr>
+<tr>
+<td>10</td>
+<td>oreb_pct</td>
+<td>Computed (box scores)</td>
+<td>Offensive rebound percentage</td>
+</tr>
+<tr>
+<td>11</td>
+<td>oreb_pct_d</td>
+<td>Computed (box scores)</td>
+<td>Opponent offensive rebound pct (defensive rebounding)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>fg3_pct</td>
+<td>Computed (box scores)</td>
+<td>Three-point field goal percentage</td>
+</tr>
+<tr>
+<td>13</td>
+<td>ap_rank</td>
+<td>AP Poll</td>
+<td>Preseason AP ranking (captures "prestige" not in efficiency metrics)</td>
+</tr>
+<tr>
+<td>14</td>
+<td>em_change</td>
+<td>KenPom Preseason</td>
+<td>Preseason → end-of-season efficiency margin change (trajectory)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>glm_quality</td>
+<td>Computed</td>
+<td>GLM team quality from game graph (Raddar method — MLE team strength)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>SeedNum_x_pt_diff</td>
+<td>Interaction</td>
+<td>Seed × point differential</td>
+</tr>
+<tr>
+<td>17</td>
+<td>massey_rank_x_barthag</td>
+<td>Interaction</td>
+<td>Massey composite × Barttorvik win probability</td>
+</tr>
+<tr>
+<td>18</td>
+<td>close_win_pct_x_pt_diff</td>
+<td>Interaction</td>
+<td>Close game win% (≤7pt margin) × point differential</td>
+</tr>
+<tr>
+<td>19</td>
+<td>colley_rank</td>
+<td>Computed</td>
+<td>Colley Matrix ranking (from regular season W/L graph)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>ncsos</td>
+<td>Computed</td>
+<td>Non-conference strength of schedule</td>
+</tr>
+<tr>
+<td>21</td>
+<td>SeedNum_x_massey</td>
+<td>Interaction</td>
+<td>Seed × Massey composite rank</td>
+</tr>
+<tr>
+<td>22</td>
+<td>ncsos_x_massey</td>
+<td>Interaction</td>
+<td>Non-conference SOS × Massey composite</td>
+</tr>
+<tr>
+<td>23</td>
+<td>srs</td>
+<td>Computed</td>
+<td>Simple Rating System: <code>rating = avg_margin + avg(opponent_ratings)</code>, iterative</td>
+</tr>
+<tr>
+<td>24</td>
+<td>srs_x_ap_rank</td>
+<td>Interaction</td>
+<td>SRS × AP rank</td>
+</tr>
+<tr>
+<td>25</td>
+<td>coach_pase</td>
+<td>Coach Results</td>
+<td>Coach Performance Above Seed Expectation (historical tournament over/under-performance)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Women's features (11):</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Feature</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SeedNum</td>
+<td>Competition</td>
+</tr>
+<tr>
+<td>2</td>
+<td>win_pct</td>
+<td>Computed</td>
+</tr>
+<tr>
+<td>3</td>
+<td>oreb_pct_d</td>
+<td>Computed (box scores)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>blk_pct</td>
+<td>Computed (box scores)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>last_n_win_pct</td>
+<td>Computed (last 10 games)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>elo_slope</td>
+<td>Computed (Elo trend over season)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>net_x_elo</td>
+<td>Interaction: NET rank × Elo</td>
+</tr>
+<tr>
+<td>8</td>
+<td>elo_x_colley</td>
+<td>Interaction: Elo × Colley rank</td>
+</tr>
+<tr>
+<td>9</td>
+<td>srs</td>
+<td>Computed (same as men's)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>last_n_pt_diff_x_elo_x_colley</td>
+<td>3-way interaction</td>
+</tr>
+<tr>
+<td>11</td>
+<td>last_n_pt_diff_x_colley_rank</td>
+<td>Interaction</td>
+</tr>
+</tbody>
+</table>
+<p>The women's model uses fewer features because women's basketball is more seed-predictable (higher seed wins 76.2% vs 68.9% in men's), and with ~646 training rows, more features = more overfitting.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F32386536%2Fe0b6014fb535ca67afea9ceb5df34deb%2F01_coefficients.png?generation=1775638674917423&amp;alt=media" alt="LR Feature Importance"></p>
+<h3>Custom Rating Systems</h3>
+<p><strong>Carry-over Elo:</strong></p>
+<ul>
+<li>K-factor: 32, home advantage: 100 rating points</li>
+<li>Margin-of-victory multiplier: <code>ln(|margin| + 1) × 2.2 / (0.001 × |margin| + 2.2)</code> (diminishing returns for blowouts)</li>
+<li>Season carryover: <code>0.75 × end_elo + 0.25 × 1500</code> (captures multi-year program strength)</li>
+</ul>
+<p><strong>Colley Matrix:</strong></p>
+<ul>
+<li>Solves <code>(2I + C)r = 1 + (w - l)/2</code> where C is the connectivity matrix from regular season games</li>
+<li>Produces rankings purely from win/loss record weighted by opponent strength</li>
+</ul>
+<p><strong>SRS (Simple Rating System):</strong></p>
+<ul>
+<li>Iterative: <code>rating_i = avg_margin_i + mean(opponent_ratings)</code>, converged to 1e-6 tolerance</li>
+<li>Mean-centered each iteration</li>
+</ul>
+<p><strong>GLM Quality (Raddar method):</strong></p>
+<ul>
+<li>Maximum likelihood team strength from the game graph, treating each game outcome as a Bernoulli trial</li>
+</ul>
+<p><strong>Massey Composite:</strong></p>
+<ul>
+<li>Average of latest rankings from <strong>all Massey Ordinal systems with full season coverage</strong> across the training period (2015-2025 excl. 2020). This dynamically selects ~28 systems rather than a hand-picked subset. Using all available systems rather than a curated subset gave the best CV (-0.00246 vs 15-system subset).</li>
+</ul>
+<h3>Model Architecture</h3>
+<pre><code>Pipeline:
+  1. SimpleImputer(strategy="median")   — handles NaN from missing external data
+  2. StandardScaler()                    — centers/scales differential features
+  3. LogisticRegression(C=C, solver="lbfgs", max_iter=1000)
+</code></pre>
+<p><strong>Hyperparameters:</strong></p>
+<ul>
+<li>Men's: C=100, clip predictions to [0.03, 0.97]</li>
+<li>Women's: C=0.15, clip predictions to [0.005, 0.995]</li>
+<li>Men's C is much higher (less regularization) because 25 well-conditioned differential features benefit from more capacity</li>
+<li>Women's C is low (more regularization) because the model needs noise suppression with 11 features on ~646 rows</li>
+</ul>
+<h3>Training / Validation</h3>
+<ul>
+<li><strong>Training data:</strong> Tournament games from 2015-2025 (excluding 2020 — no tournament due to COVID). ~669 men's games, ~646 women's games.</li>
+<li><strong>Validation:</strong> Leave-One-Season-Out (LOSO) cross-validation using <code>GroupKFold(n_splits=10)</code> grouped by season. This simulates the real task: predict a future tournament using only past data.</li>
+<li><strong>Loss function:</strong> sklearn LogisticRegression optimizes log loss (cross-entropy) natively. Evaluated on Brier score (MSE of probabilities) to match competition metric.</li>
+<li><strong>No recency weighting</strong> for LR (confirmed through ablation — it hurts by reducing effective sample size).</li>
+<li><strong>Final CV (LOSO Brier):</strong> Men's 0.11199, Women's 0.13506, Combined <strong>0.12352</strong>.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F32386536%2Fa2ea71fd99f4dd715b21165db15c1058%2F03_calibration.png?generation=1775638699626793&amp;alt=media" alt="Calibration Plot"></p>
+<h3>Market Probability Blend (Post-Processing)</h3>
+<p>The key innovation was blending LR predictions with prediction market probabilities in a <strong>tiered system</strong>:</p>
+<p><strong>Tier 1 — Round 1 game-specific (highest confidence):</strong></p>
+<ul>
+<li>ESPN BPI provides game-specific win probabilities that factor in injuries, travel, rest, and matchup details</li>
+<li>Vegas moneylines converted to no-vig implied probabilities: <code>P_fav = |ML| / (|ML| + 100)</code>, <code>P_dog = 100 / (ML + 100)</code>, then normalized</li>
+<li>Market consensus: <code>60% × Vegas + 40% × BPI</code> (Vegas has real money at stake → more efficient, reacts faster to injuries)</li>
+<li>Coverage: <strong>30 men's R1 games</strong> (30 with both BPI+Vegas, 2 BPI-only) and <strong>28 women's R1 games</strong></li>
+<li><strong>Men's R1:</strong> <code>10% LR + 90% market_consensus</code></li>
+<li><strong>Women's R1:</strong> <code>25% LR + 75% market_consensus</code></li>
+</ul>
+<p><strong>Tier 2 — Bradley-Terry from championship probabilities:</strong></p>
+<ul>
+<li>For non-R1 matchups where both teams have BPI championship odds: <code>P(A beats B) = strength_A / (strength_A + strength_B)</code></li>
+<li><strong>Men's:</strong> <code>75% LR + 25% BPI_BT</code></li>
+<li><strong>Women's:</strong> <code>85% LR + 15% BPI_BT</code></li>
+</ul>
+<p><strong>Tier 3 — Kalshi futures:</strong></p>
+<ul>
+<li>Same Bradley-Terry conversion from Kalshi championship futures odds</li>
+<li><strong>Men's:</strong> <code>85% LR + 15% Kalshi_BT</code></li>
+<li><strong>Women's:</strong> <code>85% LR + 15% Kalshi_BT</code></li>
+</ul>
+<p><strong>Tier 4 — Pure LR (fallback):</strong></p>
+<ul>
+<li>For matchups where no market data exists</li>
+</ul>
+<p>The rationale: markets aggregate millions of dollars of analysis including real-time injury/lineup information that no pre-tournament statistical model can capture. The tiered approach trusts markets most where they're most informative (game-specific R1 picks) and least where they're thin (deep tournament matchups between low-profile teams).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F32386536%2Fc9d9dc0f0ad5f0910c30fdaf114e898a%2F05_lr_vs_market.png?generation=1775638727932954&amp;alt=media" alt="LR vs Market Scatter"></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F32386536%2F739ff09a0fa91d50ce6333553e450c3d%2F06_seed_heatmap.png?generation=1775638855165588&amp;alt=media" alt="Seed Matchup Heatmap"></p>
+<h3>Key Contrarian Calls That Paid Off</h3>
+<ul>
+<li><strong>UConn 70% vs Michigan State (Sweet 16)</strong> — Model was high on UConn despite them being lower-seeded. Correct.</li>
+<li><strong>Michigan 79% in championship</strong> — Higher than Vegas (~70%). Michigan won. This call alone likely moved us from ~5th to 3rd.</li>
+</ul>
+<h3>Progression Summary</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F32386536%2F6e030d1fc4f7ab38c60e93435793f483%2F02_progression.png?generation=1775638873387140&amp;alt=media" alt="Brier Score Progression"></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Rounds</th>
+<th>CV (Brier)</th>
+<th>Key Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XGBoost baseline</td>
+<td>1-11</td>
+<td>0.158→0.157</td>
+<td>Feature engineering, Optuna HPO, split M/W, multi-seed</td>
+</tr>
+<tr>
+<td>Switch to LR</td>
+<td>23-24</td>
+<td>0.145→0.142</td>
+<td>LR dominates XGB for Stage 2 by -0.013</td>
+</tr>
+<tr>
+<td>Feature pruning</td>
+<td>27</td>
+<td>0.135</td>
+<td>33→18 M features, 19→8 W features. Biggest single-round gain (-0.007)</td>
+</tr>
+<tr>
+<td>Feature interactions</td>
+<td>34-46</td>
+<td>0.135→0.128</td>
+<td>Colley Matrix, SRS, ncsos, GLM quality, interactions, C-tuning</td>
+</tr>
+<tr>
+<td>SRS + W interactions</td>
+<td>49-50</td>
+<td>0.126→0.125</td>
+<td>SRS for both genders, feature/C optimization</td>
+</tr>
+<tr>
+<td>Coach PASE + markets</td>
+<td>51-52</td>
+<td>0.124</td>
+<td>Triple-market blend (BPI + Vegas + Kalshi)</td>
+</tr>
+</tbody>
+</table>
+<h3>Reproducibility</h3>
+<p><strong>Environment:</strong></p>
+<ul>
+<li>Python 3.9+</li>
+<li>Dependencies: <code>numpy</code>, <code>pandas</code>, <code>scikit-learn</code></li>
+<li>No GPU required. Full pipeline runs in &lt;30 seconds on any modern machine.</li>
+</ul>
+<p><strong>To reproduce the winning submission:</strong></p>
+<pre><code># 1. Clone the repository
+git clone https://github.com/kevin1000/march-mania-2026-3rd-place.git
+cd march-mania-2026-3rd-place
+
+# 2. Install dependencies
+pip install numpy pandas scikit-learn scipy
+
+# 3. Download competition data (requires Kaggle CLI + API token)
+mkdir -p data
+kaggle competitions download -c march-machine-learning-mania-2026 -p data/
+cd data &amp;&amp; unzip '*.zip' &amp;&amp; rm *.zip &amp;&amp; cd ..
+
+# External datasets are already included in the repository (external/ directory).
+# These include Barttorvik stats (2015-2026), KenPom, EvanMiya, AP Poll,
+# Coach Results, Kalshi odds, WNCAA NET, and team ID mapping files.
+
+# 4. Run the final submission script
+#    The submitted version used 90% market weight for M R1 and 75% for W R1.
+#    To reproduce the exact winning submission:
+python3 -c "
+import round52_final as r52
+r52.ALPHA_M_R1 = 0.90
+r52.ALPHA_W_R1 = 0.75
+r52.generate_submission(tag='winning_submission')
+"
+# Output: submissions/submission_winning_submission.csv
+</code></pre>
+<p><strong>Code structure:</strong></p>
+<p>The solution uses an incremental import chain where each round builds on previous rounds:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>round27_pruned.py</code></td>
+<td>Base: data loading, carry-over Elo, Four Factors, Barttorvik stats, Massey composite, AP Poll, EvanMiya, KenPom Preseason, momentum features</td>
+</tr>
+<tr>
+<td><code>round45_final.py</code></td>
+<td>Adds Colley Matrix, GLM quality, close game record, all-system Massey, ncsos, feature interactions, Elo slope</td>
+</tr>
+<tr>
+<td><code>round46_final.py</code></td>
+<td>Adds Kalshi prediction market blend, elo×colley interaction, C re-tuning</td>
+</tr>
+<tr>
+<td><code>round49_final.py</code></td>
+<td>Adds SRS computation for M and W</td>
+</tr>
+<tr>
+<td><code>round50_final.py</code></td>
+<td>ESPN BPI data (game-specific R1 + championship BT), final feature/C optimization</td>
+</tr>
+<tr>
+<td><code>round51_final.py</code></td>
+<td>Coach PASE, Women's BPI R1 predictions</td>
+</tr>
+<tr>
+<td><code>round52_final.py</code></td>
+<td><strong>Winning submission.</strong> Triple-market blend (ESPN BPI + Vegas moneylines + Kalshi)</td>
+</tr>
+</tbody>
+</table>
+<p>Import chain: <code>round27 → round45 → round46 → round49 → round50 → round51 → round52</code></p>
+<p>All 7 files are required. Each wraps the previous round's <code>build_m_features()</code> / <code>build_w_features()</code> functions, adding new features incrementally.</p>
+<p><strong>Code repository:</strong> <a href="https://github.com/kevin1000/march-mania-2026-3rd-place" target="_blank">https://github.com/kevin1000/march-mania-2026-3rd-place</a></p>
+<h3>References</h3>
+<ul>
+<li><strong>Competition data:</strong> <a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data" target="_blank">March Machine Learning Mania 2026</a></li>
+<li><strong>Barttorvik:</strong> Team ratings downloaded from <a href="https://barttorvik.com" target="_blank">barttorvik.com</a> (<code>{year}_team_results.csv</code>)</li>
+<li><strong>nishaanamin/march-madness-data:</strong> <a href="https://www.kaggle.com/datasets/nishaanamin/march-madness-data" target="_blank">Kaggle dataset</a> — KenPom Barttorvik, EvanMiya, AP Poll, Coach Results, KenPom Preseason</li>
+<li><strong>WNCAA NET Rankings:</strong> <a href="https://www.kaggle.com/datasets/sqlrockstar/wncaa-net" target="_blank">Kaggle dataset</a></li>
+<li><strong>ESPN BPI:</strong> Game-specific predictions scraped from ESPN.com on March 19, 2026</li>
+<li><strong>Vegas moneylines:</strong> No-vig implied probabilities from ESPN/sportsbooks, March 19, 2026</li>
+<li><strong>Kalshi:</strong> Championship futures from <a href="https://kalshi.com" target="_blank">kalshi.com</a> API (<code>KXMARMAD-26</code>, <code>KXNCAWBB-26-CHAMP</code>), March 15, 2026</li>
+<li><strong>Colley Matrix:</strong> Based on the <a href="https://www.colleyrankings.com/" target="_blank">Colley Bias-Free Ranking method</a></li>
+<li><strong>Raddar GLM quality:</strong> Inspired by <a href="https://www.kaggle.com/raddar" target="_blank">Raddar's approach</a> for team strength estimation via game-graph MLE</li>
+</ul>
+<hr>
+<p><em>This was my first entry in March Machine Learning Mania. The journey from a basic XGBoost model to a market-blended LR took 52 rounds of experimentation over 4 weeks, testing 100+ ideas. The biggest lesson: for small-data prediction tasks (~650 rows), simpler models with careful feature selection beat complex models every time.</em></p>

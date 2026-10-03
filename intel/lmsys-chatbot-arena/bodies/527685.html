@@ -1,0 +1,55 @@
+<p>First of all, thanks to the organizers. We really enjoyed the content of the competition. Although the leak was frustrating, we survived and finished 2nd.</p>
+<p>Congratulations to my teammates <a href="https://www.kaggle.com/liushuzhi" target="_blank">@liushuzhi</a> and <a href="https://www.kaggle.com/kapenon" target="_blank">@kapenon</a> for becoming Grand Masters.</p>
+<p>Our <a href="https://www.kaggle.com/code/tascj0/lmsys-0805/notebook?scriptVersionId=191245382" target="_blank">inference code</a> and <a href="https://github.com/tascj/kaggle-lmsys-chatbot-arena" target="_blank">training code</a> are made public.</p>
+<h1>Solution</h1>
+<h2>Baseline</h2>
+<ul>
+<li>We used <code>StratifiedGroupKFold</code> based on prompt, reserving 20% as a validation set.</li>
+<li>21k data from the deduplicated 33k dataset were added to the training data, thanks to <a href="https://www.kaggle.com/abdullahmeda" target="_blank">@abdullahmeda</a>.</li>
+<li>Instructions from <a href="https://arxiv.org/abs/2306.05685" target="_blank">2306.05685</a> was used to format the input. We tried both prompt-res_a-res_b and promt-res_a-prompt-res_b. For 1.5B models, the latter seemed better, while for models 7B and above, there wasn't much difference. Considering token efficiency, we mainly used the PAB format. Max sequence length for gemma2-9b is around 4340.</li>
+<li>A custom head is used for classification. <code>XXXForSequenceClassification</code> initialization of head gives high loss on early iterations, so the head is re-initialized after model initialized.</li>
+</ul>
+<pre><code>    model = torch(
+        torch(),
+        torch(hdim, hdim 
+        torch(),
+        torch(),
+        torch(hdim 
+    )
+</code></pre>
+<p>Based on my experience on previous competitions, I did not try LoRA and used only full-parameter training. With BF16 and optimizer with <a href="https://optimi.benjaminwarner.dev/kahan_summation/" target="_blank">kahan summation</a> support, it's possible to train 7B models using single A100 80G, 9B models requires two A100s.</p>
+<p>During the last 10 days of this competition, I used A100 80G x4 for all experiments.</p>
+<h2>Full Swap</h2>
+<p>In early experiments, I performed random swaps of response_a and response_b as augmentation, which improves val log_loss a bit. <a href="https://www.kaggle.com/kapenon" target="_blank">@kapenon</a> found that including both the original sample and its swap was better. To avoid overfitting, the gradients of the original sample and its swap must be accumulated for the same <code>optimizer.step</code>. Although the training time doubles, full swap shows a stable 0.003 improvement for gemma2-9b compared to random swap.<br>
+Furthermore, I tried adding different input formats (PAB and PAPB) as augmentation in the same way, bringing a small (0.001) improvement.</p>
+<h2>Steps to Train the Final Model</h2>
+<h3>Stage 1</h3>
+<p>We fine-tuned <code>google/gemma-2-9b-it</code>, <code>google/gemma-2-27b-it</code>, and <code>RLHFlow/ArmoRM-Llama3-8B-v0.1</code>. The validation log losses were 0.891, 0.883, and 0.899 respectively without TTA. After average ensemble, the log loss was 0.876.</p>
+<p>After completing the <code>gemma-2-9b</code> training, I spent a lot of time trying <code>gemma-2-27b</code> without getting good results. By comparing with <a href="https://www.kaggle.com/kapenon" target="_blank">@kapenon</a>'s code, I adjusted the batch_size to 80 and turned off grad_clip, finally successfully trained the model.</p>
+<h3>Stage 2 (pseudo labeling)</h3>
+<p>We generated pseudo labels for 240k data using the ensemble obtained from stage 1. Of this, 110k data came from lmsys-1m (prepared by <a href="https://www.kaggle.com/kapenon" target="_blank">@kapenon</a>), 130k came from other datasets (@liushuzhi tested numerous external datasets using a 1.5B model).<br>
+On this dataset, we fine-tuned <code>gemma-2-9b</code> and <code>RLHFlow/ArmoRM-Llama3-8B-v0.1</code>.<br>
+From this stage, I turned off the window attention for <code>gemma-2-9b</code>, because I'm not sure if efficient attention implementations supporting sm75 could do window attention. The longest input length was 4340 (including instruction), so this should have minimal impact on the score.</p>
+<p>TTA was not applied when generating pseudo labels (my mistake).</p>
+<h3>Stage 3</h3>
+<p>Based on the checkpoint obtained in stage 2, we fine-tuned using 55k+21k data. Multi input format augmentation was disabled due to time limit.<br>
+On the 20% validation set, the two models achieved 0.884 and 0.890 respectively, with the average ensemble log loss being 0.876~0.877.<br>
+At submission, input for <code>RLHFlow/ArmoRM-Llama3-8B-v0.1</code> was AB swapped. This model scored 0.873 on the old LB. After training with all data, this model reached 0.869 on the old LB. After adjusting the ensemble ratio to 2:1, the score was 0.868.</p>
+<h1>Faster training</h1>
+<p>We used <code>flash-attn==2.6.2</code> for its <code>logit_softcapping</code> support.</p>
+<p>When using <code>flash_attn_varlen_func</code>, attention_mask and padding are unnecessary. To avoid wasting computation on pad tokens, I</p>
+<ol>
+<li>Implemented a custom collator to perform sequence concat on samples and prepare <code>cu_seqlens</code></li>
+<li>Modified the code based on huggingface's implementation, so the model only accepts <code>input_ids</code> and <code>cu_seqlens</code>. The model does not involve padding from start to finish.</li>
+</ol>
+<p>Additionally, <code>RMSNorm</code> and <code>FusedRoPEFunc</code> from <code>transformer_engine</code> were used to further accelerate training.</p>
+<h1>Faster inference</h1>
+<p>T4x2 is sufficient to run 7b-9b models in fp16. Transformers can be almost evenly distributed across 2 GPUs, just needing slight code modifications to make executions on two GPUs pipelined.</p>
+<p>Using latest efficient operators on T4 (sm75) doesn't seem easy. After some attempts, I used the following triton operators for inference:</p>
+<ol>
+<li><code>context_attention_fwd</code> from <code>ModelTC/lightllm</code>, with some optimizations and <code>logit_softcapping</code> support.</li>
+<li><code>rms_norm</code> and <code>fused_rotary_emb</code> from <code>InternLM/lmdeploy</code></li>
+<li><code>gelu_and_mul_fwd</code> and <code>silu_and_mul_fwd</code> from <code>ModelTC/lightllm</code></li>
+</ol>
+<p><code>memory_efficient_attention</code> from <code>xformers</code> was used for Llama3.</p>
+<p>Same as training, the entire inference process is also based on sequence collate, requiring no padding.</p>

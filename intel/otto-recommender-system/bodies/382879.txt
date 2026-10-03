@@ -1,0 +1,476 @@
+# https://www.kaggle.com/competitions/otto-recommender-system/discussion/382879
+
+Topic #382879: 3rd place(imaginary) solution
+  Author: Makotu
+  Posted: 2023-02-01 11:07:27.664000
+  Votes: 98  Comments: 20
+
+PS: This solution is actually equivalent to 3rd place, but it was ban because a cheater was on the team. So please enjoy it as an "imaginary" 3rd place solution.
+
+First of all, thank you for organizing a great competition. I would also like to thank everyone who participated in the competition with us and the four of us who worked together as a team.
+About one week before the end of the competition, we formed a team. However, just on the next day, we were warned one of our teammate might have some problem(link). And since then, we other four were working hard together to achieve the best possible result. 
+We can proudly tell you that this 3rd place score is definitely a result with no outside influence. (Of course, as we have already said, we leave it up to the kaggle team to decide how our results will ultimately be handled.)
+In this discussion, I would be happy to share with you the solutions of the four of us.
+Of course we can share the code as well, but we hope we can open it after the rankings are finalized.
+(The code is not yet public at this time, so it would be difficult for cheaters to imitate our accuracy.)
+
+We write the solution each one below.
+
+
+
+Alvor part
+
+Candidates selection:
+
+
+
+all items from the session's history
+
+items from co-visitation matrices. I did many experiments (window size, weights, action types etc.) and finally end up with 5 best matrices (in terms of maximum possible recall when using each matrix). Each of these 5 matrices I use both for candidates selection and for feature engineering (sum/avg/max candidate score, etc.)
+
+I did not have fixed number of candidates per session
+
+median number of candidates per session: 67
+
+but there were sessions with very high number of candidates, so the average candidates number per session is 121.46
+
+my recalls per target:
+clicks recall: 0.631531
+carts recall: 0.540274
+orders recall: 0.729626
+Total: 0.6630
+What did not work for me:
+
+add candidates from Word2Vec embeddings (K nearest neighbours)
+
+add candidates from Matrix Factorization embeddings (K nearest neighbours)
+
+simply increase number of candidates in my methods
+
+all these attempts increased the maximum possible recall, but decreased the validation score
+
+
+Feature engineering:
+
+
+
+Sessions features
+
+Items features
+
+Items-2-Sessions interactions features
+
+Co-Visitation matrices features (sum/avg/max of candidate score, etc.)
+
+Word2Vec features: euclidean and angular distance between the candidate's embedding and session's last item's embedding
+
+Matrix Factorization features: euclidean and angular distance between the candidate's embedding and last session's item's embedding
+
+Features selection based on Feature importance of my experimental models
+Some of my best candidates:
+
+index of last interaction with the candidate in the session
+
+relative number of interactions with given candidate among all session's interactions
+
+timestamp differences
+
+angular distance between candidate's w2v embedding and last session's item w2v embedding
+
+number of co-visitation matrices containing given item as a candidate
+What did not work for me:
+
+Word2Vec and Matrix Factorization features: euclidean and angular distance between the candidate's embedding and session's penultimate item's embedding
+
+Word2Vec and Matrix Factorization features: average/min euclidean and angular distance between the candidate's embedding and all session's items embeddings
+
+Word2Vec and Matrix Factorization features: euclidean and angular distance between the candidate's embedding and session's last cart/order item's embedding (there was a minor improvement, but I abandoned these features)
+
+
+Model
+
+
+
+Group 3-Fold (by sessions) LightGBM Classifier (binary_logloss)
+
+One model per one target (clicks/carts/orders)
+
+No negative downsample (during almost the entire competition) so it required a lot of memory and time
+
+1/5 negative downsample for carts/orders and 1/15 for clicks (last week of competition)
+
+But I use another trick to reduce memory/time usage: When I train a model for carts/orders, I use only sessions for which I have at least one ground-truth candidate among my candidates. Because the main goal of model is to distinguish between good candidates and bad candidates. So I think that sessions with only bad candidates don't help my model.
+(It could be by 2 reasons:
+1) the session has not ground true cart/order at all
+2) the session has ground-true cart/order, but I didn't select it among my candidates)
+
+'dart' boosting for carts nodel, 'gbdt' boosting for clicks and orders model.
+
+add "carts" prediction as a feature for "orders" model (the best feature)
+What did not work for me:
+
+Add second click to the positive samples as well as first click
+
+add "clicks" prediction as a feature for "orders" model
+
+multiple attempts to build a second model to re-arrange only top-X candidates from the first model
+
+
+
+
+Makotu part
+
+My pipeline consists mainly of preprocess/make co-matrix/candidate / make feature / modeling parts.
+
+
+
+Data
+
+
+
+I used Radek's train/validation/test data
+
+
+Preprocess
+
+
+
+make aid vector using w2v
+
+make BPR(Bayesian Personalized Ranking) feature (recommended Sirius)
+
+
+Make-co-matrix and candidate
+
+
+
+I made many pattern co-matrix. Basically, co-matrix is created in the  form of probabilities. For example, the following pattern is used to quantify the relationship between aidA and aidB.
+
+
+aid B count within same session / all aid A count
+
+aid B count within same session (after aid A click) / all aid A count
+
+aid B count within same session / all aid A count. (But if the same user has the same pair of idA and idB, make them unique and then aggregate)
+
+aid B count within same session / all aid A count. (with time weighted)
+
+aid B count within same session and within 1 hour / all aid A count.
+like this.
+
+Select a candidate based on session last action aid / top action aid / with in 1 hour action aid / within 1 day action aid
+
+candidate recall
+
+
+order: 0.732 (@190 candidates)
+
+cart: 0.546 (@190 candidates)
+
+click: 0.682 (@140 candidates)
+
+
+Make feature
+
+
+
+User / aid / user&amp;aid interaction features.
+
+features that worked
+
+
+last action aid
+
+distance from last aid w2v to candidate aid w2v
+
+BPR feature (recommened sirius)
+
+co-matrix features (ex. probability of clicking on candidate aid after the last aid)
+
+etc
+
+
+Modeling
+
+
+
+Catboost (loss: PairLogitPairwise)
+
+Group Kfold(group: session)
+
+Add oof features in addition to the above features
+
+
+click model does not use oof.
+However, two patterns of click models were created. in addition to predicting the next clicked id, it also predicts all subsequent clicks of the id, and then uses as oof.
+
+cart model add above 2 model oof.
+
+order model add click 2 model oofs, cart model's oof
+
+CV click: 0.5632 cart: 0.4429 order: 0.6699
+
+LB: 0.602
+
+
+Stacking
+
+I was not involved in the stacking of results with other members, as all the stacking was carried out by shimacos with great skill. I hope you will wait for his addition. 
+
+(add) code of my part
+
+https://github.com/makotu1208/Otto-kaggle-3rd-solution-makotupart
+
+
+
+Shimacos part
+
+
+
+data
+
+
+
+First, I used my own original truncate dataset.
+
+
+train: 2022-08-14 ~ 2022-08-21 valid 2022-08-21 ~ 2022-08-28
+
+train: 2022-08-21 ~ 2022-08-28 test: 2022-08-28 ~ 2022-09-04 (Training iteration is the calculated one in the previous step)
+
+And Roughly 10 or so models were made and stacking. (Single 0.592 -&gt; 0.595)
+
+However since everyone except me was using the radek dataset, I shifted to using that one after team merge. This was to maximize ensemble results.
+
+
+preprocess
+
+
+
+made aid vector
+
+
+w2v with gensim
+
+n2v with pytorch_geometric
+
+made session, aid vector
+
+
+bpr with implicit
+
+
+Candidates
+
+
+
+As shown in the overview figure.
+
+I created candidates and features by BigQuery. For example, the covisit candidates can be calculated in less than one minute for both train and test.
+
+Recall
+
+
+average candidate count: 188.69
+
+click: 0.6799
+
+cart: 0.5555
+
+order: 0.7359
+
+Overall: 0.6762
+
+
+Feature
+
+
+
+As shown in the overview figure.
+
+I used the overall average for smoothing when calculating cvr.
+
+High importance feature (CatBoost LossFunctionChange importance)
+
+
+difference between the last time the aid was actioned across the overall data and the last time of the session.
+
+candidate feature by next visit covisit
+
+I think it was because in the end it was important to hit the next aid after the last action.
+
+difference feature of w2v and bpr
+
+covisit cvr feature
+
+
+Model
+
+
+
+LightGBM (lambdarank) and CatBoost (PairLogit)
+
+I used CatBoost the day before the last day and found an improvement of about 0.002-0.003 over LightGBM. I should have used it earlier…
+
+
+I got 0.596 and 0.598 at private LB finally.
+
+
+Stacking
+
+
+
+At the team merge, the scores were only 0.600 (makotu), 0.600 (sirius),0.598 (Alvor and Shimacos), but By rank blending each score as follows, we were able to produce a 0.603, which was the second at the time.
+
+
+Use the top50 of each prediction.
+
+And the each prediction was simply outer joined to create a pair of user items.
+
+fillna with 1 / 50
+
+rank blending with formula 1/rank_a + 1/rank_b + 1/rank_c and sort descending.
+
+As the number of models increased, it became difficult to find the optimal weights, so stacking was performed.
+
+
+Dataset is the same as above.
+
+Feature: prediction score and rank
+
+This resulted in a score of 0.604 by LightGBM. (CV: 0.59624)
+
+The same was created in CatBoost (CV: 0.59592) and averaged.
+
+Finally, I interpolated predictions by aid with the highest number of actions for each type in the test period.
+
+Random Thought
+
+
+Too many more models could lower the score. This is probably due to too many negative examples.
+
+Stacking models created by different candidates tended to increase the overall score. 
+
+
+
+
+Sirius part
+
+
+
+Recalling
+
+
+
+All the recalling methods are listed in the figure.
+
+Avg candidates cnt for each user: 224.74
+
+Overall recall: 0.677232,
+
+
+Clicks recall:0.688493
+
+Carts recall:0.557334
+
+Orders recall:0.735304
+
+
+Ranking
+
+Samples
+
+
+
+Click model: the generated candidates which the user clicked are labeled with 1
+
+Cart/Order model: the generated candidates which the user carted or ordered are labeled with 1. I merged cart and order labels because of their sharing of similar semantic
+
+Downsampling of negtive samples is abopted. I just keep the negative samples with amount of 20*len(pos_samples)
+
+
+Features
+
+
+
+All the features are listed in the figure.
+
+The feature with highest importance in my model is BPR①, implemented with Implicit package.  (Notebook will be public after everything is verified.)
+
+Bi-gram② is a terminology of NLP, meaning the successive visiting of aid1, aid2 here. It is similar to co-visit matrix, but it only counts the next one action. And I normlize the count by the hotness of item then. This group of features gave the biggest boost among all my experiments, ~0.006.  (Notebook will be public after everything is verified.)
+
+OOF of other action③ help improve my score ~0.001.
+
+Features ①+③+ shimacos’s w2v improved Makotu's CV ~0.001 and features ①+② improved Alvor's CV ~0.003.
+
+
+Models
+
+
+
+Catboost is trained with Logloss. When training Cart/Order model, I set different weights to positive sample, 5 and 10 for is_carts and is_orders respectively. Along with the strategy of mergeing Cart labels and Order labels, it boosts CV ~0.002, compared with training Cart model and Order model separately.
+
+MLP is trained with the same features as catboost, plus an standard scaler to normlize the features. But it is not accurate and diverse enough to improve the blending score. So in our final submission, it is not included. Beside MLP, I have tried to introduce GRU and pretrained item embedding into the NN model, but all failed.
+
+
+Ensemble
+
+That’s @shimacos ’s credit. Very impressive work!
+
+Comments:
+├─ sirius (2023-02-01 14:56:05.757000) [+13]
+│  No matter what the final result will be, cooperating with you guys is super pleasant. Thank you very much!
+├─ Wonho Song (2023-02-02 02:42:55.643000) [+3]
+│  I admire your team! Thank you for your hard work and nice sharing.
+├─ Michal Bogacz (2023-02-01 14:05:04.227000) [+2]
+│  Wow, so much content here. Great solution, congrats guys!
+├─ wcq_glhf (2023-02-14 05:55:12.473000) [+0]
+│  excuse me, may i ask how to determine the w2v model trained well, i train the w2v model for recall and cv top 200 get round 0.600, and i use the w2v embedding for rerank but my rerank doesn't work,...
+├─ Apa (2023-02-06 11:24:09.697000) [+0]
+│  https://www.kaggle.com/code/sirius81/otto-bigram-feature/notebook  404😂
+  ├─ sirius (2023-02-06 11:42:52.150000) [+0]
+  │  "Notebook will be public after everything is verified."  But I have added you in the sharing list now.
+    ├─ Apa (2023-02-07 02:13:18.387000) [+0]
+    │  Thanks, I learned a lot of new things from your code
+├─ Sohil Sharma (2023-02-04 19:12:40.517000) [+0]
+│  congratulations @mhyodo !!
+├─ Alex Pierron (2023-02-03 09:26:03.710000) [+0]
+│  Impressive !
+├─ sunoonlee (2023-02-03 08:10:00.293000) [+0]
+│  Thank you for sharing! Really impressed by stacking, bi-gram, and the speed of BigQuery. 
+│  Besides BigQuery, what computational resources did you use, and what were the main considerations?
+├─ Bibek (2023-02-02 04:42:24.347000) [+0]
+│  Thanks for sharing and great team from 4 of you!! I hope Kaggle makes fair decision. 
+│  
+│  
+│    
+│  Bi-gram② is a terminology of NLP, meaning the successive visiting of here. It is similar to co-visit matri...
+  ├─ sirius (2023-02-02 04:52:30.517000) [+1]
+  │  Yes, Exactly.
+├─ Apa (2023-02-02 03:39:59.283000) [+0]
+│  Will you provide the code later? I would like to learn the details of the processing inside
+├─ Gaurav Rawat (2023-02-01 17:34:52.697000) [+0]
+│  Great explanation a lot to learn here .. specially use of angular distance (which we havent used and weren't aware of). Lessons to take in future comps . Also thanks @sirius81 for your tips from yo...
+  ├─ sirius (2023-02-02 00:13:53.227000) [+1]
+  │  Hi @gauravbrills , thanks for your comments. Very glad to hear that!
+├─ BenediktSchifferer (2023-02-01 13:15:47.720000) [+0]
+│  Thanks for the write up
+│  
+│  As the number of models increased, it became difficult to find the optimal weights, so stacking was performed.
+│  Dataset is the same as above.
+│  Feature: prediction score and r...
+  ├─ shimacos (2023-02-01 13:24:32.703000) [+1]
+  │  Yes, I used oof of radek dataset.
+  │  This was possible because our team all used Redek's dataset.
+    ├─ BenediktSchifferer (2023-02-01 13:44:21.763000) [+0]
+    │  Are you not using Radek's 4th week truncated dataset to train your individual reranker models? Makotu, Alvor and Sirius Model? On which dataset do you train these models and on which is the ensembl...
+    ├─ shimacos (2023-02-01 13:52:59.917000) [+1]
+    │  We used Radek's 4th week truncated dataset to train by GroupKFold.
+    │  Then built stacking model by the oof prediction.
+    │  The following is a section on how to create the dataset.
+    │  
+    │  
+    │    
+    │  Use the top50 of ea...
+├─ Zhen Wang(Ryan) (2023-02-03 08:52:03.567000) [+0]
+│  Thanks for sharing. Quite Remarkable.

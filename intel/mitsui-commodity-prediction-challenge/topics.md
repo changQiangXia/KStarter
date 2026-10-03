@@ -1,0 +1,82 @@
+# mitsui-commodity-prediction-challenge 讨论区（按票数排序，共 80 条）
+
+- [Clarification Needed: Forecasting Constraints, Label Lags, and Inference Time — Let's Make It Clear for Everyone](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591256) — 54 票 / 24 评论 / 2025-07-26 
+- [This competition is most likely completely based on luck](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/599772) — 33 票 / 15 评论 / 2025-08-18 
+- [date_id to real date](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/593820) — 31 票 / 13 评论 / 2025-07-30 
+- [Reduce the size of data (Recap)](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591053) — 27 票 / 4 评论 / 2025-07-25 
+- [baseline pipeline for this competition](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/609601) — 26 票 / 5 评论 / 2025-09-28 
+- [date_id to real date matching](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/602699) — 25 票 / 2 评论 / 2025-08-29 
+- [Six "HUB" assets and the correlation structure](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591643) — 20 票 / 1 评论 / 2025-07-29 
+- [Why not disabling the public LB ? ](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591237) — 20 票 / 8 评论 / 2025-07-26 
+- [What is the Target? Explain it in Human Language](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/598315) — 20 票 / 4 评论 / 2025-08-10 
+- [4 target pairs contain delisted stock ids](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/606650) — 18 票 / 7 评论 / 2025-09-09 
+- [Regularized-naive #10 solution](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668589) — 17 票 / 5 评论 / 2026-01-17 **write-up?**
+- [MITSUI&CO. Commodity Prediction Challenge - 15th Place Solution Writeup](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668673) — 16 票 / 5 评论 / 2026-01-18 **write-up?**
+- [[draft] testbed fo AI agent Kaggler](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596215) — 16 票 / 11 评论 / 2025-08-02 
+- [Fun Fact on Current LB](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/650534) — 16 票 / 38 评论 / 2025-12-01 
+- [What's your leak-free CV?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591530) — 16 票 / 12 评论 / 2025-07-28 
+- [Why is the participation so dismal here?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/600030) — 16 票 / 16 评论 / 2025-08-20 
+- [Rank Adaptive Optimizer](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/610904) — 16 票 / 10 评论 / 2025-10-07 
+- [What are these stocks in the dataset? Full list of US_Stocks with detailed info](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/598876) — 15 票 / 0 评论 / 2025-08-13 
+- [Available data during forecasting phase - inconsitency in description](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/599169) — 14 票 / 8 评论 / 2025-08-14 
+- [Interim competition dataset update](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/603716) — 13 票 / 38 评论 / 2025-09-03 
+- [Overfitting](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591196) — 12 票 / 6 评论 / 2025-07-26 
+- [A Community-Driven Quant Finance Competition with Transparent Rules and Real Alpha](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/669175) — 12 票 / 5 评论 / 2026-01-21 
+- [Dropped out of the leaderboard ](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668489) — 12 票 / 3 评论 / 2026-01-17 
+- [LB Testing Phase Rules???](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668482) — 12 票 / 2 评论 / 2026-01-17 
+- [Unpopular opinion: It was great not having a leaderboard](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/610866) — 11 票 / 16 评论 / 2025-10-07 
+- [Baseline / Benchmark / No good news here](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/608827) — 11 票 / 8 评论 / 2025-09-22 
+- [Suggestion: Can we get the recent market data near the end of the competition?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591252) — 10 票 / 2 评论 / 2025-07-26 
+- [WarpGBM's Invariant Learning Could Be a Game-Changer for Robust Predictions](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/593904) — 10 票 / 5 评论 / 2025-07-31 
+- [if you want a LB, try this](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596327) — 10 票 / 11 评论 / 2025-08-02 
+- [[Out of date] FYI - Leaderboard will not be meaningful until the final deadline](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668455) — 9 票 / 47 评论 / 2026-01-16 
+- [Is the 1min submission limit a mistake?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/600370) — 9 票 / 6 评论 / 2025-08-22 
+- [ZLF's Solution in the MITSUI&CO. Commodity Prediction Challenge](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/670526) — 8 票 / 1 评论 / 2026-01-28 **write-up?**
+- [Understanding the target (lag) and evaluation setup in Mitsui Commodity Prediction Challenge](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/607285) — 8 票 / 4 评论 / 2025-09-13 
+- [Any info on LB update frequency?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/611310) — 8 票 / 8 评论 / 2025-10-10 
+- [Metric Concerns](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591458) — 7 票 / 6 评论 / 2025-07-28 
+- [Are you experiencing drastic changes in CV scores with addition/ removal of few features](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596576) — 7 票 / 7 评论 / 2025-08-04 
+- [Who had a stable score throughout..???](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668552) — 7 票 / 4 评论 / 2026-01-17 
+- [Competition is DEFINTELY based on luck](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/639581) — 7 票 / 7 评论 / 2025-11-25 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/669343) — 6 票 / 2 评论 / 2026-01-21 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591005) — 6 票 / 3 评论 / 2025-07-24 
+- [Clarify forecasting input shape, start point, and any warm-up days](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/599487) — 6 票 / 0 评论 / 2025-08-16 
+- [Second leaderboard update posted](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/657807) — 6 票 / 24 评论 / 2025-12-10 
+- [Initial future data update scores posted](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/639489) — 6 票 / 20 评论 / 2025-11-24 
+- [cannot understand the data mechanism regarding the forecasting phase](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591350) — 5 票 / 2 评论 / 2025-07-27 
+- [LB Probe Meaningless](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591610) — 5 票 / 2 评论 / 2025-07-29 
+- [Provided date during evaluation](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596837) — 5 票 / 16 评论 / 2025-08-05 
+- [One Model or Many? Curious What Others Think](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596643) — 5 票 / 2 评论 / 2025-08-04 
+- [My two submissions with negative scores](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/640170) — 5 票 / 8 评论 / 2025-11-25 
+- [Lags don't match train labels(actually they do, I just was confused)](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591543) — 5 票 / 4 评论 / 2025-07-29 
+- [89th Place Solution](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668781) — 5 票 / 3 评论 / 2026-01-19 **write-up?**
+- [Generate All Targets](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/598743) — 4 票 / 0 评论 / 2025-08-12 
+- [97th Place Solution](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668698) — 4 票 / 0 评论 / 2026-01-18 **write-up?**
+- [Question regarding inference starting date](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596666) — 4 票 / 2 评论 / 2025-08-04 
+- [26th Place Solution – MITSUI&CO. Commodity Prediction Challenge Writeup](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/669234) — 4 票 / 0 评论 / 2026-01-21 **write-up?**
+- [25th Place Silver – MITSUI&CO. Commodity Prediction Challenge Writeup](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/669088) — 3 票 / 0 评论 / 2026-01-20 **write-up?**
+- [Note that we are predicting t+2, t+3 and not t+1, t+2 etc](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591282) — 3 票 / 5 评论 / 2025-07-26 
+- [37th Place Solution for the MITSUI&CO. Commodity Prediction Challenge](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668669) — 3 票 / 3 评论 / 2026-01-18 **write-up?**
+- [API data in the prediction phase](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/600643) — 3 票 / 4 评论 / 2025-08-24 
+- [Concerns About Metric Instability and Unrealistic Leaderboard Scores](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591560) — 3 票 / 2 评论 / 2025-07-29 
+- ["LME_CA_CLOSE" is named incorrectly in the Competition Dataset](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591646) — 3 票 / 0 评论 / 2025-07-29 
+- [Will the train.csv data be updated near the end of the competition to get more recent data?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/599371) — 3 票 / 9 评论 / 2025-08-16 
+- [Flaw in date_id of test_labels_lag_1:4](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596695) — 3 票 / 4 评论 / 2025-08-04 
+- [anything more than 0.5 sharpe is probably not right (thats if not 0.4)](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/607591) — 3 票 / 8 评论 / 2025-09-15 
+- [Past number of days available for evaluation?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/593892) — 3 票 / 3 评论 / 2025-07-31 
+- [Not Consistent Results between local LB and Public LB](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/598823) — 2 票 / 3 评论 / 2025-08-13 
+- [Can the private dataset be shared please as the competition is over ?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/668531) — 2 票 / 5 评论 / 2026-01-17 
+- [Understanding of the forecasting phase](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/603007) — 2 票 / 6 评论 / 2025-08-31 
+- [Retraining during evaluation](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/597749) — 2 票 / 2 评论 / 2025-08-07 
+- [Initial data update error](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/669451) — 2 票 / 0 评论 / 2026-01-22 
+- [Why is the prediction length 1 when running on a batch?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/610624) — 2 票 / 9 评论 / 2025-10-04 
+- [In the dark.. Would love some feedback from fellow data scientists please](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/611125) — 2 票 / 11 评论 / 2025-10-08 
+- [For Better Data Comprehension](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591255) — 2 票 / 0 评论 / 2025-07-26 
+- [Surprising Consistency Between the First Update and PB — Just Luck?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/639895) — 2 票 / 25 评论 / 2025-11-25 
+- [Sharp Range?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/596154) — 2 票 / 1 评论 / 2025-08-01 
+- [Potential Bug in the Competition Evaluation Metric](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591505) — 2 票 / 1 评论 / 2025-07-28 
+- [Artem777 in MITSUI&CO. Commodity Prediction Challenge](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/670416) — 2 票 / 0 评论 / 2026-01-27 
+- [Time limit in prediction](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/610050) — 2 票 / 2 评论 / 2025-10-01 
+- [Completability issue](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/599195) — 1 票 / 1 评论 / 2025-08-14 
+- [Pairs Missing from target_pairs.csv in Evaluation Phase?](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/598318) — 1 票 / 3 评论 / 2025-08-10 
+- [EVVSK MITSUI&CO. Commodity Prediction Challenge](https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/735390) — 1 票 / 0 评论 / 2026-08-15 

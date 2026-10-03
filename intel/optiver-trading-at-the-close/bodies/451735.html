@@ -1,0 +1,16 @@
+<p>Several concepts need clarification:</p>
+<ol>
+<li><p>The original feature columns provided are referred to as "Field". We call the extensive and complex calculations (such as MACD, RSI, STD, SKEW, etc.) "operators (op)". The expressions formed by combining operators are called "factors".</p></li>
+<li><p>For a factor to be considered an alpha, it needs to demonstrate stable profitability over time, that is, maintain a stable correlation with the target. IC is known as the temporal factor-target correlation. IR represents the mean/variance ratio of the factor-target correlation over time. To assess whether a factor is an alpha, one should look at whether the IR is relatively high.</p></li>
+<li><p>In the process of using operators to produce factors, using native pandas can make the code run very slowly, which can be quite painful. In fact, if we are not in a notebook environment, we could use C++ for compilation. However, I believe that under the constraints of this competition, the best approach is still to use <code>numba + multiprocessing</code>. (<a href="url" target="_blank">https://www.kaggle.com/code/wenxuanxx/faster-function-build-feature</a>)</p></li>
+</ol>
+<ul>
+<li>Regarding how to use numba efficiently: First, we should use numba.jit(nopython=True). By leveraging a plethora of mathematical expression principles, we can find formulas for calculating related statistical indicators from numpy. The use of for loops combined with numba.prange can implement a portion of the acceleration. For particularly complex mathematical formulas, we should use numba.jit(nopython=True, fastmath=True). By doing this, we can construct a high-efficiency time series statistical scheme. After verification, the acceleration ratio (compared to pandas) can reach about 20 times. </li>
+</ul>
+<blockquote>
+  <p>To provide some reference, my current estimate for the inference time on the private dataset is 71 minutes (for 195 features), of which 150+ are rolling features. The time for a single inference is 1.04 seconds, compared to 23.5 seconds before optimization.</p>
+</blockquote>
+<ul>
+<li>What people are more concerned about is how to use rolling features in online applications. We will use "streaming cache prediction," which means caching the data output at each iteration and concatenating it to obtain the features before the current timestamp, such as <code>ma(wap, 10)</code>. To prevent memory overload, we need to update this "cache" by specifying a maximum timestamp to which it should be updated. For instance, for each stock, we need to calculate the data from 60 days ago.</li>
+</ul>
+<p><strong><em>To recap the key points:</em></strong> We use <em>numba</em> and <em>multiprocessing</em> to construct factors, use <strong><em>IR</em></strong> to filter factors, and employ the leave-one-out(last 45 days) method to validate the effectiveness of factors and train models. Trust me, this will help you achieve a good score.</p>

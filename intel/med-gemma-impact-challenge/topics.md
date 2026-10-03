@@ -1,0 +1,82 @@
+# med-gemma-impact-challenge 讨论区（按票数排序，共 80 条）
+
+- [A slight delay in announcing the winners](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/684112) — 30 票 / 17 评论 / 2026-03-23 
+- [HAI-DEF models: CXR Foundation, Path Foundation, Derm Foundation, HeAR, CT Foundation.](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/667677) — 28 票 / 4 评论 / 2026-01-13 
+- [Thank you for your participation in the MedGemma Impact Challenge!](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/680221) — 27 票 / 2 评论 / 2026-03-06 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/667660) — 19 票 / 16 评论 / 2026-01-13 
+- [Announcing the Winners!](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/685002) — 15 票 / 24 评论 / 2026-03-26 
+- [Welcome to the MedGemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/669140) — 9 票 / 1 评论 / 2026-01-20 
+- [SOLVED: HeAR API Bug + Complete Clinical AI System (Working Demo Inside!)](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/667786) — 7 票 / 0 评论 / 2026-01-14 
+- [Seeking Clarification: Regulatory Context of HAI-DEF Models & Competition Implications](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668280) — 6 票 / 2 评论 / 2026-01-16 
+- [Questions regarding submission format and platform format](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668140) — 6 票 / 2 评论 / 2026-01-15 
+- [Do judges need a hug😅? 879 Submissions! ](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678856) — 6 票 / 16 评论 / 2026-02-25 
+- [MedGemma 27B Deployment Challenges - Seeking Advice](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673091) — 5 票 / 11 评论 / 2026-02-12 
+- [Practicing Surgeon looking for a team](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668341) — 5 票 / 13 评论 / 2026-01-16 
+- [AI in healthcare writeup](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/667678) — 5 票 / 2 评论 / 2026-01-14 **write-up?**
+- [Question on track selection](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678937) — 4 票 / 1 评论 / 2026-02-25 
+- [Can I still push new commits to my GitHub repository after the competition deadline?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678861) — 4 票 / 3 评论 / 2026-02-25 
+- [Feedback Request: Scoring Transparency for Non-Winning Submissions](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/685138) — 3 票 / 8 评论 / 2026-03-26 **write-up?**
+- [Urgent question on external non-commercial data & CC BY 4.0 winner license](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/671596) — 3 票 / 8 评论 / 2026-02-02 
+- [Hosting MedGemma on VertexAI seems Broken](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668731) — 3 票 / 5 评论 / 2026-01-18 
+- [medasr mlx(apple silicon) is here - use in mobile apps](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/672879) — 3 票 / 3 评论 / 2026-02-11 
+- [Question: MedGemma 1.5 MRI training and preprocessing](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668623) — 2 票 / 3 评论 / 2026-01-17 
+- [Simple MedGemma Bot -- 100% local components](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/669999) — 2 票 / 0 评论 / 2026-01-25 
+- [Where to have the models hosted ?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674220) — 2 票 / 2 评论 / 2026-02-19 
+- [VertexAI is still Broken](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673230) — 2 票 / 1 评论 / 2026-02-13 
+- [Should we had to track main competition as well?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678909) — 1 票 / 1 评论 / 2026-02-25 
+- [Submission issues](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/679005) — 1 票 / 0 评论 / 2026-02-26 
+- [Can we use ultrasound images in this competition?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668014) — 1 票 / 1 评论 / 2026-01-14 
+- [Nurse + Biologist + Dev | Looking for Engineering Team to build Real-World Clinical AI](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/669540) — 1 票 / 4 评论 / 2026-01-22 
+- [Any Suggestions for a participant who is not from the medical background? ](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/669354) — 1 票 / 5 评论 / 2026-01-21 
+- [What This Competition Taught Me About Designing Responsible AI Systems](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/679963) — 1 票 / 5 评论 / 2026-03-05 
+- [Technical Note regarding Demo Video (Audio Correction)](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/680422) — 1 票 / 0 评论 / 2026-03-08 
+- [Local Download of Model](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/670832) — 1 票 / 3 评论 / 2026-01-29 
+- [Agentic Workflow Prize](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674645) — 1 票 / 3 评论 / 2026-02-21 
+- [Clarification on "3 Pages" Limit for Kaggle Writeup Format](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/671156) — 1 票 / 1 评论 / 2026-01-31 **write-up?**
+- [Video Length](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674262) — 1 票 / 1 评论 / 2026-02-19 
+- [Can the demo video more than 3 mins ? ](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674432) — 1 票 / 2 评论 / 2026-02-20 
+- [run medasr inside a browser](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/672881) — 1 票 / 0 评论 / 2026-02-11 
+- [MedGemma for Healthcare Systems in Senior Living](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/672958) — 1 票 / 0 评论 / 2026-02-11 
+- [Clarification on Video Duration Strictness](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673357) — 1 票 / 1 评论 / 2026-02-14 
+- [Are there any credits available for hosting on GCP?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673157) — 1 票 / 1 评论 / 2026-02-12 
+- [Citations Required?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673195) — 1 票 / 2 评论 / 2026-02-12 
+- [Participation by Google Affiliates](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668027) — 0 票 / 2 评论 / 2026-01-14 
+- [Are Belarus residents prize‑eligible in this challenge?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668260) — 0 票 / 1 评论 / 2026-01-15 
+- [Eligibility question – participant under 18](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668367) — 0 票 / 3 评论 / 2026-01-16 
+- [GPU and CPU discussion](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668676) — 0 票 / 1 评论 / 2026-01-18 
+- [Does On-Premise MedGemma Deployment with Limited Internet Features Meet Hackathon Guidelines?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/669895) — 0 票 / 2 评论 / 2026-01-24 
+- [Seeking Subject Matter Experts: Help us bridge the gap in Midlife Women’s Health](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/670786) — 0 票 / 0 评论 / 2026-01-29 
+- [Joy Projet](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/671030) — 0 票 / 0 评论 / 2026-01-30 
+- [Usage of Reddit Data](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/671180) — 0 票 / 1 评论 / 2026-01-31 
+- [Model inference expected speeds?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/671243) — 0 票 / 3 评论 / 2026-01-31 
+- [are China residents eligible for participating and prizing?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/671446) — 0 票 / 1 评论 / 2026-02-02 
+- [Compute Requirements](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/668062) — 0 票 / 1 评论 / 2026-01-15 
+- [Installing MedGemma](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/672250) — 0 票 / 1 评论 / 2026-02-07 
+- [Question for host about usage of images dataset](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/672400) — 0 票 / 5 评论 / 2026-02-08 
+- [Team required for MedGemma hackathon](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673000) — 0 票 / 1 评论 / 2026-02-11 
+- [MedGemma 4B keeps collapsing to single-token repetition during fine-tuning](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673582) — 0 票 / 4 评论 / 2026-02-15 
+- [How to submit a project with Locally run Model](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673879) — 0 票 / 1 评论 / 2026-02-17 
+- [Would it be okay if I submit App as a notebook?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673437) — 0 票 / 1 评论 / 2026-02-14 
+- [🚑 The 45-Minute War: Can We Shift Medical AI from Reactive to Proactive?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674222) — 0 票 / 3 评论 / 2026-02-19 
+- [Type 2 diabetes is also important topic.](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674285) — 0 票 / 0 评论 / 2026-02-19 
+- [Submission without Notebook](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673170) — 0 票 / 2 评论 / 2026-02-12 
+- [Public interactive live demo for a local app](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/673166) — 0 票 / 2 评论 / 2026-02-12 
+- [Can we use the quantized model?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674418) — 0 票 / 2 评论 / 2026-02-20 
+- [Where to put write-up + Page limits](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/674799) — 0 票 / 1 评论 / 2026-02-22 **write-up?**
+- [I need clarification about links](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678489) — 0 票 / 1 评论 / 2026-02-24 
+- [App external testing for IOS stuck in review process](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678743) — 0 票 / 2 评论 / 2026-02-24 
+- [MedGemma Impact Challenge- Submission got denied even though I tried to submit before time](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678799) — 0 票 / 2 评论 / 2026-02-25 
+- [We submit before deadline, and said submit successsfully, but it said after it miss?](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678798) — 0 票 / 2 评论 / 2026-02-25 
+- [Submission Error due to Video Format for team AI Attending Physician](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678801) — 0 票 / 4 评论 / 2026-02-25 
+- [Multi-agent Clinical Diagnostic Assistance. Failed to submit on time. Would appreciate any feedback.](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678789) — 0 票 / 2 评论 / 2026-02-25 
+- [Updated Live Demo Link - Surgical Copilot (Azure Account Issue)](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/679402) — 0 票 / 0 评论 / 2026-03-01 
+- [about judgeing](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/679114) — 0 票 / 1 评论 / 2026-02-27 
+- [Change name of the write up](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/679787) — 0 票 / 0 评论 / 2026-03-03 **write-up?**
+- [How HealTrip Could Use MedGemma to Govern Cross-Border Medical Decisions](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/680423) — 0 票 / 0 评论 / 2026-03-08 
+- [MedChart Submission – Patient-Centered Medical Flow with MedGemma](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678731) — -1 票 / 1 评论 / 2026-02-24 
+- [PLS I HAVE PROBLEM TO PUSH MY PROJECT ](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678793) — -1 票 / 0 评论 / 2026-02-25 
+- [Team of 3 AI Engineers with professional experience | looking for a practicing surgeon (preferably neurosurgeon)](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/669970) — -1 票 / 0 评论 / 2026-01-25 
+- [Could there be an open window for late submission](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678915) — -1 票 / 1 评论 / 2026-02-25 
+- [Technical issues during writeup submition](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678792) — -1 票 / 5 评论 / 2026-02-25 **write-up?**
+- [Please, Tried to submit and it said submit on 11.59 aM but miss the dead line!](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678794) — -2 票 / 0 评论 / 2026-02-25 
+- [I triend to submit 1 minute before the deadline, but they closed the submisiion](https://www.kaggle.com/competitions/med-gemma-impact-challenge/discussion/678790) — -2 票 / 1 评论 / 2026-02-25 

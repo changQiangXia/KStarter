@@ -1,0 +1,65 @@
+<p>First of all, thank you NBME and Kaggle for hosting such an amazing competition. It has been an enriching experience with a steep learning curve. My sincere thanks to the community for sharing great ideas and engaging discussions.</p>
+<h2>Code</h2>
+<ul>
+<li><a href="https://github.com/rbiswasfc/kaggle-nbme-3rd-place-solution" target="_blank">https://github.com/rbiswasfc/kaggle-nbme-3rd-place-solution</a></li>
+</ul>
+<h2>Summary</h2>
+<ul>
+<li>Task adaptation with MLM pre-training</li>
+<li>Multi label token classification (Predicting Inside, Beginning and End of answer spans)</li>
+<li>Training Diversity<ul>
+<li>Meta Pseudo Labels</li>
+<li>Knowledge Distillation from Model Ensemble</li>
+<li>Marked tokens: add a prefix token to feature text e.g.: ["QA CASE=0"]</li>
+<li>Stochastic Weight Averaging (SWA)</li></ul></li>
+<li>Blending: weighted average of character level predictions from different models</li>
+<li>Post Processing: time duration related features e.g. for <code>feature 309: duration-2-months</code>  filter out spans containing <code>2 weeks</code>, <code>years</code> in it etc</li>
+</ul>
+<h2>Models</h2>
+<ul>
+<li>DeBERTa Large</li>
+<li>DeBERTa XLarge</li>
+<li>DeBERTa V2 XLarge</li>
+<li>DeBERTa V3 Large</li>
+</ul>
+<h2>Workflow</h2>
+<h3>1. Task Adaptation</h3>
+<p>I continued pre-training of all DeBERTa models using the patient notes. Used standard masked language modelling for pre-training with token masking probability of 0.2. In the subsequent training steps, task-adapted models are used as backbone.</p>
+<ul>
+<li>References:<ul>
+<li>Don't Stop Pretraining: Adapt Language Models to Domains and Tasks (<a href="https://arxiv.org/abs/2004.10964" target="_blank">https://arxiv.org/abs/2004.10964</a>)</li></ul></li>
+</ul>
+<h3>2. Meta Pseudo Labels (MPL)</h3>
+<p>I felt the key to doing well in this competition was to make most out of the unlabelled data. To this end, I experimented with (1) standard Pseudo Labelling, (2) Weak Supervision: Contrastive-Regularized Self-Training Approach (<a href="https://arxiv.org/pdf/2010.07835.pdf" target="_blank">https://arxiv.org/pdf/2010.07835.pdf</a>) and (3) Meta Pseudo Labels (MPL). Among these, MPL worked the best. Thanks to <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> for sharing this excellent notebook on MPL: <a href="https://www.kaggle.com/code/hengck23/playground-for-meta-pseudo-label" target="_blank">https://www.kaggle.com/code/hengck23/playground-for-meta-pseudo-label</a>. I adapted this notebook for NBME token classification task. I used both soft &amp; hard pseudo labels for diversity during different training runs.</p>
+<ul>
+<li>References:<ul>
+<li>Meta Pseudo Labels (<a href="https://arxiv.org/abs/2003.10580" target="_blank">https://arxiv.org/abs/2003.10580</a>)</li>
+<li>Fine-Tuning Pre-trained Language Model with Weak Supervision: A Contrastive-Regularized Self-Training Approach (<a href="https://arxiv.org/pdf/2010.07835.pdf" target="_blank">https://arxiv.org/pdf/2010.07835.pdf</a>)</li></ul></li>
+</ul>
+<h3>3. Fine-tuning of Student</h3>
+<p>During MPL, the student model is trained only on unlabelled data using pseudo labels from teacher. So the student can be further fine-tuned on actual training data for additional performance boost. During fine-tuning, I also used Stochastic Weight Averaging (SWA) for better generalization.</p>
+<h3>4. Knowledge Distillation (KD)</h3>
+<p>For DeBERTa Large, I trained two models using MPL (each with 180k randomly sampled unlabelled data + all labelled data). Next I used these two models as teacher to distill their combined knowledge (mean token predictions) into another DeBERTa Large model. I used the following loss during distillation: <code>0.15 * BCE Loss on Labelled Data (actual annotations) + 0.15 * BCE Loss on Labeled Data (pseudo labels from teaches) + 0.7 * BCE Loss on Unlabelled Data with Pseudo Labels</code>. Rational for using KD: In literature, there are examples where student outperforms teachers specially when additional data is involved. Furthermore, it adds to model diversity.</p>
+<p>References:</p>
+<ul>
+<li>Can Students Outperform Teachers in Knowledge Distillation Based Model Comparison? (<a href="https://openreview.net/pdf?id=XZDeL25T12l" target="_blank">https://openreview.net/pdf?id=XZDeL25T12l</a>)</li>
+</ul>
+<h2>Marked Tokens</h2>
+<p>This basically involves modifying the feature text with a prefix token. I created 10 new tokens for each case e.g. "[QA CASE=0]". I thought some of the feature texts from different cases are very close to each other e.g. Feature 314: nausea, Feature 508: Associated-nausea. Therefore I felt, giving additional context of case number in feature text would help the model to distinguish between these cases.</p>
+<h2>Additional Details</h2>
+<ul>
+<li>For MPL training, both Teacher and Student models need to be loaded into memory. To avoid memory overflow issues, I used the usual tricks such as mixed precision training, 8-bit adam optimizer, batch size of 4, freezing of lower layers &amp; gradient checkpointing.</li>
+<li>In ensemble, majority of the models are trained using all data instead of individual folds</li>
+<li>For token classification head, concatenated hidden outputs from last 12 transformer layers.</li>
+<li>Reinitialized last 4-12 transformer layers</li>
+<li>LR Scheduler: cosine schedule with warmup</li>
+<li>Multi-label classification: 3 labels -&gt; [token is inside answer span, token is start of answer span, token is end of answer span].</li>
+</ul>
+<h2>Things that didn't work</h2>
+<ul>
+<li>Weighted Box Fusion (WBF): With WBF, the LB scores decreased by around 0.002</li>
+<li>Non Maximum Suppression (NMS): simple blending of char probs worked the best</li>
+<li>Tuning of model weights</li>
+<li>Tuning of thresholds (used 0.5 for all features)</li>
+<li>Most of my post-processing attempts</li>
+</ul>

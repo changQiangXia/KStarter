@@ -1,0 +1,82 @@
+# nbme-score-clinical-patient-notes 讨论区（按票数排序，共 80 条）
+
+- [#2 solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323085) — 174 票 / 54 评论 / 2022-07-01 **write-up?**
+- [[placeholder] my experiment results](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/315707) — 139 票 / 135 评论 / 2022-03-29 
+- [1st solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323095) — 128 票 / 28 评论 / 2022-05-22 **write-up?**
+- [Tokenization Analysis](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/313752) — 127 票 / 36 评论 / 2022-03-18 
+- [4th place solution: Deberta models & postprocess](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322799) — 126 票 / 57 评论 / 2022-05-16 **write-up?**
+- [Deberta-base Baseline [CV: 0.8607, LB: 0.861]](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/306184) — 106 票 / 15 评论 / 2022-02-08 
+- [Using Roberta](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/310897) — 80 票 / 15 评论 / 2022-03-03 
+- [BERT models for healthcare](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/305793) — 75 票 / 15 评论 / 2022-02-07 
+- [20th Place Solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323094) — 73 票 / 12 评论 / 2022-05-04 **write-up?**
+- [3rd Place Solution: Meta Pseudo Labels + Knowledge Distillation](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322832) — 72 票 / 32 评论 / 2022-09-13 **write-up?**
+- [Deberta Notes](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/320670) — 64 票 / 18 评论 / 2022-04-22 
+- [Case 5 is the key?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/315314) — 63 票 / 9 评论 / 2022-03-27 
+- [🩺 Medical Abbreviations specified in the Patient History](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/304607) — 61 票 / 9 评论 / 2022-02-01 
+- [6th place solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323237) — 61 票 / 18 评论 / 2022-05-05 **write-up?**
+- [7th place solution: Get 0.892 in just 10 minutes](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322829) — 60 票 / 22 评论 / 2022-05-04 **write-up?**
+- [Best Single Model CV/LB](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/306771) — 59 票 / 92 评论 / 2022-02-10 
+- [11th Solution: Trust CV](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322804) — 58 票 / 19 评论 / 2023-03-29 **write-up?**
+- [Validation Strategy](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/305599) — 57 票 / 9 评论 / 2022-02-06 
+- [18th place with only Kaggle and free Colab ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322958) — 53 票 / 14 评论 / 2022-05-04 **write-up?**
+- [Fast inference by padding optimization (about 1.7 times faster) ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/319669) — 50 票 / 12 评论 / 2022-04-18 
+- [2nd rank solution (inference code)](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322893) — 46 票 / 9 评论 / 2022-05-04 **write-up?**
+- [30 th Place Simple Solution & Eid Mubarak](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322994) — 40 票 / 11 评论 / 2022-05-04 **write-up?**
+- [✍🔮📚 Machine Learning :: List of brilliant free courses from Top Universities ✔👍](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/306372) — 38 票 / 16 评论 / 2022-02-09 
+- [Wow!      ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322790) — 37 票 / 11 评论 / 2022-05-04 
+- [5th place solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322875) — 37 票 / 20 评论 / 2022-05-05 **write-up?**
+- [Papers on Machine Learning, NLP and Research around medical record analysis](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/305148) — 36 票 / 4 评论 / 2022-02-04 
+- [14th Place Solution : pretrained with pseudo labels](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323156) — 35 票 / 3 评论 / 2022-05-10 **write-up?**
+- [A simple way to add a lf token for deberta v2/3](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322812) — 35 票 / 13 评论 / 2022-05-04 
+- [[CTDS.Show] Gold Medalling in a comp when just starting out | CroDoc & Amed](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314114) — 33 票 / 1 评论 / 2022-03-21 **write-up?**
+- [🤗 Hugging Face course - great for learning NLP](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/307280) — 33 票 / 9 评论 / 2022-02-13 
+- [How to debug submissions](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/318215) — 29 票 / 0 评论 / 2022-04-11 
+- [Competition data to be made available for academic research](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/318488) — 28 票 / 10 评论 / 2022-04-12 
+- [Good Pretrained Bert Model for Clinical Tasks](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/307324) — 27 票 / 5 评论 / 2022-02-13 
+- [Deberta-v2-xlarge ?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314808) — 27 票 / 74 评论 / 2022-03-24 
+- [Annotations/Location count per rows](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/304676) — 27 票 / 2 评论 / 2022-02-02 
+- [Four magical teams](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322906) — 26 票 / 8 评论 / 2022-05-04 
+- [about the fate of low-resource kagglers](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322532) — 26 票 / 27 评论 / 2022-05-02 
+- [Solutions write-up](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322919) — 26 票 / 4 评论 / 2022-05-04 **write-up?**
+- [NBME MeMe Thread :D](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/311827) — 25 票 / 2 评论 / 2022-03-09 
+- [NBME Meta Pseudo Labels: Training Notebook](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323029) — 25 票 / 4 评论 / 2022-05-04 
+- [9th Weight search and threshold modification](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322891) — 25 票 / 5 评论 / 2022-05-04 
+- [8th place solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322962) — 25 票 / 7 评论 / 2022-05-04 **write-up?**
+- [Instant geniuses and silent companions increasing presence in leaderboards ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322981) — 25 票 / 6 评论 / 2022-05-04 
+- [13th place solution](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323074) — 24 票 / 7 评论 / 2022-05-04 **write-up?**
+- [How to start with NLP competitions?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/305902) — 23 票 / 17 评论 / 2022-02-07 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/304559) — 22 票 / 138 评论 / 2022-02-01 
+- [28th Place Solution ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323031) — 22 票 / 7 评论 / 2022-05-05 **write-up?**
+- [deberta deberta deberta (68th place solution)](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322803) — 22 票 / 1 评论 / 2022-05-04 **write-up?**
+- [Post-processing galore and custom ensemble method tools](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314400) — 21 票 / 9 评论 / 2022-03-22 
+- [Good luck everyone!](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322345) — 21 票 / 26 评论 / 2022-05-01 
+- [Congratulations to new Kaggle Competition GM!!](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322811) — 21 票 / 9 评论 / 2022-05-04 
+- [How good are the train and test set annotations?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314461) — 19 票 / 9 评论 / 2022-03-22 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/304560) — 18 票 / 13 评论 / 2022-02-01 
+- [Micro-averaged F1-score, or the Micro-F1. ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/306997) — 18 票 / 4 评论 / 2022-02-11 
+- [the most emotional day of kaggle](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322646) — 18 票 / 12 评论 / 2022-05-03 
+- [Pseudo labels make cv/lb uncorrelated?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/315321) — 18 票 / 16 评论 / 2022-03-27 
+- [How to read location column? (Character spans indicating the location of each annotation) ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/304645) — 17 票 / 17 评论 / 2022-02-02 
+- [19th Solution: Pseudo label and PP](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322993) — 17 票 / 3 评论 / 2022-05-04 **write-up?**
+- [GMs are coming!](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/312962) — 17 票 / 18 评论 / 2022-03-15 
+- [70th place Reflection](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323337) — 17 票 / 1 评论 / 2022-05-06 **write-up?**
+- [0.890 is achieved! Can we break 0.900?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/311698) — 16 票 / 9 评论 / 2022-03-08 
+- [Are the 1000 annotated notes labelled completely or only partially?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314436) — 16 票 / 9 评论 / 2022-03-22 
+- [The Reason BioBERT Does Not Work](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/316420) — 16 票 / 7 评论 / 2022-04-01 
+- [Clinical cases in private and public test set](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/304765) — 16 票 / 2 评论 / 2022-02-02 
+- [Dear Kaggle - Can we get a 4th decimal shown on LB? ](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323157) — 16 票 / 3 评论 / 2022-05-05 
+- [[24th place solution]: Pretrain tasks is the key!](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323168) — 16 票 / 6 评论 / 2022-05-05 **write-up?**
+- [anyone has probe the hidden test data for max length of pn history?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/316327) — 15 票 / 6 评论 / 2022-04-01 
+- [Potential External Datasets](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/317929) — 15 票 / 6 评论 / 2022-04-09 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/305714) — 14 票 / 17 评论 / 2022-02-06 
+- [Very emotional process and won the bronze first time in NLP competition](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322836) — 14 票 / 14 评论 / 2022-05-04 
+- [Does this contest allow the use of external datasets?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/315400) — 14 票 / 7 评论 / 2022-03-28 
+- [Biological sex determination dilemma](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/308625) — 14 票 / 1 评论 / 2022-02-19 
+- [Augmenting Training with Extra Feature Information](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/316416) — 14 票 / 2 评论 / 2022-04-01 
+- [Leaderboard was finalized but questions remain](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/325706) — 14 票 / 8 评论 / 2022-05-17 
+- [FYI: SOTA language mode just get bigger - 540B Pathways Language Model (PaLM)](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/318355) — 14 票 / 2 评论 / 2022-04-12 
+- [Domain-adaptive pretraining and task-adaptive pretraining?](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/316172) — 14 票 / 26 评论 / 2022-03-31 
+- [Kaggle Equipment](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314288) — 14 票 / 69 评论 / 2022-03-22 
+- [Question Answering vs Named Entity Recognition](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/315758) — 13 票 / 3 评论 / 2022-03-29 
+- [Solution Rank 46th  with Some Feature corrections..](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322839) — 12 票 / 2 评论 / 2022-05-04 **write-up?**
+- [Is it really possible to get 0.88 with roBERTa ? 😂](https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/314689) — 12 票 / 29 评论 / 2022-03-24 

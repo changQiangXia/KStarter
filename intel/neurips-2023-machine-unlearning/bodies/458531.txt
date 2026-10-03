@@ -1,0 +1,121 @@
+# https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458531
+
+Topic #458531: 5th place solution
+  Author: vvs
+  Posted: 2023-11-30 12:34:22.352000
+  Votes: 30  Comments: 8
+
+Firstly, thank you for hosting this intriguing research competition! I'd also like to express my gratitude to everyone for sharing numerous important insights in discussions.
+
+We have published our notebook, and the description is as follows:
+Notebook : https://www.kaggle.com/code/marvelworld/toshi-k-rotate-and-marvel-pseudo-blend48-52
+(The code for adding to the dataset and debugging does not affect the submission in any way)
+
+1. Overview
+
+Our solution is an ensemble of two approaches: (1) Retraining from transposed weights and (2) Fine-tuning with pseudo-labels.
+
+
+
+(1) involves retraining the model using a modified version of the original model. In this modification, all weights in Conv2D are transposed. This process helps in forgetting samples in the forget-set, enabling the reuse of valuable features from the original model.
+
+(2) reproduces the behavior of the retrained model with pseudo-labels. We estimate the mistakes made by the retrained model with the forget data and use them as pseudo-labels for fine-tuning the pretrained model.
+
+
+One of these approaches is executed each time unlearning is performed for one model.
+
+2. Retraining from transposed weights (by @toshik)
+
+At the start of the unlearning process, all weights in Conv2D are transposed both vertically and horizontally. This operation facilitates the forgetting of the forget-set. The modification is carried out simply as follows,
+
+def rotate:
+    print('rotate weight')
+       local_model.modules:
+         isinstance(, torch.nn.modules.conv.Conv2d):
+            .weight = torch.nn.)
+
+
+Afterwards, the model is trained with the retain set for 3 epochs. This is considered equivalent to inputting flipped images into the original model and performing fine-tuning.
+When compared to retraining from scratch, transposed weights still retain valuable features from the original model. This allows for the reuse of such information, resulting in faster and more stable convergence during fine-tuning.
+
+3. Fine-tune with pseudo-labels (by @marvelworld)
+
+The first step is to infer the forget data from pretrained model. Next, infer the forget data after a simple unlearning as shown in the example notebook again. Compare the results of both inferences and identify the data on which the inference moves in the wrong direction.
+We also developed a simple scratch model from retrain data to infer forget data. This result also identifies data on which the model is easy to mistake with some confidence.
+Finally, finetuning pretrained model with the identified data and incorrect inferences as pseudo-labels.
+
+4. Ensemble
+
+Our solution comprises a mixture of two types of models. We opted for different combinations, and the final scores are as follows,
+
+
+
+
+Retraining from transposed weights
+Fine-tune with pseudo-labels
+Private LB
+
+
+
+
+246 models
+266 models
+0.0785184178
+
+
+266 models
+246 models
+0.0756313425
+
+
+
+
+5. What we tried but didn’t work
+
+
+
+class weights
+
+approach to each layer like LLRD,  init/freeze
+
+softmax labels / KL Loss
+
+Relax Loss
+
+
+https://openreview.net/forum?id=FEDfGWVZYIn
+
+SCRUB
+
+
+https://arxiv.org/abs/2302.09880
+
+
+Although Relax Loss and SCRUB appeared to be a state-of-the-art methods in this field, they unexpectedly did not perform well.
+The unlearning metric was so stringent that the defenses against MIA were insufficient to achieve a good score.
+
+6. Final Remarks
+
+Our solution is built upon two distinctive approaches, contributing to the stability of our solution in the private leaderboard. However, there are certain limitations when applying it to real-world problems, particularly in manually tuning some parameters.
+
+We hope that our solution serves as a valuable reference in future research.
+Thank you for reading this to the end!
+
+Comments:
+├─ C R Suthikshn Kumar (2023-12-01 04:10:18.707000) [+3]
+│  Congratulations on achieving 6th place. Thanks for sharing the notebook and details of your solution.
+├─ fanchuan (2023-12-01 03:29:40.293000) [+3]
+│  Congratulations! Nice job and ideas you make in this competition.
+├─ Gal Alon (2023-12-27 15:36:59.400000) [+1]
+│  Congrats!
+│  I'm curious, during your research, did you come across any papers that employed a similar methodology or inspired your solution?
+  ├─ vvs (2023-12-30 00:47:15.317000) [+1]
+  │  At least SCRUB inspired us, but ultimately the idea wasn't adopted.
+├─ VIKRAM MISHRA (2023-12-01 15:25:33.843000) [+1]
+│  Good to hear about that, your skills are awesome, kindly check my work for your views.
+├─ Sagar Aute (2023-12-01 06:10:26.123000) [+2]
+│  congratulations
+├─ Amin Ansari (2023-12-13 17:07:04.330000) [+0]
+│  Thank you for writing a good summary of your solution! The out of the box thinking with the transposed weights was impressive.
+├─ [deleted] (2023-12-08 12:20:11.967000) [+0]
+│  [deleted]

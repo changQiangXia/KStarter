@@ -1,0 +1,122 @@
+# novozymes-enzyme-stability-prediction 讨论区（按票数排序，共 120 条）
+
+- [How To Use Kaggle's Train Data](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/358320) — 218 票 / 53 评论 / 2022-10-07 
+- [1st Place Public - Shakedown to 967th Place Private - Hahaha](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376116) — 169 票 / 111 评论 / 2023-01-06 **write-up?**
+- [Train Data Contains Mutations Like Test Data!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355209) — 122 票 / 65 评论 / 2022-09-26 
+- [What is a PDB File and How To Read It](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354339) — 119 票 / 19 评论 / 2022-09-21 
+- [Approaching This Competition & Domain Knowledge](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354806) — 100 票 / 13 评论 / 2022-09-24 
+- [Congratulations to Chris on 0.6+](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361415) — 79 票 / 25 评论 / 2022-10-21 
+- [13,000 Single Point Edit Mutations in Train Data](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355737) — 75 票 / 24 评论 / 2022-09-28 
+- [AF2 predictions for all test mutations](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361816) — 71 票 / 13 评论 / 2022-10-23 
+- [A prepared extra dataset for model training and evaluating ](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356182) — 71 票 / 37 评论 / 2022-09-29 
+- [Additional Data File: train_updates.csv](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356251) — 69 票 / 43 评论 / 2022-09-29 
+- [1st place...](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375920) — 68 票 / 29 评论 / 2023-01-04 **write-up?**
+- [[placeholder lb0.335] my experiment results](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354631) — 65 票 / 38 评论 / 2022-09-23 
+- [Starter - Hugging Face Transformer - LB 0.300](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361674) — 64 票 / 8 评论 / 2022-10-23 
+- [2nd place solution & private LB 0.577 QUICK OVERVIEW](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376134) — 53 票 / 21 评论 / 2023-02-03 **write-up?**
+- [Code for Identification of Mutation Details of Test Dataset](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354783) — 52 票 / 5 评论 / 2022-09-23 
+- [[LB: 0.483] ThermoNet model + ensembling](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/359344) — 51 票 / 23 评论 / 2022-10-11 
+- [How to use the information in PDB file](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356003) — 51 票 / 16 评论 / 2022-09-29 
+- [Display Test Protein Using AlphaFold v2.1.0](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354982) — 51 票 / 4 评论 / 2022-09-24 
+- [Surface area of the amino acids in the model structure.](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357899) — 50 票 / 72 评论 / 2022-10-06 
+- [1st place solution - Protein as a Graph](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376371) — 49 票 / 14 评论 / 2023-01-06 **write-up?**
+- [Rosetta scores: LB 471, 0.579 after ensembling!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362901) — 47 票 / 16 评论 / 2022-10-29 
+- [ProteinBERT pretrained SOTA model](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354852) — 43 票 / 8 评论 / 2022-09-24 
+- [Shakeup Explained - Kagglers and Researchers Beware](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376807) — 42 票 / 31 评论 / 2023-01-08 
+- [11th place solution](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376147) — 41 票 / 12 评论 / 2023-01-06 **write-up?**
+- [ The Debye-Waller Factor. Temperature Value.  ( B-Factors in Protein Science)](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354476) — 39 票 / 13 评论 / 2022-09-22 
+- [Difference Features - LB 0.600](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/363737) — 38 票 / 15 评论 / 2022-11-03 
+- [We compete, we learn ...](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375908) — 37 票 / 28 评论 / 2023-01-04 
+- [Rasp anybody? (new paper)](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/368270) — 35 票 / 17 评论 / 2022-11-24 
+- [My incredibly lucky 6th place solution w code](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375900) — 34 票 / 23 评论 / 2023-01-05 **write-up?**
+- [Kindly remind: please do not private sharing](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/374596) — 34 票 / 17 评论 / 2022-12-28 
+- [Wow, so much to learn here!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362570) — 33 票 / 9 评论 / 2022-10-27 
+- [Starter Notebook - LB 0.34 - Training XGB Model](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357889) — 31 票 / 7 评论 / 2022-10-06 
+- [78 wildtypes generated from the official Train dataset, covering 4195 rows!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/358156) — 31 票 / 5 评论 / 2022-10-06 
+- [3rd place solution](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375964) — 31 票 / 33 评论 / 2024-03-23 **write-up?**
+- [Upvotes vs forks](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362312) — 30 票 / 8 评论 / 2022-10-26 
+- [8-th place solution - AVGP3 + Rosetta](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376070) — 28 票 / 9 评论 / 2023-01-04 **write-up?**
+- [NESP: 9929 Unique Mutations + Voxel Features](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362389) — 28 票 / 13 评论 / 2022-10-27 
+- [Public/Private Test Split](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/369912) — 28 票 / 21 评论 / 2022-12-01 
+- [ESMFold API available](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/363651) — 28 票 / 28 评论 / 2022-11-02 
+- [Is any part of ESMFold better than AlphaFold?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364127) — 27 票 / 19 评论 / 2022-11-04 
+- [Introduction to Enzymes](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354768) — 25 票 / 4 评论 / 2022-09-23 
+- [A clean train dataset with WT Tm values](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/372201) — 25 票 / 4 评论 / 2022-12-14 
+- [What Do We Know So Far? - Summary of the top Discussion Posts ](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/373162) — 25 票 / 1 评论 / 2022-12-20 
+- [Incredible shakeup](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376010) — 24 票 / 6 评论 / 2023-01-04 
+- [Friendly Reminder About Team Mergers](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364898) — 23 票 / 7 评论 / 2022-11-08 
+- [Fast Starting->So Far of this Competition[Resources]](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364475) — 23 票 / 1 评论 / 2022-11-06 
+- [introducing unifold](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357617) — 22 票 / 8 评论 / 2022-10-05 
+- [Amino Acids Dataset 💾](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354787) — 22 票 / 2 评论 / 2022-09-23 
+- [FYI: If you are using PDB structures](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/367021) — 22 票 / 9 评论 / 2022-11-18 
+- [Deep protein residues don't like mutations](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357640) — 22 票 / 8 评论 / 2022-10-05 
+- [Thanks and Acknowledgement Post](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375922) — 21 票 / 5 评论 / 2023-01-04 
+- [`seq_id` of 32559 IS the wildtype test enzyme](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354774) — 20 票 / 1 评论 / 2022-09-23 
+- [Are natural enzymes most thermally stable? Yes and No](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356948) — 20 票 / 9 评论 / 2022-10-02 
+- [(wild,mutation) pair  in train data using multi-seq-alignment with FAMAS](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355343) — 20 票 / 1 评论 / 2022-09-26 
+- [Train and test data are different](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356180) — 19 票 / 13 评论 / 2022-09-29 
+- [my little chat with ChatGPT on enyzm thermostability](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/370199) — 18 票 / 4 评论 / 2022-12-03 
+- [Let's discuss: what external programs are allowed in this competition?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362762) — 18 票 / 11 评论 / 2022-10-28 
+- [Graph Neural Network(GNN) Approach in this Competition](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355892) — 18 票 / 8 评论 / 2022-09-28 
+- [Do you think this is an overfitting competition？](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/372114) — 18 票 / 9 评论 / 2022-12-14 
+- [All mutant (2413) model structures using metaverse ESM ](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364163) — 18 票 / 7 评论 / 2022-11-04 
+- [Novozymes is looking for a Protein Designer](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357694) — 18 票 / 10 评论 / 2022-10-05 
+- [Important Clarification Regarding `b_factor`](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356920) — 18 票 / 45 评论 / 2022-10-02 
+- [[56th  place] Fitting? I'm over it.](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376359) — 18 票 / 13 评论 / 2023-01-05 **write-up?**
+- [AlphaFold and mutation](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364592) — 17 票 / 26 评论 / 2022-11-07 
+- [Delta Delta Gibsons Free Energy (DDG) for predicting how a single point mutation will affect protein stability](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356015) — 17 票 / 0 评论 / 2022-09-29 
+- [Leaderboard fresh accounts explosion](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/372513) — 17 票 / 10 评论 / 2022-12-16 
+- [large pH values](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354370) — 17 票 / 5 评论 / 2022-09-22 
+- [Accessible surface area scaled by BLOSUM62 substitutions](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/360769) — 17 票 / 3 评论 / 2022-10-18 
+- [Papers on Thermal Stability of Enzyme Variants and Machine Learning](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354435) — 17 票 / 1 评论 / 2022-09-22 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/352353) — 16 票 / 91 评论 / 2022-09-14 
+- [AlphaFold files for 73 out of 78 wildtypes in train set](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/359284) — 16 票 / 19 评论 / 2022-10-11 
+- [What scores is everyone getting on their CV?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/370632) — 16 票 / 13 评论 / 2022-12-05 
+- [7-th place solution](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376163) — 15 票 / 12 评论 / 2023-01-05 **write-up?**
+- [Exciting possibilities in protein thermostability prediction](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/363116) — 15 票 / 2 评论 / 2022-10-31 
+- [Using 2 T4 with Pytorch DataParallel](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362111) — 15 票 / 3 评论 / 2022-10-25 
+- [Bio-embeddings. Embeddings from pLMs.](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356242) — 15 票 / 6 评论 / 2022-09-29 
+- [EvoEF logic in C++ to calculate dG](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/368598) — 15 票 / 1 评论 / 2022-11-26 
+- [HeliXonProtein/binding-ddg-predictor](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/368597) — 15 票 / 3 评论 / 2022-11-26 
+- [Generating .pdb 3D Protein Structures using AlphaFold from the training sequences](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354865) — 14 票 / 14 评论 / 2022-09-24 
+- [Clean data set of S1626 data set with dTM values](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/363749) — 14 票 / 1 评论 / 2022-11-03 
+- [What metric should we optimize?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364699) — 14 票 / 3 评论 / 2022-11-07 
+- [Amino-acid relationships from pLMs](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/373721) — 14 票 / 0 评论 / 2022-12-22 
+- [AlphaFold2 + MD simulations](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354743) — 14 票 / 7 评论 / 2022-09-23 
+- [We can now run Rosetta on Kaggle!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/363251) — 14 票 / 3 评论 / 2022-10-31 
+- [13th place quick hits](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375919) — 14 票 / 10 评论 / 2023-01-04 **write-up?**
+- [Protein Sequencing Notation](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354502) — 14 票 / 2 评论 / 2022-09-22 
+- [Thank you for participating!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/378638) — 13 票 / 15 评论 / 2023-01-16 
+- [CatboostRanker and Yeti Rank](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364816) — 13 票 / 2 评论 / 2022-11-08 
+- [let's share CV vs LB for ML Models Only](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355292) — 13 票 / 19 评论 / 2022-09-26 
+- [Presenting kaggleFold with AlphaFold and Rosettafold integration](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362058) — 13 票 / 2 评论 / 2022-10-25 
+- [Figuring out mutations that are tolerated well](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356776) — 13 票 / 4 评论 / 2022-10-01 
+- [Best Private Sub You May/May-Not Have Selected -- aka. Hindsight is 20/20](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375911) — 13 票 / 27 评论 / 2023-01-04 
+- [My takeaway - this competition was not about the models](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376369) — 13 票 / 10 评论 / 2023-01-05 
+- [Thanks for the competition!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375899) — 13 票 / 1 评论 / 2023-01-04 
+- [Downloaded matching AlphaFold files!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/357584) — 12 票 / 2 评论 / 2022-10-04 
+- [A rainbow summary](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376393) — 12 票 / 4 评论 / 2023-01-06 
+- [Fast method for predicting the stability change upon mutation from 3D structure](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356001) — 12 票 / 3 评论 / 2022-09-29 
+- [Using The Additional Data File](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356464) — 12 票 / 7 评论 / 2022-09-30 
+- [Links to important resources](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/362578) — 12 票 / 4 评论 / 2022-10-27 
+- [Kernel stats for Novozymes](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/365120) — 12 票 / 6 评论 / 2022-11-09 
+- [Relevant research papers, models etc ](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354902) — 12 票 / 1 评论 / 2022-09-24 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/352350) — 11 票 / 8 评论 / 2022-09-14 
+- [Is the training data relevant ?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/354890) — 11 票 / 8 评论 / 2022-09-24 
+- [Why do they do single mutations?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/360252) — 11 票 / 1 评论 / 2022-10-15 
+- [Super weird, my train takes longer when I increase batch size](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356722) — 11 票 / 8 评论 / 2022-10-01 
+- [What are limits of protein functionality under mutation pressure?](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361084) — 11 票 / 0 评论 / 2022-10-19 
+- [MEME Thread](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/358413) — 11 票 / 19 评论 / 2022-10-07 
+- [A Collection Of Great Kernels So Far !!!](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355833) — 11 票 / 1 评论 / 2022-09-28 
+- [ProteinMPNN - predict protein sequence with high thermostability](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364133) — 11 票 / 2 评论 / 2022-11-04 
+- [Kitchen sink prediction, and why we don't see a lot of papers around this.](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/364295) — 11 票 / 6 评论 / 2022-11-05 
+- [How to do sequence embedding with a ProtT5 model](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355489) — 11 票 / 1 评论 / 2022-09-27 
+- [Best Single Model CV/LB](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/368821) — 11 票 / 0 评论 / 2022-11-27 
+- [Spearman rank correlation and ensembling technique](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/356882) — 10 票 / 6 评论 / 2022-10-02 
+- [Notebook private/public scores](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375969) — 10 票 / 20 评论 / 2023-01-04 
+- [Treat Deletion as Substitution](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375941) — 10 票 / 6 评论 / 2023-01-04 
+- [Rosetta and FoldX to predict single point mutations](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376700) — 10 票 / 8 评论 / 2023-01-07 
+- [Using residue depth to predict thermal stability](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/360918) — 10 票 / 3 评论 / 2022-10-19 
+- [What Does Solvent Accessible Surface Area of 0 Indicate](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361275) — 10 票 / 7 评论 / 2022-10-20 
+- [This new PDB data set is giving me 0.323 LB score ](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361824) — 10 票 / 7 评论 / 2022-10-24 
+- [external data](https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/355812) — 10 票 / 2 评论 / 2022-09-28 

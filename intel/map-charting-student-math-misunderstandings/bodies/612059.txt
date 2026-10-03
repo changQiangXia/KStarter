@@ -1,0 +1,289 @@
+# https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612059
+
+Topic #612059: 3rd place (Public 1st) solution : monsaraida & Masaya
+  Author: monsaraida
+  Posted: 2025-10-16 13:03:23.545000
+  Votes: 78  Comments: 9
+
+First, sincere thanks to the organizers and the Kaggle community for discussions, public notebooks, and feedback. Our team, monsaraida &amp; Masaya, finished Private 3rd (Public 1st). We are grateful for the support.
+
+Overview
+
+Here is an overview of our solution. In the following sections, we describe monsaraida’s part and Masaya’s part in turn.  
+
+
+monsaraida’s part
+
+Prompting
+
+Choices
+
+For the {Question / Answer / Correct? / Student Explanation} structure used in public notebooks, I changed {Answer} to {Choices / Selected}. This change is intended to help the LLM identify potential misunderstandings by presenting not only the student's chosen Answer but also the other options.This change was significant, improving the CV/Public score by over +0.001. This idea also significantly improved Masaya's model accuracy, so it may be one of the key tricks in this competition.
+
+Hints
+
+In this competition, the types of misunderstandings for each question were predetermined. Therefore, as a hint, I added a list of misunderstandings to the prompt for each question, ordered by their probability of occurrence. This change improved my CV score by +0.0003.
+
+Example of prompt
+
+Question: What fraction  the shape   shaded? Give your answer  its simplest form.  A triangle split into  equal smaller triangles.   them are shaded.  
+Choices: (A)    (B)    (C)    (D)     
+Selected:     
+Correct? Yes  
+Student Explanation:  goes into everything   goes into nine  
+Common mistakes  this question: Incomplete, WNB
+
+
+Training
+
+Base model
+
+I adopted Qwen/Qwen3-14B as the base model after testing the following alternatives and selecting the best-performing one: google/gemma-2-9b-it, Qwen/Qwen2.5-14B-Instruct, Qwen/Qwen2.5-Math-7B-Instruct, deepseek-ai/deepseek-math-7b-instruct, Qwen/Qwen2.5-Coder-14B, deepseek-ai/DeepSeek-R1-Distill-Qwen-14B, mistralai/Mistral-Nemo-Instruct-2407, mistralai/Mixtral-8x7B-Instruct-v0.1, mistralai/Mathstral-7B-v0.1, AmanPriyanshu/gpt-oss-10.8b-specialized-instruction_following-pruned-moe-only-15-experts
+
+LoRA SFT with multi-task learning
+
+I performed supervised fine-tuning with LoRA and used AutoModelForSequenceClassification for classification. During classification, I used multi-task learning with the main task “Category: Misconception (65 classes)” and the following auxiliary tasks:
+• True / False (2 classes)
+• Correct / Misconception / Neither (3 classes)
+• Misconception (36 classes)
+Multitask learning contributed to a slight improvement in accuracy.
+
+Improving generalization
+
+Due to the high noise levels in this competition's labels, I introduced R-Drop(Regularized Dropout) as a measure to improve generalization. The effect of R-Drop was significant, improving the CV by over +0.001. Adding AWP (Adversarial Weight Perturbation) on top of R-Drop led to a further, slight CV improvement. Furthermore, introducing the EMA (Exponential Moving Average) stabilized the CV and improved accuracy.
+
+Inference
+
+Multi-stage inference
+
+To ensemble multiple models within the 9-hour inference time limit, I implemented multi-stage inference. In the first stage, I performed inference on the entire test set and ensemble the results. In the next stage, I sorted the results by confidence in ascending order and re-ran inference only on the lowest-confidence 50%. (I also tried more complex staging, but it did not yield the best Private score.)
+
+Tips for faster inference
+
+Some public notebooks used `torch_dtype=torch.bfloat16`, but bfloat16 is unavailable in Kaggle’s T4 execution environment, which adds conversion overhead. Changing bfloat16 to float16 made inference 2 times faster. Furthermore, since this competition often involves short prompts, setting `padding=False` instead of `padding="max_length"` achieved another 2 times speedup. Combined, these changes resulted in a 4 times speedup, enabling the use of more models in the ensemble and contributing to improved accuracy.
+
+Masaya’s part
+
+Overview
+
+Overview of my pipeline is here,
+
+
+One of the advantages of using a CausalLM is that it can achieve higher accuracy even when the labels are of variable length.  
+In this competition, since the labels appearing for each QuestionId were predetermined, I hypothesized that limiting the label set for each QuestionId — instead of performing inference across all 37 or 65 labels — would improve accuracy.  
+Therefore, I mainly conducted experiments using CausalLM.
+
+My single best model was Qwen2.5-72B-Instruct-GPTQ, but inference on the test set took about 3 hours.  
+Therefore, I designed a system where relatively smaller models such as 14B and 32B were used for inference first, and only samples with low top1 probability were re-inferred using the 72B model.  
+This approach reduced the inference time for the 72B model to about 1 hour.
+
+Note: This pipeline is used for our Public LB Best and The Private LB score was slightly lower than the pipeline mentioned above.
+
+Preprocess
+
+In this competition, both the train and test datasets had a limited number of QuestionIds (only 15). Additionally, each QuestionId had only 2 to 5 Misconceptions, which was also limited. Therefore, to narrow down the predicted tokens of the CausalLM, the prompt was designed to include only the Misconception, Correct, and Incorrect options that appeared for each specific QuestionId. As discussed here, the True_ / False_  labels could be assigned later using rule-based logic, so they were excluded as well to further reduce the number of prediction tokens. This approach significantly improved accuracy while also reducing inference time. (LB/CV +0.002~0.003 and faster about 3 times)  
+As mentioned above, adding other options to the prompt helped boost accuracy.(LB/CV +0.003~0.004)
+
+Here is prompt example,   
+
+  
+You are Qwen, created  Alibaba Cloud. You are a helpful assistant.  
+
+
+You are a Mathematics teacher.   
+Your task   evaluate whether the student’s explanation contains a misconception,    does,  identify the specific type  misconception.
+
+Question Text: Calculate       
+Choices: ()    ()    ()    ()   
+
+Student Answer:     
+Is Student Answer Correct: No
+
+Student Explanation: Because you  half    
+
+You must choose the your answer  the following options:
+
+A. Correct:NA   
+B. Neither:NA   
+C. Misconception:FlipChange   
+D. Misconception:Mult   
+E. Misconception:SwapDividend 
+
+  
+  
+Your Answer:   
+
+
+Training Models
+
+Mainly, I tuned Qwen2.5 as the CausalLM.  
+The single best model was Qwen2.5-72B-Instruct trained with EMA, but since its performance on the public leaderboard was lower compared to similar models, I decided not to use it for the final submission.  
+And I used LoRA for finetuning, r=16,lora_alpha=32,lora_dropout=0.05,target_modules=( "q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj").  
+Main training config is here,
+
+
+
+epoch=2  
+
+learning_rate=1e-4  
+
+per_device_batch_size=4  
+
+gradient_accumulation_steps=4
+
+
+Tips: High learning rate improved better score, but too high learning rate caused collapse while training.
+
+
+
+
+model
+task
+cv
+lb*
+pd
+use final
+inferrence time
+Note (other info)
+
+
+
+
+Qwen/Qwen2.5-14B-Instruct-AWQ
+CausalLM
+0.9469
+0.943
+0.942
+✅
+30 min
+
+
+
+Qwen/Qwen2.5-32B-Instruct-AWQ
+CausalLM
+0.9498
+0.949
+0.944
+✅
+60 min
+
+
+
+Qwen/Qwen2.5-72B-Instruct-GPTQ
+CausalLM
+-
+0.950
+0.946
+✅
+190 min
+
+
+
+Qwen/Qwen2.5-72B-Instruct-GPTQ
+CausalLM
+-
+0.950
+0.948
+
+190 min
+use EMA for training (Single Best)
+
+
+Qwen/Qwen2.5-32B-Instruct-AWQ
+CausalLM
+0.9474
+0.945
+0.941
+
+60 min
+Without choices in prompts
+
+
+Qwen/Qwen2.5-72B-Instruct-GPTQ
+CausalLM
+-
+0.946
+0.940
+
+190 min
+Without choices in prompts
+
+
+
+
+(*) CV is calculated from fold 0 (because of lack of GPU). LB is from the submitted full-train model.
+
+Inference
+
+The prompt design during inference was the same as before.  
+At this stage, since each token’s meaning differs depending on the QuestionId, the outputs are converted back to 65 labels to align with monsaraida’s probability.  
+The True_ / False_ labels can be inferred from the value of is_correct.  
+As for the 72B model, since it cannot be inferred using LoRA, I performed LoRA merge and quantization (GPTQ), and executed it while offloading to the CPU. (Reference here)
+
+Not Worked for me
+
+
+
+Models other than Qwen2.5 including Llama 3.3-70B and gemma2.  
+
+Causal LM for pair-wise decision. This is too large a time for inference.  
+
+Fixing the choices token for each label. For example,
+
+
+A.    
+B.    
+F.    
+D.    
+R.    
+
+
+
+
+Pretrained other competition data. I used Eedi competition pretrained model but it didn’t work.  
+
+Considering the label noise as discussed here. For QuestionId=31778, I included the reversed True_ / False_ version in the top 2 predictions for the Correct Neither samples that had high confidence. However, this slightly decreased accuracy on the final results, although there was a small improvement in CV.
+
+
+Reference
+
+
+
+vllm
+
+auto-round
+
+Qwen
+
+Eedi competition  
+
+Qwen2.5-72B &amp; Llama 3.3-70B on 2xT4(questionable performance)
+
+Does Test Data Have Questions Different Than Train Data?
+
+Comments:
+├─ Bill Fan (2025-10-17 02:39:04.543000) [+1]
+│  congratulations. would you like to share some code  about your solution. thank a lots
+  ├─ Saiyan Warrior (2025-10-17 07:12:16.967000) [+0]
+  │  +1 
+  │  Hi @monsaraida  and @irrohas congrats on the win and Thanks for the wonderful writeup learned a lot.
+  │  can your training and inference code?
+  │  I wanted to understand AWP, Multi-label training, EMA ...
+├─ AI-Cat (2025-10-16 17:52:56.113000) [+1]
+│  Congratulations on a well-deserved victory, fantastic! I really liked the solution and its detailed and clear description. Using the 72B model is really cool. And what's more, it's a real mega zoo ...
+├─ Zhuohan Chi (2025-10-16 15:30:29.433000) [+1]
+│  Congratulations. This is very helpful. I'd love to know what kind of compute setup you used for your training and inference — was it A100s or something else?
+  ├─ monsaraida (2025-10-17 00:11:07.323000) [+1]
+  │  Thank you for your comment!
+  │  For training, we used several GPUs including A100 (40GB), RTX 6000 Ada (48GB), and RTX 4080 (16GB).
+  │  For inference, we used two T4 (16GB) GPUs available in Kaggle Notebooks.
+├─ Dimpi Mittal (2025-10-17 07:09:35.083000) [+0]
+│  Congratulations! Your detailed explanation of the multi-stage inference and prompt engineering is very insightful. It’s impressive how you balanced accuracy and inference time. I’m curious, when us...
+  ├─ Masaya (2025-10-17 15:03:51.960000) [+0]
+  │  Thank you! I’m glad you found the explanation helpful.
+  │  
+  │  Naturally, increasing the number of samples inferred by the more accurate 72B model would improve the overall score. However, this comes with...
+├─ !!!!! (2025-10-17 03:10:26.187000) [+0]
+│  Congratulation! How many A100s and how long does it take to train? I only use one A100, but training a 32B model would take too long, so I only used the 7B model. Will you make the training code pu...
+├─ [deleted] (2025-10-23 07:07:19.203000) [+0]
+│  [deleted]

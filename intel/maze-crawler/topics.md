@@ -1,0 +1,25 @@
+# maze-crawler 讨论区（按票数排序，共 23 条）
+
+- [Maze Crawler - 1st Place Solution Writeup](https://www.kaggle.com/competitions/maze-crawler/discussion/717120) — 11 票 / 4 评论 / 2026-07-01 **write-up?**
+- [[SOLVED] Great competition, but no medals or points?](https://www.kaggle.com/competitions/maze-crawler/discussion/696453) — 9 票 / 2 评论 / 2026-05-02 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/maze-crawler/discussion/696210) — 5 票 / 0 评论 / 2026-05-01 
+- [Daily Episodes Datasets](https://www.kaggle.com/competitions/maze-crawler/discussion/701822) — 4 票 / 0 评论 / 2026-05-19 
+- [7th Place: Global Task Optimization (Hungarian Matcher) + Time-A](https://www.kaggle.com/competitions/maze-crawler/discussion/717177) — 3 票 / 0 评论 / 2026-07-01 **write-up?**
+- [[Sharing] Jump-Preferred BFS (LB 1223)](https://www.kaggle.com/competitions/maze-crawler/discussion/702108) — 3 票 / 0 评论 / 2026-05-21 
+- [5th (Correction: now 7th) Place: A Rules-Based Bot Without Much Search](https://www.kaggle.com/competitions/maze-crawler/discussion/708834) — 2 票 / 4 评论 / 2026-06-17 
+- [Evaluation Period has started](https://www.kaggle.com/competitions/maze-crawler/discussion/708878) — 1 票 / 0 评论 / 2026-06-17 
+- [Competition Updates](https://www.kaggle.com/competitions/maze-crawler/discussion/701583) — 1 票 / 7 评论 / 2026-05-18 
+- [# Maze Crawler 3rd Place Solution Writeup](https://www.kaggle.com/competitions/maze-crawler/discussion/718158) — 1 票 / 0 评论 / 2026-07-03 **write-up?**
+- [[SOLVED]Strange tiebreak](https://www.kaggle.com/competitions/maze-crawler/discussion/702770) — 1 票 / 4 评论 / 2026-05-26 
+- [Possible improvements for opponent allocation](https://www.kaggle.com/competitions/maze-crawler/discussion/696486) — 1 票 / 0 评论 / 2026-05-02 
+- [late submissions possible?](https://www.kaggle.com/competitions/maze-crawler/discussion/714492) — 0 票 / 0 评论 / 2026-06-26 
+- [Is random seed guessable?](https://www.kaggle.com/competitions/maze-crawler/discussion/709692) — 0 票 / 0 评论 / 2026-06-19 
+- [[BUG] - Cannot replicate kaggle game history](https://www.kaggle.com/competitions/maze-crawler/discussion/703207) — 0 票 / 1 评论 / 2026-05-29 
+- [Meta-lessons from two weeks of grinding Maze Crawler (no recipe inside, just stuff I wish I knew earlier)](https://www.kaggle.com/competitions/maze-crawler/discussion/704125) — 0 票 / 0 评论 / 2026-06-03 
+- [spawn North](https://www.kaggle.com/competitions/maze-crawler/discussion/704068) — 0 票 / 1 评论 / 2026-06-03 
+- [[SOLVED] Currently local environment doesn't match environment on kaggle, so its impossible to test agents](https://www.kaggle.com/competitions/maze-crawler/discussion/701737) — 0 票 / 3 评论 / 2026-05-19 
+- [[SOLVED] Scrolling is way to fast[CONCRETE PROOF]](https://www.kaggle.com/competitions/maze-crawler/discussion/701748) — 0 票 / 0 评论 / 2026-05-19 
+- [[SOLVED] DONT COMPETE HERE!!! CURENTLY THE GAME IS ULTRA BUGGED!!!](https://www.kaggle.com/competitions/maze-crawler/discussion/700980) — 0 票 / 7 评论 / 2026-05-18 
+- [[SOLVED] Factory as fast as scout, also mines dont seem to spawn[ON CALL NEEDED]](https://www.kaggle.com/competitions/maze-crawler/discussion/700638) — 0 票 / 4 评论 / 2026-05-17 
+- [How does the competition related to machine learning](https://www.kaggle.com/competitions/maze-crawler/discussion/696838) — 0 票 / 1 评论 / 2026-05-04 
+- [AI might take our jobs[discussion]](https://www.kaggle.com/competitions/maze-crawler/discussion/701887) — -5 票 / 3 评论 / 2026-05-19 

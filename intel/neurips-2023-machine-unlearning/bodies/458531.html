@@ -1,0 +1,64 @@
+<p>Firstly, thank you for hosting this intriguing research competition! I'd also like to express my gratitude to everyone for sharing numerous important insights in discussions.</p>
+<p>We have published our notebook, and the description is as follows:<br>
+Notebook : <a href="https://www.kaggle.com/code/marvelworld/toshi-k-rotate-and-marvel-pseudo-blend48-52" target="_blank">https://www.kaggle.com/code/marvelworld/toshi-k-rotate-and-marvel-pseudo-blend48-52</a><br>
+(The code for adding to the dataset and debugging does not affect the submission in any way)</p>
+<h2>1. Overview</h2>
+<p>Our solution is an ensemble of two approaches: (1) Retraining from transposed weights and (2) Fine-tuning with pseudo-labels.</p>
+<ul>
+<li>(1) involves retraining the model using a modified version of the original model. In this modification, all weights in Conv2D are transposed. This process helps in forgetting samples in the forget-set, enabling the reuse of valuable features from the original model.</li>
+<li>(2) reproduces the behavior of the retrained model with pseudo-labels. We estimate the mistakes made by the retrained model with the forget data and use them as pseudo-labels for fine-tuning the pretrained model.</li>
+</ul>
+<p>One of these approaches is executed each time unlearning is performed for one model.</p>
+<h2>2. Retraining from transposed weights (by <a href="https://www.kaggle.com/toshik" target="_blank">@toshik</a>)</h2>
+<p>At the start of the unlearning process, all weights in Conv2D are transposed both vertically and horizontally. This operation facilitates the forgetting of the forget-set. The modification is carried out simply as follows,</p>
+<pre><code>def rotate:
+    print('rotate weight')
+       local_model.modules:
+         isinstance(, torch.nn.modules.conv.Conv2d):
+            .weight = torch.nn.)
+</code></pre>
+<p>Afterwards, the model is trained with the retain set for 3 epochs. This is considered equivalent to inputting flipped images into the original model and performing fine-tuning.<br>
+When compared to retraining from scratch, transposed weights still retain valuable features from the original model. This allows for the reuse of such information, resulting in faster and more stable convergence during fine-tuning.</p>
+<h2>3. Fine-tune with pseudo-labels (by <a href="https://www.kaggle.com/marvelworld" target="_blank">@marvelworld</a>)</h2>
+<p>The first step is to infer the forget data from pretrained model. Next, infer the forget data after a simple unlearning as shown in the example notebook again. Compare the results of both inferences and identify the data on which the inference moves in the wrong direction.<br>
+We also developed a simple scratch model from retrain data to infer forget data. This result also identifies data on which the model is easy to mistake with some confidence.<br>
+Finally, finetuning pretrained model with the identified data and incorrect inferences as pseudo-labels.</p>
+<h2>4. Ensemble</h2>
+<p>Our solution comprises a mixture of two types of models. We opted for different combinations, and the final scores are as follows,</p>
+<table>
+<thead>
+<tr>
+<th>Retraining from transposed weights</th>
+<th>Fine-tune with pseudo-labels</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>246 models</td>
+<td>266 models</td>
+<td>0.0785184178</td>
+</tr>
+<tr>
+<td>266 models</td>
+<td>246 models</td>
+<td>0.0756313425</td>
+</tr>
+</tbody>
+</table>
+<h2>5. What we tried but didn’t work</h2>
+<ul>
+<li>class weights</li>
+<li>approach to each layer like LLRD,  init/freeze</li>
+<li>softmax labels / KL Loss</li>
+<li>Relax Loss<ul>
+<li><a href="https://openreview.net/forum?id=FEDfGWVZYIn" target="_blank">https://openreview.net/forum?id=FEDfGWVZYIn</a></li></ul></li>
+<li>SCRUB<ul>
+<li><a href="https://arxiv.org/abs/2302.09880" target="_blank">https://arxiv.org/abs/2302.09880</a></li></ul></li>
+</ul>
+<p>Although Relax Loss and SCRUB appeared to be a state-of-the-art methods in this field, they unexpectedly did not perform well.<br>
+The unlearning metric was so stringent that the defenses against MIA were insufficient to achieve a good score.</p>
+<h2>6. Final Remarks</h2>
+<p>Our solution is built upon two distinctive approaches, contributing to the stability of our solution in the private leaderboard. However, there are certain limitations when applying it to real-world problems, particularly in manually tuning some parameters.</p>
+<p>We hope that our solution serves as a valuable reference in future research.<br>
+Thank you for reading this to the end!</p>

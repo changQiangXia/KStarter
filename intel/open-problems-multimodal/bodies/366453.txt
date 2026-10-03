@@ -1,0 +1,142 @@
+# https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366453
+
+Topic #366453: 2nd place solution(senkin part with code)
+  Author: senkin13
+  Posted: 2022-11-16 08:18:50.642000
+  Votes: 95  Comments: 29
+
+Thanks to all the organizers and kaggle team hosting such a challengeable competition.Thanks my team mate @baosenguo, I have no knowledge about  bioinformatics ,learned a lot from him.I thought my team could win this competition as we were at the 1st place of LB from start to end,but the time domain shift is unpredictable,we accept this result and congratulas to @shujisuzuki65 ,great shakeup!
+
+Overview
+
+Cite
+
+[](https://postimg.cc/s1XNhL6m)
+
+Multi
+
+[](https://postimg.cc/sMwW7T0P)
+
+preprocessing
+
+1)  centered log ratio transformation (CLR) is the best normalization method for both of cite and multi, I found the method from nature articles. https://www.nature.com/articles/s41467-022-29356-8
+
+2) high correlation raw features with target 
+
+3) @baosenguo designed fine tuned process
+
+
+
+using raw count:
+
+normalization:sample normalization by mean values over features
+
+transformation:sqrt transformation
+
+standardization:feature z-score
+
+batch-effect correction:take "day" as batch, for each batch, we calculate the column-wise median to get a "median-sample" representing the batch, and then subtract this sample from each sample in this batch. This method may not bring much improvement, but it is simple enough to avoid risks.
+
+
+4) row-wise zscore transformation before input to neural network
+
+validation
+
+The biggest challenge in this competition is how to build a robust model for unseen donor in public test and unseen day&amp;donor in private test. At the early stage I used random kfold, cross validation and LB score matched very well, so we don't need to worry about donor domain shift.But time domain shift is unpredictable, after team merge, we check our features one by one with out-of-day validation(groupkfold by day) to make sure all the features can improve every day.
+
+model
+
+
+
+
+Lightgbm
+train 4 lightgbm models with different input features,then transform oof predictions to tsvd as nn model's meta features
+-- library-size normalized and log1p transformed counts -&gt; tsvd
+-- raw counts -&gt; clr -&gt; tsvd
+-- raw counts
+-- raw counts with raw target
+one trick is input sparse matrix of raw count to lightgbm directly with small "feature_fraction": 0.1,it brings nn model much improvment.
+
+
+NN
+Basiclly 3layers MLP works well,one trick is to use GRU to replace first dense layer or add GRU after final dense layer.
+Cite target is transformed to dsb having negative values, compared to ReLU, ELU is much better to deal with negative target values,Swish is also work well for both of cite and multi.
+At the early stage I found cosine similarity is best as loss funtion for my model, after team merge, I learned from teammate to use MSE and Huber to build more different models.
+
+
+notebook
+
+[simple cite version]
+https://www.kaggle.com/code/senkin13/2nd-place-gru-cite
+
+github
+
+https://github.com/senkin13/kaggle/tree/master/Open-Problems-Multimodal-Single-Cell-Integration-2nd-Place-Solution
+
+Comments:
+├─ Chris Deotte (2022-11-18 23:57:53.247000) [+3]
+│  Congratulations @senkin13 and @baosenguo Great job leading the public LB during the competition and great job building a generalizing model to stay top on private LB!
+├─ senkin13 (2022-12-07 08:14:02.743000) [+1]
+│  source code uploaded
+├─ BarryZhou (2022-11-24 05:17:28.893000) [+1]
+│  Congratulations and thanks for posting your great solution senkin13!
+├─ NicoF (2022-11-21 17:01:30.150000) [+1]
+│  Congratulation! and thanks for sharing the notebook, its super useful!
+├─ Alexander Chervov (2022-11-20 12:00:39.550000) [+1]
+│  Congratulations again  with the great solution! 
+│  
+│  May I ask you - you write:
+│  "we check our features one by one with out-of-day validation(groupkfold by day) to make sure all the features can improv...
+  ├─ senkin13 (2022-11-24 06:20:24.317000) [+1]
+  │  sorry, I mean one group by one group, for example clr of raw count is one group, lightgbm oof predictions is one group.
+├─ JulyHappy (2022-11-19 07:27:46.403000) [+1]
+│  Thank you for sharing! I still don't understand the data processing. Where can I see more detailed information about（train_cite_X.shape）→(70988, 1009)，Can you explain why it is 1009 columns？
+  ├─ senkin13 (2022-11-24 06:26:28.280000) [+1]
+  │  it includes clr transformation(200), lgb oof(400), fine-tuned transformation(164), high correlation and important features(245)
+├─ Jiwei Liu (2022-11-18 16:14:18.113000) [+1]
+│  Do you use the raw data for cite exclusively? and not use the kaggle preprocessed version at all? Thank you.
+  ├─ senkin13 (2022-11-24 06:21:58.287000) [+1]
+  │  yes, I only use the raw data for cite exclusively
+├─ Dmitriy Ershov (2022-11-18 10:00:04.567000) [+1]
+│  Hi! Tried to upgrade your notebook, changed your GRU net on my best CNN with 1D and 2D convs. Got a little improvements
+  ├─ senkin13 (2022-11-24 06:23:09.937000) [+0]
+  │  good job, it seems lower cv,higher plb, our random kfold didn't fit private very well
+├─ time's up (2022-11-17 22:07:42.057000) [+1]
+│  @senkin13  Big congratulation and thanks a lot for sharing your team solutions. 
+│  May I ask in the early stage why you typically choose the cosine similarity as your loss function? Did you try a bat...
+  ├─ senkin13 (2022-11-24 06:24:07.383000) [+0]
+  │  I tried mse,mae,pearson correlation,cosine similarity, cosine similarity is best for my model
+├─ no-magic (2022-11-16 17:31:18.387000) [+1]
+│  Thank you for sharing! Would you like to share the consideration why gru works in this dataset, does it mean that through forget and add new information through features, gru layer extract more inf...
+  ├─ senkin13 (2022-11-17 02:03:28.477000) [+2]
+  │  I don't have precise theory supported,but I assume you are right,gru layer extract some more and different information than mlp.
+  │  there were two successful experience in the past。
+  │  https://www.kaggle...
+  ├─ no-magic (2022-11-17 17:01:39.253000) [+1]
+  │  awesome solution, thanks!
+├─ yjyang (2022-11-16 17:02:42.717000) [+1]
+│  May I know how much the row-wise z-score step help you score up?
+  ├─ senkin13 (2022-11-17 02:04:04.920000) [+1]
+  │  I remember it boosted cv 0.0003
+├─ Jiwei Liu (2022-11-16 14:18:27.090000) [+1]
+│  Super strong solution! Thank you for sharing!
+├─ Alexander Chervov (2022-11-16 13:27:40.947000) [+1]
+│  @senkin13 Thank you very much for your efforts on the competition ! 
+│  You were the one who broke all the limits which seemed to be unbrokable, thus giving the others the example to follow  !
+│  So main...
+  ├─ senkin13 (2022-11-16 13:49:11.153000) [+1]
+  │  Thank you for invitation, I am going to share more details at NeurIPS workshop at 7/Dec, you can follow that.
+├─ TESUZI (2022-11-16 13:08:26.870000) [+1]
+│  Interesting.  I did not have ideas about TF-IDF, it seems that this approach is always used in NLP. Glad to see it works.
+  ├─ senkin13 (2022-11-16 13:51:53.207000) [+1]
+  │  yes, it also can be used for GBDT or ridge model.By the way,TF-IDF is the old version data provided,you can check Dataset Description page.
+├─ Dmitriy Ershov (2022-11-16 09:08:40.507000) [+1]
+│  I also used cosine similarity on some models, but at the end I also used weighted combination of mse, cs, and corr loss, and it works well
+  ├─ senkin13 (2022-11-16 09:13:51.140000) [+1]
+  │  yes, we should ensemble models as many as possible, I regret I didn't ensemble lots of models.
+├─ Trí Phạm (2023-06-20 08:35:10.577000) [+0]
+│  I am interested in your solutions. So, I tried to run your code, but I running LightLBM on the CPU very slowly. Thus, I wonder whether your team uses GPU when training the LightLBM model. I try to ...
+├─ Noé Tran (2023-03-09 05:23:07.573000) [+0]
+│  I'm really new to those topic. I'm just confused about the purpose of LightBGM model, could you please briefly explain it to me? Thank in advance!!!
+  ├─ Trí Phạm (2023-06-16 15:36:05.170000) [+0]
+  │  I think, LightBGM use extracting features

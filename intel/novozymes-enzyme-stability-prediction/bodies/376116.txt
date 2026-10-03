@@ -1,0 +1,650 @@
+# https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/376116
+
+Topic #376116: 1st Place Public - Shakedown to 967th Place Private - Hahaha
+  Author: Chris Deotte
+  Posted: 2023-01-04 18:33:46.979000
+  Votes: 169  Comments: 111
+
+Wow, big shakedown. It hurts! Congratulations to all teams that did well on private leaderboard. Impressive!
+
+I spent a lot of time on this competition, so I will share my approach. I did have an unselected submission that would have won 1st place private so I believe there are things to learn from my solution.
+
+Solution Summary
+
+Like everyone, I struggled to create a local validation. Since the test data was one enzyme, I decided to use public test as my validation. So my strategy was as follows:
+
+
+
+Generate as many strong single model/features as possible
+
+Probe LB to acquire the public test labels via mathematical optimization
+
+Train one model using my single models as features and public test labels as targets
+
+
+This approach worked well. But i had no way to know which trained model was best. For my final two submission, I chose to use (1) hill climbing with positive weights and (2) hill climbing with positive and negative weights because i felt these two model will not overfit and would do well on private. Their public LBs were 609 and 645 respectively which seemed good. 
+
+During the competition, I also trained (3) a random forest with sklearn default settings but i suspected it was overfitting because RF allows for non-linearities and interactions. In retrospect, the random forest was the best and achieved private LB 546 first place. 
+
+
+
+Another reason I didn't choose RF was because its public LB was 0.829 which also suggested overfitting. After the competition ended, i changed the random forest hyperparameters to depth=4 and achieved public LB 655 and private LB 558! 🔥
+
+
+
+Probe LB
+
+Since Kaggle LB returns an error if all of public prediction is zeros (and does not count against submission quota), we can determine the exact public/private split using only 2 quota submissions. We slowly move where our non-zero predictions are.
+
+
+  
+Public LB data is exactly df.iloc[:541] and df.iloc[1757:] and df.iloc[1169]. Public LB is residuals 16 thru 123 inclusive plus wildtype and private LB is residuals 124 thru 221 inclusive. So the public LB is the first half of residuals while the private LB is the second half of the residuals.
+
+
+Once we know the public split exactly, it is a mathematical optimization problem to maximize public LB. Download all 350 public submission from all versions of public notebooks. Then find X such that the correlation of X with each of the 350 submission equals their LB score. Next create 5 new submission each day where submission.csv values are chosen to acquire the most information where your optimization is least confident. I ran my optimization algorithm 24 hours a day for 3 months, each day i uploaded my new 5 submissions and any new public notebooks to my optimization algorithm. My optimization algorithm achieved public LB 865 
+
+Build Single Model/Features
+
+While my optimization algorithm was running, I set out to discover new features and/or single models. I searched the internet, current research, etc. For each row of test data, compute feature (or infer model) and submit and observe LB score.
+
+The Best Feature
+
+The strongest feature on private LB was RSASA. No public notebooks nor discussions mentioned it. This is relative solvent accessible surface area. Robert posted a notebook here which submits SASA to LB and achieves public LB 407 and private LB 466. (Also RopeOnMars published SASA here). 
+
+SASA is the surface area of an amino acid exposed to the outside (i.e. the solvent) of the enzyme. RSASA is the relative surface area (i.e. 50%, 75% etc of amino acid is exposed). This single feature (its not even a model, its just a single amino acid property but does require PDB structure) achieves public LB 442 and private LB 496. 
+
+Simplest 3rd Place Gold Medal Solution
+
+The simplest gold medal solution is to blend 50% Rosetta energy scores with 50% RSASA (25% wildtype RSASA and 25% mutation RSASA). This simple model achieves public LB 556 private LB 542! 3rd Place 🔥
+
+
+
+Strong Single Models/Features (Public LB 300+)
+
+Below is a list of all my single models and features which achieved LB 300+ on their own. Many of these were made public in notebooks and discussion. Note that the LB may be better than you expect. This is because i have corrected the delete mutation test rows as explained below.
+
+
+
+
+Model
+Public LB
+Private LB
+links
+
+
+
+
+Thermonet v2
+495
+460
+link
+
+
+Rosetta Energy
+471
+438
+link
+
+
+RASP
+454
+416
+link link
+
+
+RSASA wt
+449
+484
+link link
+
+
+RSASA mut
+428
+477
+link
+
+
+SASA wt+mut
+420
+487
+link
+
+
+RMSD
+410
+350
+link
+
+
+XGB v2
+408
+394
+link
+
+
+SASA wt
+407
+466
+link link
+
+
+XGB v1
+397
+400
+link
+
+
+SA apolar
+395
+406
+link
+
+
+Thermonet v1
+386
+428
+link
+
+
+SA sidechain
+377
+342
+link
+
+
+deepDDG
+364
+429
+link link
+
+
+DeMask score
+363
+340
+link
+
+
+gemme
+352
+260
+link
+
+
+DeMask log2f var
+323
+259
+link
+
+
+residue depth wt
+322
+326
+link
+
+
+residue depth mut
+320
+338
+link
+
+
+continuous Blosum62
+315
+207
+link
+
+
+ESM finetune
+308
+352
+link
+
+
+SA backbone
+297
+420
+link
+
+
+pLDDT diff
+297
+287
+link link
+
+
+inps 3d
+293
+318
+link
+
+
+duet
+291
+406
+link
+
+
+pLDDT
+291
+209
+link
+
+
+DeMask entropy
+285
+340
+link
+
+
+
+
+Weak Single Models/Features (Public LB 200-300)
+
+Below is a list of all my single models and features which achieved LB 200-300 on their own. Many of these were made public in notebooks and discussion. Note that the LB may be better than you expect. This is because i have corrected the delete mutation test rows as explained below.
+
+
+
+
+Model
+Public LB
+Private LB
+links
+
+
+
+
+ddgun seq
+281
+231
+link
+
+
+sdm
+277
+328
+link
+
+
+inps seq
+256
+244
+link
+
+
+imut 3d
+246
+208
+link
+
+
+ESM entropy
+238
+134
+link
+
+
+DeMask sub matrix
+236
+211
+link
+
+
+ESM
+234
+107
+link
+
+
+dynamut
+226
+357
+link
+
+
+imut seq
+224
+191
+link
+
+
+mCSM
+214
+384
+link
+
+
+ESM mut prob
+210
+065
+link
+
+
+blosum 95
+203
+141
+
+
+
+ddgun 3d
+199
+216
+link
+
+
+blosum 100
+197
+135
+
+
+
+
+
+Meaningless Models/Features (Public LB 0-200)
+
+I submitted a bunch of random submissions and was able to achieve LB 215 with pure randomness. Therefore I concluded that any model or feature with public LB less than 200 cannot be trusted on private LB. 
+
+Delete Mutation
+
+The simplest way to predict delete mutation test rows is to predict the worst stability that occurs at that residual location. I learned this from Geraseva's notebooks and confirmed it works well.
+
+test['min_pos'] = test.groupby('position').tm.transform('min')
+test.loc[test.seq_id.isin(DELETE),'tm'] =  test.loc[test.seq_id.isin(DELETE),'min_pos'] 
+
+
+Train Final Submission
+
+Now we have 27 strong features and 14 weak features. All single features/models with LB 300+ I trusted to generalize to both public and private LB. All single features/models with LB 200-300 I partially trusted. And all single feaures/models with LB less than 200 I did not trust and I ignored. We train our final submission model using the public test labels from LB probe LB 865. We use features from the tables above.
+
+
+
+Random Forest trained with 27 strong features - Public LB 656 - Private LB 535 - 5th Place 🔥
+
+Random Forest trained with 41 features - Public LB 655  - Private LB 558 - 1st Place 🔥
+
+Hill Climb with 27 strong and pos and neg weights - Public 645 -  - Private LB 517 without bug 227th place
+
+Hill Climb with 27 strong and positive weights - Public 609 -  - Private LB 520 without bug 198th place
+
+
+Above illustrates the difficulty of model selection. Based only on public LB score, how can we tell which model generalizes the best to unseen data? Which will do best on private LB? My instincts chose hill climbing but apparently random forest modeled important feature interaction. Who knew??
+
+Random Forest
+
+To train random forest, first we normalize each single model/feature prediction with pred = (pred - min) / std. Then we normalize the LB 865 submission too. Then x_train = np.zeros((1162,27)). The shape of x_train are all the rows of public LB excluding the delete mutation and wildtype row 1169. We only fit our random forest to the replace mutations. Afterward we use the code above to predict the delete mutation. Below are total feature importance from the entire forest and below is a picture of one tree in the forest of 100 trees.
+
+
+
+
+
+We can enlarge the image of tree above by right clicking and "open in new tab". We observe that many decisions in the tree are based on SASA and RSASA. Random forest learns to model interactions like "If amino acid has such and such SASA and Thermonet prediction is large, predict this". Or "If amino acid has such and such RSASA and  Rosetta energy is low, predict this" etc etc. 
+
+Hill climbing has always been my favorite algorithm to create my final submission, but I will be more careful and open minded in the future…
+
+UPDATE
+
+I published my final solution here. It shows the hill climbing with faulty preprocess that i selected. It shows how hill climbing could achieve private 0.525 with correct preprocess and it shows how random forest can achieve private 0.560. It also has a dataset containing my 41 features/models plus my LB 865 sub if others want to experiment.
+
+I did not share my LB probe code at this time because i want to use it to get a gold in a future competition. Once it succeeds, i will share the algorithm.
+
+Comments:
+├─ Tilii (2023-01-04 18:50:07.067000) [+10]
+│  Truly amazing level of detail. Your logic about all these things was fine, and the only thing that caused the drop is the fact that focusing on this protein alone is not general enough. I eventuall...
+  ├─ Chris Deotte (2023-01-04 19:11:15.587000) [+9]
+  │  Thanks @tilii7 I appreciate everything that you shared. Your sharing along with others made this a fun biology learning experience. Congratulations achieving solo gold! 
+  │  
+  │  It was fun reading all the...
+├─ CPMP (2023-01-04 20:20:47.283000) [+8]
+│  Thanks for haring, and gain, I am sorry to see you drop that way.
+│  
+│  There is one thing I don't get in your writeup. You wrote: "My optimization algorithm achieved public LB 865 but of course the pri...
+  ├─ Chris Deotte (2023-01-04 21:04:07.993000) [+2]
+  │  Thanks @cpmpml my original algorithm attempted to predict private test in a meaningful way. But later versions of my algorithm did not. None-the-less, my algorithm still accepts full length submiss...
+    ├─ Chris Deotte (2023-01-04 21:30:44.043000) [+2]
+    │  I updated my original post and removed "but of course the private LB was a low LB 266." I agree that is confusing.
+├─ Chris Deotte (2023-01-06 04:43:43.430000) [+5]
+│  UPDATE: Corrected a bug (i.e. poor preprocess choice) in my hill climbing code. My final private LB would be 0.520 with hill climbing and private LB rank would be 198th. This explains part of the r...
+├─ Patrick Chan (2023-01-05 04:00:50.557000) [+5]
+│  Thanks very much for sharing. If there is a prize for helpfulness in this competition, Chris would be number 1 in this competition and Kaggle!  Sad to see your drop but this is an incredible amount...
+├─ Michael Howard (2023-01-04 19:49:45.970000) [+6]
+│  How did you find time to make so many submissions and try so many ideas? This is a sincere question. Research and development is full of dead ends and fruitless endeavors. How did you optimize your...
+  ├─ Chris Deotte (2023-01-04 20:08:31.017000) [+11]
+  │  Most of my ideas originated from something someone shared in discussion or notebook. When i start reading how something works, i realize there are more ways to utilize that something. For example i...
+    ├─ Robert Hatch (2023-01-04 20:44:16.817000) [+4]
+    │  The other half: time management: if you have enough time, that always makes time management easier. And if you're more experienced like Chris, you might get task X done quicker and have better intu...
+├─ Daisy (2023-01-05 02:31:34.147000) [+3]
+│  You're very tolerant! I was worried about this, because the whole order would be different from one of public LB. Therefore, I have thought that when public score is too high, private score is lowe...
+  ├─ Chris Deotte (2023-01-05 02:50:16.697000) [+1]
+  │  You were correct @hdynamics we were overfitting. I knew this but i didn't realize we were overfitting as much as we were. I thought the top private LB would be around LB 0.600. But top private ende...
+├─ MichaelP (2023-01-04 23:15:10.743000) [+3]
+│  Hi Chris, thanks for sharing and sorry to see the impact of the shakeup on your placing. I know your content has vastly enriched the community over the years. Are there any general lessons you take...
+  ├─ Chris Deotte (2023-01-05 02:41:45.687000) [+6]
+  │  Hi Michael. It was difficult to validate, optimize, and select the best model in this competition. Kaggle did not provide train data (that was similar to test data) and it was difficult to find dat...
+  ├─ Robert Hatch (2023-01-05 03:00:05.823000) [+4]
+  │  And the train data difficulties didn't end with finding decent online data: it was just incredibly time and effort intensive to recreate the best public notebook features on train data.
+  │  
+  │  It all sta...
+    ├─ Tilii (2023-01-05 03:17:24.953000) [+3]
+    │  And the train data difficulties didn't end with finding decent online data: it was just incredibly time and effort intensive to recreate the best public notebook features on train data.
+    │  
+    │  
+    │  I don't w...
+    ├─ Robert Hatch (2023-01-05 06:44:56.980000) [+2]
+    │  I'll join you if you do decide to rant 😆
+  ├─ MichaelP (2023-01-05 12:09:19.637000) [+3]
+  │  Thanks, Chris, Robert and Tilii, for the thoughts on my questions as an outsider to this competition and congrats to Robert and Tilii for your gold medals.
+├─ YaGana Sheriff-Hussaini (2023-01-04 19:06:48.767000) [+3]
+│  Thanks for sharing @cdeotte. This is an amazing set of experiments you went through. 
+│  
+│  Although I joined the competition late, dropping 102 pts is no picnic, so I feel your pain. Although winning a...
+├─ zhi zhuowq (2023-01-04 18:54:09.117000) [+3]
+│  Great job, been following your posts since the race and have learned a lot. Rankings don't matter at this point.
+├─ @kaggleqrdl (2023-01-04 20:20:25.747000) [+4]
+│  Awesome writeup!  
+│  
+│  I had the same probing strategy, mostly, but I didn't do the "submission.csv values are chosen to acquire the most information where your optimization is least confident", which...
+  ├─ [deleted] (2023-01-04 21:45:48.143000) [+0]
+  │  [deleted]
+  ├─ Chris Deotte (2023-01-04 22:57:40.647000) [+2]
+  │  Thanks for all your sharing @kaggleqrdl . You made this competition more enjoyable. This was an awesome group competition, with many great biology discussions from many domain experts.
+├─ Yijie Xu (2023-02-18 14:01:18.030000) [+1]
+│  Made this comment already on your 1st place notebook, but inspiring work.
+├─ André Polaszek (2023-01-16 14:45:09.990000) [+1]
+│  Great notebook, thanks for taking the time to explain your approach !
+  ├─ Chris Deotte (2023-02-02 23:33:23.197000) [+0]
+  │  Thank you Andre!
+├─ Byron J Ehrke (2023-01-16 01:32:54.703000) [+1]
+│  Good Job Chris this will help me a lot in the future!
+├─ Rope on Mars (2023-01-13 17:00:33.510000) [+1]
+│  Nice work Chris, learned a lot from your work.
+├─ Joseph Minielli (2023-01-13 15:19:28.377000) [+1]
+│  Well done, like a pro my guy
+├─ Hanxin Song (2023-01-12 05:03:48.083000) [+1]
+│  wow, nice job!!
+├─ Mike Yasnov (2023-01-11 21:39:01.410000) [+1]
+│  Same thing on other bio ML task. It could be troubles in data or classic overfit
+  ├─ Chris Deotte (2023-01-12 00:36:06.357000) [+0]
+  │  Hi. What other Kaggle competition are you referring to?
+    ├─ @kaggleqrdl (2023-01-12 03:10:46.783000) [+2]
+    │  Mayo Clinic was particularly bad, though it was image.
+    │  
+    │  https://www.kaggle.com/c/mayo-clinic-strip-ai/leaderboard
+    ├─ Mike Yasnov (2023-01-12 05:15:34.303000) [+1]
+    │  Hi. I’m telling not only about Kaggle competitions. I was working with biological data as a project and got a same troubles, while testing.
+├─ Calvin Oko Mensah (2023-01-11 17:44:02.920000) [+1]
+│  thats great!
+├─ AKHIL30121996 (2023-01-09 15:04:43.373000) [+1]
+│  looks interesting
+├─ Bonnie H. (2023-01-09 00:36:37.547000) [+1]
+│  Thanks for sharing. This is an interesting problem.
+├─ eagle4 (2023-01-07 16:57:21.777000) [+1]
+│  Thanks a lot: I was waiting for your write up.
+│  
+│  I love the last line !
+├─ @kaggleqrdl (2023-01-06 17:41:17.253000) [+1]
+│  @cdeotte Any chance you could share some of your high LB submissions?  :)
+  ├─ Mohamed Eltayeb (2023-01-06 18:07:29.897000) [+3]
+  │  I think he shared the 0.865 below:
+  │  https://www.kaggle.com/datasets/cdeotte/novozyme-public-lb-865-submission
+  ├─ Chris Deotte (2023-01-06 18:19:02.397000) [+4]
+  │  I am making a notebook now which has all 41 of my single models and my LB 865 sub. (And trains and submits both hill climbing and random forest). This will help others run experiments and compare t...
+    ├─ Mohamed Eltayeb (2023-01-06 19:16:42.010000) [+1]
+    │  @cdeotte  Could I find a notebook where I can learn using hill climbing properly please?
+    ├─ Chris Deotte (2023-01-06 19:22:09.913000) [+2]
+    │  My new notebook will show how it works
+  ├─ Chris Deotte (2023-01-06 22:53:02.087000) [+0]
+  │  @kaggleqrdl I shared my LB 865 submission and 41 best single model submissions in a dataset attached to my new notebook
+├─ charpk (2023-01-06 01:26:39.400000) [+1]
+│  Very interesting!
+├─ Um me hani khan (2023-01-05 16:43:15.230000) [+1]
+│  Thank you very much chris for sharing.It's very helpful for us to learn.
+├─ SuperScience (2023-01-05 15:33:21.987000) [+1]
+│  Impressive!
+├─ BarryZhou (2023-01-05 14:28:17.113000) [+1]
+│  Awesome Chris! Thank you for sharing. It's very helpful for us to learn.
+├─ Daisy (2023-01-05 04:01:01.407000) [+1]
+│  Hi! Chris, I have known an astonishing fact now. The result of adding my calculating ASA to total of SASA is 0.522 in Private Leaderboard! Just adding!
+  ├─ Daisy (2023-01-05 09:36:49) [+1]
+  │  Mutation proteins were made by another codes and ASA was calculated by the following pdbremix. However, this Github is worked with Python2. The differences need to be modified. Author, Bosco Ho is ...
+├─ Ilya Chernov (2023-01-04 20:05:03.883000) [+1]
+│  Hey @cdeotte , thank you for the detailed explanation! Do you mind explaining your approach to target normalization please? I outlined my approach here https://www.kaggle.com/competitions/novozymes...
+├─ Robert Hatch (2023-01-04 19:03:47.493000) [+1]
+│  Can you share your top public LB submission file?
+│  
+│  I'm very curious what score I would've gotten with my exact model submission (that got 523 when ensembled with my 528 non-model), if I reran with ...
+  ├─ Chris Deotte (2023-01-04 19:16:57.927000) [+2]
+  │  Here's my public LB 865 submission - link.
+    ├─ Robert Hatch (2023-01-04 20:02:12.630000) [+1]
+    │  It actually scored a bit worse :P
+    │  
+    │  By itself, my original was 499 -&gt; 481 with the above file.
+    │  50/50 with my 528 sub original got 523 -&gt; 517 new.
+    ├─ Chris Deotte (2023-01-04 23:08:51.780000) [+0]
+    │  Interesting. This is another mystery :-) There are many mysteries in this competition about what really helped and what didn't.
+    ├─ Gary (2023-01-05 02:37:27.113000) [+0]
+    │  yes.
+    │  I'd also really looking forward to seeing chris's probe code.
+  ├─ Robert Hatch (2023-01-04 20:03:26.323000) [+3]
+  │  My probe notebook: https://www.kaggle.com/code/roberthatch/nesp-probe-public-lb/notebook
+    ├─ Robert Hatch (2023-01-05 03:29:41.517000) [+3]
+    │  @cdeotte Just gonna ask one more time if you're planning to share your exact algorithm(s) for the LB probing?
+    │  
+    │  I wasn't successful at scaling my version past 50-100 submissions to align. 
+    │  
+    │  And I al...
+    ├─ Gary (2023-01-05 13:46:19.953000) [+1]
+    │  I still don't understand how chris probe LB, maybe I'll figure it out after I read chris’s code😳
+    ├─ Chris Deotte (2023-01-05 18:57:55.963000) [+6]
+    │  @roberthatch @garybios 
+    │  
+    │  
+    │    
+    │  Just gonna ask one more time if you're planning to share your exact algorithm(s) for the LB probing?
+    │  
+    │  
+    │  I don't plan to share it yet but I will most likely share it afte...
+    ├─ Robert Hatch (2023-01-05 19:02:07.293000) [+2]
+    │  Sweet! :) Thanks for letting us know
+    ├─ Mohamed Eltayeb (2023-01-05 19:16:30.890000) [+1]
+    │  Hype is 🔥. I am honestly curious to know if finding such an algorithm can help in real world projects somehow?
+    ├─ Robert Hatch (2023-01-05 19:45:35.427000) [+1]
+    │  I have a potential use case I want to try with mine, that probably would apply to his as well. 
+    │  
+    │  I used mine as a way of generating an arbitrary number of answer sets "X" that fits our known scores...
+    ├─ @kaggleqrdl (2023-01-08 06:06:01.653000) [+0]
+    │  @tilii7 
+    │  
+    │  Read the above from Chris and others :)
+├─ [deleted] (2023-01-04 18:57:18.363000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-13 17:11:47.410000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-13 17:14:45.330000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-01-13 17:19:40.553000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-13 17:22:40.463000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-13 17:25:26.170000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-13 17:27:36.020000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-01-13 17:33:41.110000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-01-12 02:19:27.577000) [+2]
+│  [deleted]
+├─ [deleted] (2023-01-10 05:38:45.270000) [+2]
+│  [deleted]
+├─ [deleted] (2023-01-06 22:39:03.893000) [+2]
+│  [deleted]
+├─ [deleted] (2023-01-05 12:03:41.653000) [+2]
+│  [deleted]
+├─ [deleted] (2023-01-05 03:29:15.753000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-05 03:41:20.950000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2023-01-05 03:51:21.827000) [+2]
+    │  [deleted]
+  ├─ [deleted] (2023-01-05 04:01:43.970000) [+3]
+  │  [deleted]
+  ├─ [deleted] (2023-01-05 04:05:55.740000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2023-01-05 04:54:39.923000) [+2]
+    │  [deleted]
+├─ [deleted] (2023-01-04 19:23:54.943000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-04 23:07:51.473000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-01-05 03:23:02.477000) [+1]
+    │  [deleted]
+  ├─ [deleted] (2023-01-07 17:46:15.730000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-01-07 20:15:14.200000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-01-07 20:43:03.117000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-01-07 21:00:13.390000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-01-07 21:03:21.817000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-08 02:01:32.553000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-01-08 02:32:36.677000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-08 06:03:20.850000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-01-13 16:43:33.857000) [+0]
+│  [deleted]
+├─ [deleted] (2023-01-11 09:04:19.853000) [+4]
+│  [deleted]
+├─ [deleted] (2023-01-06 08:33:39.497000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-14 23:10:53.820000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-13 06:06:03.433000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-12 12:17:06.593000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-11 15:15:01.937000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-11 14:43:53.247000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-11 14:17:01.243000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-10 13:33:26.487000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-10 08:44:06.797000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-09 09:28:35.413000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-09 04:07:06.970000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-09 00:37:04.023000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-08 18:31:01.790000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-08 17:24:42.817000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-05 11:51:27.507000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-05 09:08:20.683000) [+1]
+│  [deleted]

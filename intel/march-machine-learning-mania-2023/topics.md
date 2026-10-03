@@ -1,0 +1,82 @@
+# march-machine-learning-mania-2023 讨论区（按票数排序，共 80 条）
+
+- [1st Place Submission - Another victory for raddars code](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399553) — 77 票 / 30 评论 / 2023-04-04 **write-up?**
+- [Official Scoring Update Thread](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395257) — 74 票 / 60 评论 / 2023-03-16 
+- [External data: 538 ratings](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388323) — 74 票 / 27 评论 / 2023-02-16 
+- [Bracket Visualizer updated](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395767) — 51 票 / 35 评论 / 2023-03-18 
+- [Onboarding materials](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388130) — 48 票 / 10 评论 / 2023-02-16 
+- [Note to myself: read this before next year's competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399612) — 47 票 / 20 评论 / 2023-04-04 
+- [Final dataset update is posted!](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394455) — 33 票 / 28 评论 / 2023-03-13 
+- [Experts Median Submission](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395317) — 26 票 / 21 评论 / 2023-03-16 
+- [You vs Everybody Visualization](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395275) — 24 票 / 11 评论 / 2023-03-16 
+- [The Effect of Regularization on LB Brier Score](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395600) — 23 票 / 4 评论 / 2023-03-17 
+- [Tournament Brackets with TeamID embedded](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395286) — 21 票 / 2 评论 / 2023-03-16 
+- [External data: ESPN ratings for WNCAA](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388325) — 21 票 / 5 评论 / 2023-02-16 
+- [Best way to track results live](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395215) — 20 票 / 7 评论 / 2023-03-16 
+- [Looking towards March Mania 2024](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399864) — 19 票 / 4 评论 / 2023-04-05 
+- [Dataset Refresh v3](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/393817) — 19 票 / 12 评论 / 2023-03-10 
+- [The 0.1804 Score ](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/400295) — 19 票 / 0 评论 / 2023-04-07 
+- [2nd Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/401578) — 17 票 / 6 评论 / 2023-04-15 **write-up?**
+- [🏆 Collection of Top-5 Winning Solutions 2019-2022 🏆 ](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/389911) — 17 票 / 3 评论 / 2023-02-23 **write-up?**
+- [🏆 2022 Winner solution Men & Women 🏆](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388102) — 16 票 / 0 评论 / 2023-02-16 **write-up?**
+- [Does a combined women + men model make sense?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388311) — 15 票 / 23 评论 / 2023-02-16 
+- [5th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/401382) — 14 票 / 4 评论 / 2023-04-13 **write-up?**
+- [What's a good brier score?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/390138) — 14 票 / 25 评论 / 2023-02-24 
+- [Remaining Paths to Victory - Potential Spoilers](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397987) — 14 票 / 28 评论 / 2023-03-28 
+- [Thread for latest men's Massey Ordinals data (Season=2023, RankingDayNum=133)](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394303) — 13 票 / 7 评论 / 2023-03-13 
+- [March Mania 2024?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/475046) — 13 票 / 4 评论 / 2024-02-07 
+- [[VIDEO] Furman (13) upsets Virginia (4) with a three pointer 2.4 seconds before the end](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395325) — 12 票 / 1 评论 / 2023-03-16 
+- [Timeline Clarification](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388618) — 12 票 / 12 评论 / 2023-02-18 
+- [Rode an rollercoaster through this competition -- truly March Madness](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399645) — 12 票 / 5 评论 / 2023-04-05 
+- [4th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/401588) — 12 票 / 4 评论 / 2023-04-14 **write-up?**
+- [Leaderboard after 75 and 120 matches: charts](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/398757) — 11 票 / 1 评论 / 2023-03-31 
+- [7th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/400116) — 11 票 / 3 评论 / 2023-04-06 **write-up?**
+- [9th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/400151) — 11 票 / 7 评论 / 2023-05-14 **write-up?**
+- [Live Competition LB raw data snapshots](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395605) — 10 票 / 4 评论 / 2023-03-17 
+- [Track your progress up (and down) the leaderboard](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395692) — 10 票 / 7 评论 / 2023-03-18 
+- [The competition's Brier patch and the odds of successful gambling](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/391495) — 10 票 / 37 评论 / 2023-03-01 
+- [47-Way Tie ](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395744) — 9 票 / 10 评论 / 2023-03-18 
+- [How did you use your two submissions?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395260) — 9 票 / 33 评论 / 2023-03-16 
+- [What are your biggest takeaways after the first two rounds? ](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397014) — 9 票 / 43 评论 / 2023-03-23 
+- [Making the games more interesting to watch by sharing your submissions](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397889) — 9 票 / 4 评论 / 2023-03-27 
+- [Competition Win Probability Assuming a Perfect Model](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/396273) — 9 票 / 4 评论 / 2023-03-21 
+- [New combined tournament format](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/393722) — 8 票 / 23 评论 / 2023-03-10 
+- [Why aren't cell phone jockey submissions clustered as a big team?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395938) — 8 票 / 18 评论 / 2023-03-19 
+- [Keeping with Tradition](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397710) — 8 票 / 6 评论 / 2023-03-26 
+- [Reflections on changes this year: Brier score, combination of both Men's and Women's](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397826) — 8 票 / 4 评论 / 2023-03-27 
+- [Hindsight is 20/20](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/398413) — 8 票 / 6 评论 / 2023-03-29 
+- [8th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/400834) — 8 票 / 2 评论 / 2023-04-10 **write-up?**
+- [3th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/401641) — 8 票 / 2 评论 / 2023-04-14 **write-up?**
+- [Bracket Tool](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394728) — 7 票 / 4 评论 / 2023-03-14 
+- [Will the Kaggle Brackets Visualizer be updated for 2023?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/393730) — 7 票 / 14 评论 / 2023-03-10 
+- [Submission File Check](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394967) — 7 票 / 7 评论 / 2023-03-15 
+- [What does *all* competitions mean?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388429) — 7 票 / 12 评论 / 2023-02-17 
+- [6th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/400709) — 7 票 / 5 评论 / 2023-04-09 **write-up?**
+- [Automated Modeling](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/389830) — 6 票 / 2 评论 / 2023-02-23 
+- [Men's final four set](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397714) — 6 票 / 4 评论 / 2023-03-26 
+- [Upset? LSU beats Iowa in Womens Championship Game!](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399183) — 6 票 / 6 评论 / 2023-04-03 
+- [Reminder - select two submissions](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395104) — 6 票 / 11 评论 / 2023-03-15 
+- [Suggested for next year: stage 1 on a simulated tournament](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394781) — 6 票 / 7 评论 / 2023-03-14 
+- [2nd time ever! Number 1 seed OUT](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395620) — 5 票 / 8 评论 / 2023-03-18 
+- [FAU win -- matchups definitely make games](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/397166) — 5 票 / 13 评论 / 2023-03-24 
+- [Delete leaked data.](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388976) — 5 票 / 3 评论 / 2023-02-20 
+- [Men & Women Leaderboard](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399468) — 5 票 / 2 评论 / 2023-04-04 
+- [New evaluation metric](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388091) — 5 票 / 10 评论 / 2023-02-15 
+- [What is next for March Madness? Curious on opinions about making this a better competition and how to make better predictions](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/399761) — 5 票 / 12 评论 / 2023-04-05 
+- [Relative Brier Scores (a.k.a. Net Brier Points). Forecasting Tournaments.](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388188) — 4 票 / 7 评论 / 2023-02-16 
+- [How good are South Carolina's Women?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/392264) — 4 票 / 20 评论 / 2023-03-04 
+- [competition over](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395316) — 4 票 / 11 评论 / 2023-03-16 
+- [Tourney Results Files Updated](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/400930) — 4 票 / 9 评论 / 2023-04-10 
+- [Data Request for next year: MSlotCities.csv / WSlotCities.csv](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394700) — 4 票 / 13 评论 / 2023-03-14 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388156) — 3 票 / 17 评论 / 2023-02-16 
+- [External Data: AP Polls (Women and Men)](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/390208) — 3 票 / 1 评论 / 2023-02-24 
+- [Sigmoid Temperatures](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/390735) — 3 票 / 4 评论 / 2023-02-27 
+- [Safe 1st Round Overrides?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/393885) — 3 票 / 1 评论 / 2023-03-11 
+- [External Data: Betting Odds](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394731) — 3 票 / 0 评论 / 2023-03-14 
+- [Bracket Predictions](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/394559) — 3 票 / 8 评论 / 2023-03-14 
+- [Historical Rule of Thumb Benchmark](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/398547) — 3 票 / 10 评论 / 2023-03-30 
+- [Thoughts on chances after first weekend](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/396156) — 3 票 / 18 评论 / 2023-03-20 
+- [High Leverage Games (3/19)](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395958) — 3 票 / 3 评论 / 2023-03-19 
+- [Would you consider open sourcing the data collection scripts / results?](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395970) — 3 票 / 0 评论 / 2023-03-19 
+- [Warmup Submission File](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/395748) — 3 票 / 4 评论 / 2023-03-18 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/march-machine-learning-mania-2023/discussion/388155) — 0 票 / 3 评论 / 2023-02-16 

@@ -1,0 +1,82 @@
+# lux-ai-season-3 讨论区（按票数排序，共 80 条）
+
+- [1st place approach by Flat Neurons](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/569562) — 74 票 / 21 评论 / 2025-04-08 **write-up?**
+- [Imitation Learning: 3rd Place Solution](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568494) — 57 票 / 19 评论 / 2025-03-25 **write-up?**
+- [Frog Parade's Solution](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568621) — 53 票 / 30 评论 / 2025-03-17 **write-up?**
+- [How not to be bad at RL like me](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/556943) — 41 票 / 1 评论 / 2025-01-15 
+- [4th Place Solution - Imitation Learning Approach](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/569928) — 36 票 / 6 评论 / 2025-03-25 **write-up?**
+- [Multi-agent RL Silver solution by 3Comets, 14th place](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567961) — 33 票 / 10 评论 / 2025-03-25 **write-up?**
+- [9th Place Solution](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568789) — 31 票 / 3 评论 / 2025-03-25 **write-up?**
+- [EcoBangBang's Approach - Yet Another RL Solution](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568721) — 27 票 / 4 评论 / 2025-03-18 **write-up?**
+- [Competition conclusion, congratulations to the winners and thank you everyone! 🏆🏆🏆](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/569919) — 21 票 / 7 评论 / 2025-03-25 
+- [10th Place Solution – Boey – End-to-End JAX RL](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/570196) — 21 票 / 3 评论 / 2025-03-26 **write-up?**
+- [Welcome to Lux AI Season 3!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/551464) — 19 票 / 4 评论 / 2024-12-13 
+- [A solution that I hope will earn a silver medal (currently in 29th place)](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567581) — 19 票 / 14 评论 / 2025-03-11 **write-up?**
+- [Starting materials and references ](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/550848) — 18 票 / 2 评论 / 2024-12-09 
+- [Kiwis xLSTM agent (5th place solution)](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/571111) — 17 票 / 1 评论 / 2025-04-12 **write-up?**
+- [Sprint Prize 1 coming up and some new quality of life features](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/554167) — 17 票 / 0 评论 / 2024-12-30 
+- [How to view the performance of both of your bots](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567576) — 16 票 / 0 评论 / 2025-03-11 
+- [Sprint Prize 1 Winners, Congratulations!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/554330) — 15 票 / 0 评论 / 2025-01-01 
+- [8th Place Solution - Imitation Learning](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/570673) — 14 票 / 0 评论 / 2025-04-21 **write-up?**
+- [Bronze medal border solution (finally in 92th place)](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567893) — 13 票 / 0 评论 / 2025-04-01 **write-up?**
+- [Lux AI Episode Helper chrome extension](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/551611) — 12 票 / 1 评论 / 2024-12-14 
+- [65th~ place solution just on Rules and will to experiment](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567567) — 12 票 / 2 评论 / 2025-03-10 **write-up?**
+- [Issues with submissions](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553283) — 12 票 / 10 评论 / 2024-12-25 
+- [CNN-Transformer based model with PPO,  but it didn't work well ... : ( 😭😭😭](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/566896) — 11 票 / 18 评论 / 2025-03-07 
+- [Initial thoughts: match parameters and agent strategies](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/551158) — 11 票 / 6 评论 / 2024-12-11 
+- [Rule based solution around 20th place](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568196) — 9 票 / 2 评论 / 2025-03-14 **write-up?**
+- [Balance Patch](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/557715) — 9 票 / 9 评论 / 2025-01-20 
+- [Final submissions due in 3 days!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567001) — 9 票 / 1 评论 / 2025-03-07 
+- [Is something wrong with LB pairings?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/561771) — 8 票 / 3 评论 / 2025-02-07 
+- [Bronze medal(77th) border solution with many possibly interesting ideas combined together](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568409) — 8 票 / 0 评论 / 2025-03-15 **write-up?**
+- [How does energy work exactly?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/554457) — 7 票 / 1 评论 / 2025-01-01 
+- [Submission limits?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/551506) — 7 票 / 1 评论 / 2024-12-13 
+- [Vadasz agent (7th solution)](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/574415) — 7 票 / 0 评论 / 2025-04-21 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/570967) — 6 票 / 1 评论 / 2025-03-31 
+- [What's wrong with servers? NaN in all matches](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553361) — 6 票 / 2 评论 / 2024-12-25 
+- [Sprint Prize 3 coming up and announcing Sprint 2 winners](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/565118) — 6 票 / 0 评论 / 2025-02-26 
+- [relic node point tile location](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/552468) — 6 票 / 1 评论 / 2024-12-19 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/550847) — 5 票 / 3 评论 / 2024-12-09 
+- [Best way to start?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553477) — 5 票 / 4 评论 / 2024-12-26 
+- [Sprint Prize 3 winners and submission deadline is coming up in 10 days!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/565579) — 5 票 / 0 评论 / 2025-03-01 
+- [Bug Fixes and Leaderboard Issues](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/562318) — 5 票 / 6 评论 / 2025-02-11 
+- [Visualize PPO Training | PPO (Stable-Baselines3)](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/564864) — 5 票 / 0 评论 / 2025-02-25 
+- [Gymnasium env](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/564387) — 5 票 / 6 评论 / 2025-02-22 
+- [C# starter kit](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/552405) — 5 票 / 0 评论 / 2024-12-19 
+- [? bug in reward points calculation ?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/558173) — 5 票 / 2 评论 / 2025-01-23 
+- [This game is a monster 🤪🤪](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567572) — 5 票 / 13 评论 / 2025-03-11 
+- [Replay Data Missing?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/552682) — 4 票 / 5 评论 / 2024-12-21 
+- [Delay in energy nodes observation.](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553876) — 4 票 / 2 评论 / 2024-12-29 
+- [RL starter bot written by Devin](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/557324) — 4 票 / 4 评论 / 2025-01-18 
+- [How to choose specific submissions?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553258) — 4 票 / 2 评论 / 2024-12-24 
+- [[Solved] Agent environment ](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/559372) — 4 票 / 3 评论 / 2025-01-25 
+- [  🏆 LuxAI Winner solution in last two season🏆](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/550897) — 3 票 / 0 评论 / 2024-12-10 **write-up?**
+- [[Bug? Specification?]Vision Power on Drifted Nebula Tile Remains Minus](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/559310) — 3 票 / 1 评论 / 2025-01-24 
+- [Do Nebula block point generation?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/558186) — 3 票 / 0 评论 / 2025-01-23 
+- [Performance issue with Lux AI using jax on GPU.](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/557640) — 3 票 / 7 评论 / 2025-01-20 
+- [Error uploading a model](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/556620) — 3 票 / 4 评论 / 2025-01-14 
+- [c++ Starter Kit](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/552274) — 3 票 / 3 评论 / 2024-12-18 
+- [Visualiser question](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/555604) — 3 票 / 1 评论 / 2025-01-08 
+- [Error in energy calculation when moving to an immovable position?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/556302) — 3 票 / 1 评论 / 2025-01-12 
+- [Leaderboard bug?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/562283) — 2 票 / 1 评论 / 2025-02-11 
+- [Error on action encoding.](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/551655) — 2 票 / 1 评论 / 2024-12-14 
+- [NuralBrain v0.5 model | Train And Win](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553449) — 2 票 / 1 评论 / 2024-12-26 
+- [The prblems of sap](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/563814) — 2 票 / 9 评论 / 2025-02-19 
+- [Inconsistent or incorrect description?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/554259) — 2 票 / 0 评论 / 2024-12-31 
+- [? Bug in Nebula Drift Speed implementation ?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/557863) — 2 票 / 3 评论 / 2025-01-21 
+- [Bugs / Environment Improvement report topic](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/550974) — 1 票 / 2 评论 / 2024-12-10 
+- [In notebook rendering broken? Read this!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/551181) — 1 票 / 1 评论 / 2024-12-11 
+- [Does my submission file have to include my model as well?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567428) — 1 票 / 8 评论 / 2025-03-10 
+- [[Resolved] How can we find the correct request URL for EpisodeService?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/552692) — 1 票 / 1 评论 / 2024-12-21 
+- [Final submissions closed, good luck!](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/567569) — 1 票 / 2 评论 / 2025-03-11 
+- [Agent logs - increase stderr max length? ](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553323) — 1 票 / 0 评论 / 2024-12-25 
+- [Can't make a Python submission](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553310) — 1 票 / 5 评论 / 2024-12-25 
+- [Notebook Submissions](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/566937) — 1 票 / 2 评论 / 2025-03-07 
+- [Validation Episode failed](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/553674) — 1 票 / 2 评论 / 2024-12-27 
+- [Problem with submission from Stable Baseline trained on local computer](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/564921) — 1 票 / 2 评论 / 2025-02-25 
+- [NeurIPS 2024- Lux AI season 3: Game App](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/565077) — 1 票 / 0 评论 / 2025-02-26 
+- [# of relic fragments](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/556429) — 1 票 / 2 评论 / 2025-01-13 
+- [How to submit my agent pth file ？](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/556624) — 1 票 / 10 评论 / 2025-01-14 
+- [Loading game env on google colab uses ridiculous amount of vram. Need help.](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/562381) — 1 票 / 2 评论 / 2025-02-11 
+- [How to get started?](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/554960) — 1 票 / 4 评论 / 2025-01-04 
+- [NeurIPS conference??](https://www.kaggle.com/competitions/lux-ai-season-3/discussion/564090) — 1 票 / 2 评论 / 2025-02-20 

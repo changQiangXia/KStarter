@@ -1,0 +1,578 @@
+# https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/315707
+
+Topic #315707: [placeholder] my experiment results
+  Author: hengck23
+  Posted: 2022-03-29 12:12:26.026000
+  Votes: 139  Comments: 135
+
+here, i share some experiment results and thoughts on possible improvement.
+this post is continuously updated …
+
+my focus this time will be on semi-supervised learning for span prediction. any suggestion (e.g. paper, method) are welcome
+
+
+
+we can learn something new for every kaggle competition. The followings are methods that proved to work and worth learning here. You can expand it by searching for new papers (and internet, blog, github, etc) that further improve these basic methods.
+
+[updated 2-apr-2020]
+(1) understand the use of further pertaining using domain training.
+reference paper:  
+
+
+
+Don't Stop Pretraining: Adapt Language Models to Domains and Tasks - ACL2020
+https://www.youtube.com/watch?v=zNjiTcF3FZE
+
+ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators
+
+
+what learning rate? schduler? how many iteration? how much pretrain datat? how/what to mask? Alterantive to masking? domain-specific? task-specific?
+
+
+
+(2) understand adverisal perurbation. How to improve generalistion and prevent overfitting in downstream finetunning task
+reference paper:
+
+
+
+Adversarial Weight Perturbation
+https://arxiv.org/pdf/2004.05884.pdf
+https://www.bilibili.com/s/video/BV1pt4y1Y7uU
+
+
+student feedback top solution:
+https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313177
+https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook
+
+
+
+SMART: Robust and Efficient Fine-Tuning for Pre-trained Natural Language Models through Principled Regularized Optimization
+
+
+https://papertalk.org/papertalks/7047
+
+deberta method:
+https://github.com/microsoft/DeBERTa/blob/e686c04ce31a1525f07ec15243d3b9112ebf93d0/DeBERTa/sift/README.md
+
+
+
+(3) charcter-level BERT
+more robust against mispelling
+
+https://github.com/wtma/CharBERT
+https://github.com/helboukkouri/character-bert
+
+Comments:
+├─ hengck23 (2022-03-31 06:50:18.743000) [+14]
+│  adversial weight perturbation
+│  
+│  
+│  
+│  
+│  we need to find a way to stablise training. I experiment with adversial weight perturbation (awp) to improve robustness.
+│  awp was introduced in the top solution of ...
+  ├─ SchenbergZ (2022-03-31 12:08:35.407000) [+2]
+  │  AWP need unlimited time of gpus but I only have colab and Kaggle😂
+  │  Have you tuned adversial_learning_rate?
+  │  Btw, how to train Xlarge deberta within kaggle?
+  ├─ ACMHIT (2022-03-31 12:30:34.127000) [+0]
+  │  I think FGM is ok…PGD can be better but cost too much
+  ├─ hengck23 (2022-03-31 12:43:34.960000) [+3]
+  │  i used the awp code from https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook
+  │  the cost is not much. 
+  │  
+  │  i did not check his code in detail, but it seems only the model parameter weight is p...
+  ├─ hengck23 (2022-03-31 12:47:46.273000) [+2]
+  │  i google around and find some interetsing benchmark:
+  │  https://github.com/lonePatient/BERT-NER-Pytorch
+  │  
+  │  https://github.com/searchableai/KitanaQA
+  │  ADVERSARIAL TRAINING METHODS FOR SEMI-SUPERVISED TEXT ...
+  ├─ gezi (2022-04-01 01:36:02.713000) [+1]
+  │  @hengck23 I saw in the notebook adv_lr was set as 0?
+  ├─ hengck23 (2022-04-01 01:39:19.373000) [+4]
+  │  I set it to 1
+  ├─ hengck23 (2022-04-01 04:04:23.890000) [+4]
+  │  recipe for lb0.885 solution!
+  ├─ hengck23 (2022-04-01 04:11:39.137000) [+0]
+  │  i did not use wramup in my scheduler. anyone has comment about the effectiveness of using warmup learning rate?
+  ├─ gezi (2022-04-01 06:56:49.660000) [+0]
+  │  interesting, what's eps you use? AWP make worse result for me
+  ├─ hengck23 (2022-04-01 07:01:27.637000) [+11]
+  │  0.001 for the deberta-v3-large,
+  │  0.00005 for the deberta-xlarge,
+  │  
+  │                  net.train()
+  │                  net.output_type = ['loss']
+  │                  with amp.autocast(enabled = is_amp):
+  │          ...
+  ├─ gezi (2022-04-01 11:03:21.847000) [+1]
+  │  @hengck23 I made mistakes.  It indeed works for me also, thanks!
+  ├─ hengck23 (2022-04-01 12:04:45.767000) [+3]
+  │  i read that adversarial training works for unlabelled too.
+  │   Adversarial Training Methods For Semi-Supervised Text Classification. - Goodfellow I. 
+  │  
+  │  my next plan is:
+  │  
+  │  
+  │  
+  │  baseline: MLM (masked LM) usi...
+  ├─ YYama (2022-04-01 13:55:36.057000) [+8]
+  │  baseline: MLM (masked LM) using unlabelled on history
+  │  
+  │  
+  │  This is exactly what I have tried.
+  │  There was an improvement of about 0.002 in CV when using non-labeled data in the MLM.
+  │  
+  │  When I also used la...
+  ├─ gezi (2022-04-01 15:39:40.480000) [+1]
+  │  Interesting, suprizing to know traning data of pn_history might improve so much.
+  ├─ SchenbergZ (2022-04-02 12:40:33.753000) [+0]
+  │  @hengck23 when using gradient accumulation with AWP, how to place optimizer.zero_grad() in the training step?
+  ├─ hengck23 (2022-04-02 12:48:57.927000) [+1]
+  │  using gradient accumulation, the AWP code has to be rewritten.
+  ├─ Reason Wang (2022-04-02 15:19:23.230000) [+0]
+  │  why does awp help to improve performance? I think the purpose of adversarial training is to improve robustness of model. Is there any intuition or paper about this?
+  ├─ Gaurav Rawat (2022-04-03 14:14:02.470000) [+0]
+  │  If I may ask @hengck23 what's your folds strategy as we seeing diff bw ensemble cv- lb of around 0.001 - 0.002
+  ├─ hengck23 (2022-04-04 04:07:57.570000) [+2]
+  │  def make_fold(df):
+  │      df.loc[:,'fold']=-1
+  │      gkf = GroupKFold(n_splits=5)
+  │      for n, (train_index, valid_index) in enumerate(gkf.split(df['id'], df['location'], df['pn_num'])):
+  │          df.loc[val...
+  ├─ Gaurav Rawat (2022-04-06 02:02:43.560000) [+0]
+  │  ok its the same what I have thanks for sharing ..
+  ├─ Jaideep (2022-04-07 17:50:25.987000) [+0]
+  │  @goldenlock does awp model correlates well  with LB?
+  │  I get very high cv with AWP. m pretty sure it will not get same LB.
+├─ hengck23 (2022-04-20 19:51:10.900000) [+8]
+│  update of results for distillation to single model (LB 0.888).
+│  based on the results you might actually do pseudo-label on hidden test data … if you are fast enough.
+  ├─ yukiya (2022-04-21 09:04:03.140000) [+0]
+  │  @hengck23 Could you point me to working example of network distillation ? I don't understand how it is done  (I have interest in network compression)
+  ├─ hengck23 (2022-04-21 09:07:37.933000) [+3]
+  │  just train the destination model using pesudo-labelled data and orginal train data
+  ├─ FiZZy (2022-04-21 18:17:17.053000) [+0]
+  │  @hengck23 What does the span correction mean here?
+├─ hengck23 (2022-03-30 03:22:32.470000) [+7]
+│  first baseline code is up!
+│  https://www.kaggle.com/code/hengck23/deberta-v3-small-baseline?scriptVersionId=91606466
+│  
+│  deberta-v3-small (one fold)
+│  local cv:  0.853646 
+│  public lb:  0.848 (10 min) # the...
+  ├─ hengck23 (2022-03-30 20:04:32.407000) [+1]
+  ├─ ACMHIT (2022-03-31 01:42:55.270000) [+0]
+  │  Why your cv/LB scores are so similar to mine😂 I've seen people getting really close cv/LB like 0.883/0.883.
+  ├─ hengck23 (2022-03-31 01:43:49.147000) [+0]
+  │  they are uisng the same fold split
+├─ hengck23 (2022-04-03 13:51:07.960000) [+8]
+│  just an idea, … it is known as soft prompting
+│  
+│  
+│  
+│  I wonder how we can automatically mine new conpcets like this from unlabelled data …
+  ├─ Yuanhao (2022-04-04 10:13:52.440000) [+6]
+  │  I tried this and it worked. cv +0.002
+  ├─ hengck23 (2022-04-04 10:37:45.980000) [+0]
+  │  so there are pos qutesion, negative question …. or even other question tags …  (strong question, weak question, unkonwn question …)
+  ├─ hengck23 (2022-04-04 10:38:03.920000) [+1]
+  │  "I tried this and it worked. cv +0.002"
+  │  
+  │  thanks for reporting. you probably can write a paper on this
+  ├─ Jaideep (2022-04-06 05:49:54.800000) [+0]
+  │  @hengck23 you mean in above case changing Shortness of breadth to  "NOT Pressure in chest" ?
+  ├─ Jaideep (2022-04-07 18:04:44.380000) [+0]
+  │  @Yuanhao could provide one eg please.
+  │  for above thing
+├─ hengck23 (2022-04-26 09:51:11.450000) [+5]
+│  this is the last post:
+│  
+│  manual correction of suspected missing annotations of train data
+│  https://www.kaggle.com/datasets/hengck23/nbme-score-clinical-patient-notes-correction
+  ├─ maxg (2022-05-01 12:33:24.773000) [+1]
+  │  Dear @hengck23, 
+  │  Thanks for all your analysis, it was the most interesting discussion topic of the competition for me.
+  │  
+  │  I am commenting quickly here because I noticed that some of the annotation co...
+├─ hengck23 (2022-04-22 08:02:19.167000) [+5]
+│  this is why you are getting lower LB score than the top kagglers
+│  
+│  e = tokenizer('coffee/night.nervousness(worry)')
+│  print(tokenizer.convert_ids_to_tokens(e['input_ids']))
+│  
+│  e = tokenizer('coffee/nigh...
+  ├─ hengck23 (2022-04-22 08:06:23.710000) [+3]
+  │  are doctors bad at spellings?
+  │  i think that is the reasons why their handwriting are "illegible" … hmm
+  │  
+  │  vocab built from pn history:
+  │  
+  │  'hoospitlizations', 'hop', 'hopc', 'hope', 'hopeful', 'hopefull'...
+  ├─ Yuanhao (2022-04-23 03:45:32.773000) [+1]
+  │  I think this is not the main reason
+  ├─ hengck23 (2022-04-24 02:50:09.223000) [+1]
+  │  characters like '.,:- … ' causes wrong offset in start, end  prediction (due to token fragmentation).
+  │  you can solve this by pre-processing (better tokenization, masked MLM) or post-processing (e.g....
+├─ hengck23 (2022-04-21 04:27:09.497000) [+6]
+│  i created vocab from pn_history.csv
+│  it is important to take note of  words that can only be found in the unlabelled set and not in the labelled set (and also not in the tokenizer's vocab)
+│  
+│  (you can...
+  ├─ hengck23 (2022-04-21 06:39:06.210000) [+1]
+  │  how to learn abbreviations:
+  │  
+  │  AT-BERT: Adversarial Training BERT for Acronym Identification Winning Solution for SDU@AAAI-21
+  │  http://ceur-ws.org/Vol-2831/paper28.pdf
+  │  
+  │  
+  │  
+  │  create pair of train sample (t...
+  ├─ hengck23 (2022-04-22 15:05:34.063000) [+1]
+  │  some of the abbreivations are not standard and cannot be found from list of medical abbreviations from internet …
+  │  
+  │  e.g.
+  │  feature:  507,case5,No-illicit-drug-use
+  │  
+  │  example ph history (from unlaballed ...
+  ├─ hengck23 (2022-04-23 03:13:16.227000) [+1]
+  │  feature: 000 Family-history-of-MI-OR-Family-history-of-myocardial-infarction
+  │  
+  │  these are missing from my pesudo label (false negative)
+  │  
+  │  pn_num=253
+  │  Dad: HA 
+  │  
+  │  
+  │  pn_num=358
+  │  FamHx: Father HA age 52
+  │  
+  │  
+  │  HA ...
+  ├─ Tingxin (2022-04-30 12:32:47.930000) [+0]
+  │  Hi, I am wondering if you have tried deberta-v2-xlarge and how is it compared with deberta-xlarge (they are just very close according to the benchmark results in huggingface)? I am planning to try ...
+├─ hengck23 (2022-04-02 12:08:15.867000) [+5]
+│  Direct char level prediction !!
+│  notebook link :https://www.kaggle.com/code/hengck23/direct-char-level-output?scriptVersionId=91916010
+│  not the best model, but a workable model for illustration purpo...
+  ├─ v.TueNg (2022-04-02 15:04:47.887000) [+0]
+  │  Thanks for sharing, I tried something like this but in another task with very slowly implement.  I learned new method token-char in LM.
+  ├─ BK (2022-04-03 20:11:07.267000) [+1]
+  │  Does it make sense to compute the loss for both the tokens and characters? My intuition says to only optimize character-level but I would love to hear what you think :)
+  ├─ hengck23 (2022-04-04 03:12:49.367000) [+0]
+  │  i tried adding char token
+  ├─ hengck23 (2022-04-04 03:18:55.503000) [+3]
+  │  "My intuition says to only optimize character-level but I would love to hear what you think :)"
+  │  
+  │  key to NLP is pretraining. you have to keep the problem as close to the original one, while adding y...
+├─ hengck23 (2022-04-10 09:01:04.867000) [+6]
+│  update of experiment (fold-0 + unlabelled only )
+  ├─ hengck23 (2022-04-12 10:30:12.710000) [+0]
+  │  this is already mentioned in the forum before:
+  │  
+  │  a shortcut is to use all train data at once.
+  │  you may not get the best results, but it is an estimate of the upper bound for ensemble.
+  │  
+  │  you may want t...
+  ├─ Jaideep (2022-04-15 17:06:08.313000) [+0]
+  │  @hengck23 how much you get out of Train ALL alone ?
+├─ hengck23 (2022-04-10 16:45:03.757000) [+3]
+│  how to do human in the loop:
+│  
+│  
+│  
+│  make a list of (count,annotation) from your prediction.
+│  it is easy to discover mistake.
+│  
+│  the above shows predicted annotation from unlabelled on history
+  ├─ Nicholas Broad (2022-04-10 17:14:24.610000) [+3]
+  │  Is human-in-the-loop considered "hand labeling?"
+  │  
+  │  In section B5 of the rules, it says:
+  │  
+  │  
+  │    
+  │  Submissions may not use or incorporate information from hand labeling or human prediction of the validati...
+  ├─ hengck23 (2022-04-11 00:19:34.740000) [+1]
+  │  unlabelled data is train data. as long as you don't touch the LB submission data, everything is safe.
+  │  
+  │  "Submissions may not use or incorporate information from hand labeling or human prediction of ...
+  ├─ CPMP (2022-04-11 07:09:07.103000) [+0]
+  │  "Submissions may not use or incorporate information from hand labeling or human prediction of the validation dataset or test data records."
+  │  
+  │  This refers to information from hand labeling on validat...
+  ├─ Nicholas Broad (2022-04-11 10:54:12.647000) [+1]
+  │  I appreciate the replies, but I still don’t really understand what validation data refers to. The hosts didn’t provide validation data, just train data, but I could use that train data for validati...
+  ├─ CPMP (2022-04-11 11:30:08.670000) [+0]
+  │  I was answering to Heng as I disagree with his interpretation.
+  │  
+  │  But the final word should come from host or Kaggle staff.
+  ├─ hengck23 (2022-04-11 17:45:25.463000) [+5]
+  │  "I was answering to Heng as I disagree with his interpretation."
+  │  
+  │  you probably need to start a new thread and tag@ the host or organizer to catch their attention to answer it. my comments is based ...
+  ├─ Ryan Holbrook (2022-04-11 18:01:09.007000) [+13]
+  │  Julia's comment applies here. The unlabelled data is training data, and you may hand-label if you like.
+  ├─ CPMP (2022-04-13 08:44:24.343000) [+1]
+  │  @ryanholbrook Thanks for the answer.
+├─ hengck23 (2022-04-23 10:30:58.377000) [+4]
+│  some of the feature has ~100% occurrence.
+│  use this fact to improve your LB score!
+│  
+│  the first sentence  of the patient note should show this.
+│  
+│  I give you two examples:
+│  
+│  case0:
+│  
+│  patient comes with
+│  00...
+├─ hengck23 (2022-03-29 12:15:07.890000) [+3]
+│  for a start, a simple trick to improve token-to-char alignment for "space character problem"
+│  
+│  before:
+│  
+│          prob_pn_history=[]
+│          for t,d in valid_df.iterrows():
+│              prob = np.zeros...
+  ├─ van73 (2022-03-29 13:23:55.350000) [+0]
+  │  @hengck23 It's nice to meet you in this cometiton, I am confusing about the  key name "token_start_correction/ token_end_correction", where are they from? Thanks  in advance！
+  ├─ hengck23 (2022-03-29 13:32:27.483000) [+2]
+  │  train your model to output multiple predictions:
+  │  
+  │  
+  │  
+  │  label of token (binary classification)
+  │  
+  │  because of space character, the offset mapping from tokenizer may not be correct. We let the model to pre...
+  ├─ gezi (2022-03-29 14:32:11.797000) [+1]
+  │  great idea！
+  ├─ ACMHIT (2022-03-30 02:50:55.243000) [+2]
+  │  Or we can simply add a character level LSTM after BERT's output. But this method does a similar job to postprocessing in my case.
+  ├─ hengck23 (2022-03-30 03:12:37.960000) [+0]
+  │  yes, char lstm is an option:
+  ├─ gezi (2022-03-30 09:10:44.023000) [+0]
+  │  Directly output from char level from model might be more elegant.
+  ├─ hengck23 (2022-03-30 11:41:34.517000) [+2]
+  │  https://www.kaggle.com/code/theoviel/character-level-model-magic
+  ├─ Chris Deotte (2022-03-31 03:26:18.400000) [+12]
+  │  Here is the link for the image (YouTube video) above
+  │  https://www.youtube.com/watch?v=PXc_SlnT2g0
+  │  This shows many tricks for winning many Kaggle NLP competitions.
+  ├─ Harm Buisman (2022-03-31 10:31:24.050000) [+1]
+  │  I like your enthusiastic presentation style! Real good stuff. Thanks!
+├─ hengck23 (2022-04-05 23:17:24.647000) [+4]
+│  peduso label experiment (deberta-v3-small/large)
+  ├─ Yuanhao (2022-04-06 03:09:12.747000) [+0]
+  │  is there any cv boost?
+  ├─ hengck23 (2022-04-06 04:20:51.553000) [+0]
+  │  for deberta-v3-small improvement is from 0.866476 to 0.871165.
+  │  for deberta-v3-large, experiment is still in progress
+  ├─ hengck23 (2022-04-06 04:25:37.483000) [+5]
+  │  next plan is this:
+  │  https://arxiv.org/abs/2003.10580
+  │  Meta Pseudo Labels
+  │  
+  │   
+  │  
+  │  notebook link on Meta Pseudo Labels learning setup (with dummy data moonshot data): 
+  │  https://www.kaggle.com/code/hengck23/...
+  ├─ Vu (2022-04-06 04:48:54.237000) [+0]
+  │  @hengck23 , meta pseudo labels is really cost extensive. Btw, may I know how do you use pseudo data, do you split external data into 5 parts for each fold, or using all for each fold?
+  ├─ xbustc (2022-04-06 05:49:12.117000) [+0]
+  │  hi, according to your CV, it seems that you avoid the leakage when training with pseudo label, how did you do this?
+  ├─ hengck23 (2022-04-06 07:00:04.100000) [+11]
+  │  there is no leakage. 
+  │  
+  │  but there are other issues, which I will explain later
+  │  
+  │  
+  │  
+  │  the experiment process is:
+  │  
+  │  
+  │  
+  │  use  train dataT to train a model M0. validate on validation set V.
+  │  
+  │  use M0 to label u...
+  ├─ xbustc (2022-04-06 08:07:56.193000) [+0]
+  │  Thanks for your explanation.
+  ├─ hengck23 (2022-04-06 09:05:01) [+1]
+  │  this is my thoughts only. not necessarily correct
+  │  
+  │  
+  │  
+  │  
+  │  results from current pseudo labels seems to behave like augmentation noise.
+  │  (there is no "new" knowledge learned, if there is CV score should b...
+  ├─ hengck23 (2022-04-06 09:10:42.317000) [+0]
+  │  if there is new knowledge from pseduo label, it can be reflected from new words detected in your prediction (i.e, if you compare before and after pseduo, the missing rare words should become now de...
+  ├─ hengck23 (2022-04-06 09:12:59.783000) [+0]
+  │  from the train and valid loss (and gap) from train and train+pseduo experiments, you can know the noise level
+  ├─ Azamat Tolegen (2022-04-07 05:14:14.660000) [+0]
+  │  so even if I use my best model deverta-v3-large (0.883) to label unannotated data it will give some incorrect annotations, so the point is even with this incorrect annotations it will give better r...
+  ├─ hengck23 (2022-04-07 05:20:55.070000) [+0]
+  │  which train data will give best results?
+  │  
+  │  
+  │  
+  │  20 samples (100% clean label)
+  │  
+  │  50 samples (100% clean label)
+  │  
+  │  100 samples (99% clean label)
+  │  
+  │  1000 samples (99% clean label)
+  │  
+  │  10000 samples (95% clean lab...
+  ├─ GUNER (2022-04-07 10:49:08.063000) [+0]
+  │  There are probably many factors starting from the model (any model will be insufficient to reflect the immense data in the last bullet anyhow) to the task itself (easy task would need less data.. b...
+  ├─ hengck23 (2022-04-07 12:09:12.957000) [+0]
+  │  "Trying to make sense of it…it will backpropagate dirties not different from the cleans, No?"
+  │  
+  │  it propagates "average"
+  ├─ GUNER (2022-04-07 12:15:52.103000) [+0]
+  │  so unless, dirties take over the 'gradient batch', we are OK.
+  ├─ hengck23 (2022-04-07 17:01:22.083000) [+1]
+  │  you probably can do this a few rounds:
+  │  
+  │  
+  │  maybe efficientnet noisy student self training method can work here
+  ├─ Gaurav Rawat (2022-04-13 00:48:25.273000) [+0]
+  │  @hengck23  had one question on the pseudo labelled generated should we be still be using data which was not unannotated by the Teacher model . Currently we were excluding that data as already the p...
+  ├─ Jaideep (2022-04-13 11:14:02.550000) [+1]
+  │  @hengck23 in pseudo label how many labels are you able to get out 4.4k ?
+  ├─ FiZZy (2022-04-15 15:03:35.850000) [+0]
+  │  @hengck23 Hi, what do the heads mean? Does it mean to add an rnn layer after deberta?
+  ├─ FiZZy (2022-04-15 17:32:25.787000) [+0]
+  │  Ahh, I found your code below
+├─ hengck23 (2022-03-31 08:44:55.110000) [+4]
+│  i have been visualising the errors made. i think the best way to improve is human in the loop in pesudo label.
+│  there are many obvious mistake (e.g. missing prediction of span of common words like "...
+  ├─ hengck23 (2022-03-31 10:31:36.200000) [+1]
+  │  An interpretable natural language processing system for written medical examination assessment
+  │  https://www.sciencedirect.com/science/article/pii/S153204641930187X
+  │  
+  │  Leveraging Natural Language Proce...
+├─ hengck23 (2022-04-17 06:55:23.603000) [+1]
+│  interesting paper: SpanBERT: Improving Pre-training by Representing and Predicting Spans
+│  https://github.com/facebookresearch/SpanBERT
+├─ hengck23 (2022-03-29 13:29:12.447000) [+1]
+│  there exists NER annotation tools that provide semi-supervised learning
+│  e.g. https://docs.tagtog.net/machine-learning.html
+│  
+│  "In tagtog, training data means annotations in any of supported types. Yo...
+  ├─ Gaurav Rawat (2022-03-29 20:37:01.013000) [+0]
+  │  Thanks for this I was looking /trying similar semi supervised or programmatic tools to train missing annotations . But is tagtog free and open source to be used  ?
+  ├─ hengck23 (2022-03-30 00:08:42.077000) [+2]
+  │  you can find many papers (and their code) by google search. try "entity NER semi-supervised (or distance supervision)".
+  │  (e.g. https://aclanthology.org/2021.emnlp-main.255.pdf,
+  │  https://www.microsoft...
+  ├─ Gaurav Rawat (2022-03-30 23:07:35.380000) [+0]
+  │  Thanks interesting ideas will look at these I was thinking if tools like snorkel could also be used
+├─ hengck23 (2022-04-02 08:04:59.170000) [+2]
+│  charBERT
+│  
+│  
+│  https://github.com/wtma/CharBERT
+│  
+│  related:
+│  https://github.com/helboukkouri/character-bert
+│  
+│  more robust against spelling error
+├─ hengck23 (2022-04-01 05:58:51.203000) [+2]
+│  from deberta website:
+│  https://github.com/microsoft/DeBERTa/blob/e686c04ce31a1525f07ec15243d3b9112ebf93d0/DeBERTa/sift/README.md
+│  
+│  https://papertalk.org/papertalks/7047
+│  
+│  
+│  
+│  "However, due to limited da...
+├─ hengck23 (2022-03-30 03:40:10.183000) [+1]
+│  compliementry methods like NER and QA can be used to score the confidence of pesudo labels.
+│  if we can find variety of independent methods, I think results can be good with just consistency loss
+  ├─ ACMHIT (2022-03-30 04:44:31.997000) [+1]
+  │  Talking about consistency loss, I think maybe Rdrop can do that. Dropout twice. I used that previously but sometimes it doesn't converge. Multitask losses are somewhat hard to optimize since the we...
+├─ hengck23 (2022-04-25 14:03:32.500000) [+0]
+│  i think why pesudo label without any post-processing work ….
+├─ yebulk (2022-04-25 07:16:30.573000) [+0]
+│  How many pseudo labels do you use？And do you choose the pseudo label randomly? :D
+  ├─ hengck23 (2022-04-25 07:37:50.953000) [+0]
+  │  you should have post-processed your pseudo labels.
+  │  e.g.  a predictor to estimate the error of the predicted pseudo label and control the amount of noise in pseudo labels (e.g. discard those with hi...
+├─ hengck23 (2022-04-23 14:28:15.820000) [+0]
+│  anyone trying applying feature_num to non designated case_num?
+│  maybe this can increase unlabelled dataset?
+├─ hengck23 (2022-04-23 10:33:17.463000) [+0]
+│  i note a couple of missing labels even in the train.csv.
+│  maybe those needs to be relabel?
+│  
+│  looking at the missing label and some wrong label (e.g. wrong span with missing first letter) in train.csv...
+├─ kpgggg (2022-04-15 09:41:51.507000) [+0]
+│  what is span-correct ?  is it dense layer work as predictor?
+├─ hengck23 (2022-04-11 18:08:20.657000) [+0]
+│  i have been palying with a few NER labeling tools. this is the best free one I have used. 
+│  https://towardsdatascience.com/a-free-and-powerful-labelling-tool-every-data-scientist-should-know-ce66473...
+├─ hengck23 (2022-04-11 00:20:46.327000) [+0]
+│  with few train data, training i ssensitive to noise.
+│  an example is:
+│  
+│  case 01881 : ['mom has hypothyriod'], labeled wrong for feature num 005-No-hair-changes-OR-no-nail-changes-OR-no-temperature-int...
+├─ hengck23 (2022-04-04 02:59:37.917000) [+0]
+│  how to probe the hidden test domain data….
+│  
+│  1) we can google for papers. an example is the measure the intersection of the top 1000 occurring words between given train pn history and hidden test pn...
+├─ hengck23 (2022-04-04 02:44:53.160000) [+0]
+│  Domain-specific language model pretraining for biomedical natural language processing
+│  https://www.youtube.com/watch?v=axQTxj4ExAM
+│  
+│  https://arxiv.org/pdf/2007.15779.pdf
+├─ hengck23 (2022-04-04 01:26:29.103000) [+0]
+│  always updatd … experiments results on further MLM training on unlabelled pn history notes:
+  ├─ Nicholas Broad (2022-04-04 10:39:28.037000) [+1]
+  │  You probably already know this, but deberta v3 wasn’t pretrained with MLM and if you use AutoModelForMaskedLM, I think it will have random weights. 
+  │  
+  │  I’m curious to see your results
+  ├─ hengck23 (2022-04-04 10:44:46.737000) [+2]
+  │  i will compare ELECTRA and MLM. i do not use AutoModelForMaskedLM, I wrote my own code, trainer and dataset
+  │  
+  │  # see DebertaV2ForMaskedLM
+  │  class Net(nn.Module):
+  │      def __init__(self,max_length):
+  │      ...
+  ├─ Vadim Irtlach (2022-04-05 22:24:35.963000) [+0]
+  │  Hello, @hengck23! You are doing great work! I already learned a lot! I have a small question, was your model pre-trained with Masked LM, or did you treat it as Multi-Task Learning when your model h...
+  ├─ hengck23 (2022-04-06 00:38:31.837000) [+1]
+  │  only MLM.  Next Sentence Prediction (NSP) is not used
+  ├─ Vadim Irtlach (2022-04-06 09:25:23.297000) [+0]
+  │  Thank you!
+  ├─ Jaideep (2022-04-07 17:56:23.437000) [+0]
+  │  @nbroad what is meant by MLM
+  ├─ Nicholas Broad (2022-04-07 18:17:44.397000) [+0]
+  │  masked language modeling
+  ├─ Jaideep (2022-04-07 18:27:02.990000) [+0]
+  │  @nbroad  thanks m not very well versed with NLP. This is just 2nd competition for me. 
+  │  which models are MLM based.
+  ├─ Nicholas Broad (2022-04-07 18:52:08.550000) [+2]
+  │  mlm: bert, roberta, deberta v1/v2, bigbird, longformer
+  │  autoregressive (predict next token): gpt
+  │  seq2seq (these all have different training objectives): t5, pegasus, bart
+  │  discriminators: electra, de...
+  ├─ DJ_Xia (2022-04-11 02:35:42.997000) [+1]
+  │  Where can I find the code for debert-v3-large pre-training?
+  ├─ Nicholas Broad (2022-04-11 10:57:38.863000) [+2]
+  │  PreTraining code for deberta v3 doesn’t exist anywhere to the extent of my knowledge
+  ├─ FiZZy (2022-04-15 17:29:26.963000) [+0]
+  │  My MLM training for deberta-v3-base still gives 0.77 ACC. But for deberta-v3-large it is only 0.04.
+├─ [deleted] (2022-04-02 17:32:23.067000) [+0]
+│  [deleted]
+├─ [deleted] (2022-03-30 02:48:25.430000) [+0]
+│  [deleted]
+├─ [deleted] (2022-03-29 12:56:54.900000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-07 22:57:07.503000) [+1]
+│  [deleted]
+├─ [deleted] (2022-04-03 16:04:53.837000) [+0]
+│  [deleted]

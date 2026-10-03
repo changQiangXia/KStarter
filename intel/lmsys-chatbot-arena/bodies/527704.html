@@ -1,0 +1,78 @@
+<p>Thanks to the organizers and especially to everyone who participated in the discussions and shared their notebooks.</p>
+<h1>Solution summary</h1>
+<ul>
+<li>train the gemma2-9b-it using the  lmsys-chat-1m pseudo label data. </li>
+<li>ensemble with llama3 model</li>
+</ul>
+<h2>chat-1m pseudo label data</h2>
+<ol>
+<li><p>remove useless row  <br>
+<code>df = df[(df.language == "English") &amp; (~df["redacted"])]</code></p></li>
+<li><p>I extract unique prompts and randomly sample two responses generated from different models for each prompt. I only sample two responses to reduce the data volume while still including as many prompts as possible. This creates approximately 45k additional training data.</p></li>
+</ol>
+<h2>LB progress</h2>
+<p>LB refers to the one before the leak.   </p>
+<ol>
+<li>Train single gemma2 model and perform response swap TTA  <br>
+→ LB : 0.890</li>
+<li>Instead of TTA, I train another gemma2 model with response swap data and ensemble it.<br>
+→ LB : 0.887</li>
+<li>Train both model in the same way as 2. by adding chat-1m pseudo label  <br>
+→ LB : 0.881 (<strong>private LB: 0.9859</strong>)</li>
+<li>ensemble with single llama3 model without TTA (LB: 0.899 with TTA)<br>
+→ LB : 0.881 (<strong>private LB: 0.9828</strong>)</li>
+</ol>
+<h1>Solution details</h1>
+<h2>Dataset</h2>
+<h3>input</h3>
+<ul>
+<li>kaggle train data  </li>
+<li>33k data (<a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973" target="_blank">https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973</a>)</li>
+<li>lmsys-chat-1m (used only in pseudo label)</li>
+</ul>
+<h3>prompt</h3>
+<pre><code></code></pre>
+<ul>
+<li><code>response_a</code>: last response of model A  </li>
+<li><code>response_b</code>: last response of model B  </li>
+<li><code>context</code>: all user instruction and response (but the response include only one model) except response_a and response_b  </li>
+</ul>
+<h3>tokenizer</h3>
+<ul>
+<li>truncation_side = "left"</li>
+<li>max_len<ul>
+<li>train: 256 * 6</li>
+<li>inference: 256 * 7</li></ul></li>
+</ul>
+<h2>Model</h2>
+<ul>
+<li><p>gemma2-9b-it</p>
+<ul>
+<li>all linear for lora</li>
+<li>r=32, lora_alpha=64</li>
+<li>epoch=1</li>
+<li>lr=8e-5</li>
+<li>learning scheduler=linear</li>
+<li>no warm up step</li>
+<li>global batch size=16</li></ul></li>
+<li><p>llama3-8b</p>
+<ul>
+<li>I used the pretrained weights of the reward model which allow two different model responses to be included in the prompt instead of <a href="https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct" target="_blank">llama3-8b-instruct</a>.<ul>
+<li>used pretrained weight: <a href="https://huggingface.co/RLHFlow/pair-preference-model-LLaMA3-8B" target="_blank">https://huggingface.co/RLHFlow/pair-preference-model-LLaMA3-8B</a>  </li></ul></li>
+<li>all linear for lora</li>
+<li>r=128, lora_alpha=128</li>
+<li>epoch=1</li>
+<li>lr=5e-5</li>
+<li>learning scheduler=linear</li>
+<li>no warm up step</li>
+<li>global batch size=16</li></ul></li>
+</ul>
+<h2>Inference Tips</h2>
+<ul>
+<li>Due to notebook time constraints, it was difficult to infer two gemma2 models and one llama3 model, so the llama3 model was only inferred for samples with token counts of 512 or less and 1500 or more.</li>
+<li>For speedup<ul>
+<li>use 8bit quantization model instead of 4bit. </li>
+<li>merge_and_unload()<ul>
+<li>In the case of 8-bit quantization, no decrease in score was observed.</li></ul></li>
+<li>Dynamically change batch size based on token length</li></ul></li>
+</ul>

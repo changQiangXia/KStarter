@@ -1,0 +1,122 @@
+# neurips-open-polymer-prediction-2025 讨论区（按票数排序，共 120 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607947) — 116 票 / 17 评论 / 2025-09-17 **write-up?**
+- [🚀 Jump-starting “NeurIPS — Open Polymer Prediction 2025” 🚀](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585022) — 106 票 / 41 评论 / 2025-06-17 
+- [Data to reach 0.037 on LB](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587318) — 74 票 / 32 评论 / 2025-06-30 
+- [Strongly recommend removing Tg and recalculating the scores to rescue this competition](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607784) — 71 票 / 63 评论 / 2025-09-16 
+- [An update about the competition](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585884) — 58 票 / 48 评论 / 2025-06-23 
+- [Starting materials ](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584905) — 49 票 / 14 评论 / 2025-06-16 
+- [Competition data updates](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588643) — 46 票 / 143 评论 / 2025-07-07 
+- [Baseline(LB:0.068) - RDKit descriptors features](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584953) — 43 票 / 8 评论 / 2025-06-17 
+- [Various methods to featurise SMILES data ](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584967) — 36 票 / 2 评论 / 2025-06-17 
+- [8th Place Solution | No Tg Post Processing](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608069) — 36 票 / 10 评论 / 2025-09-17 **write-up?**
+- [Why shakeup?Why Domain Shift?Some Bugs?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607769) — 36 票 / 22 评论 / 2025-09-16 
+- [Potential NeurIPS Code of Ethics violation](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608250) — 33 票 / 7 评论 / 2025-09-18 
+- [20th Place Solution: NeurIPS - Open Polymer Prediction 2025](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607803) — 32 票 / 7 评论 / 2025-09-16 **write-up?**
+- [Transfer learning | ChemBERTA continuous pre-training on TPU](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587331) — 29 票 / 17 评论 / 2025-06-30 
+- [Does anyone want to reverse engineer the train data?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/593755) — 29 票 / 30 评论 / 2025-07-30 
+- [Rerun? BUG? data leak?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607778) — 28 票 / 13 评论 / 2025-09-16 
+- [Inspiration from similar challenges:  BELKA & Tox24](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585344) — 26 票 / 0 评论 / 2025-06-19 
+- [Reflections and a Useful AutoGluon Trick - Text Features from SMILES](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608175) — 26 票 / 5 评论 / 2025-09-18 
+- [Good Luck Everyone!](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607758) — 25 票 / 3 评论 / 2025-09-15 
+- [Private LB 0.083 | GNN Embeddings + Stacking Ensemble](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607796) — 25 票 / 2 评论 / 2025-09-16 
+- [0.068 Private LB Score](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607814) — 25 票 / 16 评论 / 2025-09-16 
+- [[placeholder] my experiment results](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587992) — 24 票 / 25 评论 / 2025-07-03 
+- [Developing Bio-Based materials with AI.  Eco-friendly Biopolymers.](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584945) — 24 票 / 4 评论 / 2025-06-17 
+- [Better CV strategy : GroupKFold with Canonical SMILES Grouping ?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585654) — 24 票 / 16 评论 / 2025-06-22 
+- [Addtional dataset for target 'Tg' and 'Tc'](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585178) — 24 票 / 23 评论 / 2025-06-18 
+- [What went SO WRONG with NeurIPS - Open Polymer Prediction 2025?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608182) — 23 票 / 21 评论 / 2025-09-18 
+- [3rd Place Solution](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607991) — 23 票 / 5 评论 / 2025-09-17 **write-up?**
+- [Welcome to NeurIPS 2025 Open Polymer Prediction](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584948) — 21 票 / 36 评论 / 2025-06-17 
+- [i.i.d dataset split sanity check](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607811) — 21 票 / 16 评论 / 2025-09-16 
+- [Beware external data](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585870) — 19 票 / 10 评论 / 2025-06-23 
+- [Let's properly train a GNN for polymer ... it has to be POLY... ](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589360) — 19 票 / 40 评论 / 2025-07-12 
+- [Please generate another set of test data.](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607899) — 19 票 / 7 评论 / 2025-09-16 
+- [Super genius or ...](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/603399) — 18 票 / 9 评论 / 2025-09-02 
+- [So, in summary, isn’t this the case?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607847) — 18 票 / 1 评论 / 2025-09-16 
+- [Feature selection, Random Forest, and things I should have done better](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607919) — 18 票 / 7 评论 / 2025-09-16 
+- [wMAE: Weighted Mean Absolute Error - The Key to Accurate Polymer Property Predictions](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584922) — 18 票 / 12 评论 / 2025-06-16 
+- [2nd Place Solution](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608984) — 17 票 / 2 评论 / 2025-09-22 **write-up?**
+- [What is the code submission cutoff time?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584962) — 16 票 / 12 评论 / 2025-06-17 
+- [[Issue confirmed by hosts] Does anyone want to test the test?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591394) — 15 票 / 45 评论 / 2025-07-27 
+- [CV-LB correlation](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584958) — 15 票 / 11 评论 / 2025-06-17 
+- [Please Resubmit Your Best Notebook So Far -- Surprise!](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591153) — 14 票 / 27 评论 / 2025-07-25 
+- [SMILES-BERT approach and thoughts about data](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585160) — 14 票 / 1 评论 / 2025-06-18 
+- [11 public, 27 private LB solution No Tg magic tricks](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608123) — 14 票 / 3 评论 / 2025-09-17 **write-up?**
+- [PB: 0.090, LB: 0.062 solution](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608226) — 13 票 / 14 评论 / 2025-09-18 **write-up?**
+- [hacking autogluon and experiments for debiasing dataset1,2,3,4,csv](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588794) — 13 票 / 25 评论 / 2025-07-08 
+- [Strange LB scenario](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587290) — 13 票 / 12 评论 / 2025-06-30 
+- [[pinned?] whitelist of external dataset](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588062) — 13 票 / 3 评论 / 2025-07-04 
+- [Validation MAEs on the base dataset](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/602478) — 12 票 / 23 评论 / 2025-08-27 
+- [I think LB is overfitted](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/598638) — 12 票 / 30 评论 / 2025-08-12 
+- [PySimm-based Tc calculation: a first approach](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588919) — 12 票 / 25 评论 / 2025-07-09 
+- [Let's properly train a Transformer for polymer ... it has to be POLY...](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589683) — 12 票 / 3 评论 / 2025-07-14 
+- [2nd year in a row](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607764) — 12 票 / 0 评论 / 2025-09-16 
+- [Step 1: Literature Review: Related Papers](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584907) — 12 票 / 2 评论 / 2025-06-16 
+- [[NeurIPS] Silly question: ¿why no obfuscation?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587451) — 12 票 / 2 评论 / 2025-07-01 
+- [LB with using only dataset provided by the hosts](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587300) — 11 票 / 19 评论 / 2025-06-30 
+- [ChemBERTa Embeddings + Molecular Descriptor Features](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585012) — 11 票 / 1 评论 / 2025-06-17 
+- [Chemistry-oriented BERT Family](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/586920) — 11 票 / 3 评论 / 2025-06-29 
+- [Massive(+40M) polymer generation with SELFIES-VAE](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/590193) — 11 票 / 9 评论 / 2025-07-18 
+- [Gemini CLI v.s. Claude Code](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/586245) — 11 票 / 2 评论 / 2025-06-25 
+- [how do you replace the stars *?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589372) — 11 票 / 20 评论 / 2025-07-12 
+- [Few [general] thoughts [UPDATED]](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/598502) — 11 票 / 7 评论 / 2025-08-11 
+- [A Hybrid Physics–Machine Learning Framework for Polymer Property Prediction](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608096) — 10 票 / 4 评论 / 2025-09-17 
+- [score 0.147 without model](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584919) — 10 票 / 0 评论 / 2025-06-16 
+- [seriously?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608187) — 10 票 / 0 评论 / 2025-09-18 
+- [About kernel SMILES augmentation](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/605452) — 9 票 / 2 评论 / 2025-09-08 
+- [SMILES with 1, 3, and 4 * explanation ](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591170) — 9 票 / 0 评论 / 2025-07-25 
+- [transfer function method](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/590790) — 9 票 / 13 评论 / 2025-07-23 
+- [24th place solution - 2 stage Autogluon and XGB, no post-processing](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608114) — 9 票 / 1 评论 / 2025-09-17 **write-up?**
+- [Properties for folks new to Polymers](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585001) — 9 票 / 1 评论 / 2025-06-17 
+- [About Submission Scoring Error](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585262) — 9 票 / 9 评论 / 2025-06-19 
+- [I don't understand data restrictions here](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/600134) — 9 票 / 5 评论 / 2025-08-21 
+- [polyOne Data Set - 100 million hypothetical polymers including 29 properties](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587000) — 8 票 / 5 评论 / 2025-06-29 
+- [at Tg × 2.3, are the public LB and private LB the same?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607786) — 8 票 / 10 评论 / 2025-09-16 
+- [Request for Guidelines on Dataset Expansion](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585522) — 8 票 / 1 评论 / 2025-06-21 
+- [Why Are There So Many Missing Values?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584923) — 8 票 / 3 评论 / 2025-06-16 
+- [🧪 8 Chemical Language Models for Polymer Property Prediction🧪 ](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608371) — 8 票 / 5 评论 / 2025-09-19 
+- [Regarding the use of external datasets and licensing ](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587376) — 7 票 / 7 评论 / 2025-06-30 
+- [Improving model score with Graph based features](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587731) — 7 票 / 6 评论 / 2025-07-02 
+- [let's explore better way to install package offline](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/590350) — 7 票 / 5 评论 / 2025-07-20 
+- [upload submission file](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585196) — 7 票 / 4 评论 / 2025-06-18 
+- [Thoughts on external data use in NeurIPS 2025](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/586240) — 7 票 / 5 评论 / 2025-06-25 
+- [Iterative Pseudo-Labeling with Multi-Architecture Ensemble LB 0.09 (0.067)](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608519) — 6 票 / 4 评论 / 2025-09-20 
+- [16 Public 61 Private LB Solution | Silver Medal Solution](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607998) — 6 票 / 2 评论 / 2025-09-17 **write-up?**
+- [Late submission thread](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608637) — 6 票 / 2 评论 / 2025-09-21 
+- [FFV test data issue](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/596435) — 6 票 / 23 评论 / 2025-08-03 
+- [When LB is going to be updated?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591568) — 6 票 / 7 评论 / 2025-07-29 
+- [LAMMPS for dummies with working code!](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591661) — 6 票 / 11 评论 / 2025-07-29 
+- [Question on Degree of Polymerization](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585361) — 6 票 / 4 评论 / 2025-06-19 
+- [ A Discussion on the CV vs. LB Discrepancy, Underfitting, and External Data Strategy](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/607607) — 5 票 / 5 评论 / 2025-09-15 
+- [Question in replicating polyONE dataset of polyBERT](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/590243) — 5 票 / 11 评论 / 2025-07-19 
+- [E3NN (Equivariant Neural Networks) 🧬](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585221) — 5 票 / 2 评论 / 2025-06-18 
+- [38 public, 46 private LB solution (Uni-Mol/XGB)](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608390) — 5 票 / 1 评论 / 2025-09-19 **write-up?**
+- [[PB: 0.090, LB: 0.063] Solution](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608193) — 5 票 / 1 评论 / 2025-09-18 **write-up?**
+- [Rdkit's Ipc descriptor issue](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589524) — 5 票 / 6 评论 / 2025-07-13 
+- [10th Place Solution: A feature-centric approach with Multi-Stage selection](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608415) — 5 票 / 1 评论 / 2025-09-19 **write-up?**
+- [Does it makes sense deleting the extra data ?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585934) — 5 票 / 5 评论 / 2025-06-24 
+- [Is the test data free of missing values?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/586189) — 5 票 / 8 评论 / 2025-06-25 
+- [Cv LB question](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/603441) — 4 票 / 4 评论 / 2025-09-02 
+- [Polymers with single * or multiple (>2)*?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588137) — 4 票 / 11 评论 / 2025-07-04 
+- [Previous similar competition with winning solutions and notebooks](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585013) — 4 票 / 1 评论 / 2025-06-17 **write-up?**
+- [Crazy LB race](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588242) — 4 票 / 7 评论 / 2025-07-05 
+- [I’d like to form a team in about a month!](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585154) — 4 票 / 1 评论 / 2025-06-18 
+- [TDA for extracting additional features (with code example)](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/587945) — 4 票 / 3 评论 / 2025-07-03 
+- [can local MAE be trusted?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/599528) — 4 票 / 23 评论 / 2025-08-17 
+- [Possible bug on Official competition metric](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/585326) — 4 票 / 5 评论 / 2025-06-19 
+- [[Silver Medal | Rank 50 | Score 0.087] My Approach to NeurIPS – Open Polymer Prediction 2025](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608152) — 4 票 / 0 评论 / 2025-09-18 **write-up?**
+- [Submission Fails After 1 Minute Despite Code Still Running (Solved!)](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/590797) — 4 票 / 5 评论 / 2025-07-23 
+- [Anyone else seeing a drop in score?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591113) — 4 票 / 3 评论 / 2025-07-25 
+- [Private LB score](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/603665) — 4 票 / 4 评论 / 2025-09-03 
+- [Rg and rdkit Descriptors3D.RadiusOfGyration](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/591450) — 4 票 / 1 评论 / 2025-07-28 
+- [Question about SMILES in `train.csv` – Monomers or Polymers?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588023) — 3 票 / 6 评论 / 2025-07-03 
+- [Notebook Threw Exception - Need help](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/588821) — 3 票 / 10 评论 / 2025-07-08 
+- [Why does the supplement data of train with the same SMILES have different values? Is groupBy and mean efficient?](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589361) — 3 票 / 9 评论 / 2025-07-12 
+- [Get started here](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584928) — 1 票 / 5 评论 / 2025-06-16 
+- [This Competition Has an Official Discord Channel](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/584943) — -5 票 / 0 评论 / 2025-06-17 
+- [Next Steps on Report, Data, and Pipeline](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/609070) — -36 票 / 24 评论 / 2025-09-23 
+- [Further Clarification on the Distribution Shift](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608289) — -49 票 / 39 评论 / 2025-09-18 
+- [Top Student Group Prize](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608108) — -51 票 / 1 评论 / 2025-09-17 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608105) — -65 票 / 0 评论 / 2025-09-17 
+- [Results of the Private Data Investigation](https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/608103) — -87 票 / 70 评论 / 2025-09-17 

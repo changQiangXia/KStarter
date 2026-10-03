@@ -1,0 +1,226 @@
+# https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527704
+
+Topic #527704: 9th Place Solution
+  Author: Ebi
+  Posted: 2024-08-13 12:52:03.672000
+  Votes: 39  Comments: 17
+
+Thanks to the organizers and especially to everyone who participated in the discussions and shared their notebooks.
+
+Solution summary
+
+
+
+train the gemma2-9b-it using the  lmsys-chat-1m pseudo label data. 
+
+ensemble with llama3 model
+
+
+chat-1m pseudo label data
+
+
+
+
+remove useless row  
+df = df[(df.language == "English") &amp; (~df["redacted"])]
+
+
+I extract unique prompts and randomly sample two responses generated from different models for each prompt. I only sample two responses to reduce the data volume while still including as many prompts as possible. This creates approximately 45k additional training data.
+
+
+LB progress
+
+LB refers to the one before the leak.   
+
+
+
+Train single gemma2 model and perform response swap TTA  
+→ LB : 0.890
+
+Instead of TTA, I train another gemma2 model with response swap data and ensemble it.
+→ LB : 0.887
+
+Train both model in the same way as 2. by adding chat-1m pseudo label  
+→ LB : 0.881 (private LB: 0.9859)
+
+ensemble with single llama3 model without TTA (LB: 0.899 with TTA)
+→ LB : 0.881 (private LB: 0.9828)
+
+
+Solution details
+
+Dataset
+
+input
+
+
+
+kaggle train data  
+
+33k data (https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973)
+
+lmsys-chat-1m (used only in pseudo label)
+
+
+prompt
+
+
+
+
+
+response_a: last response of model A  
+
+response_b: last response of model B  
+
+context: all user instruction and response (but the response include only one model) except response_a and response_b  
+
+
+tokenizer
+
+
+
+truncation_side = "left"
+
+max_len
+
+
+train: 256 * 6
+
+inference: 256 * 7
+
+
+Model
+
+
+
+
+gemma2-9b-it
+
+
+
+all linear for lora
+
+r=32, lora_alpha=64
+
+epoch=1
+
+lr=8e-5
+
+learning scheduler=linear
+
+no warm up step
+
+global batch size=16
+
+
+llama3-8b
+
+
+
+I used the pretrained weights of the reward model which allow two different model responses to be included in the prompt instead of llama3-8b-instruct.
+
+
+used pretrained weight: https://huggingface.co/RLHFlow/pair-preference-model-LLaMA3-8B  
+
+all linear for lora
+
+r=128, lora_alpha=128
+
+epoch=1
+
+lr=5e-5
+
+learning scheduler=linear
+
+no warm up step
+
+global batch size=16
+
+
+Inference Tips
+
+
+
+Due to notebook time constraints, it was difficult to infer two gemma2 models and one llama3 model, so the llama3 model was only inferred for samples with token counts of 512 or less and 1500 or more.
+
+For speedup
+
+
+use 8bit quantization model instead of 4bit. 
+
+merge_and_unload()
+
+
+In the case of 8-bit quantization, no decrease in score was observed.
+
+Dynamically change batch size based on token length
+
+Comments:
+├─ Chris Deotte (2024-08-13 16:06:13.653000) [+3]
+│  Congratulations @ebinan92 achieving solo gold medal ! 
+│  
+│  What was the learning rate, learning schedule, and epochs for your Llama3-8B? (i.e. lr=2e-5 linear with warmup 1 epoch). And what were the lr...
+  ├─ Ebi (2024-08-14 16:14:02.320000) [+2]
+  │  I added detailed learning parameters.
+├─ Chris Deotte (2024-08-14 18:14:54.040000) [+1]
+│  In #2 when you
+│  
+│  
+│    
+│  Train another gemma2 model with response swap data instead of TTA.
+│  
+│  
+│  Do you train the model with 2x train data? When adding more train data, do you change any hyperparameters li...
+  ├─ Ebi (2024-08-14 18:23:01.270000) [+2]
+  │  No, the number of training data remains the same, and all the parameters are the same. I just swapped the responses in the training data and trained them with different seeds.   (I think it's proba...
+    ├─ Chris Deotte (2024-08-14 18:25:53.427000) [+1]
+    │  Oh, interesting. So you train two Gemma? One with normal data, one with swapped data?
+    │  
+    │  Then what do you do during inference? Do you just infer each once with normal test data without TTA (and ensem...
+    ├─ Ebi (2024-08-14 18:36:18.023000) [+2]
+    │  Oh, interesting. So you train two Gemma? One with normal data, one with swapped data?
+    │  
+    │  
+    │  Yes, that's right.
+    │  
+    │  
+    │    
+    │  Then what do you do during inference? Do you just infer each with normal test data wi...
+├─ Ashwani (2024-08-13 17:27:39.423000) [+1]
+│  Congratulations on your solo gold. 👏
+│  
+│  I also did something similar to you during training and inference, I only missed doing pseudolabelling on chat-1m data ( i guess that costed me).
+│  
+│  I was also s...
+├─ Cody_Null (2024-08-13 15:36:25.553000) [+2]
+│  This is something new to me, could you explain why 8bit quantization instead of 4bit is faster?
+  ├─ Ebi (2024-08-14 18:08:19.267000) [+5]
+  │  As I understand it, when using QLoRA, the original quantized weights for each layer are dequantized during inference and then merged with the adapter weights for calculation.   
+  │  In other words, reg...
+    ├─ Cody_Null (2024-08-14 20:04:13.987000) [+1]
+    │  Ahh wow that is certainly good to know! We probably would have been able to do things a bit differently knowing that! Haha
+├─ ktr (2024-08-13 15:14:44.850000) [+2]
+│  Congratulations on your solo gold.👏
+│  
+│  It'd be great if you could tell me about swap strategies used during training.
+│  
+│  
+│    
+│  Train another gemma2 model with response swap data instead of TTA.
+│  
+│  
+│  For exa...
+  ├─ Ebi (2024-08-13 15:54:22.403000) [+2]
+  │  Rather than randomly swapping, I simply swap response_a and response_b in all the data before training and train a new model.
+  │  My prompt only included one model of the responses in the case of multi...
+    ├─ [deleted] (2024-08-15 01:06:23.690000) [+0]
+    │  [deleted]
+├─ WoNiu666 (2024-08-16 08:37:39.863000) [+0]
+│  hi, i don't know the pseudo label,  is that 0/1 or logic probability?
+  ├─ Ebi (2024-08-17 14:15:47.470000) [+1]
+  │  probability
+├─ Saiyan Warrior (2024-08-14 11:56:59.140000) [+0]
+│  Hi @ebinan92 congrats on solo gold. 
+│  can you give some more detail on  use 8bit quantization model instead of 4bit.?
+  ├─ Ebi (2024-08-14 18:39:09.080000) [+2]
+  │  This simply means training QLoRA with 8bit instead of 4bit.

@@ -1,0 +1,114 @@
+# https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375900
+
+Topic #375900: My incredibly lucky 6th place solution w code
+  Author: Shujun
+  Posted: 2023-01-04 00:43:54.729000
+  Votes: 34  Comments: 23
+
+Somehow I ended up in 6th place, and I can't believe how lucky I am. I started working on this competition with only 4 weeks left and my main idea was to use a rotation and translation equivariant network (e3nn), which I failed to develop into a strong solution on its own. Most of my ensemble comes from public notebooks, I will reference them shortly but in this post I will quickly discuss my e3nn network.
+
+Data
+
+I used the same dataset compiled by the thermonet notebook, so nothing fancy really.
+
+My e3nn network
+
+The good performance of thermonet surprised me a lot, mostly because 3D conv is not rotation equivariant, meaning that if you rotate a protein structure, it would give you different results. Obviously, you would think this would be a problem because we know rotating a protein structure shouldn't change its properties but thermonet actually outperformed my e3nn network on both private and public. However, it could be that my e3nn is simply unoptimized because I've never used it before and don't know how to use it well. 
+
+For convenience, i simply ported most the data pipeline from the themonet notebook but instead of 3D voxel grids I used atom types and xyz coordinates as inputs to e3nn, a euclidean neural network specifically designed to tackle 3D structures with rotation, translation, and permutation equivariance. The rest of my solution is identical to the thermonet notebook.
+
+My code: https://github.com/Shujun-He/Novaenzymes
+
+Some notable specifics of my e3nn:
+
+
+
+I calculate the geometric center of the residue of the mutated position and only take atoms within a certain range (8)
+
+Input node features other than atom types include residue and whether the structure is a mutant structure or wt structure
+
+
+My e3nn used in the final sub scored 0.362/0.346 on private/public.
+
+Ensemble
+
+I ensemble an 8 fold e3nn with the public 0.603 notebook (https://www.kaggle.com/code/oxzplvifi/deletion-specific-ensemble) with 0.8 (public 0.603 notebook)/0.2 (8 fold e3nn) weight. For inference, I use both alphafold structures and rosetta relaxed structures (generated with thermonet codebase) and averaged the predictions.
+
+References
+
+pLDDT, BLOSUM, DeepDDG and DeMaSk procedures are from:
+https://www.kaggle.com/code/dschettler8845/novo-esp-eli5-performant-approaches-lb-0-425
+with additional references:
+https://www.kaggle.com/code/kvigly55/plldt-and-ddg
+https://www.kaggle.com/code/lucasmorin/nesp-changes-eda-and-baseline
+https://www.kaggle.com/code/hengck23/lb0-335-deepdgg-server-benchmark
+Differential pLDDT procedure is from:
+https://www.kaggle.com/code/cdeotte/difference-features-lb-0-600
+with mutation PDB files from:
+https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/361816
+https://www.kaggle.com/datasets/roberthatch/nesp-kvigly-test-mutation-pdbs
+RMSD and SASA from MD simulation procedure:
+https://www.kaggle.com/code/oxzplvifi/rmsd-from-molecular-dynamics
+with the following two MD simulation outputs used:
+https://www.kaggle.com/datasets/oxzplvifi/novozymes-md for SASA measurement
+https://www.kaggle.com/datasets/oxzplvifi/novozymes-md2 for RMSD measurement
+The output files of Rosetta and Thermonet were loaded directly since I am not sure yet if they can be implemented in R:
+https://www.kaggle.com/code/shlomoron/nesp-relaxed-rosetta-scores for Rosetta
+https://www.kaggle.com/code/vslaykovsky/nesp-thermonet-v2 for Thermonet
+
+e3nn github:https://github.com/e3nn/e3nn
+e3nn paper:https://arxiv.org/abs/2207.09453
+
+Comments:
+├─ Tilii (2023-01-05 06:21:03.513000) [+1]
+│  Nicely done! Congratulations on your solo gold and thanks for providing the code.
+  ├─ Shujun (2023-01-05 20:12:24.960000) [+0]
+  │  Thanks! Your discussion posts are very helpful, although there were so many of them and I couldn't keep up at the end haha
+├─ Ravi Ramakrishnan (2023-01-04 03:53:53.043000) [+1]
+│  Thanks to @shujun717 and team for the detailed approach note with these links! 
+│  Congratulations for the result too!! This is well deserved!! Wishing you the best for the future assignments as well!!
+├─ Wei Lu (2023-01-04 02:19:43.083000) [+1]
+│  I also had a submission ensembled with e3nn model. and the private score is 0.542, but I didn't choose it. 😂
+├─ @kaggleqrdl (2023-01-04 00:58:44.093000) [+1]
+│  Congrats!  Thanks for sharing all the code, @shujun717
+├─ Rope on Mars (2023-01-13 17:30:56.247000) [+0]
+│  Wow, you are using spherical harmonics. Reading your paper now!
+├─ Tobias Schopper (2023-01-06 07:55:06.650000) [+0]
+│  I love that you used e3nn!! Awesome to see it perform well.
+├─ Chris Deotte (2023-01-05 15:40:27.463000) [+0]
+│  Congratuations on solo gold, nice job! In your final ensemble of 80% 20% which model had 80%? And what was the public LB score of this final sub?
+  ├─ Shujun (2023-01-05 19:55:54.137000) [+2]
+  │  Thanks Chris! Sorry it wasn't clear in the post. The .603 notebook has 0.8 weight and the 8-fold e3nn has 0.2 weight. The public score is 0.594.
+    ├─ Chris Deotte (2023-01-05 20:00:23.290000) [+2]
+    │  Great job. It took trust to watch the public LB score decrease after adding 20% of your model but still selecting it for your final submission. What gave you confidence in that choice?
+    ├─ Shujun (2023-01-05 20:27:42.693000) [+4]
+    │  Unfortunately, confidence had nothing to with my selection. I simply did not select any submissions and the 0.594 was actually my best public sub (I was testing a lot of e3nn single models exps so ...
+├─ Robert Hatch (2023-01-05 15:17:16.713000) [+0]
+│  Congrats on your solo gold, well done!
+│  
+│  I hadn't looked too deeply into thermonet, I hadn't considered it wasn't rotation equivariant. It makes me wonder if data augmentation on the thermonet noteb...
+  ├─ Shujun (2023-01-05 20:11:04.077000) [+0]
+  │  Thanks Robert. In theory, adding rotational augmentation would be helpful, although a ridiculous amount of augmentation would be needed to provide a similar performance to an equivariant network, t...
+    ├─ Robert Hatch (2023-01-05 21:30:26.377000) [+0]
+    │  Interesting. It's all pretty far outside anything I've studied. 
+    │  
+    │  If there's any benefit to random rotations instead of an equivarient network, it would be in injecting random noise, which might(?)...
+├─ Gary (2023-01-04 07:32:56.743000) [+0]
+│  Congrats
+│  Could you share the public/private scores of e3nn？
+  ├─ Shujun (2023-01-04 18:07:47.803000) [+0]
+  │  Thanks. My e3nn used in the final sub scored 0.362/0.346 on private/public. Added that o the solution as well
+├─ medicine-wave (2023-01-04 06:09:55.850000) [+0]
+│  Congrats and Thanks for your sharing. The score of single e3nn on LB is about?
+  ├─ Shujun (2023-01-04 18:08:55.090000) [+0]
+  │  Thanks. Please see the comment above for my e3nn score
+├─ Iafoss (2023-01-04 06:01:59.073000) [+0]
+│  You got quite lucky to survive after such huge waves, BIG congratulations!
+  ├─ Shujun (2023-01-04 18:08:23.773000) [+0]
+  │  Thanks @iafoss ! Indeed it was quite lucky
+├─ Patrick Chan (2023-01-04 01:38:17.990000) [+0]
+│  Congratulations Shujun and thanks for sharing.
+  ├─ Patrick Chan (2023-01-04 01:40:24.737000) [+0]
+  │  --&gt; I calculate the geometric center of the residue of the mutated position and only take atoms within a certain range (8) - How do you arrive at the range number 8? Thks.
+    ├─ Shujun (2023-01-04 02:05:12.987000) [+0]
+    │  Thanks Patrick. The reason I used 8 is because I started out with 8 due to thermonet using a box of 16x16x16 (16/2=8). I tried some different ranges (e.g. 5, 10, 15) but 8 works the best

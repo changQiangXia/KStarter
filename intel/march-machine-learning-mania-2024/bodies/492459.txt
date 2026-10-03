@@ -1,0 +1,96 @@
+# https://www.kaggle.com/competitions/march-machine-learning-mania-2024/discussion/492459
+
+Topic #492459: 17th place finish - description of my methodology
+  Author: Jeff Sonas
+  Posted: 2024-04-09 16:34:37.513000
+  Votes: 28  Comments: 13
+
+My predictions were based on the Chessmetrics algorithm that I developed about 20-25 years ago for rating chessplayers.  Please forgive the ancient webpage here - it's literally two decades old but still heavily in use in the chess world, among chess historians!  http://chessmetrics.com/cm/CM2/Formulas.asp  
+
+This is an approach that iteratively calculates a team's rating as being equal to their average opponent rating, plus whatever rating advantage/disadvantage is indicated by the team's winning percentage.  In each iteration, you use the rating calculation from the previous iteration for recalculating everyone's average opponent rating, and eventually this converges to a stable simultaneous solution where each team's rating is equal to its "performance rating".
+
+Although basketball only has wins and losses whereas chess also has draws, you can still get better granularity in measuring team performance from a basketball game, because you can look at margin of victory.
+
+The basic idea is that you can map back and forth pretty easily between winning percentage and margin of victory/superiority, so I convert each game result into a "game score" where a 1.0 result means winning by a lot of points, a 0.0 result means losing by a lot of points, and a result slightly above/below 0.5 means a close victory/loss.  This allows a more precise "winning percentage" to be calculated rather than just wins/(wins+losses).  Thus even a dominant undefeated team would not have a true 100% average result because some of their wins were more like a 60% or 70% game score.  But truly dominant teams like UNLV of the early 1990's or UConn's best women teams can still have a "winning percentage" above 95% from this.
+
+And the goal is to have team ratings that can be used in the same way to predict winning percentage, by taking the difference in ratings and converting it to a predicted winning percentage.  This is what I call a "power rating" - a rating that should be able to translate directly into a predicted pointspread just by looking at the difference between two team ratings.
+
+GameScore given PointsScored and PointsAllowed = 1.0 / (1.0 + POWER(10.0, (PointsAllowed - PointsScored)/Interval))
+  and
+PredictedWinPercentage given OwnRating and OppRating = 1.0 / (1.0 + POWER(10.0, (OppRating - OwnRating)/Interval))
+
+In an ideal rating system, you could use the same number for Interval in both of these formulas (in chess ratings, the value of Interval is generally 400 Elo points).  However, it turns out that the ratings you get from this in college basketball seem to not be as good predictors as they might ideally be.  I used an Interval value of 14 for calculating game scores, but using an Interval of 14 for resultant predictions doesn't work so great.  So I actually had to experimentally derive the optimal value of Interval (for predicting) based on their past predictive ability.  I know I should do that with cross-validation but didn't think that this would be particularly overfit, and so I just did it based on retrospective calculation (whatever value would have predicted best in the past seasons).  I hope you will forgive me for calling this "training".  I got pretty different Interval values based on whether I was training with late regular season games or tournament games, and also it was pretty different for men's versus women's.
+
+Generally when I participate in the contest, I don't gamble on individual games or individual teams; I go with one aggressive submission and one conservative submission.  This year, with only two submissions to play with, I instead decided to go with one set of predictions whose Interval hyperparameter values were based on regular season training (8.7 for men and 8.2 for women) and the other whose Interval values were based on NCAA tournament training (10.2 for men and 7.3 for women).  And I didn't really worry about the scoring function; I just predicted as precisely as I could, and hoped that the scoring function would properly reward that.  So I didn't do any "overrides", and I'm not sure I ever have, other than capping the predictions at 95% or 99% or whatever, back when we were using log-loss.
+
+One way to visualize the meaning of an "Interval" is to realize that when you use it for predictions, you get 10/11 (91%) and 1/11 (9%) winning percentages when the difference in team ratings is actually equal to the interval.  So if the men's tournament interval is 10.2, that means a team that is 10.2 points stronger (in terms of their rating advantage over their opponent) has a 91% chance to win, whereas if the women's tournament interval is 7.3, that mean's a team that is 7.3 points stronger has a 91% chance to win.  So for whatever reason, there's fewer upsets in the women's tournament, for comparable differences in team strength.  Maybe it's because of the venue in the first two rounds in the women's tournament (the stronger team tending to be a home team and therefore performing better than ratings would suggest).
+
+I would think that late-season regular season games provide a lot more information than the tournament games do, and so you should preferentially train on those, but for me at least, and for this year at least, once again the tournament-trained hyperparameters worked better than the late-regular-season ones, since the former finished about a dozen spots higher than the latter would have.
+
+So that just leaves the (very important) question of how I actually calculated team ratings.  I did this using the Chessmetrics approach, where for each team you calculate their rating as:
+
+Team Rating = Average Opponents' Rating + (Average Winning Percentage converted to a rating advantage)
+  (although the Average Winning Percentage is actually the average Game Score, not the simple (wins)/(wins+losses) formula.)
+
+You can do this iteratively, so at the start you assume everyone's rating to be the same, then for each iteration you recalculate everyone's rating, and plug in the new ratings during the calculation of your opponents' average rating for the next iteration.  In chess I need to weight older games less, but for college basketball I have found in the past that the seasons are short enough, and different enough, that I just ignore games from previous seasons and treat all games from the current season with equal importance.
+
+Eventually this iterative calculation will converge so that each team's performance rating stabilizes.  It can drift upward or downward forever unless you "calibrate" it by enforcing something at the end of each iteration, like having the average rating always be 75.0 for all teams.
+
+For whatever reason, I have always found (whether it be chess or basketball) that this Chessmetrics approach works best if you add a couple of hypothetical drawn (50%) results against typical opposition.  In fact, I recently convinced the world chess federation (FIDE) to adjust the formula they use for calculating initial player ratings, so that it included two hypothetical draws against a fixed opponent level.  This pulls performances a little closer to that level and regularizes the ratings a bit.  You could view it as reflecting some small level of belief that a typical chessplayer is around 1800 strength or a typical college basketball team is around 75.0 rating.  Here's the article announcing those chess rating changes from earlier this year: https://www.fide.com/news/2831
+
+Of course a big question is, what level of opponent strength should those "fake draws" happen against?  This is actually pretty important, because it can pull entire groups of teams up or down depending on whether you use a fixed opponent level, or teams' average opponent rating strength, or some other thing.  When the calculation is iterative, something that pulls up one team's strength, can ultimately pull their opponents etc. up as well.  In the original Chessmetrics, I did some of the fake draws against a fixed opponent level, and some against the team's average opponent rating level.  You can see that if you fight your way through the ancient webpage design in that first link above.
+
+But a few years ago for this basketball contest, I hit on the idea of using teams' conference strengths for the strength level of these theoretical opponents.
+
+Some years when I want to submit predictions, I actually have time to think hard about my predictions; other years I just have to plug in past approaches and take my chances (because often the data preparation takes up most of my available time).  The 2021 contest organizing was my most challenging experience ever, in terms of time management for these contests.  What I thought was going to be a relatively straightforward preparation of contest data on the evening of Selection Sunday turned into a disaster since there were hundreds of box scores missing from my source, and so I had to type those in manually in order to get full regular season "Detailed Results".  And in fact the post-Selection-Sunday data was delivered an entire day late, and I think I had to stay up all night for like two straight nights, to get all the data into a good state and only be one day late.  So that year, for my last-minute predictions, I basically just plugged in my Chessmetrics ratings using the same approach from the previous contest, and trusted my numbers, since there were probably only a couple of hours until the submission deadline anyway.  
+
+But this year I was looking back at old Chessmetrics ratings, and noticed that my Chessmetrics ratings had Colgate - COLGATE! - ranked #2 among men's teams at the end of the 2021 regular season!  That is ridiculous, of course, but it turns out that in the COVID-truncated 2021 regular season, Colgate had only played a small handful of teams and went almost unbeaten against them.  This is a scenario where it's super-important to get the strength of their opponents correct.  And it doesn't even help very much to use average team strength from their conference, since my untethered calculation had the Patriot league (definitely a below average conference) among the top ten strongest conferences.  It's basically like there was a small group of teams off on a deserted island somewhere, playing basketball against each other, and really hard to assess (just from the games of that year) how good those teams on the island were.
+
+We are also entering a bizarre era of conference realignment, and anything that wants to be based on conference strength will potentially need to be rethought, since teams are shifting around.  For example, conference strengths could be estimated nicely by going back a few years and seeing the conference average team strength over the past five years or so.  But what if your teams in the conference have significantly changed?  So I decided the way I would assess a conference strength, is to go through each TEAM and get a sense of that team's average strength over the five previous years of Chessmetrics ratings, and then assess the current conference strength by the average of that number across all the teams that are CURRENTLY in the conference.
+
+When I took that approach, the Patriot League for 2021 dropped far down to the bottom ten instead of the top ten, which is much more reasonable, and I no longer had 14-seed Colgate advancing deep into the 2021 tournament.  So I felt like I had addressed that problem well, and I just decided to go with two fake draws for each team, against their conference strength estimate.  Without worrying too much about whether "two games" was a good amount.  You can think of it as a win and a loss against their conference's average team, if you prefer.
+
+I didn't really understand why I kept moving up in the leaderboard each round, other than the fact that gambling often doesn't pay off, and I hadn't gambled.  I was surprised I didn't drop down more after South Carolina won the women's final, since I expected a very common gambling strategy would be to pick South Carolina with essentially infinite strength and so they could have 100% chance to win all their games.  I think I dropped from #12 to #14.  Perhaps such people couldn't control their gambling addiction, and chose to gamble elsewhere as well, in hopes of differentiating themselves from the South Carolina fanboys and fangirls.  Fanpeople.
+
+I had the UConn women as the best team in their region, like many others seem to have, but otherwise no huge surprises.  But it was becoming clear as the tournament progresses, that UConn was the best men's team, and I definitely had Purdue stronger, so that's the only game (other than UConn over USC on the women's side) where I really knew who I should be rooting for.  It sure felt weird to be rooting for the UConn women; that's roughly like rooting for the 20th century New York Yankees or modern University of Alabama's football team.  Plus I'm a big Stanford women's basketball fan.  But it was okay this year since UConn had like five players who were out for the year with injuries and so they really were underdogs.  It was actually kind of fun to root for them, for once…
+
+Anyway, this is definitely the best I've ever done in the contest, and the only year I really felt like I had a shot at a great finish.  I don't think I was eligible for prizes because of the contest rules, but it was still fun to be up there for once.  I was #14 going into the final men's game, and figured that would drop down a bunch if UConn won, and probably improve a bit if Purdue won.  Eventually landed at #17.
+
+Comments:
+├─ Amir Bachar (2024-04-09 17:36:49.477000) [+2]
+│  Congrats on your first Silver Medal, hopefully you'll have motivation to continue this competition for many years!
+├─ Robert Hatch (2024-04-09 17:54:50.890000) [+1]
+│  (8.7 for men and 8.2 for women) and the other whose Interval values were based on NCAA tournament training (10.2 for men and 7.3 for women).
+│  
+│  
+│  Here's my preconceived explanation for these numbers:
+│  ...
+  ├─ Jeff Sonas (2024-04-09 18:04:57.290000) [+0]
+  │  If I am understanding you correctly about the persistent luck element, it's the difference between variability in teams' game-to-game performance, versus variability in a rating estimate due to unc...
+    ├─ Punith P N (2024-04-09 18:12:30.193000) [+1]
+    │  Which is why every year there is at-least 1 play in team that advances into the second round. Most successful teams being 2011 VCU team that made it to the final four and 2021 UCLA team which also ...
+    ├─ Robert Hatch (2024-04-09 19:54:36.593000) [+0]
+    │  I'd say that variability in the team's rating element is part of it, but you can separate it further: when you say that I think of variability in their perceived skill compared to a constant actual...
+    ├─ Robert Hatch (2024-04-09 19:57:04.137000) [+0]
+    │  Which is why every year there is at-least 1 play in team that advances into the second round. 
+    │  
+    │  
+    │  I would say that phenomenon is mainly variability in ratings due to uncertainty. 
+    │  
+    │  And a strong Cind...
+    ├─ Ryan Armstrong (2024-04-12 04:05:23.343000) [+0]
+    │  I believe variability in team strength is a powerful predictor and significantly overlooked. My model this year used only regular season data to calculate most likely team ratings (mean and varianc...
+├─ Zach Bradshaw (2024-04-10 01:55:13.630000) [+2]
+│  The 2021 contest organizing was my most challenging experience ever, in terms of time management for these contests. What I thought was going to be a relatively straightforward preparation of conte...
+  ├─ Amir Bachar (2024-04-10 19:28:50.693000) [+0]
+  │  Jeff is a legend in the Chess analytics, I wouldn't say it's without recognition…
+    ├─ Jack Lichtenstein (2024-04-10 22:56:11.897000) [+1]
+    │  He was referring to Jeff manually updating 100s of box scores for the competition as something he did without recognition!
+├─ Good Spellr (2024-04-11 02:13:37.917000) [+0]
+│  Thanks, Jeff for posting your method and for all the work you put into getting the data ready for this competition every year.  
+│  
+│  Also, I enjoyed your appearance on the Perpetual Chess Podcast.  I ...
+├─ mbundy1237 (2024-04-10 05:56:19.630000) [+0]
+│  Cool idea! Always love the cross-use approaches. Congrats!
+├─ Satya Prakash (2024-04-10 16:39:15.770000) [+0]
+│  Thanks for sharing

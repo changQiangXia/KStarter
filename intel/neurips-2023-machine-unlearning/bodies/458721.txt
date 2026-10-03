@@ -1,0 +1,114 @@
+# https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458721
+
+Topic #458721: 2nd place solution
+  Author: fanchuan
+  Posted: 2023-12-01 08:39:29.382000
+  Votes: 35  Comments: 17
+
+At first, thanks to Kaggle for hosting such an interesting competition and every Kagglers. It’s been a truly memorable experience for me, not only because of the active discussion zone, which provides interesting and useful directions for thought and practice, but also because of the meaningful topic of unlearning. I'm surprised to have this chance to introduce my solution here.
+My solution is based on a 2-stage training method, which contains a one epoch forgetting stage on forget dataset and an 8-epoch adversarial fine-tuning stage on both forget dataset and retain dataset. Here are the details:
+
+Overview:
+
+(1). In order to let the model initially forget in the logits space, we optimize the KL-divergence between the output logits and a uniform pseudo label.
+(2). An adversarial fine-tuning stage:  
+Forget Round:
+     Instance-scale SCL(self supervised contrastive learning) could be a beneficial method when facing some unsupervised learning task such as clustering feature embeddings. Self supervised contrastive learning aims to pull the distance between positive samples and their enhanced samples closer, and to push the distance between positive samples and all samples further. In my assumption, we need to let the forget sample as uniform as possible in feature space, which could be seen as pushing the distance between any forget sample and all retain samples further. Hence, I have proposed two kinds of contrastive loss here:
+
+
+
+
+For a forget sample x, use its enhanced version x’ as a positive pair, and use all samples in the retain batch as a negative pair. The final loss formula could be written as this: 
+
+
+
+Each retain sample could have the same probability to be chosen as positive sample with the any forget sample, which means they have the same weight in the formula of the contrastive loss. The final loss formula could be written as this:
+
+I have use second loss function as the final submission version (Because the first loss function performs not as good as the second preliminarily, I give up this idea due to the days limitation). I set temperature coefficient t=1.15 here.
+the forget training round code here:
+
+
+for sample_forget, sample_retain in (forget_loader, retain_ld4fgt):
+    t =  ##temperature coefficient
+    inputs_forget,inputs_retain = sample_forget[],sample_retain[]
+    inputs_forget, inputs_retain = inputs_forget.(DEVICE), inputs_retain.(DEVICE)
+    optimizer_forget.()
+    outputs_forget,outputs_retain = (inputs_forget),(inputs_retain).()
+    loss = (- * nn.(dim=-)(outputs_forget @ outputs_retain.T/t)).() ##weighted CL 
+    ##Loss function
+    loss.()
+    optimizer_forget.()
+
+
+Due to the different steps in forget_loader and retain_loader (here referred to as retain_ld4fgt, a new dataloader for Contrastive Learning), there is an unexpected random shuffle at different checkpoints, which can be viewed as an ensembling method.
+Retain Round:
+      To enhance performance on the retain dataset, fine-tuning it is unavoidable. Here, I just simply retrain the model using cross-entropy loss.
+
+Some useful tricks:
+
+
+
+Actually, because of our competition time limitation, the max epoch could be maximized to 6 when retain batchsize is 64. (This conclusion can be continued to use even for adversarial training because the forget round takes little time compared with the retain round).  "I've tried to add more epochs by increasing the batch size of the retain dataloader and the learning rate. Results show that eight epochs of training with a batch size of 256 performs best on the public leaderboard.
+
+
+2.CosineAnnealingLR could also be useful in forget rounds (Simply adding this, score on public lb increases from 0.084 to 0.091)
+
+Some directions I have not investigated deeply :
+
+
+
+Add more forget rounds in an epoch. For example, to intensify the adversarial stage (as a fiercer confrontation may enhance forgetting performance), adding another forget round could increase the total steps of forgetting.
+
+Replace the first stage with Contrastive learning loss.
+
+
+Conclusion:
+
+During the competition, my thinking went through multiple stages, and each stage had a different understanding of the competition and tasks. In fact, many excellent codes or discussions in the forum have been of great help to me. For example, @Maria Gorinova 's evaluation notebook is an excellent work that help you quickly understand the evaluation metrics. I have also witnessed many vastly different ideas on the forum. I believe that each idea has its own reasons, but the competition scenes are limited and idealized. While high-scoring methods may have limitations in practical scenarios, their underlying innovative approaches are universally applicable. I always look forward to seeing any creative solution.
+
+Solution link:2nd place Solution
+
+Comments:
+├─ Hải Dương Nguyễn (2024-07-20 04:29:30.213000) [+1]
+│  I have 2 questions:
+│  
+│  
+│  
+│  What is the enhanced version x’ in the first loss? How did you generate it?
+│  
+│  In the second loss. Why did you consider retain sample and forget sample as positive sample (usua...
+├─ Sanyog Sharma (2024-01-10 18:03:33.963000) [+1]
+│  what is the enhanced version of the positive pair that you are talking about (are specific pairs are taken retain dataset as enhanced versions)?
+├─ MiHu (2023-12-30 02:09:53.527000) [+1]
+│  wonderful idea！ However, due to the generalization of the model, I believe that the forgotten samples with different labels will not be uniformly distributed in the feature space. Specifically, the...
+  ├─ fanchuan (2023-12-30 02:38:58.857000) [+1]
+  │  Yeah, it's my misexpression. Actually I mean the Uniformity in the whole feature space comes from the denominator part of infoNce loss. (Make clusters stay around instead of a small part of the spa...
+    ├─ MiHu (2023-12-30 02:47:11.817000) [+1]
+    │  I understand what you're saying. In order to increase training stability, I tried to add a new contrastion loss term to your method. This loss term helps samples with different labels in the forget...
+    ├─ fanchuan (2023-12-30 03:03:04.803000) [+1]
+    │  Already read. It's an interesting method. Glad to hear if you make any progress.
+    ├─ MiHu (2024-01-01 02:04:31.717000) [+0]
+    │  I set the loss weight to 0.5 and found that it can reach 0.1049870259 which the original score is
+    │  
+    │  0.1014639103. I hope it will be helpful for you.
+├─ Jaysdon Swift (2023-12-03 10:00:03.600000) [+1]
+│  徐神太强了，徐神牛逼
+├─ Carlos Cui (2023-12-01 12:18:04.983000) [+1]
+│  Congratulations on winning 2nd place in the competition and thanks for sharing your incredible insights👍.
+├─ Maria Gorinova (2023-12-01 11:01:11.883000) [+1]
+│  Congratulations on winning 2nd place; this is a really great approach! Thank you for posting the solution and for the mention - I'm glad the evaluation notebook was helpful 🙏🏽
+├─ fan_mindy (2024-05-30 02:34:07.467000) [+0]
+│  作者你好，我想问一下，我用mock模式跑通了你的代码，随后我检测了每一个checkpoint的遗忘和测试效果，我发现结果非常奇怪，如第一个图所示，随后我查看了一下代码，应该是代码每次都是从mock_model_path处开始学习而非从上一个checkpoint存储模型学习的原因，我改变代码解决了这个问题，然而效果虽然趋势是合理的（遗忘集的准确率在降低）如第二个图所示，但是最终训练效果并不够好...
+├─ fan_mindy (2024-05-26 10:52:20.913000) [+0]
+│  Hello author, I have recently been trying to use machine unlearning against backdoor attacks, but had some problems in replicating your code, I noticed that the code does not seem to have learned f...
+  ├─ yxwwww (2024-06-13 03:45:51.343000) [+0]
+  │  可以加我qq交流一下吗,1950437953
+    ├─ fan_mindy (2024-06-13 13:53:50.237000) [+0]
+    │  找不到这个QQ呀？如果你看到这条消息可以加我的微信：mindy_can，我的方向是AI安全，欢迎和我交流
+  ├─ fanchuan (2024-06-22 07:23:14.360000) [+0]
+  │  It seems you don't review the focus of the whole competition, that may be the reason.
+  │  Actually, machine unlearning is not only focused on forgetting every data from forget dataset. In this competit...
+├─ [deleted] (2023-12-08 12:12:50.203000) [+1]
+│  [deleted]
+├─ [deleted] (2023-12-03 09:59:39.203000) [+0]
+│  [deleted]

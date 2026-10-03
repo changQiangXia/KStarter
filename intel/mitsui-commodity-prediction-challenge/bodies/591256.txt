@@ -1,0 +1,162 @@
+# https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591256
+
+Topic #591256: Clarification Needed: Forecasting Constraints, Label Lags, and Inference Time — Let's Make It Clear for Everyone
+  Author: EL Younes
+  Posted: 2025-07-26 15:11:09.976000
+  Votes: 54  Comments: 24
+
+Hey everyone 👋,
+
+I'm excited to join this competition and put to the test all the experience I’ve gained so far. Unfortunately, in some of the previous quantitative finance competitions, I struggled during the forecasting phase — mainly because the API submission process wasn’t clearly explained. This led to failures or subpar performance in my notebooks, even though I had solid models during training.
+
+That’s why I’m really hoping this competition will be different — clearer, fairer, and more collaborative. I’ve compiled some key questions I believe are crucial not just for me but for many participants, especially those building real-time or hybrid models.
+
+
+
+❓ Forecasting Phase Questions:
+
+
+
+
+424 Targets per Time Step:
+
+
+
+We are expected to predict 424 targets at every time_id.
+→ Is the inference per timestep truly required to be completed in under 1 minute, including data preprocessing, feature engineering, and inference?
+
+
+Train Set Availability:
+
+
+
+During the forecasting phase, will the train set continue to update with each timestep, or will it remain fixed?
+
+Are we allowed to maintain internal state or cache features across timesteps?
+
+
+Label Lags Interpretation:
+
+
+
+The provided label lags (t-1, t-2,t-3, t-4,…) contain missing values.
+→ Should we expect similar missing patterns during forecasting?
+→ How large is the typical gap between the lags and the actual target (in terms of timesteps)?
+
+
+Model Feasibility:
+
+
+
+
+It's very difficult to run 424 separate univariate models within 1 minute per timestep.
+
+
+And can we load models once globally, or must they be loaded fresh within the prediction window?
+
+
+Inference Input Structure:
+
+
+
+During the real inference stage, will we receive a single row at a time, or a batch of rows?
+This impacts whether we can batch our predictions or not.
+
+
+Warm-up Period:
+
+
+
+Will we get a short warm-up period at the beginning of test time to initialize our models?
+
+
+Evaluation Metric:
+
+
+
+Are all 424 targets equally weighted in the final evaluation, or are some targets prioritized?
+
+
+Lag Labels as Real-World Simulation:
+
+
+
+Are the lagged labels designed to simulate delayed real-world signals (e.g., from a reporting system), or are they purely synthetic for model training?
+
+
+
+
+Please, if any organizers or experienced participants have insights, sharing answers to these will help all of us design fair, realistic, and efficient models. Also, if I missed a question you believe is important, feel free to reply here — the more clarity we get now, the better the competition will be for everyone!
+
+Thanks 🙏 and good luck to all participants!
+
+Comments:
+├─ GillesDqn (2025-07-29 06:41:49.960000) [+8]
+│  I have just started to dive in this challenge and, to be honest, I find it worrying that they are not able to explain clearly the target of a prediction!!
+│  
+│  What I understand so far is that for each...
+  ├─ Ogurtsov (2025-07-29 07:13:00.043000) [+0]
+  │  Secondly, let's assume one wins the challenge, giving away your code for USD 20,000 on such a problem is kind of a joke.
+  │  
+  │  
+  │  Win the competition != solve the problem with appropriate quality. 1000 pa...
+    ├─ GillesDqn (2025-07-29 09:22:17.420000) [+0]
+    │  The fine prints are saying that you need to give away your code. Again, if I understood correctly the blurb.
+  ├─ UU (2025-07-31 03:23:00.303000) [+1]
+  │  I feel the same。。。
+  ├─ Chase (2025-09-15 12:27:08.660000) [+0]
+  │  The gap between winning Kaggle and monetizing forecasts in finance is surprisingly large. These firms don't copy/paste your model into their production systems. It's more for validation (or hiring)...
+├─ Ogurtsov (2025-07-28 11:04:13.810000) [+5]
+│  Mitsui Demo Submission answers some of the questions:
+│  
+│  def (
+│      : .DataFrame,
+│      label_lags_1_batch: .DataFrame,
+│      label_lags_2_batch: .DataFrame,
+│      label_lags_3_batch: .DataFrame,
+│      label_...
+  ├─ CarlosAntonioPinzón (2025-08-12 16:16:56.827000) [+0]
+  │  I checked the code of mitsui_gateway.py and the parameters label_lags_1_batch to label_lags_4_batch seem to be the testing data (shown below), which makes sense with what you explained.
+  │  
+  │  But why wo...
+    ├─ Ogurtsov (2025-08-12 16:44:40.863000) [+1]
+    │  You can inspect it manually by running inference example. It's just lag values, one row each https://www.kaggle.com/competitions/mitsui-commodity-prediction-challenge/discussion/591256#3255323
+├─ Ogurtsov (2025-07-28 12:41:25.650000) [+3]
+│  I can imagine only one reasonable way to run predictions:
+│  1) We make prediction today, 28 July 2025.
+│  2) Some history is available, e.g. 90 days including 28 July 2025. Model should be trained to ta...
+├─ chenpengzang (2025-07-28 11:57:11.740000) [+1]
+│  In the predict phase, it seems a single row predict and the input (test) is also single row.
+│  Is it possible to use the row of date_id&lt;current_date_id (time series information)?
+  ├─ Ogurtsov (2025-07-28 12:12:06.583000) [+0]
+  │  Input can't be single row, it should be time series of specified (but currently unknown) length.
+    ├─ chenpengzang (2025-07-28 12:18:47.507000) [+0]
+    │  Thanks Ogurtsov.
+    │  But when I tested locally and submited, what I see is a single row input. (the shape of "test" is (1,…)). and also in the submission demo, it outputs single rows. (predictions = pl...
+    ├─ Ogurtsov (2025-07-28 12:30:01.490000) [+0]
+    │  target_pairs.csv contains lag - The number of days of lag. - different targets should be predicted on different lags. We only need to know the length of time series available for each prediction. N...
+    ├─ chenpengzang (2025-07-28 12:40:15.013000) [+0]
+    │  oh, you can output test (print(test)) in the predict function which shows a one row dataframe.
+    ├─ Ogurtsov (2025-07-28 12:54:18.700000) [+2]
+    │  I recently did it, all function inputs have 0 or 1 row depending on timestamp. Clarification about actual test data shapes is needed. It's not so much sense to predict future by single today's value.
+    ├─ chenpengzang (2025-07-28 13:02:35.860000) [+0]
+    │  Thanks Ogurtsov. 
+    │  I wonder how to generate a ts based features. for example, in the date of date_id==100, feature=LME_AH_Close-LME_AH_Close[-1] where [-1] indicates the the LME_AH_Close in the row ...
+    ├─ Ogurtsov (2025-07-28 13:08:44.410000) [+1]
+    │  All of us are looking for such hints from competition orgs
+    ├─ chenpengzang (2025-07-28 13:14:21.343000) [+0]
+    │  I see.
+    │  Thanks
+    ├─ John (2025-07-29 04:32:35.273000) [+8]
+    │  this competition is poorly designed, there is no mention of which futures contract we consider (3M for LME? monthly for others?), when it rolls (e.g. 3rd Friday of the month or?), we don't have a v...
+    ├─ [deleted] (2025-07-30 02:24:52.273000) [+0]
+    │  [deleted]
+    ├─ ChRiv89 (2025-08-01 02:49:11.377000) [+1]
+    │  sensible approaches to overcoming the 87% of missing data in these columns?
+    ├─ Ravi Ramakrishnan (2025-08-22 11:14:24.170000) [+1]
+    │  Agreed 100% this one is surely not worth any time investment @serorjb
+├─ TF (2025-09-17 01:47:24.790000) [+0]
+│  I want to know those information too. espetially train set availavility. thanks.
+├─ klog (2025-08-10 12:50:13.690000) [+0]
+│  Thanks for the meaningful discussion!
+│  Do you know if the hosts have answered the question about whether we can use historical data (rows before the current date) during the forecasting phase? I cou...

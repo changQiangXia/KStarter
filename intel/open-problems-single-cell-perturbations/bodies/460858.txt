@@ -1,0 +1,604 @@
+# https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460858
+
+Topic #460858: #13: U900 team - PYBOOST is what you need 
+  Author: Alexander Chervov
+  Posted: 2023-12-11 13:58:45.939000
+  Votes: 65  Comments: 5
+
+We would like to express great thanks to Kaggle and the organizers for creating that exciting (and quite difficult) challenge which is devoted to cutting-edge questions in bioinformatics. Research community will surely benefit from that. And great thanks to all participants and those who shared their ideas, notebooks, datasets, insights…
+
+Here is the report on U900 team approach. We follow the guidelines of the report provided by the organizers. The detailed Kaggle-style write-up of the solution is placed in the section 3.2 "Model design. Details" - Kagglers may prefer to jump to that subsection directly. 
+
+Context
+
+Competition Overview:  https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/overview
+Open Problems: https://openproblems.bio/
+
+Table of contents
+
+We follow organizer's guideline:
+
+
+
+Integration of Biological Knowledge
+
+Exploration of the problem
+
+Model design
+
+Robustness
+
+Documentation &amp; code style
+
+Reproducibility
+
+
+Highlights
+
+
+
+Main innovative tool  - new gradient boosting algorithm designed for MULTI-target tasks - PYBOOST - developed by team member A. Vakhrushev. Effectiveness to predict thousands targets  at once - distinguishes it from XGBoost, etc. E.g. aftermath: solo PYBOOST model can achieve private score 0.718 - better than top1 - 0.728.  
+
+Openness and knowledge sharing. Team shared dozens notebooks, posts, datasets during the challenge - obtained: hundreds forks, thousands views, among 10 upvoted code notebooks 4 from the team (in particular top1).  PYBOOST approach has been openly shared,     medal winning solutions incorporate it and as well as all top scored  publicly open solo-models. We also organized and shared on Youtube webinars around the challenge (1,2,3,) (as well as the one in 2022: 1,2… ) - with thousand+ views. 
+
+Not only PYBOOST:  several neural networks, in depth analysis of cross-validation schemes, methods to carefully control the diversity for models ensemble, non-standard approach to ensemble - forms the solution.
+
+Stability: 1) our public and private leaderboard rankings are approximately the same 2) aftermath: correlation between public and private scoring - 0.98. Thus our models are stable and generalize well on unseen data - thanks to careful cross-validation for solo models as well as diversity control of the entire ensemble.
+
+In-depth biological knowledge exploration: we performed and publicly shared standard single-cell pipelines analysis with Scanpy and Seurat, cell cycle analysis,  top upvoted EDA notebook, created, benchmarked and analyzed 1,2 many features like ChemBert, molecular descriptors, Morgan fingerprints, etc…
+
+
+1. Integration of Biological Knowledge
+
+1.1 Did you use the chemical structures in your model?  Did you use other data sources? Which ones, why?
+
+Use of SMILES.
+
+One of our key Neural Networks (see section “Family of Neural Networks based on NLP-like SMILES embedding”)  use encoding for compounds based on their SMILES representation.  It  starts with Text Vectorization followed by Embedding layer and thus learns the embedding from the current data. We extended the training set with SMILES augmentation library, unfortunately - no score uplift.
+
+Use and benchmark Morgan Fingerprints and Molecular Descriptors, ChemBert embeddings.
+
+We encoded compounds by these techniques (Notebook,  Kaggle dataset, EDA1, EDA2 ). Systematically compared these features with other encodings: ChemBert embeddings, pure machine learning encodings: one-hot, Helmert contrast encoding,  Backward Difference. The tables in the notebook show a bit surprising outcome  that the most simple one-hot encoding is the most effective among those. At  least among those encodings - which are  not incorporating targets,  target encoding techniques are more effective - benchmarked separately.(All these notebooks and datasets were openly shared during the challenge).  Final ensemble did not include these models.    
+
+DrugBank
+
+We also analyzed and shared on Kaggle the DrugBank database ( Kaggle dataset ) with the idea - split compounds by similarity groups and use group indicators as additional features for our models. However due to technical reasons (not all challenge compounds found in DrugBank) and lack of time - that was not implemented.  Aftermath: team#43 reported uplift for Pyboost from the  similar idea.
+
+Our other models relied on pure ML technique for encoding compounds and cell types - target encoding. 
+
+1.2 What representation of the single-cell data did you use? Did you reduce genes into modules? Did you learn a gene regulatory network?
+
+Mainly we worked directly with the pseudo-bulk  differential expressions train dataset provided by the organizers ('de_train.parquet').  Various target encoding techniques (see “model design” section) were employed. 
+
+Genes reduction by clustering - helps some models
+
+Two of  our models included the reduction genes into groups. The genes were clustered by K-means into 3 groups based on input train dataset. Features were constructed by target encoding techniques for  each group and neural networks were predicting each group independently. Concatenation was done at the final step. These models are among our top scored solo models (0.569, 0.570) as well as they allowed us to increase diversity in that family of our models.  See e.g. correlations clustermap for that family of models - the two mentioned above are: N3,4 ("3kmeans" in id). 
+
+Use of raw scRNA-seq counts data
+
+Another two our models employed raw single-cell RNA sequencing data. That have been done using aggregation by cell-types and compound the raw counts expressions data, and further PCA and target encoding (see section 6.1. Make-features ).  Thus we created new features which have been used for training the neural networks. These features have been concatenated with the original one - we did not gain the performance, but we gained some diversity and so blend with the original one - brings uplift.   The performance of the original model and the one with raw count features is described in the table  - pre-last raw (MLPv15 TE scaled_counts_features) - public score 0.583 - similar to other models. All the models from that table were averaged gaining score 0.573 and that entered as a component to the final ensemble (described in the next table).  
+
+1.3 How did you integrate the ATAC data? Which representation did you use?
+
+Integration of single cell ATAC data, or any other single cell (e.g. CITE-seq) data can be done by exactly the same scheme as described and utilized above for raw single cell RNA sequencing count data - aggregation, dimensional reduction (PCA), target encoding. We did not have  enough time to explore these models.  
+
+1.4 If adding a particular biological prior didn’t work, how did you judge this and why do you think this failed?
+
+Prior bio-knowledge will always contain a kind of "batch effect" - different type of cells, donors, conditions, technology so on… Batch effect problem is no so solvable or even well-defined because what can be unwanted batch is one situation, is desired biological effect in the other.       During the Open Problems 2022 we studied a lot how to use various biological prior knowledge  - we and colleagues organized a kind crowd-source activity and participants openly shared with community solutions and datasets based on Reactome pathway database,  Protein-protein interaction networks, and so on and so forth. The idea was constructing features based on aggregation by the biologically motivated groups of genes , pre-selecting those which related to targets based on prior knowledge. Followed by modified forward selection addition of these features if the cross-validation scores increases. However the outcomes were less prominent than pure ML approaches by the other teams. It resembles the situation with NLP where key successes of LLM are big models and large datasets - while prior knowledge (linguistic) approaches are not so effective.  As we can see from Open Problems 2021, 2022 and the current  challenges there are always teams on top who rely solely on ML methods. In some sense ML-models extract information from the train data more effectively than our prior knowledge databases. 
+
+2 Exploration of the problem
+
+2.1 Are there some cell types it’s easier to predict across? What about sets of genes?
+
+Myeloid cells are more difficult to predict than B cells for the current challenge.  (Not surprising biologically).
+
+However that is most probably specific to the current dataset.
+That is quite natural from prior knowledge: B-cells and all cell types from the train - are lymphoid cells, while myeloid is different branch of the blood cells e.g. see hematopoiesis. So B-cells are more similar to train cells than myeloid cells and so it is natural  that prediction for B-cells goes better. 
+
+Similar we can see from the data (without prior knowledge):  multiple evidence (e.g. clustermap, umap, etc) leads to the following picture - NK-cells are the most close to test set, and the most close to B-cells rather than to Myeloid cells, T-regs are the next close, while T-cells CD4+ and especially CD8+ least close. So since NK-cells a) are in the train b) closer to B-cells - hence we see translation goes better for B-cells.  If train set would contain other cell type which is close to Myeloid cells - than it would be opposite. By “most close” we mean with respect to the current data, not the prior biological knowledge. 
+
+The analysis comparing predictability of B-cells and Myeloid cells is the following:
+There are 17 samples of each type in the train set - so one can compare local metrics for these samples and see that B-cells are better predicted 
+For test samples we do not have ground truth - but we can compare disagreement between different models predictions  - we see that models quite more often disagree on Myeloid cells rather than on B-cells. See e.g. https://www.kaggle.com/code/antoninadolgorukova/op2-analysis-of-different-models-predictions#-Correlations-between-all-models-included-in-the-final-ensemble  
+
+Genes
+
+The first order of magnitude effect controlling genes predictability   is, of course,   how big are their  values (more precisely how big are the values of their differential expression, since we are working with it)  - bigger values - everything is bigger - prediction errors, variations etc…  
+The interesting question is what are the other effects.  Figures here show the analysis.
+We see that, for each model, especially, Pyboost, there is a subset of genes with big SD and quite low variance, meaning that a model is quite confident in their prediction despite the high variability of DE. Also, each model gives highly variable predictions to a subset of genes with quite low SDs. 
+
+More details on the analysis added in the post and notebook. Some highlights:
+
+
+
+All models are less confident in their predictions for myeloid cells compared to B cells (medians of prediction variability across genes and samples are higher).
+
+However, the highest bias (differences between predicted and true values) and variability of gene expression change predictions are associated with individual drugs rather than cell types.
+
+These drugs are mostly outliers - with the lowest number of cells (≤10 cells), or drugs that affected the cells in such a way that they were misclassified (discovered by  @ambrosm in his Excellent EDA ).
+
+GO enrichment analysis suggests that the hard-to-predict genes are often related to immune cell activities, cytotoxicity, and cell death. Though it might be some artefact. 
+
+
+2.2 Do you have any evidence to suggest how you might develop an ideal training set for cell type translation beyond random sampling of compounds in cell types?
+
+As we understand the question - it is about planning new experiments to cover much higher number of the cell type, comparing to only 6 in the current challenge. With the goal to reduce expansive experiments costs in favor of a cheap computational computational approach. For that question -  the experience of the current challenge  suggests the following: 
+
+Ideally we should take into account similarity distance between the cell types. Having the similarity - the strategy is the standard one - uniformly subsample train set with respect to similarity distance. In other words (simplified a bit): perform clustering of cell types with respect to similarity distance and choose say 1 representative from each cluster - that would be “ideal” training set.  That ensures that every cell type would have a  “neighbor cell type” belonging to the train set which is similar enough to it and so “translation” would go smoothly. 
+
+So the key question - what similarity relation for cell-types to consider.
+
+We suggest: first run a preliminary experiment with SMALL number of drugs but LARGE number of cell-types - which allows to define similarity for cell types as similarity of their response to drugs. And take that similarity relation as a basis. 
+
+Rationale and details  behind that suggestion are the following.  The clustermap of cell-types clearly suggests the relations described above: NK-cells close to B-cells and Myeloid, T-cells CD8+ are the most distinct, and the key points are the following:
+
+
+
+That similarity   is consistent with models results. So: it is defined without any modeling, but  models “respects” it:   e.g. exclude T-cells CD8+ often improves modeling quality - and that corresponds to the fact CD8+ cells are the most different from the others on the clustermap; NK-cells is the best validation fold for some models like Pyboost, etc. - and that corresponds to the fact that NK-cells most close to B-cells and Myeloid cells on the clustermap
+
+It is not evident from the prior biological knowledge. 
+
+
+So it would be much more cost effective to define the similarity between cell types based on some prior biological knowledge (e.g. just the distance in some umap space for some atlas scale single cell dataset). But experience of the current challenge makes us doubt that such  similarity would perform well on drug response tasks. 
+
+If experiments are planned “one by one”, but not “all at once”, it is worth considering “active learning” strategy - analyzing results after each step, and  choosing for the next step of experiment those cell types which are in the worst predicted clusters.    
+
+3 Model design.
+
+We split that section into two parts the first one is devoted to answers to organizer's questions. The second part is detailed write-up of the solution - Kaggler's may prefer to jump directly to the subsection 3.2
+
+3.1 Answers to organizer's questions
+
+3.1.1 Is there certain technical innovation in your model that you believe represents a step-change in the field?
+
+PYBOOST - a new innovative gradient boosting tool
+
+Which is developed for MULTI-target tasks by team member A. Vakhrushev - we believe an important step-change in a field. It is well-known that for tabular data with SINGLE target gradient boosting (XGBoost, LightGBM, CatBoost) are the top performers - showing better result than e.g. Random Forest, SVR, etc. and even  Neural Networks (neural works are best performing on images, audio, text - some kind of continuous, not tabular data). However these packages are not so effective when one needs to predict many targets simultaneously. PYBOOST resolves that issue providing an effective strategy to predict even thousands of targets at once by a gradient boosting approach. 
+
+The innovative features of the PYBOOST consists of two parts: strictly-Pyboost - which is software library and the SketchBoost - which is algorithmic innovation which improves algorithmic part of gradient boosting on multi-target tasks. (But for brevity by PYBOOST we typically mean both parts). The software part - strictly-Pyboost - is software library which allows the efficient realization of the complicated boosting algorithms directly in Python utilizing GPU, that means we can write easy to deal Python code, but it will be almost as efficient as low level optimized C-code - because of utilizing the GPU. The second part is algorithmic innovation - "Sketchboost" - provides new strategy to speed up tree structure search in multioutput setup by approximating ("sketching") the scoring function used to find optimal splits. Approximation is made by reducing dimensions of the gradient and hessian matrices while keep other boosting steps without change, thus enables crucial speed-up for the main bottleneck in boosting algorithm.
+
+For more details we refer to the paper, and the webinar. 
+
+We openly shared the PYBOOST approach with the community during the challenge  Notebook, Post.  It gained hundred forks, becoming component of gold-zone solutions as well as other medal winning. Moreover aftermath shows that solo-Pyboost solution combined with ideas by the other teams provides better results than current top1.  Recent top2 solution for the CAFA5 challenge - prediction Gene Ontology terms is also based on Pyboost.  Thus PYBOOST is quite effective for such kind of MULTI-target biological tasks. 
+
+3.1.2 Can you show that top performing methods can be well approximated by a simpler model?
+
+It depends on the meaning of the “simpler”, let us try two variants for that meaning: 
+
+Answer 1. Production ready solution expected  not to lose much compared to huge Kaggle-style ensemble
+
+1) One side of the question seems to be: What is the estimated performance loss between Kaggle-style huge ensembles (not production ready) and production-ready reasonable  solutions ?
+In short - we think the performance loss would NOT be essential - some very rough and pessimistic estimation  can be  - let us say the top gives 0.558, then production ready (with ~2 solo models)  -  0.566, with 3 solo models - 0.563, with 4 solo models 0.559. 
+We also think that appropriate modification of the PYBOOST solution deserves to be considered as the production ready solution, it is high performing, easy to use, maintain and modify. It is typically quite diverse from NN solutions and blend with any NN would uplift the scores. 
+
+But … 
+But it seems we are not ready to give more precise analysis, because -  strange and unusual things happened - just after the competition closure and based on published solutions and write-ups - new combined solutions breaking current top1 appeared (we followed that route - and demonstrated that solo PYBOOST model beats the top1 ). So in some sense we do not know what are the real  “top performing solutions” - almost surely combining approaches we can go quite further. Nevertheless we hope that it would not change the basic answer - the difference between the huge ensembles and production ready solutions is not expected to be essential. 
+
+What seems to be essential - the setup with metric (MRRMSE) and preprocessing (LIMMA log-p-values) is not the perfect way. And so we recommend to update that first -  before making any further conclusions for production choices.  To give some details - it seems  that setup MRRMSE + log-p-values is very sensitive to outliers, and that is the reason why see:  solutions “Nothing but just multiplied a factor of 1.2” , leaderboard super-successful  probing  during the challenge and so on. 
+
+Answer 2
+
+If we understand the question in a slightly different manner: is it possible to approximate top solutions by some conceptually “trivial” ones ? 
+Then the answer is: NO.   It is clear from write-ups that teams incorporate models like Neural Networks, Pyboost, and have non-trivial findings - so we would not call that “trivial”.  Also at the early stage of the competition we have tried more than 50 simple models+feature encodings:  Ridge, SVR, KernelRidge, Catboost, etc…  - but all of them showed results worse than 0.600 - so to break that  barrier one should already do something a bit non-trivial. (The predictions and the analysis were openly shared during the challenge Kaggle dataset link.)
+
+3.1.3 Is your model explainable? How well can you identify what is causing your model to respond to certain inputs?
+
+PYBOOST has feature importance estimation as any other boosting  or Random Forest algorithm. For the Neural Networks we can apply the special techniques like activation maps technique to gain certain interpretation.
+
+3.2 Model design. Details
+
+We constructed diverse models to gain the stability and better performance. Each has been carefully cross-validated. While ensembling we controlled diversity and preferred to rely on the most stable schemes.  The main innovative part of the solution - is PYBOOST - a new gradient boosting algorithm developed by team member (Kaggle grandmaser) Anton Vakhrushev. 
+
+3.2.0 Solution principal components:
+
+1 Family of Pyboost/Catboost models
+2 Family of MLP-like Neural Networks employing target encoding
+3 Family of Neural Networks based on NLP-like SMILES embedding
+4 Analysis of several cross-validation schemes and CV-LB correspondence 
+5 Multi-stage blend scheme with diversity control and  weights equal to 0.5 at each stage
+
+Below we report on each item one by one.  
+
+3.2.1 Family of Pyboost/Catboost models
+
+Here we describe construction of PYBOOST and CatBoost models - both by the same scheme. PYBOOST performs better, but CatBoost is diverse enough and provide uplift in blend.   The code: Pyboost: the basic baseline notebook,  other versions of the PYBOOST are in the notebook. Catboost Notebook , version 64, scores 0.584, 0.776
+
+Highlights:
+
+
+
+PYBOOST “out of box” gives quite good results  (better than “out of box”  our other models), but couple of tricks improves it:
+
+Target Encoding by Quantile 80 - that was found by systematic consideration of all target encoders and all their params
+
+Retraining on several “ALMOST ENTIRE” train subsets - the logic is simple: we have very few samples - so: retrain on entire train set - helps the model,  but we slightly improved it:  generate several “almost entire” train subsets, train on all of them, average the results. Thus we gain from both - larger train sets and diversity. 
+
+CatBoost provides diverse enough solutions from Pyboost, even with less performance it is useful in blend. 
+
+
+Modeling organization:
+
+The core Pyboost and Catboost models are organized as follows (TSVD + TargetEncoder scheme):
+
+
+
+TSVD reduction of targets to say 70 dimensions (components)
+
+Target encoding of cell type and compound by these components 
+
+Train model to predict these components (NOT the original targets). 
+(For PYBOOST - one model predicts all components at once,
+For CatBoost - train 70 models - one for each component - it is time consuming, but feasible)
+
+Predict TSVD components for the test set. And finally  use TSVD-inverse-transform - to obtain original (genes) targets from the predicted components. 
+
+
+The key findings :
+
+Quantile 80 target encoder
+
+brings significant boost in performance e.g. 0.602-&gt;0.586 for Pyboost and CatBoost. Default value - Quantile 50 is significantly worse. That have been found by systematic  consideration of all possible category encoders and all their params. The notebook (openly shared) “Gentle tuner” provides a framework to tune params of the models and encoders together (employing several CV-schemes simultaneously).  First we found that effect for CatBoost (notebook v61 linked figures)  and then employed for PYBOOST.
+
+The subsets for training - critically affect the scores.
+
+Idea - “train on multiple ALMOST ENTIRE train subsets”. 
+Motivation: due to the small number of samples many of our models benefit if we retrain them on the ENTIRE train set (before the submission). But that is not the best way, which is - employ ALMOST ENTIRE train subsets, but  SEVERAL of them :
+I.e. retrain models on 5-10 subsets of the train (each sized  80-99%  of the entire train set) and average the predictions of all these models to get the submission.
+Thus models benefit from both - more information and diversity. 
+The trick uplifts Pyboost from 0.584 to 0.577
+
+Some details.  Let us emphasize one moment - “CV tuning and submit preparation are DIVORCED” in contrast to the usual Kaggle approach. I.e. The whole process is two staged - first one is standard -  we search for optimal params of the model using the cross-validation. At the second stage - submission preparation - we forget about CV folds and generate new training subsets (these “almost entire train” subsets). We train the model  with SAME params (found by CV) on these subsets and average the predictions. It is important that we do not use early stopping - number of trees/epochs was optimized by CV at the first stage and fixed on the second stage. That allows to retrain on (almost) entire train set - impossible with early stopping. So cross-validation and submission preparation are divorced in contrast to the usual Kaggle approach. The strategy works most probably due to  the small sample number. It is employed for boostings and one of our Neural Networks (Target Encoding based). 
+
+Exclude T-cells CD8+
+
+One small improvement 0.586-&gt;0.584 (but stably seen for other variants of the PYBOOST also) - exclude T-cells CD8+ from the training set.
+
+Notes:
+
+Pyboost  outperforms CatBoost about 0.010 for that task in equal setups, but their predictions are diverse enough to get uplift  in blend. 
+
+The standard tuning experiments:
+Tuning the standard params for boostings - number of trees, max depth, learning rate, etc… as well as number of TSVD components - bring uplift from around 0.604 to 0.602 - so not that much crucial as ones above.  We tried a bit PCA/ICA instead but TSVD but got downlifts.  
+
+Comments.
+
+Comment on TSVD-scheme. Employment of TSVD (or PCA, or ICA) reduction of targets is a more or less standard approach to treat mult-target tasks e.g. widely used in Open Problems 2022. Its obvious benefit is simplification - direct prediction of 18211 targets is not feasible for many  models (except NN). Less obvious benefit ( a bit surprisingly):  it often improves the performance, despite seemingly loss of information reducing 18211 targets to say 70. The reason is:  what is lost -  mostly noise, not the useful information and so reduction to say 70 components - kind of denoises the data and helps the model. We also experimented with PCA/ICA, but TSVD seems better for boostings, while for NN we used PCA.  (See our first notebooks for some experiments. And of course, that is not universal -  depends on the data).  
+
+Remark (other models): the TSVD-scheme above can be applied for any model - we experimented a lot with Ridge,SVR, Kernel Ridge, LightGBM, Random Forest, ExtraTrees - but only Pyboost and Catboost showed good results for us. Somehow surprisingly, LightGMB was not effective, despite CatBoost was - typically it is not like that.  See “Gentle tuner”  public notebook.   
+
+Comment (Target Encoders - pay attention to LeaveOneOutEncoder): Target encoding is a standard way to treat  categorical features. The idea is to substitute the category by mean (median, quantile, etc) of target with respect to that category.  There are many modifications of target encoding and they have several parameters: Quantile Encoder (respectively), LeaveOneOutEncoder, CatBoost Encoder, James-Stein Encoder. We made systematic benchmarking of the encoders for that task for many models. As said above Quantile80 Encoder uplifts boostings a lot. We should also note that LeaveOneEncoder deserves special attention - for linear and close to linear (SVR, some Kernel Ridges) it stably outperforms other encoders (tables). For Boostings it is either the second one (after Quantile80) and even the first one (depending on training set configuration e.g. top public Pyboost 0.574 utlized LeaveOneOut and tricky preparation of the train set). 
+
+PS
+
+Not enough time: 
+
+PYBOOST predicting directly 18211 targets , i.e. not predicting TSVD-components followed by tsvd.inverse_transform - but just directly. 
+We did not have enough time to tune  params, out-of-box we got 0.594 notebook - not enough score comparing to our other models, so not included in the final ensemble. On the other hand we checked it is quite diverse from the tsvd-based PYBOOST, so we think it is promising to combine these two approaches. 
+
+We planned to try feature engineering by target encoding not only from TSVD , but from biologically motivated groups of genes, or from most important features  (as grandmaster Silogram did in 2022) but did not have enough time for that.
+
+3.2.2 Family of MLP-like Neural Networks employing target encoding
+
+We developed a Neural Network model which features are:  Target Encoding of PCA components. And then we developed a huge number of variations for that basic model. Key ensemble gained 0.566 and included 8 model variations.  
+The main notebook with models: Notebook MLP with Target Encoding 
+
+Highlights:
+
+
+
+Easy to diversify the basic model  and benefit from the ensemble of the variations - changing augmentation, noise levels, varying features, training subsets, activations etc. - one obtains models with similar performance, but diverse enough to boost the ensemble (blend)
+
+Raw single cell RNA-seq data employed in the same scheme, same can be done for ATAC-seq 
+
+Model is very stable and easy to implement - various changes do not degrade the performance 
+
+Genes clustering into groups is easily employed and boost the performance
+
+Magic (simple) train duplicating trick improved score significantly: 0.600+ -&gt; 0.580+
+
+Training on "almost entire" train subsets boosted 0.580+-&gt; 0.570+; blend boosted to 0.566
+
+
+Modeling organization and details:
+
+
+
+Feature creation: Target Encoding of cell-type and compounds by PCA-components, 100 components considered for both 
+
+Architecture: Multi-layer perceptron with 2 layers (200,256,18211) ; activation: “relu”
+
+Prediction scheme: 18211 targets directly (PCA is used for feature creation, but we do not predict PCA components here - in contrast to Pyboost scheme)
+
+CV scheme: 5-fold cross-validation scheme - folds containing only  leaderboard  drugs are used, split randomly in 5 groups.  
+
+Training/Tuning: loss: MAE; optimizer: AdamW; batch size: 256; max learning rate: 0.01, decayed with weight: wd = 0.5 - one-cycle learning rate strategy lr_one_cycle; epoch number have been tuned and fixed to 20. (Fixed epoch number allows to retrain model on the (almost) entire train set, while early stopping methods forbid that way).
+
+Training/Submit: Retrain model on “almost entire” train subsets (i.e. entire train with exclusion 2-3-10 subsamples)
+
+Magic (simple) train duplicating trick improved score significantly: 0.600+ -&gt; 0.580+
+
+
+The strategy to create variations of the basic model employed the following techniques:
+
+
+
+Changing the training set methods: exclusions of the samples which originate from extremely low numbers (1 or 2) of single cells processed in pseudo-bulk procedure.    
+
+Genes clustering into groups (e.g. 3 groups by K-means); processing each group separately and concatenating the predictions
+
+Augmentation techniques: varying number train duplicates; different noise levels for cell type and compounds; linear combinations of features + targets to create new samples;  
+
+
+Params used during the challenge: notebook version 52.  The precise description of  all 10 variations of the basic model entered in the final submission is here. The diversity analysis of the these variations is here - one can see - some models are quite diverse from the others - correlation score 0.9. 
+
+We employed the same idea training on "almost entire" train subsets as described for PYBOOST above. It boosted scores approximately: 0.580+-&gt; 0.570+. 
+
+3.2.3 Family of Neural Networks based on NLP-like SMILES embedding
+
+We developed several NN models employing direct encoding of SMILES by embedding layer (technique coming from NLP). The key single model achieved 0.574, another quite diverse model entering the final ensemble -  0.587 and the last hours combination achieved 0.571 score - incorporating  pseudo-labeling technique  (not included in the selected blend submit).   These solutions originate from the public one by Kishan Vavdara though substantially reworked from architectural and training points of view uplifting the score from 0.607 (original) to 0.574 and further.
+
+Highlights:
+
+
+
+Lion - new powerful optimizer - outperformed Adam 
+
+Magic (simple) train duplicating trick improved score 0.582 -&gt; 0.574
+
+SMILES encoding by the embedding layer
+
+
+Modeling organization (key 0.574 model):
+
+The main notebook, the submission with 0.574 (0.766 pricate) score is version 11.
+
+
+
+Feature Encoding: SMILES - by Embedding layer, Cell Types - One-hot; both concatenated
+
+Architecture: 5-Layer (1558,512,256, 128, 256, 18211) Perceptron with carefully chosen Batchnorm and Dropout layers positions, activation: “elu”
+
+Preprocessing: Standard Scaler for targets, Add Gaussian Noise for features
+
+Training: Lion optimizer; loss: competition loss - MRRMSE (custom);  5 almost random folds; best (by validation score)  epoch (out of 300)   is restored for each fold - that appears to be quite important
+
+Prediction scheme: 18211 targets directly, (TSVD -  not used at all) 
+
+The trick with duplicating the train for each fold yields 0.582-&gt;0.574 uplift. Similar to our other NN models.  
+
+Tuning: params were optimized by CV
+
+
+The model is defined in notebook section "The model", the next cell contains a figure with the graphical description.
+
+So the model organized as follows: SMILES are encoded via the embedding layer and Cell Type via one-hot; both encodings concatenated; that followed by 5-dense-layers perceptron (1558,512,256, 128, 256, 18211) carefully  interchanged with batchnorm and dropout layers; activation is “elu”. 
+We checked the stability of the model as follows. Rerun it with several times with similar params compare CV scores and submit. We stably observed similar CV scores and moreover LB scores at the range 0.581-0.583 - before adding train duplication trick and 0.574 after. That is quite in contrast to the original model - which has  larger score variance:  0.600 - 0.617 at least (see experiments here ). 
+
+What did not worked well for that version of the NN:
+
+
+
+SMILES augmentation package  
+
+LSTM/CNN architectures, other optimizers, pseudolabeling, dropping out noisy samples. 
+
+The trick to retrain model on the entire train also was not successful for that NN (in contrast to other models) because the epoch number determined by early stopping was different from fold to fold and fixing it to some particular number - degraded the CV-scores and so we did not want to risk employing  the models not having good CV scores. Spent quite a lot efforts to resolve it, but unsuccessful. 
+
+
+That family of models also included other variants:
+
+It yielded 0.587 score in initial version (included in final blend) notebook1, notebook2.  And last hours change yielded 0.571, but not giving significant boost to the entire blend construction (so not included in the chosen submits): 
+
+Highlight:
+
+
+
+The 0.571 versions heavily employed pseudolabeling: https://www.kaggle.com/code/bejeweled/op2-u900-part-of-solution-pytorch-tf-nns
+
+
+The other findings are the following: 
+
+
+
+With the LSTM layer after smile embeddings.
+
+With sigmoidal range activation as the model output.
+
+With multiplication of outputs by coefs.
+
+With pseudolabels from these models blends.
+
+
+PS
+
+What did not work: we spent quite efforts on Neural Network based on one-hot encoding of the compounds, even achieving local CV-uplift, but LB score still appeared to be 0.619 notebook, changing architecture, augmenting train, changing one-hot to similar encodings: Helmert, Backward difference, etc - nothing worked. We got same LB score as in the early version - which is just   average of many random seeds in the simple version of the net from the public: notebook. The original net seems to be quite unstable - public score varies with the seed 0.599 - 0.620, and not so good results on private. 
+
+3.2.4 Analysis of several cross-validation schemes and CV-LB correspondence
+
+Here we describe our approaches to cross-validation, analysis of the CV-LB correspondence.
+More details (tables, figures, etc) can be found in the separate post. 
+
+CV - LB correspondence is quite problematic in the current challenge. Its better understanding would be important for research community future works. Even aftermath writeups analysis seems to reveal that good solution for CV-LB correspondence is not found yet.  During the challenge several logical CV-schemes were proposed - AmbrosM - discussion, notebook or MT's scheme: discussion, notebook.  MT proposes to put in validation SAME CELL-TYPES as on LB, while AmbrosM proposes SAME COMPOUNDS. However even early analysis showed far from perfect correspondence to LB for both schemes.  Note: we developed and openly shared the Python class which conveniently encapsulates these and other CV-schemes.
+
+Here are some our findings:
+
+Highlights
+
+
+
+Local (CV) row-wise correlation score is better  related (0.5)  to LB (mrrmse score) than other metrics 
+
+Local (CV) mrrmse score is near zero correlated with the LB (mrrmse score)  for all CV schemes considered
+
+NK cells local mrrmse is better  correlated to LB ( 0.2+), while for T-cells CD8+ it is negative (-0.1+) 
+
+NK-cells local mrrmse is well related with LB for Pyboost models, but not for other e.g. NN models
+
+Random folds are NOT worse than more logical and sophisticated CV-schemes; and seems preferable for NN models
+
+Public and private LB scores -  highly correlated:  0.98, despite poor CV-LB correspondence
+
+
+So, there seems to be many surprises: despite the LB metric is mrrmse - the best locally related to it - is the OTHER metric - row-wise correlation;  while local mrrmse performs near zero. Another surprise - CV-LB correspondence is poor - while public-private LB is very good - 0.98 correlation. And also it is surprising that random folds performs not worse than more logical schemes.
+
+Further notes/suggestions:
+
+
+
+Models of the same nature/features  - the CV-LB correspondence  somehow  working (not so good but still) for all CV schemes. So strategy can be - tune each particular model by CV, verifying by LB - that what we used. 
+
+The main problem to compare different models - even close models Pyboost and Catboost,  with same public LB scores e.g. 0.584 may show quite different CV score like 0.92 vs 0.89, and even worse for boosting vs NN. So for final blend we decided to rely more on LB score, rather than on CV. 
+
+
+Setup. Potential bias. The analysis is based on more than 50 quite diverse models, still it can be biased by models choice. We see very clearly that local metrics better corresponding to LB are quite dependent on the model/features/etc.
+
+See further analysis in the separate post. 
+
+PS
+
+To complement: here is table (from here) showing correlation of CV and LB for different metrics for a set of SIMILAR models (NN based on target encoding) - we see it is quite high (better for public, less for private):  
+
+
+
+
+metric
+corr_vs_public
+corr_vs_private
+
+
+
+
+MRRMSE
+0.69
+0.39
+
+
+corr_rows
+-0.79
+-0.53
+
+
+corr_cols
+-0.74
+-0.48
+
+
+R2
+-0.64
+-0.42
+
+
+
+
+Pay attention that for models of diverse nature - correlations are much lower, even for that family of models but with bigger modifications of  feature construction - correlations become much lower (see table). (See post  for more details).
+
+3.2.5 Multi-stage blend scheme with diversity control and  weights equal to 0.5 at each stage
+
+Here we describe our approach to ensemble (blend). The more detailed explanations and working code are in the notebook.
+
+Highlights:
+
+
+
+Main problem - absence of good CV - LB correspondence - forbids the usual strategy to choose weights by CV
+
+Solution relies on: how to increase and control diversification; how to avoid overfit-proning choice of weights - a scheme of multi-step blend  with the only weight = 0.5 on each step.
+
+Measure of diversity - average target-wise correlation of predictions
+
+Check by various experiments: models with correlation score 0.8-0.9 - consistently give substantial uplift in blend (about +0.01 - 0.006)
+
+Avoid overfit-proning question: how to choose weights of the models with DIFFERENT scores, by the following scheme:
+
+Core scheme: sequential blend of the models with EQUAL (almost) scores, giving them EQUAL blend weight (=0.5):
+
+step1: LB score 0.575 = 0.5 Pyboost(0.584) + 0.5 Catboost(0.584) 
+
+step2: LB score 0.566 = 0.5 step1 (0.575 ) + 0.5 NN-NLP (0.574)
+
+step3: LB score 0.559 = 0.5 step2 (0.566 ) + 0.5 MLP_TargetEncEnsemble (0.566)
+
+final polishing: 0.558 - blend more Pyboost (0.574,0.577) and NN (0.569,0.570,0.572,0.587) models:
+
+
+Experiments with other blend ideas:
+
+
+
+Different weights for B-cells and Myeloid cells (partially successful)
+
+Tried, but had not enough time to succeeded:
+
+
+Estimate variance and correlations for each target (or each row) of predictions and choose blend weights according to modifications of the classical statistical formula - weights are proportional to variance - bigger variance - less confidence - lower weight in blend
+
+
+4. Robustness
+
+4.1 How robust is your model to variability in the data? Here are some ideas for how you might explore this, but we’re interested in unique ideas too.
+
+The robustness of our models can be advocated e.g. as follows. Our public and private leaderboard ranking is approximately the same, moreover it corresponds to our ranking during last weeks of challenge (ignoring the effect of public-LB-probing notebooks appearing at the end). Aftermath: we computed the correlation between public and private scores of our submits and it is 0.98. So models well generalize on the unseen data. 
+Additionally we performed the following tests for most of our models during the challenge - changed params a bit and made submissions - the variations was always around 0.001-0.002. 
+
+All the models have been optimized by local cross-validation scores and only then submitted to LB, we accepted only those changes which improve both CV and LB. 
+
+4.2 Add small amounts of noise to the input data. What kinds of noise is your model invariant to? Bonus points if the noise is biologically motivated.
+
+Gaussian noise has been included at the feature generation stage for our neural network models. We tested several  values of noise magnitude and chose the optimal values of the noise level. 
+
+5. Documentation &amp; code style
+
+The code is documented in the notebooks.
+The section 3.2 "Model Design -  Details” here  provides quite detailed description of the solution. 
+
+6. Reproducibility
+
+Source code is here available in the notebooks:
+Pyboost: the basic baseline notebook,  other version of the PYBOOST are in the notebook.
+
+Catboost Notebook , version 64, scores 0.584, 0.776
+
+MLP-like Neural Networks employing target encoding Notebook, params used during the challenge: notebook version 52.
+
+Neural Networks based on NLP-like SMILES embedding - the main notebook, the submission with 0.574 (0.766 private) score is version 11.
+
+Blend: Notebook, selected final submit is version 15 - direct link.
+
+Most of our submissions can be found in the Kaggle datasets submits and out-of-fold predictions, Open Problems 2 Submits, etc
+
+Information on all submits with public and private scores is in the file
+
+Our initial PYBOOST notebook has been openly shared and forked about 100 times, being a component of top public solo models as well as  many medal winning solutions - probably the best indication of the reproducibility. 
+
+Concluding remarks
+
+MRRMSE and log-p-values - may not be the perfect choice
+
+The metric mrrmse and preprocessing - log-p-values by Limma - seems to cause certain problems. It seems that combination - mrrmse and log-p-values is too much sensitive to outliers. During the competition - the leaderboard has been probed too easily.  It is also quite unusual appearance of the better than top1 late submits just 1-2 days after the end and medal zone solutions like “Nothing but just multiplied a factor of 1.2”. All that indicates: a) we (as a community) not fully understand the problem b) the metric was not chosen perfectly. We are not fully convinced that the argument that p-values allow to catch difference in distributions, while log-fold change will capture only the difference in averages between distributions - that would be the case for p-values of the concordance criteria like KS or Chi2, but it seems  p-values by Limma capture only the difference in averages. What should be the proper choice of the metric and processing ? - seems to an interesting and important question. 
+
+small number of samples - but sill stable - how to anticipate ?
+
+It seems the small number of  samples was really frightening and prevented participation of many experienced Kagglers at the challenge. Small number of samples typically leads to high instability and shake-up at the end, thus people not willing to invest their time with big chances to be randomly ranked at the end. However, surprisingly,  that seems to have appeared to be  a mistake. There were only moderate changes in ranking for the leaders, aftermath shows quite high correlation 0.98 between public and private leaderboard scoring. So in some sense, a small number of samples was compensated by a large number of targets and overall ensured certain stability. Could be anticipated from the beginning i.e. despite small number of samples overall predictability is quite stable ?
+
+Overall “Open problems” team and Kaggle team are doing great job bringing cutting-edge datasets to community consideration and thus allowing to contribute the cutting-edge scientific research. We are happy to be a part of that activity.
+
+Comments:
+├─ [deleted] (2023-12-13 21:20:47.343000) [+3]
+│  Would it be possible for you to provide me with a link for every submission in blend?
+  ├─ Alexander Chervov (2023-12-14 08:56:47.660000) [+1]
+  │  Thanks for your question ! 
+  │  
+  │  The main submits (in particular those in the final submit) are collected in the Kaggle dataset: https://www.kaggle.com/datasets/alexandervc/open-problems-2-submits-etc
+  │  ...
+├─ [deleted] (2023-12-16 22:17:39.917000) [+1]
+│  Can you please send me the link to Pyboost 0.718 private LB?
+  ├─ Alexander Chervov (2023-12-16 22:36:14.200000) [+1]
+  │  https://www.kaggle.com/code/alexandervc/op2-explore-4th-place-magic
+  │  That is 4-th place Magic applied to AmbrosM Pyboost on t-scores
+├─ Alexander Chervov (2023-12-14 09:11:03.087000) [+2]
+│  To complement the main post:
+│  
+│  Here is PYBOOST/SKETCHBOOST Nips-poster attached (see under the post) and screenshotted:
+│  
+│  
+│  Here is demonstration of speed-up Pyboost achieves comparing to CatBoost, XG...

@@ -1,0 +1,122 @@
+<p>First of all, thanks to competition organizers for hosting this competitions and great teammate(@ryuichigt). And thanks to the great notebooks and discussions, I learned a lot and was able to make it my final solution.</p>
+<h2>Solution Summary</h2>
+<p>The following six models are blended to maximize cv. Each models use MLM, pseudo labeling, AWP, augmentation, and trained 5 out of 10 GroupStratifiedKFolds and all data, built our CV from the resultant 50% train data OOF. Final submit uses some weights of those six (fold 0, 1, 2, 3, 4, all) due to time limitations. <a href="https://www.kaggle.com/code/currypurin/nbme-final-cv-ver2?scriptVersionId=94661636" target="_blank">Notebook</a></p>
+<table>
+<thead>
+<tr>
+<th>exp-num</th>
+<th>Hugging Fase Model</th>
+<th>cv</th>
+<th>PubLB<br>(5/10folds+all)</th>
+<th>PriLB<br>(5/10folds+all)</th>
+<th>final submit<br>used weights</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>107</td>
+<td>deberta-v3-large</td>
+<td>0.8925</td>
+<td>0.8931</td>
+<td>0.8929</td>
+<td>4/10folds+all</td>
+</tr>
+<tr>
+<td>092</td>
+<td>deberta-v2-xlarge</td>
+<td>0.8914</td>
+<td>0.8930</td>
+<td>0.8911</td>
+<td>3/10folds+all</td>
+</tr>
+<tr>
+<td>106</td>
+<td>deberta-large</td>
+<td>0.8913</td>
+<td>0.8922</td>
+<td>0.8925</td>
+<td>2/10folds+all</td>
+</tr>
+<tr>
+<td>102</td>
+<td>deberta-v2-xlarge</td>
+<td>0.8925</td>
+<td>0.8928</td>
+<td>0.8940</td>
+<td>3/10folds+all</td>
+</tr>
+<tr>
+<td>101</td>
+<td>deberta-large</td>
+<td>0.8907</td>
+<td>0.8918</td>
+<td>0.8934</td>
+<td>4/10folds</td>
+</tr>
+<tr>
+<td>104</td>
+<td>deberta-v2-large</td>
+<td>0.8921</td>
+<td>0.8925</td>
+<td>0.8920</td>
+<td>2/10folds+all</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://user-images.githubusercontent.com/24523856/167264854-d4614212-45f3-4f2b-b9b5-0acdf6841515.jpeg" alt="NBME Model PipeLine 003"></p>
+<h2>Things that worked.</h2>
+<ul>
+<li><p>AWP</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook" target="_blank">Feedback Prize 1st Place Great Notebook</a> is very helpful.</li>
+<li>trying several parameters, the following improved the cv<ul>
+<li>adv_lr: 1.0, adv_eps: 0.01</li></ul></li>
+<li>cv increase about 0.002</li>
+<li><a href="https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323095#1777969" target="_blank">my code</a></li></ul></li>
+<li><p><a href="https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/316172" target="_blank">MLM</a></p>
+<ul>
+<li>Pre-training is performed on 'patient_notes.csv' except for the data in 'train.csv'.</li>
+<li>cv increase about 0.002</li></ul></li>
+<li><p>pseudo labeling</p>
+<ul>
+<li>Ratio, pseudo labeling data: 90%, train data: 10%</li>
+<li>soft label<ul>
+<li>In my experiments, soft labels improved cv score better than hard labels.</li>
+<li>We attempted to limit the data used for pseudo labeling, such as those with more than 0.95 predictive value for any one letter, but sampling randomly from the entire data set improved the cv.</li></ul></li></ul></li>
+<li><p>augmentation</p>
+<ul>
+<li>Remove one sentence from the text.</li>
+<li>Probability of augmentation, p=0.2</li>
+<li>cvscore is almost unchanged. However, it seemed to be effective for this task and data, so we adopted it.</li>
+<li>Pseudo-label data did not try augmentation.</li></ul></li>
+<li><p>Auxiliary Target Learning</p>
+<ul>
+<li>Add the beginning and end of the target, respectively. and learn with 3chanel.<ul>
+<li>channel_0: Normal target</li>
+<li>channel_1: start: 1, else: 0</li>
+<li>channel_2: end: 1, else: 0</li></ul></li>
+<li>The cv improvement is slight, but can be used for ensembles(blend) with pseudo labels. (I think taking the average of two pseudo labels would improve the accuracy of the pseudo label.)</li>
+<li>Checking the PrivateLB scores, it appears that this attempt was effective.</li></ul></li>
+</ul>
+<h2>Not worked</h2>
+<ul>
+<li>shuffle augmentation<ul>
+<li>augmentation shuffles sentences, makes cv worse.</li></ul></li>
+<li>label smoothing loss </li>
+<li>clip_grad_norm<ul>
+<li>I tried the following two things, but the cv got worse. Maybe we need to adjust some more parameters.<ul>
+<li>torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1000)</li>
+<li>torch.nn.utils.clip_grad_norm_(self.model.parameters(), 10)</li></ul></li></ul></li>
+</ul>
+<h2>postprocessing</h2>
+<ul>
+<li>Remove leading and trailing spaces.</li>
+<li>this excellent notebook <a href="https://www.kaggle.com/code/junkoda/be-aware-of-white-space-deberta-roberta" target="_blank">Be aware of white space [DeBERTa+RoBERTa]</a>very helpful.</li>
+</ul>
+<h2>cv split</h2>
+<p>Up until midway through the competition, we were using 5fold GroupKFolds. The change from 10folds to GroupStratifiedKFolds has been a huge improvement for our team.</p>
+<h2>Notebook</h2>
+<p>submit: <a href="https://www.kaggle.com/currypurin/nbme-final-submit-currypurin" target="_blank">https://www.kaggle.com/currypurin/nbme-final-submit-currypurin</a><br>
+MLM: <a href="https://www.kaggle.com/code/currypurin/nbme-mlm/" target="_blank">https://www.kaggle.com/code/currypurin/nbme-mlm/</a></p>
+<h2>Edit</h2>
+<p>Edit: cv score added</p>

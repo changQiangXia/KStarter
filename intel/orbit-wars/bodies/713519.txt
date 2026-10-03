@@ -1,0 +1,155 @@
+# https://www.kaggle.com/competitions/orbit-wars/discussion/713519
+
+Topic #713519: FLG's solution: RL + league + short rollout search with custom edge attention
+  Author: flg
+  Posted: 2026-06-24 16:22:32.228000
+  Votes: 38  Comments: 9
+
+First, thanks to Kaggle and bovard for the great comp. Well organized and a fun problem.
+
+Solution overview
+
+
+
+end-to-end RL using self-play and league play in the 4 player variant
+
+separate 2p and 4p models
+
+2.5M params modern transformer
+
+custom "edge"-attention solution that encodes planet A-to-B relations (travel time, ownership changes…)
+
+inference time 2-step rollout search in 2 player only (+30-40 points)
+
+heavy feature engineering inside a C++ extension used via pybind (forward prediction)
+
+forward prediction of each action (will it capture planet? will ownership remain etc)
+
+reimplementation of env in C++ for faster training
+
+support for multiple fleet-share size (fire 100%, 50%) - out of which the agent only used 100% ¯_(ツ)_/¯ 
+
+initialize with small, fast model trained with dense aux. reward, then transfer to larger transformer (big speedup)
+
+
+Features, attention and network
+
+My features use no absolute positions (x/y), no player_ids etc., all inputs are relative. This avoids per-seat special behavior and increases sample efficiency without any data augmentation. 
+Instead of absolute planet coordinates the model receives distances and travel times as part of the A-to-B attention (fire 100% from A to B will travel 7 turns and take the planet, fire 50% will travel 11 turns and fail to conquer etc).
+Players are identified by relative id based on starting location ("clockwise neighbor"…) instead of absolute id.
+
+Only planets are inputs to the net, fleets are handled entirely in forward prediction: there is 23 "arrival" buckets: how many fleets will arrive in 13 turns on this planet, from which player, who will win …
+
+The core of the model is a regular, modern transformer, 4 layers, dim 256, 8 heads, ff_expansion=2, GELU, LayerNorm, custom attention (as above).
+The policy head is an NxN MLP head (fire from A to B) and predicts each of four used fleet share (25%, 50%, 75%, 100%) logits. 
+The input to the head are concat([src_vec, target_vec, edge_vec]), where edge_vec is the same planet-to-planet input used in the attention module.
+Noop is an extra output (NxN+1). Single action selection per actor (source planet).
+
+The value head is a [cls]-style token that uses a Gaussian histogram loss with 51 bins, predicting the agent's win rate.
+
+RL training
+
+The model is trained through self-play (2p and 4p) and league play (4p only). The league is a simple fixed set of previous agents, that I manually updated from time to time.
+Training is done via async PPO and GAE (gamma 0.999 in 2p, 1.0 in 4p, lambda 0.9-0.98 depending on training stage). Reward is just the game outcome.
+
+Other params: bs=1024, lr=1.0e-6..3.0e-5 (early on), ppo_eps=0.2, very light wd, value_coef=0.1..0.3 (gaussian histogram loss!), entropy coef=2e-3, single ppo pass.
+Advantages are normalized with EMA to support comparably smaller batches. PPO clipping is done on the joint action space instead of per actor.
+
+Initially I trained a smaller 2 layer, dim=128 model that played both game modes with a dense capture reward (production delta to opponent mean production, given whenever planet taken/lost).
+This was much faster than the larger model. It learned very quickly and after one week I transferred its knowledge to the new model using teacher KL loss.
+
+Training was single machine two rollout actors (self play and / or league rollout worker). Each worker ran ~24-48 async envs rolled out for 32 steps.
+Learner received partial rollouts via queues and sent weight updates back through queues. Despite much optimization and reimplementing the env in C++ the process was still CPU-bound and SPS ran 800-2000 depending on setup.
+
+Selected models were SWA of 5 checkpoints (roughly 5 GPU-hours). Best were chosen in large all-against-all tournaments imitating Kaggle ratings.
+
+I did all development and the first half of training on my local machine (RTX 3090), for the second half I rented 1xA100. Model is Pytorch-based, the RL loop is implemented from scratch.
+
+Inference
+
+In 4p the model uses its argmax action each turn. In 2p due to fewer relevant actions and the zero-sum nature of the game a limited search gave a small boost.
+First I implemented CFR over one-step look ahead search. The agent and opponent sampled say 5 actions, stepped the env 5x5 times and evaluated the resulting state. Then I solved the restricted matrix game.
+This gave a modest boost but the evaluation were noisy with such a short rollout. 
+
+A less theoretically sound but well-working solution was greedy 2-step rollouts: the agent samples 5 actions for itself and evaluates these
+against the opponents argmax action, the resulting state is stepped once more with argmax of both players for a narrow 2-step prediction. This method worked a lot better even though optimizing against just one action seems limited.
+From what I could tell it worked mostly by avoiding short-sighted mistakes, firing at an untaken planet that you barely beat just to have the opponent react to your action by easily taking it from you after the narrow takeover.
+
+Using more principled monte-carlo rollouts with CFR worked really well when testing but it needed too many samples in my testings that I couldn't do on the Kaggle VMs.
+
+What worked and what didn't
+
+Worked:
+
+
+
+only relative inputs + custom "edge" attention was a massive gain, no more different WRs based on player starting position, very smooth training
+
+Gaussian histogram loss, a lot more stable training than earlier MSE, and switching from say 0.99 to 1.0 gamma caused no instability and went smoothly; choosing bins and sigma_ratio is critical though
+
+early termination of won games: if one player has 95% of ships and all planets, cancel the game (give full future rewards); this can shave off ~30 turns of matches lasting 170 turns, big boost
+
+league play stabilized 4p model, self-play-only had huge weaknesses when weaker opponents were in a game as it was not used to those
+
+forward prediction / heavy features: the model doesn't have to deal with any fleet entities and gets all future planet ownerships as inputs: the model could easily time shots very precisely early on in training
+
+
+Didn't work well / improvements:
+
+
+
+firing less than 100%: I spent a lot of effort on the features and forward prediction for fire actions but it did not improve gameplay at all
+
+compute, the 2p model still improves linearly at the end of the competition with no slowdown, could have been a lot better
+
+in 4p my model was too weak esp. when weaker agents were in the game, the pool of opponents probably wasn't wide enough, having different agent branches or specific agents like exploiters might have helped a lot (but compute costs)
+
+value net predictions in 4p were noisy / swingy when combining league play and self-play naively; a much better implementation was possible (e.g passing agent ids to the vnet to better predict outcomes)
+
+search in 4p: large gains locally but weaker on the LB; my model's prediction of opponent's move options are too imprecise it seems; or the 4p joint action space might also simply be too large
+
+
+Competition improvements
+
+
+
+Compute costs: some recent competitions and first writeups on this one have people training on 8xH100 or even 16xH100 for longer periods, sometimes with institution and company access.
+It seems impossible to compete with that. RL tasks like this just scale well with compute. Some academic competitions have requirements like "Solution must be reproducible in 500 A100 hours." Something like that could avoid a cost race and would also help finding better solutions.
+
+Evaluating 4p and 2p through a single score with uneven matchmaking seems not ideal. Separate scores might have been better and less noisy.
+
+VMs please make inference machine performance more predictable :)
+
+
+Thanks and good luck all.
+
+Source
+
+Comments:
+├─ WOOSUNG YOON (2026-06-25 12:46:58.530000) [+1]
+│  Thanks for sharing the detailed writeup.  😄
+│  I found your points about self-play weaknesses, league play, and the need for a wider opponent pool especially interesting. 
+│  
+│  I had one issue during the ...
+  ├─ flg (2026-06-25 13:35:11.893000) [+1]
+  │  For 4p with the default env reward this is optimal behavior. Winning gets a reward of [1, -1, -1, -1] (player_0 wins) and a 4-way draw gets [1, 1, 1, 1]. The expected return is negative for anythin...
+├─ Billy Bradley (2026-06-24 22:59:59.070000) [+1]
+│  Great job! Could you tell me more about how you encode the relative features in the self attention mechanism?
+  ├─ flg (2026-06-25 14:12:35.533000) [+0]
+  │  Sure, thanks! For each travel edge (from planet A to planet B) I calculate a feature vector containing travel time, fire angle, info about where the intercept will happen, will it capture the plane...
+    ├─ Billy Bradley (2026-06-25 14:19:50.523000) [+0]
+    │  Fascinating idea, thanks!
+    ├─ Nicolai Karcher (2026-06-25 14:54:19.430000) [+0]
+    │  Could I follow up on that with a question? Does this mean you only ever computed these cross-planet attentions for a single (known) fleet size? Because if fleet size is not known at this step, trav...
+├─ CPMP (2026-06-24 16:40:47.967000) [+1]
+│  Very interesting. I tried a small Monte =Carlo rollout at inference but did not have enough subs to test it. Glad you tried and have it work.
+│  
+│  There is a lot more in your solution, I'll read it aga...
+  ├─ flg (2026-06-25 13:39:13.537000) [+0]
+  │  Thanks and congrats to your agent, 2 weeks is impressive!
+  │  
+  │  The value of the rollout depended a lot on how similar the agent is to its opponents, could cover too little of the action space on the Ka...
+├─ Timme (2026-06-25 15:15:47.043000) [+0]
+│  Thanks a lot for the writeup, this was super useful.
+│  
+│  One thing I wanted to pick your brain on: you mentioned early termination for clearly won games. We tried a related but probably much noisier i...

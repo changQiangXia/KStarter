@@ -1,0 +1,432 @@
+<p>Many thanks to NVIDIA and the Kaggle staff for organizing the Nemotron Model Reasoning Challenge, and congratulations to everyone who placed. This was a great competition to work on, and I learned a lot from building a fully deterministic data pipeline around a single base model.</p>
+<hr>
+<h2>Overview</h2>
+<p>Our solution was based on deterministic program-generated reasoning traces rather than LLM distillation. For each task category, we built symbolic reasoners that derive answers from the prompt alone, then fine-tuned a single base model to imitate those reasoning procedures.</p>
+<ul>
+<li><p><strong>Method</strong></p>
+<ul>
+<li>Program-based deterministic reasoners generate Chain-of-Thought (CoT) traces for synthetic problems across 9 task categories.</li>
+<li>Each reasoner re-derives the answer from the prompt alone. It never reads the ground-truth answer and emits a step-by-step CoT ending in <code>\boxed{answer}</code>.</li>
+<li>We then SFT a single base model with LoRA on those traces so it learns the reasoning procedure, not just the answer.</li></ul></li>
+<li><p><strong>Base model</strong></p>
+<ul>
+<li><code>nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16</code>
+30B Mixture-of-Experts, approximately 3B active parameters.</li></ul></li>
+<li><p><strong>Scores</strong></p>
+<ul>
+<li>Public LB: <code>0.860</code></li>
+<li>Private LB: <code>0.880</code></li>
+<li>Placement: <code>10th</code></li></ul></li>
+</ul>
+<p>The main lesson was that the final score was mostly limited by the quality and coverage of the deterministic teachers. Once the traces were clean, compact, and consistent, the model could imitate them surprisingly well.</p>
+<hr>
+<h2>Core idea — Synthetic data + procedure learning</h2>
+<p>Each category has a program-based deterministic reasoner that re-derives the answer from the prompt alone. The stored answer is never used during trace generation. The generated trace explains the procedure step by step and ends with <code>\boxed{answer}</code>.</p>
+<p>The corpus tokenizes each example with the chat template, masks the prompt tokens with <code>mask=0</code>, and trains only on the completion tokens with <code>mask=1</code>. This lets the LoRA adapter learn the generated reasoning procedure rather than only the final answer.</p>
+<p>A useful working assumption was that, given clean and consistent traces, SFT could imitate the teacher reasoner closely. Therefore, validation accuracy was largely bounded by the reasoner's own oracle accuracy. The main lever was improving the coverage and learnability of the generated traces, rather than relying on SFT hyperparameter tricks.</p>
+<hr>
+<h2>Oracle coverage by category</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Found</th>
+<th>Total</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit_manipulation</td>
+<td>1582</td>
+<td>1602</td>
+<td>98.8%</td>
+</tr>
+<tr>
+<td>cipher</td>
+<td>1576</td>
+<td>1576</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>cryptarithm_deduce</td>
+<td>59</td>
+<td>659</td>
+<td>9.0%</td>
+</tr>
+<tr>
+<td>cryptarithm_guess</td>
+<td>13</td>
+<td>164</td>
+<td>7.9%</td>
+</tr>
+<tr>
+<td>equation_numeric_deduce</td>
+<td>555</td>
+<td>596</td>
+<td>93.1%</td>
+</tr>
+<tr>
+<td>equation_numeric_guess</td>
+<td>56</td>
+<td>136</td>
+<td>41.2%</td>
+</tr>
+<tr>
+<td>gravity</td>
+<td>1597</td>
+<td>1597</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>numeral</td>
+<td>1576</td>
+<td>1576</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>unit_conversion</td>
+<td>1594</td>
+<td>1594</td>
+<td>100.0%</td>
+</tr>
+<tr>
+<td>TOTAL</td>
+<td>8608</td>
+<td>9500</td>
+<td>90.6%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Main reasoner improvements</h2>
+<p>The largest gain came from <code>bit_manipulation</code>, where the reasoner was rewritten to match the true task structure more closely. A smaller but important improvement came from <code>equation_numeric</code>, where candidate ordering and unseen-operator guessing were improved using corpus statistics.</p>
+<hr>
+<h2>bit_manipulation trace update</h2>
+<p>The main reasoner change in this solution was to rewrite the <code>bit_manipulation</code> generator from a per-bit logical-operation matcher into a rotate/shift key-table reasoner.</p>
+<p>This improved reasoner oracle accuracy from <code>1364/1602 = 85.14%</code> to <code>1582/1602 = 98.75%</code>, while replacing long, loop-prone traces with shorter derivations that were easier for the model to copy.</p>
+<h3>Background</h3>
+<p>The original generator modeled every output bit as a logical operation over fixed input columns. For each output column, it searched candidate families such as <code>Identity</code>, <code>NOT</code>, <code>constant 0</code>, <code>constant 1</code>, <code>AND</code>, <code>OR</code>, <code>XOR</code>, <code>AND-NOT</code>, <code>OR-NOT</code>, and <code>XOR-NOT</code>.</p>
+<p>It then found operand pairs whose columns reproduced the output, built left and right stride runs, truncated them to eight bits, and filled the middle slots by a category vote.</p>
+<p>This representation did not match the actual task structure well. The underlying transform was a rotate-and-shift composition rather than arbitrary per-bit boolean logic over fixed columns. As a result, many problems could not be expressed well by the old family search, which limited the oracle ceiling to <code>1364/1602 = 85.14%</code>.</p>
+<p>The traces were also long and enumeration-heavy, with repeated <code>Left</code>, <code>Right</code>, <code>Best</code>, <code>Truncated</code>, <code>Tentative</code>, <code>Preferred</code>, and <code>Matched</code> sections. These traces were difficult for the model to imitate reliably and sometimes encouraged runaway generation loops.</p>
+<h3>Key-table reasoner</h3>
+<p>The reasoner was redesigned around the rule that generates the data:</p>
+<pre><code>out[i] = F(rotl(x, a)[i], shl(x, b)[i], shr(x, c)[i])
+</code></pre>
+<p>Here:</p>
+<ul>
+<li><code>rotl</code> is the input rotated left by <code>a</code>, where <code>a</code> ranges from 0 to 7.</li>
+<li><code>shl</code> is the input shifted left by <code>b</code>, where <code>b</code> ranges from 1 to 7 with zero fill.</li>
+<li><code>shr</code> is the input shifted right by <code>c</code>, where <code>c</code> ranges from 1 to 7 with zero fill.</li>
+<li><code>F</code> is a shared 3-input boolean function used for every bit.</li>
+</ul>
+<p>Instead of naming <code>F</code>, the reasoner reads it from the examples as a key table that maps each 3-bit key to an output bit.</p>
+<p>The offsets <code>(a, b, c)</code> are recovered from boundary bits where one operand is forced to zero. At bit 0, <code>shr = 0</code>; at bit 7, <code>shl = 0</code>. Therefore, each boundary output column must be a function of only two input columns. Scanning single columns and column pairs at these boundaries constrains <code>(a, b)</code> from bit 0 and <code>(a, c)</code> from bit 7.</p>
+<p>Each surviving candidate <code>(a, b, c)</code> is then verified against every example. The reasoner accumulates the key table example by example and rejects a candidate as soon as a conflict appears. The first candidate whose table covers all keys needed for the question is selected.</p>
+<p>Ties and uncovered keys fall back to agreement, where the same prediction must appear twice and unknown values are filled with 1, or to a per-bit majority vote. The stored answer is never used during this process.</p>
+<h3>Trace efficiency</h3>
+<p>The trace was shortened without changing any answers.</p>
+<p>Redundant per-example bit echoes were removed because verification only needs the transposed columns. The candidate <code>List:</code> enumeration was also removed, since it was the largest source of long traces and often caused runaway generation loops. The candidate walk now iterates the set directly.</p>
+<p>Additional boundary scans for bits 1 and 6, then bits 2 and 5, are only run when the candidate set is large. This is gated by a count threshold of <code>_THRESH = 24</code>.</p>
+<p>Keys are rendered compactly in <code>key&gt;value</code> form.</p>
+<h3>Remaining oracle failures</h3>
+<p>The reasoner still fails on <code>20/1602</code> problems.</p>
+<p>All 20 problems are expressible within the rotate/shift plus key-table family, so there were no failures caused by the rule being outside the reasoner's hypothesis class. The remaining failures come from ambiguity in identifying the rule from the given examples.</p>
+<p>Of these 20 failures, 11 are inherently underdetermined. In these cases, the question requires a 3-bit key that never appears in the examples, leaving a hole in the key table. The reasoner must fill the missing value through fallback logic such as filling with 1 or using a majority vote, but the examples do not contain enough information to determine the answer uniquely.</p>
+<p>The other 9 failures are candidate-selection errors. In these cases, at least one consistent <code>(a, b, c)</code> decomposition gives the correct answer, but multiple decompositions are consistent with the examples. The reasoner's selection order or fallback path chooses a different consistent candidate, leading to the wrong answer.</p>
+<h3>Token budget</h3>
+<p>Not all regenerated traces fit within an 8192-token budget. In total, <code>1578/1602</code> <code>bit_manipulation</code> examples were included, meaning 24 examples were dropped and did not provide training traces.</p>
+<p>These excluded cases were mainly heavy examples with candidate explosion.</p>
+<h3>Result</h3>
+<p>Reasoner oracle accuracy improved from <code>1364/1602 = 85.14%</code> to <code>1582/1602 = 98.75%</code>.</p>
+<p>On the validation subset, the reasoner was oracle-correct on <code>169/169</code> problems without introducing regressions.</p>
+<hr>
+<h2>equation_numeric trace update</h2>
+<p><code>equation_numeric</code> asks the model to recover the rule behind an operator glyph <code>◯</code> in expressions such as:</p>
+<pre><code>a ◯ b = out
+</code></pre>
+<p>The glyph is arbitrary and its meaning changes per problem. There are two subtasks:</p>
+<ul>
+<li><strong>deduce</strong> — the queried glyph appears in the examples.</li>
+<li><strong>guess</strong> — the queried glyph does not appear in the examples.</li>
+</ul>
+<p>Both changes leave the search core untouched:</p>
+<ul>
+<li><code>deduce</code> — reorder which candidates are tried.</li>
+<li><code>guess</code> — improve unseen-operator prediction using corpus statistics.</li>
+</ul>
+<h3>Three corpus observations</h3>
+<p>These observations were verified on the real data.</p>
+<ol>
+<li><p><strong>Operations are frequency-skewed.</strong></p>
+<p><code>add</code>, <code>mul</code>, <code>sub(a-b)</code>, and <code>abs</code> dominate the corpus.</p></li>
+</ol>
+<pre><code>   add        250
+   mul        247
+   sub(a-b)   233
+   abs        159
+</code></pre>
+<p>The glyph <code>-</code> maps to signed subtraction 52% of the time, and <code>sub</code> outnumbers <code>neg-abs</code> by roughly 3:1.</p>
+<p>Therefore, frequent and conventional operations should be tried first.</p>
+<ol>
+<li><p><strong>The wrapper is shared across a whole problem.</strong></p>
+<p>Operand reversal, result reversal, and sign formatting were shared across a whole problem in <code>688/688</code> cases.</p>
+<p>Therefore, solving a single operator can pin the wrapper, which can then be reused for an unseen one.</p></li>
+<li><p><strong>Operations usually do not repeat within a problem.</strong></p>
+<p>Operations did not repeat within a problem in <code>676/688</code> cases.</p>
+<p>Therefore, an unseen operator is most likely an unused operation.</p></li>
+</ol>
+<h3>deduce — fixing the candidate trial order</h3>
+<p>For <code>deduce</code>, the main change was to reorder candidates by frequency and to make <code>-</code> try conventional signed subtraction before absolute difference.</p>
+<p>With a single example, several operations can match at once. In that case, trial order alone decides which operation is accepted.</p>
+<pre><code>Baseline — abs tried first:
+  97-03 = 94:  |97-03| = 94  match   &lt;- accepted
+               97-03   = 94  match   &lt;- also correct, skipped
+  apply 52-99: |52-99| = 47          &lt;- wrong
+
+After — '-' tries subtraction first:
+  97-03 = 94:  97-03   = 94  match   &lt;- accepted
+               |97-03| = 94  match   &lt;- also correct, skipped
+  apply 52-99: 52-99 = -47           &lt;- correct
+</code></pre>
+<p><strong>Result:</strong> <code>deduce</code> oracle improved from <code>541</code> to <code>555</code>, a gain of <code>+14</code>.</p>
+<h3>guess — rebuilding both axes of the guess</h3>
+<p>For <code>guess</code>, the queried glyph does not appear in the examples, so the reasoner must infer both:</p>
+<ol>
+<li>which operation to use;</li>
+<li>which wrapper to apply.</li>
+</ol>
+<p>The output has the form:</p>
+<pre><code>wrapper(op(a, b))
+</code></pre>
+<p>The previous guess reasoner fixed <code>op</code> to absolute difference and only borrowed the wrapper from the most frequent operator. This gave <code>21/136</code> oracle accuracy. We reworked both the operation choice and the wrapper choice.</p>
+<h4>A. Choosing the operation</h4>
+<p>The operation is selected in two steps.</p>
+<ol>
+<li><p>If the glyph has a conventional meaning, use it when available.</p>
+<ul>
+<li><code>+</code> → addition</li>
+<li><code>-</code> → signed subtraction</li>
+<li><code>*</code> → multiplication</li></ul>
+<p>This convention is used only if no seen operator already uses that operation.</p></li>
+<li><p>Otherwise, choose the first unused operation from the candidate trio:</p></li>
+</ol>
+<pre><code>   addition, absolute difference, multiplication
+</code></pre>
+<p>The order follows corpus frequency.</p>
+<p>The difference slot here is unsigned absolute difference. For arbitrary glyphs, the result is almost always non-negative, so the unsigned form gets the sign right more often.</p>
+<h4>B. Choosing the wrapper</h4>
+<p>An unseen operator has zero examples, so its wrapper cannot be derived from itself.</p>
+<p>Using the observation that the wrapper is shared across a whole problem, the seen operator with the most examples is solved in full to pin the wrapper. That wrapper is then reused for the unseen operator.</p>
+<p>Skipping this step often leaves the operation right but the answer shifted, for example <code>4</code> becoming <code>04</code>.</p>
+<h3>Worked examples</h3>
+<table>
+<thead>
+<tr>
+<th>Problem ID</th>
+<th>Query</th>
+<th>Glyph convention</th>
+<th>A seen operator uses</th>
+<th>Chosen op</th>
+<th>New</th>
+<th>Gold</th>
+<th>Baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1c4861e6</code></td>
+<td><code>12*91</code></td>
+<td>multiplication</td>
+<td><code>-</code> = abs diff</td>
+<td><code>mul</code>, convention free</td>
+<td>993</td>
+<td>993</td>
+<td>79 ✗</td>
+</tr>
+<tr>
+<td><code>07aef27f</code></td>
+<td><code>22-84</code></td>
+<td>subtraction</td>
+<td><code>*</code> = multiply+1</td>
+<td><code>sub</code>, convention free</td>
+<td>-62</td>
+<td>-62</td>
+<td>62 ✗</td>
+</tr>
+<tr>
+<td><code>0c0683c3</code></td>
+<td><code>79"59</code></td>
+<td>none</td>
+<td><code>-</code> = abs diff</td>
+<td><code>add</code>, top unused</td>
+<td>138</td>
+<td>138</td>
+<td>20 ✗</td>
+</tr>
+</tbody>
+</table>
+<p>Example of the fallback in step A.2:</p>
+<pre><code>77+42
+</code></pre>
+<p>In this problem, addition and absolute difference are both already in use, so the reasoner chooses multiplication:</p>
+<pre><code>77 × 42 = 3234
+</code></pre>
+<p>This is within 1% of the gold answer, <code>3235</code>.</p>
+<p><strong>Result:</strong> <code>guess</code> oracle improved from <code>21/136</code> to <code>56/136</code>, a gain of <code>+35</code>.</p>
+<hr>
+<h2>Training &amp; hyperparameters</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data scope</td>
+<td>Full training data, no OOF exclusion</td>
+</tr>
+<tr>
+<td>Token filter</td>
+<td>Exclude samples over 8192 tokens</td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>Mix self-priority, y-trap <code>bit_manipulation</code>, and dictionary-search <code>cipher</code> at 2x each</td>
+</tr>
+<tr>
+<td>LoRA rank</td>
+<td>32</td>
+</tr>
+<tr>
+<td>LoRA alpha</td>
+<td>128, so <code>lora_alpha / r = 4</code></td>
+</tr>
+<tr>
+<td>LoRA dropout</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>Target modules</td>
+<td><code>q_proj</code>, <code>k_proj</code>, <code>v_proj</code>, <code>o_proj</code>, <code>in_proj</code>, <code>out_proj</code>, <code>up_proj</code>, <code>down_proj</code></td>
+</tr>
+<tr>
+<td><code>lm_head</code> LoRA</td>
+<td>Enabled. <code>lm_head</code> is added to the target modules above</td>
+</tr>
+<tr>
+<td>max_seq_length</td>
+<td>8192</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>2e-4</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td><code>lr_scheduler_type=linear</code>, <code>warmup_ratio=0.0</code></td>
+</tr>
+<tr>
+<td>Epochs</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Effective batch size</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Sampling</td>
+<td>Stratified sampling</td>
+</tr>
+</tbody>
+</table>
+<p>Priority samples were examples or demos associated with known fragile failure modes. They were duplicated at 2x so the model saw those traces more often without overwhelming the original distribution.</p>
+<hr>
+<h2>Additional techniques</h2>
+<h3>Add low-logprob problems and retrain</h3>
+<p>Low-logprob problems were added or duplicated in the training corpus as priority samples, then SFT was run again.</p>
+<p>This was not just a way to increase data volume. It was a way to re-expose traces that the model tended to forget, or traces where boundary decisions were fragile.</p>
+<p>Demos for failure patterns, such as candidate acceptance/suppression in <code>bit_manipulation</code> and dictionary search in <code>cipher</code>, were mixed in with the same idea. The objective was to repeatedly train the reasoning steps the model was weak at and compress them into a single adapter.</p>
+<h3>Raising the LoRA alpha</h3>
+<p>To make the adapter follow the deterministic CoT more strongly, the final recipe used:</p>
+<pre><code>lora_alpha / r = 4
+</code></pre>
+<p>This improved CV.</p>
+<hr>
+<h2>Validation strategy</h2>
+<h3>Held-out split</h3>
+<p>950 problems were excluded from training and used as a fixed validation set. Accuracy was tracked per category.</p>
+<h3>Oracle ceiling and fidelity</h3>
+<p>Since the model imitates the reasoner, we compared model accuracy against the reasoner's own oracle accuracy and monitored how closely the model reached that ceiling.</p>
+<p>This made it easier to separate two failure modes:</p>
+<ol>
+<li>the reasoner itself produced the wrong answer;</li>
+<li>the model failed to imitate a correct trace.</li>
+</ol>
+<h3>Learnability analysis</h3>
+<p>Per-example and per-epoch log probabilities were used to identify examples and trace steps that were difficult for the model to learn.</p>
+<p>This helped identify fragile traces that should be simplified, duplicated, or converted into targeted demos.</p>
+<h3>Iterative evaluation</h3>
+<p>Each reasoner change was evaluated per category. We checked not only the net score change, but also whether improvements in one area introduced regressions elsewhere.</p>
+<hr>
+<h2>Attempts that did not improve results</h2>
+<h3>Curriculum learning</h3>
+<p>Easy-to-hard staged batching within each epoch was tested using difficulty bands, with noisy or mislabeled examples isolated as the final stage.</p>
+<p>Accuracy and training stability did not change meaningfully, and no clear benefit was observed.</p>
+<h3>Two-stage training</h3>
+<p>Two-stage training was also tested by continuing from an existing adapter and fine-tuning only on targeted failure-mode demos.</p>
+<p>Some local gains appeared, especially for y-trap-style cases, but adding stages tended to redistribute wins and losses rather than produce a robust net gain.</p>
+<p>In the end, mixing the same demos from the start in a single-stage run was more stable, and the extra stage management did not justify itself.</p>
+<h3>3x priority duplication</h3>
+<p>Increasing priority strength to 3x overfit and reduced performance.</p>
+<p>Priority was useful, but too large a multiplier distorted the overall training distribution.</p>
+<h3>Excluding failed or low-confidence reasoner traces</h3>
+<p>We tried excluding traces for incorrect or low-confidence problems because they were expected to negatively affect model learning.</p>
+<p>However, accuracy decreased after removing them. This suggests that learning from failure patterns may also provide useful signal.</p>
+<p>In the code, these low-confidence examples were often represented as <code>rule_unknown</code>: cases where the reasoner could not confidently identify the correct rule but still emitted a fallback trace.</p>
+<h3>Cryptarithm trace update</h3>
+<p>A large reasoner-side effort was made to generate traces not only for <code>concat</code> and <code>rev_concat</code>, but also for <code>add</code>, <code>sub</code>, and <code>mul</code> operations.</p>
+<p>However, because issues such as logical jumps still occurred at a nontrivial rate, the model was not able to learn these traces stably.</p>
+<h3>LoRA merge / model merging</h3>
+<p>Model merging was tested as a way to compress complementary adapters into a single LoRA.</p>
+<p>Both SVD merge and seed soup failed to beat the single best adapter. SVD merge could not extract complementarity within rank 32, and seed soup degraded to the level of the worst member.</p>
+<p>Even when adapters were complementary at the output level, averaging or compressing LoRA weights tended to produce intermediate behavior rather than selecting the strongest behavior from each model.</p>
+<hr>
+<h2>Results</h2>
+<table>
+<thead>
+<tr>
+<th>Run</th>
+<th>Validation</th>
+<th>Public LB</th>
+<th>Private LB</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Best public-LB run</td>
+<td>832/950 = 0.876</td>
+<td>0.872</td>
+<td>0.852</td>
+<td>Validation split, <code>bit_manipulation</code> with 2-input traces</td>
+</tr>
+<tr>
+<td>Best private-LB run</td>
+<td>859/950 = 0.904</td>
+<td>0.860</td>
+<td>0.880</td>
+<td>Full train, <code>bit_manipulation</code> with 3-input traces, training strategies described above</td>
+</tr>
+</tbody>
+</table>
+<p>The final selected run had a lower public score but a higher validation score. It ultimately performed better on the private leaderboard.</p>
+<p>The private split may have contained more difficult <code>bit_manipulation</code> problems, or its distribution may have differed from the public split. In this case, selecting by validation rather than public LB gave the better private result.</p>
+<hr>
+<h2>Takeaways</h2>
+<p>The most important lesson was that, for this competition, improving the deterministic teacher was more valuable than changing SFT hyperparameters.</p>
+<p>Once the traces were clean and compact, the model could imitate them well. The final gains came mainly from matching the reasoner hypothesis class to the true task structure, especially in <code>bit_manipulation</code>, and from using targeted priority samples for fragile reasoning patterns.</p>
+<p>The solution was therefore less about finding a sophisticated training trick and more about building a reliable synthetic teacher: one that was accurate, deterministic, compact, and easy for the model to copy.</p>

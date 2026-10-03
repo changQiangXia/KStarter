@@ -1,0 +1,132 @@
+<p>Thanks to Kaggle and NVIDIA for hosting such a unique competition. </p>
+<h1>Brief summary</h1>
+<p>The key elements of our <strong>2nd public</strong> / <strong>6th private</strong> solutions were:</p>
+<ol>
+<li>Validation strategy.</li>
+<li>Bit-manipulation and cryparithemtic algorithmic solvers.</li>
+<li>Training on a massive synthetic dataset.</li>
+</ol>
+<h1>Overall summary and a training routine</h1>
+<p>We started to build our work on a <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> <a href="https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915" target="_blank">OPP write-up</a>. It was well aligned with our initial understanding of the problem and provided a great baseline with good algorithmic solvers.</p>
+<p>Most of our hypotheses were tested using Unsloth in Kaggle/Google Cloud G4 enviroments. Our standard setup used a 32 BS, 3.5e-4 LR, 32 lora_rank, 32 lora_alpha and 1 epoch. In order to train the adapters much faster in the late stages, we used Tinker.</p>
+<h1>1. Validation scheme</h1>
+<p>Most of the public validation strategies were quite simple — a 10% holdout set consisting of 950 samples was used. However, this is not reliable enough, since even some of the training samples are not learned well with LoRA adapters. Therefore, we decided to use the full training data as validation, effectively increasing the validation set size by x10. In order to do so, we had to create synthetic problems that match the training distribution (see synthetic data section below).</p>
+<h3>Per domain public checks aka LB probing</h3>
+<p>Considering the inference time, the public score distribution, and a common sense, it was natural to assume that the test set consisted of 500 problems split 250/250 between public/private. From that we basically understood that each 0.01 on the LB corresponded to 3 solved problems. So we used -0, -1, -2 notation for our submission scores to track progress more easily.</p>
+<p>250/250 problems is a small sample and the train distirbution could have been skewed a bit between public/private. Moreover, making changes to a single domain CoTs could negatively affect the other domains. That's why it was important to understand per-domain quality of the algorithmic solver / other improvements. We came up with the following procedure:</p>
+<ol>
+<li>For the selected domain, we used algorithmic CoTs.</li>
+<li>For all other domains, we trained the model to output <code>I will ignore this problem\n\boxed{DUMMY}</code> for the input prompt.</li>
+</ol>
+<p>This allowed us to retrieve a pure per-domain signal from the public LB. Below are the results for some bit-manipulation solver tests when using 5k (OPP algorithm) vs 12.6k (ours algorithm) training samples:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F13977249%2F232311383829b6281fda373d4f3a6cca%2Fper-domain.jpg?generation=1781701807078374&amp;alt=media" alt=""></p>
+<h1>2. Algorithmic solvers</h1>
+<p>As mentioned earlier, most of the OPP solvers were already good enough: numeral, unit conversion, gravity, and cipher. We made little to no changes to them. In this write-up, we will focus on the novel bit-manipulation and cryparithmetic / equation numeric solvers.</p>
+<hr>
+<h3>Bit-manipulation solver</h3>
+<p>Through <code>train.csv</code> analysis, we came up with a small set of templates that solve all <code>train.csv</code> problems:</p>
+<pre><code>Formula  Problems solved
+shl      18
+shr      42
+rotr     89
+
+shl XOR shr       368
+rotr AND NOT shl  86
+rotr OR shr       71
+rotr XOR shl      70
+rotr AND shl      54
+rotr OR shl       53
+rotr XOR shr      51
+rotr AND shr      51
+
+(shr OR NOT shl) AND rotr       28 (not used in final sub, small gain)
+(rotr AND NOT shr) XOR NOT shl  20 (not used in final sub, small gain)
+(shl XOR NOT rotr) OR shr       303
+(shl OR shr) AND rotr           143
+
+MAJ(shl, shr, rotr)  54
+CH(shl, shr, rotr)   48
+
+NOT CH(shr, shl AND rotr, shl XOR rotr)  53 (not used in final sub, too much training needed)
+</code></pre>
+<p>Here e.g. shl is applied directly to the input with some nonzero shift.</p>
+<p>For each template, the reasoner iterates over all possible shift values to find the matching formula. An example of our reasoning trace can be found in the attachments (or <a href="https://storage.googleapis.com/kaggle-forum-message-attachments/3474219/45743/bit.txt" target="_blank">here</a>).</p>
+<h3>Results</h3>
+<p>Our final submission reasoner solves 1508 / 1602 problems from train.csv. The LLM solves 1480 train.csv problems after training on lots of synthetic data.</p>
+<h3>Optimizations</h3>
+<ul>
+<li><strong>Skips</strong>. For example, for (shl(x, a) XOR NOT rotr(x, b)) OR shr(x, c)  we can skip iteration over c if (shl(x, a) XOR NOT rotr(x, b)) is less than result (same for AND since both are monotonic).</li>
+<li><strong>Hex</strong>. We trained LLM to do calculations exclusively in hex digits. This includes doing &lt;= in hex. To aid LLM, we first print a cheatsheet with all hex multiplication tables.</li>
+<li>For NOT CH, we developed a unique approach that is learnable and does not take a lot of tokens. Still, it is the hardest formula to check and we did not include it in our final training.</li>
+</ul>
+<hr>
+<h3>Cryparithmetic solver</h3>
+<p>In cryptarithm, we must map each symbol to a digit or an operation. For both cryptarithm and equation_numeric, we used the following set of operations:</p>
+<pre><code>add family         sub family                  mul family          maxmodmin
+------------------------------------------------------------------------------------------------------
+add:    a + b      sub:            a - b       mul:    a * b       max_mod_min: max(a, b) % min(a, b)
+add_p1: a + b + 1  sub_ba:         b - a       mul_p1: a * b + 1
+add_m1: a + b - 1  abs_diff:      |a - b|      mul_m1: a * b - 1
+                   neg_abs_diff: -|a - b|
+</code></pre>
+<p>The algorithm is a depth-first tree search, where depth is a number of fully mapped equations:</p>
+<ol>
+<li>Start with an empty mapping</li>
+<li>Pick a new equation</li>
+<li>Start / continue the search over all unmapped symbols (both digits and operation)</li>
+<li>As soon as symbols are mapped into a correct equation, go to 2</li>
+<li>If no correct mapping is found for current equation, abandon last accepted equation and go to 3.</li>
+<li>If all equations are mapped, try to calculate the answer</li>
+</ol>
+<p>Additionally, we check the possibility of all numbers being inverted. If forward search fails, we start anew the reversed search. Approximately 40% of solved problems are solved in reversed mode.</p>
+<p>A representative example of our reasoning trace can be found in the attachments (or <a href="https://storage.googleapis.com/kaggle-forum-message-attachments/3474219/45742/crypt.txt" target="_blank">here</a>).</p>
+<h3>Results</h3>
+<p>Our best version solves 240 / 654 cryptarithm_deduce problems from train.csv under limit after training on ~100M tokens.</p>
+<p>We also finalized a ligher version that solves 170 problems under limit and poses less threat to other categories. We used this algorithm for the final selected submission (more on that later).</p>
+<h3>Optimizations</h3>
+<ul>
+<li><strong>Operation deduction</strong>. Before the search, we restrict each operation symbol usually 2-3 possible operations based on result lengths, whether result is positive or negative, and the fact that no more than one operation from each family can be in a problem.</li>
+<li><strong>Leading zero</strong>. For first digits in operands and results, we remove zero from the set of possible digits.</li>
+<li><strong>Leading one</strong>. If possible mappings for an operation is reduced to add family only and result is three-digit, we auto deduce the first digit to be 1.</li>
+<li><strong>Equation sorting</strong>. First, we search equations with as few unique unknown digits as possible.</li>
+</ul>
+<hr>
+<h3>Equation numeric solver</h3>
+<p>Same as <code>cryptarithm</code>, but much easier since all digits are known. Solves 550 / 594 <code>equation_numeric_guess</code> problems from <code>train.csv</code>.</p>
+<h1>3. Synthetic data</h1>
+<p>Since our validation scheme did not allow us to use the training data to obtain clean metrics, we focused on creating a synthetic dataset instead.</p>
+<h3>3.1. Cipher, gravity, unit conversion</h3>
+<p>To create synthetic data matching the training distribution, we used the distribution of the number of examples per prompt for all domains. In addition, for each domain specifically, we considered the following:</p>
+<ol>
+<li><p><strong>Gravity and unit conversion</strong>: calculated empirical distribution of example parameters, query parameters, answers. Then, we simply sampled numbers from these distributions.</p></li>
+<li><p><strong>Ciphers</strong>: number of unseen characters, words distribution, sentence structure. </p></li>
+</ol>
+<ul>
+<li>During validation, we found several problematic patterns for our adapters. For example, the following hallucinations occurred quite often:</li>
+</ul>
+<pre><code>*LoRA adapter output*
+
+s-t-u-d-e-n-t-&gt;「sent」
+</code></pre>
+<pre><code>*LoRA adapter output*
+
+c-l-e-v-e-r-&gt;「letter」
+</code></pre>
+<p>To directly mitigate this issue, we created a targeted subset focused on these and other common failure cases. Adding that subset solved that issue.</p>
+<ul>
+<li>One more common failure pattern was a repeatness. We are sure that it is poissble to mitigate this by choosing another algorithmiс solver, but we didn't have time to find a proper one.</li>
+</ul>
+<h3>3.2. Bit manipulation</h3>
+<p>For each formula template, we generate samples with different shift values, number of equations and inputs. For training, we increased rate of complex three-atom problems to learn them better.</p>
+<h3>3.3. Cryparithmetic, equation numeric</h3>
+<p>We collected stats from train.csv on the number of equations, unique digits, unique operations, reversals, etc. Our cryptarithm synthetic generator fixes key properties of a problem (set of operation, reversal) and keeps rerolling digit mappings until the reasoner solves this problem correctly under token limit.</p>
+<h1>Some numbers and final decisions.</h1>
+<p>On the last day of the competition, we trained on two datasets of different sizes.</p>
+<p>We noticed that adding synthetic data for any single domain improved that domain and almost did not hurt the others, except for the bit-manipulation domain. Even small percentage changes in the amount of data for different domains hurt bit-manipulation performance. This trade-off required us to add much more data for the bit-manipulation domain. As a result, 69%/66% of the tokens in both of our final datasets came from bit-manipulation problems.</p>
+<h3>~0.25B tokens 6th private place dataset</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F13977249%2F92630a894b213648011b91a370017e50%2F2nd_best_private.jpg?generation=1781710415393806&amp;alt=media" alt=""></p>
+<p>That was our best CV dataset perfecting gravity, unit conversion, numeral. We also had ~98.5% for cipher, ~92% for bit-manipulation and equation numeric and ~17% for cryparithmetic.</p>
+<h3>~0.5B tokens 2nd-3rd private place dataset</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F13977249%2F9c34e180f7803f213328d927b6f97e4c%2Fbest_private.jpg?generation=1781710407271956&amp;alt=media" alt=""></p>
+<p>This dataset was created to significantly improve amount of solved validaiton cryparithmetic problems. We effectively doubled the number of problems in the cryptarithmetic domain and added some additional gravity/cipher/unit conversion/equation numeric problems. According to our internal calculations, we assumed that we had to double the size of the bit-manipulation domain to keep the same CV score. The number of solved cryptarithmetic train problems increased from 150 to 241, while other domains did not change much. However, our estimate was slightly off, and the bit-manipulation CV score dropped more than expected.</p>
+<p>That is why we decided to use two seeds of the 0.25B adapter above, which cost us 2nd or 3rd place in the final ranking.</p>

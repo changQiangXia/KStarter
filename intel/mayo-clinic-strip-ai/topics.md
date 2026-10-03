@@ -1,0 +1,82 @@
+# mayo-clinic-strip-ai 讨论区（按票数排序，共 80 条）
+
+- [Image Classification Checklist](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335726) — 107 票 / 14 评论 / 2022-07-07 
+- [1st place solution](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357892) — 67 票 / 39 评论 / 2022-10-06 **write-up?**
+- [Greetings from the Center for Augmented Intelligence in Imaging (CAII) of the Department of Radiology, Mayo Clinic, Florida](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335564) — 58 票 / 35 评论 / 2022-07-06 
+- [How I Deal With WSI (Whole Slide Images aka. RAM Crashingly Large Images)](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335976) — 58 票 / 13 评论 / 2022-07-08 
+- [Question to organizers - are we sure there is signal in the data?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336260) — 58 票 / 12 评论 / 2022-07-10 
+- [Mayo Clinic Sliced 1024x1024 JPG Datasets](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335755) — 47 票 / 8 评论 / 2022-07-07 
+- [[placeholder] transformer MIL for WSI](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/337902) — 47 票 / 6 评论 / 2022-07-18 
+- [I became the first person to cross the sample submission.csv](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336819) — 43 票 / 9 评论 / 2022-07-13 
+- [Papers on Image Classification of Stroke Blood 🩸🧐](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335647) — 42 票 / 8 评论 / 2022-07-07 
+- [Mayo Tile Images Dataset [size=1024, N=16]](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/338299) — 40 票 / 24 评论 / 2022-07-20 
+- [All you need is Multiple Instance Learning](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/337651) — 39 票 / 5 评论 / 2022-07-17 
+- [I manually labeled 20.000 images (clot vs. background)](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335996) — 34 票 / 12 评论 / 2022-07-08 
+- [5th Place Solution](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358029) — 33 票 / 11 评论 / 2022-10-06 **write-up?**
+- [Bad data examples](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/338256) — 32 票 / 4 评论 / 2022-07-19 
+- [Congratulations to sample submission!](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357875) — 30 票 / 23 评论 / 2022-10-06 
+- [It was not all randomness ! (maybe) - 5th Place Secret Sauce](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357877) — 29 票 / 9 评论 / 2022-10-06 **write-up?**
+- [How not to waste your only submission a day](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336420) — 28 票 / 4 评论 / 2022-07-11 
+- [LB with more digits?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335761) — 28 票 / 2 评论 / 2022-07-07 
+- [Zoom-In Network - Efficient Classification of Very Large Images with Tiny Objects](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336022) — 26 票 / 4 评论 / 2022-07-09 
+- [Texture Analysis](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/347095) — 26 票 / 18 评论 / 2022-08-22 
+- [2nd place solution - EfficientNetB0+augmentations+smart tiling](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358089) — 25 票 / 14 评论 / 2022-10-07 **write-up?**
+- [25th Solution - Custom MIL with timm backbones](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357898) — 25 票 / 4 评论 / 2022-10-06 **write-up?**
+- [13th Place Solution](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358203) — 24 票 / 6 评论 / 2022-10-07 **write-up?**
+- [what are the signals ????](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/349742) — 23 票 / 5 评论 / 2022-09-02 
+- [CV vs LB thread](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/337309) — 22 票 / 13 评论 / 2022-07-15 
+- [Memes thread 😂](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/339052) — 21 票 / 7 评论 / 2022-07-23 
+- [[Important Resource for everyone] Tiled and cleaned dataset for training](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/353217) — 21 票 / 17 评论 / 2022-09-17 
+- [I'm Finally Done](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357634) — 20 票 / 6 评论 / 2022-10-05 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/333672) — 18 票 / 5 评论 / 2022-06-27 
+- [Previous Image Classification competitions Solutions | Kaggle](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336035) — 18 票 / 3 评论 / 2022-07-09 **write-up?**
+- [Be Cautious – Don't Overfit](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335937) — 18 票 / 6 评论 / 2022-07-08 
+- [4th Place Solution - Split images into tiles and do 3D CNN](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/364466) — 17 票 / 10 评论 / 2022-11-07 **write-up?**
+- [Poor Results from Vision Transformers](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/343665) — 17 票 / 30 评论 / 2022-08-12 
+- [Everyone to use Pyvips! It's very Useful! ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/346013) — 17 票 / 2 评论 / 2022-08-17 
+- [My 1st submission !](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/353340) — 16 票 / 6 评论 / 2022-09-17 
+- [JPG dataset](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336012) — 16 票 / 5 评论 / 2022-07-08 
+- [Good resource on how to deal with .tif format](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335575) — 16 票 / 8 评论 / 2022-07-06 
+- [Mayo: Tiled Dataset](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/350250) — 16 票 / 0 评论 / 2022-09-04 
+- [Winning solutions of previous image classification competitions](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335706) — 16 票 / 0 评论 / 2022-07-07 **write-up?**
+- [Codes | Multi-level Approach for Computer-Aided Detection](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/344187) — 16 票 / 3 评论 / 2022-08-14 
+- [Duplicate areas within images](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336063) — 16 票 / 7 评论 / 2022-07-09 
+- [7th place solution -> 2-step MIL based strategy](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358130) — 15 票 / 9 评论 / 2022-10-08 **write-up?**
+- [3rd place solution - ResNet pretraining](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358187) — 15 票 / 10 评论 / 2022-10-06 **write-up?**
+- [Some of the experiments  and some of the ideas; sincerely hope it can help the players](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/342888) — 15 票 / 12 评论 / 2022-08-09 
+- [CE images are twice the size of LAA images (on average)](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336067) — 15 票 / 2 评论 / 2022-07-09 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/359409) — 14 票 / 0 评论 / 2022-10-12 
+- [Preprocessing Starter Code from Organizers [CAII, Mayo Clinic]](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335758) — 14 票 / 4 评论 / 2022-07-07 
+- [Looking for a Team Thread](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/333671) — 13 票 / 115 评论 / 2022-06-27 
+- [How do we bring 400GB of data?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/343470) — 13 票 / 6 评论 / 2022-08-11 
+- [SeamCarving take long Time. Take my dataset .png about Train Dataset ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/346916) — 13 票 / 2 评论 / 2022-08-22 
+- [Stain Normlization for images taken from different centers](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/339127) — 13 票 / 6 评论 / 2022-07-23 
+- [Research Papers - Articles | Study Materials for Mayo Clinic - STRIP AI](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335849) — 13 票 / 2 评论 / 2022-07-08 
+- [It is not too late to start building a baseline for this competition](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/350119) — 13 票 / 0 评论 / 2022-09-04 
+- [How Do Pathologists Distinguish Blood Clot Origin?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/347133) — 12 票 / 4 评论 / 2022-08-23 
+- [Multiclass ML, Log Loss and AIS (Acute Ischemic Stroke). Dragon Score. ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335787) — 12 票 / 6 评论 / 2022-07-07 
+- [Resources for Multiple Instance Learning (MIL)](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357452) — 12 票 / 6 评论 / 2022-10-04 
+- ["Submission Scoring Error" for you submission](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/337270) — 11 票 / 1 评论 / 2022-07-15 
+- [Simply Resize may lead to an irreversible mistake ! -- About data size and actual observations (see attached picture)   ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/343083) — 11 票 / 9 评论 / 2022-08-10 
+- [Who Will Beat Sample Submission??!??](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336357) — 11 票 / 6 评论 / 2022-07-10 
+- [Build a MONAI based pipeline for this challenge](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/341752) — 11 票 / 1 评论 / 2022-08-04 
+- [Kernels - Notebooks to Explore | Study Materials for Mayo Clinic - STRIP AI](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336071) — 11 票 / 1 评论 / 2022-07-09 
+- [How to handle this kind of large size image data (.tif)?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335739) — 10 票 / 5 评论 / 2022-07-07 
+- [Evaluation Function](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/345905) — 10 票 / 3 评论 / 2022-08-17 
+- [Process images with `pyvips` package and handle the memory limitation issue](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/340052) — 10 票 / 1 评论 / 2022-07-27 
+- [EfficientNet Transfer Learning + Data Augmentation](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/341041) — 10 票 / 8 评论 / 2022-08-01 
+- [a physician's perspective?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358023) — 10 票 / 1 评论 / 2022-10-06 
+- [Sample submission got a bronze medal](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358276) — 10 票 / 1 评论 / 2022-10-07 **write-up?**
+- [Save memory and GPU quota in test time](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/349200) — 9 票 / 1 评论 / 2022-08-31 
+- [References to get started! ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336363) — 9 票 / 2 评论 / 2022-07-10 
+- [Images - the first impressions and what's next](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336109) — 9 票 / 4 评论 / 2022-07-09 
+- ["Notebook Exceeded Allowed Compute" while submission](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/336484) — 9 票 / 26 评论 / 2022-07-11 
+- [Exploratory Data Analysis Visualisation software](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/338190) — 9 票 / 3 评论 / 2022-07-19 
+- [What's wrong with this submission.csv ?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/339590) — 8 票 / 45 评论 / 2022-07-25 
+- [52'nd place - My approach](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358490) — 8 票 / 5 评论 / 2022-10-10 
+- [Question to competition organizer / Mayo staff. Is there differences among the pictures? ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/337811) — 8 票 / 6 评论 / 2022-07-17 
+- [Why do my models have lower performances than sample submission? it's a weird competition](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/354911) — 8 票 / 45 评论 / 2022-09-24 
+- [LeaderBoard Probing strategies](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/335697) — 8 票 / 3 评论 / 2022-07-07 
+- [Can we get more digits now?](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/357895) — 8 票 / 2 评论 / 2022-10-06 
+- [It is taking forever to prepare even first pipeline. ](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/354792) — 7 票 / 1 评论 / 2022-09-23 
+- [How to install libraries without internet](https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/337173) — 7 票 / 7 评论 / 2022-07-14 

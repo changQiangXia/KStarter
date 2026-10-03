@@ -1,0 +1,189 @@
+# https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486169
+
+Topic #486169: Prize-Winner (7th place solution)
+  Author: Nima Shahbazi
+  Posted: 2024-03-23 19:42:24.703000
+  Votes: 43  Comments: 10
+
+Acknowledgements: I extend my gratitude to Optiver and Kaggle for facilitating this competition. The challenge presented posed a significant and complex problem within the domain of time series forecasting in financial markets.
+
+Methodology: My approach integrates LightGBM and neural network models, with minimal feature engineering for neural networks. The objective was to synergize these models to attenuate the variance in the final predictions.
+
+Feature Engineering:
+
+
+
+LightGBM Enhancements: Utilized features include:
+
+
+Order Book Imbalance: Leveraging publicly shared imb1, imb2, etc.
+
+Trend Indicators: Employing diff() for temporal variation.
+
+Volume-Based Cumulatives: Aggregating volumes over time.
+
+Global Stock Statistics: Calculating mean, median, and standard deviation for historical stock data.
+
+Deviation Features: Both tree-based and neural network models benefited from raw features representing deviations from the median shown below:
+
+Online Learning: both for NNs and LGBM model.
+
+
+Deviation features and online learning helped to reduce the error by a big margin.
+
+deviation from median function used on raw features:
+
+   ():
+      groupby_cols = [, ]
+      new_columns = {}
+       feature  num_features:
+          grouped_median = df.groupby(groupby_cols)[feature].transform()
+          deviation_col_name = 
+          new_columns[deviation_col_name] = df[feature] - grouped_median
+       pd.concat([df, pd.DataFrame(new_columns)], axis=)
+
+
+Neural Network Architecture: The architecture includes LSTM and ConvNet models, incorporating global stock statistics and deviation features for improved convergence.
+
+I had already published the NN models structure here on Kaggle, in this post:
+https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462639
+
+
+
+ConvNet: Optiver Conv Just IMB Inference Cleanup
+
+LSTM: Optiver No FE LSTM Inference Cleanup
+
+
+Validation Strategy: Employed a straightforward time-based split for model validation
+
+and the extended Convolutional 1D model is shown below:
+
+ ():
+    conv_outputs = []
+
+     kernel_size  kernel_sizes:
+        conv_layer = Conv1D(filters=filters, kernel_size=kernel_size, activation=, padding=)(input_layer)
+        conv_layer = BatchNormalization()(conv_layer)
+        conv_layer = Dropout(do_ratio)(conv_layer)
+
+        shortcut = conv_layer
+
+        conv_layer = Conv1D(filters=filters, kernel_size=kernel_size, padding=)(conv_layer)
+        conv_layer = BatchNormalization()(conv_layer)
+        conv_layer = Activation()(conv_layer)
+
+        
+        conv_layer = Add()([conv_layer, shortcut])
+        conv_outputs.append(conv_layer)
+
+
+    concatenated_conv = Concatenate(axis=-)(conv_outputs)
+    flattened_conv_output = Flatten()(concatenated_conv)
+
+     flattened_conv_output
+
+
+ ():
+
+    categorical_features = 
+    categorical_uniques  = {  : }
+    embedding_dim        = { : }
+
+    input_layer = Input(shape=(window_size, (numerical_features) + ), name=)
+
+    
+    numerical_input = Lambda( x: x[:, :, :-], name=)(input_layer)
+    categorical_input = Lambda( x: x[:, :, -:], name=)(input_layer)
+
+    first_numerical = Lambda( x: x[:, ])(numerical_input)
+
+
+    
+     ():
+         Lambda( x: x[:, lag:, :] - x[:, :-lag, :], name=)
+
+    difference_layers = []
+     lag  (, window_size):
+        diff_layer = create_difference_layer(lag)(numerical_input)
+        padding = ZeroPadding1D(padding=(lag, ))(diff_layer)  
+        difference_layers.append(padding)
+    combined_diff_layer = Concatenate(name=)(difference_layers)
+
+
+    
+    vocab_size, embedding_dim = categorical_uniques[categorical_features], embedding_dim[categorical_features]
+    embedding = Embedding(vocab_size, embedding_dim, input_length=window_size)(categorical_input)
+    embedding = Reshape((window_size, -))(embedding)
+
+    first_embedding = Lambda( x: x[:, ])(embedding)
+
+    
+    
+
+    kernel_sizes = [,]
+    do_ratio = 
+
+    flattened_conv_output = apply_conv_layers(numerical_input, kernel_sizes, do_ratio=do_ratio)
+    flattened_conv_output_cat = apply_conv_layers(embedding, kernel_sizes, do_ratio=do_ratio)
+    flattened_conv_output_diff = apply_conv_layers(combined_diff_layer, kernel_sizes, do_ratio=do_ratio)
+
+
+    dense_output = Concatenate(axis=-)([flattened_conv_output,flattened_conv_output_cat,flattened_conv_output_diff, Reshape((-,))(combined_diff_layer),first_numerical,first_embedding])
+
+    dense_sizes = [, , , , ]
+    do_ratio = 
+     size  dense_sizes:
+        dense_output = Dense(size, activation=)(dense_output)
+        dense_output = BatchNormalization()(dense_output)
+        dense_output = Dropout(do_ratio)(dense_output)
+
+    
+    output = Dense(, name=)(dense_output)
+
+    
+    lr_schedule = ExponentialDecay(
+        initial_learning_rate=initial_learning_rate,
+        decay_steps=,
+        decay_rate=,
+        staircase=)
+
+    
+    model = Model(inputs=input_layer, outputs=output)
+    optimizer = Adam(learning_rate=lr_schedule)
+
+    model.(optimizer=optimizer, loss=)
+
+     model
+
+
+
+
+For further exploration, the repository Optiver Trading Close is also available, which I will update with the full winning code
+
+Comments:
+├─ Devang Giri Goswami (2024-03-26 10:02:32.493000) [+1]
+│  Congrats @nimashahbazi Hard work pays off! Thanks for sharing your notebook, I got to know new things.
+├─ Ravi Ramakrishnan (2024-03-24 05:31:23.303000) [+1]
+│  @nimashahbazi you were always at the top end of the LB right from the start till the end. This is a huge achievement in my opinion. 
+│  All the best and best wishes for the future! 
+│  Congratulations fo...
+  ├─ Nima Shahbazi (2024-03-25 12:30:16.663000) [+0]
+  │  Thanks Ravi,
+  │  Congrats to your team as well.
+├─ C R Suthikshn Kumar (2024-03-24 04:10:58.827000) [+1]
+│  Congratulations on securing the 7th place in this competition. Thanks for sharing the details of your solution.
+├─ WindClimber (2024-03-23 23:14:49.047000) [+1]
+│  Thank you for sharing your great ideas. I learned a lot from your NN architecture!
+  ├─ Nima Shahbazi (2024-03-25 12:30:42.590000) [+1]
+  │  Thanks, glad to hear that.
+├─ achaosss (2024-03-23 20:04:15.977000) [+1]
+│  Nice work. Congratulations!
+├─ AssskyRui (2024-10-29 23:52:41.927000) [+0]
+│  Hi Nima, thanks for sharing your solution. Just a simple question, did you spend a lot of time on tuning and architech the neural network? I also implement a structure similar to you, but the perfo...
+├─ giampaolo1980 (2024-04-19 08:44:14.790000) [+0]
+│  Hi Nima, thanks a lot for sharing this code. This is by far the best NN solution that has been shared!
+│  There is one line I don't understand.
+│  In the code below, what is the purpose/rationale of the ...
+├─ [deleted] (2025-05-15 20:53:04.193000) [+0]
+│  Great work, thank you for sharing!

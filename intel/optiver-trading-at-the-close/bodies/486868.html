@@ -1,0 +1,51 @@
+<p>A big thanks to Optiver and Kaggle for hosting this competition. This competition has a really stable correlation between local cv and lb. </p>
+<p>Actually I entered this game a little late, about 30 days before its ends and I am not good at NN, so I only focus on Gradient Boosting tree models and its feature engineering. I noticed there are many top solutions using NN and it is really a good opportunity for me to learn NN.</p>
+<h3>Model</h3>
+<ul>
+<li>Xgboost with 3 different seeds and same 157 features<ul>
+<li>There is not much difference between Xgboost and Lightgbm in lb score. But GPU Xgboost trains faster than GPU Lightgbm.</li></ul></li>
+</ul>
+<h3>Feature Engineering</h3>
+<ul>
+<li>Firstly, create some "basic features" based on raw features(i.e. add, subtract, multiply, divide from raw features). Also, create some median-scaled raw size features.</li>
+</ul>
+<pre><code>size_col = [,,,]
+ _  size_col:
+    train[] = train[_] / train.groupby([])[_].transform()
+</code></pre>
+<ul>
+<li>Secondly, do further feature engineering/aggregation on raw features and "basic features"<ul>
+<li>imb1, imb2 features</li>
+<li>market_urgency feateures I copied from public notebook</li>
+<li>diff features on different time window</li>
+<li>shift features on different time window</li>
+<li>rolling_mean/std features on different time window</li>
+<li>using history wap to calculate target of 6 second before. Then, do some rolling_mean </li>
+<li>some global date_id+seconds weighted features</li>
+<li>MACD feateures</li>
+<li>target rolliong_mean over stock_id + seconds_in_bucket</li></ul></li>
+</ul>
+<h3>Feature Selection</h3>
+<ul>
+<li>Because we have limit on inference time and memory, it's essential to do some feature selection. I add features group by group and check whether the local cv improves. Each feature group usually have 10 - 30 features. If one groups make local cv improve, I add feature one by one insides this feature group and usually kept only 5-10 most effective features.</li>
+<li>I keep 157 features in my final model.</li>
+</ul>
+<h3>Post-processing:</h3>
+<ul>
+<li>Subtract weighted sum. From the definition of target, we can know weighted sum of target for all stocks should be zero.</li>
+</ul>
+<pre><code>test_df[] = lgb_predictions
+test_df[] = test_df[] * test_df[]
+test_df[] = test_df.groupby([,])[].transform() / test_df.groupby([,])[].transform()
+test_df[] = test_df[] - test_df[]
+</code></pre>
+<h3>Others:</h3>
+<ul>
+<li>xgb mae objective</li>
+<li>xgb sample_weight 1.5 weight for latest 45 days data </li>
+<li>Online training. I only retrain model twice. one is N day (N is the start date of private lb), the other is N+30 day.</li>
+<li>polars and <code>reduce_mem_usage function</code> helps a lot</li>
+</ul>
+<h3>Codes</h3>
+<p>train: <a href="https://github.com/ChunhanLi/9th-kaggle-optiver-trading-close" target="_blank">https://github.com/ChunhanLi/9th-kaggle-optiver-trading-close</a><br>
+inference: <a href="https://www.kaggle.com/code/hookman/9th-submission" target="_blank">https://www.kaggle.com/code/hookman/9th-submission</a></p>

@@ -1,0 +1,82 @@
+# lux-ai-2021 讨论区（按票数排序，共 80 条）
+
+- [Toad Brigade’s Approach - Deep Reinforcement Learning](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294993) — 183 票 / 83 评论 / 2021-12-13 
+- [6th place solution summary](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293776) — 72 票 / 47 评论 / 2021-12-07 **write-up?**
+- [Rules overview diagram](https://www.kaggle.com/competitions/lux-ai-2021/discussion/267007) — 69 票 / 13 评论 / 2021-08-21 
+- [Open source faster Python replica game engine and RL Gym+Env](https://www.kaggle.com/competitions/lux-ai-2021/discussion/267351) — 63 票 / 53 评论 / 2021-08-22 
+- [UNet for imitation learning](https://www.kaggle.com/competitions/lux-ai-2021/discussion/289540) — 60 票 / 55 评论 / 2021-11-20 
+- [Algorithms that you can apply in this competition](https://www.kaggle.com/competitions/lux-ai-2021/discussion/278770) — 56 票 / 18 评论 / 2021-10-15 
+- [How to write your rule-based agent](https://www.kaggle.com/competitions/lux-ai-2021/discussion/270239) — 53 票 / 5 评论 / 2021-09-04 
+- [A website for checking submission's statistics](https://www.kaggle.com/competitions/lux-ai-2021/discussion/281823) — 51 票 / 22 评论 / 2021-10-25 
+- [[Tricks List] Tricks from way too much RL experience about getting RL to actually work](https://www.kaggle.com/competitions/lux-ai-2021/discussion/283883) — 51 票 / 4 评论 / 2021-10-28 
+- [How transfer can improve your bot](https://www.kaggle.com/competitions/lux-ai-2021/discussion/278236) — 48 票 / 10 评论 / 2021-10-13 
+- [Lux AI 2021 - Python Gym Environment](https://www.kaggle.com/competitions/lux-ai-2021/discussion/276419) — 45 票 / 8 评论 / 2021-10-04 
+- [RLIAYN's approach - Online deep reinforcement learning](https://www.kaggle.com/competitions/lux-ai-2021/discussion/300844) — 44 票 / 3 评论 / 2022-01-18 
+- [A way to boost your learning](https://www.kaggle.com/competitions/lux-ai-2021/discussion/290284) — 43 票 / 25 评论 / 2021-11-23 
+- [Welcome to the Lux AI Challenge](https://www.kaggle.com/competitions/lux-ai-2021/discussion/265766) — 41 票 / 37 评论 / 2021-08-16 
+- [8th place solution: Deep Neural Networks & Tree Search](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294603) — 41 票 / 6 评论 / 2021-12-11 **write-up?**
+- [Rule-based agent for beginners](https://www.kaggle.com/competitions/lux-ai-2021/discussion/274436) — 39 票 / 7 评论 / 2021-09-26 
+- [[Up-to-date Summary] We are approaching the final weeks, These are the stories up to this point!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/287562) — 38 票 / 3 评论 / 2021-11-14 
+- [5th solution summary: Learning to imitate the best leaderboard agents using Conditional Unet](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293911) — 37 票 / 17 评论 / 2021-12-07 **write-up?**
+- [RL vs Search Based vs Rule Based, who will top the leaderboard?](https://www.kaggle.com/competitions/lux-ai-2021/discussion/277927) — 32 票 / 8 评论 / 2021-10-11 
+- [Thank you all 1000+ teams 🎉🎉🎉](https://www.kaggle.com/competitions/lux-ai-2021/discussion/287428) — 30 票 / 5 评论 / 2021-11-13 
+- [Customary meme thread for this competition!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/291721) — 30 票 / 9 评论 / 2021-11-30 
+- [Rule Based? Combinatorial Optimization? Machine Learning? Reinforcement Learning?](https://www.kaggle.com/competitions/lux-ai-2021/discussion/270086) — 30 票 / 26 评论 / 2021-09-03 
+- [(16th place) Improve your imitation agent with rules](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293835) — 29 票 / 6 评论 / 2021-12-07 **write-up?**
+- [4th Solution (Team Durrett): IL from multiple agents](https://www.kaggle.com/competitions/lux-ai-2021/discussion/296938) — 27 票 / 2 评论 / 2021-12-24 **write-up?**
+- [For your convenience](https://www.kaggle.com/competitions/lux-ai-2021/discussion/266474) — 25 票 / 2 评论 / 2021-08-19 
+- [Some useful and useless ideas(maybe silver solution- 25th place)](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293836) — 25 票 / 6 评论 / 2021-12-07 **write-up?**
+- [12th (ish) placed agent. Top rules-based agent?](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293953) — 25 票 / 7 评论 / 2021-12-07 
+- [Optimal city shape](https://www.kaggle.com/competitions/lux-ai-2021/discussion/265886) — 24 票 / 3 评论 / 2021-08-17 
+- [Bradley–Terry rating system for Lux](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294561) — 24 票 / 31 评论 / 2021-12-11 
+- [Final evaluation concerns](https://www.kaggle.com/competitions/lux-ai-2021/discussion/292758) — 24 票 / 26 评论 / 2021-12-03 
+- [Competition is Finalized - Congratulations to our Winners; Recap](https://www.kaggle.com/competitions/lux-ai-2021/discussion/296519) — 22 票 / 2 评论 / 2021-12-22 
+- [Lux off-season](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293379) — 22 票 / 6 评论 / 2021-12-05 
+- [IMPORTANT Lux AI version 3.1.0 released, update your environments and packages!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/269544) — 22 票 / 11 评论 / 2021-09-01 
+- [Benchmark your agent with published agents](https://www.kaggle.com/competitions/lux-ai-2021/discussion/295968) — 20 票 / 1 评论 / 2021-12-19 
+- [Sprint 1 Award Winners 🎉🎉🎉](https://www.kaggle.com/competitions/lux-ai-2021/discussion/269498) — 20 票 / 6 评论 / 2021-09-01 
+- [A list of RL Resources ](https://www.kaggle.com/competitions/lux-ai-2021/discussion/280990) — 19 票 / 3 评论 / 2021-10-23 
+- [Is there some way to play this game myself?](https://www.kaggle.com/competitions/lux-ai-2021/discussion/266117) — 18 票 / 5 评论 / 2021-08-18 
+- [Papers on AI Agents](https://www.kaggle.com/competitions/lux-ai-2021/discussion/267030) — 18 票 / 2 评论 / 2021-08-21 
+- [Resource distribution on maps](https://www.kaggle.com/competitions/lux-ai-2021/discussion/272715) — 17 票 / 5 评论 / 2021-09-16 
+- [Submissions are closed - entering the final weeks!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293778) — 17 票 / 2 评论 / 2021-12-07 
+- [Current meta and possible balance issues. Worker glitch?🤔](https://www.kaggle.com/competitions/lux-ai-2021/discussion/274958) — 17 票 / 16 评论 / 2021-09-28 
+- [This is way self-play doesn't work for you ](https://www.kaggle.com/competitions/lux-ai-2021/discussion/284388) — 16 票 / 0 评论 / 2021-10-31 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/lux-ai-2021/discussion/265767) — 16 票 / 41 评论 / 2021-08-16 
+- [Summary of the top-ranked solutions](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294459) — 15 票 / 8 评论 / 2021-12-10 **write-up?**
+- [LB convergence](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294321) — 15 票 / 19 评论 / 2021-12-09 
+- [Prior  Kaggle simulations comp & approaches](https://www.kaggle.com/competitions/lux-ai-2021/discussion/265819) — 15 票 / 6 评论 / 2021-08-17 
+- [Is your heart also Beating so Fast? Best of LUCK!!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/295900) — 15 票 / 9 评论 / 2021-12-18 
+- [Carts Theorycrafting](https://www.kaggle.com/competitions/lux-ai-2021/discussion/277363) — 15 票 / 17 评论 / 2021-10-09 
+- [Let's Block the Invaders!! (With pictures and intended for beginners).](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294432) — 14 票 / 2 评论 / 2021-12-10 
+- [[Papers tl;dr] - tl;dr of all SOTA algorithms on Atari from the past two years](https://www.kaggle.com/competitions/lux-ai-2021/discussion/284230) — 14 票 / 0 评论 / 2021-10-30 
+- [Good luck everyone, and thanks for the competition and contributions!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293782) — 14 票 / 2 评论 / 2021-12-07 
+- [Best of luck!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293777) — 14 票 / 9 评论 / 2021-12-07 
+- [noise in evaluation](https://www.kaggle.com/competitions/lux-ai-2021/discussion/271913) — 14 票 / 17 评论 / 2021-09-13 
+- [Sprint 3 Award Winners 🎉🎉🎉](https://www.kaggle.com/competitions/lux-ai-2021/discussion/284448) — 13 票 / 0 评论 / 2021-11-01 
+- [My Observation on Tigga’s Strategy](https://www.kaggle.com/competitions/lux-ai-2021/discussion/270198) — 13 票 / 2 评论 / 2021-09-04 
+- [How does a beginner begin?](https://www.kaggle.com/competitions/lux-ai-2021/discussion/266985) — 13 票 / 6 评论 / 2021-08-21 
+- [New to ML or Kaggle? Come Say Hi!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/265765) — 13 票 / 3 评论 / 2021-08-16 
+- [Submissions prioritisation for LB matches](https://www.kaggle.com/competitions/lux-ai-2021/discussion/291025) — 13 票 / 8 评论 / 2021-11-27 
+- [Best of Lux (Luck) Competition](https://www.kaggle.com/competitions/lux-ai-2021/discussion/293839) — 13 票 / 2 评论 / 2021-12-07 
+- [Good game!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/296296) — 12 票 / 1 评论 / 2021-12-21 
+- [Estimate your rating with winrate](https://www.kaggle.com/competitions/lux-ai-2021/discussion/280765) — 12 票 / 2 评论 / 2021-10-22 
+- [A way choosing agents](https://www.kaggle.com/competitions/lux-ai-2021/discussion/284068) — 12 票 / 12 评论 / 2021-10-29 
+- [[12th] Unet IL](https://www.kaggle.com/competitions/lux-ai-2021/discussion/296406) — 11 票 / 2 评论 / 2021-12-21 
+- [34th Place Solution](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294003) — 11 票 / 2 评论 / 2021-12-08 **write-up?**
+- [Off policy rl apporach ~1200](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294601) — 11 票 / 4 评论 / 2021-12-11 
+- [Tigga's insane chain transfers](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294953) — 11 票 / 7 评论 / 2021-12-13 
+- [Uncertainly increases for non-converged agents](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294480) — 11 票 / 5 评论 / 2021-12-10 
+- [Final Ceremony Announcement + Merch Store + Feedback](https://www.kaggle.com/competitions/lux-ai-2021/discussion/295268) — 10 票 / 0 评论 / 2021-12-15 
+- [Sprint 4 Winners](https://www.kaggle.com/competitions/lux-ai-2021/discussion/291805) — 10 票 / 2 评论 / 2021-12-01 
+- [IMPORTANT Potential Changes v2 - Bug Fixes, Symmetric Mining, and Wood Regrowth](https://www.kaggle.com/competitions/lux-ai-2021/discussion/268605) — 10 票 / 4 评论 / 2021-08-28 
+- [Video Tutorial on Lux AI by Sentdex](https://www.kaggle.com/competitions/lux-ai-2021/discussion/274809) — 10 票 / 2 评论 / 2021-09-27 
+- [ Free Deep Reinforcement Learning Course](https://www.kaggle.com/competitions/lux-ai-2021/discussion/285621) — 10 票 / 0 评论 / 2021-11-05 
+- [Kaggle-environment issues](https://www.kaggle.com/competitions/lux-ai-2021/discussion/277623) — 9 票 / 1 评论 / 2021-10-10 
+- [Who is still using a rules-based agent? ](https://www.kaggle.com/competitions/lux-ai-2021/discussion/291449) — 9 票 / 6 评论 / 2021-11-29 
+- [PPO hyper parameters](https://www.kaggle.com/competitions/lux-ai-2021/discussion/289746) — 9 票 / 4 评论 / 2021-11-21 
+- [Leadboard convergence](https://www.kaggle.com/competitions/lux-ai-2021/discussion/280727) — 9 票 / 10 评论 / 2021-10-22 
+- [Congratulations to Toad Brigade on cross 2K!!](https://www.kaggle.com/competitions/lux-ai-2021/discussion/287136) — 9 票 / 5 评论 / 2021-11-12 
+- [ 43rd place and my best local tested approach](https://www.kaggle.com/competitions/lux-ai-2021/discussion/294070) — 8 票 / 2 评论 / 2021-12-08 **write-up?**
+- [Resources Thread](https://www.kaggle.com/competitions/lux-ai-2021/discussion/265769) — 8 票 / 0 评论 / 2021-08-16 
+- [Clustering Is Key](https://www.kaggle.com/competitions/lux-ai-2021/discussion/277344) — 8 票 / 4 评论 / 2021-10-09 

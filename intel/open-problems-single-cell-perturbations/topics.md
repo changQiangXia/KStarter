@@ -1,0 +1,82 @@
+# open-problems-single-cell-perturbations 讨论区（按票数排序，共 80 条）
+
+- [A Comprehensive Guide to Small Molecule-Cell Interaction Prediction: Challenges, Approaches, and Strategies](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/438859) — 65 票 / 4 评论 / 2023-09-12 
+- [#13: U900 team - PYBOOST is what you need ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460858) — 65 票 / 5 评论 / 2023-12-16 
+- [#18: Py-boost predicting t-scores](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458661) — 54 票 / 18 评论 / 2023-12-11 
+- [1st Place Solution Writeup for Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459258) — 50 票 / 22 评论 / 2023-12-13 **write-up?**
+- [2nd Place Solution for the Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458738) — 49 票 / 26 评论 / 2023-12-01 **write-up?**
+- [🔥Papers including Code for this Competition](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/438963) — 41 票 / 2 评论 / 2023-09-13 
+- [Single Cell Perturbation. PerturbNet (Deep Generative Model) MichiGAN (NN Architecture).](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/438868) — 41 票 / 12 评论 / 2023-09-12 
+- [Announcing free compute (with A10 GPUs), courtesy of Saturn Cloud 🪐](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/440680) — 36 票 / 15 评论 / 2023-09-15 
+- [3rd Place Solution for the Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458750) — 33 票 / 10 评论 / 2023-12-06 **write-up?**
+- [PYBOOST - breakthrough gradient boosting for MULTI-target tasks](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/454700) — 33 票 / 0 评论 / 2023-11-11 
+- [Some strange observations about adata_train.parquet](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/445883) — 33 票 / 13 评论 / 2023-10-09 
+- [Stop spoiling the competition with high scoring notebooks](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/457753) — 29 票 / 18 评论 / 2023-11-26 
+- [Will there be a huge shakeup?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/456943) — 28 票 / 19 评论 / 2023-11-22 
+- [SMILES notation: Rules. Aromaticity and Kekulization. PySmiles, Chem and RDKit.](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/440177) — 26 票 / 0 评论 / 2023-09-14 
+- [ChemBERTa v2 Embeddings for smiles](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/441550) — 24 票 / 15 评论 / 2023-09-19 
+- [Welcome to the “Open Problems - Single-Cell Perturbations” competition 🎉](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/437486) — 23 票 / 8 评论 / 2023-09-06 
+- [Video available: Pyboost - from creator - Anton Vakrushev - Monday 17.00 (CET) 11 December. Webinars related to the competition ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/444825) — 22 票 / 19 评论 / 2023-10-03 
+- [What is the score for your single model? ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/454375) — 21 票 / 25 评论 / 2023-11-10 
+- [Lessons Learned](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458916) — 20 票 / 2 评论 / 2023-12-02 
+- [Competition Info Session + Q&A - Oct 3, 2023](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/443493) — 19 票 / 11 评论 / 2023-09-27 
+- [Info Session 1 - Recording and notes](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/444986) — 19 票 / 5 评论 / 2023-10-04 
+- ["Terribly" scored models - are useful in current blends - any idea why ? ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/452515) — 18 票 / 17 评论 / 2023-11-02 
+- [Mistakes you made ?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/457782) — 16 票 / 6 评论 / 2023-11-26 
+- [Did you use any biological prior knowledge and how it works?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/447256) — 16 票 / 23 评论 / 2023-10-15 
+- [When and how to submit the write up for judge prize](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/456239) — 15 票 / 3 评论 / 2023-11-18 **write-up?**
+- [7th Place Solution for the Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459623) — 15 票 / 5 评论 / 2023-12-08 **write-up?**
+- [Three great perturbation models to share](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/438938) — 14 票 / 1 评论 / 2023-09-13 
+- [Announcing the Competition Workshop (Saturday Dec. 16)](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461113) — 13 票 / 5 评论 / 2023-12-12 
+- [Could you provide the code for DE analysis?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/439017) — 13 票 / 4 评论 / 2023-09-13 
+- [Missing data for DMSO in adata](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/453376) — 13 票 / 1 评论 / 2023-11-06 
+- [Kaggle datasets - single cell data under similar compounds, but different cell types](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/440677) — 13 票 / 1 评论 / 2023-09-15 
+- [Judges Award Submission + End of competition survey!](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/456615) — 12 票 / 22 评论 / 2023-11-20 
+- [Feature Augmentation 2 - Adding "fragments of SMILES" as a feature](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/453818) — 12 票 / 0 评论 / 2023-11-07 
+- [What CV you used  ? What tricks/lessons to overcome poor CV - LB correspondence ?  NK-cells - as validation - good for you ? ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458834) — 12 票 / 1 评论 / 2023-12-01 
+- [How to choose notebooks for Private Leaderboard](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458639) — 12 票 / 17 评论 / 2023-11-30 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/434084) — 12 票 / 8 评论 / 2023-08-23 
+- [0.98 - correlation between public and private scores - our team, what is for your ?  (or trust your LB, not CV)](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458939) — 12 票 / 5 评论 / 2023-12-02 
+- [There is always a meme Thread](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/457510) — 12 票 / 7 评论 / 2023-11-25 
+- [New Kernels Grandmaster - Meer Atif Magsi 😎](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/453486) — 12 票 / 10 评论 / 2023-11-06 
+- [43d Place Solution for the Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460567) — 11 票 / 2 评论 / 2023-12-11 **write-up?**
+- [Question Regarding DE model](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/456874) — 11 票 / 0 评论 / 2023-11-22 
+- [Ideas why ensembles work so well on LB?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/445048) — 11 票 / 9 评论 / 2023-10-04 
+- [CV-LB correspondence analysis: row-wise correlation (CV) - better fits LB, local mrrmse is near ZERO correlated with LB](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460251) — 11 票 / 2 评论 / 2023-12-08 
+- [Why there are genes in the de_train with exactly the same expression change?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461389) — 11 票 / 3 评论 / 2023-12-14 
+- [10th Place Solution for the Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459961) — 11 票 / 3 评论 / 2023-12-14 **write-up?**
+- [20th Place Solution Writeup For Open Problems - Single-cell Perturbations Competition](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461159) — 11 票 / 10 评论 / 2023-12-18 **write-up?**
+- [CV , LB results thread. Welcome to use AmbrosM's or MT's CV schemes](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/444494) — 11 票 / 8 评论 / 2023-10-02 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459552) — 10 票 / 5 评论 / 2023-12-05 
+- [4rd Place Solution for the Open Problems – Single-Cell Perturbations](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460191) — 10 票 / 3 评论 / 2023-12-15 **write-up?**
+- [Run the differential expression code using Kaggle kernels](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/446034) — 10 票 / 2 评论 / 2023-10-10 
+- [4th Place Writeup](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459573) — 10 票 / 1 评论 / 2023-12-05 **write-up?**
+- [Genes direct targets of the drugs ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/441700) — 10 票 / 1 评论 / 2023-09-19 
+- [9th solution write-up: Pure NN model](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461015) — 10 票 / 6 评论 / 2023-12-12 **write-up?**
+- [45 Place Solution for the Open Problems – Single-Cell Perturbations Competition](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459365) — 10 票 / 0 评论 / 2023-12-05 **write-up?**
+- [About reproducing the targets from training data](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/444668) — 10 票 / 0 评论 / 2023-10-03 
+- [ATAC-seq analysis](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/450439) — 10 票 / 12 评论 / 2023-10-24 
+- [Drug-Target (Gene) Interaction database and API](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/442756) — 10 票 / 1 评论 / 2023-09-24 
+- [Limma model clarification](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/443580) — 9 票 / 8 评论 / 2023-09-27 
+- [The Bittersweet Taste of Victory and Defeat: My First Kaggle Expedition](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461245) — 9 票 / 4 评论 / 2023-12-13 
+- [New adata_excluded_ids File](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/454107) — 9 票 / 1 评论 / 2023-11-08 
+- [Anyone tried cell data?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/446397) — 9 票 / 9 评论 / 2023-10-11 
+- [SCP 21st Solution](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458764) — 9 票 / 4 评论 / 2023-12-12 **write-up?**
+- [Remove - CD8+ T-cells uplifted score ? Locally ? Why ? Increase multiplicity of b-cells, myeloid cells, etc.  helped ? ](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458842) — 9 票 / 4 评论 / 2023-12-01 
+- [Pseudobulked counts from AnnData inconsistent](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/450545) — 9 票 / 2 评论 / 2023-10-24 
+- [The values to predict](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/440706) — 9 票 / 9 评论 / 2023-09-16 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/440394) — 8 票 / 0 评论 / 2023-09-14 
+- [scATAC-seq integration](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/455350) — 8 票 / 2 评论 / 2023-11-14 
+- [#30: "Melting" the Data](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461649) — 8 票 / 15 评论 / 2024-01-08 
+- [Feature Augmentation](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/451245) — 8 票 / 0 评论 / 2023-10-27 
+- [Detailed Analysis of Gene Cluster Stability](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/463546) — 8 票 / 1 评论 / 2023-12-25 
+- [Mapping between differential gene expressions (DE) and log(p-value) s](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/448556) — 8 票 / 3 评论 / 2023-10-20 
+- [Overview and Data Explained](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/448668) — 8 票 / 0 评论 / 2023-10-20 
+- [Funky effects of batch size on the metric MRRMSE (You'd want to know if you are using NN)](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/442490) — 7 票 / 1 评论 / 2023-09-22 
+- [Why RNA splicing factors are susceptible to perturbations?](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/462435) — 7 票 / 5 评论 / 2023-12-19 
+- [Post-competition EDA: unveiling the significance of biases in the training data](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/466181) — 7 票 / 1 评论 / 2024-01-07 
+- [... & I'd like to thank Kaggle, the challenge host, and everyone who made their notebooks public.](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459001) — 7 票 / 10 评论 / 2023-12-02 
+- [16th Place Solution Writeup for the Open Problems – Single-Cell Perturbations (Los Rodriguez)](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461225) — 7 票 / 4 评论 / 2023-12-13 **write-up?**
+- [27th Tabtransformer](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458663) — 7 票 / 2 评论 / 2023-12-01 
+- [8th Place Solution for the Open Problems – Single-Cell Perturbations Competition](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459618) — 7 票 / 5 评论 / 2023-12-11 **write-up?**
+- [Public 7th and Private 15th solution (Nothing but just multiplied a factor of 1.2)](https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/459588) — 7 票 / 0 评论 / 2023-12-05 **write-up?**

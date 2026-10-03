@@ -1,0 +1,196 @@
+# https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366428
+
+Topic #366428: 3rd place solution
+  Author: Makotu
+  Posted: 2022-11-16 06:47:53.345000
+  Votes: 70  Comments: 18
+
+First of all, to the organizers and kaggle management, and to everyone who participated with me, thank you for organizing a great competition!
+
+Before starting this competition, I had no knowledge of the biological field.To be honest, I still don't know much about it.
+(Since this was a completely unprofessional field, I may have been able to try various things without bias…？)
+
+I would like to share my solution below. Please forgive me if it is difficult to read in many respects, as my English skills are not very good.
+
+
+
+Summary:
+
+multiome
+
+preprocess
+
+
+
+use okapi bm25 instead of tfidf
+
+dimensionality reduction：use lsi(implemented in muon) instead of svd
+https://muon.readthedocs.io/en/latest/api/generated/muon.atac.tl.lsi.html
+muon.atac.tl.lsi(rawdata(with okapi preprocessing), n_comps=64)
+
+
+feature
+
+Basically, pre-processing contributed greatly to the accuracy, but the following features also contributed somewhat to the accuracy.
+
+
+
+binary feature
+transformed 0/1 binary and reduced 16 dimensions(svd) as features
+
+w2v vector feature
+For each cell, the top100 with the highest expression levels were lined up
+and vectorized by gensim to get feature vector(16dims) for each gene.
+https://radimrehurek.com/gensim/models/word2vec.html
+    Ex. CellA: geneB → geneE → geneF → …
+        CellB: geneA → geneC → geneM → …
+top100 genes vector average in each cell used as features.
+
+leiden cluster mean feature
+I made Clusters using muon's leiden clustering(23 cluster).
+https://muon.readthedocs.io/en/latest/api/generated/muon.tl.leiden.html#muon.tl.leiden
+After taking the average of the features for each cluster(23 cluster × 228942 feat),
+they were reduced to 16 dimensions by svd and used as features(23 cluster × 16feat).
+After that, join on clusters.
+
+connectivy matrix feature
+Since muon's leiden clustering generates an adjacency matrix between cells
+as a byproduct, I also use it 16-dimensional with svd as a feature.
+
+
+model
+
+
+
+mlp
+
+
+Simple 4-layer mlp; no major differences from mlp in public notebooks
+
+target has been reduced to 128 dimensions with svd.
+
+use rmse loss
+
+catboost
+
+
+target has been reduced to 128 dimensions with svd.
+
+
+ensemble
+
+
+
+I made a model of nearly 20 mlp and 3 catboosts with various feature combinations. and cv-based weighted averaging.
+
+
+cite
+
+preprocess
+
+
+
+The same process as in the organizer was applied.
+use sc.pp.normalize_per_cell and sc.pp.log1p (excluding the gene that are significantly related to the target protein)
+
+
+feature
+
+I've made a lot of features, and here are some of them that have worked to some degree.
+
+
+
+leiden cluster feature
+I made Clusters using muon's leiden clustering.
+Average of features per cluster and reduce dimensions with svd.
+(excluding Important genes. It were not used svd, and use raw count's average for each cluster was used as features as is.)
+
+w2v vector feature
+Same as multiome.
+
+
+model
+
+
+
+mlp
+
+
+Simple 4-layer mlp; no major differences from mlp in public notebooks
+
+Using correlation_loss. No different from public notebook.
+
+catboost
+
+
+ensemble
+
+
+
+I made a model of nearly 20 mlp and 2 catboosts with various feature combinations. and cv-based weighted averaging.
+
+
+Validation
+
+It goes without saying that one of the key elements of this competition is validation.
+I tried binary classification to classify test data used in PB and others. (At this point, the classification accuracy was so high. So I think it is dangerous to trust LB.)
+The 10% of the training data that is close to the PB, is used as validation data. 
+This method seemed to work well, the submit with my highest cv was highest pb score.
+
+update: Code &amp; Model &amp; Data
+
+share code and models in github and kaggle datasets
+https://github.com/makotu1208/open-problems-multimodal-3rd-solution
+
+Comments:
+├─ luddite^ (2022-11-17 00:08:25.090000) [+1]
+│  Congratulations for your solo gold, and thank you for your informative solutions. 
+│  I want to ask a question about w2v vector features. Did you input numerical data into w2v and converted them to 16...
+  ├─ Makotu (2022-11-17 02:35:33.753000) [+1]
+  │  Thank you for comment!
+  │  I think it would be faster to have you look at code, so I created a notebook.
+  │  https://www.kaggle.com/code/mhyodo/w2v-feature-sample
+  ├─ luddite^ (2022-11-17 03:30:04.633000) [+1]
+  │  I understood!
+  │  Thank you, and again congratulations!
+├─ Artem Fedorov (2022-11-16 16:35:42.967000) [+1]
+│  cite
+│    model
+│    catboost
+│    target has been reduced to 128 dimensions with svd.
+│  
+│  
+│  Did you reduce target for CITE to 128 dimentions also?
+  ├─ Makotu (2022-11-17 02:37:18.720000) [+0]
+  │  Oops, sorry. cite used the 140 dimensional target as is without dimensional reduction. I will correct this. Thanks for pointing that out!
+├─ sing4it Luo (2022-11-16 09:02:10.917000) [+1]
+│  a little aside, your avatar is so charming on LB😆
+├─ Anthony Chiu (2022-11-16 08:06:13.197000) [+1]
+│  Interestingly you used word2vec instead of autoencoder, have you compared them?
+  ├─ Makotu (2022-11-16 09:21:01.097000) [+1]
+  │  Thanks for your comment!  I also tried making feature using autoencoder, but it did not work that well within my experiments.
+  ├─ Anthony Chiu (2022-11-16 11:55:35.823000) [+1]
+  │  I think it is also interesting to fit the vectors for each position directly to an RNN layer rather than taking an average.
+├─ BarryZhou (2022-11-24 05:18:33.433000) [+2]
+│  Congratulations and thanks for posting your great solution Makotu!
+├─ Chris Deotte (2022-11-19 00:01:59.673000) [+2]
+│  Congratulations @mhyodo Fantastic job winning 3rd place Cash Gold Solo!
+├─ pineapple (2022-11-18 04:26:06.297000) [+2]
+│  Thanks for sharing! As a beginner, this is really helpful for illustrating the importance of validation sets.
+├─ time's up (2022-11-17 22:53:13.207000) [+2]
+│  @mhyodo  Big Congrat on your solo gold. And thanks a lot for sharing your solution.
+│  Could you please help me to understand the validation part?
+│  
+│  Why did you start to doubt the LB with a high binary...
+  ├─ Makotu (2022-11-20 11:09:47.400000) [+2]
+  │  Thanks for your question! 
+  │  Also, sorry for the delay in responding.
+  │  Sorry, I need to add something. Precisely, I clearly felt that it might be dangerous to trust LB because when I performed the cla...
+  ├─ time's up (2022-11-20 16:03:55.787000) [+1]
+  │  Ah， got it! thanks again for your explanation
+├─ Riccardo (2022-11-16 08:07:36.113000) [+2]
+│  @mhyodo adversarial validation was surely a nice way to go! Congrats!
+├─ Moses Aborisade (2022-11-16 15:42:41.547000) [+0]
+│  This is really a nice idea
+├─ Pavithra Devi M (2022-11-17 16:57:01.640000) [+0]
+│  Thanks for sharing :)

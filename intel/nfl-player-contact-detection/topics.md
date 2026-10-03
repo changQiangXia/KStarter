@@ -1,0 +1,82 @@
+# nfl-player-contact-detection 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391635) — 138 票 / 53 评论 / 2023-03-06 **write-up?**
+- [2nd place solution - Team Hydrogen](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391740) — 78 票 / 9 评论 / 2023-04-01 **write-up?**
+- [Welcome to the NFL Player Contact Detection competition!](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370678) — 75 票 / 75 评论 / 2022-12-05 
+- [CNN can Visualize Contact (4th place K_mat part)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391719) — 49 票 / 12 评论 / 2023-03-02 **write-up?**
+- [Top solutions from previous NFL competitions](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370685) — 48 票 / 9 评论 / 2022-12-05 **write-up?**
+- [14th Place Solution](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391609) — 39 票 / 2 评论 / 2023-03-07 **write-up?**
+- [6th Place Solution (TK&penguin46 part)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391620) — 37 票 / 5 评论 / 2023-03-02 **write-up?**
+- [3rd place solution, single stage approach](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392182) — 37 票 / 5 评论 / 2023-03-12 **write-up?**
+- [4th place solution Overall pipeline & tabular part - Osaka Tigers](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391761) — 37 票 / 7 评论 / 2023-03-03 **write-up?**
+- [The Matthews correlation coefficient (MCC)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370688) — 35 票 / 4 评论 / 2022-12-05 
+- [1st place code](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392583) — 32 票 / 4 评论 / 2023-03-06 **write-up?**
+- [9th place solution - Team JK](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392402) — 32 票 / 6 评论 / 2023-03-06 **write-up?**
+- [6th Place Solution (Qishen & Bo)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391723) — 31 票 / 3 评论 / 2023-03-02 **write-up?**
+- [CV vs public LB](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/379082) — 30 票 / 22 评论 / 2023-01-18 
+- [Tricks used by the winners of the previous NFL competitions](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372969) — 30 票 / 0 评论 / 2022-12-19 
+- [Introduction to Tracking with SORT and DeepSORT](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/371702) — 29 票 / 2 评论 / 2022-12-11 
+- [All training frame extracted dataset](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/374646) — 26 票 / 2 评论 / 2022-12-28 
+- [Matthews Correlation Coefficient[MCC]  for Loss function [code]. It's can useful this competition.](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370723) — 24 票 / 10 评论 / 2022-12-06 
+- [35th Best CV 750 Public LB 740 Single Tabular model result](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391627) — 21 票 / 2 评论 / 2023-03-02 
+- [Great work and Congratulations!](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392110) — 19 票 / 0 评论 / 2023-03-03 
+- [NFL 101: Introduction to NFL Football](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370937) — 19 票 / 4 评论 / 2022-12-07 
+- [16th place solution - Team : Deimon Devil Bats](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391792) — 18 票 / 2 评论 / 2023-03-02 **write-up?**
+- [9th place solution (yuki part)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392046) — 18 票 / 0 评论 / 2023-03-03 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392290) — 18 票 / 7 评论 / 2023-03-04 **write-up?**
+- [How long does your submission take?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/379265) — 18 票 / 8 评论 / 2023-01-18 
+- [Tracking vs Image data](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/379434) — 17 票 / 21 评论 / 2023-01-19 
+- [19th place writeup](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391607) — 16 票 / 3 评论 / 2023-03-02 **write-up?**
+- [Result of Late Submission: 2D-CNN + XGB + 1D-CNN (Private LB: 0.78703)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/394302) — 15 票 / 2 评论 / 2023-03-17 
+- [Be careful of medal thieves.](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391448) — 15 票 / 8 评论 / 2023-03-01 
+- [Best luck to all](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391335) — 15 票 / 2 评论 / 2023-03-01 
+- [[Chai Time] Top Solutions from previous NFL competitions explained](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/380257) — 15 票 / 3 评论 / 2023-01-22 **write-up?**
+- [Final Week is here! Good Luck Everyone.](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/389964) — 14 票 / 6 评论 / 2023-02-23 
+- [49th silver, 2.5DCNN solution, public0.736, private0.722 (shakedown from 39 to 49) ](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391727) — 14 票 / 0 评论 / 2023-03-02 **write-up?**
+- [Why is it so quiet in here? Let's change that.](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/378364) — 14 票 / 6 评论 / 2023-01-15 
+- [41st solution(2D-CNN, 1D-CNN, Stacking)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392226) — 13 票 / 2 评论 / 2023-03-04 **write-up?**
+- [31st place solution](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391892) — 13 票 / 1 评论 / 2023-03-02 **write-up?**
+- [When you are removed score from competition, find the reason and stand up!](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391925) — 12 票 / 2 评论 / 2023-03-03 
+- [How to load multi-frame images efficiently?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392279) — 12 票 / 16 评论 / 2023-03-04 
+- [Evaluated on Matthews Correlation Coefficient Python [code]](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370722) — 12 票 / 0 评论 / 2022-12-06 
+- [Obviously wrong labels?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372806) — 11 票 / 1 评论 / 2022-12-18 
+- [How to fix predicted helmets assignment](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392392) — 11 票 / 3 评论 / 2023-03-05 
+- [18th place solution : 2d-cnn / 1d-cnn / XGB / 1d-cnn](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392162) — 10 票 / 7 评论 / 2023-03-03 **write-up?**
+- [More Understanding of the data](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/371638) — 10 票 / 4 评论 / 2022-12-11 
+- [An OOF prediction label visualize tool](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391701) — 10 票 / 1 评论 / 2023-03-02 
+- [Two weeks left - Summary of the top discussions!](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/388560) — 10 票 / 1 评论 / 2023-02-18 
+- [45th place solution (the most simple method to get seliver madel)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391703) — 10 票 / 2 评论 / 2023-03-02 **write-up?**
+- [In game_play 58538_002774, there are 10 players in away team](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372241) — 9 票 / 3 评论 / 2022-12-15 
+- [Don’t share your solution to suspicious persons! (1st and future)](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/381969) — 9 票 / 1 评论 / 2023-01-28 **write-up?**
+- [YOLO v8 is here!! 🚀🚀](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/377248) — 9 票 / 3 评论 / 2023-01-10 
+- [Demosite - Albumentations](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/383841) — 9 票 / 1 评论 / 2023-02-05 
+- [About Evaluation Metrics](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/370741) — 9 票 / 0 评论 / 2022-12-06 
+- [Where is my submit button??](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391411) — 9 票 / 11 评论 / 2023-03-01 
+- [Winning solution of Previous Object Detection Kaggle Challenges](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/388558) — 9 票 / 2 评论 / 2023-02-18 **write-up?**
+- [Is the role of the player position useful data?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392095) — 8 票 / 2 评论 / 2023-03-03 
+- [What are the differences between 'game' and 'play'?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/371800) — 8 票 / 3 评论 / 2022-12-12 
+- [Should the model predict player Ids?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/371948) — 6 票 / 1 评论 / 2022-12-13 
+- [[Off-topic] SSH NFL](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/373094) — 6 票 / 0 评论 / 2022-12-19 
+- [Some useful public notebooks and approaches](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/382009) — 6 票 / 2 评论 / 2023-01-29 
+- [Just wondering what's evidence and what's a hunch](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391692) — 6 票 / 3 评论 / 2023-03-02 
+- [Which is best?ML(xgb,lgb) or DL(deepsort,yolo...)?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372800) — 6 票 / 7 评论 / 2022-12-18 
+- [How to fast process video Data ?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/371270) — 6 票 / 2 评论 / 2022-12-09 
+- [Wrong Tracking Data ](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/383005) — 5 票 / 4 评论 / 2023-02-01 
+- [Tabular data causes shake up?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391621) — 5 票 / 21 评论 / 2023-03-02 
+- [Recap of Competition - Congratulations to the Winners! ](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/393790) — 4 票 / 1 评论 / 2023-03-10 
+- [Yolov7 and understanding the boxes coordinates](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/371414) — 4 票 / 0 评论 / 2022-12-09 
+- [Is it possible to compete in this competition with Kaggle resources?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372873) — 4 票 / 2 评论 / 2022-12-18 
+- [Fold split with less player duplication](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/393400) — 4 票 / 1 评论 / 2023-03-09 
+- [[Chai Time] Working w Videos: Top solutions from Great Barrier Reef explained](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/382664) — 4 票 / 0 评论 / 2023-01-31 **write-up?**
+- [removed from the leaderboard](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391912) — 4 票 / 2 评论 / 2023-03-03 
+- [Question of a code error](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/388380) — 3 票 / 2 评论 / 2023-02-17 
+- [Question about Evaluation Metric](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372942) — 3 票 / 1 评论 / 2022-12-18 
+- [Submission scoring error and Notebook out of memory](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/373189) — 3 票 / 4 评论 / 2022-12-20 
+- [Contacts outside of video frames](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/379429) — 3 票 / 1 评论 / 2023-01-19 
+- [Not enough digits in the score ?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/373500) — 3 票 / 9 评论 / 2022-12-21 
+- [Your Best NN Score?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/381206) — 3 票 / 0 评论 / 2023-01-25 
+- [Extreme Overfitting with tracking data](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372382) — 2 票 / 4 评论 / 2022-12-15 
+- ["1st and Future" meaning?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/372941) — 2 票 / 1 评论 / 2022-12-18 
+- [Quality of CV matters: fold split with less player duplication made CV/LB correlated](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/393570) — 2 票 / 0 评论 / 2023-03-09 
+- [How long it will took to PreProcess Test Data?](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/377290) — 2 票 / 3 评论 / 2023-01-10 
+- [Reading images on GPU](https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/379377) — 2 票 / 2 评论 / 2023-01-19 

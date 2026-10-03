@@ -1,0 +1,88 @@
+<p>The long journey has ended. Thanks to Optiver and Kaggle for hosting this amazing competition. Thanks to my teammates <a href="https://www.kaggle.com/chellyfan" target="_blank">@chellyfan</a> and <a href="https://www.kaggle.com/unknownkid" target="_blank">@unknownkid</a> for their incredible effort. We ended up in 30th place. Here's how our rank changed during each update:</p>
+<table>
+<thead>
+<tr>
+<th>Update</th>
+<th>Rank</th>
+<th>Rank Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public leaderboard</td>
+<td>18th</td>
+<td>--</td>
+</tr>
+<tr>
+<td>1st update</td>
+<td>37th</td>
+<td>↓ 19</td>
+</tr>
+<tr>
+<td>2nd update</td>
+<td>41st</td>
+<td>↓ 4</td>
+</tr>
+<tr>
+<td>3rd update</td>
+<td>39th</td>
+<td>↑ 2</td>
+</tr>
+<tr>
+<td>4th update</td>
+<td>40th</td>
+<td>↓ 1</td>
+</tr>
+<tr>
+<td>Final leaderboard</td>
+<td>30th</td>
+<td>↑ 10</td>
+</tr>
+</tbody>
+</table>
+<p>In short , our model is an <strong>LGBM &amp; CatBoost ensemble</strong> trained on a total of 480 + 37 days <strong>without online learning</strong> (480 days from the training set and an extra 37 days from the original public leaderboard data obtained via API). Our online learning crashed when it encountered the interim update data. Our rank is quiet stable during the updates. Check origin post below for more detail discussion. </p>
+<p><strong>Origin Post</strong></p>
+<p><strong>TL;DR</strong></p>
+<ul>
+<li>Feature engineering based on public notebooks</li>
+<li>Catboost feature elimination (some features works very well in Catboost but very bad in LGBM, vice-versa.)</li>
+<li>LGBM and Catboost ensemble model, 202 features in LGBM, 141 in Catboost</li>
+<li>Online learning to collects hidden public leaderboard data continuously update the model.  </li>
+<li>Our online learning works fine with public LB data but crash once we enter the interim update date period.</li>
+<li>Stick with single fold holdout CV</li>
+<li>Try different post processing approach</li>
+<li>Full code here : <a href="https://www.kaggle.com/code/wuhongrui/public-5-3227-lgbm-catboost-with-online-learning/notebook" target="_blank">https://www.kaggle.com/code/wuhongrui/public-5-3227-lgbm-catboost-with-online-learning/notebook</a></li>
+</ul>
+<p>Some detail discussion below</p>
+<ul>
+<li><p><strong>Feature engineering</strong></p>
+<ul>
+<li><p><strong>For LGBM:</strong></p></li>
+<li><p>Drop all the rows that contain NaN in columns like <code>wap</code>, <code>bid_price</code>, <code>ask_price</code> from the original <code>train.csv</code>.</p></li>
+<li><p>Adapt most of the features by <a href="https://www.kaggle.com/lblhandsome" target="_blank">@lblhandsome</a> <a href="https://www.kaggle.com/code/lblhandsome/optiver-robust-best-single-model" target="_blank">"⚡Optiver 🚀Robust Best ⚡ Single Model"</a>, ensuring to group by <code>stock_id</code> and <code>date_id</code> when calculating <code>diff</code>, <code>pct_change</code> and <code>shift</code>.</p></li>
+<li><p>Calculate the <code>index wap</code>like this post <a href="https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462022" target="_blank">"Obtaining past target values with wap"</a> , and then compute its <code>diff</code>, <code>pct_change</code>, and <code>shift</code>.</p></li>
+<li><p>Use features from the previous day at the same seconds to predict today's target</p></li>
+<li><p>Further we grab the target from the previous day as a feature.</p></li>
+<li><p><strong>For CatBoost:</strong></p></li>
+<li><p>Threw all the features into CatBoost, including those that didn't work well with LGBM.</p></li>
+<li><p>Utilized feature elimination in CatBoost (@yekenot <a href="https://www.kaggle.com/code/yekenot/feature-elimination-by-catboost" target="_blank">"Feature Elimination by CatBoost"</a> to filter out less important features, 380+ -&gt; 141.</p></li>
+<li><p>Technical indicators like RSI, MACD, and Bollinger Bands work well with CatBoost but not as effectively with LGBM. But it took too long to generate them.</p></li>
+<li><p>CatBoost trains significantly faster than LGBM (7 minutes vs 1 hour in holdout CV), and after adding and selecting features, our CatBoost CV/LB performance are close to our LGBM.</p></li></ul></li>
+<li><p><strong>Online learning</strong></p>
+<ul>
+<li>We believe this is crucial for this type of prediction competition. The aim is to collect private data and continuously retrain and update the model.</li>
+<li>The incremental learning methods provided by LGBM and Catboost were not effective, leading to a lot of drifts</li>
+<li>Our logic is concat all the test data in same date_id to form a cache.  Then generate features for each cache (i.e., one day) and concatenate them to the original features dataframe, which contains features generated from days 0-480.</li>
+<li>The revealed targets are also concatenated to the original target dataset.</li>
+<li>Retrain our model every 15 days using the concatenated data and it finally gets us to public LB 5.3231. (training at dates 481, 481+15, 481+30).</li>
+<li>However once our code enter the period of interim update data, it crash and cause submission score error. We waste tons of submission try to debug but still can't locate the reason.</li>
+<li>Things we have tried to debug but not work: </li>
+<li>There are missing stock in test data so the shape of each test iteration is not always (200,16), same if there are not excatly 55 time id in each days. This will lead to the shape of cache for each date_id is not always 11000 rows.(200 x 55)</li>
+<li>In this case, we couldn't figure out the shape of corresponding revealed target provided by the API next day. <br>
+<a href="https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/461989" target="_blank">See my post here</a></li>
+<li>Tried merging data with <code>date_id</code>, <code>seconds_in_bucket</code>, <code>stock_id</code> instead of direct concatenation, but it didn’t resolve the issue.</li>
+<li>Checked the data type for each test iteration as discussed in <a href="https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/456435" target="_blank">[Finding] the Mechanism of Newly Added Data</a> .</li>
+<li>Considered orther edge cases like <code>NaN</code> in <code>date_id</code>, missing <code>seconds_in_bucket</code> at 0 seconds, etc.</li>
+<li>Reviewed and tried solutions from all submission score error post in Discussions, but none were applicable to our case.</li></ul></li>
+</ul>
+<p>We are curious and eager to hear the way how others deal with those interim update data and utilized them to retrain the model. Debug with this API without knowing much useful information is very annoying….</p>

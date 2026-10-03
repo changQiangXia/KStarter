@@ -1,0 +1,195 @@
+<p>First, sincere thanks to the organizers and the Kaggle community for discussions, public notebooks, and feedback. Our team, monsaraida &amp; Masaya, finished Private 3rd (Public 1st). We are grateful for the support.</p>
+<h2>Overview</h2>
+<p>Here is an overview of our solution. In the following sections, we describe monsaraida’s part and Masaya’s part in turn.  <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F2668122%2Ffe5d400cf85da3294983f8667f2be251%2FKaggle_MAP_3rd_place_solution_overview.svg?generation=1760620299013691&amp;alt=media" alt=""></p>
+<h2>monsaraida’s part</h2>
+<h3>Prompting</h3>
+<h4>Choices</h4>
+<p>For the {Question / Answer / Correct? / Student Explanation} structure used in public notebooks, I changed {Answer} to {Choices / Selected}. This change is intended to help the LLM identify potential misunderstandings by presenting not only the student's chosen Answer but also the other options.This change was significant, improving the CV/Public score by over +0.001. This idea also significantly improved Masaya's model accuracy, so it may be one of the key tricks in this competition.</p>
+<h4>Hints</h4>
+<p>In this competition, the types of misunderstandings for each question were predetermined. Therefore, as a hint, I added a list of misunderstandings to the prompt for each question, ordered by their probability of occurrence. This change improved my CV score by +0.0003.</p>
+<h4>Example of prompt</h4>
+<pre><code>Question: What fraction  the shape   shaded? Give your answer  its simplest form.  A triangle split into  equal smaller triangles.   them are shaded.  
+Choices: (A)    (B)    (C)    (D)     
+Selected:     
+Correct? Yes  
+Student Explanation:  goes into everything   goes into nine  
+Common mistakes  this question: Incomplete, WNB
+</code></pre>
+<h3>Training</h3>
+<h4>Base model</h4>
+<p>I adopted Qwen/Qwen3-14B as the base model after testing the following alternatives and selecting the best-performing one: google/gemma-2-9b-it, Qwen/Qwen2.5-14B-Instruct, Qwen/Qwen2.5-Math-7B-Instruct, deepseek-ai/deepseek-math-7b-instruct, Qwen/Qwen2.5-Coder-14B, deepseek-ai/DeepSeek-R1-Distill-Qwen-14B, mistralai/Mistral-Nemo-Instruct-2407, mistralai/Mixtral-8x7B-Instruct-v0.1, mistralai/Mathstral-7B-v0.1, AmanPriyanshu/gpt-oss-10.8b-specialized-instruction_following-pruned-moe-only-15-experts</p>
+<h4>LoRA SFT with multi-task learning</h4>
+<p>I performed supervised fine-tuning with LoRA and used AutoModelForSequenceClassification for classification. During classification, I used multi-task learning with the main task “Category: Misconception (65 classes)” and the following auxiliary tasks:<br>
+• True / False (2 classes)<br>
+• Correct / Misconception / Neither (3 classes)<br>
+• Misconception (36 classes)<br>
+Multitask learning contributed to a slight improvement in accuracy.</p>
+<h4>Improving generalization</h4>
+<p>Due to the high noise levels in this competition's labels, I introduced R-Drop(Regularized Dropout) as a measure to improve generalization. The effect of R-Drop was significant, improving the CV by over +0.001. Adding AWP (Adversarial Weight Perturbation) on top of R-Drop led to a further, slight CV improvement. Furthermore, introducing the EMA (Exponential Moving Average) stabilized the CV and improved accuracy.</p>
+<h3>Inference</h3>
+<h4>Multi-stage inference</h4>
+<p>To ensemble multiple models within the 9-hour inference time limit, I implemented multi-stage inference. In the first stage, I performed inference on the entire test set and ensemble the results. In the next stage, I sorted the results by confidence in ascending order and re-ran inference only on the lowest-confidence 50%. (I also tried more complex staging, but it did not yield the best Private score.)</p>
+<h4>Tips for faster inference</h4>
+<p>Some public notebooks used `torch_dtype=torch.bfloat16`, but bfloat16 is unavailable in Kaggle’s T4 execution environment, which adds conversion overhead. Changing bfloat16 to float16 made inference 2 times faster. Furthermore, since this competition often involves short prompts, setting `padding=False` instead of `padding="max_length"` achieved another 2 times speedup. Combined, these changes resulted in a 4 times speedup, enabling the use of more models in the ensemble and contributing to improved accuracy.</p>
+<h2>Masaya’s part</h2>
+<h4>Overview</h4>
+<p>Overview of my pipeline is here,<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F2668122%2Fe4b2c5269fee5745de7beb63998ef3da%2FKaggle_MAP_3rd_place_solution_Masaya.svg?generation=1760620542415916&amp;alt=media" alt=""></p>
+<p>One of the advantages of using a CausalLM is that it can achieve higher accuracy even when the labels are of variable length.  <br>
+In this competition, since the labels appearing for each QuestionId were predetermined, I hypothesized that limiting the label set for each QuestionId — instead of performing inference across all 37 or 65 labels — would improve accuracy.  <br>
+Therefore, I mainly conducted experiments using CausalLM.</p>
+<p>My single best model was Qwen2.5-72B-Instruct-GPTQ, but inference on the test set took about 3 hours.  <br>
+Therefore, I designed a system where relatively smaller models such as 14B and 32B were used for inference first, and only samples with low top1 probability were re-inferred using the 72B model.  <br>
+This approach reduced the inference time for the 72B model to about 1 hour.</p>
+<p>Note: This pipeline is used for our Public LB Best and The Private LB score was slightly lower than the pipeline mentioned above.</p>
+<h4>Preprocess</h4>
+<p>In this competition, both the train and test datasets had a limited number of QuestionIds (only 15). Additionally, each QuestionId had only 2 to 5 Misconceptions, which was also limited. Therefore, to narrow down the predicted tokens of the CausalLM, the prompt was designed to include only the Misconception, Correct, and Incorrect options that appeared for each specific QuestionId. As discussed <a href="https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589400" target="_blank">here</a>, the <code>True_</code> / <code>False_</code>  labels could be assigned later using rule-based logic, so they were excluded as well to further reduce the number of prediction tokens. This approach significantly improved accuracy while also reducing inference time. (LB/CV +0.002~0.003 and faster about 3 times)  <br>
+As mentioned above, adding other options to the prompt helped boost accuracy.(LB/CV +0.003~0.004)</p>
+<p>Here is prompt example,   </p>
+<pre><code>  
+You are Qwen, created  Alibaba Cloud. You are a helpful assistant.  
+
+
+You are a Mathematics teacher.   
+Your task   evaluate whether the student’s explanation contains a misconception,    does,  identify the specific type  misconception.
+
+Question Text: Calculate       
+Choices: ()    ()    ()    ()   
+
+Student Answer:     
+Is Student Answer Correct: No
+
+Student Explanation: Because you  half    
+
+You must choose the your answer  the following options:
+
+A. Correct:NA   
+B. Neither:NA   
+C. Misconception:FlipChange   
+D. Misconception:Mult   
+E. Misconception:SwapDividend 
+
+  
+  
+Your Answer:   
+</code></pre>
+<h4>Training Models</h4>
+<p>Mainly, I tuned Qwen2.5 as the CausalLM.  <br>
+The single best model was Qwen2.5-72B-Instruct trained with EMA, but since its performance on the public leaderboard was lower compared to similar models, I decided not to use it for the final submission.  <br>
+And I used LoRA for finetuning, <code>r=16,lora_alpha=32,lora_dropout=0.05,target_modules=( "q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj")</code>.  <br>
+Main training config is here,</p>
+<ul>
+<li>epoch=2  </li>
+<li>learning_rate=1e-4  </li>
+<li>per_device_batch_size=4  </li>
+<li>gradient_accumulation_steps=4</li>
+</ul>
+<p>Tips: High learning rate improved better score, but too high learning rate caused collapse while training.</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>task</th>
+<th>cv</th>
+<th>lb*</th>
+<th>pd</th>
+<th>use final</th>
+<th>inferrence time</th>
+<th>Note (other info)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qwen/Qwen2.5-14B-Instruct-AWQ</td>
+<td>CausalLM</td>
+<td>0.9469</td>
+<td>0.943</td>
+<td>0.942</td>
+<td>✅</td>
+<td>30 min</td>
+<td></td>
+</tr>
+<tr>
+<td>Qwen/Qwen2.5-32B-Instruct-AWQ</td>
+<td>CausalLM</td>
+<td>0.9498</td>
+<td>0.949</td>
+<td>0.944</td>
+<td>✅</td>
+<td>60 min</td>
+<td></td>
+</tr>
+<tr>
+<td>Qwen/Qwen2.5-72B-Instruct-GPTQ</td>
+<td>CausalLM</td>
+<td>-</td>
+<td>0.950</td>
+<td>0.946</td>
+<td>✅</td>
+<td>190 min</td>
+<td></td>
+</tr>
+<tr>
+<td>Qwen/Qwen2.5-72B-Instruct-GPTQ</td>
+<td>CausalLM</td>
+<td>-</td>
+<td>0.950</td>
+<td>0.948</td>
+<td></td>
+<td>190 min</td>
+<td>use EMA for training (Single Best)</td>
+</tr>
+<tr>
+<td>Qwen/Qwen2.5-32B-Instruct-AWQ</td>
+<td>CausalLM</td>
+<td>0.9474</td>
+<td>0.945</td>
+<td>0.941</td>
+<td></td>
+<td>60 min</td>
+<td>Without choices in prompts</td>
+</tr>
+<tr>
+<td>Qwen/Qwen2.5-72B-Instruct-GPTQ</td>
+<td>CausalLM</td>
+<td>-</td>
+<td>0.946</td>
+<td>0.940</td>
+<td></td>
+<td>190 min</td>
+<td>Without choices in prompts</td>
+</tr>
+</tbody>
+</table>
+<p>(*) CV is calculated from fold 0 (because of lack of GPU). LB is from the submitted full-train model.</p>
+<h4>Inference</h4>
+<p>The prompt design during inference was the same as before.  <br>
+At this stage, since each token’s meaning differs depending on the QuestionId, the outputs are converted back to 65 labels to align with monsaraida’s probability.  <br>
+The <code>True_</code> / <code>False_</code> labels can be inferred from the value of <code>is_correct</code>.  <br>
+As for the 72B model, since it cannot be inferred using LoRA, I performed LoRA merge and quantization (GPTQ), and executed it while offloading to the CPU. (Reference <a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550223" target="_blank">here</a>)</p>
+<h4>Not Worked for me</h4>
+<ul>
+<li>Models other than Qwen2.5 including Llama 3.3-70B and gemma2.  </li>
+<li>Causal LM for pair-wise decision. This is too large a time for inference.  </li>
+<li>Fixing the choices token for each label. For example,</li>
+</ul>
+<pre><code>A.    
+B.    
+F.    
+D.    
+R.    
+</code></pre>
+<ul>
+<li>Pretrained other competition data. I used <a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/overview" target="_blank">Eedi competition</a> pretrained model but it didn’t work.  </li>
+<li>Considering the label noise as discussed <a href="https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589400" target="_blank">here</a>. For <code>QuestionId=31778</code>, I included the reversed <code>True_</code> / <code>False_</code> version in the top 2 predictions for the Correct Neither samples that had high confidence. However, this slightly decreased accuracy on the final results, although there was a small improvement in CV.</li>
+</ul>
+<h4>Reference</h4>
+<ul>
+<li><a href="https://docs.vllm.ai/en/latest/" target="_blank">vllm</a></li>
+<li><a href="https://github.com/intel/auto-round" target="_blank">auto-round</a></li>
+<li><a href="https://huggingface.co/Qwen" target="_blank">Qwen</a></li>
+<li><a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/overview" target="_blank">Eedi competition</a>  </li>
+<li><a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550223" target="_blank">Qwen2.5-72B &amp; Llama 3.3-70B on 2xT4(questionable performance)</a></li>
+<li><a href="https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589400" target="_blank">Does Test Data Have Questions Different Than Train Data?</a></li>
+</ul>

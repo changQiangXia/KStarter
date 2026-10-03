@@ -1,0 +1,82 @@
+# march-machine-learning-mania-2025 讨论区（按票数排序，共 80 条）
+
+- [Interactive bracket visualizer](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568862) — 66 票 / 29 评论 / 2025-03-18 
+- [Leaderboard Update Thread (Editing Live)](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569248) — 62 票 / 57 评论 / 2025-03-20 
+- [References and starter materials ](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562250) — 59 票 / 26 评论 / 2025-02-10 
+- [Final Dataset is ready!](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568630) — 52 票 / 25 评论 / 2025-03-17 
+- [Previous Solutions and Takeaways](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562585) — 47 票 / 6 评论 / 2025-02-12 **write-up?**
+- [First time Kagglers, don't get demotivated](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570657) — 44 票 / 35 评论 / 2025-03-29 
+- [4th Place Solution for the March Machine Learning Mania 2025 Competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572466) — 37 票 / 5 评论 / 2025-04-09 **write-up?**
+- [First Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572717) — 32 票 / 14 评论 / 2025-04-11 **write-up?**
+- [Experts Median Submission file](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569214) — 30 票 / 5 评论 / 2025-03-20 
+- [What's Different This Year???](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/563049) — 29 票 / 19 评论 / 2025-02-14 
+- [Current first place scares me](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569369) — 29 票 / 52 评论 / 2025-03-21 **write-up?**
+- [Best validation scores](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/567290) — 28 票 / 75 评论 / 2025-03-09 
+- [Second Place Solution: The raddar Prophecy Strikes Again...](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572528) — 26 票 / 10 评论 / 2025-04-09 **write-up?**
+- [~0.160 is a Good Target Brier Score 🎯](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562816) — 26 票 / 55 评论 / 2025-02-13 
+- [2 Major Public Forks](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569659) — 25 票 / 55 评论 / 2025-03-23 
+- [First Interim Data Refresh is complete](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/564130) — 25 票 / 7 评论 / 2025-02-21 
+- [Integrating EDA Insights with Previous Winning Strategies](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562628) — 24 票 / 1 评论 / 2025-02-12 **write-up?**
+- [Second Interim Data Refresh is complete](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/566812) — 23 票 / 11 评论 / 2025-03-07 
+- [MAE vs Brier meta analysis](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/571286) — 22 票 / 45 评论 / 2025-04-02 
+- [External Data!](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/566448) — 18 票 / 2 评论 / 2025-03-05 
+- [Suggestions for next year?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572378) — 17 票 / 47 评论 / 2025-04-09 
+- [Submission Scoring and Visualization](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/564340) — 16 票 / 1 评论 / 2025-02-22 
+- [264th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569173) — 16 票 / 2 评论 / 2025-03-20 **write-up?**
+- [Competition Timeline, Stage Updates](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562883) — 15 票 / 27 评论 / 2025-02-13 
+- [See your submission score](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569268) — 15 票 / 1 评论 / 2025-03-21 
+- [Visualization: You vs Everybody / Which Team to Root For](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569207) — 14 票 / 15 评论 / 2025-03-20 
+- [My annual petition for MAE on point(s) difference/scored](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570828) — 14 票 / 13 评论 / 2025-03-31 
+- [Welcome to Kaggle March Mania 2025 - Get started here](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562241) — 13 票 / 0 评论 / 2025-02-10 
+- [Clarification on the Use of 538 Data](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/564802) — 13 票 / 10 评论 / 2025-02-25 
+- [Who are the experts??](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/573483) — 13 票 / 9 评论 / 2025-04-15 
+- [Problems in the data?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562473) — 13 票 / 71 评论 / 2025-02-11 
+- [VERY IMPORTANT - select your two submissions!!](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/567230) — 13 票 / 1 评论 / 2025-03-09 
+- [6th Place Solution: An Attempt to Bet Responsibly](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572482) — 12 票 / 1 评论 / 2025-04-09 **write-up?**
+- [Common Mistakes in MMLM 2023](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568134) — 12 票 / 5 评论 / 2025-03-14 
+- [Vote for 2026 Contest Design by Reaction to this Post (just curious)](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570855) — 12 票 / 8 评论 / 2025-03-31 
+- [ESPN Bracket Groups](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568394) — 11 票 / 17 评论 / 2025-03-15 
+- [40 Minutes of Madness](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569230) — 11 票 / 12 评论 / 2025-03-20 
+- [Optimal Risk Strategy under Brier-Score](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562402) — 11 票 / 13 评论 / 2025-02-11 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/573578) — 10 票 / 2 评论 / 2025-04-16 
+- [Past March Mania Winning Solutions](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562328) — 10 票 / 0 评论 / 2025-02-11 **write-up?**
+- [Your model vs tournament seeds](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568880) — 10 票 / 7 评论 / 2025-03-18 
+- [What's Working (Or Not) For Me: Some Insights](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/567915) — 10 票 / 25 评论 / 2025-03-12 
+- [Exploring Logistic Scoring](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/571842) — 10 票 / 40 评论 / 2025-04-06 
+- [LAST REMINDER - Remember to specify your two "selected" submissions!!](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569054) — 9 票 / 6 评论 / 2025-03-19 
+- [March No Madness?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570826) — 9 票 / 3 评论 / 2025-03-31 
+- [Stage 1 Score Calculator in Excel](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/564133) — 9 票 / 2 评论 / 2025-02-21 
+- [Waiting for selection Sunday](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568217) — 9 票 / 1 评论 / 2025-03-14 
+- [8th Place Solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572535) — 9 票 / 1 评论 / 2025-04-10 **write-up?**
+- [Brier score on Kaggle - March ML Mania 2025](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562268) — 8 票 / 0 评论 / 2025-02-10 
+- [Sweet 16 Games](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570208) — 8 票 / 34 评论 / 2025-03-26 
+- [UConn is insane](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/571707) — 8 票 / 10 评论 / 2025-04-05 
+- [Conference tourneys start on Sunday March 2](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/565531) — 8 票 / 11 评论 / 2025-02-28 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562428) — 7 票 / 0 评论 / 2025-02-11 
+- [Friendly Reminder! ](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569118) — 7 票 / 3 评论 / 2025-03-20 
+- [Women's Massey Ordinals?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/566050) — 7 票 / 0 评论 / 2025-03-03 
+- [Massey for WNCAA](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568943) — 7 票 / 7 评论 / 2025-03-18 
+- [list of public notebooks on this competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562395) — 7 票 / 3 评论 / 2025-02-11 
+- [3th place solution](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572553) — 7 票 / 0 评论 / 2025-04-10 **write-up?**
+- [7th place solution 🥇 : The very simple method !](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572540) — 7 票 / 2 评论 / 2025-06-02 **write-up?**
+- [538 Team Ratings?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/562472) — 7 票 / 5 评论 / 2025-02-11 
+- [How stable is your model ?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569922) — 7 票 / 1 评论 / 2025-03-25 
+- [2025 Retrospective](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/574434) — 7 票 / 0 评论 / 2025-04-22 
+- [The Secret To My Top 100 (So Far) LB Submission](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569560) — 6 票 / 4 评论 / 2025-03-22 
+- [Find the latest Massey Ordinals here!](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568631) — 6 票 / 12 评论 / 2025-03-17 
+- [Bracket Viz Tool](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/568715) — 6 票 / 1 评论 / 2025-03-17 
+- [Submission Evaluation Utility](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/563189) — 6 票 / 3 评论 / 2025-02-15 
+- [Juju Watkins Injured!?!?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569932) — 6 票 / 5 评论 / 2025-03-25 
+- [Lack of Upsets](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569802) — 6 票 / 15 评论 / 2025-03-24 
+- [[103rd] Odds and Ends](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572394) — 6 票 / 0 评论 / 2025-04-09 
+- [How to check your most impactful predictions/games](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572300) — 6 票 / 1 评论 / 2025-04-08 
+- [Glorified ESPN Bracket Challenge](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/573153) — 6 票 / 15 评论 / 2025-04-14 
+- [Why was my submission manually invalidated?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569261) — 5 票 / 15 评论 / 2025-03-20 
+- [Brier score 0.1703: inside my March Madness model](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569047) — 5 票 / 20 评论 / 2025-03-19 
+- [Next Year: Adding Games](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/571205) — 5 票 / 13 评论 / 2025-04-01 
+- [Leaderboard Stage Data](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572242) — 5 票 / 1 评论 / 2025-04-08 
+- [The Most Important Lesson](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/572895) — 5 票 / 13 评论 / 2025-04-12 
+- [First weekend done - Want to know if you are still in the running?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570019) — 4 票 / 5 评论 / 2025-03-25 
+- [Why are Kaggle re-running all subs?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/569244) — 4 票 / 5 评论 / 2025-03-20 
+- [Gold Public Notebook?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/570557) — 4 票 / 10 评论 / 2025-03-28 
+- [Why so many teams have exactly the same high score?](https://www.kaggle.com/competitions/march-machine-learning-mania-2025/discussion/571258) — 4 票 / 3 评论 / 2025-04-02 

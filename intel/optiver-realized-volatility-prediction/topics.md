@@ -1,0 +1,122 @@
+# optiver-realized-volatility-prediction 讨论区（按票数排序，共 120 条）
+
+- [1st Place Solution - Nearest Neighbors](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274970) — 501 票 / 149 评论 / 2022-01-11 **write-up?**
+- [After a month here are a few observations ...](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/263308) — 236 票 / 56 评论 / 2021-08-09 
+- [Competition data FAQ](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249752) — 201 票 / 186 评论 / 2021-06-29 
+- [My journey: 1st public -> 154 private](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/279170) — 175 票 / 51 评论 / 2022-01-13 
+- [Previous competitions winning solutions 🏆](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249523) — 150 票 / 11 评论 / 2021-06-28 **write-up?**
+- [All useful features at one place - Optiver Realized Volatility Prediction](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/256080) — 134 票 / 10 评论 / 2021-07-30 
+- [Second leaderboard update will be rerun without added noise](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/284121) — 127 票 / 33 评论 / 2021-10-29 
+- [Some Initial Thoughts...](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249782) — 120 票 / 19 评论 / 2021-06-29 
+- [Custom Evaluation](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250324) — 118 票 / 12 评论 / 2021-07-02 
+- [What "overfitting the public lb" means](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/271845) — 99 票 / 34 评论 / 2021-09-12 
+- [Papers on Quantitative Trading Models](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249527) — 92 票 / 12 评论 / 2021-06-28 
+- [GNN short GOLD solution LB=0.18345 PB=0.20139](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275185) — 85 票 / 40 评论 / 2021-09-29 **write-up?**
+- [Forward filling book data](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251277) — 83 票 / 29 评论 / 2021-07-06 
+- [Some Feature Selection Technique](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/269283) — 81 票 / 43 评论 / 2021-08-31 
+- [🔥 Best Previous notebooks that can help winning this competition 🔥](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249899) — 76 票 / 13 评论 / 2021-06-30 **write-up?**
+- [Data Science career at Optiver](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249476) — 75 票 / 26 评论 / 2021-06-28 
+- [Competition Q&A](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249474) — 73 票 / 165 评论 / 2021-06-28 
+- [Some more useful features](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/273915) — 69 票 / 7 评论 / 2021-09-23 
+- [additional Realized Volatility Estimators and Quarticity](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/267096) — 69 票 / 19 评论 / 2021-08-21 
+- [15th Place, Interesting Features - No Phishing](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/276137) — 61 票 / 21 评论 / 2021-10-03 **write-up?**
+- [Neural Network Observations & General Wondering ...](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/266354) — 61 票 / 19 评论 / 2021-08-18 
+- [Top 3 mysteries after 2 months of struggles](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/273349) — 59 票 / 12 评论 / 2021-09-20 
+- [Ablation study on the 1st place solution: effect of ensemble, tick-size leak and normalization](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/302626) — 56 票 / 5 评论 / 2022-01-23 **write-up?**
+- [Forecasting volatility with the ARCH and GARCH models](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250998) — 55 票 / 11 评论 / 2021-07-05 
+- [.parquet files - how to deal with it?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249513) — 55 票 / 18 评论 / 2021-06-28 
+- [Feature Engineering and Selection (Free book)](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/255833) — 53 票 / 15 评论 / 2021-07-29 
+- [seconds_in_bucket not starting from zero in some parts of the filler data](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251775) — 53 票 / 47 评论 / 2021-07-08 
+- [Results of Correlation Analysis with 192 Features ](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250688) — 50 票 / 8 评论 / 2021-07-03 
+- [LGB starter](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251543) — 46 票 / 1 评论 / 2021-07-07 
+- [TabNet BaseLine[LB0.21445]. Ensemble with LGBM [LB0.2092]](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/263321) — 45 票 / 37 评论 / 2021-08-09 
+- [TabNet - Top scored public notebook 🕵️- [Optiver Volatility]](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/264787) — 45 票 / 17 评论 / 2021-08-13 
+- [Where is the "magic" of this competition?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/256356) — 45 票 / 12 评论 / 2021-08-01 
+- [Tentative 3rd Place Solution (6th in Public) - life is volatile](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/278676) — 45 票 / 5 评论 / 2021-10-15 **write-up?**
+- [Tips To Speed Up Feature Engineering](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/253503) — 44 票 / 13 评论 / 2021-07-17 
+- [Public 12 Place Short Solution](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275169) — 43 票 / 25 评论 / 2021-09-29 **write-up?**
+- [How many Stock Embedding - FFNN - My features notebooks are we gonna see?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/267507) — 42 票 / 9 评论 / 2021-08-23 
+- [Difference between CV and public LB](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/256231) — 42 票 / 29 评论 / 2021-07-31 
+- [RAPIDS Solution](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/273343) — 42 票 / 2 评论 / 2021-09-20 **write-up?**
+- [Single Model CV-LB Score (Non-Model Score)](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250695) — 42 票 / 30 评论 / 2021-07-03 
+- [MLP Mixer Baseline - 0 Feature Engineering MLP Model](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/273116) — 40 票 / 12 评论 / 2021-09-19 
+- [Revised second rerun is posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/284665) — 40 票 / 9 评论 / 2021-11-01 
+- [Optimize your workflow](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/266191) — 40 票 / 4 评论 / 2021-08-18 
+- [What was the secret? 🕵️‍♂️](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274873) — 39 票 / 25 评论 / 2021-09-28 
+- [My Final Thoughts](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/265113) — 39 票 / 29 评论 / 2021-08-14 
+- [Stock aggregation - 5 strategies](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/265143) — 37 票 / 34 评论 / 2021-08-14 
+- [FYI - Schedule of remaining updates](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/294962) — 37 票 / 0 评论 / 2021-12-13 
+- [Dear organizer & \compliance](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275134) — 37 票 / 21 评论 / 2021-09-28 
+- [Fourth score update delayed until next week](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/290289) — 36 票 / 1 评论 / 2021-11-23 
+- [A compilation of solutions & other conversations](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275825) — 35 票 / 2 评论 / 2021-10-01 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249471) — 35 票 / 222 评论 / 2021-06-28 
+- [Why feed-forward networks win against LightGBM](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/272867) — 34 票 / 7 评论 / 2021-09-17 
+- [Shakeup #2 plot: Surprisingly volatile...](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/283843) — 34 票 / 13 评论 / 2021-10-28 
+- [What are the best practices during the competitions?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/262203) — 33 票 / 12 评论 / 2021-08-06 
+- [Variance inflation factor (VIF)](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/252060) — 33 票 / 20 评论 / 2021-07-10 
+- [Ideas Tried But Did Not Work](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275466) — 33 票 / 16 评论 / 2021-09-30 
+- [Models off the beaten path](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274852) — 33 票 / 16 评论 / 2021-09-27 
+- [Public 37th solution](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275473) — 32 票 / 8 评论 / 2021-09-30 **write-up?**
+- [Thank you all! ](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/300020) — 30 票 / 4 评论 / 2022-01-10 
+- [Online Data Science Events: Realized Volatility and Competition Data Explained](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/273923) — 30 票 / 2 评论 / 2021-09-23 
+- [Neural Network without any feature engineering](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/268184) — 29 票 / 20 评论 / 2021-08-26 
+- [Related Financial Competitions](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249516) — 29 票 / 3 评论 / 2021-06-28 
+- [🎉🎉 Congrats new Competitions Master !!!](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/268584) — 28 票 / 30 评论 / 2021-08-27 
+- [Top 5 Worst Predicted Time Buckets](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/271920) — 28 票 / 15 评论 / 2021-09-13 
+- [7th place main ideas](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/276506) — 28 票 / 15 评论 / 2022-01-13 **write-up?**
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249473) — 28 票 / 18 评论 / 2021-06-28 
+- [Ideas about handling stock 31?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251611) — 28 票 / 6 评论 / 2021-07-08 
+- [the distribution of calculated vols is different from that of targets  ](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251358) — 28 票 / 20 评论 / 2021-07-07 
+- [Accelerate pandas aggregation by Numba.](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/254149) — 28 票 / 8 评论 / 2021-07-20 
+- [Cross-Validation (CV) vs. Leaderboard (LB)](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250650) — 27 票 / 20 评论 / 2021-07-03 
+- [Fourth score update posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/291550) — 27 票 / 2 评论 / 2021-11-29 
+- [Experimental Setup](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250781) — 27 票 / 23 评论 / 2021-07-04 
+- [Three tricks which did work](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274937) — 26 票 / 8 评论 / 2021-09-28 
+- [CV Splitting by time_id](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/256226) — 26 票 / 13 评论 / 2021-07-31 
+- [Contributor to Master in a week :)](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/300043) — 26 票 / 11 评论 / 2022-01-10 
+- [Third Update Posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/286828) — 26 票 / 4 评论 / 2021-11-10 
+- [The Optiver team should make a submission or two](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/267068) — 25 票 / 9 评论 / 2021-08-21 
+- [I couldn't believe my eyes ...](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/273675) — 25 票 / 10 评论 / 2021-09-22 
+- [Smoothing methods for time series](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/265268) — 24 票 / 3 评论 / 2021-08-15 
+- [Yet another feature idea](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/266049) — 24 票 / 13 评论 / 2021-08-17 
+- [tau features?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/269735) — 24 票 / 11 评论 / 2021-09-01 
+- [Congrats to chumajin on becoming a notebooks grandmaster!](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/264299) — 24 票 / 10 评论 / 2021-08-11 
+- [Averting "No module named 'keras' " errors](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/271367) — 24 票 / 11 评论 / 2021-09-10 
+- [No Feature Engineering NN Only Solution](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274936) — 24 票 / 7 评论 / 2021-09-28 **write-up?**
+- [Custom SPE loss and RMSPE metric for XGBoost](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251517) — 23 票 / 1 评论 / 2021-07-07 
+- [Error handling reminder](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274222) — 23 票 / 25 评论 / 2021-09-24 
+- [Feed Foward NN + LGBM - SCORE 0.20727](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/265438) — 22 票 / 3 评论 / 2021-08-15 
+- [Congrats to @nyanpn for becoming GM with this solo win](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/300079) — 22 票 / 11 评论 / 2022-01-11 
+- [XGBoost Baseline with Statistical Feature Engineering](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249696) — 22 票 / 2 评论 / 2021-06-29 
+- [Starter solution with a 10x speed improvement](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250221) — 22 票 / 4 评论 / 2021-07-01 **write-up?**
+- [When do we expect the first LB update? ](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274874) — 22 票 / 5 评论 / 2021-09-28 
+- [When Was the Training Data Set Collected](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/270947) — 22 票 / 4 评论 / 2021-09-07 
+- [Sixth update posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/296670) — 21 票 / 2 评论 / 2021-12-23 
+- [Another Type of Validation (Nested CV)](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/260694) — 20 票 / 7 评论 / 2021-08-03 
+- [Main difference between simple KFold and time id based GroupKfold.](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/262185) — 20 票 / 7 评论 / 2021-08-06 
+- [My drop from 37th public -> 2786th private explained](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/300746) — 19 票 / 5 评论 / 2022-01-14 
+- [Shakeup plots](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/278447) — 19 票 / 8 评论 / 2021-10-14 
+- [Things I tried](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274884) — 19 票 / 7 评论 / 2021-09-28 
+- [NN for Tabular Dataset](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/272281) — 18 票 / 11 评论 / 2021-09-14 
+- [Some thoughts about possible shake-up...](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/264644) — 18 票 / 17 评论 / 2021-08-12 
+- [Is aggregating by time_id helped?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/256018) — 18 票 / 17 评论 / 2021-07-30 
+- [Notebook expert](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/251911) — 18 票 / 12 评论 / 2021-07-09 
+- ["Notebook Threw Exception" error only on submission](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250498) — 18 票 / 8 评论 / 2021-07-03 
+- [Fifth score update posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/294344) — 18 票 / 1 评论 / 2021-12-10 
+- [knn++ algorithm](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/268813) — 17 票 / 6 评论 / 2021-08-29 
+- [What is the "ground truth" realized volatility?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/250612) — 17 票 / 8 评论 / 2021-07-03 
+- [My three ways of volatility prediction.](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/267761) — 17 票 / 12 评论 / 2021-08-24 
+- [Public 39th solution – 10-folds lgbm](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/275973) — 17 票 / 7 评论 / 2021-10-02 **write-up?**
+- [Is loading of preprocessed train dataset considered as External Data?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/271671) — 16 票 / 19 评论 / 2021-09-11 
+- [Final Update Posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/300023) — 16 票 / 1 评论 / 2022-01-10 
+- [Questions About the Stock ID](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/249570) — 16 票 / 5 评论 / 2021-06-29 
+- [Rules clarification](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274087) — 16 票 / 20 评论 / 2021-09-24 
+- [Is this the end of pandas?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274879) — 16 票 / 10 评论 / 2021-09-28 
+- [First rerun update posted](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/278361) — 16 票 / 31 评论 / 2021-10-14 
+- [Why GroupKFold hurts LB?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/264825) — 16 票 / 4 评论 / 2021-08-13 
+- [Time Series Techniques for This Competition](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/265193) — 16 票 / 12 评论 / 2021-08-15 
+- [1D CNN Baseline](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/265425) — 15 票 / 11 评论 / 2021-08-15 
+- [What do you think about the final Private Leaderboard Score ??](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274431) — 15 票 / 11 评论 / 2021-09-26 
+- [Any meaningful stock clustering?](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/261960) — 15 票 / 3 评论 / 2021-08-05 
+- [wow, up to now it feels like being on a roller coaster!](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/287216) — 15 票 / 7 评论 / 2021-11-12 
+- [How to use Facebook Prophet for time series](https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/252676) — 15 票 / 1 评论 / 2021-07-13 

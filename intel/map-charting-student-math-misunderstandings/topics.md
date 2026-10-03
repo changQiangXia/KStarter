@@ -1,0 +1,82 @@
+# map-charting-student-math-misunderstandings 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612268) — 191 票 / 30 评论 / 2025-10-18 **write-up?**
+- [Does Test Data Have Questions Different Than Train Data?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589400) — 98 票 / 65 评论 / 2025-07-12 
+- [18th Place - Pyramid Ensemble](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612096) — 81 票 / 39 评论 / 2025-10-16 **write-up?**
+- [3rd place (Public 1st) solution : monsaraida & Masaya](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612059) — 78 票 / 9 评论 / 2025-10-16 **write-up?**
+- [Ettin-Encoder-1B achieves LB 0.940 wow!](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590326) — 75 票 / 38 评论 / 2025-07-20 
+- [Is Bigger Better? Gemma2-9B vs Ettin-1B achieves LB 0.942!](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590923) — 71 票 / 10 评论 / 2025-07-24 
+- [Place 22 with only 1 model](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611985) — 68 票 / 19 评论 / 2025-10-16 
+- [DeBERTa versus ModernBERT? Which is Better?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590096) — 66 票 / 24 评论 / 2025-07-17 
+- [10th Place Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612038) — 64 票 / 23 评论 / 2025-10-16 **write-up?**
+- [From 1.5B to 7B: My Best Single Model LB Score So Far](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/598250) — 62 票 / 26 评论 / 2025-08-09 
+- [Is Public LB 0.950 a Resistance Level?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/591054) — 50 票 / 20 评论 / 2025-07-25 
+- [Deberta versus Tf-idf? Which is Better?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589452) — 48 票 / 16 评论 / 2025-07-13 
+- [✨ MAP 6th Place Solution - Qwen-semble FTW! 🚀](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612099) — 44 票 / 4 评论 / 2025-10-16 **write-up?**
+- [MAP2025_Private&Public 2nd ](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612145) — 44 票 / 10 评论 / 2025-10-17 
+- [8th Place Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612101) — 37 票 / 10 评论 / 2025-10-16 **write-up?**
+- [The Rise of the 1-Shot Submit](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611998) — 33 票 / 13 评论 / 2025-10-16 
+- [5th place solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612124) — 31 票 / 0 评论 / 2025-10-17 **write-up?**
+- [Correct and Misconception, yeah we know what they are, but what's Neither?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589274) — 29 票 / 5 评论 / 2025-07-11 
+- [4th Place Solution (single model pb 0.948 lb 0.951)](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612178) — 28 票 / 2 评论 / 2025-10-17 **write-up?**
+- [Will submissions be re-run for private LB?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589453) — 27 票 / 15 评论 / 2025-07-13 
+- [Private 7th (Public 10th) Place Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612134) — 27 票 / 4 评论 / 2025-10-17 **write-up?**
+- [Public 8th / Private 24th Solution (Miss a gold solution)](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612003) — 26 票 / 4 评论 / 2025-10-16 **write-up?**
+- [15th Place Solution Writeup](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612062) — 26 票 / 3 评论 / 2025-10-16 **write-up?**
+- [MAP Competition 13th Place Gold Medal Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612069) — 24 票 / 0 评论 / 2025-10-16 **write-up?**
+- [Is there any additional labels in hidden test data](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/603909) — 23 票 / 4 评论 / 2025-09-05 
+- [9th Place Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612105) — 22 票 / 0 评论 / 2025-10-17 **write-up?**
+- [Overcoming Misconceptions for Learning.  Do's and Dont' s. ](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589208) — 22 票 / 2 评论 / 2025-07-11 
+- [All we need - A box contains 120 counters + AI generated extra training data !!](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589193) — 20 票 / 15 评论 / 2025-07-10 
+- [Wrong Labels in 31778 \( 6 \) AND \( 9 \): True and False exist in same MC_Answer](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590451) — 19 票 / 7 评论 / 2025-07-21 
+- [12th Place Solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612114) — 19 票 / 0 评论 / 2025-10-16 **write-up?**
+- [Public 32/Private 203 Place(Did not select the best scoring notebook)](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611995) — 19 票 / 10 评论 / 2025-10-16 
+- [Inconsistent targets for duplicate texts ](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/604008) — 18 票 / 5 评论 / 2025-09-05 
+- [Misconception - Categorical or Natural text](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589500) — 17 票 / 5 评论 / 2025-07-13 
+- [Misconception Combination Coverage in Training vs Test Data](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590165) — 17 票 / 3 评论 / 2025-07-18 
+- [Private LB 0.945: Merging LoRA Adapters](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611990) — 16 票 / 1 评论 / 2025-10-16 
+- [Public 29 Private 75 approach - simple blend of multiple model families](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612279) — 16 票 / 0 评论 / 2025-10-18 
+- [45th Place (Silver Medal) : A Multi-LLM Ensemble Approach [LB-0.947]](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612021) — 16 票 / 3 评论 / 2025-10-16 **write-up?**
+- [The Discussions section says it all](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589226) — 15 票 / 51 评论 / 2025-07-11 
+- [How Big Are The Models Going To Be (Top Solutions)](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590129) — 14 票 / 6 评论 / 2025-07-18 **write-up?**
+- [🕵️ I/O performance test in Kaggle Kernel](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612649) — 14 票 / 2 评论 / 2025-10-21 
+- [How data collected?  [maybe] - What Category means?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589350) — 14 票 / 0 评论 / 2025-07-12 
+- [Get started here](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589185) — 13 票 / 7 评论 / 2025-07-10 
+- [Public 16 / Private 30 solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612004) — 13 票 / 2 评论 / 2025-10-16 **write-up?**
+- [Wrong_fraction vs Wrong_Fraction](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/596220) — 13 票 / 1 评论 / 2025-08-02 
+- [26th place solution](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612049) — 12 票 / 2 评论 / 2025-10-16 **write-up?**
+- [Private LB 0.946 = Just add postprocessing](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612002) — 11 票 / 4 评论 / 2025-10-16 
+- [Same StudentExplanation with different MC_Answer selected and different Misconception labels assigned.](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/598184) — 11 票 / 4 评论 / 2025-08-09 
+- [Upshake 319 places! Gemini fewshot labels](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612020) — 10 票 / 3 评论 / 2025-10-16 
+- [CV vs LB scores](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589544) — 10 票 / 10 评论 / 2025-07-13 
+- [Are we in danger of MAP@3 of 1.0 on LB](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589335) — 10 票 / 13 评论 / 2025-07-12 
+- [0.948 (public) and 0.945 (private) using single model [Public 38/Private 257]](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612013) — 9 票 / 13 评论 / 2025-10-16 
+- [Understanding Submission Workflows for Long Training Times](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589476) — 9 票 / 6 评论 / 2025-07-13 
+- [Meaning of Misconceptions & Will New Ones Appear in Test Data?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590078) — 9 票 / 1 评论 / 2025-07-17 
+- [Public 6th | Private 31st solution - Multi-head structure](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612598) — 9 票 / 4 评论 / 2025-10-20 **write-up?**
+- [21 Public/56 Private Solution - Data Augmentation and Feature Engineering](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612128) — 8 票 / 0 评论 / 2025-10-17 **write-up?**
+- [Evaluation metric question](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589280) — 8 票 / 2 评论 / 2025-07-11 
+- [Single Model - Best Score](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590510) — 8 票 / 7 评论 / 2025-07-21 
+- [Same Expressions, Different Labels](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590148) — 8 票 / 2 评论 / 2025-07-18 
+- [[Closed] Looking to Team Up: Single-Model (strictly, OOF) LB=0.949(currently 32nd) Solution Available](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/608184) — 8 票 / 10 评论 / 2025-09-18 **write-up?**
+- [How to check Category and Misconception ? ](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/591080) — 8 票 / 9 评论 / 2025-07-25 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612559) — 7 票 / 0 评论 / 2025-10-20 
+- [What's the best score of your single models?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/604435) — 7 票 / 18 评论 / 2025-09-07 
+- [Misconception vs Neither](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/591448) — 7 票 / 1 评论 / 2025-07-28 
+- [Duplicate misconception labels](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590318) — 7 票 / 3 评论 / 2025-07-19 
+- [More Decimal Places](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611982) — 7 票 / 2 评论 / 2025-10-16 
+- [MAP@3 Competition [LB 0.945] ](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612042) — 7 票 / 0 评论 / 2025-10-16 
+- [the linked report for the Misconception Reference PDF is missing.](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589429) — 6 票 / 2 评论 / 2025-07-12 
+- [I think there are errors in the labels as well](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/597944) — 6 票 / 0 评论 / 2025-08-08 
+- [Misconception Prediction](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590788) — 6 票 / 4 评论 / 2025-07-23 
+- [Are simple models are effective in this problem?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590980) — 6 票 / 4 评论 / 2025-07-24 
+- [What does 'True_Neither' mean?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/590171) — 6 票 / 1 评论 / 2025-07-18 
+- [0.001 gain](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611992) — 6 票 / 0 评论 / 2025-10-16 
+- [Has this happened on Kaggle before?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/611988) — 6 票 / 18 评论 / 2025-10-16 
+- [A useful resource](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589340) — 6 票 / 1 评论 / 2025-07-12 
+- [This Competition Has an Official Discord.](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/589184) — 5 票 / 3 评论 / 2025-07-10 
+- [How to handle duplicate rows ?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/596778) — 5 票 / 4 评论 / 2025-08-05 
+- [How to improve model(s)?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/596987) — 5 票 / 10 评论 / 2025-08-06 
+- [Val loss = NaN with QLoRA](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/598868) — 5 票 / 9 评论 / 2025-08-13 
+- [98th Place Bronze Solution (43rd on Public LB)](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612054) — 5 票 / 0 评论 / 2025-10-16 **write-up?**
+- [Handling sparse targets - remove, correct or leave alone?](https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/609472) — 5 票 / 7 评论 / 2025-09-26 

@@ -1,0 +1,122 @@
+# orbit-wars 讨论区（按票数排序，共 120 条）
+
+- [Scaling Reinforcement Learning to the Stars](https://www.kaggle.com/competitions/orbit-wars/discussion/714324) — 150 票 / 80 评论 / 2026-06-26 
+- [Sharing our RL lessons so far](https://www.kaggle.com/competitions/orbit-wars/discussion/697725) — 126 票 / 110 评论 / 2026-05-07 
+- [N < 10th (🤞) Solution for Orbit Wars](https://www.kaggle.com/competitions/orbit-wars/discussion/713276) — 98 票 / 46 评论 / 2026-06-24 **write-up?**
+- [1st Place Solution - Scaling Reinforcement Learning to the Stars](https://www.kaggle.com/competitions/orbit-wars/discussion/724268) — 90 票 / 18 评论 / 2026-07-10 **write-up?**
+- [2nd Place Solution for Orbit Wars](https://www.kaggle.com/competitions/orbit-wars/discussion/723728) — 90 票 / 20 评论 / 2026-07-08 **write-up?**
+- [Vibecoded a local Orbit Wars visualizer for myself - sharing in case useful](https://www.kaggle.com/competitions/orbit-wars/discussion/694127) — 83 票 / 14 评论 / 2026-04-23 
+- [[SOLVED] Proposal: use 90-degree rotational symmetry for fairer 4-player maps](https://www.kaggle.com/competitions/orbit-wars/discussion/694310) — 77 票 / 17 评论 / 2026-04-24 
+- [Struggling with RL? Something that helped me.](https://www.kaggle.com/competitions/orbit-wars/discussion/707869) — 67 票 / 50 评论 / 2026-06-12 
+- [Rookie RL trajectory: implementing GRPO for adversarial games from scratch](https://www.kaggle.com/competitions/orbit-wars/discussion/713408) — 59 票 / 28 评论 / 2026-06-24 
+- [Orbit Wars top-10% daily episode replay datasets](https://www.kaggle.com/competitions/orbit-wars/discussion/697413) — 49 票 / 18 评论 / 2026-05-05 
+- [🤖 Agents are coming for the leaderboard](https://www.kaggle.com/competitions/orbit-wars/discussion/696214) — 44 票 / 17 评论 / 2026-05-01 
+- [How I made Ender](https://www.kaggle.com/competitions/orbit-wars/discussion/713483) — 43 票 / 28 评论 / 2026-06-24 
+- [Introducing "The Producer" agent](https://www.kaggle.com/competitions/orbit-wars/discussion/704113) — 42 票 / 9 评论 / 2026-06-03 
+- [Lessons learned so far in this competition](https://www.kaggle.com/competitions/orbit-wars/discussion/704741) — 42 票 / 4 评论 / 2026-06-05 
+- [Top 100 rule-based agent](https://www.kaggle.com/competitions/orbit-wars/discussion/713354) — 40 票 / 21 评论 / 2026-06-24 
+- [Writeup: My Orbit Wars Solution](https://www.kaggle.com/competitions/orbit-wars/discussion/713126) — 40 票 / 13 评论 / 2026-06-24 **write-up?**
+- [baseline method: Planet Wars AI Competition](https://www.kaggle.com/competitions/orbit-wars/discussion/692800) — 39 票 / 3 评论 / 2026-04-17 
+- [FLG's solution: RL + league + short rollout search with custom edge attention](https://www.kaggle.com/competitions/orbit-wars/discussion/713519) — 38 票 / 9 评论 / 2026-06-24 **write-up?**
+- [13th Place Solo Gold Solution](https://www.kaggle.com/competitions/orbit-wars/discussion/723731) — 38 票 / 8 评论 / 2026-07-08 **write-up?**
+- [My Orbit Wars Solution (Jake Will)](https://www.kaggle.com/competitions/orbit-wars/discussion/723325) — 38 票 / 6 评论 / 2026-07-07 **write-up?**
+- [Clarification on Orbit Wars runtime environment specs?](https://www.kaggle.com/competitions/orbit-wars/discussion/700191) — 36 票 / 19 评论 / 2026-05-16 
+- [Some considerations on evaluating targets](https://www.kaggle.com/competitions/orbit-wars/discussion/699003) — 33 票 / 10 评论 / 2026-05-12 
+- [[3rd Place] Ab in den Orbit](https://www.kaggle.com/competitions/orbit-wars/discussion/723820) — 31 票 / 5 评论 / 2026-07-08 **write-up?**
+- [🚀 Play orbit wars in your browser](https://www.kaggle.com/competitions/orbit-wars/discussion/696221) — 30 票 / 5 评论 / 2026-05-01 
+- [8th Place: How I Made Ender for <$200](https://www.kaggle.com/competitions/orbit-wars/discussion/723739) — 30 票 / 7 评论 / 2026-07-08 **write-up?**
+- [Reinforcement Learning vs. Rule-Based Optimization — Which Will Dominate?](https://www.kaggle.com/competitions/orbit-wars/discussion/693755) — 27 票 / 21 评论 / 2026-04-22 
+- [Orbit Wars Daily Episode Datasets](https://www.kaggle.com/competitions/orbit-wars/discussion/701894) — 26 票 / 9 评论 / 2026-05-19 
+- [It has been an honor competing with you all!](https://www.kaggle.com/competitions/orbit-wars/discussion/713107) — 24 票 / 1 评论 / 2026-06-24 
+- [Orbit Wars Tooling: Visualizer, "Cinema" Mode, and Tournament Runner](https://www.kaggle.com/competitions/orbit-wars/discussion/702126) — 24 票 / 11 评论 / 2026-05-21 
+- [Will the LB stabilize?](https://www.kaggle.com/competitions/orbit-wars/discussion/714395) — 23 票 / 38 评论 / 2026-06-26 
+- [Submissions are closed! Evaluation period has started](https://www.kaggle.com/competitions/orbit-wars/discussion/713110) — 22 票 / 19 评论 / 2026-06-24 
+- [kaggle 2.0.2 is now available for downloading replays and agent logs!](https://www.kaggle.com/competitions/orbit-wars/discussion/694210) — 22 票 / 11 评论 / 2026-04-23 
+- [My Orbit wars journey to rank 59 visually recapped.](https://www.kaggle.com/competitions/orbit-wars/discussion/705019) — 21 票 / 19 评论 / 2026-06-08 
+- [Possible orbit_wars observation inconsistency: initial_planets differs by player after comet updates](https://www.kaggle.com/competitions/orbit-wars/discussion/692695) — 21 票 / 6 评论 / 2026-04-17 
+- [Orbit Wars: Day 1 Autonomous Research & Development Summary](https://www.kaggle.com/competitions/orbit-wars/discussion/696219) — 21 票 / 13 评论 / 2026-05-01 
+- [remainingOverageTime 60s](https://www.kaggle.com/competitions/orbit-wars/discussion/694188) — 21 票 / 4 评论 / 2026-04-23 
+- [🪐 Community Benchmark — 50-Agent Mega Tournament](https://www.kaggle.com/competitions/orbit-wars/discussion/698614) — 20 票 / 3 评论 / 2026-05-10 
+- [What should we do now? Submit, or wait for the Kaggle team to fix this?](https://www.kaggle.com/competitions/orbit-wars/discussion/712102) — 20 票 / 19 评论 / 2026-06-22 
+- [Last day scramble](https://www.kaggle.com/competitions/orbit-wars/discussion/713187) — 20 票 / 10 评论 / 2026-06-24 
+- [[TIPS] Several ways to create failed submissions and how to avoid them. ](https://www.kaggle.com/competitions/orbit-wars/discussion/694217) — 20 票 / 2 评论 / 2026-04-23 
+- [GPU Poor, PPO Rich: A Top 2%(75th) Pure Self-Play Solution](https://www.kaggle.com/competitions/orbit-wars/discussion/714226) — 20 票 / 6 评论 / 2026-06-25 **write-up?**
+- [128 seeds, 32 game-shape archetypes — a small eval panel](https://www.kaggle.com/competitions/orbit-wars/discussion/701745) — 19 票 / 6 评论 / 2026-05-19 
+- [Why is it taking this much time to submit ?](https://www.kaggle.com/competitions/orbit-wars/discussion/711880) — 19 票 / 10 评论 / 2026-06-22 
+- [Yet another RL Solution from Team One Man Wrecking Machine](https://www.kaggle.com/competitions/orbit-wars/discussion/714276) — 19 票 / 3 评论 / 2026-06-26 **write-up?**
+- [Implementing a critic free RL in adversarial games from scratch](https://www.kaggle.com/competitions/orbit-wars/discussion/723786) — 19 票 / 1 评论 / 2026-07-08 
+- [Orbit Wars: Day 2](https://www.kaggle.com/competitions/orbit-wars/discussion/697397) — 18 票 / 5 评论 / 2026-05-05 
+- [Orbit Wars Replay Dataset (parquet) - 3,000+ games ready to analyze in seconds](https://www.kaggle.com/competitions/orbit-wars/discussion/701984) — 18 票 / 4 评论 / 2026-05-20 
+- [Proposal: Fix Orbit War fleet tunneling planets bug due to collision checking granularity](https://www.kaggle.com/competitions/orbit-wars/discussion/696043) — 17 票 / 13 评论 / 2026-05-01 
+- [Daily release of all game data to ensure fairness and efficiency](https://www.kaggle.com/competitions/orbit-wars/discussion/696747) — 17 票 / 18 评论 / 2026-05-03 
+- [Leaderboard Match Pairings & Proportion of 2P vs 4P](https://www.kaggle.com/competitions/orbit-wars/discussion/698659) — 17 票 / 13 评论 / 2026-05-11 
+- [ELO rating](https://www.kaggle.com/competitions/orbit-wars/discussion/693515) — 17 票 / 9 评论 / 2026-04-21 
+- [Is Leaderboard Reset at deadline before Private LB 2 Weeks?](https://www.kaggle.com/competitions/orbit-wars/discussion/705041) — 17 票 / 6 评论 / 2026-06-08 
+- [Benchmark dataset for aiming](https://www.kaggle.com/competitions/orbit-wars/discussion/703466) — 16 票 / 1 评论 / 2026-05-31 
+- [Proposal to improve ranking convergence](https://www.kaggle.com/competitions/orbit-wars/discussion/716725) — 16 票 / 7 评论 / 2026-06-30 
+- [Proportion of 4P vs 2P for top players](https://www.kaggle.com/competitions/orbit-wars/discussion/704777) — 15 票 / 7 评论 / 2026-06-06 
+- [Matchmaking Fix](https://www.kaggle.com/competitions/orbit-wars/discussion/705170) — 15 票 / 12 评论 / 2026-06-08 
+- [Monte Carlo Tree Search on top of rule-based policy](https://www.kaggle.com/competitions/orbit-wars/discussion/713494) — 15 票 / 0 评论 / 2026-06-24 
+- [Beyond the Blade to the Realm of Void](https://www.kaggle.com/competitions/orbit-wars/discussion/708826) — 15 票 / 2 评论 / 2026-06-17 
+- [Torch-native Environment](https://www.kaggle.com/competitions/orbit-wars/discussion/700270) — 14 票 / 0 评论 / 2026-05-17 
+- [What wizardry is this?](https://www.kaggle.com/competitions/orbit-wars/discussion/712726) — 14 票 / 5 评论 / 2026-06-23 
+- [Alternative Orbit Wars Rankings](https://www.kaggle.com/competitions/orbit-wars/discussion/729951) — 14 票 / 7 评论 / 2026-07-27 
+- [[6th] RL + league + search with a custom edge attention transformer](https://www.kaggle.com/competitions/orbit-wars/discussion/728496) — 14 票 / 0 评论 / 2026-07-23 
+- [Caution: Agent metadata may be publicly readable](https://www.kaggle.com/competitions/orbit-wars/discussion/698395) — 14 票 / 6 评论 / 2026-05-09 
+- [Why are matchmaking and scoring not transparent ? ](https://www.kaggle.com/competitions/orbit-wars/discussion/707660) — 14 票 / 7 评论 / 2026-06-11 
+- [How I got to top 100 using 2x0.4M models](https://www.kaggle.com/competitions/orbit-wars/discussion/714684) — 13 票 / 2 评论 / 2026-06-26 
+- [Rank ~55 solution: a first-time RL practitioner’s experience](https://www.kaggle.com/competitions/orbit-wars/discussion/715147) — 13 票 / 8 评论 / 2026-06-27 **write-up?**
+- ['Validation Episode failed' Error on Submit](https://www.kaggle.com/competitions/orbit-wars/discussion/692938) — 13 票 / 20 评论 / 2026-04-18 
+- [[Solved] change orange/yellow colors to add contrast](https://www.kaggle.com/competitions/orbit-wars/discussion/693541) — 13 票 / 5 评论 / 2026-04-21 
+- [Green/Gold odds](https://www.kaggle.com/competitions/orbit-wars/discussion/723594) — 13 票 / 6 评论 / 2026-07-07 
+- [Random walk round the orbit](https://www.kaggle.com/competitions/orbit-wars/discussion/714058) — 12 票 / 2 评论 / 2026-06-25 
+- [I'm not worried by lack of game play](https://www.kaggle.com/competitions/orbit-wars/discussion/713108) — 12 票 / 12 评论 / 2026-06-24 
+- [Download your agent logs from UI](https://www.kaggle.com/competitions/orbit-wars/discussion/695256) — 12 票 / 0 评论 / 2026-04-29 
+- [Custom scoring formula for optimal target planets](https://www.kaggle.com/competitions/orbit-wars/discussion/694971) — 12 票 / 3 评论 / 2026-04-27 
+- [Symmetry Update: Use 90-degree rotational symmetry for fairer 4-player maps](https://www.kaggle.com/competitions/orbit-wars/discussion/694910) — 11 票 / 10 评论 / 2026-04-27 
+- [Ratings restart from 600 after deadline?](https://www.kaggle.com/competitions/orbit-wars/discussion/712221) — 11 票 / 5 评论 / 2026-06-22 
+- [Is a bronze medal feasible with just heuristics?](https://www.kaggle.com/competitions/orbit-wars/discussion/695715) — 11 票 / 27 评论 / 2026-04-30 **write-up?**
+- [[solved] how to get kaggle lb render version of playback (contains more information than kaggle api)](https://www.kaggle.com/competitions/orbit-wars/discussion/692880) — 11 票 / 6 评论 / 2026-04-18 
+- [[Utility] Replay JSON to Pandas DataFrame for ML/RL models!](https://www.kaggle.com/competitions/orbit-wars/discussion/694776) — 10 票 / 0 评论 / 2026-04-27 
+- [🪐 Community Benchmark — 109-Agent Mega Tournament](https://www.kaggle.com/competitions/orbit-wars/discussion/704095) — 10 票 / 3 评论 / 2026-06-03 
+- [Orbit Wars: What I Tried, What Worked, and What's Next](https://www.kaggle.com/competitions/orbit-wars/discussion/705482) — 10 票 / 3 评论 / 2026-06-10 
+- [110th Place Solution – PPO with GAE Clipping and CUDA-Based Rollouts](https://www.kaggle.com/competitions/orbit-wars/discussion/713535) — 10 票 / 0 评论 / 2026-06-24 **write-up?**
+- [What is going on in the leaderboard? Why is 2500 rated bot plays with 700 rated?](https://www.kaggle.com/competitions/orbit-wars/discussion/693767) — 10 票 / 9 评论 / 2026-04-22 
+- [Orbit Wars debug visualizer if you want to iterate and debug locally.](https://www.kaggle.com/competitions/orbit-wars/discussion/695865) — 9 票 / 0 评论 / 2026-04-30 
+- [Why no Reinforcement Learning approaches yet?](https://www.kaggle.com/competitions/orbit-wars/discussion/693020) — 9 票 / 41 评论 / 2026-04-19 
+- [Fix for notebook crashes/freezes when viewing match replays.](https://www.kaggle.com/competitions/orbit-wars/discussion/693144) — 9 票 / 6 评论 / 2026-04-19 
+- [7th Place Solution - How structured experiments saved my sanity](https://www.kaggle.com/competitions/orbit-wars/discussion/728348) — 9 票 / 2 评论 / 2026-07-22 **write-up?**
+- [Possible bug: scheduler pairing submissions using a stale rating](https://www.kaggle.com/competitions/orbit-wars/discussion/711754) — 9 票 / 10 评论 / 2026-06-22 
+- [Stale games?](https://www.kaggle.com/competitions/orbit-wars/discussion/712285) — 9 票 / 5 评论 / 2026-06-22 
+- [That's a wrap, what a ride 🚀](https://www.kaggle.com/competitions/orbit-wars/discussion/713112) — 9 票 / 2 评论 / 2026-06-24 
+- [Balance of 2-player and 4-player games](https://www.kaggle.com/competitions/orbit-wars/discussion/713710) — 9 票 / 33 评论 / 2026-06-25 
+- [Complete novice to Top 100 w/ self-play PPO](https://www.kaggle.com/competitions/orbit-wars/discussion/717226) — 9 票 / 1 评论 / 2026-07-01 
+- [19th Place Gold Writeup](https://www.kaggle.com/competitions/orbit-wars/discussion/724139) — 9 票 / 0 评论 / 2026-07-09 **write-up?**
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/orbit-wars/discussion/692290) — 8 票 / 4 评论 / 2026-04-16 
+- [Orbit Journey - Simulated Annealing Method](https://www.kaggle.com/competitions/orbit-wars/discussion/714020) — 8 票 / 0 评论 / 2026-06-25 
+- [Downloading Replays from UI](https://www.kaggle.com/competitions/orbit-wars/discussion/694980) — 8 票 / 0 评论 / 2026-04-27 
+- [An attempt at treating Orbit Wars like chess](https://www.kaggle.com/competitions/orbit-wars/discussion/714467) — 8 票 / 0 评论 / 2026-06-26 
+- [Benchmarked some of the agents in the code section against each other:](https://www.kaggle.com/competitions/orbit-wars/discussion/698536) — 8 票 / 0 评论 / 2026-05-10 
+- [RL Model Scaling vs Stability](https://www.kaggle.com/competitions/orbit-wars/discussion/707656) — 8 票 / 21 评论 / 2026-06-11 
+- [VaaS (Variance as a Service)](https://www.kaggle.com/competitions/orbit-wars/discussion/697997) — 7 票 / 3 评论 / 2026-05-08 
+- [Burnout (Orbiting the Drain)](https://www.kaggle.com/competitions/orbit-wars/discussion/700279) — 7 票 / 11 评论 / 2026-05-17 
+- [Critical issues heading into the final period of the tournament.](https://www.kaggle.com/competitions/orbit-wars/discussion/704996) — 7 票 / 5 评论 / 2026-06-08 
+- [11th Place Solution - Standing on the Shoulders of Supergiants](https://www.kaggle.com/competitions/orbit-wars/discussion/727715) — 7 票 / 2 评论 / 2026-07-20 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/orbit-wars/discussion/727854) — 7 票 / 0 评论 / 2026-07-20 **write-up?**
+- [Orbit Wars 5th place solution](https://www.kaggle.com/competitions/orbit-wars/discussion/727619) — 7 票 / 0 评论 / 2026-07-19 **write-up?**
+- [Imitation-Trained Graph Transformers, Production Attribution, and some RL Fine-Tuning](https://www.kaggle.com/competitions/orbit-wars/discussion/714314) — 7 票 / 0 评论 / 2026-06-26 
+- [9th Place Solution - End-to-End JAX PPO](https://www.kaggle.com/competitions/orbit-wars/discussion/727595) — 7 票 / 0 评论 / 2026-07-19 **write-up?**
+- [Is it possible to add sending multiple files for 1 solution?](https://www.kaggle.com/competitions/orbit-wars/discussion/695449) — 7 票 / 3 评论 / 2026-04-29 **write-up?**
+- [Looking for advice or a DL/RL-oriented teammate](https://www.kaggle.com/competitions/orbit-wars/discussion/705256) — 7 票 / 7 评论 / 2026-06-09 
+- [Sweep logic and visualizer color updates](https://www.kaggle.com/competitions/orbit-wars/discussion/697414) — 7 票 / 6 评论 / 2026-05-05 
+- [Loser winning the game](https://www.kaggle.com/competitions/orbit-wars/discussion/693810) — 7 票 / 8 评论 / 2026-04-22 **write-up?**
+- [GPU Poor, PPO Rich: A Top 2%(72nd) Pure Self-Play Solution](https://www.kaggle.com/competitions/orbit-wars/discussion/723922) — 7 票 / 0 评论 / 2026-07-08 **write-up?**
+- [Some personal thoughts on how to efficiently train models, currently being put into practice.](https://www.kaggle.com/competitions/orbit-wars/discussion/698004) — 6 票 / 2 评论 / 2026-05-08 
+- [Open sourcing my C lookup precompute engine](https://www.kaggle.com/competitions/orbit-wars/discussion/704817) — 6 票 / 5 评论 / 2026-06-06 
+- [[Too late to fix] Planets didn't move in the first step](https://www.kaggle.com/competitions/orbit-wars/discussion/704841) — 6 票 / 4 评论 / 2026-06-06 
+- [Can kaggle provide a demo submission method for external files?](https://www.kaggle.com/competitions/orbit-wars/discussion/694056) — 6 票 / 9 评论 / 2026-04-23 
+- [Bug: OOB check destroys fleets before collision detection runs](https://www.kaggle.com/competitions/orbit-wars/discussion/694605) — 6 票 / 2 评论 / 2026-04-25 
+- [381th Place Solution](https://www.kaggle.com/competitions/orbit-wars/discussion/725092) — 6 票 / 0 评论 / 2026-07-14 **write-up?**
+- [Orbit Wars: Beyond the Basic Sniper - Advanced Strategies for Top Performance](https://www.kaggle.com/competitions/orbit-wars/discussion/692752) — 6 票 / 2 评论 / 2026-04-17 
+- [Numba not working](https://www.kaggle.com/competitions/orbit-wars/discussion/697906) — 6 票 / 2 评论 / 2026-05-07 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/orbit-wars/discussion/723920) — 3 票 / 1 评论 / 2026-07-08 

@@ -1,0 +1,269 @@
+# https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612268
+
+Topic #612268: 1st Place Solution
+  Author: tascj
+  Posted: 2025-10-18 07:06:48.091000
+  Votes: 191  Comments: 30
+
+Solution Writeup
+
+I would like to thank the competition hosts and Kaggle for organizing this interesting challenge。
+Winning 1st place in an NLP competition for the first time feels great! Below is my solution writeup.
+
+1. Data
+
+I dropped duplications, resulting in 35,960 samples. Created 5-fold cross-validation splits stratified by "Category".
+
+2. Modeling
+
+I modeled the problem as a suffix classification task.
+
+Given the same context(prefix), models are trained to predict the correct suffix from a set of candidates.
+
+Context is formatted as follows:
+
+&lt;|imChoices}
+ {Answer}
+ {MisconceptionCandidates}
+ {MCend|&gt;
+&lt;|im
+
+Suffixes are formatted in submission format.
+
+:&lt;|im_end|&gt;
+
+
+Each QuestionId has 8, 10 or 12 possible suffix candidates based on possible misconceptions of the question.
+
+Last-token features of [prefix ++ suffix0, prefix ++ suffix1, ...] are extracted and fed into a nn.Linear(hidden_size, 1) to get logits, then cross-entropy loss is computed.
+In practice, I organized inputs in prefix-shared format: prefix ++ suffix0 ++ suffix1 ++ ..., using custom attention masks with FlexAttention.
+
+ ():
+    causal = q_idx &gt;= kv_idx
+    is_prefix = suffix_ids[kv_idx] == -
+    same_suffix = (suffix_ids[q_idx] == suffix_ids[kv_idx])
+    same_doc = doc_ids[q_idx] == doc_ids[kv_idx]
+     causal &amp; (same_suffix | is_prefix) &amp; same_doc
+
+
+3. Training
+
+While working on the WSDM Cup competition earlier this year, I implemented  offload_adam to enable efficient full-parameter training of models up-to 32B on single A100 80G GPU. So in this competition, I could run all experiments on single A100 80G or RTX Pro 6000 Blackwell. Most of the training runs were performed with same hyperparameters: epoch=1, batch_size=32, learning_rate=1e-5.
+
+Probably due to label noise (mainly Neither), validation score varies a lot using different seeds. I had to use ensemble of multiple runs with different seeds to get a stable validation score.
+
+I did a 5-fold x 5-seeds run using Qwen3-8B. 3 seeds ensemble seemed to be stable, so I used the most difficult fold and ensemble of 3 runs for further experiments. This approach is not new - the 1st place solution in "Feedback Prize - Predicting Effective Arguments" also used 3-seed ensemble for validation.
+
+Main Validation Results (seed ensemble [seed1, seed2, seed3])
+
+
+
+
+model
+loss
+MAP@3
+
+
+
+
+deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+0.2716 [0.2809, 0.2871, 0.2835]
+0.9444 [0.9426, 0.9428, 0.9421]
+
+
+Qwen/Qwen3-8B
+0.2677 [0.2813, 0.2777, 0.2756]
+0.9455 [0.9433, 0.9450, 0.9437]
+
+
+zai-org/GLM-Z1-9B-0414
+0.2627 [0.2783, 0.2762, 0.2761]
+0.9469 [0.9455, 0.9433, 0.9452]
+
+
+deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+0.2621 [0.2782, 0.2698, 0.2738]
+0.9464 [0.9421, 0.9443, 0.9450]
+
+
+Qwen/Qwen3-14B
+0.2614 [0.2707, 0.2744, 0.2695]
+0.9477 [0.9442, 0.9451, 0.9461]
+
+
+Qwen/Qwen3-32B
+0.2589 [0.2687, 0.2718, 0.2700]
+0.9484 [0.9465, 0.9451, 0.9454]
+
+
+zai-org/GLM-Z1-32B-0414
+0.2560 [0.2713, 0.2681, 0.2682]
+0.9480 [0.9450, 0.9463, 0.9462]
+
+
+Qwen/Qwen3-32B+zai-org/GLM-Z1-32B-0414
+0.2530
+0.9496
+
+
+
+
+The experimental results clearly demonstrated that:
+
+
+
+I should not trust single-seed validation score
+
+The larger the model, the better the performance
+
+It might be better to trust loss rather than MAP@3
+
+
+I also compared multi-fold ensemble with multi-seed ensemble. Multi-seed ensemble was much better. Therefore, for the final submission, I trained Qwen/Qwen3-32B and zai-org/GLM-Z1-32B-0414 on full dataset with 3 different seeds and slightly different data format each.
+
+Auxiliary SFT Loss Experiment
+
+In the final days of the competition, I experimented with using Qwen/Qwen3-235B-A22B-Thinking-2507-FP8 to generate short justifications for the labels, and trained models with auxiliary SFT loss on the generated content. 
+
+An example of generated justification:
+
+True_Correct:NA
+The categorization 
+
+This approach showed some improvement for deepseek-ai/DeepSeek-R1-Distill-Qwen-7B, but had minimal effect on Qwen/Qwen3-8B. I included it in the ensemble, though I estimate its contribution is marginal. Anyway, it was an interesting attempt.
+
+4. Inference
+
+There are two main challenges for inference: compute and memory.
+
+Compute
+
+For short-sequence prefilling workload, the main bottleneck is matrix multiplications in nn.Linear layers. T4, while claiming 65TFLOPS of FP16 on whitepaper, could only achieve unstable 20TFLOPS in practice. 
+
+The W8A8 INT8 kernel in LMDeploy achieves stable 40+TFLOPS. To enable W8A8 INT8 inference, I quantized models using SmoothQuant(alpha=0.75). Ensemble performance in validation is almost identical to unquantized models.
+
+Memory
+
+I used layer-wise inference to enable 32B model inference on a single T4 GPU:
+
+
+
+Initialize and keep only 2 transformer layers on GPU
+
+Overlapping execution of current layer with loading states of next layer from disk
+
+
+I used 640 samples (40 micro batches of 16 samples) in each forward run to keep GPUs busy.
+
+It takes around 65 minutes to finish inference of 16,000 samples with T4×2. Implementing prefix-caching/sharing of question context could further reduce inference time (more than half of the tokens could be cached), but I didn't implement it.
+
+Kaggle Notebook Environment Notes
+
+Kaggle notebook environment's storage caused me some trouble.
+
+
+
+/kaggle/input - Not local storage, very slow access
+
+/tmp/ - Local Copy-on-Write storage with capacity limits, files cannot be truly deleted
+
+/kaggle/working - Regular local storage, files can be deleted to free up space
+
+
+I initially stored checkpoints of layers in /tmp, which led to a crash due to capacity overflow. After debugging, I only had time to submit an ensemble of 4 models (out of 6 uploaded). Anyway, the results were still quite good.
+
+5. Summary
+
+For me, the most critical aspect of this competition was finding the right way to obtain reliable validation scores. Single-seed validation scores were highly unstable and misleading. Multi-seed ensemble provided stable and trustworthy validation metrics, which then enabled effective model tuning and selection.
+
+Submission notebook
+Training
+
+Comments:
+├─ Yurnero (2025-10-18 13:00:39.077000) [+7]
+│  I guess that is the first time a kaggler achieved a 1-sub win in a not random competition. Huge meta achievement. Congratulations with top-1 overall rank!
+├─ LX (2025-10-18 14:42:25.620000) [+1]
+│  I used the most fold ensemble of  runs for further experiments.
+│  
+│  
+│  Is the "most difficult fold" mentioned here referring to selecting one out of the five folds as the validation data in 5-fold cross...
+  ├─ tascj (2025-10-18 23:09:29.897000) [+2]
+  │  I selected the fold with the lowest validation score as my fixed validation set. Each experiment used 3 seeds trained on the other 80% of data.
+  │  
+  │  For final submission, I retrained models on the full...
+    ├─ Brainydaps (2026-03-08 10:51:20.193000) [+0]
+    │  Hi @tascj0 I was wondering if you would be interested in being a featured author/data scientist on our company's website? I havent found a way to reach out to you personally.
+├─ WOOSUNG YOON (2025-10-18 13:36:08.730000) [+1]
+│  Thank you for your detailed solution. It was very insightful.
+│  
+│  I have a question about the 40 micro-batches of 16 samples.   
+│  Is this setup specific to layer-wise offloading on a T4 GPU to address ...
+  ├─ tascj (2025-10-18 23:18:58.613000) [+5]
+  │  I didn't carefully test this. For my input format, 640 samples were sufficient to hide the time of loading layer states from disk. Kaggle's storage is very slow. With local NVMe storage, 32 samples...
+  ├─ WOOSUNG YOON (2025-10-19 02:55:34.253000) [+0]
+  │  @tascj0 
+  │  Thank you for the clear explanation.  
+  │  I will practice applying your submission notebook code to the Qwen-2.5 14b model.  😄
+  │  I learned a lot.
+├─ Ali_Haider_Ahmad (2025-10-19 23:30:05.083000) [+0]
+│  Wow! This is art!
+├─ ODBAYAR O (2025-10-29 00:32:52.873000) [+0]
+│  I loved this! Goodluck!
+├─ Muhammad Awais (2025-10-24 20:00:57.383000) [+0]
+│  Great job. This motivates me to learn more about these models.
+├─ DRBendermun (2025-10-23 03:11:06.233000) [+0]
+│  Your work is impressive!
+├─ Sudharsan Velumani (2025-10-22 14:32:53.510000) [+0]
+│  Congratulations!
+│  
+│  Thank you for this awesome and detailed soultion.
+│  
+│  Did you use any external datasets for training the model or you just used only the competition dataset ?
+├─ Navneet (2025-10-21 10:13:08.933000) [+0]
+│  The Art of Winning @tascj0
+├─ moth (2025-10-20 18:08:21.017000) [+0]
+│  +70.000
+│  New badge earned: One shot, One kill
+│  New badge earned: Champion
+├─ Gaurav Rawat (2025-10-20 14:59:28.113000) [+0]
+│  Great solution and specially love how inference was squeezed lot to learn there .. But I do had a curious question does a difference of scores in range of 0.00x really make these solutions so much ...
+  ├─ tascj (2025-10-21 00:26:02.867000) [+2]
+  │  In Kaggle competitions, there's often a gap between "climbing the leaderboard" and "solving the problem". It depends on the competition design choices by the host.
+├─ Bilzard (2025-10-20 12:28:59.233000) [+0]
+│  @tascj0 Congratulations on 1st place with only single submission.
+│  
+│  
+│    
+│  I modeled the problem as a suffix classification task.
+│    Given the same context(prefix), models are trained to predict the cor...
+  ├─ tascj (2025-10-21 00:14:51.287000) [+3]
+  │  I tested several different modeling paradigms and didn't observe significant performance differences between them. I chose the suffix classification approach because I thought it was the most natur...
+    ├─ ShelterW (2025-10-28 03:55:46.313000) [+0]
+    │  I think the biggest trick to improving the score is adding Common Misconceptions to the prompt, but I still find the suffix classification setup with auxiliary SFT loss really interesting and well ...
+├─ Hatix Ntsoa (2025-10-20 09:42:55.203000) [+0]
+│  Simply great
+├─ Psi (2025-10-19 11:22:07.440000) [+0]
+│  Ensembling multiple large models using smooth quant and LMDeploy and then doing the sub literally last minute deserves a lot of respect. I am curious how confident you were this will all run throug...
+  ├─ tascj (2025-10-19 13:06:57.970000) [+3]
+  │  The inference parts (w8a8 quantization, layer-wise) were developed during the WSDM Cup competition, so they were already validated.
+  │  I did extensive testing back then. The samples' sequence length i...
+  ├─ @kaggleqrdl (2025-10-19 19:01:05.760000) [+0]
+  │  it is a bit weird, I have to say, to risk like this.  Power outages, family emergencies, someone pulling a fire alarm, etc.  
+  │  
+  │  You must have a lot of access to spare compute if you can do this sort...
+├─ Tom (2025-10-18 14:19:53.483000) [+0]
+│  @tascj0  should give a 1-shot-1st-place badge for you.
+├─ @kaggleqrdl (2025-10-18 12:27:41.740000) [+0]
+│  Well done.  I believe you are the new reigning #1 kaggler in competitions with this win.
+│  
+│  Would it be fair to say that your CV technique won the day?  It's something I will certainly be storing awa...
+  ├─ tascj (2025-10-18 23:23:52.017000) [+0]
+  │  I haven't carefully checked other teams' solutions yet, but I noticed many teams trained for 2-3 epochs, so the situation might be somewhat different.
+├─ AI-Cat (2025-10-18 11:42:44.913000) [+0]
+│  Excellent work, and thank you for sharing at least a brief description of your wonderful solution. I don't understand what inspired you to reach the compelling conclusion that your MAP@3 metric was...
+  ├─ tascj (2025-10-18 23:37:44.803000) [+0]
+  │  I agree this isn't a rigorous conclusion - the data in the table alone doesn't really prove this point.
+├─ Mao (2025-10-18 11:40:46.177000) [+0]
+│  Brilliant!
+├─ Irakoze Ntawigenga Kelly (2025-10-20 13:43:16.843000) [+0]
+│  Thanks, happy to learn from this!

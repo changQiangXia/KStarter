@@ -1,0 +1,208 @@
+# https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391620
+
+Topic #391620: 6th Place Solution (TK&penguin46 part)
+  Author: penguin46
+  Posted: 2023-03-02 01:54:32.257000
+  Votes: 37  Comments: 5
+
+First, I would like to thank the hosts for organizing the competition.
+Congratulations to the winning teams. Thanks also to @tanakar, @haqishen, and @boliu0 for competing with me.
+
+In this post, we will explain TK(@tanakar) &amp; penguin46 part of the whole solution.
+[update] Qishen &amp; Bo part was posted here
+
+Overview
+
+Features created using train.csv, tracking.csv, bbox.csv and pretrained models (yolov7, mmpose) for the video data is input to xgboost along with predictions of the cnn part. CV with csv data only is 0.766, CV with pretrained models added is 0.774, and 0.7955 with the CNN part added.
+
+CNN Part
+
+2.5d CNN is used for contact prediction. In this part, @tanakar in especially made a great contribution.
+
+Input Image
+
+Grayscale images are cropped around the helmet's bbox and resized to 224x224.
+Inputs are different for player &amp; player contacts and player &amp; ground contacts.
+
+
+
+player &amp; player
+
+
+crop range up to 2 times the rectangle surrounding the two bboxes
+
+input bbox mask as an additional channel
+
+±2step
+
+player &amp; ground
+
+
+crop 6x around the bbox
+
+no mask
+
+±2step
+
+
+
+Downsampling
+
+
+
+player &amp; player
+
+
+use samples with predictions of 1st stage lightgbm greater than 0.01
+
+player &amp; ground
+
+
+remove samples with predictions of Qishen&amp;Bo’s stage1 less than 0.005
+
+
+Backbones
+
+
+
+player &amp; player
+
+
+resnet18d
+
+swin_tiny_patch4_window7_224
+
+tf_efficientnet_b0_ns
+
+player &amp; ground
+
+
+resnet18d
+
+swin_tiny_patch4_window7_224
+
+efficientnetv2_rw_t
+
+
+The simple average of multiple backbones is used as the features of next xgb. 
+
+Table &amp; Pretrained Models Part
+
+Player Detection
+
+Player was detected using pretrained YOLOv7 and detected boxes were tracked using REPP, and matched with helmets. We inferred in steps instead of frames to speed up the submission time. In the matching process, bboxes were extracted in the order of the longest tracked length and greedily matched to the helmets of the players that matched best. The features created are as follows
+
+
+
+size of the bbox
+
+aspect ratio of the bbox
+
+distance between the center coordinates of the two players' bboxes (dx, dy, dist, dist/width)
+
+IoU of the bbox of the two players
+
+area of overlap with the bbox of the helmet
+
+tracked length
+
+matching score (sum of overlapped area)
+
+
+
+Pose Estimation
+
+We used mmpose to estimate the players' posture. mmpose saved inference time by using the players' bboxes that were object detected by yolov7. In addition, inference was performed only once in 2steps because this part was not significant for the computation time.
+
+
+
+distance between head and foot, hand and foot
+
+knee, hip angle
+
+number of keypoints detected and sum of confiences
+
+distance between head and center of helmet bbox
+
+
+Coordinates Gap Between Field and Camera View
+
+tracking.csv does not include a vertical component. Optimize the homographic transformation from field coordinates to camera coordinates and calculate the displacement of the helmet position. This misalignment can be attributed to the misalignment between the measured position of the field coordinates and the position of the helmet, and the vertical coordinates of the player, from which we can extract the vertical component. This idea is based on this solution by @its7171 from the last year's solution. The homography transformation was optimized using cv2.findHomography.
+
+
+
+Coordinates (x, y) after projection
+
+Number of players used to optimize the homography matrix
+
+Distance between the coordinates after projection and the center coordinates of the helmet (dx, dy, dist, dx/width, dy/width dist/width)
+
+Total distance between the post-projection coordinates and the center coordinates of the helmet in frames
+
+
+
+Other Features
+
+
+
+step, max(step), step / max(step)
+
+amount of movement from the start/end of the match (dx, dy, dist)
+
+distance to the nth nearest player (n=1, 2, 5, 10, 15)
+
+distance from the center of gravity coordinates of all players (dx, dy, dist)
+
+difference, product, and sum of velocity, acceleration, distance, and angle of two players
+
+aspect ratio of the bboxes of the helmets
+
+distance between the center coordinates of the bboxes of the two helmets
+
+IoU of the tow helmets
+
+position
+
+same team or not (0/1)
+
+lag features for the most important features among the above (diff, shift, lag=±1, 2, 5, 10, 20)
+
+
+Other Tips
+
+
+
+To make the experiment more efficient, we trained lightgbm, which predicts contact faster with fewer features, and excluded samples that were obviously unnecessary from penguin&amp;tk pipeline.
+
+xgboost was about 0.002~4 better than lightgbm.
+
+When using cutoff with qishen&amp;bo's predictions, add a mask feature to shows it has been cutoff.
+
+
+Not Worked
+
+
+
+LSTM, Transformer, 1DCNN
+
+data augmentation by swapping nfl_player_id_1, nfl_player_id_2 in table part
+
+instance segmentation
+
+seed averaging improved by less than 0.001
+
+Comments:
+├─ Rob Mulla (2023-03-04 16:53:37.977000) [+1]
+│  Great great work! There is a lot of interesting research knowledge gained from the different approaches you took. I believe you are one of the few top teams that used pose estimation in your soluti...
+  ├─ penguin46 (2023-03-05 07:26:06.107000) [+0]
+  │  Thank you! We have not analyzed the contribution of the features in the final submission, but below are the changes in cv before and after adding the key features. I hope this will be useful.
+  │  
+  │  
+  │  
+  │  pl...
+├─ nadhir hasan (2023-03-02 08:37:58.977000) [+0]
+│  congratulations! Excellent work. specially Not Worked part is very informative. if you don't mind can you please tell me which yolo architecture did you use? yolov7l or yolov7x. because i used yolo...
+  ├─ penguin46 (2023-03-02 09:06:18.717000) [+0]
+  │  thanks. we used yolov7.pt and the inference should be finished within 10min when submission. we also tried yolov8x.pt, but the time was not much different. please note that we input images in step ...
+├─ HongCheng (2023-03-02 05:10:12.863000) [+0]
+│  Nice Detailed Sharing and Congratulations!

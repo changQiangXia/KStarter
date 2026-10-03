@@ -1,0 +1,429 @@
+# https://www.kaggle.com/competitions/otto-recommender-system/discussion/382771
+
+Topic #382771: 20th Place Solution
+  Author: kiccho
+  Posted: 2023-02-01 00:10:44.471000
+  Votes: 90  Comments: 31
+
+Acknowledgements
+
+First, I would like to thank the organizers and those who shared knowledge. Especially I would like to thank @cdeotte and @radek1 for posting so many codes and discussions. I learned a lot from you. 
+
+Considering the controversy about the possible cheaters, I will publish the entire code after everything is finalized and I will just share the ideas in this solution. (Although Will says sharing code is not something we should withhold)
+
+
+
+Solution Summary
+
+
+
+My code is here: https://github.com/kiccho1101/kaggle-otto2
+
+
+
+CV Strategy
+
+
+
+
+
+I used Radek’s CV strategy
+
+Although CV data was good for the local experiments, it took quite a long time to run experiments so I used only 1/20 sessions by random sampling. As a result, the average time that takes to run 1 experiment became about 10~30mins which allowed me to run many experiments quickly.
+
+Even if I sampled the data, the CV-LB score correlation was very stable.
+
+The data used for each stage is below
+
+
+
+
+
+Step
+CV
+LB
+
+
+
+
+Candidate Generation
+TrainData + ValidDataA
+TrainData + ValidDataA + ValidDataB + TestDataA
+
+
+User Feature Creation
+ValidDataA
+TestDataA
+
+
+Item Feature Creation
+TrainData + ValidDataA
+TrainData + ValidDataA + ValidDataB + TestDataA
+
+
+User-Item Feature Creation
+ValidDataA
+TestDataA
+
+
+Re-Ranking
+ValidDataA
+TestDataA
+
+
+
+
+
+
+1st Stage - Candidate Generation
+
+
+
+word2vec
+
+
+
+Trained word2vec model with aid sequences
+
+Retrieve top-k aids by word2vec embeddings (Used faiss-gpu to speed up)
+
+
+
+
+CoVis
+
+
+
+I used Chris’s co-visitation matrix to generate candidates
+
+
+
+
+Item MF (Item Matrix Factorization)
+
+class ItemMFModel(nn.Module):
+    def __init__(self, n_aid: int, n_factors: int):
+        super().__init__()
+        self.criterion = BPRLoss()
+        self.n_factors = n_factors
+        self.n_aid = n_aid
+        self.aid_embeddings = nn.Embedding(self.n_aid, self.n_factors)
+
+        initrange = 1.0 / self.n_factors
+        nn.init.uniform_(self.aid_embeddings.weight.data, -initrange, initrange)
+
+    def forward(self, aid_x, aid_y):
+        aid_x = self.aid_embeddings(aid_x)
+        aid_y = self.aid_embeddings(aid_y)
+        return (aid_x * aid_y).sum(dim=1)
+
+    def calc_loss(self, aid_x, aid_y, size_x, size_y):
+        rand_idx = torch.randperm(aid_y.size(0))
+        output_pos = self.forward(aid_x, aid_y)
+        output_neg = self.forward(aid_x, aid_y[rand_idx])
+        loss = self.criterion(output_pos, output_neg)
+        return loss
+
+
+
+
+Trained aid_embeddings with BPR loss to make co-occurring embeddings become similar
+
+What worked
+
+
+Multiply the inverse of item_size by loss (Removing popularity bias)
+
+Multiply the inverse of ts_diff by loss (The closer the co-occur timing is, the more similar the embeddings become)
+
+
+
+
+User MF (User Matrix Factorization)
+
+class UserMFModel(nn.Module):
+    def __init__(self, n_session: int, n_aid: int, n_factors: int):
+        super().__init__()
+        self.n_factors = n_factors
+        self.n_session = n_session
+        self.n_aid = n_aid
+
+        self.session_embeddings = nn.Embedding(self.n_session, self.n_factors)
+        self.aid_embeddings = nn.Embedding(self.n_aid, self.n_factors)
+
+        self.criterion = BPRLoss()
+
+        initrange = 1.0 / self.n_factors
+        nn.init.uniform_(self.session_embeddings.weight.data, -initrange, initrange)
+        nn.init.uniform_(self.aid_embeddings.weight.data, -initrange, initrange)
+
+    def forward(self, session, aid, aid_size):
+        session_emb = self.session_embeddings(session)
+        aid_emb = self.aid_embeddings(aid)
+        return (session_emb * aid_emb).sum(dim=1)
+
+    def calc_loss(self, session, aid, aid_size):
+        rand_idx = torch.randperm(aid.size(0))
+        output_pos = self.forward(session, aid)
+        output_neg = self.forward(session, aid[rand_idx])
+        loss = self.criterion(output_pos, output_neg)
+        return loss
+
+
+
+
+Trained session_embeddings and aid_embeddings with BPR loss
+
+What worked
+
+
+Multiply the inverse of item_size by loss (Removing popularity bias)
+
+Multiply the inverse of ts_diff by loss (The closer the co-occur timing is, the more similar the embeddings become)
+
+
+
+
+Item CF
+
+
+
+Implemented item cf with polars
+
+Calculated the similarity weights for each item-item pair and retrieved candidates by getting the most similar items based on sum/min/max/mean of weights
+
+What worked
+
+
+Multiply the inverse of item_size by weight (Removing popularity bias)
+
+Multiply the inverse of ts_diff by weight (The closer the co-occur timing is, the bigger the weight becomes)
+
+Multiply trend coefficient (The more ts is recent, the bigger the weight becomes)
+
+
+
+
+User CF
+
+
+
+Implemented in the same way as item cf
+
+
+
+
+2nd Stage - Re-Ranking
+
+
+
+Feature
+
+
+Created ~200 features in total
+
+pl.col(’ts’).agg([mean,min,max,std]).over({’session’ or ‘aid’})
+
+candidate_selected_(count, rank)
+
+candidate_(score, rank, selected)
+
+(inter, click, cart, order)_hour_mean.over({’session’ or ‘aid’})
+
+(inter, click, cart, order)_count.over({’session’ or ‘aid’})@(3d, 7d, 14d, 21d)
+
+aid_multi_(inter,click,cart,order)_prob
+
+Model
+
+
+LightGBM Ranker (lambdarank)
+
+CatBoost Classifier (Logloss)
+
+CatBoost Ranker (YetiRank)
+
+
+
+
+What did not work well
+
+
+
+Transformers
+
+GRU
+
+CDAE
+
+RecVAE
+
+Implicit(ALS, BPR)
+
+Clustering by item embeddings
+
+Popular items
+
+Stacking
+
+Pseudo Labeling
+
+
+
+
+Lessons Learned
+
+
+
+polars is all you need to create features
+
+
+At first, I created features with pandas and cudf but I switched to polars during the competition because polars is fast, memory efficient, and the syntax is easy to understand.
+
+Creating a good baseline is very important
+
+
+It took me 1~2 month to create a baseline pipeline
+
+Thanks to Chris’s great discussion post, I was able to create a 2-stage baseline from scratch (I will publish the code on GitHub soon)
+
+Feature Store is useful
+
+
+I stored intermediate files to parquet files, which saved me to run experiments quickly in a more reproducible way.
+
+
+
+
+Score Timeline
+
+
+
+
+CV (1/20 sampled)
+CV
+Public LB
+Description
+
+
+
+
+0.536
+0.569
+0.5799
+2-Stage Baseline
+
+
+0.539
+0.572
+0.5830
+Added Item2Vec ItemMF
+
+
+0.547
+0.581
+0.5930
+Added ItemCF UserMF
+
+
+0.550
+0.585
+0.5970
+Added variation to ItemCF
+
+
+0.552
+0.587
+0.5985
+Ensemble(LightGBM + CatBoost)
+
+
+
+
+
+
+Feature Importance
+
+Comments:
+├─ kiccho (2023-02-11 23:35:48) [+9]
+│  I uploaded my code to Github. Have fun!
+│  https://github.com/kiccho1101/kaggle-otto2
+├─ Kexin LI (2023-03-19 08:17:11.890000) [+1]
+│  Congrats @kiccho11 ! and thanks for sharing! I have problems when i run your code ’ evaluate_util' it says ‘to_numpy not supported for dtype: List/ Boolean'. I wonder if you have the same problems ...
+├─ vij (2023-02-09 11:24:10.233000) [+1]
+│  Hi Kiccho
+│  
+│  Thanks for the write up. Will you be sharing code
+  ├─ kiccho (2023-02-10 00:25:28.937000) [+2]
+  │  Thanks for reminding. I’m doing some refactoring on my code and will publish soon.
+├─ Jakub Gorski (2023-02-01 10:39:52.363000) [+1]
+│  Congrats @kiccho11, and thanks for sharing the article describing your solution. I have a question related to the graphs showing the feature's importance. What algorithm did you use to determine th...
+  ├─ kiccho (2023-02-02 02:36:52.687000) [+1]
+  │  The values are from model.feature_importance of LightGBM.
+    ├─ Jakub Gorski (2023-02-02 12:13:22.777000) [+1]
+    │  Thanks for your reply.
+├─ Taha Muhammad Haider (2023-02-01 05:04:41.143000) [+1]
+│  Great job @kiccho11! Your solution is truly impressive. Thank you for sharing this well-written article with us.
+├─ Aji Samudra (2023-02-01 05:03:47.370000) [+1]
+│  Congrats @kiccho11 ! and thanks for sharing!
+│  
+│  Do you mind elaborating on these features?
+│  
+│  
+│  
+│  candidate_selected_(count, rank)
+│  
+│  candidate_(score, rank, selected)
+│  
+│  and the meaning "inter" here, (inter...
+  ├─ kiccho (2023-02-01 06:57:19.223000) [+2]
+  │  candidate_selected_count: By how many recall methods the item is recalled
+  │  
+  │  candidate_selected_rank: The rank of candidate_selected_count over each session
+  │  
+  │  candidate_score: The score of each candid...
+    ├─ Aji Samudra (2023-02-02 04:15:35.010000) [+1]
+    │  thanks for your kind reply!
+├─ Anil Ozturk (2023-02-01 04:19:46.127000) [+1]
+│  Congratulations! It seems MF and CF worked well for you guys.
+  ├─ kiccho (2023-02-01 04:30:51.520000) [+0]
+  │  Yes. ItemCF was the best recall method and ItemMF was the next for us
+├─ Ravi Shah (2023-02-01 04:19:11.757000) [+1]
+│  Congrats @kiccho11! Amazing solution! Thanks for sharing this write up.
+├─ MichaelG (2023-02-01 02:25:38.940000) [+1]
+│  Congratulations @kiccho11, implicit's BPR works well in my side to make the similarity between the candidate items &amp; user session as features.
+  ├─ kiccho (2023-02-01 03:54:03) [+0]
+  │  Congratz on your solo gold medal! I will try BPR for late submission.
+├─ elsabc (2023-02-01 01:39:26.973000) [+1]
+│  very useful, thanks for sharing!  congrats @kiccho11
+├─ Dive Deeper (2023-02-01 00:42:52.900000) [+1]
+│  Thanks for sharing! May I ask how do you merge all candidates from a bunch of strategy?
+  ├─ kiccho (2023-02-01 01:08:31.280000) [+1]
+  │  We concatenated all candidates vertically and dropped duplicates. Dropping duplicates is memory-heavy so we ran this by chunk.
+├─ HinePo (2023-02-01 00:35:12.757000) [+1]
+│  Thanks a lot for sharing the details, especially the Score Timeline part. I was looking for an understanding like that for a long time, how to break the 579 barrier.
+│  
+│  I also took two months to buil...
+├─ Minh T. Nguyen (2023-02-01 00:31:17.063000) [+1]
+│  @kiccho11 Thanks for sharing such detailed insights and lessons :)
+├─ ADAM. (2023-02-01 00:25:10.340000) [+1]
+│  Thanks for sharing. May I know what's your public lb only using retrieve methods (i.e. 1st Stage - Candidate Generation)?
+  ├─ kiccho (2023-02-01 00:35:50.143000) [+1]
+  │  I didn't submit with only retrieval methods but on my local cv, 0.5596(without re-ranking) and 0.585(with re-ranking)
+├─ @kaggleqrdl (2023-02-01 00:13:28.623000) [+1]
+│  Don't forget to link to your solution from the team page.
+  ├─ kiccho (2023-02-01 00:14:47.167000) [+0]
+  │  I linked it. Thanks!
+├─ Radek Osmulski (2023-02-01 00:59:26.683000) [+2]
+│  congrats @kiccho11! 🥳 And thank you for sharing this great write-up! 🙂
+├─ Sherry_pomi (2023-02-01 00:47:02.180000) [+2]
+│  Well-documented introduction! Thanks for sharing, quick question, how many candidate do you use in the end based on so many recall strategies and how to distribute the number of candidate from each...
+  ├─ kiccho (2023-02-01 01:05:43.967000) [+1]
+  │  We generated average 300 candidates for each user. For the topk numbers of each reacll method, I could not come up with a good way so I tuned them heuristically just like hyper parameters.
+    ├─ Sherry_pomi (2023-02-02 04:21:29.730000) [+1]
+    │  Got it! Thanks for your reply!
+├─ Yxy991028 (2023-03-21 13:16:00.617000) [+0]
+│  Hello，kiccho！Thanks for sharing.I recently had trouble running your code on github, what is the Last Inter method in the recall phase?
+├─ Ryan (2023-02-13 05:19:13.683000) [+0]
+│  wow, thanks. I think ItemCF would be a good way for me to start. And do you have some other potential way to improve? 
+│  Thanks again for sharing!

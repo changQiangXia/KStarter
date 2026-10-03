@@ -1,0 +1,82 @@
+# lux-ai-season-2 讨论区（按票数排序，共 80 条）
+
+- [FLG's Approach - Deep Reinforcement Learning with a Focus on Performance - 4th place](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/406702) — 51 票 / 19 评论 / 2023-05-09 **write-up?**
+- [1st place solution](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/407982) — 43 票 / 6 评论 / 2023-12-13 **write-up?**
+- [Final notes and parameter tweaking](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/404921) — 43 票 / 17 评论 / 2023-04-25 
+- [Onboarding materials](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381185) — 35 票 / 4 评论 / 2023-01-25 
+- [Yet-another-logic-bot](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/405476) — 31 票 / 0 评论 / 2023-04-27 
+- [Imitation Solution Notes](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/404842) — 31 票 / 10 评论 / 2023-04-25 **write-up?**
+- [RL Baselines and Jax Env tutorials](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381312) — 22 票 / 4 评论 / 2023-01-26 
+- [A website for checking submission's statistics is back](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/390700) — 19 票 / 1 评论 / 2023-02-26 
+- [Using RL in Lux AI Season 2 with Stone Tao on twitch!](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/383463) — 18 票 / 1 评论 / 2023-02-03 
+- [[Updated] A Compilation of Discarded Outstanding Bots](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/383835) — 17 票 / 6 评论 / 2023-02-05 
+- [Welcome to Lux AI Season 2!](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/380983) — 16 票 / 5 评论 / 2023-01-24 
+- [Some notes on a pure logic approach (lots of focus on domestic admin, not enough on fighting)](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/405245) — 16 票 / 2 评论 / 2023-05-16 
+- [[10th place] Deimos's RL approach](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/411725) — 15 票 / 7 评论 / 2023-05-20 **write-up?**
+- [Matchmaking and scoring are broken?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/392227) — 13 票 / 20 评论 / 2023-03-04 
+- [Musings on farming: solar vs lichen](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/403218) — 13 票 / 6 评论 / 2023-04-21 
+- [I made a public tool for evaluating agents](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/389473) — 12 票 / 9 评论 / 2023-02-21 
+- [[15th place] A goal-based logic bot & code.](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/407723) — 12 票 / 0 评论 / 2023-06-18 **write-up?**
+- [RL PPO Self-play Solution (Digs and Transfers Water, Survives Full Game)](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/406791) — 12 票 / 0 评论 / 2023-05-03 **write-up?**
+- [Centralized Reinforcement Learning for Lux](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/404809) — 12 票 / 5 评论 / 2023-04-25 
+- [Top Solutions from previous Lux AI competition](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381184) — 12 票 / 1 评论 / 2023-01-25 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/409394) — 11 票 / 2 评论 / 2023-05-10 **write-up?**
+- [Available python packages to use in the competition + Stable Baselines 3 support](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/386839) — 11 票 / 10 评论 / 2023-02-14 
+- [RL Baseline and Code Notebook](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/382815) — 10 票 / 5 评论 / 2023-02-01 
+- [Using an arbitrary compiled language](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/384322) — 10 票 / 2 评论 / 2023-02-07 
+- [v2.1.0 (major) release - Action repeat modification/clarification, Advanced Specs, Java/JS/C++/Go kits available](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381952) — 10 票 / 2 评论 / 2023-01-28 
+- [Lux AI episode helper Chrome extension](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/383167) — 10 票 / 0 评论 / 2023-02-02 
+- [New top game files in the dataset](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/388803) — 9 票 / 2 评论 / 2023-02-19 
+- [Replay visualiser with unit lockon](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/386173) — 9 票 / 1 评论 / 2023-02-11 
+- [Sharing Json Specifications](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/384093) — 9 票 / 0 评论 / 2023-02-06 
+- [Competition Recap - Congratulations to the Winners!](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/408186) — 8 票 / 0 评论 / 2023-05-09 
+- [Sprint 2 Award Winners 🎉🎉🎉](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/391287) — 8 票 / 2 评论 / 2023-03-01 
+- [Don’t share your solutions to suspicious persons (Lux AI season 2)](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381975) — 8 票 / 6 评论 / 2023-01-29 **write-up?**
+- [Convergence time!](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/404804) — 8 票 / 3 评论 / 2023-04-25 
+- [[9th Place] Improved Dijkstra algorithm](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/408001) — 8 票 / 2 评论 / 2023-05-09 **write-up?**
+- [[76th place] Another fork of "Building a Basic Rule Based Agent in Python"](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/408048) — 8 票 / 0 评论 / 2023-05-09 **write-up?**
+- [Sprint 1 Award Winners 🎉🎉🎉](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/384189) — 7 票 / 5 评论 / 2023-02-07 
+- [Solution from QuData](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/407689) — 7 票 / 0 评论 / 2023-05-09 **write-up?**
+- [Neat diagram showing how the tutorial RL agent works](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/389039) — 7 票 / 0 评论 / 2023-02-20 
+- [8th place solution](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/460834) — 7 票 / 0 评论 / 2023-12-11 **write-up?**
+- [Lux AI Season 2 NeurIPS Edition Coming Soon](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/415269) — 6 票 / 2 评论 / 2023-06-05 
+- [Congratulations to all competitors, season 2 finally concludes!](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/408006) — 6 票 / 0 评论 / 2023-05-09 
+- [Raw Go kit](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381707) — 6 票 / 1 评论 / 2023-01-27 
+- [Helpful materials for newcomers in RL](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/398976) — 6 票 / 5 评论 / 2023-04-01 
+- [[78th place] Rule-based Agents](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/404916) — 6 票 / 1 评论 / 2023-04-25 **write-up?**
+- [Is this environment appropriate to solve with the normal RL method?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/384336) — 6 票 / 5 评论 / 2023-02-07 
+- [It's good to be back !](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381384) — 6 票 / 0 评论 / 2023-01-26 
+- [[59th place] Rule-based Agents](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/409202) — 6 票 / 2 评论 / 2023-05-10 **write-up?**
+- [Approaching Simulation Challenges](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381256) — 6 票 / 0 评论 / 2023-01-25 
+- [Multi agent RL](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/392912) — 6 票 / 3 评论 / 2023-03-07 
+- [I, for one, welcome...](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/392691) — 6 票 / 0 评论 / 2023-03-06 
+- [How do I get episode json?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/382858) — 5 票 / 3 评论 / 2023-02-01 
+- [Clarifications](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381452) — 5 票 / 1 评论 / 2023-01-26 
+- [What are Factions](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/382077) — 5 票 / 5 评论 / 2023-01-29 
+- [Dataset with episodes for top submissions](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/386359) — 5 票 / 0 评论 / 2023-02-12 
+- [Multi-Agent Path Finding -- four simple heuristics compared](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/407596) — 5 票 / 0 评论 / 2023-05-07 
+- [How to Reference an RL Model on the Kaggle Environment - Explained](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/395322) — 5 票 / 0 评论 / 2023-03-16 
+- [Sprint Award 2 Coming Up + Sprint 2 Twitch Stream](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/390784) — 5 票 / 0 评论 / 2023-02-27 
+- [Rejoining the Challenge: Which AI techniques are you using, and are non-AI approaches still viable?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/390362) — 5 票 / 14 评论 / 2023-02-25 
+- [v2.0.6 engine released](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381463) — 4 票 / 3 评论 / 2023-01-26 
+- [Reinforcement Learning (RL). Unmissable tips by Stone Tao on Lux AI Season 2. ](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/383163) — 4 票 / 1 评论 / 2023-02-02 
+- [PPO and SAC: "state of the art" techniques applied by last Lux AI season's winners.](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/383635) — 4 票 / 0 评论 / 2023-02-04 
+- [Previous Competition's Paper](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/386249) — 4 票 / 0 评论 / 2023-02-12 
+- [Fixing AttributeError: 'EntryPoints' object has no attribute 'get' in kaggle notebooks](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/384027) — 4 票 / 2 评论 / 2023-02-06 
+- [Fixing: Installing luxai_s2 throws error after installing gym==0.21.0](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/389027) — 4 票 / 1 评论 / 2023-02-20 
+- [Release your agents. Testing Different Dims.](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381202) — 4 票 / 0 评论 / 2023-01-25 
+- [How well can a rule-based agent do?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/401950) — 4 票 / 15 评论 / 2023-04-15 **write-up?**
+- [Got error when trying to run self play](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/401544) — 4 票 / 2 评论 / 2023-04-13 
+- [A little help with self-play](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/395414) — 4 票 / 1 评论 / 2023-03-17 
+- [7th place IL-based solution](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/461697) — 3 票 / 1 评论 / 2023-12-15 **write-up?**
+- [Final Livestream on Twitch](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/407779) — 3 票 / 0 评论 / 2023-05-08 
+- [Suitable Action Space Selection for a Central Policy](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/391784) — 3 票 / 3 评论 / 2023-03-02 
+- [Why is the render mode in season 2 soo bad ?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381621) — 3 票 / 1 评论 / 2023-01-27 
+- [Is there any debug method or "hack" in the Lux-ai runner CLI?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/381649) — 3 票 / 2 评论 / 2023-01-27 
+- [Submission issue](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/386367) — 3 票 / 3 评论 / 2023-02-12 
+- [Sprint Award 1 Coming Up! Get your submissions in!](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/383966) — 3 票 / 0 评论 / 2023-02-06 
+- [First Time Submission Help](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/384401) — 3 票 / 3 评论 / 2023-02-07 
+- [Problem with setting up the competition locally on PyCharm](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/387874) — 3 票 / 3 评论 / 2023-02-15 
+- [Stable baseline](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/397730) — 3 票 / 1 评论 / 2023-03-27 
+- [Sprint Award 3 Coming Up + Sprint 3 Twitch Stream](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/398593) — 3 票 / 0 评论 / 2023-03-30 
+- [Load a pretrained model and continue training?](https://www.kaggle.com/competitions/lux-ai-season-2/discussion/386265) — 3 票 / 5 评论 / 2023-02-12 

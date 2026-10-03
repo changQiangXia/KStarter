@@ -1,0 +1,50 @@
+<h1>Kaggle PetFinder Comp</h1>
+<p>Thanks Kaggle and Petfinder for hosting this wonderful competition. Building models to help pets was fun and rewarding. My solution is the combination of my shared discussion posts and notebooks.</p>
+<h1>Trust Your CV</h1>
+<p>For my final two submissions, I chose my best LB score (<strong>CV 17.15, LB 17.64</strong>) and my best CV score (<strong>CV 16.98, LB 17.78</strong>). My best CV score only had public leaderboard rank 120. It was <strong>scary</strong> to select it, but my final private LB 6th rank was this best CV submission!<br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2022/catlb2.png" alt=""></p>
+<h1>Preprocess</h1>
+<p>There are at least two ways to resize images for our models. We can squish the original images into a square (distorting aspect ratio), or we can square crop (and preserve aspect ratio). I trained my models with random square crops. Not only does this create natural looking images that match how they are displayed at Petfinder website but it also provides data augmentation by using random crops during training (which helps our models generalize). <strong>This boosted CV LB</strong>.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2022/preprocess.png" alt=""></p>
+<h1>Image CNN Training</h1>
+<p>Training CNNs to achieve a good CV LB RSME score was more difficult than training Transformers and it required freezing backbones to train the head (and/or freezing first 66% backbone to train last 33% backbone plus head). It's also <strong>important</strong> to freeze all batchnorm layers. (This was demonstrated <a href="https://www.kaggle.com/rsmits/effnet-b2-feature-models-catboost" target="_blank">here</a> and explained <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/301259" target="_blank">here</a>). There are many great examples showing CNN training in public notebooks <a href="https://www.kaggle.com/rsmits/effnet-b2-feature-models-catboost" target="_blank">here</a>, <a href="https://www.kaggle.com/jackstapleton/d169-baseline-nc-inference" target="_blank">here</a>, and <a href="https://www.kaggle.com/vishalkarangale/inceptionv3-10folds-tensorflow" target="_blank">here</a>. My best single model CNN was <strong>EfficientNetB2 with RAPIDS SVR</strong> head. It achieved <strong>CV 17.55</strong></p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2022/freeze2.png" alt=""></p>
+<h1>Image Transformer Training</h1>
+<p>There are dozens of image transformers. To view all available pretrained image transformers, just type <code>import timm; timm.list_models(pretrained=True)</code>. You will see <code>beit, cait, convit, crossvit, deit, levit, pit, swin, vit, xcit</code>! Next you can fork the public <code>fastai</code> notebook <a href="https://www.kaggle.com/tanlikesmath/petfinder-pawpularity-eda-fastai-starter" target="_blank">here</a> and run with each of these models! To evaluate which is the best, you must correct the RSME metric with <code>metrics=AccumMetric(func=petfinder_rmse)</code> as explained <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/294054" target="_blank">here</a> (otherwise CV score is meaningless and wrong).</p>
+<p>My best single model was <code>BeIT</code> (not <code>Swin</code>). It's a transformer with BERT pretraining. Research paper <a href="https://arxiv.org/abs/2106.08254" target="_blank">here</a>. A <strong>single BeIT transformer</strong> achieved my best <strong>CV 17.42</strong> and best <strong>Private LB 17.00</strong> which is top 50 private LB!</p>
+<h1>Image Size and Data Augmentation</h1>
+<p>I trained models with image sizes 224, 384, 512. The advantage of a variety of image sizes is explained <a href="https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/160147" target="_blank">here</a>. For large image sizes more augmentation was required. When using image size 512, the following augmentations were applied; Random square crop, Horizontal Flip, Vertical Flip, Transpose, Brightness, Contrast, Hue, Saturation, Rotation, Random Erase. Some of the small 224 models, only used Random square crop and Flips.</p>
+<h1>Multi Task Learning</h1>
+<p>There are two ways to use meta data. We can input it into our model or use it as an additional output (i.e. auxiliary target) during training. The easiest way to train an image transformer with additional output is by modifying the PyTorch notebook <a href="https://www.kaggle.com/ytakayama/train-pytorch-swin-5fold-some-tips" target="_blank">here</a>. The meta data provided in this competition didn't help, but using Cat Dog labels as an additionally target from <a href="https://www.kaggle.com/chrisbradley/pawpularity-cat-or-dog" target="_blank">here</a> helped boost CV LB and add model diversity.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Jan-2022/multitask.png" alt=""></p>
+<h1>Hill Climbing</h1>
+<p>My approach in this competition was to build an ensemble slow and steady. First I corrected my local RSME computation so that CV score was correct. Then each day during the competition, I would train a new model, save the OOF predictions, and <strong>ensemble it will equal weights</strong> to my previous best CV ensemble and previous best LB ensemble. If it increased CV then i added it to my best CV ensemble. If it increased LB then I added it to my best LB ensemble. </p>
+<p>I describe hill climbing more <a href="https://www.kaggle.com/c/siim-isic-melanoma-classification/discussion/175614" target="_blank">here</a>. The secret to hill climbing is to make new <strong>diverse</strong> models. (i.e. Try different image sizes, backbones, augmentations etc). Each new model doesn't necessarily need to have a great CV by itself. They <strong>need to be different</strong> than your previous models so that when you ensemble them to your previous models, the result is an improved CV LB. My two (hill climbing generated) ensembles contained different models. Here are the lists</p>
+<h3>Best CV Ensemble</h3>
+<p><strong>CV = 16.98, Public LB = 17.78, Private LB = 16.90</strong></p>
+<ul>
+<li>Swin 224 with Dog Cat auxiliary output</li>
+<li>Swin 384</li>
+<li>BeIT 224</li>
+<li>BeIT 384</li>
+<li>BeIT 512</li>
+<li>ConvNeXt 224</li>
+<li>ConvNeXt 384 with Dog Cat auxiliary output</li>
+<li>EfficientNetB2 with RAPIDS SVR head</li>
+</ul>
+<h3>Best LB Ensemble</h3>
+<p><strong>CV = 17.15, Public LB = 17.64, Private LB = 17.01</strong></p>
+<ul>
+<li>Swin 224 with Dog Cat auxiliary output</li>
+<li>Swin 384</li>
+<li>BeIT 224</li>
+<li>BeIT 384</li>
+<li>EfficientNetB2 with RAPIDS SVR head</li>
+<li>DenseNet 224 with MLP regression head</li>
+<li>Inception 229 with 66% frozen backbone</li>
+</ul>
+<h1>What Didn't Work</h1>
+<p>I tried to pseudo label external images but it didn't improve my CV nor LB. I also tried to use last year competition data by pretraining models with last year's images and last year's meta data. This did not help CV nor LB. I also tried to train models on last year data and infer new features on this year's data. But that didn't help either. <strong>In the end, I didn't use last year's comp data nor external data</strong>.</p>
+<p>After reading other winners' solutions; <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/300929" target="_blank">2nd place here</a>, <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/301072" target="_blank">4th place here</a>, <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/300928" target="_blank">5th place here</a>, it appears that last year's data was actually very powerful. The way to use it was to find the duplicate images from last years data that were also used this year. Then for those images (which were about 33% of all images) concatenate last years meta features onto this year's data. Then train a model to use this year's image with the concatenated last years meta data. Apparently the meta data from the previous PetFinder competition was more powerful than the meta data provided this year.</p>
+<h1>The Power of SOTA Image Models!</h1>
+<p>It was shown from <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/300938" target="_blank">1st place here</a>, <a href="https://www.kaggle.com/c/petfinder-pawpularity-score/discussion/301044" target="_blank">3rd place here</a> (and my 6th place solution) that using meta features from last year were not needed to achieve a powerful model. Today's SOTA image models are amazingly good at looking at images and extracting information!</p>

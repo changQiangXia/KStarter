@@ -1,0 +1,124 @@
+<p>We want to start by thanking <a href="https://www.kaggle.com/asimandia" target="_blank">@asimandia</a> and <a href="https://www.kaggle.com/raddar" target="_blank">@raddar</a> for the public baseline that we built our solution on. It gave us a clean and sensible starting point that has already become a classic backbone of any successful March Mania solution. We kept that overall structure, trusted the parts that already made sense, and spent our time improving the pieces that looked easiest to move.</p>
+<p>At a higher level, our final solution had three main parts:</p>
+<ul>
+<li>a richer set of matchup features built from seeds, Elo, GLM team quality, and possession-based efficiency metrics</li>
+<li>an XGBoost regressor trained on point differential values rather than a binary win/loss target</li>
+<li>separate men's and women's isotonic calibration to improve robustness, followed by light sharpening learned from OOF predictions.</li>
+</ul>
+<p>Eventually, we stayed close to the baseline, but ended up with a stronger final pipeline.</p>
+<h2>Baseline and what we changed</h2>
+<p>Pizzaboi and Raddar's baseline already had a lot of advanced sports and ML related techniques included. Tournament games were converted into a Team 1 vs Team 2 table, regular-season summaries were merged in, Elo and a GLM-style quality estimate were added to the data, and an XGBoost regressor was trained on point differential.</p>
+<p>Most of our gains came from tightening the following four areas:</p>
+<h3>1) We made the feature set richer</h3>
+<p>The baseline already used seeds, regular-season averages, Elo, and GLM quality. We kept all of that and added several more layers. This was the biggest step forward over the baseline. The final model used <strong>89 engineered features</strong>, and the feature importance plot below shows that the extra quality and efficiency gaps became central.</p>
+<h3>2) We normalized game statistics more carefully</h3>
+<p>We also normalized overtime-affected box score statistics back toward a 40-minute baseline before building season summaries. That sounds minor, but once you start leaning on possession-based and efficiency-based features, those small distortions matter. We found it cleaner to standardize those inputs up front rather than let the model absorb overtime noise.</p>
+<h3>3) We replaced the baseline probability mapping with a more deliberate calibration pipeline</h3>
+<p>The baseline used a simpler margin-to-probability conversion. We kept the margin-first idea, but made the probability side more careful:</p>
+<ul>
+<li>generate leave-one-season-out margin predictions;</li>
+<li>fit <strong>separate isotonic regressions</strong> for men's and women's games;</li>
+<li>apply a small amount of <strong>tail sharpening</strong> to extreme probabilities, chosen on out-of-fold data.</li>
+</ul>
+<p>In our opinion, this was one of the most useful changes. The men's and women's tournaments do not behave exactly the same, and treating them separately gave us better estimates.</p>
+<h3>4) We kept validation and submission as close as possible</h3>
+<p>For submission, we averaged margin predictions from the seasonal models and then applied the same group-specific calibration logic we used during validation. That may sound obvious, but it helped avoid the usual trap where the cross-validation pipeline and the final submission pipeline quietly drift apart.</p>
+<h2>Data setup</h2>
+<p>We trained on the official competition files for both tournaments. Each historical tournament game was represented from the Team 1 vs Team 2 perspective with:</p>
+<ul>
+<li><code>PointDiff = T1_Score - T2_Score</code> as the regression target;</li>
+<li><code>win = 1(PointDiff &gt; 0)</code> as the evaluation label for probability metrics.</li>
+</ul>
+<p>We merged tournament results with team-level regular-season features, seeds, Elo ratings, and GLM quality estimates, then built matchup-level predictors from both absolute team strength and team-vs-team differences.</p>
+<h2>Feature engineering</h2>
+<p>The features that we used in the gradient boosting model can be grouped into six main groups:</p>
+<table>
+<thead>
+<tr>
+<th>Feature group</th>
+<th>Features</th>
+<th>Why it helped</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Seed features</strong></td>
+<td>Raw seeds, <code>Seed_diff</code>, <code>Seed_sum</code>, <code>Seed_prod</code>, <code>Seed_gap_abs</code></td>
+<td>These let the model go beyond simple seed gap and distinguish, for example, a strong-bracket game from a lower-seeded matchup with the same difference.</td>
+</tr>
+<tr>
+<td><strong>Elo features</strong></td>
+<td><code>elo_diff</code>, <code>elo_prob</code></td>
+<td>We found it useful to keep both the raw rating gap and its implied win probability. <code>elo_prob</code> gave the trees a smoother, bounded strength signal.</td>
+</tr>
+<tr>
+<td><strong>Possession / efficiency features</strong></td>
+<td>Possessions, <code>OffRtg</code>, <code>DefRtg</code>, <code>NetRtg</code>, <code>eFG%</code>, <code>TS%</code>, <code>FTR</code>, 3PA rate, turnover rate, rebounding rates, assist rate, win percentage</td>
+<td>These features described <em>how</em> teams were winning: shot quality, pace, ball security, rebounding, and overall efficiency.</td>
+</tr>
+<tr>
+<td><strong>Adjusted strength features</strong></td>
+<td><code>AdjOffRtg</code>, <code>AdjDefRtg</code>, <code>AdjNetRtg</code>, <code>PythagWinPct</code>, <code>Luck</code></td>
+<td>These corrected for schedule strength and gave us cleaner estimates of underlying team quality than raw season averages alone.</td>
+</tr>
+<tr>
+<td><strong>Matchup gap features</strong></td>
+<td>Differences for most advanced stats, e.g. <code>AdjNetRtg_diff</code>, <code>OffRtg_diff</code>, <code>TS_diff</code>, <code>ORBRate_diff</code></td>
+<td>Tournament prediction is mostly about relative strength, so these features let the model reason directly about the gap between the two teams.</td>
+</tr>
+<tr>
+<td><strong>Blended prior</strong></td>
+<td><code>strength_blend = 0.45 * diff_quality + 0.35 * elo_diff + 0.20 * AdjNetRtg_diff</code></td>
+<td>This gave the model one strong summary feature combining three of our most reliable views of team strength.</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F7845922%2F81bf3b4bd1617ab6f7b3096453a2af47%2Fxgb_feature_importance.png?generation=1775756579921246&amp;alt=media" alt="Top XGBoost features">
+<em>Figure 1. Quality difference, adjusted efficiency difference, and seed-gap variables carried most of the signal.</em></p>
+<h2>Model and validation</h2>
+<p>Our core model was an <strong>XGBoost regressor</strong> with <code>objective = reg:squarederror</code>. We kept the tree model fairly conservative: <code>eta = 0.0093</code>, <code>max_depth = 4</code>, <code>min_child_weight = 4</code>, <code>subsample = 0.6</code>, <code>colsample_bynode = 0.8</code>, <code>num_parallel_tree = 2</code>, <code>grow_policy = lossguide</code>, <code>max_bin = 38</code>, and <code>num_boost_round = 704</code>.</p>
+<p>We validated with <strong>leave-one-season-out cross-validation</strong>. For each held-out season, we trained on all other seasons, predicted tournament margins for the held-out year, and then ran the calibration step on the out-of-fold predictions.</p>
+<p>The notebook reported:</p>
+<ul>
+<li>average leave-one-season-out margin <strong>MAE = 9.2418</strong>;</li>
+<li>overall calibrated out-of-fold <strong>Brier = 0.16272</strong>;</li>
+<li>best displayed recent fold: <strong>2025 Brier = 0.12803</strong>.</li>
+</ul>
+<p>Cross-validation was reasonably steady from season to season, which gave us confidence that the changes were helping for the right reasons, even if the final public/private shakeout still depended on bracket variance.</p>
+<h2>Key metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seed-only AUC</td>
+<td>0.811</td>
+</tr>
+<tr>
+<td>GLM team-quality AUC</td>
+<td>0.829</td>
+</tr>
+<tr>
+<td>Average leave-one-season-out MAE</td>
+<td>9.2418</td>
+</tr>
+<tr>
+<td>Overall calibrated OOF Brier</td>
+<td>0.16272</td>
+</tr>
+<tr>
+<td>Best reported 2025 fold Brier</td>
+<td>0.12803</td>
+</tr>
+</tbody>
+</table>
+<h2>Submission pipeline</h2>
+<p>For Stage 2, we rebuilt the same matchup features for every row in <code>SampleSubmissionStage2.csv</code>, scored them with the seasonal XGBoost models, averaged the predicted margins, and then applied the learned men's and women's calibrators. Final probabilities were clipped to <code>[0.01, 0.99]</code> and rounded before export.</p>
+<h2>Final thoughts</h2>
+<p>We built our solution on top of <strong>Pizzaboi</strong> and <strong>Raddar's</strong> public baseline, so first of all, thank you to them for sharing such a strong starting point. The baseline already had the core idea in place; our contribution was to push it further by improving the team-strength features, making the matchup representation more expressive, and putting more care into calibration.</p>
+<p>We also want to thank the <strong>Kaggle team</strong> for continuing to host March Mania. It is one of the most fun competitions of the year, but it is also one where variance matters a lot. In this setting, the gap between a solid result and a top-8 finish is never just model quality. A few games go differently and the leaderboard can look very different.</p>
+<p>Thanks for your attention!</p>

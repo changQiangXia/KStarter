@@ -1,0 +1,227 @@
+# https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391635
+
+Topic #391635: 1st place solution
+  Author: nvnn
+  Posted: 2023-03-02 04:17:06.820000
+  Votes: 138  Comments: 53
+
+Thanks to NFL and Kaggle for hosting this interesting competition.
+My approach comprises three main components
+
+
+
+A weak xgb model to remove easy negative samples
+
+A CNN to classify contact
+
+A xgb model to post-process the output.
+
+
+Since my xgb preprocessing was not really good compare to other teams (CV ~ 0.72),I will only elaborate on my CNN and post-processing method in this write-up.
+1. 3D CNN for Video Classification
+1.1 Input generator
+
+I separate the modeling and training of player-player (PP) and player-ground (PG) contacts.
+The PP model is trained using input from three sources, namely endzone video, sideline video, and tracking data. On the other hand, the PG model is trained using input from only two sources, namely endzone video and sideline video. Notably, including tracking data does not result in improved performance for the PG model.
+
+1.1.1 Input generator for PP model
+
+The endzone and sideline videos are processed similarly. Firstly, I extract 18 images from neighboring frames, namely {frame[-44], -37, -30, -24, -18, -13, -8, -4, -2, 0, 2, 4, 8, 13, 18, 24, 30, frame[37]}. The frame[-44] represents 44 frames prior to the current sample's estimated frame. This sampling technique enables the model to observe more frames close to the estimated frame. 
+
+Next, I mask the players' heads in contact with a black or white circle to guide the model's attention to the relevant players. Rather than using an additional channel, I mark the players' heads directly into the image. I made this decision to maintain the input's 3-channel format, which maximizes the utilization of the pretrained weight file. Finally, I crop each image around the players' contact area using a crop size of 10 times the mean helmet box size within the specified frame range.
+
+To enable the tracking data to be stacked with images from the endzone and sideline, I simulate the tracking data as images. To accomplish this, I use the OpenCV cv2.circle function to plot each player's position in a specific step on a black background. I assign two different colors to represent the two teams, and players in contact are depicted with bigger and brighter circles (radius is 5, and pixel value is 255), while background players are depicted with smaller and darker circles (radius is 3, and pixel value is 127). By integrating this information into the input, the model can learn the interaction of all players from a bird's eye view. The input to the PP model is displayed in the GIF below.
+
+
+
+1.1.2 Input generator for PG model
+The endzone and sideline videos are processed similarly to the PP model, with the exception that the PG model uses a longer input sequence of 23 neighboring frames, ranging from [-54, -48, -42, -36, -30, -24, -18, -13, -8, -4, -2, 0, 2, 4, 8, 13, 18, 24, 30, 36, 42, 48, 54]. 
+
+The PG model does not include simulated tracking images as they do not improve the PG CV score. 
+
+Unlike the PP model, I can use a longer sequence of images in the PG model because the tracking images are not included. In the PP model, the maximum sequence length that can fit into my GPU is 18 images.
+
+1.2 Model
+Given that the input appears to resemble an action classification task rather than a standard 3D classification, I opted to use an action recognition model to address this problem. After reviewing the mmaction2 repository, it became clear that the CSN series delivered the most impressive results in the Kinetics-400 dataset. As a result, I selected resnet50-irCSN and fine-tuned it for this particular task.
+
+1.3 Training
+
+During training, I apply the following augmentations to the endzone and sideline images and randomly swap them. As for the tracking images, I only use horizontal and vertical flips as augmentations.
+
+base_aug = [
+        A.RandomResizedCrop(always_apply=False, p=1.0, height=cfg.img_size, width=cfg.img_size, scale=(0.7, 1.2), ratio=(0.75, 1.3), interpolation=1),
+        A.OneOf([
+            A.RandomGamma(gamma_limit=(30, 150), p=1),
+            A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.3, p=1),
+            A.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2, p=1),
+            A.HueSaturationValue(hue_shift_limit=20, sat_shift_limit=30, val_shift_limit=20, p=1),
+            A.CLAHE(clip_limit=5.0, tile_grid_size=(5, 5), p=1),
+        ], p=0.6),
+        A.HorizontalFlip(p=0.5), 
+        A.ShiftScaleRotate(shift_limit=0.0, scale_limit=0.1, rotate_limit=15,
+                                        interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_CONSTANT, p=0.8),
+        A.Cutout(max_h_size=int(50), max_w_size=int(50), num_holes=2, p=0.5),
+    ]
+
+cfg.train_transform = A.ReplayCompose(base_aug)
+
+
+I used a linear scheduler for the learning rate and trained the model for one epoch. In the final submission, I trained the model using all available data with 4 seeds.
+
+2. XGB Postprocessing
+I employed a simple xgb model to combine the predictions of pre-xgb and cnn. Through experimentation, I discovered that the optimal feature for post-processing in PP and PG models slightly differs.
+
+2.1 PP postprocessing
+First, I calculated an ensemble probability from the CNN and preprocessing xgb model as follows: prob = 0.2pre_xgb_prob + 0.8cnn_prob. 
+Then, I used the probability from the 20 neighboring steps as features for the xgb model, i.e., {prob(-10), prob(-9), …, prob(0), prob(1), …, prob(9)}, where prob(-10) represents the probability of the same pair of players in the prior 10 steps.
+This postprocessing method improved my PP CV score by approximately 0.005.
+
+2.2 PG postprocessing
+ I calculated an ensemble probability from the CNN and preprocessing xgb model as follows: prob = 0.15pre_xgb_prob + 0.85cnn_prob. 
+The feature to xgb model are 
+
+
+
+The ensemble probability from the 30 neighboring steps {prob(-15), prob(-14), …, prob(0), prob(1), …, prob(14)},  
+
+The pre_xgb_prob and cnn_prob from the 20 neighboring steps.
+This postprocessing method improved my PG CV score by approximately 0.04.
+
+
+P/S. Thanks chatGPT for making my explanation better!!
+
+Comments:
+├─ Camaro (2023-03-04 09:19:09.280000) [+3]
+│  Congratulations on a strong finish and solo winning this hard competition! Different interval frame sampling and concatenating rgb image and tracking image are beyond my imagination, but seems surp...
+  ├─ nvnn (2023-03-04 09:43:08.433000) [+1]
+  │  Thank you. Congratulations on your strong finish and becoming GM. well done
+    ├─ Camaro (2023-03-07 15:01:00.023000) [+0]
+    │  @nvnnghia Thanks for sharing code too, that's definitely a masterpiece!!
+    │  Quick question, when I look through your code, I found that the dropout rate is set to 0.5, which seems too large for me. Is...
+    ├─ nvnn (2023-03-07 15:35:48.867000) [+4]
+    │  dropout 0.5 is natural for me.
+    │  
+    │  At times, I utilize a larger dropout rate, such as 0.6 or 0.7. If my model appears to overfit easily, one of the initial experiments I aim to conduct is to increase ...
+    ├─ David Del Río (2023-03-21 22:29:36.627000) [+0]
+    │  What do you mean by adjusting the intensity of data augmentation? Thanks in advance!!
+├─ DanielPuente (2023-03-18 16:50:13.460000) [+1]
+│  Congratulations.
+│  
+│  Very interesting way of solving the tournament, congratulations. I have a question about how to train the net.
+│  
+│  · Have you used a custom loss function to train the resnet?
+│  
+│  Thank ...
+├─ Majid Ahmad Khan (2023-03-10 02:25:21.300000) [+1]
+│  Congratulations on your achievement on Kaggle! I'm really impressed with your work and wanted to let you know. By the way, if you have a moment, I would really appreciate it if you could take a loo...
+├─ Sitraka_Forler (2023-03-08 14:49:45.820000) [+1]
+│  Congrats on winning  @nvnnghia ! And thanks for sharing your method wouldn't have though of it…
+├─ ayushsingh05 (2023-03-05 17:20:36.487000) [+1]
+│  Congratulations on winning and also thanks for sharing the approach
+├─ Ravi Shah (2023-03-04 18:58:49.167000) [+1]
+│  Congrats on winning @nvnnghia! Thanks for sharing this write up!
+├─ Chris Deotte (2023-03-04 18:55:54.517000) [+1]
+│  Awesome work Nvnn. Congratulations on first place solo cash gold finish!
+├─ Bilzard (2023-03-03 14:47:32.573000) [+1]
+│  @nvnnghia 
+│  Congratulation.
+│  
+│  About 1st stage, what is the performance of negative sampling?
+│  Can I ask the recall and sample reduction ratio?
+│  
+│  e.g) For my case, 
+│  
+│  
+│  
+│  player-player contact: keeping rec...
+  ├─ nvnn (2023-03-04 01:58:05.530000) [+1]
+  │  thanks. After filtering, around 1.4 million samples remained for the PP model, with a recall rate of 99.3%. For the PG model, around 130k samples remained with a recall rate of over 97%.
+├─ E-Max AI (2023-03-03 08:16:21.947000) [+1]
+│  Congratulation!
+├─ Ahmed Samir (2023-03-02 13:19:39.510000) [+1]
+│  Really brilliant! Congrats on getting the 1st position 🙌
+├─ Ethan (2023-03-02 08:32:00.143000) [+1]
+│  Congrats and thanks for sharing your greate solution! How much does post-processing improve your cv score?
+  ├─ nvnn (2023-03-02 08:44:27.720000) [+1]
+  │  thanks. pp boost my cv around +0.015. I didn't check LB
+├─ nadhir hasan (2023-03-02 08:30:08.160000) [+1]
+│  congratulations!, you idea is amazing. may i know which algorithm did you used to find the bbox to crop the area. are you used YOLO or something else?
+  ├─ nvnn (2023-03-02 08:43:33.647000) [+0]
+  │  thanks. I used provided baseline helmet boxes
+├─ Dewei Chen (2023-03-02 08:09:34.927000) [+1]
+│  Congrats! Could you please tell us your Hardware device for training? and how much GPU RAM size for your model?
+  ├─ nvnn (2023-03-02 08:14:00.817000) [+3]
+  │  1x RTX 3090 24Gb VRAM
+├─ ( ͡° ͜ʖ ͡°) (2023-03-02 08:04:22.587000) [+1]
+│  wow congrats
+├─ KhanhVD (2023-03-02 05:38:50.210000) [+1]
+│  Congrats bro !!! Waiting for more detail from your solution.
+├─ arutema47 (2023-03-02 05:15:57.263000) [+1]
+│  Awesome pipeline, thanks for sharing!
+│  Do you have any takes on the shake up? I think you were the only gold medal player who got PB&gt;LB
+  ├─ nvnn (2023-03-02 05:45:04.807000) [+2]
+  │  To be honest, I'm unsure. From what I've observed, several teams have achieved a high public score within a short inference time, so I guess that that they might be unintentionally filtering out to...
+    ├─ Psi (2023-03-02 08:46:56.593000) [+2]
+    │  I am quite confident that threshold filtering is not the reason. We tried a few different thresholds and both public and private behaves as expected for them for us.
+├─ HongCheng (2023-03-02 04:49:07.257000) [+1]
+│  Congratulation! waiting for more sharing
+├─ Dmytro Poplavskiy (2023-03-04 06:39:58.410000) [+2]
+│  Congrats on winning the competition!
+├─ Rob Mulla (2023-03-03 18:32:00.993000) [+2]
+│  Congrats @nvnnghia on your winning solution! I look forward to learning more about it. The idea of including the NGS data as part of the input image to your CNN is really clever.
+│  
+│  I have a few init...
+  ├─ nvnn (2023-03-04 02:21:21.330000) [+1]
+  │  Thanks Rob.
+  │  I have just added more detail to my writeup to make it more clear based on your questions. 
+  │  
+  │  
+  │  
+  │  How did you determine the frames you used {frame[-44], -37, -30, -24, -18, -13, -8, -4, -2...
+    ├─ Rob Mulla (2023-03-04 16:11:25.427000) [+0]
+    │  Thanks for the answers. That really helps. Congrats again.
+├─ Heroseo (2023-03-03 11:13:14.873000) [+2]
+│  Wow, Congrats on solo 1st place! It's a really cool, great job.
+├─ Leon (2023-03-02 04:55:42.010000) [+2]
+│  Congrats! Great idea to put tracking data into CNNs. How much will performance drop if you don't add it?
+  ├─ nvnn (2023-03-02 05:02:16.070000) [+2]
+  │  I added it when my cv were still low (~0.73) and it boosted my cv to 0.76. I don't know how much it contributed to my final model (cv 0.79+).
+    ├─ Psi (2023-03-02 08:37:59.857000) [+0]
+    │  Is your 0.79+ CV on a single fold or full oof?
+    ├─ nvnn (2023-03-02 08:46:20.597000) [+1]
+    │  it is a full oof. ~0.788 for 1 seed, and 0.79+ if ensemble multiple seeds.
+    ├─ Psi (2023-03-02 08:49:32.573000) [+0]
+    │  Thanks for sharing. Interesting that you made this decent jump while others dropped. Our CV on full oof is well into 0.805+ territory.
+    ├─ nvnn (2023-03-02 08:52:13.053000) [+0]
+    │  wow. is that your final CV or only video base cv?? my CV with post processing also 805+
+    ├─ Psi (2023-03-02 08:53:38.860000) [+0]
+    │  Final CV as scored on LB, so your 805+ after PP sounds more reasonable then I guess :)
+├─ SFR.LUX (2023-03-27 21:16:36.030000) [+0]
+│  Bro CV hain't izy …
+├─ mLiammm (2023-03-12 21:04:14.607000) [+0]
+│  Appreciate all the effort you took here! Thanks for sharing
+├─ Krishna (2023-03-12 20:43:23.377000) [+0]
+│  Congratulations on your 1st place solution in the NFL and Kaggle competition! Your approach is well-structured and appears to be very effective. Here are some potential improvements you could consi...
+├─ Tony (2023-03-09 14:11:55.673000) [+0]
+│  Congratulations.
+│  Do you run inference for endzone and sideline respectively? If so ,how do you combine they.
+├─ Venkata Hemanth Gubbala (2023-03-09 09:38:33.323000) [+0]
+│  Congratulations for the win.
+├─ Revy Hono (2023-03-06 23:58:30.003000) [+0]
+│  @nvnnghia that's awesome solution, you're well done!
+├─ Ranjan Rashmi Sahoo (2023-03-06 09:53:44.327000) [+0]
+│  @nvnnghia , many many Congratulations on winning this competition. I am new to Kaggle and aspiring to become a ML engineer.  I am done almost 3 months of learning and practicing python and ML now. ...
+├─ Muhammad Rehan Rao (2023-03-06 08:04:32.440000) [+0]
+│  Great to see that how machine learning reshaping the world.
+├─ [deleted] (2023-03-05 23:00:52.417000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-24 17:45:44.720000) [+0]
+│  [deleted]
+├─ [deleted] (2023-06-08 02:36:36.810000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-12 22:24:26.680000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-09 13:50:34.327000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-08 06:13:34.970000) [+0]
+│  [deleted]

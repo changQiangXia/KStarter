@@ -1,0 +1,122 @@
+<p>Thanks a lot to the hosts and Kaggle for hosting this interesting competition. Congratulations to the other competitors for the great solutions and results.Special thanks to the competitors who selflessly shared their knowledge during this competition, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> , <a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a> , <a href="https://www.kaggle.com/ropeonmars" target="_blank">@ropeonmars</a> , <a href="https://www.kaggle.com/roberthatch" target="_blank">@roberthatch</a> , <a href="https://www.kaggle.com/dschettler8845" target="_blank">@dschettler8845</a> , <a href="https://www.kaggle.com/jinyuansun" target="_blank">@jinyuansun</a> , <a href="https://www.kaggle.com/kvigly55" target="_blank">@kvigly55</a> , <a href="https://www.kaggle.com/vslaykovsky" target="_blank">@vslaykovsky</a> , <a href="https://www.kaggle.com/oxzplvifi" target="_blank">@oxzplvifi</a> , <a href="https://www.kaggle.com/shlomoron" target="_blank">@shlomoron</a> …, If I've missed someone, please let me know.</p>
+<h1>Training Set</h1>
+<p>I used the dataset <a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/359284" target="_blank">D1</a> ,<a href="https://www.kaggle.com/datasets/shlomoron/train-wildtypes-af" target="_blank">D2</a> and <a href="https://www.kaggle.com/code/vslaykovsky/14656-unique-mutations-voxel-features-pdbs" target="_blank">D3</a>.</p>
+<h1>Feature Engineering</h1>
+<p>I selected the 21 amino acids closest to the mutant amino acids to construct the features.</p>
+<ul>
+<li>The relative distances of the 21 amino acid mutation sites were calculated.<br>
+$$D_{ci}=\frac{r_{c}-r_{i}}{max_{i∈K}{(r_{c}-r_{i})}}$$,$$r_{ci}=\sqrt{{(x_{c}-x_{i})}^{2}+{(y_{c}-y_{i})}^{2}+{(z_{c}-z_{i})}^{2}}$$</li>
+<li>The average relative distance between the 21 amino acids and the mutation site was calculated.</li>
+<li>The angles of the 21 amino acids to the mutation site were calculated.<br>
+$$\alpha_{1}=arccos\frac{(z_{c}-z_{i})}{r}$$<br>
+$$\alpha_{2}=arccos\frac{(x_{c}-x_{i})}{r}$$<br>
+$$\alpha_{3}=arccos\frac{(y_{c}-y_{i})}{r}$$<br>
+$$\beta_{4}=arctan\frac{(y_{c}-y_{i})}{(x_{c}-x_{i})}$$<br>
+$$\beta_{5}=arctan\frac{(z_{c}-z_{i})}{(y_{c}-y_{i})}$$<br>
+$$\beta_{6}=arctan\frac{(x_{c}-x_{i})}{(z_{c}-z_{i})}$$</li>
+<li>B_factor, sasa, blosum, demask…</li>
+<li>Use the adjusted blosum62 to multiply sasa, b_factor…</li>
+</ul>
+<pre><code> ():
+     -(/(+np.exp(-x/adjustment_factor)))
+</code></pre>
+<ul>
+<li>Features of the whole protein sequence, mutant amino acids and 21 amino acids extracted by esm.</li>
+<li>There are a few other interesting features <a href="https://www.kaggle.com/code/dschettler8845/novo-esp-residue-depth-and-more-w-biopython" target="_blank">here</a>.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8874838%2Fe933f40cad3209abc44bd7fc34206c3f%2F2023-01-04%20142508.png?generation=1672813546656646&amp;alt=media"></li>
+</ul>
+<h1>Model</h1>
+<h2>XGB_v1</h2>
+<p>This model gets public score <strong>0.52132</strong> and private score: <strong>0.46642</strong>.<br>
+We used <a href="https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/359284" target="_blank">D1</a> to train my first Xgboost model. This dataset is wildtypes and mutants selected from kaggle's training set with 4000+ rows of train data. First of all, I did some simple processing on the dataset, removing duplicate rows and deletion mutation, deleting rows that did not match pdb, and retaining groups with mutation samples &gt; 20. Finally, we get a training set with 1800+ rows.<br>
+We used the features mentioned above and took Tm rank as target to train the model,so we have 298 features for our model.</p>
+<h2>XGB_v2</h2>
+<p>This model gets public score <strong>0.40512</strong> and private score: <strong>0.30495</strong>. <br>
+We used <a href="https://www.kaggle.com/datasets/shlomoron/train-wildtypes-af" target="_blank">D2</a> to train my second Xgboost model. This dataset is wildtypes and mutants selected from kaggle's training set. But this data set is cleaned up in more detail.The cleaned dataset contains only 986 mutations from 30 groups, all groups are same-source, same-pH.</p>
+<h2>XGB_v3</h2>
+<p>This model gets public score <strong>0.40435</strong> and private score: <strong>0.43294</strong>. <br>
+We used <a href="https://www.kaggle.com/code/vslaykovsky/14656-unique-mutations-voxel-features-pdbs" target="_blank">D3</a> to train my third Xgboost model. Since the strong correlation between dTm and ddg(ddG is a measure of the change in energy between the folded and unfolded states (𝚫Gfolding) and the change in 𝚫Gfolding when a point mutation is present.), we can also use ddg as target in order to increase the training data. This external dataset contains 14656 unique mutations. Since the wild type is more stable than most mutants, we kept only unstable mutations and ensure that the pH and source of each group are the same. After a simple cleanup, the training set contains 6000+ rows.</p>
+<h1>Ensemble</h1>
+<p>I used the three xgb models ensemble with  some public notebooks, I don't have a good idea here, just try to change the weight until the score stops improving.</p>
+<h1>reference</h1>
+<ul>
+<li><a href="https://www.kaggle.com/code/cdeotte/xgboost-5000-mutations-200-pdb-files-lb-0-410" target="_blank">XGBoost - 5000 Mutations 200 PDB Files [LB 0.410]</a></li>
+<li><a href="https://www.kaggle.com/code/vslaykovsky/nesp-thermonet-v2" target="_blank">🧬 NESP: ThermoNet v2 🧬</a></li>
+<li><a href="https://www.kaggle.com/code/roberthatch/nesp-alphafold-getarea-exploration" target="_blank">NESP: AlphaFold+GetArea exploration</a></li>
+<li><a href="https://www.kaggle.com/code/cdeotte/difference-features-lb-0-600" target="_blank">Difference Features - [LB 0.600]</a></li>
+<li><a href="https://www.kaggle.com/code/oxzplvifi/rmsd-from-molecular-dynamics" target="_blank">RMSD from Molecular Dynamics</a></li>
+<li><a href="https://www.kaggle.com/code/dschettler8845/novo-esp-residue-depth-and-more-w-biopython" target="_blank">NOVO-ESP – Residue Depth and More w/ BioPython</a></li>
+<li><a href="https://www.kaggle.com/code/dschettler8845/novo-esp-eli5-performant-approaches-lb-0-451" target="_blank">NOVO ESP – ELI5 - Performant Approaches [LB=0.451]</a></li>
+</ul>
+<hr>
+<p>Update:<br>
+The ensemble weight of this notebook wihch got 0.542 in private Leaderboard.</p>
+<blockquote>
+  <p><a href="https://www.kaggle.com/code/gehallak/nesp-3d-geometry-0-32-lb" target="_blank">3Dgeometry</a>(0.32) + 1.5×foldx(0.413) + 1.5×<a href="https://www.kaggle.com/code/vslaykovsky/nesp-thermonet-v2" target="_blank">ThermoNet v2</a>(0.495) + 2×<a href="https://www.kaggle.com/code/shlomoron/nesp-relaxed-rosetta-scores" target="_blank">rosetta</a>(0.471) + 1.5×<a href="https://www.kaggle.com/code/oxzplvifi/rmsd-from-molecular-dynamics" target="_blank">rmsd</a>(0.410) + xgb2(0.404) + 1.5×xgb1(0.521) + 1.5×<a href="https://www.kaggle.com/code/cdeotte/difference-features-lb-0-600" target="_blank">difplddt</a>(0.299) + 1.5×xgb3(0.405)</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Public LB</th>
+<th>Private LB</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3Dgeometry</td>
+<td>0.32</td>
+<td>0.338</td>
+<td><a href="https://www.kaggle.com/code/gehallak/nesp-3d-geometry-0-32-lb" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Foldx</td>
+<td>0.413</td>
+<td>0.375</td>
+<td><a href="https://www.kaggle.com/code/zrongchu/foldx" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>Thermonet v2</td>
+<td>0.495</td>
+<td>0.460</td>
+<td><a href="https://www.kaggle.com/code/vslaykovsky/nesp-thermonet-v2" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>rosetta</td>
+<td>0.471</td>
+<td>0.438</td>
+<td><a href="https://www.kaggle.com/code/shlomoron/nesp-relaxed-rosetta-scores" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>rmsd</td>
+<td>0.410</td>
+<td>0.350</td>
+<td><a href="https://www.kaggle.com/code/oxzplvifi/rmsd-from-molecular-dynamics" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>xgb2</td>
+<td>0.404</td>
+<td>0.432</td>
+<td><a href="https://www.kaggle.com/code/zrongchu/4000-unique-mutation-with-dtm/notebook" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>xgb1</td>
+<td>0.524</td>
+<td>0.464</td>
+<td><a href="https://www.kaggle.com/code/zrongchu/nesp-xgboost" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>difplddt</td>
+<td>0.297</td>
+<td>0.287</td>
+<td><a href="https://www.kaggle.com/code/cdeotte/difference-features-lb-0-600" target="_blank">link</a></td>
+</tr>
+<tr>
+<td>xgb3</td>
+<td>0.405</td>
+<td>0.304</td>
+<td><a href="https://www.kaggle.com/code/zrongchu/nesp-xgboost?scriptVersionId=113857946" target="_blank">link</a></td>
+</tr>
+</tbody>
+</table>

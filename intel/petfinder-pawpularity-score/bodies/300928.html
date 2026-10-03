@@ -1,0 +1,168 @@
+<p>Thank you all teams who competed with us, all the people who participated in this competition, and the organizer that hosts such a great competition.</p>
+<p>I'm very sorry to shake down and missed 1st … !</p>
+<p>Our final notebooks are available.</p>
+<ul>
+<li>sub1 : <a href="https://www.kaggle.com/kaerunantoka/offense-final?scriptVersionId=85192352" target="_blank">https://www.kaggle.com/kaerunantoka/offense-final?scriptVersionId=85192352</a></li>
+<li>sub2 : <a href="https://www.kaggle.com/yururoi/stacking-pp-avg-pp-34-defensive-breed-group?scriptVersionId=84896876" target="_blank">https://www.kaggle.com/yururoi/stacking-pp-avg-pp-34-defensive-breed-group?scriptVersionId=84896876</a></li>
+<li>2nd stage training code : <a href="https://www.kaggle.com/yururoi/offense-stacking-pp-avg-pp-36-b285-b103" target="_blank">https://www.kaggle.com/yururoi/offense-stacking-pp-avg-pp-36-b285-b103</a></li>
+</ul>
+<h1>Overview</h1>
+<p>our solution has 3 steps.</p>
+<ul>
+<li><p>1st : Make a lot of single models. (our final submittion has 14 single models)</p></li>
+<li><p>2nd : Calculate similarity score to detect the same images, previous competiton's train+test images (about 70000 images) and this competition's images.</p></li>
+<li><p>Final :  On overthreshold data, We can use previous competitions meta data. So, we made models for each adoptionspeed as post proccessing.</p></li>
+</ul>
+<p><img alt="Screen Shot 2022-01-15 at 7 23 54" src="https://user-images.githubusercontent.com/38504303/149600083-089fab1c-94fa-4065-997f-e90896c080b3.png"></p>
+<h1>Single Models</h1>
+<p>We use below models.</p>
+<ul>
+<li>All models are trained with Only Images. (Without meta data!)</li>
+<li>Cut long side to make the aspect ratio fixed in Dataset class.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Loss func</th>
+<th>CV</th>
+<th>LB (if any)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>swin_large_patch4_window12_384</td>
+<td>BCE</td>
+<td>17.484603</td>
+<td>18.02737</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window12_384</td>
+<td>BCE</td>
+<td>17.3944997416399</td>
+<td>-</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window12_384</td>
+<td>BCE</td>
+<td>17.7691509886505</td>
+<td>17.98811</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>BCE</td>
+<td>17.7937685311947</td>
+<td>17.97379</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>BCE</td>
+<td>17.7916477565051</td>
+<td>17.94652</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>BCE</td>
+<td>17.458288</td>
+<td>-</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>BCE</td>
+<td>17.5616612122726</td>
+<td>17.96412</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>BCE</td>
+<td>17.6927744617933</td>
+<td>17.98374</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>BCE</td>
+<td>17.52656</td>
+<td>17.90651</td>
+</tr>
+<tr>
+<td>vit_base_r50_s16_384</td>
+<td>BCE</td>
+<td>17.9787132114343</td>
+<td>-</td>
+</tr>
+<tr>
+<td>vit_large_r50_s32_384</td>
+<td>BCE</td>
+<td>17.705468</td>
+<td>-</td>
+</tr>
+<tr>
+<td>densenet121</td>
+<td>MSE</td>
+<td>18.811589</td>
+<td>-</td>
+</tr>
+<tr>
+<td>tf_efficientnet_b0_ns</td>
+<td>MSE</td>
+<td>18.1307282713156</td>
+<td>-</td>
+</tr>
+<tr>
+<td>resnext101_32x8d</td>
+<td>BCE</td>
+<td>18.4265347215127</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h1>Validation Strategy</h1>
+<p>We used below 2 method</p>
+<ul>
+<li><p>GroupKfold … Add id to the same images, this id is used as group.</p></li>
+<li><p>StratifiedKfold … Drop the same images, and split fold.</p></li>
+</ul>
+<h1>DataAugmentation</h1>
+<pre><code>CFG.get_transforms = {
+        'train' : A.Compose([
+            A.OneOf([
+                A.RandomResizedCrop(CFG.IMG_SIZE, CFG.IMG_SIZE, p=0.3, scale=(0.85, 0.95)),
+                A.Resize(CFG.IMG_SIZE, CFG.IMG_SIZE, p=0.4),
+                A.Compose([
+                    A.Resize(int(CFG.IMG_SIZE * 1.5), int(CFG.IMG_SIZE * 1.5), p=1.0),
+                    A.CenterCrop(p=1.0, height=CFG.IMG_SIZE, width=CFG.IMG_SIZE),
+                ], p=0.3),
+            ], p=1.0),
+            A.HorizontalFlip(p=0.5),
+            A.VerticalFlip(p=0.5),
+            A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0,),
+        ], p=1.0),
+        'valid' : A.Compose([
+            A.Resize(CFG.IMG_SIZE, CFG.IMG_SIZE, p=1),
+            A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0,),
+        ], p=1.0),    
+    }
+</code></pre>
+<h1>Detect similar (maybe the same) image</h1>
+<ul>
+<li>Feature Extractor : EfficientNetB0</li>
+<li>Calculate cosine similarity</li>
+</ul>
+<h1>Stacking</h1>
+<ul>
+<li>Model … BayesianRidge</li>
+<li>fold … 4fold</li>
+</ul>
+<h1>Post Processing</h1>
+<ul>
+<li>Model … 5 BayesianRidge Models for each AdoptionSpeed (0~4)</li>
+<li>fold … 4fold</li>
+<li>Feature … oof, Age, Breed, TextLength, and so on.</li>
+</ul>
+<h1>What didn't work</h1>
+<ul>
+<li>Use Metadata</li>
+<li>Cropped images with Yolo v5</li>
+<li>Data augmentations on CNN models</li>
+<li>Image stats features</li>
+</ul>

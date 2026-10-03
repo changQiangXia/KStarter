@@ -1,0 +1,152 @@
+<h1>88th PLACE SOLUTION</h1>
+<h2>Introduction and Acknowledgements</h2>
+<p>First, we would like to sincerely thank the organizers for hosting this competition, the Kaggle community for sharing valuable discussions and notebooks, and our teammates for working through the competition together. We learned from many shared insights and were able to enjoy the process until the end.</p>
+<h2>Solution Overview</h2>
+<p>Our solution was based on <a href="https://www.kaggle.com/code/huikang/end-to-end-finetuning-for-lb-0-85" target="_blank">End-to-end finetuning for LB 0.85</a> and was also heavily influenced by the following public notebooks. We would like to thank the authors again.</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/dgxchen/training-with-unsloth-to-achieve-0-85-lb" target="_blank">Training with Unsloth to Achieve 0.85 LB</a></li>
+<li><a href="https://www.kaggle.com/code/huikang/end-to-end-finetuning-for-lb-0-85" target="_blank">End-to-end finetuning for LB 0.85</a></li>
+<li><a href="https://www.kaggle.com/code/huikang/tinker-submission-notebook/notebook" target="_blank">Tinker submission notebook</a></li>
+</ul>
+<p>Our approach can be summarized in the following three points.</p>
+<h3><strong>We made almost no changes to the reasoner (CoT generation logic)</strong></h3>
+<ul>
+<li><p>The <strong>reasoner</strong> was based on <a href="https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915" target="_blank">Open Progress Prize Publication</a>, and we made almost no changes to it.</p></li>
+<li><p>The <strong>reasoner</strong> could correctly solve <strong>87.8%</strong> of the problems, while the best score from the public notebooks was <strong>0.86</strong>. Therefore, we believed that if the LLM could reproduce the behavior of the <strong>reasoner</strong> more faithfully, a high ranking would be achievable.</p></li>
+<li><p>Our approach was not to solve harder problems, but to avoid losing problems that should already be solvable.</p></li>
+<li><p>Below is the final accuracy of our <strong>reasoner</strong>. It is almost the same as the publicly available one.</p></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Found</th>
+<th>Total</th>
+<th>Accuracy</th>
+<th>Avg ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit_manipulation</td>
+<td>1364</td>
+<td>1602</td>
+<td>85.1%</td>
+<td>0.8</td>
+</tr>
+<tr>
+<td>cipher</td>
+<td>1576</td>
+<td>1576</td>
+<td>100.0%</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>cryptarithm_deduce</td>
+<td>59</td>
+<td>659</td>
+<td>9.0%</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>cryptarithm_guess</td>
+<td>13</td>
+<td>164</td>
+<td>7.9%</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>equation_numeric_deduce</td>
+<td>541</td>
+<td>596</td>
+<td>90.8%</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>equation_numeric_guess</td>
+<td>21</td>
+<td>136</td>
+<td>15.4%</td>
+<td>0.6</td>
+</tr>
+<tr>
+<td>gravity</td>
+<td>1597</td>
+<td>1597</td>
+<td>100.0%</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>numeral</td>
+<td>1576</td>
+<td>1576</td>
+<td>100.0%</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>unit_conversion</td>
+<td>1594</td>
+<td>1594</td>
+<td>100.0%</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td>8341</td>
+<td>9500</td>
+<td>87.8%</td>
+<td>0.2</td>
+</tr>
+</tbody>
+</table>
+<h3><strong>We built a new generator and synthesized many similar problems</strong></h3>
+<ul>
+<li><p>Although the <strong>reasoner</strong> could correctly solve <strong>87.8%</strong> of the problems, the best public notebook score remained at <strong>0.86</strong>. We suspected that the gap was caused by a shortage of training data.</p></li>
+<li><p>Therefore, we extracted various task-level statistics from <strong>train.csv</strong> and built a program that could generate an arbitrary number of <strong>rule_found</strong> samples.</p></li>
+<li><p>The statistics we used included character frequencies, numeric ranges and distributions, and distributions of transformation methods.</p></li>
+<li><p>To improve the quality of the <strong>generator</strong>, we trained the model only on synthetic data and evaluated it on both synthetic data and original data. If the synthetic data perfectly imitated the original data, the evaluation accuracy on synthetic data and original data should be the same. By measuring this gap, we identified missing factors in the synthetic data generation algorithm and iteratively fixed them.</p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F20464683%2Fd5e3ae37b66068929e7f74fed72d4fcc%2FIMG_1907.PNG?generation=1781582790753122&amp;alt=media" alt="92th PLACE SOLUTION"></p>
+<ul>
+<li><p>In the final submission, we trained with a ratio of "synthetic data : original data = 2.5 : 1", using synthetic data first and then original data.</p></li>
+<li><p>Longer training improved the loss, especially on difficult tasks.</p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F20464683%2Fc2e7e8fbe14ae75c473b90bea78ad547%2FIMG_1909.PNG?generation=1781582840852766&amp;alt=media" alt=""></p>
+<h3><strong>Tokenization trick (synthetic tokens for cryptarithm)</strong></h3>
+<ul>
+<li><p>In cryptarithm tasks, tokenizer segmentation sometimes caused multiple characters to be handled as a single token. This issue was also discussed in the competition discussions.</p></li>
+<li><p>To address this, we used synthetic tokens that force each single character to be encoded as one token, making the learning process more stable.</p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F20464683%2F06c865355c47f0fa2d011933aec933c3%2FIMG_1908.PNG?generation=1781582878712331&amp;alt=media" alt=""></p>
+<h2>Additional Improvements</h2>
+<h3>Gradient clipping</h3>
+<ul>
+<li><p>In the public notebook, the gradient clipping value was set extremely high at <strong>1e9</strong>.</p></li>
+<li><p>We found that this was causing training instability, so we clipped gradients at <strong>1.5</strong>.</p></li>
+<li><p>There were discussions about scores varying from submission to submission, and we believe this may have been one of the causes.</p></li>
+<li><p>The figure below shows an example where the same training setup produced very different LB scores depending on whether gradient explosion occurred.</p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F20464683%2F30a272f565e44f6723a0dd7898ec75c1%2FIMG_1905.PNG?generation=1781582960350490&amp;alt=media" alt=""></p>
+<h3>Local validation strategy</h3>
+<ul>
+<li><p>Until the middle of the competition, we validated by training on synthetic data and evaluating on original data. For submissions, we trained on both synthetic data and original data.</p></li>
+<li><p>However, as we improved the quality of the <strong>generator</strong>, the model became increasingly overfit to the original data, and we observed a divergence between local validation and Public LB.</p></li>
+<li><p>Therefore, for the final stage, we decided to prioritize <strong>Public LB</strong>, which was based on unseen data, over local validation.</p></li>
+</ul>
+<h2>What Did Not Work</h2>
+<h3><strong>Generating CoTs with higher temperature and applying reinforcement learning (SimPO / ORPO)</strong></h3>
+<ul>
+<li><p>When we inspected model failures, we found that in many cases the model produced CoTs that were very close to the correct ones. Therefore, we thought that instead of only increasing the probability of correct outputs through SFT, we also needed to reduce the probability of failures through reinforcement learning.</p></li>
+<li><p>To create failed examples (<code>rejected</code>), we sampled from the SFT model with temperature set to <strong>1.3</strong>.</p></li>
+<li><p>For <code>chosen</code>, we used the output of the <strong>reasoner</strong> as is.</p></li>
+<li><p>We performed preference learning with SimPO / ORPO using these output pairs. However, it did not improve accuracy as much as expected, so we did not use it in the final submission.</p></li>
+<li><p>In the training logs, we observed some cases where the probability of the <code>chosen</code> side increased, but we saw almost no decrease in the probability of the <code>rejected</code> side, which was what we had expected.</p></li>
+<li><p>We believe that learning did not progress sufficiently because <code>chosen</code> and <code>rejected</code> were too similar.</p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F20464683%2F20601595763e31a891259704732596cc%2FIMG_1906.PNG?generation=1781582935915018&amp;alt=media" alt=""></p>
+<h3><strong>Solving new problems</strong></h3>
+<ul>
+<li><p>For us, solving <strong>bit_manipulation</strong> and <strong>cryptarithm</strong> tasks and creating CoTs that an LLM could imitate was very difficult.</p></li>
+<li><p>Algorithms that solve these problems with high accuracy require a large amount of search, and it was very difficult for an LLM to imitate them within a limited token budget.</p></li>
+<li><p>We also used <strong>Claude Fable 5</strong>, but we were not able to develop a sufficiently strong <strong>reasoner</strong>.</p></li>
+</ul>

@@ -1,0 +1,1071 @@
+<h2>Acknowledgements</h2>
+<p>First, we would like to thank NVIDIA and Kaggle for hosting such an interesting competition. We also thank the participants who shared useful ideas through public notebooks and discussions during the competition. We were very happy to finish 1st on both Public LB and Private LB. This was the first Kaggle gold medal for all members of our team. In particular, we learned a lot about trace design and training strategy across multiple task categories from the <a href="https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915" target="_blank">Open Progress Prize Publication</a> by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>. Also, <a href="https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690307" target="_blank">Strategy to solve 85% of bit manipulation</a> by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> was the direct starting point for our bit manipulation solver.</p>
+<h2>Summary</h2>
+<ul>
+<li>The core of our solution was deciding what the model should memorize through synthetic traces and what it should compute inside the trace.</li>
+<li>The overall pipeline was simple: generate synthetic problems, attach solver-generated traces, and train the model with SFT.</li>
+<li>For cryptarithm, we precomputed candidate digit assignments from a single equation and made the model memorize them. Memorization alone does not determine consistency across multiple equations, so we checked that part sequentially with DFS.</li>
+<li>For bit manipulation, we started from the solver by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>. We compressed long bit strings into HEX to free token budget, and then repaired the selected 8-rule sequence by checking nearby valid sequences from a precomputed rule-sequence catalog.</li>
+</ul>
+<h2>Competition Overview</h2>
+<p>The NVIDIA Nemotron Model Reasoning Challenge was a competition to improve the reasoning ability of <a href="https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16" target="_blank">Nemotron-3-Nano-30B</a>. Each prompt gives several input-output examples. The task is to infer the hidden transformation and apply it to the final query. The provided <code>train.csv</code> contained 9,500 labeled problems across bit manipulation, equation numeric, cryptarithm, text cipher, numeral system, unit conversion, and gravity.</p>
+<p>Submissions were restricted to LoRA adapters for Nemotron-3-Nano-30B, with LoRA rank &lt;= 32. At evaluation time, the submitted adapter was loaded with vLLM, and accuracy was computed by checking whether the final answer inside <code>\boxed{}</code> matched the ground truth. String answers required exact match, while numeric answers allowed relative error <code>1e-2</code>. The generation settings were <code>temperature=0.0</code>, <code>top_p=1.0</code>, and <code>max_tokens=7680</code>, so the model had to produce the reasoning trace and final answer within that token budget.</p>
+<p>This setup meant that we could not run a program at evaluation time to compute the answer.</p>
+<h2>Pipeline</h2>
+<h3>Synthetic Data</h3>
+<p>For each category, we generated synthetic problems and attached traces produced by rule-based solvers. The synthetic problems were generated programmatically, not by asking an LLM to freely write puzzles. At a high level, we extracted statistics from <code>train.csv</code>, sampled the structure of each prompt, instantiated hidden rules and values, rendered the prompt with templates using the same format as the competition prompts, and then ran the corresponding rule-based solver to attach the trace. Validation samples were a 15% split from <code>train.csv</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Main training samples</th>
+<th>Main training tokens</th>
+<th>Extra training samples</th>
+<th>Extra training tokens</th>
+<th>Validation samples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit manipulation</td>
+<td>40,000</td>
+<td>228.2M</td>
+<td>50,000</td>
+<td>285.3M</td>
+<td>239</td>
+</tr>
+<tr>
+<td>equation numeric</td>
+<td>10,000</td>
+<td>41.9M</td>
+<td>10,000</td>
+<td>42.1M</td>
+<td>109</td>
+</tr>
+<tr>
+<td>cryptarithm</td>
+<td>120,000</td>
+<td>484.1M</td>
+<td>40,000</td>
+<td>160.9M</td>
+<td>124</td>
+</tr>
+<tr>
+<td>text cipher</td>
+<td>20,000</td>
+<td>67.0M</td>
+<td>10,000</td>
+<td>33.5M</td>
+<td>237</td>
+</tr>
+<tr>
+<td>numeral system</td>
+<td>10,000</td>
+<td>9.7M</td>
+<td>10,000</td>
+<td>9.7M</td>
+<td>236</td>
+</tr>
+<tr>
+<td>unit conversion</td>
+<td>10,000</td>
+<td>24.3M</td>
+<td>10,000</td>
+<td>24.4M</td>
+<td>239</td>
+</tr>
+<tr>
+<td>gravity</td>
+<td>10,000</td>
+<td>35.0M</td>
+<td>10,000</td>
+<td>34.9M</td>
+<td>240</td>
+</tr>
+<tr>
+<td>total</td>
+<td>220,000</td>
+<td>890.1M</td>
+<td>140,000</td>
+<td>590.7M</td>
+<td>1,424</td>
+</tr>
+</tbody>
+</table>
+<p>After the main training finished, there was still time before the competition ended, and bit manipulation still had room for improvement. Therefore, we continued training on extra data with a higher proportion of bit manipulation samples. The extra training token counts in the table are for the full extra data pool. Because of time constraints, extra training was run for 6,500 steps. With effective batch size 16, the actual number of processed samples was <code>104,000</code>.</p>
+<h3>SFT</h3>
+<p>Final training settings:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LoRA rank</td>
+<td>32</td>
+</tr>
+<tr>
+<td>LoRA alpha</td>
+<td>32</td>
+</tr>
+<tr>
+<td>main training learning rate</td>
+<td>2.0e-4</td>
+</tr>
+<tr>
+<td>extra training learning rate</td>
+<td>1.0e-5</td>
+</tr>
+<tr>
+<td>scheduler</td>
+<td>cosine</td>
+</tr>
+<tr>
+<td>optimizer</td>
+<td>adamw_bnb_8bit</td>
+</tr>
+<tr>
+<td>per-device batch size</td>
+<td>main: 1, extra: 2</td>
+</tr>
+<tr>
+<td>effective batch size</td>
+<td>16</td>
+</tr>
+<tr>
+<td>main training epochs</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>training time</td>
+<td>main: about 119h, extra: about 51h</td>
+</tr>
+<tr>
+<td>LoRA target modules</td>
+<td><code>q_proj</code>, <code>k_proj</code>, <code>v_proj</code>, <code>o_proj</code>, <code>in_proj</code>, <code>out_proj</code>, <code>up_proj</code>, <code>down_proj</code>, <code>gate_proj</code>, <code>lm_head</code></td>
+</tr>
+<tr>
+<td>training framework</td>
+<td>Unsloth</td>
+</tr>
+</tbody>
+</table>
+<p>The main run used per-device batch size 1, so its throughput was lower than the continuation run, which used per-device batch size 2.</p>
+<h2>Trace Design</h2>
+<p>After reading the Open Progress Prize solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>, we concluded that the main room for improvement was in cryptarithm and bit manipulation. Many submissions were around <code>0.86</code> on the Public LB, and the number of submissions around <code>0.87</code>, which looked like strong improvements over the solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>, was also increasing. Because evaluation scores had variance, we needed a clear gap in these two categories rather than staying in a range where randomness could decide the final ranking.</p>
+<h3>Equation Numeric</h3>
+<h4>Task Format</h4>
+<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+55`39 = 16
+61\65 = 126
+42&gt;23 = 4223
+17\21 = 38
+Now, determine the result for: 81`20
+</code></pre>
+<p>In equation numeric, two 2-digit numbers are transformed by an operator defined inside the prompt. Each line has the form <code>2 digits + operator + 2 digits = output</code>. The important point is not to read symbols such as <code>`</code>, <code>\</code>, and <code>&gt;</code> by their visual meaning. The meaning of each operator changes from prompt to prompt. In the final query, we apply the operator meaning inferred from the same prompt. Sometimes the query operator does not appear in the examples, so there is no direct input-output example for that operator.</p>
+<p>In this example, <code>55`39 = 16</code> tells us that <code>`</code> means <code>55 - 39</code>. The examples <code>61\65 = 126</code> and <code>17\21 = 38</code> tell us that <code>\</code> means addition. The example <code>42&gt;23 = 4223</code> tells us that <code>&gt;</code> concatenates the two 2-digit inputs. Therefore, the query <code>81`20</code> becomes <code>81 - 20 = 61</code>, and the answer is <code>\boxed{61}</code>.</p>
+<h4>Solution</h4>
+<p>In the trace, we first parse each equation as <code>AB op CD = output</code> and collect examples for each operator. Then, for each operator, we check which rules in the 24-rule inventory reproduce its examples. When multiple rules remain, we use prompt-level mode and group constraints, plus operator priors for <code>+</code>, <code>-</code>, and <code>*</code>, to narrow them down. Once the operator rule for the query is fixed, we apply that rule to the 2-digit query inputs. By analyzing equation numeric in <code>train.csv</code>, we found that all operator transformations could be explained by the same 24-rule inventory. Two observations were especially important.</p>
+<ul>
+<li>Observation 1: In one prompt, all non-join operators use the same mode. If one operator is explained by a <code>normal</code> mode rule, then the other non-join operators in the same prompt are also explained by <code>normal</code> mode rules. Conversely, in a <code>flip</code> mode prompt, all non-join operators use <code>flip</code> mode.</li>
+<li>Observation 2: In one prompt, non-join operators do not reuse the same group. For example, if one operator uses the add group, another non-join operator uses the sub or mul group. The join group is an exception and can appear independently of the normal / flip mode choice.</li>
+</ul>
+<p>The 24-rule inventory is listed below. We write it using the 2-digit inputs in <code>AB op CD</code>. <code>BA</code> and <code>DC</code> are the reversed digits of <code>AB</code> and <code>CD</code>. <code>rev(x)</code> reverses the decimal representation of the result. <code>op</code> means that the operator symbol in the prompt is used as the sign marker.</p>
+<table>
+<thead>
+<tr>
+<th>rule</th>
+<th>group</th>
+<th>mode</th>
+<th>definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>join</code></td>
+<td>join</td>
+<td>join</td>
+<td><code>ABCD</code></td>
+</tr>
+<tr>
+<td><code>join_swap</code></td>
+<td>join</td>
+<td>join</td>
+<td><code>CDAB</code></td>
+</tr>
+<tr>
+<td><code>add</code></td>
+<td>add</td>
+<td>normal</td>
+<td><code>AB + CD</code></td>
+</tr>
+<tr>
+<td><code>add+1</code></td>
+<td>add</td>
+<td>normal</td>
+<td><code>AB + CD + 1</code></td>
+</tr>
+<tr>
+<td><code>add-1</code></td>
+<td>add</td>
+<td>normal</td>
+<td><code>AB + CD - 1</code></td>
+</tr>
+<tr>
+<td><code>flip_add</code></td>
+<td>add</td>
+<td>flip</td>
+<td><code>rev(BA + DC)</code></td>
+</tr>
+<tr>
+<td><code>flip_add+1</code></td>
+<td>add</td>
+<td>flip</td>
+<td><code>rev(BA + DC + 1)</code></td>
+</tr>
+<tr>
+<td><code>flip_add-1</code></td>
+<td>add</td>
+<td>flip</td>
+<td><code>rev(BA + DC - 1)</code></td>
+</tr>
+<tr>
+<td><code>sub</code></td>
+<td>sub</td>
+<td>normal</td>
+<td><code>AB - CD</code></td>
+</tr>
+<tr>
+<td><code>absdiff</code></td>
+<td>sub</td>
+<td>normal</td>
+<td><code>abs(AB - CD)</code></td>
+</tr>
+<tr>
+<td><code>absdiff_prefix</code></td>
+<td>sub</td>
+<td>normal</td>
+<td><code>op + abs(AB - CD)</code> when <code>abs(AB - CD)</code> is nonzero</td>
+</tr>
+<tr>
+<td><code>maxmodmin</code></td>
+<td>sub</td>
+<td>normal</td>
+<td><code>max(AB, CD) mod min(AB, CD)</code></td>
+</tr>
+<tr>
+<td><code>flip_sub_prefix</code></td>
+<td>sub</td>
+<td>flip</td>
+<td><code>rev(BA - DC)</code>, with <code>op</code> prefix if negative</td>
+</tr>
+<tr>
+<td><code>flip_sub_suffix</code></td>
+<td>sub</td>
+<td>flip</td>
+<td><code>rev(DC - BA)</code>, with <code>op</code> suffix if negative</td>
+</tr>
+<tr>
+<td><code>flip_absdiff</code></td>
+<td>sub</td>
+<td>flip</td>
+<td><code>rev(abs(BA - DC))</code></td>
+</tr>
+<tr>
+<td><code>flip_absdiff_prefix</code></td>
+<td>sub</td>
+<td>flip</td>
+<td><code>op + rev(abs(BA - DC))</code> when <code>abs(BA - DC)</code> is nonzero</td>
+</tr>
+<tr>
+<td><code>flip_absdiff_suffix</code></td>
+<td>sub</td>
+<td>flip</td>
+<td><code>rev(abs(BA - DC)) + op</code> when <code>abs(BA - DC)</code> is nonzero</td>
+</tr>
+<tr>
+<td><code>flip_maxmodmin</code></td>
+<td>sub</td>
+<td>flip</td>
+<td><code>rev(max(BA, DC) mod min(BA, DC))</code></td>
+</tr>
+<tr>
+<td><code>mul</code></td>
+<td>mul</td>
+<td>normal</td>
+<td><code>AB * CD</code></td>
+</tr>
+<tr>
+<td><code>mul+1</code></td>
+<td>mul</td>
+<td>normal</td>
+<td><code>AB * CD + 1</code></td>
+</tr>
+<tr>
+<td><code>mul-1</code></td>
+<td>mul</td>
+<td>normal</td>
+<td><code>AB * CD - 1</code></td>
+</tr>
+<tr>
+<td><code>flip_mul</code></td>
+<td>mul</td>
+<td>flip</td>
+<td><code>rev(BA * DC)</code></td>
+</tr>
+<tr>
+<td><code>flip_mul+1</code></td>
+<td>mul</td>
+<td>flip</td>
+<td><code>rev(BA * DC + 1)</code></td>
+</tr>
+<tr>
+<td><code>flip_mul-1</code></td>
+<td>mul</td>
+<td>flip</td>
+<td><code>rev(BA * DC - 1)</code></td>
+</tr>
+</tbody>
+</table>
+<p>There were operator priors for <code>+</code>, <code>-</code>, and <code>*</code>, and they were useful in equation numeric. For example, <code>+</code> was biased toward addition-like rules and <code>*</code> toward multiplication-like rules. However, these priors did not transfer well enough to cryptarithm, so we did not use them there.</p>
+<h3>Cryptarithm</h3>
+<h4>Task Format</h4>
+<pre><code>In Alice's Wonderland, a secret set of transformation rules is applied to equations. Below are a few examples:
+|!)&lt;&lt; = &lt;[[
+::$\{ = !{?
+&lt;&lt;$'' = {\|(
+Now, determine the result for: !')?&lt;
+</code></pre>
+<p>Cryptarithm is an equation task where digits are hidden by symbols. The left side of each equation has 5 characters: <code>2 symbols + operator + 2 symbols</code>, so it has the form <code>AB op CD = output</code>. In the first line, <code>|!)&lt;&lt; = &lt;[[</code>, the operator is <code>)</code> between <code>|!</code> and <code>&lt;&lt;</code>, and the output is <code>&lt;[[</code>. After mapping symbols back to digits, this becomes a <code>2-digit op 2-digit = 3-digit</code> equation. In this category, we must determine both the digit assignment and the operator rule assignment. The query also has the same <code>2 symbols + operator + 2 symbols</code> form, and the computed numeric result must be mapped back to symbols. Sometimes the query operator does not appear in the examples, so both the digit assignment and the query operator rule must be inferred without a direct example for that operator. In this example, the answer is <code>\boxed{:![}</code>. The final assignment is:</p>
+<pre><code>|=0 !=4 &lt;=7 [=1 :=3 {=2 \=8 ?=9 '=6 (=5
+)=flip_add
+$=flip_mul
+</code></pre>
+<p>The query <code>!')?&lt;</code> becomes <code>46)97</code> under this assignment. Since <code>)</code> is <code>flip_add</code>, we reverse the two 2-digit inputs and compute <code>64 + 79 = 143</code>, then reverse the result to get <code>341</code>. Mapping <code>3,4,1</code> back to symbols gives <code>:![</code>, so the answer is <code>\boxed{:![}</code>.</p>
+<h4>Solution</h4>
+<p>For cryptarithm traces, we used the same 24-rule inventory from equation numeric as candidates for operator rules. Observation 1, the mode constraint, and Observation 2, the group constraint, were also consistent with cryptarithm, so we used them for DFS pruning. On the other hand, the operator priors for <code>+</code>, <code>-</code>, and <code>*</code> did not transfer well enough, so we did not use them.</p>
+<p>The naive search space is too large to write out as a teacher trace. In <code>train.csv</code> cryptarithm prompts, up to 10 digit symbols and up to 3 operator symbols appear. A rough upper bound for full search is:</p>
+<pre><code>digit assignments: 10! = 3,628,800
+operator rules: 24^3 = 13,824
+total combinations: about 5e10 candidates
+</code></pre>
+<p>This cannot be reproduced token by token within the <code>7680</code> generation-token budget. Therefore, the problem was not only to solve the task, but also to decompose the search into a short procedure that the model could follow inside a trace.</p>
+<p>The first check is <code>join</code> / <code>join_swap</code>. We inspect all equations and see whether the output is simply the two inputs concatenated. If an equation matches, the rule assignment for that operator is determined immediately.</p>
+<pre><code>join:      AB op CD -&gt; ABCD
+join_swap: AB op CD -&gt; CDAB
+</code></pre>
+<p>For example, in a symbolic prompt, if we see <code>!&gt;*}&gt; = !&gt;}&gt;</code>, then operator <code>*</code> can be identified as concatenating the two inputs <code>!&gt;</code> and <code>}&gt;</code>. If the same operator appears in the query, we can answer by concatenating the two query inputs. These two rules recover about 5% of cryptarithm problems. The Open Progress Prize solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> reached this stage for cryptarithm.</p>
+<p>Many cryptarithm problems remain after <code>join</code> / <code>join_swap</code>, so we solve the rest with DFS. First, choose one equation and list candidates for the rule and digit assignments that satisfy that equation. After choosing one candidate, check the remaining equations in order: the same symbol must map to the same digit, and the same operator must map to the same rule. If a contradiction appears, move to the next candidate. Once an assignment consistent with all equations is found, decode the query. When generating candidates for a single equation, we also used filters based on modular arithmetic and inequalities. However, it was difficult to pack that candidate-generation process into a short trace, and that alone did not produce a large score gain.</p>
+<p>The breakthrough was the signature viewpoint. A signature represents where the same symbols repeat and where the sign marker appears on the output side. For example, in <code>'^-"} = -@@</code>, the left operand <code>'^</code> corresponds to <code>AB</code>, the right operand <code>"}</code> to <code>CD</code>, and the answer <code>-@@</code> to signed <code>EE</code>, so the signature is <code>ABCD-EE</code>. The signature viewpoint and the precomputed operation-table approach were discussed in <a href="https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/701981" target="_blank">A Pattern-Matching Approach to Solving Symbolic Arithmetic Puzzles</a> by <a href="https://www.kaggle.com/youkinasa" target="_blank">@youkinasa</a>. That discussion described using a precomputed operation table keyed by signature to reduce solver candidates, instead of directly running brute force search. Our addition was to turn this into a signature catalog that the model memorizes through repeated SFT traces, rather than using it as a program at inference time. Since we cannot execute a program at evaluation time in this competition, it was important for the model to recall candidate counts and candidate digit assignments from the signature.</p>
+<p>This fit the hard part of DFS very well. The expensive step in DFS is the first equation. In the first equation, the solver typically has to assign about 4 to 8 digit symbols and the rule for that equation at once. In later equations, the digits fixed by the first equation can already be used, so the number of newly assigned symbols is often only about 0 to 3. Therefore, we precomputed one-equation candidates for each signature and trained the model to memorize this signature catalog. Instead of discovering candidates for the first equation from scratch every time, DFS starts from candidates retrieved from the catalog and only checks consistency with the remaining equations.</p>
+<p>The signature catalog was built by exhaustively enumerating the two 2-digit operands on the left side of an equation. Concretely, we assigned <code>00..99</code> to the left operand and <code>00..99</code> to the right operand, applied each of the 22 non-join rules, and computed the output. Then we normalized the digit sequence <code>left operand + right operand + output</code> by first occurrence into <code>A,B,C,...</code>. This sequence is the signature. This enumeration produced <code>4205</code> unique signatures. The signature catalog includes signatures such as <code>AAAAA</code>, <code>ABCCCDD</code>, <code>AABBCDEF</code>, and <code>ABCD-AE</code>. Each signature maps to candidate rows, each consisting of an operator rule, a slot digit string, and a candidate count. For example, <code>ABCCCDD</code> has:</p>
+<table>
+<thead>
+<tr>
+<th>signature</th>
+<th>rule</th>
+<th>candidate count</th>
+<th>slot digit strings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ABCCCDD</code></td>
+<td><code>add</code></td>
+<td>1</td>
+<td><code>8911100</code></td>
+</tr>
+<tr>
+<td><code>ABCCCDD</code></td>
+<td><code>flip_add</code></td>
+<td>8</td>
+<td><code>0299911</code>, <code>0388811</code>, <code>0477711</code>, <code>0566611</code>, <code>0655511</code>, <code>0744411</code>, <code>0833311</code>, <code>0922211</code></td>
+</tr>
+<tr>
+<td><code>ABCCCDD</code></td>
+<td><code>flip_add+1</code></td>
+<td>6</td>
+<td><code>9288811</code>, <code>9377711</code>, <code>9466611</code>, <code>9644411</code>, <code>9733311</code>, <code>9822211</code></td>
+</tr>
+</tbody>
+</table>
+<p>For example, the slot digit string <code>8911100</code> with the <code>add</code> rule means <code>89 + 11 = 100</code>. Combining the candidate rows for the three rules above gives <code>15</code> candidates, and the trace prints this as <code>eq0 ABCCCDD rows 15</code> and <code>D0 eq0 branches 15</code>. The <code>Candidate rows</code> part of the trace shows this signature-catalog lookup. Although the trace prints <code>rows 15</code>, the meaning is candidate count 15. This number is not just an auxiliary display: it is used to choose the anchor, the starting point of search, and the search order.</p>
+<p>With this method, we reached Public LB 0.89 / Private LB 0.908.</p>
+<p>A similar memorization + DFS direction also appeared in public discussion near the end of the competition. In <a href="https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/703479" target="_blank">Trying to improve cryptarithm - feedback welcome</a>, <a href="https://www.kaggle.com/kemshim" target="_blank">@kemshim</a> shared a multiplication-pattern lookup approach that already included an attempt to make the model memorize the mul pattern table. The comments with <a href="https://www.kaggle.com/MAJ0RT0M" target="_blank">@MAJ0RT0M</a> then focused on the learnability and limits of memorizing those triplet and multiplication tables.</p>
+<h4>Trace Example</h4>
+<p>Below is an excerpt from an actual training trace. Long tables are omitted, but the excerpt keeps enough detail to show what is decided at each point and what is passed to the next step.</p>
+<p>Target prompt:</p>
+<pre><code>|!)&lt;&lt; = &lt;[[
+::$\{ = !{?
+&lt;&lt;$'' = {\|(
+Now, determine the result for: !')?&lt;
+</code></pre>
+<p>The trace first parses each equation and maps symbols to <code>a,b,c,...</code> and signature symbols <code>A,B,C,...</code>. <code>eq0</code> is processed as follows.</p>
+<pre><code>1 Parse and normalize rows
+eq0
+split | ! ) &lt; &lt; = &lt; [ [
+left | !
+op )
+right &lt; &lt;
+output &lt; [ [
+map
+| a A new
+! b B new
+) ) op
+&lt; c C new
+&lt; c C seen
+&lt; c C seen
+[ d D new
+[ d D seen
+normalized ab)cc=cdd
+signature ABCCCDD
+slots abcccdd
+join no
+join_swap no
+rhs_edge none
+rhs_mag_len 3
+</code></pre>
+<p>Next, <code>2 Join-first</code> confirms that the operators are not <code>join</code> / <code>join_swap</code>.</p>
+<pre><code>2 Join-first
+op join join_swap decision
+$ no no non_join
+) no no non_join
+query op )
+query operator is seen; continue
+</code></pre>
+<p>In <code>3 Rule table</code>, for each operator, the trace checks <code>len</code> / <code>edge</code> for the 22 non-join rules. At this point, it does not search digit assignments yet. It first removes rules that can be rejected from the surface form of the output. <code>len</code> checks output length. For example, addition-like rules between two 2-digit numbers can be at most <code>99 + 99 + 1 = 199</code>, so if the numeric part of the right side has length 4, they can be rejected. Multiplication-like rules can produce 4 digits and remain under the same length condition. <code>edge</code> checks the sign position. In cryptarithm, the operator symbol is also used as the sign marker. If that symbol appears on the right side, its position, prefix or suffix, can reject several prefix / suffix rules.</p>
+<pre><code>3 Rule table
+op )
+rule mode group len edge
+sub normal sub ng ok
+flip_mul flip mul ok ok
+...
+flip_absdiff_prefix flip sub ng ok
+flip_absdiff_suffix flip sub ng ok
+active flip_mul flip_add add mul add+1 mul-1 mul+1 add-1 flip_add+1 flip_mul+1 flip_mul-1 flip_add-1
+
+op $
+rule mode group len edge
+sub normal sub ng ok
+flip_mul flip mul ok ok
+...
+flip_absdiff_prefix flip sub ng ok
+flip_absdiff_suffix flip sub ng ok
+active flip_mul mul mul-1 mul+1 flip_mul+1 flip_mul-1
+</code></pre>
+<p><code>Group precheck</code> uses Observation 2 to narrow down groups. In this example, <code>)</code> is fixed to the add group and <code>$</code> to the mul group. The purpose is to reduce the candidate rules for each operator before entering DFS.</p>
+<pre><code>Group precheck
+op groups
+) add mul
+$ mul
+match
+) add
+$ mul
+active after group
+) add flip_add add+1 flip_add+1 add-1 flip_add-1
+$ mul flip_mul mul+1 flip_mul+1 mul-1 flip_mul-1
+</code></pre>
+<p>In <code>4 Candidate rows</code>, the trace retrieves the candidate count from the signature. This candidate count is also something the model memorizes. The anchor is first chosen from equations with the smallest candidate count. In addition, the trace also considers a length-8 signature where multiplication can be fixed early. In the excerpt this is printed as <code>sig8</code>. If the length-8 candidate count is at most <code>max(30, 2 * min_count)</code>, it is chosen as the anchor. Otherwise, the minimum-count equation remains the anchor.</p>
+<pre><code>4 Candidate rows
+eq0 ABCCCDD rows 15
+eq1 AABCDCE rows 186
+eq2 AABBCDEF rows 76
+
+anchor
+min eq0 15
+sig8 eq2 76
+limit max(30,2*15)=30
+76&lt;=30 no
+anchor eq0
+order check
+fixed after eq0: a b c d
+eq1 lhs eefg -&gt; unknown e f g cost 3
+eq2 lhs ccii -&gt; unknown i cost 1
+</code></pre>
+<p>In this example, the smallest candidate count is <code>15</code> for <code>eq0</code>, and the length-8 signature candidate is <code>eq2</code> with 76 candidates. The limit is <code>max(30, 2*15)=30</code>, so <code>76&lt;=30 no</code>, and the anchor remains <code>eq0</code>. The <code>cost</code> in the trace is the number of unknown symbols left on the input side after the anchor has fixed some symbols. <code>eq2</code> has only <code>i</code> unknown, so cost 1. <code>eq1</code> still has <code>e f g</code>, so cost 3. Therefore, the search order becomes <code>D0 eq0 -&gt; D1 eq2 -&gt; D2 eq1</code>.</p>
+<p>In <code>5 Search</code>, the digit assignment candidates for the anchor are listed as D0 branches. This is where DFS starts. In D0, the trace chooses one candidate for <code>eq0</code>, fixing the digits <code>a,b,c,d</code> and the rule for <code>)</code>. Then D1 checks <code>eq2</code> and keeps only candidates that do not contradict already fixed digits or the rule, mode, and group constraints. Finally, D2 checks <code>eq1</code>.</p>
+<pre><code>5 Search
+order
+D0 eq0
+D1 eq2
+D2 eq1
+
+D0 eq0 branches 15
+idx rule ABCCCDD abcd
+1 flip_add 0299911 0291
+2 flip_add 0388811 0381
+3 flip_add 0477711 0471
+4 flip_add 0566611 0561
+5 flip_add 0655511 0651
+6 flip_add 0744411 0741
+7 flip_add 0833311 0831
+8 flip_add 0922211 0921
+9 add 8911100 8910
+10 flip_add+1 9288811 9281
+11 flip_add+1 9377711 9371
+12 flip_add+1 9466611 9461
+13 flip_add+1 9644411 9641
+14 flip_add+1 9733311 9731
+15 flip_add+1 9822211 9821
+</code></pre>
+<p>The next excerpt is the successful branch. <code>Loc 1/15</code> and <code>Loc 2/15</code> appear immediately before this in the actual trace, but both are rejected with <code>branches 0</code>.</p>
+<pre><code>Loc 3/15
+from D0 3/15 flip_add abcd=0471 rem 235689
+lock )=flip_add mode=flip group=add
+scan D1 eq2 op $
+input unknown: i
+output unknown: f g j
+
+flip_mul
+77*ii=j0fg
+i lhs rhs fgj status
+2 1694 j0fg 941 fail
+3 2541 j0fg 412 fail
+5 4235 j0fg 354 fail
+6 5082 j0fg 825 ok
+8 6776 j0fg 766 fail
+9 7623 j0fg 237 fail
+valid 1
+
+mul reject mode
+
+mul-1 reject mode
+
+mul+1 reject mode
+
+flip_mul+1
+77*ii+1=j0fg
+i lhs rhs fgj status
+2 1695 j0fg 951 fail
+3 2542 j0fg 422 fail
+5 4236 j0fg 364 fail
+6 5083 j0fg 835 ok
+8 6777 j0fg 776 fail
+9 7624 j0fg 247 fail
+valid 1
+
+flip_mul-1
+77*ii-1=j0fg
+i lhs rhs fgj status
+2 1693 j0fg 931 fail
+3 2540 j0fg 402 fail
+5 4234 j0fg 344 fail
+6 5081 j0fg 815 repeat
+8 6775 j0fg 756 fail
+9 7622 j0fg 227 fail
+valid 0
+
+branches 2
+1 flip_mul fgij=8265
+2 flip_mul+1 fgij=8365
+
+Loc 3/15-1/2
+from D1 1/2 flip_mul fgij=8265 rem 39
+lock $=flip_mul
+scan D2 eq1 op $
+input unknown: e
+output unknown: h
+
+flip_mul
+ee*28=h24
+e lhs rhs h status
+3 924 h24 9 ok
+9 2772 h24 none fail
+valid 1
+
+branches 1
+1 flip_mul eh=39
+
+Loc 3/15-1/2-1/1
+from D2 1/1 flip_mul eh=39 rem
+
+final state
+path 3.1.1
+digits a=0 b=4 c=7 d=1 e=3 f=8 g=2 h=9 i=6 j=5
+rules )=flip_add $=flip_mul
+</code></pre>
+<p><code>Loc 3/15</code> means that the trace is trying the 3rd of the 15 D0 branches. This branch fixes <code>)=flip_add</code> and <code>a=0,b=4,c=7,d=1</code>, leaving unused digits <code>rem 235689</code>. D1 then checks <code>eq2</code>. Only <code>i</code> is still unknown on the input side, so the trace tries remaining digits one by one and checks whether output-side <code>f,g,j</code> can be filled without contradiction. Lines such as <code>mul reject mode</code> are pruning by Observation 1. Since D0 fixed <code>flip</code> mode, D1 rejects normal mode rules without searching them. D1 leaves 2 branches, and the first one moves to D2 as <code>Loc 3/15-1/2</code>. In D2, only the unknown symbols <code>e,h</code> in <code>eq1</code> remain, and one branch survives. The <code>final state</code> has all digit symbols and operator rules fixed, so DFS stops there.</p>
+<p>Finally, <code>6 Query computation</code> uses the rule for the query operator and the final digit assignment to produce the answer.</p>
+<pre><code>6 Query computation
+rule ) flip_add
+bi)hc = 46)97 -&gt; 64+79 = 143 -rev-&gt; 341 -&gt; ebd -&gt; :![
+I will now return the answer in \boxed{}
+\boxed{:![}
+</code></pre>
+<h3>Bit Manipulation</h3>
+<h4>Task Format</h4>
+<p>In bit manipulation, the prompt gives several <code>input -&gt; output</code> examples, and we need to find the common 8-bit transformation and apply it to the final query. The left side is an 8-bit binary input, and the right side is an 8-bit binary output. All examples in one prompt are generated by the same transformation.</p>
+<pre><code>In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -&gt; output:
+00010101 -&gt; 10000011
+01100011 -&gt; 10111001
+11000101 -&gt; 01111000
+00011010 -&gt; 10100011
+01010110 -&gt; 00000011
+11010001 -&gt; 00011010
+10100010 -&gt; 00110110
+00111111 -&gt; 01111011
+11000011 -&gt; 01111100
+01110101 -&gt; 11001111
+
+Now, determine the output for: 01101001
+</code></pre>
+<p>One transformation that fits this example is:</p>
+<pre><code>s = not(rol1(x))
+a = not(shr3(x))
+b = shl2(x)
+out = sel_nand_xnor(s, a, b)
+</code></pre>
+<p>Here, <code>sel_nand_xnor(s, a, b)</code> uses <code>nand(a,b)</code> where each bit of <code>s</code> is 1, and <code>xnor(a,b)</code> where each bit of <code>s</code> is 0. Applying it to the query gives:</p>
+<pre><code>x = 01101001
+s = not(rol1(x)) = 00101101
+a = not(shr3(x)) = 11110010
+b = shl2(x)      = 10100100
+out              = 10001101
+</code></pre>
+<p>Therefore, the final answer is <code>\boxed{10001101}</code>.</p>
+<h4>Solution</h4>
+<p>The solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> does not try to guess all 8 output bits at once. Instead, it searches for an expression for each output bit in terms of input bits. For example, for output bit 0, it may try using input bit 0 directly, negating input bit 1, or taking AND / OR / XOR of two input bits. If an expression reproduces output bit 0 for all examples, it becomes the rule for output bit 0. However, the solver does not simply choose each bit rule independently. It first tries input bits, negations, constants, and two-bit AND / OR / XOR rules, and builds a table of which output bit each expression can reproduce. Then it searches from the left for sequences where input references advance one by one, such as <code>AND57</code>, <code>AND60</code>, <code>AND71</code>. It also searches from the right and prefers longer consecutive sequences. If middle bits remain unresolved, it checks whether they can be filled by constants or similar operations using input positions predicted by the left and right sequences. Finally, it applies the selected 8-rule sequence to the query. This "find per-output-bit rules, then choose consistent left and right sequences" idea was very strong and became the starting point of our bit manipulation solution.</p>
+<p>We made three main improvements to this starting point.</p>
+<ol>
+<li>Convert long bit-column sections of the trace to HEX to reduce token count.</li>
+<li>Add rules that the original solution did not cover, such as majority, 3-input parity, conditional selection, and 3-input compositions.</li>
+<li>Instead of using the selected sequence as-is, repair it by checking nearby valid 8-rule sequences from a precomputed rule-sequence catalog.</li>
+</ol>
+<p>For the additional bit rules, we first collected candidate rule families from existing discussions, public notebooks, and our analysis of <code>train.csv</code>. We then adjusted the rule set by adding and removing rule families while keeping the ability to explain all bit manipulation examples and queries in <code>train.csv</code>. This gave us a compact rule set for the rule-sequence catalog instead of an unnecessarily broad enumeration.</p>
+<p>The biggest limitation of the solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> was token count. The original traces repeat bit columns many times. Also, unlike many other tokenizers, Nemotron's tokenizer behaves close to one token per digit or bit character. Therefore, replacing long binary strings with hexadecimal strings directly reduces output tokens. We converted bit strings of length 4 or more to HEX. With the same sample set and training code, the median number of generated tokens decreased from <code>6771</code> to <code>4888</code> (<code>27.8%</code> reduction). Early HEX traces lowered accuracy, but increasing synthetic data with HEX traces recovered much of it while keeping the shorter output length.</p>
+<p>The saved token budget allowed us to cover transformations that the original solution had given up on. The 8-bit transformations enumerated for the rule-sequence catalog are listed below. Here, <code>a</code>, <code>b</code>, <code>c</code>, and <code>s</code> are 8-bit sequences constructed from <code>x</code>, shift, rotate, and not.</p>
+<table>
+<thead>
+<tr>
+<th>notation</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>original 8-bit input</td>
+</tr>
+<tr>
+<td><code>not(x)</code></td>
+<td>bitwise NOT over 8 bits</td>
+</tr>
+<tr>
+<td><code>shl1(x)</code> … <code>shl7(x)</code></td>
+<td>left shift, zero-filled on the right</td>
+</tr>
+<tr>
+<td><code>shr1(x)</code> … <code>shr7(x)</code></td>
+<td>right shift, zero-filled on the left</td>
+</tr>
+<tr>
+<td><code>rol1(x)</code> … <code>rol7(x)</code></td>
+<td>left rotation</td>
+</tr>
+<tr>
+<td><code>not(shl{k}(x))</code>, <code>not(shr{k}(x))</code>, <code>not(rol{k}(x))</code></td>
+<td>negated shift / rotation</td>
+</tr>
+<tr>
+<td><code>xor(a, b)</code>, <code>and(a, b)</code>, <code>or(a, b)</code></td>
+<td>bitwise combination of two 8-bit sequences</td>
+</tr>
+<tr>
+<td><code>maj(a, b, c)</code></td>
+<td>majority of three 8-bit sequences</td>
+</tr>
+<tr>
+<td><code>par3(a, b, c)</code></td>
+<td>parity of three 8-bit sequences</td>
+</tr>
+<tr>
+<td><code>ch(s, a, b)</code></td>
+<td>choose <code>a</code> where <code>s</code> is 1, otherwise <code>b</code></td>
+</tr>
+<tr>
+<td><code>sel_nand_xnor(s, a, b)</code></td>
+<td>use <code>nand(a,b)</code> where <code>s</code> is 1, otherwise <code>xnor(a,b)</code></td>
+</tr>
+<tr>
+<td><code>ao(a, b, c)</code>, <code>oa(a, b, c)</code></td>
+<td><code>(a and b) or c</code>, <code>(a or b) and c</code></td>
+</tr>
+<tr>
+<td><code>ax(a, b, c)</code>, <code>ox(a, b, c)</code></td>
+<td><code>(a and b) xor c</code>, <code>(a or b) xor c</code></td>
+</tr>
+<tr>
+<td><code>xa(a, b, c)</code>, <code>xo(a, b, c)</code></td>
+<td><code>(a xor b) and c</code>, <code>(a xor b) or c</code></td>
+</tr>
+</tbody>
+</table>
+<p>Repair was needed because the procedure by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> chooses the 8-rule sequence heuristically. Even if each output bit rule matches the examples locally, the 8 rules as a sequence are not necessarily possible as one coherent 8-bit transformation. In particular, the baseline procedure can produce fallbacks such as <code>default 1</code>. This means "we failed to find a good rule for this bit, so fill it with a constant", and such a sequence does not exist in the rule-sequence catalog. Therefore, we enumerated theoretically possible 8-bit transformations from the list above and converted each into per-output-bit operation notation. Concretely, each 8-bit transformation is normalized into an 8-rule sequence: "rule for output bit 0, rule for output bit 1, …, rule for output bit 7". For example, <code>sel_nand_xnor(not(rol1(x)), not(shr3(x)), shl2(x))</code> becomes <code>XNOR12 XNOR23 XNOR34 SEL-NAND-XNOR045 SEL-NAND-XNOR156 SEL-NAND-XNOR267 OR-NOT73 OR-NOT04</code>. As another example, <code>maj(rol2(x), shl4(x), shr7(x))</code> becomes <code>AND24 AND35 AND46 AND57 C0 C0 C0 AND01</code>. After removing duplicates, this precomputation produced <code>5238</code> valid 8-rule sequences.</p>
+<p>Repair means replacing the selected sequence from the baseline procedure with a nearby valid sequence from the rule-sequence catalog. We used Hamming distance as the distance metric. We can view this as a nearest-neighbor projection onto the valid rule-sequence catalog under Hamming distance. Even when the baseline procedure produces <code>default</code> or a local mistake, checking nearby valid sequences can restore a coherent 8-bit transformation. This is the same memorization-computation split as in cryptarithm. The model internalizes the rule-sequence catalog, and then checks within the trace whether each catalog candidate matches the examples. Instead of expanding the full catalog, the trace only checks catalog candidates near the selected sequence, keeping the amount of verification small while still using memorized structure.</p>
+<p>The idea of training the model on this repair came from the success of memorizing the signature catalog and candidate counts in cryptarithm. For bit manipulation, we decided that it was not enough to simply apply the selected sequence from the baseline procedure. It was more effective to make the model memorize nearby valid sequences and verify them against the examples to repair the final answer. The trigger for trying this format was an accidental inconsistent trace during development. In a bit problem where the local solver output differed from the ground truth, we accidentally created a training sample where the trace up to the end came from the solver, but the final <code>\boxed{}</code> was replaced with the ground-truth answer. This was not a proper trace imitation target, but the model learned the format. In fact, we saw cases where the solver would be wrong, but the trained model changed only the final answer and became correct.</p>
+<p>Even before adding this repair, we reached Public LB 0.89. With repair and extra training, the final system reached Public LB 0.91 / Private LB 0.920. The best unselected submission scored 0.932 on Private LB.</p>
+<h4>Trace Example</h4>
+<p>Below is an excerpt from an actual trace. The target problem is:</p>
+<pre><code>In Alice's Wonderland, a secret bit manipulation rule transforms 8-bit binary numbers. The transformation involves operations like bit shifts, rotations, XOR, AND, OR, NOT, and possibly majority or choice functions.
+
+Here are some examples of input -&gt; output:
+00010101 -&gt; 10000011
+01100011 -&gt; 10111001
+11000101 -&gt; 01111000
+00011010 -&gt; 10100011
+01010110 -&gt; 00000011
+11010001 -&gt; 00011010
+10100010 -&gt; 00110110
+00111111 -&gt; 01111011
+11000011 -&gt; 01111100
+01110101 -&gt; 11001111
+
+Now, determine the output for: 01101001
+</code></pre>
+<p>In the first part, corresponding to the solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>, the trace decomposes inputs and outputs into bit columns. Long 0/1 columns are compressed into hexadecimal here. For example, <code>1101000001-&gt;341</code> means that the output bit 0 column across the 10 examples, <code>1101000001</code>, is written as hexadecimal <code>341</code>.</p>
+<pre><code>Output columns
+0 1101000001-&gt;341
+1 0010000111-&gt;087
+2 0111001110-&gt;1CE
+3 0110011110-&gt;19E
+4 0110010111-&gt;197
+5 0000001011-&gt;00B
+6 1001111101-&gt;27D
+7 1101100101-&gt;365
+
+~Output columns
+0-&gt;0BE
+1-&gt;378
+2-&gt;231
+3-&gt;261
+4-&gt;268
+5-&gt;3F4
+6-&gt;182
+7-&gt;09A
+
+Input columns
+0 0010011010-&gt;09A
+1 0110110011-&gt;1B3
+2 0100001101-&gt;10D
+3 1001110101-&gt;275
+4 0001000100-&gt;044
+5 1010100101-&gt;2A5
+6 0101101110-&gt;16E
+7 1110010111-&gt;397
+</code></pre>
+<p>Next, the trace evaluates rules by combining input bit columns and checks which output bit column each rule matches. The following is part of the added rules. <code>045:19E=3</code> means that <code>SEL-NAND-XNOR</code> using input bits 0, 4, and 5 matches output bit 3, whose column is <code>19E</code>.</p>
+<pre><code>SEL-NAND-XNOR:
+012:3DB 013:0AB 014:29A 015:07B 016:3B8 017:149
+023:09F 024:2BE 025:0DF 026:396 027:1FF
+034:1DE 035:3BF 036:0FE 037:28F
+045:19E=3 046:2DF 047:0BE
+...
+156:197=4 157:37E
+...
+267:00B=5
+301:2E7 302:27D=6 304:375 305:3F5 306:27F 307:2E7
+312:374 314:27D=6 315:2DC 316:357 317:3EE
+...
+756:3B3
+
+Matching output
+Absent:0127
+3 045
+4 156
+5 267
+6 302 314
+
+Left
+none
+Best: none
+
+Right
+none
+Best: none
+</code></pre>
+<p><code>MAJ</code> is checked in the same way. In this example, candidates matching output bits 3 and 4 are found.</p>
+<pre><code>MAJ:
+012:19B 013:0B3 014:092 015:0B3 016:1BA 017:193
+023:01D 024:00C 025:08D 026:10E 027:19F
+034:054 035:2B5 036:07E 037:297
+...
+067:19E=3
+...
+127:197=4
+...
+147:197=4
+...
+567:3A7
+
+Matching output
+Absent:012567
+3 067
+4 127 147
+
+Left
+none
+Best: none
+
+Right
+none
+Best: none
+</code></pre>
+<p>The baseline procedure selects the longest consecutive rule sequence from the left and from the right. In this example, it finds <code>~XOR12 ~23 ~34</code> from the left for 3 bits, and <code>~AND-NOT04 ~73</code> from the right for 2 bits. The middle bits 3, 4, and 5 cannot be filled, so they become <code>default 1</code>.</p>
+<pre><code>Lefts
+Identity none
+C0 none
+AND none
+OR none
+XOR ~XOR12 ~23 ~34: 3
+AND-NOT none
+SEL-NAND-XNOR none
+MAJ none
+
+Rights
+Identity ~I0: 1
+C0 none
+AND none
+OR none
+XOR none
+AND-NOT ~AND-NOT04 ~73: 2
+SEL-NAND-XNOR none
+MAJ none
+
+Left longest: 3
+Right longest: 2
+
+Best left: ~XOR12 ~23 ~34: 3
+Best right: ~AND-NOT04 ~73: 2
+...
+Selected
+0 ~XOR12
+1 ~XOR23
+2 ~XOR34
+3 default 1
+4 default 1
+5 default 1
+6 ~AND-NOT73
+7 ~AND-NOT04
+</code></pre>
+<p>First, the trace applies the selected sequence from the baseline procedure to the query. <code>69</code> in <code>Applying to 69</code> is the hexadecimal representation of query <code>01101001</code>.</p>
+<pre><code>Applying to 69
+Input
+0 0
+1 1
+2 1
+3 0
+4 1
+5 0
+6 0
+7 1
+Output
+0 ~XOR12 = NOT(XOR(1,1)) = 1
+1 ~XOR23 = NOT(XOR(1,0)) = 0
+2 ~XOR34 = NOT(XOR(0,1)) = 0
+3 default 1 = 1
+4 default 1 = 1
+5 default 1 = 1
+6 ~AND-NOT73 = NOT(AND(1,NOT(0))) = 0
+7 ~AND-NOT04 = NOT(AND(0,NOT(1))) = 1
+
+\boxed{10011101}
+</code></pre>
+<p>This would produce <code>10011101</code>, but the trace then repairs it using the rule-sequence catalog. In the actual trace, it retrieves up to 32 catalog candidates with small Hamming distance from the selected sequence. <code>v1</code> is the sequence selected by the baseline procedure. <code>v2</code> and later are retrieved from the rule-sequence catalog, ordered by increasing Hamming distance from <code>v1</code>. <code>32</code> is not a theoretical value. It is a practical limit chosen from the trace token budget and the density of the learning signal. If there are too few candidates, close valid sequences are missing. If there are too many, the trace becomes long because it has to verify examples and apply candidates to the query, and the learning signal for candidate checking becomes sparse. The <code>diff</code> in the trace is the Hamming distance from <code>selected</code> after normalizing the 8 positions. The rule-sequence catalog can contain equivalent expressions after normalization, such as <code>~AND-NOT73</code> and <code>OR-NOT37</code>. The trace checks each catalog candidate against the examples from top to bottom, and applies the first valid 8-rule sequence that matches all 8 output bits.</p>
+<pre><code>Catalog vectors
+v1 selected: ~XOR12 ~XOR23 ~XOR34 default1 default1 default1 OR-NOT37 OR-NOT40 diff 0
+v2: XNOR12 XNOR23 XNOR34 OX(I0,NOT4,I5) OX(I1,NOT5,I6) OX(I2,NOT6,I7) OR-NOT73 OR-NOT04 diff 3
+v3: XNOR12 XNOR23 XNOR34 SEL-NAND-XNOR045 SEL-NAND-XNOR156 SEL-NAND-XNOR267 OR-NOT73 OR-NOT04 diff 3
+...
+
+Check v1
+catalog no
+
+Check v2
+0 yes
+1 yes
+2 yes
+3 no
+
+Check v3
+0 yes
+1 yes
+2 yes
+3 yes
+4 yes
+5 yes
+6 yes
+7 yes
+</code></pre>
+<p><code>v1</code> is rejected because it is not in the rule-sequence catalog. <code>v2</code> fails at the check for bit 3. <code>v3</code> passes all 8 bit checks, so this sequence is applied to the query.</p>
+<pre><code>Applying to 69
+0 XNOR12 = 1
+1 XNOR23 = 0
+2 XNOR34 = 0
+3 SEL-NAND-XNOR045 = 0
+4 SEL-NAND-XNOR156 = 1
+5 SEL-NAND-XNOR267 = 1
+6 OR-NOT73 = 0
+7 OR-NOT04 = 1
+
+\boxed{10001101}
+</code></pre>
+<h3>Text Cipher</h3>
+<h4>Task Format</h4>
+<pre><code>In Alice's Wonderland, secret encryption rules are used on text. Here are some examples:
+hmxad apdhvdq vid ohexahm apwqvhm -&gt; alice creates the magical crystal
+zxuhpl zhvaidq xyqxld txmmhed -&gt; wizard watches inside village
+nfddy xohexydq xy ehpldy -&gt; queen imagines in garden
+osfqd qddq lssp -&gt; mouse sees door
+vid amdtdp zxuhpl dgjmspdq -&gt; the clever wizard explores
+Now, decrypt the following text: bxye aihqdq ahqvmd
+</code></pre>
+<p>Text cipher is a word-aligned substitution cipher. The left side is ciphertext, the right side is plaintext, and the query ciphertext must be decrypted using the same mapping. The example sides have the same number of words in the same order, so from <code>hmxad -&gt; alice</code> we can collect character mappings such as <code>h-&gt;a</code>, <code>m-&gt;l</code>, <code>x-&gt;i</code>, <code>a-&gt;c</code>, and <code>d-&gt;e</code>. This mapping is consistent within one prompt.</p>
+<p>In this example, the query word <code>aihqdq</code> becomes <code>chases</code> from <code>a-&gt;c</code>, <code>i-&gt;h</code>, <code>h-&gt;a</code>, <code>q-&gt;s</code>, <code>d-&gt;e</code>, <code>q-&gt;s</code>. Similarly, <code>ahqvmd</code> becomes <code>castle</code>. On the other hand, <code>bxye</code> can only be read as <code>?ing</code> from the example-derived mapping, because <code>b</code> is unknown. Using the candidate vocabulary and context, we choose <code>king</code> and add <code>b-&gt;k</code>. The full decrypted phrase is <code>king chases castle</code>, so the answer is <code>\boxed{king chases castle}</code>.</p>
+<h4>Solution</h4>
+<p>The trace directly implements this simple reading. It aligns example sentences word by word, builds a character mapping table, and decodes the query from left to right. If a ciphertext word itself appears in the examples, the trace uses direct word correspondence. Otherwise, it applies the character mapping. When unknown characters remain, it chooses from a candidate vocabulary using word length, repeated-character pattern, and consistency with already fixed characters. The vocabulary is not arbitrary English words. We built it from the 77 words that appear on the plaintext side of text cipher problems in <code>train.csv</code>. This is a strong constraint: for example, instead of searching for <code>?ing</code> among all English words, the trace only needs to check words in this 77-word vocabulary. This was not our main improvement target, and the procedure was almost the same as the Open Progress Prize text cipher solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>.</p>
+<h3>Numeral System</h3>
+<h4>Task Format</h4>
+<pre><code>In Alice's Wonderland, numbers are secretly converted into a different numeral system. Some examples are given below:
+11 -&gt; XI
+15 -&gt; XV
+94 -&gt; XCIV
+19 -&gt; XIX
+Now, write the number 38 in the Wonderland numeral system.
+</code></pre>
+<p>Numeral system is a task of converting integers to Roman numerals. In this example, <code>38 = 30 + 8</code>, so we concatenate <code>30 -&gt; XXX</code> and <code>8 -&gt; VIII</code> to get <code>XXXVIII</code>. The answer is <code>\boxed{XXXVIII}</code>.</p>
+<h4>Solution</h4>
+<p>The trace writes down this procedure directly. It decomposes the query number by place value and concatenates the Roman numeral representation of each part. This category was already stable with the procedure from the Open Progress Prize solution by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a>.</p>
+<h3>Unit Conversion</h3>
+<h4>Task Format</h4>
+<pre><code>In Alice's Wonderland, a secret unit conversion is applied to measurements. For example:
+10.08 m becomes 6.69
+17.83 m becomes 11.83
+35.85 m becomes 23.79
+17.06 m becomes 11.32
+31.54 m becomes 20.93
+Now, convert the following measurement: 25.09 m
+</code></pre>
+<p>Unit conversion asks us to convert an input value using a hidden conversion coefficient. All examples are generated by the same coefficient. In this example, <code>6.69 / 10.08 = 0.6637</code>, <code>11.83 / 17.83 = 0.6635</code>, and <code>23.79 / 35.85 = 0.6636</code>, so the coefficient is about <code>0.6636</code>. Therefore, for the query, <code>25.09 * 0.6636 = 16.65</code>, and the answer is <code>\boxed{16.65}</code>.</p>
+<h4>Solution</h4>
+<p>The trace writes down this reading directly. It computes <code>output / input</code> for each example, confirms that the coefficient is consistent, applies the same coefficient to the query, and rounds to two decimal places. We used the Open Progress Prize procedure by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> as-is for this category.</p>
+<h3>Gravity</h3>
+<h4>Task Format</h4>
+<pre><code>In Alice's Wonderland, the gravitational constant has been secretly changed. Here are some example observations:
+For t = 1.37s, distance = 14.92 m
+For t = 4.27s, distance = 144.96 m
+For t = 3.28s, distance = 85.54 m
+For t = 3.67s, distance = 107.09 m
+For t = 1.78s, distance = 25.19 m
+Now, determine the falling distance for t = 4.41s given d = 0.5*g*t^2.
+</code></pre>
+<p>Gravity asks for the falling distance from time <code>t</code>. The prompt explicitly gives <code>d = 0.5*g*t^2</code>, but <code>g</code> changes from prompt to prompt. From the examples, we can compute <code>g = 2*d/t^2</code>: <code>2*14.92/1.37^2 = 15.8986</code>, <code>2*144.96/4.27^2 = 15.9009</code>, and <code>2*85.54/3.28^2 = 15.9020</code>, so <code>g</code> is about <code>15.90</code>. Therefore, for the query, <code>0.5 * 15.90 * 4.41^2 = 154.62</code>, and the answer is <code>\boxed{154.62}</code>.</p>
+<h4>Solution</h4>
+<p>The trace writes down this procedure directly. It computes <code>g = 2*d/t^2</code> from each example, confirms that the values are close, and applies <code>d = 0.5*g*t^2</code> to the query time. We also used the Open Progress Prize procedure by <a href="https://www.kaggle.com/huikang" target="_blank">@huikang</a> as-is for this category.</p>
+<h2>Leaderboard Variance and Checkpoint Selection</h2>
+<p>During the competition, we did not have enough GPU capacity to evaluate many checkpoints locally while training was still running. Therefore, we periodically submitted checkpoints to Kaggle and used Public LB as a noisy external signal. Later, when we ran local validation for the submitted checkpoints, the validation curve was reasonably aligned with the Public LB trend. When the same checkpoint was submitted multiple times, the plotted leaderboard score is the average of those submissions.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11115645%2F53a70af56cb088d5ea361b43fda917ae%2Fscore_curve.png?generation=1781737317584760&amp;alt=media" alt="Leaderboard and validation score curve"></p>
+<p>At evaluation time, generation with <code>temperature=0.0</code> was still not fully deterministic, so scores varied across repeated submissions. The final Private LB also fluctuated heavily across nearby checkpoints. Even so, the correlation between local validation and Public LB gave us a stable basis for selecting checkpoints. In the end, we submitted the adapter after extra training twice and selected those two submissions as our final submissions.</p>
+<h2>Solver Coverage and Model Validation</h2>
+<p>We measured how many correct teacher traces the trace-generating solvers could produce on <code>train.csv</code> within the <code>7680</code> generation-token budget, and compared that with the answers produced by the SFT model. If a full trace exceeded <code>7680</code> tokens but the answer extracted from the first <code>7680</code> tokens was correct, we counted it as correct within the token budget. <code>deduce</code> means that the query operator appears in the examples, while <code>guess</code> means that the query operator is unseen in the examples. This is not an unbiased evaluation. The solver design and rule extraction were done after looking at the full <code>train.csv</code>, so this table essentially includes leakage.</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Count</th>
+<th>Solver Correct (within token budget)</th>
+<th>Model Correct</th>
+<th>Solver Accuracy (within token budget)</th>
+<th>Model Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bit manipulation</td>
+<td>1,602</td>
+<td>1,562</td>
+<td>1,497</td>
+<td>97.50%</td>
+<td>93.45%</td>
+</tr>
+<tr>
+<td>equation numeric deduce</td>
+<td>596</td>
+<td>569</td>
+<td>568</td>
+<td>95.47%</td>
+<td>95.30%</td>
+</tr>
+<tr>
+<td>equation numeric guess</td>
+<td>136</td>
+<td>72</td>
+<td>71</td>
+<td>52.94%</td>
+<td>52.21%</td>
+</tr>
+<tr>
+<td>cryptarithm deduce</td>
+<td>659</td>
+<td>283</td>
+<td>251</td>
+<td>42.94%</td>
+<td>38.09%</td>
+</tr>
+<tr>
+<td>cryptarithm guess</td>
+<td>164</td>
+<td>21</td>
+<td>20</td>
+<td>12.80%</td>
+<td>12.20%</td>
+</tr>
+<tr>
+<td>text cipher</td>
+<td>1,576</td>
+<td>1,576</td>
+<td>1,568</td>
+<td>100.00%</td>
+<td>99.49%</td>
+</tr>
+<tr>
+<td>numeral system</td>
+<td>1,576</td>
+<td>1,576</td>
+<td>1,576</td>
+<td>100.00%</td>
+<td>100.00%</td>
+</tr>
+<tr>
+<td>unit conversion</td>
+<td>1,594</td>
+<td>1,594</td>
+<td>1,594</td>
+<td>100.00%</td>
+<td>100.00%</td>
+</tr>
+<tr>
+<td>gravity</td>
+<td>1,597</td>
+<td>1,597</td>
+<td>1,595</td>
+<td>100.00%</td>
+<td>99.87%</td>
+</tr>
+<tr>
+<td>total</td>
+<td>9,500</td>
+<td>8,850</td>
+<td>8,740</td>
+<td>93.16%</td>
+<td>92.00%</td>
+</tr>
+</tbody>
+</table>
+<h2>Compute and Implementation</h2>
+<p>Almost all experiments and training runs were done on our own workstation with one NVIDIA RTX PRO 6000 Blackwell GPU.</p>
+<p>All code was written with Codex. We did not write a single line of code directly. However, the ideas, analysis direction, and trace design decisions that improved the score almost never came from Codex.</p>

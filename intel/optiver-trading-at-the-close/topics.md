@@ -1,0 +1,122 @@
+# optiver-trading-at-the-close 讨论区（按票数排序，共 120 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/487446) — 338 票 / 76 评论 / 2024-10-14 **write-up?**
+- [Features as explained to a kid](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/444516) — 166 票 / 63 评论 / 2023-10-02 
+- [Weights of the Synthetic Index](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442851) — 141 票 / 48 评论 / 2023-09-24 
+- [About some modeling ideas](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/450626) — 139 票 / 72 评论 / 2023-10-25 
+- [Onboarding materials and resources ](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/441966) — 94 票 / 11 评论 / 2023-09-20 
+- [Volatility Matters. What worked and what didn't work on the last Optiver Competition.](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442021) — 79 票 / 6 评论 / 2023-09-21 
+- [Some ideas and implementation of features](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/453609) — 73 票 / 19 评论 / 2023-11-07 
+- [Competition Q&A](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/441590) — 68 票 / 302 评论 / 2023-09-19 
+- [9th Place Solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486868) — 66 票 / 36 评论 / 2024-03-26 **write-up?**
+- [NN with no feature engineering (get 5.34X)](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462639) — 63 票 / 15 评论 / 2023-12-21 
+- [Nasdaq closing auction: mechanism and key data columns](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442669) — 63 票 / 19 评论 / 2023-09-23 
+- [Faster solution for building features](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/451735) — 54 票 / 21 评论 / 2023-10-30 **write-up?**
+- [Reverse Engineering](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/457721) — 50 票 / 9 评论 / 2023-11-26 
+- [6th Place Solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486040) — 49 票 / 20 评论 / 2024-03-23 **write-up?**
+- [All previous Kaggle Trading competitions](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442453) — 47 票 / 9 评论 / 2023-09-22 
+- [Summarizing our collective learnings over the past month](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/448920) — 46 票 / 7 评论 / 2023-10-22 
+- [Summarizing our collective learnings over the past 2 months](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/456458) — 44 票 / 12 评论 / 2023-11-20 
+- [Working at Optiver](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/441816) — 43 票 / 24 评论 / 2023-09-20 
+- [Prize-Winner (7th place solution)](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486169) — 43 票 / 10 评论 / 2024-03-23 **write-up?**
+- [Demystifying the dataset: A Guide to Understanding Optiver - Trading at the Close](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/445025) — 41 票 / 15 评论 / 2023-10-04 
+- [Local CV and Public Score Correlation](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/456438) — 41 票 / 36 评论 / 2023-11-20 
+- [[Public LB 23th]Feature is all you need](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462664) — 41 票 / 16 评论 / 2023-12-21 
+- [Domain knowledge sharing: plausible edge cases](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/457058) — 34 票 / 19 评论 / 2023-11-22 
+- [[finding] the mechanism of revealed_targets](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/443275) — 34 票 / 15 评论 / 2023-09-26 
+- [Obtain Information by Submitting](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/443195) — 34 票 / 16 评论 / 2023-09-26 
+- [Kaggle Kernels community relationship](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/449002) — 33 票 / 10 评论 / 2023-10-22 
+- [Learning from Mistakes - Use TDD](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/457610) — 31 票 / 6 评论 / 2023-11-25 
+- [Interim data update planned for the week of November 13th](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454103) — 31 票 / 44 评论 / 2023-11-08 
+- [14th Place Gold Solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485985) — 31 票 / 24 评论 / 2024-03-23 **write-up?**
+- [🚀 Papers to Get Started 🚀](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442001) — 31 票 / 0 评论 / 2023-09-20 
+- [What I learned in Optiver Competition](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462370) — 29 票 / 26 评论 / 2023-12-19 
+- [Meme thread!](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/461417) — 28 票 / 24 评论 / 2023-12-14 
+- [[5th Public LB] LGB Continuous Learning + Catboost Ensemble](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462743) — 28 票 / 18 评论 / 2023-12-21 
+- [Technical analysis functions to generate more features](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454179) — 27 票 / 10 评论 / 2023-11-09 
+- [The previous Optiver competition and its top solutions](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442167) — 27 票 / 1 评论 / 2023-09-21 **write-up?**
+- [[30th place] What our team learned and what we tried in this competition ](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462650) — 25 票 / 25 评论 / 2023-12-21 **write-up?**
+- [14th Place Solution for the Optiver - Trading at the Close Competition](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462653) — 25 票 / 13 评论 / 2024-04-04 **write-up?**
+- [Latest NVIDIA cuDF fully supports Pandas with 150x speedup! No code changes needed!](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454454) — 24 票 / 11 评论 / 2023-11-10 
+- [[Public Notebook Confusion/Discussion] When in doubt, experiment and build it from scratch](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454283) — 24 票 / 10 评论 / 2023-11-09 
+- [15th place solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486086) — 23 票 / 2 评论 / 2024-03-23 **write-up?**
+- [Interim hidden dataset update is live](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/455462) — 23 票 / 101 评论 / 2023-11-14 
+- [Sharing submissions timing script](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/448714) — 23 票 / 5 评论 / 2023-10-20 
+- [Purging & Embargo for Predictive Prowess 💪📊](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/453128) — 22 票 / 12 评论 / 2023-11-05 
+- [25th Place Solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485967) — 22 票 / 4 评论 / 2024-03-22 **write-up?**
+- [Rolling Features in test](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442632) — 21 票 / 16 评论 / 2023-09-23 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/441959) — 21 票 / 28 评论 / 2023-09-20 
+- [Congratulations!🎉🎉](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462636) — 19 票 / 2 评论 / 2023-12-20 
+- [[7th Public Submissions] Betting on Recent or Historical Patterns](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462666) — 19 票 / 36 评论 / 2023-12-21 
+- [Are our models just making "nice" guesses](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/452872) — 19 票 / 32 评论 / 2023-11-03 
+- [Minor data update: API delivers last three date IDs of training data for demonstration purposes](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/443571) — 19 票 / 12 评论 / 2023-09-27 
+- [89th Place Solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486038) — 19 票 / 2 评论 / 2024-05-23 **write-up?**
+- [ Can anyone explain the zero sum function in most of the public notebooks?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/451251) — 18 票 / 40 评论 / 2023-10-27 
+- [Lessons learned](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485924) — 18 票 / 7 评论 / 2024-03-22 
+- [First leaderboard update posted](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/468464) — 18 票 / 34 评论 / 2024-01-16 
+- [What's your gbdt model performance?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/469142) — 17 票 / 27 评论 / 2024-01-19 
+- [Anyone achieved high scores using model other than LGBM?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454136) — 17 票 / 20 评论 / 2023-11-09 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/441960) — 17 票 / 160 评论 / 2023-09-20 
+- [How to survive shakeup](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/456280) — 16 票 / 9 评论 / 2023-11-19 
+- [Some (maybe) useful facts](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/448148) — 16 票 / 9 评论 / 2023-10-18 
+- [How to compare / combine the MAE across multiple folds](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/448069) — 16 票 / 12 评论 / 2023-10-18 
+- [Thanks to the organizers](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442094) — 16 票 / 1 评论 / 2023-09-21 
+- [Feature selection techniques](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454190) — 16 票 / 11 评论 / 2023-11-09 
+- [Merry Christmas to all of you!](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/463353) — 15 票 / 0 评论 / 2023-12-24 
+- [Optiver: last day competition statistics](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462416) — 15 票 / 13 评论 / 2023-12-19 
+- [The best params for LGBM](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/447066) — 15 票 / 35 评论 / 2023-10-14 
+- [Analyzing the leaderboard updates and potential churn](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/476582) — 15 票 / 2 评论 / 2024-02-12 
+- [Candlestick Patterns - worth to try?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/447556) — 15 票 / 7 评论 / 2023-10-16 
+- [📈Market Prediction - 🏆Winning Solutions from other competitions - Useful for Optiver - Trading at the Close - Predict US stocks closing movements📈❓](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/443396) — 14 票 / 3 评论 / 2023-09-27 **write-up?**
+- [Optiver Kernel stats](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/451532) — 14 票 / 6 评论 / 2023-10-29 
+- [Is there anyone tried to build LGBM for each stock_id? [200 models]](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/455384) — 14 票 / 10 评论 / 2023-11-14 
+- [Handling Missing Values: An Exploration and Strategy Discussion](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/445414) — 14 票 / 7 评论 / 2023-10-06 
+- [From public 1000+ to 34th](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486228) — 14 票 / 8 评论 / 2024-03-24 
+- [[Obsolete] First leaderboard update in progress - expect odd state for the next hour](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/468448) — 14 票 / 4 评论 / 2024-01-16 
+- [Leaderboard after 1st update - chart](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/468493) — 13 票 / 12 评论 / 2024-01-16 
+- [Are there any tips for building a NN model?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/455468) — 13 票 / 41 评论 / 2023-11-14 
+- [Clarification on the hidden test data](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/447877) — 13 票 / 1 评论 / 2023-10-17 
+- [Final update has been published](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485903) — 12 票 / 20 评论 / 2024-03-22 
+- [Submission Scoring Failed](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/456286) — 12 票 / 25 评论 / 2023-11-19 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442222) — 12 票 / 0 评论 / 2023-09-21 
+- [Memory reduced dataset in parquet format](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/441992) — 12 票 / 0 评论 / 2023-09-20 
+- [Questions about prediction environments](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442000) — 12 票 / 7 评论 / 2023-09-20 
+- [Fourth leaderboard update posted](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/479998) — 12 票 / 17 评论 / 2024-02-26 
+- [[Finding] the Mechanism of Newly Added Data](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/456435) — 12 票 / 11 评论 / 2023-11-20 
+- [Missing Value in Target](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442145) — 11 票 / 3 评论 / 2023-09-21 
+- [[Silver solution] Rolling stats + GroupedKFold approach](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/481600) — 11 票 / 2 评论 / 2024-03-04 **write-up?**
+- [Some baseline materials to get started](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442485) — 11 票 / 1 评论 / 2023-09-22 
+- [Inconsistent results in public LB before and after API update, with no code changes](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/455690) — 11 票 / 5 评论 / 2023-11-16 
+- [Submission Scoring Error after DATA UPDATE](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/455531) — 10 票 / 50 评论 / 2023-11-15 
+- [Let’s talk about stock_id](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/457928) — 10 票 / 7 评论 / 2023-11-27 
+- [stock universe in test](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442293) — 10 票 / 4 评论 / 2023-09-22 
+- [What percentage of top 100 is continuous learning?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/468579) — 10 票 / 15 评论 / 2024-01-17 
+- [Private 50th Place Solution](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486666) — 10 票 / 0 评论 / 2024-03-26 **write-up?**
+- [🌟 The Magic of Sectors, PCA, and Personal Exploration! 🌟](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/448636) — 10 票 / 4 评论 / 2023-10-20 
+- [speed-up XGBoost 10x with GPU](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/452395) — 10 票 / 0 评论 / 2023-11-02 
+- [[LB5.3393] Use Rapids Speed up Feature Engineering 🚀🚀🚀](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/453507) — 10 票 / 0 评论 / 2023-11-06 
+- [Second interim data update posted](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/459562) — 10 票 / 28 评论 / 2023-12-05 
+- [CV and Leaderboard Scores](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/443461) — 10 票 / 2 评论 / 2023-09-27 
+- [Exact formula for computing target (Index)](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/442796) — 10 票 / 5 评论 / 2023-09-24 
+- [To avoid final submission timeout, what is the running time limit for the current public leaderboard?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/455937) — 9 票 / 17 评论 / 2023-11-17 
+- [Articles and Papers Relevant for "Optiver-Trading at the Close: Predict US Stocks Closing Movements" Competition](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/460654) — 9 票 / 1 评论 / 2023-12-10 
+- [Question regarding Training/Inference](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/450948) — 9 票 / 11 评论 / 2023-10-26 
+- [When will be the first Leaderboard update?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/465255) — 9 票 / 17 评论 / 2024-01-03 
+- [Statistics: How many features you used and what LB score you achieved?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/458378) — 8 票 / 34 评论 / 2023-11-29 
+- [23rd Place: Thoughts & Reflection](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485993) — 8 票 / 6 评论 / 2024-03-23 **write-up?**
+- [The Likelihood of Major Shakes in Private LB Standings](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/461872) — 8 票 / 14 评论 / 2023-12-16 
+- [Detailed Feature Explanations as to a HS Student](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/452946) — 8 票 / 0 评论 / 2023-11-04 
+- [Datasets for Private Leaderboard and Continuity of Data ](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/451483) — 8 票 / 5 评论 / 2023-10-29 
+- [My thoughts on the Magic, post processing and other topics 😊](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462642) — 8 票 / 17 评论 / 2023-12-21 
+- [[68th LB score] LGBM single model refitted every 22 days](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462822) — 8 票 / 8 评论 / 2023-12-21 
+- [Rolling features - Is it the correct approach?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/453546) — 8 票 / 5 评论 / 2023-11-06 
+- [Leaderboard after 4th update - chart](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/480009) — 8 票 / 3 评论 / 2024-02-26 
+- [Date Range for the Train & Test](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/443507) — 8 票 / 1 评论 / 2023-09-27 
+- [ Submission scoring error](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/444508) — 8 票 / 26 评论 / 2023-10-02 
+- [Leaderboard dynamics across updates 1-2](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/472684) — 8 票 / 6 评论 / 2024-02-01 
+- [Any idea for cluster feature?](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454680) — 8 票 / 2 评论 / 2023-11-11 
+- [Why there's leakage in most notebooks](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/463826) — 8 票 / 8 评论 / 2023-12-27 
+- [Be careful that LGBM (GPU training) may not be reproducible !!!](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/454687) — 7 票 / 7 评论 / 2023-11-11 
+- [Leaderboard after final update - chart](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/485932) — 7 票 / 4 评论 / 2024-03-22 
+- [Future leaderboard updates](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462527) — 7 票 / 8 评论 / 2023-12-20 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/486883) — 5 票 / 4 评论 / 2024-03-26 

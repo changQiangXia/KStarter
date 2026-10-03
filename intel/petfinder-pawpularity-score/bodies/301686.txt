@@ -1,0 +1,499 @@
+# https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301686
+
+Topic #301686: 1st Place - Winning Solution - Full Writeup
+  Author: Giba
+  Posted: 2022-01-19 01:09:57.693000
+  Votes: 329  Comments: 85
+
+Thanks Kaggle and Petfinder.my for this really interesting competition. When I started competing 2 months ago I could'n stop due to the cuttenes of the pets and the level of the challenge posted here. Also this win is very special to me because it's my first solo win in an image competition. FInally, congratulations to all prize winners and medalists because I have a good idea of the amount of time and energy invested here.
+
+So basically the challenge is a regression and we were asked to predict the Pawpularity of each pet given the image and some tabular meta features. I ended using only the competition images and dropped all meta features from my solution. We don’t have much information about how the Pawpularity target is generated, but we have some clues in the description and it may be related to the cuteness meter implemented here: https://www.petfinder.my/cutenessmeter 
+
+Trainset consists of 9912 images of dogs and cats, and testset around 6800 images.
+
+The Pawpularity ranges from 1 to 100 and it is rounded to integers. The target follows that distribution with a mean average of 38.04 and a standard deviation of 20.59, that means if you predict 38.04 for all images then the RMSE score is 20.59. Any model that scores lower than 20.59 is considered to have some predictive power.
+
+So my solution consists of two parts, one tabular based in Transfer Learning and Support Vector Regression(SVR) and one image regression based in Deep Learning images architectures.
+
+PART 1. Transfer Learning + SVR:
+
+The idea consists in extracting features from pretrained architectures to transform the problem into a tabular approach, then fit a model using that data. To extract features from images I used imagenet pretrained models available in timm and OpenAI CLIP libraries. At the moment there are around 575 pretrained models available in timm library and most of them were trained using 1000 classes imagenet images. I found the most useful for this competition were the ones trained in that 1k classes. My hypothesis as to why they are better is that imagenet 1k have some classes of breeds of dogs and cats. Also extracting the features from the top 1k linear head performed better here than extracting the internal embeddings layer (the layer before the linear classification head).
+OpenIA CLIP works differently. That architecture is trained using a combination of text and image, see how in: https://github.com/openai/CLIP. This architecture permits you to query an image with a text, for example, you can input the model with a dog image and the text: “is a dog?” and the output would be the score of having a dog in the image. So basically CLIP has two encoders inside, one for the text and one for the image and it outputs two corresponding embeddings vectors that you can use dot product to calculate the output score. For my solution only the CLIP image encoder was used. I prepared a notebook to explain better how to use CLIP here
+
+Extracting the features from the architectures and running SVR directly on the top is possible to have competitive RMSE scores. You can check the performances in the table below:
+
+
+
+
+Architecture
+Feature dimension
+RMSE
+
+
+
+
+tf_efficientnet_l2_ns_475
+1000
+17.56
+
+
+tf_efficientnet_l2_ns_475_512
+1000
+17.57
+
+
+tf_efficientnet_l2_ns_475_hflip_384
+1000
+17.62
+
+
+clip_RN50x16
+768
+17.59
+
+
+ig_resnext101_32x48d
+1000
+17.63
+
+
+ig_resnext101_32x48d_hflip_384
+1000
+17.66
+
+
+clip_ViT-B-16
+512
+17.65
+
+
+tf_efficientnet_b6_ns
+1000
+17.66
+
+
+tf_efficientnet_b7_ns
+1000
+17.67
+
+
+deit_base_distilled_patch16_384
+1000
+17.68
+
+
+deit_base_distilled_patch16_384_hflip_384
+1000
+17.66
+
+
+tf_efficientnet_b8_ap
+1000
+17.70
+
+
+clip_RN50x4
+640
+17.75
+
+
+ig_resnext101_32x8d
+1000
+17.82
+
+
+vit_base_patch16_384
+1000
+17.82
+
+
+clip_ViT-B-32
+512
+17.84
+
+
+vit_large_patch16_384
+1000
+17.89
+
+
+resnest269e
+1000
+17.90
+
+
+swsl_resnext101_32x8d
+1000
+17.91
+
+
+vit_large_r50_s32_384
+1000
+17.92
+
+
+clip_RN101
+512
+17.93
+
+
+rexnet_200
+1000
+17.96
+
+
+resnetv2_152x4_bitm
+1000
+18.06
+
+
+clip_RN50
+1024
+18.11
+
+
+repvgg_b0
+1000
+18.21
+
+
+fbnetc_100
+1000
+18.52
+
+
+
+
+Each architecture has differences that can be explored by combining multiple architecture into the same dataset (stacking features side-by-side). The diversity between models can be used that way to boost RMSE. So to select the best models to include in the stacking dataset I used a simple forward feature selection with hill climbing. The algorithm is show below:
+
+Features = [‘tf_efficientnet_l2_ns_475’] # Start using only 1 model
+Best_feat = None
+bestRMSE = np.inf
+currentRMSE = 0
+while currentRMSE &lt; bestRMSE: # Keep adding models while rmse decreases
+    bestRMSE = currentRMSE
+    Features.append(best_feat)
+    rmse_scores= [compute_SVR_RMSE(Features + [feat]) for feat in all_pretrained_models]
+    currentRMSE = np.min(rmse_scores)
+    best_feat = np.argmin(rmse_scores)
+
+
+So the algorithm keeps incrementally adding model features while RMSE keeps decreasing. RAPIDS SVR is an important key in this process, because in the end its necessary to run thousands of SVR folds in order to find the best combination of features. Without the speedup given by cuML SVR it wasn't possible before or it would have taken more time than the full competition time span. 
+
+By running that algorithm multiple times using a different starting model I ended with three subsets of pretrained features that scored very well in terms of RMSE:
+
+
+
+
+Set A: ['clip_RN50x16', 'clip_ViT-B-32', 'clip_ViT-B-16', 'clip_RN50x4', 'deit_base_distilled_patch16_384', 'ig_resnext101_32x48d', 'repvgg_b0', 'resnetv2_152x4_bitm', 'swsl_resnext101_32x8d', 'tf_efficientnet_l2_ns_475', 'vit_base_patch16_384', 'vit_large_r50_s32_384']
+
+
+Set B: ['clip_RN50x16', 'clip_RN101', 'clip_RN50', 'fbnetc_100', 'ig_resnext101_32x8d', 'rexnet_200', 'resnest269e', 'tf_efficientnet_b6_ns', 'tf_efficientnet_b8_ap', 'tf_efficientnet_b7_ns', 'vit_large_patch16_384']
+
+
+Set C: ['tf_efficientnet_l2_ns_hflip_384', 'deit_base_distilled_patch16_384_hflip_384', 'ig_resnext101_32x48d_hflip_384', 'tf_efficientnet_l2_ns_512', 'ig_resnext101_32x48d', 'vit_large_r50_s32_384', 'clip_RN50x4', 'clip_ViT-B-16', 'clip_RN50x16', 'clip_ViT-B-32']
+
+
+Running Kfold SVR on the sets gives RMSE:
+Set A CV: 17.029
+Set B CV: 17.148
+Set C CV: 16.997
+
+Ensembling sets A, B and C gives local RMSE: 16.923 / Public LB: 17.77 / Private LB: 16.95 (Top10 private) and would have ended in the golden medal zone. Clipping target Pawpularity to 85 helps SVR model to improve RMSE a little bit.
+
+A notebook describing in more details this transfer learning approach and how to fit cuML SVR can be found here.
+
+PART 2. CNN + Vision Transformers ensembling:
+
+This part of solution is an weighted average of 5 classical image regressions models using different backbones and augmentations. Backbones used:
+
+
+
+
+Backbone
+Image size
+TTA
+Training augmentations
+Mixup + Cutmix
+RMSE CV
+Ensemble weight
+
+
+
+
+swin_large_patch4_window7_224
+224
+hflip
+light
+no
+17.48
+3
+
+
+beit_large_patch16_224
+224
+normal
+light
+no
+17.42
+4
+
+
+swin_large_patch4_window12_384_in22k
+384
+hflip
+light
+Yes(15%)
+17.47
+3
+
+
+beit_large_patch16_224
+224
+hflip
+heavy
+Yes(50%)
+17.38
+4
+
+
+tf_efficientnet_b6_ns
+528
+normal
+heavy
+Yes(60%)
+17.75
+2
+
+
+
+
+For training procedure I used CosineAnnealingWarmRestarts scheduler and around 16 to 48 epochs per fold, scoring validation set 6 times per epoch to pick the best validation score.
+
+Those models were chosen using feature selection from a set of around 25 valid models built during the competition. As submission is limited to 9h and the SVR part of solution consumes aprox. 4h submission time, I had to choose a subset of all models available for the final submission. Loss function used in all models was BCE, inline with what others found during the competition.
+TTA worked for me, but gave very small improvement in CV/LB, around 0.0005
+During submission scoring I decided to use only hflip TTA, so I selected 3 out of 5 models to score using horizontal flip. TTA works better when hard augmentations are used during training. 
+Ensemble CV of image based models: 17.029 / Public LB: 17.87 / Private LB: 16.92 (Top10 private)
+
+Final weighted average:
+0.1224SVR_A + 0.0011SVR_B + 0.4556SVR_C + 0.4446ImagesEnsemble
+
+CV: 16.81, Public LB: 17.72, Private LB: 16.82 (winner submission).
+
+Final solution inference link here:
+
+The SVR_B weights have become too low and can probably be removed from solution without too much RMSE penalty.
+
+Things that didn't work for me:
+
+
+
+Adding competitions meta features to models.
+
+Semi supervised learning using PET 1 images.
+
+Pretraining models on PET 1 meta features.
+
+Mixed Multiples heads on DL models.
+
+Finetuning on CLIP models.
+
+CNN worked much worse than vision transformers here.
+
+Interactive labelling using Pet 1 images + transfer learninig + cuML SVR.
+
+XGBoost or RandomForest on transfer learning features.
+
+RMSE loss
+
+Multiclass loss
+
+Removing outliers
+
+Cliping targets to [1, 85] for image models.
+
+Adding too much regularization in image models.
+
+
+Hardware used during the competition: 1x V100 GPU
+Time invested in the challenge: around 20h/week.
+
+CLIP notebook: https://www.kaggle.com/titericz/openai-clip-example?scriptVersionId=85404940
+
+SVR notebook: https://www.kaggle.com/titericz/imagenet-embeddings-plus-rapids-svr?scriptVersionId=85544833
+
+SVR+image notebook (Full solution): https://www.kaggle.com/titericz/imagenet-embeddings-rapids-svr-finetuned-models?scriptVersionId=85554890
+
+Comments:
+├─ Tim Yee (2022-01-19 14:41:38.563000) [+3]
+│  Awesome solution! I love how you used the 1k imagenet classes for breed information and confirms that breed information is super powerful when combined with SVR. Such a brilliant idea!
+  ├─ Giba (2022-01-21 19:27:35.163000) [+3]
+  │  Yes I believe breed classes in imagenet helped a lot.
+├─ Mongrel Jedi (2022-01-21 02:17:39.937000) [+4]
+│  Congratulations on your 1st place, @titericz!
+│  
+│  Thank you for your brilliant work, creativity and skills. We look forward to working with you on implementing the solution and saving more lives toget...
+  ├─ Giba (2022-01-21 19:29:32.193000) [+3]
+  │  Thanks @andykoh I really enjoyed the competition. Hope I can help to deploy the solution.
+├─ Nyeongmin Lee (2022-03-15 09:07:30.030000) [+1]
+│  great work, congrats! will look through it comparing our work
+├─ R_Ruchi (2022-02-09 06:16:32.120000) [+1]
+│  Great Work
+├─ mrClumsy (2022-01-30 02:04:24.840000) [+1]
+│  Good jobs
+├─ noo named (2022-01-29 09:24:22.487000) [+1]
+│  great work, Congratulations
+├─ noo named (2022-01-28 20:01:36.130000) [+1]
+│  Congratualations
+├─ Bhumit Bedse (2022-01-28 11:50:52.177000) [+1]
+│  Great Work, Congratulation!!
+├─ nauben (2022-01-28 09:55:44.060000) [+1]
+│  Amazing, well done!
+├─ Johannes Kofler (2022-01-28 09:24:47.130000) [+1]
+│  Amazing Work!
+├─ Yajun TANG (2022-01-28 08:16:59.813000) [+1]
+│  Congrats!!!
+├─ Romil Shah (2022-01-28 08:04:45.597000) [+1]
+│  Congratulations!! Great Work!
+├─ Ansh Ray (2022-01-28 05:48:39.240000) [+1]
+│  Great work!
+├─ Ruby Abdullah (2022-01-28 03:50:35.417000) [+1]
+│  great work, Congratulations
+├─ Yukiuki (2022-01-28 01:55:31.837000) [+1]
+│  Congratulations!
+├─ sealau (2022-01-28 01:36:27.317000) [+1]
+│  Congratulations!
+├─ zhijiang liang (2022-01-27 14:30:53.577000) [+1]
+│  Congratulations!
+├─ Yoo Suhyeon (2022-01-27 14:08:51.283000) [+1]
+│  Congratsulations !!
+├─ Yoo Suhyeon (2022-01-27 14:08:33.483000) [+1]
+│  Congratsulations!
+├─ Eduardo Rocha de Andrade (2022-01-27 13:40:47.687000) [+1]
+│  Amazing work Giba!! Well deserved! Congrats!
+├─ Junior (2022-01-27 06:05:16.297000) [+1]
+│  good work thankyou
+├─ Tom Ng (2022-01-26 23:20:04.883000) [+1]
+│  That`s Awesome!
+├─ alessiosavi (2022-01-26 18:40:38.607000) [+1]
+│  Wow! This is huge! Can I ask in which method you have thinking about the "architecture" of this solution? Have you had previous experience related to this particular task?
+├─ Samuel Hardy (2022-01-26 18:32:58.800000) [+1]
+│  Very nice!
+├─ EgorBondarenko (2022-01-26 15:04:07.870000) [+1]
+│  Cool! Quality work, lots to learn.
+├─ Samuel Nordmann (2022-01-26 12:38:40.253000) [+1]
+│  Amazing contribution, very insightful. thx !
+├─ sanskar gupta (2022-01-26 10:32:50.677000) [+1]
+│  Congratulations Worthy Solution
+├─ Michael Kingston (2022-01-26 08:02:41.213000) [+1]
+│  Congratulations and well done. Very impressive!
+├─ Nikhil Chowdary Gutlapalli (2022-01-26 07:42:20.393000) [+1]
+│  Great Work
+├─ [deleted] (2022-01-25 23:07:14.657000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 21:29:09.810000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 20:42:55.947000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 19:32:18.680000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 17:15:13.003000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 15:12:27.570000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 13:58:03.690000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 13:55:11.677000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 13:47:31.723000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 12:51:42.317000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 06:13:20.677000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 05:57:29.923000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 23:39:26.507000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 15:42:04.413000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 15:15:22.590000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 13:13:38.317000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 12:57:14.567000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 11:27:56.613000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 10:58:36.413000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 06:25:14.420000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 06:14:27.940000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 04:42:52.030000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-24 00:36:43.043000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-23 13:48:00.683000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-23 12:45:56.273000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-23 03:19:40.327000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-22 13:19:03.237000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-22 05:48:40.620000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-22 05:29:19.713000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-22 04:20:25.160000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-22 00:50:45.153000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-21 20:53:49.347000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 16:32:49.183000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 10:01:00.723000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 08:12:30.327000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 07:36:25.283000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 07:33:06.930000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 04:09:31.573000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 03:39:31.530000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-19 02:57:19.927000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-01-19 10:39:37.727000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-01-19 02:29:05.267000) [+2]
+│  [deleted]
+├─ [deleted] (2022-01-22 21:07:55) [+0]
+│  [deleted]
+├─ [deleted] (2022-01-19 19:01:37.947000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-01-21 19:27:01.107000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-01-21 20:29:05.727000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-07-25 14:34:39.930000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-23 06:01:15.953000) [+0]
+│  [deleted]
+├─ [deleted] (2022-01-29 20:01:32.697000) [+0]
+│  [deleted]
+├─ [deleted] (2022-01-28 10:46:20.640000) [+0]
+│  [deleted]
+├─ [deleted] (2022-01-26 15:01:56.897000) [+0]
+│  [deleted]
+├─ [deleted] (2022-01-26 09:20:18.577000) [+2]
+│  [deleted]
+├─ [deleted] (2022-01-22 16:47:38.017000) [+1]
+│  [deleted]
+├─ [deleted] (2022-01-25 23:38:28.877000) [+1]
+│  [deleted]

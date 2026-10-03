@@ -1,0 +1,298 @@
+<h1>Candidate Rerank Model</h1>
+<p>A strong and easy way to build a solution for this competition is a "candidate rerank" model explained <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/364721" target="_blank">here</a>. Creating train data, training and inferring a GBT ranker model can be difficult to understand at first. I hope the following discussion post will help you on your journey.</p>
+<p>The general idea is; for each <code>session</code> (i.e. user), we find 50-200 candidates (that are likely to be correct predictions) then we train an GBT ranker model to select our final 20. To do this, we need to create train data for our ranker model. Below are some tips to help create train data and use GBT ranker models</p>
+<h1>Candidate DataFrame</h1>
+<p>The first step to creating train data for our ranker model is building a dataframe of candidates. One way to generate high quality candidates is using co-visitiation matrices, explained <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/365369" target="_blank">here</a>. Our candidate dataframe has one pair of <code>session</code> (i.e. user) and <code>aid</code> (i.e. item) per row. This dataframe has the following columns</p>
+<ul>
+<li>session (i.e. user)</li>
+<li>aid (i.e. item)</li>
+<li>user features</li>
+<li>item features</li>
+<li>user-item interaction features</li>
+<li>click target (i.e 0 or 1)</li>
+<li>cart target (i.e. 0 or 1)</li>
+<li>order target (i.e. 0 or 1)</li>
+</ul>
+<h1>Memory Management</h1>
+<p>In all of the following code, it is very important to continually change the <code>dtype</code> of each column to minimum data size. So after making a new column, make sure to <code>df[col] = df[col].astype('int32')</code> or the smallest possible dtype. If you do nothing then many libraries will use <code>int64</code> or <code>float64</code> which takes 8 bytes per value. This will use more RAM and disk space then needed. <strong>Always reduce dtypes!</strong></p>
+<p><strong>NOTE</strong> When using the latest version of cuDF locally (version 22.08 or later) , there is a new feature to set default bitwidth as 32. This will prevent the dataframe from using <code>int64</code> nor <code>float64</code> and makes it easier for the user. (Thanks Giba for pointing this out <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/371058" target="_blank">here</a>):</p>
+<pre><code>import cudf
+cudf.set_option("default_integer_bitwidth", 32)
+cudf.set_option("default_float_bitwidth", 32)
+</code></pre>
+<p>Even after reducing column dtypes, you may still have memory issues. The way to solve this is to process everything in chunks. If you are using <code>train.groupby('session')</code> to make user features, then perhaps first split the train data into X pieces (like 2, 4, 8 pieces). Then process user features for each piece separately and save to disk as <code>f'user_features_p{PIECE_NUMBER}.pqt'</code>. Later when you read them in, you can concatenate them together.</p>
+<p>Also consider using DASK which works with both CPU Pandas or GPU RAPIDS cuDF to use multiple CPU/GPU and/or disk when needed to avoid all memory errors! <a href="https://www.dask.org/" target="_blank">(info here)</a></p>
+<h1>Speed - Use GPU</h1>
+<p>All of the following code will take time to run since this data has around 13 million users and 2 million items. I suggest using an accelerated dataframe library for all the following processing like Nvidia's RAPIDS cuDF <a href="https://rapids.ai/" target="_blank">here</a> which uses GPU instead of CPU for accelerated speed !</p>
+<h1>Step 1</h1>
+<p>Our train data will be the first 3 weeks of Kaggle train data. And our validation data will be the last 1 week of Kaggle train. We then split our validation data into <strong>validation data A</strong> and <strong>validation data B</strong> where validation B are the ground truths. (Validation data A is like the Kaggle test data we download whereas validation data B is like the LB (leaderboard). Roughly speaking <code>A</code> is like first half of each user activity during week while <code>B</code> is second half).</p>
+<p>Consider using Radek's train and valid data <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/364991" target="_blank">here</a> which already splits validation data into A and B. For every user (i.e. session) in our <strong>validation data A</strong> (i.e. last 1 week of Kaggle train), we generate X candidate aids. Let's say <code>X=50</code> for the rest of our discussion. We create a dataframe of shape <code>(</code>number_of_session x 50<code>, 2 )</code>:</p>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0001</td>
+<td>6456</td>
+</tr>
+<tr>
+<td>0001</td>
+<td>4490</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>8486</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>7297</td>
+</tr>
+</tbody>
+</table>
+<p>Each session will appear 50 times. And there will be no duplicate <code>[session,aid]</code> pairs. We only use users from our validation data because we only have targets for users in validation data (in step 6 below).</p>
+<h1>Step 2</h1>
+<p>Create item features. Using our <strong>train data + valid data A</strong> (yes use test leak), we create item features in their own dataframe and save a parquet to disk. For example</p>
+<pre><code>item_features = train.groupby('aid').agg({'aid':'count','session':'nunique','type':'mean'})
+item_features.columns = ['item_item_count','item_user_count','item_buy_ratio']
+# CONVERT COLUMNS TO INT32 and FLOAT32 HERE
+item_features.to_parquet('item_features.pqt')
+</code></pre>
+<p><strong>NOTE</strong> if you have memory problems. Then break <code>train</code> into 10 dataframe parts. All rows pertained to a single item must be in the same dataframe part so that <code>train_part_1.groupby('aid')</code> will work correctly. After processing, save each part separately to disk. And later when you read them from disk, concatenate them together before merging them to candidate dataframe.</p>
+<h1>Step 3</h1>
+<p>Create user features. Using our <strong>validation data A</strong>, we create user features in their own dataframe and save a parquet to disk. For example</p>
+<pre><code>user_features = train.groupby('session').agg({'session':'count','aid':'nunique','type':'mean'})
+user_features.columns = ['user_user_count','user_item_count','user_buy_ratio']
+# CONVERT COLUMNS TO INT32 and FLOAT32 HERE
+user_features.to_parquet('user_features.pqt')
+</code></pre>
+<h1>Step 4</h1>
+<p>This step is optional. Step 4 will improve CV and LB, but your GBT ranker will work without step 4. Create user-item interaction features. Using our <strong>validation data A</strong>, we create <strong>multiple</strong> user-item feature dataframes and save them as parquets to disk. For each idea, we can make a new dataframe. One dataframe can contain all items that a user clicks. So make a dataframe with one column user, one column item, and a third column called <code>item_clicked</code>. Then for each unique item that a user clicked, we add a new row with <code>item_clicked = 1</code>. Note that our dataframe will have <strong>no duplicate rows</strong> of <code>['user','item']</code> pairs. Save this dataframe to disk. When we merge this to candidate dataframe we will <code>fillna(0)</code> to indicate the items not clicked.</p>
+<h1>Step 5</h1>
+<p>Add features to our candidate dataframe. To add features to our candidate dataframe, we read from disk and merge them on as follows</p>
+<pre><code>item_features = pd.read_parquet('item_features.pqt')
+candidates = candidates.merge(item_features, left_on='aid', right_index=True, how='left').fillna(-1)
+user_features = pd.read_parquet('user_features.pqt')
+candidates = candidates.merge(user_features, left_on='session', right_index=True, how='left').fillna(-1)
+</code></pre>
+<p>Now our candidate dataframe looks like</p>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>item</th>
+<th>item_feat1</th>
+<th>item_feat2</th>
+<th>user_feat1</th>
+<th>user_feat2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0001</td>
+<td>6456</td>
+<td>10</td>
+<td>12</td>
+<td>5.4</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>0001</td>
+<td>4490</td>
+<td>13</td>
+<td>15</td>
+<td>5.4</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>8486</td>
+<td>55</td>
+<td>8</td>
+<td>2</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>7297</td>
+<td>70</td>
+<td>10</td>
+<td>2</td>
+<td>1.2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>NOTE</strong> if we have memory problems merging all our features to our candidate dataframe, then we can do this in chunks</p>
+<pre><code>CHUNKS = 10
+chunk_size = np.ceil( len(candidates) / CHUNKS)
+for k in range(CHUNKS):
+    df = candidates.iloc[k*chunk_size:(k+1)*chunk_size].copy()
+    df = df.merge(item_features, left_on='aid', right_index=True, how='left').fillna(-1)
+    df = df.merge(user_features, left_on='session', right_index=True, how='left').fillna(-1)
+    df.to_parquet(f'candidate_with_features_p{k}.pqt')
+</code></pre>
+<h1>Step 6</h1>
+<p>We will now add targets to our candidate dataframe from step 1. The best way to add a column of targets is to use dataframe merge. First we make a dataframe of all the <code>target=1</code> as follows. Starting with a dataframe that contains the targets as a column of lists ( like Radek's ground truth labels <a href="https://www.kaggle.com/datasets/radek1/otto-train-and-test-data-for-local-validation?select=test_labels.parquet" target="_blank">here</a>) such as:</p>
+<p><code>test_labels.parquet</code></p>
+<table>
+<thead>
+<tr>
+<th>session</th>
+<th>type</th>
+<th>ground truth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0001</td>
+<td>carts</td>
+<td>[3456, 4490, 5661, 7821, 9914 ]</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>carts</td>
+<td>[1222, 4656, 533, 8486]</td>
+</tr>
+</tbody>
+</table>
+<p>We use the following code to convert these lists into a dataframe of targets:</p>
+<pre><code>tar = pd.read_parquet('test_labels.parquet')
+tar = tar.loc[ tar['type']=='carts' ]
+aids = tar.ground_truth.explode().astype('int32').rename('item')
+tar = tar[['session']].astype('int32').rename({'session':'user'},axis=1)
+tar = tar.merge(aids, left_index=True, right_index=True, how='left')
+tar['cart'] = 1
+</code></pre>
+<p>This produces a dataframe like</p>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>item</th>
+<th>cart</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0001</td>
+<td>3456</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0001</td>
+<td>4490</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>And we merge it to our candidate dataframe with the following line:</p>
+<pre><code>candidates = candidates.merge(cart_target,on=['user','item'],how='left').fillna(0)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>user</th>
+<th>item</th>
+<th>item_feat1</th>
+<th>item_feat2</th>
+<th>user_feat1</th>
+<th>user_feat2</th>
+<th>cart</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0001</td>
+<td>6456</td>
+<td>10</td>
+<td>12</td>
+<td>3</td>
+<td>0.5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0001</td>
+<td>4490</td>
+<td>13</td>
+<td>5</td>
+<td>5.4</td>
+<td>0.1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>8486</td>
+<td>55</td>
+<td>10</td>
+<td>5</td>
+<td>0.9</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0002</td>
+<td>7297</td>
+<td>70</td>
+<td>20</td>
+<td>2</td>
+<td>1.2</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h1>Training</h1>
+<p>We now have train data for our GBT ranker model. We must train using <code>GroupKFold</code>. <strong>Important Note</strong>: when we train, we do not use the <code>user</code> and <code>item</code> columns as features, we only use the other columns. <code>FEATURES = candidates.columns[2 : -1*len(targets)]</code>. Note with XGB, we have 3 options for rankers by changing <code>objective</code> parameter, to either <code>rank:pairwise</code>, or <code>rank:ndcg</code>,  or <code>rank:map</code>. (We should also add and tune XGB parameters <code>'max_depth', 'subsample', 'colsample_bytree', 'learning_rate'</code>)</p>
+<pre><code>import xgboost as xgb
+from sklearn.model_selection import GroupKFold
+
+skf = GroupKFold(n_splits=5)
+for fold,(train_idx, valid_idx) in enumerate(skf.split(candidates, candidates['click'], groups=candidates['user'] )):
+
+    X_train = candidates.loc[train_idx, FEATURES]
+    y_train = candidates.loc[train_idx, 'click']
+    X_valid = candidates.loc[valid_idx, FEATURES]
+    y_valid = candidates.loc[valid_idx, 'click']
+
+    # IF YOU HAVE 50 CANDIDATE WE USE 50 BELOW
+    dtrain = xgb.DMatrix(X_train, y_train, group=[50] * (len(train_idx)//50) ) 
+    dvalid = xgb.DMatrix(X_valid, y_valid, group=[50] * (len(valid_idx)//50) ) 
+
+    xgb_parms = {'objective':'rank:pairwise', 'tree_method':'gpu_hist'}
+    model = xgb.train(xgb_parms, 
+        dtrain=dtrain,
+        evals=[(dtrain,'train'),(dvalid,'valid')],
+        num_boost_round=1000,
+        verbose_eval=100)
+    model.save_model(f'XGB_fold{fold}_click.xgb')
+</code></pre>
+<p><strong>NOTE</strong> If you have memory problems training XGB on GPU, consider downsampling negatives 2x, 4x, 10x, 20x with <code>frac = 0.5, 0.25, 0.1, or 0.05</code> (and then update group sizes in DMatrix). Or use DASK XGB with multiple GPUs. Here is example code:</p>
+<pre><code>positives = candidates.loc[candidates['click']==1]
+negatives = candidates.loc[candidates['click']==0].sample(frac=0.5)
+candidates = pd.concat([positives,negatives],axis=0,ignore_index=True)
+</code></pre>
+<h1>Inference</h1>
+<p>For inference, we create a new candidate dataframe (using our technique to generate candidates before) but this time from Kaggle's test data. Then we make item features from all 4 weeks of Kaggle train plus 1 week of Kaggle test. And we make user features from Kaggle test. We merge the features to our candidates. Then we use our saved models to infer predictions for clicks. Lastly we select 20 by sorting the predictions and choosing 20 with.</p>
+<pre><code>preds = np.zeros(len(test_candidates))
+for fold in range(5):
+    model = xgb.Booster()
+    model.load_model(f'XGB_fold{fold}_click.xgb')
+    model.set_param({'predictor': 'gpu_predictor'})
+    dtest = xgb.DMatrix(data=test_candidates[FEATURES])
+    preds += model.predict(dtest)/5
+predictions = test_candidates[['user','item']].copy()
+predictions['pred'] = preds
+
+predictions = predictions.sort_values(['user','pred'], ascending=[True,False]).reset_index(drop=True)
+predictions['n'] = predictions.groupby('user').item.cumcount().astype('int8')
+predictions = predictions.loc[predictions.n&lt;20]
+sub = predictions.groupby('user').item.apply(list)
+sub = sub.to_frame().reset_index()
+sub.item = sub.item.apply(lambda x: " ".join(map(str,x)))
+sub.columns = ['session_type','labels']
+sub.session_type = sub.session_type.astype('str')+ '_clicks'
+</code></pre>
+<p><strong>NOTE</strong> if you have memory errors. Consider loading 1/10th of the test data. Then merge features. Then infer. Next load the next 1/10th, merge features, infer. etc. etc. Lastly concatenate the predictions and make submission.csv</p>
+<h1>Enjoy</h1>
+<p>I hope this discussion post helps illustrate how to create data for a GBT ranking model and how to train and infer. Have fun!</p>

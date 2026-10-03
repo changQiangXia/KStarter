@@ -1,0 +1,76 @@
+# https://www.kaggle.com/competitions/maze-crawler/discussion/718158
+
+Topic #718158: # Maze Crawler 3rd Place Solution Writeup
+  Author: Daniel Bekker
+  Posted: 2026-07-03 05:24:24.959000
+  Votes: 1  Comments: 0
+
+This was a really fun competition, and I mostly used it as a chance to try out Genematon's
+experimental RL features, which aren't generally available yet. Genematon did the machine
+learning: the behavioral-cloning bootstrap, the reward, the PPO training, and the self-play,
+all from a problem we set up for it. We supplied the behavioral-cloning data, drawn from the
+daily datasets posted to Kaggle, and wrote a fast JAX port of the environment with the help
+of LLMs. Large-scale RL needs a quick simulator, and generating that environment isn't
+something Genematon does yet (though we expect it to before long). Everything that follows is
+my own analysis and summary of what the system did.
+The submission is a neural-network policy trained with self-play reinforcement learning.
+Rather than hand-coding a strategy, the agent learned one from a very large number of games.
+
+Overview
+
+The pipeline had three broad stages:
+
+
+
+A fast simulator. A heavily optimized JAX port of the environment, allowing an
+enormous number of games to be run cheaply. Fast simulation is the foundation everything
+else rests on; it's what made large-scale RL and thorough evaluation practical.
+
+A learned starting point. An initial policy was bootstrapped by imitating strong
+existing play, giving the reinforcement-learning stage a competent place to begin instead
+of starting from scratch.
+
+Self-play reinforcement learning. From there the policy was trained with PPO, first to
+reliably survive and then to win in head-to-head play, improving across successive
+generations of self-play.
+
+
+Model
+
+The policy is a small neural network that combines a convolutional view of the board with a
+separate pathway for non-spatial game state, so both the spatial layout and the scalar
+information (things like resources, timers, and counts) are used effectively. The model was
+kept deliberately small and fast.
+
+Reward
+
+The reward is intentionally minimal. The objective the agent optimizes is winning; the
+main signal is the game outcome. On top of that, a small, dense shaping term tied to in-game
+energy is added, purely to make learning tractable: a single win/loss signal per long game
+gives very little to learn from, so a light, well-behaved shaping term helps the agent
+improve steadily between outcomes without changing what "optimal" means.
+The most important lesson here was to keep the reward simple and to make sure it matches the
+game's actual win condition exactly. Getting the win logic precisely right mattered more
+than adding extra reward terms; several of the reward "improvements" were really just
+removals of terms that pulled the agent in the wrong direction.
+
+Self-play
+
+The agent was improved through repeated self-play against past versions of itself, with the
+strongest checkpoints kept and used to train the next generation. Careful, large-sample
+evaluation was essential. Small evaluations were far too noisy to trust, and an improvement
+was only believed once it held up over many games.
+The end result was an agent that plays a very strong energy game: it survives almost every
+match and banks energy up to the practical ceiling the map allows.
+
+What I believe could be done differently
+
+The agent became excellent at the energy side of the game but comparatively weak at direct
+combat. I think that's because the self-play pool was fairly homogeneous, so the training
+loop never forced the agent to become a strong fighter; energy play was enough to win
+against its own lineage. Against the field, the top solutions exploited exactly that gap. If
+I did this again, I'd deliberately train adversarial opponents whose job is to attack the
+agent's blind spots, the approach used in AlphaStar, so a single dominant strategy couldn't
+quietly take over the whole population.
+
+No comments

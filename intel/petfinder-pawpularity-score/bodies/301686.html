@@ -1,0 +1,268 @@
+<p>Thanks Kaggle and Petfinder.my for this really interesting competition. When I started competing 2 months ago I could'n stop due to the cuttenes of the pets and the level of the challenge posted here. Also this win is very special to me because it's my first solo win in an image competition. FInally, congratulations to all prize winners and medalists because I have a good idea of the amount of time and energy invested here.</p>
+<p>So basically the challenge is a regression and we were asked to predict the Pawpularity of each pet given the image and some tabular meta features. I ended using only the competition images and dropped all meta features from my solution. We don’t have much information about how the Pawpularity target is generated, but we have some clues in the description and it may be related to the cuteness meter implemented here: <a href="https://www.petfinder.my/cutenessmeter" target="_blank">https://www.petfinder.my/cutenessmeter</a> </p>
+<p>Trainset consists of 9912 images of dogs and cats, and testset around 6800 images.</p>
+<p>The Pawpularity ranges from 1 to 100 and it is rounded to integers. The target follows that distribution with a mean average of 38.04 and a standard deviation of 20.59, that means if you predict 38.04 for all images then the RMSE score is 20.59. Any model that scores lower than 20.59 is considered to have some predictive power.</p>
+<p>So my solution consists of two parts, one tabular based in Transfer Learning and Support Vector Regression(SVR) and one image regression based in Deep Learning images architectures.</p>
+<h1>PART 1. Transfer Learning + SVR:</h1>
+<p>The idea consists in extracting features from pretrained architectures to transform the problem into a tabular approach, then fit a model using that data. To extract features from images I used imagenet pretrained models available in timm and OpenAI CLIP libraries. At the moment there are around 575 pretrained models available in timm library and most of them were trained using 1000 classes imagenet images. I found the most useful for this competition were the ones trained in that 1k classes. My hypothesis as to why they are better is that imagenet 1k have some classes of breeds of dogs and cats. Also extracting the features from the top 1k linear head performed better here than extracting the internal embeddings layer (the layer before the linear classification head).<br>
+OpenIA CLIP works differently. That architecture is trained using a combination of text and image, see how in: <a href="https://github.com/openai/CLIP" target="_blank">https://github.com/openai/CLIP</a>. This architecture permits you to query an image with a text, for example, you can input the model with a dog image and the text: “is a dog?” and the output would be the score of having a dog in the image. So basically CLIP has two encoders inside, one for the text and one for the image and it outputs two corresponding embeddings vectors that you can use dot product to calculate the output score. For my solution only the CLIP image encoder was used. I prepared a notebook to explain better how to use CLIP <a href="https://www.kaggle.com/titericz/openai-clip-example?scriptVersionId=85404940" target="_blank">here</a></p>
+<p>Extracting the features from the architectures and running SVR directly on the top is possible to have competitive RMSE scores. You can check the performances in the table below:</p>
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Feature dimension</th>
+<th>RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tf_efficientnet_l2_ns_475</td>
+<td>1000</td>
+<td>17.56</td>
+</tr>
+<tr>
+<td>tf_efficientnet_l2_ns_475_512</td>
+<td>1000</td>
+<td>17.57</td>
+</tr>
+<tr>
+<td>tf_efficientnet_l2_ns_475_hflip_384</td>
+<td>1000</td>
+<td>17.62</td>
+</tr>
+<tr>
+<td>clip_RN50x16</td>
+<td>768</td>
+<td>17.59</td>
+</tr>
+<tr>
+<td>ig_resnext101_32x48d</td>
+<td>1000</td>
+<td>17.63</td>
+</tr>
+<tr>
+<td>ig_resnext101_32x48d_hflip_384</td>
+<td>1000</td>
+<td>17.66</td>
+</tr>
+<tr>
+<td>clip_ViT-B-16</td>
+<td>512</td>
+<td>17.65</td>
+</tr>
+<tr>
+<td>tf_efficientnet_b6_ns</td>
+<td>1000</td>
+<td>17.66</td>
+</tr>
+<tr>
+<td>tf_efficientnet_b7_ns</td>
+<td>1000</td>
+<td>17.67</td>
+</tr>
+<tr>
+<td>deit_base_distilled_patch16_384</td>
+<td>1000</td>
+<td>17.68</td>
+</tr>
+<tr>
+<td>deit_base_distilled_patch16_384_hflip_384</td>
+<td>1000</td>
+<td>17.66</td>
+</tr>
+<tr>
+<td>tf_efficientnet_b8_ap</td>
+<td>1000</td>
+<td>17.70</td>
+</tr>
+<tr>
+<td>clip_RN50x4</td>
+<td>640</td>
+<td>17.75</td>
+</tr>
+<tr>
+<td>ig_resnext101_32x8d</td>
+<td>1000</td>
+<td>17.82</td>
+</tr>
+<tr>
+<td>vit_base_patch16_384</td>
+<td>1000</td>
+<td>17.82</td>
+</tr>
+<tr>
+<td>clip_ViT-B-32</td>
+<td>512</td>
+<td>17.84</td>
+</tr>
+<tr>
+<td>vit_large_patch16_384</td>
+<td>1000</td>
+<td>17.89</td>
+</tr>
+<tr>
+<td>resnest269e</td>
+<td>1000</td>
+<td>17.90</td>
+</tr>
+<tr>
+<td>swsl_resnext101_32x8d</td>
+<td>1000</td>
+<td>17.91</td>
+</tr>
+<tr>
+<td>vit_large_r50_s32_384</td>
+<td>1000</td>
+<td>17.92</td>
+</tr>
+<tr>
+<td>clip_RN101</td>
+<td>512</td>
+<td>17.93</td>
+</tr>
+<tr>
+<td>rexnet_200</td>
+<td>1000</td>
+<td>17.96</td>
+</tr>
+<tr>
+<td>resnetv2_152x4_bitm</td>
+<td>1000</td>
+<td>18.06</td>
+</tr>
+<tr>
+<td>clip_RN50</td>
+<td>1024</td>
+<td>18.11</td>
+</tr>
+<tr>
+<td>repvgg_b0</td>
+<td>1000</td>
+<td>18.21</td>
+</tr>
+<tr>
+<td>fbnetc_100</td>
+<td>1000</td>
+<td>18.52</td>
+</tr>
+</tbody>
+</table>
+<p>Each architecture has differences that can be explored by combining multiple architecture into the same dataset (stacking features side-by-side). The diversity between models can be used that way to boost RMSE. So to select the best models to include in the stacking dataset I used a simple forward feature selection with hill climbing. The algorithm is show below:</p>
+<pre><code>Features = [‘tf_efficientnet_l2_ns_475’] # Start using only 1 model
+Best_feat = None
+bestRMSE = np.inf
+currentRMSE = 0
+while currentRMSE &lt; bestRMSE: # Keep adding models while rmse decreases
+    bestRMSE = currentRMSE
+    Features.append(best_feat)
+    rmse_scores= [compute_SVR_RMSE(Features + [feat]) for feat in all_pretrained_models]
+    currentRMSE = np.min(rmse_scores)
+    best_feat = np.argmin(rmse_scores)
+</code></pre>
+<p>So the algorithm keeps incrementally adding model features while RMSE keeps decreasing. RAPIDS SVR is an important key in this process, because in the end its necessary to run thousands of SVR folds in order to find the best combination of features. Without the speedup given by cuML SVR it wasn't possible before or it would have taken more time than the full competition time span. </p>
+<p>By running that algorithm multiple times using a different starting model I ended with three subsets of pretrained features that scored very well in terms of RMSE:</p>
+<ul>
+<li><p>Set A: <code>['clip_RN50x16', 'clip_ViT-B-32', 'clip_ViT-B-16', 'clip_RN50x4', 'deit_base_distilled_patch16_384', 'ig_resnext101_32x48d', 'repvgg_b0', 'resnetv2_152x4_bitm', 'swsl_resnext101_32x8d', 'tf_efficientnet_l2_ns_475', 'vit_base_patch16_384', 'vit_large_r50_s32_384']</code></p></li>
+<li><p>Set B: <code>['clip_RN50x16', 'clip_RN101', 'clip_RN50', 'fbnetc_100', 'ig_resnext101_32x8d', 'rexnet_200', 'resnest269e', 'tf_efficientnet_b6_ns', 'tf_efficientnet_b8_ap', 'tf_efficientnet_b7_ns', 'vit_large_patch16_384']</code></p></li>
+<li><p>Set C: <code>['tf_efficientnet_l2_ns_hflip_384', 'deit_base_distilled_patch16_384_hflip_384', 'ig_resnext101_32x48d_hflip_384', 'tf_efficientnet_l2_ns_512', 'ig_resnext101_32x48d', 'vit_large_r50_s32_384', 'clip_RN50x4', 'clip_ViT-B-16', 'clip_RN50x16', 'clip_ViT-B-32']</code></p></li>
+</ul>
+<p>Running Kfold SVR on the sets gives RMSE:<br>
+Set A CV: 17.029<br>
+Set B CV: 17.148<br>
+Set C CV: 16.997</p>
+<p>Ensembling sets A, B and C gives local RMSE: 16.923 / Public LB: 17.77 / Private LB: 16.95 (Top10 private) and would have ended in the golden medal zone. Clipping target Pawpularity to 85 helps SVR model to improve RMSE a little bit.</p>
+<p>A notebook describing in more details this transfer learning approach and how to fit cuML SVR can be found <a href="https://www.kaggle.com/titericz/imagenet-embeddings-plus-rapids-svr?scriptVersionId=85544833" target="_blank">here</a>.</p>
+<h1>PART 2. CNN + Vision Transformers ensembling:</h1>
+<p>This part of solution is an weighted average of 5 classical image regressions models using different backbones and augmentations. Backbones used:</p>
+<table>
+<thead>
+<tr>
+<th>Backbone</th>
+<th>Image size</th>
+<th>TTA</th>
+<th>Training augmentations</th>
+<th>Mixup + Cutmix</th>
+<th>RMSE CV</th>
+<th>Ensemble weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>swin_large_patch4_window7_224</td>
+<td>224</td>
+<td>hflip</td>
+<td>light</td>
+<td>no</td>
+<td>17.48</td>
+<td>3</td>
+</tr>
+<tr>
+<td>beit_large_patch16_224</td>
+<td>224</td>
+<td>normal</td>
+<td>light</td>
+<td>no</td>
+<td>17.42</td>
+<td>4</td>
+</tr>
+<tr>
+<td>swin_large_patch4_window12_384_in22k</td>
+<td>384</td>
+<td>hflip</td>
+<td>light</td>
+<td>Yes(15%)</td>
+<td>17.47</td>
+<td>3</td>
+</tr>
+<tr>
+<td>beit_large_patch16_224</td>
+<td>224</td>
+<td>hflip</td>
+<td>heavy</td>
+<td>Yes(50%)</td>
+<td>17.38</td>
+<td>4</td>
+</tr>
+<tr>
+<td>tf_efficientnet_b6_ns</td>
+<td>528</td>
+<td>normal</td>
+<td>heavy</td>
+<td>Yes(60%)</td>
+<td>17.75</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>For training procedure I used CosineAnnealingWarmRestarts scheduler and around 16 to 48 epochs per fold, scoring validation set 6 times per epoch to pick the best validation score.</p>
+<p>Those models were chosen using feature selection from a set of around 25 valid models built during the competition. As submission is limited to 9h and the SVR part of solution consumes aprox. 4h submission time, I had to choose a subset of all models available for the final submission. Loss function used in all models was BCE, inline with what others found during the competition.<br>
+TTA worked for me, but gave very small improvement in CV/LB, around 0.0005<br>
+During submission scoring I decided to use only hflip TTA, so I selected 3 out of 5 models to score using horizontal flip. TTA works better when hard augmentations are used during training. <br>
+Ensemble CV of image based models: 17.029 / Public LB: 17.87 / Private LB: 16.92 (Top10 private)</p>
+<p>Final weighted average:<br>
+0.1224<em>SVR_A + 0.0011</em>SVR_B + 0.4556<em>SVR_C + 0.4446</em>ImagesEnsemble</p>
+<p>CV: 16.81, Public LB: 17.72, Private LB: 16.82 (winner submission).</p>
+<p>Final solution inference link <a href="https://www.kaggle.com/titericz/imagenet-embeddings-rapids-svr-finetuned-models?scriptVersionId=85554890" target="_blank">here</a>:</p>
+<p>The SVR_B weights have become too low and can probably be removed from solution without too much RMSE penalty.</p>
+<h1>Things that didn't work for me:</h1>
+<ul>
+<li>Adding competitions meta features to models.</li>
+<li>Semi supervised learning using PET 1 images.</li>
+<li>Pretraining models on PET 1 meta features.</li>
+<li>Mixed Multiples heads on DL models.</li>
+<li>Finetuning on CLIP models.</li>
+<li>CNN worked much worse than vision transformers here.</li>
+<li>Interactive labelling using Pet 1 images + transfer learninig + cuML SVR.</li>
+<li>XGBoost or RandomForest on transfer learning features.</li>
+<li>RMSE loss</li>
+<li>Multiclass loss</li>
+<li>Removing outliers</li>
+<li>Cliping targets to [1, 85] for image models.</li>
+<li>Adding too much regularization in image models.</li>
+</ul>
+<p>Hardware used during the competition: 1x V100 GPU<br>
+Time invested in the challenge: around 20h/week.</p>
+<p>CLIP notebook: <a href="https://www.kaggle.com/titericz/openai-clip-example?scriptVersionId=85404940" target="_blank">https://www.kaggle.com/titericz/openai-clip-example?scriptVersionId=85404940</a></p>
+<p>SVR notebook: <a href="https://www.kaggle.com/titericz/imagenet-embeddings-plus-rapids-svr?scriptVersionId=85544833" target="_blank">https://www.kaggle.com/titericz/imagenet-embeddings-plus-rapids-svr?scriptVersionId=85544833</a></p>
+<p>SVR+image notebook (Full solution): <a href="https://www.kaggle.com/titericz/imagenet-embeddings-rapids-svr-finetuned-models?scriptVersionId=85554890" target="_blank">https://www.kaggle.com/titericz/imagenet-embeddings-rapids-svr-finetuned-models?scriptVersionId=85554890</a></p>

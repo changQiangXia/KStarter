@@ -1,0 +1,596 @@
+# https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/715330
+
+Topic #715330: 18th solution: From Deterministic Solvers to Learnable Reasoning Traces
+  Author: ForcewithMe
+  Posted: 2026-06-28 11:10:39.108000
+  Votes: 17  Comments: 3
+
+Overview
+
+First of all, we would like to thank Kaggle and NVIDIA team for hosting the Nemotron Model Reasoning Challenge, and also thank the community and open-source participants. Our solution was built on top of the open-source deterministic CoT pipeline from tonghuikang/nemotron. The public solutions and discussions after the competition also helped us understand the gap between our work and the strongest teams more clearly.
+
+Our team won a gold medal in this competition. Considering several major mistakes in our process, especially the lack of a reliable local validation set, we were quite lucky to still finish in the gold-medal range. Congrats to @kevin1742064161 and @quincyqiang for becoming Kaggle Grandmasters with this gold medal, and congrats to @forcewithme for a 2x Kaggle Grandmaster.
+
+At a high level, our approach treated the model as a calculator that needed to be taught fixed algorithms. For each puzzle category, we wrote deterministic reasoners to compute answers and generate teacher chain-of-thought traces, then distilled these traces into a rank-limited LoRA adapter through SFT. Under this framework, the score was mainly determined by two factors:
+
+
+
+how many real problems the reasoners could solve;
+
+whether the generated CoT traces were short, consistent, local, and easy for the model to imitate.
+
+
+One lesson we shared with many top teams was that a CoT trace should be a learnable trajectory, not merely a record proving that a solver can run through the problem. A high-quality trace should be short, consistent, local, free of hidden computation, complete in its references, and each step should follow from small rules already introduced in the context. The key question is not only whether the solver itself is correct, but whether the trajectory is easy for the model to learn.
+
+Our Biggest Mistake: No Local Validation Set
+
+Our biggest mistake was that we did not build a local validation set early enough. This was the root cause of almost no real progress during the last two months.
+
+We did not realize early how small and noisy the test set was. At the same time, we did not put synthetic problem generation at a high enough priority. As a result, we trained on the full dataset throughout the competition and used the public leaderboard as our validation signal.
+
+This caused two serious problems.
+
+First, after our public LB reached around 0.87, our exploration became scattered. We tried many directions, but most of them were not continued deeply. For example, the synthetic-data direction in expv003 was only tried once and then abandoned because its public score looked worse at that time. However, from the private leaderboard, the improvement was actually quite meaningful.
+
+Second, we failed to select the highest-private submissions. From the top1 solutions after the competition, local validation scores, public scores, and private scores did have a certain level of consistency. If we had built a trustworthy local validation set, we likely would have made better submission-selection decisions.
+
+We also clearly acknowledge the gap between us and the top six teams. Their solutions showed stronger validation discipline, more systematic synthetic data, and more complete exploitation of the benchmark structure. We learned a lot from them after the competition.
+
+Solution
+
+The writeups only keep the valuable experiment versions. In practice, these versions skipped many abandoned trials. For clarity, we uniformly name the important experiments as expv001 to expv006, and describe the final LoRA fusion submission as expv001_002.
+
+expv001: Early Stable Baseline
+
+Score gain in one sentence: expv001 established a stable 0.87-level baseline by improving the early deterministic reasoners while keeping the CoT style short and consistent.
+
+expv001 was our first reliable improvement over the open-source baseline, and it became the reference point for later experiments. It kept the overall framework for all nine official categories: each problem was processed by its corresponding reasoner, which generated a CoT and a final answer, and all samples were included in the training corpus without filtering by whether the rule was explicitly found.
+
+The main changes were:
+
+
+
+cryptarithm: a backtracking solver assigned digits to symbols, tried operator rules such as addition, absolute difference, multiplication, concatenation, and reverse concatenation, then checked whether all examples were mutually consistent. The search budget was still conservative, so coverage was not high, but the generated CoTs were short and stable.
+
+bit_manipulation: the solver already included whole-byte-level pattern search, while avoiding later complicated ambiguous fallback ordering.
+
+equation_numeric: the solver included early fixes for negative signs, reversal, zero padding, and operator-prefix/operator-suffix output formats.
+
+cipher, gravity, numeral, and unit_conversion: these categories mostly followed the stable official rules and were already close to perfect locally.
+
+
+Representative local accounting:
+
+bit_manipulation          1361 / 1602
+cipher                    1575 / 1576
+cryptarithm_deduce          54 / 659
+cryptarithm_guess           11 / 164
+equation_numeric_deduce    554 / 596
+equation_numeric_guess      22 / 136
+gravity                   1597 / 1597
+numeral                   1576 / 1576
+unit_conversion           1594 / 1594
+TOTAL                     8344 / 9500
+
+
+The value of this version was not the highest local solve rate, but the stable training distribution: short CoT templates, fewer rule-selection jumps, and reliable online performance.
+
+expv002: Larger Search Budget and Whole-Byte Logical Shifts
+
+Score gain in one sentence: expv002 improved hard cryptarithm and bit cases by increasing cryptarithm search budget and adding whole-byte logical shift rules for bit manipulation.
+
+Cryptarithm had the highest failure rate among the nine categories. Its solver used backtracking: it assigned a digit from 0 to 9 to each symbol, tried a rule for each operator, and verified whether all examples were mutually consistent. Real tasks often had only three to five examples but more than ten unresolved symbols, so the search space was enormous. Many failures were timeouts rather than truly unsolvable cases. We therefore doubled the search budget for each phase, allowing the solver to recover some difficult cases that had previously timed out.
+
+For bit manipulation, the original whole-byte mode recognized cyclic shifts but not logical shifts. The two operations are different: cyclic shifts wrap discarded bits to the other side, while logical shifts discard them and pad with zeros. Without logical shifts, tasks whose rule was a pure shift or shift plus XOR mask would be missed. We added whole-byte logical shifts for left and right shifts by 1 to 7 bits, with an optional XOR mask, and placed this rule after rotate rules to reduce interference with true cyclic-shift cases.
+
+We did not add subtraction-style cryptarithm operators at this stage because the dataset answers were pure digit strings and did not provide a clean negative-number encoding. Equation was already relatively stable, so this experiment focused on cryptarithm and bit manipulation.
+
+expv003: Synthetic Problem Generation
+
+Score gain in one sentence: expv003 improved private performance by adding controlled synthetic problems that were generated from hidden rules and filtered by deterministic reasoners.
+
+The synthetic pipeline generated additional training samples for three target categories:
+
+
+
+bit_manipulation
+
+equation_numeric_deduce
+
+cryptarithm_deduce
+
+
+Each synthetic problem followed the same structure:
+
+
+
+choose a hidden transformation rule;
+
+sample several distinct inputs;
+
+apply the hidden rule to create examples;
+
+reserve one more input as the query;
+
+compute the final answer using the same rule;
+
+validate structural consistency;
+
+keep the sample only if the existing deterministic reasoner solved it correctly.
+
+
+For bit_manipulation, the generator created 8-bit binary-string transformation tasks such as XOR with a constant, rotate left/right, and rotate followed by XOR. For equation_numeric_deduce, it generated custom-operator arithmetic tasks using rules such as addition, subtraction, reverse subtraction, multiplication, and absolute difference. For cryptarithm_deduce, it generated symbolic arithmetic tasks with a one-to-one digit-symbol mapping and simple concatenation or reverse-concatenation rules.
+
+The important point is that these samples were not random benchmark-style text. Each accepted sample had a known hidden rule, a recomputed answer, and a reasoner check. This made the synthetic data closer to clean deduction problems.
+
+In this version, we generated 400 bit_manipulation problems, 1,400 equation_numeric_deduce problems, and 1,400 cryptarithm_deduce problems, then merged them into the training mix. In retrospect, this direction deserved much more effort. We stopped after an early version because the public score did not look promising enough, but the private score showed that synthetic data was likely important.
+
+expv004: Answer-Guided Selection of Rule and Format
+
+Score gain in one sentence: expv004 produced cleaner labels for equation and cryptarithm by selecting among rule-format candidates whose rendered answer exactly matched the ground truth.
+
+This version turned scattered answer-guidance ideas into a unified label-generation mechanism for the equation and cryptarithm families.
+
+The pseudo-equation tasks had many possible variants: forward concatenation, reverse concatenation, disguised addition, disguised multiplication, reverse subtraction, leading-zero preservation, digit-wise operations, and formats where the operator symbol appeared as a prefix or suffix in the result.
+
+Instead of committing to one rule first and hoping it was correct, this version expanded the full candidate space:
+
+
+
+arithmetic operator;
+
+operand and result reversal;
+
+plain digit output;
+
+operator prefix or suffix;
+
+trailing minus sign;
+
+zero padding and signed zero padding.
+
+
+It then selected candidates whose rendered result exactly matched the ground-truth answer. When multiple candidates matched, we chose the easiest-to-learn explanation using priors: plain output first, natural operator meanings first, and no reversal before reversal.
+
+For cryptarithm guess cases, where the query operator might not appear in the examples, the CoT explicitly stated that the prompt could not uniquely determine the hidden operator, then selected a rule family consistent with the answer. This produced some of our cleanest teacher labels for the hardest guess-style tasks.
+
+expv005: No-GT Solve-Rate Improvement
+
+Score gain in one sentence: expv005 improved the local solve count without using gold answers to lock rules, mainly through broader candidate search and deterministic fallback ordering.
+
+The goal of expv005 was to improve real-problem CoT coverage as much as possible without using the gold answer to choose the rule.
+
+For bit_manipulation, we added fallback candidate search on top of official rules. The solver first found all bit-level candidates that could explain the examples. If the query-bit result was not unique, it used deterministic prior and fallback ordering to select one candidate. The gain came from example-supported candidate rules plus fixed ordering, not from back-solving the answer.
+
+For equation_numeric_deduce, the solver enumerated operand parsing modes, result reversal, zero padding, symbol markers, and other output formats. It then found candidate rules that explained the examples and used a fixed ordering to choose the final one. equation_numeric_guess remained conservative and avoided query-only answer fallback.
+
+For cryptarithm, the main improvement came from a more expensive search and refreshed CoT generation for cryptarithm categories. This increased local coverage, especially for cryptarithm_deduce.
+
+Representative local accounting:
+
+bit_manipulation          1426 / 1602
+cipher                    1576 / 1576
+cryptarithm_deduce         160 / 659
+cryptarithm_guess           21 / 164
+equation_numeric_deduce    553 / 596
+equation_numeric_guess      52 / 136
+gravity                   1597 / 1597
+numeral                   1576 / 1576
+unit_conversion           1594 / 1594
+TOTAL                     8555 / 9500
+
+
+This version showed that no-GT changes could significantly increase the local found count. However, complex fallback and prior logic did not always translate into stable online learning.
+
+expv006: Conservative GT-Assisted Score-Pushing
+
+Score gain in one sentence: expv006 raised local solve rate and private score by using gold answers only to choose among example-consistent candidates, instead of directly constructing answers from gold.
+
+expv006 started from the expv005 direction and enabled conservative gold assistance. This version no longer claimed to be no-GT. Its purpose was to push the score and understand the upper bound of answer-assisted teacher labels.
+
+The principle was: first use examples to find a set of candidate rules that already explain the examples; if multiple candidates were plausible, then use the gold answer to choose the candidate that produced the correct query answer. It did not create a brand-new rule from the gold answer.
+
+For bit_manipulation, the solver kept the candidate-search framework from expv005, but allowed the gold bit to choose among multiple example-consistent candidates.
+
+For equation_numeric_deduce, gold was used only to break ties among candidates that already explained the examples. equation_numeric_guess avoided direct query-only gold fallback and used conservative symbol priors and default rules.
+
+For cryptarithm_deduce, candidate-level gold tie-break and gold guard helped avoid training on symbolic candidates whose query answer disagreed with the true answer. Direct query-gold re-encoding was disabled. cryptarithm_guess kept symbol priors but avoided directly wrapping the gold answer as if it had been reasoned out.
+
+Representative local accounting:
+
+bit_manipulation          1456 / 1602
+cipher                    1576 / 1576
+cryptarithm_deduce         184 / 659
+cryptarithm_guess           20 / 164
+equation_numeric_deduce    596 / 596
+equation_numeric_guess      37 / 136
+gravity                   1597 / 1597
+numeral                   1576 / 1576
+unit_conversion           1594 / 1594
+TOTAL                     8636 / 9500
+
+
+This version showed that answer-assisted labels could clearly increase the local found count, especially for equation_numeric_deduce and bit_manipulation. The difference from expv005 is important: the higher local score came from limited GT assistance, not from pure reasoning generalization.
+
+expv001_002: LoRA Fusion
+
+Score gain in one sentence: expv001_002 improved the final submission by merging two LoRA adapters at the weight level and projecting the merged update back to a valid rank.
+
+Besides single-reasoner iterations, we also used LoRA fusion. Different experiments were good at different task types, so merging their adapters could combine complementary strengths without retraining.
+
+A LoRA adapter represents a low-rank update to the base model weights:
+
+Delta W = (alpha / r) * B * A
+
+
+To merge two adapters, we first restored each adapter to its true scale using its own alpha and rank, then linearly combined their updates with equal weights. The competition imposed a rank limit, so direct concatenation of two rank-32 adapters would exceed the limit. Instead, after combining the low-rank factors, we applied truncated SVD and projected the merged update back to a valid target rank. This produced a single legal LoRA adapter.
+
+We also tried TIES and DARE merging, but our own SVD-based LoRA fusion performed better. The final selected gold-medal submission used the fusion of expv001 and expv002, named expv001_002.
+
+Online Score Summary
+
+
+
+
+experiment
+public
+private
+selected as final submission
+solution details
+
+
+
+
+expv001
+0.872
+0.864
+No
+Early stable baseline with short CoTs and reliable deterministic reasoners
+
+
+expv002
+0.872
+0.864
+No
+Larger cryptarithm search budget and whole-byte logical shift support for bit manipulation
+
+
+expv003
+0.868
+0.872
+No
+Synthetic data for bit, equation deduce, and cryptarithm deduce, filtered by deterministic reasoners
+
+
+expv004
+0.864
+0.872
+No
+Answer-guided rule-format selection for cleaner equation and cryptarithm labels
+
+
+expv005
+0.868
+0.872
+No
+No-GT candidate search and deterministic fallback ordering to improve local solve count
+
+
+expv006
+0.864
+0.880
+No
+Conservative GT-assisted candidate selection, highest private single-model score
+
+
+expv001_002
+0.876
+0.868
+Yes
+SVD-based LoRA fusion of expv001 and expv002, used as the final selected gold-medal submission
+
+
+
+
+In summary, our solution was based on deterministic reasoners plus SFT-distilled CoT traces. The most useful directions were cleaner teacher labels, broader but controlled solver coverage, synthetic data, and LoRA fusion. Our biggest process failure was the absence of a trustworthy local validation set, which made us rely too much on a noisy public leaderboard and weakened our submission selection.
+
+
+
+中文版：Top18 solution-从确定性求解器到可学习推理轨迹
+
+首先，我们感谢Kaggle和NVIDIA 主办 Nemotron Model Reasoning Challenge，也感谢社区和开源选手。我们的方案建立在 tonghuikang/nemotron 的开源确定性 CoT 管线之上。赛后的公开方案和讨论也帮助我们更清楚地理解了我们与最强队伍之间的差距。
+
+我们团队在这次比赛中获得了金牌。考虑到我们过程中有几个重大失误，尤其是没有可靠的线下验证集，我们在仍然进入金牌区这件事上相当幸运。两位队友通过这次比赛晋升为 Kaggle Grandmasters，一位队友晋升为 2x Kaggle Grandmaster。
+
+从高层来看，我们的方法是把模型当作一台需要被教会固定算法的计算器。对于每一类谜题，我们编写确定性 reasoner 来计算答案并生成教师思维链 trace，然后通过 SFT 把这些 trace 蒸馏进一个受 rank 限制的 LoRA adapter。在这个框架下，分数主要由两个因素决定：
+
+
+
+reasoner 能解出多少真实题；
+
+生成的 CoT trace 是否短、一致、局部，并且容易被模型模仿。
+
+
+我们和很多前排队伍共有的一个经验是，CoT trace 应该是一条可学习轨迹，而不仅仅是证明 solver 能跑通问题的记录。高质量 trace 应该短、一致、局部、没有隐藏计算、引用完整，并且每一步都应该能从上下文里已经引入的小规则推出。关键问题不只是 solver 本身是否正确，而是这条轨迹是否容易被模型学习。
+
+我们最大的失误：没有线下验证集
+
+我们最大的失误是没有足够早地构建线下验证集。这是最后两个月几乎没有真正进展的根本原因。
+
+我们没有很早意识到测试集有多小、有多噪。同时，我们没有把合成题目生成放在足够高的优先级。结果是，我们从头到尾都在全量数据上训练，并把 public leaderboard 当作验证信号。
+
+这导致了两个严重问题。
+
+第一，在我们的 public LB 到 0.87 左右之后，我们的探索变得很发散。我们尝试了很多方向，但大多数方向都没有持续深入。比如 expv003 的合成数据方向只尝试了一版，然后因为当时 public 分数看起来更差就放弃了。但是从 private leaderboard 看，提升其实相当有意义。
+
+第二，我们没有选到 private 最高的提交。从赛后的 top1 solutions 看，线下验证分数、public 分数和 private 分数之间确实存在一定一致性。如果我们有一个可信的线下验证集，我们很可能会做出更好的提交选择。
+
+我们也明确承认我们与前六名队伍之间的差距。他们的方案展现了更强的验证纪律、更系统的合成数据，以及对 benchmark 结构更完整的利用。我们赛后从他们那里学到了很多。
+
+方案细节
+
+writeups 只保留了有价值的实验版本。实际上，这些版本跳过了很多被废弃的尝试。为了清晰起见，我们统一把重要实验命名为 expv001 到 expv006，并把最终 LoRA 融合提交描述为 expv001_002。
+
+expv001：早期稳定基线
+
+一句话上分点： expv001 通过改进早期确定性 reasoner，同时保持 CoT 风格短且一致，建立了一个稳定的 0.87 档基线。
+
+expv001 是我们相对于开源 baseline 的第一个可靠提升版本，也成为后续实验的参照点。它保留了九个官方类别的整体框架：每道题由对应 reasoner 处理，生成 CoT 和最终答案，并且所有样本都进入训练语料，不按照规则是否被显式找到来过滤。
+
+主要变化是：
+
+
+
+cryptarithm：回溯 solver 为符号分配数字，尝试加法、绝对差、乘法、拼接、反向拼接等 operator rule，然后检查所有 examples 是否互相一致。搜索预算仍然保守，所以覆盖率不高，但生成的 CoT 短且稳定。
+
+bit_manipulation：solver 已经包含整字节级别的模式搜索，同时避免后续更复杂的 ambiguous fallback 排序。
+
+equation_numeric：solver 包含了负号、反转、补零、operator 前缀/后缀输出格式的早期修复。
+
+cipher、gravity、numeral、unit_conversion：这些类别基本沿用稳定的官方规则，本地已经接近或达到满分。
+
+
+代表性本地统计：
+
+bit_manipulation          1361 / 1602
+cipher                    1575 / 1576
+cryptarithm_deduce          54 / 659
+cryptarithm_guess           11 / 164
+equation_numeric_deduce    554 / 596
+equation_numeric_guess      22 / 136
+gravity                   1597 / 1597
+numeral                   1576 / 1576
+unit_conversion           1594 / 1594
+TOTAL                     8344 / 9500
+
+
+这个版本的价值不是最高的本地求解率，而是稳定的训练分布：短 CoT 模板、更少的规则选择跳跃，以及可靠的线上表现。
+
+expv002：更大的搜索预算和整字节逻辑移位
+
+一句话上分点： expv002 通过增加 cryptarithm 搜索预算，并为 bit manipulation 加入整字节逻辑移位规则，改善了困难 cryptarithm 和 bit 样本。
+
+cryptarithm 是九个类别中失败率最高的。它的 solver 使用回溯：为每个符号分配 0 到 9 的数字，为每个 operator 尝试一条规则，并验证所有 examples 是否互相一致。真实任务经常只有三到五条 examples，但有十个以上未确定符号，因此搜索空间巨大。很多失败是超时，而不是真正无解。因此我们把每个阶段的搜索预算翻倍，让 solver 能找回一部分以前超时的难题。
+
+对于 bit manipulation，原始整字节模式能识别循环移位，但不能识别逻辑移位。这两个操作不同：循环移位会把被移出的 bit 绕到另一侧，而逻辑移位会丢弃它们并补零。没有逻辑移位时，规则为纯 shift 或 shift 加 XOR mask 的题会被漏掉。我们加入了左移和右移 1 到 7 位的整字节逻辑移位，并支持可选 XOR mask，同时把这个规则放在 rotate 规则之后以减少对真实循环移位样本的干扰。
+
+我们在这个阶段没有加入 subtraction 风格的 cryptarithm operator，因为数据集答案是纯数字串，没有干净的负数编码。Equation 当时已经相对稳定，所以这个实验集中在 cryptarithm 和 bit manipulation。
+
+expv003：合成题目生成
+
+一句话上分点： expv003 通过加入从隐藏规则生成、并由确定性 reasoner 过滤的受控合成题目，提高了 private 表现。
+
+合成管线为三个目标类别生成额外训练样本：
+
+
+
+bit_manipulation
+
+equation_numeric_deduce
+
+cryptarithm_deduce
+
+
+每个合成题目都遵循相同结构：
+
+
+
+选择一个隐藏变换规则；
+
+采样几个不同输入；
+
+应用隐藏规则生成 examples；
+
+额外保留一个输入作为 query；
+
+用同一规则计算最终答案；
+
+验证结构一致性；
+
+只有当现有确定性 reasoner 正确解出它时才保留样本。
+
+
+对于 bit_manipulation，generator 创建 8-bit 二进制字符串变换任务，例如与常量 XOR、左/右 rotate、rotate 后 XOR。对于 equation_numeric_deduce，它生成自定义 operator 算术任务，规则包括加法、减法、反向减法、乘法和绝对差。对于 cryptarithm_deduce，它生成带有一一对应数字-符号映射的符号算术任务，以及简单拼接或反向拼接规则。
+
+重要点是，这些样本不是随机的 benchmark 风格文本。每个被接受的样本都有已知隐藏规则、重新计算的答案，以及 reasoner 检查。这使合成数据更接近干净的 deduction problem。
+
+这个版本中，我们生成了 400 道 bit_manipulation、1,400 道 equation_numeric_deduce 和 1,400 道 cryptarithm_deduce 题目，然后把它们合入训练 mix。回头看，这个方向值得投入更多精力。我们在早期版本后就停止了，因为 public 分数看起来不够好，但 private 分数显示合成数据很可能很重要。
+
+expv004：答案引导的规则和格式选择
+
+一句话上分点： expv004 通过在渲染答案与真值完全匹配的 rule-format 候选中进行选择，为 equation 和 cryptarithm 生成了更干净的标签。
+
+这个版本把零散的答案引导想法转化为 equation 和 cryptarithm 家族的一套统一标签生成机制。
+
+伪等式任务有很多可能变体：正向拼接、反向拼接、伪装加法、伪装乘法、反向减法、保留前导零、逐位运算，以及 operator 符号作为结果前缀或后缀出现的格式。
+
+这个版本不再先承诺一条规则然后希望它是对的，而是展开完整候选空间：
+
+
+
+算术 operator；
+
+operand 和 result 反转；
+
+纯数字输出；
+
+operator 前缀或后缀；
+
+末尾负号；
+
+补零和带符号补零。
+
+
+然后它选择渲染结果与 ground-truth answer 完全一致的候选。当多个候选都匹配时，我们用 prior 选择最容易学习的解释：纯输出优先、自然 operator 含义优先、不反转优先于反转。
+
+对于 cryptarithm guess 样本，也就是 query operator 可能没有出现在 examples 中的样本，CoT 会明确说明 prompt 无法唯一确定隐藏 operator，然后选择一个与答案一致的规则族。这为最困难的 guess 风格任务产生了我们最干净的一批教师标签。
+
+expv005：No-GT 求解率提升
+
+一句话上分点： expv005 在不使用 gold answer 锁定规则的情况下，主要通过更广的候选搜索和确定性 fallback 排序，提高了本地 solve count。
+
+expv005 的目标是在不使用 gold answer 选择规则的前提下，尽可能提高真实题 CoT 覆盖率。
+
+对于 bit_manipulation，我们在官方规则之上加入 fallback candidate search。solver 首先找到所有能解释 examples 的 bit-level candidate。如果 query-bit 结果不唯一，它就用确定性 prior 和 fallback ordering 选择一个候选。提升来自 examples 支持的候选规则加固定排序，而不是从答案反推。
+
+对于 equation_numeric_deduce，solver 枚举 operand 解析方式、result 反转、补零、符号 marker 和其他输出格式。然后找到能解释 examples 的候选规则，并用固定排序选择最终规则。equation_numeric_guess 保持保守，并避免 query-only answer fallback。
+
+对于 cryptarithm，主要提升来自更昂贵的搜索，以及对 cryptarithm 类别刷新 CoT generation。这提高了本地覆盖率，尤其是 cryptarithm_deduce。
+
+代表性本地统计：
+
+bit_manipulation          1426 / 1602
+cipher                    1576 / 1576
+cryptarithm_deduce         160 / 659
+cryptarithm_guess           21 / 164
+equation_numeric_deduce    553 / 596
+equation_numeric_guess      52 / 136
+gravity                   1597 / 1597
+numeral                   1576 / 1576
+unit_conversion           1594 / 1594
+TOTAL                     8555 / 9500
+
+
+这个版本显示 no-GT 修改也能显著提高本地 found count。但是复杂 fallback 和 prior 逻辑并不总能稳定转化为线上学习效果。
+
+expv006：保守 GT-assisted 冲分
+
+一句话上分点： expv006 通过只在 example-consistent candidates 中使用 gold answer 做选择，而不是直接从 gold 构造答案，提高了本地求解率和 private 分数。
+
+expv006 从 expv005 方向出发，打开了保守 gold assistance。这个版本不再声称是 no-GT。它的目的是冲分，并理解 answer-assisted 教师标签的上限。
+
+原则是：先使用 examples 找到一组已经能解释 examples 的候选规则；如果多个候选都合理，再用 gold answer 选择能产生正确 query answer 的候选。它不会从 gold answer 创造一条全新的规则。
+
+对于 bit_manipulation，solver 保留 expv005 的 candidate-search 框架，但允许 gold bit 在多个 example-consistent candidates 之间选择。
+
+对于 equation_numeric_deduce，gold 只用于在已经解释 examples 的 candidates 中打破平局。equation_numeric_guess 避免直接 query-only gold fallback，而使用保守的 symbol prior 和默认规则。
+
+对于 cryptarithm_deduce，candidate-level gold tie-break 和 gold guard 帮助避免训练那些 query answer 与真实答案不一致的 symbolic candidates。直接 query-gold re-encoding 被关闭。cryptarithm_guess 保留 symbol prior，但避免直接把 gold answer 包装成像是推理出来的结果。
+
+代表性本地统计：
+
+bit_manipulation          1456 / 1602
+cipher                    1576 / 1576
+cryptarithm_deduce         184 / 659
+cryptarithm_guess           20 / 164
+equation_numeric_deduce    596 / 596
+equation_numeric_guess      37 / 136
+gravity                   1597 / 1597
+numeral                   1576 / 1576
+unit_conversion           1594 / 1594
+TOTAL                     8636 / 9500
+
+
+这个版本显示 answer-assisted labels 可以明显提高本地 found count，尤其是 equation_numeric_deduce 和 bit_manipulation。它与 expv005 的区别很重要：更高的本地分数来自有限 GT assistance，而不是纯推理泛化。
+
+expv001_002：LoRA 融合
+
+一句话上分点： expv001_002 通过在权重层面融合两个 LoRA adapters，并把合并后的 update 投影回合法 rank，改善了最终提交。
+
+除了单 reasoner 迭代，我们还使用了 LoRA fusion。不同实验擅长不同题型，所以融合它们的 adapters 可以在不重新训练的情况下结合互补能力。
+
+一个 LoRA adapter 表示的是对 base model weights 的低秩更新：
+
+Delta W = (alpha / r) * B * A
+
+
+为了融合两个 adapters，我们先用各自的 alpha 和 rank 把每个 adapter 还原到真实尺度，然后用等权线性组合它们的 updates。比赛有 rank 限制，所以直接拼接两个 rank-32 adapters 会超过限制。因此，在组合低秩因子之后，我们应用 truncated SVD，把合并后的 update 投影回合法 target rank。这产生了一个单一合法 LoRA adapter。
+
+我们也尝试了 TIES 和 DARE merging，但我们自己的基于 SVD 的 LoRA fusion 表现更好。最终选中的金牌提交使用了 expv001 和 expv002 的融合，命名为 expv001_002。
+
+线上分数汇总
+
+
+
+
+实验
+public
+private
+是否选为最终提交
+方案细节
+
+
+
+
+expv001
+0.872
+0.864
+否
+早期稳定基线，使用短 CoT 和可靠的确定性 reasoners
+
+
+expv002
+0.872
+0.864
+否
+更大的 cryptarithm 搜索预算，以及 bit manipulation 的整字节逻辑移位支持
+
+
+expv003
+0.868
+0.872
+否
+为 bit、equation deduce 和 cryptarithm deduce 生成合成数据，并由确定性 reasoners 过滤
+
+
+expv004
+0.864
+0.872
+否
+答案引导的 rule-format selection，用于更干净的 equation 和 cryptarithm 标签
+
+
+expv005
+0.868
+0.872
+否
+No-GT candidate search 和确定性 fallback ordering，用于提升本地 solve count
+
+
+expv006
+0.864
+0.880
+否
+保守 GT-assisted candidate selection，最高 private 单模型分数
+
+
+expv001_002
+0.876
+0.868
+是
+expv001 和 expv002 的基于 SVD 的 LoRA fusion，用作最终选中的金牌提交
+
+
+
+
+总结来说，我们的方案基于确定性 reasoners 加 SFT 蒸馏的 CoT traces。最有用的方向是更干净的教师标签、更广但受控的 solver 覆盖、合成数据和 LoRA fusion。我们最大的流程失误是缺少可信的线下验证集，这让我们过度依赖有噪声的 public leaderboard，并削弱了我们的提交选择。
+
+Comments:
+├─ Yurnero (2026-06-30 08:14:52.890000) [+1]
+│  Congrats with huge GM/GM/2xGM achievements!
+│  
+│  next: 2xGM/2xGM/3xGM : )
+  ├─ ForcewithMe (2026-06-30 12:21:14.023000) [+1]
+  │  @samson8 Congrats. 3 years for 7 gold medals. You are such a talented kagglers!
+├─ Navneet (2026-07-01 08:09:58.597000) [+0]
+│  Bravo for the 18th solution Guys!

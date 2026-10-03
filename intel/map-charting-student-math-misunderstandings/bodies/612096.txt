@@ -1,0 +1,203 @@
+# https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/discussion/612096
+
+Topic #612096: 18th Place - Pyramid Ensemble
+  Author: Chris Deotte
+  Posted: 2025-10-16 18:42:42.328000
+  Votes: 81  Comments: 39
+
+Thank you Kaggle and community for an enjoyable competition. My final solution is a "pyramid ensemble" to maximize the efficient use of limited submission inference time and compute. 
+
+First we infer 100% test samples with small models, then we determine which predictions the ensemble is more uncertain about. Next we predict top 50% uncertain test samples with medium models. We incorporate these predictions with 2x weight and recompute prediction uncertainty. Next we predict top 10% uncertain with large models. We incorporate these new predictions with 4x weight and recompute prediction uncertainty. Finally we predict top 6% with an extra large model and incorporate these predictions with 8x weight. See diagram for more info.
+
+
+
+My final "pyramid ensemble" submission has 5 KFold CV = 0.951, Public LB = 0.952, and Private LB = 0.947.
+
+Diversity
+
+I joined this competition in the beginning, so I have 3 months to investigate many diverse approaches. In 3 months, I trained 1000 LLM+ models. Every day I had about 4xA100 GPUs running experiments. I investigated the following things:
+
+
+
+Different  Backbones (i.e. Qwen, Gemma, Llama, etc)
+
+Different Paradigms (i.e. Sequence classification, Text generation, Multiple choice, multiple heads, etc)
+
+Different Prompts (i.e. list MC_Answer choices, add 'is_correct = Yes/No`, list target class choices, add system roles, etc)
+
+Generative AI assistance. (i.e. Create synthetic data, vibe coding, etc)
+
+Different training configurations (Full finetune, LORA, QLORA, layer decay, warm ups, etc)
+
+Different inference configurations (vllm, huggingface, awq, bitsandbytes, etc)
+
+
+Multiple Paradigms
+
+Paradigm - Sequence Classification and/or Text Generation
+
+There were many ways to solve this problem. The most straightforward was using AutoModelForSequenceClassification() with 65 classes or remove True False for 37 classes. Another powerful approach is AutoModelForCausalLM() where the model generates a single token to predict a target class and we extract that token's logits/probability.
+
+Paradigm - Multiple Choice
+
+Another approach that worked well was converting the problem to LLM Multiple Choice like:
+
+: A box contains  counters. The counters are red or blue. / of the counters are red. How many red counters are there?
+ Answer: 
+ Answer: 
+ Explanation: B because  fifths of  is 
+: A) Correct B) Irrelevant C) Incomplete D) Wrong_Fraction E) Neither
+
+
+Once we remove the prefix of "True_" and "False_", there are only 37 target classes. Then for each question, there are always 6 or less possible target classes. So every train sample and test sample can be reformulated with choices A, B, C, D, E, F (where sometimes C, D, E, and/or F are empty). And we can randomly shuffle the choices. The model must learn to read the choices, understand the choices, and pick 1 of the 6. Afterward, we map the prediction into a Numpy array of probabilities with 65 columns (or the 65 original target classes).
+
+Paradigm - Multi-head Architecture
+
+The most fun paradigm was multihead. It was difficult to get work but I finally got mulit-head to work and perform well using 3 heads. The first head predicts the column Category = ["True_Correct", "True_Neither", "True_Misconception", "False_Correct", "False_Neither", "False_Misconception"]. And the second head predicts True Misconceptions and the third head predicts False Misconceptions. For a given train sample, the first head always provides loss and then heads 2 and 3 may or may not provide loss.
+
+For example if the full label is True_Correct:NA. The total loss is just the first head (and heads 2 and 3 provide no loss). If full label is True_Misconception:Shorter_is_bigger. Then the total loss is first head loss plus second head loss (and head 3 provides no loss). And if full label is False_Misconception:WNB then the total loss is first head plus third head (and head 2 provides no loss).
+
+Prompt Diversity
+
+There were so many options with prompt creation. For example, do we add is_correct = Yes/No into the prompt, or do we let the model determine this itself? Decisions like this made a big difference. Also we can list the MC_Answer choices. And we can list the possible target class choices for a specific QuestionId, MC_Answer combination. Also we can use chat formatting with system and user role. Or we cannot. We can add extra info to help classify targets. My best single model notebook here (CV 0.949, LB 0.949) used the following prompt:
+
+You are an expert mathematics assessor.
+Question: What fraction  the shape   shaded? Give your answer  its simplest form. [Image: A triangle split into  equal smaller triangles.   them are shaded.]
+Choices: A)    B)    C)    D)   
+Response:   
+Explanation: /  shaded therefore  must be left therefore the answer  /
+Now classify the explanation  Correct explanation (regardless  whether response  correct), Misconception:Incomplete, Misconception:WNB,  Not an explanation.
+
+
+Here are some details about this prompt:
+
+
+
+Adds a system like instruction
+
+Enumerates MC_Answer choices
+
+Lists target classes for this specific QuestionID and MC_Answer
+
+Clarifies some target classes like explain that "Correct" is "regardless of whether response is correct".
+
+
+Generative AI
+
+I tried many experiments with synthetic data using GPT. First, using my local OOF for all train data, I determined which classes are being confused. Then I prompted ChatGPT4 to specifically make synthetic data which will help an LLM learn the difference between these confused classes. Of course I did this in an "out of fold fashion" to prevent leakage. The results were mixed, sometimes improvement but mostly not. In the end I didn't use any synthetic data because I did not trust it.
+
+Train Setup
+
+For models 14B and less, I mostly did full finetuning. For models 14B and larger I mostly did LORA or QLORA. (For 14B models I did both LORA and non-LORA). I trained models using A100 GPU 80GB VRAM. Usually I would train using a single GPU but with the largest 72B LLM, I trained using 2xA100 or 4xA100. My typical LORA settings were r=32, a=64, dropout=0.05 or 0.1, target modules = ["q_proj", "k_proj", "v_proj", "o_proj","gate_proj", "up_proj", "down_proj"]. I would use gradient checkpointing and large batches like 64. Learning rate was usually around 1e-4 or 2e-4. Optimizer was often AdamW4bit.
+
+Infer Setup
+
+I did lots of experiments to optimize inference. My main innovation was to make sure both 2xT4 GPU were always running at 100%. So if a model only needed 1 GPU, I would run two threads and infer the first half of test.csv while the second thread was inferring the second half of test.csv. For larger models, using CasualLM and vllm was the most efficient and fastest. But I also used pure PyTorch and/or HF Trainer for inference too.
+
+Backbones
+
+Wow! There are so many LLM out there to try. I probably tried every LLM backbone between 1B and 72B. Haha, yes I trained a lot of models. For each backbone, I would try different paradigms, prompts, train setups, and inference setups. Using ChatGPT helped me get everything up and running fast and solve any errors that arose.
+
+Comments:
+├─ Navneet (2025-10-22 00:11:09.857000) [+1]
+│  Amazing Work
+├─ HZM (2025-10-20 14:06:08.157000) [+1]
+│  AMAZING JOB
+  ├─ Chris Deotte (2025-10-22 05:46:38.977000) [+0]
+  │  Thanks HZM. Great job winning cash gold 2nd place!
+├─ Dimpi Mittal (2025-10-19 18:12:30.327000) [+1]
+│  This is a well-explained and insightful approach. I really like how you structured the “pyramid ensemble” to prioritize uncertain samples it’s a smart way to optimize limited compute during inference.
+  ├─ Chris Deotte (2025-10-20 04:03:31.097000) [+0]
+  │  Thank you.
+├─ Khushi Yadav (2025-10-18 21:31:30.237000) [+1]
+│  Great writeup!
+├─ Zack M123 (2025-10-18 17:50:13.413000) [+1]
+│  Thank you for another wonderfully educational writeup! Did you run into any inference issues with Qwen3-32B by chance, and if so, how did you resolve them? My attempt at inferring with fp16 on Qwen...
+  ├─ Chris Deotte (2025-10-18 17:56:43.380000) [+2]
+  │  For all my models, i train in bf16 and save the weights in bf16. Then during Kaggle inference, I load the weights into memory as bf16. I just do the inference compute in fp16. That solved problems ...
+├─ Chew Kok Wah (2025-10-17 15:58:01.687000) [+1]
+│  Is  your best single model DeepSeek-R1-Distill-Qwen-7B ?
+  ├─ Chris Deotte (2025-10-18 00:32:00.990000) [+0]
+  │  It is DeepSeek-R1-Distill-Qwen-32B, so 32 not 7
+├─ yunsuxiaozi (2025-10-17 13:57:28.737000) [+1]
+│  Hello chris, I tried to train the qwen2.5-math-7b model with Lora, but the results were not good. Could you please give me some guidance? Thank you.Here  is the notebook.
+  ├─ Chris Deotte (2025-10-17 14:18:23.833000) [+2]
+  │  The first think i notice is that the learning rate is too high for LORA. You are using learning_rate=2e-3. LORA likes 1e-4 or 2e-4. Try 1e-4 first.
+├─ Tom (2025-10-17 04:49:51.780000) [+1]
+│  @cdeotte  The Paradigm – Multi-head Architecture is a beautifully designed framework, Chris. It adaptively handles multiple scenarios.
+├─ MJeremy (2025-10-17 04:41:54.383000) [+1]
+│  Hi, @cdeotte thanks for sharing, been following you on this comp all the way.
+│   how much uplift of multi-head work? I also tried 3-heads experimented on deberta small, I tried tune weights and diffe...
+  ├─ MJeremy (2025-10-17 04:43:06.823000) [+1]
+  │  Also, how do you determine the uncertainty of the model prediction and select top x%?
+  ├─ Chris Deotte (2025-10-17 13:31:30.130000) [+2]
+  │  The 3-head model performed to similar to other paradigms. So it didn't give individual model uplift but rather helped add diversity to ensemble. Also the 3-head should generalize better to unseen d...
+├─ yunsuxiaozi (2025-10-17 03:43:28.210000) [+1]
+│  How much improvement does converting 65 categories into 37 categories have on the model's performance?
+  ├─ Chris Deotte (2025-10-17 03:47:58.947000) [+0]
+  │  Hi. It depends on the model. Some models gained maybe +0.001 or +0.002 (if I remember correctly) but other models I left targets as 65 classes and that performed better.
+  │  
+  │  Also for smaller models wh...
+├─ ShadowCoder (2025-10-17 02:58:09.440000) [+1]
+│  this notebook not public ：“ My best single model notebook here (CV 0.949, LB 0.949)”
+  ├─ Chris Deotte (2025-10-17 03:16:22.953000) [+0]
+  │  thanks for letting me know. I just fixed the link
+├─ SeungHo LEE (2025-10-17 00:34:05.880000) [+1]
+│  Great writeup, Chris. Thank you for sharing your insightful experiments. I've learned a lot!
+├─ WOOSUNG YOON (2025-10-16 20:52:43.030000) [+1]
+│  Thank you for sharing a great solution. It helped resolve my questions.
+│  Upon recently reviewing the discussion, I gained a slight impression regarding the solution. 😄
+│  
+│  
+│  
+│  https://www.kaggle.com/comp...
+├─ Levin (2025-10-17 01:46:30.757000) [+2]
+│  Big thanks for the write-up and for your earlier notebooks—they were instrumental. They led me to a 32B approach: vLLM (embed-only, GPTQ-4bit backbone) + an external FP16 classification head. Grate...
+  ├─ Chris Deotte (2025-10-17 03:42:39.500000) [+0]
+  │  Thanks. Congratulations on solo gold 10th place!
+├─ Taewoong Kim (2025-10-17 00:40:55.947000) [+2]
+│  Your notebook has been a great source of inspiration.
+│  I trained 1000 LLM+ models.
+│  Is your main job being a Kaggler?!
+  ├─ Chris Deotte (2025-10-17 03:44:25.233000) [+1]
+  │  As part of my job responsibilities as KGMON for NVIDIA, I spend some time competing on Kaggle. Each day I would set up a dozen or so experiments and let them run all day long producing new OOF pred...
+├─ Martin Kovacevic Buvinic (2025-10-16 22:12:32.200000) [+2]
+│  Wow Chris that's a lot of experiments 😅. Good job!!
+  ├─ Chris Deotte (2025-10-16 23:32:32.457000) [+2]
+  │  Thanks. Great job achieving 22nd with single model.
+  │  
+  │  I enjoyed all the experiments because it gave me an opportunity to study (and become up to date with) all the most recent LLM (which there are s...
+├─ @kaggleqrdl (2025-10-16 19:47:00.460000) [+2]
+│  Awesome writeup as always.   Bit surprised at the drop from cv/lb.  I wonder if it was a random shuffle. 
+│  
+│  I went through the top 40 public notebooks, none scored higher on private lb and it was sa...
+  ├─ Chris Deotte (2025-10-16 20:11:31.007000) [+2]
+  │  Yeah, the metric MAP@3 has a lot of variance. Training the same model with different seeds could cause the MAP@3 to change a bunch. (For example post competition experiments demonstrate that submit...
+    ├─ @kaggleqrdl (2025-10-18 18:01:15.580000) [+1]
+    │  What did you think of tascj's multi seed CV?
+    │  
+    │  
+    │    
+    │  Probably due to label noise (mainly Neither), validation score varies a lot using different seeds. I had to use ensemble of multiple runs with diff...
+    ├─ Chris Deotte (2025-10-19 14:57:21.397000) [+1]
+    │  @kaggleqrdl Multi seed is great and that is what i usually do with MAP@3 metric. I did this in Kaggle playground Fertilizer comp here and it helped a lot. 
+    │  
+    │  I considered doing it here but it alread...
+├─ Nicholas Broad (2025-10-16 19:41:38.823000) [+2]
+│  Great writeup! What did you use to determine uncertainty in the predictions?
+  ├─ Chris Deotte (2025-10-16 20:06:46.663000) [+3]
+  │  Thanks. Each row of test_probs corresponded to a single test sample and has 65 columns (that summed to 1). To compute the uncertainty for each row, I compared a few different techniques on local CV...
+    ├─ Nicholas Broad (2025-10-16 20:45:51.847000) [+1]
+    │  Cool, thanks!
+├─ Kawchar Husain (2025-10-28 09:37:40.733000) [+0]
+│  @cdeotte, How you have used 72B model in T4 x2 GPU?
+├─ Esakki Ponraj (2025-10-27 13:16:20.363000) [+0]
+│  Hi @cdeotte,
+│  Thanks for the excellent write-up. I’m a beginner—could you point me to any public notebooks that tackle this as a text-generation problem and show how to extract logits
+  ├─ Chris Deotte (2025-10-27 13:18:36.307000) [+0]
+  │  Thanks. Here's an example:
+  │  https://www.kaggle.com/code/aleaiest/lb-0-945-qwen2-5-32b-gptq
+  │  
+  │  Note that this example uses a very long prompt which makes train and infer time consuming for LLM 32B. In ...
+├─ Sibonile Mthunzi (2025-10-22 19:39:57.180000) [+1]
+│  Great work!

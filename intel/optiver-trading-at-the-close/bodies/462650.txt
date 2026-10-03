@@ -1,0 +1,227 @@
+# https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462650
+
+Topic #462650: [30th place] What our team learned and what we tried in this competition 
+  Author: HW
+  Posted: 2023-12-21 02:31:22.797000
+  Votes: 25  Comments: 25
+
+The long journey has ended. Thanks to Optiver and Kaggle for hosting this amazing competition. Thanks to my teammates @chellyfan and @unknownkid for their incredible effort. We ended up in 30th place. Here's how our rank changed during each update:
+
+
+
+
+Update
+Rank
+Rank Change
+
+
+
+
+Public leaderboard
+18th
+--
+
+
+1st update
+37th
+↓ 19
+
+
+2nd update
+41st
+↓ 4
+
+
+3rd update
+39th
+↑ 2
+
+
+4th update
+40th
+↓ 1
+
+
+Final leaderboard
+30th
+↑ 10
+
+
+
+
+In short , our model is an LGBM &amp; CatBoost ensemble trained on a total of 480 + 37 days without online learning (480 days from the training set and an extra 37 days from the original public leaderboard data obtained via API). Our online learning crashed when it encountered the interim update data. Our rank is quiet stable during the updates. Check origin post below for more detail discussion. 
+
+Origin Post
+
+TL;DR
+
+
+
+Feature engineering based on public notebooks
+
+Catboost feature elimination (some features works very well in Catboost but very bad in LGBM, vice-versa.)
+
+LGBM and Catboost ensemble model, 202 features in LGBM, 141 in Catboost
+
+Online learning to collects hidden public leaderboard data continuously update the model.  
+
+Our online learning works fine with public LB data but crash once we enter the interim update date period.
+
+Stick with single fold holdout CV
+
+Try different post processing approach
+
+Full code here : https://www.kaggle.com/code/wuhongrui/public-5-3227-lgbm-catboost-with-online-learning/notebook
+
+
+Some detail discussion below
+
+
+
+
+Feature engineering
+
+
+
+
+For LGBM:
+
+
+Drop all the rows that contain NaN in columns like wap, bid_price, ask_price from the original train.csv.
+
+
+Adapt most of the features by @lblhandsome "⚡Optiver 🚀Robust Best ⚡ Single Model", ensuring to group by stock_id and date_id when calculating diff, pct_change and shift.
+
+
+Calculate the index waplike this post "Obtaining past target values with wap" , and then compute its diff, pct_change, and shift.
+
+
+Use features from the previous day at the same seconds to predict today's target
+
+
+Further we grab the target from the previous day as a feature.
+
+
+For CatBoost:
+
+
+Threw all the features into CatBoost, including those that didn't work well with LGBM.
+
+
+Utilized feature elimination in CatBoost (@yekenot "Feature Elimination by CatBoost" to filter out less important features, 380+ -&gt; 141.
+
+
+Technical indicators like RSI, MACD, and Bollinger Bands work well with CatBoost but not as effectively with LGBM. But it took too long to generate them.
+
+
+CatBoost trains significantly faster than LGBM (7 minutes vs 1 hour in holdout CV), and after adding and selecting features, our CatBoost CV/LB performance are close to our LGBM.
+
+
+Online learning
+
+
+
+We believe this is crucial for this type of prediction competition. The aim is to collect private data and continuously retrain and update the model.
+
+The incremental learning methods provided by LGBM and Catboost were not effective, leading to a lot of drifts
+
+Our logic is concat all the test data in same date_id to form a cache.  Then generate features for each cache (i.e., one day) and concatenate them to the original features dataframe, which contains features generated from days 0-480.
+
+The revealed targets are also concatenated to the original target dataset.
+
+Retrain our model every 15 days using the concatenated data and it finally gets us to public LB 5.3231. (training at dates 481, 481+15, 481+30).
+
+However once our code enter the period of interim update data, it crash and cause submission score error. We waste tons of submission try to debug but still can't locate the reason.
+
+Things we have tried to debug but not work: 
+
+There are missing stock in test data so the shape of each test iteration is not always (200,16), same if there are not excatly 55 time id in each days. This will lead to the shape of cache for each date_id is not always 11000 rows.(200 x 55)
+
+In this case, we couldn't figure out the shape of corresponding revealed target provided by the API next day. 
+See my post here
+
+Tried merging data with date_id, seconds_in_bucket, stock_id instead of direct concatenation, but it didn’t resolve the issue.
+
+Checked the data type for each test iteration as discussed in [Finding] the Mechanism of Newly Added Data .
+
+Considered orther edge cases like NaN in date_id, missing seconds_in_bucket at 0 seconds, etc.
+
+Reviewed and tried solutions from all submission score error post in Discussions, but none were applicable to our case.
+
+
+We are curious and eager to hear the way how others deal with those interim update data and utilized them to retrain the model. Debug with this API without knowing much useful information is very annoying….
+
+Comments:
+├─ Thomas Dueholm Hansen (2023-12-21 08:26:54.390000) [+1]
+│  I also retrain my model every 13 days on new data, and I also struggled with crashes. In the end, what solved it for me was to use pandas.to_numeric with errors='coerce'. I think some of the reveal...
+  ├─ hongyao hongyao (2024-01-23 19:40:49.823000) [+0]
+  │  Is your current ranking plan a non-online learning approach?
+    ├─ Thomas Dueholm Hansen (2024-01-23 23:00:58.857000) [+0]
+    │  No. I fixed the issue, so I am retraining every 13 days.
+├─ ADAM. (2023-12-21 03:01:16.840000) [+1]
+│  Sorry to hear you failed in online training. I did success online training in interim data, at least in public interim data.
+│  
+│  I've added some protective codes to make sure all goes well. But I've a...
+  ├─ HW (2023-12-21 03:12:53.437000) [+1]
+  │  Thanks for your sharing !  We made some similar data type conversion as you did. I guess we need to check them again…
+├─ QXYMP (2023-12-21 03:00:58.090000) [+1]
+│  Great work! I have tried incremental learning, but its performance is terrible.
+│  
+│  One question: will online training make the runtime exceed 9 hours or the RAM limit? I am worried about these issues.
+  ├─ Zane (2023-12-21 03:06:52.957000) [+0]
+  │  We believe timeout and RAM problems can be avoided by controlling the number of training times and the amount of data cached for training purposes.
+├─ yuanzhe zhou (2023-12-21 03:08:13.350000) [+2]
+│  I dk if any one checked the dtypes with similar code. I did not spend my submissions on submit it
+│  
+│   optiver2023
+│  env = optiver2023.make_env()
+│  iter_test = env.iter_test()
+│  
+│  counter = 
+│   (test, revealed...
+  ├─ HW (2023-12-21 03:28:02.220000) [+0]
+  │  Thanks for sharing. Our way to handle the data type is based on your reply in this post ["Finding] the Mechanism of Newly Added Data"](https://www.kaggle.com/competitions/optiver-trading-at-the-clo...
+├─ xianZ_waikato (2024-02-01 14:49:36.567000) [+-1]
+│  thanks for share but why only
+│  
+│  (training at dates 481, 481+15, 481+30)
+│  
+│  instead of 
+│  
+│  (training at dates 481, 481+15, 481+30,481+45, 481+60,481+75…….)
+├─ hongyao hongyao (2024-01-23 19:41:41.253000) [+0]
+│  Is your current ranking plan a non-online learning approach? it seems that it is still robust
+  ├─ Zane (2024-02-09 16:14:46.317000) [+0]
+  │  Yes, it is a non-online learning approach. However, as time goes by, the gradually increasing error is inevitable. Therefore, it's quite a pity that we couldn't utilize non-online learning in the end.
+├─ ginger (2023-12-25 07:41:13.073000) [+0]
+│  Thanks for sharing. Did you try other validation strategies?
+├─ silver (2023-12-21 04:01:49.303000) [+0]
+│  I put target and feature in two separate dataframe, use stock id X date id X seconds to join them when needed. Retrain model every 30d. Didn't encounter failure in available data.
+├─ htao1234 (2023-12-21 03:15:51.513000) [+0]
+│  Great work and thanks for sharing. 
+│  May I know if without the:
+│  
+│   our model every  days using the concatenated data and it finally gets us to public LB .. (training at dates , +, +).
+│  
+│  
+│  how much the ...
+  ├─ HW (2023-12-21 03:19:37.600000) [+2]
+  │  About 0.003-0.006 drop in LB
+  ├─ hongyao hongyao (2023-12-21 03:42:45.460000) [+0]
+  │  I'm curious about the previous score too.
+    ├─ HW (2023-12-21 04:05:33.110000) [+0]
+    │  around 5.3300
+  ├─ Zane (2023-12-21 04:17:15.127000) [+0]
+  │  We have not measured lgb+ctb without online learning. But based on previous experiments on lgb, we estimate that there would be a drop of about 0.003.
+├─ Funny (2023-12-21 02:50:39.863000) [+0]
+│  do you check if the RAM is enough for processing the extra data?
+  ├─ [deleted] (2023-12-21 03:02:58.577000) [+0]
+  │  [deleted]
+  ├─ HW (2023-12-21 03:03:55.373000) [+0]
+  │  We had consider it. We made a stress test with our code by duplicate and concat last 200 days' data to form a 680-day dataset. Our code can handle about 600 days. We even tried a sliding window to ...
+    ├─ Funny (2023-12-21 03:07:20.043000) [+0]
+    │  Then I is might be the revealed target data type, I tried to correct them before merge with the original data, and did not get error, at least for 480+ 103 days
+    ├─ HW (2023-12-21 03:15:27.227000) [+0]
+    │  Thanks for pointing it out. After reading the reply from @hookman above, I think there are some issue  in our code while handling the data type.
+├─ [deleted] (2024-03-22 17:11:45.393000) [+0]
+│  [deleted]

@@ -1,0 +1,121 @@
+<h1>Solution Writeup</h1>
+<p>I would like to thank the competition hosts and Kaggle for organizing this interesting challenge。<br>
+Winning 1st place in an NLP competition for the first time feels great! Below is my solution writeup.</p>
+<h1>1. Data</h1>
+<p>I dropped duplications, resulting in 35,960 samples. Created 5-fold cross-validation splits stratified by "Category".</p>
+<h1>2. Modeling</h1>
+<p>I modeled the problem as a suffix classification task.</p>
+<p>Given the same context(prefix), models are trained to predict the correct suffix from a set of candidates.</p>
+<p>Context is formatted as follows:</p>
+<pre><code>&lt;|imChoices}
+ {Answer}
+ {MisconceptionCandidates}
+ {MCend|&gt;
+&lt;|im</code></pre>
+<p>Suffixes are formatted in submission format.</p>
+<pre><code>:&lt;|im_end|&gt;
+</code></pre>
+<p>Each <code>QuestionId</code> has 8, 10 or 12 possible suffix candidates based on possible misconceptions of the question.</p>
+<p>Last-token features of <code>[prefix ++ suffix0, prefix ++ suffix1, ...]</code> are extracted and fed into a nn.Linear(hidden_size, 1) to get logits, then cross-entropy loss is computed.<br>
+In practice, I organized inputs in prefix-shared format: <code>prefix ++ suffix0 ++ suffix1 ++ ...</code>, using custom attention masks with FlexAttention.</p>
+<pre><code> ():
+    causal = q_idx &gt;= kv_idx
+    is_prefix = suffix_ids[kv_idx] == -
+    same_suffix = (suffix_ids[q_idx] == suffix_ids[kv_idx])
+    same_doc = doc_ids[q_idx] == doc_ids[kv_idx]
+     causal &amp; (same_suffix | is_prefix) &amp; same_doc
+</code></pre>
+<h1>3. Training</h1>
+<p>While working on the <code>WSDM Cup</code> competition earlier this year, I implemented  <a href="https://github.com/tascj/offload_adam" target="_blank">offload_adam</a> to enable efficient full-parameter training of models up-to 32B on single A100 80G GPU. So in this competition, I could run all experiments on single A100 80G or RTX Pro 6000 Blackwell. Most of the training runs were performed with same hyperparameters: <code>epoch=1, batch_size=32, learning_rate=1e-5</code>.</p>
+<p>Probably due to label noise (mainly <code>Neither</code>), validation score varies a lot using different seeds. I had to use ensemble of multiple runs with different seeds to get a stable validation score.</p>
+<p>I did a 5-fold x 5-seeds run using <code>Qwen3-8B</code>. 3 seeds ensemble seemed to be stable, so I used the most difficult fold and ensemble of 3 runs for further experiments. This approach is not new - the <a href="https://www.kaggle.com/competitions/feedback-prize-effectiveness/writeups/team-hydrogen-team-hydrogen-1st-place-solution" target="_blank">1st place solution</a> in "Feedback Prize - Predicting Effective Arguments" also used 3-seed ensemble for validation.</p>
+<p><strong>Main Validation Results (seed ensemble [seed1, seed2, seed3])</strong></p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>loss</th>
+<th>MAP@3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deepseek-ai/DeepSeek-R1-Distill-Qwen-7B</td>
+<td>0.2716 [0.2809, 0.2871, 0.2835]</td>
+<td>0.9444 [0.9426, 0.9428, 0.9421]</td>
+</tr>
+<tr>
+<td>Qwen/Qwen3-8B</td>
+<td>0.2677 [0.2813, 0.2777, 0.2756]</td>
+<td>0.9455 [0.9433, 0.9450, 0.9437]</td>
+</tr>
+<tr>
+<td>zai-org/GLM-Z1-9B-0414</td>
+<td>0.2627 [0.2783, 0.2762, 0.2761]</td>
+<td>0.9469 [0.9455, 0.9433, 0.9452]</td>
+</tr>
+<tr>
+<td>deepseek-ai/DeepSeek-R1-Distill-Qwen-14B</td>
+<td>0.2621 [0.2782, 0.2698, 0.2738]</td>
+<td>0.9464 [0.9421, 0.9443, 0.9450]</td>
+</tr>
+<tr>
+<td>Qwen/Qwen3-14B</td>
+<td>0.2614 [0.2707, 0.2744, 0.2695]</td>
+<td>0.9477 [0.9442, 0.9451, 0.9461]</td>
+</tr>
+<tr>
+<td>Qwen/Qwen3-32B</td>
+<td>0.2589 [0.2687, 0.2718, 0.2700]</td>
+<td>0.9484 [0.9465, 0.9451, 0.9454]</td>
+</tr>
+<tr>
+<td>zai-org/GLM-Z1-32B-0414</td>
+<td>0.2560 [0.2713, 0.2681, 0.2682]</td>
+<td>0.9480 [0.9450, 0.9463, 0.9462]</td>
+</tr>
+<tr>
+<td>Qwen/Qwen3-32B+zai-org/GLM-Z1-32B-0414</td>
+<td>0.2530</td>
+<td>0.9496</td>
+</tr>
+</tbody>
+</table>
+<p>The experimental results clearly demonstrated that:</p>
+<ol>
+<li>I should not trust single-seed validation score</li>
+<li>The larger the model, the better the performance</li>
+<li>It might be better to trust loss rather than MAP@3</li>
+</ol>
+<p>I also compared multi-fold ensemble with multi-seed ensemble. Multi-seed ensemble was much better. Therefore, for the final submission, I trained <code>Qwen/Qwen3-32B</code> and <code>zai-org/GLM-Z1-32B-0414</code> on full dataset with 3 different seeds and slightly different data format each.</p>
+<h3>Auxiliary SFT Loss Experiment</h3>
+<p>In the final days of the competition, I experimented with using <code>Qwen/Qwen3-235B-A22B-Thinking-2507-FP8</code> to generate short justifications for the labels, and trained models with auxiliary SFT loss on the generated content. </p>
+<p>An example of generated justification:</p>
+<pre><code>True_Correct:NA
+The categorization </code></pre>
+<p>This approach showed some improvement for <code>deepseek-ai/DeepSeek-R1-Distill-Qwen-7B</code>, but had minimal effect on <code>Qwen/Qwen3-8B</code>. I included it in the ensemble, though I estimate its contribution is marginal. Anyway, it was an interesting attempt.</p>
+<h1>4. Inference</h1>
+<p>There are two main challenges for inference: compute and memory.</p>
+<h2>Compute</h2>
+<p>For short-sequence prefilling workload, the main bottleneck is matrix multiplications in <code>nn.Linear</code> layers. T4, while claiming 65TFLOPS of FP16 on whitepaper, could only achieve unstable 20TFLOPS in practice. </p>
+<p>The W8A8 INT8 kernel in LMDeploy achieves stable 40+TFLOPS. To enable W8A8 INT8 inference, I quantized models using SmoothQuant(alpha=0.75). Ensemble performance in validation is almost identical to unquantized models.</p>
+<h2>Memory</h2>
+<p>I used layer-wise inference to enable 32B model inference on a single T4 GPU:</p>
+<ol>
+<li>Initialize and keep only 2 transformer layers on GPU</li>
+<li>Overlapping <code>execution of current layer</code> with <code>loading states of next layer from disk</code></li>
+</ol>
+<p>I used 640 samples (40 micro batches of 16 samples) in each forward run to keep GPUs busy.</p>
+<p>It takes around 65 minutes to finish inference of 16,000 samples with T4×2. Implementing prefix-caching/sharing of question context could further reduce inference time (more than half of the tokens could be cached), but I didn't implement it.</p>
+<h3>Kaggle Notebook Environment Notes</h3>
+<p>Kaggle notebook environment's storage caused me some trouble.</p>
+<ol>
+<li><code>/kaggle/input</code> - Not local storage, very slow access</li>
+<li><code>/tmp/</code> - Local Copy-on-Write storage with capacity limits, <strong>files cannot be truly deleted</strong></li>
+<li><code>/kaggle/working</code> - Regular local storage, files can be deleted to free up space</li>
+</ol>
+<p>I initially stored checkpoints of layers in <code>/tmp</code>, which led to a crash due to capacity overflow. After debugging, I only had time to submit an ensemble of 4 models (out of 6 uploaded). Anyway, the results were still quite good.</p>
+<h1>5. Summary</h1>
+<p>For me, the most critical aspect of this competition was finding the right way to obtain reliable validation scores. Single-seed validation scores were highly unstable and misleading. Multi-seed ensemble provided stable and trustworthy validation metrics, which then enabled effective model tuning and selection.</p>
+<p><a href="https://www.kaggle.com/code/tascj0/map-submit/notebook" target="_blank">Submission notebook</a><br>
+<a href="https://github.com/tascj/kaggle-map-charting-student-math-misunderstandings" target="_blank">Training</a></p>

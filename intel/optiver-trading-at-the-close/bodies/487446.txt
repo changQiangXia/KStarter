@@ -1,0 +1,361 @@
+# https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/487446
+
+Topic #487446: 1st place solution
+  Author: hyd
+  Posted: 2024-03-29 03:02:47.812000
+  Votes: 338  Comments: 76
+
+Thanks to Optiver and Kaggle for hosting this great financial competition. And thanks to the
+great notebooks and discussions, I learned a lot. I am so happy to win my second solo win! 😃😀😀
+
+Overview
+
+My final model(CV/Private LB of 5.8117/5.4030) was a combination of CatBoost (5.8240/5.4165), GRU (5.8481/5.4259), and Transformer (5.8619/5.4296), with respective weights of 0.5, 0.3, 0.2 searched from validation set. And these models share same 300 features.
+
+Besides, online learning(OL) and post-processing(PP) also play an important role in my final submission.
+
+
+
+
+model name
+validation set w/o PP
+validation set w/ PP
+test set w/o OL w/ PP
+test set w/ OL one time w/ PP
+test set w/ OL five times w/ PP
+
+
+
+
+CatBoost
+5.8287
+5.8240
+5.4523
+5.4291
+5.4165
+
+
+GRU
+5.8519
+5.8481
+5.4690
+5.4368
+5.4259
+
+
+Transformer
+5.8614
+5.8619
+5.4678
+5.4493
+5.4296
+
+
+GRU + Transformer
+5.8233
+5.8220
+5.4550
+5.4252
+5.4109
+
+
+CatBoost + GRU + Transformer
+5.8142
+5.8117
+5.4438
+5.4157
+5.4030*(overtime)
+
+
+
+
+Validation Strategy
+
+My validation strategy is pretty simple, train on first 400 days and choose last 81 days as my holdout validation set. The CV score aligns with leaderboard score very well which makes me believe that this competition wouldn't shake too much. So I just focus on improving CV in most of time.
+
+Magic Features
+
+My models have 300 features in the end. Most of these are commonly used, such like raw price, mid price, imbalance features, rolling features and historical target features.
+I will introduce some features really helpful and other teams didn't share yet.
+1 agg features based on seconds_in_bucket_group
+
+pl(pl() &lt; )()(pl() &lt; )()()(pl.Float32)(),
+
+
+ *[(pl.col(col).first() / pl.col(col)).([, , ]).cast(pl.Float32).(.format(col))  col  base_features],
+ *[(pl.col(col).rolling_mean(, min_periods=) / pl.col(col)).([, , ]).cast(pl.Float32).(.format(col, ))  col  base_features]
+
+
+2 rank features grouped by seconds_in_bucket
+
+ *[(pl.col(col).mean() / pl.col(col)).over([, ]).cast(pl.Float32).alias(.format(col))  col  base_features],
+ *[(pl.col(col).rank(descending=,='') / ..)...)    ],
+
+
+Feature Selection
+
+Feature selection is important because we have to avoid memory error issue and run as many rounds of online training as possible. 
+I just choose top 300 features by CatBoost model's feature importance.
+
+Model
+
+
+
+Nothing to say about CatBoost as usual, just simply train and predict.
+
+GRU input tensor's shape is (batch_size, 55 time steps,  dense_feature_dim), followed by 4 layers GRU, output tensor's shape is (batch_size, 55 time steps).
+
+Transformer input tensor's shape is (batch_size, 200 stocks,  dense_feature_dim), followed by 4 layers transformer encoder layers, output tensor's shape is (batch_size, 200 stocks). A small trick that turns output into zero mean is helpful.
+
+
+ =  - .mean(, keepdim=)
+
+
+4 sample weight
+
+Online Learning Strategy
+
+I retrain my model every 12 days, 5 times in total. 
+I think most teams can only use up to 200 features when training GBDT if online training strategy is adopted. Because it requires double memory consumption when concat historical data with online data. 
+The data loading trick can greatly increase this. For achieving this,  you should save training data one file per day and also loading day by day.
+
+data loading trick
+
+def (meta_data, features):
+    res = np.(((meta_data), (features)), dtype=np.float32)
+    all_date_id = (meta_data[].())
+    data_index = 
+    for date_id in (all_date_id):
+        tmp = h5py.( .(date_id), )
+        tmp = np.(tmp[][], dtype=np.float32)
+        res[data_index:data_index+(tmp),:] = tmp
+        data_index += (tmp)
+    return res
+
+
+Actually, my best submission is overtime at last update. I just skip online training if total inference time meets certain value.
+So there are 4 online training updates in total. I estimate that the best score would be around 5.400 if not overtime.
+Anyway, I am really lucky! 
+
+Post Processing
+
+Subtract weighted-mean is better than average-mean since metric already told.
+
+test_df[] = test_df[].map(stock_weights)
+test_df[] = test_df[] - (test_df[] * test_df[]).sum() / test_df[].sum()
+
+
+What not worked for me
+
+
+
+ensemble with 1dCNN or MLP. 
+
+multi-days input instead of singe day input when applying GRU models
+
+larger transformer, e.g. deberta 
+
+predict target bucket mean by GBDT
+
+
+Thank you all!
+
+Comments:
+├─ Ayman Allawi (2024-03-31 19:43:57.423000) [+16]
+│  Excuse me for another question, Every 12 day you re-train the Catboost from scratch and fine-tune the two NNs am I right?
+  ├─ hyd (2024-04-01 02:29:56.573000) [+6]
+  │  Right. ~~~~
+├─ WindClimber (2024-03-30 09:45:00.563000) [+8]
+│  Thank you for sharing your great ideas! If I understand correctly, the GRU model is designed to capture time-series dynamics, while the Transformer is for the cross-sectional dynamics, and thus the...
+  ├─ hyd (2024-03-30 09:52:40.643000) [+3]
+  │  You are right!
+├─ Natarajan Vijaikumar (2024-04-02 12:10:34.937000) [+5]
+│  Awesome sharing @hydantess
+├─ Igor Volianiuk (2024-04-02 12:04:50.777000) [+3]
+│  Thank you for your sharing and gratz for the grade! Awesome work @hydantess !
+├─ lele (2024-04-01 13:44:25.037000) [+3]
+│  Thanks for your sharing and congrats again for the grade!  I am a little bit confused about the GRU and Transformer model input and output dimension in your model. I would appreciate a lot if you c...
+  ├─ giampaolo1980 (2024-04-01 16:22:42.390000) [+1]
+  │  Yes I tried to ask the same question. Apparently some seq2seq modelling was used but I am personally still a bit confused (how many targets were used for the seq2seq?)
+  ├─ hyd (2024-04-02 02:35:09.153000) [+3]
+  │  You're right. Will take the last timestamp when inference.
+  │  
+  │  Yes.
+├─ Leo (2024-04-02 01:22:51.290000) [+3]
+│  Congratulations! @hydantess 
+│  
+│  
+│  
+│  
+│  What are these operators: over, when, then, otherwise, over, cast, alias? Are they from a third-party package or functions that you have designed yourself?
+│  
+│  
+│  I actu...
+  ├─ hyd (2024-04-02 02:31:18.467000) [+4]
+  │  This is polars.
+  │  
+  │  polars over == pandas groupby().transform()
+    ├─ MJeremy (2024-04-04 03:42:02.320000) [+2]
+    │  does this help a lot in preventing from overtime in submission?
+├─ wen6Lev57q4 (2024-04-10 05:38:20.190000) [+1]
+│  Congratulations！@hydantess 
+│  I have two questions: 
+│  
+│  
+│  
+│  How can we make the model engage in online learning during the prediction phase when there is no target? 
+│  
+│  Why doesn't the transformer output d...
+  ├─ hyd (2024-04-10 06:19:57.867000) [+3]
+  │  We can receive historical target info in inference phase, you can refer to this demo.
+  │  
+  │  I want transformer to learn info across different stocks, GRU to learn sequence info. You can combine these tw...
+├─ zephyrus1 (2024-04-04 20:35:31.293000) [+1]
+│  Thank you for your sharing it's amazing to see unique techniques. @hydantess
+├─ WayneWang-8624 (2024-04-04 04:18:32.987000) [+1]
+│  Congrats and thank you for sharing this!!
+├─ Ziyi Dong (2024-04-03 06:40:11.607000) [+1]
+│  I am a novice who has just started with Kaggle, and I noticed that many competitions necessitate the use of an Online Learning Strategy. Could you explain the principles of this strategy or how to ...
+  ├─ hyd (2024-04-08 11:16:58.783000) [+2]
+  │  It means retrain models with more test data in prediction phase.
+├─ Yousif Hajajj (2024-04-03 00:42:41.607000) [+1]
+│  Congratulations!
+├─ giampaolo1980 (2024-03-31 19:30:16.353000) [+1]
+│  Thanks a lot for sharing and congrats for the victory . Any chance you can share the winning code? Also why is the output of the GRU of size batch x time steps? Did you do seq2seq modelling? I thou...
+  ├─ hyd (2024-04-01 02:29:01.710000) [+1]
+  │  Sorry, I don't plan to share my code.
+  │  Yes, it's seq2seq model but not bidirection for avoiding label leak.
+├─ Yisak Birhanu Bule (2024-03-31 16:13:37.730000) [+1]
+│  congratulation man, I hope you will take first place in the Kaggle world rank next month when end  enefit  competition. can you share your notebook
+  ├─ hyd (2024-03-31 16:17:27.590000) [+1]
+  │  Sorry, I don't plan to share my code.😂
+├─ Ayman Allawi (2024-03-31 15:34:21.960000) [+1]
+│  Thanks for sharing your solutions it is a great one indeed. However, I am curious why you don't use meta model to combine and ensemble your models, I think that in the competition of predicting ene...
+  ├─ hyd (2024-03-31 16:14:46.130000) [+0]
+  │  Thanks for your suggestion. I am not familiar with meta model. What does this mean? Stacking or what else?
+    ├─ Ayman Allawi (2024-03-31 16:41:48.787000) [+0]
+    │  It can be done in countless ways, but in short it is when use the predictions of a model or group of models as feature to the single model that makes the final prediction, this model is the meta model
+    ├─ hyd (2024-03-31 16:50:02.940000) [+1]
+    │  I know you mean. It's very time-consuming to train a second-level model and doesn't help much in fact. So i just use weighted sum.
+├─ Geremie Yeo (2024-03-31 11:43:54.187000) [+1]
+│  Thanks for sharing!
+│  
+│  The weighted postprocessing improved our selected sub from 5.4457 to 5.4405, good for 11th place. This was the magic pp, zero-sum and zero-mean did not make much difference to ...
+  ├─ Naseem Ali (2024-04-01 12:34:45.223000) [+0]
+  │  Can I ask you what u mean by sub from 5.4457 to 5.4405
+    ├─ Geremie Yeo (2024-04-01 13:46:39.160000) [+1]
+    │  Our competition selected submission scored 5.4457 without any postprocessing
+    │  Adding the weighted mean postprocessing, improved it from 5.4457 to 5.4405
+├─ Hina Ismail (2024-03-31 05:14:41.193000) [+1]
+│  Great sir keep it up!
+├─ Roberto Spadim (2024-03-31 02:09:09.043000) [+1]
+│  gru should be trained and states reseted every day?
+  ├─ hyd (2024-03-31 02:16:20.727000) [+0]
+  │  Just zero inited at the beginning of every day.
+├─ skygoal9 (2024-03-31 01:53:29.253000) [+1]
+│  congratulations and thanks a lot for sharing
+├─ achaosss (2024-03-31 00:41:43.230000) [+1]
+│  Why the feature number you choose is 300, not 200 or 400?
+  ├─ hyd (2024-03-31 02:02:52.297000) [+1]
+  │  based on CV score, 300 is better than 200.
+  │  400 will have memory issue.
+├─ mhdaw (2024-03-30 17:37:10.517000) [+1]
+│  Congratulations . Thanks for sharing your great idea . I'm kind of new to ML and if I got it correctly the input data for the Transformer part of your model was different with the input data of the...
+  ├─ hyd (2024-03-30 23:11:27.380000) [+0]
+  │  Thanks~
+  │  
+  │  
+  │  
+  │  Yes
+  │  
+  │  It means Gradient Boosting Decision Tree.
+├─ Devang Giri Goswami (2024-03-30 15:17:56.577000) [+1]
+│  Congrats @hydantess to be the top placeholder!
+├─ JM (2024-03-30 13:06:52.293000) [+1]
+│  Congratulations @hydantess, blew it away! Thanks for sharing the scores difference between the PP/OL additions too very informative..
+│  
+│  Relocating to Netherlands/Optiver next step? 😅
+  ├─ hyd (2024-03-31 02:03:26.920000) [+14]
+  │  I love China. 😀
+    ├─ Jason Jiasting (2025-06-19 03:57:24.670000) [+1]
+    │  大神你好，我有3个问题希望向您请教一下，1、您在上面提到用catboost的特征重要性top300的特征作为后续训练的特征，此处您在catboost训练时特征应该在300以上，后面还需要用catboost在筛选的300个特征上再次训练吗，还是300特征仅用在后续的GRU和Transform上了？2、每12天重新训练模型，是否也需要重新生成新的特征排序，重新选择300个特征；3、每次滚动训练时...
+├─ IAmGroot (2024-03-30 11:28:35.457000) [+1]
+│  Very informative
+├─ Andreas Bisiadis (2024-03-30 08:26:02.243000) [+1]
+│  Congratulations for your win! I did not have the chance to participate in the competition (I got into kaggle after the competition closed), however I am interested keeping up with the solutions. 
+│  
+│  ...
+  ├─ hyd (2024-03-30 08:28:48.597000) [+7]
+  │  No, It's torch.transformerencoder ~
+├─ Adnan Alaref (2024-03-29 10:58:17.897000) [+1]
+│  Congratulations and continued success @hydantess
+├─ Pet222 (2024-04-10 06:31:16.467000) [+2]
+│  congratulations and thanks for sharing your ideas!
+├─ Gerryl (2024-04-07 10:21:00.240000) [+2]
+│  Congratulations!
+│  
+│  
+│  
+│  For your GRU models, do you use decoder only (shared params) or encoder/decoder (with not shared params) models? 
+│  
+│  And how do you fine-tune old models with new data since you do...
+  ├─ hyd (2024-04-08 11:19:09.720000) [+5]
+  │  decoder only
+  │  
+  │  We can have recent data in prediction phase.
+  │  
+  │  I use whole data set to retrain my models.
+├─ Xiaolei Lian (2024-04-03 03:33:12.480000) [+2]
+│  简直太强了！感谢分享🙏
+├─ Shuai@ETH (2024-04-01 07:08:51.370000) [+2]
+│  Congrats on your work! How did you do the CV? Your validation strategy is to have one holdout set (400 + 80), do you train 5 (or other number) folds of catboost and GRU and transformer? Or just ens...
+  ├─ hyd (2024-04-01 07:28:30.793000) [+3]
+  │  Just single model. Kfold is more reasonable but also more time-consuming.
+├─ [deleted] (2024-03-31 20:38:19.660000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-04-01 02:30:53.590000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-03-29 14:55:46.910000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-03-30 02:04:30.743000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-04-07 08:38:40.097000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-03-29 10:37:35.603000) [+2]
+│  [deleted]
+├─ [deleted] (2024-12-20 15:38:38.187000) [+0]
+│  [deleted]
+├─ [deleted] (2024-10-05 16:20:38.067000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-26 07:16:39.977000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-22 08:44:40.423000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-17 15:34:00.980000) [+0]
+│  [deleted]
+├─ [deleted] (2024-09-04 09:42:07.043000) [+0]
+│  [deleted]
+├─ [deleted] (2024-07-05 20:01:54.310000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-08 16:02:56.150000) [+0]
+│  [deleted]
+├─ [deleted] (2024-05-02 09:33:53.247000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-28 07:48:41.127000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-16 07:57:58.927000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-08 04:28:27.870000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-22 12:25:54.430000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-03 01:37:23.713000) [+0]
+│  [deleted]
+├─ [deleted] (2024-07-16 06:12:11.797000) [+0]
+│  [deleted]
+├─ [deleted] (2024-07-01 04:08:48.080000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-08 03:06:29.103000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-02 18:04:23.343000) [+0]
+│  [deleted]

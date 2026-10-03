@@ -1,0 +1,193 @@
+# https://www.kaggle.com/competitions/lux-ai-2021/discussion/293776
+
+Topic #293776: 6th place solution summary
+  Author: nosound
+  Posted: 2021-12-07 00:00:03.488000
+  Votes: 72  Comments: 47
+
+It was a great competition, special thanks to Stone Tao @stonet2000 for making it happen. I am looking forward for any off-season activities and of course season 2. My solution is entirely imitation learning (IL), and multiple attempts at reinforcement learning (RL) did not succeed. In this summary I will first describe my IL implementation, and then share conclusions from my experience with RL.
+
+The leaderboard will finalise in only 2 weeks (the lower limit), so I wish everyone who cares about their placement good luck with their final battles!
+
+
+The model
+
+The architecture that I used I described in this post, below I attach an updated picture. There was a lot of discussion in the comments to that post, if one is interested in technical details.
+
+
+
+One thing that I found is that it is very beneficial to fine-tune the last layers with replays from one agent. I usually started training with 7-20 top submissions, from different agents, then freeze most of the network and fine-tune the last 3 layers with data from "Toad Brigade" (TD) only. 
+
+Two other components which I found to be very useful are learning transfer action and a city tile model. Regarding the transfer action, I am not sure if it is indeed very useful, or it just helps a lot because this is what TD uses, and I learn from TD. I tested different tweaks around transfer action, and the most aggressive use of it worked the best for me. City tile model was clearly beneficial for me too. It replaced a naive logic of building a unit if possible and research otherwise, but it turns out in many cases it is better to research instead of building a unit.
+
+In the sketch above you can see that the model output is 7. The 7 actions are the following:
+
+
+
+Unit: CENTER move action
+
+Unit: NORTH move action
+
+Unit: Build a city
+
+Unit: NORTH transfer action (the first resource that found in cargo, all of it)
+
+City tile: Build a unit
+
+City tile: Research
+
+City tile: Do nothing
+
+
+Why only north for unit move and transfer? I used the trick that I described here. 
+
+You can see I used the same model both for units and city tiles. And the general approach is the same for them, both for training and for inference I pick the 7 logits from the corresponding position of the unit / city tile that I am currently looking at. I really like that I need only one forward pass per turn. Even with just one forward pass the running time was getting close to the limits sometimes, so I guess per-unit approaches should really have struggled with the time limit.
+
+Another important component is masking invalid actions. First, it is important to prohibit picking of clearly invalid actions, for example when the model proposes to build a city with only 98 cargo at hand. Second, a solid units collision avoidance logic is required. But then one can think of lots of different ways to improve here. For example the extreme here is blending imitation learning model with a rule based approach. The rule based proposes different missions, and the model picks the action with highest probability from the subset defined by missions. So basically masking all other actions, which appear as the first move in none of the missions. I tried some things but nothing interesting to mention.
+
+During training I used one augmentation, - horizontal flipping of the map. When I need to decide to move north or to build a city, flipping the map east-west is a valid augmentation. I also used this flip as a test time augmentation (TTA), but it was giving very little improvement and sometimes (rarely) submissions with TTA were hitting time limits (therefore losing), so ended up using it in only half of the submissions.
+
+Reinforcement Learning
+
+In this competition I worked more on RL approaches than the IL that I described above. I used @glmcdona implementation of the game engine and integration with stable-baselines3 here. I mostly experimented with PPO method. I will not go into details, because I couldn't improve my IL with it, but this is what I learnt in general.
+
+
+
+Having an ability to imitation learn, like in this competition, is important for RL success (didn't help me enough). First, RL is slower to train, so having an already pre-trained IL model saves lots of time. Second, IL allows perfecting the model architecture before RL runs. What if the model does not even have enough capacity to learn the concepts? One can test all of this with IL, become confident that the architecture is solid, and only then move to RL. Testing such things with RL itself is unrealistically expensive. 
+
+Simulate fast. Having a fast simulation engine is important, because the RL training takes much more time than supervised learning. Implementing the engine in C should be considered. But at least take time at perfecting the infrastructure.
+
+Value function should be as accurate as possible. It is even appropriate not to train the policy and the value networks at the same time. First train the value function with supervised learning on your agent replays, and then do PPO policy iteration with frozen value function. Repeat.
+
+Multi-agent environment. This is the main reason why my RL failed, I think. My PPO was actually able to learn some correct moves with just a few units from scratch, but at some level of complexity it stopped improving. The problem is that the value function that I used is global, and therefore advantage calculation for each individual unit was extremely noisy, in presence of dozens or hundreds of other units. 
+
+Simplify. Deep RL is hard. Start small, in this case, start from maps 12x12. Maybe do PvE. Maybe even freeze the seed. But even just to learn to maximise final number of city tiles on a specific 12x12 map without opponent is hard, so be humble. 
+
+Tree search approaches seem to be hard to implement here, because it is massively multi-agent. Interesting if someone succeeded.
+
+
+Feedback
+
+I have participated in quite a few Kaggle competitions by now, and I can say I am still to meet a competition which is organised without a glitch. So here we go:
+
+
+
+The LB match making, scoring and final submissions policy are BAD. It was discussed in many threads, here and on discord, lots of room for improvement.
+
+There were some rules changes in the beginning, the very important python engine took time to take off (and still with small bugs actually), and other problems with utilities here and there. This can be of course explained by the fact that this is the first season, and the organisers deserve the highest mark for handling all issues fast and professionally.  
+
+Working with meta-kaggle dataset is not a good experience. It is huge, and for example right now has not been updated for 5 days already, despite promised daily updates. 
+
+
+Finally
+
+This competition is awesome, unique and addictive. The replays are great, not sure how many hundreds I have watched. In memory of all the units that I sent to work at night:
+
+Comments:
+├─ Neuron Engineer (2021-12-07 02:41:16.373000) [+5]
+│  Finally the end!
+│  Thanks for everything @zaharch
+│  
+│  For people who don't know, "no sound" is one of our top data scientists in Kaggle, whom I had a chance to participate many competitions in the past....
+  ├─ nosound (2021-12-07 11:10:08.377000) [+2]
+  │  Thank you for the kind words! I have always followed your work on the previous competitions too. We need to find an opportunity to team up already.
+├─ Stone Tao (2021-12-07 00:14:34.930000) [+6]
+│  And thanks to @bovard for his contributions to the engine and game design and @pisalux (pisa in discord) for the beautiful visual design (and mushroom workers!)
+│  
+│  And special thanks to all the open ...
+  ├─ nosound (2021-12-07 00:17:56.290000) [+1]
+  │  The design is beautiful indeed!
+├─ kuto (2021-12-07 00:44:03.797000) [+4]
+│  Congrats! 
+│  Your contribution to this competition is huge, Thanks for sharing a lot of useful information!
+│  
+│  I tried PPO RL by using pretrained IL model but not improve just like you. 
+│  I would like t...
+├─ KhanhVD (2021-12-09 09:47:15.927000) [+1]
+│  Nice solution! Thanks for sharing @zaharch
+├─ Bach Ngo (2021-12-07 05:35:22.837000) [+1]
+│  Congrats!! Your posts are amazing, I leaned a lot from your approach. I also tried to use your  trick but unfortunately it didn't work for me. Are you planning to share your code?
+│  Anyway, thank you...
+  ├─ nosound (2021-12-07 10:53:46.320000) [+1]
+  │  I am sorry to hear it didn't work. The implementation can be a little bit challenging, maybe something went wrong along the lines. I do not plan to publish the code, because I will need to do too m...
+├─ Tong Hui Kang (2021-12-07 05:17:27.940000) [+1]
+│  What is the single change that gives you the greatest boost?
+│  
+│  My guess is training the center action (which you have shared) and also training when to research or produce units.
+  ├─ nosound (2021-12-07 11:02:16.720000) [+1]
+  │  I have never tried without the center action, but it is clearly very important. Other things that clearly worked are transfer action, city tile model, fine-tuning on Toad Brigade, the rotation trick.
+├─ Dapeng (2021-12-07 02:26:23.983000) [+1]
+│  @zaharch  Congrats! Your sharing is very impressive！
+│  About the Multi-agent problem, As far as i know, There has no suitable model for such problem in lux untill now. Because the number of agent is ...
+  ├─ nosound (2021-12-07 11:07:49.637000) [+1]
+  │  Thank you! AlphaGo uses MCTS heavily (tree search), and because there are so many units I am not sure how feasible it is. Actually most successful RL algos use tree search.
+  ├─ RL > IRL (2021-12-07 20:29:00.577000) [+2]
+  │  @zaharch Massive congratz bud, super well done :). @li325040229 Check out Alpha Zero -&gt; it uses a Resnet rather than just a pure CNN approach and uses the MCTS to actually build up a partial sea...
+├─ Lin Myat Ko (2021-12-07 02:02:14.973000) [+1]
+│  Thank you for sharing. I learn a lot from you. Are you going to share the codes too? My deep learning knowledge is just basic. I don't understand all of your techniques. Thank you. Best of luck in ...
+  ├─ nosound (2021-12-07 11:10:56.660000) [+1]
+  │  Thanks! I do not plan to publish the code, too much extra work for me to do it.
+├─ Shihao Shao (2021-12-07 01:40:39.337000) [+1]
+│  Anyway, Let's try RL in Lux Season 2!
+  ├─ nosound (2021-12-07 11:12:33.820000) [+1]
+  │  I already have some good ideas to attack RL again)). Hopefully we will meet there! By the way, wish you the best of luck fighting for this gold medal. It seems like the competition is significant t...
+├─ Challapalli Manoj (2021-12-09 05:59:07.507000) [+0]
+│  Impressive Work
+├─ bholeasafa (2021-12-08 13:18:32.293000) [+0]
+│  GREAT JOB …
+├─ Priyanka (2021-12-08 06:11:13.550000) [+0]
+│  Interesting solution.
+├─ kneowave2 (2021-12-07 08:32:45.043000) [+0]
+│  Hello! This is first time for my situation.I have a lot of question.see you later.
+├─ KAZI SHAMIM SHAHAREAR ISLAM (2021-12-07 12:05:15.087000) [+1]
+│  Congrats!! Your posts are Nice
+├─ BHUWAN CHANDRA (2021-12-11 15:35:31.827000) [+-1]
+│  Great Solution
+├─ Akankhya Panda (2021-12-11 08:23:16.790000) [+-1]
+│  Your contribution is impressive.
+├─ KrishnaRastogi (2021-12-11 08:02:05.633000) [+-1]
+│  great solution
+├─ salehmm (2021-12-10 17:28:45.597000) [+-1]
+│  Very nice job
+├─ faridadilazuarda (2021-12-10 11:47:31.180000) [+-1]
+│  Wonderful!
+├─ Faique Ali (2021-12-10 11:12:30.437000) [+-1]
+│  It was a nice read
+├─ Priya Dharshini Balaji (2021-12-07 21:42:46.047000) [+-1]
+│  Interesting!
+├─ CoreyJamesLevinson (2021-12-23 17:38:35.543000) [+0]
+│  @zaharch How do you scale the global features into your model? Is everything scaled into 0-1?
+  ├─ nosound (2021-12-23 18:57:26.040000) [+1]
+  │  The global features I scaled into [-1;1] and the map features [0;1]. The map features started from 0 because I thought it went better with zero padding for convolutions.
+  ├─ CoreyJamesLevinson (2021-12-28 15:10:58.273000) [+0]
+  │  Thanks nosound. Did you find that you needed to e.g. BatchNorm or tanh to the pooled features immediately before concatenation with the global features? Or it just worked without doing that?
+  ├─ nosound (2021-12-28 20:26:50.153000) [+0]
+  │  tanh I have not used, and BatchNorm is used as in the picture. But where does this question come from? I am not familiar with any potential problems on that front.
+  ├─ CoreyJamesLevinson (2021-12-31 16:40:24.777000) [+0]
+  │  I'm just thinking that all features should be on the same scale for neural networks. So if your global features are [-1, +1] and your 4x4 observation map was Conv2d, BatchNorm, ReLU, which means it...
+  ├─ nosound (2022-01-01 11:49:37.377000) [+0]
+  │  If I check carefully where these activations are heading to, it is first torch.nn.Upsample and then torch.nn.Conv2d. Both of them do not care about the signs or scales of their inputs. Should be fi...
+├─ DJEY KANJARIYA (2021-12-12 18:23:27.910000) [+0]
+│  Simply brilliant solution. Kudos
+├─ Mauricio Maroto (2021-12-11 20:49:27.390000) [+0]
+│  Wow, really good explanations of how to best use the algorithms.
+├─ [deleted] (2021-12-11 06:49:05.887000) [+-1]
+│  [deleted]
+├─ [deleted] (2021-12-09 13:42:46.380000) [+-1]
+│  [deleted]
+├─ [deleted] (2021-12-09 11:56:46.633000) [+-1]
+│  [deleted]
+├─ Himanshu Rathee (2021-12-08 04:53:06.363000) [+0]
+│  Nice one ! Thanks 👌
+├─ Omar Lahrach (2021-12-07 19:46:39.747000) [+0]
+│  Nice post, Thanks
+├─ [deleted] (2021-12-07 14:02:28.890000) [+0]
+│  [deleted]
+├─ [deleted] (2021-12-07 06:03:59.487000) [+0]
+│  [deleted]
+├─ [deleted] (2021-12-10 17:06:52.797000) [+-1]
+│  [deleted]
+├─ [deleted] (2021-12-12 04:45:48.053000) [+0]
+│  [deleted]
+├─ [deleted] (2021-12-10 09:37:44.340000) [+0]
+│  [deleted]

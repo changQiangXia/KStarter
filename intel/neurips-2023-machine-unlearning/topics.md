@@ -1,0 +1,82 @@
+# neurips-2023-machine-unlearning 讨论区（按票数排序，共 80 条）
+
+- [What's the reasoning behind not awarding points and medals?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438567) — 50 票 / 34 评论 / 2023-09-11 
+- [🔥Related Papers and Code for this Competition](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438660) — 45 票 / 3 评论 / 2023-09-12 
+- [2nd place solution](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458721) — 35 票 / 17 评论 / 2023-12-01 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458531) — 30 票 / 8 评论 / 2023-12-30 **write-up?**
+- [Machine Unlearning Techniques,  Challenges, Zero-Shot Approach and on Kaggle ](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438614) — 29 票 / 3 评论 / 2023-09-12 
+- [Important Things about this Competition](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438786) — 29 票 / 1 评论 / 2023-09-12 
+- [Why the Public Notebooks are so similar to the Starter "Run Unlearn"?  What I'm missing here?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442946) — 23 票 / 8 评论 / 2023-09-24 
+- [[Released] New Machine Unlearning Benchmark Datasets and Codes on Facial Recognition Classification Systems for Kagglers](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/453767) — 23 票 / 3 评论 / 2023-11-07 
+- [ A possible reason for no points nor medals?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440547) — 19 票 / 5 评论 / 2023-09-15 
+- [How to use age_class_weights.json](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440307) — 18 票 / 11 评论 / 2023-09-14 
+- [Onboarding materials- general reads, papers and adjutant resources](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438572) — 17 票 / 3 评论 / 2023-09-11 
+- [[updated] clarifying what we consider valid / fair submissions](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440376) — 17 票 / 38 评论 / 2023-09-14 
+- [Less epochs are better(???)](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/441318) — 16 票 / 13 评论 / 2023-09-18 
+- [Machine Unlearning Evaluation on CIFAR-10](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/454949) — 15 票 / 6 评论 / 2023-11-12 
+- [Consistency is key in this competition. Thoughts?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/441632) — 14 票 / 9 评论 / 2023-09-19 
+- [Submission successful, scoring failure after 3 mins of run](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442093) — 14 票 / 12 评论 / 2023-09-21 
+- [Our Approach - Similarity-Based Sampling Bad Teaching (12th on public leaderboard)](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458648) — 14 票 / 2 评论 / 2023-11-30 **write-up?**
+- [Microsoft FaceSynthetics Dataset ? 🤔](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/441440) — 14 票 / 3 评论 / 2023-09-18 
+- [6th Place Solution for the NeurIPS 2023 - Machine Unlearning Competition](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458740) — 13 票 / 2 评论 / 2023-12-16 **write-up?**
+- [Metric reproduction attempt (with link to github code)](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/453735) — 13 票 / 2 评论 / 2023-11-07 
+- [9th Place Solution (Forget set-free Approach, 3rd on Public LB)](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458715) — 11 票 / 2 评论 / 2023-12-09 **write-up?**
+- [Submission file with 512 checkpoints](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/439080) — 11 票 / 1 评论 / 2023-09-13 
+- [1 model or 512 models](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442007) — 11 票 / 4 评论 / 2023-09-21 
+- [Findings on Looking into Output Probability Space](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/450909) — 10 票 / 4 评论 / 2023-10-26 
+- [Digging deep in this competition's evaluation method](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/449096) — 10 票 / 0 评论 / 2023-10-23 
+- [Recreation of problem setting for offline testing](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438814) — 10 票 / 0 评论 / 2023-09-12 
+- [Submission CSV Not Found ](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/441758) — 10 票 / 15 评论 / 2023-09-20 
+- [Nearing the end of the competition - next steps and action items](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/457425) — 9 票 / 8 评论 / 2023-11-24 
+- [Does the models only "pretend" to forget?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/451173) — 9 票 / 1 评论 / 2023-10-27 
+- [Visualizing output representations - a simple local checker of forget quality](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/450474) — 8 票 / 0 评论 / 2023-10-24 
+- [Concern about running time limitation](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438894) — 8 票 / 6 评论 / 2023-09-13 
+- [Open, tabular playground style.](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438582) — 8 票 / 1 评论 / 2023-09-11 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/460044) — 7 票 / 7 评论 / 2023-12-07 
+- [Google group and website](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438989) — 7 票 / 1 评论 / 2023-09-13 
+- [An oracle-free measurement of forgetting quality](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/457033) — 7 票 / 1 评论 / 2023-11-22 
+- [Any luck using weighted cross entropy ?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/454897) — 7 票 / 9 评论 / 2023-11-12 
+- [Correction to maximum submission notebook runtime: limit is 8 hours](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/439085) — 7 票 / 0 评论 / 2023-09-13 
+- [Note on closing mechanics](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458012) — 7 票 / 5 评论 / 2023-11-27 
+- [Not able to see my private leaderboard score](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458464) — 7 票 / 5 评论 / 2023-11-30 
+- [Is consistency achievable?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/446013) — 7 票 / 6 评论 / 2023-10-09 
+- [Clarify on the notebook submission](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438749) — 7 票 / 8 评论 / 2023-09-12 
+- [3rd place solution](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/459200) — 7 票 / 3 评论 / 2023-12-05 **write-up?**
+- [Can Fixing DataLoader be a Valid Submision?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/455040) — 6 票 / 1 评论 / 2023-11-13 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438593) — 6 票 / 53 评论 / 2023-09-11 
+- [sharing my idea based on Bayes' theorem, probability marginalization and Jensen's inequality.](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458452) — 6 票 / 2 评论 / 2023-11-30 
+- [The data and the details of the metric will be released now?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/459424) — 6 票 / 1 评论 / 2023-12-05 
+- [What Normalize parameter for submit model?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438962) — 6 票 / 2 评论 / 2023-09-13 
+- [Who's Harry Potter? Approximate Unlearning in LLMs](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/445253) — 6 票 / 1 评论 / 2023-10-06 
+- [Unlearning solution (3rd rank)](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/459334) — 6 票 / 2 评论 / 2025-01-24 **write-up?**
+- [Information about training details  of ResNet18 ](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440517) — 6 票 / 2 评论 / 2023-09-15 
+- [Sample submission randomness](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440651) — 6 票 / 0 评论 / 2023-09-15 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/438577) — 6 票 / 1 评论 / 2023-09-11 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/429007) — 6 票 / 1 评论 / 2023-08-03 
+- [Class weight of forget set, retain set?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/447081) — 5 票 / 1 评论 / 2023-10-14 
+- [Effective train and test environment and metrics approximation](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442061) — 5 票 / 6 评论 / 2023-09-21 
+- [Is the evaluation metric sound?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442582) — 5 票 / 8 评论 / 2023-09-23 
+- [does unlearning in this setting make sense?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/450284) — 5 票 / 4 评论 / 2023-10-23 
+- [Better Public Face Recognition Dataset?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/450484) — 5 票 / 2 评论 / 2023-10-24 
+- [10th Place Solution](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458814) — 5 票 / 1 评论 / 2024-01-11 **write-up?**
+- [Can we only test through submitting?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440649) — 5 票 / 0 评论 / 2023-09-15 
+- [Zipping 512 resnet model fails due to 20GB limit on `\kaggle\working`](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440302) — 5 票 / 1 评论 / 2023-09-14 
+- [Random weight mask and reset: public score 0.0795, private score 0.0937](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458696) — 5 票 / 0 评论 / 2023-12-01 
+- [Clarification about competition rules for some approaches](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/455208) — 5 票 / 3 评论 / 2023-11-13 
+- [Submission CSV error or something else?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/451286) — 4 票 / 12 评论 / 2023-10-28 
+- [(Question for Evaluation) What occurs if all attack are skipped?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/447791) — 4 票 / 7 评论 / 2023-10-17 
+- [Error Exception in using Student-Teacher Model](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/447398) — 4 票 / 6 评论 / 2023-10-15 
+- [7th place solution](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/459095) — 4 票 / 2 评论 / 2024-01-16 **write-up?**
+- [Submission CSV not found](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/447456) — 4 票 / 3 评论 / 2023-10-16 
+- [Questions on evaluation](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442197) — 4 票 / 5 评论 / 2023-09-21 
+- [Unexpected Submission Timeouts and Errors](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/443673) — 4 票 / 3 评论 / 2023-09-28 
+- [Permitted Modifications to ResNet-18 Architecture](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/448394) — 4 票 / 1 评论 / 2023-10-19 
+- [Is it possible to change the HiddenDataset and load_example functions? ](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/455374) — 4 票 / 1 评论 / 2023-11-14 
+- [I can now officially say I'm tied for first place 🎉](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458430) — 4 票 / 1 评论 / 2023-11-29 **write-up?**
+- [Distorting the image recreation layers](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/443592) — 3 票 / 5 评论 / 2023-09-28 
+- [Kaggle Notebook runs out of disk space.](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442069) — 3 票 / 9 评论 / 2023-09-21 
+- [Use of forget set](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/499373) — 3 票 / 0 评论 / 2024-05-01 
+- [5th Place Solution](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/459148) — 3 票 / 2 评论 / 2023-12-03 **write-up?**
+- [Where can I see my submissions?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458437) — 3 票 / 3 评论 / 2023-11-30 
+- [Dataset distributions ](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/440250) — 3 票 / 0 评论 / 2023-09-14 
+- [how to return runtime?](https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/442348) — 3 票 / 0 评论 / 2023-09-22 

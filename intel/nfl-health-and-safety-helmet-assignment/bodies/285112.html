@@ -1,0 +1,56 @@
+<p>Congratulations to all the winners. Congratulations especially to K_mat. Your scores and solutions are really great.  <br>
+<br><br>
+I would like to thank the Kaggle and host team for this interesting competition. I especially want to thank Rob. Your contribution to this competition is very significant!  <br>
+<br><br>
+This is a brief summary of my solution.<br>
+<br></p>
+<h2>1 Helmet detection</h2>
+<p>I trained YoloV5 with only supplemental photos.<br>
+The prediction accuracy for small helmets was not good, so I upsampled from1280 to 1664 and trained it.</p>
+<h2>2 Helmet clustering (team classification)</h2>
+<p>I performed 2-stage K-means clustering using the helmet images.<br>
+The first K-means clustering  extracts 20 representative colors from the set of each pixels of all helmet images in the entire video-frames.<br>
+In the second K-means, helmets are clustered using feature vectors which shows how many of each representative color the helmet have.<br>
+This model achieved 97% accuracy.<br>
+This model was improved to 98% accuracy by using the tracking information to ensure that the same players are on the same team in post-processing.<br>
+The result of this team clustering is used for player assignment and player tracking.<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/clustering.png" alt="helmet clustering"></p>
+<h2>3 Feature extraction (used as distance for matching)</h2>
+<p>In addition to the 2D information of up/down, left/right, team (Home team or Visitor team) information, player orientation, and the gap between the helmet and the sensor position were used as distances for mapping players.</p>
+<h3>3-1 Player orientation</h3>
+<p>I created a model that predicts the "o" in the tracking data and used it to penalizes if the angle is too far off when matching.<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/%E5%90%91%E3%81%8D.png" alt="Player Orientation Prediction"><br>
+Red: Predicted value (Home)<br>
+Orange: Predicted value (Visitor)<br>
+Light blue: Ground Truth (Home)<br>
+Dark blue: Ground Truth (Visitor)</p>
+<h3>3-2 Apparent gap between helmet and sensor position</h3>
+<p>For example, even with the same coordinates, the apparent helmet position changes depending on whether the user is standing or squatting.<br>
+I have created a model to predict this shift.<br>
+In advance, I made mapping Grand-Truth and helmet box to obtain the positional gap.<br>
+Then I made a model to predict this gap using this training data.<br>
+This image show the helmet box updated by gap.<br>
+You can see that the boxes of kneeling and fallen players have been corrected.<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/gap_with_arrow.png" alt="updated boxes with the gap"><br>
+For these feature extractions, I used <a href="https://github.com/xingyizhou/CenterNet" target="_blank">CenterNet</a>, and I shared this code here.<br>
+<a href="https://www.kaggle.com/its7171/nfl-centernet" target="_blank">https://www.kaggle.com/its7171/nfl-centernet</a></p>
+<h2>4 Coordinate transformation</h2>
+<p>I used lines on the ground to align the coordinates of the video image and the tracking.<br>
+I used CV2 to detect the lines.<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/line.png" alt="White line detection"><br>
+By extracting two lines from the extracted line and doing a little calculation, geometric coordinate transformation is possible.<br>
+Coordinate transformation1 (aspect ratio)<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/aspect_ratio.png" alt="Coordinate transformation"><br>
+Coordinate transformation2 (trapezoid correction)<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/pt.png" alt="Coordinate transformation"><br>
+Coordinate transformation3 (rotation)<br>
+<img src="https://raw.githubusercontent.com/CuteChibiko/kaggle-images/main/nfl/座標変換.png" alt="Coordinate transformation"></p>
+<h2>5 Player assignment</h2>
+<p>Since there are often less than 22 players in the video, I adjusted the number of players by removing  the players on the top, bottom, left and right of the tracking information (by cutting off the tracking coordinates with a rectangle), and then solved it as a linear assignment problem.<br>
+There are many candidates for removing players, but I chose the candidate with the smallest minimum distance among all candidates.</p>
+<h2>6 Player tracking</h2>
+<p>Modern object tracking models use the closeness of image features as a metric for the distance between objects.<br>
+However, I thought this approach might not be very appropriate for this competition since all helmets are the same for the same team.<br>
+So I used an algorithm based on <a href="https://github.com/abewley/sort" target="_blank">SORT</a>.<br>
+However, I introduced the helmet image feature as a step-function to avoid tracking the same person across different teams.<br>
+The image features are reused from K-means team clustering.</p>

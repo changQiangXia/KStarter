@@ -1,0 +1,132 @@
+<h1>Orbit Wars — Approach Writeup</h1>
+<p>Here I describe the design of my Orbit Wars submission: how I encode the
+game state, the model architecture that consumes it, the action space the policy
+acts through, and how it is trained. I'm a biologist by training, self-taught in 
+RL as a hobby. When I first looked at this game it seemed similar to the complex 
+spatial interactions found in folded protein structures. Using AlphaFold's Evoformer
+as my inspiration, I adapted its node/pair message-passing for this problem. Most of 
+the architectural choices below fall out of this analogy.</p>
+<h2>1. Observation encoding</h2>
+<p>I encode the game as two things: <strong>planets</strong> (nodes) and <strong>directed planet-pairs</strong>
+(edges). I deliberately do <em>not</em> model fleets as first-class objects. A fleet in
+flight is, from a decision-making standpoint, just a future event that lands on
+some planet at some time and changes its ownership and/or garrison. So instead of
+giving the model a separate token per in-flight fleet and asking it to learn the
+collision geometry, I <strong>collapse every fleet into the planet it is going to
+collide with</strong> and expose the consequence directly.</p>
+<h3>Planet (node) features</h3>
+<p>Each planet/comet body becomes one token. Comets share the planet encoder, so the
+total count is bounded by <code>MAX_PLANETS</code> (40 planets + comet spawn slots). A planet
+token carries:</p>
+<ul>
+<li><strong>Spatial state</strong> — position and velocity, plus distance/relationship to the
+sun.</li>
+<li><strong>Current ownership and garrison</strong> — who owns the planet now and how many ships are
+there.</li>
+<li><strong>Production</strong> — Rate of ship production.</li>
+<li><strong>Projected timeline</strong> — this is where the fleets go. For a horizon of 25
+future steps I project, per planet: the <strong>incoming ships per player</strong>, 
+the <strong>projected garrison</strong> over time, and the <strong>projected owner</strong> at each step. Every 
+fleet currently in flight has already been simulated forward and folded into the timeline 
+of its destination planet, so the token answers "what is going to happen to me, and
+when" without the model ever seeing a raw fleet.</li>
+<li><strong>Flags / despawn</strong> — comet despawn timing and assorted status bits.</li>
+</ul>
+<p>The forward projections are generated using a simulator that is consistent with the engine's 
+ground truth.</p>
+<h3>Edge (pair) features</h3>
+<p>For every directed ordered pair of planets <code>(source -&gt; target)</code> I compute a small
+set of <strong>comparative, action-relevant</strong> features that describe what would happen
+if the source committed its garrison to the target ("full send"):</p>
+<ul>
+<li><strong>Time-to-arrival</strong> at full send, bucketed (one-hot over ETA buckets), plus a
+<strong>blocked</strong> flag for when no legal trajectory exists.</li>
+<li><strong>Outcome of the full send</strong> — most importantly a <code>can_takeover</code> flag: would
+sending everything from the source actually flip the target, given the target's
+defenders plus the production it accrues over the flight time?</li>
+<li><strong>Relational owner features</strong> — source owner and target owner slots, which let
+the edge express same-owner vs. different-owner cheaply.</li>
+</ul>
+<p>The key design decision is that the edge already encodes the <em>consequence</em> of a
+move, not just the raw geometry. The model isn't asked to learn intercept math or
+exact-takeover arithmetic; that's resolved deterministically in the observation
+and in the action interpreter.</p>
+<h2>2. Model architecture — an Evoformer for planets</h2>
+<p>Planets are tokens; planet-pairs are an explicit <strong>pair (edge) representation</strong>.
+This is the core of the borrowing from the Evoformer: rather than letting the
+model infer relationships purely through dot-product attention, I keep a learned
+edge state for every pair and let it bias and shape attention directly.</p>
+<p>The backbone is a stack of node/pair blocks. Each block does, in order:</p>
+<ol>
+<li><strong>Pair-biased planet attention</strong>. Standard query-key attention over planet 
+tokens, but each attention logit is <em>added</em> to a per-head bias projected 
+from the edge state. So a planet attends to another both because their content 
+matches (QK) and because the edge between them says they're relevant.</li>
+<li><strong>Pair update.</strong> The edge state is updated from the tokens it connects via
+token-to-edge information flow — the planets write back into the relationships,
+keeping the raw edge features explicitly modeled. Similar to the Evoformer, the 
+raw pair encodings are injected into each layer.</li>
+<li><strong>Pair feedforward transition.</strong></li>
+</ol>
+<p>In addition to the planets there are a few special tokens: a <strong>global token</strong> carrying
+dense scalars (turn number, ship totals, comet timer), a learned <strong>register</strong>
+aggregator the bodies can route information through, and a <strong>critic token</strong> that
+serves as the query for the value head's cross-attention readout. The observation
+is Markovian — one forward pass per turn — because the observation already carries 
+the projected future.</p>
+<p>Default size (the released submission): token dim <code>= 144</code>, pair stream <code>= 160</code>,
+5 layers, 4 heads.</p>
+<h2>3. Action space — edge-scored full sends</h2>
+<p>The action head is <strong>edge-first</strong>. For every directed edge <code>source -&gt; target</code> it builds 
+an edge context from the source token, the target token, and the pair state, and scores it.</p>
+<p>Conceptually, <strong>each source–target pair (and its edge) predicts a full-send
+score</strong>, and for each source planet I <strong>softmax over its outgoing edges</strong> to pick
+what that planet does this turn. The source's <em>self</em>-edge is the <strong>no-send</strong>
+option, so "hold and accumulate" competes directly against every outgoing fleet under 
+one normalization.</p>
+<p>The destination is chosen as a pointer over actual planet slots, and the firing angle and 
+exact ship counts are resolved deterministically downstream by an action interpreter. 
+The policy never has to emit raw angles or ship counts. It only has to answer the strategic 
+question of <em>where to commit force</em>. Each source planet acts independently per turn, so a 
+full turn is the collection of per-planet softmax choices across the board. This limits the 
+number of actions per turn to the number of owned planets.</p>
+<h2>4. Training — Imitation followed by PPO with a joint action probability and GAE</h2>
+<p>Training was initiated by behavior cloning of downloaded replays. An interpreter is used
+to convert the observed fleets into the desired action space. Alternatively, a heuristic 
+<em>expert action</em> was used as the training target. The imitation learning phase was critical<br>
+for 2 main reasons:</p>
+<ul>
+<li><strong>Experimentation.</strong> A model that cannot do behavior cloning will likely be unable to 
+train via PPO. I experimented with many encodings and architectural choices before finding 
+a subset that could mimic expert play.</li>
+<li><strong>Representation Pre-Training.</strong> Behavior cloning accelerates training of the network's 
+feature extraction capabilities. Attention maps can sometimes struggle with distribution shift — pre-training on a fixed distribution helps address that.</li>
+</ul>
+<p>Training is then switched to <strong>self-play PPO</strong>. The agent plays Orbit Wars matches against a live
+copy of itself, collects trajectories, and updates with clipped PPO.</p>
+<ul>
+<li><strong>Joint probability.</strong> A turn is not one action — it's one decision per owned
+planet. I treat the turn's action as the <strong>joint</strong> over all source planets and
+sum their log-probabilities, so the PPO ratio and entropy are computed over the
+whole board's move, not over individual planets in isolation.</li>
+<li><strong>Advantages via GAE.</strong> Returns and advantages use generalized advantage
+estimation. The value side is a <strong>distributional</strong> head (a two-hot / symlog bin
+support read out from the critic token).</li>
+<li><strong>Clipped PPO objective</strong> with the usual value loss and entropy bonus on top of
+the joint policy.</li>
+</ul>
+<h2>5. What I tried and dropped — search (SBR)</h2>
+<p>I experimented with adding <strong>search</strong> on top of the policy — a sampled-best-response
+style loop (SBR) using simulating learned rollouts. In principle this is the right thing 
+to do for a game with a clean forward model like Orbit Wars.</p>
+<p>In practice it was <strong>too expensive for my rig</strong>. Even a shallow search multiplies
+every training step by the branching factor times the rollout depth times the
+number of sampled responses, and each of those evaluations is a full
+observation-assembly + network forward pass. The search variants spent almost all of their 
+wall-clock budget inside the search expansion. I'd expect search to pay off with more compute.</p>
+<h2>6. Summary</h2>
+<p>This was an interesting, often frustrating, and very fun competition. My approach was
+inspired by the Evoformer — a variant of the Transformer where edges are conditioned 
+explicitly. I look forward to seeing what cool ideas other competitors used in their
+solutions!</p>
+<p>repo: <a href="https://github.com/Nebraskinator/orbitwars" target="_blank">https://github.com/Nebraskinator/orbitwars</a> </p>

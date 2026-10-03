@@ -1,0 +1,257 @@
+# https://www.kaggle.com/competitions/novozymes-enzyme-stability-prediction/discussion/375964
+
+Topic #375964: 3rd place solution
+  Author: Rongchu
+  Posted: 2023-01-04 07:36:26.821000
+  Votes: 31  Comments: 33
+
+Thanks a lot to the hosts and Kaggle for hosting this interesting competition. Congratulations to the other competitors for the great solutions and results.Special thanks to the competitors who selflessly shared their knowledge during this competition, @cdeotte , @tilii7 , @ropeonmars , @roberthatch , @dschettler8845 , @jinyuansun , @kvigly55 , @vslaykovsky , @oxzplvifi , @shlomoron …, If I've missed someone, please let me know.
+
+Training Set
+
+I used the dataset D1 ,D2 and D3.
+
+Feature Engineering
+
+I selected the 21 amino acids closest to the mutant amino acids to construct the features.
+
+
+
+The relative distances of the 21 amino acid mutation sites were calculated.
+$$D_{ci}=\frac{r_{c}-r_{i}}{max_{i∈K}{(r_{c}-r_{i})}}$$,$$r_{ci}=\sqrt{{(x_{c}-x_{i})}^{2}+{(y_{c}-y_{i})}^{2}+{(z_{c}-z_{i})}^{2}}$$
+
+The average relative distance between the 21 amino acids and the mutation site was calculated.
+
+The angles of the 21 amino acids to the mutation site were calculated.
+$$\alpha_{1}=arccos\frac{(z_{c}-z_{i})}{r}$$
+$$\alpha_{2}=arccos\frac{(x_{c}-x_{i})}{r}$$
+$$\alpha_{3}=arccos\frac{(y_{c}-y_{i})}{r}$$
+$$\beta_{4}=arctan\frac{(y_{c}-y_{i})}{(x_{c}-x_{i})}$$
+$$\beta_{5}=arctan\frac{(z_{c}-z_{i})}{(y_{c}-y_{i})}$$
+$$\beta_{6}=arctan\frac{(x_{c}-x_{i})}{(z_{c}-z_{i})}$$
+
+B_factor, sasa, blosum, demask…
+
+Use the adjusted blosum62 to multiply sasa, b_factor…
+
+
+ ():
+     -(/(+np.exp(-x/adjustment_factor)))
+
+
+
+
+Features of the whole protein sequence, mutant amino acids and 21 amino acids extracted by esm.
+
+There are a few other interesting features here.
+
+
+
+Model
+
+XGB_v1
+
+This model gets public score 0.52132 and private score: 0.46642.
+We used D1 to train my first Xgboost model. This dataset is wildtypes and mutants selected from kaggle's training set with 4000+ rows of train data. First of all, I did some simple processing on the dataset, removing duplicate rows and deletion mutation, deleting rows that did not match pdb, and retaining groups with mutation samples &gt; 20. Finally, we get a training set with 1800+ rows.
+We used the features mentioned above and took Tm rank as target to train the model,so we have 298 features for our model.
+
+XGB_v2
+
+This model gets public score 0.40512 and private score: 0.30495. 
+We used D2 to train my second Xgboost model. This dataset is wildtypes and mutants selected from kaggle's training set. But this data set is cleaned up in more detail.The cleaned dataset contains only 986 mutations from 30 groups, all groups are same-source, same-pH.
+
+XGB_v3
+
+This model gets public score 0.40435 and private score: 0.43294. 
+We used D3 to train my third Xgboost model. Since the strong correlation between dTm and ddg(ddG is a measure of the change in energy between the folded and unfolded states (𝚫Gfolding) and the change in 𝚫Gfolding when a point mutation is present.), we can also use ddg as target in order to increase the training data. This external dataset contains 14656 unique mutations. Since the wild type is more stable than most mutants, we kept only unstable mutations and ensure that the pH and source of each group are the same. After a simple cleanup, the training set contains 6000+ rows.
+
+Ensemble
+
+I used the three xgb models ensemble with  some public notebooks, I don't have a good idea here, just try to change the weight until the score stops improving.
+
+reference
+
+
+
+XGBoost - 5000 Mutations 200 PDB Files [LB 0.410]
+
+🧬 NESP: ThermoNet v2 🧬
+
+NESP: AlphaFold+GetArea exploration
+
+Difference Features - [LB 0.600]
+
+RMSD from Molecular Dynamics
+
+NOVO-ESP – Residue Depth and More w/ BioPython
+
+NOVO ESP – ELI5 - Performant Approaches [LB=0.451]
+
+
+
+
+Update:
+The ensemble weight of this notebook wihch got 0.542 in private Leaderboard.
+
+
+  
+3Dgeometry(0.32) + 1.5×foldx(0.413) + 1.5×ThermoNet v2(0.495) + 2×rosetta(0.471) + 1.5×rmsd(0.410) + xgb2(0.404) + 1.5×xgb1(0.521) + 1.5×difplddt(0.299) + 1.5×xgb3(0.405)
+
+
+
+
+
+Model
+Public LB
+Private LB
+Link
+
+
+
+
+3Dgeometry
+0.32
+0.338
+link
+
+
+Foldx
+0.413
+0.375
+link
+
+
+Thermonet v2
+0.495
+0.460
+link
+
+
+rosetta
+0.471
+0.438
+link
+
+
+rmsd
+0.410
+0.350
+link
+
+
+xgb2
+0.404
+0.432
+link
+
+
+xgb1
+0.524
+0.464
+link
+
+
+difplddt
+0.297
+0.287
+link
+
+
+xgb3
+0.405
+0.304
+link
+
+Comments:
+├─ Marília Prata (2023-05-13 20:15:21.553000) [+1]
+│  Though I'm very late: a huge congratulations for your 3rd place and thanks for sharing your solution.
+  ├─ Rongchu (2023-05-14 01:10:59.367000) [+1]
+  │  Thanks! Marília Prata.
+├─ Swati Parida (2023-04-04 14:45:04.663000) [+1]
+│  hey, congrats !!
+│  May I know what was the best rmse/accuracy that you got.
+│  Thanks in advance.
+  ├─ Rongchu (2023-05-14 01:09:11.663000) [+0]
+  │  Hi,Swati Parida.Forgive me for the delay in replying.The best mse I got is 0.26+.But there's not much correlation between mse and Spearman's coefficient
+├─ Rope on Mars (2023-01-13 17:37:27.593000) [+1]
+│  Congrats Ron.
+  ├─ Rongchu (2023-01-17 04:50:29.457000) [+0]
+  │  Welcome back, Rope on Mars.
+  │  Thanks for you great contribution in this competition.
+├─ Chris Deotte (2023-01-07 15:36:38.883000) [+1]
+│  What is the public LB score for your private LB 0.542 final submission?
+  ├─ Rongchu (2023-01-10 06:48:51.390000) [+0]
+  │  Sorry, I missed this comment. The public LB score is 0.614.
+  ├─ FredPiko (2023-01-16 14:52:29.107000) [+1]
+  │  Hi, Chris and rongchu.
+  │  I have read rongchu‘s XGB notebook carefully, and find most of its main features and code are derived from “XGBoost - 5000 Mutations” notebook which you Chris released previo...
+    ├─ Rongchu (2023-01-17 04:39:56.263000) [+1]
+    │  Hi, FredPiko.
+    │  To be clear, my model gets a higher public score, but the private score is actually not high（0.464）.
+    │  I will answer your questions based on my previous attempts, because I haven't veri...
+    ├─ FredPiko (2023-01-17 16:00:31.970000) [+1]
+    │  Thanks, rongchu.
+    │  I totally agree with you after reading your new notebook! These features that you constructed do have good performance. 
+    │  By the way, I found the pdbs of rosetta relaxed chains in 1...
+    ├─ Rongchu (2023-01-18 02:10:16.723000) [+1]
+    │  Thank you! I didn't notice that. I will try it.
+├─ Chris Deotte (2023-01-07 03:05:40.400000) [+1]
+│  Congratulations! How does FoldX work? It is my understanding that FoldX finds the structure of the enzyme (i.e. PDB file), how do you turn this in thermostability predictions?
+  ├─ Robert Hatch (2023-01-07 04:12:05.447000) [+1]
+  │  FoldX had commands almost exactly equivalent to Rosetta. 
+  │  
+  │  Rosetta Relax, FoldX Repair. And forget the names, but both has a command that takes a mutation list as text file and runs a type of energ...
+    ├─ Chris Deotte (2023-01-07 13:49:19.497000) [+0]
+    │  Rosetta Relax, FoldX Repair. And forget the names, but both has a command that takes a mutation list as text file and runs a type of energy minimization on WT vs mutant.
+    │  
+    │  
+    │  Is the energy computation...
+  ├─ Rongchu (2023-01-07 05:31:32.070000) [+2]
+  │  Thank you, Chris.
+  │  Please check this document(https://foldxsuite.crg.eu/documentation) and discussion here. But I will get an proxy error now when I open this website, I don't know why. I downloaded...
+    ├─ Robert Hatch (2023-01-07 16:29:54.243000) [+1]
+    │  Interesting, I used command "BuildModel". (Which did just a single one, and used the command 2335 times) But with website down I can't really say how much difference between single PositionScan on ...
+    ├─ Robert Hatch (2023-01-07 16:41:26.373000) [+1]
+    │  @cdeotte : physics based potential energy. Well, or something like that. Lower is better. 
+    │  
+    │  In fact, I used delta total energy, and never used in my final solution anything else, but I got output f...
+    ├─ Chris Deotte (2023-01-07 16:59:47.840000) [+1]
+    │  Wow, that's a lot of columns. Can you share all those columns in a CSV file for the 2413 test rows. I can add all those features to my random forest. Would be curious to see LB if they all get used.
+    ├─ Robert Hatch (2023-01-07 22:21:07.073000) [+2]
+    │  I will be sharing a lot sooner or later, but let me pre-share the current datasets I have…
+    │  
+    │  Some of them might have high-corr with each other, and some are very sparse with nunique &lt; 10 or 20.
+    │  
+    │  ...
+    ├─ Robert Hatch (2023-01-07 22:22:33.207000) [+2]
+    │  XGB Weight:
+    ├─ Robert Hatch (2023-01-07 22:23:36.687000) [+1]
+    │  Aside: there weren't many other features, so it mainly gives an idea which FoldX columns might've had good value.
+    ├─ Robert Hatch (2023-01-07 22:24:14.513000) [+2]
+    │  XGB Gain:
+    ├─ Robert Hatch (2023-01-07 22:33:31.110000) [+2]
+    │  And here's the dataset! It even has all the same FoldX data for a large chunk of train data, I think the entire deduplicated FireProtDB - I haven't glanced at that data in a month, haha.
+    │  
+    │  https://w...
+├─ Gary (2023-01-04 10:08:05.737000) [+1]
+│  Congratulations.
+│  Would you share your code for training xgboost?
+  ├─ Rongchu (2023-01-04 12:32:10.830000) [+1]
+  │  Thanks, gary.
+  │  I just made my notebook public here.
+├─ BarryZhou (2023-01-04 07:40:12.967000) [+1]
+│  Congratulations rongchu on your prize! All the best for future competitions. 多么熟悉的名字和头像呀哈哈，恭喜！
+  ├─ Rongchu (2023-01-04 08:12:55.200000) [+1]
+  │  Thank you,Barrry.🤝
+├─ FredPiko (2023-01-04 10:14:01.500000) [+1]
+│  Congratulations! Learned a lot from your construction method of spatial features using distances and angles. I think this may be a simpler way to denote space, as a replacement of the voxel feature...
+  ├─ Rongchu (2023-01-04 13:12:40.613000) [+2]
+  │  Thanks,FredPiko.
+  │  The demask I added is the wildtype of the test set, and it is also used for the train set. I didn't generate demask for every wildtype(I tried to do this at first, but then I reali...
+    ├─ FredPiko (2023-01-10 05:40:20.130000) [+1]
+    │  Thanks for your detailed reply, rongchu. I missed these important notebooks before.
+    │  It seems that I should pay more attention to the public notebook and get ideas more carefully from it in future c...
+├─ Suma Mallapragada (2023-08-26 14:20:28.177000) [+0]
+│  Thanks for sharing your solution and giving insights into all the related work! I found your work very simple to comprehend for a beginner in computational biochemistry.
+├─ [deleted] (2023-01-04 10:11:24.660000) [+0]
+│  [deleted]

@@ -1,0 +1,284 @@
+<p>First of all, I would like to thank everyone involved in organizing this competition, all the participants, and my teammates <a href="https://www.kaggle.com/kibuna" target="_blank">@kibuna</a> <a href="https://www.kaggle.com/cnumber" target="_blank">@cnumber</a> <a href="https://www.kaggle.com/kawattataido" target="_blank">@kawattataido</a> <a href="https://www.kaggle.com/yukiokumura1" target="_blank">@yukiokumura1</a> </p>
+<p>I write up our team solution. <br>
+GitHub repo: <a href="https://github.com/kuto5046/kaggle-luxai-s3" target="_blank">https://github.com/kuto5046/kaggle-luxai-s3</a></p>
+<h2>Summary</h2>
+<ul>
+<li>Imitation learning based on match results of top teams</li>
+<li>Selected high-performing top teams submissions and carry out two-stage fine tuning.</li>
+<li>Adopted a UNet architecture to predict map-based policy and SAP probabilities</li>
+<li>Estimated unknown environmental parameters and hidden states</li>
+<li>Assigned actions to each unit using minimum cost flow</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2603247%2Fc138abdfcca056b855c2280de5d7839f%2FLuxAIS3%20Solution%20(2).svg?generation=1742267156556249&amp;alt=media" alt=""></p>
+<hr>
+<h2>Dataset</h2>
+<ul>
+<li><strong>Stage 1</strong><ul>
+<li>Frog Parade (submission_id=42704976)</li>
+<li>7,935 episodes</li>
+<li>Trained only on winning games</li></ul></li>
+<li><strong>Stage 2</strong><ul>
+<li>Frog Parade (submission_id=43276830)</li>
+<li>1,550 episodes</li>
+<li>Trained on both winning and losing games</li></ul></li>
+<li>Mixing data from different policies (multiple submissions) did not significantly improve performance.</li>
+</ul>
+<p>Thanks for team Frog Parade.</p>
+<hr>
+<h2>Features</h2>
+<ul>
+<li>Created 14-channel map features and 16-channel scalar features.</li>
+<li>Normalized these features to the range of -1 to 1, except for some exceptions.</li>
+<li>Standardized normalization criteria (e.g., <code>OWN_UNIT_ENERGY</code> and <code>UNIT_MOVE_COST</code> both represent energy values and were normalized using a common scale).</li>
+<li>Applied mirroring so that the initial position of the home team is always (0,0).</li>
+</ul>
+<h3>Map Features (14 channels)</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2603247%2Fa3319de3171d3ba98071629d79b59f63%2Fimage.png?generation=1742257505470205&amp;alt=media" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>Variable Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TILE_TYPE</code></td>
+<td>The type of the current tile (<code>UNKNOWN = -1, EMPTY = 0, NEBULA = 1, ASTEROID = 2</code>)</td>
+</tr>
+<tr>
+<td><code>NEXT_TILE_TYPE</code></td>
+<td>The type of the tile in the next step</td>
+</tr>
+<tr>
+<td><code>ENERGY</code></td>
+<td>(Estimated) The amount of energy on the tile</td>
+</tr>
+<tr>
+<td><code>NEBULA_ENERGY_REDUCTION</code></td>
+<td>(Estimated) Energy reduction caused by nebula tiles</td>
+</tr>
+<tr>
+<td><code>SENSOR_MASK</code></td>
+<td>Area visible to sensors</td>
+</tr>
+<tr>
+<td><code>RELICS</code></td>
+<td>Locations of relic nodes</td>
+</tr>
+<tr>
+<td><code>POINTS</code></td>
+<td>(Estimated) Nodes where points can be gained near relic nodes</td>
+</tr>
+<tr>
+<td><code>ENTROPY</code></td>
+<td>Entropy of estimated <code>POINTS</code></td>
+</tr>
+<tr>
+<td><code>OWN_UNIT_COUNT</code></td>
+<td>Number of own units per cell</td>
+</tr>
+<tr>
+<td><code>OWN_UNIT_ENERGY</code></td>
+<td>Energy of own units per cell</td>
+</tr>
+<tr>
+<td><code>OPP_UNIT_COUNT</code></td>
+<td>(Estimated) Number of opponent units per cell</td>
+</tr>
+<tr>
+<td><code>OPP_UNIT_ENERGY</code></td>
+<td>Energy of opponent units per cell</td>
+</tr>
+<tr>
+<td><code>VISIT_COUNT</code></td>
+<td>Number of times each tile has been visited in the current match</td>
+</tr>
+<tr>
+<td><code>SAP_AVAILABLE_AREA</code></td>
+<td>Area where sap can be used</td>
+</tr>
+</tbody>
+</table>
+<h3>Scalar Features (16 channels)</h3>
+<table>
+<thead>
+<tr>
+<th>Variable Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MATCH_STEPS</code></td>
+<td>Number of steps elapsed in the current match</td>
+</tr>
+<tr>
+<td><code>MATCH_COUNT</code></td>
+<td>Current match number</td>
+</tr>
+<tr>
+<td><code>TEAM_POINTS</code></td>
+<td>Points earned by the team (own team points - opponent team points)</td>
+</tr>
+<tr>
+<td><code>TEAM_WINS</code></td>
+<td>Number of matches won by the team (own wins - opponent wins)</td>
+</tr>
+<tr>
+<td><code>UNIT_MOVE_COST</code></td>
+<td>Energy cost for unit movement</td>
+</tr>
+<tr>
+<td><code>UNIT_SAP_COST</code></td>
+<td>Energy cost for sap action</td>
+</tr>
+<tr>
+<td><code>UNIT_SAP_RANGE</code></td>
+<td>Range within which sap can be used</td>
+</tr>
+<tr>
+<td><code>UNIT_SENSOR_RANGE</code></td>
+<td>Sensor range of units</td>
+</tr>
+<tr>
+<td><code>NEBULA_TILE_VISION_REDUCTION_MEAN</code></td>
+<td>Mean vision reduction by nebula tiles</td>
+</tr>
+<tr>
+<td><code>NEBULA_TILE_VISION_REDUCTION_SIGMA</code></td>
+<td>Standard deviation of vision reduction by nebula tiles</td>
+</tr>
+<tr>
+<td><code>ENERGY_NODE_DRIFT_SPEED_MEAN</code></td>
+<td>Mean movement speed of energy nodes</td>
+</tr>
+<tr>
+<td><code>ENERGY_NODE_DRIFT_SPEED_SIGMA</code></td>
+<td>Standard deviation of movement speed of energy nodes</td>
+</tr>
+<tr>
+<td><code>NEBULA_TILE_ENERGY_REDUCTION_MEAN</code></td>
+<td>Mean energy reduction by nebula tiles</td>
+</tr>
+<tr>
+<td><code>NEBULA_TILE_ENERGY_REDUCTION_SIGMA</code></td>
+<td>Standard deviation of energy reduction by nebula tiles</td>
+</tr>
+<tr>
+<td><code>UNIT_SAP_DROPOFF_FACTOR_MEAN</code></td>
+<td>Mean energy drop-off factor for sap action</td>
+</tr>
+<tr>
+<td><code>UNIT_SAP_DROPOFF_FACTOR_SIGMA</code></td>
+<td>Standard deviation of energy drop-off factor for sap action</td>
+</tr>
+</tbody>
+</table>
+<h2>Estimation of Hidden States</h2>
+<p>Unknown environmental parameters and hidden states, which vary randomly per match, were estimated using the following methods:</p>
+<ul>
+<li><strong><code>NEXT_TILE_TYPE</code></strong><ul>
+<li>Estimated tile drift speed from observed tile movements and predicted the next tile state accordingly.</li></ul></li>
+<li><strong><code>ENERGY</code></strong><ul>
+<li>Estimate the overall energy map by narrowing down the energy nodes from the partially observed energy map by a Exhaustive search</li></ul></li>
+<li><strong><code>POINTS</code></strong><ul>
+<li>Estimate point probabilities by Bayesian inference.</li>
+<li>Initialized relic-adjacent tiles with 0.5 and others with 0.0.</li></ul></li>
+<li><strong><code>OPP_UNIT_COUNT</code></strong><ul>
+<li>Track all possible actions of previously observed enemy units to estimate their existence probabilities.</li></ul></li>
+<li><strong><code>NEBULA_TILE_VISION_REDUCTION</code></strong><ul>
+<li>Estimated based on observed unit vision changes when stepping on nebula tiles.</li></ul></li>
+<li><strong><code>ENERGY_NODE_DRIFT_SPEED</code></strong><ul>
+<li>Prepared candidate drift speeds and refined estimates using Bayesian inference.</li></ul></li>
+<li><strong><code>NEBULA_TILE_ENERGY_REDUCTION</code></strong><ul>
+<li>Estimated from observed unit energy reductions when stepping on nebula tiles.</li></ul></li>
+<li><strong><code>UNIT_SAP_DROPOFF_FACTOR</code></strong><ul>
+<li>Estimated based on observed energy values of adjacent enemy units.</li></ul></li>
+</ul>
+<hr>
+<h2>Model Architecture</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2603247%2Fda8364c31b1a47d5ae6275f24287fc33%2Fimage5.png?generation=1742258276454060&amp;alt=media" alt=""></p>
+<ul>
+<li>Based on the 6th place LuxAI Season 1 solution using a UNet architecture (<a href="https://www.kaggle.com/competitions/lux-ai-2021/discussion/293776" target="_blank">link</a>).</li>
+<li><strong>Inputs</strong><ul>
+<li>Map features <code>(14, n_stack, 24,24)</code></li>
+<li>Scalar features <code>(16, n_stack)</code></li>
+<li><code>n_stack</code> is a parameter for how many steps in the past to input the state, we use n_stack=4. This means that the states of the past 4steps are input to the model as features.</li></ul></li>
+<li><strong>Outputs</strong><ul>
+<li>Policy logits <code>(6,24,24)</code><ul>
+<li><code>CENTER = 0, UP = 1, RIGHT = 2, DOWN = 3, LEFT = 4, SAP = 5</code></li></ul></li>
+<li>SAP policy logits <code>(1,24,24)</code><ul>
+<li>Probability of sap in that cell.</li></ul></li></ul></li>
+<li><strong>Model layers</strong><ul>
+<li>UNet (encoder/decoder)</li>
+<li>SAP Policy Layer<ul>
+<li>Predicted SAP policy using a residual convolutional layer.</li>
+<li>Stabilized training by adding batch normalization in the final layer.</li></ul></li>
+<li>Policy Layer<ul>
+<li>Combined SAP policy with UNet decoder output and predicted policy using a residual convolutional layer.</li></ul></li></ul></li>
+</ul>
+<hr>
+<h2>Training</h2>
+<ul>
+<li>loss<ul>
+<li>policy → DiceLoss</li>
+<li>sap policy → Custom Focal Tversky Loss (weight=0.1)<ul>
+<li>Sap targets are on the (24,24) map (1 if the target team is at the sap location, 0 otherwise)</li>
+<li>The target was masked so that only <code>SAP_AVAILABLE_AREA</code> was the training target because the target was sparse, and Focal Tversky Loss was employed to counter sparse targets.</li>
+<li>Set loss weight is 0.1 not to inhibit policy learning.</li></ul></li></ul></li>
+<li>training setting<ul>
+<li>epoch=30</li>
+<li>lr=1e-3</li>
+<li>batch_size=1024</li></ul></li>
+<li>augmentation<ul>
+<li>Applied mirroring along the x and y axes.</li></ul></li>
+</ul>
+<hr>
+<h2>Action Selection</h2>
+<ul>
+<li><p>Predicted two map-based policies using a neural network:</p>
+<ul>
+<li><p><strong>Policy (6, 24, 24)</strong></p>
+<ul>
+<li>Actions: <code>CENTER = 0, UP = 1, RIGHT = 2, DOWN = 3, LEFT = 4, SAP = 5</code></li>
+<li>Applied softmax on valid actions to convert logits into probabilities.</li>
+<li>Sampled actions probabilistically like following:</li></ul>
+<pre><code>action = np.random.choice((), p=policy)
+</code></pre></li>
+<li><p><strong>SAP Policy (1, 24, 24)</strong></p>
+<ul>
+<li>Predicted SAP probability per cell.</li></ul></li></ul></li>
+<li><p><strong>Action assignment by minimum cost flow</strong></p>
+<ul>
+<li>Units in the same cell tend to take the same action, so actions were assigned using minimum cost flow based on unit policies.</li></ul>
+<ol>
+<li><strong>Assignment of SAP Actions</strong><ol>
+<li>Enumerate the units (SAP units) for which a SAP action is sampled at a given step.</li>
+<li>For each SAP unit, list the SAP position candidates based on the sap map and the next-best move action after the sap action with its probability. (to avoid unnecessary sap when the sap map value is very small around a unit).</li>
+<li>Define cost of target sap point(x,y) as <code>cost = 1 - sap_policy[y,x] * policy[5]</code> if it is a sap action, <code>cost = 1 - policy[action_idx]</code>otherwise</li>
+<li>Assign actions to SAP units by minimizing the total cost using minimum cost flow.</li></ol></li>
+<li><strong>Assignment of Move Actions</strong><ol>
+<li>Enumerate the units (MOVE units) that are not SAP units at a given step.</li>
+<li>For each move unit, list all possible actions(without sap) along with their probability values.</li>
+<li>Define the cost of each action as <code>cost = 1 - unit_policy[action_idx]</code>  and add a penalty cost for moving to an already occupied cell.</li>
+<li>Assign actions to MOVE units by minimizing the total cost using minimum cost flow.</li></ol></li></ol></li>
+<li><p><strong>TTA (Test Time Augmentation)</strong></p>
+<ul>
+<li>Applied mirroring along the x and y axes.</li></ul></li>
+</ul>
+<hr>
+<h2>Performance Evaluation</h2>
+<h3>Visualizer (by streamlit)</h3>
+<ul>
+<li><p>Checked features estimation results.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2603247%2F26f2536cc2bf3fa307521b6a3c7ca79e%2Fimage4.png?generation=1742257445637244&amp;alt=media" alt=""></p></li>
+<li><p>Checked unit policies from match results.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2603247%2Fc1ec36dddb5de597d5578f7a666e3f2f%2Fimage2.png?generation=1742257461980005&amp;alt=media" alt="">]</p></li>
+</ul>
+<h3>Custom Tournament Evaluation</h3>
+<ul>
+<li>Modified <code>luxai_runner</code> to display win rate and p-value in a tournament setting.</li>
+<li>Conducted a sufficient number of local matches (e.g., 100 episodes) and adopted model changes only if the win rate significantly improved over the best existing model.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2603247%2Fb76b4431a94e0457b58a3a727e1c2199%2Fimage3.png?generation=1742257374557581&amp;alt=media" alt=""></p>

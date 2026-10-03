@@ -1,0 +1,82 @@
+# openai-gpt-oss-20b-red-teaming 讨论区（按票数排序，共 80 条）
+
+- [Welcome to the Red-Teaming Challenge: OpenAI gpt-oss-20b!](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/596882) — 39 票 / 50 评论 / 2025-08-05 
+- [Congratulations & Announcing Winners](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608537) — 24 票 / 91 评论 / 2025-09-20 
+- [Thank you!!  And next steps](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602389) — 23 票 / 114 评论 / 2025-08-27 
+- [ AI Red Teaming activities: macro, micro, and meta levels. AI systems Retirement.](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/596972) — 19 票 / 2 评论 / 2025-08-05 
+- [Previously discovered or reported issues](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/597037) — 18 票 / 10 评论 / 2025-08-06 
+- [To those setting up for local inference w/ transformers, you need to get the latest merge/ git](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/597262) — 14 票 / 0 评论 / 2025-08-06 
+- [Reminder to Submit Your Writeup AND an Update on Public Data Assets](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600934) — 13 票 / 41 评论 / 2025-08-25 **write-up?**
+- [Are jailbreaks considered as topic of interest?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598015) — 12 票 / 4 评论 / 2025-08-08 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/593972) — 10 票 / 1 评论 / 2025-07-31 
+- [What a timing: gpt-oss-20b released today as the Red Teaming/OpenAI Challenge is launched too.](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/596950) — 10 票 / 2 评论 / 2025-08-05 
+- [Example transcript limit << context size](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600315) — 10 票 / 5 评论 / 2025-08-22 
+- [Need help to have clarity on the ask in the competition ](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599659) — 7 票 / 3 评论 / 2025-08-18 
+- [Can we know the list of 145 teams in the second round](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608750) — 6 票 / 1 评论 / 2025-09-22 
+- [Thanks for the writeups – excited to read them! ](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608430) — 6 票 / 21 评论 / 2025-09-19 **write-up?**
+- [Clarification on Team Rules for Same-Household Participants](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/596919) — 5 票 / 1 评论 / 2025-08-05 
+- [From challenge to initiative: Empathy-In-Action](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608180) — 5 票 / 30 评论 / 2025-09-18 
+- [🤖 "I'm sorry, but I cant help with that"](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598472) — 5 票 / 0 评论 / 2025-08-11 
+- [Single writeup for all 5 issues? or separate](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598454) — 5 票 / 4 评论 / 2025-08-11 **write-up?**
+- [What's the definition of 5 different problem? It  means the categary or attack method?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600001) — 5 票 / 0 评论 / 2025-08-20 
+- [Details for Oct 7 Virtual Workshop](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/610854) — 4 票 / 1 评论 / 2025-10-06 
+- [Proxy for LLM Judging Phase using Deepseek API](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608890) — 4 票 / 9 评论 / 2025-09-22 
+- [Built a taxonomy of attack method for all writeups](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608997) — 4 票 / 5 评论 / 2025-09-23 **write-up?**
+- [How to load model in kaggle](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/597160) — 4 票 / 13 评论 / 2025-08-06 
+- [Eight of the winners (all very deserving, in my honest opinion) won via Jailbreaks](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608555) — 4 票 / 3 评论 / 2025-09-20 
+- [OS router_logits visualization for GptOssForCausalLM](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598726) — 4 票 / 0 评论 / 2025-08-12 
+- [Clarification on tracks](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/597954) — 3 票 / 1 评论 / 2025-08-08 
+- [LLM Vulnerabilities and Routing](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598301) — 3 票 / 0 评论 / 2025-08-09 
+- [Fine tuning out of scope](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598529) — 3 票 / 10 评论 / 2025-08-11 
+- [Be careful about using CoT in writeups](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599346) — 3 票 / 0 评论 / 2025-08-15 **write-up?**
+- [Question on Submission Language for Prompts and Datasets](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598667) — 3 票 / 3 评论 / 2025-08-12 
+- [Some vulnerabilities are exposed or illustrated using multiple prompts. How does result.schema support reporting this?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599164) — 3 票 / 6 评论 / 2025-08-14 
+- [How to create harmony walkthroughs easily?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599759) — 3 票 / 3 评论 / 2025-08-18 
+- [Kaggle has built-in Guardrails and NSFW-detection mechanisms, but with the Red‑Teaming Challenge, will they be waived?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598476) — 3 票 / 5 评论 / 2025-08-11 
+- [Seeking Licensing Clarity for the OpenAI gpt-oss-20b Challenge](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600341) — 3 票 / 1 评论 / 2025-08-22 
+- [RewardHacking and Other JailBreaking Prompts](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602387) — 3 票 / 1 评论 / 2025-08-27 
+- [OpenAI account banned](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/603188) — 3 票 / 3 评论 / 2025-09-01 
+- [Separate archiving from display, allow deletion](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/609398) — 3 票 / 11 评论 / 2025-09-26 
+- [Managing Expectations in a Self-Echoic World](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608571) — 3 票 / 15 评论 / 2025-09-20 
+- [Data Mining writeups with grok 4 fast free (2M token budget)](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608696) — 3 票 / 0 评论 / 2025-09-21 **write-up?**
+- [A novel method - MIND INCEPTION](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608437) — 3 票 / 4 评论 / 2025-09-20 
+- [Has anyone heard back from Red‑Teaming Challenge - OpenAI gpt-oss-20b about winners or awards?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/607593) — 3 票 / 6 评论 / 2025-09-15 
+- [arXiv cs.CL Endorsement](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/604257) — 3 票 / 10 评论 / 2025-09-06 
+- [Questions about "verified catastrophic risks" and other issues](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608681) — 2 票 / 20 评论 / 2025-09-21 
+- [Stress Testing Deliberative Alignment for Anti-Scheming Training](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/609304) — 2 票 / 0 评论 / 2025-09-25 
+- [Favorite among the winners?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608643) — 2 票 / 0 评论 / 2025-09-21 
+- [I want to know which outputs can be used as demonstrations for the Red team](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598623) — 2 票 / 0 评论 / 2025-08-12 
+- [We need more transparent LLMs as primary hackathon judges - not less.](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608628) — 2 票 / 0 评论 / 2025-09-21 
+- [VB-AF, A Fuzzing Framework for Uncovering CoT Inconsistencies in Reasoning Models](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608467) — 2 票 / 3 评论 / 2025-09-20 
+- [dataset: red-teaming-gpt-oss-20b-writeup-title-author-sub](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608493) — 2 票 / 4 评论 / 2025-09-20 **write-up?**
+- [Garak, a Generative AI Red-teaming & Assessment Kit from NVIDIA repo](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599053) — 2 票 / 1 评论 / 2025-08-14 
+- [📦 GPT-OSS-20B Red-Teaming Starter Harness (Configurable + CSV Export)](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599219) — 2 票 / 5 评论 / 2025-08-14 
+- [Thoughts on GPT-OSS-20B AI Safety](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599637) — 2 票 / 2 评论 / 2025-08-17 
+- [Content(walkthrough) in submission dataset need any redaction? ](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600288) — 2 票 / 2 评论 / 2025-08-22 
+- [Anthropomorphism for fun and profit.](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600560) — 2 票 / 0 评论 / 2025-08-23 
+- [i want clarity on submission like can i put more than one vulneribilies in one json file which are of same category ?  or its just one vulneribilty one json files ?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600578) — 2 票 / 1 评论 / 2025-08-23 
+- [Notebook Version](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/603687) — 2 票 / 3 评论 / 2025-09-03 
+- [Demo Video of NOXFORGE - An AI Safety Testing Framework](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602516) — 2 票 / 8 评论 / 2025-08-28 
+- [How about writing an interesting secnario?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600621) — 2 票 / 1 评论 / 2025-08-24 
+- [Editing Code demo notebook after the deadline](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602453) — 2 票 / 0 评论 / 2025-08-27 
+- [Vulnerabilities of MoE-Based LLMs](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602844) — 2 票 / 2 评论 / 2025-08-30 
+- [Feedback on the Writeup UI](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602681) — 2 票 / 6 评论 / 2025-08-29 **write-up?**
+- [Are the novelty score and the open source score contradictory?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598481) — 1 票 / 5 评论 / 2025-08-11 
+- [RESOLVED: submitted writeup as a separate file (PDF)](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602691) — 1 票 / 5 评论 / 2025-08-29 **write-up?**
+- [Images disappeared from Writeup? Anyone else effected?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602859) — 1 票 / 2 评论 / 2025-08-30 **write-up?**
+- [Clarification on rules / scoring](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/597879) — 1 票 / 6 评论 / 2025-08-07 
+- [Some cyber security related issues](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602538) — 1 票 / 1 评论 / 2025-08-28 
+- [Natural Disaster Prevented Submission of Critical NOXFORGE Files](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602598) — 1 票 / 0 评论 / 2025-08-28 
+- [Psi-Walk Writeup: Fractal Probes for AI Safety](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608508) — 1 票 / 5 评论 / 2025-09-20 **write-up?**
+- [Any transformer architecture insights?  eg: sinks](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608888) — 1 票 / 2 评论 / 2025-09-22 
+- [Question for the Judges ](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/598849) — 1 票 / 7 评论 / 2025-08-13 
+- [Some Summary Statistics](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608578) — 1 票 / 1 评论 / 2025-09-20 
+- [Quick Question](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/602467) — 1 票 / 1 评论 / 2025-08-27 
+- [My GPT lied to me — said our entry was the best 😭💔](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608570) — 1 票 / 6 评论 / 2025-09-20 
+- [Writeups -  Great Visuals - Anyone downloading all into a single dataset?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608451) — 1 票 / 1 评论 / 2025-09-20 **write-up?**
+- [PDF file with the project ](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/599836) — 1 票 / 4 评论 / 2025-08-19 
+- [AI Red Teaming Competitions are Dual-Use in Nature](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/607713) — 1 票 / 20 评论 / 2025-09-15 
+- [I might've taken 'freedom of format' a little too far 🤣](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/608452) — 1 票 / 2 评论 / 2025-09-20 
+- [Change Values?](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600076) — 1 票 / 1 评论 / 2025-08-20 
+- [Survivorship Bias](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600285) — 1 票 / 0 评论 / 2025-08-21 
+- [Result Evaluation](https://www.kaggle.com/competitions/openai-gpt-oss-20b-red-teaming/discussion/600087) — 1 票 / 4 评论 / 2025-08-20 

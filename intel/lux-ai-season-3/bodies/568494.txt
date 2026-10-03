@@ -1,0 +1,156 @@
+# https://www.kaggle.com/competitions/lux-ai-season-3/discussion/568494
+
+Topic #568494: Imitation Learning: 3rd Place Solution
+  Author: aDg4b
+  Posted: 2025-03-16 09:06:49.201000
+  Votes: 57  Comments: 19
+
+At the beginning of the competition, I initially attempted to build a rule-based agent. However, by mid-January, I had hit my limits. After spending weeks trying to improve the solution without any progress, I decided to give the Imitation Learning (IL) approach a shot. Several days were spent downloading and preparing the data, followed by just a couple of hours of training. To my surprise, the IL-based bot outperformed my best rule-based agent. This led me to abandon the rule-based approach and switched to IL. While no groundbreaking discoveries in RL were made, the experience was both valuable and enjoyable!
+
+Solution
+
+My solution is based on two UNets:
+
+
+
+World-wise Unit-UNet: predicts the action for each of my units.
+
+Unit-wise SAP-UNet: predicts the target for the SAP action.
+
+
+I had originally planned to combine these two networks into a single model, but I never got around to implementing it.
+
+Unit-UNet
+
+The Unit-UNet takes two types of input:
+
+
+
+Feature Maps (28x24x24): These maps represent various aspects of the environment and the unit state at the current and previous steps. Some of the feature maps include: unit positions and energy (current and previous step), fleet vision, nebulae, asteroids, node energy, relics, reward points, the duration a node was out of vision.
+
+Global Features (17): These are broadcast to the bottleneck of the UNet and include: move cost, SAP cost, SAP range, team points from the start of the match, team points from the last step, match step, match number, hidden constants (nebula_tile_drift_speed, nebula_tile_energy_reduction, nebula_tile_vision_reduction, unit_sap_dropoff_factor, unit_energy_void_factor).
+
+
+The output of the Unit-UNet is a tensor of shape 6x24x24, representing the probabilities of performing each of the 6 possible actions (Center, Up, Right, Down, Left, SAP) at each position.
+
+This architecture can't properly handle situations when two or more units occupy the same position. To address this, during training, if multiple units are at the same position, I randomly select one action for all units, prioritizing moving actions and SAP actions over Center actions. This ensures that the model learns to avoid passive behavior and encourages more strategic actions.
+
+During inference, the Unit-UNet predicts a single action for each position. To handle multiple units at a position, I sort them by energy and assign the predicted action to the top half of the units with the most energy. This helps spread units and reduces the risk of clustering. Since top teams typically avoid bunching their units, this limitation of the Unit-UNet isn't a significant issue in practice.
+
+SAP-UNet
+
+This network complements the Unit-UNet by predicting the target location for the SAP action, while the Unit-UNet determines whether a unit should perform the SAP action in the first place.
+
+The SAP-UNet has a similar architecture to the Unit-UNet, with a few differences. This network is unit-wise, meaning it focuses on individual units rather than the entire environment. In terms of feature maps, I added the unit position and unit SAP positions to help the model focus on the specific location. Additionally, I included unit energy as a global feature.
+
+The output of the SAP-UNet is a tensor of shape 24x24, representing the probability distribution for potential SAP action targets at each position on the grid.
+
+Data Selection
+
+For my imitation learning, I used replays from the teams "Frog Parade" and "Flat Neurons". Big thanks to these teams!
+
+I didn't use all timesteps from a replay. If the agent lost a game, I added to the dataset only the matches where the agent won. If the agent won the game, I added all matches from that replay to the dataset. However, I never used matches where the outcome of the game was already decided (i.e., when one team won more than 2 matches). This is because there is a chance that these matches no longer reflect normal gameplay and might not be as useful for training.
+
+Data Preprocessing
+
+I believe Data Preprocessing is the most challenging and crucial part of IL in this competition, and I spent the majority of my time on this step.
+
+The agent does not have full visibility of the environment — it's operating under a fog of war, meaning it can only see a subset of the game state. Additionally, there are hidden constants and reward locations, that are not directly observable by the agent during the game. Simulating these hidden elements accurately is crucial for training the agent to mimic the behavior of the replay agent effectively. To achieve this, at each replay step, I run my own code that receives the information available to the replay agent. The code attempts to identify reward positions, populate the obstacle map (asteroids and nebulae), and uncover hidden constants based on the agent's observations. This process is almost the same as the space.update method from the Relicbound bot.
+
+As a result, the actual training data is not directly from the replays, but rather the data that my code extracts from the replay agent's observations during the game.
+
+Additionally, if the replay agent's spawn position was in the bottom-right corner, I mirrored the entire map along the line of symmetry. This transformation ensured that all the data in my dataset had a spawn location at position (0, 0). However, this process affected the distribution of Right, Left, Up, and Down actions, increasing the frequency of Right and Down actions while reducing the frequency of Left and Up actions, making the dataset more unbalanced. To address this, I used weighted cross-entropy loss during training, though I’m unsure whether the weights had a significant impact. I also dropped 95% of all instances where all units performed the Center action to reduce their frequency and speed up the learning process.
+
+Source Code
+
+You can find my code here: https://github.com/w9PcJLyb/lux3-bot
+
+And both of my final submissions are here: https://github.com/w9PcJLyb/lux3-bot/releases/tag/0.4.8
+
+
+
+lux3_0.4.8_fp.tar.gz (submission_id 43374110): Trained on replays from team "Frog Parade"
+
+lux3_0.4.8_fn.tar.gz (submission_id 43380878): Trained on "Frog Parade" and fine-tuned on "Flat Neurons"
+
+
+In my local evaluation and on the public leaderboard, lux3_0.4.8_fn.tar.gz performed better.
+
+Comments:
+├─ sytnocui (2025-03-27 03:34:32.363000) [+1]
+│  What was the highest rank your rule-based agent achieved, and what bottlenecks led you to switch to IL?  
+│  
+│  In Lux S2, the leader teams all used rule-based bots. Why do you think the leader teams in...
+  ├─ aDg4b (2025-03-29 06:06:47.310000) [+1]
+  │  Thank you again!
+  │  
+  │  
+  │  
+  │  
+  │  It’s hard to determine the exact rank of my best rule-based agent because I stopped submitting RB agents a while ago. It’s even harder to estimate because my last submitted RB ...
+├─ Stone Tao (2025-03-18 16:53:16.453000) [+1]
+│  Really interesting choice of modeling! Similar to season 1 it seems top 2 will be RL and third is IL again
+  ├─ aDg4b (2025-03-29 04:11:54.427000) [+0]
+  │  Thank you for hosting this competition. I’m looking forward to the next season!
+├─ CodeHacker (2025-03-16 13:29:41.247000) [+1]
+│  I clearly realized aspects I hadn't considered when using the RL approach. Previously, when I experimented with IL, I tried to train both SAP actions and their target positions simultaneously withi...
+├─ Gloria Chepkirui (2025-03-17 06:48:15.600000) [+-2]
+│  why is data science quite challenging?
+├─ sytnocui (2025-03-26 14:37:12.327000) [+0]
+│  Congratulations on your good performance, and thank you for your open source code framework! 
+│  
+│  May I ask what CPU&amp;GPU you used to train your model?
+  ├─ aDg4b (2025-03-29 04:20:15.883000) [+2]
+  │  Thank you!
+  │  
+  │  I only used my laptop in this competition. CPU: i7-10870H 32GB, GPU RTX 3060 6GB.
+├─ [deleted] (2025-03-18 07:43:03.263000) [+0]
+│  This is an impressive approach! Switching from a rule-based system to Imitation Learning was a smart decision, and the use of two UNet models for action prediction. I also appreciate the effort put...
+├─ KKY (2025-03-17 06:40:17.007000) [+0]
+│  Great solution!
+│  
+│  
+│    
+│  &lt; Thanks for consistently sharing  throughout the competition. Good luck to the top 3!
+├─ yuanzhe zhou (2025-03-17 04:19:03.353000) [+0]
+│  I had the same idea, but I ended up playing with rules with the help of llm.
+  ├─ sytnocui (2025-03-26 14:04:03.303000) [+0]
+  │  Do you use LLM by calling API through https?
+├─ Zacchaeus (2025-03-16 19:51:08.580000) [+0]
+│  Congrats! I tried an approach very similar to yours but without integrating the rule-based part. My agent ended up not learning the relic positions well.
+├─ Thomas (2025-03-16 18:54:22.503000) [+0]
+│  Congratulations @egrehbbt !
+│  Do you have any idea of the accuracy of your submitted model (to predict actions) ?
+  ├─ aDg4b (2025-03-16 19:25:27.620000) [+1]
+  │  lux3_0.4.8_fp.tar.gz
+  │  
+  │  
+  │  
+  │  Unit-Unet: center: 0.81, up: 0.63, right: 0.77, down: 0.76, left: 0.63, sap: 0.85
+  │  
+  │  SAP_Unet: 0.7640
+  │  
+  │  
+  │  lux3_0.4.8_fn.tar.gz
+  │  
+  │  
+  │  
+  │  Unit-Unet: center: 0.79, up: 0.55, right: 0.78,...
+    ├─ Thomas (2025-03-16 20:05:14.847000) [+0]
+    │  Thank you for the detailed explanation
+├─ Lin Myat Ko (2025-03-16 18:34:50.820000) [+0]
+│  Class imbalance is problematic in supervised learning. I have never seen anyone solves it with weighted cross-entropy before. Today, I learn. Thank you for sharing.
+│  
+│  F.cross_entropy(predictions, la...
+├─ Kyrylo Yemets (2025-03-16 11:30:55.043000) [+0]
+│  But if we download replay form public it didn't have initialazion of map. So we se only changes it in. And if take seed than we still didn't have actual position of the map. 
+│  
+│  So how you really ext...
+  ├─ aDg4b (2025-03-16 12:01:13.023000) [+1]
+  │  I’m not sure I fully understand your point. Public replays actually contain all the necessary information. They include data such as:
+  │  
+  │  
+  │  
+  │  seed
+  │  
+  │  positions of nebulae and asteroids, as well as node en...

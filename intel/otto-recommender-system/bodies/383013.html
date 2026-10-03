@@ -1,0 +1,88 @@
+<h1>Team G &amp; B &amp; D &amp; T</h1>
+<p>It was a pleasure to work with <a href="https://www.kaggle.com/titericz" target="_blank">@titericz</a> <a href="https://www.kaggle.com/benediktschifferer" target="_blank">@benediktschifferer</a> <a href="https://www.kaggle.com/theoviel" target="_blank">@theoviel</a> . We each made individual models and then ensembled all our work together by adding the ranks of each of our predictions per user target type. Below I describe my individual single model. My teammates will describe their work in their own discussion posts. You can read about Theo's LB 0.6029 model <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/382975" target="_blank">here</a>! You can read about Benny's LB 0.601 model <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/386497" target="_blank">here</a>!</p>
+<p>Most of my solution was made public in my notebook <a href="https://www.kaggle.com/code/cdeotte/candidate-rerank-model-lb-0-575" target="_blank">here</a> and discussion <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/370210" target="_blank">here</a> during the competition. There were only 3 significant ideas missing from my public work. Let's discuss how to boost my public work to LB 0.601 single model. (UPDATE: All code published to GitHub <a href="https://github.com/cdeotte/Kaggle-OTTO-Comp" target="_blank">here</a>)</p>
+<h1>How To Score LB 0.601 Single Model</h1>
+<p>It was explained <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/364721" target="_blank">here</a> and <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/370210" target="_blank">here</a> that the best approach was "candidate rerank" model. My public notebook <a href="https://www.kaggle.com/code/cdeotte/candidate-rerank-model-lb-0-575" target="_blank">here</a> shows how to achieve LB 0.575. And my discussion post <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/370210" target="_blank">here</a> explains how to improve my public notebook by adding a GBT ranker model. Below are the three missing pieces labeled (1), (2), and (3) to achieve LB 0.601</p>
+<h1>(1) Choosing Candidates</h1>
+<p>To build a "candidate rerank", we need candidates. Where do we get candidates? The easiest way is to get them from my public notebook. In the <code>def suggest_buys(df)</code> and <code>def suggest_clicks(df)</code> function, the last lines are</p>
+<pre><code>top_aids = [aid for aid, ct in aids_counter.most_common(20)] 
+return top_aids
+</code></pre>
+<p>To generate 50 candidates, we change 20 to 50 as in</p>
+<pre><code>top_aids = [aid for aid, ct in aids_counter.most_common(50)] 
+return top_aids
+</code></pre>
+<h1>(2) Choosing Interaction Features</h1>
+<p>We now have 50 candidates per user from our public notebook above. Next we need to make features for our reranker model. The strongest and easiest way to make features is extract our co-visit counts by changing the last two lines of my public notebook to the following:</p>
+<pre><code>top_counts = [ct for aid, ct in aids_counter.most_common(50)] 
+return top_counts
+</code></pre>
+<p>When we merge these counts to our candidates, we now have an interaction feature for each user item pair. To make more interaction features, we can extract the counts for each co-visit matrix individually. For example, imagine that we have 3 co-visit matrices named covisit2, covisit3, and covist4. Then one by one, we extract each covisit's counts:</p>
+<pre><code>EXTRACT = ['covisit2']
+aids_counter = Counter()
+if 'covisit2' in EXTRACT:
+    aids = list(itertools.chain(*[covisit2[aid] for aid in unique_aids if aid in covisit2]))
+    for a in aids: aids_counter[a] += 1
+if 'covisit3' in EXTRACT:
+    aids = list(itertools.chain(*[covisit3[aid] for aid in unique_aids if aid in covisit3]))
+    for a in aids: aids_counter[a] += 1
+if 'covisit4' in EXTRACT:
+    aids = list(itertools.chain(*[covisit4[aid] for aid in unique_aids if aid in covisit4]))
+    for a in aids: aids_counter[a] += 1
+top_counts = [ct for aid, ct in aids_counter.most_common(50)] 
+return top_counts
+</code></pre>
+<h1>Reranker Boost CV and LB +0.011</h1>
+<p>First we use the technique above to generate candidates and the technique above to extract covisit counts. Next we add some simple item and user features like counting the number of times an item is click cart or order. When we apply the XGB reranker described <a href="https://www.kaggle.com/competitions/otto-recommender-system/discussion/370210" target="_blank">here</a>, our CV and LB will boost by <code>+0.011</code>. For example, the public notebook will boost to LB 0.586.</p>
+<h1>Using Rules Only (without reranker) Scores LB 0.590</h1>
+<p>To score over LB 0.600, we create more co-visit matrices to boost the original notebook's LB score. My public notebook uses 3 covisit matrices and achieves LB 0.575. If we make 17 more covisit matrices, we can boost my public "rules only" notebook to LB 0.590 (new notebook published <a href="https://www.kaggle.com/cdeotte/rules-only-model-achieves-lb-590" target="_blank">here</a>). Then when we extract the covisit counts explained above, the XGB reranker will boost +0.011 and achieve LB 0.601</p>
+<h1>(3) Twenty Covisit Matrices</h1>
+<p>Below are a description of my 20 covisit matrices. These covisit matrices are the secret sauce enabling my single XGB ranker model to achieve LB 0.601. The following variable names are from my new LB 0.590 notebook posted <a href="https://www.kaggle.com/cdeotte/rules-only-model-achieves-lb-590" target="_blank">here</a>. (Example code showing how to compute covisit matrices on GPU is <a href="https://www.kaggle.com/code/cdeotte/candidate-rerank-model-lb-0-575" target="_blank">here</a>)</p>
+<ul>
+<li><strong>top_20</strong> - this covisit matrix is in my original notebook</li>
+<li><strong>top_20b</strong> - all covisit pair counts are consecutive items. See code below.<br>
+<code>df['k'] = np.arange(len(df))</code><br>
+<code>df = df.merge(df, on=['session'])</code><br>
+<code>df = df.loc[ (df.k_y - df.k_x).abs()==1 ]</code></li>
+<li><strong>top_20c</strong> - all covisit pair counts are <code>(df.k_y - df.k_x).abs()&lt;=2</code></li>
+<li><strong>top_20d</strong> - all covisit pairs are carts/orders and forward at most 3 consecutive<br>
+<code>df = df.loc[df['type'].isin(['carts','orders'])]</code><br>
+<code>df = df.merge(df, on=['session'])</code><br>
+<code>df = df.loc[ (df.k_y - df.k_x &gt; 0) &amp; (df.k_y - df.k_x &lt;= 3) ]</code></li>
+<li><strong>top_20e</strong> - all covisit pairs are <code>(df.k_y - df.k_x).abs()&lt;=3</code> and have time decay with<br>
+<code>df['wgt'] = (1/2)**( (df.ts_x - df.ts_y).abs() /60/60)</code></li>
+<li><strong>top_20f</strong> - same as above but <code>(df.k_y - df.k_x).abs()&lt;=6</code></li>
+<li><strong>top_20_orders</strong> - this covisit matrix is in my original notebook</li>
+<li><strong>top_20_buy2buy</strong> - this covisit matrix is in my original notebook</li>
+<li><strong>top_20_buy2buy2</strong> - use most recent 3 weeks data and only carts/orders. Apply time decay shown above.</li>
+<li><strong>top_20_test</strong> - use most recent 3 weeks data. Only forward in time pairs. Use clicks/carts/orders to carts/orders. Add time decay<br>
+<code>df = df.loc[df.ts &gt;= LAST_3_WEEKS ]</code><br>
+<code>df2 = df.loc[df['type'].isin(['carts','orders'])]</code><br>
+<code>df = df.merge(df2, on=['session'])</code><br>
+<code>df = df.loc[ df.ts_y - df.ts_x &gt; 0 ]</code><br>
+<code>df['wgt'] = (1/2)**( (df.ts_x - df.ts_y).abs() /60/60)</code></li>
+<li><strong>top_20_test2</strong> - use most recent 2 weeks data with time decay.</li>
+<li><strong>top_20_buy</strong> - Limit to forward 2 hours. Use clicks/carts/orders to carts/orders. Apply time decay.</li>
+<li><strong>top_20_new</strong> - Find cold start users in train. Pairs using only their first history item. Use clicks/carts/orders to carts/orders.<br>
+<code>df['x'] = df.groupby('session').ts.transform('min')</code><br>
+<code>df = df.loc[df.x &gt; train.ts.min() + TWO_WEEKS ]</code><br>
+<code>df['n'] = df.groupby('session').cumcount()</code><br>
+<code>df2 = df.loc[df['n']==0]</code><br>
+<code>df3 = df.loc[df['type'].isin(['carts','orders'])]</code><br>
+<code>df = df2.merge(df3, on='session')</code></li>
+<li><strong>top_20_new2</strong> - Find cold start users in train. Pairs using only their first history item. Use clicks/carts/orders to clicks/carts/orders. Apply time decay.</li>
+<li><strong>top_40_day</strong> - Use only last week data. Forward in time. Clicks/carts/orders to carts/orders. Time decay</li>
+<li><strong>top_40_day2</strong> - Use only last week data. Time decay</li>
+<li><strong>top_40_less</strong> - Train users with less than 6 history and test users with less than 3<br>
+<code>df = df.loc[df[COUNT]&lt;THRESHOLD]</code><br>
+<code>df = df.merge(df, on='session')</code></li>
+<li><strong>top_40_more</strong> - Train users with more than 6 history and test users with more than 3</li>
+<li><strong>top_40_less2</strong> - Use item pairs with first item before 2pm. Clicks/carts/orders to carts/orders. Time decay<br>
+<code>df2 = df.loc[df[HOUR]&lt;14]</code><br>
+<code>df = df2.merge(df, on='session')</code></li>
+<li><strong>top_40_more2</strong> - Use item pairs with first item after 2pm. Clicks/carts/orders to carts/orders. Time decay</li>
+</ul>
+<h1>Fast Covisit Experiments With RAPIDS cuDF</h1>
+<p>To find the above 20 covisit matrices, i computed hundreds of covisit matrices and then computed local CV score. To make covisit matrices quickly, I used RAPIDS cuDF to make each covisit matrix on GPU in under 1 minute. Code to make covisit matrix is shown <a href="https://www.kaggle.com/code/cdeotte/candidate-rerank-model-lb-0-575" target="_blank">here</a>. Matrices were made using Nvidia 4xV100 32GB GPUs.</p>
+<h1>UPDATE: GitHub Code!</h1>
+<p>I published all 261 jupyter notebooks in my GitHub <a href="https://github.com/cdeotte/Kaggle-OTTO-Comp" target="_blank">here</a>. Specially we can review all the code used to generate co-visititation matices. And we can see the pipeline for building, training, inferring a GBT reranker model. Our team's final Kaggle inference submit notebook is <a href="https://www.kaggle.com/code/cdeotte/3rd-place-team-g-b-d-t-0-604" target="_blank">here</a>. My notebook to generate 100 candidates for reranker is <a href="https://www.kaggle.com/cdeotte/rules-only-model-achieves-lb-590" target="_blank">here</a>. By itself it scores 49th place LB 0.590!</p>

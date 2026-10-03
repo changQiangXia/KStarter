@@ -1,0 +1,101 @@
+<p>This is my first year on Kaggle and also my first Kaggle competition. Encountering repeated errors with the test set in my very first Featured Competition was very unfriendly to a newcomer like me. This current version of the solution was written following the requirements from the email.<br>
+Initially, I tried to use Uni-Mol for predictions and wasted a lot of time before realizing I couldn't use it well, and my local computing power was completely insufficient, so I had no choice but to give up. However, working with Uni-Mol made me realize the importance of data preprocessing, which made me much more proficient when I later switched to using GNNs.</p>
+<h1>code,PPT,data here:</h1>
+<p><a href="https://github.com/fresnellll/kaggle-NeurIPS-polymer-prediction-solution" target="_blank">https://github.com/fresnellll/kaggle-NeurIPS-polymer-prediction-solution</a></p>
+<h1>Overview</h1>
+<p>My winning method is a fusion scheme that combines a Graph Attention Network (GATv2Conv) with selected Morgan Fingerprint features. I believe the main factors for my success are:<br>
+1,GATv2's attention mechanism can already capture complex, high-level geometric and chemical environment information. The simple, bit-based Morgan Fingerprints provide complementary, low-level substructure information without creating conflicting signals.<br>
+2,Recognizing that the data might have biases, I used the validation set as a baseline to calibrate the data and used 5-fold cross-validation to mitigate the risks posed by potential data anomalies.</p>
+<p>Core GNN Backbone: Each&nbsp;GATv2Conv&nbsp;layer utilizes&nbsp;8 Attention Heads, allowing the model to focus on different neighborhood information patterns simultaneously.The GNN's hidden dimension is&nbsp;384. With 8 heads, each head processes a 48-dimensional feature space (384 / 8 = 48).<br>
+Residual Connections&nbsp;are implemented via simple element-wise addition, enabling stable training of the 6-layer deep network.<br>
+Feature Fusion Architecture:The fusion of global and local features is a critical step. We use simple but effective concatenation. </p>
+<p>| Graph Embedding (384 dims) | Top 50 FP (50 dims) |<br>
+Independent MLP Prediction Heads:<br>
+Following the fusion layer, each of the 5 target properties has its own dedicated prediction head.<br>
+Each head is a 2-layer MLP with a&nbsp;ReLU&nbsp;activation and&nbsp;Dropout&nbsp;for regularization:<br>
+Linear(in=434, out=384)<br>
+ReLU()<br>
+Dropout(p=0.2)<br>
+Linear(in=384, out=1)<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2F6af656894f438fc4d3dc1c1666fd97bf%2F2025-09-20%20154804.png?generation=1758355211170570&amp;alt=media" alt="model overview"></p>
+<p>**Training Pipeline **<br>
+Robust Ensembling with 5-Fold Cross-Validation:<br>
+The final submission is a&nbsp;simple average ensemble&nbsp;of the predictions from the 5 models. Each model is given an equal weight of 20%.<br>
+Training Hyperparameters &amp; Optimization:<br>
+Optimizer:&nbsp;We use&nbsp;AdamW, which often provides better regularization and performance on deep learning models compared to the standard&nbsp;Adam.<br>
+Learning Rate:&nbsp;A constant learning rate of&nbsp;1e-4&nbsp;is used throughout the training.<br>
+Early Stopping:&nbsp;Training is halted if the validation wMAE score does not improve for&nbsp;40 consecutive epochs&nbsp;(patience=40). The model from the best epoch is saved.<br>
+Batch Size:&nbsp;We use a batch size of&nbsp;64&nbsp;during training.<br>
+Custom Loss Function for Direct Metric Optimization:<br>
+We implemented a custom&nbsp;Weighted MAE (wMAE) Loss Function&nbsp;in PyTorch.<br>
+This is critical because it ensures the model's training objective is&nbsp;perfectly aligned with the official competition metric, leading to more direct and efficient optimization.<br>
+Post-Hoc Calibration Details:<br>
+The Linear Calibrator is a simple&nbsp;LinearRegression()&nbsp;model from&nbsp;scikit-learn. For each target, it learns a linear transformation (y = a*x + b) to map the GNN's raw predictions to the true values, effectively correcting simple biases.</p>
+<h1>Feature Selection/engineering</h1>
+<p><strong>Fundamental Transformation: SMILES to Graph Representation</strong><br>
+We convert 1D SMILES strings into rich graph structures where atoms are nodes and bonds are edges.<br>
+Node features include atomic number, degree, hybridization, etc. (7 features total).<br>
+This allows our GNN model to learn directly from the polymer’s 2D topology, capturing complex structural information.</p>
+<p><strong>Key Engineering Step: Chemical Data Augmentation</strong><br>
+We implemented a function to programmatically extend monomer repeat units (<em>A</em>&nbsp;-&gt;&nbsp;<em>A-A-A</em>).<br>
+This creates a larger and more realistic training set, forcing the model to learn features from longer, more representative polymer chains, which significantly boosts generalization.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2Fc56ae9b53c4d809bb94bb2d4c811f741%2F2025-09-20%20132100.png?generation=1758355487895108&amp;alt=media" alt="Before augmentation"><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2F16b805f1bb73d66818ef3d50edb79fb8%2F2025-09-20%20132122.png?generation=1758355529307779&amp;alt=media" alt="After aufmentation"></p>
+<p><strong>Winning Strategy: Hybrid &amp; Task-Specific Feature Selection</strong><br>
+We combine two feature types:&nbsp;learned global embeddings&nbsp;from the GNN and&nbsp;curated local features&nbsp;from Morgan Fingerprints.<br>
+For each of the 5 targets, we independently select the&nbsp;Top 50 most predictive Morgan Fingerprints&nbsp;using F-regression, creating a tailored feature set for each prediction task.</p>
+<p><strong>e.g.</strong><br>
+We used&nbsp;F-regression&nbsp;to score all 1024 Morgan Fingerprint bits against the&nbsp;Tg&nbsp;target, identifying the most predictive chemical substructures.<br>
+The plot visualizes the Top 20 bits with the highest scores. These bits, such as&nbsp;fp_587&nbsp;and&nbsp;fp_80, represent the most influential local chemical features for&nbsp;Tg&nbsp;prediction.<br>
+This data-driven selection process allowed us to create a compact and powerful 50-feature set for the&nbsp;Tg&nbsp;prediction head, instead of using the full noisy 1024-bit vector.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2F4d438018d26a8efb60dd6b49d45d031e%2F2025-09-20%20160810.png?generation=1758355705593705&amp;alt=media" alt="top 20 FP for Tg"><br>
+Relationship to Target: Impact of the Top Feature (fp_587) on Tg<br>
+To visualize the impact of our most important feature, we compared the&nbsp;Tg&nbsp;distributions for two groups of polymers: those that&nbsp;possess&nbsp;the&nbsp;fp_587&nbsp;fingerprint bit and those that&nbsp;do not.<br>
+The violin plot clearly shows a significant positive correlation: polymers&nbsp;with the&nbsp;fp_587&nbsp;substructure have a markedly higher median&nbsp;Tg&nbsp;(approx. 280°C vs 150°C).<br>
+This strong visual evidence validates our feature selection method and confirms that our model is learning meaningful chemical relationships.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2Fd5614ec748186f0d35b1331ef7c2f205%2F2025-09-20%20160943.png?generation=1758355800084528&amp;alt=media" alt="relationship"></p>
+<h1>Training Methods</h1>
+<p><strong>Custom Weighted MAE Loss with AdamW Optimizer.</strong><br>
+We implemented a custom loss function in PyTorch that&nbsp;perfectly mirrors the official wMAE competition metric. This ensures the model directly optimizes for the final score.<br>
+AdamW&nbsp;optimizer was used with a constant learning rate of&nbsp;1e-4.<br>
+Robust 5-Fold Cross-Validation Ensemble.<br>
+The final solution is a simple average ensemble of 5 models trained on different 80/20 splits of the data.<br>
+Batch size of&nbsp;64&nbsp;was used during training.<br>
+<strong>Two-Stage Training with Early Stopping &amp; Refitting.</strong><br>
+Stage 1: Find Best Epoch.&nbsp;We train on 80% of the data and use the remaining 20% as a validation set for&nbsp;Early Stopping&nbsp;(patience=40), preventing overfitting.<br>
+Stage 2: Refit on Full Data.&nbsp;A new model is then re-trained from scratch on 100% of the fold's data for exactly the best number of epochs found in Stage 1. This maximizes data utilization for each final model.<br>
+<strong>Post-Hoc Linear Calibration.</strong><br>
+After training, a simple&nbsp;LinearRegression&nbsp;model is fitted for each target on the validation set's predictions. This effectively corrects any systematic bias from the GNN model, providing a final small but crucial boost in performance.</p>
+<h1>Important&amp;interesting Findings</h1>
+<p><strong>Finding 1: Polymer Chain Extension is Superior to Isomer Generation</strong><br>
+We experimented with two distinct data augmentation strategies.<br>
+Strategy A (Chain Extension): Simulating polymerization by extending monomer repeat units (<em>A</em> -&gt; <em>A-A-A</em>). This was highly effective.<br>
+Strategy B (Isomer Generation): Creating multiple different but chemically valid SMILES strings (isomers) for the same monomer. This provided no performance gain.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2Fa23fb7a41df6cf1bf764086a014c9214%2F2025-09-20%20161521.png?generation=1758356143202293&amp;alt=media" alt="different Augmentation"></p>
+<p><strong>Finding 2:The "Sweet Spot" of Batch Size - Bigger is Not Always Better</strong><br>
+Despite having enough GPU memory for larger batch sizes (128, 256), we found that a smaller batch size of&nbsp;64&nbsp;consistently yielded the best results.<br>
+Larger batch sizes led to a degradation in the final PB score.</p>
+<p><strong>Finding 3: Surprising Synergy Between GNN Architectures and Feature Types</strong><br>
+We tested different combinations of GNN backbones and auxiliary features. The results revealed a strong and unexpected interaction effect.<br>
+GATv2 + Morgan Fingerprints&nbsp;was the clear winner.<br>
+Interestingly, RDKit Descriptors&nbsp;hurt&nbsp;the performance of GATv2 a lot, but&nbsp;helped&nbsp;the performance of NNConv a little.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2F193ca0e336bc899498f4bdf92ba91457%2F2025-09-20%20161733.png?generation=1758356267436482&amp;alt=media" alt="different models&amp;features"><br>
+Hypothesis:<br>
+GATv2's attention mechanism already captures complex, high-level geometric and chemical environments. The simple, bit-based&nbsp;Morgan Fingerprints&nbsp;provide complementary, low-level substructure information without creating conflicting signals.<br>
+NNConv, being a simpler message-passing network, may benefit more from the pre-computed, human-engineered&nbsp;RDKit Descriptors, which provide it with high-level chemical concepts it struggles to learn on its own.</p>
+<p><strong>Finding 4: Systematic Bias Correction via Post-Hoc Calibration</strong><br>
+Analysis of our Out-of-Fold (OOF) predictions across all 5 folds revealed a consistent, systematic bias: the model's raw predictions (blue line) consistently overestimate low&nbsp;Tg&nbsp;values and underestimate high&nbsp;Tg&nbsp;values.<br>
+This distribution shift is a common challenge, and correcting for it was key to maximizing our score.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2Fc9496bad40d717444059fc6cf7a5437d%2F2025-09-20%20161952.png?generation=1758356405634528&amp;alt=media" alt=""><br>
+We found this bias can be effectively corrected with a simple&nbsp;LinearRegression&nbsp;model fitted on each fold's validation predictions.<br>
+As shown in the table, this simple post-hoc step provides a&nbsp;significant 5.47% improvement&nbsp;to the final wMAE score. It's a small change that makes a crucial impact.Our PB Score from 0.080 to 0.078.We must thanks to <a href="https://www.kaggle.com/hengck23" target="_blank">https://www.kaggle.com/hengck23</a> in <a href="https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589360" target="_blank">https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/discussion/589360</a></p>
+<h1>Simple Model</h1>
+<p>To understand the contribution of each component, we evaluated several simplified versions of our final model.<br>
+A&nbsp;single model&nbsp;(1-fold) without ensembling already achieves a competitive score.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F23753908%2Fa66e87e43feeca47789eaf9e91d8af14%2F2025-09-20%20162308.png?generation=1758356601590792&amp;alt=media" alt="Simple Model"><br>
+<strong>Post-Competition Finding: The Untapped Potential of&nbsp;RemoveHs</strong><br>
+After the competition ended, we tested a simple change in the data preprocessing step: removing hydrogen atoms (RemoveHs&nbsp;in RDKit) before graph conversion.<br>
+Surprisingly, a single model trained with&nbsp;RemoveHs&nbsp;achieved a&nbsp;Public LB score of ~0.083, which is&nbsp;even better than our single model with hydrogens.<br>
+Conclusion:&nbsp;This suggests that if we had applied the&nbsp;RemoveHs&nbsp;preprocessing to our full 5-fold ensemble pipeline, our final score could have been even higher. The model performs better when focusing on the heavy-atom backbone of the polymer.</p>
+<p>Thank you<br>
+hongyu Guo</p>

@@ -1,0 +1,49 @@
+# nfl-big-data-bowl-2023 讨论区（按票数排序，共 47 条）
+
+- [Welcome to the 2023 Big Data Bowl!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359079) — 72 票 / 70 评论 / 2022-10-10 
+- [2023 Big Data Bowl Film Review](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/362714) — 25 票 / 0 评论 / 2022-10-28 
+- [Winner of past NFL Big Data Bowl analytics competitions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/361175) — 23 票 / 2 评论 / 2022-10-20 
+- [List of Potential 2023 Big Data Bowl Topics](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/365497) — 21 票 / 0 评论 / 2022-11-11 
+- [2023 Big Data Bowl: finalists and honorable mention announcement](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/382941) — 18 票 / 6 评论 / 2023-02-01 
+- [Host-Provided Demo Notebook](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/360659) — 18 票 / 0 评论 / 2022-10-17 
+- [Ressources for American football newbies](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359537) — 18 票 / 4 评论 / 2022-10-12 
+- [Big Data Bowl Next Steps](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/377795) — 14 票 / 10 评论 / 2023-01-12 
+- [Papers on NFL and Machine Learning](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359945) — 14 票 / 6 评论 / 2022-10-14 
+- [Great story about linemen and the Matthews family](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/361504) — 13 票 / 1 评论 / 2022-10-22 
+- [Video resources on OL and DL technique and tactics](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359730) — 11 票 / 2 评论 / 2022-10-13 
+- [Useful resources for a start!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/371604) — 9 票 / 0 评论 / 2022-12-11 
+- [Minor timstamp fix](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359791) — 8 票 / 0 评论 / 2022-10-13 
+- [Historical data ?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/360087) — 6 票 / 1 评论 / 2022-10-14 
+- [pff_positionLinedUp meaning](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/369849) — 3 票 / 8 评论 / 2022-12-01 
+- [Feedback on Submissions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/398532) — 2 票 / 0 评论 / 2023-03-30 
+- [Length of Frame](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359781) — 2 票 / 3 评论 / 2022-10-13 
+- [Use database in kaggle](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/364884) — 2 票 / 1 评论 / 2022-11-08 
+- [Using Game Footage in Notebook Submissions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/375510) — 2 票 / 1 评论 / 2023-01-02 
+- [(see Edit & comment) How to Participate in an Unfair Competition -a priori- (Open letter to the contest's organizers: the hosts etc)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/366229) — 2 票 / 12 评论 / 2022-11-15 
+- [Submission Question](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/376925) — 2 票 / 2 评论 / 2023-01-09 
+- [Great Dataset!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/443743) — 2 票 / 0 评论 / 2023-09-28 
+- [Resume Drop](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/400851) — 1 票 / 0 评论 / 2023-04-10 
+- [Questions on pff_passCoverage, pff_passCoverageType, and other pff_* fields](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/373948) — 1 票 / 5 评论 / 2022-12-24 
+- [need help understanding some parts of play description.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/373035) — 1 票 / 2 评论 / 2022-12-19 
+- [Is the Appendix part of scoring?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/375499) — 1 票 / 1 评论 / 2023-01-02 
+- [Can you create a applet with GUI that lives in the submission book?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/370682) — 1 票 / 4 评论 / 2022-12-05 
+- [Win/Loss and Score per Game?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/365772) — 1 票 / 2 评论 / 2022-11-12 
+- [Screen Passing Plays excluded from passing data?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/364365) — 1 票 / 4 评论 / 2022-11-06 
+- [Images no longer showing in notebook](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/377798) — 1 票 / 3 评论 / 2023-01-12 
+- [Plays - Event - First Contact](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/374833) — 0 票 / 1 评论 / 2022-12-29 
+- [Are Outside Linebackers who rush the passer considered Defensive Lineman?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/374806) — 0 票 / 1 评论 / 2022-12-28 
+- [Glossary of pff_positionLinedUP feature](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/374579) — 0 票 / 1 评论 / 2022-12-27 
+- [NFL Big Data Bowl 2023](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/374913) — 0 票 / 0 评论 / 2022-12-29 
+- [Question concerning weekly tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/368177) — 0 票 / 3 评论 / 2022-11-24 
+- [Difference between autoevent_passforward and pass_forward?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/371711) — 0 票 / 2 评论 / 2022-12-11 
+- [Any chance the remaining 2021 season data is available to use as unseen data?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/371461) — 0 票 / 1 评论 / 2022-12-10 
+- [NFL Competion Goal](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/369737) — 0 票 / 1 评论 / 2022-12-01 
+- [Participation questions.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/376198) — 0 票 / 3 评论 / 2023-01-05 
+- [Submission Rule Questions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/376387) — 0 票 / 2 评论 / 2023-01-06 
+- [Question about Weekly Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/365774) — 0 票 / 1 评论 / 2022-11-12 
+- [Questions about Notebook requirements](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/376426) — 0 票 / 1 评论 / 2023-01-06 
+- [Questions on Coaching Track Submission](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/376847) — 0 票 / 1 评论 / 2023-01-08 
+- [Question by competition](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/407841) — 0 票 / 0 评论 / 2023-05-08 
+- [Limited tracking data?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/460361) — 0 票 / 3 评论 / 2023-12-08 
+- [I can not submit, it says An Evaluation system has not been configured for this competition. Submissions have been disabled for this competition.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/376730) — -1 票 / 3 评论 / 2023-01-08 
+- [bias concerns](https://www.kaggle.com/competitions/nfl-big-data-bowl-2023/discussion/359200) — -1 票 / 18 评论 / 2022-10-11 

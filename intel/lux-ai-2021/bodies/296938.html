@@ -1,0 +1,48 @@
+<p>Firstly, we'd like to thank the organizers and other participants. We were able to learn much through the competition, such as reinforcement learning and CNN architectures. The only regret is that we couldn't make RL work out. On the other hand, if it were easier to utilize RL, we wouldn't have obtained such a good result due to our lack of knowledge and skills. Fortunately, we will be able to learn from the successful top teams using RL,  so we're looking forward to using this experience for the next time.</p>
+<h1>Summary</h1>
+<p>Like many of the other participants, our final solution is imitation learning from top 7 agents using the almost same network architecture shared by <a href="https://www.kaggle.com/shoheiazuma/lux-ai-with-imitation-learning" target="_blank">Sazuma's notebook</a>.<br>
+Since it would not be desirable to train the network from a complete mixture of data from different agents, we prepared as many last FC-layers as the number of agents to learn, while the CNN architecture is shared.<br>
+In inference, we used only the FC-layer which is trained with the top agent.</p>
+<h1>Model</h1>
+<p><img src="https://user-images.githubusercontent.com/22230913/147354382-37ff4bd6-9300-4870-99b5-4fe72b0d73a9.jpg" alt="model picture"></p>
+<ul>
+<li>Channel Size: 384</li>
+<li>The actions of all units and all citytiles output by one forward.</li>
+</ul>
+<p>We've noticed that the representation power of the network in the original notebook is insufficient, so inserted FReLU, SE-Layer, and transformer encoder.  In addition, we increased as many layers and parameters as possible. In our model, in one turn, only one forward is executed, so we could save inference time and maximize the network's representation power (On average, it seems that it takes about 1.5sec per turn except for the first turn, which may need to load the model parameters.). In terms of training error, validation error, and self-play results, we observed the improvements by this network architecture refinements.</p>
+<h1>Training</h1>
+<ul>
+<li>Optimizer: AdamW(lr=1e-03, weight_decay=1e-05)</li>
+<li>Epochs: 100</li>
+<li>LRScheduler: reduce the learning rate by 0.1 at the 50 epochs and 80 epochs.</li>
+<li>Loss: Weighted Softmax CrossEntropy (only reduce the weight for move center)</li>
+<li>Data Augmentation: Rotate 4 directions</li>
+</ul>
+<p>It's worth mentioning that the number of epochs plays an important role. It costs the training time much (about 1 week for the final model), but through the self-plays and LB results, we observed that the model trained by many epochs showed better performance.</p>
+<h1>Actions</h1>
+<p>Our actions model is not so different from others' solutions.</p>
+<h2>Worker's Actions</h2>
+<ul>
+<li>Move x 4</li>
+<li>Move Center</li>
+<li>Build City  </li>
+<li>Transfer x 4</li>
+</ul>
+<h2>Citytile's Actions</h2>
+<ul>
+<li>Research</li>
+<li>Build Worker</li>
+<li>Do Nothing</li>
+</ul>
+<h1>Network Interpreter</h1>
+<p>Using the network's output itself as the output of the agents didn't give a satisfactory performance. So we added some rules to interpret the network's output. The followings are some examples.</p>
+<ul>
+<li>Prohibit workers go to the same cell except for citytile.</li>
+<li>Prohibit workers in the citytile go to the same citytile's cell. (If this is allowed, some multiple workers continue to take the same actions.)</li>
+<li>As to citytile's actions, the proportion of "Do Nothing" is so large and this prevents imitating the original agent correctly. So in the situation where building workers is allowed, prioritized "Build Worker" in the order of the output score.</li>
+</ul>
+<p>We've evaluated these rules through thousands of self-plays.</p>
+<h1>Code</h1>
+<p>We published the code for the final model <a href="https://github.com/takuwwwo/LuxAI" target="_blank">here</a>.</p>
+<h1>Dataset</h1>
+<p>Dataset for the final solution is uploaded <a href="https://www.kaggle.com/bomac1/luxai-replay-dataset" target="_blank">here</a>.</p>

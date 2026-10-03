@@ -1,0 +1,657 @@
+# https://www.kaggle.com/competitions/neurogolf-2026/discussion/726653
+
+Topic #726653: 9th place solution
+  Author: Yiheng Wang
+  Posted: 2026-07-16 00:05:38.601000
+  Votes: 66  Comments: 22
+
+My NeuroGolf Pipeline and Key Tricks
+
+Overview
+
+NeuroGolf asked competitors to solve 400 ARC-AGI tasks with ONNX models while minimizing model cost.
+
+My system-first approach was inspired by the fourth-place solution to the 2025
+Google Code Golf Championship, Parallel Sampling + Rule-based Prompt
+Generation [1]. Their published system ran many Codex attempts in parallel, verified
+the candidates, selected the best valid result, and used structured prompts to
+drive the next round. They also mixed iterative refinement with from-scratch
+sampling to escape local optima.
+
+I had used the then-current GPT-5 Codex during that competition as well, but in
+my experience it was not yet reliable enough to make this style of automation
+consistently productive. Still, the fourth-place writeup stayed with me: I
+wanted to try the same basic idea when a problem and a stronger model made it a
+better fit. NeuroGolf provided exactly that setting. It had 400 independent
+tasks, a mechanical verifier, and a scalar optimization objective; meanwhile,
+GPT-5.5 felt substantially more capable at sustained repository-level work.
+So my first move was not to optimize tasks one by one, but to build the system
+that would optimize them.
+
+The competition's early phase repeatedly exposed scoring loopholes and
+validator edge cases. Around May 6, the scoring standard changed, so this
+writeup starts from that reset rather than covering the earlier
+loophole-driven phase.
+
+Under the new metric:
+
+cost = memory + parameters
+score = max(1, 25 - ln(max(1, cost)))
+
+
+MACs were diagnostic only. This completely changed the optimization target: computation was effectively free, while parameters and intermediate tensors were expensive.
+
+My first safe online bundle after the reset landed in second place. Within a couple of days of further optimization under the new metric, it moved into a clear first place, ahead of the field, and held that lead for roughly 15 days. This was likely helped by a head start I hadn't fully appreciated at the time: during the exploit-heavy weeks before the reset, I had already been adding constraints to my optimization targets to avoid relying on scoring loopholes, so the underlying models were "correct" rather than loophole-dependent well before the reset made that distinction matter. All 400 tasks eventually passed.
+
+The result came from two complementary pipelines:
+
+
+
+a Codex scheduler for high-throughput implementation and validation;
+
+a ChatGPT webpage workflow for long-context semantic analysis and architecture discovery.
+
+
+
+
+The Per-Task Optimization Unit
+
+Before introducing the scheduler, it is useful to define what one optimization
+task looks like. Each of the 400 tasks is an independent program-synthesis
+problem: given a small set of input/output examples, produce the cheapest ONNX
+graph that implements the same transformation.
+
+What a Worker Reads
+
+A worker does not receive only the examples and the incumbent ONNX file. Its
+context combines four kinds of information:
+
+
+
+
+Context layer
+Main sources
+Purpose
+
+
+
+
+Task evidence
+dataset/taskNNN.json
+The known input/output examples from which the worker re-derives the semantic transformation and its invariants.
+
+
+Current implementation
+output/taskNNN.onnx, attacks/attack_tNNN.py, and docs/task-NNN.md
+The actual graph, its reproducible builder, the current algorithm and cost breakdown, previous experiments, and all known hidden/online risks. These are the only persistent files the task worker may modify.
+
+
+Shared optimization knowledge
+docs/tricks.md and, depending on the prompt mode, chatgpt/sources/scorer_policy.md, tricks_curated.md, and tricks_final.md
+The scorer rules and hard gates, reusable ONNX constructions, operator-specific cost tricks, runtime constraints, successful transfers, and known online-fatal patterns. These shared playbooks are read-only for parallel workers.
+
+
+Search state
+The task row in reval_scores.txt, persistent TaskState, prior-turn summaries, failure logs, and preserved candidates
+The accepted score/cost, current target, what has already been tried, why it failed, and whether the next turn should optimize, repair, or rethink the method.
+
+
+
+
+The worker also receives an external semantic reference from the Python
+code-golf solutions. It runs:
+
+python automation/notebook_task_hints.py --task NNN
+
+
+This helper returns three useful views: the method notes immediately above the
+task in the winning-solutions notebook, that notebook's golfed Python
+implementation, and the corresponding Python reference solution from
+NeurIPS-Code-Golf-2025/solutions/taskNNN.py. These solutions are not
+translated mechanically into ONNX. They are alternative descriptions of the
+algorithm, often exposing a much simpler invariant than the incumbent graph.
+
+Finally, the repository's checker and task-local attack script form the
+validation interface. Workers may create disposable probes under tmp/, but
+the dataset, global playbooks, Python references, score table, and shared
+scorer/checker code remain read-only. Only the task's three-file unit is
+eligible for promotion.
+
+The worker must return a correct ONNX model. Correctness is the hard constraint;
+among correct models, the objective is to minimize the official cost:
+
+cost = memory + parameters
+
+
+Why Every Task Has Three Files
+
+An ONNX binary alone is not enough for iterative optimization. I therefore
+treat each task as a three-file unit:
+
+
+
+
+Artifact
+Role
+Why we keep it
+
+
+
+
+output/taskNNN.onnx
+The executable submission artifact
+This is the graph evaluated by the checker and the competition runtime.
+
+
+attacks/attack_tNNN.py
+The reproducible builder and test script
+ONNX is an opaque binary. The script records exactly how the graph was constructed, makes structural changes reviewable, and lets us rebuild and validate it.
+
+
+docs/task-NNN.md
+Durable task memory
+It records the inferred rule, assumptions, current architecture and score, experiments, failures, and hidden-test risks so that later turns do not rediscover the same facts.
+
+
+
+
+As a concrete reference, I attached the complete three-file unit for T001 to
+this writeup: attack_t001.py, task-001.md, and task001.onnx. Together they
+show the intended relationship between the artifacts: the attack script is the
+readable and reproducible source, the task document explains the semantics,
+cost history, validation evidence, and known risks, and the ONNX file is the
+generated executable submitted to the evaluator. The binary is therefore not
+an unexplained end product; it can be traced back to both its construction and
+the reasoning that justified it.
+
+Temporary probes may be written under tmp/, but they are disposable and are
+not part of the accepted task state. The three files above move together: a
+successful turn promotes all of them, while a failed turn restores all of them.
+This keeps the executable model, its source, and its explanation synchronized.
+
+examples + Python references + shared tricks
+                    +
+      current three-file state + score/history
+                    |
+                    v
+             Codex experiment
+                    |
+                    v
+           candidate three-file state
+                    |
+                    v
+         correctness and cost validation
+               /                \
+          accept              reject
+     promote all three    restore all three
+
+
+This task boundary also makes parallel execution safe: each worker owns one
+attack script, one document, one ONNX output, and one scratch area. Workers can
+optimize different tasks concurrently without editing the same files.
+
+Pipeline 1: The Multi-Turn Codex Scheduler
+
+Why I Built It
+
+NeuroGolf contains 400 independent optimization tasks. Optimizing each task
+may require several attempts: understanding the current ONNX graph, testing a
+new representation, diagnosing its failure, and repairing the best candidate.
+
+I could not supervise this process continuously through interactive CLI
+sessions. Launching 400 agents simultaneously was also impractical because of
+model-concurrency, CPU, memory, logging, and recovery constraints. Instead, I
+built a scheduler that runs a bounded pool of Codex workers while preserving a
+separate multi-turn session for every task.
+
+This moved the human role up one level. I selected queues, prompt strategies,
+concurrency, and stopping rules; the scheduler handled execution, validation,
+rollback, and recovery.
+
+
+
+How It Works
+
+The scheduler keeps at most N workers active. When one worker finishes, the
+next queued task immediately takes the free slot, so fast tasks do not wait for
+the slowest task in a fixed batch.
+
+Each task owns persistent state including its Codex session ID, accepted cost,
+turn number, no-improvement streak, previous summary, and best failed
+candidate. The first turn starts a new session with codex exec; later turns
+continue the same reasoning context with codex exec resume &lt;session_id&gt;.
+Consequently, a worker can repair a concrete failure instead of rediscovering
+the task from scratch on every attempt.
+
+Before each turn, the scheduler backs up the task-owned files. The worker then
+experiments only within that task's attack script, documentation, ONNX output,
+and scratch directory. Its result passes through a transactional gate:
+
+
+
+Run the strict ONNX checker and shape inference.
+
+Verify runtime correctness on every available example.
+
+Measure the official cost: memory + parameters.
+
+Promote the candidate only if it is correct and strictly cheaper.
+
+Otherwise restore the backup, optionally preserving a promising candidate
+for a later repair turn.
+
+
+In short, every turn follows:
+
+backup -&gt; experiment -&gt; validate -&gt; promote or restore
+
+
+The next prompt depends on the result. An improvement receives a lower target;
+a near-correct model receives a repair prompt; a failed representation receives
+a method-rethink prompt. Tasks stop after their round or no-improvement limit.
+
+All session state and results are checkpointed in sessions.json,
+results.jsonl, and per-turn logs. Interrupted waves can therefore resume
+without repeating completed work or losing task-specific reasoning context.
+
+Closing the Loop After a Wave
+
+Local validation was necessary but not sufficient. The public task examples
+were small, while the online evaluator could exercise additional inputs. After
+the scheduler had run for a while, I therefore paused optimization and closed
+the loop in two stages.
+
+
+
+1. Submit the Changed Tasks and Locate Regressions
+
+I packaged the modified ONNX files into a submission archive, with the last
+accepted models supplying the unchanged tasks. For that archive I knew the
+expected local gain:
+
+expected gain = sum(new local task scores - previous accepted task scores)
+online gap    = expected gain - observed online gain
+
+
+If the online gain matched the local estimate, the changed tasks were treated
+as online-confirmed. A material gap meant that one or more candidates had
+overfit the known examples, relied on an unsafe runtime assumption, or behaved
+differently on hidden inputs.
+
+When an archive contained several changes, its total score did not identify
+the failing task directly. I located failures with differential submissions:
+split the changed-task set into smaller groups, submit archives that differ by
+only one group, compare their score deltas, and repeat until the responsible
+task or interaction is isolated. This is effectively a binary search over the
+wave. Rejected candidates were reverted or quarantined, and the observed
+failure mode was added to the task document under its hidden/online warnings.
+
+2. Consolidate Online-Proven Tricks
+
+Successful task optimizations produced reusable ideas: graph rewrites,
+operator substitutions, carrier constructions, cost formulas, and warnings
+about transformations that looked valid locally but failed online. These
+lessons were more valuable than the individual score improvement because they
+could unlock other tasks in later waves.
+
+Parallel workers did not edit the shared docs/tricks.md directly. Instead,
+each worker recorded its result in the task document, and the scheduler emitted
+a round-level trick-candidate report. After online evaluation, one serialized
+Codex consolidation step reviewed only the confirmed successes and merged the
+generalizable parts into docs/tricks.md. It also preserved the conditions
+under which each trick was safe; online failures became explicit negative
+examples rather than recommended techniques.
+
+scheduler wave
+     |
+     v
+package changed tasks -&gt; online submission -&gt; compare local/online deltas
+                                                |
+                         +----------------------+----------------------+
+                         |                                             |
+                    score matches                                  score gap
+                         |                                             |
+              mark online-confirmed                       group/bisect submissions
+                         |                                             |
+              collect trick candidates                    isolate and revert failure
+                         |                                             |
+                         +----------------------+----------------------+
+                                                |
+                                                v
+                              update task docs and hidden-risk history
+                                                |
+                                                v
+                         serialized Codex update of `docs/tricks.md`
+                                                |
+                                                v
+                                      prioritize the next wave
+
+
+This review stage turned the online evaluator into a feedback signal for the
+next scheduler wave, rather than treating a submission as the end of the
+process.
+
+Scheduler at a Glance
+
+The multi-turn scheduler turned Codex from an interactive assistant into a
+resumable optimization system:
+
+400 independent three-file task units
+-&gt; prioritized queue
+-&gt; bounded worker pool
+-&gt; one persistent Codex session per task
+-&gt; repeated experiment and validation turns
+-&gt; transactional promotion or restoration
+-&gt; changed-task online probes and regression isolation
+-&gt; serialized consolidation of online-proven tricks
+-&gt; resumable global search
+
+
+A Five-Day Unattended Run
+
+One concrete example showed why automation mattered. I went on vacation from May 22 to May 26 and left a low-concurrency scheduler job running for five days.
+
+The last verified local snapshot before the run scored 7516.01. The
+accumulated changes were consolidated in the May 26 commit, where the verified
+local score reached 7575.78 (and the leaderboard score was 7575.83).
+
+In one unattended run:
+
+
+
+verified snapshot gain: +59.77;
+
+changed ONNX task models: 271;
+
+strict cost reductions among them: 256;
+
+cost-neutral rewrites: 15;
+
+cost regressions retained: 0.
+
+
+Representative reductions included:
+
+
+
+T032: 48 -&gt; 32, worth approximately +0.405;
+
+T142: 246 -&gt; 180, worth approximately +0.312;
+
+T308: 1902 -&gt; 1478, worth approximately +0.253;
+
+T363: 5565 -&gt; 4532, worth approximately +0.205.
+
+
+This was not one universal trick. It was the cumulative value of letting many independent workers make, validate, and retain small and medium improvements while I was away.
+
+
+
+Pipeline 2: ChatGPT Webpage
+
+The ChatGPT workflow used a persistent Project containing stable competition knowledge:
+
+
+
+scorer and validator requirements;
+
+reusable ONNX patterns;
+
+known hidden-set failures;
+
+curated trick documents;
+
+method-rewrite instructions;
+
+project-wide constraints.
+
+
+For each task, I generated a small upload bundle containing:
+
+
+
+the complete dataset;
+
+current attack builder;
+
+task documentation;
+
+code-golf and notebook references;
+
+current cost breakdown;
+
+a textual ONNX graph summary.
+
+
+Workflow
+
+
+
+Infer the semantic ARC rule.
+
+Compare the current ONNX method with the code-golf and notebook methods.
+
+Determine whether the problem was an expensive implementation or the wrong representation entirely.
+
+Identify the dominant cost object.
+
+Propose at least three distinct ONNX architecture families.
+
+Produce a separate candidate builder without overwriting the incumbent.
+
+Validate and score it locally.
+
+Return failures or cost regressions to the chat for another design turn.
+
+
+I also used five-task bucket chats, an approach informed by Fritz Cremer's
+Kaggle discussion thread publishing per-bucket total scores [2]. ChatGPT first
+audited all five tasks in a bucket, estimated where the competitor gap was
+concentrated, and then selected the most promising attack set. Having those
+shared bucket totals as a reference point made this more targeted than generic
+auditing: for each bucket, I had ChatGPT specifically work at closing the gap
+between my own bucket total and the one reported in that thread, rather than
+optimizing tasks in isolation.
+
+This pipeline was slower and required manual handoff, but it was better at semantic comparison and blank-slate architecture design. Comparing reasoning tiers directly, the ChatGPT webpage's Pro reasoning mode consistently outperformed Codex's highest ("xhigh") reasoning effort for this kind of open-ended architecture search.
+
+The two pipelines formed a feedback loop:
+
+ChatGPT discovers architectures and transferable ideas
+    -&gt; Codex implements and searches them at scale
+    -&gt; local validation produces accepted models and failure evidence
+    -&gt; the shared ChatGPT knowledge base is updated
+
+
+
+
+Core Tricks
+
+1. Write directly to graph output
+
+The graph output tensor was not charged as intermediate memory. A large final Einsum, Conv, or ConvTranspose could therefore be much cheaper than a procedural pipeline that materialized masks, labels, coordinates, and decoded images.
+
+The most important rewrite was often:
+
+detect -&gt; mask -&gt; coordinates -&gt; classify -&gt; decode -&gt; output
+
+
+becoming:
+
+input + compact factors -&gt; terminal operator -&gt; output
+
+
+The final operator could perform enormous computation because MACs were free.
+
+T001 (3x3-to-9x9 fractal self-similar expansion) is a clean example: the whole graph is a single 226-operand Einsum node writing output directly, at cost 98 (memory 0 + params 98). A staged incumbent — detect the nonzero outer cells, build a mask, compute inner/outer coordinates, decode the color, paint — would have had to materialize a [1,10,30,30]-scale intermediate at some stage; folding all of that into one direct-output contraction kept counted memory at zero.
+
+2. Recompute instead of carrying state
+
+The worst models were usually dominated by full-canvas intermediate tensors. It was often cheaper to recompute a relation independently for every output cell than to carry a compact-looking mask through several nodes.
+
+This led to direct algebraic formulations using:
+
+
+
+polynomial roots;
+
+finite Fourier phases;
+
+geometric sequences;
+
+projective coordinates;
+
+row and column moments;
+
+signed interval products;
+
+low-rank relation factors.
+
+
+T017 is an example: instead of storing a [10, k] color-relation table to check whether two cells share a color, the graph recomputes "do these two input cells match" on the fly as a zero-parameter Einsum contraction (summing products of two copies of the one-hot input tensor) every time the relation is needed, rather than materializing it once and carrying it forward. That collapsed the task from cost 60 to cost 10.
+
+3. Make one paid basis serve several roles
+
+A coordinate, phase, palette, or relation basis could sometimes also provide:
+
+
+
+a support mask;
+
+branch selection;
+
+color decoding;
+
+constants;
+
+occupancy tests;
+
+output polarity.
+
+
+Dead rows, unreachable coefficients, repeated marginals, transposed factors, and nullspace columns were useful sources of otherwise separate parameters.
+
+T096 (concentric-ring/corner-cutout decoding) reused a single phase-shifted
+Fourier/coordinate basis across several detector contractions instead of
+giving each one its own initializer, and split one affine squared-difference
+core so its two slices doubled as both the radius-comparison geometry factor
+and the color classifier. That kept the graph at cost 1364 (memory 820 +
+params 544) despite needing several logically distinct roles from its bases.
+
+4. Replace tables with finite-state or number-theoretic algebra
+
+Many ARC tasks only reached a small finite set of states. Dense lookup tables could sometimes be replaced with projective codes, roots, powers, or bounded integer arithmetic.
+
+The strongest late example was T061:
+
+cost 606 -&gt; 70
+
+
+Instead of storing an analytic multiplication table, one direct-output
+Einsum used two small witness-column selectors to certify row and column
+congruence for every modulus in the task family. A shared ten-value color mask
+excluded the hole channel. The construction needed only 70 parameters and no
+counted intermediate memory. The important lesson was not a particular
+underflow trick, but that a bounded algebraic rule could replace a much larger
+explicit representation. Such rewrites still required a proof—or strong
+generated tests—that the finite-state assumptions covered hidden inputs.
+
+5. Use native operators as transport mechanisms
+
+QLinearConv, dynamic convolution, ConvTranspose, Resize, and attribute-only pooling occasionally replaced explicit Gather, Scatter, Pad, or tile carriers.
+
+However, exotic operators were rarely the breakthrough by themselves. Their main value was forcing a new representation of the task. Most accepted improvements still came from deleting or factoring an existing carrier.
+
+T082 and T098 both used the graph's own one-hot input tensor as the dynamic weight of a ConvTranspose node (instead of a stored weight), with only a small constant activation tensor as the other operand. Because ConvTranspose's output was the graph output, there were no counted intermediates at all. T082 landed at cost 21 (a [1,1,7,3] stencil, 21 params); T098's dynamic-weight version replaced a depthwise same-color stencil bank that had cost 270, bringing it down to 37.
+
+6. Treat contraction order as model state
+
+For large Einsum graphs, algebraically equivalent operand orders could have different:
+
+
+
+FLOAT32 signs;
+
+underflow behavior;
+
+correctness;
+
+runtime.
+
+
+Contraction order therefore had to be preserved and validated like any other model parameter.
+
+T001's single 226-operand Einsum again illustrates this: reordering which operands the equation contracts first — moving small detector/selector/basis factors ahead of the broad input copies, and settling the cheaper "outer" role before the "inner" role — cut the official runtime helper by roughly 13%, and a later reassociation of the same operand multiset cut a further ~16% off an even larger 274-operand version, all at identical cost and score.
+
+
+
+References
+
+
+
+Parallel Sampling + Rule-based Prompt Generation — fourth-place
+solution, Google Code Golf 2025
+
+Fritz Cremer's NeuroGolf discussion topic on five-task bucket
+scores
+
+
+
+
+TODO: this is only a draft version, and I will finalize it in the following days.
+
+Comments:
+├─ Tony Li (2026-07-16 18:25:50.217000) [+3]
+│  Congratulations, @yiheng! Winning a solo gold medal in this competition and becoming a Kaggle Competitions Grandmaster is incredible . I am genuinely very happy for you—you worked toward this momen...
+  ├─ Yiheng Wang (2026-07-16 23:05:04.533000) [+3]
+  │  Hi @tonylica , thanks and congrats to your prize winning!
+  │  Hope we have a chance to work together again😄
+    ├─ Tony Li (2026-07-16 23:24:49.540000) [+2]
+    │  Thanks, Yiheng! Anytime 😄 I’d be really happy to team-up in any comp!
+├─ Hai (Tom) Nguyen Thien (2026-07-21 17:02:03.687000) [+1]
+│  Congratulations on your official gold and becoming GM @yiheng !
+├─ Chris Deotte (2026-07-16 18:30:37.383000) [+1]
+│  Congratulation @yiheng You did an impressive job solo! Congratulations on becoming a Kaggle competitions Grandmaster!
+│  
+│  I really like your "Five-Day Unattended Run". I have never left autonomous age...
+  ├─ Yiheng Wang (2026-07-16 23:35:00.163000) [+1]
+  │  Hi @cdeotte , thanks! Congrats to your winning! Your vertical and horizontal ways, as well as prompt designing methods are perfect! 
+  │  
+  │  For the ChatGPT Pro, on my side, it works well in the middle st...
+├─ robga (2026-07-16 13:11:15.883000) [+1]
+│  Great work! I was happy to see you stay in the zone in the final weeks and days.
+│  Your solution isn't too dissimilar to my own (lower scoring) one. I think maybe competing solo comes with some desig...
+  ├─ Yiheng Wang (2026-07-16 23:47:23.263000) [+1]
+  │  HI @robga , thanks! Yes, I think a better way (for optimization challenges) may be solo first and merge late for a better ensemble.
+├─ Fritz Cremer (2026-07-16 12:56:33.617000) [+1]
+│  Congratulations! Glad staying solo paid off for you :)
+├─ Eng Adam Al mohammedi (2026-07-16 12:36:37.740000) [+1]
+│  Great work, and congratulations, Grandmaster💪🧠!
+│  You waited so long for this moment, and you truly deserved it. Congratulations!
+├─ [deleted] (2026-07-16 06:17:00.343000) [+1]
+│  nice work bro
+├─ Yiheng Wang (2026-07-16 02:48:51.930000) [+1]
+│  The attachments include the three-file unit for T001 for reference
+├─ thisray (2026-07-16 00:46:52.280000) [+1]
+│  Congratulations on the solo gold and on reaching Kaggle Competitions Grandmaster!!
+│  
+│  Thanks for the detailed writeup. I’m especially curious how the "Core Tricks" emerged in practice: were they main...
+  ├─ Yiheng Wang (2026-07-16 02:24:47.083000) [+1]
+  │  Good question. After a few days discussion in Codex CLI, I designed a parallel optimization system for this competition.
+  │  The main idea is to do "codex exec …" things for each task, since we cannot ...
+├─ mudesteven (2026-07-16 00:15:56.437000) [+1]
+│  Amzing work. Super impressed by your codex 5-day run we have to babysit our pipeline this entire time.
+├─ Chan Kha Vu (2026-07-17 04:57:18.627000) [+2]
+│  Congratulations for becoming a GM, in the most flashy show of dedication and will 🥳🥳🥳 I don't think there can be a more dramatic promotion to GM status, ever! Seeing you standing proud among teams ...
+├─ Georgy Mamarin (2026-07-17 11:20:37.650000) [+0]
+│  The task-level numbers in this write-up teach the metric better than any formula — congrats on the solo gold. Two favourites: T001's 226-operand Einsum writing straight to the output lands at cost ...
+├─ SpeedSci (2026-07-16 10:02:09.377000) [+2]
+│  Congratulations on becoming GM！
+├─ Timmy Juicehouse (2026-07-16 00:20:33.110000) [+1]
+│  Congratulations on becoming GM. It was no easy feat to win the solo gold medal in this battle of talent, money, resources and stamina; blood and hustle deserves!
+├─ @mldsdev (2026-07-26 21:06:16.853000) [+0]
+│  Always nice to see AI built on a solid architecture. If you can share how many tokens were burned? And what subscription was used?
+├─ Mohit (2026-07-25 18:41:59.530000) [+0]
+│  congratssss
+├─ Xman (2026-07-16 00:25:49.027000) [+1]
+│  Good job !

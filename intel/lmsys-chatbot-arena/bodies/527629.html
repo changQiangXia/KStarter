@@ -1,0 +1,53 @@
+<h1>Introduction</h1>
+<p>I am thrilled to have won first place in this competition, marking my first solo gold medal🏅.<br>
+I would like to thank Kaggle and the organizers for hosting this competition.<br>
+Despite the leakage issues that troubled many participants, I appreciate Kaggle's efforts to salvage the competition as much as possible. <br>
+In my view, the CV and LB in this competition were very consistent, making it a rare and excellent contest, especially in the current context of LLMs. 🔥<br>
+Next, I will summarize my solution.</p>
+<h1>Solution</h1>
+<h2>Dataset</h2>
+<p>kaggle train data<br>
+ut data(<a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499756" target="_blank">https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499756</a>)<br>
+33k data (<a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973" target="_blank">https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973</a>)</p>
+<h2>Base models</h2>
+<p>llama3 70b qwen2 72b gemma2-9b</p>
+<h2>Base model architecture</h2>
+<p>AutoModelForSequenceClassification<br>
+lora(9b)<br>
+qlora(llama3 and qwen2)<br>
+all linear for lora <br>
+r=64,a=128<br>
+max_len=1024<br>
+epoch = 2<br>
+global batch_size = 64 </p>
+<h2>Post-pretrain</h2>
+<p>To begin with, train one epoch on three models using the ut dataset.  （lr=1e-5）</p>
+<h2>Get the logits distribution</h2>
+<p>Load the weight from  Post-pretrain, split the dataset into 5 folds for training<br>
+(eg:train➡️4/5 kaggle train data + 33k data,dev➡️1/5 kaggle train data) to train llama3 70b and qwen2 72b.<br>
+Then infer the probability distribution of the training set.</p>
+<h2>Distill to the 9b model with logits</h2>
+<p>After obtaining the logits distribution, load the 9b model for fine-tuning and incorporate the distillation loss during the fine-tuning process. (at least three loss for trainning，lr=5e-5).</p>
+<h2>Model ensemble</h2>
+<p>Directly average the LoRA layers of the 5 folds.</p>
+<h2>Get 8bit Model</h2>
+<p>Quantize to 8-bit using GPTQ and use TTA (length 2000) during submission.</p>
+<h2>CV/LB</h2>
+<p>(Here, I will only provide my final results. There were too many experiments before, but these results are the most important.)</p>
+<ul>
+<li>qwen72b<br>
+CV of 5 folds: 0.875, 0.881, 0.869, 0.880, 0.875</li>
+<li>llama3 70b<br>
+CV of 5 folds: 0.874, 0.877, 0.877, 0.873, 0.873</li>
+<li>distill gemma 9b<br>
+CV of 5 folds: 0.862, 0.876, 0.858, 0.872, 0.868</li>
+<li>merge lora and quantize to 8bit<br>
+LB: 0.882 (With TTA 0.876) final PB:0.96898<br>
+(In the final submission, I had one sub that also failed to run because I deleted another model that I had uploaded.)<br>
+infer code: <a href="https://www.kaggle.com/code/sayoulala/v7-gemma-gptq?scriptVersionId=191029701" target="_blank">https://www.kaggle.com/code/sayoulala/v7-gemma-gptq?scriptVersionId=191029701</a><br>
+train code:<a href="https://github.com/shyoulala/LMSYS_BlackPearl" target="_blank">https://github.com/shyoulala/LMSYS_BlackPearl</a></li>
+</ul>
+<h1>Summary</h1>
+<p>In my solution, the most important aspect is distillation using larger models. There are also some other details that you can explore on your own if interested. I believe distillation is a very promising approach, especially in the current Kaggle competitions, where inference constraints are a limiting factor.</p>
+<h1>A small recommendation</h1>
+<p>BlackPearl also participated in this year's <a href="https://www.biendata.xyz/kdd2024/" target="_blank">KDD Cup 2024 OAG-Challenge</a> and swept all the championships in the track. The three challenges in this track include AQA, PST, and WhoIsWho-IND. In our solutions, we employed LLMs to tackle classification and vector recall problems, significantly outperforming traditional feature extraction and BERT-based approaches. We have also open-sourced our code, and we welcome you to star it (<a href="https://github.com/BlackPearl-Lab/KddCup-2024-OAG-Challenge-1st-Solutions" target="_blank">https://github.com/BlackPearl-Lab/KddCup-2024-OAG-Challenge-1st-Solutions</a>).</p>

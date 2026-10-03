@@ -1,0 +1,131 @@
+<p><strong>Acknowledgements</strong>: I extend my gratitude to <strong>Optiver and Kaggle</strong> for facilitating this competition. The challenge presented posed a significant and complex problem within the domain of time series forecasting in financial markets.</p>
+<p><strong>Methodology</strong>: My approach integrates <strong>LightGBM and neural network models</strong>, with minimal feature engineering for neural networks. The objective was to synergize these models to attenuate the variance in the final predictions.</p>
+<p><strong>Feature Engineering</strong>:</p>
+<ul>
+<li><strong>LightGBM Enhancements</strong>: Utilized features include:<ul>
+<li><strong>Order Book Imbalance</strong>: Leveraging publicly shared imb1, imb2, etc.</li>
+<li><strong>Trend Indicators</strong>: Employing <code>diff()</code> for temporal variation.</li>
+<li><strong>Volume-Based Cumulatives</strong>: Aggregating volumes over time.</li>
+<li><strong>Global Stock Statistics</strong>: Calculating mean, median, and standard deviation for historical stock data.</li>
+<li><strong>Deviation Features</strong>: Both tree-based and neural network models benefited from raw features representing deviations from the median shown below:</li>
+<li><strong>Online Learning</strong>: both for NNs and LGBM model.</li></ul></li>
+</ul>
+<p><strong>Deviation features</strong> and <strong>online learning</strong> helped to reduce the error by a big margin.</p>
+<p>deviation from median function used on raw features:</p>
+<pre><code>   ():
+      groupby_cols = [, ]
+      new_columns = {}
+       feature  num_features:
+          grouped_median = df.groupby(groupby_cols)[feature].transform()
+          deviation_col_name = 
+          new_columns[deviation_col_name] = df[feature] - grouped_median
+       pd.concat([df, pd.DataFrame(new_columns)], axis=)
+</code></pre>
+<p><strong>Neural Network Architecture</strong>: The architecture includes <strong>LSTM and ConvNet models</strong>, incorporating global stock statistics and deviation features for improved convergence.</p>
+<p>I had already published the NN models structure here on Kaggle, in this post:<br>
+<a href="https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462639" target="_blank">https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/462639</a></p>
+<ul>
+<li>ConvNet: <a href="https://www.kaggle.com/code/nimashahbazi/optiver-conv-just-imb-inference-cleanup" target="_blank">Optiver Conv Just IMB Inference Cleanup</a></li>
+<li>LSTM: <a href="https://www.kaggle.com/code/nimashahbazi/optiver-no-fe-lstm-inference-cleanup" target="_blank">Optiver No FE LSTM Inference Cleanup</a></li>
+</ul>
+<p><strong>Validation Strategy</strong>: Employed a straightforward time-based split for model validation</p>
+<p>and the extended Convolutional 1D model is shown below:</p>
+<pre><code> ():
+    conv_outputs = []
+
+     kernel_size  kernel_sizes:
+        conv_layer = Conv1D(filters=filters, kernel_size=kernel_size, activation=, padding=)(input_layer)
+        conv_layer = BatchNormalization()(conv_layer)
+        conv_layer = Dropout(do_ratio)(conv_layer)
+
+        shortcut = conv_layer
+
+        conv_layer = Conv1D(filters=filters, kernel_size=kernel_size, padding=)(conv_layer)
+        conv_layer = BatchNormalization()(conv_layer)
+        conv_layer = Activation()(conv_layer)
+
+        
+        conv_layer = Add()([conv_layer, shortcut])
+        conv_outputs.append(conv_layer)
+
+
+    concatenated_conv = Concatenate(axis=-)(conv_outputs)
+    flattened_conv_output = Flatten()(concatenated_conv)
+
+     flattened_conv_output
+</code></pre>
+<pre><code> ():
+
+    categorical_features = 
+    categorical_uniques  = {  : }
+    embedding_dim        = { : }
+
+    input_layer = Input(shape=(window_size, (numerical_features) + ), name=)
+
+    
+    numerical_input = Lambda( x: x[:, :, :-], name=)(input_layer)
+    categorical_input = Lambda( x: x[:, :, -:], name=)(input_layer)
+
+    first_numerical = Lambda( x: x[:, ])(numerical_input)
+
+
+    
+     ():
+         Lambda( x: x[:, lag:, :] - x[:, :-lag, :], name=)
+
+    difference_layers = []
+     lag  (, window_size):
+        diff_layer = create_difference_layer(lag)(numerical_input)
+        padding = ZeroPadding1D(padding=(lag, ))(diff_layer)  
+        difference_layers.append(padding)
+    combined_diff_layer = Concatenate(name=)(difference_layers)
+
+
+    
+    vocab_size, embedding_dim = categorical_uniques[categorical_features], embedding_dim[categorical_features]
+    embedding = Embedding(vocab_size, embedding_dim, input_length=window_size)(categorical_input)
+    embedding = Reshape((window_size, -))(embedding)
+
+    first_embedding = Lambda( x: x[:, ])(embedding)
+
+    
+    
+
+    kernel_sizes = [,]
+    do_ratio = 
+
+    flattened_conv_output = apply_conv_layers(numerical_input, kernel_sizes, do_ratio=do_ratio)
+    flattened_conv_output_cat = apply_conv_layers(embedding, kernel_sizes, do_ratio=do_ratio)
+    flattened_conv_output_diff = apply_conv_layers(combined_diff_layer, kernel_sizes, do_ratio=do_ratio)
+
+
+    dense_output = Concatenate(axis=-)([flattened_conv_output,flattened_conv_output_cat,flattened_conv_output_diff, Reshape((-,))(combined_diff_layer),first_numerical,first_embedding])
+
+    dense_sizes = [, , , , ]
+    do_ratio = 
+     size  dense_sizes:
+        dense_output = Dense(size, activation=)(dense_output)
+        dense_output = BatchNormalization()(dense_output)
+        dense_output = Dropout(do_ratio)(dense_output)
+
+    
+    output = Dense(, name=)(dense_output)
+
+    
+    lr_schedule = ExponentialDecay(
+        initial_learning_rate=initial_learning_rate,
+        decay_steps=,
+        decay_rate=,
+        staircase=)
+
+    
+    model = Model(inputs=input_layer, outputs=output)
+    optimizer = Adam(learning_rate=lr_schedule)
+
+    model.(optimizer=optimizer, loss=)
+
+     model
+</code></pre>
+<ul>
+<li>For further exploration, the repository <a href="https://github.com/nimashahbazi/optiver-trading-close" target="_blank">Optiver Trading Close</a> is also available, which I will update with the full winning code</li>
+</ul>

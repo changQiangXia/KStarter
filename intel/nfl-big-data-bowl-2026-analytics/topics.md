@@ -1,0 +1,43 @@
+# nfl-big-data-bowl-2026-analytics 讨论区（按票数排序，共 41 条）
+
+- [Question about results announcement](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/670213) — 16 票 / 0 评论 / 2026-01-26 
+- [2026 Big Data Bowl Analytics Track Winners](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/670745) — 8 票 / 2 评论 / 2026-01-29 
+- [Welcome to the 2026 Big Data Bowl!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/609370) — 8 票 / 12 评论 / 2025-09-26 
+- [2025 Winner – AMA & Supplement Release](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/614950) — 5 票 / 1 评论 / 2025-11-07 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/609278) — 4 票 / 13 评论 / 2025-09-25 
+- [sharing idees: novel data analytics you can do](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/609474) — 4 票 / 3 评论 / 2025-09-26 
+- [Describe a Play. Find Similar Ones.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610095) — 4 票 / 4 评论 / 2025-10-01 
+- [Effective Safety Range Visualizer](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/663470) — 2 票 / 0 评论 / 2025-12-18 
+- [Broadcast Visualization Submission](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/635956) — 2 票 / 3 评论 / 2025-11-20 
+- [Feedback on Submissions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/683019) — 1 票 / 0 评论 / 2026-03-19 
+- [Update on Datasets](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610455) — 1 票 / 1 评论 / 2025-10-03 
+- [ball_land discrepancies](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610834) — 1 票 / 4 评论 / 2025-10-06 
+- [Model Training](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/612525) — 1 票 / 3 评论 / 2025-10-20 
+- [Number of Players per Play in the NFL Tracking Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/612717) — 1 票 / 2 评论 / 2025-10-21 
+- [player_to_predict clarification](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/613454) — 1 票 / 1 评论 / 2025-10-27 
+- [Ball Landing Spot Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/656536) — 0 票 / 1 评论 / 2025-12-09 
+- [Question about Team Coverage Type](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/656945) — 0 票 / 2 评论 / 2025-12-09 
+- [Data Bowl 2027](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/656546) — 0 票 / 1 评论 / 2025-12-09 
+- [Data Subset](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/651738) — 0 票 / 1 评论 / 2025-12-04 
+- [Broadcast Visualization Track - Film Question](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/650188) — 0 票 / 1 评论 / 2025-12-01 
+- [Data Requirements](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/644814) — 0 票 / 1 评论 / 2025-11-29 
+- [Clarification on dropback distances](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/639412) — 0 票 / 1 评论 / 2025-11-24 
+- [Video Editing Questions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/635044) — 0 票 / 2 评论 / 2025-11-20 
+- [Outside Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/635898) — 0 票 / 1 评论 / 2025-11-20 
+- [gemini3 for visualisation](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/634984) — 0 票 / 1 评论 / 2025-11-20 
+- [frame_id clarification](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/614459) — 0 票 / 1 评论 / 2025-11-04 
+- [Notebook Submission](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/613560) — 0 票 / 1 评论 / 2025-10-27 
+- [Player orientation question](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/613468) — 0 票 / 1 评论 / 2025-10-27 
+- [Submission Clarification](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/662658) — 0 票 / 1 评论 / 2025-12-14 
+- [Query regarding submitting our work](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/662451) — 0 票 / 2 评论 / 2025-12-13 
+- [Submission questions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/662596) — 0 票 / 2 评论 / 2025-12-13 
+- [Pass Forward Frame](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/612230) — 0 票 / 1 评论 / 2025-10-17 
+- [Cannot submit An Evaluation system has not been configured for this competition.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/663170) — 0 票 / 3 评论 / 2025-12-16 
+- [Editing a submitted writeup](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/663242) — 0 票 / 1 评论 / 2025-12-17 **write-up?**
+- [Quick Question about Frames](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610507) — 0 票 / 2 评论 / 2025-10-04 
+- [Eligibility criteria for non-US students](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610429) — 0 票 / 1 评论 / 2025-10-03 
+- [Clarification on output data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610250) — 0 票 / 1 评论 / 2025-10-02 
+- [Competition focus and data split before and while the ball is in the air](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610190) — 0 票 / 1 评论 / 2025-10-02 
+- [Clarification on Field Names](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/610026) — 0 票 / 3 评论 / 2025-10-01 
+- [issues uploadiing](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/663456) — 0 票 / 3 评论 / 2025-12-18 
+- [Question about acceleration values](https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-analytics/discussion/657011) — -1 票 / 1 评论 / 2025-12-10 

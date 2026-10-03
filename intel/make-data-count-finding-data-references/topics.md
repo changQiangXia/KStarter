@@ -1,0 +1,82 @@
+# make-data-count-finding-data-references 讨论区（按票数排序，共 80 条）
+
+- [Alternative, manually constructed training data](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/586075) — 75 票 / 19 评论 / 2025-06-25 
+- [1st Place Solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606853) — 61 票 / 20 评论 / 2025-09-10 **write-up?**
+- [Data Quality - Mega Thread](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584899) — 48 票 / 37 评论 / 2025-06-16 
+- [Tricks (10char)](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606740) — 47 票 / 18 评论 / 2025-09-10 
+- [5th Place - by standing on the shoulders of Giants](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606769) — 46 票 / 13 评论 / 2025-09-10 **write-up?**
+- [Tips: How to pip install in an Internet-Off Environment](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584098) — 44 票 / 15 评论 / 2025-06-11 
+- [Extra Data (Protein Data Bank)](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585885) — 41 票 / 3 评论 / 2025-06-23 
+- [Related Papers : Literature Review : Step 1](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584080) — 37 票 / 13 评论 / 2025-06-11 
+- [Stop Releasing Medal Notebooks 2 Weeks Before the End of the Competition](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/601118) — 37 票 / 7 评论 / 2025-08-26 
+- [2nd Place Solution [Updated]](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606786) — 29 票 / 10 评论 / 2025-09-10 **write-up?**
+- [Synthetic data generation using a tool calling agent](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606752) — 29 票 / 11 评论 / 2025-09-10 
+- [IMPORTANT: Updated Train Labels and Metric](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/589314) — 28 票 / 63 评论 / 2025-07-11 
+- [Latest update to "unofficial" training data](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/596550) — 28 票 / 29 评论 / 2025-08-04 
+- [Quality of train vs test labels](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584792) — 28 票 / 3 评论 / 2025-06-16 
+- [9th place Solo Gold solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606743) — 27 票 / 8 评论 / 2025-09-10 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606921) — 24 票 / 1 评论 / 2025-09-10 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606879) — 24 票 / 4 评论 / 2025-09-10 **write-up?**
+- [15th place solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606751) — 24 票 / 4 评论 / 2025-09-10 **write-up?**
+- [Impossible Predictions](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585036) — 23 票 / 6 评论 / 2025-06-17 
+- [20th Place Solution: Regex + Qwen + DeBERTa for MDC](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606746) — 23 票 / 6 评论 / 2025-09-10 **write-up?**
+- [[IMPORTANT QUESTION] : Is the competition metrics CASE SENSITIVE ?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/586553) — 22 票 / 4 评论 / 2025-06-27 
+- [CV vs LB Thread](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585546) — 22 票 / 33 评论 / 2025-06-21 
+- [📄 Better PDF Parsing with Marker](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584799) — 21 票 / 0 评论 / 2025-06-16 
+- [Very similar to previous kaggle competition](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584377) — 21 票 / 2 评论 / 2025-06-12 
+- [Be aware of CV overfitting](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/586383) — 21 票 / 10 评论 / 2025-06-26 
+- [Comparison of "Baseline" Statistics](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/586738) — 19 票 / 4 评论 / 2025-06-28 
+- [Data Citation Index (DCI) versus Altmetrics. Data Sharing main Agents.](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584143) — 19 票 / 2 评论 / 2025-06-12 
+- [How to Correctly Classify Accession IDs? My Rule-Based Method Beats My LLM Attempts.](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/598550) — 19 票 / 71 评论 / 2025-08-11 
+- [12th place solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606745) — 17 票 / 2 评论 / 2025-09-10 **write-up?**
+- [XML formats](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584638) — 16 票 / 10 评论 / 2025-06-14 
+- [Train labels incomplete?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584287) — 15 票 / 5 评论 / 2025-06-12 
+- [Improved Evaluation Code](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585667) — 15 票 / 0 评论 / 2025-06-22 
+- [7th place solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606757) — 15 票 / 2 评论 / 2025-09-10 **write-up?**
+- [13th Place Solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606979) — 15 票 / 0 评论 / 2025-09-11 **write-up?**
+- [External data ](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584286) — 14 票 / 0 评论 / 2025-06-12 
+- [6th Place Solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606867) — 13 票 / 1 评论 / 2025-09-10 **write-up?**
+- [Updated Metric](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/590778) — 12 票 / 11 评论 / 2025-07-23 
+- [Metric elaboration?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584395) — 11 票 / 9 评论 / 2025-06-13 
+- [Are there only two possible labels for the submissions?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584140) — 11 票 / 5 评论 / 2025-06-12 
+- [Why Kaggle should host an open source LLM API](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584168) — 9 票 / 5 评论 / 2025-06-12 
+- [for beginners who don't understand what this competition is about](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584294) — 9 票 / 1 评论 / 2025-06-12 
+- [Key EDA Takeaways for MDC - Finding Data References 🚀](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584627) — 9 票 / 0 评论 / 2025-06-14 
+- [Highest score from train data only?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/587001) — 9 票 / 11 评论 / 2025-06-29 
+- [Best Practices for RTX5090 + vLLM](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584954) — 9 票 / 6 评论 / 2025-06-17 
+- [Dataset DOI prefixes](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/598139) — 9 票 / 11 评论 / 2025-08-08 
+- [11th place solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606940) — 9 票 / 0 评论 / 2025-09-11 **write-up?**
+- [22nd Place Solution | ML](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606794) — 9 票 / 3 评论 / 2025-09-10 **write-up?**
+- [Exploring Regex for Dataset Mentions — Other Ideas?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/587242) — 8 票 / 14 评论 / 2025-06-30 
+- [Dataset is the mess](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/589992) — 8 票 / 8 评论 / 2025-07-16 
+- [Inconsistency in Labels for GenBank Data: Why Is KU363060 Marked as Missing?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/591509) — 8 票 / 20 评论 / 2025-07-28 
+- [Welcome to our competition!](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584337) — 7 票 / 15 评论 / 2025-06-12 
+- [Get started here](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/583846) — 7 票 / 3 评论 / 2025-06-09 
+- [First move](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584094) — 7 票 / 3 评论 / 2025-06-11 
+- [Scoring Submission Error](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/588415) — 7 票 / 2 评论 / 2025-07-06 
+- [Accession IDs vs DOI LB Scores](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/589122) — 7 票 / 12 评论 / 2025-07-10 
+- [Examples of data citations from the latest Data Citation Corpus](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/598095) — 7 票 / 14 评论 / 2025-08-08 
+- [Suggestion: Provide High-Quality Parsed PDFs as Additional Official Data](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585261) — 7 票 / 1 评论 / 2025-06-19 
+- [LB Score for DOI only](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/600330) — 6 票 / 66 评论 / 2025-08-22 
+- [Opinions on shakeup](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/602703) — 6 票 / 18 评论 / 2025-08-29 
+- [Clarification about classification labels](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584454) — 6 票 / 2 评论 / 2025-06-13 
+- [Why XML and PDF are not the same?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584316) — 6 票 / 5 评论 / 2025-06-12 
+- [8th place solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606768) — 6 票 / 2 评论 / 2025-09-10 **write-up?**
+- [a DOI ID in the label file, but it has never appeared in the original text?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/602531) — 6 票 / 2 评论 / 2025-08-28 
+- [What is "Missing" mean?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/590035) — 6 票 / 14 评论 / 2025-07-17 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/607004) — 5 票 / 0 评论 / 2025-09-11 
+- [Discussion post was auto-removed](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/589312) — 5 票 / 1 评论 / 2025-07-11 
+- [About Efficiency : What is the scoring time of your best submission ?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/603764) — 5 票 / 25 评论 / 2025-09-04 
+- [22nd Place Solution ](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606822) — 5 票 / 0 评论 / 2025-09-10 **write-up?**
+- [New Ranking](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585066) — 5 票 / 2 评论 / 2025-06-17 
+- [97th Place Solution](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606782) — 5 票 / 3 评论 / 2025-09-10 **write-up?**
+- [Understanding the evidence for why the secondary source examples are indeed secondary](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584823) — 5 票 / 1 评论 / 2025-06-16 
+- [How many articles in test? [ 2,600 articles - inversion conformed ]](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584103) — 5 票 / 17 评论 / 2025-06-11 
+- [Question about missing DOI in train CSV](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/585087) — 4 票 / 1 评论 / 2025-06-17 
+- [40th place solution ](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606923) — 4 票 / 0 评论 / 2025-09-10 **write-up?**
+- [How to distinguish between primary and secondary? I feel confused.](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584992) — 4 票 / 3 评论 / 2025-06-17 
+- [24th place : Solution summary](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/606851) — 4 票 / 0 评论 / 2025-09-11 **write-up?**
+- [My submission experience so far](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/603700) — 4 票 / 0 评论 / 2025-09-03 
+- [Scoring time](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584392) — 4 票 / 5 评论 / 2025-06-13 
+- [How are people getting the article_id?](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584520) — 4 票 / 2 评论 / 2025-06-14 
+- [This Competition Has an Official Discord Channel](https://www.kaggle.com/competitions/make-data-count-finding-data-references/discussion/584942) — 0 票 / 1 评论 / 2025-06-17 

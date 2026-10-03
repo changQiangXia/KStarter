@@ -1,0 +1,75 @@
+# https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527669
+
+Topic #527669: 5th Place Solution: Team Danube
+  Author: Psi
+  Posted: 2024-08-13 10:42:31.224000
+  Votes: 59  Comments: 13
+
+Thanks to Kaggle and all competitors for a fun competition. I hope this one can be re-done, and this first addition was a dry run resolving all hiccups :)
+
+Here is a short summary of our (/w @dott1718 &amp; @ilu000) solution.
+
+Data and pretraining
+
+For our final models for fine-tuning we only use the competition data as well as the separate 33k dataset. We do not employ any pseudo tagging or knowledge distillation, and do not use the extra 1M dataset.
+
+However, we found that pre-training on reward data was helpful for the final models. We found this after exploring RewardBench models, and finding that some of the top models performed better than the base and instruct versions of those models when fine-tuned on competition data. Particularly the models shared by RLHFlow performed very well, making us curious and we saw that they trained those models on lots of UltraFeedback and similar data.
+
+Hence, we decided to also pre-train gemma-2-9b on public reward data, mostly UltraFeedback data. We experimented with various setups, but in the end just training on binary win/loss label was sufficient. The amount of data was also not particularly crucial, so taking all data from UltraFeedback was sufficient. Taking these pre-trained checkpoints as the starting point for our fine-tuning boosted our scores by up to 20 points on CV and public LB. Our final fine-tuned model has a local single fold score of around 0.880.
+
+All models have been trained using H2O LLM Studio.
+
+Final Models
+
+Our final submission is an ensemble of two models, both being fine-tuned gemma-2-9b models based on our pre-trained checkpoint elaborated above. In detail, we train the same configuration two times on the full data twice for one epoch. Each run has swapped training order for response A and B for some tiny diversity. The final submission then runs both models, where one is run on the original order, and one on the swapped order for TTA. This blend has a local single fold score of around 0.873.
+
+Inference
+
+We explored faster inference in the kernel a lot, but unfortunately the T4 GPUs in Kaggle kernel do not give a lot of room to improve. What we found works the best is the following setup:
+
+
+
+Run half of the data on one GPU and half on the other GPU concurrently
+
+Sort by length and optimize batch formation
+
+INT8 with bitsandbytes and float16 compute
+
+
+This can run easily for two models even with 8k max context length. Our final sub takes 4k to be safe for the re-run.
+
+Our final inference code is online.
+
+Comments:
+├─ Chris Deotte (2024-08-13 11:54:02.313000) [+4]
+│  Congratulations Team Danube. Can you explain how you pretrain? For example do you use LoRA and train Gemma2 on UT dataset first. Then merge adapter. Then finetune the merged model a second time on ...
+  ├─ Psi (2024-08-13 11:59:53.817000) [+4]
+  │  We use pretty much very similar settings as for fine-tuning, then merge, throw away the head and fine-tune.
+  │  But different settings didn't have a big impact here, so any form of pretraining already ...
+    ├─ Chris Deotte (2024-08-13 12:16:23.413000) [+1]
+    │  I reviewed my experiments. I kept the same head for pretrain with UT and finetune with comp+33k. Perhaps throwing away the head and training a new head was the key. (For the UT data, I used the sco...
+    ├─ Psi (2024-08-13 12:36:44.613000) [+3]
+    │  Keeping the head was a tiny bit worse, but still much better than without pretrain.
+    │  We also didnt use the data shared on Kaggle, I was not confident enough about the source of it and where the ties...
+├─ sayoulala (2024-08-13 10:47:19.540000) [+4]
+│  Congratulations! 
+│  That's strange. I can only set the maximum length to 2000 in 8-bit mode; otherwise, it will time out.
+  ├─ Valentin Werner (2024-08-13 10:50:38.260000) [+0]
+  │  I said the same in your write-up too. You should be able to do 4k at least. We did not try beyond 4k but using dynamic batch sizing a max length of 4000 with batch size 1 results in 12.x to 13.x GB...
+  ├─ Chris Deotte (2024-08-13 12:04:00.943000) [+5]
+  │  @sayoulala I notice in your solution writeup that you use GPTQ quantization. Different quantization have different inference speed. So perhaps this is why you cannot infer max=4096. I used BitsAndB...
+    ├─ Psi (2024-08-13 12:37:26.077000) [+7]
+    │  Ah right, I also tried GPTQ and it was much slower. I also tried AWQ which was also even slower than BNB.
+    │  
+    │  What I found out is that those quantizations have some slowdown on the first token predict...
+    ├─ sayoulala (2024-08-13 15:04:02.747000) [+0]
+    │  I got it.Thanks
+├─ Mohamed Eltayeb (2024-08-13 11:34:53.163000) [+1]
+│  Congrats!
+│  could you put more details about what you mean by batch formation? We just tried the split in the public nbs [0::2], [1::2]. I thought about [:half:], [half::] but it turned out that one ...
+  ├─ Psi (2024-08-13 11:47:51.033000) [+2]
+  │  We have some code logic to sort the data so that the lengths are split equally across the gpus.
+├─ zhang qianheng (2025-01-20 09:07:24.393000) [+0]
+│  @philippsinger Sorry to bother you, I used your method in WSDM and found some questions. When I used gemma2-9b-it-fp16 to fine tune with the train data, I got 0.691. Then I used UltraFeedback data ...
+├─ Mohamed Eltayeb (2024-08-13 15:40:58.180000) [+0]
+│  Have you considered using some sort of BiLSTM on the head? I tried that on the last days but got nan loss and didn't find time to debug it

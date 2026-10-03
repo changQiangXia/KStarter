@@ -1,0 +1,269 @@
+<h1>Overview</h1>
+<p>This solution achieves 15th place using a <strong>online training approach</strong> combined with advanced feature engineering and ensemble learning. The key innovation is retraining models every 7 days during inference using newly available labeled data, allowing the model to adapt to changing market conditions.</p>
+<h2>Key Innovation: Online Training During Inference</h2>
+<h3>The Core Idea</h3>
+<p>Unlike traditional approaches that use a static model trained once, or train with temporal cross-validation, this solution implements a dynamic training strategy:</p>
+<ul>
+<li><strong>Initial Training:</strong> Train ensemble models on historical data using <strong>CombinatorialPurgedGroupKFold</strong> cross-validation, as applied in my previous Kaggle competitions.</li>
+<li><strong>Inference Stage:</strong> As new test data arrives and becomes labeled:<ul>
+<li>Accumulate labeled samples in a buffer</li>
+<li>Every 7 days (when buffer reaches 7 samples):  train a new set of models (a new fold) for the ensemble.</li>
+<li>Use the last 7 samples as validation set</li>
+<li>Make predictions with the updated models</li></ul></li>
+</ul>
+<h3>Rationale</h3>
+<p>Financial markets exhibit non-stationary behavior, with patterns evolving over time. Continuous retraining allows the model to adapt to recent market regime changes and learn evolving correlations between commodities.</p>
+<h2>Model Architecture</h2>
+<h3>Strategy Pattern Design</h3>
+<p>The solution implements a <strong>flexible model strategy architecture</strong> that allows easy addition/removal of models:</p>
+<pre><code>class ModelStrategy(ABC):
+    @abstractmethod
+    def build_model(self, input_dim, output_dim)
+    def train(...)
+    def predict(...)
+</code></pre>
+<p>This design enables rapid experimentation with different architectures while maintaining consistent training/evaluation pipelines.</p>
+<h3>Ensemble Models</h3>
+<p>Three complementary deep learning architectures are combined:</p>
+<h4>1. Attention DNN</h4>
+<ul>
+<li>Multi-layer perceptron with attention mechanism</li>
+<li>Learns to focus on important features dynamically</li>
+<li>Architecture: 1024 → 768 (Attention) → 512 → 384 → 256 → 424 outputs</li>
+<li>Custom ranking loss balancing MSE and Spearman correlation</li>
+</ul>
+<h4>2. Residual DNN</h4>
+<ul>
+<li>Deep network with skip connections preventing gradient vanishing</li>
+<li>Two residual blocks with Add layers for better gradient flow</li>
+<li>More stable training in deep architectures</li>
+</ul>
+<h4>3. AutoEncoder</h4>
+<ul>
+<li>Learns compressed representations (128-dim latent space)</li>
+<li>Multi-task learning: reconstruction + prediction</li>
+<li>Regularizes features through bottleneck for denoising</li>
+</ul>
+<h3>Dynamic Ensemble Weighting</h3>
+<p>The ensemble employs <strong>performance-based weighting</strong> rather than uniform averaging:</p>
+<ol>
+<li><strong>Validation Scoring:</strong> Each model evaluated on holdout folds during CV</li>
+<li><strong>Test Scoring:</strong> Models also evaluated on test sets when labels become available</li>
+<li><strong>Adaptive Weights:</strong> Strategy weights computed from rank-based scoring:</li>
+</ol>
+<pre><code>   ranks = len(scores) - np.argsort(np.argsort(scores)) + 1
+   weights = ranks / ranks.sum()
+</code></pre>
+<p><strong>4. Fold-level Weights:</strong> Balance performance (α=0.1) and timeliness (1-α=0.9)</p>
+<p>This dual evaluation ensures models that perform well on both validation and test data receive higher weights in the final ensemble.</p>
+<h2>Feature Engineering</h2>
+<h3>Advanced Financial Features (2,658 features generated)</h3>
+<h4>1. Momentum Indicators</h4>
+<ul>
+<li><strong>Rate of Change (ROC):</strong> Multi-period momentum (5, 10, 20 days)</li>
+<li><strong>RSI (Relative Strength Index):</strong> Overbought/oversold signals</li>
+<li><strong>Williams %R:</strong> Price position in recent range</li>
+<li><strong>CCI (Commodity Channel Index):</strong> Deviation from typical price</li>
+</ul>
+<h4>2. Volatility Features</h4>
+<ul>
+<li><strong>Historical Volatility:</strong> Multiple horizons (5-60 days)</li>
+<li><strong>Garman-Klass Estimator:</strong> Uses OHLC for better vol estimation</li>
+<li><strong>Volatility of Volatility:</strong> Second-order volatility</li>
+<li><strong>Semi-Volatility:</strong> Separate upside/downside volatility</li>
+<li><strong>Jump Variation:</strong> Detects price discontinuities</li>
+</ul>
+<h4>3. Moving Averages &amp; Trends</h4>
+<ul>
+<li><strong>SMA/EMA:</strong> Multiple periods (5-200 days)</li>
+<li><strong>MACD:</strong> Convergence/divergence signals</li>
+<li><strong>Bollinger Bands:</strong> Price position and band width</li>
+<li><strong>Golden/Death Cross:</strong> 50/200-day MA crossovers</li>
+</ul>
+<h4>4. Market Microstructure</h4>
+<ul>
+<li><strong>Volume Momentum:</strong> Rate of volume change</li>
+<li><strong>Amihud Illiquidity:</strong> Price impact per unit volume</li>
+<li><strong>Volume Trends:</strong> Short vs long-term volume ratios</li>
+</ul>
+<h4>5. Cross-Market Features</h4>
+<ul>
+<li><strong>Rolling Correlations:</strong> Between LME, JPX, US, FX markets (10-60 day windows)</li>
+<li><strong>Correlation Stability:</strong> Variance of correlation over time</li>
+<li><strong>Spread Features:</strong> Price differences within market groups</li>
+<li><strong>Spread Z-scores:</strong> Mean reversion signals</li>
+<li><strong>Half-life:</strong> Mean reversion speed estimation</li>
+</ul>
+<h4>6. Regime Detection</h4>
+<ul>
+<li><strong>ADX (Average Directional Index):</strong> Trend strength</li>
+<li><strong>Volatility Regime:</strong> Short vs long vol comparison</li>
+<li><strong>Trend Slope:</strong> Linear regression coefficient</li>
+<li><strong>Hurst Exponent:</strong> Trending vs mean-reverting behavior</li>
+</ul>
+<h4>7. Statistical Moments</h4>
+<ul>
+<li><strong>Skewness:</strong> Distribution asymmetry (tail risk)</li>
+<li><strong>Kurtosis:</strong> Fat-tail detection</li>
+<li><strong>Z-scores:</strong> Standardized price deviations</li>
+<li><strong>Coefficient of Variation:</strong> Risk-adjusted returns</li>
+</ul>
+<h3>Feature Selection</h3>
+<p>From 2,658 engineered features, select top 800 using:</p>
+<ul>
+<li><strong>Mutual Information Regression:</strong> Captures non-linear relationships</li>
+<li><strong>RobustScaler:</strong> Handles outliers in financial data</li>
+<li>Reduces dimensionality while preserving predictive power</li>
+</ul>
+<h2>Training Strategy</h2>
+<h3>Cross-Validation</h3>
+<ul>
+<li><strong>CombinatorialPurgedGroupKFold:</strong> 5 splits, 1 test splits</li>
+<li><strong>Purging:</strong> Prevents data leakage between adjacent time periods</li>
+<li><strong>Embargo:</strong> Adds buffer between train/test to account for autocorrelation</li>
+</ul>
+<h3>Custom Loss Function</h3>
+<p>Hybrid ranking loss combining:</p>
+<pre><code>loss = 0.2 * MSE + 0.8 * (1 - Spearman_Correlation)
+</code></pre>
+<ul>
+<li>MSE ensures magnitude accuracy</li>
+<li>Spearman correlation optimizes ranking (the competition metric)</li>
+<li>80% weight on ranking reflects competition objective</li>
+</ul>
+<h3>Training Optimizations</h3>
+<ul>
+<li><strong>EarlyStopping:</strong> Patience=20, prevents overfitting</li>
+<li><strong>ReduceLROnPlateau:</strong> Adaptive learning rate</li>
+<li><strong>Gradient Clipping:</strong> Stabilizes training (clipnorm=1.0)</li>
+<li><strong>Batch Normalization:</strong> Accelerates convergence</li>
+</ul>
+<h2>Limitations and Future Work</h2>
+<h3>Issue: Feature Selection Limitation</h3>
+<p><strong>Problem:</strong> Feature selection utilizes only the first target (target_0) for scoring, but applies the selected features to all 424 targets.</p>
+<p><strong>Impact:</strong> Despite this limitation, this solution achieved 15th place. Proper multi-target feature selection could improve performance.</p>
+<h3>Better Approach</h3>
+<ul>
+<li>Select features independently per target group</li>
+<li>Use average mutual information across all targets</li>
+<li>Implement hierarchical feature selection</li>
+</ul>
+<h3>Potential Improvements</h3>
+<h4>1. Better Feature Selection:</h4>
+<ul>
+<li>Target-specific feature selection</li>
+<li>Group targets by correlation structure</li>
+<li>Ensemble of feature selectors</li>
+</ul>
+<h4>2. Model Architecture</h4>
+<ul>
+<li>Add transformer layers for sequence modeling</li>
+<li>Implement temporal convolutional networks</li>
+<li>Multi-scale feature extraction</li>
+</ul>
+<h4>3. Continuous Training</h4>
+<ul>
+<li>Experiment with different retrain frequencies (3, 5, 10 days)</li>
+<li>Implement incremental learning (update weights vs full retrain)</li>
+<li>Use ensemble of models from different time windows</li>
+</ul>
+<h4>4. Meta-Learning</h4>
+<ul>
+<li>Learn optimal ensemble weights over time</li>
+<li>Detect regime changes and adjust accordingly</li>
+<li>Implement adaptive feature importance</li>
+</ul>
+<h2>Results Analysis</h2>
+<h3>Score Progression</h3>
+<ul>
+<li>Round 1 (Public): 0.134</li>
+<li>Round 2 (Private): 0.110</li>
+<li>Round 3 (Private): 0.445</li>
+</ul>
+<h3>Round 3 Analysis</h3>
+<p>The significant score improvement in Round 3 (0.110 → 0.445) demonstrates:</p>
+<ul>
+<li>The continuous training strategy successfully adapted to the final test period</li>
+<li>Models effectively learned from accumulating labeled data during inference</li>
+<li>The ensemble weighting scheme properly balanced recent vs historical performance</li>
+<li>Feature engineering captured evolving commodity market dynamics in the later period</li>
+</ul>
+<h2>Alternative Approach: Target-Specific Feature Engineering</h2>
+<p>An alternative approach was developed that showed promising initial results but did not complete successfully in Round 3 due to infrastructure issues.</p>
+<h3>Key Differences from Final Solution</h3>
+<h4>1. Target-Pair-Based Feature Engineering</h4>
+<p>Instead of generic rolling features, this approach used the competition-provided <code>target_pairs.csv</code> to create targeted features:</p>
+<ul>
+<li><strong>Relationship Mapping:</strong> Each target was mapped to specific commodity pairs from the metadata</li>
+<li><strong>Custom Rolling Windows:</strong> Window sizes matched the lag values specified for each target-pair relationship</li>
+<li><strong>Precision Features:</strong> Rolling mean/std calculated only for columns directly related to each target</li>
+</ul>
+<p>Example: For a target related to "JPX_Copper - US_Oil", features were computed only from those specific instruments rather than all 558 columns.</p>
+<h4>2. Simpler Architecture, More Frequent Updates</h4>
+<ul>
+<li><strong>Lightweight DNN:</strong> 128 → 64 → 32 → 424 (much smaller than final ensemble)</li>
+<li><strong>Faster Training:</strong> Enabled more frequent retraining (every 7 days vs every 7 days in final)</li>
+<li><strong>Time-Weighted Ensemble:</strong> Recent models weighted exponentially higher (1.0 → 1.2 → 1.44…)</li>
+</ul>
+<h4>3. Performance Comparison</h4>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Target-Specific Approach</th>
+<th>Final Ensemble Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Round 1 (Public)</td>
+<td>0.196</td>
+<td>0.134</td>
+</tr>
+<tr>
+<td>Round 2 (Private)</td>
+<td>0.357</td>
+<td>0.110</td>
+</tr>
+<tr>
+<td>Round 3 (Private)</td>
+<td><strong>Failed</strong></td>
+<td>0.445</td>
+</tr>
+<tr>
+<td>Memory Usage</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+</tbody>
+</table>
+<h3>Why It Failed</h3>
+<p>The target-specific approach initially outperformed the baseline (0.196 vs 0.134 in Round 1), but it ultimately did not complete. The likely reasons for failure appear to be:</p>
+<ul>
+<li><strong>Infrastructure Fragility:</strong> The lighter-weight pipeline may have been more vulnerable to instability in Kaggle's inference API.</li>
+<li><strong>Memory Constraints:</strong> Rolling-window calculations required retaining growing historical data, which likely exceeded available memory limits over time.</li>
+<li><strong>Lack of Robust Checkpointing:</strong> Unlike the final solution—which loaded pre-trained models—this method depended entirely on training during inference, offering no clear path for recovery if interrupted.</li>
+</ul>
+<h3>Lessons Learned</h3>
+<p>This experience highlights the critical importance of <strong>robustness over raw performance</strong> in production ML systems:</p>
+<ol>
+<li><strong>Defensive Programming:</strong> Always implement fallback mechanisms for inference failures</li>
+<li><strong>Memory Management:</strong> Monitor and limit historical data accumulation</li>
+<li><strong>Model Checkpointing:</strong> Pre-train stable base models to avoid cold-start scenarios</li>
+<li><strong>Testing at Scale:</strong> Local validation doesn't capture all production edge cases</li>
+</ol>
+<p>It's worth noting that <strong>many participants experienced similar failures</strong> in Round 3. While disappointing, this represents a valuable learning opportunity about the challenges of deploying adaptive models in constrained environments.</p>
+<p><strong>Future iterations of this competition would benefit from enhanced pipeline stability to support online learning approaches</strong> — the problem domain is fascinating, and online learning approaches show great promise if given a more robust infrastructure to operate within.</p>
+<h2>Conclusion</h2>
+<p>This work demonstrates the effectiveness of adaptive learning strategies for non-stationary financial time series prediction, achieving 15th place in a competitive field. The core contribution lies in the implementation of an online training framework that continuously integrates newly labeled data during inference, enabling the model to track evolving market dynamics over a 9-month prediction horizon.</p>
+<p>The experimental results validate several key hypotheses. First, periodic model retraining (every 7 days) meaningfully improved predictive performance, as evidenced by the substantial score improvement from Round 2 (0.110) to Round 3 (0.445). Second, ensemble diversity—combining attention-based, residual, and autoencoder architectures—proved more robust than reliance on a single model class. Third, comprehensive feature engineering spanning momentum, volatility, microstructure, and cross-market dynamics provided richer signal than price-based features alone.</p>
+<p>The identified limitations, particularly the single-target feature selection strategy, suggest concrete directions for future work. Target-specific or group-based feature selection could further enhance performance, as could investigation of optimal retraining frequencies and incremental learning approaches. The comparative analysis of the lightweight target-specific approach, while ultimately unsuccessful due to infrastructure constraints, underscores the critical importance of robustness and fault tolerance in production machine learning systems—lessons that extend well beyond the competition setting.</p>
+<p>More broadly, this solution reinforces the principle that in financial forecasting, model adaptability may matter as much as initial model sophistication. As market regimes shift, the ability to continuously learn from recent data provides a sustainable advantage over static approaches. The methods presented here—dynamic ensemble weighting, purged cross-validation, and hybrid ranking loss functions—offer a template for similar problems involving non-stationary time series with explicit ranking objectives.</p>
+<p>The complete implementation is available in the referenced Kaggle notebook, providing a reproducible foundation for practitioners seeking to apply online learning techniques to commodity price forecasting and related financial prediction tasks.</p>
+<h2>Key Takeaways</h2>
+<ol>
+<li><strong>Online Learning Works:</strong> Retraining every 7 days allowed adaptation to market changes</li>
+<li><strong>Ensemble Diversity:</strong> Combining attention, residual, and autoencoder architectures captures different patterns</li>
+<li><strong>Feature Engineering Matters:</strong> 2,658 advanced financial features provide rich signal</li>
+<li><strong>Robust Scaling:</strong> RobustScaler handles outliers common in commodity data</li>
+</ol>

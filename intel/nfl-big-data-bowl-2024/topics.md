@@ -1,0 +1,82 @@
+# nfl-big-data-bowl-2024 讨论区（按票数排序，共 80 条）
+
+- [NFL Jargons: Offensive Formations, Positions Abbreviations, Passing Statistics, Squad Numbers.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447174) — 20 票 / 3 评论 / 2023-10-14 
+- [Welcome to the 2024 Big Data Bowl!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/446943) — 19 票 / 18 评论 / 2023-10-13 
+- [Tackling or Blocking?  Can’t have one without the other. Assisted and Missed Tackles. Forced Fumble.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/448833) — 19 票 / 6 评论 / 2023-10-21 
+- [KagglersNFLverse: AI-Powered Fantasy.  Rushing Yards. The Zoo (1st Place). Nflverse (R Package)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/446946) — 17 票 / 0 评论 / 2023-10-13 **write-up?**
+- [Thank you!! Big Data Bowl wrap up thread](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/468229) — 16 票 / 2 评论 / 2024-01-15 
+- [Offensive Player Evaluation in football. Passing and Rushing models. Expected points. Win Probability & EPA.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447660) — 16 票 / 0 评论 / 2023-10-16 
+- [👍🎁Good resources and past winners of NFL Big databowl.⭐📱](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447026) — 15 票 / 3 评论 / 2023-10-14 
+- [2024 Big Data Bowl -- finalist announcement!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/472712) — 14 票 / 20 评论 / 2024-02-01 
+- [Is there a Data Discrepancy?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447639) — 14 票 / 6 评论 / 2023-10-16 
+- [Dataset with external data and optimized competition data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447690) — 9 票 / 1 评论 / 2023-10-16 
+- [Starter resources and references](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/446969) — 8 票 / 0 评论 / 2023-10-13 
+- [Why there is no announcement for this competition if it started 3 days ago.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447494) — 7 票 / 5 评论 / 2023-10-16 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/446963) — 6 票 / 0 评论 / 2023-10-13 
+- [Defensive Assignments](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/451008) — 6 票 / 1 评论 / 2023-10-26 
+- [Word Count of Submission](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/454039) — 6 票 / 3 评论 / 2023-11-08 
+- [[preSnapHomeTeamWinProbabilityAdded] and [preSnapVisitorTeamWinProbabilityAdded] are [homeTeamWinProbabilityAdded] and [visitorTeamWinProbabilityAdded] respectively in the dataset.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447011) — 4 票 / 2 评论 / 2023-10-14 
+- [Football position "lagging" on some plays ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/448035) — 4 票 / 5 评论 / 2023-10-18 
+- [Tackles dataset inconsistencies... ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/461347) — 4 票 / 3 评论 / 2023-12-14 
+- [Obtaining Video Clips of Specific Plays](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/452506) — 4 票 / 1 评论 / 2023-11-02 
+- [Feedback on Submissions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/484845) — 3 票 / 3 评论 / 2024-03-18 
+- [Thank you, I am looking for these types of competitions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/455758) — 3 票 / 0 评论 / 2023-11-16 
+- [Home/Visitor End Zone Definitions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/454380) — 3 票 / 2 评论 / 2023-11-10 
+- [Timeline for receiving feedback & order of submissions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/463067) — 3 票 / 3 评论 / 2023-12-23 
+- [Calculating Distance from the Ball](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/451831) — 3 票 / 3 评论 / 2023-10-30 
+- [More info about Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/451868) — 3 票 / 4 评论 / 2023-10-30 
+- [Submission Notebook](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/463922) — 3 票 / 1 评论 / 2023-12-28 
+- [Missing Tracking Data?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/451985) — 3 票 / 1 评论 / 2023-10-31 
+- [Is the use of the "StatsBomb American Football Open Data" repository legal for this competition?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/450982) — 3 票 / 1 评论 / 2023-10-26 
+- [NFL Big Data Bowl 2024 - Beginners Corner](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/448310) — 3 票 / 6 评论 / 2023-10-19 
+- [number of rows in the files](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/448413) — 3 票 / 4 评论 / 2023-10-19 
+- [How to tell when missed tackles occur in play](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447710) — 3 票 / 3 评论 / 2023-10-16 
+- [Explanation of "expectedPoints" and "expectedPointsAdded"](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447262) — 3 票 / 2 评论 / 2023-10-15 
+- [Competition rules and final scores not released](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/472752) — 3 票 / 3 评论 / 2024-02-02 
+- [Some passresult values missing in plays.csv?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/451804) — 2 票 / 3 评论 / 2023-10-30 
+- [2000 Word Limit](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/464862) — 2 票 / 5 评论 / 2024-01-01 
+- [Using All-22 Film is within the rules of the competition?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/461515) — 2 票 / 1 评论 / 2023-12-14 
+- [Are There Missing ball_snap Events?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/452944) — 2 票 / 4 评论 / 2023-11-04 
+- [Player Height/Weight ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/453100) — 2 票 / 1 评论 / 2023-11-04 
+- [Looking for a team](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/452309) — 2 票 / 3 评论 / 2023-11-01 
+- [Meaning of 'run' event value in tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/453816) — 2 票 / 2 评论 / 2023-11-07 
+- [How can I add gifs to a kaggle notebook?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466266) — 2 票 / 1 评论 / 2024-01-08 
+- [file not found submission .csv error](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466257) — 2 票 / 7 评论 / 2024-01-07 
+- [Late corrections is possible? [SOLVED]](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466493) — 2 票 / 2 评论 / 2024-01-08 
+- ["Kernel Source" Error with GIFs](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466521) — 2 票 / 6 评论 / 2024-01-09 
+- [Big Data Bowl Topic Used in Real World](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/703882) — 1 票 / 0 评论 / 2026-06-02 
+- [Is there somewhere you can watch the plays?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/451667) — 1 票 / 1 评论 / 2023-10-30 
+- [Plays That End Out of Bounds and Indicates a Tackle](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/453340) — 1 票 / 2 评论 / 2023-11-06 
+- [Team Formation](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/447805) — 1 票 / 0 评论 / 2023-10-17 
+- [Looking for a team of undergraduates](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/456038) — 1 票 / 1 评论 / 2023-11-17 
+- [What makes the play jump from first down to third down?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/458019) — 1 票 / 5 评论 / 2023-11-27 
+- [Missing data in plays.csv for gameId = 2022091808](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/459352) — 1 票 / 1 评论 / 2023-12-04 
+- [Formula for 'a' in tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/460748) — 1 票 / 1 评论 / 2023-12-11 
+- [Submission Logistics](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/460334) — 1 票 / 7 评论 / 2023-12-08 
+- [How are the tracking data a and s calculated?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/462025) — 1 票 / 4 评论 / 2023-12-17 
+- [How to interpret the assist category in the tackles data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/463383) — 1 票 / 2 评论 / 2023-12-25 
+- [Team mates wanted for Metric Track](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/464658) — 1 票 / 0 评论 / 2023-12-31 
+- [Big Data Bowl Data Submission Help. !!Urgent!!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/465355) — 1 票 / 3 评论 / 2024-01-04 
+- [Notebook_full](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/465620) — 1 票 / 5 评论 / 2024-01-04 
+- [Kaggle data to read csv on r](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466063) — 1 票 / 7 评论 / 2024-01-07 
+- [Submission issue](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466508) — 1 票 / 0 评论 / 2024-01-08 
+- [Submission Question For Help！](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466510) — 1 票 / 0 评论 / 2024-01-09 
+- [Submission missing](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466888) — 1 票 / 0 评论 / 2024-01-10 
+- [Svg Animation problem](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466490) — 1 票 / 5 评论 / 2024-01-08 
+- [Important Update on NFL Vision - Your Gateway to Enhanced NFL Gameplay Analysis](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/470693) — 1 票 / 0 评论 / 2024-01-25 
+- [Resume Drop (deadline March 5th 2024)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/478371) — 1 票 / 3 评论 / 2024-02-20 
+- [Latest on personalized feedback](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/484644) — 1 票 / 2 评论 / 2024-03-17 
+- [Feature Engineering with Featuretools](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/457326) — 0 票 / 0 评论 / 2023-11-24 
+- [Players having both missed tackle and tackle in the same play](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/457567) — 0 票 / 2 评论 / 2023-11-25 
+- [can i still join the competition?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/458279) — 0 票 / 2 评论 / 2023-11-29 
+- [Output File](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/458551) — 0 票 / 1 评论 / 2023-11-30 
+- [NFL Next Gen Stats access](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/459350) — 0 票 / 3 评论 / 2023-12-04 
+- [Possible inconsistency between plays and tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/460396) — 0 票 / 2 评论 / 2023-12-09 
+- [Frame Identifier](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/459780) — 0 票 / 2 评论 / 2023-12-06 
+- [Question about the main problem](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/460533) — 0 票 / 2 评论 / 2023-12-09 
+- [Submission Help](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/461687) — 0 票 / 1 评论 / 2023-12-15 
+- [Any Undergraduates who would like to work on this next week?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/461681) — 0 票 / 1 评论 / 2023-12-15 
+- [Clarification on the Use of Automated Machine Learning Tools in NFL Big Data Bowl 2024](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/461592) — 0 票 / 5 评论 / 2023-12-15 
+- [How to interpret acceleration?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/465844) — 0 票 / 3 评论 / 2024-01-05 
+- [Formatting final submission](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/466217) — 0 票 / 1 评论 / 2024-01-07 
+- [Plots not appearing, notebook only just stopped failing.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2024/discussion/468747) — 0 票 / 0 评论 / 2024-01-17 

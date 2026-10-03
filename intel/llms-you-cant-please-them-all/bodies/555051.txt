@@ -1,0 +1,192 @@
+# https://www.kaggle.com/competitions/llms-you-cant-please-them-all/discussion/555051
+
+Topic #555051: [Old Metric] 30.0 Exploit
+  Author: conor
+  Posted: 2025-01-04 21:39:03.387000
+  Votes: 71  Comments: 59
+
+This is the code from our submission that got a score of 30 using the old metric.
+
+The exploit and model targeting approach itself is completely useless against the current judges but may still be interesting to some. We can't publish the wordlist we're using as it does a lot of the heavy lifting here and we're still making use of it.
+
+ pandas  pd
+ random
+
+random.seed()
+
+ (, )  f:
+    words = [word.strip()  word  f.readlines()]
+
+exploit = 
+
+pd.DataFrame([
+    { : row[], : .join(random.choices(words, k=))[:] + exploit }
+     _, row  pd.read_csv().iterrows()
+]).to_csv(, index=)
+
+Comments:
+├─ Yurnero (2025-01-05 03:55:24.463000) [+6]
+│  Cool. It's fun I used completely different approach with english only to get 29.6+
+  ├─ conor (2025-01-05 10:11:16.380000) [+1]
+  │  I don't think we've found any English-only approaches that were anywhere close to being that consistent.
+  │  
+  │  Were you using generated/templated essays + injection, random words + injection, no injecti...
+    ├─ Yurnero (2025-01-05 13:04:42.390000) [+3]
+    │  I have used only prompt injection. No generated/templated essays, no random words
+├─ Jagat Kiran (2025-01-04 21:42:57.517000) [+3]
+│  I am surprised you got a perfect 30.000 score with some Japanese text included. 
+│  For me, if even a single character is non-English, I get avg_e less than 1
+  ├─ Gerwyn (2025-01-05 07:13:21.467000) [+13]
+  │  Hmmm, after doing some naive testing, it seems like lingua usage isn't as straightforward as it appears.
+  │  
+  │  I think choosing list of languages is having some impact here (i.e. maybe japanese maybe "c...
+    ├─ Jagat Kiran (2025-01-05 07:19:33.917000) [+0]
+    │  Oh I see! Thanks for testing. 
+    │  For me, when Qwen produced even a single Chinese character, lingua used to reduce the avg_e a bit.
+    │  But this exact Japanese text seems to have no effect on lingua 🧐
+    │  
+    │  I...
+    ├─ conor (2025-01-05 08:53:58.617000) [+16]
+    │  The length of the essay seems to have the most impact on the English confidence score (provided the entire essay is in English excluding the exploit at the end). The similarity score can also be op...
+    ├─ Jagat Kiran (2025-01-05 09:24:17.370000) [+0]
+    │  Ah nice catch with regards to essay length affecting the lingua's score. 
+    │  
+    │  Btw, is the essay length of 400 chars or words?
+    │  For me, anything over 200 words is a automatic 0.00 score right from the s...
+    ├─ conor (2025-01-05 09:37:11.047000) [+6]
+    │  Characters not words. Combinations of essays and exploits that are longer than ~900 characters get very low scores.
+    ├─ Khoi Nguyen (2025-01-05 10:29:01.530000) [+3]
+    │  My guess is that they silently truncated the essay and if it was too long the attack is also truncated giving all 000s for gibberish.
+    ├─ conor (2025-01-05 10:41:53.333000) [+2]
+    │  Yep that's what we think too, it seemed to be clipping the ends of our injections when we used longer essays.
+├─ Man of the year (2025-01-04 23:15:07.607000) [+4]
+│  Genius approach. I was thinking about the similar idea as well. I am surprised, that this approach worked, because in my case many injections did not work at all, without special structure or words...
+├─ Ninad Chaudhari (2025-01-13 22:42:45.413000) [+1]
+│  Iam still a bit confused regarding the approach
+│  In order to score 30 we need both splits 0 , 9 , 9 and 9 , 0 , 0
+│  I can see how we can get 0 , 9 , 9
+│  Not sure how its generating the 9, 0 , 0 splits m...
+  ├─ Jagat Kiran (2025-01-13 22:59:51.930000) [+0]
+  │  Hey, the mentioned approach was for old metric (0,9,9 alone was enough).
+  │  
+  │  The author did mention this technique is not ideal for this current metric
+    ├─ Ninad Chaudhari (2025-01-13 23:04:12.350000) [+0]
+    │  Ohh okay gotchya! Thank you!
+  ├─ conor (2025-01-13 23:03:43.273000) [+5]
+  │  This approach was for the old metric which used the mean variance instead of mean standard deviation and did not consider vertical variance at all. Getting grades of (0, 9, 9) for all essays result...
+    ├─ Ninad Chaudhari (2025-01-13 23:05:33.600000) [+1]
+    │  Ohh okay understood thanks for the clarification! 
+    │  Awesome approach btw!
+    ├─ Shaido (2025-01-17 07:58:49.347000) [+0]
+    │  So with the new metric, to get a score of 30, variations of (0, 9, 9), (9, 0, 9) and (9, 9, 0) grades are enough?
+    │  There is no need to have (9, 0, 0), (0, 9, 0), and (0, 0, 9) grades at all? Would a...
+    ├─ conor (2025-01-17 08:19:40.390000) [+1]
+    │  Using variants of (9, 0, 0) grades would give the same horizontal and vertical standard deviations but would give a mean grade of 3 resulting in a score of 15:
+    │  
+    │  (0, 0, 9) etc.
+    │  - =3.000 =4.243 =4.24...
+    ├─ Shaido (2025-01-20 03:01:38.500000) [+0]
+    │  Thank you very much for the clarification.
+├─ Khoi Nguyen (2025-01-06 10:11:53.910000) [+1]
+│  Haha did you crack it again?
+├─ Ghislain Delabie (2025-01-06 17:58:50.957000) [+2]
+│  That sounds great. I've got a few (naive) questions as a beginner in the field:
+│  1/ In understand that you induce one of the judge to grade 0 if it reads nonsense and that this specific judge interp...
+  ├─ conor (2025-01-06 22:39:10.020000) [+11]
+  │  (1/2) Yep that's pretty much it except that the random words are interpreted as nonsense by the first judge and not the Japanese instructions.
+  │  
+  │  (3) Using random English words in general is useful a...
+├─ Jagat Kiran (2025-01-07 17:25:27.617000) [+0]
+│  Wow, 29.4 already! Well done team 'Team'
+│  Guess we are bound for another metric change 🙃.
+  ├─ Yurnero (2025-01-08 14:31:29.840000) [+2]
+  │  Don't think metric will be changed. It took them ~3-4 weeks to find this solution and no one still has no clue how to reach 9,9,0 splits like they did. I am impressed with their educacted guessing ...
+    ├─ Man of the year (2025-01-08 14:43:33.147000) [+1]
+    │  I agree, that's fair. Moreover, even with the previous metrics, not many teams have found 29+ solution. Another change would be just devaluing their work.
+    ├─ Yurnero (2025-01-08 14:48:50.050000) [+0]
+    │  Many = 3 (it was like 6-7 days tho, but still). Noted
+    ├─ Jagat Kiran (2025-01-08 15:09:24.323000) [+0]
+    │  Yep, I agree as well. 
+    │  My initial thought was that the host might change metric(as they said it is experimental competition) and given 2 months still remain, but yeah, it seems unfair to change it ...
+├─ yuanzhe zhou (2025-01-21 04:26:07.730000) [+0]
+│  Nice sharing! Different from lmsys competition where almost all the notebooks could not be fork&amp;submit. These seems to be more sharings here. 
+│  
+│  So it's almost impossible to target llm now?
+  ├─ conor (2025-01-21 10:10:11.240000) [+2]
+  │  It's a lot more difficult now but it's still possible to consistently target each combination of LLMs.
+├─ piu ATI (2025-01-17 12:34:15.400000) [+0]
+│  In fact, I'm a bit confused about this competition right now. I think something that would be more meaningful, or perhaps more challenging or interesting, would be to use some LLM-based generation ...
+  ├─ conor (2025-01-17 13:00:53.883000) [+0]
+  │  The inclusion of the language confidence and similarity score do make it seem like generation-based methods were intended but the organizers do mention LLMs having "degrees of vulnerabilities to ta...
+├─ guo dashuai (2025-01-05 12:36:23.167000) [+0]
+│  I am greatly amazed by what you do,but I still have a question: wouldn't the content chosen by random.choice be the same every time, leading to a similarity score of one?
+  ├─ conor (2025-01-05 12:56:51.940000) [+3]
+  │  Setting the random seed just ensures consistency across multiple submissions. Within a single submission every call to random.choices will produce entirely different essays (the wordlist is quite l...
+    ├─ guo dashuai (2025-01-05 13:04:21.077000) [+0]
+    │  Thank you for your explanation.
+  ├─ JP (2025-01-05 13:19:14.207000) [+2]
+  │  I think this depends on how long the word list they are using is, but also on the order of the words that results from the random choice. First, if the word list is long enough, you may end up with...
+    ├─ guo dashuai (2025-01-05 13:27:39.527000) [+0]
+    │  This makes a lot of sense.
+    ├─ Shivam A. (2025-02-22 19:29:53.417000) [+0]
+    │  Which one of the following options could they be using ?
+    │  
+    │  1-&gt; s = SequenceMatcher(lambda x: x == " ",
+    │                      "private Thread currentThread;",
+    │                      "private volatile T...
+    ├─ JP (2025-02-22 22:54:26.490000) [+0]
+    │  I just do this:
+    │  
+    │  similarities = [SequenceMatcher(, e1, e2).ratio()  e1, e2  combinations(essays, )]
+    │  
+    │  
+    │  But I can't be sure that that's exactly what they are doing. If I remember correctly, the use o...
+├─ Furkan HALA MADRID (2025-01-05 11:48:39.130000) [+0]
+│  Man, I was really tired of dealing with that. Congratulations. Thinking of and implementing something like this is awesome. I wonder, does it still have at least a little bit of validity? Did you t...
+  ├─ conor (2025-01-05 13:31:52.017000) [+2]
+  │  This exploit specifically is only consistent for one of the judges now - it's unlikely to be very useful if you're trying to get 0/9/9 splits.
+├─ Khoi Nguyen (2025-01-05 08:41:50.003000) [+0]
+│  Does this still give you zero in the new metric, I've found something similar in English that still gives zero now.
+  ├─ conor (2025-01-05 08:57:15.273000) [+0]
+  │  It does get 0 against the new metric but not because it's getting 100% consistent [0, 9, 9] grades.
+    ├─ Khoi Nguyen (2025-01-05 09:10:27.877000) [+0]
+    │  Same here, it does not do well when combined with other zero attacks.
+    ├─ Yuchen20 (2025-01-07 13:42:46.817000) [+3]
+    │  Quite interestingly, inspired by this post, I constructed a random wordlist.txt myself—a rather targeted one—and it works well enough, achieving a score of around 15 when directly translating the J...
+    ├─ [deleted] (2025-01-08 13:56:04.233000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2025-01-08 19:23:43.253000) [+0]
+    │  [deleted]
+├─ Gerwyn (2025-01-05 05:21:13.753000) [+0]
+│  Nice share!
+│  
+│  
+│    
+│  against the current judges
+│  
+│  
+│  Did you mean you and your team suspect the model-judges have been changed?
+  ├─ K-chan (2025-01-05 05:34:55.507000) [+0]
+  │  I’m also interested in that point. I understood that the only change to the evaluation method in the past was the introduction of min_v. Does the above method make min_v approach zero by assigning ...
+    ├─ Gerwyn (2025-01-05 07:02:47.240000) [+1]
+    │  My old-metric LB scores and new-metric LB scores gave totally opposite conclusions on the set of attacks that worked.
+    │  
+    │  However, i do not think my data points are conclusive to know if the change is...
+  ├─ conor (2025-01-07 22:02:17.620000) [+2]
+  │  Judge models haven't changed but other things have.
+    ├─ Man of the year (2025-01-07 23:16:35.520000) [+1]
+    │  They've been through a lot…
+    ├─ colt (2025-01-08 01:03:19.053000) [+0]
+    │  Did you think there could be two similar judges?
+    ├─ conor (2025-01-08 01:11:24.137000) [+4]
+    │  Extremely similar 🤐
+    ├─ Gerwyn (2025-01-08 14:51:30.293000) [+0]
+    │  just want to say that your shares and hints have great
+    ├─ Ghislain Delabie (2025-01-08 17:33:07.047000) [+2]
+    │  Do you mean that judges are still the same models but changes include either prompts, fine-tuning or other kind of configuration of these models to better handle essays and avoid some exploits? Thi...
+    ├─ conor (2025-01-09 22:03:21.400000) [+3]
+    │  Same models, different prompts and likely the same generation params. Probably no fine-tuning.
+├─ [deleted] (2025-01-08 05:38:30.920000) [+0]
+│  [deleted]
+├─ [deleted] (2025-01-10 06:10:22.197000) [+0]
+│  [deleted]

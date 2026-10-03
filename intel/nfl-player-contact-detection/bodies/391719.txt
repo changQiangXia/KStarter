@@ -1,0 +1,97 @@
+# https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391719
+
+Topic #391719: CNN can Visualize Contact (4th place K_mat part)
+  Author: K_mat
+  Posted: 2023-03-02 12:56:51.231000
+  Votes: 49  Comments: 12
+
+Thanks to NFL and Kaggle for hosting such interesting challenge every year. Thanks @nyanpn , @bamps53  and @hattan0523 for teaming up with me. I really enjoyed and learned a lot from you guys! Congrats to the winners and everyone who enjoyed this competition!
+
+My main contributions are as follows:
+1. Contact prediction by 2D CNN
+2. Feature engineering with bbox and tracking data such as the registration error.
+Here, I show the former.
+
+Model Architecture
+
+I applied 2D CNN(U-Net) to each player's image and predict some masks. Then the masks of each pair's area of intersection are multiplied and the maximum value of it is outputted as the contact prediction between two players. I expected the model to predict the contact event from the intersected area of each pair of players.
+
+
+
+Additionally, I created a slightly different model based on the same concept for ensemble. I input whole image into UNet and crop players in the feature space.
+
+Characteristics
+
+This model can learn and predict the contact from the intersection of two players’ area. It is beneficial in many aspects. 
+
+
+
+The model can be trained efficiently.
+
+Quick inference since this model runs for the times of the number of players. (not number of pairs)
+
+Though this model isn’t trained to learn mask directly, it automatically becomes to predict the area of contact as shown in the figure below. Unfortunately, This didn’t help so much during competition but I believe it will help NFL people in their analysis.
+
+
+
+
+The output of my model is used in the second stage. 
+Our team solution is 
+https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391761
+
+Comments:
+├─ Rob Mulla (2023-03-04 16:20:49.587000) [+1]
+│  Nice work @kmat2019 and congrats on yet another strong finish!
+│  
+│  The model's ability to predict the specific region is really cool! This could have a lot of use cases for us. 
+│  
+│  Am I understanding wh...
+  ├─ K_mat (2023-03-05 04:51:05.207000) [+1]
+  │  Thank you! It's my pleasure to hear that as I focused on usability and simplicity this time.
+  │  
+  │  
+  │    
+  │  1.You preprocessed the training data to extract a the bounding box of each player
+  │  
+  │  
+  │  Exactly. I enla...
+├─ Bilzard (2023-03-03 08:41:37.383000) [+0]
+│  @kmat2019 congratulation for the 4th place.
+│  
+│  Does this model is trained end-to-end?
+│  
+│  Actually, I'm not clear about how model can learn where is the contact region is only from the feed back of log ...
+  ├─ K_mat (2023-03-03 14:45:48.817000) [+4]
+  │  Thank you.
+  │  Yes, it's end to end.
+  │  
+  │  Let's start from simple exmaple. The code below is a much simpler model than mine.
+  │  
+  │  input = image_two_players
+  │  mask = UNet(input)
+  │  output = sigmoid(mask).max()
+  │  
+  │  
+  │  But...
+    ├─ Bilzard (2023-03-03 17:12:34.040000) [+0]
+    │  Please point out if I am wrong. In my understanding, when it comes to back-propagate phase, max pooling propagate gradient for only one pixel that has maximum pixel value. It seems to me training p...
+    ├─ Bilzard (2023-03-03 17:17:20.133000) [+0]
+    │  I'm not sure I'm saying correct, but maybe lower resolution mask might be sufficient if the model can learn the roughly highlighted area of contact region.
+    ├─ K_mat (2023-03-04 02:28:50.887000) [+1]
+    │  max pooling propagate gradient for only one pixel that has maximum pixel value
+    │  
+    │  
+    │  You're right. But there are many implementation using maxpooling in CNN and they are working well such as a globalma...
+    ├─ K_mat (2023-03-04 02:32:13.147000) [+1]
+    │  If you use lower resolution mask, you cannot predict the contact precisely. There would be many false positives and false negatives when multiplying every pair of players' low resolution mask.
+    ├─ Bilzard (2023-03-04 04:16:38.880000) [+0]
+    │  But there are many implementation using maxpooling in CNN and they are working well such as a globalmaxpooling in classification.
+    │  
+    │  
+    │  You are right. I found a paper[1] which uses global max-pooling t...
+    ├─ Bilzard (2023-03-04 04:46:22.453000) [+0]
+    │  By the way, since this task is kind of weakly supervised training, I think it takes some amount of time to learn decent prediction. How much epoch does it take to train this task?
+    ├─ K_mat (2023-03-08 08:23:39.393000) [+1]
+    │  It was rather faster than the simple classification in my experiment. That's because I applied the prior knowledge of people that the contact occurs in the intersection. Models are trained for 20 e...
+    ├─ Bilzard (2023-03-08 10:10:05.897000) [+0]
+    │  Thanks, it is interesting.

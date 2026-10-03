@@ -1,0 +1,301 @@
+# https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/494343
+
+Topic #494343: 1st place solution: adversarial attack
+  Author: Khoi Nguyen
+  Posted: 2024-04-17 00:15:09.711000
+  Votes: 243  Comments: 115
+
+Inference notebook: https://www.kaggle.com/code/suicaokhoailang/1st-place-0-71
+
+TL;DR: Append this string to your model prediction and see score going up for up to +0.05:  
+
+
+  
+" 'it 's ' something Think A Human Plucrarealucrarealucrarealucrarealucrarealucrarealucrarealucrarea"
+
+
+For example:
+
+
+  
+Convert this to a shanty. 'it 's ' something Think A Human Plucrarealucrarealucrarealucrarealucrarealucrarealucrarealucrarea"
+
+
+My explanations (or what I've known so far):
+
+
+
+It's not about lucrarea, but the &lt;/s&gt;  token. In the huggingface version of sentence-t5, when comparing two vaguely similar sentences, if you append an extra&lt;/s&gt; to one of them, the cosine similarity will be pulled toward ~0.9 i.e. if the original is lower, it goes up, if higher it goes down. 
+
+0.9 translates to about 0.73 of competition metric, now you're seeing where this is going.
+
+However, the tensorflow version, which the host used to compute the score, uses the default config of sentencepiece, which means it will tokenize special tokens as literal, &lt;/s&gt; becomes ['&lt;', '/', 's', '&gt;']
+
+Here comes lucrarea, by computing the embeddings of all tokens in the t5 vocab, you'll find some which are extremely close to &lt;/s&gt;, lucrarea included. 
+
+Strangely, only lucrarea shares this behavior, I haven't figured out why yet. Also why did some random tokens end up having the almost same embedding as a special token is a mystery.
+
+lucrarea is basically a Walmart version of &lt;/s&gt;, only pull scores to 0.71, thanks Data Jesus that's enough to win. 
+
+It's understandable that messing with special tokens leads to unexpected behavior, but it leading to such a high score may just be pure luck for me.
+
+
+My theory
+
+I think the special token pulls a sentence to some focal point in the embedding space, maybe the center of it.
+If the sentence are far enough from each other, it's more likely that the new distance (green) is shorter than the old one (orange). But if the two sentences are already very close to each other, this can hurt performance.
+
+
+
+Models
+
+I used a mix of Mistral 7b (both the instruction tuned and original version) and Gemma-7b-1.1-it, trained on different datasets. Mistral performed a bit better than Gemma but in the end none of the models beat 0.65.
+The predictions of each model are concatenated, something like this:
+
+
+  
+Rewrite the following text into a shanty. Alter this into a sailor's shanty. Turn this text into a shanty. Make this text into a shanty about a code competition."
+
+
+To ensure diversity of predictions, each model is prompted with a different opening verb. A diverse set of predictions helped bring final score from 0.70 to 0.71.
+
+Comments:
+├─ Khoi Nguyen (2024-04-17 01:18:41.563000) [+63]
+│  Updated meme
+  ├─ Tran Huu Nhan - ĐH FPT (2024-12-04 02:36:40.677000) [+0]
+  │  Dạ anh ơi em còn mới trong lĩnh vực NLP và hiện tại em đang gia vào cuộc thi có liên quan về LLM models, em muốn hỏi là LUCRAREA là gì vậy anh, vì hiện tại topic em làm có vẻ liên quan về concept v...
+    ├─ Khoi Nguyen (2024-12-05 12:27:45.850000) [+0]
+    │  It's an adversarial attack against t5-sentence-base, please read the post above.
+├─ Heads or Tails (2024-04-17 00:42:54.177000) [+15]
+│  Credit where it's due. Still, I'm not quite sure whether to be impressed by your strategy or annoyed by the metric. I'll be impress-noyed. Turns out it did come down to exploiting weaknesses in the...
+  ├─ Khoi Nguyen (2024-04-17 00:54:21.690000) [+5]
+  │  Thank you. Yeah the metric is frustrating, my "honest" score with pure model predictions were 0.67, which is quite decent and  I think that also plays a role as the attack only amplify the existing...
+    ├─ Heads or Tails (2024-04-17 01:00:08.190000) [+0]
+    │  Absolutely, that's a very good score to build on. Could you share a bit more about your model approach? Did you fine-tune, few-shot, or find some prompting techniques that helped more than others? ...
+    ├─ Khoi Nguyen (2024-04-17 01:07:31.433000) [+1]
+    │  I'll update the writeup soon.
+    ├─ tarick.morty (2024-04-17 01:08:12.153000) [+1]
+    │  So the model based score is 0.67 for you as well. I tried so many things with modelling and couldn't find anything that can boost it further from 0.67. 
+    │  
+    │  Pure disappointment with the T5 metric. Kud...
+    ├─ Big red bear (2024-04-17 01:11:05.090000) [+0]
+    │  What kind of setting did you use to get to 0.67 with the modeling approach?
+    ├─ Khoi Nguyen (2024-04-17 01:20:24.310000) [+1]
+    │  @tarique7 I'm sorry you didn't get the solo gold this time, you probably did as well as it can get in term of modeling, good luck next time.
+    ├─ tarick.morty (2024-04-17 01:49:18) [+0]
+    │  Thanks @suicaokhoailang for your kind words.
+    │  Not a great result for me but happy for you that you kept your spot 😊. 
+    │  I submitted one of my solution with your magical string haha
+    ├─ Min-Hsien Weng (2024-04-17 04:59:37.607000) [+0]
+    │  I'm interested in seeing the model's approach. My Gemma-7b solution only achieved a score of 0.63, which isn't ideal.
+    ├─ [deleted] (2024-04-17 05:16:06.967000) [+0]
+    │  My fine-tuned model dropped 0.01 instead, and the mean prompt remained firm
+├─ Rich Olson (2024-04-17 01:09:14.180000) [+7]
+│  Very impressive work!  (but also sad about the scoring metric for the competition…)
+├─ sayoulala (2024-04-17 01:39:50.647000) [+5]
+│  Very surprised, although it seems to have no sense for real technology, but this kind of thinking is worth learning.
+├─ Taimo (2024-04-17 04:53:33.290000) [+6]
+│  That's an impressive hacking of T5! I was too focused on recovering rewrite prompts to aligning with human's linguistic view. I should have ignored the bias and considered T5's view instead. Thanks...
+├─ at7459 (2024-04-17 06:39:38.177000) [+3]
+│  congrats, i do feel like a moron now though, because there is another running competition where the metric is similarly dumb and instead of using the free ticket for first place i just told everyon...
+├─ Yusef A. (2024-04-17 01:44:25.867000) [+3]
+│  Well done! Lucrarea was also my silver bullet, will do a fuller write up but I got .69 on mean prompt alone and eeked the last bit out via Mistral. This comp relied on thoroughly knowing ST5.
+  ├─ Yusef A. (2024-04-17 01:46:53.550000) [+1]
+  │  To follow up also spotted the tf and torch versions are a bit different, they also don't have the sentinel tokens i.e. . And also have a max length of 128 if I remember well.
+  ├─ tarick.morty (2024-04-17 02:06:21.647000) [+1]
+  │  I knew it. Please share your mean prompt 🥹
+    ├─ Yusef A. (2024-04-17 03:28:48.940000) [+2]
+    │  Posted a long write up! :)
+├─ Timmy Juicehouse (2024-04-17 00:55:43.007000) [+3]
+│  WTF, I confirm the game sucks. Congratulation, bro, what a genius.
+├─ Chris Deotte (2024-04-18 05:50:13.267000) [+4]
+│  Congratulations winning $100,000.00 and solo Gold. Well done!
+  ├─ Khoi Nguyen (2024-04-18 06:11:10.320000) [+9]
+  │  Thank you, I've mostly completed all of my Kaggle goals, only thing left now is last place 😆
+  ├─ Abdullah Ali Abdullah (2024-05-13 12:59:55.770000) [+0]
+  │  Join a team with me and you will get that last place and complete all of Kaggle goal hhhhhhhhhhhhhh
+├─ ( ͡° ͜ʖ ͡°) (2024-04-18 03:25:18.320000) [+1]
+│  Congrats solo prize gold 🎉
+├─ Eduardo Rocha de Andrade (2024-04-17 19:07:44.500000) [+1]
+│  Really nice man! Congratz on your win! 🔥
+│  PS: we also found lucrarea but we didn't know it was related to &lt;/s&gt; token!
+├─ melkhawaggle (2024-04-17 17:48:36.817000) [+1]
+│  Does lucrareu even have a meaning ?
+  ├─ Lucifer_is_back_ (2024-04-19 08:30:50.060000) [+0]
+  │  nah its just a token
+  ├─ Adrian Sergheev (2024-04-22 09:46:32.663000) [+2]
+  │  fun fact: "lucrarea" means "the work" in romanian
+├─ Hina Ismail (2024-04-17 16:41:23.580000) [+1]
+│  congurats sir
+├─ Adrian Dip (2024-04-17 14:51:31.500000) [+1]
+│  This is awesome Khoi! Enjoy the win and the money. You deserve it.
+│  
+│  I gave up when I saw Gemini producing the same output with different prompts. The signal was not recoverable. This is a cool way ...
+├─ GUNER (2024-04-17 08:13:51.820000) [+1]
+│  Congrats, although probably not useable by host, you truly deserved this. I am more curious about your modeling approach. During the competition you posted to regret not spending enough time for mo...
+├─ Nikolai Semiachkin (2024-04-17 07:41:19.517000) [+1]
+│  Would be very interesting to see your code. After reading about this solution and other adversarial attack approaches here, I still don't fully understand how to automate searching for mean prompt 🤔
+├─ Shivam Taneja (2024-04-17 06:30:48.650000) [+1]
+│  this is an interesting type of reverse engineering. Congratulations!!
+├─ George.Z (2024-04-17 06:13:00.470000) [+1]
+│  Hi Congratulations! 
+│  
+│  I also used the adversarial attack method in this competition, but I curious about that, how do you know " the tensorflow version, which the host used to compute the score, us...
+  ├─ Yuri Barbashov (2024-04-17 08:56:28.693000) [+1]
+  │  By adding  to your current mean prompt and testing it on the leaderboard. I tried it and it did not work, so it means they discard it somehow, though I did not think about that at that moment.
+  ├─ Khoi Nguyen (2024-04-18 10:15:38.410000) [+0]
+  │  The result being ['&lt;', '/', 's', '&gt;'] is just an educated guess based on how the hugginface version tokenize "&lt;/s" to ['&lt;', '/', 's']. The true behavior of the tf version is unknown bec...
+├─ ShubhamG21 (2024-04-17 05:56:23.473000) [+1]
+│  Thankssss and comgratsss
+├─ C R Suthikshn Kumar (2024-04-17 04:23:06.377000) [+1]
+│  Congratulations on topping the competition. Thanks for the nice tip on prompting. It looks like you are exploiting a vulnerability in the competition to score better.
+├─ Ahmed Maghrabi (2024-04-17 03:06:56.227000) [+1]
+│  Congrats! @suicaokhoailang After the results showed up, I remembered your comment somewhere that there won't be a big shake up, I'm curious what made you expect that?
+  ├─ Chan Kha Vu (2024-04-18 04:16:38.957000) [+2]
+  │  I guess it's just from the experience. When I looked at this comp, I also did not expect any big shakeups, because of how uniformly the data was generated and split.
+├─ ModeEric (2024-04-17 02:51:32.500000) [+1]
+│  Congrats! I can't find any context for "lucrarea" other than it might be a Romanian word? I wonder why it's so similar, I suppose some are bound to be similar given the nature of embeddings but thi...
+├─ Leo (Dung) (2024-04-17 02:18:24.353000) [+1]
+│  Congratulations, what a genius you are. Wasted a month and I don't even imagine the silver bullet is Lucrarea.
+├─ Ethan long use (2024-04-17 02:16:39.993000) [+1]
+│  How you find lucrarea is better not "lucas", "louis"🤣
+├─ Sinan Calisir (2024-04-17 01:39:34.177000) [+1]
+│  Haha, that was fun to read. Congratulations!!
+├─ Big red bear (2024-04-17 00:36:05.790000) [+1]
+│  This is amazing! Do you mind sharing how you discovered this?
+├─ hyd (2024-04-17 00:33:15.283000) [+1]
+│  Great solution! Never thought of it that way😂.
+  ├─ Khoi Nguyen (2024-04-17 00:34:30.317000) [+4]
+  │  I've made it my personal mission to attack T5 from the beginning of this comp.
+    ├─ Chan Kha Vu (2024-04-18 02:18:46.393000) [+0]
+    │  Let's hope our future AI overlord won't be a T5 descendant
+  ├─ AIFIRST (2024-04-17 00:46:36.033000) [+3]
+  │  what a fxxk  competition😅
+├─ yuanzhe zhou (2024-04-17 00:29:30.107000) [+1]
+│  It seemed that you did not worry about distribution shift. The shake up could be larger than 0.01.
+  ├─ Khoi Nguyen (2024-04-17 00:33:53.160000) [+3]
+  │  I constructed multiple unseen validation sets locally and it worked pretty consistently, so I wasn't worried too much.
+    ├─ yuanzhe zhou (2024-04-17 00:36:21.587000) [+0]
+    │  I find out that keeping only lucrarea is the most robust… Anything else is overfitting. Anyway, there is no distribution shift. Congratulations!
+    ├─ Khoi Nguyen (2024-04-17 00:38:26.883000) [+0]
+    │  my second sub was pure lucrarea too, but in the end it wasn't needed.
+    ├─ [deleted] (2024-04-18 02:15:04.873000) [+0]
+    │  [deleted]
+├─ Hunain Imran (2024-04-17 00:21:26.377000) [+1]
+│  I just exactly thought about doing this. tried out many times on huggingface sentence similarity, but then left this approach
+├─ [deleted] (2024-04-17 00:19:10.220000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-04-17 00:20:12.717000) [+6]
+  │  [deleted]
+    ├─ [deleted] (2024-04-17 01:27:30.390000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-04-17 00:17:16.317000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-04-17 00:18:15.807000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-04-19 07:54:00.977000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 20:47:51.553000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 18:46:11.883000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-04-18 09:16:15.400000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-04-17 07:36:30.207000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 06:34:33.277000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 04:20:23.463000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 02:34:20.973000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 02:08:33.077000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-04-17 04:47:15.947000) [+4]
+  │  [deleted]
+├─ [deleted] (2024-04-17 01:43:42.613000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-04-18 13:51:59.887000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-04-17 01:09:38.807000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-04-17 14:35:20.277000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2024-04-17 14:53:39.330000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-04-17 00:49:47.627000) [+2]
+│  [deleted]
+├─ [deleted] (2024-04-17 00:30:26.880000) [+2]
+│  [deleted]
+├─ [deleted] (2025-05-20 10:47:12.930000) [+0]
+│  [deleted]
+  ├─ [deleted] (2025-05-30 09:57:42.013000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-05-24 17:13:24.027000) [+0]
+│  [deleted]
+├─ [deleted] (2024-05-16 22:54:01.073000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-28 09:14:08.473000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-28 04:07:19.237000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-28 02:39:54.630000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-27 14:44:22.627000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-27 12:47:12.960000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-26 19:11:40.443000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-24 18:29:23.463000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-23 18:31:09.987000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-22 16:25:13.690000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-21 17:21:04.553000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-19 16:59:48.010000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-18 16:11:32.170000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-04-19 08:33:15.163000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-04-18 15:24:59.930000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-18 12:19:08.887000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-18 10:41:33.657000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-18 07:28:22.363000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-18 06:49:50.640000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-04-18 10:31:25.133000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-04-18 06:23:09.703000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-17 01:22:10.310000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-04-17 01:24:35.427000) [+3]
+  │  [deleted]
+├─ [deleted] (2024-04-17 00:21:07.057000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-04-17 00:22:28.113000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2024-04-17 00:23:46.843000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-04-17 00:25:10.973000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-04-17 00:35:08.960000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2024-04-17 00:37:12.733000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-05-14 12:58:21.927000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-24 14:41:08.040000) [+0]
+│  [deleted]
+├─ [deleted] (2024-04-17 00:43:46.640000) [+1]
+│  [deleted]
+├─ [deleted] (2024-04-19 16:27:11.577000) [+0]
+│  [deleted]

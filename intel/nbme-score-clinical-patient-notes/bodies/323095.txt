@@ -1,0 +1,313 @@
+# https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323095
+
+Topic #323095: 1st solution
+  Author: currypurin
+  Posted: 2022-05-04 19:15:18.285000
+  Votes: 128  Comments: 28
+
+First of all, thanks to competition organizers for hosting this competitions and great teammate(@ryuichigt). And thanks to the great notebooks and discussions, I learned a lot and was able to make it my final solution.
+
+Solution Summary
+
+The following six models are blended to maximize cv. Each models use MLM, pseudo labeling, AWP, augmentation, and trained 5 out of 10 GroupStratifiedKFolds and all data, built our CV from the resultant 50% train data OOF. Final submit uses some weights of those six (fold 0, 1, 2, 3, 4, all) due to time limitations. Notebook
+
+
+
+
+exp-num
+Hugging Fase Model
+cv
+PubLB(5/10folds+all)
+PriLB(5/10folds+all)
+final submitused weights
+
+
+
+
+107
+deberta-v3-large
+0.8925
+0.8931
+0.8929
+4/10folds+all
+
+
+092
+deberta-v2-xlarge
+0.8914
+0.8930
+0.8911
+3/10folds+all
+
+
+106
+deberta-large
+0.8913
+0.8922
+0.8925
+2/10folds+all
+
+
+102
+deberta-v2-xlarge
+0.8925
+0.8928
+0.8940
+3/10folds+all
+
+
+101
+deberta-large
+0.8907
+0.8918
+0.8934
+4/10folds
+
+
+104
+deberta-v2-large
+0.8921
+0.8925
+0.8920
+2/10folds+all
+
+
+
+
+
+
+Things that worked.
+
+
+
+
+AWP
+
+
+
+Feedback Prize 1st Place Great Notebook is very helpful.
+
+trying several parameters, the following improved the cv
+
+
+adv_lr: 1.0, adv_eps: 0.01
+
+cv increase about 0.002
+
+my code
+
+
+MLM
+
+
+
+Pre-training is performed on 'patient_notes.csv' except for the data in 'train.csv'.
+
+cv increase about 0.002
+
+
+pseudo labeling
+
+
+
+Ratio, pseudo labeling data: 90%, train data: 10%
+
+soft label
+
+
+In my experiments, soft labels improved cv score better than hard labels.
+
+We attempted to limit the data used for pseudo labeling, such as those with more than 0.95 predictive value for any one letter, but sampling randomly from the entire data set improved the cv.
+
+
+augmentation
+
+
+
+Remove one sentence from the text.
+
+Probability of augmentation, p=0.2
+
+cvscore is almost unchanged. However, it seemed to be effective for this task and data, so we adopted it.
+
+Pseudo-label data did not try augmentation.
+
+
+Auxiliary Target Learning
+
+
+
+Add the beginning and end of the target, respectively. and learn with 3chanel.
+
+
+channel_0: Normal target
+
+channel_1: start: 1, else: 0
+
+channel_2: end: 1, else: 0
+
+The cv improvement is slight, but can be used for ensembles(blend) with pseudo labels. (I think taking the average of two pseudo labels would improve the accuracy of the pseudo label.)
+
+Checking the PrivateLB scores, it appears that this attempt was effective.
+
+
+Not worked
+
+
+
+shuffle augmentation
+
+
+augmentation shuffles sentences, makes cv worse.
+
+label smoothing loss 
+
+clip_grad_norm
+
+
+I tried the following two things, but the cv got worse. Maybe we need to adjust some more parameters.
+
+
+torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1000)
+
+torch.nn.utils.clip_grad_norm_(self.model.parameters(), 10)
+
+
+postprocessing
+
+
+
+Remove leading and trailing spaces.
+
+this excellent notebook Be aware of white space [DeBERTa+RoBERTa]very helpful.
+
+
+cv split
+
+Up until midway through the competition, we were using 5fold GroupKFolds. The change from 10folds to GroupStratifiedKFolds has been a huge improvement for our team.
+
+Notebook
+
+submit: https://www.kaggle.com/currypurin/nbme-final-submit-currypurin
+MLM: https://www.kaggle.com/code/currypurin/nbme-mlm/
+
+Edit
+
+Edit: cv score added
+
+Comments:
+├─ currypurin (2022-05-05 01:00:29.773000) [+23]
+│  My AWP code. I use pl.LightningModule. I tried several patterns, but this method gave me the good cv score.
+│  
+│  class Learner(pl.LightningModule):
+│      def __init__(self, model, num_train_steps, num_wa...
+  ├─ vialactea (2022-05-10 18:13:09.013000) [+4]
+  │  I feel I'm missing something in your AWP implementation. You reference @wht1996's solution, which I understood as follows:
+  │  
+  │  
+  │  
+  │  Compute regular gradients.
+  │  
+  │  Use regular gradients to perform an adversa...
+├─ KhanhVD (2022-05-05 00:22:02.817000) [+5]
+│  Nice solutions. Thanks for sharing @currypurin :D
+├─ 🐢 Jun Koda (2022-05-04 20:52:04.293000) [+4]
+│  Congratulations for the 1st, amazing boost in the last few days, and for becoming a Grandmaster!!!
+│  Using 10 fold is a good idea, which I didn't even imagine, having a little large training set with...
+  ├─ currypurin (2022-05-05 00:13:07.133000) [+3]
+  │  Thanks!! Ggood parameter might depend on the batch size. The batch size I used is as follows.
+  │  
+  │  
+  │  
+  │  deberta-v3-large, deberta-large: 8
+  │  
+  │  deberta-v2-large: 4 or 5
+├─ xiaoguzai123 (2022-05-06 11:27:50.953000) [+1]
+│  Hello,bro,can you show your entire code?
+├─ llleeex (2022-05-05 01:51:35.423000) [+1]
+│  Wow， Congratulations for the gold🎉 and thanks for sharing. Did I understand correctly that you train fold 0 ~ 4 and built cv on fold 5 ~ 9 ?
+  ├─ currypurin (2022-05-06 02:57:59.700000) [+1]
+  │  Thank you!!
+  │  I trained fold 0~4 and build cv on fold 0~4. I didn't train fold 5~9.  Because it takes time to train and there is not enough time to submit. ref: https://www.kaggle.com/competitions/nb...
+├─ Romuska Palo Ur Laputa (2022-05-07 12:03:23.143000) [+2]
+│  Thank you for your great notebook!!
+│  I'll study with this!! Congratulation for your gold medal and being Grandmaster!
+├─ OhNoMyNameIsTaken (2022-05-06 19:03:53.730000) [+2]
+│  Congrats, and thanks for sharing the solution!
+├─ Jaideep (2022-05-06 17:28:59.533000) [+2]
+│  @currypurin  could you throw light on how u trained using the MLM.
+│  what really contributed more to the score .
+│  Many congrats for the 1st place sol.
+  ├─ currypurin (2022-05-07 01:25:49.813000) [+1]
+  │  Yes MLM's contribution is very significant. I posted the link in the Notebook section above.
+  │  I also tried freezing the parameters, but did not adopt it because the loss did not go down.
+  ├─ dlbsabu (2022-05-07 01:51:53.423000) [+1]
+  │  thanks for sharing !
+  │  The page appears to have been deleted ?
+  ├─ currypurin (2022-05-07 02:13:02.380000) [+1]
+  │  sorry, public it.
+├─ SchenbergZ (2022-05-05 10:49:00.723000) [+2]
+│  Big Congrats and I want to verify some details when you move from Pseudo Training (PT) to Auxiliary Target Learning (ATL) and Auxiliary Target and Pseudo (ATaP):
+│  
+│  
+│  
+│  you load weights from PT to ATL ...
+  ├─ currypurin (2022-05-06 03:46:00.270000) [+1]
+  │  Yes, I load my own trained weights in all but the MLM. I don't see any difference between it and the MLM weights.
+  │  
+  │  
+  │    
+  │  When moving from ATL to ATaP, can you explain the process a bit?
+  │  
+  │  
+  │  There is no...
+├─ Trushant Kalyanpur (2022-05-05 07:36:00.577000) [+2]
+│  Congratulations on the late LB climb and 1st place finish! Amazing achievement becoming a competition GM!! 
+│  How did you come up with the weights per model during the ensemble? Was that using optuna...
+  ├─ currypurin (2022-05-06 03:49:08.250000) [+4]
+  │  Thank you! Yes I used optuna. My cv also did not correlate well with Public LB. Therefore, our team chose two final submissions, one with a high cv and one with a high PublicLB. Finally, the best P...
+├─ CPMP (2022-05-05 07:19:33.067000) [+2]
+│  Congrats on the win!
+│  
+│  I see you used three heads as well :D
+│  
+│  I could not make AWP work for me. I will check if it works with your parameters, thanks for sharing.
+  ├─ currypurin (2022-05-06 03:05:45.627000) [+2]
+  │  I have learned a lot from your solution, thank you!
+├─ vialactea (2022-05-04 23:53:12.333000) [+2]
+│  Congratulations and thanks for sharing!
+│  
+│  
+│  
+│  Did I understand correctly that you trained all 10 folds, but only used a subset in the submission ensemble?
+│  
+│  What was your strategy to select the folds f...
+  ├─ currypurin (2022-05-05 00:50:20.997000) [+3]
+  │  Thank you!
+  │  
+  │  
+  │    
+  │  Did I understand correctly that you trained all 10 folds, but only used a subset in the submission ensemble?
+  │  
+  │  
+  │  I trained fold 0~4 and all data, fold 5~9 not trained. This is because...
+├─ 💥Alien💥 (2022-05-04 20:10:02.577000) [+2]
+│  @currypurin Wow! congratulations on winning and thanks for sharing your solution. Amazing work
+├─ Zacchaeus (2022-05-04 19:25:58.730000) [+2]
+│  Congrats on winning🎉🎉🎉
+│  
+│  
+│    
+│  Up until midway through the competition, we were using 5fold GroupKFolds. The change from 10folds to GroupStratifiedKFolds has been a huge improvement for our team.
+│  
+│  
+│  Ma...
+  ├─ currypurin (2022-05-05 00:04:38.553000) [+1]
+  │  Thanks!
+  │  CV/LB correlation may not be improving. cv score improved about 0.001~0.002 and LB score improved 0.002~0.003.  I am not sure if this is due to the change from 5fold to 10fold or from Group...
+├─ Nanga Parbat (2022-05-16 09:13:55.110000) [+0]
+│  wow~great job!
+├─ [deleted] (2022-05-09 09:59:32.480000) [+0]
+│  [deleted]
+├─ mylinh97 (2022-05-06 15:31:00.713000) [+2]
+│  congrats and thanks for sharing!

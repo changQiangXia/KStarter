@@ -1,0 +1,40 @@
+# llm-prompting-with-makersuite 讨论区（按票数排序，共 38 条）
+
+- [Useful Resources for The Competition](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447223) — 18 票 / 10 评论 / 2023-10-14 
+- [MarkerSuite: Access Restricted.  It's Not avaiable for Brazil region! I wanted so much that Kaggle Hoodie : )](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446465) — 17 票 / 12 评论 / 2023-10-11 
+- [Touring Kaggle Games/Simulations Competitions. Agents vs.Agents. LLM Prompting Without MakerSuite.](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/451608) — 14 票 / 0 评论 / 2023-10-29 
+- [Big opportunity for Kaggle BIPOC participants: Interactive tutors LLM Prompting](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446695) — 13 票 / 0 评论 / 2023-10-12 
+- [Competition Prize Announcements](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457016) — 10 票 / 7 评论 / 2023-11-22 
+- [Pinned Q&A Thread](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446450) — 9 票 / 23 评论 / 2023-10-11 
+- [🥇🔮Good resources for LLM Prompting with MakerSuite Competition✔🏆](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/448042) — 8 票 / 0 评论 / 2023-10-18 
+- [suggestion : what about a prompt market place next time?](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447012) — 7 票 / 1 评论 / 2023-10-14 
+- [Why is it not available in Europe?](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446473) — 7 票 / 1 评论 / 2023-10-11 
+- [Well Explained Reasoning Category Winner](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457094) — 6 票 / 0 评论 / 2023-11-23 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446463) — 6 票 / 1 评论 / 2023-10-11 
+- [ "MakerSuite is available in our country, the Philippines, but I don't know how to use it. It's an exciting new learning journey for me!" ](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446546) — 6 票 / 2 评论 / 2023-10-12 
+- [Winner for Developer Tools Category: Create Yaml files with Ease](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457085) — 5 票 / 0 评论 / 2023-11-23 
+- [How can I genreate long paragraph](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/449148) — 5 票 / 7 评论 / 2023-10-23 
+- [Not able to share the output](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447148) — 4 票 / 3 评论 / 2023-10-14 
+- [Wow Prompt Engeering :)](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446481) — 4 票 / 0 评论 / 2023-10-11 
+- [Data Science Tools Category Winner:](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457449) — 3 票 / 0 评论 / 2023-11-24 
+- [Here is the Summary of this Competition ](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447588) — 3 票 / 0 评论 / 2023-10-16 
+- [Prompting skill will give you an edge in coming years..](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446531) — 3 票 / 0 评论 / 2023-10-12 
+- [Storytelling and Interactive Games Category Winner](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457023) — 2 票 / 0 评论 / 2023-11-22 
+- [When will the results be coming ? Would I will get to know my position in the competition?](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/455618) — 2 票 / 1 评论 / 2023-11-15 
+- [Cannot share MakerSuite Prompt ？ ](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/453533) — 2 票 / 2 评论 / 2023-11-06 
+- [LLM Prompting with MakerSuite Competition](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/450373) — 2 票 / 1 评论 / 2023-10-24 
+- [LLM Prompting with MakerSuite Competition - Participated](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/450769) — 2 票 / 0 评论 / 2023-10-25 
+- [Should we create a model or just take the inputs and outputs and submit it ?](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/450504) — 2 票 / 1 评论 / 2023-10-24 
+- [Can I get my evaluation score?](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447125) — 2 票 / 1 评论 / 2023-10-14 
+- [Great Prompt](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447053) — 2 票 / 0 评论 / 2023-10-14 
+- [Makersuite prompt](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447027) — 2 票 / 1 评论 / 2023-10-14 
+- [It seems like Makersuite suite output does not render markdown and latex notation.](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447004) — 2 票 / 0 评论 / 2023-10-13 
+- [Thank you for sharing the details about the aforementioned analytics competition](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446728) — 2 票 / 0 评论 / 2023-10-12 
+- [Other Ideas Category: Providing Self-Help support to diverse section of society seeking help](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457591) — 1 票 / 0 评论 / 2023-11-25 
+- [Education and Interactive Tutors Category Winner](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/457165) — 1 票 / 0 评论 / 2023-11-23 
+- [Cannot Save the Prompt](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/449112) — 1 票 / 3 评论 / 2023-10-23 
+- [Not able to take screenshot of full output](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447935) — 1 票 / 2 评论 / 2023-10-17 
+- [Kaggle solution write-up](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/447146) — 1 票 / 0 评论 / 2023-10-14 **write-up?**
+- ["MakerSuite Magic: Unleashing Innovative Prompts!"](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/446732) — 1 票 / 0 评论 / 2023-10-12 
+- [i am unable to share my prompt](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/453562) — 0 票 / 6 评论 / 2023-11-06 
+- [Applying for the post of Freelance Consultant in Data Science](https://www.kaggle.com/competitions/llm-prompting-with-makersuite/discussion/456638) — -3 票 / 2 评论 / 2023-11-21 

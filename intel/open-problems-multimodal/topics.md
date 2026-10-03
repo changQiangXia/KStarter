@@ -1,0 +1,82 @@
+# open-problems-multimodal 讨论区（按票数排序，共 80 条）
+
+- [Massive and organized cheating](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366313) — 147 票 / 129 评论 / 2022-11-15 
+- [Understanding the Competition + Some Domain Knowledge](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/346888) — 132 票 / 17 评论 / 2022-08-21 
+- [Announcing free compute (with GPU) via Saturn Cloud](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/346999) — 111 票 / 61 评论 / 2022-08-22 
+- [1st Place Solution Summary](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366961) — 104 票 / 21 评论 / 2022-11-25 **write-up?**
+- [Recordings and Source codes of winners' solutions of this competition last year.](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348792) — 96 票 / 17 评论 / 2022-08-30 **write-up?**
+- [2nd place solution(senkin part with code)](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366453) — 95 票 / 29 评论 / 2022-12-07 **write-up?**
+- [Leak in public test set](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/349867) — 94 票 / 21 评论 / 2022-09-03 
+- [One woman and three men?](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348761) — 79 票 / 6 评论 / 2022-08-29 
+- [Private 0.773 lessons learned](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366395) — 76 票 / 23 评论 / 2022-11-16 
+- [3rd place solution](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366428) — 70 票 / 18 评论 / 2022-11-24 **write-up?**
+- [It is a time series...](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/363052) — 57 票 / 15 评论 / 2022-10-30 
+- [7th Place Solution Summary](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366471) — 55 票 / 12 评论 / 2022-11-16 **write-up?**
+- [My first medal!](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366370) — 55 票 / 37 评论 / 2022-11-16 
+- [Exploiting the column names](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/349242) — 54 票 / 9 评论 / 2022-08-31 
+- [Methods to 0.813 without ensemble](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/364408) — 54 票 / 28 评论 / 2022-11-06 
+- [12th-Place Solution](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366455) — 53 票 / 11 评论 / 2022-11-16 **write-up?**
+- [​Лѣтописъ​: regular chronicles of the competition:  state of arts, successes, findings, problems - all you wanted to know in one post ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348311) — 51 票 / 21 评论 / 2022-08-27 
+- [Data Update and Rescore](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/350933) — 50 票 / 37 评论 / 2022-09-07 
+- [13th place and how to](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366504) — 46 票 / 17 评论 / 2022-11-16 **write-up?**
+- [Associating ATAC peaks to Genes](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/349559) — 42 票 / 2 评论 / 2022-09-01 
+- [2nd Place Solution  -  tmp's part ( code updated )](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366476) — 42 票 / 4 评论 / 2022-11-16 **write-up?**
+- [[6th private - 3rd public] Summary of our solution](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366417) — 40 票 / 9 评论 / 2022-11-16 **write-up?**
+- [Multiome Shapes and scoring](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/353523) — 39 票 / 4 评论 / 2022-09-18 
+- [I'm Sharing Models and Notebooks About Single-Cell Data](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/344824) — 38 票 / 15 评论 / 2022-08-16 
+- [4th place solution (with code)](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366460) — 38 票 / 17 评论 / 2022-12-06 **write-up?**
+- [Private 5th Solution (A Beginner part)](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366409) — 36 票 / 4 评论 / 2022-11-16 **write-up?**
+- [CITEseq data: same RNA expression matrices from different donors in day2?](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/347890) — 35 票 / 4 评论 / 2022-08-25 
+- [Kaggle wisdom from Grandmaster senkin13](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/351021) — 34 票 / 0 评论 / 2022-09-08 
+- [Public lb big change on the last days of the deadline?](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366267) — 33 票 / 28 评论 / 2022-11-15 
+- [Raw Counts Dataset](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/359355) — 32 票 / 23 评论 / 2022-10-11 
+- [Welcome to the Open Problems Multimodal Single-Cell Integration challenge!](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/344607) — 32 票 / 28 评论 / 2022-08-15 
+- [TF / Keras custom loss](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/347595) — 32 票 / 3 评论 / 2022-08-24 
+- [CV vs LB Classical Discussion](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/349591) — 32 票 / 22 评论 / 2022-09-01 
+- [The amount of private sharing on this LB is through the roof.](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366368) — 32 票 / 0 评论 / 2022-11-16 
+- [Kaggle (grand)masters  where are you ? Please come and "save the world" ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/361339) — 32 票 / 16 评论 / 2022-10-21 
+- [Correlations between all inputs and targets for BOTH Multiome and CITEseq](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/351725) — 30 票 / 19 评论 / 2022-09-11 
+- [We miss the meme thread, come here!](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366036) — 29 票 / 20 评论 / 2022-11-14 
+- [Ideas of winning solutions from the last year. ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/353225) — 28 票 / 4 评论 / 2022-09-17 **write-up?**
+- [Private 41st Solution summary](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366372) — 28 票 / 1 评论 / 2022-11-23 **write-up?**
+- [Tips on Dimensionality Reduction](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348233) — 28 票 / 3 评论 / 2022-08-27 
+- [9th place solution – strong fundamentals](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366667) — 27 票 / 0 评论 / 2022-11-17 **write-up?**
+- [Research Papers on Multimodal Single-Cell Integration](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/344686) — 25 票 / 2 评论 / 2022-08-16 
+- [🥇Gold Medals: Solutions & Notebooks](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366513) — 25 票 / 0 评论 / 2022-11-16 **write-up?**
+- [Competition Survey from the Organizers (Publication + NeurIPS presentation opportunity!)](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366376) — 24 票 / 3 评论 / 2022-11-16 
+- [MSCI Multiome: handling the full dataset with pytorch](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/350167) — 24 票 / 2 评论 / 2022-09-04 
+- [Public 6th Private 14 Solution](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366392) — 23 票 / 12 评论 / 2022-11-16 **write-up?**
+- [6-fold cross-validation scheme with TWO "tests" one is like public LB, another is like private LB](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/358860) — 23 票 / 4 评论 / 2022-10-09 
+- [Methods to score 0.812](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/359866) — 23 票 / 33 评论 / 2022-10-14 
+- [Recap of Competition - Congratulations to the Winners! ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/368183) — 21 票 / 26 评论 / 2022-11-24 
+- [Breaking the 0.810 barrier](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/362870) — 21 票 / 25 评论 / 2022-10-29 
+- [Some ideas, bio motivated and not only](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/361025) — 21 票 / 2 评论 / 2022-10-19 
+- [Multiome target pca](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/350447) — 21 票 / 4 评论 / 2022-09-05 
+- [BioQuestion 01: MAGIC features ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/350856) — 21 票 / 5 评论 / 2022-09-07 
+- [16th Place Solution Summary](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/368052) — 19 票 / 1 评论 / 2022-11-23 **write-up?**
+- [To win - blend 1000 models ? Recipe to make them.  ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/362751) — 19 票 / 2 评论 / 2022-10-28 
+- [Looking for a Team Thread](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/342812) — 18 票 / 61 评论 / 2022-08-08 
+- [Cite / Multiome weights in the score](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/360180) — 18 票 / 6 评论 / 2022-10-15 
+- [CITE weights 0.661, MULTI weights 0.339 in !PUBLIC! correlation score](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/359222) — 18 票 / 5 评论 / 2022-10-11 
+- [2 more digits on the LB? ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/352503) — 18 票 / 11 评论 / 2022-09-14 
+- [Key ways to go from the top of the rankings to the bottom](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366913) — 18 票 / 9 评论 / 2022-11-18 
+- [private 29th place (public 4th)solution](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/367195) — 18 票 / 5 评论 / 2022-12-27 **write-up?**
+- [my summary(72nd)](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366420) — 17 票 / 3 评论 / 2022-11-30 
+- [ 🎉🎉 Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366393) — 16 票 / 5 评论 / 2022-11-16 
+- [Does the public/private split prone the shake-up ? ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/347202) — 16 票 / 12 评论 / 2022-08-23 
+- [Explain Like I'm Five](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348773) — 16 票 / 5 评论 / 2022-08-29 
+- [Up 580 positions on lb and a bronze medal for a simple catboost solution](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366503) — 16 票 / 4 评论 / 2022-11-16 **write-up?**
+- [Sparse matrices: PCA doesn´t work, TruncatedSVD does](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348377) — 16 票 / 0 评论 / 2022-08-28 
+- [Papers, videos, notebooks, other materials related to the competition and research topics around ](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/351038) — 15 票 / 1 评论 / 2022-09-08 
+- [Sparse Matrices for MSCI: quickstart toolkit](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/349031) — 15 票 / 3 评论 / 2022-08-31 
+- [Part of 21st place solutions: Methods driven by biological information](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366578) — 15 票 / 2 评论 / 2022-11-27 **write-up?**
+- [Kernels statistics for Multimodal Single-Cell Integration](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/365106) — 15 票 / 0 评论 / 2022-11-09 
+- [43rd Place : Summary and What Worked Well](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/368421) — 15 票 / 0 评论 / 2022-11-25 **write-up?**
+- [Tricks and understanding the metric - predict 138, not 140 targets CITE-seq   (because Pearson - by targets, not sampleswisely (as it usually happens))](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/360253) — 15 票 / 3 评论 / 2022-10-15 
+- [Weighted-nearest neighbor analysis  - Multimodal Single-Cell Integration](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/344688) — 15 票 / 0 评论 / 2022-08-16 
+- [Open Problems DNA/Single Cells. Join this Unique Bioinformatics Competition.](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/361814) — 15 票 / 7 评论 / 2022-10-23 
+- [CD_pathways_and_families](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/360455) — 15 票 / 1 评论 / 2022-10-16 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/342813) — 14 票 / 14 评论 / 2022-08-08 
+- [ This is the farthest I've been since playing Kaggle](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366381) — 14 票 / 2 评论 / 2022-11-16 
+- [Cell cycle analysis (it is mainly for research, not score improve)](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/350314) — 14 票 / 5 评论 / 2022-09-05 
+- [Competition Wrap Up Workshop + Last Call for Survey!](https://www.kaggle.com/competitions/open-problems-multimodal/discussion/372609) — 11 票 / 5 评论 / 2022-12-16 

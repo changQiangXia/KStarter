@@ -1,0 +1,184 @@
+# https://www.kaggle.com/competitions/otto-recommender-system/discussion/382790
+
+Topic #382790: 2nd Place Solution(ONODERA part)
+  Author: ONODERA
+  Posted: 2023-02-01 02:53:54.110000
+  Votes: 90  Comments: 34
+
+First of all, thank you for launching and organizing this terrific competition @pnormann.
+
+I wanted to be first, but I don't really care so far.
+I'd like to explain my part.
+
+Candidates
+
+When I teamed up with @psilogram, he already has great candidates compared to mine.
+So I decided to use his candidates.
+
+Features
+
+Item2item Features
+
+Also @psilogram already has splendid features, but there is room for improvement regarding CF features.
+So I focused on item2item features and that consists of
+
+
+
+count
+
+time difference
+
+sequence difference(invented by @psilogram)
+
+2 kind of weighted above features
+
+Aggregation of above
+In total, I got 93 features. After this, I could generate almost 5k features using different combination(e.g. click to order, cart to order, etc…)
+I use just 400~500 features eventually.
+
+
+
+1st stage prediction Features
+
+
+
+Pseudo Event Features
+
+
+
+Models
+
+I used XGBoost and CatBoost.
+
+
+Pipeline
+
+After that 2nd stage, we blended our result ( @senkin13, @h4211819 ) by rank.
+
+my teammate's solution
+
+
+
+Acknowledgments
+
+If I hadn't used cuDF and cuML, I couldn't manage a lot of experiments.
+Thanks RAPIDS
+
+Comments:
+├─ Silogram (2023-02-01 08:21:44.030000) [+12]
+│  A few thoughts on this competition. 
+│  
+│  
+│  
+│  
+│  I must say it's really nice to have a competition where CV/public LB/private LB scores are all aligned. This was due primarily to the large amount of data p...
+  ├─ MichaelG (2023-02-01 09:07:44.460000) [+0]
+  │  sknn did well on my side which mainly search the most similar &amp; recent K session(by aid overlapping)
+    ├─ Silogram (2023-02-01 12:46:08.763000) [+1]
+    │  Interesting. How did you convert the session into vectors?
+    ├─ MichaelG (2023-02-01 15:29:10.680000) [+1]
+    │  I don't convert it to vector when calculate the similarity of 2 sessions as aid is high cardinality. Just simply convert all aid of session as set, then use the union operator to calculate the over...
+    ├─ Silogram (2023-02-01 15:49:55.960000) [+0]
+    │  I see, so something like jaccard similarity. Does this similarity metric have a name?
+    ├─ MichaelG (2023-02-01 16:00:52.833000) [+0]
+    │  typo in previous message, it should be intersection. It's a cosine distance likely.
+  ├─ kgxiao (2023-02-01 12:41:51.547000) [+0]
+  │  Congratulations! 🎉🎉🎉🎉🎉🎉🎉🎉
+  │  Consider publishing the code for the solution? 
+  │  I'd like to study your team's solution carefully.
+  ├─ Jiwei Liu (2023-02-01 15:26:44.120000) [+0]
+  │  Congrats! Could you please elaborate on the usage of cugraph? Thank you.
+    ├─ Silogram (2023-02-01 15:57:33.487000) [+4]
+    │  I used cugraph to build a graph of items that appeared together in the same session. Each node was an item and edges represented a pair of items appearing in the same session (with session truncati...
+    ├─ Chris Deotte (2023-02-01 17:39:53.740000) [+2]
+    │  The jaccard scores turned out to be among the strongest features.
+    │  
+    │  
+    │  Awesome! Nice use of cugraph features!
+  ├─ Bilzard (2023-02-02 05:02:22.143000) [+0]
+  │  Congratulation for 2nd rank. 
+  │  
+  │  
+  │    
+  │  sequence difference(invented by @psilogram)
+  │  
+  │  
+  │  Can you explain more about this feature?
+    ├─ ONODERA (2023-02-02 05:27:41.967000) [+2]
+    │  Sure. Let's say a session has clicked aid [a, b, c, d] and sequence is [0, 1, 2, 3].
+    │  We can generate distance features from this.
+    │  e.g. distance between aid d and aid a is 3(3-0)
+    ├─ Bilzard (2023-02-02 05:53:11.903000) [+0]
+    │  @onodera I see. However, I'm starting to be confused about what CF features mean.
+    │  But since this features are your part, let me ask in other thread.
+├─ Apa (2023-02-01 05:54:34.800000) [+12]
+│  Hi, will you open source your code later? I want to learn the details
+├─ Gunes Evitan (2023-02-01 04:13:47.847000) [+6]
+│  Congrats @onodera 2nd place curse continues lol
+├─ Chris Deotte (2023-02-02 01:43:41.903000) [+1]
+│  Congratulations @onodera and team. Great job jumping upward from public to private LB!
+├─ ONODERA (2023-02-16 20:43:48.920000) [+0]
+│  I added some figures. I hope this helps you understand.
+├─ Bilzard (2023-02-02 05:56:59.580000) [+0]
+│  I'm not familiar with CF feature. So, what this means? Is this session feature or item feature?
+│  Considering from your answer, this seems to describe kind of item2item features but is this correct?
+│  ...
+  ├─ ONODERA (2023-02-02 06:02:35.273000) [+0]
+  │  Yeah, exactly
+    ├─ Bilzard (2023-02-02 06:18:03.340000) [+0]
+    │  Well, then, how to calculate this feature from 1st stage output?
+    │  
+    │  According to @psilogram 's comment, 1st stage output are like this:
+    │  
+    │  [session, aid, aid_candidate, jaccard, …]
+    │  
+    │  how to add e.g. seq...
+    ├─ Bilzard (2023-02-02 06:28:28.717000) [+0]
+    │  Oh, I think I'm  start to understand.
+    │  
+    │  
+    │    
+    │  aid, aid_candidate
+    │  
+    │  
+    │  Since all these pairs are AIDs in the same session, you just added session difference of these items, right?
+    ├─ ONODERA (2023-02-02 06:38:08.483000) [+2]
+    │  Yes. FYI, the primary keys of my item2item features are [aid_x(aid), type_x, aid_y(aid_candidate), type_y], so I could aggregate them again. That's why I had a lot of features.
+    ├─ Bilzard (2023-02-02 06:50:04.570000) [+0]
+    │  I see. Thanks.
+    │  
+    │  Can I also ask:
+    │  
+    │  
+    │  
+    │  how many events in the 2nd stage input
+    │  
+    │  how much time to calculate generating features
+    │  
+    │  Your machine spec
+    ├─ ONODERA (2023-02-02 07:15:52.897000) [+2]
+    │  same as 1st stage. All events.
+    │  
+    │  Just 1 hour or so.
+    │  
+    │  DGX(4X V100)
+  ├─ Silogram (2023-02-02 07:32:27.393000) [+2]
+  │  Just to be clear, all of these features (jaccard, sequence distance, event type, time between events, event recency, etc.) are just different ways of weighting pairs when building the co-visitation...
+    ├─ Bilzard (2023-02-02 07:42:55.757000) [+0]
+    │  I see, so does 1st stage model generate candidate solely from this co-visitation matrix? If so, how to optimize weight from these features?
+    ├─ Silogram (2023-02-02 07:54:28.223000) [+1]
+    │  Yes, candidates are generated almost entirely by joining the events that have already occurred in the session to the various co-visitation matrices. Weight optimization was done by trial-and-error....
+    ├─ Bilzard (2023-02-02 07:59:08.687000) [+0]
+    │  @psilogram I see. So you used similar approach that Chris does. Thanks.
+├─ Raheem Nasirudeen (2023-02-02 05:35:28.487000) [+0]
+│  Congratulations King of 2nd place on Kaggle
+├─ Sherry_pomi (2023-02-01 23:43:33.757000) [+0]
+│  Congratulations! In your nice visualized flow chart I see a very high recall score in 1st stage, is this corresponding to recall@20 only with candidate generation? Is so, could you help provide mor...
+├─ Oleg Zakh (2023-02-01 03:27:58.267000) [+0]
+│  Good example of aggregated data.
+├─ [deleted] (2023-02-01 08:57:30.300000) [+0]
+│  [deleted]
+├─ [deleted] (2023-02-01 06:03:48.907000) [+0]
+│  [deleted]
+├─ Tigran Hakobyan (2023-04-13 01:14:57.383000) [+0]
+│  Thanks for the write-up

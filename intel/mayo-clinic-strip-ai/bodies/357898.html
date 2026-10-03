@@ -1,0 +1,283 @@
+<p>When I first started this competition 2 weeks ago, I got RSNA-MICCAI Brain Tumor Radiogenomic Classification flashbacks. These two competitions are quite similar in terms of low signal but this one was slightly better and less random. I had some decent experiences in that competition and I applied those things here.</p>
+<p>Inference Notebook: <a href="https://www.kaggle.com/code/gunesevitan/mayo-clinic-strip-ai-inference" target="_blank">https://www.kaggle.com/code/gunesevitan/mayo-clinic-strip-ai-inference</a><br>
+GitHub Repository: <a href="https://github.com/gunesevitan/mayo-clinic-strip-ai" target="_blank">https://github.com/gunesevitan/mayo-clinic-strip-ai</a></p>
+<h2>Dataset</h2>
+<p>I created a pre-computed dataset of instances for training more efficiently. Pre-computed dataset consist of 16 instances of size 1024x1024 with 3 channels (RGB) per image. Dataset creation process can be simplified to</p>
+<ul>
+<li>Compress image with JPEG compression (100% JPEG quality)</li>
+<li>Resize longest edge to 20.000 pixels</li>
+<li>Extract non-overlapping instances and pad them with white background</li>
+<li>Sort instances by their sums in descending order and take top 16 instances</li>
+</ul>
+<h2>Models</h2>
+<p>I used Multiple Instance Learning (MIL) models for processing instances. My MIL model is slightly different than the one shared in this competition. I think the model in <a href="https://www.kaggle.com/code/analokamus/a-sample-of-multi-instance-learning-model" target="_blank">this</a> notebook concatenates feature maps on height dimension which felt weird to me, so I tried different pooling and concatenation methods. </p>
+<pre><code>class ConvolutionalMultiInstanceLearningModel(nn.Module):
+
+    def __init__(self, n_instances, model_name, pretrained, freeze_parameters, aggregation, head_class, head_args):
+
+        super(ConvolutionalMultiInstanceLearningModel, self).__init__()
+
+        self.backbone = timm.create_model(
+            model_name=model_name,
+            pretrained=pretrained,
+            num_classes=head_args['n_classes']
+        )
+
+        if freeze_parameters is not None:
+            # Freeze all parameters in backbone
+            if freeze_parameters == 'all':
+                for parameter in self.backbone.parameters():
+                    parameter.requires_grad = False
+            else:
+                # Freeze specified parameters in backbone
+                for group in freeze_parameters:
+                    if isinstance(self.backbone, timm.models.DenseNet):
+                        for parameter in self.backbone.features[group].parameters():
+                            parameter.requires_grad = False
+                    elif isinstance(self.backbone, timm.models.EfficientNet):
+                        for parameter in self.backbone.blocks[group].parameters():
+                            parameter.requires_grad = False
+
+        self.aggregation = aggregation
+        n_classifier_features = self.backbone.get_classifier().in_features
+        input_features = (n_classifier_features * n_instances) if self.aggregation == 'concat' else n_classifier_features
+        self.classification_head = eval(head_class)(input_features=input_features, **head_args)
+
+    def forward(self, x):
+
+        # Stack instances on batch dimension before passing input to feature extractor
+        input_batch_size, input_instance, input_channel, input_height, input_width = x.shape
+        x = x.view(input_batch_size * input_instance, input_channel, input_height, input_width)
+        x = self.backbone.forward_features(x)
+        feature_batch_size, feature_channel, feature_height, feature_width = x.shape
+
+        if self.aggregation == 'avg':
+            # Average feature maps of multiple instances
+            x = x.contiguous().view(input_batch_size, input_instance, feature_channel, feature_height, feature_width)
+            x = torch.mean(x, dim=1)
+        elif self.aggregation == 'max':
+            # Max feature maps of multiple instances
+            x = x.contiguous().view(input_batch_size, input_instance, feature_channel, feature_height, feature_width)
+            x = torch.max(x, dim=1)[0]
+        elif self.aggregation == 'logsumexp':
+            # LogSumExp feature maps of multiple instances
+            x = x.contiguous().view(input_batch_size, input_instance, feature_channel, feature_height, feature_width)
+            x = torch.logsumexp(x, dim=1)
+        elif self.aggregation == 'concat':
+            # Stack feature maps on channel dimension
+            x = x.contiguous().view(input_batch_size, input_instance * feature_channel, feature_height, feature_width)
+
+        output = self.classification_head(x)
+        return output
+
+    def __init__(self, n_instances, model_name, pretrained, freeze_parameters, aggregation, head_class, head_args):
+
+        super(ConvolutionalMultiInstanceLearningModel, self).__init__()
+
+        self.backbone = timm.create_model(
+            model_name=model_name,
+            pretrained=pretrained,
+            num_classes=head_args['n_classes']
+        )
+
+        if freeze_parameters is not None:
+            # Freeze all parameters in backbone
+            if freeze_parameters == 'all':
+                for parameter in self.backbone.parameters():
+                    parameter.requires_grad = False
+            else:
+                # Freeze specified parameters in backbone
+                for group in freeze_parameters:
+                    if isinstance(self.backbone, timm.models.DenseNet):
+                        for parameter in self.backbone.features[group].parameters():
+                            parameter.requires_grad = False
+                    elif isinstance(self.backbone, timm.models.EfficientNet):
+                        for parameter in self.backbone.blocks[group].parameters():
+                            parameter.requires_grad = False
+
+        self.aggregation = aggregation
+        n_classifier_features = self.backbone.get_classifier().in_features
+        input_features = (n_classifier_features * n_instances) if self.aggregation == 'concat' else n_classifier_features
+        self.classification_head = eval(head_class)(input_features=input_features, **head_args)
+
+    def forward(self, x):
+
+        # Stack instances on batch dimension before passing input to feature extractor
+        input_batch_size, input_instance, input_channel, input_height, input_width = x.shape
+        x = x.view(input_batch_size * input_instance, input_channel, input_height, input_width)
+        x = self.backbone.forward_features(x)
+        feature_batch_size, feature_channel, feature_height, feature_width = x.shape
+
+        if self.aggregation == 'avg':
+            # Average feature maps of multiple instances
+            x = x.contiguous().view(input_batch_size, input_instance, feature_channel, feature_height, feature_width)
+            x = torch.mean(x, dim=1)
+        elif self.aggregation == 'max':
+            # Max feature maps of multiple instances
+            x = x.contiguous().view(input_batch_size, input_instance, feature_channel, feature_height, feature_width)
+            x = torch.max(x, dim=1)[0]
+        elif self.aggregation == 'logsumexp':
+            # LogSumExp feature maps of multiple instances
+            x = x.contiguous().view(input_batch_size, input_instance, feature_channel, feature_height, feature_width)
+            x = torch.logsumexp(x, dim=1)
+        elif self.aggregation == 'concat':
+            # Stack feature maps on channel dimension
+            x = x.contiguous().view(input_batch_size, input_instance * feature_channel, feature_height, feature_width)
+
+        output = self.classification_head(x)
+        return output
+</code></pre>
+<p>Aggregation parameter tunes the MIL pooling or aggregating part of the model.</p>
+<ul>
+<li><code>avg</code>: average all feature maps on instance dimension</li>
+<li><code>max</code>: max all feature maps on instance dimension (this was mentioned on many papers)</li>
+<li><code>logsumexp</code>: logsumexmp all feature maps on instance (I saw this on one paper so I added it as well)</li>
+<li><code>concat</code>: concatenate all feature maps on channel dimension</li>
+</ul>
+<p><code>concat</code> worked best for me even though the feature map counts multiplied with number of instances. I was working on an attention mechanism for instance feature maps but I didn't have enough time and I eventually ditched the idea.</p>
+<h2>Validation</h2>
+<p>5 folds of cross-validation is used as the validation scheme. Splits are stratified on <code>binary_encoded_label</code>, <code>patient_id</code> doesn't overlap between folds, and dataset is shuffled before splitting. Best random seed is selected by minimizing the standard deviation of <code>binary_encoded_label</code> mean between folds which ensures target means of folds are close to each other.</p>
+<h2>Training</h2>
+<p>Loss Function: Negative log likelihood loss is used as the loss function. Binary labels are converted to multi-class labels by simply doing</p>
+<pre><code>inputs = torch.sigmoid(inputs)
+inputs = torch.cat(((1 - inputs), inputs), dim=-1)
+</code></pre>
+<p>Optimizer: AdamW with 1e-5 initial learning rate and learning rate is cycled to 1e-6 back-and-forth after every 300 steps.</p>
+<p>Batch Size: Training: 4 - Validation: 8</p>
+<p>Early Stopping: Early Stopping is triggered after 5 epochs with no validation loss improvement</p>
+<h2>Training Augmentations</h2>
+<p>Training augmentations are applied to all instances randomly.</p>
+<ul>
+<li>Resize 256x256 or 224x224</li>
+<li>Luminosity standardization by 10% chance</li>
+<li>Horizontal flip by 50% chance</li>
+<li>Vertical flip by 50% chance</li>
+<li>Random 90-degree rotation by 25% chance</li>
+<li>Random hue-saturation-value by 25% chance</li>
+<li>Coarse dropout or pixel dropout by 10% chance</li>
+<li>Normalize by instance dataset statistics</li>
+</ul>
+<h2>Ensemble</h2>
+<p>8 models are used in the ensemble. Those models are selected based on their ROC AUC scores. Models with OOF ROC AUC score greater than 0.65 are qualified for the ensemble. My best single model was DenseNetBlur121d which is quite interesting and worth more exploring.</p>
+<ul>
+<li>DenseNet121 (ImageNet pre-trained weights) - 256x256 16 instances</li>
+<li>DenseNetBlur121d (ImageNet pre-trained weights) - 256x256 16 instances</li>
+<li>DenseNet169 (ImageNet pre-trained weights) - 256x256 16 instances</li>
+<li>EfficientNetB2 (ImageNet pre-trained weights) - 256x256 16 instances</li>
+<li>EfficientNetV2 Tiny (ImageNet pre-trained weights) - 256x256 16 instances</li>
+<li>CoaT Lite Mini (ImageNet pre-trained weights) - 224x224 16 instances</li>
+<li>PoolFormer 24 (ImageNet pre-trained weights) - 224x224 16 instances</li>
+<li>Swin Transformer Tiny Patch 4 Window 7 (ImageNet pre-trained weights) - 224x224 16 instances</li>
+</ul>
+<p>Blending is utilized on selected models. Blend weights are found by trial and error.</p>
+<pre><code>blend_weights = {
+    'mil_densenet121_16_256': 0.10,
+    'mil_densenet169_16_256': 0.10,
+    'mil_densenetblur121d_16_256': 0.25,
+    'mil_efficientnetb2_16_256': 0.125,
+    'mil_efficientnetv2rwt_16_256': 0.125,
+    'mil_coatlitemini_16_224': 0.10,
+    'mil_poolformer24_16_224': 0.10,
+    'mil_swintinypatch4window7_16_224': 0.10
+}
+</code></pre>
+<p>Linear stacking is also utilized on selected models by fitting a linear regression model on training predictions and targets.</p>
+<h2>Post-processing</h2>
+<p>Predictions are averaged among patient_id groups and 0.21 is added to aggregated predictions for making the prediction 0.5 centered. That constant is selected by maximizing the OOF score.</p>
+<h2>Results</h2>
+<p>Quantitative results are provided as cross-validation, public and private leaderboard scores.<br>
+Best single model and ensemble cross-validation scores are highlighted.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CV ROC AUC</th>
+<th>CV Weighted Log Loss</th>
+<th>Public Leaderboard</th>
+<th>Private Leaderboard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DenseNet121</td>
+<td>0.6501</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>DenseNetBlur121d</td>
+<td><strong>0.6628</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>DenseNet169</td>
+<td>0.6551</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>EfficientNetB2</td>
+<td>0.6501</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>EfficientNetV2 Tiny</td>
+<td>0.6500</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CoaT Lite Mini</td>
+<td>0.6503</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>PoolFormer 24</td>
+<td>0.6536</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Swin Transformer Tiny Patch 4 Window 7</td>
+<td>0.6497</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Blend + patient_id Aggregation + Adjustment</td>
+<td>0.6822</td>
+<td>0.6471</td>
+<td>0.6</td>
+<td><strong>0.67897</strong></td>
+</tr>
+<tr>
+<td>Stack + patient_id Aggregation + Adjustment</td>
+<td><strong>0.6842</strong></td>
+<td><strong>0.6387</strong></td>
+<td><strong>0.6</strong></td>
+<td>0.68666</td>
+</tr>
+</tbody>
+</table>
+<p>I started overfitting when I added more and more models to ensemble. My stack was also overfitting a bit but my best submission is my blend.</p>
+<h2>What didn't work</h2>
+<ul>
+<li>Decaying learning rate</li>
+<li>Freezing backbone parameters</li>
+<li>Average and max MIL pooling</li>
+<li>Lots of other timm models</li>
+<li>Binary cross-entropy loss, focal loss, weighted log loss</li>
+<li>Label smoothing</li>
+<li>Different number of instances with larger sizes</li>
+</ul>

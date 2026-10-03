@@ -1,0 +1,275 @@
+# https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301015
+
+Topic #301015: 6th Place - Multitask Learning
+  Author: Chris Deotte
+  Posted: 2022-01-15 13:02:47.769000
+  Votes: 164  Comments: 60
+
+Kaggle PetFinder Comp
+
+Thanks Kaggle and Petfinder for hosting this wonderful competition. Building models to help pets was fun and rewarding. My solution is the combination of my shared discussion posts and notebooks.
+
+Trust Your CV
+
+For my final two submissions, I chose my best LB score (CV 17.15, LB 17.64) and my best CV score (CV 16.98, LB 17.78). My best CV score only had public leaderboard rank 120. It was scary to select it, but my final private LB 6th rank was this best CV submission!
+
+
+Preprocess
+
+There are at least two ways to resize images for our models. We can squish the original images into a square (distorting aspect ratio), or we can square crop (and preserve aspect ratio). I trained my models with random square crops. Not only does this create natural looking images that match how they are displayed at Petfinder website but it also provides data augmentation by using random crops during training (which helps our models generalize). This boosted CV LB.
+
+
+
+Image CNN Training
+
+Training CNNs to achieve a good CV LB RSME score was more difficult than training Transformers and it required freezing backbones to train the head (and/or freezing first 66% backbone to train last 33% backbone plus head). It's also important to freeze all batchnorm layers. (This was demonstrated here and explained here). There are many great examples showing CNN training in public notebooks here, here, and here. My best single model CNN was EfficientNetB2 with RAPIDS SVR head. It achieved CV 17.55
+
+
+
+Image Transformer Training
+
+There are dozens of image transformers. To view all available pretrained image transformers, just type import timm; timm.list_models(pretrained=True). You will see beit, cait, convit, crossvit, deit, levit, pit, swin, vit, xcit! Next you can fork the public fastai notebook here and run with each of these models! To evaluate which is the best, you must correct the RSME metric with metrics=AccumMetric(func=petfinder_rmse) as explained here (otherwise CV score is meaningless and wrong).
+
+My best single model was BeIT (not Swin). It's a transformer with BERT pretraining. Research paper here. A single BeIT transformer achieved my best CV 17.42 and best Private LB 17.00 which is top 50 private LB!
+
+Image Size and Data Augmentation
+
+I trained models with image sizes 224, 384, 512. The advantage of a variety of image sizes is explained here. For large image sizes more augmentation was required. When using image size 512, the following augmentations were applied; Random square crop, Horizontal Flip, Vertical Flip, Transpose, Brightness, Contrast, Hue, Saturation, Rotation, Random Erase. Some of the small 224 models, only used Random square crop and Flips.
+
+Multi Task Learning
+
+There are two ways to use meta data. We can input it into our model or use it as an additional output (i.e. auxiliary target) during training. The easiest way to train an image transformer with additional output is by modifying the PyTorch notebook here. The meta data provided in this competition didn't help, but using Cat Dog labels as an additionally target from here helped boost CV LB and add model diversity.
+
+
+
+Hill Climbing
+
+My approach in this competition was to build an ensemble slow and steady. First I corrected my local RSME computation so that CV score was correct. Then each day during the competition, I would train a new model, save the OOF predictions, and ensemble it will equal weights to my previous best CV ensemble and previous best LB ensemble. If it increased CV then i added it to my best CV ensemble. If it increased LB then I added it to my best LB ensemble. 
+
+I describe hill climbing more here. The secret to hill climbing is to make new diverse models. (i.e. Try different image sizes, backbones, augmentations etc). Each new model doesn't necessarily need to have a great CV by itself. They need to be different than your previous models so that when you ensemble them to your previous models, the result is an improved CV LB. My two (hill climbing generated) ensembles contained different models. Here are the lists
+
+Best CV Ensemble
+
+CV = 16.98, Public LB = 17.78, Private LB = 16.90
+
+
+
+Swin 224 with Dog Cat auxiliary output
+
+Swin 384
+
+BeIT 224
+
+BeIT 384
+
+BeIT 512
+
+ConvNeXt 224
+
+ConvNeXt 384 with Dog Cat auxiliary output
+
+EfficientNetB2 with RAPIDS SVR head
+
+
+Best LB Ensemble
+
+CV = 17.15, Public LB = 17.64, Private LB = 17.01
+
+
+
+Swin 224 with Dog Cat auxiliary output
+
+Swin 384
+
+BeIT 224
+
+BeIT 384
+
+EfficientNetB2 with RAPIDS SVR head
+
+DenseNet 224 with MLP regression head
+
+Inception 229 with 66% frozen backbone
+
+
+What Didn't Work
+
+I tried to pseudo label external images but it didn't improve my CV nor LB. I also tried to use last year competition data by pretraining models with last year's images and last year's meta data. This did not help CV nor LB. I also tried to train models on last year data and infer new features on this year's data. But that didn't help either. In the end, I didn't use last year's comp data nor external data.
+
+After reading other winners' solutions; 2nd place here, 4th place here, 5th place here, it appears that last year's data was actually very powerful. The way to use it was to find the duplicate images from last years data that were also used this year. Then for those images (which were about 33% of all images) concatenate last years meta features onto this year's data. Then train a model to use this year's image with the concatenated last years meta data. Apparently the meta data from the previous PetFinder competition was more powerful than the meta data provided this year.
+
+The Power of SOTA Image Models!
+
+It was shown from 1st place here, 3rd place here (and my 6th place solution) that using meta features from last year were not needed to achieve a powerful model. Today's SOTA image models are amazingly good at looking at images and extracting information!
+
+Comments:
+├─ Clear n' Simple (2022-01-16 02:35:34.840000) [+4]
+│  Then each day during the competition, I would train a new model, save the OOF predictions, and ensemble it with equal weights to my previous best CV ensemble and previous best LB ensemble.  If it i...
+  ├─ Chris Deotte (2022-01-16 04:04:37.973000) [+8]
+  │  Your second equation. But we only have 5 models if we kept every model from day 1 to 4. For example we may discard Day 3 like this:
+  │  
+  │  Day 1, CV = Day1. Keep Day 1
+  │  Day 2, CV = (Day1 + Day2)/2, CV inc...
+  ├─ Clear n' Simple (2022-01-16 15:03:25.333000) [+1]
+  │  Thank you, @cdeotte.
+  │  
+  │  
+  │    
+  │  And then every few days, I may remove each previous model one by one to make sure removing a previous day doesn't increase CV. Because sometimes an old model is no longer ...
+  ├─ Kishal Mandal (2022-01-16 22:10:18.013000) [+0]
+  │  Congratulations Chris!!
+  │  
+  │  I have one question:
+  │  
+  │  When you are adding Day 2 model to Day1 is it like this ((Day1 5folds) + (Day2 5folds))/2? Can you make it a bit clear 😃
+  ├─ Chris Deotte (2022-01-17 00:07:46.163000) [+3]
+  │  Yes. When you do KFolds CV, you get an OOF dataframe that is the same length as the length of train dataset. Your OOF has 1 prediction for every row of train data.
+  │  
+  │  oof = np.array(len(train))
+  │  for f...
+  ├─ Kishal Mandal (2022-01-17 14:13:07.960000) [+1]
+  │  Thanks a lot for the explanation :)
+├─ Awsaf (2022-02-02 20:12:24.343000) [+1]
+│  @cdeotte regarding the Preprocess what did you do when the image is smaller than the resize dimension? Let's just say the image is 192x224 but our input_shape is 224x224. How should we crop/resize ...
+  ├─ Chris Deotte (2022-02-02 20:16:55.453000) [+1]
+  │  If image is 192x224, then the largest square is 192x192. First i randomly select a largest square from 192x224, next I resize it to 224x224
+  │  
+  │  In general if dim is A x B, then largest square is min(A...
+├─ Rifat Bin Alam Rohit (2022-01-22 16:00:16.207000) [+1]
+│  This is really indepth. Awesome work!!
+├─ gao-hongnan (2022-01-22 06:07:41.913000) [+1]
+│  Thanks for this Chris, I have two questions:
+│  
+│  
+│  
+│  The resize method using crop, is it something similar to the following:
+│  
+│  
+│  albumentations.Compose(
+│          [
+│              albumentations.SmallestMaxSiz...
+├─ yuuniee (2022-01-19 05:13:59.980000) [+1]
+│  I could not trust my CV Score, that was very regretful. And I am always learning a lot from you. Thank you!
+├─ Santhoshkumar (2022-01-17 06:02:49.263000) [+1]
+│  Great work @cdeotte , congratulations👏
+├─ Tian (2022-01-17 01:49:23.950000) [+1]
+│  Congratulations.
+│  I can always learn from your sharing.
+│  Thanks.
+├─ RAHUL BAJAJ (2022-01-16 10:34:40.330000) [+1]
+│  Congratulations and Thanks @cdeotte, it would be great if you can share the notebook for image pertaining on the prev images
+  ├─ Chris Deotte (2022-01-16 11:23:04.490000) [+5]
+  │  If I have time, perhaps I will post. The idea is this. Choose a backbone and build a head with 12 outputs. Then train with previous images and predict the 12 meta targets from previous comp. This h...
+├─ CPMP (2022-01-15 21:02:13.400000) [+1]
+│  Well done Chris!  I was surprised to see you could use meta information, but now I see you used another meta data than the one in the competition! I tried with the competition meta data and my CV s...
+├─ DeepUnderstanding (2022-01-15 17:13:02.990000) [+1]
+│  They need to be different
+│  can you explain like how can we make the models more diverse? like for me to make the ensemble diverse I just changed the backbone networks, but what are some other way to...
+  ├─ Chris Deotte (2022-01-15 17:41:30.690000) [+22]
+  │  Here are some ideas that come to mind
+  │  
+  │  
+  │  
+  │  change batch size
+  │  
+  │  change input image size
+  │  
+  │  change backbone
+  │  
+  │  use CNN vs. Transformer
+  │  
+  │  use model pretrained on different original image datasets (1k image vs...
+  ├─ DeepUnderstanding (2022-01-15 17:48:32.710000) [+1]
+  │  Damn, Thanks!
+  │  Next time I am using all this ;)
+  ├─ Chris Deotte (2022-01-15 17:54:57.623000) [+4]
+  │  This is why teaming up makes strong ensembles. Because although everyone is doing basically the same stuff, one teammate will do just one thing different. Like perhaps they will initialize the laye...
+  ├─ Charlie Craine (2022-01-15 18:08:52.780000) [+1]
+  │  100% agree and that is a great outline of things to learn.
+  ├─ DeepUnderstanding (2022-01-15 18:15:38.620000) [+2]
+  │  Exactly! I was fortunate to have a good teammate, well we will try to improve further, anyway thanks for all the tips! and Congrats again
+├─ Mutopia (2022-01-15 16:04:25.333000) [+1]
+│  Congrats and thanks for sharing the solution Chirs. Btw I learned a lot along the way reading your posts, especially the pitfall of RMSE calculation, big thanks again @cdeotte.
+  ├─ Chris Deotte (2022-01-15 16:09:37.383000) [+0]
+  │  Thanks Mutopia
+  ├─ Mutopia (2022-01-15 16:21:09.953000) [+1]
+  │  Have you thought about ideas like adding animal pose information as extra features? Some probing of the data makes me wonder certain poses of animals may have high pawpularity scores. It could be a...
+  ├─ Chris Deotte (2022-01-15 17:46:26.173000) [+3]
+  │  I don't think adding these features as input help the model because the model can already see this in the image. For example, an image model doesn't need to be told whether animal is dog or cat. It...
+  ├─ Allohvk (2022-01-15 18:05:34.590000) [+1]
+  │  Thanks. This is an interesting thought!
+├─ Awsaf (2022-01-15 16:04:08.807000) [+1]
+│  Congrats @cdeotte.
+  ├─ Chris Deotte (2022-01-15 16:09:07.363000) [+1]
+  │  Thanks @awsaf49 . Your discussion and notebooks were very helpful. My earlier ensembles included your ViT model but as I continued to add more recent SOTA image transformers, using ViT no longer he...
+  ├─ Awsaf (2022-01-15 16:25:21.910000) [+1]
+  │  I'm glad that you found those useful :)
+├─ DeepUnderstanding (2022-01-15 15:49:19.930000) [+1]
+│  Congratulations !!
+│  You really were the MVP in this comp!
+│  Thanks for all the ideas, it really helped!
+├─ Sanjay Parajuli (2022-01-15 14:49:05.083000) [+1]
+│  Thanks @cdeotte for your concise information. You were a great motivation throughout this competition.
+├─ Charlie Craine (2022-01-15 13:08:52.663000) [+1]
+│  @cdeotte so much of what you post is like a masterclass. Thank you for sharing this!
+  ├─ Chris Deotte (2022-01-15 14:14:41.840000) [+1]
+  │  Thanks @crained . Congratulations to you and your team for shaking upward on private LB and finishing in top 100. You must have had a good reliable local CV.
+  ├─ Charlie Craine (2022-01-15 16:04:29.390000) [+1]
+  │  We did but a lot of credit to the team! 😊
+├─ Edrick Kesuma (2022-01-17 13:35:48.747000) [+2]
+│  @cdeotte what's the reason behind freezing 66% of the backbone and training the rest + the head? Could i also know how you can unfreeze that 33% of the backbone for train? Thanks and congrats on 6th!
+  ├─ Chris Deotte (2022-01-17 13:53:51.297000) [+7]
+  │  After downloading a pretrained CNN from the internet, you can display the number of layers with len( base_model.layers ) in TensorFlow. For example, InceptionV3 has 311 layers. Then you can freeze ...
+  ├─ Charlie Craine (2022-01-17 15:07:26.750000) [+2]
+  │  That's a really good explanation.
+  ├─ Edrick Kesuma (2022-01-17 16:48:05.733000) [+0]
+  │  Interesting.. just knew that batch norm and dropout actually worsens models for regression tasks. 
+  │  Additionally when doing regression (which is different than classification), I have found that fre...
+  ├─ Chris Deotte (2022-01-17 17:25:58.433000) [+2]
+  │  The best answer is to try both (freeze and unfreeze) and see what achieves the best CV score. In general i will freeze less for classification tasks and more for regression.
+  │  
+  │  There are other factor...
+├─ Chris Deotte (2022-01-16 21:48:04.443000) [+2]
+│  UPDATE: I added emphasis that freezing batch norm layers was important when training EfficientNet to achieve good CV LB RSME. Team 42nd achieved CV 17.30 LB 17.92 with an EfficientNet explained her...
+├─ pixyz0130 (2022-01-16 13:28:54.123000) [+2]
+│  最後だけ日本語訳
+│  
+│  It was shown from 1st place here, 3rd place here (and my 6th place solution) that using meta features from last year were not needed to achieve a powerful model. Today's SOTA image models...
+├─ Daniel (2022-01-16 05:52:00.947000) [+2]
+│  Thanks very much for the great discussion posts and congrats! This was my first competition in which I actively participated, and I feel like I have learned a lot. One question:
+│  Hill Climbing seems...
+  ├─ DeepUnderstanding (2022-01-16 05:54:29.017000) [+1]
+  │  Also is there some difference between hill climbing and forward selection(a method used by Giba)?
+  ├─ Chris Deotte (2022-01-16 11:15:31.417000) [+8]
+  │  Early in every competition, i decide whether I will pursue a single model or ensemble. If I believe single model is best then I spend most of my time improving the CV LB of one model (after explori...
+  ├─ Charlie Craine (2022-01-17 03:09:06.367000) [+0]
+  │  I was sort of surprised at how much seeds changed the CV. What is the deal with seeds anymore? I feel like I don't get the impact but there was one for sure.
+├─ Anthony Chiu (2022-01-15 18:04:42.450000) [+2]
+│  We also found that cropping along the short side is helpful, but I didn't realize it is also helpful to keep the squish one.
+  ├─ Chris Deotte (2022-01-15 18:10:14.370000) [+1]
+  │  Making models with the squish preprocess only improved my best LB ensemble (strangely). All models in my best CV ensemble use random square cropping (and no squish preprocess).
+├─ Mobassir (2022-01-15 14:48:28.407000) [+2]
+│  heartiest congratulations 🙌👌
+│  you are the kaggler i admire the most.learning a lot from you everyday in kaggle. i remember in readability competition you taught me the trick of freezing backbone and...
+  ├─ Chris Deotte (2022-01-16 04:08:11.197000) [+1]
+  │  Thanks @mobassir!
+├─ Allie K. (2022-01-15 14:07:33.293000) [+2]
+│  @cdeotte, thank you very much for everything what you shared here. At least for me, you made this competition to be an unforgettable experience. In fact with your analyses in the discussion "Is the...
+  ├─ Chris Deotte (2022-01-15 14:13:21.780000) [+1]
+  │  Thanks @blankaf . Congrats on finishing solo Silver 52nd out of 3550 teams. That's fantastic!
+  ├─ Allie K. (2022-01-15 14:20:58.467000) [+1]
+  │  Thank you @cdeotte, but half of my success is in fact yours! I will share something from my solution later if I find that something was really original there. Yet another solution simple but made a...
+  ├─ Oleg Sidorshin (2022-01-15 14:21:58.407000) [+2]
+  │  Absolutely the same! Your comment about good model accuracy with binned target gave me motivation to participate in this competition seriously. Thanks a lot!
+├─ KhanhVD (2022-01-16 05:24:36.033000) [+1]
+│  Congrats @cdeotte on 6th place final. We chose the wrong submission with an uncertainty cv and it took away our gold medal
+  ├─ Chris Deotte (2022-01-16 11:16:42.730000) [+0]
+  │  Congrats KhanhVD and team. 53th out of 3500 teams is excellent! Sorry to hear, you missed Gold. You'll get Gold next time! Good work.
+  ├─ Quan Vu (2022-01-18 01:34:43.557000) [+1]
+  │  Congrats, we also regret missing gold medal. We only use swin with label distribution and label normalization, ensemble technique make our model more stable. Congrats @cdeotte, I learned a lot from...
+├─ [deleted] (2022-01-21 13:15:27.810000) [+1]
+│  Thanks for sharing
+├─ deepGlx (2022-01-18 18:51:40.377000) [+1]
+│  Great . Thanks for sharing👍
+├─ sam_the_rice_cake (2022-01-16 11:17:01.393000) [+2]
+│  Thank you, very great

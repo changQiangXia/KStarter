@@ -1,0 +1,82 @@
+# nfl-big-data-bowl-2022 讨论区（按票数排序，共 80 条）
+
+- [Thanks for joining the 2022 Big Data Bowl! ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274066) — 41 票 / 27 评论 / 2021-09-23 
+- [Winners from previous NFL Analytics Competitions](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274056) — 29 票 / 4 评论 / 2021-09-23 
+- [Welcome to the 2022 Big Data Bowl!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274053) — 22 票 / 7 评论 / 2021-09-23 
+- [Big Data Bowl film study](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/283822) — 20 票 / 2 评论 / 2021-10-28 
+- [Big Data Bowl Demos](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/275296) — 18 票 / 1 评论 / 2021-09-29 
+- [Beginner’s Guide to NFL Football](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274258) — 18 票 / 5 评论 / 2021-09-24 
+- [Special teams basics in 10 minutes](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274376) — 17 票 / 4 评论 / 2021-09-25 
+- [A little bit of NFL Bowl 2022 for Beginners](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274428) — 14 票 / 7 评论 / 2021-09-26 
+- [2022 Big Data Bowl -- judging and next steps](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/300722) — 10 票 / 6 评论 / 2022-01-13 
+- [Weather Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/276845) — 9 票 / 4 评论 / 2021-10-06 
+- [Awesome dataset!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/280457) — 8 票 / 0 评论 / 2021-10-21 
+- [Start here if you are new to NFL🏈](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/287366) — 8 票 / 0 评论 / 2021-11-13 
+- [Big Data Bowl 2022 Winners](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/307969) — 7 票 / 2 评论 / 2022-02-16 
+- [Downs or Plays (with link)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/288057) — 7 票 / 0 评论 / 2021-11-16 
+- [Accuracy and precision of tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/295359) — 7 票 / 1 评论 / 2021-12-15 
+- [2020 Big data bowl - Finalist papers](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/277786) — 6 票 / 0 评论 / 2021-10-11 
+- [Player Height is Inconsistent](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/276122) — 6 票 / 5 评论 / 2021-10-03 
+- [NFL Passing Rules Explained😉](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/287936) — 6 票 / 0 评论 / 2021-11-16 
+- [Submitting to the College Competition](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/298290) — 6 票 / 4 评论 / 2022-01-02 
+- [2022 Big Data Bowl - Next Steps](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/314825) — 5 票 / 0 评论 / 2022-03-24 
+- [Outcomes of a kickoff](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/293754) — 5 票 / 0 评论 / 2021-12-06 
+- [Could anyone explain how the playResult is calculated?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/292798) — 5 票 / 2 评论 / 2021-12-03 
+- [Most Voted Kernel From Previous NFL Competition ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/275228) — 5 票 / 0 评论 / 2021-09-29 
+- [Papers on NFL and Machine Learning](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/275220) — 5 票 / 0 评论 / 2021-09-29 
+- [Rule clarification: External Data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/284626) — 5 票 / 1 评论 / 2021-11-01 
+- [How to see the leaderboard](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/310478) — 4 票 / 1 评论 / 2022-03-01 
+- [Competition has concluded! Next steps](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/299254) — 4 票 / 0 评论 / 2022-01-07 
+- [Analyze Player Speed on Kickoffs Demos](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/280749) — 4 票 / 6 评论 / 2021-10-22 
+- [Quick Tip: Las Vegas/Oakland Raiders](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/282566) — 4 票 / 0 评论 / 2021-10-27 
+- [''vises' Field Description](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274418) — 4 票 / 4 评论 / 2021-09-25 
+- [Thursday Night Football has good examples of using stats](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/287408) — 4 票 / 0 评论 / 2021-11-13 
+- [Big Data Bowl 22 -- next steps and plans for a virtual show](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/309716) — 3 票 / 0 评论 / 2022-02-25 
+- [multiple notebooks](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/296007) — 3 票 / 1 评论 / 2021-12-19 
+- [Does having 15+ views a day good news? ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/303202) — 3 票 / 4 评论 / 2022-01-26 
+- [What are the differences among kickoff, autoevent_kickoff, free_kick and kickoff_play?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/294736) — 3 票 / 2 评论 / 2021-12-12 
+- [Contextualizing speed/acceleration of the football](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/278338) — 3 票 / 3 评论 / 2021-10-13 
+- [How to add a team member?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/288990) — 3 票 / 1 评论 / 2021-11-18 
+- [NFL Positions Quick overview (with link)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/287479) — 3 票 / 0 评论 / 2021-11-14 
+- [Join/Merge my team? Neural Football League](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/282243) — 2 票 / 0 评论 / 2021-10-26 
+- [Please explain or point a source for the position variable](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274889) — 2 票 / 2 评论 / 2021-09-28 
+- [Are you able to make multiple submissions?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/276658) — 2 票 / 3 评论 / 2021-10-05 
+- [Play data:Special Teams Result](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/287085) — 2 票 / 3 评论 / 2021-11-12 
+- [Players appear in multiple teams (plays.csv)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/287678) — 2 票 / 1 评论 / 2021-11-15 
+- [Why the competition doesn't award points or tiers?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/275717) — 2 票 / 1 评论 / 2021-10-01 
+- [how do we know the height of the football in the air?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/292395) — 2 票 / 2 评论 / 2021-12-02 
+- [need clarification on a couple of things in the data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/294747) — 2 票 / 2 评论 / 2021-12-12 
+- [Special Teams outcome](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/276425) — 2 票 / 2 评论 / 2021-10-04 
+- [Is there a specific distance (considered risk) to tackle returners?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/297953) — 2 票 / 1 评论 / 2021-12-30 
+- [Data Cleaning: Patches For PFF/Tracking Data Mismatches](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/298160) — 2 票 / 0 评论 / 2022-01-01 
+- [Trouble Submitting Project](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/299048) — 1 票 / 4 评论 / 2022-01-05 
+- [Columns Mentioned in Data Description are not in Players Data Set](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/284943) — 1 票 / 2 评论 / 2021-11-03 
+- [Will my notebook be rejected if....?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/299021) — 1 票 / 1 评论 / 2022-01-05 
+- [data problem!](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/276944) — 1 票 / 1 评论 / 2021-10-07 
+- [PFF Scouting data, Punts: difference between normal punt (N) and nose-down, Aussie rules style (A)](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/290461) — 1 票 / 1 评论 / 2021-11-24 
+- [Are you looking for a team? - Megathread](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/274517) — 1 票 / 12 评论 / 2021-09-26 
+- [Question to organizers: kinematics of one flying ball seems off. Why?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/284774) — 1 票 / 3 评论 / 2021-11-02 
+- [Invalid tracking data values?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/284166) — 1 票 / 1 评论 / 2021-10-30 
+- [Helpful stats from NFL official site](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/292116) — 1 票 / 0 评论 / 2021-12-01 
+- [maximum team size](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/277889) — 1 票 / 1 评论 / 2021-10-11 
+- [Quantity 'a' in tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/294461) — 1 票 / 1 评论 / 2021-12-10 
+- [Differences in Types of Kicks on Kickoff](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/295187) — 1 票 / 1 评论 / 2021-12-14 
+- [kickContactType](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/277978) — 1 票 / 1 评论 / 2021-10-12 
+- [Regular season standings 2018 - 2020](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/278380) — 1 票 / 0 评论 / 2021-10-14 
+- [Scouting Data, Meaning of KickType field values?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/279778) — 1 票 / 1 评论 / 2021-10-19 
+- [Field Goal Events on Tracking](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/278375) — 1 票 / 1 评论 / 2021-10-14 
+- [PFF scouting data: NaN's in the hangTime field](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/278358) — 1 票 / 1 评论 / 2021-10-13 
+- [Processing the Tracking data](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/279278) — 0 票 / 3 评论 / 2021-10-17 
+- [Data problem](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/281320) — 0 票 / 2 评论 / 2021-10-24 
+- [team up for nfl ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/281740) — 0 票 / 3 评论 / 2021-10-25 
+- [missing plays?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/286330) — 0 票 / 6 评论 / 2021-11-08 
+- [Helpful videos for NFL🏈](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/290039) — 0 票 / 0 评论 / 2021-11-22 
+- [Learn basic football terminology from Pro bowl safety Glover Quin!.](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/290043) — 0 票 / 0 评论 / 2021-11-22 
+- [What should I find out with this data?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/290313) — 0 票 / 1 评论 / 2021-11-24 
+- [Is this a complete set of information? ](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/298468) — 0 票 / 2 评论 / 2022-01-03 
+- [Code in Appendix](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/298556) — 0 票 / 1 评论 / 2022-01-03 
+- [Winner Team for each game](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/298997) — 0 票 / 2 评论 / 2022-01-05 
+- [Issues with saving notebook](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/299072) — 0 票 / 1 评论 / 2022-01-06 
+- [Plays data on passes](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/299142) — 0 票 / 1 评论 / 2022-01-06 
+- [Should I resubmit when I update it?](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/299023) — 0 票 / 3 评论 / 2022-01-05 
+- [Questions required](https://www.kaggle.com/competitions/nfl-big-data-bowl-2022/discussion/297750) — -1 票 / 2 评论 / 2021-12-29 

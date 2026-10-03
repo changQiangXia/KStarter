@@ -1,0 +1,66 @@
+<h1>1. Integration of Biological Knowledge</h1>
+<p>Generally, I treated this problem as a regression with 2 feature columns and 18211 targets, but I had tried to utilize SMILES sequences in neural network with LSTM unit. Both the sm_name and SMILES columns can be encoded exactly in the same way, so the sm_name column can be replaced with the SMILES column. Moreover, SMILES column is more informative, because every single character of the sequence can be encoded (not only a single value like in sm_name)  and the order of these characters provides extra information. Theoretically, In the worst case, the performance of the neural network using SMILES column instead of sn_name should be not worse than using original columns. Unfortunate, I have reached an unsatisfactory public score with this neural network and I stopped further research. </p>
+<h1>2. Exploration of the problem</h1>
+<p>For simplicity, the analysis is done for the single best model without pseudolabeling. Since mrrmse metric is sensitive to outliers, a distribution of ranges for columns should be checked.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2F523b491c0054eae38b031b945b7eb168%2FScreenshot%20from%202023-12-05%2009-36-00.png?generation=1701849069283853&amp;alt=media" alt=""><br>
+The majority of columns have a range of values in an interval (4, 50). Naturally, the columns with high range lead to high mae or mse, so in order to determine genes which are easy and hard to predict, the standardized (divided by std) colwise mse is applied. The table below shows the hardest and easiest genes for prediction.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2Fd8bf3ee03e6d6154593170a5db43cab3%2FScreenshot%20from%202023-12-05%2009-45-05.png?generation=1701849594906441&amp;alt=media" alt=""><br>
+The scheme of the applied cross validation.  Every fold contains one cell type chosen from NK cells, T cells CD4+, T cells CD8+, T regulatory cells and only sm_names being in public and private test was involved. The lowest value of this validation split corresponds to the lowest value on public and private dataset. In my opinion this is a reliable split and the perfect split depends on the model architecture, so every model can have its perfect validation split. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2Fb4a580c8349343ab853a40cf6ee8b43e%2FScreenshot%20from%202023-12-05%2009-49-01.png?generation=1701849988973830&amp;alt=media" alt=""><br>
+The easiness of learning per cell types is shown below. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2F64d7f90af54659c0e8477d4faa3a3c51%2FScreenshot%20from%202023-12-05%2009-56-05.png?generation=1701850210915961&amp;alt=media" alt=""><br>
+The values of loss are different, because they are calculated in truncated space. T cells CD4+ and NK cells are learning well. T regulatory cells are harder for training. The T cells CD8 are weakly improving on validation dataset. This split uses about 25% of the dataset for validation, so I believe more reliable splits exist. My new proposition of split is: <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2F718b580e65a5654a92880f8a6bcf6d1b%2FScreenshot%20from%202023-12-05%2010-08-16.png?generation=1701850452329548&amp;alt=media" alt=""><br>
+This split is similar to the previous one, but for each validation fold, randomly selected examples are moved to training. Let's check an impact of the new split for training. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2F8a68fc6a4b3025b48d37dabc67a50c05%2FScreenshot%20from%202023-12-05%2010-12-19.png?generation=1701850788086187&amp;alt=media" alt=""><br>
+For each cell type, more data improved performance on this same, constant and small validation set. Metric is calculated on full dimension this time. The first value at 480 training examples corresponds to the previous split. Theoretically, decreasing the size of validation set to one example can lead to the best performance. Since it will be very similar to training on whole dataset, what is done finally.</p>
+<h1>3. Model design</h1>
+<h2>Solution</h2>
+<p>The prediction system is two staged, so I publish two versions of the notebook. <br>
+The first stage predicts pseudolabels. To be honest, if I stopped on this version, I would not be the third. <br>
+The predicted pseudolabels on all test data (255 rows) are added to training in the second stage.</p>
+<h3>Stage 1 preparing pseudolabels</h3>
+<p>The main part of this system is a neural network. Every neural network and its environment was optimized by optuna. Hyperparameters that have been optimized:<br>
+a dropout value, a number of neurons in particular layers, an output dimension of an embedding layer, a number of epochs, a learning rate, a batch size, a number of dimension of truncated singular value decomposition.<br>
+The optimization was done on custom 4-folds cross validation.  In order to avoid overfitting to cross validation by optuna I applied 2 repeats for every fold and took an average. Generally, the more, the better. The optuna's criterion was MRRMSE. <br>
+Finally, 7 models were ensembled. Optuna was applied again to determine best weights of linear combination. The prediction of test set is the pseudolabels now and will be used in second stage.</p>
+<h3>Stage 2 retraining with pseudolabels</h3>
+<p>The pseudolabels (255 rows) were added to the training dataset. I applied 20 models with optimized parameters in different experiments for a model diversity.<br>
+Optuna selected optimal weights for the linear combination of the prediction again.<br>
+Models had high variance, so every model was trained 10 times on all dataset and the median of prediction is taken as a final prediction.  The prediction was additionally clipped to colwise min and max. </p>
+<p><strong>History of improvements:</strong></p>
+<ol>
+<li>a replacing onehot encoding with an embedding layer</li>
+<li>a replacing MAE loss with MRRMSE loss</li>
+<li>an ensembing of models with mean</li>
+<li>a dimension reduction with truncated singular value decomposition</li>
+<li>an ensembling of models with weighted mean</li>
+<li>using pseudolabeling</li>
+<li>using pseudolabeling and ensembling of 20 models and weighted mean. </li>
+</ol>
+<p><strong>What did not work for me</strong>:</p>
+<ul>
+<li>a label normalization, standardization</li>
+<li>a chained regression</li>
+<li>a denoising dataset</li>
+<li>a removal of outliers</li>
+<li>an adding noise to labels</li>
+<li>a training on selected easy / hard to predict columns</li>
+<li>a huber loss.</li>
+</ul>
+<h1>4. Robustness</h1>
+<p>I have tested 3 types of the robustness: increasing dataset size, adding noise to labels and inputs. Adding the noise to inputs failed totally, it is logical for me, because the nominal and categorical values are changed and are behaving like the continues values, what is not beneficial.<br>
+Let's see the performance on 40%, 50%,…, 100% of training dataset. It started from 40%, because singular values decomposition is limited by number of examples.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2Fb684812f2feb70c2b9f28f2df5714cd7%2FScreenshot%20from%202023-12-05%2013-11-10.png?generation=1701852018611279&amp;alt=media" alt=""><br>
+The experiment was 5 times repeated, so the interval of uncertainty is visible. More data improves the performance significantly. <br>
+The last test of robustness is adding noise to the labels. The random gaussian (a distribution with 0 mean and scale * std) noise was added to the labels.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6882624%2F8625a5cb1af874f4986277c98e76ab8e%2FScreenshot%20from%202023-12-05%2011-45-22.png?generation=1701852528532795&amp;alt=media" alt=""><br>
+Adding some noise (0.01 * std) can even improve the model's performance.  Generally, the model is robust to the noise. </p>
+<h1>5. Documentation &amp; code style</h1>
+<p>The code on GitHub is documented. </p>
+<h1>6. Reproducibility</h1>
+<p>GitHub code:<br>
+<a href="https://github.com/okon2000/single_cell_perturbations" target="_blank">repo</a><br>
+Notebook. The version 264 is first a stage and 266 the second one:<br>
+<a href="https://www.kaggle.com/code/jankowalski2000/3rd-place-solution" target="_blank">notebook</a>.</p>
+<p>The code runs in approximately 1 hour using CPU Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz and 8GB RAM.</p>

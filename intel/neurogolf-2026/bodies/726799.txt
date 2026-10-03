@@ -1,0 +1,147 @@
+# https://www.kaggle.com/competitions/neurogolf-2026/discussion/726799
+
+Topic #726799: 1st Place - Kaggle Agent - Pipeline overview
+  Author: Eduardo Rocha de Andrade
+  Posted: 2026-07-16 16:48:06.406000
+  Votes: 34  Comments: 16
+
+Adding up to @cdeotte's intro to our solution, I'm writing a bit about the pipelines we used and how we improved our token efficiency (we still need to write the rest of the write-up).
+
+Token efficiency
+
+At the beginning of this competition, we were all mind-blown by how agents could solve and optimize ONNX models with barely any instructions. However, after a while, we noticed that this was not only token-inefficient but was also stalling progress. So, at some point, we spent a few days trying to optimize our pipelines, and I’d like to share the main findings. Some are NeuroGolf-specific, but others can likely be reused for other repetitive agentic work with minor adaptations.
+
+Optimization vs. Architecture Rewrites
+
+When starting a worker agent to optimize a task without any concrete target or proper guidance, e.g., “improve this task for 2 hours,” we noticed that we would get minor improvements (+0.05, 0.1, 0.2) each round until it eventually hit a plateau where it was not possible to prune the existing architecture further. At this point, the next round would very likely have the disruptive insight, “Oh, I think I need to completely change this architecture because there is no way to improve it further,” and then we would get a single +1, +2, or an even bigger improvement. However, all the tokens and pruning work that had been spent on the previous architecture were now rendered useless. This was one of the biggest token sinks we found.
+
+In order to tackle this, we started to use concrete targets and headstrong prompts. We would use something along the lines of, “Your goal is to improve this task by at least 1.5 points! It is possible and has been achieved by another competitor. If you think you can’t beat it, please revisit your approach and calculations and keep trying. In the end, always return your best effort! If you can reach the target, try going beyond it!” This simple guidance changed the behavior completely, as we noticed that agents started to first derive the theoretical maximum score (although it was very pessimistic in most cases) for the tasks before doing any optimization work on the existing baseline, since a +1 improvement requires meaningful node count reduction under the log-based metric.
+
+This simple change reduced our token usage a lot and also helped break our current plateau at that time.
+
+Task rediscovery and previous worker’s notes
+
+Another thing we noticed is that every worker would spend a lot of tokens inspecting the task, identifying its patterns, looking for symmetries, etc. So we added individual task notes as part of the agent’s input and pre-baked some stuff to avoid rediscovery. For example:
+
+## Task facts
+
+- Training pairs: 3 (test: 1, arc-gen: 262)
+- Input shapes: 7×7, 7×7, 7×7 | palette: {0,1,2,3,4,8}
+- Output shapes: 7×7, 7×7, 7×7 | palette: {1,2,3,4,8}
+- Area ratio (median): 1.00× | shape preserved: True
+- Symmetry probes: rot90: 0/3 | rot180: 0/3 | flip_h: 0/3 | flip_v: 0/3
+- Baseline: cost=263, nodes=8, ops={Conv:1, MaxPool:1, Cast:1, Squeeze:1, Mul:1, Concat:1, Gather:1, QLinearConv:1}
+- Baseline initializers: color_w:[1, 10, 1, 1] float32 40B, cmap:[7, 7] int64 392B, sq_axis3_i64_t007:[1] int64 8B, q_scale_t007_f32:[] float32 4B, q_zero_m16_i8:[] int8 1B, ... +1 more
+
+## Archetype hint
+
+- Baseline archetype: **A2**
+- Family median cost: 200 | your baseline: 263 (1.3× median)
+- No sibling family registered for this archetype.
+- Tasks at A2 median for reference: task006, task015, task022, task026, task038
+
+## Task rule (draft — verify against training pairs)
+
+The input contains a diagonal stripe of non-zero values that encodes a repeating color sequence (read along the stripe). The output fills the entire 7×7 grid by tiling that sequence diagonally: each cell (r, c) gets the color at position (r + c) mod N, where N is the length of the sequence extracted from the stripe. The zero cells in the input are placeholders and the non-zero diagonal defines both the sequence and its cyclic order.
+
+**Confidence: high.** Caveat: It is not fully determined from training alone whether the sequence is always read from the bottom-left direction of the stripe or whether a stripe oriented differently (e.g., anti-diagonal) would use a different extraction rule.
+
+
+Then, each worker would append to this note a brief explanation of what it tried, what worked, and what dead ends it found. By feeding this as input, new workers would do a much shallower exploration and would avoid previously tried dead ends.
+
+Python code utils
+
+We also noticed that agents would often rewrite utility code, so we created a set of utility scripts and functions that could be reused out of the box by agents and referenced this usage directly in the prompt. We also started asking agents to dump the builder scripts, i.e., Python scripts that generate the ONNX files, along with the task notes so they could be reused later instead of rewritten from scratch.
+
+Cookbooks
+
+This is likely the central pillar of our solution. Every time we discovered new optimization techniques or tricks, we would add them to a shared cookbook that all workers would receive. This allowed agents to reuse previous knowledge and greatly improved our gains/token.
+
+Pipelines
+
+Throughout the competition, we tried so many different architectures and variations that it is hard to pinpoint which one was actually the best. In fact, there is an argument in favor of believing that trying so many different approaches is a key component of our success, since it might have helped us discover a very diverse set of tricks, which we later reused in other tasks.
+
+That said, our pipelines come in two major flavors: vertical single-task deep exploration and horizontal multi-task exploitation.
+
+
+
+Single-task vertical exploration (single-turn)
+
+I think this is very similar to what other teams were doing, where we basically set 1 agent to solve 1 specific task. This allows the agent to focus all its resources (time and thinking budget) on that task, which breaks optimization plateaus and potentially discovers new tricks.
+
+One thing to note that might be different from other teams is that we only worked in single-turn mode for this pipeline, i.e., we started with a well-defined prompt + input resource bundle and collected the final results once the agent was done without ever interacting with it mid-session.
+
+As input for each task worker, we would provide:
+
+
+
+A target LB gain for the task (usually varying from +0.5 to 1.5) and some headstrong incentives to pursue it
+
+Cookbooks with proven tricks and techniques
+
+Task notes from previous agents who had already worked on that task. These also included the seeded header with the task’s logic descriptions, symmetries, input-output stats, and previously found dead ends
+
+Human solutions to similar ARC-AGI problems
+
+
+We locally validated each optimization candidate using the competition-provided input-output pairs and other generated pairs from ARC-GEN and, in some cases, randomly generated inputs and color variations on existing inputs for color-agnostic tasks.
+
+In terms of harnesses and models, we mainly used Claude Code (Opus 4.8 and Fable 5), Codex and ChatGPT Pro (5.6-Sol and 5.5), like many other people were doing. For Codex, we would use a Python script that spawned several worker agents with codex exec (which allows greater scaling than a single orchestrator agent spawning sub-agents), and each agent would read through the codebase (inputs above) and produce updated task notes and the updated ONNX model. For ChatGPT, on the other hand, we also needed to provide the offline wheel files as part of the input. So, for convenience and speed, we simply created a project and added the wheels package as a source for the entire project. Then, for each task, we would manually create a new chat, paste a template prompt (the same for all tasks), and attach the task-specific input bundle, e.g., a README with extra instructions and a target goal, cookbooks, human solutions, baseline ONNX, etc.
+
+Every now and then, we would analyze our sessions and trajectories to identify what new ideas and tricks the agents discovered and update our shared cookbook.
+
+Horizontal multi-task exploitation (multi-turn)
+
+Although the single-task deep exploration was amazing for improving individual tasks and mining new techniques, it wasn’t very efficient at applying new techniques to other tasks quickly.
+
+For example, imagine that a worker agent just discovered a new trick for a task, e.g., heavy einsum from input to output tensor. It would take many rounds of the single-task pipeline until we looped through all 400 tasks and applied that same trick. Also, the only knowledge-sharing mechanism we had was the cookbook, which grew considerably over time. Thus, it was a bit of a needle-in-a-haystack problem, and we had to hope that the worker agent would notice that previously found einsum trick and reuse it. Because of this issue, we complemented our vertical pipelines with a multi-task horizontal search.
+
+Here, we would start a Codex or Claude Code session manually via CLI and instruct it to first look at our codebase, cookbook, task clustering report (important for this pipeline), and metric code and fully understand them. Then, we would ask it to look at the newest techniques and tricks and see what could be applied to other potential tasks (the task clustering input helps a lot here). This was quite useful for flushing quick gains from new tricks to other tasks.
+
+Finally, the usual flow of our solution was this alternating approach of single-task exploration -&gt; trace analysis to mine new tricks and improve cookbook -&gt; multi-task exploitation -&gt; repeat.
+
+Comments:
+├─ Wasiq Ali (2026-08-03 18:44:54.463000) [+2]
+│  Thanks @arc144 for sharing this impressive information for us it's my first time seeing a solution pipeline and I am also work on a project which also required a pipeline and this information is re...
+├─ Tony Li (2026-07-16 18:12:38.017000) [+6]
+│  Thanks for sharing—this is really insightful and wonderful. Matheus discovered something similar and helped our team break through a long plateau.
+│  
+│  Near the end, though, we ran out of time and capa...
+  ├─ Eduardo Rocha de Andrade (2026-07-16 19:00:09.317000) [+3]
+  │  Hey Tony, thanks a lot for all your contributions to the discussion forums throughout the competition!
+  │  
+  │  Regarding the timeout, we did something similar to what @yiheng shared here. We asked our age...
+    ├─ Tony Li (2026-07-16 22:27:21.113000) [+4]
+    │  Wow, that’s really cool—and brilliant! ☀️ No wonder your team performed so well. You had such a systematic and advanced approach about running time, far beyond what we managed. 
+    │  
+    │  Being able to prep...
+  ├─ Evolvion (2026-07-16 19:02:41.067000) [+2]
+  │  Hi Tony just wanted to say congratulations to 3rd place and I hope I gave you good fight as I promised back then 😅
+    ├─ Tony Li (2026-07-16 22:36:20.803000) [+0]
+    │  Thanks, and congratulations to you too! You definitely delivered on what you promised—we were worried until the very last minute about your possible 100-point jump😅,  But let’s not take the discuss...
+  ├─ Chris Deotte (2026-07-16 19:06:33.010000) [+5]
+  │  Congratulations @tonylica and your team!
+  │  
+  │  Our team's dashboard used Multiple-Choice Knapsack Problem (MCKP) to pick our best LB submission. And we had a dedicated Claude Code Fable 5 that was rewri...
+    ├─ Tony Li (2026-07-16 22:33:50.320000) [+2]
+    │  Chris, thanks for your kind words😃. One of my teammates also used the Multiple-Choice Knapsack Problem (MCKP) to select our best submission under the runtime limit, while I simply let Codex choose ...
+├─ Navneet (2026-07-23 07:58:30.657000) [+2]
+│  Thank you for the Token efficiency @arc144
+├─ Bambang Satmoko (2026-07-21 16:58:30.503000) [+2]
+│  CONGRATULATION !!! highly appreciate for how the think work. it's incredible team work build this kind of solution that's deepest understanding.
+├─ [deleted] (2026-07-16 20:49:28.870000) [+2]
+│  Congrats on winning the competition and thanks for sharing the detailed pipeline architecture. Really impressed by your teams progress, it was honestly a motivation. 
+│  
+│  I have a question about how d...
+  ├─ Chris Deotte (2026-07-16 20:56:52.423000) [+2]
+  │  I think having good prompt/plan and cookbooks (i.e. accumulated techniques from weeks of previous work) helped encourage agents to reach their target. When our score was 7900 and above, and we subm...
+    ├─ [deleted] (2026-07-16 21:12:17.500000) [+1]
+    │  What thinking level did you used with ChatGPT Extra High or Pro? The turnaround for pro was too high and Extra High kept arguing with me. 😃
+    │  
+    │  So I mostly stuck with codex as churn was higher and for...
+    ├─ Chris Deotte (2026-07-16 21:18:28.880000) [+3]
+    │  We used ChatGPT Pro. We submitted a single question (i.e not multi-turn conversation). We uploaded a tar.gz file along with our single prompt (The tar.gz installed onnx WHLs and contained cookbooks...
+├─ hongan (2026-07-16 20:44:38.757000) [+2]
+│  Congrats and thanks for sharing! We had something similar to your cookbook and I found out this trick from it in the last days but ran out of time to try applying it to every task. It can almost al...
+  ├─ Chris Deotte (2026-07-16 20:59:09.183000) [+1]
+  │  Congratulations @honganzhu and team! I forget if we had that specific discovery but we had 100s of discoveries in our cookbooks. So when an agent was given these priceless cookbooks and asked to bo...

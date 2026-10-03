@@ -1,0 +1,350 @@
+# https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527596
+
+Topic #527596: 16th Place - So Close to Gold Medal 😀
+  Author: Chris Deotte
+  Posted: 2024-08-13 02:15:46.602000
+  Votes: 205  Comments: 73
+
+I enjoyed this competition! Thanks Kaggle and LMSYS! It was a great opportunity to learn about finetuning and inferring large LLM.
+
+I recently began learning how to finetune large LLM-4B+ four months ago. I posted my first notebook in Essay comp here (LLM-7B) and Twenty Questions here (LLM-8B). Then I practiced in KDD Cup 2024, explained here (LLM-72B). Then began applying what I learned to LMSYS comp and published starter notebook here (LLM-34B). Large language models are so exciting!
+
+LoRA/QLoRA Efficient Training for LLM
+
+Using LoRA/QLoRA allows us to train a Gemma2-9B-IT model like it is only DeBERTa-v3-base or large wow! If we finetuned the full Gemma2-9B-IT, we would need to update 9 billion parameters. Instead we can use LoRA/QLoRA with rank=64 and only finetune 200k parameters (or use rank=16 and 50k parameters). 
+
+For reference DeBERTa-v3-base has 90k parameters and DeBERTa-v3-large has 300k parameters. LoRA works based on linear algebra. If the weights of Gemma2 are (m x n) matrix where m*n=9B, we leave them as is and only find two LoRA matrices of sizes (m x r) and (r x n) where each is about 100k. Then our finetuned model is the product of these two matrices plus the original base matrix. (Of course Gemma2 weights are more than one matrix but you get the idea).
+
+
+
+How To Tune LoRA/QLoRA
+
+Using LoRA/QLoRA introduces more variables to tune. Namely we now have r (i.e. rank), alpha, and modules. This is in addition to our usual training parameters learning rate, epochs and batch_size. Here is a strategy to tune everything:
+
+
+
+First pick modules. If possible using all modules will yield best results: 
+target_modules = ["q_proj", "k_proj", "v_proj", "down_proj","up_proj","o_proj","gate_proj"].
+
+Next pick a learning rate. This will be the learning rate of your model's head. Using 2e-4 or 2e-5 is a good choice. And using full batch size = 8 is good (i.e. bs per gpu times number of GPUs). Use gradient accumulation, gradient checkpointing, or multiple GPU to achieve this batch size. (Note when using model parallelism with HuggingFace trainer then per_device_train_batch_size is actually the full batch size not per device. Also note gradient checkpointing didn't seem to work correctly with HuggingFace trainer).
+
+Next start with r=16 and try different alphas. The parameter alpha determines the learning rate of the backbone = alpha/rank * head_LR. Do alpha = 2, 4, 8, 16, 32, 64. Train for 1 epoch (linear schedule with warmup). We now have r=16 and corresponding best alpha.
+
+Keep the alpha we discovered fixed and try different ranks. Above if we used LR=2e-4 then we will find a=4 to be optimal. So now we try r=4,a=4, r=8,a=4, r=16,a=4, r=32,a=4, r=64,a=4 etc (In this comp once we find optimal alpha for one rank, it is also the optimal alpha for all ranks when keeping LR (learning rate) the same).
+
+We will generally find there is a specific rank r which bisects performance. In this comp rank&lt;16 performs poorly and rank&gt;=16 performs well. (Increasing above r=16 will generally yield slight improvement. For me using r=1024 gave +0.002 boost vs. r=16).
+
+
+(FYI, if we use LR=2e-4 1 epoch linear schedule with warmup, then a=4 is best alpha for all rank. If we use LR=2e-5, then a=192 is best alpha for all rank. If we use LR=6e-5, then a=64 is best alpha for all rank).
+
+Training with Multiple GPU
+
+Training large LLM using multiple GPU helps with memory and speed. In this competition, I used Nvidia 8xV100 32GB GPUs and sometimes used Nvidia 4xA100 80GB GPUs. Thank you Nvidia for compute resources.
+
+We need to be aware that there are (at least) three ways to parallelize training LLM with multiple GPU. Search for blogs on these topics to learn more. We can use
+
+
+
+data parallelism (each GPU has a copy of LLM and batches are processed in parallel)
+
+model parallelism (LLM is split over GPUs and batches are processed sequentially)
+
+hybrid parallelism (LLM is split over GPUs and batches are processed in parallel)
+
+
+
+
+HuggingFace trainer uses the first two. More advanced libraries like Axolotl/DeepSpeed can use the most efficient third one. These affect our training speed and memory requirements. Ideally during training we want all GPUs to be utilized 100%. So we can run nvidia-smi or gpustat -i and adjust our parallel code until we achieve the most efficient use of GPU.
+
+How To Achieve Silver Medal with Public Notebook
+
+Kaggle user @emiz6413 published an amazing starter notebook train here and infer here which achieved LB = 0.941! Thank you Eisuke Mizutani for sharing! With just a few changes, we can boost this public notebook to LB &lt; 0.900 Silver Medal!
+
+
+
+Use TTA! Change tta = False to tta = True boosts LB 0.941 =&gt; 0.926
+
+Change LoRA r=16, a=32, freeze=16 to r=64, a=16, freeze=0 boosts LB 0.926 =&gt; 0.913
+
+Add modules: ["down_proj","up_proj","o_proj","gate_proj"] and use r=64, a=4 boost LB 0.913 =&gt; 0.903
+
+Add external 33k dedup dataset here and train with 100% data boost LB 0.903 =&gt; 0.899 Silver Medal!
+
+
+How To Almost Achieve Gold Medal (i.e. 16th place)
+
+Starting from above, we can almost achieve gold medal (i.e. 16th place) with the following updates:
+
+
+
+Train with max=2048 vs max=1024 boost LB 0.899 =&gt; 0.895
+
+Change LoRA r=64, a=4 to r=1024, a=4 boost LB 0.895 =&gt; 0.894
+
+Use LoRA train fp16 infer 8bit instead of QLoRA train 4bit infer 4bit =&gt; 10% inference speedup!
+
+Infer with max=3072 (and avoid timeout with 8bit quant above) boost LB 0.894 =&gt; 0.893
+
+TTA with two different Gemma2 boost LB 0.893 =&gt; 0.891
+
+Infer 3 heads (preference, model_a, model_b discard last two) boost LB 0.891 =&gt; 0.890
+
+Truncate from left vs right boost LB 0.890 =&gt; 0.885 Almost Gold Medal!
+
+
+Truncate Left instead of Truncate Right
+
+One of the biggest boosts came from truncating long text from the beginning (i.e. left side) instead of the ending (i.e. right side):
+
+ ():
+
+    prompts = json.loads(prompts)
+    responses_a = json.loads(responses_a)
+    responses_b = json.loads(responses_b)
+
+    rounds = [
+        
+        +
+        +
+         i  ((prompts))
+    ]
+
+     k  ((rounds)):
+        text = .join(rounds[k:])
+         ( self.tokenizer(text)[] )&lt;: 
+
+     text
+
+
+LLama3.1-405B-as-a-Judge
+
+I read research papers that said LLM-as-a-Judge performed similar to humans. So during the competition I tried many times to use Llama3.1-405B to create synthetic data to improve CV and LB score. I tried 3 ideas but none of them worked. :-(
+
+In each scenario below, I employed few shot learning. I would show Llama 10 to 20 examples of real train data then ask Llama to create something. I would provide a detailed system prompt in addition to user prompt:
+
+
+
+Show Llama3.1-405B fifteen examples and ask Llama3.1 to create new train data
+
+Show Llama3.1-405B ten examples and prompt-responseA from lmsys-1M-dataset and ask Llama to create responseB and target
+
+Show Llama3.1-405B twenty examples and prompt-responseA-responseB pairs from lmsys-1M-dataset and ask Llama to create target. Local validation showed that Llama was achieving around logloss = 0.95 but this data did not help.
+
+
+Post Competition Experiments
+
+I'm curious to learn what I missed to achieve Gold Medal. I will read other top solutions and try to incorporate new ideas into my final solution and make late submissions to LB. I will update this section if I discover anything that boosts my CV and LB score into Gold Medal zone!
+
+UPDATE: Published Single Model Code
+
+I published the code to reproduce my best single model of CV 0.878 and LB 0.888 (on original public LB data). There are three Jupyter notebooks
+
+
+
+Train (1 of 3) here
+
+Quantize (2 of 3) here
+
+Infer (3 of 3) here
+
+
+The first two public notebooks (1 and 2) use settings to train with QLoRA and quantize to 4bit in order to work within Kaggle's 2xT4 16GB GPUs. If we do this, then we can only infer with max token 2048 and achieve LB 0.889. If we train these notebooks offline, we can change the settings to use LoRA and quantize to 8bit and infer max token 3072 and achieve LB 0.888.
+
+Comments:
+├─ Chris Deotte (2024-08-14 20:06:54.463000) [+11]
+│  UPDATE: I published code to reproduce my best single model. See links in last section of my discussion post. This code illustrates some techniques that are not in any public notebooks. Namely:
+│  
+│  
+│  
+│  H...
+├─ william.wu (2024-08-13 07:33:49.627000) [+3]
+│  Thanks for sharing @cdeotte, I was struggling with efficient finetuning on multiple GPUs, would you like to share more about:
+│  
+│  
+│    
+│  More advanced libraries like Axolotl/DeepSpeed can use the most ef...
+├─ Eisuke Mizutani (2024-08-13 03:05:08.287000) [+3]
+│  @cdeotte 
+│  Amazing work! Thank you for sharing!
+│  I couldn't think of truncating from left but it makes more sense as humans probably prioritize the conclusion.
+│  Have you tried full finetuning? In my c...
+  ├─ Chris Deotte (2024-08-13 03:08:50.373000) [+4]
+  │  Wow, that's awesome. I did try full finetuning, but i used the same learning rate for both head and backbone so it didn't improve CV nor LB. I think if I trained full finetuning with different lear...
+├─ Khoi Nguyen (2024-12-04 07:43:32.543000) [+2]
+│  Thank you for the writeup. This is probably the whole "LLM finetuning for classification" bag-of-tricks explained.
+├─ sayoulala (2024-08-13 03:37:25.890000) [+4]
+│  Distill is all you need.Thanks for your share.for me the key point is
+│   distill.not hard label
+  ├─ Chris Deotte (2024-08-13 03:53:05.427000) [+1]
+  │  Congratulations @sayoulala Amazing job achieving 1st place solo cash gold! 🔥 What external dataset did you distill with? I am trying post comp to pseudo label 100k pairs from lmsys 1M dataset and t...
+    ├─ sayoulala (2024-08-13 03:56:42.820000) [+2]
+    │  wait a moment.I will share my solution soon
+    ├─ sayoulala (2024-08-13 07:23:05.753000) [+7]
+    │  @cdeotte I have published my solution, which primarily involves distilling large models into smaller ones. The link is here.https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629
+    ├─ Chris Deotte (2024-08-13 15:46:32.140000) [+2]
+    │  Awesome solution @sayoulala Congratulations!
+├─ delai50 (2024-09-09 16:55:33.457000) [+1]
+│  A little bit late Chris but thanks a lot for sharing! I would like to ask a couple of questions about the Quantize notebook (2 of 3):
+│  
+│  
+│  
+│  When you loaded the model using the PeftModel.from_pretraine...
+├─ Tanishk Patil (2024-08-25 03:55:00.650000) [+1]
+│  This is vey helpful for my college project. so thank you for sharing.
+├─ 1000da (2024-08-23 10:09:32.163000) [+1]
+│  Thank you very much for the wonderful post !!
+│  
+│  I have one question I would like to ask.
+│  Why did you add the heads to predict the generated models (model_a, model_b) as custom heads for Gemma2?
+│  I am...
+  ├─ Chris Deotte (2024-08-25 09:18:15.050000) [+11]
+  │  It's called Auxilliary learning. By challenging the LLM to learn more related tasks, we make the LLM smarter in what we care about. This same technique works when teaching humans.
+├─ Stuti Agrawal00 (2024-08-23 04:37:24.127000) [+1]
+│  That's solid work, I liked your LLama3.1 approach
+  ├─ Chris Deotte (2024-08-31 23:16:49.887000) [+0]
+  │  Thank you
+├─ capyun007 (2024-08-20 09:01:41.197000) [+1]
+│  hello, thanks for your sharing code. I get the following errors, how can i fix it?
+│  
+│  ValueError                                Traceback (most recent call last)
+│  Cell In[49], line 43
+│       41 config2 ...
+  ├─ Chris Deotte (2024-08-21 21:39:29.947000) [+1]
+  │  What did you try to do, i.e. what did you change? This error is a GPU VRAM memory error. Did you try to train without QLoRA on Kaggle's 2xT4 16GB GPUs? This is not enough GPU to train without QLoRA...
+├─ hxGuo8 (2024-08-18 15:32:41.877000) [+1]
+│  thanks for share!!! I would like to ask if the tuning strategy mentioned below about r and alpha comes from your experience or from which paper？
+  ├─ Chris Deotte (2024-08-19 13:03:05.837000) [+3]
+  │  My suggestions are my opinions from my experience. We do know from LoRA paper that r represents "the quantity of weights we update in backbone" and alpha represents the "learning rate scaler for th...
+├─ AJ (2024-08-16 17:09:23.140000) [+1]
+│  there is more to learn from you
+├─ WoNiu666 (2024-08-16 06:45:21.747000) [+1]
+│  thanks for share!!
+│  why lora is faster than qlora (lora is 8bit but qlora is 4bit)??
+  ├─ Chris Deotte (2024-08-16 13:51:41.133000) [+2]
+  │  LoRA is fp16. It is not 8bit and it does not do quantization. During training all computation is in fp16. Therefore if we quantize the model then we need to continuously quantize and unquantize to ...
+  ├─ Chris Deotte (2024-08-16 14:45:38.697000) [+6]
+  │  Let me clarify further. Both LoRA and QLoRA refer to training. Regarding inference, we can do whatever we want regardless of whether we chose LoRA or QLoRA during training.
+  │  
+  │  For training, using no ...
+    ├─ SeshuRaju 🧘‍♂️ (2024-08-16 16:15:54.643000) [+1]
+    │  Thanks @cdeotte -&gt; is more clear about the training speed and choice of training approach, could you share for 8b/9b =&gt; how much gpu ram to train fp16 since 2nd solution mention 2xA100 needed...
+    ├─ WoNiu666 (2024-08-17 04:17:01.503000) [+1]
+    │  it‘s very clearly, which is very useful for me, thanks.
+├─ Ethan (2024-08-15 18:16:22.680000) [+1]
+│  This notebook is incredibly insightful.
+├─ Siddiqui Faiz naeem (2024-08-15 14:49:35.290000) [+1]
+│  I will learn many thing from you  in future,
+│  Thank you for contributing in kaggle competitions.
+├─ Huniverse (2024-08-15 14:38:55.200000) [+1]
+│  Thank you for your contribution to the community!
+├─ Mohamed Eltayeb (2024-08-15 08:06:02.347000) [+1]
+│  Congrats! 
+│  Have you considered using some sort of BiLSTM on the head? I tried that on the last days but got nan loss and didn't find time to debug it
+  ├─ Chris Deotte (2024-08-15 11:05:01.167000) [+1]
+  │  Good idea. I didn't try that here but I usually do in NLP classification competitions.
+  ├─ [deleted] (2024-09-03 03:33:13.153000) [+0]
+  │  [deleted]
+  ├─ Fae Gaze (2024-09-03 03:33:40.300000) [+1]
+  │  Hi, Would it be worth exploring a different architecture, like using a simpler RNN or GRU instead of BiLSTM?
+├─ Saiyan Warrior (2024-08-14 04:41:45.247000) [+1]
+│  Congrats @cdeotte this is just pure gold of knowledge. 
+│  
+│  if possible, can you share your training notebooks? especially for training multiple heads. I am following you from a long time and know thi...
+  ├─ Saiyan Warrior (2024-08-14 08:11:35.800000) [+0]
+  │  Hi @cdeotte I have one more question on the below point.
+  │  Use LoRA train fp16 infer 8bit instead of QLoRA train 4bit infer 4bit =&gt; 10% inference speedup!
+  │  What do you think can be the reason as 4b...
+  ├─ Chris Deotte (2024-08-14 20:00:35.930000) [+2]
+  │  Hi @saiyanwarrior I published my train, quantize, and infer code. See last section of discussion post for links.
+    ├─ SeshuRaju 🧘‍♂️ (2024-08-15 19:33:08.097000) [+2]
+    │  @cdeotte Thanks for sharing your code, how Axolotl used for train 1 and 2 scripts?
+    │  
+    │   ():
+    │       ():
+    │          ().__init__(config)
+    │          self.num_labels_head1 = num_labels_head1
+    │          self.num_label...
+    ├─ Chris Deotte (2024-08-15 20:31:25.820000) [+1]
+    │  The notebook shows 40 unique models because we are in DEBUG = True which is only using the first 64 rows of train data. When we use DEBUG = False and use all rows of train data, then after renaming...
+    ├─ Chris Deotte (2024-08-15 20:33:34.970000) [+2]
+    │  how Axolotl used for train 1 and 2 scripts?
+    │  
+    │  
+    │  I do not know how to do this. In this competition, I used inefficient HuggingFace trainer. But we should figure out how to use Axolotl because if we ar...
+    ├─ SeshuRaju 🧘‍♂️ (2024-08-15 20:42:30.123000) [+1]
+    │  Thanks @cdeotte for the explanations, is it means. =&gt; how it handle new models in test set? or no new models in hidden test set?
+├─ Allie K. (2024-08-13 19:21:41.983000) [+1]
+│  Hi Chris, absolutely amazing learning material as always.
+│  
+│  I was somehow (quite intuitively) utilizing most similar tricks but what didn't even come to my mind is the "truncating long text from the...
+  ├─ Chris Deotte (2024-08-14 06:43:09.823000) [+5]
+  │  I discovered this mostly by trial and error. During training and inference, it was clear that some prompt+response_a+response_b were being truncated, so I tried different ways of removing text. Usi...
+    ├─ Allie K. (2024-08-14 16:35:34.657000) [+1]
+    │  Thank you very much for the explanation. 
+    │  Considering the tokens position it makes perfect sense. I have probably already read about it but I was unable to put it into consequences.
+├─ Elo jxece (2024-08-13 19:03:15.973000) [+1]
+│  Good job. 🙂
+├─ Kha Vo (2024-08-13 15:10:34.967000) [+1]
+│  Unbelievable informative and educative post. Thanks Professor
+├─ Ivan Vybornov (2024-08-13 13:18:56.347000) [+1]
+│  Thanks for sharing, when training did you shuffle 33k dataset with the train dataset from kaggle? From my experience the former has a significant data shift that is reflected by the raise of the tr...
+  ├─ Chris Deotte (2024-08-13 14:56:56.847000) [+4]
+  │  I use the 21k dedup version of the 33k. Then I just concatenate the two to produce 76k (= 21 + 55) samples. Then I train with 100% data for 1 epoch linear schedule with warmup. I use the learning r...
+├─ Nikhil Tumbde (2024-08-13 13:00:54.953000) [+1]
+│  Hi Chris, thanks for the solution. 
+│  Use of 8 bit quantisation to avoid timeout is a really helpful tip which you also mentioned in a previous discussion.
+│  Would you tell me how much VRAM was require...
+├─ JamshaidSohail (2024-08-13 11:55:54.867000) [+1]
+│  Dear @cdeotte. Thank you for the amazing share as always. Huge fan here. As you mentioned "Search for blogs on these topics to learn more". Can you share some example blogs which you find useful fo...
+├─ Vasily Kostyumov (2024-08-13 08:17:23.333000) [+1]
+│  Thank you for sharing step by step solution
+├─ Benedikt Droste (2024-08-13 07:00:00.687000) [+1]
+│  Good job. Interesting additionaI explanations as always. 
+│  
+│  I am always fascinated by how much enthusiasm and joy you convey in your posts. I'm looking forward to the next joint challenge :)
+├─ Qihang Wang (2024-08-13 04:40:13.753000) [+1]
+│  Your solution is so cool !!!
+│  Our validation and training losses were almost identical, so we decided not to use a separate validation set and utilized all the data for training.(21k + train);  also...
+  ├─ Chris Deotte (2024-08-13 18:09:24.380000) [+2]
+  │  Thanks @wangqihanginthesky . Congratulations to you and your team on Silver medal. You built two great models. I think you are right that ensembling with Llama3-8B would boost my score. Thanks for ...
+├─ WoNiu666 (2024-08-13 03:47:11.640000) [+1]
+│  Hi, it is a good work. And i have some questions, can you give me some advises? 
+│  I did it almost same with you,  when i add the full layers and full modules to train, the lora params are getting mo...
+  ├─ Chris Deotte (2024-08-13 03:50:39.647000) [+1]
+  │  For me, merging did not hurt score. It helped inference become faster. I always merge LoRA adapter to Gemma2 fp16 first then quantize second. If I train with QLoRA 4bit then I quantize to 4bit. If ...
+    ├─ WoNiu666 (2024-08-13 04:13:57.563000) [+1]
+    │  Thanks, i think i have found the reason why get a worse result after merged. 😅
+├─ cloudwantyou@gmail.com (2024-08-13 03:20:39.080000) [+1]
+│  can you share the training&amp;inference code ?
+  ├─ Chris Deotte (2024-08-13 03:23:14.267000) [+5]
+  │  I will clean the code and post it in the next few days.
+  ├─ Chris Deotte (2024-08-14 20:01:28.837000) [+0]
+  │  Hi @dlondmike , I released the train, quantize, and infer code. See the discussion post's last section for links.
+├─ [deleted] (2024-08-13 03:10:34.657000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-08-13 03:11:44.777000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-08-13 03:00:55.370000) [+1]
+│  [deleted]
+  ├─ [deleted] (2024-08-13 03:10:56.120000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-08-23 12:11:54.707000) [+2]
+│  [deleted]
+├─ [deleted] (2024-08-17 11:05:01.037000) [+2]
+│  [deleted]
+├─ [deleted] (2024-08-17 03:25:41.097000) [+2]
+│  [deleted]
+├─ [deleted] (2024-08-15 01:39:53.467000) [+2]
+│  [deleted]
+├─ [deleted] (2024-08-13 16:09:49.813000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-08-13 16:13:56.137000) [+8]
+  │  [deleted]
+    ├─ [deleted] (2024-08-13 16:15:56.317000) [+1]
+    │  [deleted]
+├─ [deleted] (2026-09-03 19:45:34.130000) [+0]
+│  [deleted]
+├─ [deleted] (2024-08-19 21:06:14.267000) [+0]
+│  [deleted]
+├─ [deleted] (2024-08-17 19:58:42.090000) [+0]
+│  [deleted]

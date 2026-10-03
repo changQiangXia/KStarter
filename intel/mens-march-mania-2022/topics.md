@@ -1,0 +1,122 @@
+# mens-march-mania-2022 讨论区（按票数排序，共 120 条）
+
+- [#1 solution ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317145) — 55 票 / 26 评论 / 2022-04-05 **write-up?**
+- [External data: 538 ratings](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309917) — 54 票 / 18 评论 / 2022-02-26 
+- [1st Place Magic Explained](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317316) — 46 票 / 76 评论 / 2022-04-24 **write-up?**
+- [What is a "good" leaderboard score for Stage 1??](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309337) — 42 票 / 16 评论 / 2022-02-23 
+- [Visualize your predictions in a Brackets](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312685) — 39 票 / 18 评论 / 2022-03-13 
+- [Experts Median Submission file](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313552) — 31 票 / 9 评论 / 2022-03-17 
+- [Projection added to the Kaggle Bracket Visualization](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315065) — 31 票 / 27 评论 / 2022-03-26 
+- [Visualize your ugly, red brackets!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313616) — 30 票 / 5 评论 / 2022-03-18 
+- [Stage 2 has begun!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312934) — 27 票 / 10 评论 / 2022-03-14 
+- [A Bronze without any ML?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315605) — 27 票 / 17 评论 / 2022-03-29 
+- [🏆 Previous Winning Solutions 🏆](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308513) — 26 票 / 8 评论 / 2022-02-19 **write-up?**
+- [There go the Brackets - Upsets Galore ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313602) — 24 票 / 65 评论 / 2022-03-18 
+- [Latest updates for Massey Ordinals](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312944) — 24 票 / 11 评论 / 2022-03-14 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308506) — 23 票 / 24 评论 / 2022-02-19 
+- [Two of Three Goals achieved!!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317018) — 22 票 / 12 评论 / 2022-04-05 
+- [Meme Thread - NCCA 2022](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315756) — 19 票 / 1 评论 / 2022-03-29 
+- [Congratulations to the Charlie Craine - new Discussion Grandmaster!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313382) — 19 票 / 30 评论 / 2022-03-16 
+- [Will kaggle host similar comp for World Cup 2022?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313603) — 16 票 / 9 评论 / 2022-03-18 
+- [Easiest way to track results live (with probabilities)](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313521) — 16 票 / 4 评论 / 2022-03-17 
+- [6th place solution, team embedding](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317114) — 14 票 / 3 评论 / 2022-04-05 **write-up?**
+- [Anyone watching Gonzaga game?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313575) — 14 票 / 6 评论 / 2022-03-17 
+- [Merging the two competitions](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317745) — 14 票 / 7 评论 / 2022-04-08 
+- [What should/could change about what's in our dataset?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313643) — 14 票 / 30 评论 / 2022-03-18 
+- [Ken Pomeroy's ranks](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308558) — 14 票 / 8 评论 / 2022-02-19 
+- [You win some, you lose some, but March Madness is a fun ride](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309101) — 13 票 / 6 评论 / 2022-02-21 
+- [Tournament Bracket Group](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312588) — 13 票 / 16 评论 / 2022-03-12 
+- [#5 Solution](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317566) — 13 票 / 1 评论 / 2022-04-07 **write-up?**
+- [Visualize Predicted Bracket](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308685) — 13 票 / 8 评论 / 2022-02-19 
+- [Latest news - Arkansas defeats Gonzaga!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308894) — 12 票 / 7 评论 / 2022-02-20 
+- [Kentucky loss agains St Peter's - impact on LB](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313898) — 11 票 / 1 评论 / 2022-03-19 
+- [Please Share Your Top 8 Teams](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313431) — 11 票 / 13 评论 / 2022-03-17 
+- [Richmond beats Iowa](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313579) — 11 票 / 6 评论 / 2022-03-17 
+- [Pivot your Predictions to Win your Bracket Competition!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313384) — 11 票 / 17 评论 / 2022-03-16 
+- [Perform sanity check of your model predictions](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313097) — 11 票 / 3 评论 / 2022-03-15 
+- [Let's Share CV Here !](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309287) — 11 票 / 9 评论 / 2022-02-22 
+- [#3 Solution Explained](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317365) — 11 票 / 4 评论 / 2022-04-06 **write-up?**
+- [🏀🏀🏀 March Mania - Winning Solutions from Earlier Years! 🏀🏀🏀](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308601) — 11 票 / 10 评论 / 2022-02-19 **write-up?**
+- [🏆 Last Four years competition and winning solution 🏀](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308580) — 11 票 / 0 评论 / 2022-02-19 **write-up?**
+- [The longest an NCAA bracket has ever stayed perfect](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309538) — 11 票 / 7 评论 / 2022-02-24 
+- [Iowa State vs. Miami](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314285) — 10 票 / 17 评论 / 2022-03-22 
+- [17th place solution](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317903) — 10 票 / 2 评论 / 2022-04-09 **write-up?**
+- [What upsets are your models predicting?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313267) — 10 票 / 33 评论 / 2022-03-16 
+- [Teams that play three times in the same season](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/311791) — 9 票 / 4 评论 / 2022-03-08 
+- [Updating team features throughout the tournament](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314084) — 9 票 / 10 评论 / 2022-03-20 
+- [High frequency LB updates, Thanks!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313780) — 8 票 / 0 评论 / 2022-03-18 
+- [New to Kaggle | Lets Understand the problem statement ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/311456) — 8 票 / 8 评论 / 2022-03-07 
+- [Point spread competition?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/310706) — 8 票 / 6 评论 / 2022-03-02 
+- [【日本語】ER of March Machine Learning Mania 2022 Men’s](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309645) — 8 票 / 0 评论 / 2022-02-24 
+- [Avoid Data Leakage - Phase 1](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308660) — 8 票 / 1 评论 / 2022-02-19 
+- [Saint Peter's Win again!!!!!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315067) — 8 票 / 4 评论 / 2022-03-26 
+- [Update on vizualisation of everyone's progress from Sweet 16](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317156) — 8 票 / 0 评论 / 2022-04-05 
+- [Round 2 probabilities](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313814) — 7 票 / 23 评论 / 2022-03-19 
+- [Are there even upsets anymore?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314183) — 7 票 / 2 评论 / 2022-03-21 
+- [Please do not use historical scores to cheat on stage 1.](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/311627) — 7 票 / 7 评论 / 2022-03-08 
+- [How many games are scored in the Sample Submission?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309829) — 7 票 / 11 评论 / 2022-02-25 
+- [🏀 Papers on College Men's Basketball Tournament Prediction 🏀](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308569) — 7 票 / 0 评论 / 2022-02-19 
+- [Leaderboard error after 54 games?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315070) — 7 票 / 2 评论 / 2022-03-26 
+- [💥🔮🏀 Bracket Prediction - NCAA Men - Post your Predictions 🏀🔮💥](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312617) — 7 票 / 16 评论 / 2022-03-13 
+- [Competition Metric Log Loss Ratio](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312829) — 7 票 / 10 评论 / 2022-03-14 
+- [Top GitHub Source Codes on March Machine Learning Mania](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/310223) — 7 票 / 2 评论 / 2022-02-28 
+- [Python bracket maker - from preds to PNG bracket](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313143) — 7 票 / 3 评论 / 2022-03-15 
+- [Some Aggregate Scores](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/318216) — 7 票 / 1 评论 / 2022-04-11 
+- [External data: Ken Pomroy's ratings](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312139) — 6 票 / 2 评论 / 2022-03-10 
+- [#2 Solution](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/318779) — 6 票 / 2 评论 / 2022-04-13 **write-up?**
+- [#1 Bracket & Submission ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317143) — 6 票 / 3 评论 / 2022-04-05 
+- [Providence vs SD State Game Result](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313556) — 6 票 / 2 评论 / 2022-03-17 
+- [Who is your Team? ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312924) — 6 票 / 25 评论 / 2022-03-14 
+- [Bracket Simulator](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/311431) — 5 票 / 4 评论 / 2022-03-06 
+- [Who's gambling?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312947) — 5 票 / 11 评论 / 2022-03-14 
+- [Sweet 16 Outcomes with More / Less Data](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315008) — 5 票 / 4 评论 / 2022-03-25 
+- [Good Luck Everyone](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313551) — 5 票 / 0 评论 / 2022-03-17 
+- [Competition Idea](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314766) — 5 票 / 6 评论 / 2022-03-24 
+- [Welcomed from the very first day !!](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313600) — 5 票 / 5 评论 / 2022-03-18 
+- [Try 𝘼𝙪𝙩𝙤𝙇𝙂𝘽𝙈 for that crispy score! 🤯](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308848) — 5 票 / 8 评论 / 2022-02-20 
+- [Beware of Leaks](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308755) — 5 票 / 1 评论 / 2022-02-20 
+- [Kaggle in stagnation](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313513) — 5 票 / 23 评论 / 2022-03-17 
+- [Picking an upset](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312562) — 5 票 / 6 评论 / 2022-03-12 
+- [For those in UK: BT Sport does a monthly pass](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313474) — 4 票 / 0 评论 / 2022-03-17 
+- [Quicker updates this year?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313564) — 4 票 / 1 评论 / 2022-03-17 
+- [Scoring errors](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313557) — 4 票 / 8 评论 / 2022-03-17 
+- [Thread: Big list of Papers, Books and other interesting BBall articles](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309098) — 4 票 / 0 评论 / 2022-02-21 
+- [Local CV score, public score, private score?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/310366) — 4 票 / 8 评论 / 2022-03-01 
+- [March Machine Learning Mania 2023](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/383499) — 4 票 / 2 评论 / 2023-02-04 
+- [When will the final data be live?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312415) — 4 票 / 6 评论 / 2022-03-11 
+- [54th place solution aka close but no silver cigar](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317077) — 4 票 / 3 评论 / 2022-04-05 **write-up?**
+- [🥉How is your strategy playing out?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314951) — 4 票 / 14 评论 / 2022-03-25 
+- [Should "TeamID" be used as a training feature?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/310415) — 4 票 / 11 评论 / 2022-03-01 
+- [Total term of team coach](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/311324) — 4 票 / 9 评论 / 2022-03-06 
+- [Which out-of-the-box variable would you want to add to your model next year?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314110) — 4 票 / 0 评论 / 2022-03-21 
+- [The story of a weekend - and how it typifies the comp so far](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/315977) — 4 票 / 2 评论 / 2022-03-30 
+- [High Scoring Solutions of Previous March Machine Learning Mania ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308515) — 4 票 / 0 评论 / 2022-02-19 **write-up?**
+- [Strange Times](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309219) — 3 票 / 5 评论 / 2022-02-22 
+- [March Madness Explained](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/310067) — 3 票 / 3 评论 / 2022-02-27 
+- [An Idea for using Monte-Carlo simulation](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/310591) — 3 票 / 7 评论 / 2022-03-02 
+- [(Problems) Replicating Stage 1 Submission Score](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/311396) — 3 票 / 4 评论 / 2022-03-06 
+- [Finding the extra data](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308764) — 3 票 / 3 评论 / 2022-02-20 
+- [Poweful dataset, links & suggestion](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308631) — 3 票 / 1 评论 / 2022-02-19 
+- [How to Use Player Transfer Information?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312901) — 3 票 / 0 评论 / 2022-03-14 
+- [Score discrepancy mid to late day 2](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313791) — 3 票 / 11 评论 / 2022-03-18 
+- [Me vs Pool Histogram (w/ Live Odds Option)](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313529) — 3 票 / 8 评论 / 2022-03-17 
+- [Senior guards / player age](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312729) — 3 票 / 10 评论 / 2022-03-13 
+- [🏀🏀🏀🏀 'Let's Get Ready to Rumble'!! 🏀🏀🏀🏀](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313514) — 3 票 / 0 评论 / 2022-03-17 
+- [Useful Secondary Features](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/308816) — 2 票 / 0 评论 / 2022-02-20 
+- [Climb up or Drop down today?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314581) — 2 票 / 7 评论 / 2022-03-23 
+- [Postition tracker](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/314988) — 2 票 / 3 评论 / 2022-03-25 
+- [Who is your March Madness team(s)?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309108) — 2 票 / 0 评论 / 2022-02-21 
+- [External Data: DRatings](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313113) — 2 票 / 1 评论 / 2022-03-15 
+- [Modeling Player and Team Performance in Basketball](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309095) — 2 票 / 1 评论 / 2022-02-21 
+- [Any way to see how teams ranked in previous competitions for Stage 1 vs. Stage 2?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309281) — 2 票 / 4 评论 / 2022-02-22 
+- [Tournament locations for 2022](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312777) — 2 票 / 6 评论 / 2022-03-14 
+- [Future feature request for NCAA](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312684) — 2 票 / 0 评论 / 2022-03-13 
+- ['notebook' code can help for get TOP leaderboard??](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312169) — 2 票 / 4 评论 / 2022-03-10 
+- [Notebooks for live scoring](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313915) — 2 票 / 0 评论 / 2022-03-19 
+- [How will the Stage 2 go?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/312863) — 2 票 / 5 评论 / 2022-03-14 
+- [Resourceful Notebook From Previous Competition ](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309793) — 2 票 / 0 评论 / 2022-02-25 
+- [An attempt to avoid data leakage via cross-validation](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/309811) — 2 票 / 0 评论 / 2022-02-25 
+- [Cities for the upcoming tournament games](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/317375) — 2 票 / 5 评论 / 2022-04-06 
+- [Do we have to post what external datasets we have used?](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313436) — 2 票 / 0 评论 / 2022-03-17 
+- [20 days time extended](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/313530) — 2 票 / 5 评论 / 2022-03-17 
+- [Official #3 Solution](https://www.kaggle.com/competitions/mens-march-mania-2022/discussion/318302) — 2 票 / 0 评论 / 2022-04-11 **write-up?**

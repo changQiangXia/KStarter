@@ -1,0 +1,372 @@
+# https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/284975
+
+Topic #284975: 1st Place Solution
+  Author: K_mat
+  Posted: 2021-11-03 02:53:16.958000
+  Votes: 327  Comments: 113
+
+Thanks to organizers for this interesting challenge and congrats everyone who enjoyed it! It’s one of the most fun competitions that I’ve ever experienced. I especially appreciate Rob’s supports before and during competition. I believe he makes this competition such great thing.
+
+It’s really tough challenge. It requires various skills of  detection, registration, optimization and tracking (and debugging). I guess many competitors build complicated pipelines, and  struggled to debug it. I respect those who have completed this competition until the end. Congratulations!
+
+Overview of my solution
+
+My pipeline consists of:
+
+
+
+Detector to find helmets.
+
+Converter to project movies’ images to 2D map (bird’s eye view).
+
+Classifier to classify players into 2(H/V) teams.
+
+Registration of detected players on 2D map to provided tracking data.
+
+Track detected bounding boxes and reassign players.
+
+
+I guess the key difference between my solution and public notebooks is the mapping and registration modules, which gave me the score of approx. 0.8 only by helmets.csv though it works faster than 10 frames/sec on GPU.
+Let me explain each modules briefly.
+
+
+01. Helmet Detector
+
+
+
+2 stage detector to find helmets.
+
+1st detector predicts the average helmets’ size and resize input images(higher resolution) based on it. 
+
+2nd detector detects helmets in high resolution images. I thought detecting fixed-size objects is easier than detecting objects of various sizes.
+
+
+
+02. Image to Map Converter
+
+
+
+CNN(U-Net base) to convert helmets’ bounding boxes in images to 2D map. It predicts 2D location(x and y) looking from camera location.
+
+It outputs the global location from bottleneck and small residuals from decoder.
+
+Attention by helmets bounding-boxes improves accuracy.
+
+
+
+03. Points to Points Registration
+
+
+
+Matching predicted players on 2D map to the provided tracking data.
+
+ICP (Iterative Closest Points) based algorism. Iteratively solve the nearest search and normal equation to get 4 unknown parameters (xy translation, rotation and zoom ratio) by least squares fitting.
+
+Pre/post-processing is applied to remove inappropriate predictions such as sideline players.
+
+
+
+
+04. Team Classifier
+
+
+
+Team information is also important to improve the registration accuracy. X,Y location and team can be used in Points to Points Registration above.
+
+CNN classifier predicts the similarity matrix to show each pair of players belongs to the same team or not.
+
+Using arcface and pseudo-labeling improved the accuracy. Validation score is approx. 97%.
+
+
+
+05. Tracker
+
+
+
+Tracker accumulates the results of player assignment through all frames, and re-assign players to bounding boxes.
+
+I applied simple IoU tracker because it’s fast and enough accurate.
+
+Not only frequency but also tracking confidence and frame distance is used for reassignment. Assignment results far from the target frame should not be weighted.
+
+
+
+06. Ensemble
+
+
+
+WBF(Weighted Box Fusion) is applied in the reassignment phase in the tracker. It ensembles multi-frame and multi-model predictions.
+
+Take the weighted average of the player-assignment matrix of each models, then choose the final assignment by Hungarian algorithm. It works better than normal WBF which ensembles the results of bounding boxes and detection confidences only.
+
+4 detectors’ ensemble for final submission. 
+
+
+
+Scores History
+
+
+
+Final thoughts
+
+Fortunately, I have the experience of the object detection, depth estimation, pointcloud registration and tracking. I think this is the reason why I could win this competition.
+I started learning programming and machine learning at kaggle 3 years ago, and most of my knowledge comes from kaggle. Thanks again to the whole of kaggle community!
+
+Inference code is released
+
+https://www.kaggle.com/kmat2019/nfl-1stplace-inference
+
+Ablation Study (Late Submission)
+
+Comments:
+├─ Rob Mulla (2021-11-03 03:02:58.417000) [+27]
+│  I've only had time to read this once so far, but it is an absolute masterpiece. Great work and a well deserved finish!
+├─ README (2021-11-26 03:04:37.703000) [+9]
+│  I plot Image2Map model architecture based on my understanding.
+  ├─ K_mat (2021-12-01 02:49:47.150000) [+2]
+  │  Thank you. It's very helpful to understand how it works.
+  │  It's interesting for me to know the effect of attention weight visually.
+  │  
+  │  Regarding "Player's RGB Info", I used both the mask of the target ...
+  ├─ README (2021-12-01 09:50:46.453000) [+3]
+  │  Thank you for your appreciation. In "Player's RGB Info", I just want to simplify drawing for sharing with my colleagues, so I forgot this before uploading to here. I think below is correct!
+├─ Carly Fennell (2021-11-03 12:54:29.647000) [+7]
+│  Wow, congratulations @kmat2019, it's been incredible to watch you stay on top of the leader board since the beginning of the competition. Your write up is very well explained. Amazing work!
+  ├─ K_mat (2021-11-03 13:13:30.950000) [+3]
+  │  Thank you for hosting! It's really fun competition!
+├─ Pascal Pfeiffer (2021-11-03 08:31:18.247000) [+7]
+│  Beautiful and elegant solution @kmat2019 
+│  A well deserved win. Seeing your strong CV, we had no worries that you would also get the top rank on private LB. 
+│  
+│  While we did think about the team assig...
+  ├─ K_mat (2021-11-03 12:59:40.603000) [+5]
+  │  Thank you @ilu000 
+  │  Congrats on the gold!
+  │  
+  │  You're absolutely right. 
+  │  Lots of players are close to each other, so it's difficult to distinguish them without team labels.
+  │  Team labels improves the scor...
+├─ Chris Deotte (2021-11-03 03:02:43.943000) [+6]
+│  Wow incredible! Great job!
+├─ Camaro (2021-11-03 03:15:33.477000) [+6]
+│  So impressive, you definitely deserve for the winning. I need to read this many times to understand correctly.
+│  Congratulations!
+├─ RIYADH HAITHAM (2021-11-16 17:46:24.383000) [+3]
+│  great work 
+│  Just one quastion in camera_ratios_head function why did you select "tanh" as activation function rather than "relu" and  why did you take exp to the output of each dense layer is it sp...
+  ├─ K_mat (2021-11-17 03:37:59.847000) [+3]
+  │  I just want to limit the value between exp(0) to exp(3) for scale_ratio and exp(0.4) to exp(2.4) for aspect_ratio. So the following might work
+  │  scale_ratio = clip_by_value( linear_activation(x), min...
+  ├─ RIYADH HAITHAM (2021-11-17 03:46:43.350000) [+0]
+  │  Oh i see thanks
+  ├─ RIYADH HAITHAM (2021-11-18 11:40:16.657000) [+1]
+  │  one more question if you don't mind sir
+  │  why did you multiply xy_offsets matrix with epoch_dependent_value i don't see any relation between the number of training epochs and xy_offsets.
+  │  
+  │  xy_offsets ...
+  ├─ K_mat (2021-11-18 12:09:06.857000) [+3]
+  │  Good question.
+  │  Delta map(xy_offsets) starts training from approx. 5 epoch. Only global map is trained in first 5 epochs. So epoch_dependent_value is 0.0 if epoch&lt;5, otherwise 1.0.
+  │  
+  │  Actually, thi...
+  ├─ RIYADH HAITHAM (2021-11-18 12:23:01.170000) [+1]
+  │  wow smart way for training this model is very cool, but it is too huge sometimes I get lost in it Sorry if I ask too much😅
+  ├─ README (2021-11-26 02:36:12.560000) [+0]
+  │  Hello, @kmat2019 , i think the value for scale_ratio is between exp(-3) to exp(3) and for aspect_ratio is between exp(-1.6) to exp(2.4) since the range of "tanh" is -1 to 1. Correct me if I'm wrong.
+├─ Yueqi Qian (2021-11-04 17:03:23.307000) [+3]
+│  Really really incredible!
+│  And are you going to share the training code? Especially the Image2Map part.
+  ├─ K_mat (2021-11-05 11:25:21.867000) [+3]
+  │  Thank you. 
+  │  
+  │  I haven't decided yet. If you want to see the loss functions, they are defined in model.py in my dataset released already.
+├─ Amrit Sahu_7 (2021-11-03 12:56:38.457000) [+3]
+│  @kmat2019 Where did you train the models and how long it took for each components.Were kaggle kernel gpus sufficient
+  ├─ K_mat (2021-11-03 13:24:56.687000) [+9]
+  │  Models are trained in colab and kaggle notebook except final ensemble models. Every model takes about 5hr. High resolution detector is the largest one. It takes about 7hr. So I didn't use all datas...
+├─ HatterSpec (2021-11-14 02:16:59.310000) [+1]
+│  Awesome!!!
+├─ Devansh Chowdhury (2021-11-13 07:59:24.483000) [+1]
+│  I am trying to recreate the kernel and methods used here to learn more. Is anyone interested in partnering up ?
+├─ Aryan Tuteja (2021-11-13 06:36:59.690000) [+1]
+│  Awesome.!
+├─ Ayush Singh (2021-11-12 15:52:05.293000) [+1]
+│  Hats Off, Kudos,  
+│  Very very thoughtful and amazing solution. 
+│  Congratulations :)
+├─ Rajdeep Uzumaki (2021-11-12 11:11:59.840000) [+1]
+│  Thanks a lot for sharing this. It was very informative. I am trying to learn through participating in completion as well.
+├─ Rajdeep Uzumaki (2021-11-12 11:11:07.357000) [+1]
+│  Thank you so much for sharing. I need to learn a lot before I could comprehend this.
+├─ JJGG (2021-11-12 00:44:06.300000) [+1]
+│  Thank you for sharing. But, i can not see images… can you help me?
+├─ Shubha Hegde (2021-11-11 18:28:59.453000) [+1]
+│  Thank You for sharing! Loved the code :)
+├─ Tobias Weiß (2021-11-11 08:48:17.093000) [+1]
+│  Amazing work there! Thanks for sharing. 😊
+├─ Ayub (2021-11-10 17:03:36.323000) [+1]
+│  Congratulations and thanks for the insight
+├─ Tey Kai Cong (2021-11-10 14:13:41.183000) [+1]
+│  Thanks for sharing! Really helpful for me
+├─ Nusa Yudiskara (2021-11-10 12:48:38.500000) [+1]
+│  Congratulations!!! Thank you for sharing!
+├─ Haydara (2021-11-09 03:20:46.550000) [+1]
+│  Congratulations on winning the competition! And thank you for the very illustrative description of your solution. I truly enjoyed reading it.
+├─ I. HASSE (2021-11-07 21:57:57.390000) [+1]
+│  I think the quality is good enough to get a degree in data science! Thank you for sharing!
+├─ Tejal Bangali (2021-11-07 17:53:52.783000) [+1]
+│  Awesome🎉😇
+├─ Old Monk (2021-11-07 07:08:37.450000) [+1]
+│  Great write up and congrats on your position @kmat2019, very well deserved!
+├─ Alex Wang (2021-11-05 18:26:56.450000) [+1]
+│  Congratulations, this was a great read. Thanks for the detailed explanation.
+├─ Kha Vo (2021-11-05 15:40:55.447000) [+1]
+│  Incredible
+├─ Siyu Wang (2021-11-05 09:10:07.047000) [+1]
+│  Thanks for sharing this masterpiece ，this is my first time trying to acomplish a MOT projection, and it is really hard to finish the mapping part for me.  I will read and learn your code very caref...
+├─ Kang Luo (2021-11-05 08:06:05.517000) [+1]
+│  Amazing solution! Thank you for sharing!
+├─ [deleted] (2021-11-04 12:35:11.273000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-04 07:54:37.310000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-04 07:52:42.660000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-04 05:39:05.643000) [+1]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 07:26:00.020000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 08:27:03.610000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 14:21:07.853000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-04 03:26:15.303000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 21:33:05.563000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 21:07:45.577000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 19:14:53.077000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 17:09:49.077000) [+1]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 08:56:46.277000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 09:05:52.213000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 09:25:21.340000) [+3]
+  │  [deleted]
+├─ [deleted] (2021-11-03 15:23:41.180000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 15:00:35.050000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 14:16:35.660000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 13:10:36.787000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 10:57:26.093000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 09:33:52.737000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 09:32:30.543000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 06:51:08.940000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 06:32:17.513000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 03:58:26.870000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 03:30:29.083000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 03:29:09.160000) [+1]
+│  [deleted]
+  ├─ [deleted] (2021-11-03 08:20:57.177000) [+4]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 03:30:35.363000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-11-03 03:27:04.287000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 03:25:51.070000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 03:12:40.027000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-09 11:40:18.633000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-11 03:28:58.610000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-11-08 17:26:47.527000) [+2]
+│  [deleted]
+├─ [deleted] (2021-11-07 13:56:38.943000) [+2]
+│  [deleted]
+├─ [deleted] (2021-11-05 15:10:05.487000) [+2]
+│  [deleted]
+├─ [deleted] (2021-11-05 08:00:15.530000) [+2]
+│  [deleted]
+├─ [deleted] (2021-11-03 17:21:46.377000) [+2]
+│  [deleted]
+├─ [deleted] (2021-11-03 14:02:07.100000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 03:24:43.580000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2021-11-09 07:24:21.367000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-03 11:23:59.827000) [+2]
+│  [deleted]
+├─ [deleted] (2021-11-03 09:21:45.710000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-03 13:10:32.223000) [+3]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 02:04:05.110000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 04:20:12.007000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 04:33:46.987000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 08:30:56.970000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 08:35:36.970000) [+8]
+  │  [deleted]
+  ├─ [deleted] (2021-11-16 08:21:15.073000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-11-16 08:31:57.653000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-11-17 03:19:29.770000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-11-03 04:17:17.750000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-03 08:28:29.967000) [+4]
+  │  [deleted]
+├─ [deleted] (2023-01-06 07:39:12.720000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-15 07:24:03.360000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-23 14:15:42.550000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-04 08:04:27.017000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-04 02:58:42.227000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-31 17:39:19.040000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-11 08:07:39.620000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-10 16:19:46.923000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-10 15:15:23.997000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-09 22:21:18.377000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-09 17:31:44.910000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-09 00:21:12.523000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-06 02:09:25.840000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-05 11:28:32.133000) [+1]
+│  [deleted]
+├─ [deleted] (2021-11-03 21:12:35.460000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-16 20:41:03.297000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-14 18:11:29.053000) [+0]
+│  [deleted]

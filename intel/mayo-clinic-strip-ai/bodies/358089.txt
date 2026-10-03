@@ -1,0 +1,140 @@
+# https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358089
+
+Topic #358089: 2nd place solution - EfficientNetB0+augmentations+smart tiling
+  Author: Ilia los
+  Posted: 2022-10-06 15:10:02.482000
+  Votes: 25  Comments: 14
+
+Thanks to Mayo Clinic for preparing this competition and to Kaggle for hosting it. And I'm happy that it was hosted as a code competition, because from my opinion it helps a lot to vanish the gap between kaggle competitions and real life business problems. Also I would like to congratulate guys from the first place because their solution seems much more complex and interesting than mine. 
+At the same time sorry to see so low scores on the top comparing with random solution. I'm afraid that this competition might not help guys from Mayo to solve this very important problem and this is really sad.
+Looking at the private leaderboard it seems like it was all about proper validation and total ignoring public scores (and a bit of luck of course). So let me quickly describe my solution.
+
+Data preparation
+For training I used all train images except 5 too-blurry. And also all other image with label 'Other'. I mixed them with LAA images in order to increase the amount of samples for that class, because in general I just wanted to distinguish CE from all other types.
+Process step by step:
+
+
+
+Resize images by factor 24. I also tried 8, 16, 32, 48, but 24 showed the best final metric;
+
+Use line-to-line pixelwise difference to calc for each 28x28 block does it have blood or background;
+
+For each 224x224 block with stride 28 check does it have blood or background;
+
+Deduplicate tiles: remove all blood tiles that intersect by more than half;
+
+Get random 20 if we have more tiles than that;
+
+No color normalization. I've tried several approaches, but all of them worked worse than strong color jitter augmentation.
+
+
+Validation process
+First of all I quickly trained a small model on the same data to classify tiles by center_id. This models easily showed above-random performance (sorry, I lost exact metrics) and it was a signal for me that model potentially might overfits on similar clinics. Also here competition host mentioned that data was collected from 18 institutes, but in train data we have only 11. So either test has 7 other clinics or it was about data from other folder somehow. Anyway I decided to use cross-validation based on clinics. In order to handle "small-size" clinics (small test size might leads to unstable metric and potential overfit) I joined them into groups. So each group has at least 90 examples.
+(11,), (4,), (7,), (1, 5,), (10, 3), (6, 2, 8, 9,)
+
+Model training
+During my experiments I had a lot of issues with overfitting and stability. So I tried to choose as simple approach as possible.
+I used efficientNetB0 pretrained on imageNet as a backbone and just one FC layer as a head. Also backbone was frozen during the whole training. Model predicts only one probability "is it CE type". So basically I trained only 513 parameters. 
+In order to stratify training dataset I used upsampling and also I found it useful to upsample it 4 more times (probably, it only helps with bigger batch size). Also I multiplied test dataset 20 times: if some image has 20 tiles then all of them will be used in test once, if less then some tiles from that image could be presented more than once.
+Other bullet points:
+
+
+
+Ensemble of 6 models as a final model (one model from each CV fold);
+
+Bigger batch helps: 64 was my final choice;
+
+Learning rate is important;
+
+Learning process was still a bit unstable so I trained 3 models for each CV fold and got the best one;
+
+BCELoss as a loss function;
+
+Competition metric with (0.5, 0.5) weights as a main and the only metric;
+
+If image has no tiles (for example, too small or too-blurry) then replace their final score with 0.5.
+
+
+Data augmentations
+For my approach it was the most important part so I decided to write about it in a separate block.
+I used 3 types of augmentations during the training:
+
+
+
+Random flips - obvious;
+
+Random adjust sharpness - by some reason helped a lot, but blur doesn't at the same time;
+
+Strong color jitter (brightness=0.2, saturation=0.5, hue=0.5) - the most important one, because helped to fix color difference problem.
+And also used 2 and 3 during the test. I used seeds everywhere in order to make the process reproducible. 
+
+
+Results
+Competition target metric on my CV: 0.6373838583629989
+Public LB metric: 0.70822
+Private LB metric: 0.66421
+
+What didn't work for me
+
+
+
+MIL;
+
+More complex models;
+
+Color normalization;
+
+Final predictions clipping;
+
+Grayscale images;
+
+Gram matrices from VGG19 (see style transfer model).
+
+
+Code is available on my GitHub now: https://github.com/IlyaLos/mayo-clinic-strip-ai
+Notebooks (just run one by one): 
+https://www.kaggle.com/code/ilyalos/2nd-place-solution-tiles-generation
+https://www.kaggle.com/code/ilyalos/2nd-place-solution-train
+https://www.kaggle.com/code/ilyalos/2nd-place-solution-inference
+
+Comments:
+├─ Marília Prata (2022-10-27 15:06:20.343000) [+1]
+│  Hi Ilya Ios,
+│  
+│  Congratulations for your medal/2nd place.  
+│  Thanks for sharing what worked and what didn't work for you.  And mostly for sharing your GitHub code/link. 
+│  
+│  Best regards, 
+│  Marília
+  ├─ Ilia los (2022-11-01 12:03:15.707000) [+2]
+  │  Thank you @mpwolke !
+  │  Hope you found some of my ideas useful.
+├─ ForcewithMe (2022-10-08 01:56:32.370000) [+1]
+│  Hi @ilyalos , congrats for you solo gold. Did you average the score of all the patches of each tissues to get the final probability?
+  ├─ Ilia los (2022-10-08 05:30:57.887000) [+1]
+  │  thank you, @forcewithme 
+  │  Yes, I had 6-folds CV and used 6-models ensemble for the final prediction. 
+  │  My logic about it: each model was validated on its own set of centers, so they are different som...
+  ├─ ForcewithMe (2022-10-08 06:08:36.583000) [+1]
+  │  Hi @ilyalos . Thank you for your answer. I mean, you get 20 patches for each tissues(wsl), then how did you get the probability for each wsl? I guess you average the score of the 20 patches of each...
+  ├─ Ilia los (2022-10-08 10:36:57.893000) [+0]
+  │  oh, sorry, I missed your point. Yes, you're right, I just got an average of all probabilities.
+├─ gray98 (2022-10-31 12:32:38.593000) [+0]
+│  Thanks for your great sharing. I do not know what is Final predictions clipping. Does this refer to ensemble modeling?
+  ├─ Ilia los (2022-11-01 12:01:49.463000) [+2]
+  │  In general if you have a model that predicts some probability then you might want to clip that probability in some ranges. For example, if probability is from range [0.4, 0.6] you might want to cli...
+  ├─ gray98 (2022-11-01 15:21:23.650000) [+1]
+  │  Thanks a lot! I understand it.
+├─ tdiceman (2022-10-06 15:41:39.913000) [+0]
+│  Great work @ilyalos, congrats for your position. I also used EffnetB0, but I am amazed that frozen backbone worked so well here. Thanks for the details.
+  ├─ Ilia los (2022-10-06 15:48:43.070000) [+2]
+  │  Thanks, @icemantd and congrats with your 7th place too :)
+  │  yes, without freezing (and even with unfreezing only few last layers) learning process was really unstable in my case. I even tried to unfr...
+  ├─ tdiceman (2022-10-06 15:53:13.373000) [+1]
+  │  Really good to know these details. And thanks :)
+  ├─ cosmosaa (2022-10-07 13:08:01.857000) [+1]
+  │  Very weird that imagenet features extracted from images of sharks, frogs, spiders, etc can yield good performance on whole slide images of biological tissue. I don't understand how this works. 
+  │  
+  │  An...
+  ├─ Ilia los (2022-10-07 13:35:49.193000) [+1]
+  │  In general these features might provide a lot of useful information for various number of different tasks. But you're right and blood clot images don't look like the best area anyway. Of course, wi...

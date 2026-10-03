@@ -1,0 +1,126 @@
+<p>First of all, thanks to NBME host and Kaggle for this challenging competition. I really liked that we got 10x more unlabelled data than labelled data to try unsupervised or semi supervised techniques. Without that the competition would have been way less interesting.</p>
+<p>Let me describe my solution. Most of the code can be seen in my inference notebook. For some reason Kaggle doesn't want me to put the link here as I shared it in another post. You can access it from the leaderboard. Then look for the latest version where I shared all checkpoints in pubic datasets.</p>
+<p><strong>Data processing</strong></p>
+<p>I quickly saw that annotations were inconsistent, as most of the participants did. My guess is that annotators sometimes only identified some of the occurrence of a given feature, and not all of them. This can be seen with Alderall (spelling?) for instance. While fixing these annotations would make much sense in a real life project, it is probably a bad idea here. Indeed, there is no reason to believe that test annotations are not as inconsistent as training data annotations.</p>
+<p>I further made the hypothesis that annotators were more likely to miss repeated annotations than first occurrence. It means that the annotations have a sequence dependency, and that using a RNN at some point could make sense.</p>
+<p>Another thing I noticed is that using uncased modeling would be better as some text were in uppercase, other in lower case, without any semantic significance for the difference. I therefore decided to use lower case text.</p>
+<p>Medical abbreviations were more of a headache. I contemplated expanding the most common ones (as shared in the competition forum) but this could lead to complex token offset mapping.  I decided to only map most common cases to each other. My preprocessing text function is this:</p>
+<pre><code>def clean_abbrev(text):
+    text = text.replace('FHx', 'FH ')
+    text = text.replace('FHX', 'FH ')
+    text = text.replace('PMHx', 'PMH ')
+    text = text.replace('PMHX', 'PMH ')
+    text = text.replace('SHx', 'SH ')
+    text = text.replace('SHX', 'SH ')
+    text = text.lower()
+    return text
+</code></pre>
+<p>The other data analysis I did was to check where annotation boundary falls within a token span. When this happens there is no way a token based model can correctly learn how to predict these boundaries correctly. I did this for roberta, deberta and debertav2 tokenizers. There are 2 cases that cover most of cases:</p>
+<ul>
+<li>spaces before some non space text</li>
+<li>'\r\n' before some text<br>
+I therefore created a post processing function that expanded on <a href="https://www.kaggle.com/theoviel" target="_blank">@theoviel</a> space removal function:</li>
+</ul>
+<pre><code>spaces = ' \n\r'
+
+def post_process_spaces(pred, text):
+    text = text[:len(pred)]
+    pred = pred[:len(text)]
+    if text[0] in spaces:
+        pred[0] = 0
+    if text[-1] in spaces:
+        pred[-1] = 0
+
+    for i in range(1, len(text) - 1):
+        if text[i] in spaces:
+            if pred[i] and not pred[i - 1]:  # space before
+                pred[i] = 0
+
+            if pred[i] and not pred[i + 1]:  # space after
+                pred[i] = 0
+
+            if pred[i - 1] and pred[i + 1]:
+                pred[i] = 1
+
+    return pred
+</code></pre>
+<p>There is a third case that covers most of the remaining ones:</p>
+<ul>
+<li>'yom' and 'yof' sub strings meaning year old female, or year old male. The span boundary is right after 'yo' but all tokenizers create a token for 'of', and roberta tokenizer creates a token for 'om'. In both cases the boundary is inside the 'of' or 'om' token.</li>
+</ul>
+<p>I post processed tokens ‘om’ and ‘on’ depending on the feature. If the feature is about gender then I only keep the second character. If the feature is about age, then I only keep the first character. Here s the code I used.</p>
+<pre><code>def pred_to_chars(token_type_logits, len_token, max_token, offset_mapping, text, feature_num):
+    token_type_logits = token_type_logits[:len_token]
+    offset_mapping = offset_mapping[:len_token]
+    char_preds = np.ones(len(text)) * -1e10
+    for i, (start,end) in enumerate(offset_mapping):
+        if text[start:end] == 'of' and start &gt; 0 and text[start-1:end] == 'yof':
+            if feature_num in feature_female:
+                char_preds[end-1:end] = 1
+            elif feature_num in feature_year:
+                char_preds[start:start+1] = token_type_logits[i-1]
+            else:
+                char_preds[start:end] = token_type_logits[i]
+        elif text[start:end] == 'om' and start &gt; 0 and text[start-1:end] == 'yom':
+            if feature_num in feature_male:
+                char_preds[end-1:end] = 1
+            elif feature_num in feature_year:
+                char_preds[start:start+1] = token_type_logits[i-1]
+            else:
+                char_preds[start:end] = token_type_logits[i]
+        else:
+            char_preds[start:end] = token_type_logits[i]
+    return (char_preds, text)
+</code></pre>
+<p>The one thing I didn't use in my select submissions is to handle line feed via a new token.  I did <a href="https://www.kaggle.com/code/cpmpml/sub-nbm-315/settings?scriptVersionId=93957412" target="_blank">only one sub</a> with it. It is a 4 fold model that scores 0.894 on private LB! I give more details about it <a href="https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/322812" target="_blank">here</a>.</p>
+<p><strong>Model architecture</strong></p>
+<p>I mostly used <code>deberta-large</code> and <code>deberta-v3-large</code> backbones.  </p>
+<p>I also tried <code>deberta-v2-xlarge</code> and <code>roberta-large</code> backbones, but they were weaker. My best selected sub did not use them.</p>
+<p>Training data is rather small and NLP models are large transformers. This is a recipe for training instability or for overfitting, or both. I added various regularization tricks.  </p>
+<ul>
+<li>First, using classification heads with 5 levels of dropout as shared by <a href="https://www.kaggle.com/abhishek" target="_blank">@abhishek</a> in Feedback competition. </li>
+<li>Second, using a linear combination of all hidden states with a dropout on the linear coefficients. The dropout forces the model heads to learn from all hidden states and not just the last one.</li>
+<li>Third, using a primary head for token classification together with two auxiliary heads for predicting annotation span boundaries (one head for span starts and one head for span ends). Using the span boundary predictions was not so bad, but was about 0.01 - 0.02 worse than using the token classification head.</li>
+</ul>
+<p>As discussed above, I thought that annotations depend on the order in which they appear in the text. I therefore inserted a RNN after the backbone last hidden state and before the three classification heads.  I used a single layer bidirectional RNN, I used either GRU or LSTM, which gives me two variant for the same backbone.</p>
+<p><strong>Model training</strong></p>
+<p>The most important piece I think was to pretrain my backbones on the Squadv2 dataset. Why Squadv2? Because the input to the model is the same as in qa: a question (the feature text), and a context (the patient history). The annotations are all answers to the question.</p>
+<p>I tried some pretrained models but found that pretraining them myself gave better results. I used Huggingface <code>run_qa.py</code> script. I modified the script to use DebertaV2TokenizerFast as shared by <a href="https://www.kaggle.com/nbroad" target="_blank">@nbroad</a> in his dataset. I saved checkpoints at end of first 3 epochs and picked the one that led to best result downstream. </p>
+<p>Before training my models I loaded the backbone weights form the Squadv2 ones.</p>
+<p>I trained my models with AdamW optimizer together with a custom scheduler similar to cosine with warmup.</p>
+<p>As said above, I was afraid of overfitting. Therefore I use token dropout, i.e. replacing 10% of input tokens by a mask token, as in MLM pretraining. I did this only for the pn history text and not features. When using dropout for features CV score dropped, probably because some feature text are very small and could be entirely masked.</p>
+<p>I then used pseudo labeling, using the model to predict annotations for unlabelled data. I used the token class probabilities, i.e.I did not round them. I found that focal loss was better than BCE and wondered why. Then I thought it was because focal loss down weights the pseudo labels that were close to 0.5. I then decided to try a custom loss that ignores samples with pseudo label 0.5 and increase sample weights until 1 when the label is 0 or 1. It is equivalent to BCE when labels are 0 or 1:</p>
+<pre><code>def criterion(preds, targets):
+    targets2 = torch.where(targets &gt;= 0.5, 2*targets -1, 1 - 2*targets)
+    preds2 = torch.where(targets &gt;= 0.5, preds, -preds)
+    loss = - targets2 * F.logsigmoid(preds2) 
+   return loss
+</code></pre>
+<p>I did one round of pseudo labeling. A second run did not improve CV.</p>
+<p>In general I only kept a new model if both its CV score and its public LB score improved. This seems to have been a good practice, but it led me to ignore line feed token unfortunately.</p>
+<p>I trained my models using 4 folds. At the end I also trained selected models on full train data with 4 different seeds.</p>
+<p>Using the above I could get a public LB score of 0.893 and a private LB score of 0.894. I selected my best LB submission as final submission.</p>
+<p><strong>Adversarial training</strong></p>
+<p>For my second submission I wanted something quite different, to mitigate risk of LB overfitting. One of Feedback competition top teams shared that they used adversarial training. I decided to deep dive on it and discovered a whole new world.  I experimented lots of variants: fgm, vat, sift, smart, etc, and selected my best sub out of it. Although its CV score was quite higher than the one I selected above, both its public LB score and private LB score were lower. It seems that my way of doing pseudo labeling was better. It may be that being quite new to these techniques I didn't tune them correctly. I will try them in future competitions for sure.</p>
+<p>Main issue of these methods is that they are slower than pseudo labeling as they require multi forward passes per sample.</p>
+<p>For those interested here are some references I recommend:</p>
+<p>VAT: <br>
+<a href="https://arxiv.org/pdf/1704.03976v2.pdf" target="_blank">https://arxiv.org/pdf/1704.03976v2.pdf</a><br>
+<a href="https://arxiv.org/pdf/1605.07725.pdf" target="_blank">https://arxiv.org/pdf/1605.07725.pdf</a><br>
+<a href="https://arxiv.org/pdf/1507.00677.pdf" target="_blank">https://arxiv.org/pdf/1507.00677.pdf</a></p>
+<p>SMART:<br>
+<a href="https://arxiv.org/abs/1911.03437" target="_blank">https://arxiv.org/abs/1911.03437</a></p>
+<p>AWP:<br>
+ <a href="https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook" target="_blank">https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook</a></p>
+<p>FGM:<br>
+<a href="https://arxiv.org/abs/1412.6572" target="_blank">https://arxiv.org/abs/1412.6572</a><br>
+<a href="https://www.kaggle.com/c/tweet-sentiment-extraction/discussion/143764" target="_blank">https://www.kaggle.com/c/tweet-sentiment-extraction/discussion/143764</a> </p>
+<p>SIFT:<br>
+ <a href="https://github.com/microsoft/DeBERTa/tree/master/DeBERTa/sift" target="_blank">https://github.com/microsoft/DeBERTa/tree/master/DeBERTa/sift</a></p>
+<p><strong>Ensembling and final prediction</strong></p>
+<p>I used a weighted combination of token type probabilities. Coefficients were found by a crude grid search with CV score. </p>
+<p>I used the fold models to find the weights then applied same weights to the models trained on the full data. I later tuned some overweight for full data models using the public LB. I did this for only one of my two selected subs.</p>
+<p>Probabilities were thresholded same way for all cases. I was afraid of overfitting if using different thresholds per cases. Once thresholded I applied the post processing described above.</p>
+<p>That's it! I hope that some of the above will be useful for future competitions.</p>
+<p><strong>Edit:</strong> post comp submission shows that using lf token adds lots of noise in LB score. Not using it was probably a good thing.</p>
+<p><strong>Edit2.</strong> Maybe lf token did not work for me because I didn't pretrain using MLM on all notes, hence my lf token embedding was not trained properly.</p>

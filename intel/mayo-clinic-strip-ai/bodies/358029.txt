@@ -1,0 +1,137 @@
+# https://www.kaggle.com/competitions/mayo-clinic-strip-ai/discussion/358029
+
+Topic #358029: 5th Place Solution
+  Author: Theo Viel
+  Posted: 2022-10-06 11:26:13.159000
+  Votes: 33  Comments: 11
+
+Thanks everyone for the competition, congratz to the winners &amp; kudos to the learners. 
+
+Although this one is a controversial one because most people couldn't even beat the sample submission, I still believe it was an alright competition. The key is to understand that there is not a lot of signal, and that the competition metric is not friendly with overconfident models, more on that later.
+
+Because of the nature of the competition (not a lot of signal, and basically no public LB), I decided not too invest too much time on it, so I am very happy with the result !
+
+Data
+
+
+
+Color normalization : 
+
+
+Detect the background color
+
+Normalize all the image by  𝑟 = 𝑏𝑎𝑐𝑘𝑔𝑟𝑜𝑢𝑛𝑑_𝑐𝑜𝑙𝑜𝑟/(255,   255,  255)
+
+Simple Approach : 
+
+
+Remove all white chunks from the image 
+
+Resize to 1024x1024
+
+Advanced Approach (cf figure below): 
+
+
+Detect duplicated areas in the image
+
+Keep only one of them
+
+Resize to have the longest edge to 1024, preserving aspect ratio
+
+
+
+
+You can see some examples here.
+
+Models
+
+
+
+3 Small Models  -  CV AUC 0.684
+
+
+Resnet10t – AUC 0.661
+
+EfficientNet-b0 – AUC 0.671
+
+EfficientNet-b0 using simple approach images - AUC 0.662
+
+Training
+
+
+Image size : 1024x1024
+
+Ranger + lr=5e-4 (a, b)   - Adam + lr = 1e-4 (c)
+
+Class-balanced BCE to mimic the metric + Label smoothing
+
+10 epochs, bs=16
+
+Flip &amp; color augmentations
+
+Inference
+
+
+4 flips TTA
+
+Simple average
+
+Scaling !
+
+
+Adapting to the Competition Metric
+
+
+
+
+
+The logloss heavily penalizes confident mistakes, comparatively to the reward for confident guesses
+
+
+Since our models have low AUCs, we want to avoid the “Heavy Penalty” zone
+
+My ensemble already outputs most of its scores in the “safe” range possibly because  my models were designed to underfit (Label smoothing, small model size, short training with low LRs)
+
+
+Ensemble CV : 0.655
+
+You can force your model to be safer ! (cf this post)
+
+
+Linearly Rescale to the 0.15 / 0.85 range
+
+Clip to 0.25 / 0.75
+
+Final CV : 0.640 - Public LB 0.733 - Private LB 0.666
+
+
+Thanks for reading :)
+
+Comments:
+├─ KKY (2022-10-06 14:15:19.917000) [+3]
+│  Congrats solo gold!!  The data pipeline is amazing,  did you try some heavy models?
+  ├─ Theo Viel (2022-10-06 14:42:14.760000) [+3]
+  │  Thanks ! 
+  │  I tried effnets up to b5, resnet 18, 24 and 50, but the smallest ones worked better
+  ├─ Gunes Evitan (2022-10-06 14:56:47.837000) [+3]
+  │  Yeah amazing pre-processing and post-processing. Can you try DenseNet variations with your pipeline? They were my best models in both this competition and RSNA-MICCAI Brain Tumor Radiogenomic Class...
+  ├─ Theo Viel (2022-10-06 15:25:08.600000) [+1]
+  │  Densenet scores about 0.01/0.02 lower on AUC so it's not really good on my pipeline 
+  │  
+  │  Other interesting models (but not good enough to help my ensemble) were convnext-pico, convnext-atto, efficient...
+├─ khyeh (2022-10-06 14:12:52.383000) [+3]
+│  Congrats! I like the postprocessing part, it seems like a very good boost. Also it is amazing to have such a good cv with efb0.
+  ├─ Theo Viel (2022-10-06 14:42:48.747000) [+2]
+  │  Thanks, and congratulations again on the win !
+├─ Will (2022-10-09 03:36:05.373000) [+1]
+│  Congrats on your success!
+├─ Darien Schettler (2022-10-07 12:14:21.950000) [+1]
+│  This is wonderful and the approach is intuitive and powerful. Well earned!
+├─ Manish Tripathi (2022-10-07 06:41:44.807000) [+1]
+│  Congratulations @theoviel thanks for putting out your solution here. How did you shrink the 395 GB of image data, did you work with the data on Kaggle only or did you take it on computer to work on...
+  ├─ Theo Viel (2022-10-07 08:04:47.543000) [+1]
+  │  I worked on my local machine :)
+  │  
+  │  My preprocessing code is available here, I basically run it once and then work with the 1024 images.
+    ├─ Manish Tripathi (2023-03-11 06:35:19.983000) [+0]
+    │  Thank a lot

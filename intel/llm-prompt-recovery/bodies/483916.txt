@@ -1,0 +1,313 @@
+# https://www.kaggle.com/competitions/llm-prompt-recovery/discussion/483916
+
+Topic #483916: Subjective Competition Learnings (or a list of problems I encountered and possible solutions)
+  Author: Darien Schettler
+  Posted: 2024-03-14 17:53:44.936000
+  Votes: 105  Comments: 29
+
+Hi all, here we go:
+
+
+
+PROBLEM 1: The rewrite prompts for the synthetic dataset can be wonky.
+
+
+
+When generating your synthetic dataset, the generated rewrite prompts sometimes don't make sense.
+
+For Example:
+
+
+"Rewrite this as a brief to be briefed"
+
+"Transform this text into a powerpoint presentation"
+
+etc
+
+It's also hard to know if the rewrite prompts should be short, long, descriptive, etc…
+
+
+POTENTIAL SOLUTION
+
+
+
+I wouldn't rely on complete automated rewrite prompt generation.
+
+Identify common elements in rewrite prompts and stick with those try to minimize unnecessary variability. The model needs to learn the semantic part AFTER this but it can also learn to - essentially - perform categorical classification on things like the type of text (every little bit helps).
+
+
+Identify common roots (rewrite, rephrase, translate, etc.)
+
+Identify common words for text (text, essay, blog post, paragraph, paper, etc.)
+
+Identify other commonalities you think could be categorically predicted.
+
+As for the generation of these prompts… 
+
+
+I would either write them yourself, or generate them with a high quality LLM and then do your best to review as many as possible.
+
+Because the synthetic dataset can be a combination of N permutations of original texts with rewrite prompts, the size of the unique rewrite prompt set probably does not have to be that large (1-2 thousand examples with 10-20 thousand rewrite texts would yield ~20-25 Million Examples) 
+
+
+
+
+PROBLEM 2: Configuring the model to generate the synthetic datasets rewritten text is hard.\
+
+
+
+Different implementations of Gemma7B have differences that are sometimes hard to catch.
+
+Ideally, you would want to match the hyperparameters used to generate the test set… but we don't know those.
+
+
+POTENTIAL SOLUTION
+
+
+
+Use the exact model that the hosts said they used --&gt; gemma-insruct-7b-quant Pytorch model (see the data page).
+
+You should also endeavour to use the same prompt templates ([|], [user|model], [end|start]_of_turn, etc.)… this is not always straightforward given that the different implementations handle doing this for you in different ways.
+
+Use a greedy sampler.
+
+
+We do this because if you set temperature higher (topk, whatever)… it is still possible to generate the greedy (topk=1 or temperature=0) decoded text…
+
+But if we set the sampler to something more non-deterministic, and the hosts themselves used a greedy sampler, we are generating examples that fall outside of the possible distribution…
+
+In other words, if we knew which setup to use… we would use that… but it is safer (in my opinion) to use greedy sampling
+
+Read up about the implementation you are using and do your best to follow what the paper/google says they did. 
+
+Likely, the hosts followed the public tutorials on how to generate data (i.e. it's not like a deepmind engineer responsible for the underlying model generated the outputs) and as such if you do your best to follow a similar path you should align with their strategy (hopefully… fingers crossed…)
+
+
+
+
+PROBLEM 3: Your synthetic (generated) rewritten texts are not great… sometimes.
+
+
+
+If you review some generated examples, you may notice that the model does a bad job rewriting the text. For the sake of simplicity let list some problems:
+
+
+Annoying prefix statement: 'Sure, here is the text rewritten:\n\n', 'The text you requested is shown below:\n\n', etc
+
+Missing the point. Sometimes the model just does a bad job rewriting the text. You ask it to do X and for some reason it does Y. I've seen this a lot with more nuanced requests, negative requests (it doesn't like being mean), requests are too generic or specific, or transformation requests that are too difficult.
+
+The model will say no. Sometimes the model just refuses to do it and will say so. This can be due to it being impossible/very-difficult/missing-information, but it can also be for other reasons (maybe safety, etc.)
+
+The model fails to stop generating. This might just be me, but this definitely happens sometimes.
+
+
+POTENTIAL SOLUTION
+
+
+
+OPTION 1: Use an auxiliary model to perform reflection on the generated prompts to remove ones that don't make sense.
+
+OPTION 2: Assume the hosts faced similar issues so … just leave them in?
+
+OPTION 3: Use rule/pattern based tools to remove/edit/filter the rewritten texts (i.e. remove the prefix statements, get rid of too long/short texts, etc.)
+
+OPTION 4: ???
+
+
+
+
+PROBLEM 4: Your collection of synthetic rewrite prompts (and the test site ground truth rewrite prompts) might be impossible or detrimental to try to predict directly.
+
+
+
+This sounds counterintuitive… but it might not be the best idea to finetune your model using the actual rewrite prompts from your synthetic dataset… yes… those prompts WERE used to generate the rewritten texts… yes… the goal of the competition is to predict that… however, we KNOW we are evaluated within the T5 embedding space and this means we have to understand how that influences our goal.
+
+From my exploration of the T5 embedding space, it is clear that more detail (especially irrelevant or incorrect detail) definitely pushes the vector embeddings far away from one another. For example:
+
+
+GROUND TRUTH: "Transform this sentence into a more humorous and sarcastic version, using irony and wit."
+
+FULL PREDICTION [Similarity of 0.628] : "Rewrite this text to infuse it with humor and a light-hearted tone, while still conveying the scientific facts and the relative safety due to the distant future impact date."
+
+SHORTER PREDICTION [Similarity of 0.715]: "Rewrite this text to infuse it with humor."
+
+
+POTENTIAL SOLUTION
+
+
+
+It may make sense to fine-tune the model to output as terse a version as possible to prevent divergence from the original text later in the sentence that might be VERY difficult to avoid.
+
+To get a terser representation that maintains the same (or similar but simpler) semantic meaning, we would likely want to use an auxiliary LLM (ChatGPT, Claude, etc.)
+
+Therefore we have the following flows:
+
+
+Original Text + Full Rewrite Prompt --- [GEMMA 7B INFER] ---&gt; Rewritten Text
+
+Full Rewrite Prompt --- [CHATGPT INFER] ---&gt; Condensed Rewrite Prompt
+
+Original Text + Rewritten Text --- [SMALL LLM TRAIN] ---&gt; Condensed Rewrite Prompt
+
+The last flow should give us a trained model that outputs a condensed rewrite prompt that ideally is more semantically similar (in the T5 embedding space) than if we had trained it on the full Rewrite Prompt.
+
+
+
+
+PROBLEM 5: The evaluation embedding space is different than the training embedding space.
+
+
+
+This is related to PROBLEM 4, but still worth acknowledging separately.
+
+If you consider the embedding space of your trained model (Gemma or whatever), the predicted text's vector representation may be nearly identical to the ground truth vector representation, however, it may still have a large cosine distance within the T5 (evaluation) embedding space.
+
+This happens because the embedding space represents the model's understanding of the semantic meaning (w.r.t. the task it was trained on… probably just language generation) of language, and while you might think that wouldn't diverge that much, model to model, you'd be wrong. 
+
+In other words, Gemma might think two sentences are similar, huzzah, we did it! But T5 might think they are quite different (oh no…)
+
+
+POTENTIAL SOLUTION
+
+
+
+I'm still working on this one…
+
+
+Reinforcement Learning?
+
+Use an secondary loss during PEFT of the small llm?
+
+
+
+
+PROBLEM 6: We don't know the pre/post processing the hosts may have done.
+
+
+
+It's unclear if the hosts have done any pre/post-processing
+
+
+Have they removed the prefix statements that are commonly output by Gemma7B?
+
+Have they removed special characters?
+
+Have they only selected smaller texts (or truncated larger texts)
+
+etc.
+
+The original text, rewrite prompt is NOT all the information you need if you want to know how to generate the rewritten text.
+
+
+We've discussed hyperparameters before
+
+What about the prompt template the inputs are injected into (triple quotes? etc)
+
+
+POTENTIAL SOLUTION
+
+
+
+Probe the test set. There's likely no other way to figure it out… but with probing you should be able to validate the following:
+
+
+The presence/absence of common prefix statements in the rewritten text
+
+The minimum/maximum lengths of the original/rewritten texts
+
+The presence of special characters
+
+and probably more…
+
+
+
+
+Anyway… thanks for letting me dump my thoughts here!
+
+
+
+DALL-E's Interpretation of my ramblings:
+
+Comments:
+├─ Khoi Nguyen (2024-03-16 12:26:56.440000) [+10]
+│  I love a good puzzle but having to prob for the way the text was preprocessed put this competition right into meme tier. I wonder where @cdeotte is when we need him 😄
+├─ Prady G (2024-03-19 14:10:06.073000) [+1]
+│  One of the solutions to PROBLEM 4 that comes to my head is limiting the length (let's say to 8 words) of rewrite_prompts while finetuning. Maybe even explicitly asking the (Gemma, etc) model to gen...
+  ├─ Darien Schettler (2024-03-19 21:13:16.103000) [+1]
+  │  I like the idea of limiting the model. It could definitely work. I did PEFT with terser rewrite prompts (and it accomplished the same thing… but if we can do it without retraining that is obviously...
+  ├─ Simon E Gilbert (2024-04-03 16:33:28.817000) [+0]
+  │  Does the max_new_tokens setting help here (I'm using Mistral)?
+├─ Mojtaba Yousefi (2024-03-16 19:58:59.117000) [+1]
+│  On problem 5 I was wondering what you were thinking of adding a loss to the PEFT training. We don't have a continuous differentiable function to represent the sharpened cosine similarity in the t5 ...
+  ├─ Darien Schettler (2024-03-17 22:33:11.537000) [+2]
+  │  It's worth pointing out that –– in-general (not when vector magnitude is 0) ––&nbsp;cosine similarity IS differentiable. 
+  │  
+  │  
+  │  
+  │  For clarity:
+  │  
+  │  Embeddings are Differentiable: The generation of embedding...
+├─ winddude (2024-03-15 15:56:36.553000) [+1]
+│  Identify common elements in rewrite prompts and stick with those try to minimise unnecessary variability. The model needs to learn the semantic part AFTER this but it can also learn to - essentiall...
+  ├─ Darien Schettler (2024-03-17 22:17:57.400000) [+1]
+  │  Good to know, it's really hard to know what the right thing to do is with no examples or training set … or really any details… haha
+  │  
+  │  Maybe we can explore soft prompting to discover the single 'best...
+    ├─ winddude (2024-03-22 19:19:31.460000) [+0]
+    │  also to the size of the prompt set can grow very quickly… but so far I've had better success with this method than, using prompts from the public datasets.
+├─ sayoulala (2024-03-15 13:27:06.363000) [+1]
+│  Great discussion, thank you. Have you tried shortening the model's predicted results, just as you mentioned in your PROBLEM 4?
+  ├─ Geremie Yeo (2024-03-15 13:52:06.360000) [+1]
+  │  I tried to do this 
+  │  
+  │   = truncate_txt(decoded_output, )
+  │  
+  │  
+  │  and the score worsened
+  ├─ Darien Schettler (2024-03-15 20:09:04.640000) [+0]
+  │  I am going to submit this evening. I have translated the rewrite prompts using gemini-pro and I have a pipeline that does LoRA on Gemma2B. I have lots of experimentation to do:
+  │  
+  │  
+  │  
+  │  Models
+  │  
+  │  Number of...
+    ├─ Darien Schettler (2024-03-17 22:16:30.493000) [+2]
+    │  @sayoulala - I'm quite surprised.
+    │  
+    │  On my local CV when I PEFT Gemma 2B to produce terser outputs I get a massive boost to performance (and it LOOKS better anecdotally) … however, my submission yiel...
+    ├─ sayoulala (2024-03-25 10:12:59.183000) [+1]
+    │  @dschettler8845  Thank you for sharing, I think the most important thing is the diversity of prompts, rather than their length. It seems that all we can do is to ensure the quality and diversity of...
+├─ Esme (2024-03-31 08:06:35.617000) [+0]
+│  Hello, your idea is so good, it is very helpful to me, I have learned a lot from it, thank you very much for your sharing
+├─ Marília Prata (2024-03-14 23:07:35.137000) [+0]
+│  Since I don't have enough knowledge to understand what you exposed so well. This is my Placeholder to read what other kagglers could add about that.  I'm still trying to recover my appropriate prom...
+├─ Sharad Patel (2024-04-18 04:22:39.863000) [+0]
+│  Very good explanation, learned a lot from it. Thank you for sharing.😊
+├─ Shure (2024-04-11 01:15:34.097000) [+0]
+│  @dschettler8845 thank you for your work.
+│  Yesterday, I published a new dataset based on your idea, Full Rewrite Prompt --- [CHATGPT INFER] ---&gt; Condensed Rewrite Prompt
+│  , please check.
+│  https://ww...
+├─ haohua chang (2024-04-02 15:28:54.213000) [+0]
+│  Great idea, it's truly helpful for me.
+├─ irinchan (2024-04-02 11:47:31.387000) [+0]
+│  Thanks for sharing your thoughts on generating rewrite prompts for synthetic datasets. I can totally relate to the challenges you've mentioned, like getting prompts that don't quite make sense or f...
+├─ zhangchenghao07 (2024-03-30 16:21:09.423000) [+0]
+│  Great insights
+├─ tytytyty123 (2024-03-23 07:03:39.473000) [+0]
+│  Thank you for your summary of the problems, helpful for my preparation.
+├─ ABHIJEET KUMAR JHA (2024-03-22 16:38:46.500000) [+0]
+│  have encountered any issue regrading submission time out i have a simple code i have fine tunned a model and uploaded it to kaggle and i am just trying to infer rewrite prompt using it . notebook r...
+├─ Ainz Ooal Gown (2024-03-17 10:59:25.007000) [+0]
+│  This was great!
+├─ [deleted] (2024-03-25 05:43:45.257000) [+0]
+│  [deleted]
+├─ [deleted] (2024-03-16 05:40:35.350000) [+0]
+│  [deleted]
+├─ Farzam Alam (2024-04-10 01:19:13.920000) [+0]
+│  Awesome ideas, thanks for sharing.
+├─ Sanath Goutham (2024-03-31 11:48:52.167000) [+0]
+│  Great insights, thanks for sharing.
+├─ Li Shengwei (2024-03-27 09:59:06.520000) [+0]
+│  Thanks！！！！

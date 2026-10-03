@@ -1,0 +1,98 @@
+<p>First, I would like to thank the hosts for organizing the competition.<br>
+Congratulations to the winning teams. Thanks also to <a href="https://www.kaggle.com/tanakar" target="_blank">@tanakar</a>, <a href="https://www.kaggle.com/haqishen" target="_blank">@haqishen</a>, and <a href="https://www.kaggle.com/boliu0" target="_blank">@boliu0</a> for competing with me.</p>
+<p>In this post, we will explain TK(@tanakar) &amp; penguin46 part of the whole solution.<br>
+[update] Qishen &amp; Bo part was posted <a href="https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391723" target="_blank">here</a></p>
+<h1>Overview</h1>
+<p>Features created using train.csv, tracking.csv, bbox.csv and pretrained models (yolov7, mmpose) for the video data is input to xgboost along with predictions of the cnn part. CV with csv data only is 0.766, CV with pretrained models added is 0.774, and 0.7955 with the CNN part added.</p>
+<h1>CNN Part</h1>
+<p>2.5d CNN is used for contact prediction. In this part, <a href="https://www.kaggle.com/tanakar" target="_blank">@tanakar</a> in especially made a great contribution.</p>
+<h2>Input Image</h2>
+<p>Grayscale images are cropped around the helmet's bbox and resized to 224x224.<br>
+Inputs are different for player &amp; player contacts and player &amp; ground contacts.</p>
+<ul>
+<li>player &amp; player<ul>
+<li>crop range up to 2 times the rectangle surrounding the two bboxes</li>
+<li>input bbox mask as an additional channel</li>
+<li>±2step</li></ul></li>
+<li>player &amp; ground<ul>
+<li>crop 6x around the bbox</li>
+<li>no mask</li>
+<li>±2step<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3962786%2F4a505595b255bfda550e795046c0df38%2Fcnn.png?generation=1677721348768987&amp;alt=media" alt=""></li></ul></li>
+</ul>
+<h2>Downsampling</h2>
+<ul>
+<li>player &amp; player<ul>
+<li>use samples with predictions of 1st stage lightgbm greater than 0.01</li></ul></li>
+<li>player &amp; ground<ul>
+<li>remove samples with predictions of Qishen&amp;Bo’s stage1 less than 0.005</li></ul></li>
+</ul>
+<h2>Backbones</h2>
+<ul>
+<li>player &amp; player<ul>
+<li>resnet18d</li>
+<li>swin_tiny_patch4_window7_224</li>
+<li>tf_efficientnet_b0_ns</li></ul></li>
+<li>player &amp; ground<ul>
+<li>resnet18d</li>
+<li>swin_tiny_patch4_window7_224</li>
+<li>efficientnetv2_rw_t</li></ul></li>
+</ul>
+<p>The simple average of multiple backbones is used as the features of next xgb. </p>
+<h1>Table &amp; Pretrained Models Part</h1>
+<h2>Player Detection</h2>
+<p>Player was detected using pretrained YOLOv7 and detected boxes were tracked using <a href="https://github.com/AlbertoSabater/Robust-and-efficient-post-processing-for-video-object-detection" target="_blank">REPP</a>, and matched with helmets. We inferred in steps instead of frames to speed up the submission time. In the matching process, bboxes were extracted in the order of the longest tracked length and greedily matched to the helmets of the players that matched best. The features created are as follows</p>
+<ul>
+<li>size of the bbox</li>
+<li>aspect ratio of the bbox</li>
+<li>distance between the center coordinates of the two players' bboxes (dx, dy, dist, dist/width)</li>
+<li>IoU of the bbox of the two players</li>
+<li>area of overlap with the bbox of the helmet</li>
+<li>tracked length</li>
+<li>matching score (sum of overlapped area)<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3962786%2F929fef6a9bf240a7b4faa87bb38e8d9f%2Ftracking.png?generation=1677721445396871&amp;alt=media" alt=""></li>
+</ul>
+<h2>Pose Estimation</h2>
+<p>We used mmpose to estimate the players' posture. mmpose saved inference time by using the players' bboxes that were object detected by yolov7. In addition, inference was performed only once in 2steps because this part was not significant for the computation time.</p>
+<ul>
+<li>distance between head and foot, hand and foot</li>
+<li>knee, hip angle</li>
+<li>number of keypoints detected and sum of confiences</li>
+<li>distance between head and center of helmet bbox</li>
+</ul>
+<h2>Coordinates Gap Between Field and Camera View</h2>
+<p>tracking.csv does not include a vertical component. Optimize the homographic transformation from field coordinates to camera coordinates and calculate the displacement of the helmet position. This misalignment can be attributed to the misalignment between the measured position of the field coordinates and the position of the helmet, and the vertical coordinates of the player, from which we can extract the vertical component. This idea is based on <a href="https://www.kaggle.com/competitions/nfl-health-and-safety-helmet-assignment/discussion/285112" target="_blank">this solution</a> by <a href="https://www.kaggle.com/its7171" target="_blank">@its7171</a> from the last year's solution. The homography transformation was optimized using cv2.findHomography.</p>
+<ul>
+<li>Coordinates (x, y) after projection</li>
+<li>Number of players used to optimize the homography matrix</li>
+<li>Distance between the coordinates after projection and the center coordinates of the helmet (dx, dy, dist, dx/width, dy/width dist/width)</li>
+<li>Total distance between the post-projection coordinates and the center coordinates of the helmet in frames<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3962786%2F0b6d775701b80ea65fb25115692ed5e4%2Fgap.png?generation=1677721429648162&amp;alt=media" alt=""></li>
+</ul>
+<h2>Other Features</h2>
+<ul>
+<li>step, max(step), step / max(step)</li>
+<li>amount of movement from the start/end of the match (dx, dy, dist)</li>
+<li>distance to the nth nearest player (n=1, 2, 5, 10, 15)</li>
+<li>distance from the center of gravity coordinates of all players (dx, dy, dist)</li>
+<li>difference, product, and sum of velocity, acceleration, distance, and angle of two players</li>
+<li>aspect ratio of the bboxes of the helmets</li>
+<li>distance between the center coordinates of the bboxes of the two helmets</li>
+<li>IoU of the tow helmets</li>
+<li>position</li>
+<li>same team or not (0/1)</li>
+<li>lag features for the most important features among the above (diff, shift, lag=±1, 2, 5, 10, 20)</li>
+</ul>
+<h1>Other Tips</h1>
+<ul>
+<li>To make the experiment more efficient, we trained lightgbm, which predicts contact faster with fewer features, and excluded samples that were obviously unnecessary from penguin&amp;tk pipeline.</li>
+<li>xgboost was about 0.002~4 better than lightgbm.</li>
+<li>When using cutoff with qishen&amp;bo's predictions, add a mask feature to shows it has been cutoff.</li>
+</ul>
+<h1>Not Worked</h1>
+<ul>
+<li>LSTM, Transformer, 1DCNN</li>
+<li>data augmentation by swapping nfl_player_id_1, nfl_player_id_2 in table part</li>
+<li>instance segmentation</li>
+<li>seed averaging improved by less than 0.001</li>
+</ul>

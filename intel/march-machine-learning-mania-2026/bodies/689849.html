@@ -1,0 +1,172 @@
+<h3>6th Place Solution  March Machine Learning Mania 2026</h3>
+<p><strong>Final Score:</strong> 0.1181 (MSE/Brier, 126 games) 
+<strong>Final Rank</strong>: 6th  / 3,485</p>
+<p>Context
+Business context: <a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/overview" target="_blank">https://www.kaggle.com/competitions/march-machine-learning-mania-2026/overview</a></p>
+<p>Data context: <a href="https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data" target="_blank">https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data</a></p>
+<h4>1.Summary</h4>
+<p>This solution focused on building a well-calibrated probabilistic system rather than simply maximizing prediction accuracy. The strongest improvements came from:</p>
+<ul>
+<li>Using temporal cross-validation to avoid leakage and ensure realistic validation</li>
+<li>Applying data-driven ensemble weighting instead of manual heuristics</li>
+<li>Incorporating seed-based priors as a form of regularization</li>
+<li>Leveraging model diversity across multiple pipelines (feature-based, Elo, etc.)</li>
+</ul>
+<p>A key realization was that reducing overconfidence and variance had a larger impact than increasing model complexity. Careful calibration and disciplined ensembling consistently outperformed intuitive or manual adjustments.
+At the same time, several intuitive ideas (manual overrides, external brackets, improper weighting) highlighted how easy it is to break probabilistic consistency, even with seemingly reasonable changes.</p>
+<p><strong>One of the most valuable lessons from this competition is that exploring other participants’ work is extremely important — their shared ideas can significantly accelerate learning, save time, and provide insights that are difficult to discover alone.</strong></p>
+<h4>2.Core approach:</h4>
+<ul>
+<li>Model diversity</li>
+<li>Robust ensembling</li>
+<li>Careful calibration &amp; post-processing</li>
+<li>Integration of domain knowledge (seeds)</li>
+</ul>
+<h4>3. Core Philosophy</h4>
+<p><strong>Key principles:</strong>
+Reduce overconfidence ,Stabilize predictions across models and Combine complementary signals (data + domain priors)</p>
+<h4>3. Modeling Pipelines</h4>
+<p>I built multiple independent pipelines, each capturing different aspects of team strength.</p>
+<h5>3.1 Feature-Based Pipeline</h5>
+<p><strong>Feature Engineering:</strong></p>
+<p>Efficiency metrics (Offensive / Defensive / Net Rating)
+Shooting &amp; possession stats (FG%, TO%, ORB%, etc.)
+Win rate &amp; scoring margin</p>
+<p><strong>Models:</strong> 
+LightGBM
+XGBoost
+Logistic Regression</p>
+<h5>3.2 Elo-Based Pipeline</h5>
+<p>Dynamic rating updated game-by-game
+Margin-of-victory scaling
+Implicit strength-of-schedule encoding</p>
+<h5>3.3 Contextual &amp; Advanced Signals</h5>
+<p><strong>Additional high-signal features:</strong></p>
+<ul>
+<li>Momentum (recent performance)</li>
+<li>Conference strength</li>
+<li>Coach experience</li>
+<li>Rating trend (important feature)</li>
+</ul>
+<p><code>results['Rating_Trend'] = linregress(...).slope</code></p>
+<p><strong>Captures:</strong>
+Improving teams (dangerous in tournaments)
+Declining teams</p>
+<h4>4. Feature Diversity Insight</h4>
+<p>Different models learned different patterns:
+XGBoost → heavily relied on seed_diff
+LightGBM → focused on efficiency &amp; SOS
+Others → more balanced
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F21413594%2Fb647ea3488ad281e1bdfd2f1b039b983%2F.JPG?generation=1775764676939029&amp;alt=media" alt=""></p>
+<p>➡️ This justified ensembling as models were complementary.</p>
+<h4>5. Ensembling Strategy (Core Component)</h4>
+<p><strong>Final solution combined:</strong></p>
+<ul>
+<li>Multiple models</li>
+<li>Multiple feature spaces</li>
+<li>Multiple notebooks</li>
+</ul>
+<p><strong>Structure:</strong></p>
+<ul>
+<li>8 variations from main pipeline</li>
+<li>Elo-based submission</li>
+<li>Additional alternative pipeline</li>
+</ul>
+<h4>6. Improved Ensemble (Key Differentiator)</h4>
+<p>The main gains came from how predictions were combined, not from adding more models.</p>
+<p>we implemented a submission-level A/B testing framework to systematically explore improvements without retraining models. First, a feature matrix was constructed for all possible matchups, and predictions were generated using three base models: Logistic Regression (with scaling), XGBoost, and LightGBM. These were combined into a baseline ensemble (40/40/20), which served as the reference prediction.</p>
+<p>From this baseline, multiple controlled variations were created by adjusting clipping ranges to reduce overconfidence, modifying ensemble weights to emphasize different models, and introducing small seed-based blending (5–10%) as a form of regularization. When available, optimized weights derived from out-of-fold predictions were also applied.  </p>
+<h5>6.1 Temporal Cross-Validation (Leakage-Free)</h5>
+<p><strong>Instead of k-fold:</strong>
+Train on seasons &lt; N
+Validate on season N</p>
+<p><strong>Benefits:</strong>
+Eliminates future leakage
+More realistic validation
+Better generalization</p>
+<h5>6.2 Optimized Ensemble Weights</h5>
+<p>Used Scipy optimization to minimize log loss on OOF predictions.</p>
+<p><strong>Advantages:</strong>
+Data-driven weighting
+Captures model complementarities
+Outperforms manual weights</p>
+<h5>6.3 Seed-Based Blending (High Impact)</h5>
+<p>Tournament seeds are extremely predictive.</p>
+<p><strong>Final formula:</strong>
+<code>final_pred = ALPHA * model_pred + (1 - ALPHA) * seed_pred</code></p>
+<p><strong>Insight:</strong>
+Acts as regularization
+Reduces variance
+Controls overconfidence</p>
+<h4>Key Insight</h4>
+<p><strong>Biggest gains came from:</strong></p>
+<ul>
+<li>Variance reduction</li>
+<li>Calibration improvement</li>
+</ul>
+<p>—not model complexity.</p>
+<h4>7. Multi-Submission Strategy</h4>
+<h5>7.1 Internal A/B Testing</h5>
+<p>Generated multiple submissions by varying:
+Clipping ranges
+Ensemble weights
+Seed blending intensity
+➡️ Acts as submission-level hyperparameter tuning</p>
+<h5>7.2 Cross-Notebook Blending</h5>
+<p>Integrated predictions from:
+Elo notebook
+Alternative ensemble notebook</p>
+<h5>7.3 Diversity vs Calibration Trade-off</h5>
+<p><strong>Problem:</strong>
+Different models → different calibration
+<strong>Risk:</strong>
+Naive averaging → distorted probabilities</p>
+<h5>7.4 Outcome</h5>
+<p><strong>Pros:</strong>
+Better exploration of solution space
+Increased robustness
+<strong>Cons:</strong>
+Marginal gains without proper weighting
+Calibration mismatch can hurt performance</p>
+<h4>Key Takeaway</h4>
+<p>Diversity alone is not enough — calibration alignment is critical.</p>
+<h4>8. What Didn’t Work</h4>
+<h5>8.1 Manual Overrides</h5>
+<p>Based on personal judgment
+Introduced bias
+Increased overconfidence</p>
+<p>➡️ Worse log loss, even when directionally correct</p>
+<h5>8.2 External Brackets (ESPN) Data</h5>
+<p><strong>Issues:</strong>
+Not true probabilities
+Strong bias toward favorites
+Poor calibration
+➡️ Damaged prediction distribution</p>
+<h5>8.3 Weighting Bug</h5>
+<p>Intended weight: ~0.05
+Actual: ~0.25</p>
+<p><strong>Impact:</strong>
+Weak signals dominated
+Model signal diluted
+Performance dropped significantly
+<strong>Lesson</strong>
+Poor weighting can destroy a strong ensemble.</p>
+<h4>9. Final Takeaways</h4>
+<p>Calibration &gt; Accuracy
+Variance reduction is critical
+Simple ideas (like seeds) can outperform complex models
+Ensembling works only with:
+Proper weighting
+Calibration awareness</p>
+<h4>10. Future Improvements</h4>
+<p>Use external ratings (Massey, KenPom, BPI)
+Advanced calibration (Isotonic / Platt scaling)
+Time-aware CV (leave-one-season-out)
+Separate pipelines (Men vs Women)
+Learn weights for human priors instead of manual blending</p>
+<h4>11.  Acknowledgments</h4>
+<p>A significant part of this solution was inspired and accelerated by the work of others in the community. In particular, special credit goes to:
+<a href="https://www.kaggle.com/dasdasdada" target="_blank">@dasdasdada</a> for an outstanding and well-structured notebook that served as a strong foundation
+<a href="https://www.kaggle.com/ibrahimqasimi" target="_blank">@ibrahimqasimi</a> for valuable modeling ideas and practical insights
+<a href="https://www.kaggle.com/lennarthaupts" target="_blank">@lennarthaupts</a> for the Elo-based approach, which was especially influential
+Their shared work greatly helped reduce development time and provided key ideas that contributed to the final solution.</p>

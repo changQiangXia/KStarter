@@ -1,0 +1,63 @@
+# https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/discussion/458648
+
+Topic #458648: Our Approach - Similarity-Based Sampling Bad Teaching (12th on public leaderboard)
+  Author: Claudio Savelli
+  Posted: 2023-11-30 22:37:50.768000
+  Votes: 14  Comments: 2
+
+We are happy to present our work for the challenge! 
+The notebook for this solution is publicly available at the following link: https://www.kaggle.com/code/claudiosavelli/sbs-bad-teaching-12th-on-public-leaderboard
+
+Before I begin, I would like to thank you for this wonderful opportunity. Thanks to the work done in this challenge, I became very passionate about this topic and it became the subject of my Master's thesis!
+
+Context
+
+
+
+Business Context: https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/overview
+
+Data Context: https://www.kaggle.com/competitions/neurips-2023-machine-unlearning/data
+
+
+Overview of the Approach
+
+We started from the method proposed in [1], with various contributions applied. An example diagram of the Unlearning process is shown in the attached image:
+
+
+
+In the image, α is the 'smart_fraction', i.e. the fraction of images sampled based on the similarity of the new Retain subset. 𝑊 are the weights obtained in the Similarity-Based Sampling phase (see later).
+
+The approach is based on training a Target Model through two models:
+1)     a Good Teacher, which contains the weights of the model trained with both Forget and Retain, and
+2)     a Bad Teacher, a model unaware of the Forget points. Although a random initialisation is proposed as the main approach in [1], we pre-train our Bad Teacher for a limited number of epochs on the Retain set.
+The Target model is a student in this 2-teacher scenario, and it is initialised with the same weights as the Good Teacher (i.e. the original model, before unlearning).
+In the Unlearning phase, we align the predictions of the student to those of the Good Teacher for points in the Retain set, and to the predictions of the Bad Teacher for the Forget samples. We do so by minimising the KL-divergence between the logits of the student and those of the respective teachers.
+
+Details of the Submission
+
+Without going into too much detail, the main contributions are listed below: 
+
+1) Similarity-Based Sampling of the Retain Set. In the unlearning phase, not all Retain images are useful for training the student model, and this not only slows down the unlearning process but also mitigates it as the number of Retain images is much greater than the images I want to forget. An example of images with similar features is shown below:
+
+
+
+In fact, good unlearning aims to reconstruct the feature space around the Forget images by using Retain images that are close in feature space to them.
+
+2) Weighted unlearning. This contribution is related to the unlearning process. Thanks to Similarity-Based Sampling, it is possible to evaluate which images have similar features to the ones of our Forget set. From this, a weighted unlearning method was developed, in which our Retain images have more weight in the unlearning phase if they are close in the feature space to several images in the Forget set. This phenomenon is expected in this framework since if a person requests the deletion of their data in the model, there will probably be several images in the training of the model which belong to the same subject and close in the feature space. For this reason, a Retain image may have similar characteristics to many, if not all, these images.
+
+3) Smart batch construction. To ensure greater efficiency of the Unlearning process, within the epochs, the batch is composed in such a way as to maximise the effect of the Forget Set and the Bad Teacher. As already mentioned, Retain images are much more numerous than Forget ones, so the effect on the model of the latter decreases if the batches are not intelligently constructed. For this reason, a process like the one carried out by other unlearning processes[2] of destruction and reconstruction was chosen. At the beginning of unlearning many more images of Forget are shown, so that the information related to them is destroyed (intelligently) by the Bad Teacher, and then reconstructed by the Good Teacher and Retain images in the final phase of the epoch. This approach is particularly effective at the beginning of unlearning where the student would produce the same logits as the good teacher on the Retain images, which is why the KL-divergence between these two will be zero, making the unlearning phase inefficient.
+
+In conclusion, we are very satisfied with the work done and the excellent result achieved with the local dataset and the public leaderboard. Unfortunately, our solution did not make it to the final leaderboard. Although the reasons for it are unclear, we expect the problem to be due to having incurred in a timeout -- however, we rely on the organisers' feedback on the matter, which we hope will arrive soon :)
+
+We thank you for your attention! And we remain available for any questions, curiosities, or further analysis of the topic!
+
+References
+
+[1] Chundawat, Vikram S., et al. "Can bad teaching induce forgetting? Unlearning in deep networks using an incompetent teacher." Proceedings of the AAAI Conference on Artificial Intelligence. Vol. 37. No. 6. 2023.  https://arxiv.org/abs/2205.08096
+[2] Tarun, Ayush K., et al. "Fast Yet Effective Machine Unlearning." Accepted in IEEE Transactions on Neural Networks and Learning Systems. 2023. https://arxiv.org/abs/2111.08947
+
+Comments:
+├─ C R Suthikshn Kumar (2023-12-01 04:08:36.157000) [+2]
+│  Congratulations on achieving 12th place. Thanks for sharing the details of your solution with colorful images.
+  ├─ Claudio Savelli (2023-12-01 11:29:30.060000) [+1]
+  │  Thank you for the feedback! 🤗

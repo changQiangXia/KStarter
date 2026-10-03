@@ -1,0 +1,326 @@
+<p>We would like to express great thanks to Kaggle and the organizers for creating that exciting (and quite difficult) challenge which is devoted to cutting-edge questions in bioinformatics. Research community will surely benefit from that. And great thanks to all participants and those who shared their ideas, notebooks, datasets, insights…</p>
+<p>Here is the report on U900 team approach. We follow the guidelines of the report provided by the organizers. The detailed Kaggle-style write-up of the solution is placed in the section 3.2 "Model design. Details" - Kagglers may prefer to jump to that subsection directly. </p>
+<h1>Context</h1>
+<p>Competition Overview:  <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/overview" target="_blank">https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/overview</a><br>
+Open Problems: <a href="https://openproblems.bio/" target="_blank">https://openproblems.bio/</a></p>
+<h1>Table of contents</h1>
+<p>We follow <a href="www.kaggle.com/competitions/open-problems-single-cell-perturbations/overview/judges-prizes-scoring-rubrics" target="_blank">organizer's guideline</a>:</p>
+<ol>
+<li>Integration of Biological Knowledge</li>
+<li>Exploration of the problem</li>
+<li>Model design</li>
+<li>Robustness</li>
+<li>Documentation &amp; code style</li>
+<li>Reproducibility</li>
+</ol>
+<h1>Highlights</h1>
+<ul>
+<li>Main innovative tool  - new gradient boosting algorithm designed for MULTI-target tasks - PYBOOST - developed by team member A. Vakhrushev. Effectiveness to predict thousands targets  at once - distinguishes it from XGBoost, etc. E.g. aftermath: <a href="https://www.kaggle.com/code/alexandervc/op2-explore-4th-place-magic" target="_blank">solo PYBOOST</a> model can achieve private score 0.718 - better than top1 - 0.728.  </li>
+<li>Openness and knowledge sharing. Team shared dozens notebooks, posts, datasets during the challenge - obtained: hundreds forks, thousands views, among 10 upvoted code notebooks 4 from the team (in particular <a href="https://www.kaggle.com/code/alexandervc/op2-eda-baseline-s" target="_blank">top1</a>).  <a href="https://www.kaggle.com/code/alexandervc/pyboost-secret-grandmaster-s-tool" target="_blank">PYBOOST approach</a> has been openly shared,     medal winning solutions incorporate it and as well as all top scored  publicly open solo-models. We also organized and shared on Youtube webinars around the challenge (<a href="https://youtu.be/dRG3qTaALp0?si=wruKSL2wu-DZb6D2" target="_blank">1</a>,<a href="https://youtu.be/6ySKxnjHX8Y?si=llQxil9FCY-NB5Mc" target="_blank">2</a>,<a href="https://youtu.be/lcc5vY-Pycs?si=94hhV9IOwcbLbZHP" target="_blank">3</a>,) (as well as the one in 2022: <a href="https://youtu.be/aqUOz3nFYm4?si=XLWxMsoef8l6OpVU" target="_blank">1</a>,<a href="https://youtu.be/dS0p3e-Je90?si=REmpRqLgY3pIOdhO" target="_blank">2</a>… ) - with thousand+ views. </li>
+<li>Not only PYBOOST:  several neural networks, in depth analysis of cross-validation schemes, methods to carefully control the diversity for models ensemble, non-standard approach to ensemble - forms the solution.</li>
+<li>Stability: 1) our public and private leaderboard rankings are approximately the same 2) <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458939" target="_blank">aftermath:</a> correlation between public and private scoring - 0.98. Thus our models are stable and generalize well on unseen data - thanks to careful cross-validation for solo models as well as diversity control of the entire ensemble.</li>
+<li>In-depth biological knowledge exploration: we performed and publicly shared standard single-cell pipelines analysis with <a href="https://www.kaggle.com/code/alexandervc/op2-rna-seq-data-scanpy-adata-cell-cycle" target="_blank">Scanpy</a> and <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-adata-analysis-with-seurat" target="_blank">Seurat</a>, <a href="https://www.kaggle.com/code/alexandervc/op2-rna-seq-data-scanpy-adata-cell-cycle" target="_blank">cell cycle analysis</a>,  <a href="https://www.kaggle.com/code/alexandervc/op2-eda-baseline-s" target="_blank">top upvoted EDA notebook</a>, <a href="https://www.kaggle.com/datasets/antoninadolgorukova/op2-supplementary-calcs-for-ml" target="_blank">created</a>, <a href="https://www.kaggle.com/code/alexandervc/op2-category-encoders-chembert-fingerpints-moldes?scriptVersionId=150999986&amp;cellId=1" target="_blank">benchmarked</a> and analyzed <a href="https://www.kaggle.com/code/alexandervc/eda-morgan-fingerprint-features" target="_blank">1</a>,<a href="(https://www.kaggle.com/code/alexandervc/eda-molecular-descriptors-features" target="_blank">2</a> many features like ChemBert, molecular descriptors, Morgan fingerprints, etc…</li>
+</ul>
+<h1>1. Integration of Biological Knowledge</h1>
+<h2>1.1 Did you use the chemical structures in your model?  Did you use other data sources? Which ones, why?</h2>
+<h4>Use of SMILES.</h4>
+<p>One of our key Neural Networks (see section “Family of Neural Networks based on NLP-like SMILES embedding”)  use encoding for compounds based on their SMILES representation.  It  starts with Text Vectorization followed by Embedding layer and thus learns the embedding from the current data. We extended the training set with <a href="https://github.com/Ebjerrum/SMILES-enumeration" target="_blank">SMILES augmentation library</a>, unfortunately - no score uplift.</p>
+<h4>Use and benchmark Morgan Fingerprints and Molecular Descriptors, ChemBert embeddings.</h4>
+<p>We encoded compounds by these techniques (<a href="https://www.kaggle.com/code/antoninadolgorukova/op2-feature-engineering/notebook" target="_blank">Notebook</a>,  <a href="https://www.kaggle.com/datasets/antoninadolgorukova/op2-supplementary-calcs-for-ml" target="_blank">Kaggle dataset</a>, <a href="https://www.kaggle.com/code/alexandervc/eda-morgan-fingerprint-features" target="_blank">EDA1</a>, <a href="https://www.kaggle.com/code/alexandervc/eda-molecular-descriptors-features" target="_blank">EDA2</a> ). Systematically compared these features with other encodings: ChemBert embeddings, pure machine learning encodings: one-hot, Helmert contrast encoding,  Backward Difference. The tables in the <a href="https://www.kaggle.com/code/alexandervc/op2-category-encoders-chembert-fingerpints-moldes?scriptVersionId=150999986&amp;cellId=1" target="_blank">notebook</a> show a bit surprising outcome  that the most simple one-hot encoding is the most effective among those. At  least among those encodings - which are  not incorporating targets,  target encoding techniques are more effective - <a href="https://www.kaggle.com/code/alexandervc/op2-target-encoders" target="_blank">benchmarked separately</a>.(All these notebooks and datasets were openly shared during the challenge).  Final ensemble did not include these models.    </p>
+<h4>DrugBank</h4>
+<p>We also analyzed and shared on Kaggle the DrugBank database ( <a href="https://www.kaggle.com/datasets/antoninadolgorukova/op2-supplementary-calcs-for-ml/data?select=drug_bank" target="_blank">Kaggle dataset</a> ) with the idea - split compounds by similarity groups and use group indicators as additional features for our models. However due to technical reasons (not all challenge compounds found in DrugBank) and lack of time - that was not implemented.  Aftermath: <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460567" target="_blank">team#43 reported</a> uplift for Pyboost from the  similar idea.</p>
+<p>Our other models relied on pure ML technique for encoding compounds and cell types - target encoding. </p>
+<h2>1.2 What representation of the single-cell data did you use? Did you reduce genes into modules? Did you learn a gene regulatory network?</h2>
+<p>Mainly we worked directly with the pseudo-bulk  differential expressions train dataset provided by the organizers ('de_train.parquet').  Various target encoding techniques (see “model design” section) were employed. </p>
+<h3>Genes reduction by clustering - helps some models</h3>
+<p>Two of  our models included the reduction genes into groups. The genes were clustered by K-means into 3 groups based on input train dataset. Features were constructed by target encoding techniques for  each group and neural networks were predicting each group independently. Concatenation was done at the final step. These models are among our top scored solo models (0.569, 0.570) as well as they allowed us to increase diversity in that family of our models.  See e.g. <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution?scriptVersionId=154341265&amp;cellId=56" target="_blank">correlations clustermap</a> for that family of models - the two mentioned above are: N3,4 ("3kmeans" in id). </p>
+<h3>Use of raw scRNA-seq counts data</h3>
+<p>Another two our models employed raw single-cell RNA sequencing data. That have been done using aggregation by cell-types and compound the raw counts expressions data, and further PCA and target encoding (see <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-adata-analysis-with-seurat#6.1.-Make-features" target="_blank">section 6.1. Make-features</a> ).  Thus we created new features which have been used for training the neural networks. These features have been concatenated with the original one - we did not gain the performance, but we gained some diversity and so blend with the original one - brings uplift.   The performance of the original model and the one with raw count features is described in the <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution?scriptVersionId=154412513&amp;cellId=49" target="_blank">table</a>  - pre-last raw (MLPv15 TE scaled_counts_features) - public score 0.583 - similar to other models. All the models from that table were averaged gaining score 0.573 and that entered as a component to the final ensemble (described in the <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution?scriptVersionId=154412513&amp;cellId=52" target="_blank">next table</a>).  </p>
+<h2>1.3 How did you integrate the ATAC data? Which representation did you use?</h2>
+<p>Integration of single cell ATAC data, or any other single cell (e.g. CITE-seq) data can be done by exactly the same scheme as described and utilized above for raw single cell RNA sequencing count data - aggregation, dimensional reduction (PCA), target encoding. We did not have  enough time to explore these models.  </p>
+<h2>1.4 If adding a particular biological prior didn’t work, how did you judge this and why do you think this failed?</h2>
+<p>Prior bio-knowledge will always contain a kind of "batch effect" - different type of cells, donors, conditions, technology so on… Batch effect problem is no so solvable or even well-defined because what can be unwanted batch is one situation, is desired biological effect in the other.       During the Open Problems 2022 we studied a lot how to use various biological prior knowledge  - we and colleagues organized a kind <a href="https://www.kaggle.com/competitions/open-problems-multimodal/discussion/348293" target="_blank">crowd-source activity</a> and participants openly shared with community solutions and datasets based on <a href="https://www.kaggle.com/code/annanparfenenkova/ridge-with-reactome-features" target="_blank">Reactome pathway database</a>,  <a href="https://www.kaggle.com/code/visualcomments/sim-ppi-corr-output" target="_blank">Protein-protein interaction networks</a>, and so on and so forth. The idea was constructing features based on aggregation by the biologically motivated groups of genes , pre-selecting those which related to targets based on prior knowledge. Followed by modified forward selection addition of these features <a href="https://www.kaggle.com/code/visualcomments/mmscel-crossvalidation-schemes-features-select#Exploration-of-additional-features" target="_blank">if the cross-validation scores increases</a>. However the outcomes were less prominent than pure ML approaches by the other teams. It resembles the situation with NLP where key successes of LLM are big models and large datasets - while prior knowledge (linguistic) approaches are not so effective.  As we can see from Open Problems 2021, 2022 and the current  challenges there are always teams on top who rely solely on ML methods. In some sense ML-models extract information from the train data more effectively than our prior knowledge databases. </p>
+<h1>2 Exploration of the problem</h1>
+<h2>2.1 Are there some cell types it’s easier to predict across? What about sets of genes?</h2>
+<h3>Myeloid cells are more difficult to predict than B cells for the current challenge.  (Not surprising biologically).</h3>
+<p>However that is most probably specific to the current dataset.<br>
+That is quite natural from prior knowledge: B-cells and all cell types from the train - are lymphoid cells, while myeloid is different branch of the blood cells e.g. see <a href="https://en.wikipedia.org/wiki/Haematopoiesis" target="_blank">hematopoiesis</a>. So B-cells are more similar to train cells than myeloid cells and so it is natural  that prediction for B-cells goes better. </p>
+<p>Similar we can see from the data (without prior knowledge):  multiple evidence (<a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458842" target="_blank">e.g. clustermap, umap, etc</a>) leads to the following picture - NK-cells are the most close to test set, and the most close to B-cells rather than to Myeloid cells, T-regs are the next close, while T-cells CD4+ and <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458842" target="_blank">especially CD8+ least close</a>. So since NK-cells a) are in the train b) closer to B-cells - hence we see translation goes better for B-cells.  If train set would contain other cell type which is close to Myeloid cells - than it would be opposite. By “most close” we mean with respect to the current data, not the prior biological knowledge. </p>
+<p>The analysis comparing predictability of B-cells and Myeloid cells is the following:<br>
+There are 17 samples of each type in the train set - so one can compare local metrics for these samples and see that B-cells are better predicted <br>
+For test samples we do not have ground truth - but we can compare disagreement between different models predictions  - we see that models quite more often disagree on Myeloid cells rather than on B-cells. See e.g. <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-analysis-of-different-models-predictions#-Correlations-between-all-models-included-in-the-final-ensemble" target="_blank">https://www.kaggle.com/code/antoninadolgorukova/op2-analysis-of-different-models-predictions#-Correlations-between-all-models-included-in-the-final-ensemble</a>  </p>
+<h3>Genes</h3>
+<p>The first order of magnitude effect controlling genes predictability   is, of course,   how big are their  values (more precisely how big are the values of their differential expression, since we are working with it)  - bigger values - everything is bigger - prediction errors, variations etc…  <br>
+The interesting question is what are the other effects.  <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-analysis-of-different-models-predictions?scriptVersionId=154657444&amp;cellId=148" target="_blank">Figures here</a> show the analysis.<br>
+We see that, for each model, especially, Pyboost, there is a subset of genes with big SD and quite low variance, meaning that a model is quite confident in their prediction despite the high variability of DE. Also, each model gives highly variable predictions to a subset of genes with quite low SDs. </p>
+<p>More details on the analysis added in the <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/461663" target="_blank">post</a> and <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-analysis-of-different-models-predictions" target="_blank">notebook</a>. Some highlights:</p>
+<ul>
+<li>All models are less confident in their predictions for myeloid cells compared to B cells (medians of prediction variability across genes and samples are higher).</li>
+<li>However, the highest bias (differences between predicted and true values) and variability of gene expression change predictions are associated with individual drugs rather than cell types.</li>
+<li>These drugs are mostly outliers - with the lowest number of cells (≤10 cells), or drugs that affected the cells in such a way that they were misclassified (discovered by  <a href="https://www.kaggle.com/ambrosm" target="_blank">@ambrosm</a> in his <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458661" target="_blank">Excellent EDA</a> ).</li>
+<li>GO enrichment analysis suggests that the hard-to-predict genes are often related to immune cell activities, cytotoxicity, and cell death. Though it might be some artefact. </li>
+</ul>
+<h3>2.2 Do you have any evidence to suggest how you might develop an ideal training set for cell type translation beyond random sampling of compounds in cell types?</h3>
+<p>As we understand the question - it is about planning new experiments to cover much higher number of the cell type, comparing to only 6 in the current challenge. With the goal to reduce expansive experiments costs in favor of a cheap computational computational approach. For that question -  the experience of the current challenge  suggests the following: </p>
+<p>Ideally we should take into account similarity distance between the cell types. Having the similarity - the strategy is the standard one - uniformly subsample train set with respect to similarity distance. In other words (simplified a bit): perform clustering of cell types with respect to similarity distance and choose say 1 representative from each cluster - that would be “ideal” training set.  That ensures that every cell type would have a  “neighbor cell type” belonging to the train set which is similar enough to it and so “translation” would go smoothly. </p>
+<p>So the key question - what similarity relation for cell-types to consider.</p>
+<p>We suggest: first run a preliminary experiment with SMALL number of drugs but LARGE number of cell-types - which allows to define similarity for cell types as similarity of their response to drugs. And take that similarity relation as a basis. </p>
+<p>Rationale and details  behind that suggestion are the following.  The <a href="https://www.kaggle.com/code/alexandervc/op2-eda-baseline-s?scriptVersionId=147818286&amp;cellId=21" target="_blank">clustermap of cell-types</a> clearly suggests the relations described above: NK-cells close to B-cells and Myeloid, T-cells CD8+ are the most distinct, and the key points are the following:</p>
+<ul>
+<li>That similarity   is consistent with models results. So: it is defined without any modeling, but  models “respects” it:   e.g. <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/458842" target="_blank">exclude T-cells CD8+</a> often improves modeling quality - and that corresponds to the fact CD8+ cells are the most different from the others on the clustermap; <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460251" target="_blank">NK-cells is the best validation fold</a> for some models like Pyboost, etc. - and that corresponds to the fact that NK-cells most close to B-cells and Myeloid cells on the clustermap</li>
+<li>It is not evident from the prior biological knowledge. </li>
+</ul>
+<p>So it would be much more cost effective to define the similarity between cell types based on some prior biological knowledge (e.g. just the distance in some umap space for some atlas scale single cell dataset). But experience of the current challenge makes us doubt that such  similarity would perform well on drug response tasks. </p>
+<p>If experiments are planned “one by one”, but not “all at once”, it is worth considering “active learning” strategy - analyzing results after each step, and  choosing for the next step of experiment those cell types which are in the worst predicted clusters.    </p>
+<h1>3 Model design.</h1>
+<p>We split that section into two parts the first one is devoted to answers to organizer's questions. The second part is detailed write-up of the solution - Kaggler's may prefer to jump directly to the subsection 3.2</p>
+<h2>3.1 Answers to organizer's questions</h2>
+<h3>3.1.1 Is there certain technical innovation in your model that you believe represents a step-change in the field?</h3>
+<h4>PYBOOST - a new innovative gradient boosting tool</h4>
+<p>Which is developed for MULTI-target tasks by team member A. Vakhrushev - we believe an important step-change in a field. It is well-known that for tabular data with SINGLE target gradient boosting (XGBoost, LightGBM, CatBoost) are the top performers - showing better result than e.g. Random Forest, SVR, etc. and even  Neural Networks (neural works are best performing on images, audio, text - some kind of continuous, not tabular data). However these packages are not so effective when one needs to predict many targets simultaneously. PYBOOST resolves that issue providing an effective strategy to predict even thousands of targets at once by a gradient boosting approach. </p>
+<p>The innovative features of the PYBOOST consists of two parts: strictly-Pyboost - which is software library and the SketchBoost - which is algorithmic innovation which improves algorithmic part of gradient boosting on multi-target tasks. (But for brevity by PYBOOST we typically mean both parts). The software part - strictly-Pyboost - is software library which allows the efficient realization of the complicated boosting algorithms directly in Python utilizing GPU, that means we can write easy to deal Python code, but it will be almost as efficient as low level optimized C-code - because of utilizing the GPU. The second part is algorithmic innovation - "Sketchboost" - provides new strategy to speed up tree structure search in multioutput setup by approximating ("sketching") the scoring function used to find optimal splits. Approximation is made by reducing dimensions of the gradient and hessian matrices while keep other boosting steps without change, thus enables crucial speed-up for the main bottleneck in boosting algorithm.</p>
+<p>For more details we refer to the <a href="https://openreview.net/forum?id=WSxarC8t-T" target="_blank">paper</a>, and the <a href="https://youtu.be/5xRxuDh_cGk" target="_blank">webinar</a>. </p>
+<p>We openly shared the PYBOOST approach with the community during the challenge  <a href="https://www.kaggle.com/code/alexandervc/pyboost-secret-grandmaster-s-tool" target="_blank">Notebook</a>, <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/454700" target="_blank">Post</a>.  It gained hundred forks, becoming component of gold-zone solutions as well as other medal winning. Moreover aftermath shows that <a href="https://www.kaggle.com/code/alexandervc/op2-explore-4th-place-magic" target="_blank">solo-Pyboost solution</a> combined with ideas by the other teams provides better results than current top1.  Recent top2 solution for the CAFA5 challenge - prediction Gene Ontology terms is also <a href="https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/434064" target="_blank">based on Pyboost</a>.  Thus PYBOOST is quite effective for such kind of MULTI-target biological tasks. </p>
+<h3>3.1.2 Can you show that top performing methods can be well approximated by a simpler model?</h3>
+<p>It depends on the meaning of the “simpler”, let us try two variants for that meaning: </p>
+<h4>Answer 1. Production ready solution expected  not to lose much compared to huge Kaggle-style ensemble</h4>
+<p>1) One side of the question seems to be: What is the estimated performance loss between Kaggle-style huge ensembles (not production ready) and production-ready reasonable  solutions ?<br>
+In short - we think the performance loss would NOT be essential - some very rough and pessimistic estimation  can be  - let us say the top gives 0.558, then production ready (with ~2 solo models)  -  0.566, with 3 solo models - 0.563, with 4 solo models 0.559. <br>
+We also think that appropriate modification of the PYBOOST solution deserves to be considered as the production ready solution, it is high performing, easy to use, maintain and modify. It is typically quite diverse from NN solutions and blend with any NN would uplift the scores. </p>
+<p>But … <br>
+But it seems we are not ready to give more precise analysis, because -  strange and unusual things happened - just after the competition closure and based on published solutions and write-ups - new combined solutions breaking current top1 appeared (we followed that route - and demonstrated that <a href="https://www.kaggle.com/code/alexandervc/op2-explore-4th-place-magic" target="_blank">solo PYBOOST model beats the top1</a> ). So in some sense we do not know what are the real  “top performing solutions” - almost surely combining approaches we can go quite further. Nevertheless we hope that it would not change the basic answer - the difference between the huge ensembles and production ready solutions is not expected to be essential. </p>
+<p>What seems to be essential - the setup with metric (MRRMSE) and preprocessing (LIMMA log-p-values) is not the perfect way. And so we recommend to update that first -  before making any further conclusions for production choices.  To give some details - it seems  that setup MRRMSE + log-p-values is very sensitive to outliers, and that is the reason why see:  solutions “Nothing but just multiplied a factor of 1.2” , leaderboard super-successful  probing  during the challenge and so on. </p>
+<h4>Answer 2</h4>
+<p>If we understand the question in a slightly different manner: is it possible to approximate top solutions by some conceptually “trivial” ones ? <br>
+Then the answer is: NO.   It is clear from write-ups that teams incorporate models like Neural Networks, Pyboost, and have non-trivial findings - so we would not call that “trivial”.  Also at the early stage of the competition we have tried more than 50 simple models+feature encodings:  Ridge, SVR, KernelRidge, Catboost, etc…  - but all of them showed results worse than 0.600 - so to break that  barrier one should already do something a bit non-trivial. (The predictions and the analysis were openly shared during the challenge <a href="https://www.kaggle.com/datasets/alexandervc/open-problems-single-cell-perturbations-submitsetc" target="_blank">Kaggle dataset</a> link.)</p>
+<h3>3.1.3 Is your model explainable? How well can you identify what is causing your model to respond to certain inputs?</h3>
+<p>PYBOOST has feature importance estimation as any other boosting  or Random Forest algorithm. For the Neural Networks we can apply the special techniques like activation maps technique to gain certain interpretation.</p>
+<h2>3.2 Model design. Details</h2>
+<p>We constructed diverse models to gain the stability and better performance. Each has been carefully cross-validated. While ensembling we controlled diversity and preferred to rely on the most stable schemes.  The main innovative part of the solution - is PYBOOST - a new gradient boosting algorithm developed by team member (Kaggle grandmaser) Anton Vakhrushev. </p>
+<h3>3.2.0 Solution principal components:</h3>
+<p>1 Family of Pyboost/Catboost models<br>
+2 Family of MLP-like Neural Networks employing target encoding<br>
+3 Family of Neural Networks based on NLP-like SMILES embedding<br>
+4 Analysis of several cross-validation schemes and CV-LB correspondence <br>
+5 Multi-stage blend scheme with diversity control and  weights equal to 0.5 at each stage</p>
+<p>Below we report on each item one by one.  </p>
+<h3>3.2.1 Family of Pyboost/Catboost models</h3>
+<p>Here we describe construction of PYBOOST and CatBoost models - both by the same scheme. PYBOOST performs better, but CatBoost is diverse enough and provide uplift in blend.   The code: Pyboost: <a href="https://www.kaggle.com/code/alexandervc/pyboost-secret-grandmaster-s-tool" target="_blank">the basic baseline notebook</a>,  other versions of the PYBOOST are in the <a href="https://www.kaggle.com/alexandervc/pyboost-u900" target="_blank">notebook</a>. Catboost <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v3-catboost" target="_blank">Notebook</a> , <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v3-catboost?scriptVersionId=152513917" target="_blank">version 64, scores 0.584, 0.776</a></p>
+<h4>Highlights:</h4>
+<ol>
+<li>PYBOOST “out of box” gives quite good results  (better than “out of box”  our other models), but couple of tricks improves it:</li>
+<li>Target Encoding by Quantile 80 - that was found by systematic consideration of all target encoders and all their params</li>
+<li>Retraining on several “ALMOST ENTIRE” train subsets - the logic is simple: we have very few samples - so: retrain on entire train set - helps the model,  but we slightly improved it:  generate several “almost entire” train subsets, train on all of them, average the results. Thus we gain from both - larger train sets and diversity. </li>
+<li>CatBoost provides diverse enough solutions from Pyboost, even with less performance it is useful in blend. </li>
+</ol>
+<h4>Modeling organization:</h4>
+<p>The core Pyboost and Catboost models are organized as follows (TSVD + TargetEncoder scheme):</p>
+<ul>
+<li>TSVD reduction of targets to say 70 dimensions (components)</li>
+<li>Target encoding of cell type and compound by these components </li>
+<li>Train model to predict these components (NOT the original targets). <br>
+(For PYBOOST - one model predicts all components at once,<br>
+For CatBoost - train 70 models - one for each component - it is time consuming, but feasible)</li>
+<li>Predict TSVD components for the test set. And finally  use TSVD-inverse-transform - to obtain original (genes) targets from the predicted components. </li>
+</ul>
+<h4>The key findings :</h4>
+<h5>Quantile 80 target encoder</h5>
+<p>brings significant boost in performance e.g. 0.602-&gt;0.586 for Pyboost and CatBoost. Default value - Quantile 50 is significantly worse. That have been found by systematic  consideration of all possible category encoders and all their params. The notebook (openly shared) <a href="https://www.kaggle.com/code/alexandervc/op2-gentle-param-tuner" target="_blank">“Gentle tuner”</a> provides a framework to tune params of the models and encoders together (employing several CV-schemes simultaneously).  First we found that effect for CatBoost (<a href="https://www.kaggle.com/code/alexandervc/op2-gentle-param-tuner?scriptVersionId=150416991&amp;cellId=36" target="_blank">notebook v61 linked figures</a>)  and then employed for PYBOOST.</p>
+<h5>The subsets for training - critically affect the scores.</h5>
+<p>Idea - “train on multiple ALMOST ENTIRE train subsets”. <br>
+Motivation: due to the small number of samples many of our models benefit if we retrain them on the ENTIRE train set (before the submission). But that is not the best way, which is - employ ALMOST ENTIRE train subsets, but  SEVERAL of them :<br>
+I.e. retrain models on 5-10 subsets of the train (each sized  80-99%  of the entire train set) and average the predictions of all these models to get the submission.<br>
+Thus models benefit from both - more information and diversity. <br>
+The trick uplifts Pyboost from 0.584 to 0.577</p>
+<p>Some details.  Let us emphasize one moment - “CV tuning and submit preparation are DIVORCED” in contrast to the usual Kaggle approach. I.e. The whole process is two staged - first one is standard -  we search for optimal params of the model using the cross-validation. At the second stage - submission preparation - we forget about CV folds and generate new training subsets (these “almost entire train” subsets). We train the model  with SAME params (found by CV) on these subsets and average the predictions. It is important that we do not use early stopping - number of trees/epochs was optimized by CV at the first stage and fixed on the second stage. That allows to retrain on (almost) entire train set - impossible with early stopping. So cross-validation and submission preparation are divorced in contrast to the usual Kaggle approach. The strategy works most probably due to  the small sample number. It is employed for boostings and one of our Neural Networks (Target Encoding based). </p>
+<h5>Exclude T-cells CD8+</h5>
+<p>One small improvement 0.586-&gt;0.584 (but stably seen for other variants of the PYBOOST also) - exclude T-cells CD8+ from the training set.</p>
+<h4>Notes:</h4>
+<p>Pyboost  outperforms CatBoost about 0.010 for that task in equal setups, but their predictions are diverse enough to get uplift  in blend. </p>
+<p>The standard tuning experiments:<br>
+Tuning the standard params for boostings - number of trees, max depth, learning rate, etc… as well as number of TSVD components - bring uplift from around 0.604 to 0.602 - so not that much crucial as ones above.  We tried a bit PCA/ICA instead but TSVD but got downlifts.  </p>
+<h4>Comments.</h4>
+<p>Comment on TSVD-scheme. Employment of TSVD (or PCA, or ICA) reduction of targets is a more or less standard approach to treat mult-target tasks e.g. widely used in Open Problems 2022. Its obvious benefit is simplification - direct prediction of 18211 targets is not feasible for many  models (except NN). Less obvious benefit ( a bit surprisingly):  it often improves the performance, despite seemingly loss of information reducing 18211 targets to say 70. The reason is:  what is lost -  mostly noise, not the useful information and so reduction to say 70 components - kind of denoises the data and helps the model. We also experimented with PCA/ICA, but TSVD seems better for boostings, while for NN we used PCA.  (See our first notebooks for some experiments. And of course, that is not universal -  depends on the data).  </p>
+<p>Remark (other models): the TSVD-scheme above can be applied for any model - we experimented a lot with Ridge,SVR, Kernel Ridge, LightGBM, Random Forest, ExtraTrees - but only Pyboost and Catboost showed good results for us. Somehow surprisingly, LightGMB was not effective, despite CatBoost was - typically it is not like that.  See <a href="https://www.kaggle.com/code/alexandervc/op2-gentle-param-tuner" target="_blank">“Gentle tuner”</a>  public notebook.   </p>
+<p>Comment (Target Encoders - pay attention to LeaveOneOutEncoder): <a href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.TargetEncoder.html" target="_blank">Target encoding</a> is a standard way to treat  categorical features. The idea is to substitute the category by mean (median, quantile, etc) of target with respect to that category.  There are many modifications of target encoding and they have several parameters: Quantile Encoder (respectively), LeaveOneOutEncoder, CatBoost Encoder, James-Stein Encoder. We made systematic benchmarking of the encoders for that task for many models. As said above Quantile80 Encoder uplifts boostings a lot. We should also note that LeaveOneEncoder deserves special attention - for linear and close to linear (SVR, some Kernel Ridges) it stably outperforms other encoders (<a href="https://www.kaggle.com/code/alexandervc/op2-target-encoders" target="_blank">tables</a>). For Boostings it is either the second one (after Quantile80) and even the first one (depending on training set configuration e.g. <a href="https://www.kaggle.com/code/madrismiller/copy-of-pyboost-secret-grandmaster-s-to-1d68b4?scriptVersionId=150557250" target="_blank">top public Pyboost 0.574</a> utlized LeaveOneOut and tricky preparation of the train set). </p>
+<p>PS</p>
+<p>Not enough time: </p>
+<p>PYBOOST predicting directly 18211 targets , i.e. not predicting TSVD-components followed by tsvd.inverse_transform - but just directly. <br>
+We did not have enough time to tune  params, out-of-box we got 0.594 <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v5-pyboost-no-tsvd" target="_blank">notebook</a> - not enough score comparing to our other models, so not included in the final ensemble. On the other hand we checked it is quite diverse from the tsvd-based PYBOOST, so we think it is promising to combine these two approaches. </p>
+<p>We planned to try feature engineering by target encoding not only from TSVD , but from biologically motivated groups of genes, or from most important features  (<a href="https://www.kaggle.com/competitions/open-problems-multimodal/discussion/366455" target="_blank">as grandmaster Silogram did in 2022</a>) but did not have enough time for that.</p>
+<h3>3.2.2 Family of MLP-like Neural Networks employing target encoding</h3>
+<p>We developed a Neural Network model which features are:  Target Encoding of PCA components. And then we developed a huge number of variations for that basic model. Key ensemble gained 0.566 and included 8 model variations.  <br>
+The main notebook with models: <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution" target="_blank">Notebook MLP with Target Encoding</a> </p>
+<h4>Highlights:</h4>
+<ol>
+<li>Easy to diversify the basic model  and benefit from the ensemble of the variations - changing augmentation, noise levels, varying features, training subsets, activations etc. - one obtains models with similar performance, but diverse enough to boost the ensemble (blend)</li>
+<li>Raw single cell RNA-seq data employed in the same scheme, same can be done for ATAC-seq </li>
+<li>Model is very stable and easy to implement - various changes do not degrade the performance </li>
+<li>Genes clustering into groups is easily employed and boost the performance</li>
+<li>Magic (simple) train duplicating trick improved score significantly: 0.600+ -&gt; 0.580+</li>
+<li>Training on "almost entire" train subsets boosted 0.580+-&gt; 0.570+; blend boosted to 0.566</li>
+</ol>
+<h4>Modeling organization and details:</h4>
+<ul>
+<li>Feature creation: Target Encoding of cell-type and compounds by PCA-components, 100 components considered for both </li>
+<li>Architecture: Multi-layer perceptron with 2 layers (200,256,18211) ; activation: “relu”</li>
+<li>Prediction scheme: 18211 targets directly (PCA is used for feature creation, but we do not predict PCA components here - in contrast to Pyboost scheme)</li>
+<li>CV scheme: 5-fold cross-validation scheme - folds containing only  leaderboard  drugs are used, split randomly in 5 groups.  </li>
+<li>Training/Tuning: loss: MAE; optimizer: AdamW; batch size: 256; max learning rate: 0.01, decayed with weight: wd = 0.5 - one-cycle learning rate strategy <a href="https://skeydan.github.io/Deep-Learning-and-Scientific-Computing-with-R-torch/training_efficiency.html" target="_blank">lr_one_cycle</a>; epoch number have been tuned and fixed to 20. (Fixed epoch number allows to retrain model on the (almost) entire train set, while early stopping methods forbid that way).</li>
+<li>Training/Submit: Retrain model on “almost entire” train subsets (i.e. entire train with exclusion 2-3-10 subsamples)</li>
+<li>Magic (simple) train duplicating trick improved score significantly: 0.600+ -&gt; 0.580+</li>
+</ul>
+<h4>The strategy to create variations of the basic model employed the following techniques:</h4>
+<ul>
+<li>Changing the training set methods: exclusions of the samples which originate from extremely low numbers (1 or 2) of single cells processed in pseudo-bulk procedure.    </li>
+<li>Genes clustering into groups (e.g. 3 groups by K-means); processing each group separately and concatenating the predictions</li>
+<li>Augmentation techniques: varying number train duplicates; different noise levels for cell type and compounds; linear combinations of features + targets to create new samples;  </li>
+</ul>
+<p>Params used during the challenge: <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution?scriptVersionId=153981848" target="_blank">notebook version 52</a>.  The precise description of  all 10 variations of the basic model entered in the final submission is <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution?scriptVersionId=154412513&amp;cellId=50" target="_blank">here</a>. The diversity analysis of the these variations is <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-analysis-of-different-models-predictions?scriptVersionId=154657444&amp;cellId=153" target="_blank">here</a> - one can see - some models are quite diverse from the others - correlation score 0.9. </p>
+<p>We employed the same idea training on "almost entire" train subsets as described for PYBOOST above. It boosted scores approximately: 0.580+-&gt; 0.570+. </p>
+<h3>3.2.3 Family of Neural Networks based on NLP-like SMILES embedding</h3>
+<p>We developed several NN models employing direct encoding of SMILES by embedding layer (technique coming from NLP). The key single model achieved 0.574, another quite diverse model entering the final ensemble -  0.587 and the last hours combination achieved 0.571 score - incorporating  pseudo-labeling technique  (not included in the selected blend submit).   These solutions originate from the <a href="https://www.kaggle.com/code/kishanvavdara/nlp-regression" target="_blank">public one</a> by Kishan Vavdara though substantially reworked from architectural and training points of view uplifting the score from 0.607 (original) to 0.574 and further.</p>
+<h4>Highlights:</h4>
+<ol>
+<li>Lion - new powerful optimizer - outperformed Adam </li>
+<li>Magic (simple) train duplicating trick improved score 0.582 -&gt; 0.574</li>
+<li>SMILES encoding by the embedding layer</li>
+</ol>
+<h4>Modeling organization (key 0.574 model):</h4>
+<p>The <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1" target="_blank">main notebook</a>, the submission with 0.574 (0.766 pricate) score is <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1?scriptVersionId=151529557" target="_blank">version 11</a>.</p>
+<ul>
+<li>Feature Encoding: SMILES - by Embedding layer, Cell Types - One-hot; both concatenated</li>
+<li>Architecture: 5-Layer (1558,512,256, 128, 256, 18211) Perceptron with carefully chosen Batchnorm and Dropout layers positions, activation: “elu”</li>
+<li>Preprocessing: Standard Scaler for targets, Add Gaussian Noise for features</li>
+<li>Training: Lion optimizer; loss: competition loss - MRRMSE (custom);  5 almost random folds; best (by validation score)  epoch (out of 300)   is restored for each fold - that appears to be quite important</li>
+<li>Prediction scheme: 18211 targets directly, (TSVD -  not used at all) </li>
+<li>The trick with duplicating the train for each fold yields 0.582-&gt;0.574 uplift. Similar to our other NN models.  </li>
+<li>Tuning: params were optimized by CV</li>
+</ul>
+<p>The model is defined in notebook section <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1#The-model" target="_blank">"The model"</a>, the next cell contains a <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1?scriptVersionId=154712856&amp;cellId=64" target="_blank">figure</a> with the graphical description.</p>
+<p>So the model organized as follows: SMILES are encoded via the embedding layer and Cell Type via one-hot; both encodings concatenated; that followed by 5-dense-layers perceptron (1558,512,256, 128, 256, 18211) carefully  interchanged with batchnorm and dropout layers; activation is “elu”. <br>
+We checked the stability of the model as follows. Rerun it with several times with similar params compare CV scores and submit. We stably observed similar CV scores and moreover LB scores at the range 0.581-0.583 - before adding train duplication trick and 0.574 after. That is quite in contrast to the original model - which has  larger score variance:  0.600 - 0.617 at least (see experiments <a href="https://www.kaggle.com/code/erotar/fork-of-nlp-regression-12a31a?scriptVersionId=150057568" target="_blank">here</a> ). </p>
+<h4>What did not worked well for that version of the NN:</h4>
+<ul>
+<li><a href="https://github.com/Ebjerrum/SMILES-enumeration" target="_blank">SMILES augmentation package</a>  </li>
+<li>LSTM/CNN architectures, other optimizers, pseudolabeling, dropping out noisy samples. </li>
+<li>The trick to retrain model on the entire train also was not successful for that NN (in contrast to other models) because the epoch number determined by early stopping was different from fold to fold and fixing it to some particular number - degraded the CV-scores and so we did not want to risk employing  the models not having good CV scores. Spent quite a lot efforts to resolve it, but unsuccessful. </li>
+</ul>
+<h4>That family of models also included other variants:</h4>
+<p>It yielded 0.587 score in initial version (included in final blend) <a href="https://www.kaggle.com/bejeweled/scp-blend-own" target="_blank">notebook1</a>, <a href="https://www.kaggle.com/bejeweled/scp-pseudo50-ct-strat-mrrmse-tf-smilesv" target="_blank">notebook2</a>.  And last hours change yielded 0.571, but not giving significant boost to the entire blend construction (so not included in the chosen submits): </p>
+<p>Highlight:</p>
+<ul>
+<li>The 0.571 versions heavily employed pseudolabeling: <a href="https://www.kaggle.com/code/bejeweled/op2-u900-part-of-solution-pytorch-tf-nns" target="_blank">https://www.kaggle.com/code/bejeweled/op2-u900-part-of-solution-pytorch-tf-nns</a></li>
+</ul>
+<p>The other findings are the following: </p>
+<ul>
+<li>With the LSTM layer after smile embeddings.</li>
+<li>With sigmoidal range activation as the model output.</li>
+<li>With multiplication of outputs by coefs.</li>
+<li>With pseudolabels from these models blends.</li>
+</ul>
+<p>PS</p>
+<p>What did not work: we spent quite efforts on Neural Network based on one-hot encoding of the compounds, even achieving local CV-uplift, but LB score still appeared to be 0.619 <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v4-nnohe" target="_blank">notebook</a>, changing architecture, augmenting train, changing one-hot to similar encodings: Helmert, Backward difference, etc - nothing worked. We got same LB score as in the early version - which is just   average of many random seeds in the simple version of the net from the public: <a href="https://www.kaggle.com/code/alexandervc/op2-kishan-s-nn-streamlined-and-blended" target="_blank">notebook</a>. The <a href="https://www.kaggle.com/code/kishanvavdara/neural-network-regression" target="_blank">original net</a> seems to be quite unstable - public score varies with the seed 0.599 - 0.620, and not so good results on private. </p>
+<h3>3.2.4 Analysis of several cross-validation schemes and CV-LB correspondence</h3>
+<p>Here we describe our approaches to cross-validation, analysis of the CV-LB correspondence.<br>
+More details (tables, figures, etc) can be found in the separate <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460251" target="_blank">post</a>. </p>
+<p>CV - LB correspondence is quite problematic in the current challenge. Its better understanding would be important for research community future works. Even aftermath writeups analysis seems to reveal that good solution for CV-LB correspondence is not found yet.  During the challenge several logical CV-schemes were proposed - AmbrosM - <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/443395#2457831" target="_blank">discussion</a>, <a href="https://www.kaggle.com/code/ambrosm/scp-quickstart?scriptVersionId=144293041&amp;cellId=8" target="_blank">notebook</a> or MT's scheme: <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/444494#2466644" target="_blank">discussion</a>, <a href="https://www.kaggle.com/code/masato114/scp-quickstart-another-cv-strategy/notebook" target="_blank">notebook</a>.  MT proposes to put in validation SAME CELL-TYPES as on LB, while AmbrosM proposes SAME COMPOUNDS. However even early analysis showed far from perfect correspondence to LB for both schemes.  Note: we developed and <a href="https://www.kaggle.com/code/alexandervc/op2-class-for-custom-cv-schemes" target="_blank">openly shared</a> the Python class which conveniently encapsulates these and other CV-schemes.</p>
+<p>Here are some our findings:</p>
+<h4>Highlights</h4>
+<ol>
+<li>Local (CV) row-wise correlation score is better  related (0.5)  to LB (mrrmse score) than other metrics </li>
+<li>Local (CV) mrrmse score is near zero correlated with the LB (mrrmse score)  for all CV schemes considered</li>
+<li>NK cells local mrrmse is better  correlated to LB ( 0.2+), while for T-cells CD8+ it is negative (-0.1+) </li>
+<li>NK-cells local mrrmse is well related with LB for Pyboost models, but not for other e.g. NN models</li>
+<li>Random folds are NOT worse than more logical and sophisticated CV-schemes; and seems preferable for NN models</li>
+<li>Public and private LB scores -  highly correlated:  0.98, despite poor CV-LB correspondence</li>
+</ol>
+<p>So, there seems to be many surprises: despite the LB metric is mrrmse - the best locally related to it - is the OTHER metric - row-wise correlation;  while local mrrmse performs near zero. Another surprise - CV-LB correspondence is poor - while public-private LB is very good - 0.98 correlation. And also it is surprising that random folds performs not worse than more logical schemes.</p>
+<h3>Further notes/suggestions:</h3>
+<ol>
+<li>Models of the same nature/features  - the CV-LB correspondence  somehow  working (not so good but still) for all CV schemes. So strategy can be - tune each particular model by CV, verifying by LB - that what we used. </li>
+<li>The main problem to compare different models - even close models Pyboost and Catboost,  with same public LB scores e.g. 0.584 may show quite different CV score like 0.92 vs 0.89, and even worse for boosting vs NN. So for final blend we decided to rely more on LB score, rather than on CV. </li>
+</ol>
+<p><strong>Setup. Potential bias.</strong> The analysis is based on more than 50 quite diverse models, still it can be biased by models choice. We see very clearly that local metrics better corresponding to LB are quite dependent on the model/features/etc.</p>
+<p>See further analysis in the separate <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460251" target="_blank">post</a>. </p>
+<p>PS</p>
+<p>To complement: here is table (<a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460251#2553943" target="_blank">from here</a>) showing correlation of CV and LB for different metrics for a set of SIMILAR models (NN based on target encoding) - we see it is quite high (better for public, less for private):  </p>
+<table>
+<thead>
+<tr>
+<th>metric</th>
+<th>corr_vs_public</th>
+<th>corr_vs_private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MRRMSE</td>
+<td>0.69</td>
+<td>0.39</td>
+</tr>
+<tr>
+<td>corr_rows</td>
+<td>-0.79</td>
+<td>-0.53</td>
+</tr>
+<tr>
+<td>corr_cols</td>
+<td>-0.74</td>
+<td>-0.48</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>-0.64</td>
+<td>-0.42</td>
+</tr>
+</tbody>
+</table>
+<p>Pay attention that for models of diverse nature - correlations are much lower, even for that family of models but with bigger modifications of  feature construction - correlations become much lower (see <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-tricks-and-metrics?scriptVersionId=155213609&amp;cellId=53" target="_blank">table</a>). (See <a href="https://www.kaggle.com/competitions/open-problems-single-cell-perturbations/discussion/460251#2553943" target="_blank">post</a>  for more details).</p>
+<h3>3.2.5 Multi-stage blend scheme with diversity control and  weights equal to 0.5 at each stage</h3>
+<p>Here we describe our approach to ensemble (blend). The more detailed explanations and working code are in the <a href="https://www.kaggle.com/code/alexandervc/op2-u900-team-blend" target="_blank">notebook</a>.</p>
+<h4>Highlights:</h4>
+<ul>
+<li>Main problem - absence of good CV - LB correspondence - forbids the usual strategy to choose weights by CV</li>
+<li>Solution relies on: how to increase and control diversification; how to avoid overfit-proning choice of weights - a scheme of multi-step blend  with the only weight = 0.5 on each step.</li>
+<li>Measure of diversity - average target-wise correlation of predictions</li>
+<li>Check by various experiments: models with correlation score 0.8-0.9 - consistently give substantial uplift in blend (about +0.01 - 0.006)</li>
+<li>Avoid overfit-proning question: how to choose weights of the models with DIFFERENT scores, by the following scheme:</li>
+<li>Core scheme: sequential blend of the models with EQUAL (almost) scores, giving them EQUAL blend weight (=0.5):</li>
+<li>step1: LB score 0.575 = 0.5 Pyboost(0.584) + 0.5 <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v3-catboost?scriptVersionId=152513917" target="_blank">Catboost(0.584)</a> </li>
+<li>step2: LB score 0.566 = 0.5 step1 (0.575 ) + 0.5 <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1" target="_blank">NN-NLP (0.574)</a></li>
+<li>step3: LB score 0.559 = 0.5 step2 (0.566 ) + 0.5 <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution" target="_blank">MLP_TargetEncEnsemble (0.566)</a></li>
+<li>final polishing: 0.558 - blend more Pyboost (0.574,0.577) and NN (0.569,0.570,0.572,0.587) models:</li>
+</ul>
+<h4>Experiments with other blend ideas:</h4>
+<ul>
+<li>Different weights for B-cells and Myeloid cells (partially successful)</li>
+<li>Tried, but had not enough time to succeeded:<ul>
+<li>Estimate variance and correlations for each target (or each row) of predictions and choose blend weights according to modifications of the classical statistical formula - weights are proportional to variance - bigger variance - less confidence - lower weight in blend</li></ul></li>
+</ul>
+<h1>4. Robustness</h1>
+<h2>4.1 How robust is your model to variability in the data? Here are some ideas for how you might explore this, but we’re interested in unique ideas too.</h2>
+<p>The robustness of our models can be advocated e.g. as follows. Our public and private leaderboard ranking is approximately the same, moreover it corresponds to our ranking during last weeks of challenge (ignoring the effect of public-LB-probing notebooks appearing at the end). Aftermath: we <a href="https://www.kaggle.com/code/alexandervc/op2-public-vs-private-scores" target="_blank">computed the correlation</a> between public and private scores of our submits and it is 0.98. So models well generalize on the unseen data. <br>
+Additionally we performed the following tests for most of our models during the challenge - changed params a bit and made submissions - the variations was always around 0.001-0.002. </p>
+<p>All the models have been optimized by local cross-validation scores and only then submitted to LB, we accepted only those changes which improve both CV and LB. </p>
+<h3>4.2 Add small amounts of noise to the input data. What kinds of noise is your model invariant to? Bonus points if the noise is biologically motivated.</h3>
+<p>Gaussian noise has been included at the feature generation stage for our neural network models. We tested several  values of noise magnitude and chose the optimal values of the noise level. </p>
+<h1>5. Documentation &amp; code style</h1>
+<p>The code is documented in the notebooks.<br>
+The section 3.2 "Model Design -  Details” here  provides quite detailed description of the solution. </p>
+<h1>6. Reproducibility</h1>
+<p>Source code is here available in the notebooks:<br>
+Pyboost: <a href="https://www.kaggle.com/code/alexandervc/pyboost-secret-grandmaster-s-tool" target="_blank">the basic baseline notebook</a>,  other version of the PYBOOST are in the <a href="https://www.kaggle.com/alexandervc/pyboost-u900" target="_blank">notebook</a>.</p>
+<p>Catboost <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v3-catboost" target="_blank">Notebook</a> , <a href="https://www.kaggle.com/code/alexandervc/fork-of-op2-oof-new-folds-v3-catboost?scriptVersionId=152513917" target="_blank">version 64, scores 0.584, 0.776</a></p>
+<p>MLP-like Neural Networks employing target encoding <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution" target="_blank">Notebook</a>, params used during the challenge: <a href="https://www.kaggle.com/code/antoninadolgorukova/op2-simple-mlp-part-of-13th-place-solution?scriptVersionId=153981848" target="_blank">notebook version 52</a>.</p>
+<p>Neural Networks based on NLP-like SMILES embedding - <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1" target="_blank">the main notebook</a>, the submission with 0.574 (0.766 private) score is <a href="https://www.kaggle.com/code/alexandervc/nlp-regression-custom-kfold-update1?scriptVersionId=151529557" target="_blank">version 11</a>.</p>
+<p>Blend: <a href="https://www.kaggle.com/code/alexandervc/op2-u900-team-blend" target="_blank">Notebook</a>, selected final submit is version 15 - <a href="https://www.kaggle.com/code/alexandervc/op2-u900-team-blend?scriptVersionId=153084243" target="_blank">direct link</a>.</p>
+<p>Most of our submissions can be found in the Kaggle datasets <a href="https://www.kaggle.com/datasets/alexandervc/open-problems-single-cell-perturbations-submitsetc" target="_blank">submits and out-of-fold predictions</a>, <a href="https://www.kaggle.com/datasets/alexandervc/open-problems-2-submits-etc" target="_blank">Open Problems 2 Submits, etc</a></p>
+<p>Information on all submits with public and private scores is in the <a href="https://www.kaggle.com/code/alexandervc/op2-public-vs-private-scores/output?select=df_stat_submissions.csv" target="_blank">file</a></p>
+<p>Our initial PYBOOST notebook has been openly shared and forked about 100 times, being a component of top public solo models as well as  many medal winning solutions - probably the best indication of the reproducibility. </p>
+<h1>Concluding remarks</h1>
+<h2>MRRMSE and log-p-values - may not be the perfect choice</h2>
+<p>The metric mrrmse and preprocessing - log-p-values by Limma - seems to cause certain problems. It seems that combination - mrrmse and log-p-values is too much sensitive to outliers. During the competition - the leaderboard has been probed too easily.  It is also quite unusual appearance of the better than top1 late submits just 1-2 days after the end and medal zone solutions like “Nothing but just multiplied a factor of 1.2”. All that indicates: a) we (as a community) not fully understand the problem b) the metric was not chosen perfectly. We are not fully convinced that the argument that p-values allow to catch difference in distributions, while log-fold change will capture only the difference in averages between distributions - that would be the case for p-values of the concordance criteria like KS or Chi2, but it seems  p-values by Limma capture only the difference in averages. What should be the proper choice of the metric and processing ? - seems to an interesting and important question. </p>
+<h2>small number of samples - but sill stable - how to anticipate ?</h2>
+<p>It seems the small number of  samples was really frightening and prevented participation of many experienced Kagglers at the challenge. Small number of samples typically leads to high instability and shake-up at the end, thus people not willing to invest their time with big chances to be randomly ranked at the end. However, surprisingly,  that seems to have appeared to be  a mistake. There were only moderate changes in ranking for the leaders, aftermath shows quite high correlation 0.98 between public and private leaderboard scoring. So in some sense, a small number of samples was compensated by a large number of targets and overall ensured certain stability. Could be anticipated from the beginning i.e. despite small number of samples overall predictability is quite stable ?</p>
+<p>Overall “Open problems” team and Kaggle team are doing great job bringing cutting-edge datasets to community consideration and thus allowing to contribute the cutting-edge scientific research. We are happy to be a part of that activity. </p>

@@ -1,0 +1,48 @@
+# meta-kaggle-hackathon 讨论区（按票数排序，共 46 条）
+
+- [Announcing the Meta Kaggle Hackathon Winners!](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/598833) — 24 票 / 26 评论 / 2025-08-13 
+- [Kaggle impact on education - Data Science Education for High School Students](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582261) — 21 票 / 2 评论 / 2025-05-30 
+- [Introducing Kaggle Hackathons!](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/581301) — 16 票 / 3 评论 / 2025-05-29 
+- [Starter materials and onboarding references](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582208) — 16 票 / 8 评论 / 2025-05-29 
+- [Get Started Here!](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/581300) — 11 票 / 23 评论 / 2025-05-29 
+- [This Competition Has an Official Discord Channel](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/581302) — 7 票 / 5 评论 / 2025-05-29 
+- [📒 Supplemental dataset: Official Meta Kaggle dataset ported to Parquet Format](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583068) — 7 票 / 4 评论 / 2025-06-04 
+- [Notebooks and Datasets weren't made Public](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590655) — 6 票 / 7 评论 / 2025-07-22 
+- [🔢 Supplemental Datasets: Meta Kaggle Forum Data Embedding Datasets for this Hackathon](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582619) — 5 票 / 0 评论 / 2025-06-01 
+- [Any chance for extra time?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590417) — 5 票 / 3 评论 / 2025-07-20 
+- [General Questions Concerning the Hackathon](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583782) — 5 票 / 3 评论 / 2025-06-09 
+- [[Request] Can a sample writeup template be made available for everybody to refer?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/588045) — 5 票 / 0 评论 / 2025-07-04 **write-up?**
+- [Clarification on results release time](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/598615) — 4 票 / 8 评论 / 2025-08-12 
+- [Submitting to both Tracks with the same Source](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589357) — 4 票 / 5 评论 / 2025-07-12 
+- [Should We Make Our Work Public Beforehand?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590373) — 3 票 / 11 评论 / 2025-07-20 
+- [College students ](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582945) — 3 票 / 2 评论 / 2025-06-03 
+- [Progression Changes and the Meta Kaggle Hackathon](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/588799) — 3 票 / 2 评论 / 2025-07-08 
+- [Leaderboard](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582243) — 2 票 / 4 评论 / 2025-05-30 
+- [Hackathon Main Task](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582358) — 2 票 / 5 评论 / 2025-05-30 
+- [Could medals be considered for hackathon-style competitions?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582279) — 2 票 / 6 评论 / 2025-05-30 
+- [Convert data to Parquet format?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583025) — 2 票 / 3 评论 / 2025-06-04 
+- [Notebook from past?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582507) — 2 票 / 8 评论 / 2025-05-31 
+- [Platform Infrastructure Question for Meta Kaggle Analysis](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583300) — 2 票 / 2 评论 / 2025-06-06 
+- [After competition end](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583603) — 2 票 / 1 评论 / 2025-06-08 
+- [Is there a data connection issue? ](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583923) — 2 票 / 3 评论 / 2025-06-10 
+- [I couldn't submit my writeup](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589854) — 2 票 / 6 评论 / 2025-07-15 **write-up?**
+- [Announcement Time](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/598401) — 2 票 / 1 评论 / 2025-08-10 
+- [submiting this competition notebook](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589172) — 1 票 / 1 评论 / 2025-07-10 
+- [Submit to both Tracks?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/585821) — 1 票 / 3 评论 / 2025-06-23 
+- [Writeups problems](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589369) — 1 票 / 3 评论 / 2025-07-12 **write-up?**
+- [Character Analysis of Discussion Data](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589710) — 1 票 / 0 评论 / 2025-07-15 
+- [is AI voice allowed in youtube video submission ?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589809) — 1 票 / 2 评论 / 2025-07-15 
+- [Increase Maximum Project Limit per User](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/583594) — 1 票 / 1 评论 / 2025-06-08 
+- [Correction on Public Writeup License](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589996) — 1 票 / 0 评论 / 2025-07-16 **write-up?**
+- [Writeups problems.A1](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589697) — 1 票 / 1 评论 / 2025-07-14 **write-up?**
+- [Clarification: Should the demo video walk through every section of the write-up?](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590301) — 1 票 / 2 评论 / 2025-07-19 **write-up?**
+- [Results announcement date](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590941) — 1 票 / 7 评论 / 2025-07-24 
+- [Result Declaration Date? ](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582545) — 1 票 / 2 评论 / 2025-06-01 
+- [Submitting projects](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589112) — 0 票 / 1 评论 / 2025-07-10 
+- [Writeup Evaluation questions](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/589447) — 0 票 / 0 评论 / 2025-07-13 **write-up?**
+- [Clarification on the Scope of the "Trends Over Time" Track](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/584349) — 0 票 / 1 评论 / 2025-06-12 
+- [Writeup save Issue "This comment id too similar to previous one"](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590185) — 0 票 / 1 评论 / 2025-07-18 **write-up?**
+- [Problem with Writeups (Meta Kaggle Hackathon)](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590365) — 0 票 / 1 评论 / 2025-07-20 **write-up?**
+- [Meta Kaggle Hackathon- Public/Private setting issue](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/590744) — 0 票 / 0 评论 / 2025-07-22 
+- [Medals in more competitions as an instigator](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/582639) — 0 票 / 0 评论 / 2025-06-01 
+- [ Decoding Kaggle: A Meta-Level Exploration (META KAGGLE HACKATHON)](https://www.kaggle.com/competitions/meta-kaggle-hackathon/discussion/586161) — -6 票 / 0 评论 / 2025-06-25 

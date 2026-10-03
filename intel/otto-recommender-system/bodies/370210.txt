@@ -1,0 +1,918 @@
+# https://www.kaggle.com/competitions/otto-recommender-system/discussion/370210
+
+Topic #370210: How To Build a GBT Ranker Model
+  Author: Chris Deotte
+  Posted: 2022-12-03 16:41:41.353000
+  Votes: 335  Comments: 224
+
+Candidate Rerank Model
+
+A strong and easy way to build a solution for this competition is a "candidate rerank" model explained here. Creating train data, training and inferring a GBT ranker model can be difficult to understand at first. I hope the following discussion post will help you on your journey.
+
+The general idea is; for each session (i.e. user), we find 50-200 candidates (that are likely to be correct predictions) then we train an GBT ranker model to select our final 20. To do this, we need to create train data for our ranker model. Below are some tips to help create train data and use GBT ranker models
+
+Candidate DataFrame
+
+The first step to creating train data for our ranker model is building a dataframe of candidates. One way to generate high quality candidates is using co-visitiation matrices, explained here. Our candidate dataframe has one pair of session (i.e. user) and aid (i.e. item) per row. This dataframe has the following columns
+
+
+
+session (i.e. user)
+
+aid (i.e. item)
+
+user features
+
+item features
+
+user-item interaction features
+
+click target (i.e 0 or 1)
+
+cart target (i.e. 0 or 1)
+
+order target (i.e. 0 or 1)
+
+
+Memory Management
+
+In all of the following code, it is very important to continually change the dtype of each column to minimum data size. So after making a new column, make sure to df[col] = df[col].astype('int32') or the smallest possible dtype. If you do nothing then many libraries will use int64 or float64 which takes 8 bytes per value. This will use more RAM and disk space then needed. Always reduce dtypes!
+
+NOTE When using the latest version of cuDF locally (version 22.08 or later) , there is a new feature to set default bitwidth as 32. This will prevent the dataframe from using int64 nor float64 and makes it easier for the user. (Thanks Giba for pointing this out here):
+
+import cudf
+cudf.set_option("default_integer_bitwidth", 32)
+cudf.set_option("default_float_bitwidth", 32)
+
+
+Even after reducing column dtypes, you may still have memory issues. The way to solve this is to process everything in chunks. If you are using train.groupby('session') to make user features, then perhaps first split the train data into X pieces (like 2, 4, 8 pieces). Then process user features for each piece separately and save to disk as f'user_features_p{PIECE_NUMBER}.pqt'. Later when you read them in, you can concatenate them together.
+
+Also consider using DASK which works with both CPU Pandas or GPU RAPIDS cuDF to use multiple CPU/GPU and/or disk when needed to avoid all memory errors! (info here)
+
+Speed - Use GPU
+
+All of the following code will take time to run since this data has around 13 million users and 2 million items. I suggest using an accelerated dataframe library for all the following processing like Nvidia's RAPIDS cuDF here which uses GPU instead of CPU for accelerated speed !
+
+Step 1
+
+Our train data will be the first 3 weeks of Kaggle train data. And our validation data will be the last 1 week of Kaggle train. We then split our validation data into validation data A and validation data B where validation B are the ground truths. (Validation data A is like the Kaggle test data we download whereas validation data B is like the LB (leaderboard). Roughly speaking A is like first half of each user activity during week while B is second half).
+
+Consider using Radek's train and valid data here which already splits validation data into A and B. For every user (i.e. session) in our validation data A (i.e. last 1 week of Kaggle train), we generate X candidate aids. Let's say X=50 for the rest of our discussion. We create a dataframe of shape (number_of_session x 50, 2 ):
+
+
+
+
+user
+item
+
+
+
+
+0001
+6456
+
+
+0001
+4490
+
+
+0002
+8486
+
+
+0002
+7297
+
+
+
+
+Each session will appear 50 times. And there will be no duplicate [session,aid] pairs. We only use users from our validation data because we only have targets for users in validation data (in step 6 below).
+
+Step 2
+
+Create item features. Using our train data + valid data A (yes use test leak), we create item features in their own dataframe and save a parquet to disk. For example
+
+item_features = train.groupby('aid').agg({'aid':'count','session':'nunique','type':'mean'})
+item_features.columns = ['item_item_count','item_user_count','item_buy_ratio']
+# CONVERT COLUMNS TO INT32 and FLOAT32 HERE
+item_features.to_parquet('item_features.pqt')
+
+
+NOTE if you have memory problems. Then break train into 10 dataframe parts. All rows pertained to a single item must be in the same dataframe part so that train_part_1.groupby('aid') will work correctly. After processing, save each part separately to disk. And later when you read them from disk, concatenate them together before merging them to candidate dataframe.
+
+Step 3
+
+Create user features. Using our validation data A, we create user features in their own dataframe and save a parquet to disk. For example
+
+user_features = train.groupby('session').agg({'session':'count','aid':'nunique','type':'mean'})
+user_features.columns = ['user_user_count','user_item_count','user_buy_ratio']
+# CONVERT COLUMNS TO INT32 and FLOAT32 HERE
+user_features.to_parquet('user_features.pqt')
+
+
+Step 4
+
+This step is optional. Step 4 will improve CV and LB, but your GBT ranker will work without step 4. Create user-item interaction features. Using our validation data A, we create multiple user-item feature dataframes and save them as parquets to disk. For each idea, we can make a new dataframe. One dataframe can contain all items that a user clicks. So make a dataframe with one column user, one column item, and a third column called item_clicked. Then for each unique item that a user clicked, we add a new row with item_clicked = 1. Note that our dataframe will have no duplicate rows of ['user','item'] pairs. Save this dataframe to disk. When we merge this to candidate dataframe we will fillna(0) to indicate the items not clicked.
+
+Step 5
+
+Add features to our candidate dataframe. To add features to our candidate dataframe, we read from disk and merge them on as follows
+
+item_features = pd.read_parquet('item_features.pqt')
+candidates = candidates.merge(item_features, left_on='aid', right_index=True, how='left').fillna(-1)
+user_features = pd.read_parquet('user_features.pqt')
+candidates = candidates.merge(user_features, left_on='session', right_index=True, how='left').fillna(-1)
+
+
+Now our candidate dataframe looks like
+
+
+
+
+user
+item
+item_feat1
+item_feat2
+user_feat1
+user_feat2
+
+
+
+
+0001
+6456
+10
+12
+5.4
+0.5
+
+
+0001
+4490
+13
+15
+5.4
+0.5
+
+
+0002
+8486
+55
+8
+2
+1.2
+
+
+0002
+7297
+70
+10
+2
+1.2
+
+
+
+
+NOTE if we have memory problems merging all our features to our candidate dataframe, then we can do this in chunks
+
+CHUNKS = 10
+chunk_size = np.ceil( len(candidates) / CHUNKS)
+for k in range(CHUNKS):
+    df = candidates.iloc[k*chunk_size:(k+1)*chunk_size].copy()
+    df = df.merge(item_features, left_on='aid', right_index=True, how='left').fillna(-1)
+    df = df.merge(user_features, left_on='session', right_index=True, how='left').fillna(-1)
+    df.to_parquet(f'candidate_with_features_p{k}.pqt')
+
+
+Step 6
+
+We will now add targets to our candidate dataframe from step 1. The best way to add a column of targets is to use dataframe merge. First we make a dataframe of all the target=1 as follows. Starting with a dataframe that contains the targets as a column of lists ( like Radek's ground truth labels here) such as:
+
+test_labels.parquet
+
+
+
+
+session
+type
+ground truth
+
+
+
+
+0001
+carts
+[3456, 4490, 5661, 7821, 9914 ]
+
+
+0002
+carts
+[1222, 4656, 533, 8486]
+
+
+
+
+We use the following code to convert these lists into a dataframe of targets:
+
+tar = pd.read_parquet('test_labels.parquet')
+tar = tar.loc[ tar['type']=='carts' ]
+aids = tar.ground_truth.explode().astype('int32').rename('item')
+tar = tar[['session']].astype('int32').rename({'session':'user'},axis=1)
+tar = tar.merge(aids, left_index=True, right_index=True, how='left')
+tar['cart'] = 1
+
+
+This produces a dataframe like
+
+
+
+
+user
+item
+cart
+
+
+
+
+0001
+3456
+1
+
+
+0001
+4490
+1
+
+
+
+
+And we merge it to our candidate dataframe with the following line:
+
+candidates = candidates.merge(cart_target,on=['user','item'],how='left').fillna(0)
+
+
+
+
+
+user
+item
+item_feat1
+item_feat2
+user_feat1
+user_feat2
+cart
+
+
+
+
+0001
+6456
+10
+12
+3
+0.5
+0
+
+
+0001
+4490
+13
+5
+5.4
+0.1
+1
+
+
+0002
+8486
+55
+10
+5
+0.9
+1
+
+
+0002
+7297
+70
+20
+2
+1.2
+0
+
+
+
+
+Training
+
+We now have train data for our GBT ranker model. We must train using GroupKFold. Important Note: when we train, we do not use the user and item columns as features, we only use the other columns. FEATURES = candidates.columns[2 : -1*len(targets)]. Note with XGB, we have 3 options for rankers by changing objective parameter, to either rank:pairwise, or rank:ndcg,  or rank:map. (We should also add and tune XGB parameters 'max_depth', 'subsample', 'colsample_bytree', 'learning_rate')
+
+import xgboost as xgb
+from sklearn.model_selection import GroupKFold
+
+skf = GroupKFold(n_splits=5)
+for fold,(train_idx, valid_idx) in enumerate(skf.split(candidates, candidates['click'], groups=candidates['user'] )):
+
+    X_train = candidates.loc[train_idx, FEATURES]
+    y_train = candidates.loc[train_idx, 'click']
+    X_valid = candidates.loc[valid_idx, FEATURES]
+    y_valid = candidates.loc[valid_idx, 'click']
+
+    # IF YOU HAVE 50 CANDIDATE WE USE 50 BELOW
+    dtrain = xgb.DMatrix(X_train, y_train, group=[50] * (len(train_idx)//50) ) 
+    dvalid = xgb.DMatrix(X_valid, y_valid, group=[50] * (len(valid_idx)//50) ) 
+
+    xgb_parms = {'objective':'rank:pairwise', 'tree_method':'gpu_hist'}
+    model = xgb.train(xgb_parms, 
+        dtrain=dtrain,
+        evals=[(dtrain,'train'),(dvalid,'valid')],
+        num_boost_round=1000,
+        verbose_eval=100)
+    model.save_model(f'XGB_fold{fold}_click.xgb')
+
+
+NOTE If you have memory problems training XGB on GPU, consider downsampling negatives 2x, 4x, 10x, 20x with frac = 0.5, 0.25, 0.1, or 0.05 (and then update group sizes in DMatrix). Or use DASK XGB with multiple GPUs. Here is example code:
+
+positives = candidates.loc[candidates['click']==1]
+negatives = candidates.loc[candidates['click']==0].sample(frac=0.5)
+candidates = pd.concat([positives,negatives],axis=0,ignore_index=True)
+
+
+Inference
+
+For inference, we create a new candidate dataframe (using our technique to generate candidates before) but this time from Kaggle's test data. Then we make item features from all 4 weeks of Kaggle train plus 1 week of Kaggle test. And we make user features from Kaggle test. We merge the features to our candidates. Then we use our saved models to infer predictions for clicks. Lastly we select 20 by sorting the predictions and choosing 20 with.
+
+preds = np.zeros(len(test_candidates))
+for fold in range(5):
+    model = xgb.Booster()
+    model.load_model(f'XGB_fold{fold}_click.xgb')
+    model.set_param({'predictor': 'gpu_predictor'})
+    dtest = xgb.DMatrix(data=test_candidates[FEATURES])
+    preds += model.predict(dtest)/5
+predictions = test_candidates[['user','item']].copy()
+predictions['pred'] = preds
+
+predictions = predictions.sort_values(['user','pred'], ascending=[True,False]).reset_index(drop=True)
+predictions['n'] = predictions.groupby('user').item.cumcount().astype('int8')
+predictions = predictions.loc[predictions.n&lt;20]
+sub = predictions.groupby('user').item.apply(list)
+sub = sub.to_frame().reset_index()
+sub.item = sub.item.apply(lambda x: " ".join(map(str,x)))
+sub.columns = ['session_type','labels']
+sub.session_type = sub.session_type.astype('str')+ '_clicks'
+
+
+NOTE if you have memory errors. Consider loading 1/10th of the test data. Then merge features. Then infer. Next load the next 1/10th, merge features, infer. etc. etc. Lastly concatenate the predictions and make submission.csv
+
+Enjoy
+
+I hope this discussion post helps illustrate how to create data for a GBT ranking model and how to train and infer. Have fun!
+
+Comments:
+├─ xarispan (2022-12-09 00:47:14.520000) [+5]
+│  Will this work if our candidates for each session have mixed length? For one session we may have 25 candidates, for another one 30.
+  ├─ Chris Deotte (2022-12-09 01:20:53.497000) [+6]
+  │  Yes, it will work. You just need to sort your dataframe by session and provide XGB with a list of group sizes in the order they appear in the dataframe.
+  │  
+  │  For example, sort your dataframe with train...
+  ├─ Andrej Zubaľ (2022-12-09 11:35:24.610000) [+7]
+  │  I also have different number of candidates for each session.
+  │  
+  │  In my case I managed to make it work by using qid parameter instead of groups like this:
+  │  
+  │  
+  │  df=df.sort_values(by='session_id', ascending...
+  ├─ [deleted] (2022-12-09 11:54:33.910000) [+0]
+  │  [deleted]
+  ├─ HinePo (2022-12-13 03:24:51.103000) [+4]
+  │  For those working on google colab, xgb default version is 0.90, and does not have neither group or qid parameters.
+  │  
+  │  I upgraded it to version 1.7.2 and it worked.
+  │  
+  │  ! pip uninstall xgboost -qq -y
+  │  ! p...
+├─ Giba (2022-12-07 19:15:00.997000) [+6]
+│  @cdeotte A new functionality of Cudf (since 22.08) is setting the default data type to be 32 or 64 bit. Using 32 bit can help save GPU memory when processing features.
+│  The code bellow sets 32 bit a...
+  ├─ Chris Deotte (2022-12-07 19:21:22.653000) [+0]
+  │  Thanks @titericz I added this suggestion to the data management section of my post above.
+├─ Nick (2022-12-28 14:12:18.810000) [+3]
+│  I can't understand what is happening, I'm keep getting this error: XGBoostError: [13:58:22] ../src/data/data.cc:694: Check failed: group_ptr_.back() == num_row_ (9624929 vs. 7699943) : Invalid grou...
+  ├─ Nick (2022-12-28 16:25:28.343000) [+3]
+  │  The problem was with the train_groups and valid_groups. I'm now getting group sizes for train groups and validation groups in this way:
+  │  
+  │  
+  │  This code solved the problem.
+    ├─ Chris Deotte (2022-12-28 19:37:25.203000) [+1]
+    │  Looks good
+    ├─ adairli00 (2022-12-30 11:00:17.797000) [+1]
+    │  hi,you have quite solved my problem about  the invalid number rows.but i have some new questions about you code.can you tell me your idea? the question 1 : where you get the dateset "the_clicks_tar...
+    ├─ Nick (2022-12-30 17:21:14.793000) [+0]
+    │  Hi, adairli00!
+    │  
+    │  
+    │  
+    │  clicks_target_dataset.parquet - is a dataset after Step 6 from Chris's post. It's a dataset of shape (#session x 50, #features) where one row is: session, aid, session features, a...
+├─ Piyush Chauhan (2022-12-11 08:03:33.400000) [+3]
+│  Hi Chris. Thanks a lot for this framework!   I was wondering that while merging candidate dataframe with the target,  should we do outer join instead of left, because on doing left join we might be...
+  ├─ Chris Deotte (2022-12-11 14:40:53.920000) [+1]
+  │  Hi @kazama28 We want to use how='left because we want missing values and then convert them to zero with fillna(0). These are the negative examples. To train our model we need both target = 1 and ta...
+    ├─ NaN (2022-12-19 09:59:36.923000) [+1]
+    │  But outer join (how='outer') also preserve missing values, isn't it? As @kazama28 pointed out, by doing left join we would miss out groundtruths that are not in candidate set. For type=click, each ...
+    ├─ Chris Deotte (2022-12-23 20:46:17.927000) [+1]
+    │  Good point. We can try both and see what produces better CV and better LB
+├─ danielliao (2022-12-09 07:47:35.763000) [+3]
+│  Hi @cdeotte, I have tried to implement the pipeline as you described above. I have managed to generate dataframes of candidates and features (items, users). However, when I tried to merge them, but...
+├─ Jensen (2022-12-09 04:44:12.390000) [+3]
+│  Hi,Chris,your answer helped me a lot!!!
+│  Step 4: I have a question. You use as an example whether an item is clicked as a feature of user-item interaction. But if I train a ranker to sort the candid...
+  ├─ Chris Deotte (2022-12-09 10:57:40.477000) [+4]
+  │  @niejianfei there is no leak because we do not use ground truth to create interaction features. We begin with the 4 weeks of Kaggle train data. Then we build 3 datasets
+  │  
+  │  
+  │  
+  │  new train data (first 3 w...
+  ├─ Chris Deotte (2022-12-09 11:02:01.993000) [+2]
+  │  Note these 3 datasets we make are comparable to when we make a submission to LB. For submissions, we have (1) kaggle train (first 4 weeks) (2) kaggle test (first half of week 5) (3) Leaderboard (se...
+  ├─ Jensen (2022-12-09 12:06:52.090000) [+2]
+  │  Chris, thank you very much. I get it now.I am a novice in data science competition, thank you so much for sharing!!
+├─ aldparis (2022-12-18 16:44:24.107000) [+4]
+│  Hi @cdeotte,
+│  First at all, thank you very much for this post and all the others in this complicated competition ! 
+│  I have a question : in "Training", you suggested to consider downsampling negative...
+  ├─ Chris Deotte (2022-12-18 18:05:56.417000) [+7]
+  │  When training GBT rankers, we do not need to have the same number of groups per user. So after downsampling, we count how many candidates are in each user and input this updated list to "group=" in...
+    ├─ aldparis (2022-12-18 20:15:14.903000) [+1]
+    │  Thank you for confirmation and alternatives !
+    ├─ Chris Deotte (2022-12-18 20:50:43.717000) [+1]
+    │  I added a comment to my original post reminding people to update group sizes in DMatrix if they downsample. Thanks for pointing this out.
+    ├─ sapling (2022-12-23 13:14:17.713000) [+1]
+    │  Inspite of downsampling 20x, there is memory error. 
+    │  I have 10 chunks of train data which I am concatenating into dask dataframe. 
+    │  
+    │  I am also trying dask_cudf with multiple GPUs as shown here but s...
+    ├─ Chris Deotte (2022-12-23 13:48:35.953000) [+2]
+    │  @sohamdats Do you have memory error when creating your dataframe, or do you have memory error when training XGB?
+    │  
+    │  I recommend creating your dataframe in one python script or jupyter notebook, then ...
+    ├─ sapling (2022-12-23 14:48:36.897000) [+1]
+    │  @cdeotte First of all thanks a lot for replying.
+    │  
+    │  I am facing memory error during training. I have saved 10 chunks in parquet format and loading them in a separate notebook for training. I am putti...
+    ├─ Chris Deotte (2022-12-23 14:53:18.690000) [+2]
+    │  If you are using dask-cudf and/or dask-xgb in Kaggle notebooks, then you should use 2xT4 GPU then you will have 2x16 = 32GB or GPU RAM. With 1xP100, you only have 16GB.
+    ├─ Chris Deotte (2022-12-23 14:55:38.767000) [+1]
+    │  Note if you already have your train data in multiple parquets on disk, then you do not need to use my DeviceQuantileDMatrix dataloader. If you search the internet for tutorials, you will see that D...
+    ├─ sapling (2022-12-23 14:58:04.037000) [+1]
+    │  Okay thanks a lot. I forgot that DeviceQuantileMatrix is a dataloader and I can read from disk itself. I will certainly try this. I can't thank you more.
+    ├─ Chris Deotte (2022-12-23 15:19:01.763000) [+1]
+    │  @sohamdats i just searched internet for info about reading from disk. I think the way to read from disk is to use my dataloader but change the "next function". My current dataloader from my code he...
+    ├─ sapling (2022-12-25 05:55:05.583000) [+0]
+    │  @cdeotte Thanks a lot for taking out the time and replying. I am going to try this from your notebook as you suggested.
+    ├─ Piyush Chauhan (2022-12-31 19:16:13.220000) [+0]
+    │  Hi @cdeotte, I am confused about how we should specify the groups when using DeviceQuantileDMatrix, should it be specified in the "next function" (as a 'group' parameter to input_data)?
+    ├─ Chris Deotte (2022-12-31 19:24:15.130000) [+1]
+    │  @kazama28 The code is like this
+    │  
+    │      dtrain = xgb.DeviceQuantileDMatrix(Xy_train, max_bin=256)
+    │      dtrain.set_group( [50] * ( len(train_idx)//50) )
+    │  
+    │  
+    │  Note that set_group also works for normal DMatrix
+    ├─ Piyush Chauhan (2023-01-01 05:33:55.047000) [+1]
+    │  Thanks a lot @cdeotte
+├─ ningyuwhut (2022-12-04 07:03:44.707000) [+4]
+│  Thanks for sharing， I have a question that's why step 3 and step 4 only use the validation data  but not the train data and the validation data.  In the Inference step it seems to use similar set u...
+  ├─ Chris Deotte (2022-12-04 13:04:18.230000) [+5]
+  │  Great question. When making features we would like to use the most amount of data as possible. But…
+  │  
+  │  The reason that step 3 and 4 only use validation data is because there is no overlap between tra...
+  ├─ dpalbrecht (2022-12-05 06:34:03.147000) [+2]
+  │  I am also confused by this point… I understand why you have no need for user features in the train set during test set inference, but then what user features do you train on if they're all from the...
+  ├─ Chris Deotte (2022-12-05 13:46:01.010000) [+4]
+  │  @dpalbrecht I agree where features come from is weird because there is no overlap between test users and train users. Note this is not the typical recommender system problem. Usually when building ...
+  ├─ dpalbrecht (2022-12-07 04:00:57.003000) [+1]
+  │  Yeah, this formulation is feeling very odd to me for that reason. I'll have to try the PCA or autoencoder and time fold methods - those sound interesting. Thanks again for sharing!
+  ├─ Alvin.ai (2022-12-08 01:06:27.830000) [+2]
+  │  Hi, Chris @cdeotte , I got the similar question as @dpalbrecht. I saw you made:
+  │  
+  │  
+  │  
+  │  train data: week 1-3 .
+  │  
+  │  valid data: week 4.
+  │  
+  │  valid label: week 4.
+  │  
+  │  test data: week5.
+  │  
+  │  test unseem label: after wee...
+  ├─ Chris Deotte (2022-12-08 01:17:02.917000) [+6]
+  │  Thanks for asking this question. I need to clarify my post better. There are 5 datasets. Week 4 is split into valid data and ground truth. And public LB are ground truth from week 5. I need to find...
+  ├─ Chris Deotte (2022-12-08 01:22:13.170000) [+2]
+  │  @alvinai9603 I updated my discussion to use validation data A and validation data B. Let me know if it is clearer now.
+  ├─ Alvin.ai (2022-12-08 01:56:27.160000) [+1]
+  │  Nice! It is much clear and there is not any data leakage as you said above. Thanks for sharing, Chris. 👍
+├─ deanpp (2023-01-31 13:18:27.057000) [+1]
+│  It works, thx!
+├─ Abid Hasan (2023-01-25 01:53:11.867000) [+1]
+│  Hi Chris, Thanks for sharing. 
+│  
+│  I am having trouble with memory management: I split the candidate dataframe into chunks as you suggested, but I still seem to run out of memory while loading the chu...
+  ├─ Chris Deotte (2023-01-25 04:51:06.043000) [+1]
+  │  When do you get a memory error. Does it happen when you try to read all the chunks and concat into one dataframe? Or does it happen when you start training XGB?
+  │  
+  │  One thing you can do is read in hal...
+    ├─ Abid Hasan (2023-01-26 00:50:05.857000) [+1]
+    │  Thanks for your response. It happens while reading the chunks and concating them into a single dataframe. I haven't even got to train a model on he complete dataset.
+    │  
+    │  
+    │    
+    │  One thing you can do is re...
+├─ shun.222 (2023-01-24 03:04:29.950000) [+1]
+│  I have a problem step6, Is ground truth the same as valid data B?
+  ├─ Chris Deotte (2023-01-24 20:27:59.957000) [+0]
+  │  @shun222 Yes they are the same
+├─ christeea (2023-01-21 15:40:20.133000) [+1]
+│  Wow, amazing.Cool
+├─ EeyoreLee (2023-01-18 06:59:59.187000) [+1]
+│  Hi, I'm confused that we use 4 week data (3 weeks trian plus 1 week valid A) but use 5 weeks data (4 kaggle train plus 1 week kaggle test). Wouldn't this cause some feature distribution to be incon...
+  ├─ Chris Deotte (2023-01-18 20:37:50.570000) [+2]
+  │  Great point @earlee0412 For certain features, you do need to be careful such as counts. During inference, you can use the last 3 weeks of train plus 1 week kaggle test for total of 4 weeks to count.
+    ├─ EeyoreLee (2023-01-19 02:25:54.287000) [+1]
+    │  agree so and thanks so much
+├─ shun.222 (2023-01-18 05:45:46.587000) [+1]
+│  Hi Chris, thank you for your sharing.
+│  
+│  I have a question about Infelence session.
+│  I couldn't understand about "we select 20 by sorting …".
+│  I couldn't sort predicts becouse My "12899779_clicks" pred...
+  ├─ Chris Deotte (2023-01-18 06:03:54.583000) [+0]
+  │  In step 1, we generate X number of candidates where X&gt;20. Then in the "Inference" step, for each user we will have X predictions per user. And we sort those X predictions and take the best 20.
+    ├─ shun.222 (2023-01-18 06:13:52.443000) [+1]
+    │  I　unerstand.
+    │  Thank you fou your help.
+├─ Nin7a1 (2023-01-17 10:42:09.137000) [+1]
+│  For training, should we add the positive samples, i.e., the pairs of (session, item, target=1) that are not in the set candidates?
+  ├─ EeyoreLee (2023-01-21 15:54:09.390000) [+1]
+  │  I used it
+  ├─ Chris Deotte (2023-01-21 17:07:46.157000) [+2]
+  │  The best way to find out for your model is to try it and compare to CV and LB versus not trying it.
+├─ Pradeep Pujari (2023-01-15 00:50:02.993000) [+1]
+│  How to create user-item interaction features? This is improtant for rec sys.
+├─ SuperScience (2023-01-13 04:39:39.927000) [+1]
+│  Very practical guide！Thanks for sharing!
+├─ devstar3488 (2023-01-12 02:30:32.010000) [+1]
+│  Hi Chris, I appreciate your willingness to share valuable ideas and codes. It really helps me to try participation to this competition.
+│  We would generate 3 candidates for each action (clicks, carts...
+  ├─ Chris Deotte (2023-01-12 02:40:52.497000) [+3]
+  │  For each target (click,cart,order), we create one dataframe of candidates. There are 1.8 million test users. So each dataframe has X times 1.8 million where X is the number of candidates per user. ...
+    ├─ devstar3488 (2023-01-12 06:15:07.947000) [+1]
+    │  Ok, I see then I'll try it. Thank you very much.
+    ├─ devstar3488 (2023-01-18 00:09:31.850000) [+0]
+    │  Now, I was stuck in training phase. 
+    │  I crated a dataframe (e.g. clicks_df_for_train (1 GB)) in TPU-VM kaggle-platform (enough for RAM size)
+    │  I tried LGBM in the platfrom, worked without any probelm,...
+├─ Bruce (2023-01-11 13:45:31.300000) [+1]
+│  Thank you for your sharing!
+│  
+│  In the phase Training,  the size of candidates is 1801251 * 50?  1801251 is the number of sessions in the validation data A.
+│  
+│  My question is whether a group without a p...
+  ├─ Chris Deotte (2023-01-12 00:40:59.273000) [+4]
+  │  In the phase Training, the size of candidates is 1801251 * 50? 1801251 is the number of sessions in the validation data A.
+  │  
+  │  
+  │  Yes if you use 50 candidates. This is a suggestion but you can try other...
+    ├─ Bruce (2023-01-12 01:28:12.580000) [+1]
+    │  Many thanks
+├─ Rayan-aay (2023-01-04 21:42:50.223000) [+1]
+│  Thanks for sharing @cdeotte. I have a question about the co-visitation matrix.
+│  
+│  Should we create respective co-visitation matrix to extract candidates for each of train/valid/test ? For exemple, fo...
+  ├─ Chris Deotte (2023-01-12 00:42:20.280000) [+1]
+  │  Hi @rayanaay . We make one set of co-visitation matrices for train/validate. And a second set of co-visitation matrices for inference (submission.csv).
+├─ kunyuanS (2023-01-04 13:32:06.997000) [+1]
+│  Thanks for sharing very informative artical.
+├─ Nin7a1 (2023-01-03 06:39:23.180000) [+1]
+│  How can we get training labels for training set? For example, if aid 100 was clicked in session 100 at some timestamp in training set, then the target should be 1 for the pair of session 100 and ai...
+  ├─ Chris Deotte (2023-01-03 14:01:36.083000) [+1]
+  │  I suggest using Radek's Kaggle dataset explained here. Radek has converted kaggle train data into "new train data", "valid A data" and "valid B data" (where valid B are train labels that you ask ab...
+    ├─ Nin7a1 (2023-01-03 15:26:43.367000) [+2]
+    │  Thanks for your reply! I am new to recommendation. My understandings are as follows. 
+    │  1) "new train data": it is used for the generation of an "aid2aid" matrix.
+    │  2) "valid A data": we generate 50 ca...
+    ├─ Chris Deotte (2023-01-03 15:37:02.517000) [+1]
+    │  @nin7a1 that is correct. However we can use "test leakage" in this competition, read discussion here. So in your "#1", you can use "new train data" plus "valid A" to generate "aid2aid" matrix. Yes,...
+    ├─ Nin7a1 (2023-01-03 15:41:19.450000) [+1]
+    │  Thank you!
+    ├─ Rayan-aay (2023-01-04 23:16:41.723000) [+1]
+    │  @cdeotte 
+    │  I have a question about the training dataset ( the first 3 weeks ). Do you use this data only to generate features, or do you train your model on it too ?
+    │  
+    │  I'm confused because of this : ...
+    ├─ Jonathan Mallia (2024-12-20 11:48:56.903000) [+0]
+    │  Good question @rayanaay , would like to know the answer to this if you figured it out since then :)
+    │  Would be great if this is clarified @cdeotte 🙏
+├─ adairli00 (2023-01-02 15:48:00.560000) [+1]
+│  Hi Chris, its very impressive to me.i konw in the "Inference" stage you used kaggle's  train and test data to build a submission dataset.but i have one question to enquire you that how i built nati...
+  ├─ Chris Deotte (2023-01-02 16:12:42.703000) [+0]
+  │  This is why we use 5fold GroupKFold. After building the train, valid A, and valid B datasets. Then we generate candidates and features. Then we train and infer our 5fold. This will give us OOF pred...
+    ├─ adairli00 (2023-01-03 05:53:10.313000) [+1]
+    │  thank you it's very helpful for me.but i have a new question : in your discussion a 'candidate' user contains 50 items, i want to ask that in the 50 items all present the 'clicks' not contains 'car...
+    ├─ Chris Deotte (2023-01-03 14:04:06.800000) [+2]
+    │  We mark carts as type 1 because this is only one example. We build 3 candidate dataframes one for each clicks, carts, and orders. Each only has 50 candidates per user and each has candidates approp...
+    ├─ adairli00 (2023-01-03 14:47:12.900000) [+1]
+    │  thank you!!!! I understand~
+├─ Rayan-aay (2023-01-01 17:58:26.140000) [+1]
+│  Why don't you use LightGBM ? is XGBoost more suited for this task ?
+│  From my own experience, lightgbm uses less memory, isn't ?
+  ├─ Chris Deotte (2023-01-01 21:07:20.913000) [+1]
+  │  You can try XGBoost, LGBM, and CatBoost. They can all do ranker models. Its best to try all 3 and see which produces the best CV and LB.
+    ├─ Rayan-aay (2023-01-01 21:36:47.127000) [+2]
+    │  Great ! for the moment, I consider the problem as a binary problem, using  AUC as a metric. However, i'm getting 0.7 of AUC with I think, good features extracted from a graph neural network and agg...
+├─ Qucy Wei (2022-12-26 01:02:52.860000) [+1]
+│  Thanks for sharing very informative artical.
+├─ Pradeep Pujari (2022-12-25 02:14:50.993000) [+1]
+│  Where do you get user features and item features? It is not there in given dataset?
+  ├─ Chris Deotte (2022-12-25 03:00:48.480000) [+0]
+  │  No it is not. The dataset from Kaggle only has user, item, time stamp, event type (they rename them differently but this is what they are). We must create features from these columns.
+├─ kevin takano (2022-12-23 20:29:44.917000) [+1]
+│  Thanks for the post and all clarifications. 
+│  
+│  After reading your post many times I conclude that validation A is more like a 'last_week_train' dataframe than validation for ml model. Because we use...
+  ├─ Chris Deotte (2022-12-23 20:53:20.180000) [+2]
+  │  After reading your post many times I conclude that validation A is more like a 'last_week_train' dataframe than validation for ml model.
+  │  
+  │  
+  │  Perhaps, "last_week_train" would be a better name but note...
+├─ Priyanshu Chaudhary (2022-12-18 11:22:40.660000) [+1]
+│  Hi @cdeotte, Thanks for the idea. I am new to this competition and i have some doubts, can you please explain them:
+│  1) after splitting your training data into train +(val A,val B) you are generatin...
+  ├─ Chris Deotte (2022-12-18 14:21:09.447000) [+2]
+  │  1) yes and note that val A and val B have the same users. So we are generating 50 candidates for both val A and val B).
+  │  
+  │  2) yes and we can use val A to create features for items too. (and for advan...
+    ├─ Priyanshu Chaudhary (2022-12-22 10:39:26.787000) [+0]
+    │  Hi Chris, I have one more doubt, are you training for each target('click', 'cart', 'buy') independently?
+    │  Regards
+    │  Priyanshu
+    ├─ Chris Deotte (2022-12-22 13:54:21.333000) [+2]
+    │  Yes i train 3 independently. I make 3 dataframes. One dataframe is candidates for clicks, one for carts, one for orders. Then i train 3 XGB rankers. One takes click dataframe and predicts clicks. O...
+    ├─ Priyanshu Chaudhary (2022-12-26 13:07:49.110000) [+1]
+    │  Thanks a lot for help @cdeotte. I have made a similar pipeline as you have described. My CV results are as follows:
+    │  
+    │  Clicks,    ndcg@20= .7xxxx          recall=  .59
+    │  carts ,     ndcg@20= .9xxx     ...
+├─ apatheia (2022-12-16 02:50:26.957000) [+1]
+│  I love this
+├─ [deleted] (2022-12-15 12:07:27.417000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-14 00:00:43.620000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-12-14 21:36:08.413000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 21:50:12.463000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-12-13 09:53:50.467000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-12-13 14:30:44.733000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-12-13 08:25:19.977000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-12 03:41:36.383000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-11 09:02:20.353000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-12-11 14:42:49) [+1]
+  │  [deleted]
+├─ [deleted] (2022-12-10 17:31:22.293000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-10 15:25:13.117000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-10 07:51:52.007000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-10 01:12:19.603000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-05 15:20:14.797000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-12-05 15:33:30.147000) [+3]
+  │  [deleted]
+├─ [deleted] (2022-12-04 09:27:26.677000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-12-04 12:58:52.830000) [+2]
+  │  [deleted]
+├─ [deleted] (2022-12-04 09:06:29.497000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-03 18:01:00.507000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-03 17:12:56.060000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-31 17:20:50.383000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-31 17:33:43.217000) [+2]
+  │  [deleted]
+├─ [deleted] (2023-01-29 22:20:06.340000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-29 22:35:32.960000) [+1]
+  │  [deleted]
+├─ [deleted] (2023-01-23 07:19:24.397000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-23 10:08:31.377000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-01-23 10:21:03.097000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-01-04 13:44:19.230000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-12 00:42:35.477000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-01-03 21:01:46.460000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-03 21:29:47.520000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2023-01-04 01:28:02.207000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-01-03 15:02:41.387000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-01-20 11:48:04.480000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-12-28 04:45:14.573000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-28 05:07:04.023000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-12-28 01:19:59.523000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-28 02:01:24.537000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2022-12-28 16:38:30.063000) [+0]
+    │  [deleted]
+  ├─ [deleted] (2022-12-29 22:30:05.853000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-12-27 13:24:56.363000) [+2]
+│  [deleted]
+├─ [deleted] (2022-12-24 16:20:03.070000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-24 18:14:52.293000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-12-21 21:53:26.533000) [+2]
+│  [deleted]
+├─ [deleted] (2022-12-16 16:52:41.373000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-18 14:25:05.197000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2022-12-18 18:16:26.097000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-18 18:47:45.683000) [+4]
+    │  [deleted]
+    ├─ [deleted] (2022-12-18 20:40:35.333000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 15:21:26.230000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 17:21:56.057000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 17:27:57.910000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 19:59:58.480000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 20:26:47.110000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 22:48:28.710000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2022-12-26 18:41:10.513000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-28 16:20:50.227000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-28 17:04:10.420000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-30 16:30:48.960000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-01 06:52:47.987000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-01-01 07:08:36.150000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-01 16:09:15.290000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-01-02 01:12:32.587000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-01-18 02:21:14.397000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-18 02:22:07.050000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-01-18 02:23:45.377000) [+0]
+    │  [deleted]
+├─ [deleted] (2022-12-16 16:29:16.853000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-16 17:07:15.333000) [+2]
+  │  [deleted]
+├─ [deleted] (2022-12-14 13:14:14.120000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-14 13:29:36.680000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2022-12-16 11:01:58.770000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2022-12-19 14:49:14.660000) [+2]
+    │  [deleted]
+├─ [deleted] (2022-12-11 21:41:50.410000) [+2]
+│  [deleted]
+├─ [deleted] (2022-12-10 21:30:32.717000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-10 21:51:41.873000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-12-11 16:19:26.947000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-11 16:57:17.040000) [+7]
+  │  [deleted]
+    ├─ [deleted] (2022-12-13 05:06:25.233000) [+0]
+    │  [deleted]
+  ├─ [deleted] (2022-12-11 16:59:46.073000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-11 17:47:21.147000) [+4]
+  │  [deleted]
+  ├─ [deleted] (2022-12-11 17:56:44.947000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-13 18:49:16.723000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-13 20:43:22.973000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2022-12-14 03:48:06.380000) [+1]
+    │  [deleted]
+├─ [deleted] (2022-12-07 11:09:21.423000) [+2]
+│  [deleted]
+├─ [deleted] (2022-12-06 08:13:19.210000) [+2]
+│  [deleted]
+├─ [deleted] (2022-12-04 13:06:42.103000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-05 23:56:10.937000) [+1]
+  │  [deleted]
+├─ [deleted] (2022-12-03 23:22:11.353000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-12-04 01:38:51.800000) [+9]
+  │  [deleted]
+├─ [deleted] (2024-10-18 14:56:28.010000) [+0]
+│  [deleted]
+├─ [deleted] (2023-06-15 13:12:32.613000) [+0]
+│  [deleted]
+├─ [deleted] (2023-05-05 14:20:48.123000) [+0]
+│  [deleted]
+├─ [deleted] (2023-02-01 04:48:53.600000) [+0]
+│  [deleted]
+├─ [deleted] (2022-12-30 20:53:20.247000) [+0]
+│  [deleted]
+├─ [deleted] (2022-12-28 12:48:15.617000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-12-28 12:51:39.150000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2023-01-27 14:51:39.820000) [+0]
+    │  [deleted]
+├─ [deleted] (2022-12-13 07:47:16.933000) [+1]
+│  [deleted]
+  ├─ [deleted] (2022-12-13 14:37:53.497000) [+3]
+  │  [deleted]
+  ├─ [deleted] (2022-12-13 22:48:41.663000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-13 22:50:40.860000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-13 23:10:21.467000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-13 23:18:26.423000) [+5]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 13:02:04.850000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 13:30:20.267000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 13:34:34.617000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 14:12:52.160000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 17:21:01.990000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-14 18:01:13.563000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-15 06:41:49.670000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-12-15 09:56:57.027000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-15 11:22:54.010000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-12-15 14:04:33.777000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2022-12-23 20:56:35.600000) [+0]
+    │  [deleted]
+  ├─ [deleted] (2022-12-15 14:11:57.620000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-12-15 17:34:17.113000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2022-12-23 20:56:10.690000) [+0]
+    │  [deleted]
+├─ [deleted] (2022-12-03 20:10:50.453000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-23 20:24:07.050000) [+1]
+│  [deleted]
+├─ [deleted] (2022-12-16 02:43:56.837000) [+1]
+│  [deleted]
+├─ [deleted] (2023-01-19 19:06:36.770000) [+0]
+│  [deleted]
+├─ [deleted] (2023-01-12 16:00:52.487000) [+0]
+│  [deleted]
+├─ [deleted] (2022-12-14 18:21:34.210000) [+0]
+│  [deleted]

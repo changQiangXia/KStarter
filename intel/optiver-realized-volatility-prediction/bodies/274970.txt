@@ -1,0 +1,636 @@
+# https://www.kaggle.com/competitions/optiver-realized-volatility-prediction/discussion/274970
+
+Topic #274970: 1st Place Solution - Nearest Neighbors
+  Author: nyanp
+  Posted: 2021-09-28 09:55:00.277000
+  Votes: 501  Comments: 149
+
+2022-01-11 Updated the title.
+
+First of all, I would like to say a big thank you to Optiver and Kaggle for organizing a very interesting competition. I have never analyzed financial data before, but thanks to the very helpful tutorial notebook, I was able to fully immerse myself in the competition.
+
+I don't know where I rank on the final leaderboard, but the points of my public 2nd place solution are as follows:
+
+
+
+Time-series cross-validation by reverse engineering of time-id order
+
+Nearest neighbor aggregation features (boost from 0.21 to 0.19)
+
+Blend of LightGBM, MLP, and MoA’s 1D-CNN
+
+
+
+
+You can also see my notebook here:
+https://www.kaggle.com/nyanpn/public-2nd-place-solution
+
+Now, I'd like to introduce the detailed solution.
+
+Reverse engineering of time-id order
+
+The prices in the competition data are normalized, but as someone pointed out in the discussion, you can use "tick size" to recover the real prices before normalization.
+Furthermore, by compressing the time-id x stock-id price matrix to one dimension using t-SNE, I was able to recover the order of the time-id with sufficient accuracy.
+
+import glob
+
+import numpy as np
+import pandas as pd
+from joblib import Parallel, delayed
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import minmax_scale
+
+
+def calc_price_from_tick(df):
+    tick = sorted(np.diff(sorted(np.unique(df.values.flatten()))))[0]
+    return 0.01 / tick
+
+
+def calc_prices(r):
+    df = pd.read_parquet(r.book_path,
+                         columns=[
+                             'time_id',
+                             'ask_price1',
+                             'ask_price2',
+                             'bid_price1',
+                             'bid_price2'
+                         ])
+    df = df.groupby('time_id') \
+        .apply(calc_price_from_tick).to_frame('price').reset_index()
+    df['stock_id'] = r.stock_id
+    return df
+
+
+def reconstruct_time_id_order():
+    paths = glob.glob('/kaggle/input/optiver-realized-volatility-prediction/book_train.parquet/**/*.parquet')
+
+    df_files = pd.DataFrame(
+        {'book_path': paths}) \
+        .eval('stock_id = book_path.str.extract("stock_id=(\d+)").astype("int")',
+              engine='python')
+
+    # build price matrix using tick-size
+    df_prices = pd.concat(
+        Parallel(n_jobs=4)(
+            delayed(calc_prices)(r) for _, r in df_files.iterrows()
+        )
+    )
+    df_prices = df_prices.pivot('time_id', 'stock_id', 'price')
+
+    # t-SNE to recovering time-id order
+    clf = TSNE(
+        n_components=1,
+        perplexity=400,
+        random_state=0,
+        n_iter=2000
+    )
+    compressed = clf.fit_transform(
+        pd.DataFrame(minmax_scale(df_prices.fillna(df_prices.mean())))
+    )
+
+    order = np.argsort(compressed[:, 0])
+    ordered = df_prices.reindex(order).reset_index(drop=True)
+
+    # correct direction of time-id order using known stock (id61 = AMZN)
+    if ordered[61].iloc[0] &gt; ordered[61].iloc[-1]:
+        ordered = ordered.reindex(ordered.index[::-1])\
+            .reset_index(drop=True)
+
+    return ordered[['time_id']]
+
+
+The correctness of the recovery of the time-id order for the training data can be easily verified by comparing it with the real market data. By doing so, we know that the training data is for the period between 2020/1/1~2021/3/31.
+
+
+Left: Stock price restored by t-SNE  Right: Actual stock price retrieved by yfinance (2020-01-01~2021-03-31)
+
+On the other hand, for the test data, I did not use the time-id information directly in the features and models because there is no guarantee that t-SNE will be able to sort the time-id order correctly. However, even if it cannot be used directly for features, the order of the time-id can be used in various ways.
+
+
+
+Time series cross-validation. Now that we know the correct order of the timestamps, we can construct the validation sets as if they were normal time-series data.
+
+Detection of covariate shifts. Using methods such as adversarial validation enables us to find features that change over time.
+
+Data exclusion. I didn't do this because it didn't work for me, but we can exclude periods of specific market events from our data, for example, the stock market crash in early 2020.
+
+
+Time series CV was especially important. I used a 4-fold time-series CV, with 10% of
+data used for validation for each fold. This allowed me to get a good enough (though not perfect) correlation between CV and LB throughout the competition.
+
+
+
+How is the data being generated?
+
+By the way, between 2020/1/1~2021/3/31, the stock market was open for 443 days, and there were 3833 time-ids during that period, which means that about 8.6 time-ids were recorded per day.
+
+If Optiver excludes (for some reason, perhaps it's hard to predict) the first and last hour of the time that the stock market is open, then the time from 10:30~15:00 can be used for competition data. If they divided this time period into 30-minute intervals, up to 9 time-ids will be recorded per day. 
+
+In reality, given the case of circuit breakers and early closing days, the number of time-ids they can use for the data should be a little less than 9 per day. It's just a guess, but I figured this is how the data is generated.
+
+
+
+Feature engineering
+
+In this competition to predict the next 10 minutes of realized volatility (RV) from the previous 10 minutes of data, the most important feature would obviously be the RV of the previous 10 minutes.
+
+However, if we consider how the data was generated, just 10 minutes after the target computation period for a time-id, the training data for the next time-id starts. This means that if the order of the time-id can be fully recovered, we can expect the RV at the next time-id to be a very powerful feature.
+
+If we generalize further, we can improve the prediction accuracy by using not only the next time-id, but also the information of time-ids that are "similar" in some distance metric. For example, the RV of the same stock when the market had similar price, volatility, and trading volume would be useful for predicting the RV at a certain time-id.
+
+So, I used NearestNeighbor with various distance metrics to find the similar N time-ids and calculate the average of features like RV and stock size (N=2,3,5,10,20,40).
+
+In addition to the time-id, I also calculated the aggregation between similar stock-ids. Furthermore, by combining these ideas, I calculated features such as "the average tau of 20 similar stocks with similar volatility in 5 closest time-ids".
+
+
+
+target_feature = 'book.log_return1.realized_volatility'
+n_max = 40
+
+# make neighbors
+pivot = df.pivot('time_id', 'stock_id', 'price')
+pivot = pivot.fillna(pivot.mean())
+pivot = pd.DataFrame(minmax_scale(pivot))
+
+nn = NearestNeighbors(n_neighbors=n_max, p=1)
+nn.fit(pivot)
+neighbors = nn.kneighbors(pivot)
+
+# aggregate
+
+def make_nn_feature(df, neighbors, f_col, n=5, agg=np.mean, postfix=''):
+    pivot_aggs = pd.DataFrame(agg(neighbors[1:n,:,:], axis=0), 
+                              columns=feature_pivot.columns, 
+                              index=feature_pivot.index)
+    dst = pivot_aggs.unstack().reset_index()
+    dst.columns = ['stock_id', 'time_id', f'{f_col}_cluster{n}{postfix}_{agg.__name__}']
+    return dst
+
+feature_pivot = df.pivot('time_id', 'stock_id', target_feature)
+feature_pivot = feature_pivot.fillna(feature_pivot.mean())
+
+neighbor_features = np.zeros((n_max, *feature_pivot.shape))
+
+for i in range(n):
+    neighbor_features[i, :, :] += feature_pivot.values[neighbors[:, i], :]
+
+for n in [2, 3, 5, 10, 20, 40]:
+    dst = make_nn_feature(df, neighbors, feature_pivot, n)
+    df = pd.merge(df, dst, on=['stock_id', 'time_id'], how='left')
+
+
+I created about 600 features in total, 360 of which were Nearest Neighbor features, and most of my score improvement was based on these NN features.
+
+I don't think we can use future information in a real Optiver’s scenario, but the idea of using Nearest Neighbor to aggregate nearby features can probably be used in a real model.
+
+Feature processing
+
+Now that we know the order of the time-id, we can detect features that are changing over time. By performing adversarial validation, I noticed that the features aggregated from trade.order_count and book.total_volume changed remarkably over time. Therefore, instead of using their raw features, I converted these features into ranks within the same time-id.
+
+I also applied np.log1p to features that have large skew, as they may degrade the predictions if large outliers come during the 2nd stage.
+
+These have little improvement on the LB scores, but I believe they help to reduce the risk of shakedown in private LB.
+
+Modeling
+
+I used three simple blends for prediction: LightGBM, 1D-CNN, and MLP. The 1D-CNN is a simplified version of the architecture used in MoA 2nd place solution. (This CNN worked surprisingly well in both the recent MLB and Optiver competition.)
+
+
+1D-CNN architecture
+
+I did not use the pretrained model because I wanted to use the test data for feature calculation, thus all the model training was done within a single notebook. My NN model was a bit unstable in training, so I trained 10 models with different seeds and cherry-picked the top 5 models with the best validation scores for prediction (oops, I forgot to use seed=3047 :) ).
+
+What didn’t work
+
+
+
+a lot of domain-specific features like beta coefficient
+
+TabNet (not bad, but too long training time)
+
+training NN on residual (target - book.log_return.realized_volatility)
+
+dimensionality reduction features
+
+
+What I thought might work, but didn't have time for
+
+
+
+300-sec model (split the training data into the first and second halves, and create a model that predicts the RV of the second half from the first half and use it as meta-feature or data augmentation)
+
+Ensembles with LSTMs and RNNs that do not create features
+
+Auto-encoder
+
+Comments:
+├─ nyanp (2021-09-28 13:05:51.903000) [+18]
+│  I forgot to write something important: the idea that t-SNE can restore the order of time-ids came from this notebook. 
+│  
+│  https://www.kaggle.com/stassl/recovering-time-id-order?scriptVersionId=714993...
+  ├─ Stas Sl (2021-09-28 14:35:22.280000) [+9]
+  │  I also included more details in the latest version of it - maybe will be interesting to compare with yours. I ended up using another dimensionality reduction method, because for some reason 1d TSNE...
+  ├─ Max2020 (2021-09-28 14:58:23.220000) [+2]
+  │  Both of you are genius，my insight benefit from both of you
+  ├─ [deleted] (2021-09-28 17:52:32.680000) [+5]
+  │  [deleted]
+  ├─ Stas Sl (2021-09-28 17:59:35.013000) [+4]
+  │  It does. Dimensionality reduction is used for visualization/recovering time order. But for finding NNs all 112 dimensions are used, as you say.
+  ├─ [deleted] (2021-09-28 18:08:55.060000) [+4]
+  │  [deleted]
+  ├─ khyeh (2021-09-29 07:01:52.647000) [+2]
+  │  Thanks to @stassl , we get final boost from your hint: to further consider inter-time-id relationship!
+  ├─ nyanp (2021-09-30 03:29:59.930000) [+1]
+  │  @stassl 
+  │  
+  │  
+  │    
+  │  I ended up using another dimensionality reduction method, because for some reason 1d TSNE didn't work for me very well.
+  │  
+  │  
+  │  I’m looking forward to see your solution!
+  │  
+  │  BTW my twitter fol...
+    ├─ Stas Sl (2021-09-30 10:35:28.930000) [+1]
+    │  @nyanp
+    │  
+    │  
+    │    
+    │  BTW my twitter follower told me today that this reverse-engineering problem can be formulated as TSP. I think it’s a very clever idea.
+    │  
+    │  
+    │  Yeah, I think that is an interesting problem on ...
+  ├─ Carlo Lepelaars (2021-09-30 10:36:17.177000) [+4]
+  │  @eduardopeynetti, to learn more about why PCA does not work with noisy financial data I recommend checking out "Statistical consequences of fat tails" by Nassim Taleb. t-SNE can model a lot more no...
+  ├─ [deleted] (2021-09-30 11:51:46.550000) [+1]
+  │  [deleted]
+  ├─ Carlo Lepelaars (2021-10-01 11:07:22.633000) [+1]
+  │  👍 Yeah, same here! Never had real-world cases yet where t-SNE yielded practical results. Only on standard datasets like MNIST where t-SNE neatly separates the classes.
+  ├─ Lucas Morin (2021-10-01 19:05:02.460000) [+2]
+  │  @stassl @nyanpn : What about Maximum Likelihood Estimation to better deanonymise time_ids interval from price / realized volatilites ? I gave up on the general case (calculating 3080*3079/2 pairs) ...
+    ├─ Stas Sl (2021-10-01 22:46:51.397000) [+1]
+    │  @lucasmorin 
+    │  That is an interesting idea, do you have thoughts how to parametrize the model and write down the likelihood function? What I tried is to use soft permutation matrix (which is actually...
+  ├─ [deleted] (2021-10-01 19:38:16.037000) [+4]
+  │  [deleted]
+  ├─ Lucas Morin (2021-10-01 19:51:33.963000) [+1]
+  │  Interesting. I have a spread tendency feature with good importance but I didn't get that daily periodicity. It might explain why my other attempts at building proxies for time of the day didn't work.
+  ├─ Michael Poluektov (2021-10-02 11:50:07.877000) [+4]
+  │  Personally I've looked at the 6 time_id nearest neighbors, calculated their starting and ending prices, and brute-forced all 6! permutations to find the shortest Hamiltonian path, which is the most...
+├─ Stas Sl (2021-09-28 10:42:32.490000) [+16]
+│  Nearest neighbor aggregation features 
+│  
+│  
+│  You are brave to disclose this first 🙃
+  ├─ yu (2021-09-28 10:51:18.603000) [+3]
+  │  guess you guys have one submission without leakage to hedge the risk 😏
+    ├─ Stas Sl (2021-09-28 12:07:09.820000) [+6]
+    │  guess you guys have one submission without leakage to hedge the risk 😏
+    │  
+    │  
+    │  I actually have, though it probably will lost among all these 0.19xxx scores. I had big internal dilemma in last weeks what ...
+  ├─ Trushant Kalyanpur (2021-09-28 16:34:10.420000) [+0]
+  │  @stassl is there a reason not to share that I am missing?  😄The competition submission deadline is over. For people who have been working hard for months, it will be good to understand what differe...
+  ├─ Stas Sl (2021-09-28 16:56:43.420000) [+2]
+  │  @trushk I didn't mean to not share :) I think it is just a bit delicate/controversial topic, so the one who first discloses it might upset some people who didn't use it for whatever reason (didn't ...
+  ├─ Tonghui Li (2021-09-28 17:20:14.570000) [+0]
+  │  @stassl Doesn’t your notebook more pertain to recovering time_id sequence? Do you mean Nearest Neighbor features do not work as a standalone idea without recovering the order of time_id?
+    ├─ Stas Sl (2021-09-28 17:38:02.857000) [+2]
+    │  Well, in the second half of notebook (latest version) I do exactly that - use nearest neighbors to improve model performance. I think there could be some confusion in my notebook and maybe this top...
+  ├─ Trushant Kalyanpur (2021-09-28 17:22:35.227000) [+0]
+  │  @stassl got it. Thanks for clarifying :)
+├─ Jean-Michel Nairac (2021-09-28 10:14:19.797000) [+14]
+│  Hi. Thanks for sharing and well done!
+│  
+│  I would like to ask for further clarification regarding your NN approach if possible. You mentioned that you aggregate features from other time periods that h...
+  ├─ Tsai29 (2021-09-28 10:19:06.017000) [+1]
+  │  Pretty much the same questions I have after reading the solution. But thanks for sharing this. Nice Job.
+  ├─ nyanp (2021-09-28 10:53:43.900000) [+12]
+  │  @nrcjea001 
+  │  Thanks for the comment! There are several questions, and very good points, which I will address in turn.
+  │  
+  │  
+  │    
+  │  Do you not face the "using the future to predict the past" risk when doing ...
+  ├─ Jean-Michel Nairac (2021-09-28 10:57:36.560000) [+1]
+  │  ok thanks for clarifying and all the best for the forecasting
+├─ Damian (2021-09-28 17:30:01.487000) [+10]
+│  Good job of backing out the ordering of the time_id's.
+│  
+│  However, this is useless for a forecasting exercise and is clearly not in the spirit of the contest. It would be interesting to see what the ...
+  ├─ Ming Pan (2021-09-29 01:19:05.313000) [+9]
+  │  Actually the possibility was publicly raised to the competition host and using a time series API was suggested to them, which would have blocked the ability to use future time ids and forced realis...
+├─ Carlo Lepelaars (2021-09-29 20:34:39.177000) [+5]
+│  Awesome solution! Wouldn't have thought of using t-SNE for such a practical purpose to recover the order of time_id. Very curious to see the result of denoising auto-encoder solutions that were so ...
+  ├─ nyanp (2021-09-29 22:54:40.833000) [+5]
+  │  @carlolepelaars 
+  │  I tried features in that article, but unfortunately none of them worked.
+  ├─ Michael Poluektov (2021-09-29 23:27:29.780000) [+5]
+  │  I have. Only "realized quadpower quarticity" worked for me though, and the proposed code was a bit slow so I optimized it:
+  │  
+  │  def realized_quadpower_quarticity(series):
+  │      convolved = np.exp(np.conv...
+  ├─ Carlo Lepelaars (2021-09-30 09:55:30.813000) [+1]
+  │  Nice, thanks for sharing! Smart move to use np.convolve for this. 👍
+  │  
+  │  @michaelpoluektov, what is BarutaShap? Some feature selection algorithm based on SHAP? Do you have a link to where I can learn m...
+  ├─ Michael Poluektov (2021-09-30 14:31:22.333000) [+2]
+  │  I saw someone mention it in discussions and I've used this post to implement it: https://www.kaggle.com/carlmcbrideellis/feature-selection-using-the-boruta-shap-package
+  │  
+  │  I don't really know how it ...
+  ├─ Carlo Lepelaars (2021-10-01 11:04:05.977000) [+1]
+  │  Thanks @michaelpoluektov, I'll check it out!
+├─ KhanhVD (2021-10-07 11:31:05.737000) [+3]
+│  Thanks for the writeup @nyanpn, Nearest Neighbors features is all you need :)
+├─ LongYin/杰少 (2021-09-28 14:45:07.860000) [+3]
+│  Detection of covariate shifts is valuable in practice.  By the way,  I have tried this, 
+│  
+│  
+│  
+│  300-sec model (split the training data into the first and second halves, and create a model that predicts...
+  ├─ nyanp (2021-09-29 03:32:34.067000) [+0]
+  │  @longyin2 
+  │  That’s fantastic! How did you integrate this 300sec model into your predictions?
+  ├─ LongYin/杰少 (2021-09-29 03:47:52.680000) [+3]
+  │  0-300 as stage1 features, 301 - 600 as stage1 labels --&gt; get stage1 models
+  │  301 - 600 as stage2 features + use stage1 models for prediction --&gt; predictions as new features
+  ├─ yu (2021-09-29 04:25:03.117000) [+1]
+  │  I have tired the same idea but not much boost for me, would you mind sharing your code implementing it?
+  ├─ Regi Public (2021-09-30 17:18:13.590000) [+0]
+  │  Hi, was there much improvement in your score from doing this? I was thinking for doing this.. or even dividing further into 200 and gaining 2 sets of test/train/target data.. I was running out of t...
+├─ Pavel Shunkevich (2021-10-03 14:53:44.550000) [+1]
+│  Thanks for sharing! That is very interesting solution!
+├─ Jonathan Mallia (2021-10-02 11:48:54.107000) [+1]
+│  Thanks a lot @nyanpn for sharing this, it's an outstanding solution. The NN features are the real deal, they have improve my single model from a local CV of 0.180396 to 0.177138. Impressive CV gain!
+├─ Dimora (2021-09-29 10:10:49.490000) [+1]
+│  Very well done. I had a blast reading through your notebook. Pleasantly surprised on what is possible with reverse engineering and data analysis and frightened to see how much I don't know and how ...
+  ├─ Dimora (2021-09-29 11:43:21.893000) [+1]
+  │  @nyanpn I have a question that I hope you could elaborate on. Regarding identifying the real price of the stock. What is the logic behind 0.01 / tick giving you the price of the stock? why 0.01 and...
+  ├─ Tobias Tesch (2021-09-29 13:16:13.873000) [+2]
+  │  As far as I understand, (real) stock prices are not continuous, but discretized to steps of size 0.01 $.
+  │  
+  │  Now, assume that at some point during the 600s interval, the change of the (real) stock pri...
+  ├─ nyanp (2021-09-29 15:20:50.343000) [+5]
+  │  @tobiit 
+  │  Thanks! This is what I had in mind.
+  │  
+  │  
+  │    
+  │  Now, assume that at some point during the 600s interval, the change of the (real) stock price was as small as possible, namely only the 0.01 $.
+  │  
+  │  
+  │  A...
+  ├─ Tobias Tesch (2021-09-29 18:24:14.590000) [+2]
+  │  @nyanpn Makes perfectly sense, thanks!
+├─ Tonghui Li (2021-09-28 14:24:47.607000) [+1]
+│  @nyanpn Thanks so much for sharing! You said you were able to train 20 NN models in the submission notebook? How long does it take to train one NN model on average? My 1DCNN takes over 1 hour to tr...
+  ├─ nyanp (2021-09-28 22:50:05.807000) [+2]
+  │  It took 15s/epoch x 50epocs = 750sec to train singe NN. Perhaps because my CNN is much smaller than the original MoA’s CNN.
+  ├─ [deleted] (2021-09-28 23:01:38.040000) [+0]
+  │  [deleted]
+  ├─ Tonghui Li (2021-09-29 03:01:05.180000) [+1]
+  │  @nyanpn Thanks! I also noticed your MLP converges really fast - almost every model converges to 0.19 level on the third epoch. Do you think there is anything special in your setting that helps achi...
+  ├─ nyanp (2021-09-29 15:04:56.307000) [+3]
+  │  @raphael1123 
+  │  Not sure why, but searching hyper-parameters using Optuna helped me a lot to find such a stable setup.
+  ├─ Tonghui Li (2021-12-19 17:58:07.100000) [+0]
+  │  @nyanpn Congratulations on the consistent top performance on the recent updates! Sorry about the super late follow-up. How did you use Optuna to find parameters that offer stability in training?
+  ├─ nyanp (2021-12-20 13:42:57.457000) [+1]
+  │  @raphael1123 
+  │  Thanks! I think there is no magic in using optuna: I explored important hyperparameters like lr and batch size (only 3~8 parameters were explored at the same time), and visualized the...
+├─ UKI (2021-09-28 12:49:25.970000) [+1]
+│  This is great! Thanks for sharing!
+│  
+│  My understand is, the leaks between time_ids have boosted the prediction performance, and I'm not sure Optiver wants this.
+│  
+│  At this time, I'm concerning Optiver ...
+├─ Vu (2021-09-28 12:13:57.277000) [+1]
+│  Reverse engineering of time-id order 
+│  
+│  
+│  Same idea but we think about it too late. Did you think it is cheating as the host don't want us create model with true ordered time ?
+  ├─ nyanp (2021-09-28 23:24:34.057000) [+8]
+  │  While this is 100% legal against the competition rules, unfortunately it is probably not what the host wanted us to do.
+  │  On the other hand, it has happened repeatedly in Kaggle that in order to win ...
+  ├─ yu (2021-09-29 01:00:26.743000) [+2]
+  │  I think that the time NN features are utilizing the fact that volatility is mean reverting but not information from past periods of similar volatility because you would only aggregate nearby time_i...
+  ├─ leo (2021-09-29 03:24:09.097000) [+0]
+  │  ?I think trading firms like people who can think out of the box. They have full of smart people who have been working on this problem for years, so I guess?they don't really expect someone to gener...
+  ├─ Tobias Tesch (2021-09-29 08:09:33.427000) [+0]
+  │  I think whether this is 100% legal depends on whether reverse engineering features that the organizers meant to be unknown is considered "undermining the legitimate operation of the competition"/ "...
+├─ Tobias Tesch (2021-09-28 11:15:47.753000) [+1]
+│  Thanks for sharing all the details of your great work and congratulations!! :) 
+│  
+│  Just a question as I'm no experienced kaggler yet: is it okay to "reverse engineer" for example time_id order and pr...
+  ├─ yu (2021-09-28 11:27:55.167000) [+1]
+  │  https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/256725
+  │  
+  │  basically they want us to use the 10 minutes window only if I understand right
+  ├─ Michael Poluektov (2021-09-28 12:20:02.403000) [+6]
+  │  I don't think this is what they wanted, but I don't think a model not using any kind of future or historic data could ever have a good placement on public or private LB
+  │  
+  │  Aggregating features by sto...
+  ├─ Tobias Tesch (2021-09-28 12:46:01.107000) [+0]
+  │  Thanks for your responses!
+  │  
+  │  I agree that aggregating over stock_id also includes future information in the prediction. Nevertheless, this seems to have been a conscious decision of the organizers w...
+├─ Rayan-aay (2021-09-29 12:35:31.553000) [+2]
+│  Great work ! many thanks for the share.
+│  I already did test to add an Autoencoder to denoise the data, but it doesn't increase the score overall.
+├─ khyeh (2021-09-29 07:04:06.183000) [+2]
+│  Reverse engineering of time-id order
+│  
+│  
+│  Thanks for your detailed solution! I particularly enjoy reading this part, since we've been struggled to do a proper cv and need to verify on LB directly whic...
+├─ leo (2021-09-28 23:46:31.333000) [+2]
+│  You got only one piece of the puzzle from Stas Sl's notebook, then you reconstructed the whole picture. Very impressive! Also, glad to see someone else also tried the 300-sec model idea.
+├─ RDizzl3 (2021-09-28 15:11:28.200000) [+2]
+│  @nyanpn @stassl - I have a question for you. If you had not done work to recover time ids was breaking that 0.19XX plane possible still?
+  ├─ Trushant Kalyanpur (2021-09-28 15:58:33.573000) [+7]
+  │  I can confirm that 0.19x can be broken without recovering time id. Our single model was public LB 0.18951 without time id recovery.
+  ├─ Tonghui Li (2021-09-28 16:12:15.117000) [+3]
+  │  @trushk Did you use similar Nearest Neighbor features?
+  ├─ Shane (2021-09-28 16:20:44.147000) [+2]
+  │  KNN on test are leakage features.
+  ├─ Trushant Kalyanpur (2021-09-28 16:22:47.827000) [+6]
+  │  Yes Nearest Neighbor features gave us the biggest boost. Will write a  more detailed solution when I get some time.
+  ├─ RDizzl3 (2021-09-28 16:49:03.843000) [+1]
+  │  @trushk - thank you for that verification!
+  ├─ yuanzhe zhou (2021-09-28 17:00:43.930000) [+3]
+  │  Well, it's another lesson for people to learn that information from the future is the most powerful feature in time series competition.
+  ├─ jchen950 (2021-09-28 18:25:58.700000) [+0]
+  │  @trushk Is your KNN involves recovered real prices or it's based on the standardized ones provide by the host? thanks
+  ├─ Trushant Kalyanpur (2021-09-28 18:32:23.353000) [+2]
+  │  @kewellcjj no attempt at recovery done. All processing was based on baseline competition data.
+  ├─ jchen950 (2021-09-28 18:56:01.453000) [+0]
+  │  Got it thanks!
+  ├─ nyanp (2021-09-28 22:44:24.723000) [+1]
+  │  @rdizzl3 
+  │  It would be possible. My first 6 submissions used groupkfold with NN features, without time-id recovery, reaching 0.191 with a single lgb.
+  ├─ khyeh (2021-09-29 07:07:43.583000) [+1]
+  │  @raphael1123 
+  │  We used idea from https://www.kaggle.com/stassl/recovering-time-id-order?scriptVersionId=71499310
+  │  to find nearest neighbor on time_ids.
+  │  So each stock X at time Y with time_id neighbor...
+├─ RDizzl3 (2021-09-28 15:09:41.300000) [+2]
+│  @nyanpn -
+│  
+│  Thank you for your detailed explanation and code snippets that is extremely useful!
+│  
+│  
+│    
+│  So, I used NearestNeighbor with various distance metrics to find the similar N time-ids and calcu...
+├─ AmbrosM (2021-09-28 12:34:55.857000) [+2]
+│  Thank you for the detailed description of your solution!
+│  
+│  
+│    
+│  What didn’t work
+│    
+│  
+│    
+│  training NN on residual (target - book.log_return.realized_volatility)
+│    
+│  
+│  
+│  I trained my LightGBM model on a mu...
+├─ Max2020 (2021-09-28 11:59:48.323000) [+2]
+│  I don't think we can use future information in a real Optiver’s scenario, but the idea of using Nearest Neighbor to aggregate nearby features can probably be used in a real model.
+│  
+│  
+│  I thought of th...
+  ├─ Lucas Morin (2021-09-28 15:37:15.307000) [+1]
+  │  This is working because the test set is presented at once, including data from the future. It probably won’t work so well in a real life setting.
+├─ Yufeng Ma (2023-05-19 05:09:05.620000) [+0]
+│  Hi nyanp, congrats and great work !
+│  I am curious about how the 1-D CNN's inner blocks' (e.g., conv, average pooling , and max pooling) ordering are decided. Is that searched by NAS methods / grid s...
+├─ Andrew K (2023-04-20 21:35:29.663000) [+0]
+│  Thnx a lot for sharing)) Year later but your solution is still helpful)
+├─ Aijing Xing (2022-08-11 10:56:05.973000) [+0]
+│  @nyanpn
+│  Sorry for my poor English and Python recognization.
+│  Does the "make neighbors" means, in terms of the identical stock_id, borrow the features from the historical time-ids(which have similar ...
+├─ Alfred Motladile (2022-04-09 14:04:10.437000) [+0]
+│  I leant a lot from your work. Thank you and congratulations.
+├─ marketneutral (2022-02-17 17:02:53.320000) [+0]
+│  Amazing work @nyanpn. Do you have a notebook you can share showing your process for adversarial validation?
+├─ Fritz Cremer (2022-01-18 01:00:23.063000) [+0]
+│  Hey @nyanp, I read your post again and wondered if you have tried to use a cross-validation strategy similar to the one you have described, but also using the data after the validation block for tr...
+  ├─ nyanp (2022-01-23 07:39:53.663000) [+1]
+  │  @fritzcremer 
+  │  While I haven't tried such CV, I have confirmed that changing the cross-validation to time-id GroupKFold in the final submission still yields the first place score.
+  │  
+  │  However, since CV...
+  ├─ Fritz Cremer (2022-02-03 16:28:11.803000) [+0]
+  │  Ah okay, thanks for the insight!
+├─ sarahpop小蜗牛 (2021-11-16 21:09:38.170000) [+0]
+│  Very impressive! Wonder what's the logic of recovering time series "by compressing the time-id x stock-id price matrix to one dimension using t-SNE"? Thanks for any insights!
+  ├─ nyanp (2021-11-16 23:20:00.577000) [+1]
+  │  t-SNE compresses the dimension so that similar feature vectors are placed close to each other. In this case, I used the price of each stock-id as a feature vector of 112 dimensions.
+  │  t-SNE is often ...
+  ├─ sarahpop小蜗牛 (2021-11-17 21:10:55.947000) [+1]
+  │  Thank you very much for the explanation!
+├─ masiiie (2021-10-12 16:58:47.023000) [+0]
+│  Exactly what i was looking for!
+├─ [deleted] (2021-10-06 16:38:38.173000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-10-06 18:11:03.457000) [+5]
+  │  [deleted]
+    ├─ [deleted] (2021-10-08 20:02:01.280000) [+0]
+    │  [deleted]
+  ├─ [deleted] (2021-10-07 22:55:38.677000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2021-10-08 20:05:48.837000) [+0]
+    │  [deleted]
+  ├─ [deleted] (2021-10-10 23:03:47.710000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-10-10 23:14:10.717000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-10-04 07:39:32.270000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-03 07:44:31.860000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-03 02:55:43.393000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-02 21:11:45.547000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-01 18:30:01.180000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-01 00:27:34.927000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-30 17:06:33.263000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-09-30 17:25:49.697000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2021-10-04 08:07:45.313000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-09-30 14:54:34.200000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-30 02:08:13.027000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-29 15:43:01.933000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-29 09:15:08.617000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-09-29 15:52:20.527000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-09-29 06:55:56.860000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 20:10:24.213000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 15:28:25.757000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-09-28 23:12:29.567000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-09-28 14:02:17.333000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 13:55:37.217000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 12:48:58.623000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 12:41:27.677000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 12:07:22.070000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-09-29 15:35:03.550000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-09-28 12:03:36.853000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-09-29 15:38:46.147000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-09-29 16:09:54.917000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-09-30 10:45:47.113000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-09-28 11:56:45.207000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 10:55:56.047000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-09-29 15:42:19.763000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-09-28 12:51:42.530000) [+8]
+│  [deleted]
+├─ [deleted] (2021-09-28 10:20:06.667000) [+1]
+│  [deleted]
+├─ [deleted] (2021-10-14 08:48:20.227000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-11 06:38:50.053000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-02 13:05:05.517000) [+0]
+│  [deleted]
+├─ [deleted] (2023-11-01 20:21:11.240000) [+0]
+│  [deleted]
+├─ [deleted] (2023-07-20 15:50:44.790000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-11 07:12:54.627000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-10 14:45:17.997000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-30 16:14:59.640000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-29 05:55:27.770000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 13:50:46.467000) [+0]
+│  [deleted]
+├─ [deleted] (2021-09-28 11:34:01.773000) [+0]
+│  [deleted]

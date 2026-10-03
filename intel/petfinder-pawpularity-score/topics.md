@@ -1,0 +1,122 @@
+# petfinder-pawpularity-score 讨论区（按票数排序，共 120 条）
+
+- [1st Place - Winning Solution - Full Writeup](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301686) — 329 票 / 85 评论 / 2022-01-19 **write-up?**
+- [Tricks for Image Classification / Regression with Neural Networks](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/288896) — 293 票 / 49 评论 / 2021-11-18 
+- [1st Place - Winning Solution - Placeholder](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300938) — 274 票 / 115 评论 / 2022-01-15 **write-up?**
+- [baseline solution [LB17.91201]](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/275094) — 219 票 / 33 评论 / 2021-09-28 **write-up?**
+- [[Discussion] I am worried this comp will turn out to be RNG based](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/285140) — 196 票 / 59 评论 / 2021-11-03 
+- [CNN Vs Transformer 🔥 Regression Vs Classification](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/275278) — 187 票 / 16 评论 / 2021-09-29 
+- [6th Place - Multitask Learning](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301015) — 164 票 / 60 评论 / 2022-01-16 **write-up?**
+- [PyTorch trick: Lazy layers](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/279460) — 147 票 / 8 评论 / 2021-10-18 
+- [Hybrid Swin Transformer - Half CNN - Half Transformer](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/277917) — 134 票 / 35 评论 / 2021-10-11 
+- [[Up-to-date Summary] We passed 30% of the timeline, these are the stories up to this point!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/286250) — 133 票 / 11 评论 / 2021-11-08 
+- [Share your pet photos!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/287448) — 120 票 / 77 评论 / 2021-11-14 
+- [ pet-centric cropped dataset using efficientdet-d6](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274303) — 114 票 / 13 评论 / 2021-09-25 
+- [Baseline solution 【LB 17.8744】](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/276522) — 112 票 / 40 评论 / 2021-10-05 **write-up?**
+- [Use External Data from previous Pet Finder Comp](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/278925) — 106 票 / 33 评论 / 2021-10-16 
+- [Starter package](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274026) — 102 票 / 11 评论 / 2021-09-23 
+- [18th solution. Single swin transformer with custom head, with code.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300942) — 91 票 / 66 评论 / 2022-01-22 **write-up?**
+- [[Public 1st/ Private 5th] Solution Overview](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300928) — 87 票 / 12 评论 / 2022-01-15 **write-up?**
+- [Tentative 2nd place solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300929) — 87 票 / 39 评论 / 2022-01-27 **write-up?**
+- [Boost CV LB with RAPIDS SVR](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/276724) — 85 票 / 37 评论 / 2021-10-06 
+- [How good/bad are these first draft models?](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274413) — 84 票 / 9 评论 / 2021-09-25 
+- [[TL;DR list] - Every single Imagenet paper in the last 2 years summarized. ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/284284) — 82 票 / 10 评论 / 2021-10-30 
+- [my best single model cv 17.5 LB 17.90](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/289889) — 78 票 / 72 评论 / 2021-11-22 
+- [May The Paws Be With You 🐶🐱](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274106) — 72 票 / 56 评论 / 2021-09-24 
+- [🥇🏆Previous Petfinder comp-Top Solution links🏆🥇](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/273993) — 70 票 / 8 评论 / 2021-09-23 **write-up?**
+- [Make More Train Data with Dog Cat GAN!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/278364) — 63 票 / 22 评论 / 2021-10-14 
+- [9th place solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300947) — 63 票 / 17 评论 / 2022-01-24 **write-up?**
+- [If you are using fastai - PLEASE READ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/296369) — 57 票 / 10 评论 / 2021-12-21 
+- [Score Your Pet: Interactive Web App](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/291632) — 55 票 / 20 评论 / 2021-11-30 
+- [[Info] DOLG Models in TensorFlow 2 (Keras) Implementation (Update)](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/281914) — 53 票 / 9 评论 / 2021-10-25 
+- [Things I learned from being a DL beginner to a silver medal](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301369) — 53 票 / 44 评论 / 2022-01-17 **write-up?**
+- [Identify duplicates and share findings (+ dataset w/o duplicates)](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/278497) — 49 票 / 3 评论 / 2021-10-14 
+- [Dog are much more harder to classify rather than cats](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/284354) — 48 票 / 9 评论 / 2021-10-31 
+- [Duplicate Images](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/278309) — 47 票 / 10 评论 / 2021-10-13 
+- [Kaggle's Most Detailed Image Augmentations Notebook ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/282617) — 46 票 / 25 评论 / 2021-10-27 
+- [🙏Thank you! 🙌](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/298758) — 44 票 / 30 评论 / 2022-01-04 
+- [LB Overfitting Analysis](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/296180) — 44 票 / 9 评论 / 2021-12-20 
+- [Classifications - Cats vs Dogs.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274259) — 42 票 / 10 评论 / 2021-09-24 
+- [Using the duplicates to estimate target noise](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/285814) — 42 票 / 5 评论 / 2021-11-06 
+- [Submission Deadline Extended by One Day](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300004) — 42 票 / 8 评论 / 2022-01-10 
+- [13th place solution - How I survived the shakeup](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300969) — 41 票 / 11 评论 / 2022-01-15 **write-up?**
+- [OOF preds vs target distribution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/289790) — 39 票 / 22 评论 / 2021-11-22 
+- [Amazon Studio Lab a new free Google Colab Competitor](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/297579) — 39 票 / 9 评论 / 2021-12-28 
+- [*CV vs LB*](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274163) — 39 票 / 68 评论 / 2021-09-24 
+- [Leaderboard Shakeup Plot](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301192) — 39 票 / 7 评论 / 2022-01-16 
+- [3rd place Solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301044) — 38 票 / 15 评论 / 2022-01-26 **write-up?**
+- [Trouble with CV/LB correlation! Need help :)](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/298809) — 38 票 / 19 评论 / 2022-01-04 
+- [ConvNeXt seems to perform well in this competition !](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300440) — 38 票 / 5 评论 / 2022-01-12 
+- [Good Luck to Everyone!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300886) — 37 票 / 9 评论 / 2022-01-14 
+- [Understanding the Pawpularity Score.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/291118) — 37 票 / 5 评论 / 2021-11-27 
+- [14th Place Solution- KMS](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300941) — 37 票 / 12 评论 / 2022-01-15 **write-up?**
+- [Few Experiments and results - Let me know your thoughts too](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/286507) — 36 票 / 5 评论 / 2021-11-09 
+- [ensambling is great CV 17.3 LB 17.85](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/291482) — 36 票 / 26 评论 / 2021-11-29 
+- [Thank You Note Day!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/297220) — 36 票 / 8 评论 / 2021-12-26 
+- [4th place solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301072) — 35 票 / 8 评论 / 2022-01-15 **write-up?**
+- [[Compilation]Good starter notebooks 🐕 ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274568) — 34 票 / 6 评论 / 2021-09-26 
+- [A ConvNet for the 2020s ConvNeXt, Outperforms Siwn Transfomer](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300212) — 33 票 / 18 评论 / 2022-01-11 
+- [Scores 17.93066 and 17.90912 are common among few teams!!!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/290949) — 33 票 / 7 评论 / 2021-11-27 
+- [Dealing with varying image sizes in training](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/298822) — 33 票 / 3 评论 / 2022-01-04 
+- [Congrats to Abhishek for reaching #1 Notebooks Rank](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/276077) — 32 票 / 4 评论 / 2021-10-03 
+- [About the Test Images](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/277251) — 32 票 / 0 评论 / 2021-10-08 
+- [Chris' batchsize trick can help improve your score!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/295177) — 31 票 / 4 评论 / 2021-12-14 
+- [Hybrid SwinTransformer + CNN Baseline Training Script](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/278128) — 31 票 / 4 评论 / 2021-10-12 
+- [Mixup is all your need😜](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/288223) — 31 票 / 10 评论 / 2021-11-17 
+- [Announcement on Public Notebook Sharing](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/291553) — 31 票 / 3 评论 / 2021-11-29 
+- [Fastai vs Pytorch](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/296297) — 31 票 / 10 评论 / 2021-12-21 
+- [Request: Kaggle should remove the function to publish a new version of a public notebook the final week.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300130) — 31 票 / 4 评论 / 2022-01-11 
+- [Public LB variance](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/290580) — 30 票 / 3 评论 / 2021-11-25 
+- [[ Public 11th / Private 45th] We found the leak but it was too late](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301091) — 30 票 / 12 评论 / 2022-01-15 
+- [summarize PetFinder.my discussions for new comers](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/283793) — 30 票 / 4 评论 / 2021-10-27 
+- [Chris's SVR trick as applied to FastAI](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/297636) — 30 票 / 19 评论 / 2021-12-28 
+- [Early Meme Thread !!!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/295529) — 30 票 / 19 评论 / 2021-12-16 
+- [CV/LB correlation analysis](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/293378) — 29 票 / 14 评论 / 2021-12-05 
+- [54th Place Solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300940) — 29 票 / 8 评论 / 2022-01-15 **write-up?**
+- [32nd Place Solution [Part 1] - FastAI TTA: Beta (+0.08 CV boost)](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301064) — 28 票 / 18 评论 / 2022-01-16 **write-up?**
+- [Findings over TTA experiments (Consistently +0.07 LB)](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/294108) — 28 票 / 12 评论 / 2021-12-08 
+- [Time to Thanks! ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300843) — 28 票 / 9 评论 / 2022-01-14 
+- [FastAI - One way to a add custom head](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/297396) — 28 票 / 9 评论 / 2021-12-27 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/273988) — 27 票 / 37 评论 / 2021-09-23 
+- [Leaderboard Finalized - Congratulations to the Winners; Recap](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301677) — 26 票 / 8 评论 / 2022-01-18 
+- [[tf.keras users]: All Weights variation of official EfficientNet V2](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/285720) — 26 票 / 1 评论 / 2021-11-05 
+- [Swin Transformer V2 paper 👀](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/289137) — 26 票 / 5 评论 / 2021-11-19 
+- [[Info]: Beyond Self-attention: External Attention ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/281917) — 26 票 / 5 评论 / 2021-10-25 
+- [Oopsie Doopsie, Apparently my public notebook got a silver medal (#145) 😆 ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301023) — 25 票 / 3 评论 / 2022-01-15 **write-up?**
+- [Think I have found an alternative Kaggle Progression KPI: Solo Expert-among-Master-and-GM.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301628) — 25 票 / 2 评论 / 2022-01-18 
+- [Ways to use the Meta Data and Image together](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/277164) — 25 票 / 9 评论 / 2021-10-08 
+- [[ 31th solution ] noisy student, knowledge distillation](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300962) — 24 票 / 10 评论 / 2022-01-15 **write-up?**
+- [Pawpularity distribution - cat-dog chart 🐱🐶](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/293443) — 24 票 / 6 评论 / 2021-12-05 
+- [Dataset Distillation](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/295783) — 24 票 / 8 评论 / 2021-12-17 
+- [[tf.keras] swin transformer](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/276823) — 23 票 / 5 评论 / 2021-10-06 
+- [Visualizing Convolutional Layers using PyTorch's Feature Extraction Module.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/292808) — 23 票 / 0 评论 / 2021-12-03 
+- [12th place solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301191) — 23 票 / 9 评论 / 2022-01-20 **write-up?**
+- [27th solution, Swin transformer. Simple and Lucky.](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301317) — 22 票 / 8 评论 / 2022-01-17 **write-up?**
+- [Few things I've learned](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301252) — 22 票 / 7 评论 / 2022-01-16 
+- [Focal Cosine Loss (Pytorch)](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/284412) — 22 票 / 5 评论 / 2021-10-31 
+- [39th place - How to train EfficientNet](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301259) — 22 票 / 9 评论 / 2023-02-10 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/273989) — 21 票 / 102 评论 / 2021-09-23 
+- [Approach : Feature Extractor + Machine Learning Algorithm](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/279212) — 21 票 / 5 评论 / 2021-10-17 
+- [(tf.keras) Hybrid External Transformer (multi-input) + RAPIS SVR](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/286973) — 21 票 / 3 评论 / 2021-11-11 
+- [Backbones Other Than Swin Transformers](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/293685) — 21 票 / 8 评论 / 2021-12-06 
+- [How to use ImageDataGenerator with multiple inputs in TF Keras? NEED HELP 📙](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/290685) — 20 票 / 3 评论 / 2021-11-25 
+- [[tf.keras users}: latest EfficientNets checkpoints](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/275221) — 19 票 / 4 评论 / 2021-09-29 
+- [Questions to the host: Use of data from the Petfinder.my](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/281672) — 19 票 / 8 评论 / 2021-10-25 
+- [Non-Swin-Transformer Model LB-CV](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/294822) — 19 票 / 8 评论 / 2021-12-13 
+- [Integrating image and tabular data](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/291119) — 19 票 / 2 评论 / 2021-11-27 
+- [Overfitting to the training distribution?](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/290551) — 19 票 / 3 评论 / 2021-11-25 
+- [17th Place Solution](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300949) — 19 票 / 1 评论 / 2022-01-15 **write-up?**
+- [Papers and Articles on Adoptability and Photos](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274533) — 18 票 / 0 评论 / 2021-09-26 
+- [How I did shake down](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/301302) — 18 票 / 20 评论 / 2022-01-17 
+- [TorchVision new Multi-Weight support API! 💥](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/296665) — 18 票 / 6 评论 / 2021-12-22 
+- [New baseline for y'all!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/281991) — 17 票 / 0 评论 / 2021-10-26 
+- [TF: EfficientNet Hybrid Swin-Transformer + CatBoost](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/280531) — 17 票 / 2 评论 / 2021-10-21 
+- [Trust your CV rather then LB ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300937) — 17 票 / 17 评论 / 2022-01-15 
+- [Chris Deotte talking about this competition with Sanyam Bhutani!](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/303652) — 16 票 / 2 评论 / 2022-01-28 
+- [Is there any signal out there?](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/298399) — 16 票 / 21 评论 / 2022-01-02 
+- [Mistake in "FastAI KF10 + Yolov5 Labeling" notebook](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/298495) — 16 票 / 7 评论 / 2022-01-03 
+- [More than 1 animals and dog images are harder to predict?](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/296849) — 16 票 / 3 评论 / 2021-12-23 
+- [Two main tricks helped us to avoid the shake](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/300932) — 16 票 / 1 评论 / 2022-01-15 
+- [[Fastai] add `AccumMetric` in your rmse metric](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/294054) — 16 票 / 3 评论 / 2021-12-08 
+- [Why all starter notebooks are used Metadata as input features?](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/274154) — 15 票 / 4 评论 / 2021-09-24 
+- [[Info]: Behavior Sequence Transformer for structured data (non-image). ](https://www.kaggle.com/competitions/petfinder-pawpularity-score/discussion/287421) — 15 票 / 0 评论 / 2021-11-13 

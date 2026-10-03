@@ -1,0 +1,177 @@
+# https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/391609
+
+Topic #391609: 14th Place Solution
+  Author: kurupical
+  Posted: 2023-03-02 00:22:07.664000
+  Votes: 39  Comments: 2
+
+First of all, I would like to thank our hosts for organizing the competition.
+It was a task I've never solved before, and it was both educational and a lot of fun trying different approaches!
+
+Summary
+
+
+
+Model Detail
+
+3D-CNN (cv: 0.770)
+
+
+
+backbone: r3d_18 (from torchvision: https://pytorch.org/vision/stable/models/generated/torchvision.models.video.r3d_18.html#torchvision.models.video.R3D_18_Weights)
+
+use 63 frames(20fps)
+
+predict 19 steps
+
+train every 9 steps
+
+StepLR Scheduler(~2epochs: lr=1e-3/1e-4)
+
+
+2.5D3D-CNN (cv: 0.768)
+
+
+
+Almost same as DFL's 1st solution by Team Hydrogen (https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932)
+
+backbone: legacy_seresnet34
+
+use 123 frames(20fps)
+
+predict 3 frames
+
+down sampling (g: 10%, contact: 30%)
+
+label smoothing (0.1-0.9)
+
+
+Both 3D, 2.5D3D
+
+
+
+Linear layers for g and contact
+
+
+
+x_contact = model_contact(x)  
+x_g = model_g(x)  
+not_is_g = (is_g == )
+x = x_contact * not_is_g + x_g * is_g  
+
+
+
+
+output 3 prediction and calculate loss: only sideline, only endzone, concat sideline-endzone feature.
+
+
+
+ ():
+  x_sideline = cnn(x_sideline_image) 
+  x_endzone = cnn(x_endzone_image)
+   fc(torch.cat([x_sideline, x_endzone])), fc_sideline(x_sideline), fc_endzone(x_endzone)
+
+
+LGBM (cv: 0.740)
+
+
+
+about 1100 features
+
+feautres
+
+
+player's distance (tracking, helmet)
+
+lag, diff
+
+top_n nearest player's distance (n: parameters)
+
+number of people within distance n (n: parameters)
+
+groupby
+
+
+game_play
+
+is_g
+
+is_same_team
+
+number of people within distance n 
+
+
+ensemble
+
+Weighted ensemble, G and contact respectively.
+
+What worked for me
+
+
+
+image preprocessing
+
+
+draw bbox -&gt; draw bbox and paint out
+
+use 2 colors(g, contact) -&gt; use 3 colors(g, same team contact, different team contact)
+
+crop the image with keeping the aspect ratio
+
+
+  bbox_left_ratio = 
+  bbox_right_ratio = 
+  bbox_top_ratio = 
+  bbox_down_ratio = 
+   col  [, , , ]:
+      df[col] = df[[, ]].mean(axis=)
+  df[] = df[[, ]].mean(axis=)
+  df[] = df.groupby([, , ])[].transform()
+
+  series = df.iloc[]  
+  left = (series[] - series[] * bbox_left_ratio)
+  right = (series[] + series[] * bbox_right_ratio)
+  top = (series[] + series[] * bbox_top_ratio)
+  down = (series[] - series[] * bbox_down_ratio)
+  img = img[down:top, left:right]
+  img = cv2.resize(img, (, ))
+
+
+
+
+StepLR with warmup scheduler
+
+label smoothing (worked for 2.5D3D, but not worked for 3D)
+
+
+What not worked for me
+
+
+
+Transformers
+
+
+use top 100~400 features of lgbm feature importances
+
+tuned hard but got cv 0.02 lower than lgbm.
+
+2D-&gt;1D CNN
+
+
+contact score is same as 2.5D3D, 3D but very poor G score in my work.
+
+interpolate bbox
+
+
+Other
+
+
+
+tools: I make tools to investigate wrong inference and make a hypothesize to improve score.
+https://github.com/kurupical/nfl_contact_detection/blob/master/58218_003210_contact_0.506591796875_score0.0_H23_V10.gif
+
+Comments:
+├─ Rob Mulla (2023-03-04 16:59:24.443000) [+0]
+│  Great work @kurupical and thanks for sharing this solution write up.
+├─ nhatntt (2023-03-02 02:29:05.843000) [+0]
+│  First of all congratulations, thanks for sharing this great solution. I have some questions that in 3D CNN you predict 19 steps, that is, given that input sequence you will predict which step it wi...

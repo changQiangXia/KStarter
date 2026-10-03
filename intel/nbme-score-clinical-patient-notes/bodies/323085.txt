@@ -1,0 +1,341 @@
+# https://www.kaggle.com/competitions/nbme-score-clinical-patient-notes/discussion/323085
+
+Topic #323085: #2 solution
+  Author: CPMP
+  Posted: 2022-05-04 18:39:26.323000
+  Votes: 174  Comments: 54
+
+First of all, thanks to NBME host and Kaggle for this challenging competition. I really liked that we got 10x more unlabelled data than labelled data to try unsupervised or semi supervised techniques. Without that the competition would have been way less interesting.
+
+Let me describe my solution. Most of the code can be seen in my inference notebook. For some reason Kaggle doesn't want me to put the link here as I shared it in another post. You can access it from the leaderboard. Then look for the latest version where I shared all checkpoints in pubic datasets.
+
+Data processing
+
+I quickly saw that annotations were inconsistent, as most of the participants did. My guess is that annotators sometimes only identified some of the occurrence of a given feature, and not all of them. This can be seen with Alderall (spelling?) for instance. While fixing these annotations would make much sense in a real life project, it is probably a bad idea here. Indeed, there is no reason to believe that test annotations are not as inconsistent as training data annotations.
+
+I further made the hypothesis that annotators were more likely to miss repeated annotations than first occurrence. It means that the annotations have a sequence dependency, and that using a RNN at some point could make sense.
+
+Another thing I noticed is that using uncased modeling would be better as some text were in uppercase, other in lower case, without any semantic significance for the difference. I therefore decided to use lower case text.
+
+Medical abbreviations were more of a headache. I contemplated expanding the most common ones (as shared in the competition forum) but this could lead to complex token offset mapping.  I decided to only map most common cases to each other. My preprocessing text function is this:
+
+def clean_abbrev(text):
+    text = text.replace('FHx', 'FH ')
+    text = text.replace('FHX', 'FH ')
+    text = text.replace('PMHx', 'PMH ')
+    text = text.replace('PMHX', 'PMH ')
+    text = text.replace('SHx', 'SH ')
+    text = text.replace('SHX', 'SH ')
+    text = text.lower()
+    return text
+
+
+The other data analysis I did was to check where annotation boundary falls within a token span. When this happens there is no way a token based model can correctly learn how to predict these boundaries correctly. I did this for roberta, deberta and debertav2 tokenizers. There are 2 cases that cover most of cases:
+
+
+
+spaces before some non space text
+
+'\r\n' before some text
+I therefore created a post processing function that expanded on @theoviel space removal function:
+
+
+spaces = ' \n\r'
+
+def post_process_spaces(pred, text):
+    text = text[:len(pred)]
+    pred = pred[:len(text)]
+    if text[0] in spaces:
+        pred[0] = 0
+    if text[-1] in spaces:
+        pred[-1] = 0
+
+    for i in range(1, len(text) - 1):
+        if text[i] in spaces:
+            if pred[i] and not pred[i - 1]:  # space before
+                pred[i] = 0
+
+            if pred[i] and not pred[i + 1]:  # space after
+                pred[i] = 0
+
+            if pred[i - 1] and pred[i + 1]:
+                pred[i] = 1
+
+    return pred
+
+
+There is a third case that covers most of the remaining ones:
+
+
+
+'yom' and 'yof' sub strings meaning year old female, or year old male. The span boundary is right after 'yo' but all tokenizers create a token for 'of', and roberta tokenizer creates a token for 'om'. In both cases the boundary is inside the 'of' or 'om' token.
+
+
+I post processed tokens ‘om’ and ‘on’ depending on the feature. If the feature is about gender then I only keep the second character. If the feature is about age, then I only keep the first character. Here s the code I used.
+
+def pred_to_chars(token_type_logits, len_token, max_token, offset_mapping, text, feature_num):
+    token_type_logits = token_type_logits[:len_token]
+    offset_mapping = offset_mapping[:len_token]
+    char_preds = np.ones(len(text)) * -1e10
+    for i, (start,end) in enumerate(offset_mapping):
+        if text[start:end] == 'of' and start &gt; 0 and text[start-1:end] == 'yof':
+            if feature_num in feature_female:
+                char_preds[end-1:end] = 1
+            elif feature_num in feature_year:
+                char_preds[start:start+1] = token_type_logits[i-1]
+            else:
+                char_preds[start:end] = token_type_logits[i]
+        elif text[start:end] == 'om' and start &gt; 0 and text[start-1:end] == 'yom':
+            if feature_num in feature_male:
+                char_preds[end-1:end] = 1
+            elif feature_num in feature_year:
+                char_preds[start:start+1] = token_type_logits[i-1]
+            else:
+                char_preds[start:end] = token_type_logits[i]
+        else:
+            char_preds[start:end] = token_type_logits[i]
+    return (char_preds, text)
+
+
+The one thing I didn't use in my select submissions is to handle line feed via a new token.  I did only one sub with it. It is a 4 fold model that scores 0.894 on private LB! I give more details about it here.
+
+Model architecture
+
+I mostly used deberta-large and deberta-v3-large backbones.  
+
+I also tried deberta-v2-xlarge and roberta-large backbones, but they were weaker. My best selected sub did not use them.
+
+Training data is rather small and NLP models are large transformers. This is a recipe for training instability or for overfitting, or both. I added various regularization tricks.  
+
+
+
+First, using classification heads with 5 levels of dropout as shared by @abhishek in Feedback competition. 
+
+Second, using a linear combination of all hidden states with a dropout on the linear coefficients. The dropout forces the model heads to learn from all hidden states and not just the last one.
+
+Third, using a primary head for token classification together with two auxiliary heads for predicting annotation span boundaries (one head for span starts and one head for span ends). Using the span boundary predictions was not so bad, but was about 0.01 - 0.02 worse than using the token classification head.
+
+
+As discussed above, I thought that annotations depend on the order in which they appear in the text. I therefore inserted a RNN after the backbone last hidden state and before the three classification heads.  I used a single layer bidirectional RNN, I used either GRU or LSTM, which gives me two variant for the same backbone.
+
+Model training
+
+The most important piece I think was to pretrain my backbones on the Squadv2 dataset. Why Squadv2? Because the input to the model is the same as in qa: a question (the feature text), and a context (the patient history). The annotations are all answers to the question.
+
+I tried some pretrained models but found that pretraining them myself gave better results. I used Huggingface run_qa.py script. I modified the script to use DebertaV2TokenizerFast as shared by @nbroad in his dataset. I saved checkpoints at end of first 3 epochs and picked the one that led to best result downstream. 
+
+Before training my models I loaded the backbone weights form the Squadv2 ones.
+
+I trained my models with AdamW optimizer together with a custom scheduler similar to cosine with warmup.
+
+As said above, I was afraid of overfitting. Therefore I use token dropout, i.e. replacing 10% of input tokens by a mask token, as in MLM pretraining. I did this only for the pn history text and not features. When using dropout for features CV score dropped, probably because some feature text are very small and could be entirely masked.
+
+I then used pseudo labeling, using the model to predict annotations for unlabelled data. I used the token class probabilities, i.e.I did not round them. I found that focal loss was better than BCE and wondered why. Then I thought it was because focal loss down weights the pseudo labels that were close to 0.5. I then decided to try a custom loss that ignores samples with pseudo label 0.5 and increase sample weights until 1 when the label is 0 or 1. It is equivalent to BCE when labels are 0 or 1:
+
+def criterion(preds, targets):
+    targets2 = torch.where(targets &gt;= 0.5, 2*targets -1, 1 - 2*targets)
+    preds2 = torch.where(targets &gt;= 0.5, preds, -preds)
+    loss = - targets2 * F.logsigmoid(preds2) 
+   return loss
+
+
+I did one round of pseudo labeling. A second run did not improve CV.
+
+In general I only kept a new model if both its CV score and its public LB score improved. This seems to have been a good practice, but it led me to ignore line feed token unfortunately.
+
+I trained my models using 4 folds. At the end I also trained selected models on full train data with 4 different seeds.
+
+Using the above I could get a public LB score of 0.893 and a private LB score of 0.894. I selected my best LB submission as final submission.
+
+Adversarial training
+
+For my second submission I wanted something quite different, to mitigate risk of LB overfitting. One of Feedback competition top teams shared that they used adversarial training. I decided to deep dive on it and discovered a whole new world.  I experimented lots of variants: fgm, vat, sift, smart, etc, and selected my best sub out of it. Although its CV score was quite higher than the one I selected above, both its public LB score and private LB score were lower. It seems that my way of doing pseudo labeling was better. It may be that being quite new to these techniques I didn't tune them correctly. I will try them in future competitions for sure.
+
+Main issue of these methods is that they are slower than pseudo labeling as they require multi forward passes per sample.
+
+For those interested here are some references I recommend:
+
+VAT: 
+https://arxiv.org/pdf/1704.03976v2.pdf
+https://arxiv.org/pdf/1605.07725.pdf
+https://arxiv.org/pdf/1507.00677.pdf
+
+SMART:
+https://arxiv.org/abs/1911.03437
+
+AWP:
+ https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook
+
+FGM:
+https://arxiv.org/abs/1412.6572
+https://www.kaggle.com/c/tweet-sentiment-extraction/discussion/143764 
+
+SIFT:
+ https://github.com/microsoft/DeBERTa/tree/master/DeBERTa/sift
+
+Ensembling and final prediction
+
+I used a weighted combination of token type probabilities. Coefficients were found by a crude grid search with CV score. 
+
+I used the fold models to find the weights then applied same weights to the models trained on the full data. I later tuned some overweight for full data models using the public LB. I did this for only one of my two selected subs.
+
+Probabilities were thresholded same way for all cases. I was afraid of overfitting if using different thresholds per cases. Once thresholded I applied the post processing described above.
+
+That's it! I hope that some of the above will be useful for future competitions.
+
+Edit: post comp submission shows that using lf token adds lots of noise in LB score. Not using it was probably a good thing.
+
+Edit2. Maybe lf token did not work for me because I didn't pretrain using MLM on all notes, hence my lf token embedding was not trained properly.
+
+Comments:
+├─ abdo1353 (2022-05-09 00:17:25.177000) [+3]
+│  Congratulations, Good solution.
+│  can i ask you to tell me where did you learn  data science?
+  ├─ CPMP (2022-05-09 10:46:21.737000) [+12]
+  │  I have a PhD in machine learning but it is from a long long time ago and not much relevant. I then took Andrew Ng Coursera cours eon machine learning (first one), and started practicing on Kaggle.
+├─ Michal (2022-05-05 14:11:25.433000) [+4]
+│  Congrats, amazing solution and nice write up. So many things to learn from, can't wait to try out the model architecture tricks in future competitions. And the Squadv2 pretraining, what a great ide...
+  ├─ CPMP (2022-05-05 14:14:51.147000) [+2]
+  │  Squadv2 pretraining was also used by Chai competition winner. I may have got the idea from there, I don't remember exactly.
+  │  
+  │  Thanks for the fast awp link, I'll have a look.
+  │  
+  │  Rnn improved a bit, but...
+  ├─ CPMP (2022-05-05 16:58:23.800000) [+1]
+  │  I am surprised with the lf token not working in the end. 
+  │  
+  │  
+  │  I wonder if it is not because I only trained it on annotated data. When MLM on all notes is used then token embeddings are better.
+  ├─ Michal (2022-05-05 17:23:14.863000) [+2]
+  │  That might be the reason, I don't have leaderboard scores and my tests were limited but from what I tried on subsample of data (4000 training / 1000 validation)
+  │  for deberta-v3-large (folds 0,1 out ...
+├─ neongen (2022-05-04 19:49:29.290000) [+4]
+│  Congrats! Very elegant solution. It's been a long since I read such interesting writeup.
+├─ EdwardMelot (2022-05-17 20:59:42.447000) [+1]
+│  Really insightful explanation of your solution. Congrats on the podium position!
+├─ GUNER (2022-05-11 09:47:52.177000) [+1]
+│  congrats, again!
+│  a side question: for the 'fulldata' training, on model diversity and using different seeds…
+│  
+│  Attaining diversity in a specific model, without deviating too much from the baseline m...
+  ├─ CPMP (2022-05-11 10:46:45.280000) [+1]
+  │  Seed values should not matter. I usually use 0,1,2,etc.
+  ├─ GUNER (2022-05-11 11:10:08.570000) [+1]
+  │  thank you.
+├─ vialactea (2022-05-10 20:15:10.563000) [+1]
+│  Congratulations on the top position and thanks for sharing!
+│  
+│  Several top teams used AWP. I didn't try it during the competition due to concerns with GPU time. I tried it afterwards and I was unable...
+  ├─ CPMP (2022-05-11 01:28:18.013000) [+1]
+  │  II could not make AWP work at all. I am not sure why.
+├─ Eric Modesitt (2022-05-08 23:59:20.370000) [+1]
+│  Great work! It's a bit daunting to see how advanced you are compared to where I currently am but it's extremely useful to have your processes available to read, so thanks!
+├─ Genius_BadMan (2022-05-08 23:24:12.153000) [+1]
+│  Great Article
+├─ Muhammed Tausif (2022-05-08 13:31:47.467000) [+1]
+│  Congratulations @cpmpml for standing at No:2, and Thanks for sharing the insides about the solution, and the process.
+├─ Justinwu123 (2022-05-08 11:17:08.250000) [+1]
+│  Thank you for your great explanation! Super Cool
+├─ xiaoguzai123 (2022-05-06 11:25:20.080000) [+1]
+│  Hello,bro,can you show your whole code?
+  ├─ CPMP (2022-05-06 12:57:51.773000) [+1]
+  │  Hi Bro, I did.
+├─ Chirag Desai (2022-05-05 16:01:21.607000) [+1]
+│  Congratulations on your gold ! 🥇🥇 Fantastic solution.. Haven't worked on these much advanced topics yet.. it seems light years far away. But your solutions and recommendations will help for sure.. ...
+├─ [deleted] (2022-05-05 11:46:38.670000) [+1]
+│  You have done a fantastic job of explaining your solution. This is an excellent write-up that is sure to help many others. Congratulations on your Gold Medal!
+├─ leemop (2022-05-05 06:27:35.910000) [+1]
+│  Congrats for your prize! 
+│  
+│  i am so grateful of this share. i learned so a lot of thihgs. Kaggle is greatest world in my life. i learned so alot.
+│  you've been also be my great teatures on this compet...
+├─ llleeex (2022-05-05 03:18:46.380000) [+1]
+│  Congrats on solo gold！🎉 By the way，I'm confused by the description below：
+│  At the end I also trained selected models on full train data with 4 different seeds.
+│  How to evaluate the performance of the...
+  ├─ CPMP (2022-05-05 07:03:25.323000) [+0]
+  │  I used the models trained on folds to evaluate model performance. I made the hypothesis that the gain form training on all data was consistent across models.
+  ├─ llleeex (2022-05-05 07:11:37.673000) [+1]
+  │  Thanks, your explanation is clear. Congrats again.💯💯
+├─ Romuska Palo Ur Laputa (2022-05-04 18:55:28.417000) [+1]
+│  @cpmpml Thank you for your great explanation!!!
+│  I'll study with this!
+│  Congratulation on your solo gold medal!!!
+├─ Vadim Irtlach (2022-05-07 22:19:00.957000) [+2]
+│  Good solution, @cpmpml! Could you please share, if it is available, code how you did pre-training, I.e Masked Language Modeling? Thanks!
+  ├─ CPMP (2022-05-08 13:01:46.857000) [+1]
+  │  I didn't do any MLM. Not sure why you think I did.
+  ├─ Vadim Irtlach (2022-05-08 13:10:01.620000) [+0]
+  │  Sorry, I thought about MLM, after reading this line, I understand that you did it in another way:
+  │  
+  │  The most important piece I think was to pretrain my backbones on the Squadv2 dataset.
+  ├─ CPMP (2022-05-08 13:13:59.197000) [+1]
+  │  And I wrote:
+  │  
+  │  
+  │    
+  │  I used Huggingface run_qa.py script.
+  │  
+  │  
+  │  https://github.com/huggingface/transformers/blob/main/examples/pytorch/question-answering/run_qa.py
+  │  
+  │  This is not a MLM task, this a QA task.
+├─ SchenbergZ (2022-05-05 10:18:41.460000) [+2]
+│  impressive solution. Big Congrats!
+├─ rajsahilcoder (2022-05-05 08:21:14.100000) [+2]
+│  Congrats for your prize!
+├─ Mohamed Eltayeb (2022-05-05 03:26:25.180000) [+2]
+│  Congrats! Your solution is quite impressive!
+├─ WenSunnn (2025-01-22 04:27:40.120000) [+0]
+│  Hello, I apologize for the late comment. I am trying to do this as a project for my thesis and just started learning data science, and I found your solution to load the weight using the SQuAD v2 da...
+├─ Elliott Peterson (2022-06-16 00:04:52.597000) [+0]
+│  When the author runs NBME 254 in his code, he references a get of model checkpoints. However, I don't see any checkpoints made anywhere in the code. I end up getting a file does not exist error for...
+  ├─ CPMP (2022-06-28 22:09:40.990000) [+0]
+  │  You should look at the latest version of the notebook. I made all checkpoint datasets public.
+  ├─ Elliott Peterson (2022-08-03 00:02:12.130000) [+0]
+  │  You use a number of checkpoints in the notebook that you haven't uploaded that i can see. For instance haven't upload the "non-full" versions of nbme 182, nbme 254, and nbme 256. You also do not ha...
+  ├─ CPMP (2022-09-05 10:23:23.717000) [+0]
+  │  As I wrote, the latest notebook version has all datasets https://www.kaggle.com/code/cpmpml/sub-ensemble-010/data?scriptVersionId=95933493  What is it you don't see?
+  ├─ CPMP (2022-09-06 20:09:52.843000) [+0]
+  │  Could you provide any general advice on how to generate these checkpoints?
+  │  
+  │  
+  │  I tried to do that in the writeup above,
+  ├─ Elliott Peterson (2022-09-07 20:26:47.360000) [+0]
+  │  Thanks. I didn't see the "non-full" versions of nbme 182, nbme 254, and nbme 256 checkpoints that I saw used in the log. Maybe you didn't think they added anything, so you didn't upload them. 
+  │  
+  │  Cou...
+  ├─ CPMP (2022-09-07 22:25:42.377000) [+0]
+  │  The datasets are uploaded and used in the last version of the notebook I point to in the above comment.  in sub_ensemble I only share the submission code.
+├─ Trushant Kalyanpur (2022-06-10 04:26:30.803000) [+0]
+│  @cpmpml when training on full data do you train any differently? E.g. fewer epochs to avoid overfitting ?? The only way to check how good the model is probably using LB as oof?
+  ├─ CPMP (2022-06-10 11:15:59.180000) [+2]
+  │  I use exactly same training procedure for full train. The only change is full train vs fold based.
+  │  
+  │  Cross validation is used to evaluate the performance of my training procedure. Once I know its va...
+  ├─ Trushant Kalyanpur (2022-06-10 14:55:22.577000) [+1]
+  │  That makes sense and aligns with my understanding. Thanks for clarifying!
+├─ Jiongshu Wang (2022-06-02 16:41:38.100000) [+0]
+│  Congratulations
+├─ sofitsa (2022-05-30 19:22:56.323000) [+0]
+│  Congratulations. Everyone seems to take for granted the pseudo labelling process. Can you please share some link/source with the pseudo labelling methodology that you followed? Or if it is such a s...
+  ├─ CPMP (2022-05-30 21:56:32.540000) [+2]
+  │  A good intro to pseudo labeling is given here: https://www.kaggle.com/c/google-quest-challenge/discussion/129840
+  │  
+  │  Pseudo labeling is called noisy student in academic papers like this one: https://a...
+├─ I110143105 (2022-05-18 16:32:14.080000) [+0]
+│  Thank you for your great explanation! Super Cool
+├─ bingchaoWang (2022-05-17 04:39:40.853000) [+0]
+│  Can you share your SMART code? I want to try it . Thanks.
+  ├─ CPMP (2022-05-17 12:13:42.297000) [+0]
+  │  You should follow the link I gave. It points to these code you can try: https://paperswithcode.com/paper/smart-robust-and-efficient-fine-tuning-for
+├─ DwightSchnoot (2022-05-09 17:20:40.637000) [+0]
+│  Nice solution
+├─ Paul Larmuseau (2022-05-08 05:44:45.233000) [+0]
+│  You are certainly the master💪
+│  
+│  I just wondered after a while: what is the benefit of scoring student with a model that has only 90% accuracy, with annotations that are not consistent… if in the rea...
+  ├─ CPMP (2022-05-09 10:47:36.430000) [+1]
+  │  Maybe host wants explanations of why the feature is there or isn't. Providing the words identifying the feature is more explicit than a binary prediction.
+├─ [deleted] (2022-05-05 06:25:03.907000) [+0]
+│  [deleted]

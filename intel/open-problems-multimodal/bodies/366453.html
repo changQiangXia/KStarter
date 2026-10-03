@@ -1,0 +1,39 @@
+<p>Thanks to all the organizers and kaggle team hosting such a challengeable competition.Thanks my team mate <a href="https://www.kaggle.com/baosenguo" target="_blank">@baosenguo</a>, I have no knowledge about  bioinformatics ,learned a lot from him.I thought my team could win this competition as we were at the 1st place of LB from start to end,but the time domain shift is unpredictable,we accept this result and congratulas to <a href="https://www.kaggle.com/shujisuzuki65" target="_blank">@shujisuzuki65</a> ,great shakeup!</p>
+<h1>Overview</h1>
+<h2>Cite</h2>
+<p><a href="url" target="_blank">[<img src="https://i.postimg.cc/8kBQqQL2/cite.png" alt="cite.png">](https://postimg.cc/s1XNhL6m)</a></p>
+<h2>Multi</h2>
+<p><a href="url" target="_blank">[<img src="https://i.postimg.cc/tgHz0f3c/multi.png" alt="multi.png">](https://postimg.cc/sMwW7T0P)</a></p>
+<h1>preprocessing</h1>
+<p>1)  <strong>centered log ratio transformation (CLR)</strong> is the best normalization method for both of cite and multi, I found the method from nature articles. <a href="https://www.nature.com/articles/s41467-022-29356-8" target="_blank">https://www.nature.com/articles/s41467-022-29356-8</a></p>
+<p>2) high correlation raw features with target </p>
+<p>3) <a href="https://www.kaggle.com/baosenguo" target="_blank">@baosenguo</a> designed fine tuned process</p>
+<ul>
+<li>using raw count:</li>
+<li>normalization:sample normalization by mean values over features</li>
+<li>transformation:sqrt transformation</li>
+<li>standardization:feature z-score</li>
+<li>batch-effect correction:take "day" as batch, for each batch, we calculate the column-wise median to get a "median-sample" representing the batch, and then subtract this sample from each sample in this batch. This method may not bring much improvement, but it is simple enough to avoid risks.</li>
+</ul>
+<p>4) row-wise zscore transformation before input to neural network</p>
+<h1>validation</h1>
+<p>The biggest challenge in this competition is how to build a robust model for unseen donor in public test and unseen day&amp;donor in private test. At the early stage I used random kfold, cross validation and LB score matched very well, so we don't need to worry about donor domain shift.But time domain shift is unpredictable, after team merge, we check our features one by one with out-of-day validation(groupkfold by day) to make sure all the features can improve every day.</p>
+<h1>model</h1>
+<ul>
+<li><p>Lightgbm<br>
+train 4 lightgbm models with different input features,then transform oof predictions to tsvd as nn model's meta features<br>
+-- library-size normalized and log1p transformed counts -&gt; tsvd<br>
+-- raw counts -&gt; clr -&gt; tsvd<br>
+-- raw counts<br>
+-- raw counts with raw target<br>
+one trick is input sparse matrix of raw count to lightgbm directly with small "feature_fraction": 0.1,it brings nn model much improvment.</p></li>
+<li><p>NN<br>
+Basiclly 3layers MLP works well,one trick is to use GRU to replace first dense layer or add GRU after final dense layer.<br>
+Cite target is transformed to dsb having negative values, compared to ReLU, ELU is much better to deal with negative target values,Swish is also work well for both of cite and multi.<br>
+At the early stage I found cosine similarity is best as loss funtion for my model, after team merge, I learned from teammate to use MSE and Huber to build more different models.</p></li>
+</ul>
+<h1>notebook</h1>
+<p>[simple cite version]<br>
+<a href="https://www.kaggle.com/code/senkin13/2nd-place-gru-cite" target="_blank">https://www.kaggle.com/code/senkin13/2nd-place-gru-cite</a></p>
+<h1>github</h1>
+<p><a href="https://github.com/senkin13/kaggle/tree/master/Open-Problems-Multimodal-Single-Cell-Integration-2nd-Place-Solution" target="_blank">https://github.com/senkin13/kaggle/tree/master/Open-Problems-Multimodal-Single-Cell-Integration-2nd-Place-Solution</a></p>

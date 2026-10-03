@@ -1,0 +1,99 @@
+<p>First of all, I would like to thank our hosts for organizing the competition.<br>
+It was a task I've never solved before, and it was both educational and a lot of fun trying different approaches!</p>
+<h1>Summary</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1146523%2Fe323a35a9255e8e50131807aa19b56ef%2Fsolution.png?generation=1677715798541475&amp;alt=media" alt=""></p>
+<h1>Model Detail</h1>
+<h2>3D-CNN (cv: 0.770)</h2>
+<ul>
+<li>backbone: r3d_18 (from torchvision: <a href="https://pytorch.org/vision/stable/models/generated/torchvision.models.video.r3d_18.html#torchvision.models.video.R3D_18_Weights" target="_blank">https://pytorch.org/vision/stable/models/generated/torchvision.models.video.r3d_18.html#torchvision.models.video.R3D_18_Weights</a>)</li>
+<li>use 63 frames(20fps)</li>
+<li>predict 19 steps</li>
+<li>train every 9 steps</li>
+<li>StepLR Scheduler(~2epochs: lr=1e-3/1e-4)</li>
+</ul>
+<h2>2.5D3D-CNN (cv: 0.768)</h2>
+<ul>
+<li>Almost same as DFL's 1st solution by Team Hydrogen (<a href="https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932" target="_blank">https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932</a>)</li>
+<li>backbone: legacy_seresnet34</li>
+<li>use 123 frames(20fps)</li>
+<li>predict 3 frames</li>
+<li>down sampling (g: 10%, contact: 30%)</li>
+<li>label smoothing (0.1-0.9)</li>
+</ul>
+<h2>Both 3D, 2.5D3D</h2>
+<ul>
+<li>Linear layers for g and contact</li>
+</ul>
+<pre><code>
+x_contact = model_contact(x)  
+x_g = model_g(x)  
+not_is_g = (is_g == )
+x = x_contact * not_is_g + x_g * is_g  
+</code></pre>
+<ul>
+<li>output 3 prediction and calculate loss: only sideline, only endzone, concat sideline-endzone feature.</li>
+</ul>
+<pre><code>
+ ():
+  x_sideline = cnn(x_sideline_image) 
+  x_endzone = cnn(x_endzone_image)
+   fc(torch.cat([x_sideline, x_endzone])), fc_sideline(x_sideline), fc_endzone(x_endzone)
+</code></pre>
+<h2>LGBM (cv: 0.740)</h2>
+<ul>
+<li>about 1100 features</li>
+<li>feautres<ul>
+<li>player's distance (tracking, helmet)</li>
+<li>lag, diff</li>
+<li>top_n nearest player's distance (n: parameters)</li>
+<li>number of people within distance n (n: parameters)</li></ul></li>
+<li>groupby<ul>
+<li>game_play</li>
+<li>is_g</li>
+<li>is_same_team</li>
+<li>number of people within distance n </li></ul></li>
+</ul>
+<h2>ensemble</h2>
+<p>Weighted ensemble, G and contact respectively.</p>
+<h2>What worked for me</h2>
+<ul>
+<li>image preprocessing<ul>
+<li>draw bbox -&gt; draw bbox and paint out</li>
+<li>use 2 colors(g, contact) -&gt; use 3 colors(g, same team contact, different team contact)</li>
+<li>crop the image with keeping the aspect ratio</li></ul></li>
+</ul>
+<pre><code>  bbox_left_ratio = 
+  bbox_right_ratio = 
+  bbox_top_ratio = 
+  bbox_down_ratio = 
+   col  [, , , ]:
+      df[col] = df[[, ]].mean(axis=)
+  df[] = df[[, ]].mean(axis=)
+  df[] = df.groupby([, , ])[].transform()
+
+  series = df.iloc[]  
+  left = (series[] - series[] * bbox_left_ratio)
+  right = (series[] + series[] * bbox_right_ratio)
+  top = (series[] + series[] * bbox_top_ratio)
+  down = (series[] - series[] * bbox_down_ratio)
+  img = img[down:top, left:right]
+  img = cv2.resize(img, (, ))
+</code></pre>
+<ul>
+<li>StepLR with warmup scheduler</li>
+<li>label smoothing (worked for 2.5D3D, but not worked for 3D)</li>
+</ul>
+<h2>What not worked for me</h2>
+<ul>
+<li>Transformers<ul>
+<li>use top 100~400 features of lgbm feature importances</li>
+<li>tuned hard but got cv 0.02 lower than lgbm.</li></ul></li>
+<li>2D-&gt;1D CNN<ul>
+<li>contact score is same as 2.5D3D, 3D but very poor G score in my work.</li></ul></li>
+<li>interpolate bbox</li>
+</ul>
+<h2>Other</h2>
+<ul>
+<li>tools: I make tools to investigate wrong inference and make a hypothesize to improve score.<br>
+<a href="https://github.com/kurupical/nfl_contact_detection/blob/master/58218_003210_contact_0.506591796875_score0.0_H23_V10.gif" target="_blank">https://github.com/kurupical/nfl_contact_detection/blob/master/58218_003210_contact_0.506591796875_score0.0_H23_V10.gif</a></li>
+</ul>

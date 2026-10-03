@@ -1,0 +1,281 @@
+<p>Hi!</p>
+<p>For the past week, I've been running a few experiments with late submissions. Here, I share the results based on my final submission.</p>
+<p>All experiments can be reproduced from my <a href="https://www.kaggle.com/nyanpn/1st-place-public-2nd-place-solution?scriptVersionId=85907908" target="_blank">winning notebook</a> (I have already published the solution, but I did some refactoring for the ablation study). For an overview of my solution, see my previous <a href="https://www.kaggle.com/c/optiver-realized-volatility-prediction/discussion/274970" target="_blank">thread</a>.</p>
+<h2>Single Model vs Ensemble</h2>
+<p>My final submission was an ensemble of 5xLightGBM, 3x1D CNN, and 3xMLP. What would be the score in the simpler model? The following table shows the comparison of RMSPE for different combinations of models: <strong>a single LightGBM is enough to win (0.19699)</strong>, and an ensemble of three CNNs is the best RMSPE  (0.19644) for a single type of model.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>RMSPE (public)</th>
+<th>RMSPE (private)</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1xLGBM</td>
+<td>-</td>
+<td>0.19699</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>5xLGBM</td>
+<td>0.18506</td>
+<td>0.19675</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>1xCNN</td>
+<td>-</td>
+<td>0.19817</td>
+<td>#2</td>
+</tr>
+<tr>
+<td>3xCNN</td>
+<td>0.18495</td>
+<td>0.19644</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>1xMLP</td>
+<td>-</td>
+<td>0.19949</td>
+<td>#6</td>
+</tr>
+<tr>
+<td>3xMLP</td>
+<td>0.18523</td>
+<td>0.19772</td>
+<td>#2</td>
+</tr>
+<tr>
+<td>Ensemble</td>
+<td>0.18324</td>
+<td>0.19545</td>
+<td>#1</td>
+</tr>
+</tbody>
+</table>
+<h2>Type of nearest neighbors</h2>
+<p>The key of my solution is the combination of 7 different nearest neighbors. In addition to the real price recovered from tick-size leak,  I also used volatility and trade size as nearest neighbor measures. (Note that the volatility and trade size-based NN can be calculated <em>without the tick-size leak</em>.)</p>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Search Axis</th>
+<th>Measure</th>
+<th>Metrics</th>
+<th>No. of neighbors</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>time_id</td>
+<td>Real Price</td>
+<td>Canberra</td>
+<td>[2, 3, 5, 10, 20, 40]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>time_id</td>
+<td>Real Price</td>
+<td>Mahalanobis</td>
+<td>[2, 3, 5, 10, 20, 40]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>time_id</td>
+<td>Volatility</td>
+<td>Manhattan</td>
+<td>[2, 3, 5, 10, 20, 40]</td>
+</tr>
+<tr>
+<td>4</td>
+<td>time_id</td>
+<td>Trade Size</td>
+<td>Canberra</td>
+<td>[2, 3, 5, 10, 20, 40]</td>
+</tr>
+<tr>
+<td>5</td>
+<td>time_id</td>
+<td>Trade Size</td>
+<td>Mahalanobis</td>
+<td>[2, 3, 5, 10, 20, 40]</td>
+</tr>
+<tr>
+<td>6</td>
+<td>stock_id</td>
+<td>Real Price</td>
+<td>Manhattan</td>
+<td>[10, 20, 40]</td>
+</tr>
+<tr>
+<td>7</td>
+<td>stock_id</td>
+<td>Volatility</td>
+<td>Manhattan</td>
+<td>[10, 20, 40]</td>
+</tr>
+</tbody>
+</table>
+<p>The following table shows the comparison of RMSPE w/ various combinations of nearest neighbor measures and CV (All scores are based on single LightGBM model).</p>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>CV</th>
+<th>Volatility NN</th>
+<th>Trade Size NN</th>
+<th>Real Price NN</th>
+<th>RMSPE</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>GKF</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.22492</td>
+<td>#1358</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GKF</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>0.21135</td>
+<td>#12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>GKF</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>0.20798</td>
+<td>#10</td>
+</tr>
+<tr>
+<td>4</td>
+<td>GKF</td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td>0.19999</td>
+<td>#7</td>
+</tr>
+<tr>
+<td>5</td>
+<td>GKF</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>0.20367</td>
+<td>#9</td>
+</tr>
+<tr>
+<td>6</td>
+<td>GKF</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>0.19734</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Time-Series</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>0.20322</td>
+<td>#9</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Time-Series</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>0.19699</td>
+<td>#1</td>
+</tr>
+</tbody>
+</table>
+<p>We can see that using any one of the three nearest neighbors yields gold-zone RMSPE, <br>
+but the real price neighbors has the best predictive power (No.2, 3 and 4). <strong>The "tick-size leak-free" version, which uses only volatility and trade size neighbors with GroupKFold, has a score of 0.20367 RMSPE</strong> (No.5). </p>
+<p>We can also see using only real price NN is not enough to get 1st place RMSPE. From this, I think that the combination of various nearest neighbors other than real price contributed to my win.</p>
+<p>The following table shows the RMSPE for the combination of stock-id, time-id neighbors. Again, we can see that the combination of NN is important.</p>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>CV</th>
+<th>time-id NN</th>
+<th>stock-id NN</th>
+<th>RMSPE</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>GKF</td>
+<td></td>
+<td>✓</td>
+<td>0.22018</td>
+<td>#197</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GKF</td>
+<td>✓</td>
+<td></td>
+<td>0.19948</td>
+<td>#5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>GKF</td>
+<td>✓</td>
+<td>✓</td>
+<td>0.19734</td>
+<td>#2</td>
+</tr>
+</tbody>
+</table>
+<h2>Effect of rank normalization</h2>
+<p>As I wrote in the solution, I tried to reduce the effect of covariate shift by applying rank normalization to some features. However, late submission shows that rank normalization has almost no effect on the private score.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>RMSPE</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline (single LGBM)</td>
+<td>0.19699</td>
+<td>#1</td>
+</tr>
+<tr>
+<td>without Rank Normalization</td>
+<td>0.19708</td>
+<td>#1</td>
+</tr>
+</tbody>
+</table>
+<p>This may be related to the fact that in my model, the top features were dominated by the short-term nearest neighbor features on realized volatility (=lag of target). Even if the relationship between the feature, such as trade size, and the target had shifted in the long-term, the nearest neighbor of volatility would itself have been very robust to shifts, since the neighbors of volatility with small number of neighbors would have already reflected the long-term shift.</p>
+<h2>Conclusion</h2>
+<p>While a single LightGBM was enough to win, reducing the variety of nearest neighbors degraded the RMSPE, so feature diversity was more important than model diversity in my solution.</p>
+<p>For the single model, the best score without using tick-size leak was 0.20367, and the best score without using the inter-time_id relationship was 0.22018. These are worse RMSPEs than the original solution, but they have a certain predictive power.</p>
+<p>I would like to thank the host for giving me the opportunity to do these experiments by enabling late submissions.</p>

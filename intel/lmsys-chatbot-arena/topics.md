@@ -1,0 +1,82 @@
+# lmsys-chatbot-arena 讨论区（按票数排序，共 80 条）
+
+- [16th Place - So Close to Gold Medal 😀](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527596) — 205 票 / 73 评论 / 2024-08-14 **write-up?**
+- [1st Place Solution ➡️ Distill is all you need🔥🔥🔥](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629) — 196 票 / 67 评论 / 2024-08-19 **write-up?**
+- [Starter Notebook 34B LLM wow! - Nvidia Wins KDD Cup 2024 wow!](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/521294) — 179 票 / 98 评论 / 2024-07-20 
+- [2nd place solution](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527685) — 107 票 / 15 评论 / 2024-08-14 **write-up?**
+- [External data - additional 157k human preference ratings 🔥🔥🔥](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499756) — 106 票 / 19 评论 / 2024-05-02 
+- [We found a leak](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524079) — 99 票 / 68 评论 / 2024-08-04 
+- [Additional 21k Labelled Conversations 🚀](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500973) — 90 票 / 16 评论 / 2024-05-07 
+- [Cheat Issue](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524381) — 67 票 / 24 评论 / 2024-08-06 
+- [Regarding the leak, I strongly hope the organizers can address it and some suggestions.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524201) — 62 票 / 44 评论 / 2024-08-05 
+- [5th Place Solution: Team Danube](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527669) — 59 票 / 13 评论 / 2024-08-16 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527766) — 59 票 / 10 评论 / 2024-08-26 **write-up?**
+- [Data Leak Issue ](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524338) — 49 票 / 13 评论 / 2024-08-05 
+- [The magic behind Gemma2](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/522188) — 47 票 / 9 评论 / 2024-07-24 
+- [Suspicious Surge of Novice Accounts on the Leaderboard](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/523394) — 47 票 / 34 评论 / 2024-07-31 
+- [[leak source] data here.. Safe to share because it's been deleted](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524207) — 47 票 / 74 评论 / 2024-08-05 
+- [[Insights] on 165k Dataset and Model Performance](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/523527) — 45 票 / 2 评论 / 2024-08-01 
+- [How to sort this out?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524235) — 45 票 / 80 评论 / 2024-08-05 
+- [LMSYS Dataset Explorer – Cluster, segment, inspect](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/508476) — 42 票 / 16 评论 / 2024-05-29 
+- [ChatBot Arena Prompts Can Distinguish Models. The Bradley-Terry model. Elo Ratings on Kaggle.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499803) — 42 票 / 0 评论 / 2024-05-03 
+- [9th Place Solution](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527704) — 39 票 / 17 评论 / 2024-08-14 **write-up?**
+- [Leak next steps interim update: don't select leak-based submissions](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524356) — 38 票 / 61 评论 / 2024-08-05 
+- [Ranking of models estimated from train data.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499822) — 35 票 / 12 评论 / 2024-05-03 
+- [Follow-up on the leak: new test set ](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524374) — 34 票 / 106 评论 / 2024-08-05 
+- [Data Annotation Intuition - why the labels are noisy](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/502449) — 34 票 / 15 评论 / 2024-05-13 
+- [What have actually happened. My thoughts.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524502) — 34 票 / 4 评论 / 2024-08-06 
+- [Why use the leak? ](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524168) — 34 票 / 30 评论 / 2024-08-05 
+- [Prediction Using Generation Header](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/520470) — 33 票 / 16 评论 / 2024-07-16 
+- [Solution file to be updated the week of May 28th](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/506137) — 32 票 / 12 评论 / 2024-05-20 **write-up?**
+- [Danube3 (0.5 B & 4B) just dropped!](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/520234) — 32 票 / 9 评论 / 2024-07-15 
+- [Unstable Deberta Training Results](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/512441) — 29 票 / 47 评论 / 2024-06-15 
+- [4th Place Solution](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/529067) — 28 票 / 5 评论 / 2024-08-18 **write-up?**
+- [Load 7b Gemma Keras without any memory issue and FAST.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/502069) — 27 票 / 3 评论 / 2024-05-11 
+- [Converted Ultrafeedback data (External Data)](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/510706) — 27 票 / 0 评论 / 2024-06-07 
+- [The leaderboard has been finalized](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527576) — 26 票 / 54 评论 / 2024-08-12 
+- [Gemma 2 has been released](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/515292) — 26 票 / 15 评论 / 2024-06-27 
+- [LLM Models that can be used](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/518408) — 26 票 / 48 评论 / 2024-07-06 
+- [26th Solution for LMSYS - Chatbot Arena Human Preference Predictions](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527591) — 25 票 / 4 评论 / 2024-08-13 **write-up?**
+- [lmsys chat 1m (is Allowed? - dataset consists of user interactions from the ChatBot Arena) [Solved - Allowed]](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499800) — 25 票 / 3 评论 / 2024-05-03 
+- [How much money did you spend?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524527) — 24 票 / 14 评论 / 2024-08-06 
+- [[18th solution] More data + Higher rank (QLoRA)](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527595) — 24 票 / 11 评论 / 2024-08-13 **write-up?**
+- [21st place - Pseudo Labels, Feature Engineering and stable validation scores](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527627) — 23 票 / 2 评论 / 2024-08-13 **write-up?**
+- [Mistral-NeMo release](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/521048) — 22 票 / 11 评论 / 2024-07-18 
+- [Note on closing mechanics](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524376) — 22 票 / 27 评论 / 2024-08-06 
+- [Both the A and B responses are [null]](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/502303) — 22 票 / 8 评论 / 2024-05-13 
+- [Share my initial experiment](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/516806) — 22 票 / 9 评论 / 2024-07-03 
+- [Llama 3.1 has just been released](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/521916) — 21 票 / 18 评论 / 2024-07-23 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499733) — 20 票 / 7 评论 / 2024-05-02 
+- [What I learned from LMSYS](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524524) — 20 票 / 4 评论 / 2024-08-06 
+- [Stop sharing ideas before deadline please](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524280) — 20 票 / 15 评论 / 2024-08-05 
+- [[insights] Why do Large Language Models (LLMs) perform better than DeBERTa?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524795) — 19 票 / 5 评论 / 2024-08-08 
+- [13th Place Solution: Task-Domain Adaptation, Prompting and Focal Loss](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/540876) — 19 票 / 1 评论 / 2024-10-16 **write-up?**
+- [Data Understanding: Why prompt is list of strings?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500633) — 19 票 / 7 评论 / 2024-05-06 
+- [19th Place Solution](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/528288) — 18 票 / 3 评论 / 2024-12-29 **write-up?**
+- [Interpreting the metric & why current baselines are basically guessing](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500956) — 17 票 / 3 评论 / 2024-05-07 
+- [How to work with Gemma Keras 1.1_7b instruct _en WITHOUT Google Cloud? On the 1.1_2b_instruct_en No Memory issue.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/501605) — 17 票 / 6 评论 / 2024-05-10 
+- [Less than 1.3 seconds per inference?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/499801) — 17 票 / 15 评论 / 2024-05-03 
+- [More Interesting Observations to Share](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/508453) — 17 票 / 2 评论 / 2024-05-29 
+- [What GPUs used for this competition?  [ Best - 8xA00 - 2 hours =  RTX 4090 - 9 Hours = RTX 3080 - 23 Hours ]](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524570) — 15 票 / 51 评论 / 2024-08-07 
+- [Get started here!](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/492158) — 15 票 / 10 评论 / 2024-04-08 
+- [How high can the best score of a single model reach without data leakage? ](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524448) — 15 票 / 148 评论 / 2024-08-06 
+- [Viewing the leaderboard churn at the end of the competition](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527628) — 15 票 / 1 评论 / 2024-08-13 
+- [All Rank Solution thread](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527865) — 15 票 / 2 评论 / 2024-08-14 **write-up?**
+- [How to see your submissions](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524437) — 15 票 / 0 评论 / 2024-08-06 
+- [Feel overwhelmed with this competition  ](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/516839) — 13 票 / 11 评论 / 2024-07-03 
+- [CV vs LB thread](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500031) — 13 票 / 5 评论 / 2024-05-04 
+- [The LEAK -> 0.135](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524166) — 12 票 / 23 评论 / 2024-08-05 
+- [156th place solution](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527938) — 11 票 / 1 评论 / 2024-08-14 **write-up?**
+- [Has anyone tried lora variants like lora+, rslora, dora, and the latest lora-ga, lora-pro, and do they work better ?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/523019) — 11 票 / 5 评论 / 2024-07-29 
+- [Expectation for Kaggle Resources?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/523400) — 11 票 / 13 评论 / 2024-07-31 
+- [A possible solution to the matching?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524296) — 11 票 / 16 评论 / 2024-08-05 **write-up?**
+- [How long does it tke to be granted access to Llama3 on Kaggle? [Solved: 24 hours]](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/519483) — 10 票 / 20 评论 / 2024-07-11 
+- [Llama3.1 works not as good as expect](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/522024) — 10 票 / 9 评论 / 2024-07-24 
+- [LB Experiment: Modify Prediction Temperature](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/501075) — 10 票 / 1 评论 / 2024-05-08 
+- [[Obsolete] Leaderboard update underway: expect odd state for a while.](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527556) — 9 票 / 2 评论 / 2024-08-12 
+- [[???] Crazy lb 0.707 run in just 1h](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/523968) — 9 票 / 39 评论 / 2024-08-03 
+- [19th Place Model Public](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/532364) — 9 票 / 0 评论 / 2024-09-06 **write-up?**
+- [Prometheus 2 for Evaluating Language Models](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/500745) — 9 票 / 3 评论 / 2024-05-06 
+- [Time out always](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/523273) — 9 票 / 9 评论 / 2024-07-31 
+- [Helping cheaters?](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/524620) — 9 票 / 10 评论 / 2024-08-07 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527789) — 6 票 / 0 评论 / 2024-08-13 

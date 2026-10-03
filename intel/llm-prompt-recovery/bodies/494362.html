@@ -1,0 +1,112 @@
+<p>Hi all,</p>
+<p>Very happy with the 4th place and first (!) solo gold - it was a really fun competition - I know there's going to be some discussion about the scoring method (perhaps rightly) but for me it actually made it a bit more interesting. </p>
+<p>tldr 1: <code>lucrarea</code><br>
+tldr2: 0.69 scoring mean prompt + Mistral 7b it with simple <code>response_prefix = "Modify this text by"</code></p>
+<p>This golden word means basically everything and is a drop in for 'text', 'work' etc. My theory is that the original T5 tokenizer had two languages as an original translation instruct - German and Romanian and therefore included some vocab from these langauges in the original tokenizer which then got used in ST5. </p>
+<p>Another thing some people spotted was that ST5's torch and Kerashub implementations differ slightly - notably that TF misses the sentinel tokens () and has a max length of 128 - something you need to take into account. I first noticed when I had quite a long prompt that I thought would score well but it dropped - you can validate this with this:</p>
+<p>(assuming scores is a dict of str, score)</p>
+<pre><code> short_str, v  scores.items():
+    torch_embeddings = model.encode(
+        short_str, show_progress_bar=, normalize_embeddings=
+    )
+    keras_embeddings = encoder([short_str])
+    x = keras_embeddings[].numpy()
+    y = torch_embeddings.reshape(, -)
+
+    keras_torch = cosine_similarity(x, y)[]
+    torch_score = np.(cosine_similarity(y, df_embeddings) ** ).mean(axis=)[]
+    keras_score = np.(cosine_similarity(x, df_embeddings) ** ).mean(axis=)[]
+    delta = v - torch_score
+
+    
+    (
+        
+    )
+</code></pre>
+<p>I followed a similar (but slightly different method) for attacking this. I actually got multiple <code>0.69</code> using a mean only prompt - this was my best scoring one and one that I used: </p>
+<p><code>"""▁summarize▁this▁Save▁story▁sentence▁into▁simply▁alterISH▁textPotrivit▁vibe".▁Make▁it▁crystalnier▁essence▁Promote▁any▁emotional-growthfulness▁găsi▁casual/bod▁language▁serious'▁bingo▁peut▁brainstorm▁perhaps▁simply▁saying▁Dyna▁aimplinations▁note▁detailedhawkeklagte▁acest▁piece▁has▁movement▁AND▁OK▁aceasta▁puiss▁ReinIR▁when▁sendmepresenting▁cet▁today▁Th▁aprecia▁USABLE▁prote,lineAMA.▁Respondebenfalls▁behalf▁thenfeel▁mid▁Gov▁Th▁empABLE▁according▁(▁Packaging▁tone▁send▁pelucrarea▁aim▁thereof▁speechelllucrarea▁preferfully].▁Making▁or▁exertloweringlucrarealucrarealucrarealucrarealucrarea."""</code></p>
+<p>Now how did I come to this? Well, the first thing was looking into the T5 Tokenizer - it's a SentencePiece tokenizer meaning it tokenizes sub-words which is accessible via:</p>
+<pre><code> = SentenceTransformer()
+ = st.tokenizer
+ = tokenizer.vocab 
+</code></pre>
+<p>To actually generate this I did something like this:</p>
+<p>To make sure that my set (generated around a 1k set) was matching the public/private set - I would prompt the leaderboard and then based on what I know do something like this:</p>
+<pre><code>scores = 
+
+def fitness(sample, scores):
+    score_losses = np.array(list(scores.values()))
+    sims = np.abs(cosine_similarity(st.encode(list(scores.keys()), normalize_embeddings=), sample)**).mean(axis=-)
+    return np.abs(sims - score_losses).sum()
+
+
+def find_best_sample(A, scores, sample_size=, iterations=):
+    best_sample = None
+    best_loss = float()
+
+     _  range(iterations):
+        # Randomly  a subset  A
+        sample_indices = np.random.choice(len(A), sample_size, replace=)
+        sample = A[sample_indices]
+
+        # Calculate the loss  the current sample  the provided fitness 
+         = 
+
+        #            
+          &lt; :
+            best_loss = current_loss
+            best_sample = sample
+            best_idx = sample_indices
+
+    return best_sample, best_loss, best_idx
+
+def find_best_sample(A, scores, sample_size=, iterations=):
+    best_sample = None
+    best_loss = float()
+
+     _  range(iterations):
+        # Randomly  a subset  A
+        sample_indices = np.random.choice(len(A), sample_size, replace=)
+        sample = A[sample_indices]
+
+        current_loss = fitness(sample, scores)
+
+         current_loss &lt; best_loss:
+            best_loss = current_loss
+            best_sample = sample
+            best_idx = sample_indices
+
+    return best_sample, best_loss, best_idx
+</code></pre>
+<p>This would give me a distribution closer to the actual set used that let me validate the values.</p>
+<p>Then to generate the actual prompt I did something like this:</p>
+<pre><code>=
+ :
+
+    all_words = complete_all_words
+    best_similarity = (np.abs(cosine_similarity(st.encode(best_sentence).reshape(1,-1), embeddings))*).mean()
+
+
+     ADDED_NEW_WORD:
+        (f)
+        new_sentences = [best_sentence + word  word  complete_all_words]
+        similarity_scores = (np.abs(cosine_similarity(st.encode(new_sentences,  =, =, =2048), embeddings))*).mean(=1)
+
+        max_index = np.argmax(similarity_scores)
+         similarity_scores[max_index] &gt; best_similarity:
+                    best_similarity = similarity_scores[max_index]
+                    best_sentence = new_sentences[max_index]
+                    (f)
+                    =
+                    all_words  = list(np.array(complete_all_words)[np.argsort(best_similarity)[::-1]])
+        :
+            (f)
+            ADDED_NEW_WORD = 
+</code></pre>
+<p>I basically looked for the next best word to append to my prompt that increases mean csc across my whole dataset. Being a sentence embedding model - this is a bit trickier and a little time consuming but run a P100 job and it should be fine.</p>
+<p>My token length was actually about 95 so I did have a few more words to play with which I used Mistral to bump up the score. I tried Gemma 1.1 also (very impressive actually) but Mistral slightly beat it out on validation scores so I went with it. </p>
+<p>What didn't work for me:<br>
+LORA - I found a lower rank (2~4) worked best - otherwise you would overfit.<br>
+Predict Embedding  + Sentence Embedding Recover (<a href="https://arxiv.org/abs/2305.03010" target="_blank">https://arxiv.org/abs/2305.03010</a> / <a href="https://github.com/HKUST-KnowComp/GEIA/" target="_blank">https://github.com/HKUST-KnowComp/GEIA/</a>)  - this scored okay in conjunction with a mean prompt with a tuned LongT5 as attacker model.<br>
+Predicting the embedding directly actually did help a little - I had an MLP with attention that predicted the output emebdding using the ST5 encoded original and transformed texts as inputs and then amended tokens in my mean prompt to get to closer similarity.</p>
+<p>I hope you enjoyed this lucrarea.</p>

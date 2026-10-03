@@ -1,0 +1,42 @@
+<p>It was a great competition, special thanks to Stone Tao <a href="https://www.kaggle.com/stonet2000" target="_blank">@stonet2000</a> for making it happen. I am looking forward for any off-season activities and of course season 2. My solution is entirely imitation learning (IL), and multiple attempts at reinforcement learning (RL) did not succeed. In this summary I will first describe my IL implementation, and then share conclusions from my experience with RL.</p>
+<p>The leaderboard will finalise in only 2 weeks (the lower limit), so I wish everyone who cares about their placement good luck with their final battles!<br>
+<img src="https://i.imgur.com/OLUObS2.png" alt=""></p>
+<h2>The model</h2>
+<p>The architecture that I used I described in <a href="https://www.kaggle.com/c/lux-ai-2021/discussion/289540" target="_blank">this post</a>, below I attach an updated picture. There was a lot of discussion in the comments to that post, if one is interested in technical details.</p>
+<p><img src="https://i.imgur.com/y3nceOw.png" alt=""></p>
+<p>One thing that I found is that it is very beneficial to fine-tune the last layers with replays from one agent. I usually started training with 7-20 top submissions, from different agents, then freeze most of the network and fine-tune the last 3 layers with data from "Toad Brigade" (TD) only. </p>
+<p>Two other components which I found to be very useful are learning transfer action and a city tile model. Regarding the transfer action, I am not sure if it is indeed very useful, or it just helps a lot because this is what TD uses, and I learn from TD. I tested different tweaks around transfer action, and the most aggressive use of it worked the best for me. City tile model was clearly beneficial for me too. It replaced a naive logic of building a unit if possible and research otherwise, but it turns out in many cases it is better to research instead of building a unit.</p>
+<p>In the sketch above you can see that the model output is 7. The 7 actions are the following:</p>
+<ol>
+<li>Unit: CENTER move action</li>
+<li>Unit: NORTH move action</li>
+<li>Unit: Build a city</li>
+<li>Unit: NORTH transfer action (the first resource that found in cargo, all of it)</li>
+<li>City tile: Build a unit</li>
+<li>City tile: Research</li>
+<li>City tile: Do nothing</li>
+</ol>
+<p>Why only north for unit move and transfer? I used the trick that I described <a href="https://www.kaggle.com/c/lux-ai-2021/discussion/290284" target="_blank">here</a>. </p>
+<p>You can see I used the same model both for units and city tiles. And the general approach is the same for them, both for training and for inference I pick the 7 logits from the corresponding position of the unit / city tile that I am currently looking at. I really like that I need only one forward pass per turn. Even with just one forward pass the running time was getting close to the limits sometimes, so I guess per-unit approaches should really have struggled with the time limit.</p>
+<p>Another important component is masking invalid actions. First, it is important to prohibit picking of clearly invalid actions, for example when the model proposes to build a city with only 98 cargo at hand. Second, a solid units collision avoidance logic is required. But then one can think of lots of different ways to improve here. For example the extreme here is blending imitation learning model with a rule based approach. The rule based proposes different missions, and the model picks the action with highest probability from the subset defined by missions. So basically masking all other actions, which appear as the first move in none of the missions. I tried some things but nothing interesting to mention.</p>
+<p>During training I used one augmentation, - horizontal flipping of the map. When I need to decide to move north or to build a city, flipping the map east-west is a valid augmentation. I also used this flip as a test time augmentation (TTA), but it was giving very little improvement and sometimes (rarely) submissions with TTA were hitting time limits (therefore losing), so ended up using it in only half of the submissions.</p>
+<h2>Reinforcement Learning</h2>
+<p>In this competition I worked more on RL approaches than the IL that I described above. I used <a href="https://www.kaggle.com/glmcdona" target="_blank">@glmcdona</a> implementation of the game engine and integration with stable-baselines3 <a href="https://github.com/glmcdona/LuxPythonEnvGym" target="_blank">here</a>. I mostly experimented with PPO method. I will not go into details, because I couldn't improve my IL with it, but this is what I learnt in general.</p>
+<ol>
+<li><strong>Having an ability to imitation learn</strong>, like in this competition, is important for RL success (didn't help me enough). First, RL is slower to train, so having an already pre-trained IL model saves lots of time. Second, IL allows perfecting the model architecture before RL runs. What if the model does not even have enough capacity to learn the concepts? One can test all of this with IL, become confident that the architecture is solid, and only then move to RL. Testing such things with RL itself is unrealistically expensive. </li>
+<li><strong>Simulate fast</strong>. Having a fast simulation engine is important, because the RL training takes much more time than supervised learning. Implementing the engine in C should be considered. But at least take time at perfecting the infrastructure.</li>
+<li><strong>Value function</strong> should be as accurate as possible. It is even appropriate not to train the policy and the value networks at the same time. First train the value function with supervised learning on your agent replays, and then do PPO policy iteration with frozen value function. Repeat.</li>
+<li><strong>Multi-agent environment</strong>. This is the main reason why my RL failed, I think. My PPO was actually able to learn some correct moves with just a few units from scratch, but at some level of complexity it stopped improving. The problem is that the value function that I used is global, and therefore advantage calculation for each individual unit was extremely noisy, in presence of dozens or hundreds of other units. </li>
+<li><strong>Simplify</strong>. Deep RL is hard. Start small, in this case, start from maps <code>12x12</code>. Maybe do PvE. Maybe even freeze the seed. But even <em>just</em> to learn to maximise final number of city tiles on a specific <code>12x12</code> map without opponent is hard, so be humble. </li>
+<li><strong>Tree search</strong> approaches seem to be hard to implement here, because it is massively multi-agent. Interesting if someone succeeded.</li>
+</ol>
+<h2>Feedback</h2>
+<p>I have participated in quite a few Kaggle competitions by now, and I can say I am still to meet a competition which is organised without a glitch. So here we go:</p>
+<ol>
+<li>The LB match making, scoring and final submissions policy are BAD. It was discussed in many threads, here and on discord, lots of room for improvement.</li>
+<li>There were some rules changes in the beginning, the very important python engine took time to take off (and still with small bugs actually), and other problems with utilities here and there. This can be of course explained by the fact that this is the first season, and the organisers deserve the highest mark for handling all issues fast and professionally.  </li>
+<li>Working with <code>meta-kaggle</code> dataset is not a good experience. It is huge, and for example right now has not been updated for 5 days already, despite promised daily updates. </li>
+</ol>
+<h2>Finally</h2>
+<p>This competition is awesome, unique and addictive. The replays are great, not sure how many hundreds I have watched. In memory of all the units that I sent to work at night:<br>
+<img src="https://storage.googleapis.com/kaggle-competitions/kaggle/30067/logos/thumb76_76.png?t=2021-07-20-15-37-27" alt=""></p>

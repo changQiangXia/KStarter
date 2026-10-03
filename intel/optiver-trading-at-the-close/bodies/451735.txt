@@ -1,0 +1,97 @@
+# https://www.kaggle.com/competitions/optiver-trading-at-the-close/discussion/451735
+
+Topic #451735: Faster solution for building features
+  Author: go
+  Posted: 2023-10-30 09:54:48.074000
+  Votes: 54  Comments: 21
+
+Several concepts need clarification:
+
+
+
+
+The original feature columns provided are referred to as "Field". We call the extensive and complex calculations (such as MACD, RSI, STD, SKEW, etc.) "operators (op)". The expressions formed by combining operators are called "factors".
+
+
+For a factor to be considered an alpha, it needs to demonstrate stable profitability over time, that is, maintain a stable correlation with the target. IC is known as the temporal factor-target correlation. IR represents the mean/variance ratio of the factor-target correlation over time. To assess whether a factor is an alpha, one should look at whether the IR is relatively high.
+
+
+In the process of using operators to produce factors, using native pandas can make the code run very slowly, which can be quite painful. In fact, if we are not in a notebook environment, we could use C++ for compilation. However, I believe that under the constraints of this competition, the best approach is still to use numba + multiprocessing. (https://www.kaggle.com/code/wenxuanxx/faster-function-build-feature)
+
+
+
+
+Regarding how to use numba efficiently: First, we should use numba.jit(nopython=True). By leveraging a plethora of mathematical expression principles, we can find formulas for calculating related statistical indicators from numpy. The use of for loops combined with numba.prange can implement a portion of the acceleration. For particularly complex mathematical formulas, we should use numba.jit(nopython=True, fastmath=True). By doing this, we can construct a high-efficiency time series statistical scheme. After verification, the acceleration ratio (compared to pandas) can reach about 20 times. 
+
+
+
+  
+To provide some reference, my current estimate for the inference time on the private dataset is 71 minutes (for 195 features), of which 150+ are rolling features. The time for a single inference is 1.04 seconds, compared to 23.5 seconds before optimization.
+
+
+
+
+What people are more concerned about is how to use rolling features in online applications. We will use "streaming cache prediction," which means caching the data output at each iteration and concatenating it to obtain the features before the current timestamp, such as ma(wap, 10). To prevent memory overload, we need to update this "cache" by specifying a maximum timestamp to which it should be updated. For instance, for each stock, we need to calculate the data from 60 days ago.
+
+
+To recap the key points: We use numba and multiprocessing to construct factors, use IR to filter factors, and employ the leave-one-out(last 45 days) method to validate the effectiveness of factors and train models. Trust me, this will help you achieve a good score.
+
+Comments:
+├─ Bill Tao (2023-11-03 03:25:41.360000) [+1]
+│  Thank you for sharing your insights and expertise on building features efficiently for this competition. Your explanation of the concepts and the use of numba and multiprocessing is incredibly help...
+├─ AP (2023-11-01 18:37:51.397000) [+1]
+│  Just to benchmark, how much time does you guys solutions takes to run on the public LB?
+  ├─ go (2023-11-02 04:32:51.240000) [+4]
+  │  about 60min
+    ├─ Lamal (2023-11-27 09:47:26.423000) [+0]
+    │  I notice many public kernels cost ~3hrs to run, this can be so time-consuming lol, then what’s your advice on it when encountering with heavy tabular input?
+├─ MJeremy (2023-11-01 03:14:08.857000) [+2]
+│  hey, @wenxuanxx thanks. I made the code to calculate IR as you described. Does this make sense?
+│  
+│  def (x1, x2):
+│      assert (x1) == (x2)
+│      interval =   #  days
+│  
+│      x1, x2 = np.(x1), np.(x2)
+│      va...
+  ├─ go (2023-11-01 04:55:55.627000) [+9]
+  │  corr = df.groupby(["date_id", "seconds_in_bucket"]).apply(lambda x:x['target'].corr(x[f]))
+  │  and (corr.mean() / corr.std()).cumsum().plot()
+    ├─ [deleted] (2023-11-08 04:03:31.950000) [+0]
+    │  [deleted]
+    ├─ Yingdi Li (2023-11-23 15:00:36.313000) [+0]
+    │  I thought corr.mean() / corr.std() is a scalar, why should we use .cumsum() ? Looking forward to your reply😀
+    ├─ Irvin (2023-11-25 02:17:19.927000) [+0]
+    │  I think the calculation works within each group of (date, second) among all stocks. so there is one corr.mean / corr.std in each group of date. then we can calculate the cumsum over date.
+├─ Lars (2023-11-02 16:57:15.727000) [+0]
+│  Thank you for the valuable insights! Do you think that every feature returning a high IR value will most always be beneficial to improving the model's score? I was thinking of performing an iterati...
+├─ william.wu (2023-11-02 02:07:10.913000) [+0]
+│  Thanks for sharing @wenxuanxx , it's super helpful. How do you use multiprocessing to speed up the factor calculations? I only found the usage of numba in the notebook that you shared. Many thanks!
+├─ Irvin (2023-11-01 04:00:47.647000) [+0]
+│  thanks for your sharing, it's very informative. Do you use time series split during the training stage, or normal K-fold split? As what i understand, we are doing a time series task. The testing/va...
+  ├─ Lars (2023-11-02 17:05:10.013000) [+0]
+  │  The theoretical reason that KFold split does not make sense in this competition is because you are using validation data that is in-between your training data. This could cause some strange behavio...
+    ├─ Irvin (2023-11-08 02:51:47.240000) [+0]
+    │  many thanks. i craete a time series split e.g. 390 days for training and following 30 days for validation. by this plan, i can create 3 splits. then I do online inference by the mean prediciton of ...
+├─ Roberto Spadim (2023-10-30 19:35:14.740000) [+0]
+│  need some ideas from @scirpus : https://www.kaggle.com/scirpus
+├─ Simon Veitner (2023-10-30 18:49:30.353000) [+0]
+│  Hey,
+│  I have one question: Currently i am using deques to store my windows and stock histories (which is quiete fast, submission with 94 features takes about 30 minutes including training time).
+│  Cou...
+  ├─ Andy (2023-10-30 23:52:02.650000) [+0]
+  │  Same here, deques work fairly well for me but definitely am looking for a faster approach as even by using numba to speed up calculations, the submission time is still quiet long, especially for mo...
+    ├─ Joseph Zhou (2023-10-31 18:24:13.953000) [+0]
+    │  If you are using GPU, cudf might be another choice.
+  ├─ go (2023-10-31 01:49:50.760000) [+0]
+  │  I think the expensive computational cost is mainly concentrated in calculating complex rolling features, such as corr(ema(ask_price, 3), ema(bid_price, 3), 10). The solution I prefer is to store th...
+    ├─ Simon Veitner (2023-10-31 17:58:38.363000) [+1]
+    │  Could you elaborate on what you mean by efficient way?
+  ├─ Geremie Yeo (2023-11-01 12:10:24.197000) [+0]
+  │  I am using deques to store windows as well (2 deques actually, one for date and the other for time), also tried ANGLE's
+  │  
+  │    counter &gt; :
+  │       cache = cache()()(by=)(drop=True)
+  │  
+  │  
+  │  but im getting Sub...

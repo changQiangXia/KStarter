@@ -1,0 +1,122 @@
+# nvidia-nemotron-model-reasoning-challenge 讨论区（按票数排序，共 120 条）
+
+- [[Open Progress Prize Publication] SFT to maximize minimum logprob](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689915) — 241 票 / 52 评论 / 2026-04-10 
+- [Answers To Everything Data: Read Me! 100% Solve Rate](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688461) — 158 票 / 50 评论 / 2026-04-05 
+- [Visualize the problems and completions from the base model](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684212) — 149 票 / 24 评论 / 2026-03-24 
+- [1st Place Solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/709231) — 140 票 / 14 评论 / 2026-06-17 **write-up?**
+- [Strategy to solve 85% of bit manipulation](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690307) — 111 票 / 11 评论 / 2026-04-11 
+- [Kaggle CLI — Develop Locally and Run on RTX Pro 6000 GPU](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683172) — 81 票 / 13 评论 / 2026-03-19 
+- [Why GRPO is Painfully Slow on Nemotron (and the Fix)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690161) — 63 票 / 19 评论 / 2026-04-10 
+- [Mainstream LLM Performance Comparison：Gemini-3.1-Pro delivers the best performance, while DeepSeek-V3.2 is also highly impressive.](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684283) — 63 票 / 21 评论 / 2026-03-24 
+- [How to Get Started + Nemotron Model Reasoning Challenge Resources](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681745) — 60 票 / 35 评论 / 2026-03-17 
+- [97.2% Gold-Conditioned Symbolic Solver Exposing Digit Mappings and Operators](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698293) — 56 票 / 8 评论 / 2026-05-09 
+- [[Dataset Hallucination?] How did you resolve these problems by human?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684192) — 55 票 / 19 评论 / 2026-03-24 
+- [[LB25] Improvements to the progress prize submission](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708681) — 44 票 / 9 评论 / 2026-06-16 
+- [Training Nemotron-3-Nano-30B-A3B-BF16 with rank 32 LoRA on length 8192 sequences](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687961) — 42 票 / 11 评论 / 2026-04-04 
+- [Let's learn from Google Tunix Hack for Nemotron](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682313) — 38 票 / 1 评论 / 2026-03-18 
+- [Are problem types the same for train and test?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681793) — 30 票 / 7 评论 / 2026-03-17 
+- [symbol_transformation class problem can have multiple valid candidate answer](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694556) — 29 票 / 16 评论 / 2026-04-25 
+- [[Fake Notebook Alert] Watch out for fake laptops that copy and upload other people's submission.](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690689) — 26 票 / 14 评论 / 2026-04-12 
+- [[update] Read CPMP's reply. [original] Do not distill models that do not allow distillation (e.g. gemini, gpt5)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688360) — 25 票 / 27 评论 / 2026-04-05 
+- [Trying to improve cryptarithm — feedback welcome](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/703479) — 23 票 / 41 评论 / 2026-05-31 
+- [Metric Update](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/698106) — 23 票 / 24 评论 / 2026-05-08 
+- [Fix for “CUDA error: no kernel image is available for execution on the device” on RTX PRO 6000 Blackwell ](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681820) — 23 票 / 32 评论 / 2026-03-17 
+- [Pip install with internet disabled: install dependencies feature](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687142) — 22 票 / 5 评论 / 2026-04-02 
+- [3rd Place Solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/709136) — 22 票 / 0 评论 / 2026-06-19 **write-up?**
+- [Edge case in metric: \boxed{} cannot contain }](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689284) — 20 票 / 1 评论 / 2026-04-08 
+- [Competition Metric Bug: verify method fails for Binary String Problem (?)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683853) — 20 票 / 3 评论 / 2026-03-22 
+- [Why a "Better" Dataset Scored Worse: Lessons on Logprobs, Gradient Saturation, and SFT Bugs](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697491) — 18 票 / 13 评论 / 2026-05-06 
+- [Zero shot predictions](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682208) — 18 票 / 3 评论 / 2026-03-18 
+- [RTX PRO 6000 Blackwell — CUDA kernel incompatibility status + GPU time spent debugging](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683067) — 18 票 / 24 评论 / 2026-03-19 
+- [Per-Category Error Analysis After SFT (0.63 LB) — Where the Real Bottlenecks Are](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686069) — 17 票 / 6 评论 / 2026-03-30 
+- [Something wrong -- My notebook of 0.80+ now scores 0.77](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685920) — 17 票 / 25 评论 / 2026-03-29 
+- [18th solution: From Deterministic Solvers to Learnable Reasoning Traces](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/715330) — 17 票 / 3 评论 / 2026-06-28 **write-up?**
+- [What is the minimum VRAM for training?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682167) — 16 票 / 3 评论 / 2026-03-18 
+- [From 8% → 71% on Cryptarithm Tasks, But Score Still Stuck at 0.86](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/703240) — 16 票 / 37 评论 / 2026-05-29 
+- [Rescore After Metric Update](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687798) — 16 票 / 24 评论 / 2026-04-03 
+- [10th Place Solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708535) — 14 票 / 1 评论 / 2026-06-17 **write-up?**
+- [Clarification needed: Experimenting with prompting strategies vs. strict sequence length constraints?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682355) — 14 票 / 3 评论 / 2026-03-18 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681714) — 13 票 / 7 评论 / 2026-03-16 
+- [How to Cut Nemotron Training from 11 Hours to 5h 40m (And Fix the "Loss Illusion")](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694710) — 13 票 / 6 评论 / 2026-04-26 
+- [AcceleratorError: CUDA error: no kernel image is available for execution on the device; causal_conv1d; mamba_ssm](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682877) — 13 票 / 2 评论 / 2026-03-19 
+- [Are all symbolic puzzles guaranteed to be uniquely solvable? Some seem to lack enough information](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/702304) — 13 票 / 10 评论 / 2026-05-22 
+- [2nd place solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/711703) — 12 票 / 0 评论 / 2026-06-22 **write-up?**
+- [0.89!!!  I believe the breakthrough to 0.89 will definitely be in the Cryptoithm puzzle.](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/704595) — 12 票 / 4 评论 / 2026-06-05 
+- [[RESOLVED] How to use RTX Pro 6000 instead of P100 with the Kaggle API?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682197) — 12 票 / 5 评论 / 2026-03-18 
+- [Is it possible to win this competition using only Kaggle-provided machine resources?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686036) — 12 票 / 16 评论 / 2026-03-30 
+- [Midpoint Cut-off Date and the Open Progress Prize](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/688482) — 12 票 / 12 评论 / 2026-04-06 
+- [Runtime Limits During Evaluation? (CPU/GPU Constraints)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682878) — 11 票 / 5 评论 / 2026-03-19 
+- [Unlock 15 or 30 extra GPU hours per week (connect Colab Pro) ](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682375) — 11 票 / 2 评论 / 2026-03-18 
+- [ModuleNotFoundError: No module named 'cutlass'](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684271) — 11 票 / 9 评论 / 2026-03-24 
+- [Submission re-runs give different scores](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685817) — 11 票 / 4 评论 / 2026-03-29 
+- [What if the answer contains square brackets?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/696059) — 11 票 / 12 评论 / 2026-05-01 
+- [88th PLACE SOLUTION](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708539) — 11 票 / 0 评论 / 2026-06-16 **write-up?**
+- [[2nd public / 6th private] place solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/709120) — 11 票 / 0 评论 / 2026-06-19 **write-up?**
+- [Congratulations!](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/716636) — 10 票 / 6 评论 / 2026-06-30 
+- [Unit testing model on simple bit transformations](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684289) — 10 票 / 0 评论 / 2026-03-24 
+- [NVIDIA Blog](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/727712) — 10 票 / 0 评论 / 2026-07-20 
+- [sharing high quality synthetic data generation prompt ](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685886) — 10 票 / 3 评论 / 2026-03-29 
+- [Inquiry regarding inference non-determinism and Open Progress Prize fairness](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687063) — 10 票 / 5 评论 / 2026-04-02 
+- [Train locally and get lower scores.](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686419) — 10 票 / 10 评论 / 2026-03-31 
+- [Potential DGX Spark loophole?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/705001) — 10 票 / 6 评论 / 2026-06-08 
+- [Equation Symbolic has anyone figured out the pattern?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684432) — 9 票 / 6 评论 / 2026-03-24 
+- [How to break 0.86 ceiling](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/702447) — 9 票 / 9 评论 / 2026-05-23 
+- [[Potential problem] Eval regex cannot parse answers starting with character"}"](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689580) — 9 票 / 0 评论 / 2026-04-09 
+- [7th Place Solution: Solving Bitmanipulation via String Matching and Backtracking](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/712395) — 9 票 / 4 评论 / 2026-06-22 **write-up?**
+- [4th Place solution ](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/712419) — 9 票 / 1 评论 / 2026-06-22 **write-up?**
+- [Why there are so many people score 0.87 now?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708105) — 9 票 / 13 评论 / 2026-06-13 
+- [13th Place Solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/709646) — 9 票 / 0 评论 / 2026-06-19 **write-up?**
+- [Fix ModuleNotFoundError for cutlass](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684385) — 8 票 / 3 评论 / 2026-03-24 
+- [[Discussion] Concerns about copied notebooks and misleading submissions in the Notebooks section , Heavy Plagiarism](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/693251) — 8 票 / 13 评论 / 2026-04-20 
+- [FIX: ModuleNotFoundError: No module named 'cutlass'](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684336) — 8 票 / 0 评论 / 2026-03-24 
+- [Public27-Private126 Approach](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708534) — 8 票 / 0 评论 / 2026-06-16 
+- [I Solved Every Single Puzzle — And It Still Wasn't   Enough](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708531) — 8 票 / 1 评论 / 2026-06-16 
+- [Downloading packeges using pip doesn't work![FIX INCLUDED][FIX DOESN'T WORK ANYMORE] ](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681821) — 8 票 / 6 评论 / 2026-03-17 
+- [The Rise of "Brain Rot" Submissions in Nemotron Challenge (Updated Daily)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/697139) — 8 票 / 3 评论 / 2026-05-05 
+- [ Bit manipulation puzzles: are transformations uniquely determined?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683866) — 8 票 / 5 评论 / 2026-03-22 
+- [causal_conv1d_cuda not compiled for Blackwell SM120 - training impossible](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681824) — 8 票 / 2 评论 / 2026-03-17 
+- [[BUG] Utility script permission error](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683711) — 8 票 / 8 评论 / 2026-03-21 
+- [BUG in Nemotron Model file://Models/modeling_nemotron_h.py](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686615) — 8 票 / 1 评论 / 2026-03-31 
+- [ Training error: CUDA error: no kernel image is available for execution on the device](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682428) — 8 票 / 8 评论 / 2026-03-18 
+- [Open Contribution Award Submissions due June 22](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/705553) — 8 票 / 1 评论 / 2026-06-10 
+- [Open Contribution Awards](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/727065) — 8 票 / 14 评论 / 2026-07-17 
+- [Extending Model Merging to LoRa Ensembling (Sharing Experiments & Seeking Feedbacks)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/704473) — 7 票 / 12 评论 / 2026-06-04 
+- [ When should winners publish their public notebook and writeup?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685247) — 7 票 / 4 评论 / 2026-03-27 **write-up?**
+- [How Far Can Verified Synthetic Data Go?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708567) — 7 票 / 0 评论 / 2026-06-16 
+- [Inconsistency in Evaluation metric](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682561) — 7 票 / 1 评论 / 2026-03-18 
+- [A Pattern-Matching Approach to Solving Symbolic Arithmetic Puzzles](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/701981) — 7 票 / 4 评论 / 2026-05-20 
+- [Observations on high-visibility notebooks with minimal model contribution in the Nemotron Reasoning Challenge](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694859) — 6 票 / 1 评论 / 2026-04-27 
+- [9th Place Solution: Human-Auditable CoT Target Engineering](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/711570) — 6 票 / 0 评论 / 2026-06-21 **write-up?**
+- [Exactly same "types" of the prompts?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683573) — 6 票 / 2 评论 / 2026-03-21 
+- [LB15: Extension to @huikang's progress prize solution](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/711727) — 6 票 / 0 评论 / 2026-06-21 **write-up?**
+- [MAMBA 2.3.1 from 2.2.2 lowering performance and cutlass mock](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684748) — 6 票 / 3 评论 / 2026-03-25 
+- [A gated linear-equation CoT approach for cryptarithm](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/707856) — 6 票 / 5 评论 / 2026-06-12 
+- [How can I use vLLM to speed up test.csv inference on Kaggle?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684459) — 6 票 / 2 评论 / 2026-03-25 
+- [Permission denied error for ptxas-blackwell](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685380) — 5 票 / 15 评论 / 2026-03-27 
+- [Queued for hours for the first time!](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/694213) — 5 票 / 1 评论 / 2026-04-23 
+- [RL/GRPO difficulty](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686794) — 5 票 / 13 评论 / 2026-04-01 
+- [Breaking the SFT Ceiling on Nemotron-3-Nano-30B](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708626) — 5 票 / 5 评论 / 2026-06-16 
+- [Official Scoring Metric Code were not set to be Deterministic](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/687740) — 5 票 / 3 评论 / 2026-04-03 
+- [Fixed: Any fix for trl installation?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684654) — 5 票 / 7 评论 / 2026-03-25 
+- [There are still many missing pieces of the puzzle: equation and cryptarithm.](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/690891) — 5 票 / 2 评论 / 2026-04-13 
+- [Hallucination in equation problems?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689877) — 5 票 / 2 评论 / 2026-04-09 
+- [Predictions thread](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708478) — 5 票 / 9 评论 / 2026-06-15 
+- [Question about training data selection](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/700197) — 5 票 / 1 评论 / 2026-05-16 
+- [Jack of Trades, Loser of Cryptarithm](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708538) — 5 票 / 0 评论 / 2026-06-17 
+- [Does increasing token limit actually help? [SPOILER=IT DOESN'T] How do we solve this?[SPOILER=SFT and RL]](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682784) — 5 票 / 1 评论 / 2026-03-19 
+- [How many examples are there in the public leaderboard?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/689257) — 5 票 / 11 评论 / 2026-04-08 
+- [Is it possible to win a medal without tinker? If no, how much cost could i expect?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/703896) — 5 票 / 9 评论 / 2026-06-02 
+- [ModuleNotFound Error for mamba-ssm](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684244) — 5 票 / 2 评论 / 2026-03-24 
+- [Eligibility for participants under 18](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682998) — 5 票 / 1 评论 / 2026-03-19 
+- [ImportError: mamba-ssm is required by the Mamba model but cannot be imported](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684434) — 5 票 / 1 评论 / 2026-03-24 
+- [Is overfitting possible in this competition?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/705227) — 5 票 / 16 评论 / 2026-06-09 
+- [What should be included in submission.zip?](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684490) — 4 票 / 4 评论 / 2026-03-25 
+- [DAPO with vllm (45s/step)](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/708577) — 4 票 / 0 评论 / 2026-06-16 
+- [Temp Blackwell Workaround](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683523) — 4 票 / 0 评论 / 2026-03-20 
+- [Offline Dependencies and a Simple Fix for ModuleNotFoundError and PermissionError](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/686591) — 4 票 / 1 评论 / 2026-03-31 
+- [[Internet is disabled when running notebooks locally]](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/683021) — 4 票 / 1 评论 / 2026-03-19 
+- [Date Conflict: Midpoint Cut-off Date in Prizes vs Timeline section](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/681773) — 4 票 / 2 评论 / 2026-03-17 
+- [Default parameters mismatch](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/685462) — 4 票 / 0 评论 / 2026-03-28 
+- [Kaggle Environment Fixes for Nemotron-3-Nano (March 2026](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/684602) — 4 票 / 0 评论 / 2026-03-25 
+- [CUDA error:  no kernel image is available for  execution on the device](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/682991) — 4 票 / 1 评论 / 2026-03-19 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/nvidia-nemotron-model-reasoning-challenge/discussion/709192) — 3 票 / 3 评论 / 2026-06-17 
