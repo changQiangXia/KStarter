@@ -1,0 +1,159 @@
+# https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537
+
+Topic #472537: Public 10th Place Solution (Private 11th)
+  Author: Ahmet Erdem
+  Posted: 2024-02-01 10:26:48.849000
+  Votes: 78  Comments: 31
+
+I expect some shake-up but this solution can probably land between 5th and 50th place if it doesn't throw an error. Here is what I did:
+
+Stacking
+
+Trained 2 separate models:
+
+
+
+Weather forecast features only model with target/installed_capacity as target
+
+Weather history features only model with target/installed_capacity as target
+
+
+Generated estimated production per capacity features and their interactions for my final model.
+
+Problem Translation
+
+
+
+Split the data into 4 and trained models for each (is_business, is_consumption) pair
+
+Created baseline prediction as max(target_lag2, target_lag4, target_lag7)
+
+New target becomes (target + 1)/(baseline_pred + 1)
+
+For each data partition, trained 3 models with different seeds and different sample weights (equal, log1p(baseline_pred) and sqrt(baseline_pred)
+
+
+Features
+
+76 features. Nothing special.
+
+features = [, , , , , ,
+            , , , , , ,
+            , , , , ] + weather_forecast_cols
+ day  [, , ]:
+    features += [, , ,
+                 , , ]
+ day  [, ]:
+    features += [  col  weather_hist_cols]
+
+
+Postprocessing
+
+For each prediction_unit_id, calculated lag 2, 3, 4 errors and took their mean. 0.2*avg_error is added into the predictions as correction term. This way, I improve the performance for the cases where I constantly underpredict or overpredict.
+
+Re-training
+
+Every 8 days, I re-train my XGBoost models on GPU. This is especially useful when there are new prediction unit ids or increase in eics.
+
+Validation
+I split last 9 months into 3 validation folds. Also used the public LB as the 4th fold. While my 3-fold CV is 35.73, my public LB is 61.32.
+
+Ensemble
+Despite its relatively worse score, 80/20 ensembling with the public best kernel made my score 59.97. I think it is because my model was diverse and this problem benefits a lot from diverse ensembling. Btw I had an improvement also in my CV score by ensembling with the public best kernel but it was significantly lower.
+
+Comments:
+├─ Fnoa (2024-02-01 10:39:01.523000) [+10]
+│  I really like this 
+│  
+│  
+│    
+│  For each prediction_unit_id, calculated lag 2, 3, 4 errors and took their mean. 0.2*avg_error is added into the predictions as correction term. This way, I improve the perf...
+  ├─ Ahmet Erdem (2024-02-01 11:11:50.797000) [+3]
+  │  Thank you. Improved around 0.4 both CV and LB. Good luck to you too!
+  ├─ Timmy Juicehouse (2024-02-02 10:33:08.433000) [+1]
+  │  @trasibulo  Me too, never think of that. It's awesome.
+├─ AbaoJiang (2024-02-02 14:52:21.153000) [+1]
+│  Hi @aerdem4,
+│  
+│  So impressive, thanks a lot for sharing your solution!
+│  
+│  The postprocessing part is amazing. We try to do dynamic model selection based on lagged prediction error. That is, we choose t...
+├─ DongYK (2024-02-02 00:26:15.363000) [+1]
+│  For each data partition, trained 3 models with different seeds and different sample weights (equal, log1p(baseline_pred) and sqrt(baseline_pred)
+│  
+│  
+│  That's very interesting and novel approach. 😀
+│  
+│  
+│    ...
+  ├─ Ahmet Erdem (2024-02-02 19:37:16.573000) [+1]
+  │  I re-train from scratch every 8 days. Methods like partial fit doesn't usually work great. Since I don't have many features and XGB is fast on GPU, training on whole data every 8 days is feasible.
+  │  ...
+    ├─ DongYK (2024-02-03 13:58:01.867000) [+0]
+    │  Thank you for answering.
+    │  
+    │  I used the same categorical features (segment, county, product_type, …, etc.) but I didn't use the exact same hyperparameters. (XGB -&gt; LGB: 82.94 -&gt; 79.34)
+    │  So, I tho...
+├─ AAA (2024-02-01 14:30:29.733000) [+1]
+│  You're a great kagger
+├─ Mahmoud saad (2024-02-01 11:20:51.087000) [+1]
+│  Nice Job 🌟
+├─ Mikhail Golubchik (2024-02-01 12:52:41.377000) [+2]
+│  Very impressive.
+├─ Sinan Calisir (2024-02-01 11:44:43.440000) [+2]
+│  Great solution and best of luck in the next months too!
+├─ Anil Ozturk (2024-02-01 11:36:00.833000) [+2]
+│  Solid approach! Hope you'll stay there in the gold zone. 😌
+├─ AGG (2024-02-01 11:16:05.793000) [+2]
+│  Congrats on your solution! Could you comment on some of your choices?
+│  
+│  What's the rationale behind baseline = max(target_lag2, target_lag4, target_lag7), and do you know why it works better than pi...
+  ├─ Ahmet Erdem (2024-02-01 11:22:41.827000) [+5]
+  │  Thank you!
+  │  
+  │  When I take the max, my target is usually between 0 and 1. When it makes an error, it doesn't cause such huge outliers this way. If I had only one day, I get more target values above 1....
+├─ Vitaly Kudelya (2024-02-01 11:01:00.683000) [+2]
+│  Did you use target/installed_capacity as target only for is_consumption = 0 or for all segments?
+│  As I remember,  for is_consumption = 1 changing the target didn't improve CV and Public score for me
+  ├─ Ahmet Erdem (2024-02-01 11:14:58.300000) [+2]
+  │  Only for production and it is level 1 stacking model, so my final target is different.
+├─ Ahmet Erdem (2024-05-01 06:43:40.630000) [+0]
+│  Update: Ended up 11th place in Private LB. Happy that the solution was robust. Added some details about the features.
+├─ silver (2024-02-01 22:35:56.230000) [+0]
+│  I didn't go with normalized target (like target/installed capacity, target/some historical target) because they democratize target with different magnitude, and so not compatible with the metrics o...
+├─ Maksym Dolgikh (2024-02-01 11:28:40.750000) [+0]
+│  Very nice result!
+│  
+│  I tried to do target / installed capacity time and time again, but the submission always failed. Locally it worked well, but something in hidden data broke it. I tried removing n...
+  ├─ Anil Ozturk (2024-02-01 11:33:37.570000) [+1]
+  │  If you used segment as defined in the public kernels, any new segment will likely come with a null-state at its first occurence. So, you might be trying to fill NaNs with the same NaNs. 😅 I've also...
+    ├─ Maksym Dolgikh (2024-02-01 11:58:04.507000) [+2]
+    │  I too thought that segment might be null, that's why I added 2 last lines before return :)
+    │  
+    │  Perhaps I just messed up polars syntax somewhere… It was my first time using it, and I didn't have time t...
+├─ Daryna Ronska (2024-02-01 11:20:56.100000) [+0]
+│  Which model did you use as a final estimator for stacking, XGBoost as well or something else?
+  ├─ Ahmet Erdem (2024-02-01 11:23:48.940000) [+3]
+  │  Both level 1 and level 2 models are XGB models on GPU.
+├─ at7459 (2024-02-01 11:02:43.970000) [+0]
+│  thats some wild strats!
+│  
+│  btw, all the public kernels are overfitting by using the 24h forecast weather at training due to a syntax error, i dont think it really matters that much but i wonder how m...
+  ├─ Ahmet Erdem (2024-02-01 11:13:39.170000) [+1]
+  │  I didn't notice such a leak. It wouldn't work well in public too if there was such an issue I think. Can you share the code snippet that causes it?
+    ├─ at7459 (2024-02-01 11:48:16.440000) [+1]
+    │  df_forecast_weather = (
+    │      df_forecast_weather.rename({"forecast_datetime": "datetime"})
+    │      .filter((pl.col("hours_ahead") &gt;= 22) &amp; pl.col("hours_ahead") &lt;= 45) doesnt actually filter a...
+    ├─ at7459 (2024-02-01 11:53:47.960000) [+0]
+    │  and yeah i spent a lot of time confused why that model performs so well even though its cv is relatively poor and its overfitting, in the end i hope for me that it's just some random fluke due to l...
+    ├─ Ahmet Erdem (2024-02-01 12:00:48.247000) [+0]
+    │  Since effect of using sooner forecasts is small, this probably didn't cause any significant performance issue.
+    │  
+    │  I also couldn't figure out why it has much better CV-LB gap. It may be either a rando...
+├─ Julien (2024-02-01 10:44:33.230000) [+0]
+│  Nice job ! Did you use gas and electricity prices ? I did not have any improvement with historical weather (but I did not ensemble as you did, I just added them as extra features)
+  ├─ Ahmet Erdem (2024-02-01 11:14:11.503000) [+1]
+  │  Thanks. I couldn't get any value out of gas and electricity prices.
+├─ [deleted] (2024-02-05 15:54:56.540000) [+0]
+│  [deleted]

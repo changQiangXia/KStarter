@@ -1,0 +1,320 @@
+# https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391676
+
+Topic #391676: 2nd place solution
+  Author: sakaku
+  Posted: 2023-03-02 08:54:24.686000
+  Votes: 79  Comments: 25
+
+2nd place solution
+
+I would like to express my gratitude to Kaggle for hosting this meaningful competition, and to my teammates, particularly @kapenon, who persevered alongside me throughout the entire competition.
+
+I would like to extend my gratitude to @theoviel for providing the fast DALI inference notebook, which greatly aided in the completion of this competition. Additionally, I would like to thank @pourchot for generously sharing the external data, which contained valuable positive case data that contributed to the success of our final solution.
+
+Fortunately, our team was able to get 2nd place, and I am excited to share our approach.
+
+Summary of our approach
+
+Stages
+
+
+
+Pretrain a single view model in 1280x1280 resolution with external dataset (Thanks to @pourchot, Dataset)
+
+Fine-tune the single view model in 1536x1536 resolution without external dataset
+
+Use the fine-tuned single view model to further fine-tune a dual view model and a four view model
+
+
+Model
+
+
+
+ConvnextV1 small (from mmclassification)
+
+
+1. Data preparation
+
+
+
+We performed manual annotation of the bounding box for the target breast in approximately 300 images. Subsequently, we trained a basic Faster R-CNN model to crop all the breast regions for the subsequent stages of training.
+
+
+When annotating the bounding box, our aim was to refine the size of the box, with the intention of directing the focus of the subsequent stage model more precisely on the breast region. More specifically, our approach involved minimizing the bounding box to exclude the nipple and other extraneous body parts
+
+Use trained Faster R-CNN to crop external dataset
+
+
+2. Data augmentation
+
+
+
+ShiftScaleRotate from albumentation
+
+
+We assumed that the model detects cancer based on the tissue or texture of the image. Therefore, it should be safe to rotate the image at any angle.
+
+RandomFlip from mmcls
+
+RandAugment from mmcls
+
+RandomErasing from mmcls
+
+
+3. Model
+
+Backbone: ConvnextV1 small
+
+Single view model
+
+
+
+Loss
+
+
+
+Cancer: EQL loss link
+
+Aux Loss with weight 0.1:
+
+
+BIRADS: EQL loss
+
+Density: EQL loss
+
+Difficult_negative_case: EQL loss, only for negative case
+
+View: CE loss
+
+Invasive: CE loss, only for positive case
+
+
+Dual view model
+
+Meta Info: age, implant, machine_id
+)
+
+Multi laterality dual view model
+
+
+
+4. Train
+
+
+
+Optimizer: AdamW
+
+lr: 0.00015
+
+Scheduler: CosineAnnealingLR
+
+Epochs: 24
+
+Batchsize: 192 (gradient acclumulation)
+
+
+Large batchsize is important in our experiments to get better performance and stable training results
+
+EMA
+
+
+5. Submission
+
+Ensemble (Not used)
+
+During our discussion on final submission methods, two approaches were considered:
+
+
+
+Utilizing a single model with high resolution, without the use of an ensemble.
+
+Using ensemble with lower resolution.
+
+
+Ultimately, our team concluded that resolution plays a crucial role in detecting cancer, leading us to choose the first option of using a single model with high resolution.
+
+About cropping
+
+After fine-tuning the model using the original images without cropping, there was a slight improvement in the score and it remained stable. This suggests that the size of the breast may play a role in cancer detection. Taking this into account, our team decided not to crop the images for final submission.
+
+TTA
+
+
+
+Diagonal flip
+
+
+Best submission results of each model
+
+Our team has limited computational resources, and we only trained with five folds at the beginning of the competition. However, upon discovering that the scores obtained from fold 0 exhibit a strong correlation with both cross-validation and leaderboard results, we decided to solely focus our experimentation on this particular fold. Therefore, we only have pf1 score for fold 0 locally.
+
+
+
+
+Model
+External Data
+Fold 0 score
+Public LB
+Private LB
+
+
+
+
+SingleView(2nd stage fine-tuned)
+No
+0.42~44(calculated by each image)
+0.57
+0.51
+
+
+SingleView(2nd stage fine-tuned)
+Yes
+0.44~0.45(calculated by each image)
+0.58
+0.53
+
+
+DualView
+Yes
+0.55~0.56(calculated by each prediction_id)
+0.57
+0.52
+
+
+MultiLateralityDualView
+Yes
+-
+0.52
+0.53
+
+
+
+
+After careful evaluation, our team has selected the second SingleView model and the DualView model due to their higher Public LB score and Fold 0 score.
+
+The MultiLateralityDualView model, on the other hand, aims to compare the left and right breasts when detecting cancer. We noticed that the image style varies significantly with machine IDs, but for a particular patient, the image style remains the same. Additionally, most patients only have cancer on one side of the breast. Therefore, we believed it would be more logical to enable the model to compare the left and right sides to predict cancer.
+
+Unfortunately, we came up with this idea towards the end of the competition, and there was insufficient time to optimize and tune the model. As a result, we trained a model with the complete dataset and submitted it. However, we believe that the MultiLateralityDualView model still holds potential for future research and development.
+
+What works
+
+
+
+ConvnextV1
+
+EQL loss
+
+High resolution
+
+Large batchsize
+
+Auxiliary loss
+
+More training epochs
+
+External dataset for 1st stage pretraining
+
+MultiLateralityDualView?(Holds potential in our opinion)
+
+
+Not work for us
+
+
+
+Train models with external dataset at 2nd stage
+
+Concat cropped image horizontally
+
+Rule-based crop with cv2
+
+Upsample dataset
+
+Effcientnet, SE-ResNext, SwinTransformer
+
+Mixup augmentation
+
+Max pooling
+
+Lion optimizer
+
+BIRADS, density pseudo label
+
+Train models by machine id
+
+SWA? (Neither a reduction in the local score nor any improvement)
+
+DualView? (Minor reduction in the Public LB score)
+
+
+Solution code
+
+We have made our code publicly available.
+
+
+
+Code
+
+Inference notebook
+
+External data
+
+
+The code includes a single view model, which has demonstrated strong performance with a Private Leaderboard score of 0.53. Furthermore, the results obtained with this model can be reliably reproduced using a single RTX 3090.
+
+Acknowledgement
+
+We would like to express our gratitude to the Kaggle support system and the emotional support of Rist inc.
+
+Comments:
+├─ raddar (2023-03-02 10:21:31.177000) [+3]
+│  Relevance of EQL looks particularly interesting. Thanks for sharing!
+├─ CJLUer (2023-04-26 14:11:49.130000) [+1]
+│  Thanks for sharing, I think MultiLateralityDualView is a great idea, it's worth exploring.
+├─ LYLY123 (2023-04-09 09:16:01.427000) [+1]
+│  Thank you for sharing 👍. But for the Multi laterality dual view model, what did you do with this model, can you describe in more detail?
+├─ Nihat Abdullayev (2023-03-14 11:30:11.197000) [+1]
+│  MultiLateralityDualView model was great idea I think. Very professional approach!
+├─ Dheeraj Pandey (2023-03-03 05:36:22.163000) [+1]
+│  Well deserved win👌 Thank you for sharing the approach 👍
+  ├─ sakaku (2023-03-03 13:13:56.990000) [+1]
+  │  Hope it helps!
+├─ RickyLu (2023-03-02 15:50:42.030000) [+1]
+│  Additionally, most patients only have cancer on one side of the breast.
+│    Interesting find👍
+  ├─ sakaku (2023-03-03 13:11:52.633000) [+0]
+  │  Yes, we were also looking forward to it very much, but we ran out of time.
+├─ Antti Isosalo (2023-03-02 14:33:47.243000) [+1]
+│  Tidy codebase. 👍 Thanks for sharing and congratulations.
+├─ Laurent Pourchot (2023-03-02 10:06:58.210000) [+1]
+│  @liushuzhi , Congratulations !!!
+  ├─ sakaku (2023-03-03 13:04:42.880000) [+0]
+  │  Thank you! The dataset helps a lot!
+├─ Remek Kinas (2023-03-02 09:49:49.187000) [+1]
+│  Congratulations. This is esence of ML solution - as simple as possible. Great!
+  ├─ sakaku (2023-03-03 13:03:50.703000) [+0]
+  │  Thank you!
+├─ Kaschi14 (2023-10-04 11:01:03.770000) [+0]
+│  Very clean solution. However, I've a question about the dual / multiview classification.
+│  Did you use your single view finetuned backbone to process each image individually and then concat the featu...
+├─ Tsvetan Rankov (2023-03-11 18:36:20.973000) [+0]
+│  Congratulations And thank you for sharing!
+├─ daeek14 (2023-03-11 15:11:38.120000) [+0]
+│  simple and effective, congratulations!
+├─ Fernando Cossio (2023-03-08 16:47:24.647000) [+0]
+│  Congratulations and thanks for sharing your solution. I have one question. How did you handle cases in the for the multilateral dual view when there were images missing?
+├─ Nam Van Nguyen (2023-03-04 08:47:59.927000) [+0]
+│  Congratulations &gt;&lt;
+├─ Erdi Kılıç (2023-03-02 15:49:42.903000) [+0]
+│  Thanks for inspiring usage of mmclasification.
+  ├─ Erdi Kılıç (2023-03-02 16:01:45.143000) [+1]
+  │  Also, how did you enable gpu with mmclasification in offline submission? Installing wheel and downloading it take almost half hour in my experiments.
+    ├─ sakaku (2023-03-03 13:07:25.907000) [+2]
+    │  I wheeled the mmclasification related packages with another notebook and added it to inference notebook to install them. Wheel them takes time but installation is fast in my case.
+    ├─ Erdi Kılıç (2023-03-03 14:09:23.650000) [+1]
+    │  Would you share that notebook or the code to install them?
+├─ [deleted] (2023-04-26 14:11:20.060000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-26 13:41:12.030000) [+0]
+│  [deleted]
+├─ Bá Huy Nguyễn (2023-03-02 10:35:17.147000) [+1]
+│  thanks for sharing! Congratulations !!!

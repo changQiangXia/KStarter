@@ -1,0 +1,106 @@
+# https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600048
+
+Topic #600048: XGBoost - QuantileDMatrix Trick
+  Author: Chris Deotte
+  Posted: 2025-08-20 16:56:35.576000
+  Votes: 69  Comments: 16
+
+I would like to share an XGBoost trick to handle larger data and more features. When we use the Python API, we create a xgb.DMatrix() to wrap our data before train and predict. If we use an xgb.QuantileDMatrix() instead, then we can train with up to 8x more data!
+
+XGBoost uses Histogram
+
+The most common tree_method is hist. This takes each column of numbers (whether int64, int32, float64, or float32, etc) and puts it into 256 bins for training and inference (when we use the default value for max_bins). This means that the original column of 8 bytes or 4 bytes per number becomes 1 byte per number!
+
+So when our train data is 32bit precision, it gets reduced by 4x when XGB is training. (Or if it is originally 64bit precision, it gets reduced by 8x). This is good news because this means we can train with larger dataframes than we think when using XGB.
+
+Use QuantileDMatrix (Trick 1)
+
+Let's look at an example. Imagine that we have a dataframe with 1 million rows and 1000 columns. This is 1e9 elements (i.e. numbers). If each number is 32bit precision (i.e. 4 bytes), then this dataframe is 4GB of data. When we use xgb.DMatix(), this entire 4GB first gets loaded into GPU VRAM before it gets compressed into histograms and finishes as 1GB of data.
+
+When we use xgb.QuantileDMatrix(), then the data gets loaded into memory in batches. First we load 1GB and it gets compressed to 250MB. Then we load another 1GB and it gets compressed to 250MB, etc etc. So the xgbQuantileDMatrix() doesn't require us to have 4GB of GPU VRAM if we wish to train on a 4GB dataframe. Also, we choose the size of the batches, so if we make them small, then we only need about 1GB of GPU VRAM to train with 4GB of 32bit dataframe.
+
+Reduce Data Types (Trick 2)
+
+By default, Pandas and NVIDIA cuDF loads numbers as int64 and float64. Usually this is more than we need. We can nearly always reduce integers to int32 and float32. Doing this reduces our data by a factor of 2x. So first, we should read and reduce our data. And second, we can use xgb.QuantileDMatrix(). The combination of both of these techniques allows us to train with up to 8x more data!
+
+Maximize QuantileDMatrix with Disk (Trick 3)
+
+To maximize the benefit of xgb.QuantileDMatrix(), we can use two notebooks. In the first notebook we perform GPU (i.e. NVIDIA cuDF) feature engineering and save the dataframe to disk. In the second notebook we design our data loader to read batches from disk.
+
+The reason this maximizes the size of data we can train with is as follows. Imagine that we have a 15GB dataframe and 16GB of GPU VRAM. If we use NVIDIA cuDF to build our dataframe, then we are already using 15GB of GPU VRAM (to store our original dataframe) when we begin to build our xgb.QuantileDMatrix(), so we only have 1GB left over to fit the XGB train data.
+
+If we build our 15GB GPU dataframe in one notebook and save to disk. Then our second notebook begins with all of its GPU VRAM available. Then inside our data loader which feeds our xgb.QuantileDMatrix(), we read 16k rows of our dataframe at a time, transfer it into GPU VRAM and compress it to 4x smaller size. In the end XGB will only use 15/4 = 3.75GB of our 16GB GPU VRAM. And the original 15GB dataframe is not anywhere in our notebook's memory. It only exists on disk.
+
+Starter Notebook
+
+I publish a starter notebook here which shows how to use xgb.QuantileDMatrix() and reduce data types (i.e Trick 1 and Trick 2). 
+
+There is a data loader which loads data from a dataframe which is already in memory. If you want to train with even larger batches (i.e. Trick 3), we can update the dataloader to load dataframe from disk and read 16k rows per batch. We replace the line in code cell #13
+
+ = self
+
+
+with the lines
+
+dt = pd.read_csv(
+    filename,
+    skiprows=range(, +),   
+    nrows=b -  + 
+)
+
+
+Bonus Lessons
+
+In addition to teaching about handling larger data. My starter notebook also demonstrates 
+
+
+
+some popular categorical encoding techniques (i.e. LE, CE, and TE)
+
+creating new categorical columns from pairs of original categorical columns
+
+how to use original data as rows
+
+how to use original data as columns
+
+
+Enjoy!
+
+Comments:
+├─ pp1985 (2025-08-20 17:13:29.037000) [+5]
+│  Thanks, this is very helpful.
+│  I wonder how do you come across these new techniques!!!
+├─ Sarah Arshad (2025-08-24 14:10:50.690000) [+1]
+│  This is super insightful….it might help me in future
+├─ Ladipo Samson (2025-08-23 02:29:31.027000) [+1]
+│  This is super insightful. I didn’t realize QuantileDMatrix could make such a big difference in handling large datasets. Quick question does this batching approach affect training speed, or is it mo...
+  ├─ Chris Deotte (2025-08-23 11:52:48.773000) [+2]
+  │  It doesn't affect training. Before XGB can train it needs to load and convert the data into quantiles. Using DMatrix loads the data and compresses it all at once and therefore needs more VRAM. Usin...
+├─ sanjana kumari (2025-08-22 16:02:35.503000) [+1]
+│  Thank you for sharing this, it might help me in the future
+├─ JMAscacibar (2025-08-22 10:43:17.770000) [+1]
+│  Thanks, Chris! Awesome job, as usual. 
+│  
+│  Is this the same approach you used in the AMEX competition?
+  ├─ Chris Deotte (2025-08-22 11:21:20.667000) [+4]
+  │  Yes correct. I used QuantileDMatrix in AMEX comp. Back then it was called xgb.DeviceQuantileDMatrix() because it was still experimental. My AMEX XGB notebook is here.
+  │  
+  │  Two other tricks that I use t...
+├─ ABDELHAK OUANZOUGUI (2025-08-21 21:07:40.353000) [+1]
+│  Super interesting notebook!! thanks a lot!
+├─ Irakoze Ntawigenga Kelly (2025-08-21 20:29:58.017000) [+1]
+│  Thank you for sharing this, it might help me in the future
+├─ L-Lee (2025-08-21 15:31:00.507000) [+1]
+│  Bravo！Pure new knowledge!
+├─ kobby_ (2025-08-20 17:15:14.830000) [+0]
+│  Hey Chris! Thanks for this insightful update. Hoping to see you on the LB sir. 😊…
+├─ benkerrouche abdelbasset (2025-08-29 15:31:50.873000) [+0]
+│  This is insightful, thank you! Just a quick question: when we change our data types, for example from float64 to float32 or float16, does it affect our precision?
+├─ Raushan Kumar (2025-08-21 17:43:02.100000) [+1]
+│  i don't know why my model got stuck at some point in terms of accuracy….and then improvement is hard on the datasets……..
+├─ Optimistix (2025-08-21 05:52:17.077000) [+2]
+│  Thanks for another great notebook!
+├─ Taylor S. Amarel (2025-08-20 17:02:45.330000) [+2]
+│  Very useful, thank you for sharing.
+├─ Donghyun Kang (2025-08-24 09:34:20.800000) [+0]
+│  Thanks! It might help me :)

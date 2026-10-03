@@ -1,0 +1,138 @@
+# https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738691
+
+Topic #738691: 233rd Place Solution
+  Author: Joe Young
+  Posted: 2026-09-01 10:15:31.508000
+  Votes: 4  Comments: 0
+
+First off, congratulations to all participants and especially the top finishers! This was a fun and highly competitive tabular playground challenge. I managed to finish 233rd out of 3,540 teams (Top ~6.5%) with a final private score of 0.97101 (Public: 0.97128), working strictly with free/local resources.
+
+Here is a full breakdown of the pipeline, feature engineering, experimental validation, and lessons learned.
+
+
+
+1. Overview &amp; Strategy Summary
+
+The core philosophy of our approach was disciplined out-of-fold (OOF) cross-validation to prevent overfitting to the 20% public leaderboard split, combined with exploring genuine model/feature diversity.
+
+Key components of the final solution:
+
+
+
+Feature Engineering: Ratio features, time-budget residuals, interaction terms, and a multi-level target-encoding lattice.
+
+Adversarial Validation: Verified feature drift between train and test splits (Adversarial AUC: ~0.565, confirming high distribution stability).
+
+Pseudo-Labeling Experimentation: Tested high-confidence pseudo-labeling (&gt;98% / &lt;2% thresholds) on the Lattice Triad.
+
+Ensembling / Stacking: 177-member multi-seed OOF stack integrated with an elite anchor stream via percentile-rank averaging.
+
+
+
+
+2. Feature Engineering &amp; The Lattice Structure
+
+We developed custom domain features focusing on screen-time mechanics and behavioral ratios:
+
+
+
+Screen Time Accounting Residual: 
+time_accounting_residual = daily_screen_time_hours - (social_media_hours + gaming_hours + work_study_hours) (only calculated when all 4 fields are present to avoid manufactured residuals).
+
+Behavioral Ratios:
+
+
+free_time = 24.0 - sleep_hours - work_study_hours
+
+screen_to_free_time = daily_screen_time_hours / (free_time + 1e-3)
+
+minutes_per_app_open = (daily_screen_time_hours * 60.0) / (app_opens_per_day + 1e-3)
+
+social_per_age = social_media_hours / (age + 1e-3)
+
+weekday_screen_time = (daily_screen_time_hours * 7.0 - weekend_screen_time * 2.0) / 5.0
+
+Target-Encoding Lattice:
+
+
+Generated out-of-fold target encodings across pairs and triples of categorical and binned continuous features with smoothing (smooth=20.0) inside a Stratified 15-Fold cross-validation scheme.
+
+
+
+
+3. Adversarial Validation (Drift Check)
+
+Before finalizing submissions, we conducted an adversarial validation experiment:
+
+
+
+Combined train and test datasets (dropping addicted_label) and labeled them is_test = 0 vs 1.
+
+Trained a 5-fold LightGBM model to detect distribution shifts.
+
+Result: Total Adversarial AUC was 0.5654, confirming that train and test distributions were nearly identical and highly stable against private shakeups.
+
+
+
+
+4. Modeling &amp; Iterations
+
+
+
+
+Model / Experiment
+CV / OOF ROC-AUC
+Public LB
+Notes
+
+
+
+
+XGBoost / LightGBM / CatBoost Triad
+~0.96887
+0.96887
+Standard 15-Fold Lattice Baseline
+
+
+Pseudo-Labeled Lattice Triad
+~0.96893
+0.96893
+Injected 11.8k high-confidence test pseudo-labels
+
+
+177-Member OOF Stack
+0.97009
+—
+Multi-seed/multi-model stacked meta-ensemble
+
+
+PyTorch TabNet
+0.93285
+—
+Fast CPU-constrained trial for DL diversity
+
+
+Final Selected Submission (1% 177-Stack + 99% Anchor)
+0.97009 (Stack OOF)
+0.97128
+Private: 0.97101 (Rank 233)
+
+
+
+
+
+
+5. Key Takeaways &amp; Lessons Learned
+
+
+
+Feature Space Saturation: In synthetic tabular datasets of this type, pure tree-based models hit a mathematical ceiling relatively quickly. Incremental gains from additional tree models saturated near 0.97128 public.
+
+The Importance of Honest Local CV: When multiple submissions tied at 0.97128 on the public LB, trusting the submission with the highest honest local OOF CV (the 177-member stack blend at 0.97009 OOF) proved solid and held up on the private leaderboard.
+
+Next Frontier — Deep Learning on GPU: The top finishers were able to pull ahead by utilizing large-scale GPU-accelerated Neural Network architectures (MLPs/ResNets) alongside GBDTs. Setting up GPU pipelines for deep tabular models will be our primary focus for upcoming playground episodes.
+
+
+Thanks to the Kaggle community and organizers for another great competition!
+
+No comments

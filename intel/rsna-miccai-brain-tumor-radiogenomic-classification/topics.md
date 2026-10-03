@@ -1,0 +1,82 @@
+# rsna-miccai-brain-tumor-radiogenomic-classification 讨论区（按票数排序，共 80 条）
+
+- [DICOM to PNG dataset (128 GB -> 5.2 GB) 🎨🔥](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253000) — 369 票 / 103 评论 / 2021-07-14 
+- [Papers on Radiogenomics and Machine Learning](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252833) — 112 票 / 35 评论 / 2021-07-13 
+- [Fake Accounts In Competition (Cheating)](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/269396) — 107 票 / 22 评论 / 2021-08-31 
+- [1st place solution with very simple code](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/281347) — 103 票 / 27 评论 / 2021-10-24 **write-up?**
+- [The real winner ...](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279823) — 100 票 / 22 评论 / 2021-10-19 
+- [Differences in MRI imaging methods - MRIの撮影方法の違いについて](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252843) — 99 票 / 10 评论 / 2021-07-14 
+- [Previous Gold medal solutions to RSNA Intracranial Hemorrhage Detection](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252838) — 97 票 / 6 评论 / 2021-07-14 **write-up?**
+- [Using data from Task 1?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253488) — 84 票 / 25 评论 / 2021-07-16 
+- [This competition is a failure.](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279820) — 84 票 / 40 评论 / 2021-10-19 
+- [Brain Tumor Datasets and Solutions from Previous Editions](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253056) — 81 票 / 5 评论 / 2021-07-14 **write-up?**
+- [Better Understanding Of What We Are Really Doing](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/267750) — 78 票 / 8 评论 / 2021-08-24 
+- [Pretrained 3D-CNNs and other resources](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253736) — 67 票 / 13 评论 / 2021-07-18 
+- [Is this even possible?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/266173) — 66 票 / 59 评论 / 2021-08-18 
+- [Opportunity to Publish your Method and Results, in Springer LNCS](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/254252) — 62 票 / 40 评论 / 2021-07-20 
+- [[Self-Note] "Brain tumor classification" is misleading!](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/264861) — 57 票 / 18 评论 / 2021-08-13 
+- [Exclusion of three cases from training cohort ](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/262046) — 50 票 / 3 评论 / 2021-08-05 
+- [Extract DICOM metadata](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252942) — 49 票 / 6 评论 / 2021-07-14 
+- [Don't follow the top-scoring kernel "blindly"](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/265777) — 48 票 / 25 评论 / 2021-08-16 
+- [Hand Labelling the Public Test Set For Validation Purposes](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/256706) — 45 票 / 40 评论 / 2021-08-02 
+- [12th Place Solution](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279832) — 44 票 / 22 评论 / 2021-10-19 **write-up?**
+- [Changing Random Seeds can get you from 0.540 to 0.710 in no time](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/271214) — 43 票 / 21 评论 / 2021-09-09 
+- [Task 1 Dataset Uploaded](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/266679) — 41 票 / 21 评论 / 2021-08-20 
+- [prior research on the same subject.](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252837) — 41 票 / 5 评论 / 2021-07-13 
+- [Apperently the author is more important then the code](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/255607) — 40 票 / 17 评论 / 2021-07-28 
+- [[Compilation] RSNA MICCAI Brain Tumor Radiogenomic Classification : Good Baseline solutions](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/254417) — 39 票 / 12 评论 / 2021-07-21 **write-up?**
+- [Educational Merit Distinction](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/267810) — 38 票 / 5 评论 / 2021-08-24 
+- [2nd place solution](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/280033) — 37 票 / 15 评论 / 2021-10-22 **write-up?**
+- [[Info] Multi-Modal MRI Spatial Alignment Network](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/265164) — 37 票 / 6 评论 / 2021-08-14 
+- [4th place solution](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/280029) — 34 票 / 10 评论 / 2021-10-24 **write-up?**
+- [[Introducing] Visualize the entire dataset using W&B Tables](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/256051) — 33 票 / 8 评论 / 2021-07-30 
+- [Understanding the differences between T1w, T1wCE, T2w and FLAIR](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/264182) — 33 票 / 3 评论 / 2021-08-11 
+- [Understanding 3D image classification ](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/256199) — 32 票 / 5 评论 / 2021-07-31 
+- [[9th] Simple and kinda stable approach](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279826) — 31 票 / 14 评论 / 2022-01-18 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252877) — 30 票 / 21 评论 / 2021-07-14 
+- [On the low performance of models in this challenge](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/284024) — 30 票 / 2 评论 / 2021-10-29 
+- [Why Is The Task 2 Dataset Different Than The Task 1 Dataset?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/269164) — 30 票 / 10 评论 / 2021-08-30 
+- [Leaderboard Reveal and Finalization](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/278921) — 29 票 / 22 评论 / 2021-10-15 
+- [ Efficientnet3D code for non-notebook users](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/262103) — 29 票 / 10 评论 / 2021-08-05 
+- [Leaderboard Shakeup Plot - Rank and Score](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279777) — 29 票 / 11 评论 / 2021-10-19 
+- [Deleted dataset issue](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/278884) — 28 票 / 8 评论 / 2021-10-15 
+- [What is the secret behind random seed 42?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253412) — 28 票 / 32 评论 / 2021-07-16 
+- [[CV vs LB]](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/255352) — 27 票 / 16 评论 / 2021-07-27 
+- [Segmentation → Classification Approach?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252900) — 27 票 / 23 评论 / 2021-07-14 
+- [Baseline🧠 - LB: 0.602](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253075) — 27 票 / 13 评论 / 2021-07-14 
+- [Normalized Voxels: Align Planes, Adjust Contrast, and Crop](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/265098) — 25 票 / 6 评论 / 2021-08-14 
+- [A few words to share!](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279817) — 25 票 / 19 评论 / 2021-10-19 
+- [Wow public LB 1.0!!! ](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/268351) — 25 票 / 33 评论 / 2021-08-27 
+- [Research paper and related works Radiogenomic Image using CV/ML/DL approaches](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252851) — 25 票 / 6 评论 / 2021-07-14 
+- [NVIDIA: Top Spots in MICCAI 2021 Brain Tumor Segmentation Challenge](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/276639) — 25 票 / 2 评论 / 2021-10-05 
+- [662nd place solution](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/280003) — 24 票 / 8 评论 / 2021-10-19 **write-up?**
+- [Shake-up is approaching, I can already feel it](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/277787) — 24 票 / 28 评论 / 2021-10-11 
+- [6 place solution (2 stage models)](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/280402) — 23 票 / 0 评论 / 2021-10-21 **write-up?**
+- [4th place, whattt!!!!!!!](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279787) — 23 票 / 9 评论 / 2021-10-19 **write-up?**
+- [All Solutions Compilation](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/280062) — 23 票 / 3 评论 / 2021-10-20 **write-up?**
+- [I did not understand the Data itself? Can someone explain.?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252972) — 23 票 / 13 评论 / 2021-07-14 
+- [🧠Brain 3D View🧠](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252922) — 22 票 / 3 评论 / 2021-07-14 
+- [Correlation != Causation](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/277150) — 21 票 / 8 评论 / 2021-10-08 
+- [Welcome from the Challenge Sponsors](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253468) — 20 票 / 5 评论 / 2021-07-16 
+- [Looking for a Team Thread](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252876) — 19 票 / 181 评论 / 2021-07-14 
+- [Notes on MRI, Parameter Weighting, and Imaging Planes](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253698) — 19 票 / 1 评论 / 2021-07-18 
+- [Good resources for 3D Convolutional models](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253182) — 19 票 / 11 评论 / 2021-07-15 
+- [Leak in metadata?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/275233) — 18 票 / 17 评论 / 2021-09-29 
+- [Writing my CV / LB observations](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/271786) — 18 票 / 0 评论 / 2021-09-12 
+- [Paper on Augmentation Techniques for MRI Scans of the Brain](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/266895) — 17 票 / 3 评论 / 2021-08-20 
+- [Empty images on DICOM files 🤔](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/252968) — 17 票 / 4 评论 / 2021-07-14 
+- [Study of different useful kaggle datasets related with Brain and M.L. class.](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/267448) — 17 票 / 5 评论 / 2021-08-23 
+- [Shakeup Memes](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/278264) — 17 票 / 6 评论 / 2021-10-13 
+- [err - wuh?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279672) — 17 票 / 6 评论 / 2021-10-18 
+- [Notebook to run BraTS Pre-processing in Kaggle kernel](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/268597) — 15 票 / 6 评论 / 2021-08-28 
+- [Automatic Prediction of MGMT Status in Glioblastoma](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253451) — 15 票 / 3 评论 / 2021-07-16 
+- [Confusion about the genetic analysis aspect metioned in the Overview. ](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/255540) — 15 票 / 4 评论 / 2021-07-28 
+- [High validation AUC vs. Low score (85% vs. 57%!)](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/273639) — 14 票 / 11 评论 / 2021-09-21 
+- [Overview of fastai notebooks - Redux](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/253074) — 14 票 / 3 评论 / 2021-07-14 
+- [torch.manual_seed(3407) is all you need ](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/274123) — 14 票 / 2 评论 / 2021-09-24 
+- [Notebook for tumor object detection](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/275538) — 14 票 / 1 评论 / 2021-09-30 
+- [3D UNet Classisfication](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/263002) — 14 票 / 5 评论 / 2021-08-08 
+- [Is it possible to convert NIFTI to DICOM files?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/268520) — 13 票 / 19 评论 / 2021-08-27 
+- [Scan 00998 a bad data?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/271524) — 13 票 / 3 评论 / 2021-09-11 
+- [3rd place solution ](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/287713) — 13 票 / 0 评论 / 2021-11-15 **write-up?**
+- [Can the MGMT promoter value be detected visually?](https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/271955) — 13 票 / 5 评论 / 2021-09-13 

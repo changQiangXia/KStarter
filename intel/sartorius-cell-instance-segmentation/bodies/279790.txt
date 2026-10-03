@@ -1,0 +1,131 @@
+# https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279790
+
+Topic #279790: Tips in submission and baseline (in the beginning of the competition)
+  Author: Inoichan
+  Posted: 2021-10-19 04:32:44.054000
+  Votes: 205  Comments: 39
+
+Some competitors seems to have troubles in submission.
+I could succeed in submission, so I will share the tips.
+
+Instance segmentation
+
+First, the task of this competition is "instance segmentation", not "semantic segmentation". So, we need to predict cell masks separately. My first impression is that it's better to use a instance segmentation model like a Mask RCNN than to use a U-Net or something semantic segmentation models. My base model which scored over 0.22 in LB is a kind of Mask RCNN.
+
+Update:
+I read discussions of Data Science Bowl 2018, and found that U-Net based models seems to be also useful. However, in the previous competition, we had to segment the nucleus, not the cells, which is different from this time. It will take some experimentation to see which method is more effective in this competition.
+Data Science Bowl 2018 link
+
+Mask encoding
+
+In submission, we have to encoding mask. Evaluation page show the pixels are numbered from top to bottom, then left to right. But, this is not correct. As you know, the training annotations provided are numbered from left to right, then top to bottom, and this is also the case with submission.
+An LB score with encoded mask (top -&gt; bottom, left -&gt; right) was 0.0000, but a score with (left -&gt; right, top -&gt; bottom) was over 0.22.
+Unfortunately, the evaluation page is just a copy from Data Science Bowl 2018. I hope that the competition hosts will update the evaluation page for this competition.
+@christoffersartorius @addisonhoward 
+
+Update:
+The evaluation page was updated. Thanks.
+
+No overlapping
+
+At first few submissions, I got Submission scoring error. The model predictions looks good, but the error occurred. The reason is that each predicted mask is not allowed to overlap the other mask in the same image. By removing overlapped region of each mask, the submission was succeeded.
+I think this is one of the important points of this competition. We might need to find better post processing to remove overlapping. In my baseline, I set a threshold of nms=0.0000001, so if even 1 pixel overlaps with other masks, the mask with lower score will be removed. I don't think this is the best way, and further improvements are needed.
+
+Comments:
+├─ Slawek Biel (2021-10-19 15:11:47.413000) [+13]
+│  The third point sure is weird, considering there are overlaps in the ground truth masks. Thanks for the warning
+  ├─ Ayush Thakur (2021-10-19 20:53:54.547000) [+4]
+  │  +1 to the fact that there are overlaps in the ground truth masks.
+  ├─ Gleb (2021-10-19 21:39:50.317000) [+0]
+  │  if masks are broken, its kinda pointless to fight overlap (since in that case we should get another annotation set). But I agree, there should be no overlap in gt masks
+  ├─ Sohier Dane (2021-10-19 22:09:36.970000) [+7]
+  │  The data description has been updated to clarify that point:
+  │  
+  │  Note: while predictions are not allowed to overlap, the training labels are provided in full (with overlapping portions included). This...
+  ├─ Gleb (2021-10-21 10:45:01.003000) [+3]
+  │  @sohier  Im lost on how to score metric then. Is Evaluation tab up to date? Is it possible to score 1 on this map evaluation? Different methods of removing overlap will lead to different map score ...
+  ├─ A.Demyanchuk (2021-10-25 06:39:01.980000) [+3]
+  │  The pixels are one-indexed
+  │    and numbered from top to bottom, then left to right
+  │  
+  │  
+  │  I believe, this one should be also updated. Or maybe just pin this thread to the top?
+├─ Gunes Evitan (2021-10-20 09:01:27.350000) [+12]
+│  This is my first instance segmentation competition. If I understood correctly, instance segmentation models like Mask RCNN outputs every instance mask separately like an object detection model but ...
+  ├─ Eren Tekin (2021-10-20 19:41:31.177000) [+0]
+  │  +1 to this, It should not matter at the end if we can separate the Unet's output.
+  ├─ dr. Konya (2021-10-20 22:46:01.027000) [+1]
+  │  If you take care of the overlaps of the instances, you can then assign every pixel predicted by the unet to one of the instances.
+  ├─ Karan Yadav (2021-11-09 10:01:31.883000) [+2]
+  │  how to separate every instance in the semantic segmentation model's (unet) output?
+  ├─ Carlos.gut (2021-12-21 16:01:31.690000) [+0]
+  │  The topic of the nucleus separation on the output is shortly treated here: https://www.kaggle.com/c/sartorius-cell-instance-segmentation/discussion/288376
+  │  
+  │  The following code do it:
+  │  def post_proces...
+├─ hengck23 (2021-11-09 10:11:56.330000) [+6]
+│  "  previous competition, we had to segment the nucleus, not the cells, which is different from this time."
+│  
+│  kaggle HPAv2 competition provides a cell segmentation (an also nucleus segmentation )mode...
+├─ vishal sharma (2021-11-01 15:52:31.900000) [+3]
+│  Hi I am not able to understand what is the meaning of training annotations are numbered from left--&gt;right then top--&gt;bottom. I am new to computer vision and deep learning and any help would b...
+  ├─ Sarvagya Malaviya (2021-11-03 17:55:26.317000) [+2]
+  │  It means that the pixels are numbered in a column-major order. Check out this discussion for more information.
+├─ dr. Konya (2021-10-20 22:41:02.980000) [+1]
+│  Re overlapping: in my opinion this is going to be of utmost importance. See my thoughts here.
+├─ Awsaf (2021-10-19 17:28:26.990000) [+1]
+│  I've wasted many subs for this No overlapping thanks for point it out …
+├─ The fearless (2021-10-19 09:30:31.290000) [+1]
+│  Thanks for sharing!
+│  Did you exert scipy.ndimage.morphology.binary_fill_holes to deal with broken masks?
+  ├─ Inoichan (2021-10-19 11:20:36.087000) [+2]
+  │  @solosquad1999 
+  │  No, I haven't used scipy.ndimage.morphology.binary_fill_holes.
+├─ Karan Yadav (2021-11-09 10:05:37.443000) [+2]
+│  Evaluation page still shows the pixels are numbered from top to bottom, then left to right which is incorrect.
+├─ Boris Tarovik (2021-12-20 20:58:43.717000) [+0]
+│  Thank you! Didn't get what "no overlapping" means at first
+├─ Fatma Mazen (2021-11-30 06:41:18.447000) [+0]
+│  @Inoichan thank you for your post 
+│  I got stuck in this part.
+│  Could you share with me the code you used to decode and encode rle. I am wasting my submissions every day for this reason
+│  
+│  
+│    
+│  but a sco...
+├─ Yousef Rabi (2021-11-02 08:30:49.870000) [+0]
+│  Does not seem like the evaluation page was corrected. Still says from top to bottom, then left to right. "The pixels are one-indexed and numbered from top to bottom, then left to right: 1 is pixel ...
+├─ Liam Nguyen (2021-10-25 05:00:36.260000) [+0]
+│  Have you found a way to exploit the semantic models such as Unet in this competition ? I have read Data Science Bowl 2018 solution but did not quite understand.
+  ├─ Karan Yadav (2021-11-09 10:11:17.347000) [+-2]
+  │  I also read that solution and understood that. In that competition, unet model was used for semantic segmentation which gives a single mask. But in this competition we need separate masks for each ...
+├─ Mes (2021-10-24 19:03:48.327000) [+0]
+│  I have checked my output submission.csv file, it follows the form of sample submission file. Also no overlapping in the prediction as far as I can tell. But still I can not make a single submission...
+  ├─ Karan Yadav (2021-11-09 10:08:04.233000) [+1]
+  │  multiple files in output folder would not mess with the submission process in any way.
+├─ Michael Bolton (2021-10-19 15:26:39.583000) [+0]
+│  Thanks for posting. It seems that the order of labelling masks is in play, I'm guessing the evaluation page looks at the row of a mask and compares it to its ground truth mask at that particular ro...
+├─ kaggler (2021-10-19 06:07:21.393000) [+0]
+│  This article is very informative as a newbie in this competition. Thanks a lot🙏
+├─ [deleted] (2021-11-08 13:20:14.683000) [+0]
+│  [deleted]
+├─ [deleted] (2021-11-02 01:48:34.877000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-23 14:47:27.697000) [+0]
+│  [deleted]
+├─ [deleted] (2021-10-22 18:38:23.290000) [+1]
+│  [deleted]
+├─ jaehyun park (2021-10-24 12:37:04.597000) [+1]
+│  Thank you for sharing! :D
+├─ chiba1sonny (2021-12-20 18:59:00.980000) [+0]
+│  Thanks for sharing
+├─ SaintEgg (2021-12-03 16:05:12.270000) [+0]
+│  thank you for your sharing
+├─ gyindeu (2021-11-05 10:13:02.387000) [+0]
+│  Thanks for sharing!!
+├─ NotFound404 (2021-10-20 07:48:55.920000) [+0]
+│  very useful, thanks for sharing
+├─ Saurav Maheshkar ☕️ (2021-10-19 08:41:25.330000) [+0]
+│  Thanks for sharing 😁.
+├─ Srinidhi (2021-10-19 07:02:51.140000) [+0]
+│  Informative and Intuitive. Thanks :)

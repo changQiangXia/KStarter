@@ -1,0 +1,82 @@
+# rsna-2024-lumbar-spine-degenerative-classification 讨论区（按票数排序，共 80 条）
+
+- [Starter references and reading materials](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/503433) — 137 票 / 19 评论 / 2024-05-17 
+- [[placeholder] my experimental results](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/519628) — 124 票 / 42 评论 / 2024-07-12 
+- [1st place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/540091) — 105 票 / 21 评论 / 2024-10-28 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539452) — 98 票 / 22 评论 / 2024-10-18 **write-up?**
+- [Radiologist's Insights I](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/507101) — 94 票 / 16 评论 / 2024-05-24 
+- [4th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539443) — 76 票 / 22 评论 / 2024-10-13 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539453) — 65 票 / 10 评论 / 2024-10-28 **write-up?**
+- [More coordinates!](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/528653) — 60 票 / 13 评论 / 2024-08-16 
+- [Coordinate Pretraining Dataset](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/524500) — 52 票 / 36 评论 / 2024-08-06 
+- [Image-level object detection approach with Yolo [LB 0.54]](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/533240) — 50 票 / 25 评论 / 2024-09-10 
+- [Dicoms, DL & Medical Imaging: OsiriX, Pydicom, Oro, Mango viewer. Dicom on Kaggle.](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/505499) — 49 票 / 2 评论 / 2024-05-17 
+- [Explaining some Common Words](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/510963) — 43 票 / 1 评论 / 2024-06-08 
+- [Starter Resources (Research Paper, Video, Notebooks)](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/503408) — 41 票 / 4 评论 / 2024-05-17 
+- [Welcome from RSNA](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/508154) — 37 票 / 31 评论 / 2024-05-28 
+- [5th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539472) — 35 票 / 14 评论 / 2024-10-10 **write-up?**
+- [[7th solution, my part] Single Stage Model Wins!](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539439) — 35 票 / 6 评论 / 2024-10-09 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539548) — 32 票 / 7 评论 / 2024-10-13 **write-up?**
+- [14th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539459) — 31 票 / 2 评论 / 2024-10-09 **write-up?**
+- [Competition Metric Behavior vs Incorrect predictions](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/511055) — 30 票 / 0 评论 / 2024-06-08 
+- [DICOM file viewer with Gradio](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/532675) — 29 票 / 7 评论 / 2024-09-07 
+- [Summary of Top Team Solutions](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/541279) — 29 票 / 1 评论 / 2024-10-18 **write-up?**
+- [9th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539690) — 29 票 / 17 评论 / 2024-10-10 **write-up?**
+- [7th solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539486) — 27 票 / 2 评论 / 2024-10-15 **write-up?**
+- [5 Months ?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/503348) — 27 票 / 11 评论 / 2024-05-17 
+- [11th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539569) — 26 票 / 10 评论 / 2024-10-14 **write-up?**
+- [2d to 3d coord conversion: Are the dicom tag wrong?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/522956) — 26 票 / 25 评论 / 2024-07-29 
+- [Get started here!](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/503346) — 26 票 / 8 评论 / 2024-05-17 
+- [Segmentation](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/510515) — 23 票 / 5 评论 / 2024-06-06 
+- [Starter Notebook!](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/510334) — 23 票 / 12 评论 / 2024-06-05 
+- [If you think you saw everything, check for flipped axials](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/534873) — 23 票 / 23 评论 / 2024-09-19 
+- [Consolidated Train Data](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/505929) — 22 票 / 4 评论 / 2024-05-19 
+- [Inqury about the metric](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/508319) — 22 票 / 3 评论 / 2024-05-29 
+- [13th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539510) — 21 票 / 2 评论 / 2024-10-10 **write-up?**
+- [Metric patch and rescore (complete)](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/508522) — 21 票 / 0 评论 / 2024-05-30 
+- [Label Misplacement in Sagittal T2/STIR Series Data](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/529805) — 21 票 / 5 评论 / 2024-08-23 
+- [Suspicious cluster of new accounts](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539440) — 21 票 / 12 评论 / 2024-10-09 
+- [Filenames vs metadata for slice image sorting](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/518525) — 21 票 / 8 评论 / 2024-07-06 
+- [My solution for the RSNA 2024 Lumbar Spine Degenerative Classification, using only the competition data](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539555) — 21 票 / 6 评论 / 2024-10-09 **write-up?**
+- [6th Place Solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/541813) — 20 票 / 4 评论 / 2024-10-24 **write-up?**
+- [Figure out sagittal image direction](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/523859) — 19 票 / 2 评论 / 2024-08-03 
+- [10th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539587) — 19 票 / 1 评论 / 2024-10-09 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/506697) — 18 票 / 2 评论 / 2024-05-22 
+- [Suspicious wrong coordinates labels](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/512048) — 18 票 / 10 评论 / 2024-06-13 
+- [Second metric patch and rescore](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/510363) — 17 票 / 6 评论 / 2024-06-05 
+- [Relevant Research Papers for RSNA 2024 Competition](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/534191) — 17 票 / 0 评论 / 2024-09-15 
+- [15th Place Solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539981) — 15 票 / 1 评论 / 2024-10-11 **write-up?**
+- [Replicating DeepSpine Paper for Multi-Input Multi-Task Classification](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/529048) — 15 票 / 3 评论 / 2024-08-18 
+- [Some images are of the cervical vertebrae, not of the lumbar spine?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/514891) — 15 票 / 11 评论 / 2024-06-26 
+- [75th Place Solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/541067) — 15 票 / 8 评论 / 2024-10-17 **write-up?**
+- [Zenodo Spine Segmentation Dataset](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/516102) — 15 票 / 2 评论 / 2024-07-01 
+- [[NEW DATASET] Tiny Debug Dataset for RSNA 2024 Lumbar Spine Degenerative Classification](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/523247) — 14 票 / 8 评论 / 2024-07-31 
+- [Inferring the churn](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539456) — 14 票 / 2 评论 / 2024-10-09 
+- [Metric Behavior Complaint v3](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/515357) — 13 票 / 4 评论 / 2024-06-27 
+- [Does test dataset missing any T1 or T2 series?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/516848) — 13 票 / 5 评论 / 2024-07-03 
+- [How to align the axial and sagittal xyz coordinates?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/510068) — 13 票 / 5 评论 / 2024-06-04 
+- [Human error ???](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/531771) — 13 票 / 6 评论 / 2024-09-03 
+- [Left/right labels and patient positions](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/521389) — 12 票 / 6 评论 / 2024-07-20 
+- [Breaking down 2d slices of Axial Images into their respective levels](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/527759) — 12 票 / 1 评论 / 2024-08-13 
+- [More segmentations](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/529899) — 12 票 / 6 评论 / 2024-08-23 
+- [27th Place solution: Algorithm vs Memmory or Transformers is all you need, 0.39/0.44](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539494) — 12 票 / 29 评论 / 2024-10-10 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/540001) — 11 票 / 2 评论 / 2024-10-12 **write-up?**
+- [Anomalous series in training set](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/521493) — 11 票 / 4 评论 / 2024-07-21 
+- [T1 and T2, do we need to perform registration?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/520909) — 11 票 / 4 评论 / 2024-07-17 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539766) — 10 票 / 1 评论 / 2024-10-10 
+- [Is there a L6?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/520279) — 10 票 / 11 评论 / 2024-07-15 
+- [Sandwich homework. Left to Right or Right to left, what is right?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/519619) — 9 票 / 2 评论 / 2024-07-12 
+- [help! which hidden test dicom tag is causing notebook exception error?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/537339) — 9 票 / 14 评论 / 2024-10-02 
+- [Multi-task Learning for Lumbar Spine Analysis: Two Approaches](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/535986) — 9 票 / 13 评论 / 2024-09-25 
+- [How is the Axial T2 view annotated?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/519001) — 8 票 / 6 评论 / 2024-07-09 
+- [Please note the errors in the dataset！](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/534980) — 8 票 / 4 评论 / 2024-09-19 
+- [Do we need to resample the pixels to isomorphic resolution?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/521135) — 8 票 / 9 评论 / 2024-07-19 **write-up?**
+- [Instance number and slice direction](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/519377) — 8 票 / 1 评论 / 2024-07-10 
+- [Direction of the MRI scan](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/521997) — 8 票 / 7 评论 / 2024-07-23 
+- [Automatic Spine Cord Segmentation: SAM 2](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/528849) — 8 票 / 6 评论 / 2024-08-17 
+- [Unsupervised Segmentation Ideas](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/510146) — 8 票 / 10 评论 / 2024-06-05 
+- [How to get conditions and their corresponding level for the test series?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/509183) — 8 票 / 2 评论 / 2024-06-01 
+- [Not sure if is important or not...](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/536835) — 8 票 / 7 评论 / 2024-09-30 
+- [Incorrect metric weights?](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/509034) — 8 票 / 14 评论 / 2024-05-31 
+- [[Discussion] How to train/pretrain YOLO? ](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/534695) — 7 票 / 0 评论 / 2024-09-17 
+- [20th place solution](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539706) — 7 票 / 0 评论 / 2024-10-10 **write-up?**

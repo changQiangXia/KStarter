@@ -1,0 +1,242 @@
+<h1>Thanks</h1>
+<p>Happy New Year! This month-long marathon is finally over! Congratulations to all the winners! I want to thank the organizers for hosting this interesting competition.</p>
+<p>This was my first time participating in a Playground Series, and I truly poured my heart and soul into it. I started learning ML and joined Kaggle in March 2025, so it has been 9 months now. This is a wonderful New Year's gift. I hope to share this joy with all Kagglers in the community, and I wish you all the best in 2026!!!</p>
+<h1>Learning from discussion</h1>
+<p>Since the start of this competition, I almost never looked at the public notebooks in the code section because it was filled with "upvote bait"—notebooks where people simply mix others' kernels to farm upvotes. Additionally, there were one or more arrogant cheaters using multiple accounts to perform "blind blending."</p>
+<p>In contrast, the discussion section contained a lot of high-quality content. I read every single post in the discussions in detail and drew significant inspiration from them:</p>
+<h3>Orig FE</h3>
+<p><a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a> shared in <a href="https://www.kaggle.com/competitions/playground-series-s5e12/discussion/648186" target="_blank">this post</a> that using statistical features from the original dataset could lead to score improvements. This indeed increased my score slightly; however, I didn't perform any aggressive Feature Engineering, so I only attempted to use the most fundamental statistics.</p>
+<h3>The weird dataset</h3>
+<p><a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a> mentioned in <a href="https://www.kaggle.com/competitions/playground-series-s5e12/discussion/652262" target="_blank">this post</a> that this dataset is very strange. The organizers distorted the feature distributions and removed decisive strong features, resulting in an inconsistency between the Train and Test distributions. To be honest, at that point, I even considered giving up on the competition.</p>
+<h3>ID Shift</h3>
+<p>The turning point came with <a href="https://www.kaggle.com/competitions/playground-series-s5e12/discussion/659313" target="_blank">this post</a> by <a href="https://www.kaggle.com/laureanoarcanio" target="_blank">@laureanoarcanio</a> . I strongly recommend everyone read this post as it was the pivotal moment of this competition. He mentioned a phenomenon: using <code>id</code> as a feature surprisingly boosts the LB score.</p>
+<p>Furthermore, <a href="https://www.kaggle.com/alan1305" target="_blank">@alan1305</a> pointed out:</p>
+<blockquote>
+  <p>One possible reason could be the interaction of id and physical_activity_minutes_per_week. If we plot the rolling mean of physical_activity_minutes_per_week, it shifts to test distribution at the end of train dataset. Therefore, including id may help indicate which row is "closer" to test set.</p>
+</blockquote>
+<p>I conducted an Adversarial Validation analysis (Micro-Scan of the Tail Transition) and found that this phenomenon indeed exists: <strong>the closer the data is to the tail, the closer its distribution is to the test set.</strong></p>
+<p>This is actually a serious case of ID leakage, but given the significant shift between train and test, this finding was crucial. (I honestly don't know why <a href="https://www.kaggle.com/alan1305" target="_blank">@alan1305</a> only received 5 upvotes… This was clearly a game-changing finding, yet people were busy upvoting public blind-blending notebooks…)</p>
+<h3>A validation strategy</h3>
+<p>In <a href="https://www.kaggle.com/competitions/playground-series-s5e12/discussion/662501" target="_blank">this post</a>, <a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a> proposed a new validation strategy. Since the tail data better "represents" the test set, it makes sense to use the tail data directly for CV. He also introduced sample weighting.</p>
+<h3>Concept Shift</h3>
+<p><a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a> mentioned in <a href="https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663033" target="_blank">this post</a> that simple sample weighting doesn't work well because there is <strong>Concept Shift</strong>.</p>
+<p>I also conducted experiments regarding this. More specifically, within the training set, the more the data resembles the test set (low covariate shift), the greater the concept shift becomes. I divided the data into 10 bins and found that samples with the smallest covariate shift had the largest discrepancy in label distribution, whereas the original dataset did not suffer from this issue.</p>
+<pre><code>CUTOFF_ID = best_id
+
+cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+for col in cat_cols:
+    le = LabelEncoder()
+    train[col] = le.fit_transform(train[col].astype(str))
+
+train_ids = train['id'].values
+cutoff_mask = train_ids &gt;= CUTOFF_ID
+
+X_tail = train.loc[cutoff_mask].drop(columns=['id', 'diagnosed_diabetes'])
+y_adversarial_tail = pd.Series(1, index=X_tail.index)
+
+X_head = train.loc[~cutoff_mask].drop(columns=['id', 'diagnosed_diabetes'])
+y_adversarial_head = pd.Series(0, index=X_head.index)
+
+X_adv_train = pd.concat([X_head, X_tail], axis=0)
+y_adv_train = pd.concat([y_adversarial_head, y_adversarial_tail], axis=0)
+
+print(f"1. Training Discriminator: Head({len(X_head)}) vs Tail({len(X_tail)})...")
+params = {
+    'objective': 'binary',
+    'metric': 'auc',
+    'n_estimators': 500, 
+    'learning_rate': 0.05,
+    'num_leaves': 31,
+    'n_jobs': -1,
+    'random_state': 42,
+    'verbose': -1
+}
+
+model = lgb.LGBMClassifier(**params)
+model.fit(X_adv_train, y_adv_train)
+
+print("2. Evaluating Head samples...")
+head_similarity_score = model.predict_proba(X_head)[:, 1]
+
+head_true_labels = train.loc[~cutoff_mask, 'diagnosed_diabetes'].values
+
+df_eval = pd.DataFrame({
+    'tail_similarity': head_similarity_score,
+    'true_label': head_true_labels
+})
+
+# Binning
+df_eval['bin'] = pd.qcut(df_eval['tail_similarity'], q=10, labels=False, duplicates='drop')
+
+agg = df_eval.groupby('bin', observed=False).agg({
+    'true_label': ['count', 'mean'],
+    'tail_similarity': 'mean'
+})
+agg.columns = ['count', 'target_mean', 'similarity_mean']
+
+true_tail_mean = train.loc[cutoff_mask, 'diagnosed_diabetes'].mean()
+
+print(agg)
+print(f"\nTail Set True Mean: {true_tail_mean:.4f}")
+
+plt.figure(figsize=(12, 6))
+bars = sns.barplot(x=agg.index, y=agg['target_mean'], color='skyblue', alpha=0.8)
+
+for i, v in enumerate(agg['target_mean']):
+    plt.text(i, v + 0.005, f"{v:.3f}", ha='center', va='bottom', fontsize=9, fontweight='bold')
+
+plt.axhline(true_tail_mean, color='red', linestyle='--', linewidth=2, label=f'True Tail Mean ({true_tail_mean:.3f})')
+
+plt.title(" Do 'Tail-like' Head samples have correct labels?", fontsize=14)
+plt.xlabel("Similarity to Tail (0=Unlikely, 9=Indistinguishable from Tail)", fontsize=12)
+plt.ylabel("Diabetes Rate (Target Mean)", fontsize=12)
+plt.legend()
+plt.tight_layout()
+plt.show()
+</code></pre>
+<p>Result:</p>
+<pre><code>1. Training Discriminator: Head(677000) vs Tail(23000)...
+2. Evaluating Head samples...
+     count  target_mean  similarity_mean
+bin                                     
+0    67700     0.643648         0.019489
+1    67700     0.645583         0.021456
+2    67700     0.642836         0.022520
+3    67700     0.641832         0.023592
+4    67700     0.649926         0.025069
+5    67700     0.655465         0.027066
+6    67700     0.639764         0.029891
+7    67700     0.612186         0.034075
+8    67700     0.581004         0.041102
+9    67700     0.521359         0.070540
+
+Tail Set True Mean: 0.6214
+</code></pre>
+<p>Therefore, I decided to apply weighting to the Original dataset as well.</p>
+<h1>Modeling</h1>
+<p>Based on the validation strategy derived from the analysis above, I trained a diverse set of models. The core philosophy was to force the models to learn the distribution of the "Tail" (which resembles the Test set) and the "Original" dataset (which holds the ground truth logic), while suppressing the noise from the "Head" of the training data.</p>
+<p>Here is the summary of the single models used in the final ensemble:</p>
+<table>
+<thead>
+<tr>
+<th>Model Type</th>
+<th>Model Name</th>
+<th>Key Strategy / Features</th>
+<th>Cutoff AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LightGBM</strong></td>
+<td><code>lgb</code></td>
+<td>Baseline with interaction features &amp; Categorical encoding.</td>
+<td>0.70435</td>
+</tr>
+<tr>
+<td></td>
+<td><code>lgb_te</code></td>
+<td><strong>Tail-based Target Encoding</strong>: TE calculated using only Tail + Orig data.</td>
+<td>0.70382</td>
+</tr>
+<tr>
+<td></td>
+<td><code>lgb_safe</code></td>
+<td><strong>Feature Selection</strong>: Dropped "toxic" features (high concept shift) like <code>physical_activity</code>.</td>
+<td>0.67464</td>
+</tr>
+<tr>
+<td></td>
+<td><code>lgb_pseudo</code></td>
+<td><strong>Pseudo-Labeling</strong>: Trained on Tail + Pseudo-labeled Test data (Top/Bottom confidence). <br>Applied <strong>Quantile Mapping</strong> to fix distribution.</td>
+<td>0.70081</td>
+</tr>
+<tr>
+<td><strong>XGBoost</strong></td>
+<td><code>xgb</code></td>
+<td>Baseline XGBoost with standard parameters.</td>
+<td>0.70335</td>
+</tr>
+<tr>
+<td></td>
+<td><code>xgb_weighted</code></td>
+<td><strong>Sample Weighting</strong>: <strong>Tail (16x)</strong>, <strong>Orig (8x)</strong>, Head (1x).</td>
+<td>0.703??*</td>
+</tr>
+<tr>
+<td></td>
+<td><code>xgb_binned</code></td>
+<td><strong>Binning</strong>: Extensive binning of numerical features + Target Encoding from Original data.</td>
+<td>0.69898</td>
+</tr>
+<tr>
+<td></td>
+<td><code>xgb_pl_soft</code></td>
+<td><strong>Soft Pseudo-Labeling</strong>: Regression objective (<code>reg:squarederror</code>) on soft labels from best sub.</td>
+<td>0.70231</td>
+</tr>
+<tr>
+<td></td>
+<td><code>xgb_residual</code></td>
+<td><strong>Residual Modeling</strong>: Boosting over a fixed base margin derived from Tail Mean.</td>
+<td>0.70474</td>
+</tr>
+<tr>
+<td><strong>CatBoost</strong></td>
+<td><code>cat_weighted</code></td>
+<td><strong>Sample Weighting</strong>: Same 16x/8x/1x strategy as XGBoost.</td>
+<td>0.70489</td>
+</tr>
+<tr>
+<td></td>
+<td><code>cat_inter</code></td>
+<td><strong>Explicit Interactions</strong>: Manually created interaction features (e.g., <code>gender_age</code>).</td>
+<td>0.70489</td>
+</tr>
+<tr>
+<td><strong>NN</strong></td>
+<td><code>nn_dae</code></td>
+<td><strong>DAE</strong> + <strong>Fine-tuning on Tail only</strong>.</td>
+<td>0.70034</td>
+</tr>
+<tr>
+<td></td>
+<td><code>nn_stacking</code></td>
+<td>Stacked Neural Network (Input: OOF predictions).</td>
+<td>0.70616</td>
+</tr>
+<tr>
+<td><strong>Linear/Other</strong></td>
+<td><code>tail_lr</code></td>
+<td><strong>Tail-Only LR</strong>: Logistic Regression trained <em>only</em> on the last 10% of data. <br>Post-processed with Quantile Mapping.</td>
+<td>0.70345</td>
+</tr>
+<tr>
+<td></td>
+<td><code>tail_gam</code></td>
+<td><strong>Tail-Only GAM</strong>: Generalized Additive Model trained on Tail data.</td>
+<td>0.69325</td>
+</tr>
+</tbody>
+</table>
+<p><em>&gt; Note: The Cutoff AUC is calculated on the validation set defined by <code>id &gt;= 678260</code> (approx. last 3% of train data).</em></p>
+<h2>Ensemble Strategy</h2>
+<p>Given the diverse nature of the models (Linear, GAM, NN, and various GBDTs), I used <strong>Bagged Hill Climbing</strong> to find the optimal weights.</p>
+<ul>
+<li><p><strong>Method:</strong> Bagged Hill Climbing (50 bags, 2000 iterations per bag) optimizing for <strong>Cutoff AUC</strong>.</p></li>
+<li><p><strong>Final Result:</strong> The ensemble significantly improved the robustness.</p>
+<ul>
+<li><strong>Ridge Regression (Positive)</strong>: 0.70751 Cutoff AUC</li>
+<li><strong>Bagged Hill Climbing (Best)</strong>: <strong>0.70771 Cutoff AUC</strong></li></ul></li>
+</ul>
+<p>The final submission was generated using the weights from the Bagged Hill Climbing method.</p>
+<p>check <a href="https://www.kaggle.com/code/daylighth/2nd-place-solution-ensumble" target="_blank">here</a> if you need my notebook.<br>
+what's more, I also have a notebook to record my hypothesis. You can check <a href="https://www.kaggle.com/code/daylighth/ps-s5e12-hypothesis" target="_blank">here</a></p>
+<h1>Some advice for beginners</h1>
+<p>I noticed that many participants in this competition appear to be new to machine learning. As a beginner myself, I completely understand the learning curve, so I’d like to share a few simple tips based on my experience:</p>
+<ol>
+<li><strong>Conduct purposeful EDA.</strong>
+The ultimate goal of Exploratory Data Analysis (EDA) is to guide your modeling strategy. If your data analysis doesn't provide insights for feature engineering or model selection—and is just about plotting pretty charts—then I believe it lacks real value. Always ask yourself: "How does this plot help me build a better model?"</li>
+<li><strong>Don't obsess over micro-tuning hyperparameters.</strong>
+Spending too much time fine-tuning parameters is often meaningless. Changing the learning rate from <code>1e-4</code> to <code>1e-5</code> is rarely worth wasting a submission. The most efficient approach is to spend that time trying out diverse models or exploring new feature engineering ideas.</li>
+</ol>
+<p>Finally, Happy New Year again to everyone! I wish you all the best and hope you win gold medals in your upcoming competitions!</p>

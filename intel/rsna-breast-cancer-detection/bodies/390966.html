@@ -1,0 +1,224 @@
+<p>First of all congratulations to all participants. Congratulations to dream teams from gold zone. I’m impressed by your consistency in winning Kaggle competition. Waiting to learn from your solution.</p>
+<p>Thank you my team mate Andrij <a href="https://www.kaggle.com/aikhmelnytskyy" target="_blank">@aikhmelnytskyy</a> We had great collaboration 👍👍👍 - I feel that from first minute we played in one team having one goal - find better solution.</p>
+<p>Gold in competition was dream for me. Last year we (with <a href="https://www.kaggle.com/christofhenkel" target="_blank">@christofhenkel</a> ) were #1 in sliver (#12 solution in Image Matching Challange 2021). This year I decided to work hard to experience gold zone and finally become competition master. Even there is no official LB finalized …. we are #9 and in gold! :) and I am …… extremely happy! 😁😁😍😜</p>
+<p>This competition was really great for testing many different computer vision techniques. Three months passed very quickly. The first phase of the competition was difficult. We performed a large number of different tests that did not gave us results higher than 0.3 (LB score). It was very frustrating. We were unable to find any correlation between local CV and LB. Then we setup good training pipeline – main our success point are:</p>
+<ul>
+<li>Sampling strategy and positive class balancing</li>
+<li>Augumentation</li>
+<li>Model selection</li>
+<li>Postprocessing</li>
+</ul>
+<p>Last two weeks of competition were hard to me – I caught covid and had to pause (during recovery time I coded using iPad). But we cooperate all the time and we finally managed to jump to TOP10 and 0.63 (public LB). Finally we were closing gold zone on #13 (public LB) and #9 in private LB!</p>
+<p><strong>Models score summary</strong><br>
+•    best public LB: 0.63 (ensemble) / 0.57 (single model) / local CV (0.48)<br>
+•    private lb: 0.50 (max: 0.50)</p>
+<p><strong>Competition achievements</strong><br>
+•    new experience in Kaggle competition - a lot of good discussion <br>
+•    1x gold medal - dataset (I am very happy - my first one)<br>
+•    2x gold medals - notebook <br>
+•    1x gold medal - competition-&gt; extremely happy! 😁😁😍😜</p>
+<p><strong>Our final selection</strong><br>
+We selected two different solution which based on the same model setup.<br>
+•    3 models - ensemble average model prediction probabilities -&gt; LB: 0.63 (PL: 0.47)<br>
+•    3 models - voting strategy and then score average (on votes score) -&gt; LB: 0.62 (PL: 0.5)<br>
+After many tests we had strong feeling that our second choice (even score was lower on LB that many of our rest solution) is more stable (was less sensitive on th) than other solution. So we closed eye and trusted in our test rather then LB score.</p>
+<p><strong>Solution description in 4 steps</strong><br>
+Our solution is very simple. We tried different ways to predict breast cancer but finally it appeared that simples solution wors for us the best (both local CV and LB).</p>
+<ol>
+<li>Process dicom files to png (windowing).</li>
+<li>Inference – 3 convnext (v1) models with TTA</li>
+<li>Ensemble – probabilities average or voting</li>
+<li>Thresholding – th ~0.5 -&gt; final prediction result 0|1</li>
+</ol>
+<p><strong>Dataset</strong><br>
+•    Image resolution: 1536x768<br>
+•    ROI cropped - cv2.connectedComponentsWithStats method (we started with yolov5 for prototyping phase but then we used cv2 - since licence regulations)<br>
+•    4-GroupFold: on patient_id<br>
+•    image pixel scaling: div by 255.<br>
+•    dicom2png – proposed by <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> (<a href="https://www.kaggle.com/code/hengck23/3hr-tensorrt-nextvit-example" target="_blank">https://www.kaggle.com/code/hengck23/3hr-tensorrt-nextvit-example</a>)<br>
+•    we do not use external dataset – all models were trained on competition data<br>
+•    we processed data in two steps (to avoid problem with file storage capacity – during the tests we exported images to different resolutions – max 2400px):</p>
+<ol>
+<li>process j2k files format (dicom2png and crop to 1536xW - we do not resize it in this step to final resolution)-&gt;inference-&gt;delete files </li>
+<li>process nonj2k files-&gt;inference-&gt;delete files</li>
+</ol>
+<p>fast and reliable crop roi function we used during competition (cretits to <a href="https://www.kaggle.com/vslaykovsky" target="_blank">@vslaykovsky</a>  : <a href="https://www.kaggle.com/code/vslaykovsky/rsna-cut-off-empty-space-from-images" target="_blank">"RSNA: Cut Off Empty Space from Images"</a>)</p>
+<pre><code>def crop_roi(img, photometric_interpretation):
+  # it can be improved 
+    Y = img
+    xmin = Y.min()
+    xmax = Y.max()
+
+    norm = np.empty_like(Y, dtype=np.uint8)
+
+    dicomsdl.util.convert_to_uint8(Y, norm, xmin, xmax)
+    if photometric_interpretation == 'MONOCHROME1':
+        norm = 255 - norm
+
+    X = norm
+    X = X[5:-5, 5:-5]
+
+    output= cv2.connectedComponentsWithStats((X &gt; 10).astype(np.uint8)[:, :], 8, cv2.CV_32S) #
+    stats = output[2]
+
+    idx = stats[1:, 4].argmax() + 1
+    x1, y1, w, h = stats[idx][:4]
+    x2 = x1 + w
+    y2 = y1 + h
+
+    X_out = Y[y1: y2, x1: x2]
+
+    return X_out
+</code></pre>
+<p><strong>Augumentation</strong> <br>
+•    Albumentations (we tried Kornia and works great but we need more time to rewrite functions we used in competition).</p>
+<pre><code>transformation = [
+                A.OneOf([
+                    A.RandomBrightnessContrast(always_apply=False, p=.5, brightness_limit=(-1, 1.0), contrast_limit=(-1, 1.0), brightness_by_max=True),
+                    A.RandomGamma(always_apply=False, p=.5, gamma_limit=(60, 120), eps=None),
+                ], p = 0.5),
+
+                A.Rotate(limit=5, p=0.5),
+                A.Affine(rotate = 5, translate_percent=0.1, scale=[0.9,1.5], shear=0, p=0.5),
+
+                A.HorizontalFlip(p=0.5),
+                A.VerticalFlip(p=0.5),
+                A.Resize(im_size[0], im_size[1]),
+                A.ShiftScaleRotate(always_apply=False, p=.2,
+                                    shift_limit_x=(-1.0, 1.0),
+                                    shift_limit_y=(-1.0, 1.0),
+                                    scale_limit=(-0.1, 0.1),
+                                    rotate_limit=(-5, 5),
+                                    interpolation=0,
+                                    border_mode=3,
+                                    value=(0, 0, 0),
+                                    mask_value=None,
+                                    rotate_method='largest_box'),
+
+                A.OneOf([
+                    GridDropoutv2(always_apply=False, p=.2, ratio = .25, unit_size_min = 100, unit_size_max = 400, holes_number_x=100, holes_number_y=100),
+                    CoarseDropoutv2(always_apply=False, p=.2, max_holes=12, max_height=250, max_width=100, min_holes=3, min_height=50, min_width=50, mask_fill_value=None)], p=0.25),
+                ToTensorV2()
+            ]
+</code></pre>
+<p>GridDropoutv2 and CoarseDropoutv2 is our modification of Albumentations function. It generates cuts in random greyscale.</p>
+<p><img src="https://i.ibb.co/6WtqnNv/batch-images-ep7.jpg" alt=""></p>
+<p><strong>Training</strong><br>
+•    Framework: Pytorch scripts (multi gpu support: DDP)<br>
+•    Optimizer: RAdam <br>
+•    Lookahead: on<br>
+•    Scheduler: OneCycle - no warm up<br>
+•    Weight decay: 1e-2<br>
+•    Dataset each epoch was seeded by different seed.<br>
+•    Batch size: 16<br>
+•    Mixed precision (AMP): on<br>
+•    Gradient clipping: on<br>
+•    Loss function: BCEWithLogitsLoss with pos_weight = 1.0 - 1.25<br>
+•    Epochs: 7 (best models are from 4-5 epochs) - we decided to take early stopping (best probf1score) models instead of the last one.<br>
+•    Sampler (thanks to <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a>): custom sequential sampler (sequence -&gt; positive sample / negative sample = 8) – small changes compare to the original one.</p>
+<pre><code>class Balancer(torch.utils.data.Sampler):
+
+    def __init__(self, pos_cases, neg_cases, ratio = 3):
+        self.r = ratio - 1
+        self.pos_index = pos_cases
+        self.neg_index = neg_cases
+
+        self.length = self.r * int(np.floor(len(self.neg_index)/self.r))
+        self.ds_len =  self.length + (self.length // self.r)
+
+    def __iter__(self):
+        pos_index = self.pos_index
+        neg_index = self.neg_index
+
+        np.random.shuffle(pos_index)
+        np.random.shuffle(neg_index)
+
+        neg_index = neg_index[:self.length].reshape(-1,self.r)
+        #pos_index = np.random.choice(pos_index, self.length//self.r).reshape(-1,1)
+        pos_index_len = len(pos_index)
+
+        pos_index = np.tile(pos_index, ((len(neg_index) // pos_index_len) + 1, 1))
+        pos_index = np.apply_along_axis(np.random.permutation, 1, pos_index)
+        pos_index = pos_index.reshape(-1,1)[:len(neg_index)]
+
+        index = np.concatenate([pos_index,neg_index], -1).reshape(-1)
+        return iter(index)
+
+    def __len__(self):
+        return self.ds_len
+</code></pre>
+<p><strong>Models</strong><br>
+ConvNext_v1 small (timm - checkpoint: convnext_small.fb_in22k_ft_in1k_384). We tried different architectures but this one works in our solution the best.<br>
+•    avg pooling or <br>
+•    GEM pooling (trainable parameters set to True)<br>
+•    drop_path_rate=0.2  and drop_rate=0.05  (we tested different settings but these works the best for our setup)<br>
+•    input size: (1536, 768), 3 channels (b&amp;w images)</p>
+<p><strong>Local validation</strong><br>
+•    Metrics: probf1, ROC_AUC, prec/recall and MCC (Matthews’s correlation coefficient)<br>
+•    For local validation we used tool provided by <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> - <a href="https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/378521" target="_blank">https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/378521</a><br>
+•    For each traing epoch we additionaly plot: prediction dynamic, confusion matrix.<br>
+•    We looked into prediction and performed visual analysis of missed or incorrectly classified samples.  </p>
+<p><strong>Inference</strong><br>
+•    Three models – ensemble (voting or model probabilities averaging):</p>
+<ol>
+<li>avg pooling - fold 1 (trained on 1536 x 768) -&gt; probf1: 0.52 (local CV) / 0.57 (LB)</li>
+<li>GEM pooling - fold 2 (trained on 1536 x 768) -&gt; probf1: 0.44 (local CV) (we do not test it on LB)</li>
+<li>GEM pooling - fold 3 (trained on 1536 x 768) -&gt; probf1: 0.46 (local CV) (-)<br>
+•    TTA: h_flip only (TTA weighted - 0.6 original image + 0.4 flipped image) - &gt; it inceased our score by 0.03</li>
+</ol>
+<p><strong>Ensembling</strong><br>
+•    Model probabilities ensembling using better then median function</p>
+<pre><code>def better_than_median(inputs, axis):
+    """Compute the mean of the predictions if there are no outliers,
+    or the median if there are outliers.
+
+    Parameter: inputs = ndarray of shape (n_samples, n_folds)"""
+    spread = inputs.max(axis=axis) - inputs.min(axis=axis) 
+    spread_lim = 0.6
+    print(f"Inliers:  {(spread &gt; spread_lim).sum():7} -&gt; compute mean")
+    print(f"Outliers: {(spread &lt;= spread_lim).sum():7} -&gt; compute median")
+    print(f"Total:    {len(inputs):7}")
+    return np.where(spread &gt; spread_lim,
+                    np.mean(inputs, axis=axis),
+                    np.median(inputs, axis=axis))
+</code></pre>
+<p>•    Voting and then averaging</p>
+<pre><code>def voting_confidence(x):
+    if x&lt;=0.25:
+        return 0.0
+    elif x&lt;=0.45:
+        return 0.35
+    elif x&lt;=0.55:
+        return x
+    elif x&lt;=0.75:
+        return 0.65
+    else:
+        return 1.0
+</code></pre>
+<p><strong>CPU/GPU</strong><br>
+•    Training: 1-2xA6000 or A100 GPU-80GB on Cloud </p>
+<p><strong>Experiment tracking</strong><br>
+•    Weights &amp; Biases </p>
+<p><strong>Things we tested during competition and did not improve our score (probably more tests are needed)</strong><br>
+•    Full dataset training, site_1/site_2 separate models, up-sampling (by sample frac), down-sampling.<br>
+•    Stochastic Weight Averaging and Exponential Moving Average<br>
+•    Optimizers – AdamW, SGD, NAdam, Lion, Lamb<br>
+•    Training with layer freeze (different levels)<br>
+•    Loss function: Focal loss, LDAM, LMFLoss, Label smoothing<br>
+•    Models: Effnet, NextVit (simmilar score but harder to train and slower), DenseNet, Inception_v3, maxvit<br>
+•    Effnet + pixel-wise self attention, Effnet + cross attention<br>
+•    Convnextv1 + max and avg concatenated pooling<br>
+•    Synthetic dataset: synthetic breast cancer generator (experienced radiologist is required to evaluate solution).<br>
+•    PatchGD - <a href="https://arxiv.org/pdf/2301.13817.pdf" target="_blank">https://arxiv.org/pdf/2301.13817.pdf</a><br>
+•    Training attitudes - Pair training – MLO / CC – patient_id and side (L/R) <br>
+•    Metamodel - SVM and XGBoost on image enbeddings.<br>
+•    Pseudolabeling - using new samples during submission time.<br>
+•    Selecting best samples for cases where patient has more then 2 views </p>
+<pre><code>sub_s1 = sub_s1[['prediction_id', 'site_id', 'patient_id', 'laterality', 'cancer']].\
+        groupby(['patient_id','laterality']).\
+             apply(lambda x: x.nlargest(3,'cancer')).reset_index(drop=True)
+</code></pre>
+<p><strong>Special thanks to</strong><br>
+•    <a href="https://www.kaggle.com/Andrij" target="_blank">@Andrij</a> - for great cooperation during the competition. For very good and substantive talks aimed at solving the problem and improving results.<br>
+•    <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> - Thanks for the great activity on the forum and sharing knowledge. I implemented many of your ideas, many of them improved our score. Thank you!</p>
+<p>Source code will be available soon (in week) on [Remek github](<a href="https://github.com/rkinas" target="_blank">https://github.com/rkinas</a></p>

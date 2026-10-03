@@ -1,0 +1,82 @@
+# https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341305
+
+Topic #341305: 3rd Place Solution
+  Author: UEMU
+  Posted: 2022-08-02 09:22:49.748000
+  Votes: 24  Comments: 3
+
+First of all, thanks to hosts for organizing this competition.
+This competition is one of the most patient competitions I have ever participated in, as there was a lot of missing data and a lot of domain knowledge required. I respect all the participants who ran this competition.
+
+Here is my brief solution:
+
+Summary
+
+I think the key points to get gold medal in this competition are following two points.
+
+
+
+to estimate the velocity directly from ADR.
+
+to correct the pseudorange bias using the reference station observations.
+
+
+These are mentioned by @taroz1461 in this discussion.
+In addition to these two points, my solution improved the score by ensemble the results calculated with various settings.
+
+The pipeline of my solution are following:
+
+
+
+Step1.Position estimation from GNSS Data using RTKLIB.
+
+Step2.Velocity estimation from ADR in GNSS Data using WLS.
+
+Step3.Position smoothing using Kalman smoothing and CostMinimization.
+
+
+My approach is based on some published notebook and is basic.
+
+1.Position estimation from GNSS Data using RTKLib.
+
+I used the published RTKLIB and RTKLIB-py to correct pseudorange by base station observations. 
+(I wanted to implement the code myself,but I did not have the knowledge and enough time. Please let me know the good literature or code for reference.)
+
+The output of RTKLIB has applied Kalmansmoothing, but the accuracy of velocity estimation seems to be lower than when using ADR in Step2. So I re-smoothed the RTKLIB output (that are corrected position by base station) with ADR velocity estimates in Step3.
+Also, I calculated position under several conditions such as thresh of satelite elevation angle and ensemble the results.
+Since RTKlib and RTKLib-py use different satellite types, the results of both were used for the ensemble.
+
+2.Velocity estimation from ADR Data using WLS.
+
+Based on this published code (carrier-smoothing-robust-wls-kalman-smoother), I estimate the velocity directly from ADR by weighted least squares method.
+As mentioned in the 1st place soluition of the previous competition, the accuracy was higher than the result from Doppler Shift. When ADR is missing, the velocity calculated from Doppler shift is used.
+
+The ADR data has many missing points. In particular, since the missing often occurs in the sudden acceleration and deceleration, it may be difficult to interpolate and occur the position errors around that point. So, I adjusted the parameters to reduce the missing as much as possible. For example, the threshold of elevation angle for satelite selection sets lower values. Also I ignored 'ADR State' to select satelite. These setting could be worsened score by multipaths or cycle slips, but my local validation score and LB score are improved.
+Although not confirmed, tuning the parameters for velocity estimation, which is separate from position estimation, may also have improved the score.
+
+3.Position smoothing using Kalman smoothing and CostMinimization.
+
+Postion smoothing is calculated from the position and velocity estimated above by two approaches.
+Kalman smoothing is based on this published code (carrier-smoothing-robust-wls-kalman-smoother).
+CostMinimization is based on 5th placae solution in previous comp .
+
+These approaches did not have a large difference in score, but ensemble of the results improved score.
+Also, in each part, the ensemble results are adopted by changing parameters such as the update conditions of the Kalman filter.
+
+Acknowledge
+
+@taroz1461, @saitodevel01 , @timeverett
+Thank you for sharing your great ideas and code.
+
+Comments:
+├─ Will (2022-08-03 01:47:00.957000) [+1]
+│  Congratulations on your success! Very impressive
+├─ Kuts Alexey (2022-08-02 10:03:35.920000) [+1]
+│  @UEMU, impressive result! 
+│  
+│  Was what the score difference if velocity was estimated by doppler in step 2?
+  ├─ UEMU (2022-08-02 13:12:21.713000) [+0]
+  │  Thank you for your comment.
+  │  
+  │  In this notebook, the score improved from 3.02 to 2.75  in Public LB by use velocity from ADR. 
+  │  Since I did not tune any parameters in this case,  the exact effect is n...

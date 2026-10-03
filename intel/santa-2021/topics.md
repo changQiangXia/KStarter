@@ -1,0 +1,82 @@
+# santa-2021 讨论区（按票数排序，共 80 条）
+
+- [Traveling Salesman Baseline - [LB 2500]](https://www.kaggle.com/competitions/santa-2021/discussion/288995) — 107 票 / 17 评论 / 2021-11-18 
+- [At least 2440 without wildcard](https://www.kaggle.com/competitions/santa-2021/discussion/292841) — 67 票 / 72 评论 / 2021-12-03 
+- [Resources / Papers for SuperPermutation Problem](https://www.kaggle.com/competitions/santa-2021/discussion/288172) — 65 票 / 10 评论 / 2021-11-17 
+- [TSP gives a 2440 lower bound for non-wildcard solutions](https://www.kaggle.com/competitions/santa-2021/discussion/294139) — 57 票 / 33 评论 / 2021-12-08 **write-up?**
+- [Stop being a Grinch , Be generous with the Xmas cheer!](https://www.kaggle.com/competitions/santa-2021/discussion/296151) — 49 票 / 14 评论 / 2021-12-20 
+- [On analytical solutions for The Minimal Superpermutation Problem ](https://www.kaggle.com/competitions/santa-2021/discussion/288124) — 49 票 / 2 评论 / 2021-11-16 **write-up?**
+- [Solved using a visualization](https://www.kaggle.com/competitions/santa-2021/discussion/300567) — 45 票 / 16 评论 / 2022-01-13 
+- [Wonderful symmetry in this challenge](https://www.kaggle.com/competitions/santa-2021/discussion/293286) — 40 票 / 9 评论 / 2021-12-05 
+- [The 2429 is dead, long live the 2428!](https://www.kaggle.com/competitions/santa-2021/discussion/290367) — 40 票 / 9 评论 / 2021-11-24 
+- [3rd place solution](https://www.kaggle.com/competitions/santa-2021/discussion/300509) — 39 票 / 17 评论 / 2022-01-15 **write-up?**
+- [Welcome to Santa 2021!](https://www.kaggle.com/competitions/santa-2021/discussion/288113) — 36 票 / 28 评论 / 2021-11-16 
+- [Few things to get you started](https://www.kaggle.com/competitions/santa-2021/discussion/291312) — 34 票 / 11 评论 / 2021-11-28 
+- [2440 is not even bronze level anymore!](https://www.kaggle.com/competitions/santa-2021/discussion/298745) — 34 票 / 7 评论 / 2022-01-04 
+- [Kaggle's Santa is bringing me back to High School (Permutations/Combinations)](https://www.kaggle.com/competitions/santa-2021/discussion/288423) — 33 票 / 16 评论 / 2021-11-17 
+- [4th place solution by hand](https://www.kaggle.com/competitions/santa-2021/discussion/300543) — 32 票 / 2 评论 / 2022-01-19 **write-up?**
+- [Santa 5th Place Solution (2428) & Insights](https://www.kaggle.com/competitions/santa-2021/discussion/300572) — 31 票 / 3 评论 / 2022-01-13 **write-up?**
+- [Asymmetric Colored Traveling Salesman Problem with repeats](https://www.kaggle.com/competitions/santa-2021/discussion/290025) — 29 票 / 32 评论 / 2021-11-22 
+- [Previous santa competitions compilation](https://www.kaggle.com/competitions/santa-2021/discussion/288121) — 27 票 / 0 评论 / 2021-11-16 
+- [Getting Started 🎅](https://www.kaggle.com/competitions/santa-2021/discussion/288161) — 26 票 / 4 评论 / 2021-11-17 
+- [Enough sharing for now?](https://www.kaggle.com/competitions/santa-2021/discussion/297212) — 26 票 / 1 评论 / 2021-12-26 
+- [Why this unethical behaviour? [Rant Warning]](https://www.kaggle.com/competitions/santa-2021/discussion/298894) — 26 票 / 3 评论 / 2022-01-05 
+- [A MILP Journey, part 3: wildcards](https://www.kaggle.com/competitions/santa-2021/discussion/300522) — 25 票 / 4 评论 / 2022-01-13 
+- [A MILP Journey, part 1:  proof of 2440 lower bound](https://www.kaggle.com/competitions/santa-2021/discussion/300507) — 25 票 / 5 评论 / 2022-01-13 
+- [2430 Solution - Using My 2500 Public Notebook](https://www.kaggle.com/competitions/santa-2021/discussion/300671) — 24 票 / 4 评论 / 2022-01-13 **write-up?**
+- [2430 is THE answer?](https://www.kaggle.com/competitions/santa-2021/discussion/290031) — 24 票 / 18 评论 / 2021-11-22 
+- [Let us start a prediction for the end score - What's your guess?](https://www.kaggle.com/competitions/santa-2021/discussion/291608) — 24 票 / 33 评论 / 2021-11-30 
+- [A MILP Journey, part 2: 2440 solution](https://www.kaggle.com/competitions/santa-2021/discussion/300516) — 24 票 / 3 评论 / 2022-01-14 **write-up?**
+- [Winner's License Clarification](https://www.kaggle.com/competitions/santa-2021/discussion/288126) — 24 票 / 1 评论 / 2021-11-16 
+- [My solution](https://www.kaggle.com/competitions/santa-2021/discussion/301590) — 23 票 / 0 评论 / 2022-01-18 **write-up?**
+- [Movie requests for the elves](https://www.kaggle.com/competitions/santa-2021/discussion/288129) — 23 票 / 10 评论 / 2021-11-16 
+- [2428 by the numbers - no VRP, no TSP, no MIP](https://www.kaggle.com/competitions/santa-2021/discussion/300519) — 23 票 / 2 评论 / 2023-07-29 
+- [🎅 Generating a 2428 solution in 100 lines of code](https://www.kaggle.com/competitions/santa-2021/discussion/300517) — 23 票 / 2 评论 / 2022-01-13 **write-up?**
+- [🎅🏻 Merry Christmas and Happy Holidays to everyone! 🤶🏻](https://www.kaggle.com/competitions/santa-2021/discussion/297029) — 22 票 / 4 评论 / 2021-12-24 
+- [[21st place] Reflections on Santa 2021](https://www.kaggle.com/competitions/santa-2021/discussion/300901) — 20 票 / 11 评论 / 2022-01-17 **write-up?**
+- [Triangle inequality](https://www.kaggle.com/competitions/santa-2021/discussion/293670) — 19 票 / 4 评论 / 2021-12-06 
+- [Using Wildcards](https://www.kaggle.com/competitions/santa-2021/discussion/289053) — 19 票 / 9 评论 / 2021-11-19 
+- [New to Kaggle or Machine Learning? Come say hi!](https://www.kaggle.com/competitions/santa-2021/discussion/288111) — 18 票 / 13 评论 / 2021-11-16 
+- [I shared my code](https://www.kaggle.com/competitions/santa-2021/discussion/300832) — 18 票 / 3 评论 / 2022-01-14 
+- [Kaggle warning "competition ending soon" also in Discussion](https://www.kaggle.com/competitions/santa-2021/discussion/298866) — 18 票 / 0 评论 / 2022-01-05 
+- [It is 6 wildcards, not 2](https://www.kaggle.com/competitions/santa-2021/discussion/292063) — 18 票 / 7 评论 / 2021-12-01 
+- [Superpermutations + How to Approach This Competition](https://www.kaggle.com/competitions/santa-2021/discussion/289039) — 17 票 / 1 评论 / 2021-11-19 
+- [Wildcard benefit: What are you best scores with and without wildcards?](https://www.kaggle.com/competitions/santa-2021/discussion/293787) — 17 票 / 46 评论 / 2021-12-07 
+- [2440 DFS+greedy heapq. Edit: Added reasoning for why 2440 is optimal.](https://www.kaggle.com/competitions/santa-2021/discussion/300508) — 16 票 / 2 评论 / 2022-01-13 
+- [LKH and Wildcards gets to 2430 ](https://www.kaggle.com/competitions/santa-2021/discussion/300547) — 16 票 / 4 评论 / 2022-01-13 
+- [LKH documentation](https://www.kaggle.com/competitions/santa-2021/discussion/291032) — 15 票 / 21 评论 / 2021-11-27 
+- [What's your favorite Christmas song?](https://www.kaggle.com/competitions/santa-2021/discussion/289699) — 15 票 / 15 评论 / 2021-11-21 
+- [Saving 10 places using Wildcards… by Hand  (and Goodbye!)](https://www.kaggle.com/competitions/santa-2021/discussion/300527) — 15 票 / 2 评论 / 2022-01-13 
+- [Another way to 2428!!!](https://www.kaggle.com/competitions/santa-2021/discussion/297009) — 14 票 / 14 评论 / 2021-12-24 
+- [💥🔥 Congratulations to all the new GrandMasters, Masters & Experts 💯🎉](https://www.kaggle.com/competitions/santa-2021/discussion/300545) — 14 票 / 9 评论 / 2022-01-13 
+- [Maths is behind everything. Teachers Matter. Context is All Kagglers.](https://www.kaggle.com/competitions/santa-2021/discussion/289886) — 14 票 / 6 评论 / 2021-11-22 
+- [[50th Place - Silver] Summary of our journey](https://www.kaggle.com/competitions/santa-2021/discussion/300648) — 14 票 / 1 评论 / 2022-01-13 **write-up?**
+- [Competition launch email received 2 days post launch](https://www.kaggle.com/competitions/santa-2021/discussion/288916) — 14 票 / 2 评论 / 2021-11-18 
+- [Our experience with wildcards](https://www.kaggle.com/competitions/santa-2021/discussion/300506) — 14 票 / 0 评论 / 2022-01-13 
+- [Leaderboard Finalized - Congratulations to the Winners; Recap](https://www.kaggle.com/competitions/santa-2021/discussion/300871) — 13 票 / 2 评论 / 2022-01-14 
+- [Asymmetric -> Symmetric](https://www.kaggle.com/competitions/santa-2021/discussion/292114) — 13 票 / 1 评论 / 2021-12-01 
+- [Playing for silver?](https://www.kaggle.com/competitions/santa-2021/discussion/293727) — 13 票 / 7 评论 / 2021-12-06 
+- [The process of converting a super permutation problem into a traveling salesman problem ](https://www.kaggle.com/competitions/santa-2021/discussion/289257) — 13 票 / 2 评论 / 2021-11-19 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/santa-2021/discussion/288112) — 13 票 / 29 评论 / 2021-11-16 
+- [Get to 2430 with the Power of Randomization!](https://www.kaggle.com/competitions/santa-2021/discussion/300566) — 13 票 / 0 评论 / 2022-01-13 
+- [Practical real-life application potential of superpermutations?](https://www.kaggle.com/competitions/santa-2021/discussion/288819) — 13 票 / 7 评论 / 2021-11-18 
+- [Tour Augmentation -- Our technique to escape LKH local optima](https://www.kaggle.com/competitions/santa-2021/discussion/300618) — 13 票 / 0 评论 / 2022-01-13 
+- [Tool discussion: Python, Gurobi, by hand?](https://www.kaggle.com/competitions/santa-2021/discussion/292785) — 12 票 / 8 评论 / 2021-12-03 
+- [ Some Mathematic result(Looking for team to save me!!)](https://www.kaggle.com/competitions/santa-2021/discussion/292998) — 12 票 / 15 评论 / 2021-12-04 
+- [New high: 2428 💥 ](https://www.kaggle.com/competitions/santa-2021/discussion/291043) — 12 票 / 7 评论 / 2021-11-27 
+- [Lonesome R cowboy TSP](https://www.kaggle.com/competitions/santa-2021/discussion/292864) — 12 票 / 7 评论 / 2021-12-03 
+- [What is the best score?](https://www.kaggle.com/competitions/santa-2021/discussion/288892) — 12 票 / 17 评论 / 2021-11-18 
+- [What's the magic to jump from 2440 to 2428?](https://www.kaggle.com/competitions/santa-2021/discussion/294584) — 12 票 / 16 评论 / 2021-12-11 
+- [What are your favorite Christmas movies?](https://www.kaggle.com/competitions/santa-2021/discussion/289019) — 12 票 / 8 评论 / 2021-11-19 
+- [LKH and multiprocessing](https://www.kaggle.com/competitions/santa-2021/discussion/295935) — 11 票 / 3 评论 / 2021-12-18 
+- [if you cannot see the unicode font ...](https://www.kaggle.com/competitions/santa-2021/discussion/290171) — 11 票 / 0 评论 / 2021-11-23 
+- [Optimization Competitions on Kaggle](https://www.kaggle.com/competitions/santa-2021/discussion/299343) — 11 票 / 9 评论 / 2022-01-07 
+- [Anyone tried solving TSP with Neural Networks?](https://www.kaggle.com/competitions/santa-2021/discussion/297687) — 10 票 / 0 评论 / 2021-12-28 
+- [Using R alway fails](https://www.kaggle.com/competitions/santa-2021/discussion/290406) — 10 票 / 8 评论 / 2021-11-24 
+- [My journey + Constrained TSP to get from 2440 to 2430](https://www.kaggle.com/competitions/santa-2021/discussion/300591) — 9 票 / 1 评论 / 2022-01-13 
+- [Introduce yourself and Share your idea! Happy new year! 🎅](https://www.kaggle.com/competitions/santa-2021/discussion/288919) — 9 票 / 1 评论 / 2021-11-18 
+- [AIMMS - MIP implementation with TSP and Miller Tucker Zemlin](https://www.kaggle.com/competitions/santa-2021/discussion/295124) — 9 票 / 1 评论 / 2021-12-14 
+- [How to understand this Competition?](https://www.kaggle.com/competitions/santa-2021/discussion/289694) — 9 票 / 3 评论 / 2021-11-21 
+- [End of competition is near](https://www.kaggle.com/competitions/santa-2021/discussion/299680) — 9 票 / 10 评论 / 2022-01-09 
+- [Going from superpermutation -> permutation format](https://www.kaggle.com/competitions/santa-2021/discussion/289312) — 8 票 / 6 评论 / 2021-11-19 
+- [Extrapolating points from a 2-d euclidean distance matrix](https://www.kaggle.com/competitions/santa-2021/discussion/291629) — 8 票 / 11 评论 / 2021-11-30 

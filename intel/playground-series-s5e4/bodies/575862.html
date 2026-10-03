@@ -1,0 +1,59 @@
+<p>Thanks for a fun and interesting competition - the dataset was large enough for meaningful CV but still small enough to work comfortably on standard local hardware. Congrats to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> for yet another exceptional performance, and to <a href="https://www.kaggle.com/greysky" target="_blank">@greysky</a> for an impressive second place with a single (!!!) LGBM model!</p>
+<p>My approach relied heavily on Target Encoding and a large ensemble of models with diverse features and hyperparameters.</p>
+<p>During most of the competition, I used weighted averaging via Nelder-Mead or Hill Climbing. As a last-minute experiment, I tried stacking - something that’s never worked for me in a Kaggle competition - which got me an immediate boost from 11.66 to 11.62 CV on the very first and only try. I should have explored and optimized it earlier. I suspect stacking worked better here because of the high percentage of missing values in the single most important feature.</p>
+<p>In the end, I blended my stacking ensemble (80%) with my best scoring Hill Climbing ensemble (20%), effectively turning this into a three-level approach.</p>
+<p>All models were trained with 5-fold CV (simple KFold). I believe going for 7 or 10 folds could have slightly improved the score, but the tradeoff in runtime didn’t seem worth it for me.</p>
+<p>I did some quick hyperparameter tuning with Optuna, but interestingly, the final ensemble benefitted from including some older, non-optimized models. Diversity seems to have worked especially well in this competition.</p>
+<p><strong>Model Overview</strong><br>
+Level 1:</p>
+<ul>
+<li>10 × LGBM (various features and params)</li>
+<li>5 × XGB</li>
+<li>4 × CatBoost</li>
+<li>2 × RandomForest</li>
+<li>1 × ExtraTrees</li>
+<li>4 × HistGradientBoostingRegressor</li>
+</ul>
+<p>Level 2:</p>
+<ul>
+<li>Hill Climbing</li>
+<li>LGBM</li>
+</ul>
+<p>Level 3:</p>
+<ul>
+<li>Weighted Averaging</li>
+</ul>
+<p>Interestingly, HistGradientBoostingRegressor consistently received negative weights (-0.08 to -0.21) during Hill Climbing but were never discarded. Does anyone have an explanation for this? Other models (linear models) were rejected in Hill Climbing.</p>
+<p><strong>Best Single Model CV Scores:</strong></p>
+<ul>
+<li>LGBM: 11.79</li>
+<li>XGB: 11.81</li>
+<li>CatBoost: 11.93</li>
+<li>ExtraTrees: 11.96</li>
+<li>HistGB: 11.99</li>
+<li>RandomForest: 12.05</li>
+</ul>
+<p><strong>What Worked Well</strong></p>
+<ul>
+<li>Target Encoding: This was the backbone of most of my feature engineering. I experimented with median, min, max, nunique but mean TE scored best.<ul>
+<li>I concatenated 2- to 7-grams, converting all columns to string before. </li>
+<li>I dropped TE features with a very high or very low cardinality.</li>
+<li>To speed things up, I saved TE features as parquets per fold. This forced me to use the same KFold settings the whole competitions to avoid leaks. </li>
+<li>My top model used about 270 TE features.</li>
+<li>I used a custom TE implementation (no smoothing, no fillna), though using the Scikit-learn version would likely have yielded similar results.</li></ul></li>
+<li>Fixing extreme outliers for Number_of_Ads and Episode_Length_minutes helped, see <a href="https://www.kaggle.com/code/stopwhispering/podcast-eda" target="_blank">https://www.kaggle.com/code/stopwhispering/podcast-eda</a></li>
+<li>Adding number of decimal digits of string-formatted Episode_Length_minutes as a feature. Thanks <a href="https://www.kaggle.com/AngelosMar" target="_blank">@AngelosMar</a> for that interesting finding. Adding as a feature worked slightly better than manually correcting predictions with high number of decimal digits. </li>
+<li>Some Divide/Minus/Plus/Combine interaction features </li>
+<li>Original Dataset: For the original dataset I went for the concatenation approach this time, just adding original data to the train dataset. For CV scoring I ignored the original dataset records. I also added a flag 'is_original'.</li>
+</ul>
+<p><strong>What Didn’t Work</strong></p>
+<ul>
+<li>Predicting ratio (Target / Episode_Length_minutes) instead of target with a separate model for Episode_Length_minutes being NaN</li>
+<li>Any kind of linear model or NN</li>
+<li>Imputation</li>
+<li>Binning, Clustering</li>
+<li>Label encoding of categorical variables</li>
+</ul>
+<p><strong>Feature Selection</strong><br>
+For feature selection (that is mostly Target Encoding this time) I used a very greedy variant of Sequential Feature Selection using an LGBM with high learning_reate and low n_estimtors: After scoring all candidates, I selected the best scoring ~10-20 and started again - far from optimal but my local hardware didn't allow for more sophisticated selection. I tried some Recursive Feature Elimination afterwards, but that simply took too long and didn't yield good results. I did, however, remove features with extremely high correlation to other features.</p>
+<p>Updates: added some details on TE, original dataset, and feature selection.</p>

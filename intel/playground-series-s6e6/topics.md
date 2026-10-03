@@ -1,0 +1,80 @@
+# playground-series-s6e6 讨论区（按票数排序，共 78 条）
+
+- [Formulae for spectral_type and galaxy_population](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703535) — 47 票 / 8 评论 / 2026-06-01 
+- [GPU Logistic Regression STACKER - Starter Pack](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704014) — 35 票 / 18 评论 / 2026-06-02 
+- [Single Model or Ensemble?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704527) — 33 票 / 19 评论 / 2026-06-04 
+- [Galaxies Optical Surveys: The Red Sequence, The Blue Cloud and The Green Valley](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703531) — 32 票 / 0 评论 / 2026-06-01 
+- [1st Place - "Mission 300+" Accomplished!](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717510) — 31 票 / 17 评论 / 2026-07-02 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716756) — 28 票 / 6 评论 / 2026-07-01 **write-up?**
+- [Just another "Blending Topic" for your weekend.](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704761) — 27 票 / 6 评论 / 2026-06-06 
+- [25th Place - My Public Starter Notebook :-)](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716748) — 26 票 / 21 评论 / 2026-07-01 **write-up?**
+- [Single Models by Codex](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704699) — 22 票 / 8 评论 / 2026-06-05 
+- [TabPFN-3 baseline with 0.964 LB](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703686) — 21 票 / 9 评论 / 2026-06-01 
+- [Visualizing Feature Engineering as a Transformation of Feature Space](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704561) — 20 票 / 1 评论 / 2026-06-05 
+- [6th Place Solution: Trusting The OOF Plateau](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716945) — 17 票 / 4 评论 / 2026-07-01 **write-up?**
+- [[CV:0.96674]RepLeafGBM: a GBDT with representation-conditioned leaves](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/715658) — 17 票 / 4 评论 / 2026-06-29 
+- [Did Kaggle change their Synthetic Generator?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704414) — 16 票 / 3 评论 / 2026-06-04 
+- [Predicting Stellar Class using TabPFN-3](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716800) — 12 票 / 0 评论 / 2026-07-01 
+- [Why the top of this leaderboard is noise limited: my blending notes + a variance analysis](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704512) — 12 票 / 2 评论 / 2026-06-04 
+- [i am just being annoyed with blenders ](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708045) — 11 票 / 22 评论 / 2026-06-13 
+- [✍️ The Concept of "Binary Classification Chain"](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704885) — 11 票 / 3 评论 / 2026-06-07 
+- [Feature Engineering: Separating QSOs using Stellar Locus Geometry](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704386) — 9 票 / 2 评论 / 2026-06-04 
+- [3D plot of alpha and delta](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/712927) — 9 票 / 3 评论 / 2026-06-23 
+- [SHOULD KAGGLE UPDATE POLICIES ON THIS BLENDING CHEATING CROWD?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704177) — 9 票 / 6 评论 / 2026-06-03 
+- [Sky Positions Features](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/705303) — 7 票 / 5 评论 / 2026-06-09 
+- [Feature Engineering the Sky Map?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703731) — 7 票 / 1 评论 / 2026-06-01 
+- [Tribute Album OOF-based key model stack](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704751) — 7 票 / 1 评论 / 2026-06-05 
+- [Accidentally deleted my notebook: "Convolutional Neural Network: Astronomical Object" — Any way to recover?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/710463) — 7 票 / 4 评论 / 2026-06-20 
+- [24th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716763) — 7 票 / 1 评论 / 2026-07-01 **write-up?**
+- [FT-Transformer from scratch on S6E6 - self-attention on tabular data actually works](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708547) — 6 票 / 4 评论 / 2026-06-16 
+- [23rd Private: Merci Chris Deotte](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716780) — 6 票 / 2 评论 / 2026-07-01 
+- [[Top 4%] 93rd Place Solution: Stellar Classification Journey](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716975) — 6 票 / 0 评论 / 2026-07-01 **write-up?**
+- [Bitter lesson from a 278-place shakedown](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716876) — 6 票 / 1 评论 / 2026-07-01 
+- [3rd place - same light, different space](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/720018) — 6 票 / 0 评论 / 2026-07-05 **write-up?**
+- [33rd Place Solution](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716819) — 6 票 / 2 评论 / 2026-07-01 **write-up?**
+- [45th Place: CatBoost Stacker paired with MLP Embeddings](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716766) — 5 票 / 0 评论 / 2026-07-01 **write-up?**
+- [26th Place - WriteUp ( Predicting Stellar Class )](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717156) — 5 票 / 0 评论 / 2026-07-01 **write-up?**
+- [9th place solution](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717081) — 4 票 / 0 评论 / 2026-07-01 **write-up?**
+- [Battle of the CV OOF Warriors vs. the CSV Blenders : S6E6 edition](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708144) — 4 票 / 4 评论 / 2026-06-13 
+- [Balancing Local CV and Public LB](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708301) — 4 票 / 0 评论 / 2026-06-14 
+- [12th place](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717361) — 4 票 / 2 评论 / 2026-07-01 **write-up?**
+- [Learning from the Community: My pipeline and some reflections on Stellar Class classification](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703978) — 4 票 / 0 评论 / 2026-06-02 
+- [22nd Place Solution](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716892) — 3 票 / 0 评论 / 2026-07-01 **write-up?**
+- [Interesting new foundation model for tabular data by Google](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716741) — 3 票 / 1 评论 / 2026-06-30 
+- [🛡️ Top 63 / 2817 Solution: Surviving the Shake-up with Physics & Deep Stacking](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717395) — 3 票 / 0 评论 / 2026-07-01 **write-up?**
+- [[final] An almost-exhaustive EDA for Stellar Class: a checklist, not a leaderboard shortcut](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/713916) — 3 票 / 5 评论 / 2026-06-25 
+- [Stellar Multiclass Classification - Comprehensive EDA & Feature Engineering Blueprint](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704790) — 3 票 / 0 评论 / 2026-06-06 
+- [Learning Through Code Review](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704577) — 2 票 / 7 评论 / 2026-06-05 
+- [Everyone Ready for the leaderboard SHAKEUP ?  ](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/715723) — 2 票 / 1 评论 / 2026-06-29 
+- [Stellar Classification: 8-Layer Cognitive Pipeline with Physics Insights (0.957 Score) 🚀](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/715779) — 2 票 / 1 评论 / 2026-06-29 
+- [Top 34 Solution: OOF Stacking for S6E6](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/719251) — 2 票 / 1 评论 / 2026-07-04 **write-up?**
+- [Are the top public LB scores overfitting the public split?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/713943) — 2 票 / 8 评论 / 2026-06-25 
+- [Looking for (feature engineering) tips?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/712021) — 1 票 / 0 评论 / 2026-06-22 
+- [Cross Validation Vs Leader Board](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708420) — 1 票 / 5 评论 / 2026-06-15 
+- [Colour-colour diagrams separate classes better than raw bands](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708397) — 1 票 / 0 评论 / 2026-06-15 
+- [Looking for Guidance: Improving Beyond a 92% Score](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/705269) — 1 票 / 3 评论 / 2026-06-09 
+- [Pseudo-labeling experiment: helped once, hurt on repeat. Anyone seen this?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/707635) — 1 票 / 0 评论 / 2026-06-11 
+- [43rd Position - Blending with Quasi-MC AND TPE](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/718077) — 1 票 / 0 评论 / 2026-07-02 
+- [15th / 2816 (Top 8%) — Additive Flip-Stacking, Balanced-Accuracy Calibration](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/720245) — 1 票 / 0 评论 / 2026-07-05 
+- [Previous submissions question](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704402) — 1 票 / 0 评论 / 2026-06-04 
+- [Features Importance](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703841) — 1 票 / 0 评论 / 2026-06-02 
+- [[0.96647 Baseline] How Probability Calibration Boosts Tree Model Performance](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/714616) — 0 票 / 4 评论 / 2026-06-26 
+- [EDA + LightGBM baseline](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708325) — 0 票 / 0 评论 / 2026-06-15 
+- [Feature Reduction Strategies](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/707960) — 0 票 / 2 评论 / 2026-06-12 
+- [13 Robust Features: Bridging 15 Years of Manufacturing Experience with Machine L](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/717449) — 0 票 / 0 评论 / 2026-07-02 
+- [31st place --First time in 100](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/718245) — 0 票 / 0 评论 / 2026-07-03 **write-up?**
+- [massive lb shuffle](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716963) — 0 票 / 2 评论 / 2026-07-01 
+- [Teaching a Model to Read the Sky](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/721084) — 0 票 / 0 评论 / 2026-07-06 
+- [19th place - My public SKILL.md for your agents](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/724014) — 0 票 / 0 评论 / 2026-07-09 **write-up?**
+- [XGBoost + LightGBM ensemble — 0.9542 CV, why I dropped CatBoost, and the STAR/GALAXY confusion I couldn't fully close](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/724552) — 0 票 / 0 评论 / 2026-07-11 
+- [🌌 Stellar Deep Space: Predicting Stars, Galaxies, and Quasars with Machine Learning 🚀](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703833) — 0 票 / 0 评论 / 2026-06-02 
+- [LightGBM and FT-Transformer on S6E6 blend](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708991) — -1 票 / 0 评论 / 2026-06-17 
+- [Do Yeo-Johnson Transforms work?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/713346) — -1 票 / 6 评论 / 2026-06-24 
+- [Looking for a Dedicated Teammate for This Competition](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/704129) — -1 票 / 1 评论 / 2026-06-03 
+- [The Sky Neighbour Breakthrough](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/715978) — -2 票 / 0 评论 / 2026-06-29 
+- [✍️ A deeper look at the results](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/707837) — -2 票 / 0 评论 / 2026-06-12 
+- [Is feature engineering helping in this competition?](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/709118) — -3 票 / 7 评论 / 2026-06-17 
+- [feature enginerring ideas ](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716024) — -3 票 / 0 评论 / 2026-06-29 
+- [Introduction & Initial Approach](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/715977) — -3 票 / 1 评论 / 2026-06-29 
+- [Balanced Accuracy Strategy](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/716025) — -3 票 / 1 评论 / 2026-06-29 
+- [Back after 2 years — went full PyTorch on S6E6, here's what I found.](https://www.kaggle.com/competitions/playground-series-s6e6/discussion/708195) — -5 票 / 0 评论 / 2026-06-14 

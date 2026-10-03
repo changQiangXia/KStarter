@@ -1,0 +1,44 @@
+# https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571133
+
+Topic #571133: 54th solution: Feature engineering and selection
+  Author: Chun-Hsien Tsai
+  Posted: 2025-04-01 14:12:57.135000
+  Votes: 8  Comments: 0
+
+I'm glad to share the idea and strategy in this competition and hope this provides some new perspectives or ideas for you. 
+
+CV Strategy
+
+While weather prediction often uses a time-series-based split, there's no guarantee that the data itself is strictly sequential. In my view, annual temperature trends might slightly increase or oscillate, but overall, this dataset appears quite smooth.
+
+
+Additionally, the rainfall ratio across different years remains similar, which further motivated me to use  year-grouped cross validation strategy
+
+
+There have been discussions about different cross validation schemes, and this is just my personal approach. BTW, I utilize the year grouped(leave one year out) cv in a nested cv manner for doing feature engineering and tuning.
+
+Time-Based features or not
+
+The dataset includes time-related features such as the day, and we can further extract month-based information. Initially, I observed that the monthly rainfall distribution between the training and original dataset was not identical.
+
+
+To check in detail, I used adversarial validation to check, notice that the model might distinguish from train  dataset and test dataset if we adding original dataset as part of train dataset while using Timing information at the same time. As a result, I chose to discard time-based features when using the original dataset, which significantly improved my model’s performance. Besides, the permutation importance also indicate that time-based features didn't perform well.
+
+Feature Engineering
+
+I put more effort on this part. Repeatedly create some features and evaluate whether it is effective not only through model performance but also from the result of permutation importance. In general, I conduct feature engineering on specific model; in other words, different model will use different features. in most case, ratio features helps; moreover, I build other features based on the its annual information such as Annual temperature difference. For example, we can aggregate the annual temperature for its mean value then each sample will obtain the relative temperature value by substract its annual temperature. After doing feature engineering, all of my model(XGB, LGBM, Catboost, RF, Logistic Regression) achieve local cv AUC roughly 0.886~0.896. Further tuning the model, all of them enhance to 0.894~0.9003
+
+Final result
+
+
+
+
+I select one for highest local cv score which averages oof result of LGBM, RF, Logistic Regression. The local cv is 0.902 whereas the private score is 0.900. The other one is the highest LB, a early build model, which is an average of XGB, LGBM, Catboost, RF and those 4 models are untuned model with only feature engineering. The private achieve 0.90282. 
+
+
+It seems XGB and LGB perform better on private dataset. my final single XGB achieve private 0.90459 while LGBM achieve private 0.90312. The ensemble of them by rankdata(), an idea I learned from @cdeotte while participating in HCT survival analysis competition, achieve private score 0.90669. however, these are not either best local cv or best public LB cv.
+
+
+Overall, this was an interesting competition. Hopefully, you find this helpful.
+
+No comments

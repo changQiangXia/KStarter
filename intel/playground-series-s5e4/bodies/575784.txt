@@ -1,0 +1,539 @@
+# https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575784
+
+Topic #575784: 1st Place - RAPIDS cuML Stack - 3 Levels!
+  Author: Chris Deotte
+  Posted: 2025-05-01 00:11:22.279000
+  Votes: 234  Comments: 152
+
+Thank you Kaggle for a great playground competition. This month's playground competition has a great dataset with lots of interesting patterns within! (and it felt more like real data and less like synthetic data). And there are lots of strong competitors which made this competition fun and exciting!
+
+The target Listening_Time_minutes is approximately equal to the linear relationship 0.72 x Episode_Length_minutes as described in my 3 discussion posts here, here, here. The other 9 features modulate this linear relationship. Based on this insight, I stacked the following approaches:
+
+
+
+My favorite solution for a Kaggle competition is a single model, my second favorite solution is hill climbing ensemble. Neither of these solutions could win 1st place in Kaggle's April playground competition because the data has too many interactions and too many deep patterns. For Kaggle's April playground competition, we need a large diverse deep RAPIDS cuML stack of 3 levels!
+
+Hill Climbing (linear level 2 model) versus Stacking (non-linear level 2 model)
+
+Hill climbing (or ridge) ensemble generally works well. However in this competition, the dataset was so complicated that a deep stack was the best solution. The most important feature is Episode_Length_minutes. It contains 90%+ of the signal. But it is missing for 11.6% of the data! This means there are two scenarios; 
+
+
+
+Predict target Listening_Time_minutes with Episode_Length_minutes 
+
+Predict  Listening_Time_minutes without Episode_Length_minutes
+
+
+Hill climbing (and ridge) cannot do this (because it uses a linear level 2 model). Imagine that we make one model that does great predicting target with ELM and we build a second model that does great predicting target without ELM. Hill climbing will just take a weighted average of all predictions. 
+
+But a stack (non-linear level 2 model) will use predictions from one model when predicting with ELM and use the predictions from another model when predicting without ELM. In other words, instead of taking all predictions from all models, it will take the best predictions from each model (for different situations)!
+
+RAPIDS cuML Stack - 3 Levels of Models!
+
+The secret to building a strong stack is diverse models. (And every model trains with the same 5 KFolds and we must remove all leaks from target encoding, pseudo labeling, etc). Diversity comes from different feature engineering and different models (and/or model hyperparameters). 
+
+For each new model I built, I engineered different sets of features using the speed of RAPIDS cuDF. Each model has different customized features that benefit the new model best. And I trained lots of diverse models using the speed of RAPIDS cuML! All models below use the speed of GPU!
+
+
+
+Diversity x5
+
+To add diversity to our stack we can take each of the 12 model depicted above and train it in at least  5 different ways described below. Additionally, we can change feature engineering and/or hyperparameters and train more ways. My final stack uses 75 models. So I approximately created each of the above 12 models in 6 different ways!
+
+Every day during the month of April, I spent a few hours and built new diverse models. Using 3xA100 GPU and the speed of RAPIDS cuDF and cuML I would build about a dozen new models (with new complex feature engineering) each day and keep the few models which improved my stack!
+
+(1) Different Sets of Feature Engineering
+
+The typical way to predict Listening_Time_minutes is to train a model using KFold and all columns of train.csv. Additionally we can create more columns with feature engineering. We can build multiple GBDT models each using different engineered features. This provides diversity to our stack. Also we can change GBDT hyperparameters. For example, some times we use max_depth=10 and sometimes we use max_depth=0, max_leaves=1024. These find different interactions and create diverse models. Furthermore, sometimes we can use max_depth=20 to get more interaction and sometimes max_depth=5 for less interaction. Below are 4 other ways to train models in April's playground competition.
+
+(2) Remove Episode_Length_minutes from All Rows!
+
+Based on my discussion here, the feature/column Episode_Length_minutes is important. We can remove Episode_Length_minutes from all rows and train a model to predict Listening_Time_minutes from all other columns. These models will be strong predicting target when Episode_Length_minutes is missing. And the stack will use these models when appropriate.
+
+(3) Predict Ratio of Target divided by Episode_Length_minutes
+
+Based on my discussion here, for each model, we can create a new target with train['new_target'] = train.Listening_Time_minutes / train.Episode_Length_minutes. We can train models to predict this new target. We can then multiply this prediction by Episode_Length_minutes or an imputed value of Episode_Length_minutes from below.
+
+(4) Predict Episode_Length_minutes (use Train.csv and Test.csv)
+
+Based on my discussion here, the feature Episode_Length_minutes is so important, we can train models to predict Episode_Length_minutes. Futhermore, we can use both train.csv and test.csv data to train and predict Episode_Length_minutes. Because both train.csv and test.csv have all the columns necessary. 
+
+Afterwards, we can use these ELM predictions in at least 3 ways. (1) We can impute missing values with these ELM preds then train a model. (2) We can replace every row's ELM (both missing and non-missing) with these ELM preds, then train a model. (3) We can multiply these ELM preds by the Ratio preds (from above) to predict the target Listening_Time_minutes. All 3 of these ideas will make new diverse models! 
+
+(5) Pseudo Label (use Train.csv and Test.csv)
+
+Based on my discussion here, we see that many columns are important. We can use more information from more columns by using the columns from test.csv.  We can add test.csv data with pseudo labels to the training of all our models.
+
+Stacking Models CV Scores
+
+Below are the CV scores for level 1, level 2, and level 3 models (without pseudo labeling). The LB scores are basically the same as the CV scores:
+
+
+
+
+Level 1 Model
+Notes
+CV Score
+
+
+
+
+RAPIDS cuML Lasso
+uses 6000 features!
+13.2
+
+
+RAPIDS cuML SVR
+uses 6000 features!
+13.2
+
+
+RAPIDS cuML KNN Regressor
+k=51, weight by distance
+12.8
+
+
+RAPIDS cuML Random Forest
+max_depth = 32
+12.1
+
+
+NN - MLP
+Built by ChatGPT
+12.0
+
+
+NN - TabPFN
+20x "SUBSAMPLE_SAMPLES": 10_000
+13.2
+
+
+GBDT - XGBoost
+4x models with 4x feature sets
+11.8
+
+
+GBDT - LGBM
+diverse from XGBoost
+11.8
+
+
+GBDT - Boost over RAPIDS Lasso
+predict Lasso residuals
+11.9
+
+
+GBDT - Boost over RAPIDS SVR
+predict SVR residuals
+11.9
+
+
+GBDT - Boost over NN MLP
+predict MLP residuals
+11.9
+
+
+AutoML AutoGluon
+public notebook here
+12.4
+
+
+---
+---
+---
+
+
+Level 2 Model
+Notes
+CV Score
+
+
+GBDT XGBoost
+uses 73 level 1 models
+11.56
+
+
+NN - MLP
+uses 73 level 1 models
+11.56
+
+
+---
+---
+---
+
+
+Level 3 Model
+Notes
+CV Score
+
+
+Weighted Average
+50% / 50%
+11.54
+
+
+
+
+.
+CREDITS: Thank you @pirhosseinlou for XGBoost single model here and @greysky for LGBM single model here which I used as two of my XGBoost "4x models with 4x feature sets" (and then made a dozen variations of). And thank you @itasps for your AutoML AutoGluon model here. I incorporated all 3 of these public models into my final stack (by re-running with my stack's KFolds and then making a dozen variations of each)!
+
+Final Submission - CV 11.54, Public LB 11.51, Private 11.44, First Place!
+
+My final RAPIDS cuML stack has CV 11.54, Public LB 11.50, Private 11.44, First Place!
+
+Post Comp Analysis
+
+Now that the comp ended, I compare Hill Climb to Stack with my 73x L1 models:
+
+
+
+Hill Climbing - CV 11.64 - Public LB 11.57 - Private LB 11.503 
+
+Stack - CV 11.54 - Public 11.51 - Private 11.448
+
+Comments:
+├─ Vladimir Demidov (2025-05-01 00:27:54.137000) [+11]
+│  What kind of conversation with ChatGPT should be to build such a good NN? Is it crafted anything surprising, a breakthrough? Anyway, that approach deserves a guide to be published.
+  ├─ Chris Deotte (2025-05-01 00:57:39.510000) [+14]
+  │  Thanks! 😀 ChatGPT suggested the MLP architecture and ChatGPT wrote the vectorized code to normalize numerical features. The architecture isn't fancy, we could have made it ourselves. But it saved t...
+    ├─ Roman@Ahmed (2025-05-01 01:23:07.640000) [+2]
+    │  Your detailed explanations and clear thought process are truly enlightening. Thank you for sharing your knowledge
+    ├─ ayushokaay (2025-05-01 09:37:31.967000) [+1]
+    │  its detailed and well structured.
+    ├─ Venkatesh (2025-10-19 10:09:56.833000) [+0]
+    │  well code structure
+    ├─ Venkatesh (2025-10-19 10:10:49.633000) [+0]
+    │  good code structure
+    ├─ Venkatesh (2025-10-29 10:53:44.393000) [+0]
+    │  good at explanation
+    ├─ Venkatesh (2025-11-06 07:09:17.333000) [+0]
+    │  good at code and detailing
+├─ Hamed Abedi (2025-05-01 08:51:12.307000) [+5]
+│  Congratulations on your first place again!
+│  It’s impressive that you shared such valuable insights throughout the competition and still managed to win by such a large margin! You are a true legend!
+│  ...
+  ├─ Chris Deotte (2025-05-01 15:34:11.740000) [+5]
+  │  Thank you. Great questions. 
+  │  (1) When building an ensemble it is all about diversity and nothing about performance. I have models with CV score 26 RMSE which boost my stack CV score and LB score! (...
+    ├─ Hamed Abedi (2025-05-02 07:08:47.767000) [+1]
+    │  That's very insightful, I will test new methods in my ensemble next time!
+    │  Also, I hope that the future LLM still needs our mentorship ! 😀
+    ├─ Venkatesh (2025-10-27 06:05:38.227000) [+0]
+    │  good to explain
+├─ Bilal Awais (2025-05-08 06:55:38.133000) [+3]
+│  Thanks for initiating this insightful discussion! I've noticed that feature interactions and categorical encoding play a big role in improving model performance in this competition. Using technique...
+├─ rshukla4 (2025-05-05 21:31:21.970000) [+3]
+│  Hello Chris, Thank you so much for sharing this approach. I haven’t participated in a competition for a while, but it’s really amazing to see how intricate and thoughtful your method was. Heading i...
+├─ Glitch (2025-05-01 03:34:59.063000) [+3]
+│  Thanks for sharing amazing insight again highly intutive
+  ├─ Chris Deotte (2025-05-01 22:51:01.673000) [+0]
+  │  Thank you Glitch! Congrats on your top 100 finish as rank 67th!
+├─ Pascal Terpstra (2025-05-01 08:23:35.353000) [+4]
+│  Very impressive solution, and thank you for your detailed explanations -- this makes Kaggle such a fun place!
+│  
+│  Do you think scores in previous playground competitions (specifically regression setti...
+  ├─ Chris Deotte (2025-05-01 15:52:20.487000) [+3]
+  │  This is a great question. I don't have an exact answer. In this comp it was just an intuition. Many things provided hints:
+  │  
+  │  My first single model with lots of feature engineering was beat by public...
+├─ Chris Deotte (2025-05-01 02:26:06.470000) [+4]
+│  UPDATE: Now that the comp ended, I compare Hill Climb to Stack with my 73x L1 models:
+│  
+│  
+│  
+│  Hill Climbing - CV 11.64 - Public LB 11.57 - Private LB 11.50
+│  
+│  Stack - CV 11.54 - Public 11.51 - Private 11.44
+├─ Shahzad Hassan (2025-05-05 13:30:55.597000) [+2]
+│  As new in the field, can we get the entire notebook repository for learning please.
+├─ Shahzad Hassan (2025-05-05 13:41:35.803000) [+3]
+│  would be thankful if we can get the detail solution notebook please
+├─ Muhammad Khibban I'tishom (2025-05-31 12:35:45.960000) [+1]
+│  Congratulations on coming in first place! I have two questions about how you trained TabPFN:
+│  
+│  
+│  
+│  
+│  Why did you choose 20 as the number of subsamples? Is there a recommended way to determine the appro...
+├─ ABHAY SINGH (2025-05-29 05:59:18.743000) [+1]
+│  Thankyou for your solution.
+├─ Bryan Yahir Hernandez (2025-05-23 17:27:40.023000) [+1]
+│  Congrats on your win! This was an impressive solution. 
+│  What was your CV setup?
+  ├─ Chris Deotte (2025-05-23 17:59:56.953000) [+1]
+  │  Thank you. CV was 5 KFold.
+    ├─ Towhidul Islam (2025-05-24 00:13:34.080000) [+0]
+    │  Thanks for sharing here.
+├─ Zahra_Bashirrr (2025-05-09 06:39:16.437000) [+1]
+│  Thank you so much for sharing such an insightful and comprehensive breakdown of your winning approach in the Kaggle Playground competition. Your dedication to experimenting with diverse models, fea...
+├─ narsil (jobs-in-data.com) (2025-05-06 07:48:56.580000) [+1]
+│  Awesome work - thanks! A question re hardware acceleration - very much needed for hundreds of models. 
+│  1/ What is the speedup for XGB and LGBM for CPU vs GPU? 
+│  2/ Do you have proven code samples fo...
+  ├─ Chris Deotte (2025-05-06 10:37:23.807000) [+1]
+  │  Thanks. It depends on the specific GPU and specific CPU. I think XGB is like 10x faster on GPU. I'm not sure about LGBM. I do know that LGBM has two GPU versions. If you just pip install LGBM and r...
+    ├─ narsil (jobs-in-data.com) (2025-05-06 19:41:11.520000) [+1]
+    │  Thanks , I was observing something very similar re lack of GPU speedup with lgbm
+├─ Miku Tsuchiya (2025-05-29 06:20:03.657000) [+2]
+│  @cdeotte 
+│  Congratulations on coming in first place.
+│  Even now that the competition deadline has passed, I am still studying, referring to the solutions of the top competitors.
+│  I have one question.
+│  W...
+  ├─ Chris Deotte (2025-05-29 11:17:54.253000) [+2]
+  │  I forget. But the way to tell if your model is learning or not is to compare your model to predicting just the mean. So, use the mean of Episode_Length_minutes as a prediction for all rows and comp...
+    ├─ Miku Tsuchiya (2025-05-30 02:55:56.780000) [+0]
+    │  @cdeotte 
+    │  Thank you for your answer!
+    │  When the average value of Episode_Length_minutes was used as the predicted value for all rows, the RMSE was "32.964394", while the RMSE of the model I created w...
+├─ Towhidul Islam (2025-05-04 08:21:00.777000) [+1]
+│  I will have some questions to ask. So, I would expect your responses at that time. Such an outstanding output!
+├─ Parth Rait (2025-05-04 04:52:50.813000) [+1]
+│  Truly astounding i didnt think half of it like and seeing ensemble used like this was not on my todo list , tho i have a question how to reduce computing power because my laptop is not able to hand...
+├─ Robin van Hoorn (2025-05-03 15:40:40.163000) [+1]
+│  Awesome solution. I learned a lot.
+│  
+│  Can you explain how the level 2 model is able to distinguish between when an instance might have had a missing episode length minutes? This is important for the ...
+  ├─ Chris Deotte (2025-05-03 15:49:44.377000) [+1]
+  │  Hi. Thanks! Yes, I add a flag. I engineer features from train.csv and add them to my L2 model in addition to the columns of L1 OOF. One features is df['ELM_nan'] = df.Episode_Length_minutes.isna()....
+├─ Pham Le Tu Nhi (2025-05-03 00:01:49.067000) [+1]
+│  So cool! I didn't think of all these at all. Thank you! 
+│  (learning learning learning)
+├─ Edwin Daniels (2025-05-02 16:25:21.077000) [+1]
+│  Congrats on the win! The exhaustive effort and detailed write up is impressive!
+├─ Alif Sathar (2025-05-02 09:24:41.303000) [+1]
+│  that's very impressive how much work there. Thank you for sharing! &lt;3
+├─ Johannes Heller (2025-05-02 09:02:31.357000) [+1]
+│  Congratulations on an impressive and well-deserved 1st place, once again! Your approach definitely includes a lot more diversity which was probably a key to your consistently strong lead throughout...
+├─ Nyok Mawut (2025-05-02 08:59:18.487000) [+1]
+│  "Congrats on your Kaggle win, Chris! 🎉 Brilliant achievement. Would love to learn from your solution—could you share your winning model? Thanks and cheers! - Nyok Mawut"
+│  
+│  nyokmawut95@gmail.com
+│  
+│  Tha...
+├─ [deleted] (2025-05-02 07:41:10.850000) [+1]
+│  its awesome work! applause
+├─ Demon Sheriff (2025-05-02 05:08:15.403000) [+1]
+│  Hey Chris,
+│  Thanks a ton for sharing your detailed approach.
+│  
+│  I had a quick question, when you're working with such a large stack of models (especially with multiple feature engineering variants), h...
+  ├─ Chris Deotte (2025-05-02 15:00:07.360000) [+2]
+  │  Hi. My system is primitive so unfortunately I don't have any great suggestions. For me, each experiment/model is written in its own jupyter notebook and named MODEL-N.ipynb (where I increment the n...
+├─ 23f1000820 (2025-05-02 03:19:20.887000) [+1]
+│  Superb idea
+├─ Ali_Haider_Ahmad (2025-05-02 01:20:36.560000) [+1]
+│  It's as if you're solving the problem with pen and paper! I really like your methods!
+│  
+│  I have a question, please: How many features did you use with the NN-MLP model?
+  ├─ Chris Deotte (2025-05-02 01:39:25.900000) [+1]
+  │  About 1000 features. I just took my best GBDT and converted the categorical into one-hot-encoding. More info in my other comment here
+├─ Nobin Roy (2025-05-01 22:00:27.190000) [+1]
+│  insightfull information for a beginner like me.
+├─ Viren Mane (2025-05-01 21:45:46.520000) [+1]
+│  That was interesting and smart!
+├─ [deleted] (2025-05-01 21:27:29.337000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 21:20:23.333000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-02 03:05:22.227000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-05-01 19:52:38.500000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 21:20:30.050000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2025-05-01 21:30:57.487000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-05-02 06:59:53.213000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-05-01 18:36:44.170000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 18:41:56.010000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2025-05-01 19:35:29.927000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-05-01 19:50:55.407000) [+4]
+    │  [deleted]
+├─ [deleted] (2025-05-01 16:43:58.813000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 18:25:53.793000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2025-05-01 18:36:53.380000) [+3]
+  │  [deleted]
+├─ [deleted] (2025-05-01 13:53:07.643000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 12:27:59.673000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 09:49:24.870000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 09:36:11.887000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 09:32:42.120000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 12:21:53.593000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2025-05-01 15:03:02.750000) [+6]
+  │  [deleted]
+    ├─ [deleted] (2025-05-16 00:39:40.340000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-05-16 02:36:13.367000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2025-05-16 22:59:19.273000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-05-01 08:14:03.360000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 22:12:41.023000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2025-05-02 15:36:36.077000) [+5]
+    │  [deleted]
+    ├─ [deleted] (2025-05-02 16:20:55.243000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-05-01 07:19:37.383000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 05:55:12.977000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 15:58:18.513000) [+1]
+  │  [deleted]
+├─ [deleted] (2025-05-01 05:42:30.007000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 05:04:01.567000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 04:18:33.643000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 03:04:44.707000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 02:38:52.907000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 01:49:20.517000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 01:48:17.020000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 01:17:52.020000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 01:13:57.930000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 00:23:23.880000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 00:20:55.897000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 00:25:35.490000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2025-05-01 06:46:28.517000) [+2]
+    │  [deleted]
+├─ [deleted] (2025-05-01 00:19:30.553000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 00:13:36.180000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-16 15:02:32.927000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-16 15:34:46.957000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2025-05-16 18:54:16.197000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-05-03 09:04:27.513000) [+2]
+│  [deleted]
+├─ [deleted] (2025-05-03 07:39:05.293000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-03 15:52:32.263000) [+2]
+  │  [deleted]
+├─ [deleted] (2025-05-02 08:51:55.577000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-02 14:56:56.660000) [+2]
+  │  [deleted]
+├─ [deleted] (2025-05-01 21:17:59.933000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 21:32:33.057000) [+2]
+  │  [deleted]
+├─ [deleted] (2025-05-01 10:26:03.963000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 15:23:12.990000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-05-02 13:06:58.433000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2025-05-02 22:52:13.130000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-05-03 12:16:08.633000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-05-03 21:55:27.803000) [+0]
+    │  [deleted]
+├─ [deleted] (2025-05-01 08:55:30.497000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 19:08:42.590000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2025-05-03 20:17:38.583000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-05-01 05:58:56.307000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 15:55:11.033000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-05-01 05:43:38.723000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 07:13:43.327000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-05-01 10:45:31.387000) [+1]
+    │  [deleted]
+  ├─ [deleted] (2025-05-01 16:01:28.153000) [+1]
+  │  [deleted]
+├─ [deleted] (2025-05-01 04:19:30.930000) [+2]
+│  [deleted]
+├─ [deleted] (2025-05-01 04:15:49.297000) [+2]
+│  [deleted]
+├─ [deleted] (2025-05-01 04:08:43.943000) [+2]
+│  [deleted]
+├─ [deleted] (2025-05-01 03:51:20.260000) [+2]
+│  [deleted]
+├─ [deleted] (2025-05-01 01:58:33.120000) [+2]
+│  [deleted]
+├─ [deleted] (2025-10-18 13:27:09.347000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-07 17:01:01.920000) [+0]
+│  [deleted]
+  ├─ [deleted] (2025-06-07 17:45:27.957000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-06-07 19:17:00.417000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-06-07 21:23:28.617000) [+0]
+    │  [deleted]
+├─ [deleted] (2025-06-04 23:38:47.263000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-13 04:37:27.527000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-09 08:55:23.780000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-08 05:35:34.210000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-02 23:16:37.820000) [+0]
+│  [deleted]
+  ├─ [deleted] (2025-05-06 00:41:48.157000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-05-01 20:25:50.293000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-05-01 20:35:20.960000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-05-05 13:59:37.583000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-05-02 21:30:44.670000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 23:55:03.433000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 13:55:02.877000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 06:55:10.907000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-01 03:43:45.800000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-10 14:39:16.510000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-16 02:31:51.397000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-12 18:10:06.770000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-07 21:07:34.053000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-07 16:52:09.373000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-04 22:42:39.190000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-03 18:44:48.387000) [+0]
+│  [deleted]

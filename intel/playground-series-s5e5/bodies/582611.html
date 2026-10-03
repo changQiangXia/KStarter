@@ -1,0 +1,85 @@
+<p>Thanks Kaggle for another fun playground competition. This month was different than past months because the features were all numeric without NANs.</p>
+<h1>GPU Hill Climbing</h1>
+<p>My final solution is the result of feeding hundreds of GBDT, NN, and NVIDIA cuDF cuML models into my GPU Hill Climbing starter notebook <a href="https://www.kaggle.com/code/cdeotte/gpu-hill-climbing-cv-0-05930" target="_blank">here</a>. Over the month of May 2025, I used the speed of GPU and NVIDIA cuDF cuML to build as many diverse models as possible.</p>
+<p>Hill climbing is great because it automatically selects models for us. From the hundreds of candidate models, hill climbing selected the following 7 models:</p>
+<table>
+<thead>
+<tr>
+<th>Weight</th>
+<th>Model</th>
+<th>Notes</th>
+<th>CV score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/12</td>
+<td>XGBoost</td>
+<td>cuML target encoded features1</td>
+<td>0.06084</td>
+</tr>
+<tr>
+<td>1/12</td>
+<td>XGBoost</td>
+<td>cuML target encoded features2</td>
+<td>0.06061</td>
+</tr>
+<tr>
+<td>1/12</td>
+<td>XGBoost</td>
+<td>cuML target encoded features3</td>
+<td>0.06053</td>
+</tr>
+<tr>
+<td>1/4</td>
+<td>XGBoost</td>
+<td>product features</td>
+<td>0.05951</td>
+</tr>
+<tr>
+<td>1/6</td>
+<td>CatBoost</td>
+<td>binned features and groupby features</td>
+<td>0.05937</td>
+</tr>
+<tr>
+<td>1/6</td>
+<td>NN over LinearRegression</td>
+<td>NN is <a href="https://www.kaggle.com/code/cdeotte/nn-mlp-starter-cv-0-0608" target="_blank">here</a></td>
+<td>0.05999</td>
+</tr>
+<tr>
+<td>1/6</td>
+<td>XGB over NN</td>
+<td>NN is <a href="https://www.kaggle.com/code/cdeotte/nn-mlp-starter-cv-0-0608" target="_blank">here</a></td>
+<td>0.05989</td>
+</tr>
+</tbody>
+</table>
+<h1>Final Ensemble CV and LB Scores</h1>
+<p>The final hill climbing ensemble has </p>
+<ul>
+<li>RMSLE <strong>CV = 0.05880</strong></li>
+<li><strong>Public LB = 0.05677</strong></li>
+<li><strong>Private LB = 0.05841</strong></li>
+</ul>
+<h1>XGBoost with cuML Target Encoder (CV=0.06XX)</h1>
+<p>In my final ensemble 25% of the weight is XGBoost with NVIDIA cuML TargetEncoder features. This demonstrates that diversity is more important than single model CV score. My XGBoost with TE features each have a poor CV score of 0.06XX but they improved the final ensemble <code>CV 0.05890 =&gt; 0.05880</code> and <code>Private LB 0.05847 =&gt; 0.05841</code></p>
+<h1>XGBoost with Product Features (CV = 0.05951)</h1>
+<p>For each feature, i created a <code>log1p</code> version, i.e. <code>df[f'log1p_{c}'] = log1p( df[c] )</code>. Then i created all products, divisions, sums, and differences between all pairs of features.</p>
+<h1>CatBoost with Binned Features and GroupBy Features (CV=0.05937)</h1>
+<p>CatBoost loves categorical features, so I converted each numerical feature into 9 equal width binned values. I also created <code>log1p</code> versions of all features and converted those into 9 binned values. Afterward I created combinations of all pairs of columns. The resultant new columns had 81 unique values and were also categorical. We then use <code>cat_features = CATS</code>.</p>
+<p>For groupby features, I would pick a group of people like <code>Sex and Age</code> using the bins, then I would compute each person's <code>z-score</code> about their <code>height</code>. And then their <code>z-score</code> about their <code>weight</code>, i.e. for a male in their 40's how does their weight compare with other males in their 40's. </p>
+<p>I created 26 of these features. I would make groups from 1 to 3 features then compute <code>z-score</code> of another feature. Another example is <code>[ ["Sex","Weight_bin","Body_Temp"], ["Heart_Rate"] ],</code>. This means i make groups from Sex, Weight, Body_Temp and compute <code>z-score</code> for Heart_Rate.</p>
+<h1>NN over Linear Regression (CV=0.05999)</h1>
+<p>I trained my public notebook NN on the residuals from a NVIDIA cuML LinearRegression model. This improved CV <code>0.0608 =&gt; 0.0599</code>. The linear regression model does a great job capturing the linear relationships in the data. And then it helps the NN learn these relationships better.</p>
+<ul>
+<li>train LinearRegression with 5 Kfold seed 42. Make OOF predictions and test PRED predictions.</li>
+<li>make a <strong>new target</strong> with <code>new_target = old_target - LinearRegression_OOF</code></li>
+<li>train NN with train data and <strong>new target</strong> (with 5 Kfold seed 42)</li>
+<li>infer NN on test, then <code>final_pred = NN_PRED + LinearRegression_PRED</code>.</li>
+</ul>
+<h1>XGB over NN (CV=0.05989)</h1>
+<p>I trained my XGB with Product Features on the residuals from my public NN notebook. This did not improve the XGB CV score but it made a new diverse model that improved my hill climbing ensemble CV score. We implement this using similar bullet points as above in "NN over Linear Regression" section.</p>
+<h1>Icing on the Cake - Retrain Using 100% Train</h1>
+<p>I use the following trick in all my Kaggle competitions. My OOF are 5-Kfold and we use hill climbing to find the model weights from these OOF. Then we retrain all the models using 100% train data and use fixed number of iterations equal to 25% ( which equals to <code>1/(K-1)</code> ) more than average number of iterations from 5-Kfold early stopping. Then we take a weighted average of these 100% test preds using the weights found from hill climbing based on 5-Kfold OOF. This gives a nice boost in every Kaggle competition! (I also train K of these using a different seed each time and average the predictions).</p>

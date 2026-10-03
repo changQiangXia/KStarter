@@ -1,0 +1,177 @@
+# https://www.kaggle.com/competitions/playground-series-s5e5/discussion/576111
+
+Topic #576111: How To Ensemble with RMSLE
+  Author: Chris Deotte
+  Posted: 2025-05-02 18:51:17.154000
+  Votes: 140  Comments: 57
+
+Competition Metric is RMSLE
+
+Hi. When metric is MSE or RMSE then taking mean (or weighted average) is best way to ensemble. When metric is MAE then taking median is best way to ensemble, so what is the best way to ensemble when metric is RMSLE?
+
+
+
+Ensembles with RMSLE
+
+The metric RMSLE is the metric RMSE in the log(1+prediction) space. So perhaps the best ensemble method is to first convert predictions into log(1+prediction) space, then take a weighted average, then convert back to original space.
+
+Example
+
+Imagine we have N preditions in python list pred and N weights in python list weights. Then maybe the best ensemble is
+
+Transform to log(1+p) space
+
+(1) log_preds = [np.log1p(p) for p in preds]
+    log_preds_stack = np.stack(log_preds, axis=0)
+
+Weighted Average
+
+(2) avg_log_preds = np.average(log_preds_stack, axis=0, weights=weights)
+
+Invert
+
+(3) final_preds = np.expm1(avg_log_preds)
+
+Hill Climbing and/or Ridge Ensemble
+
+Furthermore when using ridge ensemble or hill climbing ensemble, we can first convert all OOF into the log(1+p) space, then run ridge or hill climbing using RMSE metric. Then apply results to Test PREDS. Finally invert ENSEMBLE_PRED back to original space!
+
+Starter Code
+
+I publish starter notebook to perform GPU hill climbing here. The secret to maximize ensemble CV score and LB score is to make lots of diverse models. Then upload all the OOF and Test PREDs from each model to GPU hill climbing and let it work its magic! Enjoy!
+
+Comments:
+├─ Arpit Rawat (2025-05-05 15:05:59.157000) [+3]
+│  @cdeotte i came to know about hill climbing method in previous playground episode. wonder what is ridge ensemble
+  ├─ Chris Deotte (2025-05-05 15:48:30.353000) [+11]
+  │  Hill climbing is a form of linear regression. We start with N models and hill climbing finds N weights where some weights may be zero. So the final ensemble is final_pred = w1 * pred1 + w2 * pred2 ...
+    ├─ Gio (2025-05-05 22:10:49.760000) [+1]
+    │  Hi @cdeotte thank you for sharing so much knowledge, you helped me a ton.
+    │  If you don't mind answering: how do you pick which models to include? Do you grab the n solo top performers from each type ...
+    ├─ Chris Deotte (2025-05-05 22:21:27.197000) [+2]
+    │  Both hill climbing and ridge perform selection for us. So we can give them our entire list of experiments from the entire month of working on competition.
+    │  
+    │  Hill climbing is greedy and adds 1 model ...
+    ├─ Gio (2025-05-05 22:24:29.633000) [+1]
+    │  Got it. Thank you!
+    ├─ ANIKET GAUNDAR (2025-05-06 02:37:38.073000) [+1]
+    │  Hi @cdeotte 
+    │  
+    │  Can you share a sample hill climbing code ? I am curious to know the implementation here. 
+    │  
+    │  Thank you
+    ├─ Chris Deotte (2025-05-06 04:31:17.650000) [+1]
+    │  Hi Aniket, I will try to upload some code in the next few days.
+    ├─ ANIKET GAUNDAR (2025-05-06 05:16:48.873000) [+1]
+    │  Thank you so much, looking forward to same 🙏
+    ├─ Chris Deotte (2025-05-06 14:47:11) [+2]
+    │  @anigaundar I publish GPU hill climbing code here
+    ├─ ANIKET GAUNDAR (2025-05-06 15:50:08.563000) [+2]
+    │  Hi Chris @cdeotte Thank you so very much for this ! great insights and study material. Tbh I had been waiting for this post whole day, trying refreshing and checking if it is there 😃🙏
+    ├─ statify (2025-05-07 10:33:58.183000) [+1]
+    │  Thank you so much. This will be very helpful for my improvement
+├─ waltonj (2025-05-09 13:24:24.720000) [+4]
+│  Thanks Chris! I'm finally putting it together on the "why?" of this metric and officially ready to jump up 10 percentiles in the competition stack.
+│  
+│  Okay correct me if I'm silly here (still a littl...
+  ├─ Chris Deotte (2025-05-09 16:42:05.007000) [+7]
+  │  Hi, yes correct. Log space is "order of magnitude", so the metric wants us to be in the right order of magnitude when making predictions. 
+  │  
+  │  The metric uses log1p which is natural logrithm  base e. ...
+├─ Adithya Challa (2025-05-20 05:59:50.090000) [+1]
+│  Hi @cdeotte I have been looking to apply ensemble methods for my notebook can you help me with some of the things to work with some ideas. This is my notebook can you take a look and provide other ...
+├─ gowtham-dd (2025-05-19 06:16:26.533000) [+1]
+│  This is super helpful, thanks! Just to clarify:
+│  
+│  When applying ridge regression or hill climbing ensemble in the log1p space, do we also need to apply the same log1p transformation to the true labe...
+  ├─ Chris Deotte (2025-05-19 11:27:24.637000) [+1]
+  │  Hi. Yes, we transform both (the OOF and ground truth) to the log1p space (then during hill climbing we use RMSE and not RMSLE)
+    ├─ gowtham-dd (2025-05-19 11:32:16.460000) [+1]
+    │  Thanks for the clarification btw !
+├─ gowtham-dd (2025-05-19 06:10:41.480000) [+1]
+│  Thanks for explaining this. Very helpful !
+├─ Enishi_Yakumo (2025-05-15 07:10:56.313000) [+1]
+│  I was not familiar with RMSLE, so your explanation was extremely helpful. Thank you!
+  ├─ Roman@Ahmed (2025-05-15 12:45:43.217000) [+1]
+  │  its really helpful
+├─ Raushan Kumar (2025-05-14 15:46:49.980000) [+1]
+│  it is really helpful…
+├─ Md. Fattah Al Fahim (2025-05-14 02:36:33.273000) [+1]
+│  Did we need to log convert our target? or only the prediction?
+  ├─ Chris Deotte (2025-05-14 19:38:21.220000) [+0]
+  │  This discussion post is about ensembling. When we train, we can do whatever we want and whatever achieves the best CV score and best LB score.
+├─ Fujikii (2025-05-13 13:21:55.993000) [+1]
+│  keep it up!
+  ├─ Chris Deotte (2025-05-13 18:22:52.110000) [+0]
+  │  Thanks Fujikii
+├─ abdelmalek eladjelet (2025-05-12 13:08:46.303000) [+1]
+│  keep it up
+├─ kazuma kitamoto (2025-05-12 10:18:39.820000) [+1]
+│  Thanks a lot!
+│  Sometimes I got overwhelmed with a tons of metric options, but I think learning the structure of them step by step is important.
+│  And this article help me very much.
+├─ Areeba Ali (2025-05-12 10:11:53.090000) [+1]
+│  Plotting the distribution of residuals before and after log-space ensembling is a great way to see if bias has reduced.
+├─ Mohammad Bahar (2025-05-08 20:21:55.647000) [+1]
+│  That I never thought of it this way, this really does explain a lot about RMSEL. Thanks a lot for your insight
+├─ Raushan Kumar (2025-05-08 15:48:53.160000) [+1]
+│  I tried so many times but no improvement in my results😐
+├─ zeynep (2025-05-07 18:31:34.810000) [+1]
+│  Great explanation. Since optimizing RMSLE is basically the same as predicting log1p(y) and minimizing RMSE, it makes total sense to ensemble the predictions in the log(1+prediction) space
+├─ Beji Afif (2025-05-07 10:11:14.293000) [+1]
+│  Smart and insightful explanation of the ensemble strategy for RMSLE, especially the hill climbing technique. Thanks a lot.
+├─ ANIKET GAUNDAR (2025-05-07 04:42:07.103000) [+1]
+│  Hi guys, I have made an observation wrt CV scores
+│  
+│  
+│  
+│  If I take the RMSLE as the metric on the actual predictions (or log_transformed targets and converting them back to original scale) I get the CV...
+  ├─ Chris Deotte (2025-05-07 14:44:35.367000) [+3]
+  │  As pointed out in the other thread the function mean_squared_log_error(y_true_clipped + 1, y_pred_clipped + 1) already contains +1, so here we are adding +2.
+    ├─ ANIKET GAUNDAR (2025-05-07 15:41:25.190000) [+1]
+    │  yeah, thank you.
+├─ Sarah Arshad (2025-05-06 15:36:40.790000) [+1]
+│  Elegant solution for RMSLE…. Thanks for the insight
+├─ Sathya Rengaswami (2025-05-06 06:27:58.627000) [+1]
+│  Wonderful insight! Optimizing the RMSLE metric is mathematically the same as predicting z=log1p(y) by optimizing the usual RMSE metric. Hence it makes to ensemble the predictions for it to build a ...
+├─ KTAcosmo (2025-05-03 23:22:44.790000) [+1]
+│  Thanks for explaining. Your post is always very helpful!
+├─ Temirlan Tolepbek (2025-05-03 09:56:33.833000) [+1]
+│  Thanks for explaining this. Ver helpful and smart. &lt;3
+├─ Zahra_Bashirrr (2025-05-07 02:26:21.717000) [+2]
+│  To ensemble when the competition metric is RMSLE, the best approach is to first transform the predictions into the log(1 + prediction) space, take a weighted average of these transformed prediction...
+├─ Chris Deotte (2025-05-06 14:46:28.987000) [+2]
+│  UPDATE: I publish starter notebook to perform GPU hill climbing here. The secret to maximize ensemble CV score and LB score is to make lots of diverse models. Then upload all the OOF and Test PREDs...
+├─ AngelosMar (2025-05-04 21:43:04.443000) [+2]
+│  Can't this be interpreted as taking the geometric mean, which equals the average in log space?
+  ├─ Sathya Rengaswami (2025-05-06 06:22:20.523000) [+2]
+  │  It is almost the geometric mean, except for the +1 part. But yes, when the predictions are much greater than 1, this is very close to the geometric mean!
+├─ Vladimir Demidov (2025-05-03 17:03:28.163000) [+2]
+│  Important where to invert and clip, before averaging or after, as it might skew results. So a possible 4th step to ensure predictions are non-negative is final_preds = np.clip(final_preds, 0, None)...
+  ├─ Chris Deotte (2025-05-03 17:34:05.963000) [+1]
+  │  The first step requires that predictions are strictly greater than -1 (so we must clip at least this much beforehand). Then as you point out, we have options when we choose to clip greater than 0. ...
+├─ Prashant Kumar (2025-05-02 20:05:05.257000) [+2]
+│  Smart approach—averaging in log(1 + p) space aligns perfectly with how RMSLE works. It's great work and very helpful for anybody working with this metric.
+├─ abdelmalek eladjelet (2025-05-13 21:59:15.347000) [+1]
+│  my model got 0.0611 score , and I put my notebook 
+│  https://www.kaggle.com/code/abdelmalekeladjelet/abdelmalek-calories-expenditure
+├─ Japyh (2025-06-05 21:43:40.860000) [+0]
+│  This is super helpful, thanks for sharing!
+├─ YeRongYu (2025-05-18 13:51:45.427000) [+1]
+│  interesting！
+├─ [deleted] (2025-05-12 08:57:46.203000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-06 12:03:22.090000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-03 17:18:58.363000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-03 14:15:09.327000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-21 00:40:25.893000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-20 16:27:42.887000) [+0]
+│  [deleted]
+├─ [deleted] (2025-05-17 19:55:24.800000) [+1]
+│  [deleted]
+├─ [deleted] (2025-05-05 05:18:54.293000) [+1]
+│  [deleted]

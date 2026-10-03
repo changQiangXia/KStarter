@@ -1,0 +1,330 @@
+<p>Thanks to Kaggle and everyone who shared their work during this competition. I finished <strong>9th on the private leaderboard with ROC-AUC 0.94575</strong>, after placing 93rd on the public leaderboard with 0.94679.</p>
+<p>The solution evolved from a CPU XGBoost baseline into an ensemble built around generator-aware numerical representations, fold-local target statistics, ridge logistic regression and residual boosting. The final combiner used <strong>54 prediction streams</strong> and L2-regularized logistic regression.</p>
+<p>Public notebooks were an important part of this solution. Below I distinguish the published starting points from the models and experiments I added. The largest late improvement started with a published token/LR/residual ensemble; I then extended its feature basis, trained additional models and rebuilt the stack.</p>
+<h2>Overview</h2>
+<ul>
+<li><strong>Result:</strong> private 0.94575, public 0.94679; final winning file was V39.</li>
+<li><strong>Features:</strong> digits, frequencies, multiscale numerical groups, fold-local target rates, GPT-2 token hierarchies and income–context statistics.</li>
+<li><strong>Models:</strong> ridge logistic regression, XGBoost, LightGBM and CatBoost, with additional teacher, auxiliary and neural prediction streams.</li>
+<li><strong>Combiner:</strong> standardized raw logits and percentile ranks, followed by L2 logistic regression; V39 used <code>C=0.1</code>.</li>
+<li><strong>Main lesson:</strong> new representations and residual learning helped more than repeatedly adjusting a highly correlated model pool.</li>
+<li><strong>Validation limitation:</strong> the late meta-model checks were conditional on an existing OOF library, not a fully nested retraining of the complete pipeline.</li>
+</ul>
+<h2>1. Understanding the data</h2>
+<p>The task was to predict <code>Will_Buy_EV</code>, evaluated with ROC-AUC. The competition data contained 668,665 training rows and 286,571 test rows, and was related to the original 10,000-row <a href="https://www.kaggle.com/datasets/itzzomkar/ev-adoption-behavior-and-range-anxiety" target="_blank">EV Adoption Behavior and Range Anxiety dataset</a>.</p>
+<p>Income was especially useful when represented in several ways. Its magnitude carried signal, but so did exact values, rounding, digits and group frequencies. Commute distance benefited from similar treatment.</p>
+<p>The original-data purchase recipe also provided a useful prior. Following <a href="https://www.kaggle.com/code/cdeotte/fable-5-1-eda-original-data-insights" target="_blank">@cdeotte's analysis</a>, recipe-based scores could be used as an initial margin, leaving a boosting model to learn deviations from that prior.</p>
+<p>Later, GPT-2 token hierarchies provided another representation of the numerical strings. Using tokenizer-derived features here did <strong>not</strong> mean training a GPT-2 language model. The resulting features were inputs to logistic and tabular models. I did not use TabPFN in this solution.</p>
+<h2>2. Early gains: numerical representations and target statistics</h2>
+<p>The initial CPU XGBoost baseline scored <strong>0.94330 public / 0.94278 private</strong>. The largest early improvement came from a package of feature engineering and blending:</p>
+<ul>
+<li>Digit decomposition and trailing-zero features.</li>
+<li>Exact-value frequencies and rounded numerical groups.</li>
+<li>Income resolutions such as 100, 250, 500, 1,000, 2,000 and 5,000.</li>
+<li>Target encoding with fold-safe training features.</li>
+<li>A rank blend of complementary feature views.</li>
+</ul>
+<p>V2 reached <strong>0.94574 public / 0.94483 private</strong>, a private increase of <strong>0.00205</strong> over the baseline. This accounts for approximately 69% of the baseline-to-final private improvement. It is the gain of the whole V2 package, rather than an isolated attribution to target encoding.</p>
+<p>V3 added XGBoost, LightGBM and CatBoost with 10 folds and two seeds. V4 expanded exact/coarse target encodings with multiple smoothing values and competition-versus-original frequency features. V5 combined multiple feature views and recipe-initialized boosting.</p>
+<p>By V5, the private score was <strong>0.94545</strong>. Increasing the number of models and folds subsequently gave diminishing returns.</p>
+<h2>3. The late breakthrough: logistic initialization and residual boosting</h2>
+<p>The most useful late direction came from <a href="https://www.kaggle.com/code/heuljax/kps6e09-generator-aware-ridge-logistic-regression" target="_blank">@heuljax's generator-aware ridge logistic regression</a> and <a href="https://www.kaggle.com/code/goodpjw2008/s6e9-lr-margin-gbdt-oof-stack-lb-0-94675" target="_blank">@goodpjw2008's LR-margin GBDT OOF stack</a>.</p>
+<p>The idea was to construct a strong logistic prediction from token hierarchies, target-rate chains and context features, then fit boosting models with that prediction as their initial logit:</p>
+<pre><code>Numerical strings and raw context
+    → token/group statistics
+    → ridge logistic initial logit
+    → residual XGBoost / LightGBM / CatBoost
+    → OOF prediction library
+    → regularized logistic stack
+</code></pre>
+<p><strong>V37 was the exact published <a href="/goodpjw2008" target="_blank">@goodpjw2008</a> submission file</strong>, after local validation and OOF replay. It scored <strong>0.94675 public / 0.94566 private</strong>. That improvement should be credited to the published method, rather than described as my original model training.</p>
+<p>For V38, I extended and trained the pipeline:</p>
+<ul>
+<li>A <strong>368-feature basis</strong>, including full income–context rates and income-neighborhood statistics at seven widths and two smoothing levels.</li>
+<li>Seed-42, 10-fold residual XGBoost models at depths 3 and 5, plus LightGBM.</li>
+<li>Seed-2027, 10-fold CatBoost models at depths 5 and 7, with 13 additional token/context categorical features.</li>
+<li>Fold-local target statistics, with five inner folds for training-row encodings.</li>
+<li>Initial training logits generated through three inner GLM fits, with feature statistics recomputed inside those fits.</li>
+</ul>
+<p>Selected V38 single-stream OOF results, before boundary rules:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>OOF ROC-AUC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ridge GLM, seed 42</td>
+<td>0.946436098</td>
+</tr>
+<tr>
+<td>Residual XGBoost, depth 3</td>
+<td>0.946529434</td>
+</tr>
+<tr>
+<td>Residual XGBoost, depth 5</td>
+<td>0.946539666</td>
+</tr>
+<tr>
+<td>Residual LightGBM</td>
+<td>0.946544515</td>
+</tr>
+<tr>
+<td>Residual CatBoost, depth 5</td>
+<td>0.946502252</td>
+</tr>
+<tr>
+<td>Residual CatBoost, depth 7</td>
+<td>0.946506644</td>
+</tr>
+</tbody>
+</table>
+<p>The V38 stack combined nine published source streams, seven new streams and two existing Paul-style 20-fold streams. Its private score rose to <strong>0.94570</strong>.</p>
+<h2>4. Final library and combiner</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11142277%2F3ccbe17e8926d7fb0beed61eda30fb80%2Ffinal_pipeline.png?generation=1790860587578987&amp;alt=media" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>Stream group</th>
+<th>Count</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Published source ensemble</td>
+<td>9</td>
+<td>Residual GBDTs, logistic models, XGB variants and RealMLP</td>
+</tr>
+<tr>
+<td>New full-basis models</td>
+<td>4</td>
+<td>GLM, two XGBoost depths and LightGBM</td>
+</tr>
+<tr>
+<td>CatBoost feature view</td>
+<td>3</td>
+<td>GLM and two CatBoost depths</td>
+</tr>
+<tr>
+<td>Paul-style 20-fold variants</td>
+<td>2</td>
+<td>Additional XGBoost predictions</td>
+</tr>
+<tr>
+<td>Context hierarchy</td>
+<td>4</td>
+<td>Alternative smoothing and context representations</td>
+</tr>
+<tr>
+<td>Auxiliary models</td>
+<td>4</td>
+<td>Additional structure from auxiliary tasks</td>
+</tr>
+<tr>
+<td>Residual corrections</td>
+<td>2</td>
+<td>Statistics and margin-based corrections</td>
+</tr>
+<tr>
+<td>Teacher models</td>
+<td>4</td>
+<td>Nested teacher predictions and residual students</td>
+</tr>
+<tr>
+<td>Repeated teacher models</td>
+<td>2</td>
+<td>Additional training variation</td>
+</tr>
+<tr>
+<td>Class-conditional density models</td>
+<td>12</td>
+<td>Feature-likelihood and prior views</td>
+</tr>
+<tr>
+<td>Shrunk neural family</td>
+<td>4</td>
+<td>GLM and controlled neural variants</td>
+</tr>
+<tr>
+<td>Alternate outer-fold teacher family</td>
+<td>4</td>
+<td>Different outer-fold partition</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>54</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>For each stream, the meta features included its clipped probability logit and its percentile rank. Train and test ranks were computed separately. Features were standardized using label-free OOF means and standard deviations.</p>
+<p>I fitted L2 logistic meta-models over <strong>three seeds × five meta folds</strong> and used their average coefficients for the final prediction. The coefficients were not constrained to be non-negative.</p>
+<p>Two final candidates were submitted:</p>
+<table>
+<thead>
+<tr>
+<th>Candidate</th>
+<th>Meta <code>C</code></th>
+<th>Full-library OOF AUC¹</th>
+<th>Public</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V39 — stable</strong></td>
+<td><strong>0.1</strong></td>
+<td><strong>0.946795834</strong></td>
+<td><strong>0.94679</strong></td>
+<td><strong>0.94575</strong></td>
+</tr>
+<tr>
+<td>V40 — flexible</td>
+<td>1.0</td>
+<td>0.946808579</td>
+<td>0.94679</td>
+<td>0.94574</td>
+</tr>
+</tbody>
+</table>
+<p>¹ This is the score obtained by applying the average meta coefficients to the full OOF library. It is not the same as a cross-fitted meta-model score.</p>
+<p>V39 was selected for its stronger held-out mean gain against frozen V38: <strong>+0.000035509</strong>, positive in <strong>14/15</strong> checks. V40 had higher full-library OOF AUC, but a smaller held-out mean gain of <strong>+0.000026826</strong>, positive in <strong>13/15</strong> checks.</p>
+<p>Private results favored V39 by one published score unit. This is a small difference; it does not establish that stronger regularization is universally better.</p>
+<h2>5. Validation: useful checks and their limits</h2>
+<p>Target-dependent feature calculations were kept inside the relevant training folds. Training-row statistics and teacher/initial-margin predictions used inner-fold computations where required. Submission IDs, row order, missing values, finite predictions and the <code>[0,1]</code> range were checked before upload.</p>
+<p>The late stacking experiments also used repeated held-out meta comparisons and paired comparisons with a refitted baseline combiner.</p>
+<p>However, <strong>the base models were not retrained for every meta holdout</strong>. Those checks therefore measure performance conditional on the available OOF library. Reusing the same labels for many model and combiner experiments also creates selection optimism.</p>
+<p>The full-library OOF values above should not be presented as independent estimates of the entire final pipeline. Early OOF measurements, test-only public blends and late meta scores did not all share one validation protocol.</p>
+<p>Another observation was that prediction diversity shrank after fold averaging: for one pair of GLM streams, the standard deviation of their rank difference fell by roughly <strong>86%</strong> from OOF to test. Consequently, a useful OOF difference need not remain equally large in test predictions.</p>
+<h2>6. What helped, and what did not</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11142277%2Fcd64b545e1dd6d7053862a1bf285ef02%2Fscore_progression.png?generation=1790860632547355&amp;alt=media" alt=""></p>
+<p>The milestones below use actual submission public/private scores:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Main change</th>
+<th>Public</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V1</td>
+<td>CPU XGBoost baseline</td>
+<td>0.94330</td>
+<td>0.94278</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Digits, frequencies, multiscale groups and target encoding</td>
+<td>0.94574</td>
+<td>0.94483</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>Multiple GBDT families and seeds</td>
+<td>0.94597²</td>
+<td>0.94500</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>Expanded target statistics and frequency lift</td>
+<td>0.94635</td>
+<td>0.94531</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>Multiple views and recipe initialization</td>
+<td>0.94646</td>
+<td>0.94545</td>
+</tr>
+<tr>
+<td>V14</td>
+<td>Paul XGB contribution</td>
+<td>0.94649</td>
+<td>0.94548</td>
+</tr>
+<tr>
+<td>V37</td>
+<td>Published token/LR/residual ensemble</td>
+<td>0.94675</td>
+<td>0.94566</td>
+</tr>
+<tr>
+<td>V38</td>
+<td>New full-basis models and joint stack</td>
+<td>0.94676</td>
+<td>0.94570</td>
+</tr>
+<tr>
+<td><strong>V39</strong></td>
+<td><strong>Expanded, regularized final stack</strong></td>
+<td><strong>0.94679</strong></td>
+<td><strong>0.94575</strong></td>
+</tr>
+</tbody>
+</table>
+<p>² One representative V3 submission; its five submitted variants ranged from 0.94594 to 0.94599 public and all scored 0.94500 private at published precision.</p>
+<p>The biggest gains came from improving representation, then adding models with complementary errors. There is no final private ablation that attributes the V39 gain to each added family separately.</p>
+<p>Several plausible ideas failed to improve the existing strong ensemble:</p>
+<ul>
+<li>Appending the original rows directly slightly hurt the early Exact V2 OOF model.</li>
+<li>Exact-income residual offsets and income-neighborhood smoothing corrections failed their local checks.</li>
+<li>Positive stacking over the older model pool did not produce a convincing gain.</li>
+<li>Pairwise/AUC losses did not outperform the existing stack in our tested configurations.</li>
+<li>Stronger CatBoost, TabM, additional pure-region rules and row-order/periodic features did not clear their screening checks.</li>
+<li>Full residual neural corrections were weak; shrinking their contribution was more useful.</li>
+</ul>
+<p>These are results for the tested pipelines, rather than general conclusions about the model families.</p>
+<h3>Public-leaderboard feedback led us in the wrong direction</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11142277%2F773a5cb23e2a116636bcc1469f3a3b1a%2Fpublic_private_divergence.png?generation=1790860677844596&amp;alt=media" alt=""></p>
+<p>Some intermediate submissions deliberately moved toward public-favored predictions. In hindsight, that branch improved public scores while losing private performance:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Public</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V17</td>
+<td>0.94661</td>
+<td>0.94544</td>
+</tr>
+<tr>
+<td>V31</td>
+<td>0.94664</td>
+<td>0.94536</td>
+</tr>
+<tr>
+<td>V35</td>
+<td>0.94664</td>
+<td>0.94526</td>
+</tr>
+</tbody>
+</table>
+<p>The final improvement came after moving to the token/LR/residual family. Conversely, V14 looked weaker than some public-favored alternatives but reached a new private best at that stage.</p>
+<h2>7. Takeaways</h2>
+<ol>
+<li><strong>Represent the data-generation traces.</strong> Exact numerical values, digits, token groups and frequencies were valuable alongside raw magnitudes.</li>
+<li><strong>Build a strong prior, then learn its residual.</strong> Logistic initialization was a useful foundation for shallow boosting models.</li>
+<li><strong>Evaluate contribution to the existing ensemble.</strong> A stronger single model is not automatically a useful stack member.</li>
+<li><strong>Keep validation claims precise.</strong> Conditional meta checks, full-library OOF replay and fully nested validation are different measurements.</li>
+<li><strong>Treat tiny public changes cautiously.</strong> Some public gains reversed on private, while several modest public improvements generalized better.</li>
+</ol>
+<h2>Acknowledgements</h2>
+<p>A heartfelt thank you to everyone whose shared notebooks, datasets and discussions helped me along the way. Your openness made it easier to understand the data, test new ideas and improve this solution.</p>
+<ul>
+<li><a href="/itzzomkar" target="_blank">@itzzomkar</a> (Omkar Kadam), for the <a href="https://www.kaggle.com/datasets/itzzomkar/ev-adoption-behavior-and-range-anxiety" target="_blank">original dataset</a>.</li>
+<li><a href="/cdeotte" target="_blank">@cdeotte</a> (Chris Deotte), for the <a href="https://www.kaggle.com/code/cdeotte/fable-5-1-eda-original-data-insights" target="_blank">original-data insights and purchase recipe</a>.</li>
+<li><a href="/heuljax" target="_blank">@heuljax</a> (Paul Bryan Elefante), for the <a href="https://www.kaggle.com/code/heuljax/kps6e09-generator-aware-ridge-logistic-regression" target="_blank">generator-aware ridge logistic regression</a> and <a href="https://www.kaggle.com/code/heuljax/kps6e09-xgb-sample" target="_blank">XGB sample</a>.</li>
+<li><a href="/goodpjw2008" target="_blank">@goodpjw2008</a>, for the <a href="https://www.kaggle.com/code/goodpjw2008/s6e9-lr-margin-gbdt-oof-stack-lb-0-94675" target="_blank">LR-margin residual GBDT OOF ensemble</a>, used directly in V37 and as a foundation for subsequent development.</li>
+<li>The authors of the public GBDT, RealMLP and OOF contributions used in that source ensemble, and the community members who shared analyses and negative results.</li>
+</ul>
+<p><strong>Compute:</strong> Work included local CPU experiments and Kaggle GPU notebooks. Congratulations to the winners and everyone who participated!</p>

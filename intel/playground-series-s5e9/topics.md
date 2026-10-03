@@ -1,0 +1,54 @@
+# playground-series-s5e9 讨论区（按票数排序，共 52 条）
+
+- [Are 50% of Kaggle Playground Regression Competitions created from Random Targets?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604028) — 64 票 / 29 评论 / 2025-09-05 
+- [Music Information Retrieval. Tempo Estimation (ANNs, LSTM). DJing: Genre Blend & BPM ranges.](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603307) — 28 票 / 4 评论 / 2025-09-01 
+- [XGBoost Starter - [CV 26.4572]](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604292) — 25 票 / 13 评论 / 2025-09-06 
+- [Mucky data can't make a rainbow](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604320) — 24 票 / 9 评论 / 2025-09-06 
+- [It shooketh](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/609993) — 20 票 / 8 评论 / 2025-10-01 
+- [CV-LB relation thread](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603432) — 20 票 / 44 评论 / 2025-09-02 
+- [How to make noisy data (and get away with it)](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604308) — 18 票 / 11 评论 / 2025-09-06 
+- [Same Beats (Oops Scores) would result to less Forks/votes? Kaggle drummer predicted that : )](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603489) — 17 票 / 0 评论 / 2025-09-02 
+- [An alternative tabular competition for your perusal](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603971) — 17 票 / 5 评论 / 2025-09-05 
+- [26th Place: FE, Pseudo-Labels, Residuals](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610264) — 16 票 / 10 评论 / 2026-03-22 **write-up?**
+- [A dataset with strong noise.](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603183) — 16 票 / 6 评论 / 2025-09-01 
+- [A Method for CV Improvement: CIR + Hill Climbing](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604392) — 12 票 / 6 评论 / 2025-09-07 
+- [Distribution Shift Between Original and Synthetic Data (KL/JS Divergence Analysis)](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603768) — 11 票 / 0 评论 / 2025-09-04 
+- [An alternative time series type tabular quantitative competition could be worthy!](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/608113) — 11 票 / 1 评论 / 2025-09-17 
+- [Who Needs Balance? Push It to the Extreme. Stretch it like a pizza dough ](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603468) — 10 票 / 3 评论 / 2025-09-02 
+- [Does ranking matter here?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/609703) — 9 票 / 22 评论 / 2025-09-29 
+- [How do Kaggle Experts approach a competition?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/606988) — 9 票 / 7 评论 / 2025-09-11 
+- [Potential first place](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/609999) — 8 票 / 15 评论 / 2025-10-01 **write-up?**
+- [Perhaps not spend too much time...](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603672) — 8 票 / 1 评论 / 2025-09-03 
+- [Will a blind random blend win the competition?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/609873) — 7 票 / 13 评论 / 2025-09-30 
+- [PSS5E9 4submissions challenge](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603177) — 6 票 / 2 评论 / 2025-09-01 
+- [Is this a randomly generated dataset?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603337) — 6 票 / 7 评论 / 2025-09-01 
+- [Recommend a simple tabular competition held at the same time](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/605416) — 6 票 / 3 评论 / 2025-09-08 
+- [Will this competition shakeup?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/609366) — 6 票 / 4 评论 / 2025-09-26 
+- [Quick Tip: Halve Your Memory Usage by Changing Dtypes](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604294) — 5 票 / 0 评论 / 2025-09-06 
+- [Possible Reason for Low Signal (A Musician's Perspective)](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603706) — 5 票 / 2 评论 / 2025-09-03 
+- [Mutual Information](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603212) — 4 票 / 14 评论 / 2025-09-01 
+- [Adding noise to good public leaderboard submissions improves the public score!!](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/607849) — 4 票 / 8 评论 / 2025-09-16 
+- [Parabola and vertex - Using a constant value for all test lines](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/606666) — 4 票 / 2 评论 / 2025-09-09 
+- [Will this competition shakeup?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604106) — 4 票 / 3 评论 / 2025-09-06 
+- [How to do post process with this dataset?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603726) — 4 票 / 2 评论 / 2025-09-04 
+- [Beyond Noise: Potential Drawbacks of Synthetic Datasets?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604355) — 3 票 / 8 评论 / 2025-09-07 
+- [Resources to improve ML skills suitable for Kaggle](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/604151) — 3 票 / 8 评论 / 2025-09-06 
+- [Chronology of actions  notebook semi-final.1  -> Top 20](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610003) — 3 票 / 0 评论 / 2025-10-01 
+- [Data contains lot of noise? - How to figure out?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603394) — 3 票 / 7 评论 / 2025-09-02 
+- [what is Post Processing ?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/607678) — 2 票 / 0 评论 / 2025-09-15 
+- [Can you help the beginner?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/608591) — 2 票 / 4 评论 / 2025-09-21 
+- [Is a score of 26.38 really better than 26.39?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/608579) — 2 票 / 6 评论 / 2025-09-21 
+- [What is RMSE (Root Mean Squared Error)](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603350) — 2 票 / 2 评论 / 2025-09-01 
+- [ Interaction Feature Crosses](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603581) — 2 票 / 5 评论 / 2025-09-03 
+- [GANDALF PyTorch Error & Code Help 🙏](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603705) — 2 票 / 2 评论 / 2025-09-03 
+- [what ??? LB --shaken pro max](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610079) — 2 票 / 2 评论 / 2025-10-01 
+- [Why baseline model beats ensemble?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/607726) — 1 票 / 5 评论 / 2025-09-15 
+- [No solutions ](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610185) — 1 票 / 0 评论 / 2025-10-02 **write-up?**
+- [Same CV Strategy and Random Seed produces better ensemble results ? ](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/603469) — 1 票 / 4 评论 / 2025-09-02 
+- [The amount of folds can led to overfitting?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/607522) — 0 票 / 8 评论 / 2025-09-14 
+- [Low r-squared with good public scores?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/608543) — 0 票 / 5 评论 / 2025-09-20 
+- [These BPM Sites?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/607716) — 0 票 / 0 评论 / 2025-09-15 
+- [Validation RMSE is 10.122, but submission RSME is worse](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/608594) — 0 票 / 21 评论 / 2025-09-21 
+- [How about create a teacher-student model](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/606617) — 0 票 / 2 评论 / 2025-09-09 
+- [Predicting-the-beats-per-minute-of-songs-solution-private-lb-postion-573](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/610016) — 0 票 / 4 评论 / 2025-10-01 **write-up?**
+- [Can We Crack RMSE Below 26 on the BPM Prediction Challenge?](https://www.kaggle.com/competitions/playground-series-s5e9/discussion/606949) — -1 票 / 9 评论 / 2025-09-11 

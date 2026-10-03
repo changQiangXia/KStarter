@@ -1,0 +1,111 @@
+# https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362651
+
+Topic #362651: [6th place] Solution Overview: 3D CNN + TD-CNN
+  Author: Ian Pan
+  Posted: 2022-10-28 10:47:41.942000
+  Votes: 59  Comments: 13
+
+Thank you to the organizers for putting together this interesting competition, and congratulations to all of the competitors on their efforts. I'm glad that shakeup was kind to me on private LB. One of my goals after becoming GM was to win a gold model with &lt;10 submissions, and I'm happy to accomplish that with this challenge. This is a brief overview of my solution. 
+
+A more detailed writeup is available here: https://docs.google.com/document/d/1GcHeUDks2dnECKmJn97nF2djFRTVVnGpORFpUH0nMuU/edit
+
+Summary
+
+-3D cervical spine segmentation
+-Individual vertebra extraction
+-Stage 1 models: 3D CNN and TD-CNN for vertebra-level fracture classification
+-Stage 2 models: transformers for final exam-level classification using features extracted from stage 1 models 
+
+Segmentation
+
+I used a 3D DeepLabV3+ encoder-decoder architecture with X3D 3D CNN backbone (https://pytorchvideo.readthedocs.io/en/latest/api/models/x3d.html) trained at 192x192x192 resolution to generate segmentations of C1-C7. 
+
+Models were first trained on the 87 semantic segmentation labels provided by the organizers. I then pseudolabeled the remaining studies with these models and retrained on the whole dataset. 
+
+Using the output of the segmentation models, one can extract a cube containing the vertebra of interest. Inevitably, there is some overlap with other vertebra levels due to their orientation within the scan. 
+
+Stage 1: 3D CNN
+
+Once a cube is extracted for each vertebra, I trained a X3D-L 3D CNN to perform binary fracture classification for each level. It was straightforward to map each vertebra to a binary label, as we're provided with the fractured levels for each study. The input size was 64x288x288 for vertebra. I also modified the model so that the z-stride was 1 for all layers. Thus, the first dimension (64) was not downsampled until final pooling. 
+
+After training the 3D classification model, features (432-D) were extracted from each vertebra. Thus, each study was represented by a 7x432 sequence. 
+
+Stage 2: TD-CNN
+
+A TD-CNN is simply a 2D CNN feature extractor with a sequence model head. In my case, I used a 2-layer transformer.  For a given volume NxHxW, the 2D CNN extracts a D-dimensional feature for each individual image (HxW) in the volume, which are then input (NxD) to the sequence model head. Ultimately, the model is trained to end-to-end. 
+
+I trained this model in 3 parts. First, I trained a TF-EfficientNetV2-S model to act as the 2D CNN feature extractor. 
+
+In order to train this model, I needed image-level labels. While there was a subset of the dataset which did have those labels, I was able to pseudolabel the entire dataset by a method I call class activation sequence. 
+
+Using the 3D CNN fracture classification model, I could generate a 3D class activation map for each vertebra by removing the pooling and classification layers and then obtaining a weighted average of the 3D feature maps using the classification layer weights. For each z-axis image in the 3D feature map, the max value was taken, converting the 3D feature map into a 1D sequence. This sequence was then rescaled to [0, 1] and resampled back to the original number of slices so a single value could be corresponded to each slice.
+
+e.g., (64, 288, 288) -&gt; (432, 64, 9, 9) -&gt; (64, 9, 9) -&gt; (64, ) -&gt; (original # of slices, )
+
+Because one vertebra-level input usually contained more than 1 level, there was overlap between these sequences. To deal with this, I just averaged the overlapping values. 
+
+I thresholded the values at 0.5 to generate pseudolabels for each image in the dataset. I did not use the provided image-level labels for training. 
+
+Stepwise training occurred as follows:
+1) Train 2D CNN feature extractor as binary classifier on pseudolabels (288x288)
+2) Add transformer head, freeze feature extractor, train head 
+3) Fine-tune entire model end-to-end (32x288x288)
+
+Similar to the 3D CNN model, a feature was extracted for each vertebra (256-D) after training, resulting in a 7x256 sequence for each vertebra. 
+
+Stage 2: Transformers
+
+Now that we have essentially converted each study into a sequence, we can use transformers to model the final output (C1-C7 fractures and overall fracture). 
+
+I used a 3-layer transformer and trained on 3 separate inputs:
+1) 7x432 input from 3D CNN (5-fold CV: 0.3205)
+2) 7x256 input from TD-CNN (5-fold CV: 0.3369)
+3) 7x688 input by fusing the above 2 sequences (5-fold CV: 0.2962) 
+
+The final submission was an ensemble of the outputs from the above 3 models (0.25, 0.25, 0.5). 
+
+Things that did not help:
+
+-Adding mask as separate channel in image
+-Masking out the non-segmented parts of the image
+-Extracting slice-wise features and training a 2D-CNN + sequence model on study-wise features- doing the vertebra-level approach was better
+
+Code
+
+https://github.com/i-pan/kaggle-rsna-cspine
+
+Comments:
+├─ Darragh (2022-10-28 11:31:37.573000) [+3]
+│  Congratulations @vaillant  Your model is robust! Very little difference between private and public.
+  ├─ Ian Pan (2022-10-30 13:23:04.383000) [+0]
+  │  Thanks, and congratulations to you as well!
+├─ Yee Ng (2022-10-28 12:38:08.147000) [+4]
+│  Congrats! Great work. And as usual very nice write up.
+│  
+│  That's amazing that you got the 3D CNN to work. I tried really hard to make 3D CNN work but my model didn't learn to pick up fractures. Inste...
+  ├─ Ian Pan (2022-10-30 13:22:43.927000) [+3]
+  │  I've had issues with 3D CNNs in the past, but the pretrained X3D models are surprisingly good for a variety of 3D tasks.
+├─ Jesse (2022-10-29 17:22:46) [+1]
+│  Congrats! Great solution as always Ian.
+│  
+│  The 3D pseudolabeling at image-level is very unique. You said you didn't use the provided image-level labels. Does that mean you tried and didn't like their...
+  ├─ Ian Pan (2022-10-30 13:21:59.647000) [+1]
+  │  Thanks!
+  │  
+  │  I tried training feature extractors using only the image-level labeled subset, but it didn't seem to work as well as when I trained on the pseudo-labeled whole dataset. 
+  │  
+  │  I didn't try usin...
+  ├─ Jesse (2022-10-31 15:29:57.353000) [+0]
+  │  Makes sense. Would be a cool performance comparison to see. pseudolabel all vs pseudolabel+provided labels if available vs provided labels using only provided subset.
+├─ Harshit Sheoran (2022-10-28 11:12:19.310000) [+2]
+│  Congratulations, both for solo gold and your personal single-digit sub goal, got to learn about both new models and new ways :)
+  ├─ Ian Pan (2022-10-30 13:23:22.130000) [+0]
+  │  Thanks and congrats as well!
+├─ Arnab_Dey (2022-10-29 13:30:27.250000) [+0]
+│  Amazing work
+├─ [deleted] (2023-03-01 18:54:31.257000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-01 14:47:02.993000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-01 14:41:56.810000) [+0]
+│  [deleted]

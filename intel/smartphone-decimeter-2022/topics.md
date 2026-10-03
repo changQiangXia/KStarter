@@ -1,0 +1,77 @@
+# smartphone-decimeter-2022 讨论区（按票数排序，共 75 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341111) — 72 票 / 23 评论 / 2022-08-01 **write-up?**
+- [How to Approach this Competition](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323548) — 65 票 / 11 评论 / 2022-05-07 
+- [GPS is back! Two resources that helped me last year](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323057) — 47 票 / 2 评论 / 2022-05-04 
+- [5th place solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340692) — 44 票 / 14 评论 / 2022-07-30 **write-up?**
+- [🔥🔥Winning Solution of Previous Google Smartphone Decimeter Kaggle Challenge ](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322510) — 42 票 / 3 评论 / 2022-05-02 **write-up?**
+- [Some ground truths are wrong](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/334654) — 39 票 / 11 评论 / 2022-07-02 
+- [6th Place Solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341226) — 31 票 / 4 评论 / 2022-08-01 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341305) — 24 票 / 3 评论 / 2022-08-03 **write-up?**
+- [Getting Oriented with GPS data ](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322644) — 23 票 / 3 评论 / 2022-05-03 
+- [Public and Private trips](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/325701) — 23 票 / 0 评论 / 2022-05-17 
+- [Tricks Used By The Winners Of Last Year's Competition](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/329824) — 22 票 / 0 评论 / 2022-06-09 
+- [Release of an application that can display baselines and street views](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/333003) — 22 票 / 7 评论 / 2022-06-24 
+- [[placeholder] experimental results on deep learning based GNSS localization.](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/326764) — 20 票 / 14 评论 / 2022-05-24 
+- [Congrats Random_Prediction to become a grandmaster! 🥇](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340596) — 19 票 / 9 评论 / 2022-07-30 
+- [Time Synchronization Across CSVs](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323135) — 18 票 / 2 评论 / 2022-05-04 
+- [Japan Participation in GNSS Positioning Competition. I hope it'll be strong Again. ](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322545) — 18 票 / 3 评论 / 2022-05-02 
+- [Interesting notebooks from last GSDC](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322640) — 17 票 / 3 评论 / 2022-05-03 
+- [Looking for a Team Thread](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322047) — 16 票 / 25 评论 / 2022-04-29 
+- [26th Place solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340693) — 15 票 / 5 评论 / 2022-07-30 **write-up?**
+- [Few datasets with Ground-Truth inaccuracy](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/337416) — 14 票 / 3 评论 / 2022-07-16 
+- [Welcome to the Second Google Smartphone Decimeter Challenge!](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322062) — 14 票 / 9 评论 / 2022-04-30 
+- [[11th Place] Solution: RTK, CV, and two Post-Processing are all you need](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341088) — 14 票 / 1 评论 / 2022-08-02 **write-up?**
+- [39th Place Solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340598) — 14 票 / 3 评论 / 2022-08-03 **write-up?**
+- [Interesting to see more optimization/Telecom engineering competitions!](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322557) — 14 票 / 2 评论 / 2022-05-02 
+- [Phones Mean does not work for test data](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322596) — 14 票 / 1 评论 / 2022-05-03 
+- [15th Place Solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341172) — 13 票 / 1 评论 / 2022-08-04 **write-up?**
+- [15-th place solution](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340597) — 13 票 / 2 评论 / 2022-07-30 **write-up?**
+- [Smartphone Decimeter Challenge at ION GNSS+ 2022](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/355952) — 12 票 / 4 评论 / 2022-09-28 
+- [Taro has nailed it twice!!](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340626) — 12 票 / 3 评论 / 2022-07-30 
+- [Competition Launch email coming a month after launch](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/328361) — 11 票 / 6 评论 / 2022-06-01 
+- [🛰️ Great interactive in-depth explanation of GPS](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/324676) — 11 票 / 1 评论 / 2022-05-12 
+- [GPS in a nutshell](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323855) — 11 票 / 5 评论 / 2022-05-08 
+- [🔥Useful Notebooks from Google Smartphone Decimeter Challenge 2021🔥](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322805) — 11 票 / 2 评论 / 2022-05-04 
+- [Understanding carrier phase cycle slips - Duty cycling](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/332127) — 10 票 / 0 评论 / 2022-06-20 
+- [What Are IMU timestamps, or Does the IMU Take Coffee Breaks?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/334308) — 10 票 / 1 评论 / 2022-06-30 
+- [Approach this competition](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/335842) — 10 票 / 4 评论 / 2022-07-08 
+- [35th place: rtklib tweaking and factor graph approach](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340724) — 10 票 / 3 评论 / 2022-07-30 **write-up?**
+- [[43rd place] RTKLIB & Lots of Postprocessing](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340663) — 10 票 / 1 评论 / 2022-08-03 **write-up?**
+- [RTKlib queries](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/324559) — 9 票 / 9 评论 / 2022-05-12 
+- [There is a silver solution hidden in public notebooks!](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340698) — 9 票 / 0 评论 / 2022-07-30 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/322046) — 8 票 / 2 评论 / 2022-04-29 
+- [Is the orientation of the smart phone the same?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/336041) — 8 票 / 6 评论 / 2022-07-09 
+- [CV score-vs-LB score](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323650) — 7 票 / 2 评论 / 2022-05-07 
+- [IMU -> Orientation](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/332386) — 7 票 / 8 评论 / 2022-06-21 
+- [Velocity coordinate conversion? (ECEF -> BLH)](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/335748) — 7 票 / 2 评论 / 2022-07-07 
+- [📐 Deriving baseline WLS solutions](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/325702) — 7 票 / 4 评论 / 2022-05-17 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/344606) — 6 票 / 0 评论 / 2022-08-15 
+- [Kalman filter for IMU and GNSS](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/328229) — 6 票 / 6 评论 / 2022-05-31 
+- [Research Papers On Gps Data + Deep Learning](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/325461) — 6 票 / 0 评论 / 2022-05-16 
+- [Why Altitudemeters in ground_truth are empty?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/332308) — 6 票 / 1 评论 / 2022-06-21 
+- [IMU sensor datasheet](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/325291) — 6 票 / 4 评论 / 2022-05-15 
+- [ map matching : are we allowed to use high resolution map as additional data?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/326734) — 6 票 / 1 评论 / 2022-05-24 **write-up?**
+- [Can somebody explain the evaluation technique](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323402) — 4 票 / 2 评论 / 2022-05-06 
+- [Orientation data?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323964) — 4 票 / 4 评论 / 2022-05-09 
+- [No email notification of notebook receiving bronze medal :'(](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/330044) — 4 票 / 7 评论 / 2022-06-10 **write-up?**
+- [How often does Kaggle do user experience surveys?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/330950) — 4 票 / 0 评论 / 2022-06-15 
+- [How is the ground truth table created ? and What is the accuracy of it?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/334964) — 4 票 / 3 评论 / 2022-07-04 
+- [Question for top-teams:  are your solutions real-time?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340630) — 4 票 / 2 评论 / 2022-07-30 **write-up?**
+- [All-null Altitude Fields](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/326742) — 3 票 / 1 评论 / 2022-05-24 
+- [Baseline position data miss in some drive](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/326120) — 3 票 / 3 评论 / 2022-05-20 
+- [What is IMU data?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/332395) — 3 票 / 4 评论 / 2022-06-21 
+- [Data explanation for GNSS file](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323783) — 3 票 / 2 评论 / 2022-05-08 
+- [I can't understand about train data... help me!](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323530) — 3 票 / 2 评论 / 2022-05-07 
+- [Has the leaderboard moved?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/341662) — 3 票 / 7 评论 / 2022-08-03 
+- [windows exe verus linux rnx2rtkp : it probably matters ?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/328149) — 2 票 / 3 评论 / 2022-05-31 
+- [Stacking numpy array delima](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323849) — 2 票 / 6 评论 / 2022-05-08 
+- [How much time do you have to wait for a TPU?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323824) — 2 票 / 3 评论 / 2022-05-08 
+- [Any one use IMU data and boost score?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/340728) — 2 票 / 1 评论 / 2022-07-30 
+- [Are there any resources to understand the problem?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323082) — 2 票 / 2 评论 / 2022-05-04 
+- [Some resources for robust optimization](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/329188) — 1 票 / 1 评论 / 2022-06-05 
+- [Do I need to use all data to do code?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/325468) — 1 票 / 1 评论 / 2022-05-16 
+- [Could the participants use RTK?](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/333829) — 1 票 / 5 评论 / 2022-06-28 
+- [Clearing Data](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/323693) — 1 票 / 0 评论 / 2022-05-07 
+- [Meaning of bit 16 in State](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/329810) — 0 票 / 0 评论 / 2022-06-08 
+- [Error when insert gnss_log.txt into GNSS Analysis](https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/331655) — 0 票 / 0 评论 / 2022-06-18 

@@ -1,0 +1,82 @@
+# playground-series-s6e2 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution — Diversity, Selection, and Trusting the CV–LB Relation](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679376) — 202 票 / 54 评论 / 2026-03-01 **write-up?**
+- [MLP with Linear & Periodic Embeddings](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671783) — 64 票 / 34 评论 / 2026-02-04 
+- [Model Explainability ](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673762) — 53 票 / 14 评论 / 2026-02-16 
+- [Trust Your CV: A Robust Ensemble Strategy](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673774) — 39 票 / 9 评论 / 2026-02-17 
+- [Cardiovascular Risk Factors. Confidence interval among gender.](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671262) — 39 票 / 7 评论 / 2026-02-01 
+- [The "Flipped Label" Trap](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673079) — 32 票 / 25 评论 / 2026-02-12 
+- [69th Place - ChatGPT Vibe Coding!](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679367) — 27 票 / 10 评论 / 2026-03-01 **write-up?**
+- [[Experiment] Does increasing n_splits actually improve the model?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671976) — 23 票 / 14 评论 / 2026-02-05 
+- [Shake-up achieved - please collect your complimentary confetti](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679364) — 20 票 / 33 评论 / 2026-03-01 
+- [Does a Higher Submission Limit Encourage Blind Blending?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671274) — 20 票 / 17 评论 / 2026-02-01 
+- [22nd place - NNs were again better than GBMs](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679389) — 19 票 / 4 评论 / 2026-03-01 **write-up?**
+- [Understanding Feature Meanings in the Heart Disease Dataset (Based on Original UCI Dataset)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673913) — 16 票 / 9 评论 / 2026-02-17 
+- [3rd place solution](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679428) — 14 票 / 3 评论 / 2026-03-01 **write-up?**
+- [Congrats, @masayakawamata!](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679366) — 14 票 / 11 评论 / 2026-03-01 
+- [First Notebook Competition – Learning to Ignore the Leaderboard (a bit)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673210) — 14 票 / 6 评论 / 2026-02-13 
+- [4th Place Solution: Why "Less is More" (Stumps & Rank Ensembling)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679414) — 13 票 / 2 评论 / 2026-03-01 **write-up?**
+- [What's your best CV?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/678812) — 13 票 / 10 评论 / 2026-02-25 
+- [Methods to improve RealMLP(NN)'s CV[PSS6E2]](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/674394) — 13 票 / 14 评论 / 2026-02-20 
+- [2nd place solution --- Avoid leaks and overfitting](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679493) — 12 票 / 3 评论 / 2026-03-01 **write-up?**
+- [Watch out! 'Thallium' and 'Chest Pain' are TRAPS (Don't treat them as numbers)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672292) — 12 票 / 13 评论 / 2026-02-07 
+- [Access to original dataset](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673335) — 11 票 / 14 评论 / 2026-02-13 
+- [#43 Solution | Catboost + RealMLP](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679378) — 11 票 / 2 评论 / 2026-03-01 **write-up?**
+- [Can we only use OOF for ensemble?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671985) — 10 票 / 3 评论 / 2026-02-05 
+- [# 35 Place - Time for a write up](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679403) — 10 票 / 0 评论 / 2026-03-01 **write-up?**
+- [10th Rank solution - Playground Series S6E2](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679418) — 8 票 / 0 评论 / 2026-03-01 **write-up?**
+- [8th Place - Ensemble and TrustCV](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679400) — 8 票 / 0 评论 / 2026-03-01 **write-up?**
+- [Trust Your CV! ](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679368) — 8 票 / 0 评论 / 2026-03-01 
+- [Feature Engineering Not Improving Score](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671301) — 7 票 / 3 评论 / 2026-02-01 
+- [GPUs for Competitions](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672836) — 7 票 / 4 评论 / 2026-02-10 
+- [Why can't we beat 0.955? I estimated the Bayes Error [Notebook]](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/674127) — 7 票 / 10 评论 / 2026-02-18 
+- [20th Place Solution (Private 0.95533) — Ridge Stacking + Weighted Rank-Average](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679444) — 6 票 / 0 评论 / 2026-03-01 **write-up?**
+- [Place 96th,Magic noise](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679370) — 6 票 / 0 评论 / 2026-03-01 
+- [Keep it Simple](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679253) — 6 票 / 2 评论 / 2026-02-28 
+- [Doubts regarding feature engineering and preprocessing ](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672476) — 6 票 / 6 评论 / 2026-02-08 
+- [Thallium is quite an important feature, Abnormal Thallium either.](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673103) — 5 票 / 2 评论 / 2026-02-12 
+- [16th Place Solution -- Trust your cv](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679496) — 5 票 / 2 评论 / 2026-03-01 **write-up?**
+- [My First Kaggle Comp: How I Blind‑Blended to a High Rank — and What I Learned](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672883) — 5 票 / 4 评论 / 2026-02-11 
+- [44th Place - Simple as Slime](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679429) — 5 票 / 0 评论 / 2026-03-01 **write-up?**
+- [# 25th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679383) — 5 票 / 1 评论 / 2026-03-01 **write-up?**
+- [🚀 Rank-Stacked 3-Stage Residual Ensemble (CB + XGB + Ada + RF + LR)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/674425) — 4 票 / 0 评论 / 2026-02-20 
+- [Feature Engineering Ideas for PSS6E2](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672305) — 4 票 / 9 评论 / 2026-02-07 
+- [[Feature addition] Kindly stop public kernel sharing in the last week of the Playground competition episodes](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679257) — 4 票 / 6 评论 / 2026-02-28 
+- [15th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679527) — 4 票 / 0 评论 / 2026-03-02 **write-up?**
+- [PSS6E2 CV vs LB,Overfit or not?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672413) — 3 票 / 3 评论 / 2026-02-08 
+- [Magic realmlp model](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672393) — 3 票 / 1 评论 / 2026-02-08 
+- [Looking for Ideas to Improve AUC (0.95362)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671959) — 3 票 / 7 评论 / 2026-02-05 
+- [#140 place - AutoGluon + feature engineering](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679395) — 3 票 / 0 评论 / 2026-03-01 
+- [External Data Declaration](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/674568) — 3 票 / 4 评论 / 2026-02-20 
+- [A Newbie's Journey from Blind Blending to Trusting the CV (My "solution writeup" for this competition 🤣)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679369) — 3 票 / 1 评论 / 2026-03-01 **write-up?**
+- [My Neural Networks failure on CSV data](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671830) — 3 票 / 7 评论 / 2026-02-04 
+- [Which Feature Engineering Approach is best with NN's?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672943) — 3 票 / 14 评论 / 2026-02-11 
+- [Mathematical Approach to Selecting the Best Model](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672285) — 2 票 / 0 评论 / 2026-02-07 
+- [🎓 TAMS Admissions Prediction - Beginner-Friendly Competition!](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673359) — 2 票 / 0 评论 / 2026-02-14 
+- [XGBoost Model with paper-based feature engineering | 0.95355 ROC AUC ](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671846) — 2 票 / 3 评论 / 2026-02-04 
+- [Why does adding new features hurt accuracy in XGBoost?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671611) — 2 票 / 2 评论 / 2026-02-03 
+- [Fold - Holdout metrics are inconsistent with LB score](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671439) — 2 票 / 5 评论 / 2026-02-02 
+- [First Kaggle Contest — Not What I Expected](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673282) — 2 票 / 4 评论 / 2026-02-13 
+- [Learnings from Private Drops](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679396) — 2 票 / 15 评论 / 2026-03-01 
+- [About generate more data.](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679219) — 2 票 / 3 评论 / 2026-02-28 
+- [[Question] Why is the Private LB calculated over 80% data only?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679388) — 2 票 / 8 评论 / 2026-03-01 
+- [Less is More: Lessons from the Complexity Trap ](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679417) — 2 票 / 1 评论 / 2026-03-01 
+- [Exploring GPU-Accelerated Logistic Regression Baseline (cuML)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672034) — 1 票 / 1 评论 / 2026-02-05 
+- [Data leakage caused by full FE/TE](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672389) — 1 票 / 0 评论 / 2026-02-07 
+- [Hard-to-Spot Finding: A Surprising Interaction Between ST Depression and Chest Pain Type](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672386) — 1 票 / 1 评论 / 2026-02-07 
+- [As expected a great shakeup](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679365) — 1 票 / 7 评论 / 2026-03-01 
+- [First-Timer's Postmortem: 1764/4283 on a Phone with No ML Background](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679464) — 1 票 / 0 评论 / 2026-03-01 
+- [Beyond Optuna-Spam: 7 Versions of Solitude and the 0.953 Foundation](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673048) — 1 票 / 0 评论 / 2026-02-12 
+- [what's your number one model right now?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673049) — 1 票 / 1 评论 / 2026-02-12 
+- [I want to apply PCA (n_components=0.90) for feature selection, but I am unsure whether this is appropriate.](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672882) — 1 票 / 6 评论 / 2026-02-11 
+- [Why EveryOne Score is So close??](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672651) — 1 票 / 4 评论 / 2026-02-09 
+- [🏆 [0.964+ AUC] Complete Guide to Beating S6E2: Feature Engineering + Original Data Secret](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/674420) — 0 票 / 5 评论 / 2026-02-20 
+- [Beyond the Baseline - Cracking Collateral Circulation Signals in Coronary Occlusion (v16.3-v17)](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673216) — 0 票 / 0 评论 / 2026-02-13 
+- [did ensembling ever help you?](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679356) — 0 票 / 1 评论 / 2026-02-28 
+- [How to improve model accuracy??](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673070) — 0 票 / 2 评论 / 2026-02-12 
+- [Max accuracy according to TI Sigma Framework ](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679384) — 0 票 / 0 评论 / 2026-03-01 
+- [Suggestions for models](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672168) — 0 票 / 3 评论 / 2026-02-06 
+- [Looking for a merge](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679109) — 0 票 / 6 评论 / 2026-02-27 
+- [Predict label flips, not heart disease](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672524) — 0 票 / 1 评论 / 2026-02-08 
+- [Seeking Advice on Optimization, stuck on score of 0.94383](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/672307) — 0 票 / 2 评论 / 2026-02-07 
+- [Greetings, I would like to ask professionals to help me and provide feedback. Am I doing well? Is this being done correctly, or is AI just going in circles with me? How should I proceed further? Any recommendations would be appreciated. Thank you.](https://www.kaggle.com/competitions/playground-series-s6e2/discussion/673700) — 0 票 / 1 评论 / 2026-02-16 

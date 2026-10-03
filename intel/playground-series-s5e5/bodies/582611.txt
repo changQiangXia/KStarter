@@ -1,0 +1,289 @@
+# https://www.kaggle.com/competitions/playground-series-s5e5/discussion/582611
+
+Topic #582611: 1st Place - GPU Hill Climbing!
+  Author: Chris Deotte
+  Posted: 2025-06-01 13:54:55.636000
+  Votes: 155  Comments: 77
+
+Thanks Kaggle for another fun playground competition. This month was different than past months because the features were all numeric without NANs.
+
+GPU Hill Climbing
+
+My final solution is the result of feeding hundreds of GBDT, NN, and NVIDIA cuDF cuML models into my GPU Hill Climbing starter notebook here. Over the month of May 2025, I used the speed of GPU and NVIDIA cuDF cuML to build as many diverse models as possible.
+
+Hill climbing is great because it automatically selects models for us. From the hundreds of candidate models, hill climbing selected the following 7 models:
+
+
+
+
+Weight
+Model
+Notes
+CV score
+
+
+
+
+1/12
+XGBoost
+cuML target encoded features1
+0.06084
+
+
+1/12
+XGBoost
+cuML target encoded features2
+0.06061
+
+
+1/12
+XGBoost
+cuML target encoded features3
+0.06053
+
+
+1/4
+XGBoost
+product features
+0.05951
+
+
+1/6
+CatBoost
+binned features and groupby features
+0.05937
+
+
+1/6
+NN over LinearRegression
+NN is here
+0.05999
+
+
+1/6
+XGB over NN
+NN is here
+0.05989
+
+
+
+
+Final Ensemble CV and LB Scores
+
+The final hill climbing ensemble has 
+
+
+
+RMSLE CV = 0.05880
+
+Public LB = 0.05677
+
+Private LB = 0.05841
+
+
+XGBoost with cuML Target Encoder (CV=0.06XX)
+
+In my final ensemble 25% of the weight is XGBoost with NVIDIA cuML TargetEncoder features. This demonstrates that diversity is more important than single model CV score. My XGBoost with TE features each have a poor CV score of 0.06XX but they improved the final ensemble CV 0.05890 =&gt; 0.05880 and Private LB 0.05847 =&gt; 0.05841
+
+XGBoost with Product Features (CV = 0.05951)
+
+For each feature, i created a log1p version, i.e. df[f'log1p_{c}'] = log1p( df[c] ). Then i created all products, divisions, sums, and differences between all pairs of features.
+
+CatBoost with Binned Features and GroupBy Features (CV=0.05937)
+
+CatBoost loves categorical features, so I converted each numerical feature into 9 equal width binned values. I also created log1p versions of all features and converted those into 9 binned values. Afterward I created combinations of all pairs of columns. The resultant new columns had 81 unique values and were also categorical. We then use cat_features = CATS.
+
+For groupby features, I would pick a group of people like Sex and Age using the bins, then I would compute each person's z-score about their height. And then their z-score about their weight, i.e. for a male in their 40's how does their weight compare with other males in their 40's. 
+
+I created 26 of these features. I would make groups from 1 to 3 features then compute z-score of another feature. Another example is [ ["Sex","Weight_bin","Body_Temp"], ["Heart_Rate"] ],. This means i make groups from Sex, Weight, Body_Temp and compute z-score for Heart_Rate.
+
+NN over Linear Regression (CV=0.05999)
+
+I trained my public notebook NN on the residuals from a NVIDIA cuML LinearRegression model. This improved CV 0.0608 =&gt; 0.0599. The linear regression model does a great job capturing the linear relationships in the data. And then it helps the NN learn these relationships better.
+
+
+
+train LinearRegression with 5 Kfold seed 42. Make OOF predictions and test PRED predictions.
+
+make a new target with new_target = old_target - LinearRegression_OOF
+
+train NN with train data and new target (with 5 Kfold seed 42)
+
+infer NN on test, then final_pred = NN_PRED + LinearRegression_PRED.
+
+
+XGB over NN (CV=0.05989)
+
+I trained my XGB with Product Features on the residuals from my public NN notebook. This did not improve the XGB CV score but it made a new diverse model that improved my hill climbing ensemble CV score. We implement this using similar bullet points as above in "NN over Linear Regression" section.
+
+Icing on the Cake - Retrain Using 100% Train
+
+I use the following trick in all my Kaggle competitions. My OOF are 5-Kfold and we use hill climbing to find the model weights from these OOF. Then we retrain all the models using 100% train data and use fixed number of iterations equal to 25% ( which equals to 1/(K-1) ) more than average number of iterations from 5-Kfold early stopping. Then we take a weighted average of these 100% test preds using the weights found from hill climbing based on 5-Kfold OOF. This gives a nice boost in every Kaggle competition! (I also train K of these using a different seed each time and average the predictions).
+
+Comments:
+├─ Marília Prata (2025-06-01 14:44:04.690000) [+5]
+│  We're already waiting you (e.g. topics/Notebooks/ solutions) on the New Fertilizer Playground.
+│  Thank you Deotte!
+├─ Daniel Bekker (2025-06-26 07:54:23.313000) [+3]
+│  Thank you for sharing @cdeotte ! What heuristic do you recommend (if any) for selecting the max number of models you may add to the ensemble when hill climbing or is this just something you test em...
+├─ Harsh Gupta (2025-06-04 19:00:37.460000) [+3]
+│  This detailed discussion will be very helpful for future competition for me, and also Thank you so much for this information.
+├─ Pratham Jain (2025-06-04 06:35:39.360000) [+3]
+│  Insane work! Love how you combined GPU brute force with clever ensemble strategy. That NN over residuals trick + product features + CatBoost bins is gold. Also, really cool to see "bad" CV models s...
+├─ Frederic Nicholson (2025-06-01 15:05:50.503000) [+3]
+│  thanks for sharing your strategy and congratulations to another first place. Just for my info, what was your best private score?  my best models private score beat your winning score, just wanted t...
+  ├─ Chris Deotte (2025-06-01 18:16:56.370000) [+2]
+  │  My best private score is this hill climbing ensemble (0.05841). Congrats on achieving 12th place and congrats on building models better than private LB 0.05841 !!
+├─ Oscar Aguilar (2025-06-01 22:25:16.367000) [+4]
+│  Congratulations on another win with a strong approach! I have a quick question: Are those results based on 5-fold or 10-fold cross-validation? In my experiments, I found that I achieved slightly be...
+  ├─ Chris Deotte (2025-06-01 22:43:17.303000) [+10]
+  │  Hi @oscarm524 Thanks! I use a trick in all my Kaggle competitions. My OOF and hill climbing use 5-Kfold to find the model weights. Then I retrain all the models using 100% train data and use fixed ...
+    ├─ Oscar Aguilar (2025-06-01 22:53:41.490000) [+2]
+    │  Interesting. Thanks for sharing, @cdeotte. I do remember now that you mentioned in a YouTube video with Abhishek that you always retrain your models on the entire dataset.
+    ├─ Khánh Vũ (2025-06-01 22:56:25.947000) [+1]
+    │  Wow this is interesting, I had been thinking about re-training all of my models on the entire training set but not sure how long should I train them for.
+    ├─ Chris Deotte (2025-06-01 23:14:10.497000) [+2]
+    │  For GBDT, i increase number of iterations by 1/(K-1). For NN, i just use the average reduce on plateau learning schedule and do not increase the number of iterations.
+    │  
+    │  For GBDT, i think increasing ...
+    ├─ Komil Parmar (2025-06-03 14:37:46.390000) [+1]
+    │  Can you also share your experience with cyclical learning rate schemes for NN please. From what I have observed, it definitely converges faster especially with more noisy data but the gain on the f...
+    ├─ goevian (2025-06-03 14:44:47.050000) [+1]
+    │  Impressive! Thanks a lot for sharing this trick
+    ├─ Chris Deotte (2025-06-03 19:14:49.837000) [+0]
+    │  Hi @komilparmar Are you talking about something like "cosine with restarts"? One trick is to train with 1 cosine schedule then save the weights afterward. Then we can start training new time and lo...
+    ├─ Roman@Ahmed (2025-07-07 10:02:36.400000) [+0]
+    │  Thanks for sharing
+├─ Johannes Heller (2025-06-01 14:28:43.247000) [+4]
+│  Congrats on another well-deserved win 🤩 Two things I find especially interesting in your description:
+│  
+│  
+│  
+│  Binning and combining binned features into new categories. → Do you think that works particu...
+  ├─ Chris Deotte (2025-06-01 18:08:24.197000) [+3]
+  │  Hi @stopwhispering . Converting numerical features into categorical features with binning helps in real life too. Because often the numerical feature can behave somewhat categorical to begin with. ...
+    ├─ paperxd (2025-06-03 02:10:07.883000) [+2]
+    │  is it a good idea to use like xgboost and another xgboost predicting residuals or is it generally not a good idea for GBDTs
+    ├─ Chris Deotte (2025-06-03 03:19:39.893000) [+1]
+    │  It works best when you use 2 different models. Like NN with XGB. Or LinearReg with NN. Or LinearReg with XGB. Or XGB with NN. etc etc
+    │  
+    │  Because the second model begins from the intelligence of the f...
+    ├─ Mahog (2025-06-03 03:21:39.747000) [+1]
+    │  According to my experiments, it does help a little
+    ├─ Gio (2025-06-03 13:07:11.657000) [+3]
+    │  I think GBDT already do that (stacking models trying to predict residuals from the previous one). Might be redundant for GBDT specifically
+├─ Beyza Kucuk (2025-07-06 07:36:19.807000) [+1]
+│  Congratulations on the impressive solution. Your systematic approach, especially the combination of residual learning, stacking, and GPU hill climbing, stands out as a masterclass in practical mach...
+├─ Evgeniy Borovoy (2025-06-21 11:40:15.187000) [+1]
+│  Congratilations!
+├─ Urvish Ahir (2025-06-16 17:09:28.087000) [+1]
+│  Congrates !! @cdeotte
+├─ PavelGorbachev1 (2025-06-14 19:49:10.187000) [+1]
+│  Interesting idea!Congratulations
+├─ Henry D (2025-06-05 17:20:17.493000) [+1]
+│  Thank you so much for sharing, I've learned a lot from your explanations. I noticed that you have over 100 entries per competition. How did you structure your workflow to manage that effectively?
+├─ Khushi Yadav (2025-06-05 10:31:20.977000) [+1]
+│  Thank you for your detailed explanation.✨
+├─ Nikolay Pasevich (2025-06-04 09:30:47.897000) [+1]
+│  Super! Thank you that you share your steps. Briliant  work!!!
+├─ Fazliddin Karimov (2025-06-04 06:17:31.260000) [+1]
+│  Thank you for your detailed explanation :)
+├─ Yasir Hussein Shakir (2025-06-03 09:37:17.277000) [+1]
+│  Congratulations sir.
+│  Your work is impressive
+├─ Marpini Pavan Srikar (2025-06-03 06:50:40.703000) [+1]
+│  Congratulations!…Thanks for sharing your solution.
+├─ Rookie (2025-06-03 05:25:03.927000) [+1]
+│  simple and amazing solution!
+├─ Afridi Jubair (2025-06-03 02:09:08.073000) [+1]
+│  Nice work man, also great insights for future similar competitions…
+├─ Roman@Ahmed (2025-06-02 18:39:56.070000) [+1]
+│  Congrats @cdeotte - Your work is always amazing, thanks for sharing
+├─ Japyh (2025-06-02 16:44:50.637000) [+1]
+│  Congratulations! Nice work :)
+├─ Sarah Arshad (2025-06-02 15:07:59.073000) [+1]
+│  Congratulations!…..Amazing overview
+├─ Chamod Kalupahana (2025-06-02 13:07:15.733000) [+1]
+│  Nice work, congratulations! 🎉
+├─ narsil (jobs-in-data.com) (2025-06-02 08:04:50.267000) [+1]
+│  Interesting that you didn't normalize the target via dividing by minutes. Target was super strongly linearly correlated with minutes (which makes sense because you if train x2 longer you need rough...
+  ├─ Chris Deotte (2025-06-02 14:56:18.093000) [+5]
+  │  I did try using ratio targets (similar to what I did in last month's competition about podcast listening times) but it didn't help my hill climbing ensemble CV this month. (Whereas last month train...
+    ├─ narsil (jobs-in-data.com) (2025-06-03 10:24:46.110000) [+1]
+    │  I imagined you must've tried ratio targets - what is interesting for me is that sometimes they help and sometimes they don't - in seemingly very similar contexts , i.e. clear drivers that correlate...
+├─ Mykyta Barkalov (2025-06-02 07:19:48.740000) [+1]
+│  Nice work. How to understand if we need to create some new features for training? They are created from analysis of data, training scores after adding these features or something else? For example,...
+├─ OMID BAGHCHEH SARAEI (2025-06-02 07:18:36.850000) [+1]
+│  Congratulations, @cdeotte, on your fantastic 1st place finish! 
+│  
+│  I was curious to know, did you experiment with cuML SVR in this competition? If so, could you share roughly how long the training ti...
+  ├─ Chris Deotte (2025-06-02 08:02:03.023000) [+4]
+  │  Thank you. Training time (for NVIDIA cuML SVR RBF) is like 1 second 😀 I use two tricks. First we need to normalize the features (subtract mean divide std). This speeds up convergence. Second each f...
+    ├─ paperxd (2025-06-02 13:33:21.910000) [+1]
+    │  Wait so you had to train 30 times because each fold you trained a model 6 times and there was 5 folds?
+    ├─ Chris Deotte (2025-06-02 14:14:57.553000) [+0]
+    │  Exactly, I trained 30 SVR but each trained in seconds.
+├─ Ashish Tandi (2025-06-02 06:48:02.203000) [+1]
+│  Nice Overview
+├─ Miko Tan (2025-06-02 04:06:35.360000) [+1]
+│  Thank you for sharing your solution. I will look into applying the techniques you've used in my own work.
+├─ ABHAY SINGH (2025-06-02 03:46:47.560000) [+1]
+│  I was working on the same approach, but the model was taking a very long time to converge. Can you suggest some tips regarding this ?
+├─ [deleted] (2025-06-02 00:17:32.577000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 23:27:29.230000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 21:14:02.510000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 19:32:11.450000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 19:25:08.313000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 17:12:00.610000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 14:47:12.107000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-01 14:33:01.407000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-28 10:12:34.933000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-02 23:16:10.263000) [+2]
+│  [deleted]
+├─ [deleted] (2025-06-02 22:05:54.770000) [+2]
+│  [deleted]
+├─ [deleted] (2025-06-02 06:10:06.983000) [+2]
+│  [deleted]
+├─ [deleted] (2025-06-02 01:19:37.140000) [+2]
+│  [deleted]
+├─ [deleted] (2025-06-01 14:59:06.160000) [+2]
+│  [deleted]
+├─ [deleted] (2025-06-01 14:45:33.413000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-06-01 18:16:04.370000) [+2]
+  │  [deleted]
+├─ [deleted] (2025-06-14 04:06:37.880000) [+1]
+│  [deleted]
+├─ [deleted] (2025-08-18 11:05:19.810000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-03 11:51:35.680000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-03 11:03:05.593000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-02 08:53:23.347000) [+1]
+│  [deleted]
+├─ [deleted] (2025-06-02 15:52:25.883000) [+2]
+│  [deleted]
+├─ [deleted] (2025-08-11 17:46:36.530000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-29 10:55:26.860000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-27 12:32:47.033000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-12 12:26:03.683000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-12 11:01:02.357000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-09 01:17:09.593000) [+0]
+│  [deleted]
+├─ [deleted] (2025-06-03 06:51:20.363000) [+1]
+│  [deleted]

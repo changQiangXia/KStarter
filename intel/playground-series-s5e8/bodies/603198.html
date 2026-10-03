@@ -1,0 +1,619 @@
+<p>Many thanks to <strong>Kaggle</strong> for organizing such a wonderful Playground competition! This month’s dataset was excellent, and I truly enjoyed the process and learned a lot. </p>
+<p>Special thanks to <a href="https://www.kaggle.com/mulicmu" target="_blank">@mulicmu</a> ’s “<a href="https://d2l.ai/" target="_blank">Dive into Deep Learning</a>”, the <a href="https://auto.gluon.ai/" target="_blank">AutoGluon </a> library, <a href="https://www.kaggle.com/optimistix" target="_blank">@optimistix</a>  for the ideas shared in the <a href="https://www.kaggle.com/competitions/playground-series-s4e8/writeups/optimistix-1st-place-solution-72-oofs-a-whole-lott" target="_blank">1st place solution</a>, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> for his enthusiastic sharing, and to everyone in the community who openly shared their work and ideas.</p>
+<h2>📌 Solution Approach</h2>
+<p>My main idea was to use iterative OOF stacking combined with AutoGluon. The workflow was as follows:</p>
+<ol>
+<li><strong>Collect OOF and submission files</strong>: Gather OOF predictions and submissions from high-quality notebooks and my own models, while filtering out those with leakage or inflated CV scores.</li>
+<li><strong>Train with AutoGluon</strong>: Use the selected OOF files as features for AutoGluon, train new models, and generate fresh OOF and submission files while recording feature importance.</li>
+<li><strong>Filter features</strong>:  Analyze feature importance and select high-quality features for the next round.</li>
+<li><strong>Iterate the process</strong>: Repeat steps 1–3, continually adding new models and OOFs to steadily improve ensemble performance.</li>
+</ol>
+<h2>🏆 Model Development Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Model / Notes</th>
+<th>Private</th>
+<th>Public</th>
+<th>Type</th>
+<th>Gap vs Best Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>AutoGluon baseline</td>
+<td>0.96677</td>
+<td>0.96691</td>
+<td>Multi-model (time_limit=1000)</td>
+<td>-0.00947</td>
+</tr>
+<tr>
+<td>V1</td>
+<td>GPU with KNN</td>
+<td>0.97085</td>
+<td>0.97111</td>
+<td>Multi-model (best_quality)</td>
+<td>-0.00539</td>
+</tr>
+<tr>
+<td>V2</td>
+<td>Added pseudo-label data</td>
+<td>0.97085</td>
+<td>0.97106</td>
+<td>Multi-model (pseudo-labels)</td>
+<td>-0.00539</td>
+</tr>
+<tr>
+<td>V3</td>
+<td>GBM</td>
+<td>0.97082</td>
+<td>0.97100</td>
+<td>Single model</td>
+<td>-0.00542</td>
+</tr>
+<tr>
+<td>V4</td>
+<td>NN_TORCH</td>
+<td>0.96528</td>
+<td>0.96559</td>
+<td>Single model</td>
+<td>-0.01096</td>
+</tr>
+<tr>
+<td>V5</td>
+<td>CATBoost</td>
+<td>0.96910</td>
+<td>0.96951</td>
+<td>Single model</td>
+<td>-0.00714</td>
+</tr>
+<tr>
+<td>V6</td>
+<td>XGB</td>
+<td>0.97008</td>
+<td>0.97046</td>
+<td>Single model</td>
+<td>-0.00616</td>
+</tr>
+<tr>
+<td>V7</td>
+<td>FASTAI</td>
+<td>0.96505</td>
+<td>0.96512</td>
+<td>Single model</td>
+<td>-0.01119</td>
+</tr>
+<tr>
+<td>V9</td>
+<td>Dual GPU, removed KNN</td>
+<td>0.97096</td>
+<td>0.97113</td>
+<td>Multi-model (best_quality)</td>
+<td>-0.00528</td>
+</tr>
+<tr>
+<td>V10</td>
+<td>Random Forest (RF)</td>
+<td>0.96650</td>
+<td>0.96694</td>
+<td>Single model</td>
+<td>-0.00974</td>
+</tr>
+<tr>
+<td>V11</td>
+<td>Extra Trees (fast, 2 hrs)</td>
+<td>0.96478</td>
+<td>0.96516</td>
+<td>Single model</td>
+<td>-0.01146</td>
+</tr>
+<tr>
+<td>V12</td>
+<td>Multiple OOF re-training</td>
+<td>0.97624</td>
+<td>0.97663</td>
+<td><strong>OOF / Stacking</strong> (CV ROC AUC: 0.97589771)</td>
+<td>0.00000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key insight:</strong></p>
+<ul>
+<li>Single models and the standard AutoGluon multi-model perform reasonably well (≈0.971),</li>
+<li>OOF/Stacking ensembles further improve the score to 0.976, demonstrating that advanced ensembling strategies clearly outperform single models or standard multi-models.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Model / Notes</th>
+<th>eval_metric</th>
+<th>CV ROC AUC</th>
+<th>Private LB</th>
+<th>Public LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V34</td>
+<td>AutoGluon,50 OOF Files,</td>
+<td>'roc_auc'</td>
+<td>0.977498</td>
+<td>0.97772</td>
+<td>0.97806</td>
+</tr>
+<tr>
+<td>V41</td>
+<td>AutoGluon, adjusted eval_metric</td>
+<td>'pac'</td>
+<td>0.977486</td>
+<td>0.97772</td>
+<td>0.97807</td>
+</tr>
+<tr>
+<td>V39</td>
+<td>AutoGluon, adjusted eval_metric</td>
+<td>'nll'</td>
+<td>0.977486</td>
+<td>0.97771</td>
+<td>0.97805</td>
+</tr>
+<tr>
+<td>V38</td>
+<td>AutoGluon, adjusted eval_metric</td>
+<td>'mcc'</td>
+<td>0.976961</td>
+<td>0.97770</td>
+<td>0.97805</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Changing <code>eval_metric</code> from <code>'roc_auc'</code>  to <code>'pac'</code> or <code>'nll'</code> has almost no effect on CV or LB scores.</li>
+<li>Using <code>'mcc'</code> slightly decreases CV ROC AUC but keeps LB stable.</li>
+<li>Overall, the metric choice did not significantly improve the leaderboard scores.</li>
+<li>Interestingly, <code>'pac'</code> gave the best Private LB, which aligned with my intuition at the time, but I didn’t dare to bet on it and stuck with the official <code>'roc_auc'</code> metric.</li>
+</ul>
+<h2>🏆 Best Single Model Evolution</h2>
+<table>
+<thead>
+<tr>
+<th>Model / Version</th>
+<th>Notes / Evolution</th>
+<th>CV ROC AUC</th>
+<th>Private LB</th>
+<th>Public LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>Based on <a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e8-single-xgb-cv-0-975782-lb-0-97681?scriptVersionId=254278105" target="_blank">original notebook</a> by <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a></td>
+<td>0.97578</td>
+<td>0.97636</td>
+<td>0.97681</td>
+</tr>
+<tr>
+<td>V1 - Single XGB</td>
+<td>Added categorical <strong>3-way combinations</strong> (Cat 3)</td>
+<td>0.97576</td>
+<td>0.97633</td>
+<td>0.97681</td>
+</tr>
+<tr>
+<td>V2 - Single XGB</td>
+<td>Added numerical <strong>3-way combinations</strong> (Num 3)</td>
+<td>0.97577</td>
+<td>0.97638</td>
+<td>0.97676</td>
+</tr>
+<tr>
+<td>V9 - Single XGB</td>
+<td>Added high-importance features and applied <strong>TE &amp; CE</strong> on them</td>
+<td>0.97592</td>
+<td>0.97645</td>
+<td>0.97684</td>
+</tr>
+<tr>
+<td>V10 - Single XGB</td>
+<td>Added high-importance features (without extra TE/CE)</td>
+<td>0.97602</td>
+<td>0.97660</td>
+<td>0.97702</td>
+</tr>
+<tr>
+<td>V13 - Single XGB</td>
+<td>Adjusted parameters</td>
+<td>0.97618</td>
+<td>0.97683</td>
+<td>0.97716</td>
+</tr>
+<tr>
+<td>V19 - Single XGB</td>
+<td>Removed 2 lowest-importance features</td>
+<td>0.97621</td>
+<td>0.97687</td>
+<td>0.97717</td>
+</tr>
+<tr>
+<td>V28 - Single XGB</td>
+<td>Selected highest-correlation features and created product interactions; CV slightly changed, but both private and public LB decreased.</td>
+<td>0.97632</td>
+<td>0.97646</td>
+<td>0.97685</td>
+</tr>
+<tr>
+<td>V30 - Single XGB</td>
+<td>Highest Private LB single model (modified XGB), 10-fold CV</td>
+<td>0.97639</td>
+<td>0.97693</td>
+<td>0.97727</td>
+</tr>
+<tr>
+<td>V32 - Single XGB</td>
+<td>40-fold CV</td>
+<td>0.97637</td>
+<td>0.97683</td>
+<td>0.97722</td>
+</tr>
+<tr>
+<td>V34 - Single XGB</td>
+<td>20-fold CV</td>
+<td>0.97644</td>
+<td>0.97688</td>
+<td>0.97725</td>
+</tr>
+</tbody>
+</table>
+<pre><code>
+df[] = df[] / (df[] + )
+df[] = df[] - df[]
+df[] = df[] * df[]
+df[] = df[] - df[]
+df[] = df[] * df[]
+
+df[] = df[] * df[]
+df[] = df[] * df[]
+</code></pre>
+<h2>📌 <a href="https://www.kaggle.com/code/bestwater/v10-of-pg-s5e8-single-xgb?scriptVersionId=255135348" target="_blank">Feature Engineering Summary</a></h2>
+<p>Based on the raw data, I designed and constructed around <strong>30 new features</strong> from <strong>duration</strong>, <strong>balance</strong>, <strong>age</strong>, <strong>month</strong>, and <strong>day</strong>, mainly including:</p>
+<ol>
+<li><strong>Nonlinear transformations</strong>: log, sqrt, square, cube, and exponential transformations.</li>
+<li><strong>Binning features</strong>: quantile-based binning (5/10/20/30 bins) to generate categorical-like features.</li>
+<li><strong>Statistical features</strong>: indicators for long/very long duration, absolute balance and squared terms.</li>
+<li><strong>Ratio features</strong>: duration-to-campaign ratio, balance-to-duration ratio.</li>
+<li><strong>Cyclical features</strong>: sine and cosine encodings for the day variable.</li>
+<li><strong>Seasonal features</strong>: indicator for peak business months (March, April, May, September, October, November).</li>
+</ol>
+<h2><strong>Overall Conclusion</strong></h2>
+<ul>
+<li><p><strong>Feature Interactions</strong></p>
+<ul>
+<li><strong>Pairwise combinations (length = 2):</strong> Provided consistent and noticeable improvements, the most effective interaction strategy so far.</li>
+<li><strong>Triple combinations (length = 3):</strong> Tried, but gains were minimal and sometimes introduced noise, leading to limited benefit.</li></ul></li>
+<li><p><strong>Target / Categorical Encoding (TE &amp; CE)</strong></p>
+<ul>
+<li>Very effective, among the most impactful techniques for performance improvement.</li></ul></li>
+<li><p><strong>Manually Engineered Features</strong></p>
+<ul>
+<li>Added some value, but overall impact was weaker compared to <strong>feature interactions</strong> and <strong>TE/CE</strong>.</li></ul></li>
+<li><p>For single models, increasing the number of cross-validation folds often helps improve performance, though too many folds can be counterproductive.</p></li>
+<li><p>Best path forward: Focus on strong pairwise interactions, then integrate TE/CE.</p></li>
+<li><p>Other engineered features can serve as complementary additions but are not the main drivers of performance.</p></li>
+<li><p>This may be partly explained by the nature of Kaggle Playground datasets, which are synthetically generated. In such data, handcrafted feature engineering often has limited effectiveness compared to systematic interactions and encoding methods.</p></li>
+</ul>
+<h2>🔹 Presets Comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>#OOF Files</th>
+<th>Presets</th>
+<th>CV ROC AUC</th>
+<th>Private LB</th>
+<th>Public LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V46</td>
+<td>52</td>
+<td>best</td>
+<td>0.97752</td>
+<td>0.97779</td>
+<td>0.97809</td>
+</tr>
+<tr>
+<td>V48</td>
+<td>52</td>
+<td>experimental_quality</td>
+<td>0.97751</td>
+<td>0.97778</td>
+<td>0.97809</td>
+</tr>
+<tr>
+<td>V53</td>
+<td>48</td>
+<td>experimental_quality</td>
+<td>0.97754</td>
+<td>0.97780</td>
+<td>0.97809</td>
+</tr>
+<tr>
+<td>V58</td>
+<td>48</td>
+<td>best</td>
+<td>0.97753</td>
+<td>0.97779</td>
+<td>0.97810</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Analysis:</strong></p>
+<ol>
+<li>Using <strong>experimental_quality</strong> presets has almost no effect on Public LB, sometimes slightly decreasing it, while slightly improving Private LB.</li>
+<li>This observation is from the mid-to-late stage of the competition; earlier or most of the time, <strong>experimental_quality</strong> performed well on both Public and Private LB.</li>
+<li>The Public LB results made me somewhat skeptical of <strong>experimental_quality</strong>, which influenced some of my decisions.</li>
+<li>Due to concerns about overfitting, I mostly chose <strong>best</strong> presets in the later stage.</li>
+</ol>
+<h2>AutoGluon Manual CV Experiments</h2>
+<ul>
+<li><strong>Goal:</strong> Test whether manually setting CV folds improves performance when <code>auto_stack=True</code>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Base</th>
+<th>auto_stack</th>
+<th>CV Setup</th>
+<th>CV ROC AUC</th>
+<th>Private LB</th>
+<th>Public LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V34</strong></td>
+<td>–</td>
+<td>✅</td>
+<td>default</td>
+<td>0.97750</td>
+<td>0.97772</td>
+<td>0.97806</td>
+</tr>
+<tr>
+<td><strong>V35</strong></td>
+<td>V34</td>
+<td>✅</td>
+<td>10-fold</td>
+<td>0.97745</td>
+<td>0.97765</td>
+<td>0.97801</td>
+</tr>
+<tr>
+<td><strong>V36</strong></td>
+<td>V34</td>
+<td>✅</td>
+<td>5-fold</td>
+<td>0.97745</td>
+<td>0.97768</td>
+<td>0.97805</td>
+</tr>
+<tr>
+<td><strong>V42</strong></td>
+<td>–</td>
+<td>✅</td>
+<td>default</td>
+<td>0.97745</td>
+<td>0.97770</td>
+<td>0.97805</td>
+</tr>
+<tr>
+<td><strong>V44</strong></td>
+<td>V42</td>
+<td>✅</td>
+<td>5-fold</td>
+<td>0.97745</td>
+<td>0.97769</td>
+<td>0.97806</td>
+</tr>
+</tbody>
+</table>
+<pre><code> sklearn.model_selection  KFold
+
+train.loc[:, ] = -
+split = KFold(n_splits=, random_state=, shuffle=).split(train, train[])
+
+ i, (_, val_index)  (split):
+    train.loc[val_index, ] = i
+
+TabularPredictor( 
+    groups=,      
+)
+</code></pre>
+<ul>
+<li><p><strong>Summary:</strong></p>
+<ul>
+<li>Manual 5-fold or 10-fold CV (V35, V36, V44) <strong>did not improve</strong> scores; CV ROC AUC slightly decreased in some cases.</li>
+<li>AutoGluon’s built-in stacking (<code>auto_stack=True</code>) already handles CV effectively.</li></ul></li>
+</ul>
+<h2>🏅 Final Submitted Models</h2>
+<table>
+<thead>
+<tr>
+<th>Model / Version</th>
+<th>Notes / Evolution</th>
+<th>CV ROC AUC</th>
+<th>Private LB</th>
+<th>Public LB</th>
+<th>Final Submission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V103 - AutoGluon</td>
+<td>AutoGluon Ensemble on CPU; same workflow as final submitted model; seed = 105</td>
+<td>0.97761</td>
+<td>0.97788</td>
+<td>0.97820</td>
+<td></td>
+</tr>
+<tr>
+<td>V107 - AutoGluon</td>
+<td>Same workflow as V103 but run on GPU T4 x2; seed = 105</td>
+<td>0.97761</td>
+<td>0.97788</td>
+<td>0.97819</td>
+<td></td>
+</tr>
+<tr>
+<td>V109 - AutoGluon</td>
+<td>Same workflow as V103 but run on GPU T4 x2; seed = 5781</td>
+<td>0.97763</td>
+<td>0.97790</td>
+<td>0.97821</td>
+<td>✅ Selected</td>
+</tr>
+</tbody>
+</table>
+<h2> </h2>
+<p>✅ What Worked Well</p>
+<ol>
+<li>My best Public LB score was also my best Private LB score — It was my third-to-last submission on the final day, where I had only changed a random seed. This shows that a bit of luck also plays a role.</li>
+<li>In most competitions, single models are hard to outperform carefully designed ensembles. For me, OOF stacking + AutoGluon brought a significant boost.</li>
+<li>More diverse ensembles tend to boost CV scores.</li>
+</ol>
+<h2>🔹 AutoGluon Blending Experiments</h2>
+<table>
+<thead>
+<tr>
+<th>Version / Blend</th>
+<th>Description / Notes</th>
+<th>CV ROC AUC</th>
+<th>Private LB</th>
+<th>Public LB</th>
+<th>Final Submission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>V70</td>
+<td>GPU run of Best presets</td>
+<td>0.977634</td>
+<td>0.97789</td>
+<td>0.97820</td>
+<td></td>
+</tr>
+<tr>
+<td>V76</td>
+<td>GPU run of Extreme presets</td>
+<td>0.977618</td>
+<td>0.97787</td>
+<td>0.97817</td>
+<td></td>
+</tr>
+<tr>
+<td>V79</td>
+<td>CPU run of Best presets</td>
+<td>0.977610</td>
+<td>0.97787</td>
+<td>0.97818</td>
+<td></td>
+</tr>
+<tr>
+<td>V87</td>
+<td>GPU run of Best presets</td>
+<td>0.977615</td>
+<td>0.97789</td>
+<td>0.97820</td>
+<td></td>
+</tr>
+<tr>
+<td>V103</td>
+<td>CPU run of Best presets</td>
+<td>0.977612</td>
+<td>0.97788</td>
+<td>0.97820</td>
+<td></td>
+</tr>
+<tr>
+<td>V108</td>
+<td>GPU run of Best presets</td>
+<td>0.977634</td>
+<td>0.97789</td>
+<td>0.97820</td>
+<td></td>
+</tr>
+<tr>
+<td>V109</td>
+<td>GPU run of Best presets</td>
+<td>0.977631</td>
+<td>0.97790</td>
+<td>0.97821</td>
+<td></td>
+</tr>
+<tr>
+<td>Blend Search2</td>
+<td>Average of V70 + V76</td>
+<td>0.977644</td>
+<td>0.97789</td>
+<td>0.97819</td>
+<td></td>
+</tr>
+<tr>
+<td>Blend Search3</td>
+<td>Average of V70 + V76 + V79</td>
+<td>0.977644</td>
+<td>0.97789</td>
+<td>0.97819</td>
+<td></td>
+</tr>
+<tr>
+<td>Blend Search4 V1</td>
+<td>Average of V70 + V76 + V79 + V87</td>
+<td>0.977643</td>
+<td>0.97789</td>
+<td>0.97819</td>
+<td></td>
+</tr>
+<tr>
+<td>Blend Search4 V2</td>
+<td>Average of V70 + V76 + V108 + V109</td>
+<td>0.977654</td>
+<td>0.97789</td>
+<td>0.97820</td>
+<td>✅ Selected Final Submission</td>
+</tr>
+<tr>
+<td>Blend Weighted Search4 V4</td>
+<td>Weighted blend of V70 + V76 + V108 + V109 [0.18,0.18,0.27,0.36]</td>
+<td>0.977655</td>
+<td>0.97790</td>
+<td>0.97820</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>#</h1>
+<p>⚠️ What Didn’t Work Well</p>
+<ol>
+<li>Simple and weighted blends improved CV scores but did not increase my LB score.</li>
+<li>Adding more original training data did not improve the leaderboard score.</li>
+</ol>
+<hr>
+<h2>💡 Reflections &amp; Learnings</h2>
+<ol>
+<li>This iterative OOF stacking approach lets me record and make use of every attempt, ensuring that all effort contributes to progress and keeps me motivated to learn.</li>
+<li>Reading and learning from other excellent solutions and open-source notebooks is one of the fastest ways to improve.</li>
+</ol>
+<hr>
+<p>I regret not being able to run more interesting experiments, and my notebooks ended up a bit messy — but here’s the <a href="https://www.kaggle.com/code/bestwater/load-of-v109-of-autogluon-playground-s5e8?scriptVersionId=259211334" target="_blank">notebook</a>.</p>
+<blockquote>
+  <p><em>“Dao can be spoken, but it is not the eternal Dao. Name can be named, but it is not the eternal name.”</em><br>
+  Learning is a continuous process of accumulation — quantitative change eventually leads to qualitative breakthroughs.<br>
+  Enjoy the journey of learning ahead, and keep pushing your boundaries!</p>
+</blockquote>
+<p>Good luck! </p>

@@ -1,0 +1,77 @@
+<p>After completing a through EDA and a Feature Engineering (based of RF). I present to you the below findings. If you have any more findings or observations I am eager to learn.</p>
+<h3>Key EDA Take-aways</h3>
+<ul>
+<li><strong>Extreme solitude</strong> is a near silver-bullet:  <ul>
+<li><code>Time_spent_Alone &gt; μ + 2 σ</code> → ~94 % of rows are Introverts.  </li></ul></li>
+<li>Both Boolean flags are <em>almost</em> one-shot Introvert indicators (<code>Stage_fear = Yes</code>, <code>Drained_after_socializing = Yes</code> each give &gt; 90 % Introvert).  </li>
+<li>Numeric variables shift monotonically between classes (median gaps 3–6 units).  </li>
+<li>5–10 % missingness appears MCAR/MAR; the absence of a value itself carries signal.  </li>
+<li>No measurable train–test drift (KS p-values &gt; 0.75 everywhere).</li>
+</ul>
+<h3>Feature Sets Tested</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Description</th>
+<th>Columns</th>
+<th>CV Log-Loss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>Raw 7 variables</td>
+<td>7</td>
+<td>0.13056</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>Raw + EDA flags (<code>NA_miss</code>, <code>high_alone_flag</code>, <code>activity_ratio</code>, <code>outside_ratio</code>)</td>
+<td>17</td>
+<td><strong>0.13008</strong></td>
+</tr>
+<tr>
+<td>C</td>
+<td>B + all 2-gram interaction strings</td>
+<td>38</td>
+<td>0.13060</td>
+</tr>
+<tr>
+<td>D</td>
+<td>C + all 3-grams</td>
+<td>73</td>
+<td>0.13127</td>
+</tr>
+<tr>
+<td>C_top30</td>
+<td>30 best cols from C</td>
+<td>30</td>
+<td>0.13063</td>
+</tr>
+<tr>
+<td>Other (median select, PCA)</td>
+<td>—</td>
+<td>—</td>
+<td>≥ 0.13079</td>
+</tr>
+</tbody>
+</table>
+<h3>Why the EDA Features Win</h3>
+<ol>
+<li><strong>Human priors</strong>: each flag embodies a clear behavioural rule, so RF splits align with reality.  </li>
+<li><strong>Dense not sparse</strong>: interaction strings explode the cardinality; forests treat rare categories as noise.  </li>
+<li><strong>Single-split power</strong>: ratios turn curved boundaries into axis-aligned ones the RF can capture early.  </li>
+<li><strong>Easy pure nodes</strong>: <code>high_alone_flag</code> isolates a 94 % Introvert island—trees lock onto it immediately.</li>
+</ol>
+<h3>Final Blend</h3>
+<p>A weighted average of the four best CV models (A, B, C, C_top30) using inverse log-loss weights produced the most stable leaderboard score.  <br>
+Weights were nearly uniform (≈ 0.25 each) because all four LLs sit within 0.00055 of one another.</p>
+<h3>Take-aways for Fellow Kagglers</h3>
+<ul>
+<li><strong>Start with intuition-based features</strong> before carpet-bombing interaction space.  </li>
+<li>If you add hundreds of categorical combos, trim them with feature-importance or you risk dilution.  </li>
+<li>PCA can hurt when your model relies on categorical purity; consider it only for linear models.  </li>
+<li>Random-Forest (or any tree stack) loves explicit threshold flags—cheap, fast, effective.</li>
+</ul>
+<p>Happy Kaggling.!</p>

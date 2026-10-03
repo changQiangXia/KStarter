@@ -1,0 +1,77 @@
+<p>My solution combines knowledge acquired in participating in the previous RSNA challenges, and involves much more than the month I spent working intensively in the competition. I've always enjoyed joining RSNA challenges, and have a special affection for medical imaging because of my relatives' medical profession. </p>
+<p>Although 2nd is a great finish, the conditions in which it happened (i.e. unjustified deadline extension) make it really painful. The Kaggle team still does not understand how much modifying rules last minute hurts participants, or they simply don't care. I was already burnt out by competing full time for a month, adding 2 days on top plus missing first place by nothing is too much for me.</p>
+<p><strong>Updates:</strong> </p>
+<ul>
+<li>More details added, fixed num_classes mistake.</li>
+<li>Inference code : <a href="https://www.kaggle.com/code/theoviel/rsna-abdominal-inf" target="_blank">https://www.kaggle.com/code/theoviel/rsna-abdominal-inf</a></li>
+<li><strong>Training code on Github :</strong> <a href="https://github.com/TheoViel/kaggle_rsna_abdominal_trauma" target="_blank">https://github.com/TheoViel/kaggle_rsna_abdominal_trauma</a></li>
+</ul>
+<h2>Data</h2>
+<p>I use <a href="https://www.kaggle.com/theoviel/datasets?sort=votes" target="_blank">my datasets</a>! Give them a quick upvote so I can reach 4x GM. <br>
+In addition, I resize the longest edge to 512 &amp; center crop to 384. I also use 1 frame out of 2 to speed up 2D models inference, and limit stack size to 600. For models requiring a specific input size, images were simply resized afterwards. <br>
+Images are loaded with <code>dicomsdl</code> and processed on GPU.   It's fast. The pipeline without ensembling runs in less than 4h. </p>
+<h2>Models</h2>
+<h3>Overview</h3>
+<p>Pipeline is below. It has two components: </p>
+<ul>
+<li>2D models + RNN, where the frame-level labels are inferred using organ visibility classification when needed. </li>
+<li>Crop models for kidney / liver / spleen. Results are fed to the RNN after pooling.</li>
+</ul>
+<p>It re-uses winning ideas from the RSNA fracture competition (main references: <a href="https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/363232" target="_blank">[1]</a>, <a href="https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362640" target="_blank">[2]</a>, <a href="https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/363232" target="_blank">[3]</a>).</p>
+<p><a href="https://ibb.co/MBBh8wP"><img src="https://i.ibb.co/fDDS86r/RSNA-Abd-drawio.png" alt="RSNA-Abd-drawio"></a></p>
+<h3>2D models</h3>
+<p>The key to achieve good performance with 2D models is cleverly sampling frames to feed meaningful information and reduce label noise.<br>
+To do so, I use a simple but fast <code>efficientnetv2_rw_t</code> to infer which organs are present on every frame. During training, frames are sampled the following way:</p>
+<ul>
+<li>kidney / liver / spleen / negative bowel : Pick a random frame inside the organ.</li>
+<li>positive bowel / positive extravasation : Use the frame-level labels.</li>
+<li>Negative extravasation : Sample anywhere</li>
+</ul>
+<p>This model extracts probabilities for every 1/2 frame in the stack, and a RNN is trained on top to aggregate results. </p>
+<p><strong>Details :</strong></p>
+<ul>
+<li>Heavy augmentations (HFlip, ShiftScaleRotate, Color augs, Blur augs, ElasticTransform) + cutmix (<code>p=0.5</code>)</li>
+<li><code>maxvit_tiny_tf_512</code> was best. <code>convnextv2_tiny</code> and <code>maxvit_tiny_tf_384</code> were also great. </li>
+<li>Ranger optimizer, <code>bs=32</code>, 40 epochs, <code>lr=4e-5</code></li>
+<li>Only 3D info is the 3 adjacent frames used as channels.</li>
+<li>11 classes : <code>[bowel/extravasation]_injury</code>(BCE optimized). And <code>[kidney/liver/spleen]_[healthy/low/high]</code>  optimized with the cross entropy.</li>
+</ul>
+<h3>Crop models</h3>
+<p>Strategy is similar : key is to feed to the model crops where the information is located. In that case, I used a 3D <code>resnet18</code> to crop the organs, and feed the crop to a 2D CNN + RNN model. It improves performances on kidney, liver and spleen by a good margin. </p>
+<p><strong>Details :</strong></p>
+<ul>
+<li>Same augmentations with more cutmix (<code>p=1.</code>)</li>
+<li>Ranger optimizer, <code>bs=8</code>, 20 epochs, <code>lr=2e-5</code></li>
+<li>Best model uses 11 frames sampled uniformly in the organ. I used different number of frames for ensembling.</li>
+<li><code>coatnet_1_rw_224</code> + RNN was best. I used different heads (RNN + attention, transformers) and other models CoatNet variants for ensembling.</li>
+<li>3 class cross-entropy loss.</li>
+</ul>
+<h3>RNN model</h3>
+<p>It is trained separately. Its role is to aggregate information from previous models, and optimize the competition metric directly.</p>
+<p><strong>Details :</strong></p>
+<ul>
+<li>Restrict stack size to 600 (for faster loading), use 1/2 frame (for faster 2D inference). Sequences are then resized to 200 for batching. </li>
+<li>Heavily tweaked LSTM architecture :<ul>
+<li>1x Dense + Bidi-LSTM for the 2D models probabilities. Input is the concatenation of the segmentation proba (<code>size=5</code>), the classification probas (<code>size=11 x n_models</code>), and the classification probas multiplied by the associated segmentation (<code>size=11 x n_models</code>)</li>
+<li>Pool using probabilities predicted by the segmentation model to get organ-conditioned features.</li>
+<li>Use the mean and max pooling of the <code>22 x n_models</code> 2D classification features</li>
+<li>Independent per organ logits, which have access to the corresponding pooled features. For instance the kidney logits sees only the crop features for the kidney (<code>3x n_crop_models</code> fts) , the RNN features pooled using the kidney segmentation, and the <code>3 x n_models</code> pooled 2D features for the kidney class.</li></ul></li>
+<li>AdamW optimizer, <code>bs=64</code>, 10 epochs, <code>lr=4e-5</code></li>
+</ul>
+<h3>Things that did not work</h3>
+<ul>
+<li>YoloX + Ian Pan extravasation boxes. Tried using the data to get crops, and adding the confidence to the RNN model. It did not really help and was painful to implement.</li>
+<li>Adding a sequential head to the first stage worked early on, but as my crop models got stronger I figured out 2D was enough. This allowed for a significant speed up of my inference pipeline which is nice.</li>
+<li>Ensembling did not really help on private ultimately and my best sub is my strongest single model.</li>
+<li>Stuff I tried during the 2 days extended deadline. I was happy with how I managed my time and knew the extension only meant more time for other teams to catch up. Thanks again Kaggle 😭</li>
+</ul>
+<h2>Scores :</h2>
+<ul>
+<li>2D Classification + RNN :<ul>
+<li>Using ConvNext-v2: <strong>Public 0.41</strong> - <strong>Private 0.39</strong></li></ul></li>
+<li>Add the crop model:<ul>
+<li>MaxVit (instead of ConvNext) +  CoatNet-RNN : <strong>Public 0.37</strong> - <strong>Private 0.35</strong> (best private)</li></ul></li>
+<li>Ensemble:<ul>
+<li>3x2D models, 8x 2.5D models : <strong>Public 0.35</strong> - <strong>Private 0.35</strong></li></ul></li>
+</ul>
+<p><em>Thanks for reading !</em></p>

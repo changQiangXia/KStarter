@@ -1,0 +1,270 @@
+# https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735593
+
+Topic #735593: Pokemon TCG AI - Team Magist Solution
+  Author: WOOSUNG YOON
+  Posted: 2026-08-17 03:57:07.914000
+  Votes: 37  Comments: 4
+
+Part 1. General Strategy
+
+
+
+A. Pattern Database
+
+
+
+Waltheri Pattern Database
+
+The Waltheri Pattern Database searches professional Go records for games with similar board patterns, enabling analysis of common follow-up moves and outcomes. This pattern-based retrieval approach strongly inspired our methodology.
+
+Based on this concept, we developed the Pokémon Pattern Database to retrieve similar battle states and estimate subsequent actions and outcomes.
+
+Reference: Waltheri, Waltheri’s Go Pattern Search, https://ps.waltheri.net/
+
+A.1 Pokemon Pattern Database
+
+
+
+1. What is the Pokémon Pattern DB?
+
+The Pokémon Pattern DB searches real match replays for game states similar to the current situation and uses historical statistics to estimate both players’ next actions and expected outcomes.
+
+2. Action Statistics Estimation
+
+Primary Key: Identifies similar battle situations based on both players’ Active Pokémon.
+
+Secondary Keys: Further refines the matching patterns based on:
+
+
+
+Damage Counters — Quantized in increments of 5
+
+Bench Composition — Compares the Pokémon on both players’ Benches
+
+Energy Attachments — Compares the amount of Energy attached to each player’s Pokémon
+
+
+A.2 Conclusion
+
+The Pattern Database provides simple and fast opponent modeling by leveraging similar historical game states. It captures local tactical patterns directly from replay data and provides statistical guidance for likely actions and outcomes.
+
+To complement this pattern-based information with a broader representation of the entire game state, we incorporated a Value Network for overall position evaluation. Together, the Pattern Database and Value Network provide both historical pattern guidance and comprehensive state evaluation.
+
+
+
+B. Transformer Policy / Value Architecture (T96)
+
+Game State
+(Cards, Pokémon, HP, Energy, Bench, Hand, etc.)
+        ↓
+Game Information Encoding
+        ↓
+Transformer
+(2 layers, 4 attention heads)
+        ↓
+Shared Game-State Representation
+        │
+        ├─ Action Head: scores legal actions
+        ├─ Pass Head: determines whether to pass
+        └─ Value Head: evaluates the position and win probability
+
+
+1. Model Input
+
+T96 receives the current game information, including cards, Pokémon, HP, damage, Energy, Bench, Hand, and decision state.
+
+2. Transformer
+
+The input is processed by a Transformer to construct a shared representation of the current game state.
+
+T96 used a two-layer Transformer as its initial architecture. Additional layers were introduced progressively, with layer-specific learning rates applied to support stable representation development.
+
+3. Output Heads
+
+
+
+Action Head: scores legal actions
+
+Pass Head: determines whether to pass
+
+Value Head: evaluates the current position and win probability
+
+
+B.1 Supervised Learning
+
+T96 was trained on game records from three complementary sources:
+
+
+
+Leaderboard Public Play: matches from submitted agents
+
+Heuristic Agents: agents using structured rule-based policies
+
+League Play: matches among trained models, model checkpoints, and heuristic agents
+
+
+
+
+C. Heuristic Tactical Variants
+
+Hybrid Neural-Heuristic Strategy for Tactical Diversity
+
+(1) Meta Adaptation
+
+Self-play agents naturally adapted to one another over repeated interactions, leading to increasingly aligned strategies within particular opponent pools or local metas.
+
+(2) Neural and Heuristic Policy
+
+The neural policy remained the default decision-making framework. Heuristics were incorporated selectively in areas that benefited from additional tactical guidance, such as Energy allocation, retreat decisions, forced-win sequences, and card-specific situations.
+
+(3) Tactical Variants
+
+Agents with different tactical priorities and specialized decision rules were added to the league to generate a broader range of game states, strategies, and behaviours.
+
+The heuristics complemented the neural policy rather than replacing it, supporting greater strategic diversity throughout self-play.
+
+C.1. Heuristic Tactical Variations
+
+The base policy was retained while tactical variants were created through:
+
+
+
+
+Priority Adjustment
+Changing preferences for development, evolution, Energy attachment, retreat, and attacking.
+
+
+Targeted Guidance
+Applying limited rules or comparing selected alternatives in situations that benefited from additional tactical evaluation.
+
+
+This produced distinct tactical behaviours while preserving the consistency of the original policy.
+
+
+
+D. Deck Selection
+
+(Top Leaderboard Decks and Genetic Algorithm Search)
+
+For the final submission, the deck was based mainly on top leaderboard public decks. During development, I also used a genetic algorithm to explore alternative card combinations and quantities.
+
+Top Leaderboard Decks
+        ↓
+Restricted Card Pool
+        ↓
+Quantity-based Deck Genome
+        ↓
+Genetic Search
+        ↓
+Parallel Match Evaluation
+
+
+D.1 Deck Representation
+
+Each card was represented by the number of copies included in the deck.
+
+[Card A: 4] [Card B: 2] [Card C: 0] ... [Card N: 1]
+
+
+Deck-building constraints were enforced during the search:
+
+Pokémon / Trainer
+→ up to 4 copies per card
+
+Special Energy
+→ up to 4 copies per type
+
+ACE SPEC
+→ 1 card in total
+
+Deck Size
+→ exactly 60 cards
+
+
+D.2 Genetic Algorithm Search
+
+Candidate decks were generated through crossover and mutation, then evaluated using CPU-parallel matches.
+
+Parent Decks
+     ↓
+Crossover / Mutation
+     ↓
+Candidate Decks
+     ↓
+Parallel Matches
+     ↓
+Selection
+     ↓
+Next Generation
+
+
+The search produced several unusual deck variants and helped test different card combinations and quantities. However, these variants were not consistently stronger.
+
+D.3 Final Deck Selection
+
+In repeated experiments, deck structures already used by top leaderboard agents were generally more stable. For the final submission, I therefore closely followed a top leaderboard public deck and focused the remaining optimisation effort on the playing policy and decision-making system.
+
+
+
+E. Monte Carlo Sampling
+
+Using the Value Network to Evaluate Uncertain Outcomes
+
+
+
+(1) When Sampling Is Used
+
+Monte Carlo sampling is used when an action involves hidden information or random events, such as hidden cards, random draws, or shuffled hands. The agent evaluates multiple possible outcomes to account for the different states that can result from the action.
+
+(2) Sampling and Simulation
+
+For each candidate action, multiple outcomes are sampled. The neural policy then continues play from each sampled state.
+
+(3) Value Evaluation
+
+Each resulting position is evaluated by the Value Head. The scores are averaged to estimate the expected value of the candidate action.
+
+Candidate Action
+      ↓
+Sample Possible Outcomes
+      ↓
+Simulate with Neural Policy
+      ↓
+Evaluate with Value Head
+      ↓
+Average Expected Value
+      ↓
+Compare Actions
+
+
+(4) Example: Judge
+
+When considering Judge, the resulting hands depend on the shuffle and draw. The agent samples multiple post-Judge hands, simulates play from each resulting position, and evaluates them with the Value Head. The average result is then compared with the value of not playing Judge.
+
+This approach keeps the neural policy as the primary decision-maker while using sampling to evaluate actions that involve multiple possible outcomes.
+
+
+
+Conclusion
+
+(1) Woosung's Conclusion
+
+I greatly enjoyed participating in this Pokémon TCG AI competition.
+As someone interested in game AI development, it was an exciting opportunity to explore different approaches and improve our agent.
+
+I learnt a lot throughout the competition and am grateful to everyone who shared their ideas and agents.
+It was a memorable experience, and if you ever visit Korea,
+I would be very happy to play some competitive Pokémon TCG together.
+
+Comments:
+├─ Erik van de Ven (2026-08-18 13:47:23.577000) [+1]
+│  Very nice read! And very creative approach to use this pattern database
+  ├─ WOOSUNG YOON (2026-08-18 19:12:49.530000) [+1]
+  │  Thank you. 
+  │  
+  │  At the beginning of the competition, I built the bot using graph search with a preference bias.
+  │  The bot searches for actions that lead to states I have previously identified as desirab...
+├─ cute wins (2026-08-17 07:04:32.650000) [+2]
+│  Great article, it helped a lot! I would like to write my approach someday…
+  ├─ WOOSUNG YOON (2026-08-17 19:11:45.117000) [+1]
+  │  Thanks, glad it helped. 😄 I’d be curious to see your approach if you ever write it up.

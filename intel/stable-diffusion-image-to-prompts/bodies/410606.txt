@@ -1,0 +1,306 @@
+# https://www.kaggle.com/competitions/stable-diffusion-image-to-prompts/discussion/410606
+
+Topic #410606: 2nd place solution
+  Author: KaizaburoChubachi
+  Posted: 2023-05-16 00:04:29.080000
+  Votes: 96  Comments: 44
+
+Congrats to all the winners, and thanks to kaggle for hosting such an interesting competition. This competition was a great learning experience for me. I am really looking forward to reading everyone's solutions.
+
+My solution is basically the same as the ViT-based method in the public notebook. I created my own dataset by running Stable Diffusion and trained a model to predict sentence embeddings in a supervised manner. The overview is shown in the figure below.
+
+
+
+Dataset Generation
+
+Preparation
+
+The following modifications were made to 4x speed up the generation with fp16.
+
+
+
+Change the scheduler from DDIM to DPMSolver++ (diffusers.DPMSolverMultistepScheduler) and change the number of steps from 50 to 16.
+
+Use xformers
+
+
+There was concern that reducing the number of generation steps would cause a shift in the mapping from prompt to image, but there was no significant qualitative difference, and the advantage of increased generation speed was judged to be greater, so I chose this method.
+
+The xformers led to a speedup of about 30%. xformers were also used in the training of the model, which is described after.
+
+Note that the random numbers used in the generation have a significant impact on the overall image generated, so it is necessary to generate images using different seeds. At first I fixed the seed to 0 to ensure reproducibility, but I realized this mistake and used a different seed for each prompt, which greatly increased the score. I was generating the seed using zlib.adler32, the name of the prompt set, and the number of the prompt.
+
+As for the guidance scale, I had been using the default value of 7.5 from diffusers until I realized that 9.0 seemed to be the correct value (link), so I used data generated with either value. LB scores showed that there was no significant difference between 7.5 and 9.0, but scores with 3.0 were significantly lower.
+
+DiffusionDB
+
+To deal with the vocabulary specific to Stable Diffusion, we generated images using prompts from DiffusionDB. Excluding duplicates, there are approximately 1.8M Prompts, and images were generated for all of them.
+
+COCO Captions
+
+Captions from Microsoft COCO Captions were used to generate the images. 500k images were generated from approximately 600k captions in train and validation.
+
+Open Images
+
+To create even more diverse prompt sets, I utilized the natural images in Open Images Dataset V3 (OID) and Image-To-Text pretrained models. Images from OID are input to the Image-To-Text model, and the resulting caption is input to StableDiffusion as a prompt. OID contains 9M natural images, of which the first 5M were used to generate.
+
+Salesforce/blip2-flan-t5-xxl was used as the Image-To-Text model. I used Nucleus sampling with do_sample=True and top_p=0.9.
+
+The sample prompts in the competition consist of multiple objects and multiple sentences, but captions output by BLIP-2 tends to produce very concise sentences by default. Therefore, by chaining BLIP-2's caption generation, I made sure that sentences with a certain level of complexity are generated. The procedure for chaining is as follows
+
+
+
+generate a sentence following "a photo of" as usual (denote the generated sentence as A)
+
+generate a sentence following "a photo of" + A (denote this as B)
+
+Output A + B as the final caption
+
+
+The Prompt set created is as follows.
+
+
+
+
+Prompt set name
+Subset
+# of images
+Chain
+
+
+
+
+OID1
+train0
+1M
+2
+
+
+OID2
+train1
+1M
+3
+
+
+OID3
+train2
+1M
+1*
+
+
+OID4
+train3
+1M
+2
+
+
+OID5
+train4
+1M
+2
+
+
+
+
+For OID3, in order to realize a combination of objects that do not exist in natural images, prompts were created by connecting two short captions created with chain=1 with commas. In concrete terms, the short captions created in chain=1 were converted to sentence embeddings using SentenceTransformer, and divided into 1000 clusters using Spherical KMeans. Then, for every combination of two clusters, we randomly selected one caption for each cluster and connected them with a comma.
+
+ChatGPT (gpt-3.5-turbo)
+
+This is a dataset that has utilized the ideas from this notebook. When I tried generating prompts using ChatGPT, I found that using the same prompt only yielded similar generation results. Altering parameters such as temperature did somewhat improve the situation, but it also made it more likely to produce broken sentences or excessively long ones. Therefore, I considered modifying the prompt sent to ChatGPT utilizing the previous generated prompts, and implemented it with the following code.
+
+command = (
+    
+    
+)
+sample_set = [
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+]
+generated_prompts: [] = []
+ _  (num_trials):
+     (generated_prompts) &lt; :
+        examples = (sample_set)
+    :
+        examples = (np.random.choice(sample_set, , replace=)) + (
+            np.random.choice(generated_prompts, , replace=)
+        )
+
+    np.random.shuffle(examples)
+    prompt = command + .join([  e  examples])
+    generated_prompts = send_to_chat_gpt_and_cleansing(prompt)
+
+
+In this method, I created about 1M prompts, inputted them into Stable Diffusion after removing duplicates, and produced about 1M images.
+
+I also tested a few other LLMs, especially focusing on those with open weights, but I was unable to obtain a prompt set equivalent or superior to gpt-3.5-turbo using the same method, based on my qualitative evaluation. Typical behaviors of such LLMs are starting some sort of explanation instead of answering in the desired format or only being able to produce slightly modified examples. I have not tested LLaMA and its derivative models because I was unable to obtain LLaMA's weights in a license-compliant manner.
+
+Model and Training
+
+CLIP Models
+
+In the initial, simplistic experiments, the pretrained models with CLIP performed better than those for ImageNet classification. As a result, I focused on fine-tuning CLIP models.
+
+The following four models were used in the final submission.
+
+
+
+ConvNeXt xxlarge (CLIP-convnext_xxlarge-laion2B-s34B-b82K-augreg-rewind)
+
+BLIP-2 VisionModel (EVA01-g?, Salesforce/blip2-opt-2.7b)
+
+EVA02-L (timm/eva02_large_patch14_clip_336.merged2b_s6b_b61k)
+
+EVA02-e (timm/eva02_enormous_patch14_plus_clip_224.laion2b_s9b_b144k)
+
+
+Linear-Probing
+
+Regarding the fine-tuning of CLIP, it has been suggested that Linear-Probing (LP), which trains only the last linear layer, and LP-FT, which fine-tunes the entire model after LP, are effective to generalize. Indeed, these methods were effective in my experiments as well.
+
+Resolution
+
+Increasing the resolution also had a significant effect. CLIP models are typically trained at a resolution of 224, but I believe that 224 was disadvantageous for recognizing complex contexts containing multiple objects.
+
+ViT can infer with only a slight degradation in performance for inputs at a higher resolution than during training, by interpolating positional encoding. For instance, you can use functions like resample_abs_pos_embed implemented in timm. By using this, you can use a model trained at a lower resolution as a good initial value when training at a higher resolution.
+
+Until the middle of the competition, I was using models trained at 224, but towards the end, I improved my score by using those as initial values and training models at 336 or 448.
+
+Q-former
+
+SentenceTransformer's sentence embeddings are the normalized sum of token embeddings. I considered leveraging these token embeddings as additional supervision signals.
+
+I implemented an architecture using the Q-former from BLIP-2 to convert the patch embeddings output by the vision model into token embeddings with a length of 77. I then compared the output of that model to the token embeddings from the SentenceTransformer, padded with zeros until they reached a length of 77, and trained the model based on this comparison. Simply taking the mean squared error (MSE) would be heavily influenced by word order, so I used the Hungarian method to find the matching with the minimum MSE and calculated the MSE between those matches. I also used the cosine similarity between the sentence embeddings.
+
+Simultaneous training of the Q-former and the vision model was unstable, and I could not achieve success during the competition period. However, by freezing the pretrained vision model and training only the added Q-former, I achieved a performance improvement of +0.001 to +0.003 on the leaderboard (LB) for individual models. Moreover, since the vision model is frozen, I could obtain its standalone output of the vision model with almost no additional cost when predicting with the Q-former. It provided a slight benefit in ensembling.
+
+The effectiveness of the Q-former was not particularly pronounced in this problem setting, but I believe it would be useful in the original sense of an inversion task, where the goal is to reproduce images.
+
+Weighted Averaging
+
+For ensembling, I used weighted averaging. The weights were optimized using Adam and validation set from my ChatGPT dataset.
+
+Comments:
+├─ Nooruddin Hyderabadwalla, CFA (2023-05-24 05:34:31) [+1]
+│  Wonderful @zaburo! I'm thrilled I'm getting to learn so much from your approach explained in here. Congratulations!
+├─ Suraj (2023-05-17 06:50:14.593000) [+1]
+│  Congratulations 🎉 @zaburo ! Got to learn a lot from this winning code !
+├─ davidlightmysterion (2023-05-16 15:21:59.517000) [+1]
+│  Wow, amazing! Really learned a lot!
+├─ qiexi fan (2023-05-16 15:10:23.657000) [+1]
+│  Thank you for sharing! Will you make public the prompts you generated, for example, those generated by gpt-3.5-turbo because we are all wondering how it will be like to generate 1M diverse prompts ...
+  ├─ KaizaburoChubachi (2023-05-18 02:58:20.137000) [+2]
+  │  Thank you for your suggestion. I will consider it.
+    ├─ qiexi fan (2023-05-18 11:41:05.163000) [+0]
+    │  Thank you again, and we are looking forward to it.
+├─ Frank (2023-05-16 14:08:22.980000) [+1]
+│  Thanks for sharing. I learned a lot from your solution. I have two questions.
+│  
+│  
+│  
+│  How did you perform weighted averaging? Did you mean something like linear layer?
+│  
+│  Would you mind sharing the code?
+  ├─ KaizaburoChubachi (2023-05-16 14:21:30.800000) [+1]
+  │  Yes.
+  │  
+  │  I'm sorry. My code contains some hard codes for our company's private clusters, and it is hard to clean those up for sharing. Therefore, I don't have plans to publish the code at this time. I...
+    ├─ Frank (2023-05-16 14:31:28.957000) [+2]
+    │  I'm curious about how the "weighted averaging" was implemented. I tried using a linear layer to ensemble 4 models, but the result was not better than manual weights. Thanks!
+    │  
+    │  I've got one more ques...
+    ├─ KaizaburoChubachi (2023-05-18 01:26:33.947000) [+1]
+    │  I'm curious about how the "weighted averaging" was implemented. I tried using a linear layer to ensemble 4 models, but the result was not better than manual weights. Thanks!
+    │  
+    │  
+    │  I used the module bel...
+    ├─ Frank (2023-05-18 04:46:43.380000) [+0]
+    │  Thank you!
+├─ HarshPadaliya1 (2023-05-16 09:09:30.713000) [+1]
+│  smooth explaining the solution, good job
+├─ Arthur_X (2023-05-16 08:33:05.950000) [+1]
+│  Thank you for sharing! Awesome solution.
+├─ Theo Badoz (2023-05-16 07:53:54.340000) [+1]
+│  Thanks a lot for sharing and congrats !👍
+├─ Fatebinder (2023-05-16 07:44:13.707000) [+1]
+│  intersting of q-former use
+├─ An Dang (2023-05-16 07:23:01.713000) [+1]
+│  Thank you for explaining the solution clearly.
+├─ 2 pieces of cold pizza (2023-05-16 00:51:15.737000) [+1]
+│  Wow, you leveraged large and various datasets! Congratulation!!!
+│  Weren't there any issues where the loss turned into 'NaN' while increasing the dataset size?
+  ├─ KaizaburoChubachi (2023-05-16 02:38:55.197000) [+2]
+  │  The training of the vision model was very stable and Nan never occurred.
+├─ KKY (2023-05-16 00:48:26.157000) [+1]
+│  congrats! Super large models like blip-2 and eva02-e looks work well as our team expect.
+├─ TapTap~ (2023-05-16 00:24:24.247000) [+1]
+│  Congratulations！
+├─ Junrui Wang (2023-05-16 00:10:20.630000) [+1]
+│  Awesome solution, congratulations!
+├─ _w1998 (2023-05-16 03:24:50.693000) [+2]
+│  Thanks for sharing this content. Glad to know it.
+├─ Yassine Alouini (2023-05-26 14:01:03.767000) [+0]
+│  Well done! Thanks for sharing your great insights. 💥
+├─ YeonwooSung (2023-05-20 14:44:26.587000) [+0]
+│  @zaburo Congratulations for winning 2nd place!
+│  
+│  Also, wanna ask you 2 questions:
+│  
+│  1) Which environment did you used for fine-tuning the CLIP models with large dataset? I tried to use Google Colab, ...
+  ├─ KaizaburoChubachi (2023-05-21 02:17:36.873000) [+2]
+  │  1) A private computer cluster owned by my company.
+  │  2) Yes, Stable Diffusion 2 is used.
+├─ joeysadventure (2023-05-18 06:14:47.793000) [+0]
+│  congratulations！ I am curious about how to use Q-former, could you please share the code of this part? Thank you very much！
+  ├─ KaizaburoChubachi (2023-05-20 10:11:56.523000) [+0]
+  │  I uploaded the code for Q-Former. By passing patch embedding extracted from images to this Qformer Module, sentence embedding and token embedding can be extracted.
+  │  https://gist.github.com/zaburo-ch...
+├─ KaizaburoChubachi (2023-05-18 01:32:09.790000) [+0]
+│  I forgot to mention that for EVA02-e, fine-tuning the entire layer would use too much computing resources, so I trained by freezing all but the last 10 layers.
+├─ Wesley (2023-05-17 14:11:29.223000) [+0]
+│  Thanks for sharing! The methods are so impressive. 
+│  i'm still confused that how to transfer your resolution from 224 to 336. Could u please share a snippet of the code about that?
+│  Thanks!
+  ├─ KaizaburoChubachi (2023-05-18 02:59:58.223000) [+0]
+  │  A similar process is implemented in timm, so that may be helpful.
+  │  https://github.com/huggingface/pytorch-image-models/blob/v0.9.2/timm/models/eva.py#L606-L616
+├─ Rasoul Mojtahedzadeh (2023-05-16 07:03:09.207000) [+0]
+│  Wow! With this amount of time, effort and computational resources that you have spent on this competition you were deserved to get even higher score and be in the first place! :)
+  ├─ KaizaburoChubachi (2023-05-16 14:13:28.500000) [+0]
+  │  Thanks. Sadly, I wasn't able to ultimately achieve first place 😅
+├─ hanxian2ai (2023-05-16 06:11:54.320000) [+0]
+│  Thank you very much for sharing, but I am not very clear about the specific use of the specific kmean and Hungarian algorithm in your plan. May I ask when the author can share your code? I look for...
+  ├─ KaizaburoChubachi (2023-05-16 14:08:14.840000) [+3]
+  │  I'm sorry. I do not plan to publish the code at this time, but I will share a snippet of the code and hope that will be helpful.
+  │  
+  │  The loss implementation used in Q-former is as follows
+  │  
+  │   scipy.opti...
+    ├─ hanxian2ai (2023-05-16 15:09:04.140000) [+0]
+    │  Thank you so much for sharing a snippet of the code ！！This is very helpful to me！🌹🌹🌹🌹
+├─ Verb (2023-05-16 01:58:29.127000) [+0]
+│  What a solution worthy of 2nd place! Congrats! 
+│  
+│  It is surprising that the use of DPMSolver++ does not result in unacceptable shifts in data distribution.
+  ├─ KaizaburoChubachi (2023-05-16 02:47:25.450000) [+1]
+  │  Stable Diffusion 2.0-v is a v-prediction model that originally had the ability to produce high quality samples in a fairly small number of steps. The quality of the generation is a bit lower with m...
+├─ Quan H. Cap (2023-05-16 01:17:55.127000) [+0]
+│  Congratulations! What a great solution!
+│  
+│  At first, I thought that BLIP-2 was too large and slow to run. How did you manage to load and run BLIP-2 within the time limit?
+  ├─ KaizaburoChubachi (2023-05-16 02:41:04.217000) [+2]
+  │  Generating text in BLIP-2 is heavy, but not so heavy if you only forward the vision model once. If the resolution is 224, it takes about 30 minutes to an hour.
+    ├─ Quan H. Cap (2023-05-16 04:34:18.587000) [+0]
+    │  Oh, I misunderstood. I thought you were using BLIP-2 for text generation. Thanks so much for the explanation!
+├─ MD Mushfirat Mohaimin (2023-05-16 00:22:31.370000) [+0]
+│  OID stands for "Open Image Dataset", right?
+  ├─ KaizaburoChubachi (2023-05-16 02:37:40.560000) [+0]
+  │  Yes. OID means "Open Images Dataset"
+├─ [deleted] (2023-05-20 14:40:46.510000) [+0]
+│  [deleted]
+├─ Abdulquadri Adegbiji (2023-05-16 05:24:52.680000) [+1]
+│  wow thanks for this piece

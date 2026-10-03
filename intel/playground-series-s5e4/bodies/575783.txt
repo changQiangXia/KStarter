@@ -1,0 +1,367 @@
+# https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575783
+
+Topic #575783: 6th Place: Select Feature Combinations based on RMSE Scores
+  Author: masaishi
+  Posted: 2025-05-01 00:08:16.221000
+  Votes: 27  Comments: 17
+
+Repo: https://github.com/masaishi/kaggle-s5e4-6th-solution
+
+Update: I published the training code, and it can achieve an 11.63 private score with a single LightGBM model using 5-fold cross-validation.
+Code Public 11.70 | Private 11.63 | Single LGB Fold 5
+
+TL;DR
+
+
+
+Identified data leaks(?) and applied targeted corrections
+
+Original Data as New Rows
+
+Select feature combinations based on RMSE scores
+
+
+Data Leak 1: More than 2 decimal digits in Episode_Length_minutes
+
+I verified the data leak originally shared by AngelosMar in this discussion post. My own verification EDA can be found here: Decimal Digits Analysis EDA
+
+The analysis revealed that data points with more than 2 decimal digits in Episode_Length_minutes were strongly correlated with the actual Listening_Time_minutes. After ensemble prediction, I overwrote these values using the formula: Episode_Length_minutes * 0.9554.
+
+df_train.(pl.col() &gt; )
+
+
+
+
+https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089&amp;cellId=7
+
+Data Leak 2: Abnormal Number_of_Ads values
+
+Normally, Number_of_Ads ranges from 0-3. However, I found 7 instances where this value exceeded 3, and these abnormal values closely matched the Listening_Time_minutes. For these cases, I applied Number_of_Ads * 1.0588 after ensemble prediction.
+
+df_train.(pl.col() &gt; )
+
+
+
+
+https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089&amp;cellId=8
+
+Data Leak 3: Records with identical features have similar listening times
+
+Since this competition used synthetic data (as mentioned in the description), I hypothesized that certain feature combinations would have consistent listening times. I systematically evaluated feature combinations to identify groups with low variability in listening times (low RMSE when predicting with group means). I will write how to calc it later.
+
+The following four feature combinations showed significant LB improvement when overwriting predictions with group means:
+
+[
+    ,
+    ,
+    ,
+    ,
+]
+
+
+
+
+Feature Engineering
+
+I implemented numerous feature transformations including:
+
+
+
+Cyclical Day/Time Features - Converting time-based features to sin/cos representations
+
+Ratio Features - Creating meaningful ratios between existing features
+
+Integer/Decimal Separation - Splitting numerical features into integer and decimal components
+
+Sentiment Features - Encoding categorical sentiment data numerically
+
+Polynomial Features - Creating squared and cubed versions of important variables
+
+
+df = df.with_columns(
+      
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      
+      (pl.col() / (pl.col() + )).fill_null().alias(),
+      (pl.col() / (pl.col() + )).fill_null().alias(),
+      (pl.col() / (pl.col() + )).fill_null().alias(),
+      
+      pl.col().floor().alias(),
+      (pl.col() - pl.col().floor()).alias(),
+      pl.col().floor().alias(),
+      (pl.col() - pl.col().floor()).alias(),
+      
+      (pl.col() == ).cast(pl.Int8).alias(),
+      pl.when(pl.col() == ).then().otherwise().cast(pl_f_type).alias(),
+      
+      (pl.col() ** ).alias(),
+      (pl.col() ** ).alias(),
+  )
+
+  df = df.with_columns(
+      (np.sin( * np.pi * pl.col() / )).alias(),
+      (np.cos( * np.pi * pl.col() / )).alias(),
+      (pl.col() * pl.col()).alias(),
+  )
+
+  df = df.with_columns(
+      (
+          (pl.col() - pl.col().median()).()
+          + (pl.col() - pl.col().median()).()
+          + (pl.col() - pl.col().median()).()
+          + (pl.col() - pl.col().median()).()
+      ).alias()
+  )
+
+
+The most impactful feature was simply pl.col("Episode_Length_minutes").floor().alias("ELen_Int") - extracting the integer part of the episode length.
+
+Utilizing the Original Dataset
+
+I incorporated this original dataset in two ways:
+
+
+
+Direct concatenation with the competition training data; “Original Data as New Cols”
+
+Adding specific rows as "Original Data as New Rows"
+
+
+For the second approach, I was inspired by Chris Deotte's solution post from the Binary Prediction with a Rainfall Dataset competition (Playground Series - Season 5, Episode 3) shared here.
+
+The technique involved finding rows in the original dataset that matched the same feature group combinations I identified in my target encoding process. When I found matching feature groups, I added those original rows with their actual Listening_Time_minutes values as new training data. This essentially allowed me to enrich my dataset with additional ground truth values from the original source.
+
+ cols  combinations_list:
+        n = 
+        means = df_pltpd.group_by(cols).agg(pl.col().mean().alias())
+        df = df.join(means, on=cols, how=).with_columns(pl.col().fill_null(m).alias(n)).drop()
+
+
+Select Feature Combinations for Target Encoding
+
+Code: https://www.kaggle.com/code/masaishi/select-feature-combinations-by-rmse
+
+I'd like to share my approach for finding optimal feature combinations through target encoding. This method systematically evaluates different feature groupings to identify which combinations best predict podcast listening time.
+
+Here's the step-by-step process I implemented:
+
+
+
+
+First, split the dataset into training (80%) and validation (20%) sets:
+
+
+Generate feature combinations to test (1-4 features at a time):
+
+
+For each combination, create groups by concatenating feature values:
+
+
+ comb[]  df.select(cs.numeric()).columns:
+    concat_expr = pl.col(comb[]).(round_num).cast(pl.Utf8)
+:
+    concat_expr = pl.col(comb[]).cast(pl.Utf8)
+
+
+ col_name  comb[:]:
+     col_name  df.select(cs.numeric()).columns:
+        concat_expr = concat_expr +  + pl.col(col_name).(round_num).cast(pl.Utf8)
+    :
+        concat_expr = concat_expr +  + pl.col(col_name).cast(pl.Utf8)
+
+
+
+Calculate the mean listening time for each group in the training data:
+
+df_train = df_train.with_columns(
+    concat_expr.alias().cast(pl.Categorical)
+)
+
+df_group = df_train.group_by().agg(
+    pl.col().count().alias(),
+    pl.col().std().alias(),
+    pl.col().mean().alias(),
+    pl.col().mean().alias(),
+)
+
+
+
+Apply these group means to the validation set as predictions:
+
+df_valid = df_valid.with_columns(
+    concat_expr.alias().cast(pl.Categorical)
+)
+df_valid = df_valid.join(
+    df_group[[, ]],
+    on=,
+    how=,
+)
+
+
+
+Calculate RMSE and other statistics for each combination:
+
+std_distributes.append({
+    : .join(comb),
+    : df_group[].() / df_train[].count(),
+    : (df_group),
+    : df_group[].mean(),
+    : df_group[].median(),
+    : df_group[].std(),
+    : df_group[].mean(),
+    : calculate_rmse(df_valid[], df_valid[]),
+})
+
+
+
+Sort results by RMSE to find the best feature combinations:
+
+std_distributes = std_distributes.sort()
+
+
+
+This approach is essentially a systematic way to perform target encoding across different feature combinations. The best combinations provide valuable insights about which podcast attributes most strongly influence listening time.
+
+
+
+Model Ensemble
+
+For my final submission, I created an ensemble combining several different regression models:
+
+
+
+HistGradientBoostingRegressor
+
+LGBMRegressor
+
+SVR (Support Vector Regression)
+
+TabNetRegressor
+
+XGBRegressor
+
+
+Experiment Management
+
+Effective experiment management was crucial to my success in this competition. I tracked experiment parameters using Wandb, while implementing an automated commit system that included validation scores and Wandb experiment names in commit messages. This made it easy for me to identify which code changes produced the best results.
+
+
+
+
+
+With over 1,000 experiments conducted throughout the competition, establishing this structured environment from the beginning proved invaluable. The screenshot examples show how my tracking system organized results visually.
+
+I also carefully structured my code architecture to maximize flexibility:
+
+/
+├── config
+├── data
+│   ├── data_class
+│   ├── data_process
+│   ├── default_selecteds
+│   ├── encoders
+│   ├── feature_eng
+│   ├── simple_data_process
+│   ├── simple_feature_eng
+│   └── tabnet_feature_eng
+├── 
+├── models
+│   ├── hgbr
+│   ├── lgb
+│   ├── svr
+│   ├── tabnet
+│   ├── test
+│   └── xgb
+└── utils
+
+
+Each model followed a consistent interface with standardized input/output formats:
+
+ () -&gt; [,  | ]:
+    
+
+
+ :
+    X_train: pl.DataFrame
+    y_train: pl.Series
+    X_valid: pl.DataFrame
+    y_valid: pl.Series
+    X_test: [pl.DataFrame] = 
+    y_test: [pl.Series] = 
+
+
+This design made it easy for me to test new models or apply successful feature engineering techniques across different algorithms. My configuration system also allowed for quick switching between prediction and evaluation modes.
+
+While these details might seem minor, they significantly enhanced my ability to iterate efficiently throughout the competition.
+
+Special Thanks to:
+
+
+
+AngelosMar - https://www.kaggle.com/angelosmar1
+
+Chris Deotte - https://www.kaggle.com/cdeotte
+
+Panagiota Moraiti - https://www.kaggle.com/giotamoraiti
+
+Pranshu Bahadur - https://www.kaggle.com/pranshubahadur
+
+Spiritmilk - https://www.kaggle.com/act18l
+
+Ravi Ramakrishnan - https://www.kaggle.com/ravi20076
+
+Masaya Kawamata - https://www.kaggle.com/masayakawamata
+
+Chinmaya - https://www.kaggle.com/chinmayadatt
+
+Farukcan Saglam - https://www.kaggle.com/greysky
+
+Carl McBride Ellis - https://www.kaggle.com/carlmcbrideellis
+
+Thomas Meißner - https://www.kaggle.com/thomasmeine
+
+Comments:
+├─ Johannes Heller (2025-05-02 08:34:53.347000) [+1]
+│  Congratulations for your 6th place. Thanks for the detailed explanation, especially of your approach to Feature Selection. I went for a very greedy traditional forward feature selection. How long d...
+  ├─ masaishi (2025-05-03 02:13:31.883000) [+0]
+  │  Thank you! I spent almost the entire last week on feature selection.
+  │  https://www.kaggle.com/code/masaishi/select-feature-combinations-by-rmse
+  │  I selected features in the notebook above, and I probab...
+├─ AngelosMar (2025-05-01 08:37:57.157000) [+1]
+│  Congratulations and thanks for sharing your approach!
+├─ Hamed Abedi (2025-05-01 07:51:48.397000) [+1]
+│  Great work ! Thanks for sharing your detailed solution!
+├─ Optimistix (2025-05-01 04:13:48.953000) [+1]
+│  Congrats! Cool experiments, and a very systematic approach with experiment tracking - something I've been meaning to look into, without quite getting around to doing it.
+  ├─ masaishi (2025-05-01 05:26:15.710000) [+1]
+  │  Thanks! I still don't have any best practices for the ratio of time to EDA and experiments, but if I run five experiments and they don't go well, I try to allocate time to EDA.
+├─ Denver Magtibay (2025-05-01 03:38:08.973000) [+1]
+│  Congrats sir! Following you now! Hopefully you share more like this on future competitions!
+  ├─ masaishi (2025-05-01 05:27:01.457000) [+0]
+  │  Thank you! It's good experience for me to write in English, so I still share code and discussion posts.
+├─ paperxd (2025-05-01 02:12:24.603000) [+1]
+│  I don't understand the point of cubing or squaring a feature. GBDTs only care about splits, so the order would still remain the same. As the idea of splitting decimals by the integer and fractional...
+  ├─ masaishi (2025-05-01 02:23:52.917000) [+1]
+  │  Regarding the first point about squaring, I'm not very familiar with LightGBM either, but since decision trees use histogram algorithms for making decisions, I think that when you square or cube va...
+    ├─ paperxd (2025-05-01 03:00:19.383000) [+1]
+    │  Ok, thanks for your valuable insights!
+├─ Oscar Aguilar (2025-05-01 01:58:46.067000) [+2]
+│  Congrats @masaishi and thanks for sharing your detailed approach!
+  ├─ masaishi (2025-05-01 02:12:11.903000) [+0]
+  │  Thank you!
+├─ Chris Deotte (2025-05-01 01:47:44.097000) [+2]
+│  Congratulations on 6th place! Great detective work, great feature engineering, great diverse ensemble!
+  ├─ masaishi (2025-05-01 02:13:17.493000) [+2]
+  │  Thank you! Your idea for previous competitions helps me a lot.
+├─ paperxd (2025-05-02 17:03:53.293000) [+0]
+│  What is cover_rate?
+  ├─ masaishi (2025-05-03 02:14:43.737000) [+0]
+  │  When grouping, I excluded unique items where data was not available, and calculated the percentage of remaining rows compared to the total as the 'cover_rate'.

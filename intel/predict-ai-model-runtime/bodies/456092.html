@@ -1,0 +1,49 @@
+<p>Thanks to the host and congratulations to the winners.<br>
+I'm glad to win my 4th gold medal on this competition.<br>
+I did not use GNN, but used LightGBM with feature engineering.<br>
+The reason why I chose LightGBM is that I thought that the runtime of the model in a single TPU is equal to the sum of the runtime of each node, and learning the aggregated statistics from the graph would be sufficient to achieve good score without learning the graph structures.</p>
+<h2>Layout</h2>
+<h3>Features</h3>
+<p>I extracted the following features from the graph.</p>
+<ul>
+<li>Number of nodes of each type for conv/dot/reshape when using the following classification method<ul>
+<li>Conv: If any one of the input/output number of dimensions or config values, or the 93~106th values of node_feat is different, it is of a different type</li>
+<li>Dot: If any one of the input/output number of dimensions or config values, or the index features of dot operation (extracted from the .pb file on its own) is different, then it is of a different type</li>
+<li>Reshape: If any one of the input/output number of dimensions or config values, or the inconsistency on the element products in a set of a certain dimension, then it is of a different type</li></ul></li>
+<li>Number of times the element is copied<ul>
+<li>Determine if a copy is needed by comparing the layout of each configurable node and the configurable nodes connected to it.</li></ul></li>
+<li>Counting binning the size of the 1st/2nd minor dimension</li>
+<li>Sum of padding generated at each configurable node</li>
+<li>(only default) Occurrence rate of config for each node relative to the total data for that model<ul>
+<li>Because genetic algorithms are used in the search, the more frequently a config pattern appears, the faster the config runtime will tend to be.</li></ul></li>
+</ul>
+<h3>Models</h3>
+<p>I trained the pointwise and pairwise models.</p>
+<ul>
+<li>Pointwise LightGBM<ul>
+<li>Target: Normalized rankings(0~1)</li>
+<li>Loss: MAE Loss</li>
+<li>Public LB: 0.715 (Private LB: 0.680)</li></ul></li>
+<li>Pairwise LightGBM<ul>
+<li>Loss: Binary</li>
+<li>Randomly select the same number of pairs as the number of configurations and generate train/valid.</li>
+<li>Inference on test data predicts for all pairs of 1000^2 and then sort configs using the sum of the predictions.</li>
+<li>Input features are as follows: <ul>
+<li>The features for one config of the pair</li>
+<li>The difference between the features of the two configs</li></ul></li>
+<li>Public LB: 0.728 (Private LB:0.701)</li></ul></li>
+</ul>
+<p>I used the same train/valid given by the host. (Failure to devise a better CV may have been the cause of the shake down)</p>
+<h2>Tile</h2>
+<h3>Features</h3>
+<ul>
+<li>Config features</li>
+<li>Node features averaged over all nodes</li>
+</ul>
+<h3>Models</h3>
+<p>I trained the pointwise LightGBM model.</p>
+<ul>
+<li>Target: Normalized rankings(0~1)</li>
+<li>Loss: MAE Loss</li>
+<li>Public LB(only tile): 0.198 (Private LB(only tile): 0.195)</li>
+</ul>

@@ -1,0 +1,49 @@
+<p>Wow! I finally finished in the Top 5. More special because I had just turned 26… perfect timing for a gift. 😁</p>
+<p>I want to thank Kaggle for continuously organizing these competitions. I’ve been competing for a year now, and I’ve learned a lot from the Playground Series. You get to learn from great, skilled people like <a href="https://www.kaggle.com/optimistix" target="_blank">@optimistix</a>, <a href="https://www.kaggle.com/tilii7" target="_blank">@tilii7</a>, <a href="https://www.kaggle.com/ravi20076" target="_blank">@ravi20076</a>, and the two geniuses <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> and <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a>. My participation in the Playground Series was a major reason why I later won 3 silver medals. I genuinely recommend newcomers to start here.</p>
+<p>Thanks to: <a href="https://www.kaggle.com/sagarnagpure1310" target="_blank">@sagarnagpure1310</a>, <a href="https://www.kaggle.com/mikhailnaumov" target="_blank">@mikhailnaumov</a>, <a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a>, <a href="https://www.kaggle.com/yeoyunsianggeremie" target="_blank">@yeoyunsianggeremie</a>, <a href="https://www.kaggle.com/yekenot" target="_blank">@yekenot</a> and others  for the public codes.</p>
+<p><strong>My approach: Two Models + Huge Feature Engineering</strong></p>
+<p>I used LGBM as the main workhorse along with a strong DNN. I started late (last 10 days), so I began from public notebooks and optimized upon.</p>
+<p>First, I trained about 8 models (cv_xgb 0.9276, hgb 0.9273,, catboost 0.9272 .. etc), and ensembled them in multiple ways, but the gains were negligible. So I decided to invest more into FE.</p>
+<p>To avoid throwing away my earlier ensemble effort, I used the ensemble predictions over the test set as pseudo-labels. This was very effective (+0.0004 on CV).</p>
+<p><strong>Then each of the two models (LGBM, DNN) followed the same pipeline:</strong></p>
+<ol>
+<li>Large and diverse engineered feature space (about 100 new features). Surprisingly,  n-way interactions didn’t help me 🤷‍♂️.</li>
+<li>Pseudo-labeling based on ensemble predictions.</li>
+<li>Stratified 5-fold CV training.</li>
+<li>N_SEEDS = 5 independent training runs.</li>
+<li>Differential-evolution hill-climbing for ensemble weighting (optimal convex combination of the 5 seeds using <code>scipy.optimize.differential_evolution</code>). This increased CV_DNN by +0.0004 over the best single seed, and CV_LGBM by +0.0002.</li>
+<li>Final test predictions by applying the optimized seed weights.</li>
+</ol>
+<p>For the final submission, I used a weighted average of LGBM and DNN.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Public LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LGBM</td>
+<td>0.9284</td>
+<td>0.9279</td>
+</tr>
+<tr>
+<td>DNN</td>
+<td>0.9274</td>
+<td>0.927</td>
+</tr>
+</tbody>
+</table>
+<p>Public LB: 0.928
+Private LB: 0.92915</p>
+<p><strong>Some notes/tips:</strong></p>
+<ul>
+<li>I noticed many people weren’t happy with DNN/CatBoost performance. For me they worked well, but you need to treat them differently. FE sometimes is everything; it determines how the architecture "sees" the data.</li>
+<li>Always trust your CV score but avoid leakage, especially with TE. I repeatedly see public notebooks getting this wrong.</li>
+<li>Monitor LB when the test data is large enough (0.2 × 254,569 is a good indicator), <strong>but mix it with CV</strong>.</li>
+<li>Add features gradually and check if CV improves. Dropping a batch of features all at once could cancel each other.</li>
+<li>(Personal view; no idea if others agree) LLMs are totally useless for creativity. They just memorize and spit it nicely. Don’t waste time asking them to "optimize" anything unless your baseline is terrible. Searching with them or writing code is fine, but that’s it.</li>
+<li>I strongly recommend reading <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>’s previous solutions.</li>
+</ul>

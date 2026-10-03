@@ -1,0 +1,101 @@
+# https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696040
+
+Topic #696040: 1st place: One vs Rest + Multiclass Models
+  Author: cstdy
+  Posted: 2026-05-01 04:26:11.430000
+  Votes: 56  Comments: 23
+
+First of all, thanks to Kaggle for this competition. This month dataset and metric were non-standard, which made it more interesting! Also, a huge thanks to @mahoganybuttstrings, @utaazu, @yunsuxiaozi, @include4eto, @yekenot, @mikhailnaumov, @rohit8527kmr7518, @rawashishsin, @wguesdon, @lucasmoraes001, and @ravi20076 for sharing the solutions I used in final submission.
+
+Approach
+
+I used OOF predictions from public notebooks with different FE for ensembling. If public notebook contained only 1 model, I trained other models on same FE in some cases. 
+I also made one FE and a set of 6 models myself, where FE is still based on public notebooks.
+
+Key observation I used was mentioned in https://www.kaggle.com/competitions/playground-series-s6e4/discussion/690677 - models almost never confuse Low and High classes. Therefore, I developed an approach with two binary classifiers. The first trained on Low vs Rest target on whole dataset. Since High class part is small, it is almost same as Low vs Medium.
+
+In the second step, I trained Medium vs. High classifier. Only Medium and High classes were used for training, but OOF predictions were generated for the whole dataset. I considered two options: train the second binary classifier on true Medium and High labels or on predicted by the first model. In the final solution, I chose the latter. 
+
+Conversion to class probabilities was done by formulas
+
+P(Low) = P(Model_1)
+P(Medium) = (1 - P(Model_1)) * (1 - P(Model_2))
+P(High) = (1 - P(Model_1)) * P(Model_2)
+
+
+This gave XGBoost and RealMLP models with a CV of 0.9805 each.
+
+Ensemble
+
+I applied same scheme with 2 binary classifiers for probabilities blending. Blending was made with transform to logits + LogisticRegressionCV on 5 folds. I also ensured that all OOF predictions were obtained on 5 folds cv. Final cv of ensemble is 0.98155.
+For final predictions, I used two threshold search algorithms—both are greedy selection based on OOF balanced accuracy.
+
+Models
+
+61 oof predictions of models were used in final solution, 30 of them are from @wguesdon, 6 from my approach described above and the rest are from other public contributors. In a few cases, I reran public notebooks with other models.
+In total, there are 17 XGBoost, 11 LightGBM, 10 CatBoost, 9 RealMLP, 3 TabM, 2 LogisticRegression and a few others. 
+
+Details can be found in the attached ensemble notebook, which contains both ensembling and training mode for my models.
+I have also attached one of TabM models training, based on https://www.kaggle.com/code/rawashishsin/s6e4-highest-score-xgboost-cv-0-98109 which was not included in best scoring submission.
+
+Conclusion
+
+There are many multiclass and multilabel problems where one-vs-rest is not optimal.
+Here the dataset is specific because models almost never confuse Low and High classes. This made one-vs-rest approach with 2 binary classifiers possible and allowed to focus first on ranking and then on thresholds calibration for balanced accuracy.
+
+Comments:
+├─ Wahabou Doudou A.fataou (2026-06-02 18:51:29.143000) [+1]
+│  Une solution très riche
+├─ Chris Deotte (2026-05-01 20:36:48.463000) [+3]
+│  Amazing work @kirill0212 ! Congratulations winning 1st place! I like your approach of using 2 binary classifiers instead of 1 multi-class classifier. I also like your large diversity of models. Gre...
+  ├─ cstdy (2026-05-02 11:28:35.017000) [+0]
+  │  Thanks, and congratulations on your great solution!
+├─ Dávid Kolumber (2026-05-01 12:39:39.310000) [+4]
+│  Thanks for the write-up, really appreciate you sharing it.
+│  
+│  I’m joining competitions with the goal of becoming first one day, and I genuinely enjoy competing as well as learning from write-ups like...
+├─ Optimistix (2026-05-01 05:58:14.483000) [+4]
+│  Congrats! Very cool solution. I'd trained binary classifiers on High vs Medium and Medium vs Low, but only used the results as features - they went to the top, but didn't make a huge difference oth...
+  ├─ cstdy (2026-05-01 12:46:34.177000) [+2]
+  │  Thanks, and congratulations on 4th place!
+├─ hato bai (2026-05-06 15:15:51.770000) [+1]
+│  COOL！Congratulations
+├─ Josue Romaric Edou (2026-05-04 22:15:02.840000) [+1]
+│  Amazing ! Congratulations
+├─ Durga Kumari (2026-05-04 17:40:09.560000) [+1]
+│  Great approach on the Low vs High separation. 
+│  The two-stage binary approach is really clean and effective. Thanks for sharing it.
+├─ Imrankhan (2026-05-03 05:32:49.117000) [+1]
+│  Congratulations @kirill0212
+├─ Vijay Takbhate (2026-05-02 14:57:10.567000) [+1]
+│  Congratulations @kirill0212🥳
+├─ Mohit (2026-05-01 15:20:30.667000) [+1]
+│  Congratulations on 1st place!
+├─ turtle (2026-05-01 14:43:11.390000) [+2]
+│  Congratulations on 1st place!  Thanks for sharing the writeup.
+├─ Jerry (2026-05-01 12:45:16.327000) [+2]
+│  Congratulations! I have a quick question for people who use a lot of models - how do you set it up on Kaggle? Do you just submit one long-running notebook that trains everything, or set up separate...
+  ├─ cstdy (2026-05-01 16:25:58.677000) [+0]
+  │  Thanks! I usually run multiple notebooks with Save &amp; run all to save OOF and test predictions, then upload them manually to local folder or Kaggle dataset. Then run ensembling notebook on kaggl...
+├─ r0tor (2026-05-01 11:25:06.770000) [+2]
+│  Congratulations on 1st place! Really impressive and elegant solution.
+│  
+│  I especially liked the idea of using two binary classifiers instead of treating the task as a standard 3-class problem. The ob...
+  ├─ cstdy (2026-05-01 12:13:49.113000) [+2]
+  │  Thank you, and congratulations on 3rd place! 
+  │  
+  │  I had many submissions with private scores between 0.981 and 0.9815 and same CV, so I guess final submission selection played a role.
+  │  
+  │  I chose 2 subs ...
+    ├─ r0tor (2026-05-01 14:17:37.813000) [+2]
+    │  I had a very similar experience. Many of my submissions were very close, and the final selection mattered a lot. I also noticed that the number of predicted High samples was one of the key differen...
+├─ AshishSinghRawat (2026-05-01 09:28:13.457000) [+2]
+│  Great solution and use of public notebooks is amazing, congrats.
+├─ Trimut (2026-05-01 07:05:15.350000) [+2]
+│  That Low vs Rest → Medium vs High idea is actually crazy smart. I was stuck around ~0.97 and didn’t even think about reframing the problem like that. The whole OOF + logits blending setup is next l...
+├─ Vandit (2026-05-01 06:00:46.737000) [+2]
+│  congrats, nice approach @kirill0212
+├─ ayushokaay (2026-05-01 04:42:24.003000) [+2]
+│  nice approach @kirill0212
+├─ [deleted] (2026-05-02 02:30:15.137000) [+0]
+│  [deleted]

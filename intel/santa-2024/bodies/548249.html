@@ -1,0 +1,73 @@
+<p>The below two steps show how to compute correct perplexity with <code>batch size &gt; 1</code>. Just add these two changes to the <code>metric.py</code> file (v29 with float16 not 8bit) provided by Kaggle</p>
+<h1>Tokenizer Pad Right Side</h1>
+<p>The secret to using <code>batch_size&gt;1</code> and computing the correct perplexity score is to <strong>pad the tokenizer on the right</strong>: </p>
+<p><code>self.tokenizer = transformers.AutoTokenizer.from_pretrained(model_path,padding_side="right")</code></p>
+<p>By default, the tokenizer will pad on the left and then when we shift the labels (before cross entropy calculation) we would remove a pad token instead of removing the <code>&lt;bos&gt;</code> token. And the LB score removes the <code>&lt;bos&gt;</code> token before computing the token average for our LB score.</p>
+<h1>Mask Pad Tokens when Compute Loss</h1>
+<p>Also, we need to update <code>get_perplexity()</code> to accept a parameter named <code>batch_size</code> and <strong>process batches</strong>. And, we need to update <code>get_perplexity()</code> function to mask the pad tokens from cross entropy calculation. The code below works:</p>
+<pre><code>PAD_TOKEN_LABEL_ID = torch.nn.CrossEntropyLoss().ignore_index  
+DEVICE = torch.device(  torch.cuda.is_available()  ) 
+.loss_fct = torch.nn.CrossEntropyLoss(reduction=) 
+
+ () -&gt; [, []]:
+
+        single_input = (input_texts, )
+        input_texts = [input_texts]  single_input  input_texts
+
+        loss_list = []
+
+        batches = (input_texts)//batch_size + ((input_texts)%batch_size != )
+         j  (batches):
+
+            a = j*batch_size
+            b = (j+)*batch_size
+            input_batch = input_texts[a:b]
+
+             torch.no_grad():
+
+                
+                text_with_special = [  text  input_batch]
+
+                
+                model_inputs = .tokenizer(
+                    text_with_special,
+                    return_tensors=,
+                    add_special_tokens=,
+                    padding=
+                )
+
+                   model_inputs:
+                    model_inputs.pop()
+
+                model_inputs = {k: v.to(DEVICE)  k, v  model_inputs.items()}
+
+                
+                output = .model(**model_inputs, use_cache=)
+                logits = output[]
+
+                label = model_inputs[]
+                label[label == .tokenizer.pad_token_id] = PAD_TOKEN_LABEL_ID
+
+                
+                shift_logits = logits[..., :-, :].contiguous()  
+                shift_labels = label[..., :].contiguous()  
+
+                
+                loss = .loss_fct(
+                    shift_logits.view(-, shift_logits.size(-)),
+                    shift_labels.view(-)
+                )
+
+                loss = loss.view((logits), -)
+                valid_length = (shift_labels != PAD_TOKEN_LABEL_ID).(dim=-)
+                loss = torch.(loss, -) / valid_length
+
+                loss_list += loss.cpu().tolist()
+
+        ppl = [exp(i)  i  loss_list]
+
+         ppl[]  single_input  ppl
+</code></pre>
+<h1>UPDATE</h1>
+<p>I published starter code demonstrating how to compute perplexity in batches. Namely I use <code>batch_size=64</code> to search all permutations for sample#0 on Kaggle's 2xT4 GPUs <a href="https://www.kaggle.com/code/cdeotte/brute-force-first-sample-perplexity-470" target="_blank">here</a></p>
+<h1>Enjoy!</h1>

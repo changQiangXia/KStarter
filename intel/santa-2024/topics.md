@@ -1,0 +1,82 @@
+# santa-2024 讨论区（按票数排序，共 80 条）
+
+- [How To Use "Batch_Size>1" and get Correct Perplexity Score!](https://www.kaggle.com/competitions/santa-2024/discussion/548249) — 92 票 / 30 评论 / 2024-11-25 
+- [1st place solution](https://www.kaggle.com/competitions/santa-2024/discussion/560560) — 85 票 / 51 评论 / 2025-02-01 **write-up?**
+- [256.6 Tutorial](https://www.kaggle.com/competitions/santa-2024/discussion/551902) — 60 票 / 8 评论 / 2024-12-16 
+- [255.9 Solution(General Topic)](https://www.kaggle.com/competitions/santa-2024/discussion/548476) — 59 票 / 8 评论 / 2024-11-27 **write-up?**
+- [Where Should We Search to Beat LB=248.5?](https://www.kaggle.com/competitions/santa-2024/discussion/551818) — 59 票 / 72 评论 / 2024-12-15 
+- [Sorting sample 6 scores 53.46](https://www.kaggle.com/competitions/santa-2024/discussion/550287) — 54 票 / 22 评论 / 2024-12-06 
+- [2nd place solution (@zaburo's part)](https://www.kaggle.com/competitions/santa-2024/discussion/560533) — 43 票 / 10 评论 / 2025-02-01 **write-up?**
+- [5th Solution - CPMP part](https://www.kaggle.com/competitions/santa-2024/discussion/560597) — 43 票 / 8 评论 / 2025-02-01 **write-up?**
+- [Explanation of Sample 5 Team Solution](https://www.kaggle.com/competitions/santa-2024/discussion/559339) — 41 票 / 17 评论 / 2025-01-24 **write-up?**
+- [Each Optimal(?) Score has been revealed!](https://www.kaggle.com/competitions/santa-2024/discussion/556784) — 36 票 / 33 评论 / 2025-01-15 
+- [11th place solution](https://www.kaggle.com/competitions/santa-2024/discussion/560542) — 33 票 / 7 评论 / 2025-02-01 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/santa-2024/discussion/560536) — 32 票 / 8 评论 / 2025-02-08 **write-up?**
+- [Santa24 10th place - My Takeaways](https://www.kaggle.com/competitions/santa-2024/discussion/560531) — 32 票 / 15 评论 / 2025-02-01 **write-up?**
+- [Quantum Santa - or how to use gradient descent](https://www.kaggle.com/competitions/santa-2024/discussion/549535) — 32 票 / 9 评论 / 2024-12-02 
+- [Brute forcing](https://www.kaggle.com/competitions/santa-2024/discussion/547564) — 30 票 / 9 评论 / 2024-11-22 
+- [3rd place solution](https://www.kaggle.com/competitions/santa-2024/discussion/560620) — 30 票 / 4 评论 / 2025-02-01 **write-up?**
+- [Accelerating ppx calculation by using different attention implementation.](https://www.kaggle.com/competitions/santa-2024/discussion/552346) — 28 票 / 11 评论 / 2024-12-19 
+- [Metric Revision and Rescore](https://www.kaggle.com/competitions/santa-2024/discussion/547676) — 27 票 / 55 评论 / 2024-11-23 
+- [Sorting sample 6 with stop words first -  scores 48.69](https://www.kaggle.com/competitions/santa-2024/discussion/550429) — 27 票 / 16 评论 / 2024-12-07 
+- [Sharing your score for each problem](https://www.kaggle.com/competitions/santa-2024/discussion/549296) — 27 票 / 34 评论 / 2024-12-01 
+- [2nd place solution ](https://www.kaggle.com/competitions/santa-2024/discussion/560540) — 27 票 / 5 评论 / 2025-02-01 **write-up?**
+- [Publishing top solution is dangerous](https://www.kaggle.com/competitions/santa-2024/discussion/555881) — 26 票 / 12 评论 / 2025-01-09 **write-up?**
+- [2nd Place Solution (@solverworld's part)](https://www.kaggle.com/competitions/santa-2024/discussion/560565) — 26 票 / 3 评论 / 2025-02-01 **write-up?**
+- [Where I learned all about solving heuristic problems](https://www.kaggle.com/competitions/santa-2024/discussion/560563) — 26 票 / 6 评论 / 2025-02-01 
+- [Hacking the LB [fixed]](https://www.kaggle.com/competitions/santa-2024/discussion/547505) — 25 票 / 9 评论 / 2024-11-22 
+- [How I sped up finding good moves](https://www.kaggle.com/competitions/santa-2024/discussion/560553) — 25 票 / 6 评论 / 2025-02-01 
+- [Bonus Stage! Testcase with 300 words](https://www.kaggle.com/competitions/santa-2024/discussion/557817) — 25 票 / 26 评论 / 2025-01-21 
+- [Perplexity Progress Plot](https://www.kaggle.com/competitions/santa-2024/discussion/555545) — 25 票 / 7 评论 / 2025-01-07 
+- [[The road to kaggle master]  Chapter 1: How can I run my code in colab?](https://www.kaggle.com/competitions/santa-2024/discussion/553248) — 24 票 / 3 评论 / 2024-12-24 
+- [Visualizing word-level entropy ](https://www.kaggle.com/competitions/santa-2024/discussion/552671) — 23 票 / 1 评论 / 2024-12-20 
+- [13th Place Writeup](https://www.kaggle.com/competitions/santa-2024/discussion/560683) — 23 票 / 6 评论 / 2025-02-01 **write-up?**
+- [6th Place Solution(@Shun Fukuda's part)](https://www.kaggle.com/competitions/santa-2024/discussion/560625) — 22 票 / 4 评论 / 2025-02-01 **write-up?**
+- [Welcome and Important Caveat](https://www.kaggle.com/competitions/santa-2024/discussion/547489) — 21 票 / 25 评论 / 2024-11-21 
+- [it is not TSP, it is about (global?) context](https://www.kaggle.com/competitions/santa-2024/discussion/548765) — 21 票 / 3 评论 / 2024-11-28 
+- [From 197.5 to 191.7 for ID=3](https://www.kaggle.com/competitions/santa-2024/discussion/557504) — 21 票 / 13 评论 / 2025-01-19 
+- [Sudden jumps](https://www.kaggle.com/competitions/santa-2024/discussion/554410) — 20 票 / 12 评论 / 2025-01-01 
+- [7th Place Solution SA SA SA](https://www.kaggle.com/competitions/santa-2024/discussion/561091) — 20 票 / 4 评论 / 2025-02-05 **write-up?**
+- [Meme Thread](https://www.kaggle.com/competitions/santa-2024/discussion/555987) — 19 票 / 5 评论 / 2025-01-10 
+- [Already Found the Optimal Solution?](https://www.kaggle.com/competitions/santa-2024/discussion/554913) — 19 票 / 32 评论 / 2025-01-04 **write-up?**
+- [How would you find cheaters in this setup?](https://www.kaggle.com/competitions/santa-2024/discussion/560329) — 19 票 / 8 评论 / 2025-01-30 
+- [9th place solution](https://www.kaggle.com/competitions/santa-2024/discussion/560601) — 19 票 / 2 评论 / 2025-02-01 **write-up?**
+- [Sharing solutions during the last week of competition](https://www.kaggle.com/competitions/santa-2024/discussion/559694) — 18 票 / 25 评论 / 2025-01-27 **write-up?**
+- [Bug in calculating perplexity?](https://www.kaggle.com/competitions/santa-2024/discussion/547513) — 18 票 / 16 评论 / 2024-11-22 
+- [Tackling Sample 4 from a Random Start Position](https://www.kaggle.com/competitions/santa-2024/discussion/554741) — 18 票 / 6 评论 / 2025-01-03 
+- [Creating a notebook with the same Docker image as the metric](https://www.kaggle.com/competitions/santa-2024/discussion/552669) — 17 票 / 3 评论 / 2024-12-20 
+- [References and onboarding materials ](https://www.kaggle.com/competitions/santa-2024/discussion/547475) — 17 票 / 4 评论 / 2024-11-21 
+- [Strange Behavior of Scorer (fix)](https://www.kaggle.com/competitions/santa-2024/discussion/547943) — 17 票 / 6 评论 / 2024-11-24 
+- [[18th Place Solution + Lessons Learned from This Competition] (ISAKA's part)](https://www.kaggle.com/competitions/santa-2024/discussion/560557) — 16 票 / 8 评论 / 2025-02-01 **write-up?**
+- [Accidental Disclosure of the Team Solution for Sample ID 5](https://www.kaggle.com/competitions/santa-2024/discussion/559317) — 16 票 / 33 评论 / 2025-01-24 **write-up?**
+- [Ethics of Copying and Republishing Kaggle Notebooks Without Enhancements](https://www.kaggle.com/competitions/santa-2024/discussion/555742) — 16 票 / 9 评论 / 2025-01-09 
+- [Same text scores differently in different environments](https://www.kaggle.com/competitions/santa-2024/discussion/547930) — 16 票 / 16 评论 / 2024-11-24 
+- [[23rd solution] TanakaAI`s part.](https://www.kaggle.com/competitions/santa-2024/discussion/560616) — 15 票 / 2 评论 / 2025-02-01 **write-up?**
+- [BUG: Same texts having different scores!](https://www.kaggle.com/competitions/santa-2024/discussion/547835) — 15 票 / 7 评论 / 2024-11-23 
+- [using key-cache to speedup decoding](https://www.kaggle.com/competitions/santa-2024/discussion/550177) — 14 票 / 8 评论 / 2024-12-05 
+- [Batch calculation of metrics using a cache](https://www.kaggle.com/competitions/santa-2024/discussion/550669) — 14 票 / 0 评论 / 2024-12-08 
+- [16th Solution and thoughts - @johnmichaelwu writeup](https://www.kaggle.com/competitions/santa-2024/discussion/560713) — 14 票 / 0 评论 / 2025-02-01 **write-up?**
+- [Visualize attention maps - Explain why alphabet sort works for sample 6](https://www.kaggle.com/competitions/santa-2024/discussion/550354) — 14 票 / 1 评论 / 2024-12-07 
+- [Possible metric fix](https://www.kaggle.com/competitions/santa-2024/discussion/547873) — 14 票 / 2 评论 / 2024-11-23 
+- [Another Heuristic Approach [JOKE THREAD]](https://www.kaggle.com/competitions/santa-2024/discussion/556247) — 14 票 / 8 评论 / 2025-01-12 
+- [Perplexity, Meaning, and id5's Words](https://www.kaggle.com/competitions/santa-2024/discussion/555701) — 13 票 / 0 评论 / 2025-01-08 
+- [Will gold zone be filled with current top score?](https://www.kaggle.com/competitions/santa-2024/discussion/559451) — 13 票 / 18 评论 / 2025-01-25 
+- [I achieved 4 milestones with Santa 2024 !](https://www.kaggle.com/competitions/santa-2024/discussion/560757) — 13 票 / 2 评论 / 2025-02-02 
+- [Interesting Team Up](https://www.kaggle.com/competitions/santa-2024/discussion/557741) — 13 票 / 19 评论 / 2025-01-21 
+- [[16th solutions] Hikari30 part](https://www.kaggle.com/competitions/santa-2024/discussion/560674) — 13 票 / 0 评论 / 2025-02-01 **write-up?**
+- [22nd Solution - neibyr part](https://www.kaggle.com/competitions/santa-2024/discussion/560672) — 12 票 / 2 评论 / 2025-02-01 **write-up?**
+- [i wonder if the "natural" LLM method will work better?](https://www.kaggle.com/competitions/santa-2024/discussion/548154) — 12 票 / 12 评论 / 2024-11-25 
+- [What is the kick?](https://www.kaggle.com/competitions/santa-2024/discussion/560689) — 12 票 / 11 评论 / 2025-02-01 
+- [Cryptographic Approaches](https://www.kaggle.com/competitions/santa-2024/discussion/552333) — 12 票 / 7 评论 / 2024-12-19 
+- [A Gentle Reminder: One Submission Can Make a Big Difference!](https://www.kaggle.com/competitions/santa-2024/discussion/559832) — 12 票 / 13 评论 / 2025-01-28 
+- [Visual Insights from My Explorations](https://www.kaggle.com/competitions/santa-2024/discussion/556946) — 12 票 / 0 评论 / 2025-01-15 
+- [Score Affected by Transformers module, Among Other Things](https://www.kaggle.com/competitions/santa-2024/discussion/551661) — 12 票 / 7 评论 / 2024-12-14 
+- [How Does Rudolph Prize Work regarding teaming](https://www.kaggle.com/competitions/santa-2024/discussion/551051) — 11 票 / 6 评论 / 2024-12-11 
+- [One Last Progress Plot](https://www.kaggle.com/competitions/santa-2024/discussion/560573) — 11 票 / 1 评论 / 2025-02-01 
+- [6th Place Solution(Yuki.O's part)](https://www.kaggle.com/competitions/santa-2024/discussion/560796) — 11 票 / 2 评论 / 2025-02-02 **write-up?**
+- [Speed up inference ideas ? TSP possible here?](https://www.kaggle.com/competitions/santa-2024/discussion/547975) — 10 票 / 2 评论 / 2024-11-24 
+- [2 Days to Go! 1 Gold to Claim!](https://www.kaggle.com/competitions/santa-2024/discussion/560198) — 10 票 / 16 评论 / 2025-01-30 
+- [36th solution ](https://www.kaggle.com/competitions/santa-2024/discussion/560640) — 10 票 / 6 评论 / 2025-02-01 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/santa-2024/discussion/561045) — 9 票 / 1 评论 / 2025-02-03 
+- [Get started here](https://www.kaggle.com/competitions/santa-2024/discussion/547466) — 3 票 / 4 评论 / 2024-11-21 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/santa-2024/discussion/548098) — 1 票 / 2 评论 / 2024-11-25 

@@ -1,0 +1,73 @@
+# playground-series-s6e7 讨论区（按票数排序，共 71 条）
+
+- [Plausible generation model of the "original" dataset](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717222) — 42 票 / 11 评论 / 2026-07-01 
+- [2nd Place Solution: Trusting CV & Mathematical Precision](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731904) — 29 票 / 13 评论 / 2026-08-01 **write-up?**
+- [Trust your CV: the CV-LB relation so far](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/718258) — 27 票 / 1 评论 / 2026-07-03 
+- [Rank11 approach](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731745) — 22 票 / 10 评论 / 2026-08-01 
+- [A 9-notebook research trail: LightGBM baseline -> CatBoost -> squeeze attempts -> a genuine +0.0009 breakthrough -> a neural-net photo finish -> highest LB via blend (not confirmed)](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/719199) — 19 票 / 5 评论 / 2026-07-04 
+- [Clustering Students lifestyle risk factors. Silence: the biggest issue to students health.](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/716781) — 16 票 / 2 评论 / 2026-07-01 
+- [How I Went from 0.903 to 0.950 with One Config](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724493) — 12 票 / 4 评论 / 2026-07-11 
+- [baseline_submission.csv](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717015) — 9 票 / 2 评论 / 2026-07-01 
+- [LightGBM + Optuna Pipeline | 0.95014 LB — sharing what worked](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724455) — 8 票 / 18 评论 / 2026-07-11 
+- [An almost-exhaustive S6E7 read: why 86% accuracy scores 0.33](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717018) — 8 票 / 12 评论 / 2026-07-01 
+- [14 tests. 4 interactions. 1 conclusion: you're probably using the wrong features](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724596) — 7 票 / 1 评论 / 2026-07-12 
+- [How I got CV 0.95032 with a single XGBoost model](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730132) — 7 票 / 5 评论 / 2026-07-28 
+- [S6E7 Solution](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731729) — 7 票 / 1 评论 / 2026-08-01 **write-up?**
+- [Does missing mean that Kaggle's synthesis algorithm has been upgraded?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/716812) — 6 票 / 5 评论 / 2026-07-01 
+- [When the foam of overfitting dissipates, what remains is the truth.](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731726) — 6 票 / 4 评论 / 2026-08-01 
+- [0.95007 LB - Synthetic Artifacts + Prior Correction + Stacking](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728842) — 5 票 / 3 评论 / 2026-07-24 
+- [[4th Place] From #414 to #4: Trusting OOF When the Leaderboard Lied](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/732487) — 4 票 / 0 评论 / 2026-08-03 **write-up?**
+- [Reflections: Threshold Tuning and Overfitting to the Public Leaderboard](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731737) — 4 票 / 4 评论 / 2026-08-01 
+- [Why 86% accuracy scores only 0.33 — balanced accuracy explained (beginner baseline)](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717568) — 4 票 / 2 评论 / 2026-07-02 
+- [Honest 0.95099 + exact OOF: stable RealMLP/FT/CatBoost blend](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728527) — 4 票 / 0 评论 / 2026-07-23 
+- [Agent in PSS6E7 CV:0.9494,LB:0.94985](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724558) — 4 票 / 0 评论 / 2026-07-12 
+- [Above ~0.950: skill, or the private draw?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/723666) — 4 票 / 5 评论 / 2026-07-07 
+- [Everything I Tried, Ranked by What Actually Worked 📊](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730837) — 3 票 / 0 评论 / 2026-07-30 
+- [Why shouldn't you even consider using LB probing in Playground Competitions](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731786) — 3 票 / 1 评论 / 2026-08-01 
+- [Too many 'at-risk' values?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/718950) — 3 票 / 2 评论 / 2026-07-04 
+- [135th Place Solution - My First Full Competition](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731907) — 3 票 / 0 评论 / 2026-08-01 **write-up?**
+- [The Shakeup Nobody Should Be Surprised By](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731738) — 2 票 / 2 评论 / 2026-08-01 
+- [Data Imputation](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/716792) — 2 票 / 2 评论 / 2026-07-01 
+- [Tuned xgboost + data augmentation lands you around: 0.9505-0.9507](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730632) — 2 票 / 0 评论 / 2026-07-29 
+- [Achieving 0.94943: My Approach to Handling Missing Data & Class Imbalance](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724303) — 2 票 / 2 评论 / 2026-07-10 
+- [First Kaggle competition experience - Rank 371/3452](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/732270) — 2 票 / 0 评论 / 2026-08-02 
+- [29th Place Solution: FT-Transformer + Exact-Value Target Encoding ](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/732394) — 2 票 / 1 评论 / 2026-08-02 **write-up?**
+- [training speed issue](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724615) — 2 票 / 14 评论 / 2026-07-12 
+- [PSS6E7 -- CV >> BLENDING](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/732429) — 2 票 / 0 评论 / 2026-08-02 
+- [📊 Student Risk: Advanced EDA | Leakage Check | Robust CV](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717063) — 1 票 / 0 评论 / 2026-07-01 
+- [S6E7 HGBC Solution](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731879) — 1 票 / 1 评论 / 2026-08-01 **write-up?**
+- [17 Models Later, a Single XGBoost Won 🏆](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730834) — 1 票 / 3 评论 / 2026-07-30 
+- [Why Models Plateau Around 0.95 in This Competition](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/729868) — 1 票 / 4 评论 / 2026-07-26 
+- [Some thoughts on my First Competition as a ML Beginner](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730259) — 1 票 / 2 评论 / 2026-07-28 
+- [Stuck at 84% Accuracy – How Can I Reach 90%+?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724080) — 1 票 / 5 评论 / 2026-07-09 
+- [376th → 92nd: the signal was non-monotonic, and one model beat every blend](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/732538) — 1 票 / 0 评论 / 2026-08-03 
+- [Adversarial Validation Insight: Mild Drift detected between Train and Test distributions (AUC ~0.63)](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/718921) — 0 票 / 5 评论 / 2026-07-04 
+- [A weighting trap in S6E7 balanced-accuracy baselines](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/718911) — 0 票 / 1 评论 / 2026-07-04 
+- [chasing noise?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/721289) — 0 票 / 5 评论 / 2026-07-06 
+- [## TPS S6E7 Mid-July Notes: Student Health Risk, Object Columns, and Why I'm Not Posting on July 1st](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724785) — 0 票 / 0 评论 / 2026-07-13 
+- [About the Missing Values](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717054) — 0 票 / 3 评论 / 2026-07-01 
+- [Interactive decision tree visualization with Health Risk ~0.84 score](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/726507) — 0 票 / 0 评论 / 2026-07-15 
+- [is 0.94968 enough for final test data evaluation ?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/726363) — 0 票 / 1 评论 / 2026-07-15 
+- [Breaking the 0.950 Ceiling: I went from 0.93 to 0.950](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/726551) — 0 票 / 3 评论 / 2026-07-15 
+- [What actually moves the needle in S6E7 — the balanced-accuracy trap, a 3-feature target, and where the errors hide 0.94972](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/727158) — 0 票 / 0 评论 / 2026-07-18 
+- [I am a beginner, How to improve](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728137) — 0 票 / 1 评论 / 2026-07-22 
+- [Honest 0.950166 OOF: rule + missing-key audit (fully reproducible)](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728485) — 0 票 / 0 评论 / 2026-07-23 
+- [Single LightGBM Outperforming Multi-Model Ensemble (LGBM + XGBoost + CatBoost)?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728499) — 0 票 / 2 评论 / 2026-07-23 
+- [[S6E7] Why ordinary argmax loses ~0.060 OOF Balanced Accuracy](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/729541) — 0 票 / 0 评论 / 2026-07-25 
+- [The Hidden Rule Behind the Labels (and Where the Real Ceiling Is)](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/729552) — 0 票 / 1 评论 / 2026-07-26 
+- [For balanced accuracy the optimal rule is argmax p over prior, not plain argmax](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728674) — 0 票 / 1 评论 / 2026-07-24 
+- [Handling High-Cardinality Categorical Features](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730239) — 0 票 / 2 评论 / 2026-07-28 
+- [Experimenting with Univariate Soft-Tree Embeddings](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730332) — 0 票 / 0 评论 / 2026-07-28 
+- [Tree + NN diversity gets you to the honest ceiling — the rest is variance](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730696) — 0 票 / 1 评论 / 2026-07-30 
+- [Competition Blog: Evaluation Parameters, Tips & Tricks](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731392) — 0 票 / 0 评论 / 2026-07-31 
+- [Experiment Review: What Worked and What Did Not ,0.95049 with single xgboost](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731489) — 0 票 / 1 评论 / 2026-07-31 
+- [the process ](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731711) — 0 票 / 1 评论 / 2026-07-31 
+- [140+ Submissions Later: What It Took to Reach 0.95301](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731469) — 0 票 / 6 评论 / 2026-07-31 
+- [Gelişmiş Özellik Mühendisliği ile LightGBM Performansını Artırma](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/724943) — -1 票 / 0 评论 / 2026-07-13 
+- [What does the 'other' mean in the 'Gender' category?](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/718941) — -1 票 / 0 评论 / 2026-07-04 
+- [Good evening!! My name is nk](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/728194) — -2 票 / 2 评论 / 2026-07-22 
+- [Early findings: LightGBM dominates, feature engineering surprisingly unhelpful](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/729973) — -2 票 / 3 评论 / 2026-07-27 
+- [0.877 to 0.949 overnight ... balanced accuracy was the key](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/730321) — -2 票 / 1 评论 / 2026-07-28 
+- [How to break past 0.950 to 0.952+? (Balanced Accuracy Optimization)](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/727882) — -3 票 / 2 评论 / 2026-07-21 
+- [The labels come from a 6-line rule — here's the ceiling, and the 2 things that actually helped](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/729537) — -3 票 / 0 评论 / 2026-07-25 
+- [Missing Values Handling](https://www.kaggle.com/competitions/playground-series-s6e7/discussion/720739) — -6 票 / 0 评论 / 2026-07-06 

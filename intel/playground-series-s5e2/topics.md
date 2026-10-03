@@ -1,0 +1,82 @@
+# playground-series-s5e2 讨论区（按票数排序，共 80 条）
+
+- [1st Place - Single Model - Feature Engineering](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565539) — 189 票 / 102 评论 / 2025-03-10 **write-up?**
+- [Backpack Data Explained - How To Find Signal](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564056) — 76 票 / 56 评论 / 2025-02-20 
+- [Starter Notebook - RAPIDS v25.02 - [LB 38.847]](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563743) — 70 票 / 29 评论 / 2025-02-18 
+- [Extra training data added](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561008) — 37 票 / 29 评论 / 2025-02-03 
+- [Rank 2 approach - a century of component feature sets and deep ensemble](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565542) — 36 票 / 22 评论 / 2025-03-01 
+- [[Suggestion] - Kindly consider organizing few playground episodes for beginners/ new accounts only](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563105) — 35 票 / 7 评论 / 2025-02-15 
+- [A few suggestions for the playground competition episodes](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561681) — 35 票 / 9 评论 / 2025-02-07 
+- [3rd Place Solution in Three Words!](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565653) — 33 票 / 16 评论 / 2025-03-02 **write-up?**
+- [Last Week. Good Luck! Have Fun!](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564766) — 31 票 / 22 评论 / 2025-02-24 
+- [Be mindful of extending these feature engineering concepts in real life assignments](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564876) — 30 票 / 10 评论 / 2025-02-25 
+- [Ongoing tabular competitions with similar metrics ](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562321) — 26 票 / 3 评论 / 2025-02-11 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560543) — 25 票 / 25 评论 / 2025-02-01 
+- [The target is just noise?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560669) — 25 票 / 26 评论 / 2025-02-01 
+- [Are you guys continuing with the competition? ](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560680) — 24 票 / 24 评论 / 2025-02-01 
+- [Relationship Between Original Data and Competition Data](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564486) — 23 票 / 15 评论 / 2025-02-23 
+- [Supervised Autoencoder Achieves LB38.84771](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563603) — 21 票 / 12 评论 / 2025-02-18 
+- [Starting materials and references](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560532) — 20 票 / 6 评论 / 2025-02-01 
+- [Implement your feature engineering carefully without leakage](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561260) — 19 票 / 0 评论 / 2025-02-05 
+- [What a beginner can learn from this episode](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561049) — 19 票 / 11 评论 / 2025-02-03 
+- [Reducing Memory usage tips.](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560561) — 18 票 / 8 评论 / 2025-02-01 
+- [Welcome Every one to Share CV/LB Score](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560545) — 17 票 / 32 评论 / 2025-02-01 
+- [Some accessible community competitions for your consideration](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565200) — 16 票 / 5 评论 / 2025-02-27 
+- [This is how I created the dataset 6 months back.](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563726) — 15 票 / 11 评论 / 2025-02-18 
+- [How to implement Target Encoder?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561801) — 15 票 / 18 评论 / 2025-02-08 
+- [5th place: Finding the SigNeedle in the NoiseStack](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565583) — 14 票 / 10 评论 / 2025-03-01 **write-up?**
+- [Why is R2 close to 0?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560593) — 12 票 / 12 评论 / 2025-02-01 
+- [Note - target has finite number of distinct categories if viewed as rounded numbers](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560539) — 11 票 / 3 评论 / 2025-02-01 
+- [Any chance of an AutoML Grand Prix for the year?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561982) — 11 票 / 2 评论 / 2025-02-09 
+- [Why does this episode use synthetic data generated from synthetic data?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561052) — 9 票 / 3 评论 / 2025-02-03 
+- [Do you think Visual Studio can help?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564572) — 8 票 / 3 评论 / 2025-02-23 
+- [Signal and noise](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561284) — 7 票 / 8 评论 / 2025-02-05 
+- [Questions about the notebook](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562781) — 6 票 / 8 评论 / 2025-02-13 
+- [Dear colleagues, please help](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562624) — 6 票 / 12 评论 / 2025-02-12 
+- [Will there be a shake up in this competition?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565145) — 6 票 / 14 评论 / 2025-02-27 
+- [Hyperparameters Tunining and Optimization](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562979) — 6 票 / 4 评论 / 2025-02-14 
+- [ Backpack Price Prediction Competition – Final Stretch!](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564979) — 6 票 / 4 评论 / 2025-02-26 
+- [Do we need the train.csv?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561246) — 6 票 / 12 评论 / 2025-02-05 
+- [Additional data improving the model?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561018) — 6 票 / 0 评论 / 2025-02-03 
+- [Memory Optimization in Kaggle Notebooks](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563454) — 5 票 / 0 评论 / 2025-02-17 
+- [How far can the LB go?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563460) — 5 票 / 9 评论 / 2025-02-17 
+- [Includes Medals?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561468) — 5 票 / 7 评论 / 2025-02-06 
+- [Only stacking possible with this dataset ?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560790) — 5 票 / 8 评论 / 2025-02-02 
+- [Such a stable leaderboard!](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565547) — 5 票 / 0 评论 / 2025-03-01 
+- [Values for Target Price for Test Set](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561254) — 4 票 / 10 评论 / 2025-02-05 
+- [Need Help Understanding what I did wrong with my Backpack prediction to get suh low R^2 scores](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/568879) — 4 票 / 4 评论 / 2025-03-18 
+- [why do my plots for the dataset covering the whole screen1!???](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562218) — 3 票 / 1 评论 / 2025-02-10 
+- [How to use Kaggle GPU to train my model](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562707) — 3 票 / 9 评论 / 2025-02-12 
+- [How to submit the first notebook](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561858) — 3 票 / 4 评论 / 2025-02-08 
+- [Install RAPIDSAI](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561136) — 3 票 / 6 评论 / 2025-02-04 
+- [Share the correlation coefficient between CV and LB](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560909) — 3 票 / 6 评论 / 2025-02-03 
+- [Has anyone faced a dataset this normalized? What techniques or approaches have helped you extract useful information?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560572) — 3 票 / 5 评论 / 2025-02-01 
+- [Simple Mean Model RMSE = 39.039275311505314](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560887) — 3 票 / 0 评论 / 2025-02-02 
+- [really bad dataset](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560835) — 3 票 / 1 评论 / 2025-02-02 
+- [the Result is always Middle Value😢](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563430) — 3 票 / 5 评论 / 2025-02-17 
+- [filled_data](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564250) — 3 票 / 3 评论 / 2025-02-21 
+- [My Newly Launched Website](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564204) — 3 票 / 3 评论 / 2025-02-21 
+- [Is Combining Original Data Effective?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560614) — 2 票 / 3 评论 / 2025-02-01 
+- [About Deeper Understanding of Machine Learning Models](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562437) — 2 票 / 3 评论 / 2025-02-11 
+- [Book suggestions for Feature engineering](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565022) — 2 票 / 3 评论 / 2025-02-26 
+- [Target and One-hot encoding](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561998) — 2 票 / 5 评论 / 2025-02-09 
+- [how to increase the score and how to do hyperparameter tunning ??](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562290) — 2 票 / 12 评论 / 2025-02-11 
+- [sklearn target encoder vs cuml target encoder](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563655) — 2 票 / 4 评论 / 2025-02-18 
+- [Dealing with noise and improving model's perfomance](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562873) — 2 票 / 2 评论 / 2025-02-13 
+- [Maybe a new way to improve score](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561226) — 2 票 / 1 评论 / 2025-02-05 
+- [features do not show the direct relationship with target Price](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563539) — 2 票 / 5 评论 / 2025-02-17 
+- [Single Model Or Many?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562576) — 2 票 / 2 评论 / 2025-02-12 
+- [Could the same backpack have a different price in the training data compared to the test data?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564225) — 2 票 / 8 评论 / 2025-02-21 
+- [Uniform to normal distribution.](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/562063) — 2 票 / 11 评论 / 2025-02-09 
+- [Please help me about train data!](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561512) — 2 票 / 3 评论 / 2025-02-06 
+- [Kernel notebook dying](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564446) — 2 票 / 1 评论 / 2025-02-22 
+- [Residual Plot Interpretation](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561836) — 2 票 / 1 评论 / 2025-02-08 
+- [Identical Features, Different Prices: A Challenge for Machine Learning](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565527) — 1 票 / 3 评论 / 2025-02-28 
+- [RMSE is it a good metric for this competition?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561212) — 1 票 / 1 评论 / 2025-02-04 
+- [How to deal with overfitting? ](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561126) — 1 票 / 1 评论 / 2025-02-04 
+- [The ~85K Records at Max Price 150](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561233) — 1 票 / 3 评论 / 2025-02-05 
+- [How many submissions are enough for this challenge?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561488) — 1 票 / 0 评论 / 2025-02-06 
+- [Can the datasets be changed for an ongoing competition?](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/560964) — 1 票 / 4 评论 / 2025-02-03 
+- [Optimizing Model Selection and Performance in Backpack Price Prediction  ](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564600) — 1 票 / 3 评论 / 2025-02-23 
+- [Data augmentation](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/564935) — 1 票 / 1 评论 / 2025-02-25 
+- [Text to Code generations -->LLM genAI provide better suggestions for ML model improvements and improved code](https://www.kaggle.com/competitions/playground-series-s5e2/discussion/561452) — 1 票 / 2 评论 / 2025-02-06 

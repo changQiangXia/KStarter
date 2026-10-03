@@ -1,0 +1,149 @@
+<p>I'm happy to share my 16th place solution write-up for this Playground competition. Huge thanks to Kaggle for hosting this competition. This was my first time experimenting with ensembling, so I wanted to document my approach.</p>
+<hr>
+<h1>Overview</h1>
+<p>My final solution was a <strong>34-model stacked ensemble</strong> with a <strong>Ridge meta-learner</strong> augmented with <strong>polynomial interaction features</strong>.</p>
+<p>No exotic architectures — just systematic ensembling done carefully.</p>
+<hr>
+<h1>Base Models</h1>
+<p>I didn't have enormous compute or time to train hundreds of models from scratch, so my approach was to improve existing public notebooks and add my own variants.</p>
+<h3>Model Set Included</h3>
+<ul>
+<li>LightGBM — multiple models with 20-seed averaging and different parameters  </li>
+<li>XGBoost — multiple models with 20-seed averaging and different parameters  </li>
+<li>CatBoost — multiple parameter and seed variants  </li>
+<li>LightGBM DART — separate diversity variant  </li>
+<li>RealMLP (multiple variants) — different feature representations  </li>
+<li>TabM (5 variants) — trained with different configurations  </li>
+<li>TabTransformer — improved public model  </li>
+<li>Trompt — improved public model  </li>
+<li>PyTabkit Ensemble — ensemble of RealMLP, XGB, CatBoost and LGBM  </li>
+<li>cdeotte GPU NNs — nn_v312, v102, tepair_logit3  </li>
+<li>BARTZ and GNN — from starter notebooks  </li>
+</ul>
+<p>All models were trained using:</p>
+<p><code>5-Fold StratifiedKFold CV</code></p>
+<hr>
+<h1>Feature Engineering</h1>
+<p>For my own trained models I built a reusable feature engineering module covering:</p>
+<h3>Numeric &amp; Statistical Features</h3>
+<ul>
+<li>Frequency encoding of numeric columns  </li>
+<li>Arithmetic features<br><ul>
+<li>charges deviation  </li>
+<li>monthly-to-total ratio  </li>
+<li>average monthly charges  </li></ul></li>
+<li>Service count features  </li>
+</ul>
+<h3>ORIG Dataset Mapping</h3>
+<ul>
+<li>ORIG_proba mappings from the original Telco dataset  </li>
+<li>Applied to all categorical and numeric columns  </li>
+</ul>
+<h3>Distribution Features</h3>
+<ul>
+<li>Percentile ranks vs churner/non-churner distributions  </li>
+<li>Quantile distance features at q25, q50, q75  </li>
+</ul>
+<h3>Digit-Level Features</h3>
+<p>For:</p>
+<ul>
+<li>tenure  </li>
+<li>MonthlyCharges  </li>
+<li>TotalCharges  </li>
+</ul>
+<p>Generated:</p>
+<ul>
+<li>first digit  </li>
+<li>last digit  </li>
+<li>mod10  </li>
+<li>mod12  </li>
+<li>round number flags  </li>
+</ul>
+<h3>Categorical Interactions</h3>
+<ul>
+<li>N-gram categorical interactions  </li>
+<li>Bigrams and trigrams of top contract/service columns  </li>
+</ul>
+<h3>Linear Embeddings</h3>
+<ul>
+<li>Min-max projections  </li>
+<li>Rank-based projections  </li>
+<li>Z-score projections  </li>
+</ul>
+<h3>Periodic Embeddings</h3>
+<ul>
+<li>Sin/Cos embeddings at multiple frequencies  </li>
+<li>Captures:<ul>
+<li>12-month tenure cycles  </li>
+<li>round charge patterns  </li></ul></li>
+</ul>
+<h3>Meta Features</h3>
+<ul>
+<li>I Trained 6 NN Models and added their OOF as Feature Input for my Boosting Models.</li>
+</ul>
+<hr>
+<h1>Ensembling</h1>
+<p>I experimented with both Hill Climbing and Ridge meta-learning.</p>
+<p>With 34 models, Hill Climbing converged too quickly and produced a very simple 3-model equal-weight blend. Ridge generalized better across the full model set because it could assign continuous weights to all 34 models simultaneously rather than greedily selecting a subset.</p>
+<h3>Ridge Meta-Learner Performance</h3>
+<ul>
+<li>CV: 0.91976  </li>
+<li>Private LB: ~0.91828</li>
+</ul>
+<hr>
+<h1>Adding Polynomial Features to the Meta-Learner</h1>
+<p>This was the single biggest improvement in my pipeline.</p>
+<p>Instead of giving Ridge just the 34 raw OOF prediction columns, I expanded them with all pairwise interaction terms:</p>
+<ul>
+<li>Degree = 2  </li>
+<li>interaction_only = True  </li>
+<li>include_bias = False  </li>
+</ul>
+<p><strong>Feature Expansion</strong></p>
+<ul>
+<li>34 → 561 features  </li>
+<li>(34 original + 527 interactions)</li>
+</ul>
+<h3>Intuition</h3>
+<p>Plain Ridge learns weighted averages.<br>
+Polynomial Ridge learns complementary model relationships.</p>
+<p>Examples:</p>
+<ul>
+<li>lgbm × catboost  </li>
+<li>realmlp × tabm  </li>
+</ul>
+<pre><code>poly = PolynomialFeatures(degree=2, interaction_only=True, include_bias=False)
+x_train_poly = poly.fit_transform(x_train)
+x_test_poly  = poly.transform(x_test)
+
+ridge_poly = Ridge(alpha=best_poly_alpha)
+ridge_poly.fit(StandardScaler().fit_transform(x_train_poly), true)
+</code></pre>
+<h1>Alpha Tuning</h1>
+<ul>
+<li>Plain Ridge: ~75</li>
+<li>Polynomial Ridge: ~235</li>
+</ul>
+<p>Improvement</p>
+<ul>
+<li>CV: 0.91976 → 0.91984</li>
+<li>Private LB: 0.91829 → 0.91837</li>
+</ul>
+<hr>
+<p>Final Ridge + Polynomial Performance</p>
+<p>Final CV: 0.91984
+Private LB: 0.91837</p>
+<hr>
+<h1>Isotonic Calibration</h1>
+<p>I also experimented with isotonic calibration applied on top of the Ridge + Polynomial predictions.</p>
+<p>This fits a monotonic mapping from raw OOF predictions to true labels, adjusting probability values without changing their ranking order (AUC preserved).</p>
+<pre><code>from sklearn.isotonic import IsotonicRegression
+
+iso = IsotonicRegression(out_of_bounds='clip')
+iso.fit(oof_meta, true)
+calibrated_test_preds = iso.predict(raw_test_preds)
+</code></pre>
+<p>On public LB this submission scored slightly lower than Ridge+Poly alone, but I selected it as my second final submission.</p>
+<hr>
+<p>Acknowledgements</p>
+<p>Thanks to the public notebook authors whose work formed the foundation of this ensemble, Including <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>, <a href="https://www.kaggle.com/yekenot" target="_blank">@yekenot</a>, <a href="https://www.kaggle.com/include4eto" target="_blank">@include4eto</a>, <a href="https://www.kaggle.com/blamerx" target="_blank">@blamerx</a>, <a href="https://www.kaggle.com/badalkrsharma" target="_blank">@badalkrsharma</a>, Also not limited to them!</p>

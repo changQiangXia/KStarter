@@ -1,0 +1,82 @@
+# playground-series-s5e7 讨论区（按票数排序，共 80 条）
+
+- [Don't mean to be fatalistic, but we are doomed ...](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587827) — 80 票 / 76 评论 / 2025-07-03 
+- [The dataset is easy, but the competition won't be](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587445) — 67 票 / 42 评论 / 2025-07-01 
+- [Feature Explosion vs Smart Selection - A Forest Story  ](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588419) — 42 票 / 8 评论 / 2025-07-06 
+- [Pure extrovert or introvert? How Ambiverts fit a model of good leadership.](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587413) — 33 票 / 19 评论 / 2025-07-01 
+- [The public LB has exactly 940 Extroverts](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587479) — 32 票 / 20 评论 / 2025-07-01 
+- [Probability calibration can improve your score](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587685) — 31 票 / 8 评论 / 2025-07-02 
+- [Top #3 score solution writeup - Predict the Introverts from the Extroverts](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594049) — 30 票 / 4 评论 / 2025-08-01 **write-up?**
+- [There are ~10 data points that will decide this competition](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/590008) — 29 票 / 12 评论 / 2025-07-17 
+- [A weird ending for a weird competition](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/593994) — 25 票 / 20 评论 / 2025-08-01 
+- [What if the magic runs out on private LB?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588664) — 24 票 / 18 评论 / 2025-07-07 
+- [Signals in original dataset](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588644) — 24 票 / 5 评论 / 2025-07-07 
+- [Let's classify this dataset by eye](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587602) — 20 票 / 7 评论 / 2025-07-01 
+- [What kind of competition is this? I try everything but it doesn't work.](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588193) — 18 票 / 12 评论 / 2025-07-04 
+- [Original Dataset link is broken - Attention to the issue please](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587485) — 17 票 / 2 评论 / 2025-07-01 
+- [🌲 Hidden in Plain Sight: How Isolation Forest Reveals 97% Multivariate Outliers That Traditional Methods Miss](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587652) — 17 票 / 3 评论 / 2025-07-02 
+- [Post mortem](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594017) — 14 票 / 9 评论 / 2025-08-01 
+- [#50 with the 4th highest score - talk about bunching!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594031) — 14 票 / 7 评论 / 2025-08-01 
+- [Is anyone going to beat the benchmark?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587922) — 14 票 / 19 评论 / 2025-07-03 
+- [Is using the original data in any form harming the model CV?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587426) — 14 票 / 10 评论 / 2025-07-01 
+- [Truncated SVD classifies the data without any training](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587918) — 14 票 / 4 评论 / 2025-07-03 
+- [The step size of the public LB is 0.0008097, it will be 0.0002024 for the private LB](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/593865) — 13 票 / 5 评论 / 2025-07-31 
+- [Perspectives from a quantitative psychologist.](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/589396) — 13 票 / 6 评论 / 2025-07-12 
+- [Starter references and onboarding materials from past episodes](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587394) — 13 票 / 0 评论 / 2025-07-01 
+- [The benchmark is finally beaten!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588092) — 11 票 / 27 评论 / 2025-07-04 
+- [Tips and Tricks for Tackling Binary Classification Problems!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587454) — 10 票 / 4 评论 / 2025-07-01 
+- [Here's the link to the original dataset ](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587576) — 10 票 / 2 评论 / 2025-07-01 
+- [Is All This About Reverse-Class Anomaly Detection?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587716) — 10 票 / 9 评论 / 2025-07-02 
+- [Getting the misclassification number down :)](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588033) — 10 票 / 2 评论 / 2025-07-04 
+- [What is your highest unselected private LB score?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594032) — 9 票 / 14 评论 / 2025-08-01 
+- [Use the Raw version of Original dataset (not the Mean/Mode‑Imputed One)](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587705) — 9 票 / 1 评论 / 2025-07-02 
+- [ Best Single Model CV/LB ](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587407) — 8 票 / 3 评论 / 2025-07-01 
+- [Beware of leaderboard shakeups with this metric](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587501) — 8 票 / 8 评论 / 2025-07-01 
+- [All 0.975708 ? is something wrong?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587420) — 8 票 / 15 评论 / 2025-07-01 
+- [Accuracy, and a small dataset - here we go again!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587474) — 8 票 / 3 评论 / 2025-07-01 
+- [Unique Playground Challenge](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/590251) — 7 票 / 7 评论 / 2025-07-19 
+- [A Deleted User is Currently in the Lead!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588154) — 7 票 / 3 评论 / 2025-07-04 
+- [Identifying Private LB Rows by Flipping Disagreements](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588304) — 7 票 / 2 评论 / 2025-07-05 
+- [Exploring Different Imputation Techniques for Missing Data](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587616) — 7 票 / 5 评论 / 2025-07-01 
+- [I'm close to desperate](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/593794) — 7 票 / 7 评论 / 2025-07-30 
+- [Help regarding Overfitting](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/590281) — 6 票 / 6 评论 / 2025-07-19 
+- [Curious Finding: Do Simpler Models Perform Better?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588200) — 6 票 / 2 评论 / 2025-07-04 
+- [Considering numerical columns as categorical](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587491) — 5 票 / 5 评论 / 2025-07-01 
+- [Is filling missing values the main problem?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587532) — 5 票 / 1 评论 / 2025-07-01 
+- [0.975708 and 0.974089](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588367) — 5 票 / 6 评论 / 2025-07-05 
+- [KEY INSIGHT!!!!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588455) — 5 票 / 12 评论 / 2025-07-06 
+- [New origin dataset link](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587488) — 5 票 / 1 评论 / 2025-07-01 
+- [all bronze medals after updating](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588779) — 5 票 / 10 评论 / 2025-07-08 **write-up?**
+- [Unrealistic separation between two types. ](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588378) — 4 票 / 1 评论 / 2025-07-05 
+- [What a strange-looking leaderboard this is!!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588184) — 4 票 / 6 评论 / 2025-07-04 
+- [Stuck at 0.9757 — Have Tried (Almost) Everything I've Seen](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/589101) — 4 票 / 5 评论 / 2025-07-10 
+- [What's the best mean or median to fill NAN values in columns for this dataset?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587582) — 4 票 / 3 评论 / 2025-07-01 
+- [How change the values NAN to values Yes or No in categorical columns?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587578) — 4 票 / 4 评论 / 2025-07-01 
+- [Initial Data Exploration: Detecting Key Issues for Modeling](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587527) — 4 票 / 4 评论 / 2025-07-01 
+- [Give TabPFN a Shot!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594016) — 4 票 / 1 评论 / 2025-08-01 
+- [Lesson learned! When it starts to make no sense, leave it alone!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594040) — 4 票 / 1 评论 / 2025-08-01 
+- [First Competition – Lessons Learned & A Private LB Plot Twist](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/594073) — 4 票 / 0 评论 / 2025-08-01 
+- [Accuracy Metrics](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587483) — 4 票 / 2 评论 / 2025-07-01 
+- [Where is the original dataset??](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587456) — 3 票 / 8 评论 / 2025-07-01 
+- [Hyperparameter Choice](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588432) — 3 票 / 4 评论 / 2025-07-06 
+- [why not extroverts from the introverts](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588576) — 3 票 / 1 评论 / 2025-07-07 
+- [This competition looks like data roulette. Was luck factor taken into account in this competition by hosts? I think it is huge for this case.](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588516) — 3 票 / 2 评论 / 2025-07-07 
+- [Why was the account that produced a score of 0.976518 deleted?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588392) — 3 票 / 6 评论 / 2025-07-06 
+- [Are the submissions overfitting?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/589012) — 3 票 / 4 评论 / 2025-07-09 
+- [Inverse logic!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/591464) — 3 票 / 3 评论 / 2025-07-28 
+- [Missing values fix - Iterative Imputer](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/591449) — 3 票 / 3 评论 / 2025-07-28 
+- [🌟About synthetic data🌟](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/591192) — 3 票 / 1 评论 / 2025-07-26 
+- [EDA: What Separates Introverts from Extroverts?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/593752) — 3 票 / 2 评论 / 2025-07-30 
+- [Missing values](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587612) — 3 票 / 5 评论 / 2025-07-01 
+- [Threshold give you magic push](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/589556) — 3 票 / 1 评论 / 2025-07-13 
+- [A Question about XGBoost](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/589517) — 3 票 / 2 评论 / 2025-07-13 
+- [Beginner Here: Public LB All Same Score – Your Experience & Strategy?](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588081) — 2 票 / 3 评论 / 2025-07-04 
+- [An error occurred while committing kernel: The kernel source must be less than 1 megabytes in size.](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587781) — 2 票 / 5 评论 / 2025-07-02 
+- [When High Scores Lie - a misinterpretation](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/590849) — 2 票 / 13 评论 / 2025-07-23 
+- [Something Seems to be Off](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/590484) — 2 票 / 18 评论 / 2025-07-21 
+- [To Overfit Or Not To Overfit](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/590028) — 2 票 / 3 评论 / 2025-07-17 
+- [The tables turned hard](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/593995) — 2 票 / 1 评论 / 2025-08-01 
+- [Label Encoding v/s One Hot Encoding](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/587655) — 2 票 / 3 评论 / 2025-07-02 
+- [Matching is all you need!](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588627) — 2 票 / 0 评论 / 2025-07-07 
+- [Question for ranking](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/596223) — 2 票 / 2 评论 / 2025-08-02 
+- [Purpose of bechmark.](https://www.kaggle.com/competitions/playground-series-s5e7/discussion/588597) — 2 票 / 1 评论 / 2025-07-07 

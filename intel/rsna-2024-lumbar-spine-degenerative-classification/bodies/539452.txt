@@ -1,0 +1,127 @@
+# https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539452
+
+Topic #539452: 2nd place solution
+  Author: YujiAriyasu
+  Posted: 2024-10-09 01:46:47.027000
+  Votes: 98  Comments: 22
+
+First, I would like to express my gratitude to Kaggle and RSNA for hosting this excellent competition.
+I'm also grateful to my teammates who worked hard till the end.
+Our solution is a simple blend of our individual predictions and small post-processing. My teammates will likely share their solutions in the replies to this post. I'll describe my solution and post-processing below.
+
+inference code: https://www.kaggle.com/code/yujiariyasu/rsna-lumbar-spine-2nd-place-solution
+
+Summary
+
+My solution is an ensemble of small models. I worked separately on axial and sagittal. Additionally, I created separate models for each target.
+Basically, all models predict 3 targets: ['normal_mild', 'moderate', 'severe']. I used models that treat data from different levels and left/right as the same, without considering these distinctions. In the end, I used the team's ensemble oof to remove noisy labal data and retrain the classification model.
+
+Axial
+
+First, I classify which slices to use for predicting each level. I used @hengck23 code for this - thank you always for your significant contributions!
+Next, I estimate the regions within each image to use for severity prediction. I trained YOLOX using the provided data.
+
+
+
+Finally, I trained classification models using ConvNeXt Small. For spinal predictions, I directly use the regions estimated by YOLOX. For non-spinal predictions, I use only the left or right half of the image, allowing me to treat left and right labels equally.
+
+Sagittal
+
+First, I classify slices suitable for predicting spinal and subarticular targets. I used 2.5D images and a simple Timm model.
+Next, I estimate regions for each level within the images. I trained YOLOX using data shared by my teammate @brendanartley - thank you for your excellent contribution!
+
+
+
+Using boxes, level each level horizontally and then crop.
+
+
+
+Finally, I perform classification using a MIL model that accepts 5 images. The backbone is ConvNeXt Small. For spinal and subarticular, I use 5 slices centered on those predicted in the 1st stage. For foraminal, I use 5 slices centered between the spinal and subarticular slices. Some models use T1/T2 in separate channels, while others use only one.
+
+noise reduction
+
+My teammate discovered label noise in train dataset, so we removed samples with high loss. Using our ensemble oof (CV: 0.3687), we excluded samples where the difference between the label and the predicted value was 0.8 or greater. Due to imbalanced data, we needed to apply coefficients to the moderate and severe categories. This magic improved our score by 1% on both public and private leaderboards. I came up with this idea just two days before the deadline, so I didn't have time to try various methods or coefficients. There are likely better approaches.
+
+This is a brief overview of my solution. There are many more intricate details that I couldn't include here.
+
+training code: https://github.com/yujiariyasu/rsna_2024_lumbar_spine_degenerative_classification
+
+Ensemble and Post-processing
+
+I simply weighted-averaged the predictions of each member, then applied post-processing only to spinal predictions.
+For each study, I multiplied the highest predicted spinal-severe value among the 5 levels by 1.25.
+
+Again, thanks to my teammates!
+
+Comments:
+├─ Ian Pan (2024-10-09 11:39:35.723000) [+24]
+│  Thank you to my teammates @yujiariyasu, @brendanartley, and @kevin0912 for a great competition. Below are more specifics regarding my part of the solution.
+│  
+│  Stage 1a - Slice Localization
+│  
+│  Foraminal...
+  ├─ Rohit Chaudhari (2024-10-12 08:45:53.787000) [+0]
+  │  Congratulations @vaillant ,
+  │  
+  │  I have few questions regarding the solution,
+  │  
+  │  
+  │  
+  │  In you CNN-transformer model, did you use image metadata as input to transformer or not ?
+  │  
+  │  What image sizes did you use ...
+    ├─ Ian Pan (2024-10-14 11:21:27.947000) [+3]
+    │  No image metadata was used.
+    │  
+    │  
+    │  Crops were all 64 x 64.
+    │  
+    │  
+    │  For sagittal T2 spinal, using minimum distance was very slightly better.
+    ├─ Rasim Berke Turan (2025-05-01 11:42:15.100000) [+0]
+    │  Congratulations, I am very amazed by your work!
+    │  
+    │  What confuses me is that the original MRI image shapes vary from 272,272 to 1024,1024, 
+    │  so 64,64 would cover a different area for different sizes of...
+├─ Bartley (2024-10-09 02:16:11.853000) [+22]
+│  Some more details
+│  
+│  Thanks to my awesome teammates, I learned a lot from them and we worked hard for this result. Also, thanks to RSNA and Kaggle for hosting this competition.
+│  
+│  TLDR; My solution is ...
+  ├─ C R Suthikshn Kumar (2024-10-09 16:01:37.600000) [+1]
+  │  Congratulations on winning the second prize in this competition. Also, thanks for sharing the details of your solution,
+  ├─ samu2505 (2024-10-14 06:47:28.527000) [+0]
+  │  According to the dataset, Sagittal T2 is only associated with Spinal Canal Stenosis, but according to 2nd stage work flow, it's Foraminal which is associated with Sagittal T1 and Axial T2; 
+  │  
+  │  merged...
+    ├─ Bartley (2024-10-15 17:33:41.870000) [+1]
+    │  Thanks @samu2505, just updated the figure.
+├─ İbrahim Öztürk (2024-12-25 19:28:44.103000) [+3]
+│  Our prediction book saves and runs in 2 minutes, everything completes, but it continues to send, it takes too long and timed out on our last try. The change of libraries was added in the figure, bu...
+├─ Evanhis (2024-10-11 16:38:03.763000) [+1]
+│  congrats brother! that's actually great :-)
+├─ Marek Nurzynski (2024-10-09 08:13:41.080000) [+1]
+│  Congratulations, great work!
+├─ Tanishk Patil (2024-10-16 05:51:48.050000) [+0]
+│  Thanks for sharing your contribution and insights. Congratulatios!
+├─ Mingguangyi Yang (2024-10-14 17:16:48.167000) [+0]
+│  congrats! clever solutions
+├─ Muhammed Tausif (2024-10-14 09:04:36.593000) [+0]
+│  Thanks for sharing your contribution and insights. Nice work.
+├─ MrSimple (2024-10-11 12:14:51.283000) [+0]
+│  Congratss!
+├─ Gauthier Avite (2024-10-10 15:21:07.117000) [+0]
+│  Congratulations and thanks for sharing your insights!
+├─ Priyash_07 (2024-10-10 11:37:55.073000) [+0]
+│  Congratulations Yuji! Great work!
+├─ [deleted] (2024-10-09 17:48:59.237000) [+0]
+│  [deleted]
+├─ AstonJin (2024-10-10 07:02:42.723000) [+1]
+│  congratulations!
+├─ Abhishek (2024-10-10 05:03:44.970000) [+1]
+│  Congratulations!!
+├─ Muhammed Tausif (2024-10-14 08:52:00.903000) [+0]
+│  Great, thanks. @yujiariyasu
+├─ Humayra Khanom Rime (2024-10-11 18:05:24.910000) [+0]
+│  Congratulations!

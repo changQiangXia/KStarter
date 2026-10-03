@@ -1,0 +1,186 @@
+<p>To start with, I want to congratulate my teammate <a href="https://www.kaggle.com/authman" target="_blank">@authman</a>. Mad man finally did it. He just became competitions master after countless high silver medals.</p>
+<p>I wanted to spend more time in this competition but unfortunately I was stuck at Optiver Realized Volatility Prediction and <a href="https://www.kaggle.com/authman" target="_blank">@authman</a> was working on G2Net Gravitational Wave Detection. We started this competition when 2.5 weeks left so we couldn't try every idea we had but at least some of them worked and we landed in 12th place.</p>
+<p>After starting the competition, I quickly read through discussions and notebooks, but the quality of shared content was really poor. I only learned dicom preprocessing from <a href="https://www.kaggle.com/davidbroberts" target="_blank">@davidbroberts</a>' notebooks.</p>
+<h2>Task 1 Data Preparation</h2>
+<p>We thought 144^3 spatial dimensions is good enough for both segmentation and classification so we decided to use MRIs and masks in that shape. We removed empty slices along X-Y, X-Z and Y-Z axes then resized them from the longest axis.  We converted ground-truth segmentation masks to non-mutually exclusive one-hot encoded masks with this code.</p>
+<pre><code>def convert_labels(mask):
+
+    """
+    Convert 3D spatial segmentation mask to 4D one-hot encoded segmentation mask
+
+    Parameters
+    ----------
+    mask [np.ndarray of shape (depth, height, width)]: Array of 3D segmentation mask
+
+    Returns
+    -------
+    mask [np.ndarray of shape (channel, depth, height, width)]: Array of 4D one-hot encoded segmentation mask
+    """
+
+    one_hot_encoded_mask = np.stack([
+        np.logical_or(mask == 1, mask == 2, mask == 3),  # Whole tumor
+        np.logical_or(mask == 2, mask == 3),  # Tumor core
+        (mask == 3),  # Enhancing tumor
+    ]).astype(np.uint8)
+
+    return one_hot_encoded_mask
+</code></pre>
+<p>Finally, we saved MRIs and masks as npy files for training faster. Preprocessing code for nii files can be found <a href="https://github.com/gunesevitan/rsna-miccai-brain-tumor-radiogenomic-classification/blob/master/src/nii_utils.py" target="_blank">here</a>.</p>
+<h2>Task 1 Validation</h2>
+<p>Single shuffled train/test split with 80/20 ratio is used for validation. Case directories were split so when every modality is included, it worked like group split without leak.</p>
+<h2>Task 1 Preprocessing</h2>
+<p>We used random rotation on X, Y and Z axes between -90 and 90 radians with 25% chance because task 1 MRIs were resampled and registered. We had to break the perfect alignment because task 2 wasn't resampled and registered. We also standardized every MRI like this <code>mri = (mri - mri.mean()) / mri.std()</code> which probably wasn't a correct way to do it.</p>
+<h2>Task 1 Models</h2>
+<p>This was my first segmentation experience so I used a high-level library and we had no time to write our models from scratch. We used <a href="https://docs.monai.io/en/latest/networks.html#segresnet" target="_blank">SegResNet</a> model from monai for segmentation. We trained 5 single split models for FLAIR, T1w, T1wCE, T2w and all modalities included. All of them trained with dice loss and converged at 0.2-0.3 validation loss. We used a dynamic threshold for converting sigmoided output to labels. Cutoff point is dynamically found using <code>(mean prediction of positives + mean prediction of negatives) / 2</code>.</p>
+<h2>Task 2 Data Preparation</h2>
+<p>We used 144^3 spatial dimensions in task 2 MRIs as well. We removed empty slices along X-Y, X-Z and Y-Z axes then resized them from the longest axis. We didn't use any voi lut or downcasted MRIs  to 8 bit because it was lossy and redundant. We saved MRIs to npy files as 16 bit numpy arrays with default values for training faster. Preprocessing code for dicom files can be found <a href="https://github.com/gunesevitan/rsna-miccai-brain-tumor-radiogenomic-classification/blob/master/src/dicom_utils.py" target="_blank">here</a>.</p>
+<h2>Task 2 Segmentation and Feature Extraction</h2>
+<p>We validated our segmentation models by visualizing predictions on task 2 MRIs. They were "good enough" but extracted features or using predicted masks as additional channels didn't help our models to score better. It was really sad for us to abandon segmentation idea because we dedicated our first week to it. </p>
+<h2>Task 2 Validation</h2>
+<p>We used 5 shuffled stratified folds for cross-validation. Folds are stratified on MGMT_value.</p>
+<h2>Task 2 Preprocessing</h2>
+<p>We used random rotation on X, Y and Z axes between -15 and 15 radians and random 3d elastic deformations with 100% chance. We standardized every MRI like this <code>mri = (mri - mri.mean()) / mri.std()</code> here as well.</p>
+<h2>Task 2 Models</h2>
+<p>We used 3D DenseNet121 and DenseNet169 models with classification head and models are trained with bce with logits loss. We noticed that our models can reach 0.66-0.67 val loss consistently with cosine annealing scheduler if it was a lucky run. Loss was correlated with ROC AUC score only after reaching that point so we run our models countless times until we get lucky and validation loss reaches 0.66-0.67. When that happens, val ROC AUC score was always &gt; 0.6. That's when I thought we had a solid chance to grab gold medal. We trained DenseNet121 and DenseNet169 models for every modality separately so we had 4 (modality) * 5 (folds) * 2 (DenseNet121 + DenseNet169) models at the end. Their scores can be seen below.</p>
+<pre><code>------------------------------
+Evaluating densenet121
+------------------------------
+
+FLAIR
+-----
+Fold 1 - ROC AUC Score: 0.625220
+Fold 2 - ROC AUC Score: 0.579333
+Fold 3 - ROC AUC Score: 0.678390
+Fold 4 - ROC AUC Score: 0.612221
+Fold 5 - ROC AUC Score: 0.605067
+------------------------------
+OOF ROC AUC Score: 0.624692
+------------------------------
+
+T1w
+---
+Fold 1 - ROC AUC Score: 0.595601
+Fold 2 - ROC AUC Score: 0.656616
+Fold 3 - ROC AUC Score: 0.563338
+Fold 4 - ROC AUC Score: 0.521013
+Fold 5 - ROC AUC Score: 0.591654
+------------------------------
+OOF ROC AUC Score: 0.576726
+------------------------------
+
+T1wCE
+-----
+Fold 1 - ROC AUC Score: 0.626393
+Fold 2 - ROC AUC Score: 0.595433
+Fold 3 - ROC AUC Score: 0.639046
+Fold 4 - ROC AUC Score: 0.615201
+Fold 5 - ROC AUC Score: 0.518629
+------------------------------
+OOF ROC AUC Score: 0.598063
+------------------------------
+
+T2w
+---
+Fold 1 - ROC AUC Score: 0.664516
+Fold 2 - ROC AUC Score: 0.566745
+Fold 3 - ROC AUC Score: 0.621162
+Fold 4 - ROC AUC Score: 0.664978
+Fold 5 - ROC AUC Score: 0.666170
+------------------------------
+OOF ROC AUC Score: 0.63008
+------------------------------
+</code></pre>
+<pre><code>------------------------------
+Evaluating densenet169
+------------------------------
+
+FLAIR
+-----
+Fold 1 - ROC AUC Score: 0.621114
+Fold 2 - ROC AUC Score: 0.584309
+Fold 3 - ROC AUC Score: 0.619672
+Fold 4 - ROC AUC Score: 0.619672
+Fold 5 - ROC AUC Score: 0.625633
+------------------------------
+OOF ROC AUC Score: 0.608471
+------------------------------
+
+T1w
+---
+Fold 1 - ROC AUC Score: 0.595894
+Fold 2 - ROC AUC Score: 0.556499
+Fold 3 - ROC AUC Score: 0.558569
+Fold 4 - ROC AUC Score: 0.581818
+Fold 5 - ROC AUC Score: 0.620566
+------------------------------
+OOF ROC AUC Score: 0.579769
+------------------------------
+
+T1wCE
+-----
+Fold 1 - ROC AUC Score: 0.563343
+Fold 2 - ROC AUC Score: 0.569379
+Fold 3 - ROC AUC Score: 0.613711
+Fold 4 - ROC AUC Score: 0.616990
+Fold 5 - ROC AUC Score: 0.559762
+------------------------------
+OOF ROC AUC Score: 0.57746
+------------------------------
+
+T2w
+---
+Fold 1 - ROC AUC Score: 0.673314
+Fold 2 - ROC AUC Score: 0.645492
+Fold 3 - ROC AUC Score: 0.616692
+Fold 4 - ROC AUC Score: 0.561550
+Fold 5 - ROC AUC Score: 0.585097
+------------------------------
+OOF ROC AUC Score: 0.603427
+------------------------------
+</code></pre>
+<h2>Task 2 Post-processing, Blending and Submission</h2>
+<p>We didn't use any post-processing to logits or sigmoided outputs. We only used average blending and we submit the predictions. We tried assigning different weights to different models but it wasn't better than average blending. I think it was because predictions' correlations were really low and all of them were contributing to final blend score regardless of their OOF scores.</p>
+<p><img src="https://i.ibb.co/GpJVrM3/Screenshot-from-2021-10-15-14-03-36.png" alt="corrs"></p>
+<p>Our final average blending score was</p>
+<pre><code>Blend
+-----
+Fold 1 - ROC AUC Score: 0.707038
+Fold 2 - ROC AUC Score: 0.682377
+Fold 3 - ROC AUC Score: 0.712668
+Fold 4 - ROC AUC Score: 0.698957
+Fold 5 - ROC AUC Score: 0.709687
+------------------------------
+OOF ROC AUC Score: 0.692443
+------------------------------
+</code></pre>
+<h2>What didn't work</h2>
+<ul>
+<li>2D segmentation by randomly selecting 3 slices from X-Y, X-Z or Y-Z axes</li>
+<li>Using U-Net or U-Net variations with 144^3 spatial dimensions, it wasn't possible to fit enough data into memory</li>
+<li>SegResNet with variational auto-encoder</li>
+<li>Features extracted from segmentations</li>
+<li>ResNet or EfficientNet classification models</li>
+<li>Weighted blending</li>
+<li>Only using folds with &gt; 0.6 ROC AUC score</li>
+<li>Only using FLAIR</li>
+<li>Only using FLAIR and T2w</li>
+</ul>
+<h2>Links</h2>
+<p>Here are the links of everything I made for this competition.</p>
+<p>Kaggle Notebooks:</p>
+<ul>
+<li><a href="https://www.kaggle.com/gunesevitan/rsna-miccai-btrc-inference-and-blend" target="_blank">RSNA-MICCAI BTRC - Inference and Blend</a></li>
+</ul>
+<p>Kaggle Datasets:</p>
+<ul>
+<li><a href="https://www.kaggle.com/gunesevitan/rsnamiccai-btrc-dataset" target="_blank">https://www.kaggle.com/gunesevitan/rsnamiccai-btrc-dataset</a></li>
+</ul>
+<p>GitHub Repository</p>
+<ul>
+<li><a href="https://github.com/gunesevitan/rsna-miccai-brain-tumor-radiogenomic-classification" target="_blank">RSNA-MICCAI Brain Tumor Radiogenomic Classification</a></li>
+</ul>
+<h2>References</h2>
+<p><a href="https://arxiv.org/abs/1505.04597" target="_blank">U-Net: Convolutional Networks for Biomedical Image Segmentation</a><br>
+<a href="https://arxiv.org/abs/1606.06650" target="_blank">3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation</a><br>
+<a href="https://www.researchgate.net/publication/350381125_Trialing_U-Net_Training_Modifications_for_Segmenting_Gliomas_Using_Open_Source_Deep_Learning_Framework" target="_blank">Trialing U-Net Training Modifications for Segmenting Gliomas Using Open Source Deep Learning Framework</a><br>
+<a href="https://arxiv.org/abs/1606.06650" target="_blank">3D MRI brain tumor segmentation using autoencoder regularization</a></p>

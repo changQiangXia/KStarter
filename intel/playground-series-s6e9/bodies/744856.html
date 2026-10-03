@@ -1,0 +1,223 @@
+<h1> </h1>
+<p>Hi everyone,</p>
+<p>I was lucky enough to finish 8th, and I'm really happy about it. This is the first time I've achieved such a high placement on Kaggle. A big thank you to everyone who shared discussions and codes.</p>
+<p><a href="/cdeotte" target="_blank">@cdeotte</a> </p>
+<p>Ever since I came across the amazing solution you shared in S6E3, you have been my goal. Thank you for always sharing such valuable insights.</p>
+<p><a href="/heuljax" target="_blank">@heuljax</a></p>
+<p>The feature engineering you shared to capture the data generator's artifacts was extremely powerful.  It was so impactful that participants' scores were completely different before and after you published it.  Thank you so much for sharing it so generously.</p>
+<h2>Overview</h2>
+<p>My final submission is a stack of 57 models, combined with logistic regression.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OOF AUC (10-fold)</td>
+<td>0.946796</td>
+</tr>
+<tr>
+<td>Public LB</td>
+<td>0.94674</td>
+</tr>
+<tr>
+<td>Private LB</td>
+<td>0.94575</td>
+</tr>
+</tbody>
+</table>
+<p>These are the four things that helped the most:</p>
+<table>
+<thead>
+<tr>
+<th>What helped</th>
+<th>Comparison</th>
+<th>OOF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Models using <a href="/heuljax" target="_blank">@heuljax</a>'s features (including the generator-aware features)</td>
+<td>Stack of 35 → 50 models</td>
+<td>+0.00029</td>
+</tr>
+<tr>
+<td>Target encoding on income keys rounded at multiple granularities (from <a href="/maiernator" target="_blank">@maiernator</a>'s notebook)</td>
+<td>37 → 130 features (LightGBM → XGBoost)</td>
+<td>+0.00021</td>
+</tr>
+<tr>
+<td>5-fold → 10-fold</td>
+<td>Same 138-feature XGBoost</td>
+<td>+0.00012</td>
+</tr>
+<tr>
+<td>Stacking with logistic regression</td>
+<td>Best single model → 57-model stack</td>
+<td>+0.00018</td>
+</tr>
+</tbody>
+</table>
+<h2>CV strategy</h2>
+<ul>
+<li>All models share the same 10 folds (StratifiedKFold, seed 42)</li>
+<li>Everything that uses the labels (target encoding, the logits used as the starting point for residual learning, etc.) was built with a nested 5-fold inside the training part of each of the 10 folds</li>
+<li>The Public LB is only 20% of the test set, and its AUC has a standard error of about 0.0016, so I made every decision based on OOF<ul>
+<li>NEVER BLIND BLENDING</li></ul></li>
+</ul>
+<h2>Features</h2>
+<h3>Target encoding</h3>
+<p>The base is the 130 features from <a href="/maiernator" target="_blank">@maiernator</a>'s notebook (later 138, after I added 8 more). What really worked was target encoding on four keys at different granularities: raw income, income rounded to $100, income rounded to $1,000, and floored commute distance. Removing these 4 features drops the OOF by 0.00019.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>OOF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Previous best (LightGBM, 37 features)</td>
+<td>0.945877</td>
+</tr>
+<tr>
+<td>XGBoost with 130 features</td>
+<td>0.946090</td>
+</tr>
+</tbody>
+</table>
+<h3>Generator-aware features</h3>
+<p>I reproduced <a href="/heuljax" target="_blank">@heuljax</a>'s three notebooks locally and used their features. My reproduced OOF scores almost exactly matched the public ones.</p>
+<table>
+<thead>
+<tr>
+<th>Notebook</th>
+<th>Model</th>
+<th>Features</th>
+<th>OOF</th>
+<th>Main features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xgb-sample</td>
+<td>XGBoost</td>
+<td>173</td>
+<td>0.946309</td>
+<td>Purchase rate per income value, adjusted for the attribute composition of the rows sharing that value; multi-level target encoding; purchase rate per income value in the original dataset; etc.</td>
+</tr>
+<tr>
+<td>logistic-regression-sample</td>
+<td>Logistic regression</td>
+<td>300</td>
+<td>0.946264</td>
+<td>Hierarchical target encoding over income digit prefixes; the 30 cells of environmental concern × subsidy × range anxiety; additive model components; etc.</td>
+</tr>
+<tr>
+<td>generator-aware-ridge-logistic-regression</td>
+<td>Logistic regression</td>
+<td>316</td>
+<td>0.946400</td>
+<td>Purchase rates keyed by the tokens obtained by splitting income with the GPT-2 tokenizer; etc.</td>
+</tr>
+</tbody>
+</table>
+<h2>Main models</h2>
+<p>These are the main models.</p>
+<h3>Group-wise XGBoost</h3>
+<p>I split the rows into groups by a category or value, trained a separate XGBoost for each group, and predicted each row with the model for its group (138 features).</p>
+<p>Groupings: city type, city type × car type, environmental concern, combinations with the number of cars owned, age, the number of charging stations near home / work, etc. (11 models in the stack)</p>
+<ul>
+<li>Each model sees fewer rows, so it is weaker on its own. With 12 groups of city type × car type, the OOF was 0.944940, which is 0.0013 lower than without grouping (0.946241)</li>
+<li>Still, these models helped the stack. Adding the 12-group model to the 26-model stack at that time gave +0.000009 (improved in 9 of 10 folds), and adding the three models grouped by age, charging stations near work, and charging stations near home at once gave +0.000016 (improved in all 10 folds)</li>
+</ul>
+<h3>Logistic regression</h3>
+<p><strong>Single OOF: 0.946509</strong></p>
+<p>An L2-regularized logistic regression on 622 features, including the generator-aware features.</p>
+<ul>
+<li>This was the most effective model. Adding just this one model to the stack gave OOF +0.00013 (improved in all 10 folds), Public +0.00016, and Private +0.00012. That was the largest single gain I got during the competition</li>
+<li>A logistic regression on only the 316 generator-aware features also gave +0.00011, so I think most of the gain came from the generator-aware features</li>
+<li>On its own, it also beat the generator-aware ridge notebook (0.946400) by +0.00011. The generator-aware features don't use the original dataset, so I think they complemented the other 306 features, which include purchase rates from the original dataset</li>
+</ul>
+<h3>Residual XGBoost</h3>
+<p><strong>Single OOF: 0.946617</strong></p>
+<p>An XGBoost on the same 622 features. I pass the logistic regression logits as <code>base_margin</code>, so the trees learn only the residual of the logistic regression. (The idea came from <a href="/goodpjw2008" target="_blank">@goodpjw2008</a>. Thank you!)</p>
+<ul>
+<li>The strongest single model. Even a single run beat the logistic regression in all 10 folds</li>
+<li>The logits passed as <code>base_margin</code> were also built with nested CV. For each training row, the logit comes from a logistic regression fitted on the other 4/5 of the training rows (the inner folds that don't contain that row)</li>
+</ul>
+<h2>Stacking</h2>
+<p><strong>The 57 models</strong></p>
+<table>
+<thead>
+<tr>
+<th>Learner</th>
+<th>Count</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XGBoost</td>
+<td>36</td>
+<td>11 of them are group-wise models (a separate model per group)</td>
+</tr>
+<tr>
+<td>Logistic regression</td>
+<td>5</td>
+<td></td>
+</tr>
+<tr>
+<td>CatBoost</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>LightGBM</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>TabM</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>MLP</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>ExtraTrees</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>RealMLP</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>I converted the OOF predictions of the 57 models to logits and combined them with a logistic regression (C=0.3)</li>
+<li>I added models one at a time with forward greedy selection. A model was accepted if the fold-averaged AUC gain was positive and the AUC improved in a majority of the 10 folds. For reference, I also checked the gain from adding a column of random noise each time</li>
+<li>22 of the 57 models use <a href="/heuljax" target="_blank">@heuljax</a>'s features and were added in the last 2 days</li>
+<li>scikit-learn's LogisticRegression stops before converging with the default tol=1e-4. The loss grows with the number of members, so I used tol=1e-8</li>
+</ul>
+<h2>Final thoughts</h2>
+<p>All of the implementation was done with Claude Code, using Fable 5.1 and Opus 5.5.</p>
+<p>In the past, AI would often get lost unless a human made the decisions, but that hardly happens anymore.</p>
+<p>How long will human decision-making still be needed? I find the future both exciting and a little frightening.</p>
+<h2>References</h2>
+<ul>
+<li>maiernator: <a href="https://www.kaggle.com/code/maiernator/s6e9-ctboost-not-catboost-astra-baseline" target="_blank">S6E9 CTBoost Not CatBoost Astra Baseline</a></li>
+<li>heuljax: <a href="https://www.kaggle.com/code/heuljax/kps6e09-xgb-sample" target="_blank">kps6e09-xgb-sample</a></li>
+<li>heuljax: <a href="https://www.kaggle.com/code/heuljax/kps6e09-logistic-regression-sample" target="_blank">kps6e09-logistic-regression-sample</a></li>
+<li>heuljax: <a href="https://www.kaggle.com/code/heuljax/kps6e09-generator-aware-ridge-logistic-regression" target="_blank">kps6e09-generator-aware-ridge-logistic-regression</a></li>
+<li>goodpjw2008: <a href="https://www.kaggle.com/code/goodpjw2008/s6e9-lr-margin-gbdt-oof-stack-lb-0-94675" target="_blank">S6E9 LR margin GBDT OOF stack</a></li>
+<li>cdeotte: [Fable 5.1 - EDA - Original Data Insights](<a href="https://www.kaggle.com/competitions/playground-series-s6e9/discussion/73930" target="_blank">https://www.kaggle.com/competitions/playground-series-s6e9/discussion/73930</a></li>
+</ul>

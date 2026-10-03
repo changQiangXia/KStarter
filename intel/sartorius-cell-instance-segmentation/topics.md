@@ -1,0 +1,82 @@
+# sartorius-cell-instance-segmentation 讨论区（按票数排序，共 80 条）
+
+- [Tips in submission and baseline (in the beginning of the competition)](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279790) — 205 票 / 39 评论 / 2021-10-19 
+- [Annotations Are too Noisy for the Metric](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/281205) — 174 票 / 18 评论 / 2021-10-23 
+- [[Up-to-date Summary] We passed 30% of the competition, These are the stories up to this point!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/286368) — 154 票 / 11 评论 / 2021-11-08 
+- [2nd place solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297988) — 146 票 / 77 评论 / 2021-12-31 **write-up?**
+- [The clean astro mask are here!!!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/291371) — 125 票 / 22 评论 / 2021-11-29 
+- [Go with the flow (3rd place)](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297984) — 124 票 / 38 评论 / 2021-12-31 **write-up?**
+- [[placeholder] my approach and results](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/285516) — 110 票 / 55 评论 / 2021-11-05 
+- [1st place solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298869) — 101 票 / 23 评论 / 2022-01-05 **write-up?**
+- [Saving the Best checkpoint in Detectron2](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/287023) — 86 票 / 17 评论 / 2021-11-11 
+- [Threshold by class](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/284215) — 85 票 / 19 评论 / 2021-10-30 
+- [Papers on Cell Instance Segmentation 📝👍](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278716) — 84 票 / 9 评论 / 2021-10-15 
+- [5th place solution, maskrcnn, pseudo label and cellpose](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298081) — 84 票 / 15 评论 / 2022-02-24 **write-up?**
+- [Tutorial: detectron 2](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/280137) — 83 票 / 9 评论 / 2021-10-20 
+- [I visualized every training image so you don't have to](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/284057) — 83 票 / 3 评论 / 2021-10-29 
+- [11th place solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298038) — 77 票 / 30 评论 / 2021-12-31 **write-up?**
+- [Summary of every SOTA instance segmentation paper of the past 2 years ](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/284135) — 75 票 / 4 评论 / 2021-10-29 
+- [6th place solution. Higher resolution is all you need.](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297986) — 72 票 / 56 评论 / 2021-12-31 **write-up?**
+- [Competition deadline](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278706) — 69 票 / 15 评论 / 2021-10-15 
+- [Mask-RCNN | MMDetection Starter - LB: 0.270](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279996) — 66 票 / 16 评论 / 2021-10-19 
+- [LIVECell paper summarized](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/285384) — 63 票 / 9 评论 / 2021-11-04 
+- [[Info] Instance Segmentation Models (quick list)](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278883) — 63 票 / 9 评论 / 2021-10-15 
+- [4th place solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298146) — 61 票 / 14 评论 / 2022-01-02 **write-up?**
+- [No Overlap Issue: Quick Fix](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279995) — 61 票 / 5 评论 / 2021-10-19 
+- [First experiment with cleaned astro masks](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/291639) — 55 票 / 16 评论 / 2021-11-30 
+- [UNet strikes... a pose!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/293159) — 55 票 / 20 评论 / 2021-12-04 
+- [Best way to split folds for cross-validation](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/285546) — 55 票 / 6 评论 / 2021-11-05 
+- [8th place solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297998) — 54 票 / 7 评论 / 2021-12-31 **write-up?**
+- [broken mask repro, should be an easy fix](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279488) — 54 票 / 21 评论 / 2021-10-18 
+- [3rd place solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298021) — 54 票 / 13 评论 / 2021-12-31 **write-up?**
+- [Getting per pixel scores from the detectron](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/285623) — 53 票 / 26 评论 / 2021-11-05 
+- [Humbled to become a Kaggle Notebooks Master](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/280130) — 50 票 / 29 评论 / 2021-10-20 
+- [Best Single Model](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/289033) — 50 票 / 85 评论 / 2021-11-19 
+- [Understanding COCO metrics](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/287163) — 50 票 / 3 评论 / 2021-11-12 
+- [Welcome to the Sartorius Cell Instance Segmentation competition!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279425) — 47 票 / 7 评论 / 2021-10-18 
+- [Overlaps - ambiguous or not?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/280250) — 47 票 / 13 评论 / 2021-10-20 
+- [How to do transfer learning and get 0.3 score](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/293026) — 46 票 / 24 评论 / 2021-12-04 
+- [Refactoring Inversion's classical RLE code](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278663) — 45 票 / 7 评论 / 2021-10-15 
+- [New Data Augmentation Method for Instance Segmentation](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/290402) — 44 票 / 23 评论 / 2021-11-24 
+- [9 Place solution: pretrain & semi-supervised & postprocessing & Trust both cv and lb](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297985) — 44 票 / 26 评论 / 2021-12-31 **write-up?**
+- [[Viettel.DGD] Train4Ever 7th place Solution](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298002) — 38 票 / 20 评论 / 2021-12-31 **write-up?**
+- [Let's talk about TTA and Ensembling...](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/287774) — 37 票 / 15 评论 / 2021-11-15 
+- [🦠Broken masks?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278801) — 37 票 / 6 评论 / 2021-10-15 
+- [Analysis of Overlaps I.](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/281084) — 36 票 / 1 评论 / 2021-10-23 
+- [Displaying validation score in detectron](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/282788) — 32 票 / 6 评论 / 2021-10-27 
+- [What I tried and did not work?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/293874) — 31 票 / 4 评论 / 2021-12-07 
+- [What is Run Length Encoding (RLE)?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278936) — 31 票 / 8 评论 / 2021-10-16 
+- [Top past solutions for instance segmentation problems](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/283851) — 28 票 / 2 评论 / 2021-10-28 **write-up?**
+- [A way to visualise predictions](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/292094) — 28 票 / 2 评论 / 2021-12-01 
+- [Previous Competitions on Instance Segmentation](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278735) — 28 票 / 2 评论 / 2021-10-15 
+- [Lets talk Augmentations!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/284283) — 28 票 / 3 评论 / 2021-10-30 
+- [Top GitHub Source Codes on Cell Instance Segmentation](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/280172) — 28 票 / 7 评论 / 2021-10-20 
+- [UNet Strikes Back 🔥 | LB: 0.155+](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/286553) — 27 票 / 14 评论 / 2021-11-09 
+- [Overlap Fractions - Outliers - Duplicates](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/287029) — 27 票 / 0 评论 / 2021-11-11 
+- [Last Monetary Prizes for 2021](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/295589) — 26 票 / 4 评论 / 2021-12-16 
+- [Announcement on Public Notebook Sharing](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/291552) — 25 票 / 2 评论 / 2021-11-29 
+- [CV/LB correlation?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/289456) — 23 票 / 37 评论 / 2021-11-20 
+- [Happy Holidays! 🎅](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297983) — 22 票 / 2 评论 / 2021-12-30 
+- [Cellpose origin](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298073) — 22 票 / 3 评论 / 2021-12-31 
+- [common tricks in kaggle image segmentation problems ](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278951) — 20 票 / 2 评论 / 2021-10-16 
+- [Ensemble Techniques for Instance Segmentation](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298022) — 20 票 / 5 评论 / 2021-12-31 
+- [22th place solution / for English edition and 中文版本](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/298030) — 20 票 / 10 评论 / 2021-12-31 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278585) — 19 票 / 133 评论 / 2021-10-14 
+- [Model sharing dicussion. E.g., the upper limit of Mask R-CNN in this competition.](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/294823) — 19 票 / 14 评论 / 2021-12-13 
+- [Warnings! Data leakage in the provided LIVECell_dataset_2021.](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/296361) — 19 票 / 5 评论 / 2021-12-21 
+- [MMDetection's vs Detectron2 ](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/286843) — 19 票 / 8 评论 / 2021-11-11 
+- [Quick review: Cellpose](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/294176) — 19 票 / 1 评论 / 2021-12-08 
+- [Is this a One-class Semantic Segmentation Competition?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279200) — 18 票 / 7 评论 / 2021-10-17 
+- [Cellpose is outdated? EMBEDSEG](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/294672) — 18 票 / 10 评论 / 2021-12-12 
+- [Are we predicting cells or a mask?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/287487) — 18 票 / 11 评论 / 2021-11-14 
+- [(Losing) my first bronze :"(](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/299228) — 18 票 / 4 评论 / 2022-01-06 
+- [Relevant past Comps and its Top solutions + extra](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/280291) — 17 票 / 4 评论 / 2021-10-20 **write-up?**
+- [Simple baseline model with LB > 0 made public](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/279365) — 17 票 / 0 评论 / 2021-10-18 
+- [Understanding Cell Types](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/282544) — 17 票 / 4 评论 / 2021-10-27 
+- [What manual manipulation of train data is allowed?](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/289552) — 17 票 / 19 评论 / 2021-11-20 
+- [Train Attention based Residual Unet with watershed algorithm for instance segmentation](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/285422) — 16 票 / 8 评论 / 2021-11-04 
+- [RLE to mask bug](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/295603) — 16 票 / 4 评论 / 2021-12-16 
+- [U-net, Mask R-CNN and RetinaNet illustrations ...and more ](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/288464) — 15 票 / 3 评论 / 2021-11-17 
+- [Competition is Finalized - Congrats to our Winners; Takeaways](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/299036) — 12 票 / 4 评论 / 2022-01-05 
+- [Dear Kagglers, thank you!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/301578) — 11 票 / 0 评论 / 2022-01-18 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/278584) — 11 票 / 23 评论 / 2021-10-14 

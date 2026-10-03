@@ -1,0 +1,43 @@
+<h1>Decreasing the loss from 63.72 (best public notebook) to 62.00</h1>
+<ul>
+<li>63.72 -&gt; 62.91 Best couple of models (simple average of direct + diff approaches, same features)</li>
+<li>62.91 -&gt; 62.00 Ensembling of different couples</li>
+</ul>
+<h2>Best Couple of models (63.72 -&gt; 62.91)</h2>
+<p>Strongest features on top of the public notebook:</p>
+<ul>
+<li>Difference in forecasted weather vs forecasted 2 days ago. This was very interesting for me to observe - you need to use differences in the forecasts, and not the difference between forecasts and actuals, because weather forecasts are ALWAYS so much higher than actuals. I don't know who is in charge of those weather forecasts but they should do a better job.</li>
+<li>Various target transformations (for example I noticed that it took a long time for my model to adjust to a "shock" - a situation where the target has a significant level shift - so I did lots of feature engineering to help the model recognize that fact)</li>
+</ul>
+<p>Additionally:</p>
+<ul>
+<li>Setting min_samples_in_leaf = 1 in LGBM. This normally leads to overfitting but can be considered also as an automatic outlier removal. The latter outweighed the former in this competition.</li>
+</ul>
+<h2>62.91 -&gt; 62.00 Ensembling of different couples</h2>
+<p>Only LGBM models (I was too lazy to train something else), with different sets of features.</p>
+<h1>Retraining strategy</h1>
+<p>This should be very important for this competition as the data for production is very non-stationary due to the constant increase of installed capacity.</p>
+<ul>
+<li>One retrain of the best 3 models couples (6 models) on 1st Feb 2024.</li>
+</ul>
+<h1>Handling non-stationarity</h1>
+<p>We all love Boosting (LGBM, XGB, Catboost), but if there is one nemesis for Boosting it is non-stationarity: the learned function can never predict outside of seen target ranges. It is very important in real-life production ML settings and Kudos to Kaggle and Hosts for giving us a competition with such a challenge.</p>
+<p>Various approaches can be used to overcome that. In this competition, a great approach was shown in the <a href="https://www.kaggle.com/code/vitalykudelya/enefit-target-diff" target="_blank">public notebook</a> by <a href="https://www.kaggle.com/vitalykudelya" target="_blank">@vitalykudelya</a>: </p>
+<ul>
+<li>Predict the delta vs strong baseline (in our case <code>target_48h</code>)</li>
+</ul>
+<p>An additional approach that worked for me:</p>
+<ul>
+<li>Training the model based on data inflated by 10% (but 20% was already too much)</li>
+</ul>
+<p>And of course the model retraining should help.</p>
+<p>An interesting characteristic of LGBM is that when you train the model using all segments, the interleaving of targets reduces the problem of non-stationarity, and the only segments where we really have a problem are the largest ones.</p>
+<h1>Validation (update)</h1>
+<p>I did the time-based 3-fold training and validation (equal intervals, of course validation only forward-looking). I got the following avg. scores:</p>
+<ul>
+<li>production: 30.88</li>
+<li>consumption: 61.52</li>
+</ul>
+<h1>Summary</h1>
+<p>Overall, this was a very fun competition on an important topic for everyone. I would like to give huge thanks to everyone who generously contributed their content. Now we just wait and see who comes on top. Fingers crossed for all of you!</p>
+<p>I am also very curious to hear from the hosts if the competition brought the improvement they were looking for <a href="https://www.kaggle.com/keljand" target="_blank">@keljand</a> </p>

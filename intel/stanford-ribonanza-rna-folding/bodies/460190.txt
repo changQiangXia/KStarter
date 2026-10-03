@@ -1,0 +1,154 @@
+# https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460190
+
+Topic #460190: 7th place solution
+  Author: Iafoss
+  Posted: 2023-12-08 06:33:17.327000
+  Votes: 44  Comments: 32
+
+Summary
+
+
+
+Transformer based solution
+
+Masked Conv1D instead of MLP
+
+bpp injection into attention matrix, bpp-based token mixing, matrix mixing, and dual stream setup (attention boosting) for incorporating bpp
+
+
+Introduction
+
+Our team would like to thank the organizers and Kaggle for making this competition possible. Also, I want to express my gratitude to my outstanding teammates @drhabib and @martynoveduard for their incredible contribution toward our final result.
+
+Details
+
+Data
+
+BPP: We generated additional bpp using vienna_2 (we also used SS output), contrafold_2, rnaformerv1, and rnafm. However, we saw nearly negligible improvement in comparison to using only bpp provided by organizers.
+EX data: We tried to do fine-tuning on this data since it is only the source that provides GT for sequence ends. We got 5-10 bps CV improvement from this procedure (Iafoss/DrHB) and got the best visualization for long-range dependencies. However, at the sequence ends the predictions tend to get values close to zero for unknown reasons. At private LB EX data did not give any boost.
+CV split. slime used a random 4-fold split. DrHB and Iafoss used a split based on sequence similarity to avoid any possible leaks and also we excluded any train data overlapping with the test test from the train. The size of the val set is ~20k samples that passed SN criterion.
+
+Model
+
+At the beginning of the competition we quickly realized that bpp is very helpful for model performance. Initially, we tried to use it as an auxiliary output computed as the mean attention matrix, but convergence was quite slow (the typical run was 200-250 epochs). Then we build setups that also take bpp as an input. It drastically accelerated convergence, so that it took only several tens of epochs, while giving similar results.
+We considered several setups:
+(1) bpp injection (Iafoss): add bpp (in the logit form) directly to the attention matrix (in case of multiple bpp, each bpp is added to the particular head). We gradually attenuate the injection towards zero in the last layers to give the mode the freedom to develop interactions missed in bpp. The critical part of the model was replacing MLP with a masked 1d x5 convolution that performs the mixing of neighboring tokens. The transformer has 384 width, a head size of 64, 24 depth, a droppath of 0.3, dropout of 0.1. We use rotary enc to define the relative position of tokens. Single bpp and 6 bpp setups were considered. The best single model got 0.14375 private and 0.14013 public LB and 0.14292 and 0.13973 with using pseudo labels.
+(2) bpp mixing (DrHB): instead of injection of bpp into the attention matrix, we tried to add matrix multiplication modules performing mixing tokens based on bpp. The total structure of the model: 3 x [bpp eterna -&gt; conv -&gt;transformer -&gt; bpp rest mean -&gt;conv -&gt;transformer -&gt;ss- as adj -&gt; graph transformer ].
+(3) matrix mixing (slime): trying to follow the previous competition solutions we added a learnable attention bias produced by a convolutional stream applied to bpp and ALIBI-like positional encoding. We used 2 bpp sources. The matrix mixer is represented by several conv layers with SE modules. The transformer consists of 12 matrix mixing + 12 regular transformer blocks with a width of 384. The best single model is 0.14509 private and 0.14066 public LB. This model used a different training pipeline and cannot be directly compared to others.
+(4) dual stream (Iafoss). The drawback of matrix mixing is that the attention bias is updated independently from the transformer based on the input bpp. How about attention boosting? We perform a simple projection of the attention state followed by scaled tanh nonlinearity to limit accumulated values and stabilize training. This value is added to the Attention matrix and then the result is fed to the next transformer layer. This modification has improved the model performance giving 0.14296 at private and 0.13697 public LB as a single model. Unfortunately, we discovered this setup only a few days before the end of the competition, and didn't have a chance to run multiple trainings and PL setup, which we expect to give a further ~10 bps improvement of LB.
+
+The models are schematically depicted in the image below:
+
+
+Training
+
+(Iafoss/DrHB) The loss is weighted based on the error, while we do not downselect data based on SN criterion: w = 1/sqrt(1/6 + err.clip(100)). Use AdamW, cosine annealing with warmup, lr=5e-4, wd=0.05, bs=16 (small bs was working better for the reason we could not identify). We used flip augmentation for both train and TTA, but the key thing here is using bpp computed for the correct order of nucleotides. It quite improves CV giving 10-15 bps boost. We also used bin based auxiliary loss which gave a slight improvement.
+
+We split the training portion of the data into 4 folds, train 4 models (40-48 epochs), fine-tune on external data + train data (5-6 epochs with x10 EX data oversampling), fine-tune on noise-free samples for 12 epochs. Then we corrected the provided train data weighting GT and PL based on the inverse error (assuming 0.15 error for PL). The provided train data has a large level of noise slowing down the convergence. Test data and the sequence ends were labeled solely based on PL. Then we train a PL model on the whole train (excluding val samples) + test data, fine-tune on EX data, and fine-tune on noise-free samples. This procedure improved CV by 10 bpp, and the weighted average of all models generated in the procedure gets further improvement.
+
+(slime) Pre-training: First we performed MLM pre-training on a whole dataset for 5 epochs (40% of input tokens are replaced with mask tokens). We used cosine decay to zero with one epoch warmup and AdamW optimizer with base_lr= 5e-4 and wd=0.05. The model was trained to predict missing nucleotides with cross-entropy loss
+
+Fine-tuning: During the fine-tuning stage we initialized our model with weights from MLM-pretraining, it gave a noticeable improvement to the final result [10 bps CV]. We fine-tuned our models for 50 epochs with batch_size=16 on samples where either SN(DMS) == 1 or SN(2A3) == 1, we masked the loss depending on SN of the given test [10 bps boost compared to filtering train dataset with SN(DMS) == 1 and SN(2a3) == 1). In addition, we weighted the samples based on their reactivity error provided by the ground-truth data as loss *= torch.log(1.1 + snr) / 2. Similar to pertaining, we used AdamW optimizer [lr=5e-4, wd=0.05] and cosine scheduler with lr decay to zero. Since in matrix mixing model masking was not considered in convolutions, this model was trained with length-matching batch sampling (samples of exactly the same length).
+
+Best singe model end ensemble
+
+Best single model (dual stream model): 0.14292 at private and 0.13711 public LB, which can take top 10 itself. This result would be further improved by 10 bps to ~0.1419 if if we had time to run our full PL pipeline.
+Our final submission is a combination of ~20 models that got 0.14189 at private and 0.13604 at public LB.
+
+Things didn't work
+
+
+
+EX data was helpful at CV and public LB (5-10 bps boost), but not helpful at private LB
+
+Additional bpps gave only a negligible improvement in comparison to the use of single bpp provided by organizers
+
+MLM on 30M external RNA sequence dataset
+
+EMA, AWP, Floyd-warshall distance matrices 
+
+2D Ushape models
+
+Comments:
+├─ slime (2023-12-08 22:16:29.313000) [+8]
+│  One of the interesting things we tried during early experiments with merging bpp and distance matrices is to incorporate Floyd-Warshall distance matrices obtained from bpp graph, the motivation was...
+├─ Antonio Félix (2023-12-08 12:32:27.510000) [+3]
+│  Congrats on the 7th position!
+├─ Diogo Santiago (2023-12-12 12:27:58.767000) [+2]
+│  Hi there! 
+│  First congrats for 7th place. 
+│  
+│  Seeing this amazing approach, my question is:  Is this intuition from any paper? If yes would you mind to share as i would like to read more?
+  ├─ Iafoss (2023-12-12 16:21:47.620000) [+2]
+  │  Thanks. During the competition we tried some ideas from papers, like 2d Ushape networks, etc., but they did not work well. Our matrix mixer approach is motivated by one of OpenVacine solutions as I...
+    ├─ FdotRK (2023-12-13 06:25:14.070000) [+1]
+    │  Do you have any references for the masked1D conv? (thanks)
+    ├─ Iafoss (2023-12-14 02:31:57.823000) [+5]
+    │  No, but it is pretty simple. Before each convolution in the network you must set all padded tokens to 0, so the output of the network is exactly the same regardless the padding you add. Otherwise y...
+    ├─ Shujun (2023-12-30 05:23:17.663000) [+0]
+    │  @iafoss do you have head to head comparison on how much this padded convolution helps? I have seen some unexpected behavior in my modeling which may be due to padding tokens accumulating
+    ├─ Iafoss (2023-12-30 05:42:45.967000) [+0]
+    │  I didn't do a careful analysis of that. I just tried to make make sure that I do not have any unexpected things in inference when batches may be composed of different length sequences.
+    ├─ Penzar Dmitry (2023-12-30 05:52:44.820000) [+0]
+    │  We tried both variants (with and without masked convolutions) and padding definitely helps
+    ├─ Shujun (2023-12-30 06:01:17.213000) [+0]
+    │  I see thanks a lot!
+├─ Luficer G (2023-12-10 07:47:24.397000) [+2]
+│  DUde that's cool
+├─ FdotRK (2023-12-09 10:54:05.323000) [+2]
+│  Very nice details - thank you! 
+│  Congrats on 7th position.
+│  
+│  Naive question  what tool you used to create network images?
+  ├─ Iafoss (2023-12-09 15:32:34.423000) [+2]
+  │  Thanks. I just used PowerPoint.
+  ├─ Rupes kumar (2023-12-10 18:06:09.580000) [+1]
+  │  Very nice details - thank you! 
+  │    Congrats on 7th position.
+  │    
+  │  Naive question  what tool you used to create network images?
+├─ greySnow (2023-12-08 07:37:24.400000) [+2]
+│  Hi. Do you mind explaining how you weighted according to the loss?
+  ├─ Iafoss (2023-12-08 20:54:16.200000) [+3]
+  │  I added these details.
+├─ swordsman (2023-12-08 07:19:10.840000) [+2]
+│  Hi
+│  I do not understand the bpp, 
+│  would mind give me more information about the bpp.
+│  thank you very much.
+  ├─ Iafoss (2023-12-08 20:57:16.770000) [+4]
+  │  It is an abbreviation for base pairing probability, i.e. the probability that nucleotides interact in the secondary structure as I understand. It is provided by organizers for eternafold package, a...
+    ├─ swordsman (2023-12-09 12:41:49.660000) [+1]
+    │  thank you very much,
+    │  finally understand…
+    │  nice study.
+    │  ありがとうございます。
+    │  非常感谢。。。
+    ├─ FdotRK (2023-12-09 18:42:56.097000) [+1]
+    │  thank you! I must admit your helps in other places is very helpful to me.
+    ├─ FdotRK (2023-12-09 18:47:04.220000) [+1]
+    │  Whether bpp was also available in test data?
+    ├─ Iafoss (2023-12-09 19:16:50.703000) [+3]
+    │  Yes, as far as I remember. Use bpp was the key thing in the competition, especially for generalization at the private LB. It appeared, that my very early models got 0.18-&gt;0.15 private LB improve...
+    ├─ DigitalEmbrace (2023-12-09 21:28:29.047000) [+1]
+    │  @liuyanfeng The base pair probabilities reflect the different conformations an RNA molecule can form. Some researchers visualize this behavior as RNA dancing. I explain more in this thread: https:/...
+    ├─ Penzar Dmitry (2023-12-09 22:13:22.087000) [+1]
+    │  Very important information about auxilary loss, I think. One more argument that the final "production" model can use no bpp as input. It's totally OK to train such model longer given additional ben...
+    ├─ Penzar Dmitry (2023-12-09 22:15:17.627000) [+1]
+    │  What kind of loss have you used on bpp matrix? BCE? or smth mae-like?
+    ├─ Iafoss (2023-12-09 22:41:00.047000) [+3]
+    │  BCE
+    ├─ FdotRK (2023-12-10 07:05:25.123000) [+1]
+    │  @dmitrypenzar1996 Just wanted to check what do you mean by model can use no bpp as input? It seems from @lafoss that there is bpp for test sequences
+    ├─ Penzar Dmitry (2023-12-10 14:32:48.553000) [+1]
+    │  Yes, but bpp are not perfect features -- 1) they tend to hide pseudoknots 2) you need to precalculate them before running a model
+    │  
+    │  While given the fact they are computed based on a quite limited nu...
+    ├─ [deleted] (2023-12-10 16:33:10.493000) [+2]
+    │  [deleted]
+    ├─ Penzar Dmitry (2023-12-10 20:48:15.890000) [+1]
+    │  Yes, about tendency. As far as I remember sRoger plot had more visible pseudoknot although his model has lower performance.
+    ├─ Penzar Dmitry (2023-12-10 20:50:45.070000) [+1]
+    │  There could be difference in behaviour (e.g hiding pseudoknots) and it will be difference in ease of use as no need in additional features
+├─ C R Suthikshn Kumar (2023-12-08 06:34:47.300000) [+2]
+│  Congratulations on achieving 7th position in this competition. Thanks for sharing the details of your solution.

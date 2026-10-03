@@ -1,0 +1,239 @@
+# https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390974
+
+Topic #390974: 6th Place Solution: Multi-view Multi-lateral Multi-stage Approach 
+  Author: RabotniKuma
+  Posted: 2023-02-28 02:16:14.507000
+  Votes: 101  Comments: 33
+
+First of all, I would like to express deep gratitude to the competition organisers and the Kaggle team. The competition dataset is of very high quality, and we would be happy if our solution could contribute to improve the quality of breast cancer screening. I would also like to thank my teammates who struggled together with me throughout the competition.
+Finally, big congratulations to all the winners (and to ourselves, three new competitions Grandmasters)! 
+
+Preprocessing
+
+
+
+Original image arrays were resized into 2048 x 2048 x 1
+
+VOI-LUT was applied to all images
+
+Images were then cropped to exclude blank space
+
+
+YOLOX model was trained to generate breast bbox
+
+Compared to simple rule-based breast extraction, YOLOX cropped images usually have a smaller region, which seemed to prevent our models from overfitting
+
+In order to shorten inference time, we used simple rule-based crop during inference
+
+Images were cropped with a random margin during training as augmentation
+
+Bbox mix (YOLOX crop + rule-based crop) were also used as augmentation
+
+Cropped images are resized to an aspect ratio of 2:1 (1024 x 512 or 1536 x 768)
+
+A wide range of augmentations were used 
+
+
+Affine transform, V/H flip, brightness/contrast, blur, CLAHE, distortion, dropout
+
+
+Model architectures
+
+
+
+Some key results
+
+
+
+
+Model name
+Description
+CV
+Public LB
+Private LB
+
+
+
+
+Aug07lr0
+MV, 1024x512
+0.493
+0.64
+0.46
+
+
+Res02lr0
+MV, 1536x768
+0.488
+0.59
+0.46
+
+
+Res02mod2
+MVF, 1536x768
+0.516
+-
+-
+
+
+Res02mod3
+MVF, 1536x768
+0.525
+0.63
+0.48
+
+
+charm_convnext_small_multi_lat
+MVL, 1024x512
+0.498
+0.60
+0.50
+
+
+
+
+Some tricks for training
+
+
+
+Due to the unstable nature of PF1 metric, area under precision recall curve (AUCPR) worked well as a surrogate metric
+
+
+AUCPRLoss (https://github.com/Shlomix/global_objectives_pytorch)
+
+The model performance is still unstable! We used exponential moving average (EMA), simple average weights
+
+Using auxiliary loss (age, biopsy, etc.) improved the performance
+
+Convnext (v1) was the best backbone for this task
+
+
+Ensemble
+
+
+Also, our best submission scored private LB 0.53, but it was not chosen because it has lower CV and public LB than our selected submissions.
+
+Things did not work
+
+
+
+Positive weight, oversampling, weighted samplers, etc. did not work
+
+
+They seemed to work when you have a weak model, but not no longer once you have a good enough model
+
+Focal loss and label smoothing did not improve CV
+
+Vanilla BCE is all you need
+
+Mixup did not work
+
+We tried pseudo-labeling and pretraining on external datasets (VINDR and DDSM), but there was no clear improvement in both CV and LB
+
+
+Code
+
+
+
+Submission notebook -&gt; https://www.kaggle.com/code/amanatsu/rsna-mammo-rejection-ensemble-v2-ishikei?scriptVersionId=120432251
+
+RabotniKuma part -&gt; https://github.com/analokmaus/kaggle-rsna-breast-cancer
+
+YOLOX(ishikei) part -&gt; https://github.com/ishikei14k/RSNA_Screening_Mammography_Breast_Cancer_Detection
+
+Charmq part -&gt; https://github.com/tyamaguchi17/rsna_mammo
+
+Comments:
+├─ Remek Kinas (2023-02-28 22:07:15.377000) [+5]
+│  Congratulations! You have great solution, great score …. but … I looked into your github - masterpiece of code module management. Configs management - brilliant. I downloaded this code to learn fro...
+├─ Dieter (2023-02-28 11:27:45.363000) [+3]
+│  Great write-up. Thanks for sharing your approach.
+├─ Ian Pan (2023-02-28 03:43:14.157000) [+3]
+│  Thanks for sharing! I'm curious how you dealt with studies with multiple images per view.
+  ├─ RabotniKuma (2023-02-28 04:40:38.523000) [+8]
+  │  @vaillant Good question! We randomly sampled an image per view during training, and sampled the image with most valid pixels (valid pixel is defined as pixel with value ⊂ [16, 160]) during inferenc...
+├─ Chenglu (2023-03-02 09:05:45.243000) [+1]
+│  Congrates on the winning and many thanks for sharing the solusion.
+│  
+│  I'm impressed of how you utilze the CAM, very brilliant method!
+├─ moth (2023-02-28 13:14:30.253000) [+1]
+│  Congratulations @analokamus. I have one question, if I remember correctly, there are patients with varying numbers of images and also other lateralities than MLO and CC. 
+│  
+│  How did you manage to alw...
+  ├─ Antti Isosalo (2023-02-28 17:09:09.273000) [+1]
+  │  I would add an additional column, "projection". Then I would device a dictionary, where I would have 'L-MLO, R-MLO,… as keys: https://www.kaggle.com/code/anttiisosalo/birads-classification-rsna-bc-...
+  ├─ RabotniKuma (2023-03-01 06:41:05.807000) [+0]
+  │  Thank you! Please refer to this thread: https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390974#2162251
+├─ Quan H. Cap (2023-02-28 09:38:11.037000) [+1]
+│  Big congratulations on becoming a grandmaster! 🎉🎉🎉
+├─ Darragh (2023-02-28 08:24:13.490000) [+1]
+│  Nice work team, we were thinking of something like the stepwise rejection but got to it too late. 
+│  MVF model looks very cool. Well deserved new grandmasters &gt;&gt; @amanatsu @analokamus @yujiariy...
+├─ Antti Isosalo (2023-02-28 06:48:20.640000) [+1]
+│  Great! I tried a bit similar thing, but could not get it working. I used Quasi-Hyberbolic Adam optimizer. What was your optimizer of choice if I may ask? Or was it mentioned?
+  ├─ RabotniKuma (2023-02-28 07:29:20.410000) [+2]
+  │  I used AdamW optimizer, cosine annealing with warm restarts scheduler, and initial learning rate of 1e-5 for batch size 16.
+├─ hengck23 (2023-02-28 03:29:50.220000) [+1]
+│  i am curious about multi-view training.
+│  did it not over fit in training?
+│  
+│  (or is my transformer encoder too strong)?
+  ├─ RabotniKuma (2023-02-28 04:48:00.487000) [+1]
+  │  @hengck23 Thank your for the question! We learnt a lot from your discussion topics (as usual 😊).
+  │  With regard to multi-view training, we tried efficientnet, convnext, seresnext, nextvit, and some ot...
+├─ RB (2023-02-28 02:49:06.070000) [+1]
+│  Congratulations and Thank you for sharing your solution.  Looking forward to the github code. 
+│  
+│  I'm trying to understand Stepwise Rejection Ensemble - 
+│  You start with predictions for Model 1 and Mo...
+  ├─ RabotniKuma (2023-02-28 04:56:29.890000) [+4]
+  │  Thank you for the question, let me clarify:
+  │  
+  │  [1st stage] [100% test data] x [model 1, model 2]
+  │  -&gt; bottom 25% were removed and labelled as 0
+  │  [2nd stage] [75% test data] x ([model 1, model 2] from...
+├─ hengck23 (2023-02-28 03:27:52.200000) [+2]
+│  Thanks for the write up. good job!
+│  
+│  " it has lower CV and public LB "
+│  … sometimes it is a bit of luck :;
+├─ BarryZhou (2023-02-28 02:20:38.893000) [+2]
+│  Great solution! Thanks for your sharing!
+├─ Shantanu Ghosh (2023-05-24 23:45:16.853000) [+0]
+│  Hi, Thanks for sharing the solution. I want to replicate your solution. Can you please tell me the order in which i will replicate your code. My understanding is follows:
+│  
+│  
+│  
+│  [YOLOX(ishikei) part] h...
+├─ LYLY123 (2023-04-09 09:21:08.633000) [+0]
+│  Thanks for sharing your approach. This notebook is so useful 👍
+├─ ForcewithMe (2023-03-06 11:22:41.497000) [+0]
+│  Hi @analokamus , congratulations on becoming a grandmaster. It's a brilliant solution. May you describe more about how you trained the local encoder?
+├─ Lê Thành Nghĩa (2023-03-02 09:35:19.600000) [+0]
+│  Thanks, i got learn so much after read this Discussion. Good job u guys
+├─ Ali Abdin (2023-03-01 19:53:46.163000) [+0]
+│  Congratulations and thanks for the great summary!
+├─ i_love_huyen_tran (2023-02-28 16:43:39.340000) [+0]
+│  Thank you, i find many useful techniques that i can apply for future competitions.
+├─ K Pradyumna (2023-02-28 14:34:21.110000) [+0]
+│  congratulation…thanks for sharing detailed documentation.
+├─ Hammad khan2412 (2023-02-28 13:31:31.260000) [+0]
+│  Big congratulations on becoming a grandmaster!
+├─ TheStrugglingEngineer (2023-02-28 08:41:06.343000) [+0]
+│  Mixup did not work
+│  
+│  
+│  Can you elaborate? How was the mixup performed, in more detail?
+│  And Congratulations on the amazing performance.
+  ├─ RabotniKuma (2023-02-28 12:59:28.610000) [+0]
+  │  Using mixup usually making training very slow to converge, and the final results are not always better than without mixup.
+├─ dragon zhang (2023-02-28 03:22:14.853000) [+0]
+│  thx for sharing.  Again,  good hardware seems a necessary for good score.
+├─ joejeo1 (2023-02-28 02:43:33.560000) [+0]
+│  Very nice models and  illustrations.  Thanks and congrats.
+├─ Feng Qilong (2023-02-28 02:31:05.980000) [+0]
+│  Amazing Solution!
+├─ Khang Duong (2023-02-28 08:45:12.817000) [+0]
+│  Thanks for sharing! Well deserved 💯
+├─ leumon (2023-02-28 06:40:04.443000) [+0]
+│  Thanks for sharing！

@@ -1,0 +1,87 @@
+<h1>Our 3rd Place Solution – Stanford RNA 3D Folding</h1>
+<p>First of all, thanks to Kaggle and the organizers for putting together such a challenging and interesting competition.  </p>
+<p>We finished <strong>3rd on the public leaderboard</strong> before the unseen data release, and also <strong>3rd on the private leaderboard</strong>.  </p>
+<p>Earlier we shared a short overview of our solution. This post goes into more detail.  </p>
+<hr>
+<h2>Summary of Our Solution</h2>
+<ul>
+<li>Ensemble of <strong>DRfold2</strong>, <strong>Protenix</strong>, and <strong>Boltz-1</strong>  </li>
+<li>Fine-tuned <strong>Protenix</strong> with newly released RNA datasets  </li>
+</ul>
+<hr>
+<h2>Detailed Solution</h2>
+<h3>Dataset</h3>
+<ul>
+<li><p><strong>rMSA</strong>  <br>
+We generated our own rMSA data using the <a href="https://github.com/pylelab/rMSA" target="_blank">official rMSA code</a> provided by the hosts.  </p>
+<ul>
+<li>The v2 rMSA released by the organizers did not cover the full set of recently published data, so we had to build our own.  </li>
+<li>This process took about <strong>14 days</strong>, even with multiprocessing and several servers.  </li>
+<li>Our rMSA data is available here: <a href="https://drive.google.com/drive/folders/15bhXWsR6QuDQo6U4j8Ii8-OE4B4SmC7i?usp=drive_link" target="_blank">Google Drive</a>.  </li></ul></li>
+<li><p><strong>Training dataset</strong>  <br>
+We tested two versions:  </p>
+<ol>
+<li><strong>Full RNA dataset</strong> – included all recently available data, such as <a href="https://www.kaggle.com/datasets/tant64/casp16" target="_blank">CASP16</a> uploaded by <a href="https://www.kaggle.com/tant64" target="_blank">@tant64</a>. To check quality, we compared some of the labels with the <a href="https://gitlab.com/arneelof/CASP16-predictions/-/tree/main/rna_results?ref_type=heads" target="_blank">CASP16 GitLab repository</a>.  </li>
+<li><strong>RNA-only dataset</strong> – excluded complexes (RNA bound to proteins/DNA), following the clarification from the hosts <a href="https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/575745" target="_blank">here</a>.  </li></ol></li>
+</ul>
+<p>Both versions of the training data and labels are available here: <a href="https://drive.google.com/drive/folders/1XKYzk2oCcHPt6DB_wLNYL-7w3s1R793n" target="_blank">Google Drive</a>.  </p>
+<hr>
+<h3>Models</h3>
+<p>We built our ensemble using models from these official repositories:  </p>
+<ul>
+<li><a href="https://github.com/leeyang/DRfold2" target="_blank">DRfold2</a>  </li>
+<li><a href="https://github.com/bytedance/Protenix" target="_blank">Protenix</a>  </li>
+<li><a href="https://github.com/jwohlwend/boltz" target="_blank">Boltz</a>  </li>
+</ul>
+<p>We initially explored new architectures, but given the time and resource limits, it was more effective to focus on fine-tuning and combining existing models.  </p>
+<hr>
+<h4>DRfold2</h4>
+<ul>
+<li>Performed best on sequences <strong>&lt;400 nt</strong> with v1 data.  </li>
+<li>Running the full pipeline with optimization, clustering, and all 80 released checkpoints was too slow.  </li>
+<li>We found that <strong>energy selection + Arena</strong> gave most of the gain, while the other steps added little to the TM-score but took significant runtime.  </li>
+<li>So our DRfold2 setup used <strong>energy selection + Arena</strong> only for the post-processing.  </li>
+</ul>
+<hr>
+<h4>Protenix</h4>
+<ul>
+<li>Trained on an <strong>NVIDIA GH200 (96GB VRAM)</strong>.  </li>
+<li>Limited to sequences <strong>&lt;800 nt</strong> due to memory issues.  </li>
+<li>Used fine-tuning code from <a href="https://www.kaggle.com/lihaoweicvch" target="_blank">@lihaoweicvch</a> (<a href="https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/573495" target="_blank">discussion link</a>).  </li>
+<li>Fine-tuning <strong>without rMSA</strong> did not help, so we trained <strong>with rMSA</strong>.  </li>
+<li>Only modified <code>max_steps</code>; a full dataset run took about a day.  </li>
+<li>Early checkpoints (2–3 cycles) performed worse; performance improved with longer fine-tuning.  </li>
+<li>We also tested <strong>multiple Protenix outputs → DRfold energy selection → Arena</strong>, but it did not improve results.  </li>
+<li>For inference, we modified <a href="https://www.kaggle.com/code/geraseva/protenix" target="_blank">@geraseva’s code</a> to include rMSA.  </li>
+</ul>
+<hr>
+<h4>Boltz-1</h4>
+<ul>
+<li>While not the strongest model on its own, including <strong>one Boltz prediction</strong> improved ensemble diversity.  </li>
+<li>This helped because the scoring metric favored picking the best out of multiple diverse outputs.  </li>
+<li>We used <a href="https://www.kaggle.com/code/youhanlee/boltz-1-inference-submission" target="_blank">@youhanlee’s inference notebook</a>.  </li>
+</ul>
+<hr>
+<h3>Final Submissions &amp; Code</h3>
+<p>We are sharing our original submission notebooks. Some commented-out code remains, which shows parts of our experiment history.  </p>
+<ol>
+<li><p><strong><a href="https://www.kaggle.com/code/yekim102/drfold4-pro-msa-pro-msa-base-rna" target="_blank">DRfold2 + Protenix</a></strong>  </p>
+<ul>
+<li>Public LB: <strong>0.60338</strong> | Private LB: <strong>0.52787</strong>  </li>
+<li>&lt;400 nt: 3 × DRfold2 + 2 × Protenix (RNA-only, with MSA)  </li>
+<li>&gt;400 nt: 2 × Protenix (RNA-only) + 2 × Protenix (All) + Protenix baseline  </li></ul></li>
+<li><p><strong><a href="https://www.kaggle.com/code/yekim102/fin-pro-all-1-rna-2-base1-boltz1" target="_blank">Protenix + Boltz</a></strong>  </p>
+<ul>
+<li>Public LB: <strong>0.61253</strong> | Private LB: <strong>0.54312</strong>  </li>
+<li>2 × Protenix (RNA-only) + Protenix (All) + Protenix baseline + Boltz baseline  </li></ul></li>
+</ol>
+<hr>
+<h2>Acknowledgements</h2>
+<p>Many thanks to the community members who shared resources and insights:  </p>
+<ul>
+<li><strong>@hengck23</strong> – for extensive discussions and guidance.  </li>
+<li><strong>@geraseva</strong> – for early Protenix inference code.  </li>
+<li><strong>@lihaoweicvch</strong> – for Protenix fine-tuning code.  </li>
+<li><strong>@youhanlee</strong> – for updated Boltz inference code.  </li>
+</ul>
+<p>Finally, thanks to <strong>Eigen Company</strong> for providing resources for this competition. </p>

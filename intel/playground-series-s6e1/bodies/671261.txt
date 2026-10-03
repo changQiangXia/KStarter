@@ -1,0 +1,124 @@
+# https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671261
+
+Topic #671261: 2nd place - NNs sometimes work better than GBMs
+  Author: Tilii
+  Posted: 2026-02-01 01:28:36.131000
+  Votes: 55  Comments: 11
+
+Congratulation to all the winners and thanks to those contributing quality discussions and code: @include4eto, @omidbaghchehsaraei, @cdeotte, @siukeitin, @mikhailnaumov. If you haven't read them already, I suggest you visit these discussions:
+
+
+
+https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665915
+
+https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665965
+
+https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669056
+
+
+My solution is conceptually identical to what I already published back in October: make as many diverse models as possible and combine them all in a large ensemble. Here I will only describe the two major differences that were unique to this competition.
+
+First, in my hands TabM worked by far the best when it came to individual models. It wasn't even close when it was compared to GBM models, even though I didn't try LightGBM that much. But I made many XGB and CatBoost models that were inferior to TabM, even when the same starting data was used. This is yet another proof that there is no absolute superiority of GBMs over NNs in tabular competitions.
+
+Second, I benefited enormously from feature engineering strategies published in November by @mahoganybuttstrings and @angelosmar1 - thank you both! I urge you to revisit their solutions:
+
+
+
+https://www.kaggle.com/competitions/playground-series-s5e11/writeups/1st-place-a-lot-of-features-a-lot-of-models-an
+
+https://www.kaggle.com/competitions/playground-series-s5e11/writeups/2nd-place-solution-7-models-but-1-was-also-enou
+
+
+Speaking of @mahoganybuttstrings, congratulations on yet another absolutely dominant win! Anyway, I have zero talent when it comes to rational feature engineering, but I know how to spot good features when I see them. There were plenty of them in the two solutions above, and I added them gradually and in various combinations to the tune of 60 TabM models that eventually were included in my 75-model ensemble. If you are wondering how I managed to make that many models: 1) it was various combinations of engineered features, ranging from ~170-700; 2) those features were combined with 6 or so hyperparameter sets that were found by tuning; 3) in addition to conventional modeling, I also did predictions over residuals from linear equations. Finally, I also added 5 features found by genetic programming that were meant to recreate the formula that generated the original dataset. Eventually this became 14 GP features that were used for modeling. The best two equations, which were used for predictions over residuals, are listed below. They create features with RMSE 8.9703 and 8.9741 to the target, respectively.
+
+           formula = 5.760845*X['study_hours'] +
+           4.760845*(X['sleep_quality'] == 'average').astype(int) +
+           8.760845*(X['sleep_quality'] == 'good').astype(int) +
+           9.52169*(X['study_method'] == 'coaching').astype(int) +
+           0.325220702899505*X['class_attendance'] +
+           (X['study_method'] == 'group study').astype(int) +
+           4.760845*(X['study_method'] == 'mixed').astype(int) +
+           5.760845*(X['facility_rating'] == 'high').astype(int) -
+           (X['facility_rating'] == 'low').astype(int) +
+           2*(X['facility_rating'] == 'medium').astype(int) +
+           X['sleep_hours']
+
+           formula = 5.87666929874987*X['study_hours'] +
+           5*(X['sleep_quality'] == 'average').astype(int) +
+           9.674877*(X['sleep_quality'] == 'good').astype(int) +
+           8.222835*(X['study_method'] == 'coaching').astype(int) +
+           0.327161004763791*X['class_attendance'] +
+           3*(X['study_method'] == 'mixed').astype(int) +
+           3.659515*(X['facility_rating'] == 'high').astype(int) -
+           4.222835*(X['facility_rating'] == 'low').astype(int) +
+           X['sleep_hours'] +
+           2.020001
+
+
+Out of 75 ensemble models, all but 7 were NNs of some kind, and there were about 20 more TabM models that didn't make it. Best individual models:
+
+
+
+
+Model
+CV
+Public LB
+Private LB
+
+
+
+
+TabM
+8.590414
+8.55355
+8.59254
+
+
+XGBoost Optuna
+8.605121
+8.56390
+8.60570
+
+
+Keras FM
+8.658336
+8.58030
+8.61956
+
+
+xLearn FFM
+8.707240
+8.67284
+8.70387
+
+
+
+
+As always, my goal was to select the best solutions, and indeed that was the case. That was made easier by good CV-LB correlations, but there was still enough difference in scores that I hedged my bets on two ensembles that had 75 and 71 models. I submitted my best solution 25 minutes before the deadline, and that's usually how close I cut it with all my deadlines.
+
+Comments:
+├─ Vijay Kumar (2026-02-03 17:15:24.003000) [+1]
+│  Nice explanation @tilii7
+├─ Mahog (2026-02-01 14:20:57.967000) [+1]
+│  Congrats on another strong finish! Could you share some details regarding the Keras FM? I just couldn't get it to work properly, RMSE just hovers around 14-15 and eventually goes up. If you have ti...
+  ├─ Tilii (2026-02-02 17:19:10.990000) [+0]
+  │  I use the FM implementation verbatim from here. You can ignore the batch_generator stuff and only need the build_model part. All the features must be converted to numbers usingOrdinalEncoder. Then ...
+├─ kobby_ (2026-02-01 10:26:33.467000) [+1]
+│  Congrats and thanks for writing this great piece. TabM sure was the king in the competition, beating XGB to the gap. Boosting XGBoost over TabM was also helpful (pseudo label &amp; residuals), as s...
+  ├─ Tilii (2026-02-02 17:10:36.403000) [+0]
+  │  Great job by you as well.
+├─ Mirko (2026-02-01 09:59:48.540000) [+1]
+│  Huge thanks, Tilii! First off, congrats on the 2nd place finish! 
+│  Your previous advice "For the (recovering) blind blending addicts" was a turning point for me during the competition. My approach t...
+  ├─ Tilii (2026-02-02 17:09:44.463000) [+1]
+  │  Thank you for your kind words and congratulations on a strong finish.
+├─ yunsuxiaozi (2026-02-01 02:01:29.427000) [+1]
+│  Have you used anything mentioned in  this post? such as use median data or 
+│  
+│  final_preds = np.where(sigma &lt; threshold, y_base + y_adj, y_base)
+  ├─ Tilii (2026-02-01 02:27:11.597000) [+2]
+  │  Didn't do any of the stuff proposed in that post. I think it is overly optimistic to think that a classification can do a better job in those left- and right-tail areas than the regression. I once ...
+├─ Navneet (2026-02-04 06:48:05.523000) [+0]
+│  Hedged your bets on two ensembles that had 75 and 71 models! supercool @tilii7
+├─ Shivam Shukla (2026-02-02 17:17:38.977000) [+2]
+│  Great work

@@ -1,0 +1,535 @@
+# https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/733181
+
+Topic #733181: 36th Place - GPT5.6 Sol - Yolo
+  Author: Chris Deotte
+  Posted: 2026-08-06 04:10:13.869000
+  Votes: 53  Comments: 16
+
+Thank you everyone for a great Kaggle competition. The data was rich with signal, the problem was interesting, and we had many helpful insights shared by Kagglers to guide us.
+
+My solution is the result of running codex --yolo continuously for two weeks with access to 2xGPU L4 to run experiments. GPT5.6 Sol read the Kaggle discussions, notebooks, and searched the internet to understand the science. Every night I had a short conversation with Codex and gave it suggestions how to proceed the next day. Codex found a single model with CV five k-fold 5.7, Public LB 6.3, Private LB 6.9. For my final submission, I averaged this with another variant to achieve Private LB 6.8 and 36th rank.
+
+I asked Codex to explain what it did as if talking to a child. Below is our writeup:
+
+🧭 The Wellbore Treasure Map
+
+How our 5.706 single-model pipeline followed a hidden rock layer
+
+Imagine drilling a very long tunnel underground.
+
+You can see where the drill is going in 3D, and a sensor called gamma ray (GR) tells you a little
+about the rocks passing by. At first, an expert also tells you the true vertical depth, or TVT.
+Then the answers disappear.
+
+Our job is to continue the missing TVT curve.
+
+That sounds simple—until the same rock pattern appears again and again. A GR wiggle that looks right
+at one depth may look almost as right 10 or 20 feet away. It is like trying to find your place in a
+book where several pages contain the same sentence.
+
+Our solution treats the task as a treasure-map puzzle:
+
+
+
+Draw a sensible first path.
+
+Ask a neural network which nearby depths look believable.
+
+Use an HMM to choose one smooth, consistent geological “page.”
+
+Use only genuine GR measurements for one final whole-well alignment check.
+
+
+The result was an honest five-fold OOF RMSE of 5.706354.
+
+
+
+The whole adventure in one picture
+
+                 THE VISIBLE PART OF THE WELL
+          XYZ path + GR + known TVT + typewell curves
+                              │
+                              ▼
+                ┌───────────────────────────┐
+                │  1. Build a good first    │
+                │     guess of the path     │
+                └─────────────┬─────────────┘
+                              │ parent TVT curve
+                              ▼
+       For every location, test shifts from -32 ft to +32 ft
+                              │
+                              ▼
+                ┌───────────────────────────┐
+                │ 2. Make an 18-layer       │
+                │    GR evidence map        │
+                └─────────────┬─────────────┘
+                              │ 256 × 65 cost map
+                              ▼
+                ┌───────────────────────────┐
+                │ 3. Dilated 2D ResNet      │
+                │    learns good patterns   │
+                └─────────────┬─────────────┘
+                              │ learned likelihoods
+                              ▼
+                ┌───────────────────────────┐
+                │ 4. Persistent-datum HMM   │
+                │    picks one rock sheet   │
+                └─────────────┬─────────────┘
+                              │ smooth correction path
+                              ▼
+                ┌───────────────────────────┐
+                │ 5. Real-GR global shift   │
+                │    gives a final nudge    │
+                └─────────────┬─────────────┘
+                              │
+                              ▼
+                       FINAL TVT CURVE
+
+
+This is a single staged prediction pipeline, not a post-hoc blend of unrelated submission
+files. At inference, the same architecture is trained on five folds and the five fold predictions
+are averaged.
+
+
+
+Chapter 1: Draw a good first path
+
+The final model does not begin from zero. It first builds a strong parent TVT curve.
+
+Think of the parent as a scout walking ahead with a pencil. The scout combines several legal clues:
+
+
+
+the known TVT before prediction_start;
+
+the future XYZ trajectory of the query well;
+
+the query's horizontal GR;
+
+its typewell GR-versus-TVT curve;
+
+a fold-pure canonical GR reference made without the held-out well;
+
+particle-style tracking and learned residual corrections;
+
+smooth geometric and formation-surface constraints.
+
+
+The scout is usually close, but it can follow the correct shape on the wrong repeated rock layer.
+The final dense model exists mainly to solve that last ambiguity.
+
+True layer:       ─────╲____╱────────╲____╱─────
+Parent guess:     ─────╲____╱────────╲____╱─────
+                        almost right, but perhaps
+                        on a layer 8 ft too high
+
+
+The important idea is coarse-to-fine prediction. The parent handles the large and complicated
+geometry. The final model searches only a manageable neighborhood around it.
+
+
+
+Chapter 2: Build a “which depth looks right?” picture
+
+For each well, we sample 256 positions along the hidden tail.
+
+At every position, we try 65 possible corrections:
+
+-32, -31, -30, ..., -1, 0, +1, ..., +30, +31, +32 feet
+
+
+This creates a two-dimensional board:
+
+                         candidate correction
+                  -32 ft       0 ft       +32 ft
+                      ◄──────────┼──────────►
+                 ┌─────────────────────────────┐
+early in well    │  ░░░░▓▓▓█▓░░░░░░░░░░░░░░    │
+                 │  ░░░░░▓▓█▓▓░░░░░░░░░░░░░    │
+                 │  ░░░░░░▓▓█▓▓░░░░░░░░░░░░    │
+                 │  ░░░░░░░▓▓█▓▓░░░░░░░░░░░    │
+late in well     │  ░░░░░░░░▓▓█▓▓░░░░░░░░░░    │
+                 └─────────────────────────────┘
+
+Dark diagonal ribbon = a correction path supported by the GR evidence
+
+
+For every square on this board, we ask:
+
+
+  
+“If the TVT were parent + this shift, how well would the observed GR match the expected GR?”
+
+
+The three GR storytellers
+
+We compare the observed horizontal GR with three different references.
+
+1. The query typewell
+
+The supplied typewell is the obvious geological guide. It says what GR should look like at different
+TVT values.
+
+2. The well's own visible prefix
+
+Before the hidden section begins, the well has both GR and TVT. We turn that visible history into a
+small self-reference curve. It is like asking the well to recognize its own handwriting.
+
+3. A fold-pure canonical reference
+
+Training wells in the same geological family help build a cleaner reference curve. For honest CV,
+the held-out fold is excluded when this reference is created.
+
+The 18 evidence channels
+
+Each candidate square receives 18 measurements:
+
+
+
+
+Reference
+Evidence channels
+Count
+
+
+
+
+Query typewell
+robust mismatch, absolute mismatch, derivative mismatch, two smoothed mismatches, outside-range flag
+6
+
+
+Visible-prefix self-reference
+the same six measurements
+6
+
+
+Fold-pure canonical reference
+the same six measurements
+6
+
+
+Total
+
+18
+
+
+
+
+Why use several versions of “mismatch”? Because each catches a different failure:
+
+
+
+raw mismatch asks whether GR values agree;
+
+derivative mismatch asks whether the wiggles turn in the same direction;
+
+smoothed mismatch checks wider geological shapes;
+
+the outside-range flag warns when we are extrapolating beyond known reference depths.
+
+
+All calibrations use only information legally available for that query.
+
+
+
+Chapter 3: Let a neural network read the treasure map
+
+The evidence board is passed to a compact 2D residual convolutional network.
+
+Its two axes mean different things:
+
+
+
+vertical axis: progress along the well;
+
+horizontal axis: possible TVT correction.
+
+
+This is useful because the answer is not an independent number at every row. It is a continuous
+path through the board.
+
+                 Ordinary row model        Our 2D model
+
+row 1            choose a dot              ┐
+row 2            choose a dot              │ sees a ribbon
+row 3            choose a dot              │ across many rows
+row 4            choose a dot              ┘
+
+
+Network recipe
+
+
+
+18 raw evidence channels;
+
+another 18 relative channels, formed by subtracting the zero-shift evidence;
+
+1 shift-coordinate channel;
+
+1 progress-along-the-well channel;
+
+38 total input channels;
+
+48 hidden channels;
+
+one opening 7 × 5 convolution;
+
+five residual blocks with along-well dilations 1, 2, 4, 8, 16;
+
+one output score for every one of the 256 × 65 candidate squares.
+
+
+The growing dilations give the model binoculars of different sizes:
+
+dilation 1:   [nearby rows]
+dilation 2:   [----a little farther----]
+dilation 4:   [----------medium context----------]
+dilation 8:   [----------------large context----------------]
+dilation 16:  [--------------------whole-pattern view--------------------]
+
+
+The model learns patterns such as:
+
+
+
+“This candidate matches locally but breaks the longer GR trend.”
+
+“This diagonal path stays believable for most of the well.”
+
+“The zero-shift candidate is only good because every candidate is bad here.”
+
+
+Training uses a soft target around the true correction plus a small regression loss. The training
+data also contains synthetic endpoint and curvature perturbations, which teach the network to repair
+more than one exact kind of parent error.
+
+
+
+Chapter 4: The HMM chooses one geological page
+
+The neural network produces good local likelihoods, but repeated rock layers can create several
+parallel ribbons.
+
+          plausible layer A     ███████████████
+
+          plausible layer B          ███████████████
+
+          plausible layer C               ███████████████
+
+
+If we simply average them, we may predict the empty space between real layers. Instead, we use a
+persistent-datum Hidden Markov Model (HMM).
+
+Child-friendly version
+
+Imagine 49 long train tracks stacked vertically.
+
+
+
+Each track represents one persistent global offset from -24 ft to +24 ft.
+
+The train must choose one track for the whole hidden section.
+
+While staying on that track, it may wiggle locally by -2 ft to +2 ft.
+
+Big sudden jumps are discouraged.
+
+
+global -2 ft track:  ────────────────╲──╱────────
+global -1 ft track:  ─────────────────────────────
+global  0 ft track:  ────────●●●●●●●●●●●●────────  ← chosen
+global +1 ft track:  ─────────────────────────────
+global +2 ft track:  ─────────────────────────────
+
+
+Mathematically, the state is:
+
+correction = persistent_global_datum + small_local_wiggle
+
+
+The HMM runs forward and backward over all 256 tokens. Then we make a hard branch commitment:
+we select the global datum with the largest complete-well probability instead of averaging different
+geological sheets.
+
+Inside that chosen branch, the local HMM posterior gives a smooth correction path. We apply it at
+50% strength:
+
+hard_path = parent + 0.5 × HMM_correction
+
+
+This hard choice is important. If one repeated bed is at +8 ft and another is at -8 ft, their
+average is 0 ft—but 0 ft may correspond to no plausible bed at all.
+
+
+
+Chapter 5: One last nudge using only real measurements
+
+The HMM is powerful, but its neural likelihood can be overconfident. We therefore perform a final,
+independent alignment check using the cleanest evidence available.
+
+We test constant shifts from -20 ft to +20 ft in 0.5-ft steps around the hard HMM path.
+
+For each shift, we compare the observed GR with:
+
+
+
+the query typewell;
+
+the fold-pure canonical GR reference.
+
+
+They receive equal weight. We add a small normalized-correlation term and a gentle prior preferring
+small shifts.
+
+Most importantly, this stage uses only genuine GR measurements. It ignores rows where GR was
+merely filled or interpolated.
+
+Candidate shifts:  -20  ...  -4  -3  -2  -1   0  +1  +2 ... +20
+GR agreement:        ·         ░   ▓   █   ▓   ░   ·
+                                      ▲
+                              posterior mean shift
+
+
+The selected shift is not switched on abruptly. At the beginning of the hidden tail, the known TVT
+anchor should remain continuous. So the correction grows smoothly during the first half:
+
+correction strength
+1.0 |                         ─────────────────────
+    |                    ____/
+    |                ___/
+    |             __/
+0.0 |____________/
+    +---------------------------------------------&gt; progress
+       prediction_start         halfway point
+
+
+The final prediction is approximately:
+
+final = parent
+      + 0.50 × HMM_path_correction
+      + 0.75 × global_GR_shift × smooth_ramp
+
+
+This last nudge reduced complete OOF RMSE from 5.758806 to 5.706354.
+
+
+
+Why this worked
+
+1. We predicted a path, not isolated rows
+
+The 2D network and HMM see the complete hidden trajectory. They can prefer a slightly weaker local
+match that remains coherent for thousands of rows.
+
+2. We separated “which sheet?” from “how does it wiggle?”
+
+The persistent global datum chooses the geological page. The local HMM handles small movement on
+that page.
+
+3. We did not average incompatible modes
+
+Hard branch commitment avoids landing halfway between repeated beds.
+
+4. We used three complementary GR references
+
+The typewell supplies the official template, the visible prefix personalizes it to the query, and
+the fold-pure canonical reference reduces noise.
+
+5. We trusted actual sensor measurements most
+
+The final whole-well shift posterior ignores synthetic filled GR rows. This small change was worth
+about 0.052 RMSE over the hard HMM parent.
+
+6. We protected the known anchor
+
+The smooth ramp prevents the global correction from creating a jump immediately after
+prediction_start.
+
+
+
+What did not work
+
+A good solution is also a museum of failed ideas.
+
+Softly averaging geological sheets
+
+This produced physically impossible “middle layers.” Hard commitment worked better.
+
+Trusting the neural branch probabilities as perfectly calibrated
+
+The network often separated repeated layers too confidently. A separate raw-GR alignment posterior
+was more reliable than trying to hedge using those probabilities.
+
+Median filtering the final curve
+
+A short median filter helped the two selection folds, but after freezing it slightly worsened the
+complete five-fold score: 5.709434 versus 5.706354. We left it out.
+
+A more complicated quadratic correction field
+
+Curved corrections had huge oracle potential, but legal GR evidence could not reliably identify the
+extra curvature. More flexibility was not automatically more accurate.
+
+A fully autoregressive local tracker
+
+With a trusted anchor it was extremely accurate, but small anchor mistakes accumulated during
+rollout. Local matching was easier than recovering absolute geological identity.
+
+
+
+Final lesson
+
+The biggest lesson was not “use a bigger neural network.”
+
+It was:
+
+
+  
+First find several plausible paths. Then use geology, continuity, and clean sensor evidence to
+choose one complete path.
+
+
+The neural network was the map reader. The HMM kept the journey on one road. The actual-GR posterior
+checked that we had not chosen the correct-looking road on the wrong geological floor.
+
+Or, in child-sized language:
+
+
+  
+Draw a careful line, do not jump between pages, and check the real clues before declaring that
+you found the treasure. 🏴‍☠️
+
+Comments:
+├─ Will (2026-08-06 09:21:54.870000) [+1]
+│  Many thanks for sharing your write-up, @cdeotte. I always learn a lot from them. I based my LLM harness system for this competition on your write-up from the Neurogolf competition. I used mostly Cl...
+├─ Geremie Yeo (2026-08-06 04:44:47.640000) [+1]
+│  Have you tried using pretrained image models like DinoV2 or DinoV3 to extract any features?
+  ├─ Chris Deotte (2026-08-06 05:05:07.850000) [+0]
+  │  No. I did not try any public pretrained models. But I think Codex pretrained on something like synthetic data first and then finetuned. I'll double check this and update this comment.
+├─ Michael Timbs (2026-08-06 04:40:05.933000) [+1]
+│  Nice. I find this auto-research type approaches interesting and valuable. Did you use any special harness or just codex?
+  ├─ Chris Deotte (2026-08-06 05:02:27.347000) [+5]
+  │  Just codex with the /goal function. And the goal is always about finding a better local CV score.
+    ├─ Geremie Yeo (2026-08-06 05:19:26.003000) [+1]
+    │  The entire public notebooks are all using GBM, for the agent to say no and go with NN is great lol 🤣
+    ├─ Chris Deotte (2026-08-06 05:53:23.630000) [+4]
+    │  I encouraged using NN from the beginning. I read how @tuckerarrants had an NN that inferred in 2 minutes and had CV 8.5 LB 7.5 here (and then later CV 5.X with NN here). I told Codex to read all Tu...
+    ├─ Will (2026-08-06 09:23:05.363000) [+1]
+    │  I was not as sucessul but I gave similar instructions to my agent indeed, Tucker's comments where a key part of the final result for me as well.
+    ├─ Tucker Arrants (2026-08-06 17:56:59.177000) [+2]
+    │  Haha! This is awesome. That is impressive it was able to do so much with fairly open ended statements.
+    ├─ Geremie Yeo (2026-08-06 18:43:25.013000) [+2]
+    │  Wow! I didn't see that comment myself, it just doesn't feel like a GBM competition to me. IMO GBM could be used but there has to be some "special processing" on top, possibly an NN prediction
+├─ Geremie Yeo (2026-08-06 05:29:20.213000) [+2]
+│  Did you at least try to study the data yourself? I tried this comp with entirely no knowledge of the dataset/domain (just feeding competition page/discussions to agent to autonomously the solution)...
+  ├─ Chris Deotte (2026-08-06 15:46:33.483000) [+5]
+  │  Achieving CV 9.5 in 12 hours is good. I think that is what my agent did when it started too. I continued to run my agent for 14 days continuously and it kept trying different things and eventually ...
+    ├─ Manoj (2026-08-07 05:49:25.677000) [+2]
+    │  Hi @cdeotte , can you give us some idea how much did it cost for 14 days of agent run and how your agent setup looks like
+├─ ktyser (2026-08-06 05:28:42.793000) [+2]
+│  Nice work! I had a very similar setup using codex/claude and giving it 2 GPUs. Still working to find a good workflow where it can improve on its own without frequent suggestions to get it unstuck f...
+  ├─ ktyser (2026-08-06 05:34:02.287000) [+2]
+  │  also, any idea of how many tokens you burned?
+    ├─ Chris Deotte (2026-08-06 16:12:33.857000) [+0]
+    │  I'm trying to resume the session to get token count. I don't think it is too many because Codex spends most of its time waiting on experiments running on GPU and CPU to finish.

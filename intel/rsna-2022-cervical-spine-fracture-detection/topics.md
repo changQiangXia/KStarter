@@ -1,0 +1,82 @@
+# rsna-2022-cervical-spine-fracture-detection 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362607) — 222 票 / 87 评论 / 2022-10-29 **write-up?**
+- [Explaining Data and Submission in detail](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340612) — 179 票 / 35 评论 / 2022-07-30 
+- [1st Place Solution -- Code](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362787) — 147 票 / 39 评论 / 2022-10-29 **write-up?**
+- [Some 3D Renderings](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/350244) — 85 票 / 15 评论 / 2022-09-04 
+- [Metric Weights](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340392) — 65 票 / 12 评论 / 2022-07-28 
+- [3rd place solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362643) — 59 票 / 11 评论 / 2022-11-19 **write-up?**
+- [[6th place] Solution Overview: 3D CNN + TD-CNN](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362651) — 59 票 / 13 评论 / 2022-11-09 **write-up?**
+- [[placeholder] 3d transformer benchmark results](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/350859) — 58 票 / 11 评论 / 2022-09-07 
+- [RSNA-CSFD PNG/JPG Dataset](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340482) — 58 票 / 12 评论 / 2022-07-29 
+- [5th place solution (Team Speedrun)](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/363232) — 51 票 / 7 评论 / 2022-11-08 **write-up?**
+- [8th Place Solution + Code](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362669) — 45 票 / 11 评论 / 2022-11-01 **write-up?**
+- [32nd place solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362593) — 43 票 / 15 评论 / 2022-10-28 **write-up?**
+- [2nd place solution ： Segmentation + 2.5D CNN + GRU Attention](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/365115) — 41 票 / 12 评论 / 2022-11-30 **write-up?**
+- [CV:0.49 PL:0.47  PyTorch EfficientNetV2 baseline (single model)](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/348462) — 40 票 / 13 评论 / 2022-08-28 
+- [Train set scan to ignore](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344862) — 38 票 / 3 评论 / 2022-08-16 
+- [Fixing Error: ... missing required dependencies: GDCM (req. GDCM), pylibjpeg (req. )](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341412) — 37 票 / 6 评论 / 2022-08-02 
+- [A quick review of cervical spine anatomy | For understanding the problem](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340439) — 36 票 / 7 评论 / 2022-07-29 
+- [Vertebrae detection with 95% accuracy](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/348241) — 36 票 / 5 评论 / 2022-08-27 
+- [4th place solution, CSN is all you need for 3D](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/364837) — 34 票 / 4 评论 / 2022-11-08 **write-up?**
+- [17th place solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362931) — 33 票 / 3 评论 / 2022-10-30 **write-up?**
+- [18th Place Solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362640) — 33 票 / 5 评论 / 2022-10-28 **write-up?**
+- [patient_overall estimates](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/354451) — 33 票 / 2 评论 / 2022-09-22 
+- [13th Place Solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362687) — 32 票 / 13 评论 / 2022-10-28 **write-up?**
+- [Related External Datasets](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341040) — 30 票 / 1 评论 / 2022-08-01 
+- [CV - LB Thread [Best Single Model Scores]](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/347670) — 30 票 / 29 评论 / 2022-08-25 
+- [How to work with dicom files ](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340577) — 28 票 / 4 评论 / 2022-07-29 
+- [10th place solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362986) — 27 票 / 5 评论 / 2022-10-30 **write-up?**
+- [12th Place Solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362844) — 26 票 / 5 评论 / 2022-10-29 **write-up?**
+- [Some helping tool and code (e.g. align segmentation orientation)](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/350760) — 26 票 / 9 评论 / 2022-09-07 
+- [Competition metric in PyTorch](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341854) — 25 票 / 4 评论 / 2022-08-04 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/339557) — 25 票 / 121 评论 / 2022-07-25 
+- [Educational Merit Distinction](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/358406) — 22 票 / 1 评论 / 2022-10-07 
+- [[38th Place] Single Stage Single Model Efficientnetv2](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362647) — 22 票 / 4 评论 / 2022-10-28 **write-up?**
+- [🎨 How to make a Custom Colormap for matplotlib graphs](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341898) — 21 票 / 5 评论 / 2022-08-04 
+- [Is a Segmentation in reverse order?](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/348658) — 21 票 / 11 评论 / 2022-08-29 
+- [Question Regarding the Formula & Log](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/349669) — 20 票 / 4 评论 / 2022-09-02 
+- [Leaderboard Plot](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/361465) — 20 票 / 6 评论 / 2022-10-21 
+- [yolov5 cervical spine cropper](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344283) — 19 票 / 1 评论 / 2022-08-14 
+- [🖼 PNG dataset](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340421) — 19 票 / 2 评论 / 2022-07-29 
+- [Enjoy some gifs](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/346457) — 18 票 / 1 评论 / 2022-08-19 
+- [Good luck to everyone!](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362378) — 18 票 / 2 评论 / 2022-10-27 
+- [14th place solution](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362771) — 18 票 / 2 评论 / 2022-10-29 **write-up?**
+- [Open sourcing my solution [2D Model, PyTorch]](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362641) — 17 票 / 2 评论 / 2022-10-28 **write-up?**
+- [RadImageNet instead of ImageNet for Transfer Learning in Medical Image!](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341140) — 16 票 / 3 评论 / 2022-08-01 
+- [Study as 3D volume](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341299) — 15 票 / 3 评论 / 2022-08-02 
+- [Research Papers on Cervical Spine Fracture Detection | Part 1](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340432) — 15 票 / 1 评论 / 2022-07-29 
+- [7th place solution, segmentation for detection tasks](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/364848) — 15 票 / 2 评论 / 2022-11-08 **write-up?**
+- [About the normalization of comp metric](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344565) — 15 票 / 5 评论 / 2022-08-15 
+- [Federated Learning to extend Training Time](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/360658) — 15 票 / 5 评论 / 2022-10-17 
+- [[placeholder] Start to build a 3d solution with MONAI](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/353878) — 15 票 / 9 评论 / 2022-09-20 **write-up?**
+- [Pretrained model for easy segmentation of C1-C7](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344480) — 14 票 / 4 评论 / 2022-08-15 
+- [previous RSNA top solutions and quick useful methodology discussion threads](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344508) — 14 票 / 1 评论 / 2022-08-15 **write-up?**
+- [GCViT: Global Context Vision Transformer](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344301) — 13 票 / 4 评论 / 2022-08-14 
+- [[Chai Time] Sanyam explains top solutions from the latest computer vision competition](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/355466) — 13 票 / 0 评论 / 2022-09-26 **write-up?**
+- [Augementation techniques discussion links : useful links and top performers tricks](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/357712) — 13 票 / 0 评论 / 2022-10-05 
+- [58th Place Solution ](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362592) — 13 票 / 1 评论 / 2022-10-28 **write-up?**
+- [That time of the week](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/359817) — 13 票 / 3 评论 / 2022-10-13 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/339556) — 12 票 / 3 评论 / 2022-07-25 
+- [Noise in Segmentation Data](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/355738) — 12 票 / 3 评论 / 2022-09-28 
+- [Voxel Spaces . NiBabel.](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/341233) — 11 票 / 0 评论 / 2022-08-02 
+- [How to speed up  loading dicom files in submission ?](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/354898) — 11 票 / 2 评论 / 2022-09-24 
+- [Papers and Articles on Cervical Spine Fracture Detection | Part 2](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340434) — 10 票 / 5 评论 / 2022-07-29 
+- [[MEME!] My CV and LB stopped correlating so....](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/347391) — 10 票 / 4 评论 / 2022-08-24 
+- [Paths don't exist on test.csv..](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340729) — 10 票 / 4 评论 / 2022-07-30 
+- [Thank You!](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/363242) — 10 票 / 2 评论 / 2022-10-31 
+- [Previous Image recognition based competition solutions](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340431) — 9 票 / 0 评论 / 2022-07-29 **write-up?**
+- [DICOM, detection resources 🫡](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340403) — 9 票 / 1 评论 / 2022-07-28 
+- [Recurrent neural networks trained on Effnetv2 embeddings](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/359128) — 9 票 / 0 评论 / 2022-10-10 
+- [Sagittal view for all patients](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/352545) — 9 票 / 2 评论 / 2022-09-14 
+- [What is DICOM?](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340398) — 8 票 / 4 评论 / 2022-07-28 
+- [pylibjpeg problem](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/343795) — 8 票 / 5 评论 / 2022-08-12 
+- [Data too huge for colab](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/356025) — 8 票 / 5 评论 / 2022-09-29 
+- [Codes | Multi-level Deep Neural Networks for Fracture Detection](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344185) — 8 票 / 0 评论 / 2022-08-14 
+- [Dataset 🤓🤓🤓](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/359162) — 8 票 / 4 评论 / 2022-10-11 
+- [Help me how to load the datsets](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/360281) — 8 票 / 4 评论 / 2022-10-16 
+- [RAM and GPU needed for this comp](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/347839) — 7 票 / 0 评论 / 2022-08-25 
+- [data pre-processing for RSNA (jpg+npy files)](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340646) — 7 票 / 7 评论 / 2022-07-30 
+- [Congratulations!](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362606) — 7 票 / 0 评论 / 2022-10-28 
+- [Identifying vertebrae C1-C7 in each image](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/344342) — 7 票 / 6 评论 / 2022-08-14 
+- [google not sharing its wisdom with google colab](https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/361942) — 7 票 / 4 评论 / 2022-10-24 

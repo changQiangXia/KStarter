@@ -1,0 +1,204 @@
+<p>Thanks to the Kaggle team for a challenging and enjoyable Playground round, and to everyone who shared notebooks and ideas. For me this was a competition where model quality mattered less than how carefully you blended and which submission you trusted. Below is a summary of what I built and what I learned.</p>
+<hr>
+<h2>The final model</h2>
+<p>My chosen submission was an sklearn LogisticRegression meta-model stacked on 99 diverse base models. The construction is simple:</p>
+<ul>
+<li>One feature per base model: each model's out-of-fold probability is converted to a logit, <code>log(p / (1 − p))</code>, clipped at ±30.</li>
+<li>The meta-model is fit fold-wise on those 99 columns to produce an honest OOF, then refit on the full data and averaged over 5 seeds for the test prediction.
+I first saw this logit-stacking idea from <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> in S6E3 and reused it in S5E4; it has been reliable across competitions.
+Two hyperparameter choices, both following directly from the metric being AUC:</li>
+<li>class_weight=None— AUC is rank-based, so class balancing only distorts the probabilities without improving the ranking.</li>
+<li>C=1.0, L2 penalty — light regularization was enough; with one clean logit per base model there was no need for the aggressive shrinkage a wider feature set would require.</li>
+</ul>
+<p>No post-processing was applied — no argmax, no offset, no calibration. Because AUC depends only on the ordering of predictions, absolute calibration does not affect the score, so the submission is the raw averaged probability.</p>
+<h3>OOF diagnostics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OOF AUC</td>
+<td>0.95536</td>
+</tr>
+<tr>
+<td>Log-loss</td>
+<td>0.2119</td>
+</tr>
+<tr>
+<td>Brier</td>
+<td>0.0660</td>
+</tr>
+<tr>
+<td>Per-fold AUC (mean)</td>
+<td>0.95537</td>
+</tr>
+<tr>
+<td>Per-fold AUC (std)</td>
+<td>0.00081</td>
+</tr>
+<tr>
+<td>Per-fold AUC (range)</td>
+<td>0.0021</td>
+</tr>
+</tbody>
+</table>
+<p>One diagnostic stood out: the OOF calibration slope was 0.082, indicating the meta-model was strongly overconfident in absolute probability terms. This does not affect AUC, since ranking is unchanged, but I read it as a signal that the meta-model was working close to its limit — and it informed the conservative submission choice described at the end.</p>
+<p>The largest-magnitude meta coefficients came from a mix of the strongest single models and a few ensembles, each carrying rank information no other base supplied: a single XGBoost, a 4-model Ridge stacker, a 7-LGBM rank-mean ensemble (with a negative coefficient, acting as a correction term), the pseudo-label LightGBMs, and the adaptive-learning-rate LightGBM.</p>
+<hr>
+<h2>The base models</h2>
+<p>The values below are OOF AUC ranges for each family.</p>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>OOF AUC range</th>
+<th>Members</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gradient-boosted trees</strong> (backbone)</td>
+<td>0.946 – 0.954</td>
+<td>LightGBM in many variants (Optuna-tuned, DART, monotonic, native-categorical, frequency-encoded, target-encoded, quantile-binned, pseudo-labeled / self-distilled, adaptive cosine LR, hazard/survival reframing, per-year and per-race specialists); XGBoost (deep, low-colsample, heavy-bagging, stint-FE, Tweedie); CatBoost (Optuna, numeric-as-categorical); HistGradientBoosting; YDF GBT</td>
+</tr>
+<tr>
+<td><strong>MLP</strong></td>
+<td>0.950 – 0.954</td>
+<td>RealMLP (pytabkit) — 5-seed PyTorch and Keras ports, an "original-data-as-stats" variant, several FE ablations; multi-task NN with auxiliary losses; categorical-embedding MLP</td>
+</tr>
+<tr>
+<td><strong>Attention / token tabular</strong></td>
+<td>0.944 – 0.952</td>
+<td>FT-Transformer, SAINT, TabM, TabTransformer, Trompt, AutoInt, GateNet</td>
+</tr>
+<tr>
+<td><strong>Other neural</strong></td>
+<td>0.918 – 0.948</td>
+<td>ResNet, GANDALF, VSN, DANet, SELU self-normalizing net, RFF-Kernel net, DAE + transfer learning</td>
+</tr>
+<tr>
+<td><strong>Sequence</strong></td>
+<td>0.941 – 0.945</td>
+<td>GRU, BiLSTM over the lap sequence, causal TCN fed survival-aware hazard channels</td>
+</tr>
+<tr>
+<td><strong>Graph</strong></td>
+<td>0.940 – 0.946</td>
+<td>GraphSAGE, GNN</td>
+</tr>
+<tr>
+<td><strong>Factorization machines</strong></td>
+<td>0.918 – 0.936</td>
+<td>Deep FFM, xLearn FFM</td>
+</tr>
+<tr>
+<td><strong>Kernel / other</strong></td>
+<td>0.925 – 0.948</td>
+<td>Nyström kernel, exact-kernel subsampled RBF SVM, Random Forest, ExtraTrees, classical Bagging trees, NGBoost, EBM, BART, logistic GAM, LDA/QDA, TE-logistic-regression</td>
+</tr>
+<tr>
+<td><strong>AutoML / meta</strong></td>
+<td>0.951 – 0.955</td>
+<td>AutoGluon (LGBM-only and NN-only), H2O AutoML</td>
+</tr>
+</tbody>
+</table>
+<p>The pattern: trees set the ceiling, MLPs matched them, and a long tail of weaker but orthogonal models (factorization machines, kernels, sequence and graph nets) did the real decorrelation work.</p>
+<hr>
+<h2>Diversity</h2>
+<p>This was a high-correlation problem. Across all 4,851 model pairs, the mean pairwise Spearman correlation was 0.950 (Pearson 0.957, top-K Jaccard 0.82). When predictions correlate that tightly, AUC stacking depends on the tails of the diversity distribution rather than the average.</p>
+<p>The per-model redundancy ranking (each model's mean Spearman against the other 98) sorted almost perfectly by family:</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Models</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Most redundant</strong> (mean Spearman ≈ 0.965–0.968)</td>
+<td>the LightGBM cluster — pseudo-label / AutoGluon / frequency-FE / native-categorical LGBMs</td>
+<td>Several were near-twins (pairwise Spearman &gt; 0.998). Keeping all of them was insurance, not new signal.</td>
+</tr>
+<tr>
+<td><strong>Most diverse</strong> (mean Spearman ≈ 0.85–0.91)</td>
+<td>Deep FFM (0.852), BART (0.851), Nyström kernel (0.884), the GNN, GRU, EBM, xLearn FFM</td>
+<td>Lowest standalone AUC, highest contribution per slot.</td>
+</tr>
+</tbody>
+</table>
+<p>The point worth stressing for anyone stacking on a saturated metric: a 0.918-AUC Deep FFM was worth more to the blend than a fourth 0.953 LightGBM. The marginal LightGBM adds ranking information the stacker already has; the FFM adds a direction nothing else covers. The weakest models earned their place precisely because they were weak in an uncorrelated way.</p>
+<p>I also ran an OOF-versus-test consistency check on every base (distribution drift, q90 gap). Only three models flagged — Deep FFM, GRU, and the LNN — all on tail (q90) drift, none on the mean. The most diverse models are also the ones whose score distributions wander most between train and test. That is the honest cost of diversity, and another reason I kept the meta-model regularized.</p>
+<hr>
+<h2>Features</h2>
+<p>The dataset was clean, with no missing values, so I spent more time on disciplined feature-engineering ablations than on any single model. The one robustly positive signal was appending the original F1-strategy dataset as extra training rows. Everything else was marginal or neutral:</p>
+<table>
+<thead>
+<tr>
+<th>Feature idea</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original data as extra training rows</td>
+<td>The reliable win</td>
+</tr>
+<tr>
+<td>Arithmetic interactions</td>
+<td>Weak positive (~+0.0005), kept in a few bases</td>
+</tr>
+<tr>
+<td>Target encoding (year-aware, Race×Year, Race×Compound, fold-fitted)</td>
+<td>Small, consistent gains</td>
+</tr>
+<tr>
+<td>Frequency encoding (log1p, fit on train ∪ original)</td>
+<td>Useful baseline</td>
+</tr>
+<tr>
+<td>Generator-fingerprint FE (digit features, snap-to-grid, anchor TE, TF-IDF)</td>
+<td>No meaningful impact here</td>
+</tr>
+<tr>
+<td>Lag / sequence features</td>
+<td>Limited, used mainly in the sequence models</td>
+</tr>
+</tbody>
+</table>
+<p>For diversity I deliberately built FE variants of the same model: numeric-as-categorical duplication, quantile-rank encoding, triple-cross target encoding, a "wrong-target" LightGBM, KNN-target features (FAISS), and DAE/SCARF self-supervised embeddings. These rarely beat the baseline on AUC, but decorrelation — not standalone accuracy — was the goal, and they delivered it.</p>
+<p>Two post-processing ideas were built and validated on OOF before any use on the test set: a near-duplicate neighbor blend (kNN label transfer was ~99% accurate on the closest 1% of test rows, but the OOF gate did not clear convincingly) and a non-linear residual LightGBM on top of the stack logits (no honest OOF re-ranking gain). </p>
+<hr>
+<h2>The submission that scored 0.95505</h2>
+<p>After the deadline I revisited how the two strongest blends were combined. My two best candidates were the logit stack (LS) and a hill-climbing ensemble (HC) built on the identical set of 132 models. They rank almost identically (Spearman ≈ 0.996) but sit on different probability scales: LS is calibrated near the base rate, while HC's scores are compressed toward the middle.</p>
+<p>Because the two scales differ, a plain average of the probabilities is dominated by whichever model has the wider spread. Averaging the two models' ranks instead puts them on a common ordering scale, so each contributes equally — which is exactly what AUC rewards. The rank average scored 0.95505 private, ahead of the raw probability average (0.95503) and enough to top the private leaderboard.</p>
+<p>It is a one-line change and a good default whenever you blend models that may be on different scales:</p>
+<pre><code>from scipy.stats import rankdata
+rank_avg = 0.5 * (rankdata(hc) / len(hc) + rankdata(ls) / len(ls))
+</code></pre>
+<hr>
+<h2>The conservative submission (1st public → 5th private)</h2>
+<p>Hill-climbing on the OOF gave a higher CV, and the corresponding HC submissions later scored private 0.95501–0.95502, which would have placed 2nd or 3rd. My best post-deadline logit-stack variant (public-equivalent 0.95571) also reached private 0.95502. So HC would have moved me up.</p>
+<p>I did not pick it, on purpose. The CV-to-public gap on the HC selections was wider than on the flat 99-model stack, and when the entire leaderboard sits inside 0.0001 AUC, a wider gap is usually exactly what gets punished on the 80% private set. A flat L2 blend over all 99 bases is much harder to overfit than a greedily selected subset, so I chose the lower-variance option.</p>
+<p>It cost me a few places. The real lesson is that the better hedge would have been to split my two final submissions across both philosophies — "trust the conservative blend" and "trust hill-climbing" — rather than spending both on conservative variants. That is the one thing I would change.</p>
+<hr>
+<h2>Acknowledgements</h2>
+<p>This solution stood on a lot of shared work. With thanks to:</p>
+<ul>
+<li><a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> — for the logit-stacking meta-model approach;</li>
+<li><a href="https://www.kaggle.com/yekenot" target="_blank">@yekenot</a> — for the RealMLP (pytabkit) approach and feature ideas that became my strongest non-GBM line;</li>
+<li><a href="https://www.kaggle.com/mikhailnaumov" target="_blank">@mikhailnaumov</a> — for feature-engineering ideas and several base models (YDF, HGB, CatBoost, XGB);</li>
+<li><a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a> — for the LightGBM GOSS variant;</li>
+<li><a href="https://www.kaggle.com/include4eto" target="_blank">@include4eto</a> — for the pseudo-labelling pipelines;</li>
+<li><a href="https://www.kaggle.com/rohit8527kmr7518" target="_blank">@rohit8527kmr7518</a> — for the CatBoost configuration I re-implemented in LightGBM;</li>
+<li><a href="https://www.kaggle.com/analyticaobscura" target="_blank">@analyticaobscura</a> — for the within-stint lag/rolling feature ideas.</li>
+</ul>
+<p>Apologies to anyone I have missed — this stack drew on many public notebooks, and the diversity it gained from them is exactly what made the final blend competitive.</p>
+<p>Happy to share my codes and answer questions in the comments.
+Happy coding! </p>

@@ -1,0 +1,44 @@
+# playground-series-s6e5 讨论区（按票数排序，共 42 条）
+
+- [1st Place: By the skin of my teeth](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703562) — 54 票 / 33 评论 / 2026-06-01 **write-up?**
+- [EDA of Race Tracks](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/698434) — 54 票 / 6 评论 / 2026-05-09 
+- [Tire compound changes during a race. Compounds determine the tire's "Personality".](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696012) — 43 票 / 7 评论 / 2026-05-01 
+- [2nd Place - Autonomous Codex Yolo!](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703615) — 36 票 / 26 评论 / 2026-06-01 **write-up?**
+- [Inconsistencies in the "original" dataset](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696380) — 31 票 / 8 评论 / 2026-05-02 
+- [4th place - 5 day rush](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703528) — 22 票 / 7 评论 / 2026-06-01 **write-up?**
+- [Rank17 approach - diverse models and blend](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703529) — 18 票 / 2 评论 / 2026-06-01 
+- [5th place solution  — a 99-model logit stack](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703572) — 15 票 / 4 评论 / 2026-06-01 **write-up?**
+- [F1 nerds, watch out because data doesn't make sense](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696227) — 12 票 / 5 评论 / 2026-05-01 
+- [Stacking stacked predictions](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703542) — 11 票 / 0 评论 / 2026-06-01 
+- [8th Place - L5 Ensemble](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703539) — 10 票 / 4 评论 / 2026-06-01 **write-up?**
+- [7th place solution](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703537) — 8 票 / 0 评论 / 2026-06-01 **write-up?**
+- [Is this distribution correct, or am I missing something? (Yearly inconsistency in PitNextLap)](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696769) — 8 票 / 3 评论 / 2026-05-04 
+- [Beginner's problem ](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/699666) — 8 票 / 9 评论 / 2026-05-14 
+- [Finished 75th](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703584) — 7 票 / 0 评论 / 2026-06-01 
+- [11th Place: In the midst of entrance exams](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703612) — 6 票 / 1 评论 / 2026-06-01 **write-up?**
+- [CT boost for binary classification. ](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696347) — 6 票 / 1 评论 / 2026-05-01 
+- [A Parent-Child Neural Ensemble Experiment](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/696947) — 6 票 / 1 评论 / 2026-05-04 
+- [TabPFN-3 is out: Tabular Foundation Model, API thinking mode, docs and model report](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/699096) — 6 票 / 2 评论 / 2026-05-12 
+- [Pushed this boulder as far up as I could have](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/702732) — 5 票 / 3 评论 / 2026-05-26 
+- [Notes from a defensive pipeline: 0.950 CV with three lessons that didn't go as planned](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/699182) — 5 票 / 1 评论 / 2026-05-13 
+- [Using Normalized TyreLife](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/700968) — 5 票 / 2 评论 / 2026-05-18 
+- [F1 Weather Telemetry Dataset (2022–2025) ⛈️](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/697144) — 4 票 / 0 评论 / 2026-05-05 
+- [How can we have a laptime delta on lap 1](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/697294) — 3 票 / 4 评论 / 2026-05-05 
+- [Unrealistic Dataset?](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/698240) — 3 票 / 2 评论 / 2026-05-08 
+- [🏎️ Hitting a Plateau? Try Triple GPU Ensemble + Level-2 Stacking (OOM Fix Included!)](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/697735) — 3 票 / 4 评论 / 2026-05-07 
+- [Submission generalization on LB](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/701714) — 3 票 / 9 评论 / 2026-05-19 
+- [What model combinations work best for stacking?](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/700622) — 3 票 / 8 评论 / 2026-05-17 
+- [High Correlation issue](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/702136) — 2 票 / 3 评论 / 2026-05-21 
+- [Is NODE ( Neural Oblivious Decision Ensembles) architecture worth training? ](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/698556) — 2 票 / 0 评论 / 2026-05-10 
+- [Top features to consider ](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/697115) — 2 票 / 1 评论 / 2026-05-05 
+- [the impact of including Pre-Season Testing](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/702442) — 1 票 / 4 评论 / 2026-05-23 
+- [Genuine Question: Why do some users share submission files without code?](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703468) — 1 票 / 0 评论 / 2026-05-31 
+- [Multiple model Trained Still no satisfying accuracy ](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/702484) — 0 票 / 5 评论 / 2026-05-24 
+- [568th Place Solution — RealMLP + Original Dataset Augmentation](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/704087) — 0 票 / 0 评论 / 2026-06-03 **write-up?**
+- [Stacked Gradient Boosting Ensemble for Pit Stop Prediction](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/704848) — 0 票 / 0 评论 / 2026-06-06 
+- [My First Kaggle Competition: Fixing Data Leakage & Advanced Pseudo-Labeling](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703851) — -1 票 / 0 评论 / 2026-06-02 
+- [Structure Predicting F1 Pit Stops](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703082) — -2 票 / 0 评论 / 2026-05-28 
+- [NN vs LightGMB, which is better](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703417) — -2 票 / 1 评论 / 2026-05-31 
+- [Streamlit Deployment 🔥🔥🔥](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703152) — -3 票 / 0 评论 / 2026-05-28 
+- [Inconsistent data - Do not attempt this competition if you are new](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/702625) — -7 票 / 6 评论 / 2026-05-25 
+- [F1: It's about score, or vehicles? ](https://www.kaggle.com/competitions/playground-series-s6e5/discussion/699372) — -7 票 / 1 评论 / 2026-05-13 

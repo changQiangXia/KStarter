@@ -1,0 +1,107 @@
+# https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/674890
+
+Topic #674890: Solution: Public LB 8th place | Private LB 3rd place (updated 2026-04-28)
+  Author: CoreyJamesLevinson
+  Posted: 2026-02-22 16:34:37.503000
+  Votes: 7  Comments: 6
+
+Please read the attached pdfs below
+
+New update after the competition ended
+
+Segmentation of image into panels
+
+
+
+Segment Anything 3 model is prompted with domain-specific text cues to detect individual panels within a composite scientific figure. Multiple prompts are tried in sequence:
+["outlined scientific images", "microscopic images", "bordered rectangles", …]
+
+Accept the first prompt that returns any segmentation masks.
+
+
+Pre-processing of panels
+
+
+
+Apply CLAHE, which corrects for brightness/exposure manipulations
+
+Detect text and arrows which are overlaid on top of the images, and blur them out.
+
+
+SIFT + Matching
+
+
+
+Extract keypoints from each panel using SIFT, which is scale and rotation invariant.
+
+Candidate pairs are matched using FLANN approximate nearest-neighbor matcher using the SIFT keypoints.
+
+Filter out low-probability candidates by using Lowe's ratio test
+
+Use RANSAC (via homography) to filter out bad matches and enforce geometric consistency between panels
+
+
+Tightening the regions
+
+
+
+instead of matching the entire panel, only segment around the tight bounding box of the RANSAC inlier matched keypoints - this handles cases where only a partial region of one image is duplicated, rather than the full crop.
+
+Remove candidates where there is high spatial overlap between the images (SAM3 detection error of the same region), or the two are vastly different areas (geometric inconsistency)
+
+
+Rerun segmentation
+
+
+
+Re-run SAM3, but now having prompts targeting image context rather than panel structure - seeking biological objects rather than borders. The prompts are:
+["biological cells", "scientific blobs", "item of interest", …]
+
+If SAM3 finds nothing, then inject deterministic crops of the overall image. This ensures every figure has at least some regions to compare. For example: split image into halves, thirds, quadrants, etc.
+
+Re-run previous steps with relaxed parameters:
+CLAHE -&gt; text/arrow suppression -&gt; SIFT -&gt; FLANN -&gt; Lowe's ratio test -&gt; RANSAC -&gt; tighten bounding boxes -&gt; remove rejections
+
+
+Interesting findings
+
+No model training was used. Things that did not work:
+
+
+
+training a ViT UNET / segformer / DinoV3 / mask2former to predict duplicates. For that matter, extending training on other copy-forge datasets like Casia, DefactoCopyMove, figshare_wb, kaggle-dsbowl, etc.
+
+approaches in academic literature did not work for me: BCMNet, Beit Base, Busternet, LBRT
+
+initially I trained my own custom DETR model to identify where panels were (using noisy training data by saying anything non-white background was part of a panel). However, SAM3 model from Facebook was slightly better. I even tried some unique ideas like Comic Panel Detection NN and DocLayout YOLO DoyLayNet.
+
+using cellpose to segment cells, then performing matching based on that (too slow)
+
+other keypoint methods (ROMA V2) are promising but too slow
+
+sherloq (https://github.com/GuidoBartoli/sherloq) which was only able to match duplicate text
+
+photoholmes (https://github.com/photoholmes/photoholmes) wasn't good at copy-forge detection
+
+Forensically (https://29a.ch/photo-forensics/#forensic-magnifier) - i recreated the algorithm in Python, but the hyperparameters are too fiddly to work with. Would probably be valuable as an uncorrelated approach to find more duplicates.
+
+imagetwin, imachek, proofig, figcheck - these all cost money and essentially the competition is to create free open-source versions of these
+
+
+I also handlabeled an extra dataset of a few hundred duplicate pairs from PubPeer/RetractionWatch. However, I did not have enough time to use it in my validation set beyond trying out different SAM3 prompts on it.
+
+The key insight to this competition was to look at your model performance on the supplemental test data. Empirically you can see that training a NN simply on (synthetic) individual images does not translate well to the supplemental data which was "figure"-based (multiple panels). Therefore a completely different approach was required
+
+Comments:
+├─ CoreyJamesLevinson (2026-02-22 16:36:57.487000) [+1]
+│  PDF Presentation: Part 1
+  ├─ CoreyJamesLevinson (2026-02-22 16:37:28.550000) [+0]
+  │  PDF Presentation: Part 2 (see attached because of 5 MB upload limit)
+    ├─ CoreyJamesLevinson (2026-02-22 16:37:50.597000) [+1]
+    │  PDF Presentation: Part 3 (it is attached because of the 5 MB upload limit)
+    ├─ CoreyJamesLevinson (2026-02-22 16:38:07.043000) [+0]
+    │  PDF Presentation: Part 4 (final part, showing full approach)
+    ├─ shiba-inu (2026-02-24 11:03:47.210000) [+0]
+    │  Thank you for sharing such a great solution! I looked at the PDF, and there's something called Cellpose — that's new to me. From what I could see in the materials, it's able to correctly segment ev...
+├─ CoreyJamesLevinson (2026-02-22 16:35:58.683000) [+0]
+│  Code: (Messy, I did not put any time into making this clean or readable). https://www.kaggle.com/code/returnofsputnik/area-ratio-1-5?scriptVersionId=292090661

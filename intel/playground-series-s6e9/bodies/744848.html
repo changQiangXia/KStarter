@@ -1,0 +1,236 @@
+<blockquote>
+  <p><strong>A personal note of thanks</strong></p>
+  <p>It has been a while since my last solution post, partly because I was looking for a new job. In August 2026, I started working full-time as an AI engineer. I came to Kaggle without a formal background in computer science or machine learning, so this means a lot to me.</p>
+  <p>I have learned so much from the notebooks, writeups and discussions shared by this community, including, but not limited to, those by <a href="/cdeotte" target="_blank">@cdeotte</a>, <a href="/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a>, <a href="/tilii7" target="_blank">@tilii7</a>, <a href="/optimistix" target="_blank">@optimistix</a> and <a href="/ravi20076" target="_blank">@ravi20076</a>. Competing alongside you has also encouraged me to keep trying new ideas and improving. I feel that I have grown through both the shared knowledge and the competition itself.</p>
+  <p>I am very grateful that learning here has helped me turn something I enjoy into my work. Thank you for sharing your knowledge so generously and helping me get here.</p>
+</blockquote>
+<p>For this competition, I would especially like to thank my teammate <strong>mahog (@mahoganybuttstrings)</strong>. I really enjoyed working with him throughout this competition. His LightGBM models were our strongest single models by CV and Public LB, and his feature engineering made an important contribution to our solution. I will describe his best LightGBM model in more detail below.</p>
+<p>Our team, <strong>M &amp; M</strong>, finished <strong>3rd out of 3,576 teams</strong>, up from <strong>9th on the Public LB</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final ensemble</td>
+<td>0.946717</td>
+<td>0.94692</td>
+<td>0.94584</td>
+</tr>
+<tr>
+<td>mahog's LightGBM (best single-model CV)</td>
+<td>0.946501875293</td>
+<td>0.94681</td>
+<td>0.94563</td>
+</tr>
+</tbody>
+</table>
+<h2>Overview</h2>
+<p>Our final solution was a logistic regression ensemble of <strong>115 prediction columns</strong>. Some columns were already ensembles themselves, so this is the number of inputs to the final stack, rather than the total number of base models.</p>
+<p>The main components were:</p>
+<ul>
+<li>Target encoding of exact values and rounded values, especially income.</li>
+<li>Different model families, including XGBoost, LightGBM, RealMLP and TabM.</li>
+<li>Soft pseudo-labels from teacher models.</li>
+<li>Additional models using income token groups and features from a source-trained language model.</li>
+<li>L2-regularized logistic regression on the models' logit predictions.</li>
+</ul>
+<p>We used the same <strong>5-fold StratifiedKFold</strong>, with <code>shuffle=True</code> and <code>random_state=42</code>. This made it easier to share OOF and test predictions and compare changes on the same folds.</p>
+<p>One detail worth clarifying is that mahog's best LightGBM model was not included in the final ensemble. An earlier version of his LightGBM was included. Adding his best model gave only a very small improvement in our ensemble CV, so we did not submit that combination.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2F5d768fa750b3175ace39d625f1c5b839%2Ff4_solution_overview.png?generation=1790838461428386&amp;alt=media" alt="Final ensemble structure"></p>
+<h2>Feature Engineering</h2>
+<h3>Target encoding and income rounding</h3>
+<p>Target encoding was very effective in this competition. Our best reference using only the <strong>13 raw columns</strong> had a CV of <strong>0.943113</strong>. A RealMLP using exact-value target encoding and rounded income reached <strong>0.945371</strong>. After further changes to the income encodings and smoothing, together with two rounds of hyperparameter optimization, it reached <strong>0.945840</strong>.</p>
+<p>Income was particularly interesting. The target rate varied between individual income values, and nearby values also contained useful information. We therefore used several levels of rounding, from coarse groups to the exact income value. Coarser groups helped when there were too few observations for a specific value.</p>
+<p>We also used value-level encodings for commute distance, age and categorical features. All supervised encodings were calculated out of fold, so a validation row's own target was excluded from its encoding.</p>
+<h3>Original data</h3>
+<p>The original dataset contained <strong>10,000 rows</strong>. About <strong>97.94%</strong> of the income values in the competition data were also present in the original data.</p>
+<p>In our experiments, simply adding the original rows as labeled training data did not help. However, statistics from the original data were useful, including group-level target statistics and information about which values occurred there. These were also part of mahog's LightGBM feature engineering.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2F684cbf55bc1f3185babc8671c5628ac6%2Ff2_ladder.png?generation=1790838501142269&amp;alt=media" alt="Selected model and ensemble results"></p>
+<p>The figure shows selected experiments with different features and training settings. It should not be read as a direct comparison of model libraries. The heuljax model shown here is our reproduction using our five folds. His reported <strong>0.94640 CV / 0.94656 Public LB</strong> used <strong>10-fold</strong> validation.</p>
+<h2>Stacking and Pseudo-Labels</h2>
+<h3>Logistic regression stacking</h3>
+<p>Our stacking approach was based on <strong>Chris Deotte's (@cdeotte) previous solutions</strong>, including his <a href="https://www.kaggle.com/competitions/playground-series-s6e5/writeups/2nd-place-autonomous-codex-yolo" target="_blank">S6E5 solution</a>. We clipped each model's probabilities, converted them to logits, and fitted an L2-regularized logistic regression. Thank you, Chris, for sharing this approach.</p>
+<p>The early ensembles used <strong>C=0.003</strong>, without standardizing the logits. In the final week, we used <strong>C=0.3</strong> for the additional expert models, with scaling fitted only on the meta-training rows.</p>
+<p>Our ensemble developed gradually:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>CV</th>
+<th>Public LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Early 83-model ensemble</td>
+<td>0.946308</td>
+<td>0.94644</td>
+</tr>
+<tr>
+<td>230-model ensemble after teaming up</td>
+<td>0.946415</td>
+<td>0.94653</td>
+</tr>
+<tr>
+<td>328-model ensemble</td>
+<td>0.946476</td>
+<td>0.94660</td>
+</tr>
+<tr>
+<td>328-model ensemble + 59 jointly fitted experts</td>
+<td>0.9465531</td>
+<td>0.94667</td>
+</tr>
+<tr>
+<td>Additional context experts</td>
+<td>0.946580</td>
+<td>0.94670</td>
+</tr>
+<tr>
+<td>Final ensemble</td>
+<td>0.946717</td>
+<td>0.94692</td>
+</tr>
+</tbody>
+</table>
+<p>The 328-model ensemble was kept as one fixed prediction column in the later ensembles. We then trained the logistic regression again with additional models. A model did not have to be especially strong by itself to help. For example, a kNN model with a CV around <strong>0.943</strong> was still useful in the ensemble.</p>
+<p>Our best Public LB stayed at <strong>0.94660</strong> from September <strong>18</strong> through September <strong>26</strong>. After adding the context experts, four additional XGBoost models brought it to <strong>0.94673</strong>, and an earlier version of mahog's LightGBM brought it to <strong>0.94676</strong>. Further language-model features, our reproduction of heuljax's models, and aggregate experts eventually brought it to <strong>0.94692</strong>.</p>
+<p>These later stacking experiments reused historical OOF predictions. They were not fully nested, and the CV improvements should be treated as exploratory. We mainly used them to compare changes under the same setup, together with their Public LB results.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2F63af0eb50ba6bd6553f95a30deea33a1%2Ff1_score_trajectory.png?generation=1790838522496365&amp;alt=media" alt="Submission history"></p>
+<p>The lines show the best score reached so far, while the labeled points show individual submissions. Private scores were added after the competition ended.</p>
+<h3>Final ensemble details</h3>
+<p>The final stack used <strong>115 prediction columns</strong>, including the 328-model ensemble as one column and an earlier version of mahog's LightGBM. An alternative <strong>150-column ensemble</strong> submission scored <strong>0.94689 Public / 0.94583 Private</strong>.</p>
+<p>The input models included boosted trees, RealMLP, TabM, transformer-based tabular models, linear token/pair/triplet models, small neural networks using raw, decimal or token features, geometry models, context and decoder-state models, heuljax-style LogReg and XGBoost models, aggregate GLMs, and mahog's earlier LightGBM.</p>
+<p>All members supplied OOF predictions in training-file order and test predictions in test-file order. Fold-specific test predictions were also retained for models used as pseudo-label teachers.</p>
+<p>Earlier ensembles averaged the test probabilities from five meta-models. The final-week approach fitted one meta-model on all OOF rows to predict the test set.</p>
+<h3>Soft pseudo-labels</h3>
+<p>For these experiments, we added all <strong>286,571 test rows</strong> to each fold's training data, using soft predictions from a teacher whose training excluded that validation fold.</p>
+<p>Soft labels worked better than hard labels. Hard pseudo-labels performed worse than adding no pseudo-labels, and randomly permuting the soft labels made the result much worse. This suggested that the teacher's probability estimates were useful for distillation.</p>
+<h2>Best Single-Model CV: mahog's LightGBM</h2>
+<p>Mahog's best LightGBM model achieved our highest single-model CV and Public LB scores.</p>
+<p>It started with a <strong>316-feature GLM</strong> based on heuljax's approach, including BPE groups, hierarchical target encoding, composition means and hinge features. Mahog used this model's logit prediction as an offset and trained a LightGBM to learn the remaining signal.</p>
+<p>The LightGBM used his own feature set, including numerical features, crossed target encodings, original-data statistics and income-group summaries.</p>
+<p>$$\eta_{final}=\eta_{GLM}+f_{LGBM}(X_{tree}).$$</p>
+<p>The GLM offset was generated with an inner <strong>5-fold</strong> process inside each outer fold, and its supervised encodings were also cross-fitted. Pseudo-labeled validation and test rows were included in the LightGBM fit with a weight of <strong>2</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GLM</td>
+<td>0.946325896599</td>
+</tr>
+<tr>
+<td>GLM + residual LightGBM</td>
+<td>0.946501875293</td>
+</tr>
+<tr>
+<td>Improvement</td>
+<td>+0.000175978694</td>
+</tr>
+</tbody>
+</table>
+<p>The improvement was positive on every fold.</p>
+<p>There is a validation limitation here: the nested procedure covered the GLM offset, but we did not fully audit the pseudo-label teacher's entire training history for nested validation. LightGBM also used the scored validation fold for early stopping.</p>
+<p>Adding this model to the existing ensemble improved exploratory CV by only <strong>0.000001224796</strong>, with <strong>4/5 folds</strong> improving. We did not submit that addition. The model itself scored <strong>0.94681 Public / 0.94563 Private</strong>, while the final ensemble was <strong>0.00021</strong> higher on Private LB.</p>
+<h3>Comparison with mahog's earlier LightGBM models</h3>
+<p>The earlier models already used income digits, crossed digit keys, original-data target statistics, deviations from original-group means and soft pseudo-labels from teachers that excluded the corresponding validation fold.</p>
+<p>His best model added the nested heuljax-style GLM as an offset. The tree received only the GLM's native logit prediction, together with mahog's own features, to learn a residual correction.</p>
+<h2>Income Tokens and Language-Model Features</h2>
+<p>Another interesting part of this competition was the distribution of income values.</p>
+<p>Among incomes from <strong>\$50,000 to \$99,999</strong>, values with the last three digits below <strong>200</strong> accounted for:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition train</td>
+<td>7.61%</td>
+</tr>
+<tr>
+<td>Original data</td>
+<td>19.80%</td>
+</tr>
+<tr>
+<td>Source-trained DistilGPT-2 pilot</td>
+<td>7.57%</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>20-bin</strong> profiles had a correlation of <strong>0.942</strong> between the competition data and our DistilGPT-2 pilot. Our CTGAN and diffusion pilots did not reproduce the same pattern.</p>
+<p>This led us to try GPT-2 token groups as features. With a leading space, <code>50000</code> is tokenized as <code>Ġ5 | 0000</code>, while <code>75000</code> becomes <code>Ġ75 | 000</code>. We grouped income values using token prefixes, suffixes and token-length patterns, then applied target encoding to those groups. This feature set only needs the tokenizer; it does not require GPT-2 inference.</p>
+<p>Adding <strong>ten token features</strong> to the same <strong>104-feature baseline</strong>, with the model and folds fixed, improved logistic regression:</p>
+<table>
+<thead>
+<tr>
+<th>Experiment</th>
+<th>CV improvement over baseline</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Native BPE groups</td>
+<td>+0.0002658065</td>
+</tr>
+<tr>
+<td>Decimal grouping control</td>
+<td>+0.0000241624</td>
+</tr>
+<tr>
+<td>Reassigned BPE groups</td>
+<td>+0.0000033671</td>
+</tr>
+</tbody>
+</table>
+<p>The baseline CV was <strong>0.9457509059</strong>, and native BPE reached <strong>0.9460167124</strong>. With seed <strong>7</strong>, the native-BPE improvement was <strong>+0.000242534</strong>.</p>
+<p>The controls used the same number of added features, but their group structures and group sizes were different. These results support using BPE groups as predictive features, but they do not establish which tokenizer or generator the organizers used.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2Fd0f343e601b118837fa4b5b83c4096b0%2Ff3_bpe_evidence.png?generation=1790838545539605&amp;alt=media" alt="BPE experiments and income distributions"></p>
+<p>The same features did not help every model. Adding them to our strong XGBoost configuration reduced CV by <strong>0.000067647</strong>. On the other hand, a neural model using tokens without target encoding had only <strong>0.94082 CV</strong>, but still helped the ensemble.</p>
+<p>We also tried features calculated from a language model trained on the original data. Three context models improved the ensemble by <strong>+0.000024</strong> over the <strong>61-column control</strong>, with all <strong>5/5 folds</strong> improving. They scored prompts under both hypothetical Yes and No labels, with and without row context. The actual target was never used to choose which prompt to score.</p>
+<p>Later models used token likelihoods and features from the attention and MLP components of our DistilGPT-2. The batches we adopted contained <strong>14 frozen</strong> and <strong>4 fold-adapted</strong> models.</p>
+<p>I would also like to thank <strong>Paul Bryan Elefante (@heuljax)</strong> for sharing his generator-aware ridge approach and discussions during the competition. We reproduced his features with logistic regression and XGBoost on our folds. Adding these two models improved ensemble CV by <strong>0.000032101419</strong> and Public LB from <strong>0.94683 to 0.94689</strong>. Our experiments took place around the same time, and I am not claiming that we were first to explore this idea.</p>
+<h3>Additional token and context feature details</h3>
+<p>The income token bank used five states: first token, proper two-token prefix, last token, token-length shape and token count. Each had a main-effect target encoding and a departure for concern × subsidy × anxiety context, giving <strong>30 cells</strong>. Smoothing was <strong>100</strong> for the main effect and <strong>200</strong> for the departure.</p>
+<p>The context features included total log-probability, token-rank summaries, a top-k margin, retained mass, entropy and last-token log-probability for income and commute prompts. Decoder-state features also used attention/MLP contributions projected onto output directions, with and without context.</p>
+<p>These are features from our own source-trained model. They do not give the probability of a full row under the unknown competition generator.</p>
+<h2>What Did Not Work</h2>
+<p>Some approaches that did not improve our tested configurations were:</p>
+<ul>
+<li>Missingness and distribution-drift features, duplicate-row searches and <code>id</code>-based features.</li>
+<li>Adding the original data directly as labeled training rows.</li>
+<li>Additional crossed-key, pair, digit and frequency features on top of our existing per-value target-encoding features.</li>
+<li>Broad cross-row aggregation features and further generic hyperparameter searches late in the competition.</li>
+<li>Nonlinear stacking models.</li>
+<li>Finer, random or overlapping interaction groups.</li>
+<li>Stronger XGBoost pseudo-label teachers.</li>
+<li>Removing models by prediction correlation, or grouping them by model family before stacking.</li>
+</ul>
+<p>These results depend on the features already present. For example, mahog's income digit-cross target encoding did help his models trained on hard labels.</p>
+<p><code>id</code> alone scored <strong>0.49999 AUC</strong>. We also checked a previously published or selected high-income boundary that contained <strong>393/393 positives</strong> in the reused labels. Setting those predictions to one changed AUC by only <strong>+0.0000000743</strong>. It made almost no difference to the ranking of positive and negative examples.</p>
+<h2>How We Worked</h2>
+<p>We shared OOF and test predictions using the same folds and row order. This helped us combine models trained in different environments and check whether an improvement was consistent across folds.</p>
+<p>Base models were trained on Kaggle or Colab. Some early stacking reproductions ran locally, and later stacking fits ran on Kaggle CPU and an authorized on-premises CPU. We also checked prediction hashes, row order and reconstructed AUC locally.</p>
+<p>We made <strong>109 submissions</strong>. On my side, we recorded the intended experiment before submitting. Mahog's early submissions after we teamed up were documented afterward.</p>
+<p>I also used LLM coding agents to help run experiments. We kept the predictions and experiment records so that we could check the results afterward. The notes contain more than a hundred experiment folders, although some experiments were not completed.</p>
+<h2>Acknowledgments and Final Thoughts</h2>
+<p>Thank you again to mahog for the collaboration, especially his LightGBM models, income digit-cross features, original-data statistics and GLM-offset design.</p>
+<p>We also learned from notebooks shared by <a href="https://www.kaggle.com/code/cdeotte/fable-5-1-eda-original-data-insights" target="_blank">@cdeotte</a>, <a href="https://www.kaggle.com/code/heuljax/kps6e09-generator-aware-ridge-logistic-regression" target="_blank">@heuljax</a> and his <a href="https://www.kaggle.com/code/heuljax/kps6e09-xgb-sample" target="_blank">XGBoost notebook</a>, <a href="https://www.kaggle.com/code/blamerx/s6e9-xgboost-window-encodings-0-946-cv" target="_blank">@blamerx</a>, <a href="https://www.kaggle.com/code/lucifer19/ev-grand-prix-48-engine-cpu-pit-stop-blend" target="_blank">@lucifer19</a>, <a href="https://www.kaggle.com/code/jazivxt/single-model-zoom-zoom" target="_blank">@jazivxt</a>, <a href="https://www.kaggle.com/code/yekenot/ps-s6-e9-realmlp-pytorch" target="_blank">@yekenot</a>, <a href="https://www.kaggle.com/code/taeyangg4/s6e9-094649-multi-paradigm-lexsort-master" target="_blank">@taeyangg4</a>, <a href="https://www.kaggle.com/code/najiama/xgboost-triple-te-dynamic-pruning-lb-0-94639" target="_blank">@najiama's XGBoost</a> and <a href="https://www.kaggle.com/code/najiama/pure-lgbm-model-cv-0-94607-lb-0-94638" target="_blank">LightGBM</a>, and <a href="https://www.kaggle.com/code/mikhailnaumov/electric-vehicle-purchases-single-xgb" target="_blank">@mikhailnaumov</a>. Thank you all for sharing your work.</p>
+<p>Congratulations to <strong>Chris Deotte</strong> on first place, <strong>Team Alicia</strong> on second place, and to <strong>Prior, Maher el Ouahabi, Ohm My Car, Paul Bryan Elefante, yuurei, Ismail Ucuran</strong> and <strong>MILANFX</strong> on their results.</p>
+<p>The <a href="https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744797" target="_blank">12th-place writeup by Ravi Ramakrishnan and Don Mani</a> describes their approach using a smaller LightGBM feature set and an ensemble.</p>
+<p>Our rank improved from <strong>9th to 3rd</strong> on the Private LB, although our score decreased. Every team in the private top <strong>200</strong> also had a lower private score.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2F3c9f7367d90b6cf9c93dc55388a995be%2Ff5_shake.png?generation=1790838566129607&amp;alt=media" alt="Public and private ranks for the private top 200"></p>
+<p>I am very happy with this result. For me, the most interesting parts were the income representations and how models with different features helped the ensemble. There are still things we do not know about how this dataset was generated, but I hope these experiments are useful for others exploring similar data.</p>

@@ -1,0 +1,502 @@
+<h2>Acknowledgement</h2>
+<p>First, we thank the competition hosts <a href="https://www.kaggle.com/evancalabrese" target="_blank">@evancalabrese</a>, <a href="https://www.kaggle.com/shosys" target="_blank">@shosys</a> and every person involved from RSNA in data preparation and competition related process, and Kaggle staff for organizing this competition. </p>
+<p>Below, we introduce the solution of team <strong>Vibes and Genius Trade-Off</strong> -- <a href="https://www.kaggle.com/tom99763" target="_blank">@tom99763</a>, <a href="https://www.kaggle.com/sersasj" target="_blank">@sersasj</a>, <a href="https://www.kaggle.com/iamparadox" target="_blank">@iamparadox</a>, <a href="https://www.kaggle.com/chihantsai" target="_blank">@chihantsai</a>, <a href="https://www.kaggle.com/atom1231" target="_blank">@atom1231</a>!</p>
+<p><strong>TL;DR</strong></p>
+<p>Our solution combines three complementary approaches:</p>
+<ul>
+<li>YOLO 2.5D with different backbones. Derived from <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/sergio-alvarez-paradox-17th-place-solution-ultraly" target="_blank">BYU competition</a></li>
+<li>3D CenterNet with 2D Effv2s extractor.</li>
+<li>Meta-classifiers (LightGBM, XGBoost, CatBoost)</li>
+</ul>
+<p>The final probabilities are obtained by averaging the outputs of the YOLO 2.5D models, 3D CenterNet with 2D Effv2s extractor and the three meta-classifiers.</p>
+<p>Here is the diagram of our approach.</p>
+<p>We used two different variations of YOLO:</p>
+<ol>
+<li><strong>YOLOv11m</strong> - The standard YOLO11 medium model from Ultralytcs</li>
+<li><strong>Custom YOLO with timm backbone</strong> - YOLO architecture with <code>timm/tf_efficientnetv2_s.in21k_ft_in1k</code> as the backbone</li>
+</ol>
+<p>For details about the YOLO+timm customization, please refer to the <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/sergio-alvarez-paradox-17th-place-solution-ultraly" target="_blank">BYU writeup</a>.</p>
+<p>We treated each of the <strong>13 vessel locations as separate bounding box classes</strong>:</p>
+<ul>
+<li>Left/Right Infraclinoid Internal Carotid Artery</li>
+<li>Left/Right Supraclinoid Internal Carotid Artery</li>
+<li>Left/Right Middle Cerebral Artery</li>
+<li>Anterior Communicating Artery</li>
+<li>Left/Right Anterior Cerebral Artery</li>
+<li>Left/Right Posterior Communicating Artery</li>
+<li>Basilar Tip</li>
+<li>Other Posterior Circulation</li>
+</ul>
+<h3><strong>2.5D Strategy</strong></h3>
+<p>Images were resized to 512×512, normalized with min-max and converted to 2.5D variation:</p>
+<p><code>R (Red channel)   = slice i-1
+G (Green channel) = slice i
+B (Blue channel)  = slice i+1</code></p>
+<p>The figure below shows examples of slices in 2D vs 2.5D variation:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4310004%2Fbc5e5f0a3d330bfc78d7961160b805f6%2F2D.png?generation=1760534875382926&amp;alt=media" alt=""></p>
+<p>As can be seen in the examples, the images vary significantly because <strong>we didn't standardize Z spacing</strong>.</p>
+<p>I (@sersasj) spent 1-2 weeks experimenting with Z-axis resize, but results were consistently worse. Perhaps I was doing something wrong, but didn't have time to investigate further.</p>
+<p>We were very reluctant to try 2.5D without proper Z-spacing resize (in my mind didn’t seem a good idea - <a href="https://www.kaggle.com/sersasj" target="_blank">@sersasj</a>). Nevertheless, the 2.5D approach even without Z-resampling improved results by 0.02+ in CV.</p>
+<h3><strong>Training Configuration</strong></h3>
+<p>Data Sampling Strategy:</p>
+<p>For negative samples we took 10 evenly sampled slices per series.</p>
+<p>Example: For a 100-slice series → slices [1, 11, 22, 33, 44, 56, 67, 78, 89, 99]</p>
+<p>For positive samples we used all slices containing annotations</p>
+<h3><strong>YOLO with timm/tf_efficientnetv2_s Backbone</strong></h3>
+<pre><code> 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+   
+</code></pre>
+<h3><strong>YOLOv11m</strong></h3>
+<pre><code> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+</code></pre>
+<p>We also modified the fitness function to include auc metric and prioritize mAP@50.</p>
+<pre><code>fitness =  × mAP@ +  × mAP@- +  × mAUC
+</code></pre>
+<p>Did this help? Maybe a little. In the <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/sergio-alvarez-paradox-17th-place-solution-ultraly" target="_blank">BYU competition</a>, we had already found that prioritizing mAP@50 over the Ultralytics standard 1.0×mAP@50-95 gave better results.</p>
+<p>Adding AUC seemed like a good idea at the time since it's the competition metric, but we didn't investigate thoroughly whether it significantly improved performance. It's possible the benefit was marginal, but we kept it for consistency.</p>
+<p><strong>Training Hardware and Time</strong></p>
+<table>
+<thead>
+<tr>
+<th>Hardware Setup</th>
+<th>GPU</th>
+<th>CPU</th>
+<th>RAM</th>
+<th>Time per Fold</th>
+<th>Total (5 folds)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.kaggle.com/sersasj" target="_blank">@sersasj</a></td>
+<td>RTX 3090</td>
+<td>Intel Core i5-12400F (12) @ 4.4GHz</td>
+<td>32GB</td>
+<td>4-5 hours</td>
+<td>~24 hours</td>
+</tr>
+<tr>
+<td><a href="https://www.kaggle.com/iamparadox" target="_blank">@iamparadox</a></td>
+<td>RTX 4090</td>
+<td>AMD Ryzen 9 7950X (32) @ 5.883GHz</td>
+<td>64GB</td>
+<td>~2 hours</td>
+<td>~10 hours</td>
+</tr>
+</tbody>
+</table>
+<h3>Inference</h3>
+<p>For inference, we sort DICOM slices by spatial position (SliceLocation → ImagePositionPatient → InstanceNumber), create 2.5D triplets for slices 1 to N-1<br>
+Run batch inference across both models, extract max confidence per class and use max(localization_confidences) as overall aneurysm presence probability<br>
+The process can be observed in the gif below:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F2221915%2F7a4a4d9d460b5a6b0cb6eb82a3c4b5ad%2Fyolo_predictions_1.2.826.0.1.3680043.8.498.10022688097731894079510930966432818105%20(2).gif?generation=1761065820372307&amp;alt=media" alt=""></p>
+<h3>Cross-Validation Scores</h3>
+<p>folds were stratified using <code>MultilabelStratifiedKFold</code> to ensure balanced distribution across:</p>
+<ul>
+<li>Aneurysm presence</li>
+<li>All 13 vessel locations</li>
+<li>Modality</li>
+</ul>
+<h3><strong>YOLO11m 2.5D Results</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Fold</th>
+<th>loc_macro_auc</th>
+<th>cls_auc</th>
+<th>combined_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fold0</td>
+<td>0.8184</td>
+<td>0.7549</td>
+<td>0.7867</td>
+</tr>
+<tr>
+<td>fold1</td>
+<td>0.8114</td>
+<td>0.7897</td>
+<td>0.8005</td>
+</tr>
+<tr>
+<td>fold2</td>
+<td>0.8134</td>
+<td>0.7827</td>
+<td>0.7981</td>
+</tr>
+<tr>
+<td>fold3</td>
+<td>0.8162</td>
+<td>0.7872</td>
+<td>0.8017</td>
+</tr>
+<tr>
+<td>fold4</td>
+<td>0.8540</td>
+<td>0.8281</td>
+<td>0.8410</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td><strong>0.8227</strong></td>
+<td><strong>0.7885</strong></td>
+<td><strong>0.8056</strong></td>
+</tr>
+</tbody>
+</table>
+<h3><strong>EfficientNetV2-S 2.5D Results</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Fold</th>
+<th>loc_macro_auc</th>
+<th>cls_auc</th>
+<th>combined_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fold0</td>
+<td>0.7978</td>
+<td>0.7790</td>
+<td>0.7884</td>
+</tr>
+<tr>
+<td>fold1</td>
+<td>0.8159</td>
+<td>0.8269</td>
+<td>0.8214</td>
+</tr>
+<tr>
+<td>fold2</td>
+<td>0.8155</td>
+<td>0.7921</td>
+<td>0.8038</td>
+</tr>
+<tr>
+<td>fold3</td>
+<td>0.8153</td>
+<td>0.7907</td>
+<td>0.8030</td>
+</tr>
+<tr>
+<td>fold4</td>
+<td>0.8499</td>
+<td>0.8560</td>
+<td>0.8529</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td><strong>0.8189</strong></td>
+<td><strong>0.8090</strong></td>
+<td><strong>0.8139</strong></td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Ensemble Results</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Fold</th>
+<th>loc_macro_auc</th>
+<th>cls_auc</th>
+<th>combined_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fold0</td>
+<td>0.8393</td>
+<td>0.7849</td>
+<td>0.8121</td>
+</tr>
+<tr>
+<td>fold1</td>
+<td>0.8330</td>
+<td>0.8291</td>
+<td>0.8310</td>
+</tr>
+<tr>
+<td>fold2</td>
+<td>0.8399</td>
+<td>0.8135</td>
+<td>0.8267</td>
+</tr>
+<tr>
+<td>fold3</td>
+<td>0.8370</td>
+<td>0.8093</td>
+<td>0.8232</td>
+</tr>
+<tr>
+<td>fold4</td>
+<td>0.8738</td>
+<td>0.8620</td>
+<td>0.8679</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td><strong>0.8446</strong></td>
+<td><strong>0.8198</strong></td>
+<td><strong>0.8322</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>What did not work:</h2>
+<p>In the initial stages of YOLO development <a href="https://www.kaggle.com/sersasj" target="_blank">@sersasj</a> created an ensemble with 3xYolo11m and 0.69LB <a href="https://www.kaggle.com/code/yosukeyama/rsna2025-32ch-img-infer-lb-0-69-share" target="_blank">EfficientNetB2 public notebook</a>. That gave us a score of 0.78 LB and put us in the top 3 in early stages of competition</p>
+<p>After a bit of probing the leaderboard, <a href="https://www.kaggle.com/iamparadox" target="_blank">@iamparadox</a> found out that YOLO's aneurysm classification AUROC was very low (around ~0.58). Then we started to develop models that would complement YOLO and boost the aneurysm classification AUROC. (We later discovered that the poor results of early YOLO development were due to an insufficient amount of negative samples in training.)</p>
+<p>One of the class of models that we used was 2.5D models that just detects the presence of aneurysm in the given series with auxiliary segmentation head. These models were inspired by <a href="https://www.kaggle.com/code/hengck23/3d-unet-using-2d-image-encoder" target="_blank">https://www.kaggle.com/code/hengck23/3d-unet-using-2d-image-encoder</a>. These models in combination with yolo11m gave us a LB of 0.80. </p>
+<p>These models then became obsolete when we merged with  <a href="https://www.kaggle.com/chihantsai" target="_blank">@chihantsai</a>, <a href="https://www.kaggle.com/atom1231" target="_blank">@atom1231</a>.</p>
+<p>In the BYU competition, our best-performing backbone was <code>timm/convnextv2_base.fcmae_ft_in22k_in1k</code>. However, in the current competition, training with half precision caused the loss to quickly become NaN. Based on our investigation, this appears to be a common issue with ConvNeXt architectures. We hypothesize that if trained in full precision, this backbone could achieve performance comparable to YOLO11m and <code>timm/tf_efficientnetv2_s.in21k_ft_in1k</code>. Unfortunately, we were unable to verify this due to time constraints.</p>
+<p>Modifying the neck and head was also considered. From what we investigate with <a href="https://www.kaggle.com/tatamikenn" target="_blank">@tatamikenn</a> <a href="https://www.kaggle.com/code/tatamikenn/reverse-engineering-yolo" target="_blank">awesome reverse engineer notebook</a> P3 features appeared to be the most utilized. We conducted a quick test on a single fold, but results on validation were more or less the same so we decided to move on.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4310004%2F7a4ca157151f82f0436dfdee766ec665%2Fimage%20(2).png?generation=1760534911466456&amp;alt=media" alt=""></p>
+<p>We also try to use our 3d segmentation result to <a href="https://www.kaggle.com/code/tom99763/rsna-iad-vessel-segmentation" target="_blank">filter out invalid location prediction from yolo</a>, but recall drops a lot.<br>
+Moreover, we tried extracting patches using YOLO and applying wavelet and log-polar transforms to the patches before predicting their classes; however, <a href="https://www.kaggle.com/code/tom99763/yolos-phw-mip-lp-rsna-i" target="_blank">this approach </a> did not yield good results.</p>
+<h2>EfficientV2s + 3D-CenterNet (Flayer)</h2>
+<p>This is a highly <strong>experimental project</strong>, made with a lot of help from AI. We started with the popular “LB 0.69 Public Notebook” , reconstructed the entire <strong>training pipeline and data preprocessing</strong> from it, and then incorporated a <strong>CenterNet-like mechanism to detect the center of the aneurysms</strong>.</p>
+<h3>Model architecture</h3>
+<p>We adopt a <strong>slice-wise 2D encoder + shallow 3D head</strong> design:</p>
+<ul>
+<li><strong>Encoder.</strong> A 2D ImageNet-pretrained <strong>EfficientNetV2-S</strong> (<code>tf_efficientnetv2_s.in21k_ft_in1k</code>) from <code>timm</code> in <em>features_only</em> mode with the <strong>penultimate</strong> feature map (<code>out_indices = (1,-2)</code>).</li>
+<li><strong>Auxiliary 2D head.</strong>The intermediate feature map (early stage) is fed into a lightweight 2D convolutional head to produce per-slice auxiliary logits, which encourage the encoder to capture vessel-relevant spatial cues before 3D aggregation. The auxiliary head is supervised with slice-level targets to stabilize early-layer learning.</li>
+<li><strong>2D→3D fusion.</strong> Each volume <code>(B, C=1, D, H, W)</code> is <strong>rearranged into <code>B·D</code> 2D slices</strong>, encoded independently, then <strong>reassembled</strong> to <code>(B, C_feat, D, H′, W′)</code> before the 3D head. If the backbone expects 3 channels, single-channel inputs are channel-repeated.</li>
+<li><strong>3D temporal head.</strong> A lightweight head (Conv3d-BN-ReLU ×2, <code>base_channels</code>) aggregates signals across depth.</li>
+<li><strong>Outputs.</strong> Two 1×1×1 conv heads:<ul>
+<li><strong>Heatmap head:</strong> <code>num_classes = 13</code> vessel locations (3D centerness maps)</li>
+<li><strong>Offset head:</strong> 3-channel sub-voxel offsets <code>(dz, dy, dx)</code></li></ul></li>
+</ul>
+<h3>Supervision targets</h3>
+<ul>
+<li>Place a <strong>3D Gaussian</strong> peak (stride-aware) at each annotated center on the class-specific heatmap.</li>
+<li>Store <strong>sub-voxel residual offsets</strong> at the nearest grid cell and mark them with an <strong>offset mask</strong>.</li>
+<li>Scale coordinates from the original series size to the current <code>(D, H, W)</code>; map to the output grid using <code>(stride_d=1, stride_h=stride_w=16)</code> so the output is <code>D × H/16 × W/16</code>.</li>
+<li>Default <strong>Gaussian σ = 0.2</strong>.</li>
+</ul>
+<h3>Segmentation masks</h3>
+<p>Vessel masks are produced in physical space by training a 3D DynUNet on volumes resampled to 0.7 mm isotropic spacing. The provided voxel-level annotations of 13 vessel classes are merged into a single binary vessel mask for training. The resulting 3D masks are then converted to slice-wise 2D masks to supervise the auxiliary head.</p>
+<h3>Losses</h3>
+<p>We train with four terms and sum them with weights:</p>
+<ul>
+<li><strong>CenterNet-style focal loss</strong> (weight = 1.0) on heatmaps (α=2, β=4).</li>
+<li><strong>L1 offset loss</strong> (weight = 1.0) (only at valid center cells).</li>
+<li><strong>BCE-with-logits classification loss</strong> (weight = 1.0) from series-level logits .</li>
+<li><strong>Auxiliary Dice &amp; BCE loss</strong> (weight = 0.5) on 2D auxiliary outputs when vessel segmentation masks are available; otherwise, it is set to zero, encouraging slice-wise feature consistency.</li>
+</ul>
+<h3>From voxelwise maps to series-level logits (for AUC &amp; ensembling)</h3>
+<p>Given heatmap logits <code>H ∈ ℝ^{B×13×D×H′×W′}</code>:</p>
+<ul>
+<li><p><strong>Per-class series logits:</strong> spatial <strong>max</strong> over <code>(D, H′, W′)</code> for each of the 13 classes.</p></li>
+<li><p><strong>Aneurysm Present (global) logit:</strong> the <strong>max over the 13</strong> class logits.</p>
+<p>These <strong>14 logits</strong> drive the BCE loss and are exported for meta-ensembling.</p></li>
+</ul>
+<h3>Data pipeline &amp; augmentations</h3>
+<ul>
+<li><strong>Input.</strong> Precomputed <code>.npy</code> volumes; <code>(D,H,W)</code> expanded to <code>(1,D,H,W)</code>— here D = 64.</li>
+<li><strong>Label scaling.</strong> Rescale coordinates to current volume size; apply stride mapping for target grids.</li>
+<li><strong>Augmentations.</strong> A <strong>shared 2D affine warp</strong> per volume (same transform for all slices): random rotation, scale, translation; vertical flip available (off by default).</li>
+<li><strong>Normalization.</strong> Albumentations normalization → tensor conversion; channel repeat to 3-ch if needed.</li>
+</ul>
+<h3>Optimization &amp; schedules</h3>
+<ul>
+<li><strong>Optimizer.</strong> AdamW (LR=2e-4, weight decay=1e-5), <strong>AMP</strong> mixed precision, <strong>grad clipping</strong> (=1.0).</li>
+<li><strong>LR schedule.</strong> Default <strong>CosineAnnealingLR</strong> (<code>T_max = epochs</code>, <code>eta_min = 1e-6</code>); <code>StepLR</code> / <code>ReduceLROnPlateau</code> also supported.</li>
+<li><strong>Checkpointing.</strong> Best model selected by <strong>mean AUC</strong> on validation.</li>
+</ul>
+<h3>Training configuration</h3>
+<ul>
+<li><strong>Epochs:</strong> 16</li>
+<li><strong>Batch size:</strong> 4 (train) / 2 (val)</li>
+<li><strong>accumulate:</strong>2</li>
+<li><strong>Workers:</strong> 16</li>
+<li><strong>Strides:</strong> depth <code>1</code>, lateral <code>16</code></li>
+<li><strong>Gaussian σ:</strong> 0.2</li>
+<li><strong>Backbone:</strong> EfficientNetV2-S, <code>pretrained=True</code>, not frozen by default</li>
+</ul>
+<h3>Cross-validation &amp; metrics</h3>
+<ul>
+<li>K-fold protocol driven by the training CSV split.</li>
+<li>Compute <strong>per-label ROC-AUC</strong>, plus <strong>mean</strong> and <strong>presence-weighted</strong> AUC each epoch.</li>
+<li>Scheduler stepping and best-by-mean-AUC saving per fold; final summary reports per-fold and average AUC.</li>
+</ul>
+<h3><strong>Flayer Results(without aux head)</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Fold</th>
+<th>loc_macro_auc</th>
+<th>cls_auc</th>
+<th>combined_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fold0</td>
+<td>0.7762</td>
+<td>0.7747</td>
+<td>0.7754</td>
+</tr>
+<tr>
+<td>fold1</td>
+<td>0.7676</td>
+<td>0.8069</td>
+<td>0.7873</td>
+</tr>
+<tr>
+<td>fold2</td>
+<td>0.7508</td>
+<td>0.7892</td>
+<td>0.7700</td>
+</tr>
+<tr>
+<td>fold3</td>
+<td>0.7553</td>
+<td>0.7778</td>
+<td>0.7666</td>
+</tr>
+<tr>
+<td>fold4</td>
+<td>0.7734</td>
+<td>0.7758</td>
+<td>0.7746</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td><strong>0.7647</strong></td>
+<td><strong>0.7848</strong></td>
+<td><strong>0.7748</strong></td>
+</tr>
+</tbody>
+</table>
+<h3><strong>Flayer Results(with aux head)</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Fold</th>
+<th>loc_macro_auc</th>
+<th>cls_auc</th>
+<th>combined_mean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fold0</td>
+<td>0.7779</td>
+<td>0.7991</td>
+<td>0.7885</td>
+</tr>
+<tr>
+<td>fold1</td>
+<td>0.7828</td>
+<td>0.7987</td>
+<td>0.7908</td>
+</tr>
+<tr>
+<td>fold2</td>
+<td>0.7601</td>
+<td>0.8051</td>
+<td>0.7826</td>
+</tr>
+<tr>
+<td>fold3</td>
+<td>0.7683</td>
+<td>0.7826</td>
+<td>0.7755</td>
+</tr>
+<tr>
+<td>fold4</td>
+<td>0.7586</td>
+<td>0.7954</td>
+<td>0.7770</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td><strong>0.7695</strong></td>
+<td><strong>0.7962</strong></td>
+<td><strong>0.7829</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>Summary</h3>
+<p><strong>Flayer</strong> converts 2D EfficientNetV2-S slice features into 3D evidence maps with a light 3D head, supervises them using CenterNet-style heatmaps + offsets, and produces robust <strong>14-logit</strong> series-level predictions (including an aggregated <em>aneurysm present</em> logit) that plug cleanly into our stacked meta-classifier.</p>
+<h2>Meta Classifier</h2>
+<p>We designed a stacked ensemble architecture to integrate predictions from <strong>YOLO11m</strong>, <strong>YOLO11-EffV2s</strong>, and <strong>EffV2s-3D-CenterNet</strong> models. Specifically, each meta-classifier receives the concatenated predictions from all base models as input and produces final predictions for both <strong>aneurysm presence</strong> and <strong>location-specific detection</strong>. This setup enables the model to assess the presence of an aneurysm at a given location by considering predictions from all locations across all models, effectively capturing the ensemble’s collective reasoning about aneurysm presence.</p>
+<pre><code>
+metadata = np.array([age, sex])
+X = np.concatenate([np.array([yolo11m_cls_preds[fold_id]]), yolo11m_loc_preds[fold_id],
+                                np.array([effv2s_cls_preds[fold_id]]), effv2s_loc_preds[fold_id],
+                                flayer_fold_preds[fold_id], metadata], axis=)[, :]
+lgb_pred = predict_prob_lgb(X, fold_id) 
+xgb_pred = predict_prob_xgb(X, fold_id)
+cat_pred = predict_prob_cat(X, fold_id)
+</code></pre>
+<p>We experimented with two ensemble structures:</p>
+<ul>
+<li><strong>Series:</strong> A single YOLO prediction combined with one Flayer prediction is fed into the ensemble model to produce the final output. </li>
+</ul>
+<pre><code>( features, [() + flayer() + meta()])
+</code></pre>
+<ul>
+<li><strong>Parallel:</strong> Two predictions from two YOLOs and one predictions from Flayer are processed in parallel and jointly used by the ensemble model to generate the final prediction. </li>
+</ul>
+<pre><code>( features, [yolo11m() + ()+ () + ()])
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F2221915%2Fef14572c1840aec4e9d0ce115fe7adb3%2Fmeta.png?generation=1760538976614470&amp;alt=media" alt="diagram-meta-models"><br>
+This comparison allows us to evaluate whether combining multiple feature streams in parallel provides additional complementary information beyond the sequential (series) configuration.</p>
+<p>We found that combining predictions from different YOLO backbones and flayer in parallel provides better improvement than series in the ensemble CV score. This suggests that the GBDT effectively leverages each model’s perception of aneurysm presence across locations to make accurate judgments. We were unable to complete the 5-fold submission due to issues encountered on the final day. Therefore, we present here our final selected result, which is based on the average of 2 folds.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Series</th>
+<th>Parallel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5 folds CV (average)</td>
+<td>0.84</td>
+<td><strong>0.852</strong></td>
+</tr>
+<tr>
+<td>5 folds CV (nelder-mead optimized)</td>
+<td>0.841</td>
+<td><strong>0.858</strong></td>
+</tr>
+<tr>
+<td>public score (average; 2 folds)</td>
+<td>0.83</td>
+<td>0.83082</td>
+</tr>
+<tr>
+<td>private score (average; 2 folds)</td>
+<td>0.81</td>
+<td><strong>0.8230</strong></td>
+</tr>
+</tbody>
+</table>
+<p>We’ve also tried Keypoint-Based Dual-Graph Predictor in <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/bias-vibes-trade-off-20th-place-solution-keypoint-" target="_blank">Tom’s BYU approach</a> earlier and found it performed well in terms of ensemble CV performance. However, the YOLO-based feature extraction and preprocessing were too time-consuming and often led to timeouts. Therefore, we did not include this method in our final solution.</p>
+<h2>Codebase &amp; Submission</h2>
+<p>Submission: </p>
+<ul>
+<li><p><a href="https://www.kaggle.com/code/tom99763/2x-yolo-flayer-meta-classifier-final-ver?scriptVersionId=267890122" target="_blank"><strong>2x yolo + flayer + meta classifier (final ver)</strong></a></p></li>
+<li><p><a href="https://www.kaggle.com/code/tom99763/9th-place-solution-rsna-iad" target="_blank">kaggle models submission</a></p></li>
+</ul>
+<p>Meta classifier training: <a href="https://www.kaggle.com/code/tom99763/2x-yolo-flayer-meta-training-final-ver" target="_blank"><strong>2x yolo + flayer meta training (final ver)</strong></a></p>
+<p>Github: <a href="https://github.com/tom99763/9th-place-solution-yolo-RSNA-IAD" target="_blank">9th-place-solution-yolo-RSNA-IAD</a></p>

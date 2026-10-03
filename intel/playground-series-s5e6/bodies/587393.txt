@@ -1,0 +1,480 @@
+# https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587393
+
+Topic #587393: 1st Place - Fast GPU Experimentation with RAPIDS cuDF cuML
+  Author: Chris Deotte
+  Posted: 2025-07-01 00:14:29.646000
+  Votes: 193  Comments: 137
+
+Thanks Kaggle for another fun playground competition! My June playground "Predicting Optimal Fertilizers" solution uses techniques from my previous 6 months of playground solutions. Below are links to old solutions with more info. And I will describe the techniques again briefly below.
+
+Techniques from Previous Playground Comps using GPU Acceleration!
+
+
+
+
+Date
+Name
+Metric
+Technique(s)
+Solution Link
+Rank
+
+
+
+
+Dec 2024
+Insurance Comp
+RMSLE
+RAPIDS cuDFFeature Engineering
+link
+1st
+
+
+Jan 2025
+Forecasting Comp
+MAPE
+Boosting over Residuals
+link
+2nd
+
+
+Feb 2025
+Backpack Comp
+RMSE
+Use Original Data
+link
+1st
+
+
+Mar 2025
+Rainfall Comp
+AUC
+RAPIDS cuML
+link
+2nd
+
+
+Apr 2025
+Podcast Comp
+RMSE
+cuML Stacking
+link
+1st
+
+
+May 2025
+Calorie Comp
+RMSLE
+GPU HillClimbing
+link
+1st
+
+
+
+
+RAPIDS cuDF Feature Engineering
+
+The secret sauce in this competition is cuDF feature engineering, specifically Target Encoding. The competition data has 8 features which can each be treated as categorical.
+
+First we make all pairs which is 28 new columns. Then we make all triples which is 56 new columns. Then we make all quadruples which is 70 new columns. From these 162 = 8+28+56+70 columns, we use cuML Target Encoder to encode the 7 binary targets, y==0?, y==1?, ..., y==6?. This produces 1134 new columns. Then we target encode using the original dataset to produce another 1134 new columns. We then train an XGBoost using all these 2268 columns!
+
+Use Original Data
+
+Using relevant external data helps in all Kaggle competitions. This technique is especially important in Kaggle's playground competitions because every competition is synthetic data generated from an original dataset. Therefore we want to utilize the original data.
+
+There are two ways to use external data like the original dataset. We can add the data as new rows. Or we can add the data as new columns. Most public notebooks in this competition used the former technique. But no public notebook used the latter. (In our final hill climbing ensemble we need models trained with former and models trained with later).
+
+To use the later, we first create a categorical column (by using original column or combination of original columns). Once we have a categorical column, we target encoding it using the original data. 
+
+ = original_data.groupby(CAT_COL)[TARGET].agg()
+ = f
+ = train.merge(TE, =CAT_COL, how=)
+
+
+Stacking (with cuML)
+
+Stacking is especially beneficial for the MAP@3 metric which likes calibrated probabilities. We train an NN level 2 stacking model with categorical cross entropy loss and it doesn't matter if stage 1 models are calibrated or not. 
+
+For stage 1 models, we don't even need multi-class. We can train individual models to predict single binary classification, Is the target y=0?, Is the target y=1? etc etc. We predict OOF probabilities using XGBoost, CatBoost, NN, cuML Linear Regression. Then we train a level 2 NN stacking model using categorical cross entropy loss to predict multi-class probabilities. This uses all the knowledge of stage 1 models and produces calibrated multi-class stage 2 predictions!
+
+We also build an GBDT level 2 stacking model using XGBoost and objective='multi:softprob'. The average of NN level 2 and GBDT level 2 is better than each stage 2 model individually!
+
+Repeated KFold
+
+Bizen250 published a beautiful public notebook here, which illustrates an important concept about MAP@3 metric. This metric is very sensitive to the randomness of training (and predicted probabilities). Therefore an easy way to boost MAP@3 metric is to train the same model again with different seed and average the predicted probabilities before selecting top3 for MAP@3. 
+
+For example, I train all my NNs 100 times and average the probabilities before selecting top 3 fertilizers. And I train all my GBDT dozens of times using 100% data and average the probabilities before selecting the top 3.
+
+In the plot below, we see that each fold of each 5-Fold XGB has average MAP@3=0.376 but when we average the probabilities from 100 5-Fold XGB and then compute MAP@3, we achieve 0.380! 
+
+
+
+Hill Climbing (with cuML)
+
+The effectiveness of hill climbing comes from creating a diverse set of models. Then when we combine them with weighted average, the result is better than any of the individual models. The key ingredients to tabular data hill climbing is building diverse GBDT, NN, and ML models. The fastest way to produce ML models is using RAPIDS cuML.
+
+Boosting over Residuals
+
+Note that we can give XGBoost starting predictions. First we train a cuML Linear Regression model. Then we use XGBoost's dtrain.set_base_margin(LINEAR_REGRESSION_LOGITS) to begin the boosting from the predictions of the linear regression model. This is an overlooked XGBoost trick!
+
+Pseudo Labeling
+
+A helpful trick in all competitions in the final days is to add test data labeled with your best ensemble. For classification, NN naturally handle the soft target probabilities (with their default cross entropy losses). For XGB, we write a custom objective to train multi-class with soft targets.
+
+Re-Train with 100% Train
+
+Another helpful trick in all competitions in the final days is to retrain all the most important models in your final ensemble using 100% train data. For XGBoost when going from 5-Fold to 100% we use fixed number of iterations equal to 25% more than average fixed during early stopping. And for NN, we just create a fixed step learning schedule from the average reduce on plateau of early stopping from 5-Fold.
+
+Trust Your CV
+
+For my final submission, I chose my best CV ensemble which was also my best LB score. My CV ensemble described below has CV MAP@3 = 0.386! Wow!
+
+Final Submission - CV 0.386
+
+My final submission is an ensemble of 9 models where each is trained many times with different seeds. The CV score is 0.386 and Private LB is 0.38652 and public LB is 0.38450!
+
+
+
+XGBoost cuDF FE - use original data as columns w/ tree depth = 4. (And train 10 models with 100% data)
+
+XGBoost cuDF FE - use original data as columns w/ tree depth = 10. (And train 10 models with 100% data)
+
+Stacking NN with many stage 1 models (And train 25 models)
+
+XGBoost RepeatedStratifiedKFold - use original data as rows - Public notebook by @bizen250 here (Trains 50 XGB)
+
+Stacking XGB over LGBM - Public notebook by @ayushchandramaurya here (And train multiple versions different seeds)
+
+XGBoost - use original data as rows w/ tree depth = 18 - Public notebook by @elainedazzio here (And train multiple versions different seeds)
+
+NN - Public notebook by @ricopue here (And train 100 NNs)
+
+Stacking XGB with many stage 1 models and with pseudo label COLUMNS (i.e KNN features).  
+
+NN with pseudo label ROWS (And train 25 NNs)
+
+
+So we use 9 models and train each many times with different seeds. Therefore our final ensemble is approximately combining 300 sets of predictions! Weights (for the 9 models) are determined by GPU Hill Climbing !
+
+Enjoy!
+
+Consider using all these techniques in Kaggle's July playground competition!
+
+Comments:
+├─ HijabZahra (2025-07-04 20:21:39.193000) [+3]
+│  U shared this I found it very useful thanks @cdeotte
+├─ Haruki Kakinuma (2025-07-01 03:03:59.147000) [+3]
+│  Congratulations!
+│  I’ll use your work as a reference in future competitions—thank you!
+├─ Mahog (2025-07-01 00:54:30.523000) [+3]
+│  Congrats on another win! How many has it been already :V. i also thought of using TE features but I could only do 2-way combinations (the feature count exploded after that).
+  ├─ Chris Deotte (2025-07-01 00:58:54.940000) [+2]
+  │  Congratulations @mahoganybuttstrings on solo 3rd place finish! 
+  │  
+  │  Thankfully, I have access to some A100 GPU 80GB VRAM. When creating all pairs, triples, quadruples and then TE the 7 binary targets ...
+    ├─ Mahog (2025-07-01 01:53:05.967000) [+1]
+    │  I'm curious, what was the CV score for that model?
+    ├─ Chris Deotte (2025-07-01 02:34:57.253000) [+1]
+    │  CV score of a single 5-kfold model is 0.37970 (using early stopping learning_rate=0.005). Note that most public notebooks use repeated kfold. If we use repeated kfold on this model, the CV will boo...
+    ├─ Mahog (2025-07-01 02:50:19.137000) [+1]
+    │  My XGB with TE features (only pairs) only had a CV score of around 0.36XX and only improved the ensemble by 0.0001. Are there any other tricks to get CV up that high?
+    ├─ Chris Deotte (2025-07-01 02:59:35.460000) [+1]
+    │  Maybe I'll publish the notebook so you can see full code. I use these XGB hyperparameters
+    │  
+    │  model = XGBClassifier(
+    │      =4,
+    │      =0.2,
+    │      =0.5,
+    │      etc, etc, etc
+    │  
+    │  
+    │  And I target encode with both train...
+    ├─ Mahog (2025-07-01 03:06:23.543000) [+2]
+    │  I think the reason my score is different from yours is because of different hyperparams and the fact that I didn't add the original.csv targets. I did convert the target into 7 binary targets.
+    ├─ davidlowryduda (2025-07-02 15:55:05.173000) [+0]
+    │  I would appreciate looking at your notebook if you choose to publish it. But your comments and description have already given me several new ideas!
+├─ Vignesh BalaChander (2025-07-06 10:55:38.383000) [+4]
+│  Yes, I often use SHAP or feature importance to prune features early — it helps reduce overfitting and speeds up training.
+│  Training binary classifiers per class usually gives more decorrelated predi...
+├─ Masaya Kawamata (2025-07-01 01:00:03.467000) [+4]
+│  Hi Chris, Congratulations on another dominant and well-deserved 1st place! It was truly impressive to watch.
+│  
+│  I was particularly astonished by the speed of your score improvement. Your first submis...
+  ├─ Chris Deotte (2025-07-01 01:18:21.920000) [+4]
+  │  Thanks @masayakawamata . Congrats on solo 2nd place victory!
+  │  
+  │  My process is very iterative. Model OOF and EDA, CV scores, and submission scores inform how I proceed. In this competition, before I e...
+    ├─ Masaya Kawamata (2025-07-01 01:28:00.710000) [+1]
+    │  Thank you so much for your detailed reply! I'm always amazed by how incredibly clear and insightful your explanations are.
+    │  
+    │  Your strategic thinking is exactly what I aspire to. I'm excited to enjoy...
+    ├─ yunsuxiaozi (2025-07-01 01:32:26.470000) [+1]
+    │  Can you please elaborate on reverse engineering? If the original data is a random target, the model should not pay attention to the TE column of the original data, so what is the purpose of adding ...
+    ├─ Chris Deotte (2025-07-01 01:36:58.500000) [+3]
+    │  The synthetic data generation process is essentially to duplicate the original rows and add noise. When we groupby some categorical column in synthetic data and merge original targets, we are essen...
+    ├─ Pablo Prieri (2025-08-09 15:29:11.427000) [+1]
+    │  Hey Chris, thanks for all the info shared, you are motivating to Kaggle again :p
+    │  Would you care to elaborate more on:
+    │  
+    │  a) why "Note when the original dataset has strong signal, then this technique ...
+├─ Adriel O'Malley (2025-07-16 23:45:33.327000) [+1]
+│  Fantastic explanation!
+├─ Chris J Mears (2025-07-08 18:27:16.647000) [+1]
+│  Congratulations @cdeotte ! Thanks for the great write-up and tips!
+├─ Victoria Li Tan (2025-07-07 12:50:26.117000) [+1]
+│  RAPIDS cuDF is such a powerful tool. Have you tried alternatives to RAPIDS cuDF, such as AutoInt architectures or Feature Tools?
+├─ Khushi Yadav (2025-07-05 03:36:57.180000) [+1]
+│  Thanks for sharing this fantastic approach.✨
+├─ bakhtawar shabbir (2025-07-04 20:17:52.690000) [+1]
+│  Brilliant engineering—GPU stacking and feature tricks shine!
+├─ Sarah Arshad (2025-07-04 10:51:16.377000) [+1]
+│  Thanks for sharing your approach! I find it really useful….
+├─ Vignesh BalaChander (2025-07-04 10:43:55.913000) [+1]
+│  Yes, I often use SHAP or feature importance to prune features early — it helps reduce overfitting and speeds up training.
+│      Training binary classifiers per class usually gives more decorrelated p...
+├─ Shuvojit Das (2025-07-04 05:46:16.247000) [+1]
+│  Hey @cdeotte ,
+│  
+│  Absolutely phenomenal work your approach was a masterclass in structured experimentation and ensemble strategy. Big congratulations on the top spot well deserved! Learned a ton from...
+├─ Anshuman Bhoi (2025-07-04 05:13:42.560000) [+1]
+│  Just wondering
+├─ Ole-Jakob (2025-07-03 09:21:46.480000) [+1]
+│  Congrats on the crushing victory, @cdeotte!
+│  
+│  A bit late to the party, but I just finished going through your write-up and your many insightful answers—really impressive work. I picked up several ne...
+  ├─ Chris Deotte (2025-07-03 13:25:22.403000) [+1]
+  │  Hi. Thanks. Congratulations on achieving 10th place!
+  │  
+  │  1) Since the metric is multi-class, when we pick a single statistic (like mean), we need to TE every feature 7 times (once for each binary targ...
+    ├─ Ole-Jakob (2025-07-03 14:20:44.723000) [+1]
+    │  Hi ! 
+    │  I completely forgot that each feature needs to be target encoded seven times—that makes perfect sense now. Please feel free to disregard my second (slightly clumsy) question :)
+├─ nunsongi (2025-07-03 00:47:16.873000) [+1]
+│  Huge congrats! I'm still a beginner, but seeing your progress really inspires me — I hope I can reach that level one day!
+├─ Ayush chandra Maurya (2025-07-02 15:32:19.817000) [+1]
+│  Congratulations @cdeotte, great work!
+│  Thanks for sharing your approach, I got to learn many things from you in last 3 months. Constantly improving my skill  and  in next competition I will try to b...
+  ├─ Chris Deotte (2025-07-02 15:35:08.360000) [+1]
+  │  Awesome. Congratuations @ayushchandramaurya I used your stacking public notebooks in my final solution. They were diverse and strong models. Nice work designing them!
+    ├─ Ayush chandra Maurya (2025-07-02 15:42:33.863000) [+2]
+    │  Thank you @cdeotte, I am glad it was helpful !
+    │  The mistake I have made is that I have not tried to blend more diverse model.
+    ├─ Ayush chandra Maurya (2025-07-10 14:34:59.157000) [+1]
+    │  Can you please share your code in which you have done (9 models and train each many times with different seeds. Therefore our final ensemble is approximately combining 300 sets of predictions! Weig...
+├─ sakshi (2025-07-02 14:02:29.457000) [+1]
+│  Respected Chris Deotte,
+│  
+│  I hope you're doing well.
+│  
+│  First of all, I would like to congratulate you on your recent win.
+│  
+│  I am a first-year undergraduate student at IIT, and I am deeply interested in...
+  ├─ Chris Deotte (2025-07-02 15:33:59.930000) [+4]
+  │  Hi @siamagma Welcome to the Kaggle community. Like all learning endeavors, my suggestion is to make learning fun. Always strive to learn more (each day) and pick activities and topics that are inte...
+    ├─ sakshi (2025-07-02 16:11:24.840000) [+1]
+    │  Thank you very much for your valuable guidance and kind advice. I truly appreciate it and will certainly follow your suggestions. Once again, thank you for your support.
+├─ Albina Chimidova (2025-07-02 12:22:19.397000) [+1]
+│  Congratulations!
+│  Thank you for sharing your solution. It is very important for me to learn from best practices as a beginner in data science.
+  ├─ Mehwish (2025-07-07 01:25:13.243000) [+0]
+  │  Congrats…
+├─ J. (2025-07-02 11:23:59.543000) [+1]
+│  Thanks for sharing your approach! I find it really useful as I’m working on improving at competitions. :)
+├─ Oleksandr Vyshnevskyi (2025-07-02 08:37:58.177000) [+1]
+│  Wow great aproach interesting practice
+├─ Karishma Battina (2025-07-02 00:42:52.617000) [+1]
+│  Congratulations Chris, thanks for sharing your approach.
+├─ Optimistix (2025-07-01 21:58:14.223000) [+1]
+│  Congrats once again! One of the early ideas I had was to simply repurpose your solution from Feb - should probably have done it.
+  ├─ Chris Deotte (2025-07-01 22:14:14.283000) [+1]
+  │  Hi Optimistix. Congratulations achieving 5th place.
+  │  
+  │  Yes, this competition is just like February playground with the difference being the metric (because both comps have zero signal in the original...
+    ├─ Optimistix (2025-07-01 22:33:24.203000) [+1]
+    │  Yes, the zero signal in the original dataset was exactly why I thought of adapting your solution from February. Interestingly, this month we seem to have gone from zero signal to zero original data 😀
+    ├─ Chris Deotte (2025-07-01 23:00:11.180000) [+1]
+    │  haha, yup this month looks like small data comp. There isn't much to do in small data playground comps. I suggest techniques from March Rainfall playground comp. Minimal to no feature engineering a...
+    ├─ Optimistix (2025-07-01 23:08:52.037000) [+1]
+    │  Thanks! Shall do something along those lines. Also good in a way, since I have some other important stuff lined up this month. Have a great July!
+├─ [deleted] (2025-07-01 20:37:18.047000) [+1]
+│  Impressive work! I appreciate you sharing it here.
+├─ statify (2025-07-01 19:46:27.343000) [+1]
+│  @cdeotte really appreciated how clearly you explained.
+├─ Urvish Ahir (2025-07-01 18:54:48.947000) [+1]
+│  That's great @cdeotte congrats !!
+├─ Taylor S. Amarel (2025-07-01 18:15:09.577000) [+1]
+│  Superb work! Really love reading your notebook and learning new things.
+│  
+│  Is it possible to run RAPIDS cuDF on Kaggle, or do you do that offline?
+  ├─ Chris Deotte (2025-07-01 18:27:39.377000) [+1]
+  │  Thank you. RAPIDS cuDF is installed on Kaggle (when we turn on GPU inside our Kaggle notebook) and we can run it on Kaggle. Using RAPIDS cuDF vs. Pandas can give us up to 50x speed up when creating...
+    ├─ Taylor S. Amarel (2025-07-01 18:56:55.517000) [+1]
+    │  Thank you, this is helpful. I tried running it earlier and ran into an apparent incompatibility issue. I will review the code and give it another shot.
+├─ FLust3R (2025-07-01 15:34:51.167000) [+1]
+│  heartfelt congrats
+├─ Roman@Ahmed (2025-07-01 15:34:47.277000) [+1]
+│  Your data-driven excellence inspires the entire community.
+├─ [deleted] (2025-07-01 15:28:12.493000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 14:31:15.587000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 12:06:30.057000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 15:36:09.787000) [+2]
+  │  [deleted]
+├─ [deleted] (2025-07-01 10:37:36.823000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 10:34:43.293000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 09:47:57.143000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 09:25:40.503000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 15:03:41.593000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-07-01 15:14:14.323000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-07-01 08:09:28.397000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 15:07:27.927000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2025-07-02 04:17:06.707000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-07-01 07:41:49.623000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 07:02:41.270000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 05:38:35.980000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 05:18:33.710000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 04:11:16.807000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 17:32:27.693000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-07-01 20:19:04.247000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-01 20:39:34.487000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-01 20:41:39.313000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-01 20:59:43.543000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-01 21:07:02.853000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2025-07-02 20:14:32.083000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2025-07-02 20:30:34.400000) [+2]
+    │  [deleted]
+├─ [deleted] (2025-07-01 02:51:06.423000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 02:01:39.210000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 02:08:51.780000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2025-07-01 02:59:14.440000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-07-01 01:49:06.893000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 00:24:12.083000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-09 12:34:36.987000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-05 11:56:22.847000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-04 20:11:51.813000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-04 08:04:47.890000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-04 16:04:16.503000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-07-03 18:00:52.927000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-04 16:05:21.130000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2025-07-06 00:16:04.523000) [+8]
+  │  [deleted]
+    ├─ [deleted] (2025-07-06 06:13:37.543000) [+2]
+    │  [deleted]
+├─ [deleted] (2025-07-02 03:33:42.187000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-02 03:52:18.033000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2025-07-02 04:15:09.507000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2025-07-02 14:52:43.717000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-03 06:18:57.707000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-07 18:04:17.833000) [+0]
+    │  [deleted]
+├─ [deleted] (2025-07-01 21:26:37.573000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-01 20:34:37.200000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 21:42:38.490000) [+2]
+  │  [deleted]
+├─ [deleted] (2025-07-01 10:33:26.460000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 17:23:05.077000) [+1]
+  │  [deleted]
+├─ [deleted] (2025-07-01 09:18:55.820000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-01 03:46:04.663000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 03:49:31.557000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2025-07-01 05:50:25.817000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-01 06:10:32.907000) [+2]
+    │  [deleted]
+  ├─ [deleted] (2025-07-01 05:53:29.367000) [+1]
+  │  [deleted]
+├─ [deleted] (2025-07-01 02:40:53.207000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 02:43:39.387000) [+3]
+  │  [deleted]
+├─ [deleted] (2025-07-01 02:32:44.233000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-01 02:31:16.523000) [+2]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 02:51:15.157000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2025-07-01 20:15:41.630000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2025-07-02 14:41:12.987000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-07-01 00:26:10.230000) [+2]
+│  [deleted]
+├─ [deleted] (2025-07-01 23:38:40.270000) [+1]
+│  [deleted]
+  ├─ [deleted] (2025-07-01 23:48:08.063000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2025-07-02 00:01:01.960000) [+1]
+    │  [deleted]
+├─ [deleted] (2025-07-01 08:48:44.020000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-04 11:36:52.707000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-04 07:16:08.803000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-02 06:05:19.627000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-02 03:03:37.107000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 13:45:38.770000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 00:31:31.430000) [+1]
+│  [deleted]
+├─ [deleted] (2025-07-01 00:25:51.757000) [+1]
+│  [deleted]
+├─ [deleted] (2025-08-30 14:43:40.943000) [+0]
+│  [deleted]
+├─ [deleted] (2025-08-16 17:49:45.743000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-10 18:12:20.130000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-10 01:39:19.153000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-09 17:44:43) [+0]
+│  [deleted]

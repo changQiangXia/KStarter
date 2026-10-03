@@ -1,0 +1,161 @@
+# https://www.kaggle.com/competitions/playground-series-s5e12/discussion/652262
+
+Topic #652262: Kaggle messed up this dataset on purpose
+  Author: Tilii
+  Posted: 2025-12-06 00:12:26.686000
+  Votes: 68  Comments: 45
+
+We have been at if for a few days, so we have some idea what's happening. Not even sure if I should be writing on this topic so early, as it can potentially dampen the enthusiasm of future users to take part in this competition.
+
+This insightful post by the ever-industrious @mpwolke got me thinking. There are some dizzyingly high predictive values in the paper that is referenced in that thread, which made me think that diabetes seems relatively east to predict.
+
+How could that be squared with the lousy models we are making in this competition? Getting AUC of ~0.73 is generally okay, but nothing to write home about. An accuracy value of ~0.69 is not worth bragging about either. In case you haven't checked, our models have log-loss of ~0.58. The best possible log-loss value is 0, and a totally random prediction (a probability of 0.5 for each data point) scores 0.693, so our predictions are much closer to random than perfect. If you still need to visualize how lousy our models are in this competition, here is a cumulative distribution function from one of my other posts. Those lines should be hugging the horizontal blue line at zero in the left part of the plot, and the flat line at 1 in the right part of the plot. Yet they are nowhere near that.
+
+
+
+So why are our models so bad if diabetes can generally be predicted well? Part of the answer was given in the post with which I started above: a feature called HbA1c (glycated hemoglobin) has been removed in the dataset we have, even though it is present in original data. More clues can be found here, here and here. All of them boil down to the same thing: there is a significant distribution shift between the original data, which is synthetic to begin with, and our double-synthetic dataset.
+
+I decided to test what kind of a prediction can be made from the original data. I fired up XGB, LGB and CatB with pretty standard parameters, assigned categorical and numerical variables, but other than that didn't do anything else. Their AUC CV scores, in the same order as above: 0.99980, 0.99982 and 0.99989. The original dataset can be classified almost perfectly, and Kaggle decided to muck that up. You will see density distributions below for our data and for the original. All the features that show good separation between 0 and 1 classes were removed: glucose_fasting, glucose_postprandial, hba1c, diabetes_risk_score. In S5E9 we dealt with a dataset to which noise was added deliberately to make it more difficult, and it seems that Inversion and company decided to follow suit. waist_to_hip_ratio was seemingly discretized in our data (by removing or replacing 0.80, 0.90, 1.00, etc values) rather than being continuous. systolic_bp, which was left-side clipped in the original, was made to be narrower and lacks some of the high values. Same for ldl_cholesterol, triglycerides and screen_time_hours_per_day, although the last one was never a major contributor. I'll let you go through the graphs below and extract your own conclusions. At this point it seems that the original dataset should not be used at all, either by concatenation to train folds, or as a modifier for target encoding.
+
+Kaggle seems to be finding new ways to throw junky data at us, in addition to what @cdeotte uncovered in his famous post. Well done, Kaggle!
+
+Density distributions for our dataset (without categorical variables):
+
+
+
+Density distributions for the original synthetic dataset:
+
+Comments:
+├─ Yao Yan (2025-12-10 22:28:22.770000) [+13]
+│  Hi @tilii7, I appreciate you raising this discussion.
+│  
+│  While the synthetic data is inspired by real data, we intentionally altered the feature set to exclude variables that would make the predictio...
+  ├─ Tilii (2025-12-10 23:54:15.943000) [+7]
+  │  Thank you for your feedback. As I said in several discussions with other Kagglers, it is not just that you excluded variables. That was already done last month, and even in this month's iteration t...
+  ├─ Abhay :) (2025-12-11 19:51:27.777000) [+0]
+  │  Hello @yanyao23 just curious … during making of these datasets , how are these exactly made like do you manually do some changes in the dataset via pandas or something or do you train some Neural n...
+  ├─ Ravi Ramakrishnan (2025-12-12 11:14:07.370000) [+0]
+  │  @yanyao23 I may suggest that one could test the signal in the features by running an Autogluon pipeline on the finalized / shortlisted dataset with the finalized evaluation metric prior to release....
+├─ Markus.JM (2025-12-08 20:56:10.200000) [+3]
+│  When Feature engineering is almost pointless, so is a challenge imo.
+  ├─ Tilii (2025-12-08 21:11:00.103000) [+1]
+  │  That's a valid way of looking at it.
+├─ Aritra Mukherjee (2025-12-09 16:16:42.380000) [+4]
+│  At the end of the day, Kaggle playground series competitions are a game of adapting to whatever constraints are thrown at us. If the data is noisy, drifted, or partially synthetic, then the challen...
+  ├─ paddykb (2025-12-09 17:09:25.757000) [+3]
+  │  push us to test ideas we wouldn’t normally try,
+  │  
+  │  
+  │  Usually for good reason :)
+  │  
+  │  The playground series often pushes us toward bad practices. 
+  │  
+  │  Because the test data mirrors the idiosyncratic synthetic...
+    ├─ Aritra Mukherjee (2025-12-10 04:49:05.420000) [+1]
+    │  I think that’s a fair take.
+    │  The playground series definitely isn’t representative of applied clinical modelling, and I agree that some of the artefacts push us toward solutions that wouldn’t transl...
+  ├─ Tilii (2025-12-09 18:41:19.217000) [+4]
+  │  At the end of the day, Kaggle playground series competitions are a game of adapting to whatever constraints are thrown at us.
+  │  
+  │  
+  │  No argument from me on this point. We will work with whatever we have...
+    ├─ Aritra Mukherjee (2025-12-10 06:00:09.353000) [+1]
+    │  Thank you for sharing your perspective, @tilii7. It’s always interesting to hear how colleagues from different disciplines of biology interpret these challenges.
+    │  
+    │  Coming from genomics, I admit I’m ...
+    ├─ Tilii (2025-12-10 10:42:01.887000) [+3]
+    │  Coming from genomics, I admit I’m a little less startled by noisy or distorted data.
+    │  
+    │  
+    │  Then let me try to startle you by showing two histogram distributions of predictions from the last two playgro...
+    ├─ Aritra Mukherjee (2025-12-10 16:33:28.613000) [+-3]
+    │  Thank you for the thoughtful follow-up, @tilii7.
+    │  
+    │  Your breakdown of prediction distributions is informative, and I agree that strong class separability typically produces the bimodal shapes you hig...
+├─ DaylightH (2025-12-06 05:52:00.093000) [+4]
+│  Thank you for taking the time to conduct this thorough analysis! I've actually participated in similar competitions where the training dataset was severely compromised. Back then, our approach was ...
+  ├─ L.E.Electron (2025-12-06 13:14:50.407000) [+2]
+  │  To train a model on original datasets to generate the efficient features is still a nice way to try, maybe we don't need a very excat value of them, what we should do is to aggregate them, I think ...
+    ├─ Tilii (2025-12-06 18:14:45.993000) [+2]
+    │  It is debatable whether this would work even if they only removed some features without changing anything else. But some feature distributions were also changed, which you can see by comparing the ...
+    ├─ Gerald Schwartz (2025-12-06 18:45:25.533000) [+1]
+    │  Gerald Schwartz
+    │  
+    │  Posted a month ago
+    │  
+    │  · 10th in this Competition
+    │  
+    │  Does it matter that the synthetic orig has 20 variables and the synthetic train-test data based on orig only uses 10 of the orig var...
+    ├─ Tilii (2025-12-06 19:42:48.437000) [+1]
+    │  Impossible to know with certainty, but I don't think so.
+    ├─ DaylightH (2025-12-07 17:27:53.037000) [+0]
+    │  I certainly don't deny this is a potentially promising idea. However, it's too aggressive and carries relatively high risk. I'm only using 2 models and some FE currently.  I believe such innovative...
+├─ Optimistix (2025-12-06 03:10:27.667000) [+4]
+│  Yes - Kaggle dropped several columns last month as well, but without killing too much signal - but this month they took out all the strong predictors. Looks like we're back to another month of wond...
+  ├─ Ravi Ramakrishnan (2025-12-06 04:17:03.717000) [+6]
+  │  Agreed 
+  │  Don't waste time on this competition. Weather is great outside, enjoy the holiday season instead @optimistix
+    ├─ Optimistix (2025-12-06 05:07:48.277000) [+1]
+    │  A bit too cold here, but otherwise agreed.
+├─ Marília Prata (2025-12-06 01:33:02.530000) [+4]
+│  I'm laughing with the " ever-industrious". 
+│  
+│  In Brazil, they say "Proactivo só faz merda" . 
+│  Google translate is so polite, it has translated it as: "Being proactive only makes things worse."  Whic...
+├─ C4rl05/V (2025-12-27 18:29:24.337000) [+1]
+│  Thanks for the post, super valuable information.
+├─ Shiwang Kumar (2025-12-13 07:21:57.650000) [+1]
+│  Thanks for this analysis @tilii7 there's smtg I wanna ask if the distributions were altered this heavily would comparing our train/test distributions help us understand what transformations were ap...
+  ├─ Tilii (2025-12-13 09:35:05.027000) [+3]
+  │  I am not sure it would be useful even if we could reverse engineer the manipulations. We already have 1 million data points total and don't think getting 100K extra points is worth the trouble. If ...
+├─ Abhay :) (2025-12-11 19:45:44.120000) [+1]
+│  Nice one ! …. @tilii7   I just had a question like if we plot density distributions of original and train datasets(as you have done) and carefully remove some parts of the features by seeing the or...
+  ├─ Tilii (2025-12-12 02:32:46.950000) [+1]
+  │  I don't think this can be done. Even though we use the phrase "adding the noise", that doesn't mean that the noise was physically added and can now be peeled off. Specifically, for some features th...
+    ├─ Abhay :) (2025-12-12 11:57:02.710000) [+0]
+    │  Oh..Okay !
+    │  thank you
+├─ Khushi Yadav (2025-12-10 16:47:32.397000) [+1]
+│  Really insightful discussion from everyone here.
+├─ Kumar Shrid (2025-12-24 13:24:09.343000) [+2]
+│  Thanks for this I am a begginer on kaggle and was struggling with this dataset
+  ├─ Nivesh Dhirwal (2025-12-24 17:01:48.160000) [+3]
+  │  Hey Kumar Shrid!
+  │  Don't worry , you will catchup soon
+├─ Krishna Yadu (2025-12-09 17:40:33.130000) [+1]
+│  I want to join in team in any competition. pls support me, I a to wil any  any compidition
+├─ Michael Semenoff (2025-12-07 19:31:41.567000) [+1]
+│  Is it possible the Kaggle team is saying 'data is dirty, this is what you've got, so work with it.'? I agree that all prior knowledge, domain expert or data collected, is invaluable. But, come on. ...
+  ├─ Tilii (2025-12-07 21:53:47.443000) [+3]
+  │  Is it possible the Kaggle team is saying 'data is dirty, this is what you've got, so work with it.'?
+  │  
+  │  
+  │  The "work with it" part is implied in any competition as we don't have a pick of datasets, but...
+├─ Abhishek Awasthi (2025-12-07 16:48:53.427000) [+1]
+│  YAH, DATASET IS MESSED UP!
+├─ Engineer Wanga (2025-12-20 09:49:12.757000) [+2]
+│  after exploring diffrent kinds of feature engineering techniques with my AUC  score still playing around .69 I was almost quiting but this discussion thread has light me up ,
+├─ NoraW (2025-12-19 03:56:45.297000) [+2]
+│  Thanks for your post! As a beginner-level participant, I've been struggling A LOT with this one. I was starting to lose my willpower on s5e12😭, so this discussion really means a lot.
+│  Thanks for sha...
+  ├─ Tilii (2025-12-19 05:33:33.297000) [+2]
+  │  If you liked this post, I suggest you keep reading the rest of discussions. In the past 5 days many insights have been uncovered that will further help you model this dataset.
+├─ Ladipo Samson (2025-12-10 07:53:28.043000) [+2]
+│  Really insightful discussion from everyone here. What stands out to me is how this thread highlights both sides of the Playground experience: on one hand, the frustration of working with data that ...
+  ├─ Optimistix (2025-12-11 04:19:34.153000) [+2]
+  │  I keep reading about the "creative problem-solving that emerges when the usual signals are stripped away" &amp; similar sentiments - could you please point me to a few examples of such creative pro...
+    ├─ Ravi Ramakrishnan (2025-12-11 20:07:40.657000) [+0]
+    │  @optimistix creative blind mix is an option - one can name this as titanium ratio as well 😀
+├─ Aritra Mukherjee (2025-12-15 15:46:03.250000) [+-2]
+│  It took me a few days to get back to you. I was enjoying a nice digital detox.
+│  
+│  To answer your questions, and statements:
+│  
+│  
+│  
+│  
+│  "Other than giving us something to entertain ourselves in December, wha...
+├─ Aishwarya Sharma (2025-12-17 18:33:11.890000) [+0]
+│  This is an awesome write up which gives a starter tons of perspective and clarity. Well done professor !
+├─ Manasa Deshpande (2025-12-11 04:24:06.250000) [+0]
+│  The dataset is messed up!!!

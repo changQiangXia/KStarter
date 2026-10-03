@@ -1,0 +1,73 @@
+<p>First of all congratulations to all the winners! Thanks as well to Kaggle and RSNA for hosting this competition and giving us the chance to work on such an interesting problem.</p>
+<p>On the contrary of what top solutions look like, my final solution was one of the very first baselines I started with. There was no model ensembling, no complex/big models, and no sophisticated training techniques.</p>
+<h3><strong>Team name secret:</strong></h3>
+<p>As many of you have seen, the team name was set to “I hate this competition” during the last month and I will explain below the reasons that made me hate spending time on this competition.</p>
+<ul>
+<li>In every competition, I always start with a very simple model and then submit it. After this, I try to use different validation strategies in order to find the best strategy that really reflects the model performance. What made me upset about this competition is that the CV score was almost random in my early models and that no strategy worked to validate the performance of the model.</li>
+<li>Bigger models were giving noisy CV scores (almost random) and I couldn’t fine-tune any of them. I only limited my models to resnet10-50 and b0-b3 during all my experiments (large resents, densents and efficientnets failed).</li>
+<li>The batch norm layer in this Efficientnet implementation <a href="https://github.com/lukemelas/EfficientNet-PyTorch" target="_blank">here</a> was giving non-sense output when I used 3 spatial inputs for the CNN. I found that other people suffered from this problem after searching about this issue and I felt disappointed since many of my experiments were just a total failure. I switched to <strong>monai</strong> library at that time.</li>
+<li>Ensembling was not really improving the score. Once I change the folds, the scores completely change and the std of the scores was so high.</li>
+<li>Seeing people getting 0.8+ on the public LB while my models were stuck at around 0.5-0.6 was annoying for me.</li>
+<li>I was certain and 100% sure that most of the public LB scores were just random scores and that all of the scores will drop in the private LB.</li>
+<li>I saw someone in the discussion forum who shared that he/she got 0.7+ in the public LB by just using random predictions.<br>
+I was reading the discussions every day and I was really amazed by how many people were targeting 0.7 and 0.8+ scores. This seemed like an impossible mission for me. My utmost ambition was getting a model that scores 0.6+ on validation and public LB (which I failed to get even after the competition ended). </li>
+</ul>
+<h3><strong>What I concluded after a whole week doing EDA:</strong></h3>
+<ul>
+<li>Public LB does make sense if you don’t overfit your validation set.</li>
+<li>Most of the public models fail to learn any useful patterns.</li>
+<li>Many teams are just focusing on improving their Public scores and didn’t even take into consideration the shakeup that could happen at the end of the competition.</li>
+<li>There will be no escape from the shakeup.</li>
+<li>It will be very easy to get a top100 position in the private LB with a simple model because many many competitors only focus on the public score.</li>
+<li>Teaming up (in order to ensemble different models) won’t help to improve any score.</li>
+<li>I should not invest more than 2 weeks working on this competition because the risk is so high and I cannot guarantee to get any medal. </li>
+<li>The chances to be in the top 1% or in the middle of the LB (500-700) are almost the same.</li>
+</ul>
+<h3><strong>Very slow validation strategy:</strong></h3>
+<p>Training the same model with the same everything (parameters, hardware, fixing all random seeds), with the same training data and the same validation set will give different aucroc scores. I remember that when I trained a EF-b0 more than 100 times (same everything) I got CV scores between 0.53 and 0.62 with a high std (can’t remember it). Training 5 folds 100 times, reduced drastically the std of the scores and I got scores (after averaging the 5 folds) between 0.52 and 0.56.<br>
+Guess what? To judge any model/idea/approach I used to train 100 models (Every model is trained 20 times X 5folds). I ranked the experiments based on the scores average. Then, I selected the top 5 ideas+models and I ran 250 models per idea (Every model is trained 50 times X 5folds. The folds in the second stage are different from the first stage folds). After this,  I re-ranked the ideas based on the average score for the 250 models (I do the oof of every idea/model and I average the 50 oofs).<br>
+Please note that some of what I called models in this section represent 4 trained models (on "FLAIR", "T1w", "T1wCE", "T2w”). Whenever I want to try an idea I apply it to the CNN model using all the 4 types data and I train 4 different models and I average the 4 models. I have excluded the “T2w” data in most of the final models (I think that more than 50% of the models were not using the “T2w” data). Anyway, let’s skip this part because the ideas and models I was trying were totally random. In fact, most of the ideas I tried were just ideas I get when I close my eyes to sleep. I have to be honest, this competition ruined many of my nights and made me feel like a stupid loser.</p>
+<h3><strong>What was the top one idea after the 2 stage ranking?</strong></h3>
+<p>I am not sure but I remember that I started with 8 simple ideas and then I tried some sophisticated and customized models (around 20).<br>
+The top 2 models after applying the 2 stage validation filtering were using the same model and same training techniques but the top 1 was using all of the 4 different structural multi-parametric MRI data (FLAIR, t1w, t1wce, t2w) while the second top model was just using the “T1wCE” data.</p>
+<h3><strong>The final model:</strong></h3>
+<ul>
+<li>3D CNN</li>
+<li>Resnet10</li>
+<li>BCE loss</li>
+<li>Adam optimizer</li>
+<li>15 epochs</li>
+<li>LR: epoch 1-&gt;10; lr = 0.0001 | epoch 10 to 15 lr=0.00005</li>
+<li>Image size: 256x256</li>
+<li>Batch size: 8 (the bigger bs I use the worse CV I get, I was alternating between bs=4 and bs=8)</li>
+<li>No mixed-precision is used.</li>
+<li>Used a small trick to build the 3D images. Let’s call it “The best central image trick”.</li>
+<li>One epoch takes around 1minute and 20 seconds using an RTX 3090.</li>
+</ul>
+<h3><strong>The best central image trick:</strong></h3>
+<p>Each independent case has a different number of images for all the MRI scans. Using all the scans will confuse the model to learn the spatial dependence of the brain pixels.<br>
+For example, Let’s assume that case_1 has 80 T1wCE  scans and case_2 has 500 T1wCE scans and that we will use 40 images as an input for the model.<br>
+What people did, is that they take the central image (aka image number 40 (80//2) for case_1 and image number 250 (500//2) in case_2) and then they build the 3d images this way:<br>
+case_1: from image number 20 to image number 60<br>
+case_2: from image number 480 to image number 520.<br>
+In this example, we will end up with 2 3d images that don’t represent the same portion of the brain. Thus, the model will not only fail to learn the tumor pattern but will also start learning some spatial patterns that are not useful in our case.<br>
+What I wanted to do and failed is to select a fixed starting and ending point for all the brains and train with the same information for all the cases. But, I couldn't find a way to successfully make it work.<br>
+After many failures, I found that using the biggest image as a central image (the image that contains the largest brain cutaway view) will slightly improve my local CV (improvements were between 0.01 and 0.02). I think that this was the only 100% successful experiment I did in this competition. It is not exactly what I wanted, but it kinda worked.</p>
+<h3><strong>What did not work:</strong></h3>
+<ul>
+<li>2d CNNs</li>
+<li>4 backbones 3D CNNs (each for one structural multi-parametric MRI folder)</li>
+<li>Ensembling</li>
+<li>Pretrained on brain images</li>
+<li>Using the metadata from the DCIM images</li>
+<li>Stacking the output from the different CNNs using based tree models.</li>
+<li>Deep CNNs</li>
+<li>Some tricks I did to normalize the voxels in some consistent ways. (It has been more than a month since I did that and I now think that what I did seems completely stupid lol)</li>
+</ul>
+<h3><strong>One funny fact:</strong></h3>
+<p>I forgot to select my best submissions since I am on vacation and I forgot about the last day of the competition. The cool thing is that my best 2 models had the best public LB score and they were automatically selected as my final submissions :D</p>
+<h3><strong>One quick final thought:</strong></h3>
+<p>I did not enjoy making submissions in this competition as much as I enjoyed the private LB results which explains the fact that the team name was changed from “I hate this competition” to “I love this competition”. The data was too small and the models were barely learning, I am sure that if everyone re-runs his best model again we will still have a small shakeup in the top teams. Finally, I feel super happy to have had my first first-place finish and my first solo gold and I apologize for not interacting with the community in the discussion forum. See you in the next competitions :D </p>
+<h3><strong>Code</strong></h3>
+<p>Training code is available <a href="https://github.com/FirasBaba/rsna-resnet10" target="_blank">here</a><br>
+The winner inference notebook can be found <a href="https://www.kaggle.com/rinnqd/monai-simple-prediction-from-flair" target="_blank">here</a></p>

@@ -1,0 +1,303 @@
+# https://www.kaggle.com/competitions/rsna-miccai-brain-tumor-radiogenomic-classification/discussion/279832
+
+Topic #279832: 12th Place Solution
+  Author: Gunes Evitan
+  Posted: 2021-10-19 08:45:13.624000
+  Votes: 44  Comments: 22
+
+To start with, I want to congratulate my teammate @authman. Mad man finally did it. He just became competitions master after countless high silver medals.
+
+I wanted to spend more time in this competition but unfortunately I was stuck at Optiver Realized Volatility Prediction and @authman was working on G2Net Gravitational Wave Detection. We started this competition when 2.5 weeks left so we couldn't try every idea we had but at least some of them worked and we landed in 12th place.
+
+After starting the competition, I quickly read through discussions and notebooks, but the quality of shared content was really poor. I only learned dicom preprocessing from @davidbroberts' notebooks.
+
+Task 1 Data Preparation
+
+We thought 144^3 spatial dimensions is good enough for both segmentation and classification so we decided to use MRIs and masks in that shape. We removed empty slices along X-Y, X-Z and Y-Z axes then resized them from the longest axis.  We converted ground-truth segmentation masks to non-mutually exclusive one-hot encoded masks with this code.
+
+def convert_labels(mask):
+
+    """
+    Convert 3D spatial segmentation mask to 4D one-hot encoded segmentation mask
+
+    Parameters
+    ----------
+    mask [np.ndarray of shape (depth, height, width)]: Array of 3D segmentation mask
+
+    Returns
+    -------
+    mask [np.ndarray of shape (channel, depth, height, width)]: Array of 4D one-hot encoded segmentation mask
+    """
+
+    one_hot_encoded_mask = np.stack([
+        np.logical_or(mask == 1, mask == 2, mask == 3),  # Whole tumor
+        np.logical_or(mask == 2, mask == 3),  # Tumor core
+        (mask == 3),  # Enhancing tumor
+    ]).astype(np.uint8)
+
+    return one_hot_encoded_mask
+
+
+Finally, we saved MRIs and masks as npy files for training faster. Preprocessing code for nii files can be found here.
+
+Task 1 Validation
+
+Single shuffled train/test split with 80/20 ratio is used for validation. Case directories were split so when every modality is included, it worked like group split without leak.
+
+Task 1 Preprocessing
+
+We used random rotation on X, Y and Z axes between -90 and 90 radians with 25% chance because task 1 MRIs were resampled and registered. We had to break the perfect alignment because task 2 wasn't resampled and registered. We also standardized every MRI like this mri = (mri - mri.mean()) / mri.std() which probably wasn't a correct way to do it.
+
+Task 1 Models
+
+This was my first segmentation experience so I used a high-level library and we had no time to write our models from scratch. We used SegResNet model from monai for segmentation. We trained 5 single split models for FLAIR, T1w, T1wCE, T2w and all modalities included. All of them trained with dice loss and converged at 0.2-0.3 validation loss. We used a dynamic threshold for converting sigmoided output to labels. Cutoff point is dynamically found using (mean prediction of positives + mean prediction of negatives) / 2.
+
+Task 2 Data Preparation
+
+We used 144^3 spatial dimensions in task 2 MRIs as well. We removed empty slices along X-Y, X-Z and Y-Z axes then resized them from the longest axis. We didn't use any voi lut or downcasted MRIs  to 8 bit because it was lossy and redundant. We saved MRIs to npy files as 16 bit numpy arrays with default values for training faster. Preprocessing code for dicom files can be found here.
+
+Task 2 Segmentation and Feature Extraction
+
+We validated our segmentation models by visualizing predictions on task 2 MRIs. They were "good enough" but extracted features or using predicted masks as additional channels didn't help our models to score better. It was really sad for us to abandon segmentation idea because we dedicated our first week to it. 
+
+Task 2 Validation
+
+We used 5 shuffled stratified folds for cross-validation. Folds are stratified on MGMT_value.
+
+Task 2 Preprocessing
+
+We used random rotation on X, Y and Z axes between -15 and 15 radians and random 3d elastic deformations with 100% chance. We standardized every MRI like this mri = (mri - mri.mean()) / mri.std() here as well.
+
+Task 2 Models
+
+We used 3D DenseNet121 and DenseNet169 models with classification head and models are trained with bce with logits loss. We noticed that our models can reach 0.66-0.67 val loss consistently with cosine annealing scheduler if it was a lucky run. Loss was correlated with ROC AUC score only after reaching that point so we run our models countless times until we get lucky and validation loss reaches 0.66-0.67. When that happens, val ROC AUC score was always &gt; 0.6. That's when I thought we had a solid chance to grab gold medal. We trained DenseNet121 and DenseNet169 models for every modality separately so we had 4 (modality) * 5 (folds) * 2 (DenseNet121 + DenseNet169) models at the end. Their scores can be seen below.
+
+------------------------------
+Evaluating densenet121
+------------------------------
+
+FLAIR
+-----
+Fold 1 - ROC AUC Score: 0.625220
+Fold 2 - ROC AUC Score: 0.579333
+Fold 3 - ROC AUC Score: 0.678390
+Fold 4 - ROC AUC Score: 0.612221
+Fold 5 - ROC AUC Score: 0.605067
+------------------------------
+OOF ROC AUC Score: 0.624692
+------------------------------
+
+T1w
+---
+Fold 1 - ROC AUC Score: 0.595601
+Fold 2 - ROC AUC Score: 0.656616
+Fold 3 - ROC AUC Score: 0.563338
+Fold 4 - ROC AUC Score: 0.521013
+Fold 5 - ROC AUC Score: 0.591654
+------------------------------
+OOF ROC AUC Score: 0.576726
+------------------------------
+
+T1wCE
+-----
+Fold 1 - ROC AUC Score: 0.626393
+Fold 2 - ROC AUC Score: 0.595433
+Fold 3 - ROC AUC Score: 0.639046
+Fold 4 - ROC AUC Score: 0.615201
+Fold 5 - ROC AUC Score: 0.518629
+------------------------------
+OOF ROC AUC Score: 0.598063
+------------------------------
+
+T2w
+---
+Fold 1 - ROC AUC Score: 0.664516
+Fold 2 - ROC AUC Score: 0.566745
+Fold 3 - ROC AUC Score: 0.621162
+Fold 4 - ROC AUC Score: 0.664978
+Fold 5 - ROC AUC Score: 0.666170
+------------------------------
+OOF ROC AUC Score: 0.63008
+------------------------------
+
+
+------------------------------
+Evaluating densenet169
+------------------------------
+
+FLAIR
+-----
+Fold 1 - ROC AUC Score: 0.621114
+Fold 2 - ROC AUC Score: 0.584309
+Fold 3 - ROC AUC Score: 0.619672
+Fold 4 - ROC AUC Score: 0.619672
+Fold 5 - ROC AUC Score: 0.625633
+------------------------------
+OOF ROC AUC Score: 0.608471
+------------------------------
+
+T1w
+---
+Fold 1 - ROC AUC Score: 0.595894
+Fold 2 - ROC AUC Score: 0.556499
+Fold 3 - ROC AUC Score: 0.558569
+Fold 4 - ROC AUC Score: 0.581818
+Fold 5 - ROC AUC Score: 0.620566
+------------------------------
+OOF ROC AUC Score: 0.579769
+------------------------------
+
+T1wCE
+-----
+Fold 1 - ROC AUC Score: 0.563343
+Fold 2 - ROC AUC Score: 0.569379
+Fold 3 - ROC AUC Score: 0.613711
+Fold 4 - ROC AUC Score: 0.616990
+Fold 5 - ROC AUC Score: 0.559762
+------------------------------
+OOF ROC AUC Score: 0.57746
+------------------------------
+
+T2w
+---
+Fold 1 - ROC AUC Score: 0.673314
+Fold 2 - ROC AUC Score: 0.645492
+Fold 3 - ROC AUC Score: 0.616692
+Fold 4 - ROC AUC Score: 0.561550
+Fold 5 - ROC AUC Score: 0.585097
+------------------------------
+OOF ROC AUC Score: 0.603427
+------------------------------
+
+
+Task 2 Post-processing, Blending and Submission
+
+We didn't use any post-processing to logits or sigmoided outputs. We only used average blending and we submit the predictions. We tried assigning different weights to different models but it wasn't better than average blending. I think it was because predictions' correlations were really low and all of them were contributing to final blend score regardless of their OOF scores.
+
+
+
+Our final average blending score was
+
+Blend
+-----
+Fold 1 - ROC AUC Score: 0.707038
+Fold 2 - ROC AUC Score: 0.682377
+Fold 3 - ROC AUC Score: 0.712668
+Fold 4 - ROC AUC Score: 0.698957
+Fold 5 - ROC AUC Score: 0.709687
+------------------------------
+OOF ROC AUC Score: 0.692443
+------------------------------
+
+
+What didn't work
+
+
+
+2D segmentation by randomly selecting 3 slices from X-Y, X-Z or Y-Z axes
+
+Using U-Net or U-Net variations with 144^3 spatial dimensions, it wasn't possible to fit enough data into memory
+
+SegResNet with variational auto-encoder
+
+Features extracted from segmentations
+
+ResNet or EfficientNet classification models
+
+Weighted blending
+
+Only using folds with &gt; 0.6 ROC AUC score
+
+Only using FLAIR
+
+Only using FLAIR and T2w
+
+
+Links
+
+Here are the links of everything I made for this competition.
+
+Kaggle Notebooks:
+
+
+
+RSNA-MICCAI BTRC - Inference and Blend
+
+
+Kaggle Datasets:
+
+
+
+https://www.kaggle.com/gunesevitan/rsnamiccai-btrc-dataset
+
+
+GitHub Repository
+
+
+
+RSNA-MICCAI Brain Tumor Radiogenomic Classification
+
+
+References
+
+U-Net: Convolutional Networks for Biomedical Image Segmentation
+3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation
+Trialing U-Net Training Modifications for Segmenting Gliomas Using Open Source Deep Learning Framework
+3D MRI brain tumor segmentation using autoencoder regularization
+
+Comments:
+├─ Pranshu15 (2021-10-25 04:36:36.400000) [+5]
+│  Nice approach, Congrats
+├─ dr. Konya (2021-10-19 09:00:37.793000) [+3]
+│  @gunesevitan thank you for the writeup!
+│  Could you elaborate a little bit what kind of segmentation did you use and how many classes did the tumor segmentation contain? Did you extract classical his...
+  ├─ Gunes Evitan (2021-10-19 10:24:02.857000) [+2]
+  │  Sorry for not being clear. Ground-truth segmentation mask labels were; 1 for the necrotic center and non-enhancing tumor, 2 for edema, and 4 for enhancing tumor. Our segmentation model's output con...
+  ├─ عثمان (2021-10-19 12:45:01.430000) [+4]
+  │  For extracted segmentation features, pyradomics was used. For each modality (4), and for each segmentation class (3), pyradomics generates ~120 features given a 3d volume and a mask for a grand tot...
+  ├─ dr. Konya (2021-10-19 12:59:50.997000) [+3]
+  │  I am really surprised that none of these pyradiomics extracted features showed higher correlations, i must admit that i would have expected to get something better from these features.
+  │  
+  │  Maybe, just...
+  ├─ عثمان (2021-10-19 13:42:51.500000) [+4]
+  │  Under normal circumstances, absolutely. But I think this competition doesn't rate late subs—they didn't even rate non-selected final 2 subs. All other submissions forced scored -1 AUC. I really wan...
+  ├─ dr. Konya (2021-10-19 15:47:48.680000) [+2]
+  │  I second that on the location of the tumor: even the newest world health organisation's grading takes the localisation (still!) into account and makes difference between midline and hemispheric gli...
+  ├─ [deleted] (2021-10-19 16:20:03.833000) [+2]
+  │  [deleted]
+  ├─ عثمان (2021-10-19 18:30:03.440000) [+0]
+  │  Thanks for the kind words and for the tip. Looks like we still have some playing around to do :-).
+  ├─ dr. Konya (2021-10-19 19:54:12.610000) [+4]
+  │  @jonathanchan… if i would do further research, i would definitely try to analyse some of the following features:
+  │  
+  │  
+  │  
+  │  
+  │  The tumours are usually not homogenous in terms of their composition, there may ...
+  ├─ [deleted] (2021-10-20 03:48:44.090000) [+1]
+  │  [deleted]
+├─ KhanhVD (2021-10-19 14:49:33.277000) [+4]
+│  Congrats @gunesevitan and team, you did a good job with 3D models
+├─ Aditya Sharma (2021-10-25 13:23:15.997000) [+2]
+│  Thanks for sharing your approach! Congratulations🎉
+├─ Muhammad Maaz (2021-10-25 09:00:01.180000) [+2]
+│  @gunesevitan Good work.
+├─ Dac-Thanh Van (2021-10-23 04:14:53.103000) [+2]
+│  congratulations! Have you been able to find the feature importance of the brain scans? The ROC of around 60 may not be a good fit for practical application.
+  ├─ Gunes Evitan (2021-10-24 15:36:10.610000) [+1]
+  │  Thanks. We didn't use any handcrafted features in final solution because they didn't work.
+├─ Mr_KnowNothing (2021-10-20 10:35:33.497000) [+2]
+│  congrats @authman I am really happy for you , very well deserved for both of you @gunesevitan
+├─ Kamal Das (2021-10-20 07:15:10.537000) [+2]
+│  Congrats @gunesevita!! Great work… and lots to learn here! 👌🙏🙌
+│  
+│  Would be interested to know how you were so confident of winning Gold as @authman noted in an earlier post:
+│  https://www.kaggle.com/c/...
+├─ atfujita (2021-10-19 15:17:34.050000) [+2]
+│  Congratulations!
+├─ MohammadHossein Givkashi (2021-10-19 12:14:20.400000) [+2]
+│  congratulations
+├─ [deleted] (2021-10-25 16:06:35.150000) [+2]
+│  [deleted]
+├─ [deleted] (2021-10-19 15:54:50.357000) [+2]
+│  [deleted]

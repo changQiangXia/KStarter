@@ -1,0 +1,89 @@
+# https://www.kaggle.com/competitions/playground-series-s6e7/discussion/717222
+
+Topic #717222: Plausible generation model of the "original" dataset
+  Author: broccoli beef
+  Posted: 2026-07-01 17:04:01.224000
+  Votes: 42  Comments: 11
+
+The "original" dataset has many features, but it appears that only 3 were useful in generating the target. These are sleep_duration, stress_level and physical_activity_level. With the ground truth being hard labels, it would not be possible to reverse engineer the generation model with certainty because many models would give the same hard labels. One can easily make up such a model:
+
+from sklearn.metrics import balanced_accuracy_score
+
+original = pd.read_csv('/kaggle/input/datasets/ziya07/college-student-health-behavior-dataset/student_health_dataset_50k.csv')
+y = original.pop('health_condition')
+z = (
+    (original.sleep_duration&lt;6).astype(int)*2+
+    (original.stress_level=='medium').astype(int)+
+    (original.stress_level=='high').astype(int)*3+
+    (original.physical_activity_level=='moderate').astype(int)+
+    (original.physical_activity_level=='sedentary').astype(int)
+)
+y_pred = pd.cut(z, [-np.inf, 0, 4, np.inf], labels=['fit', 'at-risk', 'unhealthy']).astype('object')
+print(balanced_accuracy_score(y, y_pred))
+
+
+0.9905759641337664
+
+
+Is it possible to completely separate the classes with a simple model? I have my doubt. Synthetic datasets are usually created with noise.
+
+Sticking with these 3 features, there are only 18 combinations.
+
+X = pd.DataFrame()
+X['sleep_duration&lt;6'] = (original.sleep_duration&lt;6).astype(int)
+X['stress_level=medium'] = (original.stress_level=='medium').astype(int)
+X['stress_level=high'] = (original.stress_level=='high').astype(int)
+X['physical_activity_level=moderate'] = (original.physical_activity_level=='moderate').astype(int)
+X['physical_activity_level=sedentary'] = (original.physical_activity_level=='sedentary').astype(int)
+cols = list(X.columns)
+X[''] = y
+g = X.groupby(cols)
+df = g.value_counts(normalize=True).unstack(fill_value=0)
+df['count'] = g.size()
+df
+
+
+
+It almost looks like the creator of the "original" dataset took the group with absolutely no risk factors and made 1/3 of them "at risk".
+
+Comments:
+├─ broccoli beef (2026-07-02 03:31:38.930000) [+7]
+│  It turns out the generation is completely deterministic after all.
+│  
+│  from sklearn.tree import DecisionTreeClassifier, export_text
+│  from sklearn.metrics import accuracy_score
+│  
+│  X = pd.DataFrame(index=o...
+  ├─ broccoli beef (2026-07-02 13:45:42.483000) [+2]
+  │  From 20/20 hindsight, you get the same decision tree of max depth 4 by simply fitting the data to a decision tree classifier. 
+  │  
+  │  The creator of the "original" dataset also has an "enhanced" dataset ...
+├─ Georgy Mamarin (2026-07-03 09:45:36.380000) [+1]
+│  This looks like the mechanism behind something I could only observe. In my EDA three different model families all plateau at ~0.950 balanced accuracy, and the best explanation I had was "the signal...
+├─ Alibay Alili (2026-07-07 04:53:17.967000) [+2]
+│  Top three features clearly dominate.
+  ├─ shubham jaiswal (2026-07-07 14:45:02.047000) [+1]
+  │  I am new to this so can you please just give me some insights how did you figured this out??
+    ├─ Alibay Alili (2026-07-07 18:19:46.520000) [+3]
+    │  Here is the code. 
+    │  
+    │  import xgboost as xgb
+    │  from xgboost import XGBClassifier
+    │  
+    │  # got it using Optuna
+    │  best_params = {'max_depth': 7,
+    │   'min_child_weight': 25,
+    │   'learning_rate': 0.00946478772321216,
+    │   'r...
+├─ hypecoef (2026-07-01 19:11:23.690000) [+2]
+│  Very useful information! I'm curious about how much influence BMI has on the classes in the training dataset. How did you determine these thresholds in the original data?
+  ├─ broccoli beef (2026-07-02 05:18:30.527000) [+5]
+  │  For handcrafted synthetic data where you suspect the generation logic involves simple thresholding, you can calculate the mutual information \(I(x\le t,y)\) for all thresholds \(t\). You can vector...
+    ├─ Aditya Raj Singh (2026-07-06 13:04:30.277000) [+0]
+    │  Your posts are absolute treat to look at :) . I'll definetly be using this in future
+    ├─ nybbler (2026-07-06 14:44:24.330000) [+1]
+    │  @siukeitin does it again with some amazing analysis basically breaking down the key elements of the competition!
+    │  
+    │  The mutual information of features in the original (even enhanced) dataset vs. stre...
+    ├─ Vlad Studennykov (2026-07-20 22:05:28.700000) [+0]
+    │  @nybbler @siukeitin, thank you for your insightful observations and for the inspiration. I also started reverse engineering the data generation process in my notebook here and tried to find optimal...

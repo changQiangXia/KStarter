@@ -1,0 +1,739 @@
+<p>To the organizers — thank you for hosting such a wonderful competition. This is a largely unexplored problem, and although I am not well-versed in geology or time-series analysis, I found a great deal to learn. I finished <strong>20th on Public and 6th on Private</strong> — a large shake-up — and I also reflect on what caused such a big move in the standings. I present the solution following the trajectory of the accuracy improvements, so I hope you'll take a look. I'm also looking forward to reading the other participants' solutions.</p>
+<h2>1. Summary</h2>
+<p>The task is to take the gamma-ray log (GR) measured along a horizontal well, compare it against reference data provided separately, and predict how high in the rock column the well is passing (TVT).</p>
+<p>My solution relied, from start to finish, on a <strong>Particle Filter.</strong> I ran many particle filters with different settings to produce many TVT estimates, and <strong>fed a final set of 91 estimates into an NN model</strong> to get the prediction. The mental picture is that <strong>the NN fuses the 91 candidates row by row — it is doing "row-level bagging."</strong> This reaches about CV 5.4. I am not a model specialist, so rather than elaborate on the model I fought this by relentlessly improving those 91 inputs (i.e., the features).</p>
+<p><strong>The final score was Private 5.984 / Public 5.626 / CV 5.4577.</strong></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2F84885a9eda127cffbdee6a25368c0dfc%2Ffig_overview_en.svg?generation=1785998680594279&amp;alt=media" alt=""></p>
+<hr>
+<h2>2. Methods and results</h2>
+<h3>2-0. The starting point</h3>
+<p>I joined 2 months before the deadline. Looking at the public notebooks, I saw the base was a <strong>combination of a Particle Filter and a tabular model.</strong> I also noticed these notebooks had a problem — they were <strong>heavily overfit to the Public LB.</strong></p>
+<p>A Particle Filter has a number of tunable parameters. <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/707613" target="_blank">This discussion</a> confirmed that <strong>a Particle Filter alone can reach fairly high accuracy</strong>, and that <strong>the public notebooks were under-tuned.</strong> Tuning the parameters properly with Optuna was my first step. From there on, every improvement depended heavily on improving the Particle Filter.</p>
+<h3>2-1. Baseline — CV 7.8 / LB 7.168</h3>
+<p>The items I tuned with Optuna are in the table below. <strong>At this stage there is nothing physical whatsoever.</strong> Also, the <strong>particle seed count is fixed at n_seed = 32.</strong></p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gr_sig (GR-likelihood σ)</td>
+<td>tolerance of the GR match (how strict the alignment is)</td>
+</tr>
+<tr>
+<td>gr_power</td>
+<td>sharpness (exponent) of the GR likelihood</td>
+</tr>
+<tr>
+<td>init_pos_std</td>
+<td>spread of the initial TVT position</td>
+</tr>
+<tr>
+<td>init_rate_std</td>
+<td>spread of the initial slope (rate of change)</td>
+</tr>
+<tr>
+<td>mom / vn / pn</td>
+<td>slope momentum &amp; transition noise (random-walk width of position/slope)</td>
+</tr>
+<tr>
+<td>resamp</td>
+<td>resample threshold (prevents particle degeneracy)</td>
+</tr>
+<tr>
+<td>jump_prob / jump_std</td>
+<td>probability of jumping to the other solution (branch), and its width</td>
+</tr>
+<tr>
+<td>rate_clip / tvt_clip_margin</td>
+<td>limits on slope/position drift</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>First I simply changed a <strong>single</strong> Optuna-tuned parameter and fed it the same way as the public notebooks. The result was CV 8.64 / LB 7.862 — overfit to the LB, but better than the public notebooks at the time.</p>
+<p>Next I ran the experiment: <strong>what if I concatenate the estimates from several Particle Filter parameter sets as input?</strong> I tried a 3-input and a 5-input version (these two are different things), and both improved CV and LB.</p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-input</td>
+<td>8.64</td>
+<td>7.862</td>
+<td>−0.78</td>
+<td>8.163</td>
+</tr>
+<tr>
+<td>3-input</td>
+<td>7.90</td>
+<td>7.189</td>
+<td>−0.71</td>
+<td>7.729</td>
+</tr>
+<tr>
+<td>5-input</td>
+<td>7.80</td>
+<td>7.168</td>
+<td>−0.63</td>
+<td>7.804</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3>2-2. Hot-rodding the Particle Filter (GPU + a smoother) — CV 7.5 / LB 6.724</h3>
+<p>At the 2-1 stage, just running 3 PFs (seed = 32) already took about 4 hours to score, dominated by the Particle Filter. So I rebuilt the <strong>Particle Filter to run on GPU.</strong> This made experiments and inference <strong>~200× faster,</strong> letting me run far more trials.</p>
+<p>A by-product of this rebuild was that I could add a <strong>smoother mechanism</strong> to the PF. An ordinary particle filter uses "only the past" to estimate the position at each step (causal). A smoother instead <strong>keeps the particles' ancestry (which particle came from where) and re-estimates the past after seeing a little of the future GR.</strong> Because it uses GR context on both sides, the estimate is more stable, and places that momentarily got lost in noise get corrected after the fact. What I use here is a <strong>fixed-lag particle smoother</strong>, following Kitagawa (1996) / Doucet &amp; Johansen (2009) (see References).</p>
+<p>Feeding this into the tabular model, a smoothing width of <strong>smooth = 192 gave CV −0.3 / LB −0.4.</strong> However, <strong>the longer the lag, the heavier the compute</strong> — each particle's ancestry must be kept over a long window — so it runs slower than the plain (no-smoothing) PF. Measured on an RTX 5070, one pass (one parameter set × the tw representation) over all 773 wells takes <strong>~4.5 min for plain PF → ~4.9 min for fixed-lag 16 (+~10%) → ~13 min for fixed-lag 192 (~2.9× plain).</strong> A short lag is nearly free, but stretching it to 192 becomes clearly heavy (and is impractical without the GPU port).</p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5-input</td>
+<td>7.80</td>
+<td>7.168</td>
+<td>−0.63</td>
+<td>7.804</td>
+</tr>
+<tr>
+<td>5-input + smooth</td>
+<td>7.50</td>
+<td>6.724</td>
+<td>−0.78</td>
+<td>7.404</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2F27f67ae9d5a8801de7170e9a4e8684cb%2Ffig_smoother_en.png?generation=1785998827309087&amp;alt=media" alt=""></p>
+<p>Above: pf_1 (tw representation) run with no smoothing (filter) and with fixed-lag 192 (smoother), with three cases picked by the per-well RMSE difference. <strong>Left = big improvement:</strong> where the filter wobbles and overshoots early on, the smoother — using GR context from both sides — pulls it back (7.57 → 5.08). <strong>Middle = slight improvement:</strong> on an already-easy well the effect is small but consistent (1.16 → 0.77). <strong>Right = slight worsening:</strong> very rarely, smoothing nudges it slightly worse (4.97 → 5.05). On balance, the fix-the-wobble effect dominates.</p>
+<h3>2-3. Alternative GR representations (self / neighbor) — CV 6.98 / LB 6.026</h3>
+<p>From <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/698825" target="_blank">this discussion</a> I learned that the typewell GR (henceforth <strong>twGR</strong>) is noisy, and that there is a notion of a "<strong>pseudo-typewell.</strong>"</p>
+<p>Thinking about how to apply this to our task, I noticed that <strong>neighboring train wells are provided</strong> (I call this <strong>neighbor</strong>). By overwriting the twGR with the known GR of a train neighbor within 1500 ft, you get a pseudo typewell GR (<strong>nbrGR</strong>).</p>
+<p>There is a second idea of the same kind — <strong>self.</strong> It uses the well's own prefix (the known interval on the heel side). Since TVT and GR are both known there, I overwrite in the same way (<strong>selfGR</strong>).</p>
+<p>The estimates inferred from these tvt–GR pairs are <strong>strongly complementary</strong> to the twGR estimate. The correlations are roughly selfGR ≈ 0.79 and nbrGR ≈ 0.72 against twGR — accurate on their own, yet sufficiently decorrelated. Different references fail in different ways, so their independent errors cancel downstream.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2Fccca8ba4ae9a0f9219a616c7f0300b86%2Ffig_repr_gr_en.png?generation=1785999651490094&amp;alt=media" alt=""></p>
+<p>Above are the GR waveforms of the same well seen through three references — twGR / selfGR / nbrGR (each centered and offset side by side). <strong>The large-scale shape is shared (the same strata), but the fine detail differs slightly.</strong> This "same strata through a different window" difference is the source of the decorrelation.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2F4a80f2be9f7db99ca7778376d0cee7d7%2Ffig_repr_pf_en.png?generation=1785999691594326&amp;alt=media" alt=""></p>
+<p>And when the <strong>same PF (pf_1) is run through the three representations,</strong> the TVT outputs become three mutually decorrelated legs (per-well RMSE in the legend). Each tracks the true TVT on its own, but since they miss in different directions, their errors cancel in the downstream ensembler.</p>
+<p>Generating these two and expanding to 15 inputs to the tabular model gave <strong>CV and LB both −0.50.</strong></p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-2 (5-input + smooth)</td>
+<td>7.50</td>
+<td>6.724</td>
+<td>−0.78</td>
+<td>7.404</td>
+</tr>
+<tr>
+<td>2-2 + selfGR + nbrGR</td>
+<td>6.98</td>
+<td>6.026</td>
+<td>−0.95</td>
+<td>7.112</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3>2-4. Injecting a physical constraint — CV 6.50 / LB 6.43</h3>
+<p>At this point CV (~7.0) and Public LB (6.0) diverged badly. Following the discussion argument to "<strong>combine physical constraints,</strong>" I built a <strong>prior over TVT from the well geometry (X, Y, Z) and the known TVT alone, using no GR whatsoever.</strong></p>
+<p>The idea: even without GR, if you know how far and in which direction a well went (geometry) and how the surrounding wells are tilting (the dip of the strata), you can predict how TVT will change. I split each well into segments, estimate the local dip in each, share it spatially, and integrate the dip to reconstruct the TVT trajectory. Crucially, <strong>this must be built in a strict out-of-fold manner</strong>: mixing any information from the evaluation wells into the dip field or the calibration makes only the CV look unfairly good, and it then collapses on Private (the seed of a shake-down).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2F97dd493107279efc8f356f15f6f4f85f%2Ffig_prior_en.png?generation=1785999801454132&amp;alt=media" alt=""></p>
+<p>Above are <strong>TVT waveforms built from the physical prior alone, using no GR at all,</strong> overlaid with the true TVT (per-well RMSE in the legend). <strong>Even without relying on GR, geometry and the neighbors' dip alone already track the large-scale TVT undulation fairly well</strong> (the wells it fits land at 3–5 ft, the ones it misses exceed 10 ft — there is spread).</p>
+<p>This physical prior is <strong>weak on its own (CV 10.1 / LB 10.8),</strong> but it shows its worth when <strong>injected into the PF likelihood.</strong> Adding Optuna-tuned parameters to 2-2 under the assumption of this injection gave <strong>CV −0.5 / LB +0.5</strong> — and here, <strong>for the first time, CV and LB agreed.</strong></p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>physical constraint only</td>
+<td>10.1</td>
+<td>10.8</td>
+<td>+0.70</td>
+<td>9.342</td>
+</tr>
+<tr>
+<td>twGR-prior PF alone</td>
+<td>7.8</td>
+<td>7.88</td>
+<td>+0.08</td>
+<td>7.78</td>
+</tr>
+<tr>
+<td>2-3 (selfGR + nbrGR)</td>
+<td>6.98</td>
+<td>6.026</td>
+<td>−0.95</td>
+<td>7.112</td>
+</tr>
+<tr>
+<td>2-3 + prior PF</td>
+<td>6.50</td>
+<td>6.43</td>
+<td>−0.07</td>
+<td>6.67</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>Indeed, this configuration is confirmed to <strong>transfer correctly to Private as well</strong> (CV 6.50 / Public 6.43 / Private 6.67). Even if the Public LB had looked worse here, this shows that <strong>choosing to trust the CV and press on was the right call.</strong></p>
+<p>This "CV and LB agreed" was the biggest turning point of the competition.</p>
+<h3>2-5. Fusing many leftover PFs with an input-tolerant ensembler — CV 5.94 / LB 6.17</h3>
+<p>I had a large pile of PFs that I had tuned with Optuna but that <strong>had not, on their own, led to any improvement.</strong> At some point, instead of discarding them, I <strong>fed them all in together — and the accuracy jumped, dropping CV below 6.0 (CV 5.94 / Public 6.17).</strong></p>
+<p>Why did it work? First, dissecting the error, the residual against a strong PF had self-correlation of almost 1.000 — meaning <strong>the independent per-row signal is basically exhausted, and the error lives in a per-segment choice of "which solution do we sit on."</strong> The problem was not row regression but, per segment, <strong>choosing which of many candidates to sit on.</strong></p>
+<p>So I built a <strong>candidate-curve ensembler</strong> that <strong>lines up each PF × representation TVT trajectory as "one candidate curve," and lets a lightweight attention soft-average the candidates per row.</strong> The tabular model could only concatenate a fixed-length set — <strong>limited in expressive power</strong> — whereas the ensembler can line up <strong>any number of candidates.</strong> That was decisive: it let me throw in <strong>all the PFs I had lying around that hadn't helped on their own,</strong> and that is what suddenly worked.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2F53df39b13088bcaa71700e448a23c5df%2Ffig_ensembler_en.svg?generation=1785999846922488&amp;alt=media" alt=""></p>
+<p>The candidates I fed in were <strong>6 PFs (pf_1 / pf_2 / pf_3 / r0_seed32 / r1_seed32 / pfA) × 5 representations = 30.</strong> The five representations differ in <strong>which template the GR is matched against</strong>:</p>
+<ul>
+<li><strong>typewell</strong>: the given vertical-well template (2-3).</li>
+<li><strong>self</strong>: the well's own known prefix GR as a pseudo-template (2-3).</li>
+<li><strong>neighbor</strong>: a spatially near (XY) train well's GR as a pseudo-template (2-3).</li>
+<li><strong>nbr_gr5</strong>: neighbors chosen not by XY distance but by <strong>GR similarity — the top-5 train wells whose GR (stratigraphy) matches</strong>.</li>
+<li><strong>self_graft</strong>: extends "self" beyond its known range by <strong>extrapolating (grafting)</strong> with a tw→self calibration, widening the range "self" can cover.</li>
+</ul>
+<p><strong>Of the 6 PFs, only one (pfA) carried the physical (GR-free anchor) constraint.</strong></p>
+<p>The key design finding is that <strong>it acts as a broad soft average (bagging), not a one-of-N selector.</strong> Indeed, restricting to the top-k hurt, and softmax over all candidates was optimal. Since you cannot tell "which solution is correct" from GR alone, the right move is <strong>not to force a choice, but to average probabilistically and hedge.</strong></p>
+<p>At this stage the final prediction was a <strong>fixed-weight 3-leg blend of GBM (tabular) + a sequence net (TCN) + the ensembler.</strong> The standalone CV and blend weight of each leg:</p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Leg</th>
+<th>standalone CV</th>
+<th>blend weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GBM (tabular)</td>
+<td>6.65</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>sequence net (TCN)</td>
+<td>6.32</td>
+<td>0.51</td>
+</tr>
+<tr>
+<td>candidate-curve ensembler</td>
+<td>6.19</td>
+<td>0.44</td>
+</tr>
+<tr>
+<td><strong>3-leg blend</strong></td>
+<td><strong>5.94</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Candidates</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-4 (Tabular, 15 candidates)</td>
+<td>15</td>
+<td>6.50</td>
+<td>6.43</td>
+<td>−0.07</td>
+<td>6.67</td>
+</tr>
+<tr>
+<td>feed the whole pile of leftover PFs into the ensembler</td>
+<td>30</td>
+<td>5.94</td>
+<td>6.17</td>
+<td>+0.23</td>
+<td>6.382</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<h3>2-6. Stacking one leg at a time — toward Submission A / Submission B (the final form)</h3>
+<p>From CV 5.94 onward, each single addition — <strong>more decorrelated candidates, or stronger smoothing</strong> — steadily lowered both CV and Public. In the order I added them:</p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Addition</th>
+<th>Candidates</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(reached in 2-5)</td>
+<td>30</td>
+<td>5.94</td>
+<td>6.17</td>
+<td>+0.23</td>
+<td>6.382</td>
+</tr>
+<tr>
+<td>① feature-combine, retrain one model</td>
+<td>46</td>
+<td>5.75</td>
+<td>5.707</td>
+<td>−0.04</td>
+<td>6.166</td>
+</tr>
+<tr>
+<td>② fixed-lag → full smoothing</td>
+<td>46</td>
+<td>5.70</td>
+<td>5.652</td>
+<td>−0.05</td>
+<td>6.097</td>
+</tr>
+<tr>
+<td>③ +5 decorrelated PFs (<strong>Submission A</strong>)</td>
+<td>71</td>
+<td>5.587</td>
+<td><strong>5.458</strong></td>
+<td>−0.13</td>
+<td>5.997</td>
+</tr>
+<tr>
+<td>④ add dec10 / tw-affine (<strong>Submission B</strong>)</td>
+<td>91</td>
+<td>5.458</td>
+<td>5.626</td>
+<td>+0.17</td>
+<td><strong>5.984</strong></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>① Feature-combine &gt; ensemble.</strong> Re-training a single model on <em>combined</em> features (candidates) beat blending separately-trained models by ~2.6×. Since the ensembler's strength is "candidate quality × diversity," combining beats mixing.</p>
+<p><strong>② Full smoothing.</strong> I replaced the fixed-lag smoother of 2-2 with a whole-interval one (an ancestral smoother with the lag extended to the full sequence length — the same lineage of Kitagawa 1996 / Doucet &amp; Johansen 2009; the whole-interval version is prone to path degeneracy). The ensembler directly enjoyed the better candidates, and <strong>CV −0.043 transferred fully to Public.</strong></p>
+<p><strong>③ Stacking decorrelated PFs (Submission A).</strong> I added five separately-tuned PFs with no anchor (physical constraint) and no emission, growing candidates 46 → 71. <strong>CV 5.70 → 5.587, Public 5.637 → 5.458 — an even-better-than-CV transfer (−0.18).</strong> This is the main lever, and the key is: <strong>only candidates whose way of being wrong points in a different direction help, even if individually weak.</strong> Adding candidates 0.99-correlated with what I had did nothing.</p>
+<p><strong>④ dec10 / tw-affine (Submission B).</strong> I further added dec10 (a PF on MD-decimated, noise-averaged GR) and tw-affine (a PF with prefix-calibrated GR), bringing candidates to 91: <strong>CV 5.4577 / Public 5.626.</strong></p>
+<p><strong>Post-processing (de-shrink).</strong> For both Submission A and B, the final touch applied to the ensembler's blended prediction is a <strong>one-parameter calibration, a global gain a≈1.03.</strong> Because the ensembler is a weighted (soft) average of candidates, the prediction's amplitude ends up slightly shrunk relative to the truth; the global gain restores it. It is a small add of <strong>~−0.015 CV,</strong> but a <strong>one-parameter global correction is hard to overfit and transfers robustly</strong> — in contrast to well-level constant-shift post-processing, which back-fired on the LB (§3-2, §5).</p>
+<p>Conversely, making the ensembler itself stronger (cross-attention, injecting candidate-to-candidate relations, injecting external legs as candidates) <strong>all saturated at ~0.99 correlation with the base</strong> — a single-model gain that never made it into the ensemble. The headroom was, in the end, only ever "decorrelated candidates from a different information source."</p>
+<p>Finally, here are the final candidates visualized for three wells (grey = all candidate curves, black = true TVT, red dashed = ensembler prediction).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17784323%2Fec06de0d5d2e917935c4c76ed94a598d%2Ffig_trajectories_en.png?generation=1785999733843916&amp;alt=media" alt=""></p>
+<p><strong>Left = the worst-accuracy well:</strong> the true TVT sits <em>above every candidate</em> — all candidates got the datum branch wrong. Since the ensembler is a weighted average of candidates, on a hard well where the candidates fail to bracket the truth it <strong>cannot possibly reach it</strong> (this is exactly the datum wall of 2-4 / §3-2). <strong>Middle / right = two random wells:</strong> when the candidates bracket the truth, the ensembler hits it well.</p>
+<hr>
+<h2>3. Discussion</h2>
+<h3>3-1. The biggest driver of the accuracy gains</h3>
+<p>I believe the single biggest driver was that <strong>the PF outputs themselves carried a lot of diversity.</strong></p>
+<p>Concretely: <strong>trajectories with the physical prior (the GR-free constraint) and without it,</strong> matching against <strong>a typewell or against a nearby well instead,</strong> trajectories derived from the <strong>prefix (the known interval),</strong> plus the <strong>overall lift from full smoothing</strong> — I ran <strong>everything I could think of</strong> through the PF. The result was <strong>a lot of diversity from the PF alone.</strong> Each individual candidate is not strong at all — around <strong>10.0–7.8 in overall RMSE</strong> on its own.</p>
+<p>Bluntly, what I am doing is <strong>bagging a large number of PF outputs.</strong> But it turned out to be a nice example of how <strong>simply lining up and fusing candidates that are <em>wrong in different ways</em> can push the accuracy this far.</strong></p>
+<h3>3-2. The bias of the Public LB, and CV / Public / Private transfer</h3>
+<p>I once said in the discussions that "<strong>the Public overfits under a certain condition.</strong>" My belief is that <strong>methods that depend only on the GR match overfit to the Public.</strong></p>
+<p>The table below shows results with and without the physical constraint. <strong>GR-only methods (no physics) transfer strongly and <em>positively</em> from CV to Public</strong> (Public looks much better than CV). Once the physical constraint is added, <strong>both Public and Private line up with CV</strong> (the transfer becomes honest).</p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>CV</th>
+<th>Public</th>
+<th>Δ(Pub−CV)</th>
+<th>Private</th>
+<th>Transfer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5-input + smooth (GR-only)</td>
+<td>7.50</td>
+<td>6.724</td>
+<td>−0.78</td>
+<td>7.404</td>
+<td>Public much better = GR overfit</td>
+</tr>
+<tr>
+<td>self + nbr (GR-only)</td>
+<td>6.98</td>
+<td>6.026</td>
+<td>−0.95</td>
+<td>7.112</td>
+<td>same (CV ≫ Public)</td>
+</tr>
+<tr>
+<td>+ physical prior</td>
+<td>6.50</td>
+<td>6.43</td>
+<td>−0.07</td>
+<td>6.67</td>
+<td><strong>CV ≈ Public ≈ Private</strong></td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>And this was <strong>confirmed by the final Private results.</strong> Ordering the two finalists — <strong>CV: Submission B &lt; Submission A</strong> (B better), <strong>Public: Submission A &lt; Submission B</strong> (reversed), and <strong>Private: Submission B (5.984) &lt; Submission A (5.997), agreeing with CV.</strong> So CV predicted the right direction; <strong>the Public LB, which made Submission A look better, was the single outlier.</strong> The configurations I added in Submission B only <em>looked</em> overfit on Public; on the more representative, harder Private set, they were, as CV said, slightly better.</p>
+<h3>3-3. How to build a physical constraint that risks a shake-down</h3>
+<p>The physical constraint of 2-4 is very powerful, but <strong>built wrongly it easily overfits the Public/CV and collapses hard on Private (a shake-down).</strong> This is the single most important trick.</p>
+<p>The constraint builds a "dip field of the wells" and its "calibration coefficients" from other wells' information. If you let <strong>any information from the well being evaluated (validation) leak into building the field or the calibration, you have peeked at the answer, and CV becomes unfairly good.</strong> Then you can no longer observe CV–LB transfer correctly, and a submission chosen by trusting the Public order collapses on Private.</p>
+<p>The fix: <strong>always build it in a strict 5-fold (out-of-fold) manner.</strong> That is, construct the dip field, the calibration coefficients, and the neighbor pool from <strong>only the training-side wells of that fold,</strong> fully excluding the evaluation wells, and rebuild the field and calibration per fold. Since my goal was to <em>grow CV into a trustworthy metric,</em> this rigor was decisive. Whenever you inject a "learned prior" like a physical constraint, treat leakage as <strong>the seed of a shake</strong> and always build it with the evaluation targets excluded.</p>
+<h3>3-4. Why per-row regression (tabular alone) does not work</h3>
+<p>Early on, the tabular model (GBDT) led, but as accuracy improved it was fully replaced by a sequence model + candidate selection. The reason is fundamental.</p>
+<p>In one line: <strong>it is not a problem you can solve one row at a time.</strong> Against a strong PF output, the remaining error is no longer "small per-row wiggles"; it is that <strong>a whole segment is shifted, as a block, one way or the other.</strong> Because of the periodicity of the strata, GR looks almost identical at two places, above and below — so telling "is this segment the upper one or the lower one?" from GR is essentially a coin flip (you can't).</p>
+<p>A per-row feature vector carries no information about "which of the two solutions this whole segment sits on." So the tabular model plateaus no matter how many features you add. In contrast, lining up the PF's "single coherent trajectories" as candidates and soft-averaging them naturally expresses this "whole-segment choice." In short, <strong>tabular is not bad — per-row regression was the wrong frame for the shape of the problem (a whole-segment two-way choice).</strong></p>
+<h3>3-5. Designing the CV so you don't shake down on Private</h3>
+<p>The thing I valued most for avoiding a shake-down was <strong>keeping the variance between folds small.</strong></p>
+<p>The reason is that <strong>Train / Public / Private are most likely split completely at random,</strong> and <strong>each is small — on the order of 150 wells.</strong> With a small random split, there is always a chance that <strong>the hard wells happen to cluster into one split and you draw a downswing.</strong> Whether Public or Private turns out to be a "bad draw" is not something you can control.</p>
+<p>That is exactly why <strong>a design whose score never collapses on any fold or any split — i.e., one with no downswings — pays off.</strong> A model with low inter-fold variance won't miss badly whatever random 150-well draw Public / Private happens to be. Conversely, a model with the same average performance but high inter-fold variance always carries the risk of hitting a downswing somewhere and shaking down. <strong>Removing the downswings matters as much as raising the average</strong> — that is my conclusion.</p>
+<p>Measured on the final submission, <strong>each of the 5 folds (≈155 wells each) lands roughly in the 4–6.7 range, and the overall CV averaged over the 5 folds barely moves — 5.40–5.43 (std ≈ 0.015) no matter how the split is re-drawn.</strong> In the early baseline (2-1) the per-fold RMSE swung from about 6 to 10, so <strong>the inter-fold spread has shrunk substantially.</strong> I believe this "resistance to downswings" is one reason it did not collapse on Private either.</p>
+<h3>3-6. Why the Optuna-tuned PF parameters didn't overfit the CV</h3>
+<p>I tuned the PF parameters by <strong>randomly selecting 600 wells (or 150 wells) from the 773.</strong> The natural worry is: "wouldn't that overfit to the wells you happened to pick?"</p>
+<p>First, <strong>the PF is a deterministic method with not that many parameters,</strong> so it is inherently resistant to overfitting. That said, <strong>when I optimized on few wells, I did confirm that overfitting occurs.</strong></p>
+<p>However, that overfitting appears to be <strong>only against twGR (the representation that matches against the typewell's GR).</strong> I did the tuning on twGR and then <strong>reused those tuned parameters as-is for the other representations — nbrGR, selfGR, and so on (2-3).</strong> I believe that <strong>applying parameters overfit to twGR onto representations of a different nature is what diluted the overfitting.</strong></p>
+<h3>3-7. Why the shake-up happened</h3>
+<p>The large turnover inside the gold zone was <strong>not</strong> caused by overfitting to the Public. It happened because <strong>there existed methods that were excellent for CV and Public but underwhelming on Private.</strong> The very methods of those who got shaken down are, in my view, the <em>valuable</em> ones. <strong>This is not the same as the public-notebook overfitting — please don't lump them together.</strong></p>
+<p>The final standings saw a large shake-up, and much of the Public top turned over. Looking at the solutions that survived at the top, <strong>teams that leaned on physics-based models — HMMs, particle filters — climbed almost across the board.</strong> I can't say for certain whether this was mere split noise or the result of deliberately choosing a different domain (i.e., a more physics-oriented formulation), but at the very least the <strong>dominant solution domain clearly differed between the Public top group and the Private top group.</strong></p>
+<p>After the competition I had a brief chance to talk with another team, and they raised the point that <strong>"approaches that don't rely on a physical model may be prone to CV overfitting."</strong></p>
+<p>Seen that way, <strong>that I ended up on the shake-up side (the one that rose) owed a good deal to luck.</strong> My read is that the Public-top solutions that did not strongly depend on a physical model — however excellent as methods — <strong>could not escape the accuracy drop from domain shift on Private.</strong></p>
+<hr>
+<h2>4. What worked</h2>
+<p>The methods that were the reasons for improvement:</p>
+<ul>
+<li><strong>Optuna-tuning the Particle Filter's parameters</strong> (GR-likelihood σ, transition noise, resample, jump, …) — the foundation for good candidates.</li>
+<li><strong>Concatenating estimates from several PF parameter sets</strong> as input (3-input, 5-input — stepwise gains).</li>
+<li><strong>Porting the PF to GPU</strong> (~60× faster) — enabled far more trials and the smoother.</li>
+<li><strong>The smoother mechanism.</strong> Stabilizes the estimate with two-sided GR context; lag = 192 gave CV −0.3 / LB −0.4, leak-free and transferring cleanly.</li>
+<li><strong>Adding several alternative GR representations.</strong> Beyond twGR: self, neighbor (by XY distance), GR-similarity neighbor, and a self-graft (self extrapolated via calibration) — five in all. Complementary candidates, decorrelated (≈0.7–0.8) from twGR yet accurate.</li>
+<li><strong>Injecting a no-GR physical constraint into the PF likelihood</strong> (always built 5-fold). Aligned CV and LB and neutralized the Public leniency of GR-over-reliance.</li>
+<li><strong>An ensembler that soft-averages candidates as "one curve each"</strong> (a hedge, not a selection).</li>
+<li><strong>Stacking decorrelated configurations</strong> (only candidates that are wrong in a different direction help) — the sole headroom late in the game.</li>
+<li><strong>Feature-combine &gt; ensemble</strong> (combine and retrain, rather than train separately and blend).</li>
+<li><strong>Full smoothing</strong> (whole-interval) — the ensembler transfers the candidate-quality gain fully.</li>
+<li><strong>Sequence-NN (TCN) residual blend</strong> (largest lift on weak backbones).</li>
+<li><strong>De-shrink post-processing</strong> (restore the averaged, shrunk prediction with a single global gain a≈1.03) — <strong>CV 5.587 → 5.572 (−0.015)</strong>. A one-parameter global correction, so it is physically motivated and transfers robustly.</li>
+<li><strong>FFBS-type particle smoothing (Godsill et al. 2004).</strong> As a whole-interval ancestral smoother it <strong>did work</strong> (raises candidate quality). But it is <strong>too slow, so I did not adopt it in the final pipeline</strong> — I replaced it with the lighter fixed-lag / full smoothing.</li>
+<li><strong>"Keep the PF plain and single; put the cleverness downstream" / match the inference seed to the tuning</strong> (avoid overfitting).</li>
+</ul>
+<hr>
+<h2>5. What didn't work</h2>
+<p>Nearly everything I tried that failed or back-fired:</p>
+<ul>
+<li><strong>Tuning PF parameters per well-category</strong> → overfits; loses badly to a single fixed PF.</li>
+<li><strong>Naive averaging of PF outputs</strong> → averaging estimates committed to different solutions collapses to the mid-point and breaks.</li>
+<li><strong>selfGR as an output blend (a "prediction")</strong> → double-counts with existing post-processing; non-transferring and harmful (useful as a <em>feature</em>).</li>
+<li><strong>Strengthening the physical (spatial) constraint standalone</strong> → lowers CV but back-fires on LB (the higher the prior density, the worse the transfer).</li>
+<li><strong>Well-level constant-shift post-processing (vote-hedge, …)</strong> → OOF −0.075 becomes LB +0.184.</li>
+<li><strong>Sharpening the ensembler's selection (top-k / cross-attention / candidate-relation / external-leg injection)</strong> → all saturate at ~0.99 correlation with the base.</li>
+<li><strong>Trying to solve it with tabular (row regression) alone</strong> → the frame doesn't fit a whole-segment two-way choice.</li>
+<li><strong>A PF-free 2D image CNN (GR-match image → U-Net)</strong> → good single CV, but LB collapses to 9.46.</li>
+<li><strong>Baking the physical constraint into tabular features</strong> → kills the good GR-derived transfer (the two trade off).</li>
+<li><strong>Attacking the two-way choice directly (global-MAP / Viterbi / sparse mode-switching)</strong> → GR can't pick the branch; what "worked" was just the physical constraint underneath.</li>
+<li><strong>Conditionally pulling the prediction back to a known value</strong> → none of the criteria for <em>which</em> to pull ever hit.</li>
+<li><strong>Learning the blend weights (meta-learning)</strong> → loses to hand-set fixed weights.</li>
+<li><strong>Heavy sequence architectures (iTransformer / Mamba-family / deep TCN / BiGRU)</strong> → saturate re-processing the same candidates; poor speed/benefit.</li>
+<li><strong>Using neighbor distance as a proxy for "stratigraphic closeness"</strong> → distance ≠ stratigraphy (the best GR reference is ~5,800 ft away on median).</li>
+<li><strong>Backward data augmentation (a reversed-well synthetic task)</strong> → in a weak engine (early on) CV −0.05 transferred well to LB −0.16, but in the final strong PF/ensembler it no longer helped — it actually caused a <strong>+0.2 worsening (a reverse transfer).</strong> The stronger the engine, the more the DA gain decays or flips.</li>
+<li><strong>Pre-training on synthetic wells</strong> → it didn't work. But this was <strong>probably because my generation (how the synthetic data was made) was poor</strong> — I can't conclude the approach itself has no promise.</li>
+</ul>
+<hr>
+<h2>6. Additional notes</h2>
+<ul>
+<li><strong>Environment &amp; compute cost</strong>:<ul>
+<li><strong>Training / experiments (local):</strong> GPU = RTX 5070 / CPU = AMD Ryzen 7 7700 / RAM = 32GB DDR5. All PF/NN training and every experiment ran on this single machine (every measured timing in this write-up is from this environment).</li>
+<li><strong>Submission (Kaggle notebook):</strong> GPU = T4 × 2. Since the GPU generation, VRAM, and numerical behavior differ from local, the submission side had its own pitfalls to watch for — OOM on the hidden test, bf16 math fallback, and the like.</li></ul></li>
+<li><strong>The PF parameters used in the final submission (Submission B)</strong>:
+Submission B's candidate pool is <strong>16 Optuna-tuned PF parameter sets,</strong> each run through 5 GR representations (tw / self / neighbor(XY) / GR-similarity neighbor / self-graft) and several lags, for <strong>91</strong> candidate trajectories in total (including 15 columns where tw is re-calibrated with a prefix affine, and 5 MD-decimated columns). The key knobs of the 16 sets are below.
+Common settings: <strong>n_seed = 32, whole-interval smoothing, grid step 0.2 ft.</strong> Column meanings: σ_def = base width of the GR likelihood; vn/pn = process noise (rate / position); resamp = resampling threshold; anchor = strength (mult) of the GR-free physical constraint; emis = emission temperature w_nn of the learned similarity.</li>
+</ul>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>bank</th>
+<th>parts</th>
+<th>gr_power</th>
+<th>σ_def</th>
+<th>vn</th>
+<th>pn</th>
+<th>resamp</th>
+<th>jump</th>
+<th>anchor</th>
+<th>emis</th>
+<th>role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pf_1</td>
+<td>600</td>
+<td>2.19</td>
+<td>114</td>
+<td>.0014</td>
+<td>.0068</td>
+<td>.061</td>
+<td>.002</td>
+<td>−</td>
+<td>.02</td>
+<td>original Optuna group (per-set GR-σ / process-noise tuning)</td>
+</tr>
+<tr>
+<td>pf_2</td>
+<td>600</td>
+<td>2.00</td>
+<td>71</td>
+<td>.0011</td>
+<td>.0113</td>
+<td>.308</td>
+<td>−</td>
+<td>−</td>
+<td>.02</td>
+<td>″ (narrow σ, high resamp)</td>
+</tr>
+<tr>
+<td>pf_3</td>
+<td>600</td>
+<td>2.07</td>
+<td>67</td>
+<td>.0007</td>
+<td>.0439</td>
+<td>.055</td>
+<td>.002</td>
+<td>−</td>
+<td>.02</td>
+<td>″ (large pn = high position noise)</td>
+</tr>
+<tr>
+<td>r0</td>
+<td>400</td>
+<td>1.78</td>
+<td>119</td>
+<td>.0006</td>
+<td>.0050</td>
+<td>.032</td>
+<td>.002</td>
+<td>−</td>
+<td>.02</td>
+<td>re-tuned under a different seed</td>
+</tr>
+<tr>
+<td>r1</td>
+<td>400</td>
+<td>1.46</td>
+<td>83</td>
+<td>.0012</td>
+<td>.0028</td>
+<td>.037</td>
+<td>.002</td>
+<td>−</td>
+<td>.02</td>
+<td>″ (loose likelihood gr_power)</td>
+</tr>
+<tr>
+<td><strong>pfA</strong></td>
+<td>600</td>
+<td>1.85</td>
+<td>87</td>
+<td>.0009</td>
+<td>.0061</td>
+<td>.186</td>
+<td>.002</td>
+<td><strong>✓20</strong></td>
+<td>.01</td>
+<td><strong>physical anchor (mult 20) + emission</strong> (the pillar that aligns CV=LB)</td>
+</tr>
+<tr>
+<td>pf_1′</td>
+<td>800</td>
+<td>2.99</td>
+<td>131</td>
+<td>.0009</td>
+<td>.0405</td>
+<td>.053</td>
+<td>−</td>
+<td>−</td>
+<td>.02</td>
+<td>a separately-tuned re-tune group (sharp likelihood, gr_power≈3)</td>
+</tr>
+<tr>
+<td>pf_2′</td>
+<td>500</td>
+<td>2.08</td>
+<td>95</td>
+<td>.0010</td>
+<td>.0366</td>
+<td>.064</td>
+<td>.002</td>
+<td><strong>✓20</strong></td>
+<td>.02</td>
+<td>″ (with physical anchor)</td>
+</tr>
+<tr>
+<td>pf_3′</td>
+<td>600</td>
+<td>1.49</td>
+<td>125</td>
+<td>.0017</td>
+<td>.0028</td>
+<td>.212</td>
+<td>−</td>
+<td>−</td>
+<td>.02</td>
+<td>″ (loose likelihood, high resamp)</td>
+</tr>
+<tr>
+<td>pf_4′</td>
+<td>700</td>
+<td>2.31</td>
+<td>92</td>
+<td>.0020</td>
+<td>.0107</td>
+<td>.040</td>
+<td>−</td>
+<td><strong>✓20</strong></td>
+<td>.02</td>
+<td>″ (with physical anchor)</td>
+</tr>
+<tr>
+<td>p_1</td>
+<td>700</td>
+<td>2.08</td>
+<td>103</td>
+<td>.0013</td>
+<td>.0078</td>
+<td>.046</td>
+<td>.002</td>
+<td>−</td>
+<td><strong>0</strong></td>
+<td><strong>5 decorrelated PFs with no anchor and no emission</strong> (Submission A's main lever ③). Turning emission off preserves candidate diversity, and the ensembler gained the most</td>
+</tr>
+<tr>
+<td>p_2</td>
+<td>600</td>
+<td>2.01</td>
+<td>90</td>
+<td>.0009</td>
+<td>.0015</td>
+<td>.207</td>
+<td>.002</td>
+<td>−</td>
+<td><strong>0</strong></td>
+<td>″</td>
+</tr>
+<tr>
+<td>p_3</td>
+<td>800</td>
+<td>2.36</td>
+<td>122</td>
+<td>.0016</td>
+<td>.0086</td>
+<td>.220</td>
+<td>.002</td>
+<td>−</td>
+<td><strong>0</strong></td>
+<td>″</td>
+</tr>
+<tr>
+<td>p_4</td>
+<td>800</td>
+<td>2.23</td>
+<td>110</td>
+<td>.0013</td>
+<td>.0044</td>
+<td>.140</td>
+<td>−</td>
+<td>−</td>
+<td><strong>0</strong></td>
+<td>″</td>
+</tr>
+<tr>
+<td>p_5</td>
+<td>700</td>
+<td>2.44</td>
+<td>88</td>
+<td>.0013</td>
+<td>.0063</td>
+<td>.030</td>
+<td>−</td>
+<td>−</td>
+<td><strong>0</strong></td>
+<td>″</td>
+</tr>
+<tr>
+<td>dec10</td>
+<td>600</td>
+<td>2.19</td>
+<td>114</td>
+<td>.0014</td>
+<td>.0068</td>
+<td>.061</td>
+<td>.002</td>
+<td>−</td>
+<td>.02</td>
+<td>pf_1's parameters applied to <strong>MD ×10-decimated</strong> GR (a noise-averaged, decorrelated leg, Submission B's ④)</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>All values are the actual Optuna-found settings (for the exact full hyperparameters, see <code>pf_banks_config.json</code> in the released code). The point is <strong>to scatter the <em>direction of the errors,</em> not single-model performance</strong> — which is why σ, gr_power, resample, and the presence/absence of anchor/emission are deliberately varied.</p>
+<ul>
+<li><p><strong>Code</strong>: I will share the code on GitHub later.</p></li>
+<li><p><strong>Submittion Notebook</strong>: <a href="https://www.kaggle.com/code/k256net/public20th-private6th-particle-filters" target="_blank">https://www.kaggle.com/code/k256net/public20th-private6th-particle-filters</a></p></li>
+</ul>
+<p>(Sorry, it's not well organized, so it might be a bit hard to read. Please take it as a rough reference.)</p>
+<hr>
+<h2>7. Closing</h2>
+<p>My approach is <strong>probably quite different from the other top finishers'.</strong> I don't have deep model knowledge. Instead, I got here by <strong>relentlessly improving the <em>features</em> that the Particle Filter produces.</strong> Rather than bringing in a powerful model, I focused on "how to make good candidates and how to fuse them" — a somewhat unusual solution in that sense.</p>
+<p>My thanks to the organizers and Kaggle, and to everyone who shared insight in the discussions. It was a genuinely novel and fascinating competition. Thank you.</p>
+<p>If you have any questions, feel free to drop a comment — I'll answer as best I can.</p>
+<p>(This write-up was written in collaboration with Claude, so there may be a few missing or incorrect points.)</p>
+<hr>
+<h2>References</h2>
+<ul>
+<li>N. J. Gordon, D. J. Salmond, A. F. M. Smith (1993). <em>Novel approach to nonlinear/non-Gaussian Bayesian state estimation.</em> IEE Proceedings F, 140(2), 107–113. — the original bootstrap (SIR) particle filter.</li>
+<li>G. Kitagawa (1996). <em>Monte Carlo Filter and Smoother for Non-Gaussian Nonlinear State Space Models.</em> Journal of Computational and Graphical Statistics, 5(1), 1–25. — particle filter + (fixed-lag / whole-interval) particle smoother; the basis of the smoother in this write-up.</li>
+<li>A. Doucet, A. M. Johansen (2009). <em>A Tutorial on Particle Filtering and Smoothing: Fifteen Years Later.</em> — the standard survey of particle smoothing (incl. fixed-lag and ancestral smoothing, and path degeneracy).</li>
+<li>S. J. Godsill, A. Doucet, M. West (2004). <em>Monte Carlo Smoothing for Nonlinear Time Series.</em> JASA, 99(465), 156–168. — FFBS (mentioned under "What didn't work").</li>
+</ul>

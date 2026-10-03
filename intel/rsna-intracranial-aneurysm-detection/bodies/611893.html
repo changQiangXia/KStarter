@@ -1,0 +1,70 @@
+<p>Sincere Thank You to RSNA and Kaggle for hosting this competition </p>
+<p>I tackled the challenge as a speedrun as I had only 14 days left on the competition when I started, which is nowhere near enough to cover everything one can do with this dataset, the dataset is super cool and I have barely scratched the surface. I managed to get in the gold medal line in 8 days.</p>
+<p>Finally a GM, yay!</p>
+<h3>Segmentation Model Failure</h3>
+<p>I started with training a segmentation model… which was not really happy to learn beyond 0.6 Dice in the short time I tried which was nowhere near enough for my confidence in the approach.</p>
+<h3>ROI Crop coordinates Model</h3>
+<p>I shifted to a ViT (dinov3) model that takes in input of equidistant 48 slices for each patient, input shape: 48x1x128x128 volume and predicts x1, x2, y1, y2 values of where the crop boundaries of segmetation mask should be at patient-level, this model was far more reliable and efficient for ROI cropping</p>
+<p>Original:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1794509%2F9468fad56fbe01d66d223f4a50c0304f%2Funcrop.png?generation=1760528693093368&amp;alt=media" alt=""></p>
+<p>ROI Crop:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1794509%2F3cea5be1e8254117722f8b66541e9682%2Froi_crop.png?generation=1760528860832407&amp;alt=media" alt=""></p>
+<p>I kept the ROI relatively large as I did not want to miss out on aneurisms, I tested with the coordinate data and doing it in this configuration let me keep 95%+ of aneurism locations inside the cropped region</p>
+<h3>Classification Model</h3>
+<p>I took ~2.2k samples in the train_localizer csv file and all samples from negative patients which gives me a dataset of:</p>
+<ul>
+<li>545k samples with ~2.2K positive samples and rest negative samples (1 in 250 positive), </li>
+<li>There are 14 labels in the dataset, which keeps it that model needs to predict 1/1700 values to be 1, rest 0s</li>
+</ul>
+<p>I managed to find a combination of pipeline where model starts to learn even in this highly imbalance without weighted sampling (weighted sampling did not help).</p>
+<p>My entire solution is this classification model and here’s how I improve it’s score (very simple once baseline starts learning)</p>
+<p>My baseline hyperparameters:</p>
+<ul>
+<li>Model: CoaT-Lite-Medium</li>
+<li>Optimizer: AdamW | Learning-Rate: 1e-4 cosine annealing down to ~3e-5</li>
+<li>Augmentations: HFlip, VFlip, no TTA</li>
+<li>Image size: 384x384</li>
+<li>Global Batch-Size: 192</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>CV</th>
+<th>Public/Private Leaderboard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CoaT-Lite-Medium on ROI Crops</td>
+<td>0.805</td>
+<td>0.78/0.78</td>
+</tr>
+<tr>
+<td>+ Rotate (-25, 25)</td>
+<td>0.83</td>
+<td>0.8/0.81</td>
+</tr>
+<tr>
+<td>+ 2.5D (-2, 0, +2)</td>
+<td>0.86</td>
+<td>0.86/0.83</td>
+</tr>
+<tr>
+<td>+ Soft Pseudo-Distill on remaining 500k potentially positive samples</td>
+<td>0.89</td>
+<td>0.86/0.84</td>
+</tr>
+<tr>
+<td>Ensembling with MaxViT + CoaT</td>
+<td>0.896</td>
+<td>0.87/0.84</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>On inference, the model predicts on every image for each patient, and final predictions are simply max aggregated</p>
+<p><strong>Thank you for reading!</strong></p>
+<p>Inference Code <a href="https://www.kaggle.com/code/harshitsheoran/rsna-aneurysm-detection-demo-submission" target="_blank">here</a><br>
+Training Code <a href="https://www.kaggle.com/datasets/harshitsheoran/rsna2025-training-code" target="_blank">here</a><br>
+Model Weights <a href="https://www.kaggle.com/datasets/harshitsheoran/rsna2025-raw-models" target="_blank">here</a></p>

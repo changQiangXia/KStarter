@@ -1,0 +1,58 @@
+<p>Thank you to hosts for hosting this great competition. <br>
+At the start of this competition, I was concerned that this competition would not attract many Kagglers, because machine learning was not very effective for GNSS data in the last year competition, but I am surprised that the competition was at very high level in the end. <br>
+I would like to publish my solution here:</p>
+<h1>Summary</h1>
+<p>I followed the <a href="https://www.kaggle.com/taroz1461" target="_blank">@taroz1461</a>'s <a href="https://www.kaggle.com/competitions/google-smartphone-decimeter-challenge/discussion/262406" target="_blank">1st place solution from last year competition</a> and combined it with <a href="https://www.kaggle.com/competitions/google-smartphone-decimeter-challenge/discussion/261959" target="_blank">my ideas of the 5th place solution</a>.</p>
+<p>The key point of the solution is to formulate and solve the integration of GNSS observations (pseudorange, pseudorange-rate(doppler), ADR) and trajectory smoothing as a single optimization problem. This provides following advantages: accuracy of satellite positioning due to satellite constellation is automatically taken into account in trajectory smoothing, and satellite positioning can be continued even if the number of satellites is temporarily less than required. In addition, by adding switchable constraints to all GNSS observations, satellite positioning becomes robust.</p>
+<p>Optimization was done by writing an evaluation function and a custom solver for handling equality constraints using TensorFlow (not NN). The flexibility of the deep learning framework was helpful for quickly testing ideas, but most ideas did not contribute to accuracy improvement in this competition. In the end, optimization part was fairly simple.</p>
+<p><img src="https://user-images.githubusercontent.com/309785/181914831-1e6e3068-4046-4468-9070-dabc8d5975ef.png" alt="summary"></p>
+<h1>Input Data &amp; Preprocessing</h1>
+<ul>
+<li><p>Raw GNSS log (supplemental/gnss_log.txt): <br>
+device_gnss.csv had null lines for SignalType, satellite position, etc. So I used gnss_log.txt and added columns to the obtained data-frame.</p></li>
+<li><p>Observation of pseudorange of base stations:<br>
+I used <a href="https://www.unavco.org/data/gps-gnss/gps-gnss.html" target="_blank">UNAVCO's</a> 15-second rate observation data and calculated the residual between the base station pseudorange and distance between satellite and base station. Although it is not necessary to correct for ionospheric and tropospheric delays in relative positioning, I corrected for ionospheric and tropospheric delays for both base stations and smartphone, since I also used base station data with long baseline length when performing multiple base station ensembles.</p></li>
+<li><p>Precise ephemeris:<br>
+I used satellite orbit data from <a href="https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/gnss_mgex_products.html" target="_blank">GNSS IGS MGEX Products</a> to obtain the satellite's position and velocity. Although the accuracy of the satellite position is not so critical in relative positioning, it was easier to interpolate the position data from the precise ephemeris than to calculate the satellite orbit from the navigation message.</p></li>
+<li><p>Base station location data:<br>
+I downloaded time series data of base station location data from <a href="http://geodesy.unr.edu/index.php" target="_blank">Nevada Geodetic Laboratory</a>, and used the average over the test data period (2021/4/28 - 2022/4/25) as the base station location.</p></li>
+<li><p><a href="https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/atmospheric_products.html#iono" target="_blank">Ionospheric delay data</a>:<br>
+It was used to compensate for the difference of ionospheric delay between the base station location and the smartphone location. The contribution to the final accuracy of using external data on ionospheric delay should be small, since the ionospheric delay should be mostly cancelled by relative positioning.</p></li>
+<li><p>WlsPosition in device_gnss.csv:<br>
+I used the smoothed results of the baseline locations provided by the host to pre-compute the Sagnac effect, ionospheric delay, and tropospheric delay.</p></li>
+<li><p>I did not use IMU sensor data at all in this competition because sensor data is noisy and irregular. I did a lot of work on signal processing of sensor data in the last year competition, but it did not contribute much to the improvement of my score.</p></li>
+<li><p>Since I did not use machine learning, I used ground-truth data only to check accuracy of prediction results.</p></li>
+</ul>
+<h1>Optimization</h1>
+<h2>State-space representation of smartphone trajectory</h2>
+<p>The position, velocity, acceleration, and jerk (derivative of acceleration) of the smartphone are represented in the ECEF coordinate system, and discretized state equations are created assuming that the jerk is piecewise constant.</p>
+<p><img src="https://user-images.githubusercontent.com/309785/181914830-93f67930-4d52-4b62-a6b1-de88f09867cd.png" alt="state_equation"></p>
+<p>Under this assumption, the position of the smartphone is represented by a piecewise cubic polynomial, so the position of the smartphone at any time can be accurately calculated by third-order Hermite interpolation using the position and velocity of collocation points (same for velocity).</p>
+<p>Using the position and velocity of the smartphone calculated by this method and the position and velocity of the satellites, the distance between the satellites and the smartphone and its derivative are calculated, and the trajectory of the smartphone is calculated by minimizing the residual between them and the GNSS observation data.</p>
+<h2>Position smoothing via quadratic programing</h2>
+<p>Smoothing is performed on the positions obtained by the weighted least squares method of psedurorange by solving a quadratic programming problem with the sum of the squares of the position residuals and jerks as the evaluation function.<br>
+The coefficients of the position observation matrix are calculated based on Hermite interpolation of the smartphone position based on the satellite positioning time.</p>
+<p>In last year's competition, I added velocity and acceleration terms to the evaluation function of a similar quadratic programming problem to improve accuracy, but in this competition, I did not use doppler and ADR observations at this point because the purpose of quadratic programming problems is to obtain initial values for the global optimization that follows.</p>
+<h2>Global optimization</h2>
+<p><img src="https://user-images.githubusercontent.com/309785/181914822-b29b3c62-4973-4320-b86c-c1ddf800c332.png" alt="computation"></p>
+<p>The evaluation function is calculated by the computation graph shown above by TensorFlow.<br>
+In this figure, the unknown variables (trainable variables) of the optimization are shown in red, pre-computable constants in blue. The inter-signal range biases are parameters shared to all times for each SignalType.</p>
+<p>Due to the availability of base station observations, only GPS, GLONASS, and Galileo were used for pseudorange observation data. For the doppler and ADR observations, I used data from all constellations, including QZSS and BeiDou.<br>
+In addition, the weighting of residuals by RecievedSvTimeUncertaintyNanos, PseudoRangeUncertaintyMetersPerSecond, and AcuumulatedDeltaRangeUncertaintyMeters contributed to accuracy improvement.</p>
+<p>To take into account the equality constraints of the state equation, augmented Lagrangian method is used to optimize the evaluation function defined by the above computation graph.</p>
+<p><img src="https://user-images.githubusercontent.com/309785/181914819-7604ffec-7d19-4940-a3f0-bcd261917516.png" alt="augmented_Lagrangian"></p>
+<p>Where f(x) is the evaluation function and h(x) is the equality constraint corresponding to the above state equations.<br>
+More specifically, the following steps are repeated alternately: <br>
+(1) minimizing the augmented Lagrangian by Adam optimizer.<br>
+(2) updating the dual variables of the equality constraints (λ).</p>
+<p>Convergence of this optimization is slow! But, it can robustly compute solutions with good accuracy.</p>
+<p>Note that double precision floating point is used in all computations to eliminate floating point rounding errors. For this reason, optimization is performed using the CPU instead of the GPU.</p>
+<h1>Workaround for pseudorange-rate of XiaomiMi8</h1>
+<p><img src="https://user-images.githubusercontent.com/309785/181914836-97fa4def-3d2f-4d55-9534-33fd43fc8463.png" alt="velocity_XiaomiMi8"></p>
+<p>This figure shows comparison between ground-truth velocity and estimated velocity by weighted least-squares method using pseudorange-rate in 2021-12-07-US-LAX-1/XiaomiMi8.<br>
+This shows that there is a time discrepancy of about 0.5 seconds between the estimated velocity and the ground-truth (WHY?). Therefore, correcting for this time discrepancy improves the accuracy of position estimation.<br>
+In my solution, this problem is addressed by a correction term (acceleration × time delta) for smartphone velocity and adding the time delta parameter to the optimization variables. (This workaround is applied to data other than XiaomiMi8.) This was quite effective in improving public LB, because there are many XiaomiMi8 in public test data.</p>
+<p><img src="https://user-images.githubusercontent.com/309785/181914823-1272523e-2a04-4d4a-b6d8-e0bf64797501.png" alt="modify_velocity"></p>
+<h1>Ensemble of multiple base station solutions</h1>
+<p><img src="https://user-images.githubusercontent.com/309785/181917131-42d34aa8-8e9a-4fa3-b9ca-c06204c6fe58.jpg" alt="google-earth"></p>
+<p>I had originally planed to interpolate solutions from multiple base stations based on the location of base stations and smartphone, but I found that the correlation between baseline length and position error was not so clear, and simply averaging the solutions from multiple base stations was slightly more accurate. The reason for this is assumed to be that the pseudorange data of the base stations also contains noise of about 0.5 to 1.0 m. Therefore, the median of the solutions of multiple base stations was used as the final submission, after correcting the difference between the ionospheric and tropospheric delays at the base stations and smartphone locations using external data and the model.</p>

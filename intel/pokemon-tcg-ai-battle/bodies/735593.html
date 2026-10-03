@@ -1,0 +1,157 @@
+<h1>Part 1. General Strategy</h1>
+<hr>
+<h1>A. Pattern Database</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4808143%2F9366ee976aa0a2f6a1eb1316e147d68c%2Fwaltheri_go_pattern_database.png?generation=1786938586280470&amp;alt=media" alt=""></p>
+<h3>Waltheri Pattern Database</h3>
+<p>The <strong>Waltheri Pattern Database</strong> searches professional Go records for games with similar board patterns, enabling analysis of common follow-up moves and outcomes. This pattern-based retrieval approach strongly inspired our methodology.</p>
+<p>Based on this concept, we developed the <strong>Pokémon Pattern Database</strong> to retrieve similar battle states and estimate subsequent actions and outcomes.</p>
+<p><strong>Reference:</strong> Waltheri, <em>Waltheri’s Go Pattern Search</em>, <a href="https://ps.waltheri.net/" target="_blank">https://ps.waltheri.net/</a></p>
+<h2>A.1 Pokemon Pattern Database</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4808143%2F396b2c72290f31c2216ce435d50ccc1f%2Faaaa.png?generation=1786940978554747&amp;alt=media" alt="dragapult_vs_orgapon"></p>
+<h3>1. What is the Pokémon Pattern DB?</h3>
+<p>The Pokémon Pattern DB searches real match replays for game states similar to the current situation and uses historical statistics to estimate both players’ next actions and expected outcomes.</p>
+<h3>2. Action Statistics Estimation</h3>
+<p><strong>Primary Key:</strong> Identifies similar battle situations based on both players’ Active Pokémon.</p>
+<p><strong>Secondary Keys:</strong> Further refines the matching patterns based on:</p>
+<ul>
+<li><strong>Damage Counters</strong> — Quantized in increments of 5</li>
+<li><strong>Bench Composition</strong> — Compares the Pokémon on both players’ Benches</li>
+<li><strong>Energy Attachments</strong> — Compares the amount of Energy attached to each player’s Pokémon</li>
+</ul>
+<h2>A.2 Conclusion</h2>
+<p>The Pattern Database provides <strong>simple and fast opponent modeling</strong> by leveraging similar historical game states. It captures local tactical patterns directly from replay data and provides statistical guidance for likely actions and outcomes.</p>
+<p>To complement this pattern-based information with a broader representation of the entire game state, we incorporated a <strong>Value Network</strong> for overall position evaluation. Together, the Pattern Database and Value Network provide both historical pattern guidance and comprehensive state evaluation.</p>
+<hr>
+<h1>B. Transformer Policy / Value Architecture (T96)</h1>
+<pre><code>Game State
+(Cards, Pokémon, HP, Energy, Bench, Hand, etc.)
+        ↓
+Game Information Encoding
+        ↓
+Transformer
+(2 layers, 4 attention heads)
+        ↓
+Shared Game-State Representation
+        │
+        ├─ Action Head: scores legal actions
+        ├─ Pass Head: determines whether to pass
+        └─ Value Head: evaluates the position and win probability
+</code></pre>
+<h3>1. Model Input</h3>
+<p>T96 receives the current game information, including <strong>cards, Pokémon, HP, damage, Energy, Bench, Hand, and decision state</strong>.</p>
+<h3>2. Transformer</h3>
+<p>The input is processed by a Transformer to construct a shared representation of the current game state.</p>
+<p>T96 used a <strong>two-layer Transformer</strong> as its initial architecture. Additional layers were introduced progressively, with layer-specific learning rates applied to support stable representation development.</p>
+<h3>3. Output Heads</h3>
+<ul>
+<li><strong>Action Head:</strong> scores legal actions</li>
+<li><strong>Pass Head:</strong> determines whether to pass</li>
+<li><strong>Value Head:</strong> evaluates the current position and win probability</li>
+</ul>
+<h2>B.1 Supervised Learning</h2>
+<p>T96 was trained on game records from three complementary sources:</p>
+<ul>
+<li><strong>Leaderboard Public Play:</strong> matches from submitted agents</li>
+<li><strong>Heuristic Agents:</strong> agents using structured rule-based policies</li>
+<li><strong>League Play:</strong> matches among trained models, model checkpoints, and heuristic agents</li>
+</ul>
+<hr>
+<h1>C. Heuristic Tactical Variants</h1>
+<p><strong>Hybrid Neural-Heuristic Strategy for Tactical Diversity</strong></p>
+<h3>(1) Meta Adaptation</h3>
+<p>Self-play agents naturally adapted to one another over repeated interactions, leading to increasingly aligned strategies within particular opponent pools or local metas.</p>
+<h3>(2) Neural and Heuristic Policy</h3>
+<p>The neural policy remained the default decision-making framework. Heuristics were incorporated selectively in areas that benefited from additional tactical guidance, such as Energy allocation, retreat decisions, forced-win sequences, and card-specific situations.</p>
+<h3>(3) Tactical Variants</h3>
+<p>Agents with different tactical priorities and specialized decision rules were added to the league to generate a broader range of game states, strategies, and behaviours.</p>
+<p>The heuristics complemented the neural policy rather than replacing it, supporting greater strategic diversity throughout self-play.</p>
+<h2>C.1. Heuristic Tactical Variations</h2>
+<p>The base policy was retained while tactical variants were created through:</p>
+<ol>
+<li><p><strong>Priority Adjustment</strong>
+Changing preferences for development, evolution, Energy attachment, retreat, and attacking.</p></li>
+<li><p><strong>Targeted Guidance</strong>
+Applying limited rules or comparing selected alternatives in situations that benefited from additional tactical evaluation.</p></li>
+</ol>
+<p>This produced distinct tactical behaviours while preserving the consistency of the original policy.</p>
+<hr>
+<h1>D. Deck Selection</h1>
+<p><strong>(Top Leaderboard Decks and Genetic Algorithm Search)</strong></p>
+<p>For the final submission, the deck was based mainly on <strong>top leaderboard public decks</strong>. During development, I also used a genetic algorithm to explore alternative card combinations and quantities.</p>
+<pre><code>Top Leaderboard Decks
+        ↓
+Restricted Card Pool
+        ↓
+Quantity-based Deck Genome
+        ↓
+Genetic Search
+        ↓
+Parallel Match Evaluation
+</code></pre>
+<h2>D.1 Deck Representation</h2>
+<p>Each card was represented by the number of copies included in the deck.</p>
+<pre><code>[Card A: 4] [Card B: 2] [Card C: 0] ... [Card N: 1]
+</code></pre>
+<p>Deck-building constraints were enforced during the search:</p>
+<pre><code>Pokémon / Trainer
+→ up to 4 copies per card
+
+Special Energy
+→ up to 4 copies per type
+
+ACE SPEC
+→ 1 card in total
+
+Deck Size
+→ exactly 60 cards
+</code></pre>
+<h2>D.2 Genetic Algorithm Search</h2>
+<p>Candidate decks were generated through <strong>crossover and mutation</strong>, then evaluated using CPU-parallel matches.</p>
+<pre><code>Parent Decks
+     ↓
+Crossover / Mutation
+     ↓
+Candidate Decks
+     ↓
+Parallel Matches
+     ↓
+Selection
+     ↓
+Next Generation
+</code></pre>
+<p>The search produced several unusual deck variants and helped test different card combinations and quantities. However, these variants were not consistently stronger.</p>
+<h2>D.3 Final Deck Selection</h2>
+<p>In repeated experiments, deck structures already used by top leaderboard agents were generally more stable. For the final submission, I therefore closely followed a top leaderboard public deck and focused the remaining optimisation effort on the playing policy and decision-making system.</p>
+<hr>
+<h1>E. Monte Carlo Sampling</h1>
+<p><strong>Using the Value Network to Evaluate Uncertain Outcomes</strong></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4808143%2F41a5e98984e81c17e11aa20914ce65b7%2Fmontecarlo.png?generation=1786944699431927&amp;alt=media" alt=""></p>
+<h3>(1) When Sampling Is Used</h3>
+<p>Monte Carlo sampling is used when an action involves hidden information or random events, such as hidden cards, random draws, or shuffled hands. The agent evaluates multiple possible outcomes to account for the different states that can result from the action.</p>
+<h3>(2) Sampling and Simulation</h3>
+<p>For each candidate action, multiple outcomes are sampled. The neural policy then continues play from each sampled state.</p>
+<h3>(3) Value Evaluation</h3>
+<p>Each resulting position is evaluated by the Value Head. The scores are averaged to estimate the expected value of the candidate action.</p>
+<pre><code>Candidate Action
+      ↓
+Sample Possible Outcomes
+      ↓
+Simulate with Neural Policy
+      ↓
+Evaluate with Value Head
+      ↓
+Average Expected Value
+      ↓
+Compare Actions
+</code></pre>
+<h3>(4) Example: Judge</h3>
+<p>When considering <strong>Judge</strong>, the resulting hands depend on the shuffle and draw. The agent samples multiple post-Judge hands, simulates play from each resulting position, and evaluates them with the Value Head. The average result is then compared with the value of not playing Judge.</p>
+<p>This approach keeps the neural policy as the primary decision-maker while using sampling to evaluate actions that involve multiple possible outcomes.</p>
+<hr>
+<h1>Conclusion</h1>
+<h2>(1) Woosung's Conclusion</h2>
+<p>I greatly enjoyed participating in this Pokémon TCG AI competition.<br>
+As someone interested in game AI development, it was an exciting opportunity to explore different approaches and improve our agent.</p>
+<p>I learnt a lot throughout the competition and am grateful to everyone who shared their ideas and agents.<br>
+It was a memorable experience, and if you ever visit Korea,<br>
+I would be very happy to play some competitive Pokémon TCG together.</p>

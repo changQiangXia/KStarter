@@ -1,0 +1,187 @@
+# https://www.kaggle.com/competitions/santa-2024/discussion/548249
+
+Topic #548249: How To Use "Batch_Size>1" and get Correct Perplexity Score!
+  Author: Chris Deotte
+  Posted: 2024-11-25 20:11:29.659000
+  Votes: 92  Comments: 30
+
+The below two steps show how to compute correct perplexity with batch size &gt; 1. Just add these two changes to the metric.py file (v29 with float16 not 8bit) provided by Kaggle
+
+Tokenizer Pad Right Side
+
+The secret to using batch_size&gt;1 and computing the correct perplexity score is to pad the tokenizer on the right: 
+
+self.tokenizer = transformers.AutoTokenizer.from_pretrained(model_path,padding_side="right")
+
+By default, the tokenizer will pad on the left and then when we shift the labels (before cross entropy calculation) we would remove a pad token instead of removing the &lt;bos&gt; token. And the LB score removes the &lt;bos&gt; token before computing the token average for our LB score.
+
+Mask Pad Tokens when Compute Loss
+
+Also, we need to update get_perplexity() to accept a parameter named batch_size and process batches. And, we need to update get_perplexity() function to mask the pad tokens from cross entropy calculation. The code below works:
+
+PAD_TOKEN_LABEL_ID = torch.nn.CrossEntropyLoss().ignore_index  
+DEVICE = torch.device(  torch.cuda.is_available()  ) 
+.loss_fct = torch.nn.CrossEntropyLoss(reduction=) 
+
+ () -&gt; [, []]:
+
+        single_input = (input_texts, )
+        input_texts = [input_texts]  single_input  input_texts
+
+        loss_list = []
+
+        batches = (input_texts)//batch_size + ((input_texts)%batch_size != )
+         j  (batches):
+
+            a = j*batch_size
+            b = (j+)*batch_size
+            input_batch = input_texts[a:b]
+
+             torch.no_grad():
+
+                
+                text_with_special = [  text  input_batch]
+
+                
+                model_inputs = .tokenizer(
+                    text_with_special,
+                    return_tensors=,
+                    add_special_tokens=,
+                    padding=
+                )
+
+                   model_inputs:
+                    model_inputs.pop()
+
+                model_inputs = {k: v.to(DEVICE)  k, v  model_inputs.items()}
+
+                
+                output = .model(**model_inputs, use_cache=)
+                logits = output[]
+
+                label = model_inputs[]
+                label[label == .tokenizer.pad_token_id] = PAD_TOKEN_LABEL_ID
+
+                
+                shift_logits = logits[..., :-, :].contiguous()  
+                shift_labels = label[..., :].contiguous()  
+
+                
+                loss = .loss_fct(
+                    shift_logits.view(-, shift_logits.size(-)),
+                    shift_labels.view(-)
+                )
+
+                loss = loss.view((logits), -)
+                valid_length = (shift_labels != PAD_TOKEN_LABEL_ID).(dim=-)
+                loss = torch.(loss, -) / valid_length
+
+                loss_list += loss.cpu().tolist()
+
+        ppl = [exp(i)  i  loss_list]
+
+         ppl[]  single_input  ppl
+
+
+UPDATE
+
+I published starter code demonstrating how to compute perplexity in batches. Namely I use batch_size=64 to search all permutations for sample#0 on Kaggle's 2xT4 GPUs here
+
+Enjoy!
+
+Comments:
+├─ CPMP (2024-11-25 21:07:49.780000) [+4]
+│  There is still a little difference when computing scores in a batch and scores per row. In my best sub, scores using your code:
+│  
+│  [,
+│   ,
+│   ,
+│   ,
+│   ,
+│   ]
+│  
+│  
+│  Scores by row:
+│  
+│  [,
+│   ,
+│   ,
+│   ,
+│   ,
+│   ]
+│  
+│  
+│  I guess the ...
+  ├─ Gunes Evitan (2024-11-26 06:59:04.500000) [+2]
+  │  Same here. Could it be due to fp precision error?
+  │  
+  │  Batch size = 1
+  │  
+  │  array([ ,   ,    ,  ,  ,
+  │          ], dtype=float32)
+  │  
+  │  
+  │  Batch size = 6
+  │  
+  │  array([ ,   ,   ,   ,  ,
+  │          ], dtype=float32)
+    ├─ CPMP (2024-12-01 14:01:03.850000) [+1]
+    │  It is due to different cuBLAS kernels being used. I shared how to fix that in a separate thread, early in the competition. But I don't use it the difference is small enough IMHO.
+    ├─ Michael Wu (2024-12-04 07:41:32.333000) [+0]
+    │  What do you mean by "different cuBLAS kernels being used"? Isn't floating point arithmetic supposed to be deterministic?
+  ├─ JSD (2024-12-01 13:20:55.373000) [+1]
+  │  Same here!
+├─ simjeg (2024-12-02 17:41:18.943000) [+3]
+│  @cdeotte I shared the code I'm using for batched perplexity computation here. The code is slightly more compact but at the end it's very similar to the one you shared :)
+├─ chris (2024-11-25 20:45:37.540000) [+3]
+│  Fantastic! I was trying some very convoluted things to get it to work, but simply padding on the right worked great :). thanks!
+├─ YULIN WEI (2024-11-30 08:11:50.167000) [+1]
+│  okay i got it
+├─ Taffey Lewis (2024-11-26 00:55:12.980000) [+1]
+│  Thanks for sharing this! I did a bit of playing around with it. It would seem that this is only a benefit if get_perplexity is passed a list of items to score rather than a single item? When passin...
+  ├─ Chris Deotte (2024-11-26 03:12:28.190000) [+5]
+  │  Correct. The speed up is because GPUs can process a huge batch (batch size &gt;&gt; 1) in roughly the same time as processing a single text (batch size = 1). So if we want to brute force infer all ...
+    ├─ Taffey Lewis (2024-11-26 03:29:42.680000) [+1]
+    │  Thank you! Very helpful. I'm also running into memory errors if batch is too high, so I guess GPU memory also has to be considered. Unfortunately I only have 8GB on my GPU (RTX 2000 Ada), and can o...
+    ├─ Chris Deotte (2024-11-26 03:34:20.940000) [+1]
+    │  Yes GPU VRAM helps. Note that you can change the batch size depending on how many words/tokens you are inferring. For example when solving sample #5 with 100 words we use smaller batch size than sa...
+    ├─ Taffey Lewis (2024-11-27 16:27:25.427000) [+0]
+    │  Holy rusted metal! Those A100s are some spendy bits of hardware. If there's people using those for this competition, then us normal peons are definitely not going to be able to keep up. This compet...
+├─ CPMP (2024-11-25 20:30:33.797000) [+1]
+│  I don't see the definition of PAD_TOKEN_LABEL_ID. I assume it is:
+│  
+│  PAD_TOKEN_LABEL_ID = torch.nn.CrossEntropyLoss().ignore_index
+  ├─ Chris Deotte (2024-11-25 20:34:39.707000) [+1]
+  │  Yes correct. I will add this to my code for clarity. (And torch.nn.CrossEntropyLoss() uses -100 by default)
+├─ Chris Deotte (2024-11-29 03:03:01.660000) [+2]
+│  UPDATE I published starter code demonstrating how to compute perplexity in batches. Namely I use batch_size=64 to search all permutations for sample#0 on Kaggle's 2xT4 GPUs here
+├─ SolverWorld (2024-11-25 21:02:18.840000) [+2]
+│  Very good, except I see where you have valid_length not count the PAD TOKENS, but where do you mask out the logits that correspond to them when you do the torch.sum?
+  ├─ Chris Deotte (2024-11-25 21:09:12.097000) [+4]
+  │  Whenever we feed PAD_TOKEN_LABEL_ID into self.loss_fct = torch.nn.CrossEntropyLoss(reduction='none'), the output is logits = 0 for that token. Therefore their loss is already excluded from summing ...
+  ├─ [deleted] (2024-11-25 21:18:03.823000) [+0]
+  │  [deleted]
+├─ Andrew (2024-11-27 21:32:58.563000) [+0]
+│  [Resolved - see update below.  Leaving for posterity in case it helps anybody else.]
+│  
+│  With the verbatim v29 version of the metric running on a Kaggle-supplied T4x2, I'm finding that batching doesn'...
+  ├─ Chris Deotte (2024-11-27 21:55:30.947000) [+1]
+  │  Yes, we need to use my new get_perplexity() in my discussion's bullet point 2. Then the function get_perplexity() will accept a new parameter named batch_size and if we set batch_size &gt; 1, then ...
+├─ Param2007 (2024-11-26 18:53:58.910000) [+1]
+│  It keeps showing incorrect PAD Tokens
+  ├─ Chris Deotte (2024-11-27 13:12:29.673000) [+0]
+  │  Can you explain? What is incorrect?
+├─ [deleted] (2024-11-29 19:00:29.607000) [+-12]
+│  [deleted]
+  ├─ CPMP (2024-11-30 11:41:37.397000) [+8]
+  │  Chat GPT, Claude, or another one?
+├─ Tanishk Patil (2024-12-03 03:38:55.657000) [+0]
+│  Thanks for sharing!
+├─ Subharthi Bhunia (2024-12-01 14:13:16.597000) [+0]
+│  Thanks for sharing
+├─ KANJI SASAKI (2025-01-24 05:30:11.617000) [+0]
+│  Thanks for sharing!
+├─ [deleted] (2024-11-29 22:44:29.840000) [+0]
+│  thanks, i should help me 😀
+├─ [deleted] (2024-11-27 09:38:27.157000) [+0]
+│  Interesting!

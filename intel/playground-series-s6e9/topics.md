@@ -1,0 +1,81 @@
+# playground-series-s6e9 讨论区（按票数排序，共 79 条）
+
+- [2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744815) — 43 票 / 14 评论 / 2026-10-01 **write-up?**
+- [1st Place - The AI Relay!](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/745013) — 41 票 / 20 评论 / 2026-10-01 **write-up?**
+- [Fable 5.1 - EDA - Original Data Insights](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739303) — 33 票 / 13 评论 / 2026-09-03 
+- [3rd Place Solution — Feature Engineering and Logistic Regression Stacking](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744848) — 32 票 / 10 评论 / 2026-10-01 **write-up?**
+- [A small Simpson's paradox](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738991) — 31 票 / 6 评论 / 2026-09-02 
+- [Approaches to Predict EV buying decisions (Coyote optimization algorithm).](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738610) — 26 票 / 2 评论 / 2026-09-01 
+- [Fable 5.1 - XGB Starter](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739321) — 24 票 / 2 评论 / 2026-09-03 
+- [GPT-6-Astra is Coming!](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739531) — 24 票 / 8 评论 / 2026-09-04 
+- [Rank12 Approach](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744797) — 22 票 / 2 评论 / 2026-10-01 
+- [Sharing my HC-LB Correlation](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/743860) — 22 票 / 3 评论 / 2026-09-27 
+- [10th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744826) — 19 票 / 4 评论 / 2026-10-01 **write-up?**
+- [📚 Honest Model Directory & OOF Hub (28+ Models Tracked)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742697) — 17 票 / 6 评论 / 2026-09-23 
+- [Logistic regression beats advanced models on the "original" dataset](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739142) — 16 票 / 10 评论 / 2026-09-02 
+- [Is there a leak?](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742317) — 16 票 / 14 评论 / 2026-09-21 
+- [When an ensemble plateaus, how do you decide what to try next?](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740769) — 16 票 / 21 评论 / 2026-09-11 
+- [9th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744923) — 13 票 / 0 评论 / 2026-10-01 **write-up?**
+- [Things shook](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744784) — 12 票 / 2 评论 / 2026-10-01 
+- [Everyone above $170,537 buys an EV — the hard edges of this dataset](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738968) — 12 票 / 11 评论 / 2026-09-02 
+- [8th Place Solution](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744856) — 11 票 / 0 评论 / 2026-10-01 **write-up?**
+- [If you have resources to use TabPFN ...](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/745045) — 10 票 / 2 评论 / 2026-10-01 
+- [The Unusual 5 km Commute Cluster](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739280) — 10 票 / 3 评论 / 2026-09-03 
+- [6th place solution PS6E9](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744907) — 9 票 / 0 评论 / 2026-10-01 **write-up?**
+- [13th Place Solution: Generator-Aware Views + LR Stack](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744938) — 8 票 / 0 评论 / 2026-10-01 **write-up?**
+- [The 0.94 Plateau: Are we missing a magic feature or just overfitting?](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739049) — 8 票 / 14 评论 / 2026-09-02 
+- [Your negative digit features aren't decimals: what `// (10**k)` really does](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740824) — 8 票 / 2 评论 / 2026-09-11 
+- [0.94590 LB | Digit Decomposition + Triple Target Encoding | Updated with Ablation Study](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741117) — 8 票 / 4 评论 / 2026-09-13 
+- [Replication-Aware Newton Boosting](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739910) — 8 票 / 5 评论 / 2026-09-07 
+- [Submission not working ](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738746) — 7 票 / 5 评论 / 2026-09-01 
+- [A little bit of Dataviz](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738828) — 7 票 / 0 评论 / 2026-09-01 
+- [Poor + Subsidy = Buy EV](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739391) — 7 票 / 0 评论 / 2026-09-03 
+- [The Original Reference Dataset Full Code ](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742927) — 6 票 / 1 评论 / 2026-09-24 
+- [20th Place Solution: GPT-2 Income Tokens, a Generator-Aware LR and Residual GBDT](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744910) — 5 票 / 0 评论 / 2026-10-01 **write-up?**
+- [I blended 556 prediction streams on S6E8. Here are the results!](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742170) — 5 票 / 0 评论 / 2026-09-20 
+- [Correction: my LB standard-error analysis was wrong — the paired SE is 10x smaller](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740049) — 5 票 / 5 评论 / 2026-09-08 
+- [Interesting Fact😃 : Commute distance, range anxiety, and buying an EV 🚗⚡](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739398) — 5 票 / 0 评论 / 2026-09-03 
+- [Subsidies are a 47x multiplier and other things I learned digging into this dataset](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740159) — 5 票 / 1 评论 / 2026-09-08 
+- [5 things I learned by validating everything (and a pseudo-labelling trap)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/743298) — 5 票 / 4 评论 / 2026-09-25 
+- [Final Leaderboard — 85th Place](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744908) — 4 票 / 0 评论 / 2026-10-01 **write-up?**
+- [Five algorithms, identical features, one boring truth — measured](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739233) — 4 票 / 4 评论 / 2026-09-03 
+- [everything we measured — including the twenty-odd things that didn't work](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739354) — 4 票 / 0 评论 / 2026-09-03 
+- [Documenting my thought process...](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741177) — 3 票 / 10 评论 / 2026-09-13 
+- [Zero missing values in this dataset — I faked some anyway (small but verified NN gain)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739498) — 3 票 / 1 评论 / 2026-09-04 
+- [Digit-decomposition features gave the single biggest OOF gain (+0.0015) — full ablation log inside](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739596) — 3 票 / 1 评论 / 2026-09-04 
+- [S6E9 top 3% Writeup - OOF 0.9467 pu 9467 pr 0.9456](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744853) — 3 票 / 0 评论 / 2026-10-01 **write-up?**
+- [I Tested 15 FE Candidates One at a Time — Here's What Actually Helped](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741755) — 3 票 / 3 评论 / 2026-09-17 
+- [Relational Pattern Unit](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740739) — 3 票 / 0 评论 / 2026-09-10 
+- [🚗⚡ How we’re approaching EV prediction ](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740928) — 3 票 / 0 评论 / 2026-09-11 **write-up?**
+- [Why Raw Probability Blending Failed Us in S6E9 — And What Rank-Averaging Actually Did on the Public LB](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742332) — 2 票 / 6 评论 / 2026-09-21 
+- [Rank 132 Solution: Validation-Gated Falsification & Geometric Rank Ensembling](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744905) — 2 票 / 0 评论 / 2026-10-01 **write-up?**
+- [Shake-up time](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744756) — 2 票 / 0 评论 / 2026-09-30 
+- [just funny ( +2e5 on LB)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741655) — 2 票 / 0 评论 / 2026-09-16 
+- [I recovered the generating formula. It scores 0.9377 alone and adds nothing to the trees.](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740441) — 2 票 / 0 评论 / 2026-09-09 
+- [Rigorous EDA & Out-of-Fold Feature Engineering - Baseline LightGBM Pipeline [Public Notebook]](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/738617) — 1 票 / 0 评论 / 2026-09-01 
+- [Honest CV baseline (LB 0.9416, CV≈LB) + list of what did NOT work — looking for teammates](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739379) — 1 票 / 1 评论 / 2026-09-03 
+- [253rd Place: My Second Playground Competition](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/745290) — 1 票 / 0 评论 / 2026-10-02 **write-up?**
+- [Predicting EV Purchases: Rigorous 12-Step EDA to Multi-Layer Meta-Stacking [SCARF + Genetic FE + SLSQP Blender]](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739170) — 1 票 / 2 评论 / 2026-09-03 
+- [Where the AUC lives: 94% cross-cell, and calibration can't touch it](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/740775) — 1 票 / 0 评论 / 2026-09-11 
+- [Question about Income Splitting](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741247) — 1 票 / 8 评论 / 2026-09-14 
+- [[Notebook] EV Purchase Prediction — Deep EDA · 7 Models · Optuna · Stacking | OOF 0.9431, Public LB 0.9429](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741746) — 1 票 / 6 评论 / 2026-09-17 
+- [Can I reuse tuned XGBoost parameters with a different learning rate?](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/743529) — 1 票 / 5 评论 / 2026-09-26 
+- [Proposed Kaggle title: **A Small Fold-Safe Income Frequency Gain for a Single LightGBM (OOF 0.945935)**](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742774) — 1 票 / 2 评论 / 2026-09-23 
+- [Measured on plain LightGBM: digits +0.0016, target encoding +0.0017, frequency +0.0004](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744600) — 0 票 / 0 评论 / 2026-09-30 
+- [Frequency encoding (+0.00076) is transductive but label-free — here's when it helps](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744346) — 0 票 / 1 评论 / 2026-09-29 
+- [The three files at the top of the public frontier are the same file (corr 1.00000)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744248) — 0 票 / 3 评论 / 2026-09-29 
+- [[Postmortem] My CV went up 0.0005 and my LB went down 0.0005 — same members, same folds](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741447) — 0 票 / 3 评论 / 2026-09-15 
+- [[Post-mortem] My 0.94656 anchor survived the shakeup exactly — but 42 teams above it](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744868) — 0 票 / 2 评论 / 2026-10-01 
+- [Digit decomposition gave me +0.0014 OOF (0.9406 → 0.9420) — exact code inside](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744345) — 0 票 / 1 评论 / 2026-09-29 
+- [Bayes error rate](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742324) — 0 票 / 0 评论 / 2026-09-21 
+- [S6E9: the generator copied the original incomes and remembers their labels](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742385) — 0 票 / 0 评论 / 2026-09-21 
+- [Digit Decomposition Improved My LightGBM from 0.94217 → 0.94311](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741457) — 0 票 / 4 评论 / 2026-09-15 
+- [How digit extraction work ?](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741752) — 0 票 / 2 评论 / 2026-09-17 
+- [📚 Beginner's Complete Guide: From Data Loading to Submission](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742612) — 0 票 / 0 评论 / 2026-09-22 
+- [Best single model score and number of features](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/742904) — 0 票 / 3 评论 / 2026-09-24 
+- [A step-by-step notebook: every concept explained, from EDA to a CV that matches the LB](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/743313) — 0 票 / 0 评论 / 2026-09-25 
+- [📊 [Tool] S6E9 Live Leaderboard Explorer & Meta-Analysis (Auto-Updated Daily)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/739054) — -3 票 / 1 评论 / 2026-09-02 
+- [⚡ Fast & Clean LightGBM 5-Fold Baseline (CV 0.94+) + Feature Engineering ](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744523) — -3 票 / 0 评论 / 2026-09-30 
+- [0.94677 Ridge Tower: what worked, what failed, reproducible notebook](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744592) — -4 票 / 0 评论 / 2026-09-30 
+- [Only 1.2% of buyers had no subsidy (EDA + 0.942 CV LightGBM baseline)](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744583) — -5 票 / 0 评论 / 2026-09-30 
+- [RF, NN QUIZ!!!](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/741456) — -13 票 / 6 评论 / 2026-09-15 

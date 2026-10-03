@@ -1,0 +1,172 @@
+# https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391208
+
+Topic #391208: 4th place solution
+  Author: Dieter
+  Posted: 2023-02-28 17:36:02.926000
+  Votes: 84  Comments: 19
+
+Introduction
+
+Congrats all and thank you RSNA for another great challenge. Our solution is below. Code and slides will be posted over the coming weeks.  
+
+Preprocessing
+
+We used the same preprocessing and resizing for all models, which enabled us to use more models.
+
+Pixel values for each image were windowed using the width and center from the DICOM metadata. A linear window was used regardless of the specified function in the metadata to decrease processing time. We applied a coarse CNN with minimum filter to crop the image to the breast area, and hopefully any noise/text, from the image. 
+
+The cancer was often small and the images large, so when resizing it was important to lose as little detail as possible. This paper , concludes that the best resize method is PIL with lanczos, or tensorflow with antialias. There is a good example (Fig 1. in the paper) of how resizing can lose information, comparing cv2, PIL, pytorch and others. We used PIL, which was slow but results outperformed any cv2 method. Using the .thumbnail() function seemed to help speed this up. The trade off was we did not generate any different sized images for modeling, but only did one down size of the image. 
+All images were reduced to 1152 dim. In addition, during training we applied augmentations prior to downsizing, as they would lose more information if applied to a small image. The augmentations are mainly cv2 based. Also, we kept the original filtered image aspect ratio and padded to a square image. 
+
+Augmentations
+
+Train augmentations before downsizing were vflip, hflip,transpose, shift, scale, rotate, grid distortion &amp; affine. After downsizing, we used one of random grid shuffle &amp; coarse dropout. In train, we random cropped to 1024, and in val we center cropped. 
+Example batch below.
+
+
+
+Models
+
+Model type 1: Breast level feature combination 1D-CNN with CNN backbone
+
+Auxiliary loss improved time to convergence a lot. For each backbone, stage 1 model trained for 9 epochs, stage 2 model trained for 2 epochs with frozen backbone. Heavy dropout (0.5) was applied on the linear output. 
+The 1D-CNN was set up with a filter size of 2 and no padding, so we get a (2, n_features) shape input and a (1, n_features) output. 
+
+
+
+In our final ensemble we ran the above architecture with efficientnet b3 b4 b5 v2s and v2m.
+
+Some of the solution was inspired by Bo’s great write up on the SIIM melanoma competition 1st place solution.
+
+Model type 2: Patient-level multi-view-multi-lateral transformer with CNN backbone
+
+Inspired by the paper Transformers Improve Breast Cancer Diagnosis from Unregistered Multi-View Mammograms, we designed another 2nd stage approach, but on a patient level. 
+
+Stage 1:
+
+
+
+In the first stage we train an image level CNN which is trained with an auxiliary segmentation loss by predicting masks we got from training a Yolo_v7 on CBIS dataset.
+
+Stage 2:
+
+
+
+We take the CNN trained in stage 1 and aggregate to patient level by considering four images per patient. Two views for each breast, i.e L-CC, L-MLO, R-CC, R-MLO. Using a 2-view/ 2-lateral input, the transformer can hopefully learn: 
+
+
+
+consistency between views 
+
+differences in laterals
+
+
+We extract the output feature maps of the image level CNN for each view ending up with a tensors of size (4,out_channels, 32,32), which is projected to a predefined grid-size (4,hidden_dim, 16,16) using a conv layer. Then the 4x16x16 features, which can be seen as patch-tokens are spatially flattened and concatenated. The result is a sequence (hidden_dim, 1024) which is put into a transformer. Output of that transformer are two cancer predictions, one for each breast.
+
+We first froze the CNN backbone for a few epochs to let the pretrained vision transformer "adjust" before fine-tuning the whole 2-stage model end2end. 
+If a patient has more than one image per view we randomly sample one image per view for training and use multiple 4-view combinations for inference which are then averaged. 
+Backbone-wise we used pretrained seresnext50 and convnext tiny as CNN and pretrained deit-tiny-patch16-224 as transformer.
+
+Ensembling
+
+So in total we used single seed fullfits of the following models
+
+
+
+Effnet v2_s + 1D-CNN
+
+Effnet v2_m + 1D-CNN
+
+Effnet b3 + 1D-CNN
+
+Effnet b4 + 1D-CNN
+
+Effnet b5 + 1D-CNN
+
+SE-ResNext50 + deit-tiny-patch16-224
+
+ConvNext_tiny + deit-tiny-patch16-224
+
+
+A threshold to convert to binary output was selected based on the CV of the blend. 
+Our two highest submissions according to Public LB were also our two highest blends on CV. They were not the highest private, but close to it. For the shake up, it probably helped that we did not start blending the models until the last few days of the competition, so did not get distracted by high Public LB scores. 
+
+Things that did not work/were ineffective:
+
+
+
+Pretraining on DDSM/VinDr-Mammo
+
+Training a ROI extractor and training subsequent models on focused ROIs rather than whole images
+
+Higher resolution images (similar to worse performance, longer inference times)
+
+Comments:
+├─ Chenglu (2023-03-01 01:50:25.167000) [+3]
+│  Very cool and beautiful solution, and congrats for your team!
+│  
+│  Could you offer more details about Model type 1 Stage 2, I've the following question:
+│  
+│  
+│  
+│  
+│  the input "images from the breast". In the s...
+  ├─ Darragh (2023-03-01 08:55:17.370000) [+2]
+  │  For Q2. Lets say we have 3 images, img1, img2, img3, we get the gap layer for each and get the two way pairs, (eg. img1&amp;img2, img1&amp;img3, img2&amp;img3) and pass them to a 2D CNN. Then avera...
+    ├─ Chenglu (2023-03-01 09:07:41.237000) [+1]
+    │  Thanks very much for answering. I am still confused about "2D CNN", what is that specifically? Is that a nn.Conv2d?
+    │  
+    │  After the pooling layer, for the 3 images, we can get 3 feature vectors each. I ...
+    ├─ Darragh (2023-03-01 09:21:00.787000) [+1]
+    │  Oops, sorry, your right, its a 1DCNN, need to update the docu 🤦‍♂️ 
+    │  
+    │  backbone_out = 1408
+    │  fea_conv = nn.Sequential( nn.Conv1d(backbone_out, backbone_out, kernel_size=2, padding=0), nn.ReLU())
+    │  
+    │  
+    │  So l...
+    ├─ Chenglu (2023-03-01 11:53:42.780000) [+0]
+    │  That's it, thanks so much for the explaination.
+├─ ForcewithMe (2023-03-06 11:10:20.120000) [+1]
+│  The transformer part is fancy. Congratulations and thank you! 🎉
+├─ Pablo Larrosa (2023-02-28 17:55:28.007000) [+1]
+│  Congratulations!!!, I'd like to know if it's allow to use Yolo during the competition.
+│  
+│  Thank in advance
+├─ tharun_01 (2023-03-22 18:04:33.130000) [+0]
+│  Hey, any idea of sharing your Source code? That would be really helpful. 
+│  Thank You.
+├─ Veronika Chernova (2023-03-06 11:08:51.193000) [+0]
+│  Congratulations!
+│  I have two questions:
+│  
+│  
+│  
+│  What device did you use? Is it kaggle device or you own machine?
+│  
+│  What size of batch_size did you use?
+├─ adriel cabral (2023-03-05 16:47:15.017000) [+0]
+│  I'm sorry if this is a dumb question, but how are the axillary losses supposed to help the model? it would be, for example, "Can cancer show up differently for mammography Birads/Density type "A" a...
+  ├─ Darragh (2023-03-05 18:27:44.217000) [+1]
+  │  I am not sure which aux labels helped more or less; and I see other teams also used age as an aux label. Some of them may not have helped - we did not test this too much. birads was an indication o...
+    ├─ adriel cabral (2023-03-05 20:51:46.583000) [+1]
+    │  I really liked your explanation. Now I understand the use of axillary losses, thank you very much !!! 😄
+├─ Chris Deotte (2023-03-04 18:57:58.463000) [+0]
+│  Congratulations team! Great job.
+├─ SHOHRUH BEGMATOV (2023-03-04 10:04:10.920000) [+0]
+│  good project
+├─ ZEROO (2023-03-02 02:12:43.307000) [+0]
+│  Thanks for sharing and congrats to your team!
+├─ Ebc (2023-03-01 15:28:04.680000) [+0]
+│  Congrats to your team and thank you for sharing the solution (looking forward to reading the code!). Loved the recommendation about PIL and TF antialias for resizing. Will read that paper!
+│  
+│  Thanks ...
+├─ Arthur Mulikhov (2023-03-01 11:07:32.053000) [+0]
+│  Congratulations, a very strong solution!
+│  Could you share how the CV for the stage2 model was arranged?
+├─ Optimo (2023-02-28 23:45:01.660000) [+0]
+│  Thanks for sharing and many congratulations to the entire team!
+│  
+│  Any chance you could share your CV score for the different models/ensembling?
+├─ Antti Isosalo (2023-02-28 19:23:57.737000) [+0]
+│  The cancer was often small and the images large, so when resizing it was important to lose as little detail as possible. This paper , concludes that the best resize method is PIL with lanczos, or t...

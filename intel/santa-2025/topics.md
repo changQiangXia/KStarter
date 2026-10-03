@@ -1,0 +1,122 @@
+# santa-2025 讨论区（按票数排序，共 120 条）
+
+- [Simulated Annealing Tips](https://www.kaggle.com/competitions/santa-2025/discussion/640894) — 114 票 / 10 评论 / 2025-11-26 
+- [1st place: genetic algorithm and GPU relaxation](https://www.kaggle.com/competitions/santa-2025/discussion/672465) — 111 票 / 16 评论 / 2026-02-08 **write-up?**
+- [1st place solution preview](https://www.kaggle.com/competitions/santa-2025/discussion/671058) — 84 票 / 25 评论 / 2026-01-31 **write-up?**
+- [IMPORTANT: Santa Etiquette (Please Read)](https://www.kaggle.com/competitions/santa-2025/discussion/638484) — 80 票 / 34 评论 / 2025-11-23 
+- [Author of sparrow here :)](https://www.kaggle.com/competitions/santa-2025/discussion/671593) — 73 票 / 14 评论 / 2026-02-02 
+- [Visualization of my 10 trees solution. This year's santa is going to be a hard competition.](https://www.kaggle.com/competitions/santa-2025/discussion/629896) — 65 票 / 42 评论 / 2025-11-18 **write-up?**
+- [Third place solution: a customized sparrow algorithm](https://www.kaggle.com/competitions/santa-2025/discussion/671181) — 64 票 / 9 评论 / 2026-01-31 **write-up?**
+- [Interactive Editor](https://www.kaggle.com/competitions/santa-2025/discussion/615196) — 59 票 / 16 评论 / 2025-11-09 
+- [For Large N Use Tessellations](https://www.kaggle.com/competitions/santa-2025/discussion/642347) — 59 票 / 21 评论 / 2025-11-27 
+- [Santa25 12th place](https://www.kaggle.com/competitions/santa-2025/discussion/671060) — 55 票 / 16 评论 / 2026-01-31 **write-up?**
+- [Kaggle Etiquette: Do not randomly send team merge requests](https://www.kaggle.com/competitions/santa-2025/discussion/664189) — 46 票 / 35 评论 / 2025-12-23 
+- [Symmetric solutions that are apparently optimal](https://www.kaggle.com/competitions/santa-2025/discussion/664824) — 46 票 / 32 评论 / 2025-12-28 **write-up?**
+- [There was still room!](https://www.kaggle.com/competitions/santa-2025/discussion/671057) — 43 票 / 13 评论 / 2026-01-31 
+- [An obvious lower bound of the score.](https://www.kaggle.com/competitions/santa-2025/discussion/629902) — 42 票 / 12 评论 / 2025-11-18 
+- [Why the winning solutions will be Asymmetric (Results from 24 CPUs)](https://www.kaggle.com/competitions/santa-2025/discussion/666880) — 41 票 / 29 评论 / 2026-01-09 **write-up?**
+- [Physics based packing](https://www.kaggle.com/competitions/santa-2025/discussion/638404) — 37 票 / 18 评论 / 2025-11-23 
+- [Please stop sharing public solutions ](https://www.kaggle.com/competitions/santa-2025/discussion/670298) — 37 票 / 25 评论 / 2026-01-27 **write-up?**
+- [I Made a Christmas Tree Arrangement Optimization Tool](https://www.kaggle.com/competitions/santa-2025/discussion/655327) — 36 票 / 6 评论 / 2025-12-08 
+- [Can we get a 7 day notebook sharing pause prior to the end of the competition?](https://www.kaggle.com/competitions/santa-2025/discussion/669221) — 36 票 / 11 评论 / 2026-01-21 
+- [Santa25 8th Place](https://www.kaggle.com/competitions/santa-2025/discussion/671139) — 33 票 / 6 评论 / 2026-01-31 **write-up?**
+- [About Sharing Solutions](https://www.kaggle.com/competitions/santa-2025/discussion/637458) — 29 票 / 2 评论 / 2025-11-22 **write-up?**
+- [updating already-published notebooks in the final week](https://www.kaggle.com/competitions/santa-2025/discussion/670098) — 29 票 / 3 评论 / 2026-01-26 
+- [gemini3 packing simulator: NP-hard geometry problem to learned policy over physics.](https://www.kaggle.com/competitions/santa-2025/discussion/640112) — 27 票 / 13 评论 / 2025-11-25 
+- [4th Place: Hybrid Packing with Sparrow, Manual Structuring, Region Replacement](https://www.kaggle.com/competitions/santa-2025/discussion/671515) — 26 票 / 0 评论 / 2026-02-02 **write-up?**
+- [2nd place: simulated annealing, iterated local search, and beam search](https://www.kaggle.com/competitions/santa-2025/discussion/672750) — 24 票 / 1 评论 / 2026-02-10 **write-up?**
+- [Santa 2025 5th-place solution](https://www.kaggle.com/competitions/santa-2025/discussion/672466) — 24 票 / 1 评论 / 2026-02-08 **write-up?**
+- [Best Score Achieved for a Given Number of Trees](https://www.kaggle.com/competitions/santa-2025/discussion/651069) — 23 票 / 26 评论 / 2025-12-02 
+- [A simple web application for editing solutions](https://www.kaggle.com/competitions/santa-2025/discussion/666583) — 23 票 / 0 评论 / 2026-01-07 **write-up?**
+- [manual packing + computer vision: a valid solution?](https://www.kaggle.com/competitions/santa-2025/discussion/629770) — 22 票 / 6 评论 / 2025-11-17 **write-up?**
+- [Expected Leaderboard Progression](https://www.kaggle.com/competitions/santa-2025/discussion/632348) — 21 票 / 20 评论 / 2025-11-18 
+- [Best strategy for a small number of trees, say up to 50](https://www.kaggle.com/competitions/santa-2025/discussion/651661) — 20 票 / 27 评论 / 2025-12-04 
+- [I built a local visualization & scoring tool for Santa 2025 Tree Packing 🎄我做了一个 Santa 2025 Tree Packing 的本地可视化与评分工具 🎄](https://www.kaggle.com/competitions/santa-2025/discussion/662868) — 19 票 / 1 评论 / 2025-12-15 
+- [The score of our group](https://www.kaggle.com/competitions/santa-2025/discussion/665881) — 19 票 / 17 评论 / 2026-01-04 
+- [This competition is insane](https://www.kaggle.com/competitions/santa-2025/discussion/671078) — 19 票 / 2 评论 / 2026-01-31 
+- [Largest configuration without a regular pattern](https://www.kaggle.com/competitions/santa-2025/discussion/649778) — 18 票 / 11 评论 / 2025-12-01 
+- [13th Place Santa25: Billiard + customized Sparrow](https://www.kaggle.com/competitions/santa-2025/discussion/671210) — 18 票 / 4 评论 / 2026-01-31 **write-up?**
+- [Chaos verus orderd solution](https://www.kaggle.com/competitions/santa-2025/discussion/637382) — 18 票 / 24 评论 / 2025-11-22 **write-up?**
+- [Critical check to avoid overlapping in final submission](https://www.kaggle.com/competitions/santa-2025/discussion/629793) — 18 票 / 2 评论 / 2025-11-17 
+- [[71.97] Another Public Shared Score On Telegram !](https://www.kaggle.com/competitions/santa-2025/discussion/656944) — 18 票 / 7 评论 / 2025-12-09 
+- [Community Score Analysis](https://www.kaggle.com/competitions/santa-2025/discussion/664362) — 17 票 / 13 评论 / 2025-12-24 
+- [Exploiting Homogeneity in Feasibility-Driven Polygon Packing](https://www.kaggle.com/competitions/santa-2025/discussion/671117) — 17 票 / 4 评论 / 2026-01-31 
+- [Open Forum to Showcase your 100 Trees Solution](https://www.kaggle.com/competitions/santa-2025/discussion/637061) — 17 票 / 30 评论 / 2025-11-22 **write-up?**
+- [Why not solve a subset and then make it's Grid!](https://www.kaggle.com/competitions/santa-2025/discussion/633814) — 16 票 / 7 评论 / 2025-11-19 
+- [11th Place Solution](https://www.kaggle.com/competitions/santa-2025/discussion/671134) — 15 票 / 0 评论 / 2026-01-31 **write-up?**
+- [Incremental squashing as a final pass on submissions](https://www.kaggle.com/competitions/santa-2025/discussion/650603) — 14 票 / 3 评论 / 2025-12-02 
+- [Public Shared Score On Telegram (As dataset) [72.49]](https://www.kaggle.com/competitions/santa-2025/discussion/653457) — 14 票 / 5 评论 / 2025-12-06 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/santa-2025/discussion/616533) — 13 票 / 5 评论 / 2025-11-10 
+- [Can we have a Longest Leader LB also for this competition?](https://www.kaggle.com/competitions/santa-2025/discussion/664993) — 13 票 / 1 评论 / 2025-12-29 
+- [My Journey with Claude Code: 7,850 Rounds of Optimization, 0 Improvements](https://www.kaggle.com/competitions/santa-2025/discussion/665978) — 13 票 / 8 评论 / 2026-01-04 
+- [X-mass mood](https://www.kaggle.com/competitions/santa-2025/discussion/630660) — 13 票 / 1 评论 / 2025-11-18 
+- [Merger complete (Was 21st place team seeks suitable merger)](https://www.kaggle.com/competitions/santa-2025/discussion/667642) — 13 票 / 30 评论 / 2026-01-13 **write-up?**
+- [Where do these high-scoring CSVs originate from?](https://www.kaggle.com/competitions/santa-2025/discussion/668818) — 13 票 / 4 评论 / 2026-01-19 
+- [Have you ever played Tetris?](https://www.kaggle.com/competitions/santa-2025/discussion/664447) — 12 票 / 14 评论 / 2025-12-25 
+- [k-mer exploration](https://www.kaggle.com/competitions/santa-2025/discussion/668483) — 12 票 / 2 评论 / 2026-01-17 
+- [From Kaggle Santa to NIPS spotlight and being mentioned by Terry Tao](https://www.kaggle.com/competitions/santa-2025/discussion/671246) — 12 票 / 2 评论 / 2026-01-31 
+- [Santa25 14th place - Custom Simulated Annealing](https://www.kaggle.com/competitions/santa-2025/discussion/671688) — 12 票 / 2 评论 / 2026-02-03 **write-up?**
+- [Post-competition: Let’s build a community-best submission (best-of-per-n)](https://www.kaggle.com/competitions/santa-2025/discussion/663748) — 11 票 / 9 评论 / 2025-12-20 
+- [Literature on packing polygons into squares](https://www.kaggle.com/competitions/santa-2025/discussion/638006) — 11 票 / 1 评论 / 2025-11-23 
+- [Thank you!](https://www.kaggle.com/competitions/santa-2025/discussion/670978) — 11 票 / 3 评论 / 2026-01-30 
+- [19th place solution: Loosen up, add a tree, and let the sparrows explore](https://www.kaggle.com/competitions/santa-2025/discussion/671151) — 11 票 / 3 评论 / 2026-01-31 **write-up?**
+- [Are Shared Compiled Tools Safe to Use?](https://www.kaggle.com/competitions/santa-2025/discussion/669911) — 10 票 / 3 评论 / 2026-01-25 
+- [3D Print a Tree](https://www.kaggle.com/competitions/santa-2025/discussion/670050) — 10 票 / 7 评论 / 2026-01-25 
+- [80th Place. Outrunning the Tide of Public Shares](https://www.kaggle.com/competitions/santa-2025/discussion/671433) — 10 票 / 1 评论 / 2026-02-01 **write-up?**
+- [East Team Solution](https://www.kaggle.com/competitions/santa-2025/discussion/671080) — 10 票 / 0 评论 / 2026-01-31 **write-up?**
+- [Boxing Boxes](https://www.kaggle.com/competitions/santa-2025/discussion/671082) — 10 票 / 2 评论 / 2026-01-31 
+- [How to improve the solution?](https://www.kaggle.com/competitions/santa-2025/discussion/665967) — 10 票 / 12 评论 / 2026-01-04 **write-up?**
+- [per task google sheet LB?](https://www.kaggle.com/competitions/santa-2025/discussion/631178) — 9 票 / 4 评论 / 2025-11-18 
+- [Post your compute here!](https://www.kaggle.com/competitions/santa-2025/discussion/670849) — 9 票 / 16 评论 / 2026-01-29 
+- [The team Jingle bins did it  !!!!!!!!!!](https://www.kaggle.com/competitions/santa-2025/discussion/669839) — 9 票 / 6 评论 / 2026-01-24 
+- [Why are tree like 44 and 70 so hard to optimize? ](https://www.kaggle.com/competitions/santa-2025/discussion/664181) — 9 票 / 3 评论 / 2025-12-22 
+- [Clarification on competition deadline](https://www.kaggle.com/competitions/santa-2025/discussion/669718) — 8 票 / 1 评论 / 2026-01-24 
+- [can gemini3 help?](https://www.kaggle.com/competitions/santa-2025/discussion/633422) — 8 票 / 4 评论 / 2025-11-19 
+- [Inconsistent Collision Checks Between TPU and CPU (Floating-Point Precision?)](https://www.kaggle.com/competitions/santa-2025/discussion/660292) — 8 票 / 1 评论 / 2025-12-12 
+- [Mixed Integer Linear Programming](https://www.kaggle.com/competitions/santa-2025/discussion/671075) — 8 票 / 2 评论 / 2026-01-31 
+- [Breaking the "Sawtooth" Barrier in Lattice Packing (N>=58)](https://www.kaggle.com/competitions/santa-2025/discussion/663562) — 8 票 / 7 评论 / 2025-12-18 
+- [Opus Magnum](https://www.kaggle.com/competitions/santa-2025/discussion/671773) — 8 票 / 0 评论 / 2026-02-03 
+- [Multiple people from same co-working space](https://www.kaggle.com/competitions/santa-2025/discussion/636674) — 7 票 / 3 评论 / 2025-11-21 
+- [What's different this year?](https://www.kaggle.com/competitions/santa-2025/discussion/671044) — 7 票 / 13 评论 / 2026-01-30 
+- [minkowski area and the forbidden area](https://www.kaggle.com/competitions/santa-2025/discussion/664640) — 7 票 / 2 评论 / 2025-12-26 
+- [Frequent public solution updates – how to keep up and use them effectively?](https://www.kaggle.com/competitions/santa-2025/discussion/664868) — 7 票 / 4 评论 / 2025-12-28 **write-up?**
+- [Which team secretly slipped in a CSV with a modified structure?](https://www.kaggle.com/competitions/santa-2025/discussion/670136) — 7 票 / 5 评论 / 2026-01-26 
+- [Santa 2025 Competition Silver 126th Solution: Hybrid Optimization Pipeline](https://www.kaggle.com/competitions/santa-2025/discussion/671150) — 7 票 / 0 评论 / 2026-01-31 **write-up?**
+- [Efficient basin search (was Better initial arrangements)](https://www.kaggle.com/competitions/santa-2025/discussion/667481) — 7 票 / 1 评论 / 2026-01-12 
+- [Santa25 15th Place](https://www.kaggle.com/competitions/santa-2025/discussion/671182) — 7 票 / 1 评论 / 2026-02-07 **write-up?**
+- [i ask nano banana to pack the trees](https://www.kaggle.com/competitions/santa-2025/discussion/637950) — 7 票 / 6 评论 / 2025-11-23 
+- [Rotating whole solutions for small gains](https://www.kaggle.com/competitions/santa-2025/discussion/650893) — 7 票 / 7 评论 / 2025-12-02 **write-up?**
+- [a lot of people with score 70.983815363092 ](https://www.kaggle.com/competitions/santa-2025/discussion/665178) — 6 票 / 6 评论 / 2025-12-30 
+- [bbox3 - mystery files in top kernels](https://www.kaggle.com/competitions/santa-2025/discussion/663894) — 6 票 / 11 评论 / 2025-12-21 
+- [Inspiration from the bin packing problem?](https://www.kaggle.com/competitions/santa-2025/discussion/663599) — 6 票 / 1 评论 / 2025-12-19 
+- [What are the best approaches?](https://www.kaggle.com/competitions/santa-2025/discussion/665669) — 6 票 / 11 评论 / 2026-01-03 
+- [Santa 2025 | 89th place review](https://www.kaggle.com/competitions/santa-2025/discussion/671397) — 6 票 / 1 评论 / 2026-02-01 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/santa-2025/discussion/671729) — 5 票 / 2 评论 / 2026-02-03 
+- [Santa2025 68th place.](https://www.kaggle.com/competitions/santa-2025/discussion/671570) — 5 票 / 0 评论 / 2026-02-02 **write-up?**
+- [Accidentally cool visualisation - any one else got some 'pretty' but not good solutions?](https://www.kaggle.com/competitions/santa-2025/discussion/651755) — 5 票 / 0 评论 / 2025-12-05 **write-up?**
+- [71st solution](https://www.kaggle.com/competitions/santa-2025/discussion/671987) — 5 票 / 0 评论 / 2026-02-05 **write-up?**
+- [Reinforcement learning?](https://www.kaggle.com/competitions/santa-2025/discussion/665007) — 5 票 / 0 评论 / 2025-12-29 
+- [Santa 2025 - Christmas Tree Packing Challenge | Individual Group Score Tracker](https://www.kaggle.com/competitions/santa-2025/discussion/664846) — 5 票 / 2 评论 / 2025-12-28 
+- [Visualising progress](https://www.kaggle.com/competitions/santa-2025/discussion/664932) — 5 票 / 0 评论 / 2025-12-29 
+- [Few questions regarding the nature of the trees](https://www.kaggle.com/competitions/santa-2025/discussion/629842) — 5 票 / 20 评论 / 2025-11-18 
+- [Try something new!](https://www.kaggle.com/competitions/santa-2025/discussion/664574) — 5 票 / 0 评论 / 2025-12-26 
+- [Tree Packing Sandbox Software/Game/Studio](https://www.kaggle.com/competitions/santa-2025/discussion/671187) — 5 票 / 0 评论 / 2026-01-31 
+- [Google Cloud Free Trial - 36vCPU](https://www.kaggle.com/competitions/santa-2025/discussion/664828) — 4 票 / 0 评论 / 2025-12-28 
+- [281 place solution making me Kaggle Expert](https://www.kaggle.com/competitions/santa-2025/discussion/671146) — 4 票 / 0 评论 / 2026-01-31 **write-up?**
+- [Was combination of genetic algorithms and simulated anealing already explored?](https://www.kaggle.com/competitions/santa-2025/discussion/663811) — 4 票 / 3 评论 / 2025-12-20 
+- [Competition Review](https://www.kaggle.com/competitions/santa-2025/discussion/671476) — 4 票 / 0 评论 / 2026-02-02 
+- [# Santa 2025 — 290th Writeup (bbox3‑ensemble)](https://www.kaggle.com/competitions/santa-2025/discussion/671931) — 3 票 / 0 评论 / 2026-02-05 **write-up?**
+- [Is it worth to keep SA-exploring sub-optimal solutions that are architecturally different?](https://www.kaggle.com/competitions/santa-2025/discussion/666023) — 3 票 / 0 评论 / 2026-01-04 **write-up?**
+- [Is the Rudolph prize winner fixed now?](https://www.kaggle.com/competitions/santa-2025/discussion/668395) — 3 票 / 4 评论 / 2026-01-16 
+- [Stuck scaling to larger N!!! any hints?](https://www.kaggle.com/competitions/santa-2025/discussion/668524) — 3 票 / 0 评论 / 2026-01-17 
+- [Is this amount of improvement normal in optimization problems?](https://www.kaggle.com/competitions/santa-2025/discussion/665508) — 3 票 / 1 评论 / 2026-01-01 
+- [Some optimization based techniques ](https://www.kaggle.com/competitions/santa-2025/discussion/646866) — 3 票 / 0 评论 / 2025-11-30 
+- [Looking for a merge](https://www.kaggle.com/competitions/santa-2025/discussion/669374) — 3 票 / 2 评论 / 2026-01-21 
+- [a visualized tree layout lab](https://www.kaggle.com/competitions/santa-2025/discussion/669602) — 3 票 / 0 评论 / 2026-01-23 
+- [A Reference Curve](https://www.kaggle.com/competitions/santa-2025/discussion/664987) — 3 票 / 1 评论 / 2025-12-29 
+- [Can we just finish this?](https://www.kaggle.com/competitions/santa-2025/discussion/670140) — 3 票 / 3 评论 / 2026-01-26 
+- [programming language](https://www.kaggle.com/competitions/santa-2025/discussion/631224) — 3 票 / 11 评论 / 2025-11-18 
+- [Why Decimal type is used in ChristmasTree class?](https://www.kaggle.com/competitions/santa-2025/discussion/635282) — 3 票 / 1 评论 / 2025-11-20 
+- [[327th Place Solution]  Ensemble & C++ SAT Optimization](https://www.kaggle.com/competitions/santa-2025/discussion/671417) — 3 票 / 0 评论 / 2026-02-01 **write-up?**
+- [Simple simulated annealing and boundary optimization](https://www.kaggle.com/competitions/santa-2025/discussion/671393) — 3 票 / 0 评论 / 2026-02-01 
+- [Is it too late to start here? ](https://www.kaggle.com/competitions/santa-2025/discussion/663363) — 3 票 / 18 评论 / 2025-12-17 

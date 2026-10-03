@@ -1,0 +1,34 @@
+<p>I would like to share an XGBoost trick to handle larger data and more features. When we use the Python API, we create a <code>xgb.DMatrix()</code> to wrap our data before train and predict. If we use an <code>xgb.QuantileDMatrix()</code> instead, then we can train with up to 8x more data!</p>
+<h1>XGBoost uses Histogram</h1>
+<p>The most common <code>tree_method</code> is <code>hist</code>. This takes each column of numbers (whether int64, int32, float64, or float32, etc) and puts it into 256 bins for training and inference (when we use the default value for <code>max_bins</code>). This means that the original column of 8 bytes or 4 bytes per number becomes 1 byte per number!</p>
+<p>So when our train data is 32bit precision, it gets reduced by 4x when XGB is training. (Or if it is originally 64bit precision, it gets reduced by 8x). This is good news because this means we can train with larger dataframes than we think when using XGB.</p>
+<h1>Use QuantileDMatrix (Trick 1)</h1>
+<p>Let's look at an example. Imagine that we have a dataframe with 1 million rows and 1000 columns. This is 1e9 elements (i.e. numbers). If each number is 32bit precision (i.e. 4 bytes), then this dataframe is 4GB of data. When we use <code>xgb.DMatix()</code>, this entire 4GB first gets loaded into GPU VRAM before it gets compressed into histograms and finishes as 1GB of data.</p>
+<p>When we use <code>xgb.QuantileDMatrix()</code>, then the data gets loaded into memory in batches. First we load 1GB and it gets compressed to 250MB. Then we load another 1GB and it gets compressed to 250MB, etc etc. So the <code>xgbQuantileDMatrix()</code> doesn't require us to have 4GB of GPU VRAM if we wish to train on a 4GB dataframe. Also, we choose the size of the batches, so if we make them small, then we only need about 1GB of GPU VRAM to train with 4GB of 32bit dataframe.</p>
+<h1>Reduce Data Types (Trick 2)</h1>
+<p>By default, Pandas and NVIDIA cuDF loads numbers as <code>int64</code> and <code>float64</code>. Usually this is more than we need. We can nearly always reduce integers to <code>int32</code> and <code>float32</code>. Doing this reduces our data by a factor of 2x. So first, we should read and reduce our data. And second, we can use <code>xgb.QuantileDMatrix()</code>. The combination of both of these techniques allows us to train with up to 8x more data!</p>
+<h1>Maximize QuantileDMatrix with Disk (Trick 3)</h1>
+<p>To maximize the benefit of <code>xgb.QuantileDMatrix()</code>, we can use two notebooks. In the first notebook we perform GPU (i.e. NVIDIA cuDF) feature engineering and save the dataframe to disk. In the second notebook we design our data loader to read batches from disk.</p>
+<p>The reason this maximizes the size of data we can train with is as follows. Imagine that we have a 15GB dataframe and 16GB of GPU VRAM. If we use NVIDIA cuDF to build our dataframe, then we are already using 15GB of GPU VRAM (to store our original dataframe) when we begin to build our <code>xgb.QuantileDMatrix()</code>, so we only have 1GB left over to fit the XGB train data.</p>
+<p>If we build our 15GB GPU dataframe in one notebook and save to disk. Then our second notebook begins with all of its GPU VRAM available. Then inside our data loader which feeds our <code>xgb.QuantileDMatrix()</code>, we read 16k rows of our dataframe at a time, transfer it into GPU VRAM and compress it to 4x smaller size. In the end XGB will only use 15/4 = 3.75GB of our 16GB GPU VRAM. And the original 15GB dataframe is not anywhere in our notebook's memory. It only exists on disk.</p>
+<h1>Starter Notebook</h1>
+<p>I publish a starter notebook <a href="https://www.kaggle.com/code/cdeotte/xgboost-using-original-data-cv-0-976/notebook" target="_blank">here</a> which shows how to use <code>xgb.QuantileDMatrix()</code> and reduce data types (i.e Trick 1 and Trick 2). </p>
+<p>There is a data loader which loads data from a dataframe which is already in memory. If you want to train with even larger batches (i.e. Trick 3), we can update the dataloader to load dataframe from disk and read 16k rows per batch. We replace the line in code cell #13</p>
+<pre><code> = self
+</code></pre>
+<p>with the lines</p>
+<pre><code>dt = pd.read_csv(
+    filename,
+    skiprows=range(, +),   
+    nrows=b -  + 
+)
+</code></pre>
+<h1>Bonus Lessons</h1>
+<p>In addition to teaching about handling larger data. My starter notebook also demonstrates </p>
+<ul>
+<li>some popular categorical encoding techniques (i.e. LE, CE, and TE)</li>
+<li>creating new categorical columns from pairs of original categorical columns</li>
+<li>how to use original data as rows</li>
+<li>how to use original data as columns</li>
+</ul>
+<h1>Enjoy!</h1>

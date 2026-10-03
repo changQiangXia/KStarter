@@ -1,0 +1,94 @@
+<p>First of all, I would like to express deep gratitude to the competition organisers and the Kaggle team. The competition dataset is of very high quality, and we would be happy if our solution could contribute to improve the quality of breast cancer screening. I would also like to thank my teammates who struggled together with me throughout the competition.<br>
+Finally, big congratulations to all the winners (and to ourselves, three new competitions Grandmasters)! </p>
+<h1>Preprocessing</h1>
+<ul>
+<li>Original image arrays were resized into 2048 x 2048 x 1</li>
+<li>VOI-LUT was applied to all images</li>
+<li>Images were then cropped to exclude blank space<ul>
+<li>YOLOX model was trained to generate breast bbox</li>
+<li>Compared to simple rule-based breast extraction, YOLOX cropped images usually have a smaller region, which seemed to prevent our models from overfitting</li>
+<li>In order to shorten inference time, we used simple rule-based crop during inference</li>
+<li>Images were cropped with a random margin during training as augmentation</li>
+<li>Bbox mix (YOLOX crop + rule-based crop) were also used as augmentation</li>
+<li>Cropped images are resized to an aspect ratio of 2:1 (1024 x 512 or 1536 x 768)</li></ul></li>
+<li>A wide range of augmentations were used <ul>
+<li>Affine transform, V/H flip, brightness/contrast, blur, CLAHE, distortion, dropout</li></ul></li>
+</ul>
+<h1>Model architectures</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1973217%2Fd4438a7bcbaf552a03df881ade23a0de%2FRSNA-Mammo-3.svg?generation=1677551759021366&amp;alt=media" alt=""><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1973217%2F5702736cffb022faafcd9fe8b04b9edc%2FRSNA-Mammo.svg?generation=1677551773315924&amp;alt=media" alt=""><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1973217%2Fbe83f5153c2966c8ad8a8a986fdbc569%2FRSNA-Mammo-2.svg?generation=1677551796605732&amp;alt=media" alt=""></p>
+<h2>Some key results</h2>
+<table>
+<thead>
+<tr>
+<th>Model name</th>
+<th>Description</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aug07lr0</td>
+<td>MV, 1024x512</td>
+<td>0.493</td>
+<td>0.64</td>
+<td>0.46</td>
+</tr>
+<tr>
+<td>Res02lr0</td>
+<td>MV, 1536x768</td>
+<td>0.488</td>
+<td>0.59</td>
+<td>0.46</td>
+</tr>
+<tr>
+<td>Res02mod2</td>
+<td>MVF, 1536x768</td>
+<td>0.516</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Res02mod3</td>
+<td>MVF, 1536x768</td>
+<td>0.525</td>
+<td>0.63</td>
+<td>0.48</td>
+</tr>
+<tr>
+<td>charm_convnext_small_multi_lat</td>
+<td>MVL, 1024x512</td>
+<td>0.498</td>
+<td>0.60</td>
+<td>0.50</td>
+</tr>
+</tbody>
+</table>
+<h1>Some tricks for training</h1>
+<ul>
+<li>Due to the unstable nature of PF1 metric, area under precision recall curve (AUCPR) worked well as a surrogate metric<ul>
+<li>AUCPRLoss (<a href="https://github.com/Shlomix/global_objectives_pytorch" target="_blank">https://github.com/Shlomix/global_objectives_pytorch</a>)</li></ul></li>
+<li>The model performance is still unstable! We used exponential moving average (EMA), simple average weights</li>
+<li>Using auxiliary loss (age, biopsy, etc.) improved the performance</li>
+<li>Convnext (v1) was the best backbone for this task</li>
+</ul>
+<h1>Ensemble</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1973217%2F355889cbe156ce03999e4ea891ba30d4%2FRSNA-Mammo-4.svg?generation=1677551811042501&amp;alt=media" alt=""><br>
+Also, our best submission scored private LB 0.53, but it was not chosen because it has lower CV and public LB than our selected submissions.</p>
+<h1>Things did not work</h1>
+<ul>
+<li>Positive weight, oversampling, weighted samplers, etc. did not work<ul>
+<li>They seemed to work when you have a weak model, but not no longer once you have a good enough model</li></ul></li>
+<li>Focal loss and label smoothing did not improve CV</li>
+<li>Vanilla BCE is all you need</li>
+<li>Mixup did not work</li>
+<li>We tried pseudo-labeling and pretraining on external datasets (VINDR and DDSM), but there was no clear improvement in both CV and LB</li>
+</ul>
+<h1>Code</h1>
+<ul>
+<li>Submission notebook -&gt; <a href="https://www.kaggle.com/code/amanatsu/rsna-mammo-rejection-ensemble-v2-ishikei?scriptVersionId=120432251" target="_blank">https://www.kaggle.com/code/amanatsu/rsna-mammo-rejection-ensemble-v2-ishikei?scriptVersionId=120432251</a></li>
+<li>RabotniKuma part -&gt; <a href="https://github.com/analokmaus/kaggle-rsna-breast-cancer" target="_blank">https://github.com/analokmaus/kaggle-rsna-breast-cancer</a></li>
+<li>YOLOX(ishikei) part -&gt; <a href="https://github.com/ishikei14k/RSNA_Screening_Mammography_Breast_Cancer_Detection" target="_blank">https://github.com/ishikei14k/RSNA_Screening_Mammography_Breast_Cancer_Detection</a></li>
+<li>Charmq part -&gt; <a href="https://github.com/tyamaguchi17/rsna_mammo" target="_blank">https://github.com/tyamaguchi17/rsna_mammo</a></li>
+</ul>

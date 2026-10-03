@@ -1,0 +1,82 @@
+# santa-2023 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/santa-2023/discussion/472405) — 125 票 / 32 评论 / 2024-02-01 **write-up?**
+- [Getting Started with Santa 2023](https://www.kaggle.com/competitions/santa-2023/discussion/462236) — 98 票 / 29 评论 / 2023-12-19 
+- [4th place solution repository and scores.](https://www.kaggle.com/competitions/santa-2023/discussion/472386) — 64 票 / 5 评论 / 2024-02-01 **write-up?**
+- [[7th Jan] Best achievable score](https://www.kaggle.com/competitions/santa-2023/discussion/465009) — 62 票 / 24 评论 / 2024-01-02 
+- [Welcome to Santa 2023!](https://www.kaggle.com/competitions/santa-2023/discussion/462231) — 47 票 / 2 评论 / 2023-12-18 
+- [[Final update] Best achievable score](https://www.kaggle.com/competitions/santa-2023/discussion/466500) — 43 票 / 17 评论 / 2024-01-08 
+- [Optimal solutions of wreath_6/6 and wreath_7/7 puzzles](https://www.kaggle.com/competitions/santa-2023/discussion/463683) — 39 票 / 3 评论 / 2023-12-26 **write-up?**
+- [best way to teach your kid about your dad's job?](https://www.kaggle.com/competitions/santa-2023/discussion/466076) — 35 票 / 13 评论 / 2024-01-07 
+- [This brings memories](https://www.kaggle.com/competitions/santa-2023/discussion/462968) — 33 票 / 5 评论 / 2023-12-22 
+- [16th Place Solution for Santa 2023 - The Polytope Permutation Puzzle Competition](https://www.kaggle.com/competitions/santa-2023/discussion/472489) — 33 票 / 19 评论 / 2024-02-03 **write-up?**
+- [Names explanation](https://www.kaggle.com/competitions/santa-2023/discussion/462818) — 31 票 / 4 评论 / 2023-12-21 
+- [Reading list to understand the math behind the puzzles](https://www.kaggle.com/competitions/santa-2023/discussion/467994) — 30 票 / 5 评论 / 2024-01-14 
+- [🚀 numpy ~6x faster than sympy for permutations](https://www.kaggle.com/competitions/santa-2023/discussion/462358) — 29 票 / 2 评论 / 2023-12-19 
+- [Simple direct ML (not RL) idea: train model to predict the DISTANCE to solution state, then just choose moves which decrease the estimate ](https://www.kaggle.com/competitions/santa-2023/discussion/466399) — 29 票 / 56 评论 / 2024-01-08 **write-up?**
+- [[Solution] Solving Permutation Puzzles with A* Search Algorithm and Timeout](https://www.kaggle.com/competitions/santa-2023/discussion/462317) — 29 票 / 9 评论 / 2023-12-19 **write-up?**
+- [Thanks to Ryan Holbrook and Addison Howard!](https://www.kaggle.com/competitions/santa-2023/discussion/472391) — 28 票 / 12 评论 / 2024-02-01 
+- [Heuristic Transformer for Kaggle Santa-2023](https://www.kaggle.com/competitions/santa-2023/discussion/464694) — 27 票 / 14 评论 / 2024-01-01 
+- [[85th place] Group of Order 5](https://www.kaggle.com/competitions/santa-2023/discussion/472703) — 25 票 / 5 评论 / 2024-02-02 **write-up?**
+- [ML approach for all puzzles](https://www.kaggle.com/competitions/santa-2023/discussion/472606) — 24 票 / 9 评论 / 2024-02-01 
+- [Open mathematical problems which Kagglers my shed light ](https://www.kaggle.com/competitions/santa-2023/discussion/471319) — 24 票 / 0 评论 / 2024-01-27 
+- [2nd place scores](https://www.kaggle.com/competitions/santa-2023/discussion/472402) — 24 票 / 5 评论 / 2024-02-01 **write-up?**
+- [Santa Strategy: Climbing to Silver with the Spirit of Sharing](https://www.kaggle.com/competitions/santa-2023/discussion/464059) — 23 票 / 23 评论 / 2023-12-28 
+- [What is typical cancellation pattern  - mostly subpaths longer the diameter or local "j->j+K" subpaths (K < d) also ?](https://www.kaggle.com/competitions/santa-2023/discussion/470799) — 22 票 / 14 评论 / 2024-01-25 
+- [Cube 2x2x2 explanation](https://www.kaggle.com/competitions/santa-2023/discussion/463209) — 22 票 / 9 评论 / 2023-12-23 
+- [Permutation Theory](https://www.kaggle.com/competitions/santa-2023/discussion/462748) — 22 票 / 6 评论 / 2023-12-21 
+- [Small Data Update](https://www.kaggle.com/competitions/santa-2023/discussion/462598) — 21 票 / 1 评论 / 2023-12-20 
+- [The given solutions aren't random](https://www.kaggle.com/competitions/santa-2023/discussion/464871) — 20 票 / 6 评论 / 2024-01-02 **write-up?**
+- [[1,155,878] Iterative Replacement Approach](https://www.kaggle.com/competitions/santa-2023/discussion/462336) — 20 票 / 0 评论 / 2023-12-19 
+- [Some tricks for solutions and lessons learned from the 1st competition](https://www.kaggle.com/competitions/santa-2023/discussion/472751) — 20 票 / 0 评论 / 2024-02-02 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/santa-2023/discussion/472574) — 20 票 / 4 评论 / 2024-02-01 **write-up?**
+- [Paper comparing Korf, Thistlethwaite, and Kociemba](https://www.kaggle.com/competitions/santa-2023/discussion/463516) — 20 票 / 0 评论 / 2023-12-25 
+- [25th place solution + thought process🥈 ](https://www.kaggle.com/competitions/santa-2023/discussion/472530) — 20 票 / 2 评论 / 2024-02-05 **write-up?**
+- [Santa is back! Here is how to get started!](https://www.kaggle.com/competitions/santa-2023/discussion/462348) — 20 票 / 10 评论 / 2023-12-19 
+- [3rd place solution](https://www.kaggle.com/competitions/santa-2023/discussion/476792) — 19 票 / 0 评论 / 2024-02-13 **write-up?**
+- [Solving Rubik's cube with 65,536 layers](https://www.kaggle.com/competitions/santa-2023/discussion/469167) — 18 票 / 4 评论 / 2024-01-19 
+- [The biggest database of the speedcubes algorithms. Smart cubes, etc](https://www.kaggle.com/competitions/santa-2023/discussion/462635) — 18 票 / 1 评论 / 2023-12-20 
+- [Schreier-Sims Algorithm (Non-Mathematical Approach)](https://www.kaggle.com/competitions/santa-2023/discussion/464774) — 17 票 / 4 评论 / 2024-01-01 
+- [Share: dataset for cube 2x2x2 with all 88_179_840 = 3_674_160 * 24 states listed with distance to solution state.](https://www.kaggle.com/competitions/santa-2023/discussion/468621) — 17 票 / 5 评论 / 2024-01-17 **write-up?**
+- [Approach: ML-drifted-random-walks (Brownian particle in "ML"-field) and call for collaboration ](https://www.kaggle.com/competitions/santa-2023/discussion/472594) — 17 票 / 1 评论 / 2024-02-01 
+- [References- past Santa series editions](https://www.kaggle.com/competitions/santa-2023/discussion/462262) — 17 票 / 1 评论 / 2023-12-19 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/santa-2023/discussion/472925) — 16 票 / 0 评论 / 2024-02-02 
+- [Matrix reformulation of the task . (Everyone can understand).](https://www.kaggle.com/competitions/santa-2023/discussion/464415) — 16 票 / 5 评论 / 2023-12-30 
+- [2nd place solution](https://www.kaggle.com/competitions/santa-2023/discussion/476997) — 16 票 / 0 评论 / 2024-02-14 **write-up?**
+- [Competition mid summary: key discussions and notebooks](https://www.kaggle.com/competitions/santa-2023/discussion/467187) — 15 票 / 0 评论 / 2024-01-11 
+- [12th place solution](https://www.kaggle.com/competitions/santa-2023/discussion/473094) — 15 票 / 5 评论 / 2024-02-04 **write-up?**
+- [Some useful link to understanding the competition.](https://www.kaggle.com/competitions/santa-2023/discussion/462259) — 15 票 / 5 评论 / 2023-12-19 
+- [Would you like to know the best solution to each puzzle?](https://www.kaggle.com/competitions/santa-2023/discussion/471875) — 14 票 / 7 评论 / 2024-01-29 **write-up?**
+- [Orders of groups generated by allowed moves](https://www.kaggle.com/competitions/santa-2023/discussion/469439) — 14 票 / 4 评论 / 2024-01-20 
+- [Quite useful post on Math Stack Exchange](https://www.kaggle.com/competitions/santa-2023/discussion/467239) — 13 票 / 3 评论 / 2024-01-11 
+- ["This competition is ending soon. Please do not publish high-scoring public"](https://www.kaggle.com/competitions/santa-2023/discussion/470969) — 13 票 / 9 评论 / 2024-01-26 
+- [Solution optimisation or How to use group theory for Santa puzzles](https://www.kaggle.com/competitions/santa-2023/discussion/467023) — 13 票 / 0 评论 / 2024-01-10 **write-up?**
+- [Santa 2023: last day competition recap](https://www.kaggle.com/competitions/santa-2023/discussion/472136) — 13 票 / 0 评论 / 2024-01-30 
+- [Bronze medal: using RCube to solve large Santa puzzles](https://www.kaggle.com/competitions/santa-2023/discussion/472420) — 13 票 / 2 评论 / 2024-02-01 **write-up?**
+- [Silver Medal Solution (15th)](https://www.kaggle.com/competitions/santa-2023/discussion/472437) — 13 票 / 4 评论 / 2024-02-02 **write-up?**
+- ["Optimal" 3x3x3 solutions from rubiks-cube-NxNxN-solver repo](https://www.kaggle.com/competitions/santa-2023/discussion/464351) — 13 票 / 4 评论 / 2023-12-30 **write-up?**
+- [Congratulations Rafbill!](https://www.kaggle.com/competitions/santa-2023/discussion/466710) — 12 票 / 1 评论 / 2024-01-09 
+- [Current top public solutions are far from being solved](https://www.kaggle.com/competitions/santa-2023/discussion/466712) — 12 票 / 0 评论 / 2024-01-09 **write-up?**
+- [Cube Interactive Visualizer](https://www.kaggle.com/competitions/santa-2023/discussion/472388) — 12 票 / 3 评论 / 2024-02-01 
+- [Can DOWN-COLORING be helpful (i.e. from G to G/H)? Upd2: Stabilizer as paths.  Upd1: utilize sample path.  Iteratively looking for solutions for down-colored spaces of states increasing number of colors](https://www.kaggle.com/competitions/santa-2023/discussion/473393) — 12 票 / 2 评论 / 2024-02-04 **write-up?**
+- [Matrix baseline ("cannot be simpler") and some list of optimal solutions for small puzzles ](https://www.kaggle.com/competitions/santa-2023/discussion/465343) — 11 票 / 5 评论 / 2024-01-03 **write-up?**
+- [TOP Puzzle Scores](https://www.kaggle.com/competitions/santa-2023/discussion/462555) — 11 票 / 2 评论 / 2023-12-20 
+- [Best total so far 52700 -> 50523](https://www.kaggle.com/competitions/santa-2023/discussion/472596) — 11 票 / 13 评论 / 2024-02-01 
+- [Three Mixed Integer Linear Programming (MILP) Formulations and a Lower Bound](https://www.kaggle.com/competitions/santa-2023/discussion/473263) — 10 票 / 4 评论 / 2024-02-04 
+- [A tour inside Masterball puzzle toy](https://www.kaggle.com/competitions/santa-2023/discussion/471557) — 10 票 / 0 评论 / 2024-01-28 
+- [Thistlethwaite's 52 move algorithm](https://www.kaggle.com/competitions/santa-2023/discussion/466210) — 10 票 / 2 评论 / 2024-01-07 
+- [Solutions using visualization](https://www.kaggle.com/competitions/santa-2023/discussion/472430) — 10 票 / 2 评论 / 2024-02-01 **write-up?**
+- [do you think RL (reinforcement learning) would win here?](https://www.kaggle.com/competitions/santa-2023/discussion/464044) — 10 票 / 14 评论 / 2023-12-28 
+- [Video available. Webinar around the competition ](https://www.kaggle.com/competitions/santa-2023/discussion/477383) — 10 票 / 1 评论 / 2024-02-15 
+- [The globe puzzle with odd number of layers](https://www.kaggle.com/competitions/santa-2023/discussion/465352) — 10 票 / 1 评论 / 2024-01-03 
+- [When Does a Post Share Too Much?](https://www.kaggle.com/competitions/santa-2023/discussion/464147) — 10 票 / 20 评论 / 2023-12-29 
+- [Puzzles on int8,16.. ? Can one implement any permutation  by mult, add, or,xor ... acting on int8 (16,32,64)  ?](https://www.kaggle.com/competitions/santa-2023/discussion/473074) — 9 票 / 13 评论 / 2024-02-03 
+- [Some Puzzles.csv file insights from data dashboard.](https://www.kaggle.com/competitions/santa-2023/discussion/462512) — 9 票 / 2 评论 / 2023-12-20 
+- [For math lovers: exponential growth for generic moves, while Guassian for moves which are (almost)-commuting ](https://www.kaggle.com/competitions/santa-2023/discussion/464953) — 9 票 / 2 评论 / 2024-01-02 
+- [For math lovers:  structure of the wreath's and globe's group is S_m, A_n (or related) ](https://www.kaggle.com/competitions/santa-2023/discussion/467771) — 9 票 / 7 评论 / 2024-01-13 
+- [Beware of not so expected numpy matrix multiplication feature - order of execution may not be i=1..n in sum A_m i * B_i n   ](https://www.kaggle.com/competitions/santa-2023/discussion/468370) — 9 票 / 11 评论 / 2024-01-16 
+- [Links to Rubik's Cube history and such](https://www.kaggle.com/competitions/santa-2023/discussion/463744) — 9 票 / 0 评论 / 2023-12-26 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/santa-2023/discussion/463029) — 8 票 / 0 评论 / 2023-12-22 
+- [It is (apparently?) possible to compute the leaderboard score of your notebook without submitting](https://www.kaggle.com/competitions/santa-2023/discussion/462303) — 8 票 / 5 评论 / 2023-12-19 
+- [Wreath Puzzle arramgement](https://www.kaggle.com/competitions/santa-2023/discussion/463530) — 8 票 / 1 评论 / 2023-12-25 
+- [Submission strategies at the top?](https://www.kaggle.com/competitions/santa-2023/discussion/466003) — 8 票 / 5 评论 / 2024-01-06 

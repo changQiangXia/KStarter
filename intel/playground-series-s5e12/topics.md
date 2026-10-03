@@ -1,0 +1,61 @@
+# playground-series-s5e12 讨论区（按票数排序，共 59 条）
+
+- [[2nd Place] Winning based on ID Shift Analysis ](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665385) — 77 票 / 24 评论 / 2026-01-01 **write-up?**
+- [Kaggle messed up this dataset on purpose](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/652262) — 68 票 / 45 评论 / 2025-12-06 
+- [1st Place Solution | Hill Climbing + Ridge Ensemble](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665432) — 60 票 / 30 评论 / 2026-01-01 **write-up?**
+- [Suggested roadmap for a beginner for such month-long assignments](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/650676) — 49 票 / 16 评论 / 2025-12-02 
+- [For the (recovering) blind blending addicts](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651787) — 38 票 / 18 评论 / 2025-12-05 
+- [From EDA to Baseline: A Hypothesis-Driven Approach (XGBoost + Selective TE)](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/648186) — 35 票 / 27 评论 / 2025-12-01 
+- [Clusters of health-related variables highlighted by PCA. Predicting diabetes mellitus.](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651066) — 34 票 / 10 评论 / 2025-12-02 
+- [Add TABM for Diversity](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665377) — 29 票 / 0 评论 / 2026-01-01 
+- [[Updated:12/15] Bridging the CV-LB Gap: Weighted Refit Strategy](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/662501) — 24 票 / 15 评论 / 2025-12-13 
+- [TPU for speeding up GBDT models](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651707) — 19 票 / 9 评论 / 2025-12-04 
+- [Everything flows into the well of overfitting](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663857) — 18 票 / 11 评论 / 2025-12-21 
+- [How to use (and not to use) public work in your pipeline ](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651274) — 17 票 / 13 评论 / 2025-12-03 
+- [Does Id contains signal on this competition ?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/659313) — 17 票 / 18 评论 / 2025-12-11 
+- [NOTE - key libraries upgraded in latest code environment ](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663296) — 17 票 / 7 评论 / 2025-12-17 
+- [Sonnet I – The Data’s Weight](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/655304) — 15 票 / 9 评论 / 2025-12-08 
+- [Corroborating distribution shifts using adversarial CV analysis ](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651660) — 13 票 / 7 评论 / 2025-12-04 
+- [The "original" dataset may help with the concept shift](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663033) — 13 票 / 5 评论 / 2025-12-16 
+- [Sonnet III – The Rival’s Game](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663750) — 13 票 / 4 评论 / 2025-12-20 
+- [CV:0.70573,LB:0.70682,Wow!!](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/664258) — 13 票 / 18 评论 / 2025-12-23 
+- [3 submissions challenge](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/647517) — 12 票 / 8 评论 / 2025-12-01 
+- [Sonnet II – The Tyranny of Tuning](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/658005) — 12 票 / 2 评论 / 2025-12-11 
+- [My first Kaggle comp (S5E12): what worked and what didn’t](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665186) — 11 票 / 4 评论 / 2025-12-30 
+- [A simple alternative community competition to consider ](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663279) — 10 票 / 2 评论 / 2025-12-17 
+- [Experimental GPU array support in scikit-learn 1.8.0](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663110) — 10 票 / 2 评论 / 2025-12-16 
+- [Boom goes the dynamite!](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665367) — 10 票 / 10 评论 / 2026-01-01 
+- [CV-LB thread](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/647424) — 9 票 / 21 评论 / 2025-12-01 
+- [My Full EDA → Modeling Journey (LogReg → XGBoost → CatBoost → Stacking) — What I Learned & Why My Score Plateaued](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/650906) — 8 票 / 9 评论 / 2025-12-02 
+- [Multi-head Attention Features](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/660216) — 8 票 / 7 评论 / 2025-12-12 
+- [Handling Covariate Shift in Physical Activity & Triglycerides ](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/659418) — 8 票 / 5 评论 / 2025-12-12 
+- [Will the next episode start tomorrow/ on Jan2?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665266) — 7 票 / 2 评论 / 2025-12-31 
+- [TABM is a good model candidate for performance and diversity](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/648341) — 7 票 / 7 评论 / 2025-12-01 
+- [Understanding Key Risk Factors: EDA for Diabetes Diagnosis](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/648976) — 5 票 / 1 评论 / 2025-12-01 
+- [Why lower public LB models may generalize better in S5E12](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/664533) — 5 票 / 9 评论 / 2025-12-26 
+- [Happy new year](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665340) — 4 票 / 1 评论 / 2025-12-31 
+- [Is using multiple accounts allowed in the Playground Series?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/662814) — 4 票 / 15 评论 / 2025-12-15 
+- [Diabetes Prediction Challenge: S5E12](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665513) — 3 票 / 0 评论 / 2026-01-01 
+- [Question about CV and LB gap](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/653551) — 3 票 / 7 评论 / 2025-12-06 
+- [score 0.700 XGBoost Model](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651523) — 3 票 / 3 评论 / 2025-12-04 
+- [What Swags do we get?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/647828) — 2 票 / 6 评论 / 2025-12-01 
+- [Does Standard Scaling Hurt Performance in This Competition?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/650751) — 2 票 / 4 评论 / 2025-12-02 
+- [Question: What are the exact conditions for a "Trustworthy CV"?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/650628) — 2 票 / 3 评论 / 2025-12-02 
+- [SHAP feature contribution analysis.](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651353) — 2 票 / 0 评论 / 2025-12-03 
+- [Confusion from a beginner in machine learning](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651226) — 2 票 / 12 评论 / 2025-12-03 
+- [5 Submission Limit](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/647282) — 2 票 / 13 评论 / 2025-12-01 
+- [Question: Why does test.csv not have diagnosed_data as a column?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651464) — 2 票 / 10 评论 / 2025-12-03 
+- [different score using kaggle notebooks](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/659699) — 2 票 / 4 评论 / 2025-12-12 
+- [Do INTER features not work at all?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/662444) — 2 票 / 4 评论 / 2025-12-13 
+- [📊 Advanced EDA: Mutual Information & Drift Check (KS-Test)](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/662859) — 2 票 / 0 评论 / 2025-12-15 
+- [BenchMark score?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/662950) — 2 票 / 2 评论 / 2025-12-15 
+- [Quick question on rank-based averaging for AUC metrics](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663287) — 2 票 / 7 评论 / 2025-12-17 
+- [What’s the performance ceiling without external data or blending?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663963) — 2 票 / 2 评论 / 2025-12-21 
+- [Beginner question: can I withdraw a submission made from a public notebook?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/664370) — 2 票 / 4 评论 / 2025-12-24 
+- [Stabilizing Predictions with Rank-Based Ensembling (Insights)](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663273) — 1 票 / 1 评论 / 2025-12-17 
+- [How can I further improve my model ?](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/663855) — 1 票 / 3 评论 / 2025-12-21 
+- [Curios about the leaderboard](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665972) — 0 票 / 3 评论 / 2026-01-04 
+- [Want some guidance](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/657522) — 0 票 / 3 评论 / 2025-12-10 
+- [Diabetes Risk Prediction: A Reliable, Validation-First Baseline](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/664925) — 0 票 / 2 评论 / 2025-12-28 
+- [Golden Healtrip](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/674937) — -2 票 / 0 评论 / 2026-02-22 
+- [Why Local Validation Score is Higher than Public Leaderboard](https://www.kaggle.com/competitions/playground-series-s5e12/discussion/664910) — -3 票 / 5 评论 / 2025-12-28 

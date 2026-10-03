@@ -1,0 +1,82 @@
+# recodai-luc-scientific-image-forgery-detection 讨论区（按票数排序，共 80 条）
+
+- [Copy-move forgery (CMFD) detection technique with DCT (Discrete Cosine Transform)](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613066) — 38 票 / 2 评论 / 2025-10-24 
+- [1st Place Solution](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/695702) — 37 票 / 5 评论 / 2026-04-30 **write-up?**
+- [Why This Challenge Is So Difficult](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/615080) — 22 票 / 13 评论 / 2025-11-08 
+- [Model comparison: DINOv2, DeepLabV3, ConvNeXT...](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/617749) — 22 票 / 5 评论 / 2025-11-11 
+- [Supplemental train data added](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/617968) — 18 票 / 13 评论 / 2025-11-12 
+- [Getting Deeper into Scientific Image Copy-Move Forgeries](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/614069) — 16 票 / 7 评论 / 2025-10-31 
+- [Gradio:  RECOD Segmentation Training & Inference Dashboard](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613401) — 15 票 / 2 评论 / 2025-10-26 
+- [2nd Place Solution](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/694397) — 15 票 / 10 评论 / 2026-04-24 **write-up?**
+- [Welcome to the Scientific Image Forgery Detection Challenge!](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613052) — 14 票 / 25 评论 / 2025-10-23 
+- [Thank you for your participation!](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/668270) — 11 票 / 11 评论 / 2026-01-15 
+- [Possible Labeling Error: Computed Mask vs. Ground Truth Mask Mismatch](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613694) — 11 票 / 6 评论 / 2025-10-29 
+- [The score does not improve beyond 0.303 significantly!!! Why?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613990) — 11 票 / 3 评论 / 2025-10-31 
+- [Note: the mask highlights both the copy+pasted part AND the original part that was copied from](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613200) — 10 票 / 10 评论 / 2025-10-25 
+- [Correct submission format](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/614763) — 10 票 / 11 评论 / 2025-11-06 
+- [The competition metric is extremely unfair. ](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/641092) — 10 票 / 7 评论 / 2025-11-26 
+- [That's a Wrap! Competition Closing - Congratulations to the Winners!](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/693888) — 8 票 / 14 评论 / 2026-04-22 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613025) — 8 票 / 5 评论 / 2025-10-23 
+- [65th Place Solution🥈|  DINOv2 with a Tiny Convolutional Decoder](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/694442) — 8 票 / 2 评论 / 2026-04-24 **write-up?**
+- [CV / LB gap - massive?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/617903) — 8 票 / 6 评论 / 2025-11-12 
+- [Score Improvement: Background Coverage & New Dataset Options](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/630062) — 7 票 / 0 评论 / 2025-11-18 
+- [The "research papers leaderboard scores during this phase are not meaningful."](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613586) — 7 票 / 9 评论 / 2025-10-28 
+- [Huge differences between train and supplemental images](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/657899) — 7 票 / 2 评论 / 2025-12-10 
+- [RECOD.AI - LUC Scientific Image Forgery Detection - 29th Place Solution](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/694168) — 7 票 / 0 评论 / 2026-04-23 **write-up?**
+- [Solution: Public LB 8th place | Private LB 3rd place (updated 2026-04-28)](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/674890) — 7 票 / 6 评论 / 2026-02-22 **write-up?**
+- [How good is your score compared to all authentic baseline?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/664542) — 6 票 / 6 评论 / 2025-12-26 
+- [Data Update + Announcing the SCIFOR Workshop @ ICIP 2026!](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/684191) — 6 票 / 9 评论 / 2026-03-24 
+- [5th Place Solution — DINOv3 Semantic Segmentation](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/697699) — 5 票 / 0 评论 / 2026-05-06 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/697621) — 5 票 / 0 评论 / 2026-05-06 **write-up?**
+- [Error in the code or data on the inference](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/614778) — 5 票 / 7 评论 / 2025-11-06 
+- [RSIID Dataset](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/668521) — 4 票 / 5 评论 / 2026-01-17 
+- [Test Images Folder](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613199) — 4 票 / 0 评论 / 2025-10-25 
+- [Solution: Public LB 8th place | Private LB 3rd place (updated 2026-04-28)](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/697675) — 4 票 / 0 评论 / 2026-05-06 **write-up?**
+- [Surprising Gap between Local Validation Score (0.722) and in Public LB (0.103)](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/658623) — 4 票 / 6 评论 / 2025-12-11 
+- [What happens now?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/668452) — 3 票 / 0 评论 / 2026-01-16 
+- [Appreciation Post](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/668017) — 3 票 / 2 评论 / 2026-01-14 
+- [6th place solution: SuperPoint + LightGlue](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/700586) — 3 票 / 0 评论 / 2026-05-17 **write-up?**
+- [2nd Place Solution/SIFT Maching](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/697809) — 3 票 / 0 评论 / 2026-05-07 **write-up?**
+- [Some masks do not seem correct](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613707) — 3 票 / 4 评论 / 2025-10-29 
+- [Is the test image "45.png" authentic or forged? What does your model tell you?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/654741) — 3 票 / 7 评论 / 2025-12-07 
+- [The Impact of Randomness in Deep Learning](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/617806) — 3 票 / 1 评论 / 2025-11-12 
+- [Why do older submissions show warning icons (⚠️)?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/694037) — 3 票 / 1 评论 / 2026-04-23 
+- [Using Segment Anything (SAM2) Masks to Generate Forgery Candidates](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/641008) — 3 票 / 7 评论 / 2025-11-26 
+- [Is test set going to have pairs?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/663365) — 3 票 / 1 评论 / 2025-12-17 
+- [Suggestion for Interactive Mode & Clarification on Test Set Path](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613293) — 2 票 / 0 评论 / 2025-10-25 
+- [thanks to the organizers!](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613803) — 2 票 / 0 评论 / 2025-10-29 
+- [Recod.ai/LUC - Scientific Image Forgery Detection](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/615334) — 2 票 / 0 评论 / 2025-11-10 
+- [Do we need to annotate BOTH the source region AND the target region in our predicted masks to maximize the oF1 score?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/615048) — 2 票 / 3 评论 / 2025-11-08 
+- [Anyone observing discrepancies between local validation and LB?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613765) — 2 票 / 4 评论 / 2025-10-29 
+- [problem with the leaderboard](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/668500) — 2 票 / 2 评论 / 2026-01-17 
+- [Discussion about Segmentation score](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/635546) — 2 票 / 5 评论 / 2025-11-20 
+- [Multi channel masks](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/664236) — 2 票 / 5 评论 / 2025-12-23 
+- [Mask data RGB versus 3 separate cells?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/664426) — 2 票 / 2 评论 / 2025-12-25 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/664956) — 2 票 / 2 评论 / 2025-12-29 
+- [The Strategic Synthesis: Optimizing Deep Learning for Scientific Forgery Detection](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613314) — 1 票 / 0 评论 / 2025-10-25 
+- [imbalance issue](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/655298) — 1 票 / 2 评论 / 2025-12-08 
+- [Any luck with classification models?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/663917) — 1 票 / 3 评论 / 2025-12-21 
+- [Correct format](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/651831) — 1 票 / 1 评论 / 2025-12-05 
+- [fogery images and authentic images](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/651586) — 1 票 / 3 评论 / 2025-12-04 
+- [Clarification on test data distribution and final evaluation set](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/614650) — 1 票 / 3 评论 / 2025-11-05 
+- [What do you think makes this competition hard?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613666) — 1 票 / 8 评论 / 2025-10-28 
+- [Many teams have a score of 0.3 on the Leaderboard. How are these teams with the same score of 0.3 ranked?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613580) — 1 票 / 5 评论 / 2025-10-28 
+- [Inquiry regarding removal from competition and missing private score](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/694015) — 1 票 / 6 评论 / 2026-04-22 
+- [Clarification on Copy–Move Forgery Variants and Transformations in the Dataset](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/664624) — 1 票 / 1 评论 / 2025-12-26 
+- [Is a cropped images dataset useful?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/621903) — 1 票 / 0 评论 / 2025-11-15 
+- [Does Augmentation make a difference ?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/665205) — 1 票 / 3 评论 / 2025-12-30 
+- [why not dinov2 large?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/665866) — 1 票 / 4 评论 / 2026-01-04 
+- [Understanding mask shape](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/615300) — 1 票 / 3 评论 / 2025-11-10 
+- [test data is 1 image only](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613273) — 0 票 / 2 评论 / 2025-10-25 
+- [pairs of authentic ans forged images in the test set](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613091) — 0 票 / 3 评论 / 2025-10-24 
+- [Help!! The notebook cannot run.](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613461) — 0 票 / 4 评论 / 2025-10-27 
+- [Would additional postprocessing typically applied after copy-paste manipulations？](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613077) — 0 票 / 1 评论 / 2025-10-24 
+- [Evaluating Image Classification into GEL, PLANT, and OTHER Categories.](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/668259) — 0 票 / 2 评论 / 2026-01-15 
+- [Help with snntorch or any other package for submit](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/667669) — 0 票 / 3 评论 / 2026-01-13 
+- [【Question】Can I Use Pretrained Weights for This Competition?](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/613876) — 0 票 / 4 评论 / 2025-10-30 
+- [Test data not available](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/667549) — 0 票 / 1 评论 / 2026-01-13 
+- [time taken for the submission](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/667326) — 0 票 / 2 评论 / 2026-01-12 
+- [CV vs Public LB](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/666251) — 0 票 / 3 评论 / 2026-01-06 
+- [ Scientific Image Forgery Detection submission scoring error ](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/665144) — 0 票 / 2 评论 / 2025-12-30 
+- [What is your best score for a single model? ](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/666656) — 0 票 / 1 评论 / 2026-01-08 
+- [Help needed: RLE submission format check (multiple connected components + authentic example)](https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/665875) — 0 票 / 1 评论 / 2026-01-04 

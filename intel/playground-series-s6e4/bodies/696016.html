@@ -1,0 +1,125 @@
+<p>Congratulations to all the winners! </p>
+<p>I plateaued around Public LB: 0.98109 for a long time. Balancing this alongside my university entrance exam preparation made it tough.</p>
+<p>My final solution ended up being fairly complex, but can be summarized as:
+diverse GBDTs → large OOF pool → neural stacking (RealMLP, TabFPN) → final blend. With some luck and a lot of experimentation, this got me to 24th place.</p>
+<p>One mistake on my side was not selecting the final two submissions carefully. I ended up missing better candidates, which cost me roughly 13 leaderboard positions. 
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17429833%2F7d78246291326b4142b78da37b616325%2FScreenshot%202026-05-01%20061355.png?generation=1777596317683956&amp;alt=media" alt=""></p>
+<h3>RealMLP, TabFPN &amp; TabTransformer</h3>
+<p>Alongside GBDTs, I experimented with several neural models primarily for stacking.</p>
+<p>I trained 6 variants of the RealMLP baseline from <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a>'s using different feature subsets that I shortlisted after working with GBDTs. In parallel, I also built 6 TabTransformer variants based on <a href="https://www.kaggle.com/include4eto" target="_blank">@include4eto</a>’s implementation. Additionally, I incorporated TabFPN after seeing its effectiveness in <a href="https://www.kaggle.com/titericz" target="_blank">@titericz</a>’s <a href="https://www.kaggle.com/code/titericz/tabpfnv2-x-limix-x-xgb-x-rf" target="_blank">notebook</a></p>
+<p>All of these models were not used as standalone predictors (some of them were used to extract OOFs), but rather as part of the ensembling pipeline, where they helped extract signal from a large pool of OOF predictions.</p>
+<h3>29 XGBs (diverse and residual-based)</h3>
+<p>Thanks to 
+<a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a> for their XGB <a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s6e4-xgb-cv-0-97723-lb-0-97644" target="_blank">notebook</a>. </p>
+<p><a href="https://www.kaggle.com/yunsuxiaozi" target="_blank">@yunsuxiaozi</a> for <a href="https://www.kaggle.com/code/yunsuxiaozi/pss6e4-xgb-cv-0-979805" target="_blank">this</a> too.</p>
+<p>XGBoost was where most of my experimentation happened. I built 29 XGB models in total, each using different feature sets and parameter choices. Most of these were not tuned with Optuna. Instead, I relied mainly on model intuition and iterative experimentation. Also, A large part of my early submissions was spent understanding the CV to LB relationship.</p>
+<p>I have listed the best XGB models I created. Others are just variations of these models where I experimented with the hyperparameters. </p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0_xgb</td>
+<td>0.97243</td>
+<td>baseline XGB with max_depth=2 and no TE</td>
+</tr>
+<tr>
+<td>v1_xgb</td>
+<td>0.95215</td>
+<td>ALL_CATS with max_bins=32000 and no TE</td>
+</tr>
+<tr>
+<td>v2_xgb</td>
+<td>0.97251</td>
+<td>My feature set + FLAML (1hr) parameters, max_depth=3, no TE</td>
+</tr>
+<tr>
+<td>v3_xgb</td>
+<td>0.97233</td>
+<td>My feature set + feature engineering from public notebooks (bad idea) + FLAML parameters from v2 + no TE</td>
+</tr>
+<tr>
+<td>v4_xgb</td>
+<td>0.97269</td>
+<td>TE + new parameters + the same feature set as v2</td>
+</tr>
+<tr>
+<td>v5_xgb</td>
+<td>0.97244</td>
+<td>TE + Bi-Grams (bad idea)</td>
+</tr>
+<tr>
+<td>v6_xgb</td>
+<td>0.97275</td>
+<td>Bi-Grams + No TE + Same parameters as v0</td>
+</tr>
+<tr>
+<td>v7_xgb</td>
+<td>0.97080</td>
+<td>Bi-Grams + TE + ALL_CATS + Same parameters as v0, max_bins=8000</td>
+</tr>
+<tr>
+<td>v8_xgb</td>
+<td>0.97375</td>
+<td>uniform + quantile + kmeans bins + label encoding + no TE + Same parameters as v0</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+v8 was way stronger than the previous models because discretization turned out to be extremely powerful. This idea came from earlier experiments where I used KBins with linear models and noticed that discretized numeric representations could capture useful structure</p>
+<pre><code>for col in NUMS:
+    strategies = ['uniform', 'quantile', 'kmeans']
+    for strategy in strategies:
+        kbd = KBinsDiscretizer(n_bins=80, encode='ordinal', strategy=strategy)
+        train[f'{col}_{strategy}_kbin'] = kbd.fit_transform(train[[col]])
+        test[f'{col}_{strategy}_kbin'] = kbd.transform(test[[col]])
+</code></pre>
+<p>Some experiments, such as SMOTE based XGB variants and certain feature engineering combinations, were not useful, but they helped filter out weaker directions.</p>
+<h3>11 LGBs (residual-based)</h3>
+<p>In addition to XGBoost, I trained 11 LightGBM models primarily for diversity. Most of these reused the same feature sets as the XGB models, since the goal was not to redesign features but to introduce variation through a different boosting framework.</p>
+<p>A strong starting point was <a href="https://www.kaggle.com/yunsuxiaozi" target="_blank">@yunsuxiaozi</a>’s <a href="https://www.kaggle.com/code/yunsuxiaozi/pss6e4-lgb-baselinecv-0-97943" target="_blank">baseline</a></p>
+<p>I created several variants of this baseline with small modifications, including experimenting with DART, which I believe contributed useful diversity to the final ensemble.</p>
+<p>Similar to XGB, I did not rely on heavy hyperparameter tuning. The gains here were incremental, but important when combined in the final stacking pipeline.</p>
+<p>I also briefly tried other models like CatBoost and YDF, but they did not integrate well into my ensemble and were ultimately discarded.</p>
+<h3>Ensembling</h3>
+<p>I first implemented a hill climbing ensemble using 68 OOF predictions. While it gave reasonable results, it was not strong enough and plateaued quickly. 
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17429833%2F16e27d5a75cfb2d97915f0fc97a24966%2FScreenshot%202026-05-01%20065357.png?generation=1777598652340773&amp;alt=media" alt=""></p>
+<p>I then tried a Ridge based stacker using a much larger pool of ~166 OOFs. Surprisingly, this performed worse than the hill climbing approach likely due to some implementation mistakes :p</p>
+<p>I also used <a href="https://www.kaggle.com/ravi20076" target="_blank">@ravi20076</a>'s <a href="https://www.kaggle.com/code/ravi20076/playgrounds6e4-tunedblend-v1" target="_blank">blender </a> and it was surprisingly better than the Ridge i wrote. Also, LR Stacking &gt; Ridge in this competition for me.</p>
+<p>Instead of aggressively filtering models, I used a large unfiltered pool of 166 OOF predictions and passed them into a RealMLP stacker based on <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a>’s baseline. This model achieved a CV of 0.98012 initially.</p>
+<p>After making a few modifications, particularly simplifying the early stopping strategy, the CV improved to 0.98051. Some of the key parameters are shown below:</p>
+<pre><code># --- model architecture ---
+"n_ens":        16,        
+"embed_dim":    1,     
+"onehot_thresh": 8,      
+"hidden_dims":  [512, 64, 128], 
+"dropout":      0.3,
+"activation":   nn.SiLU,  
+"add_front_scale": True,  
+
+"lr": 1e-4,
+"mom": 0.99,   
+"sq_mom": 0.98, 
+
+# --- early stopping ---
+"use_early_stopping":      True,
+"early_stopping_patience": 4,
+# "early_stopping_additive_patience":      20,    # stop if epoch &gt; best*mult + add
+# "early_stopping_multiplicative_patience": 2.0, 
+</code></pre>
+<p>In parallel, I used TabFPN and TabM based stackers on the same pool of OOF predictions to introduce further diversity. My top scoring submission is a blend of (~166 models, Stacked with RealMLP) + (~166 models, Stacked with TabFPN) + (Unique models like OneVsAll + SMOTE variants etc)</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F17429833%2F9ccc786a9b0fe2a12f30a322dffab061%2FScreenshot%202026-05-01%20073707.png?generation=1777601253322934&amp;alt=media" alt=""></p>
+<h3>What Did Not Work</h3>
+<ul>
+<li>Pseudo labeling </li>
+<li>SMOTE</li>
+<li>Extreme bias tuning</li>
+</ul>
+<h3>Closing</h3>
+<p>Very rough competition. Was shocked to see myself at ~#414 (Public LB) after such work but #24 (Private) is not bad. In future competitions, I would "choose" the top 2 submissions carefully and experiment with some manually created GBDT and MLP fusion techniques.</p>
+<p>Good Luck</p>

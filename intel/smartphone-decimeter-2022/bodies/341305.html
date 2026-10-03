@@ -1,0 +1,38 @@
+<p>First of all, thanks to hosts for organizing this competition.<br>
+This competition is one of the most patient competitions I have ever participated in, as there was a lot of missing data and a lot of domain knowledge required. I respect all the participants who ran this competition.</p>
+<p>Here is my brief solution:</p>
+<h2>Summary</h2>
+<p>I think the key points to get gold medal in this competition are following two points.</p>
+<ul>
+<li>to estimate the velocity directly from ADR.</li>
+<li>to correct the pseudorange bias using the reference station observations.</li>
+</ul>
+<p>These are mentioned by <a href="https://www.kaggle.com/taroz1461" target="_blank">@taroz1461</a> in <a href="https://www.kaggle.com/competitions/smartphone-decimeter-2022/discussion/335842#1850158" target="_blank">this discussion</a>.<br>
+In addition to these two points, my solution improved the score by ensemble the results calculated with various settings.</p>
+<p>The pipeline of my solution are following:</p>
+<ul>
+<li>Step1.Position estimation from GNSS Data using RTKLIB.</li>
+<li>Step2.Velocity estimation from ADR in GNSS Data using WLS.</li>
+<li>Step3.Position smoothing using Kalman smoothing and CostMinimization.</li>
+</ul>
+<p>My approach is based on some published notebook and is basic.</p>
+<h3>1.Position estimation from GNSS Data using RTKLib.</h3>
+<p>I used the published <a href="https://www.kaggle.com/code/timeverett/getting-started-with-rtklib" target="_blank">RTKLIB</a> and <a href="https://www.kaggle.com/code/timeverett/getting-started-with-rtklib-py" target="_blank">RTKLIB-py</a> to correct pseudorange by base station observations. <br>
+(I wanted to implement the code myself,but I did not have the knowledge and enough time. Please let me know the good literature or code for reference.)</p>
+<p>The output of RTKLIB has applied Kalmansmoothing, but the accuracy of velocity estimation seems to be lower than when using ADR in Step2. So I re-smoothed the RTKLIB output (that are corrected position by base station) with ADR velocity estimates in Step3.<br>
+Also, I calculated position under several conditions such as thresh of satelite elevation angle and ensemble the results.<br>
+Since RTKlib and RTKLib-py use different satellite types, the results of both were used for the ensemble.</p>
+<h3>2.Velocity estimation from ADR Data using WLS.</h3>
+<p>Based on this published code (<a href="https://www.kaggle.com/code/taroz1461/carrier-smoothing-robust-wls-kalman-smoother" target="_blank">carrier-smoothing-robust-wls-kalman-smoother</a>), I estimate the velocity directly from ADR by weighted least squares method.<br>
+As mentioned in the <a href="https://www.kaggle.com/competitions/google-smartphone-decimeter-challenge/discussion/262406#1455510" target="_blank">1st place soluition</a> of the previous competition, the accuracy was higher than the result from Doppler Shift. When ADR is missing, the velocity calculated from Doppler shift is used.</p>
+<p>The ADR data has many missing points. In particular, since the missing often occurs in the sudden acceleration and deceleration, it may be difficult to interpolate and occur the position errors around that point. So, I adjusted the parameters to reduce the missing as much as possible. For example, the threshold of elevation angle for satelite selection sets lower values. Also I ignored 'ADR State' to select satelite. These setting could be worsened score by multipaths or cycle slips, but my local validation score and LB score are improved.<br>
+Although not confirmed, tuning the parameters for velocity estimation, which is separate from position estimation, may also have improved the score.</p>
+<h3>3.Position smoothing using Kalman smoothing and CostMinimization.</h3>
+<p>Postion smoothing is calculated from the position and velocity estimated above by two approaches.<br>
+Kalman smoothing is based on this published code (<a href="https://www.kaggle.com/code/taroz1461/carrier-smoothing-robust-wls-kalman-smoother" target="_blank">carrier-smoothing-robust-wls-kalman-smoother</a>).<br>
+CostMinimization is based on <a href="https://www.kaggle.com/code/saitodevel01/dsdc-unified-post-processing/notebook" target="_blank">5th placae solution in previous comp</a> .</p>
+<p>These approaches did not have a large difference in score, but ensemble of the results improved score.<br>
+Also, in each part, the ensemble results are adopted by changing parameters such as the update conditions of the Kalman filter.</p>
+<h3>Acknowledge</h3>
+<p><a href="https://www.kaggle.com/taroz1461" target="_blank">@taroz1461</a>, <a href="https://www.kaggle.com/saitodevel01" target="_blank">@saitodevel01</a> , <a href="https://www.kaggle.com/timeverett" target="_blank">@timeverett</a><br>
+Thank you for sharing your great ideas and code.</p>

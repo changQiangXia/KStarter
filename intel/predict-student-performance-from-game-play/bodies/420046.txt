@@ -1,0 +1,155 @@
+# https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420046
+
+Topic #420046: 9th Place Solution
+  Author: Makotu
+  Posted: 2023-06-29 03:00:43.018000
+  Votes: 81  Comments: 29
+
+First of all, I would first like to thank all the participants who dedicated so much time and effort to this competition, as well as the hosts and the management. While I still believe there are areas in which the administration of the competition could be improved, in this post, I will focus solely on discussing my solution.
+
+Overview
+
+I didn't do anything particularly special.
+
+Mainly, I just kept adding features to improve the accuracy of the single model. For each question, I built models using LightGBM and Catboost, and took the simple average of the two models. I used the models with the highest CV scores as the final candidates. The high CV submit also got almost the best score for private.
+
+
+
+LightGBM CV：0.7018 LB(Public)：0.703 LB(Private)：0.702
+
+Catboost CV:0.7011 LB(Public)：0.7 LB(Private)：0.701
+
+Merge(final submit) CV:0.7024 LB(Public)：0.7 LB(Private)：0.702
+
+
+Features
+
+Rather than introducing each of the numerous features I created, I'll share my overall approach and discuss a few specific features that particularly contributed to the accuracy.
+
+As already demonstrated in public notebooks, an important element in this competition was "how much time one spends playing." To delve deeper, I felt that "how much time it took from a certain point to another" was crucial, so I created many features related to this.
+
+
+
+Checkpoint feature (as I named it)
+In this game, there are events that almost every player will inevitably experience. For instance, every user will find a notebook and see the message "found it!" I identified these "events that almost every user goes through," and used the time taken between these events (i.e., the elapsed time from event A to event B) and the number of clicks as features. This seemed to significantly contribute to the accuracy.
+
+
+I created such features in various patterns, like the elapsed time from viewing text A to text B, the elapsed time from one fqid to the next, the elapsed time from one room to the next, and so on.
+
+
+
+Other than this, I obviously included features like the time elapsed for each level and the average coordinates, as introduced in the public notebooks.
+
+
+The number of features increases with the level group. Ultimately, the feature counts were as follows:
+Level group 0-4: 3009 features Level group 5-12: 9747 features Level group 13-22: 18610 features
+
+Modeling Approach
+
+
+
+
+I chose to use 10-fold rather than 5-fold as it gave slightly higher CV scores (around +0.0005).
+
+
+I used straified Kfold with the number of correct answers for 18 questions of the user. So, the model is made with the distribution of the total number of correct answers of the users almost aligned. (However, I don't think it would be much different with a simple K-fold)
+
+
+For feature selection, I simply used the top 500 features based on their importance. To prevent leakage, I selected the feature importance for each fold, and retrained the model for each fold. For example, when training fold1, I first train with all features, then select the features using the fold1 model, and retrain the fold1 model with the top 500 features.
+
+
+I used the prediction probabilities of previous questions as features. For example, when predicting question 3, I used the prediction probabilities for questions 1 and 2. When predicting question 15, I used the prediction probabilities for questions 1 through 14, etc. (this improved CV by around +0.001)
+
+
+Inference took the following amounts of time:
+LightGBM: 90min Catboost: 120min Merge: 150min
+LightGBM's inference became significantly faster by compiling the model with a library called "lleaves."
+https://github.com/siboehm/lleaves
+I'm sharing my inference code. Features not mentioned here can be somewhat understood by looking at it.
+https://www.kaggle.com/code/mhyodo/restart-model-merge-v1
+
+
+What Didn't Work
+
+
+
+NN models (I tried several types, such as LSTM and MLP, but none contributed to the CV)
+
+
+Lastly, I've seen posts from others where the LB score was higher than the CV score, but in my case, they were pretty much the same. I was expecting some sort of shakeup, but I didn't anticipate making it into the top 10. I'm curious as to how those with higher LB scores achieved this, as I was unable to significantly increase my LB score. 
+Anyway, thank you! If the ranking is confirmed, I can become a new GrandMaster!
+
+Comments:
+├─ Chris Deotte (2023-06-29 03:15:22.537000) [+5]
+│  Congratulations Makotu achieving solo gold 9th and Congratulations for become Kaggle competition Grandmaster!
+│  
+│  I also observed that my best CV models had CV score = Public LB score = Private LB score
+├─ Takoi (2023-06-29 12:49:37.590000) [+3]
+│  Congratulations on achieving solo gold and GM! 
+│  In my case, what significantly contributed to higher LB scores were the ensemble of LightGBM and NN models, as well as adjusting the threshold. The f...
+  ├─ Makotu (2023-06-30 01:04:34.823000) [+1]
+  │  I see, thank you for your info! I had not tried either.
+    ├─ Gaurav Rawat (2023-06-30 02:02:27.277000) [+2]
+    │  We also observed threshold played a part, best for us was 0.605
+├─ 刘锦奥 (2023-06-29 04:53:06.037000) [+3]
+│  Congratulations on becoming a GrandMaster! Thank you so much for sharing!👍👍👍
+├─ Hoping (2023-07-02 18:57:35.777000) [+1]
+│  Great solution！Thanks for sharing and congratulations on becoming a GrandMaster!
+├─ Robert Hatch (2023-07-02 18:47:19.657000) [+1]
+│  I also came up with checkpoint features. (But didn't do all the great work to build a robust solution, of course :) ) Did you notice that there are four different text options, each session_id only...
+  ├─ Makotu (2023-07-04 00:37:26.333000) [+0]
+  │  Yes, I noticed.
+  │  However, in my case, even if I made the text consistent, the CV did not increase that much.
+├─ sirius (2023-07-02 15:00:30.383000) [+1]
+│  👍👍Very glad to see your circle turn yellow
+  ├─ Makotu (2023-07-04 00:35:38.570000) [+1]
+  │  Thanks Sirius!
+  │  Congrats to you too on your high placement in the KDDcup!
+├─ Eugeniy Osetrov (2023-06-30 06:41:33.177000) [+1]
+│  @mhyodo  Thank you for sharing and congratulations! Next time I wish to get the first place!
+├─ Pooja Chauhan (2023-06-30 05:20:24.357000) [+1]
+│  Congratulations on your 9th place finish in the competition! Your approach of combining LightGBM and Catboost models through averaging was effective. The checkpoint feature and utilization of predi...
+├─ Akshay Vyas (2023-06-29 13:28:53.753000) [+1]
+│  @mhyodo Congratulations on your achievement ! The checkpoint feature you developed, based on the time taken between specific events, seems particularly insightful.
+├─ carloszone (2023-06-29 09:58:30.660000) [+1]
+│  congratulations. Great work! I must say I agree with you that don't try NN models. Based on my experience, it isn't easy to get a great score from NN models in a run, even if the task seems to be d...
+├─ serangu (2023-06-29 04:38:02.970000) [+1]
+│  @mhyodo congrats with 9 place and gold medal!
+├─ Hoang Nguyen (2023-06-29 04:24:31.353000) [+1]
+│  Did you use the extra 7000 sessions from the leaked data? I think many teams used it to get top public/private LB.
+  ├─ Makotu (2023-06-29 04:30:55.577000) [+4]
+  │  I didn't use any extra data.
+    ├─ Hoang Nguyen (2023-06-29 04:41:30.720000) [+1]
+    │  That leaked data seems to be the secret recipe for some top public LB positions. However I think some of us utilized it too much and caused overfitting/shake-downs.
+    │  
+    │  Kudos to you for building a gol...
+    ├─ Gaurav Rawat (2023-06-29 05:06:30.947000) [+3]
+    │  Though we didn’t select unfortunately 🙁 (due to low public lb)but with extra data we saw better private score around 0.703 0.704 , will post soon
+├─ Maruichi01 (2023-07-03 23:47:01.273000) [+2]
+│  Congratulations on your solo gold and earning the title of Competitions Grandmaster!
+│  
+│  I've tried a similar approach, but I haven't been able to achieve a high score with LightGBM (always worse than...
+  ├─ Makotu (2023-07-04 00:32:11.120000) [+1]
+  │  Here are my parameters.  
+  │  Since the features are very large and prone to overfitting, making min_data_in_leaf large enough and taking feature_fraction small enough improved the CV in my case.
+  │  
+  │  para...
+    ├─ Maruichi01 (2023-07-04 00:37:51.027000) [+1]
+    │  Thank you for your prompt response! Your advice is very helpful. Once again, congratulations on becoming a Grandmaster!
+├─ Informhunter (2023-06-29 03:36:27.007000) [+2]
+│  Congrats on the gold medal and the incoming GM title!
+│  
+│  Can I ask, what was your CV strategy? (stratified multi-label/time-series window/something else?)
+  ├─ Makotu (2023-06-29 03:43:36.177000) [+2]
+  │  Oh, yes, I forgot to mention that. Thank you very much. I will add it later.
+  │  I used straified Kfold with the number of correct answers for 18 questions of the USER. So, the model is made with the d...
+├─ ADAM. (2023-06-29 03:18:35.880000) [+2]
+│  Thanks for sharing and big congrats on your GM title!!
+├─ Hoang Nguyen (2023-06-29 03:03:32.717000) [+2]
+│  Congratulations on your soon-coming GM title! Great work!
+├─ Anthony Chiu (2023-07-12 19:27:51.890000) [+0]
+│  Congrats on being a GM!
+├─ Joey-Yi (2023-06-29 04:45:51.407000) [+1]
+│  Thanks for sharing and congratulations!
+├─ ls (2023-06-30 12:09:44.210000) [+0]
+│  thanks for sharing and congrats on gold

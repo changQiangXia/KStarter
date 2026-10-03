@@ -1,0 +1,82 @@
+# stanford-ribonanza-rna-folding 讨论区（按票数排序，共 80 条）
+
+- [[1st place solution] Transformer model with Dynamic positional encoding + CNN for BPPM features](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460121) — 147 票 / 58 评论 / 2023-12-21 **write-up?**
+- [The best single model](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/440702) — 66 票 / 50 评论 / 2023-09-15 
+- [How to check if your model generalizes to long sequences](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/444653) — 60 票 / 78 评论 / 2023-10-03 
+- [RNA starter [0.186 LB]](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/438415) — 47 票 / 0 评论 / 2023-09-11 
+- [🥇Papers for this Competition [with Code]🔥](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437794) — 44 票 / 5 评论 / 2023-09-08 
+- [7th place solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460190) — 44 票 / 32 评论 / 2023-12-19 **write-up?**
+- [2nd place solution - Squeezeformer + BPP Conv2D Attention](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460316) — 42 票 / 17 评论 / 2024-01-04 **write-up?**
+- [Welcome to the Ribonanza Challenge!](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437481) — 37 票 / 55 评论 / 2023-09-06 
+- [Protein Structure Prediction: CASP. AlphaFold. Highlights on Kaggle Competitions.](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437731) — 36 票 / 13 评论 / 2023-09-08 
+- [Visualizing the leaderboard dynamics](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460193) — 33 票 / 13 评论 / 2023-12-08 
+- [4th place solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460203) — 29 票 / 7 评论 / 2023-12-19 **write-up?**
+- [8th place solution (KF Part)](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460222) — 27 票 / 2 评论 / 2023-12-19 **write-up?**
+- [Reactivity errors of 2A3 equals to those of DMS](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/451158) — 25 票 / 13 评论 / 2023-10-27 
+- [Modeling with 3D coordinates ](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/451853) — 25 票 / 17 评论 / 2023-10-30 
+- [A Comprehensive Guide to Approaches and Challenges in RNA Structure Prediction](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/438766) — 25 票 / 2 评论 / 2023-09-12 
+- [[3rd Place Solution] AlphaFold Style Twin Tower Architecture + Squeezeformer](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460403) — 24 票 / 19 评论 / 2023-12-20 **write-up?**
+- [21th solution: ESM2 + custom folding head](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460285) — 23 票 / 9 评论 / 2023-12-08 **write-up?**
+- [Host solution (RNAdegformer public/private 0.1437/0.1458) and some insights](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460301) — 23 票 / 11 评论 / 2023-12-08 **write-up?**
+- [[Fun Fact] Barrier around 0.141.](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/458478) — 21 票 / 6 评论 / 2023-11-30 
+- [15th place solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460130) — 21 票 / 4 评论 / 2023-12-22 **write-up?**
+- [Thanks from the hosts, and next steps!](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460378) — 20 票 / 9 评论 / 2023-12-09 
+- [External data from RNA Mapping DataBase](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/454397) — 19 票 / 7 评论 / 2023-11-10 
+- [36th solution : Cheap Transformers that can run on gaming laptops and does not require a BPP matrix](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460287) — 19 票 / 3 评论 / 2023-12-08 **write-up?**
+- [THE MEMES HERE! 🤡 Post your meme~~~](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/449093) — 17 票 / 8 评论 / 2023-10-23 
+- [19th Solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460145) — 17 票 / 2 评论 / 2023-12-08 **write-up?**
+- [5th Place Solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460250) — 17 票 / 2 评论 / 2024-09-04 **write-up?**
+- [58th solution: simple Roformer model](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460401) — 16 票 / 5 评论 / 2023-12-09 **write-up?**
+- [11th place solution: Transformer with MFE distance embeddings (with code)](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460192) — 16 票 / 1 评论 / 2023-12-08 **write-up?**
+- [Experimental protocol behind the data](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/445415) — 15 票 / 1 评论 / 2023-10-06 
+- [RNA Ensembles](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/446900) — 15 票 / 0 评论 / 2023-10-13 
+- [How To Map Reactivity to the Sequence](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/438345) — 13 票 / 6 评论 / 2023-09-10 
+- [Congrats to new Competition GM](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460202) — 13 票 / 3 评论 / 2023-12-08 
+- [10th Place Solution for the Stanford Ribonanza RNA Folding Competition](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/463352) — 13 票 / 3 评论 / 2023-12-26 **write-up?**
+- [16th Place Solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460545) — 12 票 / 0 评论 / 2023-12-12 **write-up?**
+- [Ribonanza data update and quick starter](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/451890) — 12 票 / 8 评论 / 2023-10-30 
+- [[Fun Fact] Barrier around 0.138, 0.139 and 0.141.](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/459634) — 12 票 / 14 评论 / 2023-12-06 
+- [Adjutant onboarding materials](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437766) — 12 票 / 3 评论 / 2023-09-08 
+- [RNA Biology with Eterna -- free Coursera course](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/454953) — 11 票 / 0 评论 / 2023-11-12 
+- [GraphAttention solution approach](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460252) — 10 票 / 0 评论 / 2023-12-08 **write-up?**
+- [ChatGPT ideas - might be not so bad](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437864) — 10 票 / 3 评论 / 2023-09-08 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460135) — 9 票 / 5 评论 / 2023-12-08 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437707) — 9 票 / 160 评论 / 2023-09-07 
+- [GNN for RNA](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437897) — 9 票 / 2 评论 / 2023-09-08 
+- [Parquet submissions temporarily disabled [obsolete]](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/454377) — 9 票 / 4 评论 / 2023-11-10 
+- [What are your expectations of shakeup?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/455715) — 9 票 / 12 评论 / 2023-11-16 
+- [Approximately 22nd Place Solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460904) — 8 票 / 2 评论 / 2023-12-11 **write-up?**
+- [22th place solution (A simplest CNN)](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460355) — 8 票 / 0 评论 / 2023-12-08 **write-up?**
+- [RNA 3D structure seminar series](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/444621) — 8 票 / 2 评论 / 2023-10-02 
+- [8 Place Solution(ONODERA part)](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460956) — 8 票 / 1 评论 / 2023-12-12 **write-up?**
+- [Data update](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/462452) — 8 票 / 0 评论 / 2023-12-20 
+- [Have there been similar competitions in the past?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/455492) — 7 票 / 3 评论 / 2023-11-15 
+- [🕸️ Graph neural network approaches - with starter notebook 🕸️](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/443168) — 7 票 / 1 评论 / 2023-09-25 
+- [RNA post-translational modifications](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437965) — 7 票 / 7 评论 / 2023-09-08 
+- [Best train-data-only scores?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460172) — 7 票 / 5 评论 / 2023-12-08 
+- [Out of ideas](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/449084) — 6 票 / 8 评论 / 2023-10-23 
+- [Anyone tried augmented bpp's from vienna, eternafold and others?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/456079) — 6 票 / 15 评论 / 2023-11-18 
+- [[18th place solution] Transformer + bpp conv + relative position bias](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460383) — 6 票 / 0 评论 / 2023-12-09 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437706) — 6 票 / 10 评论 / 2023-09-07 
+- [20th place solution](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/461545) — 6 票 / 1 评论 / 2023-12-15 **write-up?**
+- [Beginner question: can you use models you trained locally?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/453660) — 6 票 / 3 评论 / 2023-11-07 
+- [about data augumentation](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/454999) — 6 票 / 7 评论 / 2023-11-12 
+- [First 34 nucleotides are dominated by sequence GGGAACGACUCGAGUAGAGUCGAAAAGAUAUGGA - why ?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/442561) — 5 票 / 1 评论 / 2023-09-23 
+- [RESOLVED - "Download All" and API download issues](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/452061) — 5 票 / 1 评论 / 2023-10-31 
+- [Beginner Introduction to RNA Folding](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/441119) — 5 票 / 0 评论 / 2023-09-17 
+- [Train of length 206 - only 3 core sequences - CORONOVIRUS (?) -  with only small variations around - seems NOT similar to private test](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/444306) — 5 票 / 0 评论 / 2023-10-01 
+- [Regarding licenses and restrictions](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/438111) — 5 票 / 1 评论 / 2023-09-09 
+- [Scoring of flanking regions](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/456180) — 5 票 / 3 评论 / 2023-11-18 
+- [Is BPPs useful for our predictions?](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/445242) — 5 票 / 1 评论 / 2023-10-06 
+- [Help us train RibonanzaNet, a single model that integrates all of our efforts! [NEEDED BY DEC 24 2023: Labels for train sequences]](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/462850) — 5 票 / 19 评论 / 2023-12-22 
+- [Intuition behind clipped/constrained predictions not training. ](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/454546) — 5 票 / 5 评论 / 2023-11-10 
+- [Running TPU notebook on Colab](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/451881) — 4 票 / 2 评论 / 2023-10-30 
+- [Reactivity value and errors](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/451448) — 4 票 / 13 评论 / 2023-10-28 
+- [duplicated samples in training dataset ](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/448959) — 4 票 / 7 评论 / 2023-10-22 
+- [Rescores are in progress - COMPLETE!](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/453738) — 4 票 / 2 评论 / 2023-11-07 
+- [All codons appeared in train data](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/453611) — 4 票 / 4 评论 / 2023-11-07 
+- [Gibbs modified attention](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/454575) — 4 票 / 0 评论 / 2023-11-10 
+- [Preprint on Ribonanza research is out!](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/480778) — 4 票 / 0 评论 / 2024-02-29 
+- [81st Place Solution for the Stanford Ribonanza RNA Folding Competition](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460277) — 4 票 / 0 评论 / 2023-12-08 **write-up?**
+- [Seminar on Ribonanza outcome: Tuesday, 13 February, 2024](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/475103) — 4 票 / 0 评论 / 2024-02-07 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/437931) — 2 票 / 0 评论 / 2023-09-08 

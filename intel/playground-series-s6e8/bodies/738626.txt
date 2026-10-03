@@ -1,0 +1,201 @@
+# https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738626
+
+Topic #738626: 248th Place Solution — Rank-Aligned Fusion and Risk-Conditional Blending
+  Author: Zcy
+  Posted: 2026-09-01 03:23:27.570000
+  Votes: 3  Comments: 0
+
+Predicting Smartphone Addiction, Playground Series S6E8
+Final rank: 248 / 3,532 teams (Top 7.0%)
+Public / private ROC AUC: 0.97126 / 0.97100
+
+Thank you to Kaggle and to everyone who shared notebooks, OOF predictions, and
+experiments during the competition. This solution was built on a strong public
+ensemble and focused on making its validation and inference paths consistent,
+then applying a small risk-conditional blending layer.
+
+Context
+
+
+
+Competition overview: https://www.kaggle.com/competitions/playground-series-s6e8/overview
+
+Competition data: https://www.kaggle.com/competitions/playground-series-s6e8/data
+
+
+Solution overview
+
+The final pipeline had four stages:
+
+
+
+Start from the disclosed 205-model OOF Rank-Logit-Regime fusion by
+Byer/HBoyang.
+
+Convert both meta-level prediction inputs to strict percentile ranks before
+blending, using the same representation for OOF validation and test
+inference.
+
+Replace one global blend weight with OOF-selected weights conditioned on
+prediction-risk quantiles. I trained independent 8-, 10-, and 12-bin
+variants and rank-averaged their outputs.
+
+Correct two test rows whose complete feature vectors exactly duplicated one
+labeled training row with an unambiguous target.
+
+
+The final submitted prediction can be summarized as:
+
+base rank + fusion rank
+        -&gt; risk-conditional blend (8 bins)
+        -&gt; risk-conditional blend (10 bins)
+        -&gt; risk-conditional blend (12 bins)
+        -&gt; equal rank ensemble
+        -&gt; exact-duplicate correction
+
+
+Public foundation and attribution
+
+The main predictive strength came from the public 205-member OOF fusion in:
+
+
+
+Byer/HBoyang, S6E8 Rank-Logit-Regime Fusion:
+https://www.kaggle.com/code/hboyang/s6e8-rank-logit-regime-fusion-lb0-97125
+
+
+That notebook also credits the public OOF libraries it consumes. I do not claim
+those base models as original work. My additions were the inference-consistency
+fix, the risk-conditional blending layer, repeated validation audits, and the
+exact-duplicate post-processing.
+
+I also trained local lookup, XGBoost, LightGBM, and Transformer models using
+ideas adapted from Tamerlan Omralinov's Apache-2.0 notebook:
+
+
+
+Tamerlan Omralinov, S6E8 | Lookup-Transformer + Insights:
+https://www.kaggle.com/code/tamerlanomralinov/s6e8-lookup-transformer-insights-lb-0-97041
+
+
+These local models were useful for experiments but were not the main source of
+the final ensemble's performance.
+
+Validation and inference consistency
+
+The source fusion selected its top-level alpha on two ranked OOF inputs, but its
+published test path mixed a raw probability input with a ranked input. Since
+ROC AUC depends only on ordering, I applied a strict ordinal rank transform to
+both inputs on both train and test.
+
+An uncapped nested five-fold search selected blend weights
+[0.725, 0.725, 0.725, 0.725, 0.825]. I used their mean, alpha = 0.745, at
+inference. A separate fine-grid scan peaked near 0.74, and the 0.70–0.80 region
+was broad rather than a sharp optimum.
+
+This correction moved OOF ROC AUC to 0.970422 and improved every one of 15
+validation slices checked.
+
+Risk-conditional blending
+
+A single global alpha assumes that the two meta-models have the same relative
+value across the full score distribution. That was not true in OOF.
+
+For each row, I computed a risk coordinate as the mean of the two input ranks.
+Rows were assigned to equal-width rank bins, and a separate alpha was selected
+inside each bin on OOF predictions. Bins containing only one class fell back to
+the global alpha. Finally, I ranked the combined predictions again.
+
+I built three variants with 8, 10, and 12 bins and averaged their final ranks.
+The progression was:
+
+
+
+
+Stage
+OOF ROC AUC
+
+
+
+
+Rank-aligned global blend
+0.970422
+
+
+8-bin conditional blend
+0.970457
+
+
+10-bin conditional blend
+0.970457
+
+
+12-bin conditional blend
+0.970458
+
+
+8/10/12 rank ensemble
+0.970459
+
+
+
+
+The conditional layer improved all 15 validation slices. On the public
+leaderboard it moved the score from 0.97125 to 0.97126.
+
+Exact-duplicate post-processing
+
+Two test rows had complete feature vectors that appeared exactly once in the
+training set. Their matching training labels were unambiguous, so I replaced
+those two predictions with the corresponding labels. This affected only test
+IDs 735378 and 862871.
+
+What did not work
+
+Several ideas looked better in honest OOF but did not transfer to the hidden
+test split:
+
+
+
+A seven-variable soft student improved all 15 local validation slices, but
+its private score was lower.
+
+A depth-9 pair-target-encoding model raised local OOF further, but also lost
+on the final leaderboard.
+
+Residual anti-blends achieved the best local OOF (0.970705) and passed
+nested-fold audits, yet produced the weakest hidden-test result among the
+late candidates.
+
+Expanding the public pool from 205 to 214 members and training additional
+Rank-Gauss stacks added almost no OOF value.
+
+Local Lookup-Transformer, XGBoost, and LightGBM models were useful standalone
+baselines but were too weak or too correlated to improve the public fusion.
+
+
+The main lesson was that tiny OOF improvements were not automatically reliable
+under the train/test shift. The conservative rank-aligned risk-bin ensemble was
+more robust than the more aggressive residual corrections.
+
+Reproducibility notes
+
+
+
+Metric: ROC AUC
+
+OOF protocol: stratified five-fold validation, with repeated slice and
+nested-weight audits for promoted blends
+
+Final blend alpha: 0.745 before conditional weighting
+
+Conditional variants: 8, 10, and 12 risk bins
+
+Final post-processing: strict percentile rank plus two exact-duplicate labels
+
+
+Thanks again to all public contributors. The most useful part of this
+competition was learning how much care is needed when transferring a small OOF
+gain into a leaderboard ensemble.
+
+No comments

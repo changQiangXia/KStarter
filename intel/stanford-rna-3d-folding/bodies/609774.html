@@ -1,0 +1,57 @@
+<p>Thank you Kaggle and the competition hosts, for this incredible competition and the opportunity to participate. Your passion for this challenge was truly infectious and served as one of my driving forces throughout the competition. </p>
+<p>Since this is my first gold and my first win on Kaggle, I would like to take the opportunity to thank <a href="https://www.kaggle.com/jhoward" target="_blank">@jhoward</a> for the fast.ai course, <a href="https://www.kaggle.com/radek1" target="_blank">@radek1</a> for their book which was an inspiration in my ML journey. Khan Academy for helping me rethink mathematics, and <a href="https://www.kaggle.com/huggingface" target="_blank">@huggingface</a> for their amazing deep learning courses. </p>
+<h2>Competition Strategy</h2>
+<p>My approach was clear from the outset. Without GPUs, training a model from scratch or fine-tuning was not viable. My early research - drawing on CASP results, literature, and conference talks, including one by host <a href="https://www.kaggle.com/rhijudas" target="_blank">@rhijudas</a> - showed that Template-Based Modeling approaches consistently dominated. Based on this, I committed to TBM from day one and spent the next 90 days refining my method.</p>
+<p>Next, I focused on the evaluation metric, since understanding it determines the exploration path. TM-score has two key properties: it is normalized by structure length (so 50nt and 200nt RNAs are compared on the same 0-1 scale), and it is robust to local errors - a small number of misplaced nucleotides does not disproportionately lower the score. This insight allowed me to prioritize getting the overall fold correct over achieving atomic-level precision.</p>
+<h2>Data Strategy and Model Selection</h2>
+<p>The host-provided dataset was comprehensive. I systematically processed all CIF files in the provided PDB_RNA directory with comprehensive nucleotide mapping (93 variants including modified bases) and disorder-aware coordinate extraction. This process ensured complete coverage of the available structural data, capturing modified nucleotides that standard parsers might otherwise miss.</p>
+<p>After exploring nearly all available open-source models, I selected DRfold2 as the optimal choice due to its extensive potential for optimization. Rather than fine-tuning the model itself, I focused on enhancing its optimization and selection modules. This strategy improved prediction quality while ensuring the pipeline could execute efficiently on Kaggle GPUs.</p>
+<h2>Template-Based Modeling (TBM)</h2>
+<p>TBM follows a five-step process:</p>
+<p><strong>1. The Search - Finding Similar Structures</strong></p>
+<p>The goal is identifying database structures that resemble the target sequence through sequence alignment.</p>
+<p><strong>2. The Alignment - Sequence Mapping</strong></p>
+<p>This step creates the translation guide between query and template using global sequence alignment with gap penalties optimized for RNA. </p>
+<p><strong>3. The Transfer - Coordinate Inheritance</strong></p>
+<p>Straightforward copying of 3D coordinates for all matched positions. This leverages the evolutionary tendency for RNA to conserve 3D structure more than sequence. </p>
+<p><strong>4. The Gap Fill - Geometric Backbone Reconstruction</strong></p>
+<p>For insertions and deletions, I relied on geometric principles maintaining RNA's characteristic backbone:</p>
+<ul>
+<li>Maintains <code>C1'-C1'</code> distance (<code>~5.9Å</code> between consecutive nucleotides)</li>
+<li>For compressed gaps: extends the backbone with realistic curvature using sinusoidal perturbations perpendicular to the backbone direction</li>
+<li>For normal gaps: uses linear interpolation between flanking coordinates</li>
+<li>Terminal extensions follow the established backbone direction</li>
+</ul>
+<p><strong>5. Adaptive Refinement - Confidence-Based Optimization</strong></p>
+<p>The refinement intensity adapts to template confidence score:</p>
+<ul>
+<li>High-confidence templates (&gt;0.8 similarity): minimal constraints, preserving template geometry</li>
+<li>Medium-confidence templates: moderate sequential distance constraints (<code>5.5-6.5Å</code>)</li>
+<li>Low-confidence templates: additional steric clash prevention and light base-pairing constraints. </li>
+<li>Constraint strength scales as: <code>0.8 × (1 - min(confidence, 0.8))</code></li>
+</ul>
+<h2>DRfold2 Enhancements</h2>
+<h3>Selection Module</h3>
+<ul>
+<li><strong>Double Precision Calculations:</strong> Consistent float64 operations reduce numerical errors for more reliable model rankings</li>
+<li><strong>Vectorized Distance Calculations:</strong> GPU-accelerated pairwise distance computation via torch.cdist</li>
+<li><strong>Optimized Energy Functions:</strong> Pre-computed cubic spline coefficients enable fast structure scoring without repeated spline fitting</li>
+</ul>
+<p>These improvements were motivated by the authors' own observations that DRfold2 sometimes failed to select its best models. For example, they report cases where the 5th-ranked model significantly outperformed the top-ranked one (p. 8, lines 305–317), underscoring the need for more robust post-processing and ranking protocols (p. 9, lines 319–321). </p>
+<p>My modifications directly targeted this weakness by making scoring and ranking more accurate and consistent.</p>
+<h3>Optimization Module</h3>
+<ul>
+<li><strong>PyTorch LBFGS:</strong> Native optimizer with automatic differentiation delivers more accurate gradients and better convergence than SciPy implementations.</li>
+<li><strong>GPU Acceleration:</strong> Energy calculations and gradient computations performed on GPU where possible.</li>
+<li><strong>External Knowledge Integration:</strong> Enhanced capabilities through Boltz-1 integration (credit to <a href="https://www.kaggle.com/youhanlee" target="_blank">@youhanlee</a>) - (2nd notebook submission)</li>
+</ul>
+<p>The authors themselves highlight the flexibility of DRfold2's optimization framework, demonstrating this by integrating AlphaFold3 conformations as an additional potential term (p. 9, lines 327–329). This hybrid approach yielded significantly better results than either method alone, achieving higher TM-scores and lower RMSDs (p. 9, lines 331–334). They conclude that such integration represents a promising direction for future improvements (p. 10, lines 370–372). </p>
+<p>My own optimization experiments followed this spirit of extensibility, focusing on GPU acceleration and integration of Boltz-1.  </p>
+<h2>Hybrid Strategy</h2>
+<p>The final pipeline uses a strategic combination:</p>
+<ul>
+<li><strong>Template-based modeling:</strong> For shorter sequences and when time budget is exhausted. </li>
+<li><strong>DRfold2:</strong> For the rest of sequences where deep learning excels. </li>
+<li><strong>Graceful fallback:</strong> DRfold2 failures automatically fall back to template approach.</li>
+</ul>
+<p>Special shoutout to <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> for consistently sharing valuable research papers, open-source models, and insights that served as invaluable resources for the community.  </p>

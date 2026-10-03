@@ -1,0 +1,26 @@
+<p>Here, we aim at segmenting cells, such task can be divided in two steps :</p>
+<ol>
+<li>Detecting individual cells</li>
+<li>Correctly predicting their boundaries</li>
+</ol>
+<p>I'm focusing here on the 2nd step : <br>
+The mAP IoU evaluates the correctness of the boundaries by penalizing low IoUs using different thresholds (0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95).</p>
+<p>However, I think this is a mistake, let's take two cort cells as example, this also works with shsy5y cells.</p>
+<p><a href="https://ibb.co/B6NDQVS"><img src="https://i.ibb.co/vdY5TxK/ious.png" alt="ious"></a></p>
+<ul>
+<li>Cells are small : about 10x10 px each, because of the resolution the data is acquired at</li>
+<li>Annotations are not pixel perfect : there is a lot of ambiguity on where the cell actually stops, sometimes the brighter pixels are included, sometimes excluded</li>
+<li>Lets say such ambiguity results in a ~20px variation : this will result in a ~0.2 IoU variation for the same prediction</li>
+<li>Which means reaching the 0.8, 0.85, 0.9 and 0.95 thresholds is basically luck. I.e 40% of the evaluation metric is random</li>
+<li>The two predictions here score IoU 0.76 and 0.79 which only gives a 0.6 mAP despite them being decent enough to be considered as good as the labels</li>
+</ul>
+<p><strong>Conclusion :</strong> because cells are smalls and labels not pixel perfect, the metric fluctuates a lot.<br>
+It makes no sense to evaluate the IoU at high thresholds for small cells. </p>
+<p>An easy fix would be to consider the mAP at thresholds ranging from 0.5 to 0.75 (or 0.8).</p>
+<p>A more complicated (but better) fix would be to choose threshold according to the ground truth size, for instance :</p>
+<ul>
+<li>&lt; 200 px cells should use 0.5 -&gt; 0.75</li>
+<li>&lt; 400 px cells should use 0.5 -&gt; 0.85</li>
+<li>&gt;= 400 px cells should use 0.5 -&gt; 0.95</li>
+</ul>
+<p>High thresholds are useful to make sure boundaries are correct on big cells (astro) as well.</p>

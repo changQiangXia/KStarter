@@ -1,0 +1,40 @@
+# sorghum-id-fgvc-9 讨论区（按票数排序，共 38 条）
+
+- [PhD/Research Opportunities Related to this Project](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/320481) — 15 票 / 1 评论 / 2022-04-21 
+- [71 Gb ➡  14 Gb Dataset](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313266) — 13 票 / 11 评论 / 2022-03-16 
+- [List of Past FGVC competitions](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313171) — 13 票 / 4 评论 / 2022-03-16 
+- [3rd Place Solution](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/328593) — 12 票 / 7 评论 / 2022-06-02 **write-up?**
+- [Starter code for Luminide (LB score 85%)](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/320678) — 10 票 / 5 评论 / 2022-04-22 
+- [💥🏝  FGVC - Some nice research papers to refer for the competition🎯🔮](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313375) — 10 票 / 4 评论 / 2022-03-16 
+- [Test images are nowhere to be found](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313438) — 10 票 / 10 评论 / 2022-03-17 
+- [Image masks and canopy cover](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/318564) — 7 票 / 6 评论 / 2022-04-12 
+- [1st Place Solution](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/329049) — 6 票 / 4 评论 / 2022-06-04 **write-up?**
+- [Classify These Open Source Projects On Image Classification!](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/325854) — 6 票 / 2 评论 / 2022-05-18 
+- [One bad image file and CSV has filenames not in images directory](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313543) — 6 票 / 7 评论 / 2022-03-17 
+- [2nd Place Solution](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/329414) — 5 票 / 0 评论 / 2022-06-06 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/314426) — 4 票 / 2 评论 / 2022-03-22 
+- [Semi-supervised Learning Techniques](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/321311) — 4 票 / 3 评论 / 2022-04-26 
+- [CV vs LB thread ](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313728) — 4 票 / 1 评论 / 2022-03-18 
+- [Data unavailable via Kaggle API](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313691) — 4 票 / 10 评论 / 2022-03-18 
+- [Is Pseudo labelling considered as hand labelling?](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/324170) — 3 票 / 3 评论 / 2022-05-10 
+- [Test accuracy remain below 5% - Efficientnet B1 Keras](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/316882) — 3 票 / 13 评论 / 2022-04-04 
+- [Equalized and resized dataset with CLAHE](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/321002) — 3 票 / 0 评论 / 2022-04-24 
+- [Divides the image into 16 sections and soft-voting the predictions.](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/315734) — 3 票 / 0 评论 / 2022-03-29 
+- [Unable to run my Notebook due to large image dataset of over 70GB](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/326786) — 2 票 / 1 评论 / 2022-05-24 
+- [mismatch between test accuracy and validation accuracy](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/319983) — 2 票 / 4 评论 / 2022-04-19 
+- [Data mismatch](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/313853) — 2 票 / 4 评论 / 2022-03-19 
+- [where is the top 1% solutions could you share the code to learn fromy ou guys ](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/328477) — 1 票 / 2 评论 / 2022-06-01 **write-up?**
+- [***Cannot achieve test accuracy >0.5 for tf learning effnet***](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/325235) — 1 票 / 1 评论 / 2022-05-15 
+- [Help with saving files in the working directory and commit time](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/321426) — 1 票 / 2 评论 / 2022-04-26 
+- [Looking help to start!](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/315010) — 1 票 / 1 评论 / 2022-03-25 
+- [Is Private Public Split randomly ?](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/314831) — 1 票 / 3 评论 / 2022-03-24 
+- [Missing images](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/314049) — 1 票 / 1 评论 / 2022-03-20 
+- [registration for the workshop](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/314073) — 1 票 / 2 评论 / 2022-03-20 
+- [Where to request Test Labels?](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/367217) — 0 票 / 0 评论 / 2022-11-19 
+- [What features were picked up from the images by the winning solution?](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/332556) — 0 票 / 0 评论 / 2022-06-22 **write-up?**
+- [Training Loss Fluctuating](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/322982) — 0 票 / 2 评论 / 2022-05-04 
+- [basic question from a beginner](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/324465) — 0 票 / 0 评论 / 2022-05-11 
+- [Data Augmentation is not helping in the LB score.](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/323838) — 0 票 / 2 评论 / 2022-05-08 
+- [RuntimeError: solve: MAGMA library not found in compilation. Please rebuild with MAGMA.](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/321656) — 0 票 / 0 评论 / 2022-04-28 
+- [New class added](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/315023) — 0 票 / 0 评论 / 2022-03-25 
+- [How to get started with image datasets?](https://www.kaggle.com/competitions/sorghum-id-fgvc-9/discussion/314784) — -1 票 / 1 评论 / 2022-03-24 

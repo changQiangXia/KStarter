@@ -1,0 +1,82 @@
+# playground-series-s5e6 讨论区（按票数排序，共 80 条）
+
+- [1st Place - Fast GPU Experimentation with RAPIDS cuDF cuML](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587393) — 193 票 / 137 评论 / 2025-07-01 **write-up?**
+- [N/P/K Ratios: The Hidden Signal in a Low-Corr Dataset](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583189) — 68 票 / 39 评论 / 2025-06-05 
+- [2nd Place Solution - L3 Ensemble of 100+ OOFs](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587398) — 61 票 / 36 评论 / 2025-07-01 **write-up?**
+- [Urea Fertilizer 10:26:26 (10% N; 26%  P₂O₅ and 26% K₂O) and other percents. Playground Kaggle competition is On!](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582515) — 53 票 / 28 评论 / 2025-06-01 
+- [What if you can only use logistic regression...](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585144) — 49 票 / 23 评论 / 2025-06-18 
+- [The "original" dataset likely consists of only noise](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582632) — 46 票 / 25 评论 / 2025-06-01 
+- [Multi-Class Classification with MAP@3 Evaluation](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582520) — 34 票 / 26 评论 / 2025-06-01 
+- [Suggestion - please stop public sharing 3 days before the end of the episode](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587209) — 33 票 / 12 评论 / 2025-06-30 
+- [Revealing the target variable distribution of the public LB](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582777) — 28 票 / 3 评论 / 2025-06-02 
+- [5th Place Solution - An ensemble of 53 OOFs](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587392) — 24 票 / 13 评论 / 2025-07-01 **write-up?**
+- [ One key note regarding the metric - with implementation](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582521) — 23 票 / 8 评论 / 2025-06-01 
+- [Thanks, Kaggle! (For a different challenge and metric)](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582543) — 23 票 / 0 评论 / 2025-06-01 
+- [[CV,LB 0.377]Data Augmentation Inside vs Outside the CV Loop](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585112) — 21 票 / 11 评论 / 2025-06-18 
+- [Starting materials and references ](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582516) — 21 票 / 7 评论 / 2025-06-01 
+- [Unrealistic and incorrect data for Agriculture!!](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583018) — 20 票 / 12 评论 / 2025-06-04 
+- [Don't forget that we can also expand the competition trainset](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585296) — 20 票 / 27 评论 / 2025-06-19 
+- [3rd place - Ridge and CV are all you need](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587464) — 19 票 / 10 评论 / 2025-07-01 **write-up?**
+- [Winning Approaches in Previous Kaggle Multi-Class Competitions](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583172) — 19 票 / 3 评论 / 2025-06-05 **write-up?**
+- [4th Place - Stacking Ensemble using XGB only](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587405) — 18 票 / 18 评论 / 2025-07-01 **write-up?**
+- [Easyest way to improve model's performance](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/584983) — 17 票 / 23 评论 / 2025-06-17 
+- [Rank 28 approach - diversity and CV prevail!](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587391) — 16 票 / 19 评论 / 2025-07-01 
+- [Comparing multiclass ensembling techniques](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583889) — 16 票 / 8 评论 / 2025-06-10 
+- [Don't give up on NN](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/584043) — 15 票 / 10 评论 / 2025-06-11 
+- [6th place - 1 week rush](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587414) — 14 票 / 6 评论 / 2025-07-01 **write-up?**
+- [MAP@3 objective the LambdaRank way](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583315) — 14 票 / 11 评论 / 2025-06-06 
+- [A very different type of competition for your perusal](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/584816) — 14 票 / 8 评论 / 2025-06-16 
+- [#21 Solution | Stacking + Hill Climbing](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587409) — 13 票 / 1 评论 / 2025-07-01 **write-up?**
+- [Viewing the shakeup](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587401) — 12 票 / 2 评论 / 2025-07-01 
+- [Explaining the Evaluation Metric + Sample code ](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582558) — 12 票 / 2 评论 / 2025-06-01 
+- [7th place solution - HC + Ridge](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587573) — 11 票 / 10 评论 / 2025-07-02 **write-up?**
+- [9th Place Solution – Logistic Regression - Meta Model](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587508) — 11 票 / 6 评论 / 2025-07-01 **write-up?**
+- [Please exercise prudence while choosing your final submissions](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587298) — 11 票 / 4 评论 / 2025-06-30 
+- [Two Simple Changes That Improved My Score 🔥](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583685) — 11 票 / 13 评论 / 2025-06-08 
+- [XgBoost seems like a good option here](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582644) — 10 票 / 10 评论 / 2025-06-01 
+- [Training AutoGluon with MAP@3](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582846) — 10 票 / 12 评论 / 2025-06-03 
+- [Mean Average Precision at 3 (MAP\@3)](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582552) — 10 票 / 9 评论 / 2025-06-01 
+- [[COMPLETE] FYI - LB will return to normal soon](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585882) — 10 票 / 2 评论 / 2025-06-23 
+- [Consistently improving score with a simple feature](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585468) — 10 票 / 18 评论 / 2025-06-20 
+- [How to train AutoGluon with additional data](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583348) — 9 票 / 5 评论 / 2025-06-06 
+- [The only two features that improved my score](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583765) — 9 票 / 11 评论 / 2025-06-09 
+- [10th Place Solution - ~350 oofs => 9 hillclimbing versions => Final Autogluon ensemble](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587739) — 9 票 / 9 评论 / 2025-07-02 **write-up?**
+- [Multi-Output Regression + Euclidean Matching](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585987) — 9 票 / 15 评论 / 2025-06-24 
+- [What is your CV/LB?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583614) — 8 票 / 25 评论 / 2025-06-08 
+- [Has anyone considered solving this problem using recommender system?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/586376) — 8 票 / 5 评论 / 2025-06-26 
+- [A very easy way to introduce variety into an ensemble?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585819) — 8 票 / 22 评论 / 2025-06-23 
+- [From Zero to 30th: A Beginner's Journey with GenAI & the Kaggle Community](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587551) — 7 票 / 4 评论 / 2025-07-01 
+- [Public: 3rd -> Private: 22nd | Trust Your CV](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587476) — 7 票 / 3 评论 / 2025-07-01 
+- [Logistic Regression Training Times](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583691) — 7 票 / 10 评论 / 2025-06-08 
+- [🚨 Can a Constant Feature Improve Model Performance? Surprisingly, Yes. 🤯](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585554) — 7 票 / 22 评论 / 2025-06-21 
+- [Should We Be More Careful with Feature Engineering? XGBoost and SHAP](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582605) — 6 票 / 1 评论 / 2025-06-01 
+- [[17th] Summary of Selection from Various Hill Climbing (Public 10th → Private 17th)](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587513) — 5 票 / 4 评论 / 2025-07-01 
+- [CV score decreasing ](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583689) — 5 票 / 5 评论 / 2025-06-08 
+- [The typo on Temparature](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582586) — 5 票 / 2 评论 / 2025-06-01 
+- [Slow Training Times](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582729) — 5 票 / 9 评论 / 2025-06-02 
+- [Forward Selection, Don't waste time on FE](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583748) — 5 票 / 14 评论 / 2025-06-09 
+- [target encoding and cross validation ](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583389) — 5 票 / 18 评论 / 2025-06-06 
+- [The optimal parameters for XGBoost 🔥](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/584841) — 5 票 / 5 评论 / 2025-06-16 
+- [How to introduce diversity in XGBoost hyperparameters for model ensembling?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/584573) — 5 票 / 11 评论 / 2025-06-14 
+- [What is the most important feature in your model?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/584760) — 5 票 / 8 评论 / 2025-06-15 
+- [MAP3 on NN : Callbacks](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582840) — 5 票 / 0 评论 / 2025-06-03 
+- [Ensemble problem](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585529) — 5 票 / 9 评论 / 2025-06-21 
+- [How to use Original Data correctly!](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585207) — 5 票 / 14 评论 / 2025-06-18 
+- [quick and easy notes on covering everything i learned from forum and increased score](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585503) — 5 票 / 6 评论 / 2025-06-20 
+- [Interactive EDA in Tableau Public](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585460) — 5 票 / 5 评论 / 2025-06-20 
+- [Hill climbing overfitting ](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585125) — 4 票 / 1 评论 / 2025-06-18 
+- [Column Name Alert: "Temparature" Spelling Issue in Dataset](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583043) — 4 票 / 1 评论 / 2025-06-04 
+- [Common misunderstanding of MAP@3, Is my score any better than random?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583138) — 4 票 / 0 评论 / 2025-06-05 
+- [When Random Features Beat Real Ones (Mutual Information Baseline Test](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/586270) — 4 票 / 4 评论 / 2025-06-25 
+- [Stacking Ensemble](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583688) — 4 票 / 4 评论 / 2025-06-08 
+- [Generating weights for prediction assembling.](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585295) — 4 票 / 7 评论 / 2025-06-19 
+- [Ensemble Ideas for MAP@3](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582652) — 4 票 / 2 评论 / 2025-06-01 
+- [Public blending notebooks with different versions](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583187) — 4 票 / 4 评论 / 2025-06-05 
+- [Low mutual relationships between columns](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582971) — 4 票 / 2 评论 / 2025-06-04 
+- [23 place solution | Using Ridge](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/587461) — 4 票 / 2 评论 / 2025-07-01 **write-up?**
+- [Custom Metrics for TabNetClassifier](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/585147) — 3 票 / 4 评论 / 2025-06-18 
+- [Feature Engineering Ideas](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583667) — 3 票 / 4 评论 / 2025-06-08 
+- [Scoring Metric MAP@3 or MAP@5?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582638) — 3 票 / 5 评论 / 2025-06-01 
+- [How do I ensemble with this metric?](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582629) — 3 票 / 3 评论 / 2025-06-01 
+- [Pairwise logistic loss](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/582656) — 3 票 / 0 评论 / 2025-06-01 
+- [On "Soil Type"](https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583690) — 3 票 / 0 评论 / 2025-06-08 

@@ -1,0 +1,129 @@
+# https://www.kaggle.com/competitions/playground-series-s6e7/discussion/732394
+
+Topic #732394: 29th Place Solution: FT-Transformer + Exact-Value Target Encoding 
+  Author: Hawksartelier
+  Posted: 2026-08-02 17:44:37.793000
+  Votes: 2  Comments: 1
+
+29th Place: FT-Transformer + Exact-Value Target Encoding, and a +643-place case for trusting your CV
+
+TL;DR — Public 0.95034 (rank ~672) → Private 0.95070 (29th / 3,356). No public-LB
+chasing: both final submissions were chosen weeks in advance by nested cross-validation, and in
+hindsight the CV pick was our best private score out of all 14 submissions. The model that did it
+is a single FT-Transformer with fold-local exact-value target encoding — plus a long list of
+things that did NOT work, which I think is the more useful half of this post.
+
+The two finals
+
+
+
+
+final
+what it is
+OOF (nested BA)
+public
+private
+
+
+
+
+v31
+4-family stacked ensemble (LGBM/XGB/CatBoost/MLP legs, cross-fitted meta)
+0.950579
+0.95019
+0.95048
+
+
+v35
+FT-Transformer + exact-value TE, single member
+~0.95067
+0.95034
+0.95070
+
+
+
+
+The public board had v35 at ~rank 672. The private board put it 29th. The gap between our public
+and private ranks was not luck: with fit = 39.8k and unhealthy = 57.7k rows out of 690k,
+public-LB movement of ±0.001–0.002 is binomial noise on the minority classes. Masaya Kawamata's
+"Trust your CV" thread made that case quantitatively mid-competition, and it was the compass for
+our endgame — we stopped submitting entirely two weeks before the deadline once CV said nothing
+more was left.
+
+The model (v35)
+
+A clean reproduction of @masayakawamata's FT-Transformer-v2 recipe, rebuilt from the notebook's
+code rather than its artifacts (all credit for the architecture to him — his own paired ablation
+showed the gain comes from the encoding, +0.0012, not from the transformer itself, +0.00003):
+
+
+
+Exact-value target encoding of all 13 columns — every distinct numeric value gets its own
+target statistic. The health-risk data is quantized enough that exact values carry signal that
+binned or smoothed TEs blur away.
+
+Fitted inside every outer training fold — the TE tables never see the fold they encode.
+This is the difference between a real 0.9507 and a leaky 0.96 that collapses on private.
+
+Single ensemble member (n_ens=1): four members cost 4x GPU time for noise-level gains.
+
+Fixed 16-epoch budget, no early stopping, PLR-lite numeric embeddings, prior-correction of the
+predicted class distribution.
+
+
+What did NOT work (32 falsified levers, the honest ledger)
+
+Everything below was implemented, cross-validated with the same nested protocol, and rejected —
+posting these so you don't have to rediscover them:
+
+
+
+TabPFN v2 as an ensemble leg — error correlation 0.914 with the GBDT legs (we expected
+~0.2 from a "different prior"); the stacker assigned it zero weight. Foundation-model
+diversity was an illusion here.
+
+Row-segment specialists (e.g. a dedicated model for rows with missing sleep features) —
+no segment ever beat the global model on its own segment.
+
+Corrected-KNN density features — public 0.94987, worse than either final.
+
+Greedy hill-climb over all saved legs — converged back to v31's weights; ensembling was
+saturated months of levers ago.
+
+Ratio/product feature engineering — duplicated what the exact-value TEs already encode.
+
+Class-multiplier micro-search beyond a simple prior^beta correction — pure CV noise.
+
+
+The meta-lesson we took from a previous Playground (s6e6, where a public-anchor final cost us
+~335 private ranks): the public LB is a small-sample estimate dominated by minority-class noise,
+and every point of contact you give it corrupts your selection. This time the discipline paid.
+
+The gap to the top, quantified
+
+2nd place (0.95085, +0.00015 over us — congrats @kava1, great writeup) used the same best base
+family (Kawamata's FTT), but blended 18 diverse base predictors with class-specific simplex
+weights (an 18×3 weight matrix optimized by SLSQP on smooth OOF LogLoss, then Nelder-Mead class
+multipliers for balanced accuracy). His ensemble's OOF (0.950737) beat our v31's (0.950579) by
+almost exactly his private margin. The lesson repeats across Playgrounds: past a strong single
+model, the remaining edge is breadth of genuinely diverse bases — not deeper ensembling of one
+lineage (which is exactly the lever our hill-climb correctly reported as empty).
+
+One practical GPU note
+
+Kaggle still assigns P100s (sm_60), and the preinstalled PyTorch wheel has no sm_60 kernels —
+your first CUDA op dies with no kernel image is available. The notebook detects the GPU and
+conditionally installs the cu126 wheel on P100 only (never blind-reinstall torch — the
+torchvision/numpy cascade is worse than the disease). Pinning the T4 via kernel metadata
+("machine_shape": "NvidiaTeslaT4") avoids the issue entirely for API pushes.
+
+Training notebook (full reproduction, runs end-to-end on Kaggle GPU): https://www.kaggle.com/code/satyapb2002/29th-place-ftt-exact-value-target-encoding
+
+Thanks to @masayakawamata for the architecture and the CV-trust analysis, @kava1 for the 2nd-place
+writeup, and everyone who shared baselines. Questions welcome — happy to share any of the
+falsified-lever details.
+
+Comments:
+├─ Mohit (2026-08-02 19:23:35.823000) [+0]
+│  woahh i didnt exactly understand this 
+│  will look into it

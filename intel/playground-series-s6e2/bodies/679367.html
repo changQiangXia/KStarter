@@ -1,0 +1,76 @@
+<p>Congrats to all the winners! This was a fun competition because the data was different than past Kaggle playground competitions. I noticed that XGB did best with <code>max_depth = 2</code> implying there was "minimal to no" interaction between features (which is different than previous Kaggle playground competitions).</p>
+<p>In this competition, I asked ChatGPT to write all my code! Although ChatGPT couldn't suggest ideas to find a top solution on its own, I asked it to create specific models with specific feature engineering and it wrote code amazingly! It always exceeded my expectations! Together ChatGPT and I achieved top100 finish!</p>
+<h1>Trust CV</h1>
+<p>In this competition, it was important to Trust CV. In the middle of the competition, high scoring public notebooks began to overfit the public LB. Therefore we needed to ignore these public notebooks and focus on maximizing our local CV score.</p>
+<h1>Ensemble</h1>
+<p>My final solution is an (equal weighted) ensemble of 6 models</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.kaggle.com/code/cdeotte/logistic-regression-w-target-encoding" target="_blank">Logistic Regression v1</a></td>
+<td>0.95567</td>
+<td>0.95383</td>
+<td>0.95517</td>
+</tr>
+<tr>
+<td>Logistic Regression v2</td>
+<td>0.95556</td>
+<td>0.95362</td>
+<td>0.95488</td>
+</tr>
+<tr>
+<td>PyTorch MLP</td>
+<td>0.95573</td>
+<td>0.95389</td>
+<td>0.95526</td>
+</tr>
+<tr>
+<td>CatBoost</td>
+<td>0.95576</td>
+<td>0.95391</td>
+<td>0.95532</td>
+</tr>
+<tr>
+<td>RealMLP v1</td>
+<td>0.95572</td>
+<td>0.95393</td>
+<td>0.95529</td>
+</tr>
+<tr>
+<td>RealMLP v2</td>
+<td>0.95567</td>
+<td>0.95392</td>
+<td>0.95527</td>
+</tr>
+</tbody>
+</table>
+<h1>Final Submission - CV 0.95583</h1>
+<p>By converting predictions to ranks with <code>scipy.stats.rankdata</code> and then equal averaging. My final submission achieved <code>CV 0.95583</code> and <code>Public LB 0.95396</code> and <code>Private LB 0.95532</code>.</p>
+<h1>Logistic Regression - Nvidia cuML</h1>
+<p>My favorite model was my logistic regression models (code shared <a href="https://www.kaggle.com/code/cdeotte/logistic-regression-w-target-encoding" target="_blank">here</a>). There are two versions. In version 1, we create every pair of features and target encode these new columns. For pairs, this is 78 features. TE is probabilities, so next we convert these columns to log odds (i.e. logits). Then from each column, we create 3 columns <code>[x, x^2, x^3]</code>. Lastly we fit <code>Nvidia cuML</code> logistic regression (with column standarization) on these 234 features. For version 2, we create every triplet of features and target encode. Then convert to logits and make x, x^2, x^3. This is 858 features. Lastly we fit <code>Nvidia cuML</code> logistic regression. Below we show a diagram without pairs nor triplets and without x, x^2, x^3:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Feb-2026/stack.png" alt=""></p>
+<p>This model was important and powerful in my final ensemble because the features (in this competition) had limited interaction with each other. Using logistic regression allowed us to control how much interaction we wanted our model to utilize. Furthermore, this model was diverse from all published notebooks (and ensembled well with public notebooks).</p>
+<h1>PyTorch MLP - Nvidia GPU</h1>
+<p>My second favorite model was my custom PyTorch MLP. For each column, we treat it as categorical and create embeddings in our MLP. We also merge the original dataset with <code>tmp = orig.groupby(COL)[TARGET].agg(STATS)</code>. For <code>STATS</code>, we use <code>mean, median, std, skew, count</code>. We treat these stats as categorical and create embeddings for them too. We concatenate all the embeddings, then feed into layer of dimension 512, then 256, then a single output neuron with smoothed BCE loss.</p>
+<h1>CatBoost and RealMLP - Nvidia GPU</h1>
+<p>For my CatBoost and RealMLP models, we create them inspired by public notebooks</p>
+<ul>
+<li>CatBoost inspired from <a href="https://www.kaggle.com/kospintr" target="_blank">@kospintr</a> notebook <a href="https://www.kaggle.com/code/kospintr/heart-xgb-lightgbm-catb-baseline-k-fold" target="_blank">here</a></li>
+<li>RealMLP inspired from <a href="https://www.kaggle.com/omidbaghchehsaraei" target="_blank">@omidbaghchehsaraei</a> notebook <a href="https://www.kaggle.com/code/omidbaghchehsaraei/the-best-solo-model-so-far-realmlp-lb-0-95397" target="_blank">here</a></li>
+<li>RealMLPv2 using features inspired from XGB <a href="https://www.kaggle.com/include4eto" target="_blank">@include4eto</a> notebook <a href="https://www.kaggle.com/code/include4eto/single-xgb-cudf-pseudo-labels-cv-0-95573" target="_blank">here</a></li>
+</ul>
+<h1>UPDATE - Post Comp Analysis</h1>
+<p>It is helpful to review our solutions after a competition ends and ask, "How could I have done better?". Personally, I was surprised that my strong ensemble CV score did not perform better on the private LB. </p>
+<p>I have reviewed my models and I believe that my <code>Logistic Regression v2</code> model's CV score is leaky and over optimistic. In this model, after creating all triple pairs of features, I compute target encoding outside the KFolds instead of nested inside the KFolds. Often logistic regression models do not overfit, but with this model we have 858 features after creating all triples and then using x, x^2, x^3. With so many features, the possibility of overfitting becomes real and we should be careful to perform target encoding correctly nested inside our KFold.</p>
+<p>When I remove this model from my ensemble and just use an equal weighted ensemble of the remaining 5 models, the CV score is 0.95581 and the private LB is 0.95534 top20 finish.</p>
+<h1>Solution Code</h1>
+<p>I published my <code>Logistic Regression v1</code> code <a href="https://www.kaggle.com/code/cdeotte/logistic-regression-w-target-encoding" target="_blank">here</a></p>
+<h1>Enjoy!</h1>

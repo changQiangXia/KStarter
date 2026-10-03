@@ -1,0 +1,248 @@
+<h1>RECOD.AI - LUC Scientific Image Forgery Detection - 29th Place Solution</h1>
+<h2>Dataset</h2>
+<p>All samples from the competition dataset are utilized: the training data containing authentic and forged scientific figures with pixel-level instance masks, and the supplemental data of additional forged samples.</p>
+<p>The <a href="https://zenodo.org/records/15095089" target="_blank">RSIID (Recod.ai Scientific Image Integrity Dataset)</a> is used as external training data. It is a benchmark dataset of 39,423 synthetically tampered scientific figures derived from 2,923 pristine images.</p>
+<p>From RSIID, only the copy-move duplication subset is used, at both simple and compound levels.</p>
+<p><strong>Simple copy-move</strong> cases come with a paired pristine image (<code>figure_pristine.png</code>) that is the original figure before the forgery was applied. The ground-truth mask is computed as the pixel-wise union of the forgery mask and the pristine mask, covering both the source and destination copy regions. Only the forged image is added to training; the dataset also includes standalone authentic figures from a separate pristine split.</p>
+<pre><code># union of forgery and pristine masks covers both source and destination regions
+mask = np.maximum(forgery_mask, pristine_mask)
+mask_objects = np.unique(mask)[1:]  # skip background
+mask = np.stack([(mask == i).astype(np.uint8) for i in mask_objects], axis=0)
+</code></pre>
+<p><strong>Compound copy-move</strong> cases require counterfactual reconstruction to generate a paired authentic sample, and come in two sub-types:</p>
+<ul>
+<li><strong>Intra-panel</strong>: Each case directory contains a clean version of the forged panel (<code>panel_pristine.png</code>). A pristine image is reconstructed by locating the forged region bounding box from <code>annotations.json</code>, resizing <code>panel_pristine.png</code> to match it, and compositing it back into the forged figure:</li>
+</ul>
+<pre><code>pristine_panel = cv2.resize(pristine_panel, (w, h), interpolation=cv2.INTER_LINEAR)
+pristine_image = forgery_image.copy()
+pristine_image[y0:y1, x0:x1] = pristine_panel
+</code></pre>
+<ul>
+<li><strong>Inter-panel</strong>: No pre-existing clean panel is available. A replacement image is sampled from the RSIID source image pool (<code>datasetSrc.csv</code>), matched to the same <code>subset_tag</code> as the forged panel and excluding images already present in the figure, then resized and composited into the forgery region:</li>
+</ul>
+<pre><code># sample a same-category image that was not already used in the figure
+candidate_ids = df_rsiid_src.loc[
+    (df_rsiid_src['subset_tag'] == forgery_image_subset_tag) &amp;
+    ~df_rsiid_src['dataPath'].isin(used_image_ids),
+    'dataPath'
+]
+replace_image = cv2.imread(rsiid_src_directory / np.random.choice(candidate_ids))
+replace_image = cv2.resize(replace_image, (w, h), interpolation=cv2.INTER_LINEAR)
+pristine_image = forgery_image.copy()
+pristine_image[y0:y1, x0:x1] = replace_image
+</code></pre>
+<p>In both compound sub-types every forged image produces a paired authentic counterpart with the same image ID. All sources are merged into a single dataset:</p>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Authentic</th>
+<th>Forged</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition train</td>
+<td>2,377</td>
+<td>2,751</td>
+<td>5,128</td>
+</tr>
+<tr>
+<td>Competition supplemental</td>
+<td>—</td>
+<td>48</td>
+<td>48</td>
+</tr>
+<tr>
+<td>RSIID simple copy-move</td>
+<td>2,923</td>
+<td>5,390</td>
+<td>8,313</td>
+</tr>
+<tr>
+<td>RSIID compound copy-move</td>
+<td>19,000</td>
+<td>19,000</td>
+<td>38,000</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>24,300</strong></td>
+<td><strong>27,189</strong></td>
+<td><strong>51,489</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>Validation</h2>
+<p>The dataset is split into 5 folds using <code>StratifiedGroupKFold</code>, stratified on the joint combination of class and dataset source so that each fold preserves the original distribution across all dataset-class groups. Samples are grouped by <code>image_id</code>, which ensures that forged/authentic counterfactual pairs from the compound copy-move reconstruction always land in the same fold and never leak across the train/validation boundary.</p>
+<h2>Model</h2>
+<p>The segmentation model is <code>DinoV2Segmenter</code>, a <code>facebook/dinov2-base</code> Vision Transformer encoder paired with a lightweight convolutional decoder. The encoder is fully frozen except for the last 5 transformer blocks and the final LayerNorm; patch embeddings remain frozen throughout.</p>
+<p>At inference, the encoder's output token sequence is stripped of the CLS token, reshaped into a 2D spatial feature map, and passed to <code>DinoDecoder</code>, which upsamples it back to the input resolution:</p>
+<pre><code>def forward(self, x: torch.Tensor) -&gt; torch.Tensor:
+    H, W = x.shape[-2:]
+    out = self.encoder(pixel_values=x).last_hidden_state  # (B, N+1, 768)
+    feature_map = self._tokens_to_map(out)                # (B, 768, H/14, W/14)
+    return self.decoder(feature_map, (H, W))              # (B, 1, H, W)
+
+def _tokens_to_map(self, tokens: torch.Tensor) -&gt; torch.Tensor:
+    B, N, C = tokens.shape
+    num_reg = int(getattr(self.encoder.config, 'num_register_tokens', 0) or 0)
+    patch_tokens = tokens[:, 1 + num_reg:, :]  # drop CLS and register tokens
+    s = int(math.isqrt(patch_tokens.shape[1]))
+    return patch_tokens.permute(0, 2, 1).reshape(B, C, s, s)
+</code></pre>
+<p><code>DinoDecoder</code> is a three-block convolutional head that halves the channel width at each stage and inserts a 2× bilinear upsample between the first two blocks. A final interpolation brings the output to exactly the input image size:</p>
+<pre><code>class DinoDecoder(nn.Module):
+    def __init__(self, in_ch, mid_ch=256, out_ch=1, dropout=0.1):
+        self.block1 = nn.Sequential(Conv2d(in_ch,       mid_ch,     3, padding=1), ReLU(), Dropout2d(dropout))
+        self.block2 = nn.Sequential(Conv2d(mid_ch,      mid_ch//2,  3, padding=1), ReLU(), Dropout2d(dropout))
+        self.block3 = nn.Sequential(Conv2d(mid_ch//2,   mid_ch//4,  3, padding=1), ReLU())
+        self.out_conv = Conv2d(mid_ch//4, out_ch, kernel_size=1)
+
+    def forward(self, feature_map, out_size):
+        x = self.block1(feature_map)
+        x = F.interpolate(x, scale_factor=2.0, mode='bilinear', align_corners=False)
+        x = self.block2(x)
+        x = F.interpolate(x, scale_factor=2.0, mode='bilinear', align_corners=False)
+        x = self.block3(x)
+        x = self.out_conv(x)
+        return F.interpolate(x, size=out_size, mode='bilinear', align_corners=False)
+</code></pre>
+<h2>Training</h2>
+<p>AdamW is used with differential learning rates: the decoder is trained at <code>lr = 1e-3</code> while the unfrozen encoder blocks receive a 10× smaller rate <code>lr_encoder = 1e-4</code>, preventing the pretrained representations from being overwritten too quickly. Both parameter groups share <code>weight_decay = 1e-3</code>.</p>
+<p><code>BCEWithLogitsLoss</code> is used for binary pixel-level supervision. Training runs with Automatic Mixed Precision (<code>bfloat16</code>) and gradient norm clipping at 1.0. Models are trained for 50 epochs with a batch size of 64, and checkpoints are saved whenever validation loss or mean image score improves so both type of "best" model can be explored.</p>
+<p>Training images are resized to 512×512 and augmented with transpose, vertical flip, and horizontal flip (each at p=0.5). Light color jitter is applied with low probability: random brightness/contrast (±0.15, p=0.1), hue/saturation/value shift (±5, p=0.1), and JPEG compression (quality 95–100, p=0.1) to simulate mild compression artifacts present in real scientific figures.</p>
+<table>
+<thead>
+<tr>
+<th>Transform</th>
+<th>Parameters</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transpose</td>
+<td>—</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>Vertical flip</td>
+<td>—</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>Horizontal flip</td>
+<td>—</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>RandomBrightnessContrast</td>
+<td>limit ±0.15</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>HueSaturationValue</td>
+<td>shift ±5</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>ImageCompression</td>
+<td>JPEG, quality 95–100</td>
+<td>0.1</td>
+</tr>
+</tbody>
+</table>
+<h2>Inference</h2>
+<p>At test-time, 8 augmented versions of each image are averaged: 4 rotations (0°, 90°, 180°, 270°) × 2 horizontal flip states. Each augmented prediction is inverted back to the original orientation before averaging.</p>
+<h2>Post-processing</h2>
+<p>Each image is scored independently. Authentic images receive 1.0 for a correct <code>"authentic"</code> prediction and 0.0 for any mask. Forged images are scored by the optimal instance-level F1 computed via the Hungarian algorithm matching predicted masks to ground-truth masks. Predicting more mask instances than the ground truth carries a penalty:</p>
+<pre><code>excess_predictions_penalty = len(gt_masks) / max(len(pred_masks), len(gt_masks))
+score = np.mean(f1_score_matrix[row_ind, col_ind]) * excess_predictions_penalty
+</code></pre>
+<p>The naive baseline of predicting everything as <code>"authentic"</code> achieves a score equal to the fraction of authentic images in the dataset. Any useful submission must exceed this.</p>
+<p>These two properties; the cost of a false positive and the penalty for excess mask instances, directly shape every post-processing decision: the forgery/authentic threshold must be conservative enough to avoid tagging authentic images as forged, and when a forgery is detected the entire probability map is merged into a single mask rather than split into separate instances to avoid the excess predictions penalty.</p>
+<p>OOF probability maps are resized back to the original image resolution with cubic interpolation. A two-step rule decides the final prediction for each image: if the 99.9th percentile (<code>q999</code>) of the probability map is at least 0.95, the image is predicted as forged and the mask is thresholded at 0.3; otherwise the image is predicted as <code>"authentic"</code>.</p>
+<pre><code>if np.quantile(probability_map, 0.999) &gt;= 0.95:
+    probability_map = cv2.resize(probability_map, (orig_w, orig_h), interpolation=cv2.INTER_CUBIC)
+    mask = (probability_map &gt; THRESHOLD).astype(np.uint8)
+    prediction = rle_encode([mask])
+else:
+    prediction = 'authentic'
+</code></pre>
+<p>The intuition is that a copy-move forgery creates a localized region the model responds to with near-certain confidence. Even if that region is small, it drives the extreme tail of the probability distribution sharply upward. On authentic images the model stays uncertain across the board, so the tail never breaks above the threshold.</p>
+<p>The <code>q999</code> gate is intentionally conservative: genuinely forged images produce a tight cluster of very high-confidence pixels that pushes the extreme tail well above 0.95, while authentic images stay flat near zero throughout. The thresholded map is always submitted as a single mask instance. Predicting multiple instances when the ground truth has fewer triggers the excess predictions penalty and scales the score down by <code>len(gt_masks) / len(pred_masks)</code>, so submitting one merged mask is safer than attempting to separate individual regions.</p>
+<h2>Submission Selection</h2>
+<p>This function computes the same set of metrics globally and separately for each dataset split. For each split it reports: the mean image score, the baseline score (fraction of authentic images, what predicting everything as <code>"authentic"</code> would achieve), lift over that baseline, TP/FP/TN/FN counts, precision, recall, accuracy, and the two impact terms <code>tp_impact</code> and <code>fp_impact</code>.</p>
+<pre><code>def get_detection_stats(df: pd.DataFrame) -&gt; dict[str, int | float]:
+
+    """
+    Calculates detection statistics globally and per dataset.
+
+    Parameters
+    ----------
+    df: pd.DataFrame
+        DataFrame with 'target', 'prediction', 'score', and optionally 'dataset'.
+
+    Returns
+    -------
+    dict[str, int | float]
+        A dictionary containing global stats and per-dataset stats.
+    """
+
+    def _compute_metrics(sub_df: pd.DataFrame) -&gt; dict[str, int | float]:
+
+        is_forged_gt = sub_df['target'] != 'authentic'
+        has_mask_pred = sub_df['prediction'] != 'authentic'
+
+        tp_mask = (is_forged_gt) &amp; (has_mask_pred)
+        fp_mask = (~is_forged_gt) &amp; (has_mask_pred)
+        tn_mask = (~is_forged_gt) &amp; (~has_mask_pred)
+        fn_mask = (is_forged_gt) &amp; (~has_mask_pred)
+
+        tp = tp_mask.sum()
+        fp = fp_mask.sum()
+        tn = tn_mask.sum()
+        fn = fn_mask.sum()
+
+        total = len(sub_df)
+
+        total_tp_gain = sub_df.loc[tp_mask, 'score'].sum()
+        total_fp_loss = float(fp) * 1.0
+        fp_impact = total_fp_loss / total
+        tp_impact = total_tp_gain / total
+
+        current_mean_score = float(sub_df['score'].mean()) if not sub_df.empty else 0.0
+        count_authentic_gt = int((~is_forged_gt).sum())
+        baseline_score = float(count_authentic_gt / total)
+        lift = current_mean_score - baseline_score
+
+        return {
+            'total_samples': int(total),
+            'accuracy': float((tp + tn) / total) if total &gt; 0 else 0.0,
+            'precision': float(tp / (tp + fp)) if (tp + fp) &gt; 0 else 0.0,
+            'recall': float(tp / (tp + fn)) if (tp + fn) &gt; 0 else 0.0,
+            'count_forged_correct (TP)': int(tp),
+            'count_authentic_correct (TN)': int(tn),
+            'count_false_positives (FP)': int(fp),
+            'count_missed_forgeries (FN)': int(fn),
+            'tp_impact': float(tp_impact),
+            'fp_impact': float(fp_impact),
+            'mean_image_score': current_mean_score,
+            'baseline_score': baseline_score,
+            'lift_over_baseline': lift,
+        }
+
+    stats = _compute_metrics(df)
+    if 'dataset' in df.columns:
+        for ds_name, ds_df in df.groupby('dataset'):
+            ds_stats = _compute_metrics(ds_df)
+            for key, value in ds_stats.items():
+                stats[f'{ds_name}_{key}'] = value
+
+    return stats
+</code></pre>
+<p>Each dataset split has a different authentic/forged ratio, so the baseline score differs across splits and a threshold that improves the global score can still hurt an individual split if it generates too many false positives there. Tracking lift per split catches this: a submission is only considered safe if every split shows a positive lift, not just the aggregate.</p>
+<p>Within each split, <code>tp_impact</code> and <code>fp_impact</code> make the cost/benefit of the threshold explicit. <code>tp_impact</code> measures how much the correctly detected forgeries contribute to the score; <code>fp_impact</code> measures how much is being lost to false positives since each FP on an authentic image converts a guaranteed 1.0 into 0.0. The selected threshold is the most conservative one where every dataset split still shows a positive lift, meaning the TP gain outweighs the FP loss in each split independently rather than the threshold that maximises raw TP recall.</p>
+<p>This framework made submission selection straightforward: rather than guessing at a threshold and hoping it generalised, the per-split breakdown showed exactly where false positives were appearing and whether the lift was real or an artefact of one dominant split. The final submission was chosen as the most conservative configuration that demonstrated consistent positive lift across all splits with minimal fp_impact. The exact CV and public leaderboard scores were not recorded at the time and are no longer available.</p>

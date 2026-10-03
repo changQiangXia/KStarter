@@ -1,0 +1,104 @@
+# https://www.kaggle.com/competitions/playground-series-s5e12/discussion/651787
+
+Topic #651787: For the (recovering) blind blending addicts
+  Author: Tilii
+  Posted: 2025-12-05 08:12:32.688000
+  Votes: 38  Comments: 18
+
+We spilled a good deal of virtual ink in the past few months discussing the virtues of proper ensembling, and the reasons not to do blind blending. There are several discussions on that topic that are easy to find, and I will point you to one I wrote a month ago simply to shorten my introduction. The details are in there, but the gist is this: ensembling is fundamental, while blind blending is detrimental!
+
+Yet there are people who do a blind blending of a sort even when they have OOF files and find the blending weights properly. By that I mean that many Kagglers simply throw all the models together and let the hill climbing, logistic regression or ridge decide how much each of those models will contribute. There is nothing wrong with this in principle, as in properly set ensembling pipelines models that bring little diversity should get small or even zero weights. But is there a more predictable way to do this?
+
+I am glad you asked, and the answer is yes. I will again point to a thread that will introduce model diversity and the methodology I use here. In a nutshell, I compare the models by their cumulative distribution functions (CDFs) and use Kolmogorov–Smirnov test to gauge how different two CDFs are. So there is a KS-test number that will tell us how different the two models are (higher KS-test means more divergent), plus there will be two CDF plots for each comparison.
+
+First we do an XGBoost model versus a CatBoost model. They were both trained on identical data - a raw train dataset where numericals and categoricals are treated accordingly - and have similar CV scores (XGB 0.72846, CatB 0.72816). Let's see their CDFs.
+
+
+
+What we look for here is how close those individual lines are to the blue line, which would be a perfect prediction with ~40% zeros and ~60% ones. The models overlap almost perfectly, which is not surprising given the same data and two generally similar model types. If you zoom really close, that green line is in some parts just a bit closer to the blue line, which is to be expected because XGB model has a slightly higher score. The KS-stat is low, which confirms that these two models are not very different. From all of this we can predict that there would be relatively small benefit from ensembling these models, and that turns out to be true.
+
+   
+    
+     
+
+
+      
+
+    
+ 
+
+[   ]  [  ]
+
+          
+
+
+This simple two-model ensemble gives us a 0.00016 boost compared to the best individual model, which is nice.
+
+Let's try a different pair of models. Now we have an XGB model that was trained on an extended train data (target encoding of numerical variables, feature interactions) and has CV: 0.73097. We compare that to a RealMLP model working on a raw train dataset where numericals and categoricals are treated accordingly, but nothing fancy beyond that (CV: 0.72846). Notice two things here: 1) we are matching a GBM and a NN model, which is good; 2) we have a significantly better XGB model, and blind blenders will often tell you that only models of similar scores will blend well.
+
+
+
+Notice that the two models are clearly separated in this plot: RealMLP is closer to the blue line on the left side, and XGB is closer to the blue line on the right side. In simple terms, RealMLP is better at predicting zeros, while XGB is better at predicting ones. This is exactly what we want: two models that have different strengths, because they will complement each other. Note also that the KS-stat value is much higher than in the first plot, which would lead us to predict that these models will ensemble better. Is that really true?
+
+   
+    
+     
+
+
+      
+
+    
+ 
+
+[   ]  [  ]
+
+          
+
+
+This ensemble produces a 0.00069 boost compared to the XGB model alone. Notice also that a seemingly inferior model got almost a 40% weight. So next time when blind blenders tell you that only models with similar scores blend well, or that model weights should be assigned in proportion to CV scores, please remember that you have a formal proof here that neither one of those statements is necessarily true.
+
+Comments:
+├─ Martin von Hodenberg (2025-12-22 22:23:44.673000) [+1]
+│  How long did it take you to train RealMLP on this dataset? For me (training on GPU) it's pretty slow. Thanks!
+  ├─ Tilii (2025-12-22 23:12:20.730000) [+0]
+  │  About an hour for 10 folds, but this was off Kaggle using A40/A100 GPUs.
+├─ Gerald Schwartz (2025-12-05 13:40:09.937000) [+1]
+│  I have one thing to say. I got to  10th place last month using your statistical method. There is no special thing to do with the models.
+│  I used models with a ks-stat greater than 0.01.
+  ├─ Tilii (2025-12-05 17:33:01.403000) [+1]
+  │  I appreciate your endorsement. Even without doing it the way I outlined here, there are algorithms that will do this type of model selection based on the diversity they bring to the ensemble rather...
+    ├─ Gerald Schwartz (2025-12-05 18:10:13.570000) [+1]
+    │  I believe before ensembling, making sure your models are mostly divergent enhances these other algorithms.
+    │  I would also like to add Lasso as one to try.
+    ├─ GurSimran (2025-12-26 17:34:58.203000) [+0]
+    │  Have you try other method
+├─ Laureano Arcanio (2025-12-05 11:44:50.773000) [+1]
+│  Very insightful post.
+│  
+│  Have you studied how feature engineering overlap impacts KS-diversity more strongly than model architecture differences?
+  ├─ Tilii (2025-12-05 17:56:56.317000) [+1]
+  │  It would be an overstatement to say that I studied it, but I have made enough composite models to have empirical understanding of what works and why. That said, just in the last competition I had s...
+    ├─ Laureano Arcanio (2025-12-09 12:19:09.743000) [+1]
+    │  Thanks for sharing your thoughts. Its good to know FE isn't for everyone. As I was trying to understand Mahog notebook and wondering how he figured out all those combos and picky options. 
+    │  Always l...
+├─ MasterShomya (2025-12-05 20:58:50.883000) [+2]
+│  So I've been using KS test to check model diversity and it's been pretty helpful still I rely on correlation and my own intuition too. I've already made 7 models - 6 of them are different enough to...
+  ├─ Tilii (2025-12-06 00:28:52.030000) [+2]
+  │  Since AUC is our metric, Ridge regression is generally acceptable (it wouldn't be in for any other metric in a classification competition). Still, if you want to ensemble using a simple model, I re...
+├─ Mahog (2025-12-05 12:37:43.760000) [+2]
+│  Weird, how come your models ensemble so well? Do you do any preprocessing of oofs before passing them to HC?
+  ├─ Tilii (2025-12-05 17:41:34.757000) [+2]
+  │  There is no mystery, and I have written about it many times - including this thread. Sometimes I think that I only write about ensembling and blind blending 🤔 My first model is never a GBM, nor are...
+  ├─ Tilii (2025-12-05 18:05:44.057000) [+1]
+  │  Weird, how come your models ensemble so well?
+  │  
+  │  
+  │  I am adding this separately rather than to edit the post, as this point may have been lost in what I wrote already. I think the reason why I get such...
+    ├─ Mahog (2025-12-06 01:21:20.943000) [+1]
+    │  Hmm, my strongest single model is stronger than the 0.73097 model you showed. I'm going to try on a weaker model
+├─ yunsuxiaozi (2025-12-05 11:51:10.117000) [+0]
+│  To be honest, based solely on the results, blind mixing is basically the optimal solution when the amount of test data is sufficient, especially for datasets where the patterns synthesized by neura...
+  ├─ Tilii (2025-12-05 17:26:08.997000) [+2]
+  │  I don't think blind blending is close to an optimal solution, but it might be close to an optimum when there are many high quality public models available. When that's the case, it is less importan...
+  ├─ Ern711 (2025-12-06 17:51:42.250000) [+1]
+  │  @yunsuxiaozi Based on which results, exactly? If anything, the default expectation should be that blind blending is not optimal, except in very narrow or specific situations.

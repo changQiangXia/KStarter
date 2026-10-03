@@ -1,0 +1,110 @@
+<p>Thanks Kaggle for another fun playground competition! My <strong>June playground</strong> "Predicting Optimal Fertilizers" solution uses techniques from my previous 6 months of playground solutions. Below are links to old solutions with more info. And I will describe the techniques again briefly below.</p>
+<h1>Techniques from Previous Playground Comps using GPU Acceleration!</h1>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Name</th>
+<th>Metric</th>
+<th>Technique(s)</th>
+<th>Solution Link</th>
+<th>Rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dec 2024</td>
+<td>Insurance Comp</td>
+<td>RMSLE</td>
+<td><strong>RAPIDS cuDF<br>Feature Engineering</strong></td>
+<td><a href="https://www.kaggle.com/competitions/playground-series-s4e12/discussion/554328" target="_blank">link</a></td>
+<td>1st</td>
+</tr>
+<tr>
+<td>Jan 2025</td>
+<td>Forecasting Comp</td>
+<td>MAPE</td>
+<td><strong>Boosting</strong> over Residuals</td>
+<td><a href="https://www.kaggle.com/competitions/playground-series-s5e1/discussion/560549" target="_blank">link</a></td>
+<td>2nd</td>
+</tr>
+<tr>
+<td>Feb 2025</td>
+<td>Backpack Comp</td>
+<td>RMSE</td>
+<td>Use <strong>Original Data</strong></td>
+<td><a href="https://www.kaggle.com/competitions/playground-series-s5e2/discussion/565539" target="_blank">link</a></td>
+<td>1st</td>
+</tr>
+<tr>
+<td>Mar 2025</td>
+<td>Rainfall Comp</td>
+<td>AUC</td>
+<td><strong>RAPIDS cuML</strong></td>
+<td><a href="https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571176" target="_blank">link</a></td>
+<td>2nd</td>
+</tr>
+<tr>
+<td>Apr 2025</td>
+<td>Podcast Comp</td>
+<td>RMSE</td>
+<td>cuML <strong>Stacking</strong></td>
+<td><a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575784" target="_blank">link</a></td>
+<td>1st</td>
+</tr>
+<tr>
+<td>May 2025</td>
+<td>Calorie Comp</td>
+<td>RMSLE</td>
+<td><strong>GPU HillClimbing</strong></td>
+<td><a href="https://www.kaggle.com/competitions/playground-series-s5e5/discussion/582611" target="_blank">link</a></td>
+<td>1st</td>
+</tr>
+</tbody>
+</table>
+<h1>RAPIDS cuDF Feature Engineering</h1>
+<p>The secret sauce in this competition is <code>cuDF feature engineering</code>, specifically <strong>Target Encoding</strong>. The competition data has 8 features which can each be treated as categorical.</p>
+<p>First we make all pairs which is 28 new columns. Then we make all triples which is 56 new columns. Then we make all quadruples which is 70 new columns. From these <code>162 = 8+28+56+70</code> columns, we use <code>cuML Target Encoder</code> to encode the 7 binary targets, <code>y==0?, y==1?, ..., y==6?</code>. This produces 1134 new columns. Then we target encode using the original dataset to produce another 1134 new columns. We then train an XGBoost using all these 2268 columns!</p>
+<h1>Use Original Data</h1>
+<p>Using relevant external data helps in all Kaggle competitions. This technique is especially important in Kaggle's playground competitions because every competition is synthetic data generated from an original dataset. Therefore we want to utilize the original data.</p>
+<p>There are two ways to use external data like the original dataset. We can add the data as <strong>new rows</strong>. Or we can add the data as <strong>new columns</strong>. Most public notebooks in this competition used the former technique. But no public notebook used the latter. (In our final hill climbing ensemble we need models trained with former and models trained with later).</p>
+<p>To use the later, we first create a categorical column (by using original column or combination of original columns). Once we have a categorical column, we target encoding it using the original data. </p>
+<pre><code> = original_data.groupby(CAT_COL)[TARGET].agg()
+ = f
+ = train.merge(TE, =CAT_COL, how=)
+</code></pre>
+<h1>Stacking (with cuML)</h1>
+<p>Stacking is especially beneficial for the MAP@3 metric which likes calibrated probabilities. We train an <strong>NN level 2</strong> stacking model with categorical cross entropy loss and it doesn't matter if stage 1 models are calibrated or not. </p>
+<p>For stage 1 models, we don't even need multi-class. We can train individual models to predict single binary classification, <code>Is the target y=0?</code>, <code>Is the target y=1?</code> etc etc. We predict OOF probabilities using XGBoost, CatBoost, NN, cuML Linear Regression. Then we train a level 2 NN stacking model using categorical cross entropy loss to predict multi-class probabilities. This uses all the knowledge of stage 1 models and produces calibrated multi-class stage 2 predictions!</p>
+<p>We also build an <strong>GBDT level 2</strong> stacking model using XGBoost and <code>objective='multi:softprob'</code>. The average of <strong>NN level 2</strong> and <strong>GBDT level 2</strong> is better than each stage 2 model individually!</p>
+<h1>Repeated KFold</h1>
+<p>Bizen250 published a beautiful public notebook <a href="https://www.kaggle.com/code/bizen250/xgboost-repeatedstratifiedkfold" target="_blank">here</a>, which illustrates an important concept about MAP@3 metric. This metric is very sensitive to the randomness of training (and predicted probabilities). Therefore an easy way to boost MAP@3 metric is to train the same model again with different seed and average the predicted probabilities before selecting top3 for MAP@3. </p>
+<p>For example, I train all my NNs 100 times and average the probabilities before selecting top 3 fertilizers. And I train all my GBDT dozens of times using 100% data and average the probabilities before selecting the top 3.</p>
+<p>In the plot below, we see that each fold of each 5-Fold XGB has average MAP@3=0.376 but when we average the probabilities from 100 5-Fold XGB and then compute MAP@3, we achieve 0.380! </p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Jun-2025/benefit.png" alt=""></p>
+<h1>Hill Climbing (with cuML)</h1>
+<p>The effectiveness of hill climbing comes from creating a diverse set of models. Then when we combine them with weighted average, the result is better than any of the individual models. The key ingredients to tabular data hill climbing is building diverse GBDT, NN, and ML models. The fastest way to produce ML models is using RAPIDS cuML.</p>
+<h1>Boosting over Residuals</h1>
+<p>Note that we can give XGBoost starting predictions. First we train a cuML Linear Regression model. Then we use XGBoost's <code>dtrain.set_base_margin(LINEAR_REGRESSION_LOGITS)</code> to begin the boosting from the predictions of the linear regression model. This is an overlooked XGBoost trick!</p>
+<h1>Pseudo Labeling</h1>
+<p>A helpful trick in all competitions in the final days is to add test data labeled with your best ensemble. For classification, NN naturally handle the soft target probabilities (with their default cross entropy losses). For XGB, we write a custom objective to train multi-class with soft targets.</p>
+<h1>Re-Train with 100% Train</h1>
+<p>Another helpful trick in all competitions in the final days is to retrain all the most important models in your final ensemble using 100% train data. For XGBoost when going from 5-Fold to 100% we use fixed number of iterations equal to 25% more than average fixed during early stopping. And for NN, we just create a fixed step learning schedule from the average reduce on plateau of early stopping from 5-Fold.</p>
+<h1>Trust Your CV</h1>
+<p>For my final submission, I chose my best CV ensemble which was also my best LB score. My CV ensemble described below has CV MAP@3 = 0.386! Wow!</p>
+<h1>Final Submission - CV 0.386</h1>
+<p>My final submission is an ensemble of <strong>9 models</strong> where each is trained <strong>many times</strong> with different seeds. The CV score is 0.386 and Private LB is 0.38652 and public LB is 0.38450!</p>
+<ul>
+<li>XGBoost <strong>cuDF FE</strong> - use original <strong>data as columns</strong> w/ tree <strong>depth = 4</strong>. (And train 10 models with 100% data)</li>
+<li>XGBoost <strong>cuDF FE</strong> - use original <strong>data as columns</strong> w/ tree <strong>depth = 10</strong>. (And train 10 models with 100% data)</li>
+<li><strong>Stacking NN</strong> with many stage 1 models (And train 25 models)</li>
+<li>XGBoost <strong>RepeatedStratifiedKFold</strong> - use original <strong>data as rows</strong> - Public notebook by <a href="https://www.kaggle.com/bizen250" target="_blank">@bizen250</a> <a href="https://www.kaggle.com/code/bizen250/xgboost-repeatedstratifiedkfold" target="_blank">here</a> (Trains 50 XGB)</li>
+<li><strong>Stacking XGB</strong> over LGBM - Public notebook by <a href="https://www.kaggle.com/ayushchandramaurya" target="_blank">@ayushchandramaurya</a> <a href="https://www.kaggle.com/code/ayushchandramaurya/predicting-fertilizer-name-stacking-ensemble" target="_blank">here</a> (And train multiple versions different seeds)</li>
+<li>XGBoost - use original <strong>data as rows</strong> w/ tree <strong>depth = 18</strong> - Public notebook by <a href="https://www.kaggle.com/elainedazzio" target="_blank">@elainedazzio</a> <a href="https://www.kaggle.com/code/elainedazzio/20250618-pg6-xgb?scriptVersionId=246053236" target="_blank">here</a> (And train multiple versions different seeds)</li>
+<li><strong>NN</strong> - Public notebook by <a href="https://www.kaggle.com/ricopue" target="_blank">@ricopue</a> <a href="https://www.kaggle.com/code/ricopue/s5e6-fertilizers-nn-keras-all-embedding" target="_blank">here</a> (And train 100 NNs)</li>
+<li><strong>Stacking XGB</strong> with many stage 1 models and with <strong>pseudo label COLUMNS</strong> (i.e KNN features).  </li>
+<li><strong>NN</strong> with <strong>pseudo label ROWS</strong> (And train 25 NNs)</li>
+</ul>
+<p>So we use <strong>9 models</strong> and train each <strong>many times</strong> with different seeds. Therefore our final ensemble is approximately combining <strong>300 sets of predictions</strong>! Weights (for the 9 models) are determined by <strong>GPU Hill Climbing</strong> !</p>
+<h1>Enjoy!</h1>
+<p>Consider using all these techniques in Kaggle's July playground competition!</p>

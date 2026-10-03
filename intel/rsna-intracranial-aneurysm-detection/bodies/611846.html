@@ -1,0 +1,260 @@
+<p>I thank RSNA, the organizers, the contributing radiologists and institutions, and the Kaggle team for hosting this impactful challenge. This write-up summarizes my 1st place solution. The core of my approach is a robust, coarse-to-fine pipeline that uses vessel segmentation to guide a region-of-interest (ROI) based classifier, producing location-aware predictions.</p>
+<h2>Solution Overview</h2>
+<ul>
+<li><p><strong>High-Level Pipeline</strong></p>
+<ol>
+<li><strong>Preprocessing:</strong> Convert and standardize DICOM series into NIfTI volumes.</li>
+<li><strong>Vessel Segmentation &amp; ROI Extraction:</strong> Use a coarse-to-fine nnU-Net approach. A fast, low-resolution model first finds a candidate region. This allows the more detailed, high-resolution models to focus only on this ROI, which improves both accuracy and speed.</li>
+<li><strong>ROI Classification:</strong> A 3D classification model, using the detailed vessel masks as input, predicts the probabilities for the 13 anatomical locations and the overall aneurysm presence.</li></ol></li>
+<li><p><strong>Key Design Principles</strong></p>
+<ul>
+<li><strong>Coarse-to-Fine Efficiency:</strong> A fast, low-resolution model first scans the entire volume to find a candidate region. This allows the more detailed, high-resolution models to focus only on this ROI. This improves both accuracy and speed.</li>
+<li><strong>Using Segmentation as a Structural Guide:</strong> By providing the classification model with an explicit vessel mask, I give it a detailed map of the vessel structure. This helps the model to focus on the vessels, where aneurysms are located.</li></ul></li>
+</ul>
+<h2>Data Preparation</h2>
+<ul>
+<li>I excluded approximately 60 series due to data quality issues, such as orientation anomalies, corrupted DICOM files, and implausible slice spacing.</li>
+<li>I used multilabel-stratified 5-fold cross-validation. </li>
+</ul>
+<h2>Pipeline</h2>
+<h3>1. Preprocessing</h3>
+<ul>
+<li><strong>Filter Slices:</strong> Within each series, I retained only the images matching the majority <code>Rows × Cols</code> and <code>PixelSpacing</code> configuration and filtered out slices with outlier interslice spacing to ensure consistency.</li>
+<li><strong>Convert DICOM to NIfTI:</strong> I used <code>dcm2niix</code> for conversion. If it failed, I first ran <code>gdcmconv --raw</code> as a fallback before retrying the conversion [1].</li>
+<li><strong>Standardize Orientation:</strong> All volumes were reoriented to a consistent anatomical orientation using nnU-Net’s <code>SimpleITKIOWithReorient</code>.</li>
+<li><strong>Normalize Intensity:</strong> I applied nnU-Net’s standard per-volume z-score normalization to standardize image intensities.</li>
+</ul>
+<h3>2. nnU-Net Segmentation + ROI Extraction (Coarse-to-Fine)</h3>
+<p>This stage uses a sequence of three nnU-Net v2 [2] models (<code>nnUNetResEncUNetMPlans</code>, <code>3d_fullres</code> configuration) to first locate a coarse ROI and then produce detailed vessel segmentations within it.</p>
+<ul>
+<li><p><strong>Model 1: Coarse Vessel Localization</strong></p>
+<ul>
+<li><strong>Spacing:</strong> (1.0, 1.0, 1.0) mm</li>
+<li><strong>Classes:</strong> 3 vessel groups (Posterior+Basilar / MCA / Other)</li>
+<li><strong>Loss:</strong> Dice + Cross-Entropy</li>
+<li><strong>Purpose:</strong> To perform a fast, low-resolution scan to efficiently find a single ROI candidate for the high-resolution models. This model also supports an optional orientation correction step described later.</li></ul></li>
+<li><p><strong>Model 2: Fine Segmentation (Balanced)</strong></p>
+<ul>
+<li><strong>Spacing:</strong> (0.80, 0.45, 0.44) mm</li>
+<li><strong>Loss:</strong> Dice + Cross-Entropy + SkeletonRecall (weight=1) [3]</li>
+<li><strong>Purpose:</strong> To generate a precise vessel segmentation. The SkeletonRecall loss improves the connectivity of thin vessels, which standard losses might miss.</li></ul></li>
+<li><p><strong>Model 3: Fine Segmentation (Recall-Focused)</strong></p>
+<ul>
+<li><strong>Spacing:</strong> (0.80, 0.45, 0.44) mm</li>
+<li><strong>Loss:</strong> Tversky + Cross-Entropy + SkeletonRecall (weight=3)</li>
+<li><strong>Purpose:</strong> To complement Model 2 by prioritizing recall, making it more sensitive to detecting hard-to-find vessel segments.</li></ul></li>
+<li><p><strong>Augmentation Strategy</strong></p>
+<ul>
+<li>I disabled left–right mirroring for the fine models (2 and 3) to preserve anatomical asymmetry.</li>
+<li>I used stronger intensity and geometric augmentations [4].</li>
+<li>I added low-resolution simulation transforms to make the models robust to scans with thick slices.</li></ul></li>
+<li><p><strong>Inference Process (Two-Stage)</strong></p>
+<ul>
+<li><strong>Stage 1 (Coarse Scan):</strong> I run Model 1 with a sliding window (overlap=0.2) and binarize the output to get a foreground mask. I then apply DBSCAN clustering to the mask to remove scattered false positives. The centroid of the largest cluster is used to crop a fixed-size ROI (140×140×140 mm).</li>
+<li><strong>Stage 2 (Fine Inference):</strong> I run Models 2 and 3 with a higher overlap (0.3) only within the coarse ROI. The vessel segmentation from Model 2 is used to compute a tight bounding box, which is then re-cropped with margins to create the final ROI for the classifier.</li></ul></li>
+</ul>
+<p>The detailed segmentations from this stage are passed to the classification model as masks.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F15217057%2F9edf9e0846e14151f33a1ece358473a9%2Fflow_segmentation.png?generation=1760833847347432&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F15217057%2F82fa14c88dfc1dc57448f40bca3ee07d%2Fseg_losses.png?generation=1760833856913829&amp;alt=media" alt=""></p>
+<h3>3. ROI Classification (13 locations + Aneurysm Present)</h3>
+<p>Once the ROI and vessel masks are prepared, a 3D classification model predicts the final probabilities.</p>
+<ul>
+<li><p><strong>Model Architecture</strong></p>
+<ul>
+<li><strong>Input Size:</strong> The model takes ROI volumes of size 128 × 256 × 256 voxels.</li>
+<li><strong>Backbone:</strong> The core of the model is an nnU-Net pre-trained for the vessel segmentation task. This approach was more accurate and faster to train than standard 2.5D or 3D timm backbones.<ul>
+<li><strong>Decoder Simplification:</strong> To improve efficiency, I simplified the decoder by removing its final, computationally-heavy block. This had no negative impact on performance.</li></ul></li>
+<li><strong>Auxiliary Detection Task:</strong> To help the model learn specific features of aneurysms, I added an auxiliary task that uses the decoder features to reconstruct a small binary sphere (5-pixel radius) at the location of each annotated aneurysm.</li>
+<li><strong>Location-Specific Prediction Head:</strong> To predict the 13 location-specific probabilities, I use the following process:<ol>
+<li><strong>Per-Location Feature Pooling:</strong> A "Vessel Region-Masked Pooling" layer uses the vessel masks to extract feature vectors corresponding to each of the 13 anatomical locations from the decoder's feature maps. (<em>Note: In practice, I apply this pooling using masks from both fine segmentation models and concatenate the results for more complete features.</em>)</li>
+<li><strong>Feature Fusion:</strong> These 13 feature vectors are combined with a global feature vector from the encoder (via Global Average Pooling).</li>
+<li><strong>Inter-Location Modeling:</strong> The combined features are fed into a "Location-Aware Transformer" to model relationships between different vessel locations.</li>
+<li><strong>Classification:</strong> Finally, an MLP head predicts the probability for each of the 13 locations.</li></ol></li>
+<li><strong>"Aneurysm Present" Prediction Head:</strong> For the overall presence prediction, I pool features over the entire vessel structure (a union of all vessel masks) and combine them with the encoder's global features. This aggregated feature vector is passed to a separate MLP head.</li>
+<li><strong>Output Design:</strong> I treated each of the 14 labels as an independent binary classification problem. This design helps with the severe class imbalance, as positive cases for any single location are very rare.</li></ul></li>
+<li><p><strong>Training Details</strong></p>
+<ul>
+<li><strong>Loss Functions:</strong><ul>
+<li><strong>13 Locations:</strong> <code>BCEWithLogitsLoss</code>.</li>
+<li><strong>Aneurysm Present:</strong> <code>BCEWithLogitsLoss</code>.</li>
+<li><strong>Auxiliary Sphere Segmentation:</strong> A combination of Balanced BCE [5] and Focal-Tversky++ loss [6, 7]. This combination works well for highly sparse targets and helps prevent the over-confidence that can occur with Dice-like losses.</li>
+<li><strong>Loss Weights:</strong> The final loss was a weighted sum of the three components. I set the weights to 0.1 for the 13 location losses, 0.05 for the Aneurysm Present loss, and 1.0 for the auxiliary sphere segmentation loss. The main goal was to prioritize learning the precise location of aneurysms, so the sphere segmentation task had the highest weight. I found that higher weights on the classification losses led to overfitting, so this balance was important.</li></ul></li>
+<li><strong>Data Augmentation</strong><ul>
+<li><strong>Intensity Transforms:</strong> Gaussian noise, Gaussian smoothing, intensity shift/scale, contrast adjustment, Gaussian sharpening, and intensity inversion.</li>
+<li><strong>Geometric Transforms:</strong> Random flips (z, y, x axes), small rotations (±10°), scaling/shearing (±10%), mild grid distortions, and a simulated low-resolution transform.</li></ul></li>
+<li><strong>Optimizer and Schedule:</strong> I used the AdamW optimizer with a learning rate of 1e-4 and an effective batch size of 8 (achieved with gradient accumulation). A standard cosine annealing schedule with a warmup period was used.</li>
+<li><strong>EMA Weights:</strong> I used the Exponential Moving Average (EMA) of the model weights for inference.</li></ul></li>
+<li><p><strong>Inference</strong></p>
+<ul>
+<li><strong>Ensembling:</strong> The final predictions are an average of the models from 4 of the 5 cross-validation folds.</li>
+<li><strong>Test-Time Augmentation (TTA):</strong> I averaged the predictions from the original volume and a left-right flipped version of it.</li></ul></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F15217057%2F98e18ca93230a3f26bf2181021ce481a%2Fmodel_overview.png?generation=1760490733871010&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F15217057%2F187c3d0327547a692d8e922dc5f1d5cd%2Fvessel_pooling.png?generation=1760490747217372&amp;alt=media"></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F15217057%2F0dd935cbc51a7d50bc69779c8f12d918%2Ftransformer.png?generation=1760490761936793&amp;alt=media"></p>
+<h3>4. Other Details</h3>
+<ul>
+<li><strong>Fail-safe Mechanism:</strong> If an anomaly occurred during the segmentation or ROI extraction steps, the pipeline would not attempt a prediction. Instead, it fell back to a set of pre-determined probabilities. For each class, this probability was the mean of the out-of-fold predictions from my cross-validation set.</li>
+<li><strong>Optional Orientation Correction:</strong> I implemented a method to fix misoriented scans. It analyzed the spatial arrangement of the three vessel groups from the coarse segmentation. By comparing the relative positions of these groups to their expected anatomical locations, it estimated the correct axis permutation. This worked perfectly on the training set, fixing all identified orientation issues. However, it had no measurable effect on the leaderboard score, likely because the test set did not contain such orientation errors.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F15217057%2Ff954825e84986adf4e7b537f9160b1b0%2F3classes_for_ori_corr.png?generation=1760833867211206&amp;alt=media"></p>
+<h2>Processing Time</h2>
+<ul>
+<li><strong>Training</strong><ul>
+<li>The training times below were measured on a single NVIDIA RTX 4090.</li>
+<li>The 96×192×192 input size was mainly used for faster experimentation and tuning.</li></ul></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Input size</th>
+<th>Epochs</th>
+<th>Training Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nnU-Net (Model 2)</td>
+<td>64×192×192</td>
+<td>1000</td>
+<td>14 h</td>
+</tr>
+<tr>
+<td>ROI classifier</td>
+<td>96×192×192</td>
+<td>30</td>
+<td>6 h</td>
+</tr>
+<tr>
+<td>ROI classifier</td>
+<td>128×256×256</td>
+<td>30</td>
+<td>12 h</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Inference</strong><ul>
+<li>Inference times were measured on the Kaggle notebook using two T4 GPUs.</li>
+<li>The times reported are an average over 100 samples.</li></ul></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Time per Series</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preprocessing</td>
+<td>4.03 ± 3.78 s</td>
+</tr>
+<tr>
+<td>Vessel segmentation</td>
+<td>10.65 ± 4.10 s</td>
+</tr>
+<tr>
+<td>ROI classification</td>
+<td>3.33 ± 0.09 s</td>
+</tr>
+</tbody>
+</table>
+<h2>Ablation Study</h2>
+<p>To validate the effectiveness of the key components in my ROI classification model, I conducted an ablation study. Note that this was a simplified evaluation; hyperparameters such as the number of epochs and learning rate were not re-tuned for each experiment. For efficiency, these experiments were run on folds 0, 1, and 2, using a reduced input size of 96×192×192.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Input Size</th>
+<th>AUC (Aneurysm Present)</th>
+<th>AUC (13 Locations)</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final model (full resolution)</td>
+<td>128×256×256</td>
+<td>0.915</td>
+<td>0.916</td>
+<td>0.916</td>
+</tr>
+<tr>
+<td>Final model</td>
+<td>96×192×192</td>
+<td>0.907</td>
+<td>0.898</td>
+<td>0.902</td>
+</tr>
+<tr>
+<td>Without Location-Aware Transformer</td>
+<td>96×192×192</td>
+<td>0.899</td>
+<td>0.894</td>
+<td>0.896</td>
+</tr>
+<tr>
+<td>Using Dice instead of FocalTversky++</td>
+<td>96×192×192</td>
+<td>0.902</td>
+<td>0.896</td>
+<td>0.899</td>
+</tr>
+<tr>
+<td>Setting all loss weights to 1.0</td>
+<td>96×192×192</td>
+<td>0.890</td>
+<td>0.877</td>
+<td>0.884</td>
+</tr>
+<tr>
+<td>Without backbone pretraining</td>
+<td>96×192×192</td>
+<td>0.777</td>
+<td>0.811</td>
+<td>0.794</td>
+</tr>
+<tr>
+<td>Without segmentation model 3</td>
+<td>96×192×192</td>
+<td>0.899</td>
+<td>0.883</td>
+<td>0.891</td>
+</tr>
+<tr>
+<td>Without auxiliary segmentation loss</td>
+<td>96×192×192</td>
+<td>0.880</td>
+<td>0.871</td>
+<td>0.876</td>
+</tr>
+</tbody>
+</table>
+<p>The results show several key points:</p>
+<ul>
+<li>Pretraining the backbone on the vessel segmentation task was the most important factor. It greatly improved the score and helped the model train much faster. This was very helpful for running many experiments.</li>
+<li>The Location-Aware Transformer and the FocalTversky++ loss seemed to help at first, but their final contribution to the score was small. This is likely because other improvements and tuning had a larger overall effect.</li>
+</ul>
+<h2>Design Journey</h2>
+<p>My final design was the result of several iterations:</p>
+<ol>
+<li>I initially tried a single, end-to-end 3D classifier that had auxiliary heads for vessel segmentation and aneurysm localization. While it could detect the presence of an aneurysm, it failed to predict the 13 specific locations accurately.</li>
+<li>I then observed that a standard nnU-Net for vessel segmentation trained easily and generalized well across all modalities. This led me to change to a two-stage, vessel-first pipeline, where the segmentation acts as a strong guide for the subsequent classification task.</li>
+<li>I also experimented with a simpler model that took a 2-channel input: the image volume concatenated with a single binary vessel mask. To get a prediction for a specific label, I would feed the model the corresponding mask (e.g., the mask for one location, or the union mask for "Aneurysm Present"). Although the model itself was simple, this approach required running 14 separate forward passes to get all predictions for a single patient series, which was too computationally expensive.</li>
+<li>This led to my final approach using a single backbone pass with the region-masked pooling, which provided a good balance of accuracy and computational efficiency.</li>
+</ol>
+<h2>References</h2>
+<p>[1] <a href="https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/598083" target="_blank">https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/598083</a><br>
+[2] Isensee, F., Jaeger, P. F., Kohl, S. A., Petersen, J., &amp; Maier-Hein, K. H. (2021). nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation. Nature methods, 18(2), 203-211.<br>
+[3] Kirchhoff, Yannick, et al. "Skeleton recall loss for connectivity conserving and resource efficient segmentation of thin tubular structures." European Conference on Computer Vision. Cham: Springer Nature Switzerland, 2024.<br>
+[4] <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/mic-dkfz-2nd-place-solution-3d-nnu-net-blob-regres" target="_blank">https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/writeups/mic-dkfz-2nd-place-solution-3d-nnu-net-blob-regres</a><br>
+[5] <a href="https://www.kaggle.com/competitions/czii-cryo-et-object-identification/writeups/yu4u-tattaka-4th-place-solution-source-codes-submi" target="_blank">https://www.kaggle.com/competitions/czii-cryo-et-object-identification/writeups/yu4u-tattaka-4th-place-solution-source-codes-submi</a><br>
+[6] Yeung, Michael, et al. "Calibrating the dice loss to handle neural network overconfidence for biomedical image segmentation." Journal of Digital Imaging 36.2 (2023): 739-752.<br>
+[7] <a href="https://www.kaggle.com/competitions/czii-cryo-et-object-identification/writeups/tomoon33-6th-place-solution" target="_blank">https://www.kaggle.com/competitions/czii-cryo-et-object-identification/writeups/tomoon33-6th-place-solution</a></p>
+<h2>Code Release</h2>
+<ul>
+<li>Training code: <a href="https://github.com/uchiyama33/rsna2025_1st_place" target="_blank">https://github.com/uchiyama33/rsna2025_1st_place</a></li>
+<li>Submission notebook: <a href="https://www.kaggle.com/code/tomoon33/rsna2025-submission-1st-place" target="_blank">https://www.kaggle.com/code/tomoon33/rsna2025-submission-1st-place</a></li>
+</ul>

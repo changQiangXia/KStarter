@@ -1,0 +1,242 @@
+# https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/340612
+
+Topic #340612: Explaining Data and Submission in detail
+  Author: Harshit Sheoran
+  Posted: 2022-07-30 03:53:43.547000
+  Votes: 179  Comments: 35
+
+Let's start with understanding the features and the targets.
+
+For features used in training, we have 2 folders, 'train_images' and 'segmentations'
+In folder 'train_images' there are 2019 more folders, each folder is named after a patient study id
+eg. 1.2.826.0.1.3680043.10001
+
+In each one of these 2019 folders exists a number of dicom files (.dcm extension), the number of dicom files in folders varies.
+
+I won't go over the details of dicom files, you can find that on kaggle or google, but I will go over the useful resource of dicom for this dataset.
+
+Dicom file on this dataset have 2 uses, one is the data it possess, we can get this by doing a dcmread from pydicom library onto a file, then printing it, there are 4 data values which we can get, which are 'ImageOrientationPatient', 'ImagePositionPatient', 'PatientID', 'PatientName'.
+Eg. pydicom.dcmread('rsna_spine/train_images/1.2.826.0.1.3680043.20981/1.dcm').ImagePositionPatient
+
+'PatientID' gives us the id of the patient, for this data, 'PatientName' is the same as 'PatientID'
+'ImagePositionPatient' gives us the position on the patient, more on this later
+'ImageOrientationPatient' gives us the orientation of the patient. (I did not find anything useful in this)
+
+'ImagePositionPatient' outputs a list of 3 values, the first one indicates the position of Patient on x-axis, the second indicates the position on y-axis and the third value on the z-axis, the z-axis is the most important one to understand.
+
+Z-axis in this competition is unlike other competition with CT Scans, normally a Z-axis tells us the timestamp, this time, Z-axis tells us the position in sagittal plane.
+
+The images in this dataset is in axial plane, meaning we will only be able to observe one bone at a time, but where in the world are we, the reference can be obtained from this z-axis value.
+
+
+
+In the image above, on the left side, we can see sagittal view of the bone, in the middle we can see Axial view of tissues, Axial view of tissues is not provided in the dataset of this competition, on the right side of the image, we can see axial view of bone paticularly 2.5mm deep, the data in this competition is lower than 1mm deep, which means our dataset is more sharp.
+
+The next thing to take notice at is the thin line in sagittal view (Sag bone, leftmost image), that thin line is what is indicating what we are currently seeing in the axial view, and the Z-axis previously mentioned tells us where that thin line is and where  our axial plane is currently looking at in correspondance to the sagittal view.
+
+But here comes the biggest problem, we don't have sagittal view… and we need this view to know which dicom file is referencing to which bone
+
+The solution comes in the folder 'segmentations' where we have 87 files, these files are named with the reference to patient id, the format of these files is nifti, which can be read with the library nibabel, after reading 1 patient file, we will get an array of (height, width, num_images) (num_images here will be the same as the number of diccom files in that particular patient subfolder in the folder 'train_images')
+
+When we have got the array out of nifti files, we will see that array are kinda weird, well the reason for that is, and I quote
+
+
+  
+Please be aware that the NIFTI files consist of segmentation in the sagittal plane, while the DICOM files are in the axial plane. Please use the NIFTI header information to determine the appropriate orientation such that the DICOM images and segmentation match. Otherwise, you run the risk of having the segmentations flipped in the Z axis and mirrored in the X axis.
+
+
+Which can be done with something like this:
+segmentations = nib.load(f"segmentations/1.2.826.0.1.3680043.10921.nii").get_fdata()[:, ::-1, ::-1].transpose(2, 1, 0)
+
+Now after loading the segmentations like this, the shape of segmentations will be (num_images, height, width) and now the data will make a lot more sense.
+
+
+
+
+
+The 2 images above, the first one is a dicom reading, the second one is one of the slice of segmentations (reference to segmentations is defined above in a code block)
+
+What was the problem again? Oh yeah, we don't have the sagittal view, and we don't know which image is referencing to which bone.. well, now we kinda do, how?
+
+This segmentations numpy array which we have just created and visualized actually have one more use, the unique values of a particular slice will tell us which bone we are working on, for instance the image and  segmentation slice mask we see above, let's find out which bone we are seeing in that.
+
+I will just write np.unique(segmentations[199]) (199 in this case is the slice number, which means this image is 200.dcm)
+
+The output of this small line is array([0., 6.]), where 0 is the background and 6 is the reference to which bone we are talking about, in this case, bone C6.
+
+Am I done? Oh no, we still have to understand the variables, which in this case is that there are more than 7 bones in the base (obviously), but we only have labels for C1-C7, but as seen in the image below it is seen that there are way more than that.
+
+
+
+So, for some slices we will see unique values going beyond 7, values like 9 or 10, these refer to the bones in the image above, eg. unique value 8 refer to bone Th1
+
+But, do we need these values to train models? No, not necessarily as our target is only (C1-C7)
+
+So, lets analyse the current situation, we have 87 patients studies for segmentation, we will have to learn from these patients, which bone is presented in which image, BUT, why is knowing which image is which bone so important? Answering this question takes us to the last part of this discussion, which is, Submission.
+
+Now, normally, we don't have to talk about submission files, it is simple, but in this competition sample submission file does not tell us the correct submission format, and this format is the reason why we need to classify C1-C7 before training or rather, submitting.
+
+The submission file will in the format where each patient will have 8 rows, and 8 predictions, 7 rows for C1-C7 and the last row for overall, overall refers to weather the patient have a fracture in any one of the vertibrates are fractured.
+
+Eg.
+
+
+
+
+row_id
+fractured
+
+
+
+
+20981_C1
+0.01
+
+
+20981_C2
+0.02
+
+
+20981_C3
+0.005
+
+
+20981_C4
+0.03
+
+
+20981_C5
+0.2
+
+
+20981_C6
+0.002
+
+
+20981_C7
+0.012
+
+
+20981_patient_overall
+0.4
+
+
+
+
+[NOTE]: I have done some mistakes here such as not realizing that sagittal view is available… which changes a lot of things, but this particular discussion is still one way to look at it. 
+
+Please Upvote this topic if it helped you, if any notebooks wants to use any of the code, please provide reference link to this discussion, this is my first post in a long time, and my very first post for explaining a dataset. I might have made some mistakes, thank you for your suggestions in the comments.
+
+Comments:
+├─ boi-doingthings (2022-09-08 20:13:23.983000) [+14]
+│  If anyone like me with 0 medical background, feels the planes going over the head. The figure might help. Reading the post with this figure reference helps in a little better understanding.
+│  The axi...
+├─ Gary.l.Tang (2022-08-01 15:14:47.453000) [+4]
+│  This is very helpful to those without medical background. Thank you very much!
+├─ Innat (2022-08-24 01:59:42.773000) [+2]
+│  This may also help. 
+│  
+│  paper:https://arxiv.org/pdf/2208.05868.pdf
+│  code: https://github.com/wasserth/TotalSegmentator
+│  dataset: https://zenodo.org/record/6802614#.YwWGAXZByHs
+├─ Ravi Ramakrishnan (2022-07-30 09:36:22.350000) [+2]
+│  This is a great explanation for the data! Superb work! Keep it up! Thanks for sharing and kudos for the effort thereby!
+├─ Yiting Song (2022-10-09 09:43:27.370000) [+0]
+│  Very nice work! thx
+├─ Chirag Desai (2022-10-09 05:33:52.990000) [+0]
+│  Excellent explanations and information. Very helpful . Initially I decided not to join this competition because of lack of domain knowledge but then I thought nothing to loose in trying. At least I...
+├─ Raj Kulkarni (2022-09-28 15:17:03.630000) [+0]
+│  @harshitsheoran,  do you mean the submission file shape should be 24 rows (3 patients * 8 predictions)and 2 columns?
+│  what about row_ids?  
+│  like this?
+│  1.2.826.0.1.3680043.10197_C1
+│  1.2.826.0.1.368004...
+  ├─ Harshit Sheoran (2022-09-28 18:55:07.640000) [+1]
+  │  It should be "1.2.826.0.1.3680043.10197_patient_overall" instead of "1.2.826.0.1.3680043.10197_overall"
+  ├─ Raj Kulkarni (2022-10-04 07:14:43.887000) [+0]
+  │  Sorry for my delayed response.
+  │   still no luck with the subission file.☹️
+  ├─ Harshit Sheoran (2022-10-04 07:24:59.990000) [+0]
+  │  You should try using a format from public notebook
+  ├─ Raj Kulkarni (2022-10-04 09:43:26.313000) [+0]
+  │  Yes, did that(around 3 different notebooks just copy-pasted their code without any changes only my model which I trained)tried around 30+ different combinations .with ids in image files ,ids of sub...
+  ├─ Harshit Sheoran (2022-10-04 10:12:19.060000) [+0]
+  │  These numbers means that your notebook should only take 9 hours to submit, if it takes more than 9 hours, you will see notebook timeout error
+  ├─ Raj Kulkarni (2022-10-04 10:40:23.233000) [+1]
+  │  Ok, Thanks for clarifying.
+  │  Tip for you, hope this works:
+  │  when you submit for leaderboard your best models for competition(here you are allowed 2) make sure you submit 1st with the best score and th...
+  ├─ Chirag Desai (2022-10-09 05:26:04.880000) [+0]
+  │  Well said. I also experienced same in other competitions. Specially when public data is less , there are more chances of leaderboard shuffle on all data.
+├─ Bo-Wei, Yu (2022-09-16 15:02:40.903000) [+0]
+│  Thanks !! This is very helpful for my first works~~
+├─ jialin hou (2022-09-14 03:06:45.200000) [+0]
+│  segmentations = nib.load("../input/rsna-2022-cervical-spine-fracture-detection/segmentations/1.2.826.0.1.3680043.10921.nii").get_fdata()[:, ::-1, ::-1].transpose(2, 1, 0)
+│  
+│  np.unique(segmentations[7...
+  ├─ Harshit Sheoran (2022-09-14 05:53:16.893000) [+1]
+  │  In an axial view, there are many times when a part of adjacent bones are visible
+├─ hengck23 (2022-09-07 12:13:26.267000) [+0]
+│  you can imagine you are doing position z encoding.
+│  then image = image + pos
+  ├─ Harshit Sheoran (2022-09-07 12:32:03.203000) [+0]
+  │  Sorry, I did not get that?
+  ├─ hengck23 (2022-09-07 12:41:33.070000) [+0]
+  │  let 3d scan be scan[1,H,W,D]
+  │  1 is single channel.
+  │  
+  │  say if you retrieve the first and fifth slide:
+  │  s1 = scan[1,H,W,D,1]  
+  │  s5 = scan[1,H,W,D,5]  
+  │  
+  │  you have a 2d image model net()
+  │  
+  │  if s1 and s5 are si...
+  ├─ Harshit Sheoran (2022-09-07 12:56:16.613000) [+0]
+  │  What is the pos function exactly? like is it just a shift in position while feeding in the model?
+  ├─ hengck23 (2022-09-07 13:05:59.930000) [+3]
+  │  you can have  nn.Embedding or sinuous encoding.
+  │  
+  │  it is not really a shift but information about location in z.
+  │  
+  │  assume 
+  │  s1  = [10,20,30]
+  │  s5  = [10,20,30]
+  │  
+  │  s1+pos(1)   = [11,20,31]
+  │  s5+pos(5)  = [15,...
+├─ Denise Sodero Vinhas Portugal (2022-08-28 13:24:57.847000) [+0]
+│  Thanks for the very helpful post, @harshitsheoran! Now I know what I need to do. Thanks a lot!!!
+├─ sys-f (2022-08-25 05:05:33.687000) [+0]
+│  very deep explanation, it seems you are very well versed in this field. Thank you.
+├─ Iuryck Santos (2022-08-12 04:04:34.447000) [+0]
+│  Well explained, I've actually been working on a way to classify by positioning on the Z axis, in other words, 2 cm from the head is probably C1, 4cm probably is C2, and so on. This might help.
+├─ _lev_lipinski (2022-08-09 08:00:18.157000) [+0]
+│  Thanks for the great post, @harshitsheoran! Can you please elaborate on what you mean by "sagittal view is available"?
+  ├─ Harshit Sheoran (2022-08-09 08:38:45.373000) [+7]
+  │  Means, that it is possible to acquire sagittal view, by first stacking images in format of (n, h, w) and then using
+  │  images[:, :, 256] would provide a decent sagittal view…
+  ├─ Jebriel Abdul (2022-09-09 01:31:36.317000) [+0]
+  │  @harshitsheoran Could you elaborate on why we should index with 256? does this apply to all studies? Thank you!
+  ├─ Harshit Sheoran (2022-09-09 02:01:50.507000) [+1]
+  │  256 is the middle point of sagittal view for most images, in my eda, 256 is the most static number for a stable sagittal view, although not for all images.
+  ├─ Aniket Thomas (2022-10-05 13:37:39.667000) [+0]
+  │  I am trying this approach to get sagittal view but I am getting something like this, can you please help me with this?
+├─ nuptsww (2022-08-09 03:21:07.313000) [+0]
+│  row_id,fractured
+│  25399_patient_overall,0.008981745
+│  25399_C1,0.0044939793
+│  25399_C2,0.00068586576
+│  25399_C3,0.00024188017
+│  25399_C4,0.0023683738
+│  25399_C5,0.0009676772
+│  25399_C6,0.00360832
+│  25399_C7,0.002...
+  ├─ Harshit Sheoran (2022-08-09 04:35:38.583000) [+0]
+  │  I am sorry to hear that, but yes, the row_id should be like that, and ofcourse you should test only the images in 'test_images', You will have to figure out what to do with the last question yourse...
+  ├─ Raj Kulkarni (2022-09-26 11:38:34.850000) [+0]
+  │  Me too, it's strange I am trying every possible way to predict, row_ids like in submission files and also  row_id like in test_images. Nothing works it just says "Notebook Threw Exception". The onl...
+├─ Ronaldo S.A. Batista (2022-07-31 01:12:33.540000) [+0]
+│  Wow…Thanks for the detailed explanation!
+├─ [deleted] (2022-09-05 12:11:37.050000) [+0]
+│  [deleted]

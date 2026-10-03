@@ -1,0 +1,159 @@
+# https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420349
+
+Topic #420349: 4th Place Solution
+  Author: Joel Erikanders
+  Posted: 2023-06-30 11:04:21.412000
+  Votes: 48  Comments: 15
+
+Acknowledgement
+
+I'd like to thank the hosts for providing a very interesting and difficult project to work on for the past months. I am also grateful for all the public sharing on Kaggle, this has been an insane learning experience for me. Without all the public notebooks, discussion posts and old competition solutions available i would have had no chance in this competition.
+
+Overview
+
+
+
+Used most of the raw data for training, while validating only on the kaggle data.
+
+Ensemble of Transformer, XGBoost and Catboost, with 3 seeds and 5 folds each. 
+
+Used a generic set of features based on time, index and screen_coor differences.
+
+Linear regression as a meta model.
+
+Thresholds have a big impact on LB score
+
+
+Data
+
+I used most of the raw data for training, including sessions that only completed level group 0-4 and 5-12. About ~38000 whole sessions and ~58000 sessions in total. Using the raw data increased CV by over 0.001. I validated only on the kaggle data. 
+
+My initial data preprocessing is simply sorting by level group and index, same as what happens during inference. Also, my experiments indicated no benefit from using the hover durations, so after sorting i dropped the hover rows and re-indexed each session from 0 to len(session).
+
+Transformer
+
+I spent much of my time experimenting with transformers, which resulted in a light weight model that achieved 0.698 on the public and private LB, and 0.702 CV. 
+
+class (nn.Module):
+    def (self, num_cont_cols, embed_dim, num_layers, num_heads, max_seq_len):
+        (NN, self).()
+        self.emb_cont = nn.(
+            nn.(num_cont_cols, embed_dim//),
+            nn.(embed_dim//)
+        )
+        self.emb_cats = nn.(
+            nn.(max_seq_len + , embed_dim//),
+            nn.(embed_dim//)
+        )
+        encoder_layer = nn.(
+            d_model=embed_dim,
+            nhead=num_heads,
+            dim_feedforward=embed_dim,
+            dropout=,
+            batch_first=True,
+            activation=,
+        )
+        self.encoder = nn.(encoder_layer, num_layers=num_layers)
+        self.clf_heads = nn.([
+            nn.(embed_dim, out_dim) for out_dim in [, , ]
+        ])
+
+    def (self, x, grp):
+        emb_conts = self.(x[:, :, :-])
+        emb_cats = self.(x[:, :, -].(torch.int32))
+        x = torch.([emb_conts, emb_cats], dim=)
+        x = self.(x)
+        x = x.(dim=)
+        x = self.clf_heads[[, , ].(grp)](x)
+        return x.()
+
+
+
+
+embed_dim: 64
+
+num_layers: 1
+
+num_heads: 8
+
+max_seq_len: 452 (explained below), though the sequences are cropped to 256
+
+I used the same single model for all questions
+
+
+I found the data easy to overfit with transformers, so in an attempt to improve the signal to noise ratio i did the following:
+
+
+
+Identify different points in the game by string concatenating event_name, level, name, page, fqid, room_fqid, text_fqid, in the dataframe.
+
+Some of these occur more than once in a session. Treat these as different points by enumerating them and adding the enumeration to their names.
+
+Filter out the rows with points that is present in over 0.999 of the sessions. This makes each session maximum 452 steps long. 
+
+Create 6 feature columns:
+time difference, index difference, distance (cumulative distance moved, calculated from screen_coor's) difference, room_coor_x, room_coor_y and the categorical point column embedded.
+
+
+XGBoost
+
+This is my strongest single model with public LB 0.701, private 0.702, and 0.7029 CV. What stands out is that i flattened 5 of the transformer input columns (excluding the categorical column), and used all those values as individual features.
+
+The other features are mainly stats that can be found in public kernels, like mean and max time diff over the categoricals. The stats were calculated before applying the transformer input filtering.
+
+From early on I trained one model for each level group, inputing the question number as a feature. I found that CV increased by around 0.0002 compared to using a model for each question. This could be randomness, but i went with it since i thought 3 models instead of 18 would make my life easier during experimentation. Similar reasoning behind using one model for the transformer. 
+
+Catboost
+
+Essentially looks the same as XGBoost. CV 0.7022.
+
+Ensemble
+
+I trained a linear regression meta model for each question, using the above models output probabilites as input, to produce the final predictions. I included probabilities of past questions and some future ones! For example the regression model trained to predict question 2 took probabilities on question 1-3 as input, to predict question 7 I used probabilities on question 1-13, and for question 16 i used probabilities on question 1-18. I took 3 seeds average before linear regression input to make it more robust. 
+
+This finally results in public LB 0.702, private LB 0.703, CV 0.7044. 
+
+On threshold and submission selection
+
+I tried to trust CV as much as possible, but the consistent gap between my CV and LB was suspicius until the last few days. Then I realized one reason could be my selected threshold was suboptimal on the test data.. I made some submissions with my highest CV solution, only changing the threshold, and noticed it was indeed suboptimal and caused more variation in LB score than most of my latest experiments. So in the end I selected 3 of the same solution, with different thresholds: 0.60 (best on LB), 0.62 (best during CV) and 0.64. Turned out 0.61 would have resulted in 0.704 private, but no regrets ;)
+
+Thank you for reading!
+
+Code
+
+Training code
+Submission notebook
+
+Comments:
+├─ Robert Hatch (2023-07-01 18:39:30.567000) [+1]
+│  I considered that thresholds could be impactful (either due to randomness or some 'real' reason) but didn't officially test CV vs public LB thresholds. 
+│  
+│  If wanting to really deep dive on CV higher...
+  ├─ Joel Erikanders (2023-07-01 21:10:39.327000) [+0]
+  │  I think you're right that nested CV would have lead to more accurate or slightly pessimistic CV. Though I'm not sure whether or not it would have been a better approach, or lead to better threshold...
+    ├─ Robert Hatch (2023-07-01 22:14:02.117000) [+0]
+    │  Yeah, it wouldn't change the threshold picked, still probably pick based on regular CV. It just might have given more insight and peace of mind about CV vs LB difference. Which might not even be wo...
+├─ Akshay Vyas (2023-07-01 14:02:40.183000) [+1]
+│  @erijoel Congratulations on your impressive achievement and thank you for sharing your journey! Your ensemble approach with Transformers, XGBoost, and Catboost, along with the meta-modeling techniq...
+├─ Pooja Chauhan (2023-07-01 12:06:35.923000) [+1]
+│  The 4th place solution in the competition used an ensemble of Transformer, XGBoost, and Catboost models, along with linear regression as a meta-model. The participant applied feature engineering an...
+├─ Priyanshu Chaudhary (2023-07-01 08:22:05.337000) [+1]
+│  Congratulations on the solo gold!!
+├─ Pranav Jadhav (2023-07-01 06:09:03.983000) [+1]
+│  @erijoel Congratulations. 4th place is quite a big achievement.
+├─ Swapnil Chowdhury (2023-06-30 13:31:13.083000) [+1]
+│  Congratulations on coming 4th @erijoel . Keep achieving new milestones and medals 👍
+  ├─ Joel Erikanders (2023-06-30 13:43:12.957000) [+1]
+  │  Thank you 😄
+├─ DongYK (2023-06-30 12:07:37.917000) [+1]
+│  Congrats your first gold medal !!
+  ├─ Joel Erikanders (2023-06-30 12:43:47.090000) [+0]
+  │  Thanks a lot!
+├─ C R Suthikshn Kumar (2023-07-14 05:14:56.113000) [+2]
+│  Congratulations and thank you for sharing the solution. It is interesting to review the solution and serves as a good learning resource.
+├─ CPMP (2023-07-02 11:14:39.087000) [+2]
+│  Thanks for sharing. I tried ensembling via linear regression per question, and while it improves Cv, LB and private is a bit lower (LB 0.704) than a single linear regression LB 0.705. I was surpris...
+  ├─ Joel Erikanders (2023-07-02 22:56:34.347000) [+0]
+  │  Thanks for the comment! Surprising indeed, do you think the difference between question wise and single model  score is due to randomness or something else? The only time I tried linear regression ...
+├─ [deleted] (2023-07-01 07:30:17.983000) [+0]
+│  [deleted]

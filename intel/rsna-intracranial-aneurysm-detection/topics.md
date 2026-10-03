@@ -1,0 +1,82 @@
+# rsna-intracranial-aneurysm-detection 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611846) — 158 票 / 36 评论 / 2025-10-15 **write-up?**
+- [Overview of the clinical problem](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591648) — 90 票 / 13 评论 / 2025-07-29 
+- [5th place solution with code](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611849) — 54 票 / 11 评论 / 2025-10-15 **write-up?**
+- [9th place solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611908) — 47 票 / 7 评论 / 2025-10-15 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611856) — 46 票 / 12 评论 / 2025-10-15 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611893) — 44 票 / 20 评论 / 2025-10-15 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611867) — 41 票 / 8 评论 / 2025-10-15 **write-up?**
+- [Multi-frame DICOMs in train_localizers.csv](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591546) — 40 票 / 7 评论 / 2025-07-29 
+- [Some vessel segmentations are reversed from the image NIfTI](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/593857) — 39 票 / 7 评论 / 2025-07-31 
+- [6th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611925) — 38 票 / 7 评论 / 2025-10-15 **write-up?**
+- [Submission is slower again?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611482) — 33 票 / 44 评论 / 2025-10-11 
+- [Dataset Update](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600036) — 30 票 / 36 评论 / 2025-08-20 
+- [Data Update 2](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/606917) — 27 票 / 25 评论 / 2025-09-10 
+- [Issues with RescaleSlope/RescaleIntercept for some CTAs](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591636) — 27 票 / 9 评论 / 2025-07-29 
+- [7th place solution - 3D nnU-Net + blob regression (again)](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/612039) — 24 票 / 5 评论 / 2025-10-16 **write-up?**
+- [How Do Radiologists Actually Detect Aneurysms?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/597912) — 24 票 / 1 评论 / 2025-08-07 
+- [Regarding the remaining issues with competition data](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/610101) — 23 票 / 6 评论 / 2025-10-01 
+- [11th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/612186) — 23 票 / 6 评论 / 2025-10-17 **write-up?**
+- [An Update on Submission Scoring](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/602885) — 20 票 / 5 评论 / 2025-08-30 
+- [Gateway error](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/607746) — 19 票 / 14 评论 / 2025-09-15 
+- [Multiframe DICOMs: all have ImageOrientationPatient = [1, 0, 0, 0, 1, 0], but they are not all axial plane](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/598828) — 19 票 / 8 评论 / 2025-08-13 
+- [Prediction of brain aneurysm Rupture risk by machine learning. MCA and ACA the commonest locations of IA.](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591545) — 17 票 / 5 评论 / 2025-07-29 
+- [CV vs LB thread](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/603679) — 16 票 / 4 评论 / 2025-09-03 
+- [Share my work -- Vessel Structure Extraction ](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600304) — 16 票 / 5 评论 / 2025-08-22 
+- [For those having difficulty loading DICOM image data](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/598083) — 16 票 / 2 评论 / 2025-08-08 
+- [External dataset list by chatGPT search](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/597777) — 16 票 / 0 评论 / 2025-08-07 
+- [Corresponding vessels for segmentation labels](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/593842) — 16 票 / 1 评论 / 2025-07-30 
+- [Challenge wrap and addressing submission delays](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611953) — 15 票 / 2 评论 / 2025-10-15 
+- [Question about external dataset restrictions](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/608179) — 15 票 / 6 评论 / 2025-09-18 
+- [55st Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611858) — 14 票 / 2 评论 / 2025-10-15 **write-up?**
+- [38th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611907) — 14 票 / 0 评论 / 2025-10-15 **write-up?**
+- [As many as 28 training images have wrong orientations [Compilations]](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609876) — 14 票 / 2 评论 / 2025-09-30 
+- [Rerun of Submissions Complete](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/603990) — 14 票 / 0 评论 / 2025-09-05 
+- [Successful submissions without error handling? ](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/608575) — 14 票 / 6 评论 / 2025-09-20 
+- [Reduced competition dataset containing ROIs only](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600591) — 13 票 / 9 评论 / 2025-08-23 
+- [18th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/612006) — 12 票 / 7 评论 / 2025-10-16 **write-up?**
+- [[Maybe Not Fixed]Still hit Error reading multiframe dicom in hidden testset, which works for all train series](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/603094) — 12 票 / 6 评论 / 2025-08-31 
+- [3D Circle of Willis Segmentation with a Stacked U-Net ](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/612246) — 12 票 / 1 评论 / 2025-10-18 
+- [Server load has a substantial influence on code runtime.](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611721) — 11 票 / 9 评论 / 2025-10-14 
+- [Modality not provided in test.csv?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/596296) — 11 票 / 12 评论 / 2025-08-02 
+- [Share my work -- View sampling](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/603742) — 11 票 / 1 评论 / 2025-09-04 
+- [Handling “Unable to decompress ‘JPEG Lossless…’” errors in pydicom for MRI T2 files](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/596407) — 10 票 / 2 评论 / 2025-08-03 
+- [Problems with some MR series, including wrong coordinates/labels/slices](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/599259) — 10 票 / 1 评论 / 2025-08-15 
+- [How can only T1 or T2 modalities be used for aneurysm?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/603673) — 10 票 / 8 评论 / 2025-09-03 
+- [Question on CoW vessel label assigned to aneurysm?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/604718) — 10 票 / 4 评论 / 2025-09-07 
+- [SharedFunctionalGroupsSequence for multiframe DICOMs in test set](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609809) — 10 票 / 4 评论 / 2025-09-29 
+- [TopCoW Dataset](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/608189) — 10 票 / 1 评论 / 2025-09-18 
+- [Notice: Minor Dataset Update 2 revision (0.046%)](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609970) — 9 票 / 5 评论 / 2025-09-30 
+- [[Resolved] Submissions failing for RSNA competition](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/599026) — 9 票 / 9 评论 / 2025-08-13 
+- [Is the provided Segmentation flipped in y axis?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600540) — 9 票 / 6 评论 / 2025-08-23 
+- [Test dataset](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600396) — 9 票 / 12 评论 / 2025-08-22 
+- [Will the competition deadline be extended?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/607818) — 9 票 / 11 评论 / 2025-09-16 
+- [1 day more for the queue](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611787) — 8 票 / 1 评论 / 2025-10-14 
+- [Scout/Localizer slices found at series start or end](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/596183) — 8 票 / 3 评论 / 2025-08-02 
+- [Localizers Coordinates Check](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/607503) — 8 票 / 22 评论 / 2025-09-14 
+- [how to read a dicom folder with multi series?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600485) — 7 票 / 4 评论 / 2025-08-23 
+- [Clarification on f in train_localizers.csv](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/606577) — 7 票 / 4 评论 / 2025-09-08 
+- [MIP view on the segmentation prediction and predicted points](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/607787) — 7 票 / 7 评论 / 2025-09-16 
+- [Multiple Image Modalities from Single Patient](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/594087) — 7 票 / 3 评论 / 2025-08-01 
+- [8th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/613534) — 7 票 / 1 评论 / 2025-10-27 **write-up?**
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591535) — 6 票 / 7 评论 / 2025-07-28 
+- [RSNA Competition: Dataset Loading Taking 2-8 Seconds Per Sample - Optimization Advice Needed](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609292) — 6 票 / 4 评论 / 2025-09-25 
+- [Rescoring submissions after the dataset update? ](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600908) — 6 票 / 4 评论 / 2025-08-25 
+- [Incorrect ImageOrientation(Position)Patient for multi-frames dicom ?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609271) — 6 票 / 3 评论 / 2025-09-25 
+- [Image Order?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/593948) — 6 票 / 8 评论 / 2025-07-31 
+- [15th Place Solution](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/612775) — 6 票 / 0 评论 / 2025-10-22 **write-up?**
+- [predict() signature in the submission notebook limits parallel processing - why not just mounting the test data?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611778) — 6 票 / 3 评论 / 2025-10-14 
+- [Compilation of Questions on Inference Time. Official help, please?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/607923) — 5 票 / 4 评论 / 2025-09-16 
+- [DICOM MPR Viewer: Axial, Sagittal, Coronal Slice Visualization for CT/MR Series](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609541) — 5 票 / 0 评论 / 2025-09-27 
+- [Errors in train_localizers.csv](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600467) — 5 票 / 6 评论 / 2025-08-22 
+- [Got  "401 Client Error" while downloading competition dataset with kaggle cli](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/591616) — 5 票 / 8 评论 / 2025-07-29 
+- [Projection image among MRA images?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/593739) — 5 票 / 3 评论 / 2025-07-30 
+- [Fun fact? Two Dicom series discovered to be from the same patient!](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/611032) — 5 票 / 4 评论 / 2025-10-08 
+- [3D UNet Vessel Segmentation](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609595) — 5 票 / 25 评论 / 2025-09-28 
+- [Coordinates Sanity Check](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/599240) — 5 票 / 3 评论 / 2025-08-15 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/612213) — 4 票 / 0 评论 / 2025-10-17 
+- [Problem in getting attributes in hidden test set](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/609431) — 4 票 / 12 评论 / 2025-09-26 
+- [Kaggle Submission Error - Still Ongoing?](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/602624) — 4 票 / 6 评论 / 2025-08-28 
+- [EDA + 3D & Segmentation Visualization for RSNA Aneurysm Detection](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/596190) — 4 票 / 0 评论 / 2025-08-02 
+- [Submission error after dataset update](https://www.kaggle.com/competitions/rsna-intracranial-aneurysm-detection/discussion/600658) — 4 票 / 11 评论 / 2025-08-24 

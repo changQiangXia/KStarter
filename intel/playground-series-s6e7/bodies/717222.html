@@ -1,0 +1,34 @@
+<p>The "original" dataset has many features, but it appears that only 3 were useful in generating the target. These are <code>sleep_duration</code>, <code>stress_level</code> and <code>physical_activity_level</code>. With the ground truth being hard labels, it would not be possible to reverse engineer the generation model with certainty because many models would give the same hard labels. One can easily make up such a model:</p>
+<pre><code>from sklearn.metrics import balanced_accuracy_score
+
+original = pd.read_csv('/kaggle/input/datasets/ziya07/college-student-health-behavior-dataset/student_health_dataset_50k.csv')
+y = original.pop('health_condition')
+z = (
+    (original.sleep_duration&lt;6).astype(int)*2+
+    (original.stress_level=='medium').astype(int)+
+    (original.stress_level=='high').astype(int)*3+
+    (original.physical_activity_level=='moderate').astype(int)+
+    (original.physical_activity_level=='sedentary').astype(int)
+)
+y_pred = pd.cut(z, [-np.inf, 0, 4, np.inf], labels=['fit', 'at-risk', 'unhealthy']).astype('object')
+print(balanced_accuracy_score(y, y_pred))
+</code></pre>
+<pre><code>0.9905759641337664
+</code></pre>
+<p>Is it possible to completely separate the classes with a simple model? I have my doubt. Synthetic datasets are usually created with noise.</p>
+<p>Sticking with these 3 features, there are only 18 combinations.</p>
+<pre><code>X = pd.DataFrame()
+X['sleep_duration&lt;6'] = (original.sleep_duration&lt;6).astype(int)
+X['stress_level=medium'] = (original.stress_level=='medium').astype(int)
+X['stress_level=high'] = (original.stress_level=='high').astype(int)
+X['physical_activity_level=moderate'] = (original.physical_activity_level=='moderate').astype(int)
+X['physical_activity_level=sedentary'] = (original.physical_activity_level=='sedentary').astype(int)
+cols = list(X.columns)
+X[''] = y
+g = X.groupby(cols)
+df = g.value_counts(normalize=True).unstack(fill_value=0)
+df['count'] = g.size()
+df
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1048539%2F9cf06fe398d6a4534e1796d642a946cb%2FCapture.PNG?generation=1782925165375544&amp;alt=media" alt="">
+It almost looks like the creator of the "original" dataset took the group with absolutely no risk factors and made 1/3 of them "at risk".</p>

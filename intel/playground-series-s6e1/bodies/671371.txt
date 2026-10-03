@@ -1,0 +1,217 @@
+# https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671371
+
+Topic #671371: 1st place - (I've ran out of catchy phrases :V)
+  Author: Mahog
+  Posted: 2026-02-01 13:19:57.438000
+  Votes: 49  Comments: 32
+
+First of all, I would like to thank Kaggle for a very nice dataset this month. The CV/LB correlation was even better than S5E8/S5E11 and there was a decent amount of signal. I would also like to thank all the people who shared their code and insights, including but not limited to: @cdeotte, @yekenot, @omidbaghchehsaraei, @siukeitin, @masayakawamata, @mikhailnaumov.
+
+Now my solution:
+
+FE
+
+I have 2 main feature sets that I used for my models:
+
+Feature set 1 (this did best with NNs):
+
+
+
+Cyclical features from @yekenot's notebooks
+
+The formula from here
+
+A categorical copy of each numerical base feature
+
+Digit features
+
+Certain combinations of features + TE (mean/std/skew)
+
+Certain combinations of digits + TE (mean/std/skew)
+
+
+Feature set 2 (this did best with GBDTs):
+
+
+
+The same formula as feature set 1
+
+Ordinal mapping of categorical features from @cdeotte's notebook
+
+A categorical copy of each base feature (including categoricals as they are mapped to numerical)
+
+Digit features
+
+
+Models
+
+I focused on making stronger models rather than a lot of different models this time. This resulted in my best single model placing 7th! Their CV/LB scores (without post-processing) are as follows:
+
+
+
+
+Model type
+CV
+Public LB
+Private LB
+
+
+
+
+RealMLP
+8.58742
+8.54280
+8.58005
+
+
+XGBoost
+8.59480
+8.55235
+8.59251
+
+
+TabM
+8.59651
+8.55740
+8.59279
+
+
+CatBoost
+8.60027
+8.56047
+8.59537
+
+
+DeepTables
+8.60147
+8.55467
+8.59020
+
+
+LightGBM-dart
+8.60870
+8.56743
+8.60437
+
+
+LightGBM
+8.60910
+8.56951
+8.60670
+
+
+Keras MLP
+8.61511
+8.57016
+8.60957
+
+
+
+
+There are some other weaker models like Resnet, FTTransformer, xLearn FFM, etc. but those are not listed here (partially because I'm kinda lazy :V).
+
+Ensembling
+
+My final ensemble has a total of 190 models ensembled with Ridge: CV 8.56634, LB 8.53096, PB 8.57273 (with post-process). Other ensemblers like HC, Autogluon, CatBoost, etc. gave worse scores. 
+
+Post-processing
+
+Somewhere in the middle of the comp, I tried using Isotonic Regression to post-process the oofs passed to Ridge as well as after and it gave a decent improvement. Turns out, my final ensemble without the post-process is only slightly worse on LB and a lot better on PB: CV 8.56959, LB 8.53099, PB 8.57152. I tested it on my best single model as well and both LB and PB are worse as well.
+
+Hyperparameter tuning
+
+I also want to note that adding a lot of models with different hyperparameters worked really well. My boost from around 8.5335 down to 8.5309 was due to hyperparameter tuning all my best models (RealMLP, TabM, GBDTs) and saving all the oofs from all the trials. I would recommend using WandB sweeps as you get very handy visualizations and can parallelize the tuning on multiple machines (at least I think so, I've never tried it :V).
+
+Conclusion
+
+I've said it many times and I'll say it again, ensembling lots of diverse models and some FE is all you need. Best of luck for the next comp (which I will probably not be participating in) and happy Kaggling!
+
+Comments:
+├─ Mirko (2026-02-03 11:10:25.220000) [+3]
+│  Hi Mahog,
+│  
+│  I wanted to share that adding your RealMLP_TD_Regressor (without pseudo-labeling) to my ensemble provided a massive boost to my scores!
+│  
+│  My solution was a Ridge stack built exclusively o...
+  ├─ Mahog (2026-02-03 11:31:12.463000) [+1]
+  │  Your models must be really diverse. My ensemble only improved 0.02 from my best single model yet your ensemble improved a whole 0.04 from your best single model! Could you make your oofs public? I ...
+    ├─ Mirko (2026-02-03 13:30:56.667000) [+1]
+    │  This was my first time sharing a dataset, so I hope everything is organized correctly! 
+    │  
+    │  I also want to take a moment to thank @cdeotte, @tilii7, @siukeitin, @mikhailnaumov, @masayakawamata and obv...
+    ├─ Mahog (2026-02-03 16:10:23.960000) [+2]
+    │  Wow, your models boost my ensemble by a lot:
+    │  
+    │  CV: 8.56959 -&gt; 8.56454
+    │  
+    │  Public LB: 8.53099 -&gt; 8.52632
+    │  
+    │  Private LB: 8.57152 -&gt; 8.56782
+    │  
+    │  
+    │  
+    │  Turns out there is still quite a lot of room for impr...
+    ├─ Mirko (2026-02-03 16:27:04.873000) [+2]
+    │  That’s amazing news, Mahog! I’m so happy to see such a strong boost across CV and both LBs.
+    │  
+    │  It proves I have a lot to learn about tuning—my first attempt with RealMLP defaults was actually quite b...
+    ├─ Tilii (2026-02-03 19:55:53.540000) [+1]
+    │  @mirko45 I also see a large score increase after adding your OOF files, so you've done everything right in making that directory. My private LB goes from 8.57689 to 8.57112 after adding your files,...
+    ├─ Mahog (2026-02-04 01:40:32.657000) [+1]
+    │  @mirko45 If you have time, I would love to see your writeup. Probably not many people would pay attention to it since it's already been a few days since the comp ended, but I and maybe @tilii7 woul...
+    ├─ Mirko (2026-02-04 12:29:59.903000) [+0]
+    │  @mahoganybuttstrings, I will definitely try to put together a write-up! To be honest, I really just took @tilii7’s advice to heart. I focused entirely on creating feature-driven diversity so that e...
+    ├─ Mirko (2026-02-05 09:20:16.727000) [+0]
+    │  @mahoganybuttstrings Thanks again for the encouragement!
+    │  I just posted a write-up.
+├─ Yu Liwei (2026-02-06 15:01:31.690000) [+0]
+│  Thanks you very much. I learned a lot from your FE and MLP model. And I test it without pseudo, found it still work well.  I wonder how to chose the pseudo, use less features with the same model or...
+  ├─ David Holzmüller (2026-02-06 15:06:46.053000) [+1]
+  │  Hi, the code simply samples hyperparameter configurations using this part of the code: https://github.com/dholzmueller/pytabkit/blob/c126ea51187c5080b91f28d352481dbd3b2194b0/pytabkit/models/alg_int...
+    ├─ Yu Liwei (2026-02-07 01:47:37.543000) [+1]
+    │  Thank you very much, you're the author of pytabkit. Great to meet you here.
+├─ JecKaggle (2026-02-05 23:33:13.260000) [+0]
+│  Hi Mahog,
+│  
+│  Thank you for sharing this, a really interesting read and a great learning material for newbies like myself!
+│  
+│  In your experience, did cyclical features help for things like study hours? ...
+├─ nevergetcomplacent (2026-02-04 08:09:07.510000) [+0]
+│  Nice! I like the competition theme
+├─ Tilii (2026-02-02 17:08:40.417000) [+0]
+│  Congratulations on a stellar job of getting in front and fending off all the comers! Thanks for the notebooks and OOF files - it makes for an interesting analysis.
+  ├─ Tilii (2026-02-02 17:29:21.617000) [+1]
+  │  With a simple Keras MLP and your OOFs I get CV: 8.572227, public LB: 8.53132 and private LB: 8.57165. Nothing fancy, just 4 hidden layers (128-64-32-16 neurons). As scary as that sounds, you still ...
+    ├─ Mahog (2026-02-03 02:06:37.990000) [+1]
+    │  As I wrote above, my ensemble gets 8.57152 on private LB without post-processing, so yes, there was still a lot of room left. Also, the weird thing about this comp is that I never felt my score sta...
+    ├─ Tilii (2026-02-03 02:27:58.353000) [+1]
+    │  Same here. I had a model that was running past the deadline, and its addition alone to the ensemble improved the CV/LB scores by 0.0006. Pretty sure I would never catch you, but I am certain that w...
+├─ Vijay Kumar (2026-02-02 16:24:00.457000) [+0]
+│  congrats @mahoganybuttstrings and thanks for sharing insights
+├─ Mirko (2026-02-02 13:23:07.880000) [+0]
+│  Congrats on the 1st place finish, Mahog! 
+│  Thanks for sharing your insights with the community.
+├─ JinZhao (2026-02-02 09:21:27.720000) [+0]
+│  Congratulations on winning first place! Did you use a linear regression model? Or did you use a linear regression model to generate out-of-fold predictions (OOF) and test set predictions, and then ...
+  ├─ Mahog (2026-02-02 10:44:44.690000) [+0]
+  │  I tried adding linear regression features but they were not very effective. I'm supposing any signal from linear regression was already captured by the formula I mentioned
+├─ Jimmy Smith1009 (2026-02-02 01:12:11.150000) [+0]
+│  Congrats！thx for sharing.
+├─ Traiko Dinev (2026-02-01 17:34:16.407000) [+0]
+│  Congrats @mahoganybuttstrings ! How did you tune the RealMLP parameters? It's one of the models I have up on quite early on.
+  ├─ Mahog (2026-02-02 00:38:45.077000) [+2]
+  │  Congrats on 6th place as well! I did random search for around 30 trials with the recommended search space (tabarena-new), you can find it in here
+├─ kobby_ (2026-02-01 17:24:38.827000) [+0]
+│  Congrats man. Steady win.
+  ├─ Mahog (2026-02-02 00:39:18.007000) [+1]
+  │  Thanks! Congrats on your 9th place as well!
+├─ David Holzmüller (2026-02-01 14:38:29.777000) [+0]
+│  Congratulations, I'm delighted to see the results of your model comparison 😃
+  ├─ Mahog (2026-02-02 00:41:55.663000) [+1]
+  │  Thanks! I think this is the second comp (for me) RealMLP completely outperformed all the other models, the other one was NFL Big Data Bowl 2026
+├─ [deleted] (2026-02-01 17:45:22.857000) [+0]
+│  [deleted]
+├─ [deleted] (2026-02-01 16:01:05.110000) [+0]
+│  [deleted]
+├─ ELMIR (2026-02-03 07:33:58.747000) [+1]
+│  Thanks you for no asnwer!

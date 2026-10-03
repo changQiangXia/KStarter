@@ -1,0 +1,74 @@
+<p>First of all, I would like to thank the competition hosts for their exceptional organization and the challenging yet enriching environment they created. Their dedication to fostering a space for learning and innovation is deeply appreciated. I also express my profound gratitude to my teammates, <a href="https://www.kaggle.com/onodera" target="_blank">@onodera</a> and <a href="https://www.kaggle.com/christofhenkel" target="_blank">@christofhenkel</a>. Their collaboration, expertise, and unwavering commitment throughout this project were invaluable.</p>
+<p>Here I will try to summarize some of the main points of our solution.</p>
+<h1>Solutions from our temamates</h1>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460956" target="_blank">onodera part</a></li>
+</ul>
+<h1>CV Strategy: GroupKFold</h1>
+<p>In the field of RNA secondary structure estimation, various studies including <a href="https://academic.oup.com/bib/article/24/4/bbad186/7179751?login=false" target="_blank">Sato et al., 2023,</a> have highlighted the inappropriateness of using random splits for evaluation.This stems from the concept of 'Families' in RNA experimental data - groups of RNA molecules sharing specific functions or structures, resulting in high structural similarity within the same family. For instance, <a href="https://academic.oup.com/nar/article/50/3/e14/6430845" target="_blank">Fu et al., 2022</a> noted that the <a href="https://academic.oup.com/view-large/figure/333767038/gkab1074fig3.jpg" target="_blank">E2EFold model was overestimated due to this issue</a>.</p>
+<p>To address this, we adopted clustering based on RNA sequence edit distances, using cluster IDs for GroupKFold. Additionally, we aggregated all the limited samples with seqlen=206 into fold=0. This strategy allowed for continuous evaluation of the model's performance on longer sequences.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2311404%2Fb39fa96937be0505cbe1b8480910784e%2Fsplit.png?generation=1702029388253122&amp;alt=media" alt=""></p>
+<h1>Datasets</h1>
+<p>As part of my models, I experimented with alternating training using both the RMDB dataset and the competition dataset. This approach was adopted with the anticipation that it would enhance the model's ability to handle longer RNA sequences, a critical aspect in RNA secondary structure prediction.</p>
+<h1>Features</h1>
+<p>We processed input sequences using the 'arnie' package, mainly utilizing eternafold, rnasoft, and rnastructure. The model inputs included embedding layers for structure and loop_type, and a Graph Neural Network (GNN) adjacency matrix for bpp (base pair probability).</p>
+<p>However, bpp alone, representing the probability of forming a pair, requires many layers when combined with CNNs to view the entire graph. As an alternative to using Transformers for a global view, we utilized “structure” (renamed to 'chunk' due to naming conflicts) and “segment”, as defined in <a href="https://academic.oup.com/nar/article/46/11/5381/4994207" target="_blank">bpRNA</a> [Danaee et al., 2018].</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2311404%2Fd2a22732d565f34536b3ad5c9af99220%2Fgraph_features.png?generation=1702027001721359&amp;alt=media" alt=""></p>
+<h1>Models</h1>
+<p>My architecture is inspired by <a href="https://academic.oup.com/bioinformatics/article/39/8/btad457/7230784?login=false" target="_blank">LegNet</a> from <a href="https://www.kaggle.com/dmitrypenzar1996" target="_blank">@dmitrypenzar1996</a> and <a href="https://www.kaggle.com/competitions/stanford-covid-vaccine/discussion/189241" target="_blank">OpenVaccine's 6th place solution</a> [nyanp]. It consists solely of CNN and GNN layers. The adjacency matrices for bpp, structure, chunk, and segment significantly differ, so I prepared independent CNN+GNN blocks for each type. Group Convolution and einsum enabled this without for loops.</p>
+<p>Following <a href="https://academic.oup.com/bioinformatics/article/39/8/btad457/7230784?login=false" target="_blank">LegNet</a>, prediction head outputs a 100d vector instead of a 1d scalar, with weighted summation over bin values for the final output. This approach stabilized learning by controlling the output range in regression tasks.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2311404%2Feed37f263a4a1321dbd91ccaf915d66c%2Fmodel.png?generation=1702027231710653&amp;alt=media" alt=""></p>
+<h1>Loss</h1>
+<p>We opted for an MAE + MSE weighted by signal-to-noise ratio as my optimization function. MSE provides gradients similar to MAE in the early stages of training but approaches zero later, aiding in convergence.</p>
+<h1>Pseudo labels</h1>
+<p>We conducted pseudo label training using predictions on the test set created collaboratively with teammates <a href="https://www.kaggle.com/onodera" target="_blank">@onodera</a> and <a href="https://www.kaggle.com/christofhenkel" target="_blank">@christofhenkel</a>.</p>
+<h1>Result</h1>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>CV</th>
+<th>CV (seqlen=206)</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>single best (scratch training)</td>
+<td>0.1336</td>
+<td>0.1133</td>
+<td>0.14012</td>
+<td>0.14299</td>
+</tr>
+<tr>
+<td>single best (+pseudo label 1st)</td>
+<td>0.1313</td>
+<td>0.1152</td>
+<td>0.13828</td>
+<td>0.14222</td>
+</tr>
+<tr>
+<td>single best (+pseudo label 2nd)</td>
+<td>0.1306</td>
+<td>0.1221</td>
+<td>0.13739</td>
+<td>0.14186</td>
+</tr>
+<tr>
+<td>blending w/ all models</td>
+<td>0.127645</td>
+<td>0.109341</td>
+<td>0.13626</td>
+<td>0.14263</td>
+</tr>
+</tbody>
+</table>
+<h1>References</h1>
+<ul>
+<li>Fu, Laiyi, et al. "<a href="https://academic.oup.com/nar/article/50/3/e14/6430845" target="_blank">UFold: fast and accurate RNA secondary structure prediction with deep learning.</a>" Nucleic acids research 50.3 (2022): e14-e14.</li>
+<li>Sato, Kengo, and Michiaki Hamada. "<a href="https://academic.oup.com/bib/article/24/4/bbad186/7179751?login=false" target="_blank">Recent trends in RNA informatics: a review of machine learning and deep learning for RNA secondary structure prediction and RNA drug discovery.</a>" Briefings in Bioinformatics (2023): bbad186.</li>
+<li>Danaee, Padideh, et al. "<a href="https://academic.oup.com/nar/article/46/11/5381/4994207" target="_blank">bpRNA: large-scale automated annotation and analysis of RNA secondary structure.</a>"&nbsp;<em>Nucleic acids research</em>&nbsp;46.11 (2018): 5381-5394.</li>
+<li>Sato, Kengo, and Michiaki Hamada. "<a href="https://academic.oup.com/bib/article/24/4/bbad186/7179751?login=false" target="_blank">Recent trends in RNA informatics: a review of machine learning and deep learning for RNA secondary structure prediction and RNA drug discovery.</a>" Briefings in Bioinformatics (2023): bbad186.</li>
+<li>Penzar, Dmitry, et al. "<a href="https://academic.oup.com/bioinformatics/article/39/8/btad457/7230784?login=false" target="_blank">LegNet: a best-in-class deep learning model for short DNA regulatory regions.</a>"&nbsp;<em>Bioinformatics</em>&nbsp;39.8 (2023): btad45</li>
+</ul>

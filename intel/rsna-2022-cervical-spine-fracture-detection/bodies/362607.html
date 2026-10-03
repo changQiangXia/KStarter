@@ -1,0 +1,54 @@
+<p>Thanks to the organizers and congrats to all the winners and those who worked hard to develop new pipelines and stuck with it until the end of the competition. </p>
+<p>This is a very interesting competition, because we can think of many different ways to approach this dataset. Therefore the most important thing for this competition is to develop a reasonable pipeline, followed by optimization of the model. </p>
+<h1>Code</h1>
+<p><a href="https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362787" target="_blank">https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362787</a></p>
+<h1>Summary</h1>
+<p>I designed a 2-stage pipeline to deal with this problem.</p>
+<p>stage1: 3D semantic segmentation -&gt; stage2: 2.5D w/ LSTM classification.</p>
+<p>In addition, there are 2 different types of classification models in stage2.</p>
+<h1>3D Semantic Segmentation</h1>
+<p>For 3D semantic segmentation, we only have 87 samples w/ 3d mask in the dataset, but it's sufficient to train 3D semantic segmentation models with good performance. </p>
+<p>I use 128x128x128 input, to train resnet18d or efficientnet v2s + unet model, for segmenting C[1-7] vertebraes (7ch output).</p>
+<p>After the training was completed, I predicted 3d masks for each vertebrae for all 2k samples in the training set.</p>
+<p>Here is an example of predicted masks of C[1-7] vertebrae. Center slice of x, y, z dimension view, from left to right.<br>
+​<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F448347%2F6389a0864805b2f51c12dfe64c590cd5%2F1.png?generation=1666929046271861&amp;alt=media" alt=""></p>
+<h1>Prepare Data for Classification</h1>
+<p>Next step is to prepare data for classification.</p>
+<p>First using the predicted 3D mask for each vertebrae, we can crop out 7 vertebraes from a single original 3d image (there might be multiple vertebraes shown in a single crop, but It's fine). At this moment, we cropped 2k * 7 = 14k samples and for each sample there is only one single binary label.</p>
+<p>Then for each vertebrae sample, I extracted 15 slices evenly by z-dimension, and for each slice, I further extracted +-2 adjacent slices to form an image with 5 channels. E.g if a 3D vertebrae sample have a shape of (128, 128, 30), I extracted 0th, 2nd, 4th, 6th….26th, 28th slices, then for example for the 2nd one, I use 0th~4th slices to form a 5-channel image.</p>
+<p>In addition, I added the predicted mask of corresponding  vertebrae as the 6th channel to each image, as a way to exclude the effect of having multiple vertebraes in a single sample.</p>
+<p>Here is an example of one slice of a single vertebrae, and its predicted mask (with augmentations). We can see that the left half of the vertebrae in the image do not belong to the vertebrae specified by this crop.<br>
+​<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F448347%2Fca4e40db1dc08930b7db99416f122bb0%2F2.png?generation=1666929152961988&amp;alt=media" alt=""></p>
+<h1>2.5D + LSTM Classification</h1>
+<p>We now have 14k 3D training samples of vertebrae. Theoretically the easiest way to deal with this data is to train 3D CNN on it. But unfortunately this method does not work. Training a 3D CNN on this data did not give me satisfactory results.</p>
+<p>So I backed off and chose the 2.5D approach. Here 2.5D means that each 2D slice in a vertebrae sample has the information of several adjacent slices, so it is written 2.5D. But the model is a normal 2D CNN with 5-channels input.</p>
+<p>The structure of this model is that, I first input 15 slices from a single sample into a 2D CNN, extracted out features of each slice, and then follow it with an LSTM model. So that the whole model can learn the features of the whole vertebrae. I call it type1 model ↓</p>
+<p>​<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F448347%2F15ff7ec369c300c4f8d8f5e3df64b071%2F3.png?generation=1666929243244770&amp;alt=media" alt=""></p>
+<p>This model structure above, while being able to train a single vertebrae for fracture, does not able to train the patient as a whole for the presence of a fracture. So I designed another model.</p>
+<p>The second classification model is basically the same as the one above, except that it treats a patient as one training sample (the model above treats a vertebrae as one training sample). This model is fed with 7x15 2D images at the same time, so that it has the ability to learn patient_overall labels. I call it type2 model ↓</p>
+<p>​<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F448347%2Feecde695d666d4be6cb27791fa813ac0%2Fv2-0c70d96faae895d030d7b7f023570598_1440w.png?generation=1666929301847778&amp;alt=media" alt=""></p>
+<p>However, the disadvantage of this model is that it takes up too much GPU memory and therefore can only use small backbones (Imagine a model with batch_size = 1 that has to be trained on 105 images at one time, it is insane). </p>
+<h1>Final Submission</h1>
+<p>3D Seg</p>
+<ul>
+<li>5fold resnet 18d unet (128x128x128)</li>
+<li>5fold effv2 s (128x128x128)</li>
+</ul>
+<p>2.5D Cls</p>
+<ul>
+<li><p>Type1 5fold effv2s (512x512)</p></li>
+<li><p>Type1 5fold convnext tiny (384x384) </p></li>
+<li><p>Type2 5fold convnext nano (512x512)</p></li>
+<li><p>Type2 2fold convnext pico (512x512)</p></li>
+<li><p>Type2 2fold convnext tiny (384x384)</p></li>
+<li><p>Type2 2fold nfnet l0 (384x384)</p></li>
+</ul>
+<p>The submission time is 7.5 hours.</p>
+<p>Thanks to timm library for having so good implementation of those models. I always using it.</p>
+<h1>Acknowledge</h1>
+<p>In this competition, more than half of my models are trained on Z8G4 Workstation with dual A6000 GPU from Z by HP.<br>
+I would say I couldn't have achieved this without this workstation, thanks a lot!</p>

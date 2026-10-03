@@ -1,0 +1,101 @@
+<p>Thanks to Enefit and Kaggle for hosting this great competition. And thanks to the<br>
+great notebooks and discussions, I learned a lot.  I am so happy to win my third solo win! 😃😀😀</p>
+<h1>Overview</h1>
+<p>My final solution consists of 4 XGBoost models (for two targets and two is_consumption) and 2 GRU models (for two targets). These models share same 600 features. </p>
+<table>
+<thead>
+<tr>
+<th>model name</th>
+<th>validation set</th>
+<th>test set w/o online training</th>
+<th>test set w/ update one time</th>
+<th>test set w/ update three times</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XGBoost</td>
+<td>41.5912(2 targets:42.2531/42.6607)</td>
+<td>55.6231</td>
+<td>54.1343</td>
+<td>54.1213</td>
+</tr>
+<tr>
+<td>GRU</td>
+<td>43.0815(2 targets:43.7182/45.1687)</td>
+<td>56.6651</td>
+<td>54.9948</td>
+<td>54.6960</td>
+</tr>
+<tr>
+<td>XGBoost+GRU</td>
+<td>40.6790(2 targets:40.9613/41.5294)</td>
+<td>53.6627</td>
+<td>52.4813</td>
+<td>52.3090</td>
+</tr>
+</tbody>
+</table>
+<h1>Validation Strategy</h1>
+<p>My validation strategy is pretty simple, train on first 500 days and set the rest days as my holdout validation set which has good indication with leaderboard score. And I only checked the final overall score and didn't print single model's score.</p>
+<h1>Features</h1>
+<p>I think my features are not special compared with other top teams. I simply merge all tables excluding gas_df with train_df and create lots of lagged features. I didn't spend much time to cutdown feature size since we have not much memory pressure in this competition. With careful feature design, I believe the final feature size can be reduced to around 100-200. Maybe generating different features and targets according to different conditions will achieve better model performance after reading other kagglers' solutions, but this is also very time consuming for me.</p>
+<p>fw_new_feature from <a href="https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/468654" target="_blank">this discussion</a> help a bit(about 0.1~0.2), Thanks to <a href="https://www.kaggle.com/mohammadpakdaman0" target="_blank">@mohammadpakdaman0</a>  </p>
+<pre><code># client_df
+client_df = client_df.(["date"]).sort(["data_block_id"], descending=)
+df = df.(client_df.(["county", "is_business", "product_type", "data_block_id","eic_count","installed_capacity"]), how="left", =["county", "is_business", "product_type", "data_block_id"])
+# electricity
+electricity_df = electricity_df.(["origin_date"]).({"forecast_date":"datetime"}).with_columns([(pl.col("datetime").str.to_datetime()+pl.duration(days=)).("datetime"), (pl.col("euros_per_mwh").abs()+).("euros_per_mwh"),])
+df = df.(electricity_df[["data_block_id","datetime","euros_per_mwh"]], how="left", =["data_block_id","datetime"])
+
+# fw_df 
+fw_df = fw_df.with_columns(
+                (pl.col("origin_datetime").str.to_datetime()+pl.duration(hours="hours_ahead")).("datetime"),
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+                pl.col("data_block_id").cast(pl.datatypes.Int64),
+            ).(weather_station_to_county_mapping.(["county_name"]).with_columns(
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+            ), how="left",=["longitude","latitude"]).(["longitude","latitude","origin_datetime"])
+fw_df = fw_df.group_by(["county","datetime","data_block_id"]).agg([pl.mean(col).("fw_{}".format(col))  col  forecast_weather_cols]).with_columns([pl.col("county").cast(pl.datatypes.Int64),    
+                                                                    pl.col("data_block_id").cast(pl.datatypes.Int64),])
+df = df.(fw_df, how="left", =["county","datetime","data_block_id"]).with_columns([(pl.col("installed_capacity")*pl.col("fw_surface_solar_radiation_downwards") / (pl.col("fw_temperature") + )).("fw_new_feature"),])
+
+# hw_df 
+hw_df = hw_df.with_columns(
+            (pl.col("datetime").str.to_datetime()+pl.duration(days=)).("datetime"),
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+                pl.col("data_block_id").cast(pl.datatypes.Int64),
+            ).(weather_station_to_county_mapping.(["county_name"]).with_columns(
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+            ), how="left",=["longitude","latitude"]).(["longitude","latitude"])
+hw_df = hw_df.group_by(["county","datetime","data_block_id"]).agg([pl.mean(col).("hw_{}".format(col))  col  historical_weather_cols]).with_columns([                                                            pl.(pl.col("datetime").dt.hour()&gt;).(pl.col("datetime")+pl.duration(days=)).otherwise(pl.col("datetime")).("datetime"),
+                                                                pl.col("county").cast(pl.datatypes.Int64),    
+                                                                pl.col("data_block_id").cast(pl.datatypes.Int64),])
+df = df.(hw_df, how="left", =["county","datetime","data_block_id"])
+</code></pre>
+<h1>target</h1>
+<ol>
+<li>(target-target_shift2)/installed_capacity.</li>
+<li>target/installed_capacity.</li>
+<li>target-target_shift2</li>
+<li>raw target</li>
+</ol>
+<p>I only use 1&amp;2 since 3&amp;4 have no benefit to my final overall score. </p>
+<h1>model</h1>
+<p>I didn't spend much time to tune my xgboost models, just simply train and predict.  And I find there is no team using NN models yet, which really surprises me.<br>
+My GRU models are also very simple.  input tensor's shape is (batch_size, 24 hours, 600 dense_feature_dim + 6*16 cat_feature_dim), followed by 2 layers GRU, output tensor's shape is (batch_size, 24 hours). Categorical features are ['county', 'product_type', 'hour', 'month', 'weekday', 'day']. NN models boost my final score by 0.9.</p>
+<h1>online learning strategy</h1>
+<p>Although online learning didn't help much in public leaderboard, I think it is crucial in private leaderboard since we  <br>
+will have additional 8 months‘ data. So I just gave up chasing higher public leaderboard score by ensembling with more models and decided to retrain less models every month.</p>
+<h1>What not worked for me</h1>
+<ol>
+<li>solar features from this <a href="https://www.kaggle.com/code/karakasatarik/1st-place-solution-public-1-546-priv-1-488" target="_blank">notebook </a></li>
+<li>1dcnn model and transformer model</li>
+<li>multi-days input instead of singe day input when applying GRU models</li>
+<li>split into more models given is_business equals 0/1. </li>
+</ol>
+<p>Thank you all! I will write more if necessary.</p>

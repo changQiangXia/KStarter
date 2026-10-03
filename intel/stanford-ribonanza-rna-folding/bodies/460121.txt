@@ -1,0 +1,330 @@
+# https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/460121
+
+Topic #460121: [1st place solution] Transformer model with Dynamic positional encoding + CNN for BPPM features
+  Author: vyaltsevvaleriy
+  Posted: 2023-12-08 00:33:45.895000
+  Votes: 147  Comments: 58
+
+The Ribonanza RNA Folding competition has been an amazing opportunity and we are really glad to have participated in it. Kudos to the hosts for their substantial effort in keeping the high organizational level and giving the contestants plenty of valuable insight and support. We would also like to thank the community for the fruitful public discussions and coding initiatives. Congratulations to everyone involved! 🎉
+
+Code
+
+Open source code is available on github.
+
+TLDR
+
+Our solution is based on transformer architecture. We predicted base pair probability matrix(BPPM) for each RNA sequence using EternaFold and added convolutional blocks to our architecture to process BPPM features. For some models we added Squeeze-and-Excitation layer in convolutional blocks Also we add these features with attention values before softmax operation in Self-Attention block. To allow better generalization for longer input we implemented Dynamic Positional Bias. Then we ensembled models with slight differences in architecture and training process.
+
+Data Preprocessing
+
+At first, for each sequence in train and test datasets we calculated a base pair probability matrix (BPPM) using EternaFold. During training and inference phases we passed to our model the RNA sequences encoded with a learnable embedding layer. Each nucleotide was considered a token and special &lt; start &gt; and &lt; end &gt; tokens were placed at both ends as well. To provide the model with the information about whether the sequence comes from a “clean” subset of training dataset (which SN_filter values show - 1 corresponds to “clean” sequences with high signal-to-noise ratio and 0 is otherwise) we encoded SN_filter values with a learnable embedding layer and added corresponding  embeddings to sequence embeddings. The embedding dimension was chosen to be of size 192. BPPMs were padded with zeros at their margins to account for adding &lt; start &gt; and &lt; end &gt; tokens. The figure below summarizes the data preprocessing part.
+
+
+
+Model
+
+The model idea is partially inspired by @shujun717 solution to the Open Vaccine challenge, link
+
+The model takes a sequence of tokens and BPPM as input and outputs DMS_MaP and 2A3_MaP reactivities for each input nucleotide. Its architecture comprises 12 consecutive Transformer Encoder Layers and an output projection linear layer. Each Transformer block takes a sequence of tokens and BPPM features from the previous layer and outputs updated feature maps as shown below. The Transformer Encoder block adopts common transformer encoder architecture, except we modified the Self-Attention block to ensure interaction between BPPM features and sequence features.
+
+
+
+Self-Attention Block
+
+In the Self-Attention (SA) block we implemented an attention mechanism with the following modifications: after attention values for each head are calculated, we add BPPM features updated by the ‘Convolutional block’, which outputs BPPM features with the number of channels corresponding to the number of heads in the SA block. We set the number of heads in SA and corresponding channels of BPPM features to be 6. Thus, the hidden dimension size of Q, K, V matrices is 32. The overall structure of the SA block is shown below.
+
+
+
+Dynamic Positional Bias
+
+The sequence length is distributed differently in train and test datasets (test sequences are generally longer). To allow for the better generalization of longer inputs we implemented a positional encoding to be added to attention values. We found Dynamic Positional Bias to be of more use compared to other relative positional encoding methods we tried, such as xPos (rotary positional encoding) and ALiBi. Dynamic Positional Bias calculates for each head a relative positional bias map, which is learnable and depends on sequence length. Relative positional bias doesn’t allow to leverage distance from start and end of sequence, so tokens &lt; start &gt; and &lt; end &gt; were added to fix that.
+
+
+
+Convolutional Block and SE block
+
+The models in the final ensemble come in two versions that are slightly different in the structure of the Convolutional block. The basic Convolutional block consists of 2D convolutional layer, batchnorm layer, activation and learnable gamma parameters that scale the output feature channels, whereas the modified version of this block (SE-Convolutional block) also contains Squeeze-and-Excitation layer, hence the name. The SE layer applies input-dependent rescaling of values along the channels as shown below. Thus, the only difference between models in the ensemble is the presence of the SE layer.
+
+
+
+Training Process
+
+The training process has been adapted from the notebook by @IAFOSS
+We used a one-cycle learning rate schedule (pct_start=0.05, lr_max=2.5e-3,) coupled with AdamW optimizer (wd=0.05), and batch size set to 128.
+The number of epochs for model training was determined from the dataset size.
+For final models (trained almost on the whole dataset) we used 270 epochs. 
+In each epoch, 1791 batches were processed (we kept this number due to historical reasons), elements of each batch were sampled from dataset with the weight = 0.5 * torch.clamp_min(torch.log(sn + 1.01),0.01)
+
+We have also found that training model with a simple SGD optimizer for ~15 epochs of 500 batches each additionally improves model performance (the number of epochs varies so we used a small validation set to determine the exact number of epochs)
+
+Additionally, one model was trained to predict 2A3 given DMS, RNA sequence and BPPM (dms-to-2a3 model).
+
+Inference
+
+At the inference phase for all inputs we set the SN filter value to be 1 as if they come from a “clean” dataset.
+
+Ensembling
+
+We ensembled 15 models with SE-Convolutional block, 10 models with plain Convolutional block, 2 with plain Convolutional block trained on split by sequence lengths (one of these two models accepts bracket features).  We took the average of their predictions. Then we predicted 2a3 reactivities based on averaged dms reactivities using dms-to-2a3 model and added these predictions to averaged 2a3 reactivities in the following way: (27/28)averaged_2a3 + (1/28)predicted_2a3.
+
+Other splits
+
+The clear problem with a simple KFold split is the high sequence similarity across the training dataset and the fact that test sequences are very distinct from the training data. This might hamper the model development, because the increase in quality on the validation set could be due to overfitting rather than actual improvement.
+
+We have calculated a hamming distance matrix for all the sequences present in the training set and performed a modified DBSCAN clustering procedure with distance threshold set at 0.2. In the following picture we show the clusters mapped to their respective cluster identifier (a cluster ID was assigned as a number of the smallest sequence within that cluster in the train dataset).
+
+
+
+We tested several splits based on sequence identity (the easiest one is just to split data into folds without shuffling) and found out that while the model final validation performance degrades as we choose more and more stricter distance threshold, its relative value behave the same way as for a simple KFold split. So, we decided to use simple KFold split than training final models 
+
+Also, we have conducted a test of the model performance on length-based split. For that, we trained a model on the short sequences (length &lt; 206) and validated it on sequences of size = 206. The behavior of the validation metric was slightly noisier but still highly correlated with a metric for a simple KFold split.
+
+Public data leakage
+
+Approximately 13% of public test sequences are identical to the ones present in the train dataset (by sequence). To avoid selecting a model that is memorizing more of these sequences rather than learning RNA-related stuff, we zeroed out the predictions for these sequences in most of our submissions, while sometimes sending non-zeroed out submissions in order to compare our performance to other participants.
+
+Features we also tried
+
+capR
+
+We don’t have conclusive results for that feature. It seems like it is not beneficial for the model on average but sometimes it resulted in a better model and sometimes – in worse. We decided to not use this feature.
+
+Brackets
+
+We have tried to use brackets generated by EternaFold, ContraFold, ViennaRNA, etc., as well as programs for pseudoknots prediction (like IPknot). However, after adding EternaFold BPPMs to the model, adding other features yields no significant increase in model performance. For some models we used brackets just to augment model
+
+Different BPPMs
+
+All other BPPMs (ContraFold, ViennaRNA, RNAsoft, RNAstructure) result in a suboptimal model.
+Averaging BPPMs doesn’t result in better performance.
+BPPMs from RFold yield the same quality as ViennaRNA BPPMs.
+The RNA-FM model produces both per-nucleotide embeddings and BPPM-like matrix. Still, those don’t help the model at all, and using them results only in a slight increase in model performance then compared to sequence only model
+
+SQUARNA matrix
+
+SQUARNA (github) outputs a matrix different from BPPM, but can be used in the same manner. Unfortunately, this feature also didn’t yield any additional performance increase.
+
+What we also tried
+
+Fully-Convolutional architecture
+
+The initial reason we decided to take part in the competition was to test our model LegNet link, which shows SOTA results on DNA sequences and worked well on some RNA-related tasks (not yet published).
+Unfortunately, any modifications of this architecture resulted in subpar performance when compared with properly tuned transformer models. This can be explained by the fact that predicting RNA secondary structure requires attending to long-range contacts. The transformer architecture suits better for such cases.
+
+Subsetting data
+
+Subsetting data (filtering by different thresholds on SN ratio) resulted in a performance boost for all models. However, this technique was superseded by weight sampling, which proved itself to be more effective.
+
+Fine-tuning on public datasets
+
+We tried to fine-tune our model on a public dataset, gathered by the organizers (link) by training model to predict the results of the public experiments (excluding ones with a small number of samples) and for Ribonanza data simultaneously. Unfortunately, this also gave no boost to the model performance.
+
+Using 3D data
+
+We tried to use data about predicted 3D structure of 100k sequences from the train dataset but gave up on that once we had visually analyzed them:
+
+
+
+Absolute positional embedding
+
+Using absolute positional embedding leads to unsolvable issues when generalizing upon longer sequences.
+
+Relative positional embedding
+
+The simplest approach is to augment absolute positional encoding during the training phase to shift randomly from 0 to (Lmax - seqlen) position. This indeed solves the issue with extrapolation, but works worse than other methods.
+Rotational positional embedding, unfortunately, doesn’t help the model to generalize on larger lengths.
+ALiBi positional embedding solves the issue with extrapolation but even after keeping it only for a part of heads (as suggested in https://github.com/lucidrains/x-transformers) still behaves worse than dynamic positional bias.
+
+Augmentation
+
+First, we tried to use reverse augmentation. This can be done in three ways:
+reversing sequence before any modifications,
+reversing sequence before padding, but after adding  and  tokens,
+reversing sequence after padding.
+
+The first two ways yield no gain for all variants of models we tested. Yet, the third one (upon coupling with additional finetuning) gave us a good result for a model with xpos positional encoding. The resulting single-model performance was 0.13937 on the public leaderboard. Unfortunately, xpos shows rather poor performance on long sequences so we abstained from using this model in the final submission.
+
+We have also tried shift augmentation and different sequence padding approaches. This didn’t improve our model performance as well.
+
+Sliding window
+
+One of the possible ways to generalize for larger sequences is to predict reactivities using the sliding window. However, the idea is somewhat wrong in a biological sense, and it results in performance degradation when testing on train dataset sequences.
+
+Pseudolabelling
+
+Once we obtained ensembles of best-performing models we tried to use them to pseudolabel test dataset and use predictions with the highest confidence to train new models. While this indeed results in a better single-performing model, adding such a model to ensemble doesn’t improve ensemble performance.
+
+Changing loss
+
+Instead of filtering sequences with low SN we tried to mask positions with high reactivity error as it was done by @nullrecurrent in Open Vaccine challenge (link)
+This resulted in poor performance.
+We tried to weight loss for each sequence by its SN – it didn’t result in any improvement
+
+Tools
+
+arnie
+EternaFold
+
+Links
+
+Squeeze-and-excitation block
+
+Hu, J., Shen, L., &amp; Sun, G. (2018). Squeeze-and-excitation networks. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 7132-7141).
+
+Dynamic positional bias
+
+Wang, W., Chen, W., Qiu, Q., Chen, L., Wu, B., Lin, B., … &amp; Liu, W. (2023). Crossformer++: A versatile vision transformer hinging on cross-scale attention. arXiv preprint arXiv:2303.06908.
+
+Comments:
+├─ BarryZhou (2023-12-08 01:56:43.433000) [+9]
+│  Congratulations! @vyaltsevvaleriy 🎉🎉🎉 This is a very, very great method. May I ask what software was used to draw this picture? This is so beautiful
+  ├─ try (2023-12-08 08:56:55.440000) [+2]
+  │  Haha, I also want to know
+  ├─ vyaltsevvaleriy (2023-12-08 12:56:38.877000) [+10]
+  │  Hi! Thank you for your appreciation! I used Inkscape - it is a vector graphics editor allowing to flexibly implement any ideas.
+    ├─ BarryZhou (2023-12-08 14:32:42.767000) [+2]
+    │  Thank you very much! vyaltsevvaleriy🥰
+├─ medicine-wave (2023-12-08 00:36:09.530000) [+5]
+│  Wonderful work and presentation! Congratulations! Would you mind providing more improvement details (improvement points) with each operation?
+  ├─ Penzar Dmitry (2023-12-08 00:52:28.640000) [+4]
+  │  Yes, sure, I hope we will be able to explain this observation - https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding/discussion/458478
+├─ Shujun (2023-12-08 00:39:09.843000) [+6]
+│  Nice! Actually my model has also been published here: https://academic.oup.com/bib/article/24/1/bbac581/6986359. Congrats!
+  ├─ Penzar Dmitry (2023-12-08 00:53:19.323000) [+1]
+  │  We failed to google your publication initially, thanks!)
+    ├─ Shujun (2023-12-08 00:58:28.277000) [+6]
+    │  No problem! I actually didn't share my model because we realized models using bpp are a bit conservative on pseudo-knots and often miss them, so I didn't want to influence competitors to use bpp by...
+├─ hoyso48 (2023-12-08 01:07:23.680000) [+3]
+│  Great solution. I’m very surprised by how similar it is to mine. congrats on winning!
+├─ Xiang Huang (2023-12-08 00:50:21.310000) [+3]
+│  Congratulations, your solution is so stable!
+├─ C R Suthikshn Kumar (2023-12-08 03:56:25.133000) [+4]
+│  Congratulations on topping the leaderboard. Thanks for sharing the details of your solution with colorful diagrams and charts.
+├─ Shivansh (2023-12-26 16:52:02.887000) [+1]
+│  Wow! Amazing… and congratulations
+├─ Md Nazrul Islam (2023-12-18 19:47:51.347000) [+1]
+│  Congratulations
+├─ Borna Jamali (2023-12-12 07:01:45.770000) [+1]
+│  Interesting read, congrats!
+├─ Zafir Khalid (2023-12-11 15:46:04.120000) [+1]
+│  congratulations, this is really nice!
+├─ Shujun (2023-12-11 13:33:40.570000) [+1]
+│  For Dynamic Positional Bias: is there a relative length limit?
+  ├─ vyaltsevvaleriy (2023-12-11 18:06:37.723000) [+1]
+  │  We did not impose any explicit relative distance constraint; however, this layer may perform differently at relative distances greater than those in the training data set.
+    ├─ Shujun (2023-12-11 19:08:54.850000) [+0]
+    │  interesting as this may lead to unexpected behavior at long distances. surprised you didn't cap it
+    ├─ Penzar Dmitry (2023-12-11 20:55:49.773000) [+0]
+    │  We followed the realization from https://github.com/bob80333/investigating_extrapolation and lucidrains x-transformers, where clipping is not done. And it's shows a good (https://github.com/bob8033...
+├─ mhdaw (2023-12-10 06:21:00.163000) [+1]
+│  Congratulations this is truly amazing . great idea and implementation
+├─ Abhishek Shah (2023-12-09 18:17:58.893000) [+1]
+│  Wow, congratulations on the win! Your write up looks so professional too. It’s not easy to maintain first place from public to private, and especially not in this competition!
+├─ Izam Mohammed (2023-12-09 04:47:15.327000) [+1]
+│  It is truly amazing
+├─ Choekyel (2023-12-08 08:56:58.873000) [+1]
+│  Congratulations🎉 @vyaltsevvaleriy on your victory in the competition! Your work was not only impressive but also visually beautiful. I'm curious, what software did you use to create those visuals?
+  ├─ vyaltsevvaleriy (2023-12-08 13:08:15.627000) [+2]
+  │  Hi! I'm very glad to hear that! I used a vector graphics editor called Inkscape.
+├─ B@rro_07 (2023-12-08 08:23:42.537000) [+1]
+│  Congratulations well done. Nice explanations and charts 👏
+├─ Jonathan Romano (2023-12-08 06:39:13.563000) [+1]
+│  A few assorted thoughts that came to mind that could be interesting to explore/think about
+│  
+│  
+│  
+│  I wonder if using hamming distance could be limiting, and whether it would be better to use a method th...
+  ├─ Aleksey Trepetsky (2023-12-08 08:40:25.430000) [+0]
+  │  I think it would still be possible to use NUPACK. Just apply it only for some sequences. For example, we could select these sequences using active learning.
+    ├─ Jonathan Romano (2023-12-08 14:47:00.250000) [+1]
+    │  If you're doing that, you would still presumably need to run nupack during inference though. For our use case on Eterna, even ~155 base strands were a problem in both runtime and memory usage just ...
+    ├─ Aleksey Trepetsky (2023-12-08 15:33:53.010000) [+2]
+    │  Exactly, I apologize, I didn't think about it in the middle of the night. But it can still be used, we just need to slightly change the approach. In theory, there is nothing stopping the Transforme...
+    ├─ Jonathan Romano (2023-12-08 15:35:35.060000) [+0]
+    │  I'd love to see that approach!
+    ├─ Penzar Dmitry (2023-12-09 04:17:33.890000) [+1]
+    │  Yeap, we thought about that. But it seems @dankrstev has a solution that is able to achieve that without distillation. Lets wait.
+    │  
+    │  It seems, there are multiple ways to integrate bpps knowledge in n...
+    ├─ Aleksey Trepetsky (2023-12-09 17:02:32.180000) [+0]
+    │  Yes, I think you can just embed information about BPP into the transformer. Although, I would take a Graph Transformer for such a case, it could be taught to simply predict BPP for edges, it seems ...
+  ├─ Shujun (2023-12-09 13:27:05.037000) [+2]
+  │  @jonathanromano These bpps are all generated by LinearPartition with Eternafold's parameters actually, though locally it doesn't seem that much faster.
+    ├─ Jonathan Romano (2023-12-09 22:10:06.383000) [+1]
+    │  Interesting - admittedly I haven't gotten the chance to really sit down and play with it much. I assume linearpartition is being run with default parameters? IIRC depending on how you set beam size...
+    ├─ Shujun (2023-12-09 22:20:44.210000) [+0]
+    │  Yes. I used the default beam size which is kind of big (100), so for 200 long sequences, not much faster
+    ├─ Jonathan Romano (2023-12-09 22:28:31.573000) [+0]
+    │  Oh yeah, we are working on relatively small sequences - this would matter more if we were looking at longer sequences (going into the thousands of bases), which we do have use cases for
+├─ FdotRK (2023-12-08 05:36:49.340000) [+1]
+│  Not to rush on as you said you would release the code. 
+│  I am trying to understand the split of dataset and would want to understand:
+│  
+│  
+│  
+│  how (what entities) hamming distance was computed. 
+│  
+│  what doe...
+├─ Sarun P M (2023-12-08 05:28:04.527000) [+1]
+│  Congratulations on winning. Excellent explanation of the methods used.
+├─ sroger (2023-12-08 04:46:37.470000) [+1]
+│  Congrats! Definitely see a lot of similarities, but also some differences.
+│  For us relative worked better than dynamic positional bias and we were able to utilize pseudolabeling for a sizable boost.
+├─ Swikwislkdjc (2023-12-08 00:47:19.840000) [+1]
+│  Congratulations! Would you consider sharing the code?
+  ├─ Penzar Dmitry (2023-12-08 00:50:48.200000) [+6]
+  │  Yes, sure. We need some time to wrap it up
+├─ FdotRK (2023-12-08 01:45:17.623000) [+2]
+│  Congratulations!!
+│  Wonderful work and great to learn.
+├─ Javier Martín (2023-12-08 01:42:07.857000) [+2]
+│  Thanks for the incredibly detailed write up and congratulations!
+├─ Horikita Saku (2023-12-08 01:14:17.540000) [+2]
+│  Congratulations!
+│  Really a wonderful work. learn a lot!
+├─ tattaka (2023-12-08 01:11:54.620000) [+2]
+│  Congratulations on your first place! Our solution is very similar to yours! Great solutuion!
+├─ Antonio Félix (2023-12-08 00:51:20.427000) [+2]
+│  Congrats!
+│  
+│  Thanks for the great explanation.
+├─ ONODERA (2024-01-14 20:58:22.943000) [+0]
+│  @vyaltsevvaleriy @dmitrypenzar1996 I read your codes, and I have a question. 
+│  You prepared
+│  
+│  
+│  
+│  EternaFold BPP
+│  
+│  EternaFold MFE
+│  
+│  ipknot from 2
+│  
+│  
+│  But you actually used only EternaFold BPP? Because this...
+  ├─ Penzar Dmitry (2024-01-15 13:37:36.570000) [+1]
+  │  We used 2 and 3 for one model in our ensemble. In general, this features are completely useless, but they were used in final submission so we have to include them to git
+    ├─ ONODERA (2024-01-15 15:25:48.123000) [+0]
+    │  this features are completely useless
+    │  
+    │  
+    │  Unbelievable! I used bpp, structure, loop_type, chunk and segment.
+    │  Your model is so much simpler than I thought.
+    │  
+    │  Did you tune the number of 12 transformer la...
+    ├─ Penzar Dmitry (2024-01-24 17:20:59.567000) [+0]
+    │  We tried but there was no significan improvement.
+├─ Correlation (2023-12-11 08:46:28.860000) [+0]
+│  May you share your CV-LB correlation?
+├─ Durlav (2023-12-09 14:49:15.010000) [+0]
+│  nice. congratulations
+├─ [deleted] (2023-12-08 14:06:06.373000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-12-09 04:00:24.640000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-12-08 13:52:35.540000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-12-09 04:02:22.970000) [+2]
+  │  [deleted]
+├─ [deleted] (2023-12-08 01:38:00.170000) [+2]
+│  [deleted]

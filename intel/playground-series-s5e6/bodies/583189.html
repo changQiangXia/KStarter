@@ -1,0 +1,75 @@
+<p>After a week of poking around the 750 k row fertilizer dataset I’m finally happy with the shape of my exploratory analysis and wanted to share <br>
+(1) the strongest signals I’ve spotted, <br>
+(2) the modelling choices I’m about to make, and <br>
+(3) the feature-engineering plan that links the two.</p>
+<hr>
+<h2>1.  What the EDA is shouting at us</h2>
+<h3>Class &amp; categorical structure</h3>
+<ul>
+<li><strong>Target balance is good</strong> – the seven fertilizers all live in the 12–16 % band. No need for resampling tricks.  </li>
+<li>Strong <strong>joint patterns in (Soil Type, Crop Type)</strong>. The heat-map of fertilizer share by <code>(Soil, Crop)</code> clearly shows preferred pairings (e.g. <em>Clayey–Millets → 28-28</em>).  </li>
+<li>Zero missing values – we can focus on meaning rather than cleaning.</li>
+</ul>
+<h3>Numeric behaviour</h3>
+<ul>
+<li>Every numeric column is <strong>quasi-uniform</strong> within its physical bounds (histograms are almost flat).  </li>
+<li><strong>Almost no correlation</strong> between numerics (|ρ| &lt; 0.01 in Spearman map).  </li>
+<li>Nevertheless, the <strong>box-plots per target</strong> reveal that each fertilizer shifts the <em>median</em> of Nitrogen, Phosphorous, Potassium, etc. by a few units.</li>
+</ul>
+<h3>Visual hunches that matter</h3>
+<ul>
+<li>Stacked histograms by fertiliser show nutrient density bumps at different ranges – that screams for <strong>ratio / interaction features</strong> rather than relying on raw values.  </li>
+<li>Scatter-matrix and 3-D plot confirm that the joint distribution of <code>(Temperature, Humidity, Moisture)</code> carries class signal even if pairwise correlations are low.</li>
+</ul>
+<hr>
+<h2>2.  Model line-up (and why I’m betting on them)</h2>
+<ul>
+<li><strong>LightGBM / CatBoost</strong> - Usually fast, loves categorical splits, baseline “floor” in &lt; 5 min. </li>
+<li><strong>XGBoost (hist)</strong> - Different boosting implementation → decorrelated errors for ensembling. </li>
+<li><strong>TabNet or shallow MLP-Mixer</strong> - Captures non-linear nutrient ratios and climate interactions that trees sometimes flatten.</li>
+<li><strong>kNN in nutrient sub-space</strong> - Exploits local patterns after scaling; cheap diversity model. </li>
+</ul>
+<hr>
+<h2>3.  Feature engineering roadmap</h2>
+<ol>
+<li><p><strong>Nutrient chemistry</strong>  </p>
+<ul>
+<li>Ratios: <code>N/P</code>, <code>N/K</code>, <code>P/K</code>, plus total <code>N+P+K</code>.  </li>
+<li>Quartile bins – one-hot encode “Low/Med/High” nutrient levels.  </li></ul></li>
+<li><p><strong>Soil-Crop interactions</strong>  </p>
+<ul>
+<li>Target (mean) encoding of the 55 <code>(Soil, Crop)</code> combos.  </li>
+<li>A hashed combo feature <code>Soil_Crop_ID</code> for models that don’t ingest categoricals.</li></ul></li>
+<li><p><strong>Climate aggregates</strong>  </p>
+<ul>
+<li><code>Temp-Humidity Index</code> = <code>Temperature × Humidity / 100</code>.  </li>
+<li>Rolling z-scores within each fertilizer to capture relative micro-climate.  </li></ul></li>
+<li><p><strong>Keep it lean</strong> – no dimensionality reduction yet; numerics are only seven columns.</p></li>
+</ol>
+<hr>
+<h2>4.  Training &amp; blending plan</h2>
+<ul>
+<li><strong>Phase 1:</strong> Tune LightGBM with Optuna (~200 trials) – early-stop at 200 rounds.  </li>
+<li><strong>Phase 2:</strong> Replicate optuna search for XGB (hist) – fix learning rate first, search depth/leaves second.  </li>
+<li><strong>Phase 3:</strong> Quick TabNet run with default scheduler; retain only if CV gain &gt; 0.003.  </li>
+<li><strong>Phase 4:</strong> Build kNN (k ∈ [5, 11, 21]) on <code>StandardScaler</code>-ed nutrient-only frame.  </li>
+<li><strong>Phase 5:</strong> <strong>Weighted soft-vote</strong>; weights learned via Optuna on out-of-fold preds.  </li>
+</ul>
+<p>Calibration (<code>CalibratedClassifierCV</code>, sigmoid) will be checked last; if log-loss drops without hurting MAP@3 or MAP@5, I’ll submit the calibrated ensemble.</p>
+<hr>
+<h2>5.  What I still don’t know (and will test next)</h2>
+<ul>
+<li>Does adding a global <strong>soil-quality index</strong> (Moisture / Temperature) explain any residual confusion?  </li>
+<li>Will <strong>pairwise GMM clustering</strong> of nutrient ratios reveal hidden groups?  </li>
+<li>Can a simple rules-based model outperform k-NN on extreme nutrient cases?</li>
+</ul>
+<hr>
+<h3>TL;DR</h3>
+<ul>
+<li>The data are clean, balanced, low-corr, but class medians differ → engineer nutrient ratios.  </li>
+<li>Tree ensembles + one NN + a distance model gives a diversified stack.  </li>
+<li>Target-encoded <code>(Soil, Crop)</code> is likely the single most valuable categorical trick.  </li>
+</ul>
+<p>I’ll update once the baseline ensemble is on the board.  <br>
+All feedback and any suggestions are welcome.</p>
+<p>Lets fertilize! Happy Kaggling.!</p>

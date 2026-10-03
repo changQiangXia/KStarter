@@ -1,0 +1,85 @@
+<p>Let's start with understanding the features and the targets.</p>
+<p>For features used in training, we have 2 folders, 'train_images' and 'segmentations'<br>
+In folder 'train_images' there are 2019 more folders, each folder is named after a patient study id<br>
+eg. 1.2.826.0.1.3680043.10001</p>
+<p>In each one of these 2019 folders exists a number of dicom files (.dcm extension), the number of dicom files in folders varies.</p>
+<p>I won't go over the details of dicom files, you can find that on kaggle or google, but I will go over the useful resource of dicom for this dataset.</p>
+<p>Dicom file on this dataset have 2 uses, one is the data it possess, we can get this by doing a dcmread from pydicom library onto a file, then printing it, there are 4 data values which we can get, which are 'ImageOrientationPatient', 'ImagePositionPatient', 'PatientID', 'PatientName'.<br>
+Eg. <code>pydicom.dcmread('rsna_spine/train_images/1.2.826.0.1.3680043.20981/1.dcm').ImagePositionPatient</code></p>
+<p>'PatientID' gives us the id of the patient, for this data, 'PatientName' is the same as 'PatientID'<br>
+'ImagePositionPatient' gives us the position on the patient, more on this later<br>
+'ImageOrientationPatient' gives us the orientation of the patient. (I did not find anything useful in this)</p>
+<p>'ImagePositionPatient' outputs a list of 3 values, the first one indicates the position of Patient on x-axis, the second indicates the position on y-axis and the third value on the z-axis, the z-axis is the most important one to understand.</p>
+<p>Z-axis in this competition is unlike other competition with CT Scans, normally a Z-axis tells us the timestamp, this time, Z-axis tells us the position in sagittal plane.</p>
+<p>The images in this dataset is in axial plane, meaning we will only be able to observe one bone at a time, but where in the world are we, the reference can be obtained from this z-axis value.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1794509%2F62dc74f51c453f0e74961b92404c84b7%2FScreenshot%20from%202022-07-30%2008-39-52.png?generation=1659150707469954&amp;alt=media" alt=""></p>
+<p>In the image above, on the left side, we can see sagittal view of the bone, in the middle we can see Axial view of tissues, Axial view of tissues is not provided in the dataset of this competition, on the right side of the image, we can see axial view of bone paticularly 2.5mm deep, the data in this competition is lower than 1mm deep, which means our dataset is more sharp.</p>
+<p>The next thing to take notice at is the thin line in sagittal view (Sag bone, leftmost image), that thin line is what is indicating what we are currently seeing in the axial view, and the Z-axis previously mentioned tells us where that thin line is and where  our axial plane is currently looking at in correspondance to the sagittal view.</p>
+<p>But here comes the biggest problem, we don't have sagittal view… and we need this view to know which dicom file is referencing to which bone</p>
+<p>The solution comes in the folder 'segmentations' where we have 87 files, these files are named with the reference to patient id, the format of these files is nifti, which can be read with the library nibabel, after reading 1 patient file, we will get an array of (height, width, num_images) (num_images here will be the same as the number of diccom files in that particular patient subfolder in the folder 'train_images')</p>
+<p>When we have got the array out of nifti files, we will see that array are kinda weird, well the reason for that is, and I quote</p>
+<blockquote>
+  <p>Please be aware that the NIFTI files consist of segmentation in the sagittal plane, while the DICOM files are in the axial plane. Please use the NIFTI header information to determine the appropriate orientation such that the DICOM images and segmentation match. Otherwise, you run the risk of having the segmentations flipped in the Z axis and mirrored in the X axis.</p>
+</blockquote>
+<p>Which can be done with something like this:<br>
+<code>segmentations = nib.load(f"segmentations/1.2.826.0.1.3680043.10921.nii").get_fdata()[:, ::-1, ::-1].transpose(2, 1, 0)</code></p>
+<p>Now after loading the segmentations like this, the shape of segmentations will be (num_images, height, width) and now the data will make a lot more sense.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1794509%2F9208e350550593b9c2b209747fe20895%2Fdownload.png?generation=1659151517170533&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1794509%2Fc33edf394a2c664aef455df101fe5a62%2Fdownload%20(1).png?generation=1659151546577377&amp;alt=media" alt=""></p>
+<p>The 2 images above, the first one is a dicom reading, the second one is one of the slice of segmentations (reference to segmentations is defined above in a code block)</p>
+<p>What was the problem again? Oh yeah, we don't have the sagittal view, and we don't know which image is referencing to which bone.. well, now we kinda do, how?</p>
+<p>This segmentations numpy array which we have just created and visualized actually have one more use, the unique values of a particular slice will tell us which bone we are working on, for instance the image and  segmentation slice mask we see above, let's find out which bone we are seeing in that.</p>
+<p>I will just write <code>np.unique(segmentations[199])</code> (199 in this case is the slice number, which means this image is 200.dcm)</p>
+<p>The output of this small line is array([0., 6.]), where 0 is the background and 6 is the reference to which bone we are talking about, in this case, bone C6.</p>
+<p>Am I done? Oh no, we still have to understand the variables, which in this case is that there are more than 7 bones in the base (obviously), but we only have labels for C1-C7, but as seen in the image below it is seen that there are way more than that.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1794509%2F2bccacfc06bc3537a15b5911d348e056%2FGray_111_-_Vertebral_column-coloured.png?generation=1659152307732067&amp;alt=media" alt=""></p>
+<p>So, for some slices we will see unique values going beyond 7, values like 9 or 10, these refer to the bones in the image above, eg. unique value 8 refer to bone Th1</p>
+<p>But, do we need these values to train models? No, not necessarily as our target is only (C1-C7)</p>
+<p>So, lets analyse the current situation, we have 87 patients studies for segmentation, we will have to learn from these patients, which bone is presented in which image, BUT, why is knowing which image is which bone so important? Answering this question takes us to the last part of this discussion, which is, Submission.</p>
+<p>Now, normally, we don't have to talk about submission files, it is simple, but in this competition sample submission file does not tell us the correct submission format, and this format is the reason why we need to classify C1-C7 before training or rather, submitting.</p>
+<p>The submission file will in the format where each patient will have 8 rows, and 8 predictions, 7 rows for C1-C7 and the last row for overall, overall refers to weather the patient have a fracture in any one of the vertibrates are fractured.</p>
+<p>Eg.</p>
+<table>
+<thead>
+<tr>
+<th>row_id</th>
+<th>fractured</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20981_C1</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>20981_C2</td>
+<td>0.02</td>
+</tr>
+<tr>
+<td>20981_C3</td>
+<td>0.005</td>
+</tr>
+<tr>
+<td>20981_C4</td>
+<td>0.03</td>
+</tr>
+<tr>
+<td>20981_C5</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td>20981_C6</td>
+<td>0.002</td>
+</tr>
+<tr>
+<td>20981_C7</td>
+<td>0.012</td>
+</tr>
+<tr>
+<td>20981_patient_overall</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<p>[NOTE]: I have done some mistakes here such as not realizing that sagittal view is available… which changes a lot of things, but this particular discussion is still one way to look at it. </p>
+<p>Please Upvote this topic if it helped you, if any notebooks wants to use any of the code, please provide reference link to this discussion, this is my first post in a long time, and my very first post for explaining a dataset. I might have made some mistakes, thank you for your suggestions in the comments.</p>

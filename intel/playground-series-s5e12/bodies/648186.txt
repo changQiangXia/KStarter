@@ -1,0 +1,184 @@
+# https://www.kaggle.com/competitions/playground-series-s5e12/discussion/648186
+
+Topic #648186: From EDA to Baseline: A Hypothesis-Driven Approach (XGBoost + Selective TE)
+  Author: Masaya Kawamata
+  Posted: 2025-12-01 09:46:48.068000
+  Votes: 35  Comments: 27
+
+Hello Kagglers,
+
+I believe that steady improvement in competitions comes from a continuous loop of EDA -&gt; Hypothesis -&gt; Experiment. To consistently improve score, maintaining a coherent strategy is essential. I believe EDA is the key to establishing this direction, rather than just blindly tuning parameters.".
+
+I have published a starter notebook that demonstrates one iteration of this loop.
+
+Notebook Link: [https://www.kaggle.com/code/masayakawamata/s5e12-eda-xgb-competition-starter]
+
+The Workflow: From Observation to Implementation
+
+Here is the breakdown of how specific EDA findings led to the modeling strategy in this notebook:
+
+1. Strategy for the Original Dataset
+
+
+
+Observation: The distribution of the Original Dataset differs noticeably from the Train/Test datasets (Covariate Shift).
+
+Hypothesis: Concatenating the Original data to the Training set might introduce noise due to the distribution mismatch.
+
+Approach: Instead of concatenation, I adopted the standard practice of using the Original data as an external reference for Feature Engineering. I created statistical features (e.g., Mean/Count encoding based on the Original data) and mapped them to the Train/Test sets to extract underlying signals without altering the training distribution.
+
+
+reference: [https://www.kaggle.com/code/cdeotte/use-original-data-for-cv-boost-and-lb-boost]
+
+2. Selective Target Encoding
+
+
+
+Observation: Many "numerical" features in this dataset actually have very low cardinality (discrete nature). However, some are binary (0/1).
+
+Hypothesis: Tree models might benefit from explicit probability mapping via Target Encoding for these discrete features. However, applying it to binary features is redundant.
+
+Experiment: I implemented Selective Target Encoding, applying it only to numerical columns with nunique &gt; 2, strictly calculated within the Stratified K-Fold loop to prevent leakage.
+
+
+The Value of Experiment-Driven Approaches
+
+While this notebook prioritizes an EDA-driven hypothesis (avoiding concatenation due to distribution shift), experiment-driven approaches are equally valuable.
+
+
+
+Testing Counter-Hypotheses: Even if the distributions differ, simply concatenating the Original data as additional rows might still improve the score depending on the model's robustness. It is definitely worth testing.
+
+Hypothesis from Experiment: sometimes, we find new insights only after running experiments that seem counter-intuitive at first glance.
+
+
+I discarded the concatenation approach in this specific notebook based on my initial analysis, but I encourage you to challenge this assumption.
+
+Potential Improvements
+
+To further improve accuracy beyond this baseline, the following approaches could be effective:
+
+
+
+
+Interaction Features (High-Cardinality &amp; Target Encoding): Creating pairwise (bigrams) or higher-order combinations of discrete features is a powerful technique. This process intentionally creates high-cardinality features representing specific subgroups (e.g., "AgeGroup_BMI_Gender"). Applying Target Encoding to these specific combinations allows the model to capture fine-grained risk signals that single features cannot represent.
+
+
+Referencing Past Top Solutions: Since the data structure shares similarities with previous tabular Playground episodes, reviewing and adapting Feature Engineering techniques from top-ranking solutions in the previous competition could provide significant boosts.
+
+
+
+https://www.kaggle.com/competitions/playground-series-s5e11/writeups/1st-place-a-lot-of-features-a-lot-of-models-an
+
+https://www.kaggle.com/competitions/playground-series-s5e2/writeups/chris-deotte-1st-place-single-model-feature-engine
+
+https://www.kaggle.com/competitions/playground-series-s5e11/writeups/2nd-place-solution-7-models-but-1-was-also-enou
+
+
+Implementation Details
+
+
+
+Model: XGBoost (Scikit-Learn API)
+
+Validation: 5-Fold Stratified Cross-Validation
+
+Categorical Handling: Factorization + enable_categorical=True
+
+
+This simple logic, derived directly from looking at the data, provides a stable local CV score. I hope this serves as a good starting point for your own experiments.
+
+Happy Kaggling!
+
+Comments:
+├─ Rishabh Kumar Kannaujiya (2025-12-07 18:29:37.087000) [+1]
+│  Hi Masaya,
+│  
+│  I would love your advice on optimizing my workflow, as my current experiments are becoming very time consuming.
+│  Currently I'm torn between two approaches:
+│  
+│  
+│  
+│  Is it better to focus on se...
+  ├─ Masaya Kawamata (2025-12-07 22:18:21.543000) [+2]
+  │  Hi Rishabh,
+  │  
+  │  Thanks for reaching out! Balancing compute time is always a challenge. Here are my thoughts based on my current experiments:
+  │  
+  │  
+  │  
+  │  
+  │  Seed Averaging vs. Diverse Ensemble
+  │  Seed averaging is p...
+    ├─ Rishabh Kumar Kannaujiya (2025-12-08 06:17:57.030000) [+1]
+    │  Thanks for the quick response!
+    │  
+    │  It's great to know that diverse ensembles are yielding better results. I'll shift my compute resources accordingly. I also haven't tried Target Encoding with the ori...
+├─ Navneet (2025-12-07 11:06:54.707000) [+1]
+│  Creating pairwise (bigrams) or higher-order combinations of discrete features is a powerful technique?
+  ├─ Masaya Kawamata (2025-12-07 11:15:46.723000) [+0]
+  │  In recent competitions like s5e11 and s5e8, bigram features played a crucial role in many top solutions.
+  │  Given its consistent success in past competitions as well, I believe it’s a valuable techniq...
+├─ Vardhman Gupta (2025-12-05 07:17:29.523000) [+1]
+│  Great write-up! The distinction between simply merging data vs using it for feature statistics is a great takeaway.
+│  
+│  Quick question regarding Categorical Handling:
+│  I currently used Label Encoding f...
+  ├─ Masaya Kawamata (2025-12-05 07:41:17.657000) [+0]
+  │  Thanks for the kind words!
+  │  
+  │  Regarding Selective Target Encoding, it was indeed highly effective in the previous competition (S5E11), boosting both CV and LB significantly.
+  │  
+  │  However, I feel it might...
+    ├─ Vardhman Gupta (2025-12-05 08:17:34.053000) [+1]
+    │  This is a super valuable insight, Masaya! 
+    │  
+    │  The "CV improves, LB drops" scenario is the classic Kaggle nightmare. Hearing that even the current #1 is facing this dilemma gives me some comfort in my...
+├─ L.E.Electron (2025-12-02 01:46:04.350000) [+1]
+│  Why encode all of the column? some columns like age has wide range of values, I mean they are totally 'numerical'. Encoding those which are medium-cardinality (nunique \in [3,9] )may be more plausible
+  ├─ Masaya Kawamata (2025-12-02 01:56:06.243000) [+0]
+  │  You make a very valid point. In real-world datasets, keeping continuous variables (like Age) as numerical is usually the standard approach.However, in past Playground Series competitions involving ...
+    ├─ Daniel Arcanjo (2025-12-02 03:26:47.953000) [+1]
+    │  That's interesting. My usual approach of creating new features through interactions seems to be less effective in the playground competitions than other competitions where data isn't synthetic and ...
+    ├─ L.E.Electron (2025-12-07 06:53:11.757000) [+1]
+    │  Haha, my trick didn't worl well on this datasets. When I choose those features which are medium-cardinality, my model was  a literally disaster.As result, its AUC is almost waving around the 0.60. ...
+├─ Daniel Arcanjo (2025-12-01 19:33:14.570000) [+1]
+│  Solid work. The CV really helps to up the score to the top.
+├─ Laureano Arcanio (2025-12-01 12:48:29.647000) [+1]
+│  Hi Masaya. This competition has more columns in the original dataset than the training same as previous one. Something I experimented previous one was to use common columns to predict orig only col...
+  ├─ Masaya Kawamata (2025-12-01 12:56:15.020000) [+0]
+  │  Hi @laureanoarcanio!
+  │  
+  │  I haven't tested that approach for this competition yet, but I did try it in the previous one. I was hoping it would bring a new perspective to the features, but unfortunately...
+    ├─ Laureano Arcanio (2025-12-01 14:22:53.767000) [+1]
+    │  good columns for this (only numerical did not tries cat) are diabetes_risk_score and insulin_level. Give it a quick try but not improving CV
+    ├─ Masaya Kawamata (2025-12-01 22:03:53.500000) [+0]
+    │  Thanks for sharing!
+    │  It's just my initial impression, but it feels like Feature Engineering isn't as effective here as it was in the previous competition.
+    ├─ Laureano Arcanio (2025-12-01 22:25:50.007000) [+1]
+    │  Agree. At least for what I tried. Classics dont inprove much. BTW extra columns in orig are great predictors for an alternante diverse model
+    ├─ Masaya Kawamata (2025-12-01 22:29:33.623000) [+1]
+    │  I totally agree.
+    │  Since standard FE doesn't seem to add much value, I think the winning solution will likely rely on a strong ensemble of diverse models.
+    ├─ Laureano Arcanio (2025-12-02 12:43:40.290000) [+1]
+    │  one more question! I see in your notebook (and a few others too) that you use a custom TargetEncoder class. What are the advantages over the traditional Sklearn TargetEncoder ?
+    ├─ Masaya Kawamata (2025-12-02 13:02:34.140000) [+2]
+    │  I use a custom implementation mainly for two reasons:
+    │  
+    │  
+    │  
+    │  Versatility: It supports aggregation methods beyond just mean and std, such as skew and count. While metrics like skew haven't always been e...
+    ├─ Laureano Arcanio (2025-12-02 13:07:42.580000) [+1]
+    │  Thats what I thouht. thanks !
+├─ Omar Faruq (2025-12-01 15:10:49.577000) [+2]
+│  Hey Masaya! From where do you get the original dataset? I want to know because this technique is new to me.
+  ├─ Masaya Kawamata (2025-12-01 22:00:08.983000) [+0]
+  │  Hi! You can find the original dataset at the top of the Data Section. Here is the direct link for your convenience: https://www.kaggle.com/datasets/mohankrishnathalla/diabetes-health-indicators-dat...
+  ├─ GurSimran (2025-12-06 12:41:17.157000) [+1]
+  │  Most of playground series dataset is synthetic and they provide original Data in data tab ….
+├─ Akshat agarwal (2025-12-28 18:37:31.717000) [+0]
+│  Hi Masaya,
+│  
+│  I’m currently participating in this competition  and noticed that my local validation scores are higher than my public leaderboard score. I want to understand why this happens and learn...
+├─ Thomas W (2026-01-12 21:12:19.817000) [+0]
+│  Really helpful post, thank you!

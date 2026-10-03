@@ -1,0 +1,234 @@
+# https://www.kaggle.com/competitions/playground-series-s6e7/discussion/731904
+
+Topic #731904: 2nd Place Solution: Trusting CV & Mathematical Precision
+  Author: kava1
+  Posted: 2026-08-01 12:53:47.112000
+  Votes: 29  Comments: 13
+
+Here is the writeup of our 2nd place solution, focusing on a robust two-step optimization pipeline applied across 18 base predictors.
+
+
+
+Key Highlights &amp; Performance
+
+
+
+Ensemble Scale: Integrated 18 base predictors (including diverse implementations of LightGBM, XGBoost, CatBoost, FT-Transformer, RealMLP, and HGBC).
+
+LogLoss Optimization: Reduced OOF LogLoss from 0.105495 (Equal Weight Baseline) down to 0.086310.
+
+Balanced Accuracy Boost: Achieved an OOF Balanced Accuracy of 0.950737 (a +0.061605 improvement over raw argmax).
+
+
+
+
+Methodological Pipeline
+
+1. Simplex-Constrained Multi-Class Weight Optimization (SLSQP)
+
+Instead of a standard uniform average, we optimized class-specific weights $W \in \mathbb{R}^{18 \times 3}$ across all 18 base predictors (54 parameters in total) using SLSQP.
+
+
+
+Objective &amp; Constraint: Directly minimize OOF LogLoss. Weights are normalized per class inside the objective function, effectively enforcing a simplex constraint (\sum_m w_{m, c} = 1).
+
+Renormalization: The blended class scores are finally renormalized to form valid probability distributions before evaluating LogLoss.
+
+Complementary Strengths: The optimized weights indicate complementary predictive strengths among the base predictors:
+
+
+ftt_kawamata (FT-Transformer) received the largest optimized weight across all three classes, contributing 71.81% for Class 0, 62.45% for Class 1, and 50.28% for Class 2.
+
+xgb_ovr_kawamata (XGBoost OvR) acts as a strong complementary predictor, accounting for 45.59% in Class 2 and 28.19% in Class 1.
+
+
+2. Direct Linear Blending
+
+Rather than training an additional nonlinear meta-learning stage (which risks overfitting out-of-fold metadata), we used a direct linear combination of the base predictions, preserving the linear interpretability of the ensemble weights.
+
+3. Metric-Specific Multiplier Tuning (Nelder-Mead)
+
+To address class imbalance and maximize the target evaluation metric (Balanced Accuracy), we tuned class-wise probability multipliers on the full OOF predictions using Nelder-Mead:
+
+
+
+Optimized Multipliers: [C_0: 0.124044, \quad C_1: 1.499826, \quad C_2: 1.250181]
+
+Test Application: These multipliers were optimized on the full OOF predictions and then applied unchanged to the test set predictions. No test labels or leaderboard feedback were used for tuning.
+
+Impact: Down-weighting Class 0 while boosting minority classes (Class 1 and Class 2) improved Balanced Accuracy from 0.889132 (raw argmax) to 0.950737.
+
+
+
+
+Detailed Classification Metrics
+
+
+
+
+Class
+Precision
+Recall
+F1-Score
+Support
+
+
+
+
+at-risk (C0)
+0.9936
+0.9376
+0.9648
+592,561
+
+
+fit (C1)
+0.7384
+0.9494
+0.8307
+39,803
+
+
+unhealthy (C2)
+0.6985
+0.9652
+0.8105
+57,724
+
+
+Macro Avg
+0.8102
+0.9507
+0.8687
+690,088
+
+
+
+
+
+
+💻 My Shared Open-Source Notebooks
+
+Some of the core model components and baseline pipelines utilized in this solution were shared publicly during the competition:
+
+
+
+S6E7 | Overcoming 0.95: Tuned LightGBM Stacking
+
+S6E7 | DCNv2 | LB:0.94962
+
+
+
+
+🙏 Acknowledgments &amp; Special Thanks
+
+I would like to express my deepest gratitude to all the community members who shared their outstanding notebooks, models, and datasets during this competition (Playground Series s6e7).
+
+Special thanks to the following contributors whose models directly formed and strengthened our ensemble pipeline:
+
+🌟 Key Ensemble Contributors
+
+
+
+Masaya Kawamata (@masayakawamata)
+
+
+FT-Transformer-v2 [CV: 0.95063] — This model received the largest optimized weight across all three classes in our ensemble pipeline.
+
+XGB OvR [CV: 0.95036] — Provided crucial complementary predictive strength, particularly for Class 1 and Class 2.
+
+XGB_1 [CV: 0.94986]
+
+Rob Schieber (@robschieber)
+
+
+Unweighted LightGBM + Prior Correction — Top LightGBM contributor in our final weights.
+
+
+🤝 Public Notebook &amp; Dataset Contributors
+
+Thank you to all of you for sharing your valuable baselines, feature engineering techniques, and predictions:
+
+
+
+Souvik D Biswas — Quit Wasting 4 Hours on Training (0.95 in 5)
+
+Vladimir Demidov — PS S6 E7 RealMLP PyTorch
+
+Mikhail Naumov — Student Health Risk XGB
+
+Rugved Bane — Student Health Risk LightGBM Optuna
+
+Koushik Kumar Dinda — Advanced Health Risk Optuna K-Fold Ensemble
+
+(ノ◡ &lt;) — RealMLP Baseline
+
+green_black_tea — 0.95043 LGBM+XGB Ens / 0.95021 Solo LGBM
+
+yunsuxiaozi — RealMLP CV: 0.95063
+
+Reda Mountassir — HGBC Baseline (LB: 0.95034 / CV: 0.95026)
+
+Sofia_Gilka — Baseline XGB
+
+Don Mani — S6E7 CatBoost
+
+Tarosh Gurramkonda — Basic LGBM and Feature Eng
+
+Datatuu — Per Value TE HGBC 0.9505 Single Model
+
+Himanshu Dhiman — Predicting Student Health Risk
+
+
+Your shared insights and diverse model architectures were essential for building our robust 18-base predictor ensemble pipeline!
+
+💡 Strategic Insight &amp; Discussion
+
+
+
+Masaya Kawamata — Trust your CV: the CV-LB relation so far
+
+
+This discussion was the foundational compass for my strategy. By demonstrating that Public LB fluctuations (±0.001–0.002) were purely binomial noise on the minority classes, it convinced us to strictly optimize both our ensemble weights (SLSQP) and class scaling factors (Nelder-Mead) on the full 690k OOF predictions rather than chasing Public LB scores.
+
+Comments:
+├─ Sukanti Kar (2026-09-09 05:06:41.937000) [+2]
+│  This is a very well-structured notebook and a fantastic baseline! The explanation is super clear and highly practical for anyone looking to improve their score. Thanks for sharing this amazing work...
+  ├─ kava1 (2026-09-09 06:25:28.447000) [+0]
+  │  Thank you so much for the kind words and the upvote! Glad you found the writeup useful! 🦝
+├─ GS (2026-09-07 08:52:06.050000) [+1]
+│  Really interesting approach, How did you decide which models to include in the ensemble, and how did you determine their optimal weights?
+  ├─ kava1 (2026-09-09 06:22:18.843000) [+1]
+  │  Thanks for the comment!
+  │  
+  │  To select the models, I focused on ensuring maximum diversity—combining GBDTs (XGBoost, LightGBM, CatBoost), Tabular Neural Networks (like FT-Transformer and DCNv2), and Ov...
+    ├─ GS (2026-09-12 07:34:15.927000) [+1]
+    │  Honestly,I couldn’t fully understand what you are trying to explain, but I will try my best to understand it.Thank you for taking the time to respond
+    ├─ Arjun Sharma (2026-09-13 16:26:00.303000) [+1]
+    │  Interesting and congrats on your result! I was just wondering how you decided when to stop adding new base predictors to the ensemble; did you set some threshold for when a new one stopped improvin...
+    ├─ kava1 (2026-09-14 02:57:58.347000) [+0]
+    │  Thanks Arjun! It was mostly a manual decision to combine 18 diverse models (GBDTs, TabNNs, and OvR variations).
+    │  When I optimized the 18×3 class-specific weights using SLSQP, I noticed that the solv...
+├─ Hamza Nazim Siddiqui (2026-08-04 05:43:36.653000) [+1]
+│  Thank You for a wonderful explanation. I liked how you made ensembles based on how a model predicts a particular class.Do you think it would be better to train models on subset of data in such a wa...
+  ├─ Hamza Nazim Siddiqui (2026-08-04 05:52:55.257000) [+1]
+  │  One more thing, how did u handle NaN values ? 
+  │  
+  │  I am quite new in ML ( about to start my 5th sem in college ) so I initially tried imputing the values but results weren't good and then I pushed the...
+    ├─ kava1 (2026-08-05 05:44:24.167000) [+0]
+    │  Hi Hamza,
+    │  
+    │  Thank you so much for your kind words and thoughtful questions!
+    │  
+    │  Regarding your first question about training on class-specific subsets:
+    │  That's a very interesting idea! However, altering...
+    ├─ Hamza Nazim Siddiqui (2026-08-05 05:56:07.827000) [+1]
+    │  Thank You so much for the explanation !! I will check out Masaya Kawamata's notebook. Honestly Kaggle has been a great learning experience because of people like you who constantly support each oth...
+├─ Amged Alfaqih (2026-08-01 18:38:56.557000) [+1]
+│  Wow, you were the one who finished right next to me in the Predicting Stellar Class competition we scored 64 and 63 😄
+│  
+│  And now I see you got 2nd place in the Predicting Student Health Risk competit...
+  ├─ kava1 (2026-08-02 02:34:14.213000) [+0]
+  │  Thank you so much for the warm comment!
+  │  
+  │  Honestly, I was already super happy with my rank in the "Predicting Stellar Class" competition, so I could hardly believe my eyes when I saw 2nd place this ...

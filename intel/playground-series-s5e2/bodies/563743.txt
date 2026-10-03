@@ -1,0 +1,135 @@
+# https://www.kaggle.com/competitions/playground-series-s5e2/discussion/563743
+
+Topic #563743: Starter Notebook - RAPIDS v25.02 - [LB 38.847]
+  Author: Chris Deotte
+  Posted: 2025-02-18 23:05:39.106000
+  Votes: 70  Comments: 29
+
+Hi everyone. Kaggle's Backpack competition is a tough competition! It is hard to build a model that performs better than simply predicting the constant value of train mean for all test samples. But it is possible!
+
+The Magic
+
+The secret sauce in this competition is feature engineering. There is a weak signal in the data and we need to help our model find it with feature engineering. I publish a starter notebook here to help.
+
+GroupBy Aggregation
+
+The most powerful feature engineering technique is groupby(COL1)[COL2].agg(STAT). This is where we group by COL1 column and aggregate (i.e. compute) a statistic STAT over another column COL2. This is the underlying method used to compute target encoding and count encoding. By computing raw statistics with groupby(COL1)[COL2].agg(STAT) and inputting them into our model, our model can do more than only receiving TE or CE.
+
+Avoid Leakage
+
+For COL1 and COL2, we can use any columns. Often, using the target price works best for COL2 (but of course we can use any column for COL2). If we use target price for COL2, we need to prevent leakage by using nested folds. These are K folds inside K folds. If COL2 is not target price, then we do not need nested folds. I publish a starter notebook here demonstrating how to use nested and not-nested folds for groupby(COL1)[COL2].agg(STAT).
+
+STEP 1
+
+The first step when using groupby(COL1)[COL2].agg(STAT) is to create or find a column for COL1. We can either use an existing column or we can make a column from one or more existing columns. There is a lot of room for creativity here. Below are three ideas how to make a new column. Some are demonstrated in my starter notebook here.
+
+
+
+Transform an existing column into new bins. For example df[COL] = df[COL].round(6). 
+
+Combine multiple columns together. For example df[NEW_COL] = df[COL_A].astype('str')+"_"+df[COL_B].astype('str').
+
+Transform and combine. We can merge the above two ideas. 
+
+
+STEP 2
+
+Create or find a column for COL2. Similar to above, we can create (or find) a new column to use for COL2. If COL2 was created from target price, then we need to use nested folds to prevent leakage. If COL2 does not use target price, then we do not need to use nested folds.
+
+STEP 3
+
+Create or find a statistic STAT, and compute groupby(COL1)[COL2].agg(STAT). Note that there is lots of room for creatively here. We do not need to limit ourselves to the list ["mean", "std", "count", "nunique", "median", "min", "max", "skew"]. 
+
+After applying groupby(COL1)[COL2] we have a collection of numbers. We can invent any technique that creates a new number from this group of numbers. For example we can invent a new aggreation  called lopsided. We can divide the count of numbers above the mean by the count of numbers below the mean. 
+
+RAPIDS cuDF-Pandas v25.02
+
+Experiment, experiment, experiment. This is the way to improve our model's CV score and LB score. We need to repeatedly try new feature engineering ideas, then train a model, then observe the CV score. If the CV score improves, then our feature engineering is a keeper. If the CV score does not improve then we discard the feature engineering.
+
+We want to experiment as fast as possible and try as many ideas as possible. Computing groupby(COL1)[COL2].agg(STAT) on 4 million rows of train data takes time. We can perform more experiments if we can speed up this computation. One way to accelerate the computation of groupby(COL1)[COL2].agg(STAT) is to use RAPIDS GPU cuDF-Pandas or RAPIDS GPU cuDF-Polars. This is demonstrated in my starter notebook here.
+
+Kaggle Utility Script
+
+RAPIDS v25.02 was just released on Feb 15th, 2025. In our Kaggle notebooks, we can pip install the new RAPIDS version. Version 25.02 is a little faster than the previous 24.12 version when doing some things. 
+
+There is a faster way to install new libraries on Kaggle than using pip. I created a Kaggle Utility Script here with RAPIDS v25.02. If we attach this Utility Script to our Kaggle notebooks, then our Kaggle notebooks will immediately have RAPIDS v25.02 without needing internet and without needing to pip install. Using Utility Scripts is the fastest and easiest way to use new libraries on Kaggle!
+
+Kaggle Starter Notebook
+
+I publish a starter notebook here. We can improve the CV score and LB score by brainstorming more COL1, COL2, and STAT. My current LB score of 38.82 is a single model with 500 engineered features using groupby(COL1)[COL2].agg(STAT). It achieves CV = 38.62 and employs many creative COL1, COL2 and STAT ideas.
+
+Good Luck! Have Fun!
+
+Comments:
+├─ Optimistix (2025-02-18 23:12:34.027000) [+7]
+│  Thanks for dragging/carrying the less motivated among us along 😀
+├─ C. G. Y. Putra (2025-02-19 09:44:44.930000) [+3]
+│  Thank you, Chris , for this comprehensive and practical guide on feature engineering your insights are invaluable! 
+│  I’m curious, how do you determine the optimal balance between the complexity of e...
+  ├─ Chris Deotte (2025-02-19 14:16:34.313000) [+4]
+  │  It depends on the size of train data. When we use CV (cross validation), we get an OOF prediction for each sample in train data. Therefore in this competition, our CV has 4 million predictions. And...
+    ├─ C. G. Y. Putra (2025-02-19 22:23:14.150000) [+1]
+    │  Ok, Thank you Chris
+├─ Jordan Barker (2025-02-20 01:32:01.763000) [+4]
+│  Thank you for sharing! I've been watching the leaderboard, amazed as your score continues to improve day by day. The 500 engineered features helps put this into perspective!  
+│  
+│  I thought I was goin...
+  ├─ broccoli beef (2025-02-20 19:01:13.943000) [+6]
+  │  The competition dataset was synthesized from an "original" dataset which, as the author reveals, consists of random numbers. At first sight, it would seem that the decimal digits of random numbers ...
+    ├─ Jordan Barker (2025-02-21 02:06:02.957000) [+4]
+    │  Thank you for sharing!
+    │  
+    │  The original dataset that the author of that post refers to is different from this competition, though, right? The data in this competition is made from a deep learning mode...
+    ├─ broccoli beef (2025-02-21 17:23:24.240000) [+4]
+    │  The competition dataset differs from the "original" dataset in the details, but the mechanics of this phenomenon is the same. 
+    │  
+    │  In the case of the "original" dataset, the distribution is initially ...
+  ├─ Chris Deotte (2025-03-01 00:30:40.827000) [+1]
+  │  @jordanbarker Jordan, using digits was a very strong feature. I'm surprised that it did not help your model. The digits of Weight Capacity are indeed non-random and this weird behavior is not cause...
+├─ yunsuxiaozi (2025-02-19 05:16:33.800000) [+4]
+│  After applying groupby(COL1)[COL2] we have a collection of numbers. We can invent any technique that creates a new number from this group of numbers. For example we can invent a new aggreation call...
+  ├─ Chris Deotte (2025-02-19 16:05:21.687000) [+6]
+  │  At the same time, I also want to ask, the original author of the dataset said that this data seems to be a pile of noise. Considering this situation, is it still necessary to further study this dat...
+    ├─ Fabian Henning (2025-02-25 04:26:42.927000) [+0]
+    │  Thank you @cdeotte! 🍿What kind of real world data solutions are you thinking of?
+├─ llorenzo (2025-02-26 02:38:27.933000) [+1]
+│  Thanks for share this powerful tool. 
+│  I distilled your starter here to get a function which let us apply this Feature/Target encoding elsewhere.
+│  
+│  The issue could be that this procedure is a sort of...
+├─ Santanu Kundu (2025-02-22 16:21:55.617000) [+1]
+│  how to load data 2nd GPU with cudf  in T4 instances?
+│  My GPU getting crashed after it reached to 14.9GB GPU at one? How to use the 2nd GPU? Can you please guide me?
+├─ Gerald Schwartz (2025-02-19 18:46:51.410000) [+2]
+│  I wonder if sklearn pipe and column transformer methods can replace nested cv?
+  ├─ Arpit Rawat (2025-02-20 16:39:00.423000) [+1]
+  │  yeah same question here @cdeotte ?!
+  ├─ Chris Deotte (2025-02-20 16:54:22.493000) [+2]
+  │  Hi. I'm not knowledgeable about sklearn's pipe and column transformer, so I'm not sure. Maybe we can make something like sklearn's target encoder (or cuML's TE) where fit_transform will perform k f...
+├─ Nishant Singhal (2025-02-19 14:01:17.867000) [+2]
+│  Thank you so much for sharing this incredibly detailed and helpful solution!
+│  
+│  I do have one follow-up question :
+│  How do you handle very small group sizes when doing groupby aggregations (particular...
+  ├─ Chris Deotte (2025-02-19 14:10:35.743000) [+4]
+  │  Hi. We let the model decide. In the aggregations, we can include count. Then the model will recognize small groups and deal with them appropriately. For example groupby(COL1)[COL2].agg(["mean","std...
+    ├─ Nishant Singhal (2025-02-19 14:25:22.490000) [+1]
+    │  got it! Thank you Chris :)
+├─ Jimmer (2025-02-23 10:43:33.093000) [+1]
+│  Thank you for sharing 🤩
+├─ Philip Ross (2025-02-22 05:33:40.020000) [+1]
+│  Good Work!
+├─ YMJA (2025-02-21 19:37:18.180000) [+1]
+│  Thanks for sharing
+├─ Apocalypse7 (2025-02-21 10:09:28.023000) [+1]
+│  Thank you for sharing！
+├─ 영진 조 (2025-02-21 08:57:56.823000) [+1]
+│  Thank to for sharing!
+├─ Brian Mukundi (2025-02-21 08:16:03.290000) [+1]
+│  Thanks for sharing🙏
+├─ [deleted] (2025-02-20 06:52:09.343000) [+1]
+│  Thank you for sharing
+├─ Kai Yoo (2025-02-20 06:27:32.497000) [+1]
+│  Thank you for sharing notebook!
+├─ [deleted] (2025-02-22 20:06:19.893000) [+1]
+│  [deleted]

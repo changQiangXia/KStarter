@@ -1,0 +1,171 @@
+# https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472475
+
+Topic #472475: 53rd Public Solution
+  Author: narsil (jobs-in-data.com)
+  Posted: 2024-02-01 06:31:51.328000
+  Votes: 27  Comments: 14
+
+Decreasing the loss from 63.72 (best public notebook) to 62.00
+
+
+
+63.72 -&gt; 62.91 Best couple of models (simple average of direct + diff approaches, same features)
+
+62.91 -&gt; 62.00 Ensembling of different couples
+
+
+Best Couple of models (63.72 -&gt; 62.91)
+
+Strongest features on top of the public notebook:
+
+
+
+Difference in forecasted weather vs forecasted 2 days ago. This was very interesting for me to observe - you need to use differences in the forecasts, and not the difference between forecasts and actuals, because weather forecasts are ALWAYS so much higher than actuals. I don't know who is in charge of those weather forecasts but they should do a better job.
+
+Various target transformations (for example I noticed that it took a long time for my model to adjust to a "shock" - a situation where the target has a significant level shift - so I did lots of feature engineering to help the model recognize that fact)
+
+
+Additionally:
+
+
+
+Setting min_samples_in_leaf = 1 in LGBM. This normally leads to overfitting but can be considered also as an automatic outlier removal. The latter outweighed the former in this competition.
+
+
+62.91 -&gt; 62.00 Ensembling of different couples
+
+Only LGBM models (I was too lazy to train something else), with different sets of features.
+
+Retraining strategy
+
+This should be very important for this competition as the data for production is very non-stationary due to the constant increase of installed capacity.
+
+
+
+One retrain of the best 3 models couples (6 models) on 1st Feb 2024.
+
+
+Handling non-stationarity
+
+We all love Boosting (LGBM, XGB, Catboost), but if there is one nemesis for Boosting it is non-stationarity: the learned function can never predict outside of seen target ranges. It is very important in real-life production ML settings and Kudos to Kaggle and Hosts for giving us a competition with such a challenge.
+
+Various approaches can be used to overcome that. In this competition, a great approach was shown in the public notebook by @vitalykudelya: 
+
+
+
+Predict the delta vs strong baseline (in our case target_48h)
+
+
+An additional approach that worked for me:
+
+
+
+Training the model based on data inflated by 10% (but 20% was already too much)
+
+
+And of course the model retraining should help.
+
+An interesting characteristic of LGBM is that when you train the model using all segments, the interleaving of targets reduces the problem of non-stationarity, and the only segments where we really have a problem are the largest ones.
+
+Validation (update)
+
+I did the time-based 3-fold training and validation (equal intervals, of course validation only forward-looking). I got the following avg. scores:
+
+
+
+production: 30.88
+
+consumption: 61.52
+
+
+Summary
+
+Overall, this was a very fun competition on an important topic for everyone. I would like to give huge thanks to everyone who generously contributed their content. Now we just wait and see who comes on top. Fingers crossed for all of you!
+
+I am also very curious to hear from the hosts if the competition brought the improvement they were looking for @keljand
+
+Comments:
+├─ Albanito (2024-02-01 09:04:58.127000) [+1]
+│  Very interesting, thank you ! 
+│  
+│  For the first step, "Various target transformations" -&gt; Did you calculate more target lags ? Add kurtosis, skew of these lags ? Or is it something else ?
+│  
+│  For the...
+  ├─ narsil (jobs-in-data.com) (2024-02-01 09:50:09.560000) [+1]
+  │  "Various target transformations" 
+  │  
+  │  
+  │  
+  │  
+  │  I joined with different segments. For example, I joined production with consumption and production-consumption as target features.
+  │  
+  │  
+  │  
+  │    
+  │  For the second step, "...
+├─ AAA (2024-02-01 07:27:45.220000) [+1]
+│  Training the model based on data inflated by 10% (but 20% was already too much): which method you use about   inflated ?
+  ├─ narsil (jobs-in-data.com) (2024-02-01 07:47:02.877000) [+2]
+  │  Just after loading the train_df, I increase all targets by 10%. It is important to remember that this is only for training. For features' values during inference we need to have actual target value...
+    ├─ AAA (2024-02-01 08:14:30.460000) [+0]
+    │  thanks for you
+├─ Fnoa (2024-02-01 06:58:24.947000) [+2]
+│  Very interesting @narsil ! Thanks for sharing.
+│  
+│  What about validation? How did you validate your experiments and what scores did you obtain in validation?
+  ├─ narsil (jobs-in-data.com) (2024-02-01 07:52:05.633000) [+2]
+  │  I did the time-based 3-fold training and validation (equal intervals, of course validation only forward-looking). I got the following avg. scores:
+  │  
+  │  
+  │  
+  │  production: 30.88
+  │  
+  │  consumption: 61.52
+    ├─ Fnoa (2024-02-01 08:47:44.997000) [+1]
+    │  What period is the validation in each of the folds?
+    │  
+    │  In my case for the period (01-02-2023 - 30-04-2023) is:
+    │  
+    │  
+    │  
+    │  Total MAE: 45.29
+    │  
+    │  Consumption MAE: 55.57
+    │  
+    │  Production MAE: 35.10
+    ├─ narsil (jobs-in-data.com) (2024-02-01 09:47:13.830000) [+1]
+    │  For the period (01-07-2022 - 31-12-2022):
+    │  
+    │  
+    │  
+    │  Consumption MAE: 59
+    │  
+    │  Production MAE: 29
+    │  
+    │  
+    │  For the period (01-01-2023 - 31-05-2023):
+    │  
+    │  
+    │  
+    │  Consumption MAE: 64
+    │  
+    │  Production MAE: 33
+    ├─ [deleted] (2024-02-01 10:22:21.777000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-02-01 10:22:47.473000) [+0]
+    │  [deleted]
+  ├─ [deleted] (2024-02-01 10:24:23.583000) [+0]
+  │  [deleted]
+    ├─ Fnoa (2024-02-01 10:29:07.937000) [+0]
+    │  Hi!
+    │  No. This is the result of my entire pipeline where the only model I use is lightgbm, but these results come from the ensemble of different lgbs.
+├─ AbaoJiang (2024-02-01 10:08:48.860000) [+0]
+│  Hi @narsil,
+│  
+│  Thanks for sharing your solutions!
+│  
+│  For local CV setup, I have some questions,
+│  
+│  
+│  
+│  As our experiments show, there seems no need to use all of the available training data for training fo...

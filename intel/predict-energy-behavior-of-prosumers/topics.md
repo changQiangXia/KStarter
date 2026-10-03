@@ -1,0 +1,122 @@
+# predict-energy-behavior-of-prosumers 讨论区（按票数排序，共 120 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472793) — 178 票 / 86 评论 / 2024-05-14 **write-up?**
+- [References and starting materials](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452687) — 103 票 / 5 评论 / 2023-11-03 
+- [Public 10th Place Solution (Private 11th)](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472537) — 78 票 / 31 评论 / 2024-05-01 **write-up?**
+- [New feature for production target](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/468654) — 72 票 / 3 评论 / 2024-01-17 
+- [Timeline of availability of the data and data_block_id](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455833) — 56 票 / 7 评论 / 2023-11-16 
+- [Coincidence or private sharing?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/470238) — 56 票 / 29 评论 / 2024-01-23 
+- [The main issue with boosting tree algorithms](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455189) — 53 票 / 18 评论 / 2023-11-13 
+- [Public 3rd place solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472754) — 48 票 / 19 评论 / 2024-02-02 **write-up?**
+- [📚🔮🏆 Good Resources to refer to from previous Prediction Competitions💥📚🏆](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/453386) — 48 票 / 6 评论 / 2023-11-06 
+- [[FINDINGS] strong correlation between "target" and "installed_capacity"](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455999) — 48 票 / 23 评论 / 2023-11-17 
+- [Original method to reach LB 70](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/464650) — 42 票 / 8 评论 / 2023-12-31 
+- [Prosumer Concept, Clusters & Society Paradigm . "PROduce and conSUME our output, we are Prosuming”.](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452648) — 40 票 / 0 评论 / 2023-11-02 
+- [Suggestions for the last 15 days](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/468588) — 38 票 / 8 评论 / 2024-01-17 
+- [Public 12th Place Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472564) — 37 票 / 5 评论 / 2024-02-01 **write-up?**
+- [What happened so far? A quick summary of the discussions](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/467035) — 35 票 / 4 评论 / 2024-01-10 
+- [Confirmation on Data Availability in Each Competition Phase](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/460848) — 34 票 / 6 评论 / 2023-12-11 
+- [Welcome to Enefit's Energy Prediction Challenge](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452183) — 32 票 / 54 评论 / 2023-11-01 
+- [Exception Issue on Submission - Is Anyone Else Experiencing This?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/461342) — 32 票 / 64 评论 / 2023-12-14 
+- [Timeframe for Phase 1 private test set?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455011) — 31 票 / 6 评论 / 2023-11-13 
+- [First update correction posted.](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/482656) — 31 票 / 42 评论 / 2024-03-08 
+- [5th place solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499938) — 30 票 / 7 评论 / 2024-05-03 **write-up?**
+- [Will Data Prior to Private Test Set Be Revealed Through the Iterator?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/461023) — 29 票 / 4 评论 / 2023-12-12 
+- [#85 Most diverse normalized blend](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472583) — 28 票 / 5 评论 / 2024-02-01 
+- [53rd Public Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472475) — 27 票 / 14 评论 / 2024-02-01 **write-up?**
+- [Temperature Data](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452702) — 27 票 / 2 评论 / 2023-11-03 
+- [Weather time correction patch notes (edited)](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/459851) — 27 票 / 56 评论 / 2023-12-06 
+- [Beyond the second moment of the rolling distribution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/463885) — 26 票 / 5 评论 / 2023-12-27 
+- [Enefit: How to merge the data?!?!](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455100) — 26 票 / 2 评论 / 2023-11-13 
+- [13th place solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499364) — 26 票 / 0 评论 / 2024-05-01 **write-up?**
+- [Seems that some types will plummet in January?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/463774) — 25 票 / 5 评论 / 2023-12-27 
+- [County & location of points where weather is given](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454544) — 24 票 / 22 评论 / 2023-11-10 
+- [Public 20th (Private 27th) Place Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472559) — 23 票 / 17 评论 / 2024-02-01 **write-up?**
+- [Meme Thread](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/469845) — 23 票 / 17 评论 / 2024-01-22 
+- [Electricity prices are not forecasted but realized. Same for the natural gas prices.](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/462366) — 23 票 / 5 评论 / 2023-12-19 
+- [Data patch notes](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455472) — 23 票 / 21 评论 / 2023-11-15 
+- [The story of the competition: How the Largest Energy Hackathon was Born](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/492012) — 22 票 / 4 评论 / 2024-04-08 
+- [Interim hidden dataset update posted](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/469293) — 22 票 / 59 评论 / 2024-01-19 
+- [Look out! Missing values in installed_capacity in the hidden test set](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/468201) — 22 票 / 6 评论 / 2024-01-15 
+- [Second leaderboard update posted](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/492091) — 21 票 / 1 评论 / 2024-04-08 
+- [Holidays and Anniversaries in Estonia](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/456282) — 21 票 / 4 评论 / 2023-11-19 
+- [Public 13th private 47th Place Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472882) — 21 票 / 13 评论 / 2024-02-02 **write-up?**
+- [6th place solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499397) — 21 票 / 1 评论 / 2024-05-01 **write-up?**
+- [Probe Test - The Number of Scoring Days in the Publice LB](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/463640) — 20 票 / 26 评论 / 2023-12-26 
+- [1000x speed-up on holidays features and remove add_holidays_as_binary_features](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/466104) — 20 票 / 2 评论 / 2024-01-07 
+- [Sharing my Simple Dashboard Implemented with Dash](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/459322) — 20 票 / 3 评论 / 2023-12-04 
+- [Analyzing the final update dynamics versus all past updates](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499206) — 20 票 / 5 评论 / 2024-05-01 
+- [A tip on debugging submission errors](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/470790) — 19 票 / 2 评论 / 2024-01-25 
+- [Help your ML models with target normalization](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/458144) — 19 票 / 4 评论 / 2023-11-28 
+- [7th place solution - aka the first of the losers 😄](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499649) — 19 票 / 3 评论 / 2024-05-03 **write-up?**
+- [Temperature data correction](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452829) — 19 票 / 0 评论 / 2023-11-03 
+- [product_type | Types of contracts in enrgy partnership explained](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454898) — 18 票 / 3 评论 / 2023-11-12 
+- [GBDTs and non-stationarity](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/461505) — 18 票 / 5 评论 / 2023-12-14 
+- [How much does the LB udpate cost](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/476367) — 17 票 / 5 评论 / 2024-02-12 
+- [Visualizing the leaderboard after correction](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/483313) — 17 票 / 11 评论 / 2024-03-11 
+- [23rd LB solution + a Python library with models from this competition](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472675) — 17 票 / 3 评论 / 2024-02-01 **write-up?**
+- [Leaderboard will be in an odd state for the next two hours [Obsolete]](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499157) — 16 票 / 4 评论 / 2024-04-30 
+- [Seeking curated discussion threads to catch up and avoid missed points. Comment if anything's absent.](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/466612) — 16 票 / 6 评论 / 2024-01-09 
+- [【Public 21th solution】XGB with no target processing](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/473298) — 16 票 / 5 评论 / 2024-02-04 **write-up?**
+- [Visualizing the update2](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/492117) — 15 票 / 3 评论 / 2024-04-08 
+- [37th Place Solution - Feature Engineering + Ensembling](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499358) — 15 票 / 0 评论 / 2024-05-01 **write-up?**
+- [Big overfitting on training data?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454686) — 15 票 / 22 评论 / 2023-11-11 
+- [Public 30th Place Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472565) — 15 票 / 11 评论 / 2024-02-02 **write-up?**
+- [[Public 36th] Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472757) — 15 票 / 2 评论 / 2024-02-02 **write-up?**
+- [Welcome to passing no Submission Scoring error Competition!](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/471973) — 14 票 / 22 评论 / 2024-01-30 
+- [Publishing notebook is still blocked](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472547) — 14 票 / 2 评论 / 2024-02-01 
+- [67rd Public Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472499) — 14 票 / 4 评论 / 2024-02-01 **write-up?**
+- [Public 71st Solution Writeup (Private 39th)](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472598) — 14 票 / 4 评论 / 2024-05-01 **write-up?**
+- [Congrats to new Kaggle Competitions GM and new 1st on Kaggle Competitions Global Ranking!](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499222) — 14 票 / 7 评论 / 2024-05-01 
+- [Should we expect an update this week?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/481680) — 14 票 / 1 评论 / 2024-03-04 
+- [Video review](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/476500) — 13 票 / 2 评论 / 2024-02-12 
+- [weird units](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/466650) — 13 票 / 11 评论 / 2024-01-09 
+- [Is the time zone the same for all data?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454145) — 13 票 / 7 评论 / 2023-11-09 
+- [Continuity of Datasets and Its Impact on Model Design](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/459425) — 13 票 / 10 评论 / 2023-12-05 
+- [prediction with .clip(0)](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/453357) — 13 票 / 1 评论 / 2023-11-06 
+- [New to Machine Learning or Kaggle? Start here.](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452634) — 12 票 / 16 评论 / 2023-11-02 
+- [Exception: You can only call `make_env()` once.](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/456151) — 12 票 / 2 评论 / 2023-11-18 
+- [what is going on with test's datetime](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/471866) — 12 票 / 6 评论 / 2024-01-29 
+- ["Submission Scoring Error" despite dummy value filling](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/469344) — 12 票 / 10 评论 / 2024-01-20 
+- [10x speed-up on holidays features](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/465538) — 12 票 / 2 评论 / 2024-01-04 
+- [data_block_id alignment](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/453008) — 12 票 / 5 评论 / 2023-11-04 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/453374) — 12 票 / 26 评论 / 2023-11-06 
+- [What is the Best Approach for Stable Cross-Validation](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/465641) — 11 票 / 11 评论 / 2024-01-05 
+- [#90 MAE 63.78 to 62.56 -> FE only](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472654) — 11 票 / 0 评论 / 2024-02-01 
+- [problem with historical weather data?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/453980) — 11 票 / 11 评论 / 2023-11-08 
+- [Naive Regression or Time-series Forecasting?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452815) — 11 票 / 4 评论 / 2023-11-03 
+- [Datasets Documentation - Summary for Kaggle Enefit](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/464858) — 11 票 / 3 评论 / 2024-01-01 
+- [Submission Scoring Error is actually Notebook threw Exception](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/463560) — 11 票 / 2 评论 / 2023-12-25 
+- [Pausing high scoring kernel posting ?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/468907) — 10 票 / 8 评论 / 2024-01-18 
+- [skip code using 'currently_scored'](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/469610) — 10 票 / 3 评论 / 2024-01-21 
+- [my first and last kaggle competition](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472218) — 10 票 / 16 评论 / 2024-01-31 
+- [Online learning strategies](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472515) — 10 票 / 6 评论 / 2024-02-01 
+- [New Prediction Units in the Test Set](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/456369) — 10 票 / 4 评论 / 2023-11-19 
+- [LoFo vs Mutual Information importance scores](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/467211) — 9 票 / 11 评论 / 2024-01-11 
+- [Simple Top100 Public Solution (Deeptables+LGBM)](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472742) — 9 票 / 0 评论 / 2024-02-01 **write-up?**
+- [Where is Unknown county located? (county=12)](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454654) — 9 票 / 4 评论 / 2023-11-11 
+- [Hidden copy of the API still delivers test prediction_datetime column as datetime64[ns]](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472122) — 9 票 / 8 评论 / 2024-01-30 
+- [157th Place Solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499565) — 9 票 / 0 评论 / 2024-05-02 **write-up?**
+- [CV strategy](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/461907) — 9 票 / 3 评论 / 2023-12-17 
+- [Retraining model and available data after submission deadline](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/462382) — 9 票 / 3 评论 / 2023-12-19 
+- [Slow submission](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/470849) — 9 票 / 8 评论 / 2024-01-25 
+- [Analysis of energy behaviour profiles of prosumers](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/461028) — 9 票 / 2 评论 / 2023-12-12 
+- [Visualizing the churn](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/482672) — 9 票 / 9 评论 / 2024-03-08 
+- [[Submission Scoring Error] Gas_prices may have more than 1 rows](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/469818) — 8 票 / 7 评论 / 2024-01-22 
+- [Seeking help on unusual submission error without proper execution after data update](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/470356) — 8 票 / 12 评论 / 2024-01-23 
+- [datetime vs prediction_datetime vs forecast_date](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454573) — 8 票 / 2 评论 / 2023-11-10 
+- [👀 [Probably solved] Will this competition end on 2/1 ? -> Yes!! 🌄](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/470877) — 8 票 / 4 评论 / 2024-01-26 
+- [🐼🚀Accelerate Pandas on GPU with RAPIDS cudf](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454738) — 8 票 / 3 评论 / 2023-11-11 
+- [The lag days of revealed_targets](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/453390) — 8 票 / 6 评论 / 2023-11-06 
+- [Problems with the Data during Daylight and Standard Time Changes](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/460529) — 8 票 / 3 评论 / 2023-12-09 
+- [[Bronze solution] LGB ensembles with modified targets](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/473350) — 8 票 / 2 评论 / 2024-02-04 **write-up?**
+- [CV/Validation correlation with LB](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/455461) — 7 票 / 4 评论 / 2023-11-14 
+- [Missing values in target](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/454458) — 7 票 / 3 评论 / 2023-11-10 
+- [what time ranges for public test and privates test?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/463409) — 7 票 / 1 评论 / 2023-12-25 
+- [Why can't I see scores and rankings](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/482705) — 7 票 / 3 评论 / 2024-03-09 
+- [HOW TO SUBMIT！！（way to success for "submit"）](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/458323) — 7 票 / 12 评论 / 2023-11-29 
+- [Latest versions of essential libraries](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/465332) — 7 票 / 2 评论 / 2024-01-03 
+- [26th place solution](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/499475) — 7 票 / 0 评论 / 2024-05-01 **write-up?**
+- [Surface Radiation Feature Differences between Weather Datasets?](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/458995) — 7 票 / 5 评论 / 2023-12-02 
+- [Subject: Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/500978) — 6 票 / 2 评论 / 2024-05-07 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/452899) — 6 票 / 3 评论 / 2023-11-04 

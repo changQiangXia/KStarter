@@ -1,0 +1,328 @@
+# https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738650
+
+Topic #738650: 7th Place Solution — Way Too Many Models, One Simple Stack
+  Author: Keanan
+  Posted: 2026-09-01 06:34:21.996000
+  Votes: 14  Comments: 0
+
+7th Place — Way too many models, one simple stack
+
+Hey everyone 👋
+
+This competition got a bit out of hand for me. I started with the usual tree
+models, then added neural nets, public OOFs, rare tabular architectures and a
+lot of weak models. In the end, six regularized Logistic Regressions had to
+sort out the mess.
+
+The submission I actually trusted
+
+My best visible score was 0.97139, which put me 6th on the public
+leaderboard. But this was not my primary strategy. It was mostly a fun
+satisfaction hedge to climb the visible board and use my second final slot on
+something different.
+
+My real solution was the strict-OOF submission:
+
+
+
+OOF: 0.97087888
+
+Public LB: 0.97127
+
+Private LB: 0.97095
+
+improvement on 10/10 folds
+
+paired stratified bootstrap 95% CI: [+0.000020, +0.000039]
+
+
+Validation first
+
+I froze one ten-fold stratified split and reused it for every local run and
+every meta-model I controlled. Every serious model needed a complete OOF
+prediction, the matching test prediction and clear provenance.
+
+I was also careful at level 2. Honest level-1 OOFs are not enough if you search
+blend weights on the same OOF rows used to report the score. Final weights were
+therefore learned on nine folds and evaluated on the tenth.
+
+After removing duplicates, incomplete pairs and questionable meta-predictions,
+the final clean pool contained 556 streams: 206 local and 350 public. Another
+42 local streams were excluded. I did not personally train 556 models: a big
+part of the work was collecting and honestly evaluating what the community
+shared.
+
+
+
+From 556 verified prediction streams to the strict-OOF primary.
+
+What worked in the data
+
+The best feature idea was an artifact of the synthetic generator. Some
+continuous-looking values repeated many times and had surprisingly stable
+target rates. Exact-value target encoding was therefore extremely strong even
+when the raw feature itself was weak.
+
+The useful feature families were mainly:
+
+
+
+fold-safe exact-value target encoding on nine columns;
+
+train+test frequencies;
+
+pair and feature-on-feature statistics;
+
+decimal and rounding artifacts.
+
+
+Moving from four to nine target-encoded columns added roughly +0.00191 on
+XGBoost. Many sensible domain ratios, reconstructed totals and kNN features did
+almost nothing after that.
+
+The model zoo and the simple C-bag
+
+I tried XGBoost, LightGBM, CatBoost, RealMLP, TabM, FT-Transformer, DCN,
+AutoInt, GANDALF, TabICL, TabPFN-style models, EBM, splines and several other
+families.
+
+These were my best fully comparable local level-1 OOF scores, all measured on
+the same ten folds and before any stacking:
+
+
+
+
+Model family
+Best OOF AUC
+
+
+
+
+XGBoost
+0.969080
+
+
+TabM
+0.968948
+
+
+RealMLP
+0.968781
+
+
+LightGBM
+0.968779
+
+
+CatBoost
+0.968677
+
+
+Lookup-Transformer
+0.968672
+
+
+FT-Transformer
+0.968558
+
+
+HistGradientBoosting
+0.968215
+
+
+EBM
+0.968066
+
+
+AutoInt
+0.967759
+
+
+MLP
+0.967608
+
+
+Spline-Transformer
+0.967516
+
+
+XGBoost-DART
+0.967236
+
+
+YDF
+0.967063
+
+
+GANDALF
+0.967010
+
+
+Category-Embedding MLP
+0.966935
+
+
+GATE
+0.966639
+
+
+Retrieval NN
+0.966634
+
+
+DANet
+0.966594
+
+
+TabICLv2
+0.965772
+
+
+NODE
+0.965684
+
+
+
+
+Here, “level 1” means that the model only consumed engineered input features,
+not predictions from other models. RealMLP and TabM can still average several
+members internally. I excluded pseudo-labeled transductive variants from this
+table. I also screened DCN and TabPFN-style variants, but they did not produce a
+competitive, fully comparable ten-fold local OOF.
+
+Instead of keeping only the best solo models, I asked whether each family fixed
+different errors. A group of 50 individually weak public models added
++0.000060 to the blend, while a random same-sized control added only
++0.000013.
+
+For the stack, I rank-normalized every prediction and trained six cross-fitted
+Logistic Regressions:
+
+C = 0.01, 0.03, 0.1, 0.3, 1, 3
+
+
+I averaged their prediction ranks and ranked the result again. That was my
+rank-LogReg C-bag.
+
+One funny result: C=0.01 was the weakest member alone, but removing it reduced
+the C-bag by 0.00000189 (0.97085557 → 0.97085368). Even a weak model can
+bring a useful error direction.
+
+The last gains
+
+The blend progressed like this:
+
+
+
+
+Stage
+OOF
+
+
+
+
+first strong diverse blend
+0.970315
+
+
+560-stream mega-blend
+0.970737
+
+
+593-stream mega-blend
+0.970763
+
+
++ RealMLP + Depth-9 XGBoost
+0.970820
+
+
++ negative residual correctors
+0.970849
+
+
+final primary
+0.970879
+
+
+
+
+The negative weights were one of my favourite findings. Some weaker stacks
+represented directions my main blend was overusing. Subtracting 25% of a
+public-only stack and 10% of a Rank-Gauss stack improved OOF from 0.970820 to
+0.970849.
+
+During the final hours, I refitted the clean 556-stream C-bag on a GPU and
+blended it with the previous final. The ten outer-fold weights assigned to the
+C-bag were all between 0.50 and 0.55, so I used their median 0.525 on
+test:
+
+47.5% previous final + 52.5% clean C-bag
+
+
+This produced the final 0.97087888 OOF / 0.97127 public LB submission.
+
+Final selections
+
+I used my two final slots for two very different bets:
+
+
+
+
+Submission
+OOF
+Public LB
+Private LB
+
+
+
+
+Gaussian-copula public hedge
+—
+0.97139
+0.97112
+
+
+strict-OOF primary
+0.97087888
+0.97127
+0.97095
+
+
+
+
+The dash is intentional: the hedge included a test-only public blend, so it had
+no honest matching OOF. The first was the leaderboard hedge; the second was the
+solution I trusted from local validation.
+
+The public hedge
+
+The 0.97139 hedge was a Gaussian-copula blend of my weak-model ensemble,
+Souvik's blend2, a small cstdy component and my 593-stream mega-blend. I
+selected it because it kept the best visible score while reducing rank
+correlation with my primary to 0.99670.
+
+Again, this was the fun leaderboard submission. The 0.97087888 OOF model was
+the strategy I actually trusted. But the fun hedge won this time: it scored
+0.97112 private and gave me 7th place. Even funnier — or more painful —
+two last-hour variants I did not select scored 0.97113 private, which would
+have put me in 6th place. Classic Kaggle.
+
+Thanks
+
+Thanks to Chris Deotte, Michael Qiu, Kodai, Naji, cstdy,
+Szymon Kłapiński, Souvik D. Biswas, Adarsh Aleti, and everyone who
+shared OOF/test pairs. Honest local testing would not have been possible
+without those contributions.
+
+My main takeaway:
+
+
+  
+Keep every honest OOF, care about different errors more than solo scores, and
+  never let the fold you are evaluating choose its own blend.
+
+
+Thanks for reading, and happy Kaggling! 🚀
+
+No comments

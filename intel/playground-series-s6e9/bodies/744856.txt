@@ -1,0 +1,295 @@
+# https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744856
+
+Topic #744856: 8th Place Solution
+  Author: yuurei
+  Posted: 2026-10-01 07:30:15.270000
+  Votes: 11  Comments: 0
+
+Hi everyone,
+
+I was lucky enough to finish 8th, and I'm really happy about it. This is the first time I've achieved such a high placement on Kaggle. A big thank you to everyone who shared discussions and codes.
+
+@cdeotte 
+
+Ever since I came across the amazing solution you shared in S6E3, you have been my goal. Thank you for always sharing such valuable insights.
+
+@heuljax
+
+The feature engineering you shared to capture the data generator's artifacts was extremely powerful.  It was so impactful that participants' scores were completely different before and after you published it.  Thank you so much for sharing it so generously.
+
+Overview
+
+My final submission is a stack of 57 models, combined with logistic regression.
+
+
+
+
+
+Score
+
+
+
+
+OOF AUC (10-fold)
+0.946796
+
+
+Public LB
+0.94674
+
+
+Private LB
+0.94575
+
+
+
+
+These are the four things that helped the most:
+
+
+
+
+What helped
+Comparison
+OOF
+
+
+
+
+Models using @heuljax's features (including the generator-aware features)
+Stack of 35 → 50 models
++0.00029
+
+
+Target encoding on income keys rounded at multiple granularities (from @maiernator's notebook)
+37 → 130 features (LightGBM → XGBoost)
++0.00021
+
+
+5-fold → 10-fold
+Same 138-feature XGBoost
++0.00012
+
+
+Stacking with logistic regression
+Best single model → 57-model stack
++0.00018
+
+
+
+
+CV strategy
+
+
+
+All models share the same 10 folds (StratifiedKFold, seed 42)
+
+Everything that uses the labels (target encoding, the logits used as the starting point for residual learning, etc.) was built with a nested 5-fold inside the training part of each of the 10 folds
+
+The Public LB is only 20% of the test set, and its AUC has a standard error of about 0.0016, so I made every decision based on OOF
+
+
+NEVER BLIND BLENDING
+
+
+Features
+
+Target encoding
+
+The base is the 130 features from @maiernator's notebook (later 138, after I added 8 more). What really worked was target encoding on four keys at different granularities: raw income, income rounded to $100, income rounded to $1,000, and floored commute distance. Removing these 4 features drops the OOF by 0.00019.
+
+
+
+
+Model
+OOF
+
+
+
+
+Previous best (LightGBM, 37 features)
+0.945877
+
+
+XGBoost with 130 features
+0.946090
+
+
+
+
+Generator-aware features
+
+I reproduced @heuljax's three notebooks locally and used their features. My reproduced OOF scores almost exactly matched the public ones.
+
+
+
+
+Notebook
+Model
+Features
+OOF
+Main features
+
+
+
+
+xgb-sample
+XGBoost
+173
+0.946309
+Purchase rate per income value, adjusted for the attribute composition of the rows sharing that value; multi-level target encoding; purchase rate per income value in the original dataset; etc.
+
+
+logistic-regression-sample
+Logistic regression
+300
+0.946264
+Hierarchical target encoding over income digit prefixes; the 30 cells of environmental concern × subsidy × range anxiety; additive model components; etc.
+
+
+generator-aware-ridge-logistic-regression
+Logistic regression
+316
+0.946400
+Purchase rates keyed by the tokens obtained by splitting income with the GPT-2 tokenizer; etc.
+
+
+
+
+Main models
+
+These are the main models.
+
+Group-wise XGBoost
+
+I split the rows into groups by a category or value, trained a separate XGBoost for each group, and predicted each row with the model for its group (138 features).
+
+Groupings: city type, city type × car type, environmental concern, combinations with the number of cars owned, age, the number of charging stations near home / work, etc. (11 models in the stack)
+
+
+
+Each model sees fewer rows, so it is weaker on its own. With 12 groups of city type × car type, the OOF was 0.944940, which is 0.0013 lower than without grouping (0.946241)
+
+Still, these models helped the stack. Adding the 12-group model to the 26-model stack at that time gave +0.000009 (improved in 9 of 10 folds), and adding the three models grouped by age, charging stations near work, and charging stations near home at once gave +0.000016 (improved in all 10 folds)
+
+
+Logistic regression
+
+Single OOF: 0.946509
+
+An L2-regularized logistic regression on 622 features, including the generator-aware features.
+
+
+
+This was the most effective model. Adding just this one model to the stack gave OOF +0.00013 (improved in all 10 folds), Public +0.00016, and Private +0.00012. That was the largest single gain I got during the competition
+
+A logistic regression on only the 316 generator-aware features also gave +0.00011, so I think most of the gain came from the generator-aware features
+
+On its own, it also beat the generator-aware ridge notebook (0.946400) by +0.00011. The generator-aware features don't use the original dataset, so I think they complemented the other 306 features, which include purchase rates from the original dataset
+
+
+Residual XGBoost
+
+Single OOF: 0.946617
+
+An XGBoost on the same 622 features. I pass the logistic regression logits as base_margin, so the trees learn only the residual of the logistic regression. (The idea came from @goodpjw2008. Thank you!)
+
+
+
+The strongest single model. Even a single run beat the logistic regression in all 10 folds
+
+The logits passed as base_margin were also built with nested CV. For each training row, the logit comes from a logistic regression fitted on the other 4/5 of the training rows (the inner folds that don't contain that row)
+
+
+Stacking
+
+The 57 models
+
+
+
+
+Learner
+Count
+Note
+
+
+
+
+XGBoost
+36
+11 of them are group-wise models (a separate model per group)
+
+
+Logistic regression
+5
+
+
+
+CatBoost
+4
+
+
+
+LightGBM
+3
+
+
+
+TabM
+3
+
+
+
+MLP
+3
+
+
+
+ExtraTrees
+2
+
+
+
+RealMLP
+1
+
+
+
+
+
+
+
+I converted the OOF predictions of the 57 models to logits and combined them with a logistic regression (C=0.3)
+
+I added models one at a time with forward greedy selection. A model was accepted if the fold-averaged AUC gain was positive and the AUC improved in a majority of the 10 folds. For reference, I also checked the gain from adding a column of random noise each time
+
+22 of the 57 models use @heuljax's features and were added in the last 2 days
+
+scikit-learn's LogisticRegression stops before converging with the default tol=1e-4. The loss grows with the number of members, so I used tol=1e-8
+
+
+Final thoughts
+
+All of the implementation was done with Claude Code, using Fable 5.1 and Opus 5.5.
+
+In the past, AI would often get lost unless a human made the decisions, but that hardly happens anymore.
+
+How long will human decision-making still be needed? I find the future both exciting and a little frightening.
+
+References
+
+
+
+maiernator: S6E9 CTBoost Not CatBoost Astra Baseline
+
+heuljax: kps6e09-xgb-sample
+
+heuljax: kps6e09-logistic-regression-sample
+
+heuljax: kps6e09-generator-aware-ridge-logistic-regression
+
+goodpjw2008: S6E9 LR margin GBDT OOF stack
+
+cdeotte: [Fable 5.1 - EDA - Original Data Insights](https://www.kaggle.com/competitions/playground-series-s6e9/discussion/73930
+
+No comments

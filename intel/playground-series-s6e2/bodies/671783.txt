@@ -1,0 +1,195 @@
+# https://www.kaggle.com/competitions/playground-series-s6e2/discussion/671783
+
+Topic #671783: MLP with Linear & Periodic Embeddings
+  Author: Masaya Kawamata
+  Posted: 2026-02-04 02:37:46.555000
+  Votes: 64  Comments: 34
+
+Hi everyone,
+
+Recently, strong Neural Network architectures for tabular data, such as TabM and RealMLP, have been achieving impressive results. While these models are sophisticated, one fundamental component contributing to their success is how they handle Numerical Features.
+
+Instead of feeding raw scalar values directly into the network—as is common in standard MLP baselines—these architectures often employ Numerical Embeddings.
+
+To better understand this specific "building block" of modern Tabular DL, I created a notebook to implement these embedding techniques from scratch using PyTorch and benchmark them.
+
+Notebook Link
+
+Experiments with Numerical Embeddings (Linear &amp; Periodic)
+
+What I Explored
+
+I implemented three methods and evaluated them using 3-fold Stratified K-Fold:
+
+1. Baseline (Scalar Input)
+Standard approach. Numerical features are scaled and concatenated directly.
+
+2. Linear Embeddings
+Each numerical feature x is projected into a vector space using independent learnable weights.
+$$\mathbf{e} = x \cdot \mathbf{W} + \mathbf{b}$$
+
+3. Periodic Embeddings
+The technique highlighted in recent research (NeurIPS 2022). It transforms scalar values using Sine and Cosine functions before projection to handle the "Spectral Bias" of neural networks.
+$$\mathbf{e} = \text{Concat} \left[ \cos(2\pi x \mathbf{c} + \mathbf{b}), \sin(2\pi x \mathbf{c} + \mathbf{b}) \right]$$
+
+Results &amp; Insights
+
+Here are the results from the experiment:
+
+
+
+
+Method
+Overall AUC
+Improvement
+
+
+
+
+Baseline (Scalar)
+0.953078
+-
+
+
+Linear Embedding
+0.953104
++0.000027
+
+
+Periodic Embedding
+0.954387
++0.001309
+
+
+
+
+My Takeaways:
+
+
+
+Linear Embedding showed almost no improvement over the baseline in this simple setup. Just adding parameters didn't help much.
+
+Periodic Embedding, however, showed a significant boost (+0.0013). This strongly suggests that transforming numerical inputs into periodic representations helps the MLP capture high-frequency patterns that are otherwise invisible to standard ReLU networks.
+
+
+It seems that for tabular data, we cannot ignore Numerical Embeddings if we want to squeeze the most out of Deep Learning models.
+
+
+
+Further Room for Experiments
+
+The reference paper mentions even more advanced techniques that are worth exploring:
+
+
+
+Piecewise Linear Encoding (PLE): Instead of Sin/Cos, this method uses bins (similar to histograms) and interpolates values. The paper suggests this can be even more effective than Periodic embeddings on certain datasets.
+
+Target-Aware Binning: Using decision trees to determine the optimal bins for PLE, effectively bringing GBDT-like splitting logic into the Neural Network input layer.
+
+
+There is still a lot of room for experimentation!
+
+Reference Paper
+
+
+
+"On Embeddings for Numerical Features in Tabular Deep Learning" (Gorishniy et al., NeurIPS 2022)
+
+
+arXiv:2203.05556
+
+
+Have fun!
+
+Comments:
+├─ Chris Deotte (2026-02-05 17:09:22.987000) [+8]
+│  Great information, thanks for sharing. I wasn't aware of this. After reading your post and doing some research, it makes sense why periodic embeddings help numeric columns.
+│  
+│  In general, NN make smo...
+├─ David Holzmüller (2026-02-04 21:34:05.010000) [+5]
+│  You illustrated the "L" (linear) and "P" (periodic) embeddings. The paper found PLR (periodic + linear layer + ReLU) to perform best. However, TabM introduced a slightly improved version of PLE emb...
+  ├─ Masaya Kawamata (2026-02-04 22:39:38.307000) [+2]
+  │  Thank you for the detailed clarification. This is exactly the kind of insight I was looking for!
+  │  
+  │  I also wanted to express my appreciation for pytabkit, which has been a great resource for my work....
+    ├─ David Holzmüller (2026-02-04 22:51:52.663000) [+2]
+    │  Unfortunately it's currently not possible, since the train_metric_name will be passed into Metrics.apply(), which expects a string. However, perhaps I could update it in the next release such that ...
+    ├─ Masaya Kawamata (2026-02-04 22:59:12.650000) [+0]
+    │  Thank you for the reply! I would be excited to try it out if it gets implemented in a future release. I'll keep an eye on the updates!
+    ├─ Mikhail Zaitsev (2026-02-10 14:05:35.277000) [+2]
+    │  @davidholzmueller Great paper, btw! Very clear and well written. I often find NeurIPS papers hard to follow, but this one was genuinely engaging and easy to read. Really enjoyed it.
+  ├─ Vladimir Demidov (2026-02-06 00:28:21.103000) [+1]
+  │  As far as I saw, people prefer Piecewise Linear Encoding (Quantile Binning) over Periodic Encoding when working with the TabM model. It's not a surprise that PLE can be a default variant, but accor...
+├─ Qudsiya Siddique (2026-02-09 04:32:55.353000) [+4]
+│  Your observation is right, but the boosting models like xgboost , catboost has given the highest accuracy beating the nueral networks..in tabular dataset nueral network has very less chance of perf...
+  ├─ Masaya Kawamata (2026-02-09 06:46:27.087000) [+3]
+  │  That's often the case, but as the No Free Lunch theorem suggests, it really depends on the data. Recent studies like TabArena show that NNs (e.g., TabM, RealMLP) can outperform GBDTs in many scenar...
+    ├─ Optimistix (2026-02-09 07:07:21.960000) [+2]
+    │  I'm not sure whether we've entered such an era, or Kaggle has just been providing very clean, relatively simple datasets of late. It'd be interesting to run these NNs on datasets from PSS4 and earl...
+    ├─ Masaya Kawamata (2026-02-09 07:29:24.550000) [+3]
+    │  I also wonder how much of the recent success comes from dataset design versus a real change in model capability.
+    │  Interestingly, TabArena (NeurIPS 2025) ran benchmarks on a range of real-world datas...
+    ├─ Optimistix (2026-02-09 22:10:17.637000) [+3]
+    │  Oh, absolutely - NNs have definitely been catching up and become competitive, PSS is a very limited and niche corner of the whole space. My comment was more on the exceptional performance of NNs in...
+    ├─ David Holzmüller (2026-02-09 23:06:42.657000) [+4]
+    │  As a RealMLP and TabArena author, the main difference between PSS and TabArena are IMHO that PSS has larger datasets, feature engineering, and synthetic datasets. I'd be curious if people here have...
+    ├─ Masaya Kawamata (2026-02-10 00:06:05.263000) [+4]
+    │  I feel that even within the PSS series, the nature of the data and the optimal modeling approach vary quite a lot from competition to competition.
+    │  
+    │  In some competitions (for example S4E12, S5E2, S5...
+    ├─ Tilii (2026-02-10 01:59:42.247000) [+3]
+    │  For dataset size there is some weak signal on TabArena that NNs are actually beating GBDTs more strongly on smaller datasets.
+    │  
+    │  
+    │  In my experience it has less to do with absolute dataset sizes, altho...
+    ├─ David Holzmüller (2026-02-10 08:30:55.503000) [+3]
+    │  I'm a bit surprised, I thought more categoricals would be good for GBDTs (esp. CatBoost). At least this is what we saw in Figure B.4 in the TabICL paper.
+    │  
+    │  And yes, these differences are quite small...
+  ├─ Tilii (2026-02-09 07:41:04.717000) [+5]
+  │  in tabular dataset nueral network has very less chance of performing well
+  │  
+  │  
+  │  Barely over a week ago a competition ended where neural networks were the best individual models by far. Even in this com...
+├─ Casey Trudo (2026-02-27 20:32:25.140000) [+1]
+│  This is a great explanation and really helped me with my models.
+├─ yunsuxiaozi (2026-02-04 03:07:46.510000) [+4]
+│  It is certain that there are nonlinear signals in the data, but why are there periodic signals? It is precisely because there are periodic or similar signals that periodic embedding can have good e...
+  ├─ Masaya Kawamata (2026-02-04 03:52:47.033000) [+6]
+  │  Hi! I actually asked myself the same question while working on this notebook.
+  │  
+  │  In this specific dataset, features like Age or Cholesterol definitely aren't "periodic" in the time-series sense. So, ...
+  ├─ David Holzmüller (2026-02-04 21:29:30.213000) [+7]
+  │  The periodic embeddings don't necessarily create periodic functions - the frequencies that are learned don't need to be multiples of a common base frequency, such that the combination of multiple p...
+├─ Muhammad Muaz (2026-02-21 06:08:59.023000) [+1]
+│  in my Heart Disease Prediction model, my ROC-AUC score is not very high. What changes should I make to improve the ROC curve performance?
+├─ GurSimran (2026-02-16 16:47:33.020000) [+1]
+│  Great explanation.
+│  
+│  i always wonder how to properly feature scale NUMS features that have a wide range of values, as they may be easily overlooked or improperly weighted during model training….
+├─ Ladipo Samson (2026-02-15 10:10:12.817000) [+1]
+│  This is a very insightful discussion. I haven’t experimented yet with TabM or RealMLP-style neural tabular models, but I’ve run extensive experiments with traditional models on this dataset which i...
+├─ Debangan Ghosh (2026-02-13 21:25:08.970000) [+1]
+│  This is one of the clearest explanations of why numerical embeddings help that I’ve seen in a Playground discussion.
+│  
+│  What really clicked for me was your interpretation of periodic embeddings actin...
+├─ joshua wells (2026-02-10 12:01:17.277000) [+1]
+│  The use of numerical embeddings is becoming a significant part of modern tabular deep learning, and this example demonstrates just that. By comparing the use of raw scalar inputs with both linear a...
+├─ Ravijot Sinha (2026-02-09 09:12:25.020000) [+1]
+│  That was an interesting read!
+├─ GasMan (2026-02-09 07:28:08.220000) [+1]
+│  Wow, those Periodic Embedding results are a huge eye-opener! I've been stuck at the 0.953 LB ceiling for a while, and this explains why standard scalars aren't cutting it. Definitely going to try a...
+  ├─ Debangan Ghosh (2026-02-13 21:25:42.113000) [+1]
+  │  I had a very similar “stuck at ~0.953” experience before trying alternative representations.
+  │  
+  │  One thing I found interesting is that even when periodic embeddings don’t fully beat GBDTs, they tend t...
+├─ Ankit Gupta (2026-02-08 17:42:54.660000) [+1]
+│  Keep up the great work.
+├─ benkerrouche abdelbasset (2026-02-08 12:24:13.413000) [+1]
+│  Thank you @masayakawamata this is  great information
+├─ Aishwarya Sharma (2026-02-08 11:52:15.490000) [+1]
+│  This is superb work !
+├─ Qudsiya Siddique (2026-02-08 07:50:43.990000) [+1]
+│  Thank you, as begineer it really healped…
+├─ Navneet (2026-02-06 07:22:42.177000) [+1]
+│  Thank you for the "building block" of modern Tabular DL @masayakawamata

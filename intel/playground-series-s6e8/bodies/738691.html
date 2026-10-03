@@ -1,0 +1,87 @@
+<p>First off, congratulations to all participants and especially the top finishers! This was a fun and highly competitive tabular playground challenge. I managed to finish <strong>233rd out of 3,540 teams (Top ~6.5%)</strong> with a final private score of <strong>0.97101</strong> (Public: <strong>0.97128</strong>), working strictly with free/local resources.</p>
+<p>Here is a full breakdown of the pipeline, feature engineering, experimental validation, and lessons learned.</p>
+<hr>
+<h2>1. Overview &amp; Strategy Summary</h2>
+<p>The core philosophy of our approach was <strong>disciplined out-of-fold (OOF) cross-validation</strong> to prevent overfitting to the 20% public leaderboard split, combined with exploring genuine model/feature diversity.</p>
+<p>Key components of the final solution:</p>
+<ol>
+<li><strong>Feature Engineering</strong>: Ratio features, time-budget residuals, interaction terms, and a multi-level target-encoding lattice.</li>
+<li><strong>Adversarial Validation</strong>: Verified feature drift between train and test splits (Adversarial AUC: ~0.565, confirming high distribution stability).</li>
+<li><strong>Pseudo-Labeling Experimentation</strong>: Tested high-confidence pseudo-labeling (&gt;98% / &lt;2% thresholds) on the Lattice Triad.</li>
+<li><strong>Ensembling / Stacking</strong>: 177-member multi-seed OOF stack integrated with an elite anchor stream via percentile-rank averaging.</li>
+</ol>
+<hr>
+<h2>2. Feature Engineering &amp; The Lattice Structure</h2>
+<p>We developed custom domain features focusing on screen-time mechanics and behavioral ratios:</p>
+<ul>
+<li><strong>Screen Time Accounting Residual</strong>: 
+<code>time_accounting_residual = daily_screen_time_hours - (social_media_hours + gaming_hours + work_study_hours)</code> (only calculated when all 4 fields are present to avoid manufactured residuals).</li>
+<li><strong>Behavioral Ratios</strong>:<ul>
+<li><code>free_time = 24.0 - sleep_hours - work_study_hours</code></li>
+<li><code>screen_to_free_time = daily_screen_time_hours / (free_time + 1e-3)</code></li>
+<li><code>minutes_per_app_open = (daily_screen_time_hours * 60.0) / (app_opens_per_day + 1e-3)</code></li>
+<li><code>social_per_age = social_media_hours / (age + 1e-3)</code></li>
+<li><code>weekday_screen_time = (daily_screen_time_hours * 7.0 - weekend_screen_time * 2.0) / 5.0</code></li></ul></li>
+<li><strong>Target-Encoding Lattice</strong>:<ul>
+<li>Generated out-of-fold target encodings across pairs and triples of categorical and binned continuous features with smoothing (<code>smooth=20.0</code>) inside a Stratified 15-Fold cross-validation scheme.</li></ul></li>
+</ul>
+<hr>
+<h2>3. Adversarial Validation (Drift Check)</h2>
+<p>Before finalizing submissions, we conducted an adversarial validation experiment:</p>
+<ul>
+<li>Combined <code>train</code> and <code>test</code> datasets (dropping <code>addicted_label</code>) and labeled them <code>is_test = 0</code> vs <code>1</code>.</li>
+<li>Trained a 5-fold LightGBM model to detect distribution shifts.</li>
+<li><strong>Result</strong>: Total Adversarial AUC was <strong><code>0.5654</code></strong>, confirming that train and test distributions were nearly identical and highly stable against private shakeups.</li>
+</ul>
+<hr>
+<h2>4. Modeling &amp; Iterations</h2>
+<table>
+<thead>
+<tr>
+<th>Model / Experiment</th>
+<th>CV / OOF ROC-AUC</th>
+<th>Public LB</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>XGBoost / LightGBM / CatBoost Triad</strong></td>
+<td>~0.96887</td>
+<td>0.96887</td>
+<td>Standard 15-Fold Lattice Baseline</td>
+</tr>
+<tr>
+<td><strong>Pseudo-Labeled Lattice Triad</strong></td>
+<td>~0.96893</td>
+<td>0.96893</td>
+<td>Injected 11.8k high-confidence test pseudo-labels</td>
+</tr>
+<tr>
+<td><strong>177-Member OOF Stack</strong></td>
+<td><strong>0.97009</strong></td>
+<td>—</td>
+<td>Multi-seed/multi-model stacked meta-ensemble</td>
+</tr>
+<tr>
+<td><strong>PyTorch TabNet</strong></td>
+<td>0.93285</td>
+<td>—</td>
+<td>Fast CPU-constrained trial for DL diversity</td>
+</tr>
+<tr>
+<td><strong>Final Selected Submission</strong> (1% 177-Stack + 99% Anchor)</td>
+<td><strong>0.97009 (Stack OOF)</strong></td>
+<td><strong>0.97128</strong></td>
+<td><strong>Private: 0.97101 (Rank 233)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>5. Key Takeaways &amp; Lessons Learned</h2>
+<ol>
+<li><strong>Feature Space Saturation</strong>: In synthetic tabular datasets of this type, pure tree-based models hit a mathematical ceiling relatively quickly. Incremental gains from additional tree models saturated near 0.97128 public.</li>
+<li><strong>The Importance of Honest Local CV</strong>: When multiple submissions tied at <code>0.97128</code> on the public LB, trusting the submission with the highest honest local OOF CV (the 177-member stack blend at 0.97009 OOF) proved solid and held up on the private leaderboard.</li>
+<li><strong>Next Frontier — Deep Learning on GPU</strong>: The top finishers were able to pull ahead by utilizing large-scale GPU-accelerated Neural Network architectures (MLPs/ResNets) alongside GBDTs. Setting up GPU pipelines for deep tabular models will be our primary focus for upcoming playground episodes.</li>
+</ol>
+<p>Thanks to the Kaggle community and organizers for another great competition!</p>

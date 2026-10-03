@@ -1,0 +1,93 @@
+<p>The Ribonanza RNA Folding competition has been an amazing opportunity and we are really glad to have participated in it. Kudos to the hosts for their substantial effort in keeping the high organizational level and giving the contestants plenty of valuable insight and support. We would also like to thank the community for the fruitful public discussions and coding initiatives. Congratulations to everyone involved! 🎉</p>
+<h1>Code</h1>
+<p>Open source code is available on <a href="https://github.com/autosome-ru/vigg_ribonanza/" target="_blank">github</a>.</p>
+<h1>TLDR</h1>
+<p>Our solution is based on transformer architecture. We predicted base pair probability matrix(BPPM) for each RNA sequence using EternaFold and added convolutional blocks to our architecture to process BPPM features. For some models we added Squeeze-and-Excitation layer in convolutional blocks Also we add these features with attention values before softmax operation in Self-Attention block. To allow better generalization for longer input we implemented Dynamic Positional Bias. Then we ensembled models with slight differences in architecture and training process.</p>
+<h1>Data Preprocessing</h1>
+<p>At first, for each sequence in train and test datasets we calculated a base pair probability matrix (BPPM) using EternaFold. During training and inference phases we passed to our model the RNA sequences encoded with a learnable embedding layer. Each nucleotide was considered a token and special <strong>&lt; start &gt;</strong> and <strong>&lt; end &gt;</strong> tokens were placed at both ends as well. To provide the model with the information about whether the sequence comes from a “clean” subset of training dataset (which SN_filter values show - 1 corresponds to “clean” sequences with high signal-to-noise ratio and 0 is otherwise) we encoded SN_filter values with a learnable embedding layer and added corresponding  embeddings to sequence embeddings. The embedding dimension was chosen to be of size <strong>192</strong>. BPPMs were padded with zeros at their margins to account for adding <strong>&lt; start &gt;</strong> and <strong>&lt; end &gt;</strong> tokens. The figure below summarizes the data preprocessing part.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F482c2d20fce57fa513021909a515e98b%2Fpreprocessing.png?generation=1701994647204619&amp;alt=media" alt=""></p>
+<h1>Model</h1>
+<p>The model idea is partially inspired by <a href="https://www.kaggle.com/shujun717" target="_blank">@shujun717</a> solution to the Open Vaccine challenge, <a href="https://www.kaggle.com/competitions/stanford-covid-vaccine/discussion/189564" target="_blank">link</a></p>
+<p>The model takes a sequence of tokens and BPPM as input and outputs DMS_MaP and 2A3_MaP reactivities for each input nucleotide. Its architecture comprises 12 consecutive Transformer Encoder Layers and an output projection linear layer. Each Transformer block takes a sequence of tokens and BPPM features from the previous layer and outputs updated feature maps as shown below. The Transformer Encoder block adopts common transformer encoder architecture, except we modified the Self-Attention block to ensure interaction between BPPM features and sequence features.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F0c70879344b972d64ba13945e163a126%2Fmodel_general_view.png?generation=1701994737102906&amp;alt=media" alt=""></p>
+<h2>Self-Attention Block</h2>
+<p>In the Self-Attention (SA) block we implemented an attention mechanism with the following modifications: after attention values for each head are calculated, we add BPPM features updated by the ‘Convolutional block’, which outputs BPPM features with the number of channels corresponding to the number of heads in the SA block. We set the number of heads in SA and corresponding channels of BPPM features to be 6. Thus, the hidden dimension size of Q, K, V matrices is 32. The overall structure of the SA block is shown below.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F5a7bf6e6f893938ced8bdd2e9a1fb08c%2Fselfattention.png?generation=1701994715778085&amp;alt=media" alt=""></p>
+<h2>Dynamic Positional Bias</h2>
+<p>The sequence length is distributed differently in train and test datasets (test sequences are generally longer). To allow for the better generalization of longer inputs we implemented a positional encoding to be added to attention values. We found Dynamic Positional Bias to be of more use compared to other relative positional encoding methods we tried, such as xPos (rotary positional encoding) and ALiBi. Dynamic Positional Bias calculates for each head a relative positional bias map, which is learnable and depends on sequence length. Relative positional bias doesn’t allow to leverage distance from start and end of sequence, so tokens <strong>&lt; start &gt;</strong> and <strong>&lt; end &gt;</strong> were added to fix that.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F8d8468983d7a7d057dcf74d7511b3ac8%2Fdynpos%20(1).png?generation=1701994757603986&amp;alt=media" alt=""></p>
+<h2>Convolutional Block and SE block</h2>
+<p>The models in the final ensemble come in two versions that are slightly different in the structure of the Convolutional block. The basic Convolutional block consists of 2D convolutional layer, batchnorm layer, activation and learnable gamma parameters that scale the output feature channels, whereas the modified version of this block (SE-Convolutional block) also contains Squeeze-and-Excitation layer, hence the name. The SE layer applies input-dependent rescaling of values along the channels as shown below. Thus, the only difference between models in the ensemble is the presence of the SE layer.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F4b8f15f5aa950ba64ecbd55df123cad4%2Fconv_se.png?generation=1701994778649467&amp;alt=media" alt=""></p>
+<h1>Training Process</h1>
+<p>The training process has been adapted from the <a href="https://www.kaggle.com/code/iafoss/rna-starter-0-186-lb/notebook" target="_blank">notebook</a> by <a href="https://www.kaggle.com/IAFOSS" target="_blank">@IAFOSS</a><br>
+We used a one-cycle learning rate schedule (pct_start=0.05, lr_max=2.5e-3,) coupled with AdamW optimizer (wd=0.05), and batch size set to 128.<br>
+The number of epochs for model training was determined from the dataset size.<br>
+For final models (trained almost on the whole dataset) we used 270 epochs. <br>
+In each epoch, 1791 batches were processed (we kept this number due to historical reasons), elements of each batch were sampled from dataset with the weight = 0.5 * torch.clamp_min(torch.log(sn + 1.01),0.01)</p>
+<p>We have also found that training model with a simple SGD optimizer for ~15 epochs of 500 batches each additionally improves model performance (the number of epochs varies so we used a small validation set to determine the exact number of epochs)</p>
+<p>Additionally, one model was trained to predict 2A3 given DMS, RNA sequence and BPPM (dms-to-2a3 model).</p>
+<h1>Inference</h1>
+<p>At the inference phase for all inputs we set the SN filter value to be 1 as if they come from a “clean” dataset.</p>
+<h1>Ensembling</h1>
+<p>We ensembled 15 models with SE-Convolutional block, 10 models with plain Convolutional block, 2 with plain Convolutional block trained on split by sequence lengths (one of these two models accepts bracket features).  We took the average of their predictions. Then we predicted 2a3 reactivities based on averaged dms reactivities using dms-to-2a3 model and added these predictions to averaged 2a3 reactivities in the following way: (27/28)<em>averaged_2a3 + (1/28)</em>predicted_2a3.</p>
+<h1>Other splits</h1>
+<p>The clear problem with a simple KFold split is the high sequence similarity across the training dataset and the fact that test sequences are very distinct from the training data. This might hamper the model development, because the increase in quality on the validation set could be due to overfitting rather than actual improvement.</p>
+<p>We have calculated a hamming distance matrix for all the sequences present in the training set and performed a modified DBSCAN clustering procedure with distance threshold set at 0.2. In the following picture we show the clusters mapped to their respective cluster identifier (a cluster ID was assigned as a number of the smallest sequence within that cluster in the train dataset).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F55dc21823386d878fb212d681cae593e%2Fcluster.jpg?generation=1701994798203967&amp;alt=media" alt=""></p>
+<p>We tested several splits based on sequence identity (the easiest one is just to split data into folds without shuffling) and found out that while the model final validation performance degrades as we choose more and more stricter distance threshold, its relative value behave the same way as for a simple KFold split. So, we decided to use simple KFold split than training final models </p>
+<p>Also, we have conducted a test of the model performance on length-based split. For that, we trained a model on the short sequences (length &lt; 206) and validated it on sequences of size = 206. The behavior of the validation metric was slightly noisier but still highly correlated with a metric for a simple KFold split.</p>
+<h1>Public data leakage</h1>
+<p>Approximately 13% of public test sequences are identical to the ones present in the train dataset (by sequence). To avoid selecting a model that is memorizing more of these sequences rather than learning RNA-related stuff, we zeroed out the predictions for these sequences in most of our submissions, while sometimes sending non-zeroed out submissions in order to compare our performance to other participants.</p>
+<h1>Features we also tried</h1>
+<h2>capR</h2>
+<p>We don’t have conclusive results for that feature. It seems like it is not beneficial for the model on average but sometimes it resulted in a better model and sometimes – in worse. We decided to not use this feature.</p>
+<h2>Brackets</h2>
+<p>We have tried to use brackets generated by EternaFold, ContraFold, ViennaRNA, etc., as well as programs for pseudoknots prediction (like IPknot). However, after adding EternaFold BPPMs to the model, adding other features yields no significant increase in model performance. For some models we used brackets just to augment model</p>
+<h2>Different BPPMs</h2>
+<p>All other BPPMs (ContraFold, ViennaRNA, RNAsoft, RNAstructure) result in a suboptimal model.<br>
+Averaging BPPMs doesn’t result in better performance.<br>
+BPPMs from RFold yield the same quality as ViennaRNA BPPMs.<br>
+The RNA-FM model produces both per-nucleotide embeddings and BPPM-like matrix. Still, those don’t help the model at all, and using them results only in a slight increase in model performance then compared to sequence only model</p>
+<h2>SQUARNA matrix</h2>
+<p>SQUARNA (<a href="https://github.com/febos/SQUARNA" target="_blank">github</a>) outputs a matrix different from BPPM, but can be used in the same manner. Unfortunately, this feature also didn’t yield any additional performance increase.</p>
+<h1>What we also tried</h1>
+<h2>Fully-Convolutional architecture</h2>
+<p>The initial reason we decided to take part in the competition was to test our model LegNet <a href="https://academic.oup.com/bioinformatics/article/39/8/btad457/7230784" target="_blank">link</a>, which shows SOTA results on DNA sequences and worked well on some RNA-related tasks (not yet published).<br>
+Unfortunately, any modifications of this architecture resulted in subpar performance when compared with properly tuned transformer models. This can be explained by the fact that predicting RNA secondary structure requires attending to long-range contacts. The transformer architecture suits better for such cases.</p>
+<h2>Subsetting data</h2>
+<p>Subsetting data (filtering by different thresholds on SN ratio) resulted in a performance boost for all models. However, this technique was superseded by weight sampling, which proved itself to be more effective.</p>
+<h2>Fine-tuning on public datasets</h2>
+<p>We tried to fine-tune our model on a public dataset, gathered by the organizers (<a href="https://www.kaggle.com/datasets/rhijudas/rmdb-rna-mapping-database-2023-data/data" target="_blank">link</a>) by training model to predict the results of the public experiments (excluding ones with a small number of samples) and for Ribonanza data simultaneously. Unfortunately, this also gave no boost to the model performance.</p>
+<h2>Using 3D data</h2>
+<p>We tried to use data about predicted 3D structure of 100k sequences from the train dataset but gave up on that once we had visually analyzed them:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F16725112%2F2d054d1679176e0664130f6c46ccb0ae%2Ftrashfold.jpg?generation=1701994817511350&amp;alt=media" alt=""></p>
+<h2>Absolute positional embedding</h2>
+<p>Using absolute positional embedding leads to unsolvable issues when generalizing upon longer sequences.</p>
+<h2>Relative positional embedding</h2>
+<p>The simplest approach is to augment absolute positional encoding during the training phase to shift randomly from 0 to (Lmax - seqlen) position. This indeed solves the issue with extrapolation, but works worse than other methods.<br>
+Rotational positional embedding, unfortunately, doesn’t help the model to generalize on larger lengths.<br>
+ALiBi positional embedding solves the issue with extrapolation but even after keeping it only for a part of heads (as suggested in <a href="https://github.com/lucidrains/x-transformers" target="_blank">https://github.com/lucidrains/x-transformers</a>) still behaves worse than dynamic positional bias.</p>
+<h2>Augmentation</h2>
+<p>First, we tried to use reverse augmentation. This can be done in three ways:<br>
+reversing sequence before any modifications,<br>
+reversing sequence before padding, but after adding  and  tokens,<br>
+reversing sequence after padding.</p>
+<p>The first two ways yield no gain for all variants of models we tested. Yet, the third one (upon coupling with additional finetuning) gave us a good result for a model with xpos positional encoding. The resulting single-model performance was 0.13937 on the public leaderboard. Unfortunately, xpos shows rather poor performance on long sequences so we abstained from using this model in the final submission.</p>
+<p>We have also tried shift augmentation and different sequence padding approaches. This didn’t improve our model performance as well.</p>
+<h2>Sliding window</h2>
+<p>One of the possible ways to generalize for larger sequences is to predict reactivities using the sliding window. However, the idea is somewhat wrong in a biological sense, and it results in performance degradation when testing on train dataset sequences.</p>
+<h2>Pseudolabelling</h2>
+<p>Once we obtained ensembles of best-performing models we tried to use them to pseudolabel test dataset and use predictions with the highest confidence to train new models. While this indeed results in a better single-performing model, adding such a model to ensemble doesn’t improve ensemble performance.</p>
+<h2>Changing loss</h2>
+<p>Instead of filtering sequences with low SN we tried to mask positions with high reactivity error as it was done by <a href="https://www.kaggle.com/nullrecurrent" target="_blank">@nullrecurrent</a> in Open Vaccine challenge (<a href="https://www.kaggle.com/competitions/stanford-covid-vaccine/discussion/189620" target="_blank">link</a>)<br>
+This resulted in poor performance.<br>
+We tried to weight loss for each sequence by its SN – it didn’t result in any improvement</p>
+<h1>Tools</h1>
+<p><a href="https://github.com/DasLab/arnie/tree/master" target="_blank">arnie</a><br>
+<a href="https://github.com/eternagame/eternafold" target="_blank">EternaFold</a></p>
+<h1>Links</h1>
+<h2>Squeeze-and-excitation block</h2>
+<p>Hu, J., Shen, L., &amp; Sun, G. (2018). Squeeze-and-excitation networks. In Proceedings of the IEEE conference on computer vision and pattern recognition (pp. 7132-7141).</p>
+<h2>Dynamic positional bias</h2>
+<p>Wang, W., Chen, W., Qiu, Q., Chen, L., Wu, B., Lin, B., … &amp; Liu, W. (2023). Crossformer++: A versatile vision transformer hinging on cross-scale attention. arXiv preprint arXiv:2303.06908.</p>

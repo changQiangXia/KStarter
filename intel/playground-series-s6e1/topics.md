@@ -1,0 +1,82 @@
+# playground-series-s6e1 讨论区（按票数排序，共 80 条）
+
+- [Improve CV and LB with Pseudo Labels](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666888) — 92 票 / 31 评论 / 2026-01-09 
+- [Basic EDA shows Lots of Linear Relationships!](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665965) — 78 票 / 17 评论 / 2026-01-04 
+- [Effective Strategies from Past Playground Episodes](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665534) — 62 票 / 32 评论 / 2026-01-02 
+- [2nd place - NNs sometimes work better than GBMs](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671261) — 55 票 / 11 评论 / 2026-02-01 **write-up?**
+- [1st place - (I've ran out of catchy phrases :V)](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671371) — 49 票 / 32 评论 / 2026-02-01 **write-up?**
+- [Recovering the "original" data model](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665915) — 44 票 / 14 评论 / 2026-01-04 
+- [[Incentive Proposal] Better incentives for the Playground episode winners and top scorers](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665880) — 36 票 / 8 评论 / 2026-01-04 
+- [A swirling constellation confirms the intuition](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665372) — 36 票 / 4 评论 / 2026-01-01 
+- [Doubly censored tobit model the GBDT way](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667296) — 25 票 / 1 评论 / 2026-01-12 
+- [Blending other participants submissions bs notebooks](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669056) — 23 票 / 39 评论 / 2026-01-20 
+- [Think beyond and over blind blends](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666210) — 22 票 / 21 评论 / 2026-01-05 
+- [6th Place - A lot of features, a lot of ensembling](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671328) — 21 票 / 3 评论 / 2026-02-01 **write-up?**
+- [PSS6E1 simple findings](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665378) — 21 票 / 7 评论 / 2026-01-01 
+- [CategoryMeanTransformer - An OrdinalEncoder similar to Target Encoding](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665848) — 18 票 / 10 评论 / 2026-01-04 
+- [A slightly different competition for one to consider](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/668697) — 18 票 / 3 评论 / 2026-01-18 
+- [My Top Features for this Competition: What else is working?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666695) — 18 票 / 22 评论 / 2026-01-08 
+- [Sonnet IV – The Breakthrough](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665662) — 18 票 / 1 评论 / 2026-01-02 
+- [Why the cross-entropy loss would work in this competition](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666612) — 16 票 / 1 评论 / 2026-01-08 
+- [Private #7 | Diversity Ensemble & CV Trust](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671284) — 16 票 / 0 评论 / 2026-02-01 
+- [No shakeup](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671256) — 15 票 / 11 评论 / 2026-02-01 
+- [Predicting Residuals for Improved Performance](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665468) — 15 票 / 0 评论 / 2026-01-01 
+- [Avoid data leakage while stacking linear outputs with tree models](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665623) — 14 票 / 10 评论 / 2026-01-02 
+- [Rank14 approach - Grand blend of diverse models](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671308) — 14 票 / 7 评论 / 2026-02-01 
+- [Internet Access : NO, Study through Online Videos : YES](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665383) — 12 票 / 2 评论 / 2026-01-01 
+- [13th place - DiversitySlop](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671285) — 11 票 / 2 评论 / 2026-02-01 **write-up?**
+- [3rd place - 135 OOFs](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671357) — 10 票 / 0 评论 / 2026-02-01 **write-up?**
+- [some insights for beginners.](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665456) — 9 票 / 0 评论 / 2026-01-01 
+- [5th place - Feature-Driven Diversity & Iterative Ensembling](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671978) — 9 票 / 4 评论 / 2026-02-05 **write-up?**
+- [LR Residuals as Features or Boosted?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665589) — 7 票 / 11 评论 / 2026-01-02 
+- [Linear Starter for beginner:CV:8.97](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665584) — 6 票 / 0 评论 / 2026-01-02 
+- [Interesting things in this competition(PSS6E1)](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671259) — 6 票 / 2 评论 / 2026-02-01 
+- [First Loser (aka 4th place)](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671428) — 6 票 / 4 评论 / 2026-02-01 **write-up?**
+- [1st Contest- 15th Place](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671424) — 6 票 / 1 评论 / 2026-02-01 **write-up?**
+- [AutoML approaches?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665668) — 5 票 / 6 评论 / 2026-01-03 
+- [1263 place](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671294) — 4 票 / 0 评论 / 2026-02-04 
+- [Deep Learning vs Boosting on Tabular Data & Why Treating Numeric Features as Categorical Improves Performance](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666555) — 4 票 / 1 评论 / 2026-01-07 
+- [Advanced Feature Engineering - What's Working?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665495) — 4 票 / 1 评论 / 2026-01-01 
+- [Ideas brainstorming](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671022) — 3 票 / 3 评论 / 2026-01-30 
+- [Questions about pseudo label data leakage?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/668041) — 3 票 / 2 评论 / 2026-01-15 
+- [Found features impacting on test score](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665498) — 2 票 / 0 评论 / 2026-01-01 
+- [Censored Regression or Meta-Classification](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666607) — 2 票 / 0 评论 / 2026-01-08 
+- [How do you reuse artifacts?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669412) — 2 票 / 3 评论 / 2026-01-22 
+- [What is the correct way to tune hyperparameters when using CV with OOF predictions?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667661) — 2 票 / 2 评论 / 2026-01-13 
+- [Model selection is a pain.](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666736) — 2 票 / 2 评论 / 2026-01-08 
+- [Side competition: me versus my AI assistants](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/668398) — 2 票 / 0 评论 / 2026-01-16 
+- [Is my approach on OOF correct?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667598) — 2 票 / 6 评论 / 2026-01-13 
+- [why "harder" exams yield higher scores](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666204) — 1 票 / 4 评论 / 2026-01-05 
+- [Using Logistic Regression rather than clipping for prediction](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666223) — 1 票 / 4 评论 / 2026-01-05 
+- [Can you tell me some methods to improve the score of SENet.](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666243) — 1 票 / 3 评论 / 2026-01-06 
+- [Help, i don t understand it](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666707) — 1 票 / 2 评论 / 2026-01-08 
+- [Help me with HC code ](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665598) — 1 票 / 2 评论 / 2026-01-02 
+- [Do training material change during final evaluation?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667561) — 1 票 / 2 评论 / 2026-01-13 
+- [AutoGluon performance?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667535) — 1 票 / 3 评论 / 2026-01-13 
+- [Help in training ensemble models (Stacking)](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669324) — 1 票 / 7 评论 / 2026-01-21 
+- [🧵 Stuck at RMSE 8.75 — what am I missin](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669229) — 1 票 / 6 评论 / 2026-01-21 
+- [First Competition](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669738) — 1 票 / 4 评论 / 2026-01-24 
+- [Any tips for a newbie](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669223) — 1 票 / 8 评论 / 2026-01-21 
+- [Any data drift between Train and Test and Orig?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671096) — 1 票 / 6 评论 / 2026-01-31 
+- [Balancing Scalability and Accuracy in Student Score Prediction](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667945) — 0 票 / 6 评论 / 2026-01-14 
+- [Interpretability of regression models](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667997) — 0 票 / 2 评论 / 2026-01-14 
+- [Who gets swag in this competition?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/668277) — 0 票 / 4 评论 / 2026-01-16 
+- [Used Mutual Info Regression for feature selection, but getting the RMSE around 10, why?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/667447) — 0 票 / 2 评论 / 2026-01-12 
+- [Will beginners be able to compete?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/668294) — 0 票 / 2 评论 / 2026-01-16 
+- [Small Gains Matter: What Multi-Seed Ensembling Really Improves (CV vs LB Insight) ](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/668443) — 0 票 / 1 评论 / 2026-01-16 
+- [Beyond the Baseline - Why Bagging or Random Forest Fails on Exam Score Data?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666413) — 0 票 / 7 评论 / 2026-01-07 
+- [[Help] Install pytorch_tabular, but have conflict with numpy and pandas](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669640) — 0 票 / 2 评论 / 2026-01-23 
+- [help -- import saved models](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669633) — 0 票 / 4 评论 / 2026-01-23 
+- [Original data](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/670287) — 0 票 / 3 评论 / 2026-01-27 
+- [What exactly is facility_rating feature based on?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666410) — 0 票 / 1 评论 / 2026-01-06 
+- [XGBoost , LightGBM ,ANN](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666369) — 0 票 / 2 评论 / 2026-01-06 
+- [Comparing Study Hours: Original vs synthetic Dataset(KDE Analysis)](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671102) — 0 票 / 0 评论 / 2026-01-31 
+- [Expected leaderboard shake-up after competition ends?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671171) — 0 票 / 1 评论 / 2026-01-31 
+- [Stuck on score 8.73841..](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666186) — 0 票 / 5 评论 / 2026-01-05 
+- [Parameter check and model selection](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666342) — 0 票 / 0 评论 / 2026-01-06 
+- [Quick L1 (Lasso) sanity check before going full XGBoost](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/666154) — 0 票 / 5 评论 / 2026-01-05 
+- [if somebody have used pca comment score](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671199) — 0 票 / 0 评论 / 2026-01-31 
+- [where did most plateau @? ](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/671265) — 0 票 / 0 评论 / 2026-02-01 
+- [[Question] CV vs Public LB when adding new models to an ensemble](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/670540) — 0 票 / 5 评论 / 2026-01-28 
+- [Any Shakeup Predictions?](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/670812) — 0 票 / 4 评论 / 2026-01-29 
+- [cv dropped after hyperparameter tuning ](https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665644) — 0 票 / 2 评论 / 2026-01-02 

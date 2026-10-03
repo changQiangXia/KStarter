@@ -1,0 +1,148 @@
+<p>Thank you Kaggle for a great playground competition. This month's playground competition has a great dataset with lots of interesting patterns within! (and it felt more like real data and less like synthetic data). And there are lots of strong competitors which made this competition fun and exciting!</p>
+<p>The target <code>Listening_Time_minutes</code> is approximately equal to the linear relationship <code>0.72 x Episode_Length_minutes</code> as described in my 3 discussion posts <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573002" target="_blank">here</a>, <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574249" target="_blank">here</a>, <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571549" target="_blank">here</a>. The other 9 features modulate this linear relationship. Based on this insight, I stacked the following approaches:</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Apr-2025/approaches.png" alt=""></p>
+<p>My favorite solution for a Kaggle competition is a <strong>single model</strong>, my second favorite solution is <strong>hill climbing ensemble</strong>. Neither of these solutions could win 1st place in Kaggle's April playground competition because the data has too many interactions and too many deep patterns. For Kaggle's April playground competition, we need a large diverse deep <strong>RAPIDS cuML stack of 3 levels</strong>!</p>
+<h1>Hill Climbing (linear level 2 model) versus Stacking (non-linear level 2 model)</h1>
+<p>Hill climbing (or ridge) ensemble generally works well. However in this competition, the dataset was so complicated that a deep stack was the best solution. The most important feature is <code>Episode_Length_minutes</code>. It contains <strong>90%+</strong> of the signal. But it is missing for <strong>11.6%</strong> of the data! This means there are two scenarios; </p>
+<ul>
+<li>Predict target <code>Listening_Time_minutes</code> <strong>with</strong> <code>Episode_Length_minutes</code> </li>
+<li>Predict  <code>Listening_Time_minutes</code> <strong>without</strong> <code>Episode_Length_minutes</code></li>
+</ul>
+<p>Hill climbing (and ridge) cannot do this (because it uses a linear level 2 model). Imagine that we make one model that does great predicting target <strong>with</strong> ELM and we build a second model that does great predicting target <strong>without</strong> ELM. Hill climbing will just take a weighted average of all predictions. </p>
+<p>But a stack (non-linear level 2 model) will use predictions from one model when predicting <strong>with</strong> ELM and use the predictions from another model when predicting <strong>without</strong> ELM. In other words, instead of taking all predictions from all models, it will take the best predictions from each model (for different situations)!</p>
+<h1>RAPIDS cuML Stack - 3 Levels of Models!</h1>
+<p>The secret to building a strong stack is diverse models. (And every model trains with the <strong>same</strong> 5 KFolds and we <strong>must</strong> remove all leaks from target encoding, pseudo labeling, etc). Diversity comes from different feature engineering and different models (and/or model hyperparameters). </p>
+<p>For each new model I built, I engineered different sets of features using the speed of <strong>RAPIDS cuDF</strong>. Each model has different customized features that benefit the new model best. And I trained lots of diverse models using the speed of <strong>RAPIDS cuML</strong>! All models below use the speed of <strong>GPU</strong>!</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Apr-2025/stack.png" alt=""></p>
+<h1>Diversity x5</h1>
+<p>To add diversity to our stack we can take each of the 12 model depicted above and train it in at least  5 different ways described below. Additionally, we can change feature engineering and/or hyperparameters and train more ways. My final stack uses <strong>75 models</strong>. So I approximately created each of the above 12 models in 6 different ways!</p>
+<p>Every day during the month of April, I spent a few hours and built new diverse models. Using <strong>3xA100 GPU</strong> and the speed of <strong>RAPIDS cuDF and cuML</strong> I would build about a dozen new models (with new complex feature engineering) each day and keep the few models which improved my stack!</p>
+<h3>(1) Different Sets of Feature Engineering</h3>
+<p>The typical way to predict <code>Listening_Time_minutes</code> is to train a model using KFold and all columns of <code>train.csv</code>. Additionally we can create more columns with feature engineering. We can build multiple GBDT models each using different engineered features. This provides diversity to our stack. Also we can change GBDT hyperparameters. For example, some times we use <code>max_depth=10</code> and sometimes we use <code>max_depth=0, max_leaves=1024</code>. These find different interactions and create diverse models. Furthermore, sometimes we can use <code>max_depth=20</code> to get more interaction and sometimes <code>max_depth=5</code> for less interaction. Below are 4 other ways to train models in April's playground competition.</p>
+<h3>(2) Remove Episode_Length_minutes from All Rows!</h3>
+<p>Based on my discussion <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574249" target="_blank">here</a>, the feature/column <code>Episode_Length_minutes</code> is important. We can remove <code>Episode_Length_minutes</code> <strong>from all rows</strong> and train a model to predict <code>Listening_Time_minutes</code> from all other columns. These models will be strong predicting target when <code>Episode_Length_minutes</code> is missing. And the stack will use these models when appropriate.</p>
+<h3>(3) Predict Ratio of Target divided by Episode_Length_minutes</h3>
+<p>Based on my discussion <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573002" target="_blank">here</a>, for each model, we can create a new target with <code>train['new_target'] = train.Listening_Time_minutes / train.Episode_Length_minutes</code>. We can train models to predict this new target. We can then multiply this prediction by <code>Episode_Length_minutes</code> or an imputed value of <code>Episode_Length_minutes</code> from below.</p>
+<h3>(4) Predict Episode_Length_minutes (use Train.csv and Test.csv)</h3>
+<p>Based on my discussion <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574249" target="_blank">here</a>, the feature <code>Episode_Length_minutes</code> is so important, we can train models to predict <code>Episode_Length_minutes</code>. Futhermore, we can use both <code>train.csv</code> and <code>test.csv</code> data to train and predict <code>Episode_Length_minutes</code>. Because both <code>train.csv</code> and <code>test.csv</code> have all the columns necessary. </p>
+<p>Afterwards, we can use these ELM predictions in at least 3 ways. (1) We can impute missing values with these ELM preds then train a model. (2) We can replace every row's ELM (both missing and non-missing) with these ELM preds, then train a model. (3) We can multiply these ELM preds by the Ratio preds (from above) to predict the target <code>Listening_Time_minutes</code>. All 3 of these ideas will make new diverse models! </p>
+<h3>(5) Pseudo Label (use Train.csv and Test.csv)</h3>
+<p>Based on my discussion <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571549" target="_blank">here</a>, we see that many columns are important. We can use more information from more columns by using the columns from <code>test.csv</code>.  We can add <code>test.csv</code> data with pseudo labels to the training of all our models.</p>
+<h1>Stacking Models CV Scores</h1>
+<p>Below are the CV scores for level 1, level 2, and level 3 models (without pseudo labeling). The LB scores are basically the same as the CV scores:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Level 1 Model</strong></th>
+<th>Notes</th>
+<th>CV Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAPIDS cuML Lasso</td>
+<td>uses 6000 features!</td>
+<td>13.2</td>
+</tr>
+<tr>
+<td>RAPIDS cuML SVR</td>
+<td>uses 6000 features!</td>
+<td>13.2</td>
+</tr>
+<tr>
+<td>RAPIDS cuML KNN Regressor</td>
+<td>k=51, weight by distance</td>
+<td>12.8</td>
+</tr>
+<tr>
+<td>RAPIDS cuML Random Forest</td>
+<td>max_depth = 32</td>
+<td>12.1</td>
+</tr>
+<tr>
+<td>NN - MLP</td>
+<td>Built by ChatGPT</td>
+<td>12.0</td>
+</tr>
+<tr>
+<td>NN - TabPFN</td>
+<td>20x "SUBSAMPLE_SAMPLES": 10_000</td>
+<td>13.2</td>
+</tr>
+<tr>
+<td>GBDT - XGBoost</td>
+<td>4x models with 4x feature sets</td>
+<td>11.8</td>
+</tr>
+<tr>
+<td>GBDT - LGBM</td>
+<td>diverse from XGBoost</td>
+<td>11.8</td>
+</tr>
+<tr>
+<td>GBDT - Boost over RAPIDS Lasso</td>
+<td>predict Lasso residuals</td>
+<td>11.9</td>
+</tr>
+<tr>
+<td>GBDT - Boost over RAPIDS SVR</td>
+<td>predict SVR residuals</td>
+<td>11.9</td>
+</tr>
+<tr>
+<td>GBDT - Boost over NN MLP</td>
+<td>predict MLP residuals</td>
+<td>11.9</td>
+</tr>
+<tr>
+<td>AutoML AutoGluon</td>
+<td>public notebook <a href="https://www.kaggle.com/code/itasps/automl-autogluon-podcast" target="_blank">here</a></td>
+<td>12.4</td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td><strong>Level 2 Model</strong></td>
+<td><strong>Notes</strong></td>
+<td><strong>CV Score</strong></td>
+</tr>
+<tr>
+<td>GBDT XGBoost</td>
+<td>uses 73 level 1 models</td>
+<td>11.56</td>
+</tr>
+<tr>
+<td>NN - MLP</td>
+<td>uses 73 level 1 models</td>
+<td>11.56</td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+<td>---</td>
+</tr>
+<tr>
+<td><strong>Level 3 Model</strong></td>
+<td><strong>Notes</strong></td>
+<td><strong>CV Score</strong></td>
+</tr>
+<tr>
+<td>Weighted Average</td>
+<td>50% / 50%</td>
+<td>11.54</td>
+</tr>
+</tbody>
+</table>
+<p>.<br>
+<strong>CREDITS:</strong> Thank you <a href="https://www.kaggle.com/pirhosseinlou" target="_blank">@pirhosseinlou</a> for XGBoost single model <a href="https://www.kaggle.com/code/pirhosseinlou/xgboost-single-model" target="_blank">here</a> and <a href="https://www.kaggle.com/greysky" target="_blank">@greysky</a> for LGBM single model <a href="https://www.kaggle.com/code/greysky/ps-s5e4-lgbm-cv-12-25-lb-12-15" target="_blank">here</a> which I used as two of my XGBoost "4x models with 4x feature sets" (and then made a dozen variations of). And thank you <a href="https://www.kaggle.com/itasps" target="_blank">@itasps</a> for your AutoML AutoGluon model <a href="https://www.kaggle.com/code/itasps/automl-autogluon-podcast" target="_blank">here</a>. I incorporated all 3 of these public models into my final stack (by re-running with my stack's KFolds and then making a dozen variations of each)!</p>
+<h1>Final Submission - CV 11.54, Public LB 11.51, Private 11.44, <strong>First Place!</strong></h1>
+<p>My final <strong>RAPIDS cuML</strong> stack has CV 11.54, Public LB 11.50, Private 11.44, <strong>First Place!</strong></p>
+<h1>Post Comp Analysis</h1>
+<p>Now that the comp ended, I compare Hill Climb to Stack with my 73x L1 models:</p>
+<ul>
+<li>Hill Climbing - CV 11.64 - Public LB 11.57 - Private LB 11.503 </li>
+<li>Stack - CV 11.54 - Public 11.51 - Private 11.448 </li>
+</ul>

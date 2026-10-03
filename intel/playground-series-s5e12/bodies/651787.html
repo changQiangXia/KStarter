@@ -1,0 +1,39 @@
+<p>We spilled a good deal of virtual ink in the past few months discussing the virtues of proper ensembling, and the reasons not to do blind blending. There are several discussions on that topic that are easy to find, and I will point you to <a href="https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614704" target="_blank"><strong>one I wrote a month ago</strong></a> simply to shorten my introduction. The details are in there, but the gist is this: <strong>ensembling is fundamental, while blind blending is detrimental!</strong></p>
+<p>Yet there are people who do a blind blending of a sort even when they have OOF files and find the blending weights properly. By that I mean that many Kagglers simply throw all the models together and let the hill climbing, logistic regression or ridge decide how much each of those models will contribute. There is nothing wrong with this in principle, as in properly set ensembling pipelines models that bring little diversity should get small or even zero weights. But is there a more predictable way to do this?</p>
+<p>I am glad you asked, and the answer is yes. I will again point to <a href="https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610974" target="_blank"><strong>a thread</strong></a> that will introduce model diversity and the methodology I use here. In a nutshell, I compare the models by their cumulative distribution functions (<a href="https://en.wikipedia.org/wiki/Cumulative_distribution_function" target="_blank"><strong>CDFs</strong></a>) and use <a href="https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test" target="_blank"><strong>Kolmogorov–Smirnov test</strong></a> to gauge how different two CDFs are. So there is a KS-test number that will tell us how different the two models are (higher KS-test means more divergent), plus there will be two CDF plots for each comparison.</p>
+<p>First we do an XGBoost model versus a CatBoost model. They were both trained on identical data - a raw train dataset where numericals and categoricals are treated accordingly - and have similar CV scores (XGB 0.72846, CatB 0.72816). Let's see their CDFs.</p>
+<p><img src="https://i.postimg.cc/3rq0nJXk/distributions-Cat-B-XGB.png" alt=""></p>
+<p>What we look for here is how close those individual lines are to the blue line, which would be a perfect prediction with ~40% zeros and ~60% ones. The models overlap almost perfectly, which is not surprising given the same data and two generally similar model types. If you zoom really close, that green line is in some parts just a bit closer to the blue line, which is to be expected because XGB model has a slightly higher score. The KS-stat is low, which confirms that these two models are not very different. From all of this we can predict that there would be relatively small benefit from ensembling these models, and that turns out to be true.</p>
+<pre><code>   
+    
+     
+
+
+      
+
+    
+ 
+
+[   ]  [  ]
+
+          
+</code></pre>
+<p>This simple two-model ensemble gives us a <code>0.00016</code> boost compared to the best individual model, which is nice.</p>
+<p>Let's try a different pair of models. Now we have an XGB model that was trained on an extended train data (target encoding of numerical variables, feature interactions) and has CV: 0.73097. We compare that to a RealMLP model working on a raw train dataset where numericals and categoricals are treated accordingly, but nothing fancy beyond that (CV: 0.72846). Notice two things here: 1) we are matching a GBM and a NN model, which is good; 2) we have a significantly better XGB model, and blind blenders will often tell you that only models of similar scores will blend well.</p>
+<p><img src="https://i.postimg.cc/FzKr4c0Y/distributions-XGB-Real-MLP.png" alt=""></p>
+<p>Notice that the two models are clearly separated in this plot: RealMLP is closer to the blue line on the left side, and XGB is closer to the blue line on the right side. In simple terms, RealMLP is better at predicting zeros, while XGB is better at predicting ones. This is exactly what we want: two models that have different strengths, because they will complement each other. Note also that the KS-stat value is much higher than in the first plot, which would lead us to predict that these models will ensemble better. Is that really true?</p>
+<pre><code>   
+    
+     
+
+
+      
+
+    
+ 
+
+[   ]  [  ]
+
+          
+</code></pre>
+<p>This ensemble produces a <code>0.00069</code> boost compared to the XGB model alone. Notice also that a seemingly inferior model got almost a 40% weight. So next time when blind blenders tell you that only models with similar scores blend well, or that model weights should be assigned in proportion to CV scores, please remember that you have a formal proof here that neither one of those statements is necessarily true.</p>

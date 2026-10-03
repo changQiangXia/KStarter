@@ -1,0 +1,96 @@
+<p>First of all, huge congratulations to <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a> on the 1st place!
+Also, thank you to everyone for the insightful discussions and notebooks throughout this month. I learned a great deal from interacting with all of you.</p>
+<p>In this competition, I felt that <strong>Feature Engineering</strong> played a more significant role than anything else. My solution consists of a single effective feature set used to train XGBoost, LightGBM, and TabM (5 seeds each), blended with AutoGluon's OOF/test predictions using Ridge Regression.</p>
+<h1>Score Overview</h1>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LGBM</td>
+<td>0.92798</td>
+<td>0.92795</td>
+<td>0.92908</td>
+</tr>
+<tr>
+<td>XGB</td>
+<td>0.92790</td>
+<td>0.92799</td>
+<td>0.92908</td>
+</tr>
+<tr>
+<td>TabM</td>
+<td>0.92785</td>
+<td>0.92779</td>
+<td>0.92888</td>
+</tr>
+<tr>
+<td>Ridge Stack</td>
+<td>0.92803</td>
+<td>0.92800</td>
+<td>0.92911</td>
+</tr>
+<tr>
+<td><strong>+AG (Final)</strong></td>
+<td><strong>0.92805</strong></td>
+<td><strong>0.92800</strong></td>
+<td><strong>0.92912</strong></td>
+</tr>
+</tbody>
+</table>
+<h1>Feature Engineering</h1>
+<p>Most of my FE ideas are based on <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>'s past solutions. Thanks!</p>
+<ol>
+<li><strong>DIGIT Features:</strong> Created new features extracting digits from all positions of numerical columns.</li>
+<li><strong>ROUND/BIN Features:</strong> Created features by rounding or binning numerical columns.</li>
+<li><strong>Interaction Features:</strong> In my public notebook, I only created interaction terms from the original features (BASE). However, for the final solution, I added 2-way, 3-way, and 4-way interactions within <code>DIGIT_CATS</code> and within digits derived from the same numerical feature.</li>
+<li><strong>ORIG Features:</strong> Introduced Mean Encoding and Count Encoding to capture signals from the original data.</li>
+</ol>
+<h1>Feature Selection</h1>
+<p>Since the generated features likely contained noise, I performed a lightweight feature selection.</p>
+<ul>
+<li><strong>Method:</strong> I added features one by one to the BASE features. If the accuracy improved over the baseline, I selected it; otherwise, I discarded it.</li>
+<li><strong>Validation:</strong> Due to computational costs, I used <code>train_test_split</code> (test_size=0.2) instead of K-Fold for this selection process.</li>
+</ul>
+<p>While this method might still retain some redundant features, I did not perform further selection due to time constraints and computational resources. I assumed that GBDTs are robust enough to handle a certain amount of noise.
+(I also tried optimizing the <code>top-n</code> feature importance using Optuna, but I couldn't get it to work effectively.)</p>
+<h1>Hyperparameter Tuning with Optuna</h1>
+<p>I performed parameter tuning using Optuna for XGB, LGBM, and TabM.</p>
+<ul>
+<li><strong>XGB &amp; LGBM:</strong> 5-fold CV</li>
+<li><strong>TabM:</strong> <code>train_test_split</code> (test_size=0.2)</li>
+</ul>
+<h1>Seed Averaging &amp; Ridge Stacking</h1>
+<p>I performed <strong>5-seed averaging</strong> for XGB, LGBM, and TabM.
+The main reason was to stabilize the prediction and validation scores. Since the validation score fluctuated slightly just by changing seeds, I decided not to rely on single-seed validation.</p>
+<p>I used the OOF and test predictions to calculate the final prediction via <strong>Ridge Regression</strong>.</p>
+<ul>
+<li><strong>Why Ridge?</strong> I didn't spend enough time creating diverse OOFs that would benefit from non-linear stackers like MLP or XGBoost. My time was focused on building one strong feature set. In such cases, using XGB or MLP for stacking often leads to overfitting. Therefore, I chose a linear model like Ridge to prioritize stability over aggressive accuracy gains.</li>
+</ul>
+<h1>Data Generator Notebook</h1>
+<p>Following <a href="https://www.kaggle.com/greysky" target="_blank">@greysky</a>'s approach from the Podcast competition, I created a Data Generator Notebook.
+In my implementation, since I wanted to calculate <code>test_pred</code> using a 5-fold average, I needed to create datasets for each fold (especially for Target Encoding).
+As the number of TE features increased, the time required for TE per fold also increased. By pre-generating and simply loading the data, I significantly improved the efficiency of Optuna tuning and multi-seed training.</p>
+<ul>
+<li><strong>Note on Full Data:</strong> I did not train on the FULL DATA because, in my early experiments, the Public Score was consistently lower than the fold average. Since CV-LB correlation was excellent in this competition, I decided to trust my CV and avoided full data training.</li>
+</ul>
+<h1>Notebook Links</h1>
+<p>I have published almost all the code used for my submission, including the TabM implementation. I hope this helps!</p>
+<ul>
+<li><strong>Data Generator:</strong> <a href="https://www.kaggle.com/code/masayakawamata/s5e11-data-generator" target="_blank">s5e11-data-generator</a><ul>
+<li><em>Used Version 4.</em></li></ul></li>
+<li><strong>Ridge:</strong> <a href="https://www.kaggle.com/code/masayakawamata/s5e11-ridge-ensemble?scriptVersionId=278279429" target="_blank">s5e11-ridge-ensemble</a><ul>
+<li><em>(Note: The CV score in the TabM filename inside the code differs from the table above due to a minor oversight where I put the score of the 5th seed in the filename.)</em></li></ul></li>
+<li><strong>LGBM:</strong> <a href="https://www.kaggle.com/code/masayakawamata/s5e11-single-lgbm-tuned" target="_blank">s5e11-single-lgbm-tuned</a></li>
+<li><strong>XGB:</strong> <a href="https://www.kaggle.com/code/masayakawamata/s5e11-single-xgb-tuned" target="_blank">s5e11-single-xgb-tuned</a></li>
+<li><strong>TabM:</strong> <a href="https://www.kaggle.com/code/masayakawamata/s5e11-single-tabm-tuned" target="_blank">s5e11-single-tabm-tuned</a><ul>
+<li><em>I haven't verified if TabM runs successfully on Kaggle kernels. It might hit OOM or the 12h timeout.</em></li></ul></li>
+</ul>
+<p><strong>Discarded Models:</strong> I also implemented CatBoost, xRFM, and RealMLP with the same feature set. However, they didn't match the accuracy of LGBM/XGB/TabM and didn't contribute much to the ensemble, so they were excluded. (Though xRFM and RealMLP might have potential if tuned more thoroughly).</p>
+<p>Thank you for reading. <strong>Happy Kaggling and Trust your CV!</strong></p>

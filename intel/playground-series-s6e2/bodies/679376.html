@@ -1,0 +1,361 @@
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2Ff25a388a818dd5c954511a92550fcbea%2FS6E2Solution%20Diagram.drawio%20(1).png?generation=1772326924535398&amp;alt=media" alt=""></p>
+<p>Wow — I’m genuinely so happy to be writing 1st place solution!!</p>
+<p>I had been competing in this series for well over a year, so finally finishing <strong>1st place</strong> means a lot to me.</p>
+<p>I’m a little busy at the moment, but I still wanted to get the main ideas written down while everything was fresh, so for now I used an LLM to help organize the solution into a readable write-up. I’ll probably come back and revise / expand some parts later.</p>
+<p>Huge thanks to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>, <a href="https://www.kaggle.com/tilii" target="_blank">@tilii</a>, <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a>, <a href="https://www.kaggle.com/optimistix" target="_blank">@optimistix</a>— and definitely <strong>not limited to them</strong>. I learned so much from the discussions, comments, shared ideas, and from this community as a whole throughout the competition.</p>
+<h2>Final Result</h2>
+<p><strong>Final Submission:</strong></p>
+<ul>
+<li>CV: <strong>0.9557801</strong></li>
+<li>Public LB: <strong>0.95396</strong></li>
+<li>Private LB: <strong>0.95535</strong></li>
+</ul>
+<p><strong>Best Submission I obtained:</strong></p>
+<ul>
+<li>CV: <strong>0.9557901</strong></li>
+<li>Public LB: <strong>0.955394</strong></li>
+<li>Private LB: <strong>0.95536</strong></li>
+</ul>
+<p><strong>Best CV I obtained during the competition:</strong></p>
+<ul>
+<li>CV: <strong>0.955865</strong></li>
+<li>Public LB: <strong>0.955393</strong></li>
+<li>Private LB: <strong>0.95534</strong></li>
+</ul>
+<p>However, I did <strong>not</strong> choose that highest-CV submission as my final submission, because I suspected <strong>split overfitting</strong>.</p>
+<p>This point ended up being one of the most important lessons of the competition, and it is also why I think the better title for this write-up is not <em>“Trust your CV”</em>, but rather:</p>
+<blockquote>
+  <p><strong>Trust the CV–LB relation.</strong></p>
+</blockquote>
+<h2>1. Overall Strategy</h2>
+<p>In this competition, I did not aim to build one overwhelmingly dominant model.</p>
+<p>Instead, my overall strategy was:</p>
+<blockquote>
+  <p>Create many slightly different models → select effective combinations → combine them with a simple linear model.</p>
+</blockquote>
+<p>More concretely:</p>
+<ol>
+<li>Generate multiple feature representations.  </li>
+<li>Train many different model types.  </li>
+<li>Collect approximately 150 OOF predictions.  </li>
+<li>Use Optuna to search for good subsets.  </li>
+<li>Combine selected OOFs with Ridge regression.  </li>
+</ol>
+<p>The central idea was <strong>diversity</strong>.</p>
+<p>I was not looking for one “magic” model. Rather, I wanted many reasonably strong models that made <strong>slightly different mistakes</strong>, and then combine them in a simple and robust way.</p>
+<h2>2. Feature Engineering</h2>
+<p>Rather than searching for one optimal feature set, I created multiple representations of the same base features. Each transformation acted as a component that could later be combined flexibly.</p>
+<h3>2.1 Binning</h3>
+<p>I discretized numerical features using:</p>
+<ul>
+<li>Quantile-based binning (<code>qcut</code>)</li>
+<li>Equal-width binning (<code>cut</code>)</li>
+<li>Simple rounding (for example, Age/5, BP/10)</li>
+</ul>
+<p>Tree-based models sometimes benefit from grouped values. Different binning schemes produce slightly different split structures, which helps increase diversity.</p>
+<h3>2.2 Digit Features</h3>
+<p>For numerical variables, I extracted:</p>
+<ul>
+<li>Integer digit positions (units, tens, hundreds, etc.)</li>
+<li>The first few decimal digits when applicable</li>
+</ul>
+<p>This may look unusual, but digit-based features sometimes capture hidden structure in tabular competitions.</p>
+<h3>2.3 Treating All Features as Categorical</h3>
+<p>I also converted all base features into string format and treated them as categorical variables.</p>
+<h3>2.4 Frequency Encoding</h3>
+<p>For each feature, I added its frequency (how often each value appears).</p>
+<p>Rare values can carry useful signal, and frequency encoding often complements target encoding well in boosting models.</p>
+<h3>2.5 Genetic Programming Features</h3>
+<p>Using <code>gplearn</code>, I generated nonlinear interaction features automatically.</p>
+<p>The goal was not necessarily to create individually dominant features, but rather to introduce alternative representations that improve ensemble diversity.</p>
+<h3>2.6 Extracting Signals from the Original Dataset</h3>
+<p>Because this competition dataset was generated from an original dataset, I extracted additional statistics from the original data, such as:</p>
+<ul>
+<li>Target mean</li>
+<li>Smoothed target mean</li>
+<li>Weight of Evidence (WoE)</li>
+<li>Entropy</li>
+</ul>
+<p>This can be viewed as a kind of external target encoding, and in synthetic Playground competitions this type of information is often useful.</p>
+<h3>2.7 Denoising Variational Autoencoder (DVAE)</h3>
+<p>I trained a Denoising Variational Autoencoder on the base features.</p>
+<p>A DVAE adds noise to the inputs and learns to reconstruct the original data. The encoder then provides compressed latent representations.</p>
+<p>The main purpose here was not necessarily to improve single-model CV, but to create additional nonlinear representations that increase OOF diversity.</p>
+<h2>3. Model Training</h2>
+<p>Using the feature sets above, I trained a wide range of models:</p>
+<ul>
+<li>XGBoost</li>
+<li>LightGBM</li>
+<li>CatBoost</li>
+<li>RealMLP</li>
+<li>Regularized Greedy Forest (RGF)</li>
+<li>TabICL</li>
+<li>AutoGluon</li>
+</ul>
+<p>All OOF predictions were generated using <strong>5-fold StratifiedKFold with shuffle=True and random_state=42</strong>.</p>
+<p>Performance was evaluated using <strong>overall OOF AUC</strong>.</p>
+<h2>4. Representative Single-Model Performance</h2>
+<p>Below are representative OOF AUC scores for models that were selected at least five times during the Optuna search.</p>
+<p>All scores were computed using 5-fold StratifiedKFold and evaluated using overall OOF AUC.</p>
+<table>
+<thead>
+<tr>
+<th>Feature Set</th>
+<th>Model</th>
+<th>CV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BASE+BIN+DIGIT+ALL_CATS</td>
+<td>AutoGluon</td>
+<td>0.955747</td>
+</tr>
+<tr>
+<td>BASE+BIN+DIGIT+ALL_CATS</td>
+<td>RealMLP</td>
+<td>0.955739</td>
+</tr>
+<tr>
+<td>ORIG+TE+EMB*</td>
+<td>RealMLP</td>
+<td>0.955726</td>
+</tr>
+<tr>
+<td>BASE+GP_FEAT+ALL_CATS</td>
+<td>RealMLP</td>
+<td>0.955720</td>
+</tr>
+<tr>
+<td>BASE+BIN+DIGIT+ALL_CATS</td>
+<td>CatBoost</td>
+<td>0.955686</td>
+</tr>
+<tr>
+<td>BASE+TE</td>
+<td>XGBoost</td>
+<td>0.955663</td>
+</tr>
+<tr>
+<td>BASE+BIN+DIGIT+ALL_CATS+FREQ</td>
+<td>LGBM</td>
+<td>0.955652</td>
+</tr>
+<tr>
+<td>BASE+ALL_CATS</td>
+<td>XGBoost</td>
+<td>0.955619</td>
+</tr>
+<tr>
+<td>ORIG+ALL_CATS</td>
+<td>XGBoost</td>
+<td>0.955599</td>
+</tr>
+<tr>
+<td>BASE+ORIG+ALL_CATS</td>
+<td>XGBoost</td>
+<td>0.955597</td>
+</tr>
+<tr>
+<td>BASE</td>
+<td>XGBoost</td>
+<td>0.955575</td>
+</tr>
+<tr>
+<td>DVAE+ALL_CATS</td>
+<td>XGBoost</td>
+<td>0.955426</td>
+</tr>
+<tr>
+<td>BASE+BIN+DIGIT+ALL_CATS</td>
+<td>RGF</td>
+<td>0.954980</td>
+</tr>
+<tr>
+<td>BASE (subsample 100k × 5)</td>
+<td>TabICL</td>
+<td>0.954971</td>
+</tr>
+</tbody>
+</table>
+<p>* ORIG+TE+EMB: all features target-encoded and combined with internal embeddings in RealMLP.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11017380%2F8c16758acdde67ab8c2e947dc575748d%2Forigfeat.drawio.png?generation=1772326776510376&amp;alt=media" alt=""></p>
+<p>The differences between individual models were small.</p>
+<p>However, some models with slightly lower standalone CV — such as <strong>RGF</strong> and <strong>TabICL</strong> — were still selected frequently during ensemble search.</p>
+<p>This was a good reminder that <strong>ensemble contribution is not determined solely by individual CV performance</strong>.</p>
+<h2>5. OOF Selection with Optuna and Ridge Ensemble</h2>
+<p>In total, I generated approximately <strong>150 OOF predictions</strong>.</p>
+<p>Simply averaging all of them hurt performance, so I used <strong>Optuna</strong> to search for effective subsets:</p>
+<ul>
+<li>2500 trials</li>
+<li>Each trial selects a subset of OOF predictions</li>
+<li>Objective: maximize overall OOF AUC</li>
+</ul>
+<p>Only about one-tenth of the OOFs were consistently selected.</p>
+<p>For the final combination, I used <strong>Ridge regression</strong>.</p>
+<p>Ridge worked best because:</p>
+<ul>
+<li>It is simple and stable</li>
+<li>It handles correlated predictions well</li>
+<li>It reduces overfitting compared with more flexible meta-models</li>
+</ul>
+<p>In my experiments, nonlinear meta-models tended to overfit, while Ridge produced more consistent improvements.</p>
+<h2>6. Training on Full Data</h2>
+<p>For GBDT and RGF models:</p>
+<ul>
+<li>I retrained on the full dataset after generating OOF</li>
+<li>I used <strong>20 different random seeds</strong></li>
+<li>I averaged predictions across seeds</li>
+<li>I set <code>n_estimators</code> to <strong>1.25 ×</strong> the average best iteration obtained during CV</li>
+</ul>
+<p>In my experiments, this full-data retraining strategy worked better than simply averaging fold models.</p>
+<h2>7. Trust the CV–LB Relation, Not Just the Best CV</h2>
+<p>This was probably the most important practical lesson from this competition.</p>
+<p>At one point, I obtained a submission with <strong>CV = 0.955865</strong>, which was my highest CV. However, I did <strong>not</strong> trust it enough to make it my final submission.</p>
+<p>Why?</p>
+<p>Because I started to suspect <strong>split overfitting</strong>.</p>
+<p>I ran many hill-climbing experiments and also compared multiple actual submissions to study the relation between CV and leaderboard performance. In particular, I submitted ensembles stopped at different stages and compared their <strong>CV–LB behavior</strong>.</p>
+<p>What I observed was roughly this:</p>
+<ul>
+<li>Up to around <strong>CV 0.95578</strong>, the CV–LB relation looked reasonably consistent</li>
+<li>But once the CV started going beyond <strong>0.95578+</strong>, the relation clearly became worse</li>
+<li>Improvements in CV no longer translated into similarly reliable LB improvements</li>
+<li>In some cases, higher CV looked more like exploitation of fold-specific behavior than genuine generalization</li>
+</ul>
+<p>Because of this, I decided to select my final submission from the range around:</p>
+<blockquote>
+  <p><strong>CV 0.95578 to 0.95580</strong></p>
+</blockquote>
+<p>rather than blindly choosing the numerically best CV.</p>
+<p>In hindsight, I think this was the correct decision.</p>
+<h2>8. What Did Not Work</h2>
+<p>The following methods did not improve CV in my experiments:</p>
+<ul>
+<li>Pseudo labeling (both soft and hard)</li>
+<li>Knowledge distillation</li>
+<li>Very deep GBDT models</li>
+<li>High-order interaction expansion</li>
+<li>Autoencoders other than DVAE</li>
+<li>Nonlinear stacking</li>
+<li>Averaging too many OOFs without selection</li>
+<li>Public leaderboard climbing</li>
+</ul>
+<p>This competition reinforced a simple lesson:</p>
+<blockquote>
+  <p>More complexity does not necessarily produce better generalization.</p>
+</blockquote>
+<h2>9. Key Takeaways</h2>
+<p>For beginners and intermediate competitors, I think the main lessons are:</p>
+<ul>
+<li>You do not always need one dominant “magic” model</li>
+<li>Small differences in feature representation can create useful diversity</li>
+<li>Models with slightly lower CV can still be valuable if they add complementary signals</li>
+<li>Selection can be just as important as generation</li>
+<li>Simple ensembles are often more robust than flexible ones</li>
+<li>A strong CV number alone is not enough — what matters is whether the <strong>CV–LB relation remains trustworthy</strong></li>
+<li>Careful validation design is essential when tuning, stacking, and searching many combinations</li>
+</ul>
+<p>The most important parts of my solution were:</p>
+<ul>
+<li>stable cross-validation</li>
+<li>controlled diversity</li>
+<li>aggressive but disciplined selection</li>
+<li>simple and robust ensembling</li>
+<li>cautious final submission choice based on CV–LB consistency</li>
+</ul>
+<h2>10. Cross-Validation Strategy and Leakage Considerations</h2>
+<p>Finally, I want to discuss CV design a bit more, because it was central to this solution.</p>
+<h3>10.1 Matching CV Splits Between OOF and Ensemble</h3>
+<p>When generating OOF predictions and training an ensemble model, the CV splits should be aligned.</p>
+<p>If the fold splits used to:</p>
+<ul>
+<li>generate OOF predictions for base models, and</li>
+<li>train the ensemble model</li>
+</ul>
+<p>are different, leakage can occur.</p>
+<p>Why?</p>
+<p>Because OOF predictions are only truly out-of-fold <strong>with respect to the split used to generate them</strong>. If the ensemble is evaluated using a different split, then the meta-model may end up training on samples whose base predictions were indirectly influenced by those same samples.</p>
+<p>That can produce overly optimistic CV.</p>
+<h3>10.2 Early Stopping and Subtle Leakage</h3>
+<p>Even when the fold splits are the same, there is still a subtle issue if early stopping is used.</p>
+<p>For example:</p>
+<ul>
+<li>A base model uses fold A as validation</li>
+<li>Best iteration is chosen based on fold A</li>
+<li>The OOF prediction for fold A is produced using that selected iteration</li>
+</ul>
+<p>Strictly speaking, fold A has now influenced model selection.</p>
+<p>So while this is standard practice and usually acceptable in Kaggle, it is not perfectly leakage-free from a theoretical perspective.</p>
+<p>This effect is often small, but it is worth keeping in mind, especially when stacking many models and squeezing out tiny CV gains.</p>
+<h3>10.3 Nested K-Fold as the Strict Solution</h3>
+<p>The theoretically correct approach is <strong>Nested K-Fold</strong>:</p>
+<ul>
+<li>Outer folds: generate truly out-of-fold predictions</li>
+<li>Inner folds: tune hyperparameters / determine early stopping</li>
+</ul>
+<p>Procedure:</p>
+<ol>
+<li>Split data into outer folds</li>
+<li>For each outer fold:<ul>
+<li>run inner CV on the training portion</li>
+<li>determine hyperparameters / best iteration</li>
+<li>retrain on the full outer-training data</li>
+<li>predict on the outer-validation fold</li></ul></li>
+<li>Combine outer-fold predictions into OOF</li>
+</ol>
+<p>This ensures that no sample is used, directly or indirectly, to tune the model that predicts it.</p>
+<p>However, the computational cost becomes extremely large, especially when managing around <strong>150 OOFs</strong>.</p>
+<h3>10.4 Practical Trade-Off in Kaggle</h3>
+<p>In practice, especially in Kaggle:</p>
+<ul>
+<li>fully nested CV is often too expensive</li>
+<li>early stopping within standard K-Fold is widely accepted</li>
+<li>leakage risk is controlled by limiting model flexibility and avoiding over-searching</li>
+</ul>
+<p>Realistic safeguards include:</p>
+<ul>
+<li>using fixed CV splits</li>
+<li>avoiding overly flexible meta-models</li>
+<li>limiting ensemble size</li>
+<li>checking CV–LB consistency carefully</li>
+<li>avoiding blind public LB chasing</li>
+</ul>
+<p>In many Playground competitions:</p>
+<ul>
+<li>train and test distributions are very similar</li>
+<li>training data is larger than test data</li>
+</ul>
+<p>Under those conditions, a well-designed validation scheme is often more reliable than public LB movement alone — but only if the <strong>CV–LB relation remains healthy</strong>.</p>
+<h3>10.5 Practical Takeaway</h3>
+<p>Strictly speaking, Nested K-Fold is the only fully leakage-free solution when:</p>
+<ul>
+<li>hyperparameter tuning</li>
+<li>early stopping</li>
+<li>model selection</li>
+<li>ensemble selection</li>
+</ul>
+<p>are all involved.</p>
+<p>But in real competitions, the practical goal is:</p>
+<blockquote>
+  <p><strong>Minimize leakage risk and overfitting while preserving a stable CV–LB relation.</strong></p>
+</blockquote>
+<p>In my case, I prioritized:</p>
+<ul>
+<li>fixed StratifiedKFold splits</li>
+<li>controlled ensemble size</li>
+<li>simple Ridge stacking</li>
+<li>monitoring CV–LB behavior through actual submissions</li>
+<li>not blindly trusting the highest CV</li>
+</ul>
+<p>That balance between theory and practicality was, I believe, one of the keys to finishing in <strong>1st place</strong>.</p>
+<h2>Closing</h2>
+<p>This competition was a great reminder that ensembling is not just about adding more models.</p>
+<p>It is about:</p>
+<ul>
+<li>generating meaningful diversity</li>
+<li>selecting carefully</li>
+<li>keeping validation honest</li>
+<li>and knowing when <strong>not</strong> to trust a tiny CV gain</li>
+</ul>
+<p>In the end, my best raw CV was <strong>not</strong> my best decision.</p>
+<p>The winning decision came from trusting the <strong>CV–LB relation</strong>, not the leaderboard, and not the single highest CV in isolation.</p>

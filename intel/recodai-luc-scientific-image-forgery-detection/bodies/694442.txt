@@ -1,0 +1,108 @@
+# https://www.kaggle.com/competitions/recodai-luc-scientific-image-forgery-detection/discussion/694442
+
+Topic #694442: 65th Place Solution🥈|  DINOv2 with a Tiny Convolutional Decoder
+  Author: 
+  Posted: 2026-04-24 20:53:32.365000
+  Votes: 8  Comments: 2
+
+First, a big thank you to the competition organizers and to the Recod.ai/LUC lab for putting this challenge together. @joophillipecardenuto , @ashleyoldacre 
+
+Scientific image forensics is exactly the kind of problem I enjoy working on: research-grounded, socially useful, and technically open-ended. Detecting image manipulation in biomedical figures has real implications for the integrity of published science, and building models in this space felt meaningful beyond the leaderboard. Thank you for a well-run competition and a thoughtfully curated dataset.
+
+Summary
+
+
+
+
+Item
+Value
+
+
+
+
+Final rank
+65 / 1564 teams
+
+
+Medal
+Silver
+
+
+Architecture
+DINOv2 base (frozen + partial unfreeze) with a tiny convolutional decoder
+
+
+Input size
+518 × 518
+
+
+Training strategy
+Two-stage: decoder warmup, then joint fine-tuning
+
+
+Inference tricks
+Flip TTA, gradient-enhanced adaptive mask, grid-searched thresholds
+
+
+
+
+What I tried, and what worked
+
+Early on I explored a few directions: pure CNN segmenters (U-Net variants on EfficientNet and ResNet backbones), standard ViT features with a linear probe, and classical copy-move detectors based on keypoint matching. None of these matched the performance of a DINOv2-based approach, and in hindsight the reason is intuitive.
+
+Copy-move forgery is defined by two regions in an image being semantically and texturally identical to each other. You are not looking for an out-of-distribution object or a rendering artifact. You are looking for self-similarity. The features you want are ones that (a) are sensitive to fine-grained texture and (b) are stable enough that the same texture produces the same feature vector wherever it appears in the image. DINOv2 was trained with a self-distillation objective specifically designed to produce representations with this property. Its patch features are dense, locality-preserving, and strong out of the box, even on domains it was not trained on.
+
+So the setup that worked best is straightforward: use DINOv2 as a frozen feature extractor, put a small decoder on top, and train only the decoder (then carefully unfreeze the upper layers of DINOv2 in a second stage).
+
+Architecture
+
+DINOv2 base produces 768-dimensional features on a 37 × 37 grid for a 518 × 518 input. That feature map already carries most of the spatial information needed to localize a forgery. A heavy decoder would mostly add parameters without adding signal, so I kept the decoder small.
+
+The decoder has three convolutional blocks that progressively halve the channel width: 768 → 384 → 192 → 96, each followed by ReLU, with dropout 0.1 in the first two blocks. A final 1 × 1 convolution projects to a single logit channel. Between blocks the feature map is bilinearly upsampled (37 → 74 → 148 → 296 → 518) so the output is at full input resolution.
+
+If anyone would like a clearer picture of the flow, I can add an architecture diagram, but the core idea is: frozen DINOv2 on the bottom, small conv decoder with progressive upsampling on top, BCE loss on the full-resolution logit map.
+
+Two-stage training
+
+DINOv2 starts fully frozen. Training runs in two stages.
+
+Stage 1 is decoder warmup. Only the decoder parameters go to the optimizer. The backbone is kept in eval mode during the forward pass, and its requires_grad flags are all false, so nothing in DINOv2 gets updated. This stage converges quickly. Validation loss drops in the first few epochs and plateaus around epoch 12 to 15. Early stopping with patience 3 handles the plateau.
+
+Stage 2 is joint fine-tuning. The last 12 transformer blocks of DINOv2 are unfrozen. The optimizer now has two parameter groups: the decoder keeps its stage 1 learning rate (1e-5), and the backbone gets a much smaller one (5e-7). The reason for the gap is that the pretrained DINOv2 features are already good. I want to nudge the upper layers toward biomedical imagery, not rewrite them. A higher backbone learning rate would overwhelm the pretraining signal and collapse the features.
+
+Both stages use AdamW with weight decay 1e-4, cosine learning rate scheduling, and gradient accumulation over 8 micro-batches (effective batch size 16). The best checkpoint on validation loss is saved to disk, and stage 2 only overwrites it if it beats the stage 1 best. If stage 2 regresses, reloading at the end recovers the stage 1 model automatically, a small safety net that matters when fine-tuning large pretrained backbones, because it is easy to make things worse.
+
+Inference pipeline
+
+The inference side of the pipeline is where a fair amount of the score comes from, and it is worth going through in detail.
+
+Test-time augmentation. The test image is passed through the model three times: as-is, horizontally flipped, and vertically flipped. The predictions from the flipped versions are flipped back before averaging. The final probability map is the mean of the three. This is essentially free at inference time and reliably smooths out spurious activations.
+
+Adaptive mask from the probability map. Rather than thresholding the probability map directly, I enhance it with its own spatial gradient. Sobel gradients are computed on the probability map, their magnitude is normalized to [0, 1], and the enhanced map is a weighted blend:
+
+enhanced = (1 - alpha) * prob + alpha * gradient_magnitude
+
+
+with alpha = 0.45. This sharpens the boundaries of high-confidence regions. The gradient is largest where probability changes most, so blending it in amplifies edges. The enhanced map is then lightly Gaussian-blurred and thresholded at mean + 0.3 * std. Morphological close (5 × 5) then open (3 × 3) removes speckle and fills small gaps.
+
+Area and probability thresholds. A raw mask is only returned as a prediction if two conditions hold: the mask has at least AREA_MIN foreground pixels, and the mean probability inside the mask is at least PROB_MIN. Otherwise the image is classified as authentic and the submission writes the string "authentic" for that row. These two thresholds are grid-searched over the entire validation split (both forged and authentic images) to maximize the competition F1. The tuned values landed in the range AREA_MIN ≈ 200 and PROB_MIN ≈ 0.20 to 0.22, though they shift slightly with the alpha choice above.
+
+Submission format. Forged predictions are run-length encoded in the exact format the competition expects; authentic predictions are the literal string "authentic".
+
+Reproducing the result
+
+Everything needed to reproduce the submission is on Kaggle and GitHub. The fastest path is to open the inference notebook and use Copy and Edit. The data, the DINOv2 base model, and the trained weights are already attached.
+
+Thanks
+
+Thanks again to the organizers and to the Recod.ai/LUC team for hosting. Thanks to Dr. Elisabeth Bik for the early guidance that shaped the dataset, and to the Fapesp Horus and CNPq Aletheia teams for the technical support behind it.
+
+A particular thank you to @pankajiitr , whose public work and shared notebook were genuinely helpful throughout this competition. Open sharing in the Kaggle community is what makes competitions like this valuable beyond the leaderboard, and I benefited from it directly.
+
+Congratulations to everyone who competed.
+
+Comments:
+├─ Pankaj Gupta (2026-04-29 12:49:31.183000) [+3]
+│  Thanks for the kind words! It’s awesome to see that my shared work was helpful for your approach. Congrats again on the silver!
+├─ [deleted] (2026-04-26 05:56:46.167000) [+0]
+│  Congratulations!

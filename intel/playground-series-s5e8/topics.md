@@ -1,0 +1,82 @@
+# playground-series-s5e8 讨论区（按票数排序，共 80 条）
+
+- [Are We Here to Learn or Just to Ensemble Submissions?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596589) — 117 票 / 84 评论 / 2025-08-04 
+- [XGBoost - QuantileDMatrix Trick](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600048) — 69 票 / 16 评论 / 2025-08-20 
+- [Two Pro Tips - Final Week - LB 0.9774+](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/601015) — 63 票 / 35 评论 / 2025-08-26 
+- [2nd place - Yet another ensemble](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603297) — 47 票 / 32 评论 / 2025-09-02 **write-up?**
+- [NN Starter Notebook - Vibe Coding GPT5 - CV 0.974](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600617) — 39 票 / 13 评论 / 2025-08-23 
+- [Rank-3 Public Rank-5 Private Approach](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603187) — 36 票 / 9 评论 / 2025-09-01 
+- [Is this the end of the world? Say no to blind blending.](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596696) — 34 票 / 34 评论 / 2025-08-04 
+- [Many studies, same Portuguese bank data: their results and references.](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596335) — 31 票 / 9 评论 / 2025-08-03 
+- [1st Place Solution - JAPE: Just Another Proper Ensemble](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603210) — 26 票 / 23 评论 / 2025-09-01 **write-up?**
+- [3rd Place Solution — OOF Stacking + AutoGluon](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603198) — 24 票 / 10 评论 / 2025-09-01 **write-up?**
+- [Dance of the money tree fairies](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/594148) — 23 票 / 14 评论 / 2025-08-01 
+- [Somebody asked why blending works](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597809) — 22 票 / 4 评论 / 2025-08-07 
+- [#15 solution - Try genetic programming features](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603179) — 21 票 / 9 评论 / 2025-09-01 **write-up?**
+- [Designing NN-Friendly Features](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596888) — 20 票 / 19 评论 / 2025-08-05 
+- [4th Place Solution](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603363) — 19 票 / 13 评论 / 2025-09-02 **write-up?**
+- [Achievement unlocked](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/602692) — 18 票 / 8 评论 / 2025-08-29 
+- [Bayesian Regression, LOO-CV, R-hat values, Bulk-ESS, MCMC, Logit and Probit models](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596332) — 15 票 / 0 评论 / 2025-08-03 
+- [Only Tabm CV:0.9738. Wow!](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599048) — 14 票 / 10 评论 / 2025-08-14 
+- [11th Place Solution: AutoGluon with Two-Feature-Set Blending](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603211) — 14 票 / 2 评论 / 2025-09-01 **write-up?**
+- [PSS5E8 5submissions challenge](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/593993) — 14 票 / 20 评论 / 2025-08-01 
+- [🏆 Solution Write-up – Top 25](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603192) — 12 票 / 3 评论 / 2025-09-01 **write-up?**
+- [6th Place Solution  ->  OOF Stacking with LGBM](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603220) — 12 票 / 3 评论 / 2025-09-01 **write-up?**
+- [Hardly any shakeup](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603176) — 10 票 / 0 评论 / 2025-09-01 
+- [Feature Engineering ideas?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596229) — 10 票 / 8 评论 / 2025-08-02 
+- [8th place - hill climb selected meta-learners](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603226) — 9 票 / 4 评论 / 2025-09-01 **write-up?**
+- [19th Place Solution: 108 OOFs blending with RidgeCV](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603180) — 9 票 / 3 评论 / 2025-09-01 **write-up?**
+- [Place 267 solution,2 step ensemble](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603200) — 9 票 / 3 评论 / 2025-09-01 **write-up?**
+- [Final score?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/598339) — 9 票 / 40 评论 / 2025-08-10 
+- [12th Place Solution - Stacking with XGB and NN](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603225) — 8 票 / 3 评论 / 2025-09-01 **write-up?**
+- [## 17 place solution](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603194) — 8 票 / 2 评论 / 2025-09-01 **write-up?**
+- [Nobody is posting here, now that the Discussion ranking has been removed](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596228) — 8 票 / 3 评论 / 2025-08-02 
+- [The original dilemma](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597903) — 8 票 / 11 评论 / 2025-08-07 
+- [From Leaderboard Chasing to Real Learning ](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596868) — 7 票 / 10 评论 / 2025-08-05 
+- [21st Place Solution -> Binary Classification with a Bank Dataset Competition](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603209) — 7 票 / 3 评论 / 2025-09-01 **write-up?**
+- [10th place - NODE (Neural Oblivious Decision Ensembles)](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603354) — 7 票 / 3 评论 / 2025-09-02 **write-up?**
+- [How to improve my model accuracy score .](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596510) — 6 票 / 3 评论 / 2025-08-04 
+- [Accounting for class imbalance ](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596342) — 6 票 / 6 评论 / 2025-08-03 
+- [Why people not even trying Logistic regression?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597770) — 6 票 / 38 评论 / 2025-08-07 
+- [Baseline XGBoost Classifier | < 15 minutes](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596518) — 6 票 / 1 评论 / 2025-08-04 
+- [[EDITED] "My CV score decreases with original data" -> It seems the original dataset is beneficial after all!](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596178) — 6 票 / 8 评论 / 2025-08-02 
+- [P5E8 428th Place Solution](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603203) — 6 票 / 0 评论 / 2025-09-01 **write-up?**
+- [It's so quiet here](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596280) — 5 票 / 21 评论 / 2025-08-02 
+- [My first competitions](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597015) — 5 票 / 5 评论 / 2025-08-06 
+- [How do you keep track of the experiments ? ](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/602239) — 5 票 / 16 评论 / 2025-08-26 
+- [EDA and Feature Engineering for Bank Dataset](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596567) — 5 票 / 3 评论 / 2025-08-04 
+- [Regarding the unknown values](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596851) — 4 票 / 2 评论 / 2025-08-05 
+- [Which ensemble method is better?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/601066) — 4 票 / 13 评论 / 2025-08-26 
+- [Anyone has an idea why the subscription ratio in Mar, Sept, Oct and Dec are way higher than other month?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/598841) — 4 票 / 6 评论 / 2025-08-13 
+- [How important is handling date-related data errors for your model?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597323) — 3 票 / 2 评论 / 2025-08-06 
+- [Is it okay to copy parameters of xgboost and LGBM from discussions for beginner? ](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597795) — 3 票 / 13 评论 / 2025-08-07 
+- [Data Leakage](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596681) — 3 票 / 3 评论 / 2025-08-04 
+- [S5E8: Efficient 0.970+ AUC, LGBM > Blends](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599076) — 3 票 / 2 评论 / 2025-08-14 
+- [Standardization processing can reduce binary_logloss](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596694) — 2 票 / 1 评论 / 2025-08-04 
+- [Problems with my submission file - I suppose!](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596655) — 2 票 / 1 评论 / 2025-08-04 
+- [🌟About synthetic data🌟Vol2](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596477) — 2 票 / 3 评论 / 2025-08-03 
+- [Forking public kernels](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599024) — 2 票 / 1 评论 / 2025-08-13 
+- [The Kaggle Endgame is Blending😭😭](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/598982) — 2 票 / 7 评论 / 2025-08-13 
+- [LightGBM AUC: Fixed Hyperparameters Beat Optuna?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599669) — 2 票 / 8 评论 / 2025-08-18 
+- [Is Ensembling Others’ Models Still a Way of Learning](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599479) — 2 票 / 4 评论 / 2025-08-16 
+- [Battling with others who are constantly blending their submissions is so challenging hahaha](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/602644) — 2 票 / 12 评论 / 2025-08-29 
+- [Antonín Dvořák String Quartets](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599788) — 2 票 / 3 评论 / 2025-08-19 
+- [Automated or Handmade Feature Engineering?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600109) — 2 票 / 7 评论 / 2025-08-21 
+- [Why ranking the probability predictions?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599288) — 1 票 / 7 评论 / 2025-08-15 
+- [How should i improve my model](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599248) — 1 票 / 8 评论 / 2025-08-15 
+- [Recommendations to similar competitions?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599838) — 1 票 / 2 评论 / 2025-08-19 
+- [Scikit-learn library version](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599198) — 1 票 / 1 评论 / 2025-08-14 
+- [advice for beginer](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/614271) — 1 票 / 1 评论 / 2025-11-02 
+- [Give me some advice about my training process](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597073) — 1 票 / 2 评论 / 2025-08-06 
+- [how do you allocate time across phases?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/599907) — 1 票 / 6 评论 / 2025-08-19 
+- [Converting Existing columns to Categorical ? Why ?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600588) — 1 票 / 2 评论 / 2025-08-23 
+- [ Invalid Date](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/600817) — 1 票 / 2 评论 / 2025-08-25 
+- [Interesting Takeaway](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/598436) — 1 票 / 1 评论 / 2025-08-10 
+- [From Random Forests to Voting Classifier ](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/602944) — 1 票 / 0 评论 / 2025-08-30 
+- [How To Handle Imbalanced Feature Importance - Duration column case](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/597226) — 1 票 / 19 评论 / 2025-08-06 
+- [Last 10 Submissions right ?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/602870) — 1 票 / 7 评论 / 2025-08-30 
+- [Can I Use SMOTE for Class 1?](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/596901) — 1 票 / 6 评论 / 2025-08-05 
+- [Beginner's Guide: Column-Wise EDA, Feature Engineering & Beating the Accuracy Trap (0.768 Baseline)](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/708033) — 0 票 / 0 评论 / 2026-06-13 
+- [Last day of competition](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603017) — 0 票 / 5 评论 / 2025-08-31 
+- [Notebook Auto Suggestion](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603077) — 0 票 / 2 评论 / 2025-08-31 
+- [The Kaggle Curveball Moment](https://www.kaggle.com/competitions/playground-series-s5e8/discussion/603113) — 0 票 / 0 评论 / 2025-08-31 

@@ -1,0 +1,90 @@
+<h1>29th Place: FT-Transformer + Exact-Value Target Encoding, and a +643-place case for trusting your CV</h1>
+<p><strong>TL;DR</strong> — Public 0.95034 (rank ~672) → Private <strong>0.95070 (29th / 3,356)</strong>. No public-LB
+chasing: both final submissions were chosen weeks in advance by nested cross-validation, and in
+hindsight the CV pick was our best private score out of all 14 submissions. The model that did it
+is a single FT-Transformer with fold-local <em>exact-value</em> target encoding — plus a long list of
+things that did NOT work, which I think is the more useful half of this post.</p>
+<h2>The two finals</h2>
+<table>
+<thead>
+<tr>
+<th>final</th>
+<th>what it is</th>
+<th>OOF (nested BA)</th>
+<th>public</th>
+<th>private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v31</td>
+<td>4-family stacked ensemble (LGBM/XGB/CatBoost/MLP legs, cross-fitted meta)</td>
+<td>0.950579</td>
+<td>0.95019</td>
+<td>0.95048</td>
+</tr>
+<tr>
+<td><strong>v35</strong></td>
+<td><strong>FT-Transformer + exact-value TE, single member</strong></td>
+<td>~0.95067</td>
+<td>0.95034</td>
+<td><strong>0.95070</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The public board had v35 at ~rank 672. The private board put it 29th. The gap between our public
+and private ranks was not luck: with <code>fit</code> = 39.8k and <code>unhealthy</code> = 57.7k rows out of 690k,
+public-LB movement of ±0.001–0.002 is binomial noise on the minority classes. Masaya Kawamata's
+"Trust your CV" thread made that case quantitatively mid-competition, and it was the compass for
+our endgame — we stopped submitting entirely two weeks before the deadline once CV said nothing
+more was left.</p>
+<h2>The model (v35)</h2>
+<p>A clean reproduction of <a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a>'s FT-Transformer-v2 recipe, rebuilt from the notebook's
+code rather than its artifacts (all credit for the architecture to him — his own paired ablation
+showed the gain comes from the <em>encoding</em>, +0.0012, not from the transformer itself, +0.00003):</p>
+<ul>
+<li><strong>Exact-value target encoding of all 13 columns</strong> — every distinct numeric value gets its own
+target statistic. The health-risk data is quantized enough that exact values carry signal that
+binned or smoothed TEs blur away.</li>
+<li><strong>Fitted inside every outer training fold</strong> — the TE tables never see the fold they encode.
+This is the difference between a real 0.9507 and a leaky 0.96 that collapses on private.</li>
+<li>Single ensemble member (n_ens=1): four members cost 4x GPU time for noise-level gains.</li>
+<li>Fixed 16-epoch budget, no early stopping, PLR-lite numeric embeddings, prior-correction of the
+predicted class distribution.</li>
+</ul>
+<h2>What did NOT work (32 falsified levers, the honest ledger)</h2>
+<p>Everything below was implemented, cross-validated with the same nested protocol, and rejected —
+posting these so you don't have to rediscover them:</p>
+<ul>
+<li><strong>TabPFN v2 as an ensemble leg</strong> — error correlation 0.914 with the GBDT legs (we expected
+~0.2 from a "different prior"); the stacker assigned it zero weight. Foundation-model
+diversity was an illusion here.</li>
+<li><strong>Row-segment specialists</strong> (e.g. a dedicated model for rows with missing sleep features) —
+no segment ever beat the global model on its own segment.</li>
+<li><strong>Corrected-KNN density features</strong> — public 0.94987, worse than either final.</li>
+<li><strong>Greedy hill-climb over all saved legs</strong> — converged back to v31's weights; ensembling was
+saturated months of levers ago.</li>
+<li><strong>Ratio/product feature engineering</strong> — duplicated what the exact-value TEs already encode.</li>
+<li><strong>Class-multiplier micro-search</strong> beyond a simple prior^beta correction — pure CV noise.</li>
+</ul>
+<p>The meta-lesson we took from a previous Playground (s6e6, where a public-anchor final cost us
+~335 private ranks): the public LB is a small-sample estimate dominated by minority-class noise,
+and every point of contact you give it corrupts your selection. This time the discipline paid.</p>
+<h2>The gap to the top, quantified</h2>
+<p>2nd place (0.95085, +0.00015 over us — congrats <a href="https://www.kaggle.com/kava1" target="_blank">@kava1</a>, great writeup) used the <em>same</em> best base
+family (Kawamata's FTT), but blended <strong>18 diverse base predictors</strong> with class-specific simplex
+weights (an 18×3 weight matrix optimized by SLSQP on smooth OOF LogLoss, then Nelder-Mead class
+multipliers for balanced accuracy). His ensemble's OOF (0.950737) beat our v31's (0.950579) by
+almost exactly his private margin. The lesson repeats across Playgrounds: past a strong single
+model, the remaining edge is <em>breadth of genuinely diverse bases</em> — not deeper ensembling of one
+lineage (which is exactly the lever our hill-climb correctly reported as empty).</p>
+<h2>One practical GPU note</h2>
+<p>Kaggle still assigns P100s (sm_60), and the preinstalled PyTorch wheel has no sm_60 kernels —
+your first CUDA op dies with <code>no kernel image is available</code>. The notebook detects the GPU and
+conditionally installs the cu126 wheel on P100 only (never blind-reinstall torch — the
+torchvision/numpy cascade is worse than the disease). Pinning the T4 via kernel metadata
+(<code>"machine_shape": "NvidiaTeslaT4"</code>) avoids the issue entirely for API pushes.</p>
+<p>Training notebook (full reproduction, runs end-to-end on Kaggle GPU): <a href="https://www.kaggle.com/code/satyapb2002/29th-place-ftt-exact-value-target-encoding" target="_blank">https://www.kaggle.com/code/satyapb2002/29th-place-ftt-exact-value-target-encoding</a></p>
+<p>Thanks to <a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a> for the architecture and the CV-trust analysis, <a href="https://www.kaggle.com/kava1" target="_blank">@kava1</a> for the 2nd-place
+writeup, and everyone who shared baselines. Questions welcome — happy to share any of the
+falsified-lever details.</p>

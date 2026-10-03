@@ -1,0 +1,57 @@
+# playground-series-s6e4 讨论区（按票数排序，共 55 条）
+
+- [Original Data's Exact Formula](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687460) — 115 票 / 30 评论 / 2026-04-03 
+- [1st place: One vs Rest + Multiclass Models](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696040) — 56 票 / 23 评论 / 2026-05-01 **write-up?**
+- [Effective number of features](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687104) — 45 票 / 12 评论 / 2026-04-02 
+- [Balanced Accuracy (competition metric): handling imbalanced datasets](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/686709) — 45 票 / 4 评论 / 2026-04-01 
+- [2nd Place - Claude Code and Codex - GPU LogReg](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696169) — 44 票 / 14 评论 / 2026-05-01 **write-up?**
+- [Lightgbm baseline and advanced](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688866) — 29 票 / 3 评论 / 2026-04-07 
+- [Class-weighting may help the balanced accuracy score](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/686754) — 26 票 / 1 评论 / 2026-04-01 
+- [Be wary of data-drift between the original and train datasets](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/686722) — 25 票 / 0 评论 / 2026-04-01 
+- [4th place - more ensemblers than models!](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696054) — 24 票 / 13 评论 / 2026-05-01 **write-up?**
+- [Caution, the public leaderboard only has 1800 High class.](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687069) — 23 票 / 3 评论 / 2026-04-02 
+- [Neural networks are seemingly powerful choices along with gbdt models here](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687008) — 20 票 / 0 评论 / 2026-04-01 
+- [Remember to tune your model thresholds at the end to enjoy a boost in scores](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687082) — 19 票 / 0 评论 / 2026-04-02 
+- [Other models that separate the "original" dataset](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/692754) — 18 票 / 0 评论 / 2026-04-17 
+- [RealMLP baseline](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688002) — 17 票 / 0 评论 / 2026-04-04 
+- [Unsupervised binning method](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688353) — 14 票 / 0 评论 / 2026-04-05 
+- [Error Diversity Matters: 200-model stacking solution](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696104) — 14 票 / 4 评论 / 2026-05-01 **write-up?**
+- [Analysis of the Advantages and Disadvantages of RealMLP and TabM](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687420) — 13 票 / 3 评论 / 2026-04-03 
+- [24th Place: A Heavy Stacking Approach with 166 OOFs and Neural Meta Models](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696016) — 12 票 / 2 评论 / 2026-05-01 **write-up?**
+- [Medium Class - the only focus](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/690677) — 11 票 / 3 评论 / 2026-04-12 
+- [Rank-87 approach](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/695992) — 11 票 / 2 评论 / 2026-05-01 
+- [12th Place Solution: Stacked Ensemble with Ordered Target Encoding](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696052) — 10 票 / 6 评论 / 2026-05-01 **write-up?**
+- [My breaking into 0.98](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/694877) — 8 票 / 1 评论 / 2026-04-27 
+- [Advanced EDA of max_depth in xgboost ](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/689873) — 7 票 / 4 评论 / 2026-04-09 
+- [Manual class weights vs auto — anyone else seeing better results?](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687156) — 7 票 / 5 评论 / 2026-04-02 
+- [5th Place - AI for large scale experimentation - s6e4](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696487) — 7 票 / 0 评论 / 2026-05-02 **write-up?**
+- [Keeping Up With ML Is Getting Harder — Let's Do It Together [Discord Community]](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/693564) — 6 票 / 0 评论 / 2026-04-21 
+- [Tips for new Kagglers joining Playground S6](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/693147) — 6 票 / 0 评论 / 2026-04-19 
+- [Digits Features](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/689420) — 5 票 / 4 评论 / 2026-04-08 
+- [What I Learned from Training on a Smartphone with Only 10,000 Rows](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688226) — 5 票 / 4 评论 / 2026-04-05 
+- [The Wisdom of the Swarm: Another way to solve Model Ensembling](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688459) — 5 票 / 3 评论 / 2026-04-05 
+- [[Help] How to handle class imbalance in XGBoost for multi-class classification?](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/686746) — 5 票 / 5 评论 / 2026-04-01 
+- [19th Place - Ensemble of 29 models](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696372) — 4 票 / 0 评论 / 2026-05-02 **write-up?**
+- [XStacking — using SHAP values instead of predictions in stacking (new paper, 2025)](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/693167) — 4 票 / 0 评论 / 2026-04-20 
+- [Introduction](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/692697) — 4 票 / 0 评论 / 2026-04-17 
+- [Stocks Predict challenge](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/692551) — 4 票 / 0 评论 / 2026-04-17 
+- [Streamlit Deployment 🚀](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688877) — 4 票 / 0 评论 / 2026-04-07 
+- [Inspecting the relation between numeric features and the target](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687167) — 4 票 / 1 评论 / 2026-04-02 
+- [ Emphasize minority-class sensitivity especially for `High` class in target variable](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/686917) — 4 票 / 0 评论 / 2026-04-01 
+- [A New Ensemble Method Just Dropped — Worth Bookmarking](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/691622) — 3 票 / 0 评论 / 2026-04-15 
+- [How is synthetic noise in the dataset generated](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688174) — 3 票 / 1 评论 / 2026-04-04 
+- [Top 4% Solution: Model Diversity, FE & Systematic Experimentation](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/698335) — 3 票 / 0 评论 / 2026-05-09 **write-up?**
+- [How do you accelerate your experiments?](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/692964) — 2 票 / 3 评论 / 2026-04-18 
+- [Key features I'm finding useful so far](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/693143) — 2 票 / 1 评论 / 2026-04-19 
+- [Simple XGB with hyperparameter tuning with optuna](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696045) — 1 票 / 0 评论 / 2026-05-01 
+- [Need more info on how can i imporve my accuracy.](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/690088) — 1 票 / 4 评论 / 2026-04-10 
+- [Feature Engineering](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688450) — 1 票 / 7 评论 / 2026-04-05 
+- [Parameter Tuning????](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/688409) — 1 票 / 2 评论 / 2026-04-05 
+- [Dataset is beyond science lol!](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687151) — 1 票 / 6 评论 / 2026-04-02 
+- [Geographic feature of "region"?](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/687331) — 1 票 / 0 评论 / 2026-04-02 
+- [PS S6E4 retrospective: +42 rank jump to Top 0.7% (rank 30/4316)](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/696783) — 0 票 / 3 评论 / 2026-05-04 
+- [What actually separates High irrigation need? Three diagnostics worth discussing](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/691130) — 0 票 / 0 评论 / 2026-04-14 
+- [Features to select for Competition](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/694781) — -1 票 / 0 评论 / 2026-04-27 
+- [Reproducible LightGBM Baseline for S6E4](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/704851) — -1 票 / 0 评论 / 2026-06-06 
+- [Strategic Feature Engineering & Cross-Validation for Predicting Irrigation Need](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/692937) — -3 票 / 1 评论 / 2026-04-18 
+- [What evaluation metric is being used here?](https://www.kaggle.com/competitions/playground-series-s6e4/discussion/693135) — -5 票 / 2 评论 / 2026-04-19 

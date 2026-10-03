@@ -1,0 +1,361 @@
+# https://www.kaggle.com/competitions/playground-series-s5e12/discussion/665385
+
+Topic #665385: [2nd Place] Winning based on ID Shift Analysis 
+  Author: DaylightH
+  Posted: 2026-01-01 05:52:07.713000
+  Votes: 77  Comments: 24
+
+Thanks
+
+Happy New Year! This month-long marathon is finally over! Congratulations to all the winners! I want to thank the organizers for hosting this interesting competition.
+
+This was my first time participating in a Playground Series, and I truly poured my heart and soul into it. I started learning ML and joined Kaggle in March 2025, so it has been 9 months now. This is a wonderful New Year's gift. I hope to share this joy with all Kagglers in the community, and I wish you all the best in 2026!!!
+
+Learning from discussion
+
+Since the start of this competition, I almost never looked at the public notebooks in the code section because it was filled with "upvote bait"—notebooks where people simply mix others' kernels to farm upvotes. Additionally, there were one or more arrogant cheaters using multiple accounts to perform "blind blending."
+
+In contrast, the discussion section contained a lot of high-quality content. I read every single post in the discussions in detail and drew significant inspiration from them:
+
+Orig FE
+
+@masayakawamata shared in this post that using statistical features from the original dataset could lead to score improvements. This indeed increased my score slightly; however, I didn't perform any aggressive Feature Engineering, so I only attempted to use the most fundamental statistics.
+
+The weird dataset
+
+@tilii7 mentioned in this post that this dataset is very strange. The organizers distorted the feature distributions and removed decisive strong features, resulting in an inconsistency between the Train and Test distributions. To be honest, at that point, I even considered giving up on the competition.
+
+ID Shift
+
+The turning point came with this post by @laureanoarcanio . I strongly recommend everyone read this post as it was the pivotal moment of this competition. He mentioned a phenomenon: using id as a feature surprisingly boosts the LB score.
+
+Furthermore, @alan1305 pointed out:
+
+
+  
+One possible reason could be the interaction of id and physical_activity_minutes_per_week. If we plot the rolling mean of physical_activity_minutes_per_week, it shifts to test distribution at the end of train dataset. Therefore, including id may help indicate which row is "closer" to test set.
+
+
+I conducted an Adversarial Validation analysis (Micro-Scan of the Tail Transition) and found that this phenomenon indeed exists: the closer the data is to the tail, the closer its distribution is to the test set.
+
+This is actually a serious case of ID leakage, but given the significant shift between train and test, this finding was crucial. (I honestly don't know why @alan1305 only received 5 upvotes… This was clearly a game-changing finding, yet people were busy upvoting public blind-blending notebooks…)
+
+A validation strategy
+
+In this post, @masayakawamata proposed a new validation strategy. Since the tail data better "represents" the test set, it makes sense to use the tail data directly for CV. He also introduced sample weighting.
+
+Concept Shift
+
+@siukeitin mentioned in this post that simple sample weighting doesn't work well because there is Concept Shift.
+
+I also conducted experiments regarding this. More specifically, within the training set, the more the data resembles the test set (low covariate shift), the greater the concept shift becomes. I divided the data into 10 bins and found that samples with the smallest covariate shift had the largest discrepancy in label distribution, whereas the original dataset did not suffer from this issue.
+
+CUTOFF_ID = best_id
+
+cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+for col in cat_cols:
+    le = LabelEncoder()
+    train[col] = le.fit_transform(train[col].astype(str))
+
+train_ids = train['id'].values
+cutoff_mask = train_ids &gt;= CUTOFF_ID
+
+X_tail = train.loc[cutoff_mask].drop(columns=['id', 'diagnosed_diabetes'])
+y_adversarial_tail = pd.Series(1, index=X_tail.index)
+
+X_head = train.loc[~cutoff_mask].drop(columns=['id', 'diagnosed_diabetes'])
+y_adversarial_head = pd.Series(0, index=X_head.index)
+
+X_adv_train = pd.concat([X_head, X_tail], axis=0)
+y_adv_train = pd.concat([y_adversarial_head, y_adversarial_tail], axis=0)
+
+print(f"1. Training Discriminator: Head({len(X_head)}) vs Tail({len(X_tail)})...")
+params = {
+    'objective': 'binary',
+    'metric': 'auc',
+    'n_estimators': 500, 
+    'learning_rate': 0.05,
+    'num_leaves': 31,
+    'n_jobs': -1,
+    'random_state': 42,
+    'verbose': -1
+}
+
+model = lgb.LGBMClassifier(**params)
+model.fit(X_adv_train, y_adv_train)
+
+print("2. Evaluating Head samples...")
+head_similarity_score = model.predict_proba(X_head)[:, 1]
+
+head_true_labels = train.loc[~cutoff_mask, 'diagnosed_diabetes'].values
+
+df_eval = pd.DataFrame({
+    'tail_similarity': head_similarity_score,
+    'true_label': head_true_labels
+})
+
+# Binning
+df_eval['bin'] = pd.qcut(df_eval['tail_similarity'], q=10, labels=False, duplicates='drop')
+
+agg = df_eval.groupby('bin', observed=False).agg({
+    'true_label': ['count', 'mean'],
+    'tail_similarity': 'mean'
+})
+agg.columns = ['count', 'target_mean', 'similarity_mean']
+
+true_tail_mean = train.loc[cutoff_mask, 'diagnosed_diabetes'].mean()
+
+print(agg)
+print(f"\nTail Set True Mean: {true_tail_mean:.4f}")
+
+plt.figure(figsize=(12, 6))
+bars = sns.barplot(x=agg.index, y=agg['target_mean'], color='skyblue', alpha=0.8)
+
+for i, v in enumerate(agg['target_mean']):
+    plt.text(i, v + 0.005, f"{v:.3f}", ha='center', va='bottom', fontsize=9, fontweight='bold')
+
+plt.axhline(true_tail_mean, color='red', linestyle='--', linewidth=2, label=f'True Tail Mean ({true_tail_mean:.3f})')
+
+plt.title(" Do 'Tail-like' Head samples have correct labels?", fontsize=14)
+plt.xlabel("Similarity to Tail (0=Unlikely, 9=Indistinguishable from Tail)", fontsize=12)
+plt.ylabel("Diabetes Rate (Target Mean)", fontsize=12)
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+
+Result:
+
+1. Training Discriminator: Head(677000) vs Tail(23000)...
+2. Evaluating Head samples...
+     count  target_mean  similarity_mean
+bin                                     
+0    67700     0.643648         0.019489
+1    67700     0.645583         0.021456
+2    67700     0.642836         0.022520
+3    67700     0.641832         0.023592
+4    67700     0.649926         0.025069
+5    67700     0.655465         0.027066
+6    67700     0.639764         0.029891
+7    67700     0.612186         0.034075
+8    67700     0.581004         0.041102
+9    67700     0.521359         0.070540
+
+Tail Set True Mean: 0.6214
+
+
+Therefore, I decided to apply weighting to the Original dataset as well.
+
+Modeling
+
+Based on the validation strategy derived from the analysis above, I trained a diverse set of models. The core philosophy was to force the models to learn the distribution of the "Tail" (which resembles the Test set) and the "Original" dataset (which holds the ground truth logic), while suppressing the noise from the "Head" of the training data.
+
+Here is the summary of the single models used in the final ensemble:
+
+
+
+
+Model Type
+Model Name
+Key Strategy / Features
+Cutoff AUC
+
+
+
+
+LightGBM
+lgb
+Baseline with interaction features &amp; Categorical encoding.
+0.70435
+
+
+
+lgb_te
+Tail-based Target Encoding: TE calculated using only Tail + Orig data.
+0.70382
+
+
+
+lgb_safe
+Feature Selection: Dropped "toxic" features (high concept shift) like physical_activity.
+0.67464
+
+
+
+lgb_pseudo
+Pseudo-Labeling: Trained on Tail + Pseudo-labeled Test data (Top/Bottom confidence). Applied Quantile Mapping to fix distribution.
+0.70081
+
+
+XGBoost
+xgb
+Baseline XGBoost with standard parameters.
+0.70335
+
+
+
+xgb_weighted
+Sample Weighting: Tail (16x), Orig (8x), Head (1x).
+0.703??*
+
+
+
+xgb_binned
+Binning: Extensive binning of numerical features + Target Encoding from Original data.
+0.69898
+
+
+
+xgb_pl_soft
+Soft Pseudo-Labeling: Regression objective (reg:squarederror) on soft labels from best sub.
+0.70231
+
+
+
+xgb_residual
+Residual Modeling: Boosting over a fixed base margin derived from Tail Mean.
+0.70474
+
+
+CatBoost
+cat_weighted
+Sample Weighting: Same 16x/8x/1x strategy as XGBoost.
+0.70489
+
+
+
+cat_inter
+Explicit Interactions: Manually created interaction features (e.g., gender_age).
+0.70489
+
+
+NN
+nn_dae
+DAE + Fine-tuning on Tail only.
+0.70034
+
+
+
+nn_stacking
+Stacked Neural Network (Input: OOF predictions).
+0.70616
+
+
+Linear/Other
+tail_lr
+Tail-Only LR: Logistic Regression trained only on the last 10% of data. Post-processed with Quantile Mapping.
+0.70345
+
+
+
+tail_gam
+Tail-Only GAM: Generalized Additive Model trained on Tail data.
+0.69325
+
+
+
+
+&gt; Note: The Cutoff AUC is calculated on the validation set defined by id &gt;= 678260 (approx. last 3% of train data).
+
+Ensemble Strategy
+
+Given the diverse nature of the models (Linear, GAM, NN, and various GBDTs), I used Bagged Hill Climbing to find the optimal weights.
+
+
+
+
+Method: Bagged Hill Climbing (50 bags, 2000 iterations per bag) optimizing for Cutoff AUC.
+
+
+Final Result: The ensemble significantly improved the robustness.
+
+
+
+Ridge Regression (Positive): 0.70751 Cutoff AUC
+
+Bagged Hill Climbing (Best): 0.70771 Cutoff AUC
+
+
+The final submission was generated using the weights from the Bagged Hill Climbing method.
+
+check here if you need my notebook.
+what's more, I also have a notebook to record my hypothesis. You can check here
+
+Some advice for beginners
+
+I noticed that many participants in this competition appear to be new to machine learning. As a beginner myself, I completely understand the learning curve, so I’d like to share a few simple tips based on my experience:
+
+
+
+Conduct purposeful EDA.
+The ultimate goal of Exploratory Data Analysis (EDA) is to guide your modeling strategy. If your data analysis doesn't provide insights for feature engineering or model selection—and is just about plotting pretty charts—then I believe it lacks real value. Always ask yourself: "How does this plot help me build a better model?"
+
+Don't obsess over micro-tuning hyperparameters.
+Spending too much time fine-tuning parameters is often meaningless. Changing the learning rate from 1e-4 to 1e-5 is rarely worth wasting a submission. The most efficient approach is to spend that time trying out diverse models or exploring new feature engineering ideas.
+
+
+Finally, Happy New Year again to everyone! I wish you all the best and hope you win gold medals in your upcoming competitions!
+
+Comments:
+├─ kukazuo (2026-01-06 11:24:14.153000) [+3]
+│  This article was a valuable source of information for me as a beginner. I plan to take my time to slowly decipher and learn. Thank you.
+├─ Alan1305 (2026-01-01 07:26:43.937000) [+3]
+│  Congratulations! I am impressed by your detailed analysis. Glad that your efforts paid off!
+├─ Khang_94_VN (2026-01-14 09:59:29.167000) [+1]
+│  Crazy idea about ID Shift…. OMG @daylighth Happy new year and cheer for you
+├─ Santosh kumar (2026-01-04 01:58:14.323000) [+1]
+│  Impressive, great one
+├─ Navneet (2026-01-03 01:32:51.397000) [+1]
+│  Bravo @daylighth
+├─ Laureano Arcanio (2026-01-01 22:52:19.060000) [+1]
+│  Congratulations! Thanks for sharing your hard work !
+├─ Gaurav Jha (2026-01-01 13:46:36.487000) [+1]
+│  NGL pretty impressed by your analysis and the effort you made for beginners like me to understand the data and experimenting before directly applying any model. 
+│  i understood the main terms which a...
+├─ Irakoze Ntawigenga Kelly (2026-01-01 12:08:15.650000) [+1]
+│  much to be learn in this notebook!
+├─ benkerrouche abdelbasset (2026-01-01 10:31:44.267000) [+1]
+│  Congratulations and happy new year!
+├─ Yu Liwei (2026-01-01 10:02:28.127000) [+1]
+│  Congratulations. This is my first competition and I just start to learn ML from it. It's difficult for me to understand all the post you mentioned. What should I do to learn ML as a beginner.
+  ├─ DaylightH (2026-01-01 11:12:14.090000) [+2]
+  │  Relax, my friend. To be honest, I don't have a profound background in ML theory, so I'm not sure if I'm qualified to give you advice on "learning ML." For a competition, understanding the data form...
+    ├─ Yu Liwei (2026-01-01 11:44:40.837000) [+0]
+    │  Thank you very much.
+├─ Mohammed Rajaa (2026-01-01 08:21:31.113000) [+1]
+│  Congratulations.. great work and thank you for sharing 🖤
+├─ Don Mani (2026-01-01 06:51:25.670000) [+1]
+│  Congratulations! Well deserved!
+├─ yunsuxiaozi (2026-01-01 06:12:39.327000) [+1]
+│  Congratulations and happy new year!
+  ├─ DaylightH (2026-01-01 06:16:15.907000) [+0]
+  │  Happy New Year to you too, pal! Thanks for your deep insights in the discussion section.
+├─ wind1234it (2026-01-03 08:57:57.257000) [+2]
+│  Congratulations on your excellent 2nd place finish, @daylighth ! Starting to learn ML in March 2025 and achieving 2nd place in just 9 months is very impressive.
+│  
+│  Was your final selected submission ...
+  ├─ DaylightH (2026-01-03 09:50:02.437000) [+1]
+  │  Thank you for your question! Your 1st place finish is also very impressive! Your mindset is much stronger than mine — I learned from you that I shouldn't just blindly chase the LB.
+  │  
+  │  Actually, my hi...
+    ├─ Tilii (2026-01-03 10:21:50.870000) [+3]
+    │  Here is my file naming convention 😂
+    ├─ wind1234it (2026-01-03 11:33:58.920000) [+2]
+    │  @daylighth , your Public LB score of 0.70502 is an outstanding result, especially as it was achieved with fewer models than in my case.
+    │  
+    │  I completely relate to your experience with CV-LB inconsiste...
+├─ Tilii (2026-01-03 00:03:49.197000) [+2]
+│  Great job! This post should be a required reading for everyone starting in Kaggle competitions. Come to think of it, even for many people who have competed for a while.
+  ├─ DaylightH (2026-01-03 05:31:43.727000) [+1]
+  │  Thank you for your kind words. Every one of your posts is of master-level quality. In this competition, many top players like you didn’t even seriously participate—otherwise my result might have be...
+├─ PhillipLiu5269 (2026-01-01 08:00:09.443000) [+2]
+│  Congratulations! You are such a sharp person who can immediately identify the key points within a large amount of complex data! Could you please give some advice in the field of feature engineering...
+  ├─ DaylightH (2026-01-01 09:02:55.777000) [+6]
+  │  Hi, thanks for your comment! This is a very interesting question.
+  │  
+  │  
+  │    
+  │  Could you please give some advice in the field of feature engineering for beginners like me?
+  │  
+  │  
+  │  For traditional ML competitions...

@@ -1,0 +1,122 @@
+# predict-student-performance-from-game-play 讨论区（按票数排序，共 120 条）
+
+- [How The Game Begins - EDA](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/387864) — 228 票 / 58 评论 / 2023-02-15 
+- [Jo Wilder Game Walkthrough, Game Codes and Plausible Question - Answers](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384796) — 212 票 / 17 评论 / 2023-02-09 
+- [1st Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420217) — 168 票 / 73 评论 / 2023-12-09 **write-up?**
+- [Train GPU, Infer CPU, Boost CV LB](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/386218) — 149 票 / 70 评论 / 2023-02-11 
+- [How To Get 32GB RAM - Avoid Memory Error!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396979) — 111 票 / 32 评论 / 2023-03-23 
+- [7th Place Solution (Efficiency 1st)](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420119) — 102 票 / 32 评论 / 2023-07-12 **write-up?**
+- [Low memory Kaggle servers love this weird trick. Click ...](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384359) — 101 票 / 18 评论 / 2023-02-07 
+- [Update on Leaked Competition Data](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396202) — 92 票 / 117 评论 / 2023-03-20 
+- [You can only call once? DEBUG mode](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384814) — 88 票 / 9 评论 / 2023-02-09 
+- [[FIXED] - Is Test Data Leak Intentional or Accidental?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388479) — 85 票 / 44 评论 / 2023-02-17 
+- [9th Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420046) — 81 票 / 29 评论 / 2023-06-29 **write-up?**
+- [Dangers in Data](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/395250) — 73 票 / 20 评论 / 2023-03-16 
+- [Let's play!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384161) — 73 票 / 18 评论 / 2023-02-06 
+- [Achieve [CV 0.6914 | LB 0.694] with Only Four Features](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/398565) — 68 票 / 13 评论 / 2023-03-30 
+- [Tribute to Bertrand](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420019) — 67 票 / 28 评论 / 2023-06-29 
+- [1st Place Code](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420332) — 67 票 / 8 评论 / 2023-06-30 **write-up?**
+- [Who Took Teddy, Harry or Frank? - EDA](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388094) — 64 票 / 9 评论 / 2023-02-16 
+- [Problem with the new API (jo_wilder_310)](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/412512) — 63 票 / 17 评论 / 2023-05-24 
+- [Is this a coincidence?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420026) — 60 票 / 16 评论 / 2023-06-29 
+- [Achieve [CV 0.6914 | LB 0.694] with Only Four Features - Training Part Published](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/399133) — 58 票 / 11 评论 / 2023-04-02 
+- [13th place solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420077) — 52 票 / 18 评论 / 2023-06-29 **write-up?**
+- [Greetings from the Organizers!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384801) — 49 票 / 38 评论 / 2023-02-09 
+- [4th Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420349) — 48 票 / 15 评论 / 2023-07-19 **write-up?**
+- [ When will this competition be finalized?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/423637) — 46 票 / 24 评论 / 2023-07-10 
+- [3rd Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420235) — 44 票 / 12 评论 / 2023-07-06 **write-up?**
+- [ [LB 0.693 in 16min] How long does your most efficient submission take?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388788) — 42 票 / 21 评论 / 2023-02-19 
+- [[LB 0.679 / 19min / CV 0.680] Polars training and inference baseline here!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388804) — 39 票 / 2 评论 / 2023-02-19 
+- [LB 0.66 without training a model](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396970) — 39 票 / 12 评论 / 2023-03-23 
+- [Finally a GM! A milestone.](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/424124) — 37 票 / 27 评论 / 2023-07-12 
+- [Tribute to CPMP](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420017) — 37 票 / 14 评论 / 2023-06-29 
+- [10th Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420132) — 37 票 / 2 评论 / 2023-07-02 **write-up?**
+- ["Meetings are BORING!"](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396068) — 36 票 / 5 评论 / 2023-03-20 
+- [14th Place Solution Joseph Part](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420041) — 33 票 / 26 评论 / 2023-06-29 **write-up?**
+- [Congrats to Jack (Japan) for winning the efficiency prize!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/424004) — 32 票 / 6 评论 / 2023-07-12 **write-up?**
+- [The number of questions in each level_group is fixed/constant?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384297) — 31 票 / 2 评论 / 2023-02-07 
+- [8th Place Solution and Code](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420528) — 30 票 / 5 评论 / 2023-07-01 **write-up?**
+- [10th place solution(tereka part)](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420190) — 30 票 / 6 评论 / 2023-06-29 **write-up?**
+- [General information to get started](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384160) — 29 票 / 9 评论 / 2023-02-06 
+- [Similar Competition and their Winner Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384285) — 29 票 / 2 评论 / 2023-02-07 **write-up?**
+- [Alternative Explanation for Competition Extension](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/415820) — 27 票 / 6 评论 / 2023-06-08 
+- [Confused about competition metric](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384315) — 27 票 / 13 评论 / 2023-02-07 
+- [Current status of this competition](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/403316) — 27 票 / 43 评论 / 2023-04-22 
+- [Supplemental data for the competition!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/412098) — 26 票 / 7 评论 / 2023-05-22 
+- [Good Luck to every one!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/419947) — 24 票 / 2 评论 / 2023-06-28 
+- [BERT-like Approach for Representation Learning on Educational Process Data](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/400858) — 24 票 / 4 评论 / 2023-04-10 
+- [Saving features from level group '0-4' for later use](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388365) — 22 票 / 21 评论 / 2023-02-17 
+- [3rd place solution(yyykrk part)](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420274) — 21 票 / 8 评论 / 2023-06-30 **write-up?**
+- [30 place | but our best 0.704/0.703 solution & Code what could have been - Gaurav's Part with help from my friends ](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420181) — 20 票 / 6 评论 / 2023-06-29 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/424329) — 20 票 / 8 评论 / 2023-07-13 **write-up?**
+- [Classic CV LB Thread](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/399802) — 20 票 / 43 评论 / 2023-04-05 
+- [A way to submit without error](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396751) — 19 票 / 9 评论 / 2023-03-22 
+- [Early Stopping and Cross Validation Interplay](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/390756) — 18 票 / 7 评论 / 2023-02-27 
+- [973 place solution :)](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420202) — 18 票 / 10 评论 / 2023-06-29 **write-up?**
+- [Number of session_id in private test?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384455) — 18 票 / 3 评论 / 2023-02-08 
+- [When will this competition be completed?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/421708) — 18 票 / 15 评论 / 2023-07-06 
+- [Same thing is happening again and again and again...](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/418802) — 18 票 / 15 评论 / 2023-06-22 
+- [Why optimizing each question independently doesn't necessarily give good results ](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/417359) — 18 票 / 15 评论 / 2023-06-15 
+- [Thanks for participating!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420153) — 17 票 / 9 评论 / 2023-06-29 
+- [Data Augmentation by Connecting Session](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/405173) — 17 票 / 3 评论 / 2023-04-26 
+- [Using previous guesses as a feature 🤔🤔](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/392131) — 17 票 / 10 评论 / 2023-03-03 
+- [The data is also a Time Series:](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/397324) — 17 票 / 16 评论 / 2023-03-25 
+- [The LB has been updated!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/407887) — 16 票 / 7 评论 / 2023-05-08 
+- [Meaning of Each Event Name - EDA](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/391387) — 16 票 / 1 评论 / 2023-03-01 
+- [Easy way to increase CV and decrease training time!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388201) — 16 票 / 18 评论 / 2023-02-16 
+- [What dose `index` in train.csv actually mean?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384342) — 16 票 / 4 评论 / 2023-02-07 
+- [8th Position: (External Dataset) Good Preprocessing = +0.002 for Single Model](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420315) — 16 票 / 3 评论 / 2023-06-30 
+- [Code to partially restore 1D Conv networks](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/416963) — 15 票 / 10 评论 / 2023-06-13 
+- [The longest journey. Congrats to stable CV - LB frameworks](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420110) — 15 票 / 7 评论 / 2023-06-29 
+- [Efficiency prize ](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384541) — 14 票 / 1 评论 / 2023-02-08 
+- [Need help on "Submission Scoring Error"](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/401111) — 14 票 / 8 评论 / 2023-04-11 
+- [Jo Wilder Game Play EDA](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/390580) — 14 票 / 5 评论 / 2023-02-26 
+- [Problems in the Train Data are also present in the Test Data!!! 🙉🙊](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/395686) — 14 票 / 5 评论 / 2023-03-18 
+- [For those suffering from the API...](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/413004) — 14 票 / 1 评论 / 2023-05-26 
+- [Dealing with Multiple Games in the Data](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/391957) — 14 票 / 2 评论 / 2023-03-03 
+- [Different Thresholds for Different Question Models](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/389217) — 13 票 / 21 评论 / 2023-02-21 
+- [43th Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420158) — 13 票 / 5 评论 / 2023-07-17 **write-up?**
+- [Workaround to Fix Index Column](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388802) — 13 票 / 0 评论 / 2023-02-19 
+- [EDA: Some challenges with coordinate data](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384884) — 13 票 / 5 评论 / 2023-02-10 
+- [🖼️Following Chris's EDA :](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/390932) — 13 票 / 1 评论 / 2023-02-27 
+- [Changes to the Competition API](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/400313) — 12 票 / 14 评论 / 2023-04-07 
+- [[MATH] Why optimizing each question independently doesn't necessarily give good results](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/417478) — 12 票 / 8 评论 / 2023-06-16 
+- [On the issue of screen coords and HQ/fullscreen fields](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384534) — 12 票 / 2 评论 / 2023-02-08 
+- [Solution Writeup and Lessons Learned](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420169) — 12 票 / 2 评论 / 2023-06-29 **write-up?**
+- [Be careful with "page" column!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/386414) — 12 票 / 0 评论 / 2023-02-13 
+- [If you have Python3.10 or "jo_wilder.competition" relation problems, come in.](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/409483) — 12 票 / 4 评论 / 2023-05-11 
+- [Is it Reasonable to Split One Session into Two Games?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388751) — 12 票 / 2 评论 / 2023-02-19 
+- [Columns 'fullscreen', 'hq' and 'music' are populated in the updated train.csv](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/397640) — 12 票 / 3 评论 / 2023-03-26 
+- [How to deal with the brand new train set](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396620) — 12 票 / 8 评论 / 2023-03-22 
+- [Why you need to train 18 different models](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/393614) — 12 票 / 6 评论 / 2023-03-10 
+- [49th Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/421098) — 11 票 / 4 评论 / 2023-07-24 **write-up?**
+- [Does CV correlate with LB?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388427) — 11 票 / 9 评论 / 2023-02-17 
+- [GPU Powered Feature Engineering and Training [Using RAPIDS cuDF]](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388779) — 11 票 / 2 评论 / 2023-02-19 
+- [Congrats to two new Competition GMs!!](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420117) — 11 票 / 3 评论 / 2023-06-29 
+- [[0.67] 742nd Place Solution - Single Transformers Model Comparison Between Data Aggregation and None](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420105) — 11 票 / 1 评论 / 2023-06-29 **write-up?**
+- [How to do Feature Selection??](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/389231) — 11 票 / 7 评论 / 2023-02-21 
+- [What are the meanings of 'object_hover' and 'map_hover' ?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/391043) — 11 票 / 3 评论 / 2023-02-28 
+- [Let's talk about the quality of the model before blending](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/400706) — 10 票 / 26 评论 / 2023-04-09 
+- [A small Polars hack that allowed me to implement a static computational graph and speed-up feature extraction 6x](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420039) — 10 票 / 3 评论 / 2023-06-29 
+- [Shakeup or No Shakeup ?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/419966) — 10 票 / 16 评论 / 2023-06-28 
+- [Submission ERROR: Notebook Threw Exception](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/396348) — 10 票 / 5 评论 / 2023-03-21 
+- [[fixed] Efficiency LeaderBoard is broken?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/414897) — 10 票 / 3 评论 / 2023-06-03 
+- [Python 3.10 Update Is Complete](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/409898) — 9 票 / 25 评论 / 2023-05-13 
+- [20th place CV vs LB(public/private) scores](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420359) — 9 票 / 2 评论 / 2023-06-30 **write-up?**
+- [Session ID Reverse Engineering](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384678) — 9 票 / 2 评论 / 2023-02-08 
+- [Are the constraints for training or inference?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384350) — 9 票 / 6 评论 / 2023-02-07 
+- [Aggregate Features EDA](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/393487) — 9 票 / 0 评论 / 2023-03-09 
+- [The correct way to approach features importance?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/386526) — 9 票 / 3 评论 / 2023-02-13 
+- [Missing cudf/cuml in the latest Kaggle environment ?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388624) — 9 票 / 2 评论 / 2023-02-18 
+- [How do I add the features?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388578) — 9 票 / 9 评论 / 2023-02-18 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384150) — 8 票 / 84 评论 / 2023-02-06 
+- [98th Place Solution](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/424082) — 8 票 / 1 评论 / 2023-07-13 **write-up?**
+- [Something strange about CV and LB](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/388682) — 8 票 / 8 评论 / 2023-02-19 
+- [Efficiency track 18th place (25th public): length of test dataframe, groupby, mean](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/420616) — 8 票 / 5 评论 / 2023-07-01 **write-up?**
+- [Memory Reduced Train Dataset [UPDATE 03-22]](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384565) — 8 票 / 7 评论 / 2023-02-08 
+- [any problem on my submission file?](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384555) — 8 票 / 9 评论 / 2023-02-08 
+- [LB update incoming](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/402608) — 6 票 / 53 评论 / 2023-04-19 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/384149) — 2 票 / 13 评论 / 2023-02-06 
+- [Explanation for Competition Extension](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/415737) — -22 票 / 10 评论 / 2023-06-07 
+- [Deadline Extension](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/415219) — -79 票 / 52 评论 / 2023-06-05 
+- [Final LB update underway soon](https://www.kaggle.com/competitions/predict-student-performance-from-game-play/discussion/414109) — -88 票 / 84 评论 / 2023-05-31 

@@ -1,0 +1,544 @@
+<p>Wow, I'm excited to finish in 1st place! After shaking down in last month's playground competition, I worked extra hard this month to finish in top10. I probably worked too hard, but it was fun so it didn't feel like work :-D</p>
+<h2>KGMON Playbook for Tabular Data</h2>
+<p>This top solution follows the KGMON Playbook 2026 for tabular data: Blog <a href="https://developer.nvidia.com/blog/the-kaggle-grandmasters-playbook-7-battle-tested-modeling-techniques-for-tabular-data/" target="_blank">here</a>, Slides <a href="https://docs.google.com/presentation/d/1857Vj4sg3LYiqU7fp9p-KNd-krunP6yZ/edit?usp=sharing&amp;ouid=106005477169277841115&amp;rtpof=true&amp;sd=true" target="_blank">here</a>, GitHub <a href="https://github.com/cdeotte/KGMON-Playbook-2026" target="_blank">here</a>, GTC Training Lab <a href="https://www.nvidia.com/en-us/on-demand/session/gtc26-dlit81565/" target="_blank">here</a>, KGMON homepage <a href="https://www.nvidia.com/en-us/ai-data-science/kaggle-grandmasters/" target="_blank">here</a>, Nvidia cuDF cuML homepage <a href="https://rapids.ai/" target="_blank">here</a>.</p>
+<ul>
+<li>EDA</li>
+<li>Build Baselines</li>
+<li>GPU Feature Engineering</li>
+<li>GPU Hill Climbing</li>
+<li>Stacking</li>
+<li>Pseudo Labeling</li>
+<li>GPU Extra Training</li>
+</ul>
+<h2>GPT5.4, Gemini3.1, ClaudeOpus4.6 and 4xA100 GPUs!</h2>
+<p>LLM tools are so exciting! All of this solution's code was written by GPT5.4, Gemini3.1, ClaudeOpus4.6 and experimentation was accelerated with GPU, Nvidia cuDF, and Nvidia cuML. These agents learned to understand and follow the KGMON Playbook for tabular data and finish 1st place! </p>
+<p>In the month of March 2026, these LLMs wrote 600,000 lines of code! They built and trained 850 models on 4xA100 GPU and wrote and ran 50 EDA scripts! Wow unbelievable! (More info about LLM workflow <a href="https://developer.nvidia.com/blog/winning-a-kaggle-competition-with-generative-ai-assisted-coding/" target="_blank">here</a>)</p>
+<h2>1. Final Solution - Four Level GBDT NN Stack</h2>
+<p>Our final solution is a 4 level stack. The first level is feature extraction models like Nvidia cuML KNN, PyTorch Denoising Auto encoder, PCA clustering, Nvidia cuML Target Encoding, etc etc. These models aggregate information from other rows to augment the current row. The second level is many GBDT and NN using 5x5 nested OOF from level 1. The third level is many GBDT and NN using 5x5 nested OOF from level 2. The fourth and final level is Nvidia cuML Logistic Regression using OOF from level 3 and level 2.</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Mar-2026/4LevelStack.png" alt=""></p>
+<p>Besides the benefit of a large deep stack, the secret sauce involved creating 850 diverse potential models to select a final 150 models from. And the secret sauce involved creating 100s of diverse feature engineering techniques. Below we summarize our models and feature engineering. Many ideas were taken from public notebooks and references are provided at the end of the write up. </p>
+<p>In addition to building models, GPT5.4, Gemini3.1, ClaudeOpus4.6 were prompted to perform their own EDA to determine the relationship between <code>train.csv 600k row synthetic data</code> and <code>7k original data</code> and <code>train.csv targets</code>. Then they used their discoveries to create many new feature engineering ideas to extract signal.</p>
+<h2>2. Feature Engineering</h2>
+<p>Feature engineering was the dominant driver of performance. Nearly all 150 models share a common core, with different models exploring additional specialized techniques.</p>
+<h3>2.1 Snap Features (universal)</h3>
+<p>Map each synthetic float to its nearest value in the original IBM dataset:</p>
+<pre><code>MC_snap      = nearest MonthlyCharges in original IBM data
+TC_snap      = nearest TotalCharges in original IBM data
+MC_snap_diff = MonthlyCharges - MC_snap   # synthetic noise
+TC_snap_diff = TotalCharges  - TC_snap
+</code></pre>
+<p>Used in nearly every model. The snap value recovers the "true" original feature; the diff encodes the generator's perturbation magnitude.</p>
+<h3>2.2 Digit and Decimal Extraction (~60 models)</h3>
+<p>The most pervasive technique. Extract the digit at every decimal position:</p>
+<pre><code>frac    = x - floor(x)
+d1      = floor(frac * 10)         # 1st decimal digit
+d2      = floor(frac * 100) % 10   # 2nd decimal digit
+frac100 = round(frac * 100)        # 2-digit integer representation
+mod10   = floor(x) % 10
+mod100  = floor(x) % 100
+</code></pre>
+<p>Applied to raw <code>MonthlyCharges</code>, <code>TotalCharges</code>, and their snap values. Also: fractional residuals from common denominators (1/2, 1/4, 1/5, 1/10), is-round flags (<code>frac &lt; 0.005</code>), and digit pair combinations as categorical strings.</p>
+<h3>2.3 Target Encoding — Nested / Leak-Free (~90 models)</h3>
+<p>All target encoding (TE) uses a nested inner 5-fold loop within each outer CV fold to prevent label leakage:</p>
+<ul>
+<li>Applied to: all 16 raw categorical columns, bigram/trigram combos, binned numerics, anchor keys, and numeric × categorical snap products</li>
+<li>TE statistics beyond the mean: std, min, max, median, quantiles (5th, 10th, 45th, 55th, 90th, 95th)</li>
+<li><strong>Original IBM priors</strong>: churn probability per feature value computed once from the 7,032-row original dataset — zero leakage, as the original data carries no synthetic training labels</li>
+</ul>
+<h3>2.4 Arithmetic Interactions (~45 models)</h3>
+<pre><code>TC_deviation     = TotalCharges - tenure * MonthlyCharges
+TC_snap_exp_dev  = TC_snap - tenure * MC_snap   # original billing anomaly
+TC_per_month     = TotalCharges / (tenure + 1)
+MC_to_TC_ratio   = MonthlyCharges / (TotalCharges + 1e-9)
+</code></pre>
+<p><code>TC_deviation</code> is particularly powerful — it captures how much a customer's actual total charges deviate from what their monthly charge and tenure would predict.</p>
+<h3>2.5 Multi-Scale Binning (~52 models)</h3>
+<p>Quantile bins (up to 5,000 bins), fixed-width bins, log-scale bins, and integer floor — all converted to categorical strings and then target-encoded. Fine-grained quantile bins on <code>MonthlyCharges</code> (5,000 bins) essentially recover the original 1,584 unique values.</p>
+<h3>2.6 Categorical Cross-Features / Bigrams (~37 models)</h3>
+<pre><code>df["bi_Contract_Internet"] = df["Contract"] + "__" + df["InternetService"]
+</code></pre>
+<p>Top-signal pairs: <code>Contract × InternetService</code>, <code>Contract × PaymentMethod</code>, <code>InternetService × PaymentMethod</code>. Trigrams extend this to 3-way combinations. Nested TE on these combos captures joint churn profiles unavailable to per-column TE.</p>
+<h3>2.7 Frequency / Count Encoding (~45 models)</h3>
+<pre><code>freq = all_data[col].value_counts(normalize=True)
+all_data[f"freq_{col}"] = all_data[col].map(freq)
+</code></pre>
+<p>Especially powerful for <code>MC_snap</code> (1,584 unique values): the frequency encodes how many synthetic rows cluster around each original IBM value, which correlates with the original customer's representativeness. Count ratio features (<code>synthetic_count / original_count</code>) measure how much the generator oversampled each value.</p>
+<h3>2.8 Service Count Aggregations (~30 models)</h3>
+<pre><code>svc_cols = ["OnlineSecurity","OnlineBackup","DeviceProtection",
+            "TechSupport","StreamingTV","StreamingMovies","MultipleLines"]
+svc_yes = sum((df[c]=="Yes").astype(int) for c in svc_cols)
+</code></pre>
+<p>Also: <code>has_internet</code>, <code>has_phone</code>, per-service binary flags (<code>ISYES_</code>, <code>ISNO_</code>, <code>ISOTHER_</code>).</p>
+<h3>2.9 Original IBM Dataset Lookup (~7 models)</h3>
+<p>Build a <code>cKDTree</code> on the standardized <code>(MonthlyCharges, TotalCharges, tenure)</code> columns of the 7,032 original IBM rows. For each synthetic row, find the nearest original customer and attach their churn label as a feature. This provides a zero-leakage, noise-free "ground truth" anchor.</p>
+<h3>2.10 Radix Interaction Features (~15 models)</h3>
+<pre><code>radix = int(MC_snap * 100) + cat_code * 100_000
+</code></pre>
+<p>Encodes a (continuous, categorical) pair as a single integer category. Very natural for tree models: a single split on this integer is equivalent to splitting on both the numeric value and the categorical value simultaneously.</p>
+<h3>2.11 Synthetic Artifact Detection (specialized)</h3>
+<p>Several models go further in exploiting the generator's fingerprints:</p>
+<ul>
+<li><strong>Fractional fingerprints</strong>: <code>intlike_count</code> (frac &lt; 0.001), <code>quarterlike_count</code>, <code>halflike_count</code> — how many of a row's numeric values look like round numbers</li>
+<li><strong>TF-IDF character n-grams</strong>: Extracted from the <em>string representation</em> of <code>MonthlyCharges</code> and <code>TotalCharges</code> — detects repeating decimal patterns</li>
+<li><strong>Benford's Law deviation</strong>: The leading-digit distribution of synthetic values deviates from Benford's Law; the deviation itself is a feature</li>
+<li><strong>Drift ratios</strong>: <code>log1p(train_freq / orig_freq)</code> — measures how much the generator over/under-sampled each value</li>
+</ul>
+<h3>2.12 Projection / Manifold Features (~7 models)</h3>
+<p>Fit PCA (12 components) and Gaussian Random Projection (12 components) <strong>on the original IBM data</strong>, then project each synthetic row into that space. This gives the model explicit geometric information about how each synthetic customer relates to the true data manifold. Also: cyclical tenure features <code>sin/cos(tenure × 2π/12)</code> and <code>×2π/24</code>.</p>
+<h2>3. Tree Models</h2>
+<p>90 of the 150 ensemble models are tree-based, spanning five libraries. Each library grows
+trees differently and benefits from different feature engineering strategies.</p>
+<h3>Library Comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>XGBoost</th>
+<th>LightGBM</th>
+<th>CatBoost</th>
+<th>YDF</th>
+<th>cuML RF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tree growth</td>
+<td>Depth-wise</td>
+<td>Leaf-wise</td>
+<td>Symmetric (oblivious)</td>
+<td>Depth-wise</td>
+<td>Depth-wise</td>
+</tr>
+<tr>
+<td>Ensemble method</td>
+<td>Boosting</td>
+<td>Boosting</td>
+<td>Boosting</td>
+<td>Boosting</td>
+<td>Bagging (Random Forest)</td>
+</tr>
+<tr>
+<td>Categorical handling</td>
+<td>Manual TE required</td>
+<td>Manual TE; GPU caps at 32 cats</td>
+<td>Native ordered target statistics</td>
+<td>Auto-binning</td>
+<td>Manual TE required</td>
+</tr>
+<tr>
+<td>Key tuning knob</td>
+<td><code>max_depth</code>, <code>gamma</code></td>
+<td><code>num_leaves</code>, <code>min_child_samples</code></td>
+<td><code>l2_leaf_reg</code>, <code>random_strength</code></td>
+<td><code>max_depth</code>, <code>shrinkage</code></td>
+<td><code>n_estimators</code>, <code>max_features</code>, <code>min_samples_leaf</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3>3.1 XGBoost — 37 Models</h3>
+<p>XGBoost accumulated the widest variety of feature engineering experiments:</p>
+<ul>
+<li><strong>Baseline ports</strong>: Public Kaggle solutions, 5-fold nested TE on all 16 categorical columns</li>
+<li><strong>Anchor-based TE</strong>: Use the <code>(MC_snap, tenure)</code> anchor key as the primary grouping column for TE — directly encodes which original IBM customer archetype each row belongs to</li>
+<li><strong>Self-supervised auxiliary predictions</strong>: Train a separate model on the original 7,032 IBM rows to predict each feature column from all others; the <code>PRED_*</code> outputs encode consistency of each synthetic row with the original IBM distribution</li>
+<li><strong>Digit position features</strong>: Extract d1–d4, fractional part, mod10, mod100 from all numeric columns; use <code>max_bin=16,000</code> for fine-grained splits on decimal artifacts</li>
+<li><strong>Comprehensive feature union</strong>: Combine the best FE from all earlier XGB experiments into a single 200+ feature matrix</li>
+<li><strong>Bigram / trigram combos</strong>: All categorical pairs/triples as string tokens, nested TE on each</li>
+<li><strong>GPU-accelerated pairwise TE</strong>: 48 numeric × categorical pair features via cuML <code>TargetEncoder</code></li>
+<li><strong>Multi-seed rank blending</strong>: 3 random seeds, rank-transform before averaging for stable calibration</li>
+<li><strong>XGBRanker — pairwise ranking objective</strong>: Uses <code>rank:pairwise</code> instead of <code>binary:logistic</code>, directly optimizing the ordering that ROC AUC measures; Platt-scaled to [0,1]</li>
+</ul>
+<hr>
+<h3>3.2 LightGBM — 22 Models</h3>
+<p>LightGBM's leaf-wise growth finds deeper, more specialized patterns in the same feature space:</p>
+<ul>
+<li><strong>Baseline and public notebook port</strong>: <code>num_leaves=63</code>, sklearn <code>TargetEncoder</code></li>
+<li><strong>High-cardinality distribution features</strong>: Count ratio features (<code>row_count / group_count</code>) capture synthetic generation frequency</li>
+<li><strong>XGB feature ideas ported to LGBM</strong>: The same feature engineering applied to LightGBM produces genuinely different predictions due to leaf-wise vs. depth-wise growth</li>
+<li><strong>Optuna-optimized</strong>: <code>num_leaves=77</code>, <code>learning_rate=0.00833</code>, <code>min_child_samples=56</code> — the low <code>num_leaves</code> prevents overfitting the noisy synthetic patterns</li>
+<li><strong>Synthetic artifact fingerprinting</strong>: Prototype distance features to original IBM clusters; fractional rounding features</li>
+<li><strong>KDTree nearest-neighbor target feature</strong>: cKDTree on original IBM numeric columns → nearest original customer's churn label as a feature</li>
+</ul>
+<hr>
+<h3>3.3 CatBoost — 22 Models</h3>
+<p>CatBoost's ordered target statistics (OTS) compute leak-free TE internally at each tree node — no manual TE loop is needed for raw categorical columns. This redirects FE effort to numeric interactions:</p>
+<ul>
+<li><strong>Minimal FE / native categoricals</strong>: Pass all 16 categorical columns via <code>cat_features</code>, let CatBoost's OTS handle encoding — equivalent to leak-free TE, for free</li>
+<li><strong>Binned cross-term interactions</strong>: Pre-compute numeric pair interactions (<code>a_bin × 9 + b_bin</code>) because CatBoost's symmetric (oblivious) trees apply the same split at every node of a given depth and cannot chain splits to approximate interactions — they must be explicit input features</li>
+<li><strong>Borrowed RealMLP FE</strong>: Cross-pollinate neural network FE ideas (digit features, 3-way combo tokens) into CatBoost</li>
+<li><strong>Optuna-optimized</strong>: Tuned <code>random_strength=2.877</code> and <code>bagging_temperature=0.264</code> — CatBoost-specific regularizers with no XGBoost/LightGBM equivalents</li>
+</ul>
+<hr>
+<h3>3.4 YDF (Yggdrasil Decision Forests) — 2 Models</h3>
+<p>Google's YDF with <code>max_depth=2</code> produces ultra-shallow stumps — extremely regularized, smooth prediction surfaces that are almost orthogonal to the deep-tree models. Its value is purely ensemble diversity.</p>
+<hr>
+<h3>3.5 Nvidia cuML Random Forest — 2 Models</h3>
+<p>RAPIDS cuML's GPU-accelerated Random Forest provides the only <strong>bagging</strong> ensemble in the tree family — all other tree models use boosting. Because bagging averages many independently-grown deep trees rather than greedily correcting residuals, the cuML RF produces a fundamentally different prediction surface that adds genuine diversity to the boosted-tree bloc.</p>
+<h2>4. Deep Learning Models</h2>
+<p>60 of the 150 models are neural networks, spanning 25 distinct architecture families. All use PyTorch (directly or via <code>pytabkit</code> / <code>pytorch-tabular</code> / <code>pytorch-frame</code>) with CUDA acceleration.</p>
+<h3>4.1 Embedding MLP — Standard PyTorch (10 models)</h3>
+<p>The foundational DL architecture: learned categorical embeddings (dimension ≈ √cardinality) concatenated with raw numerics, passed through a 2–3 layer MLP (512→256→1) with dropout and BatchNorm/LayerNorm. Seven variants explore diverse training configurations (batch size 256–8192, LR 2.5e-5–2e-3, cosine annealing, label smoothing ε=0.02) to maximize prediction diversity.</p>
+<h3>4.2 Feature Interaction MLP — Pair Embeddings (2 models)</h3>
+<p>Every ordered pair of the 19 input features gets its own embedding table (171 pairs, dim capped at 16), then all pair embeddings are concatenated and passed through a 3-layer MLP. Explicitly models every second-order feature interaction as a learnable embedding rather than relying on MLP hidden layers to discover them implicitly.</p>
+<h3>4.3 Enhanced Feature MLP — XGB-Inspired Transforms (4 models)</h3>
+<p>Same Embedding MLP backbone but numerical features are enriched with five transforms borrowed from gradient boosting practice: frequency encoding (FREQ), rank transform (RANK), log1p, square-root (SQRT), and reciprocal (INV1P), all standardized. Bridges the gap between tree-based and neural approaches by giving the MLP pre-processed numerical representations that mimic the decision boundaries trees naturally find.</p>
+<h3>4.4 RealMLP — pytabkit (9 models)</h3>
+<p><code>RealMLP_TD_Classifier</code> from the <code>pytabkit</code> library. Key innovations: piecewise-linear representations (PLR) for numerical features (bin-then-learn approach giving quasi-tree-like inductive bias), SiLU activations, L2 normalization, robust scaling, label smoothing, flat+cosine LR schedule, and an 8-member internal ensemble baked into each fit (<code>n_ens=8</code>). One of the strongest individual architectures.</p>
+<h3>4.5 GraphSAGE GNN (4 models)</h3>
+<p>Each training/test row becomes a graph node; a KNN graph (k=8, built via cuML GPU-accelerated KNN) connects each customer to its nearest neighbors in feature space. Two SAGEConv layers aggregate neighbor information before an MLP classification head. Allows each customer's predicted churn probability to be informed by the churn patterns of their k nearest similar customers — a structural inductive bias unavailable to any MLP.</p>
+<h3>4.6 FT-Transformer (4 models)</h3>
+<p>Each input feature (numerical or categorical) is tokenized into a fixed-dimension embedding, then a Transformer encoder (multi-head self-attention + FFN) processes the sequence of feature tokens. A <code>[CLS]</code> token is used for classification. Self-attention among feature tokens allows every feature to attend to every other feature at each layer, learning arbitrary high-order interactions. Implemented via <code>pytorch-frame</code>'s <code>FTTransformer</code> with <code>LinearPeriodicEncoder</code> for numericals.</p>
+<h3>4.7 TabTransformer (5 models)</h3>
+<p>Applies Transformer self-attention exclusively to categorical feature embeddings, then concatenates context-aware categorical embeddings with layer-normalized numerics and passes through an MLP head. The hypothesis: categorical relationships (e.g., Contract type vs. InternetService) benefit most from attention, while numeric correlations are better left to the MLP.</p>
+<h3>4.8 TabM — Multiplicative Interactions (3 models)</h3>
+<p><code>TabM_D_Classifier</code> from <code>pytabkit</code> with <code>tabm-mini-normal</code> architecture: PLR embeddings for numerics, MLP blocks with multiplicative (bilinear) interactions alongside additive paths, and <code>k=32</code> basis components linearly combined per sample. The implicit ensemble effect from k-component basis decomposition makes TabM one of the strongest individual DL models (OOF AUC <strong>0.918788</strong>).</p>
+<h3>4.9 TabICL — In-Context Learning (3 models)</h3>
+<p><code>TabICLClassifier</code> from the <code>tabicl</code> library is a Transformer-based foundation model pre-trained on thousands of tabular datasets. At inference time it takes the training set as context and predicts test row labels by attending over training examples — zero fine-tuning required. The only model in the ensemble that requires no gradient updates at all.</p>
+<h3>4.10 GANDALF (2 model)</h3>
+<p>From <code>pytorch-tabular</code>: Gated Feature Learning Units (GFLU) gate inputs with learned sigmoid masks, select top-K most relevant features, and apply learned transformations across multiple stages. The multi-stage gating progressively filters the feature set rather than relying on a monolithic weight matrix.</p>
+<h3>4.11 Self-Normalizing Network — SELU (2 model)</h3>
+<p>Deep MLP (256→128→64→32) with SELU activations and AlphaDropout, maintaining mean≈0 and variance≈1 at every layer without explicit normalization. Uniquely also treats numeric values as text: TF-IDF character n-gram features (128-dim) extracted from the string representations of <code>MonthlyCharges</code> and <code>TotalCharges</code>, plus Benford's Law likelihood features.</p>
+<h3>4.12 Tabular ResNet (2 model)</h3>
+<p>ResNet-style MLP (4 residual blocks, pre-activation BatchNorm→ReLU→Linear→Dropout→Linear + skip) combined with manifold projection features (PCA + GRP fitted on original IBM data) and cyclical tenure features (sin/cos with periods 12 and 24 months).</p>
+<h3>4.13 RFF Kernel Network (3 models)</h3>
+<p>Numerics are transformed via Random Fourier Features (RFF, dim=1,024) to approximate an RBF kernel, then concatenated with categorical embeddings and k=32 K-Means prototype distances fitted on original IBM data, and passed through an MLP. RFF projection explicitly maps inputs into a space where a linear classifier approximates a kernel SVM with RBF kernel.</p>
+<h3>4.14 Denoising Autoencoder (DAE) (10 models)</h3>
+<p>A PyTorch encoder-decoder (hidden 128→16 latent) trained exclusively on the 7,032-row original IBM dataset to reconstruct input features corrupted with Gaussian noise; reconstruction errors and latent embeddings computed on synthetic rows measure each row's deviation from the true IBM data manifold, which are then fed as features into XGBoost. The most powerful variant (dae-8907) combined DAE-derived features with a union of the strongest XGBoost feature sets, reaching <strong>0.918345</strong> — matching the best individual models in the ensemble.</p>
+<h3>4.15 Field-Aware Factorization Machine (FFM) (10 models)</h3>
+<p>Extends the standard FM by learning field-specific factor vectors: feature i has a separate embedding <code>v_{i→j}</code> for every target field j, so pairwise interactions are computed with context-aware representations rather than a single global vector per feature. Competitive at ~0.9159 without any deep MLP branch.</p>
+<h3>4.16 Deep Residual MLP (ResNet) (4 models)</h3>
+<p>A 4-block residual MLP (hidden=512, BatchNorm→GELU→Linear + skip connection) with categorical embeddings scaled as 1.6×√cardinality; uniquely augments each training fold with the original IBM rows so the model sees ground-truth customer archetypes directly alongside synthetic training examples. Reached 0.916376.</p>
+<h3>4.17 Factorization Machine (FM) (3 models)</h3>
+<p>A pure FM with no deep branch, modeling all pairwise feature interactions as <code>&lt;v_i, v_j&gt;·x_i·x_j</code> with factor dimension k=32 — the simplest non-linear model in the experiment suite beyond logistic regression, competitive at 0.9155 purely from second-order interactions with no hidden layers. Serves as a useful lower bound showing how much signal is captured by pairwise interactions alone.</p>
+<h3>4.18 DeepFM / DeepFFM (3 models)</h3>
+<p>Combines an FM or FFM interaction component with a parallel deep MLP branch sharing the same embeddings; the two paths (FM pairwise terms + MLP higher-order terms) add their logits at the output. The deep branch adds higher-order interactions beyond the second-order FM terms and slightly exceeds the pure FM (0.9154–0.9158).</p>
+<h3>4.19 Liquid Neural Networks (LNN) (3 models)</h3>
+<p>Inspired by the C. elegans connectome: each neuron has a learnable time-constant parameter <code>τ</code> controlling state-decay dynamics, giving the network an ODE-like continuous-time structure even on static tabular inputs. The embedding variant (lnn-4401, hidden=384, 4 layers, 0.9151) outperformed the plain variant (lnn-4400, 0.9128).</p>
+<h3>4.20 Variable Selection Network (VSN / TFT-style) (4 models)</h3>
+<p>Implements the Variable Selection Network from the Temporal Fusion Transformer (TFT) paper using Gated Linear Units (GLU) and Gated Residual Networks (GRN): each feature passes through a dedicated GRN, and outputs are recombined via learned softmax attention weights providing explicit feature importances. The best variant (G-10202) adds frequency snapping — collapsing rare continuous values to the nearest frequent value before embedding — to reach 0.9141, below most MLP variants of similar complexity.</p>
+<h3>4.21 TabNet (3 models)</h3>
+<p>Sequential sparse attention: at each decision step a learned mask selects a subset of features to process, conditioned on the aggregated representation from all prior steps, with the summed masks yielding interpretable feature importances. Both variants use self-supervised pre-training on augmented original IBM data before supervised fine-tuning via <code>pytorch-tabnet</code>'s <code>TabNetPretrainer</code> topping out at ~0.9122.</p>
+<h3>4.22 Trompt (PyTorch Frame) (3 models)</h3>
+<p>A prompt-based tabular model from the <code>torch_frame</code> library that maintains <code>num_prompts=8</code> parallel context vectors through <code>num_layers=4</code> processing stages, applying cross-entropy loss independently at every layer (layer-wise supervision) and averaging layer predictions at inference — adapting the prompting paradigm from NLP to tabular data. Reached <strong>0.916291</strong> with minimal feature engineering (no target encoding, no digit features) and only 6 training epochs, still improving at the final epoch.</p>
+<h3>4.23 DANet — Deep Abstract Network (1 model)</h3>
+<p>Within the FT-Transformer notebook: Abstract Layers select sparse subsets of input features via learnable attention masks, apply shared linear transforms to selected features, and stack multiple layers to progressively build higher-order representations. A differentiable feature-interaction filter inspired by tree splits.</p>
+<h3>4.24 TabPFN v2.6 Foundation Model (1 model)</h3>
+<p>A prior-data fitted Transformer trained offline on millions of synthetic tabular datasets that performs in-context learning at inference: the training set is passed as context and test row labels are predicted via attention over training examples, requiring zero gradient updates on the target data. At this dataset scale (475k training rows), the model must subsample to 5k–10k rows per estimator due to context-length limits — with 32 estimators at 10k rows each outperforming 64 estimators at 5k rows (0.9134 vs. 0.9127) — capping performance well below what full-dataset models achieve.</p>
+<h3>4.25 DAE Transfer Learning (2 models)</h3>
+<p>Two-phase training: a denoising autoencoder (110→64→32, corrupting 30% of features with swap noise and Gaussian noise) is first pre-trained unsupervised on the combined train+test set, then a lightweight classification head is attached to the frozen encoder and fine-tuned with supervised labels — standard self-supervised transfer learning applied to tabular data. The 32-dimensional bottleneck learned a compressed representation of the full feature space, but the supervised fine-tuning phase could not exceed 0.915 despite the pre-training advantage.</p>
+<h2>5. Stacking and Ensembling</h2>
+<h3>Meta-learner</h3>
+<p>All 150 base model OOF predictions are combined via a <strong>Nvidia cuML L2-penalized Logistic Regression</strong> (logit stacking) fit on the training labels. The L2 penalty prevents any single model from dominating the stack and naturally handles the high correlation among similar models.</p>
+<h3>Second-layer stacking</h3>
+<p>Several models (<code>_stk</code> suffix) are themselves trained on OOF predictions from earlier models as additional input features — creating a two-level hierarchy: raw feature models → stacked models → final logit meta-learner.</p>
+<h3>Diversity strategy</h3>
+<p>Diversity was intentional and systematic. The 150 models span:</p>
+<ul>
+<li>4 GBDT libraries with fundamentally different tree structures</li>
+<li>25 DL architecture families across attention, graph, kernel, multiplicative, gated, and foundation model paradigms</li>
+<li>12+ distinct feature engineering pipelines (anchor TE, digit features, radix interactions, survival analysis, TF-IDF on numerics, KDTree lookup, pairwise embeddings, etc.)</li>
+<li>Multiple random seeds and Optuna-tuned hyperparameter configs</li>
+</ul>
+<p>The logit stacker learns which model to trust for which region of the feature space.</p>
+<h3>Hill climbing for model selection</h3>
+<p>Models were added to the ensemble one at a time using greedy forward selection (hillclimbing) based on OOF AUC. </p>
+<h2>6. Hardware and Infrastructure</h2>
+<ul>
+<li><strong>4× NVIDIA A100 80GB PCIe</strong> (devices 0–3)</li>
+<li><strong>RAPIDS conda environment</strong>: cuML for GPU-accelerated logistic regression, KNN, and target encoding</li>
+<li><strong>Training protocol</strong>: All models use 5-fold <code>StratifiedKFold</code> with <code>SEED=42</code></li>
+<li><strong>OOF / prediction naming convention</strong>:<ul>
+<li>OOF: <code>oof_&lt;description&gt;_v{VER}.npy</code></li>
+<li>Test: <code>pred_&lt;description&gt;_v{VER}.npy</code></li></ul></li>
+</ul>
+<hr>
+<h2>7. Summary</h2>
+<p>The core of this solution is treating the synthetic data generation process as a source of structured signal rather than noise. The two most impactful techniques were:</p>
+<ol>
+<li><strong>Snap features</strong>: Mapping synthetic floats to their nearest original IBM value to recover the true customer archetype</li>
+<li><strong>Decimal digit extraction</strong>: Exploiting the artifacts left by the generator's rounding/sampling behavior as classification features</li>
+</ol>
+<p>These signals were consumed by an unusually diverse ensemble — 37 XGBoost variants, 22 LightGBM variants, 22 CatBoost variants, 2 YDF models, 2 Nvidia cuML RF and 60 neural networks spanning 25 architectures — stacked via L2-penalized logistic regression for a final ensemble <code>OOF AUC of 0.91985</code>.</p>
+<h2>8. References — Public Notebooks Used as Starting Points</h2>
+<p>This section lists every public Kaggle notebook or discussion post referenced in the creation of this solution. Each reference was adapted into one or more local models.</p>
+<p><strong>Total unique references: 39</strong></p>
+<hr>
+<h2>Kaggle Notebooks by Author</h2>
+<hr>
+<h3>angelosmar1</h3>
+<p><strong><a href="https://www.kaggle.com/code/angelosmar1/s5e11-lgbm-cv-0-92813-2nd-place" target="_blank">https://www.kaggle.com/code/angelosmar1/s5e11-lgbm-cv-0-92813-2nd-place</a></strong>
+LightGBM 2nd-place solution from Playground Series S5E11 achieving CV 0.92813; uses
+nested target encoding and digit-position features as the core FE strategy.
+<em>Adapted in:</em> <code>lgbm2-2700.ipynb</code></p>
+<hr>
+<h3>azzamradman</h3>
+<p><strong><a href="https://www.kaggle.com/code/azzamradman/xgb-decaying-learning-rate-boost-guaranteed" target="_blank">https://www.kaggle.com/code/azzamradman/xgb-decaying-learning-rate-boost-guaranteed</a></strong>
+XGBoost with a decaying learning rate schedule ("boost guaranteed") applied to the churn
+dataset; notable for the LR decay trick rather than fixed learning rate.
+<em>Adapted in:</em> <code>xgb10-3601.ipynb</code></p>
+<hr>
+<h3>badalkrsharma</h3>
+<p><strong><a href="https://www.kaggle.com/code/badalkrsharma/cv-0-9163-xgb-lgb-multi-seed-ensemble" target="_blank">https://www.kaggle.com/code/badalkrsharma/cv-0-9163-xgb-lgb-multi-seed-ensemble</a></strong>
+Multi-seed ensemble of XGBoost and LightGBM achieving CV 0.9163; averages predictions
+across several random seeds to reduce variance.
+<em>Adapted in:</em> <code>lgb-1000.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/badalkrsharma/rank-blend-cv-0-91865-xgb-lgb-cat" target="_blank">https://www.kaggle.com/code/badalkrsharma/rank-blend-cv-0-91865-xgb-lgb-cat</a></strong>
+Rank-blend of XGBoost, LightGBM, and CatBoost with pseudo-label augmentation, achieving
+CV 0.91865; rank-transforms individual model predictions before blending for robust calibration.
+<em>Adapted in:</em> <code>cat6-5700.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/badalkrsharma/xgb-lgb-multi-seed-ensemble" target="_blank">https://www.kaggle.com/code/badalkrsharma/xgb-lgb-multi-seed-ensemble</a></strong>
+Multi-seed XGBoost + LightGBM ensemble notebook (shared competition version of the
+cv-0-9163 entry above).
+<em>Referenced in:</em> <code>ensemble-10.ipynb</code></p>
+<hr>
+<h3>blamerx</h3>
+<p><strong><a href="https://www.kaggle.com/code/blamerx/auc-0-91925-xgboost-bi-tri-target-encoding" target="_blank">https://www.kaggle.com/code/blamerx/auc-0-91925-xgboost-bi-tri-target-encoding</a></strong>
+XGBoost with bigram and trigram categorical cross-features, each target-encoded in a
+leak-free nested CV loop; achieved AUC 0.91925 and was the source of the bi/tri-TE
+feature engineering pipeline used across many ensemble models.
+<em>Adapted in:</em> <code>RealMLP5-5500.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/blamerx/s6e3-0-91902-optimized-catboost" target="_blank">https://www.kaggle.com/code/blamerx/s6e3-0-91902-optimized-catboost</a></strong>
+Optuna-optimized CatBoost for S6E3 (CV 0.91902); tunes <code>random_strength</code>,
+<code>bagging_temperature</code>, and <code>l2_leaf_reg</code> with native categorical handling.
+<em>Adapted in:</em> <code>cat-7300.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/blamerx/s6e3-0-91906-optimized-lightgbm" target="_blank">https://www.kaggle.com/code/blamerx/s6e3-0-91906-optimized-lightgbm</a></strong>
+Optuna-optimized LightGBM for S6E3 (CV 0.91906); tunes <code>num_leaves</code>, <code>min_child_samples</code>,
+and <code>learning_rate</code> alongside bigram/trigram target encoding.
+<em>Adapted in:</em> <code>lgbm8-7200.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/blamerx/s6e3-ridge-xgb-n-gram-0-91927-cv" target="_blank">https://www.kaggle.com/code/blamerx/s6e3-ridge-xgb-n-gram-0-91927-cv</a></strong>
+Stacks a Ridge regression on character n-gram TF-IDF features (extracted from string
+representations of numeric columns) with an XGBoost model, achieving CV 0.91927.
+<em>Adapted in:</em> <code>ridge-xgb-9200.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/blamerx/s6e3-tabm-advanced-features-0-91898-cv" target="_blank">https://www.kaggle.com/code/blamerx/s6e3-tabm-advanced-features-0-91898-cv</a></strong>
+TabM (<code>pytabkit</code>) with advanced feature engineering including bigrams, trigrams, digit
+features, and piecewise-linear numeric embeddings; CV 0.91898.
+<em>Adapted in:</em> <code>tabm-9100.ipynb</code></p>
+<hr>
+<h3>cdeotte</h3>
+<p><strong><a href="https://www.kaggle.com/code/cdeotte/first-place-single-model-lb-38-81" target="_blank">https://www.kaggle.com/code/cdeotte/first-place-single-model-lb-38-81</a></strong>
+1st-place single XGBoost model from a prior Kaggle Playground competition; the feature
+engineering pipeline (digit extraction, nested TE, snap features) was ported as a
+baseline starting point for this competition's XGBoost experiments.
+<em>Adapted in:</em> <code>xgb3-1200.ipynb</code></p>
+<hr>
+<h3>furqonaryadana</h3>
+<p><strong><a href="https://www.kaggle.com/code/furqonaryadana/lgbm-dart-woe-encoding-cpu-only" target="_blank">https://www.kaggle.com/code/furqonaryadana/lgbm-dart-woe-encoding-cpu-only</a></strong>
+LightGBM with DART boosting and Weight-of-Evidence (WoE) encoding for categorical
+features; WoE replaces the raw category code with the log-odds of the target given that
+category, providing a calibrated monotonic encoding without requiring nested CV.
+<em>Adapted in:</em> <code>lgbm-10100.ipynb</code></p>
+<hr>
+<h3>greysky</h3>
+<p><strong><a href="https://www.kaggle.com/code/greysky/ps-s5e4-lgbm-cv-12-25-lb-12-15" target="_blank">https://www.kaggle.com/code/greysky/ps-s5e4-lgbm-cv-12-25-lb-12-15</a></strong>
+LightGBM solution from Playground Series S5E4 (a regression task); the model structure
+and hyperparameter choices were ported and retuned for binary churn classification.
+<em>Adapted in:</em> <code>lgbm-8200.ipynb</code></p>
+<hr>
+<h3>include4eto</h3>
+<p><strong><a href="https://www.kaggle.com/code/include4eto/realmlp-feature-engineering" target="_blank">https://www.kaggle.com/code/include4eto/realmlp-feature-engineering</a></strong>
+RealMLP (<code>pytabkit</code>) paired with an extensive feature engineering pipeline including digit
+features, frequency encoding, and target encoding.
+<em>Adapted in:</em> <code>realmlp-8100.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/include4eto/tabm-pseudo-labels" target="_blank">https://www.kaggle.com/code/include4eto/tabm-pseudo-labels</a></strong>
+TabM (<code>pytabkit</code>) augmented with pseudo-label training: high-confidence test predictions
+are added to the training set for a second training pass.
+<em>Referenced in:</em> <code>ensemble-5.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/include4eto/tabtransfomer-chatgpt-vibe-coding" target="_blank">https://www.kaggle.com/code/include4eto/tabtransfomer-chatgpt-vibe-coding</a></strong>
+TabTransformer implementation assembled with ChatGPT assistance ("vibe coding"); applies
+self-attention to categorical embeddings, then concatenates with normalized numerics for
+an MLP classification head.
+<em>Adapted in:</em> <code>tabtran-8400.ipynb</code></p>
+<hr>
+<h3>johnnyhyland</h3>
+<p><strong><a href="https://www.kaggle.com/code/johnnyhyland/s6e3-reframing-as-bayesian-survival-pymc" target="_blank">https://www.kaggle.com/code/johnnyhyland/s6e3-reframing-as-bayesian-survival-pymc</a></strong>
+Reframes the churn binary classification task as a Bayesian survival analysis problem
+using PyMC; models time-to-churn with a Cox-proportional-hazards-inspired likelihood,
+then uses the survival probability at the observed tenure as the churn prediction.
+<em>Adapted in:</em> <code>cox-8000.ipynb</code></p>
+<hr>
+<h3>lightningv08</h3>
+<p><strong><a href="https://www.kaggle.com/code/lightningv08/s6e3-cv-0-91849-xgb-kfold-fe-pl" target="_blank">https://www.kaggle.com/code/lightningv08/s6e3-cv-0-91849-xgb-kfold-fe-pl</a></strong>
+XGBoost with k-fold feature engineering and pseudo-label augmentation achieving CV 0.91849;
+uses fold-safe target encoding computed within the CV loop before pseudo-label retraining.
+<em>Referenced in:</em> <code>ensemble-4.ipynb</code></p>
+<hr>
+<h3>mahoganybuttstrings</h3>
+<p><strong><a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e10-realmlp-cv-0-055936-lb-0-05549" target="_blank">https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e10-realmlp-cv-0-055936-lb-0-05549</a></strong>
+RealMLP (<code>pytabkit</code>) solution from Playground Series S5E10; ported as the structural
+template for RealMLP experiments on the churn dataset.
+<em>Adapted in:</em> <code>RealMLP3-2300.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e11-xgb-cv-0-92818-pb-0-92923" target="_blank">https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e11-xgb-cv-0-92818-pb-0-92923</a></strong>
+XGBoost solution from PS S5E11 (CV 0.92818, public LB 0.92923); uses extensive pairwise
+categorical target encoding and numeric rounding features as the primary FE approach.
+<em>Adapted in:</em> <code>mahog-700.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e8-single-xgb-cv-0-975782-lb-0-97681" target="_blank">https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e8-single-xgb-cv-0-975782-lb-0-97681</a></strong>
+Single XGBoost model from PS S5E8 achieving CV 0.975782; the general XGBoost structure
+and TE pipeline were ported for use on churn data.
+<em>Adapted in:</em> <code>xgb6-2000.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e8-tabm-cv-0-976810-pb-0-97750" target="_blank">https://www.kaggle.com/code/mahoganybuttstrings/pg-s5e8-tabm-cv-0-976810-pb-0-97750</a></strong>
+TabM (<code>pytabkit</code>) solution from PS S5E8 achieving CV 0.97681; uses piecewise-linear
+numeric embeddings and multiplicative interactions.
+<em>Adapted in:</em> <code>tabM-800.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/mahoganybuttstrings/pg-s6e1-realmlp-cv-8-58748-lb-8-58006" target="_blank">https://www.kaggle.com/code/mahoganybuttstrings/pg-s6e1-realmlp-cv-8-58748-lb-8-58006</a></strong>
+RealMLP solution from PS S6E1; served as the structural template for the RealMLP ensemble
+notebook combining predictions across multiple folds and seeds.
+<em>Adapted in:</em> <code>RealMLP-600-ENSEMBLE.ipynb</code></p>
+<hr>
+<h3>masayakawamata</h3>
+<p><strong><a href="https://www.kaggle.com/code/masayakawamata/s5e11-single-lgbm-tuned" target="_blank">https://www.kaggle.com/code/masayakawamata/s5e11-single-lgbm-tuned</a></strong>
+Single tuned LightGBM from PS S5E11 with target encoding and digit features; adapted as
+an LightGBM baseline with this competition's feature engineering added on top.
+<em>Adapted in:</em> <code>lgb6-3800.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/masayakawamata/s5e5-resmlp-cv0-05990" target="_blank">https://www.kaggle.com/code/masayakawamata/s5e5-resmlp-cv0-05990</a></strong>
+Residual MLP (ResMLP) architecture implemented in PyTorch for PS S5E5; the skip-connection
+MLP design was ported as the backbone for the ResMLP neural network experiments.
+<em>Adapted in:</em> <code>nn2-1602.ipynb</code></p>
+<hr>
+<h3>mikhailnaumov</h3>
+<p><strong><a href="https://www.kaggle.com/code/mikhailnaumov/customer-churn-ensemble" target="_blank">https://www.kaggle.com/code/mikhailnaumov/customer-churn-ensemble</a></strong>
+Public ensemble notebook combining multiple churn model predictions for this competition;
+referenced for ensemble construction methodology.
+<em>Referenced in:</em> <code>ensemble-10.ipynb</code></p>
+<hr>
+<h3>nalgirayergn</h3>
+<p><strong><a href="https://www.kaggle.com/code/nalgirayergn/xgb-predict-customer-churn-cv-0-91819" target="_blank">https://www.kaggle.com/code/nalgirayergn/xgb-predict-customer-churn-cv-0-91819</a></strong>
+XGBoost model for customer churn achieving CV 0.91819; uses snap features (mapping
+synthetic floats to nearest original IBM values) and digit extraction as its core FE.
+<em>Adapted in:</em> <code>xgb10-3600.ipynb</code>, <code>xgb10-3601.ipynb</code></p>
+<hr>
+<h3>omidbaghchehsaraei</h3>
+<p><strong><a href="https://www.kaggle.com/code/omidbaghchehsaraei/tabtransformer-cv-0-35327-lb-0-36542" target="_blank">https://www.kaggle.com/code/omidbaghchehsaraei/tabtransformer-cv-0-35327-lb-0-36542</a></strong>
+TabTransformer baseline applying Transformer self-attention to categorical embeddings
+before an MLP head; adapted as the starting architecture for TabTransformer experiments.
+<em>Adapted in:</em> <code>nn2-1603.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/omidbaghchehsaraei/the-best-solo-model-so-far-realmlp-lb-0-95397" target="_blank">https://www.kaggle.com/code/omidbaghchehsaraei/the-best-solo-model-so-far-realmlp-lb-0-95397</a></strong>
+Best single-model RealMLP submission in the competition at the time of reference
+(LB 0.95397); used as a strong RealMLP baseline with grouped original-dataset stats as
+the key feature engineering innovation.
+<em>Adapted in:</em> <code>realmlp8-6300.ipynb</code></p>
+<hr>
+<h3>ozermehmet</h3>
+<p><strong><a href="https://www.kaggle.com/code/ozermehmet/original-data-fe-single-xgb-cv-0-919-lb-0-916" target="_blank">https://www.kaggle.com/code/ozermehmet/original-data-fe-single-xgb-cv-0-919-lb-0-916</a></strong>
+Single XGBoost model (CV 0.919, LB 0.916) that uses original IBM dataset features as
+engineered inputs — a precursor to the cKDTree nearest-neighbor lookup approach.
+<em>Adapted in:</em> <code>xgb-7900.ipynb</code></p>
+<hr>
+<h3>rawashishsin</h3>
+<p><strong><a href="https://www.kaggle.com/code/rawashishsin/s6e3-single-realmlp-lb-0-91633" target="_blank">https://www.kaggle.com/code/rawashishsin/s6e3-single-realmlp-lb-0-91633</a></strong>
+Single RealMLP entry for this competition (LB 0.91633); uses bigram/trigram target
+encoding alongside standard digit and snap features fed into <code>RealMLP_TD_Classifier</code>.
+<em>Adapted in:</em> <code>realmlp-10800.ipynb</code></p>
+<hr>
+<h3>siukeitin</h3>
+<p><strong><a href="https://www.kaggle.com/competitions/playground-series-s6e3/discussion/679983" target="_blank">https://www.kaggle.com/competitions/playground-series-s6e3/discussion/679983</a></strong>
+Competition discussion post sharing a YDF (Yggdrasil Decision Forests) solution using
+Google's decision forest library; the ultra-shallow <code>max_depth=2</code> configuration produces
+highly regularized, smooth predictions valuable for ensemble diversity.
+<em>Adapted in:</em> <code>ydf-3000.ipynb</code></p>
+<hr>
+<h3>tsunamazda</h3>
+<p><strong><a href="https://www.kaggle.com/code/tsunamazda/predict-customer-churn-single-lightgbm" target="_blank">https://www.kaggle.com/code/tsunamazda/predict-customer-churn-single-lightgbm</a></strong>
+Single LightGBM model specifically targeting this churn competition; served as a clean,
+minimal LightGBM baseline before more complex feature engineering was layered on.
+<em>Adapted in:</em> <code>lgbm-5-3700.ipynb</code></p>
+<hr>
+<h3>yekenot</h3>
+<p><strong><a href="https://www.kaggle.com/code/yekenot/ps-s5-e11-fttransformer-pytorch-frame" target="_blank">https://www.kaggle.com/code/yekenot/ps-s5-e11-fttransformer-pytorch-frame</a></strong>
+FT-Transformer implemented via the <code>torch_frame</code> (PyTorch Frame) library for PS S5E11;
+tokenizes each feature into a fixed-dimension embedding and applies Transformer
+self-attention across the feature sequence before a classification head.
+<em>Adapted in:</em> <code>fft-4300.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/yekenot/ps-s5-e5-liquid-nn-pytorch" target="_blank">https://www.kaggle.com/code/yekenot/ps-s5-e5-liquid-nn-pytorch</a></strong>
+Liquid Neural Network implemented from scratch in PyTorch for PS S5E5; each neuron has a
+learnable time-constant <code>τ</code> giving ODE-like continuous-time dynamics applied to tabular
+inputs, inspired by the C. elegans connectome.
+<em>Adapted in:</em> <code>lnn-4400.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/yekenot/ps-s6-e3-realmlp-pytabkit" target="_blank">https://www.kaggle.com/code/yekenot/ps-s6-e3-realmlp-pytabkit</a></strong>
+RealMLP via <code>pytabkit</code> specifically targeting this S6E3 competition; uses piecewise-linear
+numeric embeddings, SiLU activations, and an internal 8-member ensemble.
+<em>Adapted in:</em> <code>cat-9300.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/yekenot/ps-s6-e3-trompt-pytorch-frame" target="_blank">https://www.kaggle.com/code/yekenot/ps-s6-e3-trompt-pytorch-frame</a></strong>
+Trompt (Tabular Prompt model) via <code>torch_frame</code> for S6E3; maintains parallel prompt
+vectors through multiple processing layers with layer-wise supervised loss at each stage.
+<em>Adapted in:</em> <code>tromp-4200.ipynb</code></p>
+<h3>yunsuxiaozi</h3>
+<p><strong><a href="https://www.kaggle.com/competitions/playground-series-s6e3/discussion/681229" target="_blank">https://www.kaggle.com/competitions/playground-series-s6e3/discussion/681229</a></strong>
+Competition discussion post on TabICL — a Transformer foundation model pre-trained on
+thousands of tabular datasets that performs in-context learning at inference time with
+zero fine-tuning on the target dataset.
+<em>Adapted in:</em> <code>tab-9500.ipynb</code></p>
+<p><strong><a href="https://www.kaggle.com/code/yunsuxiaozi/realmlp-from-scratchcv-0-91908/" target="_blank">https://www.kaggle.com/code/yunsuxiaozi/realmlp-from-scratchcv-0-91908/</a></strong> RealMLP written from scratch specifically targeting this S6E3 competition; uses RobustScaleSmoothClipTransform, CategoricalFeatureLayer, ScalingLayer, NTPLinear, PBLDEmbedding.</p>
+<hr>
+<h2>Summary of References by Model Type</h2>
+<table>
+<thead>
+<tr>
+<th>Model Type</th>
+<th>References</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>XGBoost</td>
+<td>azzamradman, badalkrsharma (×2), blamerx (×2), cdeotte, lightningv08, mahoganybuttstrings (×2), nalgirayergn, ozermehmet</td>
+</tr>
+<tr>
+<td>LightGBM</td>
+<td>angelosmar1, badalkrsharma, furqonaryadana, greysky, masayakawamata, tsunamazda</td>
+</tr>
+<tr>
+<td>CatBoost</td>
+<td>blamerx</td>
+</tr>
+<tr>
+<td>RealMLP</td>
+<td>include4eto, mahoganybuttstrings (×3), omidbaghchehsaraei, rawashishsin, yekenot, yunsuxiaozi</td>
+</tr>
+<tr>
+<td>TabM</td>
+<td>blamerx, include4eto, mahoganybuttstrings</td>
+</tr>
+<tr>
+<td>TabTransformer</td>
+<td>include4eto, omidbaghchehsaraei</td>
+</tr>
+<tr>
+<td>FT-Transformer</td>
+<td>yekenot</td>
+</tr>
+<tr>
+<td>Liquid NN</td>
+<td>yekenot</td>
+</tr>
+<tr>
+<td>Trompt</td>
+<td>yekenot</td>
+</tr>
+<tr>
+<td>TabICL</td>
+<td>yunsuxiaozi</td>
+</tr>
+<tr>
+<td>YDF</td>
+<td>siukeitin</td>
+</tr>
+<tr>
+<td>Bayesian Survival</td>
+<td>johnnyhyland</td>
+</tr>
+<tr>
+<td>Ridge + n-gram</td>
+<td>blamerx</td>
+</tr>
+<tr>
+<td>ResMLP</td>
+<td>masayakawamata</td>
+</tr>
+</tbody>
+</table>
+<h2>9. Solution Code</h2>
+<p>I published my final level 4 <code>Nvidia cuML Logistic Regression</code> model <a href="https://www.kaggle.com/code/cdeotte/1st-place-nvidia-cuml-logistic-regression" target="_blank">here</a> and 154 strong OOF and Test Preds in Kaggle Dataset <a href="https://www.kaggle.com/datasets/cdeotte/s6e3-oof-and-test-pred-v2" target="_blank">here</a>. The Logistic Regression model receives input from level 2 and level 3 models. In the list of input models, all models with suffix <code>"_stk"</code> are level 3 and the others are level 2.</p>
+<h2>10. LLM Workflow</h2>
+<p>I describe the LM workflow in NVIDIA developer blog <a href="https://developer.nvidia.com/blog/winning-a-kaggle-competition-with-generative-ai-assisted-coding/" target="_blank">here</a></p>
+<h2>Enjoy!</h2>

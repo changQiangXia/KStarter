@@ -1,0 +1,220 @@
+<p>First of all, thank you to the hosts for organizing this competition.
+(I also thank my faithful partner Claude Code Agent :D)</p>
+<p>My public LB rank kept stagnating, which made the final stretch a really tough fight. I wanted as many people as possible to know about this solution, so I was determined to finish near the top. I kept training models until 3 hours before the deadline, and I'm happy that it resulted in 2nd place on the private LB.</p>
+<h2>TL;DR</h2>
+<p>I trained an anchor-grid CNN that predicts conditional move distributions P(dTVT|TVT) on physically consistent synthetic data, decoded the expected path exactly with dynamic programming, and selected models with validation designed to be robust to a handful of dominant wells.</p>
+<h2>Key insight from the data</h2>
+<p>The formation surfaces interpreted by experts (the <code>ANCC</code>, <code>BUDA</code>, etc. columns in the train data) have a characteristic "sequence of straight lines" shape. Writing z_layer for the depth of the formation surface (so that its increment dz_layer is the formation-slope component), the identity</p>
+<pre><code>dTVT = dz_layer − dz    (1)
+</code></pre>
+<p>holds (it follows directly if you define z_layer := TVT + z − b_well; z is the measured TVD of the trajectory and is known for every row even at test time). Looking at real samples, dz_layer/dMD is staircase-shaped: constant over most intervals, with occasional steps. Since the identity fixes the coefficient at −1, <strong>wherever there is no step, the shape of dTVT matches −dz exactly</strong> (this is why the two curves run parallel in the figure below; steps appear in only about 10% of the columns).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2F9954341cc673109084b67a9c7a4ba6ca%2Fdzlayer_vs_dtvt.png?generation=1786050913300512&amp;alt=media" alt=""></p>
+<p>→ By feeding dz/dMD (dip z) as an input feature, the model's job shrinks to "estimating the smooth structural slope dz_layer", strongly steering it toward formation surfaces that experts would plausibly draw.</p>
+<h2>Synthetic data</h2>
+<p>My synthetic data generation rests on the following <strong>generative assumption</strong> (a layer-cake idealization: rocks at the same stratigraphic depth share the same properties):</p>
+<pre><code>GR_obs = f(TVT) + r(TVT)    (2)
+</code></pre>
+<ul>
+<li>f: the TVT–GR profile of the typewell</li>
+<li>r: residual noise</li>
+</ul>
+<p>Since (2) is a function of TVT, it has a remarkable property: <strong>given any TVT trajectory, you can generate an unlimited amount of data consistent with this assumption</strong>. Where the assumption breaks (GR deviating per well even at the same TVT), I measured the deviation from real data and carried it into the synthesis through the residual r, as described below.</p>
+<h3>Data synthesis pipeline</h3>
+<p><strong>The vertical material (the typewell's level→GR profile) and the horizontal material (the TVT trajectory along MD) are sampled from independent pools</strong>, and composed by reading out f(TVT) to form a pseudo (MD, TVT, GR) sample:</p>
+<ol>
+<li>Sample one master from the master pool (54 systems)</li>
+<li>Crop a window = the typewell profile f</li>
+<li>Sample a TVT trajectory shape from the real-well pool (horizontal pool) and place it at a depth inside the level band</li>
+<li>Read out the GR along the trajectory: f(TVT(MD)) (noise-free)</li>
+<li>Add a residual r sampled from the residual bank (773 real wells) = the simulated (noisy) GR_obs</li>
+</ol>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2Fd2976eee71822612c1ec1a97ec755041%2Fsynth_pipeline.png?generation=1786050939700485&amp;alt=media" alt=""></p>
+<p>The next three subsections detail these stages in pipeline order.</p>
+<h3>Synthesizing typewell GR (steps 1–2)</h3>
+<p>As pointed out in a discussion comment [3], the train typewells can be consolidated into a small number of master well series. My own verification consolidated them into <strong>54 systems</strong>, confirming that every typewell in a system is fully contained in a single master TVT–GR series. Cropping arbitrary windows from these master series generates a typewell profile f for any level range.</p>
+<h3>Generating TVT trajectories (step 3)</h3>
+<p>Feeding curves that could never appear in train makes the model learn spurious features, so instead of free-form curves, trajectories are generated <strong>in two steps from real train trajectories</strong>.</p>
+<p><strong>(a) Shape</strong>: deform the shape of real trajectories with vertical shifts and mixup of two trajectories:</p>
+<pre><code>TVT_mix = λ·TVT1 + (1−λ)·TVT2    (3)
+</code></pre>
+<p><strong>(b) Placement into a system (re-skinning)</strong>: assign the shape to a typewell system and decide the depth to place it at. The quantile the trajectory occupied within the drilling band of its source system (the distribution of levels where wells of that system are actually drilled) is mapped to the same quantile of the target system's drilling band. The shape is preserved, the depth becomes realistic for the target system, and the GR is re-generated from the target system's master series (= a new "skin").</p>
+<blockquote>
+  <p>Note (consistency of z): while transforming trajectories, <strong>z_layer — not z — is kept as the internal representation</strong>, and z is derived at the very end as z = z_layer − TVT. This keeps identity (1) consistent by construction, no matter what transform is applied.</p>
+</blockquote>
+<h3>Adding residuals (step 5)</h3>
+<p>Examining the residual r = GR_obs − f(TVT) of real wells, it decomposes into <strong>a smooth well-specific mean profile that emerges when you aggregate over TVT</strong>, plus a remainder:</p>
+<pre><code>r(TVT) = δ_w(TVT) + ε    (4)
+</code></pre>
+<ul>
+<li>δ_w: the systematic component — the well-specific signature of "how much this well's GR deviates from the typewell at each depth" (the mean of r aggregated over TVT)</li>
+<li>ε: the remaining non-systematic noise; not white, it carries autocorrelation</li>
+</ul>
+<p>For each synthetic well, noise was injected in one of two ways:</p>
+<ul>
+<li><strong>Pasting real residuals</strong>: paste a real well's residual sequence r as-is (this carries over both δ_w and ε with all their real-data properties)</li>
+<li><strong>Synthesis</strong>: draw δ_w as a smooth random function of TVT, and mimic ε with an AR noise model fitted to real data</li>
+</ul>
+<p>This produced synthetic data that carries realistic "well-specific GR profile quirks".</p>
+<h3>Augmentation</h3>
+<p>Augmentations were applied to both real and synthetic wells at training time. The main ones:</p>
+<ul>
+<li><strong>Geometric</strong>: MD flip, level flip (with label sign flip), random crop along MD, level shifts (±32 ft)</li>
+<li><strong>Structural</strong>: flips and scaling in z_layer space (stretching the structural slope). Consistency with identity (1) is preserved by the z_layer internal representation</li>
+<li><strong>Length normalization and stitching</strong>: short wells are extended to a target length by copy&amp;paste of themselves or fragments of other wells, with seams smoothly joined by short splines (100 ft). I also used a copy aug that redundantly extends a segment inside the eval zone to X + reverse(X) + X (figure below; values stay continuous at the seams, only the gradient flips)</li>
+<li><strong>Observation quality</strong>: specaug that masks spans of GR (up to 21 columns) in exactly the same format as real missing data</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2Fcf3bdc991fba11299a594c4ede7e343b%2Fcopy_aug.png?generation=1786050959724281&amp;alt=media" alt=""></p>
+<h2>Modeling</h2>
+<p>I started from the CNN that <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> shared in the discussion [1] (unfortunately, the paper's authors had not released a detailed implementation of the model [2]).</p>
+<p>GR matching in this task is fundamentally ambiguous. The typewell GR profile contains repeating, similar-looking stripes, so locally, <strong>multiple level hypotheses — assumptions that "the well is at this depth right now" — match the GR equally well</strong>. In other words, the posterior is multimodal, and there are multiple plausible trajectory candidates (multi-path). I confirmed this in early experiments: a model that regresses a single teacher path indeed collapses onto the average of these modes — a path that corresponds to none of the hypotheses — and is therefore mismatched with the task.</p>
+<p>My reading of [2] is that its essence is to model multi-path as a conditional probability model P(dTVT|TVT): holding, <strong>for every level hypothesis simultaneously</strong>, the distribution of "if the well is at depth TVT now, how much does it move up or down over the next interval". So I designed a probability model that expresses this explicitly.</p>
+<h3>Input features</h3>
+<p>The input is a (9, 512, 336) image tensor: vertical = typewell level (0.5 ft/bin, ±128 ft), horizontal = MD (32 ft/column; the first 16 columns are the known pre-PS interval).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2Ffd78c50981dda180af27f1cb72c1346b%2Finput_channels.png?generation=1786050989706945&amp;alt=media" alt=""></p>
+<p>The 9 channels (x6–x8 were added late in the competition):</p>
+<table>
+<thead>
+<tr>
+<th>ch</th>
+<th>content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x0</td>
+<td>GR mismatch (typewell): for each (level, MD), the discrepancy between the lateral GR and the typewell GR assuming the well is at that level</td>
+</tr>
+<tr>
+<td>x1</td>
+<td>lateral GR (broadcast over level)</td>
+</tr>
+<tr>
+<td>x2</td>
+<td>GR validity (broadcast)</td>
+</tr>
+<tr>
+<td>x3</td>
+<td>typewell coverage (broadcast over MD)</td>
+</tr>
+<tr>
+<td>x4</td>
+<td>Gaussian ridge of known TVT (TVT_input prior; the known pre-PS interval is drawn into the first 16 columns)</td>
+</tr>
+<tr>
+<td>x5</td>
+<td>known-column flag</td>
+</tr>
+<tr>
+<td>x6</td>
+<td>GR mismatch (pre-PS): a matching image against a level→GR reference built from the same well's pre-PS interval (inspired by the host's tip [6])</td>
+</tr>
+<tr>
+<td>x7</td>
+<td>coverage mask for x6 (paired with x6)</td>
+</tr>
+<tr>
+<td>x8</td>
+<td>dip z: per-column slope of the trajectory z (known at test time)</td>
+</tr>
+</tbody>
+</table>
+<h3>AnchorCNN</h3>
+<p>The basic design philosophy takes inspiration from the anchor-based / anchor-free family of object detectors (YOLO [4], CenterNet [5], etc.). CNNs are good at encoding local features, and the move direction dTVT at a specific coordinate (MD, TVT) is easy to predict from local features. So I mapped the <strong>conditioning part — "at coordinate (MD, TVT)" — onto CNN anchors</strong>. Here an <strong>anchor</strong> means the embedding vector at coordinate (i, j) of the CNN feature map. Coordinate (i, j) corresponds to a level hypothesis (being at level i in MD column j), and from each anchor the model reads out a move distribution conditioned on that position.</p>
+<p>Concretely, the outputs of every efficientnet-b0 stage are fused by an FPN-style decoder (each stage projected to a common width by 1×1 conv, interpolated to a single resolution, and summed), then mapped onto a <strong>(B, 21, 128, 336) state grid</strong> (vertical = level at 2 ft/bin, horizontal = 32 ft/column). From the anchor at each grid point, the model predicts the discrete move distribution P(dTVT | anchor). The move vocabulary — the values dTVT can take — has 21 classes: {0, ±2, ±4, …, ±20} ft/column (i.e. {−10, …, +10} bins of 2 ft).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2F197506000b320097cfcff6a0e7af3191%2Farchitecture.png?generation=1786051005368898&amp;alt=media" alt=""></p>
+<h3>Training</h3>
+<p>Supervision is teacher-forced along the ground-truth path: at each column, the anchor lying on the ground-truth level receives a cross-entropy loss against the quantized ground-truth move (plus an auxiliary intra-bin position loss). Each epoch mixes the real training wells (~620 per fold) with 2,048 synthetic wells generated on the fly. Models were trained for 120 epochs with a constant learning rate of 1e-3 after warmup (WSD schedule with no decay) and an EMA of the weights. The full 5 folds × 3 seeds took about 10 hours on a single GPU.</p>
+<h3>Path generation</h3>
+<p>Starting from the PS point, there are two ways to generate paths from the probability field on the state grid:</p>
+<ol>
+<li><strong>Rollout</strong>: sample stochastically from P(dTVT | anchor) to generate a bundle of random paths</li>
+<li><strong>Path expectation (DP)</strong>: marginalize the state grid with dynamic programming to compute the expectation of the path distribution exactly. Starting from a point mass at the PS level, the marginal p_k over levels is propagated column by column, and the prediction is its per-column mean:</li>
+</ol>
+<pre><code>p_{k+1}(s) = Σ_{s'} p_k(s') · P(dTVT = s − s' | anchor(s', k))    (5)
+TVT_hat(k) = Σ_s p_k(s) · TVT(s)                                  (6)
+</code></pre>
+<p>No sampling is involved — (5)–(6) are computed exactly.</p>
+<p>Initially I planned to generate N=1024 rollout paths and filter them with a reranker, but that turned out not to work, so the submissions use the "average path" computed by DP. For what it's worth, Viterbi (maximum-likelihood path) and other mode-tracking decoders were consistently worse than the expectation.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2Fb74d9e0d76ed60ecd6b4ed21b808ddb7%2Fflowmap.png?generation=1786051021226125&amp;alt=media" alt=""></p>
+<h3>Ensembling and TTA</h3>
+<p>The final submission averages: 5 folds × 3 seeds = 15 checkpoints of DP paths × MD-phase TTA (8 views) × 2 grid resolutions (32 ft/column and 16 ft/column). The whole ensemble scores the 200 hidden test wells in about 40 minutes on the Kaggle T4.</p>
+<p><strong>MD-phase TTA</strong>: the MD resolution of the CNN input is 32 ft (one column), so a phase ambiguity below 32 ft — where exactly the columns are cut — remains. Relative to the GR correlation length (~18 ft), the per-column box averaging is coarse, and the input values themselves change depending on where you cut the columns (aliasing). To compensate, I ran inference at 8 sub-resolution phases, shifting the column-grid origin by {0, 8, 16, 24, 32, 40, 48, 56} ft, and averaged the predictions.</p>
+<h2>Robust validation and model selection</h2>
+<p>The competition metric, pooled RMSE, is proportional to the sum of squared errors, so it is easily dominated by "catastrophic wells". The metric moves far more when you fix a few badly failing wells than when you further improve wells that are already doing fine.</p>
+<p>The question is whether an improvement on a few wells is systematic or just luck. For example, if the direction of improvement across the 5 dominant wells is random, it should be considered chance, not a real improvement.</p>
+<p>At the same time, the data is small: 773 train wells, and only 148 wells in the private test. This makes statistically careful model selection essential.</p>
+<h3>Robust acceptance test (leave-largest-contribution-out)</h3>
+<p>When comparing two models base and treat, compute the per-well difference of squared-error sums (SSE)</p>
+<pre><code>g_w = SSE_treat(w) − SSE_base(w)
+</code></pre>
+<p>and remove wells in descending order of |g_w| (i.e. the wells contributing most to the difference). Define k* as the number of removals at which the improvement first disappears. Unless k* was large enough — i.e. unless the improvement did not hinge on the luck of a few wells — I rejected the candidate.</p>
+<p>The figure below shows a real example (removal curves of two candidates against the baseline). The <strong>orange curve</strong> appears to improve OOF by −0.28 at k = 0, but removing just 8 of 773 wells almost erases the gain — the improvement hinged on the luck of a few wells, so this candidate was rejected. The <strong>blue curve</strong> decays gently and its gain survives even after removing 52 wells (the size of the public LB), so this candidate was adopted.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4910466%2Fb3228ae6180b0ee1a7b1588b66938947%2Flco_trim.png?generation=1786051036867465&amp;alt=media" alt=""></p>
+<h2>Results</h2>
+<table>
+<thead>
+<tr>
+<th>sub</th>
+<th>configuration</th>
+<th>OOF pooled</th>
+<th>public</th>
+<th>private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>068</td>
+<td>AnchorCNN (32 ft/col grid) × 15 ckpt</td>
+<td>5.624</td>
+<td><strong>5.780</strong></td>
+<td>6.126</td>
+</tr>
+<tr>
+<td>071</td>
+<td>068 + MD-phase TTA8</td>
+<td>5.417</td>
+<td>5.820</td>
+<td>6.078</td>
+</tr>
+<tr>
+<td>075</td>
+<td>16 ft/col grid × TTA8 alone (diagnostic)</td>
+<td>5.348</td>
+<td>5.970</td>
+<td>5.882</td>
+</tr>
+<tr>
+<td><strong>076 (final, selected)</strong></td>
+<td>dz_layer-head models × TTA8 + 16 ft/col × TTA8</td>
+<td><strong>5.140</strong></td>
+<td>6.146</td>
+<td><strong>5.802</strong></td>
+</tr>
+<tr>
+<td>077 (final, hedge)</td>
+<td>068-family × TTA8 + 16 ft/col × TTA8</td>
+<td>5.242</td>
+<td>5.910</td>
+<td>5.905</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Final standing: <strong>2nd place (private 5.802, sub076)</strong></li>
+</ul>
+<p><a href="https://www.kaggle.com/code/tatamikenn/rogii-2nd-place-inference?scriptVersionId=340907651" target="_blank">Inference Code</a></p>
+<h2>What didn't work</h2>
+<p>I'll list only the rejections that became design forks.</p>
+<p><strong>Selecting from a path bundle (reranker, reinforcement learning)</strong>: generating a rollout bundle (N=1024) does put very good paths inside the bundle — an oracle that picks the best path in hindsight beats the deployed score by several ft. Trying to capture that gap, I built a reranker (a model that picks good paths from the bundle) and tried reinforcement learning (GRPO), but both selectors overfit the evaluation data easily and never consistently beat the DP expectation. In the end I abandoned the "select from a bundle" design and committed to DP marginalization (expectation decoding).</p>
+<p><strong>Explicit formation modeling</strong>: modeling the formation surfaces themselves from neighboring wells captures the coarse topography of the field, but could not fix the catastrophically bad wells. My guess is that the teacher labels (expert interpretations) do not reference the formations directly — they are relative judgments based on GR matching. This result settled the design: no explicit formation model; commit entirely to the probability field over GR matching.</p>
+<h2>Final thoughts</h2>
+<p>What this model imitates is the interpretation work of geosteering experts — and the ambiguity in that work is intrinsic to the task. Rather than forcing the ambiguity to resolve prematurely, this approach keeps it alive as a probability distribution over the candidate moves (P(dTVT|TVT)). I believe this is its most practically valuable property: where the GR matching is ambiguous, the model can present alternative path hypotheses and flag low-confidence intervals for human review. And if independent external data (e.g., offset wells or seismic) becomes available, it can be used to reweigh the hypotheses and narrow down which of the ambiguous paths is the most plausible.</p>
+<h2>References</h2>
+<ul>
+<li>[1] discussion: <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/699853" target="_blank">https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/699853</a></li>
+<li>[2] Sergey Alyaev et al., "Direct Multi-Modal Inversion of Geophysical Logs Using Deep Learning" — <a href="https://arxiv.org/pdf/2201.01871" target="_blank">https://arxiv.org/pdf/2201.01871</a> (poster: <a href="https://nfes.org/assets/workshop2022/ambrus_sequential_multi_mode_inversion_poster.pdf" target="_blank">https://nfes.org/assets/workshop2022/ambrus_sequential_multi_mode_inversion_poster.pdf</a>)</li>
+<li>[3] Comment by <a href="https://www.kaggle.com/pcjimmmy" target="_blank">@pcjimmmy</a> (pointing out that typewells can be consolidated into master series): <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/705210#3468651" target="_blank">https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/705210#3468651</a></li>
+<li>[4] Joseph Redmon et al., "You Only Look Once: Unified, Real-Time Object Detection" — <a href="https://arxiv.org/abs/1506.02640" target="_blank">https://arxiv.org/abs/1506.02640</a></li>
+<li>[5] Xingyi Zhou et al., "Objects as Points" (CenterNet) — <a href="https://arxiv.org/abs/1904.07850" target="_blank">https://arxiv.org/abs/1904.07850</a></li>
+<li>[6] Comment by the host <a href="https://www.kaggle.com/igorakuvaev" target="_blank">@igorakuvaev</a> (pointing out that the lateral GR before the Prediction Start point has better resolution than the typewell GR, so it is better to use it for GR correlation): <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/698825#3456361" target="_blank">https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/discussion/698825#3456361</a></li>
+</ul>

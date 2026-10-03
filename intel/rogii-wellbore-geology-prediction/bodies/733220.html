@@ -1,0 +1,235 @@
+<p>Thanks to Kaggle and the competition hosts for organizing such an interesting competition. I was very lucky to survive the leaderboard shake-up and win my first 1st place gold medal.</p>
+<p>I'd also like to thank everyone who shared ideas publicly, especially <a href="https://www.kaggle.com/tuckerarrants" target="_blank">@tuckerarrants</a> , who motivated me to explore neural networks early in the competition, and whoever originally shared the particle filter baseline (unfortunately I couldn't trace the original author).</p>
+<p>Most of the code was written with Codex using GPT-5.5/5.6. The repository contains many implementation details, so this write-up only covers the ideas that I believe contributed most of the performance gains. For the full implementation, I recommend giving the code to an AI coding agent and asking it to explain the details. The repository also contains many inactive experimental features, which can safely be ignored.</p>
+<hr>
+<h1>Task Formulation and Loss</h1>
+<p>I formulate the problem as a <strong>2D alignment task</strong> and use <strong>cross-entropy loss</strong> as the main objective.</p>
+<p>The alignment grid is:</p>
+<ul>
+<li><strong>Horizontal well:</strong> 345 positions (downsampled by 32), consisting of 1,024 visible plus 10,000 target region.</li>
+<li><strong>Typewell:</strong> 400 positions covering ±100 ft around the last visible TVT with 0.5-ft resolution.</li>
+</ul>
+<p>Throughout this write-up, all TVT values are <strong>relative to the last visible TVT</strong>, which serves as the anchor.</p>
+<p>The training target is an exponentially smoothed probability distribution centered around the ground-truth alignment and normalized along the typewell dimension.</p>
+<p>Additional losses:</p>
+<ul>
+<li><strong>Huber loss</strong> on the expected TVT path, computed from the predicted probability map and grid TVT values.</li>
+<li><strong>GR penalty loss:</strong> <code>mean(probability × grid_GR_gap)</code>, which provides a small additional improvement.</li>
+</ul>
+<hr>
+<h1>Model</h1>
+<p>I use a standard <strong>2D U-Net</strong> with a ConvNeXt backbone:</p>
+<ul>
+<li><code>timm/convnext_small.in12k_ft_in1k_384</code></li>
+<li>Standard residual blocks in the decoder.</li>
+</ul>
+<p>Replacing <strong>LayerNorm</strong> in ConvNeXt with <strong>BatchNorm</strong> consistently works better, although BF16 training is required to avoid NaN losses.</p>
+<p>For downsampling and upsampling, simple <strong>average pooling + interpolation</strong> performs better than learnable alternatives.</p>
+<hr>
+<h1>Features</h1>
+<h2>Typewell</h2>
+<ul>
+<li>GR</li>
+<li>GR is NaN</li>
+<li>TVT</li>
+</ul>
+<p>Typewell GR is calibrated using the visible region by aggregating <code>(TVT, GR)</code> into TVT bins, interpolating back to the typewell axis, and blending with the original GR values.</p>
+<h2>Horizontal well</h2>
+<p>For each downsampled bin:</p>
+<ul>
+<li>GR mean</li>
+<li>GR nan rate</li>
+<li>GR standard deviation</li>
+<li>GR slope</li>
+<li>Last − first GR</li>
+<li>Quadratic fitting coefficients</li>
+<li>Quadratic fitting residual RMSE</li>
+<li>Visible-region TVT mean</li>
+</ul>
+<h2>Typewell × Horizontal interactions</h2>
+<ul>
+<li><code>|typewell_GR - horizontal_GR|</code></li>
+<li><code>|typewell_TVT - visible_TVT|</code></li>
+</ul>
+<h2>Coordinate based</h2>
+<ul>
+<li><code>z_diff</code></li>
+</ul>
+<h2>Particle-filter features</h2>
+<ul>
+<li>2D particle probability heatmap</li>
+<li><code>|typewell_TVT - PF_TVT|</code></li>
+</ul>
+<h2>XY-neighbor features</h2>
+<ul>
+<li>Predicted TVT difference</li>
+<li>Predicted TVT</li>
+<li><code>|typewell_TVT - predicted_TVT|</code></li>
+</ul>
+<p>When particle-filter channels are present (which already contain accumulated TVT information), using accumulated TVT performs better than using only TVT differences.</p>
+<hr>
+<h1>Particle Filter</h1>
+<p>This component was largely developed with the help of AI coding agents since I was not very familiar with particle filters. The standalone local CV is approximately <strong>7.4 RMSE</strong>.</p>
+<p>Compared with the public baseline, I believe the major improvements come from:</p>
+<ul>
+<li>Allowing low-probability large jumps</li>
+<li>Calibrated typewell GR</li>
+<li>FFBSi smoothing</li>
+<li>Blending diverse cfg profiles</li>
+<li>Updating particles in bins (64 samples) instead of raw resolution</li>
+</ul>
+<p>There are also many smaller implementation details that can be found in the released code.</p>
+<hr>
+<h1>XY Neighbor Information</h1>
+<p>Assume the local geological surface satisfies</p>
+<blockquote>
+  <p><strong>S = TVT + Z + C</strong></p>
+</blockquote>
+<p>and S is locally linear, then</p>
+<blockquote>
+  <p><strong>ΔTVT = aΔX + bΔY − ΔZ</strong></p>
+</blockquote>
+<p>where <code>(a, b)</code> are estimated by weighted least squares using (x,y) neighbors.</p>
+<p>The implementation includes anisotropic distance, singular-case handling, regularization, and several other engineering details. However, these contribute only marginal improvements over the simple formulation above, so I won't discuss them further.</p>
+<p>The standalone local CV is approximately <strong>11.4 RMSE</strong>.</p>
+<p>Adding XY-neighbor information consistently <strong>improved local CV</strong> but <strong>hurt the public leaderboard</strong>, so I performed several analyses.</p>
+<ol>
+<li>XY-neighbor prediction alone scores <strong>12.9 LB</strong> which lies in high prob region for 50 wells sample.</li>
+<li>I replaced XY based predictions with GR + <code>z_diff</code> predictions whenever neighborhood statistics exceeded the 95th percentile of the training distribution.</li>
+</ol>
+<p>The neighborhood statistics include:</p>
+<ul>
+<li>Mean neighbor distance</li>
+<li>10th percentile neighbor distance</li>
+<li>Prefix/visible neighbor weight ratio</li>
+<li>Distance(query, neighbor center) / average distance(neighbor, neighbor center)</li>
+<li>Average abs cosine corr((x_diff,y_diff),(x_nbr_diff,y_nbr_diff))</li>
+</ul>
+<p>None of these statistics explained the leaderboard degradation, and I believe they sufficiently describe neighborhood quality.</p>
+<p>Therefore, I attribute the discrepancy to inconsistent labels and chose to trust the local CV, which consistently improves by about <strong>0.3 RMSE</strong>.</p>
+<p>These same neighborhood quality statistics are also used later in the ensemble.</p>
+<hr>
+<h1>Data Augmentation</h1>
+<p>The two most important augmentations are <strong>Z-shift</strong> and <strong>GR transform</strong>.</p>
+<h3>Z-shift</h3>
+<p>Randomly sample a TVT path while keeping <strong>TVT + Z</strong> unchanged.</p>
+<p>The sampled path is generated using block bootstrap on real TVT differences.</p>
+<p>GR is regenerated by matching the typewell using:</p>
+<ul>
+<li>TVT + TVT noise</li>
+</ul>
+<p>where the TVT noise consists of smoothed white noise.</p>
+<p>Rare fault jumps are also simulated, introducing offsets in <strong>TVT + Z</strong>.</p>
+<h3>GR transform</h3>
+<p>Apply</p>
+<blockquote>
+  <p><code>GR' = a × GR + b</code></p>
+</blockquote>
+<p>to the typewell GR, forcing the model to rely more on shape than absolute values.</p>
+<h3>Other augmentations</h3>
+<ul>
+<li>Reverse path (reverse traversal while keeping part of the beginning visible)</li>
+<li>MD stretching</li>
+<li>2D channel masking</li>
+<li>GR noise shift (shift residual <code>(GR - matched_typewell_GR)</code> within each well)</li>
+<li>Tail cropping</li>
+<li>Sequential masking along the typewell axis</li>
+<li>Typewell GR jitter (consistent transformation of GR channels)</li>
+<li>PF rotate/shift (corrupt PF channels to reduce shortcut learning)</li>
+</ul>
+<hr>
+<h1>Ensemble</h1>
+<p>For wells without reliable XY-neighbor information (approximately <strong>10%</strong>), I use models without XY-neighbor channels and include the <code>z_diff</code> channel instead.</p>
+<p>Below, "default" refers to models using GR, TVT, and <code>z_diff</code> channels without particle-filter or XY-neighbor features. Models also differ slightly in augmentation and training configurations. (for version difference details see version_comparsion.md in project_files section)</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Features</th>
+<th>Weight (general / no XY)</th>
+<th>CV (3 seeds × 5 folds avg)</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Weighted ensemble</strong></td>
+<td>—</td>
+<td>—</td>
+<td><strong>4.627</strong></td>
+<td><strong>5.980</strong></td>
+<td><strong>5.639</strong></td>
+</tr>
+<tr>
+<td>0719_V1</td>
+<td>Default</td>
+<td>0.07 / 0.40</td>
+<td>5.09</td>
+<td>5.648</td>
+<td>6.130</td>
+</tr>
+<tr>
+<td>0729_V3</td>
+<td>+ Particle filter</td>
+<td>0.00 / 0.20</td>
+<td>5.53</td>
+<td>6.202</td>
+<td>6.768</td>
+</tr>
+<tr>
+<td>0801_V1</td>
+<td>Default</td>
+<td>0.07 / 0.40</td>
+<td>5.16</td>
+<td>5.723</td>
+<td>5.884</td>
+</tr>
+<tr>
+<td>0724_V1</td>
+<td>+ XY-neighbor channels</td>
+<td>0.28 / 0.00</td>
+<td>4.86</td>
+<td>6.095</td>
+<td>5.831</td>
+</tr>
+<tr>
+<td>0801_V2</td>
+<td>+ XY-neighbor channels</td>
+<td>0.28 / 0.00</td>
+<td>4.80</td>
+<td>6.166</td>
+<td>5.937</td>
+</tr>
+<tr>
+<td>0803_V2</td>
+<td>+ XY-neighbor channels + Particle-filter channels</td>
+<td>0.28 / 0.00</td>
+<td>5.00</td>
+<td>6.185</td>
+<td>5.778</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1>What didn't work</h1>
+<ol>
+<li><p><strong>Transformer-based backbones</strong> </p>
+<p>In my experiments, CNN-based backbones consistently performed better, and only ConvNeXt contributed to the final solution.</p></li>
+<li><p><strong>Pretraining on simulation data first</strong></p>
+<p>Training with simulated/augmented data and real data jointly worked better for me than a two-stage approach that first trains on simulation data.</p></li>
+<li><p><strong>Using PF features in the final single model</strong></p>
+<p>Initially, PF features provided a significant improvement, reducing CV RMSE from 7.7 to 6.7. However, after adding more augmentations and switching to stronger pretrained backbones, PF features no longer improved my best single model and I kept them in my final ensemble for diversity.
+Considering that my PF-only approach achieved around 7.4 RMSE in CV, a stronger PF-based method may still provide additional gains.</p></li>
+<li><p><strong>Fancy loss weighting strategies</strong></p>
+<p>I experimented with various loss weighting schemes, but none of them provided consistent improvements.</p></li>
+<li><p><strong>Removing visually bad-labeled wells</strong></p>
+<p>Removing wells with visually poor labels did not result in stable gains.</p></li>
+<li><p><strong>Scaling up to larger models or higher resolution</strong></p>
+<p>Further increasing model size or input resolution did not improve performance in my experiments.</p></li>
+</ol>
+<hr>
+<h1>Code</h1>
+<p>The inference notebook is available here:</p>
+<p><a href="https://www.kaggle.com/code/w5833946/submit-reproduce" target="_blank">https://www.kaggle.com/code/w5833946/submit-reproduce</a></p>
+<p>for reproduce training check: <a href="https://github.com/IAmAValidUsername/kaggle_ROGII_1st_place_solution_Ruby" target="_blank">https://github.com/IAmAValidUsername/kaggle_ROGII_1st_place_solution_Ruby</a></p>

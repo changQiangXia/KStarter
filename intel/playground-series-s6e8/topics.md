@@ -1,0 +1,65 @@
+# playground-series-s6e8 讨论区（按票数排序，共 63 条）
+
+- [1st Place - Distributed Intelligence - NVIDIA Inference Hub](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738592) — 127 票 / 78 评论 / 2026-08-31 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738856) — 47 票 / 13 评论 / 2026-09-02 **write-up?**
+- [Simple XGB and EDA Starter - CV 0.96](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736409) — 24 票 / 2 评论 / 2026-08-20 
+- [Generation model of the missing "original" dataset](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732428) — 21 票 / 0 评论 / 2026-08-02 
+- [Nomophobia: No Mobile Phone Phobia on Kaggle Playground : )](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/731755) — 18 票 / 4 评论 / 2026-08-01 
+- [Simple CAT and NN Starter - CV 0.96 and 0.94](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736585) — 18 票 / 2 评论 / 2026-08-21 
+- [As a Beginner, What's the First Thing You Check in a Tabular Competition?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733495) — 18 票 / 22 评论 / 2026-08-07 
+- [I didn’t overfit, the private LB just doesn’t appreciate my art](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738268) — 16 票 / 1 评论 / 2026-08-30 
+- [Public 18 Private 25 approach](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738603) — 15 票 / 2 评论 / 2026-09-01 
+- [Baseline Keras training, all categoricals](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732358) — 15 票 / 1 评论 / 2026-08-02 
+- [7th Place Solution — Way Too Many Models, One Simple Stack](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738650) — 14 票 / 0 评论 / 2026-09-01 **write-up?**
+- [🕵️‍♂️ S6E8: Where does the 0.97101 NN score really come from?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/735404) — 14 票 / 3 评论 / 2026-08-15 
+- [Contextualized Deep Univariate Spline Transformer](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/735421) — 12 票 / 7 评论 / 2026-08-15 
+- [14th Place - 278 Shared OOF Sets + 36 Own Models, All Judged on a Sealed Fold](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/739004) — 10 票 / 2 评论 / 2026-09-02 **write-up?**
+- [We survived without major casualties](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738593) — 10 票 / 3 评论 / 2026-09-01 
+- [Decoding the Synthetic Generator: 0.9689+ via Stringified Target Encoding and Rank Averaging](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734063) — 9 票 / 5 评论 / 2026-08-09 
+- [Original Dataset not available ](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/731719) — 8 票 / 10 评论 / 2026-08-01 
+- [Feature Engineering: What Works, What Fails, and the Math Behind It](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733541) — 8 票 / 4 评论 / 2026-08-07 
+- [LightGBM Gain Importance: What the Model Actually Cares About (and What it Ignores)](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732256) — 7 票 / 2 评论 / 2026-08-02 
+- [Residual Geometry Boosting](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736513) — 7 票 / 4 评论 / 2026-08-21 
+- [The generator turned a hard rule into a smooth field: a forensic look at the synthetic layer](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732434) — 5 票 / 3 评论 / 2026-08-03 
+- [XGBoost + Optuna on GPU | 0.96514 LB — sharing what worked](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732985) — 5 票 / 8 评论 / 2026-08-05 
+- [Handling Class Imbalance & Missing Values in This Dataset](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/731764) — 4 票 / 5 评论 / 2026-08-01 
+- [LB 27th/PB 153th Sol. | Why Low Screen Time Users are Labeled "Addicted"](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738695) — 4 票 / 0 评论 / 2026-09-01 
+- [Stuck at 0.96997 LB with pure LightGBM 🚀 — How to breach 0.9700?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737976) — 4 票 / 28 评论 / 2026-08-28 
+- [233rd Place Solution](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738691) — 4 票 / 0 评论 / 2026-09-01 **write-up?**
+- [Residual Geometry Spline Transformer](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737015) — 3 票 / 3 评论 / 2026-08-22 
+- [369th private / 351st public on my first ever competition, and the things that weren't obvious](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/740267) — 3 票 / 0 评论 / 2026-09-08 
+- [Example Submission and Expected outputs are different](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732503) — 3 票 / 5 评论 / 2026-08-03 
+- [Neural nets vs boosting: a missing-data blind spot? (+0.0014 AUC)](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736522) — 3 票 / 1 评论 / 2026-08-21 
+- [Single Model Feature Engineering technique...](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733023) — 3 票 / 4 评论 / 2026-08-05 
+- [248th Place Solution — Rank-Aligned Fusion and Risk-Conditional Blending](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738626) — 3 票 / 0 评论 / 2026-09-01 **write-up?**
+- [Plot Twist: Why My "Golden" EDA Features Dropped My CV Score (EDA vs LightGBM)](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732223) — 3 票 / 5 评论 / 2026-08-02 
+- [Changing the random seed moves you 60 places — what this leaderboard can and can't resolve](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734005) — 3 票 / 11 评论 / 2026-08-09 
+- [Train and test have different missingness rates — in all twelve columns](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732427) — 2 票 / 0 评论 / 2026-08-02 
+- [There is no distribution shift in this data - only missingness. What that means for the private LB](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733214) — 2 票 / 2 评论 / 2026-08-06 
+- [27 teams show 0.97086. None of them are tied.](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733618) — 2 票 / 0 评论 / 2026-08-07 
+- [My finding on the data and some questions](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733730) — 2 票 / 2 评论 / 2026-08-08 
+- [Model capacity was worth 18x my feature engineering — and then made it worthless](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734990) — 2 票 / 5 评论 / 2026-08-13 
+- [Seeking for help,xgboost at a limit,0.96844](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736595) — 2 票 / 6 评论 / 2026-08-21 
+- [what's your best CV?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737023) — 2 票 / 5 评论 / 2026-08-22 
+- [Is it possible to make over 0.97 with one model?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737682) — 2 票 / 4 评论 / 2026-08-26 
+- [max_bin is worth +0.0024 or +0.0005 here - it depends on whether you already encode the values](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737422) — 2 票 / 0 评论 / 2026-08-25 
+- [Exploring Alternative Ensemble Blends](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737590) — 2 票 / 5 评论 / 2026-08-26 
+- [5 Features, Logistic Regression, ~0.945 ROC AUC](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733708) — 1 票 / 2 评论 / 2026-08-07 
+- [Non-ratio Feature Engineered columns](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/735000) — 1 票 / 0 评论 / 2026-08-13 
+- [📱 S6E8 | Boosting AUC with Rank Transformation & Missing Value Indicators](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734636) — 1 票 / 0 评论 / 2026-08-12 
+- [The Generator Didn't Just Smooth the Labels — It Fixed the Data](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734501) — 1 票 / 0 评论 / 2026-08-11 
+- [How are you designing Private-LB-robust validation for S6E8?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734628) — 1 票 / 2 评论 / 2026-08-12 
+- [How to think ?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/735689) — 1 票 / 4 评论 / 2026-08-17 
+- [I Injected Real-World Data Into My Model and Every Single Fold Got Worse](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733552) — 1 票 / 2 评论 / 2026-08-07 
+- [📱 EDA Blueprint for Phone Addiction](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734978) — 0 票 / 0 评论 / 2026-08-13 
+- [What actually creates a decorrelated model when you work alone?](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/735861) — 0 票 / 4 评论 / 2026-08-18 
+- [Just a Silly Question ](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737108) — 0 票 / 0 评论 / 2026-08-23 
+- [The Signal in the Noise: Treating Missing Values as Features in S6E8](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/732955) — 0 票 / 3 评论 / 2026-08-05 
+- [I am not sure what to do with missing data. Please guide me beginner here!!](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737068) — 0 票 / 7 评论 / 2026-08-23 
+- [Question about Top 3 Prizes for Teams ](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733619) — 0 票 / 0 评论 / 2026-08-07 
+- [Help: Long waiting to appear in the 'Submissions' web page!](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/734963) — -1 票 / 0 评论 / 2026-08-13 
+- [highh log loss](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737231) — -1 票 / 9 评论 / 2026-08-24 
+- [An interesting competition](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/733908) — -2 票 / 1 评论 / 2026-08-09 
+- [Smartphone Addiction:Feature Engineering & XGBoost](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/738118) — -2 票 / 1 评论 / 2026-08-29 
+- [Predicting Smartphone Addiction with LightGBM — 5-Fold Cross-Validation & ROC-AUC Score: 0.96357](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/737369) — -4 票 / 0 评论 / 2026-08-25 
+- [🚀 Achieving 0.971+ LB: Residual NN + LightGBM Stacking Strategy](https://www.kaggle.com/competitions/playground-series-s6e8/discussion/736062) — -12 票 / 4 评论 / 2026-08-19 

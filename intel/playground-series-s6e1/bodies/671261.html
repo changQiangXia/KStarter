@@ -1,0 +1,75 @@
+<p>Congratulation to all the winners and thanks to those contributing quality discussions and code: <a href="https://www.kaggle.com/include4eto" target="_blank">@include4eto</a>, <a href="https://www.kaggle.com/omidbaghchehsaraei" target="_blank">@omidbaghchehsaraei</a>, <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>, <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a>, <a href="https://www.kaggle.com/mikhailnaumov" target="_blank">@mikhailnaumov</a>. If you haven't read them already, I suggest you visit these discussions:</p>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665915" target="_blank">https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665915</a></li>
+<li><a href="https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665965" target="_blank">https://www.kaggle.com/competitions/playground-series-s6e1/discussion/665965</a></li>
+<li><a href="https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669056" target="_blank">https://www.kaggle.com/competitions/playground-series-s6e1/discussion/669056</a></li>
+</ul>
+<p>My solution is conceptually identical to what I already published <a href="https://www.kaggle.com/competitions/playground-series-s5e10/writeups/1st-place-i-think-it-was-genetic-programming" target="_blank"><strong>back in October</strong></a>: make as many diverse models as possible and combine them all in a large ensemble. Here I will only describe the two major differences that were unique to this competition.</p>
+<p>First, in my hands TabM worked by far the best when it came to individual models. It wasn't even close when it was compared to GBM models, even though I didn't try LightGBM that much. But I made many XGB and CatBoost models that were inferior to TabM, even when the same starting data was used. <strong>This is yet another proof that there is no absolute superiority of GBMs over NNs in tabular competitions.</strong></p>
+<p>Second, I benefited enormously from feature engineering strategies published in November by <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a> and <a href="https://www.kaggle.com/angelosmar1" target="_blank">@angelosmar1</a> - thank you both! I urge you to revisit their solutions:</p>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/playground-series-s5e11/writeups/1st-place-a-lot-of-features-a-lot-of-models-an" target="_blank">https://www.kaggle.com/competitions/playground-series-s5e11/writeups/1st-place-a-lot-of-features-a-lot-of-models-an</a></li>
+<li><a href="https://www.kaggle.com/competitions/playground-series-s5e11/writeups/2nd-place-solution-7-models-but-1-was-also-enou" target="_blank">https://www.kaggle.com/competitions/playground-series-s5e11/writeups/2nd-place-solution-7-models-but-1-was-also-enou</a></li>
+</ul>
+<p>Speaking of <a href="https://www.kaggle.com/mahoganybuttstrings" target="_blank">@mahoganybuttstrings</a>, congratulations on yet another absolutely dominant win! Anyway, I have zero talent when it comes to rational feature engineering, but I know how to spot good features when I see them. There were plenty of them in the two solutions above, and I added them gradually and in various combinations to the tune of 60 TabM models that eventually were included in my 75-model ensemble. If you are wondering how I managed to make that many models: 1) it was various combinations of engineered features, ranging from ~170-700; 2) those features were combined with 6 or so hyperparameter sets that were found by tuning; 3) in addition to conventional modeling, I also did predictions over residuals from linear equations. Finally, I also added 5 features found by genetic programming that were meant to recreate the formula that generated the original dataset. Eventually this became 14 GP features that were used for modeling. The best two equations, which were used for predictions over residuals, are listed below. They create features with RMSE 8.9703 and 8.9741 to the target, respectively.</p>
+<pre><code>           formula = 5.760845*X['study_hours'] +
+           4.760845*(X['sleep_quality'] == 'average').astype(int) +
+           8.760845*(X['sleep_quality'] == 'good').astype(int) +
+           9.52169*(X['study_method'] == 'coaching').astype(int) +
+           0.325220702899505*X['class_attendance'] +
+           (X['study_method'] == 'group study').astype(int) +
+           4.760845*(X['study_method'] == 'mixed').astype(int) +
+           5.760845*(X['facility_rating'] == 'high').astype(int) -
+           (X['facility_rating'] == 'low').astype(int) +
+           2*(X['facility_rating'] == 'medium').astype(int) +
+           X['sleep_hours']
+
+           formula = 5.87666929874987*X['study_hours'] +
+           5*(X['sleep_quality'] == 'average').astype(int) +
+           9.674877*(X['sleep_quality'] == 'good').astype(int) +
+           8.222835*(X['study_method'] == 'coaching').astype(int) +
+           0.327161004763791*X['class_attendance'] +
+           3*(X['study_method'] == 'mixed').astype(int) +
+           3.659515*(X['facility_rating'] == 'high').astype(int) -
+           4.222835*(X['facility_rating'] == 'low').astype(int) +
+           X['sleep_hours'] +
+           2.020001
+</code></pre>
+<p>Out of 75 ensemble models, all but 7 were NNs of some kind, and there were about 20 more TabM models that didn't make it. Best individual models:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TabM</td>
+<td>8.590414</td>
+<td>8.55355</td>
+<td>8.59254</td>
+</tr>
+<tr>
+<td>XGBoost Optuna</td>
+<td>8.605121</td>
+<td>8.56390</td>
+<td>8.60570</td>
+</tr>
+<tr>
+<td>Keras FM</td>
+<td>8.658336</td>
+<td>8.58030</td>
+<td>8.61956</td>
+</tr>
+<tr>
+<td>xLearn FFM</td>
+<td>8.707240</td>
+<td>8.67284</td>
+<td>8.70387</td>
+</tr>
+</tbody>
+</table>
+<p>As always, my goal was to select the best solutions, and indeed that was the case. That was made easier by good CV-LB correlations, but there was still enough difference in scores that I hedged my bets on two ensembles that had 75 and 71 models. I submitted my best solution 25 minutes before the deadline, and that's usually how close I cut it with all my deadlines. </p>

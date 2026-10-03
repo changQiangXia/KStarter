@@ -1,0 +1,82 @@
+# rsna-2023-abdominal-trauma-detection 讨论区（按票数排序，共 80 条）
+
+- [Data in PNG Format](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427427) — 174 票 / 29 评论 / 2023-07-27 
+- [1st Place Solution: Team Oxygen](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447449) — 133 票 / 49 评论 / 2023-10-22 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447453) — 105 票 / 28 评论 / 2023-10-20 **write-up?**
+- [[lb0.55 my experiment results] prompt based prediction](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/435053) — 85 票 / 96 评论 / 2023-08-27 
+- [Clarification on Provided Labels/Annotations ](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428538) — 78 票 / 46 评论 / 2023-08-01 
+- [Tips on Beating the Baseline](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/441557) — 74 票 / 11 评论 / 2023-09-19 
+- [3rd Place Solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447464) — 53 票 / 10 评论 / 2023-10-24 **write-up?**
+- [EDA with Power Bi [UPDATED - 10.08.2023]](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428964) — 50 票 / 3 评论 / 2023-08-03 
+- [Active Extravasation Bounding Boxes [Updated 9/19]](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/441402) — 47 票 / 24 评论 / 2023-09-18 
+- [Standardizing Unusual Dicoms](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427217) — 45 票 / 12 评论 / 2023-07-26 
+- [CT Scans and Contrast Phases](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427226) — 45 票 / 7 评论 / 2023-07-27 
+- [Computer Vision in Healthcare (formats) and Highlights of the Last RSNA Competition.](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427232) — 44 票 / 3 评论 / 2023-07-27 
+- [Single corrupt image in the hidden test set](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/435815) — 43 票 / 8 评论 / 2023-08-30 
+- [Previous RSNA Kaggle Challenges and Winning Solutions Compilation](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427233) — 39 票 / 2 评论 / 2023-07-27 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447450) — 38 票 / 4 评论 / 2023-10-16 **write-up?**
+- [CV vs LB Scores](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/432029) — 31 票 / 55 评论 / 2023-08-15 
+- [14th place solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447553) — 28 票 / 3 评论 / 2023-10-16 **write-up?**
+- [8th Place Solution & Code](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447706) — 28 票 / 7 评论 / 2023-10-22 **write-up?**
+- [2nd Place Code](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/448086) — 28 票 / 3 评论 / 2023-10-18 **write-up?**
+- [Any Python Knight that could load the nifti files? Since we've No nii file extensions.](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427795) — 25 票 / 8 评论 / 2023-07-29 
+- [16th place solution ](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447448) — 25 票 / 3 评论 / 2023-12-15 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447539) — 23 票 / 8 评论 / 2023-12-11 **write-up?**
+- [Hi all! May have found something which speeds up reading dicom files (1.6x faster)](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/429266) — 22 票 / 3 评论 / 2023-08-04 
+- [1st Place Code + Full Solution Released ](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/448903) — 22 票 / 0 评论 / 2023-10-22 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447848) — 21 票 / 6 评论 / 2023-10-23 **write-up?**
+- [SAM-Med2D {Segment Anything Model}](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/437036) — 21 票 / 7 评论 / 2023-09-05 
+- [9th place solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447506) — 21 票 / 0 评论 / 2023-10-26 **write-up?**
+- [Onboarding references](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427424) — 20 票 / 1 评论 / 2023-07-27 
+- [17th Place Solution - How to Learn and Practice as a Beginner](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447779) — 20 票 / 2 评论 / 2023-10-17 **write-up?**
+- [Well, This is interesting!!](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447367) — 19 票 / 4 评论 / 2023-10-15 
+- [32nd place overview + mistakes](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447651) — 18 票 / 1 评论 / 2023-10-16 **write-up?**
+- [A little bit of data leakage :)](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/431665) — 18 票 / 5 评论 / 2023-08-14 
+- [Data DICOM to 3 different types of Image (Grayscale) ](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/438690) — 17 票 / 6 评论 / 2023-09-12 
+- [6th Place Solution](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/448208) — 17 票 / 0 评论 / 2023-10-27 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427220) — 17 票 / 233 评论 / 2023-07-26 
+- [2.5D Method Seems to Overfit](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/430611) — 17 票 / 18 评论 / 2023-08-10 
+- [total-segmentator-on-rsna-2023-abdominal-trauma](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/436096) — 16 票 / 21 评论 / 2023-09-01 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427219) — 16 票 / 11 评论 / 2023-07-26 
+- [7th Place Solution & Code](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447549) — 16 票 / 2 评论 / 2023-10-24 **write-up?**
+- [Reduced Dataset from 400 GB to 7.5 GB](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/433004) — 15 票 / 5 评论 / 2023-08-20 
+- [beware of dicom file problems ?](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/436527) — 15 票 / 31 评论 / 2023-09-02 
+- [Active Extravasation on Arterial / PV phase](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/444265) — 15 票 / 1 评论 / 2023-10-01 
+- [𝐄𝐱𝐭𝐫𝐚𝐯𝐚𝐬𝐚𝐭𝐢𝐨𝐧 𝐬𝐞𝐫𝐢𝐞𝐬 𝐜𝐥𝐚𝐬𝐬𝐢𝐟𝐢𝐜𝐚𝐭𝐢𝐨𝐧 𝐨𝐧 𝐘𝐎𝐋𝐎 𝐜𝐨𝐧𝐟𝐢𝐝𝐞𝐧𝐜𝐞 𝐚𝐩𝐩𝐫𝐨𝐚𝐜𝐡.](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/447501) — 14 票 / 0 评论 / 2023-10-16 
+- [Possibly corrupt .dcm in test set - Can the host/Kaggle staff check this?](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/432593) — 14 票 / 25 评论 / 2023-08-18 
+- [64th Place Solution | YOLO Extravasation Classification](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/452285) — 13 票 / 0 评论 / 2023-11-01 **write-up?**
+- [Are the labels too weak?](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428188) — 12 票 / 11 评论 / 2023-07-31 
+- [2D and 2.5D experiments](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/432217) — 12 票 / 5 评论 / 2023-08-16 
+- [probably wrong image level label?](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/437344) — 11 票 / 1 评论 / 2023-09-06 
+- [😥Slice spacing is NOT consistent across different series](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428871) — 11 票 / 2 评论 / 2023-08-03 
+- [🤩Very useful semantic segmentation model！](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428894) — 11 票 / 12 评论 / 2023-08-03 
+- [Advancing Medical Diagnosis with AI](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/434579) — 10 票 / 3 评论 / 2023-08-25 
+- [[External_datasets] Additional datasets for further experimentation from external sources.](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/437024) — 10 票 / 3 评论 / 2023-09-05 
+- [Can't submit because "Submit" button is keep disappearing](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/446853) — 9 票 / 11 评论 / 2023-10-13 
+- [Don't trust test_dicom_tags.parquet](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/440269) — 9 票 / 5 评论 / 2023-09-14 
+- [Awaiting private results. Results of the competition for me.](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/446469) — 8 票 / 5 评论 / 2023-10-11 
+- [439th-Solution-RSNA_ATD](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/453827) — 8 票 / 0 评论 / 2023-11-07 **write-up?**
+- [Clarification on segmentation](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428583) — 8 票 / 4 评论 / 2023-08-02 
+- [Solution Write-up: Unleashing the Healing Potential: Abdominal Trauma](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/452452) — 8 票 / 0 评论 / 2023-11-02 **write-up?**
+- [Understanding how Patient IDs, Series IDs, and Instance Numbers are related together in CT Scan Datasets](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/431475) — 8 票 / 2 评论 / 2023-08-13 
+- [Let's share some memes related to the competition (and the extension)](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/446618) — 7 票 / 7 评论 / 2023-10-12 
+- [TotalSegmentator](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/434041) — 7 票 / 8 评论 / 2023-08-23 
+- [59th Place Solution for the Detect and Classify Traumatic Abdominal Injuries Competition](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/453636) — 7 票 / 1 评论 / 2023-11-08 **write-up?**
+- [2.5D Pipeline](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/431706) — 7 票 / 1 评论 / 2023-08-14 
+- [79th place - beginner tutorial in applying a previous solution with minimal changes and training time ](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/450279) — 7 票 / 0 评论 / 2023-10-23 **write-up?**
+- [Getting Started with Abdominal Trauma | Research Articles](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427568) — 7 票 / 1 评论 / 2023-07-28 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/450818) — 6 票 / 0 评论 / 2023-10-25 
+- [382nd Place Solution for the RSNA 2023 Abdominal Trauma Detection](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/453685) — 6 票 / 0 评论 / 2023-11-07 **write-up?**
+- [0.44-0.46 mystery](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/446306) — 6 票 / 11 评论 / 2023-10-11 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/429944) — 6 票 / 1 评论 / 2023-08-07 
+- [The CategoricalCrossentropy Problem](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/444889) — 6 票 / 8 评论 / 2023-10-04 
+- [Where is the extravasation?](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/435101) — 6 票 / 7 评论 / 2023-08-28 
+- [PyDicom issues with this dataset](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/428707) — 6 票 / 6 评论 / 2023-08-02 
+- [Introductory webinar related to the competition](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/444286) — 6 票 / 2 评论 / 2023-10-01 
+- [AMP Parkinson's Flashbacks](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/432336) — 6 票 / 3 评论 / 2023-08-17 
+- [Silver Medal  with a Simple Constant : 0.99](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/437510) — 6 票 / 5 评论 / 2023-09-07 **write-up?**
+- [Window Width and Center](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/430444) — 6 票 / 15 评论 / 2023-08-09 
+- [How do load dcm files from test folder](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/431836) — 6 票 / 0 评论 / 2023-08-15 
+- [Generate you own trauma injury!!!!](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/442011) — 6 票 / 0 评论 / 2023-09-21 
+- [Some questions about the dataset，please help！](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/427460) — 6 票 / 2 评论 / 2023-07-28 
+- [How are the losses weighted?](https://www.kaggle.com/competitions/rsna-2023-abdominal-trauma-detection/discussion/432915) — 5 票 / 5 评论 / 2023-08-19 

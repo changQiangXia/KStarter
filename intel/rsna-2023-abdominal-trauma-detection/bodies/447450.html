@@ -1,0 +1,152 @@
+<p>Congrats to all prize and medal winners! I enjoyed this competition because there are a great variety of options for solving this task as with last year's RSNA competition. We share our team's solution ( <a href="https://www.kaggle.com/ren4yu" target="_blank">@ren4yu</a> + <a href="https://www.kaggle.com/tattaka" target="_blank">@tattaka</a> ).</p>
+<h1>Summary</h1>
+<p>Our solution is to first segment the organs, cut out each organ region, and build a dedicated model for each organ.<br>
+For the bowel and extravasation classes, for which large regions must be explored, we do not perform segmentation to cut out the regions, but instead perform simple black region removal and input the large regions into the models.<br>
+The results of each model are refined by the stacking model and submitted as the final result.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F745525%2Ff5b5b27bf27dbd11ae78efca228ff017%2F1.png?generation=1697414699260439&amp;alt=media" alt=""></p>
+<h1>Segmentation Model</h1>
+<p>We used the 3D SwinUNETR model provided by MONAI. It works surprisingly well with even a small amount of training data. To reduce the computational cost, the entire voxel was resized into 128x128x128 before segmentation.</p>
+<h1>Organ Models</h1>
+<p>For liver, spleen, kidney, and bowel cropped regions, 2.5D CNN + LSTM models are used.</p>
+<h2>Liver and Spleen Models</h2>
+<p>Cropped region is resized into 16x386x386, and fed into dedicated models.</p>
+<h2>Kidney Model</h2>
+<p>Left and right kidney are independently cropped, resized, and concatinated along with horizontal axis. This enables us horizontal flip augmentation and TTA. Concatenated region becomes 16x224x448.</p>
+<h2>Bowel Model</h2>
+<p>Cropped region is resized into 64x224x224. In training bowel model, both patient level label and image level labels were used.</p>
+<h1>Stacking Model</h1>
+<p>The purpose of the stacking model is to directly optimize the average of the weighted logloss, which is the metric for this competition, including the logloss for any_injury. Each model is optimized for the weighted logloss for each of the injury type, but not for any_injury because it is automatically calculated from the probabilities of the other injuries. For any_injury, it is essential to optimize any_injury because the weight for any_injury is relatively large.<br>
+As a stacking model, we use a simple 4-layer MLP, and trained with competition metric as loss function.</p>
+<p>The table below shows the CV evaluation results before and after stacking (The values below are out of date because we wrote this solution before the competition was extended. The final submission's CV is 0.3686).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>bowel</th>
+<th>extravasation</th>
+<th>kidney</th>
+<th>liver</th>
+<th>spleen</th>
+<th>any</th>
+<th>overall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>w/o stacking</td>
+<td>0.1186</td>
+<td>0.4716</td>
+<td>0.2948</td>
+<td>0.4282</td>
+<td>0.4301</td>
+<td>0.5528</td>
+<td>0.3827</td>
+</tr>
+<tr>
+<td>with stacking</td>
+<td>0.1034</td>
+<td>0.4885</td>
+<td>0.2861</td>
+<td>0.4409</td>
+<td>0.4452</td>
+<td>0.4777</td>
+<td>0.3736</td>
+</tr>
+</tbody>
+</table>
+<h1>tattaka's Part</h1>
+<p>I was in charge of bowel and extravasation classification. Our solution followed <a href="https://www.kaggle.com/competitions/rsna-str-pulmonary-embolism-detection/discussion/194145" target="_blank">the 2-stage approach of the RSNA competition 3 years ago</a>.  <br>
+The basic setup is as follows</p>
+<h2>Image-Level Modeling (1st stage)</h2>
+<p>The input for the 1st stage is a 3-channel image including adjacent frames.  <br>
+1epoch training was performed on all labeled images.  </p>
+<ul>
+<li>backbone: resnetrs50  </li>
+<li>head: <ul>
+<li>Separate the head by bowel and extravasation</li></ul></li>
+</ul>
+<pre><code>  nn.Sequential(
+      nn.Conv2d(num_features[-], , kernel_size=),
+      nn.AdaptiveAvgPool2d((, )),
+      Flatten(),
+      nn.Dropout(, inplace=),
+      nn.Linear(, ),
+  )
+</code></pre>
+<p>In the 1st stage, students learn bowel and extravasation at the same time.  </p>
+<h2>Series-Level Modeling (2nd stage)</h2>
+<p>The input for the 2nd stage also followed the previous solution.  <br>
+Use the 512 dimensions after Flatten in the head of the 1st stage as image features.<br>
+Image features are created with stride=3 instead of all images, and the input sequence length is set to a maximum of 256 in the same way as the previous solution.   <br>
+The differences between adjacent features are combined, and the input to the model is in the form (bs, 256, 1536). </p>
+<ul>
+<li>model:<ul>
+<li>Combines the attention pooling and max pooling of the BiGRU outputs in one layer to create an series-level prediction.</li>
+<li>The BiGRU output should also predict the image label. </li></ul></li>
+</ul>
+<p>Unlike the 1st stage, bowel and extravasation were optimized separately.</p>
+<h2>Tricks for Successful Training</h2>
+<p>There are a few tricks to successful learning in this competition.</p>
+<ul>
+<li>Because of large data imbalance, upsampling of the positive sample by a factor of 10 (high impact)<ul>
+<li>In addition, focal loss is used</li></ul></li>
+<li>After training stage1 at image level, max of the logit and gt are trained again as labels for the new image level (high impact)<ul>
+<li>repeated it twice</li>
+<li>Perhaps the image label is noisy</li></ul></li>
+<li>Rule-based removal of the outer black areas before the image is entered into the model<ul>
+<li>Because of the longer computation time when using a larger resolution, a size of 384x384 is used after removing the outer area.</li></ul></li>
+</ul>
+<pre><code> () -&gt; np.ndarray:
+    image_1ch = (img.mean() * ).astype(np.uint8)
+    kernel = np.ones((, ), np.uint8)
+    image_1ch = cv2.erode(image_1ch, kernel, iterations=)
+    mask = image_1ch &gt; 
+     mask.() == :
+         img
+    rows = np.(mask, axis=)
+    cols = np.(mask, axis=)
+    y_min, y_max = np.where(rows)[][[, -]]
+    x_min, x_max = np.where(cols)[][[, -]]
+     (y_max - y_min) &gt;   (x_max - x_min) &gt; :
+        img = img[y_min:y_max, x_min:x_max]
+     img
+</code></pre>
+<p>The bowel and extravasation scores before stacking are</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>bowel logloss</th>
+<th>bowel auc</th>
+<th>ev logloss</th>
+<th>ev auc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>stage1</td>
+<td>0.2719</td>
+<td>0.9314</td>
+<td>0.4602</td>
+<td>0.8287</td>
+</tr>
+<tr>
+<td>stage2</td>
+<td>0.1167</td>
+<td>0.9167</td>
+<td>0.4579</td>
+<td>0.8264</td>
+</tr>
+</tbody>
+</table>
+<h2>Not works</h2>
+<ul>
+<li>label smoothing</li>
+<li>resnet3dcsn<ul>
+<li>Not bad, but I didn't have time to tune in.</li></ul></li>
+<li>scaling logit</li>
+<li>GeM pooling</li>
+<li>Other backbone<ul>
+<li>ConvNeXt is slightly worse than resnetrs50</li>
+<li>I could not get the backbone of the transformer to work </li></ul></li>
+</ul>

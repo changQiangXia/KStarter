@@ -1,0 +1,64 @@
+<h1><strong>Training and inference code can be downloaded from:</strong></h1>
+<p><a href="https://github.com/hengck23/solution-predict-ai-model-runtime/" target="_blank">https://github.com/hengck23/solution-predict-ai-model-runtime/</a>  <br>
+&nbsp;</p>
+<h2>1. Layout runtime prediction</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Fb5c1c8af2f166b73061177ae313a2c6b%2FSelection_999(4192).png?generation=1701482437470415&amp;alt=media" alt=""></p>
+<p>main problem:</p>
+<ul>
+<li>we have very large graph as input. how to design learning model and algorithm that can fit into gpu memory? </li>
+</ul>
+<p>summary of approach :</p>
+<ul>
+<li>instead of using the whole graph, we can reduce it by considering only the 5-hop neighbours from node marked as "config id". We call this 5-hop-neighbour subgraph.  We think this is reasonable becuase since we are comparing relative ranking of 2 graphs,  and we just need to input the "difference nodes"  (instead of the whole graph) to the neural net.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F5e4c66d69dcf5ea590ad619c37dc2179%2FSelection_999(4193).png?generation=1701483096930612&amp;alt=media" alt=""></p>
+<ul>
+<li>using the reduced subgraph, i can sample 32 to 100 configurations using all full subgraphs with a single 48-GB  GPU card at training.</li>
+<li>batch size is not an issue here, bcuase i am using gradient accumulation. We accumuluate over one subgraph at a time when training a batch.</li>
+</ul>
+<pre><code>optimizer.zero_grad()
+
+for in range(        r = 
+        loss = net(r)  
+        
+
+
+</code></pre>
+<ul>
+<li><p>normalisation is important. We use "graph instance norm" (over node), see paper[1], which works well with gradient accumulation </p></li>
+<li><p>we use pairwise ranking loss in training loss.</p></li>
+<li><p>We try 2 GNN: </p>
+<ul>
+<li>4-layer SAGE-conv[2] with residual shortcut</li>
+<li>4-layer GIN-conv[3] </li></ul></li>
+</ul>
+<p>SAGE-conv is better than GIN-conv.</p>
+<h2>2. Tile runtime prediction</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2Fc13d2c462b0958161cd4ce09e4249bc7%2FSelection_999(4191).png?generation=1701482450756660&amp;alt=media" alt=""></p>
+<p>main problem:</p>
+<ul>
+<li>There is no issues here as the graph in the kaggle training data are much smaller. These are actually subgraphs of the much larger original computation graph.</li>
+</ul>
+<p>summary of approach</p>
+<ul>
+<li>We still use "graph instance norm" (over node) [1], and smae gradient accumulation apporach, with batch size =64.</li>
+<li>We try both SAGE-conv[2] and GAT-conv[4].  GAT-conv gives better results.</li>
+<li>Since we are interested in top 5 ranks, we find listMLE is a better loss.</li>
+</ul>
+<hr>
+<h2>[Reference]</h2>
+<p>[1] GraphNorm: A Principled Approach to Accelerating Graph Neural Network Training<br>
+<a href="https://arxiv.org/abs/2009.03294" target="_blank">https://arxiv.org/abs/2009.03294</a>  <br>
+[2] Inductive Representation Learning on Large Graphs<br>
+<a href="https://arxiv.org/abs/1706.02216" target="_blank">https://arxiv.org/abs/1706.02216</a>  <br>
+[3] How Powerful are Graph Neural Networks?<br>
+<a href="https://arxiv.org/pdf/1810.00826.pdf" target="_blank">https://arxiv.org/pdf/1810.00826.pdf</a><br>
+[4] Graph Attention Networks <br>
+<a href="https://arxiv.org/abs/1710.10903" target="_blank">https://arxiv.org/abs/1710.10903</a></p>
+<hr>
+<h2>local validation and public/private score</h2>
+<p>The metric are: slowndown (top-5) for tile and kendall tau for layout.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F113660%2F0caab07b1cf25d81b358b1234d459b8c%2FSelection_999(4194).png?generation=1701488206301120&amp;alt=media" alt=""></p>
+<hr>
+<h2>Acknowledgment</h2>
+<h2><em>"I would like to express my sincere gratitude to HP for the generous provision of the  Z8-G4 Data Science Workstation that was instrumental in the successful completion of kaggle competition. The two 48GB Nvidia Quadro RTX 8000 GPU cards give me a distinct advantage to easily bulid models with the largest public graph dataset TPUGraphs, with 100 millions graphs of 10 thousands nodes."</em></h2>

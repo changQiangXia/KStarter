@@ -1,0 +1,124 @@
+<p>Congrats to all the winners, and thanks to kaggle for hosting such an interesting competition. This competition was a great learning experience for me. I am really looking forward to reading everyone's solutions.</p>
+<p>My solution is basically the same as the ViT-based method in the public notebook. I created my own dataset by running Stable Diffusion and trained a model to predict sentence embeddings in a supervised manner. The overview is shown in the figure below.</p>
+<p><img src="https://user-images.githubusercontent.com/8179588/238365771-166ab184-9639-49e1-bd67-9d6e8fd05c90.png" alt="image"></p>
+<h2>Dataset Generation</h2>
+<h3>Preparation</h3>
+<p>The following modifications were made to 4x speed up the generation with fp16.</p>
+<ul>
+<li>Change the scheduler from DDIM to DPMSolver++ (diffusers.DPMSolverMultistepScheduler) and change the number of steps from 50 to 16.</li>
+<li>Use xformers</li>
+</ul>
+<p>There was concern that reducing the number of generation steps would cause a shift in the mapping from prompt to image, but there was no significant qualitative difference, and the advantage of increased generation speed was judged to be greater, so I chose this method.</p>
+<p>The xformers led to a speedup of about 30%. xformers were also used in the training of the model, which is described after.</p>
+<p>Note that the random numbers used in the generation have a significant impact on the overall image generated, so it is necessary to generate images using different seeds. At first I fixed the seed to 0 to ensure reproducibility, but I realized this mistake and used a different seed for each prompt, which greatly increased the score. I was generating the seed using zlib.adler32, the name of the prompt set, and the number of the prompt.</p>
+<p>As for the guidance scale, I had been using the default value of 7.5 from diffusers until I realized that 9.0 seemed to be the correct value (<a href="https://github.com/Stability-AI/stablediffusion/blob/main/scripts/txt2img.py#L142" target="_blank">link</a>), so I used data generated with either value. LB scores showed that there was no significant difference between 7.5 and 9.0, but scores with 3.0 were significantly lower.</p>
+<h3>DiffusionDB</h3>
+<p>To deal with the vocabulary specific to Stable Diffusion, we generated images using prompts from <a href="https://huggingface.co/datasets/poloclub/diffusiondb" target="_blank">DiffusionDB</a>. Excluding duplicates, there are approximately 1.8M Prompts, and images were generated for all of them.</p>
+<h3>COCO Captions</h3>
+<p>Captions from <a href="https://arxiv.org/abs/1504.00325" target="_blank">Microsoft COCO Captions</a> were used to generate the images. 500k images were generated from approximately 600k captions in train and validation.</p>
+<h3>Open Images</h3>
+<p>To create even more diverse prompt sets, I utilized the natural images in <a href="https://github.com/openimages/dataset/blob/main/READMEV3.md" target="_blank">Open Images Dataset V3</a> (OID) and Image-To-Text pretrained models. Images from OID are input to the Image-To-Text model, and the resulting caption is input to StableDiffusion as a prompt. OID contains 9M natural images, of which the first 5M were used to generate.</p>
+<p><a href="https://huggingface.co/Salesforce/blip2-flan-t5-xxl" target="_blank">Salesforce/blip2-flan-t5-xxl</a> was used as the Image-To-Text model. I used Nucleus sampling with <code>do_sample=True</code> and <code>top_p=0.9</code>.</p>
+<p>The sample prompts in the competition consist of multiple objects and multiple sentences, but captions output by BLIP-2 tends to produce very concise sentences by default. Therefore, by chaining BLIP-2's caption generation, I made sure that sentences with a certain level of complexity are generated. The procedure for chaining is as follows</p>
+<ol>
+<li>generate a sentence following <code>"a photo of"</code> as usual (denote the generated sentence as A)</li>
+<li>generate a sentence following <code>"a photo of" + A</code> (denote this as B)</li>
+<li>Output <code>A + B</code> as the final caption</li>
+</ol>
+<p>The Prompt set created is as follows.</p>
+<table>
+<thead>
+<tr>
+<th>Prompt set name</th>
+<th>Subset</th>
+<th># of images</th>
+<th>Chain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OID1</td>
+<td>train0</td>
+<td>1M</td>
+<td>2</td>
+</tr>
+<tr>
+<td>OID2</td>
+<td>train1</td>
+<td>1M</td>
+<td>3</td>
+</tr>
+<tr>
+<td>OID3</td>
+<td>train2</td>
+<td>1M</td>
+<td>1*</td>
+</tr>
+<tr>
+<td>OID4</td>
+<td>train3</td>
+<td>1M</td>
+<td>2</td>
+</tr>
+<tr>
+<td>OID5</td>
+<td>train4</td>
+<td>1M</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>For OID3, in order to realize a combination of objects that do not exist in natural images, prompts were created by connecting two short captions created with chain=1 with commas. In concrete terms, the short captions created in chain=1 were converted to sentence embeddings using SentenceTransformer, and divided into 1000 clusters using Spherical KMeans. Then, for every combination of two clusters, we randomly selected one caption for each cluster and connected them with a comma.</p>
+<h3>ChatGPT (gpt-3.5-turbo)</h3>
+<p>This is a dataset that has utilized the ideas from <a href="https://www.kaggle.com/code/safavieh/chatgpt-generated-prompts/notebook" target="_blank">this notebook</a>. When I tried generating prompts using ChatGPT, I found that using the same prompt only yielded similar generation results. Altering parameters such as temperature did somewhat improve the situation, but it also made it more likely to produce broken sentences or excessively long ones. Therefore, I considered modifying the prompt sent to ChatGPT utilizing the previous generated prompts, and implemented it with the following code.</p>
+<pre><code>command = (
+    
+    
+)
+sample_set = [
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+]
+generated_prompts: [] = []
+ _  (num_trials):
+     (generated_prompts) &lt; :
+        examples = (sample_set)
+    :
+        examples = (np.random.choice(sample_set, , replace=)) + (
+            np.random.choice(generated_prompts, , replace=)
+        )
+
+    np.random.shuffle(examples)
+    prompt = command + .join([  e  examples])
+    generated_prompts = send_to_chat_gpt_and_cleansing(prompt)
+</code></pre>
+<p>In this method, I created about 1M prompts, inputted them into Stable Diffusion after removing duplicates, and produced about 1M images.</p>
+<p>I also tested a few other LLMs, especially focusing on those with open weights, but I was unable to obtain a prompt set equivalent or superior to gpt-3.5-turbo using the same method, based on my qualitative evaluation. Typical behaviors of such LLMs are starting some sort of explanation instead of answering in the desired format or only being able to produce slightly modified examples. I have not tested LLaMA and its derivative models because I was unable to obtain LLaMA's weights in a license-compliant manner.</p>
+<h2>Model and Training</h2>
+<h3>CLIP Models</h3>
+<p>In the initial, simplistic experiments, the pretrained models with CLIP performed better than those for ImageNet classification. As a result, I focused on fine-tuning CLIP models.</p>
+<p>The following four models were used in the final submission.</p>
+<ul>
+<li>ConvNeXt xxlarge (<a href="https://huggingface.co/laion/CLIP-convnext_xxlarge-laion2B-s34B-b82K-augreg-rewind" target="_blank">CLIP-convnext_xxlarge-laion2B-s34B-b82K-augreg-rewind</a>)</li>
+<li>BLIP-2 VisionModel (EVA01-g?, <a href="https://huggingface.co/Salesforce/blip2-opt-2.7b" target="_blank">Salesforce/blip2-opt-2.7b</a>)</li>
+<li>EVA02-L (<a href="https://huggingface.co/timm/eva02_large_patch14_clip_336.merged2b_s6b_b61k" target="_blank">timm/eva02_large_patch14_clip_336.merged2b_s6b_b61k</a>)</li>
+<li>EVA02-e (<a href="https://huggingface.co/timm/eva02_enormous_patch14_plus_clip_224.laion2b_s9b_b144k" target="_blank">timm/eva02_enormous_patch14_plus_clip_224.laion2b_s9b_b144k</a>)</li>
+</ul>
+<h3>Linear-Probing</h3>
+<p>Regarding the fine-tuning of CLIP, it has been suggested that Linear-Probing (LP), which trains only the last linear layer, and <a href="https://arxiv.org/abs/2202.10054" target="_blank">LP-FT</a>, which fine-tunes the entire model after LP, are effective to generalize. Indeed, these methods were effective in my experiments as well.</p>
+<h3>Resolution</h3>
+<p>Increasing the resolution also had a significant effect. CLIP models are typically trained at a resolution of 224, but I believe that 224 was disadvantageous for recognizing complex contexts containing multiple objects.</p>
+<p>ViT can infer with only a slight degradation in performance for inputs at a higher resolution than during training, by interpolating positional encoding. For instance, you can use functions like <a href="https://github.com/huggingface/pytorch-image-models/blob/v0.9.2/timm/layers/pos_embed.py#L17" target="_blank">resample_abs_pos_embed</a> implemented in timm. By using this, you can use a model trained at a lower resolution as a good initial value when training at a higher resolution.</p>
+<p>Until the middle of the competition, I was using models trained at 224, but towards the end, I improved my score by using those as initial values and training models at 336 or 448.</p>
+<h3>Q-former</h3>
+<p>SentenceTransformer's sentence embeddings are the normalized sum of token embeddings. I considered leveraging these token embeddings as additional supervision signals.</p>
+<p>I implemented an architecture using the Q-former from BLIP-2 to convert the patch embeddings output by the vision model into token embeddings with a length of 77. I then compared the output of that model to the token embeddings from the SentenceTransformer, padded with zeros until they reached a length of 77, and trained the model based on this comparison. Simply taking the mean squared error (MSE) would be heavily influenced by word order, so I used the Hungarian method to find the matching with the minimum MSE and calculated the MSE between those matches. I also used the cosine similarity between the sentence embeddings.</p>
+<p>Simultaneous training of the Q-former and the vision model was unstable, and I could not achieve success during the competition period. However, by freezing the pretrained vision model and training only the added Q-former, I achieved a performance improvement of +0.001 to +0.003 on the leaderboard (LB) for individual models. Moreover, since the vision model is frozen, I could obtain its standalone output of the vision model with almost no additional cost when predicting with the Q-former. It provided a slight benefit in ensembling.</p>
+<p>The effectiveness of the Q-former was not particularly pronounced in this problem setting, but I believe it would be useful in the original sense of an inversion task, where the goal is to reproduce images.</p>
+<h3>Weighted Averaging</h3>
+<p>For ensembling, I used weighted averaging. The weights were optimized using Adam and validation set from my ChatGPT dataset.</p>

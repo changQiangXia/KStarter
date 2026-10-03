@@ -1,0 +1,381 @@
+# https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390966
+
+Topic #390966: ⭐️ Remek & Andrij - #9 solution ⭐️
+  Author: Remek Kinas
+  Posted: 2023-02-28 01:10:34.901000
+  Votes: 89  Comments: 36
+
+First of all congratulations to all participants. Congratulations to dream teams from gold zone. I’m impressed by your consistency in winning Kaggle competition. Waiting to learn from your solution.
+
+Thank you my team mate Andrij @aikhmelnytskyy We had great collaboration 👍👍👍 - I feel that from first minute we played in one team having one goal - find better solution.
+
+Gold in competition was dream for me. Last year we (with @christofhenkel ) were #1 in sliver (#12 solution in Image Matching Challange 2021). This year I decided to work hard to experience gold zone and finally become competition master. Even there is no official LB finalized …. we are #9 and in gold! :) and I am …… extremely happy! 😁😁😍😜
+
+This competition was really great for testing many different computer vision techniques. Three months passed very quickly. The first phase of the competition was difficult. We performed a large number of different tests that did not gave us results higher than 0.3 (LB score). It was very frustrating. We were unable to find any correlation between local CV and LB. Then we setup good training pipeline – main our success point are:
+
+
+
+Sampling strategy and positive class balancing
+
+Augumentation
+
+Model selection
+
+Postprocessing
+
+
+Last two weeks of competition were hard to me – I caught covid and had to pause (during recovery time I coded using iPad). But we cooperate all the time and we finally managed to jump to TOP10 and 0.63 (public LB). Finally we were closing gold zone on #13 (public LB) and #9 in private LB!
+
+Models score summary
+•    best public LB: 0.63 (ensemble) / 0.57 (single model) / local CV (0.48)
+•    private lb: 0.50 (max: 0.50)
+
+Competition achievements
+•    new experience in Kaggle competition - a lot of good discussion 
+•    1x gold medal - dataset (I am very happy - my first one)
+•    2x gold medals - notebook 
+•    1x gold medal - competition-&gt; extremely happy! 😁😁😍😜
+
+Our final selection
+We selected two different solution which based on the same model setup.
+•    3 models - ensemble average model prediction probabilities -&gt; LB: 0.63 (PL: 0.47)
+•    3 models - voting strategy and then score average (on votes score) -&gt; LB: 0.62 (PL: 0.5)
+After many tests we had strong feeling that our second choice (even score was lower on LB that many of our rest solution) is more stable (was less sensitive on th) than other solution. So we closed eye and trusted in our test rather then LB score.
+
+Solution description in 4 steps
+Our solution is very simple. We tried different ways to predict breast cancer but finally it appeared that simples solution wors for us the best (both local CV and LB).
+
+
+
+Process dicom files to png (windowing).
+
+Inference – 3 convnext (v1) models with TTA
+
+Ensemble – probabilities average or voting
+
+Thresholding – th ~0.5 -&gt; final prediction result 0|1
+
+
+Dataset
+•    Image resolution: 1536x768
+•    ROI cropped - cv2.connectedComponentsWithStats method (we started with yolov5 for prototyping phase but then we used cv2 - since licence regulations)
+•    4-GroupFold: on patient_id
+•    image pixel scaling: div by 255.
+•    dicom2png – proposed by @hengck23 (https://www.kaggle.com/code/hengck23/3hr-tensorrt-nextvit-example)
+•    we do not use external dataset – all models were trained on competition data
+•    we processed data in two steps (to avoid problem with file storage capacity – during the tests we exported images to different resolutions – max 2400px):
+
+
+
+process j2k files format (dicom2png and crop to 1536xW - we do not resize it in this step to final resolution)-&gt;inference-&gt;delete files 
+
+process nonj2k files-&gt;inference-&gt;delete files
+
+
+fast and reliable crop roi function we used during competition (cretits to @vslaykovsky  : "RSNA: Cut Off Empty Space from Images")
+
+def crop_roi(img, photometric_interpretation):
+  # it can be improved 
+    Y = img
+    xmin = Y.min()
+    xmax = Y.max()
+
+    norm = np.empty_like(Y, dtype=np.uint8)
+
+    dicomsdl.util.convert_to_uint8(Y, norm, xmin, xmax)
+    if photometric_interpretation == 'MONOCHROME1':
+        norm = 255 - norm
+
+    X = norm
+    X = X[5:-5, 5:-5]
+
+    output= cv2.connectedComponentsWithStats((X &gt; 10).astype(np.uint8)[:, :], 8, cv2.CV_32S) #
+    stats = output[2]
+
+    idx = stats[1:, 4].argmax() + 1
+    x1, y1, w, h = stats[idx][:4]
+    x2 = x1 + w
+    y2 = y1 + h
+
+    X_out = Y[y1: y2, x1: x2]
+
+    return X_out
+
+
+Augumentation 
+•    Albumentations (we tried Kornia and works great but we need more time to rewrite functions we used in competition).
+
+transformation = [
+                A.OneOf([
+                    A.RandomBrightnessContrast(always_apply=False, p=.5, brightness_limit=(-1, 1.0), contrast_limit=(-1, 1.0), brightness_by_max=True),
+                    A.RandomGamma(always_apply=False, p=.5, gamma_limit=(60, 120), eps=None),
+                ], p = 0.5),
+
+                A.Rotate(limit=5, p=0.5),
+                A.Affine(rotate = 5, translate_percent=0.1, scale=[0.9,1.5], shear=0, p=0.5),
+
+                A.HorizontalFlip(p=0.5),
+                A.VerticalFlip(p=0.5),
+                A.Resize(im_size[0], im_size[1]),
+                A.ShiftScaleRotate(always_apply=False, p=.2,
+                                    shift_limit_x=(-1.0, 1.0),
+                                    shift_limit_y=(-1.0, 1.0),
+                                    scale_limit=(-0.1, 0.1),
+                                    rotate_limit=(-5, 5),
+                                    interpolation=0,
+                                    border_mode=3,
+                                    value=(0, 0, 0),
+                                    mask_value=None,
+                                    rotate_method='largest_box'),
+
+                A.OneOf([
+                    GridDropoutv2(always_apply=False, p=.2, ratio = .25, unit_size_min = 100, unit_size_max = 400, holes_number_x=100, holes_number_y=100),
+                    CoarseDropoutv2(always_apply=False, p=.2, max_holes=12, max_height=250, max_width=100, min_holes=3, min_height=50, min_width=50, mask_fill_value=None)], p=0.25),
+                ToTensorV2()
+            ]
+
+
+GridDropoutv2 and CoarseDropoutv2 is our modification of Albumentations function. It generates cuts in random greyscale.
+
+
+
+Training
+•    Framework: Pytorch scripts (multi gpu support: DDP)
+•    Optimizer: RAdam 
+•    Lookahead: on
+•    Scheduler: OneCycle - no warm up
+•    Weight decay: 1e-2
+•    Dataset each epoch was seeded by different seed.
+•    Batch size: 16
+•    Mixed precision (AMP): on
+•    Gradient clipping: on
+•    Loss function: BCEWithLogitsLoss with pos_weight = 1.0 - 1.25
+•    Epochs: 7 (best models are from 4-5 epochs) - we decided to take early stopping (best probf1score) models instead of the last one.
+•    Sampler (thanks to @hengck23): custom sequential sampler (sequence -&gt; positive sample / negative sample = 8) – small changes compare to the original one.
+
+class Balancer(torch.utils.data.Sampler):
+
+    def __init__(self, pos_cases, neg_cases, ratio = 3):
+        self.r = ratio - 1
+        self.pos_index = pos_cases
+        self.neg_index = neg_cases
+
+        self.length = self.r * int(np.floor(len(self.neg_index)/self.r))
+        self.ds_len =  self.length + (self.length // self.r)
+
+    def __iter__(self):
+        pos_index = self.pos_index
+        neg_index = self.neg_index
+
+        np.random.shuffle(pos_index)
+        np.random.shuffle(neg_index)
+
+        neg_index = neg_index[:self.length].reshape(-1,self.r)
+        #pos_index = np.random.choice(pos_index, self.length//self.r).reshape(-1,1)
+        pos_index_len = len(pos_index)
+
+        pos_index = np.tile(pos_index, ((len(neg_index) // pos_index_len) + 1, 1))
+        pos_index = np.apply_along_axis(np.random.permutation, 1, pos_index)
+        pos_index = pos_index.reshape(-1,1)[:len(neg_index)]
+
+        index = np.concatenate([pos_index,neg_index], -1).reshape(-1)
+        return iter(index)
+
+    def __len__(self):
+        return self.ds_len
+
+
+Models
+ConvNext_v1 small (timm - checkpoint: convnext_small.fb_in22k_ft_in1k_384). We tried different architectures but this one works in our solution the best.
+•    avg pooling or 
+•    GEM pooling (trainable parameters set to True)
+•    drop_path_rate=0.2  and drop_rate=0.05  (we tested different settings but these works the best for our setup)
+•    input size: (1536, 768), 3 channels (b&amp;w images)
+
+Local validation
+•    Metrics: probf1, ROC_AUC, prec/recall and MCC (Matthews’s correlation coefficient)
+•    For local validation we used tool provided by @hengck23 - https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/378521
+•    For each traing epoch we additionaly plot: prediction dynamic, confusion matrix.
+•    We looked into prediction and performed visual analysis of missed or incorrectly classified samples.  
+
+Inference
+•    Three models – ensemble (voting or model probabilities averaging):
+
+
+
+avg pooling - fold 1 (trained on 1536 x 768) -&gt; probf1: 0.52 (local CV) / 0.57 (LB)
+
+GEM pooling - fold 2 (trained on 1536 x 768) -&gt; probf1: 0.44 (local CV) (we do not test it on LB)
+
+GEM pooling - fold 3 (trained on 1536 x 768) -&gt; probf1: 0.46 (local CV) (-)
+•    TTA: h_flip only (TTA weighted - 0.6 original image + 0.4 flipped image) - &gt; it inceased our score by 0.03
+
+
+Ensembling
+•    Model probabilities ensembling using better then median function
+
+def better_than_median(inputs, axis):
+    """Compute the mean of the predictions if there are no outliers,
+    or the median if there are outliers.
+
+    Parameter: inputs = ndarray of shape (n_samples, n_folds)"""
+    spread = inputs.max(axis=axis) - inputs.min(axis=axis) 
+    spread_lim = 0.6
+    print(f"Inliers:  {(spread &gt; spread_lim).sum():7} -&gt; compute mean")
+    print(f"Outliers: {(spread &lt;= spread_lim).sum():7} -&gt; compute median")
+    print(f"Total:    {len(inputs):7}")
+    return np.where(spread &gt; spread_lim,
+                    np.mean(inputs, axis=axis),
+                    np.median(inputs, axis=axis))
+
+
+•    Voting and then averaging
+
+def voting_confidence(x):
+    if x&lt;=0.25:
+        return 0.0
+    elif x&lt;=0.45:
+        return 0.35
+    elif x&lt;=0.55:
+        return x
+    elif x&lt;=0.75:
+        return 0.65
+    else:
+        return 1.0
+
+
+CPU/GPU
+•    Training: 1-2xA6000 or A100 GPU-80GB on Cloud 
+
+Experiment tracking
+•    Weights &amp; Biases 
+
+Things we tested during competition and did not improve our score (probably more tests are needed)
+•    Full dataset training, site_1/site_2 separate models, up-sampling (by sample frac), down-sampling.
+•    Stochastic Weight Averaging and Exponential Moving Average
+•    Optimizers – AdamW, SGD, NAdam, Lion, Lamb
+•    Training with layer freeze (different levels)
+•    Loss function: Focal loss, LDAM, LMFLoss, Label smoothing
+•    Models: Effnet, NextVit (simmilar score but harder to train and slower), DenseNet, Inception_v3, maxvit
+•    Effnet + pixel-wise self attention, Effnet + cross attention
+•    Convnextv1 + max and avg concatenated pooling
+•    Synthetic dataset: synthetic breast cancer generator (experienced radiologist is required to evaluate solution).
+•    PatchGD - https://arxiv.org/pdf/2301.13817.pdf
+•    Training attitudes - Pair training – MLO / CC – patient_id and side (L/R) 
+•    Metamodel - SVM and XGBoost on image enbeddings.
+•    Pseudolabeling - using new samples during submission time.
+•    Selecting best samples for cases where patient has more then 2 views 
+
+sub_s1 = sub_s1[['prediction_id', 'site_id', 'patient_id', 'laterality', 'cancer']].\
+        groupby(['patient_id','laterality']).\
+             apply(lambda x: x.nlargest(3,'cancer')).reset_index(drop=True)
+
+
+Special thanks to
+•    @Andrij - for great cooperation during the competition. For very good and substantive talks aimed at solving the problem and improving results.
+•    @hengck23 - Thanks for the great activity on the forum and sharing knowledge. I implemented many of your ideas, many of them improved our score. Thank you!
+
+Source code will be available soon (in week) on [Remek github](https://github.com/rkinas
+
+Comments:
+├─ Giba (2023-02-28 12:31:55.093000) [+3]
+│  Congrats @remekkinas and @aikhmelnytskyy ! Great solution, thanks for sharing.
+  ├─ Remek Kinas (2023-02-28 12:42:36.267000) [+5]
+  │  @titericz I would like to thank you very much for your inspiration. This is true story. I was really devastated by this competition :) The more I wanted give up the harder I worked thanks to this m...
+├─ Michal Bogacz (2023-03-02 14:24:33.797000) [+1]
+│  Congrats Remek for your 1st gold medal in competition and master title!
+  ├─ Remek Kinas (2023-03-02 19:51:28.190000) [+1]
+  │  Thank you @michau96 - and as a bonus: our team did not use any pixel from external dataset 😁
+├─ Qishen Ha (2023-03-02 13:33:38.910000) [+1]
+│  Congratulation for being competition master!
+  ├─ Remek Kinas (2023-03-02 19:53:05.540000) [+2]
+  │  @haqishen thank you very much. I am really, really happy. Still reading solution and working on some improvements. Still learning and have fun during competition. See you soon.
+├─ FabienDaniel (2023-03-01 17:17:18.473000) [+1]
+│  Congrats, thanks for this write-up and all the things you shared during this competition.
+├─ Mayank Bhaskar (2023-03-01 16:38:56.193000) [+1]
+│  Congrats @remekkinas and @aikhmelnytskyy! A well-deserved gold medal indeed &amp; surely, the first of many for @remekkinas 💯
+│  
+│  A great write-up above. I learned a lot from @hengck23's posts as well...
+  ├─ Remek Kinas (2023-03-01 19:17:29.267000) [+1]
+  │  Hi, thank you. Code will be available soon - I am working on some improvements (testing ideas provided by rest of participants).
+├─ Jijie Li (2023-03-01 07:54:12.853000) [+1]
+│  Congratulations! You gave me a lot of help in this competition, especially the roi extraction of the image dataset, wonderful work!
+├─ KhanhVD (2023-03-01 07:20:15.507000) [+1]
+│  Congrats @remekkinas and team. A lot of works and well deserved!
+├─ Julia Nickerson (2023-03-01 01:25:38.160000) [+1]
+│  Congratulations! 🎉
+│  
+│  You mentioned that "Training with layer freeze" did not help. Does that mean your best models were trained with all layers unfrozen? Do you know roughly how big of an effect thi...
+  ├─ Remek Kinas (2023-03-01 19:26:47.303000) [+0]
+  │  0.5 score is from unfrozen model layers (during training). We tried to increase batch size and decrease resources needed for training. This is why we decided to freeze some layers (we used this met...
+    ├─ Julia Nickerson (2023-03-01 22:41:26.517000) [+0]
+    │  That's very helpful, thanks for your response!
+├─ Ravi Shah (2023-03-01 01:10:49.840000) [+1]
+│  Fascinating solution! Thanks for the detailed write up @remekkinas
+├─ kemp (2023-02-28 13:24:48.153000) [+1]
+│  Congratulations @remekkinas.  I learned a lot from you during the competition.  Thank you for all of the hard work and for sharing.
+├─ Fili73 (2023-02-28 13:22:23.990000) [+1]
+│  You are great Remek! congratulation for the result and above all for the support you always provide here.
+├─ taruto (2023-02-28 12:01:56.743000) [+1]
+│  Congratulations @remekkinas !!!
+│  In this comp. you really helped me !!!  I want to say thank you.
+│  
+│  I like the part of GridDropoutv2 and CoarseDropoutv2 that generates cuts in random grayscale.
+│  How d...
+  ├─ Remek Kinas (2023-02-28 12:07:05.060000) [+3]
+  │  Thank you very much. The source of inspiration was from Trivial Augument: https://github.com/automl/trivialaugment
+    ├─ taruto (2023-02-28 13:01:46.447000) [+1]
+    │  Interesting! I must check this paper.
+    │  after the competition, you also give me tips
+    │  Thank you very much!!
+    ├─ Remek Kinas (2023-02-28 14:38:58.193000) [+1]
+    │  I am open to:
+    │  
+    │  
+    │  
+    │  learn
+    │  
+    │  share
+    │  
+    │  
+    │  AI is not only job for me but passion 😍 I really love do it … although it can devastate and frustrate me 😂 It's a complicated relationship.
+├─ Paul Bacher (2023-02-28 08:49:51.377000) [+1]
+│  Congratulations @remekkinas, all your work helped me during this competition and I really wanted to thank you.
+│  I have been very excited to see your solution.
+│  Keep going! 😊
+  ├─ Remek Kinas (2023-02-28 11:22:49.043000) [+0]
+  │  Thank you very much! 👍
+├─ Antti Isosalo (2023-02-28 06:40:17.217000) [+1]
+│  Congratulations @remekkinas! Looks like giving a lot is also a key to success. 😃
+├─ hoyso48 (2023-02-28 01:59:52.767000) [+1]
+│  Congratulations! I have a question, I don't understand the ensembling part very well. Did you use 3 models as a each model of 3-fold and use different pooling and tta for each fold?
+  ├─ Remek Kinas (2023-02-28 11:30:26.173000) [+3]
+  │  Thank you!
+  │  
+  │  0.5 (priv LB)
+  │  
+  │  
+  │  
+  │  3 convnext (v1) models with TTA (model *0.6 + model_tta * 0.4) - model1=fold_1, model2=fold_2, model3=fold_3 -&gt; as a result we get 3 model predictions (probabilities...
+├─ olivepicker (2023-02-28 01:33:55.083000) [+1]
+│  Congratulations!
+├─ Pablo Larrosa (2023-02-28 01:33:41.063000) [+1]
+│  Thank in advance for sharing your experience, congratulations!!!
+├─ Eleftherios Fanioudakis (2023-02-28 01:30:18.053000) [+1]
+│  Thank you and congratulations for the competition achievements!
+├─ joejeo1 (2023-02-28 01:29:11.943000) [+1]
+│  Thank you for the very detailed summary.  I have definitely learned something here.
+├─ tharun_01 (2023-03-12 12:11:03.333000) [+2]
+│  Congrats Remek, eagerly waiting for your source code.
+├─ beluga (2023-02-28 12:52:11.053000) [+2]
+│  Congrats @remekkinas and @aikhmelnytskyy Well deserved gold medal indeed.
+│  
+│  We also struggled a lot during the competition (CV-LB inconsistencies, finding the right amount of augmentation, not to ov...
+  ├─ Remek Kinas (2023-02-28 12:58:05.453000) [+1]
+  │  We had the same problem. I read a paper about augumentation techniques in breast cancer detection/classification. Tested most of them. Setup I described works the best for us … but I am waiting for...
+├─ Darek Kłeczek (2023-02-28 06:58:52.520000) [+2]
+│  Congrats Remek, amazing grit going all the way through this comp, putting so much energy and surviving the shake up!
+├─ dragon zhang (2023-02-28 11:50:11.647000) [+1]
+│  thanks for sharing.
+├─ ChenxiangSun@NJU (2023-02-28 01:33:30.100000) [+1]
+│  Congratulations! Thanks for sharing.

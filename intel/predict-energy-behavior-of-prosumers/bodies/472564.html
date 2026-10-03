@@ -1,0 +1,59 @@
+<h2>Target normalization</h2>
+<p>For this competition it is crucial to deal with trends. My solution predicts:</p>
+<ul>
+<li>Consumption: log_cons - log_cons_2d_ago, log_cons - log_cons_7d_ago</li>
+<li>Production: (prod - prod_2d_ago) / installed_capacity. With more time, I'd have tried adding (prod - prod_3d_ago) / installed_capacity (same idea <a href="https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/464650" target="_blank">here</a>).</li>
+</ul>
+<h2>Features:</h2>
+<p>Besides features in public notebooks:</p>
+<ul>
+<li>New categorical features: <ul>
+<li>county_producttype, county_business, producttype_business</li>
+<li>weekend_or_holiday</li>
+<li>month, hour, dayofweek were treated both categorically and numerically (as well as appropriate sin/cos transformations), and added a new "season" feature.</li></ul></li>
+<li>County information from <a href="https://en.wikipedia.org/wiki/Counties_of_Estonia" target="_blank">Wikipedia</a>. I was hoping the model would split counties by large/small population, but in practice they were unimportant.</li>
+<li>For production, <a href="https://astral.readthedocs.io/en/latest/" target="_blank">Astral</a> gives:<ul>
+<li>Sun position as elevation, azimuth, and I build certain extra trigonometric combinations</li>
+<li>Time of sunrise/sunset/dusk/dawn/noon</li>
+<li>Current time - (time of sunrise/sunset/dusk/dawn/noon)</li></ul></li>
+<li>For production:<ul>
+<li>Consider a linear regression "production = alpha x variable" and fit alpha using past 7d, 14d, 28d. From this you can add a feature which is the prediction from this model (the error estimate was also useful). </li>
+<li>The variables are 5 different types of radiation (historical/forecasted), temperature, production, production - production(2d ago), production/production(2d ago). </li>
+<li>Features like kurt/skew of last 7d, 14d, 28d (see <a href="https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/463885" target="_blank">this</a> )</li></ul></li>
+</ul>
+<p>I also trained separate models for business/domestic and low/high amount of light (surface_solar_radiation_downwards greater or smaller than 1). There might be other useful splits (I tried without success to cluster prediction_unit_id's and make different models for them).</p>
+<h2>Ensembling</h2>
+<p>For consumption/production I train LGBM on all possible combinations of</p>
+<ul>
+<li>Consumption: <ul>
+<li>All data or split by is_business</li>
+<li>Predict log - log_7d or log - log_2d</li>
+<li>extra_trees = True/False</li>
+<li>Use 350 or 200 features</li></ul></li>
+<li>Production: <ul>
+<li>All data or split by is_business or split low-high radiation</li>
+<li>extra_trees = True/False</li>
+<li>Use 600 or 300 features</li></ul></li>
+</ul>
+<p>This leads to 16 consumption models and 12 production models, tuned with Optuna. I found the ensemble weights doing a linear regression.</p>
+<h2>Submission strategy</h2>
+<p>Since training the models is expensive, I make two submissions</p>
+<ul>
+<li>One with 16+12 pretrained models up to May 2023.</li>
+<li>One with 8+6 models that will train up to Jan 2024.</li>
+</ul>
+<p>Both of them score gold in public LB, but I don't know which one will work best in private. If I had more time I would experiment with retraining during prediction phase, or fine-tuning to perform better in months similar to Feb-Apr.</p>
+<h2>Validation strategy</h2>
+<p>I train with everything except last 8/5/2 months and validate on the rest, so I have 3 CV scores (see <a href="https://www.kaggle.com/ymatioun" target="_blank">@ymatioun</a> <a href="https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/465641#2588954" target="_blank">comment</a>). Then I retrain on all data and submit to LB. I always tried to pick ideas that improved all the 3 CV scores and LB.</p>
+<p>I validate separately consumption/production, which is easy to do locally. To do the same in LB: </p>
+<ul>
+<li>Submit a baseline. For me it was prod_pred = prod_2d_ago, cons_pred = cons_7d_ago, which scores 99.93</li>
+<li>Make two different submissions:<br>
+ 1) prod_pred = prod_2d_ago, cons_pred = tree_based, which scores 87.3<br>
+ 2) prod_pred = tree_based, cons_pred = cons_7d_ago, which scores 72.97</li>
+<li>Because the metric is MAE, the full submission will score 87.3 + 72.97 - 99.93 = 60.34</li>
+</ul>
+<p>I also run this against public notebooks, to see how well I do on production/consumption compared to them.</p>
+<h2>Personal experience</h2>
+<p>Although I've been in Kaggle for a long time, this is the first time I put a lot of work on a competition. Unfortunately, I only started ensembling 3 days ago, so I didn't appreciate that my solution was doing so well (at least on public LB). </p>
+<p>If I had known I could fight for a gold medal, I would at least have studied more carefully the need to retrain, and I would have improved feature engineering for the consumption model. I also didn't experiment with postprocessing. If my code doesn't crash in the private phase, it might still fall down on the leaderboard against approaches w/ retraining.</p>

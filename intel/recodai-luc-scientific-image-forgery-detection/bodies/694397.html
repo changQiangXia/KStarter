@@ -1,0 +1,120 @@
+<h1>Recod.ai/LUC - Scientific Image Forgery Detection 2nd Place Solution</h1>
+<p>First of all, thank you to the organizers for hosting such a wonderful competition. It was a highly meaningful theme—protecting the integrity of scientific research—and I learned a great deal from it.</p>
+<p>Result: <strong>Public 3rd → Private 2nd</strong> </p>
+<h2>Solution Overview</h2>
+<p>Rather than a deep learning-based approach, my solution is built around <strong>classical feature matching (SIFT + RANSAC)</strong>, combined with YOLO-based preprocessing and custom post-processing in a 3-stage pipeline.</p>
+<pre><code>Stage 1: Valid Region Detection (Panel/Text detection with YOLOv8)
+    ↓
+Stage 2: Feature Matching (SIFT + G2NN + RANSAC)
+    ↓
+Stage 3: Post-processing (Cluster merging + High-precision mask generation)
+</code></pre>
+<hr>
+<h2>Stage 1: Valid Region Detection</h2>
+<p>In the subsequent feature matching stage, <strong>graph regions</strong> produce a large number of false positives, and <strong>text regions</strong> cause erroneous matching on caption parts (e.g., matching on the "mm" portion of "10 mm"). These lead to significant accuracy degradation, making their exclusion essential.</p>
+<p>I trained a <strong>Panel detection model</strong> and a <strong>Text detection model</strong> using YOLOv8-m to address this problem.</p>
+<h3>Panel Detection</h3>
+<p>To exclude irrelevant regions such as graphs, only relevant areas (image regions) are detected. Simultaneously, YOLO classifies detections into 3 classes: <strong>corn images</strong>, <strong>Western blot protein images</strong>, and <strong>other biological images</strong>. The reason for separating classes is that the optimal RANSAC inlier threshold differs by image type (described below).</p>
+<p>Since no suitable training data existed, I addressed this by <strong>automatically generating synthetic data</strong>.</p>
+<ul>
+<li>Used a subset of 2,000 images from external data (BioFors dataset) due to time constraints</li>
+<li>Classified and extracted cell/plant images from the competition's authentic images</li>
+<li>Auto-generated synthetic graphs (scatter plots, line charts, heatmaps, violin plots)</li>
+<li>Randomly arranged the above in various layout patterns (1×1, 2×2, 3×1, etc.) to create training data</li>
+<li>Ensembled 5 YOLOv8-m models trained with different seeds using <strong>Weighted Boxes Fusion (WBF)</strong></li>
+</ul>
+<h3>Text Detection</h3>
+<p>Existing OCR solutions (EasyOCR, etc.) were insufficiently accurate—for example, misrecognizing round cells as the letter "O". Since text in scientific paper images has minimal distortion, I determined that OCR-specific heads were unnecessary and <strong>trained YOLOv8-m as an object detector</strong>.</p>
+<ul>
+<li>Manually corrected low-threshold EasyOCR detection results to create annotations (~800 images)</li>
+<li>Added synthetic data (~2,000 images) with randomly placed text on text-free images</li>
+<li>Applied diversity in background color, text color, font, rotation, and size for augmentation</li>
+<li>At inference, performed TTA with two image sizes (640, 1280) and merged both results</li>
+</ul>
+<hr>
+<h2>Stage 2: Feature Matching</h2>
+<h3>Aggressive SIFT Keypoint Extraction</h3>
+<p>Biological images have very little texture, and default settings fail to extract sufficient keypoints.</p>
+<ul>
+<li>Used <code>contrast_threshold=0.001</code> (approximately 1/40 of the default 0.04) to extract a large number of keypoints</li>
+<li>For small images (&lt;1024px), upscaled 4× before feature extraction, then mapped coordinates back to original scale</li>
+</ul>
+<h3>G2NN Matching</h3>
+<p>The absolute L2 distance values vary greatly across images, making fixed thresholds impractical.</p>
+<p>Adopted **G2NN **: sort matching distances and accept only matches up to the breakpoint where $T_{n+1}/T_n &gt; \alpha$ ($\alpha=0.7$). This achieves threshold-independent matching.</p>
+<h3>Speedup: KDTree</h3>
+<p>Due to the enormous number of keypoints, used FLANN KDTree approximate nearest neighbor search to reduce complexity from $O(N^2)$ to $O(N \log N)$.</p>
+<h3>RANSAC + Geometric Filtering</h3>
+<p>Two sampling strategies were employed:</p>
+<ul>
+<li><strong>Local sampling</strong>: Execute RANSAC within high-density match regions + YOLO-detected bboxes. Analyze the H matrix to filter out unrealistic transformations (scale &gt;4×, shear deformation, etc.)</li>
+<li><strong>Global sampling</strong>: Execute RANSAC once on all matches, then apply HDBSCAN clustering to remove false matches</li>
+</ul>
+<p>Additionally, RANSAC inlier thresholds were adjusted per image type based on the 3 classes detected in Stage 1:</p>
+<ul>
+<li><strong>Corn images</strong>: Fine black-and-white line patterns cause frequent false matches, so the inlier threshold was set <strong>high</strong> for strict filtering</li>
+<li><strong>Protein images (Western blot)</strong>: Very few features make matching inherently difficult, so the inlier threshold was set <strong>low</strong> to enable detection even with few matches</li>
+<li><strong>Other biological images</strong>: An intermediate threshold was used</li>
+</ul>
+<hr>
+<h2>Stage 3: Post-processing</h2>
+<p>After feature matching, I discovered that <strong>careful clustering is essential</strong>. Without it, the F1 score (the competition metric) drops significantly. To achieve high-precision clustering, I implemented the following processing.</p>
+<h3>Two-stage Cluster Merging</h3>
+<ol>
+<li><strong>Stage 1 (within same pair)</strong>: Merge nearby clusters with similar H matrices (normalized difference of rotation angle, scale, and translation &lt; 0.02) using Union-Find</li>
+<li><strong>Stage 2 (across different pairs)</strong>: Merge as the same instance when IoMin (Intersection / min(area1, area2)) between source/dest bboxes ≥ 0.3</li>
+</ol>
+<h3>High-precision Mask Generation</h3>
+<ol>
+<li>Recompute H matrix from all corresponding points of merged clusters</li>
+<li>Generate source/dest masks via convex hull + dilation</li>
+<li>Refine masks precisely using H matrix transformation error (within mean + 2σ)</li>
+<li>Apply bidirectional refinement using inverse transformation</li>
+</ol>
+<hr>
+<h2>What Didn't Work</h2>
+<ul>
+<li><strong>Other feature descriptors</strong> (SURF, ORB, AKAZE, SuperPoint): Could not extract sufficient keypoints in the biological image domain, resulting in poor accuracy</li>
+<li><strong>Deep learning-based approaches</strong>: Tried CMFD models combining DINOv2/SegFormer backbones with self-correlation modules, but accuracy was insufficient</li>
+</ul>
+<hr>
+<h2>Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Panel Detection</td>
+<td>YOLOv8-m × 5 (WBF ensemble), trained on synthetic data</td>
+</tr>
+<tr>
+<td>Text Detection</td>
+<td>YOLOv8-m, manual annotation + synthetic data</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>SIFT (contrast_threshold=0.001)</td>
+</tr>
+<tr>
+<td>Matching</td>
+<td>G2NN (α=0.7) + FLANN KDTree</td>
+</tr>
+<tr>
+<td>Geometric Estimation</td>
+<td>Affine RANSAC + H matrix filtering</td>
+</tr>
+<tr>
+<td>Clustering</td>
+<td>HDBSCAN + 2-stage merging (H similarity → IoMin)</td>
+</tr>
+<tr>
+<td>Mask Refinement</td>
+<td>Convex hull + H transformation error-based refinement</td>
+</tr>
+</tbody>
+</table>
+<p>Code is available here <a href="https://github.com/oshima-yoppi/luc_pub" target="_blank">https://github.com/oshima-yoppi/luc_pub</a>.</p>

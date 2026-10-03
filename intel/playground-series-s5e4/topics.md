@@ -1,0 +1,82 @@
+# playground-series-s5e4 讨论区（按票数排序，共 80 条）
+
+- [1st Place - RAPIDS cuML Stack - 3 Levels!](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575784) — 234 票 / 152 评论 / 2025-05-01 **write-up?**
+- [Strong Correlation Between Features and Target](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571549) — 149 票 / 137 评论 / 2025-04-04 
+- [Strong Feature Interaction Exists !](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573002) — 142 票 / 85 评论 / 2025-04-12 
+- [2nd Place | Single LightGBM and Target Encoding](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575840) — 78 票 / 50 评论 / 2025-05-01 **write-up?**
+- [Direct versus Indirect - Relationship with Target](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574249) — 60 票 / 32 评论 / 2025-04-20 
+- [Rank 4 approach - lots of features, lots of simple models and a ridge blend!](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575782) — 53 票 / 32 评论 / 2025-05-01 
+- [Watch out for duplicates in the original data!](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571035) — 49 票 / 22 评论 / 2025-04-01 
+- [Getting rid of those annoying RuntimeWarning's when displaying a dataframe with NaN's](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571034) — 41 票 / 27 评论 / 2025-04-01 
+- [Two libraries worth trying](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571580) — 37 票 / 31 评论 / 2025-04-04 
+- [Onboarding materials](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571010) — 32 票 / 2 评论 / 2025-04-01 
+- [3rd Place - Target Encoding and 3 Levels](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575862) — 28 票 / 18 评论 / 2025-05-02 **write-up?**
+- [6th Place: Select Feature Combinations based on RMSE Scores](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575783) — 27 票 / 17 评论 / 2025-05-01 **write-up?**
+- [Pattern in the number of decimal digits of Episode_Length_minutes](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574925) — 27 票 / 32 评论 / 2025-04-24 
+- [Viewing the leaderboard at the end of the competition](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575789) — 24 票 / 5 评论 / 2025-05-01 
+- [[Tabular competition] Prediction interval competition II: House price](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574803) — 23 票 / 3 评论 / 2025-04-24 
+- [Trees, targets and outliers: a practical EDA recap for the listening-time task](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574754) — 21 票 / 8 评论 / 2025-04-23 
+- [About those weird, inconsistent values in the training data: It's an expected feature of synthetic data](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572351) — 20 票 / 0 评论 / 2025-04-09 
+- [[~LB 12.6]Improving Single XGBoost Accuracy through Feature Engineering](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572186) — 18 票 / 15 评论 / 2025-04-08 
+- [🚀 WarpGBM: GPU-Accelerated Gradient Boosting for Podcast Listening Time 🔊⏱️](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573581) — 15 票 / 22 评论 / 2025-04-16 
+- [Can anyone suggest something for missing values.](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571138) — 12 票 / 28 评论 / 2025-04-01 
+- [5th place: 100 OOFs, laziness, and a blunder or two](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575839) — 12 票 / 8 评论 / 2025-05-02 **write-up?**
+- [🏆 19th Place Solution | My First Tabular Comp — What an Experience!](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575792) — 12 票 / 8 评论 / 2025-05-01 **write-up?**
+- [Target Value Match Between Original and Synthetic Data](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574749) — 12 票 / 2 评论 / 2025-04-23 
+- [Not clipping killed my best submission - anyone else experience this/similar?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575785) — 11 票 / 19 评论 / 2025-05-01 
+- [XGBoost Feature Selection & Engineering](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573343) — 11 票 / 10 评论 / 2025-04-15 
+- [Would there be an AutoML Grand Prix this year?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573268) — 11 票 / 13 评论 / 2025-04-14 
+- [Can Two Test Set Extreme Outliers Destroy your Private LB ? (I suggest to cap them)](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571827) — 11 票 / 9 评论 / 2025-04-05 
+- [HistGradienBoosting looks promising](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571892) — 10 票 / 2 评论 / 2025-04-06 
+- [Will Episode 5 be released soon?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575798) — 10 票 / 8 评论 / 2025-05-01 
+- [A few approachable tabular competitions for your perusal](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574117) — 10 票 / 0 评论 / 2025-04-20 
+- [A magic command to run Pandas & sklearn on GPU](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571742) — 10 票 / 20 评论 / 2025-04-05 
+- [How to accelerate the TargetEncoder in sklearn?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573104) — 9 票 / 7 评论 / 2025-04-13 
+- [Data generation process / Inference attacks ](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571064) — 9 票 / 3 评论 / 2025-04-01 
+- [Can anyone explain why target encoding yields better performance?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573940) — 9 票 / 6 评论 / 2025-04-18 
+- [🚀 WarpGBM vs LightGBM, XGBoost, CatBoost — GPU Benchmark Results 🔥](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573846) — 9 票 / 20 评论 / 2025-04-18 
+- [PS-S5E4 | Division attention - 35 launches on private](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575837) — 9 票 / 0 评论 / 2025-05-01 
+- [Potential data issues across train-test-original data](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571054) — 8 票 / 0 评论 / 2025-04-01 
+- [Use extra GPU hours to great effect in ongoing competitions with aplomb!](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575786) — 8 票 / 0 评论 / 2025-05-01 
+- [Memory not enough!](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573585) — 8 票 / 14 评论 / 2025-04-16 
+- [#18 | “30”XGBoost -> AutoGluon](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575781) — 8 票 / 3 评论 / 2025-05-01 
+- [How to Post process?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571083) — 6 票 / 2 评论 / 2025-04-01 
+- [Seeking advice about tabular problems](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572135) — 6 票 / 8 评论 / 2025-04-07 
+- [Single XGBoost [LB12.52 CV12.59]](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571651) — 6 票 / 11 评论 / 2025-04-04 
+- [My solution-Ensembling 4 models-private score 11.66859](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575951) — 6 票 / 15 评论 / 2025-05-01 **write-up?**
+- [Good Reference Materials for the Contest - Predict Podcast Listening Time](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571037) — 6 票 / 3 评论 / 2025-04-01 
+- [Seeking Clarity on Self-Promotion Guidelines](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572051) — 5 票 / 10 评论 / 2025-04-07 
+- [Do you have any ideas for 'select' groups for Target Encoding?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574808) — 5 票 / 7 评论 / 2025-04-24 
+- [I don't understand the data](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571325) — 5 票 / 3 评论 / 2025-04-02 
+- [Error in save version](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574699) — 5 票 / 1 评论 / 2025-04-23 
+- [Large dataset, good CV-LB correspondence => low shake-up potential?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572750) — 5 票 / 17 评论 / 2025-04-11 
+- [Learning Journey (MLP vs XGBoost) & Stuck at ~12.9 RMSE - Seeking Advice](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571825) — 5 票 / 3 评论 / 2025-04-05 
+- [How a podcast can have multiple time the same episode?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571162) — 5 票 / 6 评论 / 2025-04-01 
+- [How to Deal with Outliers in Guest_Popularity_percentage?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572089) — 4 票 / 6 评论 / 2025-04-07 
+- [Listening time anomaly - Episode Length](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571240) — 4 票 / 5 评论 / 2025-04-02 
+- [Detect suspicious Ad values](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571051) — 4 票 / 4 评论 / 2025-04-01 
+- [Feature engineering question](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574766) — 4 票 / 4 评论 / 2025-04-23 
+- [Confusion from a Beginner: Why Doesn't Neural Network Perform as Well as Expected?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571642) — 4 票 / 3 评论 / 2025-04-04 
+- [How far is Train dataset from Original dataset ?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571241) — 4 票 / 0 评论 / 2025-04-02 
+- [Time is valuable, and the dataset is large.](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571811) — 4 票 / 4 评论 / 2025-04-05 
+- [Description of all the columns.](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571060) — 4 票 / 0 评论 / 2025-04-01 
+- [Discretizing TE features into categorical](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573253) — 3 票 / 2 评论 / 2025-04-14 
+- [How can we maximize resources getting models like XGBoost to use both GPUs?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572614) — 3 票 / 15 评论 / 2025-04-10 
+- [Improve Score by Normalizing Listening Time](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573423) — 3 票 / 1 评论 / 2025-04-15 
+- [Correlation between Categorical Features (Podcast Name, Genre, Publication day and time and Sentiment) and Target](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/572728) — 3 票 / 3 评论 / 2025-04-11 
+- [Beginner Notebook: MLP vs XGBoost Exploration - Feedback Welcome!🤝](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571696) — 3 票 / 7 评论 / 2025-04-04 
+- [Residual Modeling & Target Transformation — Worth Exploring?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573764) — 3 票 / 7 评论 / 2025-04-17 
+- [[EDA] Listening_Time of episodes per podcast](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571253) — 3 票 / 0 评论 / 2025-04-02 
+- [Memory allocation](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573861) — 3 票 / 11 评论 / 2025-04-18 
+- [Training/ processing speed- RF/ XGB](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571246) — 3 票 / 5 评论 / 2025-04-02 
+- [What helped you to improve 🚀 your score? Alternate Approaches?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574135) — 3 票 / 1 评论 / 2025-04-20 
+- [Should I only monitor RMSE?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571321) — 3 票 / 4 评论 / 2025-04-02 
+- [Listening time exceeds episode length – how are you handling this?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571680) — 3 票 / 4 评论 / 2025-04-04 
+- [Same Episode and Title, but different Episode Lengths](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571364) — 3 票 / 1 评论 / 2025-04-02 
+- [Has Anyone Tried Embedding Podcast_Name?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575051) — 3 票 / 6 评论 / 2025-04-25 
+- [Using LLMs (Gemma 3) for data analysis?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/571113) — 3 票 / 2 评论 / 2025-04-01 
+- [Is data engineering more important than model tuning?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575228) — 3 票 / 6 评论 / 2025-04-27 
+- [Beginner Here : Stuck on Feature engineering. ](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/575126) — 3 票 / 7 评论 / 2025-04-26 
+- [Seeking guidance on when "binning" is appropriate.](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574156) — 2 票 / 4 评论 / 2025-04-20 
+- [Is there any other way to improve model performance than just Combining different features and then use TE on that?](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573759) — 2 票 / 6 评论 / 2025-04-17 
+- [Inconsistent fold RMSEs](https://www.kaggle.com/competitions/playground-series-s5e4/discussion/573654) — 2 票 / 8 评论 / 2025-04-17 

@@ -1,0 +1,60 @@
+# https://www.kaggle.com/competitions/playground-series-s6e6/discussion/703535
+
+Topic #703535: Formulae for spectral_type and galaxy_population
+  Author: broccoli beef
+  Posted: 2026-06-01 02:55:03.466000
+  Votes: 47  Comments: 8
+
+While the competition dataset has dropped some features from the "original" dataset, it also contains additional features spectral_type and galaxy_population not present in the "original" dataset. If you tried to append the "original" dataset to the train set during training, you would encounter difficulty.
+
+It appears that spectral_type and galaxy_population are post-synthesis feature engineering and are the results of simple thresholding. You can apply the same feature engineering to the "original" dataset before appending.
+
+def spectral_type(g, r):
+    return pd.cut(
+        r-g, 
+        [-np.inf, -1, -0.5, 0, np.inf],
+        labels=['M', 'G/K', 'A/F', 'O/B']
+    ).astype(str)
+
+def galaxy_population(u, r):
+    return pd.cut(
+        u-r, 
+        [-np.inf, 2.2, np.inf],
+        labels=['Blue_Cloud', 'Red_Sequence']
+    ).astype(str)
+
+X = pd.concat([train, test])
+assert spectral_type(X.g, X.r).equals(X.spectral_type)
+assert galaxy_population(X.u, X.r).equals(X.galaxy_population)
+
+Comments:
+├─ broccoli beef (2026-06-01 13:08:50.657000) [+7]
+│  In case you are curious how these were derived.
+│  
+│  from itertools import combinations
+│  from sklearn.tree import DecisionTreeClassifier, export_text
+│  
+│  colors = ['u','g','r','i','z']
+│  X = pd.concat([train...
+  ├─ JMAscacibar (2026-06-02 11:57:10.577000) [+2]
+  │  Thank you, @siukeitin.
+  │  
+  │  Did you already know that pairwise differences are called colour indices in astronomy? What made you think of trying that approach?
+  │  
+  │  It is quite clever to check whether a sh...
+    ├─ broccoli beef (2026-06-04 14:38:10.770000) [+2]
+    │  kaggle used some rough approximations to construct these features. The real classification is not a simple thresholding.
+    │  
+    │  The classical approximate threshold separating blue cloud and red sequence ...
+  ├─ Aditya Raj Singh (2026-06-06 14:55:30.357000) [+2]
+  │  This was brilliant, the nodes of DT classifier were pure
+├─ Georgy Mamarin (2026-06-26 08:37:31.147000) [+2]
+│  Thanks, this became the backbone of the feature section in my EDA. I rebuilt both columns from your recipe (100% match), and the catch: despite high mutual information, adding them to a LightGBM li...
+├─ nybbler (2026-06-01 19:28:59.093000) [+3]
+│  This is very cool! Thanks for sharing the derivation.
+│  
+│  I looked into this, and it seems though that being abe to concat the SDSS17 data may not actually help(?) The adversarial AUC is quite high an...
+├─ Navneet (2026-06-02 07:41:40.587000) [+1]
+│  Cool Insight @siukeitin
+├─ Durga Kumari (2026-06-03 16:32:55.173000) [+2]
+│  Nice find. This should help when merging the original dataset.

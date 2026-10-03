@@ -1,0 +1,82 @@
+# predict-ai-model-runtime 讨论区（按票数排序，共 80 条）
+
+- [Understanding Layout and Tile Configurations in AI Compilers](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435631) — 101 票 / 16 评论 / 2023-08-30 
+- [1st Place Solution for the Google - Fast or Slow? Predict AI Model Runtime Competition](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456343) — 68 票 / 27 评论 / 2023-11-23 **write-up?**
+- [Tensor Tile, Tensor Shard, Simulated Annealing and Langevin Dynamics. ](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435577) — 51 票 / 15 评论 / 2023-08-30 
+- [some youtube video on the competition you should not missed!](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436629) — 45 票 / 7 评论 / 2023-09-03 
+- [[IMPORTANT] Data update – retrain your models!](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/443581) — 33 票 / 17 评论 / 2023-09-27 
+- [6th solution: Node-level Instance Norm + Residual  SageConv on 5-hop-neighbour Subgraph ](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456084) — 28 票 / 5 评论 / 2023-12-02 **write-up?**
+- [11th place solution: LightGBM](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456092) — 27 票 / 8 评论 / 2023-11-19 **write-up?**
+- [4th simple mlp solution](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456462) — 25 票 / 6 评论 / 2023-11-20 **write-up?**
+- [10th place solution: Fast or Slow with Graph Transformers](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456129) — 25 票 / 1 评论 / 2023-11-19 **write-up?**
+- [What is a Tensor Processing Unit (TPU)?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/437673) — 24 票 / 10 评论 / 2023-09-07 
+- [5th Place Solution: GNN with Invariant Dimension Features](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456093) — 23 票 / 15 评论 / 2023-12-16 **write-up?**
+- [2nd Place Solution for the Google - Fast or Slow? Predict AI Model Runtime Competition](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456365) — 22 票 / 6 评论 / 2023-11-21 **write-up?**
+- [9th Place Solution: GNN with Compressed Graphs Using Dijkstra’s Algorithm](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456206) — 21 票 / 2 评论 / 2023-11-18 **write-up?**
+- [[place holder] my experimental results](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436741) — 20 票 / 14 评论 / 2023-09-04 
+- [Files converted to parquet and csv](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435785) — 19 票 / 6 评论 / 2023-08-30 
+- [Something Interesting About Test Data.](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456083) — 19 票 / 19 评论 / 2023-11-18 
+- [Anticipate a decent shakeup](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436977) — 18 票 / 19 评论 / 2023-09-04 
+- [Understanding the layout config features of a convolutional node](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/438074) — 17 票 / 11 评论 / 2023-09-09 
+- [3rd place solution write-up](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456377) — 16 票 / 2 评论 / 2023-11-27 **write-up?**
+- [Official starter notebook](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/444828) — 15 票 / 0 评论 / 2023-10-03 
+- [Can we extract additional features from the graph?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435640) — 14 票 / 16 评论 / 2023-08-30 
+- [Extracting additional features from protobuf](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/445225) — 14 票 / 4 评论 / 2023-10-05 
+- [CV / LB Thread](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/451958) — 14 票 / 7 评论 / 2023-10-31 
+- [19th Place Solution](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456074) — 14 票 / 3 评论 / 2023-11-18 **write-up?**
+- [Leakage happening due to test sampling](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456090) — 13 票 / 2 评论 / 2023-11-18 
+- [Crikey! Data Loading Videos](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/453824) — 13 票 / 4 评论 / 2023-11-07 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/433784) — 13 票 / 12 评论 / 2023-08-22 
+- [8th place solution](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456645) — 12 票 / 1 评论 / 2023-11-21 **write-up?**
+- [Explanations of Data Folder Structure](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436680) — 12 票 / 2 评论 / 2023-09-03 
+- [Understanding Competition Evaluation Metrics ](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435744) — 11 票 / 4 评论 / 2023-08-30 
+- [Wrong data in layout/xla/random](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/449137) — 11 票 / 9 评论 / 2023-10-23 
+- [Meme Thread](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/455915) — 10 票 / 0 评论 / 2023-11-17 
+- [How to deal with layout nlp data?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/438498) — 10 票 / 11 评论 / 2023-09-11 
+- [usage of data, e.g. train on "valid+train" or pretrain on "test"?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/453760) — 10 票 / 3 评论 / 2023-11-07 
+- [Power BI EDA - [01.09.2023, Topology Analysis & Runtime analysis]](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436224) — 9 票 / 7 评论 / 2023-09-01 
+- [forget about deep GNN .... use LLM to compile your model?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456565) — 9 票 / 3 评论 / 2023-11-20 
+- [anyone know how to visualise the graph from npz file?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/452840) — 9 票 / 1 评论 / 2023-11-03 
+- [Increasing Training Loss with Improving Validation Performanc](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/448367) — 9 票 / 41 评论 / 2023-10-19 
+- [17th place solution: GNN + TransformerEncoderLayer w/ BCELoss.](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456450) — 8 票 / 0 评论 / 2023-11-20 **write-up?**
+- [Understanding the "layout propagation" technique](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/443265) — 8 票 / 11 评论 / 2023-09-26 
+- [K-fold predictions](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/452540) — 8 票 / 1 评论 / 2023-11-02 
+- [16th place solution](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456489) — 7 票 / 0 评论 / 2023-12-20 **write-up?**
+- [Layout Runtimes And Configurations](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436214) — 7 票 / 6 评论 / 2023-09-01 
+- [Building a model to learn layout data](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/439002) — 7 票 / 10 评论 / 2023-09-13 
+- [RMSE > MSE](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/455672) — 7 票 / 0 评论 / 2023-11-15 
+- [What is your kendal tau for layour:xla](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/443415) — 7 票 / 8 评论 / 2023-09-27 
+- [An introduction to graph theory - edition 2.09.2023](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436435) — 6 票 / 2 评论 / 2023-09-02 
+- [Building GNN from scratch](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/445573) — 6 票 / 0 评论 / 2023-10-07 
+- [Is it important to clean the data?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/447859) — 6 票 / 3 评论 / 2023-10-17 
+- [Predict AI Model Runtime: Research Papers ](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/451732) — 6 票 / 1 评论 / 2023-10-30 
+- [14th Place Solution for the Google - Fast or Slow? Predict AI Model Runtime Competition](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456105) — 6 票 / 0 评论 / 2023-11-29 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456606) — 5 票 / 2 评论 / 2023-11-20 
+- [Question about `edge_index`](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436786) — 5 票 / 7 评论 / 2023-09-04 
+- [Related Paper : Runtime Performance Prediction for Deep Learning Models with Graph Neural Network.](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435981) — 5 票 / 3 评论 / 2023-08-31 
+- [Share competition related resources](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/437530) — 5 票 / 4 评论 / 2023-09-07 
+- [(Rookie in this competition)Why did the submission take so long to run?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/447031) — 5 票 / 2 评论 / 2023-10-14 
+- [layout datasets have configs with the same node_config_feat but different config_runtime](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/446460) — 5 票 / 2 评论 / 2023-10-11 
+- [Multiple tensor input configs?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/454021) — 5 票 / 1 评论 / 2023-11-08 
+- [Do operations run in parallel?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/453715) — 5 票 / 3 评论 / 2023-11-07 
+- [What does `Baseline on Updated Data` on Leaderboard mean?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/443731) — 5 票 / 4 评论 / 2023-09-28 
+- [i am new and i have ni idea of what i am doing right now. i need guidlines. thank you ](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436985) — 4 票 / 2 评论 / 2023-09-04 
+- [CV and LB are not consistent](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/451472) — 4 票 / 4 评论 / 2023-10-29 
+- [What Do Isolated Nodes Represent in a Computational Graph ?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/437068) — 4 票 / 4 评论 / 2023-09-05 
+- [Congrats to new Kaggle Competitions GM](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456923) — 4 票 / 2 评论 / 2023-11-22 
+- [Configuration is at the graph-level](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/436204) — 4 票 / 4 评论 / 2023-09-01 
+- [Understanding the Layout Configuration](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/441445) — 4 票 / 4 评论 / 2023-09-18 
+- [Understanding the Tile Configuration](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/442258) — 4 票 / 7 评论 / 2023-09-21 
+- [33rd Solution Writeup and Discussion on GST](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456579) — 4 票 / 2 评论 / 2023-11-20 **write-up?**
+- [Understanding dot node layout configurations](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/443386) — 4 票 / 12 评论 / 2023-09-27 
+- [🚀 Embrace Learning with 📓 Public Notebooks! 📈](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/437039) — 3 票 / 1 评论 / 2023-09-05 
+- [New to GNNs this stuff may help u for better understand ](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/437418) — 3 票 / 2 评论 / 2023-09-06 
+- [Why is it so quiet here in this competition...](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/440869) — 3 票 / 6 评论 / 2023-09-16 
+- [7th Place Solution Write-up](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456673) — 3 票 / 1 评论 / 2023-11-21 **write-up?**
+- [Understanding the data collection process](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/438819) — 3 票 / 4 评论 / 2023-09-12 
+- [only the first 5 entries will be considered?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435548) — 3 票 / 6 评论 / 2023-08-29 
+- [When we use npz file instend of csv? What is the benefit of using npz file?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/435700) — 3 票 / 5 评论 / 2023-08-30 
+- [58th place basic vanilla keras solution](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/458511) — 3 票 / 1 评论 / 2023-11-30 **write-up?**
+- [Larger bounds = faster?](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/454177) — 3 票 / 0 评论 / 2023-11-09 
+- [GPU RAM issues for inference in Kaggle kernel](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/446795) — 3 票 / 3 评论 / 2023-10-13 
+- [Please fill our survey!](https://www.kaggle.com/competitions/predict-ai-model-runtime/discussion/456379) — 2 票 / 0 评论 / 2023-11-19 

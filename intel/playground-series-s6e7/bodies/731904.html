@@ -1,0 +1,115 @@
+<p>Here is the writeup of our 2nd place solution, focusing on a robust two-step optimization pipeline applied across 18 base predictors.</p>
+<hr>
+<h2>Key Highlights &amp; Performance</h2>
+<ul>
+<li><strong>Ensemble Scale:</strong> Integrated <strong>18 base predictors</strong> (including diverse implementations of LightGBM, XGBoost, CatBoost, FT-Transformer, RealMLP, and HGBC).</li>
+<li><strong>LogLoss Optimization:</strong> Reduced OOF LogLoss from <strong>0.105495</strong> (Equal Weight Baseline) down to <strong>0.086310</strong>.</li>
+<li><strong>Balanced Accuracy Boost:</strong> Achieved an OOF Balanced Accuracy of <strong>0.950737</strong> (a <strong>+0.061605</strong> improvement over raw argmax).</li>
+</ul>
+<hr>
+<h2>Methodological Pipeline</h2>
+<h3>1. Simplex-Constrained Multi-Class Weight Optimization (SLSQP)</h3>
+<p>Instead of a standard uniform average, we optimized class-specific weights $W \in \mathbb{R}^{18 \times 3}$ across all 18 base predictors (54 parameters in total) using <strong>SLSQP</strong>.</p>
+<ul>
+<li><strong>Objective &amp; Constraint:</strong> Directly minimize OOF LogLoss. Weights are normalized per class inside the objective function, effectively enforcing a simplex constraint (<code>\sum_m w_{m, c} = 1</code>).</li>
+<li><strong>Renormalization:</strong> The blended class scores are finally renormalized to form valid probability distributions before evaluating LogLoss.</li>
+<li><strong>Complementary Strengths:</strong> The optimized weights indicate complementary predictive strengths among the base predictors:<ul>
+<li><strong><code>ftt_kawamata</code> (FT-Transformer)</strong> received the largest optimized weight across all three classes, contributing <strong>71.81%</strong> for Class 0, <strong>62.45%</strong> for Class 1, and <strong>50.28%</strong> for Class 2.</li>
+<li><strong><code>xgb_ovr_kawamata</code> (XGBoost OvR)</strong> acts as a strong complementary predictor, accounting for <strong>45.59%</strong> in Class 2 and <strong>28.19%</strong> in Class 1.</li></ul></li>
+</ul>
+<h3>2. Direct Linear Blending</h3>
+<p>Rather than training an <strong>additional nonlinear meta-learning stage</strong> (which risks overfitting out-of-fold metadata), we used a direct linear combination of the base predictions, preserving the linear interpretability of the ensemble weights.</p>
+<h3>3. Metric-Specific Multiplier Tuning (Nelder-Mead)</h3>
+<p>To address class imbalance and maximize the target evaluation metric (Balanced Accuracy), we tuned class-wise probability multipliers on the full OOF predictions using Nelder-Mead:</p>
+<ul>
+<li><strong>Optimized Multipliers:</strong> <code>[C_0: 0.124044, \quad C_1: 1.499826, \quad C_2: 1.250181]</code></li>
+<li><strong>Test Application:</strong> These multipliers were optimized on the full OOF predictions and then applied unchanged to the test set predictions. No test labels or leaderboard feedback were used for tuning.</li>
+<li><strong>Impact:</strong> Down-weighting Class 0 while boosting minority classes (Class 1 and Class 2) improved Balanced Accuracy from <strong>0.889132</strong> (raw argmax) to <strong>0.950737</strong>.</li>
+</ul>
+<hr>
+<h2>Detailed Classification Metrics</h2>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1-Score</th>
+<th>Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>at-risk (C0)</strong></td>
+<td>0.9936</td>
+<td>0.9376</td>
+<td>0.9648</td>
+<td>592,561</td>
+</tr>
+<tr>
+<td><strong>fit (C1)</strong></td>
+<td>0.7384</td>
+<td>0.9494</td>
+<td>0.8307</td>
+<td>39,803</td>
+</tr>
+<tr>
+<td><strong>unhealthy (C2)</strong></td>
+<td>0.6985</td>
+<td>0.9652</td>
+<td>0.8105</td>
+<td>57,724</td>
+</tr>
+<tr>
+<td><strong>Macro Avg</strong></td>
+<td><strong>0.8102</strong></td>
+<td><strong>0.9507</strong></td>
+<td><strong>0.8687</strong></td>
+<td><strong>690,088</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>💻 My Shared Open-Source Notebooks</h2>
+<p>Some of the core model components and baseline pipelines utilized in this solution were shared publicly during the competition:</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/kava1/s6e7-overcoming-0-95-tuned-lightgbm-stacking" target="_blank">S6E7 | Overcoming 0.95: Tuned LightGBM Stacking</a></li>
+<li><a href="https://www.kaggle.com/code/kava1/s6e7-dcnv2-lb-0-94962" target="_blank">S6E7 | DCNv2 | LB:0.94962</a></li>
+</ul>
+<hr>
+<h2>🙏 Acknowledgments &amp; Special Thanks</h2>
+<p>I would like to express my deepest gratitude to all the community members who shared their outstanding notebooks, models, and datasets during this competition (Playground Series s6e7).</p>
+<p>Special thanks to the following contributors whose models directly formed and strengthened our ensemble pipeline:</p>
+<h3>🌟 Key Ensemble Contributors</h3>
+<ul>
+<li><strong>Masaya Kawamata</strong> (<a href="https://www.kaggle.com/masayakawamata" target="_blank">@masayakawamata</a>)<br><ul>
+<li><a href="https://www.kaggle.com/code/masayakawamata/s6e7-ft-transformer-v2-cv-0-95063" target="_blank">FT-Transformer-v2 [CV: 0.95063]</a> — <em>This model received the largest optimized weight across all three classes in our ensemble pipeline.</em></li>
+<li><a href="https://www.kaggle.com/code/masayakawamata/s6e7-xgb-ovr-cv-0-95036" target="_blank">XGB OvR [CV: 0.95036]</a> — <em>Provided crucial complementary predictive strength, particularly for Class 1 and Class 2.</em></li>
+<li><a href="https://www.kaggle.com/code/masayakawamata/s6e7-xgb-1-cv-0-94986" target="_blank">XGB_1 [CV: 0.94986]</a></li></ul></li>
+<li><strong>Rob Schieber</strong> (<a href="https://www.kaggle.com/robschieber" target="_blank">@robschieber</a>)<br><ul>
+<li><a href="https://www.kaggle.com/code/robschieber/s06e07-unweighted-lightgbm-prior-correction" target="_blank">Unweighted LightGBM + Prior Correction</a> — <em>Top LightGBM contributor in our final weights.</em></li></ul></li>
+</ul>
+<h3>🤝 Public Notebook &amp; Dataset Contributors</h3>
+<p>Thank you to all of you for sharing your valuable baselines, feature engineering techniques, and predictions:</p>
+<ul>
+<li><strong>Souvik D Biswas</strong> — <a href="https://www.kaggle.com/code/souvikdbiswas/s6e7-quit-wasting-4-hours-on-training-0-95-in-5" target="_blank">Quit Wasting 4 Hours on Training (0.95 in 5)</a></li>
+<li><strong>Vladimir Demidov</strong> — <a href="https://www.kaggle.com/code/yekenot/ps-s6-e7-realmlp-pytorch" target="_blank">PS S6 E7 RealMLP PyTorch</a></li>
+<li><strong>Mikhail Naumov</strong> — <a href="https://www.kaggle.com/code/mikhailnaumov/student-health-risk-xgb" target="_blank">Student Health Risk XGB</a></li>
+<li><strong>Rugved Bane</strong> — <a href="https://www.kaggle.com/code/rugvedbane/student-health-risk-lightgbm-optuna-0-95014" target="_blank">Student Health Risk LightGBM Optuna</a></li>
+<li><strong>Koushik Kumar Dinda</strong> — <a href="https://www.kaggle.com/code/koushikkumardinda/advanced-health-risk-optuna-k-fold-ensemble" target="_blank">Advanced Health Risk Optuna K-Fold Ensemble</a></li>
+<li><strong>(ノ◡ &lt;)</strong> — <a href="https://www.kaggle.com/code/nawfeelrahman1124444/ps-s6-ep6-realmlp-0-95090" target="_blank">RealMLP Baseline</a></li>
+<li><strong>green_black_tea</strong> — <a href="https://www.kaggle.com/code/shamsutdinovrad/0-95043-lgbm-xgb-ens-0-95021-solo-lgbm-no-tune" target="_blank">0.95043 LGBM+XGB Ens / 0.95021 Solo LGBM</a></li>
+<li><strong>yunsuxiaozi</strong> — <a href="https://www.kaggle.com/code/yunsuxiaozi/pss6e7-realmlp-cv-0-95063" target="_blank">RealMLP CV: 0.95063</a></li>
+<li><strong>Reda Mountassir</strong> — <a href="https://www.kaggle.com/code/redamountassir/ps-s6e7-hgbc-baseline-lb-0-95034-cv-0-95026" target="_blank">HGBC Baseline (LB: 0.95034 / CV: 0.95026)</a></li>
+<li><strong>Sofia_Gilka</strong> — <a href="https://www.kaggle.com/code/sofiagilka/s6e7-baseline-xgb" target="_blank">Baseline XGB</a></li>
+<li><strong>Don Mani</strong> — <a href="https://www.kaggle.com/code/donmarch14/s6e7-cat" target="_blank">S6E7 CatBoost</a></li>
+<li><strong>Tarosh Gurramkonda</strong> — <a href="https://www.kaggle.com/code/taroshg/basic-lgbm-and-feature-eng-lb-0-95" target="_blank">Basic LGBM and Feature Eng</a></li>
+<li><strong>Datatuu</strong> — <a href="https://www.kaggle.com/code/yaoguang516/s6e7-per-value-te-hgbc-0-9505-single-model" target="_blank">Per Value TE HGBC 0.9505 Single Model</a></li>
+<li><strong>Himanshu Dhiman</strong> — <a href="https://www.kaggle.com/code/hmnshudhmn24/predicting-student-health-risk" target="_blank">Predicting Student Health Risk</a></li>
+</ul>
+<p>Your shared insights and diverse model architectures were essential for building our robust 18-base predictor ensemble pipeline!</p>
+<h3>💡 Strategic Insight &amp; Discussion</h3>
+<ul>
+<li><strong>Masaya Kawamata</strong> — <a href="https://www.kaggle.com/competitions/playground-series-s6e7/discussion/718258" target="_blank">Trust your CV: the CV-LB relation so far</a><ul>
+<li><em>This discussion was the foundational compass for my strategy. By demonstrating that Public LB fluctuations (±0.001–0.002) were purely binomial noise on the minority classes, it convinced us to strictly optimize both our ensemble weights (SLSQP) and class scaling factors (Nelder-Mead) on the full 690k OOF predictions rather than chasing Public LB scores.</em></li></ul></li>
+</ul>

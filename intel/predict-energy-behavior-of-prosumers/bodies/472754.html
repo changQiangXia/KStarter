@@ -1,0 +1,74 @@
+<p>First, I would like to express my gratitude to Enefit and Kaggle for hosting this exciting competition. This challenge combined various data science skills, ranging from data processing and feature engineering to developing robust models for inference.</p>
+<p>I am happy to share the approach that led to my achieving the 3rd place in the Public Leaderboard.</p>
+<p><strong>Model and online learning</strong><br>
+LGBM models with l1 loss and same hyperparameters for both consumption and production models, including 10,000 num_estimators during training.</p>
+<p>I implemented a strategy of online learning, retraining the model every 7 days for consumption and every 4 days for production.<br>
+For final prediction phase, I start from 1st of February and don't use any pre-trained models.</p>
+<p><strong>Online learning data</strong><br>
+I assign data_block_id to the new data, and keep the last 400 data block_ids history for each iteration - to use with online learning.</p>
+<p><strong>Consumption models</strong><br>
+For consumption, I ensemble two LGBM models: one absolute and one relative. The absolute model was trained with the target as-is, while the relative model was trained with the formula <code>(target - target_mean) / (target_mean + 1e-7)</code>, where <code>target_mean</code> is the weekly average for the specific combination of <code>county, is_business, product_type</code> and<code>hour</code> of day. <br>
+The weights were set at 0.6/0.4 for relative vs. absolute.</p>
+<p><strong>Production models</strong><br>
+Forr production, I ensemble two LGBM models with different seeds, both trained with <code>target/installed_capacity</code>. Weights for production models were set at 0.5/0.5.</p>
+<p><strong>Cross-validation &amp; Leaderboard (LB) score</strong><br>
+After learning that the forecasting test period would run from Feb-2024 to Apr-2024  (from <a href="https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/469293" target="_blank">post</a>), I decided to use the three months from Feb-2023 to Apr-2023 as validation and the LB score to guide me in my decisions. </p>
+<p>The training procedure is typical for time series, where I take one month, for example, Feb-2024, as the validation set and as training set all data prior to that month. If I observe an improvement in a particular feature across all three months, I choose to retain that feature.</p>
+<p>For online learning, I only relied on the LB to choose the suitable ensemble and determine the num_iterations for the models and monitored time of submission. Increasing the num_iterations helps, but comes at the cost of submission time.</p>
+<p>For submissions, I utilized two notebook templates—one for consumption and another for production. As some of you may have noticed, I climbed to the 3rd place out of silver position on the last day. This success didn't come as a surprise to me because I was already aware of my LB score in advance, calculated by the combined LB scores of consumption and production. Consequently, all I had to do was merge them for the final submissions.</p>
+<p><strong>Features</strong><br>
+I collected distinct sets of features for consumption and production, guided by cross-validation results. The outcome was 90 features for consumption and 77 features for production.</p>
+<p>These features are primarily of type <code>forecast weather</code>, <code>time-related features</code> (such as hour and dayofweek), and <code>lag features</code>.</p>
+<ul>
+<li>The base features of <code>forecast weather</code> are similar those used in public notebooks i.e. datetime forecast averages per county. </li>
+</ul>
+<p>In addition, it was successful to use the forecast averages for the preceding hour and next hour, denoted by suffixes <code>_-1hr</code> and <code>_+1hr</code>, respectively - see below.</p>
+<pre><code>    df_forecast_local_datetime = (
+        df_forecast
+        .drop(, )
+        .group_by(, , ).mean()
+    )
+
+   df_forecast_local_datetime_plus_1hr = (
+        df_forecast_local_datetime
+        .with_columns(
+            pl.col() + pl.duration(hours=)
+        )
+    )
+
+
+    df_forecast_local_datetime_minus_1hr = (
+        df_forecast_local_datetime
+        .with_columns(
+            pl.col() - pl.duration(hours=)
+        )
+    )
+
+    df_data = df_data.join(df_forecast_local_datetime_plus_1hr, on=[, , ], how=, suffix=)
+    df_data = df_data.join(df_forecast_local_datetime_minus_1hr, on=[, , ], how=, suffix=)
+</code></pre>
+<ul>
+<li><p>Interestingly, the <code>time-related</code> features differ between consumption and production. For instance, consumption features included month and week, while production excludes both.</p></li>
+<li><p><code>lag features</code>, are the <code>target</code> and <code>daily target percent changes</code> that span from 2 to 14 days, and add the weekly averages such as <code>target_mean</code> of last 7 days.  <br>
+Consumption model also used the <code>lag production</code> that is divided by installed_capacity.  Assumption here is that the production of energy has an influence on the consumption behavior but not vice versa.</p></li>
+<li><p><code>is_holiday</code> flag and I adjusted the <code>dayofweek</code> during holidays to <code>7</code> (representing Sunday). This adjustment was made because the target behavior during holidays closely resembles that of weekends.</p></li>
+</ul>
+<p>I opted not to use gas/electricity prices and historical weather data, they did not prove to be beneficial during cross-validation. </p>
+<p><strong>What didn't work for me</strong></p>
+<ul>
+<li><p><code>Sequential GRU models</code>  trained on daily data of 24 hours</p></li>
+<li><p>Ensembling with <code>XGBoost</code> and <code>CatBoost</code></p></li>
+<li><p><code>Post-processing</code> the targets based on the absolute error of the lag targets was unsuccessful for me</p></li>
+<li><p>Fitting <code>power law</code> functions that can capture the relation between target and surface_solar_radiation_downwards </p></li>
+<li><p>In the final two days, I focused on developing <code>different models</code> for most influential <code>(county, is_business, product_type)</code> pairs. Here I used the exact values of the individual forecast weather points for a county, instead of averaging. I hypothesized that it would provide more variability to the ensemble. Although this approach yielded a slight improvement, it was not as much as I expected, and unfortunately, time constraints prevented further optimization. <br> Looking backwards I should have done a model for each <code>county</code> and not for each  <code>county, is_business, product_type</code></p></li>
+</ul>
+<p><strong>Final Discovery</strong><br>
+In the last few hours of the competition, I stumbled upon solar-related features in libraries such as <code>pvlib</code>. I managed to use them in the final submission, including azimuth. Regrettably, my last submission failed due to a single line of code that I didn't comment out 🙈. <br>
+I wish I had more time to delve into solar features and explore the related libraries.</p>
+<p>🥇🤞🏽 Grandmaster Aspirations: If the results hold after the forecasting period, this will mark my 5th gold medal and the realization of the coveted Kaggle Competitions Grandmaster title! Realizing a major milestone I set to myself when I first started with Kaggle </p>
+<p><strong>🙏 Thank you and good luck</strong></p>
+<p>Overall, I am grateful for the 3rd place finish and hope to survive a potential shake-up after the forecast period ends. </p>
+<p>My appreciation goes out to the fellow Kagglers — those who engaged in discussions and generously shared their code. Your contributions have been invaluable.</p>
+<p>I'm also thankful to those who liked and forked my <a href="https://www.kaggle.com/code/rafiko1/enefit-xgboost-starter" target="_blank">XGBoost starter notebook</a> —the most liked notebook of the competition.  Hope it helped you :) </p>
+<p>Feel free to ask any questions/feedback<br>
+Good luck to all in the forecasting period! 🌟</p>

@@ -1,0 +1,154 @@
+<h1>2nd place solution</h1>
+<p>I would like to express my gratitude to Kaggle for hosting this meaningful competition, and to my teammates, particularly <a href="https://www.kaggle.com/kapenon" target="_blank">@kapenon</a>, who persevered alongside me throughout the entire competition.</p>
+<p>I would like to extend my gratitude to <a href="https://www.kaggle.com/theoviel" target="_blank">@theoviel</a> for providing the fast DALI inference notebook, which greatly aided in the completion of this competition. Additionally, I would like to thank <a href="https://www.kaggle.com/pourchot" target="_blank">@pourchot</a> for generously sharing the external data, which contained valuable positive case data that contributed to the success of our final solution.</p>
+<p>Fortunately, our team was able to get 2nd place, and I am excited to share our approach.</p>
+<h2>Summary of our approach</h2>
+<h3>Stages</h3>
+<ol>
+<li>Pretrain a single view model in 1280x1280 resolution with external dataset (Thanks to <a href="https://www.kaggle.com/pourchot" target="_blank">@pourchot</a>, <a href="https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/377790" target="_blank">Dataset</a>)</li>
+<li>Fine-tune the single view model in 1536x1536 resolution without external dataset</li>
+<li>Use the fine-tuned single view model to further fine-tune a dual view model and a four view model</li>
+</ol>
+<h3>Model</h3>
+<ul>
+<li>ConvnextV1 small (from mmclassification)</li>
+</ul>
+<h2>1. Data preparation</h2>
+<ul>
+<li>We performed manual annotation of the bounding box for the target breast in approximately 300 images. Subsequently, we trained a basic Faster R-CNN model to crop all the breast regions for the subsequent stages of training.<ul>
+<li>When annotating the bounding box, our aim was to refine the size of the box, with the intention of directing the focus of the subsequent stage model more precisely on the breast region. More specifically, our approach involved minimizing the bounding box to exclude the nipple and other extraneous body parts</li></ul></li>
+<li>Use trained Faster R-CNN to crop external dataset</li>
+</ul>
+<h2>2. Data augmentation</h2>
+<ol>
+<li><code>ShiftScaleRotate</code> from albumentation<ul>
+<li>We assumed that the model detects cancer based on the tissue or texture of the image. Therefore, it should be safe to rotate the image at any angle.</li></ul></li>
+<li>RandomFlip from mmcls</li>
+<li>RandAugment from mmcls</li>
+<li>RandomErasing from mmcls</li>
+</ol>
+<h2>3. Model</h2>
+<p>Backbone: ConvnextV1 small</p>
+<h3>Single view model</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2369671%2Fbc8e8c9d3b6bb90135c6319d97115fbf%2Fsingle_view.png?generation=1677747094568388&amp;alt=media" alt="singleview"></p>
+<h4>Loss</h4>
+<ol>
+<li>Cancer: EQL loss <a href="https://github.com/Ezra-Yu/ACCV2022_FGIA_1st" target="_blank">link</a></li>
+<li>Aux Loss with weight 0.1:<ol>
+<li>BIRADS: EQL loss</li>
+<li>Density: EQL loss</li>
+<li>Difficult_negative_case: EQL loss, only for negative case</li>
+<li>View: CE loss</li>
+<li>Invasive: CE loss, only for positive case</li></ol></li>
+</ol>
+<h3>Dual view model</h3>
+<p>Meta Info: age, implant, machine_id<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2369671%2Fb134019ffa72690bb6136e4e393d22ed%2Fdual_view.png?generation=1677747161738296&amp;alt=media" alt="dualview">)</p>
+<h3>Multi laterality dual view model</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2369671%2F38ea4a585c5f3e5954aa60c9867a60e1%2Fmulti_laterality_dual_view.png?generation=1677747196689304&amp;alt=media" alt="fourview"></p>
+<h2>4. Train</h2>
+<ul>
+<li>Optimizer: AdamW</li>
+<li>lr: 0.00015</li>
+<li>Scheduler: CosineAnnealingLR</li>
+<li>Epochs: 24</li>
+<li>Batchsize: 192 (gradient acclumulation)<ul>
+<li>Large batchsize is important in our experiments to get better performance and stable training results</li></ul></li>
+<li>EMA</li>
+</ul>
+<h2>5. Submission</h2>
+<h3>Ensemble (Not used)</h3>
+<p>During our discussion on final submission methods, two approaches were considered:</p>
+<ol>
+<li>Utilizing a single model with high resolution, without the use of an ensemble.</li>
+<li>Using ensemble with lower resolution.</li>
+</ol>
+<p>Ultimately, our team concluded that resolution plays a crucial role in detecting cancer, leading us to choose the first option of using a single model with high resolution.</p>
+<h3>About cropping</h3>
+<p>After fine-tuning the model using the original images without cropping, there was a slight improvement in the score and it remained stable. This suggests that the size of the breast may play a role in cancer detection. Taking this into account, our team decided not to crop the images for final submission.</p>
+<h3>TTA</h3>
+<ul>
+<li>Diagonal flip</li>
+</ul>
+<h3>Best submission results of each model</h3>
+<p>Our team has limited computational resources, and we only trained with five folds at the beginning of the competition. However, upon discovering that the scores obtained from fold 0 exhibit a strong correlation with both cross-validation and leaderboard results, we decided to solely focus our experimentation on this particular fold. Therefore, we only have pf1 score for fold 0 locally.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>External Data</th>
+<th>Fold 0 score</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SingleView(2nd stage fine-tuned)</td>
+<td>No</td>
+<td>0.42~44(calculated by each image)</td>
+<td>0.57</td>
+<td>0.51</td>
+</tr>
+<tr>
+<td>SingleView(2nd stage fine-tuned)</td>
+<td>Yes</td>
+<td>0.44~0.45(calculated by each image)</td>
+<td>0.58</td>
+<td>0.53</td>
+</tr>
+<tr>
+<td>DualView</td>
+<td>Yes</td>
+<td>0.55~0.56(calculated by each prediction_id)</td>
+<td>0.57</td>
+<td>0.52</td>
+</tr>
+<tr>
+<td>MultiLateralityDualView</td>
+<td>Yes</td>
+<td>-</td>
+<td>0.52</td>
+<td>0.53</td>
+</tr>
+</tbody>
+</table>
+<p>After careful evaluation, our team has selected the second SingleView model and the DualView model due to their higher Public LB score and Fold 0 score.</p>
+<p>The MultiLateralityDualView model, on the other hand, aims to compare the left and right breasts when detecting cancer. We noticed that the image style varies significantly with machine IDs, but for a particular patient, the image style remains the same. Additionally, most patients only have cancer on one side of the breast. Therefore, we believed it would be more logical to enable the model to compare the left and right sides to predict cancer.</p>
+<p>Unfortunately, we came up with this idea towards the end of the competition, and there was insufficient time to optimize and tune the model. As a result, we trained a model with the complete dataset and submitted it. However, we believe that the MultiLateralityDualView model still holds potential for future research and development.</p>
+<h2>What works</h2>
+<ul>
+<li>ConvnextV1</li>
+<li>EQL loss</li>
+<li>High resolution</li>
+<li>Large batchsize</li>
+<li>Auxiliary loss</li>
+<li>More training epochs</li>
+<li>External dataset for 1st stage pretraining</li>
+<li>MultiLateralityDualView?(Holds potential in our opinion)</li>
+</ul>
+<h2>Not work for us</h2>
+<ul>
+<li>Train models with external dataset at 2nd stage</li>
+<li>Concat cropped image horizontally</li>
+<li>Rule-based crop with cv2</li>
+<li>Upsample dataset</li>
+<li>Effcientnet, SE-ResNext, SwinTransformer</li>
+<li>Mixup augmentation</li>
+<li>Max pooling</li>
+<li>Lion optimizer</li>
+<li>BIRADS, density pseudo label</li>
+<li>Train models by machine id</li>
+<li>SWA? (Neither a reduction in the local score nor any improvement)</li>
+<li>DualView? (Minor reduction in the Public LB score)</li>
+</ul>
+<h2>Solution code</h2>
+<p>We have made our code publicly available.</p>
+<ul>
+<li><a href="https://github.com/ShuzhiLiu/RSNABreast2ndPlace" target="_blank">Code</a></li>
+<li><a href="https://www.kaggle.com/code/liushuzhi/2ndplacesolutionsingleviewinfer" target="_blank">Inference notebook</a></li>
+<li><a href="https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/377790" target="_blank">External data</a></li>
+</ul>
+<p>The code includes a single view model, which has demonstrated strong performance with a Private Leaderboard score of 0.53. Furthermore, the results obtained with this model can be reliably reproduced using a single RTX 3090.</p>
+<h2>Acknowledgement</h2>
+<p>We would like to express our gratitude to the Kaggle support system and the emotional support of Rist inc. </p>

@@ -1,0 +1,171 @@
+# https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation/discussion/297984
+
+Topic #297984: Go with the flow (3rd place)
+  Author: Slawek Biel
+  Posted: 2021-12-31 00:07:29.391000
+  Votes: 124  Comments: 38
+
+This post describes part of the 3rd place solution that's based on cellpose
+
+Backstory
+
+Going into this competition I had no experience with image segmentation. I knew a library called Detectron exists so I started with reading tutorials and learning to use that and it gave me good early LB results. Taking the pretrained model from the LiveCell repo and finetuning it on the competition data was good enough to put me in the top 10 for a while during the first month. Meanwhile I've seen many people trying U-net in public notebooks and on the forum but all the shared results were far bellow mask-rcnn scores so I discarded it as an inferior approach. That is until start of December when I stumbled upon a mention of cellpose on the forum - the example images they show on their site looked promissing and the paper claims "significantly outperforming Stardist and Mask R-CNN" so I've decided to try to run it myself.
+
+Imagine my excitement when the very first model I trained scored 0.307 on the LB. No training code written, no postprocessing, just saved annotations into png files and run the train script. Comparable out of the box detectron model, without any tuning, was scoring around 0.28 so I started to realize that U-net might not be an inferior architecture after all. I battled with myself whether to share the finding. On the one hand I found it very cool, but I also felt I could be giving a powerful tool into hands of my competitors with only few weeks go. In the end I shared the initial experiment and then conciously refrained from any more comments or mentions of it :)
+
+From there I followed the same game plan that worked with mask rcnn
+
+
+
+pretrain on livecell
+
+tune postprocessing on different cell types
+
+ensemble mutliple models
+
+add unlabled data annotated by a larger ensamble (inconclusive)
+
+
+With all that I managed to push it into the public score with single model: 0.333, and best 5 models ensemble: 0.335. This didn't end up as the strongest model in our team submissions (@alexandrecc mask r-cnn claimed that) but I think it provided helpful diversity in the ensemble.
+
+How it works
+
+The key idea is that rather than train U-net directly on the binary masks it first creates an intermediate representation of "flow mask". To generate that first it calculates the center of mass of each mask. And then all the other points represent an angle to flow from that point towards the center. This makes it easier to disentangle touching or overlapping masks - which is the main issue a regular U-Net faces.
+
+
+The model itself is fairly simple, 20 conv layers on both down and up paths. Total of 6 million paramters which is less than resnet18. After the training the model output on the same image looks like this:
+
+You can see many of the centers identified correctly and how it's able to separate even tightly packed cells. (this image still only scores 0.155 showing how difficult a high astro score is)
+
+From this output they follow the flows from each pixel to it's center to go back to binary masks. I must admit I don't understand the exact details of this. The paper says "the predicted flow fields are used to construct a dynamical system with fixed points whose basins of attraction represent the predicted masks."
+
+The gory details
+
+What I said earlier about how easy it was to get a baseline solution unfortunately didn't translate into ease of further refinement. I have spent a lot of time on experimenting and digging through their code in the last four weeks.
+
+I hit the first wall when trying to train it on LiveCell. The library insists on loading all the images and masks into the memory before the training even starts -this is not a good idea when working with ten thousand of 520x704 images. I ended up pulling the relevant bits out of the library and writing a fast.ai dataloader and training script.
+
+Even though the model itself is small the training utilzes heavy augmentations and high zooms on small areas of an image. So you need to train for a lot of epochs to fully cover all the data. (I was using 300-500 epochs). When I started training LiveCell with my new dataloaders I've noticed that now the disk IO is the bottleneck - spinning at 100% while GPU waits idly. I had to rearange stuff on my system to free enough SSD space and only then I got a smooth training fully utilizing the GPU.
+
+A key detail in cellpose training is that it tries to maintain the pixel size of cells within a fixed range. At train time it's fairly simple - just look at the ground truth sizes and resize the image accordingly. At inference that's harder as you need to guess what the cell sizes are. That's the dreaded diameter discussed in a couple of threads here on the forum. Setting this correctly has a huge impact on models performance and I've spent so much time fiddling with it. What I have tried:
+
+
+
+setting a constant value per cell type
+
+setting a range of values and use that as TTA, 
+
+using cellpose's "size models" - which are linear regressions run on the U-net innermost activations
+
+using output of a detectron model and taking sizes from there. 
+
+
+In my final submission I have an ensamble of 10 models, use the first one with the "size model" and then pass the diamater to the following models. At each step recalculating it on the predicted masks to improve the estimate. This works ok, but I feel like this a weakness of this model that would require more exploring.
+
+Comments:
+├─ Faisal Alsrheed (2021-12-31 00:23:42.407000) [+6]
+│  I have to say thank you
+│  @slawekbiel 
+│  
+│  You are the star of this competition.
+│  
+│  It is impressive that you had no experience with image segmentation before this competition.
+│  
+│  This is really motivating....
+  ├─ Slawek Biel (2021-12-31 00:25:56.780000) [+1]
+  │  Thank you @faisalalsrheed! That's very kind
+├─ Ali (2021-12-31 00:22:30.953000) [+4]
+│  Great work and congratulations 🎉 
+│  
+│  This is my first time also with image processing , 90% of the keywords ( roughly) I never heard about before the competition 😅 plus i spent more time fixing pytho...
+├─ Swikwislkdjc (2022-01-04 16:56:13.073000) [+1]
+│  Amazing work!! Congratulations! Thank you so much for sharing this!!
+├─ alami robbi 7121 (2022-01-04 09:33:25.563000) [+1]
+│  nice sir, excellent job!
+├─ eagle4 (2022-01-03 23:01:26.070000) [+1]
+│  Slawek, excellent job! 
+│  One night towards the end, I also tried to take pieces of the interesting part of the cellpose repo: it trained but the predictions were an awful fail…
+│  
+│  I have a question: 
+│  ...
+  ├─ Slawek Biel (2022-01-04 06:21:42.197000) [+1]
+  │  I generate it before I start training and read tiff files in my DataLoader.
+├─ Aiswarya Sivakumar (2022-01-03 08:50:53.017000) [+1]
+│  congratulations and thanks for sharing the code
+├─ Ichimaru Gin (2021-12-31 16:48:18.530000) [+1]
+│  Great work and congrats on 3rd place🎉
+├─ oliver (2021-12-31 06:40:29.727000) [+1]
+│  Congratulations! Thanks for sharing your solution and all the great work you put out during the competition, I learned so much from you and I am very happy that you get rewarded for your hard work....
+├─ Cicilia (2021-12-31 04:21:08.947000) [+1]
+│  my notebook is cellpose and 0.318 ，thanks for your work
+├─ Raghawendra Singh (2021-12-31 04:08:53.033000) [+1]
+│  congrats for gold!!! I learned a lot from your notebooks and discussions … thanks
+├─ Lupin (2021-12-31 02:52:15.153000) [+1]
+│  Congrats and thank you for sharing about cellpose. I was stuck at maskrcnn(mmdetection) for a long time and then get better result with cellpose instantly. I got only a 100+ bronze in the end but t...
+  ├─ Slawek Biel (2021-12-31 16:57:05.557000) [+0]
+  │  You are right that loading all the images into memory is weird. Maybe they did work only on smaller datasets but I've also found code like this:
+  │  
+  │  #again, attempt to deal with memory overuse
+  │  yf, sty...
+├─ Meena M (2021-12-31 01:47:04.320000) [+1]
+│  Well deserved win and thanks for your community contributions. I learned about Cellpose for the first time here. Didn't use it because of the computational resources needed.
+├─ Mintwater (2021-12-31 00:27:33.130000) [+1]
+│  Congrats! Thanks for your amazing solution and meaningful notebooks published in this competition!
+├─ joejeo1 (2021-12-31 00:27:20.920000) [+1]
+│  Your approach is very interesting. "size prediction" is great idea.  Wonder if you can write "size prediction branch" into the cellpose model instead of running as a separate model.   Thanks for wr...
+  ├─ Slawek Biel (2021-12-31 00:34:17.893000) [+1]
+  │  Honestly I did think about adding an extra head to the model for just that - but the issue is we resize the image to it's desired resolution before passing it to the model. So it would have to be s...
+  ├─ joejeo1 (2021-12-31 00:45:53.653000) [+0]
+  │  Thanks for the replay.  Two stages make more sense.  Otherwise, it would be too complicated like you said.
+├─ Patrick Chan (2021-12-31 00:22:25.330000) [+1]
+│  Congratulations Slawek and thanks for sharing.
+├─ Eslam Omar mohamed (2021-12-31 00:16:57.033000) [+1]
+│  Great job 🙌
+├─ Hoda (2022-01-01 12:34:28.743000) [+2]
+│  I really want to thank you for the wonderful codes that you have shared during the competition. It gave me a lot of ideas. Congrats on 3rd place.
+  ├─ Slawek Biel (2022-01-01 13:02:05.990000) [+1]
+  │  I appreciate you saying that @hsadeghian feedback like that is what motivates me to continue trying to improve and sharing things I’ve learned along the way.
+├─ Niek van der Zwaag (2022-01-01 00:29:21.297000) [+2]
+│  Inspirational and fascinating, congrats on 3rd place! 🙌
+├─ Luca Massaron (2021-12-31 09:14:14.273000) [+2]
+│  "Going into this competition I had no experience with image segmentation"
+│  
+│  @slawekbiel: this is an inspiration for everyone wanting to take a challenge in a competition but they think that they don...
+  ├─ Slawek Biel (2021-12-31 11:33:21.870000) [+4]
+  │  Thanks Luca! My experience with kaggle so far has been that you can learn a lot in three months if you fully commit to it. 
+  │  
+  │  Also while competing in various competitions you acquire meta skills tha...
+├─ KhanhVD (2021-12-31 02:59:53.417000) [+2]
+│  Congrats @slawekbiel and team on 3rd place and thanks for sharing solution. Our Cellpose model can get 0.332 LB score but we not use for ensemble final.
+├─ Woprime (2021-12-31 00:25:24.867000) [+2]
+│  Congrats and thank you for all the great insight you've provided along the way! A very well deserved prize.
+├─ Cicilia (2021-12-31 10:34:13.627000) [+0]
+│  would u like to share you notebook？ i apply cellpose too，but
+│  My PB is 0.318 ,I want learn something from your netobook,thx,thanks for your work and ideas
+  ├─ Slawek Biel (2021-12-31 11:35:59.567000) [+1]
+  │  I need some time to clean it up and make presentable.
+├─ Drzhuzhe (2021-12-31 06:38:33.680000) [+0]
+│  disk IO is the bottleneck - spinning at 100% while GPU waits idly. I had to rearange stuff on my system to free enough SSD space and only then I got a smooth training fully utilizing the GPU.
+│  
+│  Does...
+  ├─ Slawek Biel (2021-12-31 08:12:57.063000) [+1]
+  │  You always need to look at the resources consumption in your specific setup. In this particular case where the model is small and there are more files disk cache can handle - Yes, moving files to S...
+├─ kagglerz (2021-12-31 00:33:53.467000) [+0]
+│  Congratulations! Can I ask more about how you did the pretraining? E.g. Is there a library that you used or did you design the pretraining tasks yourself?
+  ├─ Slawek Biel (2021-12-31 00:41:18.953000) [+0]
+  │  I used the same code to first train on the LiveCell data and then finetune on the competition data.
+├─ Yousef Rabi (2021-12-31 00:25:23.570000) [+0]
+│  Congratulations @slawekbiel on an awesome finish and thanks for your sharing throughout the competition.
+│  
+│  I have some questions regarding finetuning the model from the LIVECell repo.
+│  
+│  
+│  
+│  Did you suc...
+  ├─ Slawek Biel (2021-12-31 00:30:20.817000) [+1]
+  │  Yes I did. The best score I got with it was .324 public so not phenomenal but less effort and time than training on LiveCell from scratch.
+  │  I kept mostly the config from the repo, set BS to 2 for a ...
+├─ Bala Vashan (2021-12-31 12:57:36.330000) [+1]
+│  Thanks for Sharing!
+├─ RYN (2021-12-31 07:45:30.097000) [+1]
+│  Thanks for sharing!

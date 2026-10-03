@@ -1,0 +1,40 @@
+<p>Thank you to the organizers for putting together this interesting competition, and congratulations to all of the competitors on their efforts. I'm glad that shakeup was kind to me on private LB. One of my goals after becoming GM was to win a gold model with &lt;10 submissions, and I'm happy to accomplish that with this challenge. This is a brief overview of my solution. </p>
+<p>A more detailed writeup is available here: <a href="https://docs.google.com/document/d/1GcHeUDks2dnECKmJn97nF2djFRTVVnGpORFpUH0nMuU/edit" target="_blank">https://docs.google.com/document/d/1GcHeUDks2dnECKmJn97nF2djFRTVVnGpORFpUH0nMuU/edit</a></p>
+<h2>Summary</h2>
+<p>-3D cervical spine segmentation<br>
+-Individual vertebra extraction<br>
+-Stage 1 models: 3D CNN and TD-CNN for vertebra-level fracture classification<br>
+-Stage 2 models: transformers for final exam-level classification using features extracted from stage 1 models </p>
+<h2>Segmentation</h2>
+<p>I used a 3D DeepLabV3+ encoder-decoder architecture with X3D 3D CNN backbone (<a href="https://pytorchvideo.readthedocs.io/en/latest/api/models/x3d.html" target="_blank">https://pytorchvideo.readthedocs.io/en/latest/api/models/x3d.html</a>) trained at 192x192x192 resolution to generate segmentations of C1-C7. </p>
+<p>Models were first trained on the 87 semantic segmentation labels provided by the organizers. I then pseudolabeled the remaining studies with these models and retrained on the whole dataset. </p>
+<p>Using the output of the segmentation models, one can extract a cube containing the vertebra of interest. Inevitably, there is some overlap with other vertebra levels due to their orientation within the scan. </p>
+<h2>Stage 1: 3D CNN</h2>
+<p>Once a cube is extracted for each vertebra, I trained a X3D-L 3D CNN to perform binary fracture classification for each level. It was straightforward to map each vertebra to a binary label, as we're provided with the fractured levels for each study. The input size was 64x288x288 for vertebra. I also modified the model so that the z-stride was 1 for all layers. Thus, the first dimension (64) was not downsampled until final pooling. </p>
+<p>After training the 3D classification model, features (432-D) were extracted from each vertebra. Thus, each study was represented by a 7x432 sequence. </p>
+<h2>Stage 2: TD-CNN</h2>
+<p>A TD-CNN is simply a 2D CNN feature extractor with a sequence model head. In my case, I used a 2-layer transformer.  For a given volume NxHxW, the 2D CNN extracts a D-dimensional feature for each individual image (HxW) in the volume, which are then input (NxD) to the sequence model head. Ultimately, the model is trained to end-to-end. </p>
+<p>I trained this model in 3 parts. First, I trained a TF-EfficientNetV2-S model to act as the 2D CNN feature extractor. </p>
+<p>In order to train this model, I needed image-level labels. While there was a subset of the dataset which did have those labels, I was able to pseudolabel the entire dataset by a method I call class activation sequence. </p>
+<p>Using the 3D CNN fracture classification model, I could generate a 3D class activation map for each vertebra by removing the pooling and classification layers and then obtaining a weighted average of the 3D feature maps using the classification layer weights. For each z-axis image in the 3D feature map, the max value was taken, converting the 3D feature map into a 1D sequence. This sequence was then rescaled to [0, 1] and resampled back to the original number of slices so a single value could be corresponded to each slice.</p>
+<p>e.g., (64, 288, 288) -&gt; (432, 64, 9, 9) -&gt; (64, 9, 9) -&gt; (64, ) -&gt; (original # of slices, )</p>
+<p>Because one vertebra-level input usually contained more than 1 level, there was overlap between these sequences. To deal with this, I just averaged the overlapping values. </p>
+<p>I thresholded the values at 0.5 to generate pseudolabels for each image in the dataset. I did not use the provided image-level labels for training. </p>
+<p>Stepwise training occurred as follows:<br>
+1) Train 2D CNN feature extractor as binary classifier on pseudolabels (288x288)<br>
+2) Add transformer head, freeze feature extractor, train head <br>
+3) Fine-tune entire model end-to-end (32x288x288)</p>
+<p>Similar to the 3D CNN model, a feature was extracted for each vertebra (256-D) after training, resulting in a 7x256 sequence for each vertebra. </p>
+<h2>Stage 2: Transformers</h2>
+<p>Now that we have essentially converted each study into a sequence, we can use transformers to model the final output (C1-C7 fractures and overall fracture). </p>
+<p>I used a 3-layer transformer and trained on 3 separate inputs:<br>
+1) 7x432 input from 3D CNN (5-fold CV: 0.3205)<br>
+2) 7x256 input from TD-CNN (5-fold CV: 0.3369)<br>
+3) 7x688 input by fusing the above 2 sequences (5-fold CV: 0.2962) </p>
+<p>The final submission was an ensemble of the outputs from the above 3 models (0.25, 0.25, 0.5). </p>
+<h2>Things that did not help:</h2>
+<p>-Adding mask as separate channel in image<br>
+-Masking out the non-segmented parts of the image<br>
+-Extracting slice-wise features and training a 2D-CNN + sequence model on study-wise features- doing the vertebra-level approach was better</p>
+<h2>Code</h2>
+<p><a href="https://github.com/i-pan/kaggle-rsna-cspine" target="_blank">https://github.com/i-pan/kaggle-rsna-cspine</a></p>

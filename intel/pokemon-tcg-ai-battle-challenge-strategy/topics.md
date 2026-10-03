@@ -1,0 +1,49 @@
+# pokemon-tcg-ai-battle-challenge-strategy 讨论区（按票数排序，共 47 条）
+
+- [Welcome to the Pokémon TCG AI Battle Challenge Strategy Category Competition!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/708588) — 25 票 / 6 评论 / 2026-06-16 
+- [Congratulations & Announcing Winners](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/742692) — 19 票 / 6 评论 / 2026-09-23 
+- [Taking one for the Pokémon Kaggle team.  It requires a lot of guts : )](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/716196) — 13 票 / 2 评论 / 2026-06-30 
+- [Important Information About this Challenge](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/708494) — 10 票 / 0 评论 / 2026-06-15 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/708491) — 8 票 / 1 评论 / 2026-06-15 
+- [Is it a bug in strategy teamup?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/730277) — 6 票 / 1 评论 / 2026-07-28 
+- [Request for guidance - Simulation entry deadline passed, Strategy writeup ready](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/735276) — 6 票 / 3 评论 / 2026-08-14 **write-up?**
+- [Show us your final ELO rollercoaster graphs! 🎢](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/742226) — 5 票 / 0 评论 / 2026-09-20 
+- [Question on Writeup Format?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/709452) — 4 票 / 0 评论 / 2026-06-18 **write-up?**
+- [Submissions for the Pokémon TCG Strategy Challenge have officially closed!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/741309) — 3 票 / 3 评论 / 2026-09-14 
+- [Thanks for everyone ](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/741361) — 3 票 / 0 评论 / 2026-09-14 
+- [Wrapping Up with Animation](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/740725) — 3 票 / 1 评论 / 2026-09-10 
+- [Word-count scope + decklists in the writeup](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/733067) — 3 票 / 0 评论 / 2026-08-05 **write-up?**
+- [How should we present decklists? (word limit & image license questions)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/738657) — 3 票 / 1 评论 / 2026-09-01 
+- [Srategy track report — scope of the model approach and deck relative to the Aug 17 Simulation submission](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/735656) — 3 票 / 2 评论 / 2026-08-17 
+- [Is ML a requirement to win in the strategy category?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/724094) — 2 票 / 2 评论 / 2026-07-09 
+- [Where I should post writeup？](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/738911) — 2 票 / 1 评论 / 2026-09-02 **write-up?**
+- [Minor participation with parental consent — official contact?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/717046) — 1 票 / 2 评论 / 2026-07-01 
+- [Competition fairness question with regards to Rule 3.5.d](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/724831) — 1 票 / 4 评论 / 2026-07-13 
+- [Simulators??](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/730338) — 1 票 / 0 评论 / 2026-07-28 
+- [ Beginner Guide: From Deck List to First Valid Submission (Feedback Welcome!)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/725195) — 1 票 / 1 评论 / 2026-07-14 
+- [Strategy submission accepted, but unable to enter required Simulation Category](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/734869) — 1 票 / 0 评论 / 2026-08-12 
+- [My Solution Overview - Fully Open-Source & Free Resources](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/735166) — 1 票 / 0 评论 / 2026-08-14 **write-up?**
+- [Late Simulation Entry — Strategy Category Eligibility Question](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/735996) — 1 票 / 1 评论 / 2026-08-19 
+- [Questions on 2000 word limit](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/735679) — 1 票 / 1 评论 / 2026-08-17 
+- [Did anyone else use ML to create your deck?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/741305) — 1 票 / 1 评论 / 2026-09-14 
+- [Baseline Strategy & Agent Pipeline: Handling State Space & Decision Heuristics for Strategy Category](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/736038) — 0 票 / 0 评论 / 2026-08-19 
+- [Late Simulation Entry — Strategy Category Eligibility Question](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/735402) — 0 票 / 0 评论 / 2026-08-15 
+- [How are multi-word Pokémon card names counted toward the 2,000-word limit?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/738324) — 0 票 / 1 评论 / 2026-08-31 
+- [Requesting Clarity on Use of Pokemon Elements in Writeup](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/736603) — 0 票 / 8 评论 / 2026-08-21 **write-up?**
+- [The two EN card CSVs disagree on 218 cards - one still has untranslated Japanese](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/734057) — 0 票 / 0 评论 / 2026-08-09 
+- [Scope of "Pokémon Elements" in a Strategy writeup](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/733690) — 0 票 / 0 评论 / 2026-08-07 **write-up?**
+- [Two clarifying questions on Strategy scoring and the prize](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/733194) — 0 票 / 0 评论 / 2026-08-06 
+- [Important: Team Merge Deadline and Team Composition](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/738925) — 0 票 / 1 评论 / 2026-09-02 
+- [Unable to delete unsubmitted draft writeup — Permission 'forumMessages.update' was denied](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/740949) — 0 票 / 0 评论 / 2026-09-12 **write-up?**
+- [Public research evidence: three Pokémon TCG strategy experiments](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/741045) — 0 票 / 0 评论 / 2026-09-13 
+- [Competition rules question](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/722920) — 0 票 / 1 评论 / 2026-07-07 
+- [Team ichitaro3 (Simulation rank 3,471, score 616.0): Strategy writeup complete but no member could enter the Strategy track](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/741226) — 0 票 / 0 评论 / 2026-09-13 **write-up?**
+- [Problems with Cards data / CABT supported cards](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/712435) — 0 票 / 0 评论 / 2026-06-22 
+- [Competition Completed – When Will the Winners Be Announced?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/741806) — 0 票 / 2 评论 / 2026-09-17 
+- [Project visibility](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/710978) — 0 票 / 1 评论 / 2026-06-20 
+- [Participating in the Event for Users Under 18 in the United States](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/709223) — 0 票 / 3 评论 / 2026-06-17 
+- [Unable to join Simulation competition — "New entrants are currently not allowed" — does this block Strategy eligibility?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/736910) — -1 票 / 0 评论 / 2026-08-22 
+- [[Bug?] Completed submission overwritten with "ssssssadasfsd" drafts](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/739855) — -1 票 / 0 评论 / 2026-09-06 
+- [Eligibility question: Strategy writeup without a Simulation Category entry](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/740873) — -1 票 / 0 评论 / 2026-09-11 **write-up?**
+- [Can a Strategy-only team still win a prize? (Rule 2.1.c question)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/738058) — -2 票 / 8 评论 / 2026-08-28 
+- [Found and fixed 2 silent card-database bugs + a deck-out first-player bias (92% win rate vs random baseline)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/discussion/736918) — -3 票 / 0 评论 / 2026-08-22 

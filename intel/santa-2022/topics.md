@@ -1,0 +1,82 @@
+# santa-2022 讨论区（按票数排序，共 80 条）
+
+- [Another Web Vizualizer](https://www.kaggle.com/competitions/santa-2022/discussion/370075) — 112 票 / 13 评论 / 2022-12-02 
+- [Web Visualizer](https://www.kaggle.com/competitions/santa-2022/discussion/369788) — 107 票 / 20 评论 / 2022-12-01 
+- [A recipe for getting below 76000](https://www.kaggle.com/competitions/santa-2022/discussion/376306) — 88 票 / 67 评论 / 2023-01-05 
+- [2nd place solution](https://www.kaggle.com/competitions/santa-2022/discussion/379086) — 81 票 / 21 评论 / 2023-01-18 **write-up?**
+- [1st place solution with visualized route](https://www.kaggle.com/competitions/santa-2022/discussion/379167) — 80 票 / 10 评论 / 2023-01-21 **write-up?**
+- [4th place solution](https://www.kaggle.com/competitions/santa-2022/discussion/379080) — 73 票 / 11 评论 / 2023-01-18 **write-up?**
+- [TSP lower bound 74073.7278 (with costs rounded to 4 decimal places)](https://www.kaggle.com/competitions/santa-2022/discussion/378537) — 42 票 / 19 评论 / 2023-01-16 
+- [Lower Bound with Minimum Spanning Tree](https://www.kaggle.com/competitions/santa-2022/discussion/370129) — 36 票 / 12 评论 / 2022-12-03 
+- [Welcome to Santa 2022!](https://www.kaggle.com/competitions/santa-2022/discussion/369633) — 34 票 / 17 评论 / 2022-11-30 
+- [Using Numba to speed up computations](https://www.kaggle.com/competitions/santa-2022/discussion/371194) — 30 票 / 6 评论 / 2022-12-08 
+- [ 9th place solution - with video visualization - Team Arm Breakers](https://www.kaggle.com/competitions/santa-2022/discussion/379150) — 30 票 / 5 评论 / 2023-01-18 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/santa-2022/discussion/379214) — 27 票 / 2 评论 / 2023-01-18 **write-up?**
+- [[84727] Quick & Dirty Baseline - Let's have some fun :)](https://www.kaggle.com/competitions/santa-2022/discussion/369823) — 26 票 / 10 评论 / 2022-12-01 
+- [Competition Halftime - Key Discussions Summary](https://www.kaggle.com/competitions/santa-2022/discussion/374039) — 25 票 / 1 评论 / 2022-12-25 
+- [Thank you Kaggle Team](https://www.kaggle.com/competitions/santa-2022/discussion/379075) — 24 票 / 9 评论 / 2023-01-18 
+- [Finally! Santa is back!](https://www.kaggle.com/competitions/santa-2022/discussion/369643) — 24 票 / 7 评论 / 2022-11-30 
+- [The color cost diagram](https://www.kaggle.com/competitions/santa-2022/discussion/372682) — 23 票 / 0 评论 / 2022-12-17 
+- [sharing results vs ideas](https://www.kaggle.com/competitions/santa-2022/discussion/370584) — 23 票 / 20 评论 / 2022-12-05 
+- [Past winning approaches and adjutant resources from the past editions](https://www.kaggle.com/competitions/santa-2022/discussion/369635) — 20 票 / 7 评论 / 2022-11-30 **write-up?**
+- [The 'Pixel Travel Map' algorithm and Monte Carlo methods](https://www.kaggle.com/competitions/santa-2022/discussion/374407) — 19 票 / 3 评论 / 2022-12-27 
+- [8th place solution](https://www.kaggle.com/competitions/santa-2022/discussion/379511) — 18 票 / 8 评论 / 2023-01-20 **write-up?**
+- [Empirically sampling configurations ](https://www.kaggle.com/competitions/santa-2022/discussion/371053) — 17 票 / 4 评论 / 2022-12-07 
+- [Another Web Visualizer 2.0](https://www.kaggle.com/competitions/santa-2022/discussion/377940) — 17 票 / 3 评论 / 2023-01-13 
+- [Python Robotics](https://www.kaggle.com/competitions/santa-2022/discussion/374706) — 17 票 / 2 评论 / 2022-12-28 
+- [Around 74450 86th place LKH TSP solution](https://www.kaggle.com/competitions/santa-2022/discussion/379073) — 16 票 / 4 评论 / 2023-01-18 **write-up?**
+- [🌟 📓 Previous Year’s Top Solutions 🌟 📓](https://www.kaggle.com/competitions/santa-2022/discussion/369644) — 15 票 / 5 评论 / 2022-11-30 **write-up?**
+- [60th place solution (standard configuration + LKH)](https://www.kaggle.com/competitions/santa-2022/discussion/379132) — 14 票 / 2 评论 / 2023-01-18 **write-up?**
+- [74350 another TSP Solution with Pixel <-> Arm Configuration  64th Place ](https://www.kaggle.com/competitions/santa-2022/discussion/379085) — 13 票 / 2 评论 / 2023-01-18 **write-up?**
+- [Color Visualization Tool](https://www.kaggle.com/competitions/santa-2022/discussion/373311) — 13 票 / 1 评论 / 2022-12-20 
+- [Santa's problem and the generalized TSP](https://www.kaggle.com/competitions/santa-2022/discussion/371873) — 13 票 / 4 评论 / 2022-12-12 
+- [Simulated Annealing with Multithreading to Optimize the Arm Configuration](https://www.kaggle.com/competitions/santa-2022/discussion/379091) — 13 票 / 2 评论 / 2023-01-18 
+- [Metric Improvement and Rescore](https://www.kaggle.com/competitions/santa-2022/discussion/376124) — 12 票 / 11 评论 / 2023-01-04 
+- [Find the differences](https://www.kaggle.com/competitions/santa-2022/discussion/377345) — 11 票 / 7 评论 / 2023-01-10 
+- [I wish an unseen image was used for scoring !](https://www.kaggle.com/competitions/santa-2022/discussion/373962) — 11 票 / 5 评论 / 2022-12-24 
+- [Solve this problem through reinforcement learning](https://www.kaggle.com/competitions/santa-2022/discussion/370111) — 11 票 / 6 评论 / 2022-12-03 
+- [Can we do the math?](https://www.kaggle.com/competitions/santa-2022/discussion/371773) — 11 票 / 17 评论 / 2022-12-12 
+- [Reverse path](https://www.kaggle.com/competitions/santa-2022/discussion/370087) — 11 票 / 1 评论 / 2022-12-03 
+- [Graph of Top Leaderboard Scores](https://www.kaggle.com/competitions/santa-2022/discussion/373521) — 11 票 / 5 评论 / 2022-12-21 
+- [Trick to simplify problem to a TSP problem (74456 on LB) ](https://www.kaggle.com/competitions/santa-2022/discussion/379078) — 10 票 / 0 评论 / 2023-01-18 
+- [Short tip to calculate reconfigurations faster](https://www.kaggle.com/competitions/santa-2022/discussion/376701) — 9 票 / 4 评论 / 2023-01-07 
+- [Vectorization of the neighborhood computation](https://www.kaggle.com/competitions/santa-2022/discussion/374007) — 9 票 / 3 评论 / 2022-12-24 
+- [Movement clarification](https://www.kaggle.com/competitions/santa-2022/discussion/369686) — 8 票 / 7 评论 / 2022-12-01 
+- [Method used in this competition.](https://www.kaggle.com/competitions/santa-2022/discussion/379074) — 8 票 / 1 评论 / 2023-01-18 
+- [OR Tools - Travelling Sales Person](https://www.kaggle.com/competitions/santa-2022/discussion/371695) — 8 票 / 17 评论 / 2022-12-11 
+- [Is GPTChat Correct?](https://www.kaggle.com/competitions/santa-2022/discussion/371912) — 8 票 / 16 评论 / 2022-12-13 
+- [Competition Rules](https://www.kaggle.com/competitions/santa-2022/discussion/376200) — 7 票 / 8 评论 / 2023-01-05 
+- [Clarification on link length condition](https://www.kaggle.com/competitions/santa-2022/discussion/370592) — 7 票 / 4 评论 / 2022-12-05 
+- [Lowest number of steps](https://www.kaggle.com/competitions/santa-2022/discussion/371313) — 7 票 / 11 评论 / 2022-12-09 
+- [It is the Santa competition (my favorite), so Merry Christmas everybody!](https://www.kaggle.com/competitions/santa-2022/discussion/373999) — 7 票 / 1 评论 / 2022-12-24 
+- [75000 demarcation line](https://www.kaggle.com/competitions/santa-2022/discussion/377540) — 6 票 / 5 评论 / 2023-01-11 
+- [LKH running time](https://www.kaggle.com/competitions/santa-2022/discussion/376798) — 6 票 / 15 评论 / 2023-01-08 
+- [Why does the link length change?](https://www.kaggle.com/competitions/santa-2022/discussion/371124) — 6 票 / 6 评论 / 2022-12-08 
+- [Some EDA about the picture to be drawn](https://www.kaggle.com/competitions/santa-2022/discussion/371937) — 6 票 / 1 评论 / 2022-12-13 
+- [Are William Cook and Keld Helsgaun making an appearance?  ](https://www.kaggle.com/competitions/santa-2022/discussion/374837) — 6 票 / 1 评论 / 2022-12-29 
+- [Can anyone explain the color cost in more detail?](https://www.kaggle.com/competitions/santa-2022/discussion/374686) — 6 票 / 2 评论 / 2022-12-28 
+- [Best Score LKH-only solution](https://www.kaggle.com/competitions/santa-2022/discussion/379249) — 6 票 / 8 评论 / 2023-01-18 **write-up?**
+- [[RESOLVED] 💲 Cost function query](https://www.kaggle.com/competitions/santa-2022/discussion/373603) — 6 票 / 2 评论 / 2022-12-22 
+- [This competition is much more difficult than expected.](https://www.kaggle.com/competitions/santa-2022/discussion/372443) — 6 票 / 3 评论 / 2022-12-16 
+- [LKH parameters](https://www.kaggle.com/competitions/santa-2022/discussion/377134) — 5 票 / 59 评论 / 2023-01-10 
+- [AIMMS - Getting Started with Santa 2022](https://www.kaggle.com/competitions/santa-2022/discussion/376294) — 5 票 / 0 评论 / 2023-01-05 
+- [we should get the shortest possible list of config](https://www.kaggle.com/competitions/santa-2022/discussion/371345) — 5 票 / 0 评论 / 2022-12-09 
+- [The AlphaGo algorithm would work? ](https://www.kaggle.com/competitions/santa-2022/discussion/373354) — 4 票 / 1 评论 / 2022-12-21 
+- [How to force LKH to use specific edges?](https://www.kaggle.com/competitions/santa-2022/discussion/374390) — 4 票 / 6 评论 / 2022-12-26 
+- [A note on the n link move expansion](https://www.kaggle.com/competitions/santa-2022/discussion/375745) — 4 票 / 8 评论 / 2023-01-03 
+- [Santa 2023?](https://www.kaggle.com/competitions/santa-2022/discussion/458955) — 4 票 / 2 评论 / 2023-12-02 
+- [How do we add newly discovered points to the path?](https://www.kaggle.com/competitions/santa-2022/discussion/373574) — 3 票 / 0 评论 / 2022-12-22 
+- [Visualization of a baseline solution](https://www.kaggle.com/competitions/santa-2022/discussion/374573) — 3 票 / 0 评论 / 2022-12-27 **write-up?**
+- [Get config from coordinates](https://www.kaggle.com/competitions/santa-2022/discussion/372678) — 3 票 / 10 评论 / 2022-12-17 
+- [Revisiting points](https://www.kaggle.com/competitions/santa-2022/discussion/371184) — 3 票 / 2 评论 / 2022-12-08 
+- [Is it possible to use average pooling on images?](https://www.kaggle.com/competitions/santa-2022/discussion/372082) — 3 票 / 0 评论 / 2022-12-14 
+- [can you help me execute this and getting the result](https://www.kaggle.com/competitions/santa-2022/discussion/376170) — 3 票 / 2 评论 / 2023-01-05 
+- [Visit a point more than once?](https://www.kaggle.com/competitions/santa-2022/discussion/371200) — 3 票 / 3 评论 / 2022-12-08 
+- [Can both the x and y coordinate of an arm change per step?](https://www.kaggle.com/competitions/santa-2022/discussion/371097) — 3 票 / 6 评论 / 2022-12-07 
+- [How to use the TSP-result](https://www.kaggle.com/competitions/santa-2022/discussion/377229) — 3 票 / 6 评论 / 2023-01-10 
+- [Circular way to think about solution](https://www.kaggle.com/competitions/santa-2022/discussion/379466) — 3 票 / 2 评论 / 2023-01-19 **write-up?**
+- [Solve this problem through optimization method](https://www.kaggle.com/competitions/santa-2022/discussion/370100) — 3 票 / 0 评论 / 2022-12-03 
+- [How to overcome the size of the configuration?](https://www.kaggle.com/competitions/santa-2022/discussion/373496) — 2 票 / 0 评论 / 2022-12-21 
+- [i want to join a team for this competition](https://www.kaggle.com/competitions/santa-2022/discussion/375066) — 2 票 / 4 评论 / 2022-12-30 
+- [Herds of Reindeers and a Scary one. Imagine, Kagglers could make such kind of Art.](https://www.kaggle.com/competitions/santa-2022/discussion/372227) — 2 票 / 0 评论 / 2022-12-14 
+- [Potential approach](https://www.kaggle.com/competitions/santa-2022/discussion/371181) — 2 票 / 4 评论 / 2022-12-08 

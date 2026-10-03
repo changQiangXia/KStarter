@@ -1,0 +1,665 @@
+# https://www.kaggle.com/competitions/playground-series-s6e9/discussion/744815
+
+Topic #744815: 2nd Place Solution
+  Author: URAD
+  Posted: 2026-10-01 02:58:13.299000
+  Votes: 43  Comments: 14
+
+Thanks to Kaggle for another fun Playground episode. Team Alicia finished 2nd of 3,575 teams on the private leaderboard (0.94588). We chose our models and both final submissions with nested cross-validation; the public LB served only as a noise guard and as one noisy input to the final pair choice (the separate public-LB experiment below was never selected).
+
+Conventions. 1u = 1e-5 ROC AUC. Level 1 = single models with out-of-fold (OOF) predictions on our 5 folds; level 2 = stacks of level-1 OOFs; level 3 = the final blend, whose inputs are per-fold rank-logits, logit((rank − 0.5)/n). "Nested" = fitted on 4 folds, scored on the 5th. "Honest" = not fitted to the public LB.
+
+TL;DR
+
+
+
+Result. Private 2nd, 0.94588 (1st: 0.94602). Final A passed our strict nested-CV gate; Final B, an all-in refit, failed it (+0.58u at 1.15 fold-SE, vs the +1.5u / 2.5-SE bar) and was a documented judgement call. In selection, public scores served only as a noise guard and as noisy observations in a pair model; our one deliberate public-LB experiment was never selected.
+
+Validation first. Across our honest submissions on our fixed folds, the nested gain ranked the private scores with Spearman 0.991; the public score managed 0.793.
+
+TabPFN-3.5 with the full labelled context. No subsampling: ~428k context rows per fold, all 668,665 for test. AUC rose about +18.6u per doubling of context with no sign of saturating (fold 0, one seed).
+
+Label-free surrogate features. distilgpt2, fine-tuned only on the original 10k rows, gives each row a Yes-vs-No log-likelihood ratio (LLR), most useful as a TabPFN input.
+
+AUC-direct level-3 blend. A sigmoid pairwise-AUC surrogate over all ~2.6e10 pairs, computed exactly with histograms and an FFT: +1.62u over our log-loss stack.
+
+A cautionary contrast. Files we deliberately fitted to the public LB reached 0.94945 public (1st) but only 0.94313 private.
+
+
+Data in brief
+
+
+
+Shape. 668,665 train / 286,571 test rows, 13 features (7 numeric, 6 categorical), 17.46% positives, no train/test shift (adversarial AUC 0.50006).
+
+Origin. Synthesised from Omkar Kadam's CC0 "EV Adoption Behavior and Range Anxiety" dataset (10,000 rows). Chris Deotte's EDA recovered the purchase recipe: buy if 1.2·income/100k + 0.6·concern + 2·subsidy − 1·[Medium anxiety] − 3·[High anxiety] + noise &gt; 5.5 (AUC 0.9377 alone). 97.9% of competition incomes occur in the original data.
+
+Generator artifacts. broccoli beef argued on the forum that an LLM generated the rows, emitting numbers as tokens. Most of our strongest level-1 members (TabPFN, the GAR-based models, the token GBDTs) therefore use GPT-2 BPE token features of the exact CSV strings of income and commute.
+
+
+1. Validation first
+
+
+
+Folds and holdout. A fixed fold file splits 534,932 "dev" rows into 5 folds. The other 133,733 rows are a sealed holdout, never scored or used for selection; their labels enter only the final full-train refits and TabPFN's test context (their covariates also enter label-free features).
+
+Screening subset. A 50,000-row subset S was used once for screening, then excluded. Every stack gain below is nested on the 484,932 dev rows outside S (mean gain, fold-SE = sd/√5, positive folds), unless marked fold 0 or single model.
+
+Pre-registration. From 28 September every candidate was logged before its result existed (54 entries).
+
+Gates. Standard: ≥ +1.0u, ≥ 2 fold-SE, ≥ 4/5 folds, all weights &gt; 0, plus test-drift checks. Strict (for the final round, when many families ran in parallel): ≥ +1.5u and ≥ 2.5 fold-SE. No seed selection.
+
+Placebo. New features ran next to a same-width, row-permuted placebo; a placebo of 24–58 columns cost −3 to −8u, so real columns had to beat that dilution.
+
+
+Eight entries passed a gate, plus one documented exception (1.8 SE vs the 2-SE gate); after the AUC-direct blend, about 40 more candidates all failed.
+
+Why our finals did not chase the public LB. The paired public-noise SD of two submissions is about 109·√(1−ρ) u, i.e. 3.45u at ρ = 0.999, the size of our gains. Three of our stacks scored the same public 0.94687 while nested dev rose by +9.44u; private rose from 0.94578 to 0.94584.
+
+The public-LB experiment we never selected
+
+We also tested how far public scores alone could push a ranking. Every scored public file carries a little information about which public rows are positive, so we tilted our ranking toward an estimate of the public labels built from publicly shared scored files and our own submissions. All such files were labelled "[public-LB fitted]" or "tilt", and none was selected.
+
+
+
+
+File
+Public
+Private
+
+
+
+
+Honest stack (untilted baseline)
+0.94651
+0.94550
+
+
+Light tilt
+0.94671
+0.94540
+
+
+Medium tilt
+0.94718
+0.94519
+
+
+Strong tilt
+0.94822
+0.94392
+
+
+Strongest tilt (our public best)
+0.94945
+0.94313
+
+
+
+
+
+
+Ranking. 0.94313 would have placed about 1646th.
+
+Cost. Across all tilted files, against the untilted file each started from: Δprivate ≈ +16.7u − 0.88 × Δpublic (r = −0.97). Each extra 1u of public cost almost 0.9u of private; the strongest files gained +294u public and lost −235u private against their starting file (−237u against the honest stack in the table).
+
+Blind to new signal. The estimate put an honest GPT-2-token-feature submission at 0.946343 public; it scored 0.94675.
+
+
+
+
+2. Final members
+
+
+
+Final A uses 11 members. Final B refits the same objective over 29 candidates: the 11 plus 18 additional candidate members. Member AUC is pooled outside S.
+
+
+
+
+Member
+Type
+What it is
+Member AUC
+Final A w
+Final B w
+
+
+
+
+TabPFN-MIX
+L1
+TabPFN-3.5: 43 base + 2 LLR + 85 label-free columns from Paul Bryan Elefante's GAR notebook; 9 seeds
+0.946485
+0.273
+0.241
+
+
+Stack B
+L2 stack
+stack A's design (below) plus the TabPFN and LLR members as inputs
+0.946489
+0.220
+0.200
+
+
+GAR-LLR
+L1
+Paul's generator-aware ridge logistic regression on our folds + 2 LLR columns with hinges; 5 inner seeds
+0.946327
+0.184
+0.173
+
+
+TabPFN-2LLR
+L1
+TabPFN-3.5: 43 base + 2 LLR columns; 19 seeds
+0.946307
+0.165
+0.165
+
+
+Stack A
+L2 stack
+nested rank-mean over 16 inputs (below)
+0.946342
+0.156
+0
+
+
+Raw LLR
+feature
+the surrogate LLR itself
+0.938650
+0.003
+0.002
+
+
+Linear-leaf LightGBM
+L1
+linear leaves, 111 fold-local features
+0.945414
+–
+0.091
+
+
+Combo-TE LightGBM
+L1
+103 pairwise combo TEs (soft pseudo-labels in the TE statistics) + recipe margin; 3 runs
+0.946258
+–
+0.079
+
+
+Original-stats LightGBM
+L1
+combo-TE LightGBM + 52 statistics from the original 10k rows; 4 seeds
+0.946232
+–
+0.045
+
+
+Paul-XGB port
+L1
+Paul's XGB_SAMPLE on our folds with Chris Deotte's base margin; 3 seeds
+0.945768
+–
+0.004
+
+
+5 others
+L1
+four earlier TabPFN-LLR variants, GAR without LLR
+0.946025–0.946214
+0
+0
+
+
+
+
+
+
+Stack A's inputs. 15 GBDT, RealMLP and GPT-2-token neural models plus a logistic stack.
+
+Most valuable member. Dropping TabPFN-MIX from the log-loss stack costs −2.40u (0/5 folds).
+
+
+3. TabPFN-3.5 at full context
+
+Setup.
+
+
+
+tabpfn==9.0.0, default TabPFN-3.5 classifier checkpoint tabpfn-v3.5-20260909.safetensors; n_estimators=2, ignore_pretraining_limits=True, fit_mode='fit_with_cache' with automatic KV-cache precision, 32,768 test rows per batch. In a 50k-context check this was bit-identical to fit_mode='fit_preprocessors' and used less memory.
+
+No context subsampling. Each OOF prediction is one fit whose context is all ~428k labelled rows of the other four folds (427,945 for fold 0); each test prediction is one fit on all 668,665 labelled rows.
+
+Runtime. About 3.5 min per fold on a Colab RTX PRO 6000 and 21–32 min on a local GPU, where the 668k-context test fit took 3,334–3,696 s at 22.97 GB. A Kaggle T4 fits a 428k context only with an int8 KV cache (4,378–5,405 s per fold) and cannot hold the 668k test fit.
+
+
+Inputs mattered more than inference settings.
+
+
+
+Base input. 43 columns: 13 raw, 24 GPT-2 BPE token features of the income and commute strings, 6 income digits. Tokens and digits moved fold-0 AUC from 0.944752 to 0.946039.
+
+LLR columns. Each better LLR input gave a better member. One LLR column added +4.7u to the single model; two columns, one per surrogate recipe (TabPFN-2LLR), added +2.80u to the stack at a fixed combiner (4.9 SE, 5/5).
+
+Label-free GAR columns. Paul's 85 label-free columns (key counts, the generator formula, 79 transductive group-size and leave-one-out-mean columns over income, commute and token keys) gave TabPFN-MIX: +28.6u over TabPFN-2LLR on fold 0 (single model; identical runs on different GPUs differ by ~3u) and +2.37u to the stack (5/5).
+
+
+The context law (TabPFN-MIX, fold 0, random subsets of its context):
+
+
+
+
+Context rows
+107,000
+214,000
+321,000
+427,945
+
+
+
+
+Fold-0 AUC
+0.946076
+0.946175
+0.946317
+0.946459
+
+
+
+
+
+
+
+
+No saturation. +18.6u per doubling (log-linear fit); the last step alone added +14.2u (paired bootstrap +14.5u, SE 3.2).
+
+Test context. Extrapolating to 668,665 rows gives the single model +7u to +22u (central +12u). A pre-registered simulation of this mismatch (weights fitted with a half-context member, applied to the full-context one) gave +0.42u (5/5), so we kept full-context test predictions.
+
+Real labels only. Pseudo-labelled context rows added nothing (−0.13u in the stack); original-dataset rows slightly hurt (about −2u single). More seeds or estimators never paid inside the stack; only new label-free inputs did.
+
+
+Two leaks the protocol caught. A TabPFN stacker over member OOFs plus raw columns looked +13.1u better under the standard OOF protocol but was −54u leak-free; as a level-2 learner it scored an impossible +162u, because it attends to context rows whose OOFs came from models trained with the query fold's labels. Never feed model OOFs to a neighbour-reading learner.
+
+Licence. The checkpoint is under Prior Labs' non-commercial TABPFN-3.5 License v1.0, which explicitly counts data-science competitions on platforms such as Kaggle as non-commercial use; outputs may be used only non-commercially. The tabpfn package is Apache-2.0.
+
+4. Generator-surrogate LLR features
+
+Idea. If the rows were sampled from a language model fine-tuned on the original 10,000 rows, a similar model trained only on the original data should approximate the generator's own label probability without seeing a competition label.
+
+Recipe.
+
+
+
+Model. distilgpt2, fine-tuned GReaT-style (Borisov et al., ICLR 2023) in our own pure-PyTorch code: each sample is the 14 original columns in a fresh random order, written as "column is value"; the optimiser mimics the HF-Trainer default (AdamW, lr 5e-5, linear decay). Recipe A: 100 epochs at batch 32 (about 4.1 h on a local GPU). Recipe B: 100 epochs at batch 8 (about 21 min on a Colab RTX PRO 6000).
+
+Scoring. LLR = log p(row | "Will_Buy_EV is Yes,") − log p(row | "Will_Buy_EV is No,"), averaged over K = 4 fixed random column orders.
+
+
+What we learned.
+
+
+
+Small screening sets mislead. With 10k rows per fold every configuration looked negative (bootstrap SE 2–6u per fold). On the full evaluation outside S, the primary variant (fixed after screening, before the full evaluation) gave +1.86u on an earlier level-2 stack and +3.81u on stack A, 5/5 folds in both.
+
+Average across recipes, not seeds. Single seeds gave +4.04 to +6.25u on stack A. A third recipe-A seed lowered the two-seed average (+6.02u) by −0.42u, but mixing recipes kept helping: plus one recipe-B seed +7.29u → with three recipe-B seeds in total +9.71u → all 28 surrogates +10.69u.
+
+It re-learns the recipe. A diagnostic 30-epoch surrogate's LLR correlated 0.994 with the recipe score; the rest looks like LM-specific distortion.
+
+Use it as an input, not a column. The first stack with TabPFN-LLR and the LLR column gained +10.48u over stack A, and the LLR later fed TabPFN-2LLR, GAR-LLR and TabPFN-MIX. By the end the raw column was redundant: final weights 0.003 and 0.002, and dropping it from the log-loss stack would have gained +1.00u.
+
+
+5. The AUC-direct level-3 blend
+
+Our earlier level-3 combiner was a non-negative logistic regression (log-loss + ½‖w‖², w ≥ 0). In a pre-registered sweep of 28 combiner objectives, run by a Codex agent, only one AUC-direct variant (and its bagged twin) passed the strict nested gate:
+
+$$
+\min_{w\ge 0,\ \sum_k w_k=1}\ L(w)=\frac{1}{n_+n_-}\sum_{i\in\text{pos}}\sum_{j\in\text{neg}}\sigma\left(-\frac{s_i-s_j}{\tau}\right),\qquad s=Xw,\quad \tau=0.1
+$$
+
+X holds the members' per-fold rank-logits. 1 − L is a smoothed pairwise AUC (τ → 0 recovers 1 − AUC). AUC ignores shifts, so there is no intercept, and Σw = 1 fixes the scale, so τ is in rank-logit units. A training split has ~2.6e10 pairs, so we never sample them: positives and negatives are binned with linear interpolation onto a 0.0005 grid over [−16, 16] (64,001 points), and one FFT convolution with the sigmoid kernel gives the exact all-pairs value of the interpolated objective, and its gradient, in O(n + N log N). SLSQP starts from the normalised log-loss weights.
+
+import numpy as np
+from scipy.signal import fftconvolve
+from scipy.special import expit
+from scipy.optimize import minimize
+
+TAU, H, LO, N = 0.1, 0.0005, -16, 64001          # grid g_m = LO + m*H covers [-16, 16]
+# per-fold dev rank-logits lie within +-12.27 (test +-13.26), and w &gt;= 0 with sum(w) = 1 keeps s inside that range;
+# the clip only guards against other inputs
+def hist(s):                                      # linear-interpolation histogram, sums to 1
+    q = np.clip((s - LO) / H, 0, N - 1 - 1e-9)
+    lo = np.floor(q).astype(int); fr = q - lo
+    h = np.bincount(lo, weights=1 - fr, minlength=N) + np.bincount(lo + 1, weights=fr, minlength=N)
+    return h[:N] / len(s)
+
+KERNEL = expit(-np.arange(-N + 1, N) * H / TAU)  # sigma(-lag / tau), lag = pos bin - neg bin
+
+def auc_loss(w, X, y):                            # mean over all (pos, neg) pairs of sigma(-(s_pos - s_neg) / tau)
+    s = X @ w
+    F = fftconvolve(hist(s[y == 0]), KERNEL)[N - 1:2 * N - 1]
+    return hist(s[y == 1]) @ F
+
+def fit(X, y, w0):                                # w0: e.g. the non-negative log-loss weights
+    res = minimize(auc_loss, w0 / w0.sum(), args=(X, y), method="SLSQP",
+                   bounds=[(0, 1)] * X.shape[1],
+                   constraints={"type": "eq", "fun": lambda w: w.sum() - 1})
+    return res.x
+
+
+On synthetic rank-logit data the sketch matches the brute-force all-pairs loss to within 1e-8 (interpolation error). It leaves SLSQP to finite differences; our runs used the exact gradient of the interpolated objective (∇L = Xᵀc, from grid differences of the convolved histograms).
+
+
+
+
+
+Nested gain vs the log-loss stack (outside S)
+
+
+
+
+Decision run (exact FFT)
++1.62u, 2.56 fold-SE, 5/5 folds (+1.94, +0.55, +0.52, +1.17, +3.94)
+
+
+Re-implementations (independent of the decision run's code)
+exact evaluator +1.62u; sampled pairs +1.64u (3M), +1.42u (6M), +1.57u (20M per fold)
+
+
+
+
+The decision run screened on a 0.002 grid and verified on 0.0005; our exact evaluator (the method above) reproduces its weights to about 1e-6 and its gain.
+
+
+
+Why it gains. The objective, not regularisation: penalties or bagging of the logistic regression moved nothing (±0.03u).
+
+Weights. They moved toward stack B (0 → 0.22) and away from stack A (log-loss share 0.28 → 0.16). Public had favoured stack-B blends all along, but that was not why we chose this objective, and private did not reward those blends (Section 8).
+
+Caveats. Fold 4 carries much of the gain (without it +1.04u) and the pass is marginal on SE. An independent agent audit put the selection bias over the 28 variants at about 0.1–0.3u.
+
+Submission. Submitted under a pre-registered public noise guard (public ≥ incumbent − 3e-5): 0.94691 vs 0.94689 public, later 0.94587 vs 0.94586 private.
+
+
+6. Final selection
+
+Final A is the AUC-direct blend, a strict-gate pass.
+
+Final B is the all-in refit: we refitted the same exact objective over 29 candidates, the 11 Final-A members plus 18 additional candidates (seed-bagged where available). It was our second all-in refit; the first, over 26 candidates, gave +0.39u (3/5) and also failed.
+
+
+
+Gate. +0.58u over Final A (SE 0.51, 4/5 folds: −1.07, +0.61, +1.17, +1.97, +0.23), so it failed the strict gate.
+
+New members alone. Tested alone against Final A, all four new non-zero members failed (combo-TE and original-stats as single-run versions): linear-leaf +0.42u, combo-TE +0.04u, original-stats +0.18u, Paul-XGB bag −0.04u. The bagged combo-TE and original-stats members were never evaluated alone.
+
+
+Why we took it anyway. Slot 2 had held a hedge, an unfitted mean of the rank-logits of three earlier stacks. A Monte-Carlo pair model (a hierarchical Gaussian over the DeLong covariances of candidate gains, conditioned on public observations of our honest files, with grids for rivals' selection bias) preferred {Final A, Final B} to {Final A, hedge} in all 8 scenario cells: P(top-3) +2.3 to +3.9 pp, P(1st) +0.4 to +3.5 pp. On the metric of our pre-registered swap rule the gain (+1.3 to +1.9 pp) was below its 2 pp bar. A judgement call, not a gate pass.
+
+Outcome. Final B scored 0.94588 private, tied for our best private score among all our files; Final A 0.94587; the hedge it replaced 0.94586. No file of ours would have caught 1st (0.94602, 14u ahead).
+
+7. What did not work
+
+
+
+
+Idea
+Single model
+In the stack
+
+
+
+
+Combo target encoding (103 pair TEs)*
+0.946005 → 0.946196 (+19u)
++0.03u
+
+
+LLR as a LightGBM feature
++4.71u
++0.01u
+
+
+GPT-2 token-embedding PCA features
++1.46u
+−0.62u
+
+
+TabPFN + per-fold target encodings
++12.5u (fold 0)
++0.25u
+
+
+Pseudo-labels (TE statistics*, TabPFN context, LightGBM)
+up to +0.6u
+−0.13 to +0.04u
+
+
+Original data (rows appended / 52 statistics* / TabPFN context)
+–
+−0.07 / +0.18 / −0.67u
+
+
+Generator-artifact keys (original-row matching / token pairs)
+−4.1 / −3.8u
+–
+
+
+Six public-notebook OOFs added to the blend
+–
+dev +10.42u → public −2u, private 0u
+
+
+Nonlinear level-3 (monotone LightGBM / varying coefficients / kNN smoothing / ridge)
+–
+−8.86 / −2.73 / −11.91 / −52.0u
+
+
+Hard-pair residual ranker
+–
+−4.38u
+
+
+gpt2-124M surrogate
+screening AUC 0.9357 vs 0.9418
+–
+
+
+TabICL v2 instead of TabPFN
+−144u (fold 0)
+−1.87u
+
+
+TabPFN fine-tuning (100k rows)
+−3 to −23u
+–
+
+
+More TabPFN estimators / seeds
++8.9u (4 estimators)
+−0.28u / −0.07u
+
+
+
+
+* These ideas failed every gate as single members, yet bagged versions took small weights in the all-in Final B (combo-TE with pseudo-labelled TE statistics 0.079, original-stats 0.045).
+
+The pattern: single-model gains routinely vanished in the stack. Public-notebook OOFs, trained on more rows and other folds, inflated a dev gain that neither leaderboard confirmed.
+
+8. Public vs private
+
+
+
+Offset. Public minus private was a near-constant ~105u for our honest files (median over our honest files; 104u and 103u for the finals). The public top-100 median was 117u, so the offset alone says nothing about overfitting.
+
+Ranking. Over our honest submissions on our fixed folds, nested dev ranked the private scores with Spearman 0.991, public with only 0.793. Private realised about two thirds of the nested gain, so dev on our folds was somewhat optimistic.
+
+Stack-B blends. Public favoured all 8 audited blends with stack B by +2 to +5u; private never showed that gain (−2 to 0u).
+
+Shake-up. Over all teams public and private correlate at 0.993 (Spearman), but within the public top-10 only at 0.236. Of the late public jumps on the final morning, only Chris Deotte's (0.94692 → 0.94705) carried over: public 3rd → private 1st.
+
+
+
+
+
+Public rank
+Team
+Public
+Private
+Private rank
+
+
+
+
+1
+Team Alicia
+0.94945¹
+0.94588
+2
+
+
+2
+Gigrise
+0.94705
+0.94564
+101
+
+
+3
+Chris Deotte
+0.94705
+0.94602
+1
+
+
+4
+Team A.Ş
+0.94704
+0.94571
+17
+
+
+5
+Daniel Mineev
+0.94698
+0.94565
+79
+
+
+6
+Paul Bryan Elefante
+0.94697
+0.94580
+7
+
+
+7
+Rapha
+0.94695
+0.94572
+15
+
+
+8
+Prior
+0.94694
+0.94583
+4
+
+
+9
+M &amp; M
+0.94692
+0.94584
+3
+
+
+10
+CHEN Xiang
+0.94691
+0.94551
+213
+
+
+
+
+¹ The leaderboard pairs each team's best public file with its selected private score. For us these differ: 0.94945 is the unselected LB-fitted file (private 0.94313); our selected Final B scored 0.94691 public. We don't know other teams' methods or selected files.
+
+The pair model in hindsight. Our private gain over stack A (+20u) fell inside its scenario range (+16 to +27u), but it gave Deotte and Gigrise the same expected gain (+23.9u); actual +34u and −4u.
+
+
+  
+Note. Alicia Agent, teased at the end of this post, is a separate upcoming project from our team. Nothing used in this competition (code, models, tools or data) comes from or is related to Alicia Agent.
+
+
+Acknowledgements
+
+
+
+Chris Deotte: the EDA that recovered the recipe, and the XGB starter's base margin.
+
+Omkar Kadam: the original CC0 dataset and the generator script.
+
+Paul Bryan Elefante: the generator-aware ridge logistic regression (basis of GAR-LLR and of TabPFN-MIX's 85 label-free columns), the XGB_SAMPLE notebook, a forum reply suggesting combo target encoding, and a post on ensemble diversity.
+
+Rafanikitas: the memory-aware recipe-residual LightGBM, the base of our recipe-residual GBDT learner.
+
+Naji: the Pure LGBM notebook (our first reproduced baseline and the basis of a token LightGBM inside stack A) and the honest OOF hub.
+
+broccoli beef: the argument that an LLM generated the rows, emitting numbers as tokens (a reply in 741247).
+
+Marc Maldonado Lorca: the income-copying analysis (742385).
+
+Prior Labs for TabPFN-3.5 and Hugging Face for distilgpt2.
+
+Xin Feng (@milanfx): thank you for the kind words about our team in your 10th Place Solution writeup, and congratulations on 10th place!
+
+
+Tools and compute.
+
+
+
+AI used to write code: OpenAI Codex — GPT-6 Astra (Max / Ultra effort), GPT-6 Sol (Max), Daybreak Blue (Max); Claude Code — Opus 5.5 (Max / Ultracode), Fable 5.1, Opus 5 (Max). The agents, including the separate audit and re-implementation sessions, worked under the validation protocol above; the AUC-direct objective came out of a Codex objective sweep.
+
+GPUs: Kaggle and Colab notebooks (RTX PRO 6000 and H100) plus a local GPU machine.
+
+
+Closing note
+
+A personal note: in the final stretch we didn't have our main laptop, which made building and iterating on high-performance code harder than we would have liked (most experiments ran on remote GPUs from a small 8 GB machine). Next time we'll try to give it an even fuller effort.
+
+Finally, congratulations to Chris Deotte, M &amp; M, Prior and everyone who took part — we're cheering for all participants, and see you in the next episode!
+
+Comments:
+├─ Kris Dreemurr (2026-10-01 17:32:32.350000) [+1]
+│  Congrats Urad!
+├─ GurSimran (2026-10-01 16:37:17.687000) [+1]
+│  Now i understand what signal is causing such a huge jump
+├─ Mirko (2026-10-01 12:50:19.080000) [+1]
+│  Congrats! I’ll be spending the next few days diving into your solution.
+├─ Markus.JM (2026-10-01 10:40:58.910000) [+1]
+│  Congratz guys
+├─ Timur (2026-10-01 06:39:12.850000) [+1]
+│  Congratulations! This episodes leaderboard dynamics were amazing 😃
+├─ Ern711 (2026-10-01 06:17:31.977000) [+1]
+│  Congrats!
+  ├─ URAD (2026-10-01 06:43:09.810000) [+1]
+  │  Thank you so much
+├─ Psi (2026-10-01 07:11:44.787000) [+2]
+│  Great stuff and happy that TabPFN-3.5 was helpful :)
+  ├─ URAD (2026-10-01 21:54:23.463000) [+1]
+  │  Thanks to Prior Labs
+├─ Sarun P M (2026-10-01 06:56:31.127000) [+2]
+│  Congrats on the position and also for sharing the results.
+│  I just wanted to know how you make the infographics of Final Pipeline. Is it using an AI. Then, how it is done, I am curious to know.
+├─ Paul Bryan Elefante (2026-10-01 06:12:21.890000) [+2]
+│  Congratulations! Props to your team also for an amazing solution writeup.
+├─ LEEKANG (2026-10-02 15:15:15.210000) [+0]
+│  Insane Goood
+├─ Sergey Qt2024 (2026-10-01 10:18:20.163000) [+1]
+│  Congratulation!
+├─ Maher el Ouahabi (2026-10-01 06:58:10.337000) [+1]
+│  Congratulations!

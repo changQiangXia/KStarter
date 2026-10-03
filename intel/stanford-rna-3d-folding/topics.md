@@ -1,0 +1,82 @@
+# stanford-rna-3d-folding 讨论区（按票数排序，共 80 条）
+
+- [[placeholder lb0.321/0.500] My solution and experimental results](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/566906) — 121 票 / 107 评论 / 2025-03-07 **write-up?**
+- [1st Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609774) — 97 票 / 26 评论 / 2025-09-29 **write-up?**
+- [Starter notebooks by finetuning RibonanzaNet to predict 3D (updated with Rnet2 Alpha lb 0.3)](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565306) — 82 票 / 19 评论 / 2025-02-27 
+- [A medium-level introduction to RNA folding, part 1](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568445) — 80 票 / 19 评论 / 2025-03-16 
+- [You should check this video from Veritasium](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565279) — 59 票 / 13 评论 / 2025-02-27 
+- [Introduction to RNA folding, part 2](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568633) — 56 票 / 9 评论 / 2025-03-17 
+- [Welcome to the Stanford RNA 3D Folding Challenge!](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565064) — 50 票 / 44 评论 / 2025-02-26 
+- [Starting materials and references](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565292) — 42 票 / 11 评论 / 2025-02-27 
+- [RibonanzaNet2 alpha release](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/571704) — 40 票 / 10 评论 / 2025-04-05 
+- [Competition data processing pipeline](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/569085) — 38 票 / 10 评论 / 2025-03-19 
+- [ProteinX finetune result and code](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/573495) — 32 票 / 29 评论 / 2025-04-16 
+- [Getting Started with This Competition ](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/578187) — 30 票 / 3 评论 / 2025-05-09 
+- [paper: Has AlphaFold 3 reached its success for RNAs?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/566534) — 29 票 / 4 评论 / 2025-03-06 
+- [a new paper : Drfold2 :  NO MSA required](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568066) — 28 票 / 6 评论 / 2025-03-13 
+- [Outcome of the 2025 Stanford RNA 3D folding challenge](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609187) — 23 票 / 33 评论 / 2025-09-24 
+- [Description of my solution for the competition / Descripción de mi solución para la competición](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/582377) — 23 票 / 9 评论 / 2025-05-30 **write-up?**
+- [A Gentle introduction to the problem statement for absolute beginners.](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568232) — 23 票 / 14 评论 / 2025-03-14 
+- [Good starter pack for Stanford RNA 3D Folding Contest - 2025](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/567046) — 21 票 / 1 评论 / 2025-03-08 
+- [[draft] how to finetune proteinx (AF3 clone) for MSA RNA finetunning](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570704) — 21 票 / 8 评论 / 2025-03-30 
+- [Is there any chance of releasing the scoring code? (aligning+scoring)](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565374) — 21 票 / 12 评论 / 2025-02-28 
+- [RNA 3D Folding Prediction with Boltz-1 🧬](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/576619) — 21 票 / 9 评论 / 2025-05-06 
+- [Step 1 : Literature Review - Related Research Papers](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565426) — 21 票 / 3 评论 / 2025-02-28 
+- [Brief Explanation of My Temporary 1st-place Solution (Expect Significant Drop)](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/582295) — 20 票 / 19 评论 / 2025-05-30 **write-up?**
+- [AlphaFold3 baselines [0.259 noMSA/0.397 rMSA]](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570292) — 20 票 / 29 评论 / 2025-03-27 
+- [Convert UW synthetic dataset of 440k synthetic RNAs](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/567959) — 20 票 / 10 评论 / 2025-03-13 
+- [Multiple Sequence Alignments (MSAs) for Targets](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568116) — 20 票 / 10 评论 / 2025-03-13 
+- [[Draft] RNA 3d structure via minizing energy for fape(Frame Aligned Point Error) and base-pairing](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568512) — 20 票 / 10 评论 / 2025-03-16 
+- [Naive question: Is this feasible with Kaggle resources?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565314) — 18 票 / 6 评论 / 2025-02-28 
+- [MSA Update](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/569424) — 17 票 / 23 评论 / 2025-03-21 
+- [3rd Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609701) — 16 票 / 4 评论 / 2025-09-29 **write-up?**
+- [Get ready for competition close!](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/608277) — 16 票 / 5 评论 / 2025-09-18 
+- [2nd Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609843) — 16 票 / 5 评论 / 2025-10-02 **write-up?**
+- [[draft] example to use MAS provided: case of rhofold+](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568125) — 16 票 / 22 评论 / 2025-03-14 
+- [RibonanzaNet Explained](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568123) — 16 票 / 3 评论 / 2025-03-13 
+- [10th place solution (How we ensemble)](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609515) — 15 票 / 2 评论 / 2025-09-27 **write-up?**
+- [7th Place Solution: Ensemble of Two Protenix Models](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/610261) — 15 票 / 0 评论 / 2025-10-02 **write-up?**
+- [Why only 844 sequences and ideas about more data](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/569502) — 15 票 / 5 评论 / 2025-03-22 
+- [Synthetic RNA structure dataset](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/567539) — 15 票 / 0 评论 / 2025-03-10 
+- [Considerations for Ensembling in RNA 3D Structure Prediction](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/576742) — 14 票 / 0 评论 / 2025-05-06 
+- [Nvidia co-hosts!](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/576526) — 14 票 / 9 评论 / 2025-05-05 
+- [Need Tips as a Newbie](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565786) — 14 票 / 6 评论 / 2025-03-02 
+- [What happens now?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/582324) — 14 票 / 12 评论 / 2025-05-30 
+- [hot cake of GTC25: is DGX spark going to change kaggle competition?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568946) — 13 票 / 2 评论 / 2025-03-19 
+- [Public leaderboard 3rd place solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/584487) — 13 票 / 4 评论 / 2025-06-13 **write-up?**
+- [6th Place Solution ](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609713) — 13 票 / 2 评论 / 2025-10-01 **write-up?**
+- [Training data update](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/575109) — 13 票 / 27 评论 / 2025-04-26 
+- [🧬 RNA 3D Structure Prediction: 10 Key Terms Every Beginner Should Know](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/571812) — 13 票 / 1 评论 / 2025-04-05 
+- [Key Findings from EDA](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/567990) — 13 票 / 0 评论 / 2025-03-13 
+- [Posts from the hosts](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/579687) — 12 票 / 4 评论 / 2025-05-19 
+- [Get started here](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/564931) — 12 票 / 1 评论 / 2025-02-25 
+- [Interested in bio/AI beyond this competition?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/580141) — 12 票 / 2 评论 / 2025-05-22 
+- [Tryhard Boltz-1 improvements](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/582403) — 12 票 / 2 评论 / 2025-05-31 
+- [update from ICLR 2025](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/575223) — 12 票 / 3 评论 / 2025-04-26 
+- [Got a cool dataset – sharing here!](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570131) — 12 票 / 3 评论 / 2025-03-26 
+- [Are context chains being considered?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565715) — 11 票 / 2 评论 / 2025-03-01 
+- [Protenix inference | LB score of 0.33](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/571661) — 11 票 / 3 评论 / 2025-04-04 
+- [Understanding the Problem Statement](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568042) — 11 票 / 1 评论 / 2025-03-13 
+- [kaggle evaluation code: per rna or per rna chain?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/567262) — 11 票 / 6 评论 / 2025-03-09 
+- [All known RNA 3D structures clustered by sequence and structural similarity](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/576556) — 10 票 / 0 评论 / 2025-05-05 
+- [Some useful information if you are using NuFold](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570349) — 10 票 / 6 评论 / 2025-03-27 
+- [Submission Freeze April 23](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/574645) — 9 票 / 7 评论 / 2025-04-23 
+- [RibonanzaNet 3D finetuning with a structure module lb 0.19](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/569322) — 9 票 / 2 评论 / 2025-03-21 
+- [Biological definition of the dataset](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/569430) — 9 票 / 1 评论 / 2025-03-21 
+- [Protein Structure Prediction - 2024 Chemistry Nobel](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565500) — 9 票 / 1 评论 / 2025-02-28 
+- [Potential Approaches & Ideas](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/574214) — 9 票 / 6 评论 / 2025-04-20 
+- [NaN values in train labels set](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565831) — 9 票 / 11 评论 / 2025-03-02 
+- [New editorial on RNA structure prediction with links to papers ](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570768) — 9 票 / 0 评论 / 2025-03-30 
+- [Mol*: Powerful & Fast 3D Visualization Tool](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570742) — 9 票 / 0 评论 / 2025-03-30 
+- [`validation_labels.csv`: should -1e+18 be interpreted as NaN?](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565746) — 9 票 / 3 评论 / 2025-03-02 
+- [9th place solution  - d4t4 team ](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609921) — 9 票 / 4 评论 / 2025-09-30 **write-up?**
+- [Beginners guide RNA 3D Folding: starting to submission](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/566334) — 9 票 / 5 评论 / 2025-03-05 
+- [5th Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609775) — 9 票 / 0 评论 / 2025-10-02 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/565284) — 8 票 / 2 评论 / 2025-02-27 
+- [Previous Kaggle Competitions and Winning Solutions](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/568012) — 8 票 / 0 评论 / 2025-03-13 **write-up?**
+- [MSAs for the train_v2 dataset](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/578548) — 8 票 / 2 评论 / 2025-05-11 
+- [🧬 Estimating Covarying Base Pairs Based on MSA](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/570508) — 8 票 / 4 评论 / 2025-03-28 
+- [Help us discover new RNA folds in Nature](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/610629) — 8 票 / 7 评论 / 2025-10-05 
+- [Strategies for inference on long sequences](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/580433) — 8 票 / 0 评论 / 2025-05-23 
+- [Need to Innovate on Position Encoding Techniques](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/566910) — 8 票 / 0 评论 / 2025-03-07 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609196) — 5 票 / 0 评论 / 2025-09-24 

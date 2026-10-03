@@ -1,0 +1,225 @@
+<p>Repo: <a href="https://github.com/masaishi/kaggle-s5e4-6th-solution" target="_blank">https://github.com/masaishi/kaggle-s5e4-6th-solution</a></p>
+<p><strong>Update:</strong> I published the training code, and it can achieve an 11.63 private score with a single LightGBM model using 5-fold cross-validation.<br>
+Code <a href="https://www.kaggle.com/code/masaishi/public-11-70-private-11-63-single-lgb-fold-5?scriptVersionId=237136503" target="_blank">Public 11.70 | Private 11.63 | Single LGB Fold 5</a></p>
+<h2>TL;DR</h2>
+<ul>
+<li>Identified data leaks(?) and applied targeted corrections</li>
+<li>Original Data as New Rows</li>
+<li>Select feature combinations based on RMSE scores</li>
+</ul>
+<h2>Data Leak 1: More than 2 decimal digits in Episode_Length_minutes</h2>
+<p>I verified the data leak originally shared by AngelosMar in <a href="https://www.kaggle.com/competitions/playground-series-s5e4/discussion/574925#3187345" target="_blank">this discussion post</a>. My own verification EDA can be found here: <a href="https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089" target="_blank">Decimal Digits Analysis EDA</a></p>
+<p>The analysis revealed that data points with more than 2 decimal digits in Episode_Length_minutes were strongly correlated with the actual Listening_Time_minutes. After ensemble prediction, I overwrote these values using the formula: Episode_Length_minutes * 0.9554.</p>
+<pre><code>df_train.(pl.col() &gt; )
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6426215%2Fc93c3b90cd3bdba9139edd36fc81456d%2Fdataleak1.png?generation=1746058129135115&amp;alt=media" alt=""></p>
+<p><a href="https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089&amp;cellId=7" target="_blank">https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089&amp;cellId=7</a></p>
+<h2>Data Leak 2: Abnormal Number_of_Ads values</h2>
+<p>Normally, Number_of_Ads ranges from 0-3. However, I found 7 instances where this value exceeded 3, and these abnormal values closely matched the Listening_Time_minutes. For these cases, I applied Number_of_Ads * 1.0588 after ensemble prediction.</p>
+<pre><code>df_train.(pl.col() &gt; )
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6426215%2F81b279abcbbc18e0786969f484ece9b8%2Fdataleak2.png?generation=1746058143015941&amp;alt=media" alt=""></p>
+<p><a href="https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089&amp;cellId=8" target="_blank">https://www.kaggle.com/code/masaishi/decimal-digits-analysis-eda?scriptVersionId=236025089&amp;cellId=8</a></p>
+<h2>Data Leak 3: Records with identical features have similar listening times</h2>
+<p>Since this competition used synthetic data (as mentioned in the description), I hypothesized that certain feature combinations would have consistent listening times. I systematically evaluated feature combinations to identify groups with low variability in listening times (low RMSE when predicting with group means). I will write how to calc it later.</p>
+<p>The following four feature combinations showed significant LB improvement when overwriting predictions with group means:</p>
+<pre><code>[
+    ,
+    ,
+    ,
+    ,
+]
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6426215%2Fa101d890a9163d6a699bef5e747f1929%2Fdataleak3.png?generation=1746058163833828&amp;alt=media" alt=""></p>
+<h2>Feature Engineering</h2>
+<p>I implemented numerous feature transformations including:</p>
+<ol>
+<li><strong>Cyclical Day/Time Features</strong> - Converting time-based features to sin/cos representations</li>
+<li><strong>Ratio Features</strong> - Creating meaningful ratios between existing features</li>
+<li><strong>Integer/Decimal Separation</strong> - Splitting numerical features into integer and decimal components</li>
+<li><strong>Sentiment Features</strong> - Encoding categorical sentiment data numerically</li>
+<li><strong>Polynomial Features</strong> - Creating squared and cubed versions of important variables</li>
+</ol>
+<pre><code>df = df.with_columns(
+      
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).sin().alias(),
+      pl.col().cast(pl_f_type).mul( * np.pi / ).cos().alias(),
+      
+      (pl.col() / (pl.col() + )).fill_null().alias(),
+      (pl.col() / (pl.col() + )).fill_null().alias(),
+      (pl.col() / (pl.col() + )).fill_null().alias(),
+      
+      pl.col().floor().alias(),
+      (pl.col() - pl.col().floor()).alias(),
+      pl.col().floor().alias(),
+      (pl.col() - pl.col().floor()).alias(),
+      
+      (pl.col() == ).cast(pl.Int8).alias(),
+      pl.when(pl.col() == ).then().otherwise().cast(pl_f_type).alias(),
+      
+      (pl.col() ** ).alias(),
+      (pl.col() ** ).alias(),
+  )
+
+  df = df.with_columns(
+      (np.sin( * np.pi * pl.col() / )).alias(),
+      (np.cos( * np.pi * pl.col() / )).alias(),
+      (pl.col() * pl.col()).alias(),
+  )
+
+  df = df.with_columns(
+      (
+          (pl.col() - pl.col().median()).()
+          + (pl.col() - pl.col().median()).()
+          + (pl.col() - pl.col().median()).()
+          + (pl.col() - pl.col().median()).()
+      ).alias()
+  )
+</code></pre>
+<p>The most impactful feature was simply <code>pl.col("Episode_Length_minutes").floor().alias("ELen_Int")</code> - extracting the integer part of the episode length.</p>
+<h2>Utilizing the Original Dataset</h2>
+<p>I incorporated this original dataset in two ways:</p>
+<ol>
+<li>Direct concatenation with the competition training data; “Original Data as New Cols”</li>
+<li>Adding specific rows as "Original Data as New Rows"</li>
+</ol>
+<p>For the second approach, I was inspired by Chris Deotte's solution post from the Binary Prediction with a Rainfall Dataset competition (Playground Series - Season 5, Episode 3) shared <a href="https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571176" target="_blank">here</a>.</p>
+<p>The technique involved finding rows in the original dataset that matched the same feature group combinations I identified in my target encoding process. When I found matching feature groups, I added those original rows with their actual Listening_Time_minutes values as new training data. This essentially allowed me to enrich my dataset with additional ground truth values from the original source.</p>
+<pre><code> cols  combinations_list:
+        n = 
+        means = df_pltpd.group_by(cols).agg(pl.col().mean().alias())
+        df = df.join(means, on=cols, how=).with_columns(pl.col().fill_null(m).alias(n)).drop()
+</code></pre>
+<h2>Select Feature Combinations for Target Encoding</h2>
+<p>Code: <a href="https://www.kaggle.com/code/masaishi/select-feature-combinations-by-rmse" target="_blank">https://www.kaggle.com/code/masaishi/select-feature-combinations-by-rmse</a></p>
+<p>I'd like to share my approach for finding optimal feature combinations through target encoding. This method systematically evaluates different feature groupings to identify which combinations best predict podcast listening time.</p>
+<p>Here's the step-by-step process I implemented:</p>
+<ol>
+<li><p>First, split the dataset into training (80%) and validation (20%) sets:</p></li>
+<li><p>Generate feature combinations to test (1-4 features at a time):</p></li>
+<li><p>For each combination, create groups by concatenating feature values:</p>
+<pre><code>
+ comb[]  df.select(cs.numeric()).columns:
+    concat_expr = pl.col(comb[]).(round_num).cast(pl.Utf8)
+:
+    concat_expr = pl.col(comb[]).cast(pl.Utf8)
+
+
+ col_name  comb[:]:
+     col_name  df.select(cs.numeric()).columns:
+        concat_expr = concat_expr +  + pl.col(col_name).(round_num).cast(pl.Utf8)
+    :
+        concat_expr = concat_expr +  + pl.col(col_name).cast(pl.Utf8)
+</code></pre></li>
+<li><p>Calculate the mean listening time for each group in the training data:</p>
+<pre><code>df_train = df_train.with_columns(
+    concat_expr.alias().cast(pl.Categorical)
+)
+
+df_group = df_train.group_by().agg(
+    pl.col().count().alias(),
+    pl.col().std().alias(),
+    pl.col().mean().alias(),
+    pl.col().mean().alias(),
+)
+</code></pre></li>
+<li><p>Apply these group means to the validation set as predictions:</p>
+<pre><code>df_valid = df_valid.with_columns(
+    concat_expr.alias().cast(pl.Categorical)
+)
+df_valid = df_valid.join(
+    df_group[[, ]],
+    on=,
+    how=,
+)
+</code></pre></li>
+<li><p>Calculate RMSE and other statistics for each combination:</p>
+<pre><code>std_distributes.append({
+    : .join(comb),
+    : df_group[].() / df_train[].count(),
+    : (df_group),
+    : df_group[].mean(),
+    : df_group[].median(),
+    : df_group[].std(),
+    : df_group[].mean(),
+    : calculate_rmse(df_valid[], df_valid[]),
+})
+</code></pre></li>
+<li><p>Sort results by RMSE to find the best feature combinations:</p>
+<pre><code>std_distributes = std_distributes.sort()
+</code></pre></li>
+</ol>
+<p>This approach is essentially a systematic way to perform target encoding across different feature combinations. The best combinations provide valuable insights about which podcast attributes most strongly influence listening time.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6426215%2F83b38f82d9be48a5e72ebe14cecaa6db%2Fselect.png?generation=1746134530371463&amp;alt=media" alt=""></p>
+<h2>Model Ensemble</h2>
+<p>For my final submission, I created an ensemble combining several different regression models:</p>
+<ul>
+<li>HistGradientBoostingRegressor</li>
+<li>LGBMRegressor</li>
+<li>SVR (Support Vector Regression)</li>
+<li>TabNetRegressor</li>
+<li>XGBRegressor</li>
+</ul>
+<h2>Experiment Management</h2>
+<p>Effective experiment management was crucial to my success in this competition. I tracked experiment parameters using Wandb, while implementing an automated commit system that included validation scores and Wandb experiment names in commit messages. This made it easy for me to identify which code changes produced the best results.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6426215%2Ff381982423ed2b34bfbe38d8fc8795ca%2Fmanage0.png?generation=1746058203707903&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6426215%2Fffa0caf72ab06620c15a2fac723e762f%2Fmanage1.png?generation=1746058216544621&amp;alt=media" alt=""></p>
+<p>With over 1,000 experiments conducted throughout the competition, establishing this structured environment from the beginning proved invaluable. The screenshot examples show how my tracking system organized results visually.</p>
+<p>I also carefully structured my code architecture to maximize flexibility:</p>
+<pre><code>/
+├── config
+├── data
+│   ├── data_class
+│   ├── data_process
+│   ├── default_selecteds
+│   ├── encoders
+│   ├── feature_eng
+│   ├── simple_data_process
+│   ├── simple_feature_eng
+│   └── tabnet_feature_eng
+├── 
+├── models
+│   ├── hgbr
+│   ├── lgb
+│   ├── svr
+│   ├── tabnet
+│   ├── test
+│   └── xgb
+└── utils
+</code></pre>
+<p>Each model followed a consistent interface with standardized input/output formats:</p>
+<pre><code> () -&gt; [,  | ]:
+    
+
+
+ :
+    X_train: pl.DataFrame
+    y_train: pl.Series
+    X_valid: pl.DataFrame
+    y_valid: pl.Series
+    X_test: [pl.DataFrame] = 
+    y_test: [pl.Series] = 
+</code></pre>
+<p>This design made it easy for me to test new models or apply successful feature engineering techniques across different algorithms. My configuration system also allowed for quick switching between prediction and evaluation modes.</p>
+<p>While these details might seem minor, they significantly enhanced my ability to iterate efficiently throughout the competition.</p>
+<h2>Special Thanks to:</h2>
+<ul>
+<li>AngelosMar - <a href="https://www.kaggle.com/angelosmar1" target="_blank">https://www.kaggle.com/angelosmar1</a></li>
+<li>Chris Deotte - <a href="https://www.kaggle.com/cdeotte" target="_blank">https://www.kaggle.com/cdeotte</a></li>
+<li>Panagiota Moraiti - <a href="https://www.kaggle.com/giotamoraiti" target="_blank">https://www.kaggle.com/giotamoraiti</a></li>
+<li>Pranshu Bahadur - <a href="https://www.kaggle.com/pranshubahadur" target="_blank">https://www.kaggle.com/pranshubahadur</a></li>
+<li>Spiritmilk - <a href="https://www.kaggle.com/act18l" target="_blank">https://www.kaggle.com/act18l</a></li>
+<li>Ravi Ramakrishnan - <a href="https://www.kaggle.com/ravi20076" target="_blank">https://www.kaggle.com/ravi20076</a></li>
+<li>Masaya Kawamata - <a href="https://www.kaggle.com/masayakawamata" target="_blank">https://www.kaggle.com/masayakawamata</a></li>
+<li>Chinmaya - <a href="https://www.kaggle.com/chinmayadatt" target="_blank">https://www.kaggle.com/chinmayadatt</a></li>
+<li>Farukcan Saglam - <a href="https://www.kaggle.com/greysky" target="_blank">https://www.kaggle.com/greysky</a></li>
+<li>Carl McBride Ellis - <a href="https://www.kaggle.com/carlmcbrideellis" target="_blank">https://www.kaggle.com/carlmcbrideellis</a></li>
+<li>Thomas Meißner - <a href="https://www.kaggle.com/thomasmeine" target="_blank">https://www.kaggle.com/thomasmeine</a></li>
+</ul>

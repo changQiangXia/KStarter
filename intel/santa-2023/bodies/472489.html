@@ -1,0 +1,157 @@
+<h1>Context</h1>
+<ul>
+<li>Business context: <a href="https://www.kaggle.com/competitions/santa-2023/overview" target="_blank">https://www.kaggle.com/competitions/santa-2023/overview</a></li>
+<li>Data context: <a href="https://www.kaggle.com/competitions/santa-2023/data" target="_blank">https://www.kaggle.com/competitions/santa-2023/data</a></li>
+</ul>
+<h1>Overview of the approach</h1>
+<p>We used bidirectional breadth-first search to optimally solve the small puzzles. The backbone of the larger puzzles were solved with commutators and conjugates, but with several special features (detailed below) that made a big difference.</p>
+<h1>Details of the submission</h1>
+<h2>Solving small puzzles optimally</h2>
+<ul>
+<li>We solved the <code>cube_2/2/2</code>, <code>wreath_6/6</code> and <code>wreath_7/7</code> puzzles optimally using simple breadth-first-search (BFS).</li>
+<li>To extend to <code>wreath_12/12</code>, we implemented bi-directional BFS (BBFS). As well as enabling us to reach the optimal solution for <code>wreath_12/12</code> where we couldn't before (because we ran out of RAM), BBFS was vastly faster than vanilla BFS in finding the solutions and became a standard part of our toolbox for solving parts of other puzzle types. </li>
+<li>To extend to <code>wreath_21/21</code>, we made optimizations to compress the state representation and ran on a box with <em>lots</em> of RAM.</li>
+</ul>
+<h2>Medium globes</h2>
+<p>Even the smallest globes weren't solvable by BBFS. What we did here was to solve the "first" N cells using BBFS and then iteratively expand. We did this by masking out the other cells - setting them all to have the same symbol as other (<code>.</code>) - which means that many unique states collapse down to a single pseudo-state and the puzzle is therefore much smaller. Once we'd solved the first N cells, we'd extend to N+M cells. We called this Iterated BBFS (IBBFS). It no longer gives optimal solutions, but it gives pretty good ones. We then tweaked it a little further so that N and M were set adaptively - i.e. if BBFS found the solution in very few moves, we'd unwind and make it solve a bigger chunk at once.  If BBFS was taking too long to solve the next M cells, we'd abort and reduce M. We called this Adaptive IBBFS (AIBBFS). AIBBFS was our best-performing method for globes 1/8, 2/6, 3/4, 6/4 and 6/8.</p>
+<h2>Large globes</h2>
+<p>Solving the larger globes proceeded in two phases.  The first phase tried "random" moves to solve as many cells as possible.  The second phase used commutators and conjugates (in Rubik's cube parlance) to solve the remainder without upsetting what was already solved.</p>
+<h3>Phase 1</h3>
+<p>Phase 1 simply used BFS, up to a fixed depth, to find the set of moves that solved the maximum number of cells. Then we did <em>just the first of</em> that set of moves and repeated the process. Taking a single step before doing the next iteration of BFS (rather than doing the full set of moves found) improved the efficiency of this phase and markedly improved the total number of cells solvable by this phase.  Given that this phase had an efficiency in the region of 1 move/cell and phase 2 is more like 6 moves/cell, getting more cells solved in this phase was a big win.</p>
+<h3>Phase 2</h3>
+<p>We used BBFS to find a large set of short two-pair commutators - i.e. a small number of moves that swapped cells <code>{A,B}</code> and <code>{C,D}</code> but left everything else where it was. These commutators was short (8 or 10 moves) but pretty limited in the pairs they could swap. Then we extended them using conjugates - i.e. perform any set of moves as a preamble to bring cells of interest into positions <code>A, B, C &amp; D</code> that were covered by a commutator, then use the commutator, then perform the inverse of the preamble.</p>
+<p>We built a large (10s of millions of entries) database of pairs that could be swapped in this way. Then, at each step, we searched for the database entry that gave us the best bang-for-buck improvement to the current state (i.e. number of additional cells solved / number of moves taken to solve) and applied that.</p>
+<p>(Also worth mentioning something that worked nearly as well and ran much faster. There are some commutators that swap two north-south pairs and other commutators that swap a north-north pair and a south-south pair. For much of the competition we first got all the pieces into the correct hemisphere and then did the within-hemisphere swaps.)</p>
+<p>In one of the other write-ups, it sounds like the are also 3-cell commutators available for the globe puzzles. I had wondered about about adding these too, but I was out of time / focusing on helping my teammates solve the largest cubes.</p>
+<h2>Cubes</h2>
+<p>It was primarily my teammates who worked on the cubes, so I have less detail here. But the outline is a lot like the larger globes…</p>
+<ol>
+<li>Find a prefix that solves as many cells as possible.</li>
+<li>Use an orbit solver that uses commutators to solve each of the 24-cell orbits independently.</li>
+<li>For puzzles with wildcards, solve the knapsack problem.</li>
+<li>Assemble the solutions for each orbit using a travelling salesman solver.</li>
+</ol>
+<p>The last couple of phases are different to anything discussed so far.</p>
+<h3>Phase 3 - Knapsack solving</h3>
+<p>Given that phase 2 independently solves each orbit and given that some solutions have wildcards, it may be possible to leave some orbits unsolved. But which orbits should we do that for? This is the traditional <a href="https://en.wikipedia.org/wiki/Knapsack_problem" target="_blank">knapsack problem</a>. The value of omitting an orbit is the number of moves taken to solve that orbit. The cost (or "weight") of omitting an orbit is the number of cells that will be left in an incorrect state if we don't solve the orbit.</p>
+<p>This mostly applied to puzzle #277 which had 176 wildcards (8% of the state). Since it had limited applicability to other puzzles and we had limited time, we just used the straightforward approach of greedily omitting orbits based on their <code>value/weight</code> (subject to the "weight" not exceeding the number of wildcards available). There are ways of solving the knapsack problem that get better solutions, but this is often a reasonable starting point.</p>
+<h3>Phase 4 - Travelling salesman</h3>
+<p>Phase 2 solves the orbits independently. Because of that, it's possible that there are moves than cancel out at the end of one orbit solution and the beginning of the next. If we re-order the orbits, we can seek to maximize the total number of moves the cancel out. We noticed that this can be framed as an instance of the (asymmetric) travelling salesman problem. First compute, for each ordered pair of orbits <code>[A, B]</code>, the number of moves that can be cancelled ('C') when solving <code>B</code> immediately after <code>A</code>. The (directed) distance between <code>A</code> and <code>B</code> is just <code>-C</code>. Pass to a <a href="http://akira.ruc.dk/~keld/research/LKH-3/" target="_blank">travelling salesman solver</a> (which I used for <a href="https://www.kaggle.com/competitions/santa-2022" target="_blank">Santa 2022</a>) to minimize the distance and therefore maximize the amount of cancellation possible.</p>
+<p>We should also have used this method for the larger globes but, again, we were out of time.</p>
+<h1>Sources</h1>
+<p>TODO</p>
+<h1>Appendix A: The soft stuff</h1>
+<ul>
+<li><strong>Thanks</strong> to Kaggle and to Ryan in particular for setting this competition and dealing so graciously &amp; efficiently with the little wrinkles.</li>
+<li>Why <strong>Always Day Zero</strong>?  This year I invited a couple of my colleagues to join a team with me. The company that we work for has a culture that it's "always day one" (which you can read more about <a href="https://aws.amazon.com/executive-insights/content/how-amazon-defines-and-operationalizes-a-day-1-culture/" target="_blank">here</a> if you aren't familiar with the term). I've previously competed in internal capture-the-flag security competitions where obviously "day zero" refers to an exploit that hasn't been patched yet. So, as a little joke, I competed in those competitions under the team name "Always Day Zero" and I've stuck with it ever since.</li>
+<li>I'm really pleased that so many of you benefitted from my <strong>progress updates</strong> and were able to use them to focus your attentions on the puzzles where you were furthest away. Thanks for the encouragements and interesting discussions in the chat. Personally, I find it really adds to the experience.</li>
+</ul>
+<h1>Appendix B: Final scores by puzzle type</h1>
+<table>
+<thead>
+<tr>
+<th>cube size</th>
+<th>total moves</th>
+<th>wreath size</th>
+<th>total moves</th>
+<th>globe size</th>
+<th>total moves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>315 (†)</td>
+<td>6</td>
+<td>150 (†)</td>
+<td>1/8</td>
+<td>1,104</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2,821</td>
+<td>7</td>
+<td>128 (†)</td>
+<td>1/16</td>
+<td>1,434</td>
+</tr>
+<tr>
+<td>4</td>
+<td>4,953</td>
+<td>12</td>
+<td>173 (†)</td>
+<td>2/6</td>
+<td>181</td>
+</tr>
+<tr>
+<td>5</td>
+<td>5,336</td>
+<td>21</td>
+<td>176 (†)</td>
+<td>3/4</td>
+<td>680</td>
+</tr>
+<tr>
+<td>6</td>
+<td>3,825</td>
+<td>33</td>
+<td>383</td>
+<td>6/4</td>
+<td>444</td>
+</tr>
+<tr>
+<td>7</td>
+<td>2,185</td>
+<td>100</td>
+<td>642</td>
+<td>6/8</td>
+<td>2,129</td>
+</tr>
+<tr>
+<td>8</td>
+<td>2,930</td>
+<td></td>
+<td></td>
+<td>6/10</td>
+<td>2,673</td>
+</tr>
+<tr>
+<td>9</td>
+<td>3,810</td>
+<td></td>
+<td></td>
+<td>3/33</td>
+<td>11,853</td>
+</tr>
+<tr>
+<td>10</td>
+<td>4,829</td>
+<td></td>
+<td></td>
+<td>8/25</td>
+<td>4,038</td>
+</tr>
+<tr>
+<td>19</td>
+<td>14,637</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>33</td>
+<td>41,078</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>† We know we have an optimal solution.</p>
+<h1>Appendix C: Score progression</h1>
+<p>Here's a graph of our score progression over the competition.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2217262%2Fc6e9b03d54d9ad6a4d2f13d09e0b7583%2Fhistory.png?generation=1706777568273724&amp;alt=media"></p>
+<h1>Appendix D: Final submission</h1>
+<p>See the attachment for our final submission.</p>

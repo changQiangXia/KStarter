@@ -1,0 +1,233 @@
+# https://www.kaggle.com/competitions/playground-series-s5e6/discussion/583189
+
+Topic #583189: N/P/K Ratios: The Hidden Signal in a Low-Corr Dataset
+  Author: Younus_Mohamed
+  Posted: 2025-06-05 10:13:44.152000
+  Votes: 68  Comments: 39
+
+After a week of poking around the 750 k row fertilizer dataset I’m finally happy with the shape of my exploratory analysis and wanted to share 
+(1) the strongest signals I’ve spotted, 
+(2) the modelling choices I’m about to make, and 
+(3) the feature-engineering plan that links the two.
+
+
+
+1.  What the EDA is shouting at us
+
+Class &amp; categorical structure
+
+
+
+Target balance is good – the seven fertilizers all live in the 12–16 % band. No need for resampling tricks.  
+
+Strong joint patterns in (Soil Type, Crop Type). The heat-map of fertilizer share by (Soil, Crop) clearly shows preferred pairings (e.g. Clayey–Millets → 28-28).  
+
+Zero missing values – we can focus on meaning rather than cleaning.
+
+
+Numeric behaviour
+
+
+
+Every numeric column is quasi-uniform within its physical bounds (histograms are almost flat).  
+
+Almost no correlation between numerics (|ρ| &lt; 0.01 in Spearman map).  
+
+Nevertheless, the box-plots per target reveal that each fertilizer shifts the median of Nitrogen, Phosphorous, Potassium, etc. by a few units.
+
+
+Visual hunches that matter
+
+
+
+Stacked histograms by fertiliser show nutrient density bumps at different ranges – that screams for ratio / interaction features rather than relying on raw values.  
+
+Scatter-matrix and 3-D plot confirm that the joint distribution of (Temperature, Humidity, Moisture) carries class signal even if pairwise correlations are low.
+
+
+
+
+2.  Model line-up (and why I’m betting on them)
+
+
+
+LightGBM / CatBoost - Usually fast, loves categorical splits, baseline “floor” in &lt; 5 min. 
+
+XGBoost (hist) - Different boosting implementation → decorrelated errors for ensembling. 
+
+TabNet or shallow MLP-Mixer - Captures non-linear nutrient ratios and climate interactions that trees sometimes flatten.
+
+kNN in nutrient sub-space - Exploits local patterns after scaling; cheap diversity model. 
+
+
+
+
+3.  Feature engineering roadmap
+
+
+
+
+Nutrient chemistry  
+
+
+
+Ratios: N/P, N/K, P/K, plus total N+P+K.  
+
+Quartile bins – one-hot encode “Low/Med/High” nutrient levels.  
+
+
+Soil-Crop interactions  
+
+
+
+Target (mean) encoding of the 55 (Soil, Crop) combos.  
+
+A hashed combo feature Soil_Crop_ID for models that don’t ingest categoricals.
+
+
+Climate aggregates  
+
+
+
+Temp-Humidity Index = Temperature × Humidity / 100.  
+
+Rolling z-scores within each fertilizer to capture relative micro-climate.  
+
+
+Keep it lean – no dimensionality reduction yet; numerics are only seven columns.
+
+
+
+
+4.  Training &amp; blending plan
+
+
+
+Phase 1: Tune LightGBM with Optuna (~200 trials) – early-stop at 200 rounds.  
+
+Phase 2: Replicate optuna search for XGB (hist) – fix learning rate first, search depth/leaves second.  
+
+Phase 3: Quick TabNet run with default scheduler; retain only if CV gain &gt; 0.003.  
+
+Phase 4: Build kNN (k ∈ [5, 11, 21]) on StandardScaler-ed nutrient-only frame.  
+
+Phase 5: Weighted soft-vote; weights learned via Optuna on out-of-fold preds.  
+
+
+Calibration (CalibratedClassifierCV, sigmoid) will be checked last; if log-loss drops without hurting MAP@3 or MAP@5, I’ll submit the calibrated ensemble.
+
+
+
+5.  What I still don’t know (and will test next)
+
+
+
+Does adding a global soil-quality index (Moisture / Temperature) explain any residual confusion?  
+
+Will pairwise GMM clustering of nutrient ratios reveal hidden groups?  
+
+Can a simple rules-based model outperform k-NN on extreme nutrient cases?
+
+
+
+
+TL;DR
+
+
+
+The data are clean, balanced, low-corr, but class medians differ → engineer nutrient ratios.  
+
+Tree ensembles + one NN + a distance model gives a diversified stack.  
+
+Target-encoded (Soil, Crop) is likely the single most valuable categorical trick.  
+
+
+I’ll update once the baseline ensemble is on the board.  
+All feedback and any suggestions are welcome.
+
+Lets fertilize! Happy Kaggling.!
+
+Comments:
+├─ aimlVeera (2025-06-09 17:24:41.907000) [+5]
+│  Brilliantly laid out, Younus — One thing that might be worth exploring: mutual information (MI). It’s a way to measure how much a feature tells you about the target — even if there’s no linear corr...
+  ├─ Younus_Mohamed (2025-06-09 17:40:16.893000) [+3]
+  │  Thanks for the information @aimlveera I will be sure to check it out.
+├─ Richard Jana (2025-06-05 12:45:31.270000) [+5]
+│  As a relative beginner, how does target encoding work on a category target? So far I've only used it for encoding a numerical target by calculating the mean for each label, which wouldn't work here …
+  ├─ Younus_Mohamed (2025-06-05 13:20:07.910000) [+3]
+  │  Target encoding as you described, for regression isn’t directly applicable, but label or one-hot encoding works in a same way.
+  ├─ Gio (2025-06-06 05:02:10.827000) [+5]
+  │  (also a beginner)
+  │  I think this encoding will be very tricky.
+  │  treating nominal classes as number and then running a single TargetEncoder will force an artificial ordering among labels that don’t act...
+  ├─ Richard Jana (2025-06-10 09:11:24.470000) [+1]
+  │  If you're interested in my struggles to use this type of target encoding, have a look at this thread.
+├─ eddy unamed (2025-06-05 10:46:19.300000) [+5]
+│  Nice job. I've used something in the way. I'm Actually top 300 with LGBM no Optuna. Is your baseline onboard?
+  ├─ Younus_Mohamed (2025-06-05 11:20:52.770000) [+3]
+  │  Not yet bro @eddyunamed
+    ├─ eddy unamed (2025-06-05 13:57:20.223000) [+5]
+    │  At this time my best shot is no Feature Engineering and optuna.
+  ├─ Ladipo Samson (2025-06-06 09:45:44.360000) [+4]
+  │  Wow No Optuna that sound great, I used Optuna and I am still getting 0.199 has my highest result
+    ├─ eddy unamed (2025-06-12 15:35:47.543000) [+1]
+    │  My new submission is now based on optuna + lgbm.
+├─ Harsh Gupta (2025-06-12 03:12:45.457000) [+3]
+│  Thanks for sharing such a well-structured and insightful analysis. I agreed that the raw features do not reveal much, but you explore the nutrient ratios and others ratios such as temperature and h...
+├─ Grant Gonnerman (2025-06-08 15:17:50.893000) [+3]
+│  Nice ideas for feature engineering, I will give them a try.
+├─ Ladipo Samson (2025-06-06 09:44:39.987000) [+3]
+│  This is highly insighful.
+├─ Mykyta Barkalov (2025-06-09 15:02:20.190000) [+4]
+│  Unfortunately, none of this advices didn't improve my scores. Maybe it happened because of artificiality of dataset. But you work is really good. Thanks for that
+  ├─ Younus_Mohamed (2025-06-09 17:39:22.607000) [+4]
+  │  Lets see how to crack this. Please do let us know if something works for you @nektonekks
+├─ gowtham-dd (2025-06-05 16:20:32.137000) [+4]
+│  Since the individual numeric features show almost no correlation (|ρ| &lt; 0.01), have you considered using mutual information to uncover non-linear dependencies between features and the target cla...
+  ├─ Younus_Mohamed (2025-06-06 05:34:01.303000) [+3]
+  │  I think everyone is still searching. Lets see.
+├─ Ravi Ramakrishnan (2025-06-05 11:07:40.103000) [+4]
+│  @younusmohamed it is best to first test your ideas with a CV score and then exposit those that improve it.
+  ├─ Younus_Mohamed (2025-06-05 11:24:19.933000) [+4]
+  │  I totally agree bro @ravi20076 . I shared these initial findings as part of my EDA and early explorations, but I’ll make sure to back future insights with CV results to ensure they’re genuinely add...
+    ├─ Will Dyer (2025-06-05 13:25:56.917000) [+4]
+    │  I have already attempted aspects from 1. and 3. from your FE insights, however, my results did not yield any additional value. Have these ideas been tested?
+    ├─ Younus_Mohamed (2025-06-05 13:30:46.180000) [+3]
+    │  Not yet I am just starting out. Good to have a heads up. Thank you!
+    ├─ Will Dyer (2025-06-05 13:38:58.230000) [+5]
+    │  Speaking from my own and others experience so far working in this dataset, generally FE engineering even when logically what you are doing should provide at least some value, there has been little ...
+├─ sealion (2025-07-01 05:42:35.413000) [+1]
+│  Thank you for sharing this insight. It's very help me.
+├─ Sacky (2025-06-12 14:29:51.567000) [+1]
+│  Thank you for sharing such wonderful insights.  
+│  This seems like a good starting point for feature engineering.
+├─ Elmozamil Elamir (2025-06-12 07:07:58.053000) [+1]
+│  Thanks for sharing it is insightful. Feature engineering made a difference in the score. I use XGBoost and it resulted in a better score, I am exploring CatBoost. Do you think there is a data leakage?
+  ├─ Younus_Mohamed (2025-06-13 02:26:54.193000) [+0]
+  │  Data leakage where? @elmozamilelamir
+├─ Tulegen Didar - 26MD0292 (2025-06-12 06:22:30.373000) [+1]
+│  Thanks for the insights! I experimented with incorporating soil type pH as a feature, but it didn’t yield any noticeable improvement in performance in my case.
+│  
+│  Would be curious to hear if others h...
+├─ Denver Magtibay (2025-06-11 16:42:07.553000) [+1]
+│  Thank you for sharing this insight. Will use this as I start my model in this competition.
+├─ Richard Jana (2025-06-11 07:01:05.190000) [+1]
+│  I tried to implement target encoding (details in this thread), but failed - at this point I'm fairly confident that the code works as intended, but it leads to gross overfitting! In CV, my average ...
+  ├─ Mykyta Barkalov (2025-06-11 07:51:41.387000) [+2]
+  │  Did you check it for data leakage? It seems like this problem
+    ├─ Richard Jana (2025-06-11 08:06:04.560000) [+1]
+    │  It does appear to be a leak problem, but I can't image where the leak would be! (I never use the validation target column in the encoding process and employ a kfold split on the training data. Furt...
+├─ aaaditya56 (2025-06-10 09:34:49.037000) [+1]
+│  Thank you for this useful resource -- especially as a beginner in Kaggle competitions.
+  ├─ Younus_Mohamed (2025-06-10 13:32:44.377000) [+0]
+  │  All the best for your Kaggle journey.! @aaaditya56
+├─ Elmozamil Elamir (2025-06-12 07:22:09.260000) [+1]
+│  Thanks for sharing
+├─ Vikas Kumar Ram (2025-06-12 04:42:00.463000) [+1]
+│  Thank you for sharing this insight.
+├─ Sarah Arshad (2025-06-11 07:49:49.043000) [+1]
+│  Thank you for this useful resource….
+├─ adityaghai07 (2025-06-09 18:38:55.827000) [+2]
+│  Great insights! Thank you for this. I will give try to a few approaches you mentioned here.
+├─ Guillaume Duteaud (2025-06-08 14:35:59.407000) [+2]
+│  Very insightful, thank you for sharing!

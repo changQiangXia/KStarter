@@ -1,0 +1,116 @@
+<p>I salute you all for fighting to the end. Thanks also to the RSNA for their support. It was another great competition.</p>
+<h2>Overview</h2>
+<p>1, The 3D segmentation was trained with the given masks and each organ was cut into a cube shape using the predicted results.<br>
+2, Multiple organ cubes were each entered into various 2.5D+3D classification models and the results enumerated.</p>
+<h2>Segmentation</h2>
+<p>I used Qishen's 3D segmentation code. <a href="https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362607" target="_blank">https://www.kaggle.com/competitions/rsna-2022-cervical-spine-fracture-detection/discussion/362607</a><br>
+The models used were resnet18 and resnet50. The average of the output of all models was used as a mask.</p>
+<h2>Crop</h2>
+<p>Since information around the organs is essential for trauma detection, the mask was slightly enlarged before the boxes were cut out. Two patterns of mask sizes were employed and two datasets were created for each organ.</p>
+<h2>Classification</h2>
+<p>All classification models follow a 2.5D + 3D structure. Typically, multiple 2.5D images are generated from the organ box and input into the model. The input sizes are (8, 15, 3, 128, 128), where 8 is batch_size, 15 is image, and 3 is channel. Each image is transformed into a feature map through a 2D CNN and input to subsequent processes such as pooling and lstm.<br>
+Because of the correlation in injuries between organs, the problem was solved in a multiclass problem, using essentially all targets. I trained a variety of model patterns, including:</p>
+<p>・Multiple Image Sizes<br>
+・Multiple image counts<br>
+・Multiple necks (average pooling / max pooling / lstm / gru)<br>
+・Multiple crop sizes<br>
+・Multiple backbones (convnext / se_resnext / maxvit / caformer / xcit)<br>
+・Multiple augmentation sets<br>
+・Multiple epochs(without early stop)<br>
+・Multiple targets (all targets / single organ targets)<br>
+・Some models are pre-trained with image-level bowel / extravasation labels and used as initial values for weights.<br>
+・Some models reduce noise by using box<em>mask as input. There is also a model that uses box</em>mask as input to reduce noise. This type of model is specific to the liver. Because of its shape, the liver has a lot of noise information if you just crop it with a box, so masking was very effective.<br>
+・Some models use all organ boxes for training. Different image sizes/number of images are used for each organ to ensure the same resolution. A custom sampler was defined so that only boxes of the same organ exist in the same batch, allowing simultaneous training with different sizes/numbers.</p>
+<p>The following are those that have made a particularly significant contribution to accuracy:<br>
+・masking for liver model<br>
+・custom sampler for all class models<br>
+・2types of crops</p>
+<h2>Ensemble</h2>
+<p>A simple weighted average was performed for each target.<br>
+Below is a simplified weights.</p>
+<pre><code>{
+'bowel_injury':
+    {
+        'liver_gru_chaug_256_cropv1': ,
+        'liver_maxvit_224_cropv1': ,
+        'liver_maxvit_224_cropv2': ,
+        'spleen_gru_128_cropv1': ,
+        'spleen_maxvit_224_25epochs_cropv1': ,
+        'kidney_maxvit_224_cropv1': ,
+        'kidney_caformer_192_cropv2_pretrain': ,
+        'kidney_maxvit_224_cropv2': ,
+        'kidney_maxvit_224_25epochs_cropv2': ,
+        'bowel_lstm_256_n15_cropv1': ,
+        'bowel_288_n25_cropv1_pretrain': ,
+        'bowel_288_n25_25epochs_cropv1_pretrain': ,
+        'all_pretrain_cropv1_input_bowel': ,
+        'all_pretrain_cropv1_input_kidney': ,
+        'all_lstm_pretrain_cropv2_input_kidney': ,
+    },
+'kidney_healthy':
+    {
+        'liver_gru_chaug_256_cropv1': ,
+        'liver_maxvit_224_cropv1': ,
+        'liver_maxvit_224_cropv2': ,
+        'spleen_gru_128_cropv1': ,
+        'spleen_maxvit_224_25epochs_cropv1': ,
+        'kidney_maxvit_224_cropv1': ,
+        'kidney_caformer_192_cropv2_pretrain': ,
+        'kidney_maxvit_224_cropv2': ,
+        'kidney_maxvit_224_25epochs_cropv2': ,
+        'bowel_lstm_256_n15_cropv1': ,
+        'bowel_288_n25_cropv1_pretrain': ,
+        'bowel_288_n25_25epochs_cropv1_pretrain': ,
+        'all_pretrain_cropv1_input_bowel': ,
+        'all_pretrain_cropv1_input_kidney': ,
+        'all_lstm_pretrain_cropv2_input_kidney': ,
+    },
+}
+</code></pre>
+<p>The final oof log loss is as follows:</p>
+<pre><code>{
+'bowel_injury': ,
+'extravasation_injury': ,
+'kidney_healthy': ,
+'kidney_low': ,
+'kidney_high': ,
+'liver_healthy': ,
+'liver_low': ,
+'liver_high': ,
+'spleen_healthy': ,
+'spleen_low': ,
+'spleen_high': 
+}  
+</code></pre>
+<h2>Post processing</h2>
+<p>After a simple weighted average of each model, each prediction was further weighted. This is the same post-processing as in the public notebook.<br>
+I also tried stacking which directly optimizes the metric, but the results were slightly worse than the simple pp due to overfit.<br>
+The final CV is 0.3316 and the respective scores are as follows.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>bowel</th>
+<th>extravasation</th>
+<th>kidney</th>
+<th>liver</th>
+<th>spleen</th>
+<th>any</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>0.095</td>
+<td>0.4853</td>
+<td>0.2434</td>
+<td>0.3489</td>
+<td>0.3751</td>
+<td>0.4417</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>train  code: <a href="https://github.com/yujiariyasu/rsna_2023_abdominal_trauma_detection" target="_blank">https://github.com/yujiariyasu/rsna_2023_abdominal_trauma_detection</a><br>
+inference code: <a href="https://www.kaggle.com/code/yujiariyasu/3rd-place-inf-code/notebook" target="_blank">https://www.kaggle.com/code/yujiariyasu/3rd-place-inf-code/notebook</a></p>
+<p>Thanks everyone for your hard work!</p>

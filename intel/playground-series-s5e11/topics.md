@@ -1,0 +1,72 @@
+# playground-series-s5e11 讨论区（按票数排序，共 70 条）
+
+- [Here's an Idea - Let me know how it works](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614986) — 118 票 / 86 评论 / 2025-11-08 
+- [1st place - A lot of features, a lot of models, and a little bit of luck](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647362) — 95 票 / 54 评论 / 2025-12-01 **write-up?**
+- [How to blend models correctly](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614624) — 90 票 / 37 评论 / 2025-11-05 
+- [Blind blending fails in practice - here is why](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614704) — 71 票 / 20 评论 / 2025-11-05 
+- [Stable CV-LB Relationship](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614140) — 42 票 / 13 评论 / 2025-11-01 
+- [A difference between a single model and an ensemble](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/636012) — 36 票 / 16 评论 / 2025-11-21 
+- [2nd Place Solution - 7 models, but 1 was also enough](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647288) — 31 票 / 16 评论 / 2025-12-01 **write-up?**
+- [New pytabkit release - xRFM, bugfixes, better RealMLP search space](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614649) — 29 票 / 4 评论 / 2025-11-05 
+- [4 Days Left - Good Luck!](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/641561) — 29 票 / 19 评论 / 2025-11-27 
+- [What are your CV/LB scores?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614948) — 26 票 / 26 评论 / 2025-11-07 
+- [FT-Transformer NN achieves ~0.926 on Public LB 🎊](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614817) — 22 票 / 3 评论 / 2025-11-06 
+- [Understanding Model Orthogonality — Measuring Correlation Between Predictions](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614412) — 22 票 / 10 评论 / 2025-11-03 
+- [Starter EDA for Loan Payback Prediction](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614167) — 22 票 / 3 评论 / 2025-11-01 
+- [Interaction Features & Built-in Target Encoding with CatBoost](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614598) — 20 票 / 5 评论 / 2025-11-05 
+- [5th Place Solution - (XGB+LGBM+TabM)*5SEEDs+AG](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647359) — 19 票 / 11 评论 / 2025-12-01 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647417) — 17 票 / 5 评论 / 2025-12-01 **write-up?**
+- [Rank8 approach - trust the CV score](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647262) — 17 票 / 6 评论 / 2025-12-01 
+- [Which technique and model is better here to get optimal results ? ](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/615346) — 16 票 / 20 评论 / 2025-11-10 
+- [Yet another tabular DL library - PyTorch Frame](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/619617) — 15 票 / 8 评论 / 2025-11-14 
+- [#6 solution - Ensembling was the key](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647305) — 15 票 / 15 评论 / 2025-12-01 **write-up?**
+- [The Most Confusing Things I Faced in My First Kaggle Competition And What Finally Made Sense](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/623286) — 11 票 / 3 评论 / 2025-11-15 
+- [Has anyone tried TabPFN v2.5 on this competition?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/617692) — 11 票 / 6 评论 / 2025-11-11 
+- [Moving Beyond Trial-and-Error: How to Build Statistical Understanding in Tabular Competitions?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614247) — 9 票 / 5 评论 / 2025-11-02 
+- [An idea: Using Tree Leaf Indexes as Neural Network Embeddings](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/641821) — 8 票 / 14 评论 / 2025-11-27 
+- [How much does ensembling improve your score?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/615263) — 8 票 / 5 评论 / 2025-11-10 
+- [10 submissions per day?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614490) — 7 票 / 4 评论 / 2025-11-04 
+- [squared deviation pade approximants (rational functions ftw)](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/642871) — 7 票 / 2 评论 / 2025-11-28 
+- [Not much shakeup](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647248) — 7 票 / 4 评论 / 2025-12-01 
+- [A 10th Place Experiment](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/649348) — 6 票 / 0 评论 / 2025-12-01 **write-up?**
+- [Risk Score Feature (Blending Credit, Income & Loan Factors)](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/619014) — 6 票 / 2 评论 / 2025-11-13 
+- [How to break out of a Loop of Using Gpt for everything](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/635896) — 5 票 / 15 评论 / 2025-11-20 
+- [Actionable Ways to Build Diverse Models](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/623633) — 5 票 / 1 评论 / 2025-11-15 
+- [Gap between CV-LB decreases when ensembling?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/615194) — 5 票 / 2 评论 / 2025-11-09 
+- [Any Suggestion to beat Tilii as beginner  ?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614185) — 4 票 / 15 评论 / 2025-11-01 
+- [Feature interaction](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614300) — 3 票 / 0 评论 / 2025-11-02 
+- [How i saved time by building my own custom stacking regressor, leaderboard-score-0.92257](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614405) — 3 票 / 0 评论 / 2025-11-03 
+- [Model Performance](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614491) — 3 票 / 7 评论 / 2025-11-04 
+- [Feature Eng - Removal of Redundant Features](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614731) — 3 票 / 3 评论 / 2025-11-06 
+- [Guidance and help about performing EDA (Exploratory Data Analysis)](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614871) — 3 票 / 7 评论 / 2025-11-07 
+- [Can anyone help me?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614931) — 3 票 / 5 评论 / 2025-11-07 
+- [[Question] How to use GPU in LGBM model](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614095) — 3 票 / 3 评论 / 2025-11-01 
+- [Why is 'Annual Income' a Useless Feature?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/619319) — 3 票 / 5 评论 / 2025-11-13 
+- [Running time](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/617602) — 2 票 / 9 评论 / 2025-11-11 
+- [Using the original dataset to model and recover missing features — any CV/LB improvement?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/619018) — 2 票 / 0 评论 / 2025-11-13 
+- [Public leaderboard score](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/631255) — 2 票 / 5 评论 / 2025-11-18 
+- [stuck at 0.8](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/633602) — 2 票 / 6 评论 / 2025-11-19 
+- [SHAP Diagnosis & Targeted Feature Engineering, what else ?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/639554) — 2 票 / 5 评论 / 2025-11-25 
+- [submission save](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614582) — 2 票 / 2 评论 / 2025-11-04 
+- [Consistent improvement](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614477) — 2 票 / 4 评论 / 2025-11-04 
+- [Help Please - Notebooks Disappeared](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614705) — 2 票 / 4 评论 / 2025-11-05 
+- [Will this Playground competition have Kaggle merchandise prizes as well?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614141) — 2 票 / 2 评论 / 2025-11-01 
+- [how to add notebook in kaggle](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614217) — 2 票 / 4 评论 / 2025-11-02 
+- [Why don’t most notebooks create new features from existing columns?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/619569) — 1 票 / 2 评论 / 2025-11-14 
+- [Request for help installing cuDF on Kaggle](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/619016) — 1 票 / 4 评论 / 2025-11-13 
+- [Is the optimal result really optimal?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/617745) — 1 票 / 3 评论 / 2025-11-11 
+- [Random Forest , 5 Folds : Score : 0.913. Need Help !](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/627350) — 1 票 / 5 评论 / 2025-11-16 
+- [Is there a URL to the dataset . ](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/635119) — 1 票 / 1 评论 / 2025-11-20 
+- [My first competition](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/617721) — 1 票 / 2 评论 / 2025-11-11 
+- [Minimal preprocessing + LightGBM baseline Model — AUC 0.921](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/646107) — 1 票 / 0 评论 / 2025-11-30 
+- [Dataset being used](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/621792) — 0 票 / 2 评论 / 2025-11-15 
+- [Reciprocal features helping CV & LB](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/627102) — 0 票 / 3 评论 / 2025-11-16 
+- [CV and Public leaderboard score](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/617884) — 0 票 / 8 评论 / 2025-11-12 
+- [Tweaking LGBM parameters. Requesting correct theoretic approach towards problems.](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/634835) — 0 票 / 3 评论 / 2025-11-19 
+- [Results Availability](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/617789) — 0 票 / 1 评论 / 2025-11-12 
+- [What is the right way to calculate your CV score?](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/636859) — 0 票 / 2 评论 / 2025-11-21 
+- [Submission Error](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/637868) — 0 票 / 2 评论 / 2025-11-22 
+- [My first Submission](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/645135) — 0 票 / 0 评论 / 2025-11-30 
+- [Training  ](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/662504) — 0 票 / 0 评论 / 2025-12-13 
+- [improving cv score](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/640705) — -1 票 / 5 评论 / 2025-11-26 
+- [Fun Fact - If I write a for loop that prints 1 , that model will be 80% accurate](https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647125) — -1 票 / 2 评论 / 2025-11-30 

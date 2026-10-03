@@ -1,0 +1,276 @@
+# https://www.kaggle.com/competitions/santa-2023/discussion/466399
+
+Topic #466399: Simple direct ML (not RL) idea: train model to predict the DISTANCE to solution state, then just choose moves which decrease the estimate 
+  Author: Alexander Chervov
+  Posted: 2024-01-08 13:04:30.358000
+  Votes: 29  Comments: 56
+
+Some ideas - will be updated. What do you think about them ? 
+
+Plan
+
+
+
+
+All you need is DISTANCE: if one knows the distance from ANY state to the solution state - then it is trivial to solve any puzzle: start from the initial state - and always choose such move which decreases the distance to the solution state.  (Distance function - the minimal number of "moves" to connect a state and the solution state , i.e. the length of the shortest path ( standard thing in graph theory)). 
+
+
+Pain: that function is not easy to compute - may be it is even NP-hard problem , however some approximation may also work.  (We will not find optimal path, but at least not so long path).  
+
+
+Resolve pain - use of ML - train model to learn distance: we can first create some training set where we know pairs: (states + distances) - and then train ML model to predict distances. We will infer it on any state.  
+
+
+That  is all the plan.  It is quite simple. 
+
+Let us now go into details:
+
+Details
+
+4. Create training set by random walks + bit of brute force. 
+
+4.1. The states which are "nearby" the solution state - can just all be listed by brute force - say on distance 2-3-4-5.. from the solution state. But since it grows exponentially - one cannot go much further. ( The number of states in 5x5x5 cube similar to number of atoms in the universe ) 
+
+4.2 So to sample more data we can run the random walks starting from the solution state and going some "N" steps, for "N" not so big - less than "God's number"  (maximal  possible distance). So - if random walk comes to state in "k" steps - the distance is k or less, typically it is exactly "k" (if k &lt; Gods number). So we can use that as a at least use that random walk "k" as  a kind of "dirty-distance".  Any ideas to improve ? 
+
+What is done ?
+
+
+
+
+Preliminary experiments on the small puzzles shows that vanilla CatBoost can learn the distance with reasonable quality ( Wreath6/6, Wreath7/7 ). However it becomes worse if we decrease the training set: Wreath7/7, Even more smaller . Here are some experiments with CatBoost for cube 3/3/3: notebook.
+
+
+The key question seems - how to sample, and for larger cubes that can require some ideas. For the moment the simple ways for cube3/3/3  tried tried in the notebook  States+Distance Generate+Save - where first we create brute force for ALL states nearby the solution states and then run random walks which move that ENTIRE initial set by several steps e.g. 20.  The results for Cube3/3/3 and the most frequent solution state are stored in the Kaggle dataset
+
+
+Technical thing - it seems better to represent states as numeric vectors - for most cases np.int8 is Okay. Not like in the input file - as list of ['A','B',…], but encode something like A-&gt;0, B-&gt;1 etc… See e.g. here. The question is what are the best ways to hash these vectors ? (See the next section). Simple way - just the scalar product with another vector - floating number is a hash. (See e.g. here )
+
+
+Questions/problems
+
+
+
+
+The key question - how reasonable is the plan - let us try and see  - do not know yet. 
+
+
+Understanding random walks. 
+
+2a. Key question for random  walks sampling - estimate the diameter  - random walks should NOT be longer than maximal possible distance ! Do we have good estimates ? 
+
+2b. The random walk making "k"-steps  may NOT generate the shortest path between stateA and stateB, however if "k" is less than diameter we can hope it is typically true (for these puzzles). But do we have an estimate - how true is ? I.e. what is the expected distance (from start point) of the random walk making k-steps   ?  
+
+
+Are standard  random walks Okay - or may be we need to "thick tubes" i.e. not just one state is walking but its entire neighborhood - that is easy to implement since matrix multiplication of move matrix on the all-states-matrix "moves" ALL states at ONCE (see implementation here)  additional bonus that we have better confidence that such random walk is achieving really states on on distance "k", but not going into back direction - decreasing the direction to initial state. 
+
+
+For larger cubes - do we need to utilize "big jumps" ? I.e. we can just random walk by some combinates of 10 or 100 moves at once - that can be useful to explore the space of states. Like idea of [I. Pavlyukevich: Levy Flights, Non-local Search and Simulated Annealing])https://arxiv.org/abs/cond-mat/0701653) (which is now popular in ML) - utilize big jumps like in Levy process.
+
+
+What model to utilize for prediction  ? It should be quite fast - what is more important - model precision or ability to train/infer million/billion states ? 
+
+
+The main pain is , of course, enormous number of states. When we create training state - how many states we need ? Any estimates? 
+
+
+Technical thing - hashing states. In all the approaches - we need keep some array of states and efficiently decide whether the new state is in the array or not , i.e. is it really new, or we found old one. Since states can be represented by numeric vectors we can hash just my the scalar product with some random numeric vector - the floating number will be a hash - is it enough to hash big number of states ?  (See also remarks above).
+
+
+Can we utilize "active learning" ideas - iterate a) increase of training sets b) retrain the model.  Such that we can improve the models quality with the least possible training data. 
+
+
+Actually we do not need to know distances for all states - our primary interest is the "initial states"  which are given to us by the organizers  and the shortest paths connecting them to the solution states - but how to modify the approach to take that into account ?
+
+Comments:
+├─ Johnny Lee (2024-01-09 13:16:41.440000) [+9]
+│  I also tried to use NN (a simple transformer model) to solve the wreath puzzles. The results for now are as below.
+│  
+│  
+│  
+│  wreath_33/33 : 500  
+│  
+│  wreath_100/100: 2500
+│  
+│  
+│  However, the NN failed to generali...
+  ├─ MAprmr (2024-01-17 20:30:19.137000) [+3]
+  │  Do you mind sharing the form of the method you used to solve the wreath puzzles? Use transformer as an RL agent, or predicting distance as a heuristic function?
+    ├─ David List (2024-01-19 07:09:17.770000) [+3]
+    │  Yes, definitely, @wuliaokaola.  I'd like to see that too even if after the competition is over.
+    ├─ Johnny Lee (2024-01-19 08:41:27.580000) [+5]
+    │  OK. I'll make it public later.
+    ├─ Johnny Lee (2024-02-01 15:09:20.033000) [+2]
+    │  @llprogrammer @davidlist You can get it here now.
+├─ Andrew (2024-01-08 22:41:14.400000) [+9]
+│  As mentioned elsewhere, this notebook uses a Neural Network for move prediction. Your plan above is to predict distance rather that moves - which is interesting.
+│  
+│  Just an idea, but you could consid...
+├─ David List (2024-01-09 13:22:28.783000) [+7]
+│  I had a similar idea.  Here's a link you might find interesting.  https://techxplore.com/news/2021-02-deep-technique-rubik-cube-problems.html  I tried it for the globes but have put the idea on the...
+├─ WOOSUNG YOON (2024-01-14 20:52:37.733000) [+5]
+│  The minimum distance concept is related to very precise (sharp) movements.
+│  
+│  
+│  
+│  
+│  This precision means that even if the model successfully predicts the minimum distance, 
+│  the small errors in predictio...
+  ├─ Alexander Chervov (2024-01-14 21:24:31.953000) [+2]
+  │  Thanks for sharing ! 
+  │  What puzzle is it ? And how exactly the "estimated" distance is obtained ? 
+  │  
+  │  Is related to the problem discussed here: https://www.kaggle.com/competitions/santa-2023/discussio...
+├─ KirkDCO (2024-01-08 20:16:46.110000) [+5]
+│  This paper seems consistent with your idea.  It only addresses the 3x3x3 Rubik's cube.
+├─ Michael Long (2024-01-08 18:36:15.197000) [+6]
+│  Your approach is similar to what is tried in this notebook https://www.kaggle.com/code/werus23/solve-puzzles-with-self-supervision.
+│  Key differences are that the notebook is using a PyTorch NN to pr...
+├─ David List (2024-01-14 20:45:49.120000) [+3]
+│  I can confirm that a naïve random walk approach to wreath 337 out to 10,000 moves does not appear to work.  For my NN at least it gets stuck around 6000 and fails to get much closer than that.  Tha...
+  ├─ WOOSUNG YOON (2024-01-14 21:05:15.567000) [+1]
+  │  Thanks for sharing.
+  │  Gathering enough data for the model to learn the distance seems to be a problem of similar difficulty to graph exploration.
+    ├─ David List (2024-01-14 21:36:31.030000) [+2]
+    │  Plus, it seems it's important to have good quality data in addition to volume.  With only 4 moves, a purely random walk with the wreaths is likely to have a lot of very incorrect results.
+    ├─ Vincent B. (2024-01-24 13:42:59.270000) [+4]
+    │  Can confirm. Accounting for "long moves" during scrambling (longer turns of a given ring in any direction) allowed me to quite drastically reduce the amount of training data needed to 'effectively'...
+    ├─ Alexander Chervov (2024-01-24 15:02:49.730000) [+2]
+    │  @vincentjb Pretty cool ! 
+    │  Should write a paper on that !
+├─ Nishant Singhal (2024-01-12 10:09:47.953000) [+4]
+│  Alexander,  it's clear that you've put a lot of effort into considering various aspects of the problem, from data generation to model selection. I believe one aspect that could significantly impact...
+  ├─ Alexander Chervov (2024-01-13 12:29:57.233000) [+2]
+  │  Thanks for kind words !
+  │  In some sense if one gets good score - that means one gets good estimates of distance. 
+  │  If we have perfect distance- we get score no one will be able to improve.
+  │  
+  │  We can do ...
+├─ Vladimir Zhuravlev (2024-01-14 11:00:22.503000) [+1]
+│  Interesting idea.
+├─ Oleksiy Kononenko (2024-01-11 09:49:51.450000) [+1]
+│  Interesting idea, @alexandervc. However, I'm not sure that approach "start from the initial state - and always choose such move which decreases the distance to the solution state" will work in a ge...
+  ├─ David List (2024-01-11 10:23:02.807000) [+4]
+  │  Sure, but @alexandervc isn't talking about training a model for pythagorean distance.  If we look at the scenario you're describing, the distance he would be training for would actually be the mini...
+    ├─ Oleksiy Kononenko (2024-01-11 10:45:53.490000) [+2]
+    │  Sure, but @alexandervc isn't talking about training a model for pythagorean distance.
+    │  
+    │  
+    │  For chess it is more appropriate to use Manhattan distance, but I get your point.
+    │  
+    │  
+    │    
+    │  If we look at the scen...
+    ├─ David List (2024-01-11 10:58:42.780000) [+2]
+    │  My feeling is that to calculate such a distance may require a knowledge of solution to the puzzle, so there is some recursion in definition/goal, isn't it?
+    │  
+    │  
+    │  Yeah, it's a bit of a chicken and egg p...
+    ├─ Alexander Chervov (2024-01-11 11:01:18.477000) [+2]
+    │  My feeling is that to calculate such a distance may require a knowledge of solution to the puzzle, so there is some recursion in definition/goal, isn't it?
+    │  
+    │  
+    │  The idea is that you calculate it for "...
+    ├─ David List (2024-01-11 11:20:23.843000) [+2]
+    │  For the record @alexandervc, nothing would make me happier than to wake up one morning soon and see you at #1 on the leaderboard, because you figured out how to make all this work.  👍
+    ├─ WOOSUNG YOON (2024-01-11 16:01:22.283000) [+1]
+    │  Thanks for the nice explanation.  I think If we create a hash table in advance for the distance to the solution, this problem can be solved. so, we need to check the heuristic is possible to reach ...
+    ├─ Andrew (2024-01-11 16:28:27.843000) [+1]
+    │  Yeah, it's a bit of a chicken and egg problem. If you have good enough distance information to train the model to avoid the many local minimums that these puzzles seem to have, it probably means yo...
+    ├─ Alexander Chervov (2024-01-11 16:55:57.007000) [+1]
+    │  Yes, exactly ! 
+    │  
+    │  I am at the moment also thinking on the following issue - the proposal is to generate samples - by random walk and think state achieved in k steps is on distance "k".  As you menti...
+    ├─ Alexander Chervov (2024-01-11 17:01:26.253000) [+2]
+    │  PS
+    │  What gives me some hope that ML approach might work - is that DeepMind somehow managed to play "Go/chess/whatever" - so they were able to overcome huge combinatorial explosion of states. 
+    │  
+    │  The u...
+    ├─ Oleksiy Kononenko (2024-01-11 19:07:01.573000) [+3]
+    │  I got your idea now, @alexandervc. From the post I thought you propose to use the distance function to deterministically find a solution. What you say is probably doable, but may require significan...
+    ├─ David List (2024-01-11 22:15:50.330000) [+3]
+    │  Perhaps. But the intention (as I understand it) is that you can generate a large number of new puzzles for yourself by making a small(*) number of random moves (whilst avoiding move combinations th...
+    ├─ David List (2024-01-12 00:30:01.657000) [+1]
+    │  (*) You should pick paths that are no longer than "God's number" for the puzzle in question. If you do more moves than that then the path length is definitely an overestimate of the minimum path le...
+    ├─ Alexander Chervov (2024-01-12 09:53:20.213000) [+1]
+    │  @davidlist Thanks for your important remarks!
+    │  
+    │  Would you be so to comment "does not look fully random" 
+    │  It might be interesting for math .
+    │  Math papers sometimes study effectiveness of cards shuffli...
+    ├─ David List (2024-01-12 10:16:15.540000) [+2]
+    │  Hopefully my highlighting speaks for itself.
+    │  
+    │  Wreath 100/100 Solved State:
+    │  C;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;C;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;A;...
+    ├─ Alexander Chervov (2024-01-12 10:48:05.083000) [+1]
+    │  Thanks a lot for sharing.
+    │  
+    │  The only thing it seems something strange with wreath 100 100
+    │  
+    │  (sorry my mistake - as comments below show - I missed 25 on the picture below). 
+    │  
+    │  Would be happy if  @ryanh...
+    ├─ Rafbill (2024-01-12 12:25:03.813000) [+4]
+    │  There is 25 between 172 and 173.
+    ├─ David List (2024-01-12 13:43:40.347000) [+0]
+    │  yeah, but only on the 'r' commands.  kinda weird.
+    ├─ [deleted] (2024-01-12 15:14:51.347000) [+2]
+    │  [deleted]
+    ├─ David List (2024-01-13 00:18:42.047000) [+1]
+    │  Oh, wait.  No that's right.  It's 0 and 25.  It just looks weird because for the 'l' operations the tiles are already in the right part of the array.
+    ├─ WOOSUNG YOON (2024-01-14 06:05:09.980000) [+1]
+    │  @davidlist 
+    │  I made some interactive code on wreath based on the @bprinz visualization.
+    │  
+    │  https://www.kaggle.com/code/woosungyoon/interactive-cube-wreath-play
+    │  
+    │  you may check this one.
+├─ John Mitchell (2024-01-09 18:07:00.083000) [+1]
+│  Could the distance minimisation algoirithm get stuck, reach a place where none of the modest number of available moves take it closer to the solution?
+  ├─ Alexander Chervov (2024-01-09 20:35:48.100000) [+2]
+  │  Dear John, if the metric is honest/real distance - that cannot happen - because the shortest path always exist, thus there exist a  neigbour state which is on distance D-1, which is by definition o...
+    ├─ David List (2024-01-10 09:12:13.910000) [+2]
+    │  @alexandervc Yep, that was my interpretation of what I was seeing.  The link I sent includes a link to the actual paper that talks about the need for using algorithms, such as evolutionary algorith...
+├─ Myint Myat Aung (2024-01-27 12:00:08.023000) [+2]
+│  Related: https://github.com/forestagostinelli/DeepCubeA
+├─ Mydala Harsha (2024-01-24 02:36:26.850000) [+2]
+│  Is it possible to train a pre trained model which is trained based on data of smaller input and output sizes for bigger input and output sizes sizes
+│  
+│  for example train cube_2/2/2 on NN and use this...
+  ├─ Andrew (2024-01-24 10:26:09.510000) [+6]
+  │  Generalizations are definitely possible given that people do it.  I think you'll find it difficult to train models that generalize though - but I'd be interested in your progress.
+  │  
+  │  You might well f...
+    ├─ David List (2024-01-24 11:09:07.160000) [+2]
+    │  Also, the 5x5x5's have more types of tiles than the 3x3x3's, and the 7x7x7's have more types of tiles than the 5x5x5's.  Once you get to 7x7x7's, though, the larger cubes all have similar tiles.  P...
+    ├─ Alexander Chervov (2024-01-24 11:33:20.670000) [+1]
+    │  Thanks for the comment !
+    │  What is "tile" ?
+    ├─ David List (2024-01-24 11:43:52.907000) [+1]
+    │  I meant the individual squares.  I call them tiles.  Not sure if that's what they're really called.  😀
+├─ Vincent B. (2024-01-16 19:38:01.487000) [+2]
+│  @alexandervc @davidlist Have you made any progress on scrambling techniques, or do you have any more ideas here besides basic random walking? 
+│  
+│  I'm thinking about simulating some more "human-like" ...
+  ├─ Michael Long (2024-01-16 23:46:01.010000) [+1]
+  │  Do you believe that the kaggle puzzles were created by humans? I am not sure if that is the case, especially for the large puzzles, which would take a very long time for a human to scramble.
+  │  I can ...
+  ├─ Mydala Harsha (2024-01-17 01:19:00.963000) [+1]
+  │  I'm trying to use equal input sizes for all cubes that is 6534 since 33*33 cube is maximum we have and using np.array([indices]) for shuffles. Then using this 6534 sized array as input to NN with i...
+    ├─ Andrew (2024-01-17 07:27:10.287000) [+2]
+    │  Whether that's a good idea probably depends on how you encode the smaller cubes onto the 33x33x33.  For example, when encoding a 3x3x3, I'd be inclined to duplicate each edge value over the corresp...
+  ├─ Alexander Chervov (2024-01-17 08:14:09.467000) [+1]
+  │  @vincentjb 
+  │  Thank you for your post.
+  │  Cannot say much definite on that, yet, just have some ideas,  hopefully some days later give more details. 
+  │  Some remarks:
+  │  
+  │  
+  │  
+  │  
+  │  "Fast scrambling" seems to be inte...
+├─ SolverWorld (2024-01-13 23:44:07.317000) [+2]
+│  Interesting idea.   For #2b, when you generate a new state after k steps, you should see if that state has already been visited in your distance database, and if it has, use the shorter distance.  ...
+  ├─ [deleted] (2024-01-14 11:00:01.517000) [+0]
+  │  [deleted]

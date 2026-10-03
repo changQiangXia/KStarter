@@ -1,0 +1,750 @@
+# https://www.kaggle.com/competitions/playground-series-s6e2/discussion/679376
+
+Topic #679376: 1st Place Solution — Diversity, Selection, and Trusting the CV–LB Relation
+  Author: Masaya Kawamata
+  Posted: 2026-03-01 01:03:41.877000
+  Votes: 202  Comments: 54
+
+Wow — I’m genuinely so happy to be writing 1st place solution!!
+
+I had been competing in this series for well over a year, so finally finishing 1st place means a lot to me.
+
+I’m a little busy at the moment, but I still wanted to get the main ideas written down while everything was fresh, so for now I used an LLM to help organize the solution into a readable write-up. I’ll probably come back and revise / expand some parts later.
+
+Huge thanks to @cdeotte, @tilii, @mahoganybuttstrings, @optimistix— and definitely not limited to them. I learned so much from the discussions, comments, shared ideas, and from this community as a whole throughout the competition.
+
+Final Result
+
+Final Submission:
+
+
+
+CV: 0.9557801
+
+Public LB: 0.95396
+
+Private LB: 0.95535
+
+
+Best Submission I obtained:
+
+
+
+CV: 0.9557901
+
+Public LB: 0.955394
+
+Private LB: 0.95536
+
+
+Best CV I obtained during the competition:
+
+
+
+CV: 0.955865
+
+Public LB: 0.955393
+
+Private LB: 0.95534
+
+
+However, I did not choose that highest-CV submission as my final submission, because I suspected split overfitting.
+
+This point ended up being one of the most important lessons of the competition, and it is also why I think the better title for this write-up is not “Trust your CV”, but rather:
+
+
+  
+Trust the CV–LB relation.
+
+
+1. Overall Strategy
+
+In this competition, I did not aim to build one overwhelmingly dominant model.
+
+Instead, my overall strategy was:
+
+
+  
+Create many slightly different models → select effective combinations → combine them with a simple linear model.
+
+
+More concretely:
+
+
+
+Generate multiple feature representations.  
+
+Train many different model types.  
+
+Collect approximately 150 OOF predictions.  
+
+Use Optuna to search for good subsets.  
+
+Combine selected OOFs with Ridge regression.  
+
+
+The central idea was diversity.
+
+I was not looking for one “magic” model. Rather, I wanted many reasonably strong models that made slightly different mistakes, and then combine them in a simple and robust way.
+
+2. Feature Engineering
+
+Rather than searching for one optimal feature set, I created multiple representations of the same base features. Each transformation acted as a component that could later be combined flexibly.
+
+2.1 Binning
+
+I discretized numerical features using:
+
+
+
+Quantile-based binning (qcut)
+
+Equal-width binning (cut)
+
+Simple rounding (for example, Age/5, BP/10)
+
+
+Tree-based models sometimes benefit from grouped values. Different binning schemes produce slightly different split structures, which helps increase diversity.
+
+2.2 Digit Features
+
+For numerical variables, I extracted:
+
+
+
+Integer digit positions (units, tens, hundreds, etc.)
+
+The first few decimal digits when applicable
+
+
+This may look unusual, but digit-based features sometimes capture hidden structure in tabular competitions.
+
+2.3 Treating All Features as Categorical
+
+I also converted all base features into string format and treated them as categorical variables.
+
+2.4 Frequency Encoding
+
+For each feature, I added its frequency (how often each value appears).
+
+Rare values can carry useful signal, and frequency encoding often complements target encoding well in boosting models.
+
+2.5 Genetic Programming Features
+
+Using gplearn, I generated nonlinear interaction features automatically.
+
+The goal was not necessarily to create individually dominant features, but rather to introduce alternative representations that improve ensemble diversity.
+
+2.6 Extracting Signals from the Original Dataset
+
+Because this competition dataset was generated from an original dataset, I extracted additional statistics from the original data, such as:
+
+
+
+Target mean
+
+Smoothed target mean
+
+Weight of Evidence (WoE)
+
+Entropy
+
+
+This can be viewed as a kind of external target encoding, and in synthetic Playground competitions this type of information is often useful.
+
+2.7 Denoising Variational Autoencoder (DVAE)
+
+I trained a Denoising Variational Autoencoder on the base features.
+
+A DVAE adds noise to the inputs and learns to reconstruct the original data. The encoder then provides compressed latent representations.
+
+The main purpose here was not necessarily to improve single-model CV, but to create additional nonlinear representations that increase OOF diversity.
+
+3. Model Training
+
+Using the feature sets above, I trained a wide range of models:
+
+
+
+XGBoost
+
+LightGBM
+
+CatBoost
+
+RealMLP
+
+Regularized Greedy Forest (RGF)
+
+TabICL
+
+AutoGluon
+
+
+All OOF predictions were generated using 5-fold StratifiedKFold with shuffle=True and random_state=42.
+
+Performance was evaluated using overall OOF AUC.
+
+4. Representative Single-Model Performance
+
+Below are representative OOF AUC scores for models that were selected at least five times during the Optuna search.
+
+All scores were computed using 5-fold StratifiedKFold and evaluated using overall OOF AUC.
+
+
+
+
+Feature Set
+Model
+CV
+
+
+
+
+BASE+BIN+DIGIT+ALL_CATS
+AutoGluon
+0.955747
+
+
+BASE+BIN+DIGIT+ALL_CATS
+RealMLP
+0.955739
+
+
+ORIG+TE+EMB*
+RealMLP
+0.955726
+
+
+BASE+GP_FEAT+ALL_CATS
+RealMLP
+0.955720
+
+
+BASE+BIN+DIGIT+ALL_CATS
+CatBoost
+0.955686
+
+
+BASE+TE
+XGBoost
+0.955663
+
+
+BASE+BIN+DIGIT+ALL_CATS+FREQ
+LGBM
+0.955652
+
+
+BASE+ALL_CATS
+XGBoost
+0.955619
+
+
+ORIG+ALL_CATS
+XGBoost
+0.955599
+
+
+BASE+ORIG+ALL_CATS
+XGBoost
+0.955597
+
+
+BASE
+XGBoost
+0.955575
+
+
+DVAE+ALL_CATS
+XGBoost
+0.955426
+
+
+BASE+BIN+DIGIT+ALL_CATS
+RGF
+0.954980
+
+
+BASE (subsample 100k × 5)
+TabICL
+0.954971
+
+
+
+
+* ORIG+TE+EMB: all features target-encoded and combined with internal embeddings in RealMLP.
+
+
+
+The differences between individual models were small.
+
+However, some models with slightly lower standalone CV — such as RGF and TabICL — were still selected frequently during ensemble search.
+
+This was a good reminder that ensemble contribution is not determined solely by individual CV performance.
+
+5. OOF Selection with Optuna and Ridge Ensemble
+
+In total, I generated approximately 150 OOF predictions.
+
+Simply averaging all of them hurt performance, so I used Optuna to search for effective subsets:
+
+
+
+2500 trials
+
+Each trial selects a subset of OOF predictions
+
+Objective: maximize overall OOF AUC
+
+
+Only about one-tenth of the OOFs were consistently selected.
+
+For the final combination, I used Ridge regression.
+
+Ridge worked best because:
+
+
+
+It is simple and stable
+
+It handles correlated predictions well
+
+It reduces overfitting compared with more flexible meta-models
+
+
+In my experiments, nonlinear meta-models tended to overfit, while Ridge produced more consistent improvements.
+
+6. Training on Full Data
+
+For GBDT and RGF models:
+
+
+
+I retrained on the full dataset after generating OOF
+
+I used 20 different random seeds
+
+I averaged predictions across seeds
+
+I set n_estimators to 1.25 × the average best iteration obtained during CV
+
+
+In my experiments, this full-data retraining strategy worked better than simply averaging fold models.
+
+7. Trust the CV–LB Relation, Not Just the Best CV
+
+This was probably the most important practical lesson from this competition.
+
+At one point, I obtained a submission with CV = 0.955865, which was my highest CV. However, I did not trust it enough to make it my final submission.
+
+Why?
+
+Because I started to suspect split overfitting.
+
+I ran many hill-climbing experiments and also compared multiple actual submissions to study the relation between CV and leaderboard performance. In particular, I submitted ensembles stopped at different stages and compared their CV–LB behavior.
+
+What I observed was roughly this:
+
+
+
+Up to around CV 0.95578, the CV–LB relation looked reasonably consistent
+
+But once the CV started going beyond 0.95578+, the relation clearly became worse
+
+Improvements in CV no longer translated into similarly reliable LB improvements
+
+In some cases, higher CV looked more like exploitation of fold-specific behavior than genuine generalization
+
+
+Because of this, I decided to select my final submission from the range around:
+
+
+  
+CV 0.95578 to 0.95580
+
+
+rather than blindly choosing the numerically best CV.
+
+In hindsight, I think this was the correct decision.
+
+8. What Did Not Work
+
+The following methods did not improve CV in my experiments:
+
+
+
+Pseudo labeling (both soft and hard)
+
+Knowledge distillation
+
+Very deep GBDT models
+
+High-order interaction expansion
+
+Autoencoders other than DVAE
+
+Nonlinear stacking
+
+Averaging too many OOFs without selection
+
+Public leaderboard climbing
+
+
+This competition reinforced a simple lesson:
+
+
+  
+More complexity does not necessarily produce better generalization.
+
+
+9. Key Takeaways
+
+For beginners and intermediate competitors, I think the main lessons are:
+
+
+
+You do not always need one dominant “magic” model
+
+Small differences in feature representation can create useful diversity
+
+Models with slightly lower CV can still be valuable if they add complementary signals
+
+Selection can be just as important as generation
+
+Simple ensembles are often more robust than flexible ones
+
+A strong CV number alone is not enough — what matters is whether the CV–LB relation remains trustworthy
+
+Careful validation design is essential when tuning, stacking, and searching many combinations
+
+
+The most important parts of my solution were:
+
+
+
+stable cross-validation
+
+controlled diversity
+
+aggressive but disciplined selection
+
+simple and robust ensembling
+
+cautious final submission choice based on CV–LB consistency
+
+
+10. Cross-Validation Strategy and Leakage Considerations
+
+Finally, I want to discuss CV design a bit more, because it was central to this solution.
+
+10.1 Matching CV Splits Between OOF and Ensemble
+
+When generating OOF predictions and training an ensemble model, the CV splits should be aligned.
+
+If the fold splits used to:
+
+
+
+generate OOF predictions for base models, and
+
+train the ensemble model
+
+
+are different, leakage can occur.
+
+Why?
+
+Because OOF predictions are only truly out-of-fold with respect to the split used to generate them. If the ensemble is evaluated using a different split, then the meta-model may end up training on samples whose base predictions were indirectly influenced by those same samples.
+
+That can produce overly optimistic CV.
+
+10.2 Early Stopping and Subtle Leakage
+
+Even when the fold splits are the same, there is still a subtle issue if early stopping is used.
+
+For example:
+
+
+
+A base model uses fold A as validation
+
+Best iteration is chosen based on fold A
+
+The OOF prediction for fold A is produced using that selected iteration
+
+
+Strictly speaking, fold A has now influenced model selection.
+
+So while this is standard practice and usually acceptable in Kaggle, it is not perfectly leakage-free from a theoretical perspective.
+
+This effect is often small, but it is worth keeping in mind, especially when stacking many models and squeezing out tiny CV gains.
+
+10.3 Nested K-Fold as the Strict Solution
+
+The theoretically correct approach is Nested K-Fold:
+
+
+
+Outer folds: generate truly out-of-fold predictions
+
+Inner folds: tune hyperparameters / determine early stopping
+
+
+Procedure:
+
+
+
+Split data into outer folds
+
+For each outer fold:
+
+
+run inner CV on the training portion
+
+determine hyperparameters / best iteration
+
+retrain on the full outer-training data
+
+predict on the outer-validation fold
+
+Combine outer-fold predictions into OOF
+
+
+This ensures that no sample is used, directly or indirectly, to tune the model that predicts it.
+
+However, the computational cost becomes extremely large, especially when managing around 150 OOFs.
+
+10.4 Practical Trade-Off in Kaggle
+
+In practice, especially in Kaggle:
+
+
+
+fully nested CV is often too expensive
+
+early stopping within standard K-Fold is widely accepted
+
+leakage risk is controlled by limiting model flexibility and avoiding over-searching
+
+
+Realistic safeguards include:
+
+
+
+using fixed CV splits
+
+avoiding overly flexible meta-models
+
+limiting ensemble size
+
+checking CV–LB consistency carefully
+
+avoiding blind public LB chasing
+
+
+In many Playground competitions:
+
+
+
+train and test distributions are very similar
+
+training data is larger than test data
+
+
+Under those conditions, a well-designed validation scheme is often more reliable than public LB movement alone — but only if the CV–LB relation remains healthy.
+
+10.5 Practical Takeaway
+
+Strictly speaking, Nested K-Fold is the only fully leakage-free solution when:
+
+
+
+hyperparameter tuning
+
+early stopping
+
+model selection
+
+ensemble selection
+
+
+are all involved.
+
+But in real competitions, the practical goal is:
+
+
+  
+Minimize leakage risk and overfitting while preserving a stable CV–LB relation.
+
+
+In my case, I prioritized:
+
+
+
+fixed StratifiedKFold splits
+
+controlled ensemble size
+
+simple Ridge stacking
+
+monitoring CV–LB behavior through actual submissions
+
+not blindly trusting the highest CV
+
+
+That balance between theory and practicality was, I believe, one of the keys to finishing in 1st place.
+
+Closing
+
+This competition was a great reminder that ensembling is not just about adding more models.
+
+It is about:
+
+
+
+generating meaningful diversity
+
+selecting carefully
+
+keeping validation honest
+
+and knowing when not to trust a tiny CV gain
+
+
+In the end, my best raw CV was not my best decision.
+
+The winning decision came from trusting the CV–LB relation, not the leaderboard, and not the single highest CV in isolation.
+
+Comments:
+├─ Chris Deotte (2026-03-01 16:51:02.890000) [+9]
+│  Congratulations @masayakawamata winning 1st place solo! You built many great models and You did a fantastic job being careful not to overfit. Since this competition was decided in the 5th decimal p...
+  ├─ Masaya Kawamata (2026-03-01 20:48:44.413000) [+3]
+  │  Thank you so much! — your comment truly means a lot to me.
+  │  And thank you as well for sharing your CV/LB analysis and even summarizing my discussion so thoughtfully.
+  │  
+  │  Honestly, a huge part of what I...
+├─ Tilii (2026-03-01 01:47:20.513000) [+6]
+│  It warms my heart both that you won, and that you used genetic programming. Congratulations!
+│  
+│  Great explanation of the whole process. Good thing you didn't have the time, or who knows how long this...
+  ├─ Masaya Kawamata (2026-03-01 20:54:16.397000) [+2]
+  │  Thank you so much! — your words genuinely make me happy.
+  │  I still remember your comment after the October competition. Your warm feedback on my S5E10 solution stayed with me, and honestly, it helped...
+├─ jonas (2026-03-28 20:23:55.180000) [+1]
+│  Awesome solution and writeup!!
+├─ Wenlei Cao (2026-03-01 03:32:43.930000) [+3]
+│  @masayakawamata, congrates for your first place. well worth it.
+│  I learned a lot from your writeup.  I have two questions if you don't mind. 
+│  
+│  
+│  
+│  I have some troubles using ridge ensemble.  It works ...
+  ├─ [deleted] (2026-03-01 06:55:34.223000) [+0]
+  │  [deleted]
+  ├─ Masaya Kawamata (2026-03-01 21:13:02.773000) [+3]
+  │  Thanks a lot, Wenlei — I’m really glad the write-up was helpful.
+  │  
+  │  About the ensemble: no, I did not use RidgeClassifier.
+  │  
+  │  What I used was essentially ridge regression on the OOF predictions. In oth...
+    ├─ Wenlei Cao (2026-03-01 22:39:34.440000) [+1]
+    │  thanks, @masayakawamata, that is good insight.  I will give a try on my end.  again, congrates!
+├─ Pradeep Kumar (2026-03-07 16:42:29.047000) [+1]
+│  Congratulation on the Win!!
+├─ Utkarsh Karn (2026-03-07 07:18:42.623000) [+1]
+│  Congratulations on the amazing 1st place solution! 🎉
+│  I really enjoyed reading this write-up. The emphasis on model diversity, careful OOF selection, and especially the idea of trusting the CV–LB re...
+├─ Navneet (2026-03-06 07:44:19.963000) [+1]
+│  Bravo &amp; all the best @masayakawamata
+├─ Jonathan Harrison (2026-03-05 21:02:51.600000) [+1]
+│  Congrats great work!!!
+├─ Bhawesh Sinha (2026-03-05 14:18:51.123000) [+1]
+│  Congratulations!!
+  ├─ [deleted] (2026-03-06 01:01:58.997000) [+2]
+  │  [deleted]
+├─ Aishwarya Sharma (2026-03-04 09:46:41.337000) [+1]
+│  I spent around an hour with GPT to understand each concept you mentioned in your write up. This was a superb learning lesson for someone like me. Thank you so much !
+├─ ansomonium (2026-03-03 16:05:44.233000) [+1]
+│  Congratulations on winning!  Your emphasis on ensembles is motivating and thank you.
+├─ Kawthar (2026-03-03 00:20:36.853000) [+1]
+│  Congrats on securing 1st place @masayakawamata ! Your write-up is super insightful and interesting; I learned so much from it. Reading it has me excited to dive deeper into these techniques, and I ...
+├─ Mirko (2026-03-02 13:00:51.607000) [+1]
+│  Congrats again @masayakawamata! Your approach to OOF Selection with Optuna and Ridge Ensemble is brilliant—I’ve been manually checking my Ridge ensemble CV to decide which models to keep, but autom...
+├─ Drei Enriquez (2026-03-02 07:15:59.967000) [+1]
+│  Congratulations on your win! I'm new to Kaggle Competitions and I appreciate how detailed you explained your thought process and way of solving this problem. I see some similarities with my own sol...
+├─ ELMIR (2026-03-01 18:24:45.850000) [+1]
+│  I fully agree with you, in almost all competitions, the ability to assemble an ensemble of different models, simple or complex, with different parameters trained on different folds, provides a reli...
+├─ Wasiq Ali (2026-03-01 17:51:26.517000) [+1]
+│  First very very congratulations on getting the winning and get 1st solo place on competition. I also appreciate your hard working for creating the real world problem solution in it
+├─ Jetani Vivek (2026-03-01 15:38:09.840000) [+1]
+│  Congratulations on Getting The First place and It's the Great to learn from winners and from their expression
+├─ J. (2026-03-01 15:11:15.447000) [+1]
+│  Congrats on getting 1st place! 🎊🥳🎉
+├─ Mirko (2026-03-01 08:21:34.797000) [+1]
+│  Big congratulations @masayakawamata for winning the PGC!
+│  Your willingness to share ideas and teach the community is truly inspiring. I'm learnig so much from you.
+├─ aldparis (2026-03-01 08:09:52.467000) [+1]
+│  Hi @masayakawamata, congratulations for your first place and thank you for explanation !
+├─ Bdwj (2026-03-01 04:34:42.953000) [+1]
+│  Congrats chief. You did amazing. It's amazing to see how the leaderboard flipped. Thankyou for your explanation on trust your cv-lb relation.
+├─ John Ramil Mapatac (2026-03-01 04:09:25.880000) [+1]
+│  Congratulations on securing the 1st place position! Achieving the top spot in a Kaggle Playground Series competition is a massive accomplishment, especially with a solution focused on diversity and...
+├─ Gerald Schwartz (2026-03-01 03:12:08.257000) [+1]
+│  Congratulations on your win. What a detailed discussion. I do not think I could do what you did even in my hay days. Still
+│  there is one point I need some clarification. What do you mean by overall ...
+├─ AshishSinghRawat (2026-03-01 03:00:46.947000) [+1]
+│  Congrats, for winning and thanks for your wonderfull notebooks i learned alot from you…
+├─ Evan Arlen Handy (2026-03-01 01:40:28.737000) [+1]
+│  Nice work @masayakawamata
+├─ Muhammad Hammad (2026-03-01 01:36:19.867000) [+1]
+│  @masayakawamata Impressive approach and explanation, thank you for sharing, congrats!
+├─ Shul Ilya (2026-03-01 01:08:58.043000) [+1]
+│  very nice, congrats
+├─ Durga Kumari (2026-03-03 20:33:28.557000) [+2]
+│  Congratulations on the win🎊  fantastic .
+│  The idea of selecting the final submission based on CV–LB behavior rather than peak CV is extremely insightful.
+│  
+│  I’m curious whether you noticed consistent ...
+  ├─ Masaya Kawamata (2026-03-04 01:03:16.870000) [+1]
+  │  Thank you very much!
+  │  
+  │  Basically, there was a fairly stable core: around 10–13 OOFs were selected in all 10 patterns. My impression is that the remaining 5–7 OOFs changed across patterns and served ...
+├─ DavidAror (2026-03-02 20:04:31.023000) [+2]
+│  This was a very insightful editorial and I found your use of autogluon very innovative. congrats!
+├─ [deleted] (2026-03-01 18:09:28.193000) [+2]
+│  [deleted]
+  ├─ [deleted] (2026-03-01 20:44:07.397000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2026-03-01 20:54:52.003000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2026-03-01 21:34:48.280000) [+1]
+    │  [deleted]
+├─ [deleted] (2026-03-01 12:17:15.913000) [+2]
+│  [deleted]
+├─ [deleted] (2026-03-01 11:41:06.593000) [+2]
+│  [deleted]
+├─ [deleted] (2026-03-01 09:55:33.497000) [+2]
+│  [deleted]
+  ├─ [deleted] (2026-03-01 21:15:50.253000) [+0]
+  │  [deleted]
+├─ [deleted] (2026-03-01 09:10:13.950000) [+2]
+│  [deleted]
+├─ [deleted] (2026-03-01 09:09:31.920000) [+2]
+│  [deleted]
+├─ [deleted] (2026-03-01 04:44:52.250000) [+2]
+│  [deleted]
+├─ [deleted] (2026-03-01 02:26:58.727000) [+2]
+│  [deleted]
+├─ [deleted] (2026-09-13 19:47:31.507000) [+0]
+│  [deleted]
+├─ [deleted] (2026-09-13 17:52:56.870000) [+0]
+│  [deleted]
+├─ [deleted] (2026-03-06 01:01:11.083000) [+1]
+│  [deleted]
+├─ [deleted] (2026-03-01 01:05:45.963000) [+3]
+│  [deleted]
+├─ [deleted] (2026-04-10 05:35:44.400000) [+1]
+│  [deleted]
+├─ [deleted] (2026-03-09 12:42:45.277000) [+1]
+│  [deleted]

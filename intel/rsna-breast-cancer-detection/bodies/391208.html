@@ -1,0 +1,53 @@
+<h2>Introduction</h2>
+<p>Congrats all and thank you RSNA for another great challenge. Our solution is below. Code and slides will be posted over the coming weeks.  </p>
+<h2>Preprocessing</h2>
+<p>We used the same preprocessing and resizing for all models, which enabled us to use more models.</p>
+<p>Pixel values for each image were windowed using the width and center from the DICOM metadata. A linear window was used regardless of the specified function in the metadata to decrease processing time. We applied a coarse CNN with minimum filter to crop the image to the breast area, and hopefully any noise/text, from the image. </p>
+<p>The cancer was often small and the images large, so when resizing it was important to lose as little detail as possible. <a href="https://arxiv.org/pdf/2104.11222.pdf" target="_blank">This paper</a> , concludes that the best resize method is PIL with lanczos, or tensorflow with antialias. There is a good example (Fig 1. in the paper) of how resizing can lose information, comparing cv2, PIL, pytorch and others. We used PIL, which was slow but results outperformed any cv2 method. Using the <code>.thumbnail()</code> function seemed to help speed this up. The trade off was we did not generate any different sized images for modeling, but only did one down size of the image. <br>
+All images were reduced to 1152 dim. In addition, during training we applied augmentations prior to downsizing, as they would lose more information if applied to a small image. The augmentations are mainly cv2 based. Also, we kept the original filtered image aspect ratio and padded to a square image. </p>
+<h2>Augmentations</h2>
+<p>Train augmentations before downsizing were vflip, hflip,transpose, shift, scale, rotate, grid distortion &amp; affine. After downsizing, we used one of random grid shuffle &amp; coarse dropout. In train, we random cropped to 1024, and in val we center cropped. <br>
+Example batch below.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fc28321c365bb1d679c2c35eb1c03e8f7%2FScreenshot%202023-02-28%20at%2018.09.06.png?generation=1677604161886568&amp;alt=media" alt=""></p>
+<h2>Models</h2>
+<h3>Model type 1: Breast level feature combination 1D-CNN with CNN backbone</h3>
+<p>Auxiliary loss improved time to convergence a lot. For each backbone, stage 1 model trained for 9 epochs, stage 2 model trained for 2 epochs with frozen backbone. Heavy dropout (0.5) was applied on the linear output. <br>
+The 1D-CNN was set up with a filter size of 2 and no padding, so we get a (2, n_features) shape input and a (1, n_features) output. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F59667ff80e38d33611d00b97752a6aaa%2FScreenshot%202023-03-01%20at%2010.33.04.png?generation=1677663219589043&amp;alt=media" alt=""></p>
+<p>In our final ensemble we ran the above architecture with efficientnet b3 b4 b5 v2s and v2m.</p>
+<p>Some of the solution was inspired by Bo’s great write up on the <a href="https://www.kaggle.com/competitions/siim-isic-melanoma-classification/discussion/175412" target="_blank">SIIM melanoma competition 1st place solution</a>.</p>
+<h3>Model type 2: Patient-level multi-view-multi-lateral transformer with CNN backbone</h3>
+<p>Inspired by the paper <a href="https://arxiv.org/pdf/2206.10096.pdf" target="_blank">Transformers Improve Breast Cancer Diagnosis from Unregistered Multi-View Mammograms</a>, we designed another 2nd stage approach, but on a patient level. </p>
+<h4>Stage 1:</h4>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F809528c5c906c90e6752f2f6729f1f5c%2FScreenshot%202023-02-28%20at%2013.38.19.png?generation=1677604933375806&amp;alt=media" alt=""></p>
+<p>In the first stage we train an image level CNN which is trained with an auxiliary segmentation loss by predicting masks we got from training a Yolo_v7 on CBIS dataset.</p>
+<h4>Stage 2:</h4>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fa908b5aad5f9bf7b0b1dc8ce77461eab%2FScreenshot%202023-02-28%20at%2013.38.10.png?generation=1677605002279914&amp;alt=media" alt=""></p>
+<p>We take the CNN trained in stage 1 and aggregate to patient level by considering four images per patient. Two views for each breast, i.e L-CC, L-MLO, R-CC, R-MLO. Using a 2-view/ 2-lateral input, the transformer can hopefully learn: </p>
+<ul>
+<li>consistency between views </li>
+<li>differences in laterals</li>
+</ul>
+<p>We extract the output feature maps of the image level CNN for each view ending up with a tensors of size (4,out_channels, 32,32), which is projected to a predefined grid-size (4,hidden_dim, 16,16) using a conv layer. Then the 4x16x16 features, which can be seen as patch-tokens are spatially flattened and concatenated. The result is a sequence (hidden_dim, 1024) which is put into a transformer. Output of that transformer are two cancer predictions, one for each breast.</p>
+<p>We first froze the CNN backbone for a few epochs to let the pretrained vision transformer "adjust" before fine-tuning the whole 2-stage model end2end. <br>
+If a patient has more than one image per view we randomly sample one image per view for training and use multiple 4-view combinations for inference which are then averaged. <br>
+Backbone-wise we used pretrained seresnext50 and convnext tiny as CNN and pretrained deit-tiny-patch16-224 as transformer.</p>
+<h2>Ensembling</h2>
+<p>So in total we used single seed fullfits of the following models</p>
+<ul>
+<li>Effnet v2_s + 1D-CNN</li>
+<li>Effnet v2_m + 1D-CNN</li>
+<li>Effnet b3 + 1D-CNN</li>
+<li>Effnet b4 + 1D-CNN</li>
+<li>Effnet b5 + 1D-CNN</li>
+<li>SE-ResNext50 + deit-tiny-patch16-224</li>
+<li>ConvNext_tiny + deit-tiny-patch16-224</li>
+</ul>
+<p>A threshold to convert to binary output was selected based on the CV of the blend. <br>
+Our two highest submissions according to Public LB were also our two highest blends on CV. They were not the highest private, but close to it. For the shake up, it probably helped that we did not start blending the models until the last few days of the competition, so did not get distracted by high Public LB scores. </p>
+<h2>Things that did not work/were ineffective:</h2>
+<ul>
+<li>Pretraining on DDSM/VinDr-Mammo</li>
+<li>Training a ROI extractor and training subsequent models on focused ROIs rather than whole images</li>
+<li>Higher resolution images (similar to worse performance, longer inference times)</li>
+</ul>

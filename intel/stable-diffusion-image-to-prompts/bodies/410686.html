@@ -1,0 +1,61 @@
+<p>Thanks for organizers hosting a nice competition.</p>
+<p>My approach is based on CLIP model with directly predicting 384 embedding vector following <a href="https://www.kaggle.com/code/shoheiazuma/stable-diffusion-vit-baseline-train" target="_blank">this baseline notebook</a>.</p>
+<h2>Dataset</h2>
+<p>I used about ~400K data. The validation score of Diffusion DB was well correlated to LB score but still 0.025 ~ 0.03 gap.</p>
+<ul>
+<li><p><a href="https://vizwiz.org/tasks-and-dathasets/image-captioning/" target="_blank">Vizwiz image caption</a> ~70k</p>
+<ul>
+<li>This was key dataset for my experiment.</li>
+<li>Training with this data, local val vs LB score -&gt; 0.5415/0.5309, but without this 0.5528/0.48765</li>
+<li>I think this caption dataset is generally more descriptive, diverse and longer than COCO.</li>
+<li>Original training samples are 23K at this dataset, but each training sample has max 5 captions, so sampled 3 captions for each training sample.</li></ul></li>
+<li><p>Diffusion DB, 300k</p>
+<ul>
+<li>only using SD2 images, which I personally generated for improving local val/LB correlation</li>
+<li>210K samples from prompt filtering and another 80k images from hard sampling using a trained model.</li></ul></li>
+<li><p>COCO, 25k</p>
+<ul>
+<li>Under training with Vizwiz, this dataset contribution was relatively low.</li></ul></li>
+<li><p><a href="https://www.kaggle.com/datasets/motono0223/gustavosta-stable-diffusion-prompts-sd2-v2" target="_blank">Lexica.art</a>, 10k</p></li>
+</ul>
+<h2>Model</h2>
+<ul>
+<li>only using CLIP models<ul>
+<li>My baseline model was ViT Base 224(laion2B), almost all experiments were done on this model.  Final score for this model was, local val/Public/Private=0.6402/0.61402/0.61357</li>
+<li>Single best model. ViT L 336(open ai), local val/Public/Private=0.6658/0.63557/0.63425<ul>
+<li>I could not find good training parameters for larger models, ViT-H and ConvNext xxLarge.</li></ul></li>
+<li>Best submission, ensemble of ViT-L(laion2b, openai, datacompxl), ViT-H, and ConvNext Large/xxLarge,  local val/Public/Private=0.6791/0.64935/0.64814</li></ul></li>
+</ul>
+<h2>Training</h2>
+<h3>CLIP fine tuning</h3>
+<p>Fine tuning CLIP model needs extra care compared to imagenet weight, we have to keep original CLIP weight as possible as we can to get best performance.<br>
+I found the following two methods improve score by ~ +0.02 in total and used a lot of time to find best hyperparameters.</p>
+<ol>
+<li><p><a href="https://arxiv.org/pdf/2202.10054.pdf" target="_blank">LP-FT(Linear Probe and then Fine Tune)</a></p>
+<ul>
+<li>This was studied at <a href="https://arxiv.org/ftp/arxiv/papers/2210/2210.08473.pdf" target="_blank">the top-1 solution  of previous competition</a> and also other teams at this competition.</li></ul></li>
+<li><p>Combination of EMA and layer-wise learning rate decay</p>
+<ul>
+<li>This has been studied at <a href="https://arxiv.org/abs/2212.06138" target="_blank">this CLIP fine tuning paper</a>.</li>
+<li>Best parameter for ViT-B was (EMA decay, layer-wise decay) = (0.9998, 0.4)</li>
+<li>But this did not work for ViT-L, layer-wise decay = 0.6 was best. It seemed decay factor for initial layer should be around 1e-6 so we have to choose large decay late for larger models.</li></ul></li>
+</ol>
+<p>These two methods has not only direct effect but also indirect effect, because by these methods we can increase learning rate with keeping CLIP original weight and get better result.</p>
+<h3>Augmentation</h3>
+<ul>
+<li><p>Crop/RandomErase/RandAug(without posterize, solarize and equalize)</p>
+<ul>
+<li>This contributed to local val score, ~ +0.007 and this enabled longer training.</li>
+<li>Strong image transformation did not fit this competition, I tried to find weak one.</li>
+<li>Horizontal Flip worsen performance</li></ul></li>
+<li><p>Same prompt and different seed</p>
+<ul>
+<li>10% of Diffusion DB and 20% of Vizwiz samples have 3 images which are belong to the same prompt but different SD2 generation seed. For  each training epoch one of 3 images randomly chosen.</li>
+<li>This also contributed to the score and validation loss curve.</li></ul></li>
+<li><p><a href="https://github.com/ShieldMnt/invisible-watermark" target="_blank">Invisible watermark</a> augmentation</p>
+<ul>
+<li>Adding watermark on input images during training with the following <a href="https://github.com/Stability-AI/stablediffusion/blob/334969331438036c1b4fb529c262f78499870d86/scripts/txt2img.py#L363" target="_blank">stability ai repository</a></li>
+<li>This did not contribute much to the score, only ~ +2.0e-5</li></ul></li>
+</ul>
+<h3>Code</h3>
+<p>This is <a href="https://www.kaggle.com/code/sai11fkaneko/3rd-place-solution/notebook" target="_blank">my submission notebook</a>.</p>

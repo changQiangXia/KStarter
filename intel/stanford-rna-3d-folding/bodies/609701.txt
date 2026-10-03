@@ -1,0 +1,196 @@
+# https://www.kaggle.com/competitions/stanford-rna-3d-folding/discussion/609701
+
+Topic #609701: 3rd Place Solution
+  Author: Yehyun Kim
+  Posted: 2025-09-29 04:48:51.428000
+  Votes: 16  Comments: 4
+
+Our 3rd Place Solution – Stanford RNA 3D Folding
+
+First of all, thanks to Kaggle and the organizers for putting together such a challenging and interesting competition.  
+
+We finished 3rd on the public leaderboard before the unseen data release, and also 3rd on the private leaderboard.  
+
+Earlier we shared a short overview of our solution. This post goes into more detail.  
+
+
+
+Summary of Our Solution
+
+
+
+Ensemble of DRfold2, Protenix, and Boltz-1  
+
+Fine-tuned Protenix with newly released RNA datasets  
+
+
+
+
+Detailed Solution
+
+Dataset
+
+
+
+
+rMSA  
+We generated our own rMSA data using the official rMSA code provided by the hosts.  
+
+
+
+The v2 rMSA released by the organizers did not cover the full set of recently published data, so we had to build our own.  
+
+This process took about 14 days, even with multiprocessing and several servers.  
+
+Our rMSA data is available here: Google Drive.  
+
+
+Training dataset  
+We tested two versions:  
+
+
+
+Full RNA dataset – included all recently available data, such as CASP16 uploaded by @tant64. To check quality, we compared some of the labels with the CASP16 GitLab repository.  
+
+RNA-only dataset – excluded complexes (RNA bound to proteins/DNA), following the clarification from the hosts here.  
+
+
+Both versions of the training data and labels are available here: Google Drive.  
+
+
+
+Models
+
+We built our ensemble using models from these official repositories:  
+
+
+
+DRfold2  
+
+Protenix  
+
+Boltz  
+
+
+We initially explored new architectures, but given the time and resource limits, it was more effective to focus on fine-tuning and combining existing models.  
+
+
+
+DRfold2
+
+
+
+Performed best on sequences &lt;400 nt with v1 data.  
+
+Running the full pipeline with optimization, clustering, and all 80 released checkpoints was too slow.  
+
+We found that energy selection + Arena gave most of the gain, while the other steps added little to the TM-score but took significant runtime.  
+
+So our DRfold2 setup used energy selection + Arena only for the post-processing.  
+
+
+
+
+Protenix
+
+
+
+Trained on an NVIDIA GH200 (96GB VRAM).  
+
+Limited to sequences &lt;800 nt due to memory issues.  
+
+Used fine-tuning code from @lihaoweicvch (discussion link).  
+
+Fine-tuning without rMSA did not help, so we trained with rMSA.  
+
+Only modified max_steps; a full dataset run took about a day.  
+
+Early checkpoints (2–3 cycles) performed worse; performance improved with longer fine-tuning.  
+
+We also tested multiple Protenix outputs → DRfold energy selection → Arena, but it did not improve results.  
+
+For inference, we modified @geraseva’s code to include rMSA.  
+
+
+
+
+Boltz-1
+
+
+
+While not the strongest model on its own, including one Boltz prediction improved ensemble diversity.  
+
+This helped because the scoring metric favored picking the best out of multiple diverse outputs.  
+
+We used @youhanlee’s inference notebook.  
+
+
+
+
+Final Submissions &amp; Code
+
+We are sharing our original submission notebooks. Some commented-out code remains, which shows parts of our experiment history.  
+
+
+
+
+DRfold2 + Protenix  
+
+
+
+Public LB: 0.60338 | Private LB: 0.52787  
+
+&lt;400 nt: 3 × DRfold2 + 2 × Protenix (RNA-only, with MSA)  
+
+&gt;400 nt: 2 × Protenix (RNA-only) + 2 × Protenix (All) + Protenix baseline  
+
+
+Protenix + Boltz  
+
+
+
+Public LB: 0.61253 | Private LB: 0.54312  
+
+2 × Protenix (RNA-only) + Protenix (All) + Protenix baseline + Boltz baseline  
+
+
+
+
+Acknowledgements
+
+Many thanks to the community members who shared resources and insights:  
+
+
+
+@hengck23 – for extensive discussions and guidance.  
+
+@geraseva – for early Protenix inference code.  
+
+@lihaoweicvch – for Protenix fine-tuning code.  
+
+@youhanlee – for updated Boltz inference code.  
+
+
+Finally, thanks to Eigen Company for providing resources for this competition.
+
+Comments:
+├─ Gary (2025-09-29 09:47:41.743000) [+1]
+│  congradualation.
+│  How do you ensemble the outputs of different models?
+│  Because each model outputs coordinates.
+  ├─ moth (2025-09-29 18:44:45.883000) [+3]
+  │  @garybios The competition's submission.csv expects competitors to predict 5 different "candidates" for each input sequence. Most competitors ensembled models in 3 ways:
+  │  
+  │  
+  │  
+  │  Length based: check the l...
+├─ Rhiju Das (2025-10-02 20:16:00.807000) [+0]
+│  @yekim102 @ryankim99 @ouiqdmw thanks for a beautiful writeup and sharing your insights as early as June! Congrats on having the top AF3-like solution.
+│  
+│  A question for you. In earlier discussions, i...
+  ├─ Yehyun Kim (2025-10-03 02:30:17.043000) [+0]
+  │  Thank you Rhiju!
+  │  
+  │  Unfortunately, we don’t have experiments without the CASP16 targets, as we were limited by computational resources.
+  │  
+  │  The RNA-only trained model performed well on the private LB, s...

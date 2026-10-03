@@ -1,0 +1,443 @@
+# https://www.kaggle.com/competitions/playground-series-s6e5/discussion/703539
+
+Topic #703539: 8th Place - L5 Ensemble
+  Author: Masaya Kawamata
+  Posted: 2026-06-01 03:25:08.624000
+  Votes: 10  Comments: 4
+
+First of all, I would like to thank @yekenot for the great RealMLP notebook. Without that notebook, my modeling strategy for this competition would not have been possible.
+
+I also used AI tools quite heavily during this competition. Most of my coding was done with GPT-5.5 Thinking Mode (extended), and this writeup was also drafted with GPT-5.5 from my code and bullet-point notes. For modeling ideas and brainstorming, I mainly discussed with Gemini 3.1 Pro.
+
+Overview
+
+My final solution was what I called an L5 ensemble.
+
+By L5, I mean that I first built several L4 ensembles under three different split settings, and then averaged those three L4 ensembles. The three split settings were:
+
+
+
+
+Ensemble
+# OOFs
+CV
+Public LB
+Private LB
+
+
+
+
+5-fold ensemble
+123
+0.95510
+0.95440
+0.95463
+
+
+7-fold ensemble
+11
+0.95505
+0.95437
+0.95467
+
+
+10-fold ensemble
+13
+0.95503
+0.95437
+0.95461
+
+
+Final L5 ensemble
+Simple Average
+-
+0.95462
+0.95487
+
+
+
+
+The reason I used three different split strategies was partly because I wanted to generate many diverse solutions, and partly because I wanted to observe how different split designs affected the CV-LB relationship.
+
+I also wanted to reduce the overfitting risk of relying too much on one stacked ensemble. A stricter way to estimate the score would have been nested CV, but because of computational cost, limited resources, and my desire to run many experiments, I did not use nested CV. Therefore, the CV scores shown below are probably optimistic. I mainly used the Public LB to check whether the CV was becoming too optimistic.
+
+Main idea
+
+The key idea was to create diversity from two directions:
+
+
+
+
+Different split settings
+
+
+
+5-fold
+
+7-fold
+
+10-fold
+
+
+Different ways of using the original data
+
+
+
+Using the original data as additional rows.
+
+Using the original data to create column-level features, such as target encoding or anchor-style features.
+
+
+These two directions seemed to capture different signals. The gain from ensembling models trained with these different feature engineering policies was quite large.
+
+Stacking / distillation structure
+
+The stacking structure was roughly:
+
+
+
+L1: Existing OOF/test prediction files from many base models.
+
+L2: Meta models trained on prediction-level features, and also models trained on meta features plus original features.
+
+L3: Low-degree-of-freedom Logistic Regression on logit-transformed L1/L2 predictions.
+
+L4: Self-distilled student models using L2/L3 teacher OOF predictions.
+
+L5: Average of three different L4 ensembles from different split settings.
+
+
+For L2 meta features, I used not only raw predictions but also transformations such as logits, ranks, summary statistics, pairwise differences, and AUC-weighted blends.
+
+A simplified version of the final blend logic was:
+
+def make_blend(preds, weights=None, logit_space=False):
+    if weights is None:
+        weights = np.ones(len(preds)) / len(preds)
+    else:
+        weights = np.asarray(weights)
+        weights = weights / weights.sum()
+
+    if logit_space:
+        z = sum(w * logit(p) for w, p in zip(weights, preds))
+        return sigmoid(z)
+    else:
+        return sum(w * p for w, p in zip(weights, preds))
+
+
+In several places, I used both probability-space averaging and logit-space averaging. I also used conservative blends to avoid relying too much on the highest-CV stacked model, because final Logistic Regression or higher-level stacking can easily overfit when many correlated OOFs are used.
+
+5-fold ensemble: 123 OOFs
+
+CV: 0.95510 / Public: 0.95440 / Private: 0.95463
+
+This was the most experimental and chaotic ensemble.
+
+Models used:
+
+
+
+RealMLP
+
+XGBoost
+
+CatBoost
+
+LightGBM
+
+PyTorch MLP
+
+Logistic Regression
+
+KNN
+
+YDF
+
+ExtraTrees
+
+Random Forest
+
+RGF
+
+
+The best single OOF by CV was from @yekenot’s public RealMLP notebook, with CV around 0.95409.
+
+For feature engineering, I included many feature blocks that had worked well for me in previous competitions:
+
+
+
+aggregation features
+
+digit features
+
+DAE features
+
+Sparse AutoEncoder features
+
+Supervised AutoEncoder features
+
+PCA features
+
+original-column target encoding features
+
+
+This 5-fold ensemble was not very elegant. I generated many OOFs, tested many ideas, and ensembled them rather aggressively. However, it gave me a useful first understanding of which model families and feature blocks were promising.
+
+7-fold ensemble: 11 OOFs
+
+CV: 0.95505 / Public: 0.95437 / Private: 0.95467
+
+The 7-fold ensemble was more selective. Based on the 5-fold experiments, I kept only the stronger and more useful OOFs.
+
+Models used:
+
+
+
+RealMLP
+
+XGBoost
+
+CatBoost
+
+RealTabR
+
+TabPFN
+
+Fine-tuned TabICL
+
+
+Most models were optimized with Optuna. For RealMLP and XGBoost, I averaged the top 3 parameter settings. In particular, averaging different RealMLP parameter settings seemed very effective.
+
+For GBDT models, I split feature engineering candidates into blocks and performed feature selection. For TabPFN and TabICL, I mainly used no feature engineering. For RealMLP and RealTabR, I used the feature engineering from @yekenot’s notebook.
+
+7-fold model CVs
+
+
+
+
+Model
+CV
+
+
+
+
+RealMLP orig row
+0.9545
+
+
+Cat_2 orig row
+0.9532
+
+
+RealMLP orig col
+0.9529
+
+
+Cat_1 orig row
+0.9527
+
+
+XGB orig row
+0.9523
+
+
+XGB orig col
+0.9510
+
+
+Finetuned TabICL
+0.9497
+
+
+XGB_2 orig row
+0.9492
+
+
+TabPFN 200k 1seed
+0.9488
+
+
+TabPFN 150k 2seed
+0.9482
+
+
+RealTabR orig row
+0.9457
+
+
+
+
+10-fold ensemble: 13 OOFs
+
+CV: 0.95503 / Public: 0.95437 / Private: 0.95461
+
+The 10-fold ensemble used another set of models and feature engineering policies.
+
+Models used:
+
+
+
+TabM
+
+LightGBM
+
+Trompt
+
+ModernNCA
+
+CatBoost
+
+RealMLP
+
+FTT
+
+LNN
+
+FFM
+
+
+All models were optimized with Optuna. For RealMLP, TabM, CatBoost, LightGBM, and FFM, I used around 100–150 trials. For the other models, I used around 25 trials. I then created 3-parameter blends for most model families.
+
+For MLP-like models, I again used the feature engineering from @yekenot’s notebook. For LightGBM, I used both selected feature blocks and features found by Genetic Programming.
+
+10-fold model CVs
+
+
+
+
+Model
+CV
+
+
+
+
+RealMLP orig row
+0.9545
+
+
+Cat orig row
+0.9530
+
+
+TabM orig row
+0.9526
+
+
+LGBM_2 orig row
+0.9524
+
+
+Cat orig col
+0.9522
+
+
+LGBM orig col
+0.9516
+
+
+Trompt orig row
+0.9509
+
+
+LGBM GP Feat
+0.9508
+
+
+FFM orig row
+0.9507
+
+
+FTT orig row
+0.9504
+
+
+ModernNCA orig row
+0.9503
+
+
+LNN orig row
+0.9502
+
+
+
+
+What worked well
+
+1. RealMLP was the strongest base model
+
+RealMLP was clearly the most important model family in my solution. The public notebook by @yekenot was the foundation of my modeling, and the best single-model CVs came from RealMLP.
+
+Different RealMLP parameter settings also blended well with each other. This was one of the main reasons I used top-3-parameter averaging.
+
+2. Original-row and original-column approaches gave different signals
+
+One important observation was that using the original data as extra rows and using the original data for column generation were not equivalent. They seemed to capture different types of signal.
+
+Because of this, models based on “orig row” and “orig col” approaches blended very well.
+
+3. Many weak-but-diverse models were still useful
+
+Some models were not strong as standalone models, but still contributed to the final ensemble because their errors were different.
+
+Examples include:
+
+
+
+TabPFN
+
+Fine-tuned TabICL
+
+RealTabR
+
+Trompt
+
+ModernNCA
+
+FFM
+
+LNN
+
+FTT
+
+
+The final score was not achieved by a single clever model, but by accumulating many slightly different perspectives.
+
+4. Conservative stacking was important
+
+Higher-level stacking can improve CV, but it can also overfit very easily, especially when many OOFs are highly correlated.
+
+Therefore, I did not simply trust the best CV stack. I also used conservative blends that mixed:
+
+
+
+final Logistic Regression stack
+
+L3 stack
+
+teacher blend
+
+AUC-weighted L2 blend
+
+
+This helped keep the final prediction more stable.
+
+Final result
+
+The final submission was the average of the three split-level L4 ensembles.
+
+Final Public LB: 0.95462
+Final Private LB: 0.95487
+
+Comments:
+├─ Chris Deotte (2026-06-01 21:17:11.740000) [+1]
+│  Nice work. Congratulations jumping upward on private LB into 8th place. Impressive 5 level stack!
+│  
+│  I like your use of Fine-tuned TabICL. I discovered this in the last few days myself. Out of my 218...
+├─ GurSimran (2026-06-01 20:59:58.297000) [+1]
+│  Very impressive and in-depth work.
+│  
+│  There are many concepts and techniques here that are completely new to me. Reading through your work has motivated me to dive deeper into feature engineering and...
+├─ AshishSinghRawat (2026-06-02 10:52:09.083000) [+1]
+│  congrats:
+├─ Omar Faruq (2026-06-01 16:32:29.347000) [+1]
+│  Congratulations…!!!

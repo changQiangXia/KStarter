@@ -1,0 +1,373 @@
+# https://www.kaggle.com/competitions/playground-series-s5e5/discussion/576731
+
+Topic #576731: Detailed Insights from Previous Competitions' Solutions
+  Author: Younus_Mohamed
+  Posted: 2025-05-06 18:22:13.898000
+  Votes: 49  Comments: 21
+
+Below are publicly available links to previous competitions that I think might help with this competition, with key insights from leading solutions.
+
+This post went a bit longer that I expected, have shared a more concise key takeaways in another. A shorter and more precise findings here
+
+
+
+Predict Podcast Listening Time (Playground Series S5E4)
+
+Competition Link  
+Regression task to predict how many minutes listeners spend on each podcast episode.
+
+
+
+
+@cdeotte (opens in a new tab)"&gt;1st Place – RAPIDS cuML Three‑Level Stack by @cdeotte  
+• Built 73 diverse level‑1 models (LightGBM, XGB, RF, SVR, KNN, linear, MLP) on GPU with RAPIDS; target encoding and heavy feature synthesis supplied ~6 000 columns.  
+• Added auxiliary models trained without Episode_Length_minutes to handle its 12 % missing rate, then let a non‑linear level‑2 XGB decide which sub‑model to trust row‑wise.  
+• Two rounds of chronological pseudo‑labelling and five‑seed bagging for every layer reduced drift when predicting unseen weeks.  
+• Careful fold design (10 × GroupKFold on episode IDs) kept CV within 0.01 RMSE of both public and private boards.  
+• GPU throughput (A100) enabled 11 h total training despite &gt;500 M predictions generated for stacking features.
+
+
+@greysky (opens in a new tab)"&gt;2nd Place – Single LightGBM with Target Encoding by @greysky  
+• Leveraged extensive target and pair encodings; categorical pairs/triples were picked by grid‑search on 30‑fold CV.  
+• Drop‑in polynomial terms and rank‑based binning captured long‑tail effects without inflating cardinality.  
+• Public notebook stressed the value of median aggregation (instead of mean) for noisy TE targets.  
+• Final model used 8 000 leaves, monotone constraints on length‑related columns, and early‑stopping at 4 700 trees.  
+• Achieved top‑tier accuracy with &lt;30 min single‑GPU runtime, demonstrating the ceiling of a well‑tuned “solo” GBDT.
+
+
+@johannesheller (opens in a new tab)"&gt;3rd Place – Forward Feature Selection &amp; Stacking by @johannesheller  
+• Started from 1 300 engineered columns and iteratively kept only additions that improved 10‑fold RMSE ≥ 0.002.  
+• Core stack: CatBoost, LGBM goss, ElasticNet, shallow TabNet; Ridge was used during greedy search to preview ensemble lift.  
+• Final two‑level hill‑climber re‑weighted 42 retained OOF columns for an extra −0.015 RMSE.  
+• Careful seed‑averaging (seven seeds per GBDT) smoothed variance introduced by aggressive max_depth settings (&gt;18).  
+• Notebook details a reusable “feature vault” design that stores every generated column once and joins on demand.
+
+
+@ravi20076 (opens in a new tab)"&gt;4th Place – Lots of Features, Simple Models, Ridge Blend by @ravi20076  
+• Trained 382 compact models (LGBM gbdt/goss, XGB, CatBoost, AutoGluon) on brute‑forced bigram–7‑gram column interactions.  
+• GPU A6000 + 256 GB RAM processed 925‑feature matrices in &lt;15 min per model; deeper trees gradually ceded to shallower ones as feature count rose.  
+• Ridge stack on z‑scored predictions held perfect CV/LB correlation; CV 11.614 → public 11.645 → private 11.542.  
+• Post‑processing rounded every prediction to the nearest true target value, squeezing an extra −0.0005 RMSE.  
+• Discussion quantifies cloud‑GPU spend (~150 USD) and shows why diversity from weaker CatBoost runs still mattered.
+
+
+@optimistix (opens in a new tab)"&gt;5th Place – 100 OOFs, Laziness, and a Few Blunders by @optimistix  
+• Collected &gt;100 out‑of‑fold predictions from LGBM and XGB variants with differing fold counts (10 vs 30) and encoding schemes.  
+• Relied heavily on @greysky’s TE code and @masayakawamata’s selected‑feature notebooks to save GPU quota.  
+• Demonstrated that clipping forecast tails (|pred| &gt; 99.9 pct) avoided disastrous private‑LB jumps (un‑clipped model scored 177 RMSE!).  
+• Ridge beat Lasso and Autogluon stackers when all 100 OOFs were fed, but pruning to 70 models improved robustness.  
+• Post‑mortem lists “lazy” ideas never tried (OpenFE, TabNet, residual modelling) and how each could have nudged the score further.
+
+
+@masaishi (opens in a new tab)"&gt;6th Place – RMSE‑Driven Feature‑Combo Search by @masaishi  
+• Verified three dataset leaks: high‑precision Episode_Length, abnormal Number_of_Ads, and duplicate‑row groups; overwriting them cut 0.02 RMSE.  
+• Generated &gt;200 handcrafted features: cyclical sin/cos for day/time, integer‑fraction splits, sentiment dummies, polynomial degrees up to 3.  
+• Exhaustive RMSE scan over 1‑ to 4‑column combos picked four high‑coverage group‑mean replacements.  
+• Ensemble of five learners (HistGBR, LGBM, XGB, TabNet, SVR) blended via ridge; added TabNet residual fit for rows with &gt;2 missing values.  
+• Full experiment lifecycle tracked in WandB; repo shows modular data‑class + model‑interface pattern enabling 1 000+ automated runs.
+
+
+
+
+Forecast Sticker Sales (Playground Series S5E1)
+
+Competition Link  
+Daily sales forecasting for 2017‑19; evaluation is MAPE.
+
+
+
+
+@georgekoussa (opens in a new tab)"&gt;1st Place – Extended Ratio Decomposition by @georgekoussa&nbsp;|&nbsp;Notebook  
+• Adopted @kdmitrie’s GDP × store × product × DoW × sin‑cos framework then re‑fitted each ratio with SciPy MAPE‑optimised linear models.  
+• Holiday impact added through 10‑day Gaussian windows around each country’s statutory holidays via holidays package.  
+• Normalised GDP per‑capita with (-17 643 + 85.42 × GDP)/365 transform, giving Kenya a bespoke slope to fix under‑prediction.  
+• Derived store, product and country factors by regressing de‑composed residuals on wave features up to 9th harmonic.  
+• Final constant 1.06 multiplier justified by year‑over‑year error plot; rounding to int improved public MAPE but preserved private rank.
+
+
+@cdeotte (opens in a new tab)"&gt;2nd Place – Transformer on Linear‑Residuals by @cdeotte&nbsp;|&nbsp;Public Starter  
+• Base multiplicative linear model captured main ratios; 3‑layer transformer with positional encoding learned residual seasonality.  
+• Autoregressive inference 35 steps ahead; two pseudo‑label rounds (train → +2017/18 → +2019) curtailed error propagation.  
+• Five‑seed median ensemble plus 30‑holiday boolean features lifted public MAPE from 0.0526 to 0.0486.  
+• Explored future‑trend uncertainty: submitted both constant‑1.06 and mild‑linear‑up multipliers, the former winning privately.  
+• Discussion details why stacking (Transformer learning residuals) beats simple averaging and how CV gap shrank to 0.001.
+
+
+@kdmitrie (opens in a new tab)"&gt;3rd Place – Joint Parameter Fit via SciPy by @kdmitrie&nbsp;|&nbsp;Notebook  
+• Represented sales as one multiplicative formula with eight factors: GDP, store, product, weekday, sin‑cos, country, country‑day, trend.  
+• All coefficients solved simultaneously with scipy.optimize.minimize under MAPE loss, avoiding sequential bias.  
+• Gaussian‑shift holiday response (+4.5 days, σ² = 8) convolved across 10‑day windows; holiday‑observed vs actual treated separately.  
+• FFT illustrated pitfalls of naive denoising; regression on Fourier basis chosen to avoid boundary artifacts.  
+• Found that dropping 2010‑12 Kenya rows helped public LB but hurt private; final two submissions differed only by this choice.
+
+
+@stopwhispering (opens in a new tab)"&gt;4th Place – Sequential Ratio Model with FFT Smoothing by @stopwhispering  
+• Derived year‑totals from ensemble average, then sequentially estimated country→store→product→DoY ratios.  
+• FFT smoothed product‑share curves separately for even/odd years to capture two‑year periodicity.  
+• Compared flat vs linear‑trend extrapolation for 2017‑19; constant variant proved superior privately.  
+• Discussion explains why discrepancy in GDP‑based country ratios required post‑hoc linear regression correction, especially for Kenya.  
+• Implementation in pure Pandas runs &lt;10 min CPU, emphasising interpretability over heavy modelling.
+
+
+@cabaxiom (opens in a new tab)"&gt;5th Place – Trend‑vs‑Constant Probe Ensemble by @cabaxiom  
+• Same decomposition as @kdmitrie but produced two prediction sets: one following 2016‑trend slope, one flat.  
+• Submitted both; constant path scored far better privately, illustrating sensitivity of MAPE to future‑year scaling.  
+• Holiday deltas estimated from median of previous seasonally‑adjusted years, including three Kenyan holidays missing from library.  
+• Employed groupby‑median smoothing to tame noise before multiplying holiday factors, improving public LB by 0.002.  
+• Notebook lists further unexplored artefacts (e.g., leap‑day handling) that could explain residual 0.0008 gap to podium.
+
+
+@pascalterpstra (opens in a new tab)"&gt;6th Place – Triple‑Model Blend by @pascalterpstra  
+• Model‑1: @kdmitrie multiplicative ratios tweaked with 1.02 Kenya‑only and 1.06 global multipliers.  
+• Model‑2: Separate regressions for daily fraction of annual total, plus store‑/product‑fraction regressors on sin/cos features.  
+• Model‑3: Transformer from @cdeotte public starter; supplied as an additional OOF column for ridge.  
+• Ridge blend of 81 OOFs chosen; later test with Autogluon stacker (missed deadline) would have improved to 0.0462.  
+• Feature importance analysis shows OpenFE‑generated 140 columns shaved 0.005 MAPE off every GBDT baseline.
+
+
+
+
+Backpack Weight Prediction (Playground Series S5E2)
+
+Competition Link  
+Estimate a hiker’s packed‑weight from synthetic gear characteristics.
+
+
+
+
+@cdeotte (opens in a new tab)"&gt;1st Place – Single‑Model 500‑Feature XGBoost by @cdeotte  
+• Generated 1 600+ candidate features with RAPIDS cuDF; retained 500 that consistently improved 20‑fold CV, yet a 138‑feature T4‑GPU variant was still leaderboard‑winning.  
+• For every categorical (and numerical treated as categorical) built seven encodings; crafted 28 n‑gram combos, NaN base‑2 hash column, weight‑capacity digit splits and rounding bins.  
+• Introduced novel groupby‑histogram counts and multi‑quantile aggregations; merged original student‑bag prices as MSRP proxy, each shaving 0.005 RMSE.  
+• Trained 20 000‑tree GPU‑hist XGB (lr 0.001, depth 10) on A100 80 GB in six hours; only colsample_bynode reduced as feature pool grew.  
+• Integer rounding post‑process trimmed leaderboard score by 0.0003 while keeping CV/private gap below 0.001.
+
+
+@ravi20076 (opens in a new tab)"&gt;2nd Place – Century‑Scale Ensemble with Ridge Stack by @ravi20076  
+• Engineered 1 600+ features across nine datasets (Polars + RAPIDS), including 28 categorical n‑grams and CuML target encodings (mean/median/count/nunique).  
+• Trained 65 boosted‑tree bases (21 XGB, 20 LGBM, 21 CatBoost, 3 autoencoder‑enhanced) under 20‑fold CV; single‑model scores ranged 38.64–38.76 RMSE.  
+• Added dense‑NN classifier and supervised autoencoder latent vectors for diversity, then built 35 BayesianRidge meta‑learners on Colab TPUs.  
+• Final three‑layer stack blended 100 components through ridge, attaining 38.629 RMSE private; integer‑rounded variant served as safer backup.  
+• Write‑up details GPU/TPU scheduling, feature store design and experiments that failed (sample weights, variance TE, leap‑row fixes).
+
+
+@automatylicza (opens in a new tab)"&gt;3rd Place – Autoencoder Features&nbsp;+ Four‑Tree Stack by @automatylicza  
+• Built supervised autoencoder whose 32‑dim latent vector (trained to reconstruct weight and predict price) fed downstream regressors.  
+• Created distance‑based similarity features between categorical embeddings and combined every category with weight capacity.  
+• CuDF group statistics, multi‑quantile bins and NaN hash indicators enriched tabular signal; external bag‑price dataset supplied orig_price_* stats.  
+• Four base models (LGBM, XGB, XGB‑alt, CatBoost) trained with 10‑fold CV; BayesianRidge stacked OOF predictions.  
+• Small public‑notebook blend nudged private RMSE to 38.64, securing the final podium spot.
+
+
+@optimistix (opens in a new tab)"&gt;5th Place – NoiseStack Needle Hunt by @optimistix  
+• Compiled 25‑model ensemble (CatBoost, LGBM, XGB, AutoGluon) after mining community scripts; Ridge stack chosen to keep LB–CV gap at ~0.2.  
+• Leveraged @cdeotte’s engineered features and @souradippal’s generator code to craft extra capacity‑driven columns without exhausting GPU quota.  
+• Autogluon stack hit CV 38.59 but showed 0.26 gap on LB, signalling overfit; fallback Ridge ensemble CV 38.64 yielded 38.84 public / 38.63 private.  
+• Late weighted blend with @mikhailnaumov’s public notebook propelled rank from 18 → 5, illustrating high‑risk public‑board stacking tactics.  
+• Reflection section discusses motivation cycles, resource constraints, and the need to cherry‑pick community ideas instead of blindly stacking.
+
+
+
+
+Predict Insurance Premium Amount (Playground Series S4E12)
+
+Competition Link  
+Regression task with RMSLE metric; predict synthetic insurance premiums.
+
+
+
+
+@cdeotte (opens in a new tab)"&gt;1st Place – Single 611‑Feature XGBoost by @cdeotte&nbsp;|&nbsp;Notebook  
+• Searched 145 k column combinations (2‑ to 6‑way) with GPU cuDF, retaining 170 that consistently improved 20‑fold CV.  
+• For every categorical (original + combos) created seven encodings: label, CE and five TEs (mean/median/min/max/nunique).  
+• Treated five numerical columns as categoricals for TE, then re‑attached original numeric versions.  
+• Full model: 20 000 XGB trees (lr 0.001, depth 10, subsample 0.8); gradient hist GPU algorithm finished in 6 h (A100).  
+• Public/private gap &lt; 0.001 thanks to 10‑fold CV × 10‑fold TE and ridge‑like L2 regularisation.
+
+
+@noodl35 (opens in a new tab)"&gt;2nd Place – 118 OOF AutoML Ensemble by @noodl35  
+• Generated OOFs with AutoGluon, H2O, FLAML, LAMA plus custom Cat/LGBM/XGB; stacked with Lasso, Ridge and TabNet.  
+• FLAML folds run in parallel notebooks to respect Kaggle‑GPU limits; yielded five strong ExtraTrees variants.  
+• Added class‑probability CatBoost OOF predicting target‑quantile buckets; improved ensemble by ~0.002 RMSLE.  
+• OpenFE features donated by community shaved another 0.0015; final set 170 engineered + backpacker core.  
+• Hill‑climb pruned to 81 OOFs before Lasso; private CV 1.027 → private LB 1.0258, validating robust weighting.
+
+
+@optimistix (opens in a new tab)"&gt;9th Place – “With a Little Help from my Kaggle Friends” by @optimistix  
+• Adapted top public notebooks to save their OOFs; blended 100+ predictions with Ridge, Lasso and Autogluon.  
+• Switched to Lasso for final submission after noticing past comps where Lasso beat Ridge privately despite worse public.  
+• Added NAN‑count feature and health‑score binning per @cdeotte/@swagician posts; each cut CV by ~0.002.  
+• Autogluon meta‑stack (missed deadline) would have improved to 1.025 RMSLE; post details laptop resource juggling.  
+• Season retrospective lists eight top‑10 finishes and lessons on overfitting when public/private splits diverge.
+
+
+
+
+Regression of Used Car Prices (Playground Series S4E9)
+
+Competition Link  
+Predict synthetic used‑car prices; evaluation metric is RMSE.
+
+
+
+
+@martinapreusse (opens in a new tab)"&gt;1st Place – Stacked Neural Network with OOF Features by @martinapreusse  
+• Began with a classic Ridge blend of 20‑fold GBDTs/SVRs, then switched last‑minute to a fork of Vladimir Demidov’s Keras tabular NN.  
+• Fed the NN four powerful numerical inputs: SVR OOFs, two LGBM OOFs (one high‑bin variant), and CatBoost‑classifier outlier‑probability.  
+• CatBoost classifier produced leak‑free 20‑fold OOFs using median target encoding on categoricals to flag &gt;Q3 + 1.5 IQR outliers.  
+• Additional FastAI (AutoGluon) and original‑dataset rows were used only inside training folds, keeping OOF length unchanged.  
+• NN ensemble CV 72 468 RMSE narrowly beat the Ridge stack (72 300) and scored best on private board, delivering solo gold.
+
+
+@gerlandore (opens in a new tab)"&gt;2nd Place – AutoGluon Weighted Ensemble with Targeted FE by @gerlandore  
+• Simplified transmission into two buckets, tagged luxury brands, extracted cylinders &amp; HP from engine string, and built mileage_per_year.  
+• Created several feature crosses (brand×model, brand×mileage, interior×exterior colour, etc.); rare categories binned via quantile noise flag.  
+• AutoGluon’s weighted‑ensemble (FASTAI + LightGBM + CatBoost) found optimal model mixture; Optuna‑tuned single CatBoost served as fallback.  
+• Augmented training with original used‑car dataset; cross‑checked via 5‑fold CV to avoid public‑LB overfitting.  
+• Last‑day CV 71 980 jumped from public rank 626→2 privately, illustrating benefit of restrained FE plus AutoML.
+
+
+@optimistix (opens in a new tab)"&gt;3rd Place – “Gather, Ridge, Repeat” Ensemble by @optimistix  
+• Assembled 77 OOF files from Team LightAutoML, @roberthatch, @martinapreusse and personal runs; maintained identical fold length by trimming extras.  
+• Ridge regression consistently beat Autogluon, hill‑climb and Lasso ensemblers in CV and private LB; best submission CV 71 808 → private 62 958.  
+• Managed public/private divergence by capping LB‑CV gap at 0.2 and avoiding aggressive weight‑search on public board.  
+• Observed that GPU‑T4 vs CPU Autogluon stacks on same OOF pool could differ by ±0.03 RMSE; chose CPU variant that ranked potential #1 post‑hoc (62 892).  
+• Write‑up emphasises disciplined OOF management, late‑stage resource juggling and lessons from six consecutive top‑10 finishes.
+
+
+@tilii7 (opens in a new tab)"&gt;4th Place – 32‑Model Hill‑Climb Stack by @tilii7  
+• Constructed two diverse 32‑model ensembles: Keras and xLearn factorisation machines, AutoGluon sub‑models, Lasso, CatBoost, RandomForest, ExtraTrees, XGB, LGBM.  
+• Used proper hill‑climbing optimiser with positive/negative weights and verified gains via 5‑fold CV; no “public‑board guessing”.  
+• Added original‑dataset rows only inside training folds; inclusion of AutoGluon‑generated NLP n‑grams gave marginal +20 RMSE benefit.  
+• Declined flashy FE after noting no private‑LB lift; cautions that random weight guessing on public LB (“blending”) is unreliable.  
+• Post lists reproducible scripts for extracting AutoGluon child‑model OOFs and stresses need for common fold splits when mixing sources.
+
+
+@innixma (opens in a new tab)"&gt;5th Place – Day‑1 AutoGluon Zeroshot Stack by @innixma  
+• Submission was literally the first model trained 8 h after launch: AutoGluon 2024 zeroshot portfolio with experimental tweaks.  
+• Hacked numeric label into stratified K‑folds, preventing fold imbalance due to extreme outliers; dropped original features in L2 to rely solely on stack inputs.  
+• Disabled text n‑grams/special features to cut runtime; used new use_orig_features=False flag for cleaner meta‑learning.  
+• Despite mediocre public rank 626 (RMSE 72 221), strong 20‑fold CV predicted private success — ended at 5th (RMSE 62 977).  
+• Post‑mortem attributes public/private mismatch to different outlier density and underscores value of trusting robust CV over leaderboard noise.
+
+
+
+
+ASHRAE – Great Energy Predictor III
+
+Competition Link  
+Multisite time‑series regression to forecast hourly building‑meter energy (electricity, chilled‑water, steam, hot‑water) for &gt;1 000 buildings; metric is RMSLE.
+
+
+
+
+1st Place – Team Isamu &amp; Matt (CatBoost / LGBM / MLP blend)  
+• Aggressively cleaned training data: removed three anomaly types (long constant streaks, bidirectional spikes, visually spotted metre glitches) using site‑level cross‑checks, then linearly interpolated missing temperatures.  
+• Corrected local‑weather time‑zone mismatch and converted meter_reading with log1p, plus extra models that standardised by square_feet for diversity.  
+• Feature set remained compact yet rich: raw building &amp; weather vars, cyclic hour/day encodings, holiday flags, Savitzky–Golay smoothed temps ± derivatives, categorical interactions and Bayesian target encoding.  
+• Trained separate CatBoost, LightGBM and MLP models per (meter, site) and per (building, meter), using rolling‑month validation variants to harvest diverse OOF predictions.  
+• Final ensemble used Optuna‑tuned generalised weighted mean on log‑space predictions and averaged four top submissions (added three leak‑free public kernels) – yielding the gold‑medal 1.08 RMSLE on private board.
+
+
+2nd Place – Team cHaOs (rohanrao et al.)  
+• Manual visual sweep dropped low‑value noise and vertical zero streaks for every one of the 1 449 buildings – biggest single boost.  
+• Deliberately limited engineered features (&lt; 30) to favour stability; instead trained dozens of models per site × meter, per building × meter and global – XGB, LGBM, CatBoost plus site‑wise FFNN (only for electricity).  
+• Post‑processing: multiplied predictions by 0.80–0.85 (chosen via leak hold‑out &amp; CV) to correct inflated mean after noise‑row removal; lifted RMSLE by ≈ 0.01.  
+• Ensemble weighting: ≈ 30 % XGB bag, 50 % LGBM bag, 15–20 % CatBoost, 5 % FFNN on meter 0; weights hand‑tuned with leak and public board feedback.  
+• Validation combined 4–5‑fold month‑block CV with leak rows; robust to public/private split, finishing at 1.09 RMSLE and $7 000 prize.
+
+
+3rd Place – chabir (Simple Averaging + LightGBM Meta‑stack)  
+• Focused on advanced cleaning: script eliminated simultaneous zero readings across all meters within a site‑timestamp, dramatically reducing spurious “vertical lines”.  
+• Generated a variety of models (CNN, LightGBM, CatBoost) on multiple cleaned/feature variants; feature ideas included lag temperatures, count encodings and a solar‑radiation proxy computed from latitude, DOY and hour.  
+• As CV schemes proved unstable, retained &gt;30 diverse prediction files and averaged those with Pearson correlation filtering; simple mean already ranked sixth.  
+• Built second‑stage LightGBM using these predictions (+ meter id) as features, trained solely on leaked rows, to down‑weight weak models – public LB dropped but private score jumped to bronze.  
+• Lessons stressed that rigorous anomaly removal outweighed sophisticated feature engineering, and that leak‑informed stacking could rescue private‑board rank when public signal was noisy.
+
+
+
+
+Santander Value Prediction Challenge
+
+Competition Link  
+Predict the monetary value of each customer transaction from fully anonymised numeric features; evaluated by RMSLE.
+
+
+
+
+1st Place – lukeeee &amp; gilberto (Leak‑Driven Time‑Series Reconstruction)  
+• Discovered 113 hidden 40‑column “feature sets” whose patterns repeat across rows; used them to align ~3 900 train and ~7 900 test rows into ordered client‑wise time‑series groups.  
+• Implemented strict pair‑matching (lag ≥ 2) to label rows with leaked targets, then rebuilt complete sequences (lag 1) and hand‑corrected 9 mis‑aligned leaks, lifting private RMSLE by ≈ 0.016.  
+• Generated many‑to‑many RNN inputs: for each sequence stored position, group size, leak flag and engineered size/leak ratios—fed to simple LSTM that predicted missing targets inside a group.  
+• Brute‑forced additional feature‑set discovery: iteratively extended column groups ensuring exact equality on all series; accelerated with heuristics (minimum non‑zero, sequence length ≥ 5).  
+• Noted dataset quirks: (i) six‑column mean relationships between feature sets, (ii) censorship of targets outside 30 k–40 M, (iii) public &amp; private boards scored only ~9 k shared test rows.
+
+
+2nd Place – adilism (LightGBM/XGB/Random‑Forest on Sequence Aggregates)  
+• Re‑created row/column orders via iterative matching but kept only long sequences (&gt; 5) at each step to minimise false positives; yielded cleaner client IDs for CV.  
+• Custom 5‑fold CV ensured every client’s full sequence stayed within a single fold, reducing leakage between train/valid splits; averaged several random seeds to tame fold‑size variance.  
+• Feature space: ~3 500 aggregations across all 96 detected sequences and their trailing 7/14/21/28‑day segments (non‑zero mean/max, exp‑smoothed means, counts, lags). Selected top ~ 1 000 by importance.  
+• Added test leaks to training (data augmentation); small CV gain though effect on private LB unclear due to two‑decimal rounding.  
+• Final ensemble blended LightGBM, XGBoost and RandomForest on the reduced feature set; weighted average out‑performed sophisticated architectures and secured silver ($15 k).
+
+
+3rd Place – ilyenkov (Massive GBM Bag with Sequence‑Level Features)  
+• Identified 110 reliable 40‑column groups (from possible 125) plus 97‑group subset; trained separate LightGBM and XGBoost models on each set as well as on sums of top groups for diversity.  
+• Engineered statistics per group (log‑mean, log‑median, sums, std, kurtosis, non‑zero counts) and global row features; concatenated three most important groups into a “super‑group” and repeated stats.  
+• Leveraged 7 9 5 4 test leaks (lags 35–37) as additional training rows; validated their correctness (≈ 99.8 %) before augmentation.  
+• Applied GBM importance‑based feature selection, 4‑fold CV, then blended 23 models (majority LightGBM) with iterative weight tuning on combined OOF + leak predictions.  
+• Observed “six‑property” mean relations among feature sets and hypothesised that only rows obeying these linear constraints were scored—a clue explaining public/private board behaviour.
+
+
+
+
+Happy Kaggling.!
+
+Comments:
+├─ Diganta (2025-05-18 08:17:28.967000) [+7]
+│  That's a nearly exhaustive list of resources! Thanks a lot for sharing @younusmohamed !
+├─ gowtham-dd (2025-05-16 07:48:48.203000) [+5]
+│  🔑 General Takeaways from Top Solutions
+│  
+│  
+│  
+│  Feature Engineering is King
+│  Many solutions engineered thousands of columns: pairwise encodings, polynomial terms, n-gram features, sin-cos for cyclical pat...
+  ├─ Younus_Mohamed (2025-05-16 08:43:15.213000) [+2]
+  │  Really nice observations dear @gowthamdd
+├─ Karishma Battina (2025-05-09 02:14:18.210000) [+6]
+│  Thanks for summarizing everything in this single post. Very helpful.
+├─ Debshata Choudhury (2025-05-08 05:13:48.963000) [+6]
+│  Kudos to the author for this excellent compilation—an incredibly valuable learning resource for anyone diving into this competition!
+├─ gowtham-dd (2025-05-07 17:56:11.020000) [+6]
+│  This is so good and thx for ur work
+├─ Aryaman Vaishya (2025-05-06 19:36:32.117000) [+6]
+│  Honesty one of the best posts, so much easier to understand what top solutions involved as it is impossible to give time to understand each at a time. Thank you. Also would like to know how did you...
+  ├─ Younus_Mohamed (2025-05-07 03:55:03.823000) [+7]
+  │  Thank you @aryamanvaishya It took me like 3-4 days working 4-6 hours on this post. I searched for the competitions that resemble this competition from Kaggle meta data dataset and from the search o...
+    ├─ statify (2025-05-10 08:48:55.800000) [+3]
+    │  Thanks a lot!
+├─ Antony (2025-05-06 18:32:33.277000) [+6]
+│  This is so good🔥, it easily explains solutions that might be hard to understand.
+├─ Mamdouh Azizieh (2025-05-28 09:25:08.573000) [+3]
+│  This is incredibly comprehensive and informative. Much appreciated, thanks!
+├─ abdelmalek eladjelet (2025-05-24 00:59:05.960000) [+3]
+│  Great insights
+├─ Panagiota Moraiti (2025-05-18 13:09:02.223000) [+3]
+│  Great work in gathering all this valuable information, thank you very much!
+├─ Anab Farooq (2025-05-24 07:12:23.507000) [+4]
+│  Well detailed and quite insightful. Thank you very much!
+├─ YeRongYu (2025-05-15 02:45:42.333000) [+3]
+│  very good idea
+├─ Sarah Arshad (2025-05-10 10:33:50.923000) [+4]
+│  this is soo helpful….thanks for summarizing everything in one frame
+├─ Mohammad Bahar (2025-05-13 13:51:14.500000) [+2]
+│  It's really detailed and well strutered, Thanks
+├─ WizardSarthak@2007 (2025-05-07 21:16:44.050000) [+4]
+│  Thanks for these wonderful insights
+├─ Noe Rouizem (2025-05-13 22:46:57.063000) [+2]
+│  This was very helpful, thank you!
+├─ Temirlan Tolepbek (2025-05-13 08:56:29.363000) [+2]
+│  this is so helpfull thanks for sharing!
+├─ [deleted] (2025-05-13 13:50:20.650000) [+0]
+│  [deleted]

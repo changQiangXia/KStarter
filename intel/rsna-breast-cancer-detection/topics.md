@@ -1,0 +1,122 @@
+# rsna-breast-cancer-detection 讨论区（按票数排序，共 120 条）
+
+- [A Brief Intro to Mammography](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369262) — 253 票 / 35 评论 / 2022-11-29 
+- [[placeholder] LB 0.58 @ 3hr : my experimental results](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370333) — 199 票 / 253 评论 / 2022-12-04 
+- [Image Classification Tips & Tricks](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372567) — 188 票 / 22 评论 / 2022-12-16 
+- [1st place solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/392449) — 178 票 / 51 评论 / 2023-06-02 **write-up?**
+- [🏆 Winning solutions from previous RSNA challenges](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369103) — 120 票 / 12 评论 / 2022-11-29 **write-up?**
+- [📸 DICOM files converted to PNGs [314.72 GB -> 921 MB] ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369282) — 118 票 / 34 评论 / 2022-11-29 
+- [6th Place Solution: Multi-view Multi-lateral Multi-stage Approach ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390974) — 101 票 / 33 评论 / 2023-03-12 **write-up?**
+- [exploit the metric "bug"](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369886) — 95 票 / 10 评论 / 2022-12-01 
+- [Marking the first month - Summary of key discussions](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/374248) — 95 票 / 2 评论 / 2022-12-26 
+- [⭐️ Remek & Andrij - #9 solution ⭐️](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390966) — 89 票 / 36 评论 / 2023-02-28 **write-up?**
+- [💡 6 Computer Vision tricks for faster training and better models 🚀🚀🚀](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369155) — 85 票 / 11 评论 / 2022-11-29 
+- [17x dicom decode speedup on GPU for jpeg2000 encodings](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371534) — 85 票 / 21 评论 / 2022-12-10 
+- [4th place solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391208) — 84 票 / 19 评论 / 2023-03-01 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391676) — 79 票 / 25 评论 / 2023-03-12 **write-up?**
+- [[LB 0.47] MONAI training and inference pipeline](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/376879) — 71 票 / 61 评论 / 2023-01-09 
+- [⭐️ ROI extracted dataset - resolution 768pix and 1024pix⭐️ -> 2023.01.14 = 1280 (windowing)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369754) — 70 票 / 42 评论 / 2022-12-01 **write-up?**
+- [newest DALI nighly includes decoding for lossless format](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/384231) — 70 票 / 19 评论 / 2023-02-07 
+- [share you top models validation metrics performance](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/378521) — 69 票 / 57 评论 / 2023-01-16 
+- [Some LB probing results to share](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370341) — 67 票 / 33 评论 / 2022-12-04 
+- [thoughts on reaching LB 0.42](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371805) — 65 票 / 25 评论 / 2022-12-12 
+- [Competition Metric in Tensorflow, PyTorch & Numpy](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369267) — 58 票 / 6 评论 / 2022-11-29 
+- [🤓Everything you wanted to know about mammography: A radiologist’s guide ✔️](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/374288) — 58 票 / 4 评论 / 2022-12-26 
+- [Fast dicom export and processing (1.6-2x faster) 💪💪 ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371033) — 51 票 / 29 评论 / 2022-12-07 
+- [More PNG/JPG Datasets to Get Started](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369341) — 48 票 / 7 评论 / 2022-11-29 
+- [Life is hard as a kaggler](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371267) — 48 票 / 14 评论 / 2022-12-09 
+- [9 techniques to improve the stability of training and why they matter for this competition](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370587) — 47 票 / 6 评论 / 2022-12-05 
+- [Some Remarks & Achieving LB 0.24  (Updated)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369769) — 47 票 / 9 评论 / 2022-12-01 
+- [External Dataset:  CBIS-DDSM](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369321) — 46 票 / 2 评论 / 2022-11-29 
+- [Recommend: Increase your RAM to 330GB with 96 CPU cores on kaggle.](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/376630) — 41 票 / 21 评论 / 2023-01-07 
+- [Race for the prizes](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/382679) — 38 票 / 11 评论 / 2023-01-31 
+- [3rd Place Solution (Breast level models)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391779) — 37 票 / 9 评论 / 2023-03-02 **write-up?**
+- [Faster Dicom Processing on GPU](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371981) — 37 票 / 10 评论 / 2022-12-13 
+- [Classfication to Object Detection [GradCAM -> BBox]](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372186) — 36 票 / 21 评论 / 2022-12-14 
+- [Beware of cases like these!](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/388735) — 36 票 / 17 评论 / 2023-02-19 
+- [1374 DDSM mammography positive cases ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/377790) — 35 票 / 18 评论 / 2023-01-12 
+- [This competition looks really good!](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369099) — 35 票 / 10 评论 / 2022-11-28 
+- [1.4x-1.6x inference speedup with torch_tensorrt ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/375881) — 35 票 / 23 评论 / 2023-01-03 
+- [[LB: 0.37] Tensorflow Baseline with TPU-1VM](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370689) — 34 票 / 23 评论 / 2022-12-05 
+- [VinDr-Mammo: 337.8 GB 5000 patients with full-field digital mammography and yolov5 models trained on it](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/373211) — 33 票 / 16 评论 / 2022-12-20 
+- [What is the rationale for this metric above AUC?](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372175) — 32 票 / 32 评论 / 2022-12-14 
+- [7th Solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391125) — 32 票 / 26 评论 / 2023-03-08 **write-up?**
+- [Follow-up Analysis of Generalizability](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/389479) — 31 票 / 12 评论 / 2023-02-21 
+- [Part 2 - Breast Density - Everything you wanted to know about mammography: A radiologist’s guide](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/374946) — 31 票 / 18 评论 / 2022-12-29 
+- [Easy load the image with nvJPEG2000(5x faster)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372275) — 31 票 / 17 评论 / 2022-12-15 
+- [3rd Place Solution (Part of data processing and Image-level model)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391725) — 31 票 / 3 评论 / 2023-03-10 **write-up?**
+- [State-of-the-art papers of 2022](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/375169) — 30 票 / 6 评论 / 2022-12-30 
+- [There's something about efficientnets](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/373957) — 30 票 / 22 评论 / 2022-12-24 
+- [need some advice from doctors or radiologists ...](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/375267) — 29 票 / 28 评论 / 2022-12-31 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369126) — 28 票 / 250 评论 / 2022-11-29 
+- [26th solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391022) — 28 票 / 13 评论 / 2023-02-28 **write-up?**
+- [[Chai Time] Panel with Top Kagglers on Best Practises 🥇](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/379784) — 28 票 / 11 评论 / 2023-01-21 
+- [10th Place Solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391378) — 28 票 / 10 评论 / 2023-03-05 **write-up?**
+- [RSNA SMBCD CV vs LB](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371185) — 27 票 / 28 评论 / 2022-12-08 
+- [Commemorate my first medal！](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390968) — 26 票 / 7 评论 / 2023-02-28 
+- [3 resources to get started with Computer Vision in this competition 🚀🚀🚀](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369706) — 26 票 / 0 评论 / 2022-12-01 
+- [BIRADS Score](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369135) — 25 票 / 12 评论 / 2022-11-29 
+- [8th place Solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391041) — 25 票 / 8 评论 / 2023-03-05 **write-up?**
+- [how long does it take to convert dicom to png? ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369684) — 25 票 / 37 评论 / 2022-12-01 
+- [⭐️⭐️ Breast Cancer - ROI (brest) extractor ⭐️⭐️](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369749) — 24 票 / 7 评论 / 2022-12-01 
+- [[Chai Time] Relevant Top Solutions livestreams](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/376769) — 24 票 / 5 评论 / 2023-01-08 **write-up?**
+- [16th place solution : segmentation & meta-classifier](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391133) — 24 票 / 16 评论 / 2023-02-28 **write-up?**
+- [A tiny improvement of WeightedRandomSampler](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/376472) — 24 票 / 15 评论 / 2023-01-06 
+- [Congratulations to the Vladimir Slaykovskiy](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/375436) — 23 票 / 10 评论 / 2023-01-01 
+- [RSNA Dataset Breakdown, Compiled list of External Datasets](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369364) — 23 票 / 4 评论 / 2022-11-30 
+- [5th place solution ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391979) — 23 票 / 11 评论 / 2023-04-19 **write-up?**
+- [The way how you resize your images impacts the results!](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371717) — 23 票 / 6 评论 / 2022-12-11 
+- [There are two types of Dicom images in dataset.](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370045) — 22 票 / 6 评论 / 2022-12-02 
+- [free coursera ourse for domain knowledge : Artificial Intelligence for Breast Cancer Detection](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372262) — 22 票 / 9 评论 / 2022-12-15 
+- [Congratulations on a successful competition!](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370376) — 22 票 / 7 评论 / 2022-12-04 
+- [Any discussion about the final shake and... memes?](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390794) — 22 票 / 45 评论 / 2023-02-27 
+- [18th place solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390975) — 22 票 / 4 评论 / 2023-02-28 **write-up?**
+- [Lion Optimizer](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/388258) — 21 票 / 5 评论 / 2023-02-16 
+- [📸 Over 56GB of processed data, 5 different methods 🥳](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371268) — 21 票 / 6 评论 / 2022-12-09 
+- [Scores update to reflect metric patch](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369921) — 21 票 / 0 评论 / 2022-12-02 
+- [The score gap is huge ! (CV: 0.395 LB: 0.56)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/382198) — 20 票 / 78 评论 / 2023-01-30 
+- [[LB:0.27] Pytorch+EffNetV2 some working ideas](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370498) — 20 票 / 5 评论 / 2022-12-04 
+- [[relax and have fun] quizz "how would a data scientist make a marriage proposal?"](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/383630) — 20 票 / 16 评论 / 2023-02-04 
+- [Data Explorer for EDA and coreset selection](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/383466) — 20 票 / 21 评论 / 2023-02-03 
+- [Yet another working backbone](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/377654) — 19 票 / 51 评论 / 2023-01-12 
+- [[A funny story]The shake is not that big](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/390958) — 19 票 / 11 评论 / 2023-02-28 
+- [Artifacts or Anomalies (Finding Hard Examples)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370639) — 19 票 / 9 评论 / 2022-12-05 
+- [Weird Mammograms in the Dataset](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/373208) — 19 票 / 7 评论 / 2022-12-20 
+- [Recommend Loss function for F1_Score Task. It's mainly Medical Image Analysis.](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369704) — 19 票 / 2 评论 / 2022-12-01 
+- [Freezing Layers to Avoid OOM (1024px)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372550) — 19 票 / 6 评论 / 2022-12-16 
+- [66th (LB 10th) solution: k-means for background noise reduction ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391088) — 18 票 / 4 评论 / 2023-02-28 **write-up?**
+- [[Lessons] Implement DALI in the style of Pytorch ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391059) — 18 票 / 7 评论 / 2023-02-28 
+- [31st place solution ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391286) — 18 票 / 2 评论 / 2023-03-01 **write-up?**
+- [ConvNeXt-V2 : Arrival of new SOTA CNN architectures](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/375791) — 18 票 / 7 评论 / 2023-01-03 
+- [What's Best loss function in Breast Cancer Detection Task? [personal opinion]](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369400) — 18 票 / 5 评论 / 2022-11-30 
+- [Why use "windowing" on mammography images?](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369815) — 18 票 / 7 评论 / 2022-12-01 
+- [Why is External Data allowed?](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/379133) — 18 票 / 16 评论 / 2023-01-18 
+- [RSNA BCD 1024x512 Cropped + Windowing](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/379061) — 17 票 / 3 评论 / 2023-01-17 
+- [Don’t share your solutions to suspicious persons! (RSNA)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/382411) — 17 票 / 0 评论 / 2023-01-30 **write-up?**
+- [Training with size 512 vs 1024 experience](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372592) — 17 票 / 4 评论 / 2022-12-16 
+- [mmclassification benchmark (LB=0.20)](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370508) — 17 票 / 3 评论 / 2022-12-04 
+- [[PyTorch] Focal Loss using BCEWithLogitsLoss](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372054) — 16 票 / 2 评论 / 2022-12-13 
+- [19th Place Solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391341) — 16 票 / 0 评论 / 2023-03-01 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369125) — 15 票 / 25 评论 / 2022-11-29 
+- [Augmentation techniques  from top solutions for  Medical Imaging comps](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/376237) — 15 票 / 1 评论 / 2023-01-05 **write-up?**
+- [playground code for loss and imabalance data](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372628) — 15 票 / 1 评论 / 2022-12-17 
+- [ Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391127) — 15 票 / 3 评论 / 2023-02-28 
+- [ROI Extraction for breast using OpenCV - How to crop images? 💻 ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369799) — 15 票 / 4 评论 / 2022-12-01 
+- [bug in the metric?](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369902) — 15 票 / 2 评论 / 2022-12-01 
+- [22th place solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391398) — 15 票 / 5 评论 / 2023-03-01 **write-up?**
+- [Cropped datasets](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370436) — 15 票 / 2 评论 / 2022-12-04 
+- [How to Handle Class Imbalance in Computer Vision](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371020) — 14 票 / 7 评论 / 2022-12-07 
+- [DicomSDL & VOILUTFunction Sigmoid](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/377208) — 14 票 / 5 评论 / 2023-01-10 
+- [how to handle benign cases of external data ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/372910) — 14 票 / 10 评论 / 2022-12-18 
+- [non public data and kaggle product idea](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/379084) — 14 票 / 0 评论 / 2023-01-18 
+- [Adjutant resources- breast cancer Kaggle notebooks](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369188) — 14 票 / 5 评论 / 2022-11-29 
+- [[FR Team] 20th place solution](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391263) — 14 票 / 7 评论 / 2023-03-01 **write-up?**
+- [📊 EDA + training a fast.ai model + submission 🚀](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369109) — 13 票 / 3 评论 / 2022-11-29 
+- [We survived the shakeup](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/391132) — 13 票 / 1 评论 / 2023-02-28 
+- [Three extra public datasets you might find useful](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/373961) — 13 票 / 5 评论 / 2022-12-24 
+- [Mirai - Mammography-based model for breast cancer risk](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369660) — 12 票 / 0 评论 / 2022-11-30 
+- [[Solved] How to submit, what is wrong ](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/370156) — 12 票 / 12 评论 / 2022-12-03 
+- [ROI extraction - yolo training and annotations](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/371630) — 12 票 / 0 评论 / 2022-12-11 
+- [Use self-supervision for training on unlabeled external datasets](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/374259) — 12 票 / 2 评论 / 2022-12-26 
+- [📓 🌟 Useful Resources - Breast Cancer Detection 🌟 📓](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369485) — 12 票 / 4 评论 / 2022-11-30 
+- [Mammographic views](https://www.kaggle.com/competitions/rsna-breast-cancer-detection/discussion/369264) — 12 票 / 4 评论 / 2022-11-29 

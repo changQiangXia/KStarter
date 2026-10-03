@@ -1,0 +1,82 @@
+# playground-series-s5e3 讨论区（按票数排序，共 80 条）
+
+- [2nd Place - GBDT + NN + SVR + Original Data](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571176) — 160 票 / 97 评论 / 2025-04-03 **write-up?**
+- [Linear SVC with Feature Engineered Non-Linear Added](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568268) — 58 票 / 38 评论 / 2025-03-14 
+- [Key learnings from initial public and some private work](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565847) — 48 票 / 6 评论 / 2025-03-02 
+- [XGBoost Starter Notebook - LB 0.935 - Wow!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568425) — 42 票 / 21 评论 / 2025-03-15 
+- [Time Series Data with Some Mislabeled Days ](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565634) — 41 票 / 21 评论 / 2025-03-01 
+- [A friendly reminder - the public leaderboard is just 146 rows!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568465) — 41 票 / 40 评论 / 2025-03-16 
+- [Original dataset is Hong Kong data from 2015 and 2016](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566908) — 38 票 / 11 评论 / 2025-03-07 
+- [Trust Your CV Score - Pick Good Final Submissions!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570819) — 37 票 / 32 评论 / 2025-03-30 
+- [10 submissions achieved AUC=1.0: What can we learn from it?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568718) — 34 票 / 22 评论 / 2025-03-17 
+- [Hitchhiker's Guide to LB Probing (AUC edition)](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568865) — 30 票 / 12 评论 / 2025-03-18 
+- [Rank 102 approach - simplicity is key!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571011) — 27 票 / 6 评论 / 2025-04-01 
+- [Time Series competition or not? Get Started](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565548) — 25 票 / 7 评论 / 2025-03-01 
+- [18th place solution: single xgboost with custom AUC loss](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571021) — 23 票 / 19 评论 / 2025-04-01 **write-up?**
+- [LB 0.88549](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565753) — 22 票 / 9 评论 / 2025-03-02 
+- [RAPIDS KNN Starter Notebook - LB 0.961 - Wow!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568455) — 22 票 / 8 评论 / 2025-03-16 
+- [TabPFN KO's default GBDT models in this competition](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565585) — 21 票 / 7 评论 / 2025-03-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565540) — 20 票 / 13 评论 / 2025-03-01 
+- [How to find out your public leaderboard (LB) score without submitting](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/569771) — 20 票 / 16 评论 / 2025-03-24 
+- [Some cloud values have better predictive accuracy](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566054) — 19 票 / 6 评论 / 2025-03-03 
+- [Submit probabilities, not class labels](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/569765) — 19 票 / 19 评论 / 2025-03-24 
+- [Two XGBoost models + rainfall fraction per group](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571216) — 17 票 / 1 评论 / 2025-04-02 
+- [Is this the most popular Playground episode?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570932) — 17 票 / 3 评论 / 2025-03-31 
+- [Looks like there are 3 clusters](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567041) — 14 票 / 10 评论 / 2025-03-08 
+- [Confirmed - public LB contains the first 146/ 147 rows of the test data!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565710) — 14 票 / 19 评论 / 2025-03-01 
+- [A blunder in selecting the final two submissions - a potential #12 turned into #363](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571012) — 14 票 / 8 评论 / 2025-04-01 
+- [Viewing the grand churn!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571013) — 14 票 / 7 评论 / 2025-04-01 
+- [RANK 8 approach [and a probable RANK 1 as well !!!]](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571026) — 14 票 / 9 评论 / 2025-04-01 
+- [Awesome past Kaggle Time Series Competitions, Tutorial Series, Papers and other References.](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565620) — 13 票 / 0 评论 / 2025-03-01 
+- [My Approach: LSTM with Meteorological Feature Engineering](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568337) — 12 票 / 10 评论 / 2025-03-15 
+- [37th place solution - TabPFN with only comp. data and basic FE.](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571139) — 12 票 / 3 评论 / 2025-04-01 **write-up?**
+- [Time Series Plots of Weather Features](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565592) — 12 票 / 8 评论 / 2025-03-01 
+- [Non-continuous values in day columns](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565573) — 11 票 / 1 评论 / 2025-03-01 
+- [super LB,0.94797](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567964) — 11 票 / 9 评论 / 2025-03-13 
+- [What is the rationale of using purged time series split here?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567809) — 10 票 / 7 评论 / 2025-03-12 
+- [Onboarding materials, references and starter resources](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565541) — 10 票 / 1 评论 / 2025-03-01 
+- [About PairwiseLoss](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/569365) — 10 票 / 10 评论 / 2025-03-21 
+- [How to deal with small datasets?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568483) — 10 票 / 8 评论 / 2025-03-16 
+- [New Feature can make a difference](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565649) — 10 票 / 5 评论 / 2025-03-01 
+- [LB score 0.87101 by 4 feature engineering steps and with a simple Logistic regression model](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568647) — 10 票 / 2 评论 / 2025-03-17 
+- [PS-S5E3 - Rainfall | Ensemble of solutions - full archive submissions](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571015) — 10 票 / 0 评论 / 2025-04-01 **write-up?**
+- [Rank 34 - Optimal Binning](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571052) — 10 票 / 3 评论 / 2025-04-01 
+- [How people get 1 accurracy. Like seriously. It has to be overfit right](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568443) — 9 票 / 8 评论 / 2025-03-15 
+- [Best Single Model](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568582) — 9 票 / 31 评论 / 2025-03-16 
+- [A few approachable tabular competitions for consideration](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570750) — 9 票 / 5 评论 / 2025-03-30 
+- [LB 0.8769 with Only 4 Features – How to Improve Further?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568112) — 9 票 / 6 评论 / 2025-03-13 
+- [54th solution: Feature engineering and selection](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571133) — 8 票 / 0 评论 / 2025-04-01 **write-up?**
+- [Temperature Columns - Sanity Check](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566707) — 8 票 / 11 评论 / 2025-03-06 
+- [Beware of leaderboard shakeups and probing with such small datasets](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565545) — 8 票 / 0 评论 / 2025-03-01 
+- [How to predict the period of a day with a 0.96 AUC? T-SNE can help you](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566449) — 7 票 / 0 评论 / 2025-03-05 
+- [CV-LB thread](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565572) — 7 票 / 14 评论 / 2025-03-01 
+- [Is it really necessary to view the dataset as a time series?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566223) — 7 票 / 14 评论 / 2025-03-04 
+- [Did the pros overfit just for fun? I'll tell you a Secret 🤫](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/569358) — 7 票 / 6 评论 / 2025-03-21 
+- [EDA Highlights and Next Steps](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565581) — 7 票 / 0 评论 / 2025-03-01 
+- [Single MLP model with private LB AUC score of 0.90636](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571078) — 6 票 / 0 评论 / 2025-04-01 
+- [The feature “winddirection” in test_df contains a missing value.](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570719) — 6 票 / 2 评论 / 2025-03-30 
+- [lost 1st place](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571279) — 6 票 / 6 评论 / 2025-04-02 **write-up?**
+- [Final accuracy increased 4% with FE](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567367) — 6 票 / 1 评论 / 2025-03-09 
+- [The Impact of the Variable winddirection Assessed with PCA](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570821) — 6 票 / 2 评论 / 2025-03-30 
+- [Wdyt about public ensembling](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570469) — 5 票 / 6 评论 / 2025-03-28 
+- [Sentiment: Disappointment - Sentiment2: Learning](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571106) — 5 票 / 4 评论 / 2025-04-01 
+- [📊 Weather Structure & Outlier Analysis Before Feature Engineering](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570071) — 5 票 / 0 评论 / 2025-03-25 
+- [Histogram of submission files. What it shows?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568733) — 5 票 / 5 评论 / 2025-03-17 
+- [Using Time Information in Trigonometric Functions or a BETTER WAY](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570523) — 5 票 / 6 评论 / 2025-03-28 
+- [Doubt regarding the leaderboard position of this competition](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571047) — 5 票 / 7 评论 / 2025-04-01 
+- [Thoughts in the last hours of this competition](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570973) — 5 票 / 4 评论 / 2025-03-31 
+- [This line gave me closure](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/571735) — 5 票 / 0 评论 / 2025-04-05 
+- [Can We Generate Synthetic Data Using SK learn techniques](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565554) — 5 票 / 0 评论 / 2025-03-01 
+- [Would it be worthwhile to focus on achieving a higher leaderboard rank in this competition?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567113) — 5 票 / 10 评论 / 2025-03-08 
+- [What will be best strategy to fill 1 null value in test dataset ](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568044) — 4 票 / 8 评论 / 2025-03-13 
+- [Should I trust LB Score or CV Score ?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567217) — 4 票 / 19 评论 / 2025-03-09 
+- [How Can We Address Class Imbalance in Time Series Data Without Breaking Temporal Dependencies?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/568939) — 4 票 / 7 评论 / 2025-03-18 
+- [What is the rationale behind not using negative weights for blending?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567397) — 4 票 / 4 评论 / 2025-03-10 
+- [request for EDA advice](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/569746) — 4 票 / 2 评论 / 2025-03-23 
+- [AUC post-processing](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567310) — 4 票 / 0 评论 / 2025-03-09 
+- [There is a na value in id:2707 of test dataset ](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565645) — 4 票 / 3 评论 / 2025-03-01 
+- [A feature from domain knowleadge](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/567196) — 4 票 / 4 评论 / 2025-03-09 
+- [I stuck on 0.86 and I don't know how to do it better!](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/570105) — 4 票 / 9 评论 / 2025-03-25 
+- [two year auc ≈ (public + private) / 2 ?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566264) — 4 票 / 7 评论 / 2025-03-04 
+- [Best approach for CV](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/566033) — 4 票 / 1 评论 / 2025-03-03 
+- [Rely on CV or LB?](https://www.kaggle.com/competitions/playground-series-s5e3/discussion/565910) — 4 票 / 4 评论 / 2025-03-02 

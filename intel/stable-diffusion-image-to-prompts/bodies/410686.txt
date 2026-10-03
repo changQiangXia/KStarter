@@ -1,0 +1,156 @@
+# https://www.kaggle.com/competitions/stable-diffusion-image-to-prompts/discussion/410686
+
+Topic #410686: 3rd place solution
+  Author: Fumihiro Kaneko
+  Posted: 2023-05-16 08:58:31.727000
+  Votes: 38  Comments: 7
+
+Thanks for organizers hosting a nice competition.
+
+My approach is based on CLIP model with directly predicting 384 embedding vector following this baseline notebook.
+
+Dataset
+
+I used about ~400K data. The validation score of Diffusion DB was well correlated to LB score but still 0.025 ~ 0.03 gap.
+
+
+
+
+Vizwiz image caption ~70k
+
+
+
+This was key dataset for my experiment.
+
+Training with this data, local val vs LB score -&gt; 0.5415/0.5309, but without this 0.5528/0.48765
+
+I think this caption dataset is generally more descriptive, diverse and longer than COCO.
+
+Original training samples are 23K at this dataset, but each training sample has max 5 captions, so sampled 3 captions for each training sample.
+
+
+Diffusion DB, 300k
+
+
+
+only using SD2 images, which I personally generated for improving local val/LB correlation
+
+210K samples from prompt filtering and another 80k images from hard sampling using a trained model.
+
+
+COCO, 25k
+
+
+
+Under training with Vizwiz, this dataset contribution was relatively low.
+
+
+Lexica.art, 10k
+
+
+Model
+
+
+
+only using CLIP models
+
+
+My baseline model was ViT Base 224(laion2B), almost all experiments were done on this model.  Final score for this model was, local val/Public/Private=0.6402/0.61402/0.61357
+
+Single best model. ViT L 336(open ai), local val/Public/Private=0.6658/0.63557/0.63425
+
+
+I could not find good training parameters for larger models, ViT-H and ConvNext xxLarge.
+
+Best submission, ensemble of ViT-L(laion2b, openai, datacompxl), ViT-H, and ConvNext Large/xxLarge,  local val/Public/Private=0.6791/0.64935/0.64814
+
+
+Training
+
+CLIP fine tuning
+
+Fine tuning CLIP model needs extra care compared to imagenet weight, we have to keep original CLIP weight as possible as we can to get best performance.
+I found the following two methods improve score by ~ +0.02 in total and used a lot of time to find best hyperparameters.
+
+
+
+
+LP-FT(Linear Probe and then Fine Tune)
+
+
+
+This was studied at the top-1 solution  of previous competition and also other teams at this competition.
+
+
+Combination of EMA and layer-wise learning rate decay
+
+
+
+This has been studied at this CLIP fine tuning paper.
+
+Best parameter for ViT-B was (EMA decay, layer-wise decay) = (0.9998, 0.4)
+
+But this did not work for ViT-L, layer-wise decay = 0.6 was best. It seemed decay factor for initial layer should be around 1e-6 so we have to choose large decay late for larger models.
+
+
+These two methods has not only direct effect but also indirect effect, because by these methods we can increase learning rate with keeping CLIP original weight and get better result.
+
+Augmentation
+
+
+
+
+Crop/RandomErase/RandAug(without posterize, solarize and equalize)
+
+
+
+This contributed to local val score, ~ +0.007 and this enabled longer training.
+
+Strong image transformation did not fit this competition, I tried to find weak one.
+
+Horizontal Flip worsen performance
+
+
+Same prompt and different seed
+
+
+
+10% of Diffusion DB and 20% of Vizwiz samples have 3 images which are belong to the same prompt but different SD2 generation seed. For  each training epoch one of 3 images randomly chosen.
+
+This also contributed to the score and validation loss curve.
+
+
+Invisible watermark augmentation
+
+
+
+Adding watermark on input images during training with the following stability ai repository
+
+This did not contribute much to the score, only ~ +2.0e-5
+
+
+Code
+
+This is my submission notebook.
+
+Comments:
+├─ Javier Martín (2023-05-18 12:53:24.650000) [+0]
+│  Congratulations, I was expecting a correlation between higher rank and number of images used. Your solution is a pleasantly surprising outlier.
+├─ Wesley (2023-05-17 12:20:01.163000) [+0]
+│  Congratulations! ur method is the most impressive one i've read, because it is so concise with such a good result. could u plz share ur training code on github? i'm struggling with how to train or ...
+  ├─ Fumihiro Kaneko (2023-05-18 00:27:23.140000) [+0]
+  │  The current code has a lot of redundant prats so it's a really confusing one I think. Instead of sharing my code, let me point to timm library for EMA, layer-wise decay There are clear implementati...
+├─ WQ (2023-05-17 03:36:19.897000) [+0]
+│  Thanks for sharing. Only used 400K data, which is very impressive. I have a question. For DiffusionDB, how did you filter prompts and do hard sampling using a trained model?
+  ├─ Fumihiro Kaneko (2023-05-18 00:13:02.913000) [+0]
+  │  210k samples from DiffusionDB 14M with this baseline code
+  │  
+  │  
+  │  
+  │  I confirmed this sampling result was as diverse as other dataset with cos distance of prompt embedding.
+  │  
+  │  And I used DiffusionDB 14M, but...
+    ├─ WQ (2023-05-18 00:36:24.920000) [+0]
+    │  Thank you for the explanation.
+├─ Zaakcii Ru (2023-05-16 16:56:56.727000) [+0]
+│  For me, this is the most democratic method) Congratulations on the third place

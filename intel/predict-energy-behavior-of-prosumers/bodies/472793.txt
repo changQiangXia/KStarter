@@ -1,0 +1,352 @@
+# https://www.kaggle.com/competitions/predict-energy-behavior-of-prosumers/discussion/472793
+
+Topic #472793: 1st place solution
+  Author: hyd
+  Posted: 2024-02-02 05:43:06.755000
+  Votes: 178  Comments: 86
+
+Thanks to Enefit and Kaggle for hosting this great competition. And thanks to the
+great notebooks and discussions, I learned a lot.  I am so happy to win my third solo win! 😃😀😀
+
+Overview
+
+My final solution consists of 4 XGBoost models (for two targets and two is_consumption) and 2 GRU models (for two targets). These models share same 600 features. 
+
+
+
+
+model name
+validation set
+test set w/o online training
+test set w/ update one time
+test set w/ update three times
+
+
+
+
+XGBoost
+41.5912(2 targets:42.2531/42.6607)
+55.6231
+54.1343
+54.1213
+
+
+GRU
+43.0815(2 targets:43.7182/45.1687)
+56.6651
+54.9948
+54.6960
+
+
+XGBoost+GRU
+40.6790(2 targets:40.9613/41.5294)
+53.6627
+52.4813
+52.3090
+
+
+
+
+Validation Strategy
+
+My validation strategy is pretty simple, train on first 500 days and set the rest days as my holdout validation set which has good indication with leaderboard score. And I only checked the final overall score and didn't print single model's score.
+
+Features
+
+I think my features are not special compared with other top teams. I simply merge all tables excluding gas_df with train_df and create lots of lagged features. I didn't spend much time to cutdown feature size since we have not much memory pressure in this competition. With careful feature design, I believe the final feature size can be reduced to around 100-200. Maybe generating different features and targets according to different conditions will achieve better model performance after reading other kagglers' solutions, but this is also very time consuming for me.
+
+fw_new_feature from this discussion help a bit(about 0.1~0.2), Thanks to @mohammadpakdaman0  
+
+# client_df
+client_df = client_df.(["date"]).sort(["data_block_id"], descending=)
+df = df.(client_df.(["county", "is_business", "product_type", "data_block_id","eic_count","installed_capacity"]), how="left", =["county", "is_business", "product_type", "data_block_id"])
+# electricity
+electricity_df = electricity_df.(["origin_date"]).({"forecast_date":"datetime"}).with_columns([(pl.col("datetime").str.to_datetime()+pl.duration(days=)).("datetime"), (pl.col("euros_per_mwh").abs()+).("euros_per_mwh"),])
+df = df.(electricity_df[["data_block_id","datetime","euros_per_mwh"]], how="left", =["data_block_id","datetime"])
+
+# fw_df 
+fw_df = fw_df.with_columns(
+                (pl.col("origin_datetime").str.to_datetime()+pl.duration(hours="hours_ahead")).("datetime"),
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+                pl.col("data_block_id").cast(pl.datatypes.Int64),
+            ).(weather_station_to_county_mapping.(["county_name"]).with_columns(
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+            ), how="left",=["longitude","latitude"]).(["longitude","latitude","origin_datetime"])
+fw_df = fw_df.group_by(["county","datetime","data_block_id"]).agg([pl.mean(col).("fw_{}".format(col))  col  forecast_weather_cols]).with_columns([pl.col("county").cast(pl.datatypes.Int64),    
+                                                                    pl.col("data_block_id").cast(pl.datatypes.Int64),])
+df = df.(fw_df, how="left", =["county","datetime","data_block_id"]).with_columns([(pl.col("installed_capacity")*pl.col("fw_surface_solar_radiation_downwards") / (pl.col("fw_temperature") + )).("fw_new_feature"),])
+
+# hw_df 
+hw_df = hw_df.with_columns(
+            (pl.col("datetime").str.to_datetime()+pl.duration(days=)).("datetime"),
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+                pl.col("data_block_id").cast(pl.datatypes.Int64),
+            ).(weather_station_to_county_mapping.(["county_name"]).with_columns(
+                pl.col("latitude").cast(pl.datatypes.Float32).round(),
+                pl.col("longitude").cast(pl.datatypes.Float32).round(),
+            ), how="left",=["longitude","latitude"]).(["longitude","latitude"])
+hw_df = hw_df.group_by(["county","datetime","data_block_id"]).agg([pl.mean(col).("hw_{}".format(col))  col  historical_weather_cols]).with_columns([                                                            pl.(pl.col("datetime").dt.hour()&gt;).(pl.col("datetime")+pl.duration(days=)).otherwise(pl.col("datetime")).("datetime"),
+                                                                pl.col("county").cast(pl.datatypes.Int64),    
+                                                                pl.col("data_block_id").cast(pl.datatypes.Int64),])
+df = df.(hw_df, how="left", =["county","datetime","data_block_id"])
+
+
+target
+
+
+
+(target-target_shift2)/installed_capacity.
+
+target/installed_capacity.
+
+target-target_shift2
+
+raw target
+
+
+I only use 1&amp;2 since 3&amp;4 have no benefit to my final overall score. 
+
+model
+
+I didn't spend much time to tune my xgboost models, just simply train and predict.  And I find there is no team using NN models yet, which really surprises me.
+My GRU models are also very simple.  input tensor's shape is (batch_size, 24 hours, 600 dense_feature_dim + 6*16 cat_feature_dim), followed by 2 layers GRU, output tensor's shape is (batch_size, 24 hours). Categorical features are ['county', 'product_type', 'hour', 'month', 'weekday', 'day']. NN models boost my final score by 0.9.
+
+online learning strategy
+
+Although online learning didn't help much in public leaderboard, I think it is crucial in private leaderboard since we  
+will have additional 8 months‘ data. So I just gave up chasing higher public leaderboard score by ensembling with more models and decided to retrain less models every month.
+
+What not worked for me
+
+
+
+solar features from this notebook 
+
+1dcnn model and transformer model
+
+multi-days input instead of singe day input when applying GRU models
+
+split into more models given is_business equals 0/1. 
+
+
+Thank you all! I will write more if necessary.
+
+Comments:
+├─ [deleted] (2024-02-08 06:32:11.087000) [+4]
+│  Thanks alottt. You too have done great work dude !!!
+├─ paul rogov (2024-04-18 09:09:54.270000) [+1]
+│  Hey Huang, thanks for another great content🥇
+│  
+│  Two questions to you:
+│  
+│  
+│  
+│  
+│  how much time do you roughly spend on competitions mean()?
+│  From first seeing a new dataset until training a good-enough model...
+  ├─ hyd (2024-04-18 10:41:25.793000) [+1]
+  │  Thanks, I can't believe you know my last name is Huang.
+  │  
+  │  
+  │  
+  │  2 hours per day, about 25 days, 10 days to reach 1-10 on lb.
+  │  
+  │  polars, much faster than pandas.
+    ├─ paul rogov (2024-04-18 10:53:36.353000) [+2]
+    │  Haha, @whydata in one of the comments above called you Teacher Huang and I've guessed that he knows what is talking about.
+    │  
+    │  I lived in China for some time but for too short to learn Pǔtōnghuà.
+    │  
+    │  Tha...
+    ├─ MaxUhl98 (2024-08-21 13:32:47.717000) [+0]
+    │  Hi Huang, 
+    │  may I know how you are able to consistently perform well with this small amount of time you are investing into kaggle?
+    ├─ AAA (2024-11-20 01:34:43.217000) [+0]
+    │  hahaha， 😁
+├─ [deleted] (2024-02-05 08:43:05.010000) [+1]
+│  Interesting
+├─ Edouard Gaudreau (2024-02-04 23:45:34.380000) [+1]
+│  Congratulations!
+├─ Sumit Pardhiya (2024-02-04 10:05:30.117000) [+1]
+│  Amazing Solution!!!
+├─ WhyData (2024-02-04 02:30:47.900000) [+1]
+│  Congratulations！Teacher Huang NB! I am also your fan~
+│  I also tried a similar approach to target processing, but it was strange that I would lose points on the public leaderboard every time, so I ul...
+  ├─ WhyData (2024-02-04 07:46:35.973000) [+0]
+  │  Oh sorry, I find the answer4 xgboost models (for two targets * two is_consumption)🥹
+  ├─ hyd (2024-02-04 09:12:28.740000) [+0]
+  │  I think maybe we should generate different features when applying different targets. Proprecessing for installed_capacity is not the  key role. I am not sure.
+    ├─ WhyData (2024-02-04 09:55:22.273000) [+0]
+    │  WOW teacher, I just realized that you seem to have only filled the target and installed capacity in the last 1-4 hours by shift, rather than 1-4 days ? I estimate that there may be more than 7 cons...
+    ├─ Jiaxiu Zou (2024-03-02 08:40:03.900000) [+0]
+    │  Hello! I'd like to ask about the meaning of the variable target_shift_tmp. Does it mean shifting the data of each row in the target down by 2 + 3 + 4 rows? Thank you very much for your response!
+    ├─ hyd (2024-04-18 12:37:38.533000) [+0]
+    │  Yes, you are right!
+├─ hahahaj (2024-02-02 10:29:23.410000) [+1]
+│  Congrats hyd! I would like to ask why you chose to use Xgboost instead of Lightgbm.
+  ├─ hyd (2024-02-02 13:56:46.877000) [+6]
+  │  There is no big difference between these two models, I just randomly choose xgboost  and have no enough time to train lightgbm.😄
+├─ Timmy Juicehouse (2024-02-02 10:17:40.650000) [+1]
+│  Congratulation, I learn a lot from your post and am looking forward to your performance in next competition. I am your fan.
+│  
+│  
+│    
+│  client_df
+│    
+│  client_df = client_df.drop(["date"]).sort(["data_block_...
+  ├─ hyd (2024-02-02 13:53:08.240000) [+1]
+  │  Thanks! I also find county 0 is very hard to predict because of its large consumption. Normalized by installed_capacity helps a bit.
+  │  And I didn't take any other action, I think this represents the ...
+├─ Daisy (2024-02-02 06:05:56.137000) [+1]
+│  You're transformer, but it seems not to be used in this competition. I'm looking forward to seeing you at 1st place in the Private Leaderboard!
+  ├─ hyd (2024-02-02 06:21:22.317000) [+1]
+  │  Thank you! Yes, transformer does not hep in this competition~
+├─ DongYK (2024-02-02 06:01:46.977000) [+1]
+│  Amazing!
+│  Congratulations 1st in public score.
+│  I hope you keep the same place for the private leaderboard.
+│  We thought the GRU for production / installed_capacity and ANN for consumption, but we gave...
+  ├─ hyd (2024-02-02 06:17:55.820000) [+2]
+  │  For GRU, I just concat dense features with categorical features like this:
+  │  
+  │   = [embedding(x_cat[:, :, i]) for i, embedding in enumerate(self.cats)]
+  │   = torch.cat(cats, )
+  │   = torch.cat([x, x_cat_emb],...
+    ├─ DongYK (2024-02-02 06:40:44.103000) [+1]
+    │  Great architecture.
+    │  It's very impressive to reduce the dimension of time.
+    │  
+    │  
+    │    
+    │  For GBDT, I didn't do anything special, because all categorical features are low-dimension, I think GBDT can learn ver...
+    ├─ hyd (2024-02-02 06:42:25.950000) [+1]
+    │  Yes, you are right.
+    ├─ DongYK (2024-02-02 06:44:50.950000) [+1]
+    │  Thank you, hyd.
+    ├─ DongYK (2024-02-04 00:23:10.337000) [+0]
+    │  Hi, hyd.
+    │  I have more questions. Your model outputs (batch_size, 1 hour)? or (batch_size, 24 hours)?
+    │  You said that you used the hour feature, so I got curious suddenly.
+    ├─ hyd (2024-02-06 04:01:27.847000) [+2]
+    │  (batch_size, 24 hours)
+├─ snehal (2024-02-02 07:25:19.323000) [+2]
+│  Congrats and thank you for sharing solution hyd! Why do you think transformers didn't perform as well as RNN this competition?
+  ├─ hyd (2024-02-02 07:34:01.043000) [+0]
+  │  Thanks! I usually don't use transformer to learn time sequence information like RNN do but to learn information across stocks in optiver or counties in this competition. The relative target in opti...
+    ├─ snehal (2024-02-02 07:43:40.003000) [+2]
+    │  Ah ok that makes sense. Thanks again hyd we learn a lot from your solutions and good luck on becoming kaggle #1. I'm a big fan of your work
+├─ wasjaip (2024-02-02 06:40:05.583000) [+2]
+│  great job =) waiting for testing =)))
+  ├─ hyd (2024-02-02 06:43:17.350000) [+2]
+  │  Good luck to you too!
+├─ well well well (2024-02-02 06:19:18.320000) [+2]
+│  Congrats! 大佬
+├─ MrSimple (2024-02-02 09:39:30.983000) [+0]
+│  Congrats! Great solution!
+├─ silver (2024-02-02 08:41:40.870000) [+0]
+│  "So I just give up chasing higher public leaderboard score"
+│  
+│  I am hurt😭
+├─ subhani (2025-01-02 17:12:50.727000) [+0]
+│  Fr! Loved the approach!
+├─ faeqsu10 (2024-10-04 21:39:19.703000) [+0]
+│  Thank you so much for the great insights into solving time series data problems. I've learned a lot thanks to you! :)
+├─ João Mesquita (2024-07-05 09:58:18.013000) [+0]
+│  Can you share your notebook?
+├─ JK-Piece (2024-07-04 11:20:21.723000) [+0]
+│  Hello Hyd. I cannot find the code/notebook for the first place. Can you please share it?
+├─ Aakash D (2024-05-13 07:18:34.473000) [+0]
+│  I really appreciate you sharing this information.
+├─ bc_bot (2024-05-10 06:53:19.877000) [+0]
+│  Congratulations! Can you provide more details on how you combined your XGBoost and GRU models? Weighted ensemble or other method
+├─ JK-Piece (2024-05-01 00:05:03.777000) [+0]
+│  Congratulations on the 1st place🎉
+├─ Jiaxiu Zou (2024-03-02 08:16:18.237000) [+0]
+│  Thank you very much for your sharing! I'd like to ask, what do target_shift_tmp and installed_capacity_tmp mean? I didn't quite understand the code.
+├─ zhangwuji (2024-02-28 11:32:45.453000) [+0]
+│  Great solution
+├─ Huma Perveen (2024-02-13 23:20:47.300000) [+0]
+│  Congratulations, Thank you for sharing your approach to achieve 1st place  on public.
+├─ Mohammad Pakdaman (2024-02-08 09:54:06.807000) [+0]
+│  Congratulations 💯.
+├─ yunxuanli (2024-02-08 06:06:34.263000) [+0]
+│  非常详尽的分享，谢谢。
+├─ JM (2024-02-06 13:47:25.377000) [+0]
+│  Same writeup for Optiver please @hydantess  😜
+├─ Natália Zsíros (2024-02-06 12:37:02.080000) [+0]
+│  Hi! Congratulations on your really good score! Do you plan on modifying your model until April 30? I am a bit unsure about the timeline of this competition because I thought the next two months wil...
+├─ [deleted] (2024-02-06 11:44:38.823000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-08 07:26:47.373000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-02-06 11:26:57.647000) [+0]
+│  [deleted]
+├─ [deleted] (2024-02-05 08:25:11.243000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-06 02:01:50.063000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-02-04 10:52:08.437000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-04 13:29:50.897000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-02-04 13:55:50.460000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-02-03 18:33:19.910000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-04 09:18:16.727000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-02-03 18:09:48.647000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-04 09:27:53.180000) [+0]
+  │  [deleted]
+├─ [deleted] (2024-02-03 11:18:18.833000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-03 12:25:12.093000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2024-02-03 22:06:43.397000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-02-02 21:47:37.100000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-03 00:51:18.237000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2024-02-03 09:35:01.923000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-02-02 15:25:35.087000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-03 00:46:22.930000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2024-02-03 11:21:48.170000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-02-03 12:18:58.927000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2024-02-03 12:26:08.373000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-02-03 12:31:23.007000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-02-03 13:09:04.550000) [+0]
+    │  [deleted]
+├─ [deleted] (2024-02-02 08:40:05.013000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-02 08:50:42.300000) [+2]
+  │  [deleted]
+├─ [deleted] (2024-02-02 08:20:29.653000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-02-02 08:35:36.593000) [+3]
+  │  [deleted]
+├─ [deleted] (2024-02-14 09:38:51.177000) [+0]
+│  [deleted]
+├─ [deleted] (2024-02-08 12:38:50.213000) [+0]
+│  [deleted]
+├─ [deleted] (2024-02-08 11:03:10.123000) [+0]
+│  [deleted]
+├─ [deleted] (2024-02-05 15:51:58.607000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-02 22:28:16.063000) [+1]
+│  [deleted]
+├─ [deleted] (2024-02-02 15:24:18.333000) [+0]
+│  [deleted]
+├─ [deleted] (2024-02-08 10:04:54.083000) [+0]
+│  [deleted]

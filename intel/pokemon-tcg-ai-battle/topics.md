@@ -1,0 +1,122 @@
+# pokemon-tcg-ai-battle 讨论区（按票数排序，共 120 条）
+
+- [Game Engine Source Code](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717141) — 127 票 / 12 评论 / 2026-07-01 
+- [Request for an explicit ruling on game engine source, reverse engineering, and community engine](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711737) — 103 票 / 22 评论 / 2026-06-21 
+- [Daily Top Episodes Datasets](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709160) — 79 票 / 5 评论 / 2026-06-17 
+- [Leaderboard Scoring Inconsistency](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/712621) — 79 票 / 23 评论 / 2026-06-23 
+- [Top players’ methods, revealed by 30,000 games](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/724362) — 76 票 / 12 评论 / 2026-07-10 
+- [Is Battle Simulate Matching Process Working Well ?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/712657) — 58 票 / 7 评论 / 2026-06-23 
+- [Tracking 3,057 teams through 6 weeks of meta: who switched decks, when — and why it was always too late](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729926) — 57 票 / 15 评论 / 2026-07-27 
+- [Team Preferred 213tubo's Solution Overview](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735867) — 57 票 / 7 评论 / 2026-08-18 **write-up?**
+- [A Remarkable Month in My Life as a Kaggle Beginner, PTCG Player, and AI Practitioner](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735503) — 56 票 / 16 评论 / 2026-08-16 
+- [[For First-Timers] Kaggle Rules You Should Know for PokeCa ABC](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709494) — 51 票 / 10 评论 / 2026-06-18 
+- [Why is the matchmaking frequency so low right now?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735822) — 49 票 / 8 评论 / 2026-08-18 
+- [Brief 15th Place Solution](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/739241) — 44 票 / 0 评论 / 2026-09-03 **write-up?**
+- [Sharing my Reinforcement Learning journey (updated)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/717697) — 41 票 / 55 评论 / 2026-07-02 
+- [June 30 Update: Updated Simulation Environment, gameplay increases](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/716045) — 41 票 / 9 评论 / 2026-06-30 
+- [Is there a way to view the visualizer without submitting?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708869) — 40 票 / 6 评论 / 2026-06-17 
+- [Differences Between the Official Pokémon TCG Rules and the Simulator Behavior ](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708586) — 39 票 / 27 评论 / 2026-06-16 
+- [[24th Place Solution] A Population-Based Reinforcement Learning Ecosystem](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/740956) — 39 票 / 3 评论 / 2026-09-12 **write-up?**
+- [Pokemon TCG AI - Team Magist Solution](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735593) — 37 票 / 4 评论 / 2026-08-17 **write-up?**
+- [Matchup data: ~15k self-play games between the 4 sample decks](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708617) — 37 票 / 1 评论 / 2026-06-16 
+- [Question on inference environment](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708810) — 37 票 / 6 评论 / 2026-06-17 
+- [Looking forward to a dramatic final weekend 🎬](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735123) — 33 票 / 17 评论 / 2026-08-14 
+- [Can we turn off random matchmaking for the final few days?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/736361) — 33 票 / 16 评论 / 2026-08-20 
+- [# 27th Place Solution: Pure RL with a Three-Stage Curriculum](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738158) — 32 票 / 2 评论 / 2026-08-30 **write-up?**
+- [Card List Released & Playground Coming Soon!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/739417) — 32 票 / 2 评论 / 2026-09-04 
+- [Welcome to the Pokémon TCG AI Battle Challenge Simulation Category Competition!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708584) — 31 票 / 4 评论 / 2026-06-16 
+- [Alternative PTCG Rankings, inspired by Alternative Orbit Wars Rankings](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/732105) — 31 票 / 5 评论 / 2026-08-01 
+- [A Vibecoded Website to View Metas and Cards](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/710361) — 31 票 / 10 评论 / 2026-06-20 
+- [Upcoming Submission Deadline: What to expect ahead](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735312) — 30 票 / 10 评论 / 2026-08-15 
+- [Game engine source code?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708929) — 29 票 / 14 评论 / 2026-06-17 
+- [Will there be PTCG AI Battle 2.0?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/736545) — 29 票 / 5 评论 / 2026-08-21 
+- [Second Round Information](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/732331) — 28 票 / 27 评论 / 2026-08-02 
+- [Official Visualiser/Replay Viewer](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/713051) — 28 票 / 2 评论 / 2026-06-23 
+- [What We Tried, What Ceilinged, and Two Questions We Can't Answer Alone](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/713608) — 28 票 / 10 评论 / 2026-06-24 
+- [Requesting build of cabt engine for ARM64](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708899) — 27 票 / 8 评论 / 2026-06-17 
+- [【Question to Host】Is it allowed that **one agent** use multi-decks?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711741) — 27 票 / 14 评论 / 2026-06-22 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738791) — 26 票 / 28 评论 / 2026-09-01 
+- [Temporary Game Rate Decrease](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/712893) — 26 票 / 5 评论 / 2026-06-23 
+- [Where will you finish? A Monte-Carlo simulation of the final evaluation (from Meta Kaggle episode data)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/737435) — 25 票 / 17 评论 / 2026-08-25 
+- [Retrospective — One Month of Learning with AI at Full Speed: What I Did Right, and What I Did Wrong](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735975) — 24 票 / 5 评论 / 2026-08-18 
+- [Proposal: an official API extension for simulation / search-based agents](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711329) — 22 票 / 0 评论 / 2026-06-21 
+- [First or second — which do agents pick?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/723591) — 22 票 / 1 评论 / 2026-07-07 
+- [RL Beginner Question: How Much Training Data Does a PTCG-Game Agent Need?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/728071) — 22 票 / 66 评论 / 2026-07-21 
+- [Daily public meta notes from visible Game History](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709263) — 22 票 / 11 评论 / 2026-06-18 
+- [Regarding a Title to Be Awarded to the Winner of This Competition](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/725074) — 21 票 / 4 评论 / 2026-07-14 
+- [[Beginner Guide] From Deck List to First Valid Submission](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708663) — 21 票 / 0 评论 / 2026-06-16 
+- [Public Notebook Sharing Deadline: August 2](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/728935) — 21 票 / 11 评论 / 2026-07-24 
+- [My Internal Tooling + Play against my agent!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735649) — 20 票 / 8 评论 / 2026-08-17 
+- [Pokémon Deck List](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/721010) — 20 票 / 0 评论 / 2026-07-06 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708492) — 18 票 / 4 评论 / 2026-06-15 
+- [Reminder about the Kaggle Simulation Competition Format](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/714189) — 18 票 / 8 评论 / 2026-06-25 
+- [Questions regarding the re-run of the competition.](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/734883) — 18 票 / 2 评论 / 2026-08-12 
+- [If you are both a Pokemon fan and a kaggler](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/727498) — 18 票 / 10 评论 / 2026-07-19 
+- [Show us your Pokemon](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/730143) — 18 票 / 14 评论 / 2026-07-28 
+- [Important Information About this Challenge](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708493) — 17 票 / 1 评论 / 2026-06-15 
+- [Zero ML, Zero Pokémon Knowledge, Two Kids as Coaches: My First Kaggle Competition](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735681) — 16 票 / 4 评论 / 2026-08-17 
+- [Timing of solution sharing after the deadline](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/733137) — 16 票 / 7 评论 / 2026-08-06 **write-up?**
+- [A Visit to a Pokémon Card Shop Mini Tournament](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/714505) — 15 票 / 1 评论 / 2026-06-26 
+- [Memory Leak in libcg.so during continuous RL Training loops (battle_start)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709152) — 14 票 / 5 评论 / 2026-06-17 
+- [Crazy LB shake & shake](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738307) — 13 票 / 31 评论 / 2026-08-31 
+- [Public link to my essay — not a solution write-up](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/714972) — 13 票 / 9 评论 / 2026-06-27 **write-up?**
+- [my plan on how to do RL training ... is it my hallucinations?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/731298) — 13 票 / 16 评论 / 2026-07-31 
+- [【Japanese Translation】Kaggle へ初めて参加される方へ： PokeCa ABC に出場する上で知っておくべきルール](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709645) — 13 票 / 2 评论 / 2026-06-19 
+- [Can one get good results without having played pokemen before?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/723576) — 13 票 / 16 评论 / 2026-07-07 
+- [[20th Place] Learning to Play Pokémon TCG](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741272) — 12 票 / 1 评论 / 2026-09-14 **write-up?**
+- [Question about using self-play / human-play logs as external data](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/712119) — 11 票 / 7 评论 / 2026-06-22 
+- [[RESOLVED] Possible Infinite Move by Opponent Agent and Unfair Rating](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/714030) — 11 票 / 13 评论 / 2026-06-25 
+- [How has your experience been with RL/PPO/MCTS in this competition so far?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711644) — 11 票 / 5 评论 / 2026-06-21 
+- [How do you teach an agent when to use Boss's Orders and what to discard for Ultra Ball?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/721338) — 11 票 / 3 评论 / 2026-07-06 
+- [Last week rush solution: Dragapult BC + RL + MCTS Agent](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/736121) — 10 票 / 4 评论 / 2026-08-19 **write-up?**
+- [My journey at Pokemon and Reinforcement Learning](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735940) — 10 票 / 1 评论 / 2026-08-18 
+- [I've never seen a competition with nearly 6,000 participants before.](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729887) — 10 票 / 4 评论 / 2026-07-27 
+- [369th Place Solution: Conservative Ogerpon with Consensus Replay Learning](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738633) — 10 票 / 0 评论 / 2026-09-01 **write-up?**
+- [Large systematic disparity in episode rates between leaderboard agents](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/726690) — 10 票 / 8 评论 / 2026-07-16 
+- [191th Place Solution: Imitation Learning for Deck 312](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/739022) — 10 票 / 0 评论 / 2026-09-02 **write-up?**
+- [Things I tried that didn't work](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/724187) — 10 票 / 1 评论 / 2026-07-09 
+- [Updated game engine, sample submission file](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/727094) — 10 票 / 0 评论 / 2026-07-17 
+- [What are good resources when learning the rules?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708809) — 9 票 / 4 评论 / 2026-06-17 
+- [Minor Engine update](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/728587) — 9 票 / 3 评论 / 2026-07-23 
+- [Can you manipulate coin flips? — 300k-game test says no / コインの乱数調整は可能か — 30万試合の実測で「不可能」](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709071) — 9 票 / 0 评论 / 2026-06-17 
+- [Possible engine bug: Hero’s Cape reactivation before Knock Out check / ヒーローマントの再有効化ときぜつ判定](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735766) — 8 票 / 3 评论 / 2026-08-17 
+- [[Dataset+Notebook] 16 Decks That Actually Won Real Pokémon Tournaments — Ready-to-Use deck.csv](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/712011) — 8 票 / 0 评论 / 2026-06-22 
+- [22 Curated Deck Archetypes for PTCG AI Battle - A Deck Intelligence Dataset](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/730554) — 7 票 / 0 评论 / 2026-07-29 
+- [Limitless TGG](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709035) — 7 票 / 3 评论 / 2026-06-17 
+- [My Notes on Rules & Strategy — What's Your Approach?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709005) — 6 票 / 2 评论 / 2026-06-17 **write-up?**
+- [Official replay viewer is currently unreachable](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/732469) — 6 票 / 1 评论 / 2026-08-03 
+- [Deck Image Renderer Notebook: English / Japanese card images](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709301) — 6 票 / 1 评论 / 2026-06-18 
+- [Bronze Medal Solution - 589th Place](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/739219) — 6 票 / 0 评论 / 2026-09-03 **write-up?**
+- [The Meta on the Eve of the Final Deadline: Grimmsnarl ex Down, Dragapult ex Up](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735346) — 6 票 / 0 评论 / 2026-08-15 
+- [This competition has been an incredible learning experience](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735516) — 6 票 / 0 评论 / 2026-08-16 
+- [Team Merging and Finding Teammates](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/713377) — 6 票 / 1 评论 / 2026-06-24 
+- [How Pokémon Led Me into Agents and Models: My Competition Journey](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/736494) — 6 票 / 0 评论 / 2026-08-21 
+- [From the Simulation ladder to the Strategy top 8: what is confirmed, and what still needs clarification](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/733995) — 5 票 / 0 评论 / 2026-08-09 
+- [Strategy scoring (Model Score 70%) and "universal vs deck-specific" agent design a few questions](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/711280) — 5 票 / 0 评论 / 2026-06-21 
+- [[Team Pokésonic] Grimmsnarl Agent Implementation with Agent Kernel](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/740605) — 5 票 / 0 评论 / 2026-09-10 
+- [492nd Place Solution: 2 Steps Learning, BC then RL](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/739956) — 5 票 / 0 评论 / 2026-09-07 **write-up?**
+- [An engine bug(?) report ](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/728068) — 5 票 / 0 评论 / 2026-07-21 
+- [Shared ranks for Top 23: Bayesian, Mean-Reverting AR(1), Bradley–Terry, Mean/Median Ratings](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741421) — 5 票 / 3 评论 / 2026-09-15 
+- [How consistent is imitation learning in this setting?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/732905) — 5 票 / 9 评论 / 2026-08-05 
+- [[MIT] My first Kaggle competition — sharing the repo and a ~100-term glossary (Japanese) in the Wiki](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735444) — 5 票 / 0 评论 / 2026-08-16 
+- [[中文｜Chinese edition] the rules of the Pokémon Trading Card Game](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/713132) — 5 票 / 3 评论 / 2026-06-24 
+- [Too self-conscious to share my potato solution so here are my favorite pokemon cards!](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/736279) — 5 票 / 0 评论 / 2026-08-20 **write-up?**
+- [Will the games started before the end will be counted?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738595) — 5 票 / 2 评论 / 2026-09-01 
+- [Permissibility of Using External Data (Data from the Official Website)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/708979) — 5 票 / 2 评论 / 2026-06-17 
+- [Submission Strategy](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/730497) — 5 票 / 16 评论 / 2026-07-29 
+- [Time limit per turn](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/710971) — 4 票 / 0 评论 / 2026-06-20 
+- [What can we learn from previous AI card games simulators?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/709490) — 4 票 / 0 评论 / 2026-06-18 
+- [Live meta dashboard + open API for the ladder](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/712481) — 4 票 / 4 评论 / 2026-06-22 
+- [ Are top agents mostly heuristic, or are people successfully using RL/BC?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/729644) — 4 票 / 14 评论 / 2026-07-26 
+- [Incorrect all_card_data() text for Team Rocket’s Great Ball (#1132)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/731083) — 4 票 / 2 评论 / 2026-07-30 
+- [Important: Team Composition for the Strategy Category](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738924) — 4 票 / 2 评论 / 2026-09-02 
+- [ELO inconsistency](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/733083) — 4 票 / 9 评论 / 2026-08-05 
+- [Petition to use batch ELO over the block of games played during evaluation period (static Bradley Terry) instead of point sequential ELO (or at least mean/median sequential ELO)](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/738820) — 4 票 / 2 评论 / 2026-09-01 
+- [Who's That pokepilot?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741233) — 4 票 / 0 评论 / 2026-09-14 
+- [Friendly Reminder - Submissions to the Strategy Competition must be made through that competition page](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741012) — 4 票 / 0 评论 / 2026-09-12 
+- [How does the final Meta at the Top Look?](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/737107) — 4 票 / 7 评论 / 2026-08-23 
+- [[Team Pokésonic]Marnie's Grimmsnarl ex: How We Chose, Built and Played the Deck](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/740944) — 4 票 / 0 评论 / 2026-09-12 **write-up?**
+- [[Bug Report] Score delta showing as -NaN in post-deadline evaluation matches](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/735571) — 4 票 / 3 评论 / 2026-08-17 
+- [[Team Pokésonic] Using Daily Metagame Reports for Deck-Building Decisions](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/740811) — 4 票 / 0 评论 / 2026-09-11 
+- [Shaymin vs Battle Cage](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/733267) — 3 票 / 4 评论 / 2026-08-06 
+- [[125th Place Solution] Imitation Learning and Meta-Aware Deck Selection](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle/discussion/741086) — 3 票 / 0 评论 / 2026-09-13 **write-up?**

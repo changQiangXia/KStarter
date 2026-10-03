@@ -1,0 +1,85 @@
+<p>Firstly, Thank you RSNA for hosting another interesting competition &amp; my teammates <a href="https://www.kaggle.com/haqishen" target="_blank">@haqishen</a> <a href="https://www.kaggle.com/harshitsheoran" target="_blank">@harshitsheoran</a> - formation of <strong>Team oxygen</strong> ? :)) It was amazing to be #1 on public leaderboard for almost a month. I am sharing a quick overview of our solution, we will release the entire solution soon. It was really fun competing for #1 with <a href="https://www.kaggle.com/theoviel" target="_blank">@theoviel</a>  <br>
+<strong>Edit: Full solution published.</strong>  <br>
+Here is the inference code you may refer: <a href="https://www.kaggle.com/nischaydnk/rsna-super-mega-lb-ensemble" target="_blank">link</a> <br>
+Our GitHub repo w/ all preprocessing + training code: <a href="https://github.com/Nischaydnk/RSNA-2023-1st-place-solution" target="_blank">link</a><br>
+Demo Inference notebook: <a href="https://www.kaggle.com/code/haqishen/rsna-2023-1st-place-best-model-infer-cleaned" target="_blank">link</a></p>
+<h4><strong>Split used:</strong> 4 Fold GroupKFold ( Patient Level)</h4>
+<h2><strong>Our solution is divided into three parts:</strong></h2>
+<p><strong>Part 1:</strong> 3D segmentation for generating masks / crops [Stage 1]<br>
+<strong>Part 2:</strong> 2D CNN + RNN based approach for Kidney, Liver, Spleen &amp; Bowel [Stage 2]<br>
+<strong>Part 3:</strong> 2D CNN + RNN based approach for Bowel + Extravasation [Stage 2]</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2Fee28ed8eef7827d8f2cc69601875e5c2%2FScreenshot%202023-10-22%20at%2011.54.15%20AM.png?generation=1697955883461262&amp;alt=media" alt=""></p>
+<h2><strong>Data Preprocessing:</strong></h2>
+<p>Here comes the key part of our solution, we will describe it later in more depth. <strong>Note:</strong> <em>All models were trained on image size 384 x 384. We use datasets preprocessing from <a href="https://www.kaggle.com/TheoVeol" target="_blank">@TheoVeol</a> and our data which we made rescale dicoms and applying soft-tissue windowing.</em></p>
+<p>We take a patient/study, we run a 3d segmentation model on it, it outputs masks for each slice, we make a study-level crop here based on boundaries of organs - liver, spleen, kidney &amp; liver. </p>
+<p>Next, we make volumes from the patient, each volume extracted with equi-distant 96 slices for a study which is then reshaped to (32, 3, image_size, image_size) in a 2.5D manner for training CNN based models.</p>
+<p>3 channels are formed by using the adjacent slices.</p>
+<p>All our model takes in input in shape (2, 32, 3, height, width) and outputs it as (2, 32, n_classes) as the targets are also kept in shape (2, 32, n_classes).</p>
+<p>To make the targets, we need 2 things, patient-level target of each organ and how much the organ is visible compared to its maximum visibility, this data is available after normalizing segmentation model masks in 0-1 based on number of positive pixels</p>
+<p>Then we multiply targets * patient-level target for each middle slice of the sequence and that is our label</p>
+<p>For example if a patient has label 0 for liver-injury and the liver visibility is as follows in the slice sequence</p>
+<p>[0., 0., 0., 0.01, 0.05, 0.1, 0.23, 0.5, 0.7, 0.95, 0.99, 1., 0.95, 0.8, 0.4 …. 0. ,0., 0.]</p>
+<p>We multiply it with label which is currently 0 results in an all zeros list as output, but if target label for liver-injury was 1, then we use the list mentioned above as our soft labels.</p>
+<h2><strong>Stage2: 2.5D Approach ( 2D CNN + RNN):</strong></h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2Fe8df4581839b1fa7dcadf68fe2a715a1%2FScreenshot%202023-10-22%20at%205.31.23%20AM.png?generation=1697935695484067&amp;alt=media" alt=""></p>
+<p>In stage 2, we trained our models using the volumes either based on our windowing or theo's preprocessing approach and the masks/crops generated from 3D segmentation approach. Each model is trained for multiple tasks (segmentation + classification). For all 32 sequences, we predicted slice level masks and sigmoid predictions. Further, simple maximum aggregation is applied on sigmoid predictions to fetch study level prediction used in submissions. </p>
+<p>For training our models, some common settings were:</p>
+<ul>
+<li><strong>Learning rate:</strong> (1e-4 to 4e-4) range</li>
+<li><strong>Optimizer:</strong> AdamW</li>
+<li><strong>Scheduler:</strong> Cosine Annealing w/ Warmup </li>
+<li><strong>Loss:</strong> BCE Loss for Classification, Dice Loss for segmentation</li>
+</ul>
+<h3><strong>Auxiliary Segmentation Loss:</strong></h3>
+<p>One of the key things which made our training much more stable and helped in improving scores was using auxiliary losses based on segmentation. </p>
+<p>Encoder was kept same for both classification &amp; segmentation decoders,  we used two types of segmentation head:</p>
+<ul>
+<li><strong><em>Unet based decoder</em></strong> for generating masks</li>
+<li><strong><em>2D-CNN</em></strong> based head </li>
+</ul>
+<pre><code>nn.Sequential(
+            nn.Conv2d(nb_ft, 128, =3, =1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(=),
+            nn.Conv2d(128, 128, =3, =1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(=),
+            nn.Conv2d(128, 4, =1, =0),
+        )
+</code></pre>
+<pre><code>        self = self(true_encoder)
+        self = self(true_encoder)
+</code></pre>
+<p>We used the feature maps generated mainly from last and 2nd last blocks of the backbones &amp; apply dice loss on the predicted masks &amp; true masks. This trick gave us around +0.01 to +0.03 boost in our models. We used similar technique in Covid 19 detection competition held few years back, you can also refer my solution for more detailed use of auxiliary loss &amp; code snippets. <br>
+<a href="https://www.kaggle.com/c/siim-covid19-detection/discussion/266571" target="_blank">link of discussion</a></p>
+<p>Here is an example code for applying aux loss:</p>
+<pre><code></code></pre>
+<h3><strong>Architectures used in Final ensemble:</strong></h3>
+<ul>
+<li>Coat Lite Medium w/ GRU - <a href="https://github.com/mlpc-ucsd/CoaT" target="_blank">original source code</a></li>
+<li>Coat Lite Small w/ GRU!</li>
+<li>Efficientnet v2s w/ GRU [Timm]</li>
+</ul>
+<h3><strong>Augmentations:</strong></h3>
+<p>We couldn't come up with several augmentations to use, but these were the ones which we used in our training.</p>
+<pre><code>        .Perspective(p=.),
+        .HorizontalFlip(p=.),
+        .VerticalFlip(p=.),
+        .Rotate(p=., limit=(-, )),
+</code></pre>
+<h2><strong>Post Processing / Ensemble:</strong></h2>
+<p>Final ensemble for all organs model includes <strong>multiple Coat medium and V2s based models</strong> trained on either 4 Folds or Full data. </p>
+<p>For extravasation, We mainly used Coat Small and v2s in ensemble. <br>
+<strong>No major postprocessing</strong> was applied except for tuning scaling factors based on CV scores.<br>
+To get the predictions, we aggregated the model outputs at slice level and simply took the maximum value for each patient.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2Fd6fa2cc524588b85b82906cccb6552bf%2FScreenshot%202023-10-22%20at%206.02.32%20AM.png?generation=1697936329146043&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2Fb69766140607127e717966085c927bce%2FScreenshot%202023-10-22%20at%206.07.13%20AM.png?generation=1697936371125187&amp;alt=media" alt=""></p>
+<h4><strong>Ensemble:</strong></h4>
+<p>Within folds of each models, we are doing slice level ensemble.<br>
+For different architectures &amp; cross data models (theo/ours), we did ensemble after the max aggregation. </p>
+<h4><strong>Best Ensemble OOF CV</strong>: 0.31x</h4>
+<h4><strong>Best single model 4 fold OOF CV</strong>: 0.326 [Coat lite Medium]</h4>
+<p>Organ level OOF for single model looks like this:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4712534%2F9143afd07ba3069f2b2259b1d8fe80eb%2FScreenshot%202023-10-16%20at%204.05.07%20AM.png?generation=1697413214073394&amp;alt=media" alt=""></p>
+<p>Thank you. </p>
+<p>EDIT 1: 3D segmentation code: <a href="https://www.kaggle.com/code/haqishen/rsna-2023-1st-place-solution-train-3d-seg/notebook" target="_blank">notebook link</a></p>
