@@ -3,22 +3,22 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**6/204**（2026-10-03；已完成 optiver-trading-at-the-close、playground-series-s6e2、feedback-prize-effectiveness、march-machine-learning-mania-2026、santa-2023、llms-you-cant-please-them-all）
+> 进度：**10/204**（2026-10-03；**批次 B01 全部完成**：5-day course、optiver-close、s6e2、feedback-effectiveness、march-mania-2026、santa-2023、llms-ycpta、blood-vessel、s4e9、AI4Code）
 
 ## 批次 B01（1–10）
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `5-day-ai-agents-intensive-vibecoding-course-with-google` | other | Featured | 6/0 | 93.3 | ⬜ |
+| 1 | `5-day-ai-agents-intensive-vibecoding-course-with-google` | other | Featured | 6/0 | 93.3 | ✅ |
 | 2 | `optiver-trading-at-the-close` | tabular | Featured | 9/0 | 59.8 | ✅ |
 | 3 | `playground-series-s6e2` | tabular | Playground | 6/4 | 57.4 | ✅ |
 | 4 | `march-machine-learning-mania-2026` | tabular | Featured | 8/10 | 53.4 | ✅ |
 | 5 | `feedback-prize-effectiveness` | nlp | Featured | 6/3 | 52.1 | ✅ |
 | 6 | `santa-2023` | sim-agent | Featured | 6/3 | 49.8 | ✅ |
 | 7 | `llms-you-cant-please-them-all` | nlp | Featured | 6/0 | 47.6 | ✅ |
-| 8 | `blood-vessel-segmentation` | cv | Research | 6/11 | 47.5 | ⬜ |
-| 9 | `playground-series-s4e9` | tabular | Playground | 6/6 | 47.5 | ⬜ |
-| 10 | `AI4Code` | nlp | Featured | 6/6 | 47.3 | ⬜ |
+| 8 | `blood-vessel-segmentation` | cv | Research | 6/11 | 47.5 | ✅ |
+| 9 | `playground-series-s4e9` | tabular | Playground | 6/6 | 47.5 | ✅ |
+| 10 | `AI4Code` | nlp | Featured | 6/6 | 47.3 | ✅ |
 
 ## 批次 B02（11–20）
 

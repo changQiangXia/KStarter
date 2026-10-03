@@ -43,8 +43,31 @@
 - CV 与公开榜同时只微涨时，先怀疑过拟合，别庆祝。
 - 集成的前提是干净的 OOF；看到"高分 blender"先查它有没有 OOF 与折证据。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：六位数 RMSE 下的元集成赛——**干净 OOF（嵌套 TE）+ 跨家族多样性 + 匹配有效数字的停止容差**是三个胜负点。
+
+- #1（95 票）：计划中的 Ridge 集成只能第 2；最终用 NN meta（+4 个 OOF 特征）夺冠；其 notebook 私 62957.8（前三）。
+- 81st：tol=1e-5 → 私 63057（81 名）vs tol=1 → 私 63003（约第 5）——CV 更"好"反而更差，"第 5 位有效数字"才是停止线。
+- #4（48 票）：32 模型爬山（FM/Lasso/CatBoost/LAMA/AutoGluon 树）；原始数据 +~20 点；FE 只提 CV 不提 LB。
+- TE 帖（63 票）：外层 5 折 × 内层 5 折的无泄漏 target encoding（图 1）。
+- AutoML GP 3rd：公共解加权 + bagging + 预测取 5 的倍数。
+
+**悬案**：2nd/3rd 主赛方案未收录；20 折嵌套 TE 的成本收益无消融；公私排序对容差敏感（官方名次未核）。
+
+## 8. 图表证据
+
+![无泄漏 TE 嵌套折](../../intel/playground-series-s4e9/bodies/533961_img/02.png)
+
+**图 1**（topic 533961）：TE 规范图——测试集用全训练集编码；训练集内部再切 5 折，Fold i 只用 Fold j1..j4 编码。
+
+![#1 的 CV vs 私榜散点](../../intel/playground-series-s4e9/bodies/537052_img/03.png)
+
+**图 2**（topic 537052）：SVR 最高 CV/最差私榜，Ensemble 较低 CV/最佳私榜。
+
+## 9. 出处
 
 - 1st：堆叠 NN 与离群分类器：https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537052
 - 81st：回归套分类 + HC 容差复盘：https://www.kaggle.com/competitions/playground-series-s4e9/discussion/537202
 - 4th：blending works, but "blending" doesn't：https://www.kaggle.com/competitions/playground-series-s4e9/discussion/536973
+- 轻读全本：`analysis/deep/playground-series-s4e9.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）

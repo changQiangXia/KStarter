@@ -18,7 +18,22 @@
 - 课程类条目对建模 playbook 没有价值，但**对新手是低成本的入门路径**（免费、有社区）。
 - 分类器需要识别"队伍数为 0 / 无指标 / 课程 FAQ"这类信号（本条目已按 `meta` 归类）。
 
+## 轻读结论（2026-10 补）
+
+**一句话**：这不是竞赛而是 Google×Kaggle 的 5 日 Agent 工程课程——价值在任务框架与工具链。
+
+- 课程结构：Unit1 Vibe Coding/Antigravity → Unit2 MCP/A2A/A2UI/AP2/UCP 协议栈 → Unit3 Agent Skills（`SKILL.md` + 渐进式披露，对抗 context rot）→ Unit4（未收录）→ Unit5 Spec-Driven Development（Gherkin 规格为真源、零信任流水线、策略服务器）。
+- 生产化路径：vibe coding 只负责原型速度；企业级靠"规格即真源 + 自动评审 agent + 策略护栏"。
+- 实操第一约束是成本/配额（FAQ：Cloud Run 计费、$300 试用、API key、Antigravity 配额）。
+
+**悬案/缺口**：Day4 与 Capstone 正文未收录（缺 1/5 内容）；无数值成效；无图证。
+
+## 图表证据
+
+**本场无归档图片**，无法内嵌图证。
+
 ## 出处
 
 - 讨论区索引：`intel/5-day-ai-agents-intensive-vibecoding-course-with-google/topics.md`
 - 课程 FAQ：见该比赛讨论区 "Codelabs FAQs"
+- 轻读全本：`analysis/deep/5-day-ai-agents-intensive-vibecoding-course-with-google.md`（Tier B 轻读：课程结构/要点/悬案）
