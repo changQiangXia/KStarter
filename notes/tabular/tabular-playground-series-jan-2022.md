@@ -41,8 +41,31 @@
 - 公开榜只告诉你它覆盖的部分——先分析"榜在测什么"，再决定是否信它。
 - 残差不是终点：画残差、找缺的节日/外生变量，是特征工程最可靠的来源之一。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本场是"**公榜不可信 + 线性模型夺冠**"的双重示范——公榜只覆盖 2019Q1（无节假日），1st 公榜仅 4.11991（约第 306 名）却靠按年 GroupKFold + 残差驱动的假期特征私榜夺冠；5th 也是纯线性；GBDT 在本场输在"无法精确控制假期窗口"。
+
+- 1st（304355）：Ridge + log 目标；Fourier 系数（stickers 无）、精确假期长度（挪威复活节不同）、OECD 消费者信心指数；多 MinMaxScaler 实现按特征差异化正则；KaggleRama/KaggleMart 比例恒定 → 直接计算。
+- 5th（索引）：最小线性回归。
+- 16th（304413）：混合模型 + 网格搜索；一阶 Fourier；公榜跳跃 277 名；GDP_PC 被弃（普通 GDP 相关性略高）。
+- 40th（304353）：Boltzmann 集成 `exp(b(S−x))`，单参数；b 随赛程漂移；局限 = 无负权重、不管相关性。
+- 后处理：舍入提分（71 票专帖）；SMAPE 计算/近似（81 / 40 票）。
+- 社区：无奖金 TPS 的分享文化（40th 明说依赖公开 notebook）；top notebook 数据泄漏指控（305266）。
+
+**裁决**：先确认"公榜在测什么"；强季节 + 外推任务优先线性 + 显式假期/外生特征；SMAPE 要做舍入后处理；公开 notebook 集成素材在高奖金赛不可直接迁移。
+
+**悬案**：2nd–4th/6th–15th 未收录；泄漏指控未核查；图证仅社区 meme。
+
+## 9. 图表证据
+
+![社区热帖 meme](../../intel/tabular-playground-series-jan-2022/bodies/298446_img/01.jpg)
+
+**图 1**（topic 298446）：本届最高票社区 meme（224 票），非技术图证。
+
+## 10. 出处
 
 - 1st：高级线性模型（残差与节日工程）：https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304355
 - Boltzmann 集成：https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304353
 - 16th：混合模型：https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304413
+- 舍入提分（71 票）：https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301249
+- 数据泄漏指控（11 票）：https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/305266

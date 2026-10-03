@@ -51,13 +51,43 @@
 3. **上下文与工具使用的约束也是提示词工程的一部分**，不要只写"你要很聪明"。
 4. **公开 notebook 是合法起点**：前三名都在公开基础上做增量并明确署名——这在 Kaggle 是常态文化。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：AIMO3 从"微调时代"切到"**推理工程时代**"——官方直言主赛被一份公开 notebook 主导；前三名全部零训练，靠 prompt 格式约束、投票/熵聚合与沙箱/显存工程。1st 用 GPT-OSS-120B 单卡 H100 + 8-bit KV + page cache 预加载 + 熵加权自洽 + 持久沙箱；2nd 在公开 notebook 上做 7 处修改（其中"答案 [0,99999] + 模约简提醒"最高杠杆）；GPT-OSS 工具的公开版私榜 41.5（546 名）、公开峰值 42/50。
+
+- 2nd（702423）：尾部 256 token 熵、`\boxed{}` 严格提取、投票分主导聚合（2.0×vote_share + 0.3×confidence + 0.5×consensus）、中位数熵、"不可追领先"早停；50 题 4–5 小时。
+- 546th/公开版（702057）：pass@8、65,536→81,920 ctx 防截断、FP8 E4M3 KV、prefix caching、2× sandbox 池、"IMO 金牌"人设；不训练。
+- 37th（700274）：把"整数答案、避免浮点、MOD 检查、何时用 Python"写进提示，压缩思考长度。
+- AIMO2 遗产（638787）：DeepSeek-14B 微调（SFT/DPO/GRPO 压长度）+ W4KV8 + lmdeploy/TensorRT-LLM + ReDrafter 1.8×。
+- 附加奖：CrystalMath $30k（CAV 过滤）、AstralMath 亚军（431k 轨迹）；写作奖冠军含 hybrid-Mamba vLLM fork；最难题 ACUTES 仅一人两次解出、ROLLER 无人解出；Longest Leader $20k。
+
+**裁决**：当前边际收益在推理系统（prompt 约束、聚合器、沙箱/显存/时间调度）；微调与论文级提示词多样性收益有限；参赛要同时考虑私榜重跑与附加奖机制。
+
+**悬案**：1st 最终分数未披露；3rd–5th 未收录；私榜重跑规则未细读。
+
+## 9. 图表证据
+
+![AIMO3 历史榜单监控](../../intel/ai-mathematical-olympiad-progress-prize-3/bodies/662498_img/01.png)
+
+**图 1**（topic 662498）：社区历史榜单监控（分数 + 运行时长）。
+
+![参考题 pass@3 基线](../../intel/ai-mathematical-olympiad-progress-prize-3/bodies/635859_img/01.png)
+
+**图 2**（topic 635859）：各模型在参考题上的 pass@3 对比。
+
+![熵的定义](../../intel/ai-mathematical-olympiad-progress-prize-3/bodies/703222_img/07.png)
+
+**图 3**（topic 703222）：熵的直觉（低熵=高置信）——熵加权自洽的基础。
+
+## 10. 出处
 
 - 讨论区索引：`intel/ai-mathematical-olympiad-progress-prize-3/topics.md`（120 条）
-- 已收录 write-up（8 篇）：
+- 已收录 write-up（10 篇）：
   - 1st（14 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/703222
   - 2nd（15 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/702423
   - 37th（13 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/700274
   - GPT-OSS-120B 技术总结（28 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/702057
+  - AIMO2 汇总（24 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/638787
+  - 附加奖公布（24 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/708484
   - 公开/私榜难度对照（64 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/679559
   - 数学语料奖（46 / 41 / 31 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-3/discussion/672668 ｜ 672592 ｜ 672528

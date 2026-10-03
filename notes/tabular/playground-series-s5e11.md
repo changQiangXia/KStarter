@@ -44,10 +44,31 @@
 - 先做"单模最强"，它常常已经接近最终名次；集成是保险而不是魔法。
 - 分箱粒度是超参：同一列做 5 种离散化分别编码，比在一个编码器上调半天更有效。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本届是"**FE 统治 + 线性集成**"——前六名都把重心放在数字位特征、分箱后的 TE/CE、原数据 TE 上；集成器一致选择 Ridge/Hill Climbing（非线性堆叠过拟合）。1st 的最佳单模（CV 0.92818 / LB 0.92923）本身就能排第 2，最终用 100 模型集成夺冠；2nd 的 7 模型 Ridge 里单看一个 LGBM 也够第 2。
+
+- 1st（647362）：数字位两两/三元/四元交互 + TE/CE；用 `employment_status`、`employment_status+debt_to_income_ratio` 做目标的 TE；100 模型 + Ridge/HC；非线性堆叠明显更差。
+- 2nd（647288）：基数 >7 的列全 TE+CE；`annual_income`/`loan_amount` 用分位/均匀/round/整除/取整五种离散化再 TE；train/原数据计数比；自述交互特征与"原数据当行"都无提升；LGBM 强正则。
+- 4th（647417）：LGBM+DNN；早期集成当伪标签（+0.0004）；差分进化爬山配 seed 权重；私榜 0.92915。
+- 5th（647359）：XGB+LGBM+TabM×5 seeds + AutoGluon，Ridge 融合；不训全量数据（信 CV）；CatBoost/xRFM/RealMLP 被弃。
+- 6th（647305）：全类别化（loan_amount 取整 10、annual_income 取整 100）+ Keras FM/bigram；单轮爬山 0.9275→0.928；CatBoost/Keras 堆叠在大集成上过拟合。
+- 社区：盲混 vs 正确混合之争（90 票 / 71 票）；"boosting over residuals"提议 118 票；CV-LB 稳定（42 票）。
+
+**裁决**：优先"离散化 + TE/计数编码 + 数字位交互"；集成用线性/爬山；信 CV 但要警惕集成阶段的 CV 虚高；原始连续特征层面的 n-way 交互不值得。
+
+**悬案**：3rd/7th+ 未收录；boosting-over-residuals 未验证；本场 0 图（图证缺口）。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：A lot of features, a lot of models…：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647362
 - 2nd：7 models, but 1 was also enough：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647288
 - 5th：(XGB+LGBM+TabM)×5 seeds + AutoGluon：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647359
 - 4th：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647417
 - 6th：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/647305
+- How to blend models correctly（90 票）：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614624
+- Blind blending fails in practice（71 票）：https://www.kaggle.com/competitions/playground-series-s5e11/discussion/614704
