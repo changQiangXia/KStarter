@@ -43,9 +43,31 @@
 - "单模型 vs 大集成"取决于数据：2nd 与 AutoML 1st 都用单模型接近上限，但 1st 用资源碾压补足最后 0.001。
 - 补充数据的用法要做对照实验（行/列/每折全量），别默认一种姿势。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：大数据 + 24 小时限时赛——**先榨干单模专属超参（CatBoost 的 Newton score_function / XGB 的 max_bin），再谈堆叠**；CV-LB 一致时比赛本质是"实验吞吐 + 资源管理"。
+
+- Cross Sellers（132 票）：三段堆叠（分段 LGBM + LAMA 系 NN + XGB 末级）；12 版特征库；"补充数据整份进每折"CV 最高。
+- AGP 1st：**一个 CatBoost，零特征工程**（GPU 全量）→ 0.89505/0.89586。
+- 2nd：单 CatBoost 调参至 0.89788/0.89753；关键 = **Newton 系 score_function（NewtonCosine/NewtonL2）+ 12 leaf_estimation_iterations**、lr 0.085、1 万迭代、去重；50 轮分布式 HPO。
+- 3rd：按 `Previously_Insured`×`Vehicle_Damage` 分段训 9 个 LGBM + 7 个 NN + OOF 二段堆叠 → 0.89375。
+- 4th：**XGB max_bin=2^18−1**（大数据下默认 255 太小），192 vCPU 单模 60 分钟 → 0.89262；自省"先调单模超参而非堆集成"。
+
+**裁决**：大数据赛先用 CV-LB 关系定信任框架；低基数高重要性特征优先分段建模；限时赛把特征库/命名/并行 HPO 当一等公民。
+
+**悬案**：2nd 提到的 @paddykb trick 内容缺失；主榜与 AGP 两条赛道口径在材料中混淆；Cross Sellers 未给三策略分数字。
+
+## 8. 图表证据
+
+![Cross Sellers 的三段堆叠](../../intel/playground-series-s4e7/bodies/523404_img/01.png)
+
+**图 1**（topic 523404）：LGBM/CatBoost 与 LAMA 系 NN 交叉作特征，末级 XGBoost 汇总 + 公开 kernel 并入——"树叠 NN、NN 叠树"的具体结构。
+
+## 9. 出处
 
 - 1st：Team Cross Sellers（特征仓库与资源管理）：https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523404
 - 2nd：One model is all you need：https://www.kaggle.com/competitions/playground-series-s4e7/discussion/523489
 - AutoML GP 1st：One CatBoost Is All You Need：https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516475
 - 3rd：LightAutoML testers：https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516860
+- 4th：AutoGluon（max_bin 发现）：https://www.kaggle.com/competitions/playground-series-s4e7/discussion/516265
+- 轻读全本：`analysis/deep/playground-series-s4e7.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 2 图证）

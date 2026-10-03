@@ -40,8 +40,31 @@
 - 数据简单时别过度工程：本场 2 个特征 + 小集成即可前列，大集成反而拖累。
 - 用浅决策树先看全貌，避免一上来就堆模型。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**："Accuracy + 合成数据"把榜面噪声放到最大——本场同时出现"承认公榜彩票并给它 0.86 权重"（AGP 1st）与"小集成优于大集成"（6th）两种相反证据；关键是明确自己走哪条路线。
+
+- AGP 1st（32 票）：公开 notebook 是"彩票"（离线无法解释）→ 0.14 自研 + 0.86 彩票模型；自研用 AutoGluon 3h（log-loss 早停、accuracy 选择）；序数当数值、加原数据有益，样本权重无用。
+- carl（36 票）：特征工程全徒劳、删弱特征掉分；**仅改 seed（42→24）公榜 0.83875→0.83679** → 运气成分极大。
+- 6th（55 票）：5 折 + XGB/LGBM 小集成 + Optuna；"多模型集成有害"，单模/极小集成最好（有"一次提交拿第 2"的案例）。
+- ravi20076（32 票）：24 小时赛分段实验 + 留底提交，融合公开 kernel 到 0.83924。
+
+**裁决**：噪声主导的榜面上，集成会放大噪声；先做"加/不加原数据""序数 vs 类别"的单变量对照，FE 的优先级最低。
+
+**悬案**：公开彩票 notebook 的机制未解释；3rd 单 XGB 帖（515983）与离群点检测帖（511076）未细读。
+
+## 8. 图表证据
+
+![浅层决策树给出的主规则](../../intel/playground-series-s4e6/bodies/509073_img/01.png)
+
+**图 1**（topic 509073）：深度 3 决策树——`Curricular units 2nd sem (approved)` 直接分出 graduate/dropout 两翼，中间由 `Tuition fees up to date` 区分 enrolled。
+
+## 9. 出处
 
 - 多分类模型的集成适配度诊断：https://www.kaggle.com/competitions/playground-series-s4e6/discussion/512220
 - 6th：小集成与随机性观察：https://www.kaggle.com/competitions/playground-series-s4e6/discussion/515989
 - 两个最重要的特征（浅树规则）：https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509073
+- AGP 1st（0.14/0.86 彩票加权）：https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509631
+- carl 的 Pt.2 复盘（seed 敏感）：https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509642
+- ravi20076 的一天四段实验：https://www.kaggle.com/competitions/playground-series-s4e6/discussion/509665
+- 轻读全本：`analysis/deep/playground-series-s4e6.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
