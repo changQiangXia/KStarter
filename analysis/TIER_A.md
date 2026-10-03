@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 🔄 9/10 ｜ 总计 **49/60**（2026-10-03）
+> 进度：Batch 1–4 ✅ 40/40 ｜ Batch 5 ✅ 10/10 ｜ 总计 **50/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -78,7 +78,7 @@
 | 47 | `eedi-mining-misconceptions-in-mathematics` | nlp | 大标签空间→检索重排 | ✅ |
 | 48 | `nvidia-nemotron-model-reasoning-challenge` | nlp | 求解器→推理链；简单损失 | ✅ |
 | 49 | `learning-agency-lab-automated-essay-scoring-2` | nlp | 多来源拼接；QWK 阈值 | ✅ |
-| 50 | `pii-detection-removal-from-educational-data` | nlp | maxlen/stride 作为集成维度 | ⬜ |
+| 50 | `pii-detection-removal-from-educational-data` | nlp | maxlen/stride 作为集成维度 | ✅ |
 
 ## 批次 6（10）
 
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**49/60**；Batch 5：#41–#48 ✅、#49 essay-scoring-2 ✅（双源对齐+QWK 阈值工程+小样本方差，图证 2 张）
-- Batch 5 待办：#50 pii-detection（最后 1 场）→ Batch 6 → Tier B 204 场 → 阶段二三
-- 图证样板：essay-scoring（长度分布/投票集成）、nemotron、eedi、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
+- Tier A 完成：**50/60**；**Batch 5 全部收官（10/10）**：#41 ariel-2024、#42 leap-climsim、#43 g2net、#44 deep-past、#45 llm-science-exam、#46 commonlit、#47 eedi、#48 nemotron、#49 essay-scoring-2、#50 pii-detection
+- 下一里程碑：THEORY v0.5（Batch 5 归纳）→ Batch 6（#51–#60）
+- 图证样板：pii（三段式总览）、essay-scoring、nemotron、eedi、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
