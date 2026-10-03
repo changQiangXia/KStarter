@@ -42,8 +42,29 @@
 - 预测误差不是终点：画"大误差样本"，找它们的公共点，这往往是下一个特征的来源。
 - 系列赛是复利资产：先读同族上一届的冠军 notebook，再开始写代码。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**："线性/GAM + 强外生特征"的胜利：3rd 用**单个 GAM**（留 3 月块 CV，无集成）拿第 3，并猜测 4–7 名都是 GAM 变体；2nd 复用 TPS Jan 2022 的 **Boltzmann 集成**（5 公开 + 2 自研 notebook）；1st 用"逐列影响归因 + 反推去除 + 误差公共点"的迭代流程，并对 2020 年 3–5 月 COVID 影响用指数项建模。
+
+- 1st（388206）：分布检查 → 影响估计与验证 → 反推去除 → 调整列 → 找大误差样本公共点 → 加特征。
+- 2nd（356746）：`exp(b(S−x))` 加权集成，成分含 Ridge/Lasso/Elastic、线性回归、GAM、遗传规划。
+- 3rd（356643）：单 GAM；最终只把"圣诞→新年"过渡改成样条。
+- FE 合集（43 票）：GDP、教育指数、消费者/商业信心指数、封锁日期、节假日；比率特征（34 票）、周期性占用（28 票）、分层时序（34 票）。
+- 方法资源：时序 CV 指南（38 票）、Rob Mulla 教程（62 票）、SMAPE 陷阱（30 票）、Jan 2022 冠军 notebook。
+
+**裁决**：先补外生/事件特征，用线性/GAM 类可解释模型；CV 用留块而非随机折；把残差当线索迭代；复用系列赛历史方案。
+
+**悬案**：1st 细节少；4th–7th 是否 GAM 未核实；本场 0 图。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：残差驱动的工作流：https://www.kaggle.com/competitions/tabular-playground-series-sep-2022/discussion/388206
 - 2nd：Boltzmann 集成：https://www.kaggle.com/competitions/tabular-playground-series-sep-2022/discussion/356746
 - Jan 2022 冠军 notebook 公开：https://www.kaggle.com/competitions/tabular-playground-series-sep-2022/discussion/349435
+- 3rd：单 GAM：https://www.kaggle.com/competitions/tabular-playground-series-sep-2022/discussion/356643
+- FE 合集（43 票）：https://www.kaggle.com/competitions/tabular-playground-series-sep-2022/discussion/351098
+- SMAPE 的陷阱（30 票）：https://www.kaggle.com/competitions/tabular-playground-series-sep-2022/discussion/349553
