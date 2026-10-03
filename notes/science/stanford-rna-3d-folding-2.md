@@ -54,7 +54,27 @@
 2. **算力有限时，模板/检索方法优先**（成本低且常接近最优）。
 3. **评测集会变**：关注主办方公告，方案要能快速重跑。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：每个目标交 5 个预测取最优 → 真正的目标是**"候选集合的多样性与覆盖率"**；本场的通用配方 = TBM（模板，靠检索/排序）+ AlphaFold3 系（Protenix/Boltz2）+ RNAPro（扩散精化），按**序列长度与显存预算**分配槽位。
+
+- 1st（689386）：**长度自适应分配**——<250 nt：Boltz2×2+RNAPro+Protenix+DRFold2；250–999：TBM+Boltz2+RNAPro×2+Boltz2；**≥1000：TBM×3+Protenix×2**（RNAPro/Boltz2 会 OOM）；TBM 用模板池全局比对 + 指数加权采样 + 缺口插值/外推 + 键长键角与自避让后处理；最终 priv 0.49669。
+- 2nd（691133，公榜第 1）：**把 BPP（碱基配对概率）矩阵线性嵌入 AlphaFold3 Pairformer 的 z_init**（1→128），槽位 = TBM+RNAPro×2+BPP-Protenix×2；自称"几乎唯一改结构的方案"。
+- 3rd（689697）：**LightGBM 预测 query-template TM-score**（19.8 万对；含 RNA 相似度、PubMedBERT 文本相似度、BLOSUM62 蛋白相似度、DNA、配体 Tanimoto、链数特征）选 top-2 模板；槽位 TBM×2+Protenix×2+RNAPro；双 T4 并行。
+- 6th（686777）：TBM 造多样假设 + Protenix(no-MSA) → **把两者输出当模板喂给 RNAPro（交叉授粉）**；>1000 nt 直接 TBM×5。
+- 8th（687113）：TBM 加 ViennaRNA 二级结构 + 匈牙利算法做链匹配；Protenix token 512→768；缺失链用其他链缩放坐标填充。
+
+**裁决**：多预测取最优的赛制要按"覆盖率"设计提交；模板检索/排序是独立的可优化模块；2×T4 的运行时约束会直接改写方案结构；BPP 类生物先验的跨任务迁移是少见的架构增益点。
+
+**悬案**：4th/5th/7th/10th 方案缺失；BPP-Protenix 无消融；"移动靶"争议无官方结论；本场仅 1 张归档图。
+
+## 8. 图表证据
+
+![RNAPro 推理管线与对比](../../intel/stanford-rna-3d-folding-2/bodies/668412_img/01.png)
+
+**图 1**（topic 668412）：RNAPro = 序列/MSA/RNA LM/模板 → 48 层 Pairformer → 扩散模块 → 结构；柱状图显示其私榜明显优于 AlphaFold3/Eigen/odal/TBM 等基线（且 RNA-only 子集同样领先）。
+
+## 9. 出处
 
 - 讨论区索引：`intel/stanford-rna-3d-folding-2/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -62,3 +82,8 @@
   - 2nd（21 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/691133
   - 8th（16 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687113
   - 评测集变动讨论（15 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686651
+  - 2nd BPP-Protenix（21 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/691133
+  - 3rd TM-score 模板排序（16 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/689697
+  - 6th 交叉授粉（23 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686777
+  - RNAPro 管线（26 票）：https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/668412
+- 轻读全本：`analysis/deep/stanford-rna-3d-folding-2.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
