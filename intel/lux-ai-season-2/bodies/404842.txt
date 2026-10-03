@@ -1,0 +1,161 @@
+# https://www.kaggle.com/competitions/lux-ai-season-2/discussion/404842
+
+Topic #404842: Imitation Solution Notes
+  Author: Ern
+  Posted: 2023-04-25 05:25:10.966000
+  Votes: 31  Comments: 10
+
+Summary
+
+This is by no means a novel or top solution. Still, we wish to share our perspectives and thought process on how we approached this competition, coming from a more “standard” or traditional ML competition background.
+
+In short, we opted to train a supervised learning model that imitates team Deimos’ agents. We chose Deimos’ agents because:
+
+
+
+Their agents were (and still are) among the best in the competition.
+
+Their agents have a relatively simple action space. 
+
+
+For one, they exclusively use heavy robots. 
+
+More importantly, they do not leverage action queues (apart from action repeats). This greatly simplified the casting of the imitation process as a multiclass classification ML problem.
+
+Their agents are RL-based, thus providing an interesting opportunity to observe what “inhuman” behavior, if any, we could imitate.
+
+
+Solution
+
+Our bid and factory placement phases are based on simple rules, whereas our play phase is based on imitation learning.
+
+Bid and Factory Placement Phases
+
+Our agent’s bid and factory placement phases are regrettably naive:
+
+Our agent simply places a bid of zero each game.
+
+For factory placement, our agent follows a simple heuristic that factors in the proximity of ice and ore tiles, as well as the distribution of low rubble tiles – not very different from the approach presented in this kernel. 
+
+In hindsight, we should have given more thought into factory placement in particular, as it seems intuitive that a good starting location plays a significant role in the game. 
+
+Furthermore, since our play phase imitates an agent which probably developed a play phase strategy conditioned on a particular factory placement (and perhaps bid) strategy – the imitated play phase strategy (even if imitated perfectly) would be operating on initial conditions that are “distributed differently” and thus not ideal.
+
+Play Phase
+
+Data selection and simplification
+
+We shortlisted 5 agents by team Deimos which were reasonably similar in submission timing and rating distribution. After discarding episodes in which Deimos was not the winning team, we had approximately 3000 distinct episodes to work with.
+
+As mentioned previously, the fact that Deimos’ agents do not use action queues greatly simplified the action space. We made several further simplifications to cover as many of Deimos’ agents’ actions as possible without having to blow up the scale of the action space. We ended up with the following set of 9 actions (10 including no-op):
+
+
+
+Move, 4 directions
+
+Transfer ice (we remove directionality here and assume that transfers are always to the closest factory + assume robot always transfers all ice in cargo)
+
+Transfer ore (same simplification as above)
+
+Pick up power
+
+Dig
+
+Recharge power by 3000
+
+
+It is worth noting that since the action queue contains at most one action, the repeat mechanic collapses into one of two possibilities: do not repeat, or repeat the current action indefinitely until the action queue is replaced. We assumed that all actions are to be repeated indefinitely.
+
+With these simplifying assumptions, we covered approximately 95% of the action space used by Deimos’ agents.
+
+Training setup
+
+Each step of the play phase was essentially cast into a multiclass classification data sample. We employed a map-based input representation, i.e. relevant information about the game state was parsed into a 48x48xN_FEATURE “image” representation. The choice of information used as features was pretty intuitive (e.g. ice, ore, rubble, and lichen boards, as well as unit and factory information). We also included global features – such as the time step, a day/night boolean indicator, and number of units/factories owned – which were projected onto a 48x48 representation.
+
+The map-based input is fed to a deep convolutional neural network with a ResNet architecture. The network outputs a 48x48xN_ACTIONS map – i.e. for each board tile in a given game step, it assigns probabilities (more precisely, logit values) for each action, regardless of whether a unit/factory exists on that tile.
+
+We used cross-entropy loss to optimize the network parameters. Note that the loss is calculated only on tiles on which there is a friendly unit or factory.
+
+During play
+
+For each time step in the play phase, the network takes the featurized observations and predicts an action for each tile on the board, in a single forward pass. The predicted actions are assigned to each tile containing a friendly unit or factory.
+
+Several simple post-processing steps are applied on the model’s predictions:
+
+
+
+Mask invalid actions by forcing the predicted logits to -infinity
+
+Prevent overwriting the action queue if the predicted action is identical to the singular action in the queue
+
+Prevent friendly robots from colliding with one another
+
+
+Lessons
+
+We end this note with several takeaways that are particularly relevant for folks (such as ourselves) who come from a more “standard” machine learning competition background, but who wish to approach simulation competitions using supervised learning. 
+
+
+
+
+Know what your model is supposed to do: In standard ML competitions (and outside of competitions), it is of utmost importance to understand the domain of the problem. In the context of simulation competitions, it can be tempting to blindly clone the behavior of an existing agent without an in-depth understanding of the simulation environment.
+
+Dedicating effort to understanding the game mechanics and deciphering good strategies used by existing agents would not only significantly aid the modeling process, but also provide a more fun and meaningful experience competing.
+
+
+Know what your model is doing, and why it is doing so: Closely related to the previous point: It is generally good practice to understand the inputs and outputs of your model, especially around its shortcomings.
+
+To provide a concrete example, when examining some of our agents’ games, we noticed that several robots started wandering aimlessly at the edges of the map towards the later stages of the game. This likely unintended behavior was also present in Deimos’ agents’ games. Taking measures to discard units exhibiting this behavior during training improved our model’s learning process. The image below depicts this phenomenon: the map on the left is from one of our agent's games, while the map on the right is from one of Deimos' agent's games. 
+
+
+
+
+
+
+
+Know the competition: In standard Kaggle competitions, the leaderboard provides an avenue to gain meaningful feedback as well as to potentially psych out other competitors. However, there is also an argument for utilizing the leaderboard sparingly to reduce the temptation of overfitting and to hide some secret weapons.
+
+In contrast, for simulation competitions, the game-theoretic influence on the leaderboard is especially important to consider, since our agents are ranked not on some absolute metric, but on the relative performance against other agents. While there is certainly an argument for concealing one’s trump card strategies (or to prevent pesky imitators from leeching off your strategies), it is important to remember that submitting to the leaderboard is by far the most meaningful way to gauge where your agent would rank, and not some “local cross-validation” approach which only provides a limited view.
+
+
+In retrospect, these applications are highly pertinent for standard ML competitions as well, but are perhaps hidden or framed differently in the context of a simulation competition.
+
+We would like to thank Lux AI, the competitions sponsors, and Kaggle for making this interesting competition possible.
+
+Comments:
+├─ Stone Tao (2023-04-25 06:46:27.100000) [+4]
+│  It’s interesting to see that imitating other RL agents tends to be a good option. It probably is the case that if someone did RL, their data is likely more machine learnable (eg actions taken are c...
+├─ Jacopo Repossi (2023-04-25 16:44:08.427000) [+1]
+│  Hi @erniechiew , thanks for sharing your strategy.
+│  I have some questions:
+│  
+│  
+│  
+│  how did you gather the 3000 distinct episodes?
+│  
+│  how did you manage data augmentation (if any) and overfitting on maps?
+│  
+│  ...
+  ├─ Ern (2023-04-26 14:41:33.370000) [+2]
+  │  Hi @jacoporepossi , thank you for your questions. 
+  │  
+  │  
+  │  
+  │  
+  │  We scraped replay data from 5 of team Deimos' submissions using a custom script, which is similar to the approach presented in this notebook. ...
+├─ SiestaGuru (2023-04-25 12:34:22.613000) [+2]
+│  Thanks for sharing! Interesting writeup, very entertaining to see your agent originally learned to mimic Deimos's odd corner behavior. Perhaps there was a logic to it
+  ├─ Ern (2023-04-25 14:38:44.130000) [+3]
+  │  Thanks! We were unable to completely remove the cornered robots from training, and so our final agents still exhibit this behavior. 
+  │  
+  │  However, we observed more stable network training and faster co...
+├─ narsil (jobs-in-data.com) (2023-04-25 12:06:45.693000) [+2]
+│  Excellent ideas and write - up. I will be definitely discussing this approach with my students in class
+├─ John Wakefield (2023-04-25 08:14:57.720000) [+2]
+│  Thanks for sharing - really nice write up - good luck in the final leaderboard.
+  ├─ Ern (2023-04-25 14:34:05.907000) [+2]
+  │  Thanks @johnwakefield . All the best to you too!
+├─ Yijie Xu (2023-04-25 06:15:57.790000) [+2]
+│  Excellent write-up and a very interesting approach, well done!
+├─ Ericka42 (2023-04-25 16:08:58.887000) [+1]
+│  Thanks for sharing!

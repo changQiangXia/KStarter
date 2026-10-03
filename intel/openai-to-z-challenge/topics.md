@@ -1,4 +1,4 @@
-# openai-to-z-challenge 讨论区（按票数排序，共 80 条）
+# openai-to-z-challenge 讨论区（按票数排序，共 117 条）
 
 - [Who is paying for API?](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579187) — 48 票 / 23 评论 / 2025-05-15 
 - [Starter materials ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579189) — 38 票 / 12 评论 / 2025-05-15 
@@ -80,3 +80,40 @@
 - [Checkpoint 1 & 2 Complete – Amazon Basin Site with Sentinel-2 + GEDI + GPT-4o](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579904) — 1 票 / 0 评论 / 2025-05-21 
 - [Early  submission  prizes ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/584527) — 1 票 / 1 评论 / 2025-06-14 
 - [Could the Amazon River be the Ruin? Let’s Discuss.](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/586915) — 1 票 / 2 评论 / 2025-06-29 
+- [🚀 Fully Automated Report Pipeline for OpenAI to Z (with a Human Touch!)](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/584551) — 1 票 / 0 评论 / 2025-06-14 
+- [Help, my first time here. ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579726) — 0 票 / 2 评论 / 2025-05-20 
+- [How much is the OpenAI API cost?](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579763) — 0 票 / 1 评论 / 2025-05-20 
+- [Initial Approach Suggestion](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579815) — 0 票 / 0 评论 / 2025-05-20 
+- [Maybe,Maybe 😎👍 ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579831) — 0 票 / 0 评论 / 2025-05-20 
+- [Open-Source Amazon LIDAR + Satellite Data](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579837) — 0 票 / 0 评论 / 2025-05-20 
+- [Question about Data](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579480) — 0 票 / 2 评论 / 2025-05-17 
+- [Write up availability ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579611) — 0 票 / 3 评论 / 2025-05-19 **write-up?**
+- [How do we submit our work?](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579528) — 0 票 / 7 评论 / 2025-05-18 
+- [Clarification on Submission Format for the Hackathon](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579958) — 0 票 / 4 评论 / 2025-05-21 
+- [Remote services](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/579206) — 0 票 / 1 评论 / 2025-05-15 
+- [Let's do  it OpeAI to Z challenge ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580109) — 0 票 / 0 评论 / 2025-05-22 
+- [Difficulties Preparing Submission](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580196) — 0 票 / 2 评论 / 2025-05-23 
+- [GEE Deforestation Hotspot Script](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580521) — 0 票 / 0 评论 / 2025-05-24 
+- [Data Preprocessing Script for Amazon Deforestation Analysis](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580581) — 0 票 / 0 评论 / 2025-05-25 
+- [Dataset eligibility: TanDEM-X](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580670) — 0 票 / 1 评论 / 2025-05-25 
+- [OpenAI API Credits Not Allocated](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580524) — 0 票 / 5 评论 / 2025-05-24 
+- [Hi, help please, thanks](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/580319) — 0 票 / 12 评论 / 2025-05-23 
+- [Agentic RAG for Amazonian Site Discovery | Multimodal Reasoning with Satellite + Historical Texts](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/586732) — 0 票 / 0 评论 / 2025-06-28 
+- [editing images for writeup](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/586365) — 0 票 / 3 评论 / 2025-06-26 **write-up?**
+- [Why aren't my graphs for LiDAR working correctly?](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/586373) — 0 票 / 4 评论 / 2025-06-26 
+- [How much do we need to use the OpenAi api](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/582231) — 0 票 / 1 评论 / 2025-05-30 
+- [DeepSearch pipeline MVP, Amazon Data Bridge v3](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/582349) — 0 票 / 1 评论 / 2025-05-30 
+- [Abount eligible countries for team](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/582251) — 0 票 / 2 评论 / 2025-05-30 
+- [Is the LiDAR-Based Approach Fundamentally Flawed?](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/585917) — 0 票 / 1 评论 / 2025-06-24 
+- [Submission returns “No evaluation configured” – please configure evaluation.py](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/586236) — 0 票 / 2 评论 / 2025-06-25 
+- [Access to Earth Engine for the Hackathon](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/582731) — 0 票 / 1 评论 / 2025-06-02 
+- [FlameBearer GeoPulse — Sacred Site Detection with AI 🌿](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/586112) — 0 票 / 0 评论 / 2025-06-25 
+- [OpenAI to Z Challenge](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/583197) — 0 票 / 1 评论 / 2025-06-05 
+- [My files keep vanishing in the write up](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/583149) — 0 票 / 17 评论 / 2025-06-05 **write-up?**
+- [Z = Amano Iwato? Interpreting the Stargate through Mythology, Satellites, and AI Voices](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/583506) — 0 票 / 3 评论 / 2025-06-07 
+- [my galley images don't show up in the preview in the write up ](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/583818) — 0 票 / 2 评论 / 2025-06-09 **write-up?**
+- [Changing Write-up after early submission deadline](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/583845) — 0 票 / 1 评论 / 2025-06-09 **write-up?**
+- [Question About Submitted Writeup & Private Notebook Visibility](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/584124) — 0 票 / 2 评论 / 2025-06-11 **write-up?**
+- [What Happens If I Attach a Private Notebook to the Writeup?](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/584083) — 0 票 / 3 评论 / 2025-06-11 **write-up?**
+- [🚀 Automating Report Generation with Codex for OpenAI to Z Challenge](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/583892) — 0 票 / 9 评论 / 2025-06-10 
+- [Request for Judges' Kaggle IDs – OpenAI to Z Challenge](https://www.kaggle.com/competitions/openai-to-z-challenge/discussion/582792) — -1 票 / 5 评论 / 2025-06-02 

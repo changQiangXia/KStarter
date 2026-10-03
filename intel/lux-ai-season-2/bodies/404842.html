@@ -1,0 +1,59 @@
+<h1>Summary</h1>
+<p>This is by no means a novel or top solution. Still, we wish to share our perspectives and thought process on how we approached this competition, coming from a more “standard” or traditional ML competition background.</p>
+<p><strong>In short, we opted to train a supervised learning model that imitates team Deimos’ agents.</strong> We chose Deimos’ agents because:</p>
+<ol>
+<li>Their agents were (and still are) among the best in the competition.</li>
+<li>Their agents have a relatively simple action space. <ul>
+<li>For one, they exclusively use heavy robots. </li>
+<li>More importantly, they do not leverage action queues (apart from action repeats). This greatly simplified the casting of the imitation process as a multiclass classification ML problem.</li></ul></li>
+<li>Their agents are RL-based, thus providing an interesting opportunity to observe what “inhuman” behavior, if any, we could imitate.</li>
+</ol>
+<h1>Solution</h1>
+<p>Our bid and factory placement phases are based on simple rules, whereas our play phase is based on imitation learning.</p>
+<h2>Bid and Factory Placement Phases</h2>
+<p>Our agent’s bid and factory placement phases are regrettably naive:</p>
+<p>Our agent simply places a bid of zero each game.</p>
+<p>For factory placement, our agent follows a simple heuristic that factors in the proximity of ice and ore tiles, as well as the distribution of low rubble tiles – not very different from the approach presented in <a href="https://www.kaggle.com/code/istinetz/picking-a-good-starting-location" target="_blank">this kernel</a>. </p>
+<p><strong>In hindsight, we should have given more thought into factory placement in particular</strong>, as it seems intuitive that a good starting location plays a significant role in the game. </p>
+<p>Furthermore, since our play phase imitates an agent which probably developed a play phase strategy conditioned on a particular factory placement (and perhaps bid) strategy – the imitated play phase strategy (even if imitated perfectly) would be operating on initial conditions that are “distributed differently” and thus not ideal.</p>
+<h2>Play Phase</h2>
+<h3>Data selection and simplification</h3>
+<p>We shortlisted 5 agents by team Deimos which were reasonably similar in submission timing and rating distribution. After discarding episodes in which Deimos was not the winning team, we had approximately 3000 distinct episodes to work with.</p>
+<p>As mentioned previously, the fact that Deimos’ agents do not use action queues greatly simplified the action space. We made several further simplifications to cover as many of Deimos’ agents’ actions as possible without having to blow up the scale of the action space. We ended up with the following set of 9 actions (10 including no-op):</p>
+<ul>
+<li>Move, 4 directions</li>
+<li>Transfer ice (we remove directionality here and assume that transfers are always to the closest factory + assume robot always transfers all ice in cargo)</li>
+<li>Transfer ore (same simplification as above)</li>
+<li>Pick up power</li>
+<li>Dig</li>
+<li>Recharge power by 3000</li>
+</ul>
+<p>It is worth noting that since the action queue contains at most one action, the repeat mechanic collapses into one of two possibilities: do not repeat, or repeat the current action indefinitely until the action queue is replaced. We assumed that all actions are to be repeated indefinitely.</p>
+<p><strong>With these simplifying assumptions, we covered approximately 95% of the action space used by Deimos’ agents.</strong></p>
+<h3>Training setup</h3>
+<p>Each step of the play phase was essentially cast into a multiclass classification data sample. We employed a map-based input representation, i.e. relevant information about the game state was parsed into a <code>48x48xN_FEATURE</code> “image” representation. The choice of information used as features was pretty intuitive (e.g. ice, ore, rubble, and lichen boards, as well as unit and factory information). We also included global features – such as the time step, a day/night boolean indicator, and number of units/factories owned – which were projected onto a <code>48x48</code> representation.</p>
+<p>The map-based input is fed to a deep convolutional neural network with a ResNet architecture. The network outputs a <code>48x48xN_ACTIONS</code> map – i.e. for each board tile in a given game step, it assigns probabilities (more precisely, logit values) for each action, regardless of whether a unit/factory exists on that tile.</p>
+<p>We used cross-entropy loss to optimize the network parameters. Note that the loss is calculated only on tiles on which there is a friendly unit or factory.</p>
+<h3>During play</h3>
+<p>For each time step in the play phase, the network takes the featurized observations and predicts an action for each tile on the board, in a single forward pass. The predicted actions are assigned to each tile containing a friendly unit or factory.</p>
+<p>Several simple post-processing steps are applied on the model’s predictions:</p>
+<ul>
+<li>Mask invalid actions by forcing the predicted logits to -infinity</li>
+<li>Prevent overwriting the action queue if the predicted action is identical to the singular action in the queue</li>
+<li>Prevent friendly robots from colliding with one another</li>
+</ul>
+<h1>Lessons</h1>
+<p>We end this note with several takeaways that are particularly relevant for folks (such as ourselves) who come from a more “standard” machine learning competition background, but who wish to approach simulation competitions using supervised learning. </p>
+<ul>
+<li><p><strong>Know what your model is supposed to do:</strong> In standard ML competitions (and outside of competitions), it is of utmost importance to understand the domain of the problem. In the context of simulation competitions, it can be tempting to blindly clone the behavior of an existing agent without an in-depth understanding of the simulation environment.</p>
+<p>Dedicating effort to understanding the game mechanics and deciphering good strategies used by existing agents would not only significantly aid the modeling process, but also provide a more fun and meaningful experience competing.</p></li>
+<li><p><strong>Know what your model is doing, and why it is doing so:</strong> Closely related to the previous point: It is generally good practice to understand the inputs and outputs of your model, especially around its shortcomings.</p>
+<p>To provide a concrete example, when examining some of our agents’ games, we noticed that several robots started wandering aimlessly at the edges of the map towards the later stages of the game. This likely unintended behavior was also present in Deimos’ agents’ games. Taking measures to discard units exhibiting this behavior during training improved our model’s learning process. The image below depicts this phenomenon: the map on the left is from one of our agent's games, while the map on the right is from one of Deimos' agent's games. </p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1197762%2Fbbb5607e497e0eb144e1db97e1241178%2FScreen%20Shot%202023-04-25%20at%2013.20.21.png?generation=1682400049671081&amp;alt=media" alt="Lost Agents"></p>
+<ul>
+<li><p><strong>Know the competition:</strong> In standard Kaggle competitions, the leaderboard provides an avenue to gain meaningful feedback as well as to potentially psych out other competitors. However, there is also an argument for utilizing the leaderboard sparingly to reduce the temptation of overfitting and to hide some secret weapons.</p>
+<p>In contrast, for simulation competitions, the game-theoretic influence on the leaderboard is especially important to consider, since our agents are ranked not on some absolute metric, but on the relative performance against other agents. While there is certainly an argument for concealing one’s trump card strategies (or to prevent pesky imitators from leeching off your strategies), it is important to remember that submitting to the leaderboard is by far the most meaningful way to gauge where your agent would rank, and not some “local cross-validation” approach which only provides a limited view.</p></li>
+</ul>
+<p>In retrospect, these applications are highly pertinent for standard ML competitions as well, but are perhaps hidden or framed differently in the context of a simulation competition.</p>
+<p>We would like to thank Lux AI, the competitions sponsors, and Kaggle for making this interesting competition possible.</p>

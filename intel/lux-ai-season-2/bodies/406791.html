@@ -1,0 +1,74 @@
+<p>Kaggle code submission: <a href="https://www.kaggle.com/code/sgoodfriend/luxs2-rl-algo-impls-v0-0-12-rl-ppo-selfplay" target="_blank">https://www.kaggle.com/code/sgoodfriend/luxs2-rl-algo-impls-v0-0-12-rl-ppo-selfplay</a></p>
+<p>Training repo: <a href="https://github.com/sgoodfriend/rl-algo-impls/releases/tag/v0.0.12" target="_blank">https://github.com/sgoodfriend/rl-algo-impls/releases/tag/v0.0.12</a> (the specific commit the model was trained on was <a href="https://github.com/sgoodfriend/rl-algo-impls/tree/1c3f35f47cfcdb542e10e1666c0a0968dc6f7779" target="_blank">1c3f35f</a>)</p>
+<p>Weights &amp; Biases report: <a href="https://api.wandb.ai/links/sgoodfriend/v9g3qfbd" target="_blank">https://api.wandb.ai/links/sgoodfriend/v9g3qfbd</a></p>
+<p>After 20 million steps, the agent learned the following skills:</p>
+<ul>
+<li>Dig for ice and transfer the ice to base. The agent usually manages to survive the game if the opponent doesn’t intervene.</li>
+<li>Grow lichen on the map over the course of the game.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1298%2Fc5be5b5f760a11d32600d042c3e3868d%2FLuxS2MapResult.png?generation=1683140601660520&amp;alt=media" alt=""></p>
+<h2>RL Algorithm: PPO</h2>
+<p>The PPO implementation mostly reproduces <a href="https://github.com/vwxyzjn/ppo-implementation-details/blob/main/ppo_multidiscrete_mask.py" target="_blank">vwxyzjn/ppo-implementation-details/main/ppo_multidiscrete_mask.py</a> and uses similar hyperparameters to the Gym-μRTS paper [1]. Lux uses a much bigger map (48x48 vs 16x16 in the Gym-μRTS paper), which required a lot more memory to train. In order to get it to fit I reduced the <code>batch_size</code> to 1152 (from 3072) for an Nvidia A10 GPU and 2304 for an Nvidia A100. <code>n_steps</code> was reduced to keep the 4 minibatches per epoch.</p>
+<p>Initial bidding is a random distribution with mean 0 and standard deviation 5. Factory placement logic uses the logic from Abhishek Kumar’s <a href="https://www.kaggle.com/code/scakcotf/building-a-basic-rule-based-agent-in-python" target="_blank">Building a Basic Rule Based Agent in Python</a> with a slight weighing towards building factories near opponents.</p>
+<p><strong>“Spike” learning rate decay:</strong> Instead of using linear decay for learning rate, I implemented a learning rate schedule that started 100 times lower, raises to peak at 10% of total timesteps, and drops to 1000 times lower at the end. I hoped the initially low learning rate would allow me to use a higher peak learning rate (<code>4e-4</code>, about 60% higher than Gym-μRTS), since the biggest errors and jumps occur at the beginning. The estimated KL-divergence hovered around 0.005-0.02 for much of the training, not catastrophic, but a higher than the standard recommended 0.01 threshold.</p>
+<p><strong>Transitioning dense reward to sparse(-ish) reward over the course of training:</strong> At the beginning of training, the agent gets rewards for digging and transferring raw resources to the factory and gets penalized for losing factories. At the end of training, the agent only gets rewarded/penalized for win/loss, lichen generation, and difference vs opponent in lichen generation. In between, the reward is a linear interpolation based on number of training steps.</p>
+<p><strong>Training curve:</strong>The chart below shows ice generation significantly climbing at just before 5 million steps. At 3.3M steps, the agent is averaging a dig action’s worth of ice. By the end, ice generation averages over 40K . Water generation isn’t shown because it closely mimics ice except 4-fold less accounting for the conversion ratio. Episode length lags behind ice generation a bit, but crosses the important 150 step threshold at 5.2M steps (each factory was given 150 water+metal [last factory got less for any used in the bidding]). The training mean score tapers down to ~5 by the end because the reward by the end is primarily win/loss (+10/-10).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1298%2Fb89c39489680fd10a9e6b4b6cf73787a%2FSubmissionTrainingCharts.png?generation=1683140790910775&amp;alt=media" alt=""></p>
+<h2>Autocurriculum</h2>
+<p>The agent trained with half the agents playing themselves while the other half played agents with weights from prior versions. The prior agents were selected from snapshots taken every 300,000 steps with a window size of 33 (~10M step history). Every 144,000 steps (6000 steps per environment) the weights are switched out randomly.</p>
+<h2>Model: U-net-like</h2>
+<p>The Gym-μRTS paper uses an encoder-decoder; however, I went with something U-net-like as it was similar to the paper’s encoder-decoder with the addition of skip connections at each resolution level. The model scaled down the map 4 times to a size of 3x3 at the bottom. The model had ~3.8M parameters.</p>
+<p><strong>Critic:</strong> The value head was attached to the bottom of the U-net with an AvgPool2D to allow the map size to change while using the same model.</p>
+<p><strong>Actor:</strong> The actor head generates a MultiDiscrete action output for every grid position (what the Gym-μRTS paper refers to as Gridnet). Each grid position has the following discrete action outputs (30 bools):</p>
+<ul>
+<li>Factory action (4, includes do nothing)</li>
+<li>Unit action<ul>
+<li>Action type (6)</li>
+<li>Move direction (5)</li>
+<li>Transfer direction (5)</li>
+<li>Transfer resource type (5)</li>
+<li>Pickup resource type (5)</li></ul></li>
+</ul>
+<p>Transfer, pickup, and recharge action amounts are the maximum capable by the robot. The actions are enqueued repeating effectively indefinitely.</p>
+<h2>Input</h2>
+<p>The LuxAI_S2 PettingZoo ParallelEnv is wrapped in gym Wrappers and an AsyncVectorEnv reimplementation.</p>
+<p><strong>Mapping the Lux observation to Gym Box Space:</strong> The Lux observation dictionaries are converted to a Box space of WxH and ~80 boolean and float outputs. Each grid position has information on the following:</p>
+<ul>
+<li>Board ice, ore, rubble, lichen;</li>
+<li>Factory ownership, tile occupancy, cargo, and water survival info;</li>
+<li>Unit ownership, cargo, and enqueued action;</li>
+<li>Turn, day index, and day cycle info.</li>
+</ul>
+<p><strong>Invalid action mask:</strong> Actions that would be invalid to the LuxAI_S2 env are masked out by setting the logits of such actions to extremely large negative values, effectively zeroing the probability and gradients. Invalid actions masked out include:</p>
+<ul>
+<li>Not enough power to even enqueue actions</li>
+<li>Not enough power to move to a location (whether base power requirements or rubble) or illegal move into opponent factory</li>
+<li>No chance a transfer would lead to a valid destination (so if another friendly robot could be in that location, it’s not masked)</li>
+<li>Nothing possible to pickup</li>
+<li>Not enough power to dig or self-destruct</li>
+</ul>
+<p>Generating the above action masks “appears” to be very expensive. Training steps per second dropped from ~120/second to starting at 20-30/s. The reason I say “appears” is that over the course of training, training steps/second eventually climbs to ~250/s. My guess is that early slowness is from the game resetting every ~15 steps (without masking the agent picks invalid actions doing nothing vs the masked agent doing actions that cause factory destruction):</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1298%2F6982bb693c8e4eeee135597cae2606a3%2FTrainStepsPerSecond.png?generation=1683141143403629&amp;alt=media" alt=""></p>
+<h2>Performance</h2>
+<p>The above chart on training steps/second probably explains why my attempts at improving performance through increased caching and asynchronous execution of environments did not help very much. Even using a modified version of gym’s AsyncVectorEnv to handle passing along action masks through shared memory (<a href="https://github.com/sgoodfriend/rl-algo-impls/blob/1c3f35f47cfcdb542e10e1666c0a0968dc6f7779/rl_algo_impls/shared/vec_env/lux_async_vector_env.py" target="_blank">LuxAsyncVectorEnv</a>) helped little.</p>
+<h2>Reproducibility</h2>
+<p>The submitted agent was my first agent to exceed mean episode length above 150 steps (each factory got at most 150 water). This important milestone meant the model learned how to dig for ice and transfer the ice to the factory. This agent was also the best performing agent, outperforming followup agents during the competition and apparently outperforming an agent trained on the same commit:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1298%2Fade52a0a09a270700b41f16efef17bce%2FReproducingSubmissionTraining.png?generation=1683141239740251&amp;alt=media" alt=""></p>
+<p>The submitted agent is red. Blue is an agent trained at <a href="https://github.com/sgoodfriend/rl-algo-impls/commit/4f3a500cf1e575c55b06ebc2409d6537493f9207" target="_blank">4f3a500</a> (immediately after the submission version [v0.0.12] and meant to use the same hyperparams as the submission agent). The green line is being trained on the same commit as the submission, but it did worse than both!</p>
+<p>The submission agent isn’t a one-off. The blue line is trending towards 1000 step episode lengths (and most runs near the end are averaging over 990 steps [faded blue line]). With more steps and tweaking of the reward shape, training would likely catch up. However, this demonstrates how the same code and hyperparams can lead to drastically different training results.</p>
+<h2>Transfer Learning from a Simpler Map</h2>
+<p>The same U-net-like model can run on different sized maps since the actor is entirely convolutions-based and the critic uses an AvgPool2D before its fully-connected layers. Therefore, I tried training the agent on a smaller map (32x32) with one factory each for 20M steps and used this trained model as a starting point for the same 20M step full-game training.</p>
+<p>The simple-env trained agent was promising. After 20M “pre-training” steps, the agent was producing water reliably (though at an average of 10 per episode, which isn’t enough to survive).</p>
+<p>Even more promising, if this resulting model was the starting point of the full-game training, the agent nearly immediately lasts over 150 steps. However, the agent took a while to get out of this local optima, taking ~15M steps before exceeding 300 steps in episodes. By 20M steps, episodes were going for ~600 steps, despite likely collecting enough ice to survive (15K ice → ~3750 water → 3.75 factory-games). This is about one-third of the ice of the submission agent.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1298%2F3e60de33ce8a76576f828ed1e9b05725%2FSmallAndTransferLearning.png?generation=1683141368677955&amp;alt=media" alt=""></p>
+<h2>Next Steps</h2>
+<p>20M steps is not nearly enough for RL in a game of this complexity. With more time, I plan on training the agents for 100M+ steps, but with the following improvements:</p>
+<ul>
+<li><strong>Distinct phases for reward weights, <code>gamma</code>, and <code>gae_lambda</code>.</strong> The thought is to have a Phase 1 where rewards are skewed towards mining and survival lasting 30-50% of the training depending on total steps. Phase 3 will be sparse win/loss + score difference rewards (with higher <code>gamma</code> [0.999] and <code>gae_lambda</code> [0.99] for end-game only rewards), with a transitionary Phase 2. This resembles the Lux Season 1 paper using training phases [2], but with the addition of a linear transition period.</li>
+<li><strong>Switch from lichen generation to power generation reward.</strong> Lichen generation is problematic because lichen can be lost by not watering, which the agent could exploit. “Current lichen” is a better metric, but I’m going to switch to power generation, which combines factory survival, number of robots, and number of lichen tiles.</li>
+<li><strong>Asynchronous rollout generation instead of asynchronous rollout step generation.</strong> LuxAsyncVectorEnv isn’t that efficient because if one of the 18 environments is resetting, then the entire step has to wait for map generation to complete. Even in the best case scenario of 1000-step games, a reset in one of the environments will happen every 1/55 steps. If instead each rollout of 192 <code>n_steps</code> (A10 GPU) runs independently, then the resets are handled more equally (at most once per environment for 1000-step games, almost one-quarter reset pauses). This effect should be significantly larger at the beginning of training.</li>
+</ul>
+<p>The goal is for the agent to learn more advanced behaviors such as building robots, clearing rubble, direct competition with the opponent, and late-game strategies.</p>
+<h2>References</h2>
+<p>[1] Huang, S., Ontañón, S., Bamford, C., &amp; Grela, L. (2021). Gym-μRTS: Toward Affordable Full Game Real-time Strategy Games Research with Deep Reinforcement Learning. arXiv preprint <a href="https://arxiv.org/abs/2105.13807" target="_blank">arXiv:2105.13807</a>.</p>
+<p>[2] Chen, H., Tao, S., Chen, J., Shen, W., Li, X., Yu, C., Cheng, S., Zhu, X., &amp; Li, X. (2023). Emergent collective intelligence from massive-agent cooperation and competition. arXiv preprint <a href="https://arxiv.org/abs/2301.01609" target="_blank">arXiv:2301.01609</a>. </p>

@@ -1,0 +1,115 @@
+<h1>Decision for 58 place</h1>
+<p>First of all, we are very happy to be part of such a well-developed and interesting competition, many thanks to the organizers for their support and to all the contestants who selflessly shared their knowledge and insights.</p>
+<p>Many thanks to <a href="https://www.kaggle.com/kerrit" target="_blank">@kerrit</a>, a member of our QuData team! We are located and working in Ukraine and we want to thank everyone who now supports the people of Ukraine!</p>
+<h2>Solution Description</h2>
+<p>The solution is a library of several strategies for different stages of the game and active units, as well as some auxiliary functions.<br>
+Each strategy is a set of rules on the basis of which the behavior of robots and factories is built.</p>
+<p>The solution is based on the <strong>DefaultStrategy</strong> class from the basic.py file. It has a set of mandatory methods for implementing a full-fledged game strategy, in particular:</p>
+<ul>
+<li><em>getBid(…)</em> - bid selection</li>
+<li><em>getSpawnPos(…)</em> - select the position of the factory</li>
+<li><em>getActions(…)</em> - action definitions for factories and robots</li>
+</ul>
+<p>A complete strategy can be implemented in the <strong>DefaultStrategy</strong> class.</p>
+<p>Next, the <strong>DefaultStrategy</strong> strategy is divided into two groups <strong>Early</strong> and <strong>Game</strong>.</p>
+<h3>Early strategies</h3>
+<p><strong>Early</strong> strategies are the strategies of the factory setup phase.<br>
+Each of the strategies has a set of mandatory methods for implementing the strategy for the game phase, in particular:</p>
+<ul>
+<li><em>getBid(…)</em> - bid selection</li>
+<li><em>getSpawnPos(…)</em> - select the position of the factory</li>
+</ul>
+<p>In total, 6 <strong>Early</strong> strategies were implemented, located in the corresponding files.</p>
+<ul>
+<li><em>default</em> - Basic strategy of the factory placement library. The position for the factory is chosen randomly based on a previously compiled weight matrix. An example of the algorithm can be viewed <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSxd6FtgHrewPwfVBQtcwuRW0I46YdhTiy38FRarN9gOhW1b9-N3miff7Gg5rfQ92cEzD_BzV99Htkc/pubhtml?gid=986897905&amp;single=true" target="_blank">here</a>.</li>
+<li><em>from_kaggle_strategy</em> - This strategy is an extension of <em>default</em>. The strategy for calculating the weights uses algorithms from the notebook <a href="https://www.kaggle.com/code/istinetz/picking-a-good-starting-location" target="_blank">@istinetz</a>.</li>
+<li><em>best_strategy</em> - This strategy is an improvement <em>default</em> in terms of position selection. The most important change was the elimination of randomness in position selection. In this strategy, the position of the factory is chosen based on the amount of rubble in the 3x3 square around the point. In addition, the coefficients of the weight matrix have been slightly changed.</li>
+<li><em>single_strategy</em> - Strategy for test training of RL model. Based on <em>best_strategy</em>. A distinctive feature is that only one factory is exposed in the strategy.</li>
+<li><em>new_from_kaggle</em> - Strategy using algorithms from notebook <a href="https://www.kaggle.com/code/istinetz/picking-a-good-starting-location" target="_blank">@istinetz</a>. A distinctive feature is that the ratio of the total number of cells around the factory to the "bad" (&gt; 25) cells is used as weights.</li>
+<li><em>next_generation</em> - The last and, according to tests, the best strategy implemented in the library. The strategy calculates separate weight matrices for ice and ore, and when choosing a factory position, the amount of rubble in a 7x7 square around the point is taken into account. In addition, if all the best positions adjacent to the ice are occupied, the weight matrix for ice is recalculated.</li>
+</ul>
+<h3>Game strategies</h3>
+<p><strong>Game</strong> strategies are the strategies of the game phase, which are divided into two groups <strong>Factory</strong> and <strong>Robot</strong>.<br>
+Each of the strategies has a set of mandatory methods for implementing the strategy for the game phase, in particular:</p>
+<ul>
+<li><em>getFactoryActions(…)</em> - return actions for factories</li>
+<li><em>getRobotActions(…)</em> - return actions for robots</li>
+</ul>
+<h4>Factory strategies</h4>
+<p><strong>Factory</strong> strategies are strategies for how factories work.</p>
+<p>In total, 6 strategies were implemented, located in the corresponding files.</p>
+<ul>
+<li><em>default</em> - Basic strategy for factories. If resources are available, it creates 1 heavy and up to 3 light robots, and after 700 steps it starts growing lichen, reserving 1000-step water.</li>
+<li><em>mean_water</em> - Improved <em>default</em> strategy. The strategy uses the average water change per step to calculate the lichen planting step.</li>
+<li><em>for_best</em> - New factory strategy for <em>best_strategy</em>. The strategy creates up to 20 light robots, while the number of robots is calculated by the formula $min(max(round(step-step_{start})/l_{ts}*l_{max}, l_{min}), l_{max} )$, where $step_{start}$ - to what step should be $l_{min}$ robots, $l_{ts}$ - in how many steps the number of robots should increase to $l_{max}$. The number of heavy robots is not limited. To calculate the planting time of the lichen, the coefficient of increase in the cost of the lichen per step is also used.</li>
+<li><em>for_best_v2</em> - A branch of the <em>for_best</em> strategy. Added accounting for lichen to the strategy, which we will potentially grow in $min(300, 1000-step)$ steps.</li>
+<li><em>no_limit</em> - Improved <em>for_best</em> strategy. In the strategy, the threshold for light robots has been increased to 100 per factory, and the number of heavy ones is limited to 6.</li>
+<li><em>no_limit_v2</em> - An offshoot of the <em>no_limit</em> strategy. Added accounting for lichen to the strategy, which we will potentially grow in $min(300, 1000-step)$ steps.</li>
+</ul>
+<h4>Robot strategies</h4>
+<p><strong>Robot</strong> strategies are robot behavior strategies.<br>
+Robot strategies are the most complex among other strategies and use more auxiliary tools.</p>
+<h5>General information about tasks</h5>
+<p>In a general sense, the behavior of robots in strategies is determined by <strong>task</strong>.</p>
+<p><strong>Task</strong> is a set of algorithms for implementing robot behavior. Initially, the library had two tasks MINER (mines ice) and CLEANER (removes rubble). Later this list was expanded.</p>
+<p>The duties of the mining robot included:</p>
+<ul>
+<li>find the position of the ice,</li>
+<li>build a route,</li>
+<li>add digging actions if the robot is on a resource,</li>
+<li>return to the factory if we can't dig anything else (run out of energy).</li>
+</ul>
+<p>The responsibilities of the cleaning robot included:</p>
+<ul>
+<li>find the nearest rubble,</li>
+<li>build a route,</li>
+<li>add digging actions if the robot is on rubble,</li>
+<li>return to the factory if the energy runs out.</li>
+</ul>
+<h5>Description of strategies</h5>
+<p>To implement the algorithms of robot tasks, some auxiliary tools were used. The first of these are <strong>Eyes</strong>.</p>
+<p><strong>Eyes</strong> - This is a class that stores game state arrays, and also allows you to conveniently perform various operations with them.<br>
+Initially, the <strong>Eyes</strong> data was updated inside the <strong>Game</strong> strategy at every step. In later versions of the library, the <strong>DataController</strong> class was implemented to control the state of the game.<br>
+In total, N matrices were used in Eyes:</p>
+<ul>
+<li><em>factories</em> - Location of enemy factories. All the cells occupied by the enemy's factory were entered in the matrix.</li>
+<li><em>units(version 1)</em> - Location of allied units.</li>
+<li><em>units(version 2)</em> - Location of allied units or their next turn.</li>
+<li><em>units(version 3)</em> - Location of allied units or their next turn. In the case of a collision, the values are added together.</li>
+<li><em>u_move</em> - Ally's possible moves. Later versions used robot type instead of 1.</li>
+<li><em>e_move</em> - Possible enemy moves. Later versions used robot type instead of 1.</li>
+<li><em>u_energy</em> - The energy of an ally, distributed over possible moves.</li>
+<li><em>e_energy(version 1)</em> - Enemy's energy distributed over possible moves.</li>
+<li><em>e_energy(version 2)</em> - Enemy's energy distributed over possible moves. In the event of a collision, the values are added together.</li>
+<li><em>e_energy(version 3)</em> - Enemy's energy distributed over possible moves. In the event of a collision, the values are added together. In the position of the robot - 0.</li>
+<li><em>e_lichen</em> - Enemy lichen location.</li>
+</ul>
+<p>Using only <strong>Eyes</strong> the following 3 strategies were implemented.</p>
+<ul>
+<li><em>default</em> - The basic strategy of the robots' behavior, the essence of which is that the robots performed only the MINER and CLEANER tasks. The robots took into account the position of the allies when building the route, thereby avoiding the collision with the allies. The task was assigned as follows: heavy robots were always MINER, light ones up to 500 steps were assigned the task MINER after 500 - CLEANER. The strategy used the Eyes matrices: <em>factories and units(1)</em>.</li>
+<li><em>cautious</em> - Runaway strategy for robots. The strategy implemented a mechanism for escaping robots. The essence of the mechanism was that if the difference <em>e_energy(1)</em>-<em>u_energy</em> &gt; 0, then we could be crushed and the robot would return to the base. The strategy used Eyes matrices: <em>factories, units(1), e_energy(1), u_energy</em>. Also, this strategy was implemented as a separate GameStrategy as an example of the fact that any convenient approach can be used when implementing the strategy.</li>
+<li><em>curious</em> - Catching up strategy. This is an improved <em>cautious</em> strategy. A pursuit indicator was added to the strategists, which was responsible for how many steps the robot would pursue the enemy in order to crush. The strategy used Eyes matrices: <em>factories, units(2), e_energy(2), u_energy, u_move</em>. In addition, the u_energy and u_move matrices were individual for each robot, which eliminated some problems.</li>
+</ul>
+<p>The next step was to implement the <strong>Observer</strong> auxiliary class, which dealt with the distribution of tasks to robots. The number of tasks has been expanded to: MINER, CLEANER, RETURN (go to base), JOBLESS (unemployed), WARRION (crushes opponents), LEAVER (runs away), RECHARGE (charges). This contributed to more flexible control of robots.</p>
+<p>Using <strong>Eyes</strong> and <strong>Observer</strong> the following 2 strategies were implemented.</p>
+<ul>
+<li><em>optimised</em> - Improved and optimized <em>curious</em> robot strategy for new challenges. The strategy used Eyes matrices: <em>factories, units(2), e_energy(2), u_energy, u_move</em>.</li>
+<li><em>fixed</em> - Fixed version of <em>optimised</em> strategy. The RECHARGE(recharging) task was added to the strategy. The Eyes matrices were used in the strategy: <em>factories, units(3), e_energy(3), u_energy, u_move</em>.</li>
+</ul>
+<p>The last auxiliary is the <strong>TaskManager</strong> class. The tasks of the class include a deeper indication of the tasks of the robot. On the <strong>Observer</strong> class, only the functions of monitoring the environment and informing that the task of the robot needs to be changed remained. In addition, new tasks were defined: WALKER (retreat if an ally is coming at us), CARRIER (removes rubble to the nearest resource), ENERGIZER (charges robots adjacent to the factory), DESTROYER (destroys enemy lichen), the MINER task is divided into ICE_MINER and ORE_MINER, and the tasks themselves were divided into permanent (ICE_MINER, CARRIER …) and one-time (WALKER, LEAVER …).<br>
+Permanent tasks are assigned to the robot and are redefined when the robot has run out of queue, one-time tasks are determined only when a certain event occurs (an enemy is coming at us and he will crush us (LEAVER) or an ally (WALKER), we have run out of energy (RECHARGE)).</p>
+<ul>
+<li><em>next_generation</em> - This strategy fully implemented all the tasks of the robots, in addition, many errors were fixed. In the strategy, thanks to <strong>TaskManager</strong>, the number of robots on tasks was regulated, in particular, the ICE_MINER task was not assigned to three robots if there were only two ices next to us, etc. In addition, the number of ENERGIZER robots was controlled so that there were no more of them than ICE_MINER. CARRIER cleared the path to the resource only in the first 50 steps, and then went to extract the resource. For the ICE_MINER task, priority was given to heavy robots, if there were none, then light ones took their place. The amount of CLEANER was controlled. If the distance to the nearest rubble is &gt; 14, then the robots become DESTROYER or WARRIOR if the enemy did not have lichen. In addition, the total number of MINER robots depended on the current step.</li>
+</ul>
+<h5>Auxiliary Functions</h5>
+<p>The <strong>Path</strong> class was implemented to search for the path of bots.<br>
+A distinctively and unexpectedly useful feature of pathfinding is the added window mode. Its essence boiled down to the fact that we are looking for a path not on the entire map, but on a cut-out area with a minimum size of 5x5. The starting point of the route and the end point were located in the corners of this area.</p>
+<p>The picture below shows an example of a window mode:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F11578546%2F4ee6b070461f1d1202be78082ca84c20%2Fwindow_mode.png?generation=1683474895479322&amp;alt=media" alt="Example of window mode when searchin"></p>
+<h2>Solution Links</h2>
+<ul>
+<li><a href="https://github.com/BooCreator/Lux-AI-Season-2-Strategy-Library" target="_blank">Here</a>  you can see the full code of the solution.</li>
+<li><a href="https://github.com/BooCreator/Lux-AI-Season-2-Strategy-Library/tree/main/strategy" target="_blank">Here</a> is the implementation of the solution strategies</li>
+<li><a href="https://github.com/BooCreator/Lux-AI-Season-2-Strategy-Library/tree/main/bots" target="_blank">Here</a> is the implementation of the latest uploaded bots</li>
+<li><a href="https://github.com/BooCreator/Lux-AI-Season-2-Strategy-Library/tree/main/strategy/kits" target="_blank">Here</a> is the implementation of all helpers and classes</li>
+</ul>
