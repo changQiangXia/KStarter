@@ -1,0 +1,72 @@
+# tabular-playground-series-jun-2022 讨论区（按票数排序，共 70 条）
+
+- [#1 Solution - Denoising Autoencoder](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334331) — 76 票 / 20 评论 / 2022-07-01 **write-up?**
+- [Are you missing something? Imputation Techniques.](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328568) — 59 票 / 26 评论 / 2022-06-01 
+- [Solution Approach - Regression Models](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328369) — 28 票 / 11 评论 / 2022-06-01 **write-up?**
+- [MissForest and missingpy](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328358) — 27 票 / 7 评论 / 2022-06-01 
+- [Worried about missing values in the dataset? Check this compilation.](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328366) — 23 票 / 8 评论 / 2022-06-01 
+- [#2 Solution](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334319) — 21 票 / 10 评论 / 2022-07-01 **write-up?**
+- [4th place approach](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334497) — 18 票 / 8 评论 / 2022-07-02 **write-up?**
+- [Journal Papers, Kernels, Blogs | BEST Resources to Learn and Explore in TPS Jun 2022](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328676) — 17 票 / 7 评论 / 2022-06-02 
+- [Beginner friendly resources for missing values - Tutorials](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328348) — 16 票 / 7 评论 / 2022-06-01 
+- [What do we know so far? - Insights from top discussion topics](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/331227) — 16 票 / 2 评论 / 2022-06-16 
+- [Are we approaching this the wrong way?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/333761) — 16 票 / 4 评论 / 2022-06-28 
+- [Acing TPS-Jun'22: Useful Research papers for missing value predictions](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328401) — 15 票 / 2 评论 / 2022-06-01 
+- [Interesting plot!](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328386) — 14 票 / 8 评论 / 2022-06-01 
+- [Congratulations!](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334336) — 14 票 / 9 评论 / 2022-07-01 
+- [Rob Mulla's notebook on "Handling with missing data"](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328339) — 14 票 / 8 评论 / 2022-06-01 
+- [Competition Stuck...at 0.83564](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330054) — 13 票 / 18 评论 / 2022-06-10 
+- [Congrats to SRK on becoming a new 4x Kaggle  Grandmaster.](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328783) — 13 票 / 2 评论 / 2022-06-03 
+- [A recent benchmarking study of imputation techniques](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328647) — 13 票 / 9 评论 / 2022-06-02 
+- [Abhishek Thakur' Tutorial on Handling Missing Values](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/331331) — 13 票 / 4 评论 / 2022-06-16 
+- [Significant Differences Between Continuous and Discrete Variables](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328420) — 13 票 / 3 评论 / 2022-06-01 
+- [Kaggle Team, Is this a time series data?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328370) — 13 票 / 2 评论 / 2022-06-01 
+- [[TPS-JUN22] Winning solutions tricks and methods](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334415) — 12 票 / 3 评论 / 2022-07-01 **write-up?**
+- [Are features from F_1 and F_3 independent?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329000) — 11 票 / 6 评论 / 2022-06-04 
+- [I found Fast KNN imputer](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330218) — 11 票 / 2 评论 / 2022-06-11 
+- [Helpful Resources for all Kaggle Competitions](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330874) — 11 票 / 3 评论 / 2022-06-14 
+- [Overfitting when using LightGBM for regression](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329603) — 11 票 / 0 评论 / 2022-06-07 
+- [Exclusive_Techniques_Deal_with_Miss_Data!](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/333322) — 10 票 / 6 评论 / 2022-06-25 
+- [Data Imputation technique](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328352) — 10 票 / 0 评论 / 2022-06-01 
+- [Columns in group F_2_](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330421) — 9 票 / 8 评论 / 2022-06-12 
+- [#16 Deep Magic](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334358) — 9 票 / 8 评论 / 2022-07-01 
+- [A monthly prize to recognize notebooks that use Google's ML ecosystem](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330003) — 9 票 / 2 评论 / 2022-06-09 
+- [17th place solution](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334343) — 9 票 / 3 评论 / 2022-07-01 **write-up?**
+- [How to impute when there are two or more missing values in one record?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330727) — 9 票 / 0 评论 / 2022-06-14 
+- [Imputation using Datawig](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330761) — 9 票 / 4 评论 / 2022-06-14 
+- [Auto EDA to catch missing data !!!!](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/331908) — 8 票 / 3 评论 / 2022-06-19 
+- [Are we not having a TPS for July?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334356) — 8 票 / 8 评论 / 2022-07-01 
+- [Model inspection with SHAP](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330155) — 8 票 / 4 评论 / 2022-06-10 
+- [Creating a Validation set](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329050) — 8 票 / 3 评论 / 2022-06-04 
+- [Good article about Multiple Imputation](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329525) — 8 票 / 0 评论 / 2022-06-07 
+- [Baseline Iterative Imputer Code](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328588) — 7 票 / 3 评论 / 2022-06-02 
+- [#8 solution | Neural Net like MLM](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/334567) — 7 票 / 2 评论 / 2022-07-02 **write-up?**
+- [Missing Values Imputation with Auto Encoder](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329575) — 7 票 / 4 评论 / 2022-06-07 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/327376) — 6 票 / 3 评论 / 2022-05-26 
+- [The Dangers of Imputing Values using KNN](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329113) — 6 票 / 0 评论 / 2022-06-04 
+- [Using the dataset for educational purposes in Medium articles](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329567) — 6 票 / 2 评论 / 2022-06-07 
+- [What are the differences between these approaches?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329723) — 6 票 / 1 评论 / 2022-06-08 
+- [Are Null values imputed intentionally!!](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329604) — 6 票 / 3 评论 / 2022-06-07 
+- [How randomly are the missing values distributed?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/331815) — 6 票 / 2 评论 / 2022-06-18 
+- [🤔Imputing Process Takes Forever ](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/332482) — 6 票 / 7 评论 / 2022-06-21 
+- [Process of figuring out that only Mean everywhere except F4](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/332985) — 6 票 / 3 评论 / 2022-06-24 
+- [Creating the submission dataframe](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/333500) — 6 票 / 6 评论 / 2022-06-26 
+- [Kaggle Competition](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328349) — 5 票 / 2 评论 / 2022-06-01 
+- [Too slow - How to accelerate imputation?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330148) — 5 票 / 3 评论 / 2022-06-10 
+- [KNN Imputation](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328842) — 5 票 / 11 评论 / 2022-06-03 
+- [Best score stuck at 0.835](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/333183) — 5 票 / 0 评论 / 2022-06-25 
+- [Improving Score by increasing n_estimators](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328437) — 5 票 / 0 评论 / 2022-06-01 
+- [📌 10xFaster Automated Submission Function 🦾👑](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328391) — 5 票 / 0 评论 / 2022-06-01 
+- [Feature Engineering Based on Missing Values](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330382) — 4 票 / 0 评论 / 2022-06-12 
+- [Is there any solution that will be easy for deploying](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/331750) — 4 票 / 1 评论 / 2022-06-18 **write-up?**
+- [Do they mean something?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328834) — 4 票 / 0 评论 / 2022-06-03 
+- [CatBoost and Increasing the n_estimators gives great Results!!](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328494) — 4 票 / 0 评论 / 2022-06-01 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/327375) — 3 票 / 6 评论 / 2022-05-26 
+- [F2 features: Search for meaning](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330627) — 3 票 / 0 评论 / 2022-06-13 
+- [Order of missing values in the submission file](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330877) — 3 票 / 2 评论 / 2022-06-14 
+- [Chinese Kaggler Looking for a Team Megathread!! 中国小伙伴寻找队友](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/328383) — 3 票 / 0 评论 / 2022-06-01 
+- [Iterative and KNN imputers running forever](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329285) — 2 票 / 4 评论 / 2022-06-05 
+- [What do scores greater than 1 mean?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/329153) — 2 票 / 5 评论 / 2022-06-05 
+- [Shapley Interaction Index](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/330695) — 1 票 / 0 评论 / 2022-06-13 
+- [What are your moves for the last 5 days?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/333314) — 1 票 / 1 评论 / 2022-06-25 
+- [Pandas read_csv not reading all rows?](https://www.kaggle.com/competitions/tabular-playground-series-jun-2022/discussion/332303) — 0 票 / 1 评论 / 2022-06-21 

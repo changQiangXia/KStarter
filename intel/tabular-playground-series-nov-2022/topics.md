@@ -1,0 +1,76 @@
+# tabular-playground-series-nov-2022 讨论区（按票数排序，共 74 条）
+
+- [Understanding Ensemble Learning, Blending, and Stacking Generalization](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363968) — 56 票 / 20 评论 / 2022-11-03 
+- [The overlooked piece of information](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364013) — 54 票 / 23 评论 / 2022-11-04 
+- [1st Place Solution](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369674) — 52 票 / 21 评论 / 2022-12-01 **write-up?**
+- [Wrapping up Tabular Playground Series 2022](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369672) — 30 票 / 11 评论 / 2022-12-01 
+- [There are 7515 ones and 7485 zeros in private LB test set](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364082) — 30 票 / 10 评论 / 2022-11-04 
+- [Calling for Feedback on Tabular Playground Series](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/361941) — 28 票 / 29 评论 / 2022-10-24 
+- [Great advices/tips from Veterans. Embrace their GMasters Class!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363381) — 28 票 / 7 评论 / 2022-11-01 
+- [Probability calibration by isotonic regression](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363778) — 25 票 / 4 评论 / 2022-11-03 
+- [Initial thoughts and references](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363309) — 24 票 / 10 评论 / 2022-11-01 
+- [#Folds vs CV score - important note](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366100) — 24 票 / 2 评论 / 2022-11-14 
+- [OOF Ensembling: Forward Selection](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364834) — 21 票 / 5 评论 / 2022-11-08 
+- [5k features? Let's use feature selection](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363483) — 20 票 / 5 评论 / 2022-11-01 
+- [Tabular NNs in LightAutoML - 0.51522 on LB](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364074) — 17 票 / 11 评论 / 2022-11-04 
+- [Host Solution, private LB on the previous TPS. Just in case you missed it.](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/365103) — 17 票 / 4 评论 / 2022-11-09 **write-up?**
+- [💉🩺🧬 Nice Resources to refer to for November 2022 TPS🌡📈💢 ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363308) — 16 票 / 9 评论 / 2022-11-01 
+- [Stacking and blending for beginners](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363649) — 15 票 / 11 评论 / 2022-11-02 
+- [Outliers can ruin your model!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363334) — 14 票 / 2 评论 / 2022-11-01 
+- [File 0.7016449929.csv has an additional column](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363300) — 14 票 / 8 评论 / 2022-11-01 
+- [Competition metric- binary log-loss- references and explanations](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363311) — 14 票 / 5 评论 / 2022-11-01 
+- [❗️Be careful with final submissions](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369242) — 14 票 / 8 评论 / 2022-11-29 
+- [Idea: cluster the correlation matrix, take simple average over each cluster, only then optimize weights](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/367413) — 14 票 / 0 评论 / 2022-11-20 
+- [Model embedding](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/367070) — 14 票 / 0 评论 / 2022-11-18 
+- [Feather Dataset (Read all at once)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363372) — 13 票 / 5 评论 / 2022-11-01 
+- [Don't trust in log loss to do feature selection!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363721) — 13 票 / 0 评论 / 2022-11-02 
+- [Don't forget to drop (almost) perfectly correlated predictions](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363763) — 13 票 / 0 评论 / 2022-11-03 
+- [# Features vs LB score competition](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363488) — 13 票 / 14 评论 / 2022-11-01 
+- [Collection of helpful ideas - TPS Nov 2022](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363683) — 13 票 / 8 评论 / 2022-11-02 
+- [📌 Mean Methods Comparisons 🔥🔥🔥](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363371) — 12 票 / 3 评论 / 2022-11-01 
+- [Submission files may have systematic bias](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363743) — 12 票 / 2 评论 / 2022-11-03 
+- [How to augment the data we have?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364154) — 12 票 / 0 评论 / 2022-11-04 
+- [UMAP Dimensionality Reduction](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364357) — 12 票 / 3 评论 / 2022-11-06 
+- [Additional Features in Submission Files](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364931) — 12 票 / 0 评论 / 2022-11-09 
+- [PLS-DA and LogisticRegression model to reduce number of variables](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/365583) — 12 票 / 6 评论 / 2022-11-11 
+- [7th place solution](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369731) — 12 票 / 2 评论 / 2022-12-01 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/370126) — 12 票 / 2 评论 / 2022-12-03 **write-up?**
+- [📌 Feature Engineering Without Overfitting - PCA 🔥🔥🔥](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/365849) — 11 票 / 4 评论 / 2022-11-13 
+- [How did I improve my score on the leaderboard, from 0.515 to 0.514 to 0.513](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366152) — 11 票 / 2 评论 / 2022-11-15 
+- [ TPS November 2022: Beginner friendly compilation](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/367596) — 11 票 / 5 评论 / 2022-11-21 
+- [New activation: Growing Cosine Unit](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366518) — 10 票 / 4 评论 / 2022-11-16 
+- [LASSO as Feature Selector](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363990) — 9 票 / 2 评论 / 2022-11-04 
+- [Viewing the name of the submission file?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/368090) — 9 票 / 2 评论 / 2022-11-23 
+- [Analysis of blending strategies ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/368894) — 9 票 / 2 评论 / 2022-11-28 
+- [How to evaluate model calibration without graphs](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364480) — 9 票 / 6 评论 / 2022-11-06 
+- [Dilemma (Chasing two rabbits)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/367512) — 8 票 / 4 评论 / 2022-11-21 
+- ["Calibrated" best prediction. logloss 0.51869 ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364425) — 8 票 / 0 评论 / 2022-11-06 
+- [Illustration of concept: The score of the labeled rows matches the file name](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363447) — 8 票 / 7 评论 / 2022-11-01 
+- [ROC-AUC for Features Selection](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363564) — 8 票 / 0 评论 / 2022-11-02 
+- [Feature selection: Jensen-Shannon distance](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/368905) — 7 票 / 5 评论 / 2022-11-28 
+- [Question about selecting variables based on correlation coeffient](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/365928) — 6 票 / 1 评论 / 2022-11-13 
+- [The shakeup has happened again!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369671) — 6 票 / 0 评论 / 2022-12-01 
+- [Correlation Matrix](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363672) — 6 票 / 0 评论 / 2022-11-02 
+- [Adversarial Validation](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366685) — 5 票 / 1 评论 / 2022-11-17 
+- [Ideas for weighting ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363937) — 5 票 / 2 评论 / 2022-11-03 
+- [Understanding the evaluation metric[LogLoss]](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/367591) — 5 票 / 1 评论 / 2022-11-21 
+- [Handling the incorrect values](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364058) — 5 票 / 0 评论 / 2022-11-04 
+- [Looking for Techniques to Eliminate Features](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363511) — 5 票 / 4 评论 / 2022-11-02 
+- [Is there a better way of building a DF?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363703) — 5 票 / 4 评论 / 2022-11-02 
+- [All About Blending and Stacking](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363675) — 5 票 / 2 评论 / 2022-11-02 
+- [Initial idea on how to avoid overfitting](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363469) — 5 票 / 8 评论 / 2022-11-01 
+- [Difference between cross-val-score and loop model.](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366494) — 4 票 / 4 评论 / 2022-11-16 
+- [📌 Advanced Dataset - Pseudo Labels 🎭🎭🎭](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364048) — 4 票 / 2 评论 / 2022-11-04 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/361940) — 3 票 / 4 评论 / 2022-10-24 
+- [Selecting Best base leaners  ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/364083) — 3 票 / 3 评论 / 2022-11-04 
+- [Improving score by increasing and decreasing prediction probabilities by small values](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366139) — 3 票 / 9 评论 / 2022-11-15 
+- [A small idea about the final way to boost your score(with sample code)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/368941) — 3 票 / 3 评论 / 2022-11-28 
+- [📚 TPS-Nov-22 winning solutions](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369248) — 3 票 / 2 评论 / 2022-11-29 **write-up?**
+- [MORE activation](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/369741) — 3 票 / 4 评论 / 2022-12-01 
+- [Target permutation & hierarchical clustering to choose features](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363880) — 3 票 / 0 评论 / 2022-11-03 
+- [TPS December 2022 ???](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/370006) — 2 票 / 2 评论 / 2022-12-02 
+- [stacking model](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/368243) — 1 票 / 2 评论 / 2022-11-24 
+- [A simple question!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363988) — 1 票 / 1 评论 / 2022-11-04 
+- [Dataset reduced to the limit](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366987) — 0 票 / 3 评论 / 2022-11-18 
+- [How to read Kaggle data into local repository](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366388) — 0 票 / 1 评论 / 2022-11-16 
+- [clipping values is wrong](https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/366356) — 0 票 / 1 评论 / 2022-11-15 

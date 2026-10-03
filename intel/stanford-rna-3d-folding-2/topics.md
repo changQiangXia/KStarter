@@ -1,0 +1,82 @@
+# stanford-rna-3d-folding-2 讨论区（按票数排序，共 80 条）
+
+- [Welcome to Part 2 of the Stanford RNA 3D Folding Challenge!](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/666382) — 35 票 / 35 评论 / 2026-01-06 
+- [🧬 RNAPro - Inference Pipeline](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/668412) — 26 票 / 7 评论 / 2026-01-16 
+- [1st Place Solution — Five-Model Ensemble with Length-Adaptive Allocation](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/689386) — 25 票 / 7 评论 / 2026-04-08 **write-up?**
+- [6th Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686777) — 23 票 / 3 评论 / 2026-04-01 **write-up?**
+- [2nd Place (Public 1st Place) Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/691133) — 21 票 / 0 评论 / 2026-04-14 **write-up?**
+- [Running the evaluation metric](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/667106) — 21 票 / 10 评论 / 2026-01-11 
+- [3rd Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/689697) — 16 票 / 2 评论 / 2026-04-09 **write-up?**
+- [8th Place Solution - TBM and Protenix](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687113) — 16 票 / 2 评论 / 2026-04-02 **write-up?**
+- [5th Place Solution — msa and protenix and TBM](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/688036) — 15 票 / 1 评论 / 2026-04-04 **write-up?**
+- [The moving target that rendered RNA 3D Pt2 competition a huge JOKE!!! - 2nd update](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686651) — 15 票 / 37 评论 / 2026-03-31 
+- [It's official: NVIDIA returns as co-organizers!](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/670390) — 15 票 / 2 评论 / 2026-01-27 
+- [Posts from the hosts](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/666383) — 14 票 / 4 评论 / 2026-01-06 
+- [10th Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686820) — 13 票 / 3 评论 / 2026-04-01 **write-up?**
+- [AlphaFold3 Baseline Score](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/669099) — 13 票 / 0 评论 / 2026-01-20 
+- [7th Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687180) — 12 票 / 0 评论 / 2026-04-02 **write-up?**
+- [Some Thoughts on the Rerun and Ranks Discrepancies ](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687191) — 11 票 / 6 评论 / 2026-04-02 
+- [Getting started](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/666732) — 10 票 / 0 评论 / 2026-01-08 
+- [Clarification: Public/Private LB (%) split and final re-run scoring?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/679588) — 9 票 / 8 评论 / 2026-03-02 
+- [4th Place Solution — Cross-Attention Template Reranker + Protenix + RNAPro](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/692863) — 9 票 / 8 评论 / 2026-04-18 **write-up?**
+- [3 public protenix inference notebook for RNA 3D Folding Part 2](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/673621) — 9 票 / 16 评论 / 2026-02-15 
+- [Presentation of Part 1 of this challenge: Thursday Feb 5, 2026 (video added)](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/671762) — 9 票 / 2 评论 / 2026-02-03 
+- [found extra data here](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/679557) — 8 票 / 1 评论 / 2026-03-02 
+- [15th Place Solution - A Beginner Data Scientist's Journey](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/688937) — 8 票 / 2 评论 / 2026-04-07 **write-up?**
+- [19th Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686795) — 8 票 / 0 评论 / 2026-04-01 **write-up?**
+- [current RNAPro performance](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/671317) — 8 票 / 0 评论 / 2026-02-01 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/663572) — 7 票 / 0 评论 / 2025-12-18 
+- [Queued - Kaggle scripts run](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/681613) — 7 票 / 1 评论 / 2026-03-16 
+- [[Updated] I am so confused. Why am I removed from LB?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686585) — 7 票 / 35 评论 / 2026-03-31 
+- [How long does submission scoring take?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/671124) — 7 票 / 8 评论 / 2026-01-31 
+- [I wonder why](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686675) — 7 票 / 0 评论 / 2026-03-31 
+- [Template-based approach baseline + public notebook](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/671826) — 7 票 / 1 评论 / 2026-02-04 
+- [Three things I learned optimising RNA structure prediction this week ](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/679904) — 6 票 / 1 评论 / 2026-03-04 
+- [Question about the 8-hour runtime limit (submission vs final rerun)](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/680039) — 6 票 / 0 评论 / 2026-03-05 
+- [Ribonanza QuickStart](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/670892) — 6 票 / 0 评论 / 2026-01-30 
+- [Last steps in this competition](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/684359) — 6 票 / 14 评论 / 2026-03-24 
+- [16th Place Solution ](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687234) — 6 票 / 0 评论 / 2026-04-02 **write-up?**
+- [9th place solution: Optimize diversity when representation is limited](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687756) — 6 票 / 0 评论 / 2026-04-03 **write-up?**
+- [33rd Place Solution](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687757) — 6 票 / 0 评论 / 2026-04-03 **write-up?**
+- [[Answered] Evidence suggests that the rerun took place twice](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686938) — 6 票 / 13 评论 / 2026-04-01 
+- [How to Use pip install biopython Without Internet in Kaggle](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/669616) — 5 票 / 3 评论 / 2026-01-23 
+- [Can I cancel a running notebook and still submit ?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/669732) — 5 票 / 3 评论 / 2026-01-24 
+- [Need a re-rerun!](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686695) — 5 票 / 3 评论 / 2026-04-01 
+- [Use this extended training dataset using GraphQL!](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/667519) — 5 票 / 0 评论 / 2026-01-13 
+- [Clarification on GPU Configuration in the Submission Environment](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/682880) — 5 票 / 9 评论 / 2026-03-19 
+- [Outcome of the Stanford RNA 3D folding challenge, Part 2](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686590) — 4 票 / 54 评论 / 2026-03-31 
+- [Leaderboard will be clear until rerun scores are posted](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/685419) — 4 票 / 15 评论 / 2026-03-28 
+- [ Chains and ligands](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/671575) — 4 票 / 1 评论 / 2026-02-02 
+- [How can I learn about the domain for this challenge?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/668637) — 4 票 / 3 评论 / 2026-01-18 
+- [69th Place Solution - TBM + Protenix](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687506) — 4 票 / 0 评论 / 2026-04-03 **write-up?**
+- [Question Regarding the Usage Rules for protenix_base_20250630_v1.0.0](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/674343) — 4 票 / 4 评论 / 2026-02-19 
+- [ahahhahaha](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686592) — 3 票 / 1 评论 / 2026-03-31 
+- [68th Public, 142nd Private Solution - Protenix and Local Aligner for Gap Filling](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687766) — 3 票 / 0 评论 / 2026-04-03 **write-up?**
+- [Chain ordering](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/680551) — 3 票 / 2 评论 / 2026-03-09 
+- [why was a lower score selected over my higher submission??](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686854) — 2 票 / 2 评论 / 2026-04-01 
+- [Good Dice Rolling Competition !!!](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/689933) — 2 票 / 1 评论 / 2026-04-10 
+- [How to make predictions in CASP17](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/702799) — 2 票 / 0 评论 / 2026-05-26 
+- [recommended set of tools](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/666870) — 2 票 / 0 评论 / 2026-01-09 
+- [Post-deadline submissions](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/732575) — 2 票 / 3 评论 / 2026-08-03 
+- [What is exactly temporal cutoff?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/669710) — 1 票 / 5 评论 / 2026-01-23 
+- [TM-score and pairwise distance matrix](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/672054) — 1 票 / 9 评论 / 2026-02-05 
+- [What models should we use](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/674081) — 1 票 / 3 评论 / 2026-02-18 
+- [ambiguity of training data's cutoff](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/674359) — 1 票 / 2 评论 / 2026-02-20 
+- [Submission Fail with "Submission Scoring Error"](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/676172) — 1 票 / 3 评论 / 2026-02-23 
+- [Hybrid TBM-Protenix Pipeline with Geometry-Aware RNA Refinement](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/704421) — 1 票 / 0 评论 / 2026-06-04 
+- [Why is the score displayed this way?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686737) — 1 票 / 2 评论 / 2026-04-01 
+- [ Removal FROM THE LEADERBOARD](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687057) — 1 票 / 0 评论 / 2026-04-02 
+- [Question about public score shown on public notebooks](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/683490) — 1 票 / 4 评论 / 2026-03-20 
+- [Does domain knowledge dominate this competition?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/684949) — 1 票 / 5 评论 / 2026-03-26 
+- [Hybrid TBM & Chunked Protenix Pipeline with Physics-Informed Refinement](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/702448) — 0 票 / 0 评论 / 2026-05-23 
+- [Modules can't be installed?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/669069) — 0 票 / 2 评论 / 2026-01-20 
+- [Scores on the easier test set ](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/688089) — 0 票 / 0 评论 / 2026-04-04 
+- [Description typo](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/670284) — 0 票 / 1 评论 / 2026-01-27 
+- [Why Is My Unselected Notebook Scoring Higher Than Top 1 on Private?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/687312) — 0 票 / 2 评论 / 2026-04-02 
+- [Late Submission ?? ](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686925) — 0 票 / 1 评论 / 2026-04-01 
+- [Unsure how to interpret this result](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686655) — 0 票 / 3 评论 / 2026-03-31 
+- [Protenix luck competition?](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686673) — 0 票 / 0 评论 / 2026-03-31 
+- [Submission that finished after the deadline](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/686597) — 0 票 / 0 评论 / 2026-03-31 
+- [Post-competition scoring](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/685015) — 0 票 / 29 评论 / 2026-03-26 
+- [RNA  STRUCTURE − 3D FOLDING SAMPLE VISUALS ](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/673816) — 0 票 / 1 评论 / 2026-02-17 
+- [The money prize sum does  not match](https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/679501) — 0 票 / 1 评论 / 2026-03-01 

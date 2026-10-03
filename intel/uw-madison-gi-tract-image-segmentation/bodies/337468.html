@@ -1,0 +1,158 @@
+<p>Thanks to the organizers and congrats to all the winners,I have learned a lot from the discussions and previous competition solutions, thank you for your generous sharing!</p>
+<h4>Summary</h4>
+<p>My overall solution is similar to the 2nd place solution, but without 3D models. My solution is to use the detector to detect the main area, then use the classifier to judge whether it needs to be segmented, and finally segment the image that needs to be segmented, and only keep the segmentation results that the classifier judges as positive samples.</p>
+<h5>Detail</h5>
+<ul>
+<li>5 Fold cross validation by group spliting case</li>
+<li>Only 2.5D Models (slice=3 and slice=5)</li>
+<li>Pre-processing(crop with a detection model), refer to <a href="https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation/discussion/107981" target="_blank">[bestfitting]</a>, <a href="https://www.kaggle.com/competitions/rsna-str-pulmonary-embolism-detection/discussion/194145" target="_blank">[Guanshuo Xu]</a></li>
+<li>My training pipeline (cls + seg method and swa for models) is based on our siim acr solution (<a href="https://www.kaggle.com/c/siim-acr-pneumothorax-segmentation/discussion/108009" target="_blank">SIIM-ACR Solution</a>)</li>
+</ul>
+<h3>Models</h3>
+<h4>Pre-processing</h4>
+<ul>
+<li>EfficientDet-D0, size=256, epoch=5, all other parameters use default parameters. This is a very easy task for the model to learn. I generated some training samples using image preprocessing and relabeled the bad bounding box.</li>
+</ul>
+<h4>Cls part</h4>
+<p>Only use Unet(<a href="https://github.com/qubvel/segmentation_models.pytorch" target="_blank">Smp-Unet</a> and Timm-Unet) with different backbone and classification branch,Timm-Unet refer to <a href="https://github.com/selimsef/xview3_solution" target="_blank">selimsef's xview3_solution</a>, Thanks for his sharing, Then I made some modifications to the network for this competition.</p>
+<ul>
+<li>Cls branch loss: bce loss </li>
+<li>Seg branch loss: bce loss</li>
+<li>Using ema (refer to <a href="https://github.com/dungnb1333/SIIM-COVID19-Detection" target="_blank">DungNB</a>) and swa</li>
+<li>Epoch=35(7 cycle)</li>
+<li>Init lr=3e-4 or 5e-4</li>
+<li>Data: use all data</li>
+<li>Metric for select model: TP / (TP + FP + FN) and Dice score</li>
+</ul>
+<h5>models</h5>
+<ul>
+<li>Smp-Unet efficientnet-b7, size=320, slice=5</li>
+<li>Timm-Unet efficientnet-v2-l, size=320, slice=3</li>
+<li>Timm-Unet efficientnet-v2-l, size=320, slice=5</li>
+<li>Timm-Unet efficientnet-v2-m, size=352, slice=5</li>
+<li>Timm-Unet efficientnet-b7ns, size=320, slice=5</li>
+</ul>
+<h4>Seg part</h4>
+<p>For the classification model, I mainly focus on the accuracy of the classification. For the segmentation model, I hope to obtain a better and better segmentation effect, so I train the segmentation model separately.</p>
+<ul>
+<li>Cls branch loss: bce loss </li>
+<li>Seg branch loss: ComboLoss({'bce': 0.5, 'dice': 0.5, 'lovasz': 1}</li>
+<li>Data: All positive samples</li>
+<li>Using ema and swa</li>
+<li>Metric for select model:  Dice score</li>
+<li>Timm-Unet efficientnet-v2-l-1 and Timm-Unet efficientnet-v2-l-2 use different scale pretraining adjustments</li>
+</ul>
+<h5>models</h5>
+<ul>
+<li>Timm-Unet efficientnet-v2-l, size=384, epoch=35, slice=5</li>
+<li>Timm-Unet efficientnet-v2-l-1, size=416, epoch=35, slice=5</li>
+<li>Timm-Unet efficientnet-v2-l-2, size=416, epoch=35, slice=5</li>
+<li>Timm-Unet efficientnet-v2-m, size=416, epoch=35, slice=5</li>
+</ul>
+<h4>Post-process</h4>
+<ul>
+<li>Remove 25 pixel part</li>
+<li>Take three consecutively predicted positive samples as the starting point and three consecutively predicted negative samples as the end point(very small improve)</li>
+</ul>
+<h4>Some Results</h4>
+<table>
+<thead>
+<tr>
+<th>fold</th>
+<th>size/slice</th>
+<th>cls</th>
+<th>seg</th>
+<th>private/pubilc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>384/3</td>
+<td>efb3-unet</td>
+<td></td>
+<td>0.869/0.875</td>
+</tr>
+<tr>
+<td>0</td>
+<td>384/3</td>
+<td>efb5-unet</td>
+<td></td>
+<td>0.869/0.876</td>
+</tr>
+<tr>
+<td>0</td>
+<td>320/3</td>
+<td>efb7-unet</td>
+<td></td>
+<td>0.866/0.878</td>
+</tr>
+<tr>
+<td>0</td>
+<td>384/3</td>
+<td>efb7-unet</td>
+<td></td>
+<td>0.870/0.877</td>
+</tr>
+<tr>
+<td>0</td>
+<td>320/5</td>
+<td>efv2-l-unet</td>
+<td></td>
+<td>0.871/0.878</td>
+</tr>
+<tr>
+<td>0</td>
+<td>320/5</td>
+<td>efv2-l-unet(swa)</td>
+<td></td>
+<td>0.875/0.882</td>
+</tr>
+<tr>
+<td>5 folds</td>
+<td>320/3</td>
+<td>efb7-unet</td>
+<td></td>
+<td>0.873/0.883</td>
+</tr>
+<tr>
+<td>5 folds</td>
+<td>320/3</td>
+<td>efb7-unet</td>
+<td>efb7-unet</td>
+<td>0.877/0.886</td>
+</tr>
+<tr>
+<td>5 folds</td>
+<td>320/5</td>
+<td>efv2-l-unet(swa)</td>
+<td></td>
+<td>0.876/0.886</td>
+</tr>
+<tr>
+<td>5 folds</td>
+<td>320/5</td>
+<td>efv2-l-unet(swa)</td>
+<td>efv2-l-unet(swa-384)</td>
+<td>0.879/0.890(not submit)</td>
+</tr>
+</tbody>
+</table>
+<h4>Work for me</h4>
+<ul>
+<li>Add a detection model(It greatly reduces the resources used for training)</li>
+<li>Add some segmentation models for positive sample(0.886-&gt;0.890)</li>
+<li>Mixup and cutmix are work for segmentation models</li>
+<li>The swa has a relatively large increase in the single fold, and the score increase is not much different when the 5 folds ensemble.</li>
+</ul>
+<h4>Not work for me</h4>
+<ul>
+<li>Make some brightness adjustments to the data(spent a lot of time)</li>
+<li>Hausdorff distance loss function</li>
+<li>External dataset(CT), maybe need some processing with GAN models</li>
+<li>Positive and negative sample balance</li>
+</ul>
+<h4>Final</h4>
+<p>Because I don't have a local GPU now, the first two months my model was mainly based on Kaggle GPU development, 30 hours a week gave me more time to think and read previous competition solutions, and worked on Kaggle GPU for two month, the best model (classification only) obtained was effb3-FPN-384 (single fold 0.875), this score was about 90th at the time, which made me very frustrated, the last month, I rented some GPU, trained a lot of large models, luckily, large models work well. Due to time and training resource limit, I have no time to try 3D models.</p>
+<h4>Infer code</h4>
+<p>Link: <a href="https://www.kaggle.com/code/hesene/3rd-place-winning-solution" target="_blank">https://www.kaggle.com/code/hesene/3rd-place-winning-solution</a></p>

@@ -1,0 +1,102 @@
+<ul>
+<li>Updated on 2024-07-27: I published the notebook at <a href="https://www.kaggle.com/code/sash2104/uspto-6th-place-solution" target="_blank">https://www.kaggle.com/code/sash2104/uspto-6th-place-solution</a></li>
+<li>Updated on 2024-08-11: I published the scripts at <a href="https://github.com/sash2104/kaggle-uspto-public" target="_blank">https://github.com/sash2104/kaggle-uspto-public</a></li>
+<li>Updated on 2024-08-11: 日本語のwriteupを <a href="https://github.com/sash2104/kaggle-uspto-public/blob/main/writeup/README_ja.md" target="_blank">https://github.com/sash2104/kaggle-uspto-public/blob/main/writeup/README_ja.md</a> に追加</li>
+</ul>
+<p>Thanks to the hosts for organizing this competition! I thoroughly enjoyed participating throughout the duration.</p>
+<h2>Summary</h2>
+<p>An example of a query is as follows:<br>
+<code>(ti:composition ((detd:coox detd:pearly) OR (clm:dye detd:behentrimoinium))) OR (cpc:A61Q5/12 detd:artichoke detd:genaminox) OR detd:amidoquatsagain</code></p>
+<ul>
+<li>Only <code>AND</code> and <code>OR</code> operators are used.<ul>
+<li><code>AND</code> is implied and therefore omitted (<a href="https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/516104" target="_blank">https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/516104</a>)</li></ul></li>
+<li>All fields are utilized in the query.</li>
+<li>The query format is <code>subquery_1 OR subquery_2 OR ... OR subquery_k</code>. The example query consists of four subqueries. The first two subqueries sharing <code>ti:composition</code> to save tokens:<ul>
+<li><code>ti:composition detd:coox detd:pearly</code></li>
+<li><code>ti:composition clm:dye detd:behentrimoinium</code></li>
+<li><code>cpc:A61Q5/12 detd:artichoke detd:genaminox</code></li>
+<li><code>detd:amidoquatsagain</code></li></ul></li>
+<li>For validation, I used a custom searcher implemented in C++ and an alternative metric.</li>
+</ul>
+<h2>Terms</h2>
+<ul>
+<li>Result Set: A list of patents returned from the custom searcher in response to a query. It is not limited to 50 items, and includes all patents that match the query in the index.</li>
+<li>AP'@50: the competition metric, is a flawed implementation of AP@50. (<a href="https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499981#2791642" target="_blank">https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499981#2791642</a>)</li>
+<li>Positive: Target 50 patents.</li>
+<li>Negative: All patents that are not Positive. These can be divided into two types based on whether they are definitely included in the test index or not.<ul>
+<li>Certain Negative: Negative patents that exist in test.csv (~12K).</li>
+<li>Potential Negative: Patents that exist in patent_metadata.parquet but not in test.csv (~13M).</li></ul></li>
+<li>Padding: Virtual patents added when the number of results is less than 50.</li>
+</ul>
+<h2>Validation Strategy</h2>
+<p>As discussed in <a href="https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/501169" target="_blank">https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/501169</a> , I considered creating queries using all the patents included in patent_metadata.parquet. However, it seemed impractical to create a Whoosh index that includes all 13 million patents, so I decided to use my own searcher and an alternative metric for validation.</p>
+<p>To conduct the evaluation quickly, I added the following constraints:</p>
+<ul>
+<li>Constraint 1: Queries will not include proximity operators.</li>
+<li>Constraint 2: There will be no weighting of scores among patents that match the query.</li>
+<li>Constraint 3: Queries will not include wildcards.</li>
+</ul>
+<p>Constraint 1 removes the need to consider the positions of words in the patents, Constraint 2 removes the need to consider the frequency of words in the patents, and Constraint 3 removes the need to consider the surface forms of words.</p>
+<p>If only Positives (and Padding) exist in the Result Set, accurate AP'@50 can be calculated even with these constraints. For example, if Positives change from 0, 10, 20, 30, 40, to 50, the AP'@50 changes from 0 to 0.51, 0.76, 0.91, 0.97, and 1.0, respectively.</p>
+<p>When Positives and Negatives are mixed, AP'@50 can only be approximated. For instance, with one Positive and one Negative (and 48 Padding), there are two possible patterns of results.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3097455%2F4356475ff5ee4752a0f5de78853bbf7a%2Fuspto_ap50_p1n1.png?generation=1721866546870616&amp;alt=media" alt="ap@50"></p>
+<p>Due to Constraint 2, it is not possible to determine a single pattern for the result, so I assumed that all patterns appear with equal probability. The approximate AP'@50 score in this case is <code>(0.090 + 0.070)/2 = 0.080</code>. Similarly, for n Positives and m Negatives, (n+m)Cm patterns of results are possible. The score for n Positives and m Negatives was taken as the average AP'@50 of 100,000 patterns randomly sampled with replacement from all possible patterns (henceforth referred to as score1(n,m)).</p>
+<p>The graph below shows the plotted scores.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3097455%2Fabf1280c0f592a0a028e4615b135da90%2Fuspto_score1.png?generation=1721866611625446&amp;alt=media" alt="score1"></p>
+<p>For example, score1(25,0)=0.842 and score1(50,50)=0.500.</p>
+<p>If only Positives and Certain Negatives are included in the Result Set, <code>score1</code> can be used as is.</p>
+<p>When Potential Negatives are included in the Result Set, the number of Negatives varies probabilistically. Assuming all Potential Negatives are included in the Result Set with probability p, the score can be calculated using the probability mass function (pmf) of the binomial distribution as follows:</p>
+<p>$$<br>
+\text{score2}(n, m, p) = \sum_{k=0}^{m} \binom{m}{k} p^k (1-p)^{m-k} \text{score1}(n, k) <br>
+$$</p>
+<p>For example, score2(50,50,1.0) = 0.500, score2(50,50,0.1)=0.910, and score2(50,50,0.01)=0.990.</p>
+<p>The validation score was calculated as the average score2(n, m, 0.2) for each of the 2500 rows in the self-created test.csv equivalent. The total number of patents is approximately 13 million, and the number of Potential Negatives that could be included in the test index is around 75,000, so <code>p=75000/13000000 ≒ 0.006</code> seemed appropriate. However, to avoid optimistic validation scores, p=0.2 was used.</p>
+<p>The equivalent of the publication_number in test.csv was prepared as follows:</p>
+<ul>
+<li>2500 patents since 1975 and <code>len(cpc_codes) &gt; 0</code></li>
+</ul>
+<p>When the test index was created by simply filtering patents after 1975, the validation score and LB score seemed slightly off. Analyzing the published train index and LB revealed that design patents starting with US-D were rarely included in the train index and test.csv used for LB calculation. Upon investigating several design patents, I found that cpc_codes were often empty, so I added the filter <code>len(cpc_codes) &gt; 0</code>. I also confirmed that patents with empty cpc_codes were not included in the publication_number column of LB's test.csv.</p>
+<p>With the above modifications, the difference between the LB score and the validation score was generally within 0.01.</p>
+<h2>Solution</h2>
+<ul>
+<li>Phase 1: Find subquery candidates</li>
+<li>Phase 2: Generate queries using beam search to maximize <code>score2(n, m, 0.2)</code></li>
+</ul>
+<p>To achieve fast execution speed, as with my own searcher, everything was implemented in C++.</p>
+<h3>Phase 1: Finding Subquery Candidates</h3>
+<ul>
+<li>n-shot subquery<ul>
+<li>A subquery that narrows down to a specific single patent. For example, ti:margaric narrows down to US-2023092870-A1 because it is the only patent containing margaric in the title. Similarly, the cpc_codes A46B13/005 and A47L7/0061 co-occur only in US-2023025335-A1, so <code>cpc:A46B13/005 AND cpc:A47L7/0061</code> narrows down to US-2023025335-A1.</li>
+<li>Pre-calculated and embedded.</li>
+<li>Found that 5.9M patents could be narrowed down to one with a single token, and an additional 6.7M patents could be narrowed down with two tokens.</li></ul></li>
+<li>conjunctive subquery<ul>
+<li>A subquery that includes multiple Positives, no Certain Negatives, and at most <code>l</code> Potential Negatives.</li>
+<li>Combination of 2-3 tokens using AND. </li>
+<li>Explored combinations of cpc_codes, words in title and abstract (frequency &lt;=400,000), claims (frequency &lt;=100,000), and description (frequency &lt;=10,000) using DFS (Depth-First Search).</li>
+<li>Explored most cases fully, but some were time-limited.</li>
+<li>Avoided Certain Negatives as they significantly reduce the score and facilitate efficient DFS pruning.</li>
+<li>Conducted beam search with <code>l=0</code> and <code>l=1</code> for Phase 2. This improved validation score by about 0.003.</li>
+<li>Calculated on-the-fly rather than pre-calculating.</li></ul></li>
+</ul>
+<h3>Phase 2: Beam Search</h3>
+<p>The evaluation metric used was score2(n, m, 0.2), and I performed beam search with a width W for each number of tokens used. For the submission, I set W=100. Increasing W slightly improved the validation score, but even increasing W by a factor of 10 only changed the validation score by about 0.001. Additionally, if subqueries contained common tokens, they were combined to save on the number of tokens used.</p>
+<p>For example, the query for US-7507696-B2 is as follows:  <br>
+<code>(ti:composition ((detd:coox detd:pearly) OR (clm:dye detd:behentrimoinium))) OR (cpc:A61Q5/12 detd:artichoke detd:genaminox) OR detd:amidoquatsagain</code></p>
+<p>This query matches only the 50 target patents of US-7507696-B2 out of approximately 13 million patents. The query is broken down into four subqueries:</p>
+<ul>
+<li><code>ti:composition detd:coox detd:pearly</code></li>
+<li><code>ti:composition clm:dye detd:behentrimoinium</code></li>
+<li><code>cpc:A61Q5/12 detd:artichoke detd:genaminox</code></li>
+<li><code>detd:amidoquatsagain</code></li>
+</ul>
+<p>The first three subqueries are conjunctive subqueries, and the first and second share the common token ti:composition, so they are combined. The final subquery, detd:amidoquatsagain, is an n-shot subquery and matches only US-8044007-B2.</p>
+<p>Like the example query shown, the proportion of perfect queries generated that matched only the 50 target patents out of all patents was about 6%.</p>
+<p>The distribution of score2 in the submission with the best private score is as follows.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3097455%2Ff47a9d31197257e42b2dd840194ebaaa%2Fscore2_distribution.png?generation=1721866520258494&amp;alt=media" alt="score2_distribution"></p>
+<h2>What wasn't used/worked</h2>
+<ul>
+<li><code>NOT</code><ul>
+<li>I thought it might be possible to improve the score in the form of <code>(subquery_a OR ...) NOT (subquery_b OR ...)</code> by roughly narrowing down the patents and then eliminating the Negatives in the subqueries after NOT, but I didn't have time to implement and test it.</li></ul></li>
+<li>Other metaheuristics in Phase 2<ul>
+<li>I tried replacing candidates using hill climbing or simulated annealing, but simply replacing candidates randomly was inferior to beam search. Moreover, even if I worked hard to improve Phase 2 alone, the validation score seemed to improve by less than 0.01, so I didn't delve too deeply into it.</li></ul></li>
+</ul>

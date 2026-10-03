@@ -1,0 +1,79 @@
+<p>"What a strange dataset!" This is what I thought when I saw the first attempts at predicting pressures: Why do lag_back features - which are future valve settings - help to predict a pressure? Why do people use bidirectional LSTMs rather than unidirectional ones? Why does the last u_in help to predict the first pressure, which was measured three seconds before, if u_in is an independent variable?</p>
+<p>Before we start number crunching, we need a consistent qualitative model of the system which respects causality:</p>
+<ol>
+<li>In the physical system, the pressure is a function of past valve settings: <code>p[i] = f(u_in[:i])</code></li>
+<li>u_in is not an independent variable. u_in is the output of a digital controller, and the inputs of the controller are the past measured pressures: <code>u_in[i] = g(p[:i+1])</code></li>
+<li>According to <a href="https://arxiv.org/pdf/2102.06779.pdf" target="_blank">the paper</a>, the experimenters used a PID controller with various parameter settings and neural networks to control u_in, and they introduced random exploratory perturbations.</li>
+<li>The experiments were run in batches, and the initial pressure p[0] of a breath is determined by the valve settings of the previous breath. Although the breaths have been shuffled in the dataset, a neural network learns to approximately identify the batch from the u_in values and thus can predict p[0].</li>
+</ol>
+<p>Looking at this qualitative model, I realized that I needed the inverse function of a PID controller to predict the pressures based on u_in, i.e. a function which gets a u_in as input and determines what pressure the controller has seen to output this u_in.</p>
+<p>I'll start by explaining the easier case of finding the inverse of a P controller and then go on to the PI controller.</p>
+<h2>The inverse of a P controller</h2>
+<p>With a P controller, the user selects a target pressure (<code>p_star</code>), and then the controller repeatedly sets the valve to the difference between the measured pressure and the target pressure, multiplied by a factor <code>p_coef</code>. The lower the measured pressure is, the more the controller opens the valve:</p>
+<pre><code>def p_controller(p_coef, p_star):
+    for i in range(80):
+        u_in[i] = clip(p_coef * (p_star - p[i]), 0, 100)
+</code></pre>
+<p>We recognize the diagram of a P controller at u_in being a scaled mirror image of p:</p>
+<p><img src="https://i.imgur.com/g1rOijj.png" alt="634"><br>
+<img src="https://i.imgur.com/4HRCGsZ.png" alt="1300"><br>
+<img src="https://i.imgur.com/c5qQXLr.png" alt="3193"></p>
+<p>For the training data, where both u_in and pressure are known, we can determine p_coef and p_star by linear regression. If the linear regression fits well, we have found a P controller; if it doesn't fit, the experiment was run with some other controller. Running the linear regression over all breaths of the training data, we find the values which were used for p_coef and p_star:</p>
+<ul>
+<li>p_coef is an element of [0.01, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] (p_coef may be 0, but this case is useless).</li>
+<li>p_star is an element of [10, 15, 20, 25, 30, 35].</li>
+</ul>
+<p>What can we do about the test data, where only u_in is known and three variables are unknown (p_coef, p_star and pressure)? The key observations here are that the pressure sensor always gives one of 950 discrete pressure measurements and the P controller is a digital computer which computes (almost) exactly. We thus find p_coef and p_star with the following algorithm:</p>
+<pre><code>for all 20 possible values of p_coef:
+    for all 6 possible values of p_star:
+        p[i] = p_star - u_in[i] / p_coef
+        if p[i] is one of the 950 discrete values (up to a very small tolerance):
+            return p_coef, p_star
+</code></pre>
+<p>As soon as we know the two parameters, we use them to compute the pressures for the whole breath.</p>
+<p>For some parameter settings and pressures, the controller computes a u_in which is not in the admissible range from 0 to 100 and clips it. For these clipped u_in values, we cannot compute the inverse function:</p>
+<p><img src="https://i.imgur.com/WzfnlCA.png" alt="9847"><br>
+<img src="https://i.imgur.com/pWB6fEy.png" alt="13828"></p>
+<p>Having understood the P controller, we are ready to tackle the PI controller.</p>
+<h2>The inverse of a PI controller</h2>
+<p>Inverting the PI controller is more complex because it has two more parameters (i_coef and T) and because it is stateful. It maintains a running average q of pressure differences which decays with a time constant T, and it sets u_in to a linear combination of the current pressure difference and the running average:</p>
+<pre><code>def pi_controller(p_coef, i_coef, p_star, T):
+    q = q0 # some unkown initial state for the running average
+    u_in[0] = p_coef * (p_star - p_0) + i_coef * q
+    for i in range(1, 80):
+        dt = time_step[i] - time_step[i-1]
+        s = dt / (dt + T)
+        q = (1-s) * q + s * (p_star - p[i])
+        u_in[i] = p_coef * (p_star - p[i]) + i_coef * q
+</code></pre>
+<p>let's look at two diagrams:</p>
+<p><img src="https://i.imgur.com/KTUkJvL.png" alt="15090"><br>
+<img src="https://i.imgur.com/2aBIwxC.png" alt="15101"></p>
+<p>Again, I first determined the possible parameter values from the training data. p_coef, i_coef, p_star and the initial q can be determined by linear regression, but T can't. I tuned T manually until the linear regression for the other parameters gave the best fit. With T = 0.5, it fits perfectly.</p>
+<p>For the test data, the algorithm is:</p>
+<pre><code>for all 950 possible values of p[0]:
+    for all 20 possible values of p_coef:
+        for all 20 possible values of i_coef:
+            for all 6 possible values of p_star:
+                q0 = (u[0] + p_coef * (p[0] - p_star)) / i_coef
+                determine p[1] and p[2]
+                if both p[1] and p[2] are among the 950 discrete values:
+                   return p_coef, i_coef, p_star, q
+</code></pre>
+<p>It's time to think about optimizing for execution speed: With the four nested loops, the algorithm is terribly slow. Three optimizations reduce the execution time to an acceptable level (I still had to run it locally because it takes more than nine hours):</p>
+<ol>
+<li>The 950 values for p[0] have to be searched in order of decreasing frequency: The initial pressure usually is around 6, so we start the search there.</li>
+<li>The innermost loop can be vectorized by putting all p_star values into a numpy array and using matrix operations.</li>
+<li>Because the breaths are independent, we can parallelize the execution by distributing the breaths to different CPUs.</li>
+</ol>
+<p>For some breaths, u_in was perturbed deliberately. We easily recognize this pattern because the computed pressure for these timesteps is not in the 950 possible values, and then we skip these timesteps:</p>
+<p><img src="https://i.imgur.com/zKsz2R4.png" alt="15093"><br>
+<img src="https://i.imgur.com/vNbzMM1.png" alt="15104"></p>
+<p>Do we need to look at PID controllers with a D element? The paper doesn't mention them and the PI controllers cover 85 % of the data - I didn't investigate further.</p>
+<h2>Putting it together</h2>
+<p>My final submission was created in three steps:</p>
+<ol>
+<li>At the start are the seven models of <a href="https://www.kaggle.com/dlaststark/gb-vpp-pulp-fiction" target="_blank">https://www.kaggle.com/dlaststark/gb-vpp-pulp-fiction</a>. Thank you, <a href="https://www.kaggle.com/dlaststark" target="_blank">@dlaststark</a>, for sharing the notebook and the models - I doubt that I could have invented this architecture myself.</li>
+<li>In the second step I ensembled the predictions of the seven models using the <a href="https://www.kaggle.com/c/ventilator-pressure-prediction/discussion/282735" target="_blank">better_than_median()</a> function.</li>
+<li>The third step tries to determine the generating PID controller for every breath and replaces the nn predictions by the output of the inverse PID controller wherever possible. This notebook takes more than nine hours to finish and must be run locally rather than on the Kaggle infrastructure (it needs neither TPU nor GPU).</li>
+</ol>

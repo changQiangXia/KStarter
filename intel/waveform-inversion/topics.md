@@ -1,0 +1,82 @@
+# waveform-inversion 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/waveform-inversion/discussion/587388) — 194 票 / 66 评论 / 2025-07-01 **write-up?**
+- [A Clear Explanation of The Dataset](https://www.kaggle.com/competitions/waveform-inversion/discussion/572747) — 156 票 / 36 评论 / 2025-04-11 
+- [ConvNeXt Approach - [CV 31.9 LB 36.4]](https://www.kaggle.com/competitions/waveform-inversion/discussion/579841) — 84 票 / 53 评论 / 2025-05-20 
+- [CAFormer Improved - [CV 24.2 LB 28.8]](https://www.kaggle.com/competitions/waveform-inversion/discussion/582785) — 78 票 / 70 评论 / 2025-06-02 
+- [All you need know about Full-waveform Inversion](https://www.kaggle.com/competitions/waveform-inversion/discussion/572329) — 77 票 / 31 评论 / 2025-04-08 
+- [Tips to speed up training](https://www.kaggle.com/competitions/waveform-inversion/discussion/583896) — 66 票 / 33 评论 / 2025-06-10 
+- [3rd place solution](https://www.kaggle.com/competitions/waveform-inversion/discussion/587419) — 60 票 / 15 评论 / 2025-07-02 **write-up?**
+- [9th place - Custom CUDA kernel for wave propagation](https://www.kaggle.com/competitions/waveform-inversion/discussion/587498) — 59 票 / 10 评论 / 2025-07-01 **write-up?**
+- [Huggingface + Kaggle OpenFWI Dataset 670G available + Training](https://www.kaggle.com/competitions/waveform-inversion/discussion/572434) — 53 票 / 26 评论 / 2025-04-09 
+- [A Better Way To Ensemble](https://www.kaggle.com/competitions/waveform-inversion/discussion/582801) — 51 票 / 11 评论 / 2025-06-02 
+- [2nd place solution with code: refinement with FWI](https://www.kaggle.com/competitions/waveform-inversion/discussion/587950) — 49 票 / 19 评论 / 2025-07-03 **write-up?**
+- [Attempt to create OpenFWI seis data](https://www.kaggle.com/competitions/waveform-inversion/discussion/573571) — 48 票 / 21 评论 / 2025-04-16 
+- [20th solution - Caformer + data generation](https://www.kaggle.com/competitions/waveform-inversion/discussion/587402) — 46 票 / 2 评论 / 2025-07-01 **write-up?**
+- [HGNet-V2 Encoder - [CV 55.6 LB 60.9]](https://www.kaggle.com/competitions/waveform-inversion/discussion/578305) — 45 票 / 22 评论 / 2025-05-09 
+- [6th Place Solution Summary](https://www.kaggle.com/competitions/waveform-inversion/discussion/587460) — 45 票 / 11 评论 / 2025-07-01 **write-up?**
+- [Beware of Bartley!](https://www.kaggle.com/competitions/waveform-inversion/discussion/583217) — 43 票 / 18 评论 / 2025-06-05 
+- [Team FAMAS. 5th place solution.](https://www.kaggle.com/competitions/waveform-inversion/discussion/587443) — 43 票 / 15 评论 / 2025-07-01 **write-up?**
+- [4th place solution for the GWI competition  ](https://www.kaggle.com/competitions/waveform-inversion/discussion/587500) — 42 票 / 9 评论 / 2025-07-08 **write-up?**
+- [LR Decay For MAE](https://www.kaggle.com/competitions/waveform-inversion/discussion/583016) — 39 票 / 5 评论 / 2025-06-04 
+- [10th Place Solution (monnu part)](https://www.kaggle.com/competitions/waveform-inversion/discussion/587412) — 34 票 / 0 评论 / 2025-07-01 **write-up?**
+- [Improved UNet pipepline with larger dataset](https://www.kaggle.com/competitions/waveform-inversion/discussion/575097) — 32 票 / 12 评论 / 2025-04-25 
+- [12th Solution](https://www.kaggle.com/competitions/waveform-inversion/discussion/587404) — 31 票 / 4 评论 / 2025-07-01 **write-up?**
+- [15th place: Two-stage model](https://www.kaggle.com/competitions/waveform-inversion/discussion/587511) — 30 票 / 12 评论 / 2025-07-01 **write-up?**
+- [There is a leak in train files](https://www.kaggle.com/competitions/waveform-inversion/discussion/580988) — 30 票 / 6 评论 / 2025-05-27 
+- [Some cheating teams！！！](https://www.kaggle.com/competitions/waveform-inversion/discussion/587344) — 28 票 / 30 评论 / 2025-06-30 
+- [Scaling up results- Kaggle data vs full data](https://www.kaggle.com/competitions/waveform-inversion/discussion/574495) — 27 票 / 8 评论 / 2025-04-22 
+- [Some do great, others don't !](https://www.kaggle.com/competitions/waveform-inversion/discussion/585456) — 26 票 / 14 评论 / 2025-06-20 
+- [10th Place Solution (yu4u's part)](https://www.kaggle.com/competitions/waveform-inversion/discussion/587429) — 25 票 / 2 评论 / 2025-07-01 **write-up?**
+- [Will Gold Medal be Under Public LB=12.0?](https://www.kaggle.com/competitions/waveform-inversion/discussion/586283) — 25 票 / 73 评论 / 2025-06-26 **write-up?**
+- [14th place solution](https://www.kaggle.com/competitions/waveform-inversion/discussion/587529) — 24 票 / 5 评论 / 2025-07-02 **write-up?**
+- [is all OpenFWI Dataset ~ 670G vs Kaggle Dataset ~ Train 14TB (dataset) / Pre-trained Models(dataset)](https://www.kaggle.com/competitions/waveform-inversion/discussion/572334) — 21 票 / 7 评论 / 2025-04-09 
+- [He jumped from 25.1 to 16.1👏](https://www.kaggle.com/competitions/waveform-inversion/discussion/585273) — 20 票 / 30 评论 / 2025-06-19 
+- [unsupervised training with test Waveform?](https://www.kaggle.com/competitions/waveform-inversion/discussion/579376) — 19 票 / 14 评论 / 2025-05-17 
+- [Augmentation Ideas?](https://www.kaggle.com/competitions/waveform-inversion/discussion/580689) — 18 票 / 17 评论 / 2025-05-25 
+- [is classification + image2image? individual model or single model for 10 datasets?](https://www.kaggle.com/competitions/waveform-inversion/discussion/575243) — 18 票 / 20 评论 / 2025-04-27 
+- [24th Place Silver Medal Solution](https://www.kaggle.com/competitions/waveform-inversion/discussion/587390) — 17 票 / 4 评论 / 2025-07-01 **write-up?**
+- [The Power of Auxiliary Loss Functions in Minimizing MAE Loss](https://www.kaggle.com/competitions/waveform-inversion/discussion/579040) — 16 票 / 2 评论 / 2025-05-14 
+- [my maybe efficient trainer?](https://www.kaggle.com/competitions/waveform-inversion/discussion/584772) — 16 票 / 39 评论 / 2025-06-16 
+- [Welcome to the Yale/UNC-Chapel Hill – Geophysical Waveform Inversion competition!](https://www.kaggle.com/competitions/waveform-inversion/discussion/572327) — 15 票 / 4 评论 / 2025-04-08 
+- [What's your guess of the number of teams that will break the 15.0 barrier?](https://www.kaggle.com/competitions/waveform-inversion/discussion/585128) — 15 票 / 39 评论 / 2025-06-18 
+- [A new SOTA (?) paper "A Unified Framework for Forward and Inverse Problems in Subsurface Imaging Using Latent Space Translations."](https://www.kaggle.com/competitions/waveform-inversion/discussion/575178) — 15 票 / 5 评论 / 2025-04-26 
+- [CUDA Speed Up for vel-to-seis and Some Findings](https://www.kaggle.com/competitions/waveform-inversion/discussion/585236) — 14 票 / 17 评论 / 2025-06-19 
+- [I did it again: submit twice the same sub](https://www.kaggle.com/competitions/waveform-inversion/discussion/586264) — 13 票 / 42 评论 / 2025-06-25 
+- [Questions on placement of sources and sensors.](https://www.kaggle.com/competitions/waveform-inversion/discussion/572867) — 13 票 / 15 评论 / 2025-04-11 
+- [Starting materials and references](https://www.kaggle.com/competitions/waveform-inversion/discussion/572314) — 13 票 / 1 评论 / 2025-04-08 
+- [A Two-Stage Approach for Prediction using CNN Classification and InversionNet[LB: 133.6]](https://www.kaggle.com/competitions/waveform-inversion/discussion/582845) — 12 票 / 19 评论 / 2025-06-03 
+- [Additional data, efwi dataset](https://www.kaggle.com/competitions/waveform-inversion/discussion/584640) — 12 票 / 5 评论 / 2025-06-14 
+- [45th Place Solution](https://www.kaggle.com/competitions/waveform-inversion/discussion/587553) — 11 票 / 4 评论 / 2025-07-01 **write-up?**
+- [[Our findings] Did you read about how real seismic survey work when there is no ground truth of subsurface?](https://www.kaggle.com/competitions/waveform-inversion/discussion/587386) — 11 票 / 14 评论 / 2025-07-01 
+- [Anyteam can make Swin Transformer work?](https://www.kaggle.com/competitions/waveform-inversion/discussion/585194) — 11 票 / 8 评论 / 2025-06-18 
+- [[LB 249.7] OpenFWI Models  -- [LB  130.5] Ensemble](https://www.kaggle.com/competitions/waveform-inversion/discussion/572399) — 11 票 / 5 评论 / 2025-04-09 
+- [📶🌊Good starter resources for Yale/UNC GWI contest 📶🌊](https://www.kaggle.com/competitions/waveform-inversion/discussion/572365) — 10 票 / 0 评论 / 2025-04-09 
+- [CV vs LB Scores [Check Bartley's Awesome Posts/Notebooks/Comments - better CV/LB]](https://www.kaggle.com/competitions/waveform-inversion/discussion/575972) — 9 票 / 9 评论 / 2025-05-01 
+- [[Basic Geophysics] Full Waveform Inversion](https://www.kaggle.com/competitions/waveform-inversion/discussion/572330) — 9 票 / 0 评论 / 2025-04-09 
+- [Question on Scaling and Offset from best public notebooks ](https://www.kaggle.com/competitions/waveform-inversion/discussion/576237) — 9 票 / 13 评论 / 2025-05-03 
+- [STELLAR performance from Harshit Sheoran](https://www.kaggle.com/competitions/waveform-inversion/discussion/585450) — 9 票 / 6 评论 / 2025-06-20 
+- [You can get more GPU 45h-60h per week on Kaggle with Colab Pro](https://www.kaggle.com/competitions/waveform-inversion/discussion/575917) — 9 票 / 6 评论 / 2025-05-01 
+- [this is first time in kaggle history?](https://www.kaggle.com/competitions/waveform-inversion/discussion/587387) — 9 票 / 9 评论 / 2025-07-01 
+- [How far did you get by continuing to train Bartley's type models?](https://www.kaggle.com/competitions/waveform-inversion/discussion/587389) — 9 票 / 26 评论 / 2025-07-01 
+- [model diverges](https://www.kaggle.com/competitions/waveform-inversion/discussion/574648) — 9 票 / 9 评论 / 2025-04-23 
+- [Get Started Here!](https://www.kaggle.com/competitions/waveform-inversion/discussion/572279) — 8 票 / 0 评论 / 2025-04-08 
+- [[Let's Collaborate] Generating `CurveVel` & `CurveFault` for Augmentation](https://www.kaggle.com/competitions/waveform-inversion/discussion/585539) — 8 票 / 12 评论 / 2025-06-21 
+- [Sharing a few ideas (+ torch vel_to_seis)](https://www.kaggle.com/competitions/waveform-inversion/discussion/585815) — 8 票 / 7 评论 / 2025-06-23 
+- [Will winner score be above or below 5?](https://www.kaggle.com/competitions/waveform-inversion/discussion/586363) — 8 票 / 26 评论 / 2025-06-26 
+- [Share some findings](https://www.kaggle.com/competitions/waveform-inversion/discussion/587417) — 8 票 / 1 评论 / 2025-07-01 
+- [Here's Why They Call It a ‘Velocity’ Model When Nothing’s Actually Moving.](https://www.kaggle.com/competitions/waveform-inversion/discussion/574083) — 7 票 / 2 评论 / 2025-04-19 
+- [ML vs non-ML solutions — fairness of the competition](https://www.kaggle.com/competitions/waveform-inversion/discussion/573319) — 7 票 / 5 评论 / 2025-04-14 **write-up?**
+- [CAFormer 8Core TPU Training(Pytorch/XLA)](https://www.kaggle.com/competitions/waveform-inversion/discussion/584137) — 7 票 / 7 评论 / 2025-06-12 
+- [Why leaderboard score is worse than cross-validation](https://www.kaggle.com/competitions/waveform-inversion/discussion/583866) — 7 票 / 7 评论 / 2025-06-10 
+- [Epoch Train/CV scores of all datasets [Can we break Bartley's strong models]](https://www.kaggle.com/competitions/waveform-inversion/discussion/583872) — 6 票 / 9 评论 / 2025-06-10 
+- [How to use TPU in pytorch rightly?](https://www.kaggle.com/competitions/waveform-inversion/discussion/581134) — 6 票 / 11 评论 / 2025-05-28 
+- [How much compute did you use?](https://www.kaggle.com/competitions/waveform-inversion/discussion/587457) — 6 票 / 11 评论 / 2025-07-01 
+- [Tips to make forward model efficient](https://www.kaggle.com/competitions/waveform-inversion/discussion/587506) — 6 票 / 25 评论 / 2025-07-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/waveform-inversion/discussion/572278) — 5 票 / 0 评论 / 2025-04-08 
+- [A question about nn.DataParallel](https://www.kaggle.com/competitions/waveform-inversion/discussion/586109) — 5 票 / 2 评论 / 2025-06-25 
+- [Having problem downloading data? [solved]](https://www.kaggle.com/competitions/waveform-inversion/discussion/572324) — 5 票 / 8 评论 / 2025-04-08 
+- [Cheating is a serious problem, not only in Geophysical Waveform Inversion, but also in other competitions.](https://www.kaggle.com/competitions/waveform-inversion/discussion/587497) — 5 票 / 0 评论 / 2025-07-01 
+- [Best single CurveFault_B model?](https://www.kaggle.com/competitions/waveform-inversion/discussion/580892) — 5 票 / 7 评论 / 2025-05-27 
+- [Which columns to drop for submission?](https://www.kaggle.com/competitions/waveform-inversion/discussion/575846) — 5 票 / 5 评论 / 2025-05-01 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/waveform-inversion/discussion/587927) — 4 票 / 0 评论 / 2025-07-03 

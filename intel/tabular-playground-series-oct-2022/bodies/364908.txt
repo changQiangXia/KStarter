@@ -1,0 +1,159 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/364908
+
+Topic #364908: Host solution, 0.17759 on Private LB
+  Author: DJ Sterling
+  Posted: 2022-11-09 00:15:09.735000
+  Votes: 19  Comments: 10
+
+I've been working on this problem for a while and I'd like to share my current approach.  It does fairly well but I also don't know what I'm doing in a lot of aspects so I appreciate any suggestions.  See my Notebook here.
+
+Overview
+
+I followed the ideas from The Zoo's solution in the 2020 NFL Big Data Bowl competition, which had a similar competition setup of predicting results from a snapshot of game state.  I used their idea of applying a network-in-network (convolutional layer + pooling layer) over pairs of players, which I found to be a cool and effective way to funnel information to the model and take advantage of symmetry in the input data.
+
+Preprocessing
+
+Since I'm using a CNN, I needed to handle the NaN cases where players are demoed.  I added a p#_demoed boolean column for each player, and converted the NaN states to out-of-distribution states where they were unlikely to have an impact on the play:  floating above the stadium, moving upwards with zero boost.  There's probably better options here.
+
+I also drop the boost#_timer columns since I'm currently not using them, but would like to.
+
+def preprocess_features(df):
+    df.drop([col for col in df.columns if col.startswith('boost')], axis=1, inplace=True)
+
+    for p in range(6):
+        # add demoed column
+        df.insert(list(df.columns).index(f'p{p}_boost') + 1, f'p{p}_demoed', df[f'p{p}_boost'].isna())
+
+        # Convert nan values from demoed state into dummy values, specifically sitting above the stadium, flying upwards with 0 boost
+        x = -20 + 20 * (p % 3)
+        y = -20 + 40 * (p // 3)
+        cond = df[f'p{p}_boost'].isna()
+        df.loc[cond, [f'p{p}_pos_x', f'p{p}_vel_x', f'p{p}_pos_y', f'p{p}_vel_y', f'p{p}_pos_z', f'p{p}_vel_z', f'p{p}_boost']] = \
+            [x, x, y, y, 100, 10, 0]
+
+
+Model
+
+Split out input and reshape players
+
+inputs = keras.Input(shape=(54,), name='inputs')
+ball = inputs[:, :6]
+# batch_num, team_num, player_num, features (posX3, velX3, boost, demoed)
+players = keras.backend.reshape(inputs[:, 6:54], (-1, 2, 3, 8))
+
+
+First extract some ball features
+
+ball_preprocess = batched_denses(ball, [[48, 36], [36, 32]])
+
+
+Then concat player features with ball data, team number, and delta between player and ball
+
+# Get vector diffs from each player pos/vel to ball pos/vel
+ball_diffs = to_players_shape(ball) - players[:, :, :, :6]
+players_inflated = concat([players, teams, ball_diffs, to_players_shape(ball_preprocess)], axis=3)
+
+
+Then apply a network-in-network filter over each player vector
+
+player_filter_widths = [[81, 64], [64, 48], 36]
+p_conv = batched_conv2ds(players_inflated, player_filter_widths)
+
+
+For each player, find each pair of teammates and each pair of opponents, and append their features together
+
+team_pairs = keras.backend.stack([tf.roll(layer, axis=2, shift=i) for i in range(3)], axis=3)
+oppo_pairs = tf.roll(team_pairs, axis=2, shift=1)
+players_tiled = keras.backend.tile(keras.backend.reshape(layer, (-1, 2, 3, 1, layer.shape[-1])), [1, 1, 1, 3, 1])
+teammates = concat([team_pairs[:, :, :, 1:, :], players_tiled[:, :, :, 1:, :]], axis=4)
+opponents = concat([oppo_pairs, players_tiled], axis=4)
+
+
+Then apply a new network-in-network filter over each pair of players, one for teammate pairs and one for opponent pairs, and use Pooling to compress the most important informance per source player
+
+pair_filter_widths = player_filter_widths
+t_conv = convs_and_pool3d(teammates, pair_filter_widths)
+o_conv = convs_and_pool3d(opponents, pair_filter_widths)
+
+
+Lump all per-player information and apply one last network-in-network filter over each player, pooling again
+
+p_full = concat([p_conv, t_conv, o_conv], axis=3)
+full_filter_widths = player_filter_widths
+full_conv = convs_and_pool2d(p_full, full_filter_widths)
+
+
+Append the original ball preprocessing, and just run some dense layers into our prediction layers
+
+x = concat([ball_preprocess, keras.layers.Flatten()(full_conv)], axis=1)
+x = batched_denses(x, [[81, 64], [64, 48], 42])
+outputs = [keras.layers.Dense(3, activation=keras.activations.softmax)(x) for t in TARGETS]
+
+
+I use SparseCategoricalCrossentropy loss for each output, predicting between three classes: Team A scoring within Y seconds, Team B scoring within Y seconds, and neither team scoring within Y seconds, with each output having a different Y value (see below).
+
+Data augmentation
+
+As others in the competition discovered, there are 144 ways to reshape the input vector: Flip over X axis, Flip over Y axis, or Reorder either team's players in one of 3! = 6 ways, for 2 * 2 * 6 * 6 = 144 permutations.  I permuted and shuffled the dataset between every training pass.
+
+One big improvement I learned from the competitors in this competition was permuting the test features as well, making predictions over each of the permutations, and averaging the results.  I was surprised at how much this improved my score, and it only takes a few extra minutes to do.
+
+Predicting multiple timeframes
+
+I thought it could be useful to have the model predict Pr[Team X scores within Y seconds] for multiple Y values and not just the main target of Y = 10.  By doing so, we're able to give the model more information during training about scoring timeframes.  I tried TARGETS = [1, 2, 3, ..., 10] and used event_time and team_scoring_next to construct the multi-output target vector, and the model took a bit longer to train but also seemed to perform marginally better.  I also used loss_weights to still give more weight to the main Y = 10 target.
+
+Future improvements
+
+
+
+I could probably have better replacement values for demoed players, or even consider having special models just for states with less players like 2v3.
+
+I would like to utilize the boost#_timer columns, for example building a mini-network to construct per-player features estimating their chance and timing of gaining a boost orb, and appending those values to the initial player features.
+
+I would like to explore predicting future states of ball / players, as others suggested in the forums, and add those features to the model.
+
+Maybe similar to #3, I think we could use timeseries information from the training set as part of a RNN, LSTM, or similar setup, but I don't know a lot about the best practices there and need to do some research.
+
+I'm still figuring out a good learning rate strategy.  I found that sometimes reducing the LR greatly improved my loss within just one epoch, but I'm finding that reducing it too early does not show the same effect.
+
+A meta-improvement to the competition setup would be to add each player's orientation vector to the dataset, which should add more signal for a model to learn.
+
+From watching prediction traces of my model side-by-side with a gameplay sequence, it's clear to me that there's still a lot of room for improvement, and it might be time to rethink my overall model structure instead of whittling off small increases by playing with hyperparams.
+
+Comments:
+├─ TomasVdB (2022-11-10 09:34:05.250000) [+5]
+│  It's really cool to see how you've solved this, an how much improvement it was over my own solution. In the end I left out many of the player/ball engineered features since they didn't seem to add ...
+  ├─ Marília Prata (2022-11-10 11:57:39.583000) [+2]
+  │  A huge congrats for your 1st place Thomas.
+  │  
+  │  That's wonderful to read someone that really understand code changing solutions experiences.
+  ├─ DJ Sterling (2022-11-10 16:44:11.407000) [+2]
+  │  Thank you for sharing Tomas, I will have to try ensembling!  And congratulations on your 1st place finish :)
+├─ Marília Prata (2022-11-09 19:35:37.437000) [+1]
+│  Hi DJ,
+│  
+│  How many Kagglers read a solution from the previous Tab Playground Oct 2022 when they are already on November 09? And the winners were announced one week ago.  
+│  
+│  I think the majority has al...
+  ├─ DJ Sterling (2022-11-09 20:33:30.237000) [+2]
+  │  Hey Marília,
+  │  
+  │  Yes, I wanted to post this much sooner after the competition closed, and apologize that I was unable to do so.  I agree that would have been more useful, and thank you for sharing in ...
+  ├─ Marília Prata (2022-11-09 20:51:56.053000) [+2]
+  │  It's a pity that Host Solutions won't become a common practice for Kaggle TPS.
+  │  
+  │  As a beginner (what I really am) we (I) need to read code. Like you've published yours. 
+  │  
+  │  Do I vote winners solutions...
+  ├─ DJ Sterling (2022-11-10 16:42:40.570000) [+1]
+  │  Thank you Marília, yes we are aware that winners' solutions are some of the best content available on Kaggle, and we're looking into ways to better encourage and publicize high-quality solution pos...
+  ├─ Marília Prata (2022-11-10 18:33:08.923000) [+1]
+  │  Solutions could be shown after the pinned topics. Before the other topics on the competition. 
+  │  
+  │  Since the other topics only follow a publication time line. 
+  │  
+  │  We would have: Pinned topics (=Host top...
+  ├─ DJ Sterling (2022-11-15 03:13:16.833000) [+1]
+  │  Hey Marília, here's our first announcement regarding our efforts to improve the culture around solution writeups: https://www.kaggle.com/competitions/AI4Code/discussion/365712
+  ├─ Marília Prata (2022-11-15 10:55:36.477000) [+1]
+  │  I read it and noted DJ.

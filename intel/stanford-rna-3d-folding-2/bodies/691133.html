@@ -1,0 +1,226 @@
+<p>First, I would like to extend my deepest gratitude to the competition organizing team and Kaggle staff for hosting this fascinating competition. Having previously worked in experimental sciences including organic chemistry, I am well aware of the challenges in obtaining molecular 3D structural data (ground-truth structures). Considering this, I'm deeply impressed that they were able to hold this Part II competition just less than a year after the <a href="https://www.kaggle.com/competitions/stanford-rna-3d-folding" target="_blank">Part I competition</a>.
+During these approximately two months of trial-and-error work, I gained both meaningful experience and valuable learning.</p>
+<h2>Summary of My Solution</h2>
+<p>I built "<strong>BPP-Protenix</strong>", a model that integrates Base Pair Probability (BPP) features into an AlphaFold3-style architecture. The model design was inspired by the architecture of <a href="https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/668412" target="_blank">RNAPro</a> shared by <a href="https://www.kaggle.com/theoviel" target="_blank">@theoviel</a>. My final pipeline is an ensemble of TBM, RNAPro, and BPP-Protenix (with plain Protenix as fallback for targets not suitable for BPP calculation). Although I dropped one place in the private LB, after completing the development of BPP-Protenix, I held 1st place on the public LB for the final two weeks of the competition. I guess almost no other participants modified the neural network architecture in this competition, so this appears to be a unique solution.</p>
+<p><strong>Submission slot allocation is follows</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>slot 1</th>
+<th>slot 2</th>
+<th>slot 3</th>
+<th>slot 4</th>
+<th>slot5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TBM</td>
+<td>RNAPro</td>
+<td>RNAPro</td>
+<td><strong>BPP-Protenix</strong><br>(with plain Protenix fallback)</td>
+<td><strong>BPP-Protenix</strong><br>(with plain Protenix fallback)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>TBM</strong>: I used <a href="https://www.kaggle.com/code/kami1976/stanford-rna-3d-folding-part-2a18" target="_blank">the notebook</a> published by <a href="https://www.kaggle.com/kami1976" target="_blank">@kami1976</a> almost exactly as is. Since it appeared to offer good local scores and seed stability, I decided to borrow this one.</p></li>
+<li><p><strong>RNAPro</strong>: Using the template created by the above TBM as input data, I applied the <a href="https://www.kaggle.com/code/jaejohn/rnapro-inference-with-tbm" target="_blank">the pipeline</a> published by <a href="https://www.kaggle.com/jaejohn" target="_blank">@jaejohn</a>.</p></li>
+<li><p><strong>BPP-Protenix</strong>: This is the model that required the most time to develop for this competition. I'll explain it below.</p></li>
+</ul>
+<h2>Core Idea: BPP as Structural Prior</h2>
+<h3>Inspiration: Ribonanza Competition (2023)</h3>
+<p>The idea came from the <a href="https://www.kaggle.com/competitions/stanford-ribonanza-rna-folding" target="_blank">Stanford Ribonanza RNA Folding</a> competition in 2023. <a href="https://www.kaggle.com/shujun717" target="_blank">@shujun717</a> (one of the hosts of the Ribonanza competition) had published about <a href="https://academic.oup.com/bib/article/24/1/bbac581/6986359" target="_blank">RNAdegformer</a>, a transformer predicting mRNA degradation at nucleotide level. In that paper, <strong>BPP (Base Pair Probability) matrix was shown to be a very important feature</strong> for predicting RNA stability. Inspired by this, almost all top Ribonanza participants added BPP embeddings as bias terms in their Transformers.</p>
+<h3>From Stability Prediction to 3D Structure Prediction</h3>
+<p>The task of RNAdegformer and Ribonanza models was stability prediction, but RNA stability depends a lot on 3D structure. Furthermore, the base pair formation probability information obtained through secondary structure prediction provides proximity constraints on the 3D structure, thereby functioning as an effective inductive bias. Given that, providing BPP information to a 3D structure predictor seemed like a natural extension.</p>
+<h3>BPP Injection into Pairformer</h3>
+<p>The BPP matrix <code>[N, N]</code> naturally corresponds to the pair representation <code>z [N, N, c]</code> in the Pairformer trunk of AlphaFold3/Protenix architecture — both are pairwise matrices indexed by residue positions. By passing BPP through a simple linear layer (1 → c) and adding the resulting embedding to <code>z_init</code>, we can inject RNA structural knowledge directly into the model.</p>
+<pre><code>BPP [N, N]
+  → unsqueeze → [N, N, 1]
+  → LinearNoBias(1 → 128) → [N, N, 128]
+  → z_init += bpp_embedding
+</code></pre>
+<h2>BPP Calculator Selection: EternaFold vs ViennaRNA</h2>
+<p>I evaluated BPP quality against experimental 3D coordinates from the training data, checking if residue pairs with high BPP are actually close in 3D space. <a href="https://github.com/ViennaRNA/ViennaRNA" target="_blank">ViennaRNA</a> and <a href="https://github.com/WaymentSteeleLab/EternaFold" target="_blank">EternaFold</a>, two of the primary RNA secondary structure computation tools, were tested. These secondary structure prediction tools assume RNA monomers as the target of prediction. Additionally, calculating BPP for long sequences during a Kaggle session is difficult in inference. Trherefore, it was considered that the training should also be performed using shorter sequences. The following filter was applied to the approximately 5,000 sequences of Kaggle's official training data:</p>
+<p><strong>Filter conditions</strong></p>
+<ul>
+<li>RNA monomer (no multimer)</li>
+<li>Sequence length ≤ 1,000</li>
+</ul>
+<p>The BPP quality was evaluated using the <strong>1,532</strong> sequences remaining after applying this filter. Here, a C1'-C1' distance &lt; 12 Å was defined as "contact." However, this judge was only conducted for C1' combinations separated by 4 or more residues (because such residues exist spatially close regardless of base pair formation).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ViennaRNA</th>
+<th>EternaFold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Contact rate (BPP ≥ 0.7)</td>
+<td>81.4%</td>
+<td><strong>96.2%</strong></td>
+</tr>
+<tr>
+<td>Contact rate (BPP ≥ 0.9)</td>
+<td>86.6%</td>
+<td><strong>97.4%</strong></td>
+</tr>
+<tr>
+<td>Random baseline*</td>
+<td>3.6%</td>
+<td>3.6%</td>
+</tr>
+</tbody>
+</table>
+<p>*Random baseline: contact rate when residue pairs are selected randomly (no BPP information).</p>
+<p>EternaFold BPP was clearly more accurate. Also, it is easily deployable in Kaggle notebooks via the <a href="https://github.com/DasLab/arnie" target="_blank">arnie</a> library. So I chose EternaFold for feature engineering.</p>
+<hr>
+<h2>BPP-Protenix training</h2>
+<h3>Setup</h3>
+<ul>
+<li><strong>Pretrained checkpoint</strong>: <code>protenix_base_20250630_v1.0.0</code></li>
+<li><strong>Train data</strong>: 619 PDBs (RNA-only)<ul>
+<li>From the 1,532 RNA monomers (≤1000 nt) used for BPP quality evaluation mentioned above, PDBs with protein/DNA partners were excluded.</li></ul></li>
+<li><strong>Validation data</strong>: 33 PDBs<ul>
+<li>Combined Kaggle's official validation set with my own collected PDBs released between 2025-12-03 and 2026-02-18. After applying the same filter, 33 records remained.</li></ul></li>
+</ul>
+<h3>Hyperparameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>diffusion_batch_size</td>
+<td>32</td>
+</tr>
+<tr>
+<td>train_crop_size</td>
+<td>550</td>
+</tr>
+<tr>
+<td>lr</td>
+<td>1e-4</td>
+</tr>
+<tr>
+<td>EMA decay</td>
+<td>0.995</td>
+</tr>
+<tr>
+<td>num_steps</td>
+<td>4960</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>BPP-Protenix Inference</h2>
+<h3>BPP-Available Target Filter &amp; Fallback to Plain Protenix</h3>
+<p>The following filters were applied to determine if the target was appropriate for BPP calculation by EternaFold:</p>
+<ul>
+<li>RNA monomer (no multimer)</li>
+<li>Total entity length ≤ 850 tokens</li>
+<li>No protein/DNA partners</li>
+</ul>
+<p>Targets not passing the filter were predicted by <strong>plain Protenix</strong> as fallback. Targets exceeding 850 tokens were cropped to 850 residues, with remaining coordinates zero-padded.</p>
+<h3>BPP-Protenix Standalone Performance</h3>
+<p>Before evaluating the ensemble, I assessed BPP-Protenix alone (all 5 slots filled with Protenix predictions). Inspired by RNAPro's TemplateEmbedder (Protenix v0.5), I tested three integration methods (A,B,C).</p>
+<ul>
+<li><strong>Method A</strong>: just a linear layer from 1 to 128 dimensions, then embedding is added to <code>z_init</code>.</li>
+<li><strong>Method B</strong>: In addition to the direct linear layer, I also converted BPP into a 20-dimensional one-hot vector by binning, embedded it with another linear layer, and added both features to z_init.</li>
+<li><strong>Method C</strong>: In addition to method B, uses a BppEmbedder. It is the similar design pattern as TemplateEmbedder in RNAPro. Applies a small 2-block Pairformer before the main 48-block Pairformer in each recycling cycle.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Architecture</th>
+<th>Public LB (standalone*)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A (Linear)</strong></td>
+<td>LinearNoBias(1→128), add BPP-emb to z_init</td>
+<td><strong>0.340</strong></td>
+</tr>
+<tr>
+<td>B (+ Binning)</td>
+<td>Method A + one_hot(20 bins) → Linear(20→128),  add two embs to z_init</td>
+<td>0.317</td>
+</tr>
+<tr>
+<td>C (+ BppEmbedder)</td>
+<td>Method B + BppEmbedder in recycling loop</td>
+<td>0.320</td>
+</tr>
+<tr>
+<td>Plain Protenix (control)</td>
+<td>-</td>
+<td>0.309</td>
+</tr>
+</tbody>
+</table>
+<p>*Standalone: all 5 slots filled with BPP-Protenix + plain Protenix fallback</p>
+<p>The standalone BPP-Protenix (Method A) scored <strong>0.34</strong> on public LB. This is comparable to TBM-only public notebooks (~0.35), demonstrating that <strong>NN-based predictions can match template-based approaches</strong>.</p>
+<p>Interesting finding: allowing protein/DNA partner targets in the BPP filter caused almost no change in public LB score. Possibly few such targets existed in the test set. Worth investigating the performance for RNA/protein assembly with late submissions.</p>
+<hr>
+<h2>Pseudoknot Analysis</h2>
+<p><strong>Concern</strong>: EternaFold does not predict pseudoknots. Could BPP-Protenix is not suitable for potential pseudoknot targets?</p>
+<p><strong>Post-hoc validation</strong>:</p>
+<ul>
+<li>Detected pseudoknots from ground-truth 3D coordinates using biotite (base pair detection + crossing pair check)</li>
+<li>Validation set (11 RNA-only targets): pseudoknots found in <strong>7 out of 11</strong> targets</li>
+<li>BPP-Protenix outperformed plain Protenix by <strong>~0.06 TM-score</strong> on average across all 11 targets</li>
+<li>Contrary to expectations, even within the pseudoknot group, BPP-Protenix showed higher TM-scores</li>
+</ul>
+<p><strong>Interpretation</strong>: BPP provides a "pairing tendency hint" as continuous values, not a complete secondary structure prediction. Even if pseudoknot base pairs are missed, non-pseudoknot BPP information is still valuable. And maybe, the 48-block Pairformer can absorb BPP inaccuracies.</p>
+<p>Based on the local validation result, I have decided not to take any special measures specifically targeting pseudoknots.</p>
+<hr>
+<h2>Ensemble Pipeline</h2>
+<h3>TBM (Slot 1) and RNAPro (Slot 2–3)</h3>
+<ul>
+<li>Used a public notebook shared early in the competition as-is</li>
+</ul>
+<h3>BPP-Protenix (Slot 4–5)</h3>
+<ul>
+<li>Targets passing the BPP-available filter → BPP-Protenix (seed=101, N_sample=5, top 2 by confidence score)</li>
+<li>Targets failing the filter → Plain Protenix fallback (same config, no BPP, Longer targets were cropped to 850 tokens and zero-padded)</li>
+</ul>
+<h3>Public/Private LB Results</h3>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TBM 2slot / RNAPro 3slot (baseline)</td>
+<td>~0.43</td>
+<td>—</td>
+</tr>
+<tr>
+<td>TBM 1slot / RNAPro 2slot / Protenix 2slot</td>
+<td>0.461</td>
+<td>0.475</td>
+</tr>
+<tr>
+<td><strong>TBM 1slot / RNAPro 2slot / BPP-Protenix 2slot</strong></td>
+<td><strong>0.504 (1st place)</strong></td>
+<td><strong>0.492 (2nd place)</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>BPP-Protenix yielded <strong>+0.04</strong> over plain Protenix and <strong>+0.07</strong> over the TBM+RNAPro baseline in the public LB score</li>
+<li>BPP-Protenix demonstrated strong accuracy on the private test set as well</li>
+</ul>
+<h2>Acknowledgments</h2>
+<p>Thank you to the competition hosts (Rhiju Das and team) for organizing this fascinating competition. Thanks also to the Kaggle community for sharing public notebooks (TBM, RNAPro) that formed the foundation of my ensemble.</p>

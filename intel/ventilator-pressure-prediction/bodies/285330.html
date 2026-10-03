@@ -1,0 +1,204 @@
+<h1>Head</h1>
+<p>Before writing our solution, we really thank to Google Brain and Kaggle for hosting this competition and congrats to all.<br>
+Also, I really enjoyed doing this competition with my UPSTAGE team (limerobot and dlrgy22). And thanks to many kaggler who shared the notebook and left discussion, we were able to get a good score. Before explaining what we do, I will write a summary first. If something is not clear, please refer the main text or leave any comments.</p>
+<p>Let`s start our story.</p>
+<h1>Summary</h1>
+<ul>
+<li>Validation strategy</li>
+</ul>
+<blockquote>
+  <ul>
+  <li>Stratified k-fold using type_rc as y</li>
+  </ul>
+</blockquote>
+<ul>
+<li>Model: We used combination of Conv1d and LSTM</li>
+</ul>
+<blockquote>
+  <ul>
+  <li>Architecture: Conv1d + Stacked LSTM</li>
+  <li>Optimizer: AdamW</li>
+  <li>Scheduler: Cosine</li>
+  </ul>
+</blockquote>
+<ul>
+<li>Features: We used 8 features</li>
+</ul>
+<blockquote>
+  <ul>
+  <li>Original: u_in, u_out, R(one-hot), C(one-hot)</li>
+  <li>Engineered: u_in_min, u_in_diff, inhaled_air, time_diff</li>
+  </ul>
+</blockquote>
+<ul>
+<li>Data augmentation: We used three type of augmentations</li>
+</ul>
+<blockquote>
+  <ol>
+  <li>Masking: Randomly mask the R or C</li>
+  <li>Shuffling: Randomly shuffle our sequences</li>
+  <li>Mixup: Select two sequences and mix up them</li>
+  </ol>
+</blockquote>
+<ul>
+<li>Loss: We used multi-task MAE loss</li>
+</ul>
+<blockquote>
+  <ol>
+  <li>MAE of pressure</li>
+  <li>Difference of pressure</li>
+  </ol>
+</blockquote>
+<ul>
+<li>Ensemble: We used iterative pseudo labeling and seed ensemble</li>
+</ul>
+<blockquote>
+  <ol>
+  <li>Seed ensemble using median</li>
+  <li>1st Pseudo labeling</li>
+  <li>2nd Pseudo labeling</li>
+  </ol>
+</blockquote>
+<h1>Main</h1>
+<p>I will describe our solution in the following six structures: Validation strategy, Model, Features, Data augmentation, Loss, and Ensemble.</p>
+<h3>Validation strategy</h3>
+<p>What is the most important thing in a competition? IMHO, It`s to avoid shake-up when the competition is finalized and thus a well-designed validation set is needed to avoid shake-up. Although the validation set was not important to this competition, this is why I first focus on validation strategy when competitions start.</p>
+<p>We knew that the types of R and C were very important in this competition through <a href="https://www.kaggle.com/c/ventilator-pressure-prediction/discussion/276599" target="_blank">this discussion</a> (thanks to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>), and we made a validation set with the same ratio of R and C for every fold.</p>
+<p>Detailed pseudo-code is below.</p>
+<pre><code>cols = ['breath_id', 'R', 'C']
+
+meta_df = train_df.groupby('breath_id')[cols].head(1)
+meta_df['RC'] = meta_df['R'] + '_' + meta_df['C']
+meta_df['fold'] = -1
+
+kf = StratifiedKFold(12, random_state=seed, shuffle=True)
+
+for fold, (_, val_idx) in enumerate(kf.split(meta_df, meta_df['RC'])):
+    meta_df.loc[val_idx, 'fold'] = int(fold)  
+</code></pre>
+<p>In this way, we were able to create a validation set that was highly correlated with test data, but I thought that it would be possible to create a good validation set even if we just used normal KFold.</p>
+<h3>Model</h3>
+<p>After setting the validation set, we focused on boosting the performance of the model using only the original features.</p>
+<p>Since Limerobot, the magician of transformers, was on our team, some kagglers expected that our team would use transformers, but we just used simple LSTM models (thanks to <a href="https://www.kaggle.com/tenffe" target="_blank">@tenffe</a> from <a href="https://www.kaggle.com/tenffe/finetune-of-tensorflow-bidirectional-lstm" target="_blank">this notebook</a>). </p>
+<p>Detailed model architecture is below.<br>
+<img src="https://raw.githubusercontent.com/SONG-WONHO/figure/master/model_arch2.png" alt="model architecture"></p>
+<p>Our trial-and-error with models related to the pytorch and tensorflow libraries. Initially, most high-score public notebooks were implemented in tensorflow, and we tried to port it to pytorch version. However, there was a low pyotrch score because of a difference between tensorflow and pytorch in the model initialization method (thanks to <a href="https://www.kaggle.com/junkoda" target="_blank">@junkoda</a> for sharing <a href="https://www.kaggle.com/junkoda/pytorch-lstm-with-tensorflow-like-initialization" target="_blank">this notebook</a>). Model initialization methods like tensorflow allowed us to develop models in pytorch. </p>
+<p>Detailed code is below (from JUN KODA`s notebook).</p>
+<pre><code>for name, p in self.named_parameters():
+    if 'lstm' in name:
+        if 'weight_ih' in name:
+            nn.init.xavier_normal_(p.data)
+        elif 'weight_hh' in name:
+            nn.init.orthogonal_(p.data)
+        elif 'bias_ih' in name:
+            p.data.fill_(0)
+            # Set forget-gate bias to 1
+            n = p.size(0)
+            p.data[(n // 4):(n // 2)].fill_(1)
+        elif 'bias_hh' in name:
+            p.data.fill_(0)
+
+    if 'conv' in name:
+        if 'weight' in name:
+            nn.init.xavier_normal_(p.data)
+        elif 'bias' in name:
+            p.data.fill_(0)
+
+    elif 'reg' in name:
+        if 'weight' in name:
+            nn.init.xavier_normal_(p.data)
+        elif 'bias' in name:
+            p.data.fill_(0)
+</code></pre>
+<h3>Features</h3>
+<p>After designing the model, we focused on feature engineering. Features can be divided into original features and engineered features. For the original features, all features except R and C were used as they are, and one-hot encoded R and C were used to show the type information of R and C to the model.</p>
+<p>For engineered features, we did a lot of EDA and tried to put features the model could not see. In this context, we have created the following features: u_in_min, u_in_diff, inhaled_air, and time_diff.</p>
+<p>Details are below.</p>
+<pre><code>df['step'] = list(range(80))*df['breath_id'].nunique()
+
+df['u_in_min'] = df['breath_id'].map(df.groupby('breath_id')['u_in'].min())
+
+df['u_in_diff'] = df['u_in'].diff()
+df.loc[df['step']&lt;1, 'u_in_diff'] = 0
+
+df['time_diff'] = df['time_step'].diff()
+df.loc[df['step']&lt;1, 'time_diff'] = 0
+
+df['inhaled_air'] = df['time_diff']*df['u_in']
+</code></pre>
+<h3>Data augmentation</h3>
+<p>After feature engineering, we focused on data augmentation. As a result, data augmentation led us to score high. We used three type of data augmentation as following: Masking, Shuffling, and Mixup.</p>
+<h4>Masking augmentation</h4>
+<p>In the case of masking, it is a little bit similar to Cutout, but masking is randomly performed on the R and C only. In other words, numeric information such as u_in is left as it is, and only information about the type R and C is intentionally masked. In the case of u_in, it was seen that the correlation with pressure was directly high from EDA, and by intentionally erasing the type information, the model was trained to understand the general semantic of u_in.</p>
+<p><img src="https://raw.githubusercontent.com/SONG-WONHO/figure/master/masking.png" alt="Masking"></p>
+<p>Pseudo code is below.</p>
+<pre><code>one_sample = get_sample(idx)
+
+# Type masking
+if random.random() &lt; .2:
+    if random.random() &lt; .5:
+        # maskring R
+        one_sample['R'][:] = 0
+    else:
+        # masking C
+        one_sample['R'][:] = 0
+</code></pre>
+<h4>Shuffling augmentation</h4>
+<p>Shuffling randomly shuffles units within a specific window in a sequence. For example, suppose we have a sequence like <code>[0,1,2,3,4,5,6,7]</code> and window size is 3. First randomly shuffle between <code>[0,1,2]</code>; next shuffle <code>[3,4,5]</code> and so on.</p>
+<p><img src="https://raw.githubusercontent.com/SONG-WONHO/figure/master/shuffling.png" alt="Shuffling"></p>
+<p>Details are below.</p>
+<pre><code>one_sample = get_sample(idx)
+
+# Shuffling sequence
+if random.random() &lt; .2:
+    ws = np.random.choice([2, 4, 5])
+    num = max_seq_len // ws
+
+    idx = np.arange(0, max_seq_len)
+    for i in range(num):
+        np.random.shuffle(idx[i * ws:(i + 1) * ws])
+        one_sample = one_sample[idx]
+</code></pre>
+<h4>Mixup augmentation</h4>
+<p>Finally, let`s talk about the Mixup method, which gave us a huge boost in cv and lb scores. Mixup is similar to the process of creating of synthesis sequence, in which two sequences are randomly selected and mixed. For example, given two sequences like <code>[1,2,3,4,5]</code> and <code>[5,4,3,2,1]</code>, mix them in half to produce the sequence <code>[3,3,3,3,3]</code>. </p>
+<p>At this time, the point we were discussed about was how to mix-up R and C type information because of the importance of type information. In fact, before this augmentation, we were treating R and C as categorical features and embedding them via nn.Embedding. But we were able to mix these R and C features by changing the embeddings as one-hot. If there is a sequence with C 20 and the other sequence C 50, one-hot C would look like this: <code>[0, 1, 0]</code> and <code>[0, 0, 1]</code>. Then mix these two embeddings like this: <code>[0, 1, 0]</code> * 0.5 + <code>[0, 0, 1]</code> * 0.5. Then we can finally get an embedding like this: <code>[0, 0.5, 0.5]</code>.</p>
+<p>This augmentation improved the single model score on the public leaderboard from 0.117 to 0.1004.</p>
+<p><img src="https://raw.githubusercontent.com/SONG-WONHO/figure/master/mixup.png" alt="Mixup"></p>
+<p>The code is below.</p>
+<pre><code>one_sample = get_sample(idx)
+
+# Mixup two sequences
+if random.random() &lt; 0.4:
+    # Get new index
+    idx = np.random.randint(len(indices_by_breath_id))
+    sampled_sample = get_sample(idx)
+    mix_cols = ['R', 'C', 'numeric_features', 'target']
+    k = 0.5
+    for col in mix_cols:
+        one_sample[col] = (one_sample[col]*k + (1-k)*sampled_sample[col])
+</code></pre>
+<h3>Loss</h3>
+<p>In fact, loss design and augmentation were done at the same time, but for convenience, the augmentation was explained first.</p>
+<p>When we analyzed the relationship between u_in and pressure, it was confirmed that the value of u_in of a specific step affects the pressure of a next step. In other words, the flow of air when step is 0 affects pressure of step 1 or pressure of step 2. Therefore, when air enters at a certain point in time, it is delayed and reflected in the later pressure. Thus, we let our model predict the difference of pressure as well.</p>
+<p>Using this loss, we were able to improve the cv score from 0.14x to 0.127x, and as a result of median ensemble, we were able to rise to 0.11x in the public leaderboard. IMHO, the huge gap in public leaderboard may be due to this loss.</p>
+<p><img src="https://raw.githubusercontent.com/SONG-WONHO/figure/master/loss.png" alt="Loss"></p>
+<p>Code.</p>
+<pre><code>df['step'] = list(range(80))*df['breath_id'].nunique()
+
+df['pressure_diff1'] = df['pressure'].diff(periods=1)
+df['pressure_diff2'] = df['pressure'].diff(periods=2)
+df['pressure_diff3'] = df['pressure'].diff(periods=3)
+df['pressure_diff4'] = df['pressure'].diff(periods=4)
+df.loc[df['step']&lt;1, 'pressure_diff1'] = 0
+df.loc[df['step']&lt;2, 'pressure_diff2'] = 0
+df.loc[df['step']&lt;3, 'pressure_diff3'] = 0
+df.loc[df['step']&lt;4, 'pressure_diff4'] = 0    
+</code></pre>
+<h3>Ensemble</h3>
+<p>Through the above processes, we were able to record 0.1004 as a single model on the public leaderboard, and achieved a score of 0.0975 when applying median ensemble and round post-processing (thanks to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>). After that, we scored 0.963 by doing seed ensemble (seed42 and seed7).</p>
+<p>Then we created another two model with different seeds using pseudo labels generated from 0.963 submission, and we could get to 0.948 to public leaderboard.</p>
+<p>Finally, when we pseudo-labeled the submission with 0.948 files one more and training our model, then we were able to finally achieve 0.0942 for the public leaderboard and 0.0970 for the private leaderboard.</p>
+<h1>Tail</h1>
+<p>; We made a mistake of missing the paper the hosting team wrote. So, our team missing the point of being able to match predicted pressure to real pressure through PID controllers, and even if we knew, We might not be able to find the pressure perfectly.</p>
+<p>; I put all my time into this competition over the last few days to find the secret magic (although I haven`t found it).  During this, the words that i shouted countless times were "Why not?", and I changed my nickname to ynot from sogna with the determination of finding 😂.</p>
+<p>; Our UPSTAGE team had a lot of discussion in this competition, and a lot of ideas were born in the process. A big thanks again to our teams <a href="https://www.kaggle.com/jungikhyo" target="_blank">@jungikhyo</a> and <a href="https://www.kaggle.com/limerobot" target="_blank">@limerobot</a> who led us to top scores. And also thanks for reading long solution.</p>

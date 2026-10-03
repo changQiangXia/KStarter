@@ -1,0 +1,82 @@
+# tabular-playground-series-dec-2021 讨论区（按票数排序，共 80 条）
+
+- [TPS competitions - my lessons learned in 2021](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296842) — 116 票 / 62 评论 / 2021-12-23 
+- [Fix these features to get a significant boost in accuracy!!](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293373) — 62 票 / 52 评论 / 2021-12-05 
+- [Speed up your kernel using Intel® Extension for Scikit-learn](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291823) — 58 票 / 13 评论 / 2021-12-01 
+- [Reduce the size of your train and test data to model more easily](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291844) — 56 票 / 22 评论 / 2021-12-01 
+- [2# place winning solution.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/298304) — 54 票 / 32 评论 / 2023-05-16 **write-up?**
+- [Tabular Data Competition Solutions in 2021](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294062) — 51 票 / 21 评论 / 2021-12-08 **write-up?**
+- [Feature engineering update thread](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293612) — 47 票 / 24 评论 / 2021-12-06 
+- [Sum of Soil_Type and Wilderness_Area](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292823) — 46 票 / 12 评论 / 2021-12-03 
+- [How to deal with imbalance data? (Thoughts, Ideas & Posts)](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291871) — 34 票 / 38 评论 / 2021-12-01 
+- [Finally you can try a lot of feature engineering!](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291839) — 32 票 / 0 评论 / 2021-12-01 
+- [The Covertype dataset, everything you need to know](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291832) — 29 票 / 2 评论 / 2021-12-01 
+- [We really should not be using the accuracy score](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293362) — 29 票 / 11 评论 / 2021-12-05 
+- [Why Does AutoML Matter?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296118) — 28 票 / 14 评论 / 2021-12-19 
+- [The importance of Sharing and "Recycling" code.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293107) — 27 票 / 7 评论 / 2021-12-04 
+- [On using SELU activation](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294845) — 25 票 / 3 评论 / 2021-12-13 
+- [Happy New Year TPS Kagglers and see you in .... TPS-01-2022 ...](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/298050) — 24 票 / 23 评论 / 2021-12-31 
+- [TPS Dec 2021 :Beginner friendly Baseline compilation](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293878) — 24 票 / 5 评论 / 2021-12-07 
+- [Halfway into the competition, the most importance evidence](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295617) — 24 票 / 13 评论 / 2021-12-16 
+- [Focal loss, a solution at the loss level for imbalanced data](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293072) — 23 票 / 3 评论 / 2021-12-04 **write-up?**
+- [Time to say thank you](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/298135) — 23 票 / 18 评论 / 2022-01-01 
+- [Pseudo-Labeling ](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292839) — 23 票 / 15 评论 / 2021-12-03 
+- [Train and test data don't overlap](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292381) — 23 票 / 14 评论 / 2021-12-02 
+- [Class Ordering and Logistic Regression](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293115) — 22 票 / 7 评论 / 2021-12-04 
+- [.95696 XGBoost submission](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295924) — 22 票 / 15 评论 / 2021-12-18 
+- [Yet another score booster!](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293768) — 22 票 / 11 评论 / 2021-12-06 
+- [Planning the ultimate TSP in 2022](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294847) — 21 票 / 21 评论 / 2021-12-13 
+- [Additional information about Soil Types (from previous competition)](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291840) — 19 票 / 3 评论 / 2021-12-01 
+- [Who are looking forward Kaggle Staff's decision ?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294056) — 19 票 / 7 评论 / 2021-12-08 
+- [Activation Functions](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/297338) — 18 票 / 2 评论 / 2021-12-26 
+- [Probing the public leaderboard for rarer classes](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292387) — 18 票 / 4 评论 / 2021-12-02 
+- [Can we trust the feature named Wilderness_Area3  ?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292100) — 17 票 / 9 评论 / 2021-12-01 
+- [The last Tabular Playground Series in 2021!](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293767) — 16 票 / 9 评论 / 2021-12-06 
+- [TPS December 2021: "Winter"](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292069) — 16 票 / 2 评论 / 2021-12-01 
+- [Denoising AutoEncoder Pytorch Starter](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293256) — 16 票 / 8 评论 / 2021-12-04 
+- [Semi-Supervised Learning Papers ](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293728) — 16 票 / 7 评论 / 2021-12-06 
+- [Imbalanced classes vs. imbalanced cost](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294305) — 16 票 / 21 评论 / 2021-12-09 
+- [Classification: How imbalanced is "imbalanced"?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291835) — 15 票 / 7 评论 / 2021-12-01 
+- [Error analysis - estimating the effect of pseudo-labelling](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294775) — 15 票 / 8 评论 / 2021-12-12 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291935) — 14 票 / 1 评论 / 2021-12-01 
+- [Manhattan Distance of Vertical and Horizontal Hydrology Distances](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293500) — 14 票 / 3 评论 / 2021-12-05 
+- [Dropout & BatchNormalization](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295749) — 14 票 / 15 评论 / 2021-12-17 
+- [Optimizing ensemble weights](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/297584) — 13 票 / 8 评论 / 2021-12-28 
+- [Revisiting Deep Learning Models for Tabular Data.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296631) — 13 票 / 5 评论 / 2021-12-22 
+- [Congratulations, looking forward to reading about your solutions!](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/298131) — 13 票 / 12 评论 / 2022-01-01 **write-up?**
+- [It is time for Pseudolabeling ... ](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293329) — 13 票 / 4 评论 / 2021-12-05 
+- [Class distributions for the public test set](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295210) — 13 票 / 7 评论 / 2021-12-14 
+- [Parquet, and sharing data between notebooks](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291905) — 12 票 / 3 评论 / 2021-12-01 
+- [Read your confusion matrix](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296912) — 12 票 / 8 评论 / 2021-12-24 
+- [Motivational quote from François Chollet's book about learning AI](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295957) — 12 票 / 1 评论 / 2021-12-19 
+- [protip:  hoarding knowledge on TPS is poor game theory (Unless...)](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295086) — 12 票 / 5 评论 / 2021-12-14 
+- [Kaggle code snippets for Google Colab](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296300) — 12 票 / 10 评论 / 2021-12-21 
+- [Clustering the data without failing for overfitting specific areas](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292456) — 11 票 / 0 评论 / 2021-12-02 
+- [Papers on the uses and limitations of synthetic data](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295816) — 11 票 / 1 评论 / 2021-12-18 
+- [Multiclass Focal Loss for LightGBM](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293371) — 11 票 / 1 评论 / 2021-12-05 
+- [Papers With Code: Latest on Deep Learning for Tabular Data](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292826) — 11 票 / 4 评论 / 2021-12-03 
+- [Feature engineering, use pd.clip function](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295026) — 11 票 / 2 评论 / 2021-12-14 
+- [Faster Optimization using GPU Multiprocessing](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/297405) — 11 票 / 3 评论 / 2021-12-27 
+- [How to implement plurality voting?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293444) — 11 票 / 3 评论 / 2021-12-05 
+- [Singleton array xx cannot be considered a valid collection.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293350) — 11 票 / 3 评论 / 2021-12-05 
+- [Boosting methods for multi-class imbalanced data classification.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294089) — 11 票 / 3 评论 / 2021-12-08 
+- [Quotes, which could change your mind! ](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/297834) — 10 票 / 6 评论 / 2021-12-29 
+- [Dec TPS 92.6% Accuracy in less than 7 mins - Deep NN Model](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296039) — 10 票 / 2 评论 / 2021-12-19 
+- [TabNet: The End of Gradient Boosting?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293090) — 10 票 / 4 评论 / 2021-12-04 
+- [CodeGrepper: code search engine for accrue code answers as a browser extension.](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/297614) — 10 票 / 6 评论 / 2021-12-28 
+- [How to deal with class 5 which has only 1 sample](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293064) — 10 票 / 7 评论 / 2021-12-04 
+- [Handling 'Soil_Type15' and 'Soil_Type7' Features](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293504) — 10 票 / 2 评论 / 2021-12-05 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291936) — 9 票 / 12 评论 / 2021-12-01 
+- [Downsampling easy data](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293509) — 9 票 / 3 评论 / 2021-12-05 
+- [Exploiting sparsity to reduce memory usage and speed up xgboost training](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294808) — 9 票 / 0 评论 / 2021-12-13 
+- [single instance of Cover_Type = 5?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291875) — 9 票 / 9 评论 / 2021-12-01 
+- [Logistic Regression|Neural Networks|XGBoost|Random Forests 📋 🏆](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295003) — 9 票 / 0 评论 / 2021-12-13 
+- [Different NN Architectures & Implementation (..and just a thank you!)](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293951) — 8 票 / 7 评论 / 2021-12-07 
+- [Implementing SAINT model](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296567) — 8 票 / 15 评论 / 2021-12-22 
+- [Holiday reading list needed !!!](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/296782) — 8 票 / 2 评论 / 2021-12-23 
+- [Load Data Faster using Feather](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291787) — 8 票 / 3 评论 / 2021-12-01 
+- [How to reduce Our Data in terms of rows without losing Accuracy?](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/292793) — 8 票 / 6 评论 / 2021-12-03 
+- [Basic Recipe for Deep Learning 🔥](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/294843) — 7 票 / 5 评论 / 2021-12-13 
+- [Feature Engineering: Encode Soil_Type as Five 8-bit Integers](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/295549) — 7 票 / 3 评论 / 2021-12-16 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291774) — 7 票 / 2 评论 / 2021-12-01 
+- [ Dealing with Imbalanced Datasets](https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/291870) — 7 票 / 0 评论 / 2021-12-01 

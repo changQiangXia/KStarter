@@ -1,0 +1,237 @@
+# https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337197
+
+Topic #337197: 1st place solution
+  Author: Carno Zhao
+  Posted: 2022-07-15 02:16:49.781000
+  Votes: 127  Comments: 63
+
+1st place solution
+
+
+
+TL; DR
+
+We used three groups of models in our solution, named CLS group (gray boxes), SEG group (blue boxes) and 3D group (yellow boxes). CLS group is used to classify whether the prediction of a slice should be empty or not. SEG group and 3D group are used to do segmentation for slices that should be predicted.
+
+notebook
+
+Our submission notebook is for referencing only. Model weights will not be released.
+
+github
+
+Here is my github repo for this solution.
+
+1. CLS group
+
+1.1 Data
+
+Models were trained with the whole dataset, instead of folds. 
+
+Some models were trained without wrong annotated cases (mentioned in discussion).
+
+1.2 Model
+
+4 unets, with efficientnet b4, b5, b6, b7 backbones.
+
+1.3 Training
+
+Public mmsegmentation pipeline.
+
+1.4 Usage
+
+We computed prediction result of each slice of test data, using 0.6 threshold to binarize sigmoid probabilities. If the number of positive pixels if larger than 12, the slice is defined as "positive slice" (#pixels check arrow). Otherwise, the slice is defined as negative, which will skip further computation, and generate zero masks only.
+
+2. SEG group
+
+2.1 Data
+
+Efficientnet-Unet models were trained with annotated slices (green arrow) in the whole dataset, which means, slices that have no annotation will not used in this step. 
+
+ConvNeXt-UPernet models were trained with all slices in the whole dataset, except 5 slices following the end point (orange arrow) of large-bowel and small-bowel. We believe these slices' annotation will introduce ambiguous supervision.
+
+Some models were trained without wrong annotated cases (mentioned in discussion).
+
+2.2 Model
+
+5 unets, with b4, two b5, b6 and b7 backbones.
+
+2 upernet, with convnext-base and convnext-small backbones.
+
+2.3 Training
+
+Public mmsegmentation pipeline.
+
+2.4 Usage
+
+We computed logits prediction result of each positive slice of test data.
+
+3. 3D group
+
+3.1 Data
+
+Public MONAI pipeline data preprocessing
+
+3.2 Model
+
+3 SegResNets, with init_filters = 12, 20, 32, PRELU activation and batch norm.
+
+3.3 Training
+
+Public MONAI pipeline training.
+
+3.4 Usage
+
+We computed logits prediction result of each volume of test data. The 3D logits and 2.5D logits were merged using 0.4/0.6 weights, then binarized using threshold 0.4.
+
+4. Hyperparameters
+
+All hyperparameters will be listed in config files. The dataset of all config files will be released soon.
+
+In short, for CLS group and SEG group, we used dice-ce, ce, dice loss for different models. We used elastic transform, grid distortion and optical distortion, with default flip, rotation in data augmentations.
+
+For 3D groups, we used default trained pipeline as public MONAI dataset in first stage training. And we used cosine annealing, 1e-4-&gt;1e-6 learning rate, 20 epochs in second stage training.
+
+5. Acknowledgement
+
+Many thanks to my teammates. 
+
+And also thanks to other competitors that inovated us by their previous solutions: [1], [2], [3], from which our classification-segmentation two-stage pipeline and training tricks comes.
+
+And @yiheng, without his excellent 3D monai training pipeline, we can't get such a high score.
+
+Comments:
+├─ Liam Nguyen (2022-07-15 02:49:34.547000) [+4]
+│  We really appreciate other Kagglers who were willing to share their works and findings. Without them we could not achieve this.
+├─ Yiheng Wang (2022-07-15 02:35:43.520000) [+4]
+│  Congrats @carnozhao ! Well deserved winning! I'm very glad to see MONAI makes some help in your top solution : )
+  ├─ Carno Zhao (2022-07-15 02:39:05.820000) [+1]
+  │  In our submission, even ensembling our 2.5D models (~0.885) with your public 0.872 fold-0 3DUnet, we can get a +0.003 boost to 0.888. This is really amazing!
+├─ Hetvi Bhora (2022-07-20 16:50:01.190000) [+1]
+│  Thanks! The explanation was really helpful!
+├─ Veronika Chernova (2022-07-19 08:56:32.873000) [+1]
+│  Thank you for sharing!
+│  I misunderstood one moment.. 
+│  Can you explain in more detail what data you used for training ConvNeXt-UPernet models?
+│  I can't understand what this phrase means: 'were trained...
+  ├─ Carno Zhao (2022-07-19 10:23:50.727000) [+2]
+  │  You can see the left column of the Figure, where I draw a sample z-axis. From top to bottom is the direction of human's head to foot, and the green part is where annotation exists. After the end of...
+├─ Souvik Biswas (2022-07-18 11:31:35.193000) [+1]
+│  the image representation was quite helpful
+├─ Himanshu Dongre (2022-07-18 06:47:20.727000) [+1]
+│  Congrats @carnozhao. Great explaination.
+├─ Hemanth S (2022-07-18 06:44:18.247000) [+1]
+│  Congratulations for the first place @carnozhao . The idea to use a classifier is really amazing. Just a question here, did you use the classifier first on the images and then applied segmentation m...
+  ├─ Carno Zhao (2022-07-18 06:47:04.043000) [+3]
+  │  Both method you mentioned does the same thing. The only difference is that the first one can save more time since we do not have to segment "negative slices". And this is also what we used in submi...
+├─ Janga Vidhya Sagar (2022-07-18 04:31:36.333000) [+1]
+│  Congrats @carnozhao
+├─ buddybudy (2022-07-18 02:13:02.140000) [+1]
+│  Woot Woot. That's awesome
+├─ tahsin1221 (2022-07-17 11:22:46.843000) [+1]
+│  Nice. Very helpful explanation it was.
+├─ shajiayu (2022-07-17 11:19:38.193000) [+1]
+│  About the wrong annotated cases.  Models were trained without the wrong annotated cases. 
+│  Infer the images with wrong annotated use the models, we get Pseudo-Labelling.
+│  In SEG group, models were tr...
+  ├─ 豆柴金鯱 (2022-07-19 02:40:20.073000) [+1]
+  │  Did you guys embed pseudo-labeling into the pipeline or do it offline?
+  ├─ shajiayu (2022-07-19 23:17:55.230000) [+1]
+  │  Not online. Trained with the Pseudo-Labelling datas and other correct datas
+├─ Zoe Wang (2022-07-17 09:58:24.820000) [+1]
+│  This explanation is helpful.
+├─ Syem Aziz (2022-07-17 09:16:13.827000) [+1]
+│  Congratzzzz!!!!
+├─ FelipeKitamura, MD, PhD (2022-07-16 10:43:37.490000) [+1]
+│  Congratulations to the top1 team! Very neat solution. Would you mind to explain how the selection of the best model is done when training on the whole training set? Is there a validation set? Or is...
+  ├─ Carno Zhao (2022-07-16 16:08:10.073000) [+2]
+  │  We used one of models from last three epochs, based on performance on public LB or just selected one of them empirically. Our models (2.5d) were trained with 60 epochs or 20k iterations (differs be...
+  ├─ FelipeKitamura, MD, PhD (2022-07-16 17:49:53.187000) [+0]
+  │  Thanks, @carnozhao !
+  ├─ Hemanth S (2022-07-18 10:29:48.150000) [+0]
+  │  @carnozhao Can you please give some context on how choosing the last epoch model is better than choosing the best model?
+├─ moth (2022-07-15 13:22:52.067000) [+2]
+│  Congratulations for the win @carnozhao! I see that OpenMMLab is one of the best frameworks nowadays for object detection and image segmentation. However, it has a steep learning curve, do you know ...
+  ├─ Carno Zhao (2022-07-15 14:42:45.127000) [+0]
+  │  My experience is that the more you use it, the more familiar you will get to it.
+├─ Rafi Hassan Chowdhury (2024-04-25 21:45:35.347000) [+0]
+│  Niceeeeeeeeee
+├─ ElliotXie (2022-10-31 14:39:05.770000) [+0]
+│  Congratulation! And thanks so much for sharing!
+├─ David (2022-08-18 09:40:03.490000) [+0]
+│  Thanks! This sharing was really helpful!
+├─ Yassine Alouini (2022-08-09 19:30:21.607000) [+0]
+│  Thanks for sharing all these details. The diagram is great as well, well done to you!
+├─ xu jack (2022-07-31 04:33:59.383000) [+0]
+│  I'm training the classification model, but I always get nan for stomach.
+├─ xu jack (2022-07-30 13:05:30.997000) [+0]
+│  Congratulation!!  
+│  when I study and re-try your solution from the github, I met some errors. 
+│  is it updated in the github?
+├─ xu jack (2022-07-30 12:46:57.250000) [+0]
+│  the input channel of classification model is 1?  
+│  @carnozhao could you please give some details? I'm trying to reproduce the experiment.
+├─ Advay Patil (2022-07-21 21:06:36.940000) [+0]
+│  Great explanation!
+├─ Bella Pisani (2022-07-21 14:58:19.253000) [+0]
+│  Thank you for sharing! I really appreciate the diagram in particular.
+├─ Sochanntrea Ou(KIT) (2022-07-21 14:22:02.833000) [+0]
+│  The explanation was really useful!!! Thank you!!!
+├─ 栗木 (2022-07-21 10:23:08.270000) [+0]
+│  Congratulations and thanks for sharing !
+├─ Bilal Suppal (2022-07-20 17:01:11.177000) [+0]
+│  Congrats @carnozhao ! Well deserved winning! I'm very glad to see MONAI makes some help in your top solution : )
+│  @carnozhao
+├─ Diriczi Zsolt-Csaba (2022-07-20 09:39:43.180000) [+0]
+│  Congratulations!🎉🎉🎉
+├─ Shaheer AK (2022-07-17 06:21:52.020000) [+0]
+│  Congrats @carnozhao !!
+├─ [deleted] (2022-07-17 06:12:41.220000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-17 02:59:55.887000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-17 02:18:00.310000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-16 23:32:23.160000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-16 23:23:58.910000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-16 22:21:39.147000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-16 11:19:15.740000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-15 12:23:31.393000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-07-16 00:57:35.413000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-07-15 06:02:22.630000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-07-15 07:18:26.283000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-07-15 04:22:57.107000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-15 03:05:48.940000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-15 03:02:21.140000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-07-15 03:09:23.143000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-07-15 03:00:51.357000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-15 02:26:26.930000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-15 02:25:10.703000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-28 11:06:58.153000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-21 06:24:41.967000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-20 22:34:01.197000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-19 23:13:32.123000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-18 06:01:58.310000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-17 14:37:58.820000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-16 20:09:42.260000) [+0]
+│  [deleted]

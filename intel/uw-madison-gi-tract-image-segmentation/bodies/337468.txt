@@ -1,0 +1,310 @@
+# https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337468
+
+Topic #337468: 3rd Place Solution
+  Author: He
+  Posted: 2022-07-16 08:14:05.277000
+  Votes: 45  Comments: 27
+
+Thanks to the organizers and congrats to all the winners,I have learned a lot from the discussions and previous competition solutions, thank you for your generous sharing!
+
+Summary
+
+My overall solution is similar to the 2nd place solution, but without 3D models. My solution is to use the detector to detect the main area, then use the classifier to judge whether it needs to be segmented, and finally segment the image that needs to be segmented, and only keep the segmentation results that the classifier judges as positive samples.
+
+Detail
+
+
+
+5 Fold cross validation by group spliting case
+
+Only 2.5D Models (slice=3 and slice=5)
+
+Pre-processing(crop with a detection model), refer to [bestfitting], [Guanshuo Xu]
+
+My training pipeline (cls + seg method and swa for models) is based on our siim acr solution (SIIM-ACR Solution)
+
+
+Models
+
+Pre-processing
+
+
+
+EfficientDet-D0, size=256, epoch=5, all other parameters use default parameters. This is a very easy task for the model to learn. I generated some training samples using image preprocessing and relabeled the bad bounding box.
+
+
+Cls part
+
+Only use Unet(Smp-Unet and Timm-Unet) with different backbone and classification branch,Timm-Unet refer to selimsef's xview3_solution, Thanks for his sharing, Then I made some modifications to the network for this competition.
+
+
+
+Cls branch loss: bce loss 
+
+Seg branch loss: bce loss
+
+Using ema (refer to DungNB) and swa
+
+Epoch=35(7 cycle)
+
+Init lr=3e-4 or 5e-4
+
+Data: use all data
+
+Metric for select model: TP / (TP + FP + FN) and Dice score
+
+
+models
+
+
+
+Smp-Unet efficientnet-b7, size=320, slice=5
+
+Timm-Unet efficientnet-v2-l, size=320, slice=3
+
+Timm-Unet efficientnet-v2-l, size=320, slice=5
+
+Timm-Unet efficientnet-v2-m, size=352, slice=5
+
+Timm-Unet efficientnet-b7ns, size=320, slice=5
+
+
+Seg part
+
+For the classification model, I mainly focus on the accuracy of the classification. For the segmentation model, I hope to obtain a better and better segmentation effect, so I train the segmentation model separately.
+
+
+
+Cls branch loss: bce loss 
+
+Seg branch loss: ComboLoss({'bce': 0.5, 'dice': 0.5, 'lovasz': 1}
+
+Data: All positive samples
+
+Using ema and swa
+
+Metric for select model:  Dice score
+
+Timm-Unet efficientnet-v2-l-1 and Timm-Unet efficientnet-v2-l-2 use different scale pretraining adjustments
+
+
+models
+
+
+
+Timm-Unet efficientnet-v2-l, size=384, epoch=35, slice=5
+
+Timm-Unet efficientnet-v2-l-1, size=416, epoch=35, slice=5
+
+Timm-Unet efficientnet-v2-l-2, size=416, epoch=35, slice=5
+
+Timm-Unet efficientnet-v2-m, size=416, epoch=35, slice=5
+
+
+Post-process
+
+
+
+Remove 25 pixel part
+
+Take three consecutively predicted positive samples as the starting point and three consecutively predicted negative samples as the end point(very small improve)
+
+
+Some Results
+
+
+
+
+fold
+size/slice
+cls
+seg
+private/pubilc
+
+
+
+
+0
+384/3
+efb3-unet
+
+0.869/0.875
+
+
+0
+384/3
+efb5-unet
+
+0.869/0.876
+
+
+0
+320/3
+efb7-unet
+
+0.866/0.878
+
+
+0
+384/3
+efb7-unet
+
+0.870/0.877
+
+
+0
+320/5
+efv2-l-unet
+
+0.871/0.878
+
+
+0
+320/5
+efv2-l-unet(swa)
+
+0.875/0.882
+
+
+5 folds
+320/3
+efb7-unet
+
+0.873/0.883
+
+
+5 folds
+320/3
+efb7-unet
+efb7-unet
+0.877/0.886
+
+
+5 folds
+320/5
+efv2-l-unet(swa)
+
+0.876/0.886
+
+
+5 folds
+320/5
+efv2-l-unet(swa)
+efv2-l-unet(swa-384)
+0.879/0.890(not submit)
+
+
+
+
+Work for me
+
+
+
+Add a detection model(It greatly reduces the resources used for training)
+
+Add some segmentation models for positive sample(0.886-&gt;0.890)
+
+Mixup and cutmix are work for segmentation models
+
+The swa has a relatively large increase in the single fold, and the score increase is not much different when the 5 folds ensemble.
+
+
+Not work for me
+
+
+
+Make some brightness adjustments to the data(spent a lot of time)
+
+Hausdorff distance loss function
+
+External dataset(CT), maybe need some processing with GAN models
+
+Positive and negative sample balance
+
+
+Final
+
+Because I don't have a local GPU now, the first two months my model was mainly based on Kaggle GPU development, 30 hours a week gave me more time to think and read previous competition solutions, and worked on Kaggle GPU for two month, the best model (classification only) obtained was effb3-FPN-384 (single fold 0.875), this score was about 90th at the time, which made me very frustrated, the last month, I rented some GPU, trained a lot of large models, luckily, large models work well. Due to time and training resource limit, I have no time to try 3D models.
+
+Infer code
+
+Link: https://www.kaggle.com/code/hesene/3rd-place-winning-solution
+
+Comments:
+├─ Arunim Basak (2022-07-21 11:27:44.167000) [+1]
+│  One more doubt I am having ,which type of cls_labels you used in this method
+│  Type 1. cls_labels = {0,1} 
+│                0-&gt; No mask present , 1-&gt; Mask present
+│  Type 2. cls_labels = {0,1,2}
+│      ...
+  ├─ He (2022-07-23 13:57:13.257000) [+0]
+  │  sorry for the late reply, I use type2 for classification branch.
+├─ Arunim Basak (2022-07-21 11:23:04.973000) [+1]
+│  Congrats @hesene , I am having a doubt regarding your classification + segmentation method , looking forward to your clarification
+│  Why do you need segmentation loss in classification model ? Why di...
+  ├─ He (2022-07-23 13:53:22.617000) [+0]
+  │  I am using the segmentation branch as a classification task, the classification branch is just to assist the training, In my local validation, the segmentation branch get a better accurate.
+├─ kagglerz (2022-09-10 08:44:16.067000) [+0]
+│  Hi.
+│   May I ask the intuition for having classification then segmentation? Doesnt classification already give u segmentation? Why do you need further segmentation? Is the intuition to "fine tune" th...
+├─ Veronika Chernova (2022-07-26 12:09:56.970000) [+0]
+│  Tank you for sharing!
+│  I'm not sure that I understood your solution correctly.
+│  I present your solution like this:
+│  1) Finding bounding boxes for organs, then cut out pictures inside bounding boxes. S...
+├─ quinguyen (2022-07-25 02:26:18.197000) [+0]
+│  Congrats @hesene, thanks for your sharing. I learned a lots from it
+├─ Aiwc (2022-07-23 11:45:51.340000) [+0]
+│  Congrats! amazing job
+├─ The Devastator (2022-07-20 09:27:35.307000) [+0]
+│  Very nice sharing! Would you mind to share your code and models?
+├─ MINGXI LIU (2022-07-20 03:34:35.253000) [+0]
+│  Congratulations！😄😁
+├─ 豆柴金鯱 (2022-07-19 08:04:06.830000) [+0]
+│  Congrats! @hesene I have 3 questions looking forward to your clarification.
+│  
+│  
+│  
+│  Did you embed the EfficientDet into the pipeline or just use it to crop out ROIs offline?
+│  
+│  It seems that top winners a...
+  ├─ He (2022-07-19 13:58:52.717000) [+0]
+  │  Thanks.
+  │  
+  │  
+  │  
+  │  Crop out ROIs offline.
+  │  
+  │  Based on some old competitions experience(refer to this), and some offline experimental results.
+  │  
+  │  In this competition, the "heavy" models performs better than "li...
+├─ Yogeswara Reddy (2022-07-19 04:26:39.123000) [+0]
+│  Congratulations.
+├─ Yuhang Jiang (2022-07-18 06:52:11.283000) [+0]
+│  Nice work,thx.
+├─ Apurba Pandey (2022-07-18 00:01:34.690000) [+0]
+│  Great technique! Congrats @hesene
+├─ gao yaun shuai (2022-07-17 12:57:14.777000) [+0]
+│  谢谢大佬，希望有一天我也能拿一块奖牌😁
+├─ gao yaun shuai (2022-07-17 03:51:30.017000) [+0]
+│  大佬能开源一下代码吗，想学习一下。
+  ├─ He (2022-07-17 07:57:15.983000) [+6]
+  │  I am cleaning my code recently, you can refer to our previous solution at this, the training pipline is similar.
+├─ Tian (2022-07-16 13:18:59.273000) [+0]
+│  吊的吊的，祝贺大佬成为GM.
+  ├─ He (2022-07-16 14:45:45.393000) [+0]
+  │  Thanks 😁😁😁
+├─ Fred-haha (2022-07-16 10:54:33.617000) [+0]
+│  Excuse me, did you re label the data for the classification model, and how much？
+  ├─ He (2022-07-16 12:37:27.650000) [+0]
+  │  Hi, I did not relabel the data for the classification model, I removed these data (More Incorrect Masks w/ GIFs and Questions) during training and relabeled with pseudo labels at the end, but they ...
+  ├─ Fred-haha (2022-07-18 09:31:25.600000) [+0]
+  │  Sorry, I don't quite understand,Can you explain your "pseudo labels" operation，thanks
+  ├─ He (2022-07-18 15:14:53.393000) [+0]
+  │  In the early training, I remove these samples(case7_day0, case81_day30 etc. ) from the training set, and in the final training, I use the trained model to predict the results of these samples as th...
+  ├─ xu jack (2022-07-30 13:01:09.993000) [+0]
+  │  how to find out the incorrect labels? can you share us your experience?
+├─ Arun Purakkatt (2022-07-16 08:35:25.653000) [+0]
+│  @hesene  congratulations on winning 3rd place !!! Thanks for sharing detailed information about model &amp; struggles went through to reach there !!
+  ├─ He (2022-07-16 09:27:38.190000) [+0]
+  │  Thanks, it was also a journey worth remembering for me

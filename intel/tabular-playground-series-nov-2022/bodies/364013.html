@@ -1,0 +1,22 @@
+<p>The competition description contains a piece of information which seems to be neglected in many public notebooks and discussion posts:</p>
+<blockquote>
+  <p>In this competition, you are given a folder of submissions that contain <strong>predictions</strong> for a binary classification task.</p>
+</blockquote>
+<p>They say <strong>predictions</strong> rather than <strong>features</strong>, yet everybody is throwing the usual machine learning algorithms at the data. How can we exploit the fact that we are given predictions rather than features, albeit the predictions are of dubious quality?</p>
+<p><img src="https://i.imgur.com/LmbDMLT.png" alt="histogram and calibration curve"></p>
+<p>Let's try some reverse engineering! The diagrams clearly show that the model predicts probabilities which are too high. How can this happen? I assume that the model was trained on data that has the same distribution as the competition dataset, but during training, the positive samples were weighted higher. Maybe the positives were oversampled, the negatives were undersampled, or the model was simply trained with a wrong <code>class_weight</code> parameter.</p>
+<p>If this hypothesis is true, the predictions can be corrected by subtracting a constant from the logits:</p>
+<pre><code>x = scipy.special.expit(scipy.special.logit(x) - 1.17)
+</code></pre>
+<p>Equivalently, one can fit a logistic regression model to the logits:</p>
+<pre><code>LogisticRegression.fit(scipy.special.logit(x), y)
+</code></pre>
+<p>In a previous post, I showed how <a href="https://www.kaggle.com/competitions/tabular-playground-series-nov-2022/discussion/363778" target="_blank">predictions can be calibrated with isotonic regression</a>. Isotonic regression improved the cv score of a single model (0.6475577136.csv) from 0.6476 to 0.5286. Shifting the logit improves the same model's cv to 0.5281. We get this improvement because isotonic regression overfits a step function whereas logistic regression fits only one parameter to compensate for the wrong <code>class_weight</code>.</p>
+<p><img src="https://i.imgur.com/CPjhO08.png" alt="regression curves"></p>
+<p>The real improvement, however, doesn't show up in the single model, but when we use the whole dataset. Logistic regression on the original dataset gives a cv score of 0.5318; logistic regression on the logits improves the cv to 0.5258.</p>
+<p>Lessons learned</p>
+<ol>
+<li>Recommendation: replace the whole dataset by its logit before feature selection, dimensionality reduction and modeling.</li>
+<li>Always look for pieces of information that haven't been exploited yet.</li>
+</ol>
+<p>Source code is in the <a href="https://www.kaggle.com/code/ambrosm/tpsnov22-eda-which-makes-sense" target="_blank">EDA which makes sense</a>, and by the way, <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a> had the same idea at the same time.</p>

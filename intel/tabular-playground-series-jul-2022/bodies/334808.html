@@ -1,0 +1,41 @@
+<p><a href="https://www.kaggle.com/cabaxiom" target="_blank">@cabaxiom</a> and <a href="https://www.kaggle.com/hiro5299834" target="_blank">@hiro5299834</a> have shown how to fit a Gaussian mixture model with seven clusters to the data. What can we learn from these clusterings?</p>
+<h1>PCA projection</h1>
+<p>We can project the data to its first two PCA dimensions and color the clusters. The plot shows that indeed there are seven distinguishable clusters, but it doesn't show much more:</p>
+<pre><code># p is the pca output, y is the clustering output
+for i in range(n_clusters):
+    plt.scatter(p[:,0][y == i], p[:,1][y == i], s=1, label=f"Cluster {i}")
+</code></pre>
+<p><img src="https://i.imgur.com/V6faJT3.png" alt="PCA"></p>
+<p>By the way, the pink cluster is rendered last; that's why it looks like it were in front of all other clusters.</p>
+<h1>Integer features</h1>
+<p>We can plot cluster-wise histograms of each of the seven integer features. These histograms show that</p>
+<ol>
+<li>All seven int features help to distinguish the clusters</li>
+<li>The distributions are not Gaussian. Certainly a Poisson mixture model would give better clusters, but unfortunately scikit-learn knows only Gaussian mixture models. Who is capable of programming a Poisson mixture model?</li>
+</ol>
+<pre><code># data is the unscaled data, y is the clustering output
+fig, axs = plt.subplots(4, 2, figsize=(16, 14))
+axs = axs.ravel()
+int_columns = [col for col in data.columns if data[col].dtype == 'int']
+for ax, f in zip(axs, int_columns):
+    for i in range(n_clusters):
+        uv, uc = np.unique(data[f][y == i], return_counts=True)
+        ax.plot(uv, uc)
+    ax.set_title(f)
+</code></pre>
+<p><img src="https://i.imgur.com/KAwVlKI.png" alt="Int"></p>
+<h1>Float features</h1>
+<p>We can plot cluster-wise histograms of each of the 22 float features. These histograms show that the float features f_00 through f_21 do not help to distinguish the clusters: All clusters have mean 0 and standard deviation 1. We can (or even should?) drop these features from the data. Only the last seven features, f_22 through f_28, are useful.</p>
+<p><img src="https://i.imgur.com/LEJw2yi.png" alt="Float"></p>
+<h1>Other 2d projections</h1>
+<p>We don't need a PCA to project to two dimensions: The data can be projected to any two features. I'll show only one example: The following diagram shows that the blue cluster has a strange shape when it is projected to f_24 and f_25. Does the strange shape mean that the blue cluster shouldn't be a cluster at all? Do we need more than seven clusters? These diagrams have the potential for more discoveries!</p>
+<p><img src="https://i.imgur.com/tWTVYJL.png" alt="two features"></p>
+<h1>Cluster centers</h1>
+<p>We can look at the data from a completely other angle. The following diagram shows the seven cluster centers for every feature. We see again that for f_00 through f_06 and f_14 through f_21 all clusters have mean 0 and cannot be distinguished. The diagram shows as well that for f_09, the blue cluster has the smallest mean and the red cluster the largest mean - this matches what can be seen in the f_09 histogram above.</p>
+<pre><code># gm is the GaussianMixture model, scaled is the scaled input data
+for i in range(gm.means_.shape[0]):
+    plt.scatter(np.arange(scaled.shape[1]), gm.means_[i])
+plt.xticks(ticks=np.arange(scaled.shape[1]), labels=scaled.columns)
+</code></pre>
+<p><img src="https://i.imgur.com/wWODP20.png" alt="cluster means"></p>
+<p>Source code for the analysis and diagrams is <a href="https://www.kaggle.com/ambrosm/tpsjul22-gaussian-mixture-cluster-analysis" target="_blank">here</a>.</p>

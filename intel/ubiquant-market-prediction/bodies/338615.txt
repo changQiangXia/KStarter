@@ -1,0 +1,106 @@
+# https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338615
+
+Topic #338615: [2nd Place Solution] - Robust CV and LGBM
+  Author: Davide Stenner
+  Posted: 2022-07-21 06:19:58.414000
+  Votes: 28  Comments: 7
+
+Thanks to Ubiquant for hosting this competition!
+
+This competition was really challenging and push me through lot's of computing optimization.
+
+My journey was:
+
+
+
+
+Rank
+Score
+Update
+
+
+
+
+34
+0.082800
+first update
+
+
+12
+0.115900
+second update
+
+
+4
+0.133100
+third update
+
+
+2
+0.128200
+forth update
+
+
+2
+0.123175
+fifth update
+
+
+
+
+My model is quite simple because i work mainly on making the code robust to bugs and over-fitting.
+I used every available data: train.csv + supplemental_train.csv (it was difficult to optimize the pipeline without going in out of memory)
+
+FE
+300 basic columns.
+100 new columns: average by time id for the most correlated feature with the target on the latest 1000 time_id with more than 31 observation (statistical magic number :D)
+5 macro aggregation: for each row (time_id, investment_id) i calculated mean, std, quantile 0.1, quantile 0.5, quantile 0.9 over every numerical feature (f_0, … f_300)
+
+Loss/Metrics:
+rmse and correlation (correlates well with competition metrics)
+
+I used a Purged K-FOLD cross validation with embargo so i don't have leakege between Fold, this helps to reduce over fitting. 
+
+I train 5 LightGBM with early stopping based on CV Correlation (not on single validation score).
+
+What didn't work:
+AE MLP (https://www.kaggle.com/competitions/jane-street-market-prediction/discussion/224348)
+Feature neutralization
+PCA
+
+Comments:
+├─ Daisy (2022-07-21 08:44:51.933000) [+3]
+│  Congratulations! You also use the following features: 
+│  
+│  
+│    
+│  100 new columns: average by time id for the most correlated feature with the target
+│  
+│  
+│  Probably this is a direct cause I lost.  I think it...
+├─ The Devastator (2022-07-23 23:38:10.777000) [+1]
+│  I just wanted to drop a comment and say that this was an amazing solution! I'm really impressed by how you were able to get such a great score. It's truly inspiring.
+├─ Chongshan Wang (2022-09-14 08:49:56.470000) [+0]
+│  Thanks for sharing!
+│  
+│  
+│    
+│  I train 5 LightGBM with early stopping based on CV Correlation (not on single validation score).
+│  
+│  
+│  Could you please elaborate more about "based on CV correlation"，does that...
+  ├─ Davide Stenner (2022-09-22 13:52:54.900000) [+0]
+  │  As metric score i used simple Correlation not mean of Correlation by time ID, because i observed they were quite similar (well correlated).
+  │  
+  │  By saying based on CV correlation i mean that i selected...
+├─ wbzhang233 (2022-08-31 09:51:08.140000) [+0]
+│  Congratulations! Would you open your notebook lately? I'd like to learn from your source code, thanks.
+├─ Tianfan Xu (2022-07-26 13:03:47.653000) [+0]
+│  Thanks for sharing :)
+│  I wonder what these 5 macro aggregation columns represent? Can you give a hint?
+  ├─ Davide Stenner (2022-07-27 09:32:19.687000) [+3]
+  │  STARTING_NUMERIC_FEAT_NAME is the list of the feature from F_0, …,  F_299
+  │  `
+  │  
+  │  data[STARTING_NUMERIC_FEAT_NAME].mean(axis=1).astype(np.float16)
+  │  data[STARTING_NUMERIC_FEAT_NAME].std(axis=1).astype(np....

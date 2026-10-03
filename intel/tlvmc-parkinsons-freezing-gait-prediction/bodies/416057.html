@@ -1,0 +1,172 @@
+<h2>2nd place solution</h2>
+<p>First of all, thanks to the host for an interesting competition and congratulations to all the winners!</p>
+<h2>Summary</h2>
+<ul>
+<li>We designed separate models for tDCS FOG and DeFog.</li>
+<li>Both tDCS FOG and DeFog were trained using GRUs.</li>
+<li>Each Id was split into sequences of a specified length. During training, we used a shorter length (e.g., 1000 for tdcsfog, 5000 for defog), but for inference, a longer length (e.g., 5000 for tdcsfog, 30000 for defog) was applied. This emerged as the most crucial factor in this competition.</li>
+<li>For the DeFog model, we utilized the ‘notype’ data for training with pseudo-labels, significantly improving the scores; by leveraging the Event column, robust pseudo-labels could be created.</li>
+<li>Although CV and the public score were generally correlated, they became uncorrelated as the public score increased. Additionally, the CV was quite variable and occasionally surprisingly high. Therefore, we employed the public score for model selection, while CV guided the sequence length.</li>
+</ul>
+<h2>tDCS FOG</h2>
+<ul>
+<li><p>Features</p>
+<ul>
+<li>Three provided accelerations</li>
+<li>Feature engineering performed on each acceleration involved:<ul>
+<li>Difference between prior and subsequent accelerations</li>
+<li>Cumulative sum of acceleration</li></ul></li></ul></li>
+<li><p>Standardization</p>
+<ul>
+<li>Used RobustScaler</li>
+<li>Each Id was standardized individually</li></ul></li>
+<li><p>Sequence Creation Method:</p>
+<ul>
+<li><p>Training</p>
+<ul>
+<li>Sequence length: 1000<ul>
+<li>Sequences were created by shifting 500 steps from the starting position.</li></ul></li></ul></li>
+<li><p>Inference</p>
+<ul>
+<li>Sequence length: 3000 or 5000 (3000 if data size was less than 5000, 5000 otherwise)</li>
+<li>Sequences were created by shifting 1500 or 2500 steps from the starting position.<ul>
+<li>During prediction, the sequence section from 750/1250 to 2250/3750 was utilized.</li>
+<li>The initial segment spanned from 0 to 2250/3750, while the final segment used from 750/1250 to the end of the sequence. </li></ul></li></ul></li></ul></li>
+<li><p>Models</p>
+<ul>
+<li><p>For each target, we ensembled four models.</p></li>
+<li><p>The following settings were common to each model</p>
+<ul>
+<li>Model : GRU</li>
+<li>Cross validation method : StratifiedGroupKFold<ul>
+<li>group : Subject</li></ul></li>
+<li>Loss : BCEWithLogitsLoss</li>
+<li>Optimizer : AdamW</li>
+<li>Scheduler : get_linear_schedule_with_warmup<ul>
+<li>(Although not verified in detail) get_linear_schedule_with_warmup seemd to work better in CV than get_cosine_schedule_with_warmup.</li></ul></li>
+<li>Sequence length<ul>
+<li>Train : 1000</li>
+<li>Inference : 3000 / 5000</li>
+<li>Training the model with a longer sequence did not improve CV or public score. However, training with a short sequence and performing inference with a long sequence significantly improved both CV and public score. </li></ul></li></ul></li>
+<li><p>Model1</p>
+<ul>
+<li>This model trained with equal loss for each target.</li>
+<li>CV<ul>
+<li>Sequence length 3000 / 5000 : 0.493 <br><br>
+(Sequence length 1000 : 0.438)</li></ul></li>
+<li>Ensemble weight : 0.2</li></ul></li>
+<li><p>Model2</p>
+<ul>
+<li>The loss weight of one target was set to 0.6, and the remaining targets were set at 0.4.<ul>
+<li>The following three patterns<ul>
+<li>StartHesitation : 0.6 , Turn &amp; Walking : 0.4</li>
+<li>Turn : 0.6 , StartHesitation &amp; Walking : 0.4</li>
+<li>Walking : 0.6 , StartHesitation &amp; Turn : 0.4</li></ul></li></ul></li>
+<li>The model was saved at the epoch where the target with the weight set to 0.6 had the best score.</li>
+<li>Only the predictions with the loss weight set to 0.6 were used in the test predictions.</li>
+<li>CV<ul>
+<li>Sequence length 3000 / 5000 : 0.520</li></ul></li>
+<li>Ensemble weight : 0.4</li></ul></li>
+<li><p>Model3 &amp; 4</p>
+<ul>
+<li>The loss weight for two targets was set to 0.8, and the remaining target was set at 0.2.<ul>
+<li>The following three patterns<ul>
+<li>StartHesitation &amp; Turn : 0.8 , Walking : 0.2</li>
+<li>StartHesitation &amp; Walking : 0.8 , Turn : 0.2</li>
+<li>Turn &amp; Walking : 0.8 , StartHesitation : 0.2</li></ul></li></ul></li>
+<li>The model was saved at the epoch where the two targets with the weight set to 0.8 had the best score.</li>
+<li>Only the predictions with a loss weight set to 0.8 were used in the test predictions.</li>
+<li>CV <ul>
+<li>Sequence length 3000 / 5000 : 0.536</li></ul></li>
+<li>Ensemble weight : 0.4</li></ul></li>
+<li><p>ensemble</p>
+<ul>
+<li>CV<ul>
+<li>Sequence length 3000 / 5000 : 0.537</li></ul></li></ul></li></ul></li>
+</ul>
+<h2>DeFog</h2>
+<ul>
+<li><p>Features</p>
+<ul>
+<li>Three provided accelerations</li>
+<li>Feature engineering performed for each acceleration included<ul>
+<li>Difference between prior and subsequent accelerations</li></ul></li></ul></li>
+<li><p>Standardization</p>
+<ul>
+<li>Used StandardScaler</li>
+<li>Each Id was standardized individually</li></ul></li>
+<li><p>Sequence Creation Method:</p>
+<ul>
+<li><p>Training</p>
+<ul>
+<li>Sequence length: 5000<ul>
+<li>Sequences were created by shifting 2500 steps from the starting position.</li></ul></li></ul></li>
+<li><p>Inference</p>
+<ul>
+<li>Sequence length: 15000 or 30000 (15000 if data size was less than 200000, 30000 otherwise)</li>
+<li>Sequences were created by shifting 7500 or 15000 steps from the starting position.<ul>
+<li>During prediction, the sequence section from 3750/7500 to 11250/22500 was utilized.</li>
+<li>The initial segment spanned from 0 to 11250/22500, while the final segment used from 3750/7500 to the end of the sequence.</li></ul></li></ul></li></ul></li>
+<li><p>Models</p>
+<ul>
+<li><p>We ensembled five models </p></li>
+<li><p>The following settings are common to each model</p>
+<ul>
+<li>Model : GRU</li>
+<li>Cross validation method : StratifiedGroupKFold<ul>
+<li>group : Subject</li></ul></li>
+<li>Optimizer : AdamW</li>
+<li>Loss : BCEWithLogitsLoss</li>
+<li>Scheduler : get_linear_schedule_with_warmup</li>
+<li>Sequence length<ul>
+<li>Train : 5000</li>
+<li>Inference : 15000 / 30000</li></ul></li>
+<li>The loss weights for each target were uniform</li>
+<li>Only instances where both 'Valid' and 'Task' were true were considered for loss calculation.</li></ul></li>
+<li><p>model1</p>
+<ul>
+<li>CV<ul>
+<li>Sequence length 15000 / 30000 : 0.279</li></ul></li>
+<li>Ensemble weight : 0.35</li></ul></li>
+<li><p>model2</p>
+<ul>
+<li>Utilized the first round of pseudo-labeling<ul>
+<li>Applied hard labels, with the label set to 1 only if the data value of the 'Event' was 1, otherwise it was set to 0</li>
+<li>The label was determined based on the highest predictive value among the three target predictions</li>
+<li>Inference results from sequences of length 15000 from model1 were used</li></ul></li>
+<li>The application of pseudo-labeling significantly improved both public and private scores</li>
+<li>CV<ul>
+<li>Sequence length 15000 / 30000 : 0.306</li></ul></li>
+<li>Ensemble weight : 0.25</li></ul></li>
+<li><p>model3</p>
+<ul>
+<li>Utilized the second round of pseudo-labeling</li>
+<li>CV<ul>
+<li>Sequence length 15000 &amp; 30000 : 0.313</li></ul></li>
+<li>Ensemble weight : 0.25</li></ul></li>
+<li><p>model4</p>
+<ul>
+<li>Increased the hidden size of the GRU</li>
+<li>Utilized the first round of pseudo-labeling</li>
+<li>CV<ul>
+<li>Sequence length 15000 &amp; 30000 : 0.3393</li></ul></li>
+<li>Ensemble weight : 0.10</li></ul></li>
+<li><p>model5</p>
+<ul>
+<li>Trained with all data</li>
+<li>Utilized pseudo-labeling</li>
+<li>Ensemble weight : 0.05</li></ul></li>
+<li><p>ensemble(excluding model5)</p>
+<ul>
+<li>Sequence length 15000 &amp; 30000 : 0.33706</li></ul></li></ul></li>
+</ul>
+<h2>tDCS FOG &amp; DeFog</h2>
+<ul>
+<li>CV : 0.548</li>
+<li>Public Score : 0.530</li>
+<li>Private Score : 0.450</li>
+</ul>
+<h2>Inference notebook</h2>
+<p><a href="https://www.kaggle.com/code/takoihiraokazu/cv-ensemble-sub-0607-1" target="_blank">https://www.kaggle.com/code/takoihiraokazu/cv-ensemble-sub-0607-1</a></p>
+<h2>Code</h2>
+<p><a href="https://github.com/TakoiHirokazu/Kaggle-Parkinsons-Freezing-of-Gait-Prediction" target="_blank">https://github.com/TakoiHirokazu/Kaggle-Parkinsons-Freezing-of-Gait-Prediction</a></p>

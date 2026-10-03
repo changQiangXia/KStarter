@@ -1,0 +1,159 @@
+<h2>tattaka &amp; mipypf part</h2>
+<h3>Summary</h3>
+<ul>
+<li>2.5D and 3D backbone and decoder without upsampling<ul>
+<li>1/32 Resolution is sufficient for this task</li>
+<li>By focusing resources on encoder, more layers can be used for training</li></ul></li>
+<li>Strong regularization</li>
+</ul>
+<h3>Data preprocessing</h3>
+<ul>
+<li>Group K-fold is used for the validation, but is divided into 3 parts because of the large ink_id=2</li>
+<li>Input resolution is 256x256 for 2.5D model and 192x192 for 3D model<ul>
+<li>Cut out and store in npy in 32x32 (64x64 when inferring) to speed up data loading</li></ul></li>
+<li>The label is downsampled to 1/32 resolution using bilinear interpolation</li>
+<li>Input images were normalized for each sample　</li>
+</ul>
+<pre><code>  
+  mean = img.mean(dim=(, , ), keepdim=)
+  std = img.std(dim=(, , ), keepdim=) + 
+  img = (img - mean) / std
+</code></pre>
+<h3>Model</h3>
+<ul>
+<li>images(batch_size x channel x group x height x width) -&gt; 2dcnn backbone -&gt; pointwise conv2d neck -&gt; 3dcnn(ResBlockCSN like, 3 or 6 blocks) -&gt; avg + max pooling(z axis) -&gt; pointwise conv2d<ul>
+<li>2dcnn backbone: <ul>
+<li>resnetrs50</li>
+<li>convnext_tiny</li>
+<li>swinv2_tiny</li>
+<li>resnext50</li></ul></li>
+<li>The channel/group combinations used were 5x7 and 3x9. In other words, the middle 35 or 27 layers of the 65 layers are used.</li>
+<li>Referring to <a href="https://www.kaggle.com/tereka" target="_blank">@tereka</a>'s <a href="https://www.kaggle.com/competitions/nfl-player-contact-detection/discussion/392402#2170010" target="_blank">model architecture</a></li></ul></li>
+<li>images(batch_size x 1 x layers x height x width) -&gt; 3dcnn backbone -&gt; max pooling(z axis) -&gt; pointwise conv2d<ul>
+<li>3DCNN backbone: <ul>
+<li>resnet50-irCSN(layers: 32)</li>
+<li>resnet152-irCSN(layers: 24)</li></ul></li></ul></li>
+<li>loss: bce + global fbeta loss(calculate fbeta score in batch)</li>
+</ul>
+<h3>Training</h3>
+<ul>
+<li>amp</li>
+<li>EMA(decay=0.99)</li>
+<li>label smoothing(smooth = 0.1)</li>
+<li>drop_path_rate=0.2</li>
+<li>cutmix + mixup + manifold mixup</li>
+<li>heavy augmentation<ul>
+<li>cutout<ul>
+<li>modified to match the output resolution (1/32)</li></ul></li>
+<li>channel shuffle<ul>
+<li>Shuffle within the group after splitting</li></ul></li>
+<li>Random +-2 shift in z-direction of volume with 0.5 probability  </li>
+<li>other transforms</li></ul></li>
+</ul>
+<pre><code>albu.Compose(
+          [
+              albu.Flip(=0.5),
+              albu.RandomRotate90(=0.9),
+              albu.ShiftScaleRotate(
+                  =0.0625,
+                  =0.2,
+                  =15,
+                  =0.9,
+              ),
+              albu.OneOf(
+                  [
+                      albu.ElasticTransform(=0.3),
+                      albu.GaussianBlur(=0.3),
+                      albu.GaussNoise(=0.3),
+                      albu.OpticalDistortion(=0.3),
+                      albu.GridDistortion(=0.1),
+                      albu.PiecewiseAffine(=0.3),  # IAAPiecewiseAffine
+                  ],
+                  =0.9,
+              ),
+              albu.RandomBrightnessContrast(
+                  =0.3, =0.3, =0.3
+              ),
+              ToTensorV2(),
+          ]
+      )
+</code></pre>
+<h3>Inference</h3>
+<ul>
+<li>fp16 inference</li>
+<li>stride=32</li>
+<li>Use weights learned on val_ink_id=(1, 2a)</li>
+<li>TTA<ul>
+<li>h/v flip</li>
+<li>Switch tta each time stride </li></ul></li>
+<li><a href="https://www.kaggle.com/philippsinger" target="_blank">@philippsinger</a> proposed <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243463" target="_blank">percentile threshold</a><ul>
+<li>Always predicts the same amount of positives, so it is independent of model performance and depends on the pos/neg ratio of the GT</li>
+<li>Calculated for all pixels except the area outside the mask</li>
+<li>0.9 and 0.93 were used</li>
+<li>We expected 0.90 to be a better score in private, but 0.93 was better in the end!</li></ul></li>
+</ul>
+<h2>yukke42 part</h2>
+<h3>Summary</h3>
+<ul>
+<li>3D encoder and 2D/1D encoder<ul>
+<li>1/2 or 1/4 resolution prediction</li>
+<li>very simple decoder<br>
+​</li></ul></li>
+</ul>
+<h3>Data preprocessing</h3>
+<ul>
+<li>split the 2nd fragment into two image vertically: 4 folds<br>
+​</li>
+</ul>
+<h3>Model</h3>
+<ul>
+<li>3D CNN encoder and 2D Encoder<ul>
+<li>encoderbased on <a href="https://www.kaggle.com/samfc10" target="_blank">@samfc10</a> 's Notebook: <a href="https://www.kaggle.com/code/samfc10/vesuvius-challenge-3d-resnet-training" target="_blank">Vesuvius Challenge - 3D ResNet Training</a><ul>
+<li>remove maxpooling after the 1st CNN</li>
+<li>use attention before reduce D-dim</li>
+<li>use resnet18 and resnet34</li></ul></li>
+<li>decoder<ul>
+<li>a single 2D CNN layer</li>
+<li>upsample with a nearest interpolation</li></ul></li>
+<li>output resolution is downsampled to 1/2. then upsample with a bilinear interpolation</li></ul></li>
+<li>3D transformer encoder and linear decoder<ul>
+<li>encoder: use <a href="https://pytorch.org/vision/main/models/video_mvit.html" target="_blank">MViTv2-s</a> of the PyTorch official implementation and a pre-trained model<ul>
+<li>modify forward function to get each scale output</li>
+<li>replace MaxPool3d into MaxPool2d for the reproducibility</li></ul></li>
+<li>decoder: a single linear and patch expanding to upscale low resolutions 3D images<ul>
+<li>patch expanding is from <a href="https://arxiv.org/abs/2105.05537" target="_blank">Swin-Unet</a></li></ul></li>
+<li>output resolution is downsampled to 1/2 or 1/4, then upsample with a bilinear interpolation<br>
+​</li></ul></li>
+</ul>
+<h3>Training</h3>
+<ul>
+<li>amp</li>
+<li>torch.compile</li>
+<li>label smoothing</li>
+<li>cutout</li>
+<li>cutmix</li>
+<li>mixup</li>
+<li>data augmentation<ul>
+<li>referred <a href="https://www.kaggle.com/tanakar" target="_blank">@tanakar</a> 's notebook: <a href="https://www.kaggle.com/code/tanakar/2-5d-segmentaion-baseline-training" target="_blank">2.5d segmentaion baseline [training]</a></li>
+<li>referred <a href="https://www.kaggle.com/tattaka" target="_blank">@tattaka</a> and <a href="https://www.kaggle.com/mipypf" target="_blank">@mipypf</a> 's</li></ul></li>
+<li>patch_size=224 and stride=112<ul>
+<li>stride=75 or stride=56 didn't work<br>
+​</li></ul></li>
+</ul>
+<h3>Inference</h3>
+<ul>
+<li>fp16 inference</li>
+<li>stride=75<ul>
+<li>better than stride=112</li></ul></li>
+<li>ignore edge of output prediction<ul>
+<li>use only the red area of prediction (figure below)<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1745801%2Fc309c518581d183e62897d4249eb7e7e%2Fimage.png?generation=1686801349236365&amp;alt=media" alt=""></li></ul></li>
+</ul>
+<h2>Code &amp; inference notebook</h2>
+<ul>
+<li>tattaka &amp; ron part<ul>
+<li>training code: <a href="https://github.com/mipypf/Vesuvius-Challenge/tree/winner_call/tattaka_ron" target="_blank">https://github.com/mipypf/Vesuvius-Challenge/tree/winner_call/tattaka_ron</a></li>
+<li>inference code: <a href="https://www.kaggle.com/code/mipypf/ink-segmentation-2-5d-3dcnn-resnet3dcsn-fp16fold01?scriptVersionId=132226669" target="_blank">https://www.kaggle.com/code/mipypf/ink-segmentation-2-5d-3dcnn-resnet3dcsn-fp16fold01?scriptVersionId=132226669</a></li></ul></li>
+<li>yukke42 part<ul>
+<li>training code: <a href="https://github.com/yukke42/kaggle-vesuvius-challenge-ink-detection" target="_blank">https://github.com/yukke42/kaggle-vesuvius-challenge-ink-detection</a></li></ul></li>
+</ul>

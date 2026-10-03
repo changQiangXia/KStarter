@@ -1,0 +1,82 @@
+# tabular-playground-series-oct-2022 讨论区（按票数排序，共 80 条）
+
+- [Introduction to Online Learning with resources](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356584) — 70 票 / 33 评论 / 2022-10-01 
+- [Dtypes transformation (Reduce Memory Usage 75%)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356540) — 40 票 / 20 评论 / 2022-10-01 
+- [Welcome to the Rocket League Tabular Playground!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356530) — 33 票 / 15 评论 / 2022-09-30 
+- [Validation - how not to OVERFIT here!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359714) — 33 票 / 13 评论 / 2022-10-13 
+- [Data Representation and Feature Engineering](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356718) — 32 票 / 8 评论 / 2022-10-01 
+- [Kernel upvotes - community relationship](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360460) — 32 票 / 2 评论 / 2022-10-16 
+- [Some ideas](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356916) — 29 票 / 13 评论 / 2022-10-02 
+- [Feature engineering ideas](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356852) — 27 票 / 5 评论 / 2022-10-02 
+- [Player Position Null Values](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356545) — 24 票 / 11 评论 / 2022-10-01 
+- [TPS October 2022: Beginner friendly compilation](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358098) — 20 票 / 4 评论 / 2022-10-06 
+- [NN activation functions comparison](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360084) — 20 票 / 3 评论 / 2022-10-14 
+- [An important detail about the court](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356789) — 20 票 / 9 评论 / 2022-10-01 
+- [Host solution, 0.17759 on Private LB](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/364908) — 19 票 / 10 评论 / 2022-11-09 **write-up?**
+- [1st place winning solution (at least it was for 5 minutes)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/363288) — 19 票 / 12 评论 / 2022-11-01 **write-up?**
+- [Privileged ball positions](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358786) — 19 票 / 16 评论 / 2022-10-09 
+- [LogLoss explanation](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/361813) — 17 票 / 2 评论 / 2022-10-23 
+- [Competition feedback](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362157) — 16 票 / 10 评论 / 2022-10-25 
+- [Congratulations for the winners Sergey & Sam](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/363284) — 15 票 / 20 评论 / 2022-11-01 
+- [📌 Advanced Feature Engineering 1 - Goal Angle](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362691) — 15 票 / 7 评论 / 2022-10-28 
+- [Tips & tricks on feature selection from Grandmaster](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357091) — 15 票 / 2 评论 / 2022-10-03 
+- [Cross-Validation, GroupKFold (Implementation)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360070) — 15 票 / 4 评论 / 2022-10-14 
+- [Calibration is all you need!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362125) — 14 票 / 5 评论 / 2022-10-25 
+- [Read your data faster (Wall time: 12.7)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356544) — 14 票 / 7 评论 / 2022-10-01 
+- [Feature engineering recap](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362325) — 14 票 / 0 评论 / 2022-10-26 
+- [LB shakeup prediction](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/361815) — 14 票 / 9 评论 / 2022-10-23 
+- [RL Meme challenge](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360523) — 14 票 / 5 评论 / 2022-10-17 
+- [Rocket League references](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356580) — 14 票 / 4 评论 / 2022-10-01 
+- [Test time data augmentation](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359502) — 14 票 / 0 评论 / 2022-10-12 
+- [💡 Final Week Plan | 📗Things learned on the 3rd week](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/361765) — 13 票 / 2 评论 / 2022-10-23 
+- [Which Distance vector should we choose ](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360804) — 13 票 / 2 评论 / 2022-10-18 
+- [Adversarial Validation: When statistics won't capture the whole picture.](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357542) — 13 票 / 0 评论 / 2022-10-04 
+- [📌 Best Missing Value Handling Method 🔥](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357158) — 13 票 / 11 评论 / 2022-10-03 
+- [Does Rocket League have gravity?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357316) — 12 票 / 6 评论 / 2022-10-03 
+- [📌 Advanced Feature Engineering 4 - Goal Direction](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362852) — 12 票 / 2 评论 / 2022-10-29 
+- [📌 New Feature Distribution Library Featdist ❤️❤️❤️](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359009) — 12 票 / 4 评论 / 2022-10-10 
+- [ River Tool: Online Learning for ML Models in Production](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357684) — 12 票 / 0 评论 / 2022-10-05 
+- [Lost with Log Loss Rocket League player?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356770) — 11 票 / 2 评论 / 2022-10-01 
+- [📔 Things learned on the first week - Second week plan for beginners 💡](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358590) — 11 票 / 0 评论 / 2022-10-08 
+- [Data augmentation - A possible approach](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357577) — 11 票 / 8 评论 / 2022-10-04 
+- [Extrapolating distances from coordinates.](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357633) — 11 票 / 1 评论 / 2022-10-05 
+- [Ideas to use all train datasets for continues training](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356956) — 11 票 / 4 评论 / 2022-10-02 
+- [Tips and tricks to know for tree based model  from Grandmaster](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357086) — 11 票 / 0 评论 / 2022-10-03 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/355472) — 10 票 / 2 评论 / 2022-09-26 
+- [Visualization of a Rocket League game with Plotly.](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360439) — 10 票 / 0 评论 / 2022-10-16 
+- [Weekly learning plan to understand the competition and make a final submission](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357318) — 10 票 / 4 评论 / 2022-10-04 
+- [ 📌 Feature Importances by using featimp 🔥🔥](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358987) — 9 票 / 6 评论 / 2022-10-10 
+- [Ways to handle imbalance dataset](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357924) — 9 票 / 0 评论 / 2022-10-06 
+- [Beware of outliers!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358034) — 9 票 / 1 评论 / 2022-10-06 
+- [Tabular Series Notebook - 107th place solution](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/363585) — 9 票 / 0 评论 / 2022-11-02 **write-up?**
+- [Strategies for reducing data size](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357681) — 9 票 / 7 评论 / 2022-10-05 
+- [📔Things learned on the second week | Third week plan💡](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/360377) — 8 票 / 5 评论 / 2022-10-16 
+- [Understanding the evaluation metric[LogLoss] - Repost from TPS June 2021](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357426) — 8 票 / 0 评论 / 2022-10-04 
+- [Watch a gameplay of Rocket League](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356553) — 7 票 / 0 评论 / 2022-10-01 
+- [Python libraries for online machine learning](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356599) — 7 票 / 8 评论 / 2022-10-01 
+- [📔 Previous competition solutions with LogLoss evaluation metric](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/361308) — 7 票 / 0 评论 / 2022-10-20 **write-up?**
+- [How to handle Null Values.](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357392) — 7 票 / 1 评论 / 2022-10-04 
+- [Competition metric- log loss-- references and refresher](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356603) — 7 票 / 0 评论 / 2022-10-01 
+- [Update on previously presented ideas](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358193) — 7 票 / 1 评论 / 2022-10-06 
+- [Team A is consistently better than Team B](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357339) — 7 票 / 9 评论 / 2022-10-04 
+- [GroupKFold is the right scheme.... or not?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356786) — 7 票 / 1 评论 / 2022-10-01 
+- [Essential Resources For Tabular data Competition ](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356855) — 7 票 / 2 评论 / 2022-10-02 
+- [The test dataset is as imbalanced as the train dataset](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357241) — 7 票 / 1 评论 / 2022-10-03 
+- [Simulation Modelling for Predictions](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356997) — 6 票 / 3 评论 / 2022-10-02 
+- [Rocket Science](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357388) — 6 票 / 0 评论 / 2022-10-04 
+- [Use simple approaches for beginners](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358560) — 6 票 / 2 评论 / 2022-10-08 
+- [Rocket league has a frenetic pace and why it's so hard to predict](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/361838) — 6 票 / 0 评论 / 2022-10-24 
+- [Was anybody able to speed up training in keras?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362305) — 6 票 / 2 评论 / 2022-10-26 
+- [📌 Advanced Feature Engineering 3 - Car Number in The Triangle](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362839) — 6 票 / 0 评论 / 2022-10-29 
+- [3D CNN networks](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/361817) — 6 票 / 2 评论 / 2022-10-23 
+- [Can rounding improve your score? ](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/357171) — 5 票 / 0 评论 / 2022-10-03 
+- [Null values are useful](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356996) — 5 票 / 2 评论 / 2022-10-02 
+- [Question about test data](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359835) — 5 票 / 0 评论 / 2022-10-13 
+- [9x data compression  Faster using Feather](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356582) — 5 票 / 2 评论 / 2022-10-01 
+- [TPS - Oct-2022 - Some brilliant references for the competition](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356556) — 5 票 / 0 评论 / 2022-10-01 
+- [Using a simple NN for this competition](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359489) — 5 票 / 4 评论 / 2022-10-12 
+- [Low memory data loading with Pytorch Dataset class](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/358557) — 4 票 / 0 评论 / 2022-10-08 
+- [Question about large data](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356653) — 4 票 / 3 评论 / 2022-10-01 
+- [A Visual Follow Up to the Ball Position During a Game](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359638) — 4 票 / 5 评论 / 2022-10-12 
+- [Why don’t we consider recall of model](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362377) — 4 票 / 2 评论 / 2022-10-27 
+- [📌 Advanced Feature Engineering 2 - Ball Touch Positions](https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/362692) — 4 票 / 0 评论 / 2022-10-28 

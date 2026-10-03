@@ -1,0 +1,123 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328355
+
+Topic #328355: 541th Place - 0.97952 - LightGBM + XGBoost + CatBoost Ensemble
+  Author: James McGuigan
+  Posted: 2022-06-01 04:17:42.459000
+  Votes: 6  Comments: 2
+
+I remember when the Tabular Playground Series started back in January and Febuary 2021. However I've been absent from Kaggle for almost a year, so thought I would try something simple to ease myself back in.
+
+Diving back into my archive of data science tools, my first port of call was PyCaret AutoML.  In theory it will do all the work for you, if you are willing to give it 8h of compute time. In practice it usually just ends up recommending LightGBM + XGBoost + CatBoost and does some hyperparameter optimization for you. This time however the dataset was simply too large and I kept letting it run only to discover OOM out-of-memory errors when I later came back to it.
+
+So second attempt, lets do this the old fashioned way.
+
+Start with copy/pasting one of my own public notebooks. Thank you past self for writing up documention on how to use my tools, future self thanks you. 
+
+I do however notice a bunch of deprecation warnings as the API has changed with future library version. Some of this is googleable, but its really annoying when copy/paste code fails due to third-party pip dependency mismatches (this is normally why I use pip-tools pip-compile to generate a static requirements.txt file with exact version numbers to prevent such code-rot in github codebases).
+
+My previous efforts trying to reduce the memory usage of the dataframe led to me explictly map out the data types for each column. Pandas defaults to (float64 + int64) when (float16 + int32) are much more memory efficent for our purposes. 
+
+I looked at the data using pandas_profiling.ProfileReport and was suprised that most of it seemed normally distribued. I also noticed that the f_29 and f_30 int columns are actually categorical.
+
+After a bit of thinking about the high cardinality of f_27 = AABDABERCG, I decided to use .str.split('') to treat this as 10 seperate columns. I had to discard the original string column as the cardinality exceeded the 255 max bin count for LightGBM running in GPU mode. 
+
+A brief look at the discussion board turned up Engineering the top three feature interactions, which gave me an extra little code snippit to inject into my feature engineering.
+
+First attempt at running LightGBM on its own (borrowing my previous hyperparameter settings) scored a highly respectable 0.97008 / 0.97077 in CPU mode, and I was able to get a tiny increment to 0.97047 / 0.97134 just by switching the GPU on.
+
+I had a brief attempt at using scikit-learn to do a logistic regression ensemble. This was my highest scoring method in Jan 2021, but scored a pathetic 0.65336 / 0.65423 this time round. However the simple process of flipping between different methods gave me time to reflect, aquire different insights about the problem, and borrow ideas.
+
+Now at least I have a location on the leaderboard. Time to see if I can improve my score. 
+
+I scroll up to see the next public notebook above me. @utkarshshukla2912 CatBoost Feature Engineering. He had a different idea to me for f_27 which was to create a feature based on the counts of each letter, rather than using .str.split(''). I wrote him a long comment comparing our notebook ideas. 
+
+The main inspiration I got from looking at this notebook was to implement CatBoost, and I decided to do this an ensemble. Then I realize that binary classification with 2-way voting needs a tiebreaker, so I went and implemented XGBoost as well.
+
+Manually implementing the ensemble forced me to look more carefully at my prediction data. I noticed that my lgbm.train() output was floats and sometimes included out-of-range negative numbers as well as numbers greater than +1 so I decided to put a .clip(0,1) on this rather than .round(). 
+
+My XGBoost and CatBoot output was coming back as integers, which is the difference between Regression and Classification. So I decided to split my notebook and implement the ensemble both ways. I noticed the small issue. Turns out that floating-point Regression 0.97952 / 0.97982 scores much better than binary Classification 0.92500 / 0.92616.
+
+As I looked more carefully at my copy/paste implemention, I also noticed that I using the RMSE metric, so I double checked this against the Evaluation tab and realized I needed to refactor my code to use the AUR/ROC metric instead, and I had to google how to do this.
+
+Human Effort was:
+
+
+
+A day or so of waiting around on failed attempts not getting pyCaret to work
+
+12 hour coding session for the LightGBM + XGBoost + CatBoost Ensemble
+
+
+Nothing quite like a deadline to focus the mind when deep in structured procrastination
+
+It was fun, and I proved to myself that I havn't completely forgotten all my old skills.
+
+Notebook Series
+
+This notebook is part of a series exploring Tabular Data:
+
+Titanic
+
+
+
+Profilereport EDA
+
+
+Spaceship Titanic
+
+
+
+Profilereport EDA
+
+0.69932 - XGBoost
+
+
+Tabular Playground - Jan 2021
+
+
+
+0.72746 / 0.72935 - scikit-learn Ensemble
+
+0.71552 / 0.71659 - Fast.ai Tabular Solver
+
+0.70317 / 0.70426 - XGBoost
+
+0.70011 / 0.70181 - LightGBM
+
+
+Tabular Playground - Feb 2021
+
+
+
+0.84452 - PyCaret2 AutoML Regression
+
+
+Tabular Playground - May 2022
+
+
+
+0.97134 - LightGBM
+
+LGBM + XGB + CB - Regression
+
+LGBM + XGB + CB - Classification
+
+Comments:
+├─ Marília Prata (2022-06-01 23:09:17.603000) [+1]
+│  Hi James, 
+│  
+│  Your words: "The dataset was simply too large"  
+│  
+│  Nowadays, on Competitions everything is Tooooo large. Even the topics emphasize that. Maybe Freud or GoogleCloud can explain that. 😄
+│  Th...
+  ├─ James McGuigan (2022-06-02 19:40:00.030000) [+1]
+  │  Thank you.
+  │  
+  │  I've submitted a product feedback request for 32GB notebooks
+  │  
+  │  
+  │  
+  │  https://www.kaggle.com/discussions/product-feedback/328720
+  │  
+  │  
+  │  And discovered this thread about the canceled idea for Paid ...

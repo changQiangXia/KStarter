@@ -1,0 +1,103 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/341023
+
+Topic #341023: #1 solution
+  Author: Youri Matiounine
+  Posted: 2022-08-01 00:03:08.139000
+  Votes: 74  Comments: 27
+
+Here is a write-up of my approach ; see the actual code at https://www.kaggle.com/code/ymatioun/tps22jul-custom-em
+
+
+
+Data structure.
+Only 14 variables are relevant to clustering, the others are not used at all (this has been discovered early on in the competition). Variables f_07 - f_13 are integers (7 of them), and f_22 - f_28 are floating point (also 7 of them).
+
+
+Floating point variables already appear to have a normal distribution, so there is no need to transform them.
+
+But integer variables appear to come from some sort of mixed Poisson distribution. I tried to construct a model for them, but could not come up with anything that worked (that is, produced negative correlations but no negative values, and had a tractable probability mass function). So instead i did the same thing as everybody else - power-transformed them into a more 'normal' shape and treated them as multivariate normal vars. This is probably where the model could be improved the most [would be nice if competition organizers told us exactly how they constructed those vars, for future reference].
+
+
+
+Cluster structure.
+Data consists of 42 clusters, structured as 7 groups of 6 clusters each. Each cluster group is treated as one cluster as far as cluster labels are concerned, resulting in 7 distinct cluster labels.
+
+
+Integer variables only vary by 7 cluster groups (so they truly form 7 clusters, not 42). Their means and covariances seem to be completely independent across 7 cluster groups (some covariances are zero).
+
+Floating variables have two distinct distributions: for each cluster group, 2 floating variables have mean=0, standard deviation=1, and are uncorrelated with any other integer of floating point variables. Remaining 5 floating point variables have means that are -1 or +1, and full 5x5 covariance matrix. They are not correlated with integer variables, so full 14x14 covariance matrix consists of 7x7 block for integer vars, 5x5 block for correlated floating point vars, and 2x2 unit matrix for uncorrelated floating point vars.
+
+
+
+Background
+
+
+This data structure can be easily uncovered by running GaussianMixture(n_components=42) on floating point variables only, and looking at the means of mixture components.
+
+I realized this when i looked at the source code of BayesianGMMClassifier (doesn't everybody do that? -:) ), trying to understand why it improved results so much, and saw that it used the same n_components=7 for each of the 7 clusters, resulting in total of 49 clusters. I thought that was a mistake, and made it use 1 component for each cluster, but that greatly reduced the LB score. That demonstrated that true data structure consists of &gt; 7 clusters; further experimentation showed that each cluster group actually has 6 clusters, not 7.
+
+
+
+Model.
+
+
+I wrote a custom EM (Expectation Maximization) algorithm for a Gaussian Mixture Model, taking into account details of the data structure described above. I hard-coded means of all the floating point variables (0, -1, 1) to ensure convergence to true cluster centers. And this is what resulted in my best LB score.
+
+Comments:
+├─ Joseph Zhou (2022-08-01 02:20:08.683000) [+10]
+│  Congratulations. Seems that 42 plays an important role not only in seeds.😄
+├─ Ricky Young (2022-08-03 03:12:23.183000) [+4]
+│  good~Congratulations! Really thoughtful solution.
+├─ ArturRa (2022-08-01 05:56:52.573000) [+1]
+│  Congratulations! Really thoughtful solution.
+├─ Will (2022-08-01 04:36:52.420000) [+1]
+│  Congrats!
+├─ Will (2022-08-01 04:14:21.403000) [+1]
+│  Congrats on first!
+├─ RomainBdt (2022-08-01 07:56:09.773000) [+2]
+│  Congratulations and thank you for sharing your results. I also tried 1, 6 and 7 components with BayesianGMMClassifier and discover pretty much the same thing as you. 1 component is bad for LB score...
+  ├─ martinerrazquin (2022-08-02 00:07:43.607000) [+1]
+  │  AFAIK it worked better because every 'major' cluster was indeed composed of 'minor' sub-clusters, each of which were gaussian distributed. This is the hypothesis behind the BGMMClassifier. From the...
+├─ martinerrazquin (2022-08-01 00:14:57.333000) [+2]
+│  Congratulations on the first place! Well deserved.
+│  I too suspected there was a hierarchy with major clusters composed of sub-clusters (each cluster was a GM in itself) but failed to detect further ...
+├─ user7777777 (2023-06-09 01:44:29.803000) [+0]
+│  Only 14 variables are relevant to clustering      
+│    How did you find that ? Also how one do feature selection in such examples. Please help i am stuck at this for few days.
+├─ Safrizal Ardana Ardiyansa (2023-05-29 08:06:23.843000) [+0]
+│  Congratulations :D
+│  I very appreciate your solution sharing, but I am still wondering, can someone explained to me why we just use variables f_07 - f_13 and f_22 - f_28 ?
+├─ yurit04 (2022-08-28 02:43:35.183000) [+0]
+│  This is deep. Congratulations on your 1st place!
+├─ Ricky Young (2022-08-10 00:31:13.650000) [+0]
+│  great_Congratulations for winning and thank you so much for sharing your results. Such a great way to learn as a new machine learning engineer.
+├─ Oscar Aguilar (2022-08-02 18:36:00.507000) [+0]
+│  Congratulations and thanks for sharing your solution.
+├─ Yan Mazas (2022-08-02 16:54:06.067000) [+0]
+│  How did you realise that in each cluster there are 6 sub-clusters? Thank you very much for sharing your great work and congratulations!
+├─ Moon (2022-08-02 16:40:59.063000) [+0]
+│  Congrats!!
+├─ Robert Gouldie (2022-08-02 12:21:35.823000) [+0]
+│  Congratulations for winning and thank you so much for sharing your results. Such a great way to learn as a new machine learning engineer.
+├─ Francisco Javier Gallego (2022-08-02 08:42:33.180000) [+0]
+│  Thanks for sharing ! Moreover, congratulations.
+├─ Maciej Lorens (2022-08-02 08:25:11.127000) [+0]
+│  Congratulations!
+├─ Samuel Cortinhas (2022-08-01 08:07:21.143000) [+0]
+│  Congratulations!
+├─ Wonbin Lee (2022-08-01 06:15:50.860000) [+0]
+│  Congratulations!
+├─ Muhammed Tausif (2022-08-01 05:23:10.903000) [+0]
+│  Congratulations @ymatioun
+├─ Sinclair (2022-08-01 00:33:14.820000) [+0]
+│  Congratulations on first place! Thank you for sharing your approach. I am really curious as to what this data represented
+├─ [deleted] (2022-08-02 14:20:32.260000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-02 13:25:02.640000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-02 13:21:57.880000) [+0]
+│  [deleted]
+├─ Flavia Felicioni (2022-08-02 15:05:43.180000) [+0]
+│  Great job! Thanks for sharing.
+├─ Bilal Suppal (2022-08-01 14:02:01.480000) [+0]
+│  thanks for this help sir

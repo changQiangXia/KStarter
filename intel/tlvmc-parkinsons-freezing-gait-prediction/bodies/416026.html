@@ -1,0 +1,356 @@
+<p>Greetings to the Kaggle Community. In this message I want to tell you about my solution.</p>
+<p>Thanks to Kaggle for providing free GPU and TPU resources to everyone. On my graphics card (1050 Ti) I would not have achieved those results.<br>
+Thanks to Google for the excellent tensorflow library.<br>
+All of my work was done in Kaggle Notebooks and relies on TensorFlow capabilities.</p>
+<p>The key decisions that, in my opinion, led to a good result:</p>
+<ol>
+<li>Use a combination of transformer encoder and two BidirectionalLSTM layers.</li>
+<li>Use patches like VisualTransformer.</li>
+<li>Reduce the resolution of targets.</li>
+</ol>
+<p><em>How does it work?</em></p>
+<p>Suppose we have a tdcsfog sensor data series with AccV, AccML, AccAP columns and len of 5000.</p>
+<p>First, apply mean-std normalization to AccV, AccML, AccAP columns.</p>
+<pre><code> ():
+    mean = tf.math.reduce_mean(sample)
+    std = tf.math.reduce_std(sample)
+    sample = tf.math.divide_no_nan(sample-mean, std)
+
+     sample.numpy()
+</code></pre>
+<p>Then the series is zero-padded so that the final length is divisible by block_size = 15552  (or 12096 for defog). Now the series shape is (15552,  3). </p>
+<p>And create patches with the patch_size = 18 (or 14 for defog):</p>
+<pre><code>series 
+series = tf.reshape(series, shape=(CFG[] // CFG[], CFG[], )) 
+series = tf.reshape(series, shape=(CFG[] // CFG[], CFG[]*))  
+</code></pre>
+<p>Now the series shape is (864,  54). It's a model input.</p>
+<p>What to do with the StartHesitation, Turn, Walking data? Same, but apply tf.reduce_max at the end.</p>
+<pre><code>series_targets 
+series_targets = tf.reshape(series_targets, shape=(CFG[] // CFG[], CFG[], )) 
+series_targets = tf.transpose(series_targets, perm=[, , ]) 
+series_targets = tf.reduce_max(series_targets, axis=-) 
+</code></pre>
+<p>Now the series shape is (864, 3). It's a model output.</p>
+<p>At the end, simply return the true resolution with tf.tile</p>
+<pre><code>predictions = model.predict(...) 
+predictions = tf.expand_dims(predictions, axis=-) 
+predictions = tf.transpose(predictions, perm=[, , , ]) 
+predictions = tf.tile(predictions, multiples=[, , CFG[], ]) 
+predictions = tf.reshape(predictions, shape=(predictions.shape[], predictions.shape[]*predictions.shape[], )) 
+</code></pre>
+<h1>Details</h1>
+<p>Daily data, events.csv, subjects.csv, tasks.csv have never been used.</p>
+<p>Tdcsfog data is not used to train defog models. </p>
+<p>Defog data is not used to train tdcsfog models.</p>
+<p><em>Optimizer</em> </p>
+<pre><code>tf.keras.optimizers.Adam(learning_rate=Schedule(LEARNING_RATE, WARMUP_STEPS), beta_1=, beta_2=, epsilon=)
+</code></pre>
+<p><em>Loss function</em></p>
+<pre><code>
+
+ce = tf.keras.losses.BinaryCrossentropy(reduction=)
+
+ ():
+    loss = ce(tf.expand_dims(real[:, :, :], axis=-), tf.expand_dims(output, axis=-)) 
+
+    mask = tf.math.multiply(real[:, :, ], real[:, :, ]) 
+    mask = tf.cast(mask, dtype=loss.dtype)
+    mask = tf.expand_dims(mask, axis=-) 
+    mask = tf.tile(mask, multiples=[, , ]) 
+    loss *= mask 
+
+     tf.reduce_sum(loss) / tf.reduce_sum(mask)
+</code></pre>
+<p><em>Model</em> </p>
+<pre><code>CFG = {: ,
+       : ,
+       : //,
+       : ,
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+
+
+ (tf.keras.layers.Layer):
+     ():
+        ().__init__()
+
+        self.mha = tf.keras.layers.MultiHeadAttention(num_heads=CFG[], key_dim=CFG[], dropout=CFG[])
+
+        self.add = tf.keras.layers.Add()
+
+        self.layernorm = tf.keras.layers.LayerNormalization()
+
+        self.seq = tf.keras.Sequential([tf.keras.layers.Dense(CFG[], activation=),
+                                        tf.keras.layers.Dropout(CFG[]),
+                                        tf.keras.layers.Dense(CFG[]),
+                                        tf.keras.layers.Dropout(CFG[]),
+                                       ])
+
+     ():
+        attn_output = self.mha(query=x, key=x, value=x)
+        x = self.add([x, attn_output])
+        x = self.layernorm(x)
+        x = self.add([x, self.seq(x)])
+        x = self.layernorm(x)
+
+         x
+
+
+
+ (tf.keras.Model):
+     ():
+        ().__init__()
+
+        self.first_linear = tf.keras.layers.Dense(CFG[])
+
+        self.add = tf.keras.layers.Add()
+
+        self.first_dropout = tf.keras.layers.Dropout(CFG[])
+
+        self.enc_layers = [EncoderLayer()  _  (CFG[])]
+
+        self.lstm_layers = [tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(CFG[], return_sequences=))  _  (CFG[])]
+
+        self.sequence_len = CFG[] // CFG[]
+        self.pos_encoding = tf.Variable(initial_value=tf.random.normal(shape=(, self.sequence_len, CFG[]), stddev=), trainable=)
+
+     (): 
+        x = x /  
+        x = self.first_linear(x) 
+
+         training: 
+            random_pos_encoding = tf.roll(tf.tile(self.pos_encoding, multiples=[GPU_BATCH_SIZE, , ]),
+                                          shift=tf.random.uniform(shape=(GPU_BATCH_SIZE,), minval=-self.sequence_len, maxval=, dtype=tf.int32),
+                                          axis=GPU_BATCH_SIZE * [],
+                                          )
+            x = self.add([x, random_pos_encoding])
+
+        : 
+            x = self.add([x, tf.tile(self.pos_encoding, multiples=[GPU_BATCH_SIZE, , ])])
+
+        x = self.first_dropout(x)
+
+         i  (CFG[]): x = self.enc_layers[i](x) 
+         i  (CFG[]): x = self.lstm_layers[i](x) 
+
+         x
+
+ (tf.keras.Model):
+     ():
+        ().__init__()
+
+        self.encoder = FOGEncoder()
+        self.last_linear = tf.keras.layers.Dense()
+
+     (): 
+        x = self.encoder(x) 
+        x = self.last_linear(x) 
+        x = tf.nn.sigmoid(x) 
+
+         x
+</code></pre>
+<h1>Submission (Private Score 0.514, Public Score 0.527) consists of 8 models:</h1>
+<h3>Model 1 (tdcsfog model)</h3>
+<pre><code>CFG = {: , 
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE=
+</code></pre>
+<p>Validation subjects <br>
+['07285e', '220a17', '54ee6e', '312788', '24a59d', '4bb5d0', '48fd62', '79011a', '7688c1']</p>
+<p>Train 15 minutes on TPU. Validation scores:<br>
+StartHesitation AP - 0.462 Turn AP - 0.896 Walking AP - 0.470 mAP - 0.609</p>
+<h3>Model 2 (tdcsfog model)</h3>
+<pre><code>CFG = {: , 
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE = 
+</code></pre>
+<p>Validation subjects <br>
+['07285e', '220a17', '54ee6e', '312788', '24a59d', '4bb5d0', '48fd62', '79011a', '7688c1']</p>
+<p>Train 40 minutes on GPU. Validation scores:<br>
+StartHesitation AP - 0.481 Turn AP - 0.886 Walking AP - 0.437 mAP - 0.601</p>
+<h3>Model 3 (tdcsfog model)</h3>
+<pre><code>CFG = {: ,
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE = 
+</code></pre>
+<p>Validation subjects <br>
+['e39bc5', '516a67', 'af82b2', '4dc2f8', '743f4e', 'fa8764', 'a03db7', '51574c', '2d57c2']</p>
+<p>Train 11 minutes on TPU. Validation scores:<br>
+StartHesitation AP - 0.601 Turn AP - 0.857 Walking AP - 0.289 mAP - 0.582</p>
+<h3>Model 4 (tdcsfog model)</h3>
+<pre><code>CFG = {: ,
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE = 
+</code></pre>
+<p>Validation subjects <br>
+['5c0b8a', 'a03db7', '7fcee9', '2c98f7', '2a39f8', '4f13b4', 'af82b2', 'f686f0', '93f49f', '194d1d', '02bc69', '082f01']</p>
+<p>Train 13 minutes on TPU. Validation scores:<br>
+StartHesitation AP - 0.367 Turn AP - 0.879 Walking AP - 0.194 mAP - 0.480</p>
+<h3>Model 5 (defog model)</h3>
+<pre><code>CFG = {: ,
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE = 
+</code></pre>
+<p>Validation subjects <br>
+['00f674', '8d43d9', '107712', '7b2e84', '575c60', '7f8949', '2874c5', '72e2c7']</p>
+<p>Train data: defog data, notype data<br>
+Validation data: defog data, notype data</p>
+<p>Train 45 minutes on TPU. Validation scores:<br>
+StartHesitation AP - [not used] Turn AP - 0.625 Walking AP - 0.238 mAP - 0.432<br>
+Event AP - 0.800</p>
+<h3>Model 6 (defog model)</h3>
+<pre><code>CFG = {: ,
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+</code></pre>
+<p>Train data: defog data (about 85%)<br>
+Validation data: defog data (about 15%), notype data (100%)</p>
+<h3>Model 7 (defog model)</h3>
+<pre><code>CFG = {: ,
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE = 
+</code></pre>
+<p>Train data: defog data (100%)<br>
+Validation data: notype data (100%)</p>
+<p>Train 18 minutes on TPU. Validation scores:<br>
+StartHesitation AP - [not used] Turn AP - [not used] Walking AP - [not used] mAP - [not used]<br>
+Event AP - 0.764</p>
+<h3>Model 8 (defog model)</h3>
+<pre><code>CFG = {: ,
+       : , 
+       : //,
+       : , 
+
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+       : ,
+      }
+
+LEARNING_RATE = /
+STEPS_PER_EPOCH = 
+WARMUP_STEPS = 
+BATCH_SIZE = 
+</code></pre>
+<p>Validation subjects<br>
+['12f8d1', '8c1f5e', '387ea0', 'c56629', '7da72f', '413532', 'd89567', 'ab3b2e', 'c83ff6', '056372']</p>
+<p>Train data: defog data, notype data<br>
+Validation data: defog data, notype data</p>
+<p>Train 28 minutes on TPU. Validation scores:<br>
+StartHesitation AP - [not used] Turn AP - 0.758 Walking AP - 0.221 mAP - 0.489<br>
+Event AP - 0.744</p>
+<h1>Final models</h1>
+<p>Tdcsfog:  0.25 * Model 1 + 0.25 * Model 2 + 0.25 * Model 3 + 0.25 * Model 4</p>
+<p>Defog: 0.25 * Model 5 + 0.25 * Model 6 + 0.25 * Model 7 + 0.25 * Model 8</p>

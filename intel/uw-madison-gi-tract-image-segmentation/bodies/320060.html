@@ -1,0 +1,140 @@
+<p>Hi all, I've done a fair amount of legwork in this competition considering how early it still is. As such, knowing that we will have many people joining in later, I thought I would compile all my high-level understanding and resources/notebooks in one place. </p>
+<p>I will also track my basic experimentation here for others to follow.</p>
+<p><br></p>
+<hr>
+<h4>NOTEBOOKS</h4>
+<hr>
+<ul>
+<li><a href="https://www.kaggle.com/code/dschettler8845/uwm-gi-tract-image-segmentation-eda/notebook?scriptVersionId=93475332" target="_blank">Exploratory Data Analysis</a><ul>
+<li>I tried to be quite thorough</li>
+<li>I will update this document as long as possible and I will add in new findings and relevant information/discoveries as I make them.</li></ul></li>
+</ul>
+<p><br></p>
+<ul>
+<li><a href="https://www.kaggle.com/code/dschettler8845/uwm-gi-tract-image-segmentation-basic-submission" target="_blank">Smart Baseline Submission</a><ul>
+<li>This is a good place to start if you want to see how to submit to this competition</li>
+<li>The <em>SMART</em> part is because we are not just submitting empty RLEs… we find an example from the training data that matches the metadata of a given test example and submit THAT RLE instead.</li>
+<li>This works because, for instance, some slices will never contain any segmentation masks, while others contain only segmentation masks in some places.</li></ul></li>
+</ul>
+<p><br></p>
+<ul>
+<li><a href="https://www.kaggle.com/code/dschettler8845/uwmgit-deeplabv3-end-to-end-pipeline-tf" target="_blank">DeepLabV3+ w/ Dilated Spatial Pyramid Pooling</a><ul>
+<li>See the paper <a href="https://www.researchgate.net/publication/335257534_Encoder-decoder_with_dense_dilated_spatial_pyramid_pooling_for_prostate_MR_images_segmentation" target="_blank"><strong>here</strong></a></li>
+<li>See the original DeepLab paper <a href="https://arxiv.org/abs/1606.00915" target="_blank"><strong>here</strong></a></li>
+<li>This is heavily based on the Keras implementation found <a href="https://keras.io/examples/vision/deeplabv3_plus/" target="_blank"><strong>here</strong></a></li>
+<li>This model achieves a <strong>Public LB Score of 0.810</strong> with an image size of <strong>224x224x3</strong> and no augmentation after <strong>only 3 epochs</strong></li>
+<li>For simplicity, I framed this as a multiclass semantic segmentation problem in the above notebook, however, as there are overlapping class segmentation masks, the problem SHOULD be framed as multilabel semantic segmentation (i.e. <strong>sigmoid</strong> vs. <strong>softmax</strong> in final activation and <strong>Binary</strong> v. <strong>Categorical</strong> Cross-Entropy).</li></ul></li>
+</ul>
+<p><br></p>
+<ul>
+<li><a href="https://www.kaggle.com/code/dschettler8845/uwmgit-deeplabv3-w-se-aspp-tf-e2e-pipeline" target="_blank">DeepLabV3+ w/ Atrous Spatial Pyramid Pooling and Squeeze Excitation Blocks</a><ul>
+<li>Atrous Spatial Pyramid Pooling (ASSP) is a semantic segmentation module for resampling a given feature layer at multiple rates prior to convolution.</li>
+<li>See the paper <a href="https://arxiv.org/abs/1606.00915v2" target="_blank"><strong>here</strong></a></li></ul></li>
+</ul>
+<p><img src="https://i.ibb.co/t2Gv7Jg/Screen-Shot-2022-04-19-at-5-53-30-PM.png"></p>
+<ul>
+<li>Squeeze Excitation (SE) Block<ul>
+<li>The Squeeze Excitation Block is an architectural unit designed to improve the representational power of a network by enabling it to perform dynamic channel-wise feature recalibration. The process is:<ul>
+<li>The block has a convolutional block as an input.</li>
+<li>Each channel is "squeezed" into a single numeric value using average pooling.</li>
+<li>A dense layer followed by a ReLU adds non-linearity and output channel complexity is reduced by a ratio.</li>
+<li>Another dense layer followed by a sigmoid gives each channel a smooth gating function.</li>
+<li>Finally, we weight each feature map of the convolutional block based on the side network; the "excitation".</li></ul></li></ul></li>
+<li>See the paper <a href="https://arxiv.org/abs/1709.01507v4" target="_blank"><strong>here</strong></a></li>
+</ul>
+<p><img src="https://i.ibb.co/ZSjwqnv/Screen-Shot-2022-04-19-at-5-53-37-PM.png"></p>
+<ul>
+<li>This implementation is heavily based on this implementation by Nikhil Tomar <a href="https://github.com/nikhilroxtomar/Semantic-Segmentation-Architecture/blob/main/TensorFlow/deeplabv3plus.py" target="_blank"><strong>here</strong></a> and the previously mentioned tutorial.</li>
+<li>This model achieves a <strong>Public LB Score of 0.817</strong> with an image size of <strong>224x224x3</strong> and no augmentation after <strong>only 7 epochs</strong></li>
+<li>This was also framed as a multiclass semantic segmentation problem (same as the previous notebook)</li>
+</ul>
+<p><br></p>
+<hr>
+<h4>GENERAL FINDINGS</h4>
+<hr>
+<ul>
+<li><strong>What is the problem?</strong><ul>
+<li>This is <strong>multilabel,</strong> 3 class, semantic segmentation problem</li></ul></li>
+<li><strong>How do the cases work? Days? Is there 3d in there somewhere?</strong><ul>
+<li>Images are <strong>slices</strong></li>
+<li>There are either 144 (common) or 80 (rare) slices/images taken whenever a patient gets imaged</li>
+<li>A <strong>case</strong> is made up of 1-5 <strong>days</strong> worth of images for a given patient</li>
+<li>This means that a particular <strong>case</strong> is made up of between 144 - 720 images</li>
+<li>For a given <strong>case's</strong> <strong>day's</strong> images, the <strong>slice number</strong> along with the <strong>pixel width/height</strong> imparts a 3-dimensional aspect to the images… </li>
+<li>i.e. slice 1 will be the bottom-most image  </li>
+<li>i.e. slice 144 will be the top-most image (in cases where there are 80 images it will be slice 80)</li>
+<li>The slices will be spaced according to the pixel spacing information</li>
+<li>All of this said, you could frame this as a 2D or 3D segmentation problem fairly easily.</li></ul></li>
+<li><strong>General Findings</strong><ul>
+<li>All images are close in size but there are 4 unique shapes (3 square and 1 rectangular)</li>
+<li>The images are relatively small</li>
+<li>The resolution within a case-id&gt;day image group is fairly tight</li>
+<li>Some slices never contain masks (first 1 and top 8 or so slices I think</li></ul></li>
+<li><strong>More TBD</strong></li>
+</ul>
+<p><br></p>
+<hr>
+<h4>APPOACHES AND/OR NEXT STEPS</h4>
+<hr>
+<p><em>Links to be added later if required</em></p>
+<ul>
+<li>Video Semantic Segmentation </li>
+<li>Transformers for Semantic Segmentation</li>
+<li>Crop down images to relevant parts (remove black border)</li>
+<li>Add in Augmentations (mask and image)</li>
+<li>More TBD</li>
+</ul>
+<p><br></p>
+<hr>
+<h4>EXPERIMENT LOG</h4>
+<hr>
+<table>
+<thead>
+<tr>
+<th><strong>Experiment No.</strong></th>
+<th><strong>Backbone</strong></th>
+<th><strong>Image Size</strong></th>
+<th><strong>Relevant Terminology</strong></th>
+<th><strong>Public LB</strong></th>
+<th><strong>Public</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>ResNet50</td>
+<td>224</td>
+<td>DeepLabV3+, DSPP, Multiclass</td>
+<td>0.810</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>ResNet50</td>
+<td>224</td>
+<td>DeepLabV3+, ASPP, SE, Multiclass</td>
+<td>0.817</td>
+<td>Y</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>EfficientNetB0</td>
+<td>224</td>
+<td>UNet, Dice Loss, Focal Loss</td>
+<td>0.828</td>
+<td>N</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<hr>
+<p>That's all folks. Stay tuned as I will be updating this frequently throughout the competition. Feel free to ask me any questions and I will do everything I can to answer them to the best of my abilities.</p>
+<p>Good luck!!</p>

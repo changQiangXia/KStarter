@@ -1,0 +1,107 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356540
+
+Topic #356540: Dtypes transformation (Reduce Memory Usage 75%)
+  Author: SSS
+  Posted: 2022-10-01 00:42:16.732000
+  Votes: 40  Comments: 20
+
+def reduce_mem_usage(df, verbose=True):
+    start_mem = df.memory_usage().sum()/1024**2
+    numerics = ['int8', 'int16', 'int32', 'int64',
+                'float16', 'float32', 'float64']
+
+
+
+    for col in df.columns:
+        if col == 'team_scoring_next':
+            continue
+        col_type = df[col].dtypes
+        limit_int = abs(df[col]).max()
+        precision_float = df[col].apply(lambda x: len(str(x).split('.')[1])).max() 
+
+        for tp in numerics:
+            cond1 = str(col_type)[0] == tp[0]
+            if tp[0] == 'i': cond2 = limit &lt;= np.iinfo(tp).max
+            else: cond2 = precision_float &lt; np.finfo(tp).precision
+
+            if cond1 and cond2:
+                df[col] = df[col].astype(tp)
+                break
+
+    end_mem = df.memory_usage().sum()/1024**2
+
+    reduction = (start_mem - end_mem)*100/start_mem
+    if verbose:
+        print(f'[INFO] Mem. usage decreased to {end_mem:.2f}'
+              f' MB {reduction:.2f}% reduction.')
+    return df
+
+
+One step:
+[INFO] Mem. usage decreased to 260.33 MB 73.98% reduction.
+
+Overall:
+[INFO] Mem. usage decreased from 10027.15 MB to 3153.70 MB 68.55% reduction.
+
+P.s. my code here.
+P.P.s dataset I use.
+
+train = pd.read_parquet('../input/tps2022octparquet/train.parquet.gzip')
+test = pd.read_parquet('../input/tps2022octparquet/test.parquet.gzip')
+
+dtypes_dict_train = dict(pd.read_csv(../input/tps2022octparquet/dtypes_train.csv').values)
+dtypes_dict_test = dict(pd.read_csv('../input/tps2022octparquet/dtypes_test.csv').values)
+
+# Reduce memory usage by 70%.
+train = train.astype(dtypes_dict_train)
+test = test.astype(dtypes_dict_test)
+
+Comments:
+├─ Ol S (2022-10-11 06:10:38.523000) [+1]
+│  How did you obtain the parquet files? Did you read the csv and saved it to parquet one by one?
+  ├─ Ayush Bihani (2022-10-11 07:39:15.907000) [+1]
+  │  Yes the author created it using the code above and saved it to parquet format.
+  │  You can also check this notebook here where I have done something similar and the data is also available.
+  ├─ Ol S (2022-10-12 07:03:12.740000) [+0]
+  │  It is confusing a bit, since looking at this:
+  │  
+  │  # Reduce memory usage by 70%.
+  │  train = train.astype(dtypes_dict_train)
+  │  test = test.astype(dtypes_dict_test)
+  │  
+  │  it looks like there have been some parquet...
+  ├─ Ayush Bihani (2022-10-13 12:18:39.030000) [+0]
+  │  dtypes_dict_train has different data-type compared to what you get when you do pd.read_csv(train_0.csv) (which will by-default convert them to higher datatype, like float32 will be read as float64).
+├─ MaximeTut (2022-10-10 12:43:40.503000) [+1]
+│  Did you check that the numbers did not change ? Changing the dtype like this can modify your value. It is best to be aware of :
+  ├─ [deleted] (2022-10-10 17:13:22.740000) [+0]
+  │  [deleted]
+├─ C4rl05/V (2022-10-08 14:57:40.560000) [+1]
+│  Thanks for sharing, @sergiosaharovskiy, how similar this is to the reduce _mem_usage that has been around for some time, it's the same or a superior version for this competition
+  ├─ [deleted] (2022-10-09 11:12:48.283000) [+0]
+  │  [deleted]
+  ├─ C4rl05/V (2022-10-09 12:29:43.767000) [+1]
+  │  Thanks @sergiosaharovskiy
+├─ Shoaib Hossain (2022-10-05 13:16:14.053000) [+1]
+│  Wow, it was nice and simple but very effective. Thanks for sharing.
+├─ Godsent Abode (2022-10-04 00:40:04.500000) [+1]
+│  Fantastic!
+├─ Will (2022-10-03 04:21:57.440000) [+1]
+│  Very cool!
+├─ Aklima Akter Rimi (2022-10-02 04:54:12.210000) [+1]
+│  That's a clever move🙏
+├─ Ayush Bihani (2022-10-01 19:36:26.280000) [+1]
+│  Thanks for sharing @sergiosaharovskiy. 
+│  I wish I had seen it sooner. I also explored similar approach. Anyone interested feel free to download the output data shared.
+├─ Jose Cáliz (2022-10-01 01:45:07.520000) [+1]
+│  This brings me some memories from TPS Dec 21
+├─ Michael Gwinn (2022-10-01 01:18:58.907000) [+1]
+│  Awesome, nice way to reduce some unnecessary memory usage and allocation!
+├─ [deleted] (2022-10-12 07:10:55.780000) [+0]
+│  [deleted]
+├─ [deleted] (2022-10-04 15:12:47.240000) [+1]
+│  It's very useful for me.Upvoted! 👍
+├─ Daniil7191 (2022-10-01 11:17:57.140000) [+1]
+│  Great! Thanks for that!
+├─ Oscar Aguilar (2022-10-01 01:19:02.297000) [+1]
+│  Thanks for sharing @sergiosaharovskiy

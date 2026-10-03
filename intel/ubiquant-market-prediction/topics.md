@@ -1,0 +1,122 @@
+# ubiquant-market-prediction 讨论区（按票数排序，共 120 条）
+
+- [Parquet Format Dataset for Fast Loading & Low Memory Use](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301724) — 276 票 / 45 评论 / 2022-01-19 
+- [[1st Place Solution] - Our Betting Strategy](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338220) — 198 票 / 58 评论 / 2022-07-20 **write-up?**
+- [Best Loss function that optimize Pearson correlation](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302181) — 188 票 / 37 评论 / 2022-01-21 
+- [What this competition is about](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303397) — 141 票 / 20 评论 / 2022-01-27 
+- [The mystery on folds](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302286) — 109 票 / 37 评论 / 2022-01-21 
+- [Previous Market Prediction Challenge](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301675) — 98 票 / 11 评论 / 2022-01-18 
+- [Competition Q&A](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301693) — 96 票 / 272 评论 / 2022-01-19 
+- [Perspectives on the comp evaluation metric and (potential) loss functions](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302874) — 91 票 / 20 评论 / 2022-01-24 
+- [Sharing my GroupTimeSeriesSplit](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/304036) — 86 票 / 21 评论 / 2022-01-30 
+- [Other Kaggle Competitions with Anonymous Dataset](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301804) — 81 票 / 3 评论 / 2022-01-19 
+- [Why using pearson correlation as loss is tricky - A brief analysis](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/306322) — 79 票 / 24 评论 / 2022-02-09 
+- [What we have learnt from this competition?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/325695) — 76 票 / 35 评论 / 2022-05-17 
+- [Combinatorial Purged Group KFold Cross-Validation](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305118) — 76 票 / 13 评论 / 2022-02-03 
+- [Initial Competition Observations - Ubiquant Edition 🗺](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305767) — 74 票 / 7 评论 / 2022-02-06 
+- [2022 Papers for Predicting Investment's Rate of Return](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302727) — 70 票 / 16 评论 / 2022-01-24 
+- [3rd Place Solution - 5 seeds ensemble transformer](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338561) — 69 票 / 24 评论 / 2022-11-20 **write-up?**
+- [I visualized every feature so you don't have to](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303191) — 62 票 / 6 评论 / 2022-01-26 
+- [Transformers in Time-Series Forecasting](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301739) — 54 票 / 7 评论 / 2022-01-19 
+- [Join Ubiquant](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305879) — 52 票 / 14 评论 / 2022-02-07 
+- [How to reverse engineer the investment_id?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/315131) — 50 票 / 4 评论 / 2022-03-26 
+- [Who else thinks was the worst decision to add the public LB data? upvote if you do](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/315944) — 49 票 / 17 评论 / 2022-03-30 
+- [0.218 But, don't be worried.](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309618) — 49 票 / 22 评论 / 2022-02-24 
+- [【中文】 如何做逆向工程？](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/315130) — 49 票 / 33 评论 / 2022-03-26 
+- [Today i got lot of **Notebook Threw Exception** Errors Why is this happening 🤔😓](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/315600) — 48 票 / 66 评论 / 2022-03-29 
+- [⭐⭐⭐⭐⭐Resouces Thread - Tips to improve and debug your Neural Network - Beginner to Advanced](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309146) — 46 票 / 10 评论 / 2022-02-22 
+- [May be some useful loss functions](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302977) — 44 票 / 11 评论 / 2022-01-25 
+- [Public Leaderboar 0.1580 (rank20) Methods Summary](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/320725) — 43 票 / 20 评论 / 2022-04-23 
+- [Baseline Model Comparison](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305967) — 42 票 / 6 评论 / 2022-02-07 
+- [Custom Pearson Metric for LGBMRegressor](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302480) — 42 票 / 5 评论 / 2022-01-22 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301671) — 42 票 / 47 评论 / 2022-01-18 
+- [Competition metric calculation](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301987) — 41 票 / 6 评论 / 2022-01-20 
+- [*CV vs LB*](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303627) — 40 票 / 67 评论 / 2022-01-28 
+- [Which CV strategy should I use? Need help.](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302429) — 40 票 / 22 评论 / 2022-01-22 
+- [Serious leak? Private leaderboard may include historical data](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309720) — 37 票 / 25 评论 / 2022-02-25 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301672) — 37 票 / 188 评论 / 2022-01-18 
+- [A simple way to use keras for the pearson correlation coefficient](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/316589) — 35 票 / 11 评论 / 2022-04-02 
+- [TOP solution for Anonymous Feature Competition](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/311546) — 34 票 / 6 评论 / 2022-03-07 **write-up?**
+- [(Starter) Comparing the Baselines - DNN, RNN, and LightGBM](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/304418) — 34 票 / 2 评论 / 2022-02-01 
+- [Relatively strong correlation between lag targets and some features](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309414) — 33 票 / 12 评论 / 2022-02-23 
+- [5th place solution, single NN model](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338400) — 33 票 / 8 评论 / 2022-07-20 **write-up?**
+- [Unfair competition](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/315920) — 33 票 / 7 评论 / 2022-03-30 
+- [Fourth score update delayed](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/336001) — 32 票 / 12 评论 / 2022-07-08 
+- [Try to ignore the investment ID and Simplify the model](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/304958) — 32 票 / 29 评论 / 2022-02-03 
+- [Submission deadline extended by 48 hours](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/319720) — 31 票 / 36 评论 / 2022-04-18 
+- [Qlib-based EDA&Examples and Some ideas about the data](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/308313) — 30 票 / 7 评论 / 2022-02-18 
+- [Unseen test data size](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301687) — 30 票 / 3 评论 / 2022-01-19 
+- [✨✔Computational Finance Courses (Free MOOC) 📚relevant to this competition!](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303938) — 30 票 / 3 评论 / 2022-01-30 
+- [Machine Learning Research Papers on Quantitative Trading Models](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302115) — 30 票 / 2 评论 / 2022-01-20 
+- [Super fast training with fastai](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303458) — 28 票 / 10 评论 / 2022-01-27 
+- [First update postponed to early next week](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/323293) — 28 票 / 49 评论 / 2022-05-05 
+- [Don't Overfit!!!!](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/306629) — 28 票 / 7 评论 / 2022-02-10 
+- [[2nd Place Solution] - Robust CV and LGBM](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338615) — 28 票 / 7 评论 / 2022-07-21 **write-up?**
+- [Instruction for overfitting the public leaderboard](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/316257) — 27 票 / 7 评论 / 2022-04-01 
+- [Investment ID and Time ID](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305353) — 27 票 / 13 评论 / 2022-02-04 
+- [Final update delayed](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338023) — 27 票 / 8 评论 / 2022-07-18 
+- [Is the Public Leaderboard Now Useless?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/314455) — 26 票 / 20 评论 / 2022-03-22 
+- [Congratulation for RDizzl3 to Become Discussion Grandmaster](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/304064) — 26 票 / 6 评论 / 2022-01-30 
+- [Probing the LB (and bridging the CV / LB gap?)](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/308632) — 26 票 / 16 评论 / 2022-02-19 
+- [My Best Ideas (so far)](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/308044) — 25 票 / 10 评论 / 2022-02-16 
+- [Historical competitions with Anonymous Feature](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/310994) — 25 票 / 5 评论 / 2022-03-04 
+- [First update posted](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/324898) — 24 票 / 96 评论 / 2022-05-13 
+- [Anonymous feature engineering](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309717) — 24 票 / 4 评论 / 2022-02-25 
+- [7th place solution, single model, no supplemental data used](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338293) — 24 票 / 5 评论 / 2022-07-20 **write-up?**
+- [Some updates for the competition](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/310602) — 23 票 / 94 评论 / 2022-03-02 
+- [Make sure that the inference code includes code that can catch exceptions.](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/316800) — 23 票 / 2 评论 / 2022-04-04 
+- [17th Place Solution, 1000+ on public lb](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338239) — 23 票 / 6 评论 / 2022-07-19 **write-up?**
+- [why no one talks about Grouped time series split](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/307490) — 22 票 / 27 评论 / 2022-02-14 
+- [Is the 0.663 results from Ubiquant staff?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303119) — 22 票 / 6 评论 / 2022-01-26 
+- [8th place solution](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338236) — 22 票 / 2 评论 / 2022-07-20 **write-up?**
+- [Stop Overfitting!! Configurable Early Stopping Callback Function for TensorFlow](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309200) — 22 票 / 16 评论 / 2022-02-22 
+- [NNs vis. Gradient Boosting](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/307062) — 21 票 / 16 评论 / 2022-02-12 
+- [Complete Feature Exploration by time and investment strategy](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302301) — 21 票 / 4 评论 / 2022-01-21 
+- [Public leaderboard redactions](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/315575) — 21 票 / 19 评论 / 2022-03-28 
+- [FRUFS Unsupervised Feature Selection](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/314313) — 21 票 / 10 评论 / 2022-03-22 
+- [Reading In Large Datasets](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301697) — 21 票 / 13 评论 / 2022-01-19 
+- [Leaderbord after 3rd update - chart](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/331231) — 20 票 / 4 评论 / 2022-06-16 
+- [Cross Validation for Time Series](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301765) — 20 票 / 5 评论 / 2022-01-19 
+- [Debugging out of memory errors](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305031) — 20 票 / 2 评论 / 2022-02-03 
+- [Share some of my investigation](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305483) — 19 票 / 3 评论 / 2022-02-05 
+- [Back in time - temporal confusion](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302658) — 19 票 / 7 评论 / 2022-01-23 
+- [(Not so) Constant features across strategies](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302403) — 19 票 / 2 评论 / 2022-01-22 
+- [Private LeaderBoard Competition FAQ](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/328221) — 18 票 / 3 评论 / 2022-05-31 
+- [Is external data legitimate？](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309712) — 18 票 / 17 评论 / 2022-02-25 
+- [Leaderbord after 4th update - chart](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/336950) — 18 票 / 3 评论 / 2022-07-13 
+- [Automated Feature Engineering using Feature Tools](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302943) — 18 票 / 10 评论 / 2022-01-25 
+- [The disaster of using supplemental_train](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/319440) — 17 票 / 13 评论 / 2022-04-17 
+- [2 final results selection suggestion (personal opinion) ](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/319189) — 17 票 / 21 评论 / 2022-04-15 
+- [Second update posted](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/327571) — 16 票 / 13 评论 / 2022-05-27 
+- [First Update: Leaderboard Shakeup](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/324900) — 16 票 / 11 评论 / 2022-05-13 
+- [Factors that affect the size of r](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/312247) — 16 票 / 3 评论 / 2022-03-11 
+- [Make sure that the investment ID should not be used as a feature](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/313544) — 16 票 / 11 评论 / 2022-03-17 
+- [Time series validation and Lynyrd Skynyrd](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302524) — 15 票 / 1 评论 / 2022-01-22 
+- [Scores might be Significantly Lower - Overfitted Alphas](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/319763) — 15 票 / 6 评论 / 2022-04-18 
+- [Adversarial Validation](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/312398) — 15 票 / 8 评论 / 2022-03-11 
+- [Third score update posted](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/330909) — 15 票 / 3 评论 / 2022-06-14 
+- [Leaderbord after 1st update - chart](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/325234) — 15 票 / 7 评论 / 2022-05-15 
+- [LSTM starter with considering time series.](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/304910) — 15 票 / 0 评论 / 2022-02-03 
+- [Welcome to the real world of financial trading](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/328223) — 15 票 / 7 评论 / 2022-05-31 
+- [📈Market Prediction - 🏆Winning Solutions - Useful for Ubiquant Market Prediction📈❓](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301699) — 15 票 / 0 评论 / 2022-01-19 **write-up?**
+- [Fourth score update posted](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/336937) — 15 票 / 10 评论 / 2022-07-13 
+- [Leaderbord after 2nd update - chart](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/327625) — 14 票 / 0 评论 / 2022-05-28 
+- [Will the first run be postponed?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/321254) — 14 票 / 6 评论 / 2022-04-25 
+- [Submission Scoring Error?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302787) — 14 票 / 13 评论 / 2022-01-24 
+- [Ubiquant Market Prediction - my approach and ideas](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/320399) — 14 票 / 6 评论 / 2022-04-21 
+- [Public LB-10th, first rerun 1850th, 2nd rerun 50th, 3rd rerun 134th, 4th rerun 19th what's next ...](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/327574) — 14 票 / 18 评论 / 2022-05-27 
+- [Links for Stock Market Forecasting Using Time Series Analysis - Python](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301890) — 14 票 / 2 评论 / 2022-01-19 
+- [Ubiquant market prediction train in feather](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301727) — 14 票 / 0 评论 / 2022-01-19 
+- [Leaderboard precision](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305332) — 14 票 / 5 评论 / 2022-02-04 
+- [0.585！！  Did magic and miracles finally appear?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/314139) — 14 票 / 21 评论 / 2022-03-21 
+- [Time id 350-550](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/305067) — 14 票 / 5 评论 / 2022-02-03 
+- [Easy Time Series Cross Validation](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/302710) — 14 票 / 4 评论 / 2022-01-23 
+- [Vowpal Wabbit strikes back ](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/301900) — 14 票 / 2 评论 / 2022-01-20 
+- [0.663？Is there a leak?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303133) — 13 票 / 19 评论 / 2022-01-26 
+- [Medals range](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/328093) — 13 票 / 1 评论 / 2022-05-30 
+- [How to CV emsemble in TimeSeriesSplit?](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/303916) — 13 票 / 14 评论 / 2022-01-30 
+- [Predictions are correlated with low target values](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/309422) — 13 票 / 13 评论 / 2022-02-23 
+- [Leaderboard is Finalized - Congrats to our Winners, Recap](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338711) — 9 票 / 1 评论 / 2022-07-21 
+- [Thanks you all!](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/341308) — 6 票 / 0 评论 / 2022-08-02 
+- [Thank you all!](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/341306) — 4 票 / 0 评论 / 2022-08-02 
+- [Dataset Update - Late Submissions unavailable.](https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/343275) — 3 票 / 1 评论 / 2022-08-10 

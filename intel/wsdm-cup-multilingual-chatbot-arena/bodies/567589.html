@@ -1,0 +1,67 @@
+<p>Thanks to Kaggle, the competition hosts, and the participants for making this an exciting competition! We are pleased to see the winning solutions generalize well to the test set. Congratulations to all the winners! Trushant and I had a lot of fun building our solution over a 3 week sprint.</p>
+<h2>Inference Pipeline</h2>
+<p>We implemented an uncertainty-based ensemble pipeline as shown in the figure below:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2125251%2F20c27d4aacda686315f74dcdab57a78e%2Finference_pipeline.png?generation=1741661694322639&amp;alt=media" alt=""></p>
+<ul>
+<li>First, a fine-tuned <code>gemma-2-9b-it</code> model was used to score all test examples</li>
+<li>Next, uncertainty scores were calculated as closeness to the decision boundary (<code>uncertainty = 1-|p-0.5|</code>)</li>
+<li>Top 50% uncertain examples were identified (i.e. those with probabilities closest to 0.5) and scored again using with a larger model.</li>
+</ul>
+<p>Specifically,</p>
+<ul>
+<li>For top 15% uncertain examples, we used a fine-tuned <code>Qwen2.5-32B-Instruct</code> (selected submission 1) or <code>Mistral-Small-24B-Instruct-2501</code> (selected submission 2) model (xlarge)</li>
+<li>For next 35% examples, we used <code>Qwen2.5-14B-Instruct</code> (large) </li>
+<li>For remaining examples, we used scores directly from the <code>gemma-2-9b-it</code> model (base)</li>
+</ul>
+<p>The final score was computed as an ensemble:</p>
+<ul>
+<li>Top 15% uncertain examples: <code>Score = 1.0 x base + 1.5 x xlarge</code></li>
+<li>Next 35% examples: <code>Score = 1.0 x base + 1.0 x large</code></li>
+<li>Remaining examples: <code>Score = 1.0 x base</code></li>
+</ul>
+<p>We used vllm for inference. The inference time estimates for 512 examples are shown below together with max sequence length:</p>
+<pre><code>||||
+||||
+||||
+||||
+||||
+||||
+</code></pre>
+<h2>Data</h2>
+<p>We used the following data sources for training:</p>
+<h3>Labelled Datasets</h3>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/data" target="_blank">WSDM Cup - Multilingual Chatbot Arena Competition Data</a> (45k)</li>
+<li><a href="https://www.kaggle.com/c/lmsys-chatbot-arena-human-preference-predictions" target="_blank">LMSYS - Chatbot Arena Human Preference Predictions Competition Data</a> (30k)</li>
+<li><a href="https://huggingface.co/datasets/lmarena-ai/PPE-Human-Preference-V1" target="_blank">lmarena-ai/PPE-Human-Preference-V1</a> (10k)</li>
+</ul>
+<h3>Unlabelled Datasets</h3>
+<ul>
+<li><a href="https://www.kaggle.com/datasets/nbroad/wsdm-open-models-nbroad/data" target="_blank">wsdm - open models - nbroad</a> (Dataset from Nicholas - Sampled 6k)</li>
+<li><a href="https://huggingface.co/datasets/Skywork/Skywork-Reward-Preference-80K-v0.2" target="_blank">Skywork/Skywork-Reward-Preference-80K-v0.2</a> (Sampled 25k)</li>
+<li><a href="https://huggingface.co/datasets/allenai/tulu-3-sft-olmo-2-mixture" target="_blank">allenai/tulu-3-sft-olmo-2-mixture</a> (Sampled 30k)</li>
+<li>Team generated preference pairs (100k examples)<ul>
+<li>Prompts from <a href="https://huggingface.co/datasets/allenai/WildChat-1M" target="_blank">allenai/WildChat-1M</a> and <a href="https://huggingface.co/datasets/lmsys/lmsys-chat-1m" target="_blank">lmsys/lmsys-chat-1m</a> datasets</li>
+<li>Cluster based sampling to roughly match the distribution from <a href="https://lmarena.ai/?explore" target="_blank">Arena Explorer</a></li></ul></li>
+</ul>
+<h2>Models</h2>
+<p>We fine-tuned models from Gemma, Llama, Qwen and Mistral families, which achieved the following scores:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2125251%2Fc38d8dacd5ffc2e52cf02981900c24f0%2Fmodel_scores.png?generation=1741661834851185&amp;alt=media" alt=""></p>
+<ul>
+<li>We first fine-tuned <code>Qwen2.5-72B-Instruct</code> and <code>Llama-3.1-Nemotron-70B-Instruct</code> on the competition subset and used them to generate pseudo labels for the unlabeled datasets.</li>
+<li>For Gemma models, we directly used "A" and "B" token logits to compute the preference probability. These models did not have a reward model head. They were trained with a combination of language modeling and reward modeling losses. (Reference: <a href="https://arxiv.org/abs/2406.10216" target="_blank">Regularizing Hidden States Enables Learning Generalizable Reward Model for LLMs</a>)</li>
+<li>The remaining models were trained using the standard <code>AutoModelForSequenceClassification</code> architecture with a linear head.</li>
+</ul>
+<h2>Generalization</h2>
+<p>We considered the following aspects in an attempt to improve generalization:</p>
+<ul>
+<li>Incorporated larger LLMs in the inference pipeline to handle uncertain examples. Larger LLMs tend to generalize better.</li>
+<li>Ensemble of different modelling approaches and model families (logits-based and AutoModelForSequenceClassification).</li>
+<li>Kept the preference modelling head simple (one linear layer).</li>
+<li>Distillation from 70B+ LLMs using pseudo labels on a large unlabeled dataset containing diverse prompts.</li>
+</ul>
+<h2>Links</h2>
+<ul>
+<li><a href="https://www.kaggle.com/code/conjuring92/wsdm-7th-place-solution" target="_blank">Inference Notebook</a></li>
+</ul>
+<p>We look forward to reading and learning from your solutions! Special thanks to <a href="https://www.kaggle.com/trushk" target="_blank">@trushk</a> for the perfect collaboration and teamwork!</p>

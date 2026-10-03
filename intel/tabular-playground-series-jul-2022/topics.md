@@ -1,0 +1,82 @@
+# tabular-playground-series-jul-2022 讨论区（按票数排序，共 80 条）
+
+- [#1 solution](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/341023) — 74 票 / 27 评论 / 2022-08-01 **write-up?**
+- [Visualizing the seven clusters](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334808) — 73 票 / 14 评论 / 2022-07-03 
+- [Last day - what have we learnt?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/340874) — 66 票 / 23 评论 / 2022-07-31 
+- [UMAP and cluster structure](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/338839) — 63 票 / 23 评论 / 2022-07-22 
+- [How to Ensemble Clustering algorithms?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335078) — 47 票 / 17 评论 / 2022-07-04 
+- [The ARI (Adjusted Rand Index). Cluster analysis.](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334541) — 43 票 / 32 评论 / 2022-07-01 
+- [Dropped 15 features and score improved!](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334875) — 35 票 / 23 评论 / 2022-07-03 
+- [Getting an intuition for the adjusted Rand score](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335167) — 34 票 / 11 评论 / 2022-07-05 
+- [Common clustering algorithms explained](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334484) — 30 票 / 7 评论 / 2022-07-01 
+- [Thank you Kaggle for TPS 2022](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334457) — 29 票 / 4 评论 / 2022-07-01 
+- [Understading the competition metric: Adjusted rand Index](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334534) — 26 票 / 8 评论 / 2022-07-01 
+- [Another GBM hyperparameter search](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/338389) — 24 票 / 5 评论 / 2022-07-20 
+- [The best clustering notebooks of Kaggle](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334478) — 22 票 / 2 评论 / 2022-07-01 
+- [Elbow method with 50 clusters](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335079) — 21 票 / 3 评论 / 2022-07-04 
+- [Predict with LGB training with 80% most reliable data.](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336693) — 21 票 / 17 评论 / 2022-07-12 
+- [Gaussian Mixtures Models Explained](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334887) — 20 票 / 4 评论 / 2022-07-03 
+- [Best Classifier for this competition ? 0.77025](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/338937) — 20 票 / 12 评论 / 2022-07-22 
+- [10 Algorithms in Scikit-Learn for clustering: A comparison](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334892) — 20 票 / 18 评论 / 2022-07-03 
+- [Scale the Data](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334476) — 20 票 / 5 评论 / 2022-07-01 
+- [Gaussian Mixture Models](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334718) — 18 票 / 5 评论 / 2022-07-02 
+- [RAND Index - Explained](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334460) — 18 票 / 10 评论 / 2022-07-01 
+- [Silhouette Coefficient](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334508) — 17 票 / 3 评论 / 2022-07-01 
+- [Clustering | Papers, Kernels | Resources to Explore](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334463) — 17 票 / 4 评论 / 2022-07-01 
+- [Update to Sphere](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/340720) — 16 票 / 9 评论 / 2022-07-30 
+- [Cargo Cult Science](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/339407) — 16 票 / 4 评论 / 2022-07-24 
+- [CV-LB metric plotting using the bruteforce results](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336144) — 15 票 / 10 评论 / 2022-07-09 
+- [📚 Resources for Gaussian Mixture Models](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335568) — 14 票 / 6 评论 / 2022-07-06 
+- [Classification metrics seem to be more reliable to the Public LB than cluster metrics](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337031) — 14 票 / 0 评论 / 2022-07-14 
+- [cluster metrics vs. LB score?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335534) — 14 票 / 7 评论 / 2022-07-06 
+- [Towards Cross-Validation: Visually Separating the Clusters](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/338715) — 14 票 / 1 评论 / 2022-07-21 
+- [How many clusters should we use?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334605) — 13 票 / 13 评论 / 2022-07-02 
+- [Congratulations and sincere thanks!](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/341047) — 13 票 / 1 评论 / 2022-08-01 
+- [ALL ABOUT CLUSTERING](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335065) — 13 票 / 7 评论 / 2022-07-04 
+- [Are you also just guessing?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337909) — 12 票 / 6 评论 / 2022-07-18 
+- [The Elbow Method](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334569) — 12 票 / 17 评论 / 2022-07-02 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/333916) — 11 票 / 19 评论 / 2022-06-28 
+- [Comparative Analysis of Different Clustering Algorithms](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334486) — 11 票 / 1 评论 / 2022-07-01 
+- [How are cluster labels determined by sklearn models?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336601) — 11 票 / 8 评论 / 2022-07-12 
+- [Getting the Cluster_Ensembles package to work](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336522) — 11 票 / 4 评论 / 2022-07-11 
+- [Cluster Ensembling using SVD](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/339967) — 11 票 / 5 评论 / 2022-07-27 
+- [AutoEncoder vs PCA what's Best?! I'll Answer](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334697) — 11 票 / 6 评论 / 2022-07-02 
+- [data model for integer variables](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337563) — 10 票 / 10 评论 / 2022-07-16 
+- [K-means and elbow method Explained!☀️ ](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334593) — 10 票 / 4 评论 / 2022-07-02 
+- [What's the ideal number of clusters in GMM for this dataset?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335150) — 10 票 / 5 评论 / 2022-07-05 
+- [How to Ensemble Clustering Algorithms?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335264) — 9 票 / 2 评论 / 2022-07-05 
+- [Cluster Means for best features after 0.8 score.](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/339913) — 9 票 / 11 评论 / 2022-07-26 
+- [Why 7/8 is the best n_components for GMM/BGMM](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335554) — 9 票 / 4 评论 / 2022-07-06 
+- [Setting up an evaluation metric](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334628) — 8 票 / 3 评论 / 2022-07-02 
+- [Scaling choice](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/338803) — 8 票 / 5 评论 / 2022-07-22 
+- [Resource: How GMMs work](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337307) — 8 票 / 2 评论 / 2022-07-15 
+- [Right metric to validate models](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335994) — 8 票 / 2 评论 / 2022-07-08 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/333914) — 7 票 / 4 评论 / 2022-06-28 
+- [What is Adjusted Rand Index and Rand Index?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334805) — 7 票 / 1 评论 / 2022-07-03 
+- [Good luck everyone!](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334470) — 7 票 / 0 评论 / 2022-07-01 
+- [TSNE & Normalisation with Quantiles](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335081) — 7 票 / 4 评论 / 2022-07-04 
+- [[New Research Article update] ck-means, a novel unsupervised learning method that combines fuzzy and crispy clustering methods to extract intersecting data](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335103) — 7 票 / 7 评论 / 2022-07-04 
+- [Tips to outperform the Benchmark Score ⚡⚡](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334826) — 6 票 / 2 评论 / 2022-07-03 
+- [Pseudo Labelling with Soft Voting using Sklearn](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337606) — 6 票 / 1 评论 / 2022-07-16 
+- [Why we discard normally distributed features?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/339958) — 6 票 / 9 评论 / 2022-07-26 
+- [Drawing Elbow Method Using Different Scaling Techniques](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335569) — 6 票 / 4 评论 / 2022-07-06 
+- [Combining results of multiple random seeds](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/339591) — 6 票 / 14 评论 / 2022-07-25 
+- [Memory error](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336652) — 6 票 / 5 评论 / 2022-07-12 
+- [Dimension reduction ? ](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335574) — 6 票 / 7 评论 / 2022-07-06 
+- [What do we do with f_7 - f_13?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335056) — 5 票 / 3 评论 / 2022-07-04 
+- [I found a Sphere.](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/340391) — 5 票 / 4 评论 / 2022-07-28 
+- [Explanation for feature selection](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337754) — 5 票 / 7 评论 / 2022-07-17 
+- [Properties of the Rand Index & Adjusted Rand Index](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335933) — 5 票 / 1 评论 / 2022-07-08 
+- [Question: do features need to be normally distributed for a proper clustering application ?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334914) — 5 票 / 9 评论 / 2022-07-03 
+- [How are the predictions evaluated before submitting them to the leaderboard?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334810) — 4 票 / 5 评论 / 2022-07-03 
+- [Cross‑Validation Approach to Evaluate Clustering Algorithms [Paper]](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334827) — 4 票 / 2 评论 / 2022-07-03 
+- [What is Local CV for clustering prediction evaluation?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334588) — 4 票 / 0 评论 / 2022-07-02 
+- [Question: how to deal with Outliers ? ](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334911) — 4 票 / 7 评论 / 2022-07-03 
+- [Gower matrix along with kmedoid  formed matrix with complexity O(n2)](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337141) — 4 票 / 4 评论 / 2022-07-14 
+- [BGM Question](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336975) — 4 票 / 3 评论 / 2022-07-13 
+- [Is Inertia useless?](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/338381) — 4 票 / 5 评论 / 2022-07-20 
+- [TPS - Jul 2022, What I have tried.](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/339223) — 4 票 / 8 评论 / 2022-07-23 
+- [Integer Features](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/336498) — 3 票 / 3 评论 / 2022-07-11 
+- [Pandas-Profiling EDA](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337067) — 3 票 / 0 评论 / 2022-07-14 
+- [AutoEncoder investigation (and fail?)](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/337348) — 3 票 / 3 评论 / 2022-07-15 
+- [Denoise data using DAE](https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/335520) — 3 票 / 3 评论 / 2022-07-06 

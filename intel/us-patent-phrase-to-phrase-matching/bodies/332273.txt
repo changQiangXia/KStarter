@@ -1,0 +1,415 @@
+# https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332273
+
+Topic #332273: 10th place Solution : Single model public lb 0.8562, private lb 0.8717 
+  Author: chumajin
+  Posted: 2022-06-21 04:42:58.604000
+  Votes: 99  Comments: 42
+
+First of all, I would like to thank kaggle and the staff for hosting such an interesting competition.
+Also, I really appreciate my teammates, @harshit92, @ynishizono, @muhammad4hmed Congratulations to become the competition master and @trushk Congratulations to 2nd gold medal !
+
+1. Summary (Our Magic and got single model public LB : 0.8562, private : 0.8717)
+
+Our magic was to group the target words per "anchor + context" and attach them to the end of each sentence.Maybe it's easier to understand by looking at the code, so I'll share it.
+
+train['group'] = train['context'] + " " + train['anchor']
+
+allres = {}
+
+for text in tqdm(train["group"].unique()):
+  tmpdf = train[train["group"]==text].reset_index(drop=True)
+  texts = ",".join(tmpdf["target"])
+  allres[text] = texts
+
+train["target_gp"] = train["group"].map(allres)
+
+train["input"] = train.anchor + " " + tokenizer.sep_token + " " + train.target + " " + tokenizer.sep_token + " " + train.title + " " + tokenizer.sep_token + " " + train.target_gp
+
+
+for example, we get like this sentence as input. And training.
+
+abatement [SEP] abatement of pollution [SEP] HUMAN NECESSITIES. FURNITURE; DOMESTIC ARTICLES OR APPLIANCES; COFFEE MILLS; SPICE MILLS; SUCTION CLEANERS IN GENERAL [SEP] abatement of pollution,act of abating,active catalyst,eliminating process,forest region,greenhouse gases,increased rate,measurement level,minimising sounds,mixing core materials,multi pollution abatement device,noise reduction,pollution abatement,pollution abatement incinerator,pollution certificate,rent abatement,sorbent material,source items pollution abatement technology,stone abutments,tax abatement,water bodies
+
+
+By doing so, we thought that we could not only train one sentence, but also train considering the correlation of the target words for each "anchor + context" with attention. Moreover, in order to avoid leakage, groupkfold of "anchor + context" was adopted. As a result, this magic boosted our models (in best case, public lb 0.8418 → 0.8562) two days before closing.
+
+This idea was decisive for getting into the gold medal zone. (Only this single model we can get the gold)
+
+------------------Details below---------------------------------------
+
+2. Preprocess and cross validation
+
+preprocess and cross validation is proposed by @harshit92 Basically, we used the lower case, not using [SEP] but uses [sep], remove ";" , "," , and "." like this.
+
+train['input'] = train['anchor'] + ' [SEP] ' + train['target'] + ' [SEP] '  + train['context_text']
+train['input'] = train['input'].apply(lambda x: x.lower())
+train['input'] = train['input'].apply(lambda x: x.replace(';','').replace(',','').replace('.',''))
+
+
+And he found the boosting by changing 5kfold to 10kfold as NBME 1st solution
+(public LB : 5kfold 0.8395 → 10kfold 0.8435). These were the strong tools for us.
+
+3. Model making
+
+3.1 How to catch the problem
+
+We did not just solve the 1 target prediction, but to make it more diverse, we solved the problem as follows.
+
+3.1.1 BCE with binning
+
+The score value was replaced as follows. And sigmoid was calculated in each predictions and averaged.
+
+0:[0,0,0,0], 0.25:[1,0,0,0], 0.5:[1,1,0,0], 0.75:[1,1,1,0],1:[1,1,1,1]
+output = sigmoid in each prediction and averaged
+
+For example, prediction = [0.1, 0.3, 0.2, 0.4], output = (0.1 + 0.3 + 0.2 + 0.4) /4
+
+
+3.1.2 Softmax with binning
+
+The score was replaced as follows. And softmax was calculated in each predictions and convoluted.
+
+0:[0, 0, 0, 0, 0], 0.25:[0,1,0,0,0], 0.5:[0,0,1,0,0], 0.75:[0,0,0,1,0],1:[0,0,0,0,1]
+output = softmax in each prediction and convolution operation
+
+For example, prediction = [0.1, 0.3, 0.2, 0.4, 0], output = 0*0.1 + 0.25*0.3 + 0.5*0.2 + 0.75*0.4 +1.0*0
+
+
+3.2 AWP
+
+As with Feedback and NBME, we were able to improve our score with AWP.
+I got the code from the following in Feedback code
+
+This boosted my model public LB : 0.8394  to 0.8418
+
+3.3 Other tips that worked well
+
+
+
+Mixout by @trushk 
+
+Knowledge distillation(KD) by @ynishizono 
+
+text embedding with SVR 
+
+mix various loss (ex. MSE + Corr)
+
+dynamic padding for some arches 
+
+
+3.4 Didn't work well
+
+
+
+MLM
+
+pseudo labeling (export all combination of anchor and target per context)
+
+Random noise of [MASK]
+
+change the order of input
+
+post process of Gradiant Boost
+
+adding per subsection title (some case is better.)
+
+concat text embedding and SVR like PetFinder 1st solution
+
+
+4. Ensemble
+
+For our ensemble, we used the nelder-mead coefficient by oof files. Candidates were automatically exported by @trushk 's code which uses the mix of the hill climb and nelder-mead algorithm. Finally, the used models were extracted based on over 90 oof files, and adjusted manually.
+
+There are the list of models for the final submission. 
+
+
+
+
+model id
+model
+Feature
+Task
+Magic
+kfold
+cv
+public LB
+private LB
+weight
+
+
+
+
+1
+deberta-v3-large
+AWP
+MSE
+TRUE
+15
+0.8605
+0.8562
+0.8717
+0.237
+
+
+2
+electra-large-discriminator
+
+MSE
+TRUE
+15
+0.8456
+0.8406
+0.8534
+0.166
+
+
+3
+electra-large-discriminator
+
+MSE
+
+15
+0.8381
+0.8339
+0.8486
+0.049
+
+
+4
+bert-for-patents
+KD + SVR
+BCE binning
+
+5
+0.8339
+
+
+0.087
+
+
+5
+deberta-v3-large
+KD + SVR
+MSE
+
+5
+0.8470
+
+
+0.129
+
+
+6
+deberta-v3-large
+
+BCE binning
+TRUE
+5
+0.8471
+0.8512
+0.8664
+0.067
+
+
+7
+deberta-v3-large
+Mixout
+Softmax binning
+TRUE
+5
+0.8440
+0.8506
+0.8644
+0.057
+
+
+8
+bert-for-patents
+Mixout
+Softmax binning
+TRUE
+5
+0.8340
+
+
+0.084
+
+
+9
+deberta-v3-large
+
+BCE binning
+TRUE
+10
+0.8463
+
+
+0.092
+
+
+10
+deberta-v3-large
+
+BCE binning
+
+10
+0.8335
+0.8390
+0.8579
+0.073
+
+
+
+
+Final our cv is 0.8721, public lb is 0.8604, private lb is 0.8750 (11th).
+
+As reference, this is all of our cv and lb relationship. The difference in color indicates the difference between people. We discussed based on this. 
+
+
+
+5. Acknowledgments
+
+We couldn't get this score on our own. Thank you to everyone who shared past knowledge and code! We respect to you. 
+
+And I think the reason we got the gold medal was largely due to the sharing and discussion of the daily results. Eventually it leaded to the magic. We are the best team ! Thank you !!
+
+From our team :
+
+Comments:
+├─ Gani Esenov (2022-06-27 18:08:20.467000) [+3]
+│  @chumajin Hi bro, congrats you and your team. Great job, keep it up!
+├─ CPMP (2022-06-21 15:17:51.563000) [+4]
+│  Nice writeup, congrats on the result! What you call BCE binning is often called ordinal regression.
+  ├─ Trushant Kalyanpur (2022-06-21 16:47:50.290000) [+2]
+  │  Thank you! Yes you are right - BCE binning  is ordinal regression.
+  ├─ chumajin (2022-06-22 10:37:06.673000) [+2]
+  │  @cpmpml Thank you for your congratulations and explanations! fixed.
+  │  I am glad to receive congratulations from you who I respect.
+  │  Congratulations on your gold medal, too.
+├─ Romuska Palo Ur Laputa (2022-07-16 13:27:54.750000) [+1]
+│  @chumajin 
+│  Congratulation for your gold medal and being master rank!!
+│  I want to know about KD + SVR and mixout.
+│  Can I see the implementation or related link??
+│  Thank you.
+  ├─ chumajin (2022-07-20 06:04:04.880000) [+1]
+  │  @fightingmuscle Thank you for comment! I'm sorry these parts were not my work.
+  │  
+  │  So I will only tell you about the referenced link.
+  │  
+  │  
+  │  
+  │  
+  │  KD  (you are also Japanese):
+  │  
+  │  
+  │  
+  │  http://codecrafthouse.jp/p/201...
+  ├─ Romuska Palo Ur Laputa (2022-07-20 06:13:56.710000) [+1]
+  │  @chumajin 
+  │  Thank you for telling me!!!
+  │  I'll study with this! 
+  │  I admire you for combining so much knowledge!💯
+├─ CalcMaster1701 (2022-06-29 18:24:45.343000) [+1]
+│  Congrats!
+├─ Amalia (2022-06-27 09:38:19.797000) [+1]
+│  congratulations!
+├─ Nitish (2022-06-27 09:36:22.367000) [+1]
+│  Congrats and Great work. One question (apology if too naive), 
+│  
+│  As with Feedback and NBME, we were able to improve our score with AWP - What is AWP? Where can I learn more about it?
+  ├─ chumajin (2022-06-27 11:00:14.167000) [+3]
+  │  @nitishraj Thank you for comment ! You can see in another comment here. 
+  │  
+  │  AWP = Adversarial Weight Perturbation
+  │  https://arxiv.org/abs/2004.05884
+  │  
+  │  notebooks :
+  │  https://www.kaggle.com/code/wht1996/fee...
+  ├─ Nitish (2022-06-28 09:21:59.250000) [+1]
+  │  Thank you. This helps a lot!
+├─ GUNER (2022-06-25 05:16:46.697000) [+1]
+│  Congrats to the 'dreamteam'!
+│  Your 'Single model public lb 0.8562, private lb 0.8717' is still a  text classification (and not a token classification model), right?
+  ├─ chumajin (2022-06-25 07:17:36.117000) [+2]
+  │  @abdulkadirguner Thank you very much. Yes just using the AutoModelForSequenceClassification.
+  ├─ GUNER (2022-06-25 07:38:38.387000) [+1]
+  │  👍
+├─ Jingping Pei (2022-06-24 05:22:17.543000) [+1]
+│  Congrats
+  ├─ chumajin (2022-06-24 07:51:06.583000) [+0]
+  │  Thank you so much!!
+├─ Charlie Zimmerman (2022-06-24 00:27:43.377000) [+1]
+│  Hi:
+│  
+│  I see "group the target words per "anchor + context" and attach them to the end of each sentence as a trick in many high scoring solutions.  However, when I experiment with this, and set max_l...
+  ├─ Trushant Kalyanpur (2022-06-24 00:45:18.710000) [+2]
+  │  Hello @charliezimmerman . Yes, adding more target groups increases the size of the text. Depending on the architecture, we used a max length argument to the tokenizer to truncate texts. For deberta...
+  ├─ Charlie Zimmerman (2022-06-24 00:56:20.937000) [+2]
+  │  @Siruis thanks for the information and for sharing your expertise.
+├─ Marília Prata (2022-06-21 22:18:52.153000) [+1]
+│  Congrats for yours 11th position, for your topic and your Team too Chumajin-san.
+  ├─ chumajin (2022-06-22 08:47:27.547000) [+1]
+  │  @mpwolke Thank you ! I'm really happy to receive your congratulations. 
+  │  And I'm sorry to be late. Congrats to become grandmaster. This is the result of your efforts!!
+├─ 3sigma (2022-06-21 15:53:17.650000) [+1]
+│  congratulations! It seems that many top teams use the magic combination of targets information groupby "anchor + context" .
+  ├─ chumajin (2022-06-22 08:49:14.860000) [+0]
+  │  @mingccc Thank you for comment! Looking at the solutions of others, there were more variations. We only had two days from noticing the magic, but we were lucky to notice.
+├─ Uesugi Erii (2022-06-21 14:02:21.890000) [+1]
+│  what is SVR? thanks
+  ├─ Trushant Kalyanpur (2022-06-21 14:41:42.047000) [+2]
+  │  Support Vector Regression =)
+├─ Santhoshkumar (2022-06-21 09:07:36.573000) [+1]
+│  congratulations👍
+  ├─ chumajin (2022-06-21 09:17:36.253000) [+1]
+  │  Thank you !!
+├─ Arvind Devarkonda (2022-06-21 06:21:18.673000) [+1]
+│  what is AWP?
+  ├─ Shravan Kumar Koninti (2022-06-21 06:46:24.877000) [+1]
+  │  @chumajin Same query as above -- AWP?
+  ├─ AmorfEvo (2022-06-21 06:48:20.653000) [+2]
+  │  @arvinddevarkonda @shravankoninti
+  │  
+  │  AWP = Adversarial Weight Perturbation
+  │  
+  │  https://arxiv.org/abs/2004.05884
+  ├─ Shravan Kumar Koninti (2022-06-21 06:49:18.797000) [+1]
+  │  Ok I just googled. Here it is "Adversarial Weight Perturbation (AWP) ". Found some notebook. This is new to me. Thanks!
+  │  https://www.kaggle.com/code/junkoda/fast-awp/notebook
+  ├─ chumajin (2022-06-21 09:16:57.987000) [+1]
+  │  Yes. Adversarial Weight Perturbation ! 
+  │  @killimi @shravankoninti Thank you for reference link.
+├─ AhmadAbbas (2022-06-21 05:30:57.923000) [+1]
+│  congratulations
+  ├─ chumajin (2022-06-21 09:17:12.250000) [+1]
+  │  Thank you very much !!
+├─ vialactea (2022-06-23 00:53:33.357000) [+2]
+│  Congratulations on your gold medal and new masters!! I was rooting for your team.
+│  
+│  Thanks for sharing. It's a great writeup.
+  ├─ chumajin (2022-06-23 14:21:10.663000) [+1]
+  │  @vialactea Thank you for comment and rooting ! Congrats to your solo gold and become competition master too !!
+├─ sakusaku-rich (2022-06-22 14:19:05.270000) [+2]
+│  Congratulation new Masters! 
+│  What an interesting way of computing loss!
+│  
+│  I have 2 questions about SVR.
+│  
+│  
+│  
+│  How did you embed text with SVR?
+│  
+│  How did you use the embedded vector for pred? just concat...
+  ├─ chumajin (2022-06-22 16:26:53.780000) [+1]
+  │  @skraiii Thank you for comment! And congratulation to you become new master too.
+  │  This probably answers both of the two questions, it does the same thing as the notebook below.
+  │  
+  │  https://www.kaggle.c...
+  ├─ sakusaku-rich (2022-06-24 03:45:14.890000) [+2]
+  │  Thank you for sharing the helpful link.
+  │  I understood what you'd done.
+├─ xbustc (2022-06-21 16:44:19.123000) [+2]
+│  congrats, nice work
+  ├─ chumajin (2022-06-22 08:45:46.923000) [+0]
+  │  @xbustc  We did it ! I'm really happy to receive your congratulations. Thank you very much !!!

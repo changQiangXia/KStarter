@@ -1,0 +1,55 @@
+<h1>2.5D method Overall pipeline</h1>
+<p>The overall pipeline of our 2.5D solution is divided into two stages: the classification stage and the segmentation stage. The former one is responsible for determining whether there are targets in the image, while the latter one segments the targets in the image. By analyzing the classification stage to control the target segmentation in the image, the classification and segmentation stage are both model-weighted fusion to enhance the robustness of our 2.5D, and the pure 2.5D model can achieve a score of 0.889 on the public leaderboard.<br>
+<strong>The details are presented below ↓</strong></p>
+<h2>Data</h2>
+<p>For data production, we refer to  <a href="https://www.kaggle.com/awsaf49" target="_blank">@awsaf49</a> 's data production method, set the stride size to 2, and take a total of three to produce 2.5D data. <a href="https://www.kaggle.com/code/awsaf49/uwmgi-2-5d-stride-2-data" target="_blank">https://www.kaggle.com/code/awsaf49/uwmgi-2-5d-stride-2-data</a></p>
+<h2>Traing &amp; test time augmentation</h2>
+<p>We tried 640*640 and 512*512 image resize resolution. where in the case of 640*640 resolution, we used RandomCrop method to randomly crop down the target of 448*448 resolution during training. We also used random flip, elastic transformation, grid distortion and optical distortion, the specific parameters are</p>
+<pre><code>dict(type='RandomFlip', direction='horizental', p=0.5)
+dict(type='ElasticTransform', alpha=120, sigma=6.0, alpha_affine=3.6, p=1)
+dict(type='GridDistortion', p=1)
+dict(type='OpticalDistortion', distort_limit=2, shift_limit=0.5, p=1)
+</code></pre>
+<p>When it comes to test time, we use horizental flip method to preduce a new image and use weighted fusion to get the output mask. TTA can boost our score for  0.001 ~ 0.002 approximately.</p>
+<h2>Backbone</h2>
+<p>The algorithm is based on Unet, the backbone network we tried efficientNet b4 ~ b7, single model can reach about 0.883 on the public leaderboard, and model fusion at submission can reach about 0.889. And for the deep learning framework, we use our teammate <a href="https://www.kaggle.com/CarnoZhao" target="_blank">@CarnoZhao</a> 's work <a href="https://www.kaggle.com/code/carnozhao/uwmgit-mmsegmentation-end-to-end-submission" target="_blank">https://www.kaggle.com/code/carnozhao/uwmgit-mmsegmentation-end-to-end-submission</a></p>
+<h2>Training and inference tips &amp; loss function</h2>
+<p>The classification network is trained for full data, which contains empty pictures as well as images with mask. The segmentation network is only responsible for segmenting the target images, and the segmentation network is trained on full data with mask images only. The classification network is trained with a single BCELoss, and the segmentation network is trained with a BCE and Dice weighted loss function with a 1:3 loss function ratio. <br>
+Besides, we use fp16 traing method to make our training more faster and it can save about 50% gpu memory, which allowed us to use bigger batch size.</p>
+<h2>Furture work</h2>
+<p>When analyzing the data, i found that there exits some margin that contains no useful imformation, i have tried using CenterCrop method to remove those useless margin(maybe useless, i'm not sure), the score have little influence.</p>
+<pre><code>def CenterCrop(image, crop_ratio=0.9):
+   '''
+   input numpy type image
+       width
+   h ###################
+   e #                 #
+   i #                 #
+   g #                 #
+   h #                 # 
+   t ###################
+   crop_ratio -&gt; remain ratio
+   return crop_image, xmin, ymin, xmax, ymax, org_size 
+   '''
+   height, width, channel = image.shape
+   xmin, ymin, xmax, ymax = int(width  * (1 - crop_ratio) / 2), \
+                            int(height * (1 - crop_ratio) / 2), \
+                            int(width  * (1 + crop_ratio) / 2), \
+                            int(height * (1 + crop_ratio) / 2)
+   crop_image = image[ymin:ymax, xmin:xmax, ...]
+   extra_info = [height, width, xmin, ymin, xmax, ymax]
+   return crop_image, extra_info
+def PaddingCrop(crop_image, extra_info):
+   '''
+   input crop_image -&gt; the centerCrop image
+   input extra_info -&gt; original image size and Crop size infomation
+   '''
+   crop_shape = np.array(crop_image.shape[:2])
+   height, width, xmin, ymin, xmax, ymax = extra_info
+   pady = [ymin - 1, height - ymax + 1]
+   padx = [xmin - 1, width - xmax + 1]
+   original_image = np.pad(crop_image, [pady, padx, [0, 0]])
+   return original_image
+</code></pre>
+<h2>Insights from a year of cv competition on kaggle</h2>
+<p>Kaggle is a talent-packed data science platform that has taught me many algorithms, techniques, and ways of thinking about problems that I had not been exposed to before. I would like to thank my teammates <a href="https://www.kaggle.com/namgalielei" target="_blank">@namgalielei</a> <a href="https://www.kaggle.com/cgq081616" target="_blank">@cgq081616</a> <a href="https://www.kaggle.com/CarnoZhao" target="_blank">@CarnoZhao</a> <a href="https://www.kaggle.com/shajiayu" target="_blank">@shajiayu</a> who supported me immensely during the competition. After this year of competition, I successfully reached the Kaggle Master title. Next stage goal is Kaggle Grand Master (which I don't think I will ever reach).😂</p>

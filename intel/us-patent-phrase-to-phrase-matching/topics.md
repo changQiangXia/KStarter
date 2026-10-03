@@ -1,0 +1,82 @@
+# us-patent-phrase-to-phrase-matching 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332243) — 176 票 / 86 评论 / 2022-06-29 **write-up?**
+- [Wondering what the code in "context" means? I compiled everything in a CSV for you](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314306) — 173 票 / 33 评论 / 2022-03-22 
+- [2nd Place Solution](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332234) — 154 票 / 63 评论 / 2022-06-21 **write-up?**
+- [[lb 0.8469] my experiment results](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324330) — 150 票 / 103 评论 / 2022-05-11 
+- [I did it! Competition master at the age of 17](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332271) — 147 票 / 107 评论 / 2022-06-21 
+- [Closing the CV-LB gap (CV: 0.829, LB: 0.835)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/315220) — 138 票 / 33 评论 / 2022-03-26 
+- [Pretrained Patent Models on HuggingFace](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/316706) — 120 票 / 7 评论 / 2022-04-03 
+- [Transformers Hyperparameters Tips](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/330119) — 115 票 / 6 评论 / 2022-06-10 
+- [10th place Solution : Single model public lb 0.8562, private lb 0.8717 ](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332273) — 99 票 / 42 评论 / 2022-06-23 **write-up?**
+- [Someone stolen my code and got gold medal. Maybe they were removed by kaggle anti-cheat system.](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/337853) — 96 票 / 21 评论 / 2022-07-18 **write-up?**
+- [5th solution: prompt is all you need](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332418) — 88 票 / 35 评论 / 2022-06-21 **write-up?**
+- [Dear Kaggle devs, please make it more obvious when a notebook is a "copy"](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314643) — 84 票 / 45 评论 / 2022-03-23 
+- [Best Single Model CV-LB : Ideas](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/321400) — 83 票 / 46 评论 / 2022-04-26 
+- [Deberta-v3-large Baseline [CV: 0.8588, LB: 0.833]](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314489) — 80 票 / 7 评论 / 2022-03-22 
+- [8th place solution: Predicting Targets at Once Led Us to Gold](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332492) — 78 票 / 42 评论 / 2022-06-25 **write-up?**
+- [Sharing Public Patent abstract (for pretrain)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324216) — 71 票 / 22 评论 / 2022-05-10 
+- [🏆 Most recent related competition Winning solution 🏆](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314320) — 62 票 / 5 评论 / 2022-03-22 **write-up?**
+- [The Loss Function](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/327159) — 56 票 / 4 评论 / 2022-05-25 
+- [How strongly your ensemble OOF CV is correlated with Public LB?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/327732) — 56 票 / 55 评论 / 2022-05-28 
+- [My trials and leaderboard regress :-)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/320751) — 55 票 / 13 评论 / 2022-04-23 
+- [Patent data resources](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314456) — 54 票 / 10 评论 / 2022-03-22 
+- [How to easily add Mixout to your code. ](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/318070) — 53 票 / 6 评论 / 2022-04-10 
+- [A Simple Pseudo-Labelling Recipe: How to improve your score](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/327288) — 48 票 / 15 评论 / 2022-05-26 
+- [7th place solution - the power of randomness](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332928) — 48 票 / 4 评论 / 2022-06-24 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332420) — 46 票 / 14 评论 / 2022-06-22 **write-up?**
+- [31st place solution [with code]](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332355) — 44 票 / 6 评论 / 2022-06-22 **write-up?**
+- [i try to use google search to label data](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324072) — 42 票 / 15 评论 / 2022-05-10 
+- [12th Place Solution](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332567) — 40 票 / 7 评论 / 2022-06-22 **write-up?**
+- [Any tips on how to approach a NLP competition for the first time?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314281) — 40 票 / 14 评论 / 2022-03-21 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314428) — 36 票 / 150 评论 / 2022-03-22 
+- [56th solution of Our First silver medal !🥈 Just tune hyperparameters and models on the baseline.](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332707) — 36 票 / 8 评论 / 2022-06-23 **write-up?**
+- [BERT for Patents Baseline (CV: 0.862, LB: 0.837)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314445) — 35 票 / 7 评论 / 2022-03-22 
+- [Related competition - Quora Question Similarity & its top solutions](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/317638) — 34 票 / 4 评论 / 2022-04-08 **write-up?**
+- [Let's talk about xlarge and xxlarge backbones!](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/325179) — 34 票 / 49 评论 / 2022-05-15 
+- [Dropout probably not recommended](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314965) — 34 票 / 8 评论 / 2022-03-25 
+- [Let'S Talk Text Augmentations](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324868) — 34 票 / 2 评论 / 2022-05-13 
+- [⭐Best Algorithms to use for text similarity](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314323) — 34 票 / 7 评论 / 2022-03-22 
+- [3 [SEP] tokens for BERT?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/318166) — 33 票 / 19 评论 / 2022-04-11 
+- [Great to see another NLP competition! ](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314262) — 33 票 / 10 评论 / 2022-03-21 
+- [Things to do on the final 24h of a Kaggle competition 🤔](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/331971) — 32 票 / 12 评论 / 2022-06-19 
+- [cocolm-large libs fixes and usage notes](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/329939) — 32 票 / 15 评论 / 2022-06-09 
+- [PatentBert Pretrained model](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314359) — 32 票 / 1 评论 / 2022-03-22 
+- [Start the shake game!](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/331495) — 29 票 / 45 评论 / 2022-06-17 
+- [Baseline Guide (updated)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/319658) — 29 票 / 11 评论 / 2022-04-18 
+- [Do you think we will have a shake-up in private LB?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/326507) — 28 票 / 14 评论 / 2022-05-22 
+- [My First Non-Tabular Competition. And Its a Silver!!!! 🥈 (41st place Solution)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332654) — 28 票 / 13 评论 / 2022-06-22 **write-up?**
+- [there is probably a bug in cpc_text.pth](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324928) — 28 票 / 6 评论 / 2022-05-14 
+- [#24 solution (24 again)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332270) — 28 票 / 11 评论 / 2022-06-21 **write-up?**
+- [Tips & Tricks for Pretraining Language Models](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/330356) — 27 票 / 0 评论 / 2022-06-11 
+- [Possible preprocesses?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/315827) — 27 票 / 0 评论 / 2022-03-29 
+- [Learning does not work well with some folds](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/319237) — 26 票 / 10 评论 / 2022-04-16 
+- [Simple +0.004 Boost using 2nd Stage ML based Model](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332842) — 26 票 / 0 评论 / 2022-06-23 
+- [What do we know so far? - Breaking down the top discussion posts ](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/331257) — 26 票 / 4 评论 / 2022-06-16 
+- [LSTM before attention](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332290) — 24 票 / 0 评论 / 2022-06-21 
+- [27th place solution (public 72th)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/334797) — 24 票 / 12 评论 / 2022-10-24 **write-up?**
+- [Where does the magic comes from?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332348) — 24 票 / 21 评论 / 2022-06-21 
+- [Pseudo Labelling - the missing ingredient?](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324723) — 23 票 / 1 评论 / 2022-05-12 
+- [How to find initial LR for training](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/331178) — 23 票 / 4 评论 / 2022-06-16 
+- [80th place solution](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332267) — 23 票 / 8 评论 / 2022-06-21 **write-up?**
+- [Some metric properties](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/327893) — 22 票 / 3 评论 / 2022-05-29 
+- [Watch out for special characters in cpc_text!](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/325647) — 22 票 / 5 评论 / 2022-05-17 
+- [Congratulations to my teammates who are now all Competition Masters!](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332235) — 22 票 / 11 评论 / 2022-06-21 
+- [Shared Patent description dataset](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324074) — 22 票 / 5 评论 / 2022-05-10 
+- [ Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332385) — 22 票 / 4 评论 / 2022-06-21 
+- [Welcome from the Competition Hosts](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/313694) — 21 票 / 1 评论 / 2022-03-18 
+- [Data Augmentation](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/324023) — 21 票 / 5 评论 / 2022-05-09 
+- [😣😣😣 Code Competitions 😣😣😣](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314415) — 21 票 / 5 评论 / 2022-03-22 
+- [Faster experiments on large models using TPUs !!!](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/316474) — 21 票 / 9 评论 / 2022-04-02 
+- [My baseline](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/320979) — 19 票 / 12 评论 / 2022-04-24 
+- [Relation NLP research & paper](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314318) — 19 票 / 4 评论 / 2022-03-22 
+- [Are there new Anchors present in the Test Set](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/320679) — 19 票 / 9 评论 / 2022-04-22 
+- [Pearson corelation in plain English](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/315251) — 19 票 / 3 评论 / 2022-03-27 
+- [Useful resources](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314271) — 19 票 / 0 评论 / 2022-03-21 
+- [[USPPPM] Simple Meme-Thread Baseline (💯.0 LB)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332004) — 19 票 / 17 评论 / 2022-06-19 
+- [52nd place Solution 🥈 (Public 105th)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/333425) — 18 票 / 0 评论 / 2022-06-26 **write-up?**
+- [Difference between the anchors and target in Patent Contexts](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/326749) — 18 票 / 7 评论 / 2022-05-24 
+- [Cross-Encoder Training Baseline](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314307) — 18 票 / 6 评论 / 2022-03-22 
+- [57th place solution(public 188th)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/332584) — 17 票 / 0 评论 / 2022-06-23 **write-up?**
+- [HuggingFace is a unicorn :)](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/323996) — 17 票 / 3 评论 / 2022-05-09 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/discussion/314427) — 14 票 / 12 评论 / 2022-03-22 

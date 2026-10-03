@@ -1,0 +1,277 @@
+# https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/320060
+
+Topic #320060: Collection of My Resources/Thoughts For This Competition
+  Author: Darien Schettler
+  Posted: 2022-04-19 22:13:43.109000
+  Votes: 140  Comments: 12
+
+Hi all, I've done a fair amount of legwork in this competition considering how early it still is. As such, knowing that we will have many people joining in later, I thought I would compile all my high-level understanding and resources/notebooks in one place. 
+
+I will also track my basic experimentation here for others to follow.
+
+
+
+
+
+NOTEBOOKS
+
+
+
+
+
+Exploratory Data Analysis
+
+
+I tried to be quite thorough
+
+I will update this document as long as possible and I will add in new findings and relevant information/discoveries as I make them.
+
+
+
+
+
+
+Smart Baseline Submission
+
+
+This is a good place to start if you want to see how to submit to this competition
+
+The SMART part is because we are not just submitting empty RLEs… we find an example from the training data that matches the metadata of a given test example and submit THAT RLE instead.
+
+This works because, for instance, some slices will never contain any segmentation masks, while others contain only segmentation masks in some places.
+
+
+
+
+
+
+DeepLabV3+ w/ Dilated Spatial Pyramid Pooling
+
+
+See the paper here
+
+See the original DeepLab paper here
+
+This is heavily based on the Keras implementation found here
+
+This model achieves a Public LB Score of 0.810 with an image size of 224x224x3 and no augmentation after only 3 epochs
+
+For simplicity, I framed this as a multiclass semantic segmentation problem in the above notebook, however, as there are overlapping class segmentation masks, the problem SHOULD be framed as multilabel semantic segmentation (i.e. sigmoid vs. softmax in final activation and Binary v. Categorical Cross-Entropy).
+
+
+
+
+
+
+DeepLabV3+ w/ Atrous Spatial Pyramid Pooling and Squeeze Excitation Blocks
+
+
+Atrous Spatial Pyramid Pooling (ASSP) is a semantic segmentation module for resampling a given feature layer at multiple rates prior to convolution.
+
+See the paper here
+
+
+
+
+
+
+Squeeze Excitation (SE) Block
+
+
+The Squeeze Excitation Block is an architectural unit designed to improve the representational power of a network by enabling it to perform dynamic channel-wise feature recalibration. The process is:
+
+
+The block has a convolutional block as an input.
+
+Each channel is "squeezed" into a single numeric value using average pooling.
+
+A dense layer followed by a ReLU adds non-linearity and output channel complexity is reduced by a ratio.
+
+Another dense layer followed by a sigmoid gives each channel a smooth gating function.
+
+Finally, we weight each feature map of the convolutional block based on the side network; the "excitation".
+
+See the paper here
+
+
+
+
+
+
+This implementation is heavily based on this implementation by Nikhil Tomar here and the previously mentioned tutorial.
+
+This model achieves a Public LB Score of 0.817 with an image size of 224x224x3 and no augmentation after only 7 epochs
+
+This was also framed as a multiclass semantic segmentation problem (same as the previous notebook)
+
+
+
+
+
+
+GENERAL FINDINGS
+
+
+
+
+
+What is the problem?
+
+
+This is multilabel, 3 class, semantic segmentation problem
+
+How do the cases work? Days? Is there 3d in there somewhere?
+
+
+Images are slices
+
+There are either 144 (common) or 80 (rare) slices/images taken whenever a patient gets imaged
+
+A case is made up of 1-5 days worth of images for a given patient
+
+This means that a particular case is made up of between 144 - 720 images
+
+For a given case's day's images, the slice number along with the pixel width/height imparts a 3-dimensional aspect to the images… 
+
+i.e. slice 1 will be the bottom-most image  
+
+i.e. slice 144 will be the top-most image (in cases where there are 80 images it will be slice 80)
+
+The slices will be spaced according to the pixel spacing information
+
+All of this said, you could frame this as a 2D or 3D segmentation problem fairly easily.
+
+General Findings
+
+
+All images are close in size but there are 4 unique shapes (3 square and 1 rectangular)
+
+The images are relatively small
+
+The resolution within a case-id&gt;day image group is fairly tight
+
+Some slices never contain masks (first 1 and top 8 or so slices I think
+
+More TBD
+
+
+
+
+
+
+APPOACHES AND/OR NEXT STEPS
+
+
+
+Links to be added later if required
+
+
+
+Video Semantic Segmentation 
+
+Transformers for Semantic Segmentation
+
+Crop down images to relevant parts (remove black border)
+
+Add in Augmentations (mask and image)
+
+More TBD
+
+
+
+
+
+
+EXPERIMENT LOG
+
+
+
+
+
+
+Experiment No.
+Backbone
+Image Size
+Relevant Terminology
+Public LB
+Public
+
+
+
+
+1
+ResNet50
+224
+DeepLabV3+, DSPP, Multiclass
+0.810
+Y
+
+
+2
+ResNet50
+224
+DeepLabV3+, ASPP, SE, Multiclass
+0.817
+Y
+
+
+3
+EfficientNetB0
+224
+UNet, Dice Loss, Focal Loss
+0.828
+N
+
+
+4
+-
+-
+-
+-
+-
+
+
+
+
+
+
+
+
+That's all folks. Stay tuned as I will be updating this frequently throughout the competition. Feel free to ask me any questions and I will do everything I can to answer them to the best of my abilities.
+
+Good luck!!
+
+Comments:
+├─ Anand Parthiban (2022-04-22 05:07:20.217000) [+6]
+│  I'm really impressed with this level of detail and clarity in your explanation. This is something I would expect to see at the end of competitions, not the beginning, and both this post and your no...
+  ├─ Darien Schettler (2022-04-22 12:06:39.343000) [+7]
+  │  Thanks for the shoutout. Positive feedback definitely encourages me so I appreciate you taking the time. I try to focus on clear language and as much detail/communication as possible.
+  │  
+  │  I plan to op...
+├─ Irving Kyrie (2022-05-31 09:21:48.507000) [+1]
+│  Nice work!!!  Thanks!!!
+│  I want to know how to deal with 'image_size'. 224*224, did you resize or crop ? 
+│  I have seen the work that ignored the image_size and use 'sliding_window_inference'. So I wo...
+├─ Phat Tran (2022-04-20 03:12:49.267000) [+2]
+│  Thank for sharing, it's quite high score at the beginning, I guess the LB will exceed 0.9 soon :D .
+│  By the way, is your Unet implemented in TF or PyTorch
+  ├─ Darien Schettler (2022-04-22 12:07:28.240000) [+1]
+  │  You're welcome! And thanks. I'm sure this comp will get into the 0.9s in no time.
+  │  
+  │  The UNet is implemented in TF (I leverage Qubvel repo). I'll open source it shortly too.
+  ├─ Balaji Selvaraj (2022-04-24 02:33:09.840000) [+0]
+  │  Eagerly waiting to see your UNet setup. Your note1. book was very cool. Thanks for sharing such a very good notebook. All the best for the challenge @dschettler8845
+├─ Viktor Krawutschke (2022-07-25 21:52:33.557000) [+0]
+│  Hey, thank you for your great work! I leared alot from your notebooks. Still im curious about your UNet implementation, will you opensource it anytime soon? :)
+│  
+│  Keep it up!
+├─ IAfaker (2022-06-26 07:05:40.257000) [+0]
+│  great,I hope a good begin.
+├─ Jimmy Smith1009 (2022-05-17 02:06:11.570000) [+0]
+│  Great Work! Could you please explain more about the meaning of activation of last layer? Which one is better?👀
+├─ Sani Kamal (2022-04-29 17:58:30) [+0]
+│  Thank you for sharing the details and clear explanation.👍
+├─ aiai wu (2022-04-24 02:43:57.480000) [+2]
+│  Thank for sharing
+├─ Matseoi Zau (2022-05-16 13:48:17.693000) [+0]
+│  Thank for sharing

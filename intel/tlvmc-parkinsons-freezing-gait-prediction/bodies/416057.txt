@@ -1,0 +1,486 @@
+# https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416057
+
+Topic #416057: 2nd place solution
+  Author: Takoi
+  Posted: 2023-06-09 10:59:26.349000
+  Votes: 62  Comments: 20
+
+2nd place solution
+
+First of all, thanks to the host for an interesting competition and congratulations to all the winners!
+
+Summary
+
+
+
+We designed separate models for tDCS FOG and DeFog.
+
+Both tDCS FOG and DeFog were trained using GRUs.
+
+Each Id was split into sequences of a specified length. During training, we used a shorter length (e.g., 1000 for tdcsfog, 5000 for defog), but for inference, a longer length (e.g., 5000 for tdcsfog, 30000 for defog) was applied. This emerged as the most crucial factor in this competition.
+
+For the DeFog model, we utilized the ‘notype’ data for training with pseudo-labels, significantly improving the scores; by leveraging the Event column, robust pseudo-labels could be created.
+
+Although CV and the public score were generally correlated, they became uncorrelated as the public score increased. Additionally, the CV was quite variable and occasionally surprisingly high. Therefore, we employed the public score for model selection, while CV guided the sequence length.
+
+
+tDCS FOG
+
+
+
+
+Features
+
+
+
+Three provided accelerations
+
+Feature engineering performed on each acceleration involved:
+
+
+Difference between prior and subsequent accelerations
+
+Cumulative sum of acceleration
+
+
+Standardization
+
+
+
+Used RobustScaler
+
+Each Id was standardized individually
+
+
+Sequence Creation Method:
+
+
+
+
+Training
+
+
+
+Sequence length: 1000
+
+
+Sequences were created by shifting 500 steps from the starting position.
+
+
+Inference
+
+
+
+Sequence length: 3000 or 5000 (3000 if data size was less than 5000, 5000 otherwise)
+
+Sequences were created by shifting 1500 or 2500 steps from the starting position.
+
+
+During prediction, the sequence section from 750/1250 to 2250/3750 was utilized.
+
+The initial segment spanned from 0 to 2250/3750, while the final segment used from 750/1250 to the end of the sequence. 
+
+
+Models
+
+
+
+
+For each target, we ensembled four models.
+
+
+The following settings were common to each model
+
+
+
+Model : GRU
+
+Cross validation method : StratifiedGroupKFold
+
+
+group : Subject
+
+Loss : BCEWithLogitsLoss
+
+Optimizer : AdamW
+
+Scheduler : get_linear_schedule_with_warmup
+
+
+(Although not verified in detail) get_linear_schedule_with_warmup seemd to work better in CV than get_cosine_schedule_with_warmup.
+
+Sequence length
+
+
+Train : 1000
+
+Inference : 3000 / 5000
+
+Training the model with a longer sequence did not improve CV or public score. However, training with a short sequence and performing inference with a long sequence significantly improved both CV and public score. 
+
+
+Model1
+
+
+
+This model trained with equal loss for each target.
+
+CV
+
+
+Sequence length 3000 / 5000 : 0.493 
+(Sequence length 1000 : 0.438)
+
+Ensemble weight : 0.2
+
+
+Model2
+
+
+
+The loss weight of one target was set to 0.6, and the remaining targets were set at 0.4.
+
+
+The following three patterns
+
+
+StartHesitation : 0.6 , Turn &amp; Walking : 0.4
+
+Turn : 0.6 , StartHesitation &amp; Walking : 0.4
+
+Walking : 0.6 , StartHesitation &amp; Turn : 0.4
+
+The model was saved at the epoch where the target with the weight set to 0.6 had the best score.
+
+Only the predictions with the loss weight set to 0.6 were used in the test predictions.
+
+CV
+
+
+Sequence length 3000 / 5000 : 0.520
+
+Ensemble weight : 0.4
+
+
+Model3 &amp; 4
+
+
+
+The loss weight for two targets was set to 0.8, and the remaining target was set at 0.2.
+
+
+The following three patterns
+
+
+StartHesitation &amp; Turn : 0.8 , Walking : 0.2
+
+StartHesitation &amp; Walking : 0.8 , Turn : 0.2
+
+Turn &amp; Walking : 0.8 , StartHesitation : 0.2
+
+The model was saved at the epoch where the two targets with the weight set to 0.8 had the best score.
+
+Only the predictions with a loss weight set to 0.8 were used in the test predictions.
+
+CV 
+
+
+Sequence length 3000 / 5000 : 0.536
+
+Ensemble weight : 0.4
+
+
+ensemble
+
+
+
+CV
+
+
+Sequence length 3000 / 5000 : 0.537
+
+
+DeFog
+
+
+
+
+Features
+
+
+
+Three provided accelerations
+
+Feature engineering performed for each acceleration included
+
+
+Difference between prior and subsequent accelerations
+
+
+Standardization
+
+
+
+Used StandardScaler
+
+Each Id was standardized individually
+
+
+Sequence Creation Method:
+
+
+
+
+Training
+
+
+
+Sequence length: 5000
+
+
+Sequences were created by shifting 2500 steps from the starting position.
+
+
+Inference
+
+
+
+Sequence length: 15000 or 30000 (15000 if data size was less than 200000, 30000 otherwise)
+
+Sequences were created by shifting 7500 or 15000 steps from the starting position.
+
+
+During prediction, the sequence section from 3750/7500 to 11250/22500 was utilized.
+
+The initial segment spanned from 0 to 11250/22500, while the final segment used from 3750/7500 to the end of the sequence.
+
+
+Models
+
+
+
+
+We ensembled five models 
+
+
+The following settings are common to each model
+
+
+
+Model : GRU
+
+Cross validation method : StratifiedGroupKFold
+
+
+group : Subject
+
+Optimizer : AdamW
+
+Loss : BCEWithLogitsLoss
+
+Scheduler : get_linear_schedule_with_warmup
+
+Sequence length
+
+
+Train : 5000
+
+Inference : 15000 / 30000
+
+The loss weights for each target were uniform
+
+Only instances where both 'Valid' and 'Task' were true were considered for loss calculation.
+
+
+model1
+
+
+
+CV
+
+
+Sequence length 15000 / 30000 : 0.279
+
+Ensemble weight : 0.35
+
+
+model2
+
+
+
+Utilized the first round of pseudo-labeling
+
+
+Applied hard labels, with the label set to 1 only if the data value of the 'Event' was 1, otherwise it was set to 0
+
+The label was determined based on the highest predictive value among the three target predictions
+
+Inference results from sequences of length 15000 from model1 were used
+
+The application of pseudo-labeling significantly improved both public and private scores
+
+CV
+
+
+Sequence length 15000 / 30000 : 0.306
+
+Ensemble weight : 0.25
+
+
+model3
+
+
+
+Utilized the second round of pseudo-labeling
+
+CV
+
+
+Sequence length 15000 &amp; 30000 : 0.313
+
+Ensemble weight : 0.25
+
+
+model4
+
+
+
+Increased the hidden size of the GRU
+
+Utilized the first round of pseudo-labeling
+
+CV
+
+
+Sequence length 15000 &amp; 30000 : 0.3393
+
+Ensemble weight : 0.10
+
+
+model5
+
+
+
+Trained with all data
+
+Utilized pseudo-labeling
+
+Ensemble weight : 0.05
+
+
+ensemble(excluding model5)
+
+
+
+Sequence length 15000 &amp; 30000 : 0.33706
+
+
+tDCS FOG &amp; DeFog
+
+
+
+CV : 0.548
+
+Public Score : 0.530
+
+Private Score : 0.450
+
+
+Inference notebook
+
+https://www.kaggle.com/code/takoihiraokazu/cv-ensemble-sub-0607-1
+
+Code
+
+https://github.com/TakoiHirokazu/Kaggle-Parkinsons-Freezing-of-Gait-Prediction
+
+Comments:
+├─ coderRKJ (2023-06-09 14:44:59.837000) [+5]
+│  Nice solution. Just a question, if I am understanding the pseudo-labelling correctly, a trained model's best guess is used to convert the event column into one of the 3 classes. Was this labelling ...
+  ├─ Takoi (2023-06-12 12:08:39.127000) [+3]
+  │  Thank you for your comment. No, I used one model to create a pseudo-label. As for how to create pseudo-labels, it is the same as in the following discussion.  https://www.kaggle.com/competitions/go...
+├─ nayu555 (2023-06-13 05:09:40.980000) [+3]
+│  @takoihiraokazu -san,
+│  Thank you for sharing a great solution! I can learn a lot from you.
+│  May I ask why you tried to change the length of the sequence with learning and inferrence?
+│  Is it a rule of ...
+  ├─ Takoi (2023-06-13 11:38:45.363000) [+6]
+  │  Thanks for the comment.
+  │  
+  │  Firstly, in this competition, I believed it was important to extend the length of the sequence. This is because it enables a larger amount of information to be reflected in...
+    ├─ nayu555 (2023-06-15 09:17:54.397000) [+1]
+    │  @takoihiraokazu -san,
+    │  Thank you for your kind reply. Your solution is based on theory and practice ! I respect your hard work!  Your team is our role model.
+    │  
+    │  I really appreciate your answer. Thank ...
+├─ HideBu (2023-06-29 14:43:20.983000) [+1]
+│  @takoihiraokazu 
+│  Thank you for sharing CODE in github.
+│  In your training code, there are 5 kinds of datasets which are original.
+│  
+│  
+│  
+│  id_path        = f"../output/fe/fe022/fe022_id.parquet"
+│  
+│  numerical...
+  ├─ Takoi (2023-06-30 04:51:11.890000) [+1]
+  │  Thanks for the comment.
+  │  You are correct about fe022_num_array.npy and fe022_target_array.npy.
+  │  
+  │  As for fe022_mask_array.npy, it's created to represent the missing parts when generating sequences for...
+    ├─ HideBu (2023-07-03 09:47:35.740000) [+1]
+    │  Thanks a lot!!
+├─ @F (2023-06-14 22:54:20.753000) [+1]
+│  Nice work ! @takoihiraokazu
+├─ Ignacio Oguiza (2023-06-12 11:10:39.503000) [+2]
+│  Congratulations waiwai team! And thanks a lot for sharing your great solution!
+│  I have a couple of questions:
+│  
+│  
+│  
+│  regarding the target weight patterns you mention in your solution. Do you randomly ap...
+  ├─ Takoi (2023-06-12 12:28:07.977000) [+1]
+  │  Thanks!
+  │  
+  │  
+  │  
+  │  
+  │  No, I didn't apply the weights randomly. For example, I first set the weight for the loss of the "Turn" target to 0.6 and trained the model using a 5-fold cross-validation. We followed ...
+    ├─ Ignacio Oguiza (2023-06-12 13:26:50.810000) [+1]
+    │  Thanks, @takoihiraokazu for your quick reply. 
+    │  I'm sorry I misunderstood you. It's clear now.
+├─ HideBu (2023-06-11 01:19:57.740000) [+2]
+│  Congratulations!! @takoihiraokazu 
+│  I have 3 questions about your solution.
+│  
+│  
+│  
+│  Why don't you use other model like LSTM, Transformer, N-Beats…
+│  I think GRU is not often used.
+│  
+│  What did you do during C...
+  ├─ coderRKJ (2023-06-12 02:38:51.967000) [+4]
+  │  For your 3rd point, the model used GRUs (Gated Recurrent units). This layer recursively evaluate along a specified axis (in this case the the axis of the time-series). So variable inputs are accept...
+  ├─ Takoi (2023-06-12 12:19:59.887000) [+2]
+  │  Thanks!
+  │  
+  │  
+  │  
+  │  
+  │  I chose to use GRU because it yielded the highest CV and public scores among the models I experimented with. I did try LSTM and Transformer, but they didn't perform as well as GRU in te...
+    ├─ HideBu (2023-06-12 12:35:54.940000) [+1]
+    │  Thanks @takoihiraokazu -san &amp; @coderrkj -san!!
+    │  It was a very good learning experience!
+├─ Vladimir Simões da Luz Junior (2023-06-10 15:06:35.197000) [+2]
+│  Greetings, @takoihiraokazu !
+│  
+│  Interesting to see how you used different models for TDCSFOG and DEFOG series and different sequence lenght for training and inference…
+│  
+│  Congratulations and keep up wi...
+├─ Ronald GChangm (2024-10-12 16:49:37.613000) [+0]
+│  Hi, are you passing data frame between two models (tdcsfog and defog) and if there is dependency in between? I tried if I run the tdcsfog all models first then run defog, the defog results will be ...
+├─ Ruiping Chan (2023-07-03 06:59:20.507000) [+0]
+│  @takoihiraokazu Congratulations to your team! 
+│  What a nice solution, and thank you all for sharing, I have learnt a lot from your sharing!❤️❤️❤️
+├─ Sergei Fedorchenko (2023-06-12 23:56:15.997000) [+0]
+│  Thanks for sharing!

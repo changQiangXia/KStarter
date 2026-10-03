@@ -1,0 +1,355 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288221
+
+Topic #288221: Guessing the future winning solutions 
+  Author: 
+  Posted: 2021-11-17 07:46:48.857000
+  Votes: 34  Comments: 11
+
+Sharing some of my guesses for what the winning solutions might look like for this competition
+
+General Framework
+First, It is probably safe to say that the top solution will refuse to use any public prediction (submission file) or notebook as is. not any "Pretrained Model" for their ensemble. This is mostly the case in every competition: Winning solutions train their pipeline end2end on their own [even if parts of it are derived from public sharings]. 
+
+
+
+**The obvious **
+
+
+
+There probably will be much ensembling and stacking of some basic predictors (LightGBM, XGBoost, Catboost, Hist Gradient Boosting, Generalized Additive Models, FC NNs, 1D NNs, 2D NNs, Tabnets, Transformers, KNN, etc…).
+At the moment, the competition still runs and we can already see that on this dataset: NNs work better out of the box. There may be many reasons for this, it might be interesting to discuss this, anyhow this is irrelevant for the public leaderboard score. NN should be a baseline result at the moment.
+
+
+Everyone's main goal at this moment should be getting the best single model they can to later on ensemble it.
+
+In general, I am a huge fan of pushing a single model as far as possible, many of my past solutions focus on single models. I think this will work surprisingly well in this competition. However, getting back to reality: most of the winning solutions are going to be just insane ensembles. no way around it.. So the choice is yours for what you want to focus on.
+
+
+
+Hyperparams
+Speaking of pushing a single model: There might be some sort of fancy hyper-parameters tuning trick [combination of multiple optimizers like Bayesian, hyperopt, optuna.. different methods for different model types..], the majority of top solutions will often use simple hyper-parameter optimizers but will do so in a slightly better way. The pattern here is simple and is repeated again and again: Many winning solutions don't have a "nuke trick" that destroys the leaderboard on their own. Many winning solutions just utilize the same methods better: they are organized, cleaned out of any unneeded code, and most importantly: They are the end result of millions of tiny incremental steps. 
+So, we can all understand from this that: If we want to win, we simply need to take small steps - one at a time: experiment -&gt; evaluate -&gt; experiment.. get a slightly better CV score on each step. 
+
+For anyone in need, here is an optuna code snippets for tuning LightGBM, XGBoost, Catboost so you can all just copy-paste them into your code: 
+
+XGBClassifier
+
+def objective(trial):
+    params = {
+        'n_estimators' : 20000,
+        'max_depth' : trial.suggest_int('max_depth', 5, 10),
+        'learning_rate' : trial.suggest_float('learning_rate', 0.005, 0.05),
+        'reg_lambda': trial.suggest_float('reg_lambda', 0, 30),
+        'reg_lambda': trial.suggest_float('reg_lambda', 0, 30),        
+        'subsample':trial.suggest_float('subsample', 0.6, 1),
+        'colsample_bytree':trial.suggest_float('colsample_bytree', 0.1, 0.3),
+        'colsample_bynode':trial.suggest_float('colsample_bynode', 0.1,1), 
+        'colsample_bylevel':trial.suggest_float('colsample_bylevel', 0.1, 1),   
+
+
+    }
+
+    xgb = xgboost.XGBClassifier(verbose=0, **params)
+    xgb.fit(X_train, y_train, eval_set=[(X_valid, y_valid)], early_stopping_rounds=150, verbose=False)
+    xgb_pred = xgb.predict_proba(X_valid)
+    return roc_auc_score(y_valid, xgb_pred)
+
+
+
+
+
+LGBMClassifier
+
+def objective(trial):
+    params = {
+            'learning_rate' : trial.suggest_loguniform('learning_rate', 0.001, 0.5),
+            'n_estimators' : 20000,
+            'max_bin' : int(trial.suggest_int('max_bin', 10, 5000)),
+            'num_leaves' : int(trial.suggest_int('num_leaves', 10, 200)),
+            'max_depth' : int(trial.suggest_int('max_depth', 5, 200)),
+            'reg_alpha' : trial.suggest_float('reg_alpha', 0, 10),
+            'reg_lambda' : trial.suggest_float('reg_lambda', 0, 10),
+            'subsample' : trial.suggest_float('subsample', 0.5, 1),
+        }
+
+    lgb = lightgbm.LGBMClassifier(verbose=0, **params)
+    lgb.fit(X_train, y_train, eval_set=[(X_valid, y_valid)], early_stopping_rounds=150, verbose=False)
+    lgb_pred = lgb.predict_proba(X_valid)
+    return roc_auc_score(y_valid, lgb_pred)
+
+
+
+
+
+CatBoostClassifier    
+
+def objective(trial):
+    params = {
+        'n_estimators' : (trial.suggest_int('n_estimators', 8000, 13000)),
+        'depth' : (trial.suggest_int('depth', 2, 8)),
+        'learning_rate' : trial.suggest_loguniform('learning_rate', 0.008, 0.8),
+        'colsample_bylevel' : trial.suggest_float('colsample_bylevel',0.5, 1),
+        'bagging_temperature' : trial.suggest_float('bagging_temperature',0.3, 0.7),
+        'l2_leaf_reg' : trial.suggest_float('l2_leaf_reg', 0, 15),
+    }
+
+    ctb = catboost.CatBoostClassifier(verbose=0, **params)
+    ctb.fit(X_train, y_train, eval_set=[(X_valid, y_valid)], early_stopping_rounds=150, verbose=False)
+    ctb_pred = ctb.predict_proba(X_valid)
+    return roc_auc_score(y_valid, ctb_pred)
+
+
+
+
+
+
+
+Tips for better hyperparameters optimization:
+
+
+
+
+Bayesian optimization or grid search are good choices for hyperparameters optimization. 
+
+
+Start optimizing just a few parameters like num_leaves, feature_fraction, and bagging_fraction with const learning_rate and use early stopping. When this is over, play with other parameters, over time you get some intuition about what is a good value for some of the parameters.
+
+
+Search over only 1 fold and start with a small grip search. When it is done, you should have a good idea for good parameter sets. This is the time to move over the search to be using all folds (again with early stopping). Just make sure to use the ranges found on the prior grid search. 
+
+
+At the top end of the leaderboard most hyperparameters optimization needs to be manual at that point. A hyper-parameter optimizer can give you an initial idea of the search space while you leave it running.
+
+
+
+
+Some more examples from another competition:
+
+Only If you are interested: here are some examples from another competition that is running right now - G-Research:
+
+I am currently performing some experiments with hyper-parameters tuning NN models and GBM models in a different competition. 
+Since I am using also keras-tuner for NNs and Optuna for GBMs: some of you might find this useful, so here are some liks to check it out for those that are interested: 
+
+
+
+
+LightGBM + Purged Time Series CV + Optuna
+
+
+Catboost GPU + Purged Time Series CV + Optuna
+
+
+XGBoost GPU + Purged Time Series CV + Optuna
+
+
+Keras NN + Purged Time Series CV + Keras Tuner
+
+
+1st Place of Jane Street + Purged Time Series CV + Keras Tuner
+
+
+Time Series Transformer + Purged Time Series CV + Keras Tuner
+
+
+
+
+
+
+Ensembling
+
+Stacking
+
+Usually, linear models workes best (L1, L2, Elastic Net regression) since they overfit less. 
+Oftentimes, Elastic Nets seemed to have the best scores because they are "a bit more" generalizable because of their regularization. This is not a "law of nature" by any sort but it is worth trying them out. Just be careful not to overfit and have a strong CV to back you up. 
+
+An important tip about stacking: 
+
+How not to be an Idiot like me:
+
+Before we are done, let's talk about a common mistake. I overfitted a bit in the past when trying to get a stacking system to run during a kaggle competition. so if you don't want to make the same mistake as me, read along:
+
+A common mistake is using early stopping per fold. While it is a good way to get a baseline model, you still overfit a bit each fold. This kind of OOF prediction doesn't work well if you plan to perform a stacking later [This single mistake cost me a full month]
+
+The best way to avoid overfitting is performing early stop on all folds per round. Meaning, you find a "good number" of iterations you should perform [For NN: epochs, for GBMs: n_estimators].
+After you got the "ideal" number of rounds that perform well on the test set, you use the same number of rounds for ALL folds. This makes it possible to use stacking later on those OOF predictions. 
+[Note: This also works well when training a model to use all the datasets]
+
+
+
+Optimizing Ensemble Weights
+
+Some solutions will find the optimal weights by using some black-box optimizer, like scipy.
+Here is how to use scipy to find the optimal weights for a weighted average between the predictions of your models: 
+
+from scipy.optimize import minimize
+scores = []
+weights = []
+for y, lgb_pred, xgb_pred, ctb_pred in zip(y_valids, lgb_train_preds, xgb_train_preds, ctb_train_preds):
+    preds = []
+    preds.append(lgb_pred)
+    preds.append(xgb_pred)
+    preds.append(ctb_pred)
+    def log_weight_loss(weights):
+        weighted_pred = (weights[0]*preds[0]) + (weights[1]*preds[1]) + (weights[2]*preds[2])
+        return log_loss(y, weighted_pred)
+    starting_values = [0.3]*len(preds) 
+    cons = ({'type':'eq','fun':lambda w: 1-sum(w)})
+    bounds = [(0,1)]*len(preds) 
+    res = minimize(log_weight_loss, starting_values, method='Nelder-Mead', bounds=bounds, constraints=cons)
+
+    weights.append(res['x'])
+    print(res['fun'])
+    scores.append(res['fun'])
+
+
+And then combining the final predictions in a simple non-weighted average to generate the final predictions:
+
+final_weights = sum(weights)/folds
+weighted_preds = np.array((final_weights[0] * sum(lgb_test_preds)/folds)+(final_weights[1] * sum(xgb_test_preds)/folds)+(final_weights[2] * sum(ctb_test_preds)/folds))
+
+
+Psuedolabelling
+
+For those that don't know: Psuedolabelling means using a model to label the test then using the labeled test as training data for another model. This boosts performance slightly but sometimes this is the only thing you need for a medal. 
+
+
+
+Tabular NN Architectures
+The simplest NNs will be Fully Connected, as we can see in the following public notebooks:
+
+
+
+https://www.kaggle.com/mlanhenke/tps-11-nn-baseline-keras
+
+https://www.kaggle.com/javiervallejos/simple-nn-with-good-results-tps-nov-21
+
+https://www.kaggle.com/adityasharma01/simple-nn-tps-nov-21
+
+
+Some advanced NNs will also include Embeddings like here: 
+
+
+
+https://www.kaggle.com/lukaszborecki/torch-embeddings
+
+https://www.kaggle.com/kavehshahhosseini/tps-nov-2021-multi-input-neural-network
+
+
+And as we move into the "Exotic" territory, we would get NNs with 1D/2D convolutions, transformers maybe even RNNs. 
+
+
+
+https://www.kaggle.com/jmcslk/tps-nov-21-dnn-cnn-model-extras
+
+https://www.kaggle.com/ransakaravihara/trying-pytorch-cnn-just-for-fun
+
+https://www.kaggle.com/lonnieqin/tps-11-21-cnn-dnn
+
+
+Nearly never seen before:
+Just like the "1D MOA CNN" that was unintuitively powerful, we might even get some "tabular graph CNN". 
+
+
+
+Features:
+
+As also pointed out by Aayush Kumar Singha in his great series "Things worth trying out this month", here are the most common feature engineering methods used to win TPS: 
+
+Transformers
+
+
+
+PCA
+
+truncated SVD
+
+t-SNE
+
+
+Preprocessing
+
+
+
+MinMaxScalar
+
+StandardScaler
+
+QuantileTransformer
+
+RobustScaler
+
+PowerTransformer(method = 'yeo-johnson')
+
+PowerTransformer(method = 'box-cox')
+
+
+Some more Feature Engineering Tricks:
+
+
+
+KNN features
+
+Statistics per row (e.g., number of missing values, standard deviation, min, max, average, etc.).
+
+Scaling data with different scales (e.g., standard, robust, etc.).
+
+Creating categorical features from numerical columns.
+
+Adding sklearn transformers like k-means, outlier, t-SNE, and UMAP features.
+
+
+EDA methods
+Visualization tools may be interesting for this dataset since it might have been "touched" at the beginning of the competition ;).  We can already some notebooks use UMAP, tsne, and the usual things.. comparing input vs embedding learned or train vs test, also some SHAP for showing feature importance or any other model interpretability method.
+
+Usually, nothing special here. the winners often use simple methods for EDA. They just use them more deeply. 
+However, if you want to experiment with some fancy "AutoEDA" tools: I've written a post about it two days ago you might want to check out. 
+
+Exotic methods we WANT to see:
+
+self-supervised learning
+Something I want to see is the use of self-supervised learning (clustering, auto-encoder, GPT like learning for predicting partial input from other partial input of both train+test). This is something that is high-risk high-reward - very hard to get right but if you do, you might just win overall.  (something somewhat similar was used on the open-vaccine competition a year ago. 
+
+Metric Learning
+Something that might work well, it works from time to time: try some metric learning tricks on a tabular network.
+These are all based on methods that proved to work in previous kaggle challenges.
+
+Adversarial Learning
+ML-based augmentation for tabular data like contrastive learning and maybe adversarial losses or other GAN-like methods..
+
+Target Engineering 
+There might be some novel ways to use statistics of the target. maybe it will be splitting the number of samples into "hard" and "easy" targets. maybe it will be some fancy target scaling and inverse scaling… 
+whoever comes up with a "good enough" idea here - can win big time with a single simple model. 
+
+what do you want to see on the winning solutions on the finish line?
+
+Some Credits and references: 
+
+
+
+https://www.kaggle.com/ryanbarretto/boring-blend-of-stack-and-weights/notebook
+
+Comments:
+├─ Maximiliano Diaz Battan (2021-11-19 17:26:29.177000) [+1]
+│  Congratulations for becoming a Grandmaster @yamqwe, well deserved!
+├─ Pavel Motloch (2021-11-18 18:51:38.667000) [+1]
+│  Seems to me logistic regression is missing in the list..
+  ├─ Luca Massaron (2021-11-18 20:23:37.490000) [+1]
+  │  Probably the most important one…
+├─ grayjay (2021-11-18 15:22:41.453000) [+1]
+│  Very nice overview, but… obviously it totally ignores the particulars of this competition.  TPS-Nov is all about understanding the impact of the relabeling, and so far there's no evidence that the ...
+├─ Laurent Pourchot (2021-11-17 19:00:23.090000) [+2]
+│  @yamqwe , great ! you are our wikipedia_datascience 😉
+├─ Aayush Kumar Singha (2021-11-26 20:23:12.620000) [+0]
+│  @yamqwe It is an honour to be mentioned in your post! 😊😊Thanks a lot! 
+│  
+│  An awesome motivational boost just as the weekend starts!
+├─ DrHB (2021-11-21 21:20:50.837000) [+0]
+│  I did not realize you become GM =) Congrats
+├─ Remek Kinas (2021-11-21 19:28:03.973000) [+0]
+│  Super cool topics in this competition. Thank you @yamqwe 👍
+├─ Akmal Azzam o'g'li (2021-11-18 04:53:07.047000) [+0]
+│  @yamqwe Thank you for interesting notebook, you wrote about tuning ML models, how about tuning NN models?
+  ├─ Luca Massaron (2021-11-18 15:22:25.777000) [+1]
+  │  Tuning ML models is mostly about neural architectural search, that is looking for the best architecture possible for the problem. You can do that with Keras Tuner. I've prepared a notebook if you w...
+├─ Old Monk (2021-11-17 15:44:55.900000) [+0]
+│  Thanks @yamqwe for sharing, great collation of ideas, tips and tricks!

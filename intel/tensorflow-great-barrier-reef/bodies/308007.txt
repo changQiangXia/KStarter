@@ -1,0 +1,187 @@
+# https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/308007
+
+Topic #308007: 5th place solution, poisson blending,detection and tracking
+  Author: bestfitting
+  Posted: 2022-02-16 16:56:01.643000
+  Votes: 141  Comments: 26
+
+Congrats to all the winners, and thanks to organizers.
+
+The following ideas and methods helped me survive from this challenging competition.
+1.Copy COTS box and paste into background image, apply poisson blending.
+2.Several detection models training and inference with different image sizes.
+3.Appending boxes to detection results by finding homography matrix.
+4.Trust Local CV.
+
+Data
+
+As the dataset is relative small, if we have more samples we can benefit from them.
+We can generate more star fishes and put them in different under-sea images.
+
+
+The simplest way is to crop the star fishes in train-set and paste it to other images, but we can find two obvious problems.
+1.The boundary and color is not real.
+2.The COTS is not on reasonable places.
+
+I solved these two problems by:
+
+1.Poisson blending
+2.Training a classification model to predict whether a box with COTS is real or fake.
+
+This idea helped me to improve the score.
+
+I did not stop my experiments, I tried to train GAN models to generate starfishes, although the generated samples were quite real, the score did not improve. 
+I think it’s limited by the count of unique star fishes are small, if we can use more COTS downloaded from internet, I guess we could improve the score. I am not sure whether an image is allowed to use or not, so I did not use any of them. 
+Other methods such as image harmonization did not bring  improvement.  
+Anyway, despite quite a lot of time spent without too many gains in this competition, I quite enjoyed it.
+
+Model training
+
+Validation Strategy
+Split 5 folds by sequence
+
+Models
+YOLOv5-S6, YOLOv5-M6, YOLOv5-L6, YOLOX-L, YOLOR-P6 and HRNetV2P-W18
+
+Training details
+YOLOv5: 
+Network: YOLOv5-S6, YOLOv5-M6, YOLOv5-L6
+Training-size: 3600
+Inference-Size: 4800
+Optimizer: SGD
+Scheduler: Warm Up + Linear LR + lr=0.01 + 15 epochs
+Augmentation: hsv, translate, scale, flipud, fliplr, mosaic, mixup, water-augment, transpose
+
+YOLOX:
+Network: YOLOX-L
+Training-size: 1280
+Inference-Size: 1600
+Optimizer: SGD
+Scheduler: yoloxwarmcos + 20 epochs
+Augmentation: hsv, flip, degrees, translate, shear, mosaic, mixup, no_aug_epochs=5
+
+YOLOR:
+Network: YOLOR-P6
+Training-size: 2560
+Inference-Size: 2560
+Optimizer: SGD
+Scheduler: Warm Up + Linear LR + lr=0.005 + 15 epochs
+Augmentation: hsv, translate, scale, flipud, fliplr, mosaic, mixup, water-augment, transpose
+
+HRNet:
+Network: HRNetV2P-W18
+Training-size: 3600
+Inference-Size: 3600
+Optimizer: SGD
+Scheduler: Warm Up + linear LR + lr=0.02 + 10 epochs
+Augmentation: Resize, RandomFlip
+
+Tracking
+
+If the detection model has found a box in  previous frames and we can predict the box in the current frame by the following way:
+1.Kalman Filter
+2.Optic Flow
+3.Finding homography matrix and then apply the matrix to get the box in the current frame.
+
+I find the third method is the best for this dataset.
+We can get keypoint descriptors by using SuperPoint/SuperGlue and then find homography matrix.
+
+The Tracking pipeline is:
+1.If there is a box detected a frame t-10, then append a box using the homography matrix to frame t-9 unless there already a box is there(IOU greater than 0.4). Then repeat this procedure from t-9 until current frame.
+2.Apply DeepSort to get a track.
+3.Determining a box on a track is kept or not by the ratio of the model predicted boxes. If the ratio is too low, the track may be False Positive.
+
+Ensemble
+
+Calculating IOU between the boxes which predicted by different models in an image.
+If max IOU with other boxes of a box is less than 0.55,then drop this box.
+The remaining boxes are ensembled using WBF.
+
+Results
+
+Comments:
+├─ tik_boa (2022-02-17 08:36:07.800000) [+1]
+│  Training a classification model to predict whether a box with COTS is real or fake.
+│  
+│  
+│  Can this part describe the process in detail?
+│  
+│  
+│  
+│  How to construct the target of training data, first pass copy-...
+  ├─ bestfitting (2022-02-17 10:28:18.087000) [+1]
+  │  The bbox in training set is real, so the target is 1, the poisson blending COTS boxes is fake, the target is 0.
+  │  
+  │  
+  │  Any classification model is OK for this task, such resnet34.
+  │  
+  │  
+  │  bbox, resize to 64x6...
+  ├─ DiamondH (2022-04-14 12:10:43.750000) [+0]
+  │  Need a bigger bbox than the original one to include the feature edge,  before resize, is it right?
+  ├─ bestfitting (2022-04-21 08:12:36.020000) [+1]
+  │  @w3579628328 
+  │  yes, bigger bbox to include some background…
+├─ kitty_lina (2022-02-17 02:04:00.370000) [+1]
+│  Great job, tkx
+├─ Rajaram G (2022-02-16 18:26:58.397000) [+1]
+│  is there a paper or code reference for poisson blending? nice tabulation of results!
+  ├─ bestfitting (2022-02-17 10:22:33.100000) [+3]
+  │  https://www.cs.jhu.edu/~misha/Fall07/Papers/Perez03.pdf
+  │  https://github.com/PPPW/poisson-image-editing
+  ├─ Yosuke Shinya (2022-02-17 13:52:14.030000) [+2]
+  │  OpenCV supports poisson blending as seamlessClone.
+  │  https://docs.opencv.org/4.5.5/df/da0/group__photo__clone.html#ga2bf426e4c93a6b1f21705513dfeca49d
+  │  https://learnopencv.com/seamless-cloning-using-op...
+  ├─ Awsaf (2022-02-19 00:41:04.213000) [+0]
+  │  @bestfitting from github link it seems we need mask to do image poissioning, how did you get the mask?
+  ├─ bestfitting (2022-02-19 03:32:12.797000) [+2]
+  │  I think we should fill the box containing COTS with 255 to generate the mask. 
+  │  btw, I did not use the lib indeed, I gave you as reference.
+├─ Sanyam Bhutani (2022-02-16 17:38:01.150000) [+1]
+│  Thanks for sharing your solution! 🙏
+│  
+│  
+│    
+│  I did not stop my experiments, I tried to train GAN models to generate starfishes, although the generated samples were quite real, the score did not improve...
+  ├─ Psi (2022-02-16 17:40:09.240000) [+11]
+  │  GAN augmentation only seems to work in papers, I also never made it work for models, they are clever enough. Only solution I ever saw it work was in Bengali.
+  ├─ Sanyam Bhutani (2022-02-16 17:57:02.550000) [+1]
+  │  Oh wow-I didn't know about the Bengali competition. I found the writeup by the winning team incase anyone reading here is interested. 
+  │  
+  │  Thank you, Psi 🦁! 🍵
+  ├─ bestfitting (2022-02-16 18:07:28.220000) [+6]
+  │  Hey @init27, StyleGAN2, I tried many models in https://www.kaggle.com/c/generative-dog-images competition and followed progresses after that. The main reason I entered this competition is to check ...
+├─ Aruna S (2022-02-18 09:37:15.380000) [+-9]
+│  Congraatulations🤩🤩Thanks for sharing your code @bestfitting , feel free to check out my notebooks as well  😊
+├─ Jeffrey H (2022-03-10 23:26:20.230000) [+0]
+│  "The main reason I entered this competition is to check whether GAN and image blending technologies can help solve this kind of problems."
+│  
+│  
+│  Hi, @bestfitting. congrats! We have some agreement on th...
+  ├─ bestfitting (2022-03-11 12:57:09.330000) [+0]
+  │  hey,
+  │  If we paste a generated COTS to other background, it's will help our models as an augmentation method.
+  │  I had planed to use other COTS from internet to generate samples, but was not sure whethe...
+  ├─ Jeffrey H (2022-03-11 13:43:00.680000) [+1]
+  │  "I had planed to use other COTS from internet to generate samples"
+  │    Yes, you could do it, I also tried it. But the problem is that you cannot find the right starfish picture with the same color st...
+├─ HIRO (2022-02-23 14:40:37.743000) [+0]
+│  A novel idea. I want to be able to master it
+├─ jellybeanz (2022-02-20 13:34:33.353000) [+0]
+│  @bestfitting I saw that how did you train the classification model to classify fake and real and at the end you got 1.4k fake images but how did you annotate 1.4 fake images for bbox? How did you r...
+  ├─ bestfitting (2022-02-20 15:31:14.293000) [+0]
+  │  I generated many many fake images by using copy&amp;paste then poisson blending, then selected 1.4k of them by the model.
+  │  Since the fake image is generated by pasting COTS to a background, the back...
+├─ arutema47 (2022-02-20 06:35:18.327000) [+0]
+│  The poisson blending method is very interesting, and seems like a traditional CV-like GAN to me.
+│  
+│  How did you train the discriminator (classifier) for your pipeline?
+  ├─ bestfitting (2022-02-20 08:14:55.583000) [+3]
+  │  The box containing real COTS as positive sample, the box containing fake/blending COTS as negative sample, training a binary classification model(Resnet34). Then use this model to predict a  fake s...
+├─ Krish Yadav (2022-02-18 19:22:55.227000) [+0]
+│  So from what I understand @bestfitting, to increase the data on which model can train, you created a script that copies and paste the starfish on different video at a different location and then us...
+  ├─ bestfitting (2022-02-19 03:33:52.207000) [+1]
+  │  yes! Then I selected the generated COTS with different backgroud using the classification model.
+├─ yuihmoo (2022-02-21 00:16:41.767000) [+0]
+│  Thank you for sharing

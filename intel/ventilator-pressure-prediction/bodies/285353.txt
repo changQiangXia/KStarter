@@ -1,0 +1,191 @@
+# https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285353
+
+Topic #285353: 9th solution(with github code): Laplace distribution noise likelihood optimization
+  Author: ryomak
+  Posted: 2021-11-04 10:51:10.463000
+  Votes: 123  Comments: 30
+
+9th solution: Laplace distribution noise likelihood optimization
+
+github code
+
+[update 21/11/8] I found a related paper.  Estimating the mean and variance of the target probability distribution
+
+Congratulations to the winners! Thank you also to the host for organizing the competition.
+
+I am a first-year master's student in Harada Laboratory.
+
+The solution is basically based on nakama's notebook.
+The changes are
+
+
+
+changed L1 loss to likelihood loss (0.1095 on Public LB for 20 model ensemble)(10 fold &amp; all with 10 seed)
+
+pseudo labels using test data (0.1068 on Public LB)
+
+
+In the following, we will discuss the first one, minimization of the L1 norm assuming Laplace distribution as the error.
+
+Optimization using the Laplace distribution
+
+To begin, the usual L1 loss is equivalent to likelihood maximization assuming an equivariant Laplace distribution at each time for the error distribution.
+
+$$
+p(x) = \frac{1}{2b}\exp{(-\frac{|x - \mu|}{b})}
+$$
+
+$$
+L_{1} = | x - \mu |
+$$
+
+$$
+L_{laplace} = - \log{p(x)}= \frac{|x - \mu|}{b} - \log{\frac{1}{2b}}
+$$
+
+Then
+
+$$
+\frac{\partial}{\partial x}L_{1} = const. \frac{\partial}{\partial x}L_{laplace} 
+$$
+
+Now, for this data, as pointed out in some of the notebooks, increasing the training data resulted in better CV scores. This may be an indication that the situation is prone to overtraining.
+
+Then I thought this might be due to the fact that we assume equal variance as the variance of the error, meaning that it might be more difficult to predict accurately at some times than at others.
+
+So I assumed that the variance for each time was different.
+Therefore, I decided to output not only the predicted value x but also the predicted variance b from the model. The final loss is
+
+\begin{align}
+L_{laplace} &amp;= \Sigma_{i=0}^{80} - \log{p_{i}(x)} \\
+&amp;= \Sigma_{i=0}^{80} - \log{(\frac{1}{2b_{i}}\exp{(-\frac{|x_{i} - y_{i}|}{b_{i}})})})
+\end{align}
+
+This loss increased the score by more than 0.01.
+
+
+
+
+
+    def masked_laplace(self, outputs, labels):
+        mask = labels['mask']
+        y = labels['label'][mask]
+        x = outputs[...,0][mask]
+        b = outputs[...,1][mask]
+        p = 1 / (2*b) * (- (x - y).abs() / b).exp()
+        loss = - torch.log(p + 1e-12)
+        return loss.mean()
+
+
+The parameters are noted below.
+
+Optimizer: AdamW
+lr: 5e-3
+Scheduler: MultiStep(gamma 0.1)
+Iteration: 550,000(steps at 400,000 / 500,000)
+batchsize: 256
+gradient norm: 50
+
+model(based on nakama's notebook)
+hiddensize: 128
+num_layers: 3
+
+
+I spent the last two weeks augmenting the data and looking for leaks, but I couldn't improve my score.
+
+It was a simple task, but the competition was challenging and fun to analyze.
+I am happy to have won the gold medal.
+
+Finally, I would like to thank the Harada Laboratory for lending us their computing resources.
+
+Thank you very much, everyone!
+
+Comments:
+├─ Hinz (2021-11-05 01:27:17.600000) [+3]
+│  Hi, thanks for the write-up.
+│  
+│  I am interested in your work and can't wait to see the open-source implementation. Upvoted.
+│  
+│  Congrats!
+├─ nyanp (2021-11-04 23:19:08.803000) [+3]
+│  Congratulations! This technique is very interesting (although I'm not too sure why it works).
+│  I will try to use it if there is a mae competition. Thanks for sharing!
+  ├─ ryomak (2021-11-04 23:28:23.053000) [+1]
+  │  Thank you for your comment!
+  │  This loss is a bit unstable, but limiting the gradient norm worked well for me :)
+├─ Optimo (2021-11-04 11:23:45.840000) [+3]
+│  Congratulations! This is amazing, it looks so simple yet I think I did not understand your solution. ^^ 
+│  
+│  So your model is predicting the pressure and the standard deviation of the pressure for eac...
+  ├─ ryomak (2021-11-04 11:43:34.457000) [+3]
+  │  Thanks for your comments!
+  │  Yes, in a nutshell, the model produces a batch size x 80 standard deviations per iteration and calculates a weighted MAE.
+  │  It does not output a single standard deviation fr...
+  ├─ Optimo (2021-11-04 12:32:37.260000) [+8]
+  │  😳😳😳 This looks like a complete game changer (almost too good to be true to be honest).
+  │  
+  │  So this is like a "confidence layer" where the model can change the loss during training (and update the weig...
+  ├─ ryomak (2021-11-04 13:17:49.320000) [+9]
+  │  I'll think about turning this into a paper!
+  │  I'll publish the code on github over the weekend.
+  │  
+  │  Thanks a lot for your comments!
+  ├─ Optimo (2021-11-17 09:35:44.560000) [+1]
+  │  @ryomak did you share your code somewhere? Thanks in advance!
+  ├─ ryomak (2021-11-17 10:27:47.563000) [+5]
+  │  here it is!
+  │  (https://github.com/ryoma-k/GBVPP_Public)
+  │  
+  │  And I also found a related paper. the link is above. thanks!
+├─ Piotr Gabrys (2021-11-04 11:01:30.213000) [+3]
+│  Thanks for the write-up. It was great to see you coming to very good solution so fast! Congratulations on well deserved solo gold!
+├─ [deleted] (2021-11-05 20:55:44.073000) [+4]
+│  The winners of this competition are just incredible. one solution after the other, each trick is so elegant and powerful. amazing trick with the loss. I would have never thought that using a simple...
+├─ ugakkuku (2021-11-05 06:36:36.920000) [+4]
+│  Congrats! This technique is amazing. 
+│  I think that it is a fusion technology of machine learning and statistics.  
+│  
+│  Would you tell us how to find parameter b ?
+  ├─ ryomak (2021-11-05 07:05:06.587000) [+8]
+  │  Thanks for the comment.
+  │  b is not a parameter, it is an output from the model. It would be the standard deviation of the Laplace distribution, and the output b generally becomes smaller as the learn...
+  ├─ ugakkuku (2021-11-05 07:45:04.930000) [+3]
+  │  I expected the prediction error to follow a steady Laplace distribution. But it's my mistake!
+  │  After exceeding 400 epochs, b has decreased sharply.
+  │  Great study! Thank you
+  ├─ ryomak (2021-11-05 07:47:19.620000) [+1]
+  │  yeah, learning rate decreased there.
+  │  thanks!
+├─ Isamu (2021-11-04 12:30:24.153000) [+4]
+│  It never thought that I could customize MAE loss like this. This is amazing🙌
+├─ MINGOOK KIM (2021-11-19 00:03:59.163000) [+1]
+│  Congratulations on your achievements.
+│  
+│  Congratulations
+├─ Igor Kuivjogi Fernandes (2021-11-18 20:10:39.693000) [+1]
+│  It's beautiful when I see statistics used in such a great way.
+│  I just finished a B.Sc. in Statistics (Brazil) and during all the 4~5 years we derived many times log-likelihood for distributions lik...
+├─ Benny Fung (2021-11-06 12:43:52.307000) [+1]
+│  Congratulation!  Thanks for your sharing.
+├─ Gaurav Rawat (2021-11-06 10:44:37.070000) [+2]
+│  Here is a magical loss function, congrats for your gold 🪙 👍 and also congrats to all the people who contributed great public nb like @dlaststark @yasufuminakama and others they just helped everybod...
+├─ Kiran Chaudhary (2021-11-05 10:20:25.507000) [+2]
+│  Unique approach!!! Congratulations for solo gold and thanks for writeup.
+├─ AG (2021-11-05 10:04:11.927000) [+2]
+│  Congratulations on SOLO gold and creative loss function!
+├─ Ctrl_CV (2021-11-05 07:41:45.030000) [+2]
+│  Very reasonable solution! Also as a master student,i will learn more about your works!
+├─ Chris Deotte (2021-11-05 00:21:40.083000) [+2]
+│  Wow. This is ingenious. Great discovery! Congrats!
+├─ Raghawendra Singh (2021-11-04 15:39:04.233000) [+2]
+│  Congrats for winning solo gold and thanks for solution.
+├─ DrHB (2021-11-04 15:12:13.097000) [+2]
+│  Congratulations on SOLO gold, they are really hard to get this days! The solution is very elegant!
+├─ Riccardo (2021-11-04 11:33:32.450000) [+2]
+│  I tried a similar strategy to normalize by different time_id the preds before passing them to the loss! I didn’t notice such a massive gain! Nice that it worked for you 😁
+├─ Y.Nakama (2021-11-04 11:32:33.127000) [+2]
+│  Congrats on your solo gold! Well deserved!
+  ├─ ryomak (2021-11-04 12:17:24.870000) [+2]
+  │  Thanks for your great baseline! it helped a lot!
+├─ Devlikamov Vlad (2021-11-04 19:01:35.183000) [+1]
+│  Congratulations!

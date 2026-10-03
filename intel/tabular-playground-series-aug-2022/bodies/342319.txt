@@ -1,0 +1,210 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342319
+
+Topic #342319: Missing values have predictive value
+  Author: AmbrosM
+  Posted: 2022-08-06 18:42:35.106000
+  Votes: 137  Comments: 66
+
+TLDR: Add these two lines to your notebook before you impute the missing values:
+
+X['m_3_missing'] = X.measurement_3.isna()
+X['m_5_missing'] = X.measurement_5.isna()
+
+
+Did it occur to you that a missing measurement might be an early indicator of product failure? Maybe the cause of a product failure triggers the failure of a measurement device. How can we test this idea? Obviously we have to calculate the conditional product failure rate given the measurement is missing E[product fails | measurement is missing] and compare it to the unconditional product failure rate, which is 0.212608.
+
+Of course, the deviations will be small and we should test them for significance against a null hypothesis which says that the failure count is binomially distributed with p = 0.212608. For simplicity, we approximate the binomial distribution by a normal distribution, calculate the z-score and the p-value:
+
+feature           fail   miss   failure rate       z    p-value
+loading         :   44 /  250 = 0.176          -1.41      0.157
+measurement_3   :   61 /  381 = 0.160          -2.50      0.012
+measurement_4   :  128 /  538 = 0.238           1.43      0.151
+measurement_5   :  172 /  676 = 0.254           2.66      0.008
+measurement_6   :  171 /  796 = 0.215           0.15      0.879
+measurement_7   :  197 /  937 = 0.210          -0.18      0.860
+measurement_8   :  218 / 1048 = 0.208          -0.36      0.716
+measurement_9   :  283 / 1227 = 0.231           1.54      0.123
+measurement_10  :  277 / 1300 = 0.213           0.04      0.967
+measurement_11  :  311 / 1468 = 0.212          -0.07      0.944
+measurement_12  :  356 / 1601 = 0.222           0.95      0.340
+measurement_13  :  373 / 1774 = 0.210          -0.24      0.809
+measurement_14  :  413 / 1874 = 0.220           0.82      0.411
+measurement_15  :  430 / 2009 = 0.214           0.16      0.876
+measurement_16  :  436 / 2110 = 0.207          -0.67      0.502
+measurement_17  :  499 / 2284 = 0.218           0.69      0.493
+
+
+
+
+Two measurements have abs(z) &gt; 2.5 and p &lt; 0.01: the conditional failure rates of missing measurement_3 and missing measurement_5 deviate significantly from the average failure rate and we may thus add two new features to our models:
+
+X['m_3_missing'] = X.measurement_3.isna()
+X['m_5_missing'] = X.measurement_5.isna()
+
+
+Source code is available here.
+
+Comments:
+├─ broccoli beef (2022-08-07 07:27:54.087000) [+5]
+│  This finding is consistent with correlation or mutual information calculations, although the correlations look pretty weak numerically.
+│  
+│  from scipy.stats.stats import pearsonr
+│  from sklearn.feature_...
+├─ Robert Stockton (2022-08-06 23:10:31.867000) [+6]
+│  Good stuff. Thanks.
+│  
+│  As a side note, what should we make of the fact that the number of missing values increases monotonically with the feature ordering. It's too consistent to be a fluke, but I do...
+  ├─ AmbrosM (2022-08-07 03:43:05.173000) [+2]
+  │  It's certainly not a coincidence that the most important measurement, measurement_17, has the most missing values.
+  ├─ Ibraheem Seyam (2022-08-09 08:07:42.633000) [+2]
+  │  Perhaps, the quality control is done sequentially: e.g. if product code is x; measurement_0 is y, then result is declared no need to continue the test, and so on..
+  ├─ Ibraheem Seyam (2022-08-09 12:05:26.853000) [+1]
+  │  I tested this hypothesis, turns out the discarded IDs after experiment 1, are still entered to experiement 2
+  │  But the remark is still valid, every experiment takes less samples than the previous one...
+├─ Prabhanjan Jadhav (2022-08-26 20:36:54.597000) [+1]
+│  Thanks @ambrosm !!
+│  Also summing up the some of the features into one, and deleting those features, helped me to increase my score 😌..
+├─ Krystian (2022-08-25 13:27:07.330000) [+1]
+│  That's mind-blowing for me, to use missing values as entirely separate data. I will definitely use that for the future competitions and exercises.
+├─ brutzelbube (2022-08-15 19:20:37.857000) [+1]
+│  Thank you for sharing this! I recently read about the survivorship bias and this seems to fit perfectly for addressing it.
+├─ Sanskriti Agrawal (2022-08-14 12:38:28.233000) [+1]
+│  Wow! This is something new, thanks for sharing
+├─ kashyap mahesh (2022-08-10 12:49:19.037000) [+1]
+│  Thank you for this very interesting observation. 
+│  I will try to implement this in the code
+├─ Foram Aghara (2022-08-09 23:09:45.517000) [+1]
+│  Well done, Thank you for sharing your work.
+├─ Pengfei Hu (2022-08-08 19:33:36.667000) [+1]
+│  Thank you for this insight, I have incorporated these features in my model and I have found some success improving performance.
+├─ Matt OP (2022-08-07 22:24:40.043000) [+1]
+│  Thank you for this insight @ambrosm, I have incorporated these features in my model and I have found some success improving performance.
+├─ ArturRa (2022-08-07 14:38:40.503000) [+1]
+│  Nice observation.
+├─ Nitish (2022-08-07 13:05:27.313000) [+1]
+│  Great observation and as always, thanks for sharing 🙌
+├─ Mikołaj Gałkowski (2022-08-07 12:08:01.973000) [+1]
+│  great figure!
+├─ Yalesh Bhuma (2022-08-07 10:22:27.280000) [+1]
+│  Great analysis.
+├─ sakdipat ontoum (2022-08-07 09:10:20.137000) [+1]
+│  nice figure !!!
+├─ Vikram (2022-08-07 08:27:48.977000) [+1]
+│  Great Analysis…..👍
+├─ Joseph Zhou (2022-08-07 03:46:00.587000) [+1]
+│  Impressive! But this two features have zero coef in my LogisticRegression model and cv doesn't improve.
+│  Other features too important?
+  ├─ paddykb (2022-08-07 12:07:20.580000) [+3]
+  │  The na indicators are "significant" at least in my model fit.
+  │  
+  │  loading &amp; measurement_2 are mildly non-linear wrt to failure. 
+  │  
+  │  It is also interesting to see id is weakly predictive (which as Am...
+  ├─ AmbrosM (2022-08-07 12:22:46.360000) [+1]
+  │  Hi @paddykb id predicts product_code (because the rows are sorted by product code), and several measurements' distributions depend on product_code. Do you think id can do more?
+  ├─ paddykb (2022-08-07 12:53:25.803000) [+2]
+  │  Do you think id can do more?
+  │    
+  │  
+  │  
+  │  @AmbrosM Not at all. I'd not included a random effect for product_code… Thank you for pointing that out gently.
+├─ Edvard (2022-08-07 03:22:06.423000) [+1]
+│  Thank you very much for sharing! It's just amazing how some of these ideas are very simple once you read and get to know about them bet not so obvious when you are left to think on you own.
+├─ egrundman (2022-08-07 15:25:28.117000) [+2]
+│  Brilliant. I saw the nan count increase with each measurement feature wondering why there would be more per column.
+├─ Oscar Aguilar (2022-08-07 13:45:57.293000) [+2]
+│  This is a good point. Thanks for sharing.
+  ├─ Oscar Aguilar (2022-08-11 18:15:41.250000) [+0]
+  │  The interaction between m_3_missing and m_5_missing help my LB score a bit. Thanks again!
+├─ The Devastator (2022-08-06 23:33:23.420000) [+2]
+│  Thank you for this analysis, very useful as always. 
+│  I will try playing with this on my notebooks's next version
+├─ Bogdan Doicin (2022-08-18 07:47:06.567000) [+0]
+│  Great idea! Improved a lot my score!
+├─ Rishav Yadav (2022-08-07 06:04:01.597000) [+0]
+│  Good work
+├─ Ty0991 (2022-08-31 21:45:51.523000) [+0]
+│  Great idea.
+├─ Riley (2022-08-31 19:47:48.067000) [+0]
+│  I think there is an error in calculating your z score. You define standard deviation to be sqrt(p(1-p))/sqrt(n) when it should be just sqrt(p(1-p)). The std dev. of a binomial distribution is defin...
+  ├─ [deleted] (2022-08-31 21:11:27.240000) [+0]
+  │  For large enough sample, these distributions are approximate
+  │  $$
+  │  \hat{p}_1 \sim \mathcal{N}(p_1 , \frac{p_1(1-p_1)}{n_1})
+  │  $$
+  │  
+  │  and
+  │  
+  │  $$
+  │  \hat{p}_2 \sim \mathcal{N}(p_2 , \frac{p_2(1-p_2)}{n_2})
+  │  $$
+  │  
+  │  The...
+  ├─ broccoli beef (2022-08-31 22:11:46.130000) [+2]
+  │  @riley9
+  │  
+  │  @ambrosm's calculations are correct. CLT is being applied to a series of iid Bernoulli trials (not binomial trials as you seemed to imply). The calculations can be replicated with a call t...
+  ├─ Riley (2022-09-01 01:31:43.533000) [+0]
+  │  Great point. I dug into it some more and modified my calculations and get the same values for my z-scores that he does. You can modify the equation he uses to make it fit the Binomial form which lo...
+├─ Chun-Hsien Tsai (2022-08-30 16:30:42.397000) [+0]
+│  it helps a lot
+├─ [deleted] (2022-08-21 11:18:51.597000) [+0]
+│  Thank U for this analysis, it is very useful !
+├─ Aarti Ravariya (2022-08-13 07:16:04.370000) [+0]
+│  Appreciate your insight and work… I believe this will help me improving my model performance
+├─ SOUMAYADEEP MANNA (2022-08-12 03:01:56.473000) [+0]
+│  Informative and helpful
+├─ [deleted] (2022-08-11 03:40:46.533000) [+0]
+│  [deleted]
+├─ [deleted] (2022-12-06 20:37:59.227000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-14 23:43:18.573000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-06 21:59:49.500000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-21 04:30:22.297000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-16 07:54:06.580000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-12 19:21:40.203000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-10 15:26:50.370000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-10 14:31:13.237000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-10 09:47:36.090000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-09 07:51:49) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-09 07:48:04.410000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-09 07:08:09.150000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-08 21:05:54.630000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-08 13:20:55.063000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-08 07:26:47.407000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-08 06:24:23.860000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-08 04:29:42.937000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-08 01:54:23.653000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-07 16:00:25.383000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-07 15:03:57.283000) [+1]
+│  [deleted]
+├─ [deleted] (2022-08-09 14:23:20.967000) [+2]
+│  [deleted]
+├─ [deleted] (2022-08-08 02:20:50.477000) [+2]
+│  [deleted]
+├─ [deleted] (2022-12-06 13:57:43.347000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-20 10:36:57.140000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-14 17:05:35.087000) [+0]
+│  [deleted]
+├─ [deleted] (2022-08-11 10:02:00.563000) [+0]
+│  [deleted]

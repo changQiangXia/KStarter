@@ -1,0 +1,73 @@
+<p>Congrats to all the winners, and thanks to organizers.</p>
+<p>The following ideas and methods helped me survive from this challenging competition.<br>
+1.Copy COTS box and paste into background image, apply poisson blending.<br>
+2.Several detection models training and inference with different image sizes.<br>
+3.Appending boxes to detection results by finding homography matrix.<br>
+4.Trust Local CV.</p>
+<h2>Data</h2>
+<p>As the dataset is relative small, if we have more samples we can benefit from them.<br>
+We can generate more star fishes and put them in different under-sea images.<br>
+<img src="https://i.imgur.com/eRzAF1s.png" alt="poisson.png"></p>
+<p>The simplest way is to crop the star fishes in train-set and paste it to other images, but we can find two obvious problems.<br>
+1.The boundary and color is not real.<br>
+2.The COTS is not on reasonable places.</p>
+<p>I solved these two problems by:</p>
+<p>1.Poisson blending<br>
+2.Training a classification model to predict whether a box with COTS is real or fake.</p>
+<p>This idea helped me to improve the score.</p>
+<p>I did not stop my experiments, I tried to train GAN models to generate starfishes, although the generated samples were quite real, the score did not improve. <br>
+I think it’s limited by the count of unique star fishes are small, if we can use more COTS downloaded from internet, I guess we could improve the score. I am not sure whether an image is allowed to use or not, so I did not use any of them. <br>
+Other methods such as image harmonization did not bring  improvement.  <br>
+Anyway, despite quite a lot of time spent without too many gains in this competition, I quite enjoyed it.</p>
+<h2>Model training</h2>
+<p><strong>Validation Strategy</strong><br>
+Split 5 folds by sequence</p>
+<p><strong>Models</strong><br>
+YOLOv5-S6, YOLOv5-M6, YOLOv5-L6, YOLOX-L, YOLOR-P6 and HRNetV2P-W18</p>
+<p><strong>Training details</strong><br>
+YOLOv5: <br>
+Network: YOLOv5-S6, YOLOv5-M6, YOLOv5-L6<br>
+Training-size: 3600<br>
+Inference-Size: 4800<br>
+Optimizer: SGD<br>
+Scheduler: Warm Up + Linear LR + lr=0.01 + 15 epochs<br>
+Augmentation: hsv, translate, scale, flipud, fliplr, mosaic, mixup, water-augment, transpose</p>
+<p>YOLOX:<br>
+Network: YOLOX-L<br>
+Training-size: 1280<br>
+Inference-Size: 1600<br>
+Optimizer: SGD<br>
+Scheduler: yoloxwarmcos + 20 epochs<br>
+Augmentation: hsv, flip, degrees, translate, shear, mosaic, mixup, no_aug_epochs=5</p>
+<p>YOLOR:<br>
+Network: YOLOR-P6<br>
+Training-size: 2560<br>
+Inference-Size: 2560<br>
+Optimizer: SGD<br>
+Scheduler: Warm Up + Linear LR + lr=0.005 + 15 epochs<br>
+Augmentation: hsv, translate, scale, flipud, fliplr, mosaic, mixup, water-augment, transpose</p>
+<p>HRNet:<br>
+Network: HRNetV2P-W18<br>
+Training-size: 3600<br>
+Inference-Size: 3600<br>
+Optimizer: SGD<br>
+Scheduler: Warm Up + linear LR + lr=0.02 + 10 epochs<br>
+Augmentation: Resize, RandomFlip</p>
+<h2>Tracking</h2>
+<p>If the detection model has found a box in  previous frames and we can predict the box in the current frame by the following way:<br>
+1.Kalman Filter<br>
+2.Optic Flow<br>
+3.Finding homography matrix and then apply the matrix to get the box in the current frame.</p>
+<p>I find the third method is the best for this dataset.<br>
+We can get keypoint descriptors by using SuperPoint/SuperGlue and then find homography matrix.</p>
+<p><strong>The Tracking pipeline is:</strong><br>
+1.If there is a box detected a frame t-10, then append a box using the homography matrix to frame t-9 unless there already a box is there(IOU greater than 0.4). Then repeat this procedure from t-9 until current frame.<br>
+2.Apply DeepSort to get a track.<br>
+3.Determining a box on a track is kept or not by the ratio of the model predicted boxes. If the ratio is too low, the track may be False Positive.</p>
+<h2>Ensemble</h2>
+<p>Calculating IOU between the boxes which predicted by different models in an image.<br>
+If max IOU with other boxes of a box is less than 0.55,then drop this box.<br>
+The remaining boxes are ensembled using WBF.</p>
+<h2>Results</h2>
+<p><img src="https://i.imgur.com/p2iHvpi.png" alt="result1.png"><br>
+<img src="https://i.imgur.com/6Hm3GRQ.png" alt="result2.png"></p>

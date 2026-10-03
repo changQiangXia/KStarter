@@ -1,0 +1,550 @@
+# https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285330
+
+Topic #285330: [3rd Place] Single model scored 0.0975 w/o PID controller
+  Author: Wonho Song
+  Posted: 2021-11-04 08:32:58.984000
+  Votes: 221  Comments: 95
+
+Head
+
+Before writing our solution, we really thank to Google Brain and Kaggle for hosting this competition and congrats to all.
+Also, I really enjoyed doing this competition with my UPSTAGE team (limerobot and dlrgy22). And thanks to many kaggler who shared the notebook and left discussion, we were able to get a good score. Before explaining what we do, I will write a summary first. If something is not clear, please refer the main text or leave any comments.
+
+Let`s start our story.
+
+Summary
+
+
+
+Validation strategy
+
+
+
+  
+
+  
+Stratified k-fold using type_rc as y
+  
+
+
+
+
+Model: We used combination of Conv1d and LSTM
+
+
+
+  
+
+  
+Architecture: Conv1d + Stacked LSTM
+  
+Optimizer: AdamW
+  
+Scheduler: Cosine
+  
+
+
+
+
+Features: We used 8 features
+
+
+
+  
+
+  
+Original: u_in, u_out, R(one-hot), C(one-hot)
+  
+Engineered: u_in_min, u_in_diff, inhaled_air, time_diff
+  
+
+
+
+
+Data augmentation: We used three type of augmentations
+
+
+
+  
+
+  
+Masking: Randomly mask the R or C
+  
+Shuffling: Randomly shuffle our sequences
+  
+Mixup: Select two sequences and mix up them
+  
+
+
+
+
+Loss: We used multi-task MAE loss
+
+
+
+  
+
+  
+MAE of pressure
+  
+Difference of pressure
+  
+
+
+
+
+Ensemble: We used iterative pseudo labeling and seed ensemble
+
+
+
+  
+
+  
+Seed ensemble using median
+  
+1st Pseudo labeling
+  
+2nd Pseudo labeling
+  
+
+
+Main
+
+I will describe our solution in the following six structures: Validation strategy, Model, Features, Data augmentation, Loss, and Ensemble.
+
+Validation strategy
+
+What is the most important thing in a competition? IMHO, It`s to avoid shake-up when the competition is finalized and thus a well-designed validation set is needed to avoid shake-up. Although the validation set was not important to this competition, this is why I first focus on validation strategy when competitions start.
+
+We knew that the types of R and C were very important in this competition through this discussion (thanks to @cdeotte), and we made a validation set with the same ratio of R and C for every fold.
+
+Detailed pseudo-code is below.
+
+cols = ['breath_id', 'R', 'C']
+
+meta_df = train_df.groupby('breath_id')[cols].head(1)
+meta_df['RC'] = meta_df['R'] + '_' + meta_df['C']
+meta_df['fold'] = -1
+
+kf = StratifiedKFold(12, random_state=seed, shuffle=True)
+
+for fold, (_, val_idx) in enumerate(kf.split(meta_df, meta_df['RC'])):
+    meta_df.loc[val_idx, 'fold'] = int(fold)  
+
+
+In this way, we were able to create a validation set that was highly correlated with test data, but I thought that it would be possible to create a good validation set even if we just used normal KFold.
+
+Model
+
+After setting the validation set, we focused on boosting the performance of the model using only the original features.
+
+Since Limerobot, the magician of transformers, was on our team, some kagglers expected that our team would use transformers, but we just used simple LSTM models (thanks to @tenffe from this notebook). 
+
+Detailed model architecture is below.
+
+
+Our trial-and-error with models related to the pytorch and tensorflow libraries. Initially, most high-score public notebooks were implemented in tensorflow, and we tried to port it to pytorch version. However, there was a low pyotrch score because of a difference between tensorflow and pytorch in the model initialization method (thanks to @junkoda for sharing this notebook). Model initialization methods like tensorflow allowed us to develop models in pytorch. 
+
+Detailed code is below (from JUN KODA`s notebook).
+
+for name, p in self.named_parameters():
+    if 'lstm' in name:
+        if 'weight_ih' in name:
+            nn.init.xavier_normal_(p.data)
+        elif 'weight_hh' in name:
+            nn.init.orthogonal_(p.data)
+        elif 'bias_ih' in name:
+            p.data.fill_(0)
+            # Set forget-gate bias to 1
+            n = p.size(0)
+            p.data[(n // 4):(n // 2)].fill_(1)
+        elif 'bias_hh' in name:
+            p.data.fill_(0)
+
+    if 'conv' in name:
+        if 'weight' in name:
+            nn.init.xavier_normal_(p.data)
+        elif 'bias' in name:
+            p.data.fill_(0)
+
+    elif 'reg' in name:
+        if 'weight' in name:
+            nn.init.xavier_normal_(p.data)
+        elif 'bias' in name:
+            p.data.fill_(0)
+
+
+Features
+
+After designing the model, we focused on feature engineering. Features can be divided into original features and engineered features. For the original features, all features except R and C were used as they are, and one-hot encoded R and C were used to show the type information of R and C to the model.
+
+For engineered features, we did a lot of EDA and tried to put features the model could not see. In this context, we have created the following features: u_in_min, u_in_diff, inhaled_air, and time_diff.
+
+Details are below.
+
+df['step'] = list(range(80))*df['breath_id'].nunique()
+
+df['u_in_min'] = df['breath_id'].map(df.groupby('breath_id')['u_in'].min())
+
+df['u_in_diff'] = df['u_in'].diff()
+df.loc[df['step']&lt;1, 'u_in_diff'] = 0
+
+df['time_diff'] = df['time_step'].diff()
+df.loc[df['step']&lt;1, 'time_diff'] = 0
+
+df['inhaled_air'] = df['time_diff']*df['u_in']
+
+
+Data augmentation
+
+After feature engineering, we focused on data augmentation. As a result, data augmentation led us to score high. We used three type of data augmentation as following: Masking, Shuffling, and Mixup.
+
+Masking augmentation
+
+In the case of masking, it is a little bit similar to Cutout, but masking is randomly performed on the R and C only. In other words, numeric information such as u_in is left as it is, and only information about the type R and C is intentionally masked. In the case of u_in, it was seen that the correlation with pressure was directly high from EDA, and by intentionally erasing the type information, the model was trained to understand the general semantic of u_in.
+
+
+
+Pseudo code is below.
+
+one_sample = get_sample(idx)
+
+# Type masking
+if random.random() &lt; .2:
+    if random.random() &lt; .5:
+        # maskring R
+        one_sample['R'][:] = 0
+    else:
+        # masking C
+        one_sample['R'][:] = 0
+
+
+Shuffling augmentation
+
+Shuffling randomly shuffles units within a specific window in a sequence. For example, suppose we have a sequence like [0,1,2,3,4,5,6,7] and window size is 3. First randomly shuffle between [0,1,2]; next shuffle [3,4,5] and so on.
+
+
+
+Details are below.
+
+one_sample = get_sample(idx)
+
+# Shuffling sequence
+if random.random() &lt; .2:
+    ws = np.random.choice([2, 4, 5])
+    num = max_seq_len // ws
+
+    idx = np.arange(0, max_seq_len)
+    for i in range(num):
+        np.random.shuffle(idx[i * ws:(i + 1) * ws])
+        one_sample = one_sample[idx]
+
+
+Mixup augmentation
+
+Finally, let`s talk about the Mixup method, which gave us a huge boost in cv and lb scores. Mixup is similar to the process of creating of synthesis sequence, in which two sequences are randomly selected and mixed. For example, given two sequences like [1,2,3,4,5] and [5,4,3,2,1], mix them in half to produce the sequence [3,3,3,3,3]. 
+
+At this time, the point we were discussed about was how to mix-up R and C type information because of the importance of type information. In fact, before this augmentation, we were treating R and C as categorical features and embedding them via nn.Embedding. But we were able to mix these R and C features by changing the embeddings as one-hot. If there is a sequence with C 20 and the other sequence C 50, one-hot C would look like this: [0, 1, 0] and [0, 0, 1]. Then mix these two embeddings like this: [0, 1, 0] * 0.5 + [0, 0, 1] * 0.5. Then we can finally get an embedding like this: [0, 0.5, 0.5].
+
+This augmentation improved the single model score on the public leaderboard from 0.117 to 0.1004.
+
+
+
+The code is below.
+
+one_sample = get_sample(idx)
+
+# Mixup two sequences
+if random.random() &lt; 0.4:
+    # Get new index
+    idx = np.random.randint(len(indices_by_breath_id))
+    sampled_sample = get_sample(idx)
+    mix_cols = ['R', 'C', 'numeric_features', 'target']
+    k = 0.5
+    for col in mix_cols:
+        one_sample[col] = (one_sample[col]*k + (1-k)*sampled_sample[col])
+
+
+Loss
+
+In fact, loss design and augmentation were done at the same time, but for convenience, the augmentation was explained first.
+
+When we analyzed the relationship between u_in and pressure, it was confirmed that the value of u_in of a specific step affects the pressure of a next step. In other words, the flow of air when step is 0 affects pressure of step 1 or pressure of step 2. Therefore, when air enters at a certain point in time, it is delayed and reflected in the later pressure. Thus, we let our model predict the difference of pressure as well.
+
+Using this loss, we were able to improve the cv score from 0.14x to 0.127x, and as a result of median ensemble, we were able to rise to 0.11x in the public leaderboard. IMHO, the huge gap in public leaderboard may be due to this loss.
+
+
+
+Code.
+
+df['step'] = list(range(80))*df['breath_id'].nunique()
+
+df['pressure_diff1'] = df['pressure'].diff(periods=1)
+df['pressure_diff2'] = df['pressure'].diff(periods=2)
+df['pressure_diff3'] = df['pressure'].diff(periods=3)
+df['pressure_diff4'] = df['pressure'].diff(periods=4)
+df.loc[df['step']&lt;1, 'pressure_diff1'] = 0
+df.loc[df['step']&lt;2, 'pressure_diff2'] = 0
+df.loc[df['step']&lt;3, 'pressure_diff3'] = 0
+df.loc[df['step']&lt;4, 'pressure_diff4'] = 0    
+
+
+Ensemble
+
+Through the above processes, we were able to record 0.1004 as a single model on the public leaderboard, and achieved a score of 0.0975 when applying median ensemble and round post-processing (thanks to @cdeotte). After that, we scored 0.963 by doing seed ensemble (seed42 and seed7).
+
+Then we created another two model with different seeds using pseudo labels generated from 0.963 submission, and we could get to 0.948 to public leaderboard.
+
+Finally, when we pseudo-labeled the submission with 0.948 files one more and training our model, then we were able to finally achieve 0.0942 for the public leaderboard and 0.0970 for the private leaderboard.
+
+Tail
+
+; We made a mistake of missing the paper the hosting team wrote. So, our team missing the point of being able to match predicted pressure to real pressure through PID controllers, and even if we knew, We might not be able to find the pressure perfectly.
+
+; I put all my time into this competition over the last few days to find the secret magic (although I haven`t found it).  During this, the words that i shouted countless times were "Why not?", and I changed my nickname to ynot from sogna with the determination of finding 😂.
+
+; Our UPSTAGE team had a lot of discussion in this competition, and a lot of ideas were born in the process. A big thanks again to our teams @jungikhyo and @limerobot who led us to top scores. And also thanks for reading long solution.
+
+Comments:
+├─ Chris Deotte (2021-11-06 20:05:02.713000) [+5]
+│  I've done some new analysis here which shows that we can predict pressure without R and C. I think this further explains why your Mixup with R C helped your model find the underlying PID controller...
+├─ Leon (2021-11-04 09:10:55.963000) [+3]
+│  Thanks for sharing. How do you get the pressure label after mixup? Average or keep the original?
+  ├─ Wonho Song (2021-11-04 09:37:59.687000) [+4]
+  │  We create new pressure using averaging. Thanks for ur comment and congrats gold medal !
+├─ Minh Tri Phan (2021-11-04 10:16:04.433000) [+4]
+│  Thanks for your sharing. Your data augmentation is super clever. We tried flipping the entire sequence, flipping only the inspiratory phase, swapping pressure sequences of the most similar breaths ...
+  ├─ Wonho Song (2021-11-04 14:34:33.693000) [+2]
+  │  Thanks for sharing ur experience. In our case, at early time we couldn't see a boost due to many features. so we removed them all, then we could check that there is a boost using data augmentations.
+  ├─ Minh Tri Phan (2021-11-04 14:41:50.677000) [+1]
+  │  Thank you for sharing your solution and experience. And congrats to your golds!!!
+├─ Zijian Li (2021-12-13 12:09:25.543000) [+1]
+│  Congratulations. conv1d is amazing
+├─ Oscar Takeshita (2021-11-28 02:47:58.453000) [+1]
+│  Thank you for sharing your elegant solution!
+│  
+│  I thought one of the difficult aspects of this competition was the amount of required TPU/GPU time. Did you use TPU for your single model? Can you comm...
+  ├─ Wonho Song (2021-12-04 05:50:17.197000) [+2]
+  │  Hello,
+  │  
+  │  We used GPU(4x3090). Epoch and LR scheduler is 500 and scheduler with cosine policy.
+  │  
+  │  Thanks for your comment:)
+├─ MINGOOK KIM (2021-11-19 00:02:33.270000) [+1]
+│  Congratulations on your achievements.
+│  
+│  Congratulations
+  ├─ Wonho Song (2021-11-23 10:09:30.460000) [+0]
+  │  Thanks :)
+├─ Thomas (2021-11-15 23:33:55.320000) [+1]
+│  Nice work thanks for the sharing !
+  ├─ Wonho Song (2021-11-23 10:09:19.590000) [+0]
+  │  thanks :)
+├─ mumin (2021-11-11 06:23:22.557000) [+1]
+│  Thanks for sharing!
+  ├─ Wonho Song (2021-11-12 07:57:58.013000) [+0]
+  │  Thanks :)
+├─ tarun_roy (2021-11-10 22:01:55.347000) [+1]
+│  Nice work, thank you for such an elaborate documentation.
+  ├─ Wonho Song (2021-11-12 07:57:51.413000) [+0]
+  │  Thanks :)
+├─ I. HASSE (2021-11-07 22:01:13.157000) [+1]
+│  The content is carefully designed to be understandable to beginners! Thanks for sharing!
+  ├─ Wonho Song (2021-11-08 06:58:07.710000) [+0]
+  │  I'm glad it was helpful to you :) Thanks.
+├─ Ignacio Oguiza (2021-11-07 16:05:13.733000) [+1]
+│  The use of multiple Conv1d layers as feature extractors improves performance. But I'm quite surprised with the kernel sizes you chosen (2,3,4). 
+│  Did you experiment with other kernel sizes (i.e. 3,5...
+  ├─ Wonho Song (2021-11-08 06:57:26.117000) [+0]
+  │  Hi @oguiza.
+  │  
+  │  Yes, I think this is the realm of experiments. We experimented with different kernel sizes, we used the best settings.
+  ├─ Ignacio Oguiza (2021-11-08 12:38:43.693000) [+1]
+  │  Ok. Thank you.
+├─ Old Monk (2021-11-07 15:11:34.273000) [+1]
+│  Awesome write up, thanks for sharing! Congratulations on the top class finish, very well deserved!
+  ├─ Wonho Song (2021-11-08 06:55:19.257000) [+0]
+  │  Thanks for ur kind words :)
+├─ Benny Fung (2021-11-06 10:31:26.723000) [+1]
+│  Congratulation!  Thanks for your sharing.  The data augmentation and model explanation are very informative and detailed.  Appreciate it so much.
+  ├─ Wonho Song (2021-11-06 15:19:08.480000) [+0]
+  │  Thanks for ur kind word :)
+├─ T.Force (2021-11-06 09:47:02.160000) [+1]
+│  Congratulations!
+│  I have a couple of questions about feature engineering.
+│  
+│  
+│    
+│  For engineered features, we did a lot of EDA and tried to put features the model could not see.
+│  
+│  
+│  Can you share with us...
+  ├─ Wonho Song (2021-11-06 15:18:37.790000) [+4]
+  │  Thanks :)
+  │  
+  │  
+  │  
+  │  
+  │  First, because our model included the Conv1d model, we did not use rolling related features. 
+  │  
+  │  
+  │  Afterwards, it was important to predict the delayed pressure according to the EDA resul...
+  ├─ T.Force (2021-11-06 22:39:23.513000) [+1]
+  │  Thank you for your reply.
+  │  
+  │  I asked the question because I was impressed by the great results you were getting with only this number of features. (In my case, I ended up increasing the number of fea...
+  ├─ Wonho Song (2021-11-08 06:24:47.150000) [+0]
+  │  Thanks :)
+├─ KouFu (2021-11-06 07:28:07.483000) [+1]
+│  Thanks for sharing amazing solution.
+│  I have one question.
+│  ・How did you implement multi-task MAE loss?
+│   Since your model is outputting the predicted pressure, did you use a custom loss function to c...
+  ├─ Wonho Song (2021-11-06 15:06:44.313000) [+1]
+  │  Thanks for comment.
+  │  
+  │  We made model predict the diff outputs too. When we used diff norm by using pressure predicted, it had no effects in cv scores.
+  │  
+  │  We used below code.
+  │  
+  │  if 'target' in batch:
+  │      ...
+  ├─ KouFu (2021-11-08 01:33:28.587000) [+1]
+  │  Thanks for reply and code.
+  │  I learned a lot.
+├─ Ignacio Oguiza (2021-11-05 16:15:07.047000) [+1]
+│  Congratulations on your excellent performance!! 
+│  I have reviewed all solutions from top-performing teams, and I think you have the best-performing single model (with very few hand-crafted features)...
+  ├─ Wonho Song (2021-11-05 16:42:38.097000) [+2]
+  │  Thanks for comment. 
+  │  
+  │  For most of the hand-crafted features, it distracted the convergence of model, and We thought that features which the model understands are better than those engineered by hum...
+├─ SMOGomes (2021-11-05 14:45:38.063000) [+1]
+│  Nice work! I really liked the models explanation! Thanks for the sharing
+  ├─ Wonho Song (2021-11-05 15:47:04.980000) [+0]
+  │  Thanks for your kind words !
+├─ RobertLangdonVinci (2021-11-05 14:06:09.080000) [+1]
+│  Congrats! Thanks for sharing this elegant solution. I also tried conv with lstm. But tried them in parallel and concatenating their output before the dense layer. It didn't work that great for me.
+  ├─ Wonho Song (2021-11-05 15:46:49.963000) [+1]
+  │  Thanks :)
+  │  
+  │  There were no effects in using Conv1d when we used rolling features 😂
+├─ Kiran Chaudhary (2021-11-05 10:18:45.843000) [+1]
+│  Amazing solution!!! Congratulations for gold and thanks for writeup.
+  ├─ Wonho Song (2021-11-05 15:43:11.293000) [+0]
+  │  Thanks for ur kind words :)
+├─ Vipin Kumar (2021-11-04 16:39:09.737000) [+1]
+│  Amazing solution! Thanks for sharing
+  ├─ Wonho Song (2021-11-05 01:01:26.227000) [+1]
+  │  Thanks :) 😀
+├─ Darien Schettler (2021-11-04 16:05:16.843000) [+1]
+│  Incredible! Great job!
+  ├─ Wonho Song (2021-11-05 01:00:57.547000) [+0]
+  │  thanks :) 👍
+├─ DrHB (2021-11-04 14:51:07.857000) [+1]
+│  really nice and strong solutions! I really like your mixup idea, we have something very similar! Congrats on your strong finis. How did you make the nice visualization of your model ?=)
+  ├─ Wonho Song (2021-11-05 01:00:25.153000) [+2]
+  │  Thanks for leaving comment :) I used just a powerpoint =)
+├─ Tifo (2021-11-04 13:24:02.057000) [+1]
+│  Hi Ynot, congrats! Thanks for sharing your nice solution.
+│  I have one confusion  about Data Augment of shuffle. Did you randomly shuffle the feature idx but kept targets idx original?  In other word...
+  ├─ dlrgy22 (2021-11-04 14:13:56.013000) [+1]
+  │  Hi Tifo 
+  │  we also used shuffled feature idx in target not just a feature
+  ├─ Tifo (2021-11-05 01:39:15.137000) [+2]
+  │  Hi, dirgy22
+  │  Thanks for your reply!
+  │  With your words, I understand what is going on
+├─ Igor Kuivjogi Fernandes (2021-11-04 12:20:22.227000) [+1]
+│  Your idea of loss was great. I think this really makes sense to improve LB.
+  ├─ Wonho Song (2021-11-04 14:36:22.270000) [+0]
+  │  Yeah, we intended to make model understand the delayed air. Thanks for reading and leaving comment :)
+├─ 954 (2021-11-04 11:15:47.810000) [+1]
+│  Thanks for sharing！
+  ├─ Wonho Song (2021-11-04 14:35:22.357000) [+0]
+  │  Thanks for reading long solution !
+├─ kaggler (2021-11-04 10:19:16.717000) [+1]
+│  Thanks for sharing this amazing solution.
+│  축하합니다!
+  ├─ Wonho Song (2021-11-04 14:35:04.520000) [+1]
+  │  Thanks for congrats :)
+  │  감사합니다 ㅎㅎ.
+├─ [deleted] (2021-11-04 10:04:15.037000) [+1]
+│  WOW this is impressive!
+│  Well done, congrats!
+  ├─ Wonho Song (2021-11-04 10:09:41.317000) [+1]
+  │  Thanks for ur congrats :)
+├─ zr (2021-11-04 09:11:51.983000) [+1]
+│  Amazing! Elegant solution, three types of data augmentation are creative. Thanks for sharing!
+  ├─ Wonho Song (2021-11-04 09:39:40.690000) [+1]
+  │  Thanks for ur comment :)
+├─ Sinan Calisir (2021-11-04 08:59:03.760000) [+1]
+│  Wow, amazing solution. And the gain from the augmentation (particularly mixup) is great. Congrats on the strong finish!!!
+  ├─ Wonho Song (2021-11-04 09:35:53.467000) [+0]
+  │  There are huge gain in augmentation. Thanks :)
+├─ [deleted] (2021-11-04 08:51:21.770000) [+1]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 09:35:02.777000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-09 18:10:58.850000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-10 02:23:37.513000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-11-07 04:44:25) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-08 06:54:57.683000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-08 11:11:56.440000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-06 19:27:19.897000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-08 06:29:05.480000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-08 17:02:10.753000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2021-11-17 18:23:35.620000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-05 01:10:20.950000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-05 05:15:39.097000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2021-11-06 19:41:52.530000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-08 07:03:50.610000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-04 15:33:15.117000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-05 01:00:44.960000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-04 14:43:23.207000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 14:50:17.703000) [+3]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 15:50:42.140000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-11-04 09:24:10.020000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 09:42:23.620000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-04 09:08:55.297000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 09:37:06.787000) [+2]
+  │  [deleted]
+├─ [deleted] (2021-11-04 09:08:50.583000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 09:21:11.143000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 09:38:53.910000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2021-11-04 09:40:20.650000) [+1]
+  │  [deleted]
+├─ [deleted] (2021-11-04 08:50:34.870000) [+2]
+│  [deleted]
+  ├─ [deleted] (2021-11-04 09:32:23.173000) [+2]
+  │  [deleted]
+├─ [deleted] (2021-11-12 15:53:26.793000) [+0]
+│  [deleted]
+  ├─ [deleted] (2021-11-14 14:53:36.603000) [+0]
+  │  [deleted]
+├─ [deleted] (2021-11-15 00:35:20.313000) [+0]
+│  [deleted]

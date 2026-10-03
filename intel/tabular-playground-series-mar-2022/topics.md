@@ -1,0 +1,82 @@
+# tabular-playground-series-mar-2022 讨论区（按票数排序，共 80 条）
+
+- [As simple as possible, but not simpler...](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310642) — 68 票 / 24 评论 / 2022-03-02 
+- [[1st] Disbelief](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316271) — 38 票 / 16 评论 / 2022-04-01 
+- [(Some more) time series resources](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311012) — 36 票 / 10 评论 / 2022-03-04 
+- [Extracting Date Features](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310377) — 34 票 / 18 评论 / 2022-03-01 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310166) — 31 票 / 13 评论 / 2022-02-27 
+- [[TPS MARCH 2022] Beginner solution compilation](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312463) — 31 票 / 16 评论 / 2022-03-12 **write-up?**
+- [Usual topic - kernel upvotes](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310904) — 31 票 / 6 评论 / 2022-03-03 
+- [Top Resources for getting started](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310534) — 29 票 / 8 评论 / 2022-03-01 
+- [Resources on Traffic Flow Prediction 🚗🚦](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310421) — 24 票 / 1 评论 / 2022-03-01 
+- [Congratulations Hasan Basri Akçay on becoming Kaggle Master 💐](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311863) — 22 票 / 18 评论 / 2022-03-09 
+- [TPS - Mar 2022, What I have tried.](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312752) — 21 票 / 8 评论 / 2022-03-13 
+- [Helpful Articles On Understanding Cyclic Features](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310407) — 20 票 / 1 评论 / 2022-03-01 
+- [Spatio-Temporal Forecasting (STF) - Resources ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311566) — 19 票 / 8 评论 / 2022-03-07 
+- [📌 EDA📈 + FE🔥 + ML Comparison⚖️ + Rule Based Model📜](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311657) — 16 票 / 5 评论 / 2022-03-08 
+- [LB 4.835 from pure EDA without ML ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312483) — 14 票 / 1 评论 / 2022-03-12 
+- [KFold vs TimeSeriesSplit](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310479) — 13 票 / 2 评论 / 2022-03-01 
+- [Special values improve score](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311215) — 13 票 / 1 评论 / 2022-03-05 
+- [Setting type for target is extremely important to improve the score](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310554) — 13 票 / 7 评论 / 2022-03-01 
+- [A monthly prize to recognize notebooks that use Google's ML ecosystem](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310559) — 12 票 / 0 评论 / 2022-03-01 
+- [Difference Between MAE vs RSME](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310621) — 12 票 / 5 评论 / 2022-03-02 
+- [Lessons Learned in TPS-03-2022 Share your own Story](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316150) — 11 票 / 17 评论 / 2022-03-31 
+- [How we can vizualize data as a map?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311480) — 11 票 / 4 评论 / 2022-03-07 **write-up?**
+- [R is alived with very good performace (Best - 4.876) and different models](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311906) — 11 票 / 1 评论 / 2022-03-09 
+- [Advanced Mean Approaches](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312125) — 11 票 / 2 评论 / 2022-03-10 
+- [Classification Or Regression !](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310443) — 11 票 / 7 评论 / 2022-03-01 
+- [Some ideas about improving accuracy](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310405) — 10 票 / 1 评论 / 2022-03-01 
+- [The locations are linked somehow](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311304) — 10 票 / 6 评论 / 2022-03-06 
+- [How to Utilize Autocorrelation?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312285) — 10 票 / 6 评论 / 2022-03-11 
+- [Why was my public score improved?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/314974) — 9 票 / 4 评论 / 2022-03-25 
+- [Possible strategy to validate your model ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310476) — 8 票 / 0 评论 / 2022-03-01 
+- [Strong correlation between Monday 23 Sept and Monday 30 Sept](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310751) — 8 票 / 2 评论 / 2022-03-02 
+- [Best Single Model ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312767) — 8 票 / 4 评论 / 2022-03-14 
+- [Gaussian Mixture Model ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/315201) — 8 票 / 2 评论 / 2022-03-26 
+- [Using one-hot encoding for 'direction'](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311361) — 8 票 / 7 评论 / 2022-03-06 
+- [The congestion in directions NW and SE](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310436) — 7 票 / 0 评论 / 2022-03-01 
+- [👉👉 Some Amazing Resource From Previous Competitions](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310459) — 7 票 / 0 评论 / 2022-03-01 
+- [A few ideas: mutual information on spatial data, divergence, and graph learning](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313255) — 7 票 / 2 评论 / 2022-03-16 
+- [Public LB is misleading, How I missed top 2% in Private LB](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316246) — 7 票 / 13 评论 / 2022-04-01 
+- [Is there a intersection have 8 direction in real life?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313867) — 7 票 / 4 评论 / 2022-03-19 
+- [Beginner Friendly YouTube Tutorial on Time Series](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311075) — 7 票 / 2 评论 / 2022-03-04 
+- [Top 6 (4.923) with just daily average](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310837) — 7 票 / 4 评论 / 2022-03-03 
+- [Daily time-space animation](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311617) — 7 票 / 5 评论 / 2022-03-07 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310165) — 6 票 / 31 评论 / 2022-02-27 
+- [😂Models are aware about data 😂 ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310525) — 6 票 / 0 评论 / 2022-03-01 
+- [3rd place, 3rd month, 3 submissions](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/317661) — 6 票 / 1 评论 / 2022-04-08 **write-up?**
+- [Why median is effective for this dataset?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313299) — 6 票 / 4 评论 / 2022-03-16 
+- [Possible to use lag features?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312982) — 6 票 / 2 评论 / 2022-03-15 
+- [Clustering using morning commutes](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310890) — 6 票 / 1 评论 / 2022-03-03 
+- [Large public-private leaderboard shift](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316245) — 6 票 / 1 评论 / 2022-04-01 
+- [Notebook Memory issues](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311608) — 6 票 / 1 评论 / 2022-03-07 
+- [Data Questions - Resolved](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310432) — 5 票 / 2 评论 / 2022-03-01 
+- [Improving Data Visualization Skills](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313874) — 5 票 / 2 评论 / 2022-03-19 
+- [Using AWS Sagemaker for Kaggle competitions](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316385) — 5 票 / 2 评论 / 2022-04-01 
+- [[2nd] My POV](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316295) — 5 票 / 2 评论 / 2022-04-01 
+- [Data Visualization](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311216) — 5 票 / 1 评论 / 2022-03-05 
+- [Memory issues and how to solve them?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311169) — 5 票 / 3 评论 / 2022-03-05 
+- [Graph neural networks?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311330) — 5 票 / 1 评论 / 2022-03-06 
+- [Daylight Saving Time](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311709) — 5 票 / 1 评论 / 2022-03-08 
+- [Proper Local CV Strategy](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311976) — 5 票 / 5 评论 / 2022-03-09 
+- [An Attempt to use the Spatial Nature of the Data](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/314949) — 5 票 / 2 评论 / 2022-03-25 
+- [✔️ Additive Outlier vs Innovational Outlier in Timeseries ✔️](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312711) — 5 票 / 0 评论 / 2022-03-13 
+- [Label-Encoding Question](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311850) — 5 票 / 5 评论 / 2022-03-09 
+- [Cross validation and splitting](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310519) — 5 票 / 1 评论 / 2022-03-01 
+- [Ensemble Folds with Median (Taken from Chris Deotte)](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313420) — 5 票 / 0 评论 / 2022-03-17 
+- [Overview of the feature importance using Fastai](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312667) — 5 票 / 4 评论 / 2022-03-13 
+- [validation score and public score](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/314582) — 4 票 / 3 评论 / 2022-03-23 
+- [Why date features have low or no effect on model? ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/315387) — 4 票 / 2 评论 / 2022-03-27 
+- [April Fools' Shakeup ???](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/316297) — 4 票 / 2 评论 / 2022-04-01 
+- [Some clarification needed: Are the roads connected as the data implies or not?](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311360) — 4 票 / 3 评论 / 2022-03-06 
+- [Intellisense / tab autocomplete not working ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/310967) — 4 票 / 2 评论 / 2022-03-04 
+- [Hardware Requirement for such large number of rows ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313827) — 4 票 / 7 评论 / 2022-03-19 
+- [Position of the last day morning congestion comparing to data of all the previous days](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313554) — 4 票 / 2 评论 / 2022-03-17 
+- [[Apache Spark][Scala]My second tabular competition, impressions and my solution](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313882) — 4 票 / 2 评论 / 2022-03-19 **write-up?**
+- [Target encoding ](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313986) — 4 票 / 1 评论 / 2022-03-20 
+- [Traffic flow Youtube video](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313856) — 4 票 / 4 评论 / 2022-03-19 
+- [[ HELP - Memory issue ] - Pycaret AutoMl](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/311900) — 3 票 / 2 评论 / 2022-03-09 
+- [Time-series data with non-unique timestamp indexes](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/312799) — 3 票 / 1 评论 / 2022-03-14 
+- [Help in understanding data](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/314382) — 3 票 / 2 评论 / 2022-03-22 
+- [Out of ideas for now](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/313769) — 3 票 / 7 评论 / 2022-03-18 
+- [Need a team mate.](https://www.kaggle.com/competitions/tabular-playground-series-mar-2022/discussion/314013) — 3 票 / 1 评论 / 2022-03-20 

@@ -1,0 +1,119 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323892
+
+Topic #323892: Engineering the top three feature interactions
+  Author: AmbrosM
+  Posted: 2022-05-09 05:08:13.473000
+  Votes: 71  Comments: 26
+
+In the topic Interaction vs Correlation, @wti200 has demonstrated that certain projections of the feature space are partitioned into three regions with differing target probabilities. From these diagrams, we can derive the feature interactions. Three projections are particularly useful:
+
+
+
+the projection to f_02 and f_21
+
+the projection to f_05 and f_22
+
+the projection to f_00+f_01 and f_26
+
+
+
+
+We now can either hope that our classifier finds these borders by itself, or we can help the classifier.
+
+And how can we help a classifier? For every projection, we create a ternary categorical feature that indicates to which region a sample belongs:
+
+
+
+Top right region (high probability of target == 1) → +1
+
+Middle region (medium probability of target == 1) → 0
+
+Bottom left region (low probability of target == 1) → -1
+
+
+The features are:
+
+df['i_02_21'] = (df.f_21 + df.f_02 &gt; 5.2).astype(int)
+                - (df.f_21 + df.f_02 &lt; -5.3).astype(int)
+df['i_05_22'] = (df.f_22 + df.f_05 &gt; 5.1).astype(int)
+                - (df.f_22 + df.f_05 &lt; -5.4).astype(int)
+i_00_01_26 = df.f_00 + df.f_01 + df.f_26
+df['i_00_01_26'] = (i_00_01_26 &gt; 5.0).astype(int)
+                - (i_00_01_26 &lt; -5.0).astype(int)
+
+
+You can find the complete source code either in Advanced Keras or in Gradient-Boosting Quickstart.
+
+Comments:
+├─ Aditya Kumar (2022-05-19 16:21:53.933000) [+3]
+│  Thanks for sharing, as a complete beginner its very helpful for me to see how more experienced persons approach feature engineering 👍
+├─ Shagun Kala (2022-05-12 03:25:44.837000) [+3]
+│  This is a great piece of feature engineering. 
+│  
+│  Can you please help me understand how you came up with these equations?
+│  
+│  df['i_02_21'] = (df.f_21 + df.f_02 &gt; 5.2).astype(int)
+│                  - (...
+  ├─ Christophe Nicault (2022-05-12 13:07:30.203000) [+6]
+  │  You can find the values graphically by plotting the distribution of the new variable vs the target.
+  │  For example with f_21 + f_02, you can find on the graph the split for -5.3 and 5.2. 
+  │  Than the equ...
+  ├─ Shagun Kala (2022-05-12 13:21:25.360000) [+1]
+  │  Thank you for your clear explanation! I will explore the count plots for other equations.
+  ├─ Noah Gampe (2022-05-12 21:11:46.783000) [+3]
+  │  Were the values (the 5.x and -5.x) just eyeballed? How do you find the exact value?
+  ├─ AmbrosM (2022-05-14 19:06:21.017000) [+1]
+  │  @noahgampe I didn't do anything more sophisticated than plotting the diagrams and measuring. It is possible that the values are not exact. If you find a better method, please tell me…
+├─ Waldemar (2022-05-13 17:04:41.273000) [+4]
+│  A good place to start with interactions is to plot the pairplot:
+│  
+│  
+│  sns.pairplot(df_train[all_float_cols][::10], hue=target_col)
+│  
+│  f_21 interacts with most features in a similar way.
+  ├─ AmbrosM (2022-05-14 19:17:07.350000) [+2]
+  │  @waldemar I did start by looking at all scatterplots of two variables. If you plot them at higher resolution, you'll immediately see that f_02+f_21 and f_05+f_22 are special. f_00+f_26 and f_01+f_2...
+├─ theJosephGoodman (2022-06-13 07:42:55.427000) [+1]
+│  For everybody who can't understand where coefficients at the end come from, just create histogram of sum of relative features( for example df.f_21 + df.f_02) with hue=target and you will understand...
+├─ László Bebesi (2022-05-29 07:59:51.117000) [+1]
+│  Thank You for sharing!
+│  I have one question: In the code You implicitly assume that the patter we observe with these features can be described by observing the sum of the two features which defines ...
+  ├─ AmbrosM (2022-05-29 08:17:54.187000) [+1]
+  │  @lszlbebesi I didn't do anything more sophisticated than plotting the diagrams at higher resolution and measuring the millimeters. It is possible that the a in x+a*y is slightly different from 1.
+  ├─ broccoli beef (2022-05-29 18:27:27.463000) [+5]
+  │  It is an interesting question how to determine the linear combination algorithmically. One approach is to maximize the mutual information. Take for example \(f_{02}\) and \(f_{21}\). Using a differ...
+├─ ArturRa (2022-05-21 16:07:53.427000) [+1]
+│  Thank you for sharing this approach! It is really helpful.
+├─ Bhavesh Bisht (2022-05-19 04:00:52.250000) [+1]
+│  The visualization makes it super intuitive, thanks for sharing
+├─ Fernando Mercadal (2022-05-11 22:54:52.403000) [+1]
+│  This feature engineering approach was really helpful. Thanks for sharing!
+├─ hkato (2022-05-11 01:58:26.693000) [+1]
+│  @ambrosm Thanks for sharing! I will refer to it!
+├─ [deleted] (2022-05-09 20:56:48.563000) [+1]
+│  This is a really interesting approach to feature engineering and I can see how it could be incredibly helpful in many cases. Thank you so much for sharing your code and thoughts on this topic!
+├─ Lachlan Gillian (2022-05-09 07:06:35.280000) [+1]
+│  @ambrosm thanks for the detailed write up
+├─ C4rl05/V (2022-05-09 05:13:05.290000) [+1]
+│  Hello, @ambrosm thanks for sharing new ways of looking at the data and using this information to create more features.
+├─ aci.patlican (2022-05-31 15:40:02.967000) [+0]
+│  @cnicault  I'd be appreciated if you share the code that used to draw the graph f_21 + f_02 vs. target
+  ├─ Christophe Nicault (2022-06-01 18:29:14.907000) [+0]
+  │  Sure. I did it with R, I hope it works for you.
+  │  
+  │  library(tidyverse)
+  │  
+  │  train %&gt;%
+  │    mutate(f_inter = f_02 + f_21) %&gt;%
+  │    ggplot(aes(f_inter, fill = as.factor(target))) +
+  │    geom_histogram(alpha = ...
+├─ [deleted] (2022-05-15 03:51:25.113000) [+0]
+│  [deleted]
+├─ lyyabc (2022-05-22 11:01:30.257000) [+1]
+│  Thanks for sharing!
+├─ Qianru Wu (2022-05-17 14:53:19.430000) [+1]
+│  Good idea. Thank you for sharing.
+├─ Baby Shark (2022-05-14 02:37:51.607000) [+1]
+│  Cool ! i will refer it. Thanks
+├─ Muhammed Tausif (2022-05-10 11:27:03.523000) [+1]
+│  helpful, thank you

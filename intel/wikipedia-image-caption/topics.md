@@ -1,0 +1,34 @@
+# wikipedia-image-caption 讨论区（按票数排序，共 32 条）
+
+- [[Compilation] Good starter notebooks](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/273309) — 17 票 / 3 评论 / 2021-09-20 
+- [Welcome to the Wikipedia Image/Caption Matching Competition!](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272023) — 16 票 / 16 评论 / 2021-09-13 
+- [Handling a huge size of image data.  Are you ready Newbies?  ](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272204) — 14 票 / 6 评论 / 2021-09-14 
+- [ Image Captioning Research Papers with code](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272172) — 14 票 / 1 评论 / 2021-09-14 
+- [Some similar competitions in Kaggle](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272091) — 13 票 / 4 评论 / 2021-09-14 
+- [[tl;dr summary list] Research Papers summary about Text & Image matching](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/283916) — 12 票 / 1 评论 / 2021-10-28 
+- [Matching multilingual BERT embeddings with image embeddings](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/277601) — 10 票 / 5 评论 / 2021-10-10 
+- [Easy-to-Use Dataset](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/284720) — 9 票 / 1 评论 / 2021-11-02 
+- [Love the diversity 👍](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/273083) — 9 票 / 2 评论 / 2021-09-19 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272016) — 7 票 / 0 评论 / 2021-09-13 
+- [[Trainable] Pytorch Starter](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/285177) — 7 票 / 2 评论 / 2021-11-03 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272015) — 6 票 / 0 评论 / 2021-09-13 
+- [Train TSV files in Feather format](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272334) — 6 票 / 0 评论 / 2021-09-15 
+- [Test images does not downloaded](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/287955) — 5 票 / 6 评论 / 2021-11-16 
+- [Shopee [simillar-ish competition] - Solutions Mega Thread](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/283917) — 5 票 / 0 评论 / 2021-10-28 **write-up?**
+- [RapidFuzz and FuzzyWuzzy.](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272720) — 5 票 / 2 评论 / 2021-09-17 
+- [Methods and Formats: Rapids, Dask, Datatable, Feather, HDF5, Jay, Parquet, Pickle](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272531) — 5 票 / 2 评论 / 2021-09-15 
+- [IMPORTANT: Updated Dataset](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272501) — 4 票 / 2 评论 / 2021-09-15 
+- [Major inconvenience using binary classification for this project: Making submission itself seems too hard](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/286451) — 4 票 / 2 评论 / 2021-11-09 
+- [ I Implemented Nfnets-keras from scratch and got silver on Shopee - Try them out!](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/283854) — 4 票 / 0 评论 / 2021-10-28 
+- [Why does this result in 0.0000 score? ](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272294) — 4 票 / 4 评论 / 2021-09-14 
+- [Basics-Level Discussions for new-to-kaggle people](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/273681) — 3 票 / 2 评论 / 2021-09-22 
+- [Why such less participants are here ?](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/287718) — 2 票 / 5 评论 / 2021-11-15 
+- [Can we generate captions and then try to match them to the wiki description?](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272223) — 2 票 / 3 评论 / 2021-09-14 
+- [Have anyone think about generate images from text?](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/274225) — 2 票 / 0 评论 / 2021-09-24 
+- [Possible error with test embeddings](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272846) — 2 票 / 2 评论 / 2021-09-17 
+- [You’ll build a model that automatically retrieves the text closest to an image. ](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/272105) — 2 票 / 0 评论 / 2021-09-14 
+- [Announcement on Public Notebook Sharing](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/291554) — 1 票 / 0 评论 / 2021-11-29 
+- [Memory is not available](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/288192) — 1 票 / 2 评论 / 2021-11-17 
+- [IMPORTANT! A large published dataset of Wikipedia image files and features](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/273892) — 1 票 / 1 评论 / 2021-09-23 
+- [Reading tsv file gives error in Kaggle ](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/275237) — 1 票 / 1 评论 / 2021-09-29 
+- [use external datas for pre-trained model](https://www.kaggle.com/competitions/wikipedia-image-caption/discussion/284100) — 0 票 / 0 评论 / 2021-10-29 

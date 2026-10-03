@@ -1,0 +1,26 @@
+<p><strong>TLDR:</strong> You can create queries as long as you want by using a "fake" space character. Whoosh's preprocessing will replace this character by a whitespace, whereas the <code>count_query_tokens</code> function will not !</p>
+<p>Sometimes a code example is better than a long explanation:</p>
+<blockquote>
+  <p><a href="https://www.kaggle.com/code/theoviel/uspto-magic-with-cudf-pandas-lb-0-8-in-1min" target="_blank">https://www.kaggle.com/code/theoviel/uspto-magic-with-cudf-pandas-lb-0-8-in-1min</a></p>
+</blockquote>
+<h4>Overall idea</h4>
+<p>Let's say we have two publications ( <code>publication_1</code> and <code>publication_2</code>) with titles <code>title_1 =  t1_1 t1_2 t1_3 ...</code>and <code>title_2 =  t2_1 t2_2 t2_3 ...</code>.<br>
+The easiest way to query both publications would be to do : <br>
+<code>query = ti:"title_1" OR ti:"title_2"</code><br>
+The issue is that titles can be several words long, and with the token limit of 50, you cannot really query enough titles to get a reasonable score.<br>
+If only title_1 could count as only one token, that would mean we could query 25 titles, and get a score of 0.8+ effortlessly ! </p>
+<h4>The magic</h4>
+<p>The count token function uses spaces:</p>
+<pre><code> ():
+     ([i  i  re.split(, query)  i])
+</code></pre>
+<p>However, whoosh uses a more sophisticated preprocessing. If we can find a character than is replaced by a whitespace by whoosh, but not by the <code>count_query_tokens</code> regex, then we can query a title for the cost of one token  !</p>
+<p>And it turns out, such special character exists: <code>~</code> is an example. This query :</p>
+<pre><code> = ti: OR ti:
+</code></pre>
+<p>Costs 3 tokens and will match the same document as </p>
+<pre><code> = ti: OR ti:
+</code></pre>
+<p>Using this trick to query 25 exact titles alone achieves LB 0.8 which is almost in the gold zone.</p>
+<p>Using <a href="https://rapids.ai/cudf-pandas/" target="_blank">cudf-pandas</a> to process everything on GPU makes the code super-fast. The notebook shared above runs in 1 minute ! Unfortunately there is no efficiency track in this competition 😄</p>
+<p>We used slightly fancier heuristics to reach 7th place, but I'm sure top teams found even better hacks !</p>

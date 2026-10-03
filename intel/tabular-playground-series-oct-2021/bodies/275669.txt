@@ -1,0 +1,137 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275669
+
+Topic #275669: 1M rows: ...how to read in only some of the data
+  Author: Carl McBride Ellis
+  Posted: 2021-10-01 07:35:25.950000
+  Votes: 75  Comments: 32
+
+This month the train.csv occupies 2.32G and has 1,000,000 rows. 
+
+I would not be at all surprised in one could make quite a lot of progress initially only working with, say, only 10% of the training data. A very simple trick one can use is to only read in the first nrows of data, for example
+
+
+  
+train_data = pd.read_csv('train.csv', nrows=100000)
+
+
+or if one wishes to to read in a different chunk one can use skiprows before nrows:
+
+
+  
+train_data = pd.read_csv('train.csv', skiprows=range(1, 100001), nrows=100000)
+
+
+(Note that we start the skiprows from position 1 in order to keep row 0, which has the header data with the feature names).
+
+One can also reduce the RAM usage along the way by deleting unwanted dataframes, large arrays etc.  using garbage collection:
+
+
+  
+import gc
+  del unwanted_dataframe
+  gc.collect()
+
+
+For example, when one has finished fitting, or 'training', ones model, the training data is no longer required and can be deleted. This will free up memory to then go ahead and read in the test.csv file (which is also large),  make the predictions, and finally create the submission.csv file.
+
+When you are happy with your prototype, and you really do want to access all of the data, may I heartily recommend  the "Tutorial on reading large datasets" written by Vopani, introducing alternatives such as Dask, Datatable and the the Rapids cudf, which harnesses the power of the GPU's, and all affording considerable speedups w.r.t. pandas.  
+
+All the best,
+carl
+
+Comments:
+├─ Alexander Bader (2021-10-05 09:39:46.133000) [+5]
+│  If you only want to read a random part of the csv use this:
+│  
+│  
+│  
+│  read only the first column to get the index:
+│  df = pd.read_csv("../input/tabular-playground-series-oct-2021/train.csv",usecols=[0])
+│  
+│  ge...
+├─ Chris Deotte (2021-10-02 23:46:08.493000) [+6]
+│  Thanks for the tips. I also suggestion using Nvidia RAPIDS here which loads the dataframe onto the GPU and then processes the dataframe on the GPU. All the commands are the same as Pandas, but the ...
+  ├─ Gaurav Rawat (2021-10-03 03:30:04.100000) [+2]
+  │  yes use the same but have found certain panda's operation do give errors via cudf .. example group by transforms . but might raise an issue in GitHub for that or might already be raised
+  ├─ selimkalici (2024-01-10 22:34:17.810000) [+0]
+  │  I was looking for how to do this
+├─ Sreedevi Sasidharan (2021-10-05 14:21:53.663000) [+1]
+│  If I use only a minor portion of data for training, won't that affect accuracy? Or is there any way to iteratively load portions of data and train the model iteratively?
+├─ MerrickOlivier (2021-10-04 12:00:44.117000) [+1]
+│  Thanks for this tip! I've used it along with PCA and have obtain good results so far. I'd be interested to see just how much of a difference in score training on 1/10th of the dataset vs the full d...
+├─ Nikhil (2021-10-04 11:12:55.037000) [+1]
+│  Tried training with only 100000 rows using AutoML and got a score better than the Random Forest Benchmark in this competition.
+│  Score:0.84465
+│  
+│  Updated notebook used all the rows and score improved f...
+├─ marinovik (2021-10-03 16:46:16.067000) [+1]
+│  Great resource. It was very helpful!
+├─ Gaurav Rawat (2021-10-02 20:31:44.780000) [+1]
+│  This is useful I hit the problem when tuning on optuna seems to hit the mem limit every time👍
+├─ Patrick Latini (2021-10-01 22:10:56.493000) [+1]
+│  Nice stuff, tks!
+├─ Bismeet Singh (2021-10-01 13:14:53.790000) [+1]
+│  Thanks. I was really struggling with Your notebook tried to allocate more memory than is available. It has restarted.
+  ├─ Carl McBride Ellis (2021-10-01 15:26:08.943000) [+1]
+  │  Dear @bissucoder 
+  │  
+  │  I somewhat suspect that is one of the ideas behind this October challenge: resource management when dealing with "large" amounts of data, where "large" is anything that pushes th...
+├─ OldMonk (2021-10-07 16:29:46.423000) [+2]
+│  I sampled 100,000 rows from the training dataset to tune and trian Xgboost on sample which I can use on full dataset later. 
+│  
+│  This was XGBOOST tuned (optuna) and trained on 100,000 samples from Dat...
+├─ Kalilur Rahman (2021-10-02 05:20:40.343000) [+2]
+│  I found  del and gc() doesn't free memory sometimes.  Have you noticed as well ? I remember seeing some threads as well. @carlmcbrideellis
+  ├─ Carl McBride Ellis (2021-10-02 05:32:09.457000) [+2]
+  │  Dear @kalilurrahman 
+  │  
+  │  Indeed it can be hit or miss in a Jupyter notebook. Here are a couple of more in-depth treatments of the topic
+  │  
+  │  
+  │  
+  │   Python memory management in Jupyter Notebook
+  │  
+  │  Python Garbage...
+├─ ken kawa (2021-11-01 12:07:56.293000) [+0]
+│  Thankyou！！！
+├─ Ikuhiro Yoshihara (2021-10-07 08:27:36.013000) [+0]
+│  Thank you for sharing. I would like to try it.
+├─ OldMonk (2021-10-07 07:16:14.723000) [+0]
+│  Nice suggestion @carlmcbrideellis 
+│  
+│  We can also use one of the folds of Stratified 10 folds for our experimentation.
+│  
+│  I have a query though.  XGB or LGB tuned and trained using a sample of data wil...
+├─ Riti Gawade (2021-10-05 16:46:48.943000) [+0]
+│  Useful tip for handling the selected rows from huge dataset. Thank you, Carl!
+├─ Gaurav Rawat (2021-10-05 16:36:19.637000) [+0]
+│  I Also find this useful https://www.kaggle.com/gemartin/load-data-reduce-memory-usage to downsize pandas df's and use some helper for cleaning up unused objects 
+│  
+│  def free_mem(objects):
+│      """free...
+├─ Guilherme Boaviagem Ribeiro (2021-10-05 15:12:59.723000) [+0]
+│  Quite insightful and useful tips, Carl, thanks a lot.
+├─ Towhidul.Tonmoy (2021-10-04 03:12:10.190000) [+0]
+│  Good read. I have worked with DataTable. One problem that I have faced while converting to pandas data frame again with to_pandas() command: it converts the binary values to the Boolean form while ...
+├─ [deleted] (2021-10-06 13:45:13.917000) [+0]
+│  One other option is to use datatable library. More details here - https://www.kaggle.com/rohanrao/automl-tutorial-tps-october-2021/notebook
+│  I just loaded all the data, then used this:
+│  train = train...
+├─ Adam Wurdits (2021-10-05 11:46:40.457000) [+1]
+│  Thank you for the useful tip, Carl!
+├─ Edrick Kesuma (2021-10-03 03:24:26.633000) [+1]
+│  Another great resource. Thanks!
+├─ tdoh86 (2021-10-01 22:03:06.787000) [+1]
+│  Very nice trick, thanks
+├─ Tien Hoang (2021-10-01 20:15:29.477000) [+1]
+│  Thank you for sharing. This is useful.
+├─ Anvesh Konda (2021-10-26 13:08:57.063000) [+0]
+│  Thanks for sharing
+├─ 38tter (2021-10-23 04:33:12.560000) [+0]
+│  Thanks for sharing!
+├─ Mottchan (2021-10-09 01:27:04.767000) [+0]
+│  Thank you. I find many of them helpful.
+├─ Roman Metlitsky (2021-10-07 18:34:47.790000) [+0]
+│  It was useful, thank you
+├─ michelleth (2021-10-03 05:40:42.157000) [+0]
+│  Thanks for sharing

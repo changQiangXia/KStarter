@@ -1,0 +1,64 @@
+<h1>9th solution: Laplace distribution noise likelihood optimization</h1>
+<p><a href="https://github.com/ryoma-k/GBVPP_Public" target="_blank">github code</a></p>
+<p>[update 21/11/8] I found a related paper.  <a href="https://ieeexplore.ieee.org/document/374138" target="_blank">Estimating the mean and variance of the target probability distribution</a></p>
+<p>Congratulations to the winners! Thank you also to the host for organizing the competition.</p>
+<p>I am a first-year master's student in <a href="https://www.mi.t.u-tokyo.ac.jp/" target="_blank">Harada Laboratory</a>.</p>
+<p>The solution is basically based on nakama's <a href="https://www.kaggle.com/yasufuminakama/ventilator-pressure-lstm-starter" target="_blank">notebook</a>.<br>
+The changes are</p>
+<ol>
+<li>changed L1 loss to likelihood loss (0.1095 on Public LB for 20 model ensemble)(10 fold &amp; all with 10 seed)</li>
+<li>pseudo labels using test data (0.1068 on Public LB)</li>
+</ol>
+<p>In the following, we will discuss the first one, minimization of the L1 norm assuming Laplace distribution as the error.</p>
+<h2>Optimization using the Laplace distribution</h2>
+<p>To begin, the usual L1 loss is equivalent to likelihood maximization assuming an equivariant Laplace distribution at each time for the error distribution.</p>
+<p>$$<br>
+p(x) = \frac{1}{2b}\exp{(-\frac{|x - \mu|}{b})}<br>
+$$</p>
+<p>$$<br>
+L_{1} = | x - \mu |<br>
+$$</p>
+<p>$$<br>
+L_{laplace} = - \log{p(x)}= \frac{|x - \mu|}{b} - \log{\frac{1}{2b}}<br>
+$$</p>
+<p>Then</p>
+<p>$$<br>
+\frac{\partial}{\partial x}L_{1} = const. \frac{\partial}{\partial x}L_{laplace} <br>
+$$</p>
+<p>Now, for this data, as pointed out in some of the notebooks, increasing the training data resulted in better CV scores. This may be an indication that the situation is prone to overtraining.</p>
+<p>Then I thought this might be due to the fact that we assume equal variance as the variance of the error, meaning that it might be more difficult to predict accurately at some times than at others.</p>
+<p>So I assumed that the variance for each time was different.<br>
+Therefore, I decided to output not only the predicted value x but also the predicted variance b from the model. The final loss is</p>
+<p>\begin{align}<br>
+L_{laplace} &amp;= \Sigma_{i=0}^{80} - \log{p_{i}(x)} \\<br>
+&amp;= \Sigma_{i=0}^{80} - \log{(\frac{1}{2b_{i}}\exp{(-\frac{|x_{i} - y_{i}|}{b_{i}})})})<br>
+\end{align}</p>
+<p>This loss increased the score by more than 0.01.</p>
+<p><img src="https://user-images.githubusercontent.com/45588624/140300890-f89b5c3d-6239-4f42-9b95-1aec0c474fc4.png"></p>
+<p><img src="https://user-images.githubusercontent.com/45588624/140300044-7dba94d8-c54b-422f-a306-568165171c19.png"></p>
+<pre><code>    def masked_laplace(self, outputs, labels):
+        mask = labels['mask']
+        y = labels['label'][mask]
+        x = outputs[...,0][mask]
+        b = outputs[...,1][mask]
+        p = 1 / (2*b) * (- (x - y).abs() / b).exp()
+        loss = - torch.log(p + 1e-12)
+        return loss.mean()
+</code></pre>
+<p>The parameters are noted below.</p>
+<pre><code>Optimizer: AdamW
+lr: 5e-3
+Scheduler: MultiStep(gamma 0.1)
+Iteration: 550,000(steps at 400,000 / 500,000)
+batchsize: 256
+gradient norm: 50
+
+model(based on nakama's notebook)
+hiddensize: 128
+num_layers: 3
+</code></pre>
+<p>I spent the last two weeks augmenting the data and looking for leaks, but I couldn't improve my score.</p>
+<p>It was a simple task, but the competition was challenging and fun to analyze.<br>
+I am happy to have won the gold medal.</p>
+<p>Finally, I would like to thank the Harada Laboratory for lending us their computing resources.</p>
+<p>Thank you very much, everyone!</p>

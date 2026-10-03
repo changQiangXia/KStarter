@@ -1,0 +1,219 @@
+<p>First of all, I would like to thank kaggle and the staff for hosting such an interesting competition.<br>
+Also, I really appreciate my teammates, <a href="https://www.kaggle.com/harshit92" target="_blank">@harshit92</a>, <a href="https://www.kaggle.com/ynishizono" target="_blank">@ynishizono</a>, <a href="https://www.kaggle.com/muhammad4hmed" target="_blank">@muhammad4hmed</a> Congratulations to become the competition master and <a href="https://www.kaggle.com/trushk" target="_blank">@trushk</a> Congratulations to 2nd gold medal !</p>
+<h1>1. Summary (Our Magic and got single model public LB : 0.8562, private : 0.8717)</h1>
+<p>Our magic was to group the target words per "anchor + context" and attach them to the end of each sentence.Maybe it's easier to understand by looking at the code, so I'll share it.</p>
+<pre><code>train['group'] = train['context'] + " " + train['anchor']
+
+allres = {}
+
+for text in tqdm(train["group"].unique()):
+  tmpdf = train[train["group"]==text].reset_index(drop=True)
+  texts = ",".join(tmpdf["target"])
+  allres[text] = texts
+
+train["target_gp"] = train["group"].map(allres)
+
+train["input"] = train.anchor + " " + tokenizer.sep_token + " " + train.target + " " + tokenizer.sep_token + " " + train.title + " " + tokenizer.sep_token + " " + train.target_gp
+</code></pre>
+<p>for example, we get like this sentence as input. And training.</p>
+<pre><code>abatement [SEP] abatement of pollution [SEP] HUMAN NECESSITIES. FURNITURE; DOMESTIC ARTICLES OR APPLIANCES; COFFEE MILLS; SPICE MILLS; SUCTION CLEANERS IN GENERAL [SEP] abatement of pollution,act of abating,active catalyst,eliminating process,forest region,greenhouse gases,increased rate,measurement level,minimising sounds,mixing core materials,multi pollution abatement device,noise reduction,pollution abatement,pollution abatement incinerator,pollution certificate,rent abatement,sorbent material,source items pollution abatement technology,stone abutments,tax abatement,water bodies
+</code></pre>
+<p>By doing so, we thought that we could not only train one sentence, but also train considering the correlation of the target words for each "anchor + context" with attention. Moreover, in order to avoid leakage, groupkfold of "anchor + context" was adopted. As a result, this magic boosted our models (in best case, public lb 0.8418 → 0.8562) two days before closing.</p>
+<p>This idea was decisive for getting into the gold medal zone. (Only this single model we can get the gold)</p>
+<p>------------------Details below---------------------------------------</p>
+<h1>2. Preprocess and cross validation</h1>
+<p>preprocess and cross validation is proposed by <a href="https://www.kaggle.com/harshit92" target="_blank">@harshit92</a> Basically, we used the lower case, not using [SEP] but uses [sep], remove ";" , "," , and "." like this.</p>
+<pre><code>train['input'] = train['anchor'] + ' [SEP] ' + train['target'] + ' [SEP] '  + train['context_text']
+train['input'] = train['input'].apply(lambda x: x.lower())
+train['input'] = train['input'].apply(lambda x: x.replace(';','').replace(',','').replace('.',''))
+</code></pre>
+<p>And he found the boosting by changing 5kfold to 10kfold as NBME 1st solution<br>
+(public LB : 5kfold 0.8395 → 10kfold 0.8435). These were the strong tools for us.</p>
+<h1>3. Model making</h1>
+<h2>3.1 How to catch the problem</h2>
+<p>We did not just solve the 1 target prediction, but to make it more diverse, we solved the problem as follows.</p>
+<h3>3.1.1 BCE with binning</h3>
+<p>The score value was replaced as follows. And sigmoid was calculated in each predictions and averaged.</p>
+<pre><code>0:[0,0,0,0], 0.25:[1,0,0,0], 0.5:[1,1,0,0], 0.75:[1,1,1,0],1:[1,1,1,1]
+output = sigmoid in each prediction and averaged
+
+For example, prediction = [0.1, 0.3, 0.2, 0.4], output = (0.1 + 0.3 + 0.2 + 0.4) /4
+</code></pre>
+<h3>3.1.2 Softmax with binning</h3>
+<p>The score was replaced as follows. And softmax was calculated in each predictions and convoluted.</p>
+<pre><code>0:[0, 0, 0, 0, 0], 0.25:[0,1,0,0,0], 0.5:[0,0,1,0,0], 0.75:[0,0,0,1,0],1:[0,0,0,0,1]
+output = softmax in each prediction and convolution operation
+
+For example, prediction = [0.1, 0.3, 0.2, 0.4, 0], output = 0*0.1 + 0.25*0.3 + 0.5*0.2 + 0.75*0.4 +1.0*0
+</code></pre>
+<h2>3.2 AWP</h2>
+<p>As with Feedback and NBME, we were able to improve our score with AWP.<br>
+I got the code from the following in Feedback <a href="https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook" target="_blank">code</a></p>
+<p>This boosted my model public LB : 0.8394  to 0.8418</p>
+<h2>3.3 Other tips that worked well</h2>
+<ul>
+<li>Mixout by <a href="https://www.kaggle.com/trushk" target="_blank">@trushk</a> </li>
+<li>Knowledge distillation(KD) by <a href="https://www.kaggle.com/ynishizono" target="_blank">@ynishizono</a> </li>
+<li>text embedding with SVR </li>
+<li>mix various loss (ex. MSE + Corr)</li>
+<li>dynamic padding for some arches </li>
+</ul>
+<h2>3.4 Didn't work well</h2>
+<ul>
+<li>MLM</li>
+<li>pseudo labeling (export all combination of anchor and target per context)</li>
+<li>Random noise of [MASK]</li>
+<li>change the order of input</li>
+<li>post process of Gradiant Boost</li>
+<li>adding per subsection title (some case is better.)</li>
+<li>concat text embedding and SVR like PetFinder 1st solution</li>
+</ul>
+<h1>4. Ensemble</h1>
+<p>For our ensemble, we used the nelder-mead coefficient by oof files. Candidates were automatically exported by <a href="https://www.kaggle.com/trushk" target="_blank">@trushk</a> 's code which uses the mix of the hill climb and nelder-mead algorithm. Finally, the used models were extracted based on over 90 oof files, and adjusted manually.</p>
+<p>There are the list of models for the final submission. </p>
+<table>
+<thead>
+<tr>
+<th>model id</th>
+<th>model</th>
+<th>Feature</th>
+<th>Task</th>
+<th>Magic</th>
+<th>kfold</th>
+<th>cv</th>
+<th>public LB</th>
+<th>private LB</th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>deberta-v3-large</td>
+<td>AWP</td>
+<td>MSE</td>
+<td>TRUE</td>
+<td>15</td>
+<td>0.8605</td>
+<td>0.8562</td>
+<td>0.8717</td>
+<td>0.237</td>
+</tr>
+<tr>
+<td>2</td>
+<td>electra-large-discriminator</td>
+<td></td>
+<td>MSE</td>
+<td>TRUE</td>
+<td>15</td>
+<td>0.8456</td>
+<td>0.8406</td>
+<td>0.8534</td>
+<td>0.166</td>
+</tr>
+<tr>
+<td>3</td>
+<td>electra-large-discriminator</td>
+<td></td>
+<td>MSE</td>
+<td></td>
+<td>15</td>
+<td>0.8381</td>
+<td>0.8339</td>
+<td>0.8486</td>
+<td>0.049</td>
+</tr>
+<tr>
+<td>4</td>
+<td>bert-for-patents</td>
+<td>KD + SVR</td>
+<td>BCE binning</td>
+<td></td>
+<td>5</td>
+<td>0.8339</td>
+<td></td>
+<td></td>
+<td>0.087</td>
+</tr>
+<tr>
+<td>5</td>
+<td>deberta-v3-large</td>
+<td>KD + SVR</td>
+<td>MSE</td>
+<td></td>
+<td>5</td>
+<td>0.8470</td>
+<td></td>
+<td></td>
+<td>0.129</td>
+</tr>
+<tr>
+<td>6</td>
+<td>deberta-v3-large</td>
+<td></td>
+<td>BCE binning</td>
+<td>TRUE</td>
+<td>5</td>
+<td>0.8471</td>
+<td>0.8512</td>
+<td>0.8664</td>
+<td>0.067</td>
+</tr>
+<tr>
+<td>7</td>
+<td>deberta-v3-large</td>
+<td>Mixout</td>
+<td>Softmax binning</td>
+<td>TRUE</td>
+<td>5</td>
+<td>0.8440</td>
+<td>0.8506</td>
+<td>0.8644</td>
+<td>0.057</td>
+</tr>
+<tr>
+<td>8</td>
+<td>bert-for-patents</td>
+<td>Mixout</td>
+<td>Softmax binning</td>
+<td>TRUE</td>
+<td>5</td>
+<td>0.8340</td>
+<td></td>
+<td></td>
+<td>0.084</td>
+</tr>
+<tr>
+<td>9</td>
+<td>deberta-v3-large</td>
+<td></td>
+<td>BCE binning</td>
+<td>TRUE</td>
+<td>10</td>
+<td>0.8463</td>
+<td></td>
+<td></td>
+<td>0.092</td>
+</tr>
+<tr>
+<td>10</td>
+<td>deberta-v3-large</td>
+<td></td>
+<td>BCE binning</td>
+<td></td>
+<td>10</td>
+<td>0.8335</td>
+<td>0.8390</td>
+<td>0.8579</td>
+<td>0.073</td>
+</tr>
+</tbody>
+</table>
+<p>Final our cv is 0.8721, public lb is 0.8604, private lb is 0.8750 (11th).</p>
+<p>As reference, this is all of our cv and lb relationship. The difference in color indicates the difference between people. We discussed based on this. </p>
+<p><img src="https://raw.githubusercontent.com/chumajin/pppm/main/cvlb.jpg" alt="lb"></p>
+<h1>5. Acknowledgments</h1>
+<p>We couldn't get this score on our own. Thank you to everyone who shared past knowledge and code! We respect to you. </p>
+<p>And I think the reason we got the gold medal was largely due to the sharing and discussion of the daily results. Eventually it leaded to the magic. We are the best team ! Thank you !!</p>
+<p>From our team :</p>
+<p><img src="https://raw.githubusercontent.com/chumajin/pppm/main/teampicture.jpg" alt="Our team"></p>

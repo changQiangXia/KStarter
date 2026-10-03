@@ -1,0 +1,77 @@
+# womens-march-mania-2022 讨论区（按票数排序，共 75 条）
+
+- [External data: 538 ratings](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309918) — 50 票 / 15 评论 / 2022-02-26 
+- [2nd Place Approach](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/316966) — 33 票 / 5 评论 / 2022-04-07 **write-up?**
+- [Let's Share CV](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309264) — 21 票 / 33 评论 / 2022-02-22 
+- [First Basketball Game Finished, Leaderboard Updated, Good Luck!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313760) — 18 票 / 22 评论 / 2022-03-18 
+- [6th Place Solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/317105) — 18 票 / 1 评论 / 2022-04-05 **write-up?**
+- [What is a good Stage 1 score?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309360) — 17 票 / 5 评论 / 2022-02-23 
+- [40th place solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/316863) — 17 票 / 12 评论 / 2022-04-04 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/317183) — 17 票 / 2 评论 / 2022-04-27 **write-up?**
+- [Stage 2 has begun!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313070) — 15 票 / 3 评论 / 2022-03-15 
+- [Predict your final score in the best case scenario ](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/315253) — 14 票 / 3 评论 / 2022-03-27 
+- [Scoring discrepency around game 11](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313796) — 14 票 / 6 评论 / 2022-03-19 
+- [1st place solution/approach](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/317817) — 11 票 / 5 评论 / 2022-04-09 **write-up?**
+- [5th Place Approach](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/317961) — 10 票 / 4 评论 / 2022-04-09 **write-up?**
+- [79th Place Solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/316896) — 10 票 / 1 评论 / 2022-04-04 **write-up?**
+- [Experts Median Submission](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313755) — 10 票 / 6 评论 / 2022-03-18 
+- [3rd Place Solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/317787) — 10 票 / 2 评论 / 2022-04-08 **write-up?**
+- [At which point would you consider yourself out of the competition?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313957) — 9 票 / 25 评论 / 2022-03-19 
+- [Top GitHub Source Codes on March Machine Learning Mania](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310264) — 9 票 / 1 评论 / 2022-02-28 
+- [Visualize Predicted Bracket](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310893) — 9 票 / 1 评论 / 2022-03-03 
+- [Remember - there will be 68 teams this year!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312210) — 8 票 / 5 评论 / 2022-03-10 
+- [Women's  is always stable](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/315236) — 7 票 / 8 评论 / 2022-03-27 
+- [A thanks and last prob. for the WMM!!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/316729) — 7 票 / 5 评论 / 2022-04-03 
+- [Final Three Games](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/315627) — 7 票 / 30 评论 / 2022-03-29 
+- [Good luck on day two!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313925) — 7 票 / 1 评论 / 2022-03-19 
+- [🏆 Last Four years competition and winning solution 🏀](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308581) — 7 票 / 0 评论 / 2022-02-19 **write-up?**
+- [🏀🏀🏀 March Mania - NCAA-Women's Winning Solutions from Earlier Years! 🏀🏀🏀](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308605) — 7 票 / 6 评论 / 2022-02-19 **write-up?**
+- [7th Place Solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/318532) — 6 票 / 0 评论 / 2022-04-12 **write-up?**
+- [Leaderboard update - SUNY Albany v Louisville](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313795) — 6 票 / 4 评论 / 2022-03-19 
+- [Leaderboard update - Mississippi v S Dakota](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313773) — 6 票 / 3 评论 / 2022-03-18 
+- [🏅Previous Winning Solutions🏅](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308514) — 6 票 / 5 评论 / 2022-02-19 **write-up?**
+- [Poweful dataset, links, & suggestion](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308630) — 6 票 / 0 评论 / 2022-02-19 
+- [Tournament Bracket Group - NCAAW](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312600) — 6 票 / 0 评论 / 2022-03-12 
+- [Zooming in on Raddar's solution](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308519) — 5 票 / 2 评论 / 2022-02-19 **write-up?**
+- [All-in South Carolina, No Upsets PLZ!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313726) — 5 票 / 3 评论 / 2022-03-18 
+- [Try 𝘼𝙪𝙩𝙤𝙇𝙂𝘽𝙈 for that crispy score! 🤯](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308809) — 5 票 / 6 评论 / 2022-02-20 
+- [Late to the party, but willing to play…](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312432) — 5 票 / 5 评论 / 2022-03-11 
+- [When will we be able to see the medal on our profile?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/317247) — 4 票 / 5 评论 / 2022-04-06 
+- [Useful Secondary Features](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308817) — 4 票 / 2 评论 / 2022-02-20 
+- [Upsets related to MCNAA?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313584) — 4 票 / 3 评论 / 2022-03-17 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308502) — 3 票 / 0 评论 / 2022-02-19 
+- [Avoid Data Leakage - Stage 1](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310895) — 3 票 / 0 评论 / 2022-03-03 
+- [Modeling Player and Team Performance in Basketball](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309097) — 3 票 / 1 评论 / 2022-02-21 
+- [Thread: Big list of Papers, Books and other interesting BBall articles](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309284) — 3 票 / 0 评论 / 2022-02-22 
+- [When do we expect the R2 data to go live?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312969) — 2 票 / 1 评论 / 2022-03-15 
+- [Thread: Big list of Papers, Books and other interesting BBall articles](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309099) — 2 票 / 0 评论 / 2022-02-21 
+- [target predictions in which evaluation is based](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312176) — 2 票 / 3 评论 / 2022-03-10 
+- [What's the meaning of LB at the stage 2 moment?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313370) — 2 票 / 2 评论 / 2022-03-16 
+- [💥🔮🏀 Bracket Prediction - NCAA Women's - Post your Predictions 🏀🔮💥](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312618) — 2 票 / 2 评论 / 2022-03-13 
+- [My 0.18 score is deleted. ](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310826) — 2 票 / 3 评论 / 2022-03-03 
+- [Me vs Pool Histograms](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313847) — 2 票 / 2 评论 / 2022-03-19 
+- [Visualize your bracket](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/314631) — 2 票 / 0 评论 / 2022-03-23 
+- [ESPN Women's College Basketball Rankings](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310886) — 2 票 / 0 评论 / 2022-03-03 
+- [My 56 rank solution made me kaggle expert.](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/322426) — 2 票 / 3 评论 / 2022-05-02 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308505) — 1 票 / 10 评论 / 2022-02-19 
+- [predicting the upcoming 2020 games ](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313196) — 1 票 / 2 评论 / 2022-03-16 
+- [WNCAATourneySeedRoundSlots.csv](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312137) — 1 票 / 3 评论 / 2022-03-10 
+- [Using paid external data](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312161) — 1 票 / 1 评论 / 2022-03-10 
+- [Mistake on timeline?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/309882) — 1 票 / 4 评论 / 2022-02-26 
+- [ usefulness of Dates,regions and seasons](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/311989) — 1 票 / 5 评论 / 2022-03-09 
+- [An idea for Simulation](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310595) — 1 票 / 3 评论 / 2022-03-02 
+- [100 submissions per day](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308811) — 0 票 / 5 评论 / 2022-02-20 
+- [Scoring Solutions of Previous March Machine Learning Mania](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308517) — 0 票 / 1 评论 / 2022-02-19 **write-up?**
+- [Becareful of Leaks](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/308758) — 0 票 / 1 评论 / 2022-02-20 
+- [R vs. Python: March Madness curiosity](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/310572) — 0 票 / 0 评论 / 2022-03-02 
+- [participating teams in 2022 tourney ](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312201) — 0 票 / 1 评论 / 2022-03-10 
+- [problem with missing ratings](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312204) — 0 票 / 6 评论 / 2022-03-10 
+- [deadlines and leaderboard](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312597) — 0 票 / 1 评论 / 2022-03-12 
+- [stage 2 data files structure](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/312896) — 0 票 / 3 评论 / 2022-03-14 
+- [Error updating selected submissions](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313526) — 0 票 / 2 评论 / 2022-03-17 
+- [Stage 2 Tourney Slots file(s)](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313099) — 0 票 / 7 评论 / 2022-03-15 
+- [previous tournament data](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313344) — 0 票 / 4 评论 / 2022-03-16 
+- [Rule for external datasets?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313517) — 0 票 / 3 评论 / 2022-03-17 
+- [Reading csv files from folder and creating a separate dataframe for each](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/314107) — 0 票 / 3 评论 / 2022-03-21 
+- [Is it fair to manually change the output?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/313788) — 0 票 / 13 评论 / 2022-03-18 
+- [Sweet 16 full chalk?](https://www.kaggle.com/competitions/womens-march-mania-2022/discussion/314764) — 0 票 / 5 评论 / 2022-03-24 

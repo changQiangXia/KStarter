@@ -1,0 +1,82 @@
+# uspto-explainable-ai 讨论区（按票数排序，共 80 条）
+
+- [The "Magic" !](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522199) — 46 票 / 14 评论 / 2024-07-25 
+- [4th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522200) — 44 票 / 8 评论 / 2024-07-28 **write-up?**
+- [Tips for advanced usage of Whoosh](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/516104) — 44 票 / 9 评论 / 2024-07-01 
+- [1st place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522233) — 39 票 / 10 评论 / 2024-07-25 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522258) — 29 票 / 5 评论 / 2024-07-30 **write-up?**
+- [5th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522201) — 26 票 / 2 评论 / 2024-08-06 **write-up?**
+- [6th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522202) — 24 票 / 7 评论 / 2024-08-11 **write-up?**
+- [Interpretable ML. Algorithm Unrolling. Whoosh (Python Search Library) on  Kaggle .](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497545) — 22 票 / 5 评论 / 2024-04-25 
+- [11th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522207) — 21 票 / 2 评论 / 2024-07-25 **write-up?**
+- [Test set is public?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/501169) — 21 票 / 4 评论 / 2024-05-08 
+- [Sharing my mistakes and learnings](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/519468) — 20 票 / 1 评论 / 2024-07-11 
+- [What is the difference between train_index and test_index?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/505768) — 18 票 / 7 评论 / 2024-05-19 
+- [3rd Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522639) — 18 票 / 1 评论 / 2024-08-07 **write-up?**
+- [12th place - Disjunctions of bigrams, trigrams only](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522301) — 17 票 / 4 评论 / 2024-07-25 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522208) — 17 票 / 4 评论 / 2024-07-25 **write-up?**
+- [Second metric patch for freezes is live](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/506428) — 17 票 / 5 评论 / 2024-05-21 
+- [13th place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522359) — 15 票 / 4 评论 / 2024-07-25 **write-up?**
+- [mAP without probabilities?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499981) — 15 票 / 4 评论 / 2024-05-03 
+- [Tip for(maybe) preventing Whoosh freezes for text fields](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499582) — 15 票 / 10 评论 / 2024-05-02 
+- [Metric patch complete](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498023) — 15 票 / 2 评论 / 2024-04-26 
+- [8th place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522257) — 14 票 / 3 评论 / 2024-07-25 **write-up?**
+- [Initial thoughts - ngrams and overlap](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497593) — 14 票 / 1 评论 / 2024-04-25 
+- [Find patent description in 0.1 ms - O(1) time solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/519365) — 14 票 / 4 评论 / 2024-07-10 **write-up?**
+- [【To the host and Kaggle staff】 Could you share some code that succeeded in submission?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497907) — 14 票 / 7 评论 / 2024-04-26 
+- [Lack of CPCs?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/503419) — 13 票 / 3 评论 / 2024-05-17 
+- [Not all patents in 'nearest_neighbors.csv' are necessarily in 'patent_data'?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497874) — 13 票 / 0 评论 / 2024-04-26 
+- [Freezing when running certain queries in Whoosh](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498283) — 12 票 / 20 评论 / 2024-04-27 
+- [32nd place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522214) — 12 票 / 0 评论 / 2024-07-25 **write-up?**
+- [Dataset to efficiently read Nearest Neighbors](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499639) — 12 票 / 1 评论 / 2024-05-02 
+- [My validation score and Public LB is quite different. What is the reason of this?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/518461) — 10 票 / 8 评论 / 2024-07-06 
+- [Starter materials and references ](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497468) — 10 票 / 2 评论 / 2024-04-24 
+- [Train_index does not work for validation](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497956) — 10 票 / 9 评论 / 2024-04-26 
+- [CV Strategy](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/513097) — 9 票 / 21 评论 / 2024-06-18 
+- [2 data cleaning checks](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/519826) — 9 票 / 2 评论 / 2024-07-13 
+- [47th place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522205) — 9 票 / 0 评论 / 2024-07-25 **write-up?**
+- [22nd Place Solution - Simple TF-IDF](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522327) — 9 票 / 1 评论 / 2024-07-26 **write-up?**
+- [Inferring the churn](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522244) — 9 票 / 3 评论 / 2024-07-25 
+- [Make whoosh notebook public](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497466) — 9 票 / 4 评论 / 2024-04-24 
+- [18th place solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522380) — 9 票 / 6 评论 / 2024-07-25 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497437) — 8 票 / 1 评论 / 2024-04-24 
+- [Bronze solution but an interesting insight [Genetic Programming]](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522285) — 8 票 / 0 评论 / 2024-07-25 **write-up?**
+- [Is this real explainability?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/515053) — 8 票 / 1 评论 / 2024-06-26 
+- [A very subjective POV: what gets you gold medals on Kaggle](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522463) — 8 票 / 5 评论 / 2024-07-26 **write-up?**
+- [[LB 0.11] Single CPC Query - even simple queries with */AND/OR also failed](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498847) — 7 票 / 4 评论 / 2024-04-29 
+- [All we need TF IDF instead BM25 score for boolean query](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498102) — 7 票 / 0 评论 / 2024-04-26 
+- [Code Requirements < 9h with 1hr search index? [Solved]](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497547) — 7 票 / 4 评论 / 2024-04-25 
+- [What does evaluation look like in details?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/509640) — 7 票 / 5 评论 / 2024-06-03 
+- [Nearest Neighbors based on patent embeddings (vector size 64)](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497556) — 7 票 / 1 评论 / 2024-04-25 
+- [42th place: a very simple solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522347) — 7 票 / 0 评论 / 2024-07-25 **write-up?**
+- [Get started here!](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/487315) — 6 票 / 1 评论 / 2024-03-28 
+- [Hyped for 0.99 solutions](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522189) — 6 票 / 0 评论 / 2024-07-24 **write-up?**
+- [A challenge without labels?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498241) — 6 票 / 5 评论 / 2024-04-27 
+- [test.csv should contain more information](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497924) — 6 票 / 1 评论 / 2024-04-26 
+- [What are the column names in test.csv? [Solved]](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/510572) — 6 票 / 4 评论 / 2024-06-06 
+- [Why did my baseline sub score zero?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/507567) — 6 票 / 6 评论 / 2024-05-26 
+- [Patent Metadata EDA](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497757) — 5 票 / 0 评论 / 2024-04-25 
+- [28th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522415) — 5 票 / 6 评论 / 2024-07-26 **write-up?**
+- [Top terms of a patent from BigQuery (anyone can export & share)](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498128) — 5 票 / 0 评论 / 2024-04-26 
+- [is the patch (whoosh==2.7.5) applied? [Solved]](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/502323) — 5 票 / 3 评论 / 2024-05-13 
+- [Simple CPC Boolean Query: Notebook Threw Exception [Solved] but Score Error ? ](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498174) — 5 票 / 2 评论 / 2024-04-27 
+- [how can I have a team?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498991) — 4 票 / 5 评论 / 2024-04-30 
+- [50th Place Solution](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522586) — 4 票 / 1 评论 / 2024-07-27 **write-up?**
+- [Keep getting submission scoring error](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499109) — 4 票 / 9 评论 / 2024-04-30 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/518377) — 4 票 / 14 评论 / 2024-07-06 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522594) — 3 票 / 1 评论 / 2024-07-26 
+- [Anyone used a genetic algorithm succesfully?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522168) — 3 票 / 6 评论 / 2024-07-24 
+- [Trouble creating valid submission](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497841) — 3 票 / 5 评论 / 2024-04-26 
+- [Dataset Size](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/497550) — 3 票 / 3 评论 / 2024-04-25 
+- [Please help to understand test.csv, nearest_neighbors.csv and submission.csv](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/518815) — 3 票 / 4 评论 / 2024-07-08 
+- [Preprocessing nearest neighbors to save some time](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498267) — 3 票 / 0 评论 / 2024-04-27 
+- [What the competition is asking (thinking out loud)](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498599) — 3 票 / 1 评论 / 2024-04-28 
+- [Did someone make a working title-related submission yet?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/500339) — 3 票 / 2 评论 / 2024-05-05 
+- [What is mean by Boolean search?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/499328) — 3 票 / 1 评论 / 2024-05-01 
+- [I'm new here and excuse to ask,will competitors get full public test data (the one used for evaluating in the three months,not decision test data at last?)](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/530666) — 2 票 / 0 评论 / 2024-08-28 
+- [Patents prior 1975 appear in the test data.](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/498197) — 2 票 / 1 评论 / 2024-04-27 
+- [Looking for a teammate](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/512583) — 2 票 / 6 评论 / 2024-06-15 
+- [Is there any way to see the whoosh index content for a certain document?](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/519755) — 2 票 / 3 评论 / 2024-07-12 
+- [Publication number in nearest_neighbors.csv but not in patent_data/parquets](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/518556) — 2 票 / 1 评论 / 2024-07-07 
+- [Scoring Timeout](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/516597) — 2 票 / 7 评论 / 2024-07-03 
+- [Trying to understand the purpose of the competition](https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/511842) — 2 票 / 2 评论 / 2024-06-12 

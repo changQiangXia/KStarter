@@ -1,0 +1,82 @@
+# tabular-playground-series-oct-2021 讨论区（按票数排序，共 80 条）
+
+- [1M rows: ...how to read in only some of the data](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275669) — 75 票 / 32 评论 / 2021-10-01 
+- [🔥🔥Tutorial compilation for handling larger datasets](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275712) — 56 票 / 7 评论 / 2021-10-01 
+- [✔️ 9th place solution](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284492) — 40 票 / 19 评论 / 2021-11-01 **write-up?**
+- [Don't trust built-in feature importances of any model - use SHAP](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276953) — 36 票 / 18 评论 / 2021-10-07 
+- [[Compilation] Good starter notebooks](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277409) — 35 票 / 8 评论 / 2021-10-09 
+- [3rd place solution](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284594) — 31 票 / 5 评论 / 2021-11-01 **write-up?**
+- [Ignore some folds in the cross-validation method & MORE](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/280661) — 28 票 / 14 评论 / 2021-10-22 
+- [feature22 - correlation](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275605) — 27 票 / 18 评论 / 2021-10-01 
+- [Collection of baseline approaches](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276222) — 25 票 / 6 评论 / 2021-10-03 
+- [When using GPU to speed up, pay attention to LightGBM](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275930) — 25 票 / 13 评论 / 2021-10-02 
+- [Save memory for running your best models](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275854) — 23 票 / 3 评论 / 2021-10-01 
+- [What I learned from my first Kaggle Competition](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/283847) — 21 票 / 6 评论 / 2021-10-28 
+- [How to save your trained model](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/283885) — 20 票 / 5 评论 / 2021-10-28 
+- [Reduce memory usage BUT FASTER](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276034) — 18 票 / 5 评论 / 2021-10-02 
+- [🔥🔥TPS Oct 2021 - 🔥🔥Some great code to look at 🔥🔥 for starters](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275609) — 17 票 / 6 评论 / 2021-10-01 
+- [The need for KMeans](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/279277) — 17 票 / 10 评论 / 2021-10-17 
+- [4th place solution](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284560) — 16 票 / 2 评论 / 2021-11-01 **write-up?**
+- [Datatable loads data 6.6x faster than pandas!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276162) — 16 票 / 8 评论 / 2021-10-03 
+- [Getting memory exceeded | reduce memory](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275663) — 14 票 / 9 评论 / 2021-10-01 
+- [What are your moves for the last 3 days of the competition?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/283907) — 14 票 / 5 评论 / 2021-10-28 
+- [[TPS Oct 2021] Things worth trying out this month](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/282785) — 14 票 / 4 评论 / 2021-10-27 
+- [A weird idea](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276103) — 14 票 / 16 评论 / 2021-10-03 
+- [AUC 0.85671 has been crossed !](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278520) — 14 票 / 10 评论 / 2021-10-14 
+- [categorical versus continuous features in Octobers Playground](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277700) — 13 票 / 4 评论 / 2021-10-10 
+- [What I learnt from TPS Oct '21 as an absolute beginner](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284176) — 12 票 / 2 评论 / 2021-10-30 
+- [Simple blend: geomean of scaled top 6 notebooks](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276069) — 12 票 / 5 评论 / 2021-10-02 
+- [Predicting a Biological Response- Lets learn from history ](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277966) — 12 票 / 4 评论 / 2021-10-12 
+- [Understanding the Evaluation metric: AUC ( Area Under Curve)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275733) — 12 票 / 1 评论 / 2021-10-01 
+- [Best Single Model Scores. There's time for ensemble!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275801) — 11 票 / 1 评论 / 2021-10-01 
+- [How to speed up Pandas (Article)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275670) — 11 票 / 10 评论 / 2021-10-01 
+- [Sum of Binary Features Per Row](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276043) — 11 票 / 10 评论 / 2021-10-02 
+- [Here the steps (code) to move to Google Colab smoothly without downloading datasets](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277685) — 11 票 / 7 评论 / 2021-10-10 
+- [How to diversify your Blend with non Boosting models?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275916) — 11 票 / 5 评论 / 2021-10-02 
+- [Feature Engineering Ideas](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275909) — 10 票 / 7 评论 / 2021-10-02 
+- [Search for Categorical Correlation!!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276053) — 10 票 / 5 评论 / 2021-10-02 
+- [💥Your notebook tried to allocate more memory than is available. It has restarted.](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275794) — 9 票 / 4 评论 / 2021-10-01 
+- [Guessing the future winning solutions - common tricks from past kaggle tabular competitions](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278541) — 9 票 / 2 评论 / 2021-10-14 **write-up?**
+- [Thoughts on my work on the Oct 2021 Tabular competition](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284631) — 9 票 / 1 评论 / 2021-11-01 
+- [[Compilation]Emsembling ideas](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278216) — 9 票 / 4 评论 / 2021-10-13 
+- [Load the data on cpu in less that 5 seconds with feather](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275837) — 9 票 / 1 评论 / 2021-10-01 
+- [Summarizing Feature Selection](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278396) — 9 票 / 0 评论 / 2021-10-14 
+- [What's your thought in this👇??](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/280986) — 9 票 / 12 评论 / 2021-10-23 
+- [Anyone able to run LGBM on GPU?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276400) — 9 票 / 16 评论 / 2021-10-04 
+- [Understanding LightGBM thoroughly - A primer](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278046) — 8 票 / 16 评论 / 2021-10-12 
+- [Synthetic Data Augmentation - CTGAN (Tabular GAN)](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278712) — 8 票 / 2 评论 / 2021-10-15 
+- [⁉️🤔🌊 How to tackle limited memory issue for large tabular dataset ?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275892) — 8 票 / 4 评论 / 2021-10-02 
+- [Is hyperparameter tuning difficult?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/279197) — 7 票 / 10 评论 / 2021-10-17 
+- [Reference Documentation For All The Features](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275891) — 7 票 / 0 评论 / 2021-10-02 
+- [What I have learnt participating in the last 7 Tabular Playground series competitions](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275913) — 7 票 / 0 评论 / 2021-10-02 
+- [Publishing a high scoring notebook](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284245) — 7 票 / 21 评论 / 2021-10-30 
+- [XGBoost/LightGBM: Do we ever need to tune the learning rate?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276601) — 7 票 / 13 评论 / 2021-10-05 
+- [Autoviz: Automatically Visualize any Dataset](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278796) — 6 票 / 6 评论 / 2021-10-15 
+- [[Utility] Multiple file formats for faster data loading](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275719) — 6 票 / 3 评论 / 2021-10-01 
+- [[Help] How does scipy.optimise minimize figure out weights for different models in blending](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284279) — 6 票 / 3 评论 / 2021-10-30 
+- [Cross Validation Dilemma: KFold vs. StratifiedKFold](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277606) — 6 票 / 0 评论 / 2021-10-10 
+- [AutoML Starter](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275954) — 5 票 / 2 评论 / 2021-10-02 
+- [TPS - Oct 2021 - Solutions compilation ](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284785) — 5 票 / 0 评论 / 2021-11-02 **write-up?**
+- [ROC and AUC](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276650) — 5 票 / 1 评论 / 2021-10-05 
+- [Strange Features with Very High Std Deviation!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276416) — 5 票 / 6 评论 / 2021-10-04 
+- [EDA for huge datasets?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275704) — 5 票 / 4 评论 / 2021-10-01 
+- [Catboost Optuna search stops after few trials](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/282125) — 5 票 / 9 评论 / 2021-10-26 
+- [Two points on reduce memory](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278237) — 5 票 / 0 评论 / 2021-10-13 
+- [Understand Evaluation metric For this Competition - ROC Curve?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275641) — 5 票 / 2 评论 / 2021-10-01 
+- [Stacking on different seeds of base models](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277659) — 5 票 / 9 评论 / 2021-10-10 
+- [It seems that AdaBoost and GradientBoost classifier from sklearn are slow and less effective](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/280091) — 5 票 / 6 评论 / 2021-10-20 
+- [One man army competition !!](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278968) — 5 票 / 1 评论 / 2021-10-16 
+- [XGBoost Hyperparameter Tuning using Bayesian optimization](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/279254) — 5 票 / 2 评论 / 2021-10-17 
+- [Feature selection idea](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/278002) — 4 票 / 0 评论 / 2021-10-12 
+- [Has anyone tried Boruta-SHAP on LightGBM?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/281993) — 4 票 / 19 评论 / 2021-10-26 
+- [Would it make sense to label encode some of the features with distinct peaks?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277664) — 4 票 / 4 评论 / 2021-10-10 
+- [Tabnet on Tabular Playground-Oct](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277618) — 4 票 / 2 评论 / 2021-10-10 
+- [A new method of stacking?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277227) — 4 票 / 2 评论 / 2021-10-08 
+- [Not able to train ANN model using Kaggle GPU accelerator](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276349) — 4 票 / 4 评论 / 2021-10-04 
+- [The need for KMeans++](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/280437) — 4 票 / 4 评论 / 2021-10-21 
+- [ No module named 'cudf' who can help?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/280139) — 4 票 / 5 评论 / 2021-10-20 
+- [Optuna Trials keep on failing?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275781) — 4 票 / 6 评论 / 2021-10-01 
+- [  @vopani Datatable tutorial](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/275701) — 4 票 / 0 评论 / 2021-10-01 
+- [I've made a lot of improvements but..](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/277366) — 3 票 / 3 评论 / 2021-10-09 
+- [My Blending Did Better Than My Stacking](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/284452) — 3 票 / 2 评论 / 2021-11-01 
+- [what is Accelerator warning that Kaggle pops up for GPU?](https://www.kaggle.com/competitions/tabular-playground-series-oct-2021/discussion/276737) — 3 票 / 2 评论 / 2021-10-06 

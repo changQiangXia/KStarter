@@ -1,0 +1,52 @@
+<p>I remember when the Tabular Playground Series started back in January and Febuary 2021. However I've been absent from Kaggle for almost a year, so thought I would try something simple to ease myself back in.</p>
+<p>Diving back into my archive of data science tools, my first port of call was PyCaret AutoML.  In theory it will do all the work for you, if you are willing to give it 8h of compute time. In practice it usually just ends up recommending LightGBM + XGBoost + CatBoost and does some hyperparameter optimization for you. This time however the dataset was simply too large and I kept letting it run only to discover OOM out-of-memory errors when I later came back to it.</p>
+<p>So second attempt, lets do this the old fashioned way.</p>
+<p>Start with copy/pasting one of my own public notebooks. Thank you past self for writing up documention on how to use my tools, future self thanks you. </p>
+<p>I do however notice a bunch of deprecation warnings as the API has changed with future library version. Some of this is googleable, but its really annoying when copy/paste code fails due to third-party pip dependency mismatches (this is normally why I use pip-tools pip-compile to generate a static <code>requirements.txt</code> file with exact version numbers to prevent such code-rot in github codebases).</p>
+<p>My previous efforts trying to reduce the memory usage of the dataframe led to me explictly map out the data types for each column. Pandas defaults to (<code>float64</code> + <code>int64</code>) when (<code>float16</code> + <code>int32</code>) are much more memory efficent for our purposes. </p>
+<p>I looked at the data using <code>pandas_profiling.ProfileReport</code> and was suprised that most of it seemed normally distribued. I also noticed that the <code>f_29</code> and <code>f_30</code> int columns are actually categorical.</p>
+<p>After a bit of thinking about the high cardinality of <code>f_27</code> = <code>AABDABERCG</code>, I decided to use <code>.str.split('')</code> to treat this as 10 seperate columns. I had to discard the original string column as the cardinality exceeded the 255 max bin count for LightGBM running in GPU mode. </p>
+<p>A brief look at the discussion board turned up <a href="https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323892" target="_blank">Engineering the top three feature interactions</a>, which gave me an extra little code snippit to inject into my feature engineering.</p>
+<p>First attempt at running LightGBM on its own (borrowing my previous hyperparameter settings) scored a highly respectable <code>0.97008 / 0.97077</code> in CPU mode, and I was able to get a tiny increment to <code>0.97047 / 0.97134</code> just by switching the GPU on.</p>
+<p>I had a brief attempt at using scikit-learn to do a <a href="https://www.kaggle.com/code/jamesmcguigan/tps-may-2022-scikit-learn-ensemble?scriptVersionId=97118555" target="_blank">logistic regression ensemble</a>. This was my highest scoring method in Jan 2021, but scored a pathetic <code>0.65336 / 0.65423</code> this time round. However the simple process of flipping between different methods gave me time to reflect, aquire different insights about the problem, and borrow ideas.</p>
+<p>Now at least I have a location on the leaderboard. Time to see if I can improve my score. </p>
+<p>I scroll up to see the next public notebook above me. <a href="https://www.kaggle.com/utkarshshukla2912" target="_blank">@utkarshshukla2912</a> <a href="https://www.kaggle.com/code/utkarshshukla2912/cat-boost-feature-engineering" target="_blank">CatBoost Feature Engineering</a>. He had a different idea to me for <code>f_27</code> which was to create a feature based on the counts of each letter, rather than using <code>.str.split('')</code>. I wrote him a long comment comparing our notebook ideas. </p>
+<p>The main inspiration I got from looking at this notebook was to implement CatBoost, and I decided to do this an ensemble. Then I realize that binary classification with 2-way voting needs a tiebreaker, so I went and implemented XGBoost as well.</p>
+<p>Manually implementing the ensemble forced me to look more carefully at my prediction data. I noticed that my <code>lgbm.train()</code> output was floats and sometimes included out-of-range negative numbers as well as numbers greater than <code>+1</code> so I decided to put a <code>.clip(0,1)</code> on this rather than <code>.round()</code>. </p>
+<p>My XGBoost and CatBoot output was coming back as integers, which is the difference between Regression and Classification. So I decided to split my notebook and implement the ensemble both ways. I noticed the small issue. Turns out that floating-point Regression <code>0.97952 / 0.97982</code> scores much better than binary Classification <code>0.92500 / 0.92616</code>.</p>
+<p>As I looked more carefully at my copy/paste implemention, I also noticed that I using the RMSE metric, so I double checked this against the <a href="https://www.kaggle.com/competitions/tabular-playground-series-may-2022/overview/evaluation" target="_blank">Evaluation</a> tab and realized I needed to refactor my code to use the AUR/ROC metric instead, and I had to google how to do this.</p>
+<p>Human Effort was:</p>
+<ul>
+<li>A day or so of waiting around on failed attempts not getting pyCaret to work</li>
+<li>12 hour coding session for the LightGBM + XGBoost + CatBoost Ensemble</li>
+</ul>
+<p>Nothing quite like a deadline to focus the mind when deep in structured procrastination</p>
+<p>It was fun, and I proved to myself that I havn't completely forgotten all my old skills.</p>
+<h1>Notebook Series</h1>
+<p>This notebook is part of a series exploring Tabular Data:</p>
+<p><a href="https://www.kaggle.com/competitions/titanic" target="_blank">Titanic</a></p>
+<ul>
+<li><a href="https://www.kaggle.com/code/jamesmcguigan/titanic-profilereport-eda" target="_blank">Profilereport EDA</a></li>
+</ul>
+<p><a href="https://www.kaggle.com/competitions/spaceship-titanic" target="_blank">Spaceship Titanic</a></p>
+<ul>
+<li><a href="https://www.kaggle.com/code/jamesmcguigan/titanic-profilereport-eda" target="_blank">Profilereport EDA</a></li>
+<li>0.69932 - <a href="https://www.kaggle.com/code/jamesmcguigan/spaceship-titanic-xgboost" target="_blank">XGBoost</a></li>
+</ul>
+<p><a href="https://www.kaggle.com/c/tabular-playground-series-jan-2021" target="_blank">Tabular Playground - Jan 2021</a></p>
+<ul>
+<li>0.72746 / 0.72935 - <a href="https://www.kaggle.com/jamesmcguigan/tabular-playground-scikit-learn-ensemble" target="_blank">scikit-learn Ensemble</a></li>
+<li>0.71552 / 0.71659 - <a href="https://www.kaggle.com/jamesmcguigan/fast-ai-tabular-solver" target="_blank">Fast.ai Tabular Solver</a></li>
+<li>0.70317 / 0.70426 - <a href="https://www.kaggle.com/jamesmcguigan/tabular-playground-xgboost" target="_blank">XGBoost</a></li>
+<li>0.70011 / 0.70181 - <a href="https://www.kaggle.com/jamesmcguigan/tabular-playground-lightgbm" target="_blank">LightGBM</a></li>
+</ul>
+<p><a href="https://www.kaggle.com/c/tabular-playground-series-feb-2021" target="_blank">Tabular Playground - Feb 2021</a></p>
+<ul>
+<li>0.84452 - <a href="https://www.kaggle.com/jamesmcguigan/tps-pycaret2-automl-regression" target="_blank">PyCaret2 AutoML Regression</a></li>
+</ul>
+<p><a href="https://www.kaggle.com/c/tabular-playground-series-feb-2021" target="_blank">Tabular Playground - May 2022</a></p>
+<ul>
+<li>0.97134 - <a href="https://www.kaggle.com/jamesmcguigan/tps-may-2022-lightgbm-regression" target="_blank">LightGBM</a></li>
+<li><a href="https://www.kaggle.com/jamesmcguigan/tps-may-2022-lgbm-xgb-cb-regression" target="_blank">LGBM + XGB + CB - Regression</a></li>
+<li><a href="https://www.kaggle.com/jamesmcguigan/tps-may-2022-lgbm-xgb-cb-classification" target="_blank">LGBM + XGB + CB - Classification</a></li>
+</ul>

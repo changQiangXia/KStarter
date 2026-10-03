@@ -1,0 +1,82 @@
+# tabular-playground-series-aug-2022 讨论区（按票数排序，共 80 条）
+
+- [Missing values have predictive value](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342319) — 137 票 / 66 评论 / 2022-08-06 
+- [TPS-Aug-22: Consider the back story](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341462) — 63 票 / 11 评论 / 2022-08-03 
+- [Less can be more: Feature Engineering Ideas](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342126) — 52 票 / 22 评论 / 2022-08-05 
+- [Getting cross-validation right: product codes and GroupKFold](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341070) — 50 票 / 9 评论 / 2022-08-01 
+- [Open Sourcing My Kaggle Pipeline](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341120) — 44 票 / 15 评论 / 2022-08-01 
+- [Private- vs Public-Data](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342403) — 42 票 / 16 评论 / 2022-08-07 
+- [The trap of "overfitting to the public leaderboard"](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/348767) — 41 票 / 24 评论 / 2022-08-29 
+- [GroupKFold isn't enough](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341896) — 33 票 / 10 评论 / 2022-08-04 
+- [How to impute the missing loading values](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/344198) — 33 票 / 15 评论 / 2022-08-14 
+- [The area under the ROC curve. AUROC.](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341037) — 32 票 / 14 评论 / 2022-08-01 
+- [Avoid prejudice with non-English. Python/R are Universal Programming Languages. ](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341439) — 31 票 / 24 评论 / 2022-08-02 
+- [A quick summary: dos and don'ts](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346402) — 31 票 / 17 评论 / 2022-08-19 
+- [You Have Not Found The Important Feature: Brainstorming](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342862) — 29 票 / 19 评论 / 2022-08-09 
+- [ If Only.... How this competition might have been](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/348268) — 27 票 / 4 评论 / 2022-08-27 
+- [Perfect Positive Correlation with measurement_17](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343939) — 26 票 / 7 评论 / 2022-08-13 
+- [ [Compilation] Good Starter Notebooks](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343960) — 25 票 / 8 评论 / 2022-08-13 
+- [Why logistic regression works better then LightGBM on this dataset?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342946) — 23 票 / 14 评论 / 2022-08-09 
+- [No illegal LB probing please!](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341078) — 22 票 / 16 评论 / 2022-08-01 
+- [Fluid Absorption](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342936) — 21 票 / 11 评论 / 2022-08-09 
+- [Adversarial validation](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342168) — 20 票 / 8 评论 / 2022-08-05 
+- [GroupKFold and stratification](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341147) — 19 票 / 2 评论 / 2022-08-01 
+- [really fulfilling some stereotypes](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343318) — 19 票 / 6 评论 / 2022-08-10 
+- [What a surprise!!](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349385) — 18 票 / 11 评论 / 2022-09-01 
+- [Multiplying Booleans - New Feature?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343368) — 18 票 / 13 评论 / 2022-08-11 
+- [0.58 LB scores without ML](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342263) — 17 票 / 5 评论 / 2022-08-06 
+- [Some more EDA observations](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343902) — 17 票 / 9 评论 / 2022-08-12 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/338763) — 16 票 / 42 评论 / 2022-07-22 
+- [Thoughts on imputation](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341909) — 16 票 / 5 评论 / 2022-08-04 
+- [And the shakeup has happened....](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349300) — 16 票 / 10 评论 / 2022-09-01 
+- [Code Product H could be difficult to predict and since it is not in the PLB, it could bring some surprise](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346840) — 16 票 / 11 评论 / 2022-08-21 
+- [How to check statistically whether your CV improves](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343266) — 15 票 / 9 评论 / 2022-08-10 
+- [Score 0.5878 with only 5 features](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346683) — 15 票 / 4 评论 / 2022-08-20 
+- [Interesting things in the data I found + product code problem](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341307) — 14 票 / 0 评论 / 2022-08-02 
+- [Problem data](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341238) — 14 票 / 6 评论 / 2022-08-02 
+- [TPS Aug 2022 - 1st Week Update](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342611) — 14 票 / 4 评论 / 2022-08-08 
+- [Fill missing by product_code](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342124) — 14 票 / 4 评论 / 2022-08-05 
+- [Everything we learnt on TPS Aug'22](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349299) — 14 票 / 4 评论 / 2022-09-01 
+- [What is your highest private score? ( including unchosen submissions )🤒🤕](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349308) — 14 票 / 45 评论 / 2022-09-01 
+- [measurement_[3-9], correlation, and imputation -- simplified [and fixed]](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/344439) — 13 票 / 8 评论 / 2022-08-15 
+- [TPS-Aug22 9th solution](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349297) — 12 票 / 5 评论 / 2022-09-01 **write-up?**
+- [Poisson Regressor as baseline ](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341744) — 11 票 / 4 评论 / 2022-08-04 
+- [Best Single Model?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/347995) — 10 票 / 20 评论 / 2022-08-26 
+- [Tackling Imbalance Data Using Smote ](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342724) — 10 票 / 8 评论 / 2022-08-08 
+- [Model results from Automl (PyCaret)](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341545) — 10 票 / 0 评论 / 2022-08-03 
+- [📌 EDA📈 + Custom Pipeline🔥 + Featimp❤️](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342091) — 10 票 / 3 评论 / 2022-08-05 
+- [Within product code clustering variables 10-15](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/344877) — 10 票 / 1 评论 / 2022-08-17 
+- [Some thoughts and observations](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342370) — 10 票 / 2 评论 / 2022-08-07 
+- [our AUC is still in the range of noise.](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346716) — 10 票 / 3 评论 / 2022-08-21 
+- [Categorical features, are all the categorical features useless?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341143) — 9 票 / 5 评论 / 2022-08-01 
+- [What worked for me](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349310) — 9 票 / 4 评论 / 2022-09-01 
+- [What was you best "unselected" score? Mine was 0.59137](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349312) — 9 票 / 4 评论 / 2022-09-01 
+- [No correlation between public LB, private LB or CV](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349400) — 9 票 / 3 评论 / 2022-09-01 
+- [Tracking models using MLFLOW ](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/347033) — 9 票 / 4 评论 / 2022-08-22 
+- [Embedding and Stacking](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342250) — 9 票 / 3 评论 / 2022-08-06 
+- [My First Top 20](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349322) — 8 票 / 8 评论 / 2022-09-01 
+- [Hope this didn't happen to you...](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349311) — 8 票 / 20 评论 / 2022-09-01 
+- [What about missing values?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/348336) — 8 票 / 9 评论 / 2022-08-27 
+- [Product codes A and I](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346362) — 8 票 / 4 评论 / 2022-08-19 
+- [Interesting patterns found in category features](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341104) — 8 票 / 16 评论 / 2022-08-01 
+- [Dataset with missing values imputed!](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341869) — 7 票 / 6 评论 / 2022-08-04 
+- [Feedback from the competition's creator? ](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349740) — 7 票 / 0 评论 / 2022-09-02 
+- [Is it Possible Each Observation is Not Independent of Every Other Observation?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346129) — 7 票 / 7 评论 / 2022-08-18 
+- [Are we going to overfit?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/348770) — 7 票 / 3 评论 / 2022-08-29 
+- [Start with a score ~0.585 with only two features](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/346269) — 7 票 / 1 评论 / 2022-08-18 
+- [Blogs and Resources to Explore | TPS Aug 2022](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341036) — 7 票 / 4 评论 / 2022-08-01 
+- [How to use measurement_0~measurement_16 ?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343109) — 7 票 / 3 评论 / 2022-08-10 
+- [Top 10 jumped up on average by 331 spots!](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349307) — 7 票 / 1 评论 / 2022-09-01 
+- [How similar are train and test datasets?](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/347263) — 7 票 / 6 评论 / 2022-08-23 
+- [Clustering based on attributes shows relationship between products in train and test sets](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/347116) — 7 票 / 6 评论 / 2022-08-22 
+- [TPS 8 Feature Engineering LogisticRegression Top10](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341468) — 7 票 / 7 评论 / 2022-08-03 
+- [I think we are overfitting the LB](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343347) — 7 票 / 3 评论 / 2022-08-11 
+- [Interesting observation on public and private scores](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349514) — 6 票 / 4 评论 / 2022-09-01 
+- [A small exploitable anomaly](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/347222) — 6 票 / 2 评论 / 2022-08-23 
+- [17th Place Solution](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349541) — 6 票 / 6 评论 / 2022-09-01 **write-up?**
+- [Model Performance boosting with Voting-Classifier](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341038) — 6 票 / 2 评论 / 2022-08-01 
+- [Cube Sponges? 🧽](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343562) — 6 票 / 0 评论 / 2022-08-11 
+- [Public and private LB simulations](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/343954) — 6 票 / 0 评论 / 2022-08-13 
+- [Using Weight of Evidence instead of dropping columns - LB 0.58978](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342450) — 5 票 / 0 评论 / 2022-08-07 
+- [14 th solution (that could have been 6 th ) ](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349810) — 5 票 / 0 评论 / 2022-09-02 **write-up?**
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/338762) — 1 票 / 0 评论 / 2022-07-22 

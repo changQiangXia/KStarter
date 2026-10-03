@@ -1,0 +1,48 @@
+<h2>Acknowledgements</h2>
+<p>I would like to thank the competition hosts and Kaggle for the opportunity to work on such an impactful and interesting problem.<br>
+Thank you <a href="https://www.kaggle.com/jaejohn" target="_blank">@jaejohn</a> and <a href="https://www.kaggle.com/theoviel" target="_blank">@theoviel</a> for sharing strong solutions at the beginning of the competition.<br>
+Credit to Claude models for the code assistance.</p>
+<h2>Overview</h2>
+<p>My strategy for the competition was to build upon the provided strong solutions TBM, RNAPro and Protenix by incorporating into the modeling new challenges added in Part 2: proteins, DNA, ligands, multiple chains and long sequences.<br>
+Another aspect I considered important was processing speed in order to be able to include diverse predictions in the submission within the runtime constraints.<br>
+The solution combines two predictions from TBM, two predictions from Protenix, and one prediction from RNAPro for all targets. There is no additional logic for selecting specific predictions per RNA sequence.<br>
+RNAPro and Protenix inferences run in parallel on the two T4 GPUs. </p>
+<h2>Template-based modeling (TBM)</h2>
+<p>For template-based modeling, a LightGBM model predicting TM-score for a given query-template pair is introduced. From the competition train data, the 1000 most recent query RNA sequences and 200 (per query) template sequences with a preceding temporal cutoff are used to create a training dataset of ~198K query-template pairs. TM-score for each pair is computed and used as a label. The model features are:</p>
+<ul>
+<li>RNA sequences similarity: <code>alignment_score</code>, <code>percent_identity</code>, and <code>len_diff_ratio</code>  </li>
+<li>Text embeddings similarity: cosine similarity between query description and template description embeddings.  The embeddings are created with this model: <a href="https://huggingface.co/NeuML/pubmedbert-base-embeddings" target="_blank">https://huggingface.co/NeuML/pubmedbert-base-embeddings</a></li>
+<li>Proteins similarity: alignment scores with a BLOSUM62 substitution matrix. For each query protein, the max alignment score with template proteins is taken. The min, mean, and max of the resulting vector are added as features. For processing speed considerations, only up to 6 query proteins are compared with up to 20 template proteins, and protein sequences are cropped to a max length of 768. These features are named <code>protein_similarity_matrix_(min|mean|max)</code> in the model.  </li>
+<li>DNA similarity: <code>dna_similarity_matrix_(min|mean|max)</code> features calculated with the logic described above for proteins using alignment scores without a substitution matrix.  </li>
+<li>Ligands similarity: <code>ligand_similarity_matrix_(min|mean|max)</code> features using Tanimoto similarities of Morgan fingerprints calculated with the logic described above for proteins.  </li>
+<li>Composition count features: <code>num_query_(proteins|dna|ligands)</code> and <code>num_template_(proteins|dna|ligands)</code>  </li>
+<li>Chains-related features: <code>(query|template)_num_all_chains</code>, <code>(query|template)_num_unique_chains</code>, and <code>chain_counts_match</code></li>
+</ul>
+<p>The top-2 templates according to the scores predicted by this model are used for the final submission.  </p>
+<p>The script for running this step is <code>srna3d.scripts.create_tbm_submission.</code><br>
+The script for creating the training dataset is <code>srna3d.scripts.create_tmscore_dataset</code>. The dataset was created locally.<br>
+Notebook how to run it: <a href="https://www.kaggle.com/code/stefanstefanov/srna3d2-create-tmscore-dataset" target="_blank">https://www.kaggle.com/code/stefanstefanov/srna3d2-create-tmscore-dataset</a><br>
+The training dataset: <a href="https://www.kaggle.com/datasets/stefanstefanov/srna3d2-tmscore-dataset" target="_blank">https://www.kaggle.com/datasets/stefanstefanov/srna3d2-tmscore-dataset</a><br>
+The model was also trained locally. The script for training is <code>srna3d.scripts.train_tmscore_lightgbm_model</code><br>
+Training notebook: <a href="https://www.kaggle.com/code/stefanstefanov/srna3d2-train-tmscore-model" target="_blank">https://www.kaggle.com/code/stefanstefanov/srna3d2-train-tmscore-model</a>  </p>
+<h2>RNAPro</h2>
+<p>One RNAPro model prediction is generated using the top-5 templates from the TBM step as input. To speed up inference, diffusion steps are decreased to 100, MSA depth is limited to 2048, and <code>fast_layernorm</code> and <code>triattention</code> triangle attention kernels are used, as inference is faster with them on longer sequences. As long sequences are split into chunks, the MSA and templates are also sliced to be consistent with the predicted chunk start and end index.</p>
+<h2>Protenix</h2>
+<p>Two predictions are generated with the latest Protenix model <code>protenix_base_20250630_v1.0.0</code>. In addition to the RNA sequence, proteins, DNA, and ligands are also added as input to the Protenix model. To fit in the T4 GPU memory and time constraints, proteins, DNA, and ligands are limited to a maximum of 6 per group. A <code>max_len_non_rna</code> parameter is added and set to <code>128</code>. This non-RNA sequence length budget is divided equally among protein and DNA sequences, and they are cut accordingly. The idea is to model the effect of short protein and DNA sequences on the RNA 3D structure, at least for targets with a small number of proteins or DNA. Similar to RNAPro, MSA depth is limited to 2048, and <code>fast_layernorm</code> and <code>triattention</code> triangle attention kernels are used.</p>
+<h2>Long Sequences</h2>
+<p>For the RNAPro and Protenix models, RNA with a sequence length above 448 is split in two steps:</p>
+<p>1) If it has multiple chains, it is first split into chains, and for each chain, an overlap of 96 from the next chain is added.<br>
+   For the last chain, the overlap is added circularly from the first chain with the idea to try to capture potential circularity in structure.<br>
+   For faster prediction, repeated chain pairs are skipped. For example, <code>9MME</code> which has U:8 chains with a total length of 4640 (8x580) is split and passed to the next step as one sequence of length 676 (580 from the first U + 96 from the second U chain).<br>
+   If the target has multiple chains, but its total sequence length is below 448, no such splitting is performed.
+This splitting step is performed by the <code>srna3d.scripts.split_into_chains</code> script.</p>
+<p>2) Sequences from the previous step that are longer than 448 are split into chunks of length 448, having a 96-base overlap with the next chunk. This step is performed by the <code>srna3d.scripts.split_sequences_into_chunks</code> script.</p>
+<p>Chunk predictions are first combined from chunks to chains using the <code>srna3d.scripts.combine_chunked_predictions</code> script. Afterward, they are combined from chains to full sequences with the <code>srna3d.scripts.combine_chain_predictions</code> script, applying Kabsch alignment on the overlapping regions. There is an option to randomly select and combine chain predictions from different samples, but it isn’t applied; for RNAPro, one sample is generated, and for Protenix, two samples are generated.</p>
+<p>The solution includes various limits due to GPU memory and runtime constraints. It would be interesting to see what improvements this and other solutions could achieve with faster GPUs having more memory.</p>
+<h2>References</h2>
+<p>Rao, G. John, RNAPro inference with TBM notebook: <a href="https://www.kaggle.com/code/jaejohn/rnapro-inference-with-tbm" target="_blank">https://www.kaggle.com/code/jaejohn/rnapro-inference-with-tbm</a></p>
+<p>Viel, Theo, et al. RNAPro Inference notebook: <a href="https://www.kaggle.com/code/theoviel/stanford-rna-3d-folding-pt2-rnapro-inference" target="_blank">https://www.kaggle.com/code/theoviel/stanford-rna-3d-folding-pt2-rnapro-inference</a></p>
+<p>Lee, Youhan, et al. (2025). Template-based RNA structure prediction advanced through a blind code competition. <em>bioRxiv</em>. doi: 10.64898/2025.12.30.696949.<br>
+<a href="https://github.com/NVIDIA-Digital-Bio/RNAPro" target="_blank">https://github.com/NVIDIA-Digital-Bio/RNAPro</a></p>
+<p>Zhang, Yuxuan, et al. (2026). Protenix-v1: Toward High-Accuracy Open-Source Biomolecular Structure Prediction. <em>bioRxiv</em>. doi: 10.64898/2026.02.05.703733.<br>
+<a href="https://github.com/bytedance/Protenix" target="_blank">https://github.com/bytedance/Protenix</a>  </p>

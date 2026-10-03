@@ -1,0 +1,167 @@
+# https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307707
+
+Topic #307707: 3rd place solution - Team Hydrogen
+  Author: Psi
+  Posted: 2022-02-15 10:35:42.740000
+  Votes: 130  Comments: 31
+
+Thanks to hosts and all participants for this interesting competition. This is a joint writeup with  @ybabakhin (big, big thanks for the awesome team work in this competition) from Team Hydrogen.
+
+Summary
+
+Our solution is a blend of five different object detection model types with tracking.
+
+Cross-Validation
+
+For cross-validation we used two strategies: one is simple split by video, and the other is making 5-folds based on subsequences. We were mostly looking at subsequence Cross-Validation scores, time-to-time checking the video folds performance. This strategy gave us a good correlation between CV and Public LB scores throughout the competition, however it failed for the Private LB. You can read our thoughts about such a behavior below in this post.
+
+Models
+
+Our final solution is a blend of five different model types. All our models are trained on a resolution of 1152x2048 and only using images with boxes. For augmentations we employ a mix of random flips, scale, shift, rotate, brightness, contrats, cutout, cutmix.
+
+An additional augmentation we utilize in most of our models is what we call “background-mix”. Here, we randomly mix an image with boxes, with a random image without boxes. This guarantees us to not overlap / distort any boxes, but generalizes better to unseen backgrounds and also randomizes the intensity of objects. Also some models benefit from using cut&amp;paste augmentation by simply cutting and pasting objects to other frames.
+
+CenterNet
+We took an idea from the original CenterNet and substituted backbone with HRNet. The object detection task in CenterNet architecture is treated as a keypoint estimation, so we used x4 downsampled labels (288x512) for predicting heatmaps of: objects centers, width and height, and center offsets. Final submission includes two backbones: hrnet_w18 and hrnet_w32 that produced similar local performance. The models were trained for 10 epochs and were using cut&amp;paste augmentation.
+
+FasterRCNN
+We implemented FasterRCNN to work with any timm backbone and found that NFNet models work particularly well due to generalizability and also easiness to train on small batch sizes. Our final models use eca_nfnet_l1 and dm_nfnet_f0 backbones. We use 4 feature layers and 256 FPN out channels. Models were trained for 10 epochs.
+
+FCOS
+Similar to FasterRCNN, we integrated FCOS into our pipeline to work with any timm backbone and use the same backbones for training. Here, we use 3 feature layers and also 256 FPN out channels. Again, models are trained for 10 epochs.
+
+EfficientDet
+We train EfficientDet models using efficientdetv2_dt backbone which has a great balance between complexity, memory usage, and runtime. Models are trained for 20 epochs.
+
+YoloV5
+We trained yolov5l-6 using rectangular training. We adapted the original code to directly optimize F2 score, and also for rectangular training to properly work with random shuffling, mixup, cutout and other granularities. Models were trained using Adam and for 40 epochs. Inference is done on training resolution without tta.
+
+Blending &amp; Tracking
+
+For blending, we employ average WBF blending which is particularly useful here as it automatically incorporates a voting mechanism of boxes to downweight boxes that are not present in all models. 
+
+For tracking, the issue with adding missing boxes using Kalman Filter is quite tricky, as also there it is tough to estimate width and height, and the public kernel solutions do not work well when models get better. So we use tracking in a slightly different way. We use euclidean distance on the center points to find the tracks, but we keep low confidence boxes for finding the tracks. Then, we are setting the confidence of low confidence boxes to the maximum of the confidences of the track. So let’s assume we have a track with confidences 0.8, 0.7, 0.9, 0.15 - in this case we increase the confidence of the 0.15 box to 0.9. The models are quite good in finding the boxes, but sometimes they are just not confident enough, so this is clearly better than estimating the new boxes from the track with Kalman filter or similar estimates. This tracking brings about 0.01 locally.
+
+Another tracking technique that we explored in the last days of the competition was Optical Flow estimation. We used the OpenCV implementation of goodFeaturesToTrack() and calcOpticalFlowPyrLK() methods. It produced pretty nice estimates of diver/camera movements that allowed to better predict the position of starfish across the frames. Unfortunately, it gave only 0.001 improvement in both CV and LB.
+
+Label tightness &amp; Public LB
+
+As probably for most people, our public LB was significantly lower than our CV for the first half of this competition. However, we quite quickly noticed that there has to be something different in public LB vs. training data, mostly because people with higher LB has so much worse CV reported than what we saw locally. After a while, the discussion about higher resolution came up, and we just blindly tried it on LB and it immediately pushed individual CenterNet and RCNN models above 0.70. 
+
+So then some funny theories emerged on the forums and obviously we also tried to understand how something like this could happen. After several failed theories, we finally found that higher resolution than training, produces boxes that are more tight (exact) around the COTS. In training, labels are very imprecise, and also inconsistent across frames, it even looked semi-automatic. And the size of the boxes plays a huge role in this evaluation metric setting, as 0.8 IOU threshold has a particularly large impact.
+
+To check this theory, we just submitted manual pixel adjustment on public LB, i.e. decreasing the size of boxes by fixed pixels, and after tuning this a bit, it even worked better than the upscaling, and was much faster obviously. So our theory emerged that test data is labeled better after collecting the following additional evidence:
+
+
+
+Higher resolution inference produces tighter boxes, it works better on Public LB
+
+Manual pixel adjustment (making boxes smaller) works better on Public LB
+
+None of these adjustments works on ANY part in training data
+
+Visually and manually checking a few training examples, we found that boxes on training are on average 3px too large in all dimensions. This is the EXACT same amount that worked well for us on public LB. 
+
+Hand-labeling a small portion of train, finetuning on it, boosted LB significantly.
+
+The public LB had sequences from both videos. We checked if the manual adjustment works on both videos, and it did, further strengthening our suspicion that whole test is different.
+
+
+So we were very confident that it should hold for whole test, but as we know, it did not. So either we completely misinterpreted some of this evidence, or private test is again labeled differently. In general, we personally feel like that public LB should better represent private LB, and in best case it should be similar to training data. This would lead for competitors to overall focus more on improving models, vs. trying to understand the splits.
+
+Comments:
+├─ olivier (2022-02-15 19:08:05.757000) [+5]
+│  Congratulations @philippsinger and @ybabakhin for a great competition and for holding the shake up!
+│  Very Impressed by your solution.
+├─ Gleb (2022-02-15 11:34:35.093000) [+4]
+│  in general, we personally feel like that public LB should better represent private LB, and in best case it should be similar to training data.
+│  
+│  
+│  I very much agree with this, after first LB commit I...
+├─ Qishen Ha (2022-02-16 03:12:37.947000) [+1]
+│  Congratulations!
+│  Amazing that you guys use so many different object detection models
+├─ Ian Pan (2022-02-15 11:59:00.070000) [+1]
+│  Congratulations and thanks for sharing! Did you make any modifications to EfficientDet to get it to work effectively? I couldn't get it to work at all for this task…
+│  
+│  
+│    
+│  In training, labels are ve...
+  ├─ Psi (2022-02-15 12:09:24.520000) [+2]
+  │  We did not make any changes to EfficientDet hyperparameters themselve, even though we tried a lot changing anchors, anchor scales etc. What did work very well there was to increase augmentations qu...
+├─ Remek Kinas (2022-02-15 10:52:30.140000) [+2]
+│  Congratulations! Outstanding work and great solution. Thank you for sharing. I really like your way of thinking (system thinking). As I can see you during the competition you asked yourself a lot o...
+├─ Coderrexe (2022-02-15 10:46:45.797000) [+2]
+│  Congratulations @philippsinger and Team Hydrogen! I’ve been looking out for you guys ever since you were the first to achieve 0.7 LB, so congrats on the Gold Medal and the prize winning!
+├─ Niek van der Zwaag (2022-02-18 05:26:05.170000) [+0]
+│  Congratulations, amazing work and solution. Thanks for sharing 🙌
+├─ Philip Joseph (2022-02-16 18:56:16.557000) [+0]
+│  Congratulations!
+├─ Abdur Rakib (2022-02-16 17:32:44.483000) [+0]
+│  congratulation
+├─ Darien Schettler (2022-02-16 14:37:01.713000) [+0]
+│  Hi and congratulations!
+│  
+│  Just wondering if you will be open-sourcing any of the models for this competition.
+│  
+│  Also, I'm wondering if you used Pytorch or TF or a mix?
+  ├─ Psi (2022-02-16 15:14:45.233000) [+1]
+  │  Pure Pytorch, probably will not open source it.
+  ├─ Darien Schettler (2022-02-16 15:40:50.837000) [+1]
+  │  Cool! Thanks for the response and congratulations again!
+├─ Trushant Kalyanpur (2022-02-15 18:59:25.363000) [+0]
+│  Congratulations on the 3rd place ranking! Impressive solution. 
+│  
+│  Visually and manually checking a few training examples, we found that boxes on training are on average 3px too large in all dimensio...
+  ├─ Psi (2022-02-15 19:03:04.257000) [+2]
+  │  Yes, we did, and it was our big hope for private. It scored high for public, but not private. It can reach ~0.8+ CV, 0.79 LB, but only scores ~0.69 on private, meaning that private is much more inp...
+├─ Gaju Ahmed (2022-02-15 15:09:38.033000) [+0]
+│  Congratulation and Thanks for the solution.
+├─ kagglemaniak (2022-02-15 14:38:19.233000) [+0]
+│  Congratulations @philippsinger and @ybabakhin!
+│  
+│  Just wondering, do you guys plan on releasing the source code in the future?
+├─ DeepUnderstanding (2022-02-15 12:07:29.390000) [+0]
+│  Congratulations, could you give us the GitHub link from where you used the Centernet.
+│  your investigative work is awesome, but yes if the LB and training data were similar you guys could have made s...
+  ├─ DeepUnderstanding (2022-02-15 12:10:01.833000) [+0]
+  │  BTW, on average how many hours did you dedicate to the comp daily, looking at your work I think it was close to 10-15 hours ;)
+  ├─ [deleted] (2022-02-15 12:10:05.127000) [+0]
+  │  [deleted]
+  ├─ Psi (2022-02-15 12:23:11.120000) [+0]
+  │  We implemented pipelines for all model types ourselves. 
+  │  And yeah, spent quite some time on it :)
+  ├─ DeepUnderstanding (2022-02-15 12:44:08.233000) [+0]
+  │  time-to-time checking the video folds performance.
+  │  does this mean you don't track your validation scores while training and see the CV scores after a few epochs trained?
+  │  if not, what all metrics ar...
+  ├─ Psi (2022-02-15 12:47:13.900000) [+2]
+  │  No, what we mean with that is that we track our subsequence CV, and whenever we get clearly better models, we also check them on video CV setup to make sure they generalize across videos. Implement...
+├─ Bilzard (2022-02-15 11:55:06.597000) [+0]
+│  “Box tightness could affect public LB” — nice observations. Thank you for sharing this.
+│  
+│  I also relabeled the boxes to improve missing labels, and as a side effect, the newly created boxes happened...
+  ├─ Psi (2022-02-15 12:23:43.530000) [+0]
+  │  Did you still infer on larger resolution after training on relabeled data? It might be the reason why it didnt contribute.
+  ├─ Bilzard (2022-02-16 04:59:24.337000) [+0]
+  │  Did you still infer on larger resolution after training on relabeled data?
+  │  
+  │  
+  │  No, the final submission is infer size(x2), which is the same as the train scale. However, the score for this model is o...
+  ├─ Psi (2022-02-16 11:49:12.470000) [+0]
+  │  yeah, private lb seems to be also quite random
+├─ Vivo Vinco (2022-02-15 11:27:26.647000) [+0]
+│  Congratulations and thank you for sharing!
+├─ Lukasz Borecki (2022-02-15 11:20:30.490000) [+0]
+│  Wow! great solution, congratulations for podium! :)
+├─ Liam Nguyen (2022-02-15 11:07:30.890000) [+0]
+│  Thanks for the write-up and congratulations.
+│  
+│  
+│    
+│  we found that boxes on training are on average 3px too large in all dimensions
+│  
+│  
+│  How did you jump to the conclusion that the bboxes were on average...
+  ├─ Psi (2022-02-15 11:11:33.713000) [+2]
+  │  Manually looking and adjusting a subset of frames/boxes to properly fit the actual shape of the COTS and then calculating adjustments from original labels.

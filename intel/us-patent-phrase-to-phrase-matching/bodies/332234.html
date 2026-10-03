@@ -1,0 +1,55 @@
+<p>First of all, I would like to thank competition organizers for hosting this interesting competition. And thanks to my great teammate <a href="https://www.kaggle.com/fankaixie" target="_blank">@Tifo</a> , we discuss and work hard for the whole last month to explore new methods. And also thank to the community of great notebooks and discussions.</p>
+<h2><strong>Where is magic</strong></h2>
+<p>The key is that there exits strong correlations between different targets under the same anchor.  (you can see from the gap between groupkfold and kfold) For example, some targets are similar to the origin target and some are similar to the anchor. In short, adding them to the context can more effectively capture the correlation between the anchor and the target.</p>
+<p>We used various methods to take advantage of this magic:</p>
+<h4>stage1</h4>
+<ol>
+<li>Group the targets from the same <code>anchor</code>, such as 'target1, target2, target3, …'. Then add them to the context.</li>
+<li>Group the targets from the same <code>anchor</code> and <code>context</code>. This brings more relevant targets.</li>
+<li>Group the targets from the same <code>anchor</code>.  Group the anchors from the same <code>context</code>. Add them to the context in turn.</li>
+</ol>
+<h4>stage2</h4>
+<ol>
+<li><p>Group the targets from the same <code>anchor</code> and add oof score to describe more specific quantitative information, like 'target1 23, target2 47, …'. The scores are multplied by 100 so can be recognized as a token.</p></li>
+<li><p>Group the targets from the same <code>anchor</code> and <code>context</code>, with score.</p></li>
+</ol>
+<h4>details</h4>
+<ul>
+<li>During training, the group is performed inside the train-set, and the score is derived from the oof score from the first-stage models.</li>
+<li>During inference, the group is performed after concatenating train-set and test-set, and the score is derived from both the oof and the prediction of test-set from first-stage models. (Why concat? Because overlap anchors in train and test.)</li>
+</ul>
+<h2><strong>Things that worked</strong></h2>
+<ul>
+<li><p>FGM</p>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/tweet-sentiment-extraction/discussion/143764" target="_blank">Adversarial-training in NLP</a> </li>
+<li>eps: 0.1</li>
+<li>single model cv 0.002-0.005</li></ul></li>
+<li><p>EMA （Exponential Moving Average）</p>
+<ul>
+<li>decay: 0.999</li>
+<li>single model cv 0.001-0.003</li></ul></li>
+<li><p>Knowledge distillation</p>
+<ul>
+<li>In other words, soft label from ensemble oof. In this way, single model can achieve performance close to ensemble models (just save time but no more diversity)</li>
+<li>Make sure to use only the corresponding label for each fold to avoid leakage</li>
+<li>The actual performance of second or more rounds is almost the same as first round, and the cv will be distorted in a strange way. We only use few models distiled from the first round.</li></ul></li>
+</ul>
+<h2><strong>Not worked</strong></h2>
+<ul>
+<li>BCE Loss</li>
+<li>MLM</li>
+<li>Post processing</li>
+</ul>
+<h2><strong>Models</strong></h2>
+<ul>
+<li>Deberta-v3-large</li>
+<li>Bert-for-patents</li>
+<li>Deberta-large</li>
+</ul>
+<h2><strong>CV split</strong></h2>
+<p>We use the 5fold StratifiedGroupKFold (the same seed 42, group by anchor).  So we are able to use OOF to get ensemble scores and model weights effectively. Linear regression is much faster than optuna search.</p>
+<p>When there are enough models, our CV and LB are perfectly correlated. </p>
+<h2><strong>Notebook</strong></h2>
+<p>submit: <a href="https://www.kaggle.com/code/zzy990106/upppm-final" target="_blank">https://www.kaggle.com/code/zzy990106/upppm-final</a></p>
+<p>You can find more details in the code.</p>

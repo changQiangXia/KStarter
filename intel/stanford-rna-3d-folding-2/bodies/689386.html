@@ -1,0 +1,202 @@
+<h2>Acknowledgements</h2>
+<p>We are team_cp ( <a href="https://www.kaggle.com/naganohikaru" target="_blank">@naganohikaru</a>, <a href="https://www.kaggle.com/yutaroito" target="_blank">@yutaroito</a>), a two-person team.<br>
+This is our second time participating in the Stanford RNA 3D Folding series; we placed 25th in Part 1.<br>
+The experience from Part 1 — particularly understanding which model combinations held up on unseen data and learning the power of template-based modeling — gave us a strong foundation for this competition.  </p>
+<p>We are deeply grateful to the competition organizers, Stanford University, and the many Kagglers who shared public notebooks and insights throughout the competition!</p>
+<hr>
+<h2>Summary</h2>
+<p>Our solution combines five independent structure prediction models into a single 5-prediction submission, with each model's allocation driven by sequence length.<br>
+Since scoring is best-of-5, the goal is to maximize structural diversity across the five predictions.   </p>
+<h3>The five models are:</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TBM</strong> (Template-Based Modeling)</td>
+<td>Primary predictor for seq_len ≥ 250; fallback for all lengths</td>
+</tr>
+<tr>
+<td><strong>Boltz2</strong></td>
+<td>Primary predictor for seq_len &lt; 250; secondary for 250–999</td>
+</tr>
+<tr>
+<td><strong>RNAPro</strong></td>
+<td>Diffusion-based refinement for seq_len &lt; 1000</td>
+</tr>
+<tr>
+<td><strong>DRFold2</strong></td>
+<td>RNA-specific deep learning for short sequences</td>
+</tr>
+<tr>
+<td><strong>Protenix</strong></td>
+<td>AlphaFold3-based; short sequences and ≥ 1000 nt</td>
+</tr>
+</tbody>
+</table>
+<h3>Final ensemble composition (5 predictions per target):</h3>
+<table>
+<thead>
+<tr>
+<th>seq_len</th>
+<th>Pred 1</th>
+<th>Pred 2</th>
+<th>Pred 3</th>
+<th>Pred 4</th>
+<th>Pred 5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 250</td>
+<td>Boltz2₁</td>
+<td>Boltz2₂</td>
+<td>RNApro₁</td>
+<td>Protenix₁</td>
+<td>DRFold2₁</td>
+</tr>
+<tr>
+<td>250 – 999</td>
+<td>TBM₁</td>
+<td>Boltz2₁</td>
+<td>RNApro₁</td>
+<td>RNApro₂</td>
+<td>Boltz2₂</td>
+</tr>
+<tr>
+<td>≥ 1000</td>
+<td>TBM₁</td>
+<td>TBM₂</td>
+<td>TBM₃</td>
+<td>Protenix₁</td>
+<td>Protenix₂</td>
+</tr>
+</tbody>
+</table>
+<p>RNApro and Boltz2 skip sequences ≥ 1000 nt (OOM risk), so the ≥ 1000 nt tier uses TBM for 3 predictions and Protenix for the remaining 2.</p>
+<h3>Final scores (selected submission):</h3>
+<table>
+<thead>
+<tr>
+<th>Comp. Public LB</th>
+<th>Comp. Private LB</th>
+<th>Final Public LB</th>
+<th>Final Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.43837</td>
+<td>0.60037</td>
+<td>0.42854</td>
+<td><strong>0.49669</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Phase 1: Template-Based Modeling (TBM)</h2>
+<p>TBM is the backbone of our pipeline for medium and long sequences.<br>
+We search a combined train + validation pool using BioPython's <code>PairwiseAligner</code> (global mode), filtering to templates whose length is within 30% of the query length. Alignments are scored and normalized; the top-30 templates form the candidate pool.</p>
+<p><strong>Diversity within TBM predictions:</strong></p>
+<ul>
+<li>Prediction 1: top-scoring template, used as-is.</li>
+<li>Predictions 2–5 (when TBM fills multiple slots): sampled from the top-12 with exponential weighting. Already-used templates receive a 0.1× weight penalty to discourage duplication.</li>
+</ul>
+<p><strong>Gap filling:</strong></p>
+<ul>
+<li>Aligned gaps are filled by linear interpolation between the two nearest valid C1' coordinates.</li>
+<li>One-sided gaps (at chain termini) are extended by 5.95 Å steps along the extrapolated direction.</li>
+<li>If no template exists at all, a fallback linear structure is placed along the X-axis at 5.95 Å steps.</li>
+</ul>
+<p><strong>Post-processing (<code>adaptive_rna_constraints</code>):</strong>
+Each TBM prediction is refined per-chain with:</p>
+<ol>
+<li>Bond length correction: i→i+1 distance → 5.95 Å</li>
+<li>Angle correction: i→i+2 distance → 10.2 Å</li>
+<li>Laplacian smoothing to remove kinks</li>
+<li>Steric self-avoidance (3.2 Å threshold) for chains of length ≥ 25</li>
+</ol>
+<p>The correction strength scales with <code>(1 − template_similarity)</code> so that near-identical templates are barely modified while low-similarity matches are corrected more aggressively.</p>
+<hr>
+<h2>Phase 2: DRFold2</h2>
+<p>DRFold2 (cfg97 configuration, 20 models) provides an RNA-specific deep-learning signal, contributing 1 prediction for sequences shorter than 250 nt.<br>
+From Part 1, we confirmed that cfg97 outperformed other DRFold2 configurations.</p>
+<p>Within that range, the number of models run scales with sequence length:</p>
+<ul>
+<li>L &gt; 200 nt: 5 models <code>[13, 6, 14, 5, 3]</code></li>
+<li>L &gt; 100 nt: 10 models <code>[13, 6, 14, 12, 7, 2, 5, 19, 10, 9]</code></li>
+<li>L ≤ 100 nt: all 20 models</li>
+</ul>
+<p>For each model's output, we compute an energy score (bond lengths, bond angles, stacking) and normalize by the median absolute deviation across predictions. The top-5 scoring structures are selected.</p>
+<hr>
+<h2>Phase 3: RNAPro</h2>
+<p>RNAPro (NVIDIA's Part 1 winner) is used for all sequences under 1000 nt.<br>
+It contributes 2 predictions for mid-range sequences (250–999 nt) and 1 prediction for short sequences (&lt; 250 nt), each conditioned on a different TBM template (top-1 and top-2).</p>
+<p>Configuration:</p>
+<ul>
+<li>MSA enabled (<code>--use_msa true</code>)</li>
+<li>Pre-computed TBM templates (<code>--use_template ca_precomputed</code>)</li>
+<li>RibonanzaNet2 embeddings</li>
+<li>N_STEP = 200, N_CYCLE = 10, N_SAMPLE = 1</li>
+</ul>
+<hr>
+<h2>Phase 4: Boltz2</h2>
+<p>Boltz2 is the primary model for short sequences (&lt; 250 nt), contributing 2 predictions, and contributes 2 predictions for mid-range sequences (250–999 nt) as well.<br>
+It is skipped for sequences ≥ 1000 nt to avoid OOM.</p>
+<ul>
+<li><code>diffusion_samples = 10</code> structures generated per target</li>
+<li>Top-5 selected by combined plddt + confidence score</li>
+<li>Ligand information (SMILES) included in YAML input</li>
+<li>Multi-chain targets: only RNA chains are folded (<code>use_all_chains = False</code>) to avoid OOM with large complexes</li>
+</ul>
+<hr>
+<h2>Phase 5: Protenix</h2>
+<p>Protenix (ByteDance, AlphaFold3 architecture) contributes 1 prediction for short sequences (&lt; 250 nt) and 2 predictions for very long sequences (≥ 1000 nt).</p>
+<ul>
+<li>RNA MSA enabled (<code>USE_RNA_MSA = true</code>)</li>
+</ul>
+<p><strong>Long-sequence handling (≥ 1000 nt):</strong></p>
+<p>Protenix has a practical per-inference memory limit, so sequences longer than <code>MAX_SEQ_LEN = 512</code> nt are processed with a sliding-window chunking strategy:</p>
+<ol>
+<li><p><strong>Chunking</strong> — <code>split_sequence(seq, max_len=512, overlap=128)</code> divides the full sequence into overlapping windows.
+The step size is <code>512 − 128 = 384</code> nt, so a 1000 nt sequence produces three chunks: <code>[0:512]</code>, <code>[384:896]</code>, <code>[768:1000]</code>.</p></li>
+<li><p><strong>Per-chunk inference</strong> — each chunk is fed to Protenix independently as a separate short-sequence target (its own JSON input and <code>InferenceDataset</code>).
+<code>update_inference_configs</code> is called with the chunk token count so internal model buffers are sized correctly.</p></li>
+<li><p><strong>C1' extraction</strong> — from each chunk's raw atom-level output, C1' atoms are identified by matching <code>res_id</code> (1-indexed within the chunk) and <code>atom_name == "C1'"</code>.
+A two-stage fallback is used: first <code>centre_atom_mask</code>, then <code>atom_to_tokatom_idx == 12</code>.</p></li>
+<li><p><strong>Assembly</strong> — extracted C1' coordinates <code>(N_sample, chunk_len, 3)</code> are written into a pre-allocated <code>full_coords (N_sample, seq_len, 3)</code> array at <code>[:, start:end, :]</code>.
+Overlapping positions are overwritten by the later (right-side) chunk.</p></li>
+<li><p><strong>Memory cleanup</strong> — <code>torch.cuda.empty_cache()</code> and <code>gc.collect()</code> are called after every chunk to avoid GPU OOM on very long targets.</p></li>
+</ol>
+<hr>
+<h2>What Worked</h2>
+<h3>The combination of five structurally diverse models.</h3>
+<p>From Part 1 we confirmed that ensembling Boltz, Protenix, and DRFold2 was robustly better on unseen sequences than any single model alone.<br>
+Building on that, Part 2 added RNAPro (the Part 1 winner) as a powerful refinement step, which significantly improved our mid-range sequences.</p>
+<h3>TBM as the strong backbone for medium and long sequences.</h3>
+<p>TBM proved highly competitive whenever a similar sequence existed in the training data.<br>
+For sequences ≥ 250 nt, allocating multiple predictions to TBM and using other models to cover the remaining predictions was consistently better than the reverse.</p>
+<h3>Length-adaptive allocation.</h3>
+<p>Rather than a one-size-fits-all ensemble, we tuned how many predictions each model contributes based on empirical performance at each length range.<br>
+The "overlay" structure of the pipeline (models are run in order and later models overwrite earlier ones) made this easy to tune incrementally.<br>
+The 250 nt boundary was selected by balancing inference time against score: models like Boltz2 and DRFold2 are fast enough for short sequences within the time limit but become impractical beyond this point, while TBM scales well to longer sequences at low cost.</p>
+<h3>Diversity over TBM dependency.</h3>
+<p>We treated TBM as a backbone only where it is clearly strongest (longer sequences with close training-set matches), and filled the remaining predictions with diverse models.<br>
+For short sequences (&lt; 250 nt), we deliberately avoided TBM as the primary predictor and instead relied on Boltz2, DRFold2, and Protenix — models that make predictions purely from sequence without template dependency.<br>
+For the remaining slots outside of short sequences, we combined RNAPro — which starts from a TBM template but refines it into an independently generated structure — with template-free models (Boltz2 and Protenix), ensuring diversity across all five predictions.<br>
+We believe this diversity contributed to our performance on the private leaderboard, which contained harder targets where no close template existed.</p>
+<hr>
+<h2>Authors</h2>
+<p>team_cp: <a href="https://www.kaggle.com/naganohikaru" target="_blank">@naganohikaru</a>, <a href="https://www.kaggle.com/yutaroito" target="_blank">@yutaroito</a></p>
+<hr>
+<h2>References</h2>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/stanford-rna-3d-folding/writeups/25th-place-solution" target="_blank">Our Part 1 solution (25th place)</a> — baseline ensemble strategy and lessons learned carried into Part 2.</li>
+<li><a href="https://www.kaggle.com/competitions/stanford-rna-3d-folding-2/discussion/668412" target="_blank">Part 2 solution discussion</a> — competition discussion thread for this solution.</li>
+<li><a href="https://www.kaggle.com/code/qiweiyin/protenix-v1-inference-2026" target="_blank">Protenix v1 inference notebook</a> — public notebook that formed the basis of our Protenix integration.</li>
+<li><a href="https://www.kaggle.com/code/qamarmath/beginner-to-advanced-rna-3d-structure-predicti" target="_blank">Beginner-to-advanced RNA 3D structure prediction</a> — general pipeline reference used during development.</li>
+</ul>

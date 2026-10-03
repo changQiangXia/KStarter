@@ -1,0 +1,82 @@
+# wsdm-cup-multilingual-chatbot-arena 讨论区（按票数排序，共 80 条）
+
+- [LSMSY 1st Solution and Code](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/554766) — 93 票 / 10 评论 / 2025-01-03 **write-up?**
+- [8.5k Open Model Samples 🦉](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552166) — 54 票 / 13 评论 / 2024-12-18 
+- [3rd place solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567584) — 52 票 / 12 评论 / 2025-06-07 **write-up?**
+- [Starter references](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/546907) — 38 票 / 9 评论 / 2024-11-18 
+- [7th Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567589) — 32 票 / 9 评论 / 2025-03-11 **write-up?**
+- [CV vs LB thread](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552368) — 31 票 / 105 评论 / 2024-12-19 
+- [Top Solutions From the Previous Competition (LMSYS)](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547480) — 31 票 / 2 评论 / 2024-11-21 **write-up?**
+- [The 2nd Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567948) — 29 票 / 5 评论 / 2025-03-20 **write-up?**
+- [13k more open model samples](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/556059) — 29 票 / 10 评论 / 2025-01-11 
+- [Stunning results from EDA and OOF](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/551674) — 29 票 / 3 评论 / 2024-12-14 
+- [6th Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567600) — 28 票 / 4 评论 / 2025-03-11 **write-up?**
+- [[lb 0.682] speedup gemma2 training: HF+FA2 verus unsloth+FA2](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/554660) — 28 票 / 34 评论 / 2025-01-02 
+- [What I learned in WSDM](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/561065) — 26 票 / 26 评论 / 2025-02-04 
+- [1st Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/569902) — 23 票 / 0 评论 / 2025-03-24 **write-up?**
+- [WSDM Extra Dataset](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/551267) — 22 票 / 8 评论 / 2024-12-12 
+- [My final dump of responses from GIANT open models](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/557746) — 20 票 / 10 评论 / 2025-01-21 
+- ["Self-taught-evaluator-llama3.1-70B" Is All You Need -  Judge to choice the winner A/B?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547005) — 16 票 / 2 评论 / 2024-11-19 
+- [Concerns about the possibility of manipulation 🚨](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/551090) — 16 票 / 2 评论 / 2024-12-11 
+- [survey on public ranking vs GPU resource](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/561080) — 14 票 / 8 评论 / 2025-02-04 
+- [12th Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567614) — 14 票 / 3 评论 / 2025-03-11 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547182) — 12 票 / 7 评论 / 2024-11-20 
+- [WSDM 2025: Web of Things, Ubiquitous and Mobile Computing. Foundation Models. Information Integrity.](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/546946) — 12 票 / 0 评论 / 2024-11-19 
+- [Common classification models are not effective in solving this problem](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547162) — 12 票 / 3 评论 / 2024-11-20 
+- [Viewing and analyzing the churn](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567573) — 12 票 / 0 评论 / 2025-03-11 
+- [5th Place Solution for the WSDM Cup - Multilingual Chatbot Arena](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567724) — 12 票 / 4 评论 / 2025-03-11 **write-up?**
+- [11 Days Until the Competition Ends, But the Kaggle Error Already Started?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/559209) — 12 票 / 7 评论 / 2025-01-24 
+- [Leaderboard update in progress [obsolete]](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567490) — 11 票 / 6 评论 / 2025-03-10 
+- [We can apply the last LMSYS competition knowledge](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547140) — 11 票 / 4 评论 / 2024-11-20 
+- [FYI: Judge Arena: Benchmarking LLMs as Evaluators](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/553259) — 9 票 / 1 评论 / 2024-12-24 
+- [5th Place Detailed Solution ](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567856) — 9 票 / 1 评论 / 2025-04-01 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/568522) — 9 票 / 1 评论 / 2025-03-26 **write-up?**
+- [Get started here](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/546938) — 8 票 / 3 评论 / 2024-11-18 
+- [Comp=LMSYS 2?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/546905) — 8 票 / 7 评论 / 2024-11-18 
+- [Feeding the competition data to Microsoft Copilot: accuracy = 60 %](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547120) — 8 票 / 2 评论 / 2024-11-19 
+- [Training vs Forecast PSA](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/560972) — 8 票 / 19 评论 / 2025-02-03 
+- [5th place solution overview](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567617) — 7 票 / 0 评论 / 2025-03-11 **write-up?**
+- [What does Active training phase mean ?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/546904) — 7 票 / 5 评论 / 2024-11-18 
+- [Clarification about rules regarding pretrained models and compute](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/548655) — 6 票 / 8 评论 / 2024-11-28 
+- [Related Paper / Article](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552348) — 6 票 / 0 评论 / 2024-12-19 
+- [LMSYS PTSD](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547198) — 6 票 / 11 评论 / 2024-11-20 
+- [Good Luck to All. What a Competition!](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/561038) — 6 票 / 5 评论 / 2025-02-03 
+- [Which trainer to use?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/556340) — 5 票 / 14 评论 / 2025-01-12 
+- [Deleting weights/models from previous competition](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/562086) — 5 票 / 0 评论 / 2025-02-09 
+- [Can the ranking scores be displayed to three decimal places?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552480) — 5 票 / 5 评论 / 2024-12-20 
+- [34th Place Solution](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/568535) — 5 票 / 0 评论 / 2025-03-16 **write-up?**
+- [interesting: the carrot trick](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/555260) — 5 票 / 0 评论 / 2025-01-06 
+- [WSDM Conference - Call for Presentations](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/564744) — 4 票 / 0 评论 / 2025-02-24 
+- [phi4 bnb dynamic 4bit on kaggle T4 error ????](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/557442) — 4 票 / 7 评论 / 2025-01-19 
+- [LoraConfig Error when Running Inference Pipeline](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552598) — 4 票 / 1 评论 / 2024-12-20 
+- [Information about the sales of Kaggle accounts.](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/565748) — 4 票 / 3 评论 / 2025-03-02 
+- [To view your submission and private score](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567582) — 4 票 / 5 评论 / 2025-03-11 
+- [Wrong values in language column](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547447) — 3 票 / 4 评论 / 2024-11-21 
+- [Does anyone know why there is a timeout error?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/548652) — 3 票 / 8 评论 / 2024-11-28 
+- [Question for Hosts/Kaggle - Notebook runtime?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/551734) — 3 票 / 5 评论 / 2024-12-15 
+- [Merge LoRA weights](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/553084) — 3 票 / 8 评论 / 2024-12-23 
+- [Training data and kaggle resources](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/560490) — 3 票 / 13 评论 / 2025-01-31 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567727) — 2 票 / 1 评论 / 2025-03-11 
+- [GPT-2 Models](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547448) — 2 票 / 1 评论 / 2024-11-21 
+- [Failing to reproduce a good score from LMSYS public notebook :(](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/560615) — 2 票 / 2 评论 / 2025-02-01 
+- [Do you consider non-LLM submissions?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/557557) — 2 票 / 3 评论 / 2025-01-20 
+- [Multiple rounds of chat or single chat](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547246) — 2 票 / 2 评论 / 2024-11-20 
+- [Notebook Submission Error](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/555668) — 2 票 / 2 评论 / 2025-01-08 
+- [Why test datasets so small?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/548659) — 2 票 / 3 评论 / 2024-11-28 
+- [Submission is failing](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/555139) — 2 票 / 9 评论 / 2025-01-05 
+- [Will late submission be open again in the future?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567594) — 2 票 / 7 评论 / 2025-03-11 
+- [Why my LB ranking sometimes increased automatically?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/556013) — 2 票 / 4 评论 / 2025-01-10 
+- [Evaluating Reward Models in Multilingual Settings](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/555961) — 2 票 / 0 评论 / 2025-01-10 
+- [ Issue with Submission Button Not Enabling in Code Competition](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/555254) — 2 票 / 6 评论 / 2025-01-06 
+- [Data cleaning, yay or nay?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/548645) — 1 票 / 2 评论 / 2024-11-28 
+- [what is the final test set ?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547940) — 1 票 / 4 评论 / 2024-11-24 
+- [computation limits](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547419) — 1 票 / 1 评论 / 2024-11-21 
+- [How to deal with languages that have only appeared a few times](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/550062) — 1 票 / 0 评论 / 2024-12-05 
+- [May I ask why there is no API for this competition?](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/548465) — 1 票 / 1 评论 / 2024-11-27 
+- [Unable to pip install. ](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/547941) — 1 票 / 3 评论 / 2024-11-24 
+- [4 bit quantization bitsandbytes and cuda out of memory on Kaggle notebook](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/553570) — 1 票 / 2 评论 / 2024-12-26 
+- [I low the loss but lose the performance.....](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/555059) — 1 票 / 2 评论 / 2025-01-05 
+- [some confusions about the max length](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/556397) — 1 票 / 4 评论 / 2025-01-13 
+- [Regarding the restrictions on the use of open-source LLMs](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/558083) — 1 票 / 4 评论 / 2025-01-23 
+- [need to install packages with pip vs internet disabled](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/556574) — 1 票 / 3 评论 / 2025-01-14 
+- [Question about the model](https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/562422) — 1 票 / 1 评论 / 2025-02-11 

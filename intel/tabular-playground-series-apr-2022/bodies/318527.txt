@@ -1,0 +1,225 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-apr-2022/discussion/318527
+
+Topic #318527: Top six mistakes in feature engineering
+  Author: AmbrosM
+  Posted: 2022-04-12 17:17:09.392000
+  Votes: 185  Comments: 86
+
+When I look at feature engineering in public notebooks, I see the same mistakes again and again. Check your notebook for the following six mistakes, and you may be able to improve your score:
+
+
+
+
+Not enough creativity: Several public notebook aggregate sensor values by mean, median, min, max, std and var. This is not enough for the current competition. After mean and std, it's natural to try skewness and kurtosis as well. Skewness is a useless feature, but kurtosis of sensor_04 became my single most important feature.
+
+
+
+Duplicate aggregations: Do you aggregate using mean, sum, std and var? Sum is proportional to mean and brings no added value for any estimator. Std is the square root of variance and brings no added value for decision trees (it may be useful for linear estimators, however).
+
+
+No feature selection: If you give a model too many features, the score deteriorates. In the current competition, reducing the number of features is important. You can use sequential feature selection (my favorite) or permutation feature importance, for instance.
+
+
+Not using the count of sequences per subject: We have seen in the EDA that we can count sequences per subject, and subjects with more sequences have a higher probability for being in state=1. This is my second most important feature.
+
+
+Data leak in cross-validation: Don't use KFold or StratifiedKFold! In the current competition, the subjects of train and test are disjoint, and it is important to validate that the model is able to generalize to previously unseen subjects. GroupKFold with groups=train.subject ensures that the validation set consists of subjects which do not appear in train.
+
+
+RandomForestClassifier: RandomForestClassifier often gives decent results, but in the current competition gradient boosted decision trees are better. You can choose your favorite from HistGradientBoostingClassifier, XGBoost, CatBoost and LightGBM.
+
+
+The result of fixing the six mistakes can be seen in the Best Model Without NN notebook.
+
+Comments:
+├─ Maximiliano Diaz Battan (2022-04-12 18:50:09.767000) [+5]
+│  Hi Ambros, very nice synthesis. If you allow me, I would add something more related to "data-leak in cross validation", which has to do with split the data before doing any type of feature engineer...
+  ├─ AmbrosM (2022-04-12 19:14:05.653000) [+4]
+  │  Hi Maximiliano, yes, I've made that mistake, too. It most often happens when grouping by some categorical feature and adding the mean target or something similar as a feature. At the same time I'm ...
+  ├─ Waldemar (2022-04-13 11:23:22.920000) [+2]
+  │  Don you mean that during CV, for each fold, we should transform the data based on X_train used in this fold: e.g.
+  │  
+  │  for idx_train, idx_test in gkfold.split(X, groups = groups):
+  │      X_train, X_test =...
+  ├─ broccoli beef (2022-04-13 14:27:38.277000) [+1]
+  │  @Waldemar This scheme would not work for the feature that counts the sequence frequency for each subject. For that feature, it must be "fitted" on X_train and X_test separately.
+  ├─ Maximiliano Diaz Battan (2022-04-20 12:24:10.227000) [+1]
+  │  Hi @waldemar sorry for the delay. Your idea is not bad, in fact many of the preprocessing techniques such as scaling, encoding, etc, it's advisable to do them like this, within the CV loop and fit ...
+  ├─ Andrey (2022-04-25 03:16:46.793000) [+0]
+  │  Has anyone tried using Pipeline? It does not like time series data, discards DataFrames in favour of ndarrays, and long-to-wide, wide-to-long, 2d-to-3d etc transformations are problematic.
+├─ delai50 (2022-04-14 18:05:50.070000) [+3]
+│  Hey @ambrosm, thanks for sharing! 
+│  
+│  What do you do with the algorithm hyperparameters during the FE? Sometimes the usefulness of the new features may be masked by the current values of the hps. On ...
+  ├─ AmbrosM (2022-04-14 18:28:27.653000) [+2]
+  │  Hi @delai50 In my experiments with the data of this competition, there was no need to change the hyperparameters while adding features. Otherwise, you're right, one would have to alternate between ...
+├─ Laurent Pourchot (2022-04-13 10:43:38.817000) [+4]
+│  Hi @ambrosm , thank you for your reminder. Just a small comment for 3° : sometimes I use simply np.absolute(train.corr()['label']).sort_values(ascending=False) and it provides quickly a good insigh...
+  ├─ AmbrosM (2022-04-13 18:01:15.280000) [+1]
+  │  Hi @pourchot np.absolute(train.corr()['label']).sort_values(ascending=False) is certainly an alternative to my plots. I didn't use it because (a) the correlation coefficient is sensitive to outlier...
+├─ Thariq Nugrohotomo (2022-04-13 08:43:15.637000) [+4]
+│  What is the reason to prefer GroupKFold instead of StratifiedGroupKFold ?
+│  While splitting by the group/subject is definitely important, I think maintaining the class balance in cross-validation cou...
+  ├─ wti 200 (2022-04-13 10:21:16.003000) [+3]
+  │  Intuitively I have the same line of reasoning as @thariqnugrohotomo but I still have my doubts.
+  │  For example we know for a fact that in the training data the higher the number of sequences the highe...
+  ├─ broccoli beef (2022-04-13 14:12:52.263000) [+6]
+  │  For this dataset I don't think it matters very much which version of the group k-fold you use. Training set composition for each of the 5 folds:
+  │  
+  │  In general, unless the classes are very unbalanced,...
+  ├─ wti 200 (2022-04-13 17:54:05.680000) [+7]
+  │  I have experimented with both StratifiedGroupKFold and GroupKFold they indeed do not differ much for the current competition.
+├─ Galaxy Force (2022-04-14 07:53:32.530000) [+1]
+│  Thank for sharing this experience.This is a great help to me.
+├─ Niek van der Zwaag (2022-04-14 03:38:56.617000) [+1]
+│  Excellent synthesis, thanks for sharing 🙌
+├─ Stefan Comanita (2022-04-14 00:17:25.097000) [+1]
+│  Interesting advice, I frequently ran into the problem of not doing sufficient feature selection.
+├─ Mahe Jabeen Abdul (2022-04-13 21:29:09.073000) [+1]
+│  This is so useful. Thanks for sharing :)
+├─ MichaelMarzec (2022-04-13 18:24:51.430000) [+1]
+│  Thank you for sharing! I especially find that the CV data leak can be a serious issue, especially in time-series forecasting.
+├─ Zahra Amini (2022-04-13 06:16:26.637000) [+1]
+│  Oh, excellent points. 👌
+│  Thanks for sharing 🙏✨
+├─ RobinVC (2022-04-12 17:35:11.030000) [+1]
+│  I didn't think about the kurtosis, great tip!
+├─ PriyaRK (2022-05-24 17:32:25.680000) [+0]
+│  Inspiration to do better feature engineering.
+│  Thank you
+├─ Rashmita Karak (2022-04-18 17:58:59.650000) [+2]
+│  Thanks for sharing the insightful knowledge @ambrosm . 
+│  
+│  Also, should we not select less complex models as compared to more complex ones, so as to prevent overfitting model and make the model more ...
+  ├─ AmbrosM (2022-04-18 19:17:57.573000) [+2]
+  │  @rashmitakarak Yes, selecting less complex models is in line with my point 3 above.
+├─ Yiqian Liu (2022-04-17 18:25:17.230000) [+2]
+│  Thanks @ambrosm for the clear and informative post!
+│  
+│  Is that partial dependency plot in your 1.?
+  ├─ AmbrosM (2022-04-18 05:29:47.670000) [+2]
+  │  @yichian There is some similarity, but the plots here were made before training any estimator whereas partial dependency plots usually are made with a fitted estimator as input. For more informatio...
+├─ 💖Cheng (2022-04-15 14:33:27.030000) [+2]
+│  Very interesting! Thanks for sharing! I've just realized some of these mistakes by doing my own notebook and referencing others' too.
+│  
+│  Sorry in advance for my bad english but I'll try my best. For ...
+  ├─ AmbrosM (2022-04-17 08:37:52.270000) [+3]
+  │  Hi @nmtrang Features can be useful even if the correlation coefficient is zero because the correlation coefficient only captures linear relationships. The Wikipedia article on correlation shows som...
+├─ Kartik Khandelwal (2022-04-15 06:24:10.850000) [+2]
+│  Awesome @ambrosm. I'll keep these points in mind.
+│  May I know from where you get these learning? You learned this from books or from online course?
+│  Thanks.
+  ├─ 💖Cheng (2022-04-15 14:37:39.333000) [+2]
+  │  From my personal experience, I encountered these knowledge from this Data Mining book and from interrelating with real-life situations! Knowledge is everywhere! ^^ ❤️🙏
+  ├─ AmbrosM (2022-04-17 08:23:39.887000) [+6]
+  │  Hi @kartik2khandelwal It's not about books or online courses, but rather about learning by doing. Whenever I look at a notebook, I ask myself: What can I improve? And whenever I look at the outcome...
+  ├─ Kartik Khandelwal (2022-04-17 17:13:18.293000) [+1]
+  │  Thisi is really helpful @nmtrang and @ambrosm.❣️😊🙌
+  ├─ Satoshi_S (2022-04-18 15:26:43.380000) [+1]
+  │  Great advice.  Thank you for sharing the tips as well,  @ambrosm. I am sure they give great learning opportunities to many people here including me.
+├─ Muhammad Ammar Jamshed (2022-04-17 21:06:23.317000) [+0]
+│  isn't Data Leakage an unavoidable factor in Machine learning models and our aim is to try and keep it as low as possible ?
+  ├─ AmbrosM (2022-04-18 05:14:15.627000) [+1]
+  │  @muhammadammarjamshed Most data leakage is avoidable. Data leakage caused by bad cross-validation must be avoided.
+  ├─ HariKrishnaReddyB (2022-04-20 01:59:14.813000) [+0]
+  │  What are the other folding techniques that can be used to minimise the Data leakage ?
+├─ libowenustb (2022-04-17 06:13:03.113000) [+0]
+│  good！Very interesting. Thanks for sharing.
+├─ Dushyant Singh (2022-04-16 19:18:33.957000) [+0]
+│  Thanks for sharing your experience with us. It will really be very helpful for me.
+├─ Dmitriy Frantsuzov (2022-04-15 07:37:44.467000) [+0]
+│  Thanks! It's short and very informative post
+├─ David-Daniel Ojebiyi (2022-04-15 02:23:01.253000) [+0]
+│  Thanks for sharing, I would look out for these going forward.
+├─ Nicky Bellice (2022-04-14 18:05:49.547000) [+1]
+│  What is kurtosis of sensor_04?
+  ├─ AmbrosM (2022-04-14 18:30:32.357000) [+2]
+  │  @nickybellice sensor_04 is a part of the input data, and for kurtosis, see https://en.wikipedia.org/wiki/Kurtosis.
+├─ Iqbal Ali (2022-04-25 07:47:42.897000) [+-1]
+│  very good information thanks for sharing.
+├─ Abhijeet Raj Modanwal (2022-04-23 17:54:07.827000) [+-1]
+│  This is so useful, Thank you for sharing this experience.
+├─ Armita Razavi (2022-04-23 07:04:15.780000) [+-1]
+│  What brief and valuable hints! Thank you so much @ambrosm for this information.
+├─ Vineeth (2022-04-22 08:53:54.910000) [+-1]
+│  Thanks for the insights. I tried to make a permutation feature importance notebook here. would like to know your views.
+├─ Boshi Li (2022-04-22 07:40:02.973000) [+-1]
+│  Do you have any example for feature selection?
+├─ Prosper Alikizang (2022-04-21 20:10:04.897000) [+-1]
+│  Thanks  @ambrosm for sharing, I used to make some of theses mistakes but till now these mistakes will be corrected!
+├─ Peter Goshman (2022-04-21 15:01:32.243000) [+-1]
+│  Great Tips! Thanks for the detailed guide. It's enlightening to see "Not enough creativity" as the no. 1 mistake.
+├─ [deleted] (2022-04-21 11:51:55.870000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-04-21 04:23:40.500000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-04-19 10:30:54.360000) [+-2]
+│  [deleted]
+├─ [deleted] (2022-04-19 10:30:30.363000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-04-19 10:29:37.377000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-04-18 23:46:12.130000) [+-1]
+│  [deleted]
+├─ [deleted] (2023-03-16 14:38:43.583000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-18 11:44:17.317000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-17 16:10:18.037000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-17 13:58:48.567000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-17 08:35:25.723000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 12:35:50.167000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 12:31:42.547000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-13 06:34:44.850000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-14 13:12:54.963000) [+1]
+│  [deleted]
+├─ [deleted] (2022-04-14 09:55:16.983000) [+1]
+│  [deleted]
+├─ [deleted] (2022-04-14 07:40:44.070000) [+1]
+│  [deleted]
+├─ [deleted] (2022-04-13 13:42:22.963000) [+1]
+│  [deleted]
+├─ [deleted] (2022-04-17 05:58:40.730000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 13:00:51.093000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-15 12:31:25.677000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-14 22:13:37.710000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-14 21:06:17.253000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-15 17:40:59.387000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-01 05:33:36.060000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-04-20 11:09:22.983000) [+-1]
+│  [deleted]
+├─ [deleted] (2022-07-15 06:25:19.813000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-18 10:45:52.780000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-18 10:00:18.263000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-17 11:13:00.277000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-17 09:51:51.930000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 19:00:32.300000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 17:11:29.673000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 13:04:40.637000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 12:24:52.100000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-16 00:36:50.613000) [+0]
+│  [deleted]
+├─ [deleted] (2022-04-15 17:30:11.523000) [+0]
+│  [deleted]

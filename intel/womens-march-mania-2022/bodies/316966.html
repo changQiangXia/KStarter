@@ -1,0 +1,46 @@
+<p>Congratulations to all, including the South Carolina Gamecocks! Thanks to Kaggle for running the contests again and for prompt leaderboard updates! Thanks also to Mark McClure for surely the best user-generated submission scoring UI ever! Providing this tool and updating the scores on time is certainly worth some kind of <em>community-leader</em> or <em>forum hero</em> prize 👏.</p>
+<p>My submissions this year are exactly the same as my 2021 code (10th Mens, 12th Womens).</p>
+<h3>Base Model</h3>
+<p>For the Women's tournament it is an approximation of the <a href="https://fivethirtyeight.com/features/how-our-march-madness-predictions-work-2/" target="_blank">Five38 match probabilities</a>:</p>
+<pre><code>sub["Pred"] = 1. / (1 + 10**(rdiff * (30.464 / 400)))
+</code></pre>
+<p><code>rdiff</code> is the difference in Five38 team ratings; and using their more precise predictions for round 1:</p>
+<pre><code>idx = sub.Round == 1
+sub.loc[idx, "Pred"] = sub.loc[idx, "LTeamID"].map(five38.rd2_win)
+</code></pre>
+<p>That would score 0.42217 ~ 31st place. It tends to be too confident for later matches, which might be important when you see what happens to these predictions next…</p>
+<h3>Overrides</h3>
+<p>There are a couple of <em>safe</em> ways to split two submissions:</p>
+<ul>
+<li>split 0/1 for all possible final games, but then what if if the final is unbalanced? e.g. 2021.</li>
+<li>split the first round match closest to 0.5 → 1 in one sub and 0.5 → 0 in the other</li>
+</ul>
+<p>The latter guarantees -ln(0.5)/63 = 0.011 saving of log loss.</p>
+<p>Instead I used the same <a href="https://www.kaggle.com/competitions/mens-machine-learning-competition-2019/discussion/90254" target="_blank">Madtown</a> technique as <a href="https://www.kaggle.com/competitions/ncaam-march-mania-2021/discussion/231068" target="_blank">last year</a>, which I now realise is a generalisation of the second option:</p>
+<ul>
+<li><code>preds[(abs(preds-0.5)&lt;T)]</code> → [ <code>P</code> , <code>(1-P)</code> ]</li>
+</ul>
+<p>For the second "safe R1 gamble" (R1 matches only) T is nearly zero (such that only one match is affected) and P is 0.</p>
+<p>For "Madtown" gambling for the Women's tournament, I found more conservative settings appear to work better, and used T=0.16 and P=0.36, so all predictions between 0.34 - 0.66 are set to 0.36 in one sub &amp; 0.64 in the other.</p>
+<p>Here are my scored predictions:</p>
+<p><img src="https://i.postimg.cc/J4NFtsFv/womens-march-mania-2022-2nd.png" alt=""></p>
+<ul>
+<li>Y scale is the probability for the favourite</li>
+<li>X axis shows round and match winner</li>
+<li>X is sorted [round 1, round 2, other rounds], then by prob</li>
+<li>blue = model predictions</li>
+<li>black = unused original model (0.36 in one sub, 0.64 in another)</li>
+<li>red stars = log loss scores (right Y axis)</li>
+<li>black line = original model score 0.42217</li>
+<li>red line = best submission score 0.38864</li>
+</ul>
+<p>Instead of uncertain predictions around ~0.5, which will all score ~0.693, we get -ln(0.36)=0.446285 or -ln(0.64)=1.021679, hopefully more 0.446285's in one submission, pushing average logloss down.</p>
+<p>It turns out 13 <em>close</em> matches were scored that had these diverging predictions, and interestingly, <strong>any</strong> set of 0.36/0.64 overrides would have resulted in a gold medal:</p>
+<p><img src="https://i.postimg.cc/TwjbnXXd/womens-march-mania-2022-scores.png" alt=""></p>
+<p>So over <strong>all</strong> possibilities for a random seed to reassign the ~0.5 → [ 0.36, 0.64 ] matches, the worst rank would be 8th, with a 42% chance of 8th and 58% chance of top 3! My actual score of 0.38864 is from having a 9:4 split. Of course, those particular 13 matches being scored was not a given, it does not mean I was guaranteed a top 8 finish from the outset.</p>
+<p>I'm guessing the impressive-looking rankings above are partly due to other teams gambling with a 0.99+ override on Baylor (seeded 2), who lost in round 2.</p>
+<p>Thanks for reading! Any questions would be welcome…</p>
+<h3>P.S.</h3>
+<p>Same approach in Men's (but with Pystan Bayesian model as baseline) is currently a 16:14 split, 0.67280 logloss, 542nd place…</p>
+<h3>Code</h3>
+<p><strong>Updated 7th April</strong>: <a href="https://www.kaggle.com/code/jtrotman/2nd-place-ncaaw-2022" target="_blank">2nd Place NCAAW 2022</a> notebook.</p>

@@ -1,0 +1,446 @@
+<p>Congratulations to all the winners! Thanks to the organizers for hosting such an interesting competition. LMSYS was my first LLM competition with a sliver medal. And I am very happy to be able to win a gold medal this time at WSDM Cup. Here Let me share my solution.</p>
+<p>Training code: <a href="https://github.com/LIHANG-HONG/WSDM-Cup-3rd-place-solution" target="_blank">https://github.com/LIHANG-HONG/WSDM-Cup-3rd-place-solution</a><br>
+Inference code: <a href="https://www.kaggle.com/code/honglihang/wsdm-submission-nocot-public?scriptVersionId=228251584" target="_blank">https://www.kaggle.com/code/honglihang/wsdm-submission-nocot-public?scriptVersionId=228251584</a></p>
+<h1>TL;DR</h1>
+<ul>
+<li>Reimplement the training pipeline of <a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551651" target="_blank">Eedi Rerank Model</a>. Use AutoModelForCasualLM rather than AutoModelForSequenceClassification for faster inference with vllm.</li>
+<li>Qwen/Qwen2.5-14B-Instruct(with post-pretrain) + Phi4(without post-pretrain). Merge model trained with different seed.</li>
+<li>distillation with 72B Model as <a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/discussion/527629" target="_blank">1st place of LMSYS</a>. But I found that the 72B model is not necessary. Using the logit of 14B model and perform "self-distillation" can reach the same CV score. Maybe it is the the effect of label cleaning brought by soft logit that really matters.</li>
+<li>Quantize with auto-round.</li>
+<li>vllm inference. For ensemble, first sort by token length, and then perform 25% TTA with Qwen2.5-14B. The rest of the inference time is used by Phi4.</li>
+</ul>
+<h1>Preprocess</h1>
+<p>Use fasttext to infer the language of the prompt.</p>
+<h1>Train part</h1>
+<p>I override the compute_loss function of SFTTrainer to calculate the loss only for Token "A" and "B".</p>
+<pre><code> ():
+     ():
+        labels = inputs[]
+        labels[labels &gt; ] = -
+        inputs[] = labels
+        _, outputs = ().compute_loss(model, inputs, return_outputs=, num_items_in_batch=num_items_in_batch)
+        logits = outputs.logits
+        shift_logits = logits[..., :-, :].contiguous()
+        shift_labels = labels[..., :].contiguous()
+
+        logits_target = []
+        labels_target = []
+         i  ((shift_labels)):
+            lbl = shift_labels[i].cpu().numpy()
+            target_idx = np.where(lbl != -)[][]
+            
+            logits_target.append(shift_logits[i][target_idx][:])
+            labels_target.append(shift_labels[i][target_idx]-)
+
+        
+        logits_target = torch.stack(logits_target, dim=)
+        
+        labels_target = torch.tensor(labels_target).to(outputs.logits.device)
+        loss = F.cross_entropy(logits_target, labels_target)
+         return_choice_logit:
+             (loss, outputs, logits_target)  return_outputs  (loss, logits_target)
+        :
+             (loss, outputs)  return_outputs  loss
+</code></pre>
+<p>The max length of prompt, response a and response b is limited to 2048. So the max length of the input is about 6144.</p>
+<pre><code> ():
+    preference_prompt_predict_template = 
+
+    preference_prompt_train_template = preference_prompt_predict_template + 
+
+    response_template = 
+
+    sep = 
+</code></pre>
+<h2>Post-Pretrain</h2>
+<p>I used the following data for post-pretrain. The post-pretrain share the same training pipeline with the training.</p>
+<ul>
+<li><a href="https://huggingface.co/datasets/argilla/ultrafeedback-binarized-preferences-cleaned" target="_blank">ultrafeedback</a></li>
+<li>dataset collected by <a href="https://github.com/tascj/kaggle-lmsys-chatbot-arena/tree/main/scripts/sakaku" target="_blank">2nd place of LMSYS</a></li>
+</ul>
+<h2>Training</h2>
+<p>I used the following data for training.</p>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/lmsys-chatbot-arena/data" target="_blank">LMSYS data</a></li>
+<li><a href="https://huggingface.co/datasets/lmsys/chatbot_arena_conversations" target="_blank">LMSYS 33k</a></li>
+<li>WSDM Cup data</li>
+</ul>
+<p>For teacher models(Qwen2.5-72B and Athene-V2-Chat), I used deepspeed to train on multiple GPUs during the New Year holiday. To avoid adjusting the learning rate, I simply set gradient_accumulation_steps to 1 to keep the batch size same as single GPU training.</p>
+<h2>CV(without distillation)</h2>
+<p>Basically, learning rate 10e-5 is good for 14B model. Loss spike starts to occur around 14e-5. For 72B model, a smaller learning rate is better.</p>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Experiment</th>
+<th>Fold</th>
+<th>lr</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Qwen2.5 14B(post-pretrain, only WSDM data)</td>
+<td>0</td>
+<td>7e-5</td>
+<td>0.7055360462714315</td>
+</tr>
+<tr>
+<td>2</td>
+<td>-</td>
+<td>0</td>
+<td>8e-5</td>
+<td>0.7007849617847552</td>
+</tr>
+<tr>
+<td>3</td>
+<td>-</td>
+<td>0</td>
+<td>9e-5</td>
+<td>0.699958686221855</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-</td>
+<td>0</td>
+<td><strong>10e-5</strong></td>
+<td><strong>0.7051229084899814</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>-</td>
+<td>0</td>
+<td>12e-5</td>
+<td>0.7059491840528817</td>
+</tr>
+<tr>
+<td>6</td>
+<td>-</td>
+<td>0</td>
+<td>14e-5</td>
+<td>0.5084693245197274</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Phi4(only WSDM data)</td>
+<td>0</td>
+<td>7e-5</td>
+<td>0.6983061350960545</td>
+</tr>
+<tr>
+<td>8</td>
+<td>-</td>
+<td>0</td>
+<td>8e-5</td>
+<td>0.6965502995248916</td>
+</tr>
+<tr>
+<td>9</td>
+<td>-</td>
+<td>0</td>
+<td>9e-5</td>
+<td>0.6995455484404048</td>
+</tr>
+<tr>
+<td>10</td>
+<td>-</td>
+<td>0</td>
+<td>10e-5</td>
+<td>0.6966535839702541</td>
+</tr>
+<tr>
+<td>11</td>
+<td>-</td>
+<td>0</td>
+<td>12e-5</td>
+<td>0.6973765750877918</td>
+</tr>
+<tr>
+<td>12</td>
+<td>-</td>
+<td>0</td>
+<td>14e-5</td>
+<td>0.7016112373476554</td>
+</tr>
+</tbody>
+</table>
+<h2>CV(with distillation)</h2>
+<p>The best Temperature is 5.0(experiment 2~5) for me and the best soft loss weight is 0.9(experiment 2~7).<br>
+Following the 1st place of LMSYS, I tried averaging KLDivLoss and CosineEmbeddingLoss, but the effect is not obivious. KLDivLoss is enough.</p>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Experiment</th>
+<th>Fold</th>
+<th>Accuracy</th>
+<th>T</th>
+<th>distil_weight</th>
+<th>lr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Qwen2.5 14B(baseline without distillation, only WSDM data)</td>
+<td>0</td>
+<td>0.7051229084899814</td>
+<td>-</td>
+<td>-</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Qwen2.5 14B(distillation experiments, only WSDM data)</td>
+<td>0</td>
+<td>0.7061557529436067</td>
+<td>1</td>
+<td>0.5</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>-</td>
+<td>0</td>
+<td>0.7082214418508572</td>
+<td>10</td>
+<td>0.5</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-</td>
+<td>0</td>
+<td>0.7076017351786821</td>
+<td>3</td>
+<td>0.5</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>-</td>
+<td>0</td>
+<td>0.7102871307581078</td>
+<td>5</td>
+<td>0.5</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>-</td>
+<td>0</td>
+<td>0.7121462507746333</td>
+<td>5</td>
+<td>0.7</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>7</td>
+<td>-</td>
+<td>0</td>
+<td><strong>0.7134889485643462</strong></td>
+<td><strong>5</strong></td>
+<td><strong>0.9</strong></td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Qwen2.5 14B(distillation with more teacher model, only WSDM data) - weight param set1</td>
+<td>0</td>
+<td>0.7168973352613096</td>
+<td>5</td>
+<td>0.9</td>
+<td>10e-5</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Qwen2.5 14B(distillation with more teacher model, only WSDM data) - weight param set2</td>
+<td>0</td>
+<td>0.7164841974798596</td>
+<td>5</td>
+<td>0.9</td>
+<td>10e-5</td>
+</tr>
+</tbody>
+</table>
+<h2>Quantize</h2>
+<p>I used auto-round for quantization. Using a heavy quantize setting can surpress the accuracy drop. The quantize experiment is based on Qwen2.5 3B model.<br>
+My final quantize setting is seqlen=6144, nsamples=512, iters=3000.</p>
+<table>
+<thead>
+<tr>
+<th>No</th>
+<th>Experiment</th>
+<th>seqlen</th>
+<th>nsamples</th>
+<th>iters</th>
+<th>Fold</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>baseline - no quantiz</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>0.681057</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1 + lite setting</td>
+<td>2048</td>
+<td>256</td>
+<td>500</td>
+<td>0</td>
+<td>0.674653</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1 + official best setting</td>
+<td>2048</td>
+<td>512</td>
+<td>1000</td>
+<td>0</td>
+<td>0.677752</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3 + increase iter</td>
+<td>2048</td>
+<td>512</td>
+<td>2000</td>
+<td>0</td>
+<td>0.678062</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3 + increase iter</td>
+<td>2048</td>
+<td>512</td>
+<td>3000</td>
+<td>0</td>
+<td>0.677649</td>
+</tr>
+<tr>
+<td>6</td>
+<td>4 + increase iter</td>
+<td>2048</td>
+<td>512</td>
+<td>4000</td>
+<td>0</td>
+<td>0.673311 / 0.678785</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3 + increase seqlen</td>
+<td>4096</td>
+<td>512</td>
+<td>1000</td>
+<td>0</td>
+<td>0.676822</td>
+</tr>
+<tr>
+<td>8</td>
+<td>7 + increase iter</td>
+<td>4096</td>
+<td>512</td>
+<td>2000</td>
+<td>0</td>
+<td>0.678888</td>
+</tr>
+<tr>
+<td>9</td>
+<td>8 + increase iter</td>
+<td>4096</td>
+<td>512</td>
+<td>3000</td>
+<td>0</td>
+<td>0.673001</td>
+</tr>
+<tr>
+<td>10</td>
+<td>9 + increase iter</td>
+<td>4096</td>
+<td>512</td>
+<td>4000</td>
+<td>0</td>
+<td>0.678888</td>
+</tr>
+<tr>
+<td>11</td>
+<td>10 + increase iter</td>
+<td>4096</td>
+<td>512</td>
+<td>5000</td>
+<td>0</td>
+<td>0.680024</td>
+</tr>
+<tr>
+<td>12</td>
+<td>11 + increase seqlen</td>
+<td>4096</td>
+<td>512</td>
+<td>6000</td>
+<td>0</td>
+<td>0.673104</td>
+</tr>
+<tr>
+<td>13</td>
+<td>7 + increase seqlen</td>
+<td>6144</td>
+<td>512</td>
+<td>2000</td>
+<td>0</td>
+<td>0.678578</td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>13 + increase iter</strong></td>
+<td><strong>6144</strong></td>
+<td><strong>512</strong></td>
+<td><strong>3000</strong></td>
+<td>0</td>
+<td><strong>0.680851 / 0.676513 / 0.681160 / 0.678578</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td>14 + increase iter</td>
+<td>6144</td>
+<td>512</td>
+<td>4000</td>
+<td>0</td>
+<td>0.678682 / 0.674757</td>
+</tr>
+</tbody>
+</table>
+<h1>Inference part</h1>
+<p>I used vllm for inference. The inference part is nothing special, it is all about engineering. I used the following tricks.</p>
+<ul>
+<li>Dynamically change the inference time limit according to the test data size. For train phase, the inference time limit is set to 265min. For forecast phase, the inference time limit is set to 690min.</li>
+<li>Using T4x2 Environment to test the throughput of the model. The average throughput of the model is about 70000 token per minute. For TTA, thanks to the prefix cache of vllm, the throughput can reach about 74000 token per minute.</li>
+<li>Sort the test data by token length and perform TTA with Qwen2.5 14B model for the first 25% of the data.</li>
+<li>Monitor the inference time left and figure out the number of tokens that can be processed by Phi4 according to the throughput. About 60% of the test data can be processed in train phase. </li>
+</ul>
+<h1>Submission strategy</h1>
+<p>Basically, I choose the submission with the highest leaderboard score. Since the leaderboard score is not stable, I trained the same model with different seeds and linearly merged the weight of the model.<br>
+I find that phi4 performs well for short prompt but bad for long prompt in LB. So I changed the ensemble weight of Phi4 according to the token length.</p>
+<ol>
+<li>Calculate the quantile of the prompt length of the test data. q1=0.25, q2=0.5, q3=0.75, q4=1.0</li>
+<li>For token length &lt;= q2, phi4 weight is set to 0.5.</li>
+<li>For token length &gt; q2 and &lt;= q3, phi4 weight is set to 0.15.</li>
+<li>For token length &gt; q3, phi4 weight is set to 0.1.(Not used due to the inference time limit. Phi4 can only infer about 60% of the test data in train phase.)</li>
+</ol>
+<h1>What I tried but gave up</h1>
+<ul>
+<li>Inspired by 1st place of Eedi, I distiled Qwen2.5-3b to generate CoT about how to solve the prompt(=request from user). The CV and LB get better by 0.001~0.002, but the inference time is too long and I frequently encountered timeout error.</li>
+<li>Tried Qwen2.5-14b distilled by deepseek and Qwen2.5-14b-1m. The LB is not good.</li>
+</ul>
+<pre><code>
+system_prompt_template = 
+
+user_prompt_template = 
+</code></pre>

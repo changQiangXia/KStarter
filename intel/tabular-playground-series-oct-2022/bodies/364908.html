@@ -1,0 +1,77 @@
+<p>I've been working on this problem for a while and I'd like to share my current approach.  It does fairly well but I also don't know what I'm doing in a lot of aspects so I appreciate any suggestions.  See my Notebook <a href="https://www.kaggle.com/code/dster/rocket-league-tps-host-solution" target="_blank">here</a>.</p>
+<h1>Overview</h1>
+<p>I followed the ideas from <a href="https://www.kaggle.com/competitions/nfl-big-data-bowl-2020/discussion/119400" target="_blank">The Zoo's solution</a> in the 2020 NFL Big Data Bowl competition, which had a similar competition setup of predicting results from a snapshot of game state.  I used their idea of applying a network-in-network (convolutional layer + pooling layer) over pairs of players, which I found to be a cool and effective way to funnel information to the model and take advantage of symmetry in the input data.</p>
+<h1>Preprocessing</h1>
+<p>Since I'm using a CNN, I needed to handle the <code>NaN</code> cases where players are demoed.  I added a <code>p#_demoed</code> boolean column for each player, and converted the <code>NaN</code> states to out-of-distribution states where they were unlikely to have an impact on the play:  floating above the stadium, moving upwards with zero boost.  There's probably better options here.</p>
+<p>I also drop the <code>boost#_timer</code> columns since I'm currently not using them, but would like to.</p>
+<pre><code>def preprocess_features(df):
+    df.drop([col for col in df.columns if col.startswith('boost')], axis=1, inplace=True)
+
+    for p in range(6):
+        # add demoed column
+        df.insert(list(df.columns).index(f'p{p}_boost') + 1, f'p{p}_demoed', df[f'p{p}_boost'].isna())
+
+        # Convert nan values from demoed state into dummy values, specifically sitting above the stadium, flying upwards with 0 boost
+        x = -20 + 20 * (p % 3)
+        y = -20 + 40 * (p // 3)
+        cond = df[f'p{p}_boost'].isna()
+        df.loc[cond, [f'p{p}_pos_x', f'p{p}_vel_x', f'p{p}_pos_y', f'p{p}_vel_y', f'p{p}_pos_z', f'p{p}_vel_z', f'p{p}_boost']] = \
+            [x, x, y, y, 100, 10, 0]
+</code></pre>
+<h1>Model</h1>
+<p>Split out input and reshape players</p>
+<pre><code>inputs = keras.Input(shape=(54,), name='inputs')
+ball = inputs[:, :6]
+# batch_num, team_num, player_num, features (posX3, velX3, boost, demoed)
+players = keras.backend.reshape(inputs[:, 6:54], (-1, 2, 3, 8))
+</code></pre>
+<p>First extract some ball features</p>
+<pre><code>ball_preprocess = batched_denses(ball, [[48, 36], [36, 32]])
+</code></pre>
+<p>Then concat player features with ball data, team number, and delta between player and ball</p>
+<pre><code># Get vector diffs from each player pos/vel to ball pos/vel
+ball_diffs = to_players_shape(ball) - players[:, :, :, :6]
+players_inflated = concat([players, teams, ball_diffs, to_players_shape(ball_preprocess)], axis=3)
+</code></pre>
+<p>Then apply a network-in-network filter over each player vector</p>
+<pre><code>player_filter_widths = [[81, 64], [64, 48], 36]
+p_conv = batched_conv2ds(players_inflated, player_filter_widths)
+</code></pre>
+<p>For each player, find each pair of teammates and each pair of opponents, and append their features together</p>
+<pre><code>team_pairs = keras.backend.stack([tf.roll(layer, axis=2, shift=i) for i in range(3)], axis=3)
+oppo_pairs = tf.roll(team_pairs, axis=2, shift=1)
+players_tiled = keras.backend.tile(keras.backend.reshape(layer, (-1, 2, 3, 1, layer.shape[-1])), [1, 1, 1, 3, 1])
+teammates = concat([team_pairs[:, :, :, 1:, :], players_tiled[:, :, :, 1:, :]], axis=4)
+opponents = concat([oppo_pairs, players_tiled], axis=4)
+</code></pre>
+<p>Then apply a new network-in-network filter over each pair of players, one for teammate pairs and one for opponent pairs, and use Pooling to compress the most important informance per source player</p>
+<pre><code>pair_filter_widths = player_filter_widths
+t_conv = convs_and_pool3d(teammates, pair_filter_widths)
+o_conv = convs_and_pool3d(opponents, pair_filter_widths)
+</code></pre>
+<p>Lump all per-player information and apply one last network-in-network filter over each player, pooling again</p>
+<pre><code>p_full = concat([p_conv, t_conv, o_conv], axis=3)
+full_filter_widths = player_filter_widths
+full_conv = convs_and_pool2d(p_full, full_filter_widths)
+</code></pre>
+<p>Append the original ball preprocessing, and just run some dense layers into our prediction layers</p>
+<pre><code>x = concat([ball_preprocess, keras.layers.Flatten()(full_conv)], axis=1)
+x = batched_denses(x, [[81, 64], [64, 48], 42])
+outputs = [keras.layers.Dense(3, activation=keras.activations.softmax)(x) for t in TARGETS]
+</code></pre>
+<p>I use <code>SparseCategoricalCrossentropy</code> loss for each output, predicting between three classes: Team A scoring within Y seconds, Team B scoring within Y seconds, and neither team scoring within Y seconds, with each output having a different <code>Y</code> value (see below).</p>
+<h1>Data augmentation</h1>
+<p>As others in the competition discovered, there are 144 ways to reshape the input vector: Flip over X axis, Flip over Y axis, or Reorder either team's players in one of 3! = 6 ways, for 2 * 2 * 6 * 6 = 144 permutations.  I permuted and shuffled the dataset between every training pass.</p>
+<p>One big improvement I learned from the competitors in this competition was permuting the test features as well, making predictions over each of the permutations, and averaging the results.  I was surprised at how much this improved my score, and it only takes a few extra minutes to do.</p>
+<h1>Predicting multiple timeframes</h1>
+<p>I thought it could be useful to have the model predict <code>Pr[Team X scores within Y seconds]</code> for multiple <code>Y</code> values and not just the main target of <code>Y = 10</code>.  By doing so, we're able to give the model more information during training about scoring timeframes.  I tried <code>TARGETS = [1, 2, 3, ..., 10]</code> and used <code>event_time</code> and <code>team_scoring_next</code> to construct the multi-output target vector, and the model took a bit longer to train but also seemed to perform marginally better.  I also used <code>loss_weights</code> to still give more weight to the main <code>Y = 10</code> target.</p>
+<h1>Future improvements</h1>
+<ol>
+<li>I could probably have better replacement values for demoed players, or even consider having special models just for states with less players like 2v3.</li>
+<li>I would like to utilize the <code>boost#_timer</code> columns, for example building a mini-network to construct per-player features estimating their chance and timing of gaining a boost orb, and appending those values to the initial player features.</li>
+<li>I would like to explore predicting future states of ball / players, as others suggested in the forums, and add those features to the model.</li>
+<li>Maybe similar to #3, I think we could use timeseries information from the training set as part of a RNN, LSTM, or similar setup, but I don't know a lot about the best practices there and need to do some research.</li>
+<li>I'm still figuring out a good learning rate strategy.  I found that sometimes reducing the LR greatly improved my loss within just one epoch, but I'm finding that reducing it too early does not show the same effect.</li>
+<li>A meta-improvement to the competition setup would be to add each player's orientation vector to the dataset, which should add more signal for a model to learn.</li>
+<li>From watching prediction traces of my model side-by-side with a gameplay sequence, it's clear to me that there's still a lot of room for improvement, and it might be time to rethink my overall model structure instead of whittling off small increases by playing with hyperparams.</li>
+</ol>

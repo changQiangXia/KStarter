@@ -1,0 +1,70 @@
+# tabular-playground-series-may-2022 讨论区（按票数排序，共 68 条）
+
+- [Congrats to AmbrosM, a new Kaggle Grand Master !](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322481) — 74 票 / 40 评论 / 2022-05-02 
+- [Engineering the top three feature interactions](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323892) — 71 票 / 26 评论 / 2022-05-09 
+- [#1 Solution: A Two-Branch Network](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328336) — 54 票 / 20 评论 / 2022-06-01 **write-up?**
+- [Interaction vs Correlation](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323766) — 53 票 / 8 评论 / 2022-05-08 
+- [Early stopping on loss, auc or accuracy?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326116) — 45 票 / 8 评论 / 2022-05-20 
+- [Historical Tabular Playground Binary Classification Competitions](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322263) — 40 票 / 9 评论 / 2022-05-01 
+- [Notebooks to get you started!](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322303) — 29 票 / 5 评论 / 2022-05-01 
+- [Why AUC might be better than accuracy?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322296) — 26 票 / 15 评论 / 2022-05-01 
+- [TPS - May 2022, What I have tried.](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326526) — 24 票 / 3 评论 / 2022-05-23 
+- [Feature f_27 and hidden information](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322534) — 23 票 / 16 评论 / 2022-05-02 
+- [Analysing Interactions with SHAP](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323595) — 22 票 / 2 评论 / 2022-05-07 
+- [#4 Solution: Multi-Activation Branches](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328441) — 19 票 / 2 评论 / 2022-06-01 **write-up?**
+- [XGB Feature Interactions](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322313) — 19 票 / 5 评论 / 2022-05-01 
+- [Research Papers About Tabular Deep Learning](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/325529) — 18 票 / 3 评论 / 2022-05-17 
+- [#5 Solution (CatBoost + Keras)](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328553) — 17 票 / 6 评论 / 2023-11-01 **write-up?**
+- [[TPS MAY 2022] Good Beginner starter notebooks](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/327873) — 17 票 / 1 评论 / 2022-05-29 
+- [Important Features](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/325926) — 14 票 / 4 评论 / 2022-05-19 
+- [✔️ Analyze ML models using Google What-If tool (Open source)✔️](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326115) — 14 票 / 1 评论 / 2022-05-20 
+- [Interaction constraints in XGBoost, LightGBM and CatBoost](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322446) — 14 票 / 2 评论 / 2022-05-02 
+- [GBM vs NN performance on this TPS](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/327789) — 14 票 / 3 评论 / 2022-05-29 
+- [How to find some useful feature interactions](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323421) — 13 票 / 2 评论 / 2022-05-06 
+- [Fast.ai, PyTorch-Tabular, Tensorflow-embed-XGB, PyTorchLighting - Deeplearning framework using Tabular data ! ](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323339) — 12 票 / 10 评论 / 2022-05-06 
+- [Continuous Feature Interactions Dataset w/ Feature Engine](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324358) — 11 票 / 3 评论 / 2022-05-11 
+- [Unofficial R Community - May 2022](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322634) — 11 票 / 5 评论 / 2022-05-03 
+- [Score goes down with CV](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323417) — 11 票 / 5 评论 / 2022-05-06 
+- [Challenge Log for May 2022 Challenge](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322294) — 10 票 / 2 评论 / 2022-05-01 
+- [Global vs Local explanation](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324983) — 10 票 / 1 评论 / 2022-05-14 
+- [Top Feature Interactions using Xgbfir ](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324200) — 10 票 / 1 评论 / 2022-05-10 
+- [Need suggestion: When we need to take look at public work/discussion? ](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322787) — 9 票 / 5 评论 / 2022-05-03 
+- [📢 First try ! Weight and biases | Build model | Visualize 🚀](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324788) — 8 票 / 6 评论 / 2022-05-13 
+- [Learnt So Much](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328286) — 8 票 / 2 评论 / 2022-05-31 
+- [I achieved a 99% score, but Kaggle ranked me 81%](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326465) — 7 票 / 5 评论 / 2022-05-22 
+- [Is there a rule to submit prediction with unto 2 decimal places?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323155) — 7 票 / 4 评论 / 2022-05-05 
+- [can we use all data for training, once we already did with train and validation? ](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324992) — 7 票 / 4 评论 / 2022-05-14 
+- [Welcome to the May 2022 edition of the Tabular Playground Series!](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324231) — 6 票 / 3 评论 / 2022-05-10 
+- [Your notebook tried to allocate more memory than is available. It has restarted.](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/325112) — 6 票 / 7 评论 / 2022-05-14 
+- [What is the realistic score for this competition?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/327363) — 6 票 / 3 评论 / 2022-05-26 
+- [Interesting Playground](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322459) — 6 票 / 8 评论 / 2022-05-02 
+- [First thoughts!](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322484) — 6 票 / 5 评论 / 2022-05-02 
+- [a little finding about f_27](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324341) — 6 票 / 1 评论 / 2022-05-11 
+- [541th Place - 0.97952 - LightGBM + XGBoost + CatBoost Ensemble](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328355) — 6 票 / 2 评论 / 2022-06-01 **write-up?**
+- [Is there anyway to get +95% on submission without using anykind of nn](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323145) — 5 票 / 5 评论 / 2022-05-05 
+- [Problems with Logistic Regression in R](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323982) — 5 票 / 5 评论 / 2022-05-09 
+- [Different Cross validation methods](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323195) — 5 票 / 7 评论 / 2022-05-05 
+- [Great difference between my notebook's and submission's AUC score](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324136) — 4 票 / 10 评论 / 2022-05-10 
+- [【日本語】f_27の処理の仕方（Processing of f_27）](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324059) — 4 票 / 0 评论 / 2022-05-10 
+- [How to handle Large amount of Tabular data?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324201) — 4 票 / 7 评论 / 2022-05-10 
+- [Choice of Kaggle merchandise](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323465) — 4 票 / 4 评论 / 2022-05-06 
+- [Submission using Kaggle API with R](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/325242) — 4 票 / 6 评论 / 2022-05-15 
+- [Validation AUC against test AUC](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/325686) — 4 票 / 3 评论 / 2022-05-17 
+- [XGBoost FTW](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326031) — 4 票 / 2 评论 / 2022-05-19 
+- [How to predict probability values for each index](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323306) — 4 票 / 4 评论 / 2022-05-05 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322672) — 3 票 / 1 评论 / 2022-05-03 
+- [Fastai-Tabular! one of best framework](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322668) — 3 票 / 0 评论 / 2022-05-03 
+- [An interesting kind of sensor distribution](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322318) — 3 票 / 4 评论 / 2022-05-01 
+- [EDA, PCA and MI didn't get me far](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322334) — 3 票 / 2 评论 / 2022-05-01 
+- [Unable to download data with Kaggle API troubles?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/324457) — 1 票 / 0 评论 / 2022-05-11 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322673) — 1 票 / 1 评论 / 2022-05-03 
+- [How to select numbers of layers and types of functions](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326223) — 1 票 / 4 评论 / 2022-05-20 
+- [Detailed EDA & Feature Interaction Tutorial PDP Plots SHAP Interaction](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/327016) — 1 票 / 0 评论 / 2022-05-25 
+- [Using a pipeline](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/327396) — 1 票 / 0 评论 / 2022-05-27 
+- [urgent value of target in test](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322943) — 1 票 / 3 评论 / 2022-05-04 
+- [lb 0.98139-trained only on 1% test data](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328320) — 1 票 / 0 评论 / 2022-05-31 
+- [target_variable](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322326) — 1 票 / 3 评论 / 2022-05-01 
+- [What's with this f_27 column?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/323791) — 0 票 / 5 评论 / 2022-05-08 
+- [Meta classifier built on seven models ](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/326844) — 0 票 / 5 评论 / 2022-05-24 
+- [How to delete scores I submitted already?](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/328022) — 0 票 / 5 评论 / 2022-05-30 
+- [about prices](https://www.kaggle.com/competitions/tabular-playground-series-may-2022/discussion/322482) — 0 票 / 2 评论 / 2022-05-02 

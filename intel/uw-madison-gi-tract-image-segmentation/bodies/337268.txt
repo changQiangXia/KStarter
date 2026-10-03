@@ -1,0 +1,150 @@
+# https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337268
+
+Topic #337268: 5th Place Solution
+  Author: Qishen Ha
+  Posted: 2022-07-15 08:24:14.305000
+  Votes: 46  Comments: 13
+
+Thanks to the organizers and congrats to all the winners and my wonderful teammates @boliu0 
+
+Our single-model performance was not very good, and for a long time we even lost the confidence to take a gold. But surprisingly it worked very well after ensemble. 
+
+So what I mainly want to share here is how we can lift the ensemble performance by making diversity.
+
+Summary
+
+
+
+5 Fold cross validation by group spliting case
+
+2.5D Models (x, y, z 3 types in total)
+
+3D Models
+
+Post-processing
+
+
+2.5D Models
+
+Used library:
+
+
+
+https://github.com/qubvel/segmentation_models.pytorch
+
+https://github.com/rwightman/pytorch-image-models
+
+https://github.com/sithu31296/semantic-segmentation
+
+
+We first constructed the dataset into 3D format, and then by cutting the x, y, and z axes separately, we can obtain 3 different types of 2.5D datasets. I'll call it 2.5Dx (original), 2.5Dy, 2.5Dz.
+
+Then we trained 9 models on those 2.5D datasets:
+
+
+
+
+efficientnet v2s unet on 2.5Dx dataset
+
+
+nfnet l0 unet on 2.5Dx dataset
+
+
+convnext small unet on 2.5Dx dataset
+
+
+pvtv2b2 segformer on 2.5Dx dataset
+
+
+mitb2 segformer on 2.5Dx dataset
+
+
+efficientnet v2s unet on 2.5Dy dataset
+
+
+convnext small unet++ on 2.5Dy dataset
+
+
+efficientnet v2s unet on 2.5Dz dataset
+
+
+convnext small unet++ on 2.5Dz dataset
+
+
+3D Models
+
+Used library:
+
+
+
+https://github.com/qubvel/segmentation_models.pytorch
+
+https://github.com/rwightman/pytorch-image-models
+
+https://github.com/Project-MONAI/MONAI
+
+
+In this part I believe that we do not do anything different from what most people do.
+we trained :
+
+
+
+resnet unet on 3D dataset
+
+efficientnet v2s unet on 3D dataset
+
+efficientnet v2m unet on 3D dataset
+
+
+The highest  pub LB score of a single model mentioned above is only 0.875
+For the final ensemble we simply averaged the output of all models then use threshold 0.3 we get pub LB 0.889
+
+Post-processing
+
+For those images with a predicted area less than 50 pixels, we discarded them. By using this we get pub LB 0.890
+
+Acknowledge
+
+Thanks to Z by HP for sponsoring Z by HP Z8G4 Workstation with dual A6000 GPU which I trained many models on. The large memory of 48G for a single GPU allowed me to train 3D models with ease!
+
+Comments:
+├─ Kanak Pandit (2022-07-16 13:29:45.850000) [+1]
+│  Congrats! keep it up
+├─ Arun Purakkatt (2022-07-15 10:50:28.443000) [+1]
+│  @haqishen  congratulations to your team !! Thank you for sharing the valuable insights towards winning solution !!
+├─ Tuan Ho Lai (2022-07-15 10:17:18.400000) [+1]
+│  Congrats to your team!
+│  
+│  
+│    
+│  For those images with a predicted area less than 50 pixels, we discarded them. By using this we get pub LB 0.890
+│  
+│  
+│  Could you share why it is 50 pixels but not higher or ...
+  ├─ Qishen Ha (2022-07-15 11:17:29.523000) [+1]
+  │  thx! yes it comes from EDA the training data.
+├─ He (2022-07-16 09:17:47.007000) [+2]
+│  Congrats, your solutions are always amazing, I have a question, are you training the y,z model from different views? When I generated this data, I found that the masks in the y and z directions hav...
+  ├─ Qishen Ha (2022-07-16 13:48:01.690000) [+1]
+  │  Hi, congrats to your solo 3rd place and being GM!
+  │  I didn't do cleaning or anything else to the generated y, z dataset. Models trained on these datasets are not perform as well as those trained on x...
+  ├─ He (2022-07-16 14:58:24.883000) [+0]
+  │  Thank you, then how did you do the ensemble, just do the classification, or map the y z mask to the x direction?
+  ├─ Qishen Ha (2022-07-16 17:14:46.633000) [+1]
+  │  just construct every prediction comes from 2.5D models into 3D manner and then do the ensemble with 3D models.
+  ├─ He (2022-07-17 03:20:39.713000) [+0]
+  │  I get it, thank you very much
+├─ Carno Zhao (2022-07-15 09:10:50.450000) [+2]
+│  Hi @haqishen, I have a small question: How do you use eff-v2-unet (from timm I guess) in 3D dataset? Do you write your own 3D version based on timm or use all z-axis as channels of 2D images? 
+│  
+│  I s...
+  ├─ Qishen Ha (2022-07-15 09:44:36.657000) [+3]
+  │  Hi, congrats for your winning!
+  │  Yes eff v2 is from timm I write some code to replace every 2D related modules into 3D and it works quite well ;)
+├─ Veronika Chernova (2022-07-26 12:30:24.937000) [+0]
+│  Thank you for sharing!
+│  Did you use 5 fold ensemble for each of the 12 models (2.5D + 3D models)? That is, in total, 12 * 5 trained models participate in the solution?
+├─ Bilal Suppal (2022-07-17 07:23:27.783000) [+0]
+│  The information provided is so clear and easy to understand, Awesome post :)
+│  Looking forward to see more !!!
+│  let's grow together

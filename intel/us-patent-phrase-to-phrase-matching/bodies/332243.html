@@ -1,0 +1,191 @@
+<p>Thanks contest organizer for holding such an interesting game. Thanks everyone joining and sharing during this contest. I learned a lot from discussions.</p>
+<ul>
+<li><p><strong>CV strategy</strong><br>
+Groupby anchor and stratify by score, also there are some words occur in both anchor and target, make sure to put them in the same fold.  </p></li>
+<li><p><strong>NN model detail</strong><br>
+    a. Pearson loss worked best for me<br>
+    b. 5 epochs training, start AWP training from the 2nd epoch. <br>
+    AWP helps a lot in all my nlp contests recently.<br>
+    c. Groupby['anchor',  'context'] ['target'] -&gt; targets, add to input(anchor[SEP]target[SEP]CPC_TEXT[SEP]targets)  produce best model<br>
+    Groupby['anchor',  'context[0]'] ['target'] -&gt; targets,  add to input help ensemble a lot, let me define context[0] as sector, it is like F21 -&gt; F<br>
+    Remember to exclude current target from targets.<br>
+    d. Random shuffle targets during each training step. (did not test enough, I remembered improved a lot on LB)<br>
+    e. Freeze bert embedding layer (not much difference maybe but I used it for final models)<br>
+            Freeze embedding layer not hurt, means we do not need to finetue so much as our targets is simple short words similarity.<br>
+    f. Using different learning rates for bert (2e-5, 3e-5) and other parts(1e-3), especially useful when adding LSTM which need large lr.<br>
+    g. Add BI-LSTM header help a lot.<br>
+    Deberta-v3-large CV 858-&gt; 861  “prompt is all you need" gave me a hint we do not need to finetune/change bert model a lot, so I tried to add LSTM on top of bert and freeze bert embedding layer.<br>
+    h.  Using linear attention pooling on top of BI-LSTM before fc.<br>
+    i.  Lr matters a lot for best single model deberta-v3-large,  2e-5 much better then 3e-5 <br>
+    Deberta-v3-large CV 861 -&gt; 8627<br>
+    j. Change rnn output dim * 2 from (bert out dim like 1024 to 2048) help a lot for some weak models like bert-for-patents and simcse-bert-for-patent.<br>
+             So for weak models we might need models to be widder.<br>
+            k. One possible method might be using token classfication to predict all targets score in 1 instance. <br>
+Seems a bit complex to implement and I do not know if it will help improve score, not tried that yet.</p></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>CV</th>
+<th>backbone lr</th>
+<th>base lr</th>
+<th>scheduler</th>
+<th>rnn dim * 2</th>
+<th>weight</th>
+<th>1 Fold LB</th>
+<th>1 Fold PB</th>
+<th>Full train LB</th>
+<th>Full train PB</th>
+<th>5 Folds LB</th>
+<th>5 Folds PB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>microsoft/deberta-v3-large</td>
+<td>8627</td>
+<td>2e-5</td>
+<td>1e-3</td>
+<td>linear</td>
+<td>No</td>
+<td>1</td>
+<td>8599</td>
+<td>8710</td>
+<td>8604</td>
+<td>8745</td>
+<td>8604 (may shake to 8615)</td>
+<td>8761</td>
+</tr>
+<tr>
+<td>anferico/bert-for-patents</td>
+<td>8451</td>
+<td>3e-5</td>
+<td>1e-3</td>
+<td>cosine</td>
+<td>Yes</td>
+<td>0.4</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ahotrod/electra_large_discriminator_squad2_512</td>
+<td>8514</td>
+<td>2e-5</td>
+<td>1e-3</td>
+<td>cosine</td>
+<td>No</td>
+<td>0.3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Yanhao/simcse-bert-for-patent</td>
+<td>8393</td>
+<td>3e-5</td>
+<td>1e-3</td>
+<td>cosine</td>
+<td>Yes</td>
+<td>0.2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>funnel-transformer/large</td>
+<td>848</td>
+<td>3e-5</td>
+<td>1e-3</td>
+<td>cosine</td>
+<td>No</td>
+<td>Exp after game end</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Interesting to see  deberta-v3-large and electra-large work best, they are both pretrained using electra style RTD not MLM.<br>
+But for this problem bert-for-patents ensemble most well with deberta-v3-large due to better diversity.</p>
+<p></p><ul><br>
+<li><strong>Ensemble</strong><br><br>
+    a. Using 5 folds + 1 full train for each backbone, with full train model weight * 2<br><br>
+weight 2 is choosing by e., and tested ineed better then 1:1 for LB and PB.<br><br>
+    b. Minmax scale for each model's output before adding to ensemble.<br><br>
+    c. Be sure to use weighted ensemble as for simple mean average hurt LB, maybe due to deberta-v3-large is much better then other models. <br><br>
+    d. 5 folds self ensemble improve LB a lot which is a bit hard to measure by local cv<br><br>
+    e. Use 20% data left out and train 10 folds models on the 80% and could find only lower down weight of weak models you could get gain.But this is costing, in the final days I only choose model weights by manually choosing those make my local first level cv best.<br><p></p>
+<table>
+<thead>
+<tr>
+<th>Ensemble</th>
+<th>CV</th>
+<th>LB</th>
+<th>PB <br></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4 * 6 models</td>
+<td>8651</td>
+<td>8618</td>
+<td>8745 <br></td>
+</tr>
+<tr>
+<td>Add LSTM header</td>
+<td>8666</td>
+<td>8625</td>
+<td>8775 <br></td>
+</tr>
+<tr>
+<td>Adjust params like lr and rnn out dims</td>
+<td>8677</td>
+<td>8629</td>
+<td>8779 <br></td>
+</tr>
+<tr>
+<td>7 * 6 models, Add 3 groupby context, sector models</td>
+<td>8682</td>
+<td>8633</td>
+<td>8782</td></tr></tbody></table></li>
+
+
+</ul>
+
+
+
+
+
+Glad to see CV and LB PB match :)
+
+
+
+
+
+
+<ul>
+<li><strong>Summary</strong>    <br>
+-- Add targets groupby anchor,context, key magic/trick to the gold. <br>
+-- Add LSTM help me get good enough single model, which is the key for win on PB. (8745 -&gt; 8779)  <br>
+-- Add targets groupby anchor,sector(context[0]) bring diverse models (comparing to change loss function, pooling method) )(8779-&gt;8782)  </li>
+</ul>
+<p>inference code:<br>
+<a href="https://www.kaggle.com/code/goldenlock/usp-base" target="_blank">https://www.kaggle.com/code/goldenlock/usp-base</a><br>
+most training code in:<br>
+<a href="https://www.kaggle.com/datasets/goldenlock/usppmatch" target="_blank">https://www.kaggle.com/datasets/goldenlock/usppmatch</a>  <br>
+all training code opensource here:  <br>
+<a href="https://github.com/chenghuige/U.S.-Patent-Phrase-to-Phrase-Matching" target="_blank">https://github.com/chenghuige/U.S.-Patent-Phrase-to-Phrase-Matching</a></p>

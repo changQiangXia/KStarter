@@ -1,0 +1,329 @@
+# https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/325646
+
+Topic #325646: [LB 0.877] A 3D solution with MONAI
+  Author: Yiheng Wang
+  Posted: 2022-05-17 12:50:32.200000
+  Votes: 162  Comments: 94
+
+The Inference notebook is in:
+https://www.kaggle.com/code/yiheng/3d-solution-with-monai
+
+Its latest version contained the trained weight of v5 mentioned in the following table, which gets 0.868.
+Tips about how to get 0.872 (v6) is mentioned in Update 4, and do a five folds ensemble can get around 0.877 (the inference notebook can be used directly for multiple folds ensemble, you just need to put more weight files into the corresponding dataset).
+
+The preprocessing notebook is in:
+https://www.kaggle.com/yiheng/3d-solution-with-monai-produce-3d-data
+
+The training pipeline is uploaded as a dataset, since I use .py files rather than notebooks in training:
+https://www.kaggle.com/datasets/yiheng/uw3dmonaitrainingpipeline
+
+The first version is a basic 3D UNet, the input patch size is (160, 160, 80) by using RandSpatialCropd transform for the original volume.
+I used @awsaf49 's data split from his notebook, the local (dice) and LB scores for my 2D and 3D models seem comparable:
+
+
+
+
+model
+old dice
+new dice + hausdorff
+Public LB
+
+
+
+
+v1. 3D baseline 160 160 80, use dice+ce loss
+0.8789
+
+0.817
+
+
+v2. finetune and infer with 224 224 80
+0.8970
+0.8822
+0.840
+
+
+v3. finetune with 224 224 80, use dice+bce
+0.9108
+0.8933
+0.857
+
+
+v4. finetune with 224 224 80, use new metric
+
+0.8976
+0.860
+
+
+v5. new multilabel solution with a larger unet
+
+0.9024
+0.868
+
+
+v6. change lr schedule and loss function
+
+0.9042
+0.872
+
+
+5 folds ensemble
+
+
+0.877
+
+Comments:
+├─ Yiheng Wang (2022-06-10 07:23:10.900000) [+9]
+│  Update 4:
+│  
+│  I adjusted the loss function from dice + bce loss into pure dice loss, and use the following learning rate to retrain the model:
+│  
+│  
+│  
+│  from scratch, lr 5e-4 to 2e-4, do eval every 10 epoch ...
+  ├─ Artem Toporov (2022-06-12 21:32:23.510000) [+0]
+  │  Thank you!!!
+  ├─ ForcewithMe (2022-06-18 04:04:07.173000) [+0]
+  │  Hi, may I know the resolution of the 0.872 pipeline? 160 or 224? Thank you in advance. @yiheng
+  ├─ Time Master (2022-06-19 05:56:58.827000) [+1]
+  │  Hi, did you use lr warmup in this version?
+  ├─ [deleted] (2022-06-30 08:44:38.150000) [+0]
+  │  [deleted]
+  ├─ Irving Kyrie (2022-07-01 08:35:30.230000) [+1]
+  │  "2.lr 1e-4, eval (with 4 tta) every 1 epoch, totally trained 20 epoch, get best checkpoint at 8 epoch."
+  │  Hi, this one, do you mean that you use tta for trainset to train 20 epochs after entire train...
+├─ Yiheng Wang (2022-06-06 06:38:36.057000) [+10]
+│  How to reproduce (roughly) the training of 0.868 LB model (mentioned in update 3):
+│  
+│  
+│  
+│  Using the training pipeline (latest version 3) in: https://www.kaggle.com/datasets/yiheng/uw3dmonaitrainingpipe...
+  ├─ Premsurawut (2022-06-06 06:59:25.497000) [+1]
+  │  Thank you a lot! I will try to reproduce your pipeline.
+  ├─ Yiheng Wang (2022-06-06 07:08:22.957000) [+0]
+  │  Feel free to ask me if you met the issue.
+  ├─ Turbo (2022-06-06 11:22:33.960000) [+0]
+  │  How long did you train this model?
+  ├─ Yiheng Wang (2022-06-06 14:16:05.360000) [+0]
+  │  On my machine, it takes:
+  │  train one epoch: ~38s
+  │  val one epoch (without tta): ~68s
+  │  To save time, can introduce some rules to reduce the val frequency, like start do validation after 500 epochs.
+  ├─ Turbo (2022-06-07 03:24:08.527000) [+1]
+  │  Got it. Thanks for your kind reply.
+  ├─ seefun (2022-06-07 06:33:37.630000) [+1]
+  │  Thanks for sharing！I will try to reproduce your pipeline.
+  ├─ Mintwater (2022-06-18 19:34:11.580000) [+0]
+  │  Just curious, I am not familiar with monai framework and your hardware. How can train one epoch so fast like that 😲, how many images in one epoch?
+  ├─ Time Master (2022-06-19 02:07:16.567000) [+1]
+  │  I tried, 222 samples in total(fold 0), but, my poor CPU makes it 5 mins per epoch(perhaps loading data is too slow)
+  ├─ Mintwater (2022-06-20 17:45:40.043000) [+1]
+  │  good to know!
+├─ Yiheng Wang (2022-05-22 10:08:53.377000) [+8]
+│  Update 2: I just realized that the metric calculation part has been updated
+│  (reference posts: https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/324432 and https:...
+  ├─ something4kag (2022-05-23 10:17:39.610000) [+1]
+  │  Not sure if this matters, but noticed in monai DiceLoss and DiceMetric there is 
+  │  include_background: whether to skip Dice computation on the first channel of  the predicted output. Defaults to `Tru...
+  ├─ Yiheng Wang (2022-05-23 14:40:10.870000) [+1]
+  │  Hi @something4kag , during my pipeline (https://www.kaggle.com/datasets/yiheng/uw3dmonaitrainingpipeline), I manually do the remove background step before calculating.
+├─ Yiheng Wang (2022-06-05 15:09:21.713000) [+5]
+│  Update 3:
+│  
+│  My v4 result is based on multiple times finetune, thus it may not be easy to reproduce the result. Therefore, during the previous two weeks, I tried to build an end to end solution (run ...
+  ├─ Yiheng Wang (2022-06-05 15:10:44.513000) [+2]
+  │  Hi @clemchris , FYI, multilabel based method works on my side. I will disclose the detailed training way soon : )
+  ├─ Premsurawut (2022-06-06 07:00:53.097000) [+0]
+  │  Is this one the new update that you just posted in the above comment?
+  ├─ Yiheng Wang (2022-06-06 07:12:08.123000) [+1]
+  │  Yes, it is the v5 model I mentioned.
+├─ Yiheng Wang (2022-06-13 10:09:09.520000) [+4]
+│  Final Update:
+│  
+│  I trained all five folds with the same method mentioned in v6, and do the ensemble. The public LB is 0.877. It is my last update of this post, because I think that although this mode...
+├─ Yiheng Wang (2022-05-19 03:38:55.617000) [+3]
+│  Update: my original loss function is dice loss + ce loss, with converted multi-class masks. It may introduce more errors since the provided masks may have overlaps. I converted to use original mult...
+  ├─ Liam Nguyen (2022-05-19 15:16:46.883000) [+3]
+  │  because you are treating the problem as multilabel, why softmax but not sigmoid ? Can you explain
+  ├─ Yiheng Wang (2022-05-19 15:38:05.850000) [+0]
+  │  I used multilabel way on 3d model at the beginning, but the training loss cannot decrease into a reasonable level, thus I gave up and try multiclass instead.
+├─ Bhavesh Bisht (2022-06-25 22:24:56.060000) [+1]
+│  This is the first time i heard of MONAI thanks for sharing
+├─ York G (2022-06-17 08:53:17.503000) [+1]
+│  Hi, @yiheng , 
+│  
+│  Firstly, thank you for sharing whole process with all kagglers. It's my first time to contact the MONAI 3D model and know how it works.
+│  Without your sharing, it definitely will be m...
+  ├─ Yiheng Wang (2022-06-17 09:47:20.700000) [+0]
+  │  My question is: During the long time training, is loading the previous best weights always the preferred option?
+  │  
+  │  
+  │  HI @yue300c , thanks for your interests. It is not always the preferred option, ac...
+  ├─ York G (2022-06-18 10:37:42.763000) [+1]
+  │  @yiheng , Thank you for the quick reply. 
+  │  
+  │  I am running your model on local GPU.  During the training, one thing is interesting:
+  │  "cfg.batch_size = 4", by using this default value, one epoch trainin...
+  ├─ Time Master (2022-06-19 06:13:28.530000) [+0]
+  │  Hello, I also met this thing, and even worse, 1 epoch takes about 5 min using bsize=4😭
+├─ Premsurawut (2022-06-05 18:32:22.887000) [+1]
+│  Nice work! I will try with your code as well.
+├─ I110143105 (2022-05-18 16:31:34.453000) [+1]
+│  Thanks for sharing , it is really Helpful
+├─ outwrest (2022-05-23 19:40:56.540000) [+2]
+│  @yiheng I didn't see it in your code (forgive me if you did, I didn't take an in-depth look) but there is a small optimization you can do since there is a lot of empty space in terms of the x-y axi...
+  ├─ outwrest (2022-05-23 19:43:36.037000) [+2]
+  │  Zeroing out the pixels is necessary since there is a lot of background noise to the images, I believe there might be more different ways to preprocess a lot of noise out of the images and that will...
+  ├─ Yiheng Wang (2022-05-24 03:49:45.927000) [+1]
+  │  Thanks @outwrest for the suggestions! I will figure how to do heuristic to zero out : )
+  │  Welcome to fork the notebook and do the enhancements!
+├─ clem-chris (2022-05-17 21:45:16.300000) [+2]
+│  Hello, thank you for sharing the code :)! I experienced the same with 3D multilabel, the train loss just does not want to go down (https://www.kaggle.com/code/clemchris/wip-gi-seg-pytorch-monai-3d-...
+  ├─ cab (2022-05-17 22:25:00.420000) [+2]
+  │  You might want to try batch size = 1 and FP32 :)
+  ├─ FelipeKitamura, MD, PhD (2022-05-18 01:29:52.810000) [+1]
+  │  pred = irony_model(last_post)
+  │  print(nn.Sigmoid()(pred))
+  │  
+  │  
+  │    
+  │  0.9999
+  ├─ Yiheng Wang (2022-05-18 01:43:10.287000) [+1]
+  │  Hi @clemchris , I also met the issue that 3d multilabel cannot work. I will try to use FP32 as @backaggle 's suggest : )
+  ├─ outwrest (2022-05-24 05:09:04.003000) [+0]
+  │  Why can't multilabel work? with sigmoid, you can write a loss function and take the sum of that loss function for each region (lb, sb, s). I didn't try it the other way and I have not run into any ...
+├─ 原来你也玩原神 (2022-07-16 02:16:41.510000) [+0]
+│  Great! Thanks for sharing. Teach me a lot!
+├─ Ilia Zaitsev (2022-07-15 08:00:42.017000) [+0]
+│  I like the custom trick! I was thinking to implement something similar with channels shuffling/resampling. However, didn't manage to get there. Good to know that it worked out so well!
+├─ Time Master (2022-07-01 08:47:01.930000) [+0]
+│  Following Update4, my local val metric is 0.9031, however,  lb is 0.859, where could be wrong? Help Please
+├─ XIAO Dingwen (2022-06-30 08:49:38.520000) [+0]
+│  Hi, for Update 4, did you put the model with the best metric of the first step into the training of the second step or just the model after 1000 epoch training?
+├─ Salman Ahmed (2022-06-22 00:29:31.167000) [+0]
+│  Hi, I am facing this error again and again.
+│  RuntimeError: applying transform 
+│  
+│  Is there a solution to this or some way?
+│  
+│  Best,
+  ├─ Time Master (2022-06-22 01:14:57.680000) [+0]
+  │  you can try pip install pytorch_ignite, and use abs_path , this  work for me.
+  ├─ Salman Ahmed (2022-06-22 07:08:11.547000) [+0]
+  │  Thank you.!
+├─ Aramis Vesal (2022-06-21 15:25:36.083000) [+0]
+│  @yiheng Thank you for sharing your code. I tried to reproduce your latest results based on updated V5 code, however my all_score can't go beyond 0.80, however the loss (Dice + BCE) is close to 0.10...
+  ├─ Time Master (2022-06-22 09:42:42.833000) [+0]
+  │  Hi, what is your metric value? v5 is 0.9024
+  ├─ Time Master (2022-06-22 09:45:13.027000) [+0]
+  │  I'm trying to reproduce v6, and my local dice+hd is 0.9, however, lb is only 0.860
+├─ Time Master (2022-06-21 04:22:56.623000) [+0]
+│  Hello guys, if you are also using MONAI framework, we can make a team and try to get some improvments.👀
+├─ tanxxx (2022-06-20 13:22:36.243000) [+0]
+│  What a nice notebook, could you give some explaination about the differents between 'mask' and 'mask multiclass'?
+├─ Satwik (2022-06-14 09:52:30.137000) [+0]
+│  Hi! I am trying to run this pipeline on Kaggle , but it is running out of RAM.
+│  I also tried using gpu_cache = True , tried changing num_workers to 2,4,8 but nothing seems to work. 
+│  Do you have any ...
+  ├─ Yiheng Wang (2022-06-16 07:02:03.693000) [+0]
+  │  Hi, did you run training pipeline on kaggle notebook? It may not have enough GPU memory, and you may need to decrease your batch size, and patch size.
+  │  As for the gpu_cache, it is just used for some...
+  ├─ Satwik (2022-06-16 07:18:38.717000) [+0]
+  │  I tried it. I think it has enough GPU memory but not CPU RAM , since DataLoaders are being loaded there and it is crashing then. I managed to make it work somehow with num_workers = 0 and batch_siz...
+  ├─ Yiheng Wang (2022-06-17 07:37:30.440000) [+0]
+  │  I see, if not having enough cpu ram, this may impact training : (
+├─ cc Jack (2022-06-14 07:26:29.200000) [+0]
+│  when I run multilabel_train.py, I don't know why this problem occur?
+│  RuntimeError: received 0 items of ancdata
+│  could someone help me?
+  ├─ FabienDaniel (2022-06-14 08:02:10.337000) [+2]
+  │  I had the same issue and it seems to be related to issues with multi-threading. I found a quick turnaround by setting:
+  │  
+  │  torch.multiprocessing.set_sharing_strategy('file_system')
+  │  
+  │  after you import t...
+  ├─ cc Jack (2022-06-14 08:58:12.703000) [+0]
+  │  thank you! I can run the .py now.
+├─ Tony (2022-06-11 15:05:05.087000) [+0]
+│  Hi , thanks for sharing.
+│  In Update 3 your multilabel based method works. 
+│  I experienced the same problem. How did you fix it, just change loss?
+  ├─ Yiheng Wang (2022-06-12 12:45:33.127000) [+0]
+  │  Hi, I think using my latest training pipeline should not have the issue, did you run it directly?
+  ├─ Tony (2022-06-12 13:00:42.083000) [+0]
+  │  Thanks for reply. I'm reading your code ,but haven't try it.  
+  │  I'm have been trying training UNetr with multilabel for a while, but the val Dice is never higher than 0.6 . So I want to check how yo...
+  ├─ Yiheng Wang (2022-06-12 14:32:30.640000) [+0]
+  │  Actually I'm not sure what was wrong with my old multilabel solution 😂 I failed, and switched into multiclass solution and the model works, and then switched back to multilabel solution, and the is...
+  ├─ Tony (2022-06-12 14:38:00.760000) [+0]
+  │  😂😂😂
+  │  It's really confusing.
+├─ lafe (2022-06-05 16:20:10.333000) [+0]
+│  Your hausdorff is 2D version, right?
+  ├─ Yiheng Wang (2022-06-06 06:43:10.370000) [+1]
+  │  Yes, should it be 3d version?
+  ├─ lafe (2022-06-06 10:28:21.983000) [+2]
+  │  For 3D Hausdorff, we construct 3D volumes by combining each 2D segmentation with slice depth as the Z coordinate and then find the Hausdorff distance between them. (In this competition, the slice d...
+  ├─ Yiheng Wang (2022-06-07 10:13:55.300000) [+1]
+  │  Thanks, btw, I think my implementation supports both 3d and 2d calculation, maybe you can try it (it should be faster than directed_hausdorff)
+  │  The comparision code is like:
+  │  
+  │  import numpy as np
+  │  from...
+  ├─ lafe (2022-06-07 11:12:23.803000) [+0]
+  │  The crop in get_mask_edges is true  by default. there is a misalign in the three-dimensional case, and get_mask_edges only supports 2D cases.
+├─ anthony (2022-05-28 13:12:29.590000) [+0]
+│  Should I expect close to your results with taking your code and dataset?
+│  
+│  I get train loss not lower 0.894, on val it's looks quite sad: 
+│  dice_score: 0.04407963901758194 hausdorff_score: 0.15147328...
+  ├─ Yiheng Wang (2022-06-06 06:44:59.783000) [+1]
+  │  Hi, sorry for late reply. I did not see this comment. I just updated the training pipeline and I think it is possible to reproduce my current LB 0.868 result with the config file during the pipelin...
+  ├─ Yiheng Wang (2022-06-06 07:07:20.497000) [+1]
+  │  BTW, It's weird the training loss cannot decrease. On my side, after two epochs, the training loss decreased to &lt; 0.8, could you visualize some examples and check if your mask and image are cons...
+├─ Robert Herscovici (2022-05-24 12:21:04.107000) [+0]
+│  Hi, I tried to recreate your results, but i can't manage to get dice loss higher than 75. Hausdorff however gets up to 96%, but I also observed that it can reach 60% before beein trained at all. Do...
+  ├─ Yiheng Wang (2022-05-24 12:54:54.730000) [+0]
+  │  Hi, could you describe your training method? and I updated the pipeline after the update 2, did you use the latest version of code?
+├─ anthony (2022-05-22 14:04:00.620000) [+0]
+│  Thanks for sharing!
+│  Did you create public dataset with result of your pre-proc notebook?
+  ├─ anthony (2022-05-23 14:26:05.383000) [+0]
+  │  Did you face such problem: cannot import name 'NibabelWriter' ?
+  ├─ Yiheng Wang (2022-05-23 14:41:37.017000) [+3]
+  │  Hi, thanks for the notification. I created the dataset: https://www.kaggle.com/datasets/yiheng/uw3dtrainingdata
+  │  As for the issue, could you try to do: pip install nibabel.
+  ├─ something4kag (2022-05-24 04:07:41.410000) [+2]
+  │  Found the way the install is done makes a difference whether it seems to have NibabelWriter. 
+  │  
+  │  For example, to install MONAI with Nibabel and Scikit-image support:
+  │  
+  │  git clone https://github.com/Pro...
+  ├─ anthony (2022-05-26 12:41:45.910000) [+0]
+  │  Thanks for data, pip install nibabel didn't help. Will try install monai as @something4kag proposed.
+├─ [deleted] (2022-07-05 21:59:16.050000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-19 20:26:18.770000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-17 10:48:03.953000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-17 05:44:39.873000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-16 03:56:24.427000) [+0]
+│  [deleted]
+├─ [deleted] (2022-06-22 16:49:06.377000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-16 07:20:53.530000) [+1]
+│  [deleted]
+├─ [deleted] (2022-06-17 10:46:02.783000) [+2]
+│  [deleted]
+├─ [deleted] (2022-05-23 01:31:59.060000) [+2]
+│  [deleted]
+├─ [deleted] (2022-07-21 12:27:30.753000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-07 02:51:19.830000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-07 01:39:13.597000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-01 20:58:26.740000) [+0]
+│  [deleted]

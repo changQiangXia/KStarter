@@ -1,0 +1,61 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291766
+
+Topic #291766: #3 Solution: Don't trust the cv scores
+  Author: AmbrosM
+  Posted: 2021-12-01 01:49:14.517000
+  Votes: 27  Comments: 14
+
+Every competition is special somehow, and so was this one. Two observations were most important for my strategy:
+
+
+
+
+Training and test data of this competition live in different regions of the feature space. If a classifier can be trained to classify samples into training and test, cv scores may be unreliable. I experimented with weighted training data so that training samples which are near the test region got higher weight than training samples which are far from the test region. The result on the test set (i.e. leaderboard score) was disappointing.
+
+
+After it became known that the data is chunked, I changed my cross-validation strategy to GroupKFold. This means that I trained estimators on nine chunks and validated the result on the tenth one. I experimented with a broad spectrum of estimators: linear regression, kernel ridge regression, 1000 nearest neighbors, LightGBM and neural networks. They all lost against a pair of DummyRegressors trained on the leaked data. If nine training chunks don't give any information about the tenth one, why would the ten training chunks give any information about the test chunks?
+
+
+Based on these two observations, I decided to no longer look at cv scores, but only trust the public lb. In every competition we warn one another not to trust lb scores, but this competition is different: GroupKFold cv scores are useless, stratified cv scores are even more useless, the public lb was the best we could get.
+
+I probed the leaderboard for the target probabilities of 18 half-chunks: The test data is first split into nine chunks of size 60000 each, and then every chunk is split into two half-chunks at the hyperplane given by the leaked training data. Every half-chunk took one submission - this means that at five submissions per day, 18 half-chunks took four days. From the 18 public lb auc scores I calculated the target probabilities for every half-chunk. @safavieh explains the math in detail in his notebook. 
+
+Finally I used up my remaining submissions to determine the best weights for blending the 18 half-chunk probabilities with two public notebooks. The half-chunk probabilities get weighted at 92 % and the public notebooks at 8 %. My final submission is here.
+
+I thank all people who shared their insights in the competition forum and particularly those who pointed out where my statements were vague and so helped me to get a clearer picture of the facts.
+
+Comments:
+├─ broccoli beef (2021-12-01 06:11:52.410000) [+4]
+│  Congratulations on the win,  and on the swift and decisive change of strategy in the middle of the competition after critical info came to light!
+│  
+│  Question: Did you need the test data to be "chunke...
+  ├─ AmbrosM (2021-12-01 06:32:52.733000) [+2]
+  │  Good question! Yes, I need the test data to be "chunked". The assumption is that within a chunk, the samples are independent and identically Bernoulli-distributed, and the Bernoulli parameter is a ...
+├─ Vipin Kumar (2021-12-02 18:43:59.113000) [+1]
+│  congratulations 👍
+├─ Omar Bougacha (2021-12-02 09:17:58.707000) [+1]
+│  Congratulations on the win. I agree that this competition was kind of unique (at least for me) I couldn't trust my CV enough. However I should've done that… I got carried away with the public Leade...
+├─ Ehsan (2021-12-01 08:46:40.517000) [+1]
+│  Thank you for sharing and congrats for winning. Well deserved.
+├─ Lukasz Borecki (2021-12-01 07:01:51.033000) [+1]
+│  Congratulations! :) It seems it was knowledge, because many of top public remained so you haven't overfitted
+├─ Laurent Pourchot (2021-12-01 06:29:51.790000) [+1]
+│  @ambrosm , Congrats ! with your code you changed 2 times the competition during the month you were like a kaggle team member 😄
+│   I also congrats the last sprint winner @jayjay75 with overfitix :over...
+├─ Luca Massaron (2021-12-01 04:35:49.543000) [+1]
+│  This is not really the first competition where leaks and probing play a big part of the game :-) but somehow it is unique in its genre because we knew since the beginning that it was more of an int...
+├─ gianni (2021-12-01 03:13:38.393000) [+1]
+│  Surely it's interesting, and your insights show a great understanding of theory and more practical methods, but a competition that leaks data, then redacts it, is spoiled from the start. Furthermor...
+  ├─ AmbrosM (2021-12-01 04:27:48.167000) [+3]
+  │  @padova Sure, the videogame analogy has some truth to it.
+  │  
+  │  Personally, I did learn a lesson for the real world: Always assess the quality of the training data. And if the quality is bad, take the c...
+├─ Sam Y (2021-12-01 03:37:45.593000) [+0]
+│  I think this sort of ingenuity is very impressive, you're taking advantage of what information available within the rules and confines of the competition. 
+│  Hate the game not the player.
+├─ keysersoze309 (2021-12-01 03:28:07.723000) [+0]
+│  You are the real winner.
+├─ [deleted] (2021-12-03 15:46:17.633000) [+0]
+│  [deleted]
+├─ KAZI SHAMIM SHAHAREAR ISLAM (2021-12-04 21:08:48.623000) [+0]
+│  Thanks a lot!

@@ -1,0 +1,120 @@
+<p>Thanks to Kaggle and the competition hosts for this competition, and congratulations to the other teams! This was for me the first Kaggle competition in which I invested myself, and it was an awesome experience, I truly learnt a lot. </p>
+<p>The model that performed the best for me is a variant of a multi-layer GRU model in which some residual connections and fully connected layers have been added between the GRU layers:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1969534%2F18364882e67c41284297f4eaed4ddb47%2Fmodel.svg?generation=1686319620125192&amp;alt=media" alt=""></p>
+<p>Here are the PyTorch classes corresponding to this model: </p>
+<pre><code> (nn.Module):
+     ():
+        (ResidualBiGRU, self).__init__()
+
+        self.hidden_size = hidden_size
+        self.n_layers = n_layers
+
+        self.gru = nn.GRU(
+            hidden_size,
+            hidden_size,
+            n_layers,
+            batch_first=,
+            bidirectional=bidir,
+        )
+        dir_factor =   bidir  
+        self.fc1 = nn.Linear(
+            hidden_size * dir_factor, hidden_size * dir_factor * 
+        )
+        self.ln1 = nn.LayerNorm(hidden_size * dir_factor * )
+        self.fc2 = nn.Linear(hidden_size * dir_factor * , hidden_size)
+        self.ln2 = nn.LayerNorm(hidden_size)
+
+     ():
+        res, new_h = self.gru(x, h)
+        
+
+        res = self.fc1(res)
+        res = self.ln1(res)
+        res = nn.functional.relu(res)
+
+        res = self.fc2(res)
+        res = self.ln2(res)
+        res = nn.functional.relu(res)
+
+        
+        res = res + x
+
+         res, new_h
+
+ (nn.Module):
+     ():
+        (MultiResidualBiGRU, self).__init__()
+
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.out_size = out_size
+        self.n_layers = n_layers
+
+        self.fc_in = nn.Linear(input_size, hidden_size)
+        self.ln = nn.LayerNorm(hidden_size)
+        self.res_bigrus = nn.ModuleList(
+            [
+                ResidualBiGRU(hidden_size, n_layers=, bidir=bidir)
+                 _  (n_layers)
+            ]
+        )
+        self.fc_out = nn.Linear(hidden_size, out_size)
+
+     ():
+        
+         h  :
+            
+            h = [  _  (self.n_layers)]
+
+        x = self.fc_in(x)
+        x = self.ln(x)
+        x = nn.functional.relu(x)
+
+        new_h = []
+         i, res_bigru  (self.res_bigrus):
+            x, new_hi = res_bigru(x, h[i])
+            new_h.append(new_hi)
+
+        x = self.fc_out(x)
+
+         x, new_h  
+</code></pre>
+<p>Note that the code can be simplified: for my best model which performed a private lb score of 0.417, the "h" was actually always initialized with None. </p>
+<h2>Preprocessing</h2>
+<p>In terms of data, the choice I made for my model is very simplistic: consider only the accelerometer data (AccV, AccML, AccAP), merge the data from tdcsfog and defog together and train a single model on it. The main steps of my preprocessing pipeline are the following ones: </p>
+<ul>
+<li>downsample each sequence from their initial frequency (resp. 128 and 100 Hz) to 50Hz;</li>
+<li>for defog: <ul>
+<li>convert from g units to m/s^2 units;</li>
+<li>build a mask using "Valid" and "Task" to know which time steps are labeled during the training. The unlabeled time steps are fed to the model to get the full sequence context, but they are masked during the loss computation.</li></ul></li>
+<li>add a 4th "no-activity" class: the model is trained to recognize this class in the same way as the other classes. Outside of the loss, during the validation, i only use the 3 other classes to compute my metrics;</li>
+<li>per-sequence standard normalization (StandardScaler). </li>
+</ul>
+<p>Outside of the unlabeled time steps coming from defog, I did not use any other unlabeled data. </p>
+<p>For the prototype of another model i did not have the time to finish, I also began to consider some of the characteristics associated to the person who was producing the sequence, in particular I used "Visit", "Age", "Sex", "YearsSinceDx", "UPDRSIII_On" and "NFOGQ". This prototype was roughly following the same architecture as my best model ; the main idea was to initialize the GRU's hidden states with these characteristics, after using some fully connected layers to project them in the dimension of the hidden states. This prototype was also using 1D convolutions to extract features from the accelerometer data before passing them to the GRU layers, and I also considered adding dropout. I think that with more time for me to tune it, it would have beaten my current best model. The first version achieved a private lb score of 0.398. </p>
+<h2>Training details</h2>
+<p>My best model - the one which performed 0.417 on the private leaderboard - has been trained without any form of cross-validation, only with a train/validation split of 80% / 20%. To be honest, this model appeared as a prototype in my early experimentation process, and I considered stratified cross-validation only after. </p>
+<p>In this solution, I fed <strong>each whole downsampled (50Hz)</strong> sequence to my model, one after the other ie with <strong>a batch size of 1</strong>. Note that I would have been unable to feed some of the sequences to my model without downsampling them. I tried multiple different approaches with this architecture, but was unable to produce a better score when increasing the batch size. I tried multiple window sizes for my sequences ; however as I am pretty new in time series and as I also arrived pretty late in the competition, I did not implement any form of overlap and only thought about it too late. This could have probably been a key. Also when increasing the batch size, it seemed apparent that batch normalization was better than layer normalization. </p>
+<p>For the loss, I used a simple cross entropy. As the classes are pretty imbalanced (in particular with my 4th artificial one), I also considered using a weighted cross-entropy, using the inverse frequency of each class as a weight. I also considered trying a focal loss ; but these initial tests seemed unable to perform better than the cross entropy in my case. Despite these negative experiments, I still think that dealing with the imbalance nature of the problem in a better way than I did is important. </p>
+<p>In terms of optimizer, I used Ranger. I also tried Adam and AdamW and honestly i don't think this choice mattered too much. With Ranger I used a learning rate of 1e-3 with 20 epochs, with a cosine annealing schedule starting at 15. </p>
+<p>Note that I also used mixed precision training and gradient clipping. </p>
+<p>The best parameters I found for the architecture of my model are:</p>
+<ul>
+<li>hidden_size: 128;</li>
+<li>n_layers: 3;</li>
+<li>bidir: True.</li>
+</ul>
+<p>Later on, I also tried a stratified k-fold cross-validation in which I stacked the predictions of my k models via a simple average. The architecture and the training details for each fold were the same as for my 0.417 lb model, and this stacking process led to my 2nd best model, performing a score of 0.415 on the private leaderboard (with k=5). I also tried retraining my model on the whole dataset, but this approach did not improve my lb score. </p>
+<p>In no particular order, here are a few other architectures that I also tried but did not improve my score: </p>
+<ul>
+<li>replacing GRU by LSTM in my model: with my architecture, GRUs outperformed LSTMs in all the tests I've realized;</li>
+<li>multiple variants of <a href="https://www.researchgate.net/publication/349964066_Multi-input_CNN-GRU_based_human_activity_recognition_using_wearable_sensors" target="_blank">https://www.researchgate.net/publication/349964066_Multi-input_CNN-GRU_based_human_activity_recognition_using_wearable_sensors</a> ;</li>
+<li>a classic multi-layers bidirectional GRU followed by one or more fully connected layers, also with layer normalization and ReLUs. </li>
+</ul>
+<p>Edit: <br>
+Submission Notebook: <br>
+<a href="https://www.kaggle.com/zinxira/parkinson-fog-pred-4th-place-submission-notebook" target="_blank">https://www.kaggle.com/zinxira/parkinson-fog-pred-4th-place-submission-notebook</a></p>
+<p>Pretrained models "dataset": <br>
+<a href="https://www.kaggle.com/datasets/zinxira/models" target="_blank">https://www.kaggle.com/datasets/zinxira/models</a></p>
+<p>Full open-source code: <br>
+<a href="https://github.com/Zinxira/tlvmc-parkinsons-fog-prediction-4th-place-solution" target="_blank">https://github.com/Zinxira/tlvmc-parkinsons-fog-prediction-4th-place-solution</a></p>

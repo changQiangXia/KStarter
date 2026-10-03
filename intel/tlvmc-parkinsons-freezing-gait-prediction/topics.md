@@ -1,0 +1,82 @@
+# tlvmc-parkinsons-freezing-gait-prediction 讨论区（按票数排序，共 80 条）
+
+- [1st place solution: transformer and acceleration data](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416026) — 117 票 / 39 评论 / 2023-06-09 **write-up?**
+- [6th place solution: spectrograms, wavelets, convnets, unets, and transformers](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415992) — 66 票 / 8 评论 / 2023-06-09 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416057) — 62 票 / 20 评论 / 2023-06-20 **write-up?**
+- [Is the competition dataset SERIOUSLY WRONG?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/403470) — 62 票 / 21 评论 / 2023-04-23 
+- [Understanding The Data](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393852) — 61 票 / 11 评论 / 2023-03-11 
+- [Everything you need to know about FOG](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394634) — 52 票 / 9 评论 / 2023-03-14 
+- [CV and LB Scores](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/395391) — 40 票 / 15 评论 / 2023-03-17 
+- [4th Place Solution: a MultiLayer Bidirectional GRU with Residual Connections](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416410) — 37 票 / 4 评论 / 2023-06-18 **write-up?**
+- [Solutions from similar competition](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394004) — 37 票 / 4 评论 / 2023-03-11 **write-up?**
+- [Data Update and Rescore](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/406700) — 29 票 / 31 评论 / 2023-05-03 
+- [Freezing of gait (FoG) ANOVA, 88.09% accuracy, 77.58% precision.](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393574) — 29 票 / 1 评论 / 2023-03-09 
+- [Quick look at Previous Research (References)](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/395143) — 24 票 / 4 评论 / 2023-03-16 
+- [Eighth Place Solution: 5-Fold CV 1D-ResNet](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416021) — 24 票 / 27 评论 / 2023-07-10 **write-up?**
+- [21st place solution: Conv1d with denoising](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415975) — 24 票 / 10 评论 / 2023-06-09 **write-up?**
+- [Similar compition and solutions share👀](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/408012) — 22 票 / 3 评论 / 2023-05-09 **write-up?**
+- [20th place solution](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416106) — 21 票 / 3 评论 / 2023-06-11 **write-up?**
+- [10th place solution: U-Net with squeeze & excitation](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416513) — 20 票 / 7 评论 / 2023-06-12 **write-up?**
+- [5th Place Solution](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416298) — 20 票 / 7 评论 / 2023-06-10 **write-up?**
+- [1st place code: transformer and acceleration data](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416802) — 18 票 / 3 评论 / 2023-06-13 **write-up?**
+- [Updated "notype" Data](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394531) — 18 票 / 5 评论 / 2023-03-13 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393533) — 17 票 / 10 评论 / 2023-03-09 
+- [Incorrect notype event annotations?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/397982) — 14 票 / 8 评论 / 2023-03-28 
+- [Reliable CV strategy?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394426) — 14 票 / 7 评论 / 2023-03-13 
+- [12th place solution: Simple features and LSTM.](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416248) — 14 票 / 7 评论 / 2023-06-10 **write-up?**
+- [Over fitting and daily living data](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/403009) — 13 票 / 7 评论 / 2023-04-20 
+- [Kinetic column in events.csv](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394014) — 13 票 / 3 评论 / 2023-03-11 
+- [How much score did you get with train data alone?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/402616) — 13 票 / 10 评论 / 2023-04-19 
+- [One subject has both 'F' and 'M' sexes recorded.](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/401008) — 11 票 / 3 评论 / 2023-04-11 
+- [5th Place Training and Inference](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/418275) — 11 票 / 0 评论 / 2023-06-20 **write-up?**
+- [Tedious but mandatory checks (pytorch)](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/396851) — 11 票 / 5 评论 / 2023-03-23 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393534) — 10 票 / 113 评论 / 2023-03-09 
+- [On the use of 'Time' as a feature](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/400311) — 10 票 / 5 评论 / 2023-04-07 
+- [Something about What Happened on my FOG Notebook I am Creating](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/397092) — 9 票 / 2 评论 / 2023-03-24 
+- [Metric Update](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/395073) — 9 票 / 2 评论 / 2023-03-15 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394211) — 9 票 / 10 评论 / 2023-03-12 
+- [57th place solution: Conv1d model with aux head](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416100) — 9 票 / 10 评论 / 2023-06-12 **write-up?**
+- [Was there a secret?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415967) — 9 票 / 8 评论 / 2023-06-09 
+- [What are the short events?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/395327) — 8 票 / 3 评论 / 2023-03-16 
+- [Understanding Axes of Movement/Rotation](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394725) — 8 票 / 0 评论 / 2023-03-14 
+- [Train/Test split question](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394268) — 8 票 / 3 评论 / 2023-03-12 
+- [Accelerometer Data EDA and Feature Engineering](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394298) — 8 票 / 0 评论 / 2023-03-13 
+- [Thank you for participating!](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/418435) — 7 票 / 4 评论 / 2023-06-20 
+- [19th place solution: 1D Unet + Transformer](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416935) — 7 票 / 2 评论 / 2023-06-13 **write-up?**
+- [How is *Init time* of an event correctly encoded in submission?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393651) — 7 票 / 2 评论 / 2023-03-10 
+- [How should we address the imbalance dataset issue in this competition? And should we model this a classification problem or a regression problem?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/406139) — 7 票 / 7 评论 / 2023-05-01 
+- [3rd Place Solution: Transformer+GRU](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/417717) — 7 票 / 1 评论 / 2023-06-18 **write-up?**
+- [Submission out of memory error](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/398879) — 6 票 / 12 评论 / 2023-04-01 
+- [Is it allowed to train a model off line and upload it (predict ready)](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/399161) — 6 票 / 8 评论 / 2023-04-02 
+- [defog tdcsfog notype parquet data](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393954) — 6 票 / 1 评论 / 2023-03-11 
+- [Published a little write-up of my solution plus code (8th place solution)](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/422477) — 6 票 / 1 评论 / 2023-07-10 **write-up?**
+- [resource sharing: useful git repository](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/402010) — 6 票 / 1 评论 / 2023-04-16 
+- [Handling dataset ](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/399764) — 6 票 / 4 评论 / 2023-04-05 
+- [I can only find 36 subjects from daily_metadata in the defog_metadata table](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/395017) — 6 票 / 7 评论 / 2023-03-15 
+- [11th place solution: LSTM-CNN + rolling features](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/418008) — 5 票 / 0 评论 / 2023-06-18 **write-up?**
+- [Leaderboard Shakeup](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415974) — 5 票 / 1 评论 / 2023-06-09 
+- [Several data inconsistencies you might be wondering about](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/412667) — 5 票 / 4 评论 / 2023-05-24 
+- [A small "bug" in the Dataset Description?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/396658) — 5 票 / 2 评论 / 2023-03-22 
+- [Lessons from dropping 600 ranks in the LB: Trust CV and Ignore LB](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416074) — 5 票 / 6 评论 / 2023-06-09 
+- [Leaderboard is Finalized - Congratulations to our winners; Recap!](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/416744) — 4 票 / 9 评论 / 2023-06-12 
+- [Different models for defog and tdcsfog time-series?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/396926) — 4 票 / 7 评论 / 2023-03-23 
+- [Missing Valid and Type columns from tcds_defog train datasets](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393835) — 4 票 / 3 评论 / 2023-03-10 
+- [Yet another thread for 'Submission Scoring Error' [Solved]](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/398720) — 4 票 / 6 评论 / 2023-03-31 
+- [Value should be discrete(0 or 1) or it has to be probability of that even occuring(Between 0 to 1).](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/397902) — 4 票 / 4 评论 / 2023-03-27 
+- [is there any problem on my submission file?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394092) — 4 票 / 7 评论 / 2023-03-12 
+- [Are the number of series in the public and private test splits roughly equal? ](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/397054) — 4 票 / 1 评论 / 2023-03-23 
+- [Information available during "inference"](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394792) — 4 票 / 10 评论 / 2023-03-14 
+- [Perhaps Gyroscopic data would give an improvement](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/396079) — 4 票 / 2 评论 / 2023-03-20 
+- [In Top 6% of LB with a wrong model ?l!  - Classification or Regression?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/413638) — 4 票 / 2 评论 / 2023-05-29 
+- [FOG data visualization](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/396426) — 4 票 / 0 评论 / 2023-03-21 
+- [Unusable Y variable?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/393837) — 4 票 / 10 评论 / 2023-03-11 
+- [Data Update hampering scores?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415215) — 4 票 / 4 评论 / 2023-06-05 
+- [Do we have metadata in the test set?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/396959) — 4 票 / 3 评论 / 2023-03-23 
+- [Is there a commit-submit option?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/403114) — 3 票 / 2 评论 / 2023-04-21 
+- [What is the difference between public and private Dataset?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415988) — 3 票 / 3 评论 / 2023-06-09 
+- [Stuck with 0.095 Score [Solved]](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/399318) — 3 票 / 4 评论 / 2023-04-03 
+- [How to use amp_pd_peptide in my personal computer?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/404968) — 3 票 / 2 评论 / 2023-04-25 
+- [What is the purpose of kinetic column?](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/408176) — 3 票 / 0 评论 / 2023-05-09 
+- [clarification about evaluation language](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/395109) — 3 票 / 4 评论 / 2023-03-15 
+- [Can we obtain all the test data？](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/415987) — 3 票 / 0 评论 / 2023-06-09 
+- [About the columns in tasks.csv](https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction/discussion/394112) — 2 票 / 1 评论 / 2023-03-12 

@@ -1,0 +1,379 @@
+# https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417255
+
+Topic #417255: 2nd place solution
+  Author: tattaka
+  Posted: 2023-06-15 00:11:38.920000
+  Votes: 76  Comments: 21
+
+tattaka &amp; mipypf part
+
+Summary
+
+
+
+2.5D and 3D backbone and decoder without upsampling
+
+
+1/32 Resolution is sufficient for this task
+
+By focusing resources on encoder, more layers can be used for training
+
+Strong regularization
+
+
+Data preprocessing
+
+
+
+Group K-fold is used for the validation, but is divided into 3 parts because of the large ink_id=2
+
+Input resolution is 256x256 for 2.5D model and 192x192 for 3D model
+
+
+Cut out and store in npy in 32x32 (64x64 when inferring) to speed up data loading
+
+The label is downsampled to 1/32 resolution using bilinear interpolation
+
+Input images were normalized for each sample　
+
+
+  
+  mean = img.mean(dim=(, , ), keepdim=)
+  std = img.std(dim=(, , ), keepdim=) + 
+  img = (img - mean) / std
+
+
+Model
+
+
+
+images(batch_size x channel x group x height x width) -&gt; 2dcnn backbone -&gt; pointwise conv2d neck -&gt; 3dcnn(ResBlockCSN like, 3 or 6 blocks) -&gt; avg + max pooling(z axis) -&gt; pointwise conv2d
+
+
+2dcnn backbone: 
+
+
+resnetrs50
+
+convnext_tiny
+
+swinv2_tiny
+
+resnext50
+
+The channel/group combinations used were 5x7 and 3x9. In other words, the middle 35 or 27 layers of the 65 layers are used.
+
+Referring to @tereka's model architecture
+
+images(batch_size x 1 x layers x height x width) -&gt; 3dcnn backbone -&gt; max pooling(z axis) -&gt; pointwise conv2d
+
+
+3DCNN backbone: 
+
+
+resnet50-irCSN(layers: 32)
+
+resnet152-irCSN(layers: 24)
+
+loss: bce + global fbeta loss(calculate fbeta score in batch)
+
+
+Training
+
+
+
+amp
+
+EMA(decay=0.99)
+
+label smoothing(smooth = 0.1)
+
+drop_path_rate=0.2
+
+cutmix + mixup + manifold mixup
+
+heavy augmentation
+
+
+cutout
+
+
+modified to match the output resolution (1/32)
+
+channel shuffle
+
+
+Shuffle within the group after splitting
+
+Random +-2 shift in z-direction of volume with 0.5 probability  
+
+other transforms
+
+
+albu.Compose(
+          [
+              albu.Flip(=0.5),
+              albu.RandomRotate90(=0.9),
+              albu.ShiftScaleRotate(
+                  =0.0625,
+                  =0.2,
+                  =15,
+                  =0.9,
+              ),
+              albu.OneOf(
+                  [
+                      albu.ElasticTransform(=0.3),
+                      albu.GaussianBlur(=0.3),
+                      albu.GaussNoise(=0.3),
+                      albu.OpticalDistortion(=0.3),
+                      albu.GridDistortion(=0.1),
+                      albu.PiecewiseAffine(=0.3),  # IAAPiecewiseAffine
+                  ],
+                  =0.9,
+              ),
+              albu.RandomBrightnessContrast(
+                  =0.3, =0.3, =0.3
+              ),
+              ToTensorV2(),
+          ]
+      )
+
+
+Inference
+
+
+
+fp16 inference
+
+stride=32
+
+Use weights learned on val_ink_id=(1, 2a)
+
+TTA
+
+
+h/v flip
+
+Switch tta each time stride 
+
+@philippsinger proposed percentile threshold
+
+
+Always predicts the same amount of positives, so it is independent of model performance and depends on the pos/neg ratio of the GT
+
+Calculated for all pixels except the area outside the mask
+
+0.9 and 0.93 were used
+
+We expected 0.90 to be a better score in private, but 0.93 was better in the end!
+
+
+yukke42 part
+
+Summary
+
+
+
+3D encoder and 2D/1D encoder
+
+
+1/2 or 1/4 resolution prediction
+
+very simple decoder
+​
+
+
+Data preprocessing
+
+
+
+split the 2nd fragment into two image vertically: 4 folds
+​
+
+
+Model
+
+
+
+3D CNN encoder and 2D Encoder
+
+
+encoderbased on @samfc10 's Notebook: Vesuvius Challenge - 3D ResNet Training
+
+
+remove maxpooling after the 1st CNN
+
+use attention before reduce D-dim
+
+use resnet18 and resnet34
+
+decoder
+
+
+a single 2D CNN layer
+
+upsample with a nearest interpolation
+
+output resolution is downsampled to 1/2. then upsample with a bilinear interpolation
+
+3D transformer encoder and linear decoder
+
+
+encoder: use MViTv2-s of the PyTorch official implementation and a pre-trained model
+
+
+modify forward function to get each scale output
+
+replace MaxPool3d into MaxPool2d for the reproducibility
+
+decoder: a single linear and patch expanding to upscale low resolutions 3D images
+
+
+patch expanding is from Swin-Unet
+
+output resolution is downsampled to 1/2 or 1/4, then upsample with a bilinear interpolation
+​
+
+
+Training
+
+
+
+amp
+
+torch.compile
+
+label smoothing
+
+cutout
+
+cutmix
+
+mixup
+
+data augmentation
+
+
+referred @tanakar 's notebook: 2.5d segmentaion baseline [training]
+
+referred @tattaka and @mipypf 's
+
+patch_size=224 and stride=112
+
+
+stride=75 or stride=56 didn't work
+​
+
+
+Inference
+
+
+
+fp16 inference
+
+stride=75
+
+
+better than stride=112
+
+ignore edge of output prediction
+
+
+use only the red area of prediction (figure below)
+
+
+
+Code &amp; inference notebook
+
+
+
+tattaka &amp; ron part
+
+
+training code: https://github.com/mipypf/Vesuvius-Challenge/tree/winner_call/tattaka_ron
+
+inference code: https://www.kaggle.com/code/mipypf/ink-segmentation-2-5d-3dcnn-resnet3dcsn-fp16fold01?scriptVersionId=132226669
+
+yukke42 part
+
+
+training code: https://github.com/yukke42/kaggle-vesuvius-challenge-ink-detection
+
+Comments:
+├─ tattaka (2023-06-25 13:11:54.930000) [+6]
+│  Update
+│  Submission of tattaka and ron's part was set to public!
+│  
+│  
+│  
+│  training code: https://github.com/mipypf/Vesuvius-Challenge/tree/winner_call/tattaka_ron
+│  
+│  inference code: https://www.kaggle.com/co...
+├─ yukke42 (2023-06-25 15:02:11.023000) [+3]
+│  Update
+│  yukke42's training code is also public! 
+│  https://github.com/yukke42/kaggle-vesuvius-challenge-ink-detection
+├─ Guillermo Perez G (2023-06-20 13:22:05.560000) [+1]
+│  Congratulations on the success! The end was a photo finish! I hope you will post more details of your solution here or on Github or another similar platform.
+├─ LTHoon (2023-06-17 02:25:18.393000) [+1]
+│  Congratulations!!!
+├─ Shubham Rai (2023-06-16 09:54:05.930000) [+1]
+│  congrats for better results
+├─ Bilzard (2023-06-16 05:22:46.170000) [+1]
+│  @tattaka 
+│  
+│  I have another question:
+│  
+│  
+│    
+│  1/32 Resolution is sufficient for this task
+│  
+│  
+│  Does this mean you are feeding 2d encoders final layer's activations (typically output_stride is 32) directly ...
+  ├─ tattaka (2023-06-16 07:37:08.300000) [+5]
+  │  Yes, let me explain in a little more detail.
+  │  The input of the 2D encoder is (bs * groups, ch, h, w) and the output after going through the neck is (bs * groups, 512, h//32, w//32). Then permute it ...
+    ├─ 3rd Company 3rd Platoon Leader (2023-06-24 05:54:07.277000) [+1]
+    │  This is impressive! 
+    │  I tried feeding (bs, groups, h, w) to 2D encoder (changing to -&gt; (bs, output channel, h, w)) and subsequently to 3D encoder but this approach has problem to lose temporal in...
+├─ hengck23 (2023-06-15 00:45:06.860000) [+1]
+│  congrats for the good results and high ranking!
+│  
+│  if possible, i would like to know your split and local CV score.
+│  I was wondering if anyone can actually get 0.80 in CV ?
+  ├─ tattaka (2023-06-15 00:47:18.493000) [+0]
+  │  The local score for val_ink_id=1 was about 0.69 in ensemble (also 0.7, but failed to submit)
+    ├─ Feng Qilong (2023-06-15 01:10:07.317000) [+0]
+    │  wow 0.69 for ink_id = 1, super impressive, congrats!
+├─ 3rd Company 3rd Platoon Leader (2023-06-15 14:49:28.223000) [+0]
+│  Congratulations!
+├─ chumajin (2023-06-15 05:57:55.980000) [+0]
+│  @tattaka Congratulations on the shake-up to second place! That's an impressive achievement. It seems that using many layers resulted in a more robust model. I also learned the importance of applyin...
+  ├─ tattaka (2023-06-15 07:06:33.767000) [+5]
+  │  Before starting the competition, when I read the host's inkid repo, I found that they didn't use upsampling.
+  │  So when I actually calculated the maximum score that could be achieved by downsampling t...
+    ├─ chumajin (2023-06-15 13:22:01.657000) [+0]
+    │  Great method of confirmation! I think the benefits of this are incredible. Thank you for sharing.
+    ├─ hengck23 (2023-06-15 13:27:40.210000) [+1]
+    │  in my experiments, just train a pvtv2-b3 transformer and use its feature map (1/32 scale) gives about 0.65 lb without tunning. validation is fragment one.
+    │  
+    │  but not all backbone work.
+├─ cutebomb (2023-06-15 03:08:00.657000) [+0]
+│  what is resnet50-irCSN?
+  ├─ tattaka (2023-06-15 04:21:57.713000) [+1]
+  │  https://github.com/open-mmlab/mmaction2/blob/main/configs/recognition/csn/README.md
+├─ Robson (2023-06-15 01:51:57.240000) [+0]
+│  Congratulations for the great results
+├─ Bilzard (2023-06-15 00:59:20.210000) [+0]
+│  Congratulations for the 2nd rank.
+│  
+│  
+│    
+│  We expected 0.90 to be a better score in private, but 0.93 was better in the end!
+│  
+│  
+│  Were best percentiles different between test fragment a and b?
+│  If so, how ...
+  ├─ tattaka (2023-06-15 01:16:12.777000) [+1]
+  │  Looking at our results, it seems that the optimal thresholds for fragment_a and fragment_b are not that different.
+  │  However, we were unable to find any evidence to support it during the competition.

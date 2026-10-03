@@ -1,0 +1,157 @@
+# https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/567589
+
+Topic #567589: 7th Place Solution
+  Author: Raja Biswas
+  Posted: 2025-03-11 03:02:33.906000
+  Votes: 32  Comments: 9
+
+Thanks to Kaggle, the competition hosts, and the participants for making this an exciting competition! We are pleased to see the winning solutions generalize well to the test set. Congratulations to all the winners! Trushant and I had a lot of fun building our solution over a 3 week sprint.
+
+Inference Pipeline
+
+We implemented an uncertainty-based ensemble pipeline as shown in the figure below:
+
+
+
+
+First, a fine-tuned gemma-2-9b-it model was used to score all test examples
+
+Next, uncertainty scores were calculated as closeness to the decision boundary (uncertainty = 1-|p-0.5|)
+
+Top 50% uncertain examples were identified (i.e. those with probabilities closest to 0.5) and scored again using with a larger model.
+
+
+Specifically,
+
+
+
+For top 15% uncertain examples, we used a fine-tuned Qwen2.5-32B-Instruct (selected submission 1) or Mistral-Small-24B-Instruct-2501 (selected submission 2) model (xlarge)
+
+For next 35% examples, we used Qwen2.5-14B-Instruct (large) 
+
+For remaining examples, we used scores directly from the gemma-2-9b-it model (base)
+
+
+The final score was computed as an ensemble:
+
+
+
+Top 15% uncertain examples: Score = 1.0 x base + 1.5 x xlarge
+
+Next 35% examples: Score = 1.0 x base + 1.0 x large
+
+Remaining examples: Score = 1.0 x base
+
+
+We used vllm for inference. The inference time estimates for 512 examples are shown below together with max sequence length:
+
+||||
+||||
+||||
+||||
+||||
+||||
+
+
+Data
+
+We used the following data sources for training:
+
+Labelled Datasets
+
+
+
+WSDM Cup - Multilingual Chatbot Arena Competition Data (45k)
+
+LMSYS - Chatbot Arena Human Preference Predictions Competition Data (30k)
+
+lmarena-ai/PPE-Human-Preference-V1 (10k)
+
+
+Unlabelled Datasets
+
+
+
+wsdm - open models - nbroad (Dataset from Nicholas - Sampled 6k)
+
+Skywork/Skywork-Reward-Preference-80K-v0.2 (Sampled 25k)
+
+allenai/tulu-3-sft-olmo-2-mixture (Sampled 30k)
+
+Team generated preference pairs (100k examples)
+
+
+Prompts from allenai/WildChat-1M and lmsys/lmsys-chat-1m datasets
+
+Cluster based sampling to roughly match the distribution from Arena Explorer
+
+
+Models
+
+We fine-tuned models from Gemma, Llama, Qwen and Mistral families, which achieved the following scores:
+
+
+
+
+
+We first fine-tuned Qwen2.5-72B-Instruct and Llama-3.1-Nemotron-70B-Instruct on the competition subset and used them to generate pseudo labels for the unlabeled datasets.
+
+For Gemma models, we directly used "A" and "B" token logits to compute the preference probability. These models did not have a reward model head. They were trained with a combination of language modeling and reward modeling losses. (Reference: Regularizing Hidden States Enables Learning Generalizable Reward Model for LLMs)
+
+The remaining models were trained using the standard AutoModelForSequenceClassification architecture with a linear head.
+
+
+Generalization
+
+We considered the following aspects in an attempt to improve generalization:
+
+
+
+Incorporated larger LLMs in the inference pipeline to handle uncertain examples. Larger LLMs tend to generalize better.
+
+Ensemble of different modelling approaches and model families (logits-based and AutoModelForSequenceClassification).
+
+Kept the preference modelling head simple (one linear layer).
+
+Distillation from 70B+ LLMs using pseudo labels on a large unlabeled dataset containing diverse prompts.
+
+
+Links
+
+
+
+Inference Notebook
+
+
+We look forward to reading and learning from your solutions! Special thanks to @trushk for the perfect collaboration and teamwork!
+
+Comments:
+├─ ducnh279 (2025-03-19 13:27:30.090000) [+1]
+│  Congrats @conjuring92 and your team!
+│  
+│  I read the reference paper and noticed that they kept the language modeling head (lm_head) and added a separate reward head for training with both language mod...
+  ├─ Raja Biswas (2025-03-20 16:22:57.467000) [+1]
+  │  Hi @ducnh279 Thanks for the insightful comments &amp; sharing your experience!
+  │  
+  │  
+  │    
+  │  From my experience, when fine-tuning decoder models the lm_head, it usually requires a smaller learning rate than...
+├─ Atharva Ingle (2025-03-11 13:45:00.343000) [+1]
+│  Awesome solution as always. Congrats @conjuring92 and @trushk!
+├─ Jaydev (2025-03-11 03:48:32.990000) [+1]
+│  Congratulations @conjuring92 and Trushant for the Gold Medal. Your approach is interesting, especially the way you guys have handled those uncertain samples with bigger models.
+├─ chumajin (2025-03-11 06:43:24.243000) [+2]
+│  @conjuring92 @trushk 
+│  
+│  I'm so happy that you teamed up and won the gold medal. Congratulations!
+│  I’ll learn from you.
+├─ Cody_Null (2025-03-11 03:16:08.237000) [+2]
+│  Wow great work! We wanted to do something like this but sadly couldn't get vllm to work with Gemma and we were unable to get great results from the qwen models initially and it seems we moved on to...
+  ├─ Raja Biswas (2025-03-11 03:38:01.420000) [+3]
+  │  Hi @cody11null, Thanks!
+  │  
+  │  For Gemma, we needed to disable logit soft-capping for both training and inference (else we had troubles in getting soft prob scores). Yes, Qwen models blended really well ...
+    ├─ Cody_Null (2025-03-11 05:27:20.100000) [+1]
+    │  I just did, I have been struggling with trying to use vllm for generation with qwen series models for the last few days, just saw my issue thanks to your code! I am not the best with this deeper le...
+├─ [deleted] (2025-03-24 07:54:38.197000) [+0]
+│  [deleted]

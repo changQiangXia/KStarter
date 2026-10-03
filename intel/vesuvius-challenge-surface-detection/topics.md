@@ -1,0 +1,82 @@
+# vesuvius-challenge-surface-detection 讨论区（按票数排序，共 80 条）
+
+- [3D Viewer Utility](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/663144) — 78 票 / 6 评论 / 2025-12-16 
+- [1st Place Solution for the Vesuvius Challenge - Surface Detection Competition](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679238) — 66 票 / 31 评论 / 2026-02-28 **write-up?**
+- [[placeholder] my solution : it is connecting the dots!](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/651532) — 58 票 / 162 评论 / 2025-12-04 **write-up?**
+- [[CRITICAL] Why the local validation is invalid, and potentially the whole leaderboard.](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/671160) — 55 票 / 45 评论 / 2026-01-31 
+- [5th Place Solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679360) — 51 票 / 21 评论 / 2026-02-28 **write-up?**
+- [Update: Test set fix, submission rescore, and deadline extension](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/672634) — 48 票 / 93 评论 / 2026-02-09 
+- [Prize pool DOUBLED! 😱](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/662972) — 42 票 / 8 评论 / 2025-12-15 
+- [Request to host - Transparency on new leaderboard scoring](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/672996) — 37 票 / 10 评论 / 2026-02-11 
+- [Dataset update with improved label quality](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/664184) — 33 票 / 51 评论 / 2025-12-22 
+- [Bronze Medal - ChatGPT Vibe Coding!](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679221) — 32 票 / 43 评论 / 2026-02-28 **write-up?**
+- [18th : median filter x 7 post processing is very strong](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679220) — 32 票 / 12 评论 / 2026-02-28 
+- [4-th Place Solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679222) — 31 票 / 13 评论 / 2026-02-28 **write-up?**
+- [Thank you for helping us read the scrolls! ](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679385) — 30 票 / 14 评论 / 2026-03-01 
+- [[Host Baseline] -- modified nnUNet 0.543 LB raw, 0.562 w/ post processing](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/666453) — 28 票 / 48 评论 / 2026-01-07 
+- [Video how to use Kaggle server in VS Code](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/619309) — 27 票 / 3 评论 / 2025-11-13 
+- [10th place solution ](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679227) — 27 票 / 30 评论 / 2026-02-28 **write-up?**
+- [2nd Place Solution Vesuvius Challenge – A postprocessing win](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679278) — 27 票 / 9 评论 / 2026-02-28 **write-up?**
+- [Welcome to Vesuvius Challenge - Surface Detection competition](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/619251) — 24 票 / 5 评论 / 2025-11-13 
+- [9th Place Solution SUPER-CONSERVATIVE(0.623->0.616)](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679241) — 24 票 / 14 评论 / 2026-02-28 **write-up?**
+- [ 3rd place solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679236) — 24 票 / 12 评论 / 2026-02-28 **write-up?**
+- [Marching ANTS is all you need !!!](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/664320) — 23 票 / 27 评论 / 2025-12-24 
+- [11th place](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679237) — 20 票 / 3 评论 / 2026-02-28 **write-up?**
+- [Leaderboard rescore underway [Now complete]](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/665060) — 19 票 / 31 评论 / 2025-12-30 
+- [Some thoughts on challenge design](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/660123) — 19 票 / 17 评论 / 2025-12-12 
+- [12th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679259) — 19 票 / 1 评论 / 2026-02-28 **write-up?**
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/619242) — 17 票 / 2 评论 / 2025-11-13 
+- [Training speed improves 10x if you convert TIFF dataset to NPY / RLE](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/627529) — 17 票 / 9 评论 / 2025-11-16 
+- [feeling a bit down](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/669919) — 17 票 / 37 评论 / 2026-01-25 
+- [Why what you are doing matters](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/667658) — 16 票 / 3 评论 / 2026-01-13 
+- [old and new data: what has changed](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/664478) — 16 票 / 7 评论 / 2025-12-25 
+- [7th Place Solution for the Vesuvius Challenge](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679251) — 16 票 / 5 评论 / 2026-02-28 **write-up?**
+- [Access to additional unlabeled data](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/641509) — 15 票 / 2 评论 / 2025-11-26 
+- [Bonus prizes available!](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/639347) — 14 票 / 2 评论 / 2025-11-24 
+- [27th placement solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679229) — 14 票 / 0 评论 / 2026-02-28 **write-up?**
+- [Median Filter ×7 Is REALLY All You Need (Private Score: 0.614 -> 0.628)](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679362) — 14 票 / 15 评论 / 2026-02-28 
+- [24th Place Solution - Vesuvius Challenge ](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679301) — 14 票 / 7 评论 / 2026-02-28 **write-up?**
+- [8th-place-solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679248) — 13 票 / 4 评论 / 2026-02-28 **write-up?**
+- [Quick Preview of the 1st place solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679225) — 13 票 / 0 评论 / 2026-02-28 **write-up?**
+- [polynomial volume](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/671325) — 13 票 / 5 评论 / 2026-02-01 
+- [92th solution - coded with AI](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679223) — 13 票 / 10 评论 / 2026-02-28 **write-up?**
+- [Work Sharing - 3D Stationary Velocity Field Prediction ](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/644215) — 12 票 / 22 评论 / 2025-11-29 
+- [Insights on competetion metric.](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/651113) — 12 票 / 1 评论 / 2025-12-03 
+- [How to read greek on these scrolls? Images have no Ελληνικά γράμματα. Only lines. ](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/622943) — 12 票 / 4 评论 / 2025-11-15 
+- [ignoring unlabelled region in evaluation ... a problem?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/653482) — 11 票 / 4 评论 / 2025-12-06 
+- [Ignore label is a trap](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/668313) — 11 票 / 21 评论 / 2026-01-16 
+- [Extend teaming deadline [denied]](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/672740) — 11 票 / 12 评论 / 2026-02-10 
+- [Quick Clarification on Annotation Detail and Score Ceiling](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/635357) — 11 票 / 1 评论 / 2025-11-20 
+- [49th Place Solution - Vesuvius Surface Detection](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679907) — 10 票 / 0 评论 / 2026-03-04 **write-up?**
+- [43rd Place Solution - Two-stage nnU-Net for Hole Filling](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679255) — 10 票 / 0 评论 / 2026-02-28 **write-up?**
+- [25th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679230) — 10 票 / 3 评论 / 2026-02-28 **write-up?**
+- [Diffeomorphic Suface Fitting](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/667135) — 10 票 / 6 评论 / 2026-01-11 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679898) — 9 票 / 1 评论 / 2026-03-04 
+- [Amazing results after 4,000 epochs: PB=0.635](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/681341) — 9 票 / 4 评论 / 2026-03-14 
+- [a feature for discussion, "sheetness"](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/631311) — 9 票 / 2 评论 / 2025-11-18 
+- [Does this count as a hole?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/673535) — 9 票 / 10 评论 / 2026-02-15 
+- [Is the hidden dataset different from the training data?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/678904) — 9 票 / 52 评论 / 2026-02-25 
+- [123rd place — not where I aimed, but here's what I learned](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679565) — 8 票 / 2 评论 / 2026-03-02 **write-up?**
+- [Why are long epochs needed? I'd like to discuss this.](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679371) — 8 票 / 4 评论 / 2026-03-01 
+- [VOI Metric - Critical Issue?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/674052) — 8 票 / 11 评论 / 2026-02-18 
+- [Share the old dataset.](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/664776) — 8 票 / 3 评论 / 2025-12-27 
+- [Is the metric calculation included within the overall 9-hour limit?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/621455) — 8 票 / 7 评论 / 2025-11-15 
+- [Careful when teaming up! (Ghost teammates)](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/620810) — 7 票 / 3 评论 / 2025-11-15 
+- [[Info] [UPDATED] Vesuvius `npy` and `tfrecord` format](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/630100) — 7 票 / 4 评论 / 2025-11-18 
+- [2.5D segmentation solutions](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/666322) — 7 票 / 2 评论 / 2026-01-06 **write-up?**
+- [Has anyone tried warpping loss (in topo-pitfalls project and paper)? ](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/651550) — 7 票 / 11 评论 / 2025-12-04 
+- [[Info] Keras 3 Multi-Backend 2D and 3D Imaging Library](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/623696) — 6 票 / 2 评论 / 2025-11-15 
+- [6-th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/680280) — 6 票 / 0 评论 / 2026-03-06 **write-up?**
+- [Questions for the host about the metric.](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/672447) — 6 票 / 6 评论 / 2026-02-08 
+- [Unlabeled regions](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/628688) — 6 票 / 10 评论 / 2025-11-17 
+- [i ask chatgpt to trace the scroll](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/658755) — 6 票 / 6 评论 / 2025-12-11 
+- [Affinity Feature Strenghtening Network](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/663127) — 5 票 / 8 评论 / 2025-12-16 
+- [Submission failures?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/636548) — 5 票 / 24 评论 / 2025-11-21 
+- [Bronze Medal - 29 Hours of TPU Continued Training（TransUNet）](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679276) — 5 票 / 2 评论 / 2026-02-28 **write-up?**
+- [Few questions to host](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/651700) — 5 票 / 4 评论 / 2025-12-04 
+- [Training large models on Kaggle without your own GPU](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/642922) — 5 票 / 12 评论 / 2025-11-28 
+- [88th solution with Topology-Preserving 3D U-Net  and 5-Loss Stack  HybridCon](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679231) — 5 票 / 0 评论 / 2026-02-28 **write-up?**
+- [Question about GPU Support for Training Deep Learning Models](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/665764) — 5 票 / 13 评论 / 2026-01-03 
+- [Do binary hole filling algorithms fail?](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/673114) — 4 票 / 8 评论 / 2026-02-12 
+- [Don't trust LB too much.  😭](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679262) — 4 票 / 12 评论 / 2026-02-28 
+- [Probing Results (Train and Test Scroll IDs)](https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/discussion/679224) — 4 票 / 8 评论 / 2026-02-28 

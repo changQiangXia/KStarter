@@ -1,0 +1,167 @@
+<p>Thank you very much for organizing such an interesting competition. I am greatly thankful to the hosts and the Kaggle staff.</p>
+<p>Continuing from the previous competition, I am delighted to have won solo gold medal again, with a total of four medals (Table 1, NLP × 2, CV × 1). Additionally, it was my first time attempting the segmentation task, and I began with <a href="https://www.kaggle.com/tanakar" target="_blank">@tanakar</a> excellent notebook <a href="https://www.kaggle.com/code/tanakar/2-5d-segmentaion-baseline-training/comments" target="_blank">here</a>. I am truly grateful for that.</p>
+<h1>1. Summary</h1>
+<p>My approach involved an ensemble of EfficientNet and SegFormer models. I believed that the test data was rotated shown in other discussions, so I rotated the images during inference, which resulted in a significant boost at the beginning (Public LB 0.58 → 0.74). Additionally, my originality came from incorporating IR images into the training data, which gave me a CV score increase of 0.01 and an LB score increase of 0.01. I will now explain the details below.</p>
+<h1>2. Inference</h1>
+<h2>2.1 About test data and inference flow</h2>
+<p>Based on the brief LB probing and the information provided on the competition page, I had an idea of what the test data might look like. Here is an image that represents my understanding:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4001300%2Fb9c4e129fe3285876db0a7135f704edb%2Fsolution1.jpg?generation=1686795321876414&amp;alt=media" alt=""></p>
+<p>Therefore, I structured my inference code in the Kaggle notebook as follows:</p>
+<ol>
+<li>Concatenate(axis=1) fragments A and B.</li>
+<li>Rotate the image clockwise.</li>
+<li>Perform inference (original + h flip TTA).</li>
+<li>Rotate the prediction countor-clockwise back to its original position.</li>
+<li>Cut and encode each fragment A and B respectively.</li>
+</ol>
+<p>Of course, to reduce inference time, I skipped the inference for areas where the mask value was 0. Furthermore, instead of inferring fragment A and B separately, I concatenated them. This not only eliminated the 0 padding at the boundary between A and B but also allowed for continuous inference of the initial part of fragment B as a contiguous sequence. These led to a significant boost in my LB score (EfficientNet B4: 0.58 → 0.74)</p>
+<h2>2.2 Threshold</h2>
+<p>I believe many of you experienced the instability of the signal values. Therefore, I used the following function to rank the entire image and calculate percentiles. Then, by applying a threshold, I obtained a stable threshold value. This approach proved helpful not only during inference but also during ensemble processes. 2nd place solution also used the same way <a href="https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417255" target="_blank">here</a></p>
+<pre><code>def get_percentile(array):
+     org_shape = array.shape
+    = array.reshape(-1)
+    = np.arange(len(array))[array.argsort().argsort()]
+    =/ array.max()
+    = array.reshape(org_shape)
+    array
+</code></pre>
+<p>For the Public LB, the optimal threshold was found to be 0.96. However, using fragment 3, I conducted a simulation to observe the correlation between the partially optimal threshold (around 10%) and the threshold for the remaining 90%. As a result, I noticed that the threshold was overfitting for the 10% portion (likely reducing noise), while for the remaining 90%, it was better to slightly lower the threshold below the optimal value (aiming for clearer extraction of text). In fact, when comparing the same model, a threshold of 0.95 performed slightly better for the private LB(but less than 0.01). For the final submission, I used different models: sub1 with a threshold of 0.96 and sub2 with a threshold of 0.95.</p>
+<h1>3. Training</h1>
+<p>The following is an overview of the training process. Similar to inference, I created three sets of data and took their averages. It should be noted that SegFormer differs from CNN as it can only utilize 3 channels. As mentioned earlier, incorporating IR images resulted in improvements in both CV and LB scores.</p>
+<h2>3.1 CNN + Unet</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4001300%2Fa32d067916dee939f3301b72d8daf9f8%2Fsolution2.jpg?generation=1686795342236188&amp;alt=media" alt=""></p>
+<h2>3.2 SegFormer</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4001300%2Fba6b7cdc7012775d09930b49179e0317%2Fsolution3.jpg?generation=1686795355254555&amp;alt=media" alt=""></p>
+<h2>3.3 Fine-tuned Parameters</h2>
+<ul>
+<li>Stride: image size // 4</li>
+<li>Optimizer: Adam</li>
+<li>Epochs: 20</li>
+<li>Early stopping: 4</li>
+<li>Scheduler: get_cosine_schedule_with_warmup (from transformers)</li>
+<li>Warm-up: 0.1</li>
+<li>Gradient norm: 10</li>
+<li>Loss function: SoftBCEWithLogitsLoss (segmentation model in PyTorch)</li>
+<li>Training excludes areas with a mask value of 0.</li>
+<li>TTA: Horizontal flip</li>
+</ul>
+<h2>3.4 Cross Validation</h2>
+<p>For submission1, I used a 7kfold cross-validation, and for submission2, I used a 10kfold cross-validation. Increasing the value of k-fold resulted in improvements in both CV and LB scores. I recall that increasing from 5-fold to 7-fold led to an improvement of approximately 0.1 in the Public LB score.</p>
+<h1>4 Final result</h1>
+<p>Ensemble was all mean value of predictions.</p>
+<p>sub1 : th 0.96, cv 0.740, public LB 0.811570, private LB 0.661339</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>image size</th>
+<th>kfold</th>
+<th>cv</th>
+<th>public LB</th>
+<th>private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>efficientnet_b7_ns</td>
+<td>608</td>
+<td>7 + fulltrain</td>
+<td>0.712</td>
+<td>0.80</td>
+<td>0.64</td>
+</tr>
+<tr>
+<td>efficientnet_b6_ns</td>
+<td>544</td>
+<td>7 + fulltrain</td>
+<td>0.702</td>
+<td>0.79</td>
+<td>0.64</td>
+</tr>
+<tr>
+<td>efficientnetv2_l_in21ft1k</td>
+<td>480</td>
+<td>7</td>
+<td>0.707</td>
+<td>0.79</td>
+<td>0.65</td>
+</tr>
+<tr>
+<td>tf_efficientnet_b8</td>
+<td>672</td>
+<td>7</td>
+<td>0.716</td>
+<td>0.79</td>
+<td>0.64</td>
+</tr>
+<tr>
+<td>segformer b3</td>
+<td>1024</td>
+<td>7</td>
+<td>0.738</td>
+<td>0.78</td>
+<td>0.66</td>
+</tr>
+</tbody>
+</table>
+<p>sub2 : th 0.95,cv 0.746 , public LB 0.799563, private LB 0.654812</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>image size</th>
+<th>kfold</th>
+<th>cv</th>
+<th>public LB</th>
+<th>private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>efficientnet_b7_ns</td>
+<td>608</td>
+<td>10</td>
+<td>0.722</td>
+<td>0.80</td>
+<td>0.65</td>
+</tr>
+<tr>
+<td>efficientnet_b6_ns</td>
+<td>544</td>
+<td>10</td>
+<td>0.720</td>
+<td>0.79</td>
+<td>0.63</td>
+</tr>
+<tr>
+<td>efficientnetv2_l_in21ft1k</td>
+<td>480</td>
+<td>10</td>
+<td>0.717</td>
+<td>0.79</td>
+<td>0.65</td>
+</tr>
+<tr>
+<td>segformer b3</td>
+<td>1024</td>
+<td>7</td>
+<td>0.738</td>
+<td>0.78</td>
+<td>0.66</td>
+</tr>
+</tbody>
+</table>
+<h2>4.1 Visualization of predictions</h2>
+<p>The following images visualize the predictions of submission1.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4001300%2F985af9f03d54b031cc820f29b63bc891%2Fpredictions.jpg?generation=1686889411081867&amp;alt=media" alt=""></p>
+<h1>5. My understanding</h1>
+<h2>5.1 Not working well</h2>
+<p>I tried several models such as ConvNext, Mask2Former, Swin Transformer + PSPNet, BeiT, and many others, but their effectiveness was not satisfactory for cv and lb. EfficientNet and mobilevit performed well and stable in this competition for me. I also experimented with SegFormer using various versions from b1 to b5. Although it showed good performance in cross-validation (CV), the leaderboard (LB) scores were poor and unstable. Five days before the end of the competition, when I plotted the relationship between CV and LB scores again, I noticed that larger models tended to overfit. They achieved good CV scores but had poor LB scores. After adjusting the layers used, I found that only b3 showed high LB scores, although I suspected it might be overfitting. When I used it in the ensemble, it significantly improved the LB scores, so I decided to include it. This discrepancy may be due to the limited amount of training data. I should have also tried regularization techniques such as dropout, freezing, and other strategies, but I ran out of time. Considering these options might have potentially improved the performance. <br>
+※ These are just my guesses.</p>
+<h2>5.2 Potential Successes That Were Not Implemented</h2>
+<p>Pre-training using IR images: Although it improved the CV performance, it resulted in a decline in LB scores, so it was not implemented.<br>
+Including EMNIST (external data) in the training dataset: While it improved the CV performance, it led to a deterioration in LB scores, so it was not implemented.</p>
+<h1>6. Acknowledgments</h1>
+<p>I could not have achieved these results on my own. I was greatly influenced by those who I have collaborated with in the past, and I am grateful for their contributions. I would also like to express my sincere gratitude to those who have shared their knowledge and insights through previous competitions. Thank you very much.</p>
+<p>training code : <a href="https://github.com/chumajin/kaggle-VCID" target="_blank">https://github.com/chumajin/kaggle-VCID</a><br>
+inference code : <a href="https://www.kaggle.com/code/chumajin/vcid-6th-place-inference" target="_blank">https://www.kaggle.com/code/chumajin/vcid-6th-place-inference</a></p>

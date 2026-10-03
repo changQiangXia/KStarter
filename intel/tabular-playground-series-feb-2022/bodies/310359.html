@@ -1,0 +1,34 @@
+<h3>Observations</h3>
+<p>My solution is based on three observations about this TPS competition:</p>
+<ol>
+<li><p>Train and test distributions differ, a fact that was discovered early in February during EDA. The difference of the distributions was intended by the paper authors who wanted to train their algorithms on ten bacteria and then test on ten slightly different (mutated) bacteria. The difference led many competition participants to "postprocess" the predictions of their classifiers.</p></li>
+<li><p>If the cross-validation score is computed correctly (i.e. without duplicated data in the validation set), ExtraTreesClassifier reaches a public lb score which is substantially higher than the cv score. This observation (public lb score &gt; cv score) suggests that there exists a leak between training and testing data. The main challenge is finding this leak and exploiting it.</p></li>
+<li><p>A third of the training data and a quarter of the test data are duplicates. <a href="https://www.kaggle.com/siukeitin" target="_blank">@siukeitin</a> documented that these duplicates are the result of a strange random generation process (see the <a href="https://www.kaggle.com/siukeitin/tps022022-what-is-causing-these-duplicates-csi" target="_blank">source code</a>). The observation that several hundred training rows are duplicated in the test data, however, got less attention. </p></li>
+</ol>
+<p>It turns out that the duplication between train and test can be explained through the random generation process. Beyond the duplicates there are many more almost-duplicates, and the ExtraTreesClassifier reaches its high public lb score exactly because of these almost-duplicates.</p>
+<h3>The flaw in the random generation process</h3>
+<p>The following four lines of code demonstrate the flawed random generation. Let us generate two arrays of 30 digits in the range from 0 through 9. The <code>choice()</code> function requires an array of ten probabilities as input. We call <code>choice()</code> twice with different probability arrays, but with the same seed:</p>
+<pre><code>prob_train = [0.10, 0.10, 0.10, 0.10, 0.1, 0.10, 0.08, 0.12, 0.10, 0.10]
+prob_test  = [0.12, 0.09, 0.09, 0.15, 0.1, 0.05, 0.10, 0.10, 0.09, 0.11]
+
+print('Train:', np.random.RandomState(seed=231).choice(10, size=30,
+      p=prob_train))
+print('Test: ', np.random.RandomState(seed=231).choice(10, size=30,
+      p=prob_test))
+
+Train: [7 5 4 3 8 9 0 9 0 1 0 4 7 4 0 0 4 2 8 1 7 2 9 8 6 7 0 7 9 4]
+Test:  [7 5 3 3 8 9 0 9 0 1 0 4 7 4 0 0 3 2 8 1 7 2 9 8 6 7 0 7 9 3]
+</code></pre>
+<p>You can see that the two random arrays have almost the same content except for three positions where the training array has a 4 and the test array has a 3. Why is this the case? The answer can be found in the <a href="https://github.com/numpy/numpy/blob/4a8007d5d916126965e811cd1b41ff4de44663b3/numpy/random/mtrand.pyx#L954-L957" target="_blank">source code of the np.random.RandomState.choice function</a>. To generate 30 random digits, the function first generates 30 random floats between 0 and 1 and then maps them to p.cumsum(). If we apply a small change to p, we'll only get a small change in the output:</p>
+<pre><code>cdf = p.cumsum()
+uniform_samples = self.random_sample(shape)
+idx = cdf.searchsorted(uniform_samples, side='right')
+</code></pre>
+<p>That's it. Train and test data are not independent. It happens that ExtraTreesClassifier profits from this leak, but a purpose-built classification pipeline performs even better. The challenge lies in finding a data transformation (and a suitable metric) such that data points generated with similar p and the same seed become close neighbors.</p>
+<h3>The solution</h3>
+<p>My solution to the competition consists of a data transformation which makes the paired train and test points visible and a RadiusNeighborsClassifier which matches corresponding rows of train and test. For the low-resolution samples (those with 100 decamers), the transformation takes the 286 decamer counts of every row and converts them back into the list of 100 decamers which was the output of <code>np.random.RandomState.choice()</code>. The diagram below shows the transformed data with many close pairs of a training point (blue) and a test point (yellow). Details of the implementation can be found in <a href="https://www.kaggle.com/ambrosm/tpsfeb22-exploiting-the-flawed-random-generation" target="_blank">this notebook</a>.</p>
+<p><img src="https://i.imgur.com/4K2ZCRB.png" alt="transformed"></p>
+<p>I am quite certain that the biologists who gave the idea for the competition didn't want to produce a dependence between train and test. The result of their <a href="https://www.frontiersin.org/articles/10.3389/fmicb.2020.00257/full" target="_blank">paper</a> might look different if the data had been sampled correctly.</p>
+<h3>It has happened before</h3>
+<p>In Section 3.1 of Volume 2 of his <a href="https://seriouscomputerist.atariverse.com/media/pdf/book/Art%20of%20Computer%20Programming%20-%20Volume%202%20(Seminumerical%20Algorithms).pdf" target="_blank"><em>Art of Computer Programming</em></a>, <a href="https://en.wikipedia.org/wiki/Donald_Knuth" target="_blank">Donald Knuth</a> describes how he attempted to create a fantastically good random generator using an algorithm called "Algorithm K". When this algorithm was first put onto a computer, it almost immediately converged to a fixed point. Knuth concludes with the moral that "<em>random numbers should not be generated with a method chosen at random</em>. Some theory should be used."</p>
+<p>I have nothing to add to Knuth's conclusion.</p>

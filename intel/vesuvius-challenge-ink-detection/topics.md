@@ -1,0 +1,82 @@
+# vesuvius-challenge-ink-detection 讨论区（按票数排序，共 80 条）
+
+- [I have made my own carbonized papyrus](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407545) — 136 票 / 54 评论 / 2023-05-07 
+- [1st place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417496) — 112 票 / 46 评论 / 2023-06-16 **write-up?**
+- [6th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417274) — 84 票 / 42 评论 / 2023-07-03 **write-up?**
+- [[lb0.71-one-fold-fragment_id_1 !!!??? ] my experimental results ... the trick of getting good results?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407972) — 80 票 / 97 评论 / 2023-05-08 
+- [2nd place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417255) — 76 票 / 21 评论 / 2023-06-26 **write-up?**
+- [Color analysis: Ink = Ink + Noise. ROI](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/403348) — 50 票 / 13 评论 / 2023-04-22 
+- [Analogizing Ink detection to other problem domains](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395676) — 50 票 / 9 评论 / 2023-03-18 
+- [Loss functions for image segmentation](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/405259) — 43 票 / 6 评论 / 2023-04-26 
+- [9th place solution ](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417361) — 43 票 / 18 评论 / 2023-07-17 **write-up?**
+- [Run Length Encoding Explained](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395067) — 40 票 / 7 评论 / 2023-03-15 
+- [📜3D X-ray scan layers animation](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395330) — 36 票 / 3 评论 / 2023-03-16 
+- [My experimental results, which channels you need?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/409770) — 34 票 / 36 评论 / 2023-05-12 
+- [Modified DICE Coefficient Implementation](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/397288) — 34 票 / 6 评论 / 2023-03-24 
+- [11th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417281) — 33 票 / 12 评论 / 2023-06-15 **write-up?**
+- [ink-id repo](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395948) — 32 票 / 17 评论 / 2023-03-19 
+- [7th Place Solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417430) — 31 票 / 15 评论 / 2023-06-15 **write-up?**
+- [Welcome from the Vesuvius Challenge team!](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/394898) — 28 票 / 43 评论 / 2023-03-15 
+- [Total prize pool increased to $1M](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/396402) — 27 票 / 12 评论 / 2023-03-21 
+- [3rd place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417536) — 25 票 / 3 评论 / 2023-07-13 **write-up?**
+- [I found an error in ink_label](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/403113) — 25 票 / 6 评论 / 2023-04-21 
+- [Confirmation of prohibited pre-trained models](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407355) — 22 票 / 14 评论 / 2023-05-06 
+- [4th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417779) — 22 票 / 2 评论 / 2023-07-13 **write-up?**
+- [SAM applied to Vesuvius Challenge?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/401185) — 22 票 / 8 评论 / 2023-04-12 
+- [Introduction To Semantic Segmentation](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/396178) — 22 票 / 2 评论 / 2023-03-20 
+- [10th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417363) — 22 票 / 0 评论 / 2023-06-16 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417383) — 20 票 / 2 评论 / 2023-06-28 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395039) — 19 票 / 12 评论 / 2023-03-15 
+- [Some Insights](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407283) — 18 票 / 21 评论 / 2023-05-05 
+- [Libraries such as SegFormer which have a non-commercial license ARE allowed](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/410906) — 18 票 / 2 评论 / 2023-05-16 
+- [CV Strategy and choosing confidence threshold?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/400451) — 18 票 / 25 评论 / 2023-04-08 
+- [1st place and other top solutions live discussion](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417448) — 18 票 / 12 评论 / 2023-06-15 **write-up?**
+- [Tiled Dataset](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395225) — 17 票 / 11 评论 / 2023-03-16 
+- [5th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417642) — 17 票 / 4 评论 / 2023-06-30 **write-up?**
+- [Congratulations to new Kaggle Competition GM (Kudos to Heng)](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417507) — 17 票 / 3 评论 / 2023-06-16 
+- [49th place solution: ensembles](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417880) — 16 票 / 5 评论 / 2023-06-17 **write-up?**
+- [Livestream Q&A Thursday 11:30am PT](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/396521) — 14 票 / 13 评论 / 2023-03-21 
+- [Ink Labels Updated](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/405000) — 14 票 / 10 评论 / 2023-04-25 
+- [Thanks for a great competition! But it's not over yet — more prizes at scrollprize.org!](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417265) — 13 票 / 13 评论 / 2023-06-15 
+- [Improve lb score by using different channels than the ones used for training](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/413729) — 13 票 / 2 评论 / 2023-05-29 
+- [CV vs LB Thread](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/401667) — 13 票 / 15 评论 / 2023-04-14 
+- [Problem Submitting, Kaggle down?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/416679) — 12 票 / 18 评论 / 2023-06-12 
+- [Manually refining training data](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/414686) — 12 票 / 5 评论 / 2023-06-02 
+- [37 Rank solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417258) — 11 票 / 7 评论 / 2023-06-15 **write-up?**
+- [Increasing Kaggle ink detection prizes to $100k, scoring change, and announcing open source prizes](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/397279) — 11 票 / 2 评论 / 2023-03-24 
+- [Don't forget to report plagiarism](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/413123) — 10 票 / 1 评论 / 2023-05-27 
+- [13th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417444) — 10 票 / 0 评论 / 2023-06-16 **write-up?**
+- [Good luck everybody!](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417187) — 10 票 / 4 评论 / 2023-06-14 
+- [If you have a good Kaggle algorithm, win $40,000 in 3 easy steps! 😁](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/410846) — 10 票 / 20 评论 / 2023-05-16 
+- [What magic does lb 0.77 have? why do so many people stack there?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/414014) — 10 票 / 3 评论 / 2023-05-31 
+- [33d place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417323) — 10 票 / 4 评论 / 2023-06-15 **write-up?**
+- [Why was the test fragment rotated?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417433) — 10 票 / 9 评论 / 2023-06-15 
+- [1st place solution discussion video recording](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417949) — 9 票 / 2 评论 / 2023-06-18 **write-up?**
+- [Newsletter: $50k First Letters Prize + Extending/Increasing the Segmentation Tooling Prize $35k ➡️ $45k](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407299) — 9 票 / 1 评论 / 2023-05-06 
+- [F0.5 score](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/397282) — 9 票 / 1 评论 / 2023-03-24 
+- [First prizes awarded! Open Source Prizes 4x$2500](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/402279) — 9 票 / 1 评论 / 2023-04-17 
+- [forum discussion for Grand Prize  and Other Prize?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417514) — 9 票 / 0 评论 / 2023-06-16 
+- [Sharing Masked Autoencoder Idea](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/398430) — 9 票 / 2 评论 / 2023-03-30 
+- [56th silver solutions (shake up from 76 to 56)](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417260) — 9 票 / 3 评论 / 2023-06-15 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395040) — 8 票 / 85 评论 / 2023-03-15 
+- [Question about training and validation strategy](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/398329) — 8 票 / 4 评论 / 2023-03-29 
+- [73th Place Solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417563) — 8 票 / 0 评论 / 2023-06-18 **write-up?**
+- [Was the surface annotator blinded from the infrared image?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/400370) — 8 票 / 2 评论 / 2023-04-08 
+- [Newsletter: 5 days left for the open source prizes + new 10x $250 private prizes](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/400102) — 8 票 / 2 评论 / 2023-04-06 
+- [Open source prize reminder!](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/399346) — 8 票 / 3 评论 / 2023-04-03 
+- [Newsletter #3 with lots of community updates!](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/398805) — 8 票 / 0 评论 / 2023-03-31 
+- [Newsletter: Publicly available scroll segments & improved segmentation tooling](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/405723) — 7 票 / 0 评论 / 2023-04-28 
+- [Segmentation Tools Prizes ($35,000 total) & other news!](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/403217) — 7 票 / 3 评论 / 2023-04-21 
+- [A web-based volumetric renderer for Vesuvius Challenge](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407524) — 7 票 / 0 评论 / 2023-05-06 
+- [12th place solution](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/418921) — 7 票 / 2 评论 / 2023-06-23 **write-up?**
+- [Animated GIFs of All Vesuvius Tiff Files](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/400923) — 7 票 / 1 评论 / 2023-04-10 
+- [One Flew Over the Papyrus](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/412451) — 7 票 / 0 评论 / 2023-05-23 
+- [Fine-tuning SAM](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/413159) — 7 票 / 4 评论 / 2023-05-27 
+- [Sørensen–Dice index, F1 score, Czekanowski's binary, Zijdenbos similarity. Many names, same DICE.](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/395090) — 7 票 / 2 评论 / 2023-03-15 
+- [Score comparison before and after "Ink Labels Updated"](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/405927) — 6 票 / 1 评论 / 2023-04-30 
+- [In train 2, there are two potentially invalid label tags](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/403462) — 6 票 / 7 评论 / 2023-04-23 
+- [Can we use pretrained models?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/399140) — 6 票 / 5 评论 / 2023-04-02 
+- [How large are the original X-ray images before tomography?](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/399825) — 6 票 / 9 评论 / 2023-04-05 
+- [Recommended Papers or Models to Read](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/399587) — 6 票 / 4 评论 / 2023-04-04 
+- [Fast Starting Resources](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/412824) — 6 票 / 0 评论 / 2023-05-25 
+- [Special Thanks to Competition Host for Fantastic Engagement Here](https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/412776) — 6 票 / 4 评论 / 2023-05-25 

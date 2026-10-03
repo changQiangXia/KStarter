@@ -1,0 +1,73 @@
+<p>Thanks to Chatbot Arena and Kaggle for hosting such an amazing competition. Congratulations to all the winners.🎉🎉🎉</p>
+<h1>Code Framework</h1>
+<p>Based on the work shared by <a href="https://www.kaggle.com/tascj0" target="_blank">@tascj0</a> in the previous competition, which offers highly efficient <a href="https://github.com/tascj/kaggle-lmsys-chatbot-arena" target="_blank">training</a> and <a href="https://www.kaggle.com/code/tascj0/lmsys-0805/notebook?scriptVersionId=191245382" target="_blank">inference</a>, enabling fast full-parameter fine-tuning and inference under limited GPU resources. Kudos to <a href="https://www.kaggle.com/tascj0" target="_blank">@tascj0</a> 's team for this excellent work.</p>
+<h1>Data Processing</h1>
+<p>The <code>prompt</code>, <code>response_a</code>, and <code>response_b</code> are proportionally truncated in the middle based on length ratios. See <code>MIDV2ProcessorPAB</code> class in the inference code for more details.</p>
+<h1>Base Models</h1>
+<p>The models use <strong>gemma2-9b</strong> and <strong>ArmoRM-Llama3-8B-v0.1</strong>, initialized with  <a href="https://www.kaggle.com/tascj0" target="_blank">@tascj0</a>'s trained models rather than training from scratch. The last layer of the classification head is discarded and changed to 2 (original was 3).</p>
+<p>Named as <code>lmsys-gemma-pretrain</code> and <code>lmsys-llama-pretrain</code>.</p>
+<h1>Final Submission 1</h1>
+<h2>Step1 Fine-Tuning Base Models</h2>
+<p>Fine-tuned <code>lmsys-gemma-pretrain</code>, <code>lmsys-llama-pretrain</code>, and <code>gemma2-27b</code> using WSDM competition data (80% training data + 20% validation set).</p>
+<h2>Step2 Pseudo-Label Data Creation</h2>
+<p>Thanks to <a href="https://www.kaggle.com/nbroad" target="_blank">@nbroad</a> for sharing three versions of datasets. We used <a href="https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/552166" target="_blank">v1</a> (8.5k) and <a href="https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/556059" target="_blank">v2</a> (13k). <a href="https://www.kaggle.com/competitions/wsdm-cup-multilingual-chatbot-arena/discussion/557746" target="_blank">v3</a> was excluded due to minimal capability gaps between models, which could introduce noise during pseudo-labeling.</p>
+<p>Averaged predictions from three models (soft labels) to create the pseudo-label dataset <code>hf-21k</code>.</p>
+<h2>Step3 Fine-Tuning with Pseudo-Labels</h2>
+<p>Fine-tuned <code>lmsys-gemma-pretrain</code> and <code>lmsys-llama-pretrain</code> using <code>hf-21k</code> + WSDM (80%), resulting in <code>gemma-pseudo</code> and <code>llama-pseudo</code>.</p>
+<h2>Step4 Online Inference</h2>
+<p>Used Test-Time Augmentation (TTA):</p>
+<ul>
+<li><code>gemma-pseudo</code> predicts PAB</li>
+<li><code>llama-pseudo</code> predicts PBA (swap)<br>
+Results weighted at 3.3:1 ratio. Achieved LB score 0.709, private score 0.708.</li>
+</ul>
+<h1>Final Submission 2</h1>
+<h2>Step1 Expanded Pseudo-Labels</h2>
+<h3>Data Sources</h3>
+<p><code>vllm-74k</code> dataset. Prompts from <code>lmsys-chat-1m</code> after deduplication and removal of prompts used in Nicholas Broad's hf-v1/v2. Split by language:</p>
+<ul>
+<li><code>en_424k</code> (English)</li>
+<li><code>other_103k</code> (non-English)</li>
+</ul>
+<p>Sampled datasets:</p>
+<ul>
+<li><code>vllm-v1</code> (10k): 7k from <code>other_103k</code>, 3k from <code>en_424k</code></li>
+<li><code>vllm-v2</code> (27k): 21k from <code>other_103k</code>, 6k from <code>en_424k</code></li>
+<li><code>vllm-v3</code> (38k): 36k from <code>other_103k</code>, 2k from <code>en_424k</code></li>
+</ul>
+<p>Increasing non-English data ratio from v1 to v3 to improve multilingual performance.</p>
+<h3>Response Pair Generation</h3>
+<p>Used vLLM inference with models:</p>
+<p>'Qwen/Qwen2.5-72B-Instruct', 'Llama-3.3-70B-Instruct', 'gemma-2-27b-it', 'phi-4', 'DeepSeek-R1-Distill-Qwen-32B', 'Mistral-7B-Instruct-v0.3', 'internlm2_5-20b-chat', 'llama-3.2-3b-instruct', 'Hermes-3-Llama-3.1-8B', 'internlm3-8b-instruct', 'gemma-2-9b-it', 'DeepSeek-R1-Distill-Qwen-14B', 'Llama-3.2-1B-Instruct'</p>
+<p>(DeepSeek-R1 models had "think" sections removed. vllm-v1 included some online models like DeepSeek-V3 and yi-lightning.)</p>
+<h3>Pseudo-Label Generation</h3>
+<p>Used <code>gemma-pseudo</code> (PAB) and <code>llama-pseudo</code> (PBA) weighted 3.3:1. Removed data with <code>abs(winner_model_a - winner_model_b) &lt;= 0.03</code>.</p>
+<h2>Step2 Expanded Pretraining</h2>
+<p>Combined pseudo-labels: 95k (<code>hf-21k</code> + <code>vllm-74k</code>). Retrained <code>lmsys-gemma-pretrain</code> and <code>lmsys-llama-pretrain</code> to avoid pseudo-label noise, resulting in <code>gemma-pseudo-v2</code> and <code>llama-pseudo-v2</code>.</p>
+<h2>Step3 Final Training</h2>
+<p>Fine-tuned <code>gemma-pseudo-v2</code> and <code>llama-pseudo-v2</code> using full WSDM training data (100%).</p>
+<p>Split WSDM data:</p>
+<ul>
+<li>English subset (90% EN data)</li>
+<li>Multilingual subset (10% EN + other languages)</li>
+</ul>
+<p>Trained for 2 epochs:<br>
+1st epoch on English subset, 2nd epoch on multilingual subset.<br>
+Resulting in <code>gemma-final</code> and <code>llama-final</code>.</p>
+<h2>Step4 Inference</h2>
+<p>Same TTA as before:</p>
+<ul>
+<li><code>gemma-final</code> predicts all data (PAB)</li>
+<li><code>llama-final</code> only predicts data where <code>abs(winner_model_a - winner_model_b) &lt; 0.8</code> (PBA)<br>
+Weighted 2.5:1. Achieved same LB 0.709 but improved private score to 0.716.</li>
+</ul>
+<h1>Other Attempts (Not Effective)</h1>
+<ul>
+<li>Qwen2.5-72B distillation: Limited by time/GPU, only one fine-tuning cycle (lacking pretraining)</li>
+<li>Pseudo-labeling with Skywork-Reward-Gemma-2-27B-v0.2</li>
+<li>Replacing <code>lmsys-llama-pretrain</code> with Skywork-Reward-Llama-3.1-8B-v0.2</li>
+<li>Using Skywork-Reward-Preference-80K-v0.2 dataset</li>
+<li>BT loss, multi-loss weighting</li>
+</ul>
+<p><strong>Final Inference code</strong>：<a href="https://www.kaggle.com/code/zhudong1949/lmsys-0201" target="_blank">https://www.kaggle.com/code/zhudong1949/lmsys-0201</a><br>
+<strong>training code</strong>：<a href="https://github.com/zhudongwork/wsdm-cub-2nd-place-solution.git" target="_blank">https://github.com/zhudongwork/wsdm-cub-2nd-place-solution.git</a></p>

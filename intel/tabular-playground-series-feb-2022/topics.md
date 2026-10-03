@@ -1,0 +1,82 @@
+# tabular-playground-series-feb-2022 讨论区（按票数排序，共 80 条）
+
+- [Save the earth one tiny bit by dropping 38% of training data with duplicated rows](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305364) — 74 票 / 33 评论 / 2022-02-05 
+- [Kaggle is  Addictive, how do you dophamine detox and became effective on kaggle?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305184) — 73 票 / 53 评论 / 2022-02-04 
+- [#1 Solution: Exploiting the Flawed Random Generation](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/310359) — 70 票 / 16 评论 / 2022-03-01 **write-up?**
+- [I am Kaggle Discussion Master! ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304745) — 69 票 / 58 评论 / 2022-02-02 
+- [Introducing Nested Cross-Validation = "Double Cross-Validation"](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305350) — 55 票 / 9 评论 / 2022-02-04 
+- [Google Colab | Instead of Kaggle notebook](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306614) — 44 票 / 32 评论 / 2022-02-10 
+- [New Kaggle Notebooks Grandmaster, Sanskar Hasija! ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305040) — 38 票 / 42 评论 / 2022-02-03 
+- [#2 solution](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/310367) — 37 票 / 7 评论 / 2022-03-01 **write-up?**
+- [8 Categorical Features ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304483) — 37 票 / 19 评论 / 2022-02-01 
+- [How to avoid burnout?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305431) — 36 票 / 34 评论 / 2022-02-05 
+- [BioPython - nice way to operate on DNA sequence](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306855) — 33 票 / 9 评论 / 2022-02-11 
+- [Speed up your kernel using Intel® Extension for Scikit-learn](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304459) — 33 票 / 8 评论 / 2022-02-01 
+- [How the data for this competition was generated](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304616) — 31 票 / 1 评论 / 2022-02-01 
+- [Data Visualization cheat sheet by Dr. Andrew Abela](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/309939) — 30 票 / 0 评论 / 2022-02-26 
+- [State of the Art Neural Networks for Tabular Deep Learning](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/307038) — 30 票 / 14 评论 / 2022-02-12 
+- [a cool interactive website to understand probability and statistics.](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305079) — 29 票 / 13 评论 / 2022-02-03 
+- [I would have never imagined that ERT would have gotten so successful in this competition](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304814) — 28 票 / 11 评论 / 2022-02-02 
+- [Beginner friendly compilation of good starter notebooks](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/307328) — 28 票 / 8 评论 / 2022-02-13 
+- [Data science = observing + modeling](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305060) — 28 票 / 12 评论 / 2022-02-03 
+- [Experiment - bacteria as image classification - Keras Conv2D](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305845) — 27 票 / 30 评论 / 2022-02-07 
+- [Multiple models / Blending / Bagging / Boosting Ensemble - my TPS-02 tutorials](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/307367) — 25 票 / 13 评论 / 2022-02-13 
+- [Hyperparameters Optimization](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304457) — 25 票 / 20 评论 / 2022-02-01 
+- [Start with domain knowledge - nature of problem - BACTERIAS in competition](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304472) — 23 票 / 10 评论 / 2022-02-01 
+- [Reconsider whether duplicates should be dropped](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305733) — 23 票 / 20 评论 / 2022-02-06 
+- [Congratulations to the new Remek Kinas - new Discussion Grandmaster! 🎉](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/309488) — 21 票 / 35 评论 / 2022-02-23 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304454) — 19 票 / 2 评论 / 2022-02-01 
+- [Data quality alert](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305516) — 19 票 / 12 评论 / 2022-02-05 
+- [What I've learned from this compitition.](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308645) — 19 票 / 10 评论 / 2022-02-19 
+- [Kaggle tip for beginners](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308094) — 17 票 / 7 评论 / 2022-02-17 
+- [Papers with Code: Deep Learning for Tabular Data](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306581) — 17 票 / 5 评论 / 2022-02-10 
+- [New Kaggle Notebooks Master, Devlikamov Vlad!](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305276) — 17 票 / 20 评论 / 2022-02-04 
+- [What I have learnt from Paper](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305958) — 17 票 / 13 评论 / 2022-02-07 
+- [TPS - Feb 2022, What I have tried.](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/307132) — 17 票 / 19 评论 / 2022-02-12 
+- [Neural Nets for Tabular Data](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306172) — 17 票 / 2 评论 / 2022-02-08 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304455) — 16 票 / 17 评论 / 2022-02-01 
+- [We do not need CV with ExtraTreeClassifier (ETC)](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305870) — 16 票 / 16 评论 / 2022-02-07 
+- [ExtraTreesClassifier: How Accuracy changes with Number of Estimators](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304813) — 16 票 / 3 评论 / 2022-02-02 
+- [Speed up Random Forest](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/307272) — 15 票 / 8 评论 / 2022-02-13 
+- [Tutorials on reading large datasets](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304458) — 14 票 / 2 评论 / 2022-02-01 
+- [GC_content (improved my score)](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308876) — 14 票 / 6 评论 / 2022-02-20 
+- [No opportunity to reproduce the results!](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305319) — 14 票 / 9 评论 / 2022-02-04 
+- [Heartiest Congratulations to @vad13irt  on becoming the Discussion Grandmaster](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308950) — 14 票 / 23 评论 / 2022-02-21 
+- [The workflow to become a Kaggle Discussion Master :)](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308606) — 13 票 / 7 评论 / 2022-02-19 
+- [What's your Best CV scores?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304949) — 13 票 / 11 评论 / 2022-02-03 
+- [CV vs LB gap using neural networks](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305409) — 13 票 / 8 评论 / 2022-02-05 
+- [Takeaways from the TPS February 2022](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/310373) — 13 票 / 3 评论 / 2022-03-01 
+- [Clusters … UMAP, T-SNE, LDA](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304561) — 13 票 / 5 评论 / 2022-02-01 
+- [Public LB is just another fold.](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304881) — 12 票 / 6 评论 / 2022-02-02 
+- [TARGET Category Distribution ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304507) — 11 票 / 2 评论 / 2022-02-01 
+- [Interesting dependency feature names](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304519) — 11 票 / 12 评论 / 2022-02-01 
+- [Deduped Data with Stratified Folds](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306435) — 11 票 / 0 评论 / 2022-02-09 
+- [How duplicate rows came about in the original paper](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306072) — 11 票 / 9 评论 / 2022-02-08 
+- [Why Extra Trees seems to be outperforming Gradient Booster?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304720) — 11 票 / 6 评论 / 2022-02-02 
+- [This comparison confirms the performance of ExtraTreesClassifier](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305056) — 11 票 / 2 评论 / 2022-02-03 
+- [Taxonomy of the bacterial species pulled from the NCBI database to show how the species are related](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305950) — 10 票 / 6 评论 / 2022-02-07 
+- [What did you try but didn't work?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305716) — 10 票 / 13 评论 / 2022-02-06 
+- [Use the mode when cross-validating](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304618) — 10 票 / 1 评论 / 2022-02-01 
+- [Effect of N number of PCA components on Accuracy ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308754) — 10 票 / 9 评论 / 2022-02-20 
+- [Min, Max,Mean, Std: Basic Feature Engineering Question?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308644) — 10 票 / 7 评论 / 2022-02-19 
+- [Small competition break ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/309742) — 10 票 / 7 评论 / 2022-02-25 
+- [That last day of competition feeling](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/310244) — 10 票 / 6 评论 / 2022-02-28 
+- [Implementing Nested Cross-Validation for TPS Feb 2022](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/307266) — 9 票 / 10 评论 / 2022-02-13 
+- [PCA Analysis](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304571) — 9 票 / 4 评论 / 2022-02-01 
+- [📌 TPS-Feb22, EDA📊 + Modeling🔥](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304988) — 8 票 / 2 评论 / 2022-02-03 
+- [Optimization Python Code](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304456) — 8 票 / 2 评论 / 2022-02-01 
+- [What should you do?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306775) — 8 票 / 7 评论 / 2022-02-10 
+- [Why the duplicate dataset performs better than the non duplicate dataset?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308207) — 8 票 / 6 评论 / 2022-02-17 
+- [🎯100% Accuracy🎯 on at least 50% of the Data guarantee (NO MACHINE LEARNING)](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308312) — 8 票 / 14 评论 / 2022-02-18 
+- [Yes! you can use GPU for faster prediction for Scikit-learn & XGBoost models (using Hummingbird-ml)](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305713) — 8 票 / 5 评论 / 2022-02-06 
+- [XGBoost Feature Importance Across Folds](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305891) — 8 票 / 2 评论 / 2022-02-07 
+- [Correlation between bacteria's of same families!!](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/306162) — 8 票 / 3 评论 / 2022-02-08 
+- [Managing Common Python Code?](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305751) — 8 票 / 6 评论 / 2022-02-06 
+- [Visualization of Escherichia_coli with different error rate](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308183) — 7 票 / 1 评论 / 2022-02-17 
+- [Surprising results regarding n_estimators for ExtraTrees & Accuracy](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305463) — 7 票 / 1 评论 / 2022-02-05 
+- [TPS-Feb-2022 - A Brilliant resource for reading large datasets!🏆👍🔮](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304777) — 7 票 / 0 评论 / 2022-02-02 
+- [Reduce Memory Usage & Deal with Bulky Data!](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304496) — 7 票 / 2 评论 / 2022-02-01 
+- [Extra Trees vs Random Forest explained](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305053) — 6 票 / 1 评论 / 2022-02-03 
+- [Reduce train dataset to 11% of initial dataset (234 MB)](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/305020) — 6 票 / 6 评论 / 2022-02-03 
+- [To reproduce exactly all the feature names](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/304810) — 6 票 / 4 评论 / 2022-02-02 
+- [Should this be a rare case to trust the public leaderboard? ](https://www.kaggle.com/competitions/tabular-playground-series-feb-2022/discussion/308827) — 6 票 / 5 评论 / 2022-02-20 

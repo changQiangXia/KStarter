@@ -1,0 +1,82 @@
+# tabular-playground-series-nov-2021 讨论区（按票数排序，共 80 条）
+
+- [Triple mastership!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285092) — 83 票 / 84 评论 / 2021-11-03 
+- [[Productivity Guide] - How to work faster with notebooks ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287989) — 80 票 / 20 评论 / 2021-11-16 
+- [Feedback Requested](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284445) — 77 票 / 89 评论 / 2021-11-01 
+- [Mislabeled samples](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285503) — 47 票 / 121 评论 / 2021-11-04 
+- [Is he a thief?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285700) — 38 票 / 25 评论 / 2021-11-05 
+- [Overfitting tool has just been published for the curious :-)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291494) — 35 票 / 9 评论 / 2021-11-29 
+- [Courses about Pytorch, others frameworks, and posts about NN in general](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288064) — 34 票 / 29 评论 / 2021-11-16 
+- [Guessing the future winning solutions ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288221) — 34 票 / 11 评论 / 2021-11-17 **write-up?**
+- [[Guide] - How to trick AUC into scoring your stupid models higher 👌](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284507) — 30 票 / 3 评论 / 2021-11-01 
+- [Building deep neural networks for tabular data with TensorFlow 2.x](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284775) — 29 票 / 6 评论 / 2021-11-02 
+- [Difference between NN (Keras) and non-NN models](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/289595) — 28 票 / 10 评论 / 2021-11-21 
+- [The data is chunked !](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286731) — 28 票 / 25 评论 / 2021-11-10 
+- [#3 Solution: Don't trust the cv scores](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291766) — 27 票 / 14 评论 / 2021-12-01 **write-up?**
+- [There will be a December TPS?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/289267) — 26 票 / 8 评论 / 2021-11-19 
+- [Tips and tricks for training better Neural Networks](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284835) — 25 票 / 1 评论 / 2021-11-02 
+- [Don't be tempted to the leaderboard (avoid overfitt)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285355) — 24 票 / 26 评论 / 2021-11-04 
+- [TPS Nov: Find the magic  😄](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285772) — 23 票 / 2 评论 / 2021-11-06 
+- [Any good advice for beginners](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285006) — 22 票 / 21 评论 / 2021-11-03 
+- [TPS Nov 21: Good Starter Notebooks](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285800) — 21 票 / 1 评论 / 2021-11-06 
+- [#1 solution](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291883) — 21 票 / 10 评论 / 2022-05-19 **write-up?**
+- [Is adaptive overfitting occurring on the leaderboard?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291091) — 21 票 / 12 评论 / 2021-11-27 
+- [Tuning your neural network architecture for a better score](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286610) — 20 票 / 0 评论 / 2021-11-09 
+- [Use label-smoothing if you want some free AUC ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284850) — 19 票 / 4 评论 / 2021-11-02 
+- [By far the best video I've seen about How Neural Networks works.](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291259) — 19 票 / 4 评论 / 2021-11-28 
+- [[Up-to-date Summary] We've hit the quarter mark! these are the stories up to this point!](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286276) — 19 票 / 0 评论 / 2021-11-08 
+- [PyTorch Series : Folds, Datasets and DataLoaders, nn.LazyLinear, AUC metric](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288433) — 19 票 / 2 评论 / 2021-11-17 
+- [Take a break with some pretty plots](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/289438) — 18 票 / 4 评论 / 2021-11-20 
+- [🔥🔥 Differential Privacy -- Is Anonymization of features sufficient ??](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287707) — 17 票 / 4 评论 / 2021-11-15 
+- [Feature selection may help you (30% reduction of the data)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284608) — 17 票 / 12 评论 / 2021-11-01 
+- [Learning >= Winning](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285738) — 16 票 / 5 评论 / 2021-11-06 **write-up?**
+- [Leaked train.csv with original labels](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287047) — 16 票 / 6 评论 / 2021-11-11 
+- [Looking at flip probability between the chunks](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/289034) — 16 票 / 23 评论 / 2021-11-19 
+- [TPS-2021 - Previous Winning solutions](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284475) — 16 票 / 3 评论 / 2021-11-01 **write-up?**
+- [Why cv scores are unreliable in this competition](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/290810) — 16 票 / 9 评论 / 2021-11-26 
+- [Before choosing your submission, have a look at the adversarial validation](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291003) — 16 票 / 6 评论 / 2021-11-27 
+- [[Tutorial] - The Last Feature Selection Guide You’ll Ever Need](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285564) — 14 票 / 3 评论 / 2021-11-05 
+- [Data generated by sklearn's make_classification?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291463) — 14 票 / 1 评论 / 2021-11-29 
+- [They did not randomly flip 25 % of the labels](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286543) — 14 票 / 8 评论 / 2021-11-09 
+- [Picking neural or boosting](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286106) — 14 票 / 8 评论 / 2021-11-08 
+- [TPS Nov AutoViML Deep Learning model in less than 5 mins - 0.7446 score](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287039) — 14 票 / 2 评论 / 2021-11-11 
+- [A sure bet: denoising auto-encoders](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284777) — 14 票 / 26 评论 / 2021-11-02 
+- [DNN feature importance](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285891) — 13 票 / 3 评论 / 2021-11-06 
+- [Why does Neural Network works so well this month?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284784) — 13 票 / 14 评论 / 2021-11-02 
+- [[TPS Nov 2021] Things worth trying out this month](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285229) — 13 票 / 14 评论 / 2021-11-03 
+- [Auto Submitting from Google Colab via Kaggle API](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286475) — 13 票 / 5 评论 / 2021-11-09 
+- [Create your Pytorch trainer with Tez ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287152) — 13 票 / 3 评论 / 2021-11-12 
+- [Some Activation Functions in ANN 🔥🔥](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/289431) — 12 票 / 8 评论 / 2021-11-20 
+- [💫💥 Good Starter References for TPS - Nov 2021 💫💥 ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284461) — 12 票 / 2 评论 / 2021-11-01 
+- [Understanding AUC metric](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284500) — 11 票 / 1 评论 / 2021-11-01 
+- [Feature Importances and XAI](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284577) — 11 票 / 2 评论 / 2021-11-01 
+- [Feature Ranking w/ UMAP](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285280) — 11 票 / 3 评论 / 2021-11-04 
+- [Dealing with Noisy Labels](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285707) — 11 票 / 10 评论 / 2021-11-05 
+- [Discover wich feature overfitts more (Article)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285826) — 11 票 / 2 评论 / 2021-11-06 
+- [What is the Logical Steps(sequence) on building deep learning models?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287984) — 11 票 / 6 评论 / 2021-11-16 
+- [Hard margin SVM by cvxopt solver](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/290297) — 10 票 / 0 评论 / 2021-11-23 
+- [CV, Overfitting, and shake-down/ups.](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/289619) — 10 票 / 2 评论 / 2021-11-21 
+- [I submitted all the AutoML frameworks so you don't have to 🔥](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285550) — 10 票 / 1 评论 / 2021-11-05 
+- [#5 solution (and +141 from Public Leaderboard)](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291846) — 10 票 / 2 评论 / 2021-12-01 **write-up?**
+- [What can be the secret recipe of Laurent Pourchot in every TPS?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286579) — 10 票 / 19 评论 / 2021-11-09 
+- [#2 solution](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291903) — 9 票 / 2 评论 / 2021-12-01 **write-up?**
+- [Tips on getting stated with Keras](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287238) — 9 票 / 9 评论 / 2021-11-12 
+- [How is the submission score calculated?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/290593) — 8 票 / 4 评论 / 2021-11-25 
+- [Stuck in competition?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286538) — 8 票 / 8 评论 / 2021-11-09 
+- [Ensembling gone?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291317) — 8 票 / 2 评论 / 2021-11-28 
+- [Advanced EDA with UMAP/hdbscan](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284540) — 7 票 / 2 评论 / 2021-11-01 
+- [Torch, Keras, LightGBM, CatBoost, XGBoost for R Lovers](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285417) — 7 票 / 1 评论 / 2021-11-04 
+- [CV Average Fold Score > Test Score](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286113) — 7 票 / 8 评论 / 2021-11-08 
+- [Bi Modal Features](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/286539) — 7 票 / 2 评论 / 2021-11-09 
+- [Changing target to (0,1,2,3) helps to improve prediction ](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288789) — 7 票 / 4 评论 / 2021-11-18 
+- [Score Comparison by Model Type](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/287429) — 6 票 / 6 评论 / 2021-11-13 
+- [Oscillating loss and AUC for NN](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288089) — 6 票 / 12 评论 / 2021-11-16 
+- [How to Tune Neural Networks with OPTUNA?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/291073) — 6 票 / 2 评论 / 2021-11-27 
+- [[Compilation] Good starter notebooks from previous TPS](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284495) — 6 票 / 2 评论 / 2021-11-01 
+- [Need advice on managing notebook versions](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284618) — 6 票 / 7 评论 / 2021-11-01 
+- [Are the leaderboard's >.75 entries overfitting?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/288125) — 6 票 / 6 评论 / 2021-11-16 
+- [Applying PCA](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/285626) — 6 票 / 9 评论 / 2021-11-05 
+- [Seeking Teammate](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284691) — 6 票 / 4 评论 / 2021-11-02 
+- [Labels have been updated](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284455) — 5 票 / 0 评论 / 2021-11-01 
+- [Rank Gauss dataset](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/284636) — 5 票 / 1 评论 / 2021-11-01 
+- [How to do different predictions for data on different sides of a linear regression in sklearn?](https://www.kaggle.com/competitions/tabular-playground-series-nov-2021/discussion/290407) — 5 票 / 1 评论 / 2021-11-24 

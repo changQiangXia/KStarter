@@ -1,0 +1,82 @@
+# ventilator-pressure-prediction 讨论区（按票数排序，共 80 条）
+
+- [Winner's Writeup!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285256) — 326 票 / 129 评论 / 2021-11-04 **write-up?**
+- [Parameters R and C Explained (1 of 2)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276599) — 242 票 / 38 评论 / 2021-10-05 
+- [[3rd Place] Single model scored 0.0975 w/o PID controller](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285330) — 221 票 / 95 评论 / 2021-11-05 **write-up?**
+- [Ensemble Folds with Median](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276138) — 207 票 / 46 评论 / 2021-10-03 
+- [A simple feature that improved my score](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273974) — 205 票 / 49 评论 / 2021-09-23 
+- [Single Model Transformer - LB 0.112 - Gold Medal](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285277) — 173 票 / 53 评论 / 2021-11-09 **write-up?**
+- [#2 Solution: The inverse of a PID controller](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285283) — 166 票 / 33 评论 / 2021-11-04 **write-up?**
+- [Better than median](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/282735) — 163 票 / 55 评论 / 2021-10-27 
+- [Huber Loss as a better MAE loss](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277690) — 158 票 / 49 评论 / 2021-10-10 
+- [Parameters R and C Explained (2 of 2)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276828) — 148 票 / 18 评论 / 2021-10-06 
+- [How To Display LSTM Feature Importance](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277561) — 140 票 / 27 评论 / 2021-10-10 
+- [To learn or not to learn?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/278964) — 130 票 / 46 评论 / 2021-10-16 
+- [9th solution(with github code): Laplace distribution noise likelihood optimization](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285353) — 123 票 / 30 评论 / 2021-11-08 **write-up?**
+- [the custom category loss function for regression task](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/278362) — 112 票 / 12 评论 / 2021-10-14 
+- [20 Years of Background](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274424) — 109 票 / 3 评论 / 2021-09-25 
+- [5th place solution: A thousand Epochs and a Crazy Transformer](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285402) — 107 票 / 33 评论 / 2021-11-04 **write-up?**
+- [Papers on Ventilator Pressure/Ventilation Control and Machine Learning](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273910) — 98 票 / 14 评论 / 2021-09-23 
+- [4th-place solution: Hacking the PID control](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285278) — 91 票 / 7 评论 / 2021-11-04 **write-up?**
+- [6th-place solution: Single Multi-task LSTM](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285282) — 89 票 / 29 评论 / 2021-11-04 **write-up?**
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273852) — 83 票 / 49 评论 / 2021-09-22 
+- [A Dummy Approach to Improve Your Score (Best Public Notebook)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276083) — 81 票 / 8 评论 / 2021-10-03 
+- ["Single" LSTM model with Magic Features. 0.1093 LB.](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285336) — 81 票 / 21 评论 / 2021-11-04 
+- [Meme Thread](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/283918) — 79 票 / 64 评论 / 2021-10-28 
+- [ Best Single Model CV-LB](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274176) — 79 票 / 258 评论 / 2021-09-24 
+- [Explaining individual worst predictions](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/280996) — 74 票 / 43 评论 / 2021-10-23 
+- [[#1 Solution] The code](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285965) — 74 票 / 5 评论 / 2021-11-12 **write-up?**
+- [13th Place - Team UnderPressure](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285435) — 72 票 / 17 评论 / 2021-11-04 **write-up?**
+- [Can pytorch scores reach keras?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276568) — 71 票 / 69 评论 / 2021-10-05 
+- [0.1336 ？ Is that just a stupid behaviour？ they involve cheating and achivement trading！](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/283825) — 67 票 / 43 评论 / 2021-10-28 
+- [On Ventilators - their mechanics, controls and ML simulations leveraging differentiable Physics](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277882) — 65 票 / 23 评论 / 2021-10-11 
+- [Cross validation and splitting](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274137) — 63 票 / 13 评论 / 2021-09-24 
+- [Can Our Models Harm Patients?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/286396) — 62 票 / 16 评论 / 2021-11-09 
+- [You might get a better score to use dropout=0.0](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276719) — 62 票 / 5 评论 / 2021-10-06 
+- [Close—But No Cigar](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285254) — 62 票 / 25 评论 / 2021-11-04 
+- [Transformer-based Multivariate Time Series Representation Learning](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/281314) — 61 票 / 15 评论 / 2021-10-24 
+- [Key takeaways after reviewing solutions from gold-winning teams](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285639) — 59 票 / 17 评论 / 2021-11-05 **write-up?**
+- [Another simple trick to improve score: shift(2) is better than shift(1)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274196) — 58 票 / 9 评论 / 2021-09-24 
+- [14th place solution multitask LSTM - Team "no pressure"](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285513) — 56 票 / 10 评论 / 2021-11-05 **write-up?**
+- [Tips and tricks for training better Neural Networks](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/283871) — 55 票 / 8 评论 / 2021-10-28 
+- [Um..how many ppl are waitting for the TPU right now?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274710) — 55 票 / 28 评论 / 2021-09-27 
+- [11th Place Writeup - Transformers and Pseudo Label](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285320) — 55 票 / 18 评论 / 2021-11-04 **write-up?**
+- [Some "data property" seen after clustering](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/278935) — 54 票 / 7 评论 / 2021-10-16 
+- [[Question] About data collection](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/275897) — 54 票 / 5 评论 / 2021-10-02 
+- [Apologies to my teammates and all kagglers](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/286755) — 54 票 / 10 评论 / 2021-11-10 
+- [Dealing with outliers (high pressure values)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/280564) — 53 票 / 14 评论 / 2021-10-21 
+- [Life story, or a little motivation :-)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/283941) — 52 票 / 14 评论 / 2021-10-28 
+- [Transformers & Time-Series - Papers Summary](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/281708) — 48 票 / 7 评论 / 2021-10-25 
+- [Will the Top Nearest Neighbour Lie?  The Whole Truth and Nothing But The Truth](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/280356) — 48 票 / 29 评论 / 2021-10-21 
+- [#16th Place Journey Writeup - No Magik](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285395) — 48 票 / 10 评论 / 2021-11-04 **write-up?**
+- [Leaderboard finalization expected next week](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285489) — 46 票 / 0 评论 / 2021-11-04 
+- [Congrats to our new Grandmaster and Masters!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285275) — 45 票 / 4 评论 / 2021-11-04 
+- [Welcome to the Ventilator Pressure Prediction Challenge!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273855) — 43 票 / 19 评论 / 2021-09-22 
+- [20th-place solution : model & multi-task learning](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285295) — 42 票 / 23 评论 / 2021-11-04 **write-up?**
+- [Physics can help you](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/281299) — 39 票 / 12 评论 / 2021-10-24 
+- [You Lot Are Incredible!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/284956) — 39 票 / 11 评论 / 2021-11-03 
+- [Guessing current Gold/Silver notebooks - Features VS Architectures](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/280971) — 38 票 / 4 评论 / 2021-10-23 
+- [The unreasonable ineffectiveness of drop-outs in certain regression scenarios….potential workarounds & solutions](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277155) — 38 票 / 7 评论 / 2021-10-08 **write-up?**
+- [[Compilation] Good starter notebooks](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/275039) — 38 票 / 8 评论 / 2021-09-28 
+- [What is the "expiratory phase" ?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273906) — 37 票 / 11 评论 / 2021-09-23 
+- [Awesome Video(s) & Resource(s) For Background on Mechanical Ventilation](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274405) — 36 票 / 3 评论 / 2021-09-25 
+- [Effectiveness of overparameterized models](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276037) — 34 票 / 7 评论 / 2021-10-02 
+- [Getting rid of Tensorflow CUDA warnings](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274717) — 33 票 / 1 评论 / 2021-09-27 
+- [Model error study](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277241) — 33 票 / 12 评论 / 2021-10-08 
+- [Rage post !!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/276224) — 32 票 / 17 评论 / 2021-10-03 
+- [[#1 Solution] Blog Post](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/287200) — 32 票 / 5 评论 / 2021-11-12 **write-up?**
+- [Shouldn’t we stop posting high scoring notebooks at this point?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/282466) — 32 票 / 16 评论 / 2021-10-27 
+- [Do Our Models Predict Reality? or PID Controllers?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285882) — 32 票 / 12 评论 / 2021-11-06 
+- [What a coincidence!!!!](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/284816) — 31 票 / 12 评论 / 2021-11-02 
+- [Waiting..................](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/284767) — 31 票 / 7 评论 / 2021-11-02 
+- [so--close yet so far](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285268) — 31 票 / 18 评论 / 2021-11-04 
+- [ Competition is Finalized - Congratulations to our Winners; Recap](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/286388) — 30 票 / 8 评论 / 2021-11-09 
+- [Some features that can improve your score](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/280471) — 30 票 / 8 评论 / 2021-10-21 
+- [データについて（日本語訳）](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/274345) — 30 票 / 1 评论 / 2021-09-25 
+- [All Solutions Compilation (Updated)](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/285298) — 29 票 / 2 评论 / 2021-11-04 **write-up?**
+- [Venting frustration ](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/283794) — 29 票 / 28 评论 / 2021-10-27 
+- [Team "L S d" - The Magicians](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/284446) — 29 票 / 15 评论 / 2021-11-01 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273853) — 29 票 / 127 评论 / 2021-09-22 
+- [understanding of the problem?](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277847) — 28 票 / 13 评论 / 2021-10-11 
+- [negative value of target](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/273883) — 27 票 / 3 评论 / 2021-09-23 
+- [EDA about: Feature importance](https://www.kaggle.com/competitions/ventilator-pressure-prediction/discussion/277868) — 27 票 / 5 评论 / 2021-10-11 

@@ -1,0 +1,211 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-dec-2021/discussion/293373
+
+Topic #293373: Fix these features to get a significant boost in accuracy!!
+  Author: Gulshan Mishra
+  Posted: 2021-12-05 11:55:48.362000
+  Votes: 62  Comments: 52
+
+Following are the four features I fixed which gave me a massive boost in score:
+
+
+
+Aspect
+
+Hillshade_9am
+
+Hillshade_Noon
+
+Hillshade_3pm
+
+
+Aspect is the compass direction that a terrain faces. Here it is expressed in Sexagesimal system where the angle lies in the range (0, 359) degrees. In this feature, however, there are some values which are less than 0 and some values which are greater than 359. It will be better If we fix those values so that It lies in the given range. This is fairly easy to do in this case because upon a closer inspection you will find that all the values in this column lies in the range (-360, 720). So, adding 360 to angles smaller than 0 and subtracting 360 from angles greater than 359 will do the work. This is how I have done it:
+
+train_df["Aspect"][train_df["Aspect"] &lt; 0] += 360
+train_df["Aspect"][train_df["Aspect"] &gt; 359] -= 360
+
+test_df["Aspect"][test_df["Aspect"] &lt; 0] += 360
+test_df["Aspect"][test_df["Aspect"] &gt; 359] -= 360
+
+
+The next three features are the Hillshade features. Hillshade, basically, is a 3D representation of a surface. Hillshade is created by measuring luminosity of certain patches of a terrain that results when a source of light is casted at a particular angle. It's a shade of grey so all the values must lie in the range (0, 255) which is also what the data description in the original competition says. However, In both train and test datasets, there are certain rows with hillshade value more than 255 or less than 0. This may be the result of recording error. It seems that the negative values refer to the darkest shade, which has the value of 0, and the values greater then 255 refer to brightest shade, which has the value of 255 and, hence, It would be better to replace all the negative values with 0 and values greater than 255 with 255. Here is how I have done it:
+
+train_df.loc[train_df["Hillshade_9am"] &lt; 0, "Hillshade_9am"] = 0
+test_df.loc[test_df["Hillshade_9am"] &lt; 0, "Hillshade_9am"] = 0
+
+train_df.loc[train_df["Hillshade_Noon"] &lt; 0, "Hillshade_Noon"] = 0
+test_df.loc[test_df["Hillshade_Noon"] &lt; 0, "Hillshade_Noon"] = 0
+
+train_df.loc[train_df["Hillshade_3pm"] &lt; 0, "Hillshade_3pm"] = 0
+test_df.loc[test_df["Hillshade_3pm"] &lt; 0, "Hillshade_3pm"] = 0
+
+train_df.loc[train_df["Hillshade_9am"] &gt; 255, "Hillshade_9am"] = 255
+test_df.loc[test_df["Hillshade_9am"] &gt; 255, "Hillshade_9am"] = 255
+
+train_df.loc[train_df["Hillshade_Noon"] &gt; 255, "Hillshade_Noon"] = 255
+test_df.loc[test_df["Hillshade_Noon"] &gt; 255, "Hillshade_Noon"] = 255
+
+train_df.loc[train_df["Hillshade_3pm"] &gt; 255, "Hillshade_3pm"] = 255
+test_df.loc[test_df["Hillshade_3pm"] &gt; 255, "Hillshade_3pm"] = 255
+
+
+After doing these corrections, my leaderboard score improved from 0.95631 to 0.95656 while using the same NN architecture.
+
+I have also published a notebook explaining and implementing it in detail:
+https://www.kaggle.com/gulshanmishra/tps-dec-21-tensorflow-nn-feature-engineering/notebook
+
+UPDATE:
+The score now is 0.95673 just by employing a minor change so do check the updated notebook 😄.
+
+You might also wanna check out this discussion topic where I have explained these changes:
+https://www.kaggle.com/c/tabular-playground-series-dec-2021/discussion/293768
+
+Comments:
+├─ Samuel Cortinhas (2021-12-05 16:34:23.820000) [+3]
+│  Thanks Gulshan, I found this really helpful. 
+│  
+│  Can I also suggest that some negative values need to be removed, e.g. for features like Horizontal_Distance_to_Hydrology where negative distance doesn...
+  ├─ Gulshan Mishra (2021-12-05 16:56:20.560000) [+2]
+  │  Great point @samuelcortinhas. However, instead of dropping those rows, I think It would be better to just make them positive. This is due to  three reasons:
+  │  
+  │  
+  │  
+  │  Dropping rows will lead to data reduc...
+  ├─ Samuel Cortinhas (2021-12-05 17:25:36.570000) [+5]
+  │  Yes, sorry I wasn't clear. I think negative values should be replaced by 0 but still keep these entries in the dataset. 
+  │  
+  │  I believe we have negative values because of how the data was created. THIS...
+  ├─ Gulshan Mishra (2021-12-05 17:50:35.543000) [+3]
+  │  the GAN just didn't realise that these as physically impossible.
+  │  
+  │  
+  │  Very Interesting! It may well be the case. But I think setting it to 0 may mix these cases with the cases where the distance to hy...
+  ├─ Samuel Cortinhas (2021-12-05 18:41:23.083000) [+1]
+  │  When I used this trick on my code it improved my score by 0.0053. Not much but it seems to help a bit.
+  ├─ Gulshan Mishra (2021-12-05 19:13:25.857000) [+1]
+  │  I have gone through your notebook and have observed several things that you haven't done which could have skyrocketed the performance of your model:
+  │  
+  │  
+  │  
+  │  You haven't used any cross-validation strateg...
+  ├─ Samuel Cortinhas (2021-12-05 21:41:32.443000) [+1]
+  │  Thanks for the suggestions. I am still learning and there is lots of things I want to try!
+├─ Carl McBride Ellis (2021-12-05 12:11:54.573000) [+4]
+│  Dear @gulshanmishra 
+│  
+│  Wonderful post! 
+│  
+│  I think these competitions are so much more fun when the features are not anonymized and common sense and intuition come into play; the essence of science!
+│  
+│  ...
+  ├─ Gulshan Mishra (2021-12-05 12:28:35.523000) [+1]
+  │  Thank you @carlmcbrideellis, It really means a lot to me knowing that you find my work useful 😄. I admit that real fun is when the features are not anonymized for it gives you the opportunity to ex...
+├─ Matteus Rhys (2021-12-15 02:23:09.320000) [+1]
+│  Thanks for sharing, really appreciate the work put in :)
+├─ LinaCool (2021-12-14 11:50:47.093000) [+1]
+│  really helpful, mate
+├─ @kaggleqrdl (2021-12-13 08:02:34.433000) [+1]
+│  I don't want to hijack this post, but seriously, can we talk about the fact that forest cover type in the data explorer is almost statistically the same, or at least pulled from the same distributi...
+  ├─ Gulshan Mishra (2021-12-13 08:42:26.473000) [+1]
+  │  I don't want to hijack this post, but seriously, can we talk about the fact that forest cover type in the data explorer is almost statistically the same, or at least pulled from the same distributi...
+  ├─ @kaggleqrdl (2021-12-13 10:40:49.703000) [+1]
+  │  Cheers @gulshanmishra Thanks for the detailed replies.  Glad I'm not the only one thinking about this.
+  │  
+  │  FWIW, I did a basic lgbm.cv on CTGANset versus CTGANset.append(covtype_set) .. I'll let every...
+├─ Karthik Gopalkrishnan (2021-12-13 05:11:04.100000) [+1]
+│  Thanks for sharing @gulshanmishra ,really helpful
+├─ Vinayak Tiwari (2021-12-11 14:45:39.467000) [+1]
+│  @gulshanmishra  thanks for sharing , you are awesome!!!!
+  ├─ Gulshan Mishra (2021-12-12 03:52:21.700000) [+0]
+  │  @vinayaktiwari28 Thank you for the kind words 😄 Always happy to share!
+├─ VibhorMalik (2021-12-11 06:48:23.733000) [+1]
+│  This is really helpful. Thanks for sharing.
+├─ widhi mahardi darma (2021-12-10 04:15:53.017000) [+1]
+│  good job, very helpful
+  ├─ Gulshan Mishra (2021-12-10 17:51:07.697000) [+0]
+  │  Thanks @widhimahardidarma :)
+├─ Old Monk (2021-12-09 18:24:14.503000) [+1]
+│  Thank you for sharing, very helpful @gulshanmishra !
+  ├─ Gulshan Mishra (2021-12-10 03:58:38.730000) [+0]
+  │  Glad it helped :) @saurabhbagchi
+├─ junhyuk.min (2021-12-09 04:23:45.097000) [+1]
+│  Very helpfull. thank you for sharing!
+  ├─ Gulshan Mishra (2021-12-09 15:09:55.983000) [+0]
+  │  Thanks for your comment @junhyukmin. Always happy to help :)
+├─ hkato (2021-12-08 04:18:33.217000) [+1]
+│  Thank you for sharing.
+  ├─ Gulshan Mishra (2021-12-08 05:17:15.417000) [+0]
+  │  Happy to share @aboriginal3153 😄
+├─ Rayhan Lahdji (2021-12-07 15:28:31.060000) [+1]
+│  One can also scale/translate the data so that it has minimum and maximum values equivalent to real life constraints, if one insists that the data must follow such requirements. One such method is v...
+  ├─ Gulshan Mishra (2021-12-07 16:10:33.473000) [+1]
+  │  One can also scale/translate the data so that it has minimum and maximum values equivalent to real life constraints, if one insists that the data must follow such requirements. One such method is v...
+  ├─ Rayhan Lahdji (2021-12-07 19:57:01.433000) [+2]
+  │  Thank you for the explanation! Now your point is even clearer for everyone.
+  │  
+  │  Actually, I did get the point of your post. I'm sorry if my previous comment sounded condescending, dismissive, or rude ...
+  ├─ Gulshan Mishra (2021-12-08 05:13:09.493000) [+1]
+  │  Actually, I did get the point of your post. I'm sorry if my previous comment sounded condescending, dismissive, or rude toward the idea you proposed in the post. I didn't mean it.
+  │  
+  │  
+  │  @rayhanlahdji A...
+├─ Teck Meng Wong (2021-12-06 23:20:07.237000) [+1]
+│  Hi, thanks for sharing.
+  ├─ Gulshan Mishra (2021-12-07 03:23:50.853000) [+0]
+  │  You're welcome @teckmengwong 😄
+├─ Kazi Mim (2021-12-06 19:14:13.347000) [+1]
+│  Thank you very much!
+  ├─ Gulshan Mishra (2021-12-06 20:08:54.210000) [+0]
+  │  @kazimim Happy to know you liked it 😊
+├─ yann barthelemy (2021-12-06 12:06:18.517000) [+1]
+│  Thank you very much! Very helpfull.
+  ├─ Gulshan Mishra (2021-12-06 12:26:22.913000) [+0]
+  │  @yannbarthelemy glad you liked my work 😄
+├─ HoumingChen (2021-12-06 03:18:46.477000) [+1]
+│  Thank you so much @gulshanmishra ! These are really helpful!👍
+  ├─ Gulshan Mishra (2021-12-06 04:26:12.417000) [+0]
+  │  Thanks @houmingc :) Glad you liked my work
+├─ Georgii Vyshnia (2021-12-05 22:27:51.073000) [+1]
+│  @gulshanmishra : thanks for sharing the valuable insights for the feature engineering!
+  ├─ Gulshan Mishra (2021-12-06 04:27:30.940000) [+1]
+  │  Thanks @gvyshnya 😄
+├─ Antoine Debouchage (2021-12-10 23:22:50.573000) [+2]
+│  Thank you! This will be very helpful for people willing to dive into this competition.
+│  
+│  Do you think adding more transformations to some data could do the trick? Like converting degrees to radians ...
+  ├─ Gulshan Mishra (2021-12-11 06:16:21.257000) [+0]
+  │  Thank you so much for you comment @antoinedebouchage 😄 Glad to hear my work was helpful to you.
+  │  
+  │  
+  │    
+  │  Do you think adding more transformations to some data could do the trick? Like converting degree...
+├─ @kaggleqrdl (2021-12-08 23:49:19.673000) [+2]
+│  It's intriguing that the kaggle folks didn't leverage the  CTGAN bounds functionality to restrict the values, isn't it?  Oversight, or something else?  Post processing perturbation?
+│  
+│  https://sdv.de...
+  ├─ Gulshan Mishra (2021-12-09 04:04:19.837000) [+3]
+  │  Thanks for asking this question @kaggleqrdl 😄
+  │  
+  │  
+  │    
+  │  It's intriguing that the kaggle folks didn't leverage the CTGAN bounds functionality to restrict the values, isn't it? Oversight, or something els...
+  ├─ @kaggleqrdl (2021-12-09 04:25:42.213000) [+2]
+  │  I think they set the min/max to None as per "Since we may want to sample values outside of the ranges in the original data, let’s pass the min_value and max_value arguments as None to the model"
+  │  
+  │  I...
+  ├─ Gulshan Mishra (2021-12-09 06:42:42.537000) [+2]
+  │  I think they set the min/max to None as per "Since we may want to sample values outside of the ranges in the original data, let’s pass the min_value and max_value arguments as None to the model"
+  │  
+  │  
+  │  ...
+  ├─ @kaggleqrdl (2021-12-09 07:52:54.703000) [+1]
+  │  Yeah, 'tough' :)  My concerns is though that folks may be drawing the wrong conclusions about the results and techniques that are successful.   It's possible they work better than others because it...
+├─ Rituraj Kumar (2021-12-07 18:59:38.453000) [+0]
+│  One can also scale/translate the data so that it has minimum and maximum values equivalent to real life constraints, if one insists that the data must follow such requirements. One such method is v...
+  ├─ Gulshan Mishra (2021-12-08 05:16:27.633000) [+1]
+  │  Please refer to the discussion thread in this post which is initiated by our fellow kaggler @rayhanlahdji. I am sure it will clear your doubts :)
+├─ Gulshan Mishra (2021-12-06 22:57:39.387000) [+0]
+│  Thanks @andrej0marinchenk, Happy to help :)
+├─ Clarence15 (2021-12-13 22:23:22.547000) [+1]
+│  Thanks, I learned a lot!
+├─ Mathus Pongpinyopap (2021-12-12 03:56:00.893000) [+1]
+│  Thanks for sharing .

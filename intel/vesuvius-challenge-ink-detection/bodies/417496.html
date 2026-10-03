@@ -1,0 +1,118 @@
+<p>It was a very nervy ending to this competition, we held first for a long time but I am always scared of a shake-up. We tried to play it very defensively to ensure that we weren't doing anything to over-optimize for the leaderboard. Still, there is always a certain level of uncertainty when the public leaderboard is so small and your local validation is not extremely stable.</p>
+<p><strong>tl;dr</strong><br>
+At a high level, I would attribute most of our success to:</p>
+<ul>
+<li>Larger crops </li>
+<li>Strong depth-invariant models</li>
+<li>Averaging several models to give us better calibration</li>
+<li>Training against all available data after validating against fragment 1 rigorously</li>
+</ul>
+<p><strong>Data prep</strong><br>
+We initially started with the <a href="https://www.kaggle.com/code/tanakar/2-5d-segmentaion-baseline-training" target="_blank">2.5d starter code</a> and evolved it over time. What we ended up settling on was just taking the middle 16 layers, but we tried plenty of other things that didn't work. I will save that for another post. Initially, the code was configured to train against all of the crops of the image, but we filtered this very simply based on if a crop was blank. This greatly reduced our training time because many of the crops had no data in them at all. </p>
+<p>Early on there was very little progress being made and then we ran simple ablations to see how performance was impacted by the crop size and found that there was good scaling potential there. Seemed like one of the clearest patterns we saw early on. 128 got beat by 512 which got beaten by 1024. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2Fadddcf67a8c6ed4f68716e050215eb2d%2FWB%20Chart%206_15_2023%203_13_17%20PM.png?generation=1686867276107142&amp;alt=media" alt=""></p>
+<p>It seemed that the x,y context was very important here because the crop could look at a whole letter or even a couple letters at a time and draw them out more completely. Smaller crops yielded much patchier-looking outputs. One nice thing about this approach was it actually didn't increase training time at all. if you ran it with 1024x1024 crops you had to train against way less crops than if you did 128x128 crops so the epoch time and wall-clock convergence time was virtually identical, unlike some other competitions where increasing the resize makes the computation take longer. </p>
+<p><strong>Models</strong><br>
+We started with the 2.5D approach but it became apparent that it wasn't optimal because the model was learning which layers had ink in them and we knew that this varied between fragments. We wanted a solution that was depth-invariant, that could detect ink in any layer. One approach would be training a simple 2d model on each slice of the 3d volume, but with the way the data was labeled, only 2d to start with, we would be giving bad signal to the model if we told it ink was in layers that it actually wasnt and vice versa. We had many discussions about how we handle this, 1D convolutions, max pooling, 3d convolutions with size (8, 1, 1) so it was only truly looking across the depth patterns. What we found to be the most performant was using strong 3d models that would output a new 3d volume with many channels and then we could flatten them along the depth axis with a max. </p>
+<p>So for example, our first approach in this vein was a simple 3dcnn. input shape was (batch_size, 1, 16, 1024, 1024). We applied 4 layers of 3d convolutions on top of this with progressively more filters until finally, we had an output volume of (batch_size, 16, 16, 1024, 1024). At this point we just took the max across the z-dimension to squish it down to (batch_size, 16, 1024, 1024) so our 16 depth dimensions were now replaced with 16 feature dimensions. This alone was a decent approach but then passing this through a strong 2d segmentation model made it much better. We heavily relied on segformer for this, as others have mentioned b3 backbone worked great, but we also found that directionally the even bigger models performed better on the leaderboard even if they didnt perform measurably better on local validation. </p>
+<p>We iterated on this design because it seemed to satisfy the qualities we wanted, a strong 2d segmenter applied to a 3d volume that was invariant to depth. We tried different first-stage 3d methods and found that even stronger 3d models yielded better results. Evolving to 3d unet's and then eventually 3d unetr. Sometimes the results were unclear if they were better but we found a clear trend that the on-paper better models also did better on the leaderboard. Our best individual model was a UNETR first stage that passed 32 channels into a b5 segformer which scored 0.82 on the public leaderboard and 0.67 on the private. We applied a small amount of dropout on the channels in between the 3d and 2d stage. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2Fb59a1b2b524ffdbea3882fd6883e87ad%2FScreen%20Shot%202023-06-15%20at%204.12.57%20PM.png?generation=1686870810392089&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2Fd3566ee53b477abe6e4026db29d35531%2FScreen%20Shot%202023-06-15%20at%204.03.32%20PM.png?generation=1686870239615259&amp;alt=media" alt=""></p>
+<p>One thing I always wondered about was if the strength of the segformer wasnt actually that it was the best model but that it was making predictions at a lower resolution. We pass it the 1024x1024 and it returns back a 256x256 segmentation map. We simply upscaled it with a very simple conv2d transpose. I believe the second place solution verifies this that the lower resolution actually helps because it is doing much coarser classification which makes it easier than trying to more precisely get every pixel. </p>
+<p>Our final best solution was 9 different models</p>
+<table>
+<thead>
+<tr>
+<th>1st stage</th>
+<th>2nd stage</th>
+<th>Resolution</th>
+<th>Public Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3d unet(16 channels)</td>
+<td>segformer b3</td>
+<td>1024</td>
+<td>.78</td>
+</tr>
+<tr>
+<td>3d unet(16 channels)</td>
+<td>segformer b3</td>
+<td>512</td>
+<td>.77</td>
+</tr>
+<tr>
+<td>3d unet(16 channels with SWA)</td>
+<td>segformer b3</td>
+<td>512</td>
+<td>.78</td>
+</tr>
+<tr>
+<td>3d cnn(32 channels)</td>
+<td>segformer b3</td>
+<td>1024</td>
+<td>.78</td>
+</tr>
+<tr>
+<td>3d cnn(32 channels)</td>
+<td>segformer b5</td>
+<td>1024</td>
+<td>.77</td>
+</tr>
+<tr>
+<td>3d cnn(64 channels)</td>
+<td>segformer b3</td>
+<td>1024</td>
+<td>.78</td>
+</tr>
+<tr>
+<td>3d unet(32 channels)</td>
+<td>segformer b5</td>
+<td>1024</td>
+<td>.79</td>
+</tr>
+<tr>
+<td>3d unetr(32 channels)</td>
+<td>segformer b5</td>
+<td>512</td>
+<td>.82</td>
+</tr>
+<tr>
+<td>3d unetr multiclass(32 channels)</td>
+<td>segformer b5</td>
+<td>512</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+<p>One thing we tried late-on was multi-class output. Instead of binary we tried to predict nothing-mask-ink. This ended up yielding a much cleaner looking output actually, in most of our models we had some amount of noise anywhere there was papyrus and this seemed to quiet that down a lot. We did not get to explore it thoroughly enough to confirm if this really worked or not though. </p>
+<p><strong>Training procedure</strong><br>
+Our training procedure was fairly standard, we used the existing adamW optimizer, dice+bce loss and hyperparameters, fixing some small bugs in setting the min-lr and continuing to use the gradual warmup learning rate scheduling. We added on stochastic weight averaging to get wider optima instead of needing to pick a specific checkpoint because we found these pretty inconsistent. We found that validating against fragment 1 wasnt perfect but was at least directionally useful. Once we found something that worked on local validation against fold 1 we would submit that to the leaderboard to double-check its validity and we would continue training with all folds for several epochs after. We would submit and evaluate the new checkpoint trained against all folds and it was typically about 0.04 better. Sometimes we would train against all fragments from the start instead of training fragments 2, 3 and latter adding in 1, but we did not thoroughly evaluate this. </p>
+<p><strong>Augmentations</strong><br>
+We tried many permutations of augmentation, mostly from albumentations, some custom, and some from 3d packages, but ultimately couldn't find strong alpha there with anything fancy. Our best model was trained with:</p>
+<ul>
+<li>50% horizontal and vertical flips</li>
+<li>75% 90-degree rotations</li>
+<li>50% brightness contrast</li>
+<li>25% 1-2 channel dropout(in this case our channels was actually depth)</li>
+<li>10% shift scale rotate</li>
+<li>10% noise and blur</li>
+<li>10% coarse dropout</li>
+<li>10% grid distortion</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2F44380bdf9ac40366cfd12f6db39f1bef%2FScreen%20Shot%202023-06-15%20at%204.29.24%20PM.png?generation=1686871786148868&amp;alt=media" alt=""></p>
+<p>Overall seemed like the rotations and flips were crucial and everything else was a non-factor. Rotations seemed important but we did not ascertain that the test set itself was actually rotated, we just knew it was important so tried to make the model as invariant as possible. </p>
+<p><strong>Ensembling</strong><br>
+We ended up with a big pile of model checkpoints and had to whittle them down to what we believed to be the most performant trading off runtime vs throughput. We tried many different combinations, heavier tta with all rotations and flips, more models, smaller strides. The winner seemed to be 4x rotation TTA with 1/4 crop strided windows and as many good models as we could fit in. Halving the stride helped an extra .01, but that was trumped by being able to add way more models, flips didnt seem to add anything at all. It's possible with just the corrected orientation instead of TTA we could have done better but a model invariant to rotations seemed just as strong.</p>
+<p>One thing we struggled with a lot was how to best combine predictions. For each model we predicted on the same pixel 4x because of our strided approach and 4x of that because of TTA. With many models this actually gave us a ton of options for aggregating the predictions per pixel. We tinkered with a lot of stuff locally but what seemed to work best was averaging per pixel for each model all ~16x predictions and then applying the sigmoid to that averaged signal and then average those probabilities together. This posed a tough memory constraint on us on kaggles system so we had to be a bit efficient with putting things away and accumulating them as densely as possible instead of just creating large arrays and averaging at the end. </p>
+<p><strong>Thresholding</strong><br>
+One thing we went back and forth on for a long time was the calibration of predictions. As discussed in other posts, deciding a threshold was critical to getting good results and choosing the wrong threshold could give you very misleading signal on your models performance. During training and evaluation we would constantly be monitoring the AUC, Precision, Recall and f0.5 at a sweep of thresholds. Some models were well-calibrated with an optimal threshold at 0.5, but many were not. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2Ffee3f2b5c722068974d291af29fc7049%2FScreen%20Shot%202023-06-15%20at%204.58.40%20PM.png?generation=1686873556582356&amp;alt=media" alt=""></p>
+<p>Because of this, we knew that even a great model could show up as terrible on the leaderboard if its threshold wasn't set correctly. We considered using the percentile method that some people used but did not even make a submission for it because it seemed too risky if the distribution of ink was not what we expected. Ultimately what we relied on was that averaged out our predictions they would end up calibrated. We found this to be true on our local validation and held true for the leaderboard as well. Individual models would have wide optimal threshold ranges but after averaging many predictions from many models it was almost universally centered on 0.5. We actually took our last submission to be brave and try 0.55 but it did worse on the public leaderboard and finished with only 30 minutes left to spare so we didnt pick it. It did end up performing slightly higher on the private leaderboard though. I think we actually left a lot on the table in terms of ensembling and optimal thresholding. </p>
+<p><strong>Postprocessing</strong><br>
+One little magic function we borrowed from the old cloud segmentation competition was used to clean up our predictions. After everything was done and already binarized we would use cv2.connectedcomponents to find the masses and remove them if they were beyond a certain size. This would clean up anything that was too small, just little speckles and noise. We found it locally optimal to set our threshold a little lower and then clean up the extras, anything under 25000 pixels, but we only cleaned up things under 10k on our submissions and didnt try more aggressive cleaning. </p>
+<p>Before</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2F25116a2dfc769b5784abb12704df8401%2F__results___27_30.png?generation=1686874373183834&amp;alt=media" alt=""></p>
+<p>After<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1035002%2F9a6ac60974f49a6ecfbb80f47fcccbb0%2F__results___27_31.png?generation=1686874392858212&amp;alt=media" alt=""></p>

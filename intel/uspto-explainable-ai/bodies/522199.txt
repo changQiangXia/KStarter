@@ -1,0 +1,79 @@
+# https://www.kaggle.com/competitions/uspto-explainable-ai/discussion/522199
+
+Topic #522199: The "Magic" !
+  Author: Theo Viel
+  Posted: 2024-07-25 00:01:38.051000
+  Votes: 46  Comments: 14
+
+TLDR: You can create queries as long as you want by using a "fake" space character. Whoosh's preprocessing will replace this character by a whitespace, whereas the count_query_tokens function will not !
+
+Sometimes a code example is better than a long explanation:
+
+
+  
+https://www.kaggle.com/code/theoviel/uspto-magic-with-cudf-pandas-lb-0-8-in-1min
+
+
+Overall idea
+
+Let's say we have two publications ( publication_1 and publication_2) with titles title_1 =  t1_1 t1_2 t1_3 ...and title_2 =  t2_1 t2_2 t2_3 ....
+The easiest way to query both publications would be to do : 
+query = ti:"title_1" OR ti:"title_2"
+The issue is that titles can be several words long, and with the token limit of 50, you cannot really query enough titles to get a reasonable score.
+If only title_1 could count as only one token, that would mean we could query 25 titles, and get a score of 0.8+ effortlessly ! 
+
+The magic
+
+The count token function uses spaces:
+
+ ():
+     ([i  i  re.split(, query)  i])
+
+
+However, whoosh uses a more sophisticated preprocessing. If we can find a character than is replaced by a whitespace by whoosh, but not by the count_query_tokens regex, then we can query a title for the cost of one token  !
+
+And it turns out, such special character exists: ~ is an example. This query :
+
+ = ti: OR ti:
+
+
+Costs 3 tokens and will match the same document as 
+
+ = ti: OR ti:
+
+
+Using this trick to query 25 exact titles alone achieves LB 0.8 which is almost in the gold zone.
+
+Using cudf-pandas to process everything on GPU makes the code super-fast. The notebook shared above runs in 1 minute ! Unfortunately there is no efficiency track in this competition 😄
+
+We used slightly fancier heuristics to reach 7th place, but I'm sure top teams found even better hacks !
+
+Comments:
+├─ Kea Kohv (2024-07-25 03:08:36.200000) [+3]
+│  Congrats! Hilarious that querying exact titles gets one almost to the gold zone… and in one minute. :D What a slap to complex computation-heavy solutions. Nice demonstration of cuDF! :)
+├─ opamusora (Ivan Viakhirev) (2024-07-25 00:07:12.813000) [+3]
+│  25 guessed titles gets a 0.8+ score? Thats cool, the tilda solution is neat 😁, wonder what insights organizers were hoping to get from kaggle solutions, suppose it was expected NNs or something lik...
+├─ Anastas Akopian (2024-07-25 17:30:10.307000) [+3]
+│  Not sure about this, but why this approach is considered praiseworthy by the community? From the competition overview it was clear that it was aimed at interpretebility ("Capable solutions to this ...
+  ├─ Pavel Kazlou (2024-07-25 17:42:35.977000) [+2]
+  │  I agree with you, I was too disappointed to discover this secret. But I can still see many interesting ideas used by participants, many of them getting really high scores even without this trick. S...
+  ├─ opamusora (Ivan Viakhirev) (2024-07-25 23:16:49.693000) [+0]
+  │  Well it’s kaggle, you squeeze out metrics here. It doesn’t mean that it has no value, there are many things to learn here in the process, but it’s about getting best metrics (if it’s about winning ...
+    ├─ Kea Kohv (2024-07-26 08:11:38.857000) [+1]
+    │  I agree that it feels like the excessive use of "magic" undermines the goal of the competition but fortunately several top competitors also had high-scoring non-magic or a-little-magic solutions an...
+├─ aadiAR (2024-07-26 10:22:17.673000) [+1]
+│  That was an interesting read ! and the title was 🌟
+├─ Oleg Kokorin (2024-07-25 03:53:06.607000) [+1]
+│  I used the question mark '?' for my magic symbol. It makes sense that it would work to match the spaces and the whole string would be counted as a single token.
+├─ Octavi Grau (2024-07-25 00:04:24.060000) [+1]
+│  Amazing @theoviel congrats for the 7th position!
+├─ DenisIN4 (2024-07-27 05:12:05.807000) [+0]
+│  Very interesting approach!
+├─ Devang Garg (2024-07-25 08:41:24.333000) [+0]
+│  Impressive. It is the great thought to implement such logic.
+├─ Alannikos (2024-07-25 03:13:49.577000) [+0]
+│  This is really wonderful, I have been to optimize the choice of keywords, thank you for sharing☺️☺️☺️
+├─ LIGHT (2024-07-25 01:57:41.550000) [+0]
+│  Impressive!
+├─ [deleted] (2024-07-28 01:35:34.847000) [+0]
+│  [deleted]

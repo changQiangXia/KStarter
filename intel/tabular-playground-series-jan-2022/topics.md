@@ -1,0 +1,82 @@
+# tabular-playground-series-jan-2022 讨论区（按票数排序，共 80 条）
+
+- [This is how I feel every day on Kaggle](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298446) — 224 票 / 153 评论 / 2022-01-02 
+- [#1 Solution Description: Advanced Linear Model](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304355) — 111 票 / 42 评论 / 2022-02-01 **write-up?**
+- [How to calculate the SMAPE score](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298201) — 81 票 / 14 评论 / 2022-01-01 
+- [If you are new to competitions, some suggestions here!](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298149) — 75 票 / 35 评论 / 2022-01-01 
+- [Resources for Fast Start! ](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298610) — 73 票 / 31 评论 / 2022-01-03 
+- [Why rounding improves the score](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301249) — 71 票 / 10 评论 / 2022-01-16 
+- [[Dataset] GDP 2015-2019: Finland, Norway, and Sweden](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298911) — 44 票 / 13 评论 / 2022-01-05 
+- [Approximating SMAPE](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298473) — 40 票 / 19 评论 / 2022-01-03 
+- [TIPs: How to be more productive on Kaggle notebooks ...](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/300443) — 40 票 / 10 评论 / 2022-01-12 
+- [TIP: this simple one line of code can IMPROVE your score :)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299162) — 39 票 / 20 评论 / 2022-01-06 
+- [Sorry ... no sharing during this competition 😂😍](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298176) — 38 票 / 7 评论 / 2022-01-01 
+- [We need more external data](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/302694) — 37 票 / 13 评论 / 2022-01-23 
+- [Paper on SOTA for time series competitions](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298163) — 34 票 / 3 评论 / 2022-01-01 
+- [Congratulation for Luca Massaron becoming a Discussion Grandmaster!](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298256) — 33 票 / 39 评论 / 2022-01-01 
+- [Hybrid Models: Winning solutions ](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298196) — 33 票 / 10 评论 / 2022-01-01 **write-up?**
+- [TPS Jan 2022: Beginner friendly compilation ](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/300659) — 33 票 / 6 评论 / 2022-01-13 
+- [The overfitting movie](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/303818) — 33 票 / 9 评论 / 2022-01-29 
+- [ 📌 EDA📈 + Feature Engineering🔥](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298744) — 32 票 / 3 评论 / 2022-01-04 
+- [How fast does Kaggle's business grow?](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298318) — 32 票 / 6 评论 / 2022-01-02 
+- [Get more out of you date fields](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298300) — 31 票 / 10 评论 / 2022-01-02 
+- [Feature Engineering For This Contest](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298821) — 30 票 / 7 评论 / 2022-01-04 
+- [Weather dataset - EDA & Feature engineering findings](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301486) — 29 票 / 8 评论 / 2022-01-18 
+- [Time to Thanks!](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304220) — 28 票 / 6 评论 / 2022-01-31 
+- [Holidays Finland, Norway and Sweden 2015-2019](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298243) — 28 票 / 11 评论 / 2022-01-01 
+- [Minimum linear regression (5th-place)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304369) — 27 票 / 7 评论 / 2022-02-04 
+- [TPS-12 - Competition logbook [best TPS-12 ideas to improve score] 💥](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298491) — 27 票 / 10 评论 / 2022-01-03 
+- [Forum Analysis](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304316) — 26 票 / 13 评论 / 2022-01-31 
+- [16th place - Hybrid model](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304413) — 25 票 / 9 评论 / 2022-02-01 **write-up?**
+- [Ubiquant Market Prediction Competition](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301800) — 24 票 / 10 评论 / 2022-01-19 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/297972) — 23 票 / 62 评论 / 2021-12-30 
+- [Worrying trend of Kaggle GMs taking long breaks!!](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301227) — 20 票 / 7 评论 / 2022-01-16 
+- [Book for Time Series problems](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299702) — 19 票 / 9 评论 / 2022-01-09 
+- [Leaderboard Analysis](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304397) — 19 票 / 2 评论 / 2022-02-01 
+- [A class to process time information: DateProcessor](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298202) — 19 票 / 0 评论 / 2022-01-01 
+- [Festivities in Nordic countries](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298242) — 18 票 / 1 评论 / 2022-01-01 
+- [Lessons from previous TPS using time series](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298236) — 17 票 / 1 评论 / 2022-01-01 
+- [Blending submission files .... will this competition change anything?](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304411) — 17 票 / 3 评论 / 2022-02-01 
+- [Upvotes vs Forks](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298245) — 17 票 / 8 评论 / 2022-01-01 
+- [Overfitting the public lb is sooo easy](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/302889) — 16 票 / 6 评论 / 2022-01-24 
+- [GDP per capita dataset](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/300148) — 16 票 / 8 评论 / 2022-01-11 
+- [Tensorflow Custom SMAPE Loss Function for DNN Models](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298695) — 16 票 / 1 评论 / 2022-01-04 
+- [Congratulation to Luca Massaron! ](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298266) — 16 票 / 6 评论 / 2022-01-01 
+- [[40th place] Boltzmann Ensemble: A solution from statistical thermodynamics](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304353) — 16 票 / 2 评论 / 2022-02-01 **write-up?**
+- [My submission (Not good performance, but simple models used; no feature engineering or time-series forecasting)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298773) — 16 票 / 3 评论 / 2022-01-04 
+- [Meme inspired by my bad spelling](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/300444) — 16 票 / 4 评论 / 2022-01-12 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/297973) — 15 票 / 14 评论 / 2021-12-30 
+- [[Tutorial] Transformers for Time-Series (Time2Vec)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298515) — 15 票 / 1 评论 / 2022-01-03 
+- [Congratulation for Carl McBride Ellis becoming a Notebooks Grandmaster!](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299349) — 15 票 / 13 评论 / 2022-01-07 
+- [PyTorch LSTM Weights Initialization Trick ](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298558) — 15 票 / 7 评论 / 2022-01-03 
+- [Solutions of Tabular Playground Series - Jan 2022](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304381) — 15 票 / 0 评论 / 2022-02-01 **write-up?**
+- [daysTillNextHoliday && isHoliday](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298411) — 15 票 / 0 评论 / 2022-01-02 
+- [Seed averaging](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298623) — 15 票 / 11 评论 / 2022-01-03 
+- [sMAPE (Symmetrical Mean Absolute Percentage Error) links.](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298642) — 15 票 / 4 评论 / 2022-01-03 
+- [[Dataset] GDP growth + population growth - may be a better fit](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299435) — 15 票 / 4 评论 / 2022-01-07 
+- [Speed up your kernel using Intel® Extension for Scikit-learn](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298241) — 15 票 / 0 评论 / 2022-01-01 
+- [Meme Thread](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298162) — 15 票 / 9 评论 / 2022-01-01 
+- [Why doesn't the num_sold sliding window feature of this competition work?](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298671) — 14 票 / 4 评论 / 2022-01-04 
+- [Official public holidays and unofficial days Norway, Sweden, Finland](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298990) — 14 票 / 10 评论 / 2022-01-05 
+- [Transformers in Time-Series Forecasting](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298289) — 14 票 / 2 评论 / 2022-01-02 
+- [Validation Strategies vs Public Leaderboard](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298238) — 14 票 / 4 评论 / 2022-01-01 
+- [Fourier Features (kaggle course)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301629) — 14 票 / 13 评论 / 2022-01-18 
+- [How to improve upon the linear model](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299296) — 13 票 / 10 评论 / 2022-01-07 
+- [[Beginners]How to understand error metrics (Tabular datasets)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/302195) — 13 票 / 9 评论 / 2022-01-21 
+- [Code section is not for spam … (copy paste)](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298416) — 13 票 / 14 评论 / 2022-01-02 
+- [Great to see TPS roll into 2022!](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298147) — 13 票 / 2 评论 / 2022-01-01 
+- [Finland, Norway, and Sweden: macro-economic indicators](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299666) — 12 票 / 0 评论 / 2022-01-09 
+- [Holiday for Finland, Norway and Sweden](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/300923) — 12 票 / 9 评论 / 2022-01-14 
+- [Learning from the Kaggle Time Series tutorials](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/300710) — 12 票 / 4 评论 / 2022-01-13 
+- [NEW competition on Kaggle by @abhishek - Song Popularity Prediction 💪](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301597) — 12 票 / 1 评论 / 2022-01-18 
+- [Winning Solutions of TPS - 2021](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298500) — 12 票 / 2 评论 / 2022-01-03 **write-up?**
+- [TPS FEBRUARY 2022?](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304366) — 12 票 / 10 评论 / 2022-02-01 
+- [Some good methods I use in XGBoost/LightGBM](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301309) — 11 票 / 8 评论 / 2022-01-17 
+- [Yet another "proof" about the rounding procedure](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/301674) — 11 票 / 2 评论 / 2022-01-18 
+- [Leaderboard scores can't break 4.00](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/302086) — 11 票 / 0 评论 / 2022-01-20 
+- [Best module to work with Time Series | TPS JAN 2022 ](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299949) — 11 票 / 5 评论 / 2022-01-10 
+- [Important Features for your notebook - TPSJan22](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/304048) — 11 票 / 5 评论 / 2022-01-30 
+- [Data leakage in notebooks of top-competitors](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/305266) — 11 票 / 10 评论 / 2022-02-04 
+- [About peaks in late December and early April](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298292) — 10 票 / 3 评论 / 2022-01-02 
+- [Kaggle Data Science Company | Google Trends DataSet](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/299732) — 10 票 / 10 评论 / 2022-01-09 
+- [Not getting the "blender-of-blender-of-blender..." joke](https://www.kaggle.com/competitions/tabular-playground-series-jan-2022/discussion/298708) — 10 票 / 5 评论 / 2022-01-04 

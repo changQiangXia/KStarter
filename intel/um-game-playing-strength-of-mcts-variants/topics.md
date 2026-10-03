@@ -1,0 +1,82 @@
+# um-game-playing-strength-of-mcts-variants 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549801) — 95 票 / 46 评论 / 2024-12-09 **write-up?**
+- [Sharing my insights on this competition](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/534634) — 94 票 / 16 评论 / 2024-09-17 
+- [Has Anyone Tried NN with Embeddings?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/535573) — 75 票 / 25 评论 / 2024-09-23 
+- [Best Single Model CV LB thread](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532617) — 68 票 / 127 评论 / 2024-09-07 
+- [3rd place solution - two stage flip augmentation stacking with code](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549588) — 68 票 / 27 评论 / 2024-12-03 **write-up?**
+- [Generating Additional Training Data Offline](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533088) — 59 票 / 57 评论 / 2024-09-09 
+- [Top five features and their interactions](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532837) — 58 票 / 2 评论 / 2024-09-08 
+- [5th Place Solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549585) — 56 票 / 11 评论 / 2024-12-17 **write-up?**
+- [198 Constants, 18 Nulls, ID + 4 Targets out of 812 --- 216 + 5 Features can be ignored !! [Host Conformed]](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532341) — 55 票 / 16 评论 / 2024-09-05 
+- [The 6th place solution (CV 0.39)](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549582) — 53 票 / 12 评论 / 2024-12-04 **write-up?**
+- [[7th Solution] Ensemble of Tree + NN](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549617) — 44 票 / 14 评论 / 2024-12-03 **write-up?**
+- [9th Place Solution: Various Augmentations + A lot of Modeling tricks](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549624) — 38 票 / 15 评论 / 2024-12-03 **write-up?**
+- [10th place solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549605) — 38 票 / 7 评论 / 2024-12-03 **write-up?**
+- [Fix DeepTables Save & Load Error](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/542932) — 36 票 / 19 评论 / 2024-10-27 
+- [Tfidf Features Experiment](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/546224) — 36 票 / 15 评论 / 2024-11-14 
+- [LOFO Feature Importance with LightGBM](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/534321) — 35 票 / 5 评论 / 2024-09-16 
+- [ 4th Place Solution - Wow! - Code Sharing](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549603) — 33 票 / 7 评论 / 2024-12-08 **write-up?**
+- [Target Distribution Change and Possible Explanation](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533210) — 32 票 / 15 评论 / 2024-09-10 
+- [There are different "GameRulesetNames" with same "LudRules" ! ](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/535039) — 31 票 / 0 评论 / 2024-09-19 
+- [11th place solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549708) — 30 票 / 4 评论 / 2024-12-09 **write-up?**
+- [8th place solution: a 10-day challenge](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549616) — 30 票 / 3 评论 / 2024-12-03 **write-up?**
+- [Rough estimation of the cost needed to reproduce the training data](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533218) — 28 票 / 6 评论 / 2024-09-10 
+- [2nd place solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549718) — 27 票 / 6 评论 / 2024-12-09 **write-up?**
+- [Game Concepts: The Ludii system.  GGP Research Directions. Ludeme Philosophy.](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532361) — 26 票 / 0 评论 / 2024-09-05 
+- [Reference materials](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532333) — 26 票 / 3 评论 / 2024-09-05 
+- [Games for PRIVATE LB](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/535962) — 25 票 / 5 评论 / 2024-09-25 
+- [15 Public, 30 Private - Solution Writeup (Public 0.417 Private 0.427)](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549587) — 23 票 / 4 评论 / 2024-12-03 **write-up?**
+- [Be careful with feature selection!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/534821) — 23 票 / 12 评论 / 2024-09-18 
+- [Did any team generate extra data?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/545195) — 23 票 / 7 评论 / 2024-11-08 
+- [Tabular competition?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532440) — 22 票 / 5 评论 / 2024-09-06 
+- [The Communities Newest Kaggle Master](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549581) — 22 票 / 9 评论 / 2024-12-03 
+- [silver solution Just Trust LB(LB:0.420,PB:0.428)](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549580) — 22 票 / 10 评论 / 2024-12-03 **write-up?**
+- [Which Cv Method is Best ?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532925) — 21 票 / 10 评论 / 2024-09-08 
+- [End of Competition](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549661) — 20 票 / 7 评论 / 2024-12-03 
+- [Data Augmentation Trick(222th)](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549583) — 20 票 / 5 评论 / 2024-12-03 
+- [Related Papers : Step 1 -  Literature Review](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532315) — 20 票 / 5 评论 / 2024-09-05 
+- [The New Evaluation API ](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532141) — 18 票 / 29 评论 / 2024-09-04 
+- [Inferring the churn ](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549584) — 18 票 / 2 评论 / 2024-12-03 
+- [All testset GameRulesetName are unseen in train but remove it from train will hurt LB score a lot?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/535796) — 18 票 / 15 评论 / 2024-09-24 
+- [Ludrules Viz - For better understanding game environment and rules ( to build extra features )](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532795) — 18 票 / 2 评论 / 2024-09-08 
+- [CV: GroupKFold by GameRulesetName? Game? -- [GameRulesetName as per Host paper conformed]](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532759) — 17 票 / 5 评论 / 2024-09-08 
+- [Digging into deeptables NN](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/545765) — 16 票 / 4 评论 / 2024-11-12 
+- [🐍 Python code for Monte Carlo Tree Search](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532453) — 15 票 / 5 评论 / 2024-09-06 
+- [Clarification on the data preparation procedure](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532853) — 15 票 / 6 评论 / 2024-09-08 
+- [which RMSE is better?oof_RMSE or mean_RMSE？](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533392) — 15 票 / 5 评论 / 2024-09-11 
+- [Paper: Towards a Characterisation of Monte-Carlo Tree Search Performance in Different Games [CV - GameRuleSet - Host conformed]](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532959) — 14 票 / 8 评论 / 2024-09-08 
+- [Which CV strategy align better? groupby GameRulesetName  or Game?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/545225) — 14 票 / 7 评论 / 2024-11-09 
+- [Submission Related Question!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532746) — 14 票 / 3 评论 / 2024-09-08 
+- [37th place solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/550119) — 14 票 / 2 评论 / 2024-12-05 **write-up?**
+- [Monte Carlo Tree Search Guide](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532313) — 14 票 / 3 评论 / 2024-09-05 
+- [33rd Place Solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549889) — 14 票 / 5 评论 / 2024-12-04 **write-up?**
+- [Code for extracting info from "LudRules" column ](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533879) — 14 票 / 3 评论 / 2024-09-13 
+- [My results on 8 different feature sets. ](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/536540) — 13 票 / 17 评论 / 2024-09-28 
+- [No surprise? Or rather, very surprising!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549577) — 13 票 / 2 评论 / 2024-12-03 
+- [What I learned in MCTS](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549576) — 13 票 / 5 评论 / 2024-12-03 
+- [Feature Selection for LightGBM/CatBoost](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/536775) — 13 票 / 2 评论 / 2024-09-29 
+- [What went wrong? 0.428 -> 0.437 LB](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549621) — 12 票 / 7 评论 / 2024-12-03 
+- [12 Place Solution](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/550400) — 12 票 / 6 评论 / 2024-12-07 **write-up?**
+- [13th Place Solution - XGBoost ensemble](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549781) — 11 票 / 5 评论 / 2024-12-09 **write-up?**
+- [Many low variance features? - 400 columns - variance > 1%, 211 columns - variance > 10%](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533639) — 11 票 / 2 评论 / 2024-09-12 
+- [Why CV not work, LB and PB nearly the same!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549578) — 11 票 / 9 评论 / 2024-12-03 
+- [Where is the LB:0.422 baseline?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/545754) — 11 票 / 12 评论 / 2024-11-12 
+- [Target distribution is too weird](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/541987) — 11 票 / 5 评论 / 2024-10-22 
+- [[102nd place] Rush Hour on the LB ](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549730) — 11 票 / 0 评论 / 2024-12-03 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549783) — 10 票 / 0 评论 / 2024-12-03 
+- [956 Games in Public / is any 300 Games of Ludii Library in Private? [Only few games useful - Host conformed - better to ignore]](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532359) — 10 票 / 4 评论 / 2024-09-05 
+- [My conclusion about extracting features from "LudRules" and "EnglishRules" without leakage, is it correct?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/545678) — 10 票 / 7 评论 / 2024-11-11 
+- [Thoughts on private sharing in this competition](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/548707) — 10 票 / 9 评论 / 2024-11-28 
+- [Is it possible to save test batch data for training?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/535318) — 10 票 / 5 评论 / 2024-09-21 
+- [Catboost is all your need？(CV:0.4214,LB:0.427)](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/541204) — 9 票 / 4 评论 / 2024-10-18 
+- [Analysis on the cases which all win or all lose](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/542098) — 9 票 / 1 评论 / 2024-10-23 
+- [AutoML could be a good starter here!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/533146) — 9 票 / 8 评论 / 2024-09-09 
+- [Why are there only 68 unique targets?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532953) — 9 票 / 2 评论 / 2024-09-08 
+- [Changed the random seed, LB increased by 0.007](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/535968) — 9 票 / 21 评论 / 2024-09-25 
+- [How did the top Kagglers come up with the idea of fliping augmentation?](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549728) — 9 票 / 14 评论 / 2024-12-03 
+- [Unusable statistical methods](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532743) — 9 票 / 2 评论 / 2024-09-08 
+- [Get started here!](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/524723) — 8 票 / 5 评论 / 2024-08-08 
+- [MCTS summed up in a meme](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/536371) — 8 票 / 5 评论 / 2024-09-27 
+- [When to Trust CV and When to Trust the LB？](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549586) — 8 票 / 2 评论 / 2024-12-03 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/532326) — 7 票 / 0 评论 / 2024-09-05 

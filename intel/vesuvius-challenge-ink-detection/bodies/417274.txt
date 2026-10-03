@@ -1,0 +1,349 @@
+# https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/417274
+
+Topic #417274: 6th place solution
+  Author: chumajin
+  Posted: 2023-06-15 02:29:10.846000
+  Votes: 84  Comments: 42
+
+Thank you very much for organizing such an interesting competition. I am greatly thankful to the hosts and the Kaggle staff.
+
+Continuing from the previous competition, I am delighted to have won solo gold medal again, with a total of four medals (Table 1, NLP × 2, CV × 1). Additionally, it was my first time attempting the segmentation task, and I began with @tanakar excellent notebook here. I am truly grateful for that.
+
+1. Summary
+
+My approach involved an ensemble of EfficientNet and SegFormer models. I believed that the test data was rotated shown in other discussions, so I rotated the images during inference, which resulted in a significant boost at the beginning (Public LB 0.58 → 0.74). Additionally, my originality came from incorporating IR images into the training data, which gave me a CV score increase of 0.01 and an LB score increase of 0.01. I will now explain the details below.
+
+2. Inference
+
+2.1 About test data and inference flow
+
+Based on the brief LB probing and the information provided on the competition page, I had an idea of what the test data might look like. Here is an image that represents my understanding:
+
+
+
+Therefore, I structured my inference code in the Kaggle notebook as follows:
+
+
+
+Concatenate(axis=1) fragments A and B.
+
+Rotate the image clockwise.
+
+Perform inference (original + h flip TTA).
+
+Rotate the prediction countor-clockwise back to its original position.
+
+Cut and encode each fragment A and B respectively.
+
+
+Of course, to reduce inference time, I skipped the inference for areas where the mask value was 0. Furthermore, instead of inferring fragment A and B separately, I concatenated them. This not only eliminated the 0 padding at the boundary between A and B but also allowed for continuous inference of the initial part of fragment B as a contiguous sequence. These led to a significant boost in my LB score (EfficientNet B4: 0.58 → 0.74)
+
+2.2 Threshold
+
+I believe many of you experienced the instability of the signal values. Therefore, I used the following function to rank the entire image and calculate percentiles. Then, by applying a threshold, I obtained a stable threshold value. This approach proved helpful not only during inference but also during ensemble processes. 2nd place solution also used the same way here
+
+def get_percentile(array):
+     org_shape = array.shape
+    = array.reshape(-1)
+    = np.arange(len(array))[array.argsort().argsort()]
+    =/ array.max()
+    = array.reshape(org_shape)
+    array
+
+
+For the Public LB, the optimal threshold was found to be 0.96. However, using fragment 3, I conducted a simulation to observe the correlation between the partially optimal threshold (around 10%) and the threshold for the remaining 90%. As a result, I noticed that the threshold was overfitting for the 10% portion (likely reducing noise), while for the remaining 90%, it was better to slightly lower the threshold below the optimal value (aiming for clearer extraction of text). In fact, when comparing the same model, a threshold of 0.95 performed slightly better for the private LB(but less than 0.01). For the final submission, I used different models: sub1 with a threshold of 0.96 and sub2 with a threshold of 0.95.
+
+3. Training
+
+The following is an overview of the training process. Similar to inference, I created three sets of data and took their averages. It should be noted that SegFormer differs from CNN as it can only utilize 3 channels. As mentioned earlier, incorporating IR images resulted in improvements in both CV and LB scores.
+
+3.1 CNN + Unet
+
+
+
+3.2 SegFormer
+
+
+
+3.3 Fine-tuned Parameters
+
+
+
+Stride: image size // 4
+
+Optimizer: Adam
+
+Epochs: 20
+
+Early stopping: 4
+
+Scheduler: get_cosine_schedule_with_warmup (from transformers)
+
+Warm-up: 0.1
+
+Gradient norm: 10
+
+Loss function: SoftBCEWithLogitsLoss (segmentation model in PyTorch)
+
+Training excludes areas with a mask value of 0.
+
+TTA: Horizontal flip
+
+
+3.4 Cross Validation
+
+For submission1, I used a 7kfold cross-validation, and for submission2, I used a 10kfold cross-validation. Increasing the value of k-fold resulted in improvements in both CV and LB scores. I recall that increasing from 5-fold to 7-fold led to an improvement of approximately 0.1 in the Public LB score.
+
+4 Final result
+
+Ensemble was all mean value of predictions.
+
+sub1 : th 0.96, cv 0.740, public LB 0.811570, private LB 0.661339
+
+
+
+
+model
+image size
+kfold
+cv
+public LB
+private LB
+
+
+
+
+efficientnet_b7_ns
+608
+7 + fulltrain
+0.712
+0.80
+0.64
+
+
+efficientnet_b6_ns
+544
+7 + fulltrain
+0.702
+0.79
+0.64
+
+
+efficientnetv2_l_in21ft1k
+480
+7
+0.707
+0.79
+0.65
+
+
+tf_efficientnet_b8
+672
+7
+0.716
+0.79
+0.64
+
+
+segformer b3
+1024
+7
+0.738
+0.78
+0.66
+
+
+
+
+sub2 : th 0.95,cv 0.746 , public LB 0.799563, private LB 0.654812
+
+
+
+
+model
+image size
+kfold
+cv
+public LB
+private LB
+
+
+
+
+efficientnet_b7_ns
+608
+10
+0.722
+0.80
+0.65
+
+
+efficientnet_b6_ns
+544
+10
+0.720
+0.79
+0.63
+
+
+efficientnetv2_l_in21ft1k
+480
+10
+0.717
+0.79
+0.65
+
+
+segformer b3
+1024
+7
+0.738
+0.78
+0.66
+
+
+
+
+4.1 Visualization of predictions
+
+The following images visualize the predictions of submission1.
+
+
+
+5. My understanding
+
+5.1 Not working well
+
+I tried several models such as ConvNext, Mask2Former, Swin Transformer + PSPNet, BeiT, and many others, but their effectiveness was not satisfactory for cv and lb. EfficientNet and mobilevit performed well and stable in this competition for me. I also experimented with SegFormer using various versions from b1 to b5. Although it showed good performance in cross-validation (CV), the leaderboard (LB) scores were poor and unstable. Five days before the end of the competition, when I plotted the relationship between CV and LB scores again, I noticed that larger models tended to overfit. They achieved good CV scores but had poor LB scores. After adjusting the layers used, I found that only b3 showed high LB scores, although I suspected it might be overfitting. When I used it in the ensemble, it significantly improved the LB scores, so I decided to include it. This discrepancy may be due to the limited amount of training data. I should have also tried regularization techniques such as dropout, freezing, and other strategies, but I ran out of time. Considering these options might have potentially improved the performance. 
+※ These are just my guesses.
+
+5.2 Potential Successes That Were Not Implemented
+
+Pre-training using IR images: Although it improved the CV performance, it resulted in a decline in LB scores, so it was not implemented.
+Including EMNIST (external data) in the training dataset: While it improved the CV performance, it led to a deterioration in LB scores, so it was not implemented.
+
+6. Acknowledgments
+
+I could not have achieved these results on my own. I was greatly influenced by those who I have collaborated with in the past, and I am grateful for their contributions. I would also like to express my sincere gratitude to those who have shared their knowledge and insights through previous competitions. Thank you very much.
+
+training code : https://github.com/chumajin/kaggle-VCID
+inference code : https://www.kaggle.com/code/chumajin/vcid-6th-place-inference
+
+Comments:
+├─ hengck23 (2023-06-15 11:48:59.560000) [+8]
+│  "2.1 About test data and inference flow
+│  Based on the brief LB probing and the information provided on the competition page, I had an idea of what the test data might look like. Here is an image tha...
+  ├─ hengck23 (2023-06-15 11:51:43.063000) [+5]
+  │  image from my post
+  │  https://www.kaggle.com/competitions/vesuvius-challenge-ink-detection/discussion/407972
+  │  
+  │  (you also get the number of lines and number of charcters correct)
+    ├─ Kostiantyn Maksymov (2023-06-15 12:08:38.300000) [+2]
+    │  you have just submitted an image or you made rotation during predcition?
+    ├─ hengck23 (2023-06-15 12:29:37.010000) [+2]
+    │  just submitted an image
+    ├─ chumajin (2023-06-15 13:25:09.863000) [+1]
+    │  @hengck23 Great confirmation method and result ! Thank you very much. When I saw this image in your post for the first time, I also imagined that this image could be test data !
+    ├─ hengck23 (2023-06-15 13:34:03.663000) [+3]
+    │  oh, my phd friend just tell me that you can download orginal images used in arvix pdf paper from:
+    │  
+    │  " gzipped TeX, DVI, PostScript or HTML (.gz, .dvi.gz, .ps.gz or .html.gz) file depending on submis...
+    ├─ Adrian Shedley (2023-06-15 13:55:38.810000) [+1]
+    │  wow @hengck23 What a find! I should have taken more note of the discussion about test fragments being rotated.
+├─ Ted K (2023-06-15 04:15:38.497000) [+3]
+│  Congratulations on the gold and 6th place!  And thank you for the nice writeup.
+│  
+│  We were worried about threshold calibration for different models.  We briefly considered thresholding at a specific ...
+  ├─ chumajin (2023-06-15 05:31:04.267000) [+3]
+  │  @socated Congratulations on the 1st place! I'm looking forward to hearing about your solution. Personally, I didn't have such concerns because I didn't observe such tendencies in frag1 to frag3. In...
+├─ mark0347 (2023-07-12 04:24:24.497000) [+1]
+│  Thanks for the information :)  would do me a favor.
+├─ Shareef MHS (2023-06-18 16:15:39.217000) [+1]
+│  Congrats man you are superb
+├─ Pooja Chauhan (2023-06-18 13:09:39.217000) [+1]
+│  Your approach and detailed explanation provide valuable insights into your solution. It's impressive how you utilized a combination of models and techniques to achieve your results, such as ensembl...
+├─ Ioannis M (2023-06-17 19:08:52.853000) [+1]
+│  Congrats mate! you are on fire! :)
+  ├─ chumajin (2023-06-17 20:41:10.023000) [+0]
+  │  @imeintanis Thank you my friend!!
+├─ Ori Hanegby (2023-06-17 16:26:36.330000) [+1]
+│  Congrats on another solo gold!
+  ├─ chumajin (2023-06-17 20:41:38.407000) [+0]
+  │  @ohanegby Thank you very much!!
+├─ DLvector (2023-06-17 13:53:13.640000) [+1]
+│  Percentiles - How to calculate Percentiles, Quartiles, … - YouTube
+├─ Vladimir Simões da Luz Junior (2023-06-16 19:27:32.227000) [+1]
+│  Congratulations @chumajin !
+│  
+│  Interesting how yo have concatenated fragments A and B on the test set, in order to make predictions as one continuous sequence.
+│  
+│  Keep up the great work🔥💪
+├─ Manjeet Singh Rawat (2023-06-16 19:11:09.140000) [+1]
+│  Congrats brother
+├─ Lucas (2023-06-16 08:05:20.047000) [+1]
+│  Thanks so much for the detailed write-up and congrats on your 6th place. 
+│  
+│  On the rotation of the test-set and your inference rotation back and forth trick: did you add 90degree rotations to the tr...
+  ├─ chumajin (2023-06-16 14:15:06.620000) [+1]
+  │  @lucasvw Thank you for comment ! 
+  │  
+  │  1) No, I did not intentionally include 90-degree rotations in the augmentation. I believed that it could introduce noise in this approach, as the direction of the...
+├─ Mikhail Kotyushev (2023-06-15 19:13:35.933000) [+1]
+│  Hi! Congratulations on 6th place and thank you for nice write-up! Out of curiosity, could you post  the predictions on your validation folds? That would be nice to see the visual results for differ...
+  ├─ chumajin (2023-06-16 04:25:18.380000) [+1]
+  │  @mkotyushev Thank you for comment! I added the visualization of predictions (see ## 4.1).
+├─ Arunodhayan (2023-06-15 16:15:45.440000) [+1]
+│  congrats on your 6th place
+├─ Takamichi Toda (2023-06-15 13:09:02.733000) [+1]
+│  Congratulations on 6th place and your second solo gold medal!
+│  
+│  
+│    
+│  the test data was rotated shown in other discussions
+│  
+│  
+│  It seems I missed this information.😨
+│  
+│  Moreover, I wasn't able to tackle tas...
+├─ Raja Biswas (2023-06-15 09:10:37.563000) [+1]
+│  Congratulations @chumajin 🎉🎉🎉
+├─ congwang (2023-06-15 07:19:57.233000) [+1]
+│  Congratulations, that's great
+├─ Ryosuke Horiuchi (2023-06-15 07:17:29.023000) [+1]
+│  Congratulations! The concatenation of hidden test fragments A and B is a fantastic approach! 
+│  But how do you know the bonding surface of each test fragment? Those are different from the public test...
+  ├─ chumajin (2023-06-15 13:34:25.140000) [+1]
+  │  @riow1983 Thank you for comment !! Yes. Considering that the dataset before submitting is divided into two flags and the fragments are rotated, I can imagine the image mentioned above. Additionally...
+├─ Pritom Saha (2023-06-15 06:07:52.917000) [+1]
+│  Congratulations  6th place
+│  thanks for share detail explanation @chumajin
+├─ Kyle Peters (2023-06-15 04:56:04.617000) [+1]
+│  "I found that only b3 showed high LB scores"  Was this also the case for the private lb as well?  If so, do you think this shows that the private and public lb scores were very highly correlated su...
+  ├─ chumajin (2023-06-15 05:43:20.657000) [+0]
+  │  @petersk20 I didn't anticipate it, but surprisingly, the single model of SegFormer b3 achieved the highest private LB score(0.66) among my submissions. I was not very confident in the single model ...
+├─ Pavel Orlov (2023-06-15 03:49:57.847000) [+1]
+│  Congratulations on your high place! I wonder why such sensitivity to image rotation? I thought CNN was invariant to image rotations. After all, we do not recognize characters (A, B, C) and strings ...
+  ├─ chumajin (2023-06-15 05:23:18.047000) [+1]
+  │  @sapr3s Thank you very much! This is just my opinion, but I believe that it is not so much about the rotation itself, but rather aligning the images in the same orientation as during training. The ...
+├─ tattaka (2023-06-15 02:45:08.970000) [+1]
+│  Congratulations on 6th place!
+│  We weren't able to use IR images well, so I thought it was an impressive solution.
+│  Does that mean that the IR image is put into the Training Dataset as it is and treat...
+  ├─ chumajin (2023-06-15 02:59:46.153000) [+2]
+  │  @tattaka Thank you very much! Yes, that's correct. I stacked the same image multiple times as per the number of in_channels, and I used the original labels without any modifications.
+├─ WangXuC (2023-06-15 07:47:32.690000) [+2]
+│  May I ask if I use TTA to rotate the images by 90, 180, and 270 and concatenate them with the original image, which is the same as the clockwise rotation effect you mentioned? I think these two sho...
+  ├─ hengck23 (2023-06-15 12:12:10.353000) [+3]
+  │  it depends on your precision/recall of your model.
+  │  
+  │  if you use TTA, the erros may also increase by 4x
+    ├─ WangXuC (2023-06-15 12:46:02.177000) [+2]
+    │  You make a really good point. Thank you!
+    ├─ chumajin (2023-06-15 13:30:33.270000) [+2]
+    │  @wangxuc Yes, perhaps adding rotation in aug could be effective. However, if rotation is not included, I think adding noise in TTA would be necessary.
+    ├─ WangXuC (2023-06-16 00:31:38.120000) [+2]
+    │  Thank you!, I understand.👍
+├─ chumajin (2023-06-27 08:32:07.853000) [+0]
+│  I have released the training code and inference code publicly!
+│  training code : https://github.com/chumajin/kaggle-VCID
+│  inference code(kaggle) : https://www.kaggle.com/code/chumajin/vcid-6th-place-i...

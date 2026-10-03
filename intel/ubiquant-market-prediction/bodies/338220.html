@@ -1,0 +1,91 @@
+<p>Thanks to Ubiquant and everyone involved for hosting the contest.<br>
+And all the competitors who were with us on the six-month journey worked hard.</p>
+<p>In particular, the Alphas provided by Ubiquant showed relatively stable and high correlation with the target in the ever-changing financial market.<br>
+It was a valuable and enjoyable experience to utilize such high-quality data. Thanks again.</p>
+<p>Although we were the winners, this is the result of many Kaggler's discussions and public notebooks.<br>
+Also, I think we were lucky enough that the market conditions made our model smile.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6960421%2F96b53fa87660ab5e1062798347c21529%2Fszse_in_comp_period.png?generation=1658164964908086&amp;alt=media" alt=""><br>
+Nevertheless, we want to share the process we went through to increase our chances of getting this luck.</p>
+<p>I. Summary</p>
+<blockquote>
+  <p>A. Used Models: LGBM, TABNET<br>
+  B. Feature Engineering: 300 + 100<br>
+  C. Data Sampling: (train.csv + supplemental_train.csv)[2400000:]<br>
+  D. Cross Validation for FE and Parameter Tuning: PurgedGroupTimeSeries, TimeSerieseSplit<br>
+  E. Cross Validation for Training : KFold</p>
+</blockquote>
+<p>II. Detailed description</p>
+<p>A. Used Models : LGBM, TABNET</p>
+<ol>
+<li>Sorry if you were expecting a special model, this time it's LGBM and TABNET. :D</li>
+<li>LGBM is a powerful model whose performance has been proven in many competitions. It was also the most stable (especially the consistency of CV and LB) and excellent in the experiment on the competition data. (at least for me)</li>
+<li>In addition, candidate models to be ensembled in LGBM were found and tested. Among them, TABNET was selected with the best ensemble effect while being relatively stable.</li>
+<li>Some Custom MLP models were also candidates, and there were models with a significant ensemble effect even on the LB basis, but as a result, they were excluded because they were not stable in CV.</li>
+<li>For loss_fn, rmse and mse are used, respectively, and Pearson Corr. is commonly used for eval_metric.</li>
+<li>The ensemble method : Average of (LGBM x 5 Folds) + (TABNET x 5 Folds)</li>
+</ol>
+<p>B. Feature Engineering: 300 + 100<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6960421%2F0286cd6a82565ccd3c0e62b391b0b7f7%2F300%20_2.jpg?generation=1658254344800422&amp;alt=media" alt=""></p>
+<ol>
+<li>First, to reduce or remove the influence of unnecessary features, we investigated the importance and corr. of each feature, but did not find any meaningful numerical evidence, and then conversely, we contemplated the features to be added.</li>
+<li>The above 300 means built-in features, and the added 100 features showed consistent and significant improvement in CV and LB Score (CV: 0.141 -&gt; 0.154, LB: 0.141 -&gt; 0.149 based on LGBM single model) .</li>
+<li>Although we only used 100 additional features, this was the largest compromise within the limits allowed by Kernel Resources (especially RAM), and I guess that there would be an additional score increase if more useful features were included.</li>
+<li>The added 100 is calculated in the following way.<br>
+[ The average value at each time_id for the top 100 features by obtaining and sorting the corr. of 300 features and each target ]<br>
+[ Code ]</li>
+</ol>
+<blockquote>
+  <p>features = [f'f_{i}' for i in range(300)]</p>
+  <p>corr = train_df[features[:] + ['target']].corr()['target'].reset_index()<br>
+  corr['target'] = abs(corr['target'])<br>
+  corr.sort_values('target', ascending = False, inplace = True)<br>
+  best_corr = corr.iloc[3:103, 0].to_list()</p>
+  <p>time_id_mean_features = []<br>
+  for col in tqdm(best_corr):<br>
+  &nbsp;&nbsp; mapper = train_df.groupby(['time_id'])[col].mean().to_dict()<br>
+  &nbsp;&nbsp; train_df[f'time_id_{col}'] = train_df['time_id'].map(mapper)<br>
+  &nbsp;&nbsp; train_df[f'time_id_{col}'] = train_df[f'time_id_{col}'].astype(np.float16)<br>
+  &nbsp;&nbsp; time_id_mean_features.append(f'time_id_{col}')</p>
+  <p>features += time_id_mean_features</p>
+</blockquote>
+<p>C. Data Sampling: (train.csv + supplemental_train.csv)[2400000:]</p>
+<ol>
+<li>The above means the concatenation of train.csv and supplementa_train.csv, meaning that we used the last 2400k rows of it.</li>
+<li>The reason for this sampling was related to FE of 2, of course, the added features caused a huge memory increase, and we had to trade off [more features] VS [more data].</li>
+<li>For this, various probabilistic measures were performed on Score gains on PurgedGroup and TimeSeriesSplit CV, and we finally decided that additional features have a probabilistic advantage in score improvement.</li>
+<li>After that, as a result of testing in memory (RAM 13GB), the Data Row was stable up to approximately 2500k, but in order to pursue more stability, an additional 100k was dropped. :(</li>
+</ol>
+<p>D. Cross Validation for FE and Parameter Tuning : PurgedGroupTimeSeries, TimeSerieseSplit</p>
+<ol>
+<li>As already described above, various CVs were used to measure the performance of FE, and the most effective FE was selected from all of these CVs.</li>
+<li>This course also includes Hyper Parameter Tuning.</li>
+</ol>
+<p>E. Cross Validation for Training : KFold, GroupKFold</p>
+<ol>
+<li>There was another trivial strategy for this choice, which is a self-test data set, which looks like this:<br>
+training set: (time_id &gt;= 0) and (time_id &lt;= 1000)
+test set: (time_id &gt;= 1001) and (time_id &lt;= 1202)</li>
+<li>There were various training methods, but as a result of testing in the above environment, [limited training KFold] was selected as the method that showed the most stable and excellent results.</li>
+<li>To elaborate a bit, this has the advantage of being able to include more data in a variety of ways, while at the same time risking overfitting for future references.</li>
+<li>So, to reduce the risk of overfitting, we used an early stop for validation and a method of limiting the number of training (num_boost_round or epoch) to a certain value or less.</li>
+</ol>
+<p>P.S.</p>
+<ul>
+<li>Second Submission?<br>
+I didn't mention it above, but yes, I also want to keep the second submission short.<br>
+Our second submission takes a very different direction from the above.<br>
+First, supplementa_train.csv was not included, and the above model, mlp, and catboost were included, and there were a little more about 150 features, and it was considerably overfitted with unlimited training (of course, there is an early stop for validation). However, this submission resulted in a silver medal score(0.115796). In this part, I think there was an effect from the exclusion of supplemental data or excessive CV and LB overfitting.<br>
+Then, in time series data training, I think that the method such as early stop at the time when the CV score decreases to a few percent or less is also a factor to consider, but it is only a guess.</li>
+</ul>
+<p>Many Thanks.</p>
+<p>=============================================<br>
+Answering for this guys &gt; <a href="https://www.kaggle.com/agenlu" target="_blank">@agenlu</a> <a href="https://www.kaggle.com/hdynamics" target="_blank">@hdynamics</a> <a href="https://www.kaggle.com/ygygyv" target="_blank">@ygygyv</a> <br>
+How to make a feature from test? &gt; Take the average of each feature in the test set by referring to the list of features stored in best_corr in the code above.<br>
+like this,<br>
+[Code]</p>
+<blockquote>
+  <p>for col in best_corr:<br>
+  &nbsp;&nbsp;test_df['time_id'] = test_df['row_id'].str[0:4].astype(np.int64)<br>
+  &nbsp;&nbsp;mapper = test_df.groupby(['time_id'])[col].mean().to_dict()<br>
+  &nbsp;&nbsp;test_df[f'time_id_{col}'] = test_df['time_id'].map(mapper)</p>
+</blockquote>

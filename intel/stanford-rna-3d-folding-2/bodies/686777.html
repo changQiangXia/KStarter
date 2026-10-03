@@ -1,0 +1,147 @@
+<p>` Thanks everyone for a great competition. Congrats to all the winners!</p>
+<hr>
+<h2>The Core Idea</h2>
+<p>The competition scores the best of 5 predictions, meaning diversity matters as much as accuracy. My strategy was to first generate diverse structural hypotheses cheaply using Template-Based Modeling (TBM). I then used Protenix in no-MSA, no-template mode to produce independent neural predictions. These outputs were later fed into RNAPro as templates, allowing the model to explore different regions of structure space. This cross-pollination between models turned out to be the key.</p>
+<hr>
+<h2>Pipeline Overview</h2>
+<pre><code>                         ┌──────────────────┐
+                         │    Test Seqs     │
+                         └────────┬─────────┘
+                                  │
+                  ┌───────────────┴───────────────┐
+                  │                               │
+           seq &gt; 1000 nt                   seq ≤ 1000 nt
+                  │                               │
+                  │                ┌──────────────┴──────────────┐
+                  │                ▼                             ▼
+                  │         ┌─────────────┐             ┌─────────────┐
+                  │         │     TBM     │             │   Protenix  │
+                  │         │  (fast, 5   │             │  (no TBM,   │
+                  │         │   diverse)  │             │  no MSA)    │
+                  │         └──────┬──────┘             └──────┬──────┘
+                  │                │                           │
+                  │         TBM[0..4]              Protenix[0..1] as templates
+                  │                │                           │
+                  │                └─────────────┬─────────────┘
+                  │                              ▼
+                  │                      ┌──────────────┐
+                  │                      │    RNAPro    │
+                  │                      │  (refine +   │
+                  │                      │   MSA +      │
+                  │                      │ RibonanzaNet)│
+                  │                      └──────┬───────┘
+                  │                             │
+                  └──────────────┬──────────────┘
+                                 ▼
+          ┌──────────────────────────────────────────┐
+          │              5 Predictions               │
+          ├──────────────────────────────────────────┤
+          │  P1 : RNAPro  +  TBM template [0]        │
+          │  P2 : RNAPro  +  TBM template [1]        │
+          │  P3 : RNAPro  +  Protenix template [0]   │
+          │  P4 : RNAPro  +  Protenix template [1]   │
+          │  P5 : Pure Protenix [0]  (no RNAPro)     │
+          ├──────────────────────────────────────────┤
+          │  ⚠️  seq &gt; 1000 nt → TBM × 5 (all slots) │
+          └──────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>Phase 1 — Template-Based Modeling (TBM)</h2>
+<p>This runs first and serves two roles: a standalone fallback for long sequences, and a source of structural templates for RNAPro.</p>
+<p><strong>Template search:</strong> I use BioPython's <code>PairwiseAligner</code> in global mode. The  strong gap penalties (<code>open: -8, extend: -0.4</code>) including at the terminals. </p>
+<p><strong>Coordinate transfer:</strong> Once aligned, C1' coordinates from the training structure are mapped onto the query residues directly. Gaps are filled by linear interpolation between neighboring residues, or extrapolated at the ends with a fixed 3Å step.</p>
+<p><strong>Geometry refinement:</strong> After transfer I apply <code>adaptive_rna_constraints</code> which runs within each chain segment independently (important for multi-chain targets — you don't want fake bonds across chain breaks):</p>
+<ul>
+<li>i↔i+1 bond → ~5.95 Å</li>
+<li>i↔i+2 soft angle → ~10.20 Å</li>
+<li>Laplacian smoothing to kill kinks</li>
+<li>Light steric self-avoidance for chains ≥ 25 residues</li>
+</ul>
+<p>Correction strength scales with <code>(1 - similarity)</code> — if the template is a close match, barely touch it. If it's a rough match, correct more aggressively.</p>
+<p><strong>Getting 5 diverse predictions from one template:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pred</th>
+<th>Transform</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Best template, untouched</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Mild Gaussian noise scaled by (1 − similarity)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Hinge rotation on the longest chain segment</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Independent rigid-body jitter per chain</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Smooth low-frequency wiggle via interpolated control points</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Phase 2 — Protenix</h2>
+<p>I used <a href="https://github.com/bytedance/Protenix" target="_blank">Protenix</a> (ByteDance's AlphaFold3-style model) in <strong>no-MSA, no-template</strong> mode. The goal here wasn't to get the best individual prediction — it was to get something structurally <em>different</em> from TBM that RNAPro could use as an alternative starting point.</p>
+<ul>
+<li>Applied to sequences ≤ 1000 nt (truncated to 512 for featurization)</li>
+<li>5 samples generated; first 2 are passed forward as templates</li>
+<li>C1' atoms extracted via <code>centre_atom_mask</code> with fallback to <code>atom_to_tokatom_idx</code></li>
+</ul>
+<hr>
+<h2>Phase 3 — RNAPro</h2>
+<p>This is where the cross-pollination happens. I precompute a 4-slot template file combining TBM and Protenix outputs, then run RNAPro once per slot:</p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>Template Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>TBM prediction 1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>TBM prediction 2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Protenix prediction 1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Protenix prediction 2</td>
+</tr>
+</tbody>
+</table>
+<p>RNAPro runs with MSA + RibonanzaNet2 embeddings, 10 recycling cycles, 200 diffusion steps. Each run is conditioned on a different template, so you get 4 structurally distinct refined outputs.</p>
+<p>Prediction 5 is just raw Protenix[0] — no RNAPro. I kept it because on some targets (well-studied motifs with close training analogs) the direct Protenix output was hard to beat.</p>
+<hr>
+<h2>What Actually Made the Difference</h2>
+<p><strong>Feeding Protenix outputs into RNAPro as templates.</strong> Protenix and RNAPro have genuinely different inductive biases. RNAPro conditioned on a Protenix template explores a different part of structure space than RNAPro conditioned on a TBM template. This gave predictions 3 and 4 real independence from predictions 1 and 2.</p>
+<p><strong>Not throwing away raw Protenix.</strong> Prediction 5 being unrefined saved several targets where RNAPro overcorrected.</p>
+<hr>
+<h2>What Didn't Work</h2>
+<ul>
+<li>Running Protenix with MSA — didn't help and cost time</li>
+<li>More than 2 TBM template slots in RNAPro — performance plateaued after slot 2</li>
+<li>Ensemble averaging of coordinates — worse than best-of-5 strategy for this metric</li>
+</ul>
+<hr>
+<h2>Hardware</h2>
+<ul>
+<li>GPU P100 (Kaggle)
+`</li>
+</ul>

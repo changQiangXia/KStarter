@@ -1,0 +1,84 @@
+<p>Link to full code: <a href="https://www.kaggle.com/code/jeroencottaar/geophysical-waveform-inversion-2nd-place" target="_blank">https://www.kaggle.com/code/jeroencottaar/geophysical-waveform-inversion-2nd-place</a></p>
+<p>Thanks to the organizers for a fun competition, to Kaggle for providing the infrastructure, and to <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a> for providing an excellent starting point - I probably wouldn't even have competed without it.</p>
+<h2>Introduction</h2>
+<p>How do you find out what's under your feet without digging? You give the ground a good thump, which sends seismic waves underground. These waves interact with and reflect off underground structures. By placing multiple detectors at the surface, you can pick up the reflected waves. This measurement is called a seismogram.</p>
+<p>It's fairly straightforward to model the impact on the seismogram of subsurface structures, described by a velocity profile. The challenge lies in inverting this function: how do we find the original velocity profile given a seismogram? This was the challenge posed to us in this competition.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14984949%2F862fb07e92298b675b70e3088b322f28%2FScreenshot%202025-07-03%20171603.png?generation=1751555797803926&amp;alt=media" alt=""></p>
+<h2>Outline of my solution</h2>
+<p>I start with a rough deep learning model that would score 28.8 on the competition metric (this is the model <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a> shared a few weeks ago). This is then refined using full waveform inversion (FWI) to a score of 7.6. The challenge was making this feasible in terms of convergence and computation time. The key elements of my solution:</p>
+<ul>
+<li>Carefully designed priors for various subsets of the data.</li>
+<li>Choosing and tweaking of solvers (BFGS and Gauss-Newton) per subset.</li>
+<li>Optimizing computation speed, including custom CUDA kernels for the forward model and BFGS overhead.</li>
+</ul>
+<p>Even then, my solution cost about $700 in cloud compute costs to develop and run. This is in line with other top solutions, but I'm hoping this competition is an outlier in this regard or we'll have very few competitors going for top spots soon - not to mention the environmental impact.</p>
+<h2>Details</h2>
+<p>FWI is much easier when you start close to the solution. For this I use a deep learning model. I didn't develop this myself, but use a model <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a> graciously shared earlier in the competition. I modified nothing about it (and also didn't train it myself), so if you want to know more about it, you might as well get it from him: <a href="https://www.kaggle.com/code/brendanartley/caformer-full-resolution-improved" target="_blank">https://www.kaggle.com/code/brendanartley/caformer-full-resolution-improved</a></p>
+<p>From there I perform regularized full waveform inversion. This means I'm trying to find <em>x</em> that minimizes:<br>
+$$c(x)=p(x) + ||s(x)-m||^2_2$$<br>
+Here, <em>x</em> is the velocity profile, <em>p(x)</em> is the cost function defined by the prior, <em>s(x)</em> is the seismogram that follows from <em>x</em>, and <em>m</em> is the actual measured seismogram. In words: we're trying to balance minimizing a cost function and minimizing the residual.</p>
+<p>Typical methods to achieve this are BFGS and Gauss-Newton; I won't discuss these in detail. Both of these methods require us differentiate the cost function above; the most expensive part of this is computing the gradient of the seismogram function <em>\triangledown s(x)</em>. I heavily optimized this with custom CUDA kernels; the forward pass takes 30 ms and the backward pass 70 ms on a V100 at double precision, though faster is probably possible. I also reimplemented parts of BFGS with a CUDA kernel to reduce overhead.</p>
+<p>What remains is the choice of prior <em>p(x)</em> and solving strategy, which took up the bulk of development time. Different priors are needed for the different families. I won't discuss how I classify them here; as many of you have noticed, this is a fairly easy problem.</p>
+<h5>FlatVelA and FlatVelB</h5>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14984949%2F8fc5ef9592231a41259cda052c71bae3%2FScreenshot%202025-07-03%20165936.png?generation=1751554792560180&amp;alt=media" alt=""><br>
+The solution is restricted to 1D profiles, with total variation as the cost function:<br>
+$$ p(x)=\sum_{i=1}^{69} |x_{i+1}-x_i| $$<br>
+(Actually, it's not quite the absolute value, but smoothed around 0 to remain differentiable.)</p>
+<p>I use a single BFGS pass, terminated when the cost function stops decreasing significantly. My public LB score for this one is well under 0.1.</p>
+<h5>StyleA</h5>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14984949%2F4025fbd7ae9124c93460f6bf1c0a94bc%2FScreenshot%202025-07-03%20165958.png?generation=1751554813255044&amp;alt=media" alt=""><br>
+The prior for this one is a Gaussian Process with a squared-exponential kernel, and additional terms for noise, offset, and slope. Hyperparameters were tuned on the training set using maximum likelihood estimation. There is actually no noise in StyleA, which makes the covariance matrix <em>K</em> very ill-conditioned. I resolve this by restricting the solution to the strongest 1073 modes of an SVD decomposition of <em>K</em>.</p>
+<p>The strategy is a BFGS pass, further refined by a single Gauss-Newton step. My public LB score for this one is around 3.4.</p>
+<h5>StyleB</h5>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14984949%2F872cb2fbc53d8ca3975539ae406ce082%2FScreenshot%202025-07-03%20165908.png?generation=1751554770111041&amp;alt=media" alt="XXX picture"><br>
+Here I also use a Gaussian Process, with hyperparameters different from above. This one is very noisy though - it's not very far from not being regularized at all.</p>
+<p>The strategy is a BFGS pass with 1500 iterations, followed by a second pass that is terminated based on a gradient criterion. My public LB score for StyleB is around 44.4 - I was unable to find a way to capture any of the high-frequency features.</p>
+<h5>Other datasets</h5>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F14984949%2Fef50f49c655a76f1c190ac17160647d3%2FScreenshot%202025-07-03%20165806.png?generation=1751554725245359&amp;alt=media" alt=""><br>
+These are again tackled with a total variation prior, but now in 2D, so the cost function penalizes absolute differences between a point and its neighbors.</p>
+<p>The strategy is 3 BFGS passes. For the last one, I scan for areas where the velocity profile is almost flat, and restrict these to be exactly flat. Some specific datasets with only 2 flat areas are handled differently; I won't discuss this here. My public LB score for this set, which is the bulk of the data, is 4.9.</p>
+<h2>Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Prior</th>
+<th>Strategy</th>
+<th>Public LB score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FlatVelA+B</td>
+<td>1D total variation</td>
+<td>BFGS</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>StyleA</td>
+<td>Gaussian Process, SVD restricted</td>
+<td>BFGS -&gt; GN</td>
+<td>3.4</td>
+</tr>
+<tr>
+<td>StyleB</td>
+<td>Gaussian Process</td>
+<td>2x BFGS</td>
+<td>44.4</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>2D total variation</td>
+<td>3x BFGS</td>
+<td>4.9</td>
+</tr>
+</tbody>
+</table>
+<h2>Other notes and things that didn't work</h2>
+<ul>
+<li>I tried to describe the StyleB prior using a variational auto-encoder, but didn't get it to see anything but noise.</li>
+<li>I tried various forms of preconditioning for BFGS and GN, but they never brought any benefit.</li>
+<li>My forward modeling CUDA kernels are still pretty inefficient with memory. A lot more speedup might be possible by merging the timesteps (requiring a cooperative kernel), and managing caches cleverly.</li>
+<li>I didn't try to improve the original deep learning model; I was surprised this could achieve 28.8, and didn't think a significant improvement would be possible…</li>
+<li>The forward modeling involves taking the minimum of the velocity map - problematic, because this is not differentiable. I solved this by adding the minimum velocity as an additional degree of freedom (so decoupling it from the velocity profile entirely). It is never penalized in the prior.</li>
+</ul>

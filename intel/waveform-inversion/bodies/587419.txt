@@ -1,0 +1,197 @@
+# https://www.kaggle.com/competitions/waveform-inversion/discussion/587419
+
+Topic #587419: 3rd place solution
+  Author: tascj
+  Posted: 2025-07-01 02:24:27.126000
+  Votes: 60  Comments: 15
+
+Thank you kaggle and the host team for hosting this competition. Congratulations to the winners!
+
+My solution leverages synthetic data generation and Vision Transformer for modeling. Requiring lots of storage and compute resources.
+I used more than 13TB of storage and ~5.5 days of A100 SXM 80G x4.
+
+Forward Modeling
+
+I started with this implementation by @manatoyo (developed with the help of Google's Gemini). And made the following changes:
+
+
+
+Change dtype from float64 to float32. This reduced errors a bit. Matlab uses float64 by default, and Gemini knows that. However, OpenFWI seems to be created using a float32 implementation.
+
+Generate 6 channels isx=[120, 137, 154, 155, 172, 189] to enable fast hflip augmentation.
+
+Port to PyTorch and enable batch execution on GPU.
+
+
+For some vel types, there are large errors in the last row of seismic data between OpenFWI data and generated data, so I zeroed the last row of all data during training.
+
+OpenFWI is not fully open. Their code may have some minor bugs, and if there are serious bugs in their forward modeling code, there may be little we can do about it. Fortunately, the issues don't seem significant at the moment.
+
+Generating data
+
+I generated the following data for training:
+
+
+
+6ch version of Full OpenFWI data.
+
+random blending (alpha in [0.3, 0.7]) of two vels from same fold, same vel-type. repeated 8 times with different seeds.
+
+random blending (alpha in [0.3, 0.7]) of two vels from same fold, not restricted to same vel-type. repeated 8 times with different seeds.
+
+
+In my short training runs, generating more data consistently leads to performance improvements.
+
+Modeling
+
+I started with ViT with RoPE (eva02_base_patch16_clip_224) for this task.
+
+
+
+I first re-aranged the input from (N, 5, 1000, 70) to (N, 5, 250, 280), then interpolated it to (N, 5, patch_size * 18, patch_size * 18).
+
+The input is then fed to the ViT model, predicted 16-dim outputs, then pixel-shuffled to (N, 1, 72, 72) and cropped to (N, 1, 70, 70).
+
+The logits are transformed to target by logits.sigmoid() * 6000.
+
+
+Then I split ViT layers:
+
+
+
+First 1/3 layers for intra-channel feature interaction.
+
+Average pool 5 channels to 1 channel.
+
+Last 2/3 layers for further feature interaction.
+
+
+Optimizer
+
+I started with a short CurveFault_A only training run. Switching from AdamW to MuonWithAuxAdam was a big improvement (9.x -&gt; 7.x). I adapted the implementation from KellerJordan/Muon and followed the practices from MoonshotAI/Moonlight. Muon was used for weights of all Linear layers except patch embedding, for other parameters AdamW was used.
+
+I haven't achieved significant performance improvements with optimizers other than SGD and Adam for many years, so this was a surprise for me, perhaps the biggest takeaway from this competition. The only drawback is that Muon's overhead becomes non-negligible when using small batch sizes.
+
+Submission
+
+The final model was eva02_large_patch14_clip_224 trained in 3 stages.
+
+Stage 1
+
+
+
+HFlip augmentation.
+
+Input resized to (14 * 18, 14 * 18), 4x output upsampling.
+
+10 epochs on original data and generated data
+
+50% constant learning rate + 50% cosine decay learning rate
+
+
+MAE on 20% validation data: 8.1
+
+Stage 2
+
+
+
+Resume from stage 1
+
+HFlip augmentation.
+
+Input resized to (14 * 35, 14 * 35), 2x output upsampling.
+
+1 epochs on original data and generated data
+
+50% constant learning rate + 50% cosine decay learning rate
+
+
+MAE on 20% validation data: 7.6
+
+Stage 3
+
+
+
+Resume from stage 2
+
+HFlip augmentation.
+
+Input resized to (14 * 35, 14 * 35), 2x output upsampling.
+
+1 epochs on validation data
+
+cosine decay learning rate
+
+
+More synthetic data and more epochs could further improve the performance, this was the best I could finish with my GPU hours.
+
+Submission was a 20%+30%+50% blending of models from 3 stages. With x.clip(1500, 4500).round().
+
+Update
+I made a mistake in the inference script by not zeroing the last row, which is inconsistent with training. After fixing the bug, the score is (Public 7.96, Private 7.99).
+Fortunately, it doesn't affect the ranking.
+
+Code
+
+Submitted file
+Inference notebook
+Training code
+
+Comments:
+├─ Jeroen Cottaar (2025-07-01 05:51:51.667000) [+2]
+│  Congratulations on your third place.
+│  
+│  If I understand correctly, your method can efficiently infer new test data, right? In other words, your computationally intensive training step does not use th...
+  ├─ tascj (2025-07-01 06:17:44.140000) [+2]
+  │  Yes. I did not use the test data for training.
+  │  
+  │  I started this competition downloading the full OpenFWI dataset and initially did not download the Kaggle data. I didn’t realize this is a CSV compet...
+├─ greySnow (2025-07-01 06:29:41.237000) [+0]
+│  Congratz. I followed the same path i.e. just training a large vit variation on lot of generated data without using the test data. You said 'By that time, my final training job was already scheduled...
+  ├─ tascj (2025-07-01 07:15:03.720000) [+3]
+  │  I started preparing submission after stage 2 started.
+  │  
+  │  I used A100 SXM 80G x4.
+  │  
+  │  
+  │  
+  │  Data generation: ~25 hours
+  │  
+  │  Stage 1: ~74 hours
+  │  
+  │  Stage 2: ~26 hours
+  │  
+  │  Stage 3: ~6.5 hours
+  │  
+  │  
+  │  So the full pipeline took...
+├─ Darragh (2025-07-01 06:23:13.057000) [+0]
+│  Nice work, great improvement with the optimiser. I like the simplicity of the EVA head then pixel-shuffled to (N, 1, 72, 72).
+├─ Focus (2025-07-01 03:04:30.480000) [+0]
+│  Congratulations!
+│  
+│  I asked same question to another winner: What is your technique to prevent overfit in this one competition? 
+│  
+│  Thank for reply.
+  ├─ tascj (2025-07-01 04:26:47.797000) [+3]
+  │  In this competition, you can generate a large amount of data. For me, train with more data is the key to prevent overfitting.
+  │  
+  │  However, don’t underestimate the impact of underfitting — you need a m...
+    ├─ Focus (2025-07-01 04:59:13.933000) [+0]
+    │  Yes, i was struggling with both overfit and underfit.
+    │  I am looking forward to your code solution (hopefully in  Kaggle notebook 😀)
+    ├─ tascj (2025-07-02 05:29:45.713000) [+2]
+    │  Inference code&amp;checkpoints, training code are available now.
+    ├─ Jeroen Cottaar (2025-07-02 05:34:06.820000) [+0]
+    │  Could you also share the notebook that runs the full test set and writes submission.csv (if you did this on Kaggle that is)?
+    ├─ tascj (2025-07-02 06:36:46.533000) [+0]
+    │  I made predictions locally. Command shared on GitHub.
+    │  Uploaded the submitted file here.
+    ├─ Jeroen Cottaar (2025-07-02 14:54:50.610000) [+0]
+    │  Thanks. What I was mainly curious about: how long does inferring the full test set take? (This being 1000s of GPU hours for most solutions, but not yours I think).
+    ├─ tascj (2025-07-03 23:14:06.657000) [+0]
+    │  Inferring the full test set using stage2 model took 30+mins using single A100. Less than 90 mins to make the submission.
+├─ I2nfinit3y (2025-07-01 03:02:29.570000) [+0]
+│  I have tried MuonWithAuxAdam in early experiments, but it will output NaN in training loop and I have to give it up. Looking forward to code!
+├─ zhudong1949 (2025-07-01 02:51:38.353000) [+0]
+│  Congratulations, looking forward to your MuonWithAuxAdam.

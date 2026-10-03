@@ -1,0 +1,290 @@
+# https://www.kaggle.com/competitions/ubiquant-market-prediction/discussion/338220
+
+Topic #338220: [1st Place Solution] - Our Betting Strategy
+  Author: yuuniee
+  Posted: 2022-07-19 18:18:55.472000
+  Votes: 198  Comments: 58
+
+Thanks to Ubiquant and everyone involved for hosting the contest.
+And all the competitors who were with us on the six-month journey worked hard.
+
+In particular, the Alphas provided by Ubiquant showed relatively stable and high correlation with the target in the ever-changing financial market.
+It was a valuable and enjoyable experience to utilize such high-quality data. Thanks again.
+
+Although we were the winners, this is the result of many Kaggler's discussions and public notebooks.
+Also, I think we were lucky enough that the market conditions made our model smile.
+
+Nevertheless, we want to share the process we went through to increase our chances of getting this luck.
+
+I. Summary
+
+
+  
+A. Used Models: LGBM, TABNET
+  B. Feature Engineering: 300 + 100
+  C. Data Sampling: (train.csv + supplemental_train.csv)[2400000:]
+  D. Cross Validation for FE and Parameter Tuning: PurgedGroupTimeSeries, TimeSerieseSplit
+  E. Cross Validation for Training : KFold
+
+
+II. Detailed description
+
+A. Used Models : LGBM, TABNET
+
+
+
+Sorry if you were expecting a special model, this time it's LGBM and TABNET. :D
+
+LGBM is a powerful model whose performance has been proven in many competitions. It was also the most stable (especially the consistency of CV and LB) and excellent in the experiment on the competition data. (at least for me)
+
+In addition, candidate models to be ensembled in LGBM were found and tested. Among them, TABNET was selected with the best ensemble effect while being relatively stable.
+
+Some Custom MLP models were also candidates, and there were models with a significant ensemble effect even on the LB basis, but as a result, they were excluded because they were not stable in CV.
+
+For loss_fn, rmse and mse are used, respectively, and Pearson Corr. is commonly used for eval_metric.
+
+The ensemble method : Average of (LGBM x 5 Folds) + (TABNET x 5 Folds)
+
+
+B. Feature Engineering: 300 + 100
+
+
+
+
+First, to reduce or remove the influence of unnecessary features, we investigated the importance and corr. of each feature, but did not find any meaningful numerical evidence, and then conversely, we contemplated the features to be added.
+
+The above 300 means built-in features, and the added 100 features showed consistent and significant improvement in CV and LB Score (CV: 0.141 -&gt; 0.154, LB: 0.141 -&gt; 0.149 based on LGBM single model) .
+
+Although we only used 100 additional features, this was the largest compromise within the limits allowed by Kernel Resources (especially RAM), and I guess that there would be an additional score increase if more useful features were included.
+
+The added 100 is calculated in the following way.
+[ The average value at each time_id for the top 100 features by obtaining and sorting the corr. of 300 features and each target ]
+[ Code ]
+
+
+
+  
+features = [f'f_{i}' for i in range(300)]
+  
+corr = train_df[features[:] + ['target']].corr()['target'].reset_index()
+  corr['target'] = abs(corr['target'])
+  corr.sort_values('target', ascending = False, inplace = True)
+  best_corr = corr.iloc[3:103, 0].to_list()
+  
+time_id_mean_features = []
+  for col in tqdm(best_corr):
+  &nbsp;&nbsp; mapper = train_df.groupby(['time_id'])[col].mean().to_dict()
+  &nbsp;&nbsp; train_df[f'time_id_{col}'] = train_df['time_id'].map(mapper)
+  &nbsp;&nbsp; train_df[f'time_id_{col}'] = train_df[f'time_id_{col}'].astype(np.float16)
+  &nbsp;&nbsp; time_id_mean_features.append(f'time_id_{col}')
+  
+features += time_id_mean_features
+
+
+C. Data Sampling: (train.csv + supplemental_train.csv)[2400000:]
+
+
+
+The above means the concatenation of train.csv and supplementa_train.csv, meaning that we used the last 2400k rows of it.
+
+The reason for this sampling was related to FE of 2, of course, the added features caused a huge memory increase, and we had to trade off [more features] VS [more data].
+
+For this, various probabilistic measures were performed on Score gains on PurgedGroup and TimeSeriesSplit CV, and we finally decided that additional features have a probabilistic advantage in score improvement.
+
+After that, as a result of testing in memory (RAM 13GB), the Data Row was stable up to approximately 2500k, but in order to pursue more stability, an additional 100k was dropped. :(
+
+
+D. Cross Validation for FE and Parameter Tuning : PurgedGroupTimeSeries, TimeSerieseSplit
+
+
+
+As already described above, various CVs were used to measure the performance of FE, and the most effective FE was selected from all of these CVs.
+
+This course also includes Hyper Parameter Tuning.
+
+
+E. Cross Validation for Training : KFold, GroupKFold
+
+
+
+There was another trivial strategy for this choice, which is a self-test data set, which looks like this:
+training set: (time_id &gt;= 0) and (time_id &lt;= 1000)
+test set: (time_id &gt;= 1001) and (time_id &lt;= 1202)
+
+There were various training methods, but as a result of testing in the above environment, [limited training KFold] was selected as the method that showed the most stable and excellent results.
+
+To elaborate a bit, this has the advantage of being able to include more data in a variety of ways, while at the same time risking overfitting for future references.
+
+So, to reduce the risk of overfitting, we used an early stop for validation and a method of limiting the number of training (num_boost_round or epoch) to a certain value or less.
+
+
+P.S.
+
+
+
+Second Submission?
+I didn't mention it above, but yes, I also want to keep the second submission short.
+Our second submission takes a very different direction from the above.
+First, supplementa_train.csv was not included, and the above model, mlp, and catboost were included, and there were a little more about 150 features, and it was considerably overfitted with unlimited training (of course, there is an early stop for validation). However, this submission resulted in a silver medal score(0.115796). In this part, I think there was an effect from the exclusion of supplemental data or excessive CV and LB overfitting.
+Then, in time series data training, I think that the method such as early stop at the time when the CV score decreases to a few percent or less is also a factor to consider, but it is only a guess.
+
+
+Many Thanks.
+
+=============================================
+Answering for this guys &gt; @agenlu @hdynamics @ygygyv 
+How to make a feature from test? &gt; Take the average of each feature in the test set by referring to the list of features stored in best_corr in the code above.
+like this,
+[Code]
+
+
+  
+for col in best_corr:
+  &nbsp;&nbsp;test_df['time_id'] = test_df['row_id'].str[0:4].astype(np.int64)
+  &nbsp;&nbsp;mapper = test_df.groupby(['time_id'])[col].mean().to_dict()
+  &nbsp;&nbsp;test_df[f'time_id_{col}'] = test_df['time_id'].map(mapper)
+
+Comments:
+├─ mavillan (2022-07-19 18:59:48.017000) [+5]
+│  Congrats for the great work you did! Your model was in 1st place in all the last updates, so no luck here just robust modeling. 
+│  
+│  I have one question for you, how did you blend the predictions of l...
+  ├─ yuuniee (2022-07-20 00:31:17.020000) [+3]
+  │  Thanks. I have added the content of what you said to the post.
+  │  The answer is Average of (LGBM x 5 Folds) + (TABNET x 5 Folds).
+├─ Mengfei Li (2022-07-19 18:38:53.937000) [+4]
+│  It's amazing that GBDT and TABNET beat NN on purely numerical data, and you bravely dropped some features. It seems that in the competitions of stock market predictions, use of neural networks shou...
+  ├─ sirlancelot93 (2022-07-21 09:55:41.923000) [+0]
+  │  Is this fact not to be expected though? All the NNs based results in this competition did not look robust at all
+  ├─ Mengfei Li (2022-07-21 10:10:09.413000) [+1]
+  │  I am not sure about this, is NN is worse than LGB or NN is just less stable than LGB in general stocking market prediction or for the specifically segemented trainning and test data in this compete...
+  ├─ sirlancelot93 (2022-07-21 10:57:18.800000) [+1]
+  │  I agree, it's hard to say whether NNs were definitely worse than LGB in this competition. And as you say, there seems to be a good mix of NN-based models and LGB in the top solutions.
+  │  
+  │  To be fair, ...
+  ├─ Mengfei Li (2022-07-21 11:06:42.577000) [+0]
+  │  This may be because the scoring criterion is pearson correlation coefficient rather than mse.
+  ├─ Daisy (2022-07-21 15:26:13.320000) [+1]
+  │  Did you see movements of the feature plots each time_id? The criteria 0 seems to be also moved slightly. Therefore NNs get the noises and then overfitted 0.16 score in public LB. GBDT cannot be ove...
+├─ Bella Pisani (2022-07-27 14:10:33.857000) [+1]
+│  Thank you for sharing. It's always helpful when the first place team shares their solution. And congratulations!
+├─ Stirkoff (2022-07-26 11:38:27.013000) [+1]
+│  Both first and nice notebook. cool!
+├─ ShroukAli (2022-07-25 20:19:43.170000) [+1]
+│  Nice Sharing
+├─ Danny Sanchez Sanchez (2022-07-24 02:47:06.417000) [+1]
+│  thank you so much for sharing this work!
+├─ Asghar Ali Khan (2022-07-22 13:26:38.543000) [+1]
+│  nice sharing, particularly graph explain all the things very clearly
+├─ kimimgo (2022-07-20 07:54:43.353000) [+1]
+│  Best work!
+│  It was an honor to be with you @yuuniekiri
+├─ xiaoyaojiushao (2022-07-20 02:10:15.530000) [+1]
+│  The added feature seems to be a whole market trend of one day. In fact, the market really usually go together. Good idea, thanks for sharing👍
+├─ ygygyv (2022-07-20 01:48:56.263000) [+1]
+│  Congrats! I have a question, the added 100 features are the highest correlation with target at each time id. But how do you deal with test data which don't have target? Thanks!
+  ├─ yuuniee (2022-07-20 03:30:46.150000) [+1]
+  │  Take the average of each feature in the test set by referring to the list of features stored in best_corr in the code above.
+├─ SIROHAN2 (2022-07-25 07:29:18.920000) [+2]
+│  nice sharing
+├─ Optimo (2022-07-20 07:42:55.153000) [+2]
+│  Hi, congratulations on the 1st place!
+│  
+│  Did you use pytorch-tabnet library?
+│  Could you share the hyper-parameters you ended up with for tabnet please?
+├─ agenlu (2022-07-20 06:20:47.247000) [+2]
+│  @yuuniee, How do you calculate the added 100 on the test?
+│  
+│  Do you have the targets of the test set?
+│  
+│  I suppose I am missing something.
+├─ Daisy (2022-07-20 04:00:10.413000) [+2]
+│  You're great! Congratulations!  I think that the following way is different from others. Is this a general way for regression models in complex tables segmented by group like time_id although I kno...
+  ├─ yuuniee (2022-07-20 05:40:13.220000) [+1]
+  │  This is just intuition. 
+  │  However, in this case, I think that it will be possible to create a new feature by examining the correlation between each target and feature between different investment_id...
+  ├─ Daisy (2022-07-20 10:26:01.363000) [+0]
+  │  You have a good intuition! I think it is the most effective features in this table. I am convinced about it at the present.  By the way, how did you make 100 features in test data? We could have ob...
+├─ Dezheng Huang (2022-07-24 13:15:09.040000) [+0]
+│  nice sharing!
+├─ hyd (2022-07-20 01:10:33.717000) [+0]
+│  Congrats! Very impressive.👍
+├─ [deleted] (2025-12-09 19:41:53.420000) [+0]
+│  `
+│  
+│  
+│  
+│  
+│      🎾 Presenting TennisMatrix Data to the Kaggle Community
+│    
+│  
+│  
+│      We at TennisMatrix Data are proud to officially introduce ourselves to the Kaggle community.
+│    
+│  
+│  
+│      For anyone working in...
+├─ chuxiliyixiaosa (2023-05-15 14:07:04.790000) [+0]
+│  How to effectively reduce differences in the distribution of training and testing sets when using historical data to predict the future
+├─ gianni (2023-04-29 17:44:38.920000) [+0]
+│  is the competition data available somewhere?
+├─ Fei Teng zju (2022-10-24 09:32:05.157000) [+0]
+│  limited training KFold, could you describe more about this? Does it means "select serveral timezones to train models" ?
+├─ Oriol Palau (2022-10-11 22:32:27.607000) [+0]
+│  Congratulations for the success and thanks for shaing this post!
+├─ [deleted] (2023-01-11 10:45:31.107000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-24 09:30:32.990000) [+0]
+│  [deleted]
+├─ pa920072 (2022-07-28 12:36:09.400000) [+1]
+│  thanks for sharing
+├─ Agung Hartono (2022-07-28 01:03:05.240000) [+1]
+│  Thank you for sharing👍
+├─ Qian Jia97 (2022-07-27 04:30:19.243000) [+1]
+│  thanks for sharing👍
+├─ Leo93 (2022-07-26 16:41:16.407000) [+1]
+│  Thank you for sharing !
+├─ Aswin181931 (2022-07-26 03:34:29.470000) [+1]
+│  thanks for sharing…
+├─ Kowshik D (2022-07-26 02:27:15.983000) [+1]
+│  thanks for sharing👍
+├─ [deleted] (2022-07-26 01:26:27.067000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-25 13:55:32.430000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-24 19:55:38.500000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-24 16:44:36.627000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-24 05:37:25.657000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-22 08:30:58.967000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-21 23:47:41) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-20 16:59:35.400000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-20 10:35:55.127000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-20 08:41:01.600000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-20 04:05:16.583000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-20 03:47:04.810000) [+1]
+│  [deleted]
+├─ [deleted] (2022-07-25 07:44:37.717000) [+2]
+│  [deleted]
+├─ [deleted] (2022-07-24 09:08:24.567000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-24 06:27:49.120000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-23 07:33:13.943000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-21 19:31:44.757000) [+0]
+│  [deleted]
+├─ [deleted] (2022-07-20 17:50:30.173000) [+0]
+│  [deleted]
+├─ [deleted] (2023-05-26 17:16:08.517000) [+0]
+│  [deleted]
+├─ [deleted] (2023-01-12 06:19:43.217000) [+0]
+│  [deleted]

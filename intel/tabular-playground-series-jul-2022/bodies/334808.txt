@@ -1,0 +1,103 @@
+# https://www.kaggle.com/competitions/tabular-playground-series-jul-2022/discussion/334808
+
+Topic #334808: Visualizing the seven clusters
+  Author: AmbrosM
+  Posted: 2022-07-03 08:27:10.062000
+  Votes: 73  Comments: 14
+
+@cabaxiom and @hiro5299834 have shown how to fit a Gaussian mixture model with seven clusters to the data. What can we learn from these clusterings?
+
+PCA projection
+
+We can project the data to its first two PCA dimensions and color the clusters. The plot shows that indeed there are seven distinguishable clusters, but it doesn't show much more:
+
+# p is the pca output, y is the clustering output
+for i in range(n_clusters):
+    plt.scatter(p[:,0][y == i], p[:,1][y == i], s=1, label=f"Cluster {i}")
+
+
+
+
+By the way, the pink cluster is rendered last; that's why it looks like it were in front of all other clusters.
+
+Integer features
+
+We can plot cluster-wise histograms of each of the seven integer features. These histograms show that
+
+
+
+All seven int features help to distinguish the clusters
+
+The distributions are not Gaussian. Certainly a Poisson mixture model would give better clusters, but unfortunately scikit-learn knows only Gaussian mixture models. Who is capable of programming a Poisson mixture model?
+
+
+# data is the unscaled data, y is the clustering output
+fig, axs = plt.subplots(4, 2, figsize=(16, 14))
+axs = axs.ravel()
+int_columns = [col for col in data.columns if data[col].dtype == 'int']
+for ax, f in zip(axs, int_columns):
+    for i in range(n_clusters):
+        uv, uc = np.unique(data[f][y == i], return_counts=True)
+        ax.plot(uv, uc)
+    ax.set_title(f)
+
+
+
+
+Float features
+
+We can plot cluster-wise histograms of each of the 22 float features. These histograms show that the float features f_00 through f_21 do not help to distinguish the clusters: All clusters have mean 0 and standard deviation 1. We can (or even should?) drop these features from the data. Only the last seven features, f_22 through f_28, are useful.
+
+
+
+Other 2d projections
+
+We don't need a PCA to project to two dimensions: The data can be projected to any two features. I'll show only one example: The following diagram shows that the blue cluster has a strange shape when it is projected to f_24 and f_25. Does the strange shape mean that the blue cluster shouldn't be a cluster at all? Do we need more than seven clusters? These diagrams have the potential for more discoveries!
+
+
+
+Cluster centers
+
+We can look at the data from a completely other angle. The following diagram shows the seven cluster centers for every feature. We see again that for f_00 through f_06 and f_14 through f_21 all clusters have mean 0 and cannot be distinguished. The diagram shows as well that for f_09, the blue cluster has the smallest mean and the red cluster the largest mean - this matches what can be seen in the f_09 histogram above.
+
+# gm is the GaussianMixture model, scaled is the scaled input data
+for i in range(gm.means_.shape[0]):
+    plt.scatter(np.arange(scaled.shape[1]), gm.means_[i])
+plt.xticks(ticks=np.arange(scaled.shape[1]), labels=scaled.columns)
+
+
+
+
+Source code for the analysis and diagrams is here.
+
+Comments:
+├─ broccoli beef (2022-07-04 00:40:22.130000) [+7]
+│  Certainly the features f_22 to f_29 look different from the rest of the floating point features from the outset in that they have different means and variances; the rest look like all independent \...
+  ├─ AmbrosM (2022-07-04 05:55:09.473000) [+1]
+  │  @siukeitin Thank you for showing the ANOVA test! I didn't realize that we can apply it here.
+  ├─ broccoli beef (2022-07-04 07:59:31.253000) [+3]
+  │  It's a quick test for dependence between a discrete feature and a continuous feature especially when the continuous feature is normally distributed. The results suggest that modeling the conditiona...
+  ├─ mmojz642 (2022-07-09 22:05:57.267000) [+0]
+  │  This is really interesting! But it's not clear to me how these results translate to an action? So the ANOVA is saying, for example, that the mean of f_05 in each of the f_07 groups is not different...
+  ├─ broccoli beef (2022-07-09 22:46:28.060000) [+0]
+  │  @mmojz642 An obvious approach is a generative modeling of the joint probability distribution \(p(f_{00},\ldots,f_{28})\). This is not easy if you go for the most general model (which would be some ...
+  ├─ mmojz642 (2022-07-09 23:24:37.240000) [+0]
+  │  Thanks for the comments! Generative models is what I need to read about more, so that definitely helped point me in a direction. Thanks!
+├─ grayjay (2022-07-04 00:06:54.993000) [+4]
+│  The sly and clever Inversion is said to be master of this dungeon. You know the drill: We must tread very, very carefully.
+│  
+│  Those feature plots that all look the same sure look uninformative, and c...
+  ├─ AmbrosM (2022-07-04 05:26:53.197000) [+4]
+  │  Feature engineering or feature selection, that is the question…
+├─ Souparna Bose (2022-07-04 16:55:34.457000) [+1]
+│  Nice visualization info, thanks for contributing. Upvoted @ambrosm
+├─ Sakshi Jha (2022-07-03 15:40:14.817000) [+1]
+│  Thanks @ambrosm , for this type of visualization. It's very great post like it👍
+├─ Making TARS (2022-07-04 01:29:54.533000) [+2]
+│  Thank you for sharing and teaching @ambrosm
+├─ [deleted] (2022-07-08 20:16:47.400000) [+2]
+│  [deleted]
+├─ [deleted] (2022-07-03 17:07:09.453000) [+1]
+│  [deleted]
+├─ Hugo (2022-07-16 15:08:05.247000) [+1]
+│  Thank you. It is very helpful. @ambrosm

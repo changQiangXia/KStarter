@@ -1,0 +1,121 @@
+# https://www.kaggle.com/competitions/um-game-playing-strength-of-mcts-variants/discussion/549588
+
+Topic #549588: 3rd place solution - two stage flip augmentation stacking with code
+  Author: senkin13
+  Posted: 2024-12-03 01:32:44.674000
+  Votes: 68  Comments: 27
+
+Thanks to UM organizers and kaggle team giving us such a interesting competition.This competition has no leak,stable cv-lb correlation,and lots of possibilities to improve, I really enjoyed exploring the accuracy boundaries of infinite possibilities.
+
+Overview
+
+I think the key point is data augmentation and creating a stable cv lb pipeline(lb is more important), the private leaderboard has almost no shake show us public and private dataset should be the same distribution.
+
+
+
+Data Augmentation
+
+filp the agent1-agent2 pair to agent2-agent1,change the AdvantageP1 to 1-AdvantageP1,change utility_agent1 to -utility_agent1,others keep same.
+
+Cross Validation
+
+StratifiedGroupKFold by GameRulesetName, modify minor class of utility_agent1 to neighbour class.
+
+Feature Engingeering
+
+I add some features from this great notebook https://www.kaggle.com/code/yunsuxiaozi/mcts-starter
+And I also add tfidf-svd features of EnglishRules,this feature need to find the better parameter of max_features,I tried many times by lb score.
+
+Feature Selection
+
+I like use null importance feature selection to drop those features will change too much if target shift
+
+Hyper-parameter tuning
+
+I use optuna to search best hyper-parameters for lightgbm and catboost
+
+Models
+
+I use two stage modeling,the first stage is using flip augmentation data as train data to predict original train data and test data,then generate oof predictions as the second stage's feature.
+
+Ensemble
+
+My final submission is blending lightgbm and catboost with 3 seeds average ensemble.
+
+Post processing
+
+The final prediction mean values are lower than original mean values, same with public lb, so I multiply coefficients(1.12) can improve lb score of 0.002.
+
+Not work
+
+LudRules tfidf, bert embeddings,pseudo label with more agent1-agent2-games groups,neural network
+
+Notebook
+
+https://www.kaggle.com/code/senkin13/um-final-sub-1
+
+Comments:
+├─ Carlos Henrique C. Matos (2024-12-05 13:01:24.940000) [+1]
+│  Thanks for sharing, somethimes not hard tips like data augmentations help a lot, its like balance dataset some simple thinks and improve a lot the results. Congratulations for the result.
+├─ yinghao lu (2024-12-04 01:19:33.693000) [+1]
+│  Congratulations!!!!!!!
+│   Thanks for sharing!!!
+├─ Robert Hatch (2024-12-03 18:14:06.363000) [+1]
+│  I'll start a post, but… "stable cv-lb correlation"?!!
+│  
+│  I can't think of a competition I've done with less stable correlation. Nor with less stable with itself (CV1 vs CV2). Clearly some people didn...
+  ├─ senkin13 (2024-12-04 03:23:19.987000) [+0]
+  │  maybe that's because I was focus on last two weeks,I found data augmentation is very soild solution, use some useful features already  other notebooks shared, and I didn't submit too many,that make...
+├─ YaGana Sheriff-Hussaini (2024-12-03 15:27:09.443000) [+1]
+│  Congratulations @senkin13! I like your solution and thanks for sharing.
+├─ Andreas Bisiadis (2024-12-03 15:01:46.290000) [+1]
+│  @senkin13 Congrats for your success in this competition!
+│  
+│  
+│    
+│  I use two stage modeling,the first stage is using flip augmentation data as train data to predict original train data and test data,the...
+  ├─ senkin13 (2024-12-03 15:09:11.357000) [+1]
+  │  correct,out-of-fold predictions as feature for the second-stage training
+    ├─ mavillan (2024-12-03 22:32:44.960000) [+0]
+    │  Hi @senkin13 another related question: did you use any tricks to make stacking work? Like nested cross-validation or something?
+    ├─ senkin13 (2024-12-04 03:18:53.473000) [+1]
+    │  just use StratifiedGroupKFold by GameRulesetName at stage1 too
+├─ Saurabh Saket1 (2024-12-03 14:41:59.873000) [+1]
+│  Congratulations and Thanks for sharing!!!
+├─ Noussair Mighri (2024-12-03 12:09:22.513000) [+1]
+│  Thank you for sharing and congrats. Tackling overfitting is a major key for this challenges. Models are same for all participants but Data Augmentation  enhance the results of top winners.
+├─ Haru (2024-12-03 11:27:26.357000) [+1]
+│  Confratulations!
+│  Flip Augmentations… 
+│  So cool Idea…
+├─ stefanoclss (2024-12-03 10:53:47.907000) [+1]
+│  Congratulations, we tried the 2nd stage as well with multi-seeded catboost and lightgbm. Amazed you made this work :)
+├─ Sinan Calisir (2024-12-03 08:31:38.747000) [+1]
+│  Thank you for sharing, well deserved and congratulations on solo prize!
+├─ Cafelatte1 (2024-12-03 07:52:02.170000) [+1]
+│  Great solution :)
+│  Do the models in stage1 predict all features? or reduced dimension with SVD?
+  ├─ senkin13 (2024-12-03 10:35:09.803000) [+1]
+  │  stage1 predict the same target with stage2(utility_agent1 )
+├─ Athar Sayed (2024-12-03 04:24:26.607000) [+1]
+│  Congragulations . It was amazing to see the two stage flip augmentation from LMSYS competition applied here as well 😃. Also if you can share how did you find the coefficient 1.12 to multiply
+  ├─ senkin13 (2024-12-03 07:48:32.547000) [+1]
+  │  leaderboard probing, try different coefficients to see which has best lb score
+    ├─ Athar Sayed (2024-12-03 09:39:16.020000) [+0]
+    │  Oh Okay that sure is a risky method
+    ├─ gezi (2024-12-03 11:19:49.187000) [+1]
+    │  But best for this game LB nearly the same as PB even if you get better LB result with a better seed then it work better for PB😀
+├─ Tanishk Patil (2024-12-03 03:35:42.703000) [+1]
+│  Congratulations and Thanks for sharing and looking forward to learn from you
+├─ Ahmed Ibrahim (2024-12-03 02:47:59.383000) [+1]
+│  Congrats and elegant solution!
+├─ yunsuxiaozi (2024-12-03 02:30:10.827000) [+1]
+│  Congratulations, based on your experience participating in the competition, would it be better to add oof_pred as a feature to the data?
+  ├─ senkin13 (2024-12-03 02:44:36.220000) [+2]
+  │  yes,better than just add augmentation to train
+├─ Sheikh Muhammad Abdullah (2024-12-03 01:50:11.357000) [+1]
+│  Congrats @senkin13 Good Solution.
+  ├─ [deleted] (2024-12-03 02:30:00) [+0]
+  │  [deleted]
+├─ Anil Ozturk (2024-12-03 07:52:11.690000) [+2]
+│  This was the next thing in our mind, but couldn't find the time to try it. Good trick, well deserved!

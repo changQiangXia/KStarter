@@ -1,0 +1,82 @@
+# tensorflow-great-barrier-reef 讨论区（按票数排序，共 80 条）
+
+- [🔥🔥Winning solution of Previous Object Detection Kaggle Challenges](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/289999) — 256 票 / 64 评论 / 2021-11-22 **write-up?**
+- [My Kaggle Lessons Learned in 2021](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/297863) — 237 票 / 101 评论 / 2021-12-30 
+- [Trust CV -- 1st Place Solution](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307878) — 192 票 / 77 评论 / 2022-02-16 **write-up?**
+- [[LB 0.579] Yolov5(higher resolution) is all you need](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/300638) — 180 票 / 260 评论 / 2022-01-13 **write-up?**
+- [[placeholder] how to get lb 0.560 with single model](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/300405) — 152 票 / 55 评论 / 2022-01-12 
+- [🔥🔥Kaggle Starter Notebooks for Object Detection](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290016) — 152 票 / 31 评论 / 2021-11-22 
+- [5th place solution, poisson blending,detection and tracking](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/308007) — 141 票 / 26 评论 / 2022-02-24 **write-up?**
+- [🔥Congratulations to Tensor Girl for becoming 3x GrandMaster🔥 ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/303529) — 136 票 / 283 评论 / 2022-01-28 
+- [3rd place solution - Team Hydrogen](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307707) — 130 票 / 31 评论 / 2022-02-15 **write-up?**
+- [Competition logbook - ideas to IMPROVE LB score 💪💥](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/296721) — 129 票 / 26 评论 / 2021-12-23 
+- [Be CAREFUL with your TRAIN/VALID splits and avoid LB GAPS](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/293723) — 128 票 / 41 评论 / 2021-12-06 
+- [2nd Solution - YOLOv5](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307760) — 116 票 / 35 评论 / 2022-02-20 **write-up?**
+- [Best Single Model CV-LB](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290757) — 109 票 / 207 评论 / 2021-11-26 
+- [4th Place Solution - CenterNet](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307626) — 108 票 / 58 评论 / 2022-02-15 **write-up?**
+- [69th Place - WBF with Threshold](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307609) — 93 票 / 52 评论 / 2022-02-18 **write-up?**
+- [Useful External Datasets, Models and  Resources ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290353) — 90 票 / 3 评论 / 2021-11-24 
+- [Fast underwater image enhancement for Improved Visual Perception [github+Paper]](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290584) — 89 票 / 28 评论 / 2021-11-25 
+- [LB probing results](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/302057) — 89 票 / 19 评论 / 2022-01-20 
+- [🔥🔥Research Trends in Object Detection ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290005) — 81 票 / 20 评论 / 2021-11-22 
+- [Logging F2 score while training YOLOv5](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/302241) — 79 票 / 28 评论 / 2022-01-21 
+- [⭐️⭐️⭐️ Experiments list - competition summary from our team perspective ⭐️⭐️⭐️⭐️](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307504) — 78 票 / 34 评论 / 2022-02-14 
+- [Papers on Video Object Detection](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/293812) — 75 票 / 17 评论 / 2021-12-07 
+- [Can't wait to learn how people get such high score in LB](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307392) — 70 票 / 68 评论 / 2022-02-14 
+- [SAHI - new tutorial and notebook - Slicing Aided Hyper Inference for Yolov5 and YoloX](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/302586) — 68 票 / 36 评论 / 2022-01-23 
+- [YoloX Kaggle notebook - I made it! ❤️](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/291663) — 64 票 / 31 评论 / 2021-11-30 
+- [Some ideas that worked/not worked for me](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307045) — 60 票 / 33 评论 / 2022-02-12 
+- [10th place solution — 2xYOLOv5 + tracking](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307756) — 55 票 / 16 评论 / 2022-02-15 **write-up?**
+- [Journey from LB 0.038 ---> 0.502 ---> 0.515 🖤 🔥](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/294205) — 55 票 / 44 评论 / 2021-12-09 
+- [ 8 Methods on Underwater Image Enhancement and Color Restoration, With Code](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/291063) — 52 票 / 3 评论 / 2021-11-27 
+- [One ethical question, does Starfishes would be killed after Our code finds them?](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/291021) — 51 票 / 19 评论 / 2021-11-27 
+- [6th place solution ,  yolov5m6/s6,  trust cv, post classification.](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307619) — 51 票 / 19 评论 / 2022-02-15 **write-up?**
+- [there is one more image you can use for training](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/299976) — 51 票 / 26 评论 / 2022-01-10 
+- [Something in the wrong way! High resolution and big model is not the key point.](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/304725) — 50 票 / 70 评论 / 2022-02-02 **write-up?**
+- [LB (TOP20) solutions SPEED 💥💥  analysis ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/301959) — 49 票 / 17 评论 / 2022-01-20 **write-up?**
+- [[Solved] Something Odd in the LB Evaluation - 10K of Additional FPs Affect Little on the LB Score](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/302632) — 46 票 / 29 评论 / 2022-01-23 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/289993) — 45 票 / 64 评论 / 2021-11-22 
+- [7th Place Solution - Cascade RCNN+Tracking ( Public LB is not all you need.) ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307786) — 45 票 / 18 评论 / 2022-02-16 **write-up?**
+- [High score notebook (again!) in the lastest stage of the competition](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/305725) — 45 票 / 18 评论 / 2022-02-06 
+- [Concealed Object Detection](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/297875) — 44 票 / 1 评论 / 2021-12-30 
+- [Understanding the Metric : F2 score](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290136) — 43 票 / 2 评论 / 2021-11-23 
+- [These COTS do not exist](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/301210) — 43 票 / 26 评论 / 2022-01-16 
+- [LB above 0.7! Wow!](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/301014) — 42 票 / 21 评论 / 2022-01-15 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/289994) — 41 票 / 266 评论 / 2021-11-22 
+- [🔥🔥 Congratulations to DrHB for becoming Discussion GrandMaster](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290152) — 41 票 / 28 评论 / 2021-11-23 
+- [Tensorflow Bonus Prize clarification](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/291541) — 40 票 / 18 评论 / 2021-11-29 
+- [Finally got the elusive gold! ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307613) — 40 票 / 22 评论 / 2022-02-15 
+- [Bounding box exceeding image height](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290675) — 39 票 / 3 评论 / 2021-11-25 
+- [Let me introduce YoloR … :) my next yolo notebook ❤️](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/297696) — 39 票 / 21 评论 / 2021-12-28 
+- [[Guide] - How to ensemble object detection models?](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/295862) — 39 票 / 3 评论 / 2021-12-18 
+- [Yolov5 feature maps - see how network understand our starfishes …](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/304104) — 38 票 / 8 评论 / 2022-01-30 
+- [Stagnation Concern For Tensorflow (Attn. TF Team)](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307984) — 37 票 / 18 评论 / 2022-02-16 
+- [Which Colab for competition ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/296905) — 37 票 / 39 评论 / 2021-12-24 
+- [A cross-validation strategy: subsequences](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290235) — 37 票 / 11 评论 / 2021-11-23 
+- [🔥🔥 Congratulations to Awsaf for becoming Notebooks GrandMaster](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290472) — 37 票 / 40 评论 / 2021-11-24 
+- [Competition is Finalized - Congratulations to our Winners; Recap](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/308248) — 36 票 / 19 评论 / 2022-02-17 
+- [8th place solution](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307735) — 36 票 / 10 评论 / 2022-02-22 **write-up?**
+- [12th place solution (mysteriously disqualified) - Single ConvNeXt CascadeRCNN](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/308656) — 35 票 / 15 评论 / 2022-02-19 **write-up?**
+- [The Great Barrier Reef and COTS (Crown-of-thorns starfish)](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290062) — 35 票 / 9 评论 / 2021-11-23 
+- [11th Place solution - Team COTS ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307718) — 34 票 / 9 评论 / 2022-02-15 **write-up?**
+- [A Feedback: About Accuracy of This Competition’s Labels](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/308329) — 33 票 / 44 评论 / 2022-02-18 
+- [Problem statement is not only Object detection it's "Video" Object Detection, given data is in a video sequence ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290350) — 33 票 / 14 评论 / 2021-11-24 
+- [15th place solution: YOLO-X only, Seq-NMS](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307691) — 33 票 / 6 评论 / 2022-02-18 **write-up?**
+- [Future frames are available in Time-series API](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/291520) — 32 票 / 3 评论 / 2021-11-29 
+- [simplest way to "overfit" LB (dangerous!!)](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307605) — 31 票 / 27 评论 / 2022-02-15 
+- [🤝🤝🤝 TEAM WORK 🤝🤝🤝 during Kaggle competition - summary ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307689) — 31 票 / 8 评论 / 2022-02-15 
+- [🎖 Summary of all solutions shared + Tricks🎖](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307831) — 30 票 / 2 评论 / 2022-02-15 **write-up?**
+- [Some annotated COTs from internet (429 images, 2021 labels)](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/305792) — 30 票 / 7 评论 / 2022-02-06 
+- [22th place solution - Train4Ever](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307622) — 30 票 / 10 评论 / 2022-02-18 **write-up?**
+- [37th place solution - T0m part [Segment Copy-Paste & Progressive Learning]](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307669) — 30 票 / 10 评论 / 2022-02-15 **write-up?**
+- [YOLOv5: Here we go again | LB: 0.45+](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/290042) — 29 票 / 23 评论 / 2021-11-22 
+- [No ensemble No knowledge distillation, what's your LB score?](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/298514) — 29 票 / 49 评论 / 2022-01-03 
+- [Image size greater than native resolution: theory?](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307121) — 28 票 / 9 评论 / 2022-02-12 **write-up?**
+- [My BBox annotation theory that might explain the CV-LB discrepancy and the shakeup](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307607) — 28 票 / 4 评论 / 2022-02-15 
+- [Shake up is coming](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/307379) — 28 票 / 29 评论 / 2022-02-14 
+- [New release - Computer Vision: Algorithms and Applications, 2nd ed. ](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/306751) — 27 票 / 7 评论 / 2022-02-10 
+- [Why higher mAP leads to a significantly lower public score?](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/298427) — 26 票 / 33 评论 / 2022-01-02 
+- [16th Simple Solution - Only Yolov5](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/308336) — 26 票 / 9 评论 / 2022-02-18 **write-up?**
+- [About the Training Reproducibility of LB: .579](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/301452) — 25 票 / 7 评论 / 2022-01-17 
+- [Generate your own unlimited COTS - GAN Data Augumentation](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/303988) — 24 票 / 17 评论 / 2022-01-30 
+- [COCO style competition metric](https://www.kaggle.com/competitions/tensorflow-great-barrier-reef/discussion/294854) — 24 票 / 10 评论 / 2021-12-13 

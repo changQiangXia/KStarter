@@ -1,0 +1,291 @@
+# https://www.kaggle.com/competitions/waveform-inversion/discussion/587388
+
+Topic #587388: 1st Place Solution
+  Author: Harshit Sheoran
+  Posted: 2025-07-01 00:02:26.054000
+  Votes: 194  Comments: 66
+
+First and foremost, a sincere thank you to the competition organizers for this challenge, and congratulations to all my fellow competitors on their impressive work.
+
+Crazy how nobody moved a single place up or down in top 28.
+
+Goals List:
+✔️Single digit submissions solo gold
+✔️Solo win a competition #1
+
+Anyways, here's what I have done:
+
+Preprocessing
+
+This is not a segmentation task. The velocity model pixels don't line up spatially with the seismic data.
+An early experiment tested it. I had a baseline that resized the input from the original (5, 1000, 70) to (5, 350, 70) and got a CV of 46.9. , I reshape the input to (1, 350, 350), basically forcing the channels into a spatial layout. CV jumped to 32.5
+
+This is how the non-resized 1x1000x350 input looks like:
+
+
+
+Architecture
+
+Unet didn’t make sense to me, my input was 350x350, the pixel values of the velocity model did not spatially align with the input, so it did not make much sense to me to go back to previous layers to get intermediate layer’s embeddings like a Unet does
+
+Anyways, it turns out, vision transformers don’t necessarily need a Unet to do their bidding 🙂
+
+Vision transformers are secretly segmentation-like regression models:
+
+
+
+This image size was a nice square so it was easy to work with and scale.
+I started using this without a decoder with the best vision transformer I found, EVA02-small model. The performance was really cool, even at this stage it got me a close to 30 score on CV with just 40 epochs of training.
+
+To scale up the model, I experimented with base and large variants which were scoring better, but what was scoring even more was repeating the architecture as an encoder+decoder setup:
+
+
+
+Training this scored CV 28, repeating this (encoder+decoder) with base or large variant of the model did not give improvement and were overfitting
+
+Training EVA, it was still 20-30% slower than training the original ViT, I found a better backbone after experimenting to find out what was making EVA score much better than ViT, Depth? Channels? Number of attention heads? MLP layer scaling? Gated activations? Turns out, RoPE (Rotary Positional Embeddings) was contributing to the majority of the bottleneck, then I chose better pretrained weights and I got vit_small_patch14_reg4_dinov2.lvd142m as my ideal choice of backbone. On the same training, ViT+RoPE got me under 26 MAE.
+
+Here is the final architecture:
+
+
+
+Code: https://www.kaggle.com/code/harshitsheoran/yale-fwi-vit-architecture?scriptVersionId=248201360
+
+My loss function is MAE loss, I apply sigmoid on my logits and scale them in range of (1500, 4500)
+
+Training
+
+Pretty much every training run used the same recipe:
+
+
+
+LR: 1e-4 with cosine annealing down to ~1e-5
+
+Optimizer: AdamW
+
+Loss: MAE
+
+HFlip and TTA
+
+EMA
+
+
+I used 440k out of 470k for training, 30k for validation, the core of my training at MAE of 26 with 50 epochs is that I am severely underfitting, increasing image size and restarting training can lead to much better scores, for a total of 300 epochs:
+
+
+
+This model was done training on May 28 (more than a month before the deadline), the last month was done exploring the next part of the solution.
+
+Generating Data
+
+Data Augmentation is a key part of my solution, before an almost perfect replication of the forward modeling function was available, I used forward-modeling + denoiser model setup where denoiser model was the architecture above designed to predict the noise still left in the forward-modeled data
+
+After failing experiments with generating new velocity models with heuristics or diffusion, I went ahead with using FiveCrop and 5xRandomAffine augmentations {RandomAffine(p=1.0, degrees=15, translate=(0.2, 0), shear=(-15, 15), padding_mode='reflection', resample='nearest')} on existing velocity models to generate more velocity models, this gave me 10x more data of 4.7 million seismic samples, I use this data for pretraining on every step, the training graph looks like this:
+
+
+
+Later in the competition, a perfect method for forward modeling was publicly available, at the time, the original notebook was running at a speed of about 10 images per minute which was unusable, using pytorch compile and a 5090, I sped it up to &gt;5000 images per minute per gpu which is a lot more bearable for the next time consuming step.
+
+I call it “Iterative Pseudo” where after every epoch, I predict on my validation and competition’s test set, about ~95k samples in total, this prediction is a pseudo prediction (for the test set) as we do not know how good or bad it is, I take the predicted velocity models and forward-model them to generate what should be the input for them and use this input in training the next epoch. This step is repeated for every epoch, this does add extra time to each epoch but the payout in terms of score is so worth it.
+
+
+
+As pretraining epochs are 10x larger, all epochs weighted, this was trained for a total of 570 epochs.
+
+Another observation was made that most of the new score that the model is improving for a while, has been coming from mainly 4 out of 10 methods. So, model was further trained with removing the data that doesn’t come from [‘CurveFault_B’, ‘CurveVel_B’, ‘Style_A’, ‘Style_B’], this removes more than half of the data, speeds up training, frees up the model’s parameters to focus more on this part.
+
+Then for inference, I would replace the predictions that were from these 4 methods with the predictions from the model below, which yielded a score of 7.5 on CV, 7.0/7.0 on Public/Private LB
+
+
+
+Training this with larger image size at the end, with 896x896 and ensembling that Top4 model to the existing Top4 model yields my best submission at 7.28 CV, 6.9/6.9 on Public/Private LB
+
+The whole process from start to finish takes about 15 days on 4x 5090.
+
+My solution does not feature much for ensembling, and can be cleanly trained for longer to generate a hopeful sub 5 leaderboard.
+
+That didn’t work / Didn’t get to try
+
+MAE/MIM self-supervised pretraining
+Standard Augmentations
+Unet decoder, UperNet, Mask2Former, ViT-Adapter, Fusion heads, more complicated heads than a linear layer
+
+Due to being short on time, I did not go back and recreate the pretraining data with perfect simulation, that could still improve the score more.
+
+Idea that I didn’t get to try: Prediction from the model forward modeled to generate simulated seismic input - original seismic input to compute gradient, the original seismic input, this gradient and the predicted velocity model as input to a new model that will refine the prediction according to the gradient
+
+Thank you for reading!
+
+Comments:
+├─ greySnow (2025-07-01 00:27:39.167000) [+20]
+│  Someone once said that all top solution are realy simple. This time, it's not! Really amazing job. So many interesting ideas. Now I really want to do with you a competition sometime 🤣
+  ├─ Harshit Sheoran (2025-07-01 00:28:50.857000) [+3]
+  │  Thank you, I would be looking forward to it 😊
+├─ Jeroen Cottaar (2025-07-01 01:45:39.983000) [+7]
+│  Congratulations! I'll be sharing my solution around the weekend, but in short I used classical full waveform inversion, using @brendanartley's solution as a starting point. Key point to get this wo...
+  ├─ tinkei (2025-07-01 07:09:50.527000) [+0]
+  │  Looking forward to your writeup. I started out by caching Bartley's ensemble models output, and ran scalar wave FWI to refine only CurveFault_B. (In my CV, FWI mostly helps with _B family but not _...
+  ├─ Arpit1Bansal (2025-07-02 21:27:25.473000) [+1]
+  │  @jeroencottaar Hey would it be possible for you to tell what GPUs you used, as a student i was only able to use kaggle's T4 [recently got intern, now have little money]. In upcoming competition tha...
+    ├─ Jeroen Cottaar (2025-07-03 04:37:19.280000) [+2]
+    │  I used vast.ai. I'm not sure if they're the cheapest, but you get full control over your instance (i.e. you just get a Unix environment and can do what you want, including running notebooks for any...
+├─ junlee789 (2025-07-01 00:42:45.363000) [+7]
+│  As a beginner and self-taught student of data science, I really love the culture of sharing their knowledge and solutions in Kaggle. Thank you for your sharing! Even tho, I did not participate this...
+├─ Bartley (2025-07-01 02:17:28.437000) [+5]
+│  Congrats! Well deserved.
+  ├─ Mehwish (2025-07-12 15:55:38.060000) [+0]
+  │  Congratulations…..
+├─ 灵曜 (2025-07-01 00:44:21.687000) [+3]
+│  Congratulations!  @harshitsheoran Excellent work. You have a very good baseline model, and then you keep iterating on it. 
+│  I think the essence is to constantly overfit the data, because they all co...
+├─ JezzLynn (2025-07-01 00:48:58.540000) [+4]
+│  Congratulations! If optimized to the limit, is there a chance to break 6?
+  ├─ Harshit Sheoran (2025-07-01 00:51:49.210000) [+4]
+  │  If optimized to the limit, there is a chance to break 5…? Maybe… 6, most likely
+    ├─ JezzLynn (2025-07-01 00:59:15.853000) [+2]
+    │  Amazing result😧
+    ├─ Jeroen Cottaar (2025-07-01 01:40:21.193000) [+1]
+    │  Hm can you check something? The StyleB samples are very hard to predict - there is a solution where you don't predict local high-frequent features but still match the given seismograms almost perfe...
+    ├─ greySnow (2025-07-01 05:37:55.340000) [+0]
+    │  @jeroencottaar what was your score only for StyleB?
+    ├─ Jeroen Cottaar (2025-07-01 05:49:44.030000) [+1]
+    │  My average score for the StyleB maps in the public test set is ~44, contributing ~4.3 to my score. CV score is similar.
+    ├─ greySnow (2025-07-01 07:07:34.723000) [+0]
+    │  Hah. So only for this family, I have MUCH better score.
+    │  Validation is 22 and I can get it lower with better training.  
+    │  Which mean that for other family your method is so much more powerful than mine.
+    ├─ Jeroen Cottaar (2025-07-01 07:31:07.113000) [+2]
+    │  I think this is one where the deep learning approaches may be able to learn a better prior than my classical ones. In particular, they may know where to expect the high-frequent features that I hav...
+    ├─ greySnow (2025-07-01 07:43:00.070000) [+0]
+    │  It also means that sub-5 may be very well possible, and may not need more than selecting the right solution per family.  
+    │  
+    │  
+    │  Which is very easy, very simple for classifier to have 100% accuracy for ...
+    ├─ Jeroen Cottaar (2025-07-01 07:50:44.250000) [+0]
+    │  Here's everything I know about my public test set performance. This is not CV, but based on probing, though it mostly tracks CV. See any more opportunities? Also @harshitsheoran and other top compe...
+    ├─ greySnow (2025-07-01 07:59:46.810000) [+0]
+    │  @jeroencottaar let's try it!  
+    │  Here is a notebook with my final ensemble and labels.  
+    │  Try to replace the predictions in test_ensemble with yours, except for the indices where test_kind_labels=9.
+    ├─ Jeroen Cottaar (2025-07-01 09:10:25.490000) [+1]
+    │  Cool, will pick this up on Thursday (work deadlines first…)
+    ├─ Harshit Sheoran (2025-07-01 19:59:41.387000) [+0]
+    │  Yes, your CV do look off for some classes, FlatVel is perfect, StyleA is too good, "All others" have curves and faults, so 4.5 average for them is good
+    │  
+    │  CV For single model:
+    │  MAE 7.940401554107666
+    │  C...
+    ├─ Jeroen Cottaar (2025-07-01 20:24:17.813000) [+0]
+    │  Yeah I wans't able to make a good prior for StyleB, so that one hurt me bad. I think something weird also happened to some of the CurveFault_A and FaltFault_A datasets; either I messed up my probin...
+    ├─ Focus (2025-07-01 20:55:47.107000) [+1]
+    │  The average best solution (from csv file) is 6.7
+    │  https://www.kaggle.com/code/overvalueawareness/ensemble-best-solution-seismic25?scriptVersionId=248381868
+    ├─ greySnow (2025-07-01 21:25:57.847000) [+0]
+    │  @jeroencottaar I tried replacing your preds with mine for StyleB, did not work. Maybe I have a bug, or my classifier is much worse than I thought. Or your probing maybe wrong.
+    ├─ Harshit Sheoran (2025-07-01 21:41:43.673000) [+0]
+    │  Same, replacing StyleB with mine gives 7.47 private, which is only a bit better
+    ├─ Harshit Sheoran (2025-07-01 22:22:21.447000) [+0]
+    │  Almost 6.5 can be achieved with replacing your Style_B, and all of the Faults families with mine
+    ├─ Jeroen Cottaar (2025-07-02 05:27:05.893000) [+0]
+    │  Aww no easy sub-5 just yet.
+    │  
+    │  Another possibility is that both of your StyleB performances are not as good on LB as CV. I've seen some clues that StyleB in LB may be a bit different from training.
+    │  
+    │  ...
+├─ Lucas Candiani Souza (2025-07-01 12:14:31.047000) [+1]
+│  Congrats @harshitsheoran! Very interesting ideas overall, you deserved it
+├─ golden9east (2025-07-01 05:09:23.683000) [+1]
+│  can someone in simple language explain how much time in hrs did it take for training and on what resources. Is kaggle weekly 30 hr gpu sufficient. This was my first competition.
+  ├─ tinkei (2025-07-01 07:01:12.330000) [+1]
+  │  The second last section mentioned:
+  │  
+  │  
+  │    
+  │  The whole process from start to finish takes about 15 days on 4x 5090.
+    ├─ golden9east (2025-07-01 07:19:26.037000) [+2]
+    │  So 15 continuous days of training, how does one do it on kaggle resources, or is it done on private resources. Does it mean from competitive pov, one has little chance of breaking into top ranking ...
+    ├─ Jeroen Cottaar (2025-07-01 07:29:32.830000) [+2]
+    │  You have to do it in the cloud or using your own GPUs. For this competition in particular I don't think a top ranking using only Kaggle resources was possible. Luckily this is not the case for all ...
+├─ Radek Osmulski (2025-07-01 00:18:04.297000) [+1]
+│  Huge congrats, @harshitsheoran! 🙂 Stellar performance and an awesome write-up! Really neat how you explain your reasoning at various steps and the experiments you ran based on your observations 🙏
+│  
+│  ...
+├─ Johnny Hyland (2025-07-01 17:54:57.280000) [+2]
+│  Yes. This is really cool. The iterative psuedo step is pretty wild, also the 4/10 types is a really nice find I wish I'd seen! awesome work.
+├─ CPMP (2025-07-01 11:18:41.210000) [+2]
+│  Congrats on the win and the lead throughout the competition!
+│  
+│  
+│    
+│  I apply sigmoid on my logits and scale them in range of (1500, 4500)
+│  
+│  
+│  I had this on my todo list. Did you compare without sigmoid?
+  ├─ Harshit Sheoran (2025-07-01 11:29:08.450000) [+2]
+  │  Thank you, I have been doing this from day 1 actually, without sigmoid was worse but my testing was primilinary at the time.
+├─ NikhilMishra (2025-07-01 04:49:56.513000) [+2]
+│  Congratulations Harshit, great work and great result !
+├─ Algre231 (2025-07-01 19:41:01.733000) [+-1]
+│  there is some mistakes, but good
+├─ nickyl (2025-07-07 05:34:32.577000) [+0]
+│  Quite detail ths
+├─ Kyle Prior (2025-07-05 22:55:15.043000) [+0]
+│  Congrats! That's amazing!
+├─ Abel George Abraham (2025-07-05 16:27:38.333000) [+0]
+│  woah super cool! Physics-guided ML models are up and coming.
+├─ bakhtawar shabbir (2025-07-04 20:11:04.483000) [+0]
+│  Smart preprocessing insight
+├─ Benedict Pangilinan (2025-07-03 11:19:16.697000) [+0]
+│  May I know how does iteration improve the MAE.
+│  
+│  PS: I'm just a beginner
+├─ Sarah Arshad (2025-07-03 09:18:20.247000) [+0]
+│  Congrats man! interesting….
+├─ Arash karoudi (2025-07-03 03:45:25.940000) [+0]
+│  This is absolutely amazing, and I loved your thought process to arrive at such insights. As a newcomer to this field, however, I feel like this is where I have to stop. The computational resources ...
+  ├─ Jeroen Cottaar (2025-07-03 04:38:51.233000) [+5]
+  │  Please don't be discouraged. This competition really is an outlier in terms of necessary compute. For example, I took second place in this one with 0 GPU hours: https://www.kaggle.com/competitions/...
+    ├─ Arash karoudi (2025-07-03 07:26:55.067000) [+0]
+    │  I went through your solution, and it's incredible how you deconstructed and simplified the problem—that's really something extraordinary. Figuring out how you even got to that solution is a whole o...
+    ├─ Arpit1Bansal (2025-07-03 14:26:30.350000) [+0]
+    │  @jeroencottaar  Just read you solution in ariel competition, Truly smart, hats off to you.
+├─ [deleted] (2025-07-03 03:14:35.770000) [+0]
+│  Congratulations! Impressive job, learnt a lot!
+├─ L Catalano (2025-07-02 00:23:33.760000) [+0]
+│  Congratulations and thanks for sharing your solution!
+│  
+│  Do you have any validation plots of the predicted and actual velocity/geology. Since I'm a geologist, I'm just curious what the results look l...
+├─ gguillard (2025-07-01 12:03:34.457000) [+0]
+│  Not sure I got it right : (700,700) is more pixels than (5,1000,70), I guess you interpolated to increase the size ?
+│  
+│  So did I understand correctly that you did (5,1000,70) -&gt; (350,350) -&gt; (4...
+  ├─ Harshit Sheoran (2025-07-01 12:09:34.100000) [+1]
+  │  It is much more time efficient and stable to gradually increase the image size this way
+├─ Kelvin Mwaisaka (2025-07-01 09:30:27.973000) [+0]
+│  Congrats and thanks for sharing the results here. I've totally learned a lot. Its one of my freshest experiences while trying to dive deep in the Data science course.
+├─ ANGOUAH (2025-07-01 09:05:20.370000) [+0]
+│  congratulation well done
+├─ Dan5280 (2025-07-01 06:07:32.717000) [+0]
+│  Congrats!!! Thanks so much for your detailed explanation, but I'm wonder do you have more detail code snippet? Like how you do the reshape how you do the pseudo iteration. It's really helpful and I...
+├─ Focus (2025-07-01 02:29:34.553000) [+0]
+│  Congratulations!
+│  
+│  I just wonder how do you sense a model will overfit or not? Did you sense a model will overfit by seeing loss graph for ten epochs ?
+│  
+│  Thanks for reply.
+├─ Kritika Pawar (2025-07-11 08:31:46.307000) [+0]
+│  congratulations
+├─ Prabhat_Yadav_369 (2025-07-03 11:51:03.613000) [+0]
+│  Congratulations🎉🎉
+├─ [deleted] (2025-07-03 04:22:25.617000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-02 11:53:45.450000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-01 23:53:49.493000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-01 12:16:45.730000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-01 11:53:41.807000) [+0]
+│  [deleted]
+├─ [deleted] (2025-07-01 00:54:14.010000) [+0]
+│  [deleted]

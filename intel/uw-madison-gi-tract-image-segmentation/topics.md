@@ -1,0 +1,82 @@
+# uw-madison-gi-tract-image-segmentation 讨论区（按票数排序，共 80 条）
+
+- [[LB 0.877] A 3D solution with MONAI](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/325646) — 162 票 / 94 评论 / 2022-05-17 **write-up?**
+- [Collection of My Resources/Thoughts For This Competition](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/320060) — 140 票 / 12 评论 / 2022-04-19 
+- [1st place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337197) — 127 票 / 63 评论 / 2022-07-15 **write-up?**
+- [2.5D Image Training (LB:0.86+)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/322549) — 124 票 / 26 评论 / 2022-05-02 
+- [MMsegmentation end-to-end notebook](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/323921) — 104 票 / 102 评论 / 2022-05-09 
+- [Thank you Everyone :D](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337240) — 91 票 / 41 评论 / 2022-07-15 
+- [Incorrect masks](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319963) — 70 票 / 7 评论 / 2022-04-19 
+- [Image Segmentation competitions from the past](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319035) — 68 票 / 13 评论 / 2022-04-15 
+- [Best single model CV-LB](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/320692) — 62 票 / 106 评论 / 2022-04-23 
+- [1st place solution for 2.5d parts](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337217) — 56 票 / 12 评论 / 2022-07-15 **write-up?**
+- [Loss functions for image segmentation](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/329396) — 52 票 / 8 评论 / 2022-06-06 
+- [TransUNet + 2.5D Training [TF] | Transformer Vs CNN?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/326035) — 52 票 / 10 评论 / 2022-05-19 
+- [RGB Mask Dataset](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319245) — 50 票 / 12 评论 / 2022-04-16 
+- [New Luminide template: LB score 0.867](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/327166) — 48 票 / 22 评论 / 2022-05-25 
+- [LB could be wrong](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/324934) — 47 票 / 25 评论 / 2022-05-14 
+- [5th Place Solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337268) — 46 票 / 13 评论 / 2022-07-15 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337468) — 45 票 / 27 评论 / 2022-08-21 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337400) — 44 票 / 7 评论 / 2022-07-16 **write-up?**
+- [More Incorrect Masks w/ GIFs and Questions](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/321979) — 43 票 / 13 评论 / 2022-04-29 
+- [Easy Way To Boost Your Score (A Tiny Little Bit)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/321983) — 42 票 / 12 评论 / 2022-04-29 
+- [Ensemble Tricks for Image Segmentation](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/330336) — 40 票 / 3 评论 / 2022-06-11 
+- [Hausdorff Distance usage for Image Segmentation ](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319215) — 40 票 / 16 评论 / 2022-04-16 
+- [glob.glob() has changed my life](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/322967) — 40 票 / 6 评论 / 2022-05-04 
+- [15th place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337189) — 38 票 / 8 评论 / 2022-07-15 **write-up?**
+- [Welcome to the UW-Madison Gastrointestinal Tract Image Segmentation Challenge! ](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319385) — 36 票 / 45 评论 / 2022-04-17 
+- [Images and groundtruth from all anatomical planes](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/322009) — 33 票 / 9 评论 / 2022-04-29 
+- [UNETR - Paper Summary + TensorFlow Implementation](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/332379) — 32 票 / 0 评论 / 2022-06-21 
+- [3D gif visualisations](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/321450) — 31 票 / 4 评论 / 2022-04-26 
+- [My local cross-validation competition metrics code (dice and HD)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/320077) — 29 票 / 33 评论 / 2022-04-20 
+- [A trick for faster training](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/323777) — 28 票 / 4 评论 / 2022-05-08 
+- [Useful resources](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319063) — 27 票 / 3 评论 / 2022-04-15 
+- [In Depth mask/segmentation Explanation](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/324880) — 27 票 / 3 评论 / 2022-05-13 
+- [Data augmentations that make sense](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/331450) — 26 票 / 5 评论 / 2022-06-17 
+- [15th place, tips of 2.5D model training](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337326) — 26 票 / 8 评论 / 2022-07-15 **write-up?**
+- [2D or 3D Hausdorff distance?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/324432) — 26 票 / 12 评论 / 2022-05-11 
+- [11th place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337193) — 24 票 / 14 评论 / 2022-07-15 **write-up?**
+- [how to deal with ground truth label truncation at the bottom?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/333889) — 23 票 / 10 评论 / 2022-06-28 
+- [2.5D Single Model (CV 0.88  - LB 0.868)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/329520) — 20 票 / 11 评论 / 2022-06-07 
+- [Run Length Encoding (RLE) Explained](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319131) — 19 票 / 3 评论 / 2022-04-15 
+- [8th place solution ](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337359) — 18 票 / 5 评论 / 2022-07-15 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/318977) — 17 票 / 116 评论 / 2022-04-14 
+- [One more digit?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/332508) — 17 票 / 2 评论 / 2022-06-22 
+- [Useful Github Repos and Libraries](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319212) — 17 票 / 11 评论 / 2022-04-16 
+- [10-th place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337195) — 16 票 / 10 评论 / 2022-07-15 **write-up?**
+- [14th place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337191) — 16 票 / 6 评论 / 2022-07-15 **write-up?**
+- [0 Image in Test Folder ;(](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/320826) — 16 票 / 12 评论 / 2022-04-23 
+- [New paper on Self Supervised Training of SWIN UNET Transformers](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/333167) — 16 票 / 7 评论 / 2022-06-25 
+- [Why MRIs are not in DICOM format?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319053) — 16 票 / 5 评论 / 2022-04-15 
+- [Submission Explained](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/321852) — 16 票 / 1 评论 / 2022-04-29 
+- [How did your best single model perform in LB?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/334335) — 15 票 / 33 评论 / 2022-07-01 
+- [3D interactive viewer (provided dataset + annotation)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/320774) — 15 票 / 4 评论 / 2022-04-23 
+- [Will this competition be the start of ViTs for multi-step image segmentation?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319596) — 15 票 / 2 评论 / 2022-04-18 
+- [Why no 3D based models ?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/324027) — 14 票 / 29 评论 / 2022-05-09 
+- [22th place solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337199) — 14 票 / 3 评论 / 2022-07-15 **write-up?**
+- [What do we know so far? - Important insights from top discussion topics](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/331274) — 14 票 / 1 评论 / 2022-06-16 
+- [23rd Place Solution](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337327) — 14 票 / 7 评论 / 2022-07-15 **write-up?**
+- [3D Directed Hausdorff vs 3D Average Hausdorff ?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/321225) — 14 票 / 0 评论 / 2022-04-25 
+- [[43rd place] Our CV strategy (+77 positions in private)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337196) — 13 票 / 1 评论 / 2022-07-15 **write-up?**
+- [Py-Hausdorff, Surface-Distance, Pracma. Libraries to compute Hausdorff Distance. ](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319676) — 13 票 / 4 评论 / 2022-04-18 
+- [Why are the images black?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/318994) — 13 票 / 11 评论 / 2022-04-15 
+- [State-of-the-art Paper in MR Segmentation](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319356) — 13 票 / 3 评论 / 2022-04-16 
+- [31st solution (could be in gold)](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337235) — 12 票 / 14 评论 / 2022-07-15 **write-up?**
+- [(small) Vision Transformer UNet Baseline](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/324288) — 12 票 / 4 评论 / 2022-05-10 
+- [Kaggle Public Datasets on Medical Image Segmentation](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319039) — 12 票 / 4 评论 / 2022-04-15 
+- [Competition's solutions summary](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/338040) — 12 票 / 4 评论 / 2022-07-18 **write-up?**
+- [pytorch-image-models joins Hugging Face](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/332657) — 12 票 / 0 评论 / 2022-06-22 
+- [ReduceLROnPlateau you should try it](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/323885) — 12 票 / 3 评论 / 2022-05-09 
+- [[43rd place] Intelligent cropping](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337313) — 12 票 / 2 评论 / 2022-07-15 **write-up?**
+- [LISTEN UP! PAPERS ON MACHINE LEARNING AND GASTROINTESTINAL TRACT IMAGE SEGMENTATION!](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/321367) — 12 票 / 0 评论 / 2022-04-26 
+- [What percentiles are used for calculation of Hausdorff Distance?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319628) — 12 票 / 3 评论 / 2022-04-18 
+- [Potential Shake?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/333899) — 12 票 / 8 评论 / 2022-06-28 
+- [About MONAI SWIN_UNETR & UNETR](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/333784) — 11 票 / 5 评论 / 2022-06-28 
+- [17th Solution [3d part] and Kaggle Issue Report ](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337343) — 11 票 / 0 评论 / 2022-07-16 **write-up?**
+- [(How) Can you ensemble different segmentation models?](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/331943) — 11 票 / 9 评论 / 2022-06-19 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/318976) — 10 票 / 6 评论 / 2022-04-14 
+- [Hausdorff Distance -- Code](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/319452) — 10 票 / 4 评论 / 2022-04-17 
+- [For beginners: Understanding the data and segmentation masks](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/325245) — 10 票 / 4 评论 / 2022-05-15 
+- [Loss functions [experiments]](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/334907) — 10 票 / 11 评论 / 2022-07-03 
+- [Congratulations to the winners!](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/338229) — 10 票 / 0 评论 / 2022-07-19 
+- [Help maximize the impact of your solution!](https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/340510) — 3 票 / 6 评论 / 2022-07-29 **write-up?**
