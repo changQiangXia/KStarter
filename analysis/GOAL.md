@@ -44,8 +44,8 @@
 
 ## 断点续跑指引
 
-- 当前进度（2026-10-03）：**Tier A 58/60 ✅**（Batch 1–5 全部收官；Batch 6 已完成 #51–#58 共 8 场，均推送）；
-  **THEORY.md 已扩 v0.5（L1–L76 + T1–T21）**；下一步 Batch 6 其余 2 场（#59 ai-village-ctf → #60 tabular-playground-dec-2021）→ Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
+- 当前进度（2026-10-03）：**Tier A 59/60 ✅**（Batch 1–5 全部收官；Batch 6 已完成 #51–#59 共 9 场，均推送）；
+  **THEORY.md 已扩 v0.5（L1–L76 + T1–T21）**；下一步 Batch 6 最后 1 场（#60 tabular-playground-dec-2021）→ Batch 6 收官 + THEORY v0.6 → Tier B 204 场 → 阶段二三（images_index / OCR / claims / lineage / limitations）。
 - 进度看 `analysis/TIER_A.md`（⬜ 未开始 / 🔄 进行中 / ✅ 完成）；已完成深读在 `analysis/deep/<slug>.md`；
   计分在 `analysis/_tier_a_scored.csv`。
 - 单场节奏：读 digest/原帖 → 写 `analysis/deep/<slug>.md`（11 组件）→ 回写 `notes/<theme>/<slug>.md`（新增"深读结论""图表证据"节）→
