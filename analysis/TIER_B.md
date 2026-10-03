@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**106/204**（2026-10-03；B01–B10 完成；B11 进行中 6/10）
+> 进度：**109/204**（2026-10-03；B01–B10 完成；B11 进行中 9/10）
 
 ## 批次 B01（1–10）
 
@@ -165,9 +165,9 @@
 | 104 | `playground-series-s6e3` | tabular | Playground | 6/4 | 34.7 | ✅ |
 | 105 | `march-machine-learning-mania-2024` | tabular | Featured | 6/0 | 34.6 | ✅ |
 | 106 | `stanford-rna-3d-folding` | science | Featured | 6/2 | 34.6 | ✅ |
-| 107 | `google-gemma-3n-hackathon` | other | Featured | 6/1 | 33.6 | ⬜ |
-| 108 | `kore-2022` | sim-agent | Featured | 6/4 | 33.2 | ⬜ |
-| 109 | `playground-series-s5e4` | tabular | Playground | 6/10 | 32.2 | ⬜ |
+| 107 | `google-gemma-3n-hackathon` | other | Featured | 6/1 | 33.6 | ✅ |
+| 108 | `kore-2022` | sim-agent | Featured | 6/4 | 33.2 | ✅ |
+| 109 | `playground-series-s5e4` | tabular | Playground | 6/10 | 32.2 | ✅ |
 | 110 | `arc-prize-2025` | nlp | Featured | 6/4 | 31.9 | ⬜ |
 
 ## 批次 B12（111–120）
