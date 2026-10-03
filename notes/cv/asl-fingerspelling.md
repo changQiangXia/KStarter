@@ -40,10 +40,31 @@
 2. 序列任务先确认指标（CER/WER）与对齐方式。
 3. 关键点类输入的归一化决定上限。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：手语拼写的"ASR 迁移赛"——**多模态关键点 + 高效编码器（RoPE/Squeezeformer）+ 自回归解码 + 置信度后处理**，且每个效率改进都换成更深模型。
+
+- 1st（242 票）：130 关键点；改进 Squeezeformer（Llama RoPE：训练 2×/tf-lite 3×/参数 -20%；去 time reduction）+ 2 层 Transformer 解码器 + 反转序列辅助损失；置信度头 + dummy 短语替换（+0.006）；CutMix/FingerDropout/FacePoseDropout 各 +0.005；tf-lite 39988KB、fp16、2 seed（图 1）。
+- 3rd（53 票）：17 层 Squeezeformer + time reduce + RoPE；769 维输入；补充数据权重 0.1；AWP。
+- 5th（51 票）：Vanilla Transformer + Data2vec 2.0 预训练；3D 关键点正确旋转（y 缩放 1.898）；姿态+嘴唇辅助；CTC 分割 + CutMix + KD。
+
+**裁决**：ASR 工具箱直接迁移；效率=深度预算；时空增广四维度（丢手指/丢模态/时间/仿射）；辅助模态有效；补充数据多样性不足时收益有限。
+
+**失败学**：编辑距离损失、CTC 辅助、label smoothing、AWP(fp16 NaN)、TTA、beam search。
+
+**悬案**：2nd ASR 对比与上届冠军未细读；指标精确实现缺失。
+
+## 7. 图表证据
+
+![1st 的模型架构](../../intel/asl-fingerspelling/bodies/434485_img/01.png)
+
+**图 1**（topic 434485）：130 点 → 5 分支特征提取（All/Face/LHand/RHand/Pose）→ 14× Squeezeformer → 置信度 + 2 层 Transformer 解码器。
+
+## 8. 出处
 
 - 讨论区索引：`intel/asl-fingerspelling/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
   - 1st 改进 Squeezeformer（242 票）：https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434485
   - 2nd ASR 算法对比（77 票）：https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434588
   - 3rd 17 层 Squeezeformer（53 票）：https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434393
+- 轻读全本：`analysis/deep/asl-fingerspelling.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

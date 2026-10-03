@@ -51,7 +51,26 @@
 3. **公开榜不可靠时以 CV 为准**（冠军的经验之谈）。
 4. 对比 AIMO2 与 AIMO3 可以清楚看到同一赛事的两种范式：训练派 vs 推理工程派。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：离线 LLM 数学竞赛的三角——**R1-Distill-Qwen-14B 基座 × 效率工程 × 测试时策略**；零训练也能进前 3，推理工程上限被严重低估。
+
+- 1st（147 票）：540K 题→3.2M CoT + 15K TIR；Qwen2.5-14B SFT（512×H100/48h）+ **CoT×0.3+TIR×0.7 线性 merge**（maj@16 62.9/66.8→69.1，长度 15834→12489、代码执行 2.73→0.85）；TensorRT-LLM+FP8+ReDrafter（1.8×/65% 接受；210→554 tok/s）；12 路异步 + 流式早停 + 350s+210s 时间缓冲（图 1）。
+- 2nd（111 票）：SFT 8 epochs + **DPO 压长度**；lmdeploy+AWQ4+KV8（比 FP16 快 55%）；15 样本（7 CoT+8 code）+ 双层早停 + 时间自适应；公 34→私 31/50。
+- 3rd（58 票）：**零训练**；5 分支×4096 → 复制到 10 → ≥6 完成且 >70% 共识即停，否则复制 7 条到 14×4096；vLLM prefix caching；私 30/50。
+- 8th（65 票）：单模型 AWQ4 + 单 prompt + 5 attempts；私 28/50；记录"我 Google 过"式幻觉。
+
+**裁决**：基座唯一（R1-14B）；效率换尝试次数；长度控制=可行性；训练非必需（3rd 零训练第 3）；50 题下公榜噪声极大、以自建验证为准。
+
+**悬案**：digest 仅收 2 篇（本地 14 篇，其余未细读）；开源合规争议与官方处置未收录。
+
+## 8. 图表证据
+
+![1st 的推理流程](../../intel/ai-mathematical-olympiad-progress-prize-2/bodies/574765_img/04.png)
+
+**图 1**（topic 574765）：批量 maj@ 样本 → TensorRT-LLM 异步流式生成 + 代码沙箱 → 全局停止（时间/共识）→ 取消与清缓存。
+
+## 9. 出处
 
 - 讨论区索引：`intel/ai-mathematical-olympiad-progress-prize-2/topics.md`（120 条）
 - 已收录 write-up（8 篇）：
@@ -60,3 +79,4 @@
   - 4th（16 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/573671
   - 7th（46 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/572760
   - 21st（24 票）：https://www.kaggle.com/competitions/ai-mathematical-olympiad-progress-prize-2/discussion/571289
+- 轻读全本：`analysis/deep/ai-mathematical-olympiad-progress-prize-2.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

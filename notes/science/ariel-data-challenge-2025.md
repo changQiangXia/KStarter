@@ -36,7 +36,30 @@
 1. **同一作者两年连续用贝叶斯路线**（第 2 → 第 1），说明这条路线在科学反演里的稳定性。
 2. 与 ARIEL 2024、Hull Tactical、Otto 合并观察：**"不用深度学习的方案"在 Kaggle 上常被低估**。
 
-## 6. 出处
+## 6. 轻读结论（2026-10 补）
+
+**一句话**：系外行星光谱反演——**预处理/校准（+0.01~0.05）是主战场，D(λ) 与 σ(λ) 必须分别建模/校准**；贝叶斯反演与物理特征+ML 两条路线都能登顶。
+
+- 1st（56 票）：预处理（jitter PCA、进阶波长合并 +0.01）→ 贝叶斯（高斯先验：噪声/星谱/漂移/凌星 batman/深度均值+FGS 高斯+AIRS GP+PCA；迭代线性化 + 超参梯度下降；网格→BFGS 初始化）→ Fudging（对 D/σ 经验修正）；完整开发史开源（图 1）。
+- 3rd（32 票）：8σ 时间剔除 **+0.05**、AIRS 按频率 32 块 **+0.025**、梯度极值相位检测、CNN + Rational Quadratic NN 集成。
+- 7th：Phase detector → 物理特征 → NN 差分修正 → **GBM 调 σ 尺度** → 伪标（CV ~0.42）。
+
+**裁决**：预处理决定上限；σ 是第二引擎；梯度极值相位检测是轻量方案；贝叶斯与 ML 各有优势。
+
+**悬案**：6th/9th 未细读；ExoSim2 生成器与官方指标实现未入库。
+
+## 7. 图表证据
+
+![1st 的先验分解](../../intel/ariel-data-challenge-2025/bodies/609888_img/04.png)
+
+**图 1**（topic 609888）：Raw signal = (Star spectrum × Drift × Transit) + Noise 的时×波长分解。
+
+## 8. 出处
+
+- 1st（56 票）：https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609888
+- 3rd（32 票）：https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609252
+- 7th（609210）：https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609210
 
 - 讨论区索引：`intel/ariel-data-challenge-2025/topics.md`
 - 已收录 write-up（6 篇）：见该比赛讨论区（1st 含训练/提交代码与完整开发历史仓库）
+- 轻读全本：`analysis/deep/ariel-data-challenge-2025.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
