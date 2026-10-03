@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**150/204**（2026-10-03；B01–B15 完成；B16 待开始）
+> 进度：**153/204**（2026-10-03；B01–B15 完成；B16 进行中 3/10）
 
 ## 批次 B01（1–10）
 
@@ -234,9 +234,9 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 151 | `playground-series-s3e6` | tabular | Playground | 6/0 | 25.1 | ⬜ |
-| 152 | `playground-series-s3e12` | tabular | Playground | 6/4 | 25.0 | ⬜ |
-| 153 | `playground-series-s3e1` | tabular | Playground | 6/1 | 23.5 | ⬜ |
+| 151 | `playground-series-s3e6` | tabular | Playground | 6/0 | 25.1 | ✅ |
+| 152 | `playground-series-s3e12` | tabular | Playground | 6/4 | 25.0 | ✅ |
+| 153 | `playground-series-s3e1` | tabular | Playground | 6/1 | 23.5 | ✅ |
 | 154 | `tabular-playground-series-mar-2022` | tabular | Playground | 6/0 | 22.9 | ⬜ |
 | 155 | `kaggle-survey-2021` | other | Community | 6/6 | 22.5 | ⬜ |
 | 156 | `tabular-playground-series-may-2022` | tabular | Playground | 6/2 | 22.2 | ⬜ |

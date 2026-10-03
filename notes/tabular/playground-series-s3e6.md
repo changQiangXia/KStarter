@@ -41,8 +41,30 @@
 - 把连续目标按结构分解（层级分类 → 层级内回归）能稳定分数。
 - 多阶段价格校准是房价类任务的标准武器。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：巴黎房价是"**三个价格/平米档位（≈$10/$100/$1000）混合 + 极大噪声**"的回归：1st 用"回归 → 三分类（SMOTE）→ 分档线性回归 → 价格调整规则"，公榜从 110001 打到 **77494**；5th 用 `made` 分四段 + 多种子分层 CV 拿第 5；著名反直觉案例：**全量训练反而比 70% 数据更差**（127439 → 155871）。
+
+- 1st（389391）：用测试集上界反向剔训练离群；三分类只用于后处理（当特征会因 1% 误分类爆错）。
+- 5th（389145）：IQR 仅删 20 行即影响 CV；低估计器数量；保留全部特征（squareMeters 重要性 ~99%）。
+- 3rd（389140）：5 折 ×10 重复 + 逐模型 permutation importance + CAT/XGB/RF→LGBM。
+- 9th（389151）：AutoGluon 分层按三档；多分类/FE/重采样均无效。
+- 反直觉（384915）：70% 数据 > 全量；RMSE 波动 >10000 属常态。
+- 社区：三类房型（16 票）、`made` 异常（16/16）、准重复（17 票）、"别删原数据"（7 票）。
+
+**裁决**：先检测目标中的隐档位，用"分类+分段回归+规则校正"；CV 必须多种子重复；小差异不可信；单特征主导时别浪费在 FE。
+
+**悬案**：2nd private/4th/6th–8th 未收录；阈值灵敏度未分析；本场 0 图。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：五段式稳定方案：https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389391
 - 弃 30% 数据也能霸榜（Pycaret 默认行为解剖）：https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384915
 - 9th：常规线：https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389151
+- 5th：分段与多种子 CV：https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389145
+- 3rd：三模型+LGBM 元模型：https://www.kaggle.com/competitions/playground-series-s3e6/discussion/389140
+- 三类房型（16 票）：https://www.kaggle.com/competitions/playground-series-s3e6/discussion/384412
