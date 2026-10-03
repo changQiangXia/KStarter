@@ -1,0 +1,70 @@
+# https://www.kaggle.com/competitions/drawing-with-llms/discussion/581108
+
+Topic #581108: 4th Place Solution: SD3.5M + DRaFT + diffvg
+  Author: Kevin Clark
+  Posted: 2025-05-28 11:11:28.666000
+  Votes: 40  Comments: 4
+
+First, I’d like to thank the organizers for their hard work in running this competition! I’d also like to thank @richolson for sharing two extremely helpful bits of code: his OCR decoy trick and image to SVG conversion. 
+
+Overall approach
+
+My pipeline first generates images with Stable Diffusion 3.5 Medium, fine-tuned with DRaFT to produce high-quality, score-optimized outputs. The images are then heuristically converted to rough SVGs, which are further refined using diffvg, a differentiable rasterizer.
+
+
+Diffusion Model
+
+After experimenting with a few models, I decided to use Stable Diffusion 3.5 Medium without the T5 text encoder. It has a relatively small memory footprint, which is important for fine-tuning. 
+
+DRaFT Fine-Tuning
+
+I trained a LoRA for SD3.5M with DRaFT (more precisely, DRaFT-LV), which trains the diffusion model to generate high-scoring images according to reward models. Unlike RL/DPO, DRaFT takes advantage of the fact that diffusion models are differentiable and backpropagates the reward directly into the diffusion model. You can see the training code here
+
+
+
+Training data: I generated a set of 1000 training prompts with corresponding questions/answers using GPT-4o. I took a two stage-approach of first generating 50 image categories and then sampling prompts from those categories, with the known evaluation set categories (landscapes, abstract, and fashion) producing more prompts. 
+
+Reward functions: I used two general reward functions that I knew worked well from my previous work on DRaFT: 
+
+
+
+Human Preference Score v2
+
+PickScore 
+
+
+These models were trained on human preference data. I also added three competition-specific rewards:
+
+
+
+The competition aesthetic score
+
+A proxy for the VQA score (yes/no on “Does the image show {prompt}?”). This was faster and surprisingly seemed to work better than using the actual set of questions for each image. 
+
+Negative LPIPs distance between the image and convert_to_svg(image), so the model generates images that are easy to convert. 
+
+
+Results: The fine-tuning improves aesthetic score by ~10% and VQA score by about ~5%. The overall LB score went up by around 0.03. A side benefit of the training is that I didn’t need to do any prompt engineering; I instead just relied on the fine-tuning to lead the model to produce the right image style. Here are some examples of generations before/after the fine-tuning (using the same random seed):
+
+
+
+SVG Conversion
+
+I used a simple heuristic image-to-SVG converter inspired by Rich Olson’s notebook, with several tweaks to improve both visual quality and compression efficiency. The resulting SVG is then optimized with diffvg, a differentiable SVG rasterizer. The optimization minimizes the L1 distance between the rendered SVG and the original diffusion image using gradient descent on the locations/colors of the paths. This worked amazingly well, and meant I could get away with a pretty basic initial SVG converter, as the refinement would fix most issues that arose. I also used Rich Olson’s OCR decoy trick to reduce OCR hallucinations. 
+
+Best of n
+
+For each prompt, my notebook keeps generating SVGs until roughly 60 seconds have passed, with some adaptivity based on whether it is behind or ahead of schedule. This typically produces 5-6 candidates. The SVG with the highest VQA score given the yes/no question “Does this image show {prompt}?” is returned. There is also a check to make sure the returned image has an OCR score of 1.
+
+Comments:
+├─ Raki (2025-05-28 12:21:23.273000) [+5]
+│  Really nice solution and congrats to 4th place!
+│  The exploits at the very top are also cool to see, but I feel like your solution is the best variant of those keeping close to the intent of the comp...
+  ├─ Kevin Clark (2025-05-28 14:33:17.873000) [+1]
+  │  The fine-tuning did help with geometric shapes a bit, but not as much as on other examples. Quantitatively, on my train set vqa improved 0.784 -&gt; 0.808 for the for the "abstract" category vs 0.8...
+├─ Yuri Barbashov (2025-05-28 13:22:28.880000) [+0]
+│  Brilliant solution. It looks like DRaFT is much better than RL/DPO, which, in my case, didn’t work at all on 2,000 samples.
+│  
+│  What HW did you use for training?
+  ├─ Kevin Clark (2025-05-28 14:23:40.660000) [+0]
+  │  I did everything in colab. The fine-tuning took 18 hours on a single A100.

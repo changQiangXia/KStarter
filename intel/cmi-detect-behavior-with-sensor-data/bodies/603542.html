@@ -1,0 +1,67 @@
+<p>First, congrats for all winners and thanks to the organizers for hosting this interesting competition, the community-we learn a lot from your works and sharings. Thanks to my teammates(Rib~) for the excellent teamwork.</p>
+<h1>Tricks</h1>
+<p>It is obvious that this competition involves some tricks, and our solution mainly focuses on the following two points.<br>
+1.Figure out how to use the other sequences' information with the same subject. For convenience in subsequent descriptions, we will refer to this model as the subject-based. We group data from the same subject into a single batch, extract sequential information using CNN, RNN or transformer, and then add a Transformer layer along the subject dimension to capture inter-sequence relationships. During offline validation and online inference, you need to accumulate each subject’s historical sequence information before making predictions on the current sequence.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1069377%2Fb8bcf0438e0a44eca60461df7bf7d730%2F2222222.png?generation=1756860250907385&amp;alt=media" alt=""></p>
+<p>Since the evaluation API provides data in batches of single sequence rather than all sequences from the same subject, and additionally shuffles the order of sequences for each submission, this approach leads to some instability. We address this issue in the following ways:</p>
+<ul>
+<li>During the training process, the sequences from the same subject is sampled at different ratios(0.5~0.8), and this process is repeated multiple times.</li>
+<li>We have observed that the effectiveness of this solution is limited when historical data is insufficient. Therefore, we still need the sequence-based model to correct predictions under conditions of inadequate historical data, that's the second part of our tricks.</li>
+</ul>
+<p>2.We prepared 4 types of models: </p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>training approch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>imu-only_subject</td>
+<td>use imu features only, train subject-base</td>
+</tr>
+<tr>
+<td>imu-only_sequence</td>
+<td>use imu features only, train sequence-base</td>
+</tr>
+<tr>
+<td>all_subject</td>
+<td>use all features, train subject-base</td>
+</tr>
+<tr>
+<td>all_sequence</td>
+<td>use all features, train sequence-base</td>
+</tr>
+</tbody>
+</table>
+<p>We adopt the following strategies for model selection and ensemble:</p>
+<ul>
+<li>When the proportion of missing values exceeds 50%, the imu-only model is selected. Otherwise, the all model is chosen.</li>
+<li>The imu-only model can further enhance the performance of the all model. Therefore, we apply a weighted fusion of the two.</li>
+<li>When historical data is insufficient, the sequence-based model is used for ensemble, with its weight adjusted based on the amount of accumulated records.</li>
+</ul>
+<pre><code>df_test = df_hist
+n_hist = (df_hist)
+w_imu_tf = (n_hist,)/
+w_all_tf = (n_hist,)/
+n_samples = sequence
+ sequence()/n_samples&gt;=:
+     subject_predictions = (imu-only_subject_model) 
+     sequence_predictions = (imu-only_sequence_model)
+     predictions = w_imu_tf*subject_predictions + (-w_imu_tf)*sequence_predictions 
+:
+     imu_predictions = (imu-only_subject_model)
+     all_subject_predictions = (all_subject_model)
+     all_sequence_predictions = (all_sequence_model)
+     predictions = w_all_tf*all_subject_predictions + (-w_all_tf)*all_sequence_predictions
+     predictions = predictions*+imu_predictions*
+</code></pre>
+<h1>Others</h1>
+<ol>
+<li>Features &amp; Data augment: we use the features and augments mainly from the public codes, thanks again to those contributors.</li>
+<li>Validation: a little different with the public ones, we just split by subject. 5folds cv: imu-only: 0.855, all: 0.898.</li>
+<li>The subject-based model improved the performance by ~0.02 compared to the sequence-based model, while the ensemble (average) of both of our individual solutions further increased the performance by ~0.01.</li>
+<li>Our sequence-based model may be relatively weaker compared to those of other top teams, which could be one of the reasons for the performance gap.</li>
+<li>Due to the special API mechanism I mentioned earlier, our approach results fluctuate with each submission. Therefore, we finalized our solution three days ago and used the last 15 submission opportunities to repeatedly evaluate and select 2 of them. </li>
+</ol>

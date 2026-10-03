@@ -1,0 +1,144 @@
+# https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459598
+
+Topic #459598: 7th Place Solution - Wavenet and Some Tricks
+  Author: Ahmet Erdem
+  Posted: 2023-12-06 00:29:25.685000
+  Votes: 70  Comments: 10
+
+First of all, thanks my teammate @robikscube . It was a fun ride. We have noticed that Public LB is not very trustworthy and focused on our CV. We had around 0.826 CV at the end.
+
+Our main model is a wavenet with some modifications. It works on a sequence of minutely aggregated 3 days.
+
+ (nn.Module):
+     ():
+        (SleepModel, self).__init__()
+        emb_size = 
+
+        self.minute_emb = nn.Embedding(, embedding_dim=emb_size)
+
+        self.bn = nn.BatchNorm1d(inch-)
+        self.wave_block1 = Wave_Block(inch-+emb_size, , , kernel_size)
+        self.wave_block2 = Wave_Block(, , , kernel_size, base=)
+        self.wave_block3 = Wave_Block(, , , kernel_size)
+        self.wave_block4 = nn.Sequential(nn.Conv1d(, , kernel_size=, dilation=DAY_LEN//), 
+                                         nn.BatchNorm1d(), nn.LeakyReLU(),
+                                         nn.Conv1d(, , kernel_size=, dilation=DAY_LEN//), 
+                                         nn.BatchNorm1d(), nn.LeakyReLU()
+                                        )
+        self.top = nn.Conv1d(, , kernel_size=)
+        self.top2 = nn.Conv1d(, , kernel_size=)
+
+
+        self.gn1 = nn.GroupNorm(, )
+        self.gn2 = nn.GroupNorm(, )
+
+        self.avgpool = nn.AvgPool1d(kernel_size=DAY_LEN+, padding=DAY_LEN//, stride=)
+        self.maxpool = nn.MaxPool1d(kernel_size=DAY_LEN+, padding=DAY_LEN//, stride=)
+
+
+     ():
+        x = torch.cat([x[:, -DAY_LEN:]*, x, x[:, :DAY_LEN]*], axis=)
+        x = x.permute(, , )
+        minute, x = x[:, -, :], x[:, :-, :]
+
+        x[:, -, :] += minute /  
+        x = self.bn(x)
+
+        minute_emb = self.minute_emb(torch.fmod(minute, ).long()) 
+        x = torch.cat([x, minute_emb.permute(, , )], axis=)
+
+        x = self.wave_block1(x)
+        x = self.gn1(x)
+        x = self.wave_block2(x)
+        x = self.gn2(x)
+        x = self.wave_block3(x)
+
+        x = torch.cat([x, self.avgpool(x[:, :]), self.maxpool(x[:, :])], axis=)
+
+        x = self.wave_block4(x)
+        x, x2 = self.top(x), self.top2(x)
+         x, x2
+
+
+Its features are: 
+["target", "idx", "anglez_mean", "anglez_std", 
+                                                       "enmo_mean", "enmo_std", 
+                                                       "same_anglez_prev_min", "same_anglez_next_min"] +
+                                                       volatility_cols + ["hour", "minute"]
+
+Volatility columns are median over anglez absolute difference on 3 different time windows. (5, 30, 480 steps)
+Same anglez prev and next features are difference of anglez with the last day same minute.
+
+Training details:
+
+
+
+Target is also set to 1 for the adjacent minute because we predict with +3 step offset to cover the next minute too.
+
+Ignoring near misses in loss: 2nd and 3rd minutes around the target are set to -1. SO that we dont penalize positive predictions there.
+
+2 heads (1 for actual target -&gt; categorical crossentropy, 1 for 15min windows -&gt; BCE)
+
+Online Hard Example Mining with 50%
+
+6 epochs with diminishing LR. Each epoch takes 18 seconds on RTX3090. (and submission was taking 30 minutes in total)
+
+2 iterations with different seed for diversity. 1st iteration excludes some bad series and 2nd iteration has very little augmentation.
+
+
+Prediction details:
+
+
+
+1 day sliding predictions with 3 days span. Only the middle day is used.
+
+Postprocessing: Starting from the max prediction, we add their location as prediction. Score is their probability and 2nd highest probability within +-4 minute window. We set these windows to zero. We multiply surrounding +-20 minutes windows by 0.5 and continue. Later, we sample very low probability predictions for +-18 steps span for predictions with high score.
+
+Stacking with LightGBM: Lightgm with a lot of median absolute anglez difference features are used. NN probabilities and time to/till onset/wakeup features using this probabilities are added. AUC got significantly improved but the metric is improved very little. (0.001)
+
+Ensembling: We had another model with LSTM+Transformer. We added it to get 0.001 improvement.
+
+Comments:
+├─ Rob Mulla (2023-12-06 14:08:37.637000) [+11]
+│  Really happy to have teamed with @aerdem4 in this competition - I learned a lot from him and it was a lot of fun! Thanks to the hosts and congrats to everyone who participated. In this competition ...
+  ├─ Chris Deotte (2023-12-06 17:27:36.377000) [+3]
+  │  Congrats Rob, great job! I like your analysis of different target shapes. Predicting shapes instead of predicting a single target was an interesting new idea in this comp. 
+  │  
+  │  You joined early and ju...
+    ├─ Rob Mulla (2023-12-06 19:47:33.410000) [+1]
+    │  Thanks Chris! Congrats to you also on the solo gold.
+    │  
+    │  The multiclass head is a really clever idea. We tried some manual post processing and also we used the minute%15 as a feature in both of our mo...
+├─ Reza.mm79 (2023-12-07 11:22:56.943000) [+1]
+│  Hi, everybody. It was a nice job from a nice team. I encountered a problem on sleep detection and would love to hear your solutions. I am attempting to do almost the same thing with the same data, ...
+├─ Md Nuruzzaman (2023-12-06 16:55:34.227000) [+1]
+│  Great Advice
+├─ Yijie Xu (2023-12-06 06:15:00.220000) [+2]
+│  Very nice! Used a WaveNet-Grunet based approach myself but training was significantly slower on kaggle-only resources and a non resampled inout. In addition, was limited to a much smaller feature d...
+├─ Chris Deotte (2023-12-06 01:47:47.300000) [+2]
+│  Wavenet and Some Tricks
+│  
+│  
+│  and
+│  
+│  
+│    
+│  Stacking with LightGBM
+│  
+│  
+│  haha, sounds like Ion Comp Rob and Ahmet. I also tried these right away 😀 Congratulations on great gold finish and jump upward on private...
+  ├─ Ahmet Erdem (2023-12-06 05:57:42.957000) [+2]
+  │  Thank you @cdeotte , congrats to you too!
+  │  
+  │  We were using 4 folds locally and we noticed how sensitive the folds are even though each fold was larger than Public LB size. Public LB score was also mu...
+    ├─ Chris Deotte (2023-12-06 17:16:42.723000) [+3]
+    │  Those are smart observations. Using full CV was a good idea.
+    │  
+    │  
+    │    
+    │  Why did you use only 1 fold? Were your models running slow?
+    │  
+    │  
+    │  I used 1 fold to accelerate experiments because I was enjoying creati...
+├─ Sinan Calisir (2023-12-06 00:35:50.450000) [+2]
+│  Huge congrats @aerdem4 and @robikscube !!! Great ending. Looking forward to read your solution in detail later on.

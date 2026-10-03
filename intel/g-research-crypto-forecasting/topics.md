@@ -1,0 +1,122 @@
+# g-research-crypto-forecasting 讨论区（按票数排序，共 120 条）
+
+- [Initial thoughts about this competition ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284903) — 294 票 / 34 评论 / 2021-11-02 
+- [[Extra Data] Auto updating dataset collecting market data  |  Baseline + CV ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285726) — 117 票 / 23 评论 / 2021-11-06 
+- [Eval Metric, Target, Weights](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286778) — 111 票 / 47 评论 / 2021-11-10 
+- [Papers on Crypto trading](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284909) — 109 票 / 10 评论 / 2021-11-02 
+- [[Papers List] Deep Learning & Trading - Reading List](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287528) — 99 票 / 11 评论 / 2021-11-14 
+- [13th Place (Final) 1st Place (6 Weeks In) Final Solution](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/313386) — 91 票 / 24 评论 / 2022-05-04 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/323098) — 87 票 / 25 评论 / 2022-11-10 **write-up?**
+- [External "Elon Musk's Tweets" dataset allowed? 😂](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284913) — 85 票 / 25 评论 / 2021-11-02 
+- [7th place solution](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/323250) — 74 票 / 29 评论 / 2022-05-05 **write-up?**
+- [Top 5 leader board without training on future data](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/290265) — 70 票 / 78 评论 / 2021-11-23 
+- [3rd place solution](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/323703) — 67 票 / 30 评论 / 2022-05-24 **write-up?**
+- [Watch out!: test LB period is contained in the train csv](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285505) — 66 票 / 18 评论 / 2021-11-05 
+- [Welcome to the G-Research Crypto Forecasting Challenge](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284848) — 65 票 / 51 评论 / 2021-11-02 
+- [Evaluation Metric Clarification](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/291845) — 60 票 / 19 评论 / 2021-12-01 
+- [[Links List] Winning Solutions of Kaggle Time Series Forecasting Challenges](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284884) — 58 票 / 3 评论 / 2021-11-02 **write-up?**
+- [Score Update Schedule](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/304907) — 56 票 / 75 评论 / 2022-02-03 
+- [Data Creation & External Data Usage](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286779) — 55 票 / 14 评论 / 2021-11-10 
+- [Avoid Overfitting with Feature Neutralization](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287804) — 54 票 / 3 评论 / 2021-11-15 
+- [Past & Present Forecasting Competitions](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284856) — 53 票 / 7 评论 / 2021-11-02 
+- [Ideas for Feature Engineering](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286389) — 52 票 / 19 评论 / 2021-11-09 
+- [Good notebooks deserving more votes !](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308610) — 45 票 / 17 评论 / 2022-02-19 
+- [[Compilation] Good starter Notebooks- G-Research Crypto Forecasting ₿💵](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/289519) — 43 票 / 6 评论 / 2021-11-20 
+- [Interim update to supplemental_train.csv](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/300906) — 43 票 / 28 评论 / 2022-01-14 
+- [New to Machine Learning or to Kaggle? Check this out.](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284869) — 41 票 / 19 评论 / 2021-11-02 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284868) — 40 票 / 166 评论 / 2021-11-02 
+- [On-line Feature Engineering, Ensemble Calibration and Submission](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/293994) — 39 票 / 6 评论 / 2021-12-07 
+- [Possible Reasons for Submission Scoring Error](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/297000) — 39 票 / 18 评论 / 2021-12-24 
+- [Abandoned competition?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285811) — 38 票 / 11 评论 / 2021-11-06 
+- [Public Leaderboard & API Clarifications](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/290412) — 38 票 / 13 评论 / 2021-11-24 
+- [Common factors / CV / Feature importance / Evaluation function](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/288555) — 37 票 / 7 评论 / 2021-11-17 
+- [1st Place of Jane Street 🏆 ➜ Adapted to Crypto 👌](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286676) — 36 票 / 9 评论 / 2021-11-10 **write-up?**
+- [Major Notebooks Update! ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/290806) — 34 票 / 8 评论 / 2021-11-26 
+- [Memory Reduction](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285721) — 34 票 / 3 评论 / 2021-11-05 
+- [🔥 Relevant Notebooks from Optiver & Janesteet competitions to start from! 🔥](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284888) — 30 票 / 0 评论 / 2021-11-02 
+- [WTH is going on??!!!](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285878) — 30 票 / 9 评论 / 2021-11-06 
+- [Getting and Aggregating 1m Binance Data](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285913) — 30 票 / 4 评论 / 2021-11-06 
+- [[Compilation] - Winning Solutions of Previous Market Prediction Kaggle Challenges](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284883) — 30 票 / 2 评论 / 2021-11-02 **write-up?**
+- [Meaningful submission scores / sharing the lower boundary of public test data](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285289) — 28 票 / 7 评论 / 2021-11-04 
+- [[Package Summary] - Every single AutoML + Time-series package out there](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285047) — 28 票 / 0 评论 / 2021-11-03 
+- [The dominance of tree-based methods in time series predictions](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/298060) — 27 票 / 3 评论 / 2021-12-31 
+- [First update delayed until tomorrow](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308041) — 27 票 / 6 评论 / 2022-02-16 
+- [What exactly are we predicting...](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284924) — 27 票 / 11 评论 / 2021-11-02 
+- [A Faster Way to Load Data](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285291) — 27 票 / 19 评论 / 2021-11-04 
+- [Allure of public leaderboard is irresistible. But not here!](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284905) — 24 票 / 0 评论 / 2021-11-02 
+- [The first minute of every month is missing.](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286095) — 24 票 / 1 评论 / 2021-11-08 
+- [First update posted](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308221) — 24 票 / 39 评论 / 2022-02-17 
+- [Recent big drops in the crypto market](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/302478) — 23 票 / 9 评论 / 2022-01-22 
+- [No submission was submitted on the final day](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/304630) — 23 票 / 19 评论 / 2022-02-02 
+- [Third score update posted](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/313356) — 23 票 / 6 评论 / 2022-03-16 
+- [Forecast the different medal zones.](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/304735) — 23 票 / 34 评论 / 2022-02-02 
+- [Let's talk Validation! 📋](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285343) — 23 票 / 3 评论 / 2021-11-04 
+- [Thanks to all participants for a great competition](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/322909) — 22 票 / 6 评论 / 2022-05-04 
+- [9th Place Solution - Inference](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/324180) — 22 票 / 5 评论 / 2022-05-10 **write-up?**
+- [Under 2 weeks to submission deadline!](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/301844) — 22 票 / 9 评论 / 2022-01-19 
+- [External Dataset](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285742) — 22 票 / 13 评论 / 2021-11-06 
+- [6-Fold Models Ran for 9 Hours and Received the Timeout Error](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286070) — 21 票 / 18 评论 / 2021-11-07 
+- [Publish the data used for final submission evaluation](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308400) — 21 票 / 3 评论 / 2022-02-18 
+- [What is your best score without overlap?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286999) — 20 票 / 7 评论 / 2021-11-11 
+- [[Compilation] - 5 Feature Engineering Notebooks for newcomers joining in](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/294928) — 19 票 / 5 评论 / 2021-12-13 
+- [Granger causality test, IOTA, and strange results?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287499) — 19 票 / 12 评论 / 2021-11-14 
+- [Error handling reminder](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/290021) — 19 票 / 4 评论 / 2021-11-22 
+- [Chris Deotte on Chai Time Kaggle Talk](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/303651) — 18 票 / 25 评论 / 2022-01-28 
+- [This is weird. Big negative correlation in scores?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308239) — 18 票 / 52 评论 / 2022-02-17 
+- [Are we allowed to collect market data during these three months to extend the train set?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284942) — 18 票 / 19 评论 / 2021-11-03 
+- [Probably the most important paper for this competition](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284919) — 17 票 / 8 评论 / 2021-11-02 
+- [Transformer-based Multivariate Time Series Representation Learning](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286677) — 17 票 / 1 评论 / 2021-11-10 
+- [37th place approach in the G-Research Crypto Forecasting Competition.](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/322886) — 17 票 / 6 评论 / 2022-05-04 **write-up?**
+- [Numerai: a stock price forecasting competition platform](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286415) — 17 票 / 2 评论 / 2021-11-09 
+- [**Not clear the way beta_a is calculated**](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285624) — 16 票 / 15 评论 / 2021-11-05 
+- [Analysis of the 5th update](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/320347) — 16 票 / 1 评论 / 2022-04-21 
+- [[Review paper] "Forecasting: Theory and practice"](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286061) — 16 票 / 4 评论 / 2021-11-07 
+- [Fourth score update](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/315984) — 16 票 / 1 评论 / 2022-03-30 
+- [G-Research Crypto: Calculating the p-value](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/316508) — 16 票 / 7 评论 / 2022-04-02 
+- [Optimizing hyper-parameters over the new CV - Some experiments](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287527) — 16 票 / 0 评论 / 2021-11-14 
+- [New update to data supplement](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/303302) — 15 票 / 8 评论 / 2022-01-26 
+- [Wrapping up and moving on](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/313934) — 15 票 / 7 评论 / 2022-03-19 
+- [Why is it "notebook timeout"?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286123) — 15 票 / 17 评论 / 2021-11-08 
+- [Notebook Timeout](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/304060) — 15 票 / 12 评论 / 2022-01-30 
+- [Share My Own Pipeline](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/299458) — 14 票 / 4 评论 / 2022-01-08 
+- [Updating the supplemental training set](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308260) — 14 票 / 4 评论 / 2022-02-17 
+- [Don't lose hope before the final update!](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/319511) — 14 票 / 3 评论 / 2022-04-17 
+- [Brute-Force Multi-Task RNN?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285176) — 14 票 / 5 评论 / 2021-11-03 
+- [The best glitch candidate: rerun target shifted](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308564) — 14 票 / 12 评论 / 2022-02-19 
+- [Useful libraries](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286292) — 14 票 / 8 评论 / 2021-11-08 
+- [[Trader's Voice] Some Advices and Some Doubts](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/291093) — 14 票 / 8 评论 / 2021-11-27 
+- [Analysis of the updates](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/317569) — 13 票 / 7 评论 / 2022-04-07 
+- [Questions about Data](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284946) — 13 票 / 3 评论 / 2021-11-03 
+- [Vintage methods](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286759) — 13 票 / 4 评论 / 2021-11-10 
+- [Can We Use Window/Lag Data For Features?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/291596) — 13 票 / 9 评论 / 2021-11-30 
+- [Interactive Shakeup Plots](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/313417) — 13 票 / 2 评论 / 2022-03-17 
+- [Papers on Short Term Trading and Returns](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/284910) — 13 票 / 2 评论 / 2021-11-02 
+- [Errors in supplemental_train csv update.](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/301049) — 13 票 / 4 评论 / 2022-01-15 
+- [Always Submission Scoring Error](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287607) — 13 票 / 6 评论 / 2021-11-14 
+- [Second score update posted](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/310718) — 13 票 / 48 评论 / 2022-03-02 
+- [What's is going on with subs?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308230) — 13 票 / 3 评论 / 2022-02-17 
+- [Analysis of the 6th and final update](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/322899) — 12 票 / 3 评论 / 2022-05-04 
+- [Share your own socre](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/301726) — 12 票 / 13 评论 / 2022-01-19 
+- [Has Anyone Successfully Obtained Scores by Using More than One Model](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287088) — 12 票 / 6 评论 / 2021-11-12 
+- [am I (continuing) hallucinating?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/301140) — 12 票 / 5 评论 / 2022-01-16 
+- [Meaning of weights ? ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285183) — 12 票 / 9 评论 / 2021-11-03 
+- [Fifth score update](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/318793) — 12 票 / 16 评论 / 2022-04-13 
+- [Powerful Features: Volatility Estimators! ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/300149) — 12 票 / 6 评论 / 2022-01-11 
+- [Question of time series API in this competition](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/300357) — 12 票 / 9 评论 / 2022-01-12 
+- [The best thing is that we have time ahead](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308489) — 12 票 / 4 评论 / 2022-02-18 
+- [Custom TF/Keras loss for NN baseline (+SHAP)](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/299771) — 11 票 / 2 评论 / 2022-01-09 
+- [An Advanced CNN-LSTM Model for Cryptocurrency Forecasting](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/294562) — 11 票 / 1 评论 / 2021-12-11 
+- [Question about implement rolling feature ?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285103) — 11 票 / 4 评论 / 2021-11-03 
+- [Silver-zone submission with exponential moving average?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/325280) — 11 票 / 3 评论 / 2022-05-15 
+- [Does your model pays attention to the 'Volume'  feature ? ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287380) — 11 票 / 1 评论 / 2021-11-13 
+- [Meaning of supplemental_train ?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286493) — 11 票 / 1 评论 / 2021-11-09 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287524) — 11 票 / 3 评论 / 2021-11-14 
+- [How can I create the lag of the Target?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287682) — 11 票 / 6 评论 / 2021-11-15 
+- [Adventures in validation](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285480) — 11 票 / 7 评论 / 2021-11-04 
+- [List of features to increase your score](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/308100) — 10 票 / 9 评论 / 2022-02-17 
+- [50 days gap + Neutralizing Features + DenseNet = my bronze medal at Jane Street competition](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285554) — 10 票 / 1 评论 / 2021-11-05 **write-up?**
+- [.029 baseline by predicting -(the last known 15 min return). ](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/304891) — 10 票 / 9 评论 / 2022-02-02 
+- [Loading external data with yfinance](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/285678) — 10 票 / 0 评论 / 2021-11-05 
+- [How to recreate the evaluation metric?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/286012) — 10 票 / 1 评论 / 2021-11-07 
+- [A lot have been tested in the community’s public notebooks, but what was chosen?](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/304793) — 10 票 / 13 评论 / 2022-02-02 
+- [Time Series Modeling - Starter Notebooks](https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/287533) — 10 票 / 1 评论 / 2021-11-14 

@@ -1,0 +1,163 @@
+# https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561510
+
+Topic #561510: 1st place solution [segmentation with partly U-NET and ensembling part]
+  Author: Dieter
+  Posted: 2025-02-06 13:59:32.713000
+  Votes: 103  Comments: 35
+
+Thanks to kaggle and everyone involved for hosting this exciting competition. It was a great learning experience and it was very interesting to see how much of our computer vision experience could also be applied to 3D imaging. Thanks to @bloodaxe for this great team experience. 
+
+TLDR
+
+The solution in an ensemble of segmentation (3D Unets with ResNet &amp; B3 encoders) and object detection models (SegResNet and DynUnet backbones) from MONAI. We also used MONAI for augmentations, and exported models via jit or TensorRT, which gave 200% speedup increase and enabled us to have a slightly larger ensemble. We did not use any external or simulated data!
+
+This post covers the segmentation based approach and ensembling. For object detection part see @bloodaxe writeup: 1st place solution [Object Detection Part]
+
+Cross validation
+
+For segmentation approach 7 folds were used, simply by splitting by experiment. Using mean of f4-score of all 7 folds had some good correlation with LB. During model training I optimized individual class thresholds at the end of each epoch by simple grid-search on the validation experiment. After all 7 folds were trained we could re-calibrate thresholds, by taking OOF predictions. And fitting the threshold for one fold on the predictions of the other 6. Then we average the resulting f4-curves and take the best threshold.
+
+Data preprocessing/ augmentations
+
+3D images were normalized by standard normalization, i.e. for each 630x630x184 image, we substract mean and devide by standard deviation before splitting the images into patches.
+Since models are trained from scratch, augmentations were essential to prevent overfitting. 
+We used RandomCrop, Flip on each axis, and rotation, which all are available with MONAI. Additionally I used my own implementation of MixUp which was highly effective to train longer and prevent overfitting.
+
+Model
+
+Modelling was quite a ride in this competition. I started with simple UNET with having 3D gaussian balls as segmentation target. For diversity I also tried object detection example from MONAI and realized its working very well out of the box. But when analyzing the different output feature maps and trying to isolate the perfomance gain over gaussian heatmap based segmentation I realized where the advantage was and adjusted my segmentation model accordingly. I learned that 
+
+
+
+the penultimate feature map has a higher accuracy than the last one, which is surprising at first
+
+gains from box regression are negligable, as particles from the same type have mostly same size anyways.
+
+
+Hence its sufficient to have a pixel-wise loss on the penultimate feature map output. I.e. use a partly UNET. The gaussian heatmap is not needed when suppressing background with a low class weight, and just use single pixels as targets. Using the same approach on lower level outputs (= deep supervision) is possible, but does not provide much gain. Input for the segmentation models are 96x96x96 image patches and the loss is calculated on the 48x48x48 output. 
+
+
+
+In general, we observed that relatively small models work really and the design of loss is the most important aspect. We used MONAIs FlexibleUnet with backbones resnet34 and efficientnet-b3. Six checkpoints of this architecture would finish under 2h and score 7th place on LB.
+
+Training procedure
+
+We used 7 classes (incl background) and weighted CrossEntropy as loss. Notably keeping beta-amylase as a class although it is not scored is quite helpful as model learns to differentiate beta-galactosidase from it. To account for low number of positive pixels, positive pixels are weighted by 256 and background has weight 1. Models were trained with a cosine learning rate schedule with peak LR of 0.001, mixed precision and an effective batch size of 32 samples. Training is based on Random crops and for validation the single experiment image is divided into patches and stored in RAM. 
+
+Ensembling
+
+Ensembling was very challenging, as our two approaches are quite diverse. While in theory predictions from the segmentation models can be ensembled with feature map outputs of the object detection model before runnning the object detection postprocessing, in practice those feature maps have a very different distribution due to difference architectures and loss functions. 
+
+
+
+We were eager to find an elegant way to fix this scaling issue as we saw the potential of a possible ensemble. The scaling of our best submission works as following. To combine predictions A with predictions B, for each class sort all pixel values for A and B and replace values of B with the corresponding values of A of same rank. In code: 
+
+
+
+This results in both predictions having the same distribution, and hence we could simple blend the feature maps before performing object de
+tection task.
+
+
+
+What did not work
+
+
+
+Using supplemental data (external or simulated)
+
+Other augs
+
+Other losses (Tversky, Dice)
+
+
+Thanks for reading. 
+
+Edits:
+training code: https://github.com/ChristofHenkel/kaggle-cryoet-1st-place-segmentation
+inference kernel: https://www.kaggle.com/code/christofhenkel/cryo-et-1st-place-solution?scriptVersionId=223259615
+
+Comments:
+├─ Yassine Alouini (2025-02-07 19:45:43.580000) [+1]
+│  Well done and congrats. Can you provide some details on the training infrastructure please (how many GPUs, how long it trained, any issues on the losses…)?
+  ├─ Dieter (2025-02-09 11:22:02.583000) [+3]
+  │  I trained 6 checkpoints, each takes 2h on a A100 with bf16 mixed-precision. For my models mixup was crucial which more than doubles the number of epochs for training.
+    ├─ Yassine Alouini (2025-02-10 10:16:56.247000) [+1]
+    │  Thanks for the details. bf16 didn't introduce any instabilities?
+├─ Đăng Nguyễn Hồng (2025-02-07 07:19:16.023000) [+1]
+│  Congratulations and thank you so much for your write-up, as always!
+│  The CV scheme truly impressive. The ensemble approach seems like a form of histogram matching, isn't it?
+│  For single model, it's r...
+  ├─ Dieter (2025-02-09 11:30:19.753000) [+4]
+  │  I was already 1st place on public LB two months ago, with a simple 3D-Unet with gaussian balls as target. Score was around 0.74 back then. It took us 2 month of hard work to improve and refine so t...
+    ├─ Đăng Nguyễn Hồng (2025-02-11 08:17:15.863000) [+1]
+    │  Thanks! You've really motivated us 😀
+    │  0.74 to 0.765+ for single model, i mean all things were improved, but beside design of loss is the most important aspect as you mentioned, could you share your ...
+    ├─ Adrian Tif (2025-04-24 14:22:43.140000) [+0]
+    │  Congratulations for the win! What did you mean by gaussian balls as target? Is it some sort of baseline?
+├─ Volodymyr Pivoshenko 🇺🇦 (2025-02-06 21:12:25.110000) [+1]
+│  @christofhenkel congratulations! very interesting solution!
+├─ work work (2025-02-06 19:18:25.543000) [+1]
+│  congratulations , not fully understand the solution , but i learn a lot from this competition
+  ├─ Dieter (2025-02-09 11:12:52.560000) [+13]
+  │  If you have specific points where I should be clearer, I am happy to edit the post and elaborate more. My aim is that everybody can understand the solution.
+├─ Bartley (2025-02-06 17:58:23.737000) [+1]
+│  Thanks for the detailed write-up and nice ensemble strategy.
+│  
+│  How was your version of MixUp different from the usual implementation?
+  ├─ Dieter (2025-02-07 20:22:59.030000) [+8]
+  │  Its not much different to other implementations. Some mix rather the losses, I like mixing the targets better. I like a simple pure torch implementation so you can have it as part of the model on G...
+  ├─ Yassine Alouini (2025-02-08 17:22:50.443000) [+0]
+  │  I guess he adapted an existing implementation to work with 3D patches? As far as my knowledge goes, MixUp works with two images with weights alpha and (1-alpha), maybe he did something clever to ha...
+    ├─ Dieter (2025-02-09 11:45:57.913000) [+4]
+    │  Mixup really just is averaging inputs and targets of a batch with a weight drawn from a Beta-distribution.
+    │  Actually we ( @philippsinger and @ilu000 ) coded this four years ago as part of the rainfo...
+├─ David List (2025-02-07 01:26:00.740000) [+2]
+│  I mean…who thinks of measuring the accuracy of the penultimate feature map?  That or the way you managed to do the ensemble.  Pretty cool stuff!  Thanks for the great explanation!
+├─ Sinan Calisir (2025-02-06 15:32:37.710000) [+2]
+│  Congratulations on the win! Curious to see if the number one spot will come back again shortly 👀
+│  
+│  Your solo scores are amazing with no external data. It would be greatly appreciated if you plan to ...
+  ├─ Dieter (2025-02-14 06:49:40.613000) [+6]
+  │  I guess you will be happy to hear that we will add our solution to MONAI as a tutorial
+    ├─ Sinan Calisir (2025-02-14 14:23:58.357000) [+0]
+    │  Oh, that's such a great news!! I am looking forward to reading your tutorial when published.
+├─ Ma Edward (2025-02-06 14:17:42.937000) [+2]
+│  Congratulations!!!
+│  Would you mind sharing the single model performance in the final ensemble models?
+  ├─ Dieter (2025-02-06 14:25:51.720000) [+12]
+  │  for segmentation:
+  │  
+  │  resnet34 backbone: 0.766
+  │  resnet34 backbone + deep supervision: 0.767
+  │  effnet-b3 backbone: 0.765
+  │  combined: 0.778
+    ├─ Ms. Nancy Al Aswad (2025-02-06 14:36:58.947000) [+2]
+    │  Thanks for sharing 🙏
+    ├─ Ma Edward (2025-02-06 14:53:37.347000) [+2]
+    │  Thank you so much for sharing!
+├─ Sagar Sarkar (2025-02-27 03:54:39.490000) [+0]
+│  Congratulations!!  Thank you, it was a fantastic learning opportunity, and your work is greatly appreciated!
+├─ Linhan Wang (2025-02-21 21:39:29.323000) [+0]
+│  Thanks for the detailed writeup. Using x2 downsampled output can speed up the model greatly. Could you share how you do postprocessing? If you use maxpooling, can you share the kernel size. I am co...
+├─ Tyrian Tong (2025-02-13 06:36:11.877000) [+0]
+│  Thanks for the detailed write-up and nice ensemble strategy.💪
+├─ Lavanyabanga25 (2025-02-09 13:45:54.180000) [+0]
+│  Thanks for the detailed write-up and nice ensemble strategy.
+├─ work work (2025-02-09 09:27:54.500000) [+0]
+│  @christofhenkel  congratulations to be 1 ranking other time, can you share with us what environement that use to develop your solution ( IDE, HARDWARE…)
+  ├─ Dieter (2025-02-09 11:24:53.720000) [+5]
+  │  For this competition I switched from jupyter notebook as IDE to using VSCODE, simply because it enables the use of Copilot.
+    ├─ work work (2025-02-09 11:43:45.683000) [+2]
+    │  thank you for your reply
+    ├─ Yassine Alouini (2025-03-10 07:59:15.927000) [+0]
+    │  At some point, we will get cursor/copilot within notebooks I believe. 👌
+    ├─ work work (2025-03-10 12:34:38.387000) [+0]
+    │  for pycharm IDE , it is available in professional version not free version
+├─ Bhumika Mahajan (2025-02-10 18:31:12.953000) [+1]
+│  very informative
+├─ Harsaihaj Singh Gill (2025-02-10 17:16:43.930000) [+1]
+│  Very informative
+├─ Saaransh Gupta (2025-02-06 20:02:15.570000) [+1]
+│  Very nice!!!!!!!!!!!!!!
+├─ YMJA (2025-02-14 13:50:05.717000) [+0]
+│  Interesting🤔

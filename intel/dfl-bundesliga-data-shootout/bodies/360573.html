@@ -1,0 +1,93 @@
+<p>First of all, thanks to organizers for their effort in this amazing competition and congrats to all the winners. Although we need to wait another two months for the final results, let me share my currently 4th place solution. </p>
+<h1>Overview</h1>
+<p>The basic pipeline of my solution and the summary of the models are shown below.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1680435%2F34acdf1d2365d73423f2ec07bc214f54%2F2022-10-17%2010.14.55.png?generation=1665969310891529&amp;alt=media" alt=""></p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Model</th>
+<th>Backbone</th>
+<th>Input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frame Extraction</td>
+<td>NA</td>
+<td>NA</td>
+<td>1920x1080</td>
+<td>960x540 (odd frame only)</td>
+</tr>
+<tr>
+<td>Candidate Frame Selection</td>
+<td>Image Classification</td>
+<td>efficientnetv2_l</td>
+<td>512x512</td>
+<td>4-class probability</td>
+</tr>
+<tr>
+<td>Event Area Detection</td>
+<td>UNet</td>
+<td>efficientnet_b5</td>
+<td>512x512</td>
+<td>Heatmap</td>
+</tr>
+<tr>
+<td>Event Classification</td>
+<td><a href="https://openaccess.thecvf.com/content_ICCV_2019/html/Tran_Video_Classification_With_Channel-Separated_Convolutional_Networks_ICCV_2019_paper.html" target="_blank">CSN</a></td>
+<td>ResNet152</td>
+<td>224x224 ROI</td>
+<td>4-class probability</td>
+</tr>
+</tbody>
+</table>
+<h1>Frame Extraction</h1>
+<p>I used FFmpeg to extract and save frames in a video. Note, to reduce the time for disk I/O, I decided to discard even frames and reduce the size of frame to 960x540 (i.e., half the original size).</p>
+<h1>Candidate Frame Selection</h1>
+<p>The purpose of this step is to find the candidate frames in which events are likely to occur. I simply classified each of the extracted frames to four classes, background (not event), play, challenge, and throwin. The backbone is <a href="https://github.com/rwightman/pytorch-image-models" target="_blank">timm</a>'s efficientnetv2_l, and an input frame is resized to 512x512. </p>
+<p>This process doesn't use temporal information at all, so the accuracy itself is not high, but what I wanted to do here is to find the event frames with a high recall. So I ignored the absolute values of classification scores, and focused on the relative peaks. I used <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html" target="_blank">scipy.signal.find_peaks</a>, and picked the frames corresponding to the peaks of the classification scores as candidate frames.</p>
+<h1>Event Area Detection</h1>
+<p>Through a set of experiments, I found that it's difficult to reach a competitive score if I naively used entire frames. Since <a href="https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/342948" target="_blank">hand-labeling is allowed in this competition</a>, I decided to train an event area detection model to extract a ROI from frame. I annotated xy coordinate of (roughly) center of an event area (basically the coordinate of player who is most closely associated with the event) for all the event frames in the training set. This took several weeks :-(</p>
+<p>The event area detector is a simple UNet, and it outputs a heatmap of event area. The backbone is <a href="https://github.com/rwightman/pytorch-image-models" target="_blank">timm</a>'s efficientnet_b5, and an input frame is resized to 512x512. Some example results are shown in the figure below. In the figure, the left is input, the middle is output heatmap overlapped to the input, and the right is zoom-in image centered at the peak of the heatmap.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1680435%2F6151cf9fe407bb5f9332370ef6a03003%2F2022-10-17%2015.37.39.png?generation=1665988698309792&amp;alt=media" alt=""><br>
+To detect a ball is one of the promising approaches in this competition, but as discussed <a href="https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/343652" target="_blank">here</a>, in many cases a ball is not visible (as you can see from the examples above), or is quite difficult to detect because of various reasons such as background color, lack of resolution and motion blur. So I decided to detect an event area instead of a ball.</p>
+<h1>Event Classification</h1>
+<p>The frames from the <strong>Candidate Frame Selection</strong> contains a lot of wrong (non-event) frames, and also the scores are not reliable. To refine the results, this process applies a more sophisticated action recognition model to the candidate frames. </p>
+<p>After trying several action recognition models, I employed <a href="https://openaccess.thecvf.com/content_ICCV_2019/html/Tran_Video_Classification_With_Channel-Separated_Convolutional_Networks_ICCV_2019_paper.html" target="_blank">3D Channel-Separated Networks (CSN)</a> since it showed good performance for both accuracy and speed. The training set for this model was created based on the outputs of two previous steps, <strong>Candidate Frame Selection</strong> and <strong>Event Area Detection</strong>.  First, I applied the candidate frame selection to all the frames in the training set, and set the labels to background for the wrongly selected non-event frames. Of course, the correctly selected frames had their own events' labels. Then, I used the event area detection model to extract a ROI from each frame. The center of ROI is the peak of output heatmap, and its size is 224x224. Since the number of background frames are much larger (x~10) than those of event frames, I randomly selected around 10% of background frames every 5 epochs during training. </p>
+<p>The backbone of CSN is ResNet125, and the number of input frames is 16 (actual time span is 32 frames because even frames are discarded). At both training and inference, a ROI is extracted from candidate frame, and the same regions are also extracted from +/- 8 frames, and fed to the CSN.</p>
+<p>The final score is just a probability output from CSN, or ensemble of CSN output and the score from <strong>Candidate Frame Selection</strong>. The latter is slightly better than the former (+0.01).  </p>
+<h1>Computation Time</h1>
+<p>Since my pipeline consists of several blocks, my biggest challenge was to keep the computation time for each block as low as possible. Using only odd frames is one of the biggest compromises. The per-video computation time for each block in the kaggle kernel is something like below.</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Computation Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frame Extraction</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>Candidate Frame Selection</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>Event Area Detection</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>Event Classification</td>
+<td>30 min</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>80 min</td>
+</tr>
+</tbody>
+</table>
+<p>I should have thought about simpler end-to-end method, but I couldn't. Now I'm really impressed by other kagglers' very sophisticated methods, and learning a lot. Thank you, everyone!</p>

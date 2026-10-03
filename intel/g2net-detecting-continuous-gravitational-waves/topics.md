@@ -1,0 +1,82 @@
+# g2net-detecting-continuous-gravitational-waves 讨论区（按票数排序，共 80 条）
+
+- [Understanding the Data (Gravitational Waves & STFs)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/358444) — 134 票 / 16 评论 / 2022-10-07 
+- [Regarding Those -1 Labels](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/363734) — 125 票 / 30 评论 / 2022-11-03 
+- [1st place solution: Summing the power with GPU](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375910) — 101 票 / 38 评论 / 2023-01-17 **write-up?**
+- [How to generate your own data](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/347052) — 70 票 / 103 评论 / 2022-08-22 
+- [Low SNR Experiments](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/370202) — 56 票 / 11 评论 / 2022-12-03 
+- [9th Place Solution; Simple CNN Approach](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375897) — 48 票 / 11 评论 / 2023-01-04 **write-up?**
+- [Learning resources](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357682) — 43 票 / 4 评论 / 2022-10-05 
+- [6th place solution (Simulated Annealing Approach)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375923) — 41 票 / 4 评论 / 2023-01-05 **write-up?**
+- [3rd place solution: How far can deep learning go?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376233) — 40 票 / 8 评论 / 2023-01-06 **write-up?**
+- [Minimum float32 is 1e-38 and data**2 is 1e-44](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/361312) — 38 票 / 4 评论 / 2022-10-20 
+- [10 Days to go - Here's What You Need to Know](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/373973) — 36 票 / 6 评论 / 2022-12-24 
+- [ Recap of the Top Solutions from the Previous G2Net Competition](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/363280) — 35 票 / 5 评论 / 2022-10-31 **write-up?**
+- [Public artefacts and references from the previous edition](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357533) — 34 票 / 5 评论 / 2022-10-04 
+- [Papers on Continuous Gravitational-Wave Signals (ML & DL)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357664) — 34 票 / 1 评论 / 2022-10-05 
+- [There may be some alt accounts on the leaderboard.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375369) — 32 票 / 23 评论 / 2023-01-01 
+- [5th place solution: Stack-sliding and Differential Evolution](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376022) — 31 票 / 8 评论 / 2023-01-04 **write-up?**
+- [PyFstat Signal Parameters](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/361562) — 31 票 / 10 评论 / 2022-10-22 
+- [11th place solution OR Simpler is Better ](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375981) — 28 票 / 2 评论 / 2023-01-04 **write-up?**
+- [Some insights about validation strategy](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/368589) — 27 票 / 7 评论 / 2022-11-26 
+- [Welcome to the G2Net Detecting Continuous Gravitational Waves challenge!](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357201) — 25 票 / 5 评论 / 2022-10-03 
+- [12th place solution - from public 281st to private 12th!](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375961) — 24 票 / 5 评论 / 2023-01-04 **write-up?**
+- [ROC AUC score intuition ~ detected fraction](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/362918) — 21 票 / 4 评论 / 2022-10-29 
+- [2nd Place Solution: GPU-Accelerated Random Search](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376504) — 21 票 / 5 评论 / 2023-02-14 **write-up?**
+- [4th place solution: dynamic programming and ensembling](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376357) — 19 票 / 0 评论 / 2023-01-06 **write-up?**
+- [Reverse engineering 20% of test samples with external data](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/368366) — 19 票 / 0 评论 / 2022-11-24 
+- [10th place solution: CNN with pseudo labels](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376052) — 18 票 / 3 评论 / 2023-01-29 **write-up?**
+- [Anyone tried to invert the spectrograms back into waveforms?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/358835) — 18 票 / 10 评论 / 2022-10-09 
+- [possible instrumental artifacts in training/testing dataset](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/364854) — 17 票 / 3 评论 / 2022-11-08 
+- [🔥 Best CV-LB results 🔥](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357695) — 17 票 / 20 评论 / 2022-10-05 
+- [HDF files with indexed dataframes for the training set](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357645) — 16 票 / 5 评论 / 2022-10-05 
+- [The End: Thank you all!](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376006) — 15 票 / 4 评论 / 2023-01-04 
+- [How to reach 0.75 by single model?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/373020) — 15 票 / 25 评论 / 2022-12-19 
+- [Winning Solutions of the Previous G2Net Competition (Gravitational Wave Detection)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/362869) — 14 票 / 1 评论 / 2022-10-29 **write-up?**
+- [Augmentations For This Competition](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/373461) — 13 票 / 0 评论 / 2022-12-21 
+- [8th place solution: matched filter and CNN](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376253) — 13 票 / 6 评论 / 2023-01-05 **write-up?**
+- [20th place solution (how I spent lots of time on things that didn't work)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375957) — 12 票 / 2 评论 / 2023-01-04 **write-up?**
+- [How to read the hdf5 files](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357537) — 12 票 / 2 评论 / 2022-10-04 
+- [22th-place solution : simulated CW signals & augmentations](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375927) — 12 票 / 8 评论 / 2023-01-04 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357299) — 11 票 / 69 评论 / 2022-10-03 
+- [Weird property of std(spectrogram) in train data](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/363460) — 11 票 / 8 评论 / 2022-11-01 
+- [Generating samples that match the train / test distribution](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/365208) — 11 票 / 8 评论 / 2022-11-10 
+- [Timestamps and Frequencies Insights](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/358832) — 11 票 / 3 评论 / 2022-10-09 
+- [What is the difference between the G2Net this year and last year?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/366451) — 10 票 / 9 评论 / 2022-11-16 
+- [[Chai Time] Sanyam explains top solutions from the previous G2Net competition](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/371828) — 10 票 / 1 评论 / 2022-12-12 **write-up?**
+- [Good resources for Fourier transform?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/360212) — 9 票 / 6 评论 / 2022-10-15 
+- [Inverse adversarial validation with self-supervised aproach for signal detection](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/370423) — 9 票 / 2 评论 / 2022-12-04 
+- [-1 labels in train set are intersting](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/359958) — 9 票 / 2 评论 / 2022-10-14 
+- [Is there an available dataset for me to test the training? (and it contains official data)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/362816) — 9 票 / 2 评论 / 2022-10-29 
+- [To host: if the public leaderboard(24% of the test set) is splited randomly?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/369541) — 8 票 / 3 评论 / 2022-11-30 
+- [Generation Parameters and Distribution problems](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/369216) — 8 票 / 7 评论 / 2022-11-29 
+- [Can we assume the same signal trajectories between Hanford & Livingston ?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/361655) — 8 票 / 2 评论 / 2022-10-22 
+- [Solution for the UnicodeDecodeError when installing Ptemcee (from PyFstat) (Windows users)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/361477) — 8 票 / 2 评论 / 2022-10-21 **write-up?**
+- [Standard CNN models VS Basic, built from scratch CNNs](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/371585) — 7 票 / 7 评论 / 2022-12-11 
+- [Merging generated signal into noise](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/369591) — 7 票 / 4 评论 / 2022-11-30 
+- [🔥 Solutions from the previous competition 🔥](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/358039) — 7 票 / 0 评论 / 2022-10-06 **write-up?**
+- [The diversity of solutions in this competition is so impressive.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375974) — 7 票 / 0 评论 / 2023-01-04 **write-up?**
+- [A tool for observing hdf5 files.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/358693) — 7 票 / 1 评论 / 2022-10-09 
+- [Riroriro Python Package to Simulate Gravitational Waveforms.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357601) — 7 票 / 4 评论 / 2022-10-04 
+- [Does using test data for network training violate the rules?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/361501) — 7 票 / 6 评论 / 2022-10-22 
+- [What do with the vertical centered "signals" in the spectrograms?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/362775) — 6 票 / 2 评论 / 2022-10-29 
+- [what is your batch size and  LB?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/362769) — 6 票 / 5 评论 / 2022-10-29 
+- [13th Place Solution: plain machine learning.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376724) — 6 票 / 2 评论 / 2023-01-08 **write-up?**
+- [CPU vs GPU. Different results with the same code. Different Public Scores.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/363163) — 6 票 / 9 评论 / 2022-10-31 
+- [The first Machine Learning Gravitational-Wave Search Mock Data Challenge](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/360878) — 6 票 / 0 评论 / 2022-10-18 
+- [Suggestions on training on the dataset?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/359657) — 6 票 / 2 评论 / 2022-10-13 
+- [High validation accuracy (0.77), low LB score (0.56)](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/363810) — 6 票 / 8 评论 / 2022-11-03 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357298) — 5 票 / 2 评论 / 2022-10-03 
+- [About LIGO ](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/360522) — 5 票 / 4 评论 / 2022-10-17 
+- [Another similar competition?: SETI Breakthrough Listen - E.T. Signal Search](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/358083) — 5 票 / 1 评论 / 2022-10-06 
+- [score improvement G wave detection 20% data](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/368447) — 5 票 / 1 评论 / 2022-11-25 
+- [Is there any expert in the field of gravitational waves or signal matching as a participant?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/363841) — 5 票 / 0 评论 / 2022-11-03 
+- [Gap of CV and LB](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/364169) — 5 票 / 8 评论 / 2022-11-05 
+- [PyCBC Gravitational Wave Toolkit.](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/357854) — 5 票 / 0 评论 / 2022-10-05 
+- [Input SNR question](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/364537) — 4 票 / 3 评论 / 2022-11-07 
+- [200+GB dataset is crazy](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/369742) — 4 票 / 10 评论 / 2022-12-01 
+- [We can now link solution from the leaderboard](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376146) — 4 票 / 3 评论 / 2023-01-04 **write-up?**
+- [Some questions and confusions after competition](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/376602) — 4 票 / 2 评论 / 2023-01-07 
+- [Preprocessing Data](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/374161) — 3 票 / 4 评论 / 2022-12-25 
+- [Target Variable ~ [0, 1] ?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/361693) — 3 票 / 10 评论 / 2022-10-23 
+- [Inference Time?](https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/360394) — 3 票 / 1 评论 / 2022-10-16 

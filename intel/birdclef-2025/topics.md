@@ -1,0 +1,82 @@
+# birdclef-2025 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution: Multi-Iterative Noisy Student Is All You Need](https://www.kaggle.com/competitions/birdclef-2025/discussion/583577) — 263 票 / 38 评论 / 2025-06-15 **write-up?**
+- [Recipe to Public LB 0.872](https://www.kaggle.com/competitions/birdclef-2025/discussion/573066) — 119 票 / 88 评论 / 2025-04-13 
+- [Human voice in the recordings](https://www.kaggle.com/competitions/birdclef-2025/discussion/568886) — 108 票 / 37 评论 / 2025-03-18 
+- [Why is it always sadness?](https://www.kaggle.com/competitions/birdclef-2025/discussion/567495) — 83 票 / 35 评论 / 2025-03-10 
+- [Summary of Techniques from Past Top Solutions (2024)](https://www.kaggle.com/competitions/birdclef-2025/discussion/572928) — 73 票 / 7 评论 / 2025-04-12 **write-up?**
+- [Additional dataset for rare classes](https://www.kaggle.com/competitions/birdclef-2025/discussion/570760) — 72 票 / 21 评论 / 2025-03-30 
+- [5th place solution: Self-Distillation is All You Need](https://www.kaggle.com/competitions/birdclef-2025/discussion/583312) — 69 票 / 23 评论 / 2025-06-16 **write-up?**
+- [BirdCLEF back again - 2025 - 2024 - 2023 - 2022 - 2021 - 2020 + Top Solutions ](https://www.kaggle.com/competitions/birdclef-2025/discussion/567499) — 55 票 / 7 评论 / 2025-03-10 **write-up?**
+- [Unstable Experiments and Key Early Takeaways](https://www.kaggle.com/competitions/birdclef-2025/discussion/570402) — 55 票 / 20 评论 / 2025-03-27 
+- [2nd Place. Journey Down the Rabbit Hole of Pseudo Labels](https://www.kaggle.com/competitions/birdclef-2025/discussion/583699) — 54 票 / 14 评论 / 2025-06-12 **write-up?**
+- [[LB probing] How many species are included in the public LB?](https://www.kaggle.com/competitions/birdclef-2025/discussion/570837) — 47 票 / 6 评论 / 2025-03-31 
+- [Previous Competitions - Key Takeaways from Winning Solutions](https://www.kaggle.com/competitions/birdclef-2025/discussion/568479) — 47 票 / 1 评论 / 2025-03-16 **write-up?**
+- [CV   vs    LB. (Unreliable CV. Renamed - Initial experiments and LB)](https://www.kaggle.com/competitions/birdclef-2025/discussion/568303) — 45 票 / 33 评论 / 2025-03-15 
+- [All the Beasts We Cannot See / 2025 Family Portrait](https://www.kaggle.com/competitions/birdclef-2025/discussion/567672) — 43 票 / 2 评论 / 2025-03-11 
+- [BirdSet is all we need? - large dataset, trained models, training code, detailed paper](https://www.kaggle.com/competitions/birdclef-2025/discussion/567579) — 34 票 / 1 评论 / 2025-03-11 
+- [Using BirdNet and Bird Vocalization Classifier](https://www.kaggle.com/competitions/birdclef-2025/discussion/568028) — 34 票 / 8 评论 / 2025-03-13 
+- [BirdCLEF 2025: Comprehensive Resource Guide from past competitions and other sources](https://www.kaggle.com/competitions/birdclef-2025/discussion/567632) — 33 票 / 3 评论 / 2025-03-11 
+- [9th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583365) — 31 票 / 17 评论 / 2025-06-07 **write-up?**
+- [Stop to share any high score public notebook in the last week](https://www.kaggle.com/competitions/birdclef-2025/discussion/581187) — 31 票 / 10 评论 / 2025-05-28 
+- [10th Solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583310) — 30 票 / 6 评论 / 2025-06-06 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583477) — 29 票 / 15 评论 / 2025-06-07 **write-up?**
+- [BirdCLEF+ 2025:Papers on audio augmentation.](https://www.kaggle.com/competitions/birdclef-2025/discussion/570577) — 28 票 / 1 评论 / 2025-03-28 
+- [Fast Loading of Audio Data](https://www.kaggle.com/competitions/birdclef-2025/discussion/568265) — 28 票 / 7 评论 / 2025-03-14 
+- [Studying the leaderboard transition at the end of the competition](https://www.kaggle.com/competitions/birdclef-2025/discussion/583299) — 27 票 / 3 评论 / 2025-06-06 
+- [Best single Model Scored & Running Time](https://www.kaggle.com/competitions/birdclef-2025/discussion/570493) — 27 票 / 62 评论 / 2025-03-28 
+- [Public 20th / Private 26th Solution LB: 0.908](https://www.kaggle.com/competitions/birdclef-2025/discussion/583306) — 26 票 / 20 评论 / 2025-06-12 **write-up?**
+- [What works for you?](https://www.kaggle.com/competitions/birdclef-2025/discussion/576639) — 26 票 / 54 评论 / 2025-05-06 
+- [6th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583381) — 23 票 / 3 评论 / 2025-06-06 **write-up?**
+- [Single Model Hard to reach 0.8 pb score,Waht's the secret?](https://www.kaggle.com/competitions/birdclef-2025/discussion/574305) — 22 票 / 64 评论 / 2025-04-21 
+- [8th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583324) — 22 票 / 7 评论 / 2025-06-06 **write-up?**
+- [Melspectrograms Datasets (5 seconds, 10 seconds)](https://www.kaggle.com/competitions/birdclef-2025/discussion/567797) — 21 票 / 4 评论 / 2025-03-12 
+- [Is train data ok? please confirm](https://www.kaggle.com/competitions/birdclef-2025/discussion/567551) — 20 票 / 8 评论 / 2025-03-10 
+- [4th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/584034) — 18 票 / 3 评论 / 2025-06-11 **write-up?**
+- [BirdCLEF 2020-2025 + extra - All Training npy Dataset](https://www.kaggle.com/competitions/birdclef-2025/discussion/567536) — 17 票 / 10 评论 / 2025-03-10 
+- [Onboarding materials, references and past competition artefacts](https://www.kaggle.com/competitions/birdclef-2025/discussion/567507) — 17 票 / 1 评论 / 2025-03-10 
+- [Request: consider exporting your model to help conservation teams use it!](https://www.kaggle.com/competitions/birdclef-2025/discussion/575591) — 16 票 / 0 评论 / 2025-04-29 
+- [EDA Insights and How They Help Achieve the Competition Objective](https://www.kaggle.com/competitions/birdclef-2025/discussion/568472) — 16 票 / 2 评论 / 2025-03-16 
+- [14th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583344) — 16 票 / 3 评论 / 2025-06-06 **write-up?**
+- [7th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/584015) — 16 票 / 0 评论 / 2025-06-11 **write-up?**
+- [Sampling Strategy](https://www.kaggle.com/competitions/birdclef-2025/discussion/579407) — 16 票 / 15 评论 / 2025-05-17 
+- [BirdCLEF+ Working Notes - Winners announcement](https://www.kaggle.com/competitions/birdclef-2025/discussion/567628) — 15 票 / 6 评论 / 2025-03-11 **write-up?**
+- [Welcome to BirdCLEF+ 2025 - Meet the hosts](https://www.kaggle.com/competitions/birdclef-2025/discussion/567503) — 15 票 / 4 评论 / 2025-03-10 
+- [11th solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583384) — 14 票 / 3 评论 / 2025-06-06 **write-up?**
+- [13rd solution for BirdCLEF+ 2025](https://www.kaggle.com/competitions/birdclef-2025/discussion/583457) — 14 票 / 1 评论 / 2025-06-07 **write-up?**
+- [Get started here](https://www.kaggle.com/competitions/birdclef-2025/discussion/567556) — 13 票 / 14 评论 / 2025-03-10 
+- [Open Bioacoustics datasets](https://www.kaggle.com/competitions/birdclef-2025/discussion/568570) — 13 票 / 0 评论 / 2025-03-16 
+- [12th place solution](https://www.kaggle.com/competitions/birdclef-2025/discussion/583592) — 13 票 / 1 评论 / 2025-06-08 **write-up?**
+- [BirdCLEF 2020–2025: Trends and Insights from Five Years of Competition](https://www.kaggle.com/competitions/birdclef-2025/discussion/569610) — 12 票 / 4 评论 / 2025-03-22 
+- [New Dataset Released:  New Zealand Bird Sound](https://www.kaggle.com/competitions/birdclef-2025/discussion/573677) — 12 票 / 0 评论 / 2025-04-17 
+- [Training data as a Hugging Face parquet dataset](https://www.kaggle.com/competitions/birdclef-2025/discussion/568186) — 11 票 / 7 评论 / 2025-03-14 
+- [To Everyone Who Survived The Shakeup — And Everyone Who Didn’t](https://www.kaggle.com/competitions/birdclef-2025/discussion/583320) — 11 票 / 10 评论 / 2025-06-06 
+- [GPU disabled? Hold my CPU](https://www.kaggle.com/competitions/birdclef-2025/discussion/569730) — 10 票 / 4 评论 / 2025-03-23 
+- [Incoming LB Shakeup?](https://www.kaggle.com/competitions/birdclef-2025/discussion/583114) — 10 票 / 7 评论 / 2025-06-04 
+- [Other competitions @ FGVC12 [CVPR] and LifeCLEF [CLEF] workshops ](https://www.kaggle.com/competitions/birdclef-2025/discussion/569662) — 10 票 / 0 评论 / 2025-03-23 
+- [Worth it this year?](https://www.kaggle.com/competitions/birdclef-2025/discussion/572159) — 10 票 / 11 评论 / 2025-04-08 
+- [29th Place Solution for the BirdCLEF+ 2025 Competition](https://www.kaggle.com/competitions/birdclef-2025/discussion/583387) — 10 票 / 6 评论 / 2025-06-06 **write-up?**
+- [Raw wave not work.](https://www.kaggle.com/competitions/birdclef-2025/discussion/583308) — 9 票 / 9 评论 / 2025-06-06 
+- [Thanks, everyone!](https://www.kaggle.com/competitions/birdclef-2025/discussion/583328) — 9 票 / 1 评论 / 2025-06-06 
+- [Same pipeline different backbones, LB score vary very large](https://www.kaggle.com/competitions/birdclef-2025/discussion/580765) — 8 票 / 29 评论 / 2025-05-26 
+- [Same url for multiple species: audio including multiple birds species?](https://www.kaggle.com/competitions/birdclef-2025/discussion/569105) — 8 票 / 1 评论 / 2025-03-20 
+- [Optimizing preprocessed datasets](https://www.kaggle.com/competitions/birdclef-2025/discussion/569059) — 8 票 / 1 评论 / 2025-03-19 
+- [Congratulations for the winner Nikita Babych](https://www.kaggle.com/competitions/birdclef-2025/discussion/583374) — 7 票 / 2 评论 / 2025-06-06 
+- [Winning Working Notes from all the BirdCLEF competitions [2021 - 2024]](https://www.kaggle.com/competitions/birdclef-2025/discussion/575030) — 7 票 / 0 评论 / 2025-04-25 **write-up?**
+- [28th Place Solution: SED with Segment-Based Voice Removal & Progressive Pseudo-Label Training](https://www.kaggle.com/competitions/birdclef-2025/discussion/583377) — 7 票 / 2 评论 / 2025-06-06 **write-up?**
+- [Winning solutions code share / Non-medalist thoughts](https://www.kaggle.com/competitions/birdclef-2025/discussion/583347) — 6 票 / 0 评论 / 2025-06-06 **write-up?**
+- [Record location exploration](https://www.kaggle.com/competitions/birdclef-2025/discussion/570405) — 6 票 / 0 评论 / 2025-03-27 
+- [Congratulations and thank you!](https://www.kaggle.com/competitions/birdclef-2025/discussion/583359) — 5 票 / 6 评论 / 2025-06-06 
+- [Is there any Mammalia audio in the test data?](https://www.kaggle.com/competitions/birdclef-2025/discussion/576166) — 5 票 / 3 评论 / 2025-05-03 
+- [Robust local validation?](https://www.kaggle.com/competitions/birdclef-2025/discussion/572185) — 5 票 / 5 评论 / 2025-04-08 
+- [Place 38 | 0.902 AUC score ](https://www.kaggle.com/competitions/birdclef-2025/discussion/583447) — 5 票 / 2 评论 / 2025-06-06 
+- [Demystifying Torchaudio’s MelSpectrogram Parameters for BirdCLEF 2025](https://www.kaggle.com/competitions/birdclef-2025/discussion/582805) — 5 票 / 0 评论 / 2025-06-02 
+- [Not enough data error : Seeking Help](https://www.kaggle.com/competitions/birdclef-2025/discussion/567710) — 5 票 / 1 评论 / 2025-03-11 
+- [Pretraining on Birdset](https://www.kaggle.com/competitions/birdclef-2025/discussion/571338) — 5 票 / 3 评论 / 2025-04-02 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/birdclef-2025/discussion/567493) — 4 票 / 0 评论 / 2025-03-10 
+- [Ensembling does not work ](https://www.kaggle.com/competitions/birdclef-2025/discussion/582343) — 4 票 / 2 评论 / 2025-05-30 
+- [BirdCLEF 2025 in a Nutshell: Winning Recipes on One Table](https://www.kaggle.com/competitions/birdclef-2025/discussion/583434) — 4 票 / 1 评论 / 2025-06-06 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/birdclef-2025/discussion/583445) — 3 票 / 1 评论 / 2025-06-06 
+- [Overfitting to leaderboard](https://www.kaggle.com/competitions/birdclef-2025/discussion/582216) — 3 票 / 1 评论 / 2025-05-29 
+- [Using categorical cross entropy ](https://www.kaggle.com/competitions/birdclef-2025/discussion/573250) — 3 票 / 12 评论 / 2025-04-14 
+- [Granularity of the test labels](https://www.kaggle.com/competitions/birdclef-2025/discussion/573537) — 3 票 / 2 评论 / 2025-04-16 

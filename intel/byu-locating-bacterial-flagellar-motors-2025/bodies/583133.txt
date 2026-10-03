@@ -1,0 +1,169 @@
+# https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583133
+
+Topic #583133: 369th place solution YOLO part with PB0.840 notebook
+  Author: min fuka
+  Posted: 2025-06-05 01:24:22.035000
+  Votes: 37  Comments: 7
+
+Thanks to our hosts for organizing this competition. Our placing was poor, but I am happy to report that we scored reasonably well on the YOLO model.
+※The team's highest score was PB 0.851
+
+Making models
+
+
+
+
+base model
+
+yolov8l, yolo11l  (yolov8 had a better LB score)
+
+
+original data
+
+competition data + external data(https://www.kaggle.com/datasets/brendanartley/cryoet-flagellar-motors-dataset)
+
+
+making yolo dataset
+
+based on Parse Data notebook(https://www.kaggle.com/code/andrewjdarley/parse-data)
+
+I have devised the following points
+
+
+
+When creating training data, TRUST=8 for competition data and TRUST=2 for external data.
+
+When creating validation data, TRUST=4 for competition data sets only, not use external data.
+
+slice images are resized to 960x960 for uniformity
+
+vertical flipping,  horizontal flipping, and horizontal-vertical flipping data augmentation is performed on competition data only
+
+BOX_SIZE is int(1000 / voxel_spacing) for competition data, 35 for external data.
+
+4-fold datasets
+
+
+training
+
+based on Train Yolo notebook(https://www.kaggle.com/code/andrewjdarley/train-yolo)
+
+I have changed the following points
+
+
+
+batch-size = 32, epoch=30, imgsz=960
+
+yolov8l:lr0=1e-4, lrf= yolo11l:lr0=0.001  cos_lr=True, etc
+
+save_period=1 and use best_dfl_loss-epoch model
+
+
+Inference
+
+In  YOLO model, I have devised a calculation of the z-coordinate. In addition, I have tried to speed up the process.
+
+
+
+
+calculation of motor coordinates
+
+I used DFS(depth-first search). 
+The x,y coordinates detected in yolo with the slice number as the z coordinate were grouped by DFS and the average value was taken. This idea originated from @itsuki9180 's notebook in CZII (https://www.kaggle.com/code/itsuki9180/czii-yolo11-submission-baseline)
+
+
+speed up inference
+
+Submit time for public note takes 6.5h for one model. To improve the processing speed, the following efforts were made. This resulted in submit time of 1h40m for one model.
+
+
+
+tomo_id is divided into 4 groups and handled by 4 processes.
+
+2 processes share one T4-GPU
+
+In 1 porcess, read jpg files in a separate thread from yolo predictions
+
+yolo-predict in half-precision (FP16)
+
+
+
+
+
+yolo-models ensemble
+
+The yolo-models ensemble collects the per-slice detection coordinates across the entire models and processes them in DFS at once.
+
+
+slices-skip
+
+Even with the above multi-processing, it takes more than 6 hours to ensemble a 4-fold training model. The ensemble of the 4-fold model was reduced to 1h40m by reducing the number of slices in this @yyyy0201 discussion(https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/578461).
+
+Prepare array of four randomly selected slices for every 4 slices and assign them to each 4-fold model.
+
+    selected_indices = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+    selected_indices2 = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+    selected_indices3 = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+    selected_indices4 = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+
+
+This resulted in a submission time of about 3hours for an ensemble of yolov8l and yolo11l 4-fold models (8models in total). and the PB score is LB0.840. this inference notebook is (https://www.kaggle.com/code/minfuka/byu-yolo-960-inference-fold4-slice-skip-random-v8l)
+(but, this notebook could be described more compactly)
+
+
+Score Transition
+
+LB Score Transition. This score is the score before it was recalculated(https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574729).
+
+All scores are using yolov8L and hold-out(8:2) dataset and best.pt.
+
+Initially I was submitting best.pt but changed to best_dfl_epoch.pt due to unstable best.pt scores.
+
+
+
+Change image size during training from 640 to 960 → LB 0.65
+
+Change from BS=16 to BS=32 → LB 0.699
+
+Increase target slice for data set creation in public notes to Train TRUST=8 Valid TRUST=4→ LB 0.76
+
+vertical flipping,  horizontal flipping, and horizontal-vertical flipping data augmentation is performed on competition data → LB 0.80
+
+Use publicly available external data → LB0.825
+
+
+What didn't work
+
+
+
+TTA
+
+WBF
+
+Comments:
+├─ Eng Adam Al mohammedi (2025-06-05 17:17:45.083000) [+1]
+│  Great job, and thanks for sharing the details of your approach!
+│  
+│  Interestingly, my solution was quite similar in many ways
+│  I also used YOLOv8, resized images to 960×960, and relied on ** only compe...
+  ├─ min fuka (2025-06-05 21:53:40.347000) [+1]
+  │  thanks for your approach!
+  │  
+  │  I have tow questons.
+  │  
+  │  Did you change the imgsz of predict by model? I did not specify the imgsz of predict.
+  │  How did you select the 20 slices of Negative samples?
+    ├─ Eng Adam Al mohammedi (2025-06-05 22:30:02.513000) [+1]
+    │  yes i set the imgsz for each model based that trained, 
+    │  yolo8x train, predict with imgsz=896 get highest LB=0.841 , PB=0.802 
+    │  yolo8l train, predict with imgsz=960 get highest LB=0.822 , PB=0.786 
+    │  
+    │  ...
+├─ MengYe (2025-06-05 03:17:29.513000) [+1]
+│  i tried trust = 6 with yolo 11m, my lb was not good. i think that is because i use batch size = 16 and image size = 640.
+  ├─ min fuka (2025-06-05 03:34:34.020000) [+1]
+  │  I also had extremely low LB just by setting trust = 7 or trust = 10 in BS=32 and imgsz=960. but trust = 4 was better. I did not know why until the end.
+├─ Tom (2025-06-05 11:49:45.500000) [+2]
+│  Hey @minfuka, that's massive engineering effort! Very impressive!
+  ├─ min fuka (2025-06-05 12:01:36.050000) [+0]
+  │  Thanks! it's only engineering but not data science,HAHAHA:D

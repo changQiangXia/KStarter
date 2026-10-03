@@ -1,0 +1,89 @@
+<h1>Overview</h1>
+<p>Our final solution is an ensemble of three sequence-to-sequence models — ByT5-Large, ByT5-XL, and MADLAD-400-3B-MT — all initialised from continual pretraining (CPT) checkpoints and further improved with pseudo-labeled data on <code>published_texts.csv</code>.</p>
+<p>The overall pipeline consists of three stages:</p>
+<ol>
+<li>Continual pretraining (CPT) on domain-specific Akkadian text</li>
+<li>Supervised fine-tuning (SFT) on sentence-level translation data</li>
+<li>Pseudo-labeling and retraining using additional unlabeled corpus data</li>
+</ol>
+<p>The final submission ensembles predictions from all three retrained models + MBR decoding.</p>
+<hr>
+<h1>External Data</h1>
+<p>To supplement the official training data, we incorporated two external resources from Kaggle:</p>
+<ul>
+<li>Old Assyrian grammar references and linguistic materials</li>
+<li>Scanned PDFs of Kültepe tablets, primary archaeological sources for Old Assyrian cuneiform</li>
+</ul>
+<p>Source: <a href="https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668485" target="_blank">https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668485</a></p>
+<hr>
+<h1>Data Preprocessing</h1>
+<p>Scanned tablet PDFs were processed with <strong>GLM-OCR (0.9B)</strong>, with each page handled independently to extract Akkadian/English text pairs.</p>
+<h2>Post-OCR Processing</h2>
+<p>We then used the Gemini, GPT, and Claude APIs for:</p>
+<ul>
+<li>Sentence alignment</li>
+<li>OCR noise removal</li>
+<li>Text normalisation</li>
+</ul>
+<p>The same alignment and cleaning pipeline was applied to the <code>published_texts</code> corpus before using it for pseudo-labeling.</p>
+<p>To ensure a reliable evaluation setup, we reserved one held-out fold exclusively for validation and excluded it from all training stages.</p>
+<hr>
+<h1>Model Candidates</h1>
+<p>We experimented with several strong sequence-to-sequence backbones:</p>
+<ul>
+<li>ByT5 variants</li>
+<li>mT5 variants</li>
+<li>MADLAD-400-3B-MT</li>
+</ul>
+<p>ByT5 was particularly well-suited to this task: its byte-level tokenisation handles rare scripts and low-frequency transliteration patterns more robustly than standard subword tokenisation. MADLAD-400-3B-MT was included to add diversity to the final ensemble.</p>
+<hr>
+<h1>Stage 1 — Continual Pretraining (CPT)</h1>
+<p>Each model was first trained for 3 epochs of continual pretraining on document-level Akkadian text, combining:</p>
+<ul>
+<li>Official training data</li>
+<li>Cleaned external corpus data</li>
+</ul>
+<p>This stage adapts the pretrained multilingual models to the Akkadian domain before introducing translation supervision.</p>
+<hr>
+<h1>Stage 2 — Supervised Fine-tuning (SFT)</h1>
+<p>Starting from CPT checkpoints, each model was fine-tuned at the sentence level on parallel translation data, again combining:</p>
+<ul>
+<li>Official training data</li>
+<li>Cleaned external data</li>
+</ul>
+<p>The CPT → SFT pipeline consistently outperformed direct fine-tuning, likely because CPT first helps the model internalise the structure and distribution of the target language.</p>
+<hr>
+<h1>Stage 3 — Pseudo-Labeling on Published Texts</h1>
+<p>We selected the best single model based on cross-validation and leaderboard performance, and used it to generate pseudo-labels for the <code>published_texts</code> corpus at the sentence level.</p>
+<p>Three final models were retrained on the combined dataset — official training data, cleaned external Assyrian data, and pseudo-labeled published texts:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Public</th>
+<th>Private</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ByT5-Large</td>
+<td>37.4</td>
+<td>39.3</td>
+</tr>
+<tr>
+<td>ByT5-XL</td>
+<td>37.6</td>
+<td>39.2</td>
+</tr>
+<tr>
+<td>MADLAD-400-3B-MT</td>
+<td>37.3</td>
+<td>38.9</td>
+</tr>
+<tr>
+<td><strong>Ensemble</strong></td>
+<td><strong>38.5</strong></td>
+<td><strong>39.9</strong></td>
+</tr>
+</tbody>
+</table>

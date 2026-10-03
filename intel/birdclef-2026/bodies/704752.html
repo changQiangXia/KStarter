@@ -1,0 +1,439 @@
+<h2>Congrats and Thanks</h2>
+<p>Congratulations to all the winners! I know how much effort it takes, especially when you're competing against 4k teams and every day a new shared notebook appears that, despite being often an overfit, still disappoints you because you can't beat it with fancier, more complex approaches.</p>
+<p>And as always, thank you to Kaggle and the hosts for letting us compete in BirdCLEF again this year, and for introducing something new to BirdCLEF lore - Validation!!
+Also, I have to thank the Kaggle community, who shared interesting ideas in the Discussions and Notebooks, some of which I even incorporated.</p>
+<h2>Introduction</h2>
+<p>From day one, the competition felt brutal. None of last year's ideas were producing competitive results, and I watched other participants climb the leaderboard by automating their development with coding agents while I was still coding the old-school way. With a backlog of ideas to test and a strong urge to catch up, I bought the $100 Claude Code subscription and worked through its documentation and courses. Before long I was iterating far faster and landing solid results on the LB.</p>
+<p>That said, I hold a strong view. SOTA agents are excellent at software development but weaker at DS/ML when it comes to novelty. So I'd argue Kaggle work splits into two parts. The first is software, the largely mechanical code-writing process, which agents automate beautifully. The second is DS/ML, where you have to generate ideas (not just reproduce what the LLM was trained on), build intuition from your results, and arrive at something original. Even the smallest such insight can be enough to be competitive. In that second part, I believe a human engineer still has the edge over fully-automated agents, since we have our "nonlinearities" that occasionally hit us with really good ideas instead of approximating the web (though maybe I'm just not exploiting the agents well enough).</p>
+<h2>Solution Overview</h2>
+<p>Before reading this write-up, I would kindly recommend getting familiar with <a href="https://www.kaggle.com/competitions/birdclef-2025/writeups/nikita-babych-1st-place-solution-multi-iterative-n" target="_blank">my last year's write-up</a>, so the reader has all the context of the basis on which the current solution is built, otherwise some elements would have to be fully duplicated here, and I decided that explaining them again would be redundant.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F6343664%2F9eef818fb93a8412897b0637b0cf2c69%2Fbirdclef_2026_1st_place.png?generation=1780695342465830&amp;alt=media" alt=""></p>
+<h3>Abbreviations</h3>
+<ul>
+<li><strong>LSS</strong>: labeled soundscapes</li>
+<li><strong>USS</strong>: unlabeled soundscapes</li>
+<li><strong>PL</strong>: pseudo-labels</li>
+<li><strong>MLP</strong>: multilayer perceptron</li>
+<li><strong>SED</strong>: sound event detection (attention-pooling head)</li>
+<li><strong>TTA</strong>: test-time augmentation</li>
+<li><strong>LB</strong>: leaderboard</li>
+</ul>
+<h3>TLDR</h3>
+<ul>
+<li>Diverse ensemble on <strong>5-second inputs</strong>: SED-head CNNs, MLP-head CNNs, an Amphibia/Insecta specialist, a genus-level specialist, and Perch v2 (linear head, no fine-tuning).</li>
+<li>Two training phases: cosine embedding distillation (from Perch v2 [1], one model from AudioProtoPNet-5-BirdSet-XCL [2]) and full fine-tuning (supervised, then Multi-Iterative Noisy Student self-training).</li>
+<li>Self-training approach from my last year solution with some tweaks: normalize the injected label sum, add LSS as a separate injector, and mask non-LSS species for Site 22.</li>
+<li>Validation on two domain-tailored LSS splits: a Site-22 split for unseen-site generalization and a greedy split for max species coverage.</li>
+<li>Postprocessing tuned per pipeline (fine-tuned models vs. Perch native) mostly on the validation splits, rather than by probing the LB.</li>
+<li>Rank Blending between Perch v2 and my models predictions.</li>
+<li>AI tools: DS agent - me; software agent - Claude Code.</li>
+</ul>
+<h3>Data</h3>
+<h4>Additional data</h4>
+<p>Any extra data I pulled from <a href="https://xeno-canto.org/" target="_blank">Xeno-Canto</a> or <a href="https://www.inaturalist.org/" target="_blank">iNaturalist</a> for the target species made results
+consistently worse, so for training I used only the competition data:</p>
+<ul>
+<li>Train focal data</li>
+<li>LSS</li>
+<li>USS</li>
+</ul>
+<p>The only exception was the Amphibia/Insecta specialist. For it I used the <a href="https://www.kaggle.com/datasets/nikitababich/birdclef2025-1st-place-extra-data" target="_blank">dataset</a>
+of extra Xeno-Canto species I shared last year, enriched with samples and new species from
+iNaturalist:</p>
+<ul>
+<li>41,127 samples</li>
+<li>1,903 unique species</li>
+</ul>
+<h4>Focal data preparation</h4>
+<ul>
+<li><p>I sliced audio into <strong>5-second chunks</strong>. Models longer than 5 seconds did not work well this
+year, which I explain two ways:</p>
+<ul>
+<li><strong>Domain adaptation.</strong> Our main adaptation mechanism was injecting test-domain LSS, which
+include very rare species appearing once in a noisy environment.
+Stripping context beyond the labeled 5-second chunk tells the model where to focus, and
+that helped.</li>
+<li><strong>Call and labeling patterns.</strong> The optimal duration shifts year to year with the mix of
+long vs. short-call species, how hard they are to separate in the domain, and how the
+annotators label, for example whether a year counts even a slight call overlap with a
+5-second chunk. (I suspect this duration search could be automated per domain for a
+production system.)</li></ul></li>
+<li><p>Each slice is normalized by abs-max.</p></li>
+</ul>
+<h4>LSS Preparation</h4>
+<p>I reused last year's injector concept (originally built for PL): for a
+fraction of each batch, mix a random LSS chunk into the background via mixup, taking the
+element-wise max between the focal sample's labels and the labels of the sampled 5-second
+LSS chunk.</p>
+<p>With so few LSS samples, this approach was overfitting quickly even at a few injections per batch. I fixed it
+by normalizing the sampled LSS label sum to 0.5 instead of assigining 1 to each label, which minimizes the training signal
+toward those species and lets focus on the focal-only species. After that it started working pretty well.</p>
+<h4>LSS-injector parameters that were used for most trainings:</h4>
+<ul>
+<li>Ratio of LSS-mixed samples per batch: <strong>0.25 to 0.75</strong>, depending on training phase.</li>
+<li>Clean (concatenated, non-mixed) LSS chunks per batch: <strong>2</strong>, to show a few clean
+test-domain samples.</li>
+<li>Label sum: <strong>0.5</strong>.</li>
+<li>All other preparation matches the focal data.</li>
+</ul>
+<h3>Validation</h3>
+<p>There is not so many LSS samples, so I did validation on the them using two
+complementary splits and averaged their scores:</p>
+<ul>
+<li><strong>Site-22 split</strong>, move all Site 22 samples into train and validate on the rest, purely to
+check generalization to unseen sites.</li>
+<li><strong>Greedy split</strong>, push as many species into validation as possible while leaving at least
+one sample of each species in train, to maximize per-species coverage of the metric.</li>
+</ul>
+<p>I can't say that I saw a strong correlation all the time, but the signal was stable and good enough to tune the training and post-processing parameters well. For example, the training parameters I arrived at using validation turned out to be the best ones I got, even better than when I tried to readjust them specifically for the LB.</p>
+<h3>Training</h3>
+<h4>Distillation</h4>
+<p>First, I tried to follow last year's solution, training models without any Perch or pretraining, because I believed in the power of in-domain self-training that can beat absolutely everything. But I got disappointed pretty quickly, seeing that my 2-iteration self-training ensemble LB=0.931 was worse than the agent-written shared notebooks using only Perch. So I accepted the rules of the club and started experimenting with Perch distillation, and I arrived at the two-phase training that worked great for me and let me get LB=0.935+ without any self-training.</p>
+<ol>
+<li><strong>Distill the backbone</strong> from the teacher's embeddings via a linear projection head using cosine loss.</li>
+<li><strong>Disable distillation</strong> and run standard end-to-end fine-tuning at a low LR on the
+distilled model (for mlp model I enabled distillation active during fine-tuning).</li>
+</ol>
+<p>I trained every model this way, distilling the backbone first, then fine-tuning with whatever
+PL or specialist setup applied, swapping Perch for
+AudioProtoPNet-5-BirdSet-XCL on one model for diversity.</p>
+<p>One detail should be noted: even when reusing the same backbone for different head/label
+designs, I <strong>re-distilled backbone each time</strong>. The distillation loss stays non-zero, which adds
+slight diversity between models. For example, ensembling two otherwise-identical models
+distilled with different seeds gave a noticable boost.</p>
+<p>For the distillation loss I settled on <strong>cosine</strong> because it converged faster and better
+than unnormalized MSE.</p>
+<h5>Distillation phase</h5>
+<p>All models had very similar optimal training parameters, so I trained with the following:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Epochs</td>
+<td>11</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>5e-4</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>cosine</td>
+</tr>
+<tr>
+<td>Target</td>
+<td>teacher embeddings, no processing</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>one-cycle cosine</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>focal train + soundscapes</td>
+</tr>
+<tr>
+<td>Mixup</td>
+<td>p = 0.5</td>
+</tr>
+<tr>
+<td>Optimizer</td>
+<td>AdamW</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<h5>Fine-tuning phase</h5>
+<p>In this downstream phase I lowered the LR to 2e-4 and varied epochs a bit between models;
+nothing else changed between supervised fine-tuning and self-training.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Epochs</td>
+<td>from 8 to 15 (40 for Amphibia and Insecta specialist)</td>
+</tr>
+<tr>
+<td>LR</td>
+<td>2e-4</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>CE</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>one-cycle cosine</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>focal train + LSS + pseudo-labeled USS (if enabled)</td>
+</tr>
+<tr>
+<td>Target</td>
+<td>normalized species/genus labels</td>
+</tr>
+<tr>
+<td>Mixup</td>
+<td>p = 0.5</td>
+</tr>
+<tr>
+<td>Optimizer</td>
+<td>AdamW</td>
+</tr>
+<tr>
+<td>Batch size</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
+<h3>Self-training: adapting last year's recipe</h3>
+<p>The last year's self-training recipe worked well for me when I trained model without any distillation and their scores were under LB=0.925. But switching to fine-tuning of the pre-distilled models any PL made results <strong>much worse</strong> than using no PL at all. After some
+search, I found the cause: distillation + LSS already give such a strong base that adding
+even slightly noisy PL even after power transform is fatal, they pull the entire signal toward
+themselves.</p>
+<p>The first enabler was to <strong>cap the PL label sum below the focal label sum</strong> (same mechanism as the LSS
+injector, a bit different motivation). This keeps the test-domain background, adds a faint signal
+toward the species likely present there, and avoids overfitting to their noise. Two
+considerations drove it:</p>
+<ul>
+<li>LSS already provides real ground truth for some species, so noisier PL can only hurt those (pseudo labels for species from LSS  were very noisy).</li>
+<li>Rare species not covered by LSS still need most of their signal from focal data, where PL
+is unreliable, so that signal must be suppressed (since I showed LSS in each batch, non-LSS species got definetly underfitted, so their values were much lower than LSS ones and usually were noise).</li>
+</ul>
+<p>The second enabler was <strong>injecting LSS and pseudo-labeled USS in the same batch</strong> to offset PL
+noise on species that LSS already teaches well. Key nuance: the two injectors <strong>must not
+overlap</strong>. Take a fixed number of focal samples per batch and inject LSS into some and
+pseudo-labeled USS into others, never both into the same sample.</p>
+<p>And the last thing that helped improve my results a bit (I'm talking about ~0.002) was masking all species for Site 22 that didn't appear in the LSS, following the prior that we have enough Site 22 samples to assume non-LSS species are rare there. Surprisingly, that worked.</p>
+<p>Other elements from the last year's recipe were also important like power transform and sampling according max label sums. </p>
+<p><strong>During self-training both injectors run together, on separate focal samples:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>LSS injector</th>
+<th>PL injector</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Injection ratio per batch</td>
+<td>0.1875</td>
+<td>0.75</td>
+</tr>
+<tr>
+<td>Clean concats per batch</td>
+<td>2</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Label sum cap</td>
+<td>0.5</td>
+<td>0.75</td>
+</tr>
+</tbody>
+</table>
+<p>With that setup the last year's magic came again, but only for 2 iterations. </p>
+<p><strong>Below are results that I tracked submitting two seed eca_nfnet_l0.ra2_in1k SED models with smoothing:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pseudo Iteration</th>
+<th>LB score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1-stage only supervised learning</td>
+<td>0.935</td>
+</tr>
+<tr>
+<td>1-pseudo iteration</td>
+<td>0.946</td>
+</tr>
+<tr>
+<td>2-pseudo iteration</td>
+<td>0.950</td>
+</tr>
+<tr>
+<td>3-pseudo iteration</td>
+<td>0.949</td>
+</tr>
+</tbody>
+</table>
+<h3>Models</h3>
+<p>I could not get competitive results without ensembling models with <strong>different heads, label
+spaces, and inputs</strong>, on top of different CNN families. The reason: distillation +
+self-training produce highly correlated models, so the only way to push further was to add
+non-linearity through design diversity. The boost wasn't huge, but it was enough to reach 1st
+on the public LB and hold it on the private.</p>
+<p>Of all the models, the one I should explain more is the genus-level model. The thing is that a lot of species (rare amphibians specifically) couldn't be distinguished in overpopulated soundscapes, so sometimes it was enough to get the main genus signal, which is usually similar between species, to provide a very beneficial enrichment toward those otherwise unrecognizable species predictions. So I trained the model to predict genus instead of species by taking the maximum of all labels related to the same genus during data preparation (including pseudo-labels), and I blended its predictions spreading the same value to all species from the same genus, and seeing a very good boost of ~0.001-0.002 when I was stuck at LB=0.96+.</p>
+<h4>Final ensemble:</h4>
+<table>
+<thead>
+<tr>
+<th>Backbone</th>
+<th>Head</th>
+<th>Label space</th>
+<th>Distilled from</th>
+<th>Pseudo iters</th>
+<th>Mel input</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>regnety_032.ra_in1k</code></td>
+<td>SED</td>
+<td>target</td>
+<td>Perch v2</td>
+<td>2</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>regnety_032.ra_in1k</code></td>
+<td>SED</td>
+<td>target</td>
+<td>Perch v2</td>
+<td>3</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>eca_nfnet_l0.ra2_in1k</code></td>
+<td>SED</td>
+<td>target</td>
+<td>Perch v2</td>
+<td>2</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>eca_nfnet_l0.ra2_in1k</code></td>
+<td>SED</td>
+<td>target</td>
+<td>AudioProtoPNet-5-BirdSet-XCL</td>
+<td>2</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>tf_efficientnetv2_s.in21k_ft_in1k</code></td>
+<td>SED</td>
+<td>target</td>
+<td>Perch v2</td>
+<td>1</td>
+<td>160×512</td>
+</tr>
+<tr>
+<td><code>tf_efficientnetv2_s.in21k_ft_in1k</code></td>
+<td>SED</td>
+<td>target</td>
+<td>Perch v2</td>
+<td>2</td>
+<td>160×512</td>
+</tr>
+<tr>
+<td><code>tf_efficientnet_b3.ns_jft_in1k</code></td>
+<td>SED</td>
+<td>extended (Amphibia + Insecta)</td>
+<td>Perch v2</td>
+<td>supervised only</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>eca_nfnet_l0.ra2_in1k</code></td>
+<td>MLP</td>
+<td>target</td>
+<td>Perch v2</td>
+<td>2</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>eca_nfnet_l0.ra2_in1k</code></td>
+<td>SED</td>
+<td>genus-level</td>
+<td>Perch v2</td>
+<td>2</td>
+<td>128×384</td>
+</tr>
+<tr>
+<td><code>Perch v2 native</code></td>
+<td>Linear</td>
+<td>203 overlpping targets</td>
+<td>-</td>
+<td>-</td>
+<td>native frontend</td>
+</tr>
+</tbody>
+</table>
+<h4>Mel Spectrogram parameters</h4>
+<p>Mel inputs share 32 kHz audio, 5-second clips, n_fft 2048, f_min 0, f_max 16000, power 1 (except Perch v2):</p>
+<ul>
+<li>128×384 (n_mels 128, time 384): hop ≈ 417. Used by all eca and regnety models, plus the b3 specialist.</li>
+<li>160×512 (n_mels 160, time 512): hop ≈ 313. Used by the tf_efficientnetv2_s models.</li>
+</ul>
+<h2>Postprocessing</h2>
+<p>The chains are tuned <strong>separately for the fine-tuned models and for Perch v2's native
+predictions</strong>, since the two have different calibration, and both were tuned on the validation
+splits above rather than by iterating submissions.</p>
+<h3>Fine-tuned models</h3>
+<ol>
+<li><strong>Site priors from LSS</strong>, site-only combination, λ = 0.5, applied in logit space to boost
+species known to occur at the site - an idea taken from the shared notebooks.</li>
+<li><strong>Max sample/window boost</strong>, boost each chunk toward the per-file max probability for that
+class (α = 0.20).</li>
+<li><strong>Label smoothing</strong>, temporal Gaussian smoothing with a <strong>class-conditional kernel</strong>: a
+flatter <code>[0.33, 0.33, 0.33]</code> kernel for Amphibia/Insecta and a sharper
+<code>[0.2, 0.6, 0.2]</code> kernel for the other labels.</li>
+<li><strong>Genus/class taxonomy smoothing</strong>, smooth species from the same genus (α = 0.15) and from the same class (α = 0.05) -  an idea taken from the shared notebooks.</li>
+<li><strong>Delta TTA</strong>, blend framewise predictions max shifting pooling window by 2 frames (only for SED).</li>
+</ol>
+<h3>Perch v2 (native predictions)</h3>
+<ol>
+<li><strong>Window-blend smoothing</strong>, blend of a <strong>5-chunks-window</strong> (α = 0.7) and a <strong>12-chunks-window</strong> (α = 0.05) max values over
+time.</li>
+<li><strong>Genus/class taxonomy smoothing</strong> , smooth species from the same genus (α = 0.15) and from the same class (α = 0.05)</li>
+</ol>
+<h3>Inference &amp; Ensembling</h3>
+<p>Surprisingly, despite Perch's mediocre score compared to the fine-tuned models (~0.9 on the
+species that overlap with the LSS), its native predictions were essential to the ensemble.
+While experimenting with blends and submitting to the LB, I noticed that most of the Perch
+boost came from the non-LSS species. Those species probably scored close to Perch's,
+since we had no test-domain ground truth for them, so Perch did a lot of the work in
+identifying them.</p>
+<p>Final predictions are a <strong>weighted blend of the fine-tuned ensemble and Perch v2's native
+linear-head predictions</strong>. Because the two come from different pipelines with different score
+distributions, I <strong>rank-transform each class column before blending</strong> rather than averaging
+raw probabilities.</p>
+<ul>
+<li>Fine-tuned ensemble (SED + MLP + specialists): 0.8</li>
+<li>Perch v2 native: 0.2</li>
+</ul>
+<p>Restricted-head models (the genus and Amphibia/Insecta specialists) predict over their
+narrower label space and are <strong>scattered back to the full 234-class width</strong>, with a mask,
+before entering the blend.</p>
+<h3>References</h3>
+<ol>
+<li>van Merriënboer, B., Dumoulin, V., Hamer, J., Harrell, L., Burns, A., &amp; Denton, T. (2025). Perch 2.0: The Bittern Lesson for Bioacoustics. arXiv. <a href="https://doi.org/10.48550/arXiv.2508.04665" target="_blank">https://doi.org/10.48550/arXiv.2508.04665</a></li>
+<li>Heinrich, R., Rauch, L., Sick, B., &amp; Scholz, C. (2025). AudioProtoPNet: An interpretable deep learning model for bird sound classification. Ecological Informatics, 87, 103081. <a href="https://doi.org/10.1016/j.ecoinf.2025.103081" target="_blank">https://doi.org/10.1016/j.ecoinf.2025.103081</a></li>
+<li>Nikita Babych. (2025). 1st Place Solution: Multi-Iterative Noisy Student Is All You Need. Kaggle. <a href="https://doi.org/10.34740/KAGGLE/W/12619" target="_blank">https://doi.org/10.34740/KAGGLE/W/12619</a></li>
+</ol>
+<h3>Resources</h3>
+<ul>
+<li>Perch v2 model weights (Kaggle): <a href="https://www.kaggle.com/models/google/bird-vocalization-classifier" target="_blank">https://www.kaggle.com/models/google/bird-vocalization-classifier</a></li>
+<li>AudioProtoPNet-5-BirdSet-XCL (Hugging Face): <a href="https://huggingface.co/DBD-research-group/AudioProtoPNet-5-BirdSet-XCL" target="_blank">https://huggingface.co/DBD-research-group/AudioProtoPNet-5-BirdSet-XCL</a></li>
+<li>Inference Notebook: <a href="https://www.kaggle.com/code/nikitababich/birdclef2026-1st-place-inference" target="_blank">https://www.kaggle.com/code/nikitababich/birdclef2026-1st-place-inference</a></li>
+<li>Best ensemble models: <a href="https://www.kaggle.com/datasets/nikitababich/birdclef-2026-1st-place-models" target="_blank">https://www.kaggle.com/datasets/nikitababich/birdclef-2026-1st-place-models</a></li>
+<li>Inference source code: <a href="https://www.kaggle.com/datasets/nikitababich/birdclef-2026-1st-place-src-inference" target="_blank">https://www.kaggle.com/datasets/nikitababich/birdclef-2026-1st-place-src-inference</a></li>
+</ul>

@@ -1,0 +1,178 @@
+# https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566522
+
+Topic #566522: 2nd Place Solution
+  Author: Ahmet Erdem
+  Posted: 2025-03-06 00:02:29.632000
+  Votes: 115  Comments: 39
+
+First of all, I want to thank my teammates for this fun ride.
+
+
+
+Since we knew that the data is synthetic and how it was produced, we had a look at the SurvivalGAN paper. As you can see in this image, TimeRegressor is trained together with features and class information. Therefore we split the problem into two:
+
+
+
+efs classification
+
+efs_time regression
+
+
+For the regression part, we have trained and ensembled 2 models providing efs as an extra feature. Then for the test and validation sets, we make inference by setting efs=1. With this trick, we estimate how long efs time can be if there is efs. Our models are xgboost and histgbm.
+
+For classification, we use RealMLP, HistGBM and Catboost models with no feature engineering. We ensemble these models by the weights tuned on CV. We then combine it with regression predictions to calculate the risk scores:
+R = p(efs=1) * p(efs_time | efs=1)
+p(efs_time | efs=1) is sigmoid(-regression_prediction) in our case.
+
+Additionally, we train a neural network which approximates the competition metric and directly predicts the risk scores. It uses regression prediction from tree models and optimizes the approximate competition metric and auxiliary binary classification loss. 
+
+ ():
+    y_risk, y_time, y_efs = y_risk.ravel(), y_time.ravel(), y_efs.ravel()
+
+    loss = []
+     i  ((y_risk)):
+         y_efs[i] == :
+            filt = y_time[i] &lt; y_time
+            s = (y_risk - y_risk[i]).tanh()
+            loss.append(s[filt])
+
+    loss = torch.cat(loss).mean()
+     loss
+
+
+We rank ensemble it with our main pipeline.
+
+Here is our inference notebook: https://www.kaggle.com/code/karakasatarik/2nd-place-solution-inference
+
+Appendix
+
+AutoGluon
+
+Once the problem is split into two like we did, it was possible to get a gold medal even with automated machine learning.
+
+Here are our experiments using AutoGluon:
+
+
+
+
+AutoGluon Setting
+OOF Score
+Public LB
+Private LB
+
+
+
+
+Medium Quality
+0.6884
+0.694
+0.697
+
+
+High Quality
+0.6910
+0.694
+0.698
+
+
+Best Quality
+0.6921
+0.695
+0.699
+
+
+
+
+Postprocess
+
+Anil attempted to improve the efs-classifier model's outputs by tuning a custom sigmoid function on the OOF predictions:
+
+calibrated_proba = 1 / (1 + np.exp(-beta * (raw_proba - gamma)))
+
+This calibration led to a ~0.002 improvement in OOF but resulted in a 0.001 decrease on the public LB and a 0.001 improvement on the private LB.
+
+Comments:
+├─ Sergey Bryansky (2025-03-06 00:19:10.330000) [+10]
+│  similar approach, tried to solve ranking and classification tasks independently in extreme cases then combine using magic formula p(efs=1) * p(efs_time | efs=1) 😄
+  ├─ dexterxin (2025-03-06 01:59:53.057000) [+0]
+  │  Congratulations!🎊
+  │  
+  │  This is my first time using a ranking model. I have tried to use ranking models xgb, cab, lgbm, but all failed for various reasons. Among them lgbm reported error: "LightGBMError...
+├─ minerppdy (2025-03-06 00:10:53.230000) [+8]
+│  haha,quite similar solution with you!
+  ├─ Herra Huu (2025-03-06 00:22:17.613000) [+4]
+  │  I will join the club as well :D
+  ├─ Robert Hatch (2025-03-06 01:53:42.907000) [+1]
+  │  Might be everyone in top5, lol. Seems like a critical trick, even for the one of us without as good a public LB score, haha.
+  ├─ Gunes Evitan (2025-03-06 04:07:11.843000) [+0]
+  │  Looks like this was the magic. I was working on survival analysis 4 years ago and now I wonder if it would work on those organic datasets :D
+├─ Ahmet Erdem Pamuk (2025-03-08 08:52:39.310000) [+3]
+│  Awesome solution, thanks for providing this valuable insight, congratulations to your team!
+├─ Siddhant Chaudhary (2025-03-06 00:28:36.603000) [+3]
+│  Congratulations to you and the team. Impressive work!
+  ├─ [deleted] (2025-03-06 00:40:30.993000) [+0]
+  │  [deleted]
+├─ Oluwatobi Betiku (2025-03-07 12:11:14.870000) [+1]
+│  Awesome solution, thanks for providing this valuable insight, congratulations to your team!
+├─ guo dashuai (2025-03-06 02:26:23.573000) [+1]
+│  When I heard your teammate mention that you got a CV of 0.7 using synthetic data, I was quite worried for you. But as it turns out, you did exceptionally well with very meticulous thinking. My best...
+  ├─ Gunes Evitan (2025-03-06 08:38:00.720000) [+0]
+  │  I remember that I said "the winners team cv score would probably be around 0.7" and you inferred rest of it lol. I also don't remember mentioning anything about using synthetic data. I'm sorry if I...
+    ├─ guo dashuai (2025-03-06 08:52:16.033000) [+0]
+    │  You've done a fantastic job, congratulations!
+├─ Aleksandr  Larko (2025-03-06 00:41:12.913000) [+1]
+│  Good job!Congratulations！
+├─ Cody_Null (2025-03-06 00:10:30.873000) [+1]
+│  Elegant solution! Great work, seems I should have given more attention to the synthetic data part!
+├─ Davut Polat (2025-03-11 08:11:50.757000) [+0]
+│  gc.collect()
+├─ salyer_0 (2025-03-11 21:52:26.640000) [+0]
+│  Very good idea
+├─ coderyuto (2025-03-10 00:51:11.623000) [+0]
+│  great sol
+├─ Thiraput01 (2025-03-07 16:28:45.750000) [+0]
+│  Congratulations, Very insightful solution!
+├─ Samith Chimminiyan (2025-03-07 11:13:40.843000) [+0]
+│  Congrats!!! Good Job!!
+├─ Davide Stenner (2025-03-07 06:39:18.787000) [+0]
+│  Congratulation!!
+│  @aerdem4 how was the cv score of the real mlp compared to gbm?
+│  i read the paper when it come out and im curious
+  ├─ Tarik Karakas (2025-03-07 06:59:28.610000) [+1]
+  │  Thanks! RealMLP OOF score was 0.694 (7 folds), which was actually better than the GBM models in my trials. We were surprised when we saw the score 😄
+├─ Vasilis (2025-03-06 09:18:09.920000) [+0]
+│  Congratulations, amazing work!
+├─ malaxg (2025-03-06 04:40:52.220000) [+0]
+│  Congrats, great work!
+├─ pencil red (2025-03-06 04:21:33.387000) [+0]
+│  Congratulations! Great solution!
+├─ dexterxin (2025-03-06 01:44:55.013000) [+0]
+│  Congratulations! The idea of getting inspiration from paper is fantastic!🎊
+│  
+│  My solution is also a two-stage model: “efs” classification and “y” regression, but it's a lot rougher than yours. The “y...
+├─ Sheikh Muhammad Abdullah (2025-03-06 01:14:29.557000) [+0]
+│  Congrats, Good Work @aerdem4
+├─ Robert Hatch (2025-03-06 01:12:40.150000) [+0]
+│  Congrats, great work!
+├─ kk.sky.9k (2025-03-06 01:03:36.467000) [+0]
+│  Great solution, congratulations!
+├─ Bill Fan (2025-03-06 00:58:31.593000) [+0]
+│  Congratulations to you and the team. Impressive work! would you like to share you code
+├─ emararayan (2025-03-06 00:43:37.267000) [+0]
+│  Patiently waiting for this !
+├─ Adam Logman (2025-03-06 00:33:14.103000) [+0]
+│  Congratulations, I followed different path which was risky , but now in the medal zone not bad
+├─ jiahaopengX (2025-03-06 00:17:14.760000) [+0]
+│  Good job!Congratulations！
+├─ John Payne (2025-03-06 00:09:12.350000) [+0]
+│  Congratulations! I had a very similar approach, but unfortunately didn't have much time to work on this competition, cool to see that it worked out for you!
+  ├─ minerppdy (2025-03-06 00:13:23.377000) [+1]
+  │  @johnpayne0 yeah ,i saw your comments, with more complicated combine function, you will be surprised
+├─ [deleted] (2025-03-11 20:56:30.880000) [+0]
+│  [deleted]
+├─ [deleted] (2025-03-11 20:54:57.597000) [+0]
+│  [deleted]
+├─ Jaydev (2025-03-07 03:52:15.840000) [+0]
+│  Congratulations 🥳
+├─ [deleted] (2025-03-06 00:11:33.127000) [+0]
+│  [deleted]

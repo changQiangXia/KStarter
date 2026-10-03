@@ -1,0 +1,122 @@
+# commonlit-evaluate-student-summaries 讨论区（按票数排序，共 120 条）
+
+- [2nd Place Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446573) — 142 票 / 44 评论 / 2023-10-12 **write-up?**
+- [Offline pip install](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/435153) — 129 票 / 17 评论 / 2023-08-28 
+- [Onboarding materials and resources to refer](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424162) — 113 票 / 23 评论 / 2023-07-12 
+- [4th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446524) — 81 票 / 32 评论 / 2023-10-24 **write-up?**
+- [Autocorrect is LGPL, maybe we can't use it [Now with Host response!]](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/433208) — 74 票 / 37 评论 / 2023-08-20 
+- [Rotate Content 30 degrees](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/430705) — 65 票 / 24 评论 / 2023-08-10 
+- [Beware of Grade Distribution Gaps in the Dataset!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/431545) — 64 票 / 3 评论 / 2023-08-14 
+- [Single Model CV-LB Thread](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424330) — 61 票 / 157 评论 / 2023-07-13 
+- [1st: A brief review of the competition experience (Detail solution is on the way)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/447293) — 59 票 / 21 评论 / 2023-10-15 **write-up?**
+- [9th Place Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446539) — 58 票 / 17 评论 / 2023-10-12 **write-up?**
+- [The effect of changing input text and max length](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/432815) — 52 票 / 13 评论 / 2023-08-19 
+- [5th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446584) — 47 票 / 12 评论 / 2023-10-13 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446686) — 43 票 / 16 评论 / 2023-10-13 **write-up?**
+- [Approaching the Wording Prediction](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424372) — 41 票 / 3 评论 / 2023-07-13 
+- [A spell checker we can use](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/433451) — 41 票 / 5 评论 / 2023-08-21 
+- [Introduction to Transformers](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/425671) — 40 票 / 5 评论 / 2023-07-19 
+- [7th Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446534) — 39 票 / 5 评论 / 2023-10-12 **write-up?**
+- [Use Back Translation for Data Augmentation](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424404) — 38 票 / 7 评论 / 2023-07-13 
+- [Avoid wasting GPU quota when saving/submitting a notebook](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/441753) — 38 票 / 42 评论 / 2023-09-20 
+- [19th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446512) — 37 票 / 6 评论 / 2023-10-12 **write-up?**
+- [textstat fork with no pyphen dependency](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/438274) — 35 票 / 11 评论 / 2023-09-10 
+- [How to test your submission.](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/427928) — 34 票 / 16 评论 / 2023-07-30 
+- [CommonLit Readability winning solutions write-ups from 2-years ago (top 100)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424151) — 34 票 / 4 评论 / 2023-07-12 **write-up?**
+- [Greetings from the organizers!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424402) — 32 票 / 57 评论 / 2023-07-13 
+- [Competition Metric Suggestion](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/427499) — 32 票 / 8 评论 / 2023-07-28 
+- [Congratulations to Ivan Aerlic, New Kaggle Grandmaster ](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446493) — 32 票 / 26 评论 / 2023-10-12 
+- [16th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446872) — 31 票 / 4 评论 / 2023-10-13 **write-up?**
+- [8th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446712) — 31 票 / 6 评论 / 2023-10-13 **write-up?**
+- [11th place solution ](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446776) — 29 票 / 5 评论 / 2023-10-14 **write-up?**
+- [gold zone🥇 - with single model💪💪](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446554) — 29 票 / 5 评论 / 2023-10-12 
+- [Public LB may use only one prompt](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/427992) — 29 票 / 3 评论 / 2023-07-30 
+- [Spell Checker](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/428941) — 28 票 / 13 评论 / 2023-08-03 
+- [My bet: stop early](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/445996) — 28 票 / 29 评论 / 2023-10-09 
+- [No Dropout helps with the regression tasks (from an old Commonlit competition)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/432186) — 28 票 / 6 评论 / 2023-08-16 
+- [Dataset with CommonLit Library meta information](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/440234) — 27 票 / 1 评论 / 2023-09-14 
+- [Are LLMs robust enough to capture features in this challenge](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/431877) — 27 票 / 5 评论 / 2023-08-15 
+- [MCRMSE 10 months ago. Students+Summaries+ChatGPT= 😂 What'll you expect?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424167) — 26 票 / 7 评论 / 2023-07-12 
+- [The way to add prompt to Model](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/430065) — 26 票 / 19 评论 / 2023-08-08 
+- [duplicate content and wording combinations in the data](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/432035) — 26 票 / 7 评论 / 2023-08-15 
+- [Content and wording scores: what are they?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/435446) — 25 票 / 3 评论 / 2023-08-29 
+- [LB Probing: Public Data only contains Grade 10?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436864) — 25 票 / 2 评论 / 2023-09-04 
+- [49th Place Solution [Single Model]](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446516) — 24 票 / 11 评论 / 2023-10-12 **write-up?**
+- [Number of prompts in the test data is ~120](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/443223) — 24 票 / 15 评论 / 2023-09-26 
+- [25th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446701) — 22 票 / 3 评论 / 2023-10-12 **write-up?**
+- [Levenshtein distance analysis](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/435902) — 22 票 / 4 评论 / 2023-08-31 
+- [Thanks for participating!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446681) — 21 票 / 7 评论 / 2023-10-12 
+- [AWP usage in training](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/427523) — 21 票 / 12 评论 / 2023-07-28 
+- [My lessons](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446367) — 19 票 / 8 评论 / 2023-10-11 
+- [1st Place Efficiency Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/447944) — 19 票 / 3 评论 / 2023-10-17 **write-up?**
+- [Private Test Data Possibility](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/426587) — 19 票 / 5 评论 / 2023-07-24 
+- [Two thousand texts from CommonLit library](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/441202) — 19 票 / 3 评论 / 2023-09-17 
+- [Comment on model.embeddings.position_ids](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/427183) — 19 票 / 3 评论 / 2023-07-26 
+- [27th Place Solution: How to use prompts?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446542) — 18 票 / 7 评论 / 2023-10-12 **write-up?**
+- [14th place Solution (lucky for me)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446818) — 18 票 / 9 评论 / 2023-10-17 **write-up?**
+- [2nd Place Efficiency Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/447955) — 18 票 / 2 评论 / 2023-12-01 **write-up?**
+- [20th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446676) — 17 票 / 2 评论 / 2023-10-13 **write-up?**
+- [69th Place Solution ](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446560) — 17 票 / 0 评论 / 2023-10-17 **write-up?**
+- [Cross Validation Technique? ](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424604) — 17 票 / 3 评论 / 2023-07-14 
+- [Video available . Thursday 7.09 "Hands on HF". Webinar related  to the competition](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/429975) — 17 票 / 8 评论 / 2023-08-07 
+- [Does the modified MCRMSE loss work for your model?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/428387) — 16 票 / 13 评论 / 2023-08-01 
+- [Are Scores Adjusted by Grade?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424323) — 16 票 / 3 评论 / 2023-07-13 
+- [[SOLVED] Are we allowed to scrape data from the CommonLit website?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/438699) — 15 票 / 13 评论 / 2023-09-12 
+- [Freezing Layers](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/433754) — 15 票 / 14 评论 / 2023-08-22 
+- [[CONFIRMED BY HOST] py-readability-metrics as an alternative to textstat](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436608) — 15 票 / 9 评论 / 2023-09-03 
+- [[UPDATED] Notebook with competition-compliant NLP packages](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/445086) — 15 票 / 2 评论 / 2023-10-05 
+- [17th Place Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446648) — 15 票 / 0 评论 / 2023-10-12 **write-up?**
+- [Looking beyond transformers - Going back to legacy word embeddings](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436494) — 15 票 / 4 评论 / 2023-09-02 
+- [12th Place Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/447254) — 14 票 / 3 评论 / 2023-10-15 **write-up?**
+- [Optuna for determining model weights](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/429165) — 14 票 / 1 评论 / 2023-08-04 
+- [Is it valid to crawl data from CommonLit for model training?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/431243) — 14 票 / 5 评论 / 2023-08-12 
+- [We got so close! :(((](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446505) — 14 票 / 6 评论 / 2023-10-12 
+- [Public 5th & Private 24th Place Solution (CV = LB)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446689) — 14 票 / 0 评论 / 2023-10-12 **write-up?**
+- [Suspicious behavior in public LB](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/443597) — 13 票 / 10 评论 / 2023-09-28 
+- [Petition: Include Age/Grade as Metadata](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424546) — 13 票 / 3 评论 / 2023-07-14 
+- [Sentence Transformers Wheels and their utilization](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/426229) — 13 票 / 3 评论 / 2023-07-22 
+- [35th Place Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446591) — 13 票 / 0 评论 / 2023-10-18 **write-up?**
+- [Five tips for the efficiency track](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/432542) — 13 票 / 1 评论 / 2023-08-17 
+- [Different knowledge distillation and pruning techniques ](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436806) — 12 票 / 4 评论 / 2023-09-04 
+- [What I learned in CommonLit Comp!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446420) — 12 票 / 2 评论 / 2023-10-11 
+- [Kaggle Error with submission when the deadline is tomorrow!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446080) — 12 票 / 5 评论 / 2023-10-10 
+- [Why hasn't the final result been confirmed yet ?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/447719) — 12 票 / 9 评论 / 2023-10-17 
+- [CV vs. LB?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/433376) — 12 票 / 23 评论 / 2023-08-21 
+- [Text readability EDA for prompts and summaries](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436394) — 12 票 / 3 评论 / 2023-09-02 
+- [98th Place Solution Overview 🥈](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/448993) — 11 票 / 2 评论 / 2023-10-22 **write-up?**
+- [For beginners: Getting started on this competition](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436739) — 11 票 / 4 评论 / 2023-09-03 
+- [Congrats to new Kaggle Competitions GM!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446527) — 10 票 / 1 评论 / 2023-10-12 
+- [Learnings from this competition](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446548) — 10 票 / 1 评论 / 2023-10-12 
+- [Single fold result better than 4folds?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436690) — 10 票 / 5 评论 / 2023-09-03 
+- [CommonLit ESS: last day competition stats](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446012) — 10 票 / 0 评论 / 2023-10-09 
+- [Global Review and method summary（73th Place Solution）](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446510) — 10 票 / 8 评论 / 2023-10-12 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424147) — 9 票 / 110 评论 / 2023-07-12 
+- [Who else is suffering from CV-LG gap ?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/425615) — 9 票 / 11 评论 / 2023-07-19 
+- [3rd Place Efficiency Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/448604) — 9 票 / 0 评论 / 2023-10-20 **write-up?**
+- [30th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/447325) — 9 票 / 0 评论 / 2023-10-15 **write-up?**
+- [Different Quantization Techniques For Transformers And When To Use Them](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436804) — 9 票 / 1 评论 / 2023-09-04 
+- [43th place solution (711 shake up)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446644) — 9 票 / 1 评论 / 2023-10-12 **write-up?**
+- [Content score is largely explained by semantic similarity + summary length](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/436187) — 9 票 / 3 评论 / 2023-09-01 
+- [Meme Thread](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446115) — 9 票 / 9 评论 / 2023-10-10 
+- [627th Solution for CommonLit ESS competition- What doesn't kill you makes you stronger](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446500) — 9 票 / 3 评论 / 2023-10-18 **write-up?**
+- [61th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446654) — 9 票 / 0 评论 / 2023-10-12 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424145) — 8 票 / 16 评论 / 2023-07-12 
+- [Text encoding of features for Deberta training](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/437591) — 8 票 / 4 评论 / 2023-09-07 
+- [Sequence alignment features  (with introductory examples). ](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/437141) — 8 票 / 0 评论 / 2023-09-05 
+- [Submission keep running](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446083) — 8 票 / 7 评论 / 2023-10-10 
+- [32nd Place Solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446631) — 8 票 / 3 评论 / 2023-10-12 **write-up?**
+- [Why deberta-v3 can't handle prompt_text as input. in theory, deberta can handle input length of up to 24,528](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/432618) — 8 票 / 8 评论 / 2023-08-18 
+- [Congrats to all the Winners!](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446488) — 8 票 / 3 评论 / 2023-10-12 
+- [Unable to find direction to start? 📝](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/432359) — 7 票 / 1 评论 / 2023-08-17 
+- [tidbits in the summary_text](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/438633) — 7 票 / 2 评论 / 2023-09-12 
+- [Model Memory Calculator (Inference and Training)](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/435613) — 7 票 / 0 评论 / 2023-08-30 
+- [NLP libraries for installation without inernet acces](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/429151) — 7 票 / 1 评论 / 2023-08-04 
+- [Efficiency track: public 13th place solution](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446525) — 7 票 / 3 评论 / 2023-10-12 **write-up?**
+- [How to install autocorrect-1.1.0 offline?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/441265) — 7 票 / 8 评论 / 2023-09-18 
+- [Another Perspective on Licensing](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/445097) — 7 票 / 0 评论 / 2023-10-05 
+- [Wording Prediction](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/431658) — 6 票 / 3 评论 / 2023-08-14 
+- [Submission.csv not found error](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424907) — 6 票 / 17 评论 / 2023-07-16 
+- [Outputs from Last Hidden Layer as Input Features](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/435069) — 6 票 / 5 评论 / 2023-08-27 
+- [Intermediate indicators](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/428461) — 6 票 / 1 评论 / 2023-08-01 
+- [Original scale/values  of the targets  ?](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/434977) — 6 票 / 2 评论 / 2023-08-27 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/429941) — 5 票 / 0 评论 / 2023-08-07 

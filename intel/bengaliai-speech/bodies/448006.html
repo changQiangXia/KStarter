@@ -1,0 +1,44 @@
+<p>Thank you for organizing this competition so well. Whenever questions arose, the hosts responded promptly and clearly. I really enjoyed working on this problem. Thank you very much <a href="https://www.kaggle.com/imtiazprio" target="_blank">@imtiazprio</a> </p>
+<p><strong>Modeling</strong><br>
+Like most of the participants, I started with the YellowKing pipeline. I changed the backbone to IndicWav2Vec and reinitialized the CTC layer. With this method and the public Dari/normalizing pipeline, it was already possible to achieve 0.48x scores without a Language Model. However, there was a big problem: <strong>the local WER score did not match the public lb anymore if the model was trained for too long</strong>. At a learning rate of 3e-5, local overfitting started at 40k steps (batch size 16). I suspect that the model started learning the relationship of erroneous audio/annotation pairs.</p>
+<p>Due to the noisy annotation, I excluded all samples with a mos-score of &gt;2.0 in the subsequent training stage, reaching a score of 0.472. After re-labeling with the new model, I removed all samples with a WER above 0.5 for my model and a WER above 0.5 for YellowKing. <strong>This resolved the local overfitting issue</strong>, ensuring that local improvements correlated with better public lb scores. I trained the model over 210k steps (bs 16) with a learning rate of 8e-5, achieving a score of 0.452 without a language model on top.</p>
+<p>Additionally, I trained a model with a <a href="https://huggingface.co/facebook/wav2vec2-xls-r-1b" target="_blank">larger backbone</a>. Unfortunately, due to lack of time, I could not fully exploit the potential, but after 135k steps I could already achieve a score of 0.454. The learning rate for the larger model had to be much smaller (1e-5).</p>
+<p><strong>Key Takeaways:</strong></p>
+<ul>
+<li>Quality filtering of data significantly enhanced training performance.</li>
+</ul>
+<p><strong>Ensembling</strong><br>
+I tried early to average the model logits of different finetuned models. However, it doesn´t work because the predictions may not be aligned. This is even the case for models of the same architecture. In <a href="https://arxiv.org/pdf/2206.05518.pdf" target="_blank">this paper</a> a procedure is described, where <strong>features of different ASR models are concatenated</strong>, followed by the addition of a transformer encoder and a CTC layer. The weights of the asr models are freezed and only the transformer encoder and the CTC layer are trained. I applied this approach to my finetuned models:</p>
+<ul>
+<li>Extract embeddings of the finetuned models</li>
+<li>Concatenate the features</li>
+<li>Concatenated features are passed into the Transformer encoder and then processed in the CTC layer</li>
+<li>A few steps (7k steps for batchsize 8) on the same training data were enough to increase the performance of the overall model from 0.355 to 0.344 (I justed tested it in the full pipeline, so with language model, punctuation and normalizing)<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2959383%2Fadb7e22f32c07808c16ed5ece66f5032%2FBild1.png?generation=1697605346189304&amp;alt=media" alt=""></li>
+</ul>
+<p><strong>Key takeways:</strong></p>
+<ul>
+<li>Ensembling asr model outputs by concatenating the last hidden states and adding a transformer encoder with CTC layer improves performance a lot</li>
+</ul>
+<p><strong>Potentials:</strong></p>
+<ul>
+<li>I think this is where the <strong>greatest further potential lies</strong> in my solution. I didn't have enough time, but it would be interesting to see how Whisper or HUBERT in the ensemble would have improved the performance. I think because of the different architectures it should be even better because of the larger diversity in the ensemble.</li>
+<li>My finetuned model with the 1b backbone is undertrained. There is still potential for better performance if the model is trained for a longer period.</li>
+<li>I have hardly experimented with the parameters and training routine of the added transformer encoder. There is room for improvement as well.</li>
+</ul>
+<p><strong>Language Model</strong><br>
+I have thought a lot about the language model part. I had thought about interpreting the whole thing as a seq2seq problem and taking a pretrained transformer as the language model. In the end I just used a standard KenLM model. For this I used datasets which were shared in the forums (e.g. IndicCorp, SLR, Comp data).</p>
+<p>In preprocessing, I radically <strong>limited to the character set of the training data</strong>, as the<a href="https://www.kaggle.com/competitions/bengaliai-speech/discussion/433469#2410416" target="_blank"> hosts said </a> there are no new characters in the test data. I replaced numbers, other languages, and other characters with special tokens. This reduced the number of unigrams significantly which was a bottleneck in the Kaggle environment. I ended up with <strong>a 0 0 0 2 2 pruned 5-ngram</strong>. Adding more data didn´t increase the performance at a certain point.</p>
+<p>Much more important for the Kaggle workflow was the following fact: If you use the standard Wav2Vec2ProcessorWithLM of Huggingface and then remove the model, the <a href="https://github.com/kensho-technologies/pyctcdecode/pull/111" target="_blank">RAM is not released</a>. I therefore disassembled the pipeline and first computed all logits, stored them locally, and then read them back in for the decoding process. Afterwards I removed the language model cleanly with decoder.cleanup() before deleting the decoder. Without this measure, I would not have been able to use the ensemble model because of out of memory errors.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2959383%2Fd077b0fb9e9042395af9401e0b509c65%2FBild2.png?generation=1697605762499198&amp;alt=media" alt=""></p>
+<p><strong>Key Takeways:</strong></p>
+<ul>
+<li>The language model is important: precise preprocessing manages size while excessive data may not necessarily improve the LM's performance. Corrupted data can even degrade the performance of the language model.</li>
+</ul>
+<p><strong>Punctuation</strong><br>
+I tried different punctuation models and ensembles. In the end, I used a <a href="https://github.com/xashru/punctuation-restoration" target="_blank">XLM-Roberta-Large model</a>. It improved the score by ~0.02. I could improve the performance even more by forcing the model to output a | or ? after the last word (+0.002).</p>
+<p><strong>Code</strong><br>
+Cleaned up inference code can be found here:<br>
+<a href="https://www.kaggle.com/code/benbla/5th-place-solution/notebook" target="_blank">Kaggle Inference</a><br>
+Cleaned up training code can be found here:<br>
+<a href="https://github.com/bd317/BengaliAI_Speech_Recognition_5th_solution" target="_blank">Github training</a></p>

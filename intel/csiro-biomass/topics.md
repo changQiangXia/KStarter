@@ -1,0 +1,82 @@
+# csiro-biomass 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/670735) — 137 票 / 30 评论 / 2026-01-29 **write-up?**
+- [To prevent overfitting, you have to group by Sampling_Date](https://www.kaggle.com/competitions/csiro-biomass/discussion/615401) — 132 票 / 50 评论 / 2025-11-10 
+- [Analysis: Height_Ave_cm and Dead Biomass Prediction - Testing the Host's Hypothesis](https://www.kaggle.com/competitions/csiro-biomass/discussion/650736) — 86 票 / 11 评论 / 2025-12-02 
+- [Rank 5th Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/670668) — 81 票 / 15 评论 / 2026-01-29 **write-up?**
+- [Irish Grass Clover Dataset](https://www.kaggle.com/competitions/csiro-biomass/discussion/626910) — 70 票 / 11 评论 / 2025-11-16 
+- [Discussion — Seeking Advice on Multi-View Inputs, Data Strategies, Loss Design & Model Complexity](https://www.kaggle.com/competitions/csiro-biomass/discussion/651525) — 62 票 / 19 评论 / 2025-12-04 
+- [(2nd) Weakly supervised semantic segmentation + Synthetic data](https://www.kaggle.com/competitions/csiro-biomass/discussion/670895) — 61 票 / 15 评论 / 2026-01-31 
+- [🤔 The Multi-Head Question: How Many Heads & For Which Target? 🎯](https://www.kaggle.com/competitions/csiro-biomass/discussion/669012) — 52 票 / 0 评论 / 2026-01-20 
+- [Spot checking training data](https://www.kaggle.com/competitions/csiro-biomass/discussion/631335) — 50 票 / 21 评论 / 2025-11-18 
+- [4th Place Solution: ViT-Huge DINOv3 & Multi-Modal Feature Fusion with AUX predic](https://www.kaggle.com/competitions/csiro-biomass/discussion/670677) — 46 票 / 14 评论 / 2026-01-29 **write-up?**
+- [What is your local validation score -- Huge gap with LB?](https://www.kaggle.com/competitions/csiro-biomass/discussion/614642) — 41 票 / 62 评论 / 2025-11-05 
+- [Last Few Days Left](https://www.kaggle.com/competitions/csiro-biomass/discussion/668666) — 41 票 / 19 评论 / 2026-01-18 
+- [7th Place Solution - single/dual+TTT](https://www.kaggle.com/competitions/csiro-biomass/discussion/670654) — 41 票 / 17 评论 / 2026-01-29 **write-up?**
+- [🏅 37st Place Solution: Self Prompt Tuning with DINOv3](https://www.kaggle.com/competitions/csiro-biomass/discussion/670672) — 40 票 / 11 评论 / 2026-01-29 **write-up?**
+- [identify the camera?](https://www.kaggle.com/competitions/csiro-biomass/discussion/667537) — 37 票 / 10 评论 / 2026-01-13 
+- [Publication on how data was generated](https://www.kaggle.com/competitions/csiro-biomass/discussion/613941) — 36 票 / 6 评论 / 2025-10-30 
+- [Good Luck Everyone!](https://www.kaggle.com/competitions/csiro-biomass/discussion/670016) — 35 票 / 12 评论 / 2026-01-25 
+- [PCA trick to address target linear dependency](https://www.kaggle.com/competitions/csiro-biomass/discussion/614912) — 33 票 / 0 评论 / 2025-11-07 
+- [Welcome to the CSIRO - Image2Biomass Prediction Competition!](https://www.kaggle.com/competitions/csiro-biomass/discussion/613699) — 31 票 / 117 评论 / 2025-10-29 
+- [Synthetic dataset](https://www.kaggle.com/competitions/csiro-biomass/discussion/670664) — 31 票 / 14 评论 / 2026-01-29 
+- [Possible bug in the evaluation metric? (Resolved)](https://www.kaggle.com/competitions/csiro-biomass/discussion/614237) — 30 票 / 10 评论 / 2025-11-02 
+- [3rd Place Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/670901) — 29 票 / 2 评论 / 2026-01-30 **write-up?**
+- [33rd Place Silver Medal Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/670986) — 27 票 / 4 评论 / 2026-01-30 **write-up?**
+- [Is there data drift between the training data and the test data?](https://www.kaggle.com/competitions/csiro-biomass/discussion/613724) — 26 票 / 4 评论 / 2025-10-29 
+- [Spot checking training data (continue)](https://www.kaggle.com/competitions/csiro-biomass/discussion/638570) — 26 票 / 7 评论 / 2025-11-23 
+- [5th place solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/671211) — 25 票 / 2 评论 / 2026-02-02 **write-up?**
+- [What is the main difference between scores 0.66 and 0.77+?](https://www.kaggle.com/competitions/csiro-biomass/discussion/663817) — 22 票 / 22 评论 / 2025-12-20 
+- [State and Species](https://www.kaggle.com/competitions/csiro-biomass/discussion/615003) — 21 票 / 13 评论 / 2025-11-08 
+- [Interesting Post-Processing Findings](https://www.kaggle.com/competitions/csiro-biomass/discussion/665538) — 21 票 / 21 评论 / 2026-01-02 
+- [Rank72 - Simple ensemble with DINO-EVA backbones](https://www.kaggle.com/competitions/csiro-biomass/discussion/670785) — 18 票 / 0 评论 / 2026-01-29 
+- [Decoding-based Regression](https://www.kaggle.com/competitions/csiro-biomass/discussion/668735) — 18 票 / 3 评论 / 2026-01-18 
+- [importance of metadata e.g. `target_name` for `target` value](https://www.kaggle.com/competitions/csiro-biomass/discussion/614121) — 18 票 / 5 评论 / 2025-11-01 
+- [123rd (public 6th) Solution - Tile-based ViT with 2D Pos-Emb & MIL pooling](https://www.kaggle.com/competitions/csiro-biomass/discussion/670759) — 17 票 / 10 评论 / 2026-01-29 **write-up?**
+- [Private 20th | Public 25th Soluion - Simple model + Data augmentation](https://www.kaggle.com/competitions/csiro-biomass/discussion/670670) — 17 票 / 0 评论 / 2026-01-29 
+- [CV and LB and folds that work [Single Model]](https://www.kaggle.com/competitions/csiro-biomass/discussion/614042) — 17 票 / 32 评论 / 2025-10-31 
+- [Does Metadata Really Matter?](https://www.kaggle.com/competitions/csiro-biomass/discussion/619477) — 17 票 / 1 评论 / 2025-11-14 
+- [Dinov3 + DoRA + Tweedie Loss + Ballanced R2](https://www.kaggle.com/competitions/csiro-biomass/discussion/670733) — 16 票 / 8 评论 / 2026-01-29 
+- [Aspect ratio between physical quadrants and digital images.](https://www.kaggle.com/competitions/csiro-biomass/discussion/642450) — 16 票 / 0 评论 / 2025-11-28 
+- [10th Place Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/671053) — 14 票 / 5 评论 / 2026-01-30 **write-up?**
+- [Is GPL3 considered a valid free license for Kaggle winners?](https://www.kaggle.com/competitions/csiro-biomass/discussion/617603) — 14 票 / 17 评论 / 2025-11-11 
+- [R2 scores vary significantly across different folds and seeds](https://www.kaggle.com/competitions/csiro-biomass/discussion/639952) — 14 票 / 9 评论 / 2025-11-25 
+- [How to tackle Dry Dead g target?](https://www.kaggle.com/competitions/csiro-biomass/discussion/615516) — 14 票 / 6 评论 / 2025-11-10 
+- [CSIRO 2026 Rank 25th Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/670653) — 13 票 / 4 评论 / 2026-01-29 **write-up?**
+- [A Scalar Regression Pipeline Based on DINOv3](https://www.kaggle.com/competitions/csiro-biomass/discussion/671654) — 13 票 / 7 评论 / 2026-02-03 
+- [Do we have any information about the limits of detection](https://www.kaggle.com/competitions/csiro-biomass/discussion/613745) — 13 票 / 5 评论 / 2025-10-29 
+- [10 gms vs 50 gms Dead](https://www.kaggle.com/competitions/csiro-biomass/discussion/665877) — 13 票 / 13 评论 / 2026-01-04 
+- [Which targets are you predicting?](https://www.kaggle.com/competitions/csiro-biomass/discussion/665055) — 12 票 / 15 评论 / 2025-12-29 
+- [Creating a Dataset of Sub Image Labels](https://www.kaggle.com/competitions/csiro-biomass/discussion/654028) — 12 票 / 7 评论 / 2025-12-07 
+- [Clarification: Is self-supervised pretraining on the test images allowed?](https://www.kaggle.com/competitions/csiro-biomass/discussion/664342) — 12 票 / 6 评论 / 2025-12-24 
+- [Train file: "Directory containing training images (JPEG)"? Isn't jpg files? ](https://www.kaggle.com/competitions/csiro-biomass/discussion/613691) — 12 票 / 2 评论 / 2025-10-29 
+- [9th Place Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/671026) — 12 票 / 1 评论 / 2026-01-30 **write-up?**
+- [Top 10 Public | Top 38 Private solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/672000) — 12 票 / 3 评论 / 2026-02-05 **write-up?**
+- [55th Solution](https://www.kaggle.com/competitions/csiro-biomass/discussion/670695) — 10 票 / 2 评论 / 2026-01-29 **write-up?**
+- [Quite similar results on very different images](https://www.kaggle.com/competitions/csiro-biomass/discussion/639074) — 10 票 / 3 评论 / 2025-11-24 
+- [CV scores - final phase of the competition](https://www.kaggle.com/competitions/csiro-biomass/discussion/666991) — 10 票 / 14 评论 / 2026-01-10 
+- [8th Place Solution | PixelScale 🌿](https://www.kaggle.com/competitions/csiro-biomass/discussion/671363) — 10 票 / 2 评论 / 2026-02-01 **write-up?**
+- [A Dual-Stream DINOv3 + Gated Depthwise Convolutions + Auxiliary Metadata](https://www.kaggle.com/competitions/csiro-biomass/discussion/670746) — 10 票 / 3 评论 / 2026-01-29 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/csiro-biomass/discussion/613676) — 9 票 / 7 评论 / 2025-10-28 
+- [[Share Info] ID670276799 contains date on its image](https://www.kaggle.com/competitions/csiro-biomass/discussion/615349) — 9 票 / 1 评论 / 2025-11-10 
+- [Rank 83rd Silver Solution: DINOv2/3 + Depth Fusion with Uncertainty Calibration](https://www.kaggle.com/competitions/csiro-biomass/discussion/670691) — 9 票 / 0 评论 / 2026-01-29 **write-up?**
+- [Is CV even useful here?](https://www.kaggle.com/competitions/csiro-biomass/discussion/669120) — 9 票 / 11 评论 / 2026-01-20 
+- [About hidden test data](https://www.kaggle.com/competitions/csiro-biomass/discussion/618809) — 8 票 / 14 评论 / 2025-11-13 
+- [Could we get more LB score precision and split info ?](https://www.kaggle.com/competitions/csiro-biomass/discussion/670643) — 8 票 / 1 评论 / 2026-01-29 
+- [Leaderboard scores - increase digits?](https://www.kaggle.com/competitions/csiro-biomass/discussion/662526) — 8 票 / 11 评论 / 2025-12-13 
+- [Workshop - Thursday November 27 - come along! ](https://www.kaggle.com/competitions/csiro-biomass/discussion/615302) — 7 票 / 1 评论 / 2025-11-10 
+- [Public 17th / Private 146th - MoE head+Median regression+Ratio regression](https://www.kaggle.com/competitions/csiro-biomass/discussion/670665) — 7 票 / 2 评论 / 2026-01-29 
+- [Finished my first Kaggle comp — top 22%. Not my goal, but a bunch of lessons I wish I’d heard earlier.](https://www.kaggle.com/competitions/csiro-biomass/discussion/670699) — 7 票 / 1 评论 / 2026-01-29 
+- [Are all images in the dataset have size 2000x1000 ?](https://www.kaggle.com/competitions/csiro-biomass/discussion/613989) — 7 票 / 5 评论 / 2025-10-31 
+- [Metric ambiguity](https://www.kaggle.com/competitions/csiro-biomass/discussion/614190) — 7 票 / 3 评论 / 2025-11-01 
+- [SAMPLE_SUBMISSION.CSV - Submission Fails](https://www.kaggle.com/competitions/csiro-biomass/discussion/665381) — 6 票 / 5 评论 / 2026-01-01 
+- [Dry Dead vs Dry Green ](https://www.kaggle.com/competitions/csiro-biomass/discussion/613957) — 6 票 / 1 评论 / 2025-10-31 
+- [How did dinov3 go for you?](https://www.kaggle.com/competitions/csiro-biomass/discussion/664311) — 6 票 / 16 评论 / 2025-12-24 
+- [SegFormer  + Depth Pro -> DinoV3Base w/Lora -> Learned Fusion module](https://www.kaggle.com/competitions/csiro-biomass/discussion/670730) — 6 票 / 2 评论 / 2026-01-29 
+- [Validation R^2 vs Actual Kaggle Score Difference](https://www.kaggle.com/competitions/csiro-biomass/discussion/664427) — 6 票 / 3 评论 / 2025-12-25 
+- [76th Private/11th Public - CSIRO Biomass Prediction Pipeline](https://www.kaggle.com/competitions/csiro-biomass/discussion/671255) — 6 票 / 0 评论 / 2026-02-01 
+- [Are There Any New Species in the Test Dataset?](https://www.kaggle.com/competitions/csiro-biomass/discussion/614083) — 6 票 / 5 评论 / 2025-11-01 
+- [Colab Pro extra GPU hours GONE? ](https://www.kaggle.com/competitions/csiro-biomass/discussion/663257) — 5 票 / 1 评论 / 2025-12-17 
+- [Scaling Biomass Estimates from Small Plots to a Full Hectare](https://www.kaggle.com/competitions/csiro-biomass/discussion/663399) — 5 票 / 2 评论 / 2025-12-17 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/csiro-biomass/discussion/670996) — 3 票 / 4 评论 / 2026-01-30 
+- [Recap of the CSIRO – Image2Biomass Prediction Competition](https://www.kaggle.com/competitions/csiro-biomass/discussion/681443) — 3 票 / 0 评论 / 2026-03-15 

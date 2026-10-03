@@ -1,0 +1,122 @@
+# deep-past-initiative-machine-translation 讨论区（按票数排序，共 120 条）
+
+- [[DPC 1st] Data Quality Dictates Everything](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684353) — 94 票 / 28 评论 / 2026-03-25 
+- [Compiled Discussions To Read (Avoid Bad Advice)](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668402) — 93 票 / 22 评论 / 2026-01-16 
+- [Two practical stumbling blocks in Akkadian → English MT (and how to address them)](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665209) — 75 票 / 54 评论 / 2025-12-30 
+- [The translation column of the final test predictions into the corresponding <gap> and <big_gap> tags](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664948) — 55 票 / 65 评论 / 2025-12-29 
+- [[6th] DPC solution - 15 models ensemble on diverse data sources](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684231) — 54 票 / 12 评论 / 2026-03-24 **write-up?**
+- [[3rd] Synthetic Data to Teach OA Fundamentals](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684425) — 51 票 / 11 评论 / 2026-03-24 
+- [Regarding the open-source issue that is malignant and offers no nutritional value.](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/680686) — 45 票 / 13 评论 / 2026-03-10 
+- [Akkadian Translation Competition - Community Knowledge Synthesis](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/672511) — 45 票 / 14 评论 / 2026-02-08 
+- [Data Update](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664177) — 44 票 / 33 评论 / 2025-12-22 
+- [[2nd Place] Data-Centric Akkadian NMT](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684345) — 42 票 / 16 评论 / 2026-03-24 **write-up?**
+- [Probing the Best Leaderboard Public Models](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668619) — 42 票 / 12 评论 / 2026-01-17 
+- [A Stitch in Time Saves Nine](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/678899) — 36 票 / 71 评论 / 2026-02-25 
+- [[24th] Post-training Qwen2.5 32B and 72B with Gemini OCR/published texts pairs](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684189) — 36 票 / 7 评论 / 2026-03-24 
+- [Akkadian to English: Cuneify tool, Fairseq toolkit, Python Package Akkademia and Gale-Church algorithm.](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663233) — 35 票 / 7 评论 / 2025-12-17 
+- [Short 7th place note](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684215) — 33 票 / 8 评论 / 2026-03-24 **write-up?**
+- [Other Public Data](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663357) — 31 票 / 9 评论 / 2025-12-17 
+- [Dataset Update - Mind the Gaps](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/674136) — 26 票 / 46 评论 / 2026-02-18 
+- [8th Place Solution: 2-Stage Fine-tuning + High Quality Data Extraction](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684329) — 25 票 / 1 评论 / 2026-03-24 **write-up?**
+- [Mid-competition updates have now become a trend in Kaggle competitions.](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/678974) — 25 票 / 6 评论 / 2026-02-26 
+- [How To Handle These Examples](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664795) — 24 票 / 7 评论 / 2025-12-27 
+- [Formatting of the Hidden Test Set](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664411) — 24 票 / 17 评论 / 2025-12-24 
+- [LLM + Online Learning is all you need](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684236) — 23 票 / 13 评论 / 2026-03-24 
+- [[22nd] CPT, GRPO and Extensive Work on the Data (No SFT)](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684206) — 23 票 / 2 评论 / 2026-03-24 
+- [Is this competition becoming a 'Regex Guessing Game'?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/678836) — 23 票 / 6 评论 / 2026-02-25 
+- [Any luck with letters from Larsen PDF?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/670040) — 22 票 / 19 评论 / 2026-01-25 
+- [10th Place Solution — Seq2Seq + CPT + Pseudo-Labeling](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684211) — 21 票 / 2 评论 / 2026-03-24 **write-up?**
+- [ Post-processing by LLM](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664079) — 21 票 / 4 评论 / 2025-12-22 
+- [Welcome to the Deep Past Initiative Machine Translation Challenge!](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663210) — 20 票 / 27 评论 / 2025-12-16 
+- [Congratulations and Thank You All!](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/685051) — 19 票 / 1 评论 / 2026-03-26 
+- [Clarification: Gap Format in Test Set (<gap> vs <big_gap>) - Did I understand correctly?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664518) — 19 票 / 11 评论 / 2025-12-25 
+- [Improving Alignment Between Akkadian Text and English Translation](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666745) — 19 票 / 8 评论 / 2026-01-08 
+- [Incomplete translations](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663849) — 19 票 / 2 评论 / 2025-12-20 
+- [Floating Point Number Questions](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667480) — 18 票 / 18 评论 / 2026-01-12 
+- [Insights from the Akkademia Codebase & PNAS Paper for the Deep Past Challenge](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/673904) — 17 票 / 5 评论 / 2026-02-17 
+- [15th Place Gold Solution](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684819) — 16 票 / 2 评论 / 2026-03-26 **write-up?**
+- [Faster decoding](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684242) — 15 票 / 2 评论 / 2026-03-24 
+- [How were the 34.5 LB baselines exactly trained?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/670084) — 15 票 / 6 评论 / 2026-01-26 **write-up?**
+- [Starter code and some tips](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663505) — 15 票 / 3 评论 / 2025-12-18 
+- [Significant number (up to 25%) of incorrectly truncated texts in train.csv](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667483) — 14 票 / 5 评论 / 2026-01-12 
+- [Cuneiform base model](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/674348) — 14 票 / 0 评论 / 2026-02-20 
+- [11th Place Solution](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684429) — 13 票 / 0 评论 / 2026-03-24 **write-up?**
+- [Make the most of all available resources](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684187) — 13 票 / 1 评论 / 2026-03-24 
+- [[5th] Synthetic Data via Back-Translation](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684847) — 13 票 / 4 评论 / 2026-03-26 
+- [Access to https://www.ebl.lmu.de/dictionary data](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663388) — 13 票 / 8 评论 / 2025-12-17 
+- [Massive bot attack](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/679336) — 13 票 / 18 评论 / 2026-02-28 
+- [BF16 vs FP32:Full Precision significantly outperforming BF16](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664981) — 12 票 / 4 评论 / 2025-12-29 
+- [Question about the actual Team Merger Deadline: 3/10 or 3/16?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/679830) — 12 票 / 4 评论 / 2026-03-04 
+- [Another Public source of data (Michel Old Assyrian Merchant Letters)](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663576) — 11 票 / 2 评论 / 2025-12-18 
+- [Discrepancies in logogram transliteration](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663575) — 11 票 / 7 评论 / 2025-12-18 
+- [Extra data set from Akkadian AI translation](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666260) — 11 票 / 7 评论 / 2026-01-06 
+- [Processing asymmetric gaps in the ground truth](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668723) — 11 票 / 2 评论 / 2026-01-18 
+- [Thoughts on the test set. ](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/670278) — 11 票 / 11 评论 / 2026-01-27 
+- [Public tool for easier OCR of PDF documents](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/673455) — 11 票 / 3 评论 / 2026-02-14 
+- [[32nd] ByT5-base Fine-tuning | No LLMs, No Synthetic Data, No Ensembles](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684910) — 11 票 / 5 评论 / 2026-03-26 
+- [#[27th] Solution: ByT5-base + Gemini-3.0 + Ensemble](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684213) — 11 票 / 2 评论 / 2026-03-24 **write-up?**
+- [[33rd] Single byt5-base model](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684270) — 11 票 / 0 评论 / 2026-03-24 
+- [Use Sentences_Oare_FirstWord_LinNum to extract the sentence alignment](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666431) — 10 票 / 5 评论 / 2026-01-07 
+- [Unicode Fractions vs Decimals: LB Score Unchanged?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665101) — 10 票 / 8 评论 / 2025-12-30 
+- [Compiling all strategies in the PyTorch only Training NB](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667004) — 10 票 / 2 评论 / 2026-01-10 
+- [Usage of Synthetic Data](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663656) — 9 票 / 2 评论 / 2025-12-19 
+- [cv vs lb gap issues](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665886) — 9 票 / 8 评论 / 2026-01-04 
+- [[EDA] Critical Finding: Train-Test Transliteration Convention Mismatch](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665696) — 9 票 / 10 评论 / 2026-01-03 
+- [How to handle dot h/H?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665949) — 9 票 / 9 评论 / 2026-01-04 
+- [Academic Landscape of Old Akkadian: Chicago vs Munich vs French schools](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666425) — 9 票 / 0 评论 / 2026-01-07 
+- [Some questions.](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663804) — 9 票 / 7 评论 / 2025-12-20 
+- [Long Submission Queue and Unexpected Timeouts](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/680699) — 9 票 / 5 评论 / 2026-03-10 
+- [Translate Gemma](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668621) — 8 票 / 4 评论 / 2026-01-17 
+- [Missing personal names in OA_Lexicon_eBL.csv and possible fixes for 50% of them](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666916) — 8 票 / 0 评论 / 2026-01-09 
+- [One-Shot Silver Solution!](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684422) — 8 票 / 0 评论 / 2026-03-24 **write-up?**
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663183) — 7 票 / 2 评论 / 2025-12-16 
+- [Deep Past Challenge | Top-13 Solution](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/686956) — 7 票 / 0 评论 / 2026-04-01 **write-up?**
+- [Old Assyrian Tokens](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/679766) — 7 票 / 1 评论 / 2026-03-03 
+- [[50th] Solution: ByT5-base + TAPT + Ensemble](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684243) — 7 票 / 0 评论 / 2026-03-24 **write-up?**
+- [17th Place Solution — Deep Past Challenge ](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684332) — 7 票 / 0 评论 / 2026-03-24 **write-up?**
+- [Write-up / extra data](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667878) — 7 票 / 4 评论 / 2026-01-14 **write-up?**
+- [What's the best way to use OA_Lexicon_eBL.csv?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667542) — 7 票 / 5 评论 / 2026-01-13 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684963) — 6 票 / 0 评论 / 2026-03-26 
+- [Why 300-350 people are stuck at 35.1 score?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/674469) — 6 票 / 25 评论 / 2026-02-20 
+- [36th Place Solution - LLM-Based Sentence Alignment Strategy + MBR Model Ensembli](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684265) — 6 票 / 0 评论 / 2026-03-24 **write-up?**
+- [[21th] ByT5-Base + Gemini Augmentation, No Ensemble](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684267) — 6 票 / 0 评论 / 2026-03-24 
+- [Beginner's Guide & Baseline Approaches](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667065) — 6 票 / 1 评论 / 2026-01-10 
+- [Lines with Apostrophes](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/667001) — 6 票 / 1 评论 / 2026-01-10 
+- [original dataset?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/681486) — 6 票 / 3 评论 / 2026-03-15 
+- [How do quotations in the translations work?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663839) — 6 票 / 6 评论 / 2025-12-20 
+- [160th Place Solution: +218 Shake Up](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/685251) — 6 票 / 0 评论 / 2026-03-27 **write-up?**
+- [Fourth Place Solution Writeup](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/685925) — 6 票 / 0 评论 / 2026-03-29 **write-up?**
+- [[9th] Place Solution for the Deep Past Challenge Competition](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/685928) — 6 票 / 0 评论 / 2026-03-29 **write-up?**
+- [Question about OA_Lexicon_eBL.csv - Personal Name Spelling Inconsistency with Ground Truth](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664905) — 6 票 / 3 评论 / 2025-12-28 
+- [A nice podcast with Lex Fridman related to Cuneiforms](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663900) — 6 票 / 1 评论 / 2025-12-21 
+- [Guide to fix Accelerate error](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/683589) — 6 票 / 0 评论 / 2026-03-21 
+- [Formatting suggestions](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665928) — 5 票 / 5 评论 / 2026-01-04 
+- [Discrepancy: OA_Lexicon Standardized PNs vs. Training Set Ground Truth ](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668327) — 5 票 / 4 评论 / 2026-01-16 
+- [[12th] NotebookLM & Single ByT5-Base Model](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684866) — 5 票 / 1 评论 / 2026-03-26 
+- [PDF Dataset](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/670467) — 5 票 / 1 评论 / 2026-01-28 
+- [Finetuned model generates repeated gibberish](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665102) — 5 票 / 3 评论 / 2025-12-30 
+- [Some more data](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664985) — 5 票 / 4 评论 / 2025-12-29 
+- [Multi-phase curriculum training ](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684203) — 5 票 / 1 评论 / 2026-03-24 
+- [2-Stage CV, CPT & MBR Decoding](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684246) — 5 票 / 0 评论 / 2026-03-24 
+- [competiton-aligned-data-cleaning nd baseline](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/679190) — 4 票 / 0 评论 / 2026-02-27 
+- [[20th Place] ByT5-base, span corruption, synth & soup](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684381) — 4 票 / 1 评论 / 2026-03-24 **write-up?**
+- [Competition Metrics](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684116) — 4 票 / 14 评论 / 2026-03-23 
+- [Lora on ByT5 large](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/679497) — 4 票 / 1 评论 / 2026-03-01 
+- [Silver Medal Solution[29th]: ByT5-XL Custom CPT with Dictionary Data + KL-Anchor](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684537) — 4 票 / 0 评论 / 2026-03-25 **write-up?**
+- [89th Place - Solution](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684278) — 4 票 / 0 评论 / 2026-03-24 **write-up?**
+- [Is test set's transliteration formatted the same as the train set](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666798) — 4 票 / 6 评论 / 2026-01-09 
+- [[Operation issues] Why got stuck in Queued](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/680612) — 4 票 / 7 评论 / 2026-03-09 
+- [(pdf)-Translation sometimes different from train.csv translation](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/680446) — 4 票 / 1 评论 / 2026-03-08 
+- [My GPU quota has been exhausted](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/664487) — 4 票 / 2 评论 / 2025-12-25 
+- [Question on using Meta NLLB models under the winner license terms](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/671070) — 4 票 / 0 评论 / 2026-01-31 
+- [Geophysics meets Akkadian- what we did. ](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/682707) — 3 票 / 0 评论 / 2026-03-18 
+- [68th Place Solution🥈](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684274) — 3 票 / 0 评论 / 2026-03-24 **write-up?**
+- [Transliteration done implies that more than half of the work has been done ](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663444) — 3 票 / 4 评论 / 2025-12-17 
+- [How much can one use LLMs without violating the rule on Data Security?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/666443) — 3 票 / 5 评论 / 2026-01-07 
+- [Share the idea to retrain the tokenizer & model](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/668975) — 3 票 / 1 评论 / 2026-01-20 
+- [AKT PDFs Processing using PaddleOCR-VL](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684249) — 3 票 / 1 评论 / 2026-03-24 
+- [How should we tokenize?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/674708) — 3 票 / 1 评论 / 2026-02-21 
+- [BLEU and ChrF scores along with GM](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/679867) — 3 票 / 0 评论 / 2026-03-04 
+- [Advice Needed: Should an AI Beginner Join This Competition or Focus on Learning First?](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/663610) — 3 票 / 6 评论 / 2025-12-19 
+- [ByT5-Large with word-level DAPT](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/684419) — 3 票 / 0 评论 / 2026-03-24 
+- [Model finetuning](https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/discussion/665074) — 3 票 / 1 评论 / 2025-12-30 

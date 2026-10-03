@@ -1,0 +1,36 @@
+<p>Thank you Kaggle, Kagglers, PopSign, and Partners for a fun competition! Public notebooks in this competition are very strong! The host said that they need <code>LB &gt;= 0.6</code> to be helpful and the best public notebook scores <code>LB = 0.73</code>! Great job Kagglers!</p>
+<p>I joined this competition one week ago, so I didn't have much time to build my own model. Instead, i read the discussions and public notebooks, and attempted to improve the best public notebook. I boosted the best public notebook from public <code>LB = 0.73</code> to <code>LB = 0.77</code> and achieved 44th place Silver.</p>
+<h1>Praise for Best Public Notebooks</h1>
+<p>I am very impressed with the shared public notebooks</p>
+<ul>
+<li>Great Transformer model architecture</li>
+<li>Selected which 66 Landmarks out of 543 Landmarks are important (hands, lips, pose)</li>
+<li>Great preprocessing to convert videos of variable length to small fixed length</li>
+<li>Accurate local validation scheme which estimates LB score</li>
+</ul>
+<h1>Improvements to Best Public Notebook</h1>
+<p>After reading the best public notebook, I made the following 11 changes to boost CV and LB <code>+0.03</code> from <code>LB = 0.73</code> to <code>LB = 0.76</code>:</p>
+<ul>
+<li>Train 1 model =&gt; Train 4 models</li>
+<li>Add Time Scale augmentation</li>
+<li>Ensemble and apply TFLite FP16 quantization</li>
+<li>Change the following parameters:</li>
+<li>INPUT_SIZE, 64 =&gt; 12</li>
+<li>BATCH_ALL_SIGNS_N, 4 =&gt; 1</li>
+<li>N_EPOCHS, 250 =&gt; 120</li>
+<li>LANDMARK_UNITS, 384 =&gt; 224</li>
+<li>UNITS, 512 =&gt; 376</li>
+<li>NUM_BLOCKS, 2 =&gt; 3</li>
+<li>MLP_RATIO, 4 =&gt; 3</li>
+<li>MLP_DROPOUT_RATIO, 0.40 =&gt; 0.30</li>
+<li>remove random frame masking</li>
+</ul>
+<h1>Published Code</h1>
+<p>I published my code <a href="https://www.kaggle.com/code/cdeotte/improve-best-public-notebook-lb-0-76" target="_blank">here</a> for those curious to learn "How To Improve Best Public Notebook" from <code>LB = 0.73</code> to <code>LB = 0.76</code></p>
+<h1>My Thought Process</h1>
+<p>Most Kagglers are probably curious why and how I discovered these modifications. So let me share my thinking. First, the easiest way to boost CV LB for NN is to ensemble NN with multiple copies of itself (trained with different seeds). So the easiest way to boost public notebook CV LB is to make the model smaller and make the model faster (because this competition has size and time constraints). Then we can include multiple copies of the NN during inference. And each NN we will train with 100% train data.</p>
+<p>The first thing i did was reduce <code>LANDMARK_UNITS</code>, <code>UNITS</code>, and <code>MLP_RATIO</code> to reduce the model size. I slowly reduced these parameters to see how small I could go without reducing CV score. It is important to reduce the model to less than 5M (i.e. 5 million) parameters because then we can infer 4 copies of the model within the 40MB size restriction when using FP16. With 40MB size limit, the maximum number of parameters during inference with FP16 is 20M. I also tried less than 4M parameters and 3.3M parameters which allows 5 copies and 6 copies respectively (when using FP16 quantization) </p>
+<p>Second, I made the transformer deeper with more transformer blocks. I increased blocks from 2 to 3 which boosted the CV and LB about <code>+0.01</code> or <code>'0.02</code>. Reducing the <code>MLP_RATIO</code> from 4 to 3 significantly reduced the number of model parameters without affecting CV LB so this gave me extra parameters to allow increasing the transformer blocks.</p>
+<p>Next, I reduced <code>INPUT_SIZE</code> to speed up the model to make it infer (and train) faster. The parameter <code>INPUT_SIZE</code> is the transformer sequence length. This competition has a inference time constraint of 1 hour (in addition to a 40MB size constraint). Reducing <code>INPUT_SIZE</code> will decrease inference time (and does not affect model size). With sequence length 12, we can easily infer 5+ models under 1 hour.</p>
+<p>At this point, i got lucky. Reducing <code>INPUT_SIZE</code> actually boosted the CV and LB by <code>+0.01</code> or <code>+0.02</code> or so. After this I tuned the learning rate, batch size, and learning schedule and found <code>N_EPOCHS = 120</code> and <code>BATCH_ALL_SIGNS_N = 1</code> to be best. Many Kagglers overlook the fact that changing batch size can make a big difference for models. We should always try 0.25x, 0.5x, 2x, 4x batch size and change the learning rate for those experiments to be 0.25x, 0.5x, 2x, 4x respectively. Experiments demonstrate that <code>Batch Size = 256</code> is better than the original <code>Batch Size = 1024</code>. This helped <code>+0.0005</code> or so.</p>
+<p>Lastly NN always benefit from more data and data augmentation. I tried external data and many different data augmentation. Using external data did not help me. Regarding augmentation i only got benefit from <code>frame drop out</code> and <code>time scale augmentation</code>. This helped about <code>+0.0005</code> or so. I also tried rotation, scale, shift but this did not help. Flip was not needed since preprocessing normalized all videos to be left handed.</p>

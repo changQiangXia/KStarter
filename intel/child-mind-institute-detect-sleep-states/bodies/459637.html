@@ -1,0 +1,120 @@
+<p>Firstly thank you to my teammate <a href="https://www.kaggle.com/ryotayoshinobu" target="_blank">@ryotayoshinobu</a> for the amazing performance. Please read his part of the <a href="https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459597" target="_blank">solution</a>.<br>
+I am really glad I teamed up with him and learnt a lot</p>
+<p>A big thanks to the organizers as well for such an interesting competition. A really tough one.</p>
+<p>You can find the solution code here:</p>
+<p><a href="https://github.com/nikhilmishradevelop/kaggle-child-mind-institute-detect-sleep-states" target="_blank">https://github.com/nikhilmishradevelop/kaggle-child-mind-institute-detect-sleep-states</a></p>
+<h1>Solution Summary</h1>
+<p><strong>Validation Strategy</strong>: GroupKFold on Series Ids</p>
+<p><strong>Model Inputs</strong>:  17280 x n_features length sequences as input (17280 = 12 steps_per_minute x 60_minutes * 24 hours)<br>
+<strong>Model Outputs</strong>: 17280 x 2 (one for onset and other for wakeup)<br>
+<strong>Model Type</strong>: Regression Model<br>
+<strong>Loss Type</strong>: Cubic Loss i.e. abs(y_true-y_pred)**3</p>
+<p>The last remaining part of the sequences with length &lt; 17280 were padded to make them equal to 17280</p>
+<p>My solution is a modified UNET (averaged over 4 models, 2 LSTMs and 2 GRUs) using normalized Gaussian targets similar to what <a href="https://www.kaggle.com/tolgadincer" target="_blank">@tolgadincer</a> described. A big thanks to him for sharing a good method, early on in this competition.</p>
+<h2>Features:</h2>
+<ol>
+<li>Original Sequence Features: Enmo, Anglez</li>
+<li>TimeStamp Features: Hour and Weekday</li>
+<li>Derived Sequence Features: Anglez difference, Enmo Difference, HDCZA features etc)</li>
+</ol>
+<p>Good Features help in faster convergence and much better scores, so adding good features were important (Read penguin's solution for some other good features)</p>
+<p><strong>My final 4 model ensemble results</strong>: </p>
+<p><strong>CV</strong>: 0.828<br>
+<strong>Public LB</strong>: 0.789<br>
+<strong>Private LB</strong>: 0.841</p>
+<h1><strong>Model Architecture</strong></h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1265131%2Fad78d36028ed6dc7ab1d3e79631b0172%2FFireShot%20Capture%20019%20-%20Online%20FlowChart%20%20Diagrams%20Editor%20-%20Mermaid%20Live%20Editor%20-%20mermaid.live%20(1).png?generation=1701841137052567&amp;alt=media" alt="Model Architecture"></p>
+<h2>Patching to reduce sequence length</h2>
+<p>Since 17280 is a very long sequence length (makes training very slow and harder to train), we reduce the sequence length by patching it.</p>
+<p><strong>Input:</strong>  17280 * n_features (34)<br>
+<strong>Patch Size:</strong> (Used different patch sizes 3, 4, 5, or 6 in different models).</p>
+<p><strong>Modified Sequence Length:</strong> 17280 to 17280//Patch_Size sequence length</p>
+<p><strong>Modified Feature Size:</strong> k * 4 * num_features (where k is a Dense layer output dim)</p>
+<h2>Modified Unet Part</h2>
+<p><strong><em>UNET Encoder -&gt; Bottleneck -&gt; Transformer -&gt; GRU or LSTM -&gt; Unet Decoder</em></strong></p>
+<p>Each layer of UNET encoder had concatenated connections to the 1st layer</p>
+<p><strong>Initial Output size:</strong> 17280//Patch_Size, 2 * Patch_size</p>
+<p><strong>Reshaped Output Size:</strong> (17280, 2)</p>
+<h1>Post Processing</h1>
+<p>Initially I was doing just doing simple peak detection when I was competing solo.</p>
+<p>I wanted to, but could not formulate a good way to rerank model predictions using lightgbm, but <a href="https://www.kaggle.com/kmat2019" target="_blank">@kmat2019</a> is a great read for that.</p>
+<p>Thanks to <a href="https://www.kaggle.com/ryotayoshinobu" target="_blank">@ryotayoshinobu</a> , I started applying NMS, and finally experimented with a kind of  WBF algorithm and made it work. This WBF algorithm gave a score of 0.79 to 0.793 on last day.</p>
+<p>But it was worse by 0.001 in our private LB lol, so WBF hurt.</p>
+<p>WBF Working</p>
+<ol>
+<li><p><strong>Initialization and Convolution</strong>: The function starts by applying convolution with the specified <code>convolution_kernel</code> to smooth the data.</p></li>
+<li><p><strong>Peak Detection Loop</strong>: It iteratively searches for peaks in the data. The loop runs until the maximum count (<code>max_count</code>) is reached or the peak value falls below a threshold (<code>max_thresh</code>).</p></li>
+<li><p><strong>Adaptive Window and Weight Calculation</strong>:</p>
+<ul>
+<li>A dynamic window size around each peak is determined based on the current maximum value's power (<code>curr_max_power</code>) and a distance parameter (<code>k_dist</code>).</li>
+<li>Depending on the <code>section_weight_method</code> (logarithmic or linear), weights are calculated for each section of the data around the peak.</li></ul></li>
+<li><p><strong>Weighted Average and Score Calculation</strong>: For each detected peak, a weighted average is calculated to determine the score of the peak. <br>
+This is done by considering the peak and k of its neighbours. This score is influenced by the method of weight calculation and other hyperparameters like <code>log_base</code>, <code>log_scale</code>, and <code>weight_coeff</code>.</p></li>
+<li><p><strong>Suppression and Updating Predictions</strong>:</p>
+<ul>
+<li>After each peak is detected, the function suppresses the neighboring values to avoid detecting the same peak multiple times. This is controlled by <code>overlap_coeff</code> and <code>preds_reduction_power</code>.</li>
+<li>The indices and scores of detected peaks are stored and returned after the loop completes.</li></ul></li>
+</ol>
+<p>I will share the implementation of the WBF part code, you can see if tuning these hyperparameters help in your models too. This accepts predictions per series id.</p>
+<p>(I found hyperparameters by a mix of manual and automated hyperparamter tuning approach)</p>
+<pre><code> ():
+    k_dist = hyperparams[]
+    log_base = hyperparams[]
+    log_scale = hyperparams[]
+    curr_max_power = hyperparams[]
+    weight_coeff = hyperparams[]
+    convolution_kernel = hyperparams[]
+    section_weight_method = hyperparams[]
+    preds_reduction_power = hyperparams[]
+    overlap_coeff = hyperparams[]
+    min_distance = hyperparams[]
+
+    preds = preds_orig.copy()
+    preds = np.convolve(preds, convolution_kernel, mode=)
+
+    count = 
+    indices = []
+    scores = []
+
+     count &lt; max_count:
+        curr_max_idx = np.argmax(preds)
+        curr_max = preds[curr_max_idx]
+
+         curr_max &lt; max_thresh:
+            
+
+        k = (k_dist - (min_distance, (curr_max**curr_max_power)))
+
+        start_idx = (curr_max_idx - k, )
+        end_idx = (curr_max_idx + k + , (preds))
+
+        section = preds[start_idx:end_idx]
+
+        
+        distances = np.(np.arange((section)) - k)
+         section_weight_method == :
+            weights =  / (log_base ** (distances / (k * log_scale)))
+         section_weight_method == :
+            weights =  - (distances / k) * weight_coeff
+        
+
+        weighted_avg = np.(section * weights) / np.(weights)
+
+        scores.append(weighted_avg)
+        indices.append(curr_max_idx)
+
+        preds[start_idx:end_idx] *= (( - weights * overlap_coeff))**preds_reduction_power
+
+        count += 
+
+     indices, scores
+</code></pre>
+<h2>Final Ensemble</h2>
+<p>Final ensemble was a blended weight of my and Penguin's subs regression   postprocessed using WBF</p>
+<p>Final_Sub = WBF(Penguins_Predictions * 0.25 + Nikhil's Predictions*0.75)</p>
+<p>Since our predictions had slightly different scales of regression targets, Penguin's Predictions were first scaled by using a simple power transform i.e Penguin's_Predictions ** 0.7</p>
+<p><strong>Ensemble CV:</strong> 0.835<br>
+<strong>Ensemble Public LB:</strong> 0.793<br>
+<strong>Ensemble Private LB:</strong> 0.845</p>
+<p>P.S: This competition is the first time I did not use gradient boosting, even after I knew it worked so well, me being a tabular guy. I mistake I guess. I love lightgbm and will definitely use one in the next competition.</p>
+<p>Congratulations to all the the top performers, it was a good fight, till it lasted :)</p>

@@ -1,0 +1,82 @@
+# gemini-long-context 讨论区（按票数排序，共 80 条）
+
+- [Why have I Harm Category Dangerous Content about Love? It persists after HarmBlockThreshold.BLOCK_ONLY_HIGH!](https://www.kaggle.com/competitions/gemini-long-context/discussion/541463) — 24 票 / 6 评论 / 2024-10-19 
+- [Don't forget to run "Save/run All commit" to attach Gemini 1.5 Flash to your Notebook.](https://www.kaggle.com/competitions/gemini-long-context/discussion/541420) — 22 票 / 1 评论 / 2024-10-19 
+- [🏆 Kaggle Long Context Competition - Winners Announcement!](https://www.kaggle.com/competitions/gemini-long-context/discussion/552419) — 19 票 / 33 评论 / 2024-12-19 
+- [Get started here!](https://www.kaggle.com/competitions/gemini-long-context/discussion/541152) — 13 票 / 27 评论 / 2024-10-17 
+- [Google: Gemini Long Context: Relevant Papers](https://www.kaggle.com/competitions/gemini-long-context/discussion/542188) — 10 票 / 3 评论 / 2024-10-23 
+- [do we get free access to Gemini API for this project?](https://www.kaggle.com/competitions/gemini-long-context/discussion/541324) — 9 票 / 30 评论 / 2024-10-18 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/gemini-long-context/discussion/541162) — 8 票 / 1 评论 / 2024-10-17 
+- [The Illusion of Merit: Unmasking the Voting Manipulation on Kaggle](https://www.kaggle.com/competitions/gemini-long-context/discussion/550941) — 8 票 / 5 评论 / 2024-12-10 
+- [A self-aware Gemini might assist you with your project](https://www.kaggle.com/competitions/gemini-long-context/discussion/546851) — 8 票 / 7 评论 / 2024-11-18 
+- [My Thought about the Competition: Which might resonate with you...](https://www.kaggle.com/competitions/gemini-long-context/discussion/541602) — 7 票 / 7 评论 / 2024-10-20 
+- [Making Parallel Requests to Gemini API using asyncio](https://www.kaggle.com/competitions/gemini-long-context/discussion/543508) — 5 票 / 3 评论 / 2024-10-30 
+- [How To start get Gemini key and request to K-Pop Lyrics Analysis!!](https://www.kaggle.com/competitions/gemini-long-context/discussion/542732) — 4 票 / 2 评论 / 2024-10-26 
+- [ResourceExhausted: 429 Resource has been exhausted (e.g. check quota).](https://www.kaggle.com/competitions/gemini-long-context/discussion/541462) — 4 票 / 4 评论 / 2024-10-19 
+- [Winner announcement Date](https://www.kaggle.com/competitions/gemini-long-context/discussion/550167) — 4 票 / 1 评论 / 2024-12-05 
+- [Is it possible to obtain a free Gemini API Key in Spain (Europe)?](https://www.kaggle.com/competitions/gemini-long-context/discussion/543240) — 3 票 / 6 评论 / 2024-10-29 
+- [How to increase quota?](https://www.kaggle.com/competitions/gemini-long-context/discussion/543267) — 3 票 / 3 评论 / 2024-10-29 
+- [Does the Final Submission Need to Be 'Save All,' or Is the 'Quick Save' Version Acceptable?](https://www.kaggle.com/competitions/gemini-long-context/discussion/547872) — 3 票 / 3 评论 / 2024-11-23 
+- [Is it posible to use high level libraries like LlamaIndex or LangChain?](https://www.kaggle.com/competitions/gemini-long-context/discussion/541267) — 3 票 / 4 评论 / 2024-10-18 
+- [Is it a competition where do I need to create a RAG agent with Gemini AI?](https://www.kaggle.com/competitions/gemini-long-context/discussion/543122) — 3 票 / 2 评论 / 2024-10-28 
+- [General question about the submission eligibility](https://www.kaggle.com/competitions/gemini-long-context/discussion/547958) — 3 票 / 1 评论 / 2024-11-24 
+- [Announcement of the Results](https://www.kaggle.com/competitions/gemini-long-context/discussion/549435) — 3 票 / 5 评论 / 2024-12-02 
+- [502, 503, and 429 errors when using video in Vertex version of Gemini API](https://www.kaggle.com/competitions/gemini-long-context/discussion/546075) — 3 票 / 5 评论 / 2024-11-13 
+- [403 context caching video error](https://www.kaggle.com/competitions/gemini-long-context/discussion/544870) — 2 票 / 2 评论 / 2024-11-07 
+- [Congrats all and best of luck!](https://www.kaggle.com/competitions/gemini-long-context/discussion/549362) — 2 票 / 0 评论 / 2024-12-02 
+- [Is it enough to send the entries via sumbisson form?](https://www.kaggle.com/competitions/gemini-long-context/discussion/549092) — 2 票 / 3 评论 / 2024-11-30 
+- [Stress Test on Free vs Paid model.](https://www.kaggle.com/competitions/gemini-long-context/discussion/541184) — 2 票 / 1 评论 / 2024-10-18 
+- [Notebook Submission](https://www.kaggle.com/competitions/gemini-long-context/discussion/541588) — 2 票 / 9 评论 / 2024-10-20 
+- [Error : Timeout of 600.0s exceeded, last exception: 503 upstream request timeout   or DeadlineExceeded: 504 Deadline Exceeded](https://www.kaggle.com/competitions/gemini-long-context/discussion/542423) — 2 票 / 5 评论 / 2024-10-24 
+- [How to estimate compute/resources needed for this competition? ](https://www.kaggle.com/competitions/gemini-long-context/discussion/541208) — 2 票 / 2 评论 / 2024-10-18 
+- [Discussing results of non-deterministic code cells in a competition notebook](https://www.kaggle.com/competitions/gemini-long-context/discussion/548186) — 2 票 / 5 评论 / 2024-11-25 
+- [Create a new dataset](https://www.kaggle.com/competitions/gemini-long-context/discussion/541167) — 2 票 / 6 评论 / 2024-10-18 
+- [My notebook works quite well in colab, but I don't know why it always timeout in Kaggle notebook.](https://www.kaggle.com/competitions/gemini-long-context/discussion/546162) — 2 票 / 2 评论 / 2024-11-14 
+- [Clarification - is submission format limited to Kaggle notebooks?](https://www.kaggle.com/competitions/gemini-long-context/discussion/543574) — 1 票 / 1 评论 / 2024-10-31 
+- [What happens if notebooks have similar ideas?](https://www.kaggle.com/competitions/gemini-long-context/discussion/543312) — 1 票 / 1 评论 / 2024-10-29 
+- [Error with Gemini chat session](https://www.kaggle.com/competitions/gemini-long-context/discussion/544628) — 1 票 / 2 评论 / 2024-11-06 
+- [Sharing Gemini Cached Context for Disasters](https://www.kaggle.com/competitions/gemini-long-context/discussion/546644) — 1 票 / 0 评论 / 2024-11-17 
+- [looking for teammates](https://www.kaggle.com/competitions/gemini-long-context/discussion/546544) — 1 票 / 2 评论 / 2024-11-16 
+- [Do we need to use notebooks explicitly ?](https://www.kaggle.com/competitions/gemini-long-context/discussion/546438) — 1 票 / 2 评论 / 2024-11-15 
+- [YouTube Short video that outlines completed project](https://www.kaggle.com/competitions/gemini-long-context/discussion/542989) — 1 票 / 1 评论 / 2024-10-28 
+- [Insights from My Recent Learning of LLMs](https://www.kaggle.com/competitions/gemini-long-context/discussion/547066) — 1 票 / 0 评论 / 2024-11-19 
+- [Does comparing Gemini output with other LLMs fit the competition?](https://www.kaggle.com/competitions/gemini-long-context/discussion/543052) — 1 票 / 1 评论 / 2024-10-28 
+- [How tuned model~](https://www.kaggle.com/competitions/gemini-long-context/discussion/547167) — 1 票 / 0 评论 / 2024-11-20 
+- [Youtube video of the completed project](https://www.kaggle.com/competitions/gemini-long-context/discussion/544194) — 1 票 / 4 评论 / 2024-11-03 
+- [Is 'models/gemini-1.5-flash-001' allowed for the competition?](https://www.kaggle.com/competitions/gemini-long-context/discussion/546481) — 1 票 / 4 评论 / 2024-11-16 
+- [How to get "Gemini" to watch a movie? (RESOLVED)](https://www.kaggle.com/competitions/gemini-long-context/discussion/544170) — 1 票 / 6 评论 / 2024-11-03 
+- [Progressive work towards single submission.](https://www.kaggle.com/competitions/gemini-long-context/discussion/543053) — 1 票 / 0 评论 / 2024-10-28 
+- [How to use listed models](https://www.kaggle.com/competitions/gemini-long-context/discussion/542378) — 1 票 / 2 评论 / 2024-10-24 
+- [I am uploading ~ 8GB dataset. But I am getting error : Resource exhausted. I am not sure how to delete previous data. Can anyone please help](https://www.kaggle.com/competitions/gemini-long-context/discussion/542558) — 1 票 / 0 评论 / 2024-10-25 
+- [Deleting the unwanted files in  /kaggle/working/ or option in /kaggle/input/](https://www.kaggle.com/competitions/gemini-long-context/discussion/542418) — 1 票 / 2 评论 / 2024-10-24 
+- [Deep Dive into Gemini's Large Context Window](https://www.kaggle.com/competitions/gemini-long-context/discussion/542079) — 1 票 / 0 评论 / 2024-10-22 
+- [Does Gemini-1.5-Flash-002 Count?](https://www.kaggle.com/competitions/gemini-long-context/discussion/548648) — 1 票 / 1 评论 / 2024-11-28 
+- [Reediting my submission](https://www.kaggle.com/competitions/gemini-long-context/discussion/548830) — 1 票 / 1 评论 / 2024-11-29 
+- [will i have a bigger chance of winning if the data used in my code has more token?](https://www.kaggle.com/competitions/gemini-long-context/discussion/548881) — 1 票 / 2 评论 / 2024-11-29 **write-up?**
+- [The production quality was professional?](https://www.kaggle.com/competitions/gemini-long-context/discussion/541237) — 1 票 / 5 评论 / 2024-10-18 
+- [Extract a dataset from multiple PDFs](https://www.kaggle.com/competitions/gemini-long-context/discussion/541639) — 1 票 / 0 评论 / 2024-10-20 
+- [The rules specify one final submission per individual, but what about a team?](https://www.kaggle.com/competitions/gemini-long-context/discussion/541476) — 1 票 / 1 评论 / 2024-10-19 
+- [My Journey in this competition](https://www.kaggle.com/competitions/gemini-long-context/discussion/549400) — 1 票 / 0 评论 / 2024-12-02 
+- [Making changes in the Competition Notebook](https://www.kaggle.com/competitions/gemini-long-context/discussion/549690) — 1 票 / 0 评论 / 2024-12-03 
+- [Video Length](https://www.kaggle.com/competitions/gemini-long-context/discussion/549110) — 1 票 / 2 评论 / 2024-11-30 
+- [Is there any way to feed a youtube video to the model by just passing a link instead of downloading it and then uploading back to the model?](https://www.kaggle.com/competitions/gemini-long-context/discussion/541213) — 1 票 / 4 评论 / 2024-10-18 
+- [Limitations of Kaggle Notebook was a nightmare to work with....](https://www.kaggle.com/competitions/gemini-long-context/discussion/549308) — 1 票 / 4 评论 / 2024-12-01 
+- [Leaderboard and winner announcement](https://www.kaggle.com/competitions/gemini-long-context/discussion/549446) — 1 票 / 2 评论 / 2024-12-02 
+- [Improving Unit Test Coverage with Gemini](https://www.kaggle.com/competitions/gemini-long-context/discussion/552069) — 1 票 / 0 评论 / 2024-12-17 
+- [Making my own dataset rules conflict? ](https://www.kaggle.com/competitions/gemini-long-context/discussion/542775) — 0 票 / 1 评论 / 2024-10-26 
+- [How to avoid harm message about love](https://www.kaggle.com/competitions/gemini-long-context/discussion/542889) — 0 票 / 1 评论 / 2024-10-27 
+- [429 Resource has been exhausted (e.g. check quota).](https://www.kaggle.com/competitions/gemini-long-context/discussion/541733) — 0 票 / 6 评论 / 2024-10-21 
+- [YT video transcript/subtitles and audio](https://www.kaggle.com/competitions/gemini-long-context/discussion/542364) — 0 票 / 4 评论 / 2024-10-24 
+- [PDFs: To Parse or not to Parse](https://www.kaggle.com/competitions/gemini-long-context/discussion/542353) — 0 票 / 0 评论 / 2024-10-24 
+- [Initial Tests Interpreting "Tears of Steel"](https://www.kaggle.com/competitions/gemini-long-context/discussion/541999) — 0 票 / 4 评论 / 2024-10-22 
+- [Using dataset from past competitions](https://www.kaggle.com/competitions/gemini-long-context/discussion/541974) — 0 票 / 2 评论 / 2024-10-22 
+- [Cached token ](https://www.kaggle.com/competitions/gemini-long-context/discussion/541893) — 0 票 / 0 评论 / 2024-10-21 
+- [Clarification - are we allowed to use other models with Gemini to achieve a task?](https://www.kaggle.com/competitions/gemini-long-context/discussion/544586) — 0 票 / 3 评论 / 2024-11-05 
+- [How many submissions are we allowed to make?](https://www.kaggle.com/competitions/gemini-long-context/discussion/541172) — 0 票 / 2 评论 / 2024-10-18 
+- [How to clean cache?](https://www.kaggle.com/competitions/gemini-long-context/discussion/544427) — 0 票 / 2 评论 / 2024-11-05 
+- [Input Data](https://www.kaggle.com/competitions/gemini-long-context/discussion/544962) — 0 票 / 2 评论 / 2024-11-07 
+- [Resource Exhaustion Error in Gemini 1.5 Pro](https://www.kaggle.com/competitions/gemini-long-context/discussion/544345) — 0 票 / 1 评论 / 2024-11-04 
+- [how to use chat mode for documents and other kinds of files](https://www.kaggle.com/competitions/gemini-long-context/discussion/545272) — 0 票 / 1 评论 / 2024-11-09 
+- [Is it allowed to incorporate input from users in our solution?](https://www.kaggle.com/competitions/gemini-long-context/discussion/545392) — 0 票 / 0 评论 / 2024-11-09 **write-up?**
+- [Can LLMs Generate and Verify New Theorems with Lean4?](https://www.kaggle.com/competitions/gemini-long-context/discussion/545447) — 0 票 / 1 评论 / 2024-11-10 
+- [Optimizing Gemma Model Fine-Tuning Strategies: A Comprehensive Guide](https://www.kaggle.com/competitions/gemini-long-context/discussion/546217) — 0 票 / 0 评论 / 2024-11-14 

@@ -1,0 +1,82 @@
+# biohub-cell-tracking-during-development 讨论区（按票数排序，共 80 条）
+
+- [3rd Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744484) — 95 票 / 9 评论 / 2026-09-30 **write-up?**
+- [Welcome to the Biohub - Cell Tracking During Development Challenge](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/716062) — 78 票 / 7 评论 / 2026-06-30 
+- [1st Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744801) — 76 票 / 20 评论 / 2026-10-01 **write-up?**
+- [[Free Dataset] 18.5 GB of fully-labelled synthetic 3D microscopy — 165k labelled divisions](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/732103) — 65 票 / 25 评论 / 2026-08-01 
+- [Resource sharing for cell tracking challenge](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/717109) — 49 票 / 4 评论 / 2026-07-01 
+- [Share a custom napari visualizer](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/724130) — 48 票 / 8 评论 / 2026-07-09 
+- [Rule-based is surprisingly strong? (currently 7th/344teams / gold zone, no learning)](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/716952) — 48 票 / 7 评论 / 2026-07-01 
+- [beware of jumps in ground truth track](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/724283) — 42 票 / 16 评论 / 2026-07-10 
+- [focus3d : one of the best 3d cell segmentation](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738217) — 40 票 / 50 评论 / 2026-08-30 
+- [Division Metric exploit and patch. ](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727154) — 36 票 / 14 评论 / 2026-07-18 
+- [good visualisation of the task](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/722668) — 31 票 / 1 评论 / 2026-07-06 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/714101) — 27 票 / 8 评论 / 2026-06-25 
+- [5th Place: 3D U-Net + Transformer Linker + Multi-stage ILP Tracking](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744549) — 26 票 / 1 评论 / 2026-09-30 **write-up?**
+- [simple idea:"Your Affinity Field Tells Your Fate"](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/723655) — 25 票 / 19 评论 / 2026-07-07 
+- [Agents collaborate with Humans - Dashboards are key!](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/741868) — 21 票 / 7 评论 / 2026-09-17 
+- [COMPLETED: Rescore Underway](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/728324) — 20 票 / 4 评论 / 2026-07-22 
+- [14th place solution from Vibes&Edges Trade-Off](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744486) — 19 票 / 4 评论 / 2026-09-30 **write-up?**
+- [Is public Zebrahub data allowed as external training data?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/734330) — 19 票 / 3 评论 / 2026-08-11 
+- [From 12th Public to 95th Private: Our Biohub Cell Tracking Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744912) — 17 票 / 0 评论 / 2026-10-01 **write-up?**
+- [18th Place Solution: Lineage Graph Refinement Focused on Cell Divisions  ](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744531) — 17 票 / 1 评论 / 2026-09-30 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744723) — 15 票 / 0 评论 / 2026-09-30 **write-up?**
+- [Farewell and Thanks to the Kaggle community!](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744357) — 15 票 / 1 评论 / 2026-09-29 
+- [not all sparse GT edge are correct](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/729053) — 15 票 / 1 评论 / 2026-07-25 
+- [magic or overfitting?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/740145) — 14 票 / 12 评论 / 2026-09-08 
+- [Cell Tracking Challenge dataset](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/729057) — 14 票 / 0 评论 / 2026-07-25 
+- [Only 2 groups of embryo_id？](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/716793) — 14 票 / 6 评论 / 2026-07-01 
+- [Cell Tracking In-Person Workshop](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738833) — 13 票 / 5 评论 / 2026-09-01 
+- [6th Place Solution: Six-Model Detect-and-Link Ensemble + Global ILP](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744582) — 13 票 / 1 评论 / 2026-09-30 **write-up?**
+- [12th Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744501) — 13 票 / 1 评论 / 2026-09-30 **write-up?**
+- [Any update on the re-scoring timeline?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727957) — 13 票 / 3 评论 / 2026-07-21 
+- [Stuck at 0.928](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737101) — 12 票 / 5 评论 / 2026-08-23 
+- [Luxar from biohub : 3D Gaussian Splats of Embyro Cells](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/742777) — 12 票 / 0 评论 / 2026-09-23 
+- [Higher-order cell tracking](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/726521) — 12 票 / 1 评论 / 2026-07-15 
+- [4th Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744673) — 11 票 / 0 评论 / 2026-09-30 **write-up?**
+- [Exact duplicate volumes, but GT edge moves 8.9 µm](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/729082) — 11 票 / 1 评论 / 2026-07-25 
+- [Possible big leaderboard shakeup](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/735352) — 10 票 / 12 评论 / 2026-08-15 
+- [10th place solution: Grandmaster Powered Agentic Approach](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744980) — 10 票 / 0 评论 / 2026-10-01 **write-up?**
+- [Hand labeling - is it external data?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737103) — 10 票 / 6 评论 / 2026-08-23 
+- [How do people use AI tools in competitions](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/718110) — 9 票 / 3 评论 / 2026-07-03 
+- [Why train Unet for more than 100 epochs? Doesn't that lead to overfitting? ](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739915) — 9 票 / 0 评论 / 2026-09-07 
+- [7th Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744937) — 8 票 / 1 评论 / 2026-10-01 **write-up?**
+- [can we turn auto research to auo data generator?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739731) — 8 票 / 7 评论 / 2026-09-05 
+- [You can score on train locally, and why a clean prediction can go above 1.0](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/728300) — 8 票 / 0 评论 / 2026-07-22 
+- [⚠️ Don't write float centroids - same graph, 0.954 → 0.946 on the public LB](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744093) — 8 票 / 0 评论 / 2026-09-28 
+- [What model/feature diversity helped beyond the two-seed logit-blend plateau (~0.91)?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/730924) — 8 票 / 4 评论 / 2026-07-30 
+- [Errors on GT cell traces](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/732474) — 7 票 / 2 评论 / 2026-08-03 
+- [Does CV match LB in this competition?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/730160) — 7 票 / 5 评论 / 2026-07-28 
+- [Post-patch: is the 0.91+ frontier separated by the edge term or by divisions?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/728551) — 7 票 / 2 评论 / 2026-07-23 
+- [9th Place Solution: Own Detectors + Public Tracker + Restored Divisions](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744835) — 7 票 / 0 评论 / 2026-10-01 **write-up?**
+- [errors in annotated ground truth](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/742942) — 7 票 / 6 评论 / 2026-09-24 
+- [Potential Ground Truth Annotation Gaps in Boundary Cells](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/726381) — 6 票 / 0 评论 / 2026-07-15 
+- [16th Place Solution](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744671) — 6 票 / 0 评论 / 2026-09-30 **write-up?**
+- [Cotracker and other methods](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/726924) — 6 票 / 11 评论 / 2026-07-17 
+- [I measured my own division_jaccard (0.22). What's yours?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739516) — 5 票 / 1 评论 / 2026-09-04 
+- [Problems with edje connection](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739685) — 5 票 / 7 评论 / 2026-09-05 
+- [Are all public notebooks overfit?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739278) — 5 票 / 1 评论 / 2026-09-03 
+- [Model changes don't move the LB above the public plateau — what actually did for you?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/741749) — 5 票 / 7 评论 / 2026-09-17 
+- [I foresee some shakeup.](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/741651) — 5 票 / 2 评论 / 2026-09-16 
+- [ Quick question for anyone above the 0.94 line — is the detector still a 3D UNet heatmap for you, or did you move to something else ? ](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738276) — 5 票 / 5 评论 / 2026-08-31 
+- [what layer did ur gains actually come from](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737543) — 5 票 / 9 评论 / 2026-08-26 
+- [Stuck at 0.947 after ten board tests. What I measured, and one question about the relink stage ](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/742266) — 5 票 / 14 评论 / 2026-09-21 
+- [Public Notebook Rankings Need a Metric Refresh](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/736937) — 5 票 / 1 评论 / 2026-08-22 
+- [I made a video about this competition!](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727051) — 5 票 / 5 评论 / 2026-07-17 
+- [What is the best model for this domain so far?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/734604) — 5 票 / 5 评论 / 2026-08-12 
+- [Paired-Orphan Division Rescue for 3D Embryonic Cell Tracking](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744491) — 4 票 / 1 评论 / 2026-09-30 
+- [A few questions about external zebrafish data](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/741386) — 4 票 / 4 评论 / 2026-09-14 
+- [Detector overfits past ~epoch 10 on fixed sparse-GT frames -- anyone else see this?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738773) — 4 票 / 2 评论 / 2026-09-01 
+- [Very dim nodes?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737896) — 4 票 / 3 评论 / 2026-08-28 
+- [41st place: post-processing, a fine-tuned detector, and a flipped public LB](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744630) — 4 票 / 0 评论 / 2026-09-30 **write-up?**
+- [What's the probability we'll witness a massive shakeup?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/744273) — 4 票 / 7 评论 / 2026-09-29 
+- [does anyone have a different design for divisions](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737438) — 4 票 / 0 评论 / 2026-08-25 
+- [Two training embryos: same developmental stage? Same imaging protocol?](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/724386) — 4 票 / 1 评论 / 2026-07-11 
+- [How are your local CVs like? It feels like a huge gap, atleast for me.](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739352) — 4 票 / 6 评论 / 2026-09-03 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/745169) — 3 票 / 0 评论 / 2026-10-02 
+- [How to minimize training time](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/729930) — 3 票 / 6 评论 / 2026-07-27 
+- [Question about the node-count adjustment in the metric (adj_edge_jaccard can exceed 1)](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739018) — 3 票 / 2 评论 / 2026-09-02 
+- [Meta Trap, Private LB Shake-ups, and Velocity-Projected Tracking 🚀](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739570) — 3 票 / 2 评论 / 2026-09-04 
+- [How much points are you guys getting](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/734192) — 3 票 / 2 评论 / 2026-08-10 
+- [A one-to-one linker scores 0.000 on divisions - four measurements on the metric itself](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/733877) — 3 票 / 0 评论 / 2026-08-08 
+- [Metric problem](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739686) — 3 票 / 4 评论 / 2026-09-05 

@@ -1,0 +1,82 @@
+# data-assistants-with-gemma 讨论区（按票数排序，共 80 条）
+
+- [Gemma LLM released (All sources: only one hour ago). Gemma in Vertex AI. Gemma on GKE. Transformers Integration.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478606) — 50 票 / 13 评论 / 2024-02-21 
+- [Mid-point Prize Announcement](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/487380) — 30 票 / 6 评论 / 2024-03-28 
+- [Prompt, Prompt on the Wall Gemma. "Who is the fairest of them all?"  Prompting Techniques. ](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/484435) — 26 票 / 5 评论 / 2024-03-16 
+- [Competition Prize Announcements](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/499090) — 24 票 / 20 评论 / 2024-04-30 
+- [Make Gemma get access to ANY csv, then write a SIMPLE prompt. Without the AI Google tutorial.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479372) — 21 票 / 4 评论 / 2024-02-24 
+- [Quantized Models and BF16 Checkpoints. DynaQuant training Checkpoints via Dynamic Quantization.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/483965) — 21 票 / 5 评论 / 2024-03-14 
+- [original ideas vs. just copying another person's notebook.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478616) — 20 票 / 5 评论 / 2024-02-21 
+- [Pinned Q&A Thread](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478252) — 19 票 / 81 评论 / 2024-02-19 
+- [Help to fix "template Not defined" after changing the JsoL file from the Gemma AI Tutorial.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479662) — 19 票 / 3 评论 / 2024-02-25 
+- [[placeholder] ... some great ideas ... ?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478601) — 17 票 / 6 评论 / 2024-02-21 
+- [[SOLVED] Is it possible to run Gemma 7B in Kaggle Notebook?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479773) — 13 票 / 15 评论 / 2024-02-25 
+- [Resources Towards Fine-Tuning For Instruction-Following & Q/A Tasks](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478694) — 11 票 / 6 评论 / 2024-02-21 
+- [KaggleRAG - Web based Kaggle assistant demo](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479188) — 10 票 / 2 评论 / 2024-02-23 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/480279) — 9 票 / 0 评论 / 2024-02-28 
+- [MindGemmap: fine-tuned Gemma designed for generating mind maps](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/487885) — 8 票 / 3 评论 / 2024-03-31 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478253) — 8 票 / 9 评论 / 2024-02-19 
+- [Idea - Build a RAG system to answer Kaggle platform questions](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478621) — 7 票 / 2 评论 / 2024-02-21 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478254) — 7 票 / 6 评论 / 2024-02-19 
+- [Gemma meets LangChain - summarize kaggle writeups](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479620) — 7 票 / 4 评论 / 2024-02-25 **write-up?**
+- [CCC-BERT: Enable Efficient Multi-Turn Chats For Your RAG Models ](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/493455) — 6 票 / 4 评论 / 2024-04-13 
+- [Plagiarism !](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478865) — 6 票 / 5 评论 / 2024-02-22 
+- [I learned a lot from this competition](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/493771) — 6 票 / 5 评论 / 2024-04-14 
+- [Data Science AI Assistant with Gemma 2b-it](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/485585) — 6 票 / 4 评论 / 2024-03-21 
+- [Devin is a LLM that can create datascience project](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/484545) — 6 票 / 1 评论 / 2024-03-17 
+- [🐍🤖Make A Smart Python Assistant with Gemma](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/484593) — 6 票 / 2 评论 / 2024-03-17 
+- [Data for explaining solution write ups](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479190) — 5 票 / 3 评论 / 2024-02-23 **write-up?**
+- [Is Gemma too bad for RAG applications without Fine-Tuning?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479199) — 5 票 / 12 评论 / 2024-02-23 
+- [Expected gameplay dynamics  in this competition](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/480535) — 5 票 / 2 评论 / 2024-02-28 
+- [Competition Overview Google – AI](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478743) — 4 票 / 4 评论 / 2024-02-22 
+- [Gemma PyTorch Implementation Warnings](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/482321) — 4 票 / 0 评论 / 2024-03-07 
+- [Dataset for Answer common questions about the Kaggle platform.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479952) — 4 票 / 2 评论 / 2024-02-26 
+- [Summarize Kaggle Solution write ups VS Explain or teach concepts from Kaggle Solution write ups.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478868) — 4 票 / 1 评论 / 2024-02-22 **write-up?**
+- [[SOLVED] Use of Langchain and external documents?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479013) — 4 票 / 3 评论 / 2024-02-22 
+- [Python FAQ Dataset](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/491640) — 4 票 / 3 评论 / 2024-04-06 
+- [Choosing Between LoRA/QLoRA for Fine-Tuning LLM](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/492237) — 4 票 / 0 评论 / 2024-04-09 
+- [2b vs 7b chatbot use](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/482103) — 4 票 / 4 评论 / 2024-03-06 
+- [wow Prompt Engeering Competition?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478720) — 4 票 / 2 评论 / 2024-02-21 
+- [Kaggle chatbot in the future?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/480518) — 4 票 / 0 评论 / 2024-02-28 
+- [Testing, Teacher Gemma Prototype on YouTube](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/486111) — 4 票 / 4 评论 / 2024-03-23 
+- [How Do You Handle Multi-Turn Chats With RAG-Bots?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/486064) — 3 票 / 5 评论 / 2024-03-23 
+- [Is RAG possible using SQL?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/485661) — 3 票 / 4 评论 / 2024-03-21 
+- [Blending Gemma](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/482040) — 3 票 / 1 评论 / 2024-03-06 
+- ["TypeError: expected string or bytes-like object"](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/486321) — 3 票 / 2 评论 / 2024-03-24 
+- [Distributed tuning with Gemma](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/491301) — 3 票 / 0 评论 / 2024-04-05 
+- [How to scrape discussions from kaggle?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/480103) — 3 票 / 6 评论 / 2024-02-27 
+- [Advancing AI Education and Application through Gemma: Challenges and Strategies](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/492198) — 3 票 / 0 评论 / 2024-04-09 
+- [I need help with how to start!](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478845) — 3 票 / 3 评论 / 2024-02-22 
+- [Which Accelerator to run the model on?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479069) — 3 票 / 1 评论 / 2024-02-23 
+- [`Error: cutlassF: no kernel found to launch` when using `gemma-2b-it`](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479185) — 3 票 / 0 评论 / 2024-02-23 
+- [can i get rankers solution or code ?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/495318) — 3 票 / 0 评论 / 2024-04-20 **write-up?**
+- [Solutions & Writeups, KGMs Messages Dataset for Finetuning](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479961) — 2 票 / 4 评论 / 2024-02-26 **write-up?**
+- [Seeking help with code execution error (FailedPreconditionError)](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/481780) — 2 票 / 2 评论 / 2024-03-05 
+- [Beyond the Imaginable](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/481978) — 2 票 / 0 评论 / 2024-03-05 
+- [Teaching with Generative AI: Useful pointers](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/480388) — 2 票 / 0 评论 / 2024-02-28 
+- [RESOURCE_EXHAUSTED: Out of memory while trying to allocate XXXXX bytes.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479297) — 2 票 / 5 评论 / 2024-02-24 
+- [Brain Storm: Fine-tuning + RAG + prompt](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479715) — 2 票 / 0 评论 / 2024-02-25 
+- [Fine Tuning Gemma for Python and Data Science](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/482732) — 2 票 / 2 评论 / 2024-03-09 
+- [Who are the judges ?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/478869) — 2 票 / 1 评论 / 2024-02-22 
+- [Gemma on TPU](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/483466) — 2 票 / 6 评论 / 2024-03-12 
+- [Gemma-Python Programming Datasets](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/480340) — 2 票 / 4 评论 / 2024-02-28 
+- [How to properly print the output of Gemma?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/484649) — 2 票 / 1 评论 / 2024-03-17 
+- [TPU Sharding Error](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/493574) — 2 票 / 3 评论 / 2024-04-14 
+- [Dataset for answering common questions about the Python programming language](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/485231) — 2 票 / 3 评论 / 2024-03-20 
+- [Finetune Gemma 7b 2.5x faster with 70% less VRAM on T4](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/491716) — 2 票 / 0 评论 / 2024-04-07 
+- [How Top Teams Approach Problems - Recap of the LLM Science Exam Kaggle Competition](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/492204) — 2 票 / 0 评论 / 2024-04-09 
+- [The efficacy of this competition](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/492195) — 2 票 / 1 评论 / 2024-04-09 
+- [RAG for LLM](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/493073) — 2 票 / 1 评论 / 2024-04-12 
+- [How to use pdf file for Retrieval-Augmented Generation(RAG)](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/492569) — 2 票 / 0 评论 / 2024-04-10 
+- [The difference between Fine-tuning and RAG(Retrieval Augmented Generation)](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/492621) — 2 票 / 0 评论 / 2024-04-10 
+- [Diving Deep into Google Gemma Variants](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/493068) — 2 票 / 0 评论 / 2024-04-12 
+- [about Gemma](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/498846) — 1 票 / 0 评论 / 2024-04-29 
+- [Is it ok to use other models for embeddings (rag) or evaluation as part of the notebook?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/485046) — 1 票 / 1 评论 / 2024-03-19 
+- [Can large LLMs help validate and improve smaller models?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/483105) — 1 票 / 0 评论 / 2024-03-10 
+- [Google – AI Assistants for Data Tasks with Gemma:: Discusssion Topic](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479394) — 1 票 / 0 评论 / 2024-02-24 
+- [Fine-tuning? RAG?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/494106) — 1 票 / 1 评论 / 2024-04-16 
+- [Introducing Mamba](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/494099) — 1 票 / 0 评论 / 2024-04-16 
+- [What external tools are ok to use?](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/481509) — 1 票 / 1 评论 / 2024-03-04 
+- [HF adapter Issue with Gemma 2B-IT-v2](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/479431) — 1 票 / 1 评论 / 2024-02-24 
+- [ Error occurred while FineTuning the Gemma model for a dataset on the GPU.](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/481606) — 1 票 / 0 评论 / 2024-03-04 
+- [Optimizing Approach for Learning vs. Competitive Results](https://www.kaggle.com/competitions/data-assistants-with-gemma/discussion/481506) — 1 票 / 3 评论 / 2024-03-03 

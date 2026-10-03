@@ -1,0 +1,82 @@
+# czii-cryo-et-object-identification 讨论区（按票数排序，共 80 条）
+
+- [1st place solution [Object Detection Part] +Train Code +Inference +Models released](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561440) — 117 票 / 23 评论 / 2025-02-06 **write-up?**
+- [1st place solution [segmentation with partly U-NET and ensembling part]](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561510) — 103 票 / 35 评论 / 2025-02-24 **write-up?**
+- [if you are stuck below the benchmark.csv, read this!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547350) — 98 票 / 34 评论 / 2024-11-21 
+- [[lb0.748] experiment resuts on cyroET foundation model build with synthetic data](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/545221) — 81 票 / 67 评论 / 2024-11-09 
+- [4th Place Solution [Source Codes & Submission Notebook Released!]](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561401) — 68 票 / 16 评论 / 2025-02-09 **write-up?**
+- [Welcome to the CryoET Object Identification Challenge!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544702) — 55 票 / 48 评论 / 2024-11-06 
+- [3rd Place Solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561417) — 53 票 / 32 评论 / 2025-02-06 **write-up?**
+- [9th place solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561431) — 51 票 / 3 评论 / 2025-03-03 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561568) — 44 票 / 11 评论 / 2025-02-13 **write-up?**
+- [Starting materials and references](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544739) — 39 票 / 12 评论 / 2024-11-06 
+- [[solved] is it strange that submitted score is almost zero while local cv is in the range of 0.35 to 0.75?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/545381) — 38 票 / 45 评论 / 2024-11-09 
+- [Origin of the Grid is Actually the Center of the First Pixel (Not the Corner)](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/553126) — 37 票 / 6 评论 / 2024-12-23 
+- [Relevant reading materials ](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544740) — 34 票 / 1 评论 / 2024-11-06 
+- [Summary of solutions (1~43)](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/563862) — 30 票 / 4 评论 / 2025-02-19 **write-up?**
+- [7th place solution [3D-UNet with gaussian heatmaps]](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561447) — 28 票 / 4 评论 / 2025-02-19 **write-up?**
+- [Viewing the leaderboard and churn](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561433) — 28 票 / 8 评论 / 2025-02-06 
+- [8th Place Solution for the CZII - CryoET Object Identification Competition + Code Released](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561515) — 27 票 / 31 评论 / 2025-02-11 **write-up?**
+- [A note on an image transformation operation that may or may not improve model performance](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/549744) — 26 票 / 6 评论 / 2024-12-03 
+- [Train vs test set difference (statistical analysis)](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/554815) — 26 票 / 20 评论 / 2025-01-03 
+- [Some issues need to be clarified](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544895) — 26 票 / 39 评论 / 2024-11-07 
+- [Updating the Hidden Test Set - COMPLETED](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/546228) — 26 票 / 11 评论 / 2024-11-14 
+- [6th Place Solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561518) — 24 票 / 5 评论 / 2025-02-12 **write-up?**
+- [13th Place Solution - w/ Cutpaste](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561422) — 23 票 / 6 评论 / 2025-02-07 **write-up?**
+- [Converting PyTorch Checkpoints to TensorRT Models](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/556561) — 23 票 / 16 评论 / 2025-01-14 
+- [CV vs LB: precision and recall comparison](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/557506) — 22 票 / 15 评论 / 2025-01-19 
+- [5th Place Solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561580) — 21 票 / 2 评论 / 2025-02-13 **write-up?**
+- [New cool 3D particle visualisation notebook... But there's a catch](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/546453) — 21 票 / 3 评论 / 2024-11-15 
+- [12th place solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561607) — 20 票 / 2 评论 / 2025-02-08 **write-up?**
+- [32nd Solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561677) — 20 票 / 0 评论 / 2025-02-26 **write-up?**
+- [F-beta vs. F1 Score](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544750) — 20 票 / 1 评论 / 2024-11-06 
+- [33 place solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561402) — 19 票 / 12 评论 / 2025-02-06 **write-up?**
+- [OME-NGFF. Zarr data format. ome-zarr-py](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544788) — 19 票 / 0 评论 / 2024-11-06 
+- [11th place solution: batch normalization and 2D post-filtering](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561837) — 19 票 / 3 评论 / 2025-02-09 **write-up?**
+- [22nd Place Solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561444) — 18 票 / 1 评论 / 2025-02-06 **write-up?**
+- [[88th place solution] How a beginner just barely won a medal](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561416) — 18 票 / 2 评论 / 2025-02-06 **write-up?**
+- [Glossary - Important Terms](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544825) — 17 票 / 0 评论 / 2024-11-07 
+- [62th Solution: 5.19 MB ResNet18 2D to 3D UNet , 0.740/0.735](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561405) — 17 票 / 3 评论 / 2025-02-06 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544731) — 16 票 / 1 评论 / 2024-11-06 
+- [CZII CryoET - SAM2.1 ROI Generate High Quality Masks](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/549750) — 16 票 / 8 评论 / 2024-12-03 
+- [7 Training Samples / 500 Test Samples / 27 Extra Training Samples [Dataset] - How to trust CV with 7 samples? ](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544867) — 16 票 / 6 评论 / 2024-11-07 
+- [Has Anyone Been Successful With Anything But Denoised Data?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/555247) — 15 票 / 16 评论 / 2025-01-06 
+- [10th place solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561844) — 15 票 / 5 评论 / 2025-02-15 **write-up?**
+- [Thyroglobulin Structure](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/556265) — 15 票 / 1 评论 / 2025-01-12 
+- [For those interested in using the DS-10441 simulated data for training (with CoPick for data management)](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/551222) — 15 票 / 0 评论 / 2024-12-12 
+- [26th Solution - 3D UNet + CCL with Morphological Post Processing + Custom Loss Function](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561483) — 15 票 / 3 评论 / 2025-02-06 **write-up?**
+- [CZII CryoET: 630x630 PNG Dataset 8/16bit](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/548053) — 15 票 / 9 评论 / 2024-11-24 
+- [Single Model vs. Ensemble/TTA Output](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/555670) — 13 票 / 11 评论 / 2025-01-08 
+- [What's your CV-LB combination?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/549531) — 12 票 / 31 评论 / 2024-12-02 
+- [Particles Overlapping](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547091) — 12 票 / 11 评论 / 2024-11-19 
+- [Rescore under way - COMPLETE](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/546908) — 12 票 / 3 评论 / 2024-11-18 
+- [Diagnostic Visualization Tool](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/546329) — 12 票 / 2 评论 / 2024-11-15 
+- [35th place solution [2D + 3D + YOLO]](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561414) — 12 票 / 2 评论 / 2025-02-06 **write-up?**
+- [Appreciation Post](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561381) — 11 票 / 0 评论 / 2025-02-05 
+- [Get Started Here](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/544729) — 10 票 / 1 评论 / 2024-11-06 
+- [is this a wrong label?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/548224) — 10 票 / 3 评论 / 2024-11-25 
+- [79th placed solution [2 Stage Process]](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561608) — 10 票 / 0 评论 / 2025-02-06 **write-up?**
+- [Image Deformation Along the Z-Axis](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/545742) — 10 票 / 18 评论 / 2024-11-11 
+- [Overfitting or Something Else [Solved?]](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/551740) — 10 票 / 26 评论 / 2024-12-15 
+- [biological relevance of x-y-z positions?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/545131) — 9 票 / 3 评论 / 2024-11-08 
+- [All reruns complete with the updated test dataset](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/546559) — 9 票 / 0 评论 / 2024-11-16 
+- [95th Place Solution for the CZII - CryoET Object Identification Competition](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561709) — 9 票 / 3 评论 / 2025-02-07 **write-up?**
+- [23rd place solution](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561620) — 9 票 / 0 评论 / 2025-02-15 **write-up?**
+- [3D Visualization of 6 Particle Types in TS_5_4](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/556962) — 9 票 / 3 评论 / 2025-01-16 
+- [Additional realworld CryoET dataset: CryoPPP](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/553602) — 9 票 / 3 评论 / 2024-12-27 
+- [If this competition got you interested in electron microscopy or biology, then...](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561571) — 9 票 / 0 评论 / 2025-02-06 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561610) — 8 票 / 1 评论 / 2025-02-06 
+- [Naming Conventions](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547799) — 8 票 / 1 评论 / 2024-11-23 
+- [How to retrieve the targets correctly?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547890) — 8 票 / 16 评论 / 2024-11-24 
+- [License of yolo](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/559571) — 8 票 / 3 评论 / 2025-01-26 
+- [Generating Masks?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/545011) — 8 票 / 14 评论 / 2024-11-08 
+- [Importing Zarr Into a Competition Notebook](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/545006) — 8 票 / 7 评论 / 2024-11-08 
+- [How to learn the most from this competition ?](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/549715) — 8 票 / 9 评论 / 2024-12-03 
+- [[Action Requested] Share your feedback in 10-minute survey!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561600) — 8 票 / 3 评论 / 2025-02-06 
+- [77th Place Solution & Late Submission (Single Model Focus)](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/563316) — 8 票 / 0 评论 / 2025-02-16 **write-up?**
+- [Competition Datasets and Results now available on the cryoET Data Portal!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/566317) — 7 票 / 1 评论 / 2025-03-04 
+- [All solutions in one place](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561722) — 7 票 / 0 评论 / 2025-02-07 **write-up?**
+- [Very long submission time. 6+ hours and still scoring](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547044) — 7 票 / 23 评论 / 2024-11-19 
+- [Papers to read about tomograph segmentation](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547364) — 7 票 / 2 评论 / 2024-11-21 
+- [Register for the Webinar for CryoET Object Identification Workshop!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/569447) — 2 票 / 1 评论 / 2025-03-21 
+- [⌛ Last chance to share your thoughts in feedback survey!](https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/566085) — 0 票 / 0 评论 / 2025-03-03 

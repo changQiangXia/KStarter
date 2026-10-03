@@ -1,0 +1,96 @@
+<p>First of all, I'd like to thank kaggle team, host for hosting this competition , and my team mates (@tereka <a href="https://www.kaggle.com/irrohas" target="_blank">@irrohas</a> <a href="https://www.kaggle.com/aerdem4" target="_blank">@aerdem4</a>)<br>
+I finally got 5th gold medal. I'm really happy to be Competitions Grand Master.</p>
+<h2>Overview</h2>
+<p>Voting Ensemble of 3pipelines (Retriever + Reranker)<br>
+All reranker inference with vllm </p>
+<h2>Pipeline1 by Masaya</h2>
+<p>This is brief summary.<br>
+Masaya will write up detail on this <a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551430" target="_blank">link</a>.</p>
+<p>Retriever</p>
+<ul>
+<li>Generate test answer with pretrained qwen35B</li>
+<li>model :SFR-Embedding-2_R, Hard Negative Sampling(N=100) removed if unseen in training data.</li>
+<li>dataset: Filled unknown Misconception with GPT4o-mini</li>
+<li>candidate 60</li>
+</ul>
+<p>Reranker</p>
+<ul>
+<li>Qwen2.5 32B AWQ+LoRA (with 40 options)<ul>
+<li>options → 0~9 + A~Z + a~z (40 charactors)</li></ul></li>
+<li>dataset: only original</li>
+<li>candidate 40</li>
+<li>run twice and merge ([:40] and [20:]) </li>
+<li>left 25 with logprobs</li>
+</ul>
+<h2>Pipeline2 by Tereka+Kaeru</h2>
+<p>Retriever</p>
+<ul>
+<li>model1 :SFR-Embedding-2_R、Hard Negative Sampling(100）<ul>
+<li>dataset: original + synthesis with gemma 27B/Qwen2.5 32B</li>
+<li>lb 0.378</li></ul></li>
+<li>model2 : public model by sayoulala</li>
+<li>weighted avg model1 and model2</li>
+<li>candidate 70 and filter with masaya preds</li>
+<li>only single fold</li>
+</ul>
+<p>Reranker</p>
+<ul>
+<li>Qwen2.5 32B AWQ+LoRA (with binary options)<ul>
+<li>options → yes, not</li></ul></li>
+<li>dataset: original + synthesis unknown misconceptions with gemma2 27B/Qwen2.5 32B</li>
+<li>only single fold</li>
+</ul>
+<h2>Pipeline3 by Ahmet</h2>
+<p>Retriever</p>
+<ul>
+<li>Omitted in final pipeline</li>
+</ul>
+<p>Reranker</p>
+<ul>
+<li>Candidates are each top9 from previous pipeline</li>
+<li>Qwen2.5 32B (with 9 options)</li>
+</ul>
+<h2>Ensembling</h2>
+<ul>
+<li>Voting ensemble of each pipeline</li>
+<li>Apply rank like following, join, sum rank, sort by sum_rank</li>
+</ul>
+<pre><code>sub0
+  .with_columns(pl.col()..split())
+  .with_columns(pl.lit([/i  i  ((, , ))]).alias())
+  .explode(pl.col([, ]))
+</code></pre>
+<pre><code>submission
+  .sort(by=[, , , ], descending=[, , , ])
+  .group_by([], maintain_order=)
+  .agg(pl.col())
+</code></pre>
+<h2>Postprocessing</h2>
+<ul>
+<li>Boost missing misconception rank</li>
+</ul>
+<h2>Accelerating Tips</h2>
+<p>Retreiver</p>
+<ul>
+<li>Run parallel with cuda:0 and cuda:1</li>
+<li>Pre-calculating Misconception Vector</li>
+<li>Dynamic padding with collate_fn</li>
+</ul>
+<p>Reranker</p>
+<ul>
+<li>Inference with vllm (AWQ 4bit quantization)</li>
+<li>Set vllm parameter enabling_prefix_cache True</li>
+<li>Filter candidate with previous preds of pipeline</li>
+</ul>
+<h2>What not worked</h2>
+<p>Retrieval</p>
+<ul>
+<li>Concat vectors</li>
+<li>Avaraging many vectors</li>
+</ul>
+<p>Reranker</p>
+<ul>
+<li>Full-data trained model</li>
+<li>QwQ model</li>
+</ul>
+<p>Thank you!!</p>

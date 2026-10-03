@@ -1,0 +1,214 @@
+<p>First of all, this competition would have been better without the leak.<br>
+It is very sad that because of the leak, we can no longer distinguish between a good solution and a overfitting solution.</p>
+<h1>Summary</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6958652%2F8709eae7598a8c4aa5f131aff0f0d128%2Fsolution.jpg?generation=1657372988563552&amp;alt=media" alt=""></p>
+<p>My solution consists of four stages</p>
+<ul>
+<li>Candidate generation<ul>
+<li>1st stage: Create candidates</li>
+<li>2nd stage: Filtering by LightGBM</li></ul></li>
+<li>Matching<ul>
+<li>3rd stage: match prediction by xlm-roberta-base and mdeberta-base-v3</li></ul></li>
+<li>PostProcessing<ul>
+<li>4th stage: Node Classification by GNN</li></ul></li>
+</ul>
+<h1>Cross validation strategy</h1>
+<p>GroupKFold(n_splits=2, group='point_of_interest')<br>
+The CV score of my solution is 0.920</p>
+<h1>1st stage</h1>
+<ul>
+<li><p>Generates 60 candidates per id</p>
+<ul>
+<li>30 candidate neighborhoods per id using cosine similarity of text embedding by Tfidf<ul>
+<li>text: name, categories, address, city, state in a one sentence</li></ul></li>
+<li>30 candidate neighborhoods by haversine distance for per id</li></ul></li>
+</ul>
+<h1>2nd stage</h1>
+<ul>
+<li>Reduce to 3.7M pairs with high match probability using LightGBM</li>
+<li>Features<ul>
+<li>Missing value or not(name, cat)</li>
+<li>jaro(name, categories, address, city, state, zip, url, phone)</li>
+<li>leven(name, categories, address, city, state, zip, url, phone)</li>
+<li>haversine</li>
+<li>cos sim(tfidf embedding)</li>
+<li>mean top_k haversine, tfidf (k=5, 10, 15)</li></ul></li>
+<li>Using ForestInference</li>
+<li>Max IoU: 0.971</li>
+</ul>
+<h1>3rd stage</h1>
+<ul>
+<li>Predicts matche using a language model like DITTO</li>
+<li>model: xlm-roberta-base and mdeberta-base-v3</li>
+<li>Input<ul>
+<li>text: name_1 + [SEP] + name_2 + [COL] + categories_1 + [SEP] + categories_2 + [COL] + address_1 + [SEP] + address_2 + [COL] + city_1 + [SEP] + city_2 + [COL] + state_1 + [SEP] + state_2 + [COL] + zip_1 + [SEP] + zip_2</li>
+<li>numerical_feature</li>
+<li>haversine</li>
+<li>mean top_k haversine(k=5, 10, 15)</li></ul></li>
+<li>Training method<ul>
+<li>multitask learning: match and country (+0.003)</li>
+<li>augmentation</li></ul></li>
+</ul>
+<pre><code>import nlpaug as naw
+    aug_list = [
+  naw.RandomWordAug(action='swap', aug_p=0.1), 
+  naw.RandomWordAug(action='delete', aug_p=0.1), 
+  naw.SplitAug(aug_p=0.1)
+]
+</code></pre>
+<ul>
+<li>flip id_1, id_2</li>
+<li>TTA: flip id_1, id_2</li>
+</ul>
+<h1>4th stage</h1>
+<p>This stage is the most important part of my solution.<br>
+By using GNN, both CV and LB are improved by about 0.02x.  </p>
+<p>Predicts the matching id for id_1 using GNN.</p>
+<ol>
+<li>Create a 2-hop-subgraph for each id_1(max iou: 0.993)  <br>
+<strong>example</strong> , Suppose the following table is given and we predict the id matching A.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>id_1</th>
+<th>id_2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>B</td>
+</tr>
+<tr>
+<td>B</td>
+<td>A</td>
+</tr>
+<tr>
+<td>B</td>
+<td>C</td>
+</tr>
+<tr>
+<td>B</td>
+<td>D</td>
+</tr>
+<tr>
+<td>C</td>
+<td>D</td>
+</tr>
+<tr>
+<td>D</td>
+<td>B</td>
+</tr>
+<tr>
+<td>E</td>
+<td>A</td>
+</tr>
+<tr>
+<td>E</td>
+<td>F</td>
+</tr>
+<tr>
+<td>F</td>
+<td>E</td>
+</tr>
+</tbody>
+</table>
+<p>In this case, the 2-hop-subgraph for A is as follows(Think in terms of undirected graphs)</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F6958652%2F26622119da7e573aa087ba1e4e942ff6%2FScreenshot%20from%202022-07-09%2021-30-51.png?generation=1657371037868405&amp;alt=media" alt=""></p>
+<ol>
+<li>Predict whether each node matches id_1</li>
+<li>Nodes that exceed the threshold are set as matches for id_1</li>
+</ol>
+<h2>Details</h2>
+<ul>
+<li>Model<br>
+This model is based on the top solution of the Japanese competition platform atmaCup.</li>
+</ul>
+<pre><code>class SimpleGCN(nn.Module):
+    def __init__(self,
+                 num_node_features: int,
+                 num_edge_features: int,
+                #  num_classes: int,
+                 deg):
+        super(SimpleGCN, self).__init__()
+
+        aggregators = ['mean', 'min', 'max', 'std']
+        scalers = ['identity', 'amplification', 'attenuation']
+
+        towers = 4
+        pre_layer_num = 2
+        post_layer_num = 2
+        divide_input=False
+        self.convs = ModuleList()
+        self.batch_norms = ModuleList()
+        conv = PNAConv(in_channels=num_node_features, out_channels=32,
+                                    aggregators=aggregators, scalers=scalers, deg=deg,
+                                    edge_dim=num_edge_features, towers=towers, pre_layers=pre_layer_num, post_layers=post_layer_num,
+                                    divide_input=divide_input)
+        self.batch_norms.append(BatchNorm(32))
+        self.convs.append(conv)
+
+        for j in [32, 64, 128]:
+            conv = PNAConv(in_channels=j, out_channels=j*2, aggregators=aggregators, scalers=scalers, deg=deg, edge_dim=num_edge_features, towers=towers, pre_layers=pre_layer_num, post_layers=post_layer_num, divide_input=divide_input)
+            self.convs.append(conv)
+            self.batch_norms.append(BatchNorm(j*2))
+
+        self.dropout = nn.Dropout(0.2)
+        self.linear = nn.Linear(j*2, 1)
+
+    def forward(self, data):
+        x = data.x
+        edge_index = data.edge_index
+        edge_attr = data.edge_attr
+
+        for conv, batch_norm in zip(self.convs, self.batch_norms):
+            x = F.relu(batch_norm(conv(x, edge_index, edge_attr)))
+
+        x = self.dropout(x)
+        x = self.linear(x).flatten()
+        return x
+</code></pre>
+<ul>
+<li>node features<ul>
+<li>marker(I named it): 1 if the node corresponds to an id_1, 0 if it is a candidate.  <br>
+The presence of this feature allows us to solve for node classification rather than link prediction.</li>
+<li>Missing value or not(name, categories, address, city, state, zip, url, phone)</li></ul></li>
+<li>edge features<ul>
+<li>mdeberta pred</li>
+<li>xlm-roberta pred</li>
+<li>lgbm pred</li>
+<li>jaro (address, city, state, zip, url, phone, categories)</li></ul></li>
+<li>loss function<ul>
+<li>IouLoss for each graph and the binary cross-entropy of the entire batch are the loss functions</li></ul></li>
+</ul>
+<pre><code>def iou_loss(logits, data):
+    sizes = degree(data.batch, dtype=torch.long).tolist()
+
+    logit_list = logits.sigmoid().split(sizes)
+    target_list = data.y.split(sizes)
+
+    loss = 0
+    for y_pred, y_target, group_size in zip(logit_list, target_list, data.group_size):
+
+        intersection = (y_pred * y_target).sum()
+        total = (y_pred + y_target).sum() + (group_size - y_target.sum())
+        union = total - intersection
+        loss += 1 - (intersection / union)
+
+    return loss / data.num_graphs
+
+loss = iou_loss + 0.1*BCELoss
+</code></pre>
+<h2>Advantages of GNN</h2>
+<ul>
+<li>Creating a 2-hop-subgraph greatly improved maxiou.</li>
+<li>Iou loss made it possible to optimize the competition metric directly.</li>
+<li>Fast inference</li>
+</ul>
+<h1>Public Score Timeline</h1>
+<ol>
+<li>20 candidates per id and mdeberta and lgbm stacking: 0.907</li>
+<li>60 candidates per id and xlm-roberta-base+mdeberta and lgbm stacking : 0.924</li>
+<li>60 candidates per id and xlm-roberta-base + mdeberta and GNN Post Processing: 0.946</li>
+</ol>

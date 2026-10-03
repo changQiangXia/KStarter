@@ -1,0 +1,383 @@
+# https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347433
+
+Topic #347433: 3rd Place Solution - Span MLM + T5 Augmentations
+  Author: Raja Biswas
+  Posted: 2022-08-24 04:59:25.276000
+  Votes: 77  Comments: 45
+
+A big thanks to Kaggle &amp; the completion hosts for introducing the Efficiency Track, which is an amazing addition and will surely lead to more creative solutions. This is a detailed version of our solution for the Feedback Prize - Predicting Effective Arguments competition. 
+
+Links
+
+
+
+TL;DR: https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347371
+
+Code: https://github.com/rbiswasfc/kaggle-feedback-effectiveness-3rd-place-solution
+
+Inference Notebook: https://www.kaggle.com/code/conjuring92/ens58-lstm-lgb-all/notebook?scriptVersionId=104014668
+
+
+Model Architecture
+
+Overall, we followed the span classification approach with model architecture as below
+
+
+Pre-Processing
+
+We pre-processed each essay to insert newly added span start and span end tokens for each discourse types. To provide more context to our models, we added a topic segment in this format [TOPIC] &lt;prompt_text&gt; [TOPIC END] &lt;essay&gt;. As a minor detail, we inserted [SOE] and [EOE] tokens to indicate essay start and end. As an illustration here is an example:
+
+[TOPIC] Should computers read the emotional expressions of students in a classroom? [TOPIC_END] [SOE] Lead [LEAD] Imagine being told about a new new technology that reads emotions. Now imagine this, imagine being able to tell how someone truly feels about their emotional expressions because they don't really know how they really feel. [LEAD_END]  In this essay I am going to tell you about my opinions on why  Position [POSITION] I believe that the value of using technology to read student's emotional expressions is over the top. [POSITION_END] 
+
+...
+
+Concluding Statement [CONCLUDING_STATEMENT] In conclusion I think this is not a very good idea, but not in the way students should be watched. The way teachers are able to read students' facial expressions tells them how they feel. I don't believe it's important to look at students faces when they can fake their emotions. But, if the teacher is watching you then they're gonna get angry. This is how I feel on this topic. [CONCLUDING_STATEMENT_END] [EOE]
+
+
+Span MLM
+
+To train the newly added tokens (e.g. [LEAD], [POSITION]) and adapting to the specific task domain (i.e. student essays from grade 6-12) we continued the pre-training phase of each backbone (e.g. deberta-v3-large) with masked language modelling (MLM) objective. While standard MLM works alright, we found big boost with the following modifications:
+
+
+
+Changing masking probability to 40-50% instead of 15% used typically. For a detained analysis on masking rate, please refer to this : Should You Mask 15% in Masked Language Modeling? https://arxiv.org/abs/2202.08005
+
+Masking contiguous tokens of length 3-15 instead of regular random masking approach. Out motivation came from this paper: SpanBERT: Improving Pre-training by Representing and Predicting Spans https://arxiv.org/abs/1907.10529
+
+Changing chuck size / max length to 720 to match average essay length in the fine-tuning stage
+
+
+Here we used the ~15k essays from the 2021 feedback competition. In addition, we added ~25k synthetically generated essays by leveraging T5-large model. More on this in the next section.
+
+T5 Augmentations
+
+Since we couldn't find external data sources that worked for us, we explored ways to create our own augmented / synthetic data / essays. To this end, we adopted two approaches
+
+Label Preserving Training Data Augmentation with T5 Here we used 2022 labelled data to generate synthetic examples, which are directly added to train dataset during fine-tuning step. For this purpose, we first train the T5-large model with a seq2seq (text-to-text) text generation task. To be specific, this was the task input-output format:
+
+
+
+Input Template: Generate text for &lt;discourse effectiveness&gt; &lt;discourse type&gt; | Prompt: &lt;prompt text&gt; | Left Context: &lt;left context&gt; | Right Context: &lt;right context&gt;, where left context is essay up to the discourse element we try to generate and right context is anything after the discourse element
+
+Output Template: &lt;discourse text&gt; 
+
+
+Here is one example:
+
+Generate text for Ineffective Evidence | Prompt: Should the electoral college be abolished in favor of popular vote? | Left Context:Dear, State Senator\n\nWith the elctoral college vote most of people are not getting what they prefer. For the the electoral college vote, voters vote fro not the president, but for a not slate of electors. &lt;....&gt; majority of the people would rather have the popular vote.| Right Context: the electoral college election consist of the 538 electors. All you have to do is win most of those votes and you win the election. &lt;.....&gt; The electoral college is unfair, outdated, and irrational to all the people
+--&gt;
+It does not make any sense to me how the president with the votes does not win the presidential election. The electoral college is unfair for all voters that vote. When you think of a vote and how it works you would think by the most one with the most votes wins cause that pretty much means that most of the people would rather have the most wins over the win that had less votes but more electoral votes.
+
+The trained T5 model was pretty amazing, we couldn't distinguish which one was generated text and which one was original. The augmentations copied the student writing styles, identity masks e.g.  and included effects such as that mentioned by @hengck23 in the previous competition discussion:
+
+
+  
+just imagine you are asked to write the essay for homework. you are a bad student and want to copy other people work. you want to do so, such that that your teacher will not know that you are copying other people's work.
+  you can:
+  1) choose an essay of the train data. replace the claim from another essay. (if the other essay has the same position as the first essay)
+
+
+Reference: Data Augmentation using Pre-trained Transformer Models https://arxiv.org/abs/2003.02245
+
+T5: Non-Label Preserving Essay Augmentation
+We used this to mainly generate essays for MLM. It's quite similar to previous augmentation task with minor changes
+
+
+
+uses all ~15k essays from feedback 2021 dataset
+
+model only sees left context 
+
+no discourse effectiveness label is given in input prompt
+
+
+Fine-tuning
+
+In the fine-tuning stage, we mixed varying degree of T5 label-preserved augmented data (0-50% of original essays) with actual data. This was pretty much standard with following key highlights
+
+
+
+Inclusion of prompts in essay: This helped models to boost performance on Lead and Position discourse types
+
+Adversarial Training with AWP
+
+Mask Augmentations (10-25%)
+
+Multi-sample dropouts
+
+Multi-head attention over span representations
+
+LSTM over transformer encoder representations
+
+Loss = CE Loss + Focal loss
+
+Cosine scheduler
+
+Layer wise learning rate decay
+
+Mean pooling to extract span representations as opposed to [CLS] token based ones
+
+
+Model Backbones
+
+
+
+DeBERTa-Large
+
+DeBERTa-XLarge
+
+DeBERTa-V3-Large
+
+Longformer
+
+LUKE
+
+
+Ensembling
+
+We built two meta models based on OOF model probabilities + additional features
+
+LSTM based
+
+
+
+Used only stage-1 model probabilities as features
+
+Had better correlations with CV and LB
+
+
+LGB based
+
+
+
+Used stage-1 model probabilities as features + additional features
+
+Count of next line per essay text
+
+Count of discourse_id per essay_id
+
+Pos tags features (NN, VB etc)
+
+
+Things that had most impact
+
+
+
+Span MLM: 0.02 to 0.03
+
+AWP: 0.005 to 0.01
+
+Prompts: 0.002 to 0.005
+
+Direct use of T5 Augmentations: -0.002 to 0.005
+
+Mask Augmentation + MSD: 0.002 - 0.005
+
+LSTM + LGB ensemble: 0.002-0.004 
+
+
+Things that added for diversity
+
+
+
+LUKE model
+
+Multitask objectives e.g. predicting discourse type, ordered encoding of labels e.g. ineffective -&gt; [0, 0], adequate -&gt; [1, 0], effective -&gt; [1, 1]
+
+Different sampling ratio of augmented data
+
+Impact moderation of focal loss with its gamma parameter
+
+Knowledge distillation
+
+
+How to make training stable?
+
+We could train our models up to 6-7 epoch with best results obtained in penultimate/last epoch. The following helped in prolonging and stabilizing the training
+
+
+
+Careful selection of key params e.g. batch size, learning rate, weight decay
+
+Cosine learning rate scheduler
+
+Task adaptation with MLM
+
+AWP
+
+Mask augmentations + Multi-sample dropouts
+
+Layer wise learning rate decay
+
+Full precision training
+
+
+Things that didn't work for us
+
+
+
+Pseudo labelling / meta pseudo labelling
+
+on hindsight, this was a big miss for us
+
+Random augmentation 
+
+UDA - Unsupervised Data Augmentations
+
+Contrastive Learning
+
+SWA
+
+Mixout
+
+
+Thanks for reading this far! Hope this helps you in your future NLP competitions! Looking forward to your comments and feedbacks.
+
+Our team ( @trushk , @harshit92) dynamics was brilliant throughout the competition. We had a lot of fun and learned so much together. Looking forward to future teaming up! 
+
+Thanks 😊
+
+Comments:
+├─ Psi (2022-08-24 12:42:55.947000) [+3]
+│  Thanks for the writeup and congrats on the great result! It was a fun back and forth on LB :)
+│  
+│  I assume your synthetic data generation approach is replacing the pseudo labeling approach which is wh...
+  ├─ Raja Biswas (2022-08-24 13:23:59.467000) [+1]
+  │  Hi @philippsinger, Congratulations on winning the competition on both efficiency and conventional track 🎉🎉🎉 We really enjoyed the fight and believed that pushed each other. On synthetic data, yes i...
+  ├─ Psi (2022-08-24 13:50:31.760000) [+3]
+  │  Oh did you only try hard labels? Hard labels did not work AT ALL, you had to use soft labels. One core problem with hard labels is that Adequate is way too prominent there. But even on soft labels ...
+  ├─ Raja Biswas (2022-08-24 14:25:19.713000) [+1]
+  │  sadly yes, we only tried many different ways with hard labels. Thanks for the explanation, that must be it! We got distracted in finding an explanation why it doesn't work, instead of making it wor...
+  ├─ Trushant Kalyanpur (2022-08-24 15:58:52.633000) [+1]
+  │  Yes unfortunately we didnt spend enough time to get pseudo labeling to work. Seems like that was the missing piece that would have given us an edge. Looking back I think the 3rd place without pseud...
+  ├─ Psi (2022-08-24 16:53:59.077000) [+3]
+  │  Yeah it is amazing! We were so sure that you are using pseudos heavily, specifically meta pseudo labels as you used that in last competition. 
+  │  
+  │  But overall, after a competition ends and you feel li...
+├─ TouTie (2022-09-09 08:27:02.420000) [+1]
+│  Congrats on your amazing work! I learn a lot!
+├─ 🐳鲲(China) (2022-08-28 02:44:40.017000) [+1]
+│  For the span mlm part, can you recommand some code snippet? thanks!
+  ├─ Raja Biswas (2022-08-29 08:41:22.423000) [+2]
+  │  Hi @nickycan, for the span mlm part we just modified the DataCollatorForLanguageModeling from HF library. For the modification, we referred to SpanBert git repo, specifically here: https://github.c...
+├─ RDizzl3 (2022-08-24 10:49:28.387000) [+1]
+│  @conjuring92 will you be sharing your training code? Looks like there is a lot to learn here!
+  ├─ Raja Biswas (2022-08-24 13:32:07.740000) [+0]
+  │  sorry, we don't have any immediate plan to make the code public. Thanks for your understanding.
+├─ Arvind Devarkonda (2022-08-24 08:40:13.213000) [+1]
+│  Congratulation for 3rd place.
+│  
+│  1. What is Contrastive Learning?
+│  
+│  2.what do you mean "Careful selection of key params e.g. batch size, learning rate, weight decay" ?,  I can understand careful selec...
+  ├─ Raja Biswas (2022-08-24 08:48:27.893000) [+1]
+  │  Thanks! 
+  │  
+  │  For contrastive learning please refer to this paper:
+  │  
+  │  
+  │  
+  │  SUPERVISED CONTRASTIVE LEARNING FOR PRE-TRAINED LANGUAGE MODEL FINE-TUNING (https://openreview.net/pdf?id=cu7IUiOhujH)
+  │  
+  │  
+  │  Yes, weigh...
+  ├─ Arvind Devarkonda (2022-08-24 08:54:19.853000) [+0]
+  │  Did you used essay as it is  for mlm  or you used this way
+  │  
+  │  [TOPIC] Should computers read the emotional expressions of students in a classroom? [TOPIC_END] [SOE] Lead            [LEAD] Imagine bein...
+  ├─ Raja Biswas (2022-08-24 08:59:18.513000) [+1]
+  │  In MLM it was mostly same, but without the discourse type texts e.g. 
+  │  
+  │  [TOPIC] Should computers read the emotional expressions of students in a classroom? [TOPIC_END] [SOE]  [LEAD] Imagine being to...
+├─ hosuke (2022-08-24 08:08:40.500000) [+1]
+│  Congrats on 3rd place! At first I thought the structure of your model was similar to mine, but you succeeded in doing many things we never thought of, which explains the difference in scores!
+│  One t...
+  ├─ Raja Biswas (2022-08-24 08:42:45.433000) [+1]
+  │  Congratulations @horsek for becoming Competition Master 🎉  and gold position in this competition!
+  │  
+  │  For prompts we followed this great notebook: https://www.kaggle.com/code/lextoumbourou/feedback-to...
+  ├─ hosuke (2022-08-24 08:57:40.317000) [+1]
+  │  I see, thank you! @conjuring92 
+  │  Elegant augmentation with T5 is something I'd like to use myself someday…😃
+├─ Nicholas Broad (2022-08-24 05:32:43.467000) [+1]
+│  Congrats on the 3rd place finish! 🎉
+│  
+│  I have two questions: 
+│  
+│  I tried a higher masking rate (per Should You Mask 15% in Masked Language Modeling? ) for NBME but I didn't see an improvement. Did you ...
+  ├─ Zacchaeus (2022-08-24 05:37:14.663000) [+2]
+  │  @nbroad I didn't try long span masking, but for me 0.3 is better than 0.15. Also thanks for your great public baseline, one of our team's model heavily relied on it, which added up much diversity t...
+  ├─ Raja Biswas (2022-08-24 05:53:48.920000) [+1]
+  │  Thanks @nbroad 
+  │  
+  │  
+  │    
+  │  What compute did you use? AWP + Deberta with long sequences in full precision sounds like it would take quite a long time.
+  │  
+  │  
+  │  We mainly used A100 and A6000s. Training deberta-v3...
+  ├─ Nicholas Broad (2022-08-24 14:40:19.977000) [+1]
+  │  Interesting. I'll have to keep this in mind for the next span-related competition 😄
+  │  
+  │  Did you use pure masking or did you do random replacements/no changes too?
+  ├─ Raja Biswas (2022-08-24 14:42:49.847000) [+1]
+  │  10% random replacement and 10% no change, same as in DataCollatorForLanguageModeling
+  ├─ Nicholas Broad (2022-08-24 14:46:41.360000) [+1]
+  │  How high could your eval accuracy go for MLM?
+  ├─ Raja Biswas (2022-08-24 15:04:34.063000) [+1]
+  │  each model had different accuracy on the span mlm, deberta-v3-larger was around 45% accuracy, 16.x perplexity. LUKE on the other hand had ~25% accuracy
+  ├─ Nicholas Broad (2022-08-24 16:01:16.580000) [+1]
+  │  Thanks for the details.
+  │  
+  │  Did you use the default AutoModelForMaskedLM for deberta?
+  ├─ Raja Biswas (2022-08-24 16:12:59.383000) [+1]
+  │  yes, we used this to be specific
+  │  
+  │  # model
+  │  base_config = AutoConfig.from_pretrained(config["model_checkpoint"])
+  │  base_config.update(
+  │      {
+  │          # "vocab_size": len(tokenizer),
+  │          "max_positio...
+├─ Zacchaeus (2022-08-24 05:28:46.667000) [+1]
+│  Congrats! I learned a lot from your writeup. One question, the synthetic data used for MLM is fraction of essay, not the whole passage right?
+  ├─ Raja Biswas (2022-08-24 05:56:24.860000) [+1]
+  │  yes, up to 750 token length. We used this from huggingface code for splitting the essays
+  │  
+  │      def group_texts(examples):
+  │          # Concatenate all texts
+  │          concatenated_examples = {k: sum(exam...
+├─ leemop (2022-08-24 05:01:59.847000) [+1]
+│  Congraturation! Thansk for your sharing :)
+  ├─ Raja Biswas (2022-08-24 05:57:46.313000) [+0]
+  │  thanks 😊 congratulations to you too!
+├─ Sanyam Bhutani (2022-08-28 15:50:47.867000) [+2]
+│  Congrats on the great finish! 
+│  PS: great team name :D
+  ├─ Raja Biswas (2022-08-29 08:45:24.633000) [+1]
+  │  Thanks Sanyam! 😊
+├─ The Devastator (2022-08-25 10:05:12.003000) [+2]
+│  There is so much on this post.. it is just amazing! 
+│  Totally deserve your strong finish!
+  ├─ Raja Biswas (2022-08-25 12:28:06.397000) [+0]
+  │  thanks! 😊
+├─ Patrick Chan (2022-08-24 08:55:48.490000) [+2]
+│  Brilliant usage of T5! Thanks for the sharing and congratulations on the gold.
+  ├─ Raja Biswas (2022-08-24 09:04:06.127000) [+1]
+  │  thanks @drpatrickchan!! congratulations to you too!
+  ├─ Patrick Chan (2022-08-25 02:39:56.193000) [+1]
+  │  Thanks Raja, any chance you can throw the T5 model in a kernel for us to have a test?
+  ├─ Patrick Chan (2022-08-25 02:41:28.497000) [+0]
+  │  Do you face any issues training the T5 large model? I have done several at colab before.
+  ├─ Raja Biswas (2022-08-25 05:32:37.807000) [+0]
+  │  haven't decided on releasing the model yet…
+  ├─ Raja Biswas (2022-08-25 05:33:36.837000) [+0]
+  │  no didn't face much issues, training was stable.
+├─ KhanhVD (2022-08-24 06:56:26.147000) [+2]
+│  Very nice solution! Congrats and thanks for sharing the writeup @conjuring92
+  ├─ Raja Biswas (2022-08-24 07:44:56.127000) [+1]
+  │  thanks @duykhanh99!
+├─ [deleted] (2022-08-24 06:18:31.610000) [+1]
+│  [deleted]
+  ├─ Raja Biswas (2022-08-24 06:21:44.473000) [+0]
+  │  thanks @utsavsavaliya!

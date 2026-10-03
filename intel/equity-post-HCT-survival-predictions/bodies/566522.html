@@ -1,0 +1,65 @@
+<p>First of all, I want to thank my teammates for this fun ride.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F471945%2Fa04f9fe1d1ca65b3e59d803431491580%2FScreenshot%202025-02-14%20at%2017.45.05.png?generation=1741219299533999&amp;alt=media" alt=""></p>
+<p>Since we knew that the data is synthetic and how it was produced, we had a look at the SurvivalGAN paper. As you can see in this image, TimeRegressor is trained together with features and class information. Therefore we split the problem into two:</p>
+<ul>
+<li>efs classification</li>
+<li>efs_time regression</li>
+</ul>
+<p>For the regression part, we have trained and ensembled 2 models providing efs as an extra feature. Then for the test and validation sets, we make inference by setting efs=1. With this trick, we estimate how long efs time can be if there is efs. Our models are xgboost and histgbm.</p>
+<p>For classification, we use RealMLP, HistGBM and Catboost models with no feature engineering. We ensemble these models by the weights tuned on CV. We then combine it with regression predictions to calculate the risk scores:<br>
+R = p(efs=1) * p(efs_time | efs=1)<br>
+p(efs_time | efs=1) is sigmoid(-regression_prediction) in our case.</p>
+<p>Additionally, we train a neural network which approximates the competition metric and directly predicts the risk scores. It uses regression prediction from tree models and optimizes the approximate competition metric and auxiliary binary classification loss. </p>
+<pre><code> ():
+    y_risk, y_time, y_efs = y_risk.ravel(), y_time.ravel(), y_efs.ravel()
+
+    loss = []
+     i  ((y_risk)):
+         y_efs[i] == :
+            filt = y_time[i] &lt; y_time
+            s = (y_risk - y_risk[i]).tanh()
+            loss.append(s[filt])
+
+    loss = torch.cat(loss).mean()
+     loss
+</code></pre>
+<p>We rank ensemble it with our main pipeline.</p>
+<p><strong>Here is our inference notebook:</strong> <a href="https://www.kaggle.com/code/karakasatarik/2nd-place-solution-inference" target="_blank">https://www.kaggle.com/code/karakasatarik/2nd-place-solution-inference</a></p>
+<h1>Appendix</h1>
+<h2>AutoGluon</h2>
+<p>Once the problem is split into two like we did, it was possible to get a gold medal even with automated machine learning.</p>
+<p>Here are our experiments using AutoGluon:</p>
+<table>
+<thead>
+<tr>
+<th>AutoGluon Setting</th>
+<th>OOF Score</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Medium Quality</td>
+<td>0.6884</td>
+<td>0.694</td>
+<td>0.697</td>
+</tr>
+<tr>
+<td>High Quality</td>
+<td>0.6910</td>
+<td>0.694</td>
+<td>0.698</td>
+</tr>
+<tr>
+<td>Best Quality</td>
+<td>0.6921</td>
+<td>0.695</td>
+<td>0.699</td>
+</tr>
+</tbody>
+</table>
+<h2>Postprocess</h2>
+<p>Anil attempted to improve the efs-classifier model's outputs by tuning a custom sigmoid function on the OOF predictions:</p>
+<p><code>calibrated_proba = 1 / (1 + np.exp(-beta * (raw_proba - gamma)))</code></p>
+<p>This calibration led to a ~0.002 improvement in OOF but resulted in a 0.001 decrease on the public LB and a 0.001 improvement on the private LB.</p>

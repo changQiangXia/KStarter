@@ -1,0 +1,459 @@
+# https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418430
+
+Topic #418430: 2nd Place Solution [Updated with Code Link]
+  Author: Raja Biswas
+  Posted: 2023-06-20 14:38:52.022000
+  Votes: 64  Comments: 32
+
+First of all, I would like to thank the Kaggle community for sharing great ideas and engaging discussions. Special shout outs to @nbroad  and @brendanartley. Congratulations to the winning teams - looking forward to your write ups.
+
+Thank you Kaggle and hosts for organizing this interesting competition.
+
+Links
+
+
+
+Inference notebook: https://www.kaggle.com/code/conjuring92/a05-mga-split-pipe
+
+Github Repo: https://github.com/rbiswasfc/benetech-mga
+
+
+The following is a detailed summary of my solution:
+
+1 Overview
+
+My solution is entirely based on image-to-text models finetuned from the google/matcha-base backbone. The training pipeline, as depicted below, is a sequence of two phases. In the first phase, I leveraged a large number of synthetic plots to adapt the backbone for the current task.  In the second phase, I used oversampled extracted / non-generated plots to specialize the pipeline for real world graphs. In this phase, I created separate models for scatter and non-scatter plots, primarily to mitigate the difficulty in predicting scatter data points.
+
+
+
+2 Model
+
+All models share the same architecture (image-to-text transformer) and input-output pattern. Model input is simply the plot image itself without any prompts. The output text has the following template:
+
+&lt;|bos|&gt; &lt;|chart_type_start|&gt; {chart_type} &lt;|chart_type_end|&gt; &lt;|num_point_start|&gt; {n_x} | {n_y} &lt;|num_point_end|&gt; &lt;|x_span_start|&gt; {x0} | {x1} | {x2} | … | {xn} &lt;|x_span_end|&gt; &lt;|y_span_start|&gt; {y0} | {y1} | {y2} | … | {ym}  &lt;|y_span_end|&gt; &lt;|eos|&gt;
+
+Some minor details:
+
+
+
+Numeric values are cast into scientific notation using val = "{:.2e}".format(float(val)).
+
+Added histogram as additional chart type, which later converted to vertical_bar during post processing
+
+
+3 Data
+
+Apart from the competition data, I used the following sources.
+
+Synthetic Dataset
+
+I spent majority of my competition time creating the synthetic dataset. For the underlying data in synthetic plots, I used
+
+
+
+Wikitables data i.e. tables from wikipedia (25%)
+
+
+http://websail-fe.cs.northwestern.edu/TabEL/
+
+https://github.com/sunlab-osu/TURL
+
+Synthetic XY data (75%)
+
+
+Categorical series: I created a list of categories using wikipedia glossary pages in STEM domain (https://www.kaggle.com/code/conjuring92/w03-stem-glossary/notebook)
+
+Numerical series: random function generators ensuring all combinations of narrow to wide min-max range, small (1e-6) - large values (1e6), inclusion of outliers etc
+
+
+I generated the plots using matplotlib ensuring they capture all aspects of the graph conventions. For example, in the case of line plots, the generated graphs included shared origin plots, having tick labels that are not included in the data-series, additional point markers in between two tick labels, unequal spacing between x tick labels etc. I tried to maximize the diversity in the graphs by -
+
+
+
+customizing tick marks, tick labels, tick direction, formatting of numerical tick labels (e.g. scientific notation, different rounding, European style formatting, adding % as suffix, currency symbol as prefix etc), major / minor grids, titles, axis limits, spines (e.g. setting bottom spine at y=0),  legends, markers etc
+
+grayscale, background textures, aspect ratio (very wide to very narrow)
+
+number of data points (4-24 points for non-scatter, 4-64 for scatter)
+
+random special effects: text boxes with stats on y values, horizontal / vertical bands, insets, random texts, random equations, annotating min/max points, error bands, adding random shapes, varying line width, color, data point marker size, hatches, error bars, slopes etc
+
+log-log, semi-log plots, reverse y axis (although these weren’t part of test set, my hypothesis (?) was they would help in model generalization)
+
+
+The synthetic dataset consisted of
+
+
+
+100k horizontal bars
+
+100k vertical bars + histograms
+
+100k dot plots
+
+200k line plots
+
+200k scatter plots
+
+
+Synthetic Dataset - Bartley
+
+
+
+Random selection of 25k data points from the synthetic dataset shared by @brendanartley: https://www.kaggle.com/datasets/brendanartley/benetech-extra-generated-data
+
+
+Pseudo Labelling
+
+I took screenshot of around 700 images from wikimedia commons (e.g. https://commons.wikimedia.org/w/index.php?search=line+plots&amp;title=Special:MediaSearch&amp;go=Go&amp;type=image). I used pseudo labelling, followed by manual correction, to generate the annotations.
+
+ICDAR dataset
+
+I used around 1100 images from ICDAR, only those having 1 XY series (250 horizontal bar + 450 vertical bar + 250 lines + 150 scatter). I also did post-processing to ensure annotations match competition graph conventions (e.g. handling percentages, interpolation of line plot data to match tick labels etc).
+
+4 Datamix
+
+
+
+Datamix 1: used for domain adaptation
+
+
+
+
+
+Dataset
+Size
+Multiplier
+Effective Size
+
+
+
+
+Competition Dataset - Synthetic
+60k
+3
+180k
+
+
+Competition Dataset - Extracted
+1.1k
+16
+17k
+
+
+Synthetic Dataset - Self
+700k
+1
+700k
+
+
+Synthetic Dataset - Bartley
+25k
+1
+25k
+
+
+
+
+
+
+Datamix 2: scatter specialization
+
+
+
+
+
+Dataset
+Size
+Multiplier
+Effective Size
+
+
+
+
+Competition Dataset - Synthetic
+11k
+1
+11k
+
+
+Competition Dataset - Extracted
+0.2k
+16
+3.2k
+
+
+Synthetic Dataset - Self
+30k
+1
+30k
+
+
+Pseudo Labelled Dataset
+0.1k
+16
+1.6k
+
+
+ICDAR Dataset
+0.2k
+16
+3.2k
+
+
+
+
+
+
+Datamix 3: non-scatter specialization
+
+
+
+
+
+Dataset
+Size
+Multiplier
+Effective Size
+
+
+
+
+Competition Dataset - Synthetic
+48k
+1
+48k
+
+
+Competition Dataset - Extracted
+0.9k
+8
+7.2k
+
+
+Synthetic Dataset - Self
+20k
+1
+20k
+
+
+Pseudo Labelled Dataset
+0.5k
+8
+4k
+
+
+ICDAR Dataset
+1k
+8
+8k
+
+
+
+
+5 Training
+
+The main hyper-parameters for training were max_patches and max_length. I used the following settings at various phases of training:
+
+Phase 1 Training
+
+
+
+max_patches: 2048
+
+max length: 1024
+
+lr: 5e-5
+
+batch size: 2
+
+gradient accumulation: 16
+
+
+Phase 2 training - non-scatter
+
+
+
+max_patches: 4096
+
+max length: 512
+
+lr: 2e-5
+
+batch size: 4
+
+gradient accumulation: 2
+
+
+Phase 2 training - scatter
+
+
+
+max_patches: 3072
+
+max length: 1024
+
+lr: 2e-5
+
+batch size: 8
+
+gradient accumulation: 1
+
+AWP
+
+
+As minor detail, I used Exponential Moving Average (EMA) of model weights, gradient clipping, cosine scheduler with liner warmup during training.
+
+6 Augmentation
+
+Since I was repeating the extracted images many times, I decided to include the following augmentation
+
+transforms = A.Compose(
+        [
+            A.OneOf(
+                [
+                    A.RandomToneCurve(=0.3),
+                    A.RandomBrightnessContrast(
+                        brightness_limit=(-0.1, 0.2),
+                        contrast_limit=(-0.4, 0.5),
+                        =,
+                    ),
+                    A.HueSaturationValue(
+                        hue_shift_limit=(-20, 20),
+                        sat_shift_limit=(-30, 30),
+                        val_shift_limit=(-20, 20)
+                    )
+                ],
+                =0.5,
+            ),
+
+            A.OneOf(
+                [
+                    A.MotionBlur(=3),
+                    A.MedianBlur(=3),
+                    A.GaussianBlur(=3),
+                    A.GaussNoise(var_limit=(3.0, 9.0)),
+                ],
+                =0.5,
+            ),
+
+            A.Downscale(=, =0.1, =0.90, =0.99),
+        ],
+
+        =0.5,
+    )
+
+
+7 References
+
+
+
+Matcha Paper: https://arxiv.org/pdf/2212.09662v2.pdf
+
+https://www.kaggle.com/code/nbroad/donut-train-benetech
+
+https://www.kaggle.com/code/nbroad/donut-infer-lb-0-44-benetech
+
+https://www.kaggle.com/datasets/brendanartley/benetech-extra-generated-data
+
+AWP: https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook
+
+
+Sorry for the long write up. Please let me know if you have any queries / suggestions. I plan to release all scripts, configs and datasets by next week. [Edit: code released at https://github.com/rbiswasfc/benetech-mga]
+
+Comments:
+├─ Nicholas Broad (2023-06-20 19:31:30.927000) [+3]
+│  Great work! Congrats on becoming a GM 🎉🎉🎉
+│  
+│  I can't believe you got the scatter score to be so high for matcha!!
+│  
+│  2 Questions:
+│  
+│  
+│  
+│  It looks like your training runs were very long 😄  Did you use any t...
+  ├─ Raja Biswas (2023-06-21 01:40:11.967000) [+2]
+  │  Thanks Nicholas! 
+  │  
+  │  
+  │  
+  │  
+  │  Yes, very long, as compared to any other models I trained for Kaggle comps. Phase I training was around 36hrs in A100. I didn't do anything special to speed it up (only using ...
+├─ Theo Viel (2023-06-20 14:53:45.253000) [+3]
+│  Congratz on the 2nd place and on the GM title !
+│  
+│  Can you share your LB scores by chart type ?
+│  I'm mostly curious about scatter, matcha was not good for us so I'm impressed that you could get a comp...
+  ├─ Raja Biswas (2023-06-20 15:18:48.747000) [+3]
+  │  Thanks @theoviel ! Congratulations to you too!
+  │  
+  │  I only tried separate sub for scatter plots. The best I could get for scatter was: 0.24 private LB (phase I training), 0.29 (phase I + scatter only t...
+    ├─ Theo Viel (2023-06-20 15:25:52.700000) [+1]
+    │  Thanks ! We have the same scatter score it seems :)
+    ├─ Raja Biswas (2023-06-20 15:39:48.140000) [+1]
+    │  yes! I will try late subs for other plot types to see if we have same scores for them too
+├─ CroDoc (2023-06-21 09:15:26.870000) [+4]
+│  What a way to become a kaggle GM. Well deserved!
+  ├─ Raja Biswas (2023-06-21 14:04:47.917000) [+2]
+  │  Thanks @crodoc! Congratulations to you too, you became GM in such a short time &amp; always performing well in diverse competitions 👍
+├─ Thanh Hau Nguyen (2023-06-20 14:54:47.097000) [+4]
+│  Congratulations @conjuring92, your solution is excellent and your data generation strategy is impressive! Well deserved!
+  ├─ Raja Biswas (2023-06-20 15:20:23.650000) [+1]
+  │  Thanks @thanhhau097a! Congratulations to you on solo gold, I was trying to catch your score entire competition (also in LECR previously…)!
+├─ serangu (2023-06-27 05:30:04.310000) [+1]
+│  @conjuring92 congrats with 2 place! Very good solution!
+├─ Reashin Pillay (2023-06-23 12:52:39.027000) [+1]
+│  Good Work
+├─ Akshit Sharma (2023-06-21 08:25:53.533000) [+1]
+│  Great work! Thanks a lot for sharing :) @conjuring92
+├─ chumajin (2023-06-21 02:49:45.243000) [+1]
+│  @conjuring92 Congratulations for the strong 2nd solo finish and becoming GM 🎉🎉 You are strong, well deserved !!
+  ├─ Raja Biswas (2023-06-21 05:21:00.373000) [+1]
+  │  Thanks @chumajin! One more to go for you 😊
+├─ Jonathan Grace (2023-06-20 21:33:07.593000) [+1]
+│  nice work, looks very insightful
+├─ qdv206 (2023-06-20 20:02:28.710000) [+1]
+│  Congratulations on the strong finish and becoming GM!
+│  
+│  It's interesting that your solution and ours are really similar (the key parts being synthetic data generation and multi stages matcha trainin...
+  ├─ Raja Biswas (2023-06-21 01:46:31.820000) [+1]
+  │  Thanks @qdv206! Congratulations to you too! 
+  │  
+  │  Indeed, our solution and thought process were very similar. I tried a few things to boost score for scatter but all within matcha model. Since the publ...
+├─ Liam Nguyen (2023-06-20 16:33:50.070000) [+1]
+│  great work
+├─ Chinmayee Gamre (2023-06-22 07:14:57.510000) [+2]
+│  great work
+├─ Pooja Chauhan (2023-06-22 04:13:03.327000) [+2]
+│  Impressive work! Your solution demonstrates a thorough understanding of the problem and showcases your dedication to achieving high-quality results. The detailed explanations and references provide...
+├─ Hozaifa Ahmed (2023-06-21 21:25:00.357000) [+2]
+│  Great work
+├─ Darek Kłeczek (2023-06-21 07:44:39.907000) [+2]
+│  Amazing solution Raja, congrats on becoming GM, this is extremely well deserved!!! Awesome how you were able to achieve such a high score with image-to-text models only, a very elegant solution!
+  ├─ Raja Biswas (2023-06-21 13:59:15.490000) [+2]
+  │  Thanks a lot Darek😊 The performance of these image-to-text models is truly insane and can handle wide range of tasks. It was great experience teaming up in LECR, looking forward to future collabora...
+├─ Bartley (2023-06-20 16:03:02.157000) [+2]
+│  Congrats on the solo gold and for the comprehensive write-up @conjuring92!
+│  
+│  I like your approach of using the Wikipedia Glossary Pages to generate X-Y labels, and the usage of scientific notation. ...
+├─ moth (2023-06-20 14:47:59.317000) [+2]
+│  congratulations @conjuring92. When you say patch size you mean max_patches right? In that case, what hardware did you use? I trained with 1536 and 2048 and quickly went OOM even though i had 40gb V...
+  ├─ Raja Biswas (2023-06-20 15:27:51.803000) [+3]
+  │  Thanks @alejopaullier ! Yes, you're right, it should be max_patches, will update soon. I used A100/ A6000. Gradient checkpointing dramatically reduced the memory requirements:
+  │  
+  │  model()
+  │  
+  │  model()
+  │  
+  │  
+  │  a...
+    ├─ [deleted] (2023-06-20 18:46:36.213000) [+1]
+    │  [deleted]
+├─ Sinan Calisir (2023-06-20 14:44:54.303000) [+2]
+│  Man, that's an amazing effort! Thank you for the detailed write up of your solution! And huge congratulations on becoming a GM. Very well deserved!
+  ├─ Raja Biswas (2023-06-20 15:28:33.333000) [+1]
+  │  thanks @snnclsr 😊
+├─ Travis Ruddy (2023-06-21 20:52:41.940000) [+1]
+│  Well done and thank you for sharing
+├─ Talla.Lakshmi Narayana  (2023-06-21 16:57:56.037000) [+1]
+│  Thanks for sharing this information

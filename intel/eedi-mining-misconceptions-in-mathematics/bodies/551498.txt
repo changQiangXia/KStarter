@@ -1,0 +1,141 @@
+# https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551498
+
+Topic #551498: 3rd Place Solution (with Magic Boost)
+  Author: Yi-Chia Chen
+  Posted: 2024-12-13 14:47:06.550000
+  Votes: 63  Comments: 16
+
+First, I want to thank the organizers for hosting this competition, and the Kaggle community for all the discussions and shared notebooks that helped me learn so much.
+
+My Solution
+
+A two-stage approach:
+
+Stage 1: Retrieval
+
+
+
+Used Qwen-14B Embedder (from @anhvth226 ) ensemble with Qwen-14B embedder trained with FlagEmbedding
+
+Retrieved 35 most relevant misconceptions for each question
+
+Used publicly shared Retriever and tried my own FlagEmbedding-trained Retriever
+
+To be honest, my self-trained Retriever was pretty bad and removing it actually improved the score (lol)
+
+
+Stage 2: Reranking
+
+
+
+Used Qwen-32B-instruct-AWQ reranker
+
+Ensembled 6 different LoRAs with various training parameters and cross-validation
+
+One model included about 2000 GPT4-mini generated samples, but the improvement was… not very significant
+
+
+Scores at this point:
+
+
+
+Public LB: 0.590
+
+Private LB: 0.564
+
+
+Time for Some Magic!
+
+Here comes the most interesting part!
+
+It started when I discovered over 900 unseen misconceptions in the misconceptions table that never appeared in the training data. Plus, according to @zhudong1949 and @eugenkrylov findings (check here: https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550875), the testing set had many unseen subjects and only about 685 questions.
+
+So I thought: these unseen misconceptions must make up a significant portion of the testing set!
+
+Let's Experiment
+
+On the second-to-last day of the competition (yes, I really dared to use two submissions for experiments at this point XD), I did this LB probing:
+
+
+
+Predicted only 1 misconception per question
+
+Tested twice:
+
+
+Using only seen misconceptions from training data: got 0.154
+
+Using only unseen misconceptions: got 0.444
+
+
+Seeing these results, I made a bold guess that the seen-to-unseen ratio in the testing data was roughly 1:3.
+
+The Final Magic Touch
+
+So I implemented a simple post-processing:
+
+
+
+Multiplied the probabilities of all predicted unseen misconceptions by a constant C
+
+Adjusted until unseen misconceptions made up 75% of the first predictions
+
+
+This little magic trick made the scores skyrocket 😮:
+
+
+
+Public LB: 0.590 → 0.658
+
+Private LB: 0.564 → 0.600
+
+
+In the final version, I also randomly shuffled the order of misconceptions input to the reranker, which gave a small additional boost:
+
+
+
+Public LB: 0.670
+
+Private LB: 0.602
+
+
+Code
+
+The inference code can be found at:
+https://www.kaggle.com/code/threerabbits/eedi-11-21-myq14b-q32b-rerank-mod-novel-local-suf
+
+Comments:
+├─ Liu Kelin (2024-12-13 15:14:51.203000) [+1]
+│  Genius!😄😄😄
+├─ Raja Biswas (2024-12-13 15:11:13.690000) [+1]
+│  Nice spot -- this would easily win the efficiency track I think!
+├─ MrSimple (2024-12-15 17:55:11.037000) [+-4]
+│  Nice spot -- this would easily win the efficiency track I think!
+├─ cm391 (2024-12-13 14:52:25.587000) [+-3]
+│  🤯🤯🤯
+│  
+│  Genius !
+├─ peter (2024-12-31 03:46:57.723000) [+0]
+│  666, respect🫡
+├─ Grand Servant (2024-12-17 14:51:20.797000) [+0]
+│  That is magic. Never thought there are so many unseen misconceptions there.
+├─ CsOH (2024-12-16 07:44:00.933000) [+0]
+│  Genius. Do you try generate more data for the unseen misconceptions?
+├─ Ashish Patel (2024-12-16 06:41:06.190000) [+0]
+│  Congratulations thanks for the solution
+├─ Chew Kok Wah (2024-12-14 04:14:37.537000) [+0]
+│  Do you train your Lora on AWQ weight or on the unquantized weight?
+  ├─ Yi-Chia Chen (2024-12-14 17:21:09.313000) [+1]
+  │  I train my LoRA directly on AWQ weights since I don't have enough VRAM to work with unquantized weights.
+├─ Ming Sheng Choo (2024-12-14 02:38:45.657000) [+0]
+│  Gotta say this is a really interesting way to tackle the problem. Would like to ask how did you train your rerank model, was it Flagembedding or something else? Thanks!
+  ├─ Yi-Chia Chen (2024-12-14 17:23:46.253000) [+0]
+  │  I used trl SFTTrainer for training, just like what many others have shared - giving numbers to 35 misconceptions (using exactly 1-9 and A-Z), and then training LLMs to output the most relevant numb...
+├─ Timmy Juicehouse (2024-12-14 02:36:16.647000) [+0]
+│  a brave gamble!
+├─ Sinan Calisir (2024-12-13 16:59:08.573000) [+0]
+│  Wow smart trick, congratulations!!
+├─ Yannan Chen (2024-12-13 14:51:48.647000) [+0]
+│  Such a smart hack! 🤣🤣 but maybe not what the Eedi host wants to see as a solution tho
+├─ chizhu (2024-12-13 15:24:53.030000) [+0]
+│  amazing!!!

@@ -1,0 +1,728 @@
+# https://www.kaggle.com/competitions/asl-signs/discussion/391265
+
+Topic #391265: [LB0.76 one fold !!!! ] my pytorch transformer experiment results
+  Author: hengck23
+  Posted: 2023-02-28 21:05:45.123000
+  Votes: 128  Comments: 180
+
+experiments in progress …
+
+
+
+
+
+previous results:
+https://www.kaggle.com/competitions/asl-signs/discussion/391265#2197663
+
+
+
+after some experiments for the first week, here is the master plan:
+
+[1] one (or two) layer transformer is sufficient. for one fold, memory is only 2mb ( tf.lite.Optimize.DEFAULT, i.e. int8 in storage) and 25min for all 40_000 test videos (or 30 msec per video). Future because of missing frame, long term attention has its advantage
+
+in fact two layer transformer would lead to over fitting.
+
+[2] next step is to spend more time on data representation, especially normalization
+
+[3] use of external data, maybe need to use mediapipe to extract landmarks on external ASL video. 
+Other ways to use increase data increases, adversarial/diffusion augmentation, masked token prediction, etc
+
+I feel that SSL with masked token prediction (e.g. generative pretraining) fits this problem well as there are high proportion of missing frames.
+
+[4], There no much of algorithm design because network is quite shallow. if there is, it would be more on increasing parameters for accuracy and speeds. There are many VIT tricks that can be used here, e.g. window attention, poolforming, convolutional positional encoding, grouped conv, …
+
+
+
+First results 
+
+
+
+one fold, max video length=60 (crop first) : LB 0.65 
+
+1 fold, max video length=512 (crop center) :  LB  0.65  25 min
+
+4 fold, max video length=512 (crop center) :  LB  0.68  32 min
+
+5 fold, max video length=512 (crop center) :  LB  (better) 0.68  35 min
+
+
+CV one fold using train/validation random split:  cv 0.72~0.74 (probably the limit if good generalisation)
+CV one fold using train/validation participant non-overlap split:  cv 0.61 (compared with above, show the severity of lack of train data) 
+
+inference:
+https://www.kaggle.com/code/hengck23/lb-0-65-one-pytorch-transformer-solution
+
+training code:
+https://www.kaggle.com/datasets/hengck23/asl-demo
+
+Comments:
+├─ hengck23 (2023-03-13 04:40:49.920000) [+14]
+│  i have been playing with controlnet and i come across this:
+│  
+│  
+│  maybe can make some fun animation video while waiting for training
+  ├─ hengck23 (2023-03-14 02:26:27.493000) [+2]
+  │  landmark --&gt; controlnet --&gt;stable diffusion --&gt; image+style+augment --&gt; media pose --&gt;landmark+augment ???
+  │  
+  │  note that you can have depthmap as control etc and you can change viewpoin...
+  ├─ hengck23 (2023-03-30 02:22:09.557000) [+0]
+  │  controlnet based on face landmark
+  │  https://huggingface.co/georgefen/Face-Landmark-ControlNet
+  ├─ Das Koushik (2023-10-15 19:40:02.877000) [+0]
+  │  Hi, that is really interesting. I am guessing this will create images frame by frame and we merge all the frames to create a video. Can you give me gist of it? I'm still learning, but seems like a ...
+├─ hengck23 (2023-03-29 16:19:45.363000) [+8]
+│  flip augmentation magic:
+│  CV 0.703 (single fold)
+│  LB 0.72
+│  
+│  LHAND = np.arange(468, 489).tolist() # 21
+│  RHAND = np.arange(522, 543).tolist() # 21
+│  POSE  = np.arange(489, 522).tolist() # 33
+│  FACE  = np.ara...
+  ├─ hengck23 (2023-03-29 19:49:19.067000) [+2]
+  │  one may want to try "cut and paste augment": assemble body parts from different signers
+    ├─ Andrij (2023-03-29 20:06:22.660000) [+1]
+    │  I've already tried something similar when I changed body parts. On my pipeline, the result is controversial. On the one hand, this gave an increase of 1 fold, but on the other hand, the ensemble di...
+    ├─ hengck23 (2023-03-29 20:12:24.370000) [+1]
+    │  the parts have to be synchronised correctly in time. a better way is to use gan or pddm
+    ├─ hengck23 (2023-03-30 02:30:20.223000) [+0]
+    │  instead of cut and paste, imagine:
+    │  
+    │  
+    │  
+    │  there is a canoical signer
+    │  
+    │  you are use distance constrain and inverse kinemetics to transfer kaggle signer motion to this canoical signer
+    │  
+    │  check if we use onl...
+  ├─ Carno Zhao (2023-03-30 02:48:43.213000) [+1]
+  │  🤔Do other landmarks really help? In my experiments, event simply add pose landmarks (arms position) decrease CV.
+    ├─ hengck23 (2023-03-30 03:08:03.123000) [+4]
+    │  it depends on how you normalised i think.
+    │  
+    │  there is many noise in the data becuase each signer is of different size and their camera may have different frame rate. They also move differently.
+    │  
+    │  in t...
+    ├─ Carno Zhao (2023-03-30 03:12:11.127000) [+0]
+    │  yes, for me, normalization method also matters
+  ├─ hengck23 (2023-03-30 06:40:03.967000) [+1]
+  │  this is not too difficult if you think about it
+    ├─ hoyso48 (2023-03-30 09:06:33.303000) [+0]
+    │  I tried a very similar approach to this, but unfortunately, I didn't see any performance improvement compared to simple augmentation(maybe my approach was too naive). However, I think it's a fascin...
+  ├─ Araik Tamazian (2023-04-21 08:27:47.767000) [+0]
+  │  According to LANDMARKS_REFINEMENT_LEFT_EYE_CONFIG and LANDMARKS_REFINEMENT_RIGHT_EYE_CONFIG (from https://github.com/tensorflow/tfjs-models/blob/master/face-landmarks-detection/src/tfjs/constants.t...
+├─ KKY (2023-03-23 08:28:19.040000) [+8]
+│  I love your experiments records table! thanks for sharing this!
+  ├─ Dheeraj Pandey (2023-03-23 16:50:13.230000) [+0]
+  │  +1 @hengck23
+├─ hengck23 (2023-03-12 19:46:44.203000) [+7]
+│  [unorganized] some proven intermediate results … will write in more detail later
+│  
+│  
+│  
+│  
+│  add motion (xyz at current frame - xyz at previous frame). i.e. each point now has 6 dim. need to handle NaN mot...
+  ├─ hengck23 (2023-03-13 16:08:00.600000) [+3]
+  │  ideally, if there is lots and lots of training samples, you don't have to do anything, just add more parameters and the model would learn scale, rotation invariant features.
+  │  
+  │  if there is not much t...
+    ├─ hengck23 (2023-03-13 16:21:10.243000) [+4]
+    │  convergence is magical if you do things right !
+    │  
+    │  train/validation participant id does not overlap shown below:
+    │  
+    │  
+    │  distance matrix is the poor man's graph network D x A x inv(D) …
+    │  i need to google fo...
+    ├─ hengck23 (2023-03-14 01:49:37.657000) [+3]
+    │  i wondered if i renderd the point into 48x48 images and use 3dCNN, what will be the speed and accuracy …
+    ├─ hengck23 (2023-03-14 10:11:12.587000) [+1]
+    │  possible of aux loss:
+    │  
+    │  
+    │  
+    │  predict if word is one-hand or two-hand word
+    │  
+    │  predict if the signer is using left, right or both hands
+    │  
+    │  predict signer identity
+    │  
+    │  
+    │  ….
+    ├─ Lau2664 (2023-03-15 06:51:09.113000) [+0]
+    │  I didn’t try 3D CNN yet, but I have tried 2D CNN. I use a (batch_size, num_frame, num_landmark, 3) tensor as input. I didn’t do much experiments, the best val acc I got is around 0.53. I didn’t rec...
+    ├─ hengck23 (2023-03-15 06:59:03.907000) [+1]
+    ├─ Gregor Lied (2023-03-15 08:41:20.820000) [+0]
+    │  @jay2333 Papers in the skeleton-based action recognition domain rely on high-quality pose data. In most cases, they use HRNet pose estimator to extract the skeleton landmarks. Furthermore, there ar...
+    ├─ Lau2664 (2023-03-15 13:29:50.920000) [+1]
+    │  @gregorlied Totally agree with that. According to the current public notebook, a simple fully connected network can perform well. So the main issue is the data process part.
+    ├─ hengck23 (2023-03-15 14:42:51.547000) [+1]
+    │  " fully connected network can perform well. "
+    │  
+    │  the reason is that the seq are not really long
+    ├─ hengck23 (2023-03-15 15:03:07.460000) [+1]
+    │  there is a trick to speedup 3d CNN or 2d CNN
+    │  
+    │  basically it is like CLIP (aligned text and image)
+    │  
+    │  here you trained joint encoder for (pose, rendered image) pair.
+    │  rendered image has more information...
+    ├─ hengck23 (2023-03-17 05:45:15.100000) [+0]
+    │  yet  another aux loss,
+    │  
+    │  
+    │  
+    │  if word are noun (object) or verb (action, motion), etc
+    ├─ [deleted] (2023-03-30 16:45:01.383000) [+0]
+    │  [deleted]
+  ├─ Vadim Timakin (2023-04-17 16:22:28.987000) [+0]
+  │  May I ask you how you actually apply interpolation? I'm trying to apply it, but even with soft parameters the score is lower
+├─ hengck23 (2023-04-20 12:56:37.840000) [+7]
+│  watch this thread!
+│  
+│  receipe for LB0.76 one fold:
+│  
+│  
+│  
+│  i seems that there is somthing very strange about the dataset … maybe very noisy.  i have to use unconventional strong regularisation and trainin...
+  ├─ Daniel Quintero (2023-04-20 20:02:19.243000) [+0]
+  │  Have you tried using ViT or are you still using Conv1d + MHA?
+    ├─ hengck23 (2023-04-21 13:40:39.923000) [+1]
+    │  dropout has the effect of flatten the valley of loss landscape.
+    │  (this is the same as SWA, deeply supervised loss,  etc)
+    │  
+    │  Of course, adeverisal training SAM (sharpness aware optimizer, aka sample pe...
+    ├─ [deleted] (2023-04-21 17:30:00.240000) [+0]
+    │  [deleted]
+    ├─ Daniel Quintero (2023-04-21 17:30:20.373000) [+0]
+    │  It may be worthwhile to try additional parameters in conjunction with a 'late' configuration
+├─ hengck23 (2023-03-01 00:49:08.950000) [+5]
+│  [reference]
+│  
+│  
+│  
+│  'Sign Pose-based Transformer for Word-level Sign Language Recognition' - Matyáš Boháček
+│  
+│  Combining Efficient and Precise Sign Language Recognition: Good pose estimation library is al...
+├─ hengck23 (2023-03-01 00:59:53.167000) [+6]
+│  [external data]
+│  … to be updated …
+│  
+│  HOW TO SIGN
+│  https://how2sign.github.io/
+│  https://openaccess.thecvf.com/content/CVPR2021/papers/Duarte_How2Sign_A_Large-Scale_Multimodal_Dataset_for_Continuous_Amer...
+  ├─ hengck23 (2023-03-10 14:03:14.067000) [+0]
+  │  pytorch mediapipe … hmm
+  │  https://github.com/zmurez/MediaPipePyTorch
+  ├─ hengck23 (2023-03-15 13:53:17.117000) [+2]
+  │  this image explain why hand are missing.
+  │  you probably can ignore the legs
+  ├─ hengck23 (2023-03-15 15:52:54.357000) [+0]
+  │  there is a related product called copycat:
+  │  CopyCat: Using Sign Language Recognition to Help Deaf Children Acquire Language Skills
+  │  https://gvu.gatech.edu/research/projects/copycat-using-sign-languag...
+├─ hengck23 (2023-04-19 08:43:02.580000) [+3]
+│  i forget an import detail at the data card. suggestions for augmentation:
+│  
+│  "While the app provided a video example of the sign desired, signers routinely made variants of the sign based on their ba...
+  ├─ Araik Tamazian (2023-04-21 06:49:13.603000) [+0]
+  │  "need to measure label noise and decide if you want to exclude some data"
+  │  
+  │  So we need to specify some kind of "ideal" signs, and compare train data with it?
+    ├─ hengck23 (2023-04-21 06:51:29.157000) [+1]
+    │  those  that have validation/train error higher than normal  are supsicous outliers
+    ├─ Jackson You (2023-04-21 07:37:43.810000) [+0]
+    │  If the hidden dataset is very cleanly drawn, I think data with a low frame count can be left out.
+    ├─ hengck23 (2023-04-21 11:49:10.123000) [+0]
+    │  there must be some reason why some video are very long (much longer than average).
+    │  at the signer moving very slowly? or are they not cropping the video (press start and end) correctly? or are they ...
+    ├─ Jackson You (2023-04-21 12:07:25.227000) [+0]
+    │  You're right, long frame data has some problems.
+    ├─ hengck23 (2023-04-21 14:07:24.983000) [+0]
+    │  this is explain why conv1d does not work but conv1d+max pool works (about LB 0.72, compared to transformer of 0.74)
+    │  
+    │          self.conv2 = nn.Sequential(
+    │              nn.Conv1d(1024, 768, kernel_size...
+├─ hengck23 (2023-04-17 01:26:37.653000) [+3]
+│  it is suprised for me to achieve 0.75 in one fold with participant split train data(num participant = 5 in validation data). This makes me think that 0.76 is possible. 
+│  
+│  fold_type = kaggle-part
+│  fol...
+  ├─ Rob Mulla (2023-04-17 02:08:50.303000) [+1]
+  │  888888888!
+  ├─ chemdatafarmer (2023-04-17 23:29:35.293000) [+0]
+  │  Are these accuracies shown for the 5 holdout participants?
+├─ hengck23 (2023-04-03 02:01:33.027000) [+3]
+│  a couple on conv1d (as spatial temporal encoder) + MHA attention seems to have good results.
+│  some good ideas to design efficient transformer.
+│  
+│  [1] FastViT: A Fast Hybrid Vision Transformer using St...
+  ├─ Carno Zhao (2023-04-03 02:55:46.753000) [+1]
+  │  Won't conv bring much more parameters?
+  │  
+  │  I suppose what you mean is :
+  │  
+  │  
+  │  inputs_embeds = inputs_embeds + position_embeds 
+  │  
+  │  
+  │  inputs_embeds = inputs_embeds.permute(, , ) 
+  │  inputs_embeds = conv1d(inputs_...
+    ├─ hengck23 (2023-04-03 10:49:08.177000) [+1]
+    │  @carnozhao 
+    │  
+    │  1d convolution multi-head-attention:
+    │  
+    │  class MyMultiHeadAttention(nn.Module):
+    │      def __init__(self,
+    │              embed_dim,
+    │              out_dim,
+    │              qk_dim,
+    │              v_dim,
+    │   ...
+  ├─ Maxim B (2023-04-04 08:53:19.857000) [+2]
+  │  My conv1d layers are not getting through the pytorch to tflite conversion. Do you still do pytorch -&gt; onnx -&gt;tflite conversion or do you have a tf/keras twin which you convert to tflite?
+├─ hengck23 (2023-03-31 13:31:22.793000) [+3]
+│  this is how much the face (upper triangle = eyes and lip) and body(lower quadliteral = shoulders and hips)  have moved for one hand sign.
+│  
+│  I wonder if there will be improvement in accuracy if i rem...
+  ├─ A.P. (2023-03-31 13:42:42.513000) [+0]
+  │  Tried to apply moving average across frames but it doesn't work for me
+├─ hengck23 (2023-04-02 09:49:09.440000) [+4]
+│  simplest normalisation code
+│  
+│  REF = [500, 501, 512, 513, 159,  386, 13,]
+│  
+│  def do_normalise_by_ref(xyz, ref):  
+│      K = xyz.shape[-1]
+│      xyz_flat = ref.reshape(-1,K)
+│      m = np.nanmean(xyz_flat,0).r...
+  ├─ [deleted] (2023-04-03 16:59:36.753000) [+0]
+  │  [deleted]
+    ├─ hengck23 (2023-04-03 17:40:00.700000) [+0]
+    │  REF = [500, 501, 512, 513, 159,  386, 13,]
+    │  ref = xyz[:,REF]
+    │  xyz_flat = ref.reshape(-1,K)
+    │  
+    │  
+    │  using ref=xyz will be more accurate
+    │  you can conduct experiments to find the subset of most stable normalis...
+    ├─ [deleted] (2023-04-03 18:33:32.503000) [+0]
+    │  [deleted]
+├─ hengck23 (2023-03-12 02:36:03.543000) [+3]
+│  [self-study]
+│  
+│  
+│  
+│  Sign Language Translation with Transformers
+│  https://www.youtube.com/watch?v=E5nKeEvoAK0
+├─ hengck23 (2023-02-28 21:37:38.583000) [+3]
+│  [ensemble trick]
+│  
+│  
+│  
+│  since only one model can be submitted and there is a time limit, we can distilled "ensemble knowledge" into one model.
+│  
+│  a better solution is distilled encoder (or multiple encod...
+├─ hengck23 (2023-02-28 21:20:38.053000) [+3]
+│  [augmentation and tricks]
+│  
+│  
+│  
+│  simulate different frame length 
+│  
+│  simulate different NaN (as in train data)
+│  
+│  simulate different missing frame or differnt frame rate? 
+│  
+│  3d guassian noise
+│  
+│  type of landm...
+  ├─ hengck23 (2023-03-12 02:16:37.907000) [+2]
+  │  augmentation paper:
+  │  [1] PoseAug: A Differentiable Pose Augmentation Framework for 3D Human Pose Estimation
+  │  https://arxiv.org/pdf/2105.02465.pdf
+  │  
+  │  [2] DH-AUG: DH Forward Kinematics Model Driven Augme...
+    ├─ hengck23 (2023-03-12 02:29:06.657000) [+0]
+    │  i check github for ASL generator
+    │  "3D Avatar ASL github "
+    ├─ hengck23 (2023-03-12 17:46:15.033000) [+2]
+    │  i wonder if motion transfer would work?
+    │  i.e. transfer from one signer to another
+    │  
+    │  https://deepmotionediting.github.io/style_transfer
+├─ hengck23 (2023-03-05 18:52:03.680000) [+4]
+│  [normalization]
+│  
+│  normalization is all you need!
+│  
+│  def pre_process(xyz):
+│      lip = xyz[:, LIP]
+│      lhand = xyz[:, LHAND]
+│      rhand = xyz[:, RHAND]
+│      xyz = torch.cat([ #(none, 82, 3)
+│          lip,
+│    ...
+  ├─ hengck23 (2023-03-05 21:44:12.203000) [+5]
+  │  ** start training here! **
+  │     batch_size = 64 
+  │     experiment = ['transformer-pool-03-hand_lip', 'run_train_fold0.py']
+  │                             |---------------- VALID---------|---- TRAIN/BATCH --...
+    ├─ hengck23 (2023-03-07 13:08:18.303000) [+1]
+    │  learning based shape normalisation:
+    │  
+    │  
+    │  
+    │  
+    │  Spatial Transformer Networks
+    │  https://arxiv.org/pdf/1506.02025.pdf
+    │  
+    │  
+    │  PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
+    │  https://open...
+    ├─ hengck23 (2023-03-09 12:24:09.203000) [+3]
+    │  effects of normalization
+    ├─ Darien Schettler (2023-03-10 12:08:13.087000) [+0]
+    │  I'm fascinated by this. 
+    │  
+    │  
+    │  
+    │  Did you use the methods you linked to do the normalization? 
+    │  
+    │  It looks like there is an upward swinging arm (right side of left image) in the original but this looks to ...
+    ├─ hengck23 (2023-03-10 13:27:31.560000) [+2]
+    │  it is just simple mean and std normalization.
+    │  there is probably not enough resource (100 msec) to do complicated normalisation
+    │  
+    │      fig, ax = plt.subplots()
+    │      ax.invert_yaxis()
+    │  
+    │      kaggle_df = p...
+    ├─ Darien Schettler (2023-03-10 14:56:49.513000) [+0]
+    │  Awesome. Makes sense!
+    ├─ [deleted] (2023-03-11 11:10:47.910000) [+0]
+    │  [deleted]
+    ├─ Vladimir Bogachev (2023-03-13 11:55:35.670000) [+0]
+    │  Hi, I'm having trouble reproducing your results. I'm using one-layer transformer with participants 26734, 28656, 16069 as validation, and my top1 val caps at 0.35 using the following hyperparams:
+    │  
+    │  ...
+    ├─ hengck23 (2023-03-13 13:56:05.057000) [+1]
+    │  @vbogach 
+    │  
+    │  most likely there is some bug in your training code
+    │  
+    │  the training loss is shown at:
+    │  https://www.kaggle.com/competitions/asl-signs/discussion/391265#2170328
+    │  
+    │  possible bug ares:
+    │  
+    │  
+    │  
+    │  forget ...
+    ├─ Vladimir Bogachev (2023-03-13 19:20:24.993000) [+0]
+    │  It looks like I was normalizing each landmark separately and that's why it didn't work. Thanks for your help!
+├─ Bob_Fan91 (2023-04-30 07:22:23.977000) [+1]
+│  Excellent sharing！I learned a lot from this.Thank you very much!Wish you can get the top prize!
+├─ hengck23 (2023-04-17 15:03:30.517000) [+1]
+│  https://github.com/facebookresearch/dropout
+│  Dropout Reduces Underfitting
+│  
+│  
+│  
+│  late dropout works for me
+├─ hengck23 (2023-04-17 04:45:42.443000) [+1]
+│  replace the word "academics" with "kaggle"
+├─ hengck23 (2023-04-05 14:08:28.510000) [+1]
+│  i wonder if (inverse) DTW can be used as augmentation?
+│  https://ai.googleblog.com/2021/01/recognizing-pose-similarity-in-images.html
+├─ mp (2023-03-31 17:21:01.103000) [+1]
+│  Hi, I've noticed that you use xyz = xyz - xyz[~torch.isnan(xyz)].mean(0,keepdim=True) to normalize the input. However, xyz[~torch.isnan(xyz)] (or np.isnan) returns a flattened tensor of size (num_f...
+  ├─ hengck23 (2023-03-31 17:26:31.320000) [+0]
+  │  do a few print statement:
+  │  
+  │  print(xyz.shape)
+  │  print((torch.isnan(xyz)).shape)
+  │  print((xyz[~torch.isnan(xyz)]).shape)
+  │  print((xyz[~torch.isnan(xyz)].mean(0,keepdim=True)).shape)
+    ├─ mp (2023-04-01 01:44:46.860000) [+0]
+    │  Here are the sizes of everything, which are literally the same as what I said above. Was it your original intention to normalize by the single mean of all landmarks in the sequence? Just curious ab...
+    ├─ hengck23 (2023-04-01 03:27:25.140000) [+1]
+    ├─ hengck23 (2023-04-01 03:29:00.130000) [+0]
+    ├─ mp (2023-04-01 04:17:58.660000) [+0]
+    │  Glad to help. I'm not sure how to do the same for unit variance as there is no such thing as nanstd. Please share if you know.
+    ├─ hengck23 (2023-04-01 05:07:46.860000) [+0]
+    │  i make the mistake becuase of 
+    │  https://pytorch.org/docs/stable/generated/torch.nanmean.html
+    │  
+    │  quote; "(torch.nanmean(a) is equivalent to torch.mean(a[~a.isnan()]))."
+    │  
+    │  i suggest you use np for prepar...
+    ├─ hengck23 (2023-04-01 07:33:15.507000) [+0]
+    │  @notnitsuj 
+    │  
+    │  sorry for the confusion. the original implementation is "almost correct"
+    ├─ mp (2023-04-01 07:52:39.387000) [+0]
+    │  I wonder if it's better to normalize per frame, though. I'll test that out. 
+    │  Since you're normalizing everything at once, I suggest you can just delete the arguments for mean as they have no effect...
+    ├─ hengck23 (2023-04-01 10:44:11.257000) [+2]
+    │  if your xyz is already zero mean, then the average distance of points from center(0,0,0) should be
+    │  
+    │  var  =  np.nanstd(xyz.reshape(-1,3))**2 # mean of x**2, y**2, zz*2
+    │  distance_sq  = var.sum()
+    │  dista...
+  ├─ Denys Shushpanov (2023-04-02 13:54:54.773000) [+0]
+  │  By normalising x, y, z separately you meant sth like this? 
+  │  xyz.nanmean(dim=(0, 1), keepdim=True)'
+  │  
+  │  It results in normalisation of each of dimensions separately, so that mean and std for x, y, and ...
+    ├─ mp (2023-04-02 14:49:32.373000) [+0]
+    │  Yes, but I also wanted to normalize the spatial coordinates for each frame, which means to only reduce dim=1. But it's just my intuition and I'm not sure if it will benefit the model. You can check...
+├─ hengck23 (2023-03-26 09:48:45.067000) [+1]
+│  [previous results]
+│  
+│  15-mar
+│  
+│  
+│  03-apr
+├─ hengck23 (2023-03-16 20:24:55.600000) [+1]
+│  i just realise my work flow is:
+│  
+│  1.click edit notebook  
+│  2.click open data in new tab  
+│  
+│  
+│  
+│  upload new tflite file and wait  
+│  
+│  back to notebook page click check for update 
+│  
+│  
+│  3.click submit  
+│  
+│  i wis...
+  ├─ arutema47 (2023-03-16 23:47:50.637000) [+1]
+  │  I wish you could just submit the model.tflite directly like csv submissions. But it's handy enough😗
+  │  I like this new kind of kaggle competitions focused on edge computing. Kudos to the kaggle team m...
+    ├─ hengck23 (2023-03-17 00:43:51.023000) [+0]
+    │  https://www.kaggle.com/discussions/general/395353
+    │  
+    │  maybe one day we can have a chatgpt AI bot to help us with that:
+    │  prompt 'upload new tflitemodel and submit'
+    │  
+    │  and i think this is useful
+    │  prompt 'ch...
+├─ hengck23 (2023-03-14 22:33:06.623000) [+1]
+│  did another try mirror augmentation?
+│  if yes, can i have your feedbacks?
+  ├─ Muai (2023-03-16 14:48:04.883000) [+0]
+  │  I've tried mirror augmentation with a simple MLP model, but didn't get better results for now, I'm still stuck at 0.63LB with and without this augmentation.
+  │  I'll experiment further this weekend and...
+    ├─ Chinartist (2023-03-22 12:21:33.837000) [+0]
+    │  How do you implement the mirror augmentation?
+    ├─ Muai (2023-04-05 17:13:06.600000) [+0]
+    │  I simply multiply the x coordinates by -1 after normalization
+├─ hengck23 (2023-03-10 17:03:18.613000) [+1]
+│  [pretrain model]
+│  
+│  https://github.com/AI4Bharat/OpenHands
+│  pretrain model based on mediapipe !!!!
+  ├─ hengck23 (2023-03-10 19:06:17.637000) [+5]
+  │  this is one thing what i want to do:
+  │  generative pretraining
+  │  [1]SignBERT: Pre-Training of Hand-Model-Aware Representation for Sign Language Recognition
+  │  https://arxiv.org/pdf/2110.05382.pdf
+  ├─ Jackson You (2023-03-11 09:34:14.987000) [+0]
+  │  It is interesting! Do you have some thoughts about creating baseline using that pretrained model?
+    ├─ hengck23 (2023-03-12 05:19:08.527000) [+3]
+    │  related: tokenization as pretraining
+    │  
+    │  
+    │  BEST: BERT Pre-Training for Sign Language Recognition with Coupling Tokenization
+    │  https://arxiv.org/pdf/2302.05075.pdf
+    │  
+    │  
+    │  
+    │  diffusion-based autoencoder (for augm...
+    ├─ Just A game on your lips (2023-03-12 06:24:05.213000) [+0]
+    │  It's too large architecture, I think.
+    ├─ hengck23 (2023-03-12 08:16:53.277000) [+1]
+    │  you can distill later
+    ├─ hengck23 (2023-03-14 09:48:18.840000) [+1]
+    │  in theory, the max numbers of hand pattern is fixed(e.g. limited by rotation angle of finger joints, etc). hand you can actually build a "tokenizer" (aka lookup table)
+    │  
+    │  it is interesting to make a ...
+├─ hengck23 (2023-03-02 00:46:44.770000) [+1]
+│  [framework conversion]
+│  
+│  
+│  
+│  
+│  keras, pytorch:
+│  https://github.com/leondgarse/keras_cv_attention_models
+│  
+│  
+│  pytorch, onnx, tf
+│  https://github.com/PINTO0309/onnx2tf
+├─ hengck23 (2023-04-21 16:15:47.363000) [+2]
+│  i check some of the confusing words …. i wonder if a second classifier for specific pairs (or groups) of confusing words would help (e.g. using more features, number of frames, etc)
+│  
+│  167 pen (99)
+│   ...
+  ├─ hengck23 (2023-04-22 00:56:43.143000) [+0]
+  │  https://arxiv.org/pdf/2303.12080.pdf
+  │  Natural Language-Assisted Sign Language Recognition
+  │  
+  │  you can see that the confused words has similary meaning (e.g. kitty/cat, pencil/pen)
+  │  check the paper on ho...
+    ├─ Just A game on your lips (2023-04-22 03:23:30.280000) [+0]
+    │  Can I ask the simple question, which classes you didn't apply flip-agumentations. Thankss
+├─ hengck23 (2023-04-05 19:24:21.707000) [+2]
+│  distangle hand shape and hand motion:
+│  Phonologically-meaningful Subunits for Deep Learning-based Sign Language Recognition
+│  https://www.slrtp.com/papers/full_papers/SLRTP.FP.02.012.paper.pdf
+│  
+│  motion...
+├─ hengck23 (2023-03-28 11:23:42.713000) [+2]
+│  i probably got it all wrong.
+│  the correct way to shape normalise and do feature extraction is given by:
+│  
+│  https://google.github.io/mediapipe/solutions/pose_classification.html
+│  https://www.tensorflow....
+  ├─ Mykola (2023-03-28 12:22:35.167000) [+0]
+  │  Next, convert the landmark coordinates to a feature vector by:
+  │  
+  │  - Moving the pose center to the origin.
+  │  - Scaling the pose so that the pose size becomes 1
+  │  - Flattening these coordinates into a feat...
+    ├─ hengck23 (2023-03-29 18:46:10.453000) [+0]
+    │  "i probably got it all wrong."
+    │  
+    │  becuase if your feature is pairwise distance, then your normalisation is also pairwise distance.
+    │  objective of normalisation is to make feature values the same for si...
+    ├─ Vladimir Bogachev (2023-04-01 12:07:27.503000) [+0]
+    │  Hi, my pairwise distance calculation code reduces training speed dramatically from 20 batches/s to 4 batches/s. Do you precalculate pairwise distances or do you calculate it live? Do you have simil...
+    ├─ Mykola (2023-04-01 12:32:13.977000) [+0]
+    │  If you are using tf.data.Dataset I would recommend you to use .cache() after feature calculation. It will precalculate all features and cache them. All other epochs would use cache instead of calcu...
+├─ [deleted] (2023-03-20 07:37:41.097000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-03-23 11:37:21.013000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2023-03-24 10:34:29.210000) [+1]
+  │  [deleted]
+├─ [deleted] (2023-03-12 02:33:03.533000) [+2]
+│  [deleted]
+├─ [deleted] (2023-02-28 21:14:11.653000) [+2]
+│  [deleted]
+├─ [deleted] (2023-04-22 00:40:49.027000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-21 18:14:11.380000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-14 22:59:25.597000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-05 19:39:46.310000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-05 01:01:04.810000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-04-09 19:52:14.493000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-04-04 21:08:42.600000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-04 20:46:35.190000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-31 14:34:11.150000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-31 14:59:33.130000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-03-31 15:03:47.210000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2023-03-31 15:28:02.627000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-31 15:32:47.537000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-04-01 07:36:22.143000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-03-30 17:05:00.597000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-30 17:33:06.200000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-04-01 12:38:25.987000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-03-30 12:07:27.730000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-30 12:15:06.343000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2023-03-30 12:25:20.450000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-30 12:33:43.527000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-03-30 12:40:41.453000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-30 12:43:23.397000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-30 15:44:17.403000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-30 17:28:17.947000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-04-01 13:35:07.010000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-04-01 15:54:15.407000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-03-30 11:24:00.570000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-30 02:40:57.767000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-24 01:46:16.067000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 22:31:03.683000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 11:43:27.953000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-20 00:06:49.330000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-20 01:40:20.897000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2023-03-20 01:59:21.083000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-03-20 02:50:25.633000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-03-20 13:19:55.457000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-03-19 23:16:49.727000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-19 08:22:03.700000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-19 08:29:31.507000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-03-19 08:50:39.050000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-03-16 03:29:44.980000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-16 03:51:01.303000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-03-15 14:37:10.477000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-15 14:41:51.207000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-03-15 15:26:18.740000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-03-15 11:41:14.323000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-04-03 06:34:50.307000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-03-15 07:36:04.037000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-15 14:58:31.307000) [+1]
+  │  [deleted]
+├─ [deleted] (2023-03-03 16:25:25.970000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-03-04 11:07:50.940000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-03-19 01:56:45.423000) [+-5]
+│  [deleted]
+  ├─ [deleted] (2023-03-19 03:45:59.167000) [+3]
+  │  [deleted]
+├─ [deleted] (2023-03-13 08:14:48.807000) [+0]
+│  [deleted]
+├─ [deleted] (2023-04-02 08:05:45.377000) [+0]
+│  [deleted]

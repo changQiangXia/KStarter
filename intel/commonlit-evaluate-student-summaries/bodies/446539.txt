@@ -1,0 +1,164 @@
+# https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446539
+
+Topic #446539: 9th Place Solution
+  Author: Takoi
+  Posted: 2023-10-12 05:51:03.799000
+  Votes: 58  Comments: 17
+
+9th Place Solution
+
+First and foremost, I'd like to extend my gratitude to the host for organizing this competition. Congratulations to the winners as well! I'd like to present a brief overview of my solution that secured the 9th position.
+
+Cross-Validation
+
+The wording of prompt_id 814d6b stood out, being notably different from other prompt_ids. When cross-validating with groupkfold using the prompt_id, predicting for this particular prompt_id didn't correlate with scores from other prompt_ids. Hypothetically, if there were any test ids with a distribution similar to 814d6b, having 814d6b in the training data might produce decent accuracy. However, there was no way to validate this. For this competition, I employed two methods of cross-validation and submitted for both:
+Cross-validation 1: groupkfold (group = prompt_id), excluding 814d6b from evaluation.
+Cross-validation 2: groupkfold (group = prompt_id), Including 814d6b in the evaluation.
+The final private score was better for the model from cross-validation 2, so I'll delve into the details of that model. 
+Given that changing the seed alone resulted in variable CV scores, I performed cross-validation using three different seeds and evaluated the model based on their ensemble. The final submission was based on the predictions of models trained on all the data using three different seeds.
+
+Training
+
+I tokenized the text as follows:
+text1:  summary_text
+text2: prompt_question + [SEP] + prompt_text
+
+inputs = self.tokenizer.encode_plus(text1,
+                                  text2,
+                                  =,
+                                  =self.max_len,
+                                  =,
+                                  =,
+                                  =)
+
+
+Model: Consisted of two deberta-v3-large and one LSTM as described below:
+
+
+
+The first deberta-v3-large was trained using the entire input text.
+
+The second deberta-v3-large and LSTM were trained solely on the summary_text.
+
+
+ = 
+
+
+Training settings:
+
+
+
+token_len: 1680
+
+epochs: 3
+
+Loss: SmoothL1Loss
+
+lr: 8e-6
+
+optimizer: AdamW
+
+
+weight_decay: 0.01
+
+beta: (0.9, 0.98)
+
+scheduler: get_linear_schedule_with_warmup
+
+
+num_warmup_steps: 10% of total training steps
+
+EMA (Exponential Moving Average)
+
+
+ema_decay: 0.995
+
+Using EMA helped stabilize the training.
+
+
+Inference
+
+token_len: 4200
+
+Scores
+
+
+
+CV: 0.495 (ensemble of 3 seeds)
+
+
+814d6b: 0.604982
+
+ebad26: 0.431438
+
+3b9047: 0.49692
+
+39c16e: 0.483208
+
+Public Score: 0.456
+
+Private Score: 0.457
+
+
+Inference Code
+
+https://www.kaggle.com/code/takoihiraokazu/sub-ex263-seq4200?scriptVersionId=145902061
+
+Comments:
+├─ Cotmd (2023-10-13 04:45:01.593000) [+3]
+│  Congrats🎉 and thanks for your cool solution!
+│  
+│  I have some questions that I want to ask. 
+│  
+│  
+│  
+│  May I know the Private Score and CV of the submission that made Public Score: 0.421(7th place in Public S...
+  ├─ Takoi (2023-10-13 10:59:17.433000) [+4]
+  │  Thank you!
+  │  Here are the answers to your questions:
+  │  
+  │  
+  │  
+  │  
+  │  For the model with the best public score, I calculated the CV for prompt-id other than 814d6b. It is an ensemble of two DeBERTa-v3-large model...
+    ├─ Cotmd (2023-10-13 17:22:48.350000) [+1]
+    │  Thx for answering!!😆
+├─ moth (2023-10-12 14:39:55.173000) [+4]
+│  Congratulations @takoihiraokazu for your finish! 
+│  
+│  This might be a complex question, but could you elaborate on your line of thought for creating your model architecture? I imagine that the first m...
+  ├─ Takoi (2023-10-13 10:36:24.153000) [+4]
+  │  Thank you ! 
+  │  Yes, your understanding is correct except for the LSTM part. The thought process behind the model architecture is as follows:
+  │  
+  │  I wanted the model to capture the relationship between th...
+    ├─ moth (2023-10-13 19:08:27.927000) [+1]
+    │  Awesome, thanks again!
+├─ ls (2023-10-13 14:02:30.187000) [+1]
+│  Nice solution. Congrats on gold.
+├─ chumajin (2023-10-12 08:19:26.813000) [+2]
+│  Congratulations on your strong solo gold medal!
+│  It took me about 30 minutes to understand it, but the architecture of your model is great and we could not get a cv like this! I learned a lot. Thank...
+  ├─ Takoi (2023-10-12 14:02:01.453000) [+2]
+  │  Thank you! I also learned a lot from your team's solution.
+├─ Sergey Zlobin (2023-10-12 06:22:03.557000) [+2]
+│  Thanks for the description!
+│  So you don't use LGBM and why?
+  ├─ Takoi (2023-10-12 07:00:13.397000) [+3]
+  │  Thank you. I tried LGBM, but I didn't adopt it because the CV didn't improve
+├─ Dristanta Das (2023-10-12 06:13:23.270000) [+2]
+│  First of all, congratulations. 
+│  Wanted to inquire more on your solution, how you incorporated 2 models (a rough idea would be suffice) and how does lstm affected your solution (as compared to non l...
+  ├─ Takoi (2023-10-12 14:11:03.033000) [+0]
+  │  Thanks!
+  │  Regarding the two models, the output of one model is used as the input for the other. For details, please check the implementation of CustomModel. As for the LSTM, its inclusion resulted in...
+├─ [deleted] (2024-02-29 19:43:01.253000) [+0]
+│  Hi @takoihiraokazu Could you share your Exponential Moving Average code if possible.
+├─ [deleted] (2023-12-27 19:21:03.973000) [+1]
+│  Hi @takoihiraokazu The difference between model1 and model2 is that model1 consists Embedding + Encoder part and model2 consists only Encoder part. Am I getting it correct ?
+│  
+│  Also if above statemen...
+  ├─ Takoi (2023-12-29 12:11:06.387000) [+0]
+  │  Yes, your understanding is correct. The reason I differentiated between model1 and model2 was simply because I wanted to change the attention_mask midway through the model. By separating the models...
+├─ [deleted] (2023-10-12 14:59:39.633000) [+2]
+│  @chumajin Congrats for solo gold. I love your solution. Looking forward to your Training code .I learn a lot from your inference book.

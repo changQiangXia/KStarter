@@ -1,0 +1,28 @@
+<p>It was an excellent competition! For many years, I've been following astrophysics news with great interest. What else will they see in these blurry pixels? When will they finally find a habitable planet? And now I've been lucky enough to contribute to this myself.</p>
+<p>I want to thank the competition hosts, the Ariel mission, and specifically <a href="https://www.kaggle.com/GordonYip" target="_blank">@GordonYip</a> for answering important questions. I'd also like to thank all the authors of the notebook with the correct data calibration process. Without this, my participation would hardly have been meaningful. It's so difficult to find information about calibrations in articles! Thank <a href="https://www.kaggle.com/shlomoron" target="_blank">@shlomoron</a> for the meme thread and funny comments 😀</p>
+<p>My solution isn't particularly sophisticated. Here's the breakdown:</p>
+<p><strong>Data Processing</strong>:<br>
+I noticed outliers in pixel data and smoothed them with a Gaussian in the frequency axis direction. The "extra" wavelengths not included in the final spectrum were somewhat useful here. Consistently improved by 0.002.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F71783%2Faf1f3b347ae2379d01f6be441ade29d5%2Fbang.jpg?generation=1730420235408838&amp;alt=media" alt=""><br>
+<strong>Smoothing</strong>:<br>
+Nothing in the world is better than SG. It's fast enough and smooths everything. I even smoothed the predictions.</p>
+<p><strong>Transit Zone Prediction</strong>:<br>
+Nothing is more painful than getting 0 in submission results. The main problem is incorrectly predicted transit boundaries. In the test, they're wider or narrower than those in the training set. Using SG smoothing in the time direction to find boundaries. Ensuring light flux decreases at the left boundary and increases at the right.</p>
+<p><strong>Features for Models</strong>:<br>
+The feature construction process is similar to my baseline. We build a polynomial, find how to 'raise' the transit zone to align with the non-transit part. Used MAE and logpdf functions to evaluate how well we found the coefficient.<br>
+Build a general polynomial for the frequency sum. For each frequency, try to find coefficients pulling the transit as B and external parts as A to this polynomial. 1 - A/B is the target feature for individual frequencies. Sums across frequency intervals. I know from theory that some zones correspond to absorption areas of basic gases CH4, H2O, CO2, CO, NH3. But the best frequency areas for building features turned out to be different. I used a mix of genetic algorithm and manual selection to find the best intervals.</p>
+<p><strong>Sigma Estimation</strong>:<br>
+I only estimated average sigma per spectrum. Build regression from the difference between maximum and minimum predictions for the planet.</p>
+<p><strong>Models</strong>:<br>
+Two types: heuristic and CNN.</p>
+<p><strong>Heuristic</strong>:<br>
+Sum of features with weights that look realistic. 0.666 on training set and 0.666 on public. Two different approaches for predictions with differences &lt;0.00018 and larger. For larger spectra, found coefficients can be used. For small ones, better not to.</p>
+<p><strong>CNN</strong>:<br>
+Main challenge was avoiding overfitting. Experimentally established maximum frequency count in window - 21. There's physical sense in this, close to distance between different gases' transmission bands. Important that model doesn't overfit on two bands. Two-headed model, one predicting 283 spectrum points, second head predicting average sigma. Loss function - GaussianLoss.<br>
+0.678 on training set, 0.684 on test.</p>
+<p><strong>Mixing</strong>:<br>
+Weight selection by best RMSE on training set.<br>
+0.681 on training, 0.692 on public.</p>
+<p><strong>Didn't work on public</strong>:<br>
+Predicting gas compositions and summing predicted TauREX gas spectra.</p>
+<p>Final notebook <a href="https://www.kaggle.com/code/sergeifironov/new-blend-pdf?scriptVersionId=204505791" target="_blank">https://www.kaggle.com/code/sergeifironov/new-blend-pdf?scriptVersionId=204505791</a></p>

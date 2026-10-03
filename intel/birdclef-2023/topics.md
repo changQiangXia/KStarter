@@ -1,0 +1,82 @@
+# birdclef-2023 讨论区（按票数排序，共 80 条）
+
+- [1st place solution: Correct Data is All You Need](https://www.kaggle.com/competitions/birdclef-2023/discussion/412808) — 132 票 / 24 评论 / 2023-06-05 **write-up?**
+- [[LB: 0.80] Pretraining is All you Need](https://www.kaggle.com/competitions/birdclef-2023/discussion/395843) — 88 票 / 17 评论 / 2023-03-19 
+- [2nd place solution: SED + CNN with 7 models ensemble](https://www.kaggle.com/competitions/birdclef-2023/discussion/412707) — 67 票 / 37 评论 / 2024-04-04 **write-up?**
+- [Pytorch Lightning Baseline - LB 0.78 CV 0.831](https://www.kaggle.com/competitions/birdclef-2023/discussion/394162) — 63 票 / 13 评论 / 2023-03-12 
+- [4th Place Solution: Knowledge Distillation Is All You Need](https://www.kaggle.com/competitions/birdclef-2023/discussion/412753) — 55 票 / 25 评论 / 2023-06-06 **write-up?**
+- [FYI - This competition is using a new Python metrics framework](https://www.kaggle.com/competitions/birdclef-2023/discussion/393090) — 40 票 / 2 评论 / 2023-03-08 
+- [top 7th solution - `sumix` augmentation did all the work](https://www.kaggle.com/competitions/birdclef-2023/discussion/412922) — 38 票 / 1 评论 / 2023-05-28 **write-up?**
+- [[LB: 0.78] BirdCLEF 2023 Baseline 🐦](https://www.kaggle.com/competitions/birdclef-2023/discussion/393664) — 35 票 / 9 评论 / 2023-03-10 
+- [10th place solution ](https://www.kaggle.com/competitions/birdclef-2023/discussion/412713) — 33 票 / 8 评论 / 2024-03-04 **write-up?**
+- [Welcome to BirdCLEF 2023 - Meet the hosts](https://www.kaggle.com/competitions/birdclef-2023/discussion/392889) — 29 票 / 34 评论 / 2023-03-07 
+- [32kHz ogg additional data](https://www.kaggle.com/competitions/birdclef-2023/discussion/398318) — 29 票 / 2 评论 / 2023-03-29 
+- [6th place solution: BirdNET embedding + CNN](https://www.kaggle.com/competitions/birdclef-2023/discussion/412708) — 28 票 / 11 评论 / 2023-05-25 **write-up?**
+- [Identifying Audio Duplications](https://www.kaggle.com/competitions/birdclef-2023/discussion/398229) — 27 票 / 8 评论 / 2023-03-29 
+- [BirdNET usage](https://www.kaggle.com/competitions/birdclef-2023/discussion/393023) — 26 票 / 14 评论 / 2023-03-07 
+- [9th Place Solution: 7 CNN Models Ensemble](https://www.kaggle.com/competitions/birdclef-2023/discussion/412794) — 26 票 / 12 评论 / 2023-05-25 **write-up?**
+- [Audio Signal Processing for Machine Learning (Video Series)](https://www.kaggle.com/competitions/birdclef-2023/discussion/394548) — 26 票 / 6 评论 / 2023-03-13 
+- [ Solutions of winners from previous editions of BirdCLEF](https://www.kaggle.com/competitions/birdclef-2023/discussion/393025) — 25 票 / 2 评论 / 2023-03-07 **write-up?**
+- [Tips for BirdCLEF series](https://www.kaggle.com/competitions/birdclef-2023/discussion/394307) — 24 票 / 1 评论 / 2023-03-13 
+- [20th place solution: SED + CNN ensemble using onnx](https://www.kaggle.com/competitions/birdclef-2023/discussion/412742) — 23 票 / 8 评论 / 2023-05-29 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/birdclef-2023/discussion/412903) — 23 票 / 7 评论 / 2023-06-08 **write-up?**
+- [Cleaned and combined labels from 2021, 2022 and 2023 competitions](https://www.kaggle.com/competitions/birdclef-2023/discussion/396838) — 23 票 / 0 评论 / 2023-03-23 
+- [3rd place solution: SED with attention on Mel frequency bands](https://www.kaggle.com/competitions/birdclef-2023/discussion/414102) — 22 票 / 4 评论 / 2025-07-08 **write-up?**
+- [Faster inference using concurrent ThreadPoolExecutor.](https://www.kaggle.com/competitions/birdclef-2023/discussion/401587) — 22 票 / 8 评论 / 2023-04-14 
+- [12th place solution: 8 CNN models ensemble with OpenVINO](https://www.kaggle.com/competitions/birdclef-2023/discussion/412768) — 21 票 / 5 评论 / 2023-05-25 **write-up?**
+- [Previous Audio Competitions](https://www.kaggle.com/competitions/birdclef-2023/discussion/393047) — 21 票 / 1 评论 / 2023-03-07 
+- [What's the difference between Bird 2023 with the past series?](https://www.kaggle.com/competitions/birdclef-2023/discussion/394227) — 21 票 / 5 评论 / 2023-03-12 
+- [How many models can you ensemble?](https://www.kaggle.com/competitions/birdclef-2023/discussion/400899) — 20 票 / 20 评论 / 2023-04-10 
+- [Single Model CV-LB Thread](https://www.kaggle.com/competitions/birdclef-2023/discussion/395185) — 20 票 / 20 评论 / 2023-03-16 
+- [[Chai Time] Interview from BirdCLEF 2022 & Upcoming streams](https://www.kaggle.com/competitions/birdclef-2023/discussion/393109) — 19 票 / 1 评论 / 2023-03-08 
+- [8th Place Solution: Implementing Multimodal Data Augmentation Methods (last updated 05/28)](https://www.kaggle.com/competitions/birdclef-2023/discussion/412871) — 17 票 / 3 评论 / 2023-05-28 **write-up?**
+- [Duplicate audio files in the training data](https://www.kaggle.com/competitions/birdclef-2023/discussion/396506) — 17 票 / 2 评论 / 2023-03-21 
+- [Bird Sound Recordists. Competitions without them? I don't think so.](https://www.kaggle.com/competitions/birdclef-2023/discussion/393314) — 16 票 / 4 评论 / 2023-03-08 
+- [Avoid Timeout by Rounding Your Model's Parameters](https://www.kaggle.com/competitions/birdclef-2023/discussion/409331) — 16 票 / 23 评论 / 2023-05-10 
+- [Notebook timeout error with pretraining](https://www.kaggle.com/competitions/birdclef-2023/discussion/396546) — 15 票 / 24 评论 / 2023-03-22 
+- [BirdCLEF Working Notes. Announcing winners!](https://www.kaggle.com/competitions/birdclef-2023/discussion/392897) — 14 票 / 6 评论 / 2023-03-07 **write-up?**
+- [14-th place solution](https://www.kaggle.com/competitions/birdclef-2023/discussion/413209) — 14 票 / 5 评论 / 2023-05-27 **write-up?**
+- [Summarizing Key Ideas for BirdCLEF 2023](https://www.kaggle.com/competitions/birdclef-2023/discussion/398942) — 14 票 / 4 评论 / 2023-04-01 
+- [Useful External Datasets](https://www.kaggle.com/competitions/birdclef-2023/discussion/397518) — 14 票 / 0 评论 / 2023-03-26 
+- [37th place solution - TF CNN + BirdNet emb. cls. & XGB](https://www.kaggle.com/competitions/birdclef-2023/discussion/412869) — 13 票 / 3 评论 / 2023-05-26 **write-up?**
+- [🐦Learning more about birds and bird calls with Merlin app](https://www.kaggle.com/competitions/birdclef-2023/discussion/396029) — 13 票 / 6 评论 / 2023-03-20 
+- [Using data from previous competitions](https://www.kaggle.com/competitions/birdclef-2023/discussion/394358) — 13 票 / 3 评论 / 2023-03-13 
+- [Why BCE Loss function performs much worse?](https://www.kaggle.com/competitions/birdclef-2023/discussion/400221) — 12 票 / 13 评论 / 2023-04-07 
+- [Please add more significant digits to LB scores](https://www.kaggle.com/competitions/birdclef-2023/discussion/402395) — 12 票 / 8 评论 / 2023-04-18 
+- [[soundscape_id]_[end_time] What is end_time?](https://www.kaggle.com/competitions/birdclef-2023/discussion/393137) — 12 票 / 16 评论 / 2023-03-08 
+- [🏆 Last 2 year's winner solution 🏆](https://www.kaggle.com/competitions/birdclef-2023/discussion/393079) — 12 票 / 0 评论 / 2023-03-07 **write-up?**
+- [24th place solution - pre-training & single model (5 folds ensemble with ONNX)](https://www.kaggle.com/competitions/birdclef-2023/discussion/412996) — 12 票 / 0 评论 / 2023-05-26 **write-up?**
+- [Thanks for increasing substantially the prize. Research and CLEF deserve that attention too.](https://www.kaggle.com/competitions/birdclef-2023/discussion/393074) — 12 票 / 2 评论 / 2023-03-07 
+- [Audio files to NumPy Conversion](https://www.kaggle.com/competitions/birdclef-2023/discussion/397086) — 11 票 / 20 评论 / 2023-03-24 
+- [CUDA error's SED model [solved]](https://www.kaggle.com/competitions/birdclef-2023/discussion/398769) — 10 票 / 0 评论 / 2023-03-31 
+- [Good luck everyone in the private LB](https://www.kaggle.com/competitions/birdclef-2023/discussion/412695) — 10 票 / 8 评论 / 2023-05-24 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/birdclef-2023/discussion/393019) — 9 票 / 8 评论 / 2023-03-07 
+- [Updated Google Base Model: Runs Faster Everywhere](https://www.kaggle.com/competitions/birdclef-2023/discussion/398594) — 9 票 / 7 评论 / 2023-03-30 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/birdclef-2023/discussion/393020) — 8 票 / 66 评论 / 2023-03-07 
+- [What did not work for me](https://www.kaggle.com/competitions/birdclef-2023/discussion/413383) — 8 票 / 3 评论 / 2023-05-28 
+- [Thanks to all! Please add to the discussion of your methods!](https://www.kaggle.com/competitions/birdclef-2023/discussion/412775) — 7 票 / 2 评论 / 2023-05-25 
+- [[Chai Time] Walkthrough of Getting started w/ Nischay](https://www.kaggle.com/competitions/birdclef-2023/discussion/395925) — 7 票 / 0 评论 / 2023-03-19 
+- [🔥 SpeedUp spectogram pipeline with Rapids](https://www.kaggle.com/competitions/birdclef-2023/discussion/396629) — 7 票 / 1 评论 / 2023-03-22 
+- [Need help with librosa [SOLVED]](https://www.kaggle.com/competitions/birdclef-2023/discussion/410300) — 7 票 / 2 评论 / 2023-05-14 
+- [Why does everyone use efficientnet b0 or b1 instead of a larger models ?](https://www.kaggle.com/competitions/birdclef-2023/discussion/401904) — 7 票 / 3 评论 / 2023-04-15 
+- [removing the lowest predictions and normalises the rest improves score](https://www.kaggle.com/competitions/birdclef-2023/discussion/398898) — 7 票 / 4 评论 / 2023-04-01 
+- [Utilize OpenMP on PyTorch](https://www.kaggle.com/competitions/birdclef-2023/discussion/402493) — 6 票 / 2 评论 / 2023-04-18 
+- [No-call dataset: 1000 x 8-second ogg sound files](https://www.kaggle.com/competitions/birdclef-2023/discussion/406616) — 6 票 / 9 评论 / 2023-05-03 
+- [Competition wrap-up and conservation impact](https://www.kaggle.com/competitions/birdclef-2023/discussion/413020) — 5 票 / 1 评论 / 2023-05-26 
+- [Is submission time estimation reliable?](https://www.kaggle.com/competitions/birdclef-2023/discussion/407532) — 5 票 / 5 评论 / 2023-05-06 
+- [Help me broaden the knowledge](https://www.kaggle.com/competitions/birdclef-2023/discussion/395371) — 5 票 / 8 评论 / 2023-03-17 
+- [Matching "scientific name" to "ebird_code"](https://www.kaggle.com/competitions/birdclef-2023/discussion/394054) — 5 票 / 1 评论 / 2023-03-11 
+- [Submission Scoring Error](https://www.kaggle.com/competitions/birdclef-2023/discussion/399506) — 5 票 / 17 评论 / 2023-04-04 
+- [A Guide to Creating Spectrogram Images from Audio with torchaudio](https://www.kaggle.com/competitions/birdclef-2023/discussion/399731) — 5 票 / 1 评论 / 2023-04-05 
+- [Test Dataset - ](https://www.kaggle.com/competitions/birdclef-2023/discussion/396101) — 4 票 / 4 评论 / 2023-03-20 
+- [Window selection for BirdCLEF](https://www.kaggle.com/competitions/birdclef-2023/discussion/397213) — 4 票 / 7 评论 / 2023-03-24 
+- [Sound Event Detection (SED)?](https://www.kaggle.com/competitions/birdclef-2023/discussion/413040) — 4 票 / 0 评论 / 2023-05-26 
+- [How do you submit your notebooks? ](https://www.kaggle.com/competitions/birdclef-2023/discussion/400994) — 3 票 / 4 评论 / 2023-04-11 
+- [BirdClef 2024?](https://www.kaggle.com/competitions/birdclef-2023/discussion/475214) — 3 票 / 4 评论 / 2024-02-07 
+- [763rd Place Solution for the BirdCLEF 2023 Competition](https://www.kaggle.com/competitions/birdclef-2023/discussion/451041) — 3 票 / 0 评论 / 2023-10-26 **write-up?**
+- [what does cmAP stands for ?](https://www.kaggle.com/competitions/birdclef-2023/discussion/395826) — 3 票 / 3 评论 / 2023-03-19 
+- [Read the Robot Mind with BirdClef2023](https://www.kaggle.com/competitions/birdclef-2023/discussion/404792) — 3 票 / 1 评论 / 2023-04-24 
+- [improving score from 0.71](https://www.kaggle.com/competitions/birdclef-2023/discussion/403325) — 3 票 / 6 评论 / 2023-04-22 
+- [Introducing LAPE: A framework for SSL-based pre-training with audio](https://www.kaggle.com/competitions/birdclef-2023/discussion/403590) — 3 票 / 2 评论 / 2023-04-24 
+- [BirdCLEF 2023 Spectrogram Image Dataset](https://www.kaggle.com/competitions/birdclef-2023/discussion/399730) — 3 票 / 0 评论 / 2023-04-05 
+- [ What do call and song mean in the data set?](https://www.kaggle.com/competitions/birdclef-2023/discussion/405568) — 3 票 / 4 评论 / 2023-04-28 

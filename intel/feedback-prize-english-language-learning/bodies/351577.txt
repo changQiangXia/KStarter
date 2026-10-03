@@ -1,0 +1,177 @@
+# https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/351577
+
+Topic #351577: RAPIDS SVR starter kit [CV 0.450, LB 0.44x]
+  Author: Chris Deotte
+  Posted: 2022-09-11 01:07:56.203000
+  Votes: 197  Comments: 58
+
+This Feedback Prize competition is very similar to Kaggle's PetFinder competition. Both are regression tasks utilizing pretrained CNN and/or Transformers. 
+
+The 1st place solution in PetFinder (by Giba here) extracted embeddings from dozens of not-finetuned models and then trained and predicted with RAPIDS cuML SVR using the concatenated 10,000's of columns of embeddings. This works well in this competition too as an alternative to the current public notebooks which all use common NLP training techniques.
+
+RAPIDS cuML SVR
+
+
+
+Starter Notebook
+
+I published a started notebook here which achieves CV 0.4505 and LB 0.44x without finetuning any NLP transformers! The notebook simply extracts embeddings from downloaded Hugging Face transformers and then trains and infers a RAPIDS cuML SVR.
+
+How To Improve
+
+There are many ways to improve this starter notebook
+
+
+
+We can try adding embeddings from the dozens of other Hugging Face models such as BERT, RoBERTa, Funnel, Electra, etc
+
+We can try finetuning the transformers before using SVR. Note: you must finetune models using the same folds that you wish to train SVR with 
+
+We can try using models that have been trained on another task such as Feedback competition 1 and 2. Just take the trained models, remove the head, extract embeddings, and train RAPIDS SVR ! 
+
+We can add columns of meta features like "number of unique words", "length of text", "number of misspellings" etc
+
+We can extract embeddings from other layers from NN like second to last hidden, or the token embedding layer, or the output from some special pretrained head, etc etc
+
+
+Enjoy!
+
+Comments:
+├─ Wilmer E. Henao (2022-10-07 14:46:55.970000) [+6]
+│  I built a few spacy linguistic features notebook that fits right in with this approach. If you want to try it it's the notebook:
+│  
+│  https://www.kaggle.com/code/verracodeguacas/spacy-linguistic-featur...
+├─ [deleted] (2022-09-12 12:58:20.363000) [+3]
+│  Good work！👍
+│  I am currently trying to use BERT to see how it works.😄
+  ├─ Chris Deotte (2022-09-12 13:02:39.897000) [+15]
+  │  Great. Note that you can speed up inference by saving the trained SVR during one notebook version, then loading the saved model during a subsequent version. This avoids needing to extract the train...
+  ├─ [deleted] (2022-09-12 13:06:56.630000) [+3]
+  │  Thank you for making these available!
+  │  This is very friendly for students like us. 😄😄Thank you so much!
+  ├─ Steve Roberts (2022-09-23 10:59:12.723000) [+1]
+  │  Hi @cdeotte - I think you may be missing the line to save the SVR in the "if LOAD_SVR_FROM_PATH is None" section? 
+  │  I think this is needed:
+  │  
+  │  pickle.dump(clf, open(name, "wb"))
+  │  
+  │  And thanks for the co...
+  ├─ Chris Deotte (2022-09-23 20:55:09.807000) [+3]
+  │  @steveroberts thank you Steve, you are correct. I forgot to add saving. I just updated my post.
+  │  
+  │  Note that I found another way to speed up inference. The training of all 25 folds SVR takes under 1 ...
+  ├─ Steve Roberts (2022-09-24 11:40:23.780000) [+0]
+  │  @cdeotte - do you find the numpy array method to be faster than loading the trained SVRs? Would it not be slightly faster to load each pre-trained SVR rather than training them in the inference not...
+  ├─ Chris Deotte (2022-09-24 17:05:23.427000) [+2]
+  │  Loading saved SVR models will be faster by 1 minute. But saving the embeddings instead of SVR models, uses less Kaggle dataset quota and allows me to use a different version of RAPIDS offline compa...
+├─ yao (2022-09-11 05:25:03.767000) [+4]
+│  It is Amazing that achieve such score without fine-tune the embedding! Thanks for sharing! Always learn a lot from you!
+├─ Dynastes hercules (2022-11-16 09:14:53.630000) [+1]
+│  Thanks for sharing the great notebook!!
+  ├─ Chris Deotte (2022-11-17 02:26:30.430000) [+1]
+  │  Thanks Dynastes!
+├─ recha_wine (2022-11-16 03:36:06.677000) [+1]
+│  Thanks for your sharing, it's really helpful to me !👍
+├─ tomo (2022-10-16 14:06:20.453000) [+1]
+│  @cdeotte 
+│  Thanks for sharing the great notebook.
+│  I have a question: is it correct to create oof_embedding and train SVR with the same CV when I use SVR for my own trained model?
+│  When I apply this t...
+  ├─ Chris Deotte (2022-10-29 23:56:40.363000) [+3]
+  │  yes. You just need to use the same folds for training transformers and then the same folds for training SVR
+  │  
+  │  (technically, you need to do nested CV to prevent train leaks, but using same folds both...
+  ├─ tomo (2022-11-04 02:37:58.560000) [+1]
+  │  I understand. Thank you!
+├─ Apa (2022-10-10 16:09:34.173000) [+1]
+│  Generally speaking, the tree model is better than most machine learning models. I would like to ask the author why not choose the tree model but svc
+  ├─ Chris Deotte (2022-10-10 16:30:04.120000) [+10]
+  │  The best way to determine which is better for a particular task is try both. I choose SVR here because it has built in feature reduction and will not overfit if we have thousands of columns with le...
+├─ Oscar Aguilar (2022-09-24 01:12:32.353000) [+1]
+│  This is very insightful! Thanks for sharing Chris!
+├─ @kaggleqrdl (2022-09-24 00:14:49.793000) [+1]
+│  Quite surprising to see LB bump up against .43 ceiling so quickly, whereas this very elegant, but still very un-finetuned notebook was able to hit .44
+│  
+│  I don't know of too many competitions that ha...
+  ├─ @kaggleqrdl (2022-09-24 16:18:24.977000) [+0]
+  │  It sort of brings up an interesting meta point. Simplicity of model provides a lot of value, from an engineering perspective.  Going from 44 to 43 and squeezing out those gains via perhaps an intri...
+  ├─ Wilmer E. Henao (2022-09-27 01:22:50.903000) [+2]
+  │  My guess is that this is the 3rd feedback competition. At this point, we already know more or less all the tricks in these datasets.
+  ├─ @kaggleqrdl (2022-09-27 04:14:25.703000) [+0]
+  │  Good point.  Hopefully we'll break this ceiling.
+├─ Rishab Dekate (2022-09-17 14:05:16.027000) [+1]
+│  Very interesting and simply explaned
+├─ Amirdha Varshini Selvaraj (2022-09-16 10:00:32.183000) [+1]
+│  This is Informative and interesting…  @cdeotte
+├─ Philip Akomolafe (2022-09-13 23:56:21.597000) [+1]
+│  Nice.. would love to check 'em out
+├─ Raimondo Melis (2022-09-13 12:42:43.823000) [+1]
+│  Hi @cdeotte, I think it would be really useful if you created a small notebook demo on handling different versions of the notebook to save time and resources. For example, one question that comes t...
+  ├─ Chris Deotte (2022-09-13 23:04:36.043000) [+6]
+  │  The main reason to use different versions is to make our submit notebooks execute as fast as possible. Therefore a submit notebook (which is different than a commit notebook) should perform no trai...
+  ├─ Raimondo Melis (2022-09-14 07:43:35.903000) [+1]
+  │  Perfect!!! thank you
+├─ Rahul Pandey (2022-09-13 08:20:54.910000) [+1]
+│  Great to know about that @cdeotte. I would definitely use to test it.
+├─ Sitraka_Forler (2022-09-12 20:31:30.787000) [+1]
+│  Wow nice! (And concise!!)
+├─ Litchy (2022-10-10 06:48:24.330000) [+2]
+│  Thanks for sharing. This is incredible. I thought this no-finetuned assemble could not perform better than a single finetuned one but it turns out that the single finetuned one could hardly be unde...
+├─ Eisuke Okuda (2022-10-02 05:19:24.170000) [+2]
+│  I tried embeddings from trained models and the result was somehow worse. What do you think that is?
+├─ @kaggleqrdl (2022-09-14 01:31:44.713000) [+2]
+│  Awesome, as always.  I love the rapids svr approach.  So easy to understand :)  Just throw a lot of data at it, and let rapids sort the mess out!  :D
+├─ Chris Deotte (2022-09-12 19:07:03.670000) [+2]
+│  UPDATE: I added two more bullet points of ideas to improve SVR model
+  ├─ [deleted] (2022-09-13 11:43:20.720000) [+0]
+  │  [deleted]
+  ├─ Chris Deotte (2022-09-16 14:16:54.383000) [+6]
+  │  My current best SVR 5-Folds is CV 0.446 LB 0.43x using some bullet points and I still have more bullet points to try!
+  ├─ [deleted] (2022-09-16 14:21:56.350000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-09-18 09:59:51.703000) [+0]
+  │  [deleted]
+  ├─ Chinartist (2022-10-02 18:23:43.767000) [+0]
+  │  MLM doesn't always work, it depends your training strategy and dataset.
+├─ Shubhank Sharma (2022-09-12 12:56:47.787000) [+2]
+│  Simple Explanation
+├─ Riju (2022-09-12 07:16:39.950000) [+2]
+│  It was very informative! Thanks for shearing🙂
+├─ Ahmed Mamdouh (2022-09-13 22:45:04.590000) [+0]
+│  This is very interesting. I appreciate your effort. Thanks
+├─ Paulo Loyola (2022-09-13 14:27:16.513000) [+1]
+│  This is very interesting. I appreciate your effort. Thanks
+├─ Boris Polishchuk (2022-11-30 07:53:45.593000) [+0]
+│  Congratulations with the well-deserved 3rd place!
+├─ Simon Veitner (2022-10-14 16:26:06.053000) [+0]
+│  Hello,
+│  could someone explain why PL doesn't bring improvement for the svm?
+│  I use similar approach as in notebooks with some improvements.
+│  I proceeded as follows:
+│  1) Made for each fold prediction of...
+├─ [deleted] (2023-08-24 23:20:00.953000) [+0]
+│  [deleted]
+├─ [deleted] (2022-11-22 01:37:47.310000) [+0]
+│  [deleted]
+├─ [deleted] (2022-09-25 10:30:50.570000) [+1]
+│  [deleted]
+├─ Jaycezhao (2022-11-10 07:30:39.857000) [+1]
+│  Thanks for sharing
+├─ [deleted] (2022-10-27 09:23:58.057000) [+1]
+│  [deleted]
+├─ [deleted] (2022-10-07 13:30:23.360000) [+1]
+│  [deleted]
+├─ [deleted] (2022-10-06 22:30:44.640000) [+1]
+│  [deleted]
+├─ [deleted] (2022-10-04 02:17:52.110000) [+1]
+│  [deleted]
+├─ [deleted] (2022-10-02 08:40:13.073000) [+1]
+│  [deleted]
+├─ [deleted] (2022-09-27 07:50:43.007000) [+1]
+│  [deleted]
+├─ [deleted] (2022-09-14 14:42:52.660000) [+1]
+│  [deleted]
+├─ [deleted] (2022-09-12 11:41:53.493000) [+1]
+│  [deleted]
+├─ [deleted] (2022-11-22 01:37:02.920000) [+-1]
+│  [deleted]

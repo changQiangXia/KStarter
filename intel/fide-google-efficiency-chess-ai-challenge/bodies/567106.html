@@ -1,0 +1,41 @@
+<p>I'm sharing the solution that earned 9th place. The final code is publicly available at the following link:</p>
+<p><a href="https://github.com/ymgaq/Cfish_kaggle" target="_blank">https://github.com/ymgaq/Cfish_kaggle</a></p>
+<h1>Selecting the Base Program</h1>
+<p>After testing multiple chess engines, I finally chose <a href="https://github.com/syzygy1/Cfish" target="_blank">Cfish</a>.</p>
+<p>As noted by other top participants, Cfish has the advantage of lower memory consumption due to glibc compared to C++-based engines. Additionally, in Kaggle's single-core environment, it appeared to slightly outperform Stockfish in search speed.</p>
+<h1>Memory Optimization</h1>
+<ul>
+<li>Removed NNUE, relying exclusively on HCE evaluations.</li>
+<li>Reduced the Transposition Table size to 1MB.</li>
+<li>Counter Move History:<ul>
+<li>Reduced branching by merging conditions (inCheck, CaptureOrPromotion) (1/4 reduction).</li>
+<li>Changed Counter Move History indexing from pieces to types of pieces (1/2 reduction).</li></ul></li>
+<li>Reduced Material Table and Pawn Hash Table sizes to 1024.</li>
+</ul>
+<p>These adjustments resulted in memory usage of around 4MB.</p>
+<h1>Binary Size Compression</h1>
+<ul>
+<li>Removed unnecessary functions and classes (NNUE, Bench, TBProbe, PolyBook, NUMA, etc.).</li>
+<li>Removed unnecessary UCI options.</li>
+<li>Optimized build commands:<ul>
+<li>make build -j ARCH=x86-64-bmi2 EXTRACFLAGS="-ffunction-sections -fdata-sections" EXTRALDFLAGS="-Wl,--gc-sections"</li></ul></li>
+<li>Used <code>strip</code> command.</li>
+<li>Compressed binary with <code>upx --lzma</code>.</li>
+</ul>
+<p>These reductions allowed the binary size to remain under 64KB, even with O3 optimization instead of Os.</p>
+<h1>Enhanced Search</h1>
+<p>Cfish’s search initially matched Stockfish13 but was modified to resemble Stockfish16’s HCE search methods and parameters. This modification improved the engine by roughly +30 elo compared to the original search implementation. By using O3 instead of Os optimization, the average search speed increased by approximately 8-9% in Kaggle's CPU environment.</p>
+<h1>SPSA</h1>
+<p>Chess engines commonly use a powerful black-box optimization method called <a href="http://www.jhuapl.edu/spsa/PDF-SPSA/Spall_Implementation_of_the_Simultaneous.PDF" target="_blank">SPSA</a> (Simultaneous Perturbation Stochastic Approximation).</p>
+<p>Simply put, two versions of the engine with parameters perturbed by +δ and -δ compete against each other, and the winning version’s adjustments are accepted. By randomly perturbing and testing all parameters simultaneously and repeating matches, the optimal parameters are identified.</p>
+<p>While robust SPSA libraries such as <a href="https://github.com/official-stockfish/fishtest" target="_blank">fishtest</a> or <a href="https://github.com/AndyGrant/OpenBench" target="_blank">OpenBench</a> exist, I opted for a simple custom SPSA script optimized for a single local machine. <a href="https://github.com/ymgaq/Cfish_kaggle/blob/kaggle_update_params_o3/scripts/spsa.py" target="_blank">My script</a>, around 400 lines, was based on literature and an available <a href="https://github.com/zamar/spsa" target="_blank">Perl implementation</a>. It utilizes cutechess-cli and runs SPSA tests concurrently on multiple threads, adopting the competition’s 2000-opening book and 10-second time controls.</p>
+<p>This straightforward approach yielded approximately +30 elo improvements, pushing my solution to a Gold Medal.</p>
+<p>Considering the randomness of the LB, I submitted two identical binaries as my final submission.</p>
+<h1>Other Attempts (Not Adopted)</h1>
+<ul>
+<li>Tested Ethereal according to publicly shared notebooks.</li>
+<li>Evaluated memory optimization strategies for all HCE versions of Stockfish 6 to 16. Migrated to Cfish to meet the 5MB memory constraint.</li>
+<li>Attempted training a (768x2)-10-1 NNUE network using bullet, but unfortunately, I could not surpass the performance of HCE.</li>
+<li>SPSA adjustments for time control parameters were not effective in LB testing, hence not adopted.</li>
+</ul>
+<p>I found other winning solutions utilizing NNUE and neural networks extremely intriguing and slightly regret limiting my approach exclusively to HCE. Though this was my first experience developing a chess engine, optimizing within constraints akin to embedded systems proved highly engaging. I extend my sincere gratitude to the competition organizers and fellow participants for their extensive and valuable contributions.</p>

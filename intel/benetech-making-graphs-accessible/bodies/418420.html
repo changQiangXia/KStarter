@@ -1,0 +1,99 @@
+<p>First of all, congrats to all the participants especially to those that managed to stick it to the end. This was overall a really interesting challenge, and we really enjoyed tackling it. Anyone in 0.86+ public scores could've taken the win so we're glad we dropped only 2 spots.</p>
+<p>Thanks to <a href="https://www.kaggle.com/crodoc" target="_blank">@crodoc</a> for the great teaming experience, we had two different opinions on how to tackle the problem : he went for and end-to-end approach whereas I wanted to do object detection &amp; OCR. This proved to be ideal for this competition as object detection compensated for end-to-end weaknesses.</p>
+<h2>Overview</h2>
+<p><a href="https://ibb.co/qFXF9vq"><img src="https://i.ibb.co/84T42Hv/cls.png" alt="cls"></a></p>
+<p>Our solution is a two-step pipeline, where the first step is a simple classification task and the second step solves the task for the different chart types. For scatter and dot plots, we used a detection approach. For line and bar charts, Matcha was really strong. Here are our LB scores :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Overall</th>
+<th>Scatter</th>
+<th>Dots</th>
+<th>Line</th>
+<th>Horizontal Bar</th>
+<th>Vertical Bar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Public</strong></td>
+<td>0.87</td>
+<td>0.09</td>
+<td>0</td>
+<td>0.33</td>
+<td>0.04</td>
+<td>0.39</td>
+</tr>
+<tr>
+<td><strong>Private</strong></td>
+<td>0.71</td>
+<td>0.28</td>
+<td>0.01</td>
+<td>0.13</td>
+<td>0.01</td>
+<td>0.27</td>
+</tr>
+</tbody>
+</table>
+<h2>Validation &amp; Insights</h2>
+<p>From the description page : </p>
+<blockquote>
+  <p>The extracted figures in the training and public test sets are drawn from the same set of sources. The figures in the private test set are drawn from a distinct set of sources.</p>
+</blockquote>
+<p>Public LB is leaky, we need to create models that generalize to new data sources. Therefore, we use all the extracted data as validation, and train only on generated data. Data provided by the hosts is not diverse enough to allow for generalization so we generated our own. Matcha and classification models were fullfit on all the data after careful parameter optimization, but detection models were not trained on any extracted data.</p>
+<p>For validating on dots, we used a small curated dataset of 20 images found on google images. We estimated via probing that there are between 100 and 125 dots in the test set, all of them most likely being in the private test set. We did not probe for scatter though, this would've been helpful. </p>
+<h2>Step 1 - Classification</h2>
+<p>Nothing too fancy here, we trained models on (benetech + theo +  crodoc) generated data.</p>
+<p><strong>Main parameters:</strong></p>
+<ul>
+<li>2 epochs on 88k images. </li>
+<li>lr <code>3e-4</code> or <code>5e-4</code>  (2 lrs for blend, we also used 2 seeds).</li>
+<li>Mixup and some color augmentations mostly.</li>
+<li>256x384 image size.</li>
+<li>NfNet-l2 with 0.2 dropout.</li>
+</ul>
+<h2>Step 2.a - Scatter</h2>
+<p><a href="https://ibb.co/5v4cM9C"><img src="https://i.ibb.co/ct3TgvR/scatter-pipe.png" alt="scatter-pipe"></a></p>
+<p>For scatter, we relied on <a href="https://github.com/Megvii-BaseDetection/YOLOX" target="_blank">YoloX</a> to detect all markers. Cached is used to take care of the other useful elements. If all the points are detected correctly, it’s not that complicated to infer the target : detect the ticks &amp; labels, read the labels, and interpolate !</p>
+<p><strong>More details:</strong></p>
+<ul>
+<li>Ensemble YoloX-m and YoloX-l with NMS, helps reduce the number of FNs.</li>
+<li>Models are trained on scatter + dot generated benetech data + a bunch of plots I generated and pseudo labeled, for 10 epochs.</li>
+<li>CV 0.67, public LB 0.09~, private 0.29 - performance drop almost exclusively comes from overlapping/too hard to detect markers.</li>
+<li>Bunch of post-processing to make the pipeline more robust to OCR mistakes and detection mistakes.</li>
+<li>We were initially using Yolo-v7, but had to switch to YoloX because of the first rule change. It took us a week to match Yolo-v7 performance with YoloX.</li>
+</ul>
+<h2>Step 2.b - Dots</h2>
+<p><a href="https://ibb.co/sgMLzxG"><img src="https://i.ibb.co/TwFzdjS/dot-pipe.png" alt="dot-pipe"></a></p>
+<p>Dot pipeline is similar to scatter, but a bit more simple. We detect the points and cluster them, and map them to the detected x-labels. Labels with no assigned cluster are given the target 0, others the number of detected points. Counting points is not really robust to detection mistakes, so instead we used the height of the uppermost point and interpolated.</p>
+<h2>Step 2.c - Bars &amp; Lines</h2>
+<p>Matcha was really powerful here. We used <code>matcha-base</code> and set <code>is_vqa=False</code> to avoid giving texts as input to the model.</p>
+<p>We trained Matcha to predict chart type, xs and ys for an image. The ground truth looked the same as <a href="https://www.kaggle.com/nbroad" target="_blank">@nbroad</a> used for his donut approach (except we dropped the prompt token). We tried other approaches, but this worked best :</p>
+<pre><code> = X_START + .join(list(map(str, xs))) + X_END
+ = Y_START + .join(list(map(str, ys))) + Y_END
+ =  + chart_type +  + x_str + y_str
+</code></pre>
+<p>e.g: <code>&lt;line&gt;&lt;x_start&gt;0;2;4;6&lt;x_end&gt;&lt;y_start&gt;2.7;2.2;3.6;5.2;&lt;y_end&gt;</code></p>
+<p>The most valuable boost we got by generating additional charts using matplotlib. We reused the values and texts from the train dataset to generate ticks &amp; values, with different styles/patterns/fonts/colors for diversity. The code for generating additional images has around 1000 lines and basically covers most cases where the model was failing when validated on the "extracted" dataset (e.g. negative values, line edges, missing bars, multiline text, text rotations).</p>
+<p><strong>Other things that helped :</strong></p>
+<ul>
+<li>Fix the number of decimal points for numerical values using their range :<br>
+<code>number_of_decimals = max(0, round(np.log10(1/ (max(y_ticks) - min(y_ticks))) + 3)</code></li>
+<li>We use an additional chart type : histograms, to learn that such charts have one less y value. </li>
+<li>Add an additional cross entropy loss for chart types.</li>
+<li>Ensemble several (4) models  (+0.01 public) :<ul>
+<li>Voting to compute the number of outputs and fix obvious mistakes.</li>
+<li>Voting for categorical predictions.</li>
+<li>Averaging for continuous predictions.</li></ul></li>
+</ul>
+<p><strong>More details:</strong></p>
+<ul>
+<li>lr 3e-5, cosine with 0.25 cycle.</li>
+<li>10 Epochs.</li>
+<li>Save weights every 0.25 epochs and use a model soup of all checkpoints from epoch &gt; 1.</li>
+<li>Augs : Color transforms, image compression and random scaling.</li>
+</ul>
+<h2>Final Words</h2>
+<p>We were greatly perturbed by the unexpected second rule change, especially considering the fact that I was on vacation. Matcha and classification models were retrained on ICDAR during the last 3 days, this gave a 0.01 public LB boost but nothing on private. </p>
+<p>Thanks for reading !</p>

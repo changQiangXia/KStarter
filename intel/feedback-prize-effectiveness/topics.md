@@ -1,0 +1,82 @@
+# feedback-prize-effectiveness 讨论区（按票数排序，共 80 条）
+
+- [Team Hydrogen: 1st place solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347536) — 141 票 / 26 评论 / 2022-09-05 **write-up?**
+- [Some more lessons](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347425) — 107 票 / 19 评论 / 2022-08-24 
+- [2nd place solution (updated with code/notebooks)](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347359) — 94 票 / 59 评论 / 2022-09-05 **write-up?**
+- [The Rise of DeBERTa for NLP Downstream Tasks – Grandmaster Series, E7](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/332438) — 91 票 / 2 评论 / 2022-06-21 
+- [My single model experiment log (how to get to LB: 0.624)](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/333277) — 90 票 / 30 评论 / 2022-06-25 
+- [Token Classification Approach](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/338271) — 88 票 / 13 评论 / 2022-07-19 
+- [3rd Place Solution - Span MLM + T5 Augmentations](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347433) — 77 票 / 45 评论 / 2022-09-06 **write-up?**
+- [0.577 single model with full code](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347713) — 77 票 / 10 评论 / 2022-08-25 
+- [Team Hydrogen: Efficiency Prize 1st Place](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347537) — 75 票 / 11 评论 / 2022-08-24 **write-up?**
+- [Three(till now) ways to use the 'discourse_type' in your model](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/327251) — 68 票 / 1 评论 / 2022-05-26 
+- [3rd Place - Short Solution ](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347371) — 62 票 / 30 评论 / 2022-08-24 **write-up?**
+- [Share Best Single Models CV Scores](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/327330) — 62 票 / 143 评论 / 2022-05-26 
+- [Optimization approaches for Transformers](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/331452) — 58 票 / 22 评论 / 2022-06-17 
+- [[5th Solution] - Tri's part - Token classification approach and Pseudo labeling](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347369) — 57 票 / 17 评论 / 2022-08-24 **write-up?**
+- [Feedback is back! Here is how to get started with NLP!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326867) — 55 票 / 9 评论 / 2022-05-24 
+- [The Tricks of the Previous Feedback Competition Winners](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/327056) — 51 票 / 0 评论 / 2022-05-25 
+- [🔥🔥Congratulations to Debarshi Chanda for becoming Kaggle Notebooks Grandmaster](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/335238) — 50 票 / 26 评论 / 2022-07-05 
+- [[5th Solution] - housuke's part - Private 0.572, Public 0.566 with single model](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347379) — 49 票 / 19 评论 / 2022-08-24 **write-up?**
+- [Is there any leak in this competition?](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/339387) — 48 票 / 20 评论 / 2022-07-24 
+- [5th place solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347387) — 47 票 / 0 评论 / 2022-08-24 **write-up?**
+- [Gradient checkpointing](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/336278) — 46 票 / 32 评论 / 2022-07-10 
+- [This is why you do EDA](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/331544) — 45 票 / 11 评论 / 2022-06-17 
+- [Grandmaster Series – Building NLP Models using Transformers](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326953) — 43 票 / 4 评论 / 2022-05-25 
+- [Efficiency Track 2nd Place Solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347488) — 43 票 / 22 评论 / 2022-08-24 **write-up?**
+- [15th | How to train deberta & NLP tricks](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347381) — 43 票 / 11 评论 / 2022-08-24 
+- [Watch out for duplicated discourse_text with different discourse_effectiveness](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/337057) — 41 票 / 3 评论 / 2022-07-14 
+- [Thoughts about instability training and validation](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/334093) — 40 票 / 35 评论 / 2022-06-29 
+- [My Experiments + Tips & Tricks + Cross Validation](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/330217) — 40 票 / 8 评论 / 2022-06-11 
+- [Thanks for participating!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347585) — 37 票 / 5 评论 / 2022-08-24 
+- [[11th solution] Feature design and Knowledge distillation](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347386) — 37 票 / 14 评论 / 2022-08-24 **write-up?**
+- [Tips and Tricks from past text classification competitions ](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/335896) — 36 票 / 2 评论 / 2022-07-08 
+- [Simple GroupKFold might cause overfitting.](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/329383) — 34 票 / 1 评论 / 2022-06-06 
+- [Efficiency Prize Track](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/328485) — 33 票 / 24 评论 / 2022-06-01 
+- [ASAP data is not available for Feedback Prize](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/342814) — 33 票 / 0 评论 / 2022-08-08 
+- [Click here if you just pretend to understand DeBERTa](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/332925) — 33 票 / 6 评论 / 2022-06-24 
+- [My single model experiment log continued (getting to LB 0.588 - 5 folds)](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347353) — 33 票 / 10 评论 / 2022-08-24 
+- [12th place solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347490) — 32 票 / 9 评论 / 2022-08-24 **write-up?**
+- [Mixout against overfitting](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/336659) — 31 票 / 6 评论 / 2022-07-12 
+- [Deberta-large pretrained on Feedback dataset](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/329746) — 31 票 / 9 评论 / 2022-06-08 
+- [Ideas for training better language models](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/335221) — 31 票 / 0 评论 / 2022-07-05 
+- [88th place solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347456) — 30 票 / 8 评论 / 2022-08-24 **write-up?**
+- [4th Place Solution - Team ...](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347692) — 28 票 / 3 评论 / 2022-08-25 **write-up?**
+- [Ideas for using the 2021 Feedback Competition dataset](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/327929) — 28 票 / 2 评论 / 2022-05-30 
+- [Feedback 2.0 Meme Thread!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/336733) — 27 票 / 9 评论 / 2022-07-12 
+- [Efficiency Track Resources](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/328070) — 27 票 / 0 评论 / 2022-05-30 
+- [Greetings from the organizers!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326884) — 26 票 / 4 评论 / 2022-05-24 
+- [DeepSpeed Compression](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/339147) — 26 票 / 6 评论 / 2022-07-23 
+- [How to debug submissions](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/335350) — 25 票 / 6 评论 / 2022-07-05 
+- [Now You See Me: 7th Place Solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347891) — 25 票 / 4 评论 / 2022-09-19 **write-up?**
+- [Winning solutions of past Kaggle challenges involving text classification](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326998) — 25 票 / 2 评论 / 2022-05-25 **write-up?**
+- [Post-compitition: what I want to know in the coming days? Answers highly appreciated in your winner solution description](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347112) — 24 票 / 9 评论 / 2022-08-22 **write-up?**
+- [Congrats to my teammates for becoming Competition GMs](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347360) — 24 票 / 10 评论 / 2022-08-24 
+- [how to decrease inference time ](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/335074) — 23 票 / 9 评论 / 2022-07-04 
+- [Tips to Reduce Inference Time?](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/334077) — 23 票 / 16 评论 / 2022-06-29 
+- [ML Engineering Practices for Kaggle Competitions?](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347931) — 21 票 / 15 评论 / 2022-08-26 
+- [Fixing Class Imbalance](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/338857) — 21 票 / 12 评论 / 2022-07-22 
+- [Incorrect about some discourse_text](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/336277) — 21 票 / 4 评论 / 2022-07-10 
+- [Private 23rd solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347356) — 20 票 / 5 评论 / 2022-08-24 **write-up?**
+- [Solutions of Previous Feedback Prize Competition](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326870) — 20 票 / 4 评论 / 2022-05-24 **write-up?**
+- [Congratulations to new Kaggle Competitions GM!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347419) — 20 票 / 4 评论 / 2022-08-24 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326861) — 19 票 / 114 评论 / 2022-05-24 
+- [Error Analysis - Visualize Transformer's Attention heads](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/333412) — 19 票 / 1 评论 / 2022-06-26 
+- [Good Ineffective - 6th top solution: simple and effective ](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/352458) — 19 票 / 10 评论 / 2022-09-14 **write-up?**
+- [Validation Strategy - Stratified Group Kfold](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/332848) — 18 票 / 5 评论 / 2022-06-23 
+- [My 6th NLP medal 🎉](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347877) — 18 票 / 5 评论 / 2022-08-25 
+- [24th Short Solution](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347418) — 18 票 / 0 评论 / 2022-08-24 **write-up?**
+- [Links to all top solutions so far...](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347450) — 18 票 / 5 评论 / 2022-08-24 **write-up?**
+- [[Chai Time] Sanyam Bhutani interviews Sirius about his latest NLP gold medal](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/336091) — 17 票 / 4 评论 / 2022-07-09 **write-up?**
+- [Biggest difference for me so far :) ](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/341127) — 17 票 / 25 评论 / 2022-08-01 
+- [Latent Space Tricks for Improved Training](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/330426) — 17 票 / 0 评论 / 2022-06-12 
+- [Winning Solutions of The Most Recent NLP Competition 💥💥💥](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/333063) — 16 票 / 1 评论 / 2022-06-24 **write-up?**
+- [Prompts for each essay](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/327514) — 16 票 / 2 评论 / 2022-05-27 
+- [When is a good time to start ensembling?](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/335650) — 15 票 / 7 评论 / 2022-07-07 
+- [DeBERTa V3 Baseline Starter Kit [LB 0.694]](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/327059) — 15 票 / 0 评论 / 2022-05-25 
+- [CV score could be NaN, but Loss is still ok!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/329928) — 15 票 / 0 评论 / 2022-06-09 
+- [72th short solution (2 stage model)](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347383) — 15 票 / 7 评论 / 2022-08-24 **write-up?**
+- [[Chai Time] Feedback Prize #1 - Top Solutions Explained on YouTube](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/342461) — 15 票 / 4 评论 / 2022-08-07 **write-up?**
+- [Efficiency Leaderboard Update](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/342106) — 12 票 / 6 评论 / 2022-08-05 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/326860) — 11 票 / 2 评论 / 2022-05-24 
+- [Requesting Feedback on the Efficiency Prize Evaluation!](https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/348953) — 9 票 / 2 评论 / 2022-08-30 

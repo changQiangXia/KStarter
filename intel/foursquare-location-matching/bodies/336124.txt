@@ -1,0 +1,427 @@
+# https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336124
+
+Topic #336124: 13th place solution (GNN)
+  Author: 213tubo
+  Posted: 2022-07-09 12:56:45.730000
+  Votes: 102  Comments: 34
+
+First of all, this competition would have been better without the leak.
+It is very sad that because of the leak, we can no longer distinguish between a good solution and a overfitting solution.
+
+Summary
+
+
+
+My solution consists of four stages
+
+
+
+Candidate generation
+
+
+1st stage: Create candidates
+
+2nd stage: Filtering by LightGBM
+
+Matching
+
+
+3rd stage: match prediction by xlm-roberta-base and mdeberta-base-v3
+
+PostProcessing
+
+
+4th stage: Node Classification by GNN
+
+
+Cross validation strategy
+
+GroupKFold(n_splits=2, group='point_of_interest')
+The CV score of my solution is 0.920
+
+1st stage
+
+
+
+
+Generates 60 candidates per id
+
+
+
+30 candidate neighborhoods per id using cosine similarity of text embedding by Tfidf
+
+
+text: name, categories, address, city, state in a one sentence
+
+30 candidate neighborhoods by haversine distance for per id
+
+
+2nd stage
+
+
+
+Reduce to 3.7M pairs with high match probability using LightGBM
+
+Features
+
+
+Missing value or not(name, cat)
+
+jaro(name, categories, address, city, state, zip, url, phone)
+
+leven(name, categories, address, city, state, zip, url, phone)
+
+haversine
+
+cos sim(tfidf embedding)
+
+mean top_k haversine, tfidf (k=5, 10, 15)
+
+Using ForestInference
+
+Max IoU: 0.971
+
+
+3rd stage
+
+
+
+Predicts matche using a language model like DITTO
+
+model: xlm-roberta-base and mdeberta-base-v3
+
+Input
+
+
+text: name_1 + [SEP] + name_2 + [COL] + categories_1 + [SEP] + categories_2 + [COL] + address_1 + [SEP] + address_2 + [COL] + city_1 + [SEP] + city_2 + [COL] + state_1 + [SEP] + state_2 + [COL] + zip_1 + [SEP] + zip_2
+
+numerical_feature
+
+haversine
+
+mean top_k haversine(k=5, 10, 15)
+
+Training method
+
+
+multitask learning: match and country (+0.003)
+
+augmentation
+
+
+import nlpaug as naw
+    aug_list = [
+  naw.RandomWordAug(action='swap', aug_p=0.1), 
+  naw.RandomWordAug(action='delete', aug_p=0.1), 
+  naw.SplitAug(aug_p=0.1)
+]
+
+
+
+
+flip id_1, id_2
+
+TTA: flip id_1, id_2
+
+
+4th stage
+
+This stage is the most important part of my solution.
+By using GNN, both CV and LB are improved by about 0.02x.  
+
+Predicts the matching id for id_1 using GNN.
+
+
+
+Create a 2-hop-subgraph for each id_1(max iou: 0.993)  
+example , Suppose the following table is given and we predict the id matching A.
+
+
+
+
+
+id_1
+id_2
+
+
+
+
+A
+B
+
+
+B
+A
+
+
+B
+C
+
+
+B
+D
+
+
+C
+D
+
+
+D
+B
+
+
+E
+A
+
+
+E
+F
+
+
+F
+E
+
+
+
+
+In this case, the 2-hop-subgraph for A is as follows(Think in terms of undirected graphs)
+
+
+
+
+
+Predict whether each node matches id_1
+
+Nodes that exceed the threshold are set as matches for id_1
+
+
+Details
+
+
+
+Model
+This model is based on the top solution of the Japanese competition platform atmaCup.
+
+
+class SimpleGCN(nn.Module):
+    def __init__(self,
+                 num_node_features: int,
+                 num_edge_features: int,
+                #  num_classes: int,
+                 deg):
+        super(SimpleGCN, self).__init__()
+
+        aggregators = ['mean', 'min', 'max', 'std']
+        scalers = ['identity', 'amplification', 'attenuation']
+
+        towers = 4
+        pre_layer_num = 2
+        post_layer_num = 2
+        divide_input=False
+        self.convs = ModuleList()
+        self.batch_norms = ModuleList()
+        conv = PNAConv(in_channels=num_node_features, out_channels=32,
+                                    aggregators=aggregators, scalers=scalers, deg=deg,
+                                    edge_dim=num_edge_features, towers=towers, pre_layers=pre_layer_num, post_layers=post_layer_num,
+                                    divide_input=divide_input)
+        self.batch_norms.append(BatchNorm(32))
+        self.convs.append(conv)
+
+        for j in [32, 64, 128]:
+            conv = PNAConv(in_channels=j, out_channels=j*2, aggregators=aggregators, scalers=scalers, deg=deg, edge_dim=num_edge_features, towers=towers, pre_layers=pre_layer_num, post_layers=post_layer_num, divide_input=divide_input)
+            self.convs.append(conv)
+            self.batch_norms.append(BatchNorm(j*2))
+
+        self.dropout = nn.Dropout(0.2)
+        self.linear = nn.Linear(j*2, 1)
+
+    def forward(self, data):
+        x = data.x
+        edge_index = data.edge_index
+        edge_attr = data.edge_attr
+
+        for conv, batch_norm in zip(self.convs, self.batch_norms):
+            x = F.relu(batch_norm(conv(x, edge_index, edge_attr)))
+
+        x = self.dropout(x)
+        x = self.linear(x).flatten()
+        return x
+
+
+
+
+node features
+
+
+marker(I named it): 1 if the node corresponds to an id_1, 0 if it is a candidate.  
+The presence of this feature allows us to solve for node classification rather than link prediction.
+
+Missing value or not(name, categories, address, city, state, zip, url, phone)
+
+edge features
+
+
+mdeberta pred
+
+xlm-roberta pred
+
+lgbm pred
+
+jaro (address, city, state, zip, url, phone, categories)
+
+loss function
+
+
+IouLoss for each graph and the binary cross-entropy of the entire batch are the loss functions
+
+
+def iou_loss(logits, data):
+    sizes = degree(data.batch, dtype=torch.long).tolist()
+
+    logit_list = logits.sigmoid().split(sizes)
+    target_list = data.y.split(sizes)
+
+    loss = 0
+    for y_pred, y_target, group_size in zip(logit_list, target_list, data.group_size):
+
+        intersection = (y_pred * y_target).sum()
+        total = (y_pred + y_target).sum() + (group_size - y_target.sum())
+        union = total - intersection
+        loss += 1 - (intersection / union)
+
+    return loss / data.num_graphs
+
+loss = iou_loss + 0.1*BCELoss
+
+
+Advantages of GNN
+
+
+
+Creating a 2-hop-subgraph greatly improved maxiou.
+
+Iou loss made it possible to optimize the competition metric directly.
+
+Fast inference
+
+
+Public Score Timeline
+
+
+
+20 candidates per id and mdeberta and lgbm stacking: 0.907
+
+60 candidates per id and xlm-roberta-base+mdeberta and lgbm stacking : 0.924
+
+60 candidates per id and xlm-roberta-base + mdeberta and GNN Post Processing: 0.946
+
+Comments:
+├─ Patrick Chan (2022-07-10 01:25:29.133000) [+4]
+│  Great share! Personally I like your approach more than the other solutions.
+├─ Bilal Suppal (2022-07-17 07:22:29.573000) [+1]
+│  The information provided is so clear and easy to understand, Awesome post :)
+│  Looking forward to see more !!!
+│  let's grow together
+├─ yo4p (2022-07-11 10:02:43.703000) [+1]
+│  I like your approach very much. Thank you for sharing!
+├─ Ethan (2022-07-10 11:10:52.553000) [+1]
+│  Thanks for sharing. GNN is really impressive!
+├─ KKY (2022-07-10 10:41:09.957000) [+1]
+│  Very impressive solution!
+│  
+│  thanks for share.
+├─ DeepUnderstanding (2022-07-09 15:13:02.020000) [+1]
+│  Your approach with GNNs is really impressive!
+│  Congratulations!
+├─ Try Harder (2022-08-16 09:12:55.970000) [+2]
+│  Great share!  Could you share your code about train and inference? Thank you so much!
+├─ KKY (2022-07-10 10:54:19.257000) [+2]
+│  Greeeeeeate Work!  One quesition,   in stage4,  on 2-hop-subgraph,  seems only has the edge features in direct linked edge,  how to deal with the others edge?    Do you consider to share the infere...
+  ├─ 213tubo (2022-07-10 11:02:35.560000) [+0]
+  │  Thanks for the question.
+  │  
+  │  2-hop-subgraph is created by considering the graph as an undirected graph.
+  │  The implementation uses pytorch_geometric and can be written as follows
+  │  https://pytorch-geometri...
+  ├─ 213tubo (2022-07-10 11:05:10.483000) [+4]
+  │  I'm thinking of sharing the inference code, but I'd like to organize it a bit before I share it with you.
+  │  The current code is very dirty.😂
+  ├─ Bilzard (2022-07-12 08:33:11.683000) [+0]
+  │  @evilpsycho42 
+  │  
+  │  
+  │    
+  │  how to deal with the others edge?
+  │  
+  │  
+  │  Since the author saids he/she deals with the target task as a node classification, I think we don't have to consider the relation between non...
+  ├─ Bilzard (2022-07-12 08:45:54.383000) [+1]
+  │  @tubotubo I'm also interested in how the whole implementation (especially on GNN part) is done.
+  │  I don't care what the code looks like, the code would be very helpful.
+  │  
+  │  Thanks for sharing your solut...
+  ├─ 213tubo (2022-07-12 09:54:17.587000) [+1]
+  │  @tatamikenn 
+  │  
+  │  
+  │    
+  │  how to deal with the others edge?
+  │    
+  │  Since the author saids he/she deals with the target task as a node classification, I think we don't have to consider the relation between non-...
+├─ MarBH666 (2022-07-10 07:19:18.147000) [+2]
+│  you did a good job👍
+├─ Young for you (2022-07-10 03:01:59.753000) [+2]
+│  Wow Great solution.  I am only your little version
+  ├─ 213tubo (2022-07-10 03:07:13.133000) [+2]
+  │  Thank you. It is nice to be admired by a strong Grandmaster like you!
+  │  
+  │  I am very interested in your solution too.
+  │  Do you plan to share your solution?
+  │  Can you give me a brief explanation of your sol...
+  ├─ Young for you (2022-07-10 03:13:21.763000) [+1]
+  │  My solution only your stage 1+stage2+the last stage still Lgb😂. You did a great job. I feel regret for you because of the silly "leak"
+  ├─ 213tubo (2022-07-10 03:16:22.483000) [+1]
+  │  Thank you for sharing your solution!
+  │  leak is very sad😭. I hope the second Foursquare competition will be held.
+├─ Rim Zakhama (2024-01-08 13:56:39.017000) [+0]
+│  Thank you for sharing. Can you explain your approach for handling missing values, please?
+├─ H210164 (2023-11-17 07:15:20.463000) [+0]
+│  Great share! I like your solution very much! :)
+├─ 213tubo (2022-12-30 18:10:57.567000) [+0]
+│  I have decided not to share the code because the data is no longer available.
+├─ Y-Haneji (2022-07-19 01:26:41.157000) [+0]
+│  @tubotubo 
+│  Thank you for sharing a great solution, and I appreciate your new (meaning the version without leak) score and prize!
+│  Could you give me some example of input objects to GNN or dataset im...
+  ├─ 213tubo (2022-07-19 01:54:50.367000) [+2]
+  │  @hanejiyuto 
+  │  Thank you for your question.
+  │  I have implemented GNN using pytorch_geometric and networkx.
+  │  
+  │  Follow this procedure to create the inputs to the GNN.
+  │  
+  │  1. Create a large graph in the follow...
+  ├─ Y-Haneji (2022-07-19 03:03:59.517000) [+1]
+  │  @tubotubo 
+  │  Thank you for your explanation! 
+  │  I'm looking forward to seeing your detailed code.
+├─ Rushabhmalode (2022-07-16 12:09:20.610000) [+0]
+│  It's a great solved on NLP and also advantages of GNN
+├─ Bilal Suppal (2022-07-15 16:02:04.360000) [+0]
+│  One quesition, in stage4, on 2-hop-subgraph, seems only has the edge features in direct linked edge, how to deal with the others edge? Do you consider to share the inference code?
+├─ Khizer Ismael (2022-07-14 23:42:13.187000) [+0]
+│  I like your approach very much. Thank you for sharing!
+├─ Lucas See (2022-07-14 11:20:57.167000) [+0]
+│  Impressive and well-documented solution, thanks for taking the time to explain it!
+├─ Naman Sharma (2022-07-12 07:28:55.450000) [+0]
+│  It's proper, well-structured, and organized work! 👍niceee
+├─ Naman Sharma (2022-07-12 07:26:56.217000) [+0]
+│  Really detailed work
+├─ The Devastator (2022-07-10 00:39:49.450000) [+0]
+│  Thanks for sharing your approach. It's really impressive and unique!
+├─ [deleted] (2022-07-10 14:45:48.737000) [+0]
+│  [deleted]
+├─ Mohammad Souri Laki (2022-09-11 06:47:23.523000) [+0]
+│  Great, thanks a lot
+├─ Himanshu Goswami (2022-07-15 01:49:02.633000) [+0]
+│  Thanks for sharing!

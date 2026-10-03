@@ -1,0 +1,111 @@
+# https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543666
+
+Topic #543666: 6th place solution
+  Author: Sergei Fironov
+  Posted: 2024-10-31 23:59:31.002000
+  Votes: 57  Comments: 23
+
+It was an excellent competition! For many years, I've been following astrophysics news with great interest. What else will they see in these blurry pixels? When will they finally find a habitable planet? And now I've been lucky enough to contribute to this myself.
+
+I want to thank the competition hosts, the Ariel mission, and specifically @GordonYip for answering important questions. I'd also like to thank all the authors of the notebook with the correct data calibration process. Without this, my participation would hardly have been meaningful. It's so difficult to find information about calibrations in articles! Thank @shlomoron for the meme thread and funny comments 😀
+
+My solution isn't particularly sophisticated. Here's the breakdown:
+
+Data Processing:
+I noticed outliers in pixel data and smoothed them with a Gaussian in the frequency axis direction. The "extra" wavelengths not included in the final spectrum were somewhat useful here. Consistently improved by 0.002.
+
+
+Smoothing:
+Nothing in the world is better than SG. It's fast enough and smooths everything. I even smoothed the predictions.
+
+Transit Zone Prediction:
+Nothing is more painful than getting 0 in submission results. The main problem is incorrectly predicted transit boundaries. In the test, they're wider or narrower than those in the training set. Using SG smoothing in the time direction to find boundaries. Ensuring light flux decreases at the left boundary and increases at the right.
+
+Features for Models:
+The feature construction process is similar to my baseline. We build a polynomial, find how to 'raise' the transit zone to align with the non-transit part. Used MAE and logpdf functions to evaluate how well we found the coefficient.
+Build a general polynomial for the frequency sum. For each frequency, try to find coefficients pulling the transit as B and external parts as A to this polynomial. 1 - A/B is the target feature for individual frequencies. Sums across frequency intervals. I know from theory that some zones correspond to absorption areas of basic gases CH4, H2O, CO2, CO, NH3. But the best frequency areas for building features turned out to be different. I used a mix of genetic algorithm and manual selection to find the best intervals.
+
+Sigma Estimation:
+I only estimated average sigma per spectrum. Build regression from the difference between maximum and minimum predictions for the planet.
+
+Models:
+Two types: heuristic and CNN.
+
+Heuristic:
+Sum of features with weights that look realistic. 0.666 on training set and 0.666 on public. Two different approaches for predictions with differences &lt;0.00018 and larger. For larger spectra, found coefficients can be used. For small ones, better not to.
+
+CNN:
+Main challenge was avoiding overfitting. Experimentally established maximum frequency count in window - 21. There's physical sense in this, close to distance between different gases' transmission bands. Important that model doesn't overfit on two bands. Two-headed model, one predicting 283 spectrum points, second head predicting average sigma. Loss function - GaussianLoss.
+0.678 on training set, 0.684 on test.
+
+Mixing:
+Weight selection by best RMSE on training set.
+0.681 on training, 0.692 on public.
+
+Didn't work on public:
+Predicting gas compositions and summing predicted TauREX gas spectra.
+
+Final notebook https://www.kaggle.com/code/sergeifironov/new-blend-pdf?scriptVersionId=204505791
+
+Comments:
+├─ JungleBeastDS (2024-11-01 00:02:30.507000) [+6]
+│  Great job Sergei. Well deserved. When I joined this competition, I found your public notebook and build my solution off of that. Thanks for upping the level of the competition.
+├─ greySnow (2024-11-01 00:29:28.180000) [+3]
+│  Congratz on 6th place! Thank you for being such a great partner for LOLz on the LB. I was rooting for you in the last couple of days to finish in the price range, and I'm glad you made it. Your pub...
+  ├─ Sergei Fironov (2024-11-01 00:33:04.963000) [+4]
+  │  In this competition, I implemented and buried a huge number of different ideas. The MCMC idea worked poorly on the training dataset.
+  ├─ Sergei Fironov (2024-11-01 00:33:30.360000) [+1]
+  │  Congrats on 4th place! Very impressive
+├─ Data Warrior (2024-11-03 18:18:14.820000) [+0]
+│  This is a great way to think about the problem.🙂
+├─ SCHEN (2024-11-01 15:42:30.717000) [+0]
+│  Congrats and thanks for sharing the solution!
+├─ Andrei Zamfir (2024-11-01 13:41:35.217000) [+0]
+│  A sincere congratulations from me as well for the gold medal. Well deserved spot! 
+│  Your solution is intriguing and I thank you for sharing the code. I learned many things from your discussions thro...
+├─ _student (2024-11-01 12:51:27.590000) [+0]
+│  This is my first medal competition in which I participated and contributed. It was a bit difficult to understand and learn a whole new set of information. I ended up with 36.1 percent.
+│  but,
+│  Thanks ...
+├─ Zhu Siqi (2024-11-01 10:54:06.943000) [+0]
+│  Thanks for your sharing! May I ask what do you mean by
+│  
+│  
+│    
+│  Experimentally established maximum frequency count in window - 21
+  ├─ Sergei Fironov (2024-11-01 10:59:11.780000) [+0]
+  │  I used CNN where convolutions went along the wavelength axis. Each convolution with a kernel width of 2n+1 captures n points to the right and left of it. If we use two consecutive layers with kerne...
+    ├─ Zhu Siqi (2024-11-01 11:10:49.397000) [+0]
+    │  So amazing! It is hard to imagine such a correlation and I believe you must have conducted numerous experiments to discover this. Greatly appreciate your sharing!
+    ├─ Sergei Fironov (2024-11-01 11:21:57.427000) [+1]
+    │  I believe this is related to the peaks of CH4, CO2, and H2O. As soon as two peaks from different gases fall into one window, it becomes too easy for the model to calculate their ratio and draw the ...
+    ├─ Zhu Siqi (2024-11-01 11:27:50.927000) [+0]
+    │  Your interpretation is very convincing. I think this is the most interesting part of the competition.
+├─ Timmy Juicehouse (2024-11-01 00:59:48.617000) [+0]
+│  Congratulations, Sergei. I'm also inspired greatly by your notebook. 
+│  
+│  
+│    
+│  CNN:
+│    Main challenge was avoiding overfitting. Experimentally established maximum frequency count in window - 21. There's...
+  ├─ Sergei Fironov (2024-11-01 01:05:01.907000) [+0]
+  │  1D. I have published the code. This model is already based on features obtained similarly to baseline. The main reason to use convolutions here is the high spread of features for neighboring wavele...
+├─ 🐢 Jun Koda (2024-11-01 00:33:39.073000) [+0]
+│  Thanks for the great notebook and congratulations for the gold!!! I wasn't able to generalize to the test data at all. Amazing that your CNN worked for the test data!
+├─ ZHANG XINGHAN (2024-11-01 00:19:32.407000) [+0]
+│  congrats!
+│  I'm still playing with overfitting lol. cv 0.667 lb 0.589, private lb 0.621, no idea what's the problem, trying to figured it out
+  ├─ ZHANG XINGHAN (2024-11-01 00:23:10.833000) [+0]
+  │  btw, would you like to share your final notebook? really excited to know more details about your approach
+    ├─ Sergei Fironov (2024-11-01 00:26:40.920000) [+1]
+    │  https://www.kaggle.com/code/sergeifironov/new-blend-pdf?scriptVersionId=204505791
+    │  
+    │  Yes, of course. But the code is quite difficult to understand, I code very quickly but terribly messy.
+    ├─ ZHANG XINGHAN (2024-11-01 00:33:02.827000) [+0]
+    │  Sure, thank you, will look into it. :)
+├─ Zhuang Jia (2024-11-01 00:15:48.697000) [+0]
+│  Congratulations! Well deserved! The solution you shared has greatly benefited everyone.
+├─ Natan Labarrère (2024-11-01 00:12:29.183000) [+0]
+│  Great job. Learned a lot from your codes and discussions.
+├─ Donal (2024-11-01 05:09:24.377000) [+0]
+│  Congratulations!

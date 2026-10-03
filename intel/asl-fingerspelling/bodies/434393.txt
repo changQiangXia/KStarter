@@ -1,0 +1,222 @@
+# https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434393
+
+Topic #434393: [3rd place solution with code] 17 layers squeezeformer with timerduce and ROPE 
+  Author: gezi
+  Posted: 2023-08-25 04:18:36.233000
+  Votes: 53  Comments: 32
+
+This is an intesting game, I learned a lot from 
+
+https://www.kaggle.com/code/hoyso48/1st-place-solution-training
+https://www.kaggle.com/code/irohith/aslfr-ctc-based-on-prev-comp-1st-place
+https://www.kaggle.com/code/markwijkhuizen/aslfr-transformer-training-inference
+
+Preprocss
+
+
+
+Do not throw away frames witout hands!
+
+Use as much info as possible, (hands, lips, eye, nose, pose) , use (x,y,z)
+
+Use more frames, resize to 320 frames for model training.
+
+I used original + normalized + abs position(/1000.) as input feats(total 384 * 2 + 1 = 769). 
+normalized feats help converge much faster but I found original feats also helps.
+
+
+Aug
+
+I followed last competion 1st solution, and found the most important aug are 
+
+
+
+time scale (interp1d)
+
+time dim mask
+I used heavy mask here which will mask some time seq and aslo will randomly mask 50% frames
+
+affine 
+follow preve 1st solution with prob 0.75, for left-right flip only with prob 0.25
+
+
+Training
+
+
+
+I used train data + sup data combined training with sup data weight set to 0.1 for 400 epochs.
+
+batch size 128, max lr 2e-3, lr scheduler using linear decay with 0.1 epochs warmup , adam optimizer
+
+Awp training started from epochs * 0.15, with adv_lr 0.2 and adv_eps 0.
+
+Fintune with train data only for 10 epochs with max lr 1e-4, awp start from epoch 2.  
+
+
+Postdeal
+
+I used rule for blank index(0)
+
+
+Model
+
+
+
+Squeezeformer  works best, it is a bit faster then conformer. (Code from NEMO)
+
+In order to make net deeper I used 1 down sampling layer to reduce frames from 320 to 160.
+This is mainly helpful for adding more encoder layers, and also can allow using complex encoder layers.
+
+Relative pos encoding affect the performance so much, I found ROPE(by Jianlin Su) perform best and super fast. (code from huggingface implementation)
+
+Dropout is super important, I used final cls_drop=0.1 only, no dropout for other layers.
+
+I learned from 1st-place-solution-training that stochastic path is super important to avoid overfit for deep network. So I used it in squeeeze former block for each layer like below(notice the InstDropout and 0.5 skip factor all super important for final performance)
+
+
+Overall model arch below:
+
+
+
+Others
+
+
+
+For me (using 4090), torch much faster then tf (3-4 times faster)  
+
+I used tf at first and swich to torch in the last month which help to speedup experiments a lot.    
+Speed is only one factor, another important thing is I could easily try opensource code of ASR like NEMO or espnet.
+
+I used nobuco to convert torch model to keras, it works like a charm.  
+
+I still used tf for prorcess/aug and post process and also use tfrecord as input format, I wrote a torch iterable dataset which wrap tfrecord reader.
+
+
+TODOS
+
+Due to time limit, I could not finish more experiments at last days, but some possible improvements might be
+
+
+
+Model can be deeper up to 20 layers
+20 layer model perform better then 17 layers but I only trained 300 epochs which perform not as good as 17 layers + 400 epochs.
+
+More epochs training, maybe 500 or 600 ? 
+For 17 layer model from 300 to 400 improve LB 4 points and PB 2 points, so might sitll could train more epochs and might use 20 layer model for more epochs help even more:)
+
+From what I learned from other solutions, it seems I missed some major points here
+
+
+
+
+cutmix
+this is a pity, I planned to do this at the begging but did not try it, as I found hard mask of frames(50%+) worked very well, I should have realized that cut mix might help even more.  
+simple concat 2 instances  
+concat with some ratio like 0.7 and 0.3  
+concat with using ctc segmentation   
+
+seq2seq method and ctc+attention decode method    
+I tried seq2seq using tf at the begging of this competition but not give good results, should have tried it after changing to use torch with squeezeformer encoder.  
+
+input len mask to speedup infer
+
+try even more max input frames from 320 to 384 or 512(with input len mask infer)
+
+
+Code
+
+Opensource all codes here:  
+https://www.kaggle.com/code/goldenlock/3rd-place-step1-gen-tfrecords-for-train
+https://www.kaggle.com/code/goldenlock/3rd-place-step2-gen-tfrecords-for-supplement
+https://www.kaggle.com/code/goldenlock/3rd-place-step-3-gen-mean-and-std
+https://www.kaggle.com/code/goldenlock/3rd-place-step-4-train-squeezeformer
+https://www.kaggle.com/code/goldenlock/3rd-place-step-5-torch2keras-using-nobuco
+https://www.kaggle.com/code/goldenlock/3rd-place-step-6-inference  
+Notice I did not reproduce my final results using kaggle notebooks, so if you want to reproduce or want to find the original code you could find it here:
+https://github.com/chenghuige/Google-American_Sign_Language_Fingerspelling_Recognition
+
+Comments:
+├─ Muhammad Usman (2023-08-28 06:34:51.847000) [+1]
+│  Great work man!
+├─ Krishna Singh (2023-08-27 02:19:47.247000) [+1]
+│  Thank you @goldenlock, great work yet again! learning a lot from you
+├─ Darragh (2023-08-25 07:48:27.090000) [+1]
+│  Congratulations @goldenlock, great work yet again!
+│  
+│  I have a question on awp; we could not get it to work; did you train with fp16 ? I thought this might be the reason we kept getting nans. 
+│  Maybe ...
+  ├─ gezi (2023-08-25 08:28:31.480000) [+2]
+  │  Thanks @darraghdog , I also learned a lot from your sharing of last competion. 
+  │  For awp, I used fp32, it will also cause nan for me at the begging if using fp16 I do not kown why.
+  │  So I will use fp1...
+├─ C R Suthikshn Kumar (2023-08-25 06:36:32.247000) [+1]
+│  Congratulations.  Thanks for sharing the details of your model. 
+│  The deeper layer models seem to be consuming more than 9 hours.
+  ├─ gezi (2023-08-25 08:30:54.480000) [+1]
+  │  Squeezeformer is fast you could also make the encoder units less for me I used 200. Also I used smaller attention head dim 32. Actually I tested we could submit model with 20 layers which use 0.81s...
+├─ Pk (2023-08-25 05:38:35.070000) [+1]
+│  Congratulations,
+│  I also tried to use SqueezeFormer, but due to my limited coding knowledge, I couldn't replicate it. Attention with relative positional encoding completely blew my mind.
+│  
+│  Thanks to ...
+  ├─ gezi (2023-08-25 08:35:43.403000) [+0]
+  │  Thanks,  I will share the code soon.
+├─ hengck23 (2023-08-25 05:04:06.060000) [+1]
+│  "I still used tf for prorcess/aug and post process and also use tfrecord as input format, I write an torch iterable dataset which wrap tfrecord reader."
+│  
+│  thanks.
+│  so this comfirm my guess : the bott...
+  ├─ gezi (2023-08-25 05:29:06.780000) [+1]
+  │  Yes, I'm still very confused why tf so slow on this problem using gpu….
+├─ hengck23 (2023-08-25 04:33:07.153000) [+1]
+│  thanks for the introduction. i will try it:
+│  
+│  https://github.com/AlexanderLutsenko/nobuco
+├─ Yu Wu (2023-08-25 04:27:54.193000) [+1]
+│  Congrats on winning 3rd prize solo!
+│  Your work is brilliant, I need some time to digest it 🤔
+├─ Samuel Cortinhas (2023-08-25 08:27:19.593000) [+2]
+│  Congrats, thanks for the detailed write up!
+├─ Dieter (2023-08-25 05:14:38.953000) [+2]
+│  Nice work, thanks for sharing. We find several of your findings in our solution too. (e.g. Squeezeformer as the encoder). Impressive how much you found as a solo competitor.
+  ├─ gezi (2023-08-25 05:25:53.657000) [+1]
+  │  Thanks Dieter! Can not wait to learn from your solution, really big gap, I think there are some major points no other teams have found😀
+├─ hengck23 (2023-08-25 04:59:13.257000) [+2]
+│  "Do not throw away frames witout hands!
+│  Use as much info as possible"
+│  
+│  actually i think face points etc may help to identify "person identity" (i.e. unintented data leak if there is same signer at ...
+  ├─ gezi (2023-08-25 05:27:20.300000) [+1]
+  │  Yes this affect much, but Chris's method might be even better.
+├─ Chakkrit Termritthikun (2023-08-25 04:50:26.627000) [+2]
+│  Congratulations, I will try your techniques
+├─ Mystic Shadow (2023-08-30 12:40:01.397000) [+0]
+│  Superb Work !
+├─ Nowgger (2023-08-30 08:15:55.313000) [+0]
+│  Have you tried other models?
+  ├─ gezi (2023-08-30 23:49:48.583000) [+0]
+  │  I tried public notebooks of seq2seq and ctc in tensorflow at first, then I convert the ctc notebook to torch, at the last month I change to use conformer and switch to suqeezeformer at the last week.
+├─ greySnow (2023-08-25 06:12:04.157000) [+0]
+│  Amazing. There is much to learn from you solution!
+│  Can you explain what is the purpose of the 'rule for blank index'? I did not get it.
+  ├─ gezi (2023-08-25 08:34:07.557000) [+2]
+  │  Here mean for each ctc output step you could adjust the prob of blank index, for example if blank index prob is 0.25 and it is still the largest prob for this step. If no post rule then will output...
+    ├─ bliao (2023-08-25 09:12:58.830000) [+0]
+    │  How much improvement from this trick?
+    ├─ gezi (2023-08-28 07:16:32.043000) [+0]
+    │  The result is similar as other solutions which use post trick like special output for short predictions. 2-3 point online I think.
+├─ Wenxuan Ye (2023-08-25 04:24:12.783000) [+0]
+│  perfect, will you make your code available soon?
+  ├─ gezi (2023-08-25 04:24:41.783000) [+3]
+  │  Sure, will be avaliable soon.
+    ├─ Wenxuan Ye (2023-08-25 04:28:21.337000) [+1]
+    │  how long did you spend completing one epoch using 1 4090 GPU?
+    ├─ gezi (2023-08-25 04:51:05.567000) [+2]
+    │  how long did you spend completing one epoch using 1 4090 GPU?
+    │    For 17 layer model(model_size: 63.94M num_params: 16M) and batch size 128, with torch.compile and train data only(no sup data) 1 epoc...
+    ├─ greySnow (2023-08-25 06:45:00.953000) [+0]
+    │  So tensorflow epoch was 3-4 min. Did you used XLA with the tensorflow model?
+    ├─ gezi (2023-08-25 08:23:02.493000) [+0]
+    │  enable xla will be even slower
+├─ [deleted] (2023-09-06 11:41:29.550000) [+0]
+│  [deleted]

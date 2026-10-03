@@ -1,0 +1,74 @@
+<p>First of all thanks to Kaggle and the organizers for this competition. </p>
+<h3>Data Strategy</h3>
+<p>The competition data was not up to the mark and thus, there was no way you could build a good CV that correlates with the leaderboard. Unclean public training data and clean hidden private test data only meant we could use either different models and combine them together or use a single strong model like muril-large and train it on a variety of datasets shared by others. We did both.</p>
+<p>The first step was to divide the training data into 5 folds. After that, we trained our final models on subset of SQuAD v2, Google-translated SQuAD v2 shared by <a href="https://www.kaggle.com/tkm2261" target="_blank">@tkm2261</a>, all TyDi QA, hindi parts of MLQA, XQUAD and 5-10x oversampled Chaii dataset for each fold. We found that oversampling Chaii dataset helped us to improve CV and LB score. Please note that for CV calculation we used only the original validation folds.</p>
+<p>All Models were trained for 1-2 epochs with early stopping based on CV Jaccard score with max_length = 384 and doc_stride = 128. We did try other lengths such as 400, 512 and other strides like 192 but they didn’t perform very well with our cross-validation strategy.</p>
+<h3>Models</h3>
+<ul>
+<li>XLM Roberta Large (Public LB - 0.800)</li>
+<li>Muril Large (Public LB - 0.802)</li>
+<li>RemBERT (Public LB - 0.803)</li>
+</ul>
+<h3>Ensemble</h3>
+<p>Since different models have different tokenizations, simple average ensembling was not possible so tried using prediction scores to select best predictions from different models. This gave us a little improvement.</p>
+<p>The next thing we tried was to normalize the scores of all models to the same scale. We saw a little improvement using this too but we knew that this is not the best way to combine models.</p>
+<p>The vanilla version failed as different models had different scales for logits. So to overcome this I came up with a custom softmax which could normalize the logits across different context splits. Base code for this is attached below:</p>
+<pre><code>def CustomSoftmax(examples, features, raw_predictions):
+    all_start_logits, all_end_logits = raw_predictions
+
+    # Build a map example to its corresponding features.
+    example_id_to_index = {k: i for i, k in enumerate(examples["id"])}
+    features_per_example = collections.defaultdict(list)
+    for i, feature in enumerate(features):
+        features_per_example[example_id_to_index[feature["example_id"]]].append(i)
+
+    for example_index, example in enumerate(tqdm(examples)):
+        feature_indices = features_per_example[example_index]
+        start_logits_sum = 0
+        end_logits_sum = 0
+
+        logCs = None
+        logCe = None
+
+        # Find maximum logit value across context
+        for feature_index in feature_indices:
+            if logCs is None:
+                logCs = all_start_logits[feature_index].max()
+            else:
+                logCs = max(logCs, all_start_logits[feature_index].max())
+
+            if logCe is None:
+                logCe = all_end_logits[feature_index].max()
+            else:
+                logCe = max(logCe, all_end_logits[feature_index].max())
+
+        # Subtract maximum value among all logits before applying exponentiation for numerical stability
+        # And take sum across all context splits
+        for feature_index in feature_indices:
+            all_start_logits[feature_index] -= logCs
+            all_end_logits[feature_index] -= logCe
+            start_logits_sum += np.exp(all_start_logits[feature_index]).sum()
+            end_logits_sum += np.exp(all_end_logits[feature_index]).sum()
+
+        # Softmax
+        for feature_index in feature_indices:
+            all_start_logits[feature_index] = np.exp(all_start_logits[feature_index])/start_logits_sum
+            all_end_logits[feature_index] = np.exp(all_end_logits[feature_index])/end_logits_sum
+
+    return all_start_logits, all_end_logits
+</code></pre>
+<p>This was the final idea we had in the last two days and it boosted our public score from 0.809 to 0.821!</p>
+<h3>Post-processing</h3>
+<p>We followed a similar preprocessing technique as used in public notebooks. Though we observed that removing a few of the symbols were hurting the performance so we decided to use a custom punctuations list (<code>'!"#$&amp;\'()*+,-/:;&lt;=&gt;?@[\\]^_`{|}~'</code>). </p>
+<p>We also tried to solve the issue of tamil predictions as indicated by <a href="https://www.kaggle.com/jdoesv" target="_blank">@jdoesv</a> in <a href="https://www.kaggle.com/c/chaii-hindi-and-tamil-question-answering/discussion/264831" target="_blank">https://www.kaggle.com/c/chaii-hindi-and-tamil-question-answering/discussion/264831</a> with the help of stemming tamil words in the answers it helped to boost Muril performance from 0.802 -&gt; 0.804 on the public LB.</p>
+<p>In the end, we didn’t add many rule-based post-processing as we thought this might overfit the public leaderboard. </p>
+<p>Our best private submission would have scored 0.779 but we did not select it. It’s funny why we didn’t select that submission. It had a small bug. However, even with that bug, that submission was our best private submission :)</p>
+<p>We also had a single 5 fold muril-large model that would have placed us “in the money”.</p>
+<p>Our best inference kernel can be found here: <a href="https://www.kaggle.com/abhishek/chaii-xlm-roberta-x-muril-x-rembert-score-based" target="_blank">https://www.kaggle.com/abhishek/chaii-xlm-roberta-x-muril-x-rembert-score-based</a></p>
+<p>You can also try one of our best muril-large models on Hugging Face Hub: <a href="https://huggingface.co/abhishek/muril-large-chaii" target="_blank">https://huggingface.co/abhishek/muril-large-chaii</a></p>
+<p>We will also publish our training code soon.</p>
+<h3>Final thoughts</h3>
+<p>It was a fun competition but we feel that it could have been better if the provided training data was better or at least similar to the hidden test dataset. We gave up many times.</p>
+<p>We also tried a meta-model to re-rank the answers generated by different models but it was quite late in the competition (on the final day) and we didn’t have enough time to experiment with it further. </p>
+<p>P.S. <a href="https://www.kaggle.com/abhishek" target="_blank">@abhishek</a> still feels that this competition was all about data collection from hundreds of participants.</p>
+<p>P.S.S Training code can be found at: <a href="https://github.com/abhishekkrthakur/chaii-hindi-tamil-question-answering" target="_blank">https://github.com/abhishekkrthakur/chaii-hindi-tamil-question-answering</a></p>

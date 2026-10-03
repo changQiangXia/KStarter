@@ -1,0 +1,50 @@
+<h1>3rd place solution - GRU, UNET and LGB!</h1>
+<p>Congratulations to kaggle and the host for this competition, it has been a very interesting and fun competition. Before we start, special thanks to <a href="https://www.kaggle.com/kyakovlev" target="_blank">@kyakovlev</a>, it has been exceptional to be able to work with you and learn from you.</p>
+<h2>Structure of our approach</h2>
+<p><strong>1. Preprocessing</strong><br>
+<strong>2. Training (GRU + UNET + LGB)</strong><br>
+<strong>3. Inference and postprocess</strong></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3147995%2F970876bd40cd74ade6b68a7ea415c349%2FCaptura%20desde%202023-12-06%2001-35-18.png?generation=1701823419282889&amp;alt=media" alt=""></p>
+<h3>1. Preprocessing</h3>
+<p>For final submission our GRU + UNET models work just with 7 features. We tried to add more features but for local validation we did not find any that would work.</p>
+<h4>1.1. <strong>How do we structure the series before introducing them into our model?</strong></h4>
+<p>We decided to divide the series into one-day sequences and reduce the granularity from 5 secs to 30 secs. Therefore we had sequences of 2880 length in which there was normally an onset and a wakeup. Here is an standard input for our model.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3147995%2F4d5bb92e188eb1a4e751d18505ffa7ff%2Fstandard_series.png?generation=1701879825870419&amp;alt=media" alt=""></p>
+<h4>1.2. <strong>Key points and features in preprocesing</strong></h4>
+<ul>
+<li><p>Make anglez absolute, this was giving +0.002 on local validation.</p></li>
+<li><p>For the only two variables we had (anglez and enmo), we tried to find useful aggregations(diff, mean, median, skew, etc…), but the only thing that seemed to work was the standard deviation (<strong>anglez_abs_std</strong> and <strong>enmo_std</strong>).</p></li>
+<li><p>Detecting noise was another of the key points of our solution. We realized that when exactly the same value is repeated in the same series at the same hour, minute and second, this was basically noise. Here our detected noise is the red line.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3147995%2F4926d54727c25100d547d5656cbc3667%2F04f547b8017d.png?generation=1701879870683731&amp;alt=media" alt=""></p></li>
+<li><p>To incorporate temporal information into the model, we decided to add 2 frequency encoding variables (one for onsets and one for wakeups) at the hour-minute level.    </p></li>
+<li><p>A good augmentation trick was to reverse all the series during training, this allowed us to have more sequences and increased our local validation by 0.01</p></li>
+</ul>
+<h4>1.3. <strong>Small ablation study of single model in the middle of the competition</strong></h4>
+<p>The public leaderboard has really been making us dizzy throughout the competition, we thought there was a bug in our code. So halfway through the competition we did a study of how each variable was working on the leaderboard and these are the results:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3147995%2F43c76444fe8e5fc6a312bced2d320ddb%2FCaptura%20desde%202023-12-06%2017-26-09.png?generation=1701880005278625&amp;alt=media" alt=""></p>
+<h3>2. Training</h3>
+<p>Our best model was GRU, which alone gave us a local validation of <strong>0.835</strong></p>
+<h4>2.1. <strong>GRU and UNET -- training details</strong> (we did the training similar)</h4>
+<ul>
+<li><strong>Augmentation</strong>: just invert series</li>
+<li><strong>Number of features</strong>: 7 (anglez_std, enmo_std, noise_day_before, noise_day_after, noise, hour_min_onset, hour_min_wakeup)</li>
+<li><strong>Target</strong>: 2 outputs (one for onsets and other for wakeups)</li>
+<li><strong>Target transformation</strong>: Add two steps back and one forward. (0,0,0,0,1,0,0,0 -&gt; 0,0,1,1,1,1,0,0)</li>
+<li><strong>loss</strong> : cross-entropy</li>
+</ul>
+<h4>2.2. <strong>Leaderboard variability</strong></h4>
+<p>It seems that after the competition is over, we can observe that the private is more correlated with our local validation than the public one. In the public there was an instability that was consuming us because we really thought we had a bug somewhere in our code.<br>
+Our best private submission is this ensemble: (GRU*0.68 + UNET * 0.2 + LGB*0.12)<br>
+CV: ~<strong>0.840</strong> / public LB <strong>0.784</strong> / private LB <strong>0.848</strong></p>
+<h4>2.3. <strong>LGB part</strong></h4>
+<p>We've been trying to make lgb competitive since we formed a team. We finally managed to start getting him to contribute something to the ensemble the day before the competition ended. So I think that in this part we were a few days away from continuing to refine our LGB model.</p>
+<p>Anyway, in our last submission we can see how it was giving us <strong>+0.002</strong> in the private LB.<br>
+The maximum we achieved with an LGB single was <strong>0.757</strong> public / <strong>0.82</strong> private.</p>
+<h3>3. Inference and posprocess</h3>
+<p>For the best submission that we finally chose, we made an ensemble of several models (<strong>8</strong> GRU and <strong>2</strong> UNET)<br>
+Running time for inference was ~<strong>1,5</strong> hours.</p>
+<p>For postprocess we try several things, but basically what we did was keep the peaks every certain distance optimized for our predictions.</p>
+<h3>4. Conclusions</h3>
+<p>Surely there are things we are forgetting, so don't hesitate to ask anything and I'll update it in the post.</p>
+<p>It has been a type of problem that could be approached in many ways, as we are seeing in the different solutions. We would like to mention that it has been a really challenging competition where it was a constant battle with other teams that pushed us to the limit (everything was very tight). Apart from that, I hope we can help your mission and be useful to the host.</p>
+<p>Github code is here: <a href="https://github.com/FNoaGut/child-mind-institute-detect-sleep-states-3rd-place-solution" target="_blank">https://github.com/FNoaGut/child-mind-institute-detect-sleep-states-3rd-place-solution</a></p>

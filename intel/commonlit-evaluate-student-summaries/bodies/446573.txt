@@ -1,0 +1,283 @@
+# https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446573
+
+Topic #446573: 2nd Place Solution
+  Author: Ivan Aerlic
+  Posted: 2023-10-12 08:17:05.681000
+  Votes: 142  Comments: 44
+
+Inputs
+
+The data was input to the model as follows : 
+
+'Think through this step by step : ' + prompt_question + [SEP] + 'Pay attention to the content and wording : ' + text + [SEP] + prompt_text
+
+Pooling Method [High Impact]
+
+Input : [TOKEN] [TOKEN] [SEP] [TOKEN] [TOKEN] [SEP] [TOKEN] [TOKEN]
+Head Mask : [0] [0] [1] [1] [1] [0] [0] [0]
+
+Instead of using the normal attention mask created by the model tokenizer. I used a head mask that only had ones for the students' answer (text) portion of the input and zeros for all other tokens. I used the normal attention mask for the attention mask that the model consumed but I used the head mask for the mean pooling.
+
+This had the biggest impact out of all the tricks I used. It increased the CV by a huge margin in all folds, but especially for the difficult prompts : 3b9047 and 814d6b. In my opinion this was the “magic” for this competition.
+
+Prompt Question Augmentation [Moderate Impact]
+
+I created 10 extra prompt questions per a prompt. I used an LLM. I asked the LLM to give me 10 variations of the prompt question. I then used this as augmentation during training. In inference, I used the default prompt question. In total I had 44 different prompt questions across all folds.
+
+Auxiliary Classes [Moderate Impact]
+
+I used auxiliary classes during the competition. These auxiliary classes were the target classes from Feedback 3.0 - 
+['cohesion','syntax','vocabulary','phraseology','grammar','conventions'].
+
+To create these labels I used models that were trained on the Feedback 3.0 data and ran the data from this competition through those models. I used only the ‘text’ column from this competition. In doing this I produced pseudo labels to use for this competition.
+
+I used the auxiliary classes in the following way : (loss * .5) + (aux_loss * .5)
+
+The auxiliary classes were used every second step.
+
+The Feedback 3.0 competition was hosted by The Learning Agency Lab and to the best of my knowledge this is a legal technique.
+
+Max Length
+
+Models were trained on a maximum length ranging from 896-1280 during initial training. During the pseudo labelling rounds they were trained with a maximum length ranging from 1280-2048. Pseudo labels allowed the models to learn at a higher maximum length.
+
+During inference the models used 1792 for large and 2048 for base.
+
+Pseudo Labels [Moderate Impact]
+
+Once a CV of .4581 was reached across the grouped kfold I started creating pseudo labels. 
+
+The pseudo labels allowed me to train deberta-v3-base effectively. Before PL, I was not able to train the base model. They also allowed me to increase the maximum length during training.
+
+PL increased the CV from .4581 to .4476
+
+The models were trained using a concatenation of the original labels and pseudo labels.
+
+Final Ensemble (PL)
+
+
+
+
+
+
+Model Name
+Training Max Length
+Inference Max Length
+Head
+Model CV
+
+
+
+
+microsoft/deberta-v3-large
+2048
+1792
+Mean Pooling + LSTM Layer Pooling
+.460
+
+
+microsoft/deberta-v3-base
+2048
+2048
+Mean Pooling + LSTM Sequence Pooling
+.468
+
+
+OpenAssistant/reward-model-deberta-v3-large-v2
+2048
+1792
+Mean Pooling + LSTM Layer Pooling
+.464
+
+
+microsoft/deberta-large
+2048
+1792
+Mean Pooling + Linear
+.466
+
+
+microsoft/deberta-v3-large
+1280
+1792
+Mean Pooling + LSTM Sequence Pooling
+.461
+
+
+
+
+
+
+
+Did work:
+
+
+
+Layer wise learning rate decay
+
+Freezing layers (bottom 8)
+
+LSTM layer pooling
+
+LSTM Sequence pooling
+
+Turn off dropout in transformer backbone
+
+Multisample dropout in head
+
+
+Did not work:
+
+
+
+AWP
+
+SWA
+
+
+Inference script : https://www.kaggle.com/code/ivanaerlic/2nd-place-solution/notebook
+
+Note : The inference script and input datasets will contain extra tricks that I haven't mentioned here, such as the inclusion of additional head for the model. Only the main points are outlined in this write-up.
+
+Also, you can find the training script for each model inside of the dataset that contains the weights.
+
+Comments:
+├─ CPMP (2023-10-12 09:48:53.770000) [+8]
+│  Well done! The selective mask is a great idea.
+├─ Ranamalla Nithin Reddy (2023-10-13 12:21:41.950000) [+3]
+│  Congratulations @ivanaerlic on becoming GrandMaster, Great win!! Well deserved!! 🤗
+├─ Adam Montgomerie (2023-10-13 08:50:43.127000) [+3]
+│  Setting the mask to ignore anything other than the student summary is a really nice idea! Definitely something to try in similar future competitions.
+│  
+│  Congratulations!
+├─ Nischay Dhankhar (2023-10-13 05:40:11) [+3]
+│  Congratulations @ivanaerlic on becoming GrandMaster, Great win!! Well deserved!! 🤗
+  ├─ Ivan Aerlic (2023-10-13 06:16:06.427000) [+2]
+  │  @nischaydnk Good seeing you here! And good luck with RSNA 🥇
+├─ Darek Kłeczek (2023-10-15 16:49:02.090000) [+4]
+│  Fantastic solution, worthy of the GM title :) Congrats Ivan, the solution shows your deep understanding of transformers/NLP and proves your ability to avoid shake-up, a critical skill both on Kaggl...
+├─ chumajin (2023-10-12 08:37:35.323000) [+4]
+│  Congratulations on your strong second place finish and also on your promotion to competition grand master.
+│  
+│  I also tried to create several variations of the original question in the prompt using LL...
+  ├─ Ivan Aerlic (2023-10-12 08:41:40.773000) [+2]
+  │  Thanks for the kind words @chumajin. It was a great competition 😀
+├─ Ivan Aerlic (2023-10-12 08:46:24.887000) [+2]
+│  The write-up may change from time to time. I am fixing mistakes and adding content as I go.
+├─ C R Suthikshn Kumar (2023-10-20 07:05:43.673000) [+1]
+│  Congratulations on 2nd place. Thanks for sharing details  of your notebook.
+├─ Yusuke Nakayama (2023-10-16 12:00:07.037000) [+2]
+│  Congratulations on your results, and thank you for sharing your great solution!
+│  
+│  
+│    
+│  The models were trained using a concatenation of the original labels and pseudo labels.  
+│  
+│  
+│  Does this mean that ...
+  ├─ Ivan Aerlic (2023-10-16 13:11:06) [+1]
+  │  Correct. 7165 x 2.
+    ├─ Yusuke Nakayama (2023-10-16 13:57:28.057000) [+0]
+    │  Thank you for your reply!
+├─ ls (2023-10-13 14:05:17.420000) [+2]
+│  Congrats on win! Great solution.
+├─ Reacher (2023-10-12 15:31:54.900000) [+2]
+│  Congrats on your promotion to competition grand master.
+│  Pooling method  had a significant impact for us also.
+├─ moth (2023-10-12 14:56:00.127000) [+2]
+│  Congrats @ivanaerlic for your win and for becoming competition GM.
+│  
+│  If I understood correctly your mask idea filters out (in the last layer of the transformer model) all values associated to positi...
+  ├─ Ivan Aerlic (2023-10-13 03:17:09.503000) [+1]
+  │  Yes, that's correct. You can find the implementation in the inference notebook if you want to see the code.
+├─ Theo Viel (2023-10-12 09:55:36.767000) [+2]
+│  Thanks for the clear write-up, and congrats on getting competition GM. I hope you'll be releasing the code, I need to update my deberta knowledge.
+│  
+│  And I'm gonna take a (not so) wild bet and congra...
+  ├─ Ivan Aerlic (2023-10-12 09:59:15.477000) [+1]
+  │  Haha, thank you @theoviel. Do you want training or inference. Training would be a bit difficult for me. Inference I can publish quickly.
+    ├─ Theo Viel (2023-10-12 10:02:12.737000) [+0]
+    │  Ideally training but inference is fine as well. Thanks ! :D
+├─ Shreyansh Murathia (2023-10-12 08:53:01.393000) [+2]
+│  First of all, brilliant work! 🙌 
+│  Could you please explain how you determined the layer wise rate decay and which layers to freeze.
+  ├─ Ivan Aerlic (2023-10-12 09:08:08.070000) [+2]
+  │  I can't really tell you how to determine it, because it is based off of past experience and it changes per a competition. There aren't any hard rules for it.
+  │  
+  │  I can give you a few tips, though. In ...
+    ├─ BUUMOO (2023-10-12 11:43:22.463000) [+1]
+    │  Very valuable experience! Thanks for sharing.
+    │  It seems we need to maintain the model's original low-level feature extraction capability while adjust the high-level feature extractions according to ...
+  ├─ Ivan Aerlic (2023-10-12 09:12:18.273000) [+2]
+  │  Also it will change based on the batch size and max length.
+  │  
+  │  As max length goes up - decrease the learning rate.
+  │  As batch size goes up - increase the learning rate
+    ├─ Shreyansh Murathia (2023-10-12 09:48:20.790000) [+0]
+    │  Thanks for the information. It's always interesting to learn how professionals approach such tasks.
+    ├─ Ivan Aerlic (2023-10-12 09:53:38.720000) [+1]
+    │  You are welcome. I hope to become a professional soon.
+├─ AK (2023-10-12 08:26:38.840000) [+2]
+│  Great finish @ivanaerlic and congrats on achieving GM😀
+│  Can you provide the snippet on the custom head mask code you used if possible
+  ├─ Ivan Aerlic (2023-10-12 08:29:30.110000) [+6]
+  │  :
+  │      def :
+  │          super.
+  │          self.hidden_size = hidden_size
+  │          self.cat_size = hidden_size*
+  │  
+  │          self.sequence_pooler = utilities. 
+  │          self.rnn = utilities.   
+  │  
+  │          self.hea...
+    ├─ Ivan Aerlic (2023-10-12 08:30:34.247000) [+2]
+    │  Here is how the head mask is created in the dataset class :
+    │  
+    │          head_mask = 
+    │          use_full = False
+    │           token  tokenized_dict:
+    │  
+    │               token == CFG:
+    │                  use_full = not...
+    ├─ AK (2023-10-12 08:32:05.880000) [+2]
+    │  Thanks @ivanaerlic 😀
+├─ BJUT4Science (2024-01-07 08:09:36.540000) [+0]
+│  Nice work. Congratulations!
+├─ Fayçal Baki (2023-10-16 08:19:34.387000) [+0]
+│  Thank you for the very concise and precise explanations ! I learned many things, and got many ideas that I will try to reuse for sure !
+│  
+│  Congratulations !
+├─ Earth (2023-10-13 13:06:44.267000) [+0]
+│  What do AWP and SWA means and how to implement them? Sorry, I'm new here
+  ├─ Ivan Aerlic (2023-10-15 04:37:18.570000) [+1]
+  │  AWP : https://www.kaggle.com/code/itsuki9180/introducing-adversarial-weight-perturbation-awp
+  │  SWA : https://www.kaggle.com/competitions/google-quest-challenge/discussion/119371
+  │  
+  │  Here are some links....
+    ├─ Earth (2023-10-16 12:41:19.787000) [+0]
+    │  Thank you so much
+├─ Xiang Huang (2023-10-13 09:36:07.333000) [+0]
+│  Congratulations and  thanks for your detail writeup!
+├─ Igor Litvin (2023-10-12 12:36:31.950000) [+0]
+│  Thanks for the information. Your maximum length (2048) is the before tokenizer (letters) or after (encoded text)? I used 412 after tokenizer. I mean:
+│  tokenizer(……..  max_length=412)
+│  
+│  Is it too shor...
+  ├─ Ivan Aerlic (2023-10-13 03:09:03.843000) [+0]
+  │  Yeah that's probably too short. As long as you are using the right pooling method, which is zeroing out the prompt_text and prompt_question portions you should be good to do higher max lengths of 1...
+    ├─ Igor Litvin (2023-10-13 09:44:15.493000) [+0]
+    │  Thanks. It was diffenetly my huge mistake because of my models and trainig approaches were quite close to winning solutions.
+├─ RB (2023-10-12 11:01:47.290000) [+0]
+│  Congratulations on solo gold and becoming GM and thank you for sharing your code and writeup. 
+│  
+│  It seems your models are averaged , no stacking .. right .   Also you didn't have any CV / public LB ...
+  ├─ Ivan Aerlic (2023-10-12 11:11:52.150000) [+1]
+  │  I think the reason why my CV had good correlation with the LB was because of using the prompt text and the head mask, while not using feature engineering at all. I only started using the base model...
+    ├─ RB (2023-10-12 11:42:55.223000) [+1]
+    │  Our experience was that stack seemed more stable than individual models but then we only had 10 features in stack. 
+    │  Up until last week our inference was on p100 so we only had single model with pro...
+    ├─ Ivan Aerlic (2023-10-12 12:34:44.273000) [+0]
+    │  Thanks for sharing, this give me something to try out next time.
+├─ [deleted] (2023-10-12 12:14:25.053000) [+-2]
+│  [deleted]

@@ -1,0 +1,82 @@
+# big-data-derby-2022 讨论区（按票数排序，共 80 条）
+
+- [The Secret Sauce on How to Approach a Kaggle Analytics Competition](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/344765) — 80 票 / 26 评论 / 2022-08-16 
+- [🌦 NYC Daily Weather Dataset ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346096) — 73 票 / 10 评论 / 2022-08-17 
+- [Welcome to the 2022 Big Data Derby!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343581) — 43 票 / 62 评论 / 2022-08-11 
+- [Past Analytics Competitions and the Winners](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346415) — 33 票 / 5 评论 / 2022-08-19 
+- [Adding scraped data on horse identity and finishing position](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346864) — 32 票 / 17 评论 / 2022-08-21 
+- [I have made some adjustments to the arrangement of Data Description.](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343708) — 28 票 / 5 评论 / 2022-08-12 
+- [Thank You To All Who Participated!!!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/365732) — 21 票 / 7 评论 / 2022-11-12 
+- [Updated Data Files - Position at Finish](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/351147) — 21 票 / 14 评论 / 2022-09-08 
+- [A Note on Injury Data, Academic Studies and Focus](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/350949) — 19 票 / 2 评论 / 2022-09-07 
+- [MEGA Cheatsheets Collection](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343979) — 16 票 / 2 评论 / 2022-08-13 
+- [My PhD was on injury prevention based on biomechanics](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346540) — 15 票 / 5 评论 / 2022-08-20 
+- [And The Winners Are…](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/370851) — 14 票 / 35 评论 / 2022-12-06 
+- [Question regarding high values in weight_carried feature](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/344315) — 14 票 / 6 评论 / 2022-08-14 
+- [Update On Judging](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/367919) — 13 票 / 4 评论 / 2022-11-22 
+- [Competition has concluded - Next steps!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/365370) — 13 票 / 2 评论 / 2022-11-11 
+- [Top R Cheatsheets for better Analysis | ggplot2-dplyr-tidyr-RStudio](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/348225) — 13 票 / 3 评论 / 2022-08-27 
+- [Question about the dataset license](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/359125) — 13 票 / 16 评论 / 2022-10-10 
+- [nyra_2109_complete column names](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/355304) — 11 票 / 3 评论 / 2022-09-26 
+- [Does the last/largest 'Trackus_Index' signify the end of the race?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346321) — 11 票 / 14 评论 / 2022-08-18 
+- [Data on horses manifesting severe injuries during races](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/347128) — 11 票 / 3 评论 / 2022-08-23 
+- [Movies about Horses and Racing](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/356280) — 10 票 / 4 评论 / 2022-09-30 
+- [Various data problems](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343687) — 10 票 / 3 评论 / 2022-08-12 
+- [odds (in maths)/odds (in horse racing): Big Difference!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/360881) — 10 票 / 4 评论 / 2022-10-18 
+- [Competitor Feedback](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/372073) — 9 票 / 1 评论 / 2022-12-14 
+- [Hint to get an idea of the analysis: F1](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/347249) — 9 票 / 4 评论 / 2022-08-23 
+- [What Are the Different Horse Racing Classes? (race_type)](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/344323) — 7 票 / 2 评论 / 2022-08-14 
+- [Approximation of a Jockey’s Position](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/344659) — 7 票 / 9 评论 / 2022-08-16 
+- [Datasets for the competition](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343873) — 7 票 / 1 评论 / 2022-08-12 
+- [[Chai Time] Sanyam explains top solutions from American Express competition](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/350111) — 7 票 / 2 评论 / 2022-09-04 **write-up?**
+- [[Clarification+Question] post position(NOT position_at_finish) crucial information when staggered start is not possible...)](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/359406) — 7 票 / 3 评论 / 2022-10-11 
+- [Questions Regarding Competition](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/348183) — 7 票 / 1 评论 / 2022-08-27 
+- [how to submit for the competition?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/353144) — 6 票 / 2 评论 / 2022-09-17 
+- [[Question] NYTHA/NYRA's preferred units of measurement (distance, velocity and acceleration)?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/360677) — 6 票 / 2 评论 / 2022-10-17 
+- [trackus_index and lat/longs](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/360434) — 6 票 / 3 评论 / 2022-10-16 
+- [Where are the course types, where are the checkpoints? ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346535) — 6 票 / 0 评论 / 2022-08-20 
+- [What is an Analytics competition? Checkout previous winners!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343903) — 6 票 / 1 评论 / 2022-08-12 
+- [Calculate Real-Time Horse Ranking.](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/361710) — 5 票 / 0 评论 / 2022-10-23 
+- [Find a factor that determine race results](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/362114) — 5 票 / 0 评论 / 2022-10-25 
+- [[Question] When is "purse" computed?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/359012) — 5 票 / 2 评论 / 2022-10-10 
+- [How to determine the race winners in the data](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/347111) — 5 票 / 0 评论 / 2022-08-22 
+- [Breeder's Cup is in progress!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/364108) — 5 票 / 1 评论 / 2022-11-04 
+- [Dataset of all injuries with reason since 2018 ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/349634) — 5 票 / 1 评论 / 2022-09-02 
+- [Why cannot I see my notebook in Code section?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/364875) — 5 票 / 3 评论 / 2022-11-08 
+- [How many laps are there in a race?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/344878) — 5 票 / 5 评论 / 2022-08-17 
+- [Jockey Performance Metric ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/355221) — 5 票 / 4 评论 / 2022-09-26 
+- [Calculating horses speed, turning angle and relative position in race](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/347720) — 5 票 / 4 评论 / 2022-08-25 
+- [Is this competition evaluation subjective?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343825) — 5 票 / 3 评论 / 2022-08-12 
+- [Provided datasets](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/343911) — 5 票 / 5 评论 / 2022-08-12 
+- [What am I missing?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/348814) — 4 票 / 3 评论 / 2022-08-30 
+- [ Measure distances: Haversine or Vincenty](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/356894) — 4 票 / 8 评论 / 2022-10-02 
+- [EPSG4326, EPSG2260 and EPSG2263](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/361930) — 4 票 / 1 评论 / 2022-10-24 
+- [2018 Horse and Jockey Datasets](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/364175) — 4 票 / 2 评论 / 2022-11-05 
+- [Visualizing the different horse racing courses dirt / turf](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/347096) — 4 票 / 0 评论 / 2022-08-22 
+- [Question : Are the odds decided by the officials or by the people ? ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/344653) — 4 票 / 3 评论 / 2022-08-16 
+- [Demo of One Race at Saratoga.](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/355204) — 4 票 / 4 评论 / 2022-09-25 
+- [Is 0.25s tracking interval enough for the match ?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/350316) — 4 票 / 4 评论 / 2022-09-05 
+- [such a interesting challenges!](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346505) — 3 票 / 0 评论 / 2022-08-19 
+- [start/finish lane coordinate](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/353997) — 3 票 / 0 评论 / 2022-09-20 
+- [Understanding the trakus_index values](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/355203) — 3 票 / 1 评论 / 2022-09-25 
+- [My way of analyzing the given dataset](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/367617) — 3 票 / 0 评论 / 2022-11-21 
+- [General bug on the notebooks that used "hide code",The "show code" feature has been removed! ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/366808) — 3 票 / 2 评论 / 2022-11-17 
+- [How to submit ?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/365242) — 3 票 / 2 评论 / 2022-11-10 
+- [[Question] Are we allowed to edit the notebook after the deadline or it's against the rule?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/364272) — 3 票 / 2 评论 / 2022-11-05 
+- [How to know when the horses finished the race](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/357130) — 3 票 / 3 评论 / 2022-10-03 
+- [What happened to the header of nyra_start_table.csv?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/353977) — 2 票 / 2 评论 / 2022-09-20 
+- [Trakus Index Conversion Confusion](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/352553) — 2 票 / 5 评论 / 2022-09-14 
+- [Looking for a Team Thread](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/348666) — 2 票 / 4 评论 / 2022-08-29 
+- [Missing horse data](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/353410) — 2 票 / 3 评论 / 2022-09-18 
+- [Do we miss one column for the "nyra_2019_complete" dataset?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/358226) — 2 票 / 1 评论 / 2022-10-07 
+- [Badly built dataset](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/359801) — 2 票 / 2 评论 / 2022-10-13 
+- [Sample Horse and Race identification data ](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/365112) — 2 票 / 0 评论 / 2022-11-09 
+- [We may use curvature to simplify corner environment.](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/361653) — 2 票 / 0 评论 / 2022-10-22 
+- [The Cigar Mile Story](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/370658) — 1 票 / 0 评论 / 2022-12-05 
+- [Real Time Race Predictions](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/368678) — 1 票 / 4 评论 / 2022-11-27 
+- [post_time column](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346184) — 1 票 / 1 评论 / 2022-08-18 
+- [Horse Racing - definition](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346618) — 1 票 / 3 评论 / 2022-08-20 
+- [Failed to make my notebooks Public](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/365349) — 1 票 / 11 评论 / 2022-11-10 
+- [Big Data Derby - Track Analysis (Plotting Live race in each track and more...!)](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346953) — 1 票 / 2 评论 / 2022-08-22 
+- [How to identify the trakus index that is the points of entering/exiting the curve part of the track?](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/347342) — 1 票 / 2 评论 / 2022-08-23 
+- ["My Best Friend" ..Injury and "Inference from Data"](https://www.kaggle.com/competitions/big-data-derby-2022/discussion/346848) — 1 票 / 8 评论 / 2022-08-21 

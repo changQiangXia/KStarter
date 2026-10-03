@@ -1,0 +1,369 @@
+# https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313389
+
+Topic #313389: 2nd Place - Weighted Box Fusion and Post Process
+  Author: Chris Deotte
+  Posted: 2022-03-16 20:26:11.874000
+  Votes: 203  Comments: 59
+
+Second Place Solution
+
+Thank you Georgia State University, The Learning Agency Lab, and Kaggle for an awesome competition. The data was high quality and interesting. The metric and train test split were well done. This competition was a success and will benefit a good cause.
+
+Teaming with Chun Ming Lee and Udbhav Bamba has been wonderful. I learned more about NLP than if I had taken an online course. These two Kagglers are grandmasters at NLP and I now know how to use HuggingFace Trainer efficiently and effectively. I also know how to customize models and losses. Thank you @leecming @ubamba98 
+
+Solution Summary
+
+The secret sauce to our solution is powerful post process by Chun Ming (boost CV LB!), a huge variety of models implemented by Udbhav (many long sequence models!), and weighted box fusion by Chris (used in my previous comp here). Everything was fine tuned on local CV and achieved 2nd Place $35,000!
+
+
+
+
+Hugging Face Model
+CV
+Public LB
+Private LB
+special
+
+
+
+
+microsoft/deberta-large
+706
+710
+721
+trained with 100% train data
+
+
+microsoft/deberta-large
+699
+706
+719
+add lstm, add jaccard loss
+
+
+microsoft/deberta-v3-large
+694
+697
+709
+convert slow tokenizer to fast
+
+
+microsoft/deberta-xlarge
+708
+704
+713
+
+
+
+microsoft/deberta-v2-xlarge
+699
+700
+716
+convert slow tokenizer to fast
+
+
+allenai/longformer-large-4096
+702
+705
+716
+add lstm head
+
+
+LSG converted roberta
+703
+702
+714
+convert 512 roberta to 1536
+
+
+funnel-transformer/large
+688
+689
+708
+
+
+
+google/bigbird-roberta-base
+675
+676
+692
+train 1024 infer 1024
+
+
+uw-madison/yoso-4096
+652
+655
+668
+lsh_backward=False
+
+
+
+
+Weighted Box Fusion - CV 741, Public 727, Private 740
+
+Our final solution contained the 10 models listed above. We included 3 out of 10 K-folds for each of the 10 models. Our 8 hour 30 minute submission inferred 27 models! (we removed 3 folds from 30)
+
+Weighted Box Fusion by @zfturbo from his GitHub here was the magic that combined all the model predictions together. Individual models had average CV around 700 and the WBF ensemble achieved CV 741. (Folds from same models were averaged before WBF).
+
+
+
+Weighted Box Fusion can do something that no other ensemble method can do. If one model has prediction string 8 9 10 11 and another model has 10 11 12 13. Then weighted box fusion takes the average of the two starts, (8 + 10)/2 = 9 and the average of the two ends, (11 + 13)/2 = 12 resulting in 9 10 11 12. Furthermore, WBF reads submission.csv files and doesn't care what tokenizer you used, so its easy to use. (Note we add an extra column to submission dataframe with span confidence).
+
+If we averaged the token/word probabilities, or used a voting classifier, we would either get the union 8 9 10 11 12 13 or the intersection 10 11. Neither of which we want. Also averaging two "BIO" predictions gives a new prediction with two different "B" which we do not want either.
+
+Post Process
+
+Chun Ming is the mastermind behind our team's strong PP. We applied the same PP to each model before WBF. Our PP code is posted here and Chun Ming will now describe it. Our PP significantly boosted CV LB!
+
+We applied heavy post-processing to the word-level soft predictions each model made (after averaging token probabilities across folds and before the WBF ensembler). Overall CV was improved by ~.008. 
+
+In order of descending impact on CV: 
+
+
+
+
+Repairing span predictions
+Since we trained using cross-entropy loss at the token level, the raw predictions would often result in broken spans. For example, given a chain of Lead token predictions, there might be a misprediction of an “Other” in the middle. We had a rule to convert that “Other” back to Lead. 
+
+
+Discourse-specific rules
+We came up with common sense heuristics for the discourses. For example, for Lead, Position, and Concluding Statement - there should only be a maximum of one each for a text. We’d predict the most probable candidate for each or merge close duplicate spans. 
+
+
+Adjusting lengths of predicted spans
+We adjusted lengths of spans based on their original predicted length. For example, for a predicted Evidence span that was less than 45 words long, we’d shift the start of the predicted span back by 9 words. These rules and the improvement in LB/CV suggest we were taking advantage of the evaluation metric only requiring a 50% overlap in prediction and label to be counted as correct.
+
+
+It’s not sexy but sitting down and eye-balling model predictions and comparing them with ground truths using a tool like displacy was rewarding in helping us better understand the task, how our models were behaving, and how to improve model predictions. 
+
+Model Details
+
+Surprisingly many more models than LongFormer and BigBird could be trained with sequence lengths greater than 512. All our models were trained with sequence length 1536 and inferred at 1536 (except BigBird-base at 1024).
+
+The model DeBERTa accepts any input size, so we just train with 1536 as is. 
+
+The model Funnel-transformer can accept any size after updating its config.
+
+model = AutoModelForTokenClassification.from_pretrained(
+    'funnel-transformer/large', num_labels=15,
+    max_position_embeddings=1536)
+
+
+For BigBird, we used full attention
+
+model = AutoModelForTokenClassification.from_pretrained(
+    'google/bigbird-roberta-base', num_labels=15,
+    attention_type="original_full")
+
+
+For YOSO, we disabled lsh_backward
+
+model = AutoModelForTokenClassification.from_pretrained(
+    'uw-madison/yoso-4096', num_labels=15,
+    lsh_backward=False)
+
+
+Model Training
+
+Thank you Nvidia for providing us some V100 32GB GPUs and A100 40GB GPUs. For each model, we trained 6 out of 10 KFolds and built our CV from the resultant 60% train data OOF. Each fold would take approximately 4 hours on 1xGPU and required between 3 and 5 epochs to maximize val score. 
+
+For two models, we used my train public notebooks here and here. For the other eight models, we used Hugging Face Trainer. Most models, used the following parameters. And we added @robikscube Kaggle metric here and our PP directly to the Trainer evaluation, so we could watch the Kaggle metric score every 500 steps and save the model weights with best Kaggle score.
+
+Notice how we use FP16, gradient_accumulation_steps, and gradient_checkpointing. With these settings, you can basically train any size model on any GPU including Kaggle's P100 16GB GPU.
+
+from transformers import TrainingArguments, Trainer
+args = TrainingArguments( NAME,
+                     PRETRAINED_MODEL,
+                     evaluation_strategy = 'steps',
+                     eval_steps = 500,
+                     dataloader_num_workers=8,
+                     warmup_ratio=0,
+                     lr_scheduler_type = 'linear',
+                     learning_rate = 2e-5,
+                     log_level = 'warning',
+                     fp16 = True,
+                     per_device_train_batch_size = 2,
+                     per_device_eval_batch_size = 2,
+                     gradient_accumulation_steps = 2,
+                     gradient_checkpointing = True,
+                     num_train_epochs = 5,
+                     save_strategy = 'no',
+                     save_total_limit = 1)
+
+trainer = Trainer(model,
+              args,
+              train_dataset=train_dataset,
+              eval_dataset=valid_dataset,
+              compute_metrics=KaggleMetric(valid_df, valid_dataset),
+              callbacks=[SaveBestModelCallback],
+              data_collator=data_collator,
+              tokenizer=tokenizer)
+
+
+Inference Code with PP with WBF
+
+We posted our final submission inference code on Kaggle here. It includes our post process and weighted box fusion implementation. Enjoy!
+
+Training Code on GitHub
+
+Our training code is published on GitHub here
+
+Comments:
+├─ Nicholas Broad (2022-03-17 01:14:46.953000) [+8]
+│  Hugging Face Model
+│  CV
+│  Public LB
+│  Private LB
+│  special
+│  
+│  
+│  
+│  
+│  microsoft/deberta-large
+│  706
+│  710
+│  721
+│  trained with 100% train data
+│  
+│  
+│  
+│  
+│  How do you get CV when training on 100% of the data?
+  ├─ Chris Deotte (2022-03-17 01:21:33.547000) [+9]
+  │  ha, good question. The "CV score" is the score when training with 10 K-Fold. First we train with 10 K-Fold, and make note of the learning rate and number of epochs. Second we trained a second time ...
+  ├─ Chris Deotte (2022-03-17 01:23:32.277000) [+9]
+  │  @nbroad thanks for all your great work at Hugging Face. The NLP library transformers and model repository are fantastic. We also used your code to convert deberta-v2 and v3 slow tokenizers to fast ...
+  ├─ Nicholas Broad (2022-03-17 09:24:15.813000) [+4]
+  │  I greatly appreciate the comment, even though my contributions to transformers are pretty small relative to others. 
+  │  
+  │  I'm always happy to share what I learn through Hugging Face with the community ...
+  ├─ GUNER (2022-03-17 11:00:46.857000) [+0]
+  │  '''The first model was K-Fold and got CV 706. The second model used the same hyperparameters and trained on 100% data and got Public 710 Private 721'''
+  │  
+  │  so 706 is out of CV of 10 models(so 10 model...
+  ├─ Devansh Chowdhury (2022-03-23 14:05:24.470000) [+0]
+  │  ha, good question. The "CV score" is the score when training with 10 K-Fold. First we train with 10 K-Fold, and make note of the learning rate and number of epochs. Second we trained a second time ...
+├─ Dewei Chen (2022-03-17 01:36:58.300000) [+6]
+│  Would you mind public all the training models? Because it's too hard for us to Reappearance it.
+│  Thanks!
+  ├─ Chris Deotte (2022-03-17 01:40:08.153000) [+8]
+  │  We published our inference code here. And we made all trained models (i.e. Kaggle datasets) public.
+  ├─ Dewei Chen (2022-03-17 02:35:17.913000) [+1]
+  │  Got it, cheers :)
+├─ gezi (2022-03-16 20:51:49.637000) [+3]
+│  Great work! The ensemble use WBF of each model only, not using per word soft logits/prob merge?
+  ├─ Udbhav Bamba (2022-03-16 20:53:56.140000) [+3]
+  │  For different folds but same architecture, we average the probabilities and for different architectures we use WBF.
+  ├─ gezi (2022-03-16 20:55:54.330000) [+2]
+  │  Cool! Thanks!
+├─ KhanhVD (2022-03-17 00:14:50.640000) [+4]
+│  Nice solution! Congrats @cdeotte and team.  I will try your WBF method in the next NLP competition ;)
+├─ Sharaf Mukhtar (2022-03-26 18:56:51.920000) [+1]
+│  Congratulations, thanks for sharing this
+├─ FPiotro (2022-03-26 08:27:41.333000) [+1]
+│  Congratulations on this solution @cdeotte and team 🧐
+│  Well explained as always 👍
+│  Keep up the good work!
+  ├─ Chris Deotte (2022-03-26 21:41:42.450000) [+0]
+  │  Thanks FPiotro
+├─ Sdilshad (2022-03-25 09:56:52.950000) [+1]
+│  congrats.. Great work, thanks for sharing
+├─ biubiubiu~ (2022-03-24 07:13:14.743000) [+1]
+│  Congrats and thanks for sharing!!!
+│  Did post processing make a big difference to improve final score? Or an enough large model like deberta and with enough training time can bring a impressive result.
+  ├─ Chris Deotte (2022-03-26 06:29:45.980000) [+0]
+  │  Post processing made a large difference. Probably around +0.010
+├─ Tom Zheng (2022-03-24 01:18:38.210000) [+1]
+│  It is really a great code.
+  ├─ Chris Deotte (2022-03-24 01:25:14.227000) [+0]
+  │  Thanks Jingyuan
+├─ spin fit (2022-03-23 22:46:32.777000) [+1]
+│  Wow..
+│  Congratulations ~!!
+├─ Jakub Dębski (2022-03-23 14:34:42.820000) [+1]
+│  Great work, thanks for sharing details. This post process is looking great.
+├─ AtulVerma (2022-03-22 23:21:57.423000) [+1]
+│  Congratulations @cdeotte
+├─ ONIONCORE (2022-03-18 14:02:03.570000) [+1]
+│  Great work. Thanks for sharing the code.
+├─ Nicholas Broad (2022-03-18 12:13:18.350000) [+1]
+│  Adjusting lengths of predicted spans
+│    We adjusted lengths of spans based on their original predicted length. For example, for a predicted Evidence span that was less than 45 words long, we’d shift...
+  ├─ Chun Ming Lee (2022-03-18 12:19:54.667000) [+2]
+  │  Optimized against CV.
+  │  
+  │  I was somewhat paranoid about these rules and pushed for our second sub to use a more conservative subset, excluding the length adjustments. Turns out it was unnecessary as C...
+  ├─ Nicholas Broad (2022-03-18 12:35:22.790000) [+1]
+  │  So did you just try a bunch of shifts (-1, +1, -2, +2, etc.) and see how that impacted the CV?
+  ├─ Chun Ming Lee (2022-03-18 12:46:10.590000) [+1]
+  │  Broadly yes - we had optimized CV code that used multiprocessing so we could test hyperparam changes very rapidly (&lt;10s per run for 7K OOF samples). I tried using Optuna but found my gut sense b...
+├─ Ken Krige (2022-03-17 19:43:30.263000) [+1]
+│  Great work. Thanks for sharing the code.
+├─ Dranzer (2022-03-17 18:07:44.137000) [+1]
+│  Congrats Amazing Work
+├─ Khushboo (2022-03-17 09:55:23.617000) [+1]
+│  Thank you so much Chris. You've got a new follower to go through your work. ;)
+├─ Niek van der Zwaag (2022-03-17 04:49:03.590000) [+1]
+│  Really appreciate your team's efforts in explaining your thought process and approach - congrats on 2nd 🎉
+├─ Trushant Kalyanpur (2022-03-16 20:39:47.723000) [+1]
+│  Using WBF for ensembling spans is brilliant! Great work!
+├─ CroDoc (2022-03-16 20:31:40.967000) [+1]
+│  @cdeotte your last link does not point to the inference kernel?
+  ├─ Chris Deotte (2022-03-16 20:35:47.477000) [+3]
+  │  It should work now. It will display a quick save and we're running now too. We will also share the datasets later today. Congratulations CroDoc and team for you great finish and big jump in last fe...
+  ├─ CroDoc (2022-03-16 20:49:48.840000) [+2]
+  │  It works now. Thank you Chris! It was a crazy ride till the end.
+  │  
+  │  Congrats to your team. Especially to @leecming. Yellow circle is on its way 😎
+├─ Clear n' Simple (2022-03-22 18:12:12.813000) [+2]
+│  Congratulations @cdeotte for making it into top 10 competitions ranking for 1st time!
+│  
+│  Best of luck continuing to rise!
+│  It's nice when the #1 contributor for kagglers of all stages does well.
+  ├─ Chris Deotte (2022-03-24 01:28:43.840000) [+1]
+  │  Thanks @jacob34 I'm excited to enter competitions top 10. My favorite thing on Kaggle is discussions and notebooks, but recently I've been working hard on competitions.
+├─ xbustc (2022-03-17 11:26:40.857000) [+2]
+│  congrats and thanks , learn a lot from you.
+├─ AK (2022-03-17 10:56:18.980000) [+2]
+│  Kudos to you and your team. Nicely done…
+│  Thanks for the detailed writeup as always 🖖
+├─ 小白Lan (2022-03-17 10:36:56.153000) [+2]
+│  amazing work, thx for ur selfless sharing
+├─ kwchen (2022-03-17 06:19:49.223000) [+2]
+│  Congratulations!
+│  For deberta-v3-large I got worse CV than the longformer-large.
+│  I trained 5 fold, each fold has CV around 0.680. I trained 5 fold using the same folds from abhishek here:
+│  https://ww...
+  ├─ Udbhav Bamba (2022-03-17 09:07:35.947000) [+4]
+  │  I guess it could be because of the offset mapping each tokenizer has different way of generating offsets (some include spaces and some don't) and it will effect your NER labels and predictions, esp...
+├─ Theo Viel (2022-03-16 23:21:56.723000) [+2]
+│  Congratz @cdeotte @leecming @ubamba98 !
+│  That 2nd place is no surprise, I was looking forward to your solution :)
+├─ Kishal Mandal (2022-03-16 20:59:41.450000) [+2]
+│  Congrats Chris, you never fail to amaze :D
+  ├─ Chris Deotte (2022-03-16 21:04:12.647000) [+2]
+  │  Thanks! I could not have done it without my awesome teammates Chun Ming Lee and Udbhav Bamba
+├─ Allohvk (2022-07-02 10:46:56.530000) [+0]
+│  Did you face any issues customizing trainer API? For one, I think it needs valid_batch_size = 1 else there seems to be an error in its code for the last batch. The other issue is in my case the pre...
+├─ Mi Jiaxin (2022-04-24 04:04:11.947000) [+0]
+│  Congratulations, your sharing has helped me a lot. I have a question about how to get the best thresholds of different classes.
+  ├─ Udbhav Bamba (2022-04-24 04:11:57.723000) [+1]
+  │  You can choose them based on your validation
+├─ [deleted] (2022-03-26 06:10:08.957000) [+1]
+│  [deleted]
+├─ [deleted] (2022-03-18 06:55:39.203000) [+0]
+│  [deleted]
+├─ [deleted] (2022-03-25 08:44:40.327000) [+1]
+│  [deleted]
+├─ [deleted] (2022-03-25 06:43:43.143000) [+1]
+│  [deleted]
+├─ [deleted] (2022-03-25 05:51:49.607000) [+1]
+│  [deleted]
+├─ [deleted] (2022-03-24 02:35:36.353000) [+1]
+│  [deleted]
+├─ [deleted] (2022-03-17 13:50:16.643000) [+1]
+│  [deleted]
+├─ [deleted] (2022-05-13 14:40:05.043000) [+0]
+│  [deleted]
+├─ [deleted] (2022-03-18 11:40:40.370000) [+0]
+│  [deleted]

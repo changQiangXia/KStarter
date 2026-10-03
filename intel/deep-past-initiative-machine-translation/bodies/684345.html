@@ -1,0 +1,466 @@
+<h1>[2nd Place] Data-Centric Akkadian NMT: LLM-Assisted Sentence Alignment + Large-Scale Academic PDF Mining</h1>
+<p><strong>Score: 41.9 (Public) / 41.0 (Private) | Team: wukeneth | Model: google/byt5-large</strong></p>
+<hr>
+<h2>TL;DR</h2>
+<p>A fully data-centric solution. The model is vanilla <strong>ByT5-large</strong> with no architectural changes. Every point of improvement came from building a larger, cleaner training corpus through:</p>
+<ol>
+<li>A three-stage LLM pipeline to produce sentence-level alignments from the official data</li>
+<li>Manually sourcing and OCR-extracting ~60 academic publications on Old Assyrian cuneiform not covered by the official dataset</li>
+<li>Text normalization that unifies the highly variable orthography across publications</li>
+</ol>
+<hr>
+<h2>The Problem</h2>
+<p>The competition provides three key files:</p>
+<ul>
+<li><strong>train.csv</strong> — ~6,500 documents with full English translations, but <strong>no sentence-level alignment</strong></li>
+<li><strong>published_texts.csv</strong> — ~13,456 published texts, many untranslated</li>
+<li><strong>Sentences_Oare_FirstWord_LinNum.csv (S_meta)</strong> — pre-existing sentence fragments for ~1,700 documents, but the word indices and translations are <strong>frequently misaligned or corrupt</strong></li>
+</ul>
+<p>Training directly on full-document pairs (Akkadian full text → full English translation) works but leaves significant value on the table. The model needs clean <strong>sentence-level pairs</strong> to learn tight correspondences. The core challenge was building those pairs at scale.</p>
+<hr>
+<h2>Data Pipeline: Three-Stage LLM Segmentation</h2>
+<p>I partitioned all published texts into three non-overlapping sets and applied a different LLM strategy to each. The three sets are defined by strict set arithmetic on the official data files:</p>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Definition</th>
+<th>LLM Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Breaker</strong></td>
+<td>(U_train ∪ U_pub) − S_meta</td>
+<td>Segment full translation into sentence-level pairs</td>
+</tr>
+<tr>
+<td><strong>Fixer</strong></td>
+<td>S_meta</td>
+<td>Re-anchor corrupt fragments using OARE API word indices</td>
+</tr>
+<tr>
+<td><strong>Generator</strong></td>
+<td>U_pub − (U_train ∪ S_meta)</td>
+<td>Synthesize translation from morphological metadata</td>
+</tr>
+</tbody>
+</table>
+<h3>Set 1 — Sentence Breaker (clean full-text alignment)</h3>
+<p><strong>Input</strong>: Akkadian transliteration + full English translation from <code>train.csv</code> + OARE API word indices and physical line numbers.</p>
+<p><strong>Method</strong>: For each document, the OARE ID is used to look up per-word dictionary entries (normalized form, lemma) from the OARE word table. An LLM is then prompted with: the full Akkadian text, the per-word dictionary context, and the full English translation. It splits the English translation into sentence-sized chunks and assigns a <code>word_range</code> (start/end word index) to each chunk using the physical word coordinates as anchors. Because the source texts are clean (no pre-existing corrupt segmentation), the output is reliable.</p>
+<p><strong>Result</strong>: 1,558 documents → <strong>9,378 sentence pairs</strong></p>
+<h3>Set 2 — Translation Fixer (misalignment correction)</h3>
+<p><strong>Input</strong>: Corrupt S_meta fragments + OARE API
+ormalized_form, word_index and line_number fields for each word.</p>
+<p><strong>Method</strong>: Use the existing fragments as a <em>weak reference only</em>. Re-anchor each fragment by matching normalized word forms from the API to the physical tablet structure. The LLM reconstructs correct sentence boundaries from scratch, using the S_meta entries only as coarse hints.</p>
+<p><strong>Result</strong>: 1,416 documents → <strong>11,302 sentence pairs</strong></p>
+<h3>Set 3 — Translation Generator (attempted, did not help)</h3>
+<p>Attempted to generate pseudo-translations using only morphological metadata (G-Stem, 3ms, Preterite, dictionary entries). The outputs were too noisy and inconsistent. Including them in training <strong>hurt the score</strong> — dropped entirely.</p>
+<hr>
+<h2>External Data: Official PDFs + Independent Literature Mining</h2>
+<p>This was the single biggest score improvement. In addition to the competition-provided PDF corpus (AKT series, large monographs), I independently located, downloaded, OCR-processed, and extracted dozens of additional Old Assyrian cuneiform text editions from academic journals and open-access repositories.</p>
+<p>PDF-extracted sources already carry sentence-level structure (each tablet entry in a publication presents transliteration and translation line-by-line or sentence-by-sentence). The LLM extraction pipeline preserves this structure automatically — no separate sentence-breaking step is needed for external data.</p>
+<h3>Sources covered</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Key sources</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AKT series</td>
+<td>AKT 1–4, 7A/B, 9A/B, 10, 11A/B, 12 (AKT 5/6A-6E/8 already in official train.csv)</td>
+</tr>
+<tr>
+<td>ArAn (Archivum Anatolicum)</td>
+<td>~15 articles (albayrak, cecen, erol, kuzuoglu, etc.)</td>
+</tr>
+<tr>
+<td>Belleten</td>
+<td>~10 articles (bayram, donbaz, gunbatti, sever, etc.)</td>
+</tr>
+<tr>
+<td>DTCF Dergisi</td>
+<td>~8 articles</td>
+</tr>
+<tr>
+<td>ATDD / TAD</td>
+<td>~6 articles</td>
+</tr>
+<tr>
+<td>HAL open access</td>
+<td>French institutionally-archived papers</td>
+</tr>
+<tr>
+<td>International journals</td>
+<td>JCS, JNES, Anatolica, JEOL, AoF, RA, NABU, etc.</td>
+</tr>
+<tr>
+<td>Large monographs</td>
+<td>Michel LAPO19, Veenhof PIHANS 111, Barjamovic PIHANS 120, OIP27, etc.</td>
+</tr>
+<tr>
+<td>Misc</td>
+<td>Women of Assur and Kanesh, ATHE Kienast, Assur-Nada 2002, etc.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>~60,654 external sentence pairs</strong> from <strong>149 distinct sources</strong> after cleaning.</p>
+<h3>Language distribution and non-English handling</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Sentence pairs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Turkish (TR)</td>
+<td>27,089</td>
+</tr>
+<tr>
+<td>English (EN)</td>
+<td>21,683</td>
+</tr>
+<tr>
+<td>French (FR)</td>
+<td>6,436</td>
+</tr>
+<tr>
+<td>German (DE)</td>
+<td>5,413</td>
+</tr>
+<tr>
+<td>Dataset is in the attachment below.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Many Turkish- and German-language papers cover the same Akkadian tablets as English publications. During extraction, the LLM <strong>translated non-English text directly into English</strong>, so all training pairs remain <code>Akkadian → English</code>. This adds more Akkadian surface forms to training without introducing a multi-target problem.</p>
+<p>When the same physical tablet (identified by IDs like <code>Kt 88/k 71</code>, <code>CCT 4 12a</code>) appears in both an English and a Turkish/German publication, only the English version is kept (<em>Prefer-EN dedup</em>), preventing conflicting translations for the same source.</p>
+<p>Turkish-language sources are already amplified up to <strong>3×</strong> through multi-version extraction (main + two backup runs), while fresh English-language academic papers have no backup copies — only a single extraction version. To compensate for this asymmetry, English-language academic papers are explicitly <strong>boosted 2×</strong> so they remain competitive in training exposure alongside the naturally-amplified Turkish sources.</p>
+<h3>Multi-version extraction</h3>
+<p>The LLM-based extraction pipeline was executed <strong>three separate times</strong> on each non-English source (Turkish, German, French, etc.), at different points in time. Each run independently translated the source text (TR/DE/FR → EN) and stored its outputs in a separate database directory (<code>main</code>, <code>Backup_20260227</code>, <code>Backup_manual</code>). Because LLM outputs vary across runs, the three passes yield slightly different English renditions for the same Akkadian input.</p>
+<p>The dataset generator includes <strong>all three versions</strong> for any source that has backup rows (<code>is_backup=1</code>), providing implicit data augmentation through natural translation variance across extraction runs. Sources with no backup rows (single extraction only) use just the main version.</p>
+<p>Sources already covered by the Sentence Breaker / Fixer pipeline (AKT 5, 6A–6E, 8 — English-language and forming the core of <code>train.csv</code>) were not given backup extraction copies. Running additional passes on these would produce near-duplicates of the breaker/fixer sentence pairs already in the dataset, adding no new information.</p>
+<hr>
+<h2>Text Normalization</h2>
+<p>Akkadian transliteration orthography is highly inconsistent across publications. Without normalization, the same cuneiform sign appears in dozens of surface variants.</p>
+<p>Key rules (all applied to source side):</p>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sz / s, + consonant</td>
+<td>→ š</td>
+</tr>
+<tr>
+<td>, + consonant</td>
+<td>→ ṭ</td>
+</tr>
+<tr>
+<td>Subscript 2 after vowel (a2, e2…)</td>
+<td>acute accent: a2→á, e2→é, i2→í, u2→ú</td>
+</tr>
+<tr>
+<td>Subscript 3 after vowel (a3, e3…)</td>
+<td>grave accent: a3→à, e3→è, i3→ì, u3→ù</td>
+</tr>
+<tr>
+<td>Higher subscripts (₄₅₆…)</td>
+<td>→ plain ASCII digits</td>
+</tr>
+<tr>
+<td>Hamza variants (ʾ, ʿ, ʼ)</td>
+<td>→ deleted</td>
+</tr>
+<tr>
+<td>ḫ / Ḫ</td>
+<td>→ h / H (competition convention)</td>
+</tr>
+<tr>
+<td>Determinatives (d), (ki), etc.</td>
+<td>→ {d}, {ki} (cuneiform standard)</td>
+</tr>
+<tr>
+<td>Other edge cases</td>
+<td>additional rules in <code>text_normalization.py</code></td>
+</tr>
+<tr>
+<td>The script of data cleaning is attached in the links below.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Document-Level Augmentation (768-byte chunks)</h2>
+<p>In addition to sentence-level pairs, consecutive sentences are concatenated into <strong>document-level training examples</strong> up to a 768-byte (UTF-8) ceiling. This:</p>
+<ul>
+<li>Provides inter-sentence context during training</li>
+<li>Creates implicit augmentation via variable chunking boundaries</li>
+<li>Matches max_source_length = 768 of ByT5-large exactly (no truncation)</li>
+</ul>
+<hr>
+<h2>Training Configuration</h2>
+<h3>Run 1 — Submitted (Public 41.8 / Private 41.0, ~90,522 pairs)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td><code>google/byt5-large</code></td>
+</tr>
+<tr>
+<td>Max sequence length</td>
+<td>768 bytes</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>7e-5</td>
+</tr>
+<tr>
+<td>Optimizer</td>
+<td>Adafactor (β₁=None, decay_rate=-0.8, clip=1.0, eps=(1e-30, 1e-3))</td>
+</tr>
+<tr>
+<td>Effective batch size</td>
+<td>32 × 4 grad accumulation = 128</td>
+</tr>
+<tr>
+<td>Epochs</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Warmup steps</td>
+<td>800</td>
+</tr>
+<tr>
+<td>LR scheduler</td>
+<td>Linear</td>
+</tr>
+<tr>
+<td>Weight decay</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Max grad norm</td>
+<td>10.0</td>
+</tr>
+<tr>
+<td>Group by length</td>
+<td>Yes (sorts by input length to minimize padding waste)</td>
+</tr>
+<tr>
+<td>Save epochs</td>
+<td>14, 15, 16 (epoch 15 selected — highest score)</td>
+</tr>
+</tbody>
+</table>
+<h3>Run 2 — Same dataset, alternative config (Public 42.1 / Private 40.9, ~90,522 pairs)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td><code>google/byt5-large</code></td>
+</tr>
+<tr>
+<td>Max sequence length</td>
+<td>768 bytes</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>2e-4</td>
+</tr>
+<tr>
+<td>Optimizer</td>
+<td>Adafactor (β₁=0.9, decay_rate=-0.8, clip=1.0, eps=(1e-30, 1e-3))</td>
+</tr>
+<tr>
+<td>Effective batch size</td>
+<td>32 × 8 grad accumulation = 256</td>
+</tr>
+<tr>
+<td>Epochs</td>
+<td>8 (target ~5,500 steps)</td>
+</tr>
+<tr>
+<td>Warmup ratio</td>
+<td>1.1 epoch</td>
+</tr>
+<tr>
+<td>LR scheduler</td>
+<td>Linear</td>
+</tr>
+<tr>
+<td>Weight decay</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Max grad norm</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>Group by length</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3>Run 3 — Best config (Public 42.4 / Private 40.4, ~100,143 pairs)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td><code>google/byt5-large</code></td>
+</tr>
+<tr>
+<td>Max sequence length</td>
+<td>768 bytes</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>7e-5</td>
+</tr>
+<tr>
+<td>Optimizer</td>
+<td>Adafactor (β₁=None, decay_rate=-0.8, clip=1.0, eps=(1e-30, 1e-3))</td>
+</tr>
+<tr>
+<td>Effective batch size</td>
+<td>32 × 4 grad accumulation = 128</td>
+</tr>
+<tr>
+<td>Epochs</td>
+<td>14 (target ~11,000 steps)</td>
+</tr>
+<tr>
+<td>Warmup ratio</td>
+<td>1.1 epoch</td>
+</tr>
+<tr>
+<td>LR scheduler</td>
+<td>Linear</td>
+</tr>
+<tr>
+<td>Weight decay</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Max grad norm</td>
+<td>10.0</td>
+</tr>
+<tr>
+<td>Group by length</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<h3>Note on group_by_length and gradient stability</h3>
+<p><code>group_by_length=True</code> batches samples of similar input length together, significantly reducing padding waste and speeding up training. However, it introduces a side effect: consecutive batches within the same length bucket have very similar sequence lengths, which creates <strong>non-uniform gradient magnitudes</strong> across steps — batches of long sequences produce much larger raw gradients than batches of short ones, causing instability in the loss curve.</p>
+<p>The fix was setting <code>β₁=0.9</code> in Adafactor. By default, Adafactor uses no first-moment estimate (β₁=None). Adding β₁=0.9 introduces a momentum term that carries a weighted average of recent gradients, providing inertia that dampens the sharp per-step variance introduced by length-grouped batching. This stabilized training without sacrificing the throughput gains from <code>group_by_length</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Dataset version</th>
+<th>Training pairs</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Run 1 — Submitted</td>
+<td>~90,522</td>
+<td>41.8–41.9</td>
+<td>40.9–41.0</td>
+</tr>
+<tr>
+<td>Run 2 — Same dataset, alt config</td>
+<td>~90,522</td>
+<td>42.1</td>
+<td>40.9</td>
+</tr>
+<tr>
+<td>Run 3 — Best config (more data)</td>
+<td>~100,143</td>
+<td>42.4</td>
+<td>40.4</td>
+</tr>
+</tbody>
+</table>
+<p>Run 2 used the same dataset as Run 1 but with a different hyperparameter configuration, achieving a higher public score (42.1 vs 41.9). Run 3 added more data (~100k pairs) and reached the highest public score (42.4), though with a larger public/private gap (40.4 private). Run 1 was selected as the final submission based on its more stable public/private alignment.</p>
+<hr>
+<h2>What Worked</h2>
+<table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM-based sentence breaker/fixer pipeline</td>
+<td><strong>High</strong> — core training data</td>
+</tr>
+<tr>
+<td>External academic PDF mining</td>
+<td><strong>High</strong> — biggest data expansion</td>
+</tr>
+<tr>
+<td>Text normalization (sz/s,/ṭ, subscripts, ḫ)</td>
+<td><strong>Medium</strong> — removes surface noise</td>
+</tr>
+<tr>
+<td>768-byte document augmentation</td>
+<td><strong>Medium</strong> — contextual signal</td>
+</tr>
+<tr>
+<td>English prioritization (prefer-EN dedup)</td>
+<td><strong>Small positive</strong></td>
+</tr>
+<tr>
+<td>Multi-language (TR/DE) augmentation</td>
+<td><strong>Small positive</strong></td>
+</tr>
+<tr>
+<td>English academic papers 2× boost</td>
+<td><strong>Small positive</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>What Didn't Work</h2>
+<ul>
+<li><strong>Translation Generator</strong>: LLM translations from morphological metadata alone (no reference English) were too noisy; including them hurt scores.</li>
+<li><strong>Word-level dictionary augmentation</strong>: Adding <code>translate Akkadian word to English: awilum → man, person</code> pairs as training samples showed no benefit.</li>
+<li><strong>PN/GN post-processing</strong>: Built a fuzzy-matching post-processor (OARE eBL dictionary, ~18k entries) to replace hallucinated name translations with correct transliterated forms. No meaningful improvement — likely because the test set comes from diverse sources with inconsistent name conventions, so no single normalization scheme aligns well; the matching logic was also complex enough to introduce its own errors. In hindsight, if the source OCR is correct, the model already learns the proper name forms from training data and post-hoc correction is unnecessary.</li>
+</ul>
+<hr>
+<h2>Summary</h2>
+<p>This competition is a <strong>data bottleneck problem</strong>. The Akkadian→English dataset is tiny by NMT standards. My solution treats data construction as the primary engineering challenge: a systematic LLM pipeline for sentence alignment across ~3,000 documents, combined with large-scale external data mining from the academic literature on Old Assyrian cuneiform (~60 publications). The model itself is standard ByT5-large with no structural modifications.</p>
+<p>The key unrealized opportunity: the public/private LB gap indicated I should have kept collecting more external data rather than tuning the model. The private leaderboard reward clean, diverse data much more than architectural tricks.</p>

@@ -1,0 +1,222 @@
+# https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459596
+
+Topic #459596: 11th Place - GRU, CNN, Transformer - GPU Deep Learning!
+  Author: Chris Deotte
+  Posted: 2023-12-06 00:10:37.205000
+  Votes: 186  Comments: 59
+
+What a fun competition! I enjoyed this competition! Thank you Kaggle and host.
+
+Building Blocks of GPU Deep Learning!
+
+Below are 3 building blocks of deep learning. By creating different sequences of these building blocks, we can build powerful models! Each block takes an input shape of (batch_size, sequence_length, features) and outputs the same. The RNN "block" uses bidirectional (example code here). The CNN "block" uses sums and products of multiple dilated convolutions (from WaveNet paper here and example code here). And the Transformer blocks uses self attention (example code here). These 3 "blocks" can create features from signals without needing feature engineering!
+
+
+
+Data Loader - Cut Data into Daily Chunks
+
+Our data loader will randomly give us 24 hour windows that always contain both one onset and one wakeup. During each epoch, we will get different cuts. This serves as crop data augmentation.
+ 
+
+Model Head is NLP QA Softmax (not NLP NER)
+
+For the head of our model, we use an architecture that is not in any public discussion nor public notebook. We use a technique from NLP called QuestionAnswering (i.e. BertForQuestionAnswering). This is analogous to Computer Vision's object detection. All public discussions and notebooks use NLP NER (i.e. BertForTokenClassification) which is analogous to Computer Vision segmentation. 
+
+The way to implement QA is for our data loader to always include one onset and one wakeup in every train sequence. Then we apply 1440 multiclass softmax loss to pick the correct minute of target. Later we will use a separately trained classification model to remove false positives (since our QA model was trained on 100% positives and doesn't locate negatives well).
+
+
+My CNN-Transformer-GRU, 80 features
+
+Approximately CV 0.800 LB 0.750
+
+
+My Deep-GRU, 2 features
+
+Approximately CV 0.805 LB 0.755
+
+
+Extra Predictions Trick
+
+Approximately CV +0.050 LB 0.050 Wow!
+A huge trick in this competition is to make multiple onset and wakeup predictions per night. First we make a first choice for every user every night. With 200 test users and approximately 30 nights per user and 2 targets, this is about 12000 predictions. Next we make a second guess (i.e. the second max probability) for each night and divide it by 2^1. This is 12000 more guesses. Next we made a 3rd guess (i.e. 3rd max prob) and divide it by 2^2. We continue this for 30 guesses per night where the last guesses are divided by 2^29. This boost CV by about +0.050 wow 😀! 
+
+This works because Average Precision metric is always improved when adding more predictions if the new predictions have a lower score than all previous predictions. (More explanation here)
+
+Rerank Scores
+
+Approximately CV +0.020 LB 0.020
+For the metric Average Precision, the score we assign to each prediction is very important. First we use the probability from our above models as the starting score. Next we use CatBoost with handmade convolution features (CatBoost achieves LB 0.705 by itself wow!), 1D-Unet, 2D-Unet, Mel Spectrograms, ResNet34, EfficientNetB5, and Audio WaveNet to rerank the scores. This is accomplished by predicting a new score for each prediction and then averaging all the scores.
+
+Ensemble with NMS and WBF
+
+Approximately CV +0.010 LB 0.010
+My CNN-Transformer-GRU and  Deep-GRU are very diverse. First I apply NMS (non maximum supression) to each model individually. Whenever two predictions are within 5 minutes of each other, we keep only the prediction which largest probability. Afterward we ensemble the two single models with WBF (weighted box fusion). Whenever two predictions are within 5 minutes of each other (and are the same level 1 thru 30 explained above in "extra scores trick"), then we replace the two with the average step position.
+
+Solution Code
+
+I published the code for these two TensorFlow models here
+
+Comments:
+├─ Konstantin Yakovlev (2023-12-06 00:23:19.387000) [+6]
+│  Congratulations with one more solo gold. Was rooting for you all the time and so sad you got hit by shakeup.
+│  
+│  Was a fun ride. 
+│  Really enjoyed the competition.
+│  
+│  Ruby K_mat and you always pushed us t...
+  ├─ Chris Deotte (2023-12-06 00:26:29.753000) [+4]
+  │  Wow that's an amazing LGBM model. I'm looking forward to your writeup.
+  │  
+  │  I was always watching your team and trying to stay ahead of you haha 😀 . You pushed me to work harder 😀 We were tied with sam...
+    ├─ Konstantin Yakovlev (2023-12-06 00:30:14.217000) [+10]
+    │  https://www.kaggle.com/kyakovlev/cmi-baseline-lgbm-v201
+    │  lgbm - I'll clean private dataset and publish run with train also
+├─ Chris Deotte (2023-12-12 00:24:35.673000) [+3]
+│  For reference, here are the 3 popular ways to create a target in this competition. All three performed well. From all three, we can compute a step and score for submission.csv:
+├─ Chris Deotte (2023-12-09 01:22:19.847000) [+3]
+│  UPDATE I published the code for these two TensorFlow models here
+├─ Fritz Cremer (2023-12-06 01:41:01.447000) [+3]
+│  A lot of great ideas! If some of the top ranks on the LB combined their ideas, 0.88 might be possible!
+  ├─ Chris Deotte (2023-12-06 01:48:40.393000) [+2]
+  │  Thanks @fritzcremer . Congratulations on amazing cash solo gold !!
+    ├─ Fritz Cremer (2023-12-06 18:16:42.827000) [+2]
+    │  Thanks, 3 more to go for Grandmaster 😁 Congrats to your 22nd Gold haha
+├─ Chau YH (2023-12-06 01:08:59.270000) [+3]
+│  Interesting solution! My solution is quite similar to yours - I used a window of 2 days and a custom defined self attention module instead of the usual transformer block. 
+│  
+│  I didn't do extra postpr...
+  ├─ Chris Deotte (2023-12-06 01:29:51.090000) [+1]
+  │  Awesome job! Congratulations @chauyh on solo gold finish.
+  │  
+  │  I'm curious did you build features and/or post process information from the fact that sometimes the host make fake anglez enmo? For exampl...
+    ├─ Chau YH (2023-12-06 04:49:30.887000) [+2]
+    │  Thanks @cdeotte and congrats on solo gold too!
+    │  
+    │  My approach is to train a DL model end to end and use as little manual processing /postprocessing as possible. I only applied a box-cox transform to ...
+├─ Chris Deotte (2023-12-12 00:30:36.960000) [+4]
+│  For reference, here are two Mel Spectrograms with 1D prediction and 2D prediction and ground truth:
+  ├─ AIDLRE001 (2023-12-13 19:41:21.017000) [+1]
+  │  Wanted to perform this data transformation but implementation and computational bottleneck was a problem. Had wanted to use the sleeping and waking data spectrograms as images to a 2D CNN but kept ...
+    ├─ Chris Deotte (2023-12-13 20:13:27.230000) [+2]
+    │  Yes this was feasible. My final solution used this model to predict a score for each onset and wakeup and I added the score to the score from my Transformer and GRU to improve CV and LB. Also by it...
+    ├─ Chris Deotte (2023-12-13 20:14:39.267000) [+1]
+    │  Also note that the highest scoring public notebook uses Mel Spectrograms (created by PyTorch) and provides code on GitHub. Discussion here
+    ├─ AIDLRE001 (2023-12-13 20:26:47.863000) [+1]
+    │  Thank you Chris. Wish I had had this earlier on. Gave up due to memory lags and crashes. I will work with this for future similar competitions. Once more, I really appreciate your hard work and tak...
+    ├─ AIDLRE001 (2023-12-13 20:29:07.933000) [+1]
+    │  Ok Chris. Will check it out. I wonder if I doing this on TPUs would make that much difference in training and inference speed? Its the scoring time that gives me ulcers.
+    ├─ AIDLRE001 (2023-12-13 20:32:44.540000) [+1]
+    │  Oh I see. The librosa library makes it easier. Was trying to do it from scratch but never got a spectrogram plot good enough as yours. Must be some bug in my code.
+├─ Válber César (2023-12-21 02:43:34.090000) [+1]
+│  Really interesting approach. Your solution was like a Random Forrest, implemented each ML-Code separatelly, instead decision trees.. Haha! 
+│  I'm completing this challenge (late submission), but in a...
+├─ README (2023-12-14 02:00:58) [+1]
+│  Congratulations! Very interesting approach indeed
+├─ huoyeqianxun (2023-12-13 06:29:30.830000) [+1]
+│  Congratulations! Always can  learn a lot from your work. Especially the Deep GRU model that only use 2 original features. Really impressive!
+│  
+│  I'm trying to train your Deep GRU model, but I got grad...
+  ├─ Chris Deotte (2023-12-14 22:02:57.830000) [+0]
+  │  Do you mean that you get gradient vanishing during training? If so, does your data loader output the correct train data? Every train sample must have X_train with shape (batch, 17280, 2) where the ...
+    ├─ huoyeqianxun (2023-12-15 03:56:08.653000) [+0]
+    │  Thanks for your reply.
+    │  Yes, I get gradient vanishing when I train the Deep-GRU model.
+    │  I checked many times, it seems my data loader satisfies all the demands that you described.  But gradient vanis...
+├─ Miraclejy (2023-12-12 18:48:35.340000) [+1]
+│  Congratulations! Such an excellent work. As a beginner I have really learned a lot from your solution. I am still a little bit confused about two details of your approach. 
+│  
+│  One is that you set cro...
+  ├─ Chris Deotte (2023-12-12 19:32:07.127000) [+2]
+  │  Thank you
+  │  
+  │  
+  │    
+  │  One is that you set crops for 24 hours which is 17280 steps but your input for Transformer Model is 1440
+  │  
+  │  
+  │  My CNN-Transformer-GRU uses an input of 1440. The data loader output just s...
+    ├─ Miraclejy (2023-12-12 19:42:58.780000) [+1]
+    │  Got it. Thank you so much!
+├─ AIDLRE001 (2023-12-09 09:17:28.487000) [+1]
+│  Excellent work! Really learnt a lot from this. I should have stuck with my keras framework rather than going to learn pytorch. Now I know…
+├─ DongYK (2023-12-08 04:54:59.650000) [+1]
+│  I have no word. It's a great post processing!
+  ├─ DongYK (2023-12-08 04:57:52.393000) [+1]
+  │  I have a problem to come up with what the right way to build input data is.
+  │  Could you explain why you selected the input data with both an onset and a wakeup?
+    ├─ Chris Deotte (2023-12-08 10:46:13.607000) [+5]
+    │  This is a powerful technique to achieve top results in object detection and object segmentation Kaggle competitions! 
+    │  
+    │  We want the model to locate where onset and wakeup is. So every train sample c...
+    ├─ DongYK (2023-12-08 14:13:15.063000) [+1]
+    │  That's very logical approach.
+    │  And I really appreciate your long and detail answer. I'm so touched. :)
+├─ C R Suthikshn Kumar (2023-12-07 09:33:38.510000) [+1]
+│  Congratulations. Thanks for sharing your solution details. Very interesting approach indeed.
+├─ Co_yamax (2023-12-07 06:02:52.943000) [+1]
+│  The observations on the evaluation metrics are most impressive to me so I will implement such technique in late submissions. Thank you!
+├─ Md Nuruzzaman (2023-12-07 04:38:26.307000) [+1]
+│  ResNet50 GPU deep learning
+├─ samu2505 (2023-12-07 02:04:37.570000) [+1]
+│  Do you mind sharing the pseudo code you used to automatically generate features?
+  ├─ Chris Deotte (2023-12-09 21:32:46.280000) [+1]
+  │  The RNN, CNN, and Transformer blocks generate features for us. Code is shown here. Then the model heads makes the prediction using features from the proceeding blocks.
+├─ Lizzy_Shi (2023-12-06 22:05:38.677000) [+1]
+│  Fabulous sharing on GPU deep learning. Learnt a lot from u.
+├─ AdithyaKolluru (2023-12-06 13:42:20.470000) [+1]
+│  Well Done Chris! Impressive solution.
+├─ sayoulala (2023-12-06 11:54:44.800000) [+1]
+│  Hi,Congrats Chris on the gold!  I have a question I would like to ask. Is BertForTokenClassification much worse than BertForQuestionAnswering? Why did you choose BertForQuestionAnswering? I  unders...
+  ├─ Chris Deotte (2023-12-06 20:41:04.687000) [+1]
+  │  Hi @sayoulala I think both methods work well. To me the task seemed like QA so I went QA from the beginning. Below are predictions from each technique. I think we need different post process for NE...
+├─ Ertuğrul Demir (2023-12-06 08:54:42.330000) [+1]
+│  Despite not participating in the competition, I learned a lot about it just by reading this.
+│  
+│  Impressive solution as always, congrats Chris.
+  ├─ Chris Deotte (2023-12-06 17:37:51.187000) [+1]
+  │  Thanks Ertugrul
+├─ Nazarko99 (2023-12-06 08:16:43.973000) [+1]
+│  Amazing solution. Can you please share an inference code ?)
+├─ Anil Reddy (2023-12-06 06:48:10.960000) [+1]
+│  There is always something to learn from you @cdeotte. Thanks for the nice writeup. Congratulations on one more gold
+├─ NikhilMishra (2023-12-06 04:42:19.967000) [+1]
+│  What a unique solution. Congratulations @cdeotte on just another brilliant performance. We all learn from you everytime
+  ├─ Chris Deotte (2023-12-07 22:35:39.803000) [+0]
+  │  Thanks NikhilMishra. Congratulations to you and penguin46. Great job achieving cash gold !!
+├─ AnthonyTherrien (2023-12-06 01:09:20.687000) [+1]
+│  I’m impressed to see GRU having such a high score! 🚀
+  ├─ Chris Deotte (2023-12-06 03:15:13.783000) [+2]
+  │  Yes it is impressive how well GRU can do with only input the two features anglez and enmo. Note I did post process the prediction logits for all minute % 15 which equaled one of the values that did...
+├─ Sadhaklal (2023-12-06 01:05:05.720000) [+1]
+│  Congrats Chris on the gold!
+│  
+│  And thanks for the clearly written writeup. Your solution is so sophisticated, yet easy to understand 🙂
+│  
+│  I found this idea very clever:
+│  
+│  "Later we will use a separately...
+  ├─ Chris Deotte (2023-12-06 01:13:22.790000) [+3]
+  │  You are dividing the second best prediction's probability by 2^2, the third best predictions's by 2^3, etc. How did you realise that this is the right way to 'adjust' the probabilities?
+  │  
+  │  
+  │  The first...
+├─ Fnoa (2023-12-06 00:52:06.920000) [+1]
+│  Congratulations once again @cdeotte! It was a fun battle for days 😀
+  ├─ Chris Deotte (2023-12-06 00:57:50.250000) [+2]
+  │  Absolutely was fun! I knew your team was working hard every day and that encouraged me to work hard every day!
+  │  
+  │  Congratulations on an awesome 3rd place cash gold finish!
+├─ Cody_Null (2023-12-06 00:19:53.650000) [+1]
+│  Learning from you yet again, a pleasure to watch you work. Congrats Chris!
+├─ Catharis (2023-12-06 10:01:22.150000) [+2]
+│  Well done on the solo gold ! @cdeotte . we missed out on these metric specific tricks which turned out to be a huge deal, will make sure to study the metric more carefully next time. Really appreci...
+├─ HinePo (2023-12-06 01:20:01.407000) [+2]
+│  Amazing solution as always, Chris. Congrats on one more gold
+├─ [deleted] (2023-12-06 00:22:31.387000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-12-06 00:32:37.177000) [+3]
+  │  [deleted]
+    ├─ [deleted] (2023-12-06 00:41:35.520000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-12-09 10:44:28.497000) [+1]
+│  [deleted]

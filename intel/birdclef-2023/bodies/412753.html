@@ -1,0 +1,128 @@
+<p>First of all, thanks to Kaggle and Cornell Lab of Ornithology for hosting this interesting competition. And I would like to emphasize the thanks to the bird sound recordists who provided their data through xeno-canto.</p>
+<h3>Solution Summary</h3>
+<ul>
+<li>Knowledge Distillation is all you need.</li>
+<li>Adding no-call data, xeno-canto data, and background audios(Zenodo) is effective.</li>
+</ul>
+<h3>Datasets</h3>
+<p>Additional datasets can be found <a href="https://www.kaggle.com/datasets/atsunorifujita/birdclef-2023-additional" target="_blank">here</a>.</p>
+<ul>
+<li>Bird CLEF 2023</li>
+<li>Bird CLEF 2021, 2022 (for pretraining)</li>
+<li>ff1010bird_nocall (5,755 files for learning no call)</li>
+<li>xeno-canto files not included in training dataset CC-BY-NC-SA (896 files) and CC-BY-NC-ND (5,212 files).</li>
+<li>Zenodo dataset (background noise)</li>
+<li>esc50 (rain, frog)</li>
+<li>aicrowd2020_noise_30sec (background noise for pretraining)</li>
+</ul>
+<h3>Models</h3>
+<ul>
+<li>My models are based on <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243463" target="_blank">the BirdCLEF 2021 2nd place solution</a> using <a href="https://github.com/huggingface/pytorch-image-models" target="_blank">timm</a>.</li>
+<li>My solution consists of a total of 4 models, all with eca_nfnet_l0 as the backbone. Each set is slightly different.</li>
+</ul>
+<ol>
+<li>MelSpectrogram (sample_rate: 32000, mel_bins: 128, fmin: 20, fmax: 16000, window_size: 2048, hop_size: 512, top_db=80.0, NormalizeMelSpec) following <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243293" target="_blank">this solution</a>.<ul>
+<li>Public: 0.8312, Private: 0.74424</li></ul></li>
+<li>Balanced sampling with the above settings.<ul>
+<li>Public: 0.83106, Private: 0.74406</li></ul></li>
+<li><a href="https://github.com/daemon/pytorch-pcen" target="_blank">PCEN</a> (sample_rate: 32000, mel_bins: 128, fmin: 20, fmax: 16000, window_size: 2048, hop_size: 512).<ul>
+<li>Public: 0.83005, Private: 0.74134</li></ul></li>
+<li>MelSpectrogram (sample_rate: 32000, mel_bins: 64, fmin: 50, fmax: 14000, window_size: 1024, hop_size: 320).<ul>
+<li>Public: 0.83014, Private: 0.74201</li></ul></li>
+</ol>
+<h3>Training</h3>
+<p>Knowledge distillation of pre-computed predictions in <a href="https://www.kaggle.com/models/google/bird-vocalization-classifier/frameworks/TensorFlow2/variations/bird-vocalization-classifier/versions/1" target="_blank">Kaggle Models</a> (bird-vocalization-classifier) was the hallmark of my solution. This model cannot complete inference in less than 2h, but it is very powerful. cmAP_5 on my validation dataset was 0.9479. So I tried to extract useful information from this model.<br>
+<strong>The Kaggle models pre-computed predictions were created <a href="https://www.kaggle.com/code/atsunorifujita/extract-from-kaggle-models/notebook" target="_blank">here</a></strong>.<br>
+According to this <a href="https://arxiv.org/abs/2106.05237" target="_blank">paper</a>, they argued that efficient distillation required 1. consistent input, 2. aggressive mixup, and 3. a large number of epochs. So I did 2 and 3 because it was challenging to integrate the Kaggle model into my training pipeline. It certainly looked effective.<br>
+I chose only approaches that improve both CV and LB. In this competition, I just couldn't believe in one or the other.</p>
+<ul>
+<li>Using 5 StratifiedKFold. Only 1 fold did not cover all classes, so the remaining 4 were used for training.</li>
+<li>The evaluation metric is padded_cmap1. The best results were the same with padded_cmap5 in most cases.</li>
+<li>Use primary_label only</li>
+<li>no-call is represented by all 0</li>
+<li>loss: 0.1 * BCEWithLogitsLoss (primary_label) + 0.9 * KLDivLoss (from Kaggle model)<ul>
+<li>Softmax temperature=20 was best (tried 5, 10, 20, 30).</li></ul></li>
+<li>I used randomly sampled 20-sec clips for training. Audio that is less than 20 sec is repeated.</li>
+<li>epoch = 400 (Most models converge at 100-300)</li>
+<li>early stopping(pretraining=10, training=20)</li>
+<li>Optimizer: AdamW (lr: pretraining=5e-4, training=2.5e-4, wd: 1e-6)</li>
+<li>CosineLRScheduler(t_initial=10, warmup_t=1, cycle_limit=40, cycle_decay=1.0, lr_min=1e-7, t_in_epochs=True,)</li>
+<li>mixup p = 1.0  (It was better than p=0.5)<br></li>
+</ul>
+<p>I also encountered a situation where the training time was significantly longer when pretrained with past competition data. Thanks to everyone who suggested solutions.</p>
+<h4>Augmentation</h4>
+<ul>
+<li>OneOf ([Gain, GainTransition])</li>
+<li>OneOf ([AddGaussianNoise, AddGaussianSNR]</li>
+<li>AddShortNoises esc50 (rain, frog)</li>
+<li>AddBackgroundNoise from <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/394358#2179605" target="_blank">Zenodo</a>. The 60 minutes with the fewest bird calls were extracted from each dataset and divided into 30 sec (training only).</li>
+<li>AddBackgroundNoise from aicrowd2020_noise_30sec and ff1010bird_nocall (pretraining only).</li>
+<li>LowPassFilter</li>
+<li>PitchShift</li>
+</ul>
+<h4>Hardware</h4>
+<ul>
+<li>1 * RTX 3090</li>
+<li>Pretraining time: 30-40h per model. </li>
+<li>Training time: 9-12h per model.</li>
+</ul>
+<h3>Inference</h3>
+<p>Reducing the inference time is the part I was having trouble with. Thanks to <a href="https://www.kaggle.com/leonshangguan" target="_blank">@leonshangguan</a> for sharing his <a href="https://www.kaggle.com/code/leonshangguan/faster-eb0-sed-model-inference" target="_blank">effective approach</a>, I was able to use 4 models.</p>
+<ul>
+<li>Ensemble with simple averaging.</li>
+<li>4 models using PyTorch JIT. total 110min.</li>
+<li><strong><a href="https://www.kaggle.com/code/atsunorifujita/4th-place-solution-inference-kernel" target="_blank">Inference notebook</a></strong></li>
+</ul>
+<h3>What didn’t work</h3>
+<ul>
+<li>focal loss.</li>
+<li>Split a low-sample class.</li>
+<li>Backbone other than eca_nfnet_l0 and eca_nfnet_l1.</li>
+<li>Optimizers (adan, lion, ranger21, shampoo). I tried to create a custom normalize-free model but failed.</li>
+<li><a href="https://github.com/naver-ai/cmo" target="_blank">CMO</a> (mixup worked better when using distillation).</li>
+<li><a href="https://github.com/KinWaiCheuk/nnAudio/blob/master/Installation/nnAudio/features/cqt.py" target="_blank">CQT</a> (slow and degraded).</li>
+<li>Change to first stride(1, 1). CV was good but inference takes a long time and not a single model is completed in less than 2h.</li>
+<li>Pretraining Zenodo data (story before trying distillation).</li>
+<li>Distillation training from scratch (not use imagenet weights). It didn't converge in the amount of time I could tolerate.</li>
+<li>MelSpectrogram, PCEN, and CQT integrated into input channels in all combinations. There was no synergistic effect.</li>
+</ul>
+<h3>Ablation study</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BaseModel</td>
+<td>0.80603</td>
+<td>0.70782</td>
+</tr>
+<tr>
+<td>BaseModel + Knowledge Distillation</td>
+<td>0.82073</td>
+<td>0.72752</td>
+</tr>
+<tr>
+<td>BaseModel + Knowledge Distillation + Adding xeno-canto</td>
+<td>0.82905</td>
+<td>0.74038</td>
+</tr>
+<tr>
+<td>BaseModel + Knowledge Distillation + Adding xeno-canto + Pretraining</td>
+<td>0.8312</td>
+<td>0.74424</td>
+</tr>
+<tr>
+<td>BaseModel + Knowledge Distillation + Adding xeno-canto + Pretraining + Ensemble (4 models)</td>
+<td>0.84019</td>
+<td>0.75688</td>
+</tr>
+</tbody>
+</table>
+<h3>Acknowledgments</h3>
+<p>My solution builds on contributions from participants in this and past competitions, birding enthusiasts, and the work of the machine learning community. thank you very much 🙏 <br>
+<strong>Training Code</strong>: <a href="https://github.com/AtsunoriFujita/BirdCLEF-2023-Identify-bird-calls-in-soundscapes" target="_blank">https://github.com/AtsunoriFujita/BirdCLEF-2023-Identify-bird-calls-in-soundscapes</a></p>

@@ -1,0 +1,128 @@
+<p>A big thanks to Kaggle &amp; the completion hosts for introducing the <code>Efficiency Track</code>, which is an amazing addition and will surely lead to more creative solutions. This is a detailed version of our solution for the <code>Feedback Prize - Predicting Effective Arguments</code> competition. </p>
+<h1>Links</h1>
+<ul>
+<li>TL;DR: <a href="https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347371" target="_blank">https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347371</a></li>
+<li>Code: <a href="https://github.com/rbiswasfc/kaggle-feedback-effectiveness-3rd-place-solution" target="_blank">https://github.com/rbiswasfc/kaggle-feedback-effectiveness-3rd-place-solution</a></li>
+<li>Inference Notebook: <a href="https://www.kaggle.com/code/conjuring92/ens58-lstm-lgb-all/notebook?scriptVersionId=104014668" target="_blank">https://www.kaggle.com/code/conjuring92/ens58-lstm-lgb-all/notebook?scriptVersionId=104014668</a></li>
+</ul>
+<h1>Model Architecture</h1>
+<p>Overall, we followed the span classification approach with model architecture as below<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2125251%2F1b6b3d2fbb7551da6de6fe45f3f00f94%2FScreenshot%202022-08-24%20at%2010.40.29%20AM.png?generation=1661308851093353&amp;alt=media" alt=""></p>
+<h1>Pre-Processing</h1>
+<p>We pre-processed each essay to insert newly added span start and span end tokens for each discourse types. To provide more context to our models, we added a topic segment in this format <code>[TOPIC] &lt;prompt_text&gt; [TOPIC END] &lt;essay&gt;</code>. As a minor detail, we inserted <code>[SOE]</code> and <code>[EOE]</code> tokens to indicate essay start and end. As an illustration here is an example:</p>
+<pre><code>[TOPIC] Should computers read the emotional expressions of students in a classroom? [TOPIC_END] [SOE] Lead [LEAD] Imagine being told about a new new technology that reads emotions. Now imagine this, imagine being able to tell how someone truly feels about their emotional expressions because they don't really know how they really feel. [LEAD_END]  In this essay I am going to tell you about my opinions on why  Position [POSITION] I believe that the value of using technology to read student's emotional expressions is over the top. [POSITION_END] 
+
+...
+
+Concluding Statement [CONCLUDING_STATEMENT] In conclusion I think this is not a very good idea, but not in the way students should be watched. The way teachers are able to read students' facial expressions tells them how they feel. I don't believe it's important to look at students faces when they can fake their emotions. But, if the teacher is watching you then they're gonna get angry. This is how I feel on this topic. [CONCLUDING_STATEMENT_END] [EOE]
+</code></pre>
+<h1>Span MLM</h1>
+<p>To train the newly added tokens (e.g. <code>[LEAD]</code>, <code>[POSITION]</code>) and adapting to the specific task domain (i.e. student essays from grade 6-12) we continued the pre-training phase of each backbone (e.g. <code>deberta-v3-large</code>) with masked language modelling (MLM) objective. While standard MLM works alright, we found big boost with the following modifications:</p>
+<ul>
+<li>Changing masking probability to 40-50% instead of 15% used typically. For a detained analysis on masking rate, please refer to this : <strong>Should You Mask 15% in Masked Language Modeling?</strong> <a href="https://arxiv.org/abs/2202.08005" target="_blank">https://arxiv.org/abs/2202.08005</a></li>
+<li>Masking contiguous tokens of length 3-15 instead of regular random masking approach. Out motivation came from this paper: <strong>SpanBERT: Improving Pre-training by Representing and Predicting Spans</strong> <a href="https://arxiv.org/abs/1907.10529" target="_blank">https://arxiv.org/abs/1907.10529</a></li>
+<li>Changing chuck size / max length to 720 to match average essay length in the fine-tuning stage</li>
+</ul>
+<p>Here we used the ~15k essays from the 2021 feedback competition. In addition, we added ~25k synthetically generated essays by leveraging T5-large model. More on this in the next section.</p>
+<h1>T5 Augmentations</h1>
+<p>Since we couldn't find external data sources that worked for us, we explored ways to create our own augmented / synthetic data / essays. To this end, we adopted two approaches</p>
+<p><strong>Label Preserving Training Data Augmentation with T5</strong> Here we used 2022 labelled data to generate synthetic examples, which are directly added to train dataset during fine-tuning step. For this purpose, we first train the T5-large model with a seq2seq (text-to-text) text generation task. To be specific, this was the task input-output format:</p>
+<ul>
+<li>Input Template: <code>Generate text for &lt;discourse effectiveness&gt; &lt;discourse type&gt; | Prompt: &lt;prompt text&gt; | Left Context: &lt;left context&gt; | Right Context: &lt;right context&gt;</code>, where left context is essay up to the discourse element we try to generate and right context is anything after the discourse element</li>
+<li>Output Template: <code>&lt;discourse text&gt;</code> </li>
+</ul>
+<p>Here is one example:</p>
+<p><code>Generate text for Ineffective Evidence | Prompt: Should the electoral college be abolished in favor of popular vote? | Left Context:Dear, State Senator\n\nWith the elctoral college vote most of people are not getting what they prefer. For the the electoral college vote, voters vote fro not the president, but for a not slate of electors. &lt;....&gt; majority of the people would rather have the popular vote.| Right Context: the electoral college election consist of the 538 electors. All you have to do is win most of those votes and you win the election. &lt;.....&gt; The electoral college is unfair, outdated, and irrational to all the people</code><br>
+--&gt;<br>
+<code>It does not make any sense to me how the president with the votes does not win the presidential election. The electoral college is unfair for all voters that vote. When you think of a vote and how it works you would think by the most one with the most votes wins cause that pretty much means that most of the people would rather have the most wins over the win that had less votes but more electoral votes.</code></p>
+<p>The trained T5 model was pretty amazing, we couldn't distinguish which one was generated text and which one was original. The augmentations copied the student writing styles, identity masks e.g.  and included effects such as that mentioned by <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> in the previous competition discussion:</p>
+<blockquote>
+  <p>just imagine you are asked to write the essay for homework. you are a bad student and want to copy other people work. you want to do so, such that that your teacher will not know that you are copying other people's work.<br>
+  you can:<br>
+  1) choose an essay of the train data. replace the claim from another essay. (if the other essay has the same position as the first essay)</p>
+</blockquote>
+<p>Reference: <strong>Data Augmentation using Pre-trained Transformer Models</strong> <a href="https://arxiv.org/abs/2003.02245" target="_blank">https://arxiv.org/abs/2003.02245</a></p>
+<p><strong>T5: Non-Label Preserving Essay Augmentation</strong><br>
+We used this to mainly generate essays for MLM. It's quite similar to previous augmentation task with minor changes</p>
+<ul>
+<li>uses all ~15k essays from feedback 2021 dataset</li>
+<li>model only sees left context </li>
+<li>no discourse effectiveness label is given in input prompt</li>
+</ul>
+<h1>Fine-tuning</h1>
+<p>In the fine-tuning stage, we mixed varying degree of T5 label-preserved augmented data (0-50% of original essays) with actual data. This was pretty much standard with following key highlights</p>
+<ul>
+<li>Inclusion of prompts in essay: This helped models to boost performance on Lead and Position discourse types</li>
+<li>Adversarial Training with AWP</li>
+<li>Mask Augmentations (10-25%)</li>
+<li>Multi-sample dropouts</li>
+<li>Multi-head attention over span representations</li>
+<li>LSTM over transformer encoder representations</li>
+<li>Loss = CE Loss + Focal loss</li>
+<li>Cosine scheduler</li>
+<li>Layer wise learning rate decay</li>
+<li>Mean pooling to extract span representations as opposed to [CLS] token based ones</li>
+</ul>
+<h1>Model Backbones</h1>
+<ul>
+<li>DeBERTa-Large</li>
+<li>DeBERTa-XLarge</li>
+<li>DeBERTa-V3-Large</li>
+<li>Longformer</li>
+<li>LUKE</li>
+</ul>
+<h1>Ensembling</h1>
+<p>We built two meta models based on OOF model probabilities + additional features</p>
+<p><strong>LSTM based</strong></p>
+<ul>
+<li>Used only stage-1 model probabilities as features</li>
+<li>Had better correlations with CV and LB</li>
+</ul>
+<p><strong>LGB based</strong></p>
+<ul>
+<li>Used stage-1 model probabilities as features + additional features</li>
+<li>Count of next line per essay text</li>
+<li>Count of discourse_id per essay_id</li>
+<li>Pos tags features (NN, VB etc)</li>
+</ul>
+<h1>Things that had most impact</h1>
+<ul>
+<li>Span MLM: 0.02 to 0.03</li>
+<li>AWP: 0.005 to 0.01</li>
+<li>Prompts: 0.002 to 0.005</li>
+<li>Direct use of T5 Augmentations: -0.002 to 0.005</li>
+<li>Mask Augmentation + MSD: 0.002 - 0.005</li>
+<li>LSTM + LGB ensemble: 0.002-0.004 </li>
+</ul>
+<h1>Things that added for diversity</h1>
+<ul>
+<li>LUKE model</li>
+<li>Multitask objectives e.g. predicting discourse type, ordered encoding of labels e.g. ineffective -&gt; [0, 0], adequate -&gt; [1, 0], effective -&gt; [1, 1]</li>
+<li>Different sampling ratio of augmented data</li>
+<li>Impact moderation of focal loss with its gamma parameter</li>
+<li>Knowledge distillation</li>
+</ul>
+<h1>How to make training stable?</h1>
+<p>We could train our models up to 6-7 epoch with best results obtained in penultimate/last epoch. The following helped in prolonging and stabilizing the training</p>
+<ul>
+<li>Careful selection of key params e.g. batch size, learning rate, weight decay</li>
+<li>Cosine learning rate scheduler</li>
+<li>Task adaptation with MLM</li>
+<li>AWP</li>
+<li>Mask augmentations + Multi-sample dropouts</li>
+<li>Layer wise learning rate decay</li>
+<li><strong>Full precision training</strong></li>
+</ul>
+<h1>Things that didn't work for us</h1>
+<ul>
+<li>Pseudo labelling / meta pseudo labelling</li>
+<li>on hindsight, this was a big miss for us</li>
+<li>Random augmentation </li>
+<li>UDA - Unsupervised Data Augmentations</li>
+<li>Contrastive Learning</li>
+<li>SWA</li>
+<li>Mixout</li>
+</ul>
+<p>Thanks for reading this far! Hope this helps you in your future NLP competitions! Looking forward to your comments and feedbacks.</p>
+<p>Our team ( <a href="https://www.kaggle.com/trushk" target="_blank">@trushk</a> , <a href="https://www.kaggle.com/harshit92" target="_blank">@harshit92</a>) dynamics was brilliant throughout the competition. We had a lot of fun and learned so much together. Looking forward to future teaming up! </p>
+<p>Thanks 😊</p>

@@ -1,0 +1,414 @@
+# https://www.kaggle.com/competitions/birdclef-2026/discussion/704391
+
+Topic #704391: 101 place Pure Claude-Code Solution (Got Removed from Competition)
+  Author: Tom
+  Posted: 2026-06-04 11:50:07.575000
+  Votes: 48  Comments: 32
+
+I’ll share the method itself in a separate attachment later. This write-up primarily focuses on how I built a fully automated Kaggle competition solver using Claude Code for this competition. To begin, I'd like to show the token consumption from the last month:
+
+
+
+All the necessary markdown files for claude-code is in the file attachment. Here is the brief diagram about my agent workflow.
+
+Besides workflow, those html files are all triggered by me. I basically work about 1-2 hours on birdclef by seeing those html report. And if I found any strange reported results in html then I fine-tune my workflow. Otherwise I didn't touch it and just let it keeps running. 
+
+Submission Criteria: I have established multiple validation gates, including score thresholds and diversity verification across multiple datasets. Once all criteria are satisfied, the system sends an authorization request through the Gmail MCP. I then receive the email and explicitly reply to confirm that I approve the submission.
+Only after receiving my approval does the system proceed with the final submission. This process is similar to submitting a merge request to an application or repository owner and requiring their approval before the changes are merged.
+
+Working time: I worked on this competition about 1-2 hours per week including spending time on code-review the submission.
+
+architect — Autoresearcher End-to-End Flow Chart
+
+A text-based, end-to-end flow chart of the BirdCLEF 2026 "permanent self-driving research loop."
+For the implementation, see AUTORESEARCHER.md, CLAUDE.md §10/§17, .claude/skills/*,
+.claude/agents/*, and scripts/*.
+
+
+  
+One iron rule across the whole system: every submission requires human authorization — the system NEVER auto-submits.
+
+
+
+
+0. Bird's-eye view (three layers)
+
+┌────────────────────────────────────────────────────────────────────────────┐
+│  DECISION   autoresearcher-orchestrator (agent)  ← one decision step per wake │
+├────────────────────────────────────────────────────────────────────────────┤
+│  DETECTION  background daemon scripts  → continuously write flags / logs      │
+├────────────────────────────────────────────────────────────────────────────┤
+│  MEMORY     reports/autoresearch/  STATE.md · ideas_backlog.md · ledger.md     │
+└────────────────────────────────────────────────────────────────────────────┘
+        Permanent wake-up: /loop (interactive long-run) or schedule cron (unattended)
+
+
+
+
+1. Main lifecycle (one pass per wake-up)
+
+        ┌──────────────────────────────────────────────────────┐
+        │  ⏰ Wake-up layer  (/loop 30m  or  schedule cron)      │
+        └───────────────────────────┬──────────────────────────┘
+                                    │ wake
+                                    ▼
+                 ┌───────────────────────────────────┐
+                 │  Read STATE.md + outputs/logs/*.flag│
+                 │  (orchestrator loads world state)   │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                 ┌───────────────────────────────────┐
+                 │   Decision tree (policy ①→⑤,        │   ← see §2
+                 │   take first matching branch)       │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                 ┌───────────────────────────────────┐
+                 │   Execute exactly ONE action        │
+                 │   (may delegate to sub-agents)      │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                 ┌───────────────────────────────────┐
+                 │   Write back STATE.md (+ ledger)    │
+                 │   Schedule next wake-up             │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                          ⏳ Wait for next wake ──┐
+                                 ▲                │
+                                 └────────────────┘  (permanent loop)
+
+
+
+
+2. Decision tree (policy ①→⑤, top-down, first match wins)
+
+                          ┌─────────────────────────────┐
+                          │  Read flags + STATE + backlog│
+                          └──────────────┬──────────────┘
+                                         ▼
+        ① SUBMIT_READY.flag present? ──Yes──▶ [A] Submission gate flow (§3)
+                                         │
+                                         No
+                                         ▼
+        ② New finished round(5/5) not in ledger? ─Yes─▶ [B] Eval validation flow (§4)
+                                         │
+                                         No
+                                         ▼
+        ③ backlog has todo high-priority idea
+           AND GPU clean? ──────────Yes──▶ [C] Experiment execution flow (§5)
+                                         │
+                                         No
+                                         ▼
+        ④ EXPERIMENT_DRY.flag or
+           AUTORESEARCH_TRIGGER.flag? ─Yes─▶ [D] Dry → research flow (§6)
+                                         │
+                                         No
+                                         ▼
+        ⑤ ───────────────────────────────▶ [E] idle, schedule next wake-up
+
+
+
+
+3. [A] Submission gate flow — SUBMISSION GATE v2 (4 layers, all must PASS)
+
+  SUBMIT_READY.flag
+        │  delegate to submit-gatekeeper
+        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ L1  AUC gate                                                 │
+  │     candidate ckpt soundscape val AUC ≥ SUBMIT_THRESHOLD(0.9250)│
+  │     AND passes eval-validity-watchdog                        │
+  └───────────────┬───────────────────────────┬─────────────────┘
+              PASS│                       FAIL │
+                  ▼                            ▼
+  ┌─────────────────────────────────────┐   ✗ NO-GO
+  │ L2  XC distribution validity         │   report layer + values + advice
+  │     (BirdSet XCL, focal)             │   → no submit, back to experiment
+  │   lower (species): rank corr ≥ 0.50   │
+  │   upper (coarse) : JS(class_name) ≤0.10│
+  │   dist_validity_check.py --dataset xc │
+  └───────────────┬─────────────────────┘
+              PASS│  (any layer FAIL → ✗ NO-GO, as above)
+                  ▼
+  ┌─────────────────────────────────────┐
+  │ L3  PER distribution validity        │   ← soundscape, closest to hidden test
+  │     (BirdSet PER, soundscape)        │
+  │   lower rank corr ≥ 0.45 / upper JS≤0.12│
+  │   dist_validity_check.py --dataset per │
+  └───────────────┬─────────────────────┘
+              PASS│
+                  ▼
+  ┌─────────────────────────────────────┐
+  │ L4  Diversity gate                   │
+  │   2-ckpt per-species corr median ≤0.985│
+  │   round diversity / arch diversity    │
+  │   PVT R5 fold4 LOCKED / no same-round  │
+  └───────────────┬─────────────────────┘
+              PASS│
+                  ▼
+        ┌───────────────────────┐
+        │ ONNX export (FP32+INT8)│
+        │ build 2-ckpt submission│
+        │ file_level_top_k=1     │
+        │ collect L1–L4 values   │
+        └───────────┬───────────┘
+                    ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ L5  Gmail MCP approval  (human email authorization)          │
+  │     merge-request analogy: system opens MR → owner approves  │
+  │                                                              │
+  │   submit-gatekeeper assembles candidate 2-ckpt combo         │
+  │   (backbone/round/fold) + per-layer gate value summary       │
+  │     (L1 AUC · L2 XC rank-corr/coarse-JS · L3 PER · L4 div)   │
+  │                          │                                    │
+  │                          ▼                                    │
+  │   mcp__claude_ai_Gmail__create_draft  →  send                │
+  │     "Submission Authorization Request" to tom99763@gmail.com │
+  │     subject carries unique request-id:                       │
+  │       [BIRDCLEF-SUBMIT-REQ r{R}f{f} &lt;timestamp&gt;]             │
+  │     body: candidate combo + L1..L4 values + estimate;        │
+  │           "reply APPROVE to approve / REJECT to reject"      │
+  │                          │                                    │
+  │                          ▼                                    │
+  │            ⏳ state = AWAITING EMAIL AUTHORIZATION            │
+  │                          │  each wake, poll by request-id:    │
+  │                          │  mcp__claude_ai_Gmail__            │
+  │                          │     search_threads + get_thread    │
+  │                          ▼                                    │
+  │            ┌── reply in same thread? ───┐                     │
+  │            │ verify sender ==           │                     │
+  │            │   tom99763@gmail.com       │                     │
+  │            └────────────┬──────────────┘                     │
+  │             APPROVE     │     REJECT / timeout                │
+  │                ▼        │            ▼                        │
+  │             (proceed)   │        ✗ NO-GO                      │
+  │                         │   log ledger, back to experiment   │
+  └─────────────┬───────────┴──────────────────────────────────┘
+                │ APPROVE (sender verified)
+                ▼
+          ✅ Submit to Kaggle (90min timeout, 2 ckpt)
+
+  ⛔ IRON RULE: NEVER submit before a self-sent email APPROVE is received.
+  ⚠ Headless limit: interactive-auth Gmail MCP may be UNAVAILABLE in
+     headless/cron unattended mode. In that case fall back to writing
+     SUBMIT_READY.flag only, and defer the L5 email-approval loop to an
+     interactive Claude session.
+
+
+
+
+4. [B] Eval validation flow (new round done → bookkeeping)
+
+  New finished round (fold0..4_best.pt present)
+        │  delegate to eval-validator
+        ▼
+  ┌──────────────────────────────────────────────┐
+  │ Check: all_ss_probs.npz / _corrected.npz exist │
+  │        5 folds present · ss_auc∈[0.80,0.99] noNaN│
+  │        log has no error/OOM · no prob collapse  │
+  └───────────────┬──────────────────┬────────────┘
+              PASS│              FAIL │
+                  ▼                   ▼
+        Update experiment_ledger.md  ✗ mark invalid
+        (hypothesis/setup/val·LB/concl) block gen pseudo / submit
+                  │                   │ report reason
+                  ▼                   ▼
+        round result trustworthy ──▶ back to loop, re-evaluate next wake
+
+
+
+
+5. [C] Experiment execution flow (pick idea → run pipeline)
+
+  backlog has todo high-priority idea + GPU clean
+        │
+        ▼  idea → config (set idea status: running, write ledger)
+  delegate to ns-autopilot / ns-pipeline-orchestrator
+        │
+        ▼
+  ┌───────────────────────── per-round pipeline ────────────────────────┐
+  │  train 5 folds ─▶ infer all_ss ─▶ Residual Corrector ─▶ gen pseudo  │
+  │  (early stop=4)   (all_ss_probs)   (+0.40×delta)      (sed_20s_rR)   │
+  │        ▲                                                   │         │
+  │        └──────────────  next round (perch_w decays)  ◀──────┘         │
+  └────────────────────────────────┬───────────────────────────────────┘
+                                   │ each round gated by eval-validity-watchdog
+                                   ▼
+                 round done → back to loop → next wake hits policy ②(validate)
+                                   │
+        ┌──────────────────────────┴──────────────────────────┐
+        │ Running concurrently in background:                  │
+        │  watchdog_nc.sh           → auto-restart stall / GPU │
+        │  experiment_dry_detector.sh → compute AUC-improvement │
+        │                               series (see §6)        │
+        └─────────────────────────────────────────────────────┘
+
+
+
+
+6. [D] Dry → research flow (loop-until-dry core)
+
+  ── Detection layer (background experiment_dry_detector.sh, every 1800s) ──
+   Scan outputs/logs/sed_ns_*_fold*.log, compute per-round best_val_auc
+   improvement series
+        │
+        ▼  dry criteria (any one true)
+   (A) self-train converged: DRY_PATIENCE(3) rounds improve &lt; DRY_EPS(0.001)
+   (B) ceiling stuck       : best_val_auc still hugging 0.948, no breakthrough
+   (C) backlog exhausted   : no status: todo high-priority idea
+        │
+        ├─ true  ─▶ write EXPERIMENT_DRY.flag (with reason)
+        └─ false ─▶ remove stale flag (back to experiment, keep pushing)
+
+  ── Decision layer (orchestrator policy ④) ────────────────────────────
+   EXPERIMENT_DRY.flag / AUTORESEARCH_TRIGGER.flag
+        │  trigger lit-research-watch
+        ▼
+   Spawn N subtopic agents from template_agent, in parallel:
+        ┌──────────────┬──────────────┬──────────────┬─────────────┐
+        ▼              ▼              ▼              ▼             ▼
+   autoresearch   autoresearch   autoresearch   autoresearch  autoresearch
+     -scout        -scout         -scout         -scout        -scout
+   new backbone  pseudo denoise  calibration   post-proc    domain-gen / SSL
+        │              │              │              │             │
+        └──────────────┴──────┬───────┴──────────────┴─────────────┘
+                              ▼  each WebSearch+WebFetch → distill actionable gains
+                   synthesize reports/lit_research_&lt;date&gt;.md
+                              │
+                              ▼
+                   write new ideas into ideas_backlog.md (status: todo)
+                              │
+                              ▼
+                   🧹 clear EXPERIMENT_DRY.flag
+                              │
+                              ▼
+                   back to experiment phase (next wake hits policy ③)
+
+   ╔═══════════════════════════════════════════════════════════════╗
+   ║  loop-until-dry: keep pushing experiments; only go to websearch ║
+   ║  when "dry". After refilling backlog, clear the flag and return ║
+   ║  to experiments — avoids wasteful searching.                    ║
+   ╚═══════════════════════════════════════════════════════════════╝
+
+
+
+
+7. Flags &amp; data flow (detection layer → decision layer)
+
+  Background script                Writes flag/log                Consumed by
+  ─────────────────────────────────────────────────────────────────────────
+  submit_gate_watcher.sh    ──▶  SUBMIT_READY.flag          ──▶  policy ① / [A]
+  Gmail MCP create_draft    ──▶  email "SUBMIT-REQ r{R}f{f}" ──▶  L5 approval loop
+  Gmail MCP search/get_thread ─◀  reply APPROVE/REJECT       ──▶  L5 go / no-go
+       (headless: Gmail MCP may be unavailable → fall back to SUBMIT_READY.flag,
+        defer L5 email approval to an interactive session)
+  experiment_dry_detector.sh──▶  EXPERIMENT_DRY.flag         ──▶  policy ④ / [D]
+  autoresearch_scheduler.sh ──▶  AUTORESEARCH_TRIGGER.flag   ──▶  policy ④ / [D]
+  eval_validity_watchdog.sh ──▶  eval_validity.log           ──▶  [B] precheck
+  watchdog_nc.sh            ──▶  (restarts training directly) ──▶  protects [C]
+
+  Memory layer (orchestrator reads/writes)
+  ─────────────────────────────────────────────────────────────────────────
+  STATE.md            ←→  read + write back each step (LB / in-progress / next / next wake)
+  ideas_backlog.md    ←→  [D] writes todo · [C] takes &amp; sets running · result filled back
+  experiment_ledger.md ─▶ [B]/[C] append (hypothesis→setup→result→conclusion→next)
+
+
+
+
+8. One-line summary
+
+   wake → read state+flags → pick one decision-tree branch →
+        ① gate submit(L1–L4 → L5 Gmail email APPROVE)  ② validate &amp; log  ③ run experiment  ④ research only if dry  ⑤ idle
+   → write back STATE → wait next wake → ♻ permanent loop,
+   submission always waits for a self-sent email APPROVE (merge-request style;
+   headless falls back to SUBMIT_READY.flag + interactive L5)
+
+
+Will update more~
+
+Comments:
+├─ Gym Prathap (2026-09-16 13:48:57.310000) [+-1]
+│  What makes this BirdCLEF 2026 write-up interesting is that the competition solver is presented as an engineering system rather than simply a model-training recipe. The separation into decision, det...
+├─ Applnow (2026-07-22 06:30:23.580000) [+1]
+│  Nice Work!Btw I am wondering whether you draft all the agents and skill markdowns or they're generated by AI as well.If generated by AI,how do you make it?
+├─ greySnow (2026-06-06 13:52:42.903000) [+3]
+│  This disqualification fiasco annoy me quite a bit…
+│  
+│  https://www.kaggle.com/discussions/product-feedback/704835
+│  
+│  If you feels the same, show it.
+  ├─ Tom (2026-06-06 14:01:29.813000) [+-1]
+  │  @shlomoron Really thanks for creating this feedback. I really hope kaggle staff can look into this issue.
+├─ RB (2026-06-06 14:07:26.343000) [+1]
+│  Sorry this happened .
+│  
+│  Have you considered the possibility that Claude (or any other agent) created a second account or utilized any other account authentication tokens for Kaggle ? 
+│  
+│  Did you try s...
+  ├─ Tom (2026-06-06 14:13:21.163000) [+0]
+  │  No. I use 200$ for first half competition and rest half for API billing. 
+  │  The only possible thing that agent would chose to create account is it feels it needs more submissions to verify the experi...
+├─ MengYe (2026-06-06 03:01:27.260000) [+1]
+│  when you publish your write-up, can you include your rules/skills files?
+  ├─ Tom (2026-06-06 03:49:34.273000) [+1]
+  │  @konohayui  updated. You can try it now.
+├─ tennogh (2026-06-04 23:11:57.380000) [+1]
+│  That spending is crazy, did you stop after 17 days because of it, or because it was hitting a ceiling?
+│  
+│  Interestingly I tried to use your reports in the beginning and couldn't replicate most of you...
+  ├─ Tom (2026-06-05 01:28:18.817000) [+0]
+  │  Nah I just skip serveral days for other competition. 
+  │  I think in the furture people wants to replicate other's result, we need to provide CLAUDE.md and MEMORY.md 
+  │  Feeding html to replicate all the ...
+├─ Salman Ahmed (2026-06-04 21:07:02.017000) [+1]
+│  $6000+ 😯😯😯😯😯😯😯😯😯😯
+│  Excited for the publication on this. 😃
+  ├─ Tom (2026-06-05 01:40:10.753000) [+2]
+  │  That's a pretty good experiment. Paying $6,000+ just to get a glimpse of how it might work.
+  │  
+  │  The main reason I kept participating in BirdCLEF was actually because my friends, @cody11null and @p4ral...
+    ├─ Cody_Null (2026-06-06 05:32:49.247000) [+1]
+    │  Happy to fuel the fire! Regardless of medal the work is very impressive!
+├─ steubk (2026-06-04 20:08:08.533000) [+1]
+│  did your agent have a daily submission budget and decide when to submit ?
+  ├─ Tom (2026-06-05 01:29:30.340000) [+1]
+  │  I set many watchdogs and verifier agents. So it's very strict to let it conduct a submission. If it matches my threshold, it'll make submission. I think many people use similar trick in CodeGolf co...
+├─ yukiZ (2026-06-04 17:47:42.470000) [+2]
+│  "Wow, $6,169 for just 17 days of using Claude Code?! That's insane!
+│  
+│  I don't personally use Agentic AI, but it's super interesting to watch since the huge cost of Agentic AI is becoming a hot topic...
+  ├─ Tom (2026-06-05 01:43:22.173000) [+2]
+  │  I open 8-30 agents working consistenly and simutaneously. Note that this is not opening multiple claude terminal. I just ask claude-code to make 1 agent or sub-agent to work on some tasks. For exam...
+├─ Yanis Belami (2026-06-06 22:38:05.040000) [+0]
+│  Really impressive work. How did you optimize the agentic search process for token efficiency, and which parts of the workflow had the highest marginal ROI per token?
+├─ Chew Kok Wah (2026-06-06 05:52:15.733000) [+0]
+│  Do you max out your Claude Max 20x quota before you move to API? Or you are using API from the start? If it is the later (API from start) , why ?
+│  
+│  You should appeal for your removal to understand t...
+  ├─ Tom (2026-06-06 06:01:23.967000) [+0]
+  │  @chewkokwahibrainai  For the first half of the competition, I used the $100 subscription plan. Later, I switched to API billing because I noticed that I would frequently hit the usage limits, which...
+├─ Tom (2026-06-06 03:06:08.770000) [+0]
+│  Well, I got removed from the competition…
+  ├─ Tucker Arrants (2026-06-06 03:44:29.530000) [+0]
+  │  Did they provide any explanation why? Looks like around 300 people were removed…
+  ├─ MengYe (2026-06-06 04:04:02.393000) [+2]
+    ├─ Tom (2026-06-06 04:10:40.550000) [+-1]
+    │  My agent is also excited to see how its result got removed from competition
+  ├─ Tom (2026-06-06 05:26:22.847000) [+-1]
+  │  @tuckerarrants I think that's the reason I got banned, including posting token costs.
+    ├─ Tucker Arrants (2026-06-06 06:04:31.860000) [+1]
+    │  I hope they change that - it is a contradiction with their other statements. 
+    │  
+    │  The cost of running agents is part of “leveraging AI tools” which the hosts claim they are interested in learning about…
+    ├─ Timmy Juicehouse (2026-06-06 06:46:10.057000) [+1]
+    │  My result has also been disqualified, and I have no idea of it. Fortunately, I didn't win any medals in this competition. However, I have emailed the Kaggle team to ask for the specific reason. If ...
+    ├─ Tom (2026-06-06 06:47:46.300000) [+0]
+    │  @sweetyheehee Thanks, Timmy, for letting me know I'm not alone. 🙂
+    ├─ greySnow (2026-06-06 13:29:03.070000) [+7]
+    │  This is ridiculous. So now people will just not disclose the real costs of using LLMs for their solutions, harming our knowledge and the kaggle ecosystem as a whole. Kaggle has no way to know if pe...
+    ├─ Geremie Yeo (2026-06-07 02:34:27.790000) [+3]
+    │  This doesn't make sense. What about companies who sponsor their employees with enterprise subscriptions to compete on Kaggle as part of their job (like NVIDIA KGMON team), likely they would accumul...
+    ├─ Chris Deotte (2026-06-07 03:14:27.923000) [+4]
+    │  Tom, did they say you used too much LLM? Or were you just removed and you're guessing this? You should contact Kaggle and get a clear explanation why you were removed.
+    ├─ [deleted] (2026-06-17 06:06:52.107000) [+0]
+    │  [deleted]

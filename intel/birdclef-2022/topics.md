@@ -1,0 +1,82 @@
+# birdclef-2022 讨论区（按票数排序，共 80 条）
+
+- [Do not forget to report plagiarism](https://www.kaggle.com/competitions/birdclef-2022/discussion/321202) — 177 票 / 51 评论 / 2022-04-25 
+- [My Experiments ... (public 0.71)](https://www.kaggle.com/competitions/birdclef-2022/discussion/318081) — 156 票 / 31 评论 / 2022-04-10 
+- [Previous Audio Competitions](https://www.kaggle.com/competitions/birdclef-2022/discussion/307824) — 70 票 / 3 评论 / 2022-02-15 
+- [1st place solution models (it’s not all BirdNet)](https://www.kaggle.com/competitions/birdclef-2022/discussion/327047) — 63 票 / 4 评论 / 2022-06-05 **write-up?**
+- [Comment for begginers](https://www.kaggle.com/competitions/birdclef-2022/discussion/324124) — 63 票 / 15 评论 / 2022-05-10 
+- [[Public #1 Private #2] + [Private #7/8 (potential)] solutions. The host wins.](https://www.kaggle.com/competitions/birdclef-2022/discussion/326950) — 59 票 / 66 评论 / 2024-01-25 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/327193) — 56 票 / 14 评论 / 2022-06-16 **write-up?**
+- [Changes compared to previous BirdCLEF competition](https://www.kaggle.com/competitions/birdclef-2022/discussion/309213) — 56 票 / 7 评论 / 2022-02-22 
+- [First submission(BirdCLEF 2021 4th solution)](https://www.kaggle.com/competitions/birdclef-2022/discussion/308004) — 51 票 / 5 评论 / 2022-02-16 **write-up?**
+- [BirdCLEF 2021 Solutions](https://www.kaggle.com/competitions/birdclef-2022/discussion/307842) — 49 票 / 10 评论 / 2022-02-15 **write-up?**
+- [If You Are Confused About the Evaluation Metric - Read This](https://www.kaggle.com/competitions/birdclef-2022/discussion/314999) — 49 票 / 8 评论 / 2022-03-25 
+- [7th place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/326973) — 45 票 / 18 评论 / 2022-05-25 **write-up?**
+- [Pre-trained Transformer models for audio](https://www.kaggle.com/competitions/birdclef-2022/discussion/307879) — 45 票 / 4 评论 / 2022-02-16 
+- [5th place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/327044) — 44 票 / 9 评论 / 2022-05-25 **write-up?**
+- [Resources provided by hosts](https://www.kaggle.com/competitions/birdclef-2022/discussion/307752) — 43 票 / 30 评论 / 2022-02-15 
+- [Recap of the Top Solutions from the Previous Competition (BirdCLEF 2021)](https://www.kaggle.com/competitions/birdclef-2022/discussion/310741) — 42 票 / 0 评论 / 2022-03-02 **write-up?**
+- [The lower threshhold has good score.](https://www.kaggle.com/competitions/birdclef-2022/discussion/318999) — 42 票 / 6 评论 / 2022-04-15 
+- [4th place    ](https://www.kaggle.com/competitions/birdclef-2022/discussion/326987) — 41 票 / 16 评论 / 2022-05-25 **write-up?**
+- [6th place solution (human-in-the-loop)](https://www.kaggle.com/competitions/birdclef-2022/discussion/327187) — 38 票 / 3 评论 / 2022-05-26 **write-up?**
+- [check this google blog : Separating Birdsong in the Wild for Classification](https://www.kaggle.com/competitions/birdclef-2022/discussion/314929) — 37 票 / 8 评论 / 2022-03-25 
+- [BirdCLEF working notes. We want your papers!](https://www.kaggle.com/competitions/birdclef-2022/discussion/307744) — 34 票 / 17 评论 / 2022-02-15 **write-up?**
+- [Using geography to improve submission score](https://www.kaggle.com/competitions/birdclef-2022/discussion/307903) — 33 票 / 5 评论 / 2022-02-16 
+- [PCEN: a better pre-processing technique of STFT spectrograms](https://www.kaggle.com/competitions/birdclef-2022/discussion/315860) — 33 票 / 11 评论 / 2022-03-30 
+- [Storytime –AKA– How I Painfully Learned About .predict vs. .__call__](https://www.kaggle.com/competitions/birdclef-2022/discussion/314204) — 33 票 / 2 评论 / 2022-03-21 
+- [Is there a massive data shift between training and test audio files?](https://www.kaggle.com/competitions/birdclef-2022/discussion/318252) — 32 票 / 23 评论 / 2022-04-11 
+- [8th place solution. And gold on last attempt](https://www.kaggle.com/competitions/birdclef-2022/discussion/327019) — 32 票 / 8 评论 / 2022-05-28 **write-up?**
+- [9th place summary](https://www.kaggle.com/competitions/birdclef-2022/discussion/326968) — 31 票 / 11 评论 / 2022-05-25 **write-up?**
+- [Simple 17th Place Solution [0.81 Public, 0.77 Private]](https://www.kaggle.com/competitions/birdclef-2022/discussion/326933) — 30 票 / 9 评论 / 2022-05-25 **write-up?**
+- [state-of-the-art & most popular sound research](https://www.kaggle.com/competitions/birdclef-2022/discussion/307959) — 30 票 / 3 评论 / 2022-02-16 
+- [571st place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/327573) — 30 票 / 4 评论 / 2022-05-28 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/326979) — 29 票 / 6 评论 / 2022-05-26 **write-up?**
+- [Melspectrogramed Dataset Available !](https://www.kaggle.com/competitions/birdclef-2022/discussion/308211) — 27 票 / 3 评论 / 2022-02-17 
+- [Any competition metric implementation ?](https://www.kaggle.com/competitions/birdclef-2022/discussion/311493) — 27 票 / 9 评论 / 2022-03-07 
+- [Augmentation line-up](https://www.kaggle.com/competitions/birdclef-2022/discussion/307880) — 27 票 / 3 评论 / 2022-02-16 
+- [Only 21 classes?](https://www.kaggle.com/competitions/birdclef-2022/discussion/307938) — 25 票 / 12 评论 / 2022-02-16 
+- [23th place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/327046) — 24 票 / 11 评论 / 2022-05-27 **write-up?**
+- [VERY Long (1.25 Hours) Training Audio Clip - 'commyn/XC548866.ogg'](https://www.kaggle.com/competitions/birdclef-2022/discussion/311245) — 23 票 / 1 评论 / 2022-03-05 
+- [Visualization soundscape](https://www.kaggle.com/competitions/birdclef-2022/discussion/320304) — 23 票 / 4 评论 / 2022-04-21 
+- [Papers on Few-Shot Image Classification](https://www.kaggle.com/competitions/birdclef-2022/discussion/311005) — 22 票 / 4 评论 / 2022-03-04 
+- [Why do some sound files have (X, 2) dim?](https://www.kaggle.com/competitions/birdclef-2022/discussion/308579) — 21 票 / 11 评论 / 2022-02-19 
+- [Useful External Datasets](https://www.kaggle.com/competitions/birdclef-2022/discussion/308453) — 21 票 / 1 评论 / 2022-02-18 
+- [Questions About External Data](https://www.kaggle.com/competitions/birdclef-2022/discussion/315361) — 21 票 / 12 评论 / 2022-03-27 
+- [Meet the hosts](https://www.kaggle.com/competitions/birdclef-2022/discussion/307941) — 21 票 / 14 评论 / 2022-02-16 
+- [🏆🥇🎯 Congrats to the new  Notebook Grandmaster  Oh SEOK KIM 🏆🥇🎯](https://www.kaggle.com/competitions/birdclef-2022/discussion/307957) — 19 票 / 16 评论 / 2022-02-16 
+- [Tips on dealing with Class Imbalance!💯](https://www.kaggle.com/competitions/birdclef-2022/discussion/309106) — 19 票 / 6 评论 / 2022-02-21 
+- [Here's a minimalist solution with code](https://www.kaggle.com/competitions/birdclef-2022/discussion/323908) — 19 票 / 5 评论 / 2022-05-09 **write-up?**
+- [Sound separation paper](https://www.kaggle.com/competitions/birdclef-2022/discussion/307881) — 18 票 / 2 评论 / 2022-02-16 
+- [LB probe result: Estimated call rate for test soundscape is about 90%](https://www.kaggle.com/competitions/birdclef-2022/discussion/323201) — 18 票 / 7 评论 / 2022-05-05 
+- [Think of 3 aspects of this competiton.](https://www.kaggle.com/competitions/birdclef-2022/discussion/321668) — 18 票 / 2 评论 / 2022-04-28 
+- [Augmentation notebook](https://www.kaggle.com/competitions/birdclef-2022/discussion/324318) — 18 票 / 1 评论 / 2022-05-11 
+- [Hawaiian Birds Species - Kaggle BirdCLEF 2022.](https://www.kaggle.com/competitions/birdclef-2022/discussion/307971) — 18 票 / 2 评论 / 2022-02-16 
+- [Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/birdclef-2022/discussion/326931) — 18 票 / 11 评论 / 2022-05-25 
+- [Pre-computed mel-specs with PCEN](https://www.kaggle.com/competitions/birdclef-2022/discussion/317975) — 17 票 / 0 评论 / 2022-04-10 
+- [A Journey of Hand Labeling](https://www.kaggle.com/competitions/birdclef-2022/discussion/327065) — 17 票 / 2 评论 / 2022-05-25 
+- [Summary: difficulties when discussing CV/LB correlation](https://www.kaggle.com/competitions/birdclef-2022/discussion/321883) — 17 票 / 12 评论 / 2022-04-29 
+- [19th place solution, single CNN model](https://www.kaggle.com/competitions/birdclef-2022/discussion/327175) — 16 票 / 3 评论 / 2022-11-15 **write-up?**
+- [15th place summary](https://www.kaggle.com/competitions/birdclef-2022/discussion/327393) — 16 票 / 0 评论 / 2022-05-30 **write-up?**
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/birdclef-2022/discussion/307821) — 16 票 / 8 评论 / 2022-02-15 
+- [How good are you doing with Tensorflow Keras ?](https://www.kaggle.com/competitions/birdclef-2022/discussion/314156) — 16 票 / 6 评论 / 2022-03-21 
+- [📌 EDA🔊 + Noise Reduction🐦](https://www.kaggle.com/competitions/birdclef-2022/discussion/308229) — 16 票 / 2 评论 / 2022-02-17 
+- [Gradient Accumulation in PyTorch](https://www.kaggle.com/competitions/birdclef-2022/discussion/320534) — 16 票 / 3 评论 / 2022-04-22 
+- [LB hack II: Methods for Estimating Statistics of Predictions to Public Test Data](https://www.kaggle.com/competitions/birdclef-2022/discussion/322606) — 16 票 / 6 评论 / 2022-05-03 
+- [21 species of birds in Hawaii : This table is all you need to know these birds](https://www.kaggle.com/competitions/birdclef-2022/discussion/326536) — 16 票 / 1 评论 / 2022-05-23 
+- [few-shot learning demo - prevent overfitting to few sample](https://www.kaggle.com/competitions/birdclef-2022/discussion/319603) — 15 票 / 1 评论 / 2022-04-18 
+- [LB hack tip: How to estimate LB score of each species](https://www.kaggle.com/competitions/birdclef-2022/discussion/322419) — 15 票 / 10 评论 / 2022-05-02 
+- [35th Experiment](https://www.kaggle.com/competitions/birdclef-2022/discussion/328649) — 14 票 / 2 评论 / 2022-06-02 
+- [Course for audio signal processing ](https://www.kaggle.com/competitions/birdclef-2022/discussion/310662) — 14 票 / 4 评论 / 2022-03-02 
+- [44th place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/327118) — 14 票 / 2 评论 / 2022-05-26 **write-up?**
+- [65th place writeup - bronze](https://www.kaggle.com/competitions/birdclef-2022/discussion/326966) — 14 票 / 2 评论 / 2022-05-27 **write-up?**
+- [Augmentation dataset ](https://www.kaggle.com/competitions/birdclef-2022/discussion/313461) — 14 票 / 1 评论 / 2022-03-17 
+- [Few words about 14th place solution](https://www.kaggle.com/competitions/birdclef-2022/discussion/326990) — 13 票 / 0 评论 / 2022-05-25 **write-up?**
+- [Overfitting Public LB and Shakeup](https://www.kaggle.com/competitions/birdclef-2022/discussion/313073) — 13 票 / 1 评论 / 2022-03-15 
+- [Is bird presented all the time in training recordings?](https://www.kaggle.com/competitions/birdclef-2022/discussion/308861) — 13 票 / 2 评论 / 2022-02-20 
+- [Submission Clarification - Time Chunks and Predictions](https://www.kaggle.com/competitions/birdclef-2022/discussion/308009) — 13 票 / 9 评论 / 2022-02-16 
+- [A better CV always leads to worse LB?](https://www.kaggle.com/competitions/birdclef-2022/discussion/324769) — 12 票 / 3 评论 / 2022-05-13 
+- [Papers on Soundscapes and Animal Sound detection](https://www.kaggle.com/competitions/birdclef-2022/discussion/308393) — 12 票 / 1 评论 / 2022-02-18 
+- [Feedback and ideas for BirdCLEF 2023](https://www.kaggle.com/competitions/birdclef-2022/discussion/326996) — 9 票 / 20 评论 / 2022-05-25 
+- [Best working note award. Announcing winners.](https://www.kaggle.com/competitions/birdclef-2022/discussion/333581) — 8 票 / 4 评论 / 2022-06-27 **write-up?**
+- [Leaderboard Finalized - Congratulations to the Winners; Recap](https://www.kaggle.com/competitions/birdclef-2022/discussion/327565) — 7 票 / 4 评论 / 2022-05-27 
+- [Thanks everyone and congratulations to the winners](https://www.kaggle.com/competitions/birdclef-2022/discussion/326994) — 7 票 / 8 评论 / 2022-05-25 

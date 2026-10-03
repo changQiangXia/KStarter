@@ -1,0 +1,61 @@
+<p>First of all, thanks to Kaggle Team, <a href="https://www.kaggle.com/stefankahl" target="_blank">@stefankahl</a> and all participants </p>
+<p>As you may know, in our final blend we have used BirdNet along with other models provided by me, <a href="https://www.kaggle.com/ivanpan" target="_blank">@ivanpan</a>, <a href="https://www.kaggle.com/realsleim" target="_blank">@realsleim</a> and <a href="https://www.kaggle.com/selimsef" target="_blank">@selimsef</a></p>
+<p>In this post I will cover my models and approach</p>
+<p><strong>Model Architecture</strong></p>
+<p>I was using SED architecture, proposed and used by <a href="https://www.kaggle.com/tattaka" target="_blank">@tattaka</a> - <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243293" target="_blank">post</a></p>
+<p>As a backbones I have used:</p>
+<ul>
+<li>tf_efficientnet_b3_ns</li>
+<li>eca_nfnet_l0</li>
+</ul>
+<p>I have changed the first stride from (2,2) to (1,1) in order to have larger (in terms of length and number of frequencies )  output of CNN encoder ( I have taken this trick from <a href="https://www.kaggle.com/ilu000" target="_blank">@ilu000</a> <a href="https://www.kaggle.com/competitions/seti-breakthrough-listen/discussion/266385" target="_blank">SETI</a>)</p>
+<p><strong>Model Training</strong></p>
+<p>I have trained model on 15 sec chunks and with secondary labels</p>
+<p>I have used following augmentations:</p>
+<ul>
+<li>GaussianNoise</li>
+<li>PinkNoise</li>
+<li>OR Mixup on waveforms</li>
+<li>BackgroundNoise. For training - <a href="https://www.kaggle.com/datasets/mmoreaux/environmental-sound-classification-50" target="_blank">this dataset</a>. For finetuning - esc50 + nocall from soundscapes of 2021 BirdClef Comp</li>
+</ul>
+<p>Proposed by <a href="https://www.kaggle.com/selimsef" target="_blank">@selimsef</a> I have used weights (computed by <code>primary_label</code>) for Dataloader and Loss in order to cope with unbalanced dataset (especially for <code>scored_birds</code>) </p>
+<p>As for Loss I have used simple BCE on <code>clipwise</code> logits</p>
+<p>I was tracking 3 best checkpoints by LB metric and Validation loss and then averaged 3 model weights (kind of naive SWA)</p>
+<p><strong>Training stages</strong> </p>
+<p>For training I have used 2 stage training:</p>
+<ol>
+<li>Pretrain on 2021 and 2022 comp data   </li>
+<li>Finetune on data from pretrain BUT filtered by the next rule - <code>Take samples which contain scored_bird in primary_label OR secondary_labels</code></li>
+</ol>
+<p><strong>Inference</strong></p>
+<p>Having SED model I have tried 2 options for inference:</p>
+<ol>
+<li>Proposed by <a href="https://www.kaggle.com/tattaka" target="_blank">@tattaka</a> - using AND rule for <code>long</code> and <code>short</code> clipwise predictions. short prediction - 5 sec, long - 15 sec</li>
+<li>Feed model 15 sec chunk BUT apply head only on centered 5 sec reduced CNN image and use max(framewise, dim=time)</li>
+</ol>
+<p>Overall second option worked better for me</p>
+<p>Choosing threshold. Here I have tried also 2 options:</p>
+<ol>
+<li>Use ordinary threshold. Optimal values varied for me from 0.2 - 0.3</li>
+<li>Use quantile threshold, originally proposed by <a href="https://www.kaggle.com/philippsinger" target="_blank">@philippsinger</a> <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243463" target="_blank">post</a>. Optimal value for <code>quantile_tresh</code> was 0.25</li>
+</ol>
+<pre><code>tresh = np.quantile(
+                        test_model_probs[:, scored_bird_ids].flatten(),
+                        1 - quantile_tresh,
+                    )
+</code></pre>
+<p>For solo model (5 folds) second worked better and for ensembles first worked better</p>
+<p><strong>Validation</strong></p>
+<p>I have used 5 CV Stratified training (also <code>maupar</code> sample was splitted on 5 samples in order to have consistent OOF score)<br>
+Compute LB metric using next prediction scheme:<br>
+For each validation sample - slice it on pieces -&gt; predict each piece -&gt; max(sample_predictions, dim=pieces)<br>
+And then compute metric using <code>all_labels=[primary_label] + secondary_labels</code><br>
+Also I have computed this metric only on samples which contain scored_bird in all_labels and taking into account only scored_birds<br>
+And finally optimize threshold with step 0.1 </p>
+<p><strong>Results</strong></p>
+<ul>
+<li>tf_efficientnet_b3_ns: Val = 0.87894692; Public = 0.82; Private = 0.78</li>
+<li>eca_nfnet_l0: Val = 0.88640918; Public = 0.82; Private = 0.78</li>
+</ul>
+<p><strong>Inference Kernel</strong> - <a href="https://www.kaggle.com/code/ivanpan/fork-of-fork-of-cls-exp-1-870246-021187-967146/notebook?scriptVersionId=96433080" target="_blank">https://www.kaggle.com/code/ivanpan/fork-of-fork-of-cls-exp-1-870246-021187-967146/notebook?scriptVersionId=96433080</a><br>
+<strong>GitHub Repo</strong> - <a href="https://github.com/Selimonder/birdclef-2022" target="_blank">https://github.com/Selimonder/birdclef-2022</a></p>

@@ -1,0 +1,227 @@
+# https://www.kaggle.com/competitions/birdclef-2025/discussion/573066
+
+Topic #573066: Recipe to Public LB 0.872
+  Author: Salman Ahmed
+  Posted: 2025-04-13 10:19:32.400000
+  Votes: 119  Comments: 88
+
+I am sharing what worked for me in early baseline, but still haven't figured out what's working yet, still trying. 
+
+
+
+Applying any augmentation or processing on raw waves, hurts the performance.
+
+When I look at last year's leaderboard, position # 5 was able to achieve a awesome melspec model without any pseudo labels or anything, while other top solutions used pseudo labels. I believe melspec parameters were one of the import things in that solution. (Not sure.) Considering this, I started exploring and I was able to get scores from 0.810 to 0.859 just by changing the melspec parameters. You just have to think about it, visualize and explore more. (5 subs a day to find the best parameters).
+
+I've tried BCE with multiple types of weights, but FocalBCE works best for me.
+
+Consider melspecs as images and not the waves, I converted the melspecs to images, applied normalization and augment with RandAug and RandomErazing, Time and Freq Masking + (Mixup with prob of 1.0). Remaining training pipeline is same as my public notebook from last year. https://www.kaggle.com/code/salmanahmedtamu/training-0-65-0-66
+
+Another important thing, in Efficientnet models when i combined middle features and passed into the global pool that worked better than the conv_head in timm. Still Exploring…..!!!!
+
+Even simple models starts overfitting pretty easily, and you cannot track because K-Fold doesn't make sense here, your validation set is the public LB. Keep track of the Batch Size, Number of iterations, warmp up and LR. 
+
+Filtering/Processing CSA recordings by Human sound helps.
+
+Look at predictions of your model and visualize the attentions on Train Soundscape, to see what's the CAM of your model.
+
+Ensemble to 0.854, 0.856, 0.858 and 0.859 results in 0.872. 
+
+Post Processing is important as I shared in my previous public notebook, There are a lot of other ways to post process as well.
+
+I am sure, I missed a lot of detail, I'll try to share some public notebook if i get some time this week.
+
+Training on Random 5 seconds helped compared to first 5 seconds.
+
+Comments:
+├─ PRASHANT SHUKLA91 (2025-05-06 23:01:50.483000) [+1]
+│  After applying TTA using efficientnet_B0 model, every time , notebook throws message as network threw exception, while submission on scoring. Can anyone guide to resolve this issue?
+  ├─ Salman Ahmed (2025-05-06 23:12:38.450000) [+0]
+  │  Can you share that notebook? or the code for TTA?
+    ├─ [deleted] (2025-05-06 23:28:23.460000) [+0]
+    │  [deleted]
+    ├─ PRASHANT SHUKLA91 (2025-05-06 23:31:36.143000) [+1]
+    │  @salmanahmedtamu , this is the attached notebook, I referred. Plz guide me. In this use_tta = False by default, After setting use_tta = true, it is threwing exception, on submission for scoring, ev...
+  ├─ Kurise (2025-05-07 15:31:48.570000) [+1]
+  │  There is an error using source data, you need to add ".copy" when you use the apply_tta function or return directly your augmentatied mel.
+  ├─ Kurise (2025-05-07 15:36:36.300000) [+2]
+  │  I think the error raise because of the numpy.
+    ├─ PRASHANT SHUKLA91 (2025-05-10 06:26:06.267000) [+0]
+    │  Thanks, now the notebook timed out even i used tta=3(minimum).  Should I increase HOP_LENGTH?
+    ├─ Kurise (2025-05-10 07:34:45.463000) [+1]
+    │  To try light-weight model or quantitize the model (onnx or openvino), I think increase HOP will lead to low accuracy and just shorten few time (can be ignored) in my experiment.
+    ├─ PRASHANT SHUKLA91 (2025-05-10 07:46:27.177000) [+0]
+    │  Ok, but increasing tta upto value 4,5 can boost up the score, but my notebook timed out &amp; also increasing HOP will also decreases the accuracy.
+├─ [deleted] (2025-05-25 09:07:24.410000) [+2]
+│  The posting give me some hint, appreciate!
+├─ Diganta (2025-05-16 18:39:33.560000) [+0]
+│  Thanks for the insights! Did you find any efficient way to tune the melspec parameters?
+├─ Cody_Null (2025-04-16 17:44:19.720000) [+1]
+│  Could you talk about what you mean by this a bit more? "Filtering/Processing CSA recordings by Human sound helps." And also by post processing I assume you mean things like smoothing predictions, s...
+  ├─ Salman Ahmed (2025-04-16 21:54:07.370000) [+7]
+  │  I think the better way to describe it is, If I train the model without Filtering, then CAM of my model is always on the Human sound part, and the model is focusing on human sound as discriminative ...
+├─ qminh211 (2025-04-16 10:52:57.473000) [+1]
+│  I have a wonder that should I change the N_MELS in the train phase same to the inference phase?
+│  Pls reply
+  ├─ Salman Ahmed (2025-04-16 10:56:40.837000) [+0]
+  │  You should use the same N_NELS in inference which you used to train the model.
+├─ yuanzhe zhou (2025-04-13 17:42:32.550000) [+1]
+│  training is too unstable, result varies a lot
+  ├─ Araik Tamazian (2025-04-13 18:44:22.260000) [+2]
+  │  There's a big domain shift between soundscapes and train data.
+├─ kmn (2025-05-02 14:56:14.207000) [+2]
+│  With a single EfficientNet-B0 model (single fold), I was able to get up to a 0.843 public score. I haven’t been able to push a single model beyond 0.85, but ensembling results from multiple folds g...
+  ├─ rhythm master (2025-05-16 10:38:42.423000) [+0]
+  │  Did you use any additional data?
+    ├─ kmn (2025-05-20 01:35:30.937000) [+0]
+    │  No. I used only given train data.
+├─ Quan Vu (2025-04-13 10:47:46.437000) [+2]
+│  "2. When I look at last year's leaderboard, position # 5 was able to achieve a awesome melspec model without any pseudo labels or anything, while other top solutions used pseudo labels. I believe m...
+  ├─ nymfree (2025-04-13 13:48:06.630000) [+0]
+  │  your kfold seems stable not quickly overfitting to 0.95+.
+    ├─ Quan Vu (2025-04-13 17:52:15.240000) [+0]
+    │  My CV is 0.99, 0.817 and 0.85 are public score.
+    ├─ nymfree (2025-04-14 08:38:50.797000) [+0]
+    │  thanks for clarifying
+  ├─ Araik Tamazian (2025-04-13 16:12:00.113000) [+0]
+  │  Can you tell how many folds do you use?
+    ├─ Quan Vu (2025-04-13 17:52:29.070000) [+1]
+    │  I use 5 folds.
+  ├─ Wayne_127 (2025-04-14 04:49:36.773000) [+0]
+  │  @quan0095, do you only change the parameters during inference, or do you change them during both training and inference?
+    ├─ Quan Vu (2025-04-14 13:47:28.990000) [+0]
+    │  Sorry, I am quoting the words of @salmanahmedtamu
+  ├─ Hotson Honet (2025-04-16 10:45:51.040000) [+0]
+  │  How are you guys, splitting into k-folds.? I tried multilabel kfold creation, but the CV and leaderboard score is less than my kfold creation using only the primary label.
+    ├─ Quan Vu (2025-04-16 15:57:22.723000) [+0]
+    │  I use StratifiedKFold. training is too unstable 🤧 CV score is less meaningful.
+    ├─ Hotson Honet (2025-04-16 16:03:33.870000) [+0]
+    │  Us bro us (not with ranking but with problems 🤝)
+├─ Mohamed abdelrazik (2025-04-15 18:47:48.367000) [+0]
+│  May I ask what is the range for Mel spec params hop length,nfft n_mels just range to guide me not a specific number off course . And for sure I will understand if you don't want to reveal this info...
+  ├─ Mingyao (2025-04-19 00:36:31.900000) [+0]
+  │  set nfft to 2048 and others for 128/256/512 and try. I tested a lot combinations and the score ranging from 0.751 to 0.826.
+    ├─ [deleted] (2025-04-21 02:09:45.707000) [+0]
+    │  [deleted]
+    ├─ Vajinder Kaur (2025-05-05 20:43:07.293000) [+0]
+    │  What other mel spec parameters should I focus on? you said you were able to achieve 0.859 from just these changes, but the previous comment says score ranging from 0.751 to 0.826. I am a little con...
+    ├─ Mingyao (2025-05-06 02:59:36.633000) [+0]
+    │  'achieve 0.859'
+    │  that's the topic author, not me.😁
+├─ HaogeBob (2025-05-27 08:16:43.843000) [+0]
+│  thanks for notes。Does adding background noise help or not？😃
+├─ yukiya (2025-05-04 16:23:27.597000) [+0]
+│  When I look at last year's leaderboard, position # 5 was able to achieve a awesome melspec model without any pseudo labels or anything, while other top solutions used pseudo labels. I believe melsp...
+├─ Adam Mazur (2025-04-30 13:40:44.977000) [+0]
+│  Can I ask you for how many epochs do you usually train your models?
+├─ Ryenhails (2025-04-30 07:26:57.943000) [+0]
+│  Hi Salman! I was wondering—did you track the fixed epoch of a single model, or did you use model soup?
+  ├─ Salman Ahmed (2025-04-30 07:46:09.150000) [+1]
+  │  In my current solution, for some models I use final epoch and for some models I use model soup
+├─ Ahmed Elsayed (2025-04-27 14:08:37.903000) [+0]
+│  Hey, Sal!
+│  How many in_channels did you choose? and which architecture do you use?
+  ├─ Salman Ahmed (2025-04-27 14:22:33.757000) [+2]
+  │  3 Channels, efficient net b0
+    ├─ Ahmed Elsayed (2025-04-27 14:25:57.260000) [+0]
+    │  Thank you 🙏
+    │  Hope you win it this year ❤️
+    ├─ Ahmed Elsayed (2025-04-28 15:37:22.450000) [+0]
+    │  Hey, Sal!
+    │  I was working with 1 input channel, and I had an 82.2 LB score (single-fold).
+    │  When I adapted my code to the 3 channels, sadly, my score dropped to 79.8. This is because I need to refine t...
+    ├─ Salman Ahmed (2025-04-28 16:30:32.800000) [+6]
+    │  From my experiments, models usually starts to overfit pretty easily. 
+    │  Considering models are pretrained on Imagenet dataset, I think, in your case, when you trained with 1 input channel, model didn...
+├─ Fir_las_47 (2025-04-27 02:11:42.273000) [+0]
+│  How did you do this Filtering/Processing CSA recordings by Human sound? I have had a ton of problems in my efforts to do the same.
+├─ Yan  Zhang (2025-04-24 11:09:20.647000) [+0]
+│  Hello, I would like to ask if the random 5s is used to convert into a spectrogram, if the audio length is longer, such as 10s, will some information be lost？
+  ├─ lcx777 (2025-04-28 04:17:33.507000) [+0]
+  │  Agreed, but that’s the trade-off. Just test different durations and pick the best one.
+├─ kmn (2025-04-24 00:23:50.997000) [+0]
+│  Thanks for sharing! I have the similar trend—changing the melspec parameters can really impact the score. So far, I’ve managed to hit a public score of 0.836 using a single EfficientNet-B0 model (s...
+  ├─ [deleted] (2025-04-24 11:24:33.937000) [+0]
+  │  @kmatsu01 Are you Images using 3 channels or single channel for training ?
+    ├─ kmn (2025-04-24 13:28:41.120000) [+0]
+    │  3 channels. I haven't tried single channel.
+    ├─ [deleted] (2025-04-25 19:14:01.730000) [+1]
+    │  Thanks @kmatsu01
+    ├─ qminh211 (2025-05-10 11:21:15.430000) [+0]
+    │  can i ask what do 3 channels mean?
+    │  is a spec gram channel duplicate to 3 or sth else?
+    │  Thank you.
+    ├─ [deleted] (2025-05-10 11:26:05.013000) [+1]
+    │  @qminh211 Yes ,we duplicate single channel into 3 channel .
+  ├─ [deleted] (2025-04-29 15:21:35.977000) [+0]
+  │  [deleted]
+├─ Sarah Arshad (2025-04-22 14:57:46.817000) [+0]
+│  thanks for sharing and enhancing our knowledge….
+├─ Mingyao (2025-04-22 06:58:02.370000) [+0]
+│  Hi, may I ask your score including TTA or any post processing to achieve this score?
+  ├─ Salman Ahmed (2025-04-22 09:19:18.443000) [+1]
+  │  Yeah, I applied TTA / Post Processing, in all of these.
+├─ JuseTiz (2025-04-21 02:47:20.880000) [+0]
+│  Thanks for sharing.
+│  
+│  Did you use external data to achieve this .872 mentioned here?
+  ├─ Salman Ahmed (2025-04-21 15:05:56.393000) [+3]
+  │  No, I don't. BirdCLEF 2025 data only, till now.
+├─ Yu Wu (2025-04-19 17:08:23.430000) [+0]
+│  thanks for sharing! I notice that your training pipeline didn't use pre-compute  mel spec. Will it affect your training time? My training process takes 1min40s per epoch with pre-compute mel spec, ...
+  ├─ Salman Ahmed (2025-04-19 19:17:04.750000) [+3]
+  │  I am training on random 5 seconds, that's why didn't save Mel specs. 
+  │  It takes around 2.5 minutes for a single epoch.
+    ├─ Cody_Null (2025-04-19 19:40:32.200000) [+0]
+    │  Hmm that’s interesting, I checked the old notebook with some of the modifications and I was getting like 20 minutes per epoch. I was thinking it wasn’t even using GPU haha I probably did something ...
+    ├─ AdiG (2025-04-26 21:51:43.033000) [+0]
+    │  how do you get these fast training times? Without augmentations I am at 4mins and with mixup and specaugment more like 13mins/epoch. I even precomputed melspecs..
+├─ GURRAM GOPICHANDH (2025-04-18 21:35:02.227000) [+0]
+│  Thanks for sharing this — super valuable! 
+│  
+│  Your baseline-to-0.872 journey gives a lot of actionable directions to explore. 
+│  Treating MelSpecs as images – totally agree. Applying image-based augmen...
+  ├─ Salman Ahmed (2025-04-19 00:22:12.813000) [+0]
+  │  torchvision
+├─ Dmitriiy2 (2025-04-17 15:33:53.540000) [+0]
+│  did you get 0.872 without pseudo labels?
+  ├─ Salman Ahmed (2025-04-17 15:53:01.040000) [+0]
+  │  Yes,     Without Pseudo Labels
+├─ thacrobatheskis (2025-04-14 15:27:51.060000) [+0]
+│  Is FocalBCE a weighting of focal loss and bce loss? Did you have to experiment a lot with different weighting or focal params to get it to work?
+  ├─ Salman Ahmed (2025-04-14 22:20:29.267000) [+0]
+  │  It's just sum of both losses.
+├─ Shiro (2025-04-14 12:41:42.983000) [+0]
+│  Quite hard to tell for me whats work or not, because i have contradictory behavior when changing seed
+├─ noshakeplz (2025-04-14 06:10:32.413000) [+0]
+│  May I ask how you handled the human voice parts in the CSA recordings? Did you remove the segments containing human voices?
+├─ Devasy Patel23 (2025-04-13 19:38:22.580000) [+0]
+│  Has anyone tried using Triplet loss for this purpose?
+├─ Araik Tamazian (2025-04-13 12:22:00.103000) [+0]
+│  Nice post! I can tell that usage of FocalLoss had also improved my result.
+  ├─ XuKong Ji (2025-04-22 11:05:41.143000) [+0]
+  │  May I ask did you clean your data? Because In my expriments, focal loss hurt performance in my local valid set(both loss and auc)
+    ├─ Araik Tamazian (2025-04-26 17:55:29.680000) [+0]
+    │  Yes, I did.
+├─ SeshuRaju 🧘‍♂️ (2025-04-13 12:19:24.557000) [+0]
+│  Thanks for sharing your valuable insights @salmanahmedtamu , this will help to improve everyone's solutions.
+├─ [deleted] (2025-05-20 18:58:59.760000) [+0]
+│  [deleted]
+  ├─ [deleted] (2025-05-21 03:29:34.477000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-05-20 16:10:27.013000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-14 12:54:46.300000) [+0]
+│  [deleted]
+  ├─ [deleted] (2025-04-14 22:20:59.657000) [+0]
+  │  [deleted]
+├─ [deleted] (2025-05-30 06:55:31.960000) [+-1]
+│  [deleted]
+├─ [deleted] (2025-04-16 09:14:00.430000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-15 16:01:35.843000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-14 09:20:43.810000) [+0]
+│  [deleted]
+├─ [deleted] (2025-04-19 08:40:40.553000) [+0]
+│  [deleted]

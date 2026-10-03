@@ -1,0 +1,82 @@
+# gan-getting-started 讨论区（按票数排序，共 80 条）
+
+- [Welcome!  ](https://www.kaggle.com/competitions/gan-getting-started/discussion/178166) — 53 票 / 40 评论 / 2020-08-28 
+- [All you wanted to know about GANs and you were too afraid to ask](https://www.kaggle.com/competitions/gan-getting-started/discussion/180515) — 49 票 / 11 评论 / 2020-09-05 
+- [Learn more about GANs from previous comps](https://www.kaggle.com/competitions/gan-getting-started/discussion/178182) — 29 票 / 4 评论 / 2020-08-29 
+- [Getting started - basic reading material](https://www.kaggle.com/competitions/gan-getting-started/discussion/178185) — 25 票 / 5 评论 / 2020-08-29 
+- [Complete GAN Resources (so far)](https://www.kaggle.com/competitions/gan-getting-started/discussion/178253) — 24 票 / 3 评论 / 2020-08-29 
+- [Top 10 papers to get stated with GANs](https://www.kaggle.com/competitions/gan-getting-started/discussion/185910) — 23 票 / 7 评论 / 2020-09-22 
+- [Join me in congratulating the TPU Stars!](https://www.kaggle.com/competitions/gan-getting-started/discussion/199183) — 19 票 / 4 评论 / 2020-11-24 
+- [[Hacks List & Code] - Hacks and tricks to boost GANs performance](https://www.kaggle.com/competitions/gan-getting-started/discussion/283861) — 9 票 / 2 评论 / 2021-10-28 
+- [Fast.ai Lecture 12: Generative Adverserial Networks (GANs)](https://www.kaggle.com/competitions/gan-getting-started/discussion/178899) — 9 票 / 5 评论 / 2020-08-31 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/gan-getting-started/discussion/429958) — 8 票 / 1 评论 / 2023-08-07 
+- [SOTA GANs in fewest lines of code](https://www.kaggle.com/competitions/gan-getting-started/discussion/303431) — 8 票 / 1 评论 / 2022-01-27 
+- [Further reading and research areas](https://www.kaggle.com/competitions/gan-getting-started/discussion/523898) — 6 票 / 0 评论 / 2024-08-03 
+- [Stable diffusion](https://www.kaggle.com/competitions/gan-getting-started/discussion/523260) — 5 票 / 3 评论 / 2024-07-31 
+- [Contrastive Unpaired Translation (CUT) - faster and lighter training than CycleGAN](https://www.kaggle.com/competitions/gan-getting-started/discussion/180742) — 5 票 / 1 评论 / 2020-09-06 
+- [TPU Star Prizes!](https://www.kaggle.com/competitions/gan-getting-started/discussion/181397) — 4 票 / 0 评论 / 2020-09-08 
+- [Generative Adversarial Networks in Action: Art Generation](https://www.kaggle.com/competitions/gan-getting-started/discussion/180524) — 4 票 / 1 评论 / 2020-09-05 
+- [Extensive data](https://www.kaggle.com/competitions/gan-getting-started/discussion/178863) — 4 票 / 2 评论 / 2020-08-31 
+- [Extracting insights on CycleGANs from papers.](https://www.kaggle.com/competitions/gan-getting-started/discussion/187653) — 4 票 / 0 评论 / 2020-09-29 
+- [Startup guid for CyclicGAN](https://www.kaggle.com/competitions/gan-getting-started/discussion/178206) — 4 票 / 7 评论 / 2020-08-29 
+- [Another source of external data (Monet paintings)](https://www.kaggle.com/competitions/gan-getting-started/discussion/179237) — 4 票 / 0 评论 / 2020-09-01 
+- [[Beginners]The GAN zoo](https://www.kaggle.com/competitions/gan-getting-started/discussion/246068) — 3 票 / 1 评论 / 2021-06-13 
+- [Council GAN - Breaking the Cycle - Colleagues are all you need ](https://www.kaggle.com/competitions/gan-getting-started/discussion/180723) — 3 票 / 1 评论 / 2020-09-06 
+- [non-competitive](https://www.kaggle.com/competitions/gan-getting-started/discussion/178476) — 3 票 / 6 评论 / 2020-08-30 
+- [Misunderstanding about the problem](https://www.kaggle.com/competitions/gan-getting-started/discussion/412797) — 3 票 / 1 评论 / 2023-05-25 
+- [How to submit predictions?](https://www.kaggle.com/competitions/gan-getting-started/discussion/232028) — 3 票 / 5 评论 / 2021-04-11 
+- [Can't import tensorflow](https://www.kaggle.com/competitions/gan-getting-started/discussion/464785) — 3 票 / 1 评论 / 2024-01-01 
+- [Broken Link in Overview](https://www.kaggle.com/competitions/gan-getting-started/discussion/512922) — 3 票 / 1 评论 / 2024-06-17 
+- [Submission File Not Found](https://www.kaggle.com/competitions/gan-getting-started/discussion/528877) — 3 票 / 1 评论 / 2024-08-17 
+- [Vincent van Gogh Paintings](https://www.kaggle.com/competitions/gan-getting-started/discussion/178504) — 3 票 / 2 评论 / 2020-08-30 
+- [Nice CycleGAN realization (pytorch)](https://www.kaggle.com/competitions/gan-getting-started/discussion/178246) — 3 票 / 0 评论 / 2020-08-29 
+- [UPIT - a package with CycleGAN implementation (kernel and YouTube video)](https://www.kaggle.com/competitions/gan-getting-started/discussion/178952) — 2 票 / 4 评论 / 2020-09-01 
+- [Some personal records ](https://www.kaggle.com/competitions/gan-getting-started/discussion/443300) — 2 票 / 0 评论 / 2023-09-26 
+- [Does submission use TPU?](https://www.kaggle.com/competitions/gan-getting-started/discussion/448951) — 2 票 / 0 评论 / 2023-10-22 
+- [how to install kaggle_datasets?](https://www.kaggle.com/competitions/gan-getting-started/discussion/371299) — 2 票 / 6 评论 / 2022-12-09 
+- [how and where can I get other artists resouce data?](https://www.kaggle.com/competitions/gan-getting-started/discussion/471248) — 2 票 / 0 评论 / 2024-01-27 
+- [ Learn About Generative Models From These Academic Papers!](https://www.kaggle.com/competitions/gan-getting-started/discussion/323320) — 2 票 / 2 评论 / 2022-05-06 
+- [InstanceNormalization For GAN](https://www.kaggle.com/competitions/gan-getting-started/discussion/183580) — 2 票 / 1 评论 / 2020-09-17 
+- [How to install keras_contrib from inside kaggle notebook](https://www.kaggle.com/competitions/gan-getting-started/discussion/310652) — 2 票 / 0 评论 / 2022-03-02 
+- [Wiki-Art, Visual Art Encyclopedia](https://www.kaggle.com/competitions/gan-getting-started/discussion/179409) — 2 票 / 0 评论 / 2020-09-02 
+- [output file not found](https://www.kaggle.com/competitions/gan-getting-started/discussion/546881) — 2 票 / 1 评论 / 2024-11-18 
+- [Role of Instance Normalization / Batch Normalization in Downsample ? ](https://www.kaggle.com/competitions/gan-getting-started/discussion/189693) — 2 票 / 0 评论 / 2020-10-08 
+- [Deeplearning.ai GAN Specialization](https://www.kaggle.com/competitions/gan-getting-started/discussion/192474) — 2 票 / 0 评论 / 2020-10-21 
+- [Easy inspection of created models](https://www.kaggle.com/competitions/gan-getting-started/discussion/193068) — 2 票 / 2 评论 / 2020-10-25 
+- [We need rankings for GANs !](https://www.kaggle.com/competitions/gan-getting-started/discussion/178300) — 2 票 / 3 评论 / 2020-08-29 
+- [Creating a Instance normalization layer in tensorflow](https://www.kaggle.com/competitions/gan-getting-started/discussion/186853) — 2 票 / 1 评论 / 2020-09-26 
+- [PyTorch XLA Starter [LB:61.3]](https://www.kaggle.com/competitions/gan-getting-started/discussion/249028) — 2 票 / 0 评论 / 2021-06-26 
+- [When I Upload My Submission...](https://www.kaggle.com/competitions/gan-getting-started/discussion/197150) — 2 票 / 2 评论 / 2020-11-14 
+- [GAN with Faces!](https://www.kaggle.com/competitions/gan-getting-started/discussion/212360) — 2 票 / 0 评论 / 2021-01-18 
+- [Role of use_bias = False/True](https://www.kaggle.com/competitions/gan-getting-started/discussion/189450) — 2 票 / 3 评论 / 2020-10-07 
+- [How to import Kaggle Dataset to Colab?](https://www.kaggle.com/competitions/gan-getting-started/discussion/183576) — 1 票 / 3 评论 / 2020-09-17 
+- [Some duplicates in the data](https://www.kaggle.com/competitions/gan-getting-started/discussion/189404) — 1 票 / 0 评论 / 2020-10-07 
+- [CycleGAN evaluating all generator models](https://www.kaggle.com/competitions/gan-getting-started/discussion/192638) — 1 票 / 0 评论 / 2020-10-22 
+- ["cb50326950.jpg" and "c78b4fa3a9.jpg" are rounded.](https://www.kaggle.com/competitions/gan-getting-started/discussion/196946) — 1 票 / 2 评论 / 2020-11-13 
+- [Use this thread for Teamup.](https://www.kaggle.com/competitions/gan-getting-started/discussion/178303) — 1 票 / 2 评论 / 2020-08-29 
+- [Instance Normalization with TPU](https://www.kaggle.com/competitions/gan-getting-started/discussion/178641) — 1 票 / 2 评论 / 2020-08-30 
+- [Remove Submission](https://www.kaggle.com/competitions/gan-getting-started/discussion/212351) — 1 票 / 1 评论 / 2021-01-18 
+- [How to evaluate scores？](https://www.kaggle.com/competitions/gan-getting-started/discussion/540159) — 1 票 / 0 评论 / 2024-10-13 
+- [New Dataset: 🎨 WikiArt | All images (120k+)](https://www.kaggle.com/competitions/gan-getting-started/discussion/289918) — 1 票 / 0 评论 / 2021-11-22 
+- [Quick Question](https://www.kaggle.com/competitions/gan-getting-started/discussion/406932) — 1 票 / 1 评论 / 2023-05-04 
+- [GANs for sequential Data](https://www.kaggle.com/competitions/gan-getting-started/discussion/391229) — 1 票 / 0 评论 / 2023-02-28 
+- [Converting images to tfrecord for the competition ](https://www.kaggle.com/competitions/gan-getting-started/discussion/374904) — 1 票 / 1 评论 / 2022-12-29 
+- [Keep photos without anachronism](https://www.kaggle.com/competitions/gan-getting-started/discussion/313298) — 1 票 / 0 评论 / 2022-03-16 
+- [GAN Notebook link ( used in SIIM ) as starter base](https://www.kaggle.com/competitions/gan-getting-started/discussion/178218) — 0 票 / 0 评论 / 2020-08-29 
+- [I cant submit my prediction! WHY!!!!!!!!!](https://www.kaggle.com/competitions/gan-getting-started/discussion/704296) — 0 票 / 2 评论 / 2026-06-04 
+- [Help: Are TPUs still available?](https://www.kaggle.com/competitions/gan-getting-started/discussion/667905) — 0 票 / 0 评论 / 2026-01-14 
+- [Find a partner](https://www.kaggle.com/competitions/gan-getting-started/discussion/562071) — 0 票 / 1 评论 / 2025-02-09 
+- [很好的题目，我认她很有助于学习cyclegan](https://www.kaggle.com/competitions/gan-getting-started/discussion/555060) — 0 票 / 0 评论 / 2025-01-05 
+- [Best Introduction to Gan's Using Pytorch for Begineers ](https://www.kaggle.com/competitions/gan-getting-started/discussion/179738) — 0 票 / 0 评论 / 2020-09-02 
+- [Reading Material for GANs...](https://www.kaggle.com/competitions/gan-getting-started/discussion/179906) — 0 票 / 0 评论 / 2020-09-03 
+- [Leaderboard ](https://www.kaggle.com/competitions/gan-getting-started/discussion/548886) — 0 票 / 0 评论 / 2024-11-29 
+- [Is it allowed to use PyTorch? Do we have to use TPU?](https://www.kaggle.com/competitions/gan-getting-started/discussion/179933) — 0 票 / 4 评论 / 2020-09-03 
+- [Pytorch & Keras implementation of GAN - tutorial links](https://www.kaggle.com/competitions/gan-getting-started/discussion/180153) — 0 票 / 1 评论 / 2020-09-04 
+- [Dall-E Will Win](https://www.kaggle.com/competitions/gan-getting-started/discussion/320684) — 0 票 / 6 评论 / 2022-04-22 
+- [painting classification model using Tensorflow Keras](https://www.kaggle.com/competitions/gan-getting-started/discussion/331362) — 0 票 / 0 评论 / 2022-06-16 
+- [Looking for a Team](https://www.kaggle.com/competitions/gan-getting-started/discussion/325668) — 0 票 / 0 评论 / 2022-05-17 
+- [Open Source Projects On Art Generation](https://www.kaggle.com/competitions/gan-getting-started/discussion/323470) — 0 票 / 0 评论 / 2022-05-06 
+- [The Evaluator cannot find files in images.zip.](https://www.kaggle.com/competitions/gan-getting-started/discussion/182394) — 0 票 / 0 评论 / 2020-09-12 
+- [Abnormal features for generated image](https://www.kaggle.com/competitions/gan-getting-started/discussion/182694) — 0 票 / 0 评论 / 2020-09-14 
+- [Zip file has no images!](https://www.kaggle.com/competitions/gan-getting-started/discussion/322264) — 0 票 / 1 评论 / 2022-05-01 
+- [Dose this competition require to generate Monet style art from a random vector or do some style transfer from a photo? ](https://www.kaggle.com/competitions/gan-getting-started/discussion/186204) — 0 票 / 1 评论 / 2020-09-23 

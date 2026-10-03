@@ -1,0 +1,17 @@
+<p>Thanks organizers of this research competition. Here, I would like to tell about my 4th place solution.</p>
+<p>Code on github: <a href="https://github.com/artem-istranin/FathomNet23" target="_blank">https://github.com/artem-istranin/FathomNet23</a></p>
+<h1>TLDL</h1>
+<p>My solution is based on training an ensemble of categories classification models with labels smoothing. Then OSD score for each model in ensemble is obtained as <code>1 - max(probabilities of all categories)</code> and the final OSD score is estimated as average of these OSD scores + 5 average standard deviations of all category predictions.</p>
+<h1>Preprocessing</h1>
+<p>The data is very unbalanced and some categories only have few (often only 1) images. My approach is to consider all categories with less than 10 images as unknowns (zero class) so that at the end there are only the following classes left in training/validation datasets:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1728433%2F8a5e41bdd312789f22a6cf019fceab31%2Fcategories_distr_after_preprocessing.png?generation=1685126594387139&amp;alt=media" alt=""></p>
+<h1>Training</h1>
+<p>I'm using EfficientNetV2B0 architecture pretrained on imagenet accomplished with 128 units Dense layer following by the output layer for category probabilities. Initialization of the output layer is done based on positive/negative class imbalance to make convergence on model faster. I'm fine tuning base model in classical manner by 2 stages: optimization of top layers with frozen base model layers and then training incl. 2 top layers of base model.<br>
+Due to known problem of the noisy labels, training with labels smoothing 0.1 was giving the best results.</p>
+<h1>Submission</h1>
+<p>My final submission is an ensemble of 6 different models all following the same training strategy. Finally, the logic on top of predictions from models is the following:</p>
+<ul>
+<li>To predict categories, I first average scores over all models and consider only the categories with probability higher than threshold 0.4.</li>
+<li>To predict OSD score, I first estimate OSD for each single model as <code>1 - max(probabilities of all categories)</code> and consider average of these OSD scores + 5 average standard deviations of all category predictions for final OSD score.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1728433%2Ff6f58bb3d8fd1d2f084797264e22344c%2F20230523_190837_models_ensemble_osd_scores.png?generation=1685129324070290&amp;alt=media" alt=""></p>

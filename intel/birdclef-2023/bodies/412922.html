@@ -1,0 +1,95 @@
+<h4>What's important in <a href="https://www.kaggle.com/code/loonypenguin/ensemble-openvino-models-inference-notebook" target="_blank">our best inference notebook</a> ?</h4>
+<ul>
+<li>Ensemble of 19 models</li>
+<li>Ensemble of <code>efficientnet_b2</code> from <code>torchvision</code> and <code>rexnet150</code> from <code>timm</code></li>
+<li>Speedup with <code>openvino</code></li>
+<li>For submission we trained all models with knowledge distillation on full dataset - (<code>rkl</code> prefix is indicator)</li>
+</ul>
+<p>Our five models from 19 with <code>rkl-rx-wdfbn-rx-ema-200-full</code> prefix achieve 0.7471 on private test set and  0.83194 on public test set, <code>rx</code> - <code>rexnet150</code>, distillated <code>rexnet150</code> models from <code>rexnet150</code> trained before</p>
+<h4>Custom Augmentations</h4>
+<p>Let's imagine you're at some party right now and you're surrounded by talking people. It's not hard for you to pay attention to a certain group to hear their conversation and you can freely change your target. So the task - to cut specific speaker from audio - is natural. What we can say about audio in which - one person cries and another one laughs? In such audio there are two actions - laughing and crying, and this is true for birds too. With this consideration we've come up to <code>sumup</code> idea:</p>
+<pre><code>def sumup(waves: torch.Tensor, : torch.Tensor):
+    batch_size = len()
+    perm = torch.randperm(batch_size)
+
+    waves = waves + waves[perm]
+
+     {
+        : waves,
+        : torch.clip( + [perm], =, =)
+    }
+</code></pre>
+<h6>Boosting score</h6>
+<p>What if you have an audio where one bird is more louder than another? This audio is still with two different birds, but if signal from second bird is tiny, it's okay to assume, that maybe probability of second bird is small or even zero. </p>
+<pre><code>def sumix(waves: torch.Tensor, : torch.Tensor, max_percent:  = , min_percent:  = ):
+    batch_size = len()
+    perm = torch.randperm(batch_size)
+    coeffs_1 = torch.rand(batch_size, device=waves.device).(-, ) * (
+        max_percent  - min_percent
+    ) + min_percent
+    coeffs_2 = torch.rand(batch_size, device=waves.device).(-, ) * (
+        max_percent  - min_percent
+    ) + min_percent
+    label_coeffs_1 = torch.where(coeffs_1 &gt;= , ,  -  * ( - coeffs_1))
+    label_coeffs_2 = torch.where(coeffs_2 &gt;= , ,  -  * ( - coeffs_2))
+     = label_coeffs_1 *  + label_coeffs_2 * [perm]
+
+    waves = coeffs_1 * waves + coeffs_2 * waves[perm]
+     {
+        : waves,
+        : torch.clip(, , )
+    }
+</code></pre>
+<p>We propose yet another customization of data mix specific for audio domain - <code>sumix</code> augmentation. As you can see, we used linear slope in our experiments, but it's open question what's slope for labels better to use, maybe <code>min_percent = 0.3</code> doesn't need slope at all. This augmentation is applicable to any audio classification task. <code>sumix</code> is better than <code>sumup</code> because it also affects loudness, i. e. implies another audio augmentation. </p>
+<p>When we decided to check solutions from past competitions, we tried to add background noise in our pipeline, but noise didn't show any improvement. Our thoughts - incorporating new background noises for audios is already in <code>sumix</code> or <code>sumup</code>. For gaussian/colored noises we have similar explanation, why those augmentations didn't work - competition's data is not excellent and consists of noisy samples, so <code>sumix</code> and <code>sumup</code> propagate noise and make noise diverse by themselves.</p>
+<h4>Training pipeline</h4>
+<ul>
+<li><code>concatmix</code> with probability 0.5 - <a href="https://github.com/dazzle-me/birdclef-2022-3rd-place-solution/blob/main/experiments/new-metrics-exp-17/fold_4/saved_src/models/layers/concat_mix.py" target="_blank">implementation</a></li>
+<li><code>sumix(min_percent=0.3, max_percent=1.0)</code> with probability 1</li>
+<li><code>mixup</code> on mel-spectrograms with <code>Beta(1.5, 1.5)</code> with probability 1</li>
+<li><code>cutmix</code> on mel-spectrograms with <code>Beta(1.5, 1.5)</code> with probability 0.5</li>
+<li><code>AdamW</code> with constant <code>LR</code> 1e-3 and <code>weight_decay</code> 1e-2 for all models</li>
+<li><code>binary_cross_entropy</code> for every class, labels are primary labels plus secondary labels</li>
+<li>Random 5 continuous seconds from audio at training, first 5 seconds at validation</li>
+<li>We turned off <code>weight_decay</code> for all normalization layers</li>
+<li><code>EMA</code> with <code>decay</code>  0.999</li>
+<li>Almost total correlation between LB and our CV, ensemble of 20 models gathered as best in CV achieves 0.75021 on private test set and 0.83328 on public test set, this ensemble is our top-3 submission on public test set</li>
+</ul>
+<h4>Knowledge distillation</h4>
+<p>After training a model, we use it as teacher for another model with the same architecture, augmentations, <code>AdamW</code>, <code>EMA</code> and etc., except <code>loss</code>. At second stage with distillation we use $$L = 0.33 * BceFromTargets + 0.34 * KL(probs_{student} || probs_{teacher}) + 0.33 * KL(probs_{teacher} || probs_{student}) $$</p>
+<h4>Models</h4>
+<ul>
+<li><code>rexnet150</code> with <code>dropout</code> 0.3 and <code>drop_path</code> 0.2</li>
+<li><code>rexnet150-time</code> - same <code>rexnet150</code> but with attention head, distilled from <code>rexnet150</code> without <code>time</code>-aware head</li>
+<li><code>efficientnet-b2</code> with <code>dropout</code> 0.3 and <code>drop_path</code> 0.2</li>
+<li><code>efficientnet-b2-time</code> - analogously, distilled from <code>efficientnet-b2</code></li>
+</ul>
+<p>Already mentioned hacks allow to reach score 0.7471 with 5 <code>rexnet150</code>  trained on full data with <code>batch_size=336</code> 200 epochs and knowledge distillation on a single <code>A100 (40GB)</code>. To boost performance we ensemble <code>rexnet150</code>  with <code>efficientnet-b2</code> from <code>torchvision</code>. To boost performance yet another time we use attention head - copy-past <code>self-attention</code> operation from <code>transformers</code>. All experiments were conducted in mix-precision with <code>bfloat16</code> type.</p>
+<p>Ensemble of 5 models with prefix <code>rkl-rx150-wdfbn-rx150-time-ema-ep200-full-{5seeds}</code>, i.e <code>rexnet150</code> with attention head for time awareness distilled from simple <code>rexnet150</code>, achieves 0.75151 on private set and 0.83261 on public set.</p>
+<h4>We didn't try:</h4>
+<ul>
+<li>External data not from BirdClef2021/BirdClef2022</li>
+<li>SSL</li>
+<li>SED models</li>
+<li>Utilization of BirdNet</li>
+<li><code>eca_nfnet</code> from <code>timm</code></li>
+</ul>
+<h4>We tried, but it didn't work:</h4>
+<ul>
+<li>Pretraining our models on BirdClef2021/BirdClef2022, we made few attempts, it didn't show any improvements in LB, experiments conduction became much slower, so we gave up the idea</li>
+<li>Any background noise (even which was used in previous year's competition)</li>
+<li>Any LR scheduler</li>
+<li>Any Noise(Gauss, Colored)</li>
+<li><code>tf_efficientnet_b2_ns</code> from <code>timm</code></li>
+<li><code>SwinV2</code>/<code>ConvNeXt</code> from <code>torchvision</code></li>
+<li>Manifold MixUp</li>
+<li><code>focal_loss</code>, <code>soft_focal_loss</code></li>
+<li>Weighted samplers</li>
+<li><code>SpecAugment</code></li>
+</ul>
+<h4>Speeding up inference time</h4>
+<p>We measured inference time with random input in kaggle kernel, I don't remember which one of intel's processors was, often in our kaggle notebook we got <code>Intel Xeon 2.2 Gz</code>. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F13651743%2F0d18919aee04af8f54bfe0880472543d%2Fphoto_2023-05-25%2023.34.07.jpeg?generation=1685046878803412&amp;alt=media" alt=""></p>
+<p>Our thoughts - <code>ONNX</code> by itself utilizes 2 cpus, <code>OpenVino</code> is faster cause it additionally fuses some layers for inference and uses compilation specific to a certain CPU in submission notebook to take advantage of processor's type</p>
+<h4>Appendix: <code>MultiHeadAttentionClassifier</code>'s implementation. All hyperparameters are preserved</h4>
+<pre><code></code></pre>

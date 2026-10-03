@@ -1,0 +1,109 @@
+# https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405237
+
+Topic #405237: Information Accretion explainer 
+  Author: Clara De Paolis
+  Posted: 2023-04-26 16:49:08.702000
+  Votes: 68  Comments: 18
+
+I would like to take the time to highlight some great discussions that have already been posted about information accretion as well as explain a bit more about the theory and intuition of this measure. 
+
+Because of the structure of this ontology and the nature of protein function annotation, sometimes the IA measure may seen unintuitive at first glance, but I hope to clear up any confusion here. Please post comments here if there are any other questions or confusion about this measure. 
+
+What is Information Accretion?
+
+Information accretion (ia), introduced in [Clark and Radivojac, 2013], is a measure of how much information is added to an ontology annotation by node v given that its parents Pa(v) are already annotated. Specifically, 
+
+$$ia(v) = \log_2 \frac{1}{\mathrm{Pr}(v|\mathcal{Pa}(v))} = \log_2 \frac{\mathrm{Pr}(\mathcal{Pa}(v))}{\mathrm{Pr}(\mathcal{Pa}(v)|v) \mathrm{Pr}(v)}$$
+
+Since annotation of the term corresponding to node v necessarily implies the annotation of terms Pa(v) to guarantee a consistent subgraph (valid annotations), this means that  Pr(Pa(v)|v)=1 and therefore:
+
+$$ia(v) = \log_2 \frac{\mathrm{Pr}(\mathcal{Pa}(v))}{\mathrm{Pr}(v)}$$
+
+The probabilities above refer to some ground-truth distribution over annotated terms over all proteins. These distributions are unknown because we do not know the functions of all proteins. 
+
+So how can we calculate IA?
+
+To calculate these probabilities, we use the observed annotations in a dataset as the empirical distribution on which to estimate the probabilities. Thus, Pr(v) is computed as the number of examples (proteins) annotated with the term corresponding to node v (divided by the total number of proteins) and Pr(Pa(v)) as the number of examples annotated with the terms corresponding to nodes Pa(v) (divided by the total number of proteins). The division by the total number of proteins cancel in the numerator and denominator so that the empirical ia is 
+$$\bar{ia}(v) = \log_2\left(\frac{\text{number of proteins with parent term(s) of } v}{\text{number of proteins with term } v}\right)$$ 
+
+Regularizing the empirical counts
+
+Since we are using the empirical (observed) counts in the training set to estimate the true distributions, there will be terms for which Pr(v)=0 if they have not been observed in the training set. To ensure there are no terms with Pr(v)=0, counts are regularized by introducing an artificial record (protein) annotated with every terms and adding it to the counts. That is, we add 1 to the counts for all terms to avoid dividing by 0. So finally, the implemented calculation becomes: 
+$$\bar{ia}(v) = \log_2\left(\frac{1 + \text{number of proteins with parent term(s) of } v}{1+ \text{number of proteins with term } v}\right)$$ 
+
+How do we actually calculate this?
+
+I have implemented the above math here https://github.com/claradepaolis/InformationAccretion and this is the code we used to generate IA.txt from train_terms.tsv and go-basic.obo. 
+
+Intuition Check: Why does an unseen term have a large IA?
+
+Let's sat term X doesn't appear in the training set and its IA is large. This means that there are many proteins in the dataset that are annotated with the parent term(s) of X, 
+
+$$ia(X) = \log_2\left(\frac{1+\text{number of proteins with parent term(s) of } X}{1+\text{number of proteins with term } X}\right)$$ 
+
+For some unseen X the denominator would be 0, but with our regularization it's 1. log_2(large number/1) = relatively large number.
+
+For example, here is one term I just looked up. Term GO:2001081 does not appear in train_terms.tsv. It has one parent term (GO:0030247) which appears in 142 proteins in the training set. IA(GO:2001081)= 7.15987 = log_2( (142+1)/(0+1))
+
+See the discussion here: https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/403213
+
+Intuition Check: Why does a term have IA=0?
+
+Mathematically, IA=0 when IA=log(1), thus Pr(v)=Pr(Pa(v)). Intuitively, this happens when the count of proteins annotated with term v equals the count of proteins annotated with all parent terms Pa(v). That is, every protein in the training set that is annotated with the term(s) Pa(v) is also annotated with the term v. There is no protein that has annotations Pa(v) that doesn't also have v annotated. Having term v annotated doesn't set any protein apart from all the proteins that have term(s) Pa(v) annotated. According to the empirical counts, term v comes for "free" with knowing its parents. Thus, it accrues no information.
+
+Intuition Check: Why does a term deeper in the ontology have a lower IA than its predecessors?
+
+Usually, terms deeper in the ontology are more rarely annotated in proteins because they correspond to more specialized definitions of function that may be more difficult to determine. However, this is not always the case. Some examples fall into the above discussion for a term whose IA is 0. To extend the previous intuition check, IA for term v can be a smaller value than terms in Pa(v)  if in most proteins with annotations Pa(v) we also see annotations for term v. 
+
+See the discussion here: https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405090
+
+An important side note
+
+If you have worked with the gene ontology, seen figures of it, or investigated the meaning of the edges, you may have noticed that edges point toward what we have been calling "parents." That is because in the gene ontology the edges are defined for relations such as "is a" or "part of" where more specific terms point towards more general terms. This means that the most general terms, which would intuitively be the "roots" are actually the leaves. If you work with the graph programmatically and want to find some term's parent nodes, remember to either reverse all the edges of the graph or keep track that ancestors should be descendants and vice versa.
+
+Comments:
+├─ Nilay K. Bhatnagar (2023-06-09 04:21:35.850000) [+1]
+│  Thank you, This was a really helpful read
+├─ Vishal Joshi (2023-04-28 11:15:24.063000) [+1]
+│  The paper talks in section 3.3 Measuring the quality of function prediction
+│  
+│  
+│    
+│  As the decision threshold is moved from its minimum to its maximum value, the pairs of forumla.gif will result in a ...
+  ├─ Clara De Paolis (2023-05-03 14:31:16.747000) [+0]
+  │  Think of it like a traditional precision-recall or ROC curve. tau is the decision threshold for predicting a positive term (class). To make a PR or ROC curve, you would compute precision and recall...
+    ├─ Vishal Joshi (2023-05-03 16:25:21.013000) [+0]
+    │  Thanks @claradepaolis for the replies!
+├─ Vishal Joshi (2023-04-28 11:06:27.317000) [+1]
+│  Hi, This is great explanation as I have been trying to implement this paper in Java.
+│  When you form the set of parent of terms Pa(v) for a given term v, do you go all the way to the root of ontology...
+  ├─ Clara De Paolis (2023-05-03 14:20:50.020000) [+1]
+  │  The parents are the nodes that are directly connected to node v, i.e. Pa(v) = {p1, p2} in your example.
+├─ Guilherme Trajano (2023-04-26 19:20:02.103000) [+1]
+│  Great explanation!
+├─ JKC (2023-08-09 14:39:46.477000) [+0]
+│  Thanks for your explanation. It is very helpful for me.
+├─ AbaoJiang (2023-08-08 07:47:43.190000) [+0]
+│  Hi, sorry for the late question.
+│  Will information accretion be recalculated in the final evaluation phase? Thanks
+├─ KagglePro (2023-07-04 18:44:00.380000) [+0]
+│  That's really precise and intuitive, thank you!
+├─ Vishal Joshi (2023-05-02 17:04:22.467000) [+0]
+│  What is the intuition behind negative information accretion (ia)? It happens when the descendant term has is associated with more number of proteins than its parent.
+  ├─ Norix (2023-05-02 17:10:10.633000) [+1]
+  │  What is the intuition behind negative information accretion (ia)? It happens when the descendant term has is associated with more number of proteins than its parent.
+  │  
+  │  
+  │  That sounds like an annotatio...
+  ├─ Clara De Paolis (2023-05-03 14:18:33.747000) [+3]
+  │  @norixmb is correct. In addition, this can happen if you are using a different structure (ontology) than the one that generated (propagated) the original terms. If the structure has changed, the pa...
+├─ Ericka42 (2023-04-29 07:54:48.013000) [+0]
+│  That was really helpful!Thank you for sharing!
+├─ Mohammed Hamdy (2023-04-27 17:13:47.063000) [+1]
+│  Thanks, that was really helpful.
+├─ Ujjwal Grover (2023-04-27 04:33:22.973000) [+1]
+│  Really helpful. Thanks 🙏
+├─ Hunter Wrynn (2023-08-14 04:43:02.263000) [+0]
+│  Thanks, that was really helpful.
+├─ Svyatoslav Filatov (2023-06-19 09:41:37.127000) [+0]
+│  neat explanation, thanks!

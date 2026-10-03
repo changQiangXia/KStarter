@@ -1,0 +1,151 @@
+<h1>Comment</h1>
+<p>First, I would like to thank the organizers for hosting such an interesting competition with plenty of room for innovation and no major issues. I also want to thank my teammates who helped create a smooth communication environment for my first team-up experience.</p>
+<h1>Solution summary</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2064220%2F98b4dea553bdc5d6d050b10cc99c5cb9%2Fsolution.drawio%20(5).png?generation=1734097628389406&amp;alt=media" alt=""></p>
+<ol>
+<li><strong>Synthetic data generation</strong><ul>
+<li>We create problems using LLM with few shot prompting for each MisconceptionId that is not included in the training dataset.<ul>
+<li>For these few shot samples, we insert problems and incorrect answers that have similar MisconceptionNames to the one being generated.</li></ul></li></ul></li>
+<li><strong>Knowledge Distillation</strong><ul>
+<li>We input the questiontext, correct answer, and incorrect answer into the LLM (Qwen 2.5 32B Instruct) to generate the reasoning behind the incorrect answer. This content is used as input for all subsequent models (Biencoder, Listwise reranker).</li></ul></li>
+<li><strong>Candidate generation</strong><ul>
+<li>We use a biencoder model to narrow down the Misconception candidates for each problem and incorrect answer.</li></ul></li>
+<li><strong>Listwise reranking</strong><ul>
+<li>We input the Misconception candidates sorted by the Biencoder, 52 at a time (corresponding to the number of uppercase and lowercase alphabet letters used as options), into the fine-tuned LLM(Qwen 2.5 32B Instruct) to obtain probability for each option. We then sort the Misconceptions based on these probability.<ul>
+<li>For this process, we use the top 104 candidates from the biencoder. In other words, we perform inference twice with 52 candidates each time, extract the probability, and combine the results.</li></ul></li></ul></li>
+<li><strong>Ensemble</strong><ul>
+<li>Since the Listwise reranker uses GPTQ + vLLM inference, a single inference takes only about 120 minutes, allowing the results to be ensembled across three folds. (But due to the random delays discussed <a href="https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550743" target="_blank">here</a>, our best sub could not include all results from the third fold. I hope that Kaggle staff will address these issues in the future.)</li></ul></li>
+</ol>
+<h1>Detailed solution</h1>
+<ol>
+<li><p><strong>Cross validation</strong></p>
+<ul>
+<li>Initially, we used GroupKFold(k=5) based on QuestionId, but since the lb was significantly lower than local cv, we suspected there might be many MisconceptionIds that only appear in the test data. Based on this, we switched to GroupKFold(k=5) using SubjectId. This change resulted in a higher proportion of MisconceptionIds that only appear in validation data, which tended to make the cv closer to lb.<ul>
+<li>example local cv 0.626, lb: 0.633</li></ul></li></ul></li>
+<li><p><strong>Synthetic data generation</strong></p>
+<ul>
+<li>Synthetic data generation is essential to include MisconceptionIds without existing problems in the prediction results. For each MisconceptionName without problems, we generated one set of existing dataset information (QuestionName, SubjectName, ConstructName, Correct Answer, Incorrect Answer) using few shot prompting (4 shots) with LLM (gemini-1.5-pro).<ul>
+<li>For the few shot prompting samples, we embedded all MisconceptionNames using the model (dunzhang/stella_en_1.5B_v5) and included problems corresponding to similar MisconceptionNames. This resulted in approximately +0.01 improvement in cv compared to using random samples.</li></ul></li></ul></li>
+<li><p><strong>Knowledge Distillation(KD)</strong></p>
+<ul>
+<li><p>We input the QuestionText, correct answer, and incorrect answer into the LLM (Qwen 2.5 32B Instruct) to estimate the Misconception. Using this information improves the biencoder's cv+0.04. While the Listwise reranker mentioned later uses the same model as KD, it showed an increase of about cv+0.01 compared to when it's not included.</p>
+<ul>
+<li>prompt</li></ul>
+<pre><code>PROMPT_FORMAT = 
+</code></pre></li></ul></li>
+<li><p><strong>Candidate generation</strong></p>
+<ul>
+<li>We extract MisconceptionName candidates for each problem and incorrect answer pair using Biencoder. While we perform negative mining, hard negatives were not effective, so we include slightly relaxed samples.</li>
+<li>Training parameters<ul>
+<li>library: SentenceTransfomer</li>
+<li>model: dunzhang/stella_en_1.5B_v5</li>
+<li>negative mining params<ul>
+<li>range_min: 512</li>
+<li>num_negatives: 2</li></ul></li>
+<li>lora config<ul>
+<li>r: 32</li>
+<li>lora_alpha: 64</li></ul></li>
+<li>loss: CachedMultipleNegativesRankingLoss</li>
+<li>epoch: 1</li></ul></li>
+<li>cv: 0.41, lb: 0.39</li></ul></li>
+<li><p><strong>Listwise reranker</strong></p>
+<ul>
+<li><p>Overview</p>
+<ul>
+<li>The reranking part using LLM appears to be the most unique aspect of this competition, and I expect that how this part was implemented significantly impacted the scores. Our teammate <a href="https://www.kaggle.com/kcotton21" target="_blank">@kcotton21</a> had already come up with the idea of generating single tokens and using their logits for sorting at the beginning of the competition (reference: <a href="https://arxiv.org/abs/2406.15657)" target="_blank">https://arxiv.org/abs/2406.15657)</a>, and our solution is based on this.</li></ul></li>
+<li><p>prompt</p>
+<ul>
+<li>After various trial and error, we ultimately performed regular fine-tuning using the following prompt to have the LLM generate appropriate choices (which must be single tokens to enable sorting by logits(probability)).</li></ul>
+<pre><code>NA_PROMPT_FORMAT = 
+</code></pre>
+<ul>
+<li><p>misconception_list</p>
+<ul>
+<li><p>It contains 52 choices of uppercase + lowercase alphabets and their corresponding MisconceptionNames. They are ordered by the Biencoder output.</p>
+<pre><code>A: Thinks sign  parallel lines just means opposite
+B: Does  recognise the notation  parallel sides
+.
+.
+.
+y: Thinks that co-interior angles can lie on opposite sides of a transversal
+z: Believes the gradient of perpendicular lines just have opposite signs&lt;|im_end|&gt;
+</code></pre></li></ul></li>
+<li><p>label_choice</p>
+<ul>
+<li>This is the correct answer choice used for fine-tuning. If the correct answer is not included in the choices, "NA" (which is also a single token in Qwen 2.5 32B) is inserted.</li></ul></li>
+<li><p>rank</p>
+<ul>
+<li>Indicates which range of choices {start_idx - end_idx} from the Biencoder's output is included.</li></ul></li></ul></li>
+<li><p>Training</p>
+<ul>
+<li>We divided the top 208 outputs from the biencoder into non-overlapping groups of 52 each (1-52, 53-104, 105-156, 157-208) and performed fine-tuning.</li>
+<li>Training parameters<ul>
+<li>loss<ul>
+<li>This is the standard cross-entropy loss used in regular fine-tuning, calculated across the entire vocabulary. We chose this simpler implementation method since calculating cross-entropy limited to only the candidate choices + "NA" token showed little difference in results.</li></ul></li>
+<li>model:   Qwen/Qwen2.5-32B-Instruct</li>
+<li>lora_config<ul>
+<li>r: 24</li>
+<li>lora_alpha: 48</li></ul></li>
+<li>lr: 5e-5</li>
+<li>scheduler: cosine</li>
+<li>warmup_steps: 10</li>
+<li>epoch : 1.0</li>
+<li>global batch size: 8</li>
+<li>library: unsloth</li></ul></li></ul></li>
+<li><p>Inference</p>
+<ul>
+<li>From the biencoder output, we take the top 104 items and split them into two sets (1-52 and 53-104). Each set is input to the model, generating only single tokens to obtain probabilities for each option. The results from both sets are then combined and sorted.<ul>
+<li>While adding to make it top 156 (52x3 inference) showed a slight improvement in local CV, it wasn't reflected in the leaderboard score, so we didn't adopt this approach.</li></ul></li>
+<li>Quantized to 4-bit using GPTQ and inference is performed using vLLM</li></ul></li></ul></li>
+</ol>
+<h1>cv(public)[private] scores</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>52x1</th>
+<th>52x2</th>
+<th>52x3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fold 4</td>
+<td>0.623(0.627)[0572]</td>
+<td>0.626(0.633)[0.581]</td>
+<td>0.630(0.631)[0.581]</td>
+</tr>
+<tr>
+<td>fold 3</td>
+<td></td>
+<td>(0.644)[0.581]</td>
+<td></td>
+</tr>
+<tr>
+<td>fold (3 + 4)</td>
+<td></td>
+<td>(0.650)[0.590]</td>
+<td></td>
+</tr>
+<tr>
+<td>fold (2(60%sample) + 3 + 4)</td>
+<td></td>
+<td>(0.653)[0.597]</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>Computational costs</h1>
+<p>My local machine is 1 x RTX 4090.</p>
+<p>I rented an A100 (from <a href="http://vast.ai/" target="_blank">vast.ai</a>) for training a 32B model, and including experiments, it cost me about $350 in total…</p>
+<p>Training one 32B Listwise model took about 7 hours on the A100.</p>
+<h1>What didn't work</h1>
+<ul>
+<li>Options used in the Listwise reranker<ul>
+<li>As single token choices, we tried combinations of two alphabets, combinations of alphabets and numbers 0-9, and japanese hiragana, but all of these approaches performed worse than using just the 52 alphabets.</li></ul></li>
+<li>utilization of QwQ-32B-preview</li>
+<li>multi step reraking (Qwen 2.5 7B(104 candidate) → Qwen 2.5 32B(52 cadindate))</li>
+<li>adding examples of problems and misconceptions in the reraking prompts.</li>
+</ul>
+<h1>Code release</h1>
+<p>We released training code. → <a href="https://github.com/ebinan92/Eedi-5th-solution?tab=readme-ov-file" target="_blank">Eedi-5th-solution</a></p>

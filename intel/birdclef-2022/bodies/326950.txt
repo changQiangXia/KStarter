@@ -1,0 +1,240 @@
+# https://www.kaggle.com/competitions/birdclef-2022/discussion/326950
+
+Topic #326950: [Public #1 Private #2] + [Private #7/8 (potential)] solutions. The host wins.
+  Author: Zhongkai Shangguan
+  Posted: 2022-05-25 02:51:49.701000
+  Votes: 59  Comments: 66
+
+As I promised, I will publish my solution right after the competition. This will be a long topic as the two solutions are totally different. As kaggle says &gt; You've been sharing this link too often. We prevent redundant posts to reduce spam. So I put some link in the code block.
+
+Before the solutions, thanks to my teammate @jionie, our second gold medal, and first-time money zone!!!!!!!!!! Cheers!!!!!!!!!!
+
+I will start with our [Private #7/8 (potential)] Solution first since I **promise **you will say the "F" word after seeing the other solution.
+
+[Private #7/8 (potential)] Solution
+
+Training:
+Our first solution is based on @kaerunantoka 's public notebook and last year's second-place solution. The training code is pretty the mixture of the two pipelines mentioned above. 
+Some key points to mention:
+
+
+
+
+data augmentation:
+OneOf([
+                    Gain(min_gain_in_db=-15, max_gain_in_db=15, p=0.8),
+                    GainTransition(min_gain_in_db=-15, max_gain_in_db=15, p=0.8),
+                ]),
+                OneOf(
+                    [
+                        NoiseInjection(p=1, max_noise_level=0.04),
+                        GaussianNoise(p=1, min_snr=5, max_snr=20),
+                        PinkNoise(p=1, min_snr=5, max_snr=20),
+                        AddGaussianNoise(min_amplitude=0.0001, max_amplitude=0.03, p=0.5),
+                        AddGaussianSNR(min_snr_in_db=5, max_snr_in_db=15, p=0.5),
+                    ],
+                    p=0.3,
+                ),
+                AddBackgroundNoise(
+                    sounds_path=self.config.BACKGROUND_PATH, min_snr_in_db=0, max_snr_in_db=2, p=0.5
+                ),
+                Normalize(p=1),
+
+
+cut mix + mix up
+
+
+loss function: BCEWithLogits + BCEFocal2WayLoss
+
+
+hypers setting (n_fft, n_mels, hop_length) refer to our inference notebook.
+
+
+Our inference kernel and all trained models are [publicly available] 
+Only one key point to mention: if a bird is detected in the previous or next 5s, we will rank the probs and add the top5 bird species to the current detected birds.
+
+Because this solution was not selected as our final submission, we don't know the actual rank, but as it scores 0.79 in private, it should rank 7-8.
+
+[#1 Private #2] Solution
+
+Actually, I am curious that no one found it, the solution is provided by the host and finally allowed by the host.
+
+
+
+If you look at the discussion Meet the host, you will find the host mentioned BirdNet project in the post.
+
+Click the link, and it is easy to find the host's github repo.
+
+Then, find the overlap classes between the host's model and the scored birds, 20 out of 21 scored birds are the same (except aniani).
+
+Modify species_list.txt under example folder accordingly, I have uploaded the modified repo to kaggle here.
+
+Do some post-processing as in our [inference notebook]
+
+Thanks to @ivanpan who opened this issue, the host says we won't enforce the "non-commercial" clause in the license for BirdCLEF, and you can use BirdNET in your submissions. (I don't know if they also benefit from this repo, we can wait for their solution)
+
+
+Some Notes:
+Honestly, we didn't originally intend to use this model as a final submission until we notice the issue mentioned above, and actually, the ensemble of our own model could also reach the gold zone. The answer is provided by the host so that's why I say it is a weird solution. I guess the BirdNet was trained on the data for the public leaderboard but not the private one since there's a huge drop between the public lb to private (0.91 --&gt; 0.84; 0.85 --&gt; 0.78)
+
+The BirdNet is running on CPU less than 2h inference time, while ours cost about 8h to run on GPU. So the host wins, my hope is the first place team doesn't benefit from that model and can beat the host. Looking forward to their solution.
+
+Finally, a big thanks to @stefankahl for hosting this amazing competition and providing the answer as well xD.
+
+Comments:
+├─ Gilles Vandewiele (2022-05-25 04:25:22.333000) [+10]
+│  Congratulations!
+│  
+│  I do feel this should have been disclosed by @stefankahl as it seems like the BirdNET model has been trained at least partially on the test data used in this competition.
+  ├─ Stefan Kahl (2022-05-25 12:54:06) [+4]
+  │  No, it wasn't. Yet, we used other soundscape data and I never realized that this might be an issue for this competition. My guess is, with competition data only, BirdNET would not have scored in th...
+├─ Kramarenko Vladislav (2022-05-25 03:07:21.853000) [+7]
+│  thanks for the story. it is very interesting whether the host used more training records to train the model or not
+  ├─ Ari (2022-05-25 03:27:03.180000) [+2]
+  │  The host used many more. I think it was somewhere around 2434 species in the train set.
+  ├─ Kramarenko Vladislav (2022-05-25 05:32:27.873000) [+3]
+  │  I'm talking about our species. did they use, for example, the test data of this competition for training
+├─ Zhongkai Shangguan (2022-05-25 16:02:52.193000) [+7]
+│  Someone asked me why didn't you contact the host already those 20 days ago when you found it or at least 12 days ago when you wrote your comment? -- Because, as I said, we didn't manage to select B...
+├─ Ivan Panshin (2022-05-25 05:42:11.013000) [+7]
+│  BirdNet was a huge revelation to me in this competition. I couldn't believe how well it works, so decided to test on last year competition where we got 8th place. Easily managed to get top-1 on pri...
+  ├─ Kramarenko Vladislav (2022-05-25 05:51:43.273000) [+7]
+  │  I think this network works better because they had more data. not a few records, as we have.
+  ├─ anthony (2022-05-25 06:05:31.307000) [+1]
+  │  Probably BirdNet also trained on data without noisy labels and maybe even on data which used for eval here.
+  ├─ Ivan Panshin (2022-05-25 06:06:38.027000) [+0]
+  │  @vlomme I think you're right. The model itself is quite quite good, but combine it with a lot of data - and that's a recipe for SOTA.
+  ├─ Kramarenko Vladislav (2022-05-25 06:11:14.007000) [+7]
+  │  It's just that if non-public data and, possibly, test data were used for it training, then it was pointless to compete with such a model. It's very strange and I'm sad
+  ├─ UEMU (2022-05-25 06:14:01.277000) [+3]
+  │  I think that the conclusion of this competition is
+  │  "Let's increase the number of data without training with a few amount of data"
+  │  It wasn't what I expected.
+  ├─ Gleb (2022-05-25 06:27:19.053000) [+11]
+  │  Hold  up, let me get this straight. We do not allowed to use Macaulay Library data, but allowed to use BirdNet, trained on Macaulay Library data? Can I train my own public GlebNet on Macaulay Libra...
+    ├─ Markus Vogelbacher (2022-05-25 12:27:40.717000) [+1]
+    │  If it's okay to use BirdNET it should be alright to use your own model as long as it's publicly available, no matter what data it's been trained on. Is this correct @stefankahl ?
+  ├─ Kramarenko Vladislav (2022-05-25 06:29:22.980000) [+1]
+  │  No you can't.
+  ├─ slime (2022-05-25 06:35:24.997000) [+4]
+  │  @bakeryproducts couldn't agree more, in the forum there were countless discussions that explicitly prohibited the use of Macaulay Library and audios from xeno-canto w/o appropriate license (e.g. se...
+  ├─ Gleb (2022-05-25 06:59:33.683000) [+4]
+  │  To fellow participants, imagine scenario: someone creating topic "BirdNet is kinda good" two days ago. Month(s) of time -&gt; poof -&gt; 'i would like to thank kaggle for this competition and great...
+  ├─ Gilles Vandewiele (2022-05-25 07:00:44.813000) [+1]
+  │  Around which point in the competition did you discover BirdNET?
+  ├─ Kramarenko Vladislav (2022-05-25 07:05:28.450000) [+2]
+  │  no questions to the participants, it is strange that the organizers allowed the use of this model
+  ├─ Gleb (2022-05-25 07:09:08.577000) [+6]
+  │  @vlomme  thats my point, rules were made in such a way that it all could end disastrously
+  ├─ Kramarenko Vladislav (2022-05-25 07:12:27.660000) [+1]
+  │  I agree
+  ├─ Psi (2022-05-25 08:15:55.780000) [+19]
+  │  I am very confident (although I have no proof) that BirdNet only works so well because it was either trained on more data, or even the test data itself. So I am not sure if the host really wins her...
+  ├─ Kramarenko Vladislav (2022-05-25 08:26:26.350000) [+3]
+  │  It is a fact that BirdNet is trained on a larger amount of data (but hardly on a test). In a competition where there were few examples (several per class) this is a non-competitive advantage
+  ├─ Psi (2022-05-25 08:44:38.680000) [+13]
+  │  And this extra data Macaulay Library was not allowed to be used here in this competition but the BirdNet model was trained on it? Wouldn't that mean that BirdNet model should not be allowed?
+  ├─ Gilles Vandewiele (2022-05-25 08:55:22.787000) [+9]
+  │  Correct. But unfortunately, permission seems to have been given by the organizers to use this in a github issue 2 days ago.
+  ├─ Kramarenko Vladislav (2022-05-25 08:55:45.820000) [+2]
+  │  Yes, that's right. For some reason the organizer allowed the model to be used
+  ├─ S. Tomizawa (2022-05-25 10:06:31.677000) [+6]
+  │  I think the organizers should clarify whether the Macaulay Library or competition test data were used or not in the BirdNet. In any case, I feel empty.
+  ├─ Gilles Vandewiele (2022-05-25 10:09:57.753000) [+4]
+  │  They mention it explicitly in the linked issue that they use Macaulay data!
+  ├─ Psi (2022-05-25 10:16:34.937000) [+10]
+  │  Wow, I feel for you. Crazy to make such a ground-breaking decision in a github issue one day before end of competition…
+  ├─ Stefan Kahl (2022-05-25 12:32:09.127000) [+-4]
+  │  Yes, I also believe that BirdNET works so well because of additional training data (we indeed used Macaulay Library and another soundscape set from Hawaii). It would probably not score in the top 1...
+  ├─ Psi (2022-05-25 12:34:42.807000) [+5]
+  │  I am not sure I am following @stefankahl - but you explicitly allowed it one day before deadline, there was no reason to as it was disallowed before that. So you actually implemented a last-minute ...
+  ├─ Stefan Kahl (2022-05-25 12:47:53.713000) [+-2]
+  │  No, it was not disallowed before that, it's a public repo and anyone could have used it. Even the fact that it uses Macaulay data doesn't change that. If we had been aware earlier, we would have im...
+  ├─ Psi (2022-05-25 13:34:12.047000) [+7]
+  │  Your first statement in this github repo was very definite that it was not allowed. Also, according to reports of others, the Macaulay dataset was explicitly forbidden to use, so what sense does it...
+  ├─ Stefan Kahl (2022-05-25 13:37:35.927000) [+-1]
+  │  But here is where it gets complicated. BirdNET is not a dataset, it's a trained model which is publicly available, so the Macaulay Library rule does not apply. It was trained on ML data, but it is ...
+  ├─ Psi (2022-05-25 13:50:52.350000) [+4]
+  │  BirdNET is not a dataset, it's a trained model which is publicly available, so the Macaulay Library rule does not apply
+  │  
+  │  
+  │  How do you come to that conclusion? A model always has the same license as ...
+  ├─ Stefan Kahl (2022-05-25 13:55:45.447000) [+-1]
+  │  The confusion is understandable, and our first response to the request to use BirdNET for this competition was to not allow it due to the non-commercial clause in the license. Yet, we realized that...
+  ├─ Psi (2022-05-25 13:58:57.260000) [+4]
+  │  But, correct me if I am wrong, as a host you can always disallow specific models and data, regardless of the circumstances.
+  ├─ Zhongkai Shangguan (2022-05-25 14:00:32.907000) [+-3]
+  │  Guys, I think there's no need to quarrel over this topic. I think the main problem is I found the solution too late otherwise I would make it publicly available, and no one asked about the BirdNet....
+  ├─ Ivan Panshin (2022-05-25 14:09:08.993000) [+-6]
+  │  Yeah, someone could have used BirdNet last year and still win. But nobody found it (including us), until this competition. So live and learn. Now we can prepare better for the next competition(s)
+  ├─ Kramarenko Vladislav (2022-05-25 14:11:42.353000) [+5]
+  │  Did you use last year's version of BirdNet?
+  ├─ Psi (2022-05-25 14:12:23.540000) [+6]
+  │  BirdNet in this form only exists since way after last year's competition. It is only useful because it has been trained on extra data that was not available to other participants.
+  │  
+  │  And how does thi...
+  ├─ Gleb (2022-05-25 14:13:33.700000) [+2]
+  │  @ivanpan  Did you run your "test" on new edition of BirdNet, or correct edition (dated before 2021 competition) ?
+  ├─ Stefan Kahl (2022-05-25 14:13:44.970000) [+2]
+  │  We will make sure that the competition data equals the data we used for BirdNET. This way, using BirdNET will not result in an advantage.
+  ├─ Gilles Vandewiele (2022-05-25 14:17:07.047000) [+10]
+  │  The first commit on the Birdnet repo (not including the lasagne code one) is from September 2021, so I doubt that it was useful in a competition that ended in June 2021. 
+  │  
+  │  This just sets an extreme...
+  ├─ Zhongkai Shangguan (2022-05-25 14:18:57.163000) [+-2]
+  │  BirdNet in this form only exists since way after last year's competition -- anyone even tried this repo and this for the last year's competition? This is before 2021 (even 3 years ago), I don't kno...
+  ├─ CPMP (2022-05-25 14:37:02.490000) [+10]
+  │  "But here is where it gets complicated. BirdNET is not a dataset, it's a trained model which is publicly available, so the Macaulay Library rule does not apply. It was trained on ML data, but it is...
+  ├─ Giba (2022-05-25 15:11:55.157000) [+12]
+  │  @stefankahl at least, hundreds of competitors got hurt because of this pretrained model using data not allowed in the competition. This model should not be allowed, even in the last day of the comp...
+  ├─ Stefan Kahl (2022-05-25 15:31:19.117000) [+0]
+  │  @cpmpml the way I understand, a model trained on some data does not necessarily need to have the same license as the data it was trained on. So considering this, if someone (e.g. us as hosts) train...
+  ├─ Gleb (2022-05-25 15:50:44.137000) [+-3]
+  │  Here you go future BirdClef2023, no need to thank me:
+  │  
+  │  class GlebNet:
+  │    def __init__(self, macaulay_data):
+  │      self.data = macaulay_data
+  │      self.important_parameter = True
+  │    def forward(self, idx)...
+  ├─ Kramarenko Vladislav (2022-05-25 16:02:15.440000) [+6]
+  │  It has already been said many times that a mistake was made. Now it can not be corrected and the 1st and 2nd place is not to blame for this. And in principle nothing will change (except for 3-5 pla...
+  ├─ Gilles Vandewiele (2022-05-25 19:43:38.267000) [+7]
+  │  I fully agree. The LB cannot be changed, as organizers gave permission explicitly. However, this should be put into rules for future competitions, bcs as I mentioned before, this sets a dangerous p...
+  ├─ CPMP (2022-05-29 19:34:58.483000) [+1]
+  │  "a model trained on some data does not necessarily need to have the same license as the data it was trained on"
+  │  
+  │  @stefankahl You should check with a lawyer. Intuition is not a good predictor of the...
+├─ kkiller (2022-05-25 22:07:45) [+5]
+│  Despite the fact that the host mistakenly allow the BirdNet model, it's execrable that some Kagglers can find a leak-like situation and secretly exploit it for gold and money prize. This is not a g...
+├─ S. Tomizawa (2022-05-25 03:18:34.827000) [+3]
+│  It reminds me of the 2nd place solution of Cassava competition.
+  ├─ Zhongkai Shangguan (2022-05-25 03:38:31.283000) [+1]
+  │  Yes exactly,
+├─ anthony (2022-05-25 06:08:01.630000) [+2]
+│  Seems like this competition was useless:( Best results achieved by existed model which also can be used in real world instead of ensembles which we train.
+  ├─ Stefan Kahl (2022-05-25 12:56:26.457000) [+2]
+  │  No, it was not useless. We will investigate all write-ups, notebooks and working notes to add to our existing model, drawing ideas from everyone's effort. We want to improve bird sound detection an...
+├─ WANG XIN (2022-05-29 18:26:16.937000) [+1]
+│  if a bird is detected in the previous or next 5s, we will rank the probs and add the top5 bird species to the current detected birds.
+│  
+│  
+│  It's really amazing that the information of adjacent time seg...
+  ├─ Tom Denton (2022-05-29 19:00:41.153000) [+3]
+  │  I've also noticed in some recent work that averaging adjacent time windows can be quite helpful. This might in part be due to calls cut off at the window; you may get a misclassification with a par...
+├─ atfujita (2022-05-25 03:44:07.690000) [+0]
+│  Congrats and thanks for sharing the solution!
+│  I can't always find this kind of information😂
+├─ Kolya Forrat (2022-05-25 03:11:39.037000) [+0]
+│  Congratulations with your score
+│  And I'm happy that you are the only team who found and used it :)
+  ├─ Kramarenko Vladislav (2022-05-25 03:13:34.673000) [+3]
+  │  the first place also found this
+├─ [deleted] (2022-05-25 14:34:07.357000) [+0]
+│  [deleted]
+├─ gilty15 (2022-05-25 20:08:57.670000) [+0]
+│  Thanks for sharing this
+├─ jackmtlee (2022-05-25 17:26:08.443000) [+0]
+│  Thanks for sharing the solution.
+├─ Thịnh Lâm (2022-05-25 14:26:13.567000) [+0]
+│  Thanks for sharing and Congrats!

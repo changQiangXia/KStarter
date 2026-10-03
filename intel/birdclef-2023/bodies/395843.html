@@ -1,0 +1,50 @@
+<h2>Motivation</h2>
+<p>In the current competition, improving the performance of small models has proven to be a challenging task due to only <strong>CPU</strong> inference, along with a time constraint of <strong>2 hours</strong>. Additionally, the majority of models used in this competition are pre-trained on <code>ImageNet</code> and are not familiar with <strong>audio data</strong>, making it difficult for them to achieve their true potential even with transfer learning. To overcome this challenge, there are two potential solutions: 1) pre-training on an audio dataset, and 2) training with a large-scale dataset. However, the competition dataset contains only <code>16k</code> samples, and the labels from the previous competition dataset do not match with this one, making training with a large-scale dataset challenging. As a solution, utilizing the previous competition datasets for pre-training can improve the models' feature extraction capabilities.</p>
+<h2>Processing in GPU/TPU</h2>
+<p>As previously mentioned <a href="https://www.kaggle.com/code/awsaf49/birdclef23-effnet-fsr-cutmixup-train/comments#2179795" target="_blank">here</a>, <strong>model/TPU/GPU</strong> experiences a bottleneck when waiting for the data which are processed on <strong>CPU</strong>. This is because the Audio -&gt; Spectrogram transformation, Augmentation, and Normalization are performed within <code>tf.data.Dataset</code> on the CPU, creating a bottleneck. To alleviate this bottleneck, the following notebooks utilize <code>tf.keras.layers.Layer</code> to perform all operations on the <strong>GPU/TPU</strong> which can significantly speed up the training process (up to 4x in P100 GPU).</p>
+<p>To reduce the size of the notebook and make it more manageable, the <a href="https://github.com/awsaf49/tensorflow_extra" target="_blank"><strong>tensorflow_extra</strong></a> library is created. This library contains most of the augmentation and transformation code used in the notebooks. You are welcome to contribute. Here is a demo code that runs ops on GPU/TPU,</p>
+<pre><code> tensorflow_extra  tfe
+
+melspec_layer = tfe.layers.MelSpectrogram()
+specs = melspec_layer(audios)
+
+tfm_layer = tfe.layers.TimeFreqMask()
+specs2 = tfm_layer(specs, training=)
+
+norm_layer = tfe.layers.ZScoreMinMax()
+specs3 = norm_layer(specs2)
+</code></pre>
+<h2>Notebooks</h2>
+<ul>
+<li>Pretraining is All you Need<ul>
+<li>Train: <a href="https://www.kaggle.com/awsaf49/birdclef23-pretraining-is-all-you-need-train/" target="_blank">BirdCLEF23: Pretraining is All you Need [Train]</a></li>
+<li>Infer: <a href="https://www.kaggle.com/awsaf49/birdclef23-pretraining-is-all-you-need-infer/" target="_blank">BirdCLEF23: Pretraining is All you Need [Infer]</a></li></ul></li>
+</ul>
+<h2>Previous Notebooks</h2>
+<ul>
+<li>EffNet + FSR + CutMixUp<ul>
+<li>Train: <a href="https://www.kaggle.com/awsaf49/birdclef23-effnet-fsr-cutmixup-train/" target="_blank">BirdCLEF23: EffNet + FSR + CutMixUp [Train]</a></li>
+<li>Infer: <a href="https://www.kaggle.com/awsaf49/birdclef23-effnet-fsr-cutmixup-infer/" target="_blank">BirdCLEF23: EffNet + FSR + CutMixUp [Infer]</a></li></ul></li>
+</ul>
+<h2>Training Configs</h2>
+<ul>
+<li><strong>Pretraining</strong>: ~71k samples from BirdCLEF 2021 &amp; 2022 competition. Filenames with an exact match with primary_label &amp; author are removed to avoid leak.</li>
+<li><strong>Training</strong>: ~16k samples from BirdCLEF 2023 competition.</li>
+<li><strong>Model</strong>: EfficientNetB1 + FSR</li>
+<li><strong>Training Time Duration</strong>: 10 sec</li>
+<li><strong>Image Size</strong>: 128 x 384</li>
+<li><strong>Loss</strong>: CCE</li>
+<li><strong>Sampling</strong>: Downsample data to have max 500 samples in each class &amp; Upsample data to have min 50 samples in each class.</li>
+</ul>
+<h2>Result</h2>
+<ul>
+<li><strong>Validation</strong>: 0.86 (AUC) | 0.911 (cmAP)</li>
+<li><strong>LB</strong>: 0.80</li>
+<li><strong>Improvement</strong>: Local validation -&gt; 4% | LB -&gt; 2%</li>
+</ul>
+<blockquote>
+  <p><strong>Note</strong>: CV - LB gap can be reduced by reducing time duration in training but affects the training score. As there is a small overlap of labels between previous competition and current competition data, we can use them as external data as well.</p>
+</blockquote>
+<h2>Track Experiments with WandB</h2>
+<p>You can track all the experiments on Weights &amp; Biases (WandB) <a href="https://wandb.ai/awsaf49/birdclef-2023-public" target="_blank">here</a><br>
+<img src="https://i.postimg.cc/8CsMw43R/wandb-v2.png"></p>

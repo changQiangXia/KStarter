@@ -1,0 +1,122 @@
+# child-mind-institute-detect-sleep-states 讨论区（按票数排序，共 120 条）
+
+- [Detecting sleep using UNet(2D)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/452940) — 206 票 / 172 评论 / 2023-11-19 
+- [11th Place - GRU, CNN, Transformer - GPU Deep Learning!](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459596) — 186 票 / 59 评论 / 2023-12-09 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459627) — 177 票 / 27 评论 / 2023-12-16 **write-up?**
+- [1st place solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459715) — 168 票 / 33 评论 / 2024-01-06 **write-up?**
+- [🔥Papers with Code for this Competition](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437274) — 143 票 / 17 评论 / 2023-09-06 
+- [What happened so far? A quick summary of the discussions](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/449151) — 99 票 / 13 评论 / 2023-10-23 
+- [3rd place solution - GRU, UNET and LGB!](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459599) — 77 票 / 26 评论 / 2023-12-17 **write-up?**
+- [A possible deep learning approach](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/441470) — 70 票 / 28 评论 / 2023-09-19 
+- [7th Place Solution - Wavenet and Some Tricks](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459598) — 70 票 / 10 评论 / 2023-12-06 **write-up?**
+- [Offset Events](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/440697) — 68 票 / 43 评论 / 2023-09-15 
+- [4th Place Solution - Nikhil's Part (Modified Unet + Transformer and Weighted Box Fusion)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459637) — 68 票 / 6 评论 / 2023-12-16 **write-up?**
+- [4th Place Solution (penguin46 part)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459597) — 64 票 / 4 评论 / 2023-12-06 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459766) — 63 票 / 10 评论 / 2024-01-24 **write-up?**
+- [6th Place Solution - BiLSTM-UNet](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459604) — 58 票 / 15 评论 / 2023-12-14 **write-up?**
+- [Z-Angle (Anglez), Euclidean Norm Minus One (Enmo) and Mean Amplitude Deviation (MAD)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437261) — 56 票 / 17 评论 / 2023-09-06 
+- [Lightweight training dataset (180M)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437345) — 55 票 / 3 评论 / 2023-09-06 
+- [RNN Critical Point Baselines | How to Improve From Here](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/448288) — 50 票 / 22 评论 / 2023-10-19 
+- [strange pattern of true events](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/444374) — 49 票 / 16 评论 / 2023-10-01 
+- [The Potential of Transformer ](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/451372) — 47 票 / 26 评论 / 2023-10-28 
+- [80% reducted datasets](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/440170) — 47 票 / 5 评论 / 2023-09-14 
+- [Kernel upvotes vs forks - we have a problem](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/449004) — 47 票 / 18 评论 / 2023-10-22 
+- [Time series materials for reference](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437264) — 46 票 / 13 评论 / 2023-09-06 
+- [13th place solution [team summary]](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459703) — 45 票 / 2 评论 / 2023-12-11 **write-up?**
+- [CV vs LB scores](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/447882) — 45 票 / 49 评论 / 2023-10-17 
+- [Best Practices in Tackling BigData-Scale Tasks](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/441047) — 43 票 / 47 评论 / 2023-09-17 
+- [14th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460274) — 41 票 / 5 评论 / 2023-12-13 **write-up?**
+- [Update on Evaluation Metric Bug](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/454071) — 38 票 / 11 评论 / 2023-11-08 
+- [9th Place Solution - shu421 part (1D WaveNet + Transformer + GRU)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459678) — 38 票 / 3 评论 / 2023-12-06 **write-up?**
+- [Avoid Rounding to Multiples of 12 Steps](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/446919) — 38 票 / 8 评论 / 2023-10-13 
+- [[LB=0.447] HDCZA - a pure heuristic approach withought training any models](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/453267) — 37 票 / 5 评论 / 2023-11-05 
+- [How to deal with sleepless periods](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/441638) — 36 票 / 16 评论 / 2023-09-19 
+- [XGBoost 2.0.0 (whl file)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/446899) — 35 票 / 2 评论 / 2023-10-13 
+- [Multiclass dataset (211M)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438438) — 32 票 / 17 评论 / 2023-09-11 
+- [10th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459894) — 32 票 / 4 评论 / 2023-12-10 **write-up?**
+- [Python implementation of the metric seems wrong](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/451950) — 31 票 / 7 评论 / 2023-10-31 
+- [34th Place solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459595) — 29 票 / 5 评论 / 2023-12-06 **write-up?**
+- [9th Place (Youri' part; some post-processing)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459742) — 28 票 / 1 评论 / 2023-12-06 **write-up?**
+- [How to get your submission timing?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/448716) — 27 票 / 7 评论 / 2023-10-20 
+- [Is LB Test data only 12 minutes per person? [Answer: NO]](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/447937) — 27 票 / 16 评论 / 2023-10-17 
+- [Meme Thread](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/458455) — 27 票 / 16 评论 / 2023-11-30 
+- [Is this actually a time series problem?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437534) — 25 票 / 10 评论 / 2023-09-07 
+- [15th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460177) — 24 票 / 1 评论 / 2023-12-08 **write-up?**
+- [87th Place solution, 2D Object Detection](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459639) — 24 票 / 1 评论 / 2023-12-06 **write-up?**
+- [75th Place Detailed Solution - Spec2DCNN + CenterNet + Transformer + NMS](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459610) — 24 票 / 6 评论 / 2023-12-06 **write-up?**
+- [Exploration of De-noising using Fast Fourier Transformation](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/448295) — 23 票 / 2 评论 / 2023-10-19 
+- [9th Place Solution - tomo’s Part](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460276) — 23 票 / 0 评论 / 2023-12-08 **write-up?**
+- [13th place solution [K.T. part]](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460499) — 23 票 / 0 评论 / 2023-12-09 **write-up?**
+- [33th Place Solution - 1D-Unet with GRU, Detect repeating signals](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459632) — 23 票 / 0 评论 / 2023-12-06 **write-up?**
+- [9th Place (chris' part; "double gru" model)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459613) — 22 票 / 2 评论 / 2023-12-06 **write-up?**
+- [Tips for Efficient Fast Inference](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/447593) — 22 票 / 18 评论 / 2023-10-16 
+- [Kernel stats in details](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/451537) — 21 票 / 0 评论 / 2023-10-29 
+- [unlabeled events](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/456177) — 20 票 / 3 评论 / 2023-11-18 
+- [GRUNET and KLDivLoss](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/452606) — 20 票 / 3 评论 / 2023-11-02 
+- [26th solution - 1D Unet with 1D CNN, Hybrid CNN-Transformer and WBF](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459671) — 20 票 / 2 评论 / 2023-12-16 **write-up?**
+- [Timezone inconsistency and duplicated entries in train_events?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437998) — 19 票 / 11 评论 / 2023-09-09 
+- [39th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459885) — 18 票 / 3 评论 / 2023-12-07 **write-up?**
+- [Releasing my findings.](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/456143) — 18 票 / 19 评论 / 2023-11-18 
+- [9th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460372) — 18 票 / 0 评论 / 2023-12-15 **write-up?**
+- [Quick Advice: Optimize Your Data Types for Efficiency](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438394) — 18 票 / 5 评论 / 2023-09-10 
+- [Looks like an interesting final sprint!](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459089) — 18 票 / 11 评论 / 2023-12-03 
+- [8th Place Solution for the Child Mind Institute - Detect Sleep States Competition](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460617) — 18 票 / 5 评论 / 2023-12-14 **write-up?**
+- [Released a Starter Notebook - How to perform CV in this competition](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/451388) — 17 票 / 7 评论 / 2023-10-28 
+- [40th Place Solution - Improving prediction with FFT-based data cleaning](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459648) — 17 票 / 1 评论 / 2023-12-07 **write-up?**
+- [Introduction to LSTMs](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437658) — 16 票 / 2 评论 / 2023-09-07 
+- [Ablation Study on Publicly-Shared Solutions through Late Submission](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/466573) — 16 票 / 1 评论 / 2024-01-09 **write-up?**
+- [Data imbalance by season](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/447228) — 16 票 / 6 评论 / 2023-10-14 
+- [Video available. Introductory webinar related to the competition](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/446125) — 16 票 / 5 评论 / 2023-10-10 
+- [Locomotor Inactivity During Sleep (LIDS) - Viz](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/444007) — 16 票 / 1 评论 / 2023-09-29 
+- [A Question about the Test Dataset](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437567) — 16 票 / 25 评论 / 2023-09-07 
+- [Code for evaluation ](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437209) — 16 票 / 7 评论 / 2023-09-05 
+- [Cleaned training data with 269 series_id](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438683) — 16 票 / 3 评论 / 2023-09-12 
+- [Duplicate/corrupt series data for series_id 03d92c9f6f8a](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438127) — 15 票 / 2 评论 / 2023-09-09 
+- [Are false positives punished?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/451179) — 15 票 / 3 评论 / 2023-10-27 
+- [NMS (Non-Maximum Suppression): Post processing](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/458822) — 15 票 / 2 评论 / 2023-12-01 
+- [Notebook RAM increase means you can read in the entire train parquet file](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/448519) — 15 票 / 1 评论 / 2023-10-20 
+- [Is there any tricks in post processing?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/457694) — 15 票 / 9 评论 / 2023-11-26 
+- [Kaggle & Sleep:  I wish to hear lots of kagglers talk about their successes without attributing them to sleepless nights...](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437360) — 14 票 / 8 评论 / 2023-09-06 
+- [39th - Implementation of PrecTime Model from Arxiv Paper in This Competition.](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459616) — 14 票 / 0 评论 / 2023-12-06 
+- [Incorrect events even after 2nd data update](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/442862) — 14 票 / 7 评论 / 2023-09-24 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437183) — 13 票 / 161 评论 / 2023-09-05 
+- [Use of Temporal Graph Neural Networks to Detect Sleep States](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437420) — 13 票 / 4 评论 / 2023-09-06 
+- [Google just released new time series algorithm based on attention mechanism](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437553) — 13 票 / 0 评论 / 2023-09-07 
+- [The elegant way to generate the Gaussian targets with vectorization](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/454962) — 13 票 / 1 评论 / 2023-11-12 
+- [Possible expert inconsistent labeling of sleep onset in the training set](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/440290) — 13 票 / 9 评论 / 2023-09-14 
+- [77th solution - UNet1D -> WaveNet, Bi-GRU](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460112) — 13 票 / 0 评论 / 2023-12-07 **write-up?**
+- [Congratulations to new Kaggle Competitions GM!](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459626) — 13 票 / 1 评论 / 2023-12-06 
+- [About error tolerance thresholds: 3 seconds/step or 5 seconds/step?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437232) — 12 票 / 3 评论 / 2023-09-06 
+- [Using CNN for Time Series data](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/450468) — 12 票 / 6 评论 / 2023-10-24 
+- [16th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460371) — 12 票 / 2 评论 / 2023-12-09 **write-up?**
+- [Onset and Wakeup AP values for Series](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/443569) — 12 票 / 8 评论 / 2023-09-27 
+- [Literature Review on detecting sleep onset and wake from wrist-worn accelerometer data](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437417) — 12 票 / 1 评论 / 2023-09-06 
+- [Possible technique? Temporal Convolutional Networks](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437262) — 12 票 / 1 评论 / 2023-09-06 
+- [159th solution 🥉](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459730) — 11 票 / 0 评论 / 2023-12-06 **write-up?**
+- [🥉 146th place – 9 models 1h inference - Segmentation through UNet](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459699) — 11 票 / 0 评论 / 2023-12-06 **write-up?**
+- [Data Inconsistency](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/448683) — 11 票 / 21 评论 / 2023-10-20 
+- [nan steps in evaluation](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/441649) — 11 票 / 2 评论 / 2023-09-19 
+- [Kaggle Pipeline (Open Source)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437539) — 11 票 / 2 评论 / 2023-09-07 
+- [Scoring error if it takes 30 minutes for scoring?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459617) — 10 票 / 2 评论 / 2023-12-06 
+- [29th Place Solution and Initial Solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460021) — 10 票 / 0 评论 / 2023-12-07 **write-up?**
+- [110th Solution : My Original GRU Model & Tuned Unet2D Model](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459669) — 10 票 / 0 评论 / 2023-12-06 **write-up?**
+- [[advice?] timestamp column does not convert](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438165) — 10 票 / 17 评论 / 2023-09-09 
+- [CV vs LB difference](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/442552) — 10 票 / 11 评论 / 2023-09-23 
+- [Use polars to speed up by nearly 5x while reading parquet ⚡](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438862) — 10 票 / 3 评论 / 2023-09-12 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459898) — 9 票 / 0 评论 / 2023-12-07 
+- [How to structure data for an LSTMs or other models](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/448218) — 9 票 / 1 评论 / 2023-10-18 
+- [155th solution](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459744) — 9 票 / 0 评论 / 2023-12-07 **write-up?**
+- [Gradient Boosting or Neural Network](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/446725) — 9 票 / 18 评论 / 2023-10-12 
+- [Why no CV in public notebook](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/443027) — 9 票 / 8 评论 / 2023-09-25 
+- [1790th Place Solution - code details, attempts and insights](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459636) — 9 票 / 0 评论 / 2023-12-06 **write-up?**
+- [What I learned in the Deep Sleep Competition](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459583) — 9 票 / 1 评论 / 2023-12-05 
+- [23rd Place Solution (12th Public)](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/460337) — 9 票 / 0 评论 / 2023-12-08 **write-up?**
+- [What defines a "night"?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437920) — 9 票 / 9 评论 / 2023-09-08 
+- [Idea for feature engineering?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438298) — 9 票 / 10 评论 / 2023-09-10 
+- [What is the best way to deal with ENMO outliers?](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/445166) — 9 票 / 5 评论 / 2023-10-05 
+- [Train_events rows that can be dropped](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/438112) — 9 票 / 2 评论 / 2023-09-09 
+- [Binary classification or ternary classification？](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/444786) — 9 票 / 7 评论 / 2023-10-03 
+- [Solution - Place 154](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459757) — 8 票 / 0 评论 / 2023-12-06 **write-up?**
+- [How to handle such large dataset ? ](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437616) — 8 票 / 19 评论 / 2023-09-07 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437182) — 7 票 / 6 评论 / 2023-09-05 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/437221) — 2 票 / 3 评论 / 2023-09-05 

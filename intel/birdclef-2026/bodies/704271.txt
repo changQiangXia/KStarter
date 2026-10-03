@@ -1,0 +1,169 @@
+# https://www.kaggle.com/competitions/birdclef-2026/discussion/704271
+
+Topic #704271: 10th solution, simple model as always.
+  Author: coolz
+  Posted: 2026-06-04 03:42:39.563000
+  Votes: 45  Comments: 8
+
+Scheme Summary:
+
+*** The pipeline does not work well with models other than PERCH v2. I have tried several alternative backbones, HGNET as an example. Just like PERCH v2, these models require pre-trained weights. I experimented using BirdSet XC data yet only reached approximately 0.94. ***
+
+1. my best private single model,
+
+https://www.kaggle.com/code/cooolz/perchv2-sed
+
+2. Model Architecture
+
+Raw Audio (32kHz, 20s)
+       │
+       ▼
+┌─────────────────────────────┐
+│  Mel Spectrogram Frontend   │  PERCH v2 built-in (128 mel bins, frozen)
+│  stride=320, sr=32000       │  Output: (B, 128, T)
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  PERCH v2 CNN Backbone      │  Pretrained: perch_v2_pytorch.pth
+│  emb_dim=1536               │  Output: (B, 1536, H, W)
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  Linear Proj +  RoPE      │  1536 → 512,  RoPE
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  SED Transformer ×4 Layers  │  SEDBlock: Self-Attn (8 heads) + MLP (ratio=4)
+│  dim=512, RMSNorm            │  attn_drop=0.0, proj_drop=0.1
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  SEDHead (Dual Head)        │  num_context=4: split time into 4 context windows
+│  fc_logit → frame logits    │  att_logits: Σ(softmax(attn) * logit)
+│  fc_att   → attn weights    │  max_logits: per-frame max pooling
+└─────────────────────────────┘
+       │
+       ▼
+  Output: (att_logits, max_logits) — 2 heads, (B, 4, 234) each
+
+
+3. Trainable perchv2
+
+The pytorch model is convert from tf version with the help of gpt. And there is a public availabel one produced by hengck23
+
+4. Train params
+
+Cos scheduel with warmup from 0 to 2.5e-4 to 1e-6 with around 10 epochs.
+Bce loss
+
+5. Sample strategy,
+
+80-500, 
+if a label has morethan 500 files, give a low sample weight.
+if a label has less than 80 files, give a high sample weight.
+striong soundscape data x2.5 weight
+
+6. augmantation,
+
+
+
+0.8 probability: random gain ±4 dB
+
+0.5 probability: random time and frequency masking
+
+1.0 probability: mixup
+
+
+7. Inference &amp; Post-processing
+
+The final inference uses ONNX-exported model via OpenVINO. Post-processing pipeline:
+
+60s audio → Mel Spectrogram → Single Model → Prior Fusion
+    → Smooth Day/Night → Sigmoid
+    → Amphibia Month Prior → File Confidence Scale
+    → Per-Taxon Temporal Smoothing → Final Probs
+
+
+7.1.  Inference
+
+
+
+5-fold ONNX models
+
+Input: 60s audio → 6000-frame mel spec → model → 12×5s clip logits
+
+Output: logits (12, 234)
+
+
+7.2. post process
+
+7.2.1. Prior Fusion
+
+
+
+Site, hour, site×hour priors fitted from soundscape strong labels
+
+
+7.2.2. Smooth Day/Night Correction
+
+Many species follow unique day-night activity rhythms, analogous to higher cold drink sales in summer. Their hour-wise priors are computed from probability distributions of soundscape labels; supporting evidence is shown below.
+
+7.2.3. Amphibia Month Prior
+
+Amphibian activity fluctuates between dry and wet seasons, similar to seasonal beverage consumption trends. Monthly priors are fitted from soundscape probability statistics, with relevant evidence attached below.
+
+This echoes a well-known ML anecdote: a DL expert fitted beverage store data and concluded cold drinks sell more in summer and hot drinks sell better in winter.
+
+7.2.4. File-Level Confidence Scale
+
+7.2.5. Per-Taxon Temporal Smoothing
+
+7.3 ensemble
+
+The ensemble lacks diversity owing to exclusive use of the PerchV2 backbone. I substitute the Transformer with Mamba and other sequential models; this modification can maintain similar performance metrics. Actually single model is good enough. 
+
+Evidence for the post process,
+
+This time the host gives site, month and hour metainfo, that could be used. I found it late, and got no time to use it within the model.
+
+I got some evidence:
+
+
+
+
+pse label
+
+It remains unclear if pseudo labels benefit the method: a base model trained without pseudo labels scored 0.951 on public LB a month earlier. Regardless, I appended 10~12 pseudo-labeled samples to the training corpus for training.
+
+code share
+
+birclef26
+the code is summary by OMO.
+
+Comments:
+├─ Tucker Arrants (2026-06-04 03:56:25.747000) [+1]
+│  Remarkably simple, makes me realize how much I overcomplicated things. Thank you for sharing your write up.
+├─ [deleted] (2026-06-15 07:46:39.243000) [+0]
+│  absoulately amazing,  Could I ask whether you use extra data or only 2026 focla and labeled soundspaces data?
+├─ Navneet (2026-06-05 07:13:42.363000) [+0]
+│  Bravo  for the 10th solution @cooolz
+├─ swordsman (2026-06-04 06:20:01.763000) [+0]
+│  真实太厉害了，有时间简单就是最好的。。。
+│  可以分享一下训练数据如何做成的吗？
+├─ Sanskar Verma (2026-06-04 05:39:50.253000) [+0]
+│  how do i become cool like you?
+├─ Salman Ahmed (2026-06-04 03:53:59.053000) [+0]
+│  Amazing results as always (Even from start of the competition). 😃
+│  
+│  I wish I could get my head around the post processing pipeline, but I had this urge to not do it. 😆😆😆
+  ├─ Salman Ahmed (2026-06-04 14:19:56.653000) [+0]
+  │  @cooolz Would it be possible if you could share your github repo / code for this?
+    ├─ coolz (2026-06-05 03:53:29.920000) [+1]
+    │  The code was summarized with DeepSeek. Due to AI involvement, the project is disorganized and the overall code flow is hard to trace. 
+    │  Hope this could help.
+    │  
+    │  link, https://github.com/610265158/bird...

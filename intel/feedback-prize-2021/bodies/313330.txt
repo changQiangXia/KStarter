@@ -1,0 +1,328 @@
+# https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313330
+
+Topic #313330: 4th place solution - 🎖️ my first gold medal 🎖️ (+source code available!)
+  Author: Jungwoo Park
+  Posted: 2022-03-16 14:17:08.614000
+  Votes: 149  Comments: 41
+
+Here is a source code in github!
+
+Hi kagglers! Congrats to the winners and everyone who enjoyed this competition! I saw many people were tired, and me as well… But I've got my very first solo gold medal 🎖️ and I'm now really happy to become a Kaggle master!
+
+To be honest, I participated this competition about 3 weeks ago. Thanks to the community, I can accelerate my experiments and improve the score quickly. If I had more time, maybe I could get more chances… 🤔🤔
+
+I think some tricks and techniques are important in this competition. The lightgbm postprocessing is really cool and I've never thought about that idea. I focused on some technical processing and I managed to get a high score.
+
+Resolve Encoding Error
+
+As you can see, there are some abnormal characters in the documents. Let's see 0D1493FDAAD3:
+
+...
+Another reason to talk to multiple people when making a purchase is to learn from their successes. ÃÅf you saw a group of people successfully do what you are trying now, learn what they did to overcome the obstacle.
+...
+
+
+There are nonrecognizable characters ÃÅ and you may see this frequently in other documents. After some tries, I found this is a problem about cp1252 and utf8 encodings, and the below code can clean the documents.
+
+The result is as follows:
+
+...
+Another reason to talk to multiple people when making a purchase is to learn from their successes. If you saw a group of people successfully do what you are trying now, learn what they did to overcome the obstacle.
+...
+
+
+Actually, It doesn't seem to improve the final scores significantly, but I just applied this to make sure.
+And because it reduces the characters in the documents, we have to adjust the discourse_start and discourse_end offsets. To correct the offsets, I use difflib.SequenceMatcher to compare the differences of the characters. The details are in my code.
+
+word_ids vs offset_mapping?
+
+Because many NER examples use word_ids with is_split_into_words=True parameter, I also tried to use this for labeling BIO-named subword tags. However, I got 0.595 public LB with a single-fold bigbird base model. So I tried another way from the community, offset_mapping with return_offsets_mapping=True parameter to make subword NER tags, and I could get 0.630 public LB score.
+
+
+
+
+model name
+public lb score
+private lb score
+
+
+
+
+bigbird-roberta-base (single fold, word_ids)
+0.595
+0.609
+
+
+bigbird-roberta-base (single fold)
+0.630
+0.644
+
+
+bigbird-roberta-base (5 folds)
+0.659
+0.677
+
+
+
+
+Why is this happened? What is the difference between word_ids and offset_mapping approach? After trying some experiences, I found that word_ids needs to split the text into words using .split(), and it prunes the line-break information \n. Since this task is for recognizing the structure of the document, it would be necessary to use the line-break characters. Remember this because I will mention this fact in the later section.
+
+Beam-Search Decoding
+
+BIO-naming rule is quite complex, so the greedy decoding (i.e. argmax from the token predictions) cannot perform well. I observed many cases like:
+
+
+
+
+sorted candidate tags
+sorted corresponding probs
+
+
+
+
+B-Claim …
+1.0 …
+
+
+I-Claim …
+0.99  …
+
+
+I-Claim …
+0.99 …
+
+
+I-Claim B-Evidence …
+0.49 0.43 …
+
+
+I-Evidence I-Claim …
+0.99 0.01 …
+
+
+I-Evidence I-Claim …
+0.99 0.01 …
+
+
+
+
+According to the greedy decoding, the prediction result would be B-Claim I-Claim I-Claim I-Claim I-Evidence I-Evidence. The entities should be started with B-tags, so the Evidence entity will be dropped even it has high confidence. Therefore I implement beam search decoding algorithm for NER tagging:
+
+I wrote this code on PyTorch and GPU-capable for parallelization. I use beam_size=4 for all both evaluation and prediction.
+
+Entity-Level Post-Ensemble
+
+The above multi-fold predictions are from averaged token probabilities. However, if the architectures are different and the subword tokenizers are different as well, it is impossible to combine the subword token predictions (probabilities). Some people tried to ensemble with character-level probabilities, but it did not work for me. Hence I created entity-level post ensemble algorithm.
+
+The main idea is from the metric of this competition. This compeition treats more than 50% matched entities as the same group. So I group at least 50% overlapped entities which have same class. After that, I average the ranges in each group. I tested the longest, shortest, union and intersection ways, but they were all worse than the average method.
+
+It indeed showed significant improvements by ensembling several models! It can be even applied to the folds (I mean, it is useful for the same tokenizer and same subwords as well) and I can get about +0.002 lb score.
+
+
+
+
+model name
+cv
+public lb score
+private lb score
+
+
+
+
+deberta-large (5folds)
+0.6938
+0.705
+0.713
+
+
+deberta-large (5folds, entity-level ensemble)
+0.6938
+0.707
+0.714
+
+
+deberta-large + deberta-xlarge
+0.718
+0.712
+0.722
+
+
+deberta-v3-large-v2 + deberta-v2-xlarge-v2
+0.7251
+0.719
+0.731
+
+
+
+
+DebertaV2TokenizerFast?
+
+Unfortunately, deberta-v2 does not have fast-version of its tokenizer. The slow-version does not support offset_mapping, so we need the fast one. Fortunately, the code is already written and I could train deberta-v2 and deberta-v3 without tokenization errors. But the problem was the performance of models. CV scores were around ~0.68, even worse than longformers. After some experiments, I observed that the deberta-v2 tokenizer removes line-break \n characters. As I mentioned above, including \n characters is necessary, so I changed the code as below:
+
+Finally I can get the correct scores from deberta-v2 and deberta-v3 models.
+
+
+
+
+model name
+cv
+public lb score
+private lb score
+
+
+
+
+deberta-v2-xlarge
+0.7019
+0.705
+0.714
+
+
+deberta-v3-large
+0.7038
+0.707
+0.719
+
+
+
+
+I also tried larger models (e.g. deberta-v2-xxlarge) but they are all worse than the above models. Thus I only used up to deberta-xlarge scale.
+
+Hyperparameters
+
+I know many people used small batch size like 2 or 4, but I use 8 to activate tensor-cores on A100 😁 I had to train the model faster because I had no time. All models are trained for 5k/7k steps with 500/700 warmup steps. The learning rate is basically 3e-5, but depends on the scale. The detailed configurations are in my code as well. The learning rate is decayed linearly. I applied gradient clipping with 1.0 and gradient checkpointing to reduce the memory usage. AdamW optimizer is used, and I evaluate 20 times per epoch to save the best-scored model. Note that I use exactly same evaluation metric (overlap-based f1 score) to avoid the score mismatch from validation to lb score.
+
+Conclusion
+
+I tried many combinations of the models to submit because there is a time limit. The belows are my last three submissions🥲
+
+And these are my final selections:
+
+
+
+
+
+model name
+public lb score
+private lb score
+
+
+
+
+deberta-v3-large (10 folds) + deberta-xlarge (3/5) + deberta-v2-xlarge (4/5)
+0.721
+0.735
+
+
+deberta-large + deberta-v3-large + deberta-v3-large + deberta-xlarge (3/5) + deberta-v2-xlarge (3/5)
+0.724
+0.735
+
+
+
+
+Since deberta-xlarge and deberta-v2-xlarge are too heavy to run all, I only use some of them.
+
+
+Here is a source code in github!
+
+P.S. I also tried pseudo-labeling for wikipedia talk corpus (150k), it did not work. Maybe more data is required…?
+
+Comments:
+├─ Chouchou (2022-08-19 08:49:28.123000) [+1]
+│  Really like your work ! Rich analysis !
+├─ Lei Wang (2022-06-29 18:30:13.283000) [+1]
+│  nice work, congratulations for the solo gold medal 🎖️ and thank you very much for sharing!
+├─ Marília Prata (2022-07-09 23:00:10.400000) [+0]
+│  Congrats for your Solo Gold. Thanks for the write-up.
+├─ assaf (2022-03-20 15:17:50.920000) [+1]
+│  very nice !
+├─ Dmitry Lakhov (2022-03-20 14:27:27.357000) [+1]
+│  nice work , keep it up🔥
+├─ SOYOUNG PARK (2022-03-20 05:45:43.003000) [+1]
+│  Congrats on solo winner !!!!!
+├─ Mahmoud Fahmy (2022-03-19 22:13:48.193000) [+1]
+│  Congratulations!
+├─ umarchi (2022-03-19 10:04:01.803000) [+1]
+│  Congrats on your first solo gold. I'm so impressed.
+├─ xbustc (2022-03-18 10:57:19.680000) [+1]
+│  Congrats! The beam searching method is very amazing, how high is the improvement from it?
+  ├─ Jungwoo Park (2022-03-18 15:17:44.153000) [+0]
+  │  Well… actually I didn't strictly compare the performance between greedy and beam search
+├─ iamcalculating (2022-03-18 10:49:11.957000) [+1]
+│  Really nice on the analysis of "\n" problem. Now I know why my notebook is outperformed by public kernals for all models…Thanks indeed.
+├─ Niek van der Zwaag (2022-03-18 06:24:49.163000) [+1]
+│  Congrats on solo gold 🎉 Thanks for your explanation and source code 🙌
+├─ Francis Brempong (2022-03-17 19:30:25.347000) [+1]
+│  A solo gold medal! 💪 That's impressive  @affjljoo3581 Congrats.
+├─ Atharva Ingle (2022-03-16 17:16:49.653000) [+1]
+│  A tremendous amount of work and congrats, great to see you get a solo gold medal!
+  ├─ Jungwoo Park (2022-03-16 18:48:59.243000) [+1]
+  │  thank you 👍👍👍👍
+├─ TianyuZhu (2022-03-16 15:31:06.063000) [+1]
+│  Thanks for the detailed summary and the investigation on the inferior performance of deberta-v2/v3 (with default fast tokenizer) compared with v1. 
+│  Congrats on finishing with solo gold. 🎉
+│  (btw, the...
+├─ chumajin (2022-03-16 15:17:29.287000) [+1]
+│  Congratulations on Solo Gold. This is a great strategy and commentary. Thank you for sharing !
+├─ gezi (2022-03-16 15:05:24.557000) [+1]
+│  "P.S. I also tried pseudo-labeling for wikipedia talk corpus (150k), it did not work. Maybe more data is required…?" I think pl not work due to lower precision of this data/model. If it works, Chun...
+  ├─ Jungwoo Park (2022-03-16 15:14:42.160000) [+0]
+  │  Oh that's right :)
+├─ kkiller (2022-03-16 14:48:53.110000) [+1]
+│  We were desperately trying to pass you on the LB, but after reading all your hard works, I think the ranking is Ok as it is :). Congratulations on your first and solo gold medal !
+  ├─ Jungwoo Park (2022-03-16 15:15:58.267000) [+1]
+  │  Thanks! You made me really nervous 😣
+  ├─ kkiller (2022-03-16 15:41:40.910000) [+0]
+  │  You're welcome mate 😄
+├─ gezi (2022-03-16 14:34:52.783000) [+1]
+│  I also notices you ensemble all in deberta but you ensemble with many folds. How much gain will many folds model ensemble get, comparing to submit using only models train on all 15k training data?
+  ├─ Jungwoo Park (2022-03-16 14:42:23.957000) [+1]
+  │  I cannot understand what many folds mean, but I think kfolds and train-val splits are not pretty different if the number of models are same
+  ├─ gezi (2022-03-16 14:46:32.357000) [+1]
+  │  I mean, did you test for deberta-v3 for example, submitting kfold like 5 deberta-v3 models, does it work much better then submitting 1 deberta-v3 model training on all 15k training data.
+  ├─ Jungwoo Park (2022-03-16 15:14:09.560000) [+2]
+  │  I didn't train with all 15k training data because I needed a validation set to evaluate the model. If you mean just single-fold model, yes it indeed performs much better. Or not, I didn't try full ...
+  ├─ gezi (2022-03-16 15:21:57.857000) [+2]
+  │  Got it thanks!
+├─ TelmaZzzz (2022-03-16 14:30:59.230000) [+1]
+│  Congratulations. And thanks for your sharing, I find the reason why my deberta-v3-large is much worse than deberta-large.
+  ├─ Jungwoo Park (2022-03-16 14:35:32.350000) [+2]
+  │  Yes… I was also surprised when v2 and v3 models worked worse
+├─ ds.wook (2022-03-16 14:21:45.747000) [+1]
+│  Congratulations on winning the gold medal!! I think your solution is very nice
+├─ KhanhVD (2022-03-17 14:34:02.163000) [+2]
+│  Congrats on solo gold and prize money. A lot of works and thanks for sharing solution @affjljoo3581
+├─ gezi (2022-03-16 14:26:49.123000) [+2]
+│  Congrats for solo gold! Really nice sharing！
+│  Great idea of using beam search. How much does it increase score on LB/PB?
+│  For deberta-v3-large and deberta-v2-xlarge did you train using the same param...
+  ├─ Jungwoo Park (2022-03-16 14:33:58.010000) [+4]
+  │  I have no idea how much does the beam search increase the score because I already applied it before using deberta models… I didn't compare the scores strictly.
+  │  And here is a configuration of the de...
+  ├─ gezi (2022-03-16 14:35:39.090000) [+1]
+  │  Thanks will investigate your params:)
+  ├─ patriot (2022-03-18 09:08:08.837000) [+1]
+  │  In my case, applying beam search for deberta-L-5fold changed private/public:708/702→709/700.
+├─ Trunway (2022-07-26 04:11:49.613000) [+0]
+│  Thank you for your sharing. But I do not understand the resolve_encodings_and_normalize function, mainly two problems.
+│  
+│  
+│  
+│  
+│  I used part of the sentence "successes. ÃÅf you" to test the function, but...
+├─ Alvin Chen (2022-06-23 03:38:32.987000) [+0]
+│  deberta-v3-large (10 folds) + deberta-xlarge (3/5) + deberta-v2-xlarge (4/5)
+│  
+│  
+│  Hi guys, what does this (3/5, 4/5) mean ?
+│  
+│  Does that mean model trained 5 fold and best 3 or 4 out of 5 were choosen? ...
+├─ SchenbergZ (2022-03-17 09:34:07.630000) [+0]
+│  Congrats! I wan to know more about your ensemble methods: what is your averaging.
+  ├─ Jungwoo Park (2022-03-17 09:52:29.857000) [+1]
+  │  The detailed code is here. Basically I grouped entities from the submissions of the models. That means the similarly located and same-class entities will be grouped. And then I averaged the lengths...
+├─ Gianetan (2022-03-16 16:10:37.980000) [+0]
+│  @affjljoo3581 Congrats on your first gold medal!!! It is the victory of cool code with great documentation and hard work. Cheers!!!
+├─ Ishan Mehta115 (2022-03-16 15:48:24.737000) [+0]
+│  Well done

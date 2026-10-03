@@ -1,0 +1,332 @@
+<p>Thank you very much for organizing such an interesting competition. I am greatly thankful to the hosts and the Kaggle staff.</p>
+<p>This competition turned out to be exactly what we had imagined and we are really happy to have won 4th place.</p>
+<p>And thank you so much <a href="https://www.kaggle.com/kurokurob" target="_blank">@kurokurob</a> for teaming up with me and for the daily discussions and experiments. Congratulations on your 4th GOLD MEDAL.<br>
+(And I will become competition Grand Master!!!).<br>
+We are a great team!</p>
+<h1>1. Summary</h1>
+<p>Our best private solution is 1 fulltrain x 7 models ensemble.</p>
+<p>This competition had only 4 prompts in the training data and with the information that 122 prompts were in the test data, one could imagine a big shake. Also, the public lb was very unstable. These things made us think that robustness is important, not only for cv.</p>
+<p>I used all 4kfold at first. Especially the models with prompt text, because I had to increase the maxlen to increase the score, I had to increase the inference time and could not ensemble other models (only 2-3 models could be included).</p>
+<p>Just then, I and kuro have team merged. And we mixed the fulltrain idea he had been working on. By replacing 4kfold with 1fulltrain, we arrived at the idea of compressing the information of 4kfold to 1fulltrain and ensemble more models.</p>
+<p>We imagined that by doing so, we would prevent the variation and reduction of scores on each prompt in the private test data and, in total, get better score.</p>
+<p>As a result, we believe we were able to prevent a shake down and finish in this position!</p>
+<table>
+<thead>
+<tr>
+<th>sub</th>
+<th>type</th>
+<th>models</th>
+<th>cv</th>
+<th>public lb</th>
+<th>private lb</th>
+<th>rank</th>
+<th>comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sub1</td>
+<td>best lb</td>
+<td>1 fulltrain × 9 models</td>
+<td>0.4679</td>
+<td>0.41991</td>
+<td>0.45785</td>
+<td>11</td>
+<td>using gbdt and expand of inference-maxlen</td>
+</tr>
+<tr>
+<td>sub2</td>
+<td>best cv</td>
+<td>1 fulltrain × 7 models</td>
+<td>0.4639</td>
+<td>0.42979</td>
+<td>0.45515</td>
+<td>4</td>
+<td>just NLP result(expand of inference-maxlen)</td>
+</tr>
+<tr>
+<td>sub3</td>
+<td>insurance</td>
+<td>1 fulltrain × 8 models</td>
+<td>0.4693</td>
+<td>0.43855</td>
+<td>0.45597</td>
+<td>6</td>
+<td>just NLP result</td>
+</tr>
+</tbody>
+</table>
+<p>The best cv in sub2 is our best private, and that is the main explanation below.</p>
+<h1>2. training</h1>
+<p>Each of our models in sub2 is shown below.</p>
+<table>
+<thead>
+<tr>
+<th>modelno</th>
+<th>InfNo</th>
+<th>model</th>
+<th>training<br>maxlen</th>
+<th>inference <br>maxlen</th>
+<th>freezing</th>
+<th>layerwise</th>
+<th>input</th>
+<th>pooling</th>
+<th></th>
+<th></th>
+<th>2nd loss</th>
+<th>preprocess</th>
+<th>cv of 4kfold<br> earlystop</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>original prompt</td>
+<td>cls</td>
+<td>attention of <br>original prompt</td>
+<td>mean of <br>text part only</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>91</td>
+<td>deberta-v3-large</td>
+<td>768</td>
+<td>1500</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.4818</td>
+</tr>
+<tr>
+<td>2</td>
+<td>22</td>
+<td>deberta-v3-large</td>
+<td>1050</td>
+<td>950</td>
+<td></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.4855</td>
+</tr>
+<tr>
+<td>3</td>
+<td>63</td>
+<td>deberta-v3-large</td>
+<td>850</td>
+<td>1500</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>0.4984</td>
+</tr>
+<tr>
+<td>4</td>
+<td>72</td>
+<td>deberta-v3-large</td>
+<td>868</td>
+<td>1024</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>Arcface</td>
+<td>✓</td>
+<td>0.4919</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2,3</td>
+<td>deberta-v3-large</td>
+<td>868</td>
+<td>868</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.4880</td>
+</tr>
+<tr>
+<td>6</td>
+<td>259</td>
+<td>deberta-v3-large-squad2</td>
+<td>768</td>
+<td>1500</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.4952</td>
+</tr>
+<tr>
+<td>7</td>
+<td>331</td>
+<td>deberta-v3-large-squad2</td>
+<td>1050</td>
+<td>950</td>
+<td></td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0.4993</td>
+</tr>
+</tbody>
+</table>
+<p>The details are described below.</p>
+<h2>2.1 model no1 : basemodel</h2>
+<p>This model is a typical base for our model.</p>
+<p>First, two inputs are prepared and put into the tokenizer as a pair (an example of dataset). The same result can be obtained by connecting them with [SEP] even if you do not put them as a pair.</p>
+<pre><code>self = self.
+self = self +  + self +  + self
+
+tokens = tokenizer(
+            self, 
+            self,.
+            ...
+        )
+</code></pre>
+<p>Now all we have to do is put this in the model, increase the maxlen, and output the cls in the fc layer.</p>
+<h2>2.2 model no2 : original prompt</h2>
+<p>In this model, an original prompt was created and used for input.</p>
+<pre><code>self =  + self
+self = prompt_title +  + prompt_question +  + prompt_text
+
+tokens = tokenizer(
+            self, 
+            self,
+            ・・・
+        )
+</code></pre>
+<p>Then, only the part of the original prompt (Evaluating the summarized…) is attentional pooled (an example of a model).</p>
+<pre><code>## init
+.pool = AttentionPooling(..hidden_size)
+...
+
+## forward
+ = .model(ids, mask, token_type_ids)
+ = [][:,:,:]
+ = .pool(,mask[:,:])
+ = .fc()
+</code></pre>
+<h2>2.3 model no4 : using 2nd loss and preprocess</h2>
+<p>As discussed in the discussion and notebook, the train data can be classified into 38 types. I thought I could make good use of this, so I included arcface as an auxiliary loss.<br>
+I tried to make good use of embeddings at the end, but it was not available. However, it did contribute to the diversity of the ensemble.</p>
+<p>Also, as a preprocss, I made sure to include a space after the period and comma; after doing EDA, I noticed that if a sentence comes after a period or comma without a space, it is divided differently in the tokenizer. However, I don't think this affected the score significantly.</p>
+<h2>2.4 Extending the inference max length</h2>
+<p>Scores have been greatly improved by increasing the inference length over that of training. An example is shown below. The following was trained with maxlen 850, but by setting maxlen to 1500 during inference, cv and public lb improved (maybe not so much contribution to private).</p>
+<table>
+<thead>
+<tr>
+<th>traing<br>maxlen</th>
+<th>inference<br>maxlen</th>
+<th>39c16e<br>fold0</th>
+<th>814d6b<br>fold1</th>
+<th>ebad26<br>fold2</th>
+<th>3b9047<br>fold3</th>
+<th>cv</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>850</td>
+<td>850</td>
+<td>0.4505</td>
+<td>0.5595</td>
+<td>0.5051</td>
+<td>0.5024</td>
+<td>0.4984</td>
+</tr>
+<tr>
+<td>850</td>
+<td>1024</td>
+<td>0.4524</td>
+<td>0.5590</td>
+<td>0.4836</td>
+<td>0.5018</td>
+<td>0.4927</td>
+</tr>
+<tr>
+<td>850</td>
+<td>1500</td>
+<td>0.4527</td>
+<td>0.5588</td>
+<td>0.4614</td>
+<td>0.5013</td>
+<td>0.4867</td>
+</tr>
+</tbody>
+</table>
+<p>However, some models may degrade. insurance submission(sub3) consisted only of models that did not expand this inference max length. As a result, cv and public were affected, but private had almost no effect.</p>
+<h1>3. inference (ensemble)</h1>
+<p>For best cv sub, we initially post-processed using GBDT (LGBM + Catboost + XGboost), but in the end, ensemble without GBDT resulted in a better CV, The submission that produced the best private did not use post-processing with GBDT. We also considered nealder-mead and optuna, but we did not use them because of the concern that they would definitely overfit. So we use the simple mean ensemble using a hill climb technique (we also added a full train with different seed to further increase robustness for the extra inference time).</p>
+<p>final cv(4kfold earlystopping result) : 0.46394 , public : 0.42979, private 0.45515 4th</p>
+<p>※ Futhermore, we took as insurance(sub3) that the inference max lengths were the same as that in training. This result was as follows.</p>
+<p>final cv 0.4693 , public : 0.43855, private 0.45597 6th.</p>
+<p>In this result, cv and lb were bad, but private was good, which shows how important the robustness of model was in this competition.</p>
+<h1>4. Not working for us</h1>
+<ul>
+<li>mlm</li>
+<li>awp</li>
+<li>svr</li>
+<li>other model</li>
+<li>regression from classification model</li>
+<li>other many many things…</li>
+</ul>
+<h1>5. Acknowledgements</h1>
+<p>We could not have achieved these results on our own. We were greatly influenced by those who we have collaborated with in the past, and we are grateful for their contributions. We would also like to express our sincere gratitude to those who have shared their knowledge and insights through previous competitions. Thank you very much.</p>
+<p>We would especially like to thank the following people for their help in this  competition! Thank you very much.</p>
+<ul>
+<li><p>Fulltrain : Team Hydrogen <a href="https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369578" target="_blank">ref1</a> <a href="https://www.kaggle.com/competitions/feedback-prize-effectiveness/discussion/347536" target="_blank">ref2</a>, Raja Biswas <a href="https://www.kaggle.com/conjuring92" target="_blank">@conjuring92</a> <a href="https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/424330#2354068" target="_blank">ref3</a></p></li>
+<li><p>Freezing : Takamichi Toda <a href="https://www.kaggle.com/takamichitoda" target="_blank">@takamichitoda</a>  <a href="https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/433754#2405543" target="_blank">ref4</a></p></li>
+<li><p>37-38 classification : MOTH <a href="https://www.kaggle.com/alejopaullier" target="_blank">@alejopaullier</a> <a href="https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/430705" target="_blank">ref5</a>, <br>
+Alexander Chervov <a href="https://www.kaggle.com/alexandervc" target="_blank">@alexandervc</a> <a href="https://www.kaggle.com/code/alexandervc/commonlit-levenshtein-distances?scriptVersionId=141542492&amp;cellId=23" target="_blank">ref6</a></p></li>
+<li><p>Postprocess : nogawanogawa <a href="https://www.kaggle.com/tsunotsuno" target="_blank">@tsunotsuno</a> <a href="https://www.kaggle.com/code/tsunotsuno/updated-debertav3-lgbm-with-spell-autocorrect" target="_blank">ref7</a></p></li>
+<li><p>Model selection(feedback3) : CHRIS DEOTTE <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> <a href="https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369609" target="_blank">ref8</a>, TOM <a href="https://www.kaggle.com/tikutiku" target="_blank">@tikutiku</a> <a href="https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369567" target="_blank">ref9</a></p></li>
+</ul>
+<h1>6. team member</h1>
+<ul>
+<li><a href="https://www.kaggle.com/chumajin" target="_blank">@chumajin</a></li>
+<li><a href="https://www.kaggle.com/kurokurob" target="_blank">@kurokurob</a> </li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4001300%2Fa311809edebd32836455da5b13e1dc1e%2Fkuromajin.jpg?generation=1697084418755389&amp;alt=media" alt=""></p>
+<h1>7. code</h1>
+<p>inference code : <a href="https://www.kaggle.com/code/chumajin/commonlit2-4th-place-inference" target="_blank">https://www.kaggle.com/code/chumajin/commonlit2-4th-place-inference</a> (This is the cleaned code. Same score as the submission.)</p>
+<p>training code(chumajin part) : <a href="https://github.com/chumajin/kaggle-commonlit" target="_blank">https://github.com/chumajin/kaggle-commonlit</a><br>
+training code(kuro_B part) : <a href="https://github.com/kurokuroB/kaggle-commonlit2-4th_place_solution-my_training_code" target="_blank">https://github.com/kurokuroB/kaggle-commonlit2-4th_place_solution-my_training_code</a></p>

@@ -1,0 +1,220 @@
+# https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609210
+
+Topic #609210: 7th Place Solution
+  Author: Horikita Saku
+  Posted: 2025-09-25 02:01:27.087000
+  Votes: 28  Comments: 6
+
+Introduction
+
+We ( @horikitasaku and @takaito) would like to express our sincere gratitude to the organizers for such an outstanding competition.
+Special thanks also for staff members like Sohier Dane @sohier for all their hard work and support.
+
+This was truly a well-designed competition, and it clearly reflected the professionalism and scientific rigor of the organizing team (e.g., @gordonyip and colleagues). Physicists have always been the group of people I respect the most.
+
+Our approach can be summarized in the following stages:
+
+
+
+Step0: Preprocessing
+
+Step1: Signal, transit, and feature extraction; calculation of the base wl_preds (Horikita)
+
+Step2: Difference correction with NN and base sigma prediction (takaito)
+
+Step3: Sigma scale adjustment using a gradient boosting model (Horikita)
+
+Step4: Pseudo Labeling (takaito)
+
+
+Step0: Preprocessing
+
+Here we basically followed Pascal’s notebook almost as it is, and processed both obs0 and obs1.
+
+Step1: Signal, Transit, Features – Calculation of the base wl_preds (CV: ~0.42, LB:-0.45)
+
+Step1.1: Phase Detector
+
+The core idea of transit detection is using the extrema of the signal’s gradient.
+I assumed that the transit boundaries would appear as characteristic features on the derivative curve. The overall process was as follows:
+
+
+
+
+Smoothing: Smooth the signal and its gradient to remove high-frequency noise.
+
+
+Outlier removal: Clip gradient values beyond 5σ, set the edges to zero, and then apply additional Gaussian smoothing.
+
+
+Threshold scanning:
+
+
+
+Negative threshold (neg_thr) → t1, t2 (ingress)
+
+Positive threshold (pos_thr) → t3, t4 (egress)
+
+
+Local sampling: Sample around (t1, t2) and (t3, t4), and compare the baseline with the transit segment. If the ingress/egress depth is too shallow, shift the boundary toward the start or end of the sequence.
+
+
+Post-processing: Fix abnormal samples. In the initial version this was not implemented, but after the dataset update I observed bugs from Phase Detector . Upon analysis, I found many abnormal signals, so this step was added.
+
+
+
+
+
+Step1.2: Physics-based modeling and feature extraction
+
+Here I referenced two top solutions from Ariel 2024:
+
+
+
+xomox (10th place)
+
+cnumber (1st place)
+
+
+Unfortunately, this part was almost useless for sigma prediction.
+In my solo experiments, using these sigmas often reduced the final score by about 0.1 below the theoretical upper bound score. 
+
+So the real value here was in generating the base wl_preds and features derived from the physical process. We adopted two main patterns:
+
+
+
+
+Pattern 1 (main): Based on xomox’s pipeline, with several modifications:
+
+
+
+Restricted the polynomial degree of the baseline to 2–3 (higher orders caused instability in some signals).Reducing the order of the baseline polynomial resulted in a roughly 0.01 improvement for me.
+
+Adjusted binning and sampling settings.
+
+Introduced a more complex Gaussian Process (GP). In our case, the kernel design combined multiple components — RBF terms with different length scales, a periodic kernel to capture repeating structures, a Matérn kernel for local smoothness, a linear kernel tied to wavelength features, and a white noise kernel for robustness. What turned out to be very interesting is that although the GP itself was not directly effective for improving sigma prediction, it played an unexpectedly strong role in stabilizing all the downstream tasks, including the linear correction I tested independently and the NN model developed by takaito. 
+As a result, we obtained stable wl_preds, reconstructed signals, ideal transit models, and physics-derived features.
+
+
+
+Pattern 2 (secondary): Implemented cnumber’s approach with only minor changes. This provided an independent set of wl_preds and additional features.
+
+
+Step2: Difference correction with NN and base sigma prediction (CV: ~0.56x, LB: ~0.55x)
+
+Inspired by methods that worked well in ADC2024, instead of directly predicting wl, we trained deep learning models to predict the difference wl_diff between the roughly computed wl_preds from step1 and the ground truth wl_true. In other words, the NN performs a residual correction.
+
+Basic information
+
+Model inputs/outputs
+
+
+
+wl_preds from Step1 are used as the base predictions.
+
+The target variable is wl_diff (= wl_true - wl_preds).
+
+Input features include signal, transit, mask, position, and various extracted features.
+
+
+Model architectures
+
+
+
+Multilayer Perceptron (MLP)
+
+BiGRU + CNN + MLP
+
+BiLSTM + CNN + MLP
+
+BiLSTM + CNN + BiLSTM
+
+
+Key techniques
+
+
+
+Used quantile regression so the model can also predict sigma.
+
+Applied Adversarial Weight Perturbation (AWP).
+
+Performed data augmentation by flipping signal and transit sequences along the time axis.
+
+Added noise to the data for further augmentation.
+
+
+What did not work
+
+
+
+More complex model architectures did not bring improvements.
+
+
+Step3: Sigma scale adjustment with Gradient Boosting (LB +~0.01)
+
+Intuitively, Step2 already provided per-wavelength σ (step2_sigma), but there were still systematic shifts remaining at the sample level.
+To handle this, we summarized the shift into a single scalar scale factor a, learned separately for FGS (wl0) and AIRS (all other bands). The idea was simple:
+
+
+
+Correct only the overall scale
+
+Keep the relative shape across wavelengths unchanged
+
+
+Concretely:
+
+
+
+Boundary search: Used minimize_scalar(method='bounded') to find the optimal a.
+
+Discretization: Rounded a to 0.01 increments to prevent overfitting to random noise in the evaluation metric.
+
+
+Finally, we trained a Gradient Boosting model to learn this a and applied it for scaling, which stabilized sigma predictions.
+
+sigma_scaled[:, ] = (
+    np.array(mean_a_preds_fgs)
+    * step2_sigma[:, ]
+).clip(CFG.MIN_SIGMA)
+
+
+sigma_scaled[:, :] = (
+    (a_preds_airs).reshape(-, )
+    * step2_sigma[:, :]
+).clip(CFG.MIN_SIGMA)
+
+
+Step4: Pseudo Labeling (LB: ~+0.004)
+
+To boost the leaderboard score, we retrained the model using the test data along with their predicted values.
+To avoid overfitting, we only used the predictions for wl_diff and did not use the predicted sigma values.
+
+(Step2 involved checking a large number of learning curves, and we observed that even when MSE overfit the training data, the validation performance rarely deteriorated. This gave us confidence to apply pseudo labeling here.)
+
+Below are the trends we observed:
+
+
+
+MSE transition: Almost no folds showed clear overfitting.
+
+Competition metric transition: Tended to overfit more easily.
+
+Comments:
+├─ Long2003 (2025-09-25 13:32:07.230000) [+0]
+│  Congratulations on achieving 7th place in the Ariel Challenge 2025! As a university student participating in my first NeurIPS competition, I’m inspired by your solution. I have a few questions abou...
+  ├─ Horikita Saku (2025-09-25 14:52:40.650000) [+0]
+  │  Extracting features was actually a rather straightforward idea, since we wanted to provide the neural network with information derived from the base wl_pred. However, using the raw predictions dire...
+├─ Carlos Pérez Ricardo (2025-09-25 05:44:44.590000) [+0]
+│  Congrats in your gold medal, specially to your first gold medal @horikitasaku! 
+│  I am curious about 2 points:
+│  
+│  
+│  
+│  What type of features have you used to detect/correct limb darkening? Your GRU model ...
+  ├─ Horikita Saku (2025-09-25 07:17:23.640000) [+0]
+  │  In fact, I didn’t handle these cases which has no out of transit directly. My approach is: when the phase detector flags this type of sample, I set the time points t1, t2, t3, t4 to the two sides (...
+  ├─ Horikita Saku (2025-09-25 12:38:24.437000) [+0]
+  │  Our gru model is along the time dimension. Features include ideal transit models, reconstructed baseline, and selected features)
+    ├─ Carlos Pérez Ricardo (2025-09-25 13:09:00.943000) [+1]
+    │  Thanks so much for the explanation. Congrats again in your gold!

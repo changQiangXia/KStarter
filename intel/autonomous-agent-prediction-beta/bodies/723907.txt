@@ -1,0 +1,69 @@
+# https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723907
+
+Topic #723907: Common Causes of Submission Failures
+  Author: Ryan Holbrook
+  Posted: 2026-07-08 18:00:45.597000
+  Votes: 9  Comments: 11
+
+I will collect here some common reasons submissions fail, as I observe them, and how to fix the failure. If you are able, running the evaluation locally first is a great way to debug your agents.
+
+Unable to submit request because Multiple tools are supported only when they are all search tools.
+
+Some models have limited tool support. The gemini-2.5-* series models only support one tool. The deepseek-r1-0528 model does not support tools at all. You probably want to use other models except for special cases.
+
+Evaluation harness error: Failed to load skill
+
+A skill name "must be lowercase kebab-case (a-z, 0-9, hyphens), with no leading, trailing, or consecutive delimiters." Change my_skill to my-skill, for instance.
+
+Agent completed without submitting any valid predictions
+
+There can be a lot of reasons for this. An agent can get stuck in a thought loop at the start of a session and burn up the token budget or error out. Agents can also run scripts that use up the allowed session time before they have a chance to submit anything. They can also just get confused and terminate the session without doing anything. The fix for these kinds of issues will come from better instructions, temperature settings, etc.
+
+Agent error: 'Context variable not found: x.'
+
+The evaluation system compiles submissions into Google ADK agents. ADK supports injecting session state variables into agent instructions using Python {key} templates. (We define a number of task-related variables you can use. See the kaggle-kaggle-skill/resources/agent-instructions.md file in the competition dataset.)
+
+If your instructions include things that look like valid Python identifiers wrapped in braces, ADK will try to inject them as session state variables, raising an error if they are undefined. So including LaTeX strings like \sqrt{x} will fail because x is a valid Python identifier and is undefined. However, ADK will skip parsing things that do not look like Python identifiers, so \sqrt{x } and \sqrt{x+1} are okay.
+
+temperature is deprecated for this model
+
+Newer Anthropic models will fail with temperature set in the generation config. A previous (prior to July 9th) version of the metric was injecting a default temperature into the config, but this is now fixed.
+
+Comments:
+├─ Georgy Mamarin (2026-07-29 19:23:04.607000) [+1]
+│  One more failure mode for the collection, from today: submissions die before the agent's first step with
+│  
+│  Agent error: 403 Forbidden. {'message': 'User location "RU" is not supported for this model...
+├─ Afif Ali Saadman (2026-07-19 14:04:05.257000) [+1]
+│  How about Rate Limit Exceeded ?
+├─ 🐳鲲(China) (2026-07-17 09:45:58.990000) [+1]
+│  Has anyone encountered this error?
+│  
+│  Agent error: 500 None. {'error': {'code': 500, 'message': 'An unexpected error occurred while communicating with the model.'}}
+  ├─ TwangyGarlic449 (2026-07-17 17:39:03.053000) [+0]
+  │  I have had a couple similar ones. I think the issue is on their end because resubmitting sometimes fixes it.
+├─ Ioannis M (2026-07-11 17:40:23.237000) [+0]
+│  anyone has any idea on this error? 
+│  
+│  
+│    
+│  Agent error: litellm.BadRequestError: OpenAIException - {"type":"error","error":{"type"
+│  
+│  
+│  if it helps, I was trying a different agent model from the models....
+  ├─ Ryan Holbrook (2026-07-11 18:18:53.697000) [+1]
+  │  It looks like the full error message might be temperature is deprecated for this model.
+├─ Shivansh (2026-07-10 19:33:41.097000) [+0]
+│  Agents can also run scripts that use up the allowed session time before they have a chance to submit anything
+│  
+│  
+│  The allowed session time is 60 minutes right? Can import errors also lead to Agent co...
+  ├─ Ryan Holbrook (2026-07-10 19:47:01.463000) [+1]
+  │  Yes, 60 minutes. An import error by itself wouldn't cause a session to terminate. If the agent tries to run a script that raises an exception, the script just fails within the sandbox; the exceptio...
+    ├─ Shivansh (2026-07-10 19:56:29.723000) [+0]
+    │  Would it be considered cheating to ask about the size of the test datasets?
+    │  I tested the main pipeline (12 to 13 models) on several AUC scored Playground competitions with large datasets, and all r...
+├─ [deleted] (2026-07-30 09:15:37.317000) [+0]
+│  [deleted]
+├─ [deleted] (2026-07-27 16:03:15.497000) [+0]
+│  [deleted]

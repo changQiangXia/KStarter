@@ -1,0 +1,82 @@
+# birdclef-2026 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution: Noisy Student Meets Distillation](https://www.kaggle.com/competitions/birdclef-2026/discussion/704752) — 169 票 / 20 评论 / 2026-06-05 **write-up?**
+- [[placeholder] Claude-Code Results for BirdClef2026](https://www.kaggle.com/competitions/birdclef-2026/discussion/681146) — 142 票 / 118 评论 / 2026-03-13 
+- [An example of training process (HGNetV2-B0 Baseline)](https://www.kaggle.com/competitions/birdclef-2026/discussion/683822) — 66 票 / 33 评论 / 2026-03-22 
+- [Distilled SED Baseline](https://www.kaggle.com/competitions/birdclef-2026/discussion/694479) — 65 票 / 47 评论 / 2026-04-25 
+- [warping perchv2 inside pytorch for training](https://www.kaggle.com/competitions/birdclef-2026/discussion/685318) — 64 票 / 16 评论 / 2026-03-27 
+- [Is everyone using LLM tools (i.e. GPT, Gemini, Claude)?](https://www.kaggle.com/competitions/birdclef-2026/discussion/684207) — 60 票 / 116 评论 / 2026-03-24 
+- [2nd Place: Diverse Ensemble with Pseudo-Labeling and a Taxon Specialist](https://www.kaggle.com/competitions/birdclef-2026/discussion/704399) — 53 票 / 18 评论 / 2026-06-04 **write-up?**
+- [What is your best single model LB score ?](https://www.kaggle.com/competitions/birdclef-2026/discussion/683791) — 51 票 / 169 评论 / 2026-03-22 
+- [Google Perch model is quite good as a baseline](https://www.kaggle.com/competitions/birdclef-2026/discussion/681000) — 50 票 / 16 评论 / 2026-03-12 
+- [101 place Pure Claude-Code Solution (Got Removed from Competition)](https://www.kaggle.com/competitions/birdclef-2026/discussion/704391) — 48 票 / 32 评论 / 2026-06-04 **write-up?**
+- [Acknowledge Bird Sound Recordists of BirdCLEF 2026 (Brazil's Pantanal)](https://www.kaggle.com/competitions/birdclef-2026/discussion/681125) — 48 票 / 6 评论 / 2026-03-13 
+- [11th Place Solution (and the 3rd Place that Got Away) [Without Perch]](https://www.kaggle.com/competitions/birdclef-2026/discussion/704264) — 46 票 / 14 评论 / 2026-06-04 **write-up?**
+- [10th solution, simple model as always.](https://www.kaggle.com/competitions/birdclef-2026/discussion/704271) — 45 票 / 8 评论 / 2026-06-04 **write-up?**
+- [open KaggleClaw ?  let's  use and build it together](https://www.kaggle.com/competitions/birdclef-2026/discussion/685794) — 42 票 / 10 评论 / 2026-03-29 
+- [4th Place Solution: BirdCLEF+ 2026](https://www.kaggle.com/competitions/birdclef-2026/discussion/704309) — 41 票 / 16 评论 / 2026-06-04 **write-up?**
+- [BirdCLEF 2026 7th solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704292) — 41 票 / 7 评论 / 2026-06-04 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704420) — 40 票 / 0 评论 / 2026-06-04 **write-up?**
+- [`train_soundscapes_labels.csv` has duplicated records](https://www.kaggle.com/competitions/birdclef-2026/discussion/681297) — 37 票 / 17 评论 / 2026-03-13 
+- [Sharing baseline LB.928. Aiming to achieve both reproducibility and inference speed[Fixed(～2026/04/06)]](https://www.kaggle.com/competitions/birdclef-2026/discussion/686457) — 36 票 / 8 评论 / 2026-03-31 
+- [Welcome to BirdCLEF+ 2026 - Meet the hosts](https://www.kaggle.com/competitions/birdclef-2026/discussion/680383) — 32 票 / 29 评论 / 2026-03-07 
+- [Compare Inference Speed of Torch, Torch-jit-trace, OpenVINO](https://www.kaggle.com/competitions/birdclef-2026/discussion/689012) — 30 票 / 4 评论 / 2026-04-07 
+- [Most of the useful ideas come from me—that’s how it feels when I work together with AI.](https://www.kaggle.com/competitions/birdclef-2026/discussion/692610) — 29 票 / 15 评论 / 2026-04-17 
+- [14th place solo gold solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704864) — 27 票 / 2 评论 / 2026-06-06 **write-up?**
+- [[placeholder] tricks in BirdCLEF+ 2026](https://www.kaggle.com/competitions/birdclef-2026/discussion/684148) — 25 票 / 19 评论 / 2026-03-23 
+- [5 dataset observations in the 2026 Pantanal Data](https://www.kaggle.com/competitions/birdclef-2026/discussion/683879) — 24 票 / 8 评论 / 2026-03-22 
+- [12th place solution - MixMax Consistency Regularization](https://www.kaggle.com/competitions/birdclef-2026/discussion/704404) — 24 票 / 3 评论 / 2026-06-04 **write-up?**
+- [Private 9th | Public 2nd solution - Fight against randomness](https://www.kaggle.com/competitions/birdclef-2026/discussion/704887) — 24 票 / 13 评论 / 2026-06-07 **write-up?**
+- [25th Place](https://www.kaggle.com/competitions/birdclef-2026/discussion/704266) — 23 票 / 2 评论 / 2026-06-04 **write-up?**
+- [Time we fixed public sharing?](https://www.kaggle.com/competitions/birdclef-2026/discussion/704413) — 23 票 / 20 评论 / 2026-06-04 
+- [5th Place Solution: Diversity and Bug - Both Are All You Need](https://www.kaggle.com/competitions/birdclef-2026/discussion/704602) — 22 票 / 4 评论 / 2026-06-05 **write-up?**
+- [Congratulations, and Thank You for Making BirdCLEF+ 2026 a Success](https://www.kaggle.com/competitions/birdclef-2026/discussion/704294) — 21 票 / 1 评论 / 2026-06-04 
+- [Private 21st / Public 6th Place Solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704379) — 21 票 / 4 评论 / 2026-06-04 **write-up?**
+- [Export your models to serialized formats for deployment in bioacoustics apps!](https://www.kaggle.com/competitions/birdclef-2026/discussion/694965) — 19 票 / 1 评论 / 2026-04-27 
+- [Striving for collaboration](https://www.kaggle.com/competitions/birdclef-2026/discussion/702119) — 19 票 / 7 评论 / 2026-05-21 
+- [Inspired by Tom: Claude Code qwen3.5:122b](https://www.kaggle.com/competitions/birdclef-2026/discussion/685645) — 18 票 / 25 评论 / 2026-03-28 
+- [Please reduce load on Xeno-canto](https://www.kaggle.com/competitions/birdclef-2026/discussion/684524) — 18 票 / 6 评论 / 2026-03-25 
+- [are we becoming Obsolete!?](https://www.kaggle.com/competitions/birdclef-2026/discussion/682951) — 18 票 / 31 评论 / 2026-03-19 
+- [Private 24th solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704263) — 17 票 / 6 评论 / 2026-06-04 **write-up?**
+- [Empty recordings](https://www.kaggle.com/competitions/birdclef-2026/discussion/681010) — 17 票 / 12 评论 / 2026-03-12 
+- [BirdCLEF 2026 — Solution Writeup (19th place)](https://www.kaggle.com/competitions/birdclef-2026/discussion/704285) — 15 票 / 1 评论 / 2026-06-04 **write-up?**
+- [Calculating your code submission time on the hidden test set](https://www.kaggle.com/competitions/birdclef-2026/discussion/685212) — 15 票 / 2 评论 / 2026-03-27 
+- [Why Shake? A Hypothesis based on LB Probing](https://www.kaggle.com/competitions/birdclef-2026/discussion/704560) — 14 票 / 0 评论 / 2026-06-05 
+- [soundscape adaptation ](https://www.kaggle.com/competitions/birdclef-2026/discussion/690887) — 14 票 / 4 评论 / 2026-04-13 
+- [BirdClef+ 2025 Learnings and Trends](https://www.kaggle.com/competitions/birdclef-2026/discussion/681059) — 13 票 / 0 评论 / 2026-03-12 
+- [Are we allowed to use RTX 6000 Pro ?  Probably the anwser is "No".](https://www.kaggle.com/competitions/birdclef-2026/discussion/688584) — 13 票 / 2 评论 / 2026-04-06 
+- [Listen to birdsong](https://www.kaggle.com/competitions/birdclef-2026/discussion/681586) — 13 票 / 2 评论 / 2026-03-16 
+- [13th place solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704276) — 12 票 / 0 评论 / 2026-06-04 **write-up?**
+- [Direct Validation?](https://www.kaggle.com/competitions/birdclef-2026/discussion/680906) — 12 票 / 17 评论 / 2026-03-11 
+- [6th Place Solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704949) — 12 票 / 0 评论 / 2026-06-07 **write-up?**
+- [BirdCLEF+ Working Notes - Winners announcement](https://www.kaggle.com/competitions/birdclef-2026/discussion/702627) — 11 票 / 13 评论 / 2026-05-25 **write-up?**
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/birdclef-2026/discussion/680267) — 11 票 / 1 评论 / 2026-03-06 
+- [BirdCLEF+2026 18th Place Solution: Ensemble is all we need](https://www.kaggle.com/competitions/birdclef-2026/discussion/704287) — 11 票 / 0 评论 / 2026-06-04 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704770) — 10 票 / 0 评论 / 2026-06-06 **write-up?**
+- [What’s the probability we’ll witness a massive shakeup?](https://www.kaggle.com/competitions/birdclef-2026/discussion/703919) — 10 票 / 14 评论 / 2026-06-02 
+- [(Too) small sample size for sptnig1](https://www.kaggle.com/competitions/birdclef-2026/discussion/681005) — 9 票 / 3 评论 / 2026-03-12 
+- [I Built a Desktop OGG Spectrogram Player With CODEX for Audio Dataset Exploration](https://www.kaggle.com/competitions/birdclef-2026/discussion/693053) — 9 票 / 0 评论 / 2026-04-19 
+- [Share a fascinating bird-watching vlog in Pantanal](https://www.kaggle.com/competitions/birdclef-2026/discussion/683601) — 9 票 / 0 评论 / 2026-03-21 
+- [Training Recipe Help (BCE vs CE, soft vs hard labels, ...)](https://www.kaggle.com/competitions/birdclef-2026/discussion/699105) — 8 票 / 5 评论 / 2026-05-12 
+- [[MESSAGE TO ORGANIZERS] Make competition available for users in Syria](https://www.kaggle.com/competitions/birdclef-2026/discussion/680949) — 8 票 / 2 评论 / 2026-03-11 
+- [My notebook submissions "succeed" but find no files in test_soundscapes](https://www.kaggle.com/competitions/birdclef-2026/discussion/681202) — 8 票 / 5 评论 / 2026-03-13 
+- [🥈BirdCLEF+ 2026 — 128th Place Solution Writeup](https://www.kaggle.com/competitions/birdclef-2026/discussion/704306) — 8 票 / 0 评论 / 2026-06-04 **write-up?**
+- [27th place solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704390) — 8 票 / 0 评论 / 2026-06-04 **write-up?**
+- [no labels or unlabelled 5-sec windows in  train_soundscapes_labels.csv?](https://www.kaggle.com/competitions/birdclef-2026/discussion/683633) — 7 票 / 2 评论 / 2026-03-21 
+- [There Are Human Voices in Train Audio](https://www.kaggle.com/competitions/birdclef-2026/discussion/685842) — 7 票 / 0 评论 / 2026-03-29 
+- [Where do I find the Log file for my submission?](https://www.kaggle.com/competitions/birdclef-2026/discussion/681227) — 7 票 / 2 评论 / 2026-03-13 
+- ["Swarm Intelligence Prediction for BirdCLEF 2026 — MiroFish Simulation"](https://www.kaggle.com/competitions/birdclef-2026/discussion/688386) — 7 票 / 1 评论 / 2026-04-05 
+- [timeout error](https://www.kaggle.com/competitions/birdclef-2026/discussion/703576) — 7 票 / 14 评论 / 2026-06-01 
+- [33th place solution with manual data cleaning](https://www.kaggle.com/competitions/birdclef-2026/discussion/704445) — 7 票 / 0 评论 / 2026-06-04 **write-up?**
+- [16th Place Solution](https://www.kaggle.com/competitions/birdclef-2026/discussion/704689) — 7 票 / 0 评论 / 2026-06-05 **write-up?**
+- [A question to the host? Is Perch Used to Assist in Ground Truth Labeling?](https://www.kaggle.com/competitions/birdclef-2026/discussion/704572) — 7 票 / 0 评论 / 2026-06-05 
+- [training details?](https://www.kaggle.com/competitions/birdclef-2026/discussion/681615) — 6 票 / 9 评论 / 2026-03-16 
+- [Diversity is all you need.](https://www.kaggle.com/competitions/birdclef-2026/discussion/698538) — 6 票 / 10 评论 / 2026-05-10 
+- [🥈 BirdCLEF+ 2026 — 118th Place Silver Medal Solution (Public 0.9514 / Private 0](https://www.kaggle.com/competitions/birdclef-2026/discussion/704609) — 6 票 / 0 评论 / 2026-06-05 **write-up?**
+- [Beginner questions and dooubts regarding BirdCLEF+2026](https://www.kaggle.com/competitions/birdclef-2026/discussion/681358) — 5 票 / 9 评论 / 2026-03-14 
+- [96th Place Solution: Only Claude Code + custom harness](https://www.kaggle.com/competitions/birdclef-2026/discussion/705281) — 5 票 / 3 评论 / 2026-06-09 **write-up?**
+- [[Tips] Stop Submitting Code Competitions Manually — Automate Push to Submit with Kaggle CLI](https://www.kaggle.com/competitions/birdclef-2026/discussion/696234) — 5 票 / 0 评论 / 2026-05-01 
+- [[off topic]Agent competition is getting more intense? ](https://www.kaggle.com/competitions/birdclef-2026/discussion/686716) — 5 票 / 0 评论 / 2026-04-01 
+- [Stuck at ~0.928 with Two-Pass SSM + Advanced PP — Is Perch/ProtoSSM Hitting a Ceiling?](https://www.kaggle.com/competitions/birdclef-2026/discussion/694799) — 5 票 / 5 评论 / 2026-04-27 
+- [Title: Looking for a Team – Psychology Student & Data Analytics Learner](https://www.kaggle.com/competitions/birdclef-2026/discussion/680979) — 5 票 / 1 评论 / 2026-03-12 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/birdclef-2026/discussion/705051) — 3 票 / 1 评论 / 2026-06-08 

@@ -1,0 +1,69 @@
+<p>Thanks to Kaggle and the hosts for this competition! Thanks to everyone in the community I engaged with in the forums and discussions, I learned a lot from you.</p>
+<h2>CV Setup</h2>
+<p>When I'm writing this summary, I only know my public LB rank, so this paragraph may turn bitter. I decided to fully trust public LB in this competition and didn't even track local CV. The train dataset was small and confirmed to be noisy, while the public LB was bigger and contained 3-way annotations, which meant higher quality. I expected a higher correlation between public and private LB than between my local CV and private LB.</p>
+<h2>Architecture</h2>
+<p>All my models are standard QA models (AutoModelForQuestionAnswering) and the postprocessing is directly reapplied from the HF example notebook by Sylvain Gugger that I also used in my public EDA. I used XLM-Roberta Large, MURIL Large and Rembert, and blended the predictions from several models per backbone. In the next stage, I used majority voting at word level across the 3 backbones to decide which words will make it to the final prediction.</p>
+<p>For diversity, I submitted another ensemble without blending single models, only doing majority voting. It had worse score on public LB, but same on private - both my chosen subs are .787 private. My best private sub is .796. I also have a single model/fold (MURIL) that scored .802 on public LB and .783 on private.</p>
+<h2>Data Recipes</h2>
+<p>I started the competition, like most of other participants, with XLM-Roberta Large pretrained by Deepset on English SQUAD and finetuned on chaii data. Later, I started to pretrain my own backbone models (I mean QA pretraining, not MLM). I focused on TyDi dataset, because the host mentioned that chaii data was collected in a similar way. I went through several experiments with different pretraining and finetuning protocols and the key insight was that the performance of pretrained backbone often exceeded its finetuned version. Based on this observation, I decided to drop the 2-stage approach and train my models in 1-stage. However, I wanted to control the order in which I provide different datasets to the model. I call this <strong>data recipes</strong> because it feels like cooking. </p>
+<p>Here is an example of a data recipe that I used in my final experiments: </p>
+<ol>
+<li>Take the English, Bengali and Telugu subset of TyDi dataset and 2/3 of chaii train dataset. Tokenize it with sequence length 256 and remove 90% of negative examples (negative sampling). Add tokenized English SQUAD and Hindi parts of MLQA and XQUAD. Shuffle all together and put aside. </li>
+<li>Repeat step 1, but replace English SQUAD with subset of Natural Questions. Use sequece length 384 for tokenization (progressive resizing, see below). </li>
+<li>Concatenate the data collected in steps 1 and 2. </li>
+<li>Train. </li>
+</ol>
+<p>Some more details:</p>
+<ul>
+<li>Because I moved the data combination/shuffling logic into the dataset, I used sequential sampler and 1 epoch for training. HuggingFace <code>datasets</code> library made this super easy. </li>
+<li>I used negative sampling, usually 0.1, for TyDi, chaii and NQ datasets because they came with longer contexts.</li>
+<li>I initially experimented with some auto-translated datasets like Tamil SQUAD but they didn't help my performance, so at the end I only used original language datasets and those translated manually (Hindi MLQA/XQUAD). </li>
+<li>I tried various languages from TyDi and found that English/Bengali/Telugu worked best.</li>
+<li>I wanted to add some more data, so I took Google Natural Questions that contained a short answer and trained a simple Roberta-base classifier to distinguish NQ data from TyDi English dataset. I selected a subset of NQ that was most similar to English TyDi. </li>
+<li>Since I was not tracking CV, I initiatially used all chaii data. Later on, I moved to a 3 fold setup - for diversity and for early stopping. If an interim checkpoint had a much better CV than the final checkpoint, I would usually test it on public LB. </li>
+</ul>
+<h2>Image-Like Augmentations</h2>
+<p>This part is heavily inspired by <strong>fastai</strong> - during one of the Deep Learning courses <a href="https://www.kaggle.com/jhoward" target="_blank">@jhoward</a> talked about his work transfering the pretraining method from Computer Vision to NLP (ULMFiT) and mentioned that there are many other opportunities by following this approach. I focused on the augmentation techniques. </p>
+<h3>Random Cropping</h3>
+<p>This is a standard augmentation in CV, but I haven't seen it applied to NLP, although it fits perfectly here: we need to chunk a very long text into a fixed token length fragments. Rather than doing it once and showing the same examples in each epoch, why not make it a dynamic and random crop? Initially, I implemented a function that took a random crop with padding around the answer text for positive examples, and a random crop for negative examples. Once I moved to data recipes described above, I realized that the same can be simpler achieved by using a different stride and negative sampling every time I add a dataset to my recipe. </p>
+<h3>Progressive Resizing</h3>
+<p>This is another trick that Jeremy teaches in the fastai lectures, applied commonly for images. In case of progressive resizing, I use different sequence lengths during training. E.g. start with 256, then move to 384, then move to 448. </p>
+<h3>Cutout</h3>
+<p>In computer vision, we sometimes black out patches of image as augmentation. In NLP, we can do the same by replacing some tokens with <code>[MASK]</code>. I saw that <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a> used this technique in Tweet Sentiment competition. I used 0-10% cutout in my models. </p>
+<h2>Fine-tuning</h2>
+<p>I didn't experiment too much with different hyperparameters for finetuning, I usually started with the defaults described in each backbone paper and often stuck with that. I did most of my experiments on the XLM-Roberta backbone. MURIL had the best performance on the public LB (I believe due to tokenization), although the training run sometimes collapsed (a restart usually helped). </p>
+<p>Here are my default hyperparameters for each backbone (batch size = 8):</p>
+<ul>
+<li>XLM-Roberta: gradient accumulation: 4, learning rate: 1e-5, wd: 0.01</li>
+<li>MURIL: gradient accumulation: 4, learning rate: 3e-5, wd: 0.01</li>
+<li>Rembert: gradient accumulation: 16, learning rate: 1e-5, wd: 0.01</li>
+</ul>
+<h2>Post-processing</h2>
+<p>Other than the standard postprocessing (I didn't modify the default functions from the official HuggingFace QA notebook), there was an opportunity to improve predictions by addressing XLM-Roberta and Rembert tokenization issues. These models tend to merge some punctuation marks with subwords, while annotators often split them. I initially used <a href="https://www.kaggle.com/abhishek" target="_blank">@abhishek</a>'s method of simply stripping punctuation, and in the last day made some modifications similar to the method shared by <a href="https://www.kaggle.com/nbroad" target="_blank">@nbroad</a>. I add dots after BC/AD, I add parenthesis if included within the stripped prediction etc. I didn't see an impact in my score by adjusting this, but my position shifted from 3 to 2 based on this postprocessing. This didn't work well on private LB though (-0.004). I didn't do any such postprocessing for MURIL because it handled it well with its tokenizer. </p>
+<h2>Frameworks</h2>
+<p>I went all in HuggingFace in this challenge and can't imaging doing it another way. Other than <code>AutoModelForQuestionAnswering</code>, I used the <code>HF Trainer</code> initially, and later realized they have a QA version of the trainer, which has EM/F1 measures implemented for validation. I used EM/F1 for early stopping rather than observing the validation loss. Last but not least, HF <code>datasets</code> was a huge enabler for me, its caching works like magic.</p>
+<h1>Things that Didn't Work</h1>
+<h2>Label Error Corrections</h2>
+<p>Quite early in the competition, I tried to correct the noisy labels by doing out of fold predictions, looking at the model errors and replacing the label with prediction if - based on Google Translate - I thought it's better than original. However, this degraded my performance on public LB and I dropped this. I missed the opportunity to correct the answer start, I only tried it in the last 2 days after <a href="https://www.kaggle.com/zacchaeus" target="_blank">@zacchaeus</a> published his corrected dataset. The models trained with it appeared to perform better, but they didn't help my ensemble at the end.  </p>
+<h2>MT5</h2>
+<p>I was quite bullish on MT5, especially when I tried a pretrained checkpoint from HF Hub and it scored .713 without any finetuning. Also, it looks like MT5 XXL is SOTA for this type of challenges with limited data. However, the largest model I was able to run in Kaggle kernel was MT5-Large (is it possible to run a bigger one?). I got MT5-Large to train on Google Colab (thanks to AdaFactor) as I was travelling during this time, but I couldn't surpass the .713 score of the pretrained backbone. </p>
+<h2>Jaccard Loss</h2>
+<p>I implemented my own version of jaccard loss (Lovasz-Hinge) but it didn't improve my performance, even when combined with CrossEntropy. It's very likely that I made some implementation error, if you'd like to take a look and give me feedback I'd be happy to share that implementation. </p>
+<h2>XLNet Head</h2>
+<p>I also tried the XLNet head where end-logits are predicted by taking into account start-logits, using beam-search on inference. It didn't work too well for me, could be another implementation error. </p>
+<h2>Tokenization</h2>
+<p>I didn't venture to tamper with the tokenizers, but I tried to split some punctuation marks before running the tokenizer - this didn't help my score either. </p>
+<h1>Other</h1>
+<h2>Music</h2>
+<p>I listened to live concert recordings of 2 Polish rock bands during my coding sessions. Here are some samples if you want to check them out: </p>
+<ul>
+<li><a href="https://youtu.be/8XszVw_-z60" target="_blank">https://youtu.be/8XszVw_-z60</a></li>
+<li><a href="https://youtu.be/0B5gk0QjHUc" target="_blank">https://youtu.be/0B5gk0QjHUc</a></li>
+</ul>
+<h2>GPU</h2>
+<p>I have a rig with 1 RTX 3090 and a Colab Pro account.</p>
+<h2>Break</h2>
+<p>I started the competition in the first hours and prepared an EDA, baseline and QA tutorial. Then I took a break and then really focused in the last month of the competition. I used all subs I had available during that time except for 2 that I missed when DST change messed up with my submission plans. </p>
+<h1>Links</h1>
+<p><a href="https://www.kaggle.com/thedrcat/chaii-ensemble-10postuning" target="_blank">Inference Kernel</a><br>
+<a href="https://github.com/kldarek/chaii" target="_blank">Github Repo</a></p>

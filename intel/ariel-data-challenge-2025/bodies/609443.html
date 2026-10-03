@@ -1,0 +1,73 @@
+<p>Thanks to kaggle and everyone involved for hosting such an interesting competition. There was a lot to learn, and that's why we compete. </p>
+<p><strong>TLDR</strong></p>
+<p>Our solution is a a mix of transit light curve curve fitting using either batman + scipy-opitimize or pylightcurve-torch + gpytorch. We then trained a linear NN to calibrate predictions and estimate sigma values.</p>
+<p>We only discovered Pylightcurve-torch and GPytorch a week before the end. We then sprinted to replicate and improve the batman pipeline with these. </p>
+<p><strong>Cross validation</strong></p>
+<p>Cross validation was straightforward. We simply split the star into 4 folds. We evaluated the curve fitting steps without CV as there was no training, but for the NN postprocessing we did proper CV evaluation. Overall we had very good CV / LB correlation.</p>
+<p><strong>Data preprocessing</strong></p>
+<p>We used <a href="https://www.kaggle.com/ilu000" target="_blank">@ilu000</a> preprocessing as a basis which has been shared here: <a href="https://www.kaggle.com/code/ilu000/ariel25-quick-data-prep-improved" target="_blank">https://www.kaggle.com/code/ilu000/ariel25-quick-data-prep-improved</a></p>
+<p>We added a minor tweak for detecting cosmic rays, which was also shared in <a href="https://www.kaggle.com/jeroencottaar" target="_blank">@jeroencottaar</a> notebook <a href="https://www.kaggle.com/code/jeroencottaar/demonstrate-apparent-label-issue" target="_blank">https://www.kaggle.com/code/jeroencottaar/demonstrate-apparent-label-issue</a></p>
+<p>We made the additional following changes. They yield over 0.005 score improvement when we implement them. </p>
+<ul>
+<li>Inverted offset. The formula provided to use at the start of the competition was the formula used to encode the data. Given we had to decode, we have to invert both operations in the formula. Host only fixed one inversion during the competition. </li>
+<li>The dark frame must be multiplied by the duration since sensor reset. We therefore updated the code this way:</li>
+</ul>
+<pre><code>        
+         sensor == :
+            dt = torch.ones((signal), device=) * 
+            dt[::] += 
+         sensor == :
+            dt = torch.tensor(dt_airs).to()
+            dt[::] += 
+</code></pre>
+<ul>
+<li>Jitter removal. We centered the signal by computing the center oliver spatial dimensions, then using scipy 2d interpolate to move the center to the center of the frame. Doing so we need to crop the outermost pixels.</li>
+</ul>
+<p>Here is an example of correcting AIRS center on the spatial axis. Orange is after correction.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F75976%2F0db2d0135a74f942ed6687fd04eabceb%2FScreenshot%202025-09-26%20at%2019-05-26%20exomod_534_a%20(auto-c%2017)%20-%20JupyterLab.png?generation=1758906368284879&amp;alt=media" alt=""></p>
+<ul>
+<li>Some frames have very large center deviations. This is because of cosmic rays. We simply discard these frames and replace them by the one right before it. Here is an example of two cosmic rays effect on FGS1.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F75976%2Faff24e5206a0ef5d63a49ca2d97cfb14%2FScreenshot%202025-09-26%20at%2019-08-18%20exomod_531_f%20(auto-c%2013)%20-%20JupyterLab.png?generation=1758906523858560&amp;alt=media" alt=""></p>
+<ul>
+<li>We did not fix dispersion changes due to Jitter. It can still be significant. Here is the same planet where we plot the normalized variance of signal in one of FGS1 spatial axis. The bump in the middle means that more signal will be cropped from a narrow square.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F75976%2F90992f5522784a9cdd749e78954af53c%2FScreenshot%202025-09-26%20at%2019-09-25%20exomod_531_f%20(auto-c%2013)%20-%20JupyterLab.png?generation=1758906657017925&amp;alt=media" alt=""></p>
+<p>-Light is not appearing as a nice ellipsis on the FGS1 sensor. Here is the log scaled average over all planets of FGS1 signal, after centering it:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F75976%2F6c4cf9b3028bead1d0d2373b1b4e2007%2FScreenshot%202025-09-26%20at%2019-11-39%20exomod_prepr%20(auto-c%2012)%20-%20JupyterLab.png?generation=1758906716843836&amp;alt=media" alt=""></p>
+<p>We masked the darker part of that average, rather than using a square crop of the center.</p>
+<p><strong>Main approach</strong></p>
+<p>We employed an iterative curve-fitting strategy to extract the planet-to-star radius ratio (Rp/Rs) from noisy transient light curve data. The procedure consisted of progressively refining the fit across different data representations:</p>
+<ol>
+<li>Phase detection – The orbital phase of the signal was identified to align the transit features. We used the largest gradient average over wavelengths, as in public notebooks.</li>
+<li>Baseline modeling – A degree 2 polynomial fit was applied to the out-of-transit “arms” of the light curve to model and remove baseline trends.</li>
+<li>Global transit fitting – The normalized light curve was fit using the batman transit model, yielding an initial estimate of Rp.</li>
+<li>FGS refinement – The fit was repeated on the FGS data</li>
+<li>Wavelength binning – The same fitting procedure was applied to 18 wavelength buckets, capturing wavelength-dependent variations.</li>
+<li>Wavelength binning with GP – For the bucketed data, a 2D polynomial plus Gaussian Process (GP) model was used to jointly capture systematic trends and correlated noise, refining the Rp estimate.</li>
+</ol>
+<p><strong>Postprocessing</strong></p>
+<ol>
+<li>combine predictions. We combined the results from the different curve fitting steps into 18 values for prediction and 283 values for sigma; those then go into a linear NN which weights the different sigma estimates and expands the 18 predictions back to 283 values</li>
+<li>train simple NN for calibrating predictions and sigma.. We use a NN because we used a GLLoss instead of the usual MSE for linear regression.</li>
+</ol>
+<pre><code> torch
+ torch.nn  nn
+ torch.nn.functional  F
+
+
+ (nn.Module):
+     ():
+        ().__init__()
+        .pred_fc = nn.Linear(, , bias=)
+        .sigma_fc = nn.Linear(, , bias=)
+
+     ():
+        x = torch.log(pred).()
+        x = .pred_fc(x).squeeze(-)
+
+        y = torch.stack([sigma, s_std, var_l, s_std2, s_std3], ).()
+        y = torch.log(y)
+        y = .sigma_fc(y).squeeze(-)
+         x, y
+</code></pre>

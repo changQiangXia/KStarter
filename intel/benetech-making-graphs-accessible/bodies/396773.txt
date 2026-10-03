@@ -1,0 +1,124 @@
+# https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396773
+
+Topic #396773: How to tackle this competition
+  Author: moth
+  Posted: 2023-03-22 22:13:42.551000
+  Votes: 94  Comments: 30
+
+In this competition you need to predict different values (data series) depending on the figure type. A very clear explanation can be found in the Graph Convention section of this competition. These conventions ensure that predictions can be made in a consistent manner across a variety of chart formats.
+
+Step 1: predict the figure type
+
+Different types of figures have different predictions conventions. So the first step is to predict which kind of chart is present on the image. You can use any CNN backbone (like EfficientNets, Resnets, etc) with a Linear layer at the end with the same amount of neurons as chart types.
+
+
+
+This step is relatively easy and you should get high accuracy since it's pretty easy for CNN to distinguish the different types of charts!
+
+Edit: the initial dataset description stated there were 4 types of charts but in fact there is a distinction between vertical bars and horizontal bars, so in reality there are 5 different types, so there should be 5 neurons in the linear layer.
+
+Step 2: add annotations and custom markers
+
+This competition's annotations already provide bounding boxes for the different components of the charts, like the position of the title, x-axis and y-axis labels, x-ticks and y-ticks, etc. You can find how to plot these bounding boxes in this notebook.
+
+However, you might need to add some custom markers for points of interest, like data series which are not marked in the original images. In the next image these markers (bounding boxes) are represented by yellow dots.
+
+
+
+Note: it might not be necessary to mark every data series point in the charts. With enough training points the Object Detection network is still able to detect data series points. Also, the accuracy of your Object Detector depends on the accuracy on the input bounding boxes and these are not perfect! For example, just look at the vertical bar chart on the image and you will notice that the provided sky blue bounding boxes are not always very accurate!
+
+Step 3: train an Object Detection Neural Network and predict bounding boxes
+
+With the images, the annotations and the markers you can train or fine-tune an Object Detection neural network. Use this network later at inference time to predict bounding boxes for test images without annotations nor data series points.
+
+This step may be optional, since OCR networks (step 4) predict text and numbers and also output their respective bounding boxes. However, you would rely on the OCR's predictive precision (which is not that precise) and you would still need to find a way to detect the data series bounding boxes (yellow dots)!
+
+
+
+Step 4: get text and numbers from OCR
+
+Finally, with the bounding boxes and the original image you can pass them to an OCR (Object Character Recognition) network and get the corresponding text and numbers. Format the numbers, text and data series according to the chart type. 
+
+Knowing the bounding boxes for the data series points, the minimum and maximum values for each axis and their corresponding bounding boxes coordinates you can get data series values by a simple cross multiplication.
+
+Comments:
+├─ kkiller (2023-03-24 15:08:54.813000) [+8]
+│  I really believe that end to end and OCR free approaches would have great results in this competition. The DoNut model for instance is one of such models.
+  ├─ moth (2023-03-26 18:34:36.390000) [+0]
+  │  @kneroma what do you mean by end to end? DoNut looks interesting, the use case would be mainly asking which lables and ticks are present in the chart? Idk how would it be able to retrieve informati...
+    ├─ kkiller (2023-03-29 01:10:14.607000) [+2]
+    │  By end-to-end, I mean a trainable pipeline whose output can be directly used to solve the problem at hand. An end-to-end approach is opposed to a multi-step approach (ex: OCR + Classifier + PostPro...
+  ├─ Darek Kłeczek (2023-03-27 12:42:41.883000) [+3]
+  │  I hope you're right, it would be really cool to build an E2E model that can crack it… my bet is still that multi step engineered approaches will be more successful on the LB here…
+    ├─ kkiller (2023-03-29 01:10:49.817000) [+2]
+    │  @thedrcat , I would bet on multi-step approaches if one could have access to high quality OCR Engine like Azure Read or Google Vision … If Tesseract (or equivalent OCR engine) is only what we have,...
+  ├─ RB (2023-03-27 15:59:06.353000) [+5]
+  │  Or something like this  - Pix2Struct: Screenshot Parsing as Pretraining for Visual Language Understanding
+  │  Paper - https://arxiv.org/abs/2210.03347
+  │  Docs - https://huggingface.co/docs/transformers/ma...
+    ├─ [deleted] (2023-03-29 01:03:46.840000) [+0]
+    │  [deleted]
+├─ Ravi Shah (2023-03-23 04:55:02.910000) [+1]
+│  This seems like a good approach. Thanks for sharing @alejopaullier! Also really nice visual explanations!
+  ├─ moth (2023-03-23 13:35:12.547000) [+1]
+  │  Thanks @ravishah1 much appreciated
+  ├─ Ravi Shah (2023-03-23 15:32:48.240000) [+3]
+  │  Hi @alejopaullier,
+  │  I did notice one slight correction. You say there should be 4 heads on the linear layer of the first model, but I think there are actually 5 classes. Bar is split into horizontal...
+    ├─ moth (2023-03-23 15:40:03.630000) [+1]
+    │  You are right @ravishah1 I followed the dataset description which states:
+    │  
+    │  
+    │    
+    │  This competition's dataset comprises about 65,000 comprehensively-annotated scientific figures of four kinds: bar grap...
+    ├─ Ryan Holbrook (2023-03-23 15:57:07.310000) [+3]
+    │  There are five types of chart. I'll update the description. Thanks!
+├─ hutedu (2023-03-26 11:33:50.483000) [+2]
+│  So this approach will still use rule based answer( in last step we "get data series values by a simple cross multiplication"). In this case it may be very hard to write rules for all types of graph...
+  ├─ moth (2023-03-26 18:36:45.963000) [+1]
+  │  By cross multiplication I mean that if you know the tick labels and the tick positions (bounding box in pixels) you can interpolate any data series point values if you know the data series bounding...
+├─ Durval Slompo Junior (2023-05-11 21:28:29.890000) [+0]
+│  Nice work!
+├─ Chinartist (2023-05-08 05:18:32.333000) [+0]
+│  Did you use this method to reach the current ranking？
+├─ jdmm (2023-04-21 20:08:19.463000) [+0]
+│  Excellent approach. New kaglers or beginners here is a notebook with a possible implementation of Step 1. https://www.kaggle.com/montenegroj/step-1-of-benetech-competition
+├─ Max Bond ABE (2023-04-04 05:16:27.843000) [+0]
+│  Hi,
+│  
+│  Thanks for putting this together!
+│  
+│  If you'll pardon a beginner question, why use a linear layer at the output of the graph classifier rather than a softmax layer? Softmax seems like the more o...
+  ├─ moth (2023-04-09 02:52:57.137000) [+1]
+  │  Hello Max! 
+  │  
+  │  In PyTorch, it is not necessary to add a softmax or sigmoid layer at the end of a CNN because these activation functions are already included in the loss functions that are commonly us...
+├─ emine ildes egri (2023-04-01 19:16:02.973000) [+0]
+│  They seem so nice .
+├─ YujiAriyasu (2023-04-01 10:03:16.973000) [+0]
+│  It would be best if we could generate a graph, increase the data, and solve the problem with an E2E model like DoNut.
+│  @ryanholbrook 
+│  Is it allowed to generate data? Also, it needs to be clarified i...
+  ├─ Maggie (2023-04-03 20:31:28.363000) [+3]
+  │  Yes, you can generate new data. 
+  │  
+  │  In the rules the competition license that the host is looking for is MIT, which is not compatible with yolo. If there is a version of yolo that will work with MIT ...
+    ├─ YAZEED BADARO (2023-04-07 19:37:21.980000) [+0]
+    │  what is MIT?
+    ├─ Abdullah Husein (2023-04-08 07:06:07.007000) [+1]
+    │  One type of permission opensource license. You can get the details here: https://fossa.com/blog/open-source-licenses-101-mit-license/
+    ├─ [deleted] (2023-04-10 12:58:05.770000) [+0]
+    │  [deleted]
+    ├─ Ali (2023-04-12 08:25:38.237000) [+1]
+    │  Hi 
+    │  Just out of curiosity, a model or code that is licensed “Apache 2.0” can be used ? Since what I know that the apache license is compatible with MIT license ? 
+    │  @maggiemd 
+    │  @ryanholbrook
+├─ Pardeep Singh (2023-03-29 05:56:19.287000) [+0]
+│  Thanks for sharing this comprehensive approach @alejopaullier 🙌🙏
+├─ [deleted] (2023-05-26 01:23:24.923000) [+0]
+│  [deleted]
+├─ [deleted] (2023-03-28 09:39:16.247000) [+0]
+│  [deleted]
+├─ Chris Deotte (2023-04-19 03:23:30.973000) [+2]
+│  Thanks. Nice analysis

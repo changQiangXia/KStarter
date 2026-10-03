@@ -1,0 +1,131 @@
+# https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287919
+
+Topic #287919: 36th Place - Trust Your CV - Optimize PP
+  Author: Chris Deotte
+  Posted: 2021-11-16 00:33:31.570000
+  Votes: 40  Comments: 24
+
+Thank you Kaggle and host for a fun and  interesting competition.
+
+Thank you @kishalmandal for the wonderful public notebooks. I joined a few days ago and immediately studied Kishal's top scoring public notebooks.
+
+Final Submission 1 - Best LB
+
+My first final submission was my maximum public LB of 0.795. I took Kishal's LB 0.792 public notebook here and changed the weights to 
+
+start_logits = (start_logits1 + 0.85*start_logits2 + 0.85*start_logits3
+       + start_logits4+ 1.7*start_logits5 )/5.4
+end_logits = (end_logits1 + 0.85*end_logits2 + 0.85*end_logits3 
+       + end_logits4 + 1.7*end_logits5)/5.4
+
+
+This achieved public LB 0.795 which was 60th place on public LB. But when i calculated the local CV score, it was only CV 0.677.  This was very concerning. (And as it turns out, this submission had private LB 0.718 and had 728th place 😮 so it was overfitting public LB)
+
+Final Submission 2 - Best CV
+
+For my second final submission, I downloaded @kishalmandal train notebooks here and here. I optimized the hyperparameters, learning rates, and learning schedules and achieved local CV 0.697.
+
+Modify Boost Post Process +0.004!
+
+Next, I adjusted the popular public post process. I changed the first line which uses logits to the second line which uses the Bayesian product of probabilities (and gives start position a slight emphasis over end position).
+
+"score": start_logits[start_index] + end_logits[end_index]
+
+from scipy.special import expit  #THIS IS SIGMOID FUNCTION
+"score": expit(1.2*start_logits[start_index]) \
+                  * expit(end_logits[end_index])
+
+
+This boosted CV by +0.003, public LB by +0.003, and private LB by +0.004! 
+
+Best Final Submission
+
+My best final submission turned out to be my second submission which was my best CV and not my best LB. This model had CV 0.700, Public LB 0.784, and Private LB 0.744. Once again, "trust you CV" was the best strategy!
+
+UPDATE -  Post Comp Reflection
+
+My solution is only XLM-Roberta. After reading top solutions, it appears that ensemble with Muril-Large (and maybe Rembert) was the secret sauce to achieving a higher LB score! And TydiQA external dataset.
+
+Comments:
+├─ MINGOOK KIM (2021-11-21 15:05:03.410000) [+1]
+│  Congratulations !
+│  
+│  Good Job!
+├─ Old Monk (2021-11-20 15:48:20.303000) [+1]
+│  Congratulation @cdeotte ! Thanks for sharing your solution!
+├─ adldotori (2021-11-17 06:10:22.093000) [+1]
+│  Wow… This is so efficient solutions. I learned a lot. thanks!
+  ├─ Chris Deotte (2021-11-18 04:24:50.177000) [+0]
+  │  Thanks Adldotori
+├─ Mikhail Savin (2021-11-16 12:23:48.397000) [+1]
+│  @cdeotte congrats!
+│  
+│  Can i ask about this moment?
+│  
+│  
+│    
+│  My first final submission was my maximum public LB of 0.795. I took Kishal's LB 0.792 public notebook here and changed the weights
+│  
+│  
+│  And how yo...
+  ├─ Chris Deotte (2021-11-16 17:29:22.777000) [+1]
+  │  Thanks. Are you asking how I found the optimal LB weights? I explain the procedure in one of the other comments.
+  ├─ Mikhail Savin (2021-11-17 05:51:04.567000) [+1]
+  │  Oh, thank you!
+├─ [deleted] (2021-11-16 05:23:40.003000) [+1]
+│  You make it look easy..
+  ├─ Chris Deotte (2021-11-16 08:27:31.513000) [+0]
+  │  Thanks Yam
+├─ Saiyan Warrior (2021-11-16 04:15:52.750000) [+1]
+│  Hi @cdeotte congrats on your win. Can you tell us how did you decide to change weights?
+│  
+│  start_logits = (start_logits1 + 0.85*start_logits2 + 0.85*start_logits3
+│         + start_logits4+ 1.7*start_lo...
+  ├─ Chris Deotte (2021-11-16 04:25:01.303000) [+2]
+  │  On first day, i make 5 submissions using the five weights below and get respective LB scores:
+  │  
+  │  
+  │  
+  │  2,1,1,1,1 - LB 0.789
+  │  
+  │  1,2,1,1,1 - LB 0.787
+  │  
+  │  1,1,2,1,1 - LB 0.786
+  │  
+  │  1,1,1,2,1 - LB 0.789
+  │  
+  │  1,1,1,1,2 - ...
+├─ KhanhVD (2021-11-16 06:27:34.540000) [+2]
+│  Congratulations @cdeotte on results!
+  ├─ Chris Deotte (2021-11-16 08:27:19.837000) [+0]
+  │  Thanks. Congratulations to you and your team for maintaining your great result on both public and private LB
+├─ Mr_KnowNothing (2021-11-16 05:27:47.640000) [+2]
+│  Hi @cdeotte great work , can you tell me the intuition behind this 
+│  
+│  
+│    
+│  "score": expit(1.2*start_logits[start_index]) \
+│                      * expit(end_logits[end_index])
+│  
+│  
+│  Thanks
+  ├─ Chris Deotte (2021-11-16 05:36:12.023000) [+2]
+  │  Logits are log odds (like "there is log(3 to 1) chance this horse will win the race"). And sigmoid(logits) are probabilities (like "there is 75% chance this horse will win"). After we convert to pr...
+├─ Chris Deotte (2021-11-16 03:21:37.107000) [+2]
+│  After reading top solutions it appears that using Muril-Large was one of the magics! What was Muril-Large CV score? (and perhaps using Rembert was helpful too).
+  ├─ Nirjhar Roy (2021-11-16 03:28:36.577000) [+0]
+  │  Muril Large and TYDI QA Dataset
+  ├─ Chris Deotte (2021-11-16 03:52:57.807000) [+0]
+  │  What is TYDI QA Dataset?
+  ├─ Mintwater (2021-11-16 04:10:58.940000) [+1]
+  │  The one that has similar collection procedure like chaii dataset, showing in the "Data" description. It is also a great Magic according to other top solutions: )
+  ├─ Chris Deotte (2021-11-17 05:04:57.037000) [+0]
+  │  Ah yes, that makes sense because the description page says that our competition data was prepared the same way as TydiQA dataset. So that external dataset should help our models learn the format of...
+├─ Kishal Mandal (2021-11-16 00:39:20.317000) [+2]
+│  Thanks for the mention. I also tried using the sigmoid function on the logits to find the score and do a amjority voting among models. Couldn't finish. But to my surprise another single model (5fol...
+  ├─ Chris Deotte (2021-11-16 00:46:25.067000) [+5]
+  │  @kishalmandal In my early days, i trusted too many LB models and got shake down a lot. Now in my 2nd and 3rd year on Kaggle, i always build a "trust your cv" model. And in most competitions this mo...
+  ├─ Kishal Mandal (2021-11-16 00:52:55.810000) [+1]
+  │  I will keep that in mind. This was my first competition though :) Learned a lesson. Hope won't do the same blunder again. Thanks. I like your notebooks and all solutions and learn a lot from them. ...
+├─ Parv Yadav (2021-11-21 07:02:18.637000) [+0]
+│  Learnt a lot .Thanks @cdeotte !😄

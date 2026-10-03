@@ -1,0 +1,61 @@
+# bigquery-ai-hackathon 讨论区（按票数排序，共 59 条）
+
+- [Welcome to the BigQuery AI - Building the Future of Data Hackathon](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598594) — 24 票 / 49 评论 / 2025-08-11 
+- [Judging Update - Pushed out to Week of Oct 20](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/610964) — 13 票 / 10 评论 / 2025-10-07 
+- [Google Cloud Credits to Support this Hackathon](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598576) — 13 票 / 37 评论 / 2025-08-11 
+- [Vertex AI Notebooks tip.](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/599317) — 11 票 / 0 评论 / 2025-08-15 
+- [And that's a Wrap! Congratulations to our Winners!](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/612730) — 8 票 / 12 评论 / 2025-10-21 
+- [A Huge Thank You to the BigQuery AI Community!](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/609100) — 8 票 / 2 评论 / 2025-09-23 
+- [BigQuery AI experience: BigLake, Multi-Cloud Lakehouse, Vertex AI. BigQuery’s Evolution.](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598822) — 8 票 / 4 评论 / 2025-08-13 
+- [What if I'm Broke and Don't Have a Credit Card for Big Query?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598831) — 8 票 / 4 评论 / 2025-08-13 
+- [🚀 BigQuery + IA: Criando o Futuro dos Dados com Inteligência Escalável](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/601062) — 7 票 / 0 评论 / 2025-08-26 
+- [Do not include credentials or secrets in your submission ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608853) — 5 票 / 0 评论 / 2025-09-22 
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598574) — 4 票 / 0 评论 / 2025-08-11 
+- [A Deep Dive into my Submission: The Airbnb AI Consultant 🤖🏨](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/607797) — 4 票 / 0 评论 / 2025-09-16 
+- [Question: Can participants under 18 join this hackathon?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/598974) — 3 票 / 4 评论 / 2025-08-13 
+- [I am Developer cum marketer.  Looking for collaborators ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600432) — 3 票 / 1 评论 / 2025-08-22 
+- [Are there any applications of Optimal Transport?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/602514) — 2 票 / 3 评论 / 2025-08-28 
+- [Clarification Needed: Conflicting Submission Rules (1 vs 2 Final Submissions)](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/599127) — 2 票 / 1 评论 / 2025-08-14 
+- [Technical Error Caused Deadline Miss](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/609159) — 2 票 / 0 评论 / 2025-09-24 
+- [URGENT - SUBMIT BUTTON DID NOT WORK - I MISSED THE DEADLINE](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608986) — 2 票 / 10 评论 / 2025-09-23 
+- [Project getting Flagged and Suspended on Google Cloud](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608490) — 2 票 / 0 评论 / 2025-09-20 
+- [How to do calculations on dataframe with GeminiTextGenerator](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600606) — 2 票 / 1 评论 / 2025-08-23 
+- [GCP Project Suspension](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/607298) — 2 票 / 1 评论 / 2025-09-13 
+- [Re: BigQuery AI - Building the Future of Data](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/607972) — 2 票 / 2 评论 / 2025-09-17 
+- [Can we use data from API's?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600492) — 2 票 / 1 评论 / 2025-08-23 
+- [An AI tool that uses comment area data](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/602543) — 2 票 / 6 评论 / 2025-08-28 
+- [Leverage BigQuery's multimodal AI capabilities for analyzing Google Street View data](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/599470) — 1 票 / 0 评论 / 2025-08-16 
+- [Big Query: Free tier guide](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/599906) — 1 票 / 0 评论 / 2025-08-19 
+- [Techs on Google](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/599905) — 1 票 / 2 评论 / 2025-08-19 
+- [How to access this market place? ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600157) — 1 票 / 1 评论 / 2025-08-21 
+- [Does ML.GENERATE_TEXT has vision understanding on PDFs?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600194) — 1 票 / 2 评论 / 2025-08-21 
+- [Cannot Access textembedding-gecko@003 Model from Vertex AI in BigQuery](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600764) — 1 票 / 1 评论 / 2025-08-24 
+- [Project_ID during evaluation](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600986) — 1 票 / 2 评论 / 2025-08-25 
+- [What is meant by inside queries shoukd run in bigquery? ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/602854) — 1 票 / 3 评论 / 2025-08-30 
+- [Speeding up ML.GENERATE_TEXT in BigQuery AI](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/605490) — 1 票 / 1 评论 / 2025-09-08 
+- [Dataset and codes](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/606946) — 1 票 / 1 评论 / 2025-09-11 
+- [Teammates ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/600327) — 1 票 / 1 评论 / 2025-08-22 
+- [Is it a requirement that notebook can run from end to end by one click?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/607407) — 1 票 / 1 评论 / 2025-09-13 
+- [can i submit google colab notebook?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/606918) — 1 票 / 2 评论 / 2025-09-10 
+- [Pushed notebook on Github is not visible properly](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608278) — 1 票 / 2 评论 / 2025-09-18 
+- [Can you predict the weather? ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608486) — 1 票 / 0 评论 / 2025-09-20 
+- [Keep track of cost](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/604152) — 1 票 / 3 评论 / 2025-09-06 
+- [Guys help me i am here to submit ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608686) — 1 票 / 0 评论 / 2025-09-21 
+- [Cannot submit the notebook](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608759) — 1 票 / 2 评论 / 2025-09-22 
+- [UMKM360: BigQuery Top-Down AI Business Consultant for MSMEs](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/609001) — 1 票 / 0 评论 / 2025-09-23 
+- [URGENT - Tried to submit everything at which the save button got locked](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/609004) — 1 票 / 4 评论 / 2025-09-23 
+- [Notebook Didn't Get Submitted Despite Finishing it On Time....](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608987) — 1 票 / 4 评论 / 2025-09-23 
+- [URGENT - SUBMIT BUTTON DID NOT WORK - ON THE MOMENT I ACCOMPLISHED EVERYTHING](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608992) — 1 票 / 15 评论 / 2025-09-23 
+- [Questions on Evaluation Process and Rubric Feedback](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/612790) — 1 票 / 1 评论 / 2025-10-22 
+- [Using BigQuery AI to Organize Messy Business Data](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/638764) — 1 票 / 0 评论 / 2025-11-24 
+- [Please ensure you have selected a BigQuery account in the Notebook Add-ons menu.](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/604203) — 0 票 / 5 评论 / 2025-09-06 
+- [I have serious concern about billing!](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/604156) — 0 票 / 2 评论 / 2025-09-06 
+- [Access to Big Query](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/603870) — 0 票 / 1 评论 / 2025-09-04 
+- [Shall i use google colab for for demonstration purpose?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/603729) — 0 票 / 1 评论 / 2025-09-04 
+- [Does the dataset need to be public](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/607854) — 0 票 / 2 评论 / 2025-09-16 
+- [Is a public notebook required if there is a public GitHub repository?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608073) — 0 票 / 2 评论 / 2025-09-17 
+- [Uploading video seems optional](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608410) — 0 票 / 1 评论 / 2025-09-19 
+- [Doubt related to submission ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608646) — 0 票 / 0 评论 / 2025-09-21 
+- [Should the BigQuery connection be publicly available as well?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608657) — 0 票 / 1 评论 / 2025-09-21 
+- [wrong content?](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/611705) — -1 票 / 0 评论 / 2025-10-13 
+- [PLease extent content deadlines till month end? ](https://www.kaggle.com/competitions/bigquery-ai-hackathon/discussion/608418) — -6 票 / 0 评论 / 2025-09-19 

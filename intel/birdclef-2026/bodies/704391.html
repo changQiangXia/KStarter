@@ -1,0 +1,283 @@
+<p>I’ll share the method itself in a separate attachment later. This write-up primarily focuses on how I built a fully automated Kaggle competition solver using Claude Code for this competition. To begin, I'd like to show the token consumption from the last month:</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F4310004%2F1609709cf394499e6b31102307091756%2F1234.png?generation=1780573725658085&amp;alt=media" alt=""></p>
+<p>All the necessary markdown files for claude-code is in the file attachment. Here is the brief diagram about my agent workflow.</p>
+<p>Besides workflow, those html files are all triggered by me. I basically work about 1-2 hours on birdclef by seeing those html report. And if I found any strange reported results in html then I fine-tune my workflow. Otherwise I didn't touch it and just let it keeps running. </p>
+<p>Submission Criteria: I have established multiple validation gates, including score thresholds and diversity verification across multiple datasets. Once all criteria are satisfied, the system sends an authorization request through the Gmail MCP. I then receive the email and explicitly reply to confirm that I approve the submission.
+Only after receiving my approval does the system proceed with the final submission. This process is similar to submitting a merge request to an application or repository owner and requiring their approval before the changes are merged.</p>
+<p>Working time: I worked on this competition about 1-2 hours per week including spending time on code-review the submission.</p>
+<h1>architect — Autoresearcher End-to-End Flow Chart</h1>
+<p>A text-based, end-to-end flow chart of the BirdCLEF 2026 "permanent self-driving research loop."
+For the implementation, see <code>AUTORESEARCHER.md</code>, <code>CLAUDE.md</code> §10/§17, <code>.claude/skills/*</code>,
+<code>.claude/agents/*</code>, and <code>scripts/*</code>.</p>
+<blockquote>
+  <p>One iron rule across the whole system: <strong>every submission requires human authorization — the system NEVER auto-submits.</strong></p>
+</blockquote>
+<hr>
+<h2>0. Bird's-eye view (three layers)</h2>
+<pre><code>┌────────────────────────────────────────────────────────────────────────────┐
+│  DECISION   autoresearcher-orchestrator (agent)  ← one decision step per wake │
+├────────────────────────────────────────────────────────────────────────────┤
+│  DETECTION  background daemon scripts  → continuously write flags / logs      │
+├────────────────────────────────────────────────────────────────────────────┤
+│  MEMORY     reports/autoresearch/  STATE.md · ideas_backlog.md · ledger.md     │
+└────────────────────────────────────────────────────────────────────────────┘
+        Permanent wake-up: /loop (interactive long-run) or schedule cron (unattended)
+</code></pre>
+<hr>
+<h2>1. Main lifecycle (one pass per wake-up)</h2>
+<pre><code>        ┌──────────────────────────────────────────────────────┐
+        │  ⏰ Wake-up layer  (/loop 30m  or  schedule cron)      │
+        └───────────────────────────┬──────────────────────────┘
+                                    │ wake
+                                    ▼
+                 ┌───────────────────────────────────┐
+                 │  Read STATE.md + outputs/logs/*.flag│
+                 │  (orchestrator loads world state)   │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                 ┌───────────────────────────────────┐
+                 │   Decision tree (policy ①→⑤,        │   ← see §2
+                 │   take first matching branch)       │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                 ┌───────────────────────────────────┐
+                 │   Execute exactly ONE action        │
+                 │   (may delegate to sub-agents)      │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                 ┌───────────────────────────────────┐
+                 │   Write back STATE.md (+ ledger)    │
+                 │   Schedule next wake-up             │
+                 └───────────────┬───────────────────┘
+                                 ▼
+                          ⏳ Wait for next wake ──┐
+                                 ▲                │
+                                 └────────────────┘  (permanent loop)
+</code></pre>
+<hr>
+<h2>2. Decision tree (policy ①→⑤, top-down, first match wins)</h2>
+<pre><code>                          ┌─────────────────────────────┐
+                          │  Read flags + STATE + backlog│
+                          └──────────────┬──────────────┘
+                                         ▼
+        ① SUBMIT_READY.flag present? ──Yes──▶ [A] Submission gate flow (§3)
+                                         │
+                                         No
+                                         ▼
+        ② New finished round(5/5) not in ledger? ─Yes─▶ [B] Eval validation flow (§4)
+                                         │
+                                         No
+                                         ▼
+        ③ backlog has todo high-priority idea
+           AND GPU clean? ──────────Yes──▶ [C] Experiment execution flow (§5)
+                                         │
+                                         No
+                                         ▼
+        ④ EXPERIMENT_DRY.flag or
+           AUTORESEARCH_TRIGGER.flag? ─Yes─▶ [D] Dry → research flow (§6)
+                                         │
+                                         No
+                                         ▼
+        ⑤ ───────────────────────────────▶ [E] idle, schedule next wake-up
+</code></pre>
+<hr>
+<h2>3. [A] Submission gate flow — SUBMISSION GATE v2 (4 layers, all must PASS)</h2>
+<pre><code>  SUBMIT_READY.flag
+        │  delegate to submit-gatekeeper
+        ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ L1  AUC gate                                                 │
+  │     candidate ckpt soundscape val AUC ≥ SUBMIT_THRESHOLD(0.9250)│
+  │     AND passes eval-validity-watchdog                        │
+  └───────────────┬───────────────────────────┬─────────────────┘
+              PASS│                       FAIL │
+                  ▼                            ▼
+  ┌─────────────────────────────────────┐   ✗ NO-GO
+  │ L2  XC distribution validity         │   report layer + values + advice
+  │     (BirdSet XCL, focal)             │   → no submit, back to experiment
+  │   lower (species): rank corr ≥ 0.50   │
+  │   upper (coarse) : JS(class_name) ≤0.10│
+  │   dist_validity_check.py --dataset xc │
+  └───────────────┬─────────────────────┘
+              PASS│  (any layer FAIL → ✗ NO-GO, as above)
+                  ▼
+  ┌─────────────────────────────────────┐
+  │ L3  PER distribution validity        │   ← soundscape, closest to hidden test
+  │     (BirdSet PER, soundscape)        │
+  │   lower rank corr ≥ 0.45 / upper JS≤0.12│
+  │   dist_validity_check.py --dataset per │
+  └───────────────┬─────────────────────┘
+              PASS│
+                  ▼
+  ┌─────────────────────────────────────┐
+  │ L4  Diversity gate                   │
+  │   2-ckpt per-species corr median ≤0.985│
+  │   round diversity / arch diversity    │
+  │   PVT R5 fold4 LOCKED / no same-round  │
+  └───────────────┬─────────────────────┘
+              PASS│
+                  ▼
+        ┌───────────────────────┐
+        │ ONNX export (FP32+INT8)│
+        │ build 2-ckpt submission│
+        │ file_level_top_k=1     │
+        │ collect L1–L4 values   │
+        └───────────┬───────────┘
+                    ▼
+  ┌─────────────────────────────────────────────────────────────┐
+  │ L5  Gmail MCP approval  (human email authorization)          │
+  │     merge-request analogy: system opens MR → owner approves  │
+  │                                                              │
+  │   submit-gatekeeper assembles candidate 2-ckpt combo         │
+  │   (backbone/round/fold) + per-layer gate value summary       │
+  │     (L1 AUC · L2 XC rank-corr/coarse-JS · L3 PER · L4 div)   │
+  │                          │                                    │
+  │                          ▼                                    │
+  │   mcp__claude_ai_Gmail__create_draft  →  send                │
+  │     "Submission Authorization Request" to tom99763@gmail.com │
+  │     subject carries unique request-id:                       │
+  │       [BIRDCLEF-SUBMIT-REQ r{R}f{f} &lt;timestamp&gt;]             │
+  │     body: candidate combo + L1..L4 values + estimate;        │
+  │           "reply APPROVE to approve / REJECT to reject"      │
+  │                          │                                    │
+  │                          ▼                                    │
+  │            ⏳ state = AWAITING EMAIL AUTHORIZATION            │
+  │                          │  each wake, poll by request-id:    │
+  │                          │  mcp__claude_ai_Gmail__            │
+  │                          │     search_threads + get_thread    │
+  │                          ▼                                    │
+  │            ┌── reply in same thread? ───┐                     │
+  │            │ verify sender ==           │                     │
+  │            │   tom99763@gmail.com       │                     │
+  │            └────────────┬──────────────┘                     │
+  │             APPROVE     │     REJECT / timeout                │
+  │                ▼        │            ▼                        │
+  │             (proceed)   │        ✗ NO-GO                      │
+  │                         │   log ledger, back to experiment   │
+  └─────────────┬───────────┴──────────────────────────────────┘
+                │ APPROVE (sender verified)
+                ▼
+          ✅ Submit to Kaggle (90min timeout, 2 ckpt)
+
+  ⛔ IRON RULE: NEVER submit before a self-sent email APPROVE is received.
+  ⚠ Headless limit: interactive-auth Gmail MCP may be UNAVAILABLE in
+     headless/cron unattended mode. In that case fall back to writing
+     SUBMIT_READY.flag only, and defer the L5 email-approval loop to an
+     interactive Claude session.
+</code></pre>
+<hr>
+<h2>4. [B] Eval validation flow (new round done → bookkeeping)</h2>
+<pre><code>  New finished round (fold0..4_best.pt present)
+        │  delegate to eval-validator
+        ▼
+  ┌──────────────────────────────────────────────┐
+  │ Check: all_ss_probs.npz / _corrected.npz exist │
+  │        5 folds present · ss_auc∈[0.80,0.99] noNaN│
+  │        log has no error/OOM · no prob collapse  │
+  └───────────────┬──────────────────┬────────────┘
+              PASS│              FAIL │
+                  ▼                   ▼
+        Update experiment_ledger.md  ✗ mark invalid
+        (hypothesis/setup/val·LB/concl) block gen pseudo / submit
+                  │                   │ report reason
+                  ▼                   ▼
+        round result trustworthy ──▶ back to loop, re-evaluate next wake
+</code></pre>
+<hr>
+<h2>5. [C] Experiment execution flow (pick idea → run pipeline)</h2>
+<pre><code>  backlog has todo high-priority idea + GPU clean
+        │
+        ▼  idea → config (set idea status: running, write ledger)
+  delegate to ns-autopilot / ns-pipeline-orchestrator
+        │
+        ▼
+  ┌───────────────────────── per-round pipeline ────────────────────────┐
+  │  train 5 folds ─▶ infer all_ss ─▶ Residual Corrector ─▶ gen pseudo  │
+  │  (early stop=4)   (all_ss_probs)   (+0.40×delta)      (sed_20s_rR)   │
+  │        ▲                                                   │         │
+  │        └──────────────  next round (perch_w decays)  ◀──────┘         │
+  └────────────────────────────────┬───────────────────────────────────┘
+                                   │ each round gated by eval-validity-watchdog
+                                   ▼
+                 round done → back to loop → next wake hits policy ②(validate)
+                                   │
+        ┌──────────────────────────┴──────────────────────────┐
+        │ Running concurrently in background:                  │
+        │  watchdog_nc.sh           → auto-restart stall / GPU │
+        │  experiment_dry_detector.sh → compute AUC-improvement │
+        │                               series (see §6)        │
+        └─────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h2>6. [D] Dry → research flow (loop-until-dry core)</h2>
+<pre><code>  ── Detection layer (background experiment_dry_detector.sh, every 1800s) ──
+   Scan outputs/logs/sed_ns_*_fold*.log, compute per-round best_val_auc
+   improvement series
+        │
+        ▼  dry criteria (any one true)
+   (A) self-train converged: DRY_PATIENCE(3) rounds improve &lt; DRY_EPS(0.001)
+   (B) ceiling stuck       : best_val_auc still hugging 0.948, no breakthrough
+   (C) backlog exhausted   : no status: todo high-priority idea
+        │
+        ├─ true  ─▶ write EXPERIMENT_DRY.flag (with reason)
+        └─ false ─▶ remove stale flag (back to experiment, keep pushing)
+
+  ── Decision layer (orchestrator policy ④) ────────────────────────────
+   EXPERIMENT_DRY.flag / AUTORESEARCH_TRIGGER.flag
+        │  trigger lit-research-watch
+        ▼
+   Spawn N subtopic agents from template_agent, in parallel:
+        ┌──────────────┬──────────────┬──────────────┬─────────────┐
+        ▼              ▼              ▼              ▼             ▼
+   autoresearch   autoresearch   autoresearch   autoresearch  autoresearch
+     -scout        -scout         -scout         -scout        -scout
+   new backbone  pseudo denoise  calibration   post-proc    domain-gen / SSL
+        │              │              │              │             │
+        └──────────────┴──────┬───────┴──────────────┴─────────────┘
+                              ▼  each WebSearch+WebFetch → distill actionable gains
+                   synthesize reports/lit_research_&lt;date&gt;.md
+                              │
+                              ▼
+                   write new ideas into ideas_backlog.md (status: todo)
+                              │
+                              ▼
+                   🧹 clear EXPERIMENT_DRY.flag
+                              │
+                              ▼
+                   back to experiment phase (next wake hits policy ③)
+
+   ╔═══════════════════════════════════════════════════════════════╗
+   ║  loop-until-dry: keep pushing experiments; only go to websearch ║
+   ║  when "dry". After refilling backlog, clear the flag and return ║
+   ║  to experiments — avoids wasteful searching.                    ║
+   ╚═══════════════════════════════════════════════════════════════╝
+</code></pre>
+<hr>
+<h2>7. Flags &amp; data flow (detection layer → decision layer)</h2>
+<pre><code>  Background script                Writes flag/log                Consumed by
+  ─────────────────────────────────────────────────────────────────────────
+  submit_gate_watcher.sh    ──▶  SUBMIT_READY.flag          ──▶  policy ① / [A]
+  Gmail MCP create_draft    ──▶  email "SUBMIT-REQ r{R}f{f}" ──▶  L5 approval loop
+  Gmail MCP search/get_thread ─◀  reply APPROVE/REJECT       ──▶  L5 go / no-go
+       (headless: Gmail MCP may be unavailable → fall back to SUBMIT_READY.flag,
+        defer L5 email approval to an interactive session)
+  experiment_dry_detector.sh──▶  EXPERIMENT_DRY.flag         ──▶  policy ④ / [D]
+  autoresearch_scheduler.sh ──▶  AUTORESEARCH_TRIGGER.flag   ──▶  policy ④ / [D]
+  eval_validity_watchdog.sh ──▶  eval_validity.log           ──▶  [B] precheck
+  watchdog_nc.sh            ──▶  (restarts training directly) ──▶  protects [C]
+
+  Memory layer (orchestrator reads/writes)
+  ─────────────────────────────────────────────────────────────────────────
+  STATE.md            ←→  read + write back each step (LB / in-progress / next / next wake)
+  ideas_backlog.md    ←→  [D] writes todo · [C] takes &amp; sets running · result filled back
+  experiment_ledger.md ─▶ [B]/[C] append (hypothesis→setup→result→conclusion→next)
+</code></pre>
+<hr>
+<h2>8. One-line summary</h2>
+<pre><code>   wake → read state+flags → pick one decision-tree branch →
+        ① gate submit(L1–L4 → L5 Gmail email APPROVE)  ② validate &amp; log  ③ run experiment  ④ research only if dry  ⑤ idle
+   → write back STATE → wait next wake → ♻ permanent loop,
+   submission always waits for a self-sent email APPROVE (merge-request style;
+   headless falls back to SUBMIT_READY.flag + interactive L5)
+</code></pre>
+<p>Will update more~</p>

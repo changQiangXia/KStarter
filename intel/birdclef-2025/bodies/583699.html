@@ -1,0 +1,218 @@
+<p><em>We would like to thank the Armed Forces of Ukraine, the Security Service of Ukraine, the Defence Intelligence of Ukraine, and the State Emergency Service of Ukraine for providing safety and security to participate in this great competition, complete this work, and help science, technology, and business not to stop but to move forward.</em></p>
+<p><em>As the competition was coming to an end, russia once again launched a massive missile and drone attack on peaceful Ukrainian cities. This terrorist act targeted civilian homes and critical infrastructure, resulting in widespread destruction and civilian casualties. Moreover, the use of the “double tap” tactic—striking the same location twice to kill rescuers aiding those trapped in damaged and destroyed buildings—further highlights the inhumanity of the assault. This action once again affirms russia’s status as a terrorist state.</em></p>
+<h1>Opening Words</h1>
+<p>If we decompose the entire BirdCLEF competitions journey, we can say that up to and including 2023 were the times of <em>“Additional Data is All You Need”</em> but since 2024, the paradigm has changed into <em>“Journey Down the Rabbit Hole of Pseudo Labels”</em>. So let’s jump into it and explore the Wonderland of Semi-Supervised Learning.</p>
+<h1>Short Data Story</h1>
+<p>We downloaded additional Xeno-Canto data, taking into account the bug mentioned in the <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/412808" target="_blank">2023 competition</a>, which resulted in approximately:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Number of samples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xeno Canto</td>
+<td>7,376</td>
+</tr>
+<tr>
+<td>Previous Competitions</td>
+<td>90</td>
+</tr>
+</tbody>
+</table>
+<p>These samples were not present in the current year's dataset but had appropriate <code>primary_label</code> labels.<br>
+Interestingly, using parsed data from XC and iNat did not improve my models but gave a minor performance boost to <a href="https://www.kaggle.com/vialactea" target="_blank">@vialactea</a>.<br>
+That’s all (folks) regarding the main training data.</p>
+<h1>5 seconds of fame</h1>
+<p>We trained our models on 5s and randomly selected segments. Based on experience from last year, we initially tried three approaches to picking 5s segments: random 5s from the whole audio, random 5s from the first 7s, and random 5s from the first or last 7s. The reasoning for the last two approaches is that often the recorder starts the audio when the animal is vocalizing and stops it when the animal stops vocalizing. That would help the model avoid false positives. The 7s was just to add some diversity.</p>
+<p>In initial tests, the last approach provided better results. However, some species had just a few audios—as few as 2 in some cases—and we were concerned about overfitting. Therefore, we decided to inspect the audios for those species to manually identify sections of vocalization. The following charts illustrate three of the cases we found:</p>
+<ul>
+<li>Vocalization with alien speech. By alien speech, we mean speech explaining the recording and with no traces of vocalization or even the same background noise as in the section in which there is vocalization. In the chart, the alien speech occurs both before and after the vocalization.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1690820%2F5fcb7c97edf0aa8055f55d538752c12b%2Fspec_1.png?generation=1749397146360445&amp;alt=media" alt=""></li>
+<li>Speech overlapping with animal vocalization. In this case, the voice can be understood as background noise. In the chart, this occurs between seconds 57 and 142. The final 8 seconds is alien speech.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1690820%2F447bae96e17a57ddcc4b5eafed62e163%2Fspec_2.png?generation=1749397192140358&amp;alt=media" alt=""></li>
+<li>Vocalization with periods of silence, i.e., when the animal is not vocalizing.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1690820%2F988997f4b2d3fc7e24c8ed6b209a495e%2Fspec_3.jpeg?generation=1749397209766816&amp;alt=media" alt=""><br>
+Avoiding false positives must be a good thing, right? Well, no! Skipping random 5s periods in which there is no vocalization actually reduced LB. Why? Were we in over our heads trying to identify vocalization? Was there something in the audio that we were unable to detect but the models could? Maybe those false positives helped generalization by preventing the model from overfitting to the few audios available. We ended up either using the whole audio or avoiding just the sections of alien speech identified either manually or automatically. It seems that fame has more to do with false positives than with our intuition. Perhaps AI is getting too good at imitating biological intelligence, and like people, these models have developed a taste for fake stuff.</li>
+</ul>
+<h1>Validation Is All You Need but Do Not Have</h1>
+<p>That is, unfortunately, a true story for all BirdCLEF competitions. We explored a bunch of validation strategies. At the core of each strategy lies stratification by <code>primary_label</code> and grouping by <code>author</code>. After that, we had to figure out how to treat undersampled species. So, what we tried:</p>
+<ol>
+<li>Adding at least one sample of each class to each validation fold, even if it introduced a tiiiny data leakage. We also introduced scoring for undersampled species within each fold.</li>
+<li>Using the first approach but removing the added sample from the respective training fold.</li>
+<li>Adding all undersampled species to the training folds and removing them from the respective validation folds. This allows the model to see more examples of undersampled species and reduces noise in the validation scores of small classes, at the cost of losing validation feedback for those species.</li>
+</ol>
+<p>We mostly settled on the first and third strategies.<br>
+And of course, the most interesting question: do validation scores correlate with our Public score? After some major improvements, we saw significant positive changes in both metrics, but when tweaking things within ~1% AUC, the correlation was nearly absent.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1690820%2Fff4bc165e3580590eeeb7b9ebf5ddce7%2Flb_corelation.png?generation=1749397354622382&amp;alt=media" alt=""><br>
+As you can see in the plot, when we broke the 0.9 Public milestone, the correlation decided to take a rest.</p>
+<h1>Modelling, let’s be honest, is one of the most useless parts here</h1>
+<p>We followed the good traditions of previous Bird and Audio competitions and used a Spec → 2D CNN approach. But particularly for this year, backbones really did make the difference! We tried the ConvNeXt family, which showed pretty good results in 2023, but it failed this time—while also introducing very big latency. The ResNeXt family didn’t perform well either. Next encoders have become our favorites:</p>
+<ul>
+<li>tf_efficientnetv2_s</li>
+<li>eca_nfnet_l0</li>
+</ul>
+<p>In some setups, EfficientNet showed better results, while in others, nfnet_l0 carried the day. Additionally, both were a really good match for ensembles.</p>
+<p>Regarding classification heads, things were pretty standard: I used a SED head, while <a href="https://www.kaggle.com/vialactea" target="_blank">@vialactea</a> used a multi-layer perceptron.</p>
+<h1>Train it to the limit</h1>
+<p>Common parts for both backbones:</p>
+<ul>
+<li>50 epochs</li>
+<li>Batch size: 64. We tried larger sizes in the final days of the competition but, unfortunately, didn’t have submissions available to test them.</li>
+<li>Scheduler: half of a cosine cycle</li>
+<li>Focal + BCE loss</li>
+<li>Label smoothing 0.005</li>
+</ul>
+<p>Optimizer choice differed between backbones:</p>
+<ul>
+<li>eca_nfnet_l0: RAdam with 1e-4 learning rate</li>
+<li>tf_efficientnetv2_s: AdamW with 1e-4 learning rate, 1e-8 epsilon, and (0.9, 0.999) betas</li>
+</ul>
+<p>I think the most important part here was the <strong>balancing strategy</strong>. We explored a few and used different ones in the final ensemble:</p>
+<ul>
+<li>Balanced</li>
+<li>Squared</li>
+</ul>
+<pre><code>sample_weights = (
+    .value_counts() / 
+    all_primary_labels.value_counts().sum()
+)  ** (.)
+</code></pre>
+<ul>
+<li>Upsampling: Repeating samples from the most undersampled classes until each reaches a predefined count (e.g., all classes with fewer than 100 samples are upsampled to have 100).</li>
+</ul>
+<p>We ended up using both the Balanced strategy and a combination of Balanced + Upsampling.</p>
+<p>And now we come to the first ingredient of our secret sauce—pretraining!</p>
+<h1>Let me tell you a story about …. Pretraining</h1>
+<p>From the very first experiments, <a href="https://www.kaggle.com/vialactea" target="_blank">@vialactea</a> had very good results with fine-tuning from our last year’s pretrained backbones. The general concept is pretty simple:</p>
+<ol>
+<li>Download a massive Xeno-Canto dataset, excluding recordings with this year’s species to avoid data leakage</li>
+<li>Filter out undersampled species to avoid overcomplicating the classification problem during pretraining—this results in approximately 7,400–7,800 species</li>
+<li>Train, train, train!</li>
+</ol>
+<p>Picking the right checkpoint is a separate kind of art. We tried using the last, the best, and the average of the 3 best. The last two approaches worked best.<br>
+ Use only the pretrained backbone and discard the classification head.<br>
+Initially, I tried pretraining only on past competition data—and failed. That initialization made things worse. Then I adopted <a href="https://www.kaggle.com/vialactea" target="_blank">@vialactea</a> approach and confirmed it was a killer feature: scores jumped from <strong>0.83–0.84 to 0.86–0.87</strong>.</p>
+<p>After the success of last year’s pretrained models, we decided to train new ones on a fresh massive Xeno-Canto snapshot. Unfortunately, it didn’t go as well: they performed comparably or slightly worse than the 2024 pretrains. Still, one <em>eca_nfnet_l0</em> checkpoint showed promise and was selected for the final ensemble.</p>
+<p>After pretraining, we fine-tuned on our main datasets without using sophisticated techniques like differential learning rates for backbone and head.</p>
+<h1>Augmentations</h1>
+<p>Here I completely refer to the <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/412808" target="_blank">2023 write-up</a>, as we used exactly the same setup. We tried turning off RandomFiltering and/or SpecAug, which led to slightly better CV scores but worse LB. So the decision was made: don’t make life easier for the model—robots should work!</p>
+<h1>Release the Kraken — Pseudo Time!</h1>
+<p>We used the following algorithm:</p>
+<ol>
+<li>Predict all <code>train_soundscapes</code> using our best ensemble in “submission” format (5-second windows).</li>
+<li>Select only confident segments—we kept only those with a maximum probability greater than 0.5.</li>
+<li>Use soft labels— <strong>do not</strong> apply thresholding. This can be considered a form of ensemble distillation into a single model, while also adapting to the noise and target distribution of the soundscapes.<br>
+<strong>Important</strong>: Trim low probabilities to zero—we set all probabilities below 0.1 to zero. This is a key step for removing noisy, unconfident labels.</li>
+</ol>
+<p>The pseudo-code looks something like this:</p>
+<pre><code>…
+# primary_label_prob contains   across   chunk
+soundscape_df = soundscape_df[soundscape_df[] &gt; ]
+soundscape_df[scored_species &lt;] = 
+…
+</code></pre>
+<p>The next step was sampling correctly. To avoid ruining (further) the already skewed data distribution and to better control the amount of sampled pseudo labels, we used the following strategy:</p>
+<ol>
+<li>Sample according to the original sampling strategy.</li>
+<li>Check whether the class from the sample exists in <code>soundscape_df</code>. If it does, with some probability (0.4 in our case), select it instead of the current sample and replace the hard label with the pseudo soft label vector.</li>
+</ol>
+<p>The first pseudo iteration improved our scores from <strong>0.86–0.87 to 0.89–0.895</strong>. But as mentioned—only the first…</p>
+<p>The next obvious step? STACK MORE PSEUDO ITERATIONS! So, we predicted using models trained on the first pseudo-iteration samples, this time using the soundscapes that didn’t pass the max-probability threshold. This boosted scores to the <strong>0.90–0.91</strong> range.</p>
+<p>Unfortunately, a third iteration didn’t lead to noticeable gains, so we changed the strategy a bit. The main issue was that we couldn’t re-predict soundscapes from the previous iteration due to data leakage. But what if we split the soundscapes into folds? Now we could predict them with the “pseudo-trained” models in OOF (out-of-fold) mode. Sadly, repeating this approach twice didn’t boost scores beyond the second iteration. However, it gave us pseudo-labels generated in a slightly different way—which we then combined with previous pseudo-labels to form a crazy pseudo mix. A tf_efficientnetv2_s-based model trained on this mix became our top solo model, scoring 0.917 Public and 0.91 Private.</p>
+<table>
+<thead>
+<tr>
+<th>Pseudo iteration</th>
+<th>Number of selected files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>4430</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1483</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1437</td>
+</tr>
+</tbody>
+</table>
+<h1>Add a bit of postprocessing</h1>
+<p>Contrary to our 2023 solution, this year we decided to severely overfit. Not really, of course—but we did select checkpoints based on the best validation ROC AUC. We tried using the last and the average of the 3 best checkpoints, but those usually performed worse on the leaderboard. Fortunately, with fewer files to predict, we didn’t worry too much and simply submitted all 5 fold models per experiment.</p>
+<p>We used a simple post-processing step: for each audio file, we multiplied all chunk-level predictions by the top probability for each bird class in that file. This boosts consistently strong predictions and suppresses weaker ones, without affecting the within-file ranking (since all chunks are scaled equally). However, it changes the global ranking across files — e.g., a 0.2 chunk in a strong file (mean = 0.9) becomes 0.18, while in a weak file (mean = 0.4) it becomes 0.08. This consistently improved results, typically by 0.01 for weaker models and around 0.005 for stronger ones. Code for the post-processing function:</p>
+<pre><code> postprocessing(input_df, top=):
+     = input_df.iloc[:, :].values
+    , F = only_probs.shape
+     = only_probs.reshape((N//, , F))
+     = np.mean(np.sort(only_probs, axis=)[:, -top:], axis=, keepdims=True)
+     *= mean_
+    .iloc[:, :] = only_probs.reshape((N, F))
+     input_df
+</code></pre>
+<p>We predicted each 5-second chunk independently during inference. We also tried the overlapping window approach used by the previous <a href="https://www.kaggle.com/competitions/birdclef-2024/discussion/511845" target="_blank">TOP 4 team</a> (let’s follow their naming and call it TTA). It performed well on the Public LB, boosting the best experiment’s score from 0.917 to 0.922 on Public and from 0.91 to 0.918 on Private. Unfortunately, it did not perform well with postprocessing on Public</p>
+<h1>And finally …</h1>
+<p>Our final submission contained 3 models:</p>
+<ol>
+<li>tf_efficientnetv2_s trained on my pipeline with 2 pseudo iterations from the 2024 pretrained checkpoint. Trained on validation split #3 and with a Balanced sampling strategy.</li>
+<li>eca_nfnet_l0 trained on my pipeline with 3 pseudo iterations from the 2025 pretrained checkpoint. Trained on validation split #1 and with a Balanced + Upsampling sampling strategy.  </li>
+<li>tf_efficientnetv2_s trained using <a href="https://www.kaggle.com/vialactea" target="_blank">@vialactea</a> pipeline with 1 pseudo iteration from the 2024 pretrained checkpoint. Trained on validation split #3 and with a Balanced sampling strategy.</li>
+</ol>
+<p>All of this was backed by post-processing on top and <strong>without</strong> TTA prediction.</p>
+<h1>A Bit of Failed Stuff</h1>
+<ul>
+<li>Training on soft labels of the main training data. This seems like a super logical idea, but with deep learning, as usual—you never know what will work.</li>
+<li>Using pretrained weights from the latest Xeno Canto snippet</li>
+<li>Using additional iNaturalist or XC data</li>
+<li>Additional augmentations, like Time Flip</li>
+</ul>
+<h1>Write-up Speedrun</h1>
+<p>The strongest ones will cope with our long read, but for others—a short ablation table.</p>
+<table>
+<thead>
+<tr>
+<th>Improvement</th>
+<th>Public Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td>0.83-0.84</td>
+</tr>
+<tr>
+<td>+ Pretrain</td>
+<td>0.86-0.87</td>
+</tr>
+<tr>
+<td>+ Pseudo iteration 1</td>
+<td>0.89-0.895</td>
+</tr>
+<tr>
+<td>+ Pseudo iteration 2-3</td>
+<td>0.9-0.91</td>
+</tr>
+<tr>
+<td>+ TTA</td>
+<td>0.922</td>
+</tr>
+<tr>
+<td>Postprocessing</td>
+<td>+0.005-0.01</td>
+</tr>
+</tbody>
+</table>
+<h1>Closing words</h1>
+<p>I hope you haven’t fallen asleep while reading. First, I want to congratulate <a href="https://www.kaggle.com/vialactea" target="_blank">@vialactea</a> on achieving Grandmaster ranking! It was an honour to participate in this competition with you!</p>
+<p>I want to thank the entire Kaggle community and congratulate all participants and winners. Special thanks to the Cornell Lab of Ornithology, LifeCLEF, Google Research, Xeno-canto, <a href="https://www.kaggle.com/stefankahl" target="_blank">@stefankahl</a>, <a href="https://www.kaggle.com/tomdenton" target="_blank">@tomdenton</a>, <a href="https://www.kaggle.com/holgerklinck" target="_blank">@holgerklinck</a>, and <a href="https://www.kaggle.com/avocadomastermind" target="_blank">@avocadomastermind</a>. All of you were super active in discussions, shared datasets and interesting materials, answered all questions, and, of course, prepared such a cool competition!</p>
+<h1>Resources</h1>
+<p>Inference Kernel : <a href="https://www.kaggle.com/code/vladimirsydor/bird-clef-2025-ensemble-v2-final-final?scriptVersionId=244942051" target="_blank">https://www.kaggle.com/code/vladimirsydor/bird-clef-2025-ensemble-v2-final-final?scriptVersionId=244942051</a><br>
+Short Inference Kernel: <a href="https://www.kaggle.com/code/vladimirsydor/bird-clef-2025-minimul-inference?scriptVersionId=245080754" target="_blank">https://www.kaggle.com/code/vladimirsydor/bird-clef-2025-minimul-inference?scriptVersionId=245080754</a><br>
+GitHub : <a href="https://github.com/VSydorskyy/BirdCLEF_2025_2nd_place" target="_blank">https://github.com/VSydorskyy/BirdCLEF_2025_2nd_place</a><br>
+Paper : <a href="https://ceur-ws.org/Vol-4038/paper_256.pdf" target="_blank">https://ceur-ws.org/Vol-4038/paper_256.pdf</a></p>

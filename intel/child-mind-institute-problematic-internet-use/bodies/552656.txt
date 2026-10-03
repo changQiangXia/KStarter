@@ -1,0 +1,47 @@
+# https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552656
+
+Topic #552656: 5th Place Solution
+  Author: peyman armaghan
+  Posted: 2024-12-20 19:31:27.538000
+  Votes: 14  Comments: 4
+
+this is my approach for this competition:
+
+
+
+1- For Time Series:
+To make some useful features from the time series, I used clustering. I picked 6 parquet files (2 most variant files from each class), combined them, and fit 15 clusters using the KMeans algorithm. then i used this fitted model to extract cluster from other parquets
+I assumed each cluster could represent a specific movement in the parquet data. Then, I averaged each cluster's values over the time duration and used that average as a feature for each user. So, in the end, I had 15 features per user, which represented the average of some kind of activity during the time the user wore the watch.
+I was late in the competition and didn’t have enough time to clean the data or extract more useful features from the time series. I believe there was a lot of room to extract much better features from it.
+
+2- Choosing the Right Target:
+After some initial submissions, I found that using threshold optimization led to overfitting and inconsistent results. So, I ignored optimization and used PCIAT-PCIAT_Total as the target labels, and applied fixed thresholds [31, 50, 80]. Since the exact values between these thresholds were less important than their relative position to the thresholds for the final prediction, I binned the PCIAT-PCIAT_Total into 10 bins and adjusted the thresholds accordingly.
+
+3 - For Unlabeled Data:
+I used pseudo-labeling. I trained three GBDT models (CatBoost, LGBM, XGB), a Lasso regression model, and a neural network (256-128-64 architecture). Then I ensembled these models to predict labels for the unlabeled data. These new labels were then used to train my final models.
+
+4-For Final Prediction:
+For the final prediction, I used the same four models I had used in pseudo-labeling, trained on combination of original and pseudo labels. I trained the models on the entire dataset and validated only on the original labels. This approach gave me the following results for my winning submission (I didn’t use time series for this prediction):
+
+
+
+Then, I trained GBDT models on the whole dataset (tabular data + time series features). And used all these models for final ensemble 
+
+Combining these  models gave me a CV of 4.6 and a private LB of 4.81, which put me in second place. However, since QWK is a noisy metric, I tried adding some other models (logistic regression and decision tree regression) with lower CV scores. This improved my final CV and public LB slightly, but it dropped my private score from 4.81 to 4.77. I couldn’t blame for this because at the end the CV and LB and also the consistency between these two are the only metrics to choose final submission. 
+
+special Thanks to  organizers and Kaggle and all participants who shared their knowledge. Best of luck in the next competition, and Happy New Year!
+
+Comments:
+├─ Sudhansu_IISC_Bangalore (2024-12-22 11:03:36.523000) [+1]
+│  Great work and congratulations on the 5th place finish! 🎉  
+│  
+│  Your approach is really insightful, especially the use of clustering for time series feature extraction. It's impressive how you managed...
+├─ Hamed Abedi (2024-12-22 10:21:37.547000) [+1]
+│  Congrats, Peyman! great execution and well-deserved success!
+├─ Tom Yuen (2024-12-21 00:05:05.337000) [+1]
+│  Thanks for sharing. It's fab. And congratulations"
+│  May I ask about point 3 (Unlabelled data)? Do you only fill features or do you fill PCIAT_total as well?
+│  I spent quite a lot of time filling the u...
+  ├─ peyman armaghan (2024-12-21 18:11:53.903000) [+1]
+  │  thank you tom
+  │  I fill the NaN values in the features using KNN imputation for the entire dataset then I train some base models based on the available PCIAT_total  and ensemble them using hill climbi...

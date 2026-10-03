@@ -1,0 +1,120 @@
+<p><strong>Links to code:</strong></p>
+<ul>
+<li><a href="https://github.com/statist-bhfz/kaggle_cmi_1st_place_solution" target="_blank">Training code on github</a></li>
+<li><a href="https://www.kaggle.com/code/yuanzhezhou/final-sub-cmi3" target="_blank">Inference notebook</a></li>
+</ul>
+<h2>Solution Writeup</h2>
+<p>Congratulations to all the winners and a big respect to the organizers for putting together such a challenging and rewarding competition. <br>
+Special thanks to my teammates <a href="https://www.kaggle.com/yuanzhezhou" target="_blank">yuanzhe zhou</a> and <a href="https://www.kaggle.com/devinanzelmo" target="_blank">Devin Anzelmo</a> for the great collaboration and team spirit.</p>
+<h2>Solution Overview</h2>
+<ul>
+<li><p>Large ensembles for IMU-only and all-features samples, assembled as weighted sum of logits</p></li>
+<li><p>Post-processing to take into account limited number of samples with each class and with each orientation per subject (already described <a href="https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603544" target="_blank">here</a>)</p></li>
+<li><p>Additional models for orientation prediction</p></li>
+</ul>
+<hr>
+<h2>Devin's part</h2>
+<p><strong>1. Preprocessing/feature engineering:</strong></p>
+<ul>
+<li><p>Removed subjects who wore device incorrectly from both training and validation</p></li>
+<li><p>For TOF subsample by taking nine 2x2 squares and calculating mean for each (turn -1 to null first)</p></li>
+<li><p>Some models trained with temporal difference of above TOF features and thermal</p></li>
+<li><p>IMU: raw 7 + temporal diff of <code>acc</code>, rotational diff as posted in notebooks, as well as magnitude of <code>acc</code>/<code>rot</code>; 16 total</p></li>
+<li><p>preprocess left handed to match right handed for IMU and THM/TOF. Flip <code>acc_x</code>, convert <code>rot</code> to xyz euler and flip sign for y and z</p></li>
+<li><p>robust scaler </p></li>
+</ul>
+<p><strong>2. Augmentation:</strong></p>
+<ul>
+<li><p>up scaling/down scaling all features </p></li>
+<li><p>random noise </p></li>
+</ul>
+<p><strong>3. Models:</strong></p>
+<ul>
+<li><p>CNN GRU with different stems for different features. Feature extractor is four branches of CNN with no pooling</p></li>
+<li><p>Pure CNN. Same feature extractor as above but three blocks of residual at end with expanding kernal (5, 9, 13)</p></li>
+<li><p>dense GRU, scores lower but helps a little in ensemble</p></li>
+<li><p>some self excitation models, some not combining helps</p></li>
+<li><p>3D CNN for TOF data scores about 0.83 but blends well</p></li>
+</ul>
+<p><strong>4. Training:</strong></p>
+<ul>
+<li><p>batch size 64</p></li>
+<li><p>train for 60-80 (depending on model) iters with AdamW <code>lr = 0.0005</code></p></li>
+</ul>
+<p><strong>5. Ensemble:</strong></p>
+<ul>
+<li><p>blend IMU models with all-features models </p></li>
+<li><p>blend TOF-only model improves all data score</p></li>
+</ul>
+<hr>
+<h2>Ogurtsov's part</h2>
+<p><strong>1. Filtering data:</strong>    </p>
+<ul>
+<li><p>[all models] remove sequence SEQ_011975 without gesture    </p></li>
+<li><p>[all models] remove sequences with gesture/total ratio &lt; 0.2 (this subset includes almost all shortest sequences)    </p></li>
+<li><p>[models with THM and TOF data] remove sequences with TOF completely missing    (missing values patterns in TOF - 0%, 20% or 100%; 20% missing is ok)   </p></li>
+<li><p>few models were trained without "problematic" subjects SUBJ_045235 and SUBJ_019262</p></li>
+</ul>
+<p><strong>2. Preprocessing:</strong></p>
+<ul>
+<li><p>fill quaternion missing values, if possible    </p></li>
+<li><p>mirror data for left-handed subjects </p></li>
+<li><p>replace -1 TOF values with 500 because -1 encodes large distance    </p></li>
+<li><p>ultimate filling NaNs with <code>seq.ffill().bfill().fillna(0)</code></p></li>
+<li><p>pad/crop by 94 percentile in each fold (~120 max seq length)    </p></li>
+<li><p>no scalers - it gave the largest improvement at early stage    </p></li>
+</ul>
+<p><strong>3. Feature engineering:</strong>    </p>
+<ul>
+<li><p>nothing for THM and TOF    </p></li>
+<li><p>35 IMU features:    </p></li>
+</ul>
+<pre><code>[', ', ', ', ', ', ', ', ', ', ', ',    
+rot_w', ', ', ', ', ', ', ', ', ', ',    
+acc_x2', ', ', ', ', ', ', ', ', ', ', ']
+</code></pre>
+<p><code>acc_x2</code> and other <code>***2</code> features are important part of the solution. <br>
+These features are calculated on values transformed by <code>remove_gravity_from_acc()</code>.    </p>
+<p><strong>4. Models:</strong>    </p>
+<ul>
+<li><p>bunch of models with different architectures for training on IMU-only data and similar models for training with all features    </p></li>
+<li><p>main differences in time dimension processing: LSTM-, attention- or CNN-based    </p></li>
+<li><p>key part - independent processing groups of features at first layers    </p></li>
+</ul>
+<p><strong>5. Augmentations:</strong>    </p>
+<ul>
+<li><p>mixup with <code>MIXUP_ALPHA = 0.4</code></p></li>
+<li><p>augmentation from <a href="https://www.kaggle.com/code/alejopaullier/cmi-sequence-data-augmentation" target="_blank">CMI | Sequence Data Augmentation</a> (thanks <a href="https://www.kaggle.com/alejopaullier" target="_blank">moth</a>):    </p></li>
+</ul>
+<pre><code>transforms = Compose,    
+    TimeStretch,    
+])
+</code></pre>
+<p>with some variations.</p>
+<p>It was hard to pick up right augmetations with right probability &amp; strength and apply it in the correct order.    </p>
+<p><strong>6. Training:</strong>    </p>
+<ul>
+<li><p>CV5 with group by subject K-fold, 5 models are used on inference    </p></li>
+<li><p>200 or 220 epochs, patience 30 or 35    </p></li>
+<li><p><code>torch.optim.Adam</code> with <code>lr = 4e-4</code> or <code>lr = 5e-4</code> and <code>weight_decay = 3e-4</code>    </p></li>
+<li><p><code>CosineAnnealingWarmRestarts</code>; <code>LinearLR</code> + <code>CosineAnnealingWarmRestarts</code> for attention-based models    </p></li>
+<li><p>one model was trained with focal loss and class weights    (class weights obviously mean nothing for mixup samples, maybe it can serve as regularization)  </p></li>
+<li><p>one model contains bug in cross-attention (shared weights for 3 different attentions) but works pretty well</p></li>
+</ul>
+<p><strong>7. Some tricks:</strong>    </p>
+<ul>
+<li><p>pick best result for each fold among 3 runs</p></li>
+<li><p>increase sequence length by 5 on inference (it doesn't improve CV score but effectively decorrelates models)</p></li>
+</ul>
+<hr>
+<h2>zyz's part</h2>
+<p>1.1. Using the pipeline structure from <a href="https://www.kaggle.com/code/myso1987/cmi3-pyroch-baseline-model-add-aug-folds?scriptVersionId=248310337" target="_blank">CMI3 Pyroch Baseline+model_add, Aug, folds</a></p>
+<p>1.2. Fixing many bugs improved my score to 0.85.</p>
+<ol>
+<li><p>Models: simple combinations of RNN and CNN1D.</p></li>
+<li><p>Feature engineering using pytorch, which avoids problem of consistency but makes the training slower.</p></li>
+<li><p>Basic preprocessing mentioned by most teams: fillnan, handedness, etc.</p></li>
+<li><p>Post-processing based on data structure.</p></li>
+<li><p>Augmentation idea from teammates:</p></li>
+</ol>
+<p>6.1. Mask data during training helps.</p>

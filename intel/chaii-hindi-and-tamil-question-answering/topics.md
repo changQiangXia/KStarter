@@ -1,0 +1,82 @@
+# chaii-hindi-and-tamil-question-answering 讨论区（按票数排序，共 80 条）
+
+- [1st Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287923) — 173 票 / 87 评论 / 2021-11-23 **write-up?**
+- [🤯🤯🤯🤯🤯🤯🤯🤯🤯🤯🤯🤯🤯](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287916) — 80 票 / 38 评论 / 2021-11-16 
+- [what are we learning?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/267124) — 78 票 / 17 评论 / 2021-08-21 
+- [Noisy Labels in the dataset](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264395) — 65 票 / 15 评论 / 2021-08-12 
+- [Tentative 2nd place solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287917) — 59 票 / 34 评论 / 2021-11-16 **write-up?**
+- [Two weeks to go!](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/284466) — 51 票 / 38 评论 / 2021-11-01 
+- [Jaccard score for Tamil predictions might be misleading](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264831) — 51 票 / 6 评论 / 2021-08-13 
+- [5th Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288049) — 47 票 / 20 评论 / 2021-12-12 **write-up?**
+- [Sharing Datasets](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264581) — 46 票 / 49 评论 / 2021-08-12 
+- [I trained monolingual RoBERTa-large models for Hindi and Tamil](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/286603) — 45 票 / 22 评论 / 2021-11-09 
+- [36th Place - Trust Your CV - Optimize PP](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287919) — 40 票 / 24 评论 / 2021-11-17 **write-up?**
+- [Thanks to all !!!!!](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/285416) — 39 票 / 31 评论 / 2021-11-04 
+- [Dear Kaggle team, can I get the GM hoodie? 👕](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287925) — 37 票 / 16 评论 / 2021-11-16 
+- [Few very good NLP resource (kaggle links++)](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/268054) — 37 票 / 14 评论 / 2021-08-25 
+- [Previous Competition, Winning Solutions, and Helpful QA Notebooks](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264358) — 36 票 / 2 评论 / 2021-08-11 **write-up?**
+- [17th place solution - BigBird 🐥](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287914) — 34 票 / 20 评论 / 2021-11-16 **write-up?**
+- [4th Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287911) — 33 票 / 23 评论 / 2022-05-01 **write-up?**
+- [Tutorials, learning about QA - personal recommendations](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264493) — 32 票 / 2 评论 / 2021-08-12 
+- [3rd Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287929) — 31 票 / 25 评论 / 2021-11-24 **write-up?**
+- [New Model: RemBERT - Supposedly better than XLM-R](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/267827) — 31 票 / 29 评论 / 2021-08-24 
+- [13th Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287918) — 29 票 / 17 评论 / 2021-11-16 **write-up?**
+- [Muril - multilingual BERT embeddings for Indian languages](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/266351) — 28 票 / 38 评论 / 2021-08-18 
+- [Hindi & Tamil QA papers / datasets](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264344) — 27 票 / 4 评论 / 2021-08-11 
+- [Meme Thread](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/286838) — 27 票 / 34 评论 / 2021-11-11 
+- [it's time to sleep :)](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287915) — 27 票 / 14 评论 / 2021-11-16 
+- [Best Single Model Score](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/279997) — 24 票 / 18 评论 / 2021-10-19 
+- [One upvote for ⭐️Kishal Mandal⭐️'s 0.792 infer notebook?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/286989) — 24 票 / 16 评论 / 2021-11-11 
+- [Leaderboard Shakeup Plot](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287960) — 23 票 / 13 评论 / 2021-11-16 
+- [79th place| My first competition medal | A jump of 501 places in the private leaderboard](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288174) — 22 票 / 16 评论 / 2022-01-23 **write-up?**
+- [(Partially) Cleaned Dataset](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/267227) — 22 票 / 9 评论 / 2021-08-22 
+- [ [Up-to-date Summary] Entering the Final 24 hours! These are the stories up to this point!](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287577) — 22 票 / 4 评论 / 2021-11-14 
+- [12th Place Solution - top of the silver...](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288058) — 21 票 / 3 评论 / 2021-11-16 **write-up?**
+- [All The Ways You Can Compress Transformers](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/270756) — 20 票 / 0 评论 / 2021-09-06 
+- [9th place solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288110) — 20 票 / 11 评论 / 2021-11-16 **write-up?**
+- [Recipe for winning?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264917) — 20 票 / 15 评论 / 2021-08-13 **write-up?**
+- [Hindi Questions Dataset](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/265162) — 20 票 / 0 评论 / 2021-08-14 
+- [Welcome to chaii 2021!](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264578) — 19 票 / 1 评论 / 2021-08-12 
+- [🏅 Chaii - Collection of Solutions 🏅](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287921) — 19 票 / 7 评论 / 2021-11-16 **write-up?**
+- [Should I train two models Hindi and Tamil?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264749) — 19 票 / 14 评论 / 2021-08-13 
+- [14th place submission](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288168) — 19 票 / 4 评论 / 2021-11-17 **write-up?**
+- [Competition is Finalized - Congratulations to our Winners; Recap](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/290032) — 18 票 / 1 评论 / 2021-11-22 
+- [Are there answer_start positions mistaken?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/266109) — 18 票 / 10 评论 / 2021-08-18 
+- [7th Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287948) — 18 票 / 13 评论 / 2021-11-16 **write-up?**
+- [16th place solution: Data augmentation and fixes + Evaluation across different models. ](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287956) — 18 票 / 4 评论 / 2021-11-16 **write-up?**
+- [Samanantar: Largest Translation dataset for Indian languages (AI4Bharat)](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264730) — 18 票 / 4 评论 / 2021-08-13 
+- [Just a few hours to go, looking forward to the end of the competition](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287754) — 18 票 / 15 评论 / 2021-11-15 
+- [MuRIL Large](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/278895) — 17 票 / 13 评论 / 2021-10-15 
+- [Papers on MultiLingual Question Answering](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264695) — 17 票 / 1 评论 / 2021-08-12 
+- [21 place solution: Trust CV & Differential fusion](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287946) — 16 票 / 9 评论 / 2021-11-16 **write-up?**
+- [Demo Notebooks with Data Recipes and Augmentations and W&B Kaggle Talk](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/290842) — 15 票 / 1 评论 / 2021-11-26 
+- [6th place solution - with a visualization of our Jaccard scores over time](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288442) — 15 票 / 11 评论 / 2021-11-17 **write-up?**
+- [IndicNLPSuite - resources for Indic NLP](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264841) — 15 票 / 0 评论 / 2021-08-13 
+- [Train with dividing Hindi and Tamil](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/267604) — 15 票 / 6 评论 / 2021-08-24 
+- [Congrats @rhtsingh on becoming Kernels GM](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/267488) — 15 票 / 7 评论 / 2021-08-23 
+- [📒Comparison of the solutions of the top five teams！](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/289197) — 14 票 / 3 评论 / 2021-11-19 **write-up?**
+- [Accumulating gradients in finetuning](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/286353) — 14 票 / 5 评论 / 2021-11-08 
+- [tamil and hindi dataset](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/268822) — 14 票 / 6 评论 / 2021-08-29 
+- [[Summary list] - Every single SQuAD1.1 paper in history summarized ](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/285052) — 14 票 / 1 评论 / 2021-11-03 
+- [Last mile - Thanks for the competition! ](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287824) — 13 票 / 0 评论 / 2021-11-15 
+- [Upload file to kaggle from google drive](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/286121) — 13 票 / 5 评论 / 2021-11-08 
+- [🥇Gold Solutions Summary 🥇](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288565) — 13 票 / 2 评论 / 2021-11-18 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288001) — 13 票 / 3 评论 / 2021-11-16 **write-up?**
+- [Need to get stared with NLP ?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/271539) — 13 票 / 11 评论 / 2021-09-11 
+- [How many folds can you stuff in?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/286245) — 13 票 / 24 评论 / 2021-11-08 
+- [cs224n - Winter 2021](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/285491) — 13 票 / 5 评论 / 2021-11-04 
+- [submission time?](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264432) — 13 票 / 6 评论 / 2021-08-12 
+- [37th Place Solution [Sad MT5 Vibes]](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288365) — 13 票 / 3 评论 / 2022-02-11 **write-up?**
+- [CV vs. LB Score](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264802) — 12 票 / 26 评论 / 2021-08-13 
+- [Handling Long Answers](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264628) — 12 票 / 1 评论 / 2021-08-12 
+- [Any advice about a systematic way to track your experimentations for Kaggle competition](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287488) — 12 票 / 7 评论 / 2021-11-14 
+- [We all play with our XLM-Roberta-large while nvidia releases 530B parameters model](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/278526) — 12 票 / 5 评论 / 2021-10-14 
+- [1000 forks 😱!!!!](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287354) — 12 票 / 6 评论 / 2021-11-13 
+- [Helpful Videos on QA by Past Competition Winners 🏆](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/265779) — 12 票 / 1 评论 / 2021-08-16 
+- [Baseline Model LB (Weights Included 🔥)](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/269061) — 12 票 / 18 评论 / 2021-08-30 
+- [Sebastian Ruder's talk on Multilingual QA at EMNLP 2021](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287214) — 12 票 / 0 评论 / 2021-11-12 
+- [18th place solution: label variation](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287945) — 12 票 / 8 评论 / 2021-11-19 **write-up?**
+- [43rd Place Solution](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288419) — 12 票 / 6 评论 / 2021-11-22 **write-up?**
+- [That was fun and all...](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287943) — 12 票 / 9 评论 / 2021-11-16 
+- [Ensembling (combining) outputs of different models.](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/280628) — 12 票 / 8 评论 / 2021-10-22 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/264349) — 10 票 / 20 评论 / 2021-08-11 

@@ -1,0 +1,210 @@
+# https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459627
+
+Topic #459627: 2nd Place Solution
+  Author: K_mat
+  Posted: 2023-12-06 03:22:42.754000
+  Votes: 177  Comments: 27
+
+Thanks to organizers for this interesting challenge and congrats everyone who enjoyed it! It was a fun competition though the data is very simple 1D data. I look forward to seeing the various solutions.
+
+Overview of my solution
+
+My pipeline consists of:
+
+
+
+First Stage
+
+
+Preprocess and Feature engineering
+
+Event Detection and Sleep/Awake Classification by 1DCNN(U-NET)
+
+PostProcess of 1D CNN (such as Peak Detection)
+
+Second Stage
+
+
+Use ML instead of the Post-processing that is difficult to adjust
+
+Rescoring by LGBM that can consider the limitation of 2evets/day
+
+Third Stage
+
+
+Predict as many events as possible just by shifting the step of the base prediction above.
+
+Scoring the generated predictions by LGBM
+
+Ensemble
+
+
+combination of averaging and WBF ensemble
+
+
+I think the 2nd stage is the most unique. 
+This model predict the daily accuracy curve of candidates received from 1st stage. 
+
+
+
+Details are below.
+
+1st Stage: Event Detection and Sleep/Awake Classification
+
+
+
+
+2nd Stage: Rescoring the confidence considering the limitation of 2 events/day
+
+Concept
+
+I applied 2nd stage for the following 2 reasons.
+
+1. Less than 2 events/day
+
+The first stage NN cannot consider the very important limitation of this competition that the event occurs at most twice in a day. Which do you think is important?
+
+
+  
+A) The third candidate in a day with a confidence score of 0.20.
+  B) The first candidate in a day with a confidence score of 0.19.
+
+
+In many cases, the latter is more important than the former though the score is lower.
+
+Long-term features
+
+NN is really strong. However, it’s not good at handling meta features and long-term cyclic features. For example,
+“He can be sleeping longer than the usual. This might not actual wakeup.”
+“This onset is relatively unclear compared to the other days.”
+
+How to train 2nd stage model
+
+
+
+3rd Stage: Add as many events as possible
+
+
+
+Ensemble
+
+
+
+prepare 2 CNN models
+
+Averaging 10(5fold x 2seed) predictions at 1st stage for each model
+
+Run 2nd stage for each model
+
+WBF-like Ensemble of 2 models
+
+Run 3rd stage
+
+
+
+Ablation Study
+
+not yet
+
+
+
+CV Scores
+
+
+1st stage: 0.826 (-0.019)
+
+add 2nd stage: 0.832 (-0.012)
+
+add third stage: 0.842 (-0.002)
+
+add model ensemble(2models): 0.844 (baseline. final submit)
+
+
+Inference
+
+https://www.kaggle.com/code/kmat2019/cmi-sleep-2ndplace
+
+Training
+
+https://www.kaggle.com/code/kmat2019/cmisleep-training-sample-2ndplace-kmat
+
+Comments:
+├─ JiachengCui123 (2024-02-29 21:57:22.263000) [+3]
+│  Hi K_mat! I really enjoyed reading your solutions, and congratulation for getting the first place in solo. However, I have some confusions regarding your first phase, which is training the 1D CNN U...
+├─ NikhilMishra (2023-12-06 04:44:25.380000) [+4]
+│  I loved reading your solution, especially  the 2nd stage LightGBM. You dominated the competition from the start to end. Congratulations !!
+  ├─ K_mat (2023-12-08 07:14:39.517000) [+0]
+  │  Thank you. Congratulations to you too !
+├─ Chris Deotte (2023-12-11 00:33:51.057000) [+1]
+│  Congratulations K_MAT on solo cash gold finish! (And congratulations on your previous solo Kaggle comp top1 and top2 object detection finishes!) Thanks for the beautiful pictures in your writeup.
+│  
+│  ...
+  ├─ K_mat (2023-12-14 14:35:02.870000) [+1]
+  │  Thank you Chris for mentioned the other results as well :) Congratulations on your solo gold too @cdeotte! 
+  │  
+  │  
+  │    
+  │  Do you have any idea how much this boost CV and LB?
+  │  
+  │  
+  │  I tested your postprocessing, ...
+├─ Co_yamax (2023-12-09 16:12:01.783000) [+1]
+│  Congratulation for the solo gold medal you have got this time! The second part of your solution is unique indeed, and the other parts are also impressive to me.
+├─ C R Suthikshn Kumar (2023-12-07 09:26:30.640000) [+1]
+│  Congratulations on securing the second position in this competition. Appreciate your sharing of the solution.
+├─ Fnoa (2023-12-07 07:37:17.363000) [+1]
+│  It is amazing how you did the second stage model (LGB). we tried to do it but we didnt make it work.
+│  I should test your approach.
+│  Congratulations! Nice solution
+├─ Ozkan (2023-12-06 18:04:50.260000) [+1]
+│  Congratulations for the solution and great explanations
+├─ Rob Mulla (2023-12-06 13:21:21.820000) [+1]
+│  Great write up! Congrats on your finish. I'm really interested in your 3rd stage. We spent a while trying to figure out post processing tricks to account for the 15 minute pattern in the labels wit...
+  ├─ K_mat (2023-12-08 07:31:49.313000) [+0]
+  │  I could not account for the 15 minute pattern as explicitly as the 1st place solution. I just added predictions offset from base prediction by 2, 4, 8, 16 minutes, believing that they would cover t...
+├─ Amir Mohammadikarbalaei (2023-12-06 09:40:32.617000) [+1]
+│  Great work, Love your detailed solution
+├─ narsil (jobs-in-data.com) (2023-12-06 08:26:26.187000) [+1]
+│  Congrats!! Amazing, well - structured write up!
+├─ FabioDevIsTyping (2023-12-06 07:59:42.830000) [+1]
+│  Very interesting, congrats and thank you for sharing :)
+├─ Catharis (2023-12-06 07:19:26.927000) [+1]
+│  Very elegant solution and lots to learn from! congrats @kmat2019
+├─ Yijie Xu (2023-12-06 06:35:24.217000) [+1]
+│  Really awesome, love how the first stage itself performs great already. Looking forward to details
+├─ Indra Sonowal (2023-12-06 06:29:02.737000) [+1]
+│  Congrats @kmat2019. Keep achieving more.
+├─ 不眠症🍳 (2023-12-06 05:31:21.123000) [+1]
+│  😍😍😍😍😍
+├─ Cotmd (2023-12-06 05:16:16.560000) [+1]
+│  This solution is awesome!! Thanks for your writing. I got inspired and learned a lot!🤗
+├─ kerry sun (2023-12-06 03:27:31.077000) [+1]
+│  Wow how amazing work, congratulations!
+├─ vialactea (2023-12-08 03:14:50.803000) [+2]
+│  Thanks for sharing and congratulations on the 2nd place and great ideas!!!
+│  
+│  A few questions:
+│  
+│  
+│  
+│  How did you handle labeling errors in the training data? did you use any filtering rules (manual or a...
+  ├─ K_mat (2023-12-08 08:07:58.367000) [+6]
+  │  Thank you for the questions but this is not "few" questions for me. 😂
+  │  
+  │  
+  │  
+  │  
+  │  How did you handle labeling errors?
+  │  Are you talking about nan in ground truth? I added the binary mask  to the inputs of 1s...
+    ├─ vialactea (2023-12-08 19:04:23.433000) [+2]
+    │  Thanks for taking the time to answer my "few" questions 😁
+    │  
+    │  I failed to explain myself in my first question. What I meant to ask was how you had handled the errors in the labels of the training data...
+    ├─ K_mat (2023-12-14 14:41:19.193000) [+0]
+    │  I used all events as removing them didn't affect the score so much. And I finally add the 60 minutes and 1 day offset predictions after 3rd stage with very low score to cope with the annotation err...
+├─ Cody_Null (2023-12-06 03:58:08.547000) [+2]
+│  Great writeup, excited to look through this. I tried multi stage after my CNN so I am curious to see how you got it to work!
+├─ Ankita Nain (2023-12-10 14:52:42.397000) [+0]
+│  Thanks for sharing and Congratulations 🎉
+├─ [deleted] (2023-12-28 09:39:28.903000) [+0]
+│  [deleted]

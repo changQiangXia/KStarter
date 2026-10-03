@@ -1,0 +1,82 @@
+# asl-signs 讨论区（按票数排序，共 80 条）
+
+- [1st place solution - 1DCNN combined with Transformer](https://www.kaggle.com/competitions/asl-signs/discussion/406684) — 191 票 / 48 评论 / 2023-05-04 **write-up?**
+- [[LB0.76 one fold !!!! ] my pytorch transformer experiment results](https://www.kaggle.com/competitions/asl-signs/discussion/391265) — 128 票 / 180 评论 / 2023-02-28 
+- [2nd Place Solution | Google - Isolated Sign Language Recognition](https://www.kaggle.com/competitions/asl-signs/discussion/406306) — 118 票 / 48 评论 / 2023-07-26 **write-up?**
+- [44th Place Silver - How To Improve Best Public Notebook](https://www.kaggle.com/competitions/asl-signs/discussion/406302) — 73 票 / 41 评论 / 2023-05-02 **write-up?**
+- [1st place code with reproducibility](https://www.kaggle.com/competitions/asl-signs/discussion/406978) — 72 票 / 12 评论 / 2023-05-04 **write-up?**
+- [6th Place Solution - Transformer Tweaking Madness](https://www.kaggle.com/competitions/asl-signs/discussion/406537) — 49 票 / 14 评论 / 2023-05-03 **write-up?**
+- [Converting Models to TensorFlow Lite](https://www.kaggle.com/competitions/asl-signs/discussion/390182) — 48 票 / 3 评论 / 2023-02-24 
+- [🗢 Lovely lips](https://www.kaggle.com/competitions/asl-signs/discussion/391812) — 45 票 / 18 评论 / 2023-03-02 
+- [3rd Place Solution](https://www.kaggle.com/competitions/asl-signs/discussion/406568) — 37 票 / 5 评论 / 2023-05-02 **write-up?**
+- [[Q&A] TFlite conversion (e.g. pytorch to tflite)](https://www.kaggle.com/competitions/asl-signs/discussion/390935) — 36 票 / 39 评论 / 2023-02-27 
+- [Let's Merge All Landmarks!](https://www.kaggle.com/competitions/asl-signs/discussion/395380) — 34 票 / 7 评论 / 2023-03-17 
+- [4th place solution](https://www.kaggle.com/competitions/asl-signs/discussion/406673) — 32 票 / 2 评论 / 2023-05-03 **write-up?**
+- [Metric constraints patch](https://www.kaggle.com/competitions/asl-signs/discussion/393554) — 30 票 / 35 评论 / 2023-03-09 
+- [Interactive Dashboard to visualize ALL the training data per category!](https://www.kaggle.com/competitions/asl-signs/discussion/396753) — 29 票 / 4 评论 / 2023-03-22 
+- [8th place solution ... close but no cigar](https://www.kaggle.com/competitions/asl-signs/discussion/406411) — 29 票 / 6 评论 / 2023-05-02 **write-up?**
+- [ASL Kaggle Welcome](https://www.kaggle.com/competitions/asl-signs/discussion/390033) — 28 票 / 27 评论 / 2023-02-23 
+- [5th place solution with code](https://www.kaggle.com/competitions/asl-signs/discussion/406491) — 28 票 / 1 评论 / 2023-05-05 **write-up?**
+- [A Live Demo in the browser](https://www.kaggle.com/competitions/asl-signs/discussion/402167) — 27 票 / 10 评论 / 2023-04-17 
+- [EDA: Handedness by participant ID](https://www.kaggle.com/competitions/asl-signs/discussion/392335) — 27 票 / 8 评论 / 2023-03-04 
+- [Hello from the TensorFlow Lite team!](https://www.kaggle.com/competitions/asl-signs/discussion/390008) — 26 票 / 75 评论 / 2023-02-23 
+- [9th place solution](https://www.kaggle.com/competitions/asl-signs/discussion/406343) — 26 票 / 2 评论 / 2023-05-03 **write-up?**
+- [Handling Pre-processing in PyTorch](https://www.kaggle.com/competitions/asl-signs/discussion/391301) — 25 票 / 0 评论 / 2023-03-01 
+- [12th place solution - MLP Based (Structured Keypoint Pooling network)](https://www.kaggle.com/competitions/asl-signs/discussion/406300) — 25 票 / 2 评论 / 2023-05-02 **write-up?**
+- [30th Place Solution - ChatGPT can be helpful for quick idea realization](https://www.kaggle.com/competitions/asl-signs/discussion/406733) — 22 票 / 2 评论 / 2023-05-03 **write-up?**
+- [Classwise Performance](https://www.kaggle.com/competitions/asl-signs/discussion/392560) — 22 票 / 4 评论 / 2023-03-05 
+- [0.60 is the threshold for making the recognition-based game](https://www.kaggle.com/competitions/asl-signs/discussion/391282) — 21 票 / 3 评论 / 2023-02-28 
+- [14th place solution: publicly shared Transformer architecture was so strong!](https://www.kaggle.com/competitions/asl-signs/discussion/406301) — 20 票 / 1 评论 / 2024-04-22 **write-up?**
+- [11th place solution with code](https://www.kaggle.com/competitions/asl-signs/discussion/406657) — 18 票 / 2 评论 / 2023-05-03 **write-up?**
+- [10th place solution](https://www.kaggle.com/competitions/asl-signs/discussion/406434) — 18 票 / 3 评论 / 2023-05-02 **write-up?**
+- [🥈18th Place Solution🥈 ](https://www.kaggle.com/competitions/asl-signs/discussion/406441) — 17 票 / 11 评论 / 2023-05-03 **write-up?**
+- [How the data were recorded? Can all 250 words be completed with one hand?](https://www.kaggle.com/competitions/asl-signs/discussion/390715) — 17 票 / 11 评论 / 2023-02-26 
+- [[place holder] stable diffusion for extra data generation ](https://www.kaggle.com/competitions/asl-signs/discussion/395868) — 16 票 / 5 评论 / 2023-03-19 
+- [Let's Get Landmarks Animated!](https://www.kaggle.com/competitions/asl-signs/discussion/394933) — 15 票 / 9 评论 / 2023-03-15 
+- [How to make sub models larger than 100 mb](https://www.kaggle.com/competitions/asl-signs/discussion/394371) — 15 票 / 8 评论 / 2023-03-13 
+- [Skeleton Based Action Recognition: A failed attempt](https://www.kaggle.com/competitions/asl-signs/discussion/406122) — 15 票 / 2 评论 / 2023-05-01 
+- [Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/asl-signs/discussion/406432) — 15 票 / 5 评论 / 2023-05-02 
+- [49th place silver solution ](https://www.kaggle.com/competitions/asl-signs/discussion/406426) — 15 票 / 3 评论 / 2023-05-02 **write-up?**
+- [Different scoring time](https://www.kaggle.com/competitions/asl-signs/discussion/396211) — 15 票 / 10 评论 / 2023-03-20 
+- [6th Place Code](https://www.kaggle.com/competitions/asl-signs/discussion/406712) — 15 票 / 2 评论 / 2023-05-03 **write-up?**
+- [👉👉[13𝒕𝒉]𝗜𝗻𝘁𝗲𝗿𝗲𝘀𝘁𝗶𝗻𝗴 𝗵𝗮𝗻𝗱𝗺𝗮𝗱𝗲 𝗳𝗲𝗮𝘁𝘂𝗿𝗲𝘀 𝘀𝗵𝗮𝗿𝗲👈👈🥈🤟](https://www.kaggle.com/competitions/asl-signs/discussion/406469) — 14 票 / 1 评论 / 2023-05-02 
+- [🥽 Test your TFLite Model in Real-Time using your Webcam!](https://www.kaggle.com/competitions/asl-signs/discussion/400323) — 14 票 / 1 评论 / 2023-04-07 
+- [Why private test score is so high?](https://www.kaggle.com/competitions/asl-signs/discussion/406364) — 14 票 / 18 评论 / 2023-05-02 
+- [Do not waste a lottery ticket!](https://www.kaggle.com/competitions/asl-signs/discussion/405736) — 13 票 / 6 评论 / 2023-04-29 
+- [CV vs LB - is everyone seeing a lower LB score?](https://www.kaggle.com/competitions/asl-signs/discussion/391203) — 13 票 / 26 评论 / 2023-02-28 
+- [Do the train and test videos come from the same data contributors?](https://www.kaggle.com/competitions/asl-signs/discussion/390510) — 12 票 / 4 评论 / 2023-02-25 
+- [Similar words / signs](https://www.kaggle.com/competitions/asl-signs/discussion/396235) — 10 票 / 8 评论 / 2023-03-20 
+- [Call for paper machine learning applied to sign language](https://www.kaggle.com/competitions/asl-signs/discussion/393402) — 10 票 / 6 评论 / 2023-03-09 
+- [👨‍💻 Compute Distance & Angle Based Features using Keras Custom Layers ](https://www.kaggle.com/competitions/asl-signs/discussion/399904) — 10 票 / 8 评论 / 2023-04-06 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/asl-signs/discussion/384895) — 10 票 / 21 评论 / 2023-02-10 
+- [Filtering Spatial and Temporal Data for Optimum Performance 📈](https://www.kaggle.com/competitions/asl-signs/discussion/397924) — 10 票 / 4 评论 / 2023-03-27 
+- [Introduction to TensorFlow Lite Udacity Free Course](https://www.kaggle.com/competitions/asl-signs/discussion/390027) — 10 票 / 10 评论 / 2023-02-23 
+- [Frames per second?](https://www.kaggle.com/competitions/asl-signs/discussion/390687) — 9 票 / 6 评论 / 2023-02-26 
+- [Synthesized 3D Hand Pose Dataset & Z-axis Prediction Model](https://www.kaggle.com/competitions/asl-signs/discussion/406617) — 9 票 / 2 评论 / 2023-05-03 
+- [Solution - Single transformer without val dataset](https://www.kaggle.com/competitions/asl-signs/discussion/406346) — 9 票 / 4 评论 / 2023-05-08 **write-up?**
+- [Very slow fitting (about 10 hours for 10 epochs](https://www.kaggle.com/competitions/asl-signs/discussion/401481) — 8 票 / 4 评论 / 2023-04-13 
+- [The new Lion optimizer](https://www.kaggle.com/competitions/asl-signs/discussion/392942) — 8 票 / 4 评论 / 2023-03-07 
+- [26th place solution](https://www.kaggle.com/competitions/asl-signs/discussion/406659) — 8 票 / 5 评论 / 2023-05-03 **write-up?**
+- [yes, it is working on WLASL dataset](https://www.kaggle.com/competitions/asl-signs/discussion/399696) — 8 票 / 13 评论 / 2023-04-05 
+- [ 5x th place solutions (Silver) - Single model and hand made feature approach.(public : 0.84469)](https://www.kaggle.com/competitions/asl-signs/discussion/406356) — 8 票 / 1 评论 / 2023-05-02 **write-up?**
+- [Shuwa Gesture Toolkit](https://www.kaggle.com/competitions/asl-signs/discussion/397275) — 8 票 / 0 评论 / 2023-03-24 
+- [119th Place Solution: Transformer is much much better than GRU!](https://www.kaggle.com/competitions/asl-signs/discussion/406538) — 8 票 / 1 评论 / 2023-05-02 **write-up?**
+- [Torch Preprocessing ≠ Tensorflow Preprocessing](https://www.kaggle.com/competitions/asl-signs/discussion/393062) — 7 票 / 7 评论 / 2023-03-07 
+- [KerasTuner for quick search of model hyperparameters](https://www.kaggle.com/competitions/asl-signs/discussion/392802) — 7 票 / 0 评论 / 2023-03-06 
+- [Nobuco, - pytorch2tf conversion made easy.](https://www.kaggle.com/competitions/asl-signs/discussion/402545) — 7 票 / 3 评论 / 2023-04-18 
+- [The first 0.67 lb notebook is introduced](https://www.kaggle.com/competitions/asl-signs/discussion/394376) — 7 票 / 0 评论 / 2023-03-13 
+- [28th place solution - Using Arcface is not trivial.](https://www.kaggle.com/competitions/asl-signs/discussion/406630) — 7 票 / 1 评论 / 2023-12-26 **write-up?**
+- [Top 8% Bronze Medal Solution](https://www.kaggle.com/competitions/asl-signs/discussion/406354) — 7 票 / 1 评论 / 2023-05-02 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/asl-signs/discussion/406557) — 6 票 / 5 评论 / 2023-05-02 
+- [How to ensure the inference time limit in advance?](https://www.kaggle.com/competitions/asl-signs/discussion/390328) — 6 票 / 1 评论 / 2023-02-25 
+- [Dealing with variable sequence lengths in combination with TfLite requirement](https://www.kaggle.com/competitions/asl-signs/discussion/390651) — 6 票 / 3 评论 / 2023-02-26 
+- [ArcFace or Additive Angular Margin Loss paper with code](https://www.kaggle.com/competitions/asl-signs/discussion/392666) — 6 票 / 3 评论 / 2023-03-06 
+- [4th place codes](https://www.kaggle.com/competitions/asl-signs/discussion/407225) — 6 票 / 4 评论 / 2023-05-05 **write-up?**
+- [Model soup is not working here](https://www.kaggle.com/competitions/asl-signs/discussion/398741) — 6 票 / 7 评论 / 2023-03-31 
+- [Model generalization and perfomance plateau](https://www.kaggle.com/competitions/asl-signs/discussion/406457) — 6 票 / 3 评论 / 2023-05-02 
+- [Is it possible to check the time taken for the submission after it is successfully completed?](https://www.kaggle.com/competitions/asl-signs/discussion/397093) — 6 票 / 4 评论 / 2023-03-24 
+- [Doubt regarding how mediapipe landmarks were obtained](https://www.kaggle.com/competitions/asl-signs/discussion/398113) — 5 票 / 7 评论 / 2023-03-28 
+- [Reminder: Call for papers for Special Session on Machine Learning Applied to Sign Language at ESANN 2023](https://www.kaggle.com/competitions/asl-signs/discussion/403647) — 5 票 / 0 评论 / 2023-04-24 
+- [ASL Dictionary for making effective features](https://www.kaggle.com/competitions/asl-signs/discussion/392384) — 5 票 / 3 评论 / 2023-03-05 
+- [Do we really need all the face marks?](https://www.kaggle.com/competitions/asl-signs/discussion/391394) — 5 票 / 6 评论 / 2023-03-01 
+- [Google I/O spot on PopSign and this competition](https://www.kaggle.com/competitions/asl-signs/discussion/409421) — 4 票 / 0 评论 / 2023-05-10 

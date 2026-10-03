@@ -1,0 +1,133 @@
+# https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609443
+
+Topic #609443: 9th Solution
+  Author: CPMP
+  Posted: 2025-09-26 17:06:18.076000
+  Votes: 23  Comments: 6
+
+Thanks to kaggle and everyone involved for hosting such an interesting competition. There was a lot to learn, and that's why we compete. 
+
+TLDR
+
+Our solution is a a mix of transit light curve curve fitting using either batman + scipy-opitimize or pylightcurve-torch + gpytorch. We then trained a linear NN to calibrate predictions and estimate sigma values.
+
+We only discovered Pylightcurve-torch and GPytorch a week before the end. We then sprinted to replicate and improve the batman pipeline with these. 
+
+Cross validation
+
+Cross validation was straightforward. We simply split the star into 4 folds. We evaluated the curve fitting steps without CV as there was no training, but for the NN postprocessing we did proper CV evaluation. Overall we had very good CV / LB correlation.
+
+Data preprocessing
+
+We used @ilu000 preprocessing as a basis which has been shared here: https://www.kaggle.com/code/ilu000/ariel25-quick-data-prep-improved
+
+We added a minor tweak for detecting cosmic rays, which was also shared in @jeroencottaar notebook https://www.kaggle.com/code/jeroencottaar/demonstrate-apparent-label-issue
+
+We made the additional following changes. They yield over 0.005 score improvement when we implement them. 
+
+
+
+Inverted offset. The formula provided to use at the start of the competition was the formula used to encode the data. Given we had to decode, we have to invert both operations in the formula. Host only fixed one inversion during the competition. 
+
+The dark frame must be multiplied by the duration since sensor reset. We therefore updated the code this way:
+
+
+        
+         sensor == :
+            dt = torch.ones((signal), device=) * 
+            dt[::] += 
+         sensor == :
+            dt = torch.tensor(dt_airs).to()
+            dt[::] += 
+
+
+
+
+Jitter removal. We centered the signal by computing the center oliver spatial dimensions, then using scipy 2d interpolate to move the center to the center of the frame. Doing so we need to crop the outermost pixels.
+
+
+Here is an example of correcting AIRS center on the spatial axis. Orange is after correction.
+
+
+
+
+
+Some frames have very large center deviations. This is because of cosmic rays. We simply discard these frames and replace them by the one right before it. Here is an example of two cosmic rays effect on FGS1.
+
+
+
+
+
+
+We did not fix dispersion changes due to Jitter. It can still be significant. Here is the same planet where we plot the normalized variance of signal in one of FGS1 spatial axis. The bump in the middle means that more signal will be cropped from a narrow square.
+
+
+
+
+-Light is not appearing as a nice ellipsis on the FGS1 sensor. Here is the log scaled average over all planets of FGS1 signal, after centering it:
+
+
+
+We masked the darker part of that average, rather than using a square crop of the center.
+
+Main approach
+
+We employed an iterative curve-fitting strategy to extract the planet-to-star radius ratio (Rp/Rs) from noisy transient light curve data. The procedure consisted of progressively refining the fit across different data representations:
+
+
+
+Phase detection – The orbital phase of the signal was identified to align the transit features. We used the largest gradient average over wavelengths, as in public notebooks.
+
+Baseline modeling – A degree 2 polynomial fit was applied to the out-of-transit “arms” of the light curve to model and remove baseline trends.
+
+Global transit fitting – The normalized light curve was fit using the batman transit model, yielding an initial estimate of Rp.
+
+FGS refinement – The fit was repeated on the FGS data
+
+Wavelength binning – The same fitting procedure was applied to 18 wavelength buckets, capturing wavelength-dependent variations.
+
+Wavelength binning with GP – For the bucketed data, a 2D polynomial plus Gaussian Process (GP) model was used to jointly capture systematic trends and correlated noise, refining the Rp estimate.
+
+
+Postprocessing
+
+
+
+combine predictions. We combined the results from the different curve fitting steps into 18 values for prediction and 283 values for sigma; those then go into a linear NN which weights the different sigma estimates and expands the 18 predictions back to 283 values
+
+train simple NN for calibrating predictions and sigma.. We use a NN because we used a GLLoss instead of the usual MSE for linear regression.
+
+
+ torch
+ torch.nn  nn
+ torch.nn.functional  F
+
+
+ (nn.Module):
+     ():
+        ().__init__()
+        .pred_fc = nn.Linear(, , bias=)
+        .sigma_fc = nn.Linear(, , bias=)
+
+     ():
+        x = torch.log(pred).()
+        x = .pred_fc(x).squeeze(-)
+
+        y = torch.stack([sigma, s_std, var_l, s_std2, s_std3], ).()
+        y = torch.log(y)
+        y = .sigma_fc(y).squeeze(-)
+         x, y
+
+Comments:
+├─ mudesteven (2025-09-26 22:47:44.250000) [+1]
+│  Thanks for posting this write-up! I have tried Pylightcurve-torch and batman as well, but my results are less than ideal. What specific method did you use to fit the light curve? Also, how did you ...
+  ├─ CPMP (2025-09-26 23:49:22.170000) [+0]
+  │  We used Nelder-Mead in scipy-optimize. To make it work you need to have good starting points. We estimated all parameters form observed data, like max dip to get a starting point for planet radius ...
+├─ Horikita Saku (2025-09-27 07:25:00.393000) [+0]
+│  Thank you very much for your solution! I also tried using Batman before, especially when it came to correcting the limb darken issue, but it didn't yield satisfactory results. Have you considered m...
+  ├─ CPMP (2025-09-27 07:40:07.067000) [+1]
+  │  I am not sure. I see you aren't sure either given you have not open sourced your code.
+    ├─ Horikita Saku (2025-09-27 10:19:36.253000) [+2]
+    │  Yes. Agree and totally understand😄
+├─ [deleted] (2025-09-27 17:39:46.543000) [+0]
+│  Thank you so much for this solution

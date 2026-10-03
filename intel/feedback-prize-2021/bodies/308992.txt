@@ -1,0 +1,579 @@
+# https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308992
+
+Topic #308992: [Placeholder] my solution and insights
+  Author: hengck23
+  Posted: 2022-02-21 10:41:21.424000
+  Votes: 147  Comments: 150
+
+… to be updated …
+
+for a start:
+
+
+
+baseline method : my inference code and CV/LB score
+https://www.kaggle.com/hengck23/1-birdformer-1-longformer-one-fold
+
+
+the most import tricks:
+
+
+
+"The private evaluation data will contain the same essay topics. Hope this helps!"
+
+identify the 15 topics and create your own dataset! in theory you can add  cut and paste  from same position. If the position is different claim becomes counter-claim … i want to use another BERT model to generate synthetic data
+
+
+https://www.kaggle.com/c/feedback-prize-2021/discussion/297688
+https://www.kaggle.com/c/feedback-prize-2021/discussion/295181
+
+
+
+
+PERSUADE  Corpus : demographic distribution of the students, etc
+https://www.kaggle.com/c/feedback-prize-2021/discussion/297688
+
+
+information on dataset
+https://files.eric.ed.gov/fulltext/ED615492.pdf
+https://www.kaggle.com/c/feedback-prize-2021/discussion/296658
+
+
+annotation process
+using tagtog
+https://www.youtube.com/watch?v=uAL3J9E457U
+
+
+
+
+concluding statement  and position detection rate are high (also due to their position in the document).
+
+
+
+use this to decide if it is a claim or counter claim (iu.e. it is easier to classify claim or counter-claim if we know what is the position of the author)
+
+
+maybe the model need to read the document twice
+
+since there are only 15 topics, you might just build a 30-class topic classifier (for and against)
+
+
+e.g. you can use a question-and-answer, seq-seq model for:
+
+input [position #1][suspected claim #2]
+output  #2 is claim with probability ….
+
+Comments:
+├─ hengck23 (2022-02-22 06:29:39.087000) [+20]
+│  the baseline
+│  
+│  seems to me that the other units should have global attention to position and conclusion unit(since position is accurate and it is what that determines if it is claim, counterclaim or...
+  ├─ hengck23 (2022-02-22 07:44:28.463000) [+9]
+  │  i spent some time to try different models in huggingface hub. i find a NLP unet!
+  │  
+  │  
+  │  
+  │  cross validation results looks good
+  │      cross validation (fold 0)
+  │      longformer-large  +  bigbird-large  +  funn...
+  ├─ Cuog Nguyen (2022-02-22 08:38:26.987000) [+0]
+  │  amazing, thanks for your report, looks like there's a lot more to try
+  ├─ Devansh Chowdhury (2022-02-23 04:07:40.680000) [+0]
+  │  @hengck23 Have u used 3 folds or 5 folds?
+  ├─ hengck23 (2022-02-23 05:03:43.233000) [+0]
+  │  2 out of 10 folds
+  ├─ Jaideep (2022-02-23 13:24:14.353000) [+0]
+  │  @hengck23 thanku for your posts
+  │  One thing Funnel T. needs how much GPU ,with bs=4
+  │  you are using 10 folds for all your models ?
+  ├─ Bucky Cheng (2022-02-23 17:49:08.563000) [+0]
+  │  Hi @hengck23 , very thanks for your sharing,
+  │  May I know what max_seq len did you used in funnel-transformer large? I found the max_seg len is 512 in funnel-transformer large, but seems you using 16...
+  ├─ hengck23 (2022-02-23 18:52:06.427000) [+0]
+  │  1600 is used
+  ├─ GUNER (2022-02-23 20:28:28.250000) [+0]
+  │  For each model you have a score under CV column: as in bigbird base fold0 cv: .664928.
+  │  Does 'CV' mean that you run the same model and same fold for more iterations (with different seed maybe)? Or i...
+  ├─ hengck23 (2022-02-23 21:22:09.523000) [+1]
+  │  it is cross validation
+  │  the first column is single network. the second is ensemble CV
+  │  
+  │  the top is  bigbird large, the bottom is  bigbird base
+  ├─ DJ_Xia (2022-02-24 07:08:41.280000) [+0]
+  │  The maximum seq_max len of your funnel-transformer large is 512. Why is the maximum seq_max len of your funnel-transformer large 1600? Can you explain it in detail here?
+  ├─ hengck23 (2022-02-24 07:21:32.140000) [+6]
+  │  funnel uses relative position embedding. so it don't care about input length
+  │  
+  │  arch = 'funnel-transformer/medium'
+  │  max_length = 1600
+  │  
+  │  tokenizer = AutoTokenizer.from_pretrained(arch) 
+  │  encoded = tokeni...
+  ├─ [deleted] (2022-02-24 07:30:13.363000) [+0]
+  │  [deleted]
+  ├─ Devansh Chowdhury (2022-02-25 03:16:43.220000) [+0]
+  │  For 1 epoch training, the model takes around 4 hr (Funnel Large) ?
+  ├─ GUNER (2022-02-25 04:02:34.973000) [+0]
+  │  Thanks for your answer. 
+  │  As a follow on to my previous question: may I ask your cv strategy per fold and model. In other words, assume the model is x and we are at fold y How do you create your cv ...
+  ├─ hengck23 (2022-02-26 10:07:23.503000) [+2]
+  │  deBERTa-large is the king!
+  │  
+  │  i must try xlarge and xxlarge
+  │  
+  │  some good list of model
+  │  https://www.kaggle.com/c/commonlitreadabilityprize/discussion/258328
+  │  https://www.kaggle.com/c/commonlitreadability...
+  ├─ Kishal Mandal (2022-02-26 10:24:54.940000) [+1]
+  │  xlarge is about 3gb. How will u fit the model within 16gb gpu
+  ├─ CroDoc (2022-02-26 14:49:10.650000) [+0]
+  │  Very interesting finding @hengck23. How are you handling the 512 max length from deberta? I just started looking into NLP this month.
+  ├─ Hannes Öhler (2022-02-26 15:01:49.697000) [+2]
+  │  @hengck23 @crodoc Maybe a possibility is to extend the model to long and then pretrain it as it is done here. Would that work? Do you have the resources? 😊
+  ├─ gezi (2022-03-03 20:56:04.300000) [+0]
+  │  Seems deberta large easy OOM for len &gt; 512
+  ├─ hengck23 (2022-03-05 12:17:44.693000) [+1]
+  │  @hannes82 
+  │  thanks for the link: https://colab.research.google.com/github/allenai/longformer/blob/master/scripts/convert_model_to_long.ipynb#scrollTo=-m4A_ttixPuf
+  │  
+  │  i tried something similar (copying...
+├─ hengck23 (2022-02-21 19:54:01.527000) [+12]
+│  beware of wrong labels!
+│  
+│  when i was training, the ce loss decreases steadily to 0.5 and it can suddenly increase 1.5 (I am using batch_size=4) this means that there are outliers. on inspection, I f...
+├─ hengck23 (2022-02-26 14:46:33.727000) [+6]
+│  speical study on deBERTA … xlarge results are out!
+│  
+│  finetune freezes layer lowers at training. this enable batch_size =4 to fit into my GPU card (48GB)
+  ├─ tugstugi (2022-02-26 15:40:46.683000) [+3]
+  │  I like it when you join a competion and starts to post. But what you are now doing is not really fair for the people who have consumer grade GPUs. I have a 48GB GPU, so I will probably benifit from...
+  ├─ hengck23 (2022-02-26 16:51:13.590000) [+15]
+  │  there are many ways to achieve the same results
+  │  
+  │  not many people have high memory GPU, so not many people knows the performance of large large BERT. One should interpret the results as " there is e...
+  ├─ Gaurav Rawat (2022-02-26 17:38:09.050000) [+0]
+  │  Thanks will try these .. was thinking also how far can we get with base models . As that is what I am able to comfortably do with my resources . Max I am able to reach with base is around 0.67 now ...
+  ├─ hengck23 (2022-02-27 01:40:08.693000) [+2]
+  │  do you need to finetune all?
+  │  SpotTune: Transfer Learning through Adaptive Fine-tuning
+  │  
+  │  https://openaccess.thecvf.com/content_CVPR_2019/papers/Guo_SpotTune_Transfer_Learning_Through_Adaptive_Fine-Tu...
+  ├─ hengck23 (2022-02-27 02:15:31.610000) [+12]
+  │  deepSpeed magic
+  │  
+  │  maybe the most valuable know-how to learn in this competition
+  │  
+  │  https://huggingface.co/blog/zero-deepspeed-fairscale
+  │  
+  │  Fitting A Huge Model Onto One GPU
+  │  Let's try the impossible - le...
+  ├─ hengck23 (2022-02-27 12:26:29.133000) [+4]
+  │  check this as well !!!!!!!!!!!!!!
+  │  (training deberta-v2-xl on kaggle)
+  │  
+  │  Are you using gradient checkpointing already? [1]
+  │  While using gradient checkpointing, you can significantly reduce the amount o...
+  ├─ gezi (2022-03-03 04:01:13.983000) [+0]
+  │  I got not best but good result with v2-xlarge, but now could not reproduce, v2-xlarge seems hard to convergent. For gradient checkpointing, seems it slowed down training a lot.
+  ├─ hengck23 (2022-03-03 04:59:04.590000) [+2]
+  │  "now could not reproduce, v2-xlarge seems hard to convergent"
+  │  
+  │  it is same for my experiments (even for v3-large)
+  │  I am not sure if it is because of the new tokeniser in v2 (sentence piece) or the la...
+  ├─ gezi (2022-03-03 07:12:25.287000) [+0]
+  │  Not prefer to try xlarge models currently, too slow😤
+  ├─ Gaurav Rawat (2022-03-03 15:58:15.147000) [+0]
+  │  Yes we also observed same for v2 ..deverta large seems better yet to try to fit xl
+  ├─ Tifo (2022-03-06 07:20:56.803000) [+0]
+  │  Hi @hengck23 ,
+  │  Freezing half of layers didn't work for me. It seems not reduce much gpu memory.
+  │  Could you disclose some freezing details? Thanks!
+  ├─ hengck23 (2022-03-06 07:43:43.563000) [+2]
+  │  i suggest you select model and method that best suit your resources.  while there is increase from large to xlarge model, it is not very big (unless you find a way to enlarge the dataset with your ...
+  ├─ Tifo (2022-03-06 07:53:07.927000) [+0]
+  │  Thanks a lot!
+├─ hengck23 (2022-03-05 00:46:09.837000) [+4]
+│  direct subword to word token score computation using pytorch scatter.
+│  mow you can differentiate word loss directly.
+│  
+│  (similarly, you can differentiate sentences loss etc…)
+│  
+│  
+│  
+│  I quote the wrong func...
+├─ hengck23 (2022-03-03 11:08:46.167000) [+4]
+│  another work in pgression:
+│  https://www.kaggle.com/hengck23/feedback-prize-2021-extra-label
+│  
+│  the labels are actually are already in an early notebook by cdeotte:
+│  https://www.kaggle.com/cdeotte/rapid...
+  ├─ yukiya (2022-03-03 15:27:28.970000) [+0]
+  │  How do we input this topic info to the model ?  Or is this purely to help create the CV fold ?
+  ├─ hengck23 (2022-03-03 16:13:14.023000) [+4]
+  ├─ hengck23 (2022-03-03 16:15:09.690000) [+2]
+  │  "How do we input this topic info to the model ? Or is this purely to help create the CV fold ?"
+  │  
+  │  use your first CLS token as text classifier.
+  │  you can have specific IOB marker for each (or some clas...
+  ├─ Dante Becker (2022-03-04 21:25:52.397000) [+0]
+  │  How did you split essays by topic? Was it by hand using your finding that the first 1k were unshuffled?
+  ├─ Gigglekaggle (2022-03-05 03:50:54.187000) [+0]
+  │  I have question,  so Can I say the topic is like a one essays embedding so if I compare it with each sentences embedding, we can figure out the classes?
+  ├─ hengck23 (2022-03-05 12:56:02.510000) [+2]
+  │  "How did you split essays by topic? Was it by hand using your finding that the first 1k were unshuffled?"
+  │  
+  │  i tried unsupervised clustering (topics modeling) at first but then found that all topics ...
+  ├─ hengck23 (2022-03-05 12:59:12.717000) [+2]
+  │  " topic is like a one essays embedding …"
+  │  
+  │  you can just train a CLS classifier. looking at  cdeotte's notebook
+  │  https://www.kaggle.com/cdeotte/rapids-umap-tfidf-kmeans-discovers-15-topics/comments
+  │  
+  │  ...
+├─ hengck23 (2022-03-02 10:55:01.347000) [+5]
+│  looking at the results:
+│  
+│  
+│  
+│  the model has validation cv 0.685
+│  on the graph, vertical y axis is ground truth, horizontal x axis is prediction
+│  the tick mark are in the format [discourse type][length]
+│  ...
+  ├─ gezi (2022-03-03 05:05:48.620000) [+0]
+  │  Yeah, the upper bound for ensemble models is super high. But so hard to choose the best results. Maybe encoder,decoder worth a try. Thanks for sharing.
+  ├─ hengck23 (2022-03-03 14:34:59.370000) [+1]
+  │  https://aclanthology.org/2020.acl-main.603.pdf
+  │  Recurrent Chunking Mechanisms for Long-Text Machine Reading Comprehension
+  │  -dynamically cahnge the position and length of chunck using RL
+  │  (expensive me...
+  ├─ hengck23 (2022-03-04 02:55:59.933000) [+1]
+  │  confusion matrix
+  │  
+  │   
+  │  
+  │  the results a re a little unexpected.
+  │  need to draw the text heatmap to confirm for each sample
+├─ hengck23 (2022-02-27 12:56:53.430000) [+4]
+│  how to write dataset code for text augmentation
+│  
+│  
+│  
+│  as an example for paraphrase:
+│  https://huggingface.co/tuner007/pegasus_paraphrase
+│  
+│  arch = 'tuner007/pegasus_paraphrase'
+│  tokenizer = PegasusTokenize...
+├─ hengck23 (2022-02-26 10:16:46.360000) [+5]
+  ├─ GUNER (2022-02-26 11:19:54.803000) [+1]
+  │  This avoids unnecessary padding in batching, because (appox.) similar length texts are batched together, which is actually why this is faster (less padding: less dimensional inputs per batch) isn't...
+  ├─ hengck23 (2022-03-02 01:38:33.080000) [+1]
+  │  this reduces submission time from 9hr to 2 hr
+  │  (i.e. you can use 3x more model)
+  ├─ GUNER (2022-03-02 11:34:40.157000) [+0]
+  │  Does it ?, so much effect,,, really interesting, will try..
+  ├─ hengck23 (2022-03-02 11:43:03.333000) [+2]
+  │  https://www.kaggle.com/hengck23/fast-inference-deberta-xlarge-under-50min 
+  │  
+  │  fast inference code is up : one deberta-xlarge under 50min
+  ├─ GUNER (2022-03-02 11:54:28.947000) [+0]
+  │  Wouldn't this affect the cv-performance because data is always fed in a sequence? (data is not being shuffled during train epochs?).
+  ├─ hengck23 (2022-03-02 11:58:24.810000) [+2]
+  │  you will have to shuffle your data in training.
+  ├─ GUNER (2022-03-02 11:59:54.817000) [+0]
+  │  Oh yes, this is about 'inference' right, thank you.
+  ├─ GUNER (2022-03-02 12:06:41.457000) [+0]
+  │  While I caught you online, one different question: I dont have enough resources to try all, so I will have to choose for a cv strategy. And as the leaderboard is acting almost like a validation set...
+├─ hengck23 (2022-02-21 11:04:51.537000) [+5]
+│  this affects how you create your cross-validation data. you can evaluate your model topics by topics, etc
+│  
+│  what are the 15-prompts? My guess:
+│  
+│  
+│  
+│  should cell phones being banned while driving?
+│  
+│  shou...
+  ├─ hengck23 (2022-02-21 11:17:47.660000) [+8]
+  │  think of questions to input to GPT that will results in claim, counter-claim, rebuttal in the answer.
+  │  these could be new train/test data
+  │  
+  │  
+  │  
+  │  the idae comes from here: https://www.youtube.com/watch?v...
+├─ Hao Chen (2022-02-25 23:18:38.703000) [+4]
+│  I'm really surprised you have so many views on this competition. It is far from what I can comprehend in a short period of time. Thank you for being so generous with your ideas!
+├─ hengck23 (2022-03-04 13:04:39.313000) [+2]
+│  i make a notebook to study the fragmentation problem of the prediction .
+│  you can use it to analyze your prediction
+│  
+│  https://www.kaggle.com/hengck23/show-prediction-heatmap?scriptVersionId=89275548
+│  ...
+  ├─ GUNER (2022-03-05 06:21:35.770000) [+0]
+  │  as in x66d4 in your screenshot: this is the big question: is this a fragmented 'blue' class or, fragmented 'orange' class?
+  │  
+  │  I would salute any algorithm that will find the 'orange' rebuttal here, a...
+  ├─ hengck23 (2022-03-05 06:41:09.233000) [+2]
+  │  you can ouput both top-1 and top2 solution in submission
+  ├─ GUNER (2022-03-05 07:16:53.130000) [+1]
+  │  And then? find a way to optimize between top solution, which most probably will overfit to train data?
+  ├─ something4kag (2022-03-05 07:26:07.473000) [+0]
+  │  In doing some analysis of tokens, Evidence has  a much greater representation of tokens found only in that type. As well Evidence tends to have the longer spans. So wonder if some bias gets introdu...
+  ├─ hengck23 (2022-03-05 12:27:51.013000) [+3]
+  │  "And then? find a way to optimize between top solution, which most probably will overfit to train data?"
+  │  
+  │  it is a bet.
+  │  
+  │  for example, consider input test test segment. here are the model prediction ...
+  ├─ GUNER (2022-03-05 14:59:35.437000) [+0]
+  │  Excellent, thank you.
+  ├─ gezi (2022-03-06 13:27:43.483000) [+0]
+  │  Thanks for sharing, really great/creative idea.
+  ├─ hengck23 (2022-03-07 16:07:01.510000) [+2]
+  │  yet another way to visualise the results
+  │  
+  │  
+  │  
+  │  
+  │  
+  │  
+  │  in the example above, position is restated (or first stated) in the conclusion. the text is "in conclusion,  … i hereby restate by position …, then i ...
+├─ hengck23 (2022-03-03 03:07:16.380000) [+3]
+│  NER is not the only solution, there a variety of methods from previous tweet-sentiment-extraction kaggle competition.
+│  
+│  e.g. QA like SQUAD, etc
+│  https://www.kaggle.com/c/tweet-sentiment-extraction/di...
+  ├─ hengck23 (2022-03-08 02:05:46.493000) [+5]
+  │  i am surprise that there is little discussion on this.
+  │  obviously, heurestics on linking NER results is not the best. but it takes a long of understanding and time to try different methods. ideallyy...
+  ├─ something4kag (2022-03-08 05:01:51.983000) [+1]
+  │  ""i am surprise that there is little discussion on this."
+  │  
+  │  This seems to be the trend when high scoring inference notebooks and models are shared early on in competitions.  Here, not sure how many ...
+  ├─ kwchen (2022-03-11 17:03:11.717000) [+2]
+  │  I also think NER is probably not the best approach for the problem. I believe an end to end model that is able to output all sequences (start, end) with their classes and corresponding probabilitie...
+  ├─ gezi (2022-03-11 17:28:04.227000) [+0]
+  │  Beam search sounds good, but hard to find a metric like lm to help it work. I also think decode should be a key here but it was so hard to workout.
+  ├─ hengck23 (2022-03-12 04:50:34.707000) [+4]
+  │  "Beam search sounds good, but hard to find a metric like lm to help it work."
+  │  
+  │  alternative is to learn a mixture model to ouput a top-k solution (rather than one solution). it is like logit1, logit...
+  ├─ gezi (2022-03-12 08:13:22.497000) [+0]
+  │  Thanks! @hengck23  Will take a look.
+  ├─ kwchen (2022-03-18 05:13:03.040000) [+0]
+  │  6th place solution:
+  │  https://www.kaggle.com/c/feedback-prize-2021/discussion/313424
+  │  
+  │  Their solution is beautiful. They use NER with length regression, so for each iteration they have a label for eac...
+├─ hengck23 (2022-03-07 03:01:31.967000) [+1]
+│  Message must have at least 10 characters.
+├─ hengck23 (2022-03-06 06:41:54.420000) [+1]
+│  an important trick for post processing prediction fragmentation ….
+│  (aka. make your CRF work)
+│  
+│  
+│  
+│  this is inspired by SOLO, instance segmentation in computer vision.
+│  instead of semantic segmentation ...
+├─ Bobber Cheng (2022-03-05 03:55:41.947000) [+0]
+│  @hengck23 
+│  Thanks for your sharing. Now I can ensemble funnel-transformer + deberta v2 xlarge + longformer + bigbird. However, ensembling funnel-transformer + deberta v2 xlarge + longformer + bigbi...
+  ├─ hengck23 (2022-03-05 04:35:32.557000) [+2]
+  │  there is a limit to ensembling (it depends on how much information is there in the data and how good are your model in extracting the information)
+  │  
+  │  
+  │  there is +/- statistical errors and domain shift...
+  ├─ Bobber Cheng (2022-03-06 05:42:10.787000) [+5]
+  │  Thank you a lot! Here are what I got with Kaggle GPU:
+  │  
+  │  fold0/10
+  │  
+  │  
+  │  
+  │  funnel-transformer-medium: CV 0.636944
+  │  
+  │  deberta v2 xlarge: CV 0.672622
+  │  
+  │  longformer: CV 0.651819
+  │  
+  │  bigbird: CV 0.439236
+  │  
+  │  funnel-tran...
+  ├─ gezi (2022-03-06 06:11:13.150000) [+0]
+  │  Great, I see you get good result with deberta v2 xlarge, but I could not make it convergent, all other backbones ok for me.
+  ├─ Devansh Chowdhury (2022-03-06 06:22:48.893000) [+0]
+  │  @bobber Were u able to train these model just using Deepspeed?
+  ├─ hengck23 (2022-03-06 06:23:39.180000) [+1]
+  │  "bigbird: CV 0.439236" is a bug.
+  │  (the results don't make sense, we know the basic performance of the relative performance of each of these different models from public dataset ranking)
+  │  
+  │  even if we ...
+  ├─ sajwankit (2022-03-06 08:48:46.477000) [+0]
+  │  @bobber Thanks for sharing your CV stats, can you also tell the training time required for large models mentioned above ( on kaggle gpu)? did you use deepspeed with gradient checkpointing?
+  ├─ Gaurav Rawat (2022-03-06 12:03:57.980000) [+0]
+  │  @bobber if I may ask do you need to do some modifications in Heng's Notebook to make it work for ensemble . As we were facing some issues with it.
+├─ hengck23 (2022-03-01 01:18:12.170000) [+1]
+│  poor man's xlarge transformer?
+  ├─ something4kag (2022-03-03 05:44:32.070000) [+0]
+  │  Interesting in this paper, PQRNN, SOTA for mobile devices (https://arxiv.org/abs/2101.08890) performed best on the multiATIS dataset with a simple and uniform vocabulary - queries related to air tr...
+  ├─ hengck23 (2022-03-03 12:24:37.463000) [+1]
+  │  just find this paper doing similarly: https://aclanthology.org/2021.eacl-main.154.pdf 
+  │  Globalizing BERT-based Transformer Architectures for Long DocumentSummarization
+  │  
+  │  "In  this  work,  we  introdu...
+├─ hengck23 (2022-02-26 08:45:12.960000) [+1]
+│  what can we learn from image object detection or protein contact map or LSTM pointer net?
+  ├─ hengck23 (2022-03-05 00:23:51.960000) [+1]
+  │  a faster pooling way
+├─ hengck23 (2022-02-23 00:20:47.617000) [+1]
+│  transformer-based Argument Mining For Healthcare Applications
+│  https://ecai2020.eu/papers/1470_paper.pdf
+│  
+│  
+│  
+│  oit compares results of BERT+dense, BERT+GRU+CRF
+│  see also: https://pytorch.org/tutorials/b...
+  ├─ hengck23 (2022-02-23 05:45:45.687000) [+3]
+  │  i think we can google specifically for Argument unit detection papers. there are many methods, datasets, and results
+  │  
+  │  
+  │  
+  │  BIO tag : beginning, inside, outside
+  │  BIEO tag :  beginning, inside, ending, o...
+  ├─ hengck23 (2022-02-23 05:49:14.397000) [+1]
+  │  Fine-Grained Argument Unit Recognition and Classification
+  │  https://www.summetix.com/publications/
+  │  
+  │  https://innolab.ifi.lmu.de/presentations/ss2020/generalizationAcrossArgumentMiningModels.pdf
+├─ Kha Vo (2022-02-21 13:01:02.713000) [+-42]
+│  Closing stage of competition. Don’t be a hero, again. I complained once https://www.kaggle.com/c/understanding_cloud_organization/discussion/117206
+│  
+│  You can share it after the comp ends. But you ra...
+  ├─ hengck23 (2022-02-21 13:44:34.370000) [+20]
+  │  @khahuras 
+  │  you said it yourself in the link you give. "Please just don't share in the last 7 days. That's simply it."
+  ├─ Kha Vo (2022-02-21 14:37:13.640000) [+-17]
+  │  If you want it that way, you’ll need to completely silent from March 07th 2022 to March 15th 2022. And for prior period, do whatever you think appropriate for other people.
+  ├─ hengck23 (2022-02-21 14:56:17.063000) [+3]
+  │  that will be the deal
+  ├─ MaChaogong (2022-02-21 16:33:43.697000) [+3]
+  │  @khahuras Don't be nervous bro. Sharing != ruin the competition. You shall pay more attention to your continuous improvement. I don't think there is any key info about top solutions public now. If ...
+  ├─ Gigglekaggle (2022-03-01 14:06:43.343000) [+-2]
+  │  can not understand, Don`t be a villain
+├─ Gaurav Rawat (2022-03-09 15:41:58.070000) [+0]
+│  @hengck23 wanted to know your views on proba thresholds used for submission ,see you also use similar ones to Abhishek in one of your notebooks. Is there any value in optimizing them to improve sco...
+  ├─ tugstugi (2022-03-09 15:55:58.710000) [+1]
+  │  Try to tune your thresholds on multiple folds, then you can probly increase your LB score.
+  ├─ Gaurav Rawat (2022-03-09 16:11:27.053000) [+0]
+  │  Thanks .. yes we are trying the same on multiple folds via cv . does bump cv and lb .. Hope it turns out good at the end .
+  ├─ hengck23 (2022-03-09 16:26:17.523000) [+2]
+  │  ",see you also use similar ones to Abhishek in one of your notebooks. Is there any value in optimizing them to improve scores "
+  │  
+  │  I will not be using this for my final submission. i have a decoder t...
+  ├─ CroDoc (2022-03-09 16:57:14.500000) [+0]
+  │  @hengck23 what is a decoder that outputs spans?
+  ├─ hengck23 (2022-03-09 17:38:32.577000) [+7]
+  │  i will reveal it after the competition. but you can google about it. basically, seq-to-seq model (encoder-decoder) can input and output anything, as long as you can convert input and output as sequ...
+  ├─ Jungwoo Park (2022-03-09 17:49:54.043000) [+1]
+  │  Sadly, I observed that entity-level probability threshold strategy is not pretty effective when model is trained well. 🥲🥲 It would be better to find another post-processing techniques 🔎🔎
+  ├─ hengck23 (2022-03-09 18:38:25.527000) [+2]
+  │  "…not pretty effective when model is trained well."
+  │  
+  │  not true. you have good per token accuracy. but you are modifying model prediction for continuous prediction string. the drop in performance is ...
+  ├─ Jungwoo Park (2022-03-10 02:57:01.683000) [+0]
+  │  I mean that there is no any improvement of the score by using probability thresholding. If the model is trained well, it will capture the entities with high confidence.
+  │  
+  │  And I don't use per-token a...
+├─ Jerry (2022-03-07 15:28:24.860000) [+0]
+│  Thanks for your share！I learn a lot from you！👍
+├─ Pingzhi Li (2022-03-06 04:48:51.523000) [+0]
+│  @hengck23 How do you get a higher LB score than CV in your chart? I mean, I've ensembled some dx/fl/ll models in your way, I used best CV hyper-parameters. However, I got quite high CV scores as lo...
+  ├─ hengck23 (2022-03-06 07:06:48.483000) [+1]
+  │  "How do you get a higher LB score than CV in your chart"
+  │  
+  │  these are statically numbers. don't mind so much.
+  │  (i.e. it just means that I have better fold and selected better data, etc. it don't alway...
+├─ *.* (2022-02-28 12:28:25) [+0]
+│  Thank you very much for your sharing. When I trained funnel-transformer-large directly with longformer's training code, the CV was less than 0.6, and I also tried different LR. Do you have any spec...
+  ├─ hengck23 (2022-02-28 14:16:57.723000) [+2]
+  │  there is no special tricks.
+  │  
+  │  i think doing your training, there could be instability that causes loss to increase suddenly (and never recover) due to softmax attention computation in fp16 or the ou...
+  ├─ *.* (2022-02-28 14:41:02.753000) [+0]
+  │  Thanks again, I'll check my code.
+  ├─ Gaurav Rawat (2022-02-28 23:35:38.427000) [+0]
+  │  I could reach 0.664135848 with funnel base (similar model to what Heng shared) but somehow not able to ensemble with the strategy Heng shared in his notebook . But will try again . Thanks Heng for ...
+├─ aquaright (2022-02-27 23:20:19.117000) [+0]
+│  Hey @hengck23 can I ask if you performed inference at 1600 or 4096?
+│  
+│  I see that you have max_length at 1600 within the dataset, but set the tokenizer to 4096.
+  ├─ hengck23 (2022-02-28 00:46:11.230000) [+1]
+  │  performed inference at 1600
+├─ Bobber Cheng (2022-02-26 16:13:05.360000) [+0]
+│  @hengck23 
+│  
+│  Could you please share how to ensemble different models with different tokenizers as the input ids are different? You cannot simply add logits from different models.
+  ├─ hengck23 (2022-02-26 16:30:53.070000) [+2]
+  │  for a start:
+  │  
+  │  baseline method : my inference code and CV/LB score
+  │  https://www.kaggle.com/hengck23/1-birdformer-1-longformer-one-fold
+  ├─ Bobber Cheng (2022-02-26 17:17:37.383000) [+0]
+  │  Thank you a lot!
+  ├─ Bobber Cheng (2022-02-27 01:00:17.530000) [+0]
+  │  tokenizer.model_max_length of funnel transformer is 512 instead of 4096 as longformer/bigbird. Do you split input into chunks for funnel transformer?
+  ├─ DJ_Xia (2022-02-28 00:52:52.087000) [+-2]
+  │  In your inference notebook, I have encountered a thorny problem, **No module named 'bigbird_base_model **'. How do I go about solving it, I look forward to your reply.
+├─ sidra zafar (2022-02-24 12:05:31.143000) [+0]
+│  Great work and amazing report!
+├─ Romil Shah (2022-02-24 07:35:21.863000) [+0]
+│  Great work and amazing report!!
+├─ CroDoc (2022-02-23 09:47:41.990000) [+0]
+│  @hengck23 how did you create these 10 folds?
+  ├─ hengck23 (2022-02-23 10:38:05.467000) [+2]
+  │  from sklearn.model_selection import KFold
+  │  from iterstrat.ml_stratifiers import MultilabelStratifiedKFold
+  │  
+  │  #https://www.kaggle.com/abhishek/creating-folds-properly-hopefully-p
+  │  def make_fold():
+  │      d...
+  ├─ CroDoc (2022-02-23 11:01:59.580000) [+0]
+  │  Thank you :)
+  ├─ Gaurav Rawat (2022-02-24 02:06:53.647000) [+0]
+  │  @hengck23 looked at your work are 10 folds giving better results compared to 5 folds?  Don't have much compute but was thinking if will be wise for me to retrain my models on 10 folds and see .
+  ├─ hengck23 (2022-02-24 07:38:05.033000) [+1]
+  │  using two of the ten folds is good enough for me
+  │  for each fold I use different model.
+  ├─ Gaurav Rawat (2022-02-24 15:06:31.803000) [+0]
+  │  interesting time is short but will try this out .. for the time being was sticking to 5 folds with a model and trying for the ensemble
+  ├─ sajwankit (2022-02-24 18:22:50.883000) [+1]
+  │  @gauravbrills maybe you can stick with your 5 folds model for validation purpose, and then later for better LB score you can train on whole data for LB submission, keeping same train settings.
+├─ Niek van der Zwaag (2022-02-23 06:01:42.137000) [+0]
+│  Thanks for an already elaborate explanation and for offering your insights. Learning a a lot from this, thanks for sharing 🙌
+├─ [deleted] (2022-02-22 01:37:25.840000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-21 18:03:31.213000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-02-21 19:02:49.083000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-02-21 19:19:44.540000) [+5]
+  │  [deleted]
+├─ [deleted] (2022-02-21 16:39:08.480000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-26 13:47:57.050000) [+-3]
+│  [deleted]
+├─ [deleted] (2022-02-21 16:54:41.340000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-26 14:20:38.263000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-26 00:02:30.060000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-24 09:55:24.360000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-24 07:08:15.543000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-23 09:05:19.633000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-21 18:09:56.807000) [+0]
+│  [deleted]
+├─ [deleted] (2022-02-21 16:31:44.383000) [+0]
+│  [deleted]

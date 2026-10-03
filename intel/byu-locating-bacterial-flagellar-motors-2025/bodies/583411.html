@@ -1,0 +1,68 @@
+<p>Thanks to kaggle and everyone involved for hosting this exciting competition. It was a great learning experience and it was very interesting to see how much of our 1st place cryo ET methodology could be applied here. Thanks to <a href="https://www.kaggle.com/bloodaxe" target="_blank">@bloodaxe</a> for this great team experience. I would also like to thank the Armed Forces of Ukraine for providing safety and security for my team mate to participate in this competition. </p>
+<h2>TLDR</h2>
+<p>The solution is an ensemble of a simple 3D-ResNet18 Classifier and object detection models from MONAI. We also used MONAI for augmentations, and exported models via jit or TensorRT, which gave significant speedup and enabled us to have a slightly larger ensemble. We use the additional data shared by <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a> </p>
+<p>This post covers the ResNet18 classification based approach. For object detection part see <a href="https://www.kaggle.com/bloodaxe" target="_blank">@bloodaxe</a> writeup: 4th place solution <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583228" target="_blank">[Object Detection Part]</a></p>
+<h2>Cross validation</h2>
+<p>I split the original training data by Voxel Size and the external data by dataset id, to somewhat mimic train/ test difference. 4 Folds were used. Correlation with LB was not very good, so I mainly relied on LB score for feedback.</p>
+<h2>Data preprocessing/ augmentations</h2>
+<p>3D images were scaled to a fixed voxel size of 15.6 and saved to disk using int8.<br>
+Since models are trained from scratch, augmentations were essential to prevent overfitting.<br>
+I used RandomCrop (size 96x160x160), Flip on each axis within the torch dataloader, and additionally scale + rotation on GPU (all from MONAI). Additionally, I used a customized implementation of MixUp which was highly effective to train longer and prevent overfitting. I implemented a version which makes sure to not have more than 1 motor in a mixed patch. Additionally, positive samples, i.e. crops with motor in it,  were oversampled by having a total fraction of 12.5%</p>
+<h2>Model</h2>
+<p>Modelling was quite interesting in this competition. I started with the 3D UNET from our 1st place solution of CryoET competition, which worked already quite well. After learning about the forgiveness of the competition metric with respect to localization, I tried to simplify the model further and get rid of any decoder altogether, since the 32x downscaled model output should already be enough. Surprisingly, a simple ResNet3D encoder worked. My approach works the following:</p>
+<p>Input for the classification model are 96x160x160 image patches, which resulted in a feature map of 512x3x5x5 leaving the resnet backbone. I flatten the 3x5x5 output "pixels" and use a simple fully conected 512-&gt;1  layer to have a binary prediction for each pixel, which are basically 75 classes, determin the motor location. I also add an additional class to reflect having no-motor in the crop. So in total its a simple 3D-ResNet18 classifier with 76 classes, which is trained with CrossEntropy Loss. <br>
+For inference I used a sliding window aproach with an overlap of 0.5. For motor localisation, simplytake  the patch with max prediction value of the 75 classes. Then use the patch location + and offset coming from the 3x5x5 grid to determine the final localisation. This very simple and fast model scores 0.875 on public LB (5th place)  individually! </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fa7d09dd671b3726f7affa811ef092873%2FScreenshot%202025-06-10%20at%2011.55.24.png?generation=1749673662436318&amp;alt=media" alt=""></p>
+<p>The architecture might be easier to understand via code:</p>
+<pre><code> monai.networks.nets  mnn
+
+ ():
+    bs, c, d, h, w = y.shape
+    idxs = torch.where(y&gt;)
+     item  idxs[:]:
+        item //= scale
+    y2 = torch.zeros((bs,c,d//scale,h//scale,w//scale), dtype=y.dtype, layout=y.layout, device=y.device)
+    y2[idxs] += 
+     y2
+
+cfg.backbone_args = (model_name=,
+                         spatial_dims=,    
+                         pretrained=, 
+in_channels=)
+
+ (nn.Module):
+
+     ():
+        (Net, ).__init__()
+
+        .backbone = mnn.ResNetFeatures(**cfg.backbone_args)
+        .global_pool = nn.AdaptiveAvgPool3d()
+        .reg_head = nn.Conv3d(,,kernel_size=,stride=)
+        .cls_head = torch.nn.Linear(,)        
+
+     ():
+
+        x = batch[]
+
+        out = .backbone(x)[-]
+        loc_logits = .reg_head(out)
+        cls_logits = .cls_head(.global_pool(out).flatten())
+
+        loss = .custom_loss(y,loc_logits,cls_logits)
+        outputs = {:loss,:loc_logits}
+         outputs
+
+     ():
+
+        y2 = downscale(target,scale=)
+        l = logits.flatten()
+        y3 = y2.flatten()
+        y3 = torch.cat([y3,-y3.()[][:,]],dim=-)
+        l2 = torch.cat([l,cls_logits],dim=-)
+        l_cls = DenseCrossEntropy1D()(l2,y3)
+         l_cls
+</code></pre>
+<p>For threshoolding I used a quantile based a aproach as this was much more stable when comparing different models. </p>
+<p>The model was trained with bf16, and each fold needs about 17h on a single A100 for training. Although the model is small and simple, I tried a lot of other architectures, and alternatives performed much worse. So I sticked with this one. </p>
+<p>Code base is very close to<a href="https://github.com/ChristofHenkel/kaggle-cryoet-1st-place-segmentation" target="_blank"> 1st place solution of cryo et </a>, so I will save me the trouble to publish this one. <br>
+Cheers. Questions welcome. </p>

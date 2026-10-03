@@ -1,0 +1,82 @@
+# eedi-mining-misconceptions-in-mathematics 讨论区（按票数排序，共 80 条）
+
+- [1st Place Detailed Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551688) — 177 票 / 67 评论 / 2024-12-25 **write-up?**
+- [🔥🔥🔥Some tricks for training LLM Recall Model: CV 0.490, LB 0.352](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/543519) — 171 票 / 98 评论 / 2024-10-31 
+- [1st Place Solution Summary](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551402) — 127 票 / 40 评论 / 2024-12-13 **write-up?**
+- [EEDI | New LLM-generated Dataset with Same Format 🚀🚀🚀](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533764) — 80 票 / 16 评论 / 2024-09-12 
+- [Initial Concerns](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533728) — 80 票 / 17 评论 / 2024-09-12 
+- [Logits Processors](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/546978) — 78 票 / 41 评论 / 2024-11-19 
+- [5th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391) — 76 票 / 23 评论 / 2024-12-18 **write-up?**
+- [Eedi LLM Benchmark (Which LLM should you use?)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/539458) — 69 票 / 25 评论 / 2024-10-09 
+- [3rd Place Solution (with Magic Boost)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551498) — 63 票 / 16 评论 / 2024-12-13 **write-up?**
+- [Private dataset accidentally shared by Eedi ? (Another Lmsys like disaster ?)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550619) — 63 票 / 46 评论 / 2024-12-08 
+- [Qwen2.5-72B & Llama 3.3-70B on 2xT4](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550223) — 59 票 / 48 评论 / 2024-12-06 
+- [Private 7th (Public 2nd) Place Solution Summary](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551388) — 59 票 / 6 评论 / 2024-12-13 **write-up?**
+- [MalAlgoQA: a new dataset that might be useful for finetuning](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/541222) — 51 票 / 11 评论 / 2024-10-18 
+- [Questions Regarding the Format of sample_submission.csv and the Calculation Method When the Ground Truth is nan](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533790) — 47 票 / 10 评论 / 2024-09-13 
+- [I published Retriever Reranker Baseline(LB: 0.189), Fine-Tuning BGE Baseline(LB: 0.246)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/534317) — 46 票 / 1 评论 / 2024-09-16 
+- [Implementing the map@25 metric 🚀](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/534077) — 45 票 / 3 评论 / 2024-09-14 
+- [EEDI | Gradio App ](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/536648) — 45 票 / 1 评论 / 2024-09-28 
+- [10st Place Solution Summary](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551722) — 44 票 / 6 评论 / 2024-12-15 **write-up?**
+- [Most misconceptions appear only once in train](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533920) — 42 票 / 6 评论 / 2024-09-13 
+- [6th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551565) — 40 票 / 14 评论 / 2024-12-14 **write-up?**
+- [(Almost) Zero-Shot Solution - Private 64h](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551449) — 40 票 / 7 评论 / 2024-12-19 **write-up?**
+- [Interesting Paper and Resources at Learning Agency Lab](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/534320) — 38 票 / 3 评论 / 2024-09-16 
+- [Efficiency Track 1st Place Solution - Model Merging](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/552108) — 38 票 / 6 评论 / 2024-12-21 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551651) — 38 票 / 12 评论 / 2025-01-16 **write-up?**
+- [[LB 0.261] Starter Notebook 32B LLM w/ vLLM](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/540474) — 37 票 / 5 评论 / 2024-10-14 
+- [4th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551559) — 36 票 / 7 评论 / 2025-01-02 **write-up?**
+- [[Share] Callback for calculate map@25 when training with transformer Trainer](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/541931) — 35 票 / 3 评论 / 2024-10-22 
+- [8th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551412) — 34 票 / 13 评论 / 2025-01-08 **write-up?**
+- [I try using chatgpt-o1-preview ... why his answer is so precise?](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/540759) — 33 票 / 9 评论 / 2024-10-16 
+- [A way of using the latest vLLM version (0.6.3.post1) on kaggle](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/542678) — 31 票 / 10 评论 / 2024-10-26 
+- [The importance of quality distractors.  WordNet/Semantic similarity to select Distractors in MCQ.](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533789) — 31 票 / 0 评论 / 2024-09-12 
+- [Adjutant references](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533724) — 29 票 / 0 评论 / 2024-09-12 
+- [There are too many suspicious teams on the leaderboard](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551276) — 28 票 / 27 评论 / 2024-12-12 
+- [Finetuning BGE and Infer With Synthetic Data (LB: 0.277)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/535797) — 28 票 / 3 评论 / 2024-09-24 
+- [Efficiency 2nd Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/552686) — 28 票 / 2 评论 / 2024-12-21 **write-up?**
+- [Private 9th (Public 7th) Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551420) — 27 票 / 17 评论 / 2024-12-13 **write-up?**
+- [A New Synthetic Dataset Might be Useful for Training/Validation](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/547744) — 24 票 / 5 评论 / 2024-11-23 
+- [13th Place Solution ](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551673) — 23 票 / 1 评论 / 2024-12-14 **write-up?**
+- [Building good cross-validation](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551437) — 22 票 / 6 评论 / 2024-12-13 
+- [Sharing and talking about the tricks](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/544430) — 22 票 / 3 评论 / 2024-11-05 
+- [CV vs LB Score](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/537295) — 22 票 / 2 评论 / 2024-10-02 
+- [[Solved] Can't wait for private leaderboard finalization !](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/552173) — 21 票 / 14 评论 / 2024-12-18 
+- [Useless sample](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/544873) — 21 票 / 5 评论 / 2024-11-07 
+- [CV vs LB thread](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/537220) — 21 票 / 2 评论 / 2024-10-02 
+- [Some t-SNE visualizations](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/534468) — 20 票 / 0 评论 / 2024-09-16 
+- [Eedi Q&A Viewer by streamlit](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/542654) — 19 票 / 1 评论 / 2024-10-26 
+- [Phi-Mini 3.5 Approach....](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/535423) — 19 票 / 6 评论 / 2024-09-22 
+- [26th place solution(Public 14th)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551406) — 18 票 / 3 评论 / 2024-12-13 **write-up?**
+- [Get started here](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533718) — 17 票 / 3 评论 / 2024-09-12 
+- [Misconceptions on Training and Test Data](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/542726) — 17 票 / 6 评论 / 2024-10-26 
+- [External Data](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/547394) — 17 票 / 8 评论 / 2024-11-21 
+- [The same submission cost more time near the end of game](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/550743) — 17 票 / 15 评论 / 2024-12-09 
+- [12th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551429) — 16 票 / 5 评论 / 2024-12-13 **write-up?**
+- [Repeated misconceptions? How do we deal with it? Need Competition Host!](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/540066) — 16 票 / 2 评论 / 2024-10-12 
+- [Are there any new misconceptions in test?](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533768) — 16 票 / 5 评论 / 2024-09-12 
+- [14th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551492) — 15 票 / 4 评论 / 2024-12-14 **write-up?**
+- [Private 7th (Public 2nd) Solution (Masaya Part)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551430) — 15 票 / 1 评论 / 2024-12-13 **write-up?**
+- [30th place solution - just public notebook(Public 35th) ](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551409) — 15 票 / 2 评论 / 2024-12-13 **write-up?**
+- [Early Meme Thread](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/542249) — 14 票 / 4 评论 / 2024-10-23 
+- [28th Place Solution (Retriever Part)](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551455) — 13 票 / 2 评论 / 2024-12-13 **write-up?**
+- [Efficiency 3rd Place : Public Model + Simple Post Processing](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/553573) — 13 票 / 2 评论 / 2024-12-28 **write-up?**
+- [Where can we find the final efficiency prize standings.](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551397) — 13 票 / 10 评论 / 2024-12-13 
+- [Private 11th (Public 9th) Place Solution Summary](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551424) — 13 票 / 8 评论 / 2024-12-13 **write-up?**
+- [175th place solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551415) — 13 票 / 5 评论 / 2024-12-13 **write-up?**
+- [15th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551501) — 12 票 / 6 评论 / 2024-12-14 **write-up?**
+- [Are we predicting <= 25 of (2587 + 1) targets for each wrong choice options? [Private Test - Conformed]](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533744) — 12 票 / 20 评论 / 2024-09-12 
+- [Controversial topic about the high score public notebook + models ](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/537412) — 12 票 / 6 评论 / 2024-10-03 
+- [New way of loading data with kagglehub](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/538393) — 12 票 / 9 评论 / 2024-10-08 
+- [LLM Competition compilation over past year](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533847) — 11 票 / 1 评论 / 2024-09-13 
+- [How many GPUs are needed for competitive performance?](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/548644) — 11 票 / 10 评论 / 2024-11-28 
+- [Viewing and inferring the churn](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551392) — 11 票 / 2 评论 / 2024-12-13 
+- [[solution from chatgpt] let's implement it](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/541056) — 11 票 / 2 评论 / 2024-10-17 **write-up?**
+- [License Confirmation Request: Qwen2.5-Math-72B license](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/542884) — 11 票 / 6 评论 / 2024-10-27 
+- [[Share] Avoid Error about create_model_card in sentence transformer training](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/539649) — 11 票 / 3 评论 / 2024-10-10 
+- [Query regarding images in QuestionText in data](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/543421) — 10 票 / 1 评论 / 2024-10-30 
+- [How to address misconceptions missing from the training data](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533870) — 10 票 / 7 评论 / 2024-09-13 
+- [63th Place Solution](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/552291) — 10 票 / 0 评论 / 2024-12-18 **write-up?**
+- [Question About Using Generated Data ](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/534968) — 10 票 / 5 评论 / 2024-09-19 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/533741) — 9 票 / 2 评论 / 2024-09-12 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/552542) — 8 票 / 0 评论 / 2024-12-20 

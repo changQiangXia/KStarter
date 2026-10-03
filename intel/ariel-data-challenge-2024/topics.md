@@ -1,0 +1,82 @@
+# ariel-data-challenge-2024 讨论区（按票数排序，共 80 条）
+
+- [2nd place solution - pure Bayesian Inference, no deep learning](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543853) — 125 票 / 63 评论 / 2024-11-03 **write-up?**
+- [Welcome to Ariel Data Challenge - Resources and notebooks](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524287) — 74 票 / 34 评论 / 2024-08-05 
+- [For better understanding of Targets vs Sensors (FGS1 & CH0) mappings](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/527039) — 70 票 / 16 评论 / 2024-08-09 
+- [Understanding the competition metric](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528114) — 62 票 / 7 评论 / 2024-08-14 
+- [6th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543666) — 57 票 / 23 评论 / 2024-11-01 **write-up?**
+- [1st Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544317) — 51 票 / 16 评论 / 2024-11-04 **write-up?**
+- [The distribution of transit durations](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/527167) — 50 票 / 12 评论 / 2024-08-10 
+- [Understanding Calibration Data in Our Simulations](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528066) — 44 票 / 19 评论 / 2024-08-14 
+- [Typical leaks in synthetic data competition](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523708) — 42 票 / 8 评论 / 2024-08-02 
+- [Exoplanetary Features. Spectral data. ADC Metric: Gaussian Log-Likelihood](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523664) — 40 票 / 6 评论 / 2024-08-02 
+- [Easily Find The Transit Zones [With Full Code Inside!]](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/529533) — 40 票 / 3 评论 / 2024-08-21 
+- [Do Efficient Data Pre-Processing!](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528247) — 38 票 / 10 评论 / 2024-08-15 
+- [5th place solution - NeurIPS ARIEL 2024](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543760) — 36 票 / 7 评论 / 2024-11-08 **write-up?**
+- [recipe sharing ](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/540248) — 34 票 / 15 评论 / 2024-10-13 
+- [For better understanding Exoplanets & FSG1 Signal](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524109) — 29 票 / 8 评论 / 2024-08-04 
+- [References](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528233) — 29 票 / 3 评论 / 2024-08-15 
+- [4th place solution for the NeurIPS-Ariel-24 competition](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544471) — 27 票 / 1 评论 / 2024-11-05 **write-up?**
+- [7th Place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543679) — 25 票 / 4 评论 / 2024-11-05 **write-up?**
+- [3rd place solution - Polynomial fitting + PCA](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543944) — 25 票 / 5 评论 / 2024-12-08 **write-up?**
+- [Find the bug and win!](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523949) — 24 票 / 14 评论 / 2024-08-03 
+- [1st place: What happened to our team during the last 2 days?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544316) — 23 票 / 3 评论 / 2024-11-04 **write-up?**
+- [18th Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543675) — 22 票 / 5 评论 / 2024-11-01 **write-up?**
+- [#60: Data augmentation explained: Generating more stars](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543921) — 22 票 / 5 评论 / 2024-11-02 
+- [Real vs Simulation](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523726) — 21 票 / 6 评论 / 2024-08-02 
+- [why linear model works best here?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/536845) — 20 票 / 6 评论 / 2024-09-30 
+- [We need your help, fellow Kagglers. ](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/529205) — 19 票 / 0 评论 / 2024-08-19 
+- [8th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543776) — 19 票 / 5 评论 / 2024-11-01 **write-up?**
+- [Quick Update on My Solution(15th)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543681) — 19 票 / 1 评论 / 2024-11-01 **write-up?**
+- [10th Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544189) — 19 票 / 3 评论 / 2024-11-03 **write-up?**
+- [CV Strategy  [ New Star in test set - host conformed ]](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524665) — 19 票 / 0 评论 / 2024-08-07 
+- [Place 38: Improve public baseline by ~0.08 with ~20 lines of code 🚀](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543857) — 18 票 / 4 评论 / 2024-11-01 
+- [References from across Kaggle](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523612) — 18 票 / 1 评论 / 2024-08-01 
+- [Memes thread](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/537262) — 18 票 / 0 评论 / 2024-10-02 
+- [2nd place code available (upgraded to 0.7549 private LB)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544091) — 17 票 / 8 评论 / 2024-11-03 **write-up?**
+- [Fast calibration library with C and multiprocessing](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/531453) — 17 票 / 2 评论 / 2024-09-01 
+- [9th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543983) — 16 票 / 0 评论 / 2024-11-02 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543686) — 16 票 / 0 评论 / 2024-11-01 **write-up?**
+- [ARIEL data processing pipeline](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524153) — 16 票 / 7 评论 / 2024-08-04 
+- [Questions for us?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/538139) — 16 票 / 56 评论 / 2024-10-07 
+- [Really Simple Approach to Get 39th Place](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543682) — 15 票 / 0 评论 / 2024-11-06 **write-up?**
+- [34th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543676) — 15 票 / 0 评论 / 2024-11-01 **write-up?**
+- [Please share your solutions! ](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543778) — 14 票 / 5 评论 / 2024-11-01 **write-up?**
+- [Normalization should be signal -= offset?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/530247) — 13 票 / 9 评论 / 2024-08-25 
+- [What is the secret of top 10 LB places?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/534376) — 13 票 / 7 评论 / 2024-09-16 
+- [Simple linear regression for sigma (40th place)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543697) — 13 票 / 0 评论 / 2024-12-11 **write-up?**
+- [Thoughts on shakeup potential?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/530152) — 13 票 / 7 评论 / 2024-08-24 
+- [Additional questions on data processing pipeline](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/527644) — 13 票 / 3 评论 / 2024-08-13 
+- [Race so far (16 Aug)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528721) — 12 票 / 3 评论 / 2024-08-16 
+- [A few words from us and exit survey](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544486) — 11 票 / 5 评论 / 2024-11-05 
+- [19th Place Solution - Curve Fitting](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543855) — 11 票 / 1 评论 / 2024-11-02 **write-up?**
+- [Leaderboard Shakeup](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543758) — 11 票 / 5 评论 / 2024-11-01 
+- [15th Place Solution (FC part)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543754) — 11 票 / 0 评论 / 2024-11-04 **write-up?**
+- [Clarification Beforehand in case of Leaks](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524299) — 11 票 / 7 评论 / 2024-08-05 
+- [Get started here! ](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523573) — 10 票 / 11 评论 / 2024-08-01 
+- [Is this a Machine Learning competition ?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/533227) — 10 票 / 12 评论 / 2024-09-10 
+- [Another Week, Another Barchart Race (23 Aug)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/529886) — 10 票 / 0 评论 / 2024-08-23 
+- [Train/Public scores aka CV/LB](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/540663) — 10 票 / 28 评论 / 2024-10-15 
+- [Will Kaggle really give medals for bought solutions?    ](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543793) — 10 票 / 7 评论 / 2024-11-01 **write-up?**
+- [17th Parametric Fitting Approach](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543763) — 10 票 / 3 评论 / 2024-11-01 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523823) — 10 票 / 0 评论 / 2024-08-02 
+- [is Unique Dataset ? -- Previous Year Challenges / Solution / Papers](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523588) — 10 票 / 2 评论 / 2024-08-01 **write-up?**
+- [37th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544026) — 9 票 / 0 评论 / 2024-11-02 **write-up?**
+- [Previous Ariel ML Data Challenge 2023 ](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/523670) — 9 票 / 3 评论 / 2024-08-02 
+- [Zero score problem](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/539460) — 9 票 / 19 评论 / 2024-10-09 
+- [Which sigma_true should we use?](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/533301) — 8 票 / 2 评论 / 2024-09-10 
+- [74th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543823) — 8 票 / 0 评论 / 2024-11-04 **write-up?**
+- [host starter solution available](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/529511) — 8 票 / 1 评论 / 2024-08-21 **write-up?**
+- [Ariel's time-step visualization](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/529202) — 8 票 / 5 评论 / 2024-08-19 
+- [Solution for "Submission CSV Not Found" Error](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528657) — 8 票 / 4 评论 / 2024-08-16 **write-up?**
+- [2024 Normalized flux dataset (Host shared notebook) [Dataset ~2.5GB]](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524331) — 8 票 / 2 评论 / 2024-08-05 
+- [CV vs LB (with/without meta)](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524031) — 7 票 / 2 评论 / 2024-08-04 
+- [Сhanging of "white curve" over time outside the transit zone](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/533743) — 7 票 / 13 评论 / 2024-09-12 
+- [Meaning of dimensions in AIRS-CH0 images](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/527119) — 7 票 / 3 评论 / 2024-08-10 
+- [33rd place solution - Polynomials, CNN and Ridge regression](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543770) — 7 票 / 0 评论 / 2024-11-02 **write-up?**
+- [Message for our potential winners](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543198) — 6 票 / 15 评论 / 2024-10-29 
+- [Details about jitter noise assumptions](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/532639) — 6 票 / 10 评论 / 2024-09-07 
+- [NeurIPS 2022 Ariel Data: External Resource for 2024 Challenge](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/524187) — 6 票 / 4 评论 / 2024-08-05 
+- [Question About Target](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528683) — 6 票 / 1 评论 / 2024-08-16 
+- [[Advertisement] ESA datalabs Ariel Hackathon 16 - 17 Jan 2025, Spain](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/546975) — 4 票 / 0 评论 / 2024-11-19 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/544417) — 1 票 / 0 评论 / 2024-11-05 

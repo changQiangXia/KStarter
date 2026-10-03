@@ -1,0 +1,32 @@
+<p>STT Model:</p>
+<ul>
+<li>OpenAI whisper-medium</li>
+<li>Huggingface trainer</li>
+<li>Trained on 8x 48GB RTX A6000</li>
+<li>bs=8 and lr=1e-5</li>
+<li>Train steps 50k</li>
+<li>Spectrogram dithering</li>
+<li>Spectrogram time and frequency masking</li>
+<li>Resampling 16khz-&gt;8khz-&gt;16khz as augmentation</li>
+<li>Inference with max_length=260, num_beams=4 and chunk_length_s=20.1s</li>
+<li>Libsonic based speed/pitch augmentation</li>
+<li>Datasets: OpenSLR 37, OpenSLR 53, MadASR, Shrutilipi, Macro, Kathbath, GoogleTTS generated audios and pseudo labeled YouTube videos</li>
+</ul>
+<p>Punctuation Model:</p>
+<ul>
+<li>AutoModelForTokenClassification google/muril-base-cased</li>
+<li>Huggingface trainer</li>
+<li>Labels: period, comma and question mark</li>
+<li>bs=64, lr=2e-4 and max_seq_length=512</li>
+<li>Ensemble of 4 models (using 6, 8, 11 and 12 layers of google/muril-base-cased)</li>
+<li>Normalized IndicCorp v2 Bangla dataset</li>
+</ul>
+<p>In my daily job, I do speech speech recognition for low resource central Asian languages. From my experience, OpenAI Whisper works really well for OOD audios and can even transribe song lyrics. The downside is it is very sensitive to the annotation noise. So fixing the annotation noise, is the most crucial part of this competition.</p>
+<p>Because the competition dataset was not validated, the initial model was trained on OpenSLR datasets. We normalized the texts and filtered out texts containing Bengali digits. All punctuation was also removed. Additionally, we sampled 420k texts from the IndicCorp and synthesized audios using GoogleTTS, which were then used as training datasets.</p>
+<p>Following the training of an initial Whisper-medium model on OpenSLR and GoogleTTS, we conducted inference on MadASR, Shrutilipi, Macro, and Kathbath. We included audios with a WER of less than 15% in the next training phase. After three rounds of training, the model achieved an 8% WER on the Macro validation dataset and a public leaderboard score of approximately 0.380.</p>
+<p>Since most of the training set audios were short, we merged some short audios to create around 70k longer audios. Subsequently, we achieved a public leaderboard score of approximately 0.370.</p>
+<p>Whisper with the original tokenizer was slow on Bengali audios. Therefore, we trained a Whisper tokenizer with a 12k vocabulary on Bengali texts. With this tokenizer, we were able to perform inference with a num_beam value of up to 8 and a chunk_length_s of 20.1 seconds in less than 7 hours.</p>
+<p>In the next step, we applied pseudo labeling to some YouTube videos, which enabled us to achieve a public leaderboard score of approximately 0.360. When we combined the predictions of four punctuation models, our public leaderboard score improved to around 0.325.</p>
+<p>By adding more pseudo-labeled YouTube videos, our public leaderboard score further improved to 0.312 (private LB 0.372)</p>
+<p>model weight and inference notebook: <a href="https://www.kaggle.com/competitions/bengaliai-speech/discussion/447970" target="_blank">https://www.kaggle.com/competitions/bengaliai-speech/discussion/447970</a><br>
+cleaned/long/pseudo data: <a href="https://www.kaggle.com/competitions/bengaliai-speech/discussion/448110" target="_blank">https://www.kaggle.com/competitions/bengaliai-speech/discussion/448110</a></p>

@@ -1,0 +1,134 @@
+# https://www.kaggle.com/competitions/birdclef-2023/discussion/395843
+
+Topic #395843: [LB: 0.80] Pretraining is All you Need
+  Author: Awsaf
+  Posted: 2023-03-19 04:17:40.206000
+  Votes: 88  Comments: 17
+
+Motivation
+
+In the current competition, improving the performance of small models has proven to be a challenging task due to only CPU inference, along with a time constraint of 2 hours. Additionally, the majority of models used in this competition are pre-trained on ImageNet and are not familiar with audio data, making it difficult for them to achieve their true potential even with transfer learning. To overcome this challenge, there are two potential solutions: 1) pre-training on an audio dataset, and 2) training with a large-scale dataset. However, the competition dataset contains only 16k samples, and the labels from the previous competition dataset do not match with this one, making training with a large-scale dataset challenging. As a solution, utilizing the previous competition datasets for pre-training can improve the models' feature extraction capabilities.
+
+Processing in GPU/TPU
+
+As previously mentioned here, model/TPU/GPU experiences a bottleneck when waiting for the data which are processed on CPU. This is because the Audio -&gt; Spectrogram transformation, Augmentation, and Normalization are performed within tf.data.Dataset on the CPU, creating a bottleneck. To alleviate this bottleneck, the following notebooks utilize tf.keras.layers.Layer to perform all operations on the GPU/TPU which can significantly speed up the training process (up to 4x in P100 GPU).
+
+To reduce the size of the notebook and make it more manageable, the tensorflow_extra library is created. This library contains most of the augmentation and transformation code used in the notebooks. You are welcome to contribute. Here is a demo code that runs ops on GPU/TPU,
+
+ tensorflow_extra  tfe
+
+melspec_layer = tfe.layers.MelSpectrogram()
+specs = melspec_layer(audios)
+
+tfm_layer = tfe.layers.TimeFreqMask()
+specs2 = tfm_layer(specs, training=)
+
+norm_layer = tfe.layers.ZScoreMinMax()
+specs3 = norm_layer(specs2)
+
+
+Notebooks
+
+
+
+Pretraining is All you Need
+
+
+Train: BirdCLEF23: Pretraining is All you Need [Train]
+
+Infer: BirdCLEF23: Pretraining is All you Need [Infer]
+
+
+Previous Notebooks
+
+
+
+EffNet + FSR + CutMixUp
+
+
+Train: BirdCLEF23: EffNet + FSR + CutMixUp [Train]
+
+Infer: BirdCLEF23: EffNet + FSR + CutMixUp [Infer]
+
+
+Training Configs
+
+
+
+Pretraining: ~71k samples from BirdCLEF 2021 &amp; 2022 competition. Filenames with an exact match with primary_label &amp; author are removed to avoid leak.
+
+Training: ~16k samples from BirdCLEF 2023 competition.
+
+Model: EfficientNetB1 + FSR
+
+Training Time Duration: 10 sec
+
+Image Size: 128 x 384
+
+Loss: CCE
+
+Sampling: Downsample data to have max 500 samples in each class &amp; Upsample data to have min 50 samples in each class.
+
+
+Result
+
+
+
+Validation: 0.86 (AUC) | 0.911 (cmAP)
+
+LB: 0.80
+
+Improvement: Local validation -&gt; 4% | LB -&gt; 2%
+
+
+
+  
+Note: CV - LB gap can be reduced by reducing time duration in training but affects the training score. As there is a small overlap of labels between previous competition and current competition data, we can use them as external data as well.
+
+
+Track Experiments with WandB
+
+You can track all the experiments on Weights &amp; Biases (WandB) here
+
+Comments:
+├─ Stefan Kahl (2023-03-19 10:40:07.850000) [+8]
+│  Great work! I agree, pre-training might be key in this year's competition. Especially when thinking about improving performance for species with only a few samples.
+│  
+│  I case you think it helps: As m...
+  ├─ Awsaf (2023-03-19 10:44:10.947000) [+0]
+  │  Thanks for info.
+    ├─ Awsaf (2023-03-19 11:06:20.243000) [+0]
+    │  @stefankahl I noticed there is overlap of filename within same author, primary_label. Are they referring to the same file in other words is there any overlap of audio files between competitions?
+    ├─ Stefan Kahl (2023-03-19 12:55:46.780000) [+2]
+    │  Yes, there might be a few species with overlap. Usually, the filename should indicate if it's a duplicate, because it refers to the Xeno-canto ID.
+    ├─ Awsaf (2023-03-19 13:00:18.080000) [+5]
+    │  between 2023 &amp; 2021-2022 I found nearly 880 duplicate files. Initially, I was getting a pretty high score due to this overlap.
+├─ Awsaf (2023-03-19 16:16:31.300000) [+5]
+│  Update - 19 March 2023
+│  
+│  
+│  
+│  BirdCLEF 2020 dataset and Xeno-Canto Extended dataset (by @rohanrao) are added for pretraining. Surprisingly there are overlaps of xc_id (reco. by @stefankahl) between the...
+  ├─ nymfree (2023-03-28 20:49:27.903000) [+1]
+  │  thanks. you are a legend!
+├─ nymfree (2023-03-19 18:40:48.503000) [+1]
+│  Thanks for sharing! it is certainly a great pair of notebooks. a lot to learn there. especially doing pretraining properly and audio augmentation. 
+│  one idea I played around with regarding augmentat...
+  ├─ Awsaf (2023-03-22 18:09:14.293000) [+0]
+  │  Yes, I tried denoising in birdclef-2021. Due to slow inference speed I dropped it
+  ├─ RIYADH HAITHAM (2023-03-28 16:52:04.660000) [+0]
+  │  i think you can use Demucs library to do this on gpu
+    ├─ Awsaf (2023-03-28 20:20:36.790000) [+0]
+    │  But for inference you are bound to use CPU…
+├─ Maximiliano Diaz Battan (2023-03-19 10:52:00.463000) [+1]
+│  Many thanks for sharing all of this, this is my first audio competition, and I'm learning a lot in part thanks to your informative topics and notebooks.
+├─ Tariq Mahmood (2023-03-21 04:27:44.270000) [+0]
+│  Thanks for sharing a valuable technique and inspirational insights.👍👍
+├─ Siddharth Kumar (2023-03-19 05:02:59.713000) [+-4]
+│  Hi there! It's great to see that you are utilizing pre-training to improve the performance of your models in the BirdCLEF23 competition. It's definitely a smart move to use the previous competition...
+  ├─ Awsaf (2023-03-19 05:22:37.123000) [+2]
+  │  Thanks for your feedback :)
+├─ THITIWAT RUANGSAKORN (2023-03-21 23:45:33.510000) [+1]
+│  Wow, Thank for sharing
+├─ Adnan Zaidi (2023-04-24 11:02:04.070000) [+0]
+│  Great Work !!! Thanks

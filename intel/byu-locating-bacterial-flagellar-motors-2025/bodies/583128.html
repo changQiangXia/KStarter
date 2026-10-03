@@ -1,0 +1,141 @@
+<h1>Acknowledgement</h1>
+<p>Although I'm actually solo (with <a href="https://www.kaggle.com/daphne4sg" target="_blank">@daphne4sg</a> ) in this competition, I want to thank all my teammates <a href="https://www.kaggle.com/goodcoder" target="_blank">@goodcoder</a>, <a href="https://www.kaggle.com/bigochampion" target="_blank">@bigochampion</a> and <a href="https://www.kaggle.com/cybersimar08" target="_blank">@cybersimar08</a> who help me in another LLM competition and share good things about personal life. I learn a lot from you guys. I also want to thank <a href="https://www.kaggle.com/andrewjdarley" target="_blank">@andrewjdarley</a> for hosting such amazing competition. This project gives a lot of helps for my job interview. I have high willingness to do further development because your goal is very interesting.  </p>
+<h1>Short Story About This Solution</h1>
+<p>This solution originates from the best project of my career, which I completed during my master’s degree a year ago. I collaborated with a director at Micron Technology through an industrial partnership. The project was extremely challenging—we were required to build a high-performance anomaly detector using only 88 HBM scanned images due to data privacy constraints.</p>
+<p>Additionally, the labels were a mix of AOI-judged results and human expert annotations. Our objective was to model the preferences of the human expert. Some parts of my BYU solution were adapted from this HBM project, such as keypoint generation and label inference from graph structures.</p>
+<p>However, the most innovative aspect of my approach was leveraging few-shot prediction with a vision-language model (VLM) instead of traditional object detectors like YOLO. Essentially, I used prompts such as “this HBM is anomalous” or “HBM is OK” to represent the presence or absence of a target, allowing the model to make an initial classification guess.</p>
+<p>My solution calibrates the text-image embedding space using graph-based methods to enable the VLM to perform effectively for our specific task. As a result, I was able to train the model with only about 20 images, and it successfully detected nearly all anomalies identified by human experts in the HBM dataset.</p>
+<h1>Solution</h1>
+<h2>Initial Idea</h2>
+<p>The initial idea can refer to the <a href="https://www.kaggle.com/code/tom99763/first-idea-to-extract-keypoints-byu/notebook" target="_blank">notebook</a> where I made it public earlier. I want to produce a lot of points then refining them by building their relationship with labels. My strategy is sampling around the bacteria since motor existed in the head of it. If I aggregate all the keypoints  and summarize them, the correct semantic might can be captured and get away from noisy labels. However, the biggest issue is how to represent the feature of each point, so I only use patch feature extracted from a simple CNN then building GNN to predict the location of motor. It turns out a really bad model. </p>
+<h2>Further Improvement -- YOLO as Feature Extractor and Keypoint Generator</h2>
+<p>It's funny that I almost leaked my solution in <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/573491" target="_blank">this post</a> two month ago. I had short discussion with <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> about this development. After this discussion, I start to implement it and the idea becomes the pipeline showing below.  So basically I use the C3K2 feature map of YOLO11 because the feature in each spatial position can represent refined object. Setting small confidence threshold (conf=0.05) can filter enough object locations determined from YOLO11. This design boosts the score, improving basic approach a lot.</p>
+<h2>Node Feature -- C3K2 + RandomWalkPE</h2>
+<p>Feature makes very big difference for motor prediction. I've tried almost every types of features like HoG, Daisy, EfficientNet, ResNet and different YOLO versions, all of them do not work well except YOLO11, but the score is still not good enough. After several days, I found <code>AddRandomWalkPE</code> on the <a href="https://pytorch-geometric.readthedocs.io/en/2.5.1/generated/torch_geometric.transforms.AddRandomWalkPE.html" target="_blank">PYG document</a>. I suddenly realize this is the missing ingredient in 3d task. The score instantly boosts after I add it. So the node feature is C3K2 + <code>RanadomWalkPE</code> with <code>walk_length=8</code>. I think the main reason it improves the score is because it can represent the position of each point, implicitly modeling the position of motor.</p>
+<h2>Create More 3D points</h2>
+<p>YOLO successfully generates a lot of points by setting low confidence threshold, but it is still sparse in 3d space and has high possibility missing object existence. So my strategy for solving this issue is using the predicted point as center then uniformly sampling other points within a radius. I set <code>radius</code> and <code>num_samples</code> to control the range and density, respectively. I found using this strategy for training GNN also boosts score. </p>
+<h2>Label Development -- Similarity within Radius</h2>
+<p>Since annotating a single point as motor can not completely represent the actual semantic (that's why host gives so much radius tolerance in the metric), I label a point as positive by the following conditions:</p>
+<ul>
+<li>Features similarity between current location and ground truth location larger than <code>thr_sim</code>.</li>
+<li>The current location is within the 3d radius <code>thr</code> of ground truth location.</li>
+</ul>
+<pre><code> ():
+    label = train_labels[train_labels.tomo_id == tomo_id]
+    (, label[[, , ]].values[])
+    n_motors = label[].item()
+     n_motors == :
+         np.zeros(points.shape[], )
+    d, h, w = label[[, , ]].values[]
+    loc = label[[, , ]].values[]
+    tz, ty, tx = loc.astype()
+    fd, fh, fw = feat.shape[], feat.shape[], feat.shape[]
+    z = tz.astype()
+    y = ((ty/h) * fh).astype()
+    x = ((tx/w) * fw).astype()
+    
+    extract_feat = extract_feat / np.linalg.norm(extract_feat, axis=-, keepdims=)
+    target_feat = feat[z, :, y, x][, :]
+    target_feat = target_feat / np.linalg.norm(target_feat, axis=-, keepdims=)
+    sim = extract_feat @ target_feat.T
+    bool1 = sim[:, ]&gt;thr_sim
+
+    
+    dist = np.linalg.norm(points - loc[, :], axis=-) 
+    bool2 = dist&lt;thr
+
+    
+    label = np.array(bool1 &amp; bool2, dtype=)
+     label
+</code></pre>
+<h2>Choice of Graphs</h2>
+<p>I experimented with various graph structures and ultimately found that combining a k-NN graph with a <a href="https://en.wikipedia.org/wiki/Delaunay_triangulation" target="_blank">Delaunay graph</a> yields the best results. The k-NN graph provides high density, while the Delaunay graph establishes connections between distant clusters. By leveraging both properties, the combined approach results in a more generalized model. The experiment results below clearly explain why someone only take 16 submission attemps and go to sleep for a while.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Public Score</th>
+<th>Private Score</th>
+<th>CV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Knn Graph</td>
+<td><strong>0.835</strong></td>
+<td><strong>0.835</strong></td>
+<td>0.968</td>
+</tr>
+<tr>
+<td>Radius Graph</td>
+<td>0.826</td>
+<td>0.830</td>
+<td>0.966</td>
+</tr>
+<tr>
+<td>Delaunay Graph</td>
+<td>0.801</td>
+<td>0.806</td>
+<td>0.962</td>
+</tr>
+<tr>
+<td>Knn + Radius</td>
+<td>0.841</td>
+<td>0.835</td>
+<td>0.966</td>
+</tr>
+<tr>
+<td>Knn + Delaunay</td>
+<td><strong>0.856</strong></td>
+<td><strong>0.843</strong></td>
+<td>0.966</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4310004%2F6627841c58b70434ff5c698f41fffe0a%2Fgraphs.png?generation=1749125582409642&amp;alt=media" alt=""></p>
+<h2>Pipeline</h2>
+<p>First training a YOLO on the competition dataset. I don't use external dataset because I think the annotator is not the same person so it may gives differenet judgement for the motor existence. Then training the two GraphSages for each fold with <code>Binary Cross Entropy</code> with <code>positive_weight=8</code>. The ensemble function is maximum in my selected submission, but HDBSCAN is better in some scenarios. The training data for GNN is collected from the points filtered by YOLO which contains both positive and negative data. No extra dataset being used here.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F4310004%2F82efe55faaa132866f20dbda41f235e7%2F123.png?generation=1749081901431650&amp;alt=media" alt=""></p>
+<h2>YOLO Size</h2>
+<p>Unfortunately I'm trapped from my experiments and cannot make the right choice in the final minutes of deadline. YOLO11L predicts a lot of false positives which is good in this competition. But I didin't select it. This means I still have to improve my mindset and experience as a data scientist.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Public Score</th>
+<th>Private Score</th>
+<th>CV</th>
+<th>Sub Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YOLO11L</td>
+<td>0.856</td>
+<td><strong>0.843</strong></td>
+<td>0.968</td>
+<td>7HR</td>
+</tr>
+<tr>
+<td>YOLO11X</td>
+<td><strong>0.865</strong></td>
+<td>0.831</td>
+<td><strong>0.983</strong></td>
+<td>11HR</td>
+</tr>
+</tbody>
+</table>
+<h2>What didn't work</h2>
+<ul>
+<li>All the segmentation models </li>
+<li>Pure keypoints generation </li>
+<li>Larger model</li>
+</ul>
+<h1>Code Release</h1>
+<p><a href="https://www.kaggle.com/code/tom99763/21th-place-solution?scriptVersionId=240706129" target="_blank">yolo11l inference notebook</a> (0.843 pb, best private score) <br>
+<a href="https://www.kaggle.com/code/tom99763/21th-place-solution-yolo11x?scriptVersionId=243423147" target="_blank">yolo11x interence notebook</a> (0.831 pb, final submission) <br>
+<a href="https://github.com/tom99763/21th-place-solution-BYU" target="_blank">Github training code</a></p>
+<h1>Experiment Record</h1>
+<p>My pipeline is quite complicated, verifying those methods take me a lot of engineering effort. Here is all the experiment records in the past three months: <a href="https://docs.google.com/spreadsheets/d/1KCo8G_LF3T7FMXkVHWeKxo4vz24zoY7i697syACEaUY/edit?usp=sharing" target="_blank">Google Sheet</a></p>
+<p>If you have any question please comment below or use <a href="tom99763@gmail.com" target="_blank">email</a> &amp; <a href="www.linkedin.com/in/lin-chieh-huang-4b2231227" target="_blank">linkin</a> to contact me! <br>
+You're welcome to share my solution on your blog—it's a great honor for me! I hope others will find it helpful and refer to it in future competitions.</p>

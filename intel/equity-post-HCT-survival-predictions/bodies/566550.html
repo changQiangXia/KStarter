@@ -1,0 +1,289 @@
+<p>First, congratulations to the teams that finally "survived" in this competition, and thank you to the participants who shared their experiences and provided help in the forum.</p>
+<p>I also trained classifier and regressor models independently and then combined them together with a magic function, just like 2nd and 4th place solution. The main idea is that when a patient has a high probability of <code>efs == 0</code>, we should give them a high score. Otherwise, we should give them a relatively lower score and pay more attention to the rank of <code>efs_time</code>. So the regressor just needs to focus on the ranking task where <code>efs == 1</code>.</p>
+<p>Here is the simplified <a href="https://www.kaggle.com/code/minerppdy/1st-place-simplified-private-lb-0-700" target="_blank">code</a>.</p>
+<h2>1. Feature Engineering</h2>
+<ol>
+<li>Original features  </li>
+<li>One-hot encoding for all categorical features(but still keep the original category features)  </li>
+<li>Copy continuous features as categorical features  </li>
+</ol>
+<h2>2. CV Strategy</h2>
+<ol>
+<li>The CV is very unstable with different splits Strategy. To make the results comparable, I used 10-fold splits with same seeds for all classifier and regressor model training.</li>
+</ol>
+<pre><code>y_combine = data[].astype()++data[][].astype()
+skf = StratifiedKFold(n_splits=, shuffle=, random_state=)
+skf.split(X,y_combine)
+</code></pre>
+<ol>
+<li>without use early stoping to reduce the risk of overfitting, especially when I use a large number of folds.</li>
+</ol>
+<h2>3. Classifier</h2>
+<h3>Target: <code>P(efs=0)</code></h3>
+<h3>Models Used</h3>
+<ol>
+<li>XGBoost, LightGBM, CatBoost  </li>
+<li>NN, TabM</li>
+<li>GNN  </li>
+<li>NN/TabNet/GNN with pairwise-rank-loss</li>
+</ol>
+<h3>tricks</h3>
+<ol>
+<li>Gnn method. I use KNN to find nearest 25 nodes and  create edges(use Euclidean Distance),then use graphsage to fit the targets.</li>
+<li>when use rank loss, the predition would shift over different fold because rank loss is not sensitive to shift, which may cause lower CV when calculate metric in the entire set. So you need to fix these shifts to keep same mean/mid prediction value over models trained in differece fold.</li>
+<li>GNN also have this problem even if I used logloss，I still don't know why.</li>
+</ol>
+<h3>auc metrics</h3>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>auc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lightgbm</td>
+<td>0.7603</td>
+</tr>
+<tr>
+<td>catboost</td>
+<td>0.7617</td>
+</tr>
+<tr>
+<td>xgboost</td>
+<td>0.7606</td>
+</tr>
+<tr>
+<td>nn</td>
+<td>0.75902</td>
+</tr>
+<tr>
+<td>tabm</td>
+<td>0.7596</td>
+</tr>
+<tr>
+<td>gnn</td>
+<td>0.7591</td>
+</tr>
+<tr>
+<td>ranknn</td>
+<td>0.7598</td>
+</tr>
+<tr>
+<td>ranktabm</td>
+<td>0.7597</td>
+</tr>
+<tr>
+<td>rankgnn</td>
+<td>0.7586</td>
+</tr>
+</tbody>
+</table>
+<h3>interesting finding</h3>
+<ol>
+<li>The best max depth for LGB and XGB is 2 (for CatBoost, it's 6, and I still don't know why). This is nearly unheard of in my experience. It means there is little valuable feature interaction information, and the task is easy to fit. Maybe that's why NN like models also work well in this tabular data.</li>
+</ol>
+<h2>4. Regressor</h2>
+<h3>Target</h3>
+<p>Grouped and normalized rank by <code>efs</code>  </p>
+<pre><code>efs_time_norm[efs == ] = efs_time[efs == ].rank() / (efs == )  
+efs_time_norm[efs == ] = efs_time[efs == ].rank() / (efs == )  
+</code></pre>
+<h3>Models used</h3>
+<p>XGBoost lightgbm catboost( NN like model didn't work well for me, if any one succeed in NN like model, please let me know.)</p>
+<h3>Tricks</h3>
+<ol>
+<li>Add efs as a feature when training and focus on the performance at samples where <code>efs==1</code>. Set <code>efs=1</code> when making inference on LB data. </li>
+<li>apply sample weight on efs==1 and efs==0 with 0.6:0.4</li>
+<li>Here's why this trick is used. Initially, I trained the regressor only on samples where <code>efs==1</code>. When using this model to make inference on samples where <code>efs==0</code>, it still showed an obvious correlation between prediction and ground truth. This is strange because efs_time for <code>efs==0</code> is meaningless due to various reasons could cause data censoring. I guess it's because of the SurvalGAN algorithm. By the way, it turns out that there are similar patterns between samples where <code>efs==0</code> and <code>efs==1</code>. So, by adding samples where <code>efs==0</code>, the regressor's performance on <code>efs==1</code> improved significantly!</li>
+</ol>
+<h3>Raw Concordance Index on efs==1</h3>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>c-index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xgboost</td>
+<td>0.770229</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>0.767615</td>
+</tr>
+<tr>
+<td>catboost</td>
+<td>0.769340</td>
+</tr>
+</tbody>
+</table>
+<h2>5.Merge Function</h2>
+<pre><code> ():
+    
+    y_fun = (Y_HAT_REG&gt;)*c*(np.(Y_HAT_REG))**(b)
+    x_fun =(Y_HAT_CLS&gt;)*(np.(Y_HAT_CLS))**(a)
+    res = (-y_fun)*x_fun+y_fun
+    res = pd.Series(res).rank()/(res)
+     res
+</code></pre>
+<p>This is what the merge function looks like(without rank transform), where x is the probablity of efs==0 and y is predicted efs_time(scaled to 0~1) <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F24200812%2F9121e2fc16b8f0cc18f16c9d8e363608%2Fmerge_function.jpg?generation=1741316566114375&amp;alt=media" alt=""></p>
+<h2>6 Ensembling Method</h2>
+<ol>
+<li><p>Create combinations between classifiers and regressors, then find the best (a, b, c) for the merge function by with 5-folds and then get the merged predictions.</p>
+<p>Here is Stratified Concordance Index of combinations. Ignoring the rank transform in merge function, pretty sure there is no leakage</p>
+<table>
+<thead>
+<tr>
+<th>cls</th>
+<th>reg</th>
+<th>CV Stratified c-index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xgboost</td>
+<td>xgboost</td>
+<td>0.6938821198444668</td>
+</tr>
+<tr>
+<td>xgboost</td>
+<td>catboost</td>
+<td>0.693390761259049</td>
+</tr>
+<tr>
+<td>xgboost</td>
+<td>lightgbm</td>
+<td>0.6920553689042972</td>
+</tr>
+<tr>
+<td>catboost</td>
+<td>xgboost</td>
+<td>0.6946771227057665</td>
+</tr>
+<tr>
+<td>catboost</td>
+<td>catboost</td>
+<td>0.6942415329389815</td>
+</tr>
+<tr>
+<td>catboost</td>
+<td>lightgbm</td>
+<td>0.6928675187239672</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>xgboost</td>
+<td>0.6935306031275579</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>catboost</td>
+<td>0.693123814234674</td>
+</tr>
+<tr>
+<td>lightgbm</td>
+<td>lightgbm</td>
+<td>0.6917244174625249</td>
+</tr>
+<tr>
+<td>tabm</td>
+<td>xgboost</td>
+<td>0.6943607674628444</td>
+</tr>
+<tr>
+<td>tabm</td>
+<td>catboost</td>
+<td>0.6936616324722884</td>
+</tr>
+<tr>
+<td>tabm</td>
+<td>lightgbm</td>
+<td>0.6922428015362854</td>
+</tr>
+<tr>
+<td>nn</td>
+<td>xgboost</td>
+<td>0.6939542378441973</td>
+</tr>
+<tr>
+<td>nn</td>
+<td>catboost</td>
+<td>0.6932931191267933</td>
+</tr>
+<tr>
+<td>nn</td>
+<td>lightgbm</td>
+<td>0.6920700218390199</td>
+</tr>
+<tr>
+<td>gnn</td>
+<td>xgboost</td>
+<td>0.6940062476514388</td>
+</tr>
+<tr>
+<td>gnn</td>
+<td>catboost</td>
+<td>0.6932012736212297</td>
+</tr>
+<tr>
+<td>gnn</td>
+<td>lightgbm</td>
+<td>0.6921340326054011</td>
+</tr>
+<tr>
+<td>ranktabm</td>
+<td>xgboost</td>
+<td>0.693141398733159</td>
+</tr>
+<tr>
+<td>ranktabm</td>
+<td>catboost</td>
+<td>0.6927626179572159</td>
+</tr>
+<tr>
+<td>ranktabm</td>
+<td>lightgbm</td>
+<td>0.6912730733179469</td>
+</tr>
+<tr>
+<td>ranknn</td>
+<td>xgboost</td>
+<td>0.6944776101013886</td>
+</tr>
+<tr>
+<td>ranknn</td>
+<td>catboost</td>
+<td>0.6936542865352446</td>
+</tr>
+<tr>
+<td>ranknn</td>
+<td>lightgbm</td>
+<td>0.6924528052605144</td>
+</tr>
+<tr>
+<td>rankgnn</td>
+<td>xgboost</td>
+<td>0.6934854451860402</td>
+</tr>
+<tr>
+<td>rankgnn</td>
+<td>catboost</td>
+<td>0.692783734834767</td>
+</tr>
+<tr>
+<td>rankgnn</td>
+<td>lightgbm</td>
+<td>0.6916329456191074</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Ensemble the merged predictions using a weighted average with Optuna and 5-folds.</p></li>
+<li><p>Since there are 9 classifiers × 3 regressors = 27 combinations, there is a risk of overfitting. Therefore, I set the Optuna search range for weights to be between 0.1 and 1, rather than 0 and 1. I think this is a form of regularization.</p></li>
+<li><p>The  final CV Stratified c-index is round 0.6965</p></li>
+<li><p>Adding noise to some race groups significantly improved cross-validation performance, but it didn't work on either the public or private LB.</p></li>
+</ol>

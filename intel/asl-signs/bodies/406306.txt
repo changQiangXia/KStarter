@@ -1,0 +1,402 @@
+# https://www.kaggle.com/competitions/asl-signs/discussion/406306
+
+Topic #406306: 2nd Place Solution | Google - Isolated Sign Language Recognition
+  Author: Kolya Forrat
+  Posted: 2023-05-02 00:16:47.837000
+  Votes: 118  Comments: 48
+
+TLDR
+
+We used an approach similar to audio spectrogram classification using the EfficientNet-B0 model, with numerous augmentations and transformer models such as BERT and DeBERTa as helper models. The final solution consists of one EfficientNet-B0 with an input size of 160x80, trained on a single fold from 8 randomly split folds, as well as DeBERTa and BERT trained on the full dataset. A single fold model using EfficientNet has a CV score of 0.898 and a leaderboard score of ~0.8.
+
+We used only competition data.
+
+1. Data Preprocessing
+
+1.1 CNN Preprocessing
+
+
+
+We extracted 18 lip points, 20 pose points (including arms, shoulders, eyebrows, and nose), and all hand points, resulting in a total of 80 points.
+
+During training, we applied various augmentations.
+
+We implemented standard normalization.
+
+Instead of dropping NaN values, we filled them with zeros after normalization.
+
+We interpolated the time axis to a size of 160 using 'nearest' interpolation: yy = F.interpolate(yy[None, None, :], size=self.new_size, mode='nearest').
+
+Finally, we obtained a tensor with dimensions 160x80x3, where 3 represents the (X, Y, Z) axes. 
+
+
+1.2 Transformer Preprocessing
+
+
+
+
+Only 61 points were kept, including 40 lip points and 21 hand points. For left and right hand, the one with less NaN was kept. If right hand was kept, mirror it to left hand.
+
+
+Augmentations, normalization and NaN-filling were applied sequentially.
+
+
+Sequences longer than 96 were interpolated to 96. Sequences shorter than 96 were unchanged.
+
+
+Apart from raw positions, hand-crafted features were also used, including motion, distances, and cosine of angles.
+
+
+Motion features consist of future motion and history motion, which can be denoted as:
+
+
+$$
+  Motion_{future} = position_{t+1} - position_{t}
+$$
+$$
+  Motion_{history} = position_{t} - position_{t-1}
+$$
+
+
+
+
+Full 210 pairwise distances among 21 hand points were included. 
+
+
+There are 5 vertices in a finger (e.g. thumb is [0,1,2,3,4]), and therefore, there are 3 angles: &lt;0,1,2&gt;, &lt;1,2,3&gt;, &lt;2,3,4&gt;. So 15 angles of 5 fingers were included.
+
+
+Randomly selected 190 pairwise distances and randomly selected 8 angles among 40 lip points were included.
+
+
+2. Augmentation
+
+2.1 Common Augmentations
+
+
+  
+These augmentations are used in both CNN training and transformer training
+
+
+
+
+
+Random affine: Same as @hengck23 shared. In CNN, after global affine, shift-scale-rotate was also applied to each part separately (e.g. hand, lip, body-pose).
+
+
+Random interpolation: Slightly scale and shift the time dimension.
+
+
+Flip pose: Flip the x-coordinates of all points. In CNN, x_new = x_max - x_old. In transformer, x_new = 2 * frame[:,0,0] - x_old.
+
+
+Finger tree rotate: There are 4 root-children pairs in a finger with 5-vertices. E.g. in thumb ([0,1,2,3,4]), these 4 root-children pairs are: 0-[1,2,3,4],1-[2,3,4],2-[3,4],3-[4]. We randomly choose some of these pairs, and rotate the children points around root point with a small random angle.
+
+
+2.2 CNN Specific Augmentations
+
+
+
+Mixup: Implement basic mixup augmentation (only works with CNNs, not transformers).
+
+Replace augmentation: Replace some random parts from other samples of the same class.
+
+Time and frequence masking: This basic torchaudio augmentation works exceptionally well.
+
+
+freq_m = torchaudio.transforms.FrequencyMasking()  
+time_m = torchaudio.transforms.TimeMasking()       
+
+
+2.3 Augmented Sample Example
+
+Before augmentation:
+
+ 
+
+After augmentation:
+
+  
+
+3. Training
+
+3.1 CNN Training
+
+
+
+Train on one fold with a random split (8 folds in total) or the full dataset using the best parameters
+
+Onecycle scheduler with 0.1 warmup.
+
+Use weighted CrossEntropyLoss. Increase the weights for poorly predicted classes and classes with semantically similar pairs (such as kitty and cat)
+
+Implement a hypercolumn for EfficientNet with 5 blocks
+
+
+3.2 Transformer Training
+
+
+
+Train on one fold with a random split (8 folds in total) or the full dataset using the best parameters
+
+Ranger optimizer with 60% flat and 40% cosine annealing learning rate schedule.
+
+A 4-layer, 256 hidden-size, 512 intermediate-size transformer were trained.
+
+A 3-layer model was initialized with 4-layer model's first 3 layers. Knowledge distillation were used in 3-layer model training, in which the 4-layer model is the teacher.
+
+
+3.3 Hyperparameter Tuning
+
+Since we trained only one fold and used smaller models, we decided to tune most parameters with Optuna. 
+
+Here is the parameters list of CNN training (transformer training has a similar param-list):
+
+
+
+
+All augmentations probabilities (0.1 - 0.5+)
+
+
+Learning rate (2e-3 - 3e-3)
+
+
+Drop out (0.1 - 0.25)
+
+
+Num of epochs (170-185)
+
+
+Loss weights powers (0.75 - 2)
+
+
+Optimizer (Lookahead_RAdam, RAdam)
+
+
+Label smoothing (0.5 - 0.7)
+
+
+4. Submissions, Conversion and Ensemble
+
+
+
+
+We rewrote all our models in Keras and transferred PyTorch weights to them, resulting in a speed boost of around 30%. For transformer model, pytorch-onnx-tf-tflite will generate too much useless tensor shape operations, a fully rewriting can reduce these manually. For CNN model, we rewrote DepthwiseConv2D with a hard-coded way, whose speed is 200%~300% of its original version of tflite DepthwiseConv2D.
+
+
+After that, we aggregated all these models in the tf.Module class. Converting directly from Keras resulted in lower speed (don't know why).
+
+
+We calculated ensemble weights for models trained on fold 0 using the local fold 0 score and applied these weights to the full dataset models.
+
+
+EfficientNet-B0 achieved a leaderboard score of approximately 0.8, and transformers improved the score to 0.81. The final ensemble included:
+
+
+
+Efficientnet-B0, fold 0
+
+BERT, full data train
+
+DeBERTa, full data train
+
+
+Interestingly, a key feature was using the ensemble without softmax, which consistently provided a boost of around 0.01.
+
+5. PS. Need BETTER TFlite DepthwiseConv2D
+
+Depthwise convolution models performed very well for these tasks, outperforming other CNN and ViT models (rexnet_100 was also good).
+We spent a lot of time dealing with the conversion of DepthwiseConv2D operation. Here are some strange results:
+
+Given a input image with 82x42x32 (HWC), there are two ways to do a 3x3 depthwise convolution in Keras. One is Conv2D(32, 3, groups = 32), the other is DepthwiseConv2D(3). However, after converting these two to tflite, the running time of the Conv2D is 5.05ms, and the running time of DepthwiseConv2D is 3.70ms. More strangely, a full convolution Conv2D(32, 3, groups = 1) with FLOPs = HWC^2 only takes 2.09ms, even faster than previous two with FLOPs = HWC.
+
+Then we rewrote the depthwise-conv like this:
+
+     ():
+        out = x[:,:self.H_out:self.strides,:self.W_out:self.strides] * self.weight[,]
+         i  (self.kernel_size):
+             j  (self.kernel_size):
+                 i ==   j == :
+                    
+                out += x[:,i:self.H_out + i:self.strides,j:self.W_out + j:self.strides] * self.weight[i,j]
+         self.bias   :
+            out = out + self.bias
+         out
+
+
+The running time of this is 1.24 ms.
+
+In summary, our version (1.24ms) &gt; full Conv2D with larger FLOPs (2.09ms) &gt; DepthwiseConv2D (3.70ms) &gt; Conv2D(C, groups = C) (5.05ms).
+
+However, our version introduced too much nodes in tflite graph, which is not stable in running time. If the tensorflow team has a better implementation of DepthwiseConv2D, we can even ensemble two CNN models, which is expected to reach 0.82 LB.
+
+By the way, EfficientNet with ONNX was ~5 times faster than TFLite.
+
+Big thanks to my teammates @artemtprv and @carnozhao and congrats with new tiers, Master and GrandMaster!
+
+github code
+
+Comments:
+├─ Camaro (2023-05-02 06:31:09.200000) [+3]
+│  Congrats for the 2nd place! 
+│  I haven't even imagine treating this data as image… (I like audio spectrogram analogy by the way!)
+│  Well deserved!
+  ├─ Artem Toporov (2023-05-02 14:41:52.940000) [+0]
+  │  Thank you!
+├─ Darragh (2023-05-02 07:31:49.030000) [+4]
+│  Very nice work for both branches (CNN, Transformer) of the solution. How did you identify Depthwise convolution particularly as the bottleneck ? I tried efficientnet but it was too slow for me… how...
+  ├─ Kolya Forrat (2023-05-02 10:36:24.830000) [+2]
+  │  About identification I hope Carno will answer to you later (he found that)
+  │  
+  │  About the ordering:
+  │  We arranged them in groups (lips, left hand, pose, right hand), and within groups, in the order in wh...
+  ├─ Carno Zhao (2023-05-02 11:51:44.417000) [+3]
+  │  I use Tensorflow's benchmark tool to analyze Node-wise running time. But DepthwiseConv is slower than what I expected.
+├─ Kolya Forrat (2023-05-02 00:44:29.260000) [+4]
+│  By the way, for us in public LB score for full data train CNN versions was worse and we haven't select it. But in private they were better. But still lower than @hoyso48 . That's a pure victory on ...
+├─ CroDoc (2023-05-02 12:50:19.213000) [+1]
+│  Congrats on the great result. Thanks for the detailed write-up. Found a lot of useful tricks that are gonna help in the future 🔥
+├─ mhdaw (2023-05-02 10:30:59.163000) [+1]
+│  Congrats great approach and good idea to use it as image 🎉🎉🎉🔥
+├─ slime (2023-05-02 00:34:15.397000) [+1]
+│  Congratz with the result! 
+│  About DepthwiseConv2D, - I had the same problem when depthwise conv1d was converted not efficiently when using pytorch-onnx-tf pipeline, I used it for positional encoding...
+  ├─ Kolya Forrat (2023-05-02 00:37:31.773000) [+2]
+  │  Thanks. Congrats to you too!
+  │  
+  │  Yeah, we tried 'nobuco' and some other converters with ONNX. But they are all slower than our keras version. For example with nobuco we was able to add only one transf...
+  ├─ Carno Zhao (2023-05-02 00:48:17.833000) [+2]
+  │  I think what causes DepthwiseConv2D slow is the low-level code of tflite. We can not solve this unless we can use custom ops. In our solution, we use many other ops like Mul, Add, StrideSlice to re...
+├─ Theo Viel (2023-05-02 21:49:33.037000) [+2]
+│  Congratz on the result and on the overall impressive performance !
+│  0.81 public was impressive, we guessed you were using CNNs but could not get them to match our transformer performances.
+  ├─ Kolya Forrat (2023-05-04 09:30:03.727000) [+1]
+  │  Thanks. Congratulations to you too!
+  │  
+  │  
+  │    
+  │  we guessed you were using CNNs but could not get them to match our transformer performances.
+  │  
+  │  
+  │  I guess it because we have started CNN at early stage, when t...
+├─ yukiya (2023-05-02 01:59:03.923000) [+2]
+│  Big congratulations, and thanks for write-ups. It's amazing to read your struggle to speed up the inference 👍
+  ├─ Kolya Forrat (2023-05-02 02:03:15.260000) [+2]
+  │  Thanks to you 🙃
+├─ Johnpaul Nwagwu (2023-09-11 22:29:49.607000) [+0]
+│  Thank you so much for posting your solution. Great job!!
+├─ Adir Eliza (2023-08-15 20:08:21.507000) [+0]
+│  Hi,
+│  Congrats on second place!
+│  
+│  We are trying to run the code on the colab file training_notebook_example, and I saw that there is a possibility to run TREF model, which for what I understand run bo...
+├─ Quentin Parrenin (2023-08-09 02:25:50.227000) [+0]
+│  Could someone explain this part for the normalization with how you found those values to be replaced by  (lign 237 to 243 of data.py) :   
+│  self.interesting_idx = np.array(LIPS + l_hand + pose + r_h...
+├─ Heysem Ismail (2023-07-23 15:41:40.637000) [+0]
+│  @kolyaforrat great work. I could not find the transfer_transformer function used in inference code. Could you help me find it?
+├─ Hasan Patel Rodriguez (2023-05-05 00:08:55.600000) [+0]
+│  Great work, 2nd place is impressive. Hope to learn from your approach and use it to solve similar problems.
+├─ Rob Mulla (2023-05-04 14:34:39.260000) [+0]
+│  Great work! I'm very inspired by your spectrogram classification approach. Very clever! I've been trying to recreate it locally from scratch using your code on github a a guide. Any chance you coul...
+  ├─ Kolya Forrat (2023-05-04 15:25:01.003000) [+1]
+  │  Thanks!
+  │  Sure, that's my last attempts to train, here is 16 random fold split train (accuracy ~0.005 higher than 8 folds split)
+  │  
+  │  LR:
+  │  
+  │  
+  │  Train/Val Loss
+  │  
+  │  
+  │  Accuracy:
+  │  
+  │  
+  │  TopK3:
+  │  
+  │  
+  │  Epochs-accuracy-LR:
+    ├─ Rob Mulla (2023-05-04 19:57:43.583000) [+0]
+    │  This is great! Thanks for sharing. I'm noticing your loss function uses bad_weights.npy and common_weights.npy which you'ver provided in your repo- do you have any more detail about how those were ...
+    ├─ Kolya Forrat (2023-05-04 20:14:44.060000) [+1]
+    │  First we trained models with basic CE loss. And then we analyzed the errors of our models as provided here
+    │  
+    │  
+    │  
+    │  Bad weights - increase weights of bad predicted classes
+    │  
+    │  Common weights - increase weig...
+    ├─ Rob Mulla (2023-05-04 20:33:58.303000) [+0]
+    │  Thanks again for answering. Very interesting. I did something similar with looking at common words - but I did the opposite and added additional label smoothing for them. Maybe I should have been d...
+    ├─ Kolya Forrat (2023-05-04 20:49:42.530000) [+1]
+    │  Yeah, they become lower than calculated by errors, but higher that just 1 :)
+    │  
+    │  For example weight for class cat = 2, and it becomes 2**0.75~=1.68 in current run if pw_bad = 0.75
+    │  
+    │  As I said we tuned ...
+├─ Siarhei T (2023-05-03 12:14:36.877000) [+0]
+│  So cool to read about your approach, thank you for sharing! Interestingly, as probably many of us, I could not get CNN to work on this problem, now I see why. "Devil is in the details". Congrats on...
+├─ Hemangi atale (2023-05-03 08:23:05.040000) [+0]
+│  Congrats ! You did a great work
+├─ Kolya Forrat (2023-05-02 20:32:58.400000) [+0]
+│  Now just tried to submit single fold solo CNN model and got this score:
+│  
+│  
+│  It's 5th place in public and 4th in private with 17.5 MB and 42 minutes
+├─ asjad2024 (2023-05-02 20:32:33.493000) [+0]
+│  wow great !this will be very helpful this is what in summary i understood-
+│  They used an approach similar to audio spectrogram classification for their solution.
+│  They used EfficientNet-B0 as the mai...
+├─ Ivan Isaev (2023-05-02 16:56:26.467000) [+0]
+│  @kolyaforrat  @artemtprv @carnozhaocongrats with the second highest place in so competitive contest!💥🎉 The 5-th paragraph of you post is especially interesting as well as Efficientnet+BERT+DeBERTa ...
+├─ Mykola (2023-05-02 16:32:14.707000) [+0]
+│  Congrats on the perfect result! 
+│  
+│  May I ask you to clarify a way you use cross-validation? You mentioned Train on one fold with a random split (8 folds in total) or the full dataset using the best ...
+  ├─ Kolya Forrat (2023-05-02 16:54:04.137000) [+1]
+  │  Thanks!
+  │  
+  │  We tested few times for 5 folds, and with random split OOF scores was almost the same for all folds. That's why after this we trained only fold 0 for all splits. We tried 5 folds, 8 folds,...
+    ├─ Mykola (2023-05-02 18:02:02.593000) [+0]
+    │  Thank you so much for your answer!
+    │  
+    │  
+    │    
+    │  Also sorry about your shakedown, I know that feeling 🙃
+    │  
+    │  
+    │  Ah, that is painful, taking into account that it was my first real competition I participate from st...
+├─ zj yang (2023-05-02 06:01:22.063000) [+0]
+│  Could you further explain the meaning of your xyz heatmap? I do not understand why you put it in the repo…
+  ├─ Kolya Forrat (2023-05-02 06:15:41.597000) [+0]
+  │  data is:
+  │  
+  │  sample = train.loc[i] 
+  │  yy = load_relevant_data_subset(base_dir + sample[])  
+  │  
+  │  
+  │  In training dataset class we just combine all these yy to list and iterate through it. We keep it RAM for fa...
+    ├─ [deleted] (2023-06-07 07:16:53.420000) [+0]
+    │  [deleted]
+    ├─ Kolya Forrat (2023-06-07 08:13:20.387000) [+0]
+    │  Answer here
+├─ JimmyWang (2023-05-02 05:40:05.650000) [+0]
+│  Thanks for sharing, and congratulations!
+├─ gutendzx (2023-05-02 05:32:59.060000) [+0]
+│  Amazing!Thanks for sharing the detail approaches here.
+├─ serangu (2023-05-02 04:06:32.953000) [+0]
+│  @kolyaforrat cool solution! Congrats with 2nd place!
+├─ Emre Kurtoglu (2023-05-02 03:25:04.227000) [+0]
+│  Thank you for the explanation! Is the source code going to be published publicly? That would be great.
+  ├─ Kolya Forrat (2023-05-02 04:20:45.850000) [+2]
+  │  Sure, it posted here
+├─ Ravi Ramakrishnan (2023-05-02 01:13:55.517000) [+0]
+│  Hearty congratulations to you for the fantastic result and associated gold medal and best regards @kolyaforrat
+├─ joejeo1 (2023-05-02 00:50:25.557000) [+0]
+│  Very impressive.  Thanks for sharing the detail approaches here.
+├─ [deleted] (2024-08-26 12:17:03.667000) [+0]
+│  [deleted]
+├─ [deleted] (2023-05-02 09:07:43) [+0]
+│  [deleted]
+├─ [deleted] (2023-05-05 06:47:22.663000) [+0]
+│  [deleted]

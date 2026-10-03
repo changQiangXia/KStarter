@@ -1,0 +1,185 @@
+# https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552638
+
+Topic #552638: First Place Write-Up: Or How I Won the Lottery
+  Author: Lennart Haupts
+  Posted: 2024-12-20 17:33:46.235000
+  Votes: 94  Comments: 50
+
+First and foremost, I would like to thank the organizers and Kaggle for making this competition possible. Tackling real-world noisy data was both a challenging and rewarding experience.
+
+To be perfectly honest, luck played a major role in my success. I was especially lucky actually selecting the best possible notebook. Nevertheless, I’d like to present what I did. (Link to the notebook)
+
+Interestingly, I dropped out of the competition two months ago only to re-enter recently. My focus during this return was on improving the robustness of the solution.
+
+Final Model Overview
+
+The final solution was a voted ensemble consisting of:
+•    LGBMRegressor
+•    Two XGBoost Regressors
+•    CatBoostRegressor
+•    ExtraTreesRegressor
+
+Target, Cross-Validation, and Sample Weights
+
+•    Target Variable: Instead of using the provided sii labels, I used the 'PCIAT-PCIAT_Total' score and converted the predictions to sii labels. 
+•    Distribution and Weighting: The target’s distribution, especially the excess zeros, led to two approaches: exploring sample weights and alternative objectives for regression like Tweedie. Equidistant bins were used to define the sample weights. Weighting did not improve the optimized scores directly but it brought the unoptimized scores closer to the optimized scores.
+•    Cross-Validation: A 10-fold stratified KFold was used, stratified by the bins. Seeds were frequently changed to ensure stability. Submissions with different seeds were used to get further feedback from the public Leaderboard on the variance. The LB-score itself was mostly ignored to minimize overfitting to the leaderboard.
+
+Data Cleaning, Feature Engineering, and Imputation
+
+Data Cleaning: 
+
+
+
+Implausible values, such as body fat percentages over 60% or negative bone mineral content, were removed and replaced with NaN.
+
+
+Feature Engineering: 
+
+
+
+Various descriptive actigraph features were created, with separate masks for day and night.
+
+Dimensionality reduction of the actigraph data using PCA retained 15 components.
+
+Additional features included normalized values based on age group means and other features that seemed sensible like the difference between the daily energy expenditure and the basal metabolic rate.
+
+Quantile binning was applied to a good chunk of the features to deal with the noise. Which worked surprisingly well.
+
+
+Imputation: 
+
+
+
+Lasso was used for feature imputation, due to the moderately high dimensionality and noise.
+
+Features were imputed using Lasso. For each target column, a model was trained using features with fewer than 40% missing values, and missing values in these features were imputed based on the trained model. If no valid features (i.e., features with less than 40% missing values) were found for imputation, or if the number of valid samples was too small, the solution defaulted to mean imputation.
+
+
+Parameter Tuning and Feature Selection
+
+Early in the competition, it became apparent that typical parameter tuning with regular cross-validation setups resulted in unstable outcomes. To address this:
+•    Repeated Stratified KFold was employed during parameter tuning. With 10 to 20 repeats. Which was computationally more expensive but yielded more robust results.
+•    Feature selection was done manually based on feature importance, reducing the dataset to 39 features
+
+Comments:
+├─ Vladimir Demidov (2024-12-20 17:51:34.420000) [+7]
+│  Simple but solid classical approach. Congrats! You overcome all bottlenecks by your methodology. This is inspiring.
+  ├─ Abhisek Das (2024-12-21 08:21:31.750000) [+0]
+  │  congrats @yekenot… can u share ur approach.. u got 19th and I would love to know ur approach
+  ├─ Lennart Haupts (2024-12-21 17:49:21.127000) [+0]
+  │  Thank you very much for your kind feedback. Very much appreciated.☺️
+├─ Miles (2025-01-14 23:34:28.510000) [+1]
+│  One strange phenomenon to be explained. I find the engineered features, like PU_norm, CU_norm etc., have lower Spearman's correlation score than the original features with the target, why using tho...
+  ├─ Lennart Haupts (2025-01-19 14:06:16.173000) [+0]
+  │  Hey, thank you for engaging with my solution. That's an insightful observation. PU and CU were strongly correlated with age, which also had a strong relationship with the outcome. By normalizing PU...
+    ├─ Miles (2025-01-22 21:50:46.880000) [+0]
+    │  Thank you very much for the explanation! The intuition totally makes sense. The confusion just comes from the lower correlation score of the normalized with respect to the target. So, during featur...
+├─ Syed Rabeet (2024-12-29 11:43:11.533000) [+1]
+│  That's great, congrats
+├─ Bikram Chatterjee (2024-12-28 16:25:06.933000) [+1]
+│  very inspiring!
+├─ Harsh Darji (2024-12-28 11:46:06.423000) [+1]
+│  Really nice feature engineering and congratulations!
+├─ Mohan Nellore (2024-12-26 16:29:14.670000) [+1]
+│  well done, great work
+├─ Dang An (2024-12-26 11:35:40.990000) [+1]
+│  I rlly admire u. As a person w/ deep ML knowledge, can u give me (a newbie) some advice on ML?
+  ├─ Lennart Haupts (2025-01-19 14:19:00.707000) [+1]
+  │  Thank you so much, and apologies for my late response! 😊 I honestly wouldn’t consider myself as someone with particularly deep ML knowledge, but I really appreciate your kind words.
+  │  
+  │  If I could sha...
+    ├─ Dang An (2025-02-08 14:56:55.463000) [+0]
+    │  Thanks U for ur advice &lt;3
+├─ Mai Phong (2024-12-26 11:23:17.253000) [+1]
+│  Wow, great work!
+├─ CodeCavalier (2024-12-26 07:05:20.067000) [+1]
+│  Thanks for bringing this to my attention!
+├─ Juliet Kreisel (2024-12-24 23:30:51.783000) [+1]
+│  Wow, great work!
+├─ Eya Jlassi (2024-12-24 12:55:14.013000) [+1]
+│  Simple but solid classical approach. This is inspiring.
+├─ Alexander Kapturov (2024-12-24 12:13:18.220000) [+1]
+│  Congratulations, Lennart @lennarthaupts !
+├─ Zhixing Zhang (2024-12-24 11:28:45.663000) [+1]
+│  great job, congra
+├─ Azadeh Razmi (2024-12-23 12:43:19.597000) [+1]
+│  exellent👍
+├─ Yinuo Huang (2024-12-23 02:50:02.713000) [+1]
+│  Really nice feature engineering and congratulations!
+├─ Nadav Cherry (2024-12-22 08:31:08.667000) [+1]
+│  Congratulations！Solid work
+├─ Eunki_H (2024-12-21 14:12:16.827000) [+1]
+│  Congratulations! Your solid work truly inspires me and highlights the attitude needed for success in Machine Learning. Thank you for sharing your insights!
+  ├─ Lennart Haupts (2024-12-21 17:52:50.903000) [+1]
+  │  Thanks a lot!
+├─ Abhisek Das (2024-12-21 08:19:59.150000) [+1]
+│  Congratulations @lennarthaupts 🎉🎉.. Your solution help me think beyond the box, especially the usage of ExtraTreesRegressor in the end… though I would like to know more about the details of dimensi...
+  ├─ Lennart Haupts (2024-12-21 18:16:04.337000) [+0]
+  │  Thank you very much! I’ve shared the notebook link above, but here it is again:
+  │  
+  │  Notebook Link
+  │  
+  │  I used quantile binning because the data was noisy. While binning loses some information by grouping ...
+├─ taroiwai (2024-12-21 07:24:28.323000) [+1]
+│  Congratulations! And thank you for sharing the excellent strategies.
+│  
+│  Retaining unnecessary features can compromise the model's robustness. However, I hesitated to remove features because eliminati...
+  ├─ Lennart Haupts (2024-12-21 17:56:53.613000) [+0]
+  │  Thank you for your kind words!
+  │  
+  │  Yes, I approached this manually and iteratively without really hard criteria. I focused on features that showed low importance across three models, removing one to t...
+├─ muteman (2024-12-21 05:17:38.427000) [+1]
+│  Congratulations！Solid work
+  ├─ Lennart Haupts (2024-12-21 17:53:27.763000) [+0]
+  │  Thank you.
+├─ ArthurT800 (2024-12-21 04:36:30.750000) [+1]
+│  Congratulations. Really efficient strategy.
+  ├─ Lennart Haupts (2024-12-21 17:53:53.390000) [+0]
+  │  Many thanks!
+├─ Mahmoud Elshahed (2024-12-20 20:30:45.657000) [+1]
+│  Congrats, Very Efficient ⭐
+  ├─ Lennart Haupts (2024-12-21 17:59:28.590000) [+0]
+  │  Thanks so much☺️
+├─ vandl (2024-12-20 20:13:42.753000) [+1]
+│  Congratulations! Very different approach compared to "best" public notebooks, who didn't drop any features at all. The robustness and stability of the model seems to have been an important aspect o...
+  ├─ Lennart Haupts (2024-12-21 18:01:03.823000) [+0]
+  │  Thank you for the kind comment.
+  │  
+  │  When constructing new features, I usually focused on finding a domain reason; what the new feature might capture. Some features were also created to reduce dimensio...
+├─ Deepak Saldanha (2024-12-20 18:56:04.313000) [+1]
+│  Many congratulations and well thought out feature engineering approaches given the unreliable nature of this data.
+  ├─ Lennart Haupts (2024-12-21 17:54:45.587000) [+0]
+  │  I appreciate your kind words.
+├─ aldparis (2024-12-20 17:51:00.257000) [+2]
+│  Congratulations @lennarthaupts !
+  ├─ Lennart Haupts (2024-12-21 17:52:06.333000) [+1]
+  │  Much appreciated!☺️
+├─ EvelynSuryadi (2024-12-21 11:07:00.617000) [+0]
+│  Thank you for sharing your approach to the problem. Great work !
+├─ Saurabh Tiwari (2025-03-16 07:46:17.503000) [+0]
+│  Congratulations, but how to get the best set of ensemble models.
+├─ just another tuesday (2025-01-06 07:37:58.560000) [+0]
+│  nice work!
+│  
+│  Could I ask, 
+│  
+│  
+│  
+│  why 2 XGboost models? Since the rest of the model types you only went with one implementation.
+│  
+│  the final model submission is trained on the whole dataset right? not an...
+├─ quietseong (2024-12-24 07:50:19.917000) [+1]
+│  congrats!!😀
+├─ [deleted] (2024-12-24 06:07:56.777000) [+1]
+│  [deleted]
+├─ [deleted] (2024-12-23 19:09:15.247000) [+1]
+│  [deleted]
+├─ [deleted] (2024-12-29 13:51:55.923000) [+0]
+│  [deleted]
+├─ [deleted] (2024-12-29 12:47:18.917000) [+0]
+│  [deleted]
+├─ [deleted] (2024-12-29 07:11:25.900000) [+0]
+│  [deleted]
+├─ [deleted] (2024-12-26 15:18:52.897000) [+0]
+│  [deleted]

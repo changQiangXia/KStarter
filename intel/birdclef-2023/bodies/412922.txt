@@ -1,0 +1,165 @@
+# https://www.kaggle.com/competitions/birdclef-2023/discussion/412922
+
+Topic #412922: top 7th solution - `sumix` augmentation did all the work
+  Author: b ing
+  Posted: 2023-05-25 20:45:53.345000
+  Votes: 38  Comments: 1
+
+What's important in our best inference notebook ?
+
+
+
+Ensemble of 19 models
+
+Ensemble of efficientnet_b2 from torchvision and rexnet150 from timm
+
+Speedup with openvino
+
+For submission we trained all models with knowledge distillation on full dataset - (rkl prefix is indicator)
+
+
+Our five models from 19 with rkl-rx-wdfbn-rx-ema-200-full prefix achieve 0.7471 on private test set and  0.83194 on public test set, rx - rexnet150, distillated rexnet150 models from rexnet150 trained before
+
+Custom Augmentations
+
+Let's imagine you're at some party right now and you're surrounded by talking people. It's not hard for you to pay attention to a certain group to hear their conversation and you can freely change your target. So the task - to cut specific speaker from audio - is natural. What we can say about audio in which - one person cries and another one laughs? In such audio there are two actions - laughing and crying, and this is true for birds too. With this consideration we've come up to sumup idea:
+
+def sumup(waves: torch.Tensor, : torch.Tensor):
+    batch_size = len()
+    perm = torch.randperm(batch_size)
+
+    waves = waves + waves[perm]
+
+     {
+        : waves,
+        : torch.clip( + [perm], =, =)
+    }
+
+
+Boosting score
+
+What if you have an audio where one bird is more louder than another? This audio is still with two different birds, but if signal from second bird is tiny, it's okay to assume, that maybe probability of second bird is small or even zero. 
+
+def sumix(waves: torch.Tensor, : torch.Tensor, max_percent:  = , min_percent:  = ):
+    batch_size = len()
+    perm = torch.randperm(batch_size)
+    coeffs_1 = torch.rand(batch_size, device=waves.device).(-, ) * (
+        max_percent  - min_percent
+    ) + min_percent
+    coeffs_2 = torch.rand(batch_size, device=waves.device).(-, ) * (
+        max_percent  - min_percent
+    ) + min_percent
+    label_coeffs_1 = torch.where(coeffs_1 &gt;= , ,  -  * ( - coeffs_1))
+    label_coeffs_2 = torch.where(coeffs_2 &gt;= , ,  -  * ( - coeffs_2))
+     = label_coeffs_1 *  + label_coeffs_2 * [perm]
+
+    waves = coeffs_1 * waves + coeffs_2 * waves[perm]
+     {
+        : waves,
+        : torch.clip(, , )
+    }
+
+
+We propose yet another customization of data mix specific for audio domain - sumix augmentation. As you can see, we used linear slope in our experiments, but it's open question what's slope for labels better to use, maybe min_percent = 0.3 doesn't need slope at all. This augmentation is applicable to any audio classification task. sumix is better than sumup because it also affects loudness, i. e. implies another audio augmentation. 
+
+When we decided to check solutions from past competitions, we tried to add background noise in our pipeline, but noise didn't show any improvement. Our thoughts - incorporating new background noises for audios is already in sumix or sumup. For gaussian/colored noises we have similar explanation, why those augmentations didn't work - competition's data is not excellent and consists of noisy samples, so sumix and sumup propagate noise and make noise diverse by themselves.
+
+Training pipeline
+
+
+
+concatmix with probability 0.5 - implementation
+
+sumix(min_percent=0.3, max_percent=1.0) with probability 1
+
+mixup on mel-spectrograms with Beta(1.5, 1.5) with probability 1
+
+cutmix on mel-spectrograms with Beta(1.5, 1.5) with probability 0.5
+
+AdamW with constant LR 1e-3 and weight_decay 1e-2 for all models
+
+binary_cross_entropy for every class, labels are primary labels plus secondary labels
+
+Random 5 continuous seconds from audio at training, first 5 seconds at validation
+
+We turned off weight_decay for all normalization layers
+
+EMA with decay  0.999
+
+Almost total correlation between LB and our CV, ensemble of 20 models gathered as best in CV achieves 0.75021 on private test set and 0.83328 on public test set, this ensemble is our top-3 submission on public test set
+
+
+Knowledge distillation
+
+After training a model, we use it as teacher for another model with the same architecture, augmentations, AdamW, EMA and etc., except loss. At second stage with distillation we use $$L = 0.33 * BceFromTargets + 0.34 * KL(probs_{student} || probs_{teacher}) + 0.33 * KL(probs_{teacher} || probs_{student}) $$
+
+Models
+
+
+
+rexnet150 with dropout 0.3 and drop_path 0.2
+
+rexnet150-time - same rexnet150 but with attention head, distilled from rexnet150 without time-aware head
+
+efficientnet-b2 with dropout 0.3 and drop_path 0.2
+
+efficientnet-b2-time - analogously, distilled from efficientnet-b2
+
+
+Already mentioned hacks allow to reach score 0.7471 with 5 rexnet150  trained on full data with batch_size=336 200 epochs and knowledge distillation on a single A100 (40GB). To boost performance we ensemble rexnet150  with efficientnet-b2 from torchvision. To boost performance yet another time we use attention head - copy-past self-attention operation from transformers. All experiments were conducted in mix-precision with bfloat16 type.
+
+Ensemble of 5 models with prefix rkl-rx150-wdfbn-rx150-time-ema-ep200-full-{5seeds}, i.e rexnet150 with attention head for time awareness distilled from simple rexnet150, achieves 0.75151 on private set and 0.83261 on public set.
+
+We didn't try:
+
+
+
+External data not from BirdClef2021/BirdClef2022
+
+SSL
+
+SED models
+
+Utilization of BirdNet
+
+eca_nfnet from timm
+
+
+We tried, but it didn't work:
+
+
+
+Pretraining our models on BirdClef2021/BirdClef2022, we made few attempts, it didn't show any improvements in LB, experiments conduction became much slower, so we gave up the idea
+
+Any background noise (even which was used in previous year's competition)
+
+Any LR scheduler
+
+Any Noise(Gauss, Colored)
+
+tf_efficientnet_b2_ns from timm
+
+SwinV2/ConvNeXt from torchvision
+
+Manifold MixUp
+
+focal_loss, soft_focal_loss
+
+Weighted samplers
+
+SpecAugment
+
+
+Speeding up inference time
+
+We measured inference time with random input in kaggle kernel, I don't remember which one of intel's processors was, often in our kaggle notebook we got Intel Xeon 2.2 Gz. 
+
+
+
+Our thoughts - ONNX by itself utilizes 2 cpus, OpenVino is faster cause it additionally fuses some layers for inference and uses compilation specific to a certain CPU in submission notebook to take advantage of processor's type
+
+Appendix: MultiHeadAttentionClassifier's implementation. All hyperparameters are preserved
+
+Comments:
+├─ Pardeep Singh (2023-06-03 10:31:07.510000) [+0]
+│  Congrats for landing in the gold zone and thanks for sharing the writeup

@@ -1,0 +1,199 @@
+# https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551388
+
+Topic #551388: Private 7th (Public 2nd) Place Solution Summary
+  Author: kaerururu
+  Posted: 2024-12-13 00:19:34.076000
+  Votes: 59  Comments: 6
+
+First of all, I'd like to thank kaggle team, host for hosting this competition , and my team mates (@tereka @irrohas @aerdem4)
+I finally got 5th gold medal. I'm really happy to be Competitions Grand Master.
+
+Overview
+
+Voting Ensemble of 3pipelines (Retriever + Reranker)
+All reranker inference with vllm 
+
+Pipeline1 by Masaya
+
+This is brief summary.
+Masaya will write up detail on this link.
+
+Retriever
+
+
+
+Generate test answer with pretrained qwen35B
+
+model :SFR-Embedding-2_R, Hard Negative Sampling(N=100) removed if unseen in training data.
+
+dataset: Filled unknown Misconception with GPT4o-mini
+
+candidate 60
+
+
+Reranker
+
+
+
+Qwen2.5 32B AWQ+LoRA (with 40 options)
+
+
+options → 0~9 + A~Z + a~z (40 charactors)
+
+dataset: only original
+
+candidate 40
+
+run twice and merge ([:40] and [20:]) 
+
+left 25 with logprobs
+
+
+Pipeline2 by Tereka+Kaeru
+
+Retriever
+
+
+
+model1 :SFR-Embedding-2_R、Hard Negative Sampling(100）
+
+
+dataset: original + synthesis with gemma 27B/Qwen2.5 32B
+
+lb 0.378
+
+model2 : public model by sayoulala
+
+weighted avg model1 and model2
+
+candidate 70 and filter with masaya preds
+
+only single fold
+
+
+Reranker
+
+
+
+Qwen2.5 32B AWQ+LoRA (with binary options)
+
+
+options → yes, not
+
+dataset: original + synthesis unknown misconceptions with gemma2 27B/Qwen2.5 32B
+
+only single fold
+
+
+Pipeline3 by Ahmet
+
+Retriever
+
+
+
+Omitted in final pipeline
+
+
+Reranker
+
+
+
+Candidates are each top9 from previous pipeline
+
+Qwen2.5 32B (with 9 options)
+
+
+Ensembling
+
+
+
+Voting ensemble of each pipeline
+
+Apply rank like following, join, sum rank, sort by sum_rank
+
+
+sub0
+  .with_columns(pl.col()..split())
+  .with_columns(pl.lit([/i  i  ((, , ))]).alias())
+  .explode(pl.col([, ]))
+
+
+submission
+  .sort(by=[, , , ], descending=[, , , ])
+  .group_by([], maintain_order=)
+  .agg(pl.col())
+
+
+Postprocessing
+
+
+
+Boost missing misconception rank
+
+
+Accelerating Tips
+
+Retreiver
+
+
+
+Run parallel with cuda:0 and cuda:1
+
+Pre-calculating Misconception Vector
+
+Dynamic padding with collate_fn
+
+
+Reranker
+
+
+
+Inference with vllm (AWQ 4bit quantization)
+
+Set vllm parameter enabling_prefix_cache True
+
+Filter candidate with previous preds of pipeline
+
+
+What not worked
+
+Retrieval
+
+
+
+Concat vectors
+
+Avaraging many vectors
+
+
+Reranker
+
+
+
+Full-data trained model
+
+QwQ model
+
+
+Thank you!!
+
+Comments:
+├─ Raja Biswas (2024-12-13 00:30:53.510000) [+4]
+│  Congratulation on becoming Competitions GM, fully deserved! 🎉
+│  Great solution, a lot to unpack -- looking forward to reading the detailed post. The QwQ model didn't work for me as well.
+  ├─ kaerururu (2024-12-13 00:52:27.823000) [+1]
+  │  Congratulation on your 1st place too !
+  │  I'm looking forward to your robust solution.
+├─ Ahmet Erdem (2024-12-13 08:25:20.687000) [+1]
+│  I want to add some details.
+│  
+│  
+│  
+│  We had 3 rerankers each with different nature. 1st one is single misconception yes/no classifier. 2nd one is a multiplechoice over top 40 misconceptions which have mi...
+├─ faraday (2024-12-16 06:30:07.530000) [+0]
+│  What are the examples that the approach could not cope with?
+│  Since @aerdem4 states your postprocess boosts misconceptions unseen in training, did you notice cases that it adds error? Any examples t...
+├─ narsil (jobs-in-data.com) (2024-12-13 08:08:59.643000) [+0]
+│  Congratulations and welcome to the GM family! Great work!
+  ├─ kaerururu (2024-12-13 08:24:07.543000) [+0]
+  │  Thank you sooo much!!

@@ -1,0 +1,82 @@
+# ariel-data-challenge-2025 讨论区（按票数排序，共 80 条）
+
+- [1st place solution: Bayesian Inference, of course](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609888) — 56 票 / 11 评论 / 2025-09-30 **write-up?**
+- [🚀 ArielML: A Python Library for Exoplanet Transit Analysis (Built for Learning!)](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/591278) — 42 票 / 5 评论 / 2025-07-26 
+- [Starter materials ](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586485) — 39 票 / 12 评论 / 2025-06-26 
+- [Presentation videos from last year's top teams at NeurIPS 2024](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586548) — 37 票 / 2 评论 / 2025-06-27 
+- [ExoSim2: We know how to generate data!](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/587936) — 36 票 / 31 评论 / 2025-07-03 
+- [3rd Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609252) — 32 票 / 6 评论 / 2025-09-25 **write-up?**
+- [Resources and Previous Discussions](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586229) — 28 票 / 2 评论 / 2025-06-25 
+- [6th Place Solution Batman-Minuit](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609276) — 28 票 / 11 评论 / 2025-09-25 **write-up?**
+- [7th Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609210) — 28 票 / 6 评论 / 2025-09-25 **write-up?**
+- [I was scared by the data until I'd done the EDA...](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586783) — 24 票 / 9 评论 / 2025-06-28 
+- [Help Us Keep the Ariel Data Challenge Going](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586243) — 23 票 / 8 评论 / 2025-06-25 
+- [9th Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609443) — 23 票 / 6 评论 / 2025-09-26 **write-up?**
+- [Top 3 Solutions from 2024 NeurIPS Ariel Data Challenge summarized (in tabular format)](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586581) — 19 票 / 2 评论 / 2025-06-27 **write-up?**
+- [Big Range in Gold Zone!](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/607759) — 19 票 / 4 评论 / 2025-09-15 
+- [2nd Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/610252) — 18 票 / 1 评论 / 2025-10-02 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609629) — 18 票 / 0 评论 / 2025-09-28 **write-up?**
+- [Dataset Regeneration Notice](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/590210) — 15 票 / 48 评论 / 2025-07-18 
+- [Having trouble downloading the data? Use kaggle command 1.6.17 or earlier](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/587728) — 15 票 / 7 评论 / 2025-07-02 
+- [Questions for us?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/589905) — 15 票 / 54 评论 / 2025-07-16 
+- [8th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609510) — 14 票 / 0 评论 / 2025-09-27 **write-up?**
+- [Multiply or divide by gain? Add or subtract offset?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/588832) — 14 票 / 9 评论 / 2025-07-08 
+- [Differences and new challenges with respect to 2024 Edition](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/587720) — 13 票 / 5 评论 / 2025-07-02 
+- [What are the time units of the AIRS-CH0 and FGS1 sensors?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/588518) — 12 票 / 42 评论 / 2025-07-07 
+- [Error in metric code? (Fixed)](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/589630) — 11 票 / 8 评论 / 2025-07-14 
+- [The mistery of 2486733311 FGS channel](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/591086) — 11 票 / 6 评论 / 2025-07-25 
+- [The order of columns is important](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/599600) — 11 票 / 0 评论 / 2025-08-17 
+- [Visualizing the effect of limb darkening on transits](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609406) — 10 票 / 4 评论 / 2025-09-26 
+- [Winning Solutions - NeurIPS - Ariel Data Challenge 2024](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586519) — 10 票 / 4 评论 / 2025-06-27 **write-up?**
+- [Worse scores after data regeneration](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/590339) — 10 票 / 29 评论 / 2025-07-20 
+- [Last day of the competition - Thank you all. ](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609186) — 8 票 / 39 评论 / 2025-09-24 
+- [4th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/611004) — 8 票 / 0 评论 / 2025-10-08 **write-up?**
+- [This Competition Has an Official Discord ](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586479) — 8 票 / 0 评论 / 2025-06-26 
+- [12th Place Solution: E2E NN](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609375) — 8 票 / 2 评论 / 2025-09-26 **write-up?**
+- [10th Place Solution – Solverworld part](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609445) — 8 票 / 1 评论 / 2025-09-26 **write-up?**
+- [FYI: differentiable pytorch transit curve fitting - pylightcurve-torch](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609332) — 8 票 / 3 评论 / 2025-09-26 
+- [NeurIPS inivtes](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/613114) — 7 票 / 0 评论 / 2025-10-24 
+- [45th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609222) — 7 票 / 0 评论 / 2025-09-25 **write-up?**
+- [Best way to predict when there are multiple measurements?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/600509) — 6 票 / 11 评论 / 2025-08-23 
+- [10th Place Solution – DL part](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609995) — 6 票 / 2 评论 / 2025-10-01 **write-up?**
+- [29th Discovery and Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609574) — 6 票 / 0 评论 / 2025-09-28 **write-up?**
+- [37th Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609482) — 6 票 / 2 评论 / 2025-09-27 **write-up?**
+- [16th Place Solution - Probablistic Regression](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609372) — 6 票 / 0 评论 / 2025-09-26 **write-up?**
+- [58th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609227) — 6 票 / 0 评论 / 2025-09-25 **write-up?**
+- [Meaningful(*less?) scoring function](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/608878) — 6 票 / 2 评论 / 2025-09-22 
+- [Get Started Here!](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586478) — 5 票 / 0 评论 / 2025-06-26 
+- [14th private/4th public Solution- Brute Force Posterior Estimation](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609453) — 5 票 / 2 评论 / 2025-10-01 **write-up?**
+- [24 place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609295) — 5 票 / 0 评论 / 2025-09-25 **write-up?**
+- [Unexplainable measurements](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/602425) — 4 票 / 26 评论 / 2025-08-27 
+- [30th place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609334) — 3 票 / 0 评论 / 2025-09-26 **write-up?**
+- [An odd transit (Planet 1843015807)](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/598324) — 3 票 / 5 评论 / 2025-08-10 
+- [What is your CV/LB?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/593921) — 2 票 / 12 评论 / 2025-07-31 
+- [How did you deal with degenerate cases like 158006264?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609228) — 2 票 / 4 评论 / 2025-09-25 
+- [Mismatched transits from batman and train_star_info.csv](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/597953) — 2 票 / 1 评论 / 2025-08-08 
+- [Why are there so many scores of 0.322? Is there some public code that can achieve this score?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/593858) — 2 票 / 3 评论 / 2025-07-31 
+- [Error in data downloading](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/590455) — 2 票 / 4 评论 / 2025-07-21 
+- [25th Place - Polynomnial Fitting / Nelder-Mead](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609532) — 2 票 / 0 评论 / 2025-09-27 **write-up?**
+- [48th Place Solution (Silver Medal)](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609553) — 2 票 / 0 评论 / 2025-09-29 **write-up?**
+- [How many cores do we have?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/589123) — 2 票 / 1 评论 / 2025-07-10 
+- [Why 3 submissions per day?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/589130) — 2 票 / 1 评论 / 2025-07-10 
+- [19th Place Solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609700) — 2 票 / 0 评论 / 2025-09-29 **write-up?**
+- [An alternative form for this competition: known data generation pipeline](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609706) — 2 票 / 3 评论 / 2025-09-29 
+- [AIRS spectrum is reversed compared to the ground truth?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/606563) — 2 票 / 3 评论 / 2025-09-08 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609316) — 1 票 / 1 评论 / 2025-09-25 
+- [How is transit depth determined for 0.7µm from FGS1's measurements?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/593681) — 1 票 / 3 评论 / 2025-07-30 
+- [33rd place solution](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609420) — 1 票 / 0 评论 / 2025-10-01 **write-up?**
+- [Flat Field Correction and jitter](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/591329) — 1 票 / 2 评论 / 2025-07-27 
+- [Are there still old scores that are valid?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/590773) — 1 票 / 14 评论 / 2025-07-22 
+- [How to normalize unbounded data?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/603275) — 1 票 / 1 评论 / 2025-09-01 
+- [Inf and sup cuttoff](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/588277) — 1 票 / 2 评论 / 2025-07-05 
+- [Size of hidden test set in terms of number of planets](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/604207) — 1 票 / 2 评论 / 2025-09-06 
+- [Notebook Threw Exception error](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/599215) — 0 票 / 16 评论 / 2025-08-14 
+- [Scoring error](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/609017) — 0 票 / 5 评论 / 2025-09-23 
+- [Mismatching shape for Calibration for Linear Correction. (192,356) vs (32, 356) (Exactly 6 times as many rows as that of the other calibration slices)](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/602266) — 0 票 / 1 评论 / 2025-08-26 
+- [what is wavelength file ](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/602622) — 0 票 / 1 评论 / 2025-08-28 
+- [Scoring Error ](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/589339) — 0 票 / 7 评论 / 2025-07-12 
+- [how to compute the cv?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/608137) — 0 票 / 0 评论 / 2025-09-18 
+- [What happens if predictions lie outside of confidence intervals?](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/589020) — 0 票 / 2 评论 / 2025-07-09 
+- [Needs Accessible Ways to Download the Data](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/587900) — 0 票 / 1 评论 / 2025-07-03 
+- [What’s the Objective? ](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/586922) — 0 票 / 1 评论 / 2025-06-29 
+- [Seeking Help: "Submission Scoring Error" Despite Successful Notebook Run](https://www.kaggle.com/competitions/ariel-data-challenge-2025/discussion/607667) — 0 票 / 1 评论 / 2025-09-15 

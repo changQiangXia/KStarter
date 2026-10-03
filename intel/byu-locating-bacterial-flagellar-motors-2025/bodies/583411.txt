@@ -1,0 +1,136 @@
+# https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583411
+
+Topic #583411: 4th place: Simple ResNet18 classification
+  Author: Dieter
+  Posted: 2025-06-06 16:33:06.920000
+  Votes: 42  Comments: 14
+
+Thanks to kaggle and everyone involved for hosting this exciting competition. It was a great learning experience and it was very interesting to see how much of our 1st place cryo ET methodology could be applied here. Thanks to @bloodaxe for this great team experience. I would also like to thank the Armed Forces of Ukraine for providing safety and security for my team mate to participate in this competition. 
+
+TLDR
+
+The solution is an ensemble of a simple 3D-ResNet18 Classifier and object detection models from MONAI. We also used MONAI for augmentations, and exported models via jit or TensorRT, which gave significant speedup and enabled us to have a slightly larger ensemble. We use the additional data shared by @brendanartley 
+
+This post covers the ResNet18 classification based approach. For object detection part see @bloodaxe writeup: 4th place solution [Object Detection Part]
+
+Cross validation
+
+I split the original training data by Voxel Size and the external data by dataset id, to somewhat mimic train/ test difference. 4 Folds were used. Correlation with LB was not very good, so I mainly relied on LB score for feedback.
+
+Data preprocessing/ augmentations
+
+3D images were scaled to a fixed voxel size of 15.6 and saved to disk using int8.
+Since models are trained from scratch, augmentations were essential to prevent overfitting.
+I used RandomCrop (size 96x160x160), Flip on each axis within the torch dataloader, and additionally scale + rotation on GPU (all from MONAI). Additionally, I used a customized implementation of MixUp which was highly effective to train longer and prevent overfitting. I implemented a version which makes sure to not have more than 1 motor in a mixed patch. Additionally, positive samples, i.e. crops with motor in it,  were oversampled by having a total fraction of 12.5%
+
+Model
+
+Modelling was quite interesting in this competition. I started with the 3D UNET from our 1st place solution of CryoET competition, which worked already quite well. After learning about the forgiveness of the competition metric with respect to localization, I tried to simplify the model further and get rid of any decoder altogether, since the 32x downscaled model output should already be enough. Surprisingly, a simple ResNet3D encoder worked. My approach works the following:
+
+Input for the classification model are 96x160x160 image patches, which resulted in a feature map of 512x3x5x5 leaving the resnet backbone. I flatten the 3x5x5 output "pixels" and use a simple fully conected 512-&gt;1  layer to have a binary prediction for each pixel, which are basically 75 classes, determin the motor location. I also add an additional class to reflect having no-motor in the crop. So in total its a simple 3D-ResNet18 classifier with 76 classes, which is trained with CrossEntropy Loss. 
+For inference I used a sliding window aproach with an overlap of 0.5. For motor localisation, simplytake  the patch with max prediction value of the 75 classes. Then use the patch location + and offset coming from the 3x5x5 grid to determine the final localisation. This very simple and fast model scores 0.875 on public LB (5th place)  individually! 
+
+
+
+The architecture might be easier to understand via code:
+
+ monai.networks.nets  mnn
+
+ ():
+    bs, c, d, h, w = y.shape
+    idxs = torch.where(y&gt;)
+     item  idxs[:]:
+        item //= scale
+    y2 = torch.zeros((bs,c,d//scale,h//scale,w//scale), dtype=y.dtype, layout=y.layout, device=y.device)
+    y2[idxs] += 
+     y2
+
+cfg.backbone_args = (model_name=,
+                         spatial_dims=,    
+                         pretrained=, 
+in_channels=)
+
+ (nn.Module):
+
+     ():
+        (Net, ).__init__()
+
+        .backbone = mnn.ResNetFeatures(**cfg.backbone_args)
+        .global_pool = nn.AdaptiveAvgPool3d()
+        .reg_head = nn.Conv3d(,,kernel_size=,stride=)
+        .cls_head = torch.nn.Linear(,)        
+
+     ():
+
+        x = batch[]
+
+        out = .backbone(x)[-]
+        loc_logits = .reg_head(out)
+        cls_logits = .cls_head(.global_pool(out).flatten())
+
+        loss = .custom_loss(y,loc_logits,cls_logits)
+        outputs = {:loss,:loc_logits}
+         outputs
+
+     ():
+
+        y2 = downscale(target,scale=)
+        l = logits.flatten()
+        y3 = y2.flatten()
+        y3 = torch.cat([y3,-y3.()[][:,]],dim=-)
+        l2 = torch.cat([l,cls_logits],dim=-)
+        l_cls = DenseCrossEntropy1D()(l2,y3)
+         l_cls
+
+
+For threshoolding I used a quantile based a aproach as this was much more stable when comparing different models. 
+
+The model was trained with bf16, and each fold needs about 17h on a single A100 for training. Although the model is small and simple, I tried a lot of other architectures, and alternatives performed much worse. So I sticked with this one. 
+
+Code base is very close to 1st place solution of cryo et , so I will save me the trouble to publish this one. 
+Cheers. Questions welcome.
+
+Comments:
+├─ hengck23 (2025-06-06 17:56:12.080000) [+3]
+│  Thanks for the write up. So it seems that for 3d medical image, 3d net often works better than 2d net, even when there is domain shift or the 3d net is simple.
+│  
+│  The softmax localisation directly so...
+  ├─ Đăng Nguyễn Hồng (2025-06-06 19:49:05.877000) [+0]
+  │  This approach shares the same idea with SimCC, which is a little bit generalized version even for finegrained localization. Also remind me of DSNT with spatial softmax+no post processing as well
+    ├─ hengck23 (2025-06-07 10:24:25.743000) [+0]
+    │  i think accuracy of the coord is not issue here becuase the radius threshold in metric computation is large.
+    │  i think there are several motor like structure in one tomograph and the key to winning c...
+├─ Ángel Jacinto Sánchez Ruiz (2025-06-06 18:12:08.310000) [+1]
+│  Input for the classification model are 96x160x160 image patches, which resulted in a feature map of 512x3x5x5 leaving the resnet backbone. I flatten the 355 output "pixels" and use a simple fully c...
+├─ Ujjwal Pandey (2025-06-29 10:49:25.937000) [+0]
+│  I implemented a version which makes sure to not have more than 1 motor in a mixed patch
+│  
+│  
+│  Hi @christofhenkel, could you please clarify what exactly this means? Does this imply
+│  
+│  
+│  
+│  You only use origi...
+├─ Optimo (2025-06-11 11:55:28.957000) [+0]
+│  I flatten the 355 output "pixels"
+│  
+│  
+│  Can you explain where the "355" comes from here please?
+  ├─ Dieter (2025-06-11 20:26:58.060000) [+1]
+  │  its a typo. I meant "flatten the 3x5x5 output pixels"
+├─ Đăng Nguyễn Hồng (2025-06-06 20:13:15.373000) [+0]
+│  Thanks, very unique and elegant solution.
+│  I’m suprised that you successed with small XY patch size of (160, 160). Now I know that one can make it works.
+│  One more question, have you tried direct reg...
+  ├─ Dieter (2025-06-07 06:34:35.310000) [+1]
+  │  Yes, I tried direct regression. It was the 2nd best approach for me
+├─ Tom (2025-06-06 20:09:42.220000) [+0]
+│  @christofhenkel amazing idea, the approach is simple but also hard to discover. When did you find this?
+  ├─ Dieter (2025-06-07 06:38:04.640000) [+1]
+  │  I found it 3 weeks before end. I started with Segmentation using Unet, like 1st place. Then using a lot of experiments arrived at a regression based solution, i.e. using 4 logits output. 1 Logit fo...
+    ├─ Tom (2025-06-07 08:57:29.040000) [+0]
+    │  @christofhenkel that's clutch. Look forward to explore deeper about your method. Seems it can have further innovative designs.
+    ├─ hengck23 (2025-06-07 10:26:00.950000) [+0]
+    │  i am curious if "3 logits for xyz offset" is better than "1 logits for xyz offset". do you experiment results for it? decoupling seems to be a possible regularisation and maybe reduce overfitting?
+    ├─ Tom (2025-06-07 11:04:09.247000) [+0]
+    │  @hengck23 I think later one is better, handling everything all at once seems have advantages. I've tried his strategy in my dual-GNN approach, the pb score instantly reach 0.876-0.885

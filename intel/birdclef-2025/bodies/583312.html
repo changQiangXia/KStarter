@@ -1,0 +1,169 @@
+<p>We would like to thank Kaggle, the organizers, our teammates, and all participants. It was a great experience to take part in this competition. Below is a brief overview of our solution.</p>
+<h1>Data</h1>
+<p>We used only the 2025 dataset.<br>
+First, we used <a href="https://github.com/snakers4/silero-vad" target="_blank">Silero VAD</a> to detect audio files that contain human voices from the train_audio set. Next, using a Streamlit tool developed by <a href="https://www.kaggle.com/zuoliao11" target="_blank">@zuoliao11</a> , we manually listened to those files and removed the segments with human voices.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7858865%2Fb28f0a76dd3ec421c001a801abcfb206%2F1.png?generation=1749179543972081&amp;alt=media" alt=""><br>
+For underrepresented classes (n &lt; ~30), we manually selected segments that contained bird calls. <br>
+For cleaned files, we used the first 60 seconds; for the others, we used the first 30 seconds. To balance the dataset, we duplicated files in classes with fewer than 20 samples.</p>
+<h1>Model</h1>
+<p>We used a <a href="https://www.kaggle.com/code/hidehisaarai1213/introduction-to-sound-event-detection#Model-for-SED-task" target="_blank">Sound Event Detection (SED) model</a>.<br>
+<strong>Backbones:</strong><br>
+•    4x tf_efficientnetv2_s<br>
+•    3x tf_efficientnetv2_b3<br>
+•    4x tf_efficient_b3_ns <br>
+•    2x tf_efficient_b0_ns</p>
+<h1>Training</h1>
+<p>We trained our models in three stages.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7858865%2Fd9b48e53b80c3fa4f2ff27b19c814f04%2F2.png?generation=1749179501325145&amp;alt=media" alt=""></p>
+<h3>Input features:</h3>
+<p>•    <strong>Random 10-second segments</strong><br>
+•    <strong>Mel spectrogram:</strong></p>
+<pre><code>  sample_rate:  
+  mel_bins:  
+  fmin:  
+  fmax:  
+  window_size:  
+  hop_size: 
+</code></pre>
+<p>We convert the mel-spectrogram to a logarithmic scale by computing log(melspec+1e-6).<br>
+•    <strong>Augmentations:</strong><br>
+ 　　•     <a href="https://docs.pytorch.org/audio/main/generated/torchaudio.transforms.Resample.html" target="_blank">Resampling</a><br>
+ 　　•     <a href="https://docs.pytorch.org/audio/main/generated/torchaudio.functional.gain.html" target="_blank">Gain</a><br>
+ 　　•     <a href="https://arxiv.org/abs/2110.03282" target="_blank">FilterAugment</a><br>
+ 　　•     <a href="https://arxiv.org/abs/1904.08779" target="_blank">FrequencyMasking, TimeMasking</a><br>
+ 　　•     <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/412922" target="_blank">Sumix on mel domain</a></p>
+<p>•    <strong>Optimizer:</strong> Adam + Cosine Annealing with warmup<br>
+•    <strong>Loss:</strong> FocalLoss (gamma=2)<br>
+•    <strong>Epochs:</strong> 10<br>
+•    <strong>Target labels:</strong> Both primary and secondary labels</p>
+<h3>1st Stage:</h3>
+<p>We trained 5-fold models using only train_audio.</p>
+<h3>2nd Stage - Self-distillation with train_audio only:</h3>
+<p>While listening to the audio as described in the Data section, we found that many bird calls were present in the training data even though they were not labeled. This was expected, as the recorders were mainly focused on their target species, so other bird calls were often left unlabeled.<br>
+From this observation, we believed that the core challenge of the competition was accurately assigning secondary labels. To address this, we used self-distillation to enrich train_audio with more secondary labels. We used predictions from a model trained in the 1st stage as teacher labels and mixed them with the original labels. The teacher model’s predictions may have included true secondary labels that were missing from the original annotations.<br>
+We repeated self-distillation 4–5 times. From the 2nd round onward, we used the previously distilled model as the new teacher in an iterative manner. The model’s weights are re-initialized each time. This approach closely resembles the method proposed in<a href="https://arxiv.org/abs/1805.04770" target="_blank"> this paper.</a></p>
+<h3>3rd Stage - Self-distillation with train_audio + train_soundscapes:</h3>
+<p>We added data from train_soundscapes to the training set and continued self-distillation two more times. We mixed train_audio and train_soundscapes at a 1:1 ratio in each batch (no folds). We further trained several models using different random seeds.</p>
+<h3>LB Score (Public) 1st ~3rd stage（Ensemble of 5 models）</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Stage 1</th>
+<th>Stage 2 (Distill x2)</th>
+<th>Distill x4</th>
+<th>Distill x5</th>
+<th>Stage 3 (Distill x1)</th>
+<th>Distill x2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tf_efficientnetv2_s</td>
+<td>0.839</td>
+<td>0.863</td>
+<td>0.880</td>
+<td>0.884</td>
+<td>0.915</td>
+<td>0.921</td>
+</tr>
+<tr>
+<td>tf_efficientnetv2_b3</td>
+<td>0.842</td>
+<td>N/A</td>
+<td>0.872</td>
+<td>-</td>
+<td>N/A</td>
+<td>0.918</td>
+</tr>
+<tr>
+<td>tf_efficient_b3_ns</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>-</td>
+<td>N/A</td>
+<td>0.921</td>
+</tr>
+<tr>
+<td>tf_efficient_b0_ns</td>
+<td>0.836</td>
+<td>0.871</td>
+<td>0.879</td>
+<td>0.883</td>
+<td>0.905</td>
+<td>0.912</td>
+</tr>
+</tbody>
+</table>
+<p>*N/A = not submitted to LB</p>
+<p>The following figure shows the results of self-distillation across various models.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7858865%2Fc338a223e674477dad328e61ee7ca5d4%2F3.png?generation=1749180273733488&amp;alt=media" alt=""></p>
+<h1>Inference</h1>
+<p>We divided the stage 3 models into two groups, assigning different random seeds to each group when possible.</p>
+<h4>Model Group A:</h4>
+<p>4x tf_efficientnetv2_s (seed= 0, 1, 2, 3)<br>
+3x tf_efficientnetv2_b3 (seed= 2, 3, 4)<br>
+4x tf_efficient_b3_ns (seed= 0, 1, 2, 3)<br>
+2x tf_efficient_b0_ns (seed= 0, 1)</p>
+<h4>Model Group B:</h4>
+<p>4x tf_efficientnetv2_s (seed= 1, 2, 3, 4)<br>
+3x tf_efficientnetv2_b3 (seed=0, 1, 2)<br>
+4x tf_efficient_b3_ns (seed= 0, 1, 2, 3) *By mistakes, we ended up using the same seed as Group A.<br>
+2x tf_efficient_b0_ns (seed= 2, 3)</p>
+<h1>Post-Proccesing/TTA</h1>
+<h3>Inference is done with 2.5-second overlap.</h3>
+<p>Scores are weighted and combined (similar to<a href="https://www.kaggle.com/competitions/birdclef-2024/discussion/511845" target="_blank"> the 4th place solution from last year</a>).<br>
+Alpha = 0.5<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F7858865%2F1072ff957b42d2ae2488bd9a17e36954%2F4.png?generation=1749180408017102&amp;alt=media" alt=""></p>
+<h3>Smoothing:</h3>
+<p>We applied smoothing using neighboring frames with a window of [0.1, 0.8, 0.1].</p>
+<h3>Power Adjustment for Low-Ranked Classes:</h3>
+<p>The post-processing method shared in <a href="https://www.kaggle.com/code/myso1987/post-processing-with-power-adjustment-for-low-rank" target="_blank">our public notebook</a> improved the LB score, but we eventually decided not to use it due to the risk of overfitting.</p>
+<h3>Speed-up:</h3>
+<p>•    OpenVINO<br>
+•    Concurrent.futures.ThreadPoolExecutor</p>
+<h3>Final Ensemble LB Scores</h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Raw Score (Group A only)</th>
+<th>2.5-second overlap</th>
+<th>Smoothing + overlap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public LB</td>
+<td>0.919</td>
+<td>0.928</td>
+<td>0.928</td>
+</tr>
+<tr>
+<td>Private LB</td>
+<td>0.917</td>
+<td>0.924</td>
+<td>0.924</td>
+</tr>
+</tbody>
+</table>
+<h1>What didn’t work</h1>
+<p>CNN-based models.<br>
+1D models.<br>
+Too many data augmentations.</p>
+<h1>Training, Inference Notebooks &amp; Model Dataset</h1>
+<h3>Training code</h3>
+<ul>
+<li><a href="https://github.com/myso1987/BirdCLEF-2025-5th-place-solution" target="_blank">Github</a></li>
+</ul>
+<h3>Models</h3>
+<ul>
+<li><a href="https://www.kaggle.com/datasets/zuoliao11/birdclef2025-noir-models/data" target="_blank">PyTorch</a></li>
+<li><a href="https://www.kaggle.com/datasets/zuoliao11/birdclef2025-noir-models-ov/data" target="_blank">OpenVINO</a></li>
+</ul>
+<h3>Inference Notebooks</h3>
+<ul>
+<li><a href="https://www.kaggle.com/code/zuoliao11/birdclef2025-convert-models-openvino/notebook" target="_blank">Convert PyTorch models to OpenVINO</a></li>
+<li><a href="https://www.kaggle.com/code/zuoliao11/birdclef2025-inference-openvino" target="_blank">Inference</a></li>
+</ul>

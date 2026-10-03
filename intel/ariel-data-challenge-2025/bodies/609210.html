@@ -1,0 +1,111 @@
+<h1>Introduction</h1>
+<p>We ( <a href="https://www.kaggle.com/horikitasaku" target="_blank">@horikitasaku</a> and <a href="https://www.kaggle.com/takaito" target="_blank">@takaito</a>) would like to express our sincere gratitude to the organizers for such an outstanding competition.<br>
+Special thanks also for staff members like Sohier Dane <a href="https://www.kaggle.com/sohier" target="_blank">@sohier</a> for all their hard work and support.</p>
+<p>This was truly a well-designed competition, and it clearly reflected the professionalism and scientific rigor of the organizing team (e.g., <a href="https://www.kaggle.com/gordonyip" target="_blank">@gordonyip</a> and colleagues). Physicists have always been the group of people I respect the most.</p>
+<p><strong>Our approach can be summarized in the following stages:</strong></p>
+<ul>
+<li><strong>Step0:</strong> Preprocessing</li>
+<li><strong>Step1:</strong> Signal, transit, and feature extraction; calculation of the base <code>wl_preds</code> (Horikita)</li>
+<li><strong>Step2:</strong> Difference correction with NN and base sigma prediction (takaito)</li>
+<li><strong>Step3:</strong> Sigma scale adjustment using a gradient boosting model (Horikita)</li>
+<li><strong>Step4:</strong> Pseudo Labeling (takaito)</li>
+</ul>
+<h1>Step0: Preprocessing</h1>
+<p>Here we basically followed <a href="https://www.kaggle.com/code/ilu000/ariel25-quick-data-prep-improved" target="_blank">Pascal’s notebook</a> almost as it is, and processed both <code>obs0</code> and <code>obs1</code>.</p>
+<h1>Step1: Signal, Transit, Features – Calculation of the base <code>wl_preds</code> (CV: ~0.42, LB:-0.45)</h1>
+<h2>Step1.1: Phase Detector</h2>
+<p>The core idea of transit detection is <strong>using the extrema of the signal’s gradient</strong>.<br>
+I assumed that the transit boundaries would appear as characteristic features on the derivative curve. The overall process was as follows:</p>
+<ul>
+<li><p><strong>Smoothing</strong>: Smooth the signal and its gradient to remove high-frequency noise.</p></li>
+<li><p><strong>Outlier removal</strong>: Clip gradient values beyond 5σ, set the edges to zero, and then apply additional Gaussian smoothing.</p></li>
+<li><p><strong>Threshold scanning</strong>:</p>
+<ul>
+<li>Negative threshold (neg_thr) → <em>t1, t2</em> (ingress)</li>
+<li>Positive threshold (pos_thr) → <em>t3, t4</em> (egress)</li></ul></li>
+<li><p><strong>Local sampling</strong>: Sample around (t1, t2) and (t3, t4), and compare the baseline with the transit segment. If the ingress/egress depth is too shallow, shift the boundary toward the start or end of the sequence.</p></li>
+<li><p><strong>Post-processing</strong>: Fix abnormal samples. In the initial version this was not implemented, but after the dataset update I observed bugs from <code>Phase Detector</code> . Upon analysis, I found many abnormal signals, so this step was added.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11676771%2F2b03340d9a21e83b7f313e3aaa710b6b%2F438737d84bb3b050faf0ae4f1adb8fd6.png?generation=1758761787946320&amp;alt=media" alt="p1"></p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11676771%2F3d63b1fc0686b22ebb403229af6eb2d5%2F6d1506b7-957f-4bc2-8810-1992f705f8a8.png?generation=1758761822135400&amp;alt=media" alt=""></p>
+<h2>Step1.2: Physics-based modeling and feature extraction</h2>
+<p>Here I referenced <strong>two top solutions from Ariel 2024</strong>:</p>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/ariel-data-challenge-2024/writeups/xomox-10th-place-solution" target="_blank">xomox (10th place)</a></li>
+<li><a href="https://www.kaggle.com/competitions/ariel-data-challenge-2024/writeups/c-number-daiwakun-1st-place-solution" target="_blank">cnumber (1st place)</a></li>
+</ul>
+<p>Unfortunately, this part was almost useless for sigma prediction.<br>
+In my solo experiments, using these sigmas often reduced the final score by about <strong>0.1 below the theoretical upper bound score</strong>. </p>
+<p>So the real value here was in generating the <strong>base <code>wl_preds</code></strong> and <strong>features derived from the physical process</strong>. We adopted two main patterns:</p>
+<ul>
+<li><p><strong>Pattern 1 (main)</strong>: Based on <em>xomox</em>’s pipeline, with several modifications:</p>
+<ul>
+<li>Restricted the polynomial degree of the baseline to 2–3 (higher orders caused instability in some signals).Reducing the order of the baseline polynomial resulted in a roughly 0.01 improvement for me.</li>
+<li>Adjusted binning and sampling settings.</li>
+<li>Introduced a more complex Gaussian Process (GP). In our case, the kernel design combined multiple components — RBF terms with different length scales, a periodic kernel to capture repeating structures, a Matérn kernel for local smoothness, a linear kernel tied to wavelength features, and a white noise kernel for robustness. What turned out to be very interesting is that although the GP itself was not directly effective for improving sigma prediction, it played an unexpectedly strong role in stabilizing all the downstream tasks, including the linear correction I tested independently and the NN model developed by takaito. <br>
+As a result, we obtained stable <code>wl_preds</code>, reconstructed signals, ideal transit models, and physics-derived features.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11676771%2Faa1b5c478d7feedae89b9eab3929bd7f%2Fd718ac9a-1f1f-44da-90c4-7a78c229a52b.png?generation=1758762273752078&amp;alt=media" alt=""></li></ul></li>
+<li><p><strong>Pattern 2 (secondary)</strong>: Implemented <em>cnumber</em>’s approach with only minor changes. This provided an independent set of <code>wl_preds</code> and additional features.</p></li>
+</ul>
+<h1>Step2: Difference correction with NN and base sigma prediction (CV: ~0.56x, LB: ~0.55x)</h1>
+<p>Inspired by methods that worked well in ADC2024, instead of directly predicting <code>wl</code>, we trained deep learning models to predict the difference <code>wl_diff</code> between the roughly computed <code>wl_preds</code> from <strong>step1</strong> and the ground truth <code>wl_true</code>. In other words, the NN performs a <strong>residual correction</strong>.</p>
+<h2>Basic information</h2>
+<h3>Model inputs/outputs</h3>
+<ul>
+<li><code>wl_preds</code> from Step1 are used as the base predictions.</li>
+<li>The target variable is <code>wl_diff (= wl_true - wl_preds)</code>.</li>
+<li>Input features include signal, transit, mask, position, and various extracted features.</li>
+</ul>
+<h3>Model architectures</h3>
+<ul>
+<li>Multilayer Perceptron (MLP)</li>
+<li>BiGRU + CNN + MLP</li>
+<li>BiLSTM + CNN + MLP</li>
+<li>BiLSTM + CNN + BiLSTM</li>
+</ul>
+<h2>Key techniques</h2>
+<ul>
+<li>Used <strong>quantile regression</strong> so the model can also predict sigma.</li>
+<li>Applied <strong>Adversarial Weight Perturbation (AWP)</strong>.</li>
+<li>Performed data augmentation by flipping signal and transit sequences along the time axis.</li>
+<li>Added noise to the data for further augmentation.</li>
+</ul>
+<h2>What did not work</h2>
+<ul>
+<li>More complex model architectures did not bring improvements.</li>
+</ul>
+<h1>Step3: Sigma scale adjustment with Gradient Boosting (LB +~0.01)</h1>
+<p>Intuitively, Step2 already provided per-wavelength σ (<code>step2_sigma</code>), but there were still systematic shifts remaining at the sample level.<br>
+To handle this, we summarized the shift into a single scalar <strong>scale factor <code>a</code></strong>, learned separately for FGS (wl0) and AIRS (all other bands). The idea was simple:</p>
+<ul>
+<li>Correct only the overall scale</li>
+<li>Keep the relative shape across wavelengths unchanged</li>
+</ul>
+<p>Concretely:</p>
+<ol>
+<li><strong>Boundary search</strong>: Used <code>minimize_scalar(method='bounded')</code> to find the optimal <code>a</code>.</li>
+<li><strong>Discretization</strong>: Rounded <code>a</code> to 0.01 increments to prevent overfitting to random noise in the evaluation metric.</li>
+</ol>
+<p>Finally, we trained a <strong>Gradient Boosting model</strong> to learn this <code>a</code> and applied it for scaling, which stabilized sigma predictions.</p>
+<pre><code>sigma_scaled[:, ] = (
+    np.array(mean_a_preds_fgs)
+    * step2_sigma[:, ]
+).clip(CFG.MIN_SIGMA)
+
+
+sigma_scaled[:, :] = (
+    (a_preds_airs).reshape(-, )
+    * step2_sigma[:, :]
+).clip(CFG.MIN_SIGMA)
+</code></pre>
+<h1>Step4: Pseudo Labeling (LB: ~+0.004)</h1>
+<p>To boost the leaderboard score, we retrained the model using the test data along with their predicted values.<br>
+To avoid overfitting, we only used the predictions for <code>wl_diff</code> and did <strong>not</strong> use the predicted sigma values.</p>
+<p>(Step2 involved checking a large number of learning curves, and we observed that even when MSE overfit the training data, the validation performance rarely deteriorated. This gave us confidence to apply pseudo labeling here.)</p>
+<p>Below are the trends we observed:</p>
+<ul>
+<li><strong>MSE transition</strong>: Almost no folds showed clear overfitting.</li>
+<li><strong>Competition metric transition</strong>: Tended to overfit more easily.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11676771%2F530edb9c4e96db81340ba3be9c937a2e%2F584f47bf-182c-43d8-8cb6-e3f223a3f6a8.png?generation=1758762783767691&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11676771%2F4391760215c0f2ee849c24bdde20ad0c%2Fffd8de63-7407-4fba-bcee-86691107dbec.png?generation=1758762800260659&amp;alt=media" alt=""></li>
+</ul>

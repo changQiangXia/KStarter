@@ -1,0 +1,244 @@
+<p>First of all, I would like to pay tribute to all the participants who worked on this competition.   <br>
+I would also like to thank the hosts for organizing this interesting task competition.    <br>
+This task was very interesting and I enjoyed working on it because I could think of many different approaches.    <br>
+I am honored to have won first place in this very interesting competition.</p>
+<h1>Overview</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3823496%2F16283ff691149c87b3b01a49a432f107%2Foverview.jpg?generation=1687442367636860&amp;alt=media" alt="Overview"></p>
+<p>My solution consists of a two-step pipeline that first classifies chart types using a classification model and then performs data series inference.  <br>
+In the inference phase of the data series, Bar, Line, and Dot were end-to-end predictions by Deplot trained for each chart type, while Scatter was predicted by an object detection-based approach.  </p>
+<p>The final scores are as follows.  </p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Overall</th>
+<th>Scatter</th>
+<th>Dot</th>
+<th>Line</th>
+<th>Vertical Bar</th>
+<th>Horizontal Bar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public</td>
+<td>0.86</td>
+<td>0.10</td>
+<td>0.00</td>
+<td>0.32</td>
+<td>0.39</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>private</td>
+<td>0.72</td>
+<td>0.30</td>
+<td>0.01</td>
+<td>0.13</td>
+<td>0.26</td>
+<td>0.01</td>
+</tr>
+</tbody>
+</table>
+<h1>Dataset</h1>
+<p>I used the following three data sets.  </p>
+<ol>
+<li><p>Competition data set（comp_extracted_dataset/comp_generated_dataset）  </p>
+<ul>
+<li>Using both extracted dataset (comp_extracted_dataset) and generated dataset (comp_generated_dataset).  </li>
+<li>For the generated data, data with noise in the annotations were removed by a simple check (about 100 images).  </li></ul></li>
+<li><p>ICDAR data set（ICDAR_dataset/ICDAR_manualannot_dataset）  </p>
+<ul>
+<li>I used 1406 pieces of data for which annotations were provided (ICDAR_dataset) and 1903 pieces of data for which no annotations were provided (ICDAR_manualannot_dataset).  </li>
+<li>For data for which annotations were provided, I visually rechecked the annotation contents and manually corrected all data that did not follow the competition's annotation rules (e.g., % notation) or contained noise.  </li>
+<li>For the data for which no annotations were provided, I first visually checked the appearance of all the data and selected the data that could be used in this competition. Next, I inferred and assigned pseudo-labels using the Deplot model, visually checked all the results again, and manually corrected all incorrect annotations.  </li></ul></li>
+<li><p>Generated synthetic data set（synthetic_dataset）  </p>
+<ul>
+<li>After reviewing the images in the competition dataset and determining that the comp_generated_dataset alone did not have a sufficient variation to achieve robustness, so I generated about 65k synthetic data myself.  </li>
+<li>I mainly generated synthetic data with features that comp_generated_dataset does not have.  <ul>
+<li>histogram  </li>
+<li>Label contains line breaks  </li>
+<li>Bar chart with error bars  </li>
+<li>Line chart containing x labels not included in the data series</li>
+<li>etc…  </li></ul></li>
+<li>To add diversity, I also included 10k images from the dataset published by <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a>.  </li></ul>
+<p>(Example of synthetic data I generated)  <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3823496%2Fd4df82a41fcaebeda2ffc93fb8ad9159%2Fgenerated_data.jpg?generation=1687442722440643&amp;alt=media" alt="generated_data"></p></li>
+</ol>
+<h1>Solution pipeline</h1>
+<h2>1. Chart classification</h2>
+<ul>
+<li>There is not much to note, as I just performed a simple classification task.  </li>
+<li>I used two models, convnext_large_384 and swin_large_patch4_window12_384, and integrated their results in a weighted ensemble.  </li>
+</ul>
+<p><strong>Training configs</strong>  </p>
+<ul>
+<li>Dataset (training data and validation data were randomly divided into folds)  <ul>
+<li>Training（78k images）：comp_extracted_dataset, comp_generated_dataset, ICDAR_dataset, synthetic_dataset(horizontal_bar/dot)  </li>
+<li>Validation（4k images）：comp_extracted_dataset, ICDAR_dataset, synthetic_dataset(horizontal_bar/dot)</li></ul></li>
+<li>Hyperparameters<ul>
+<li>Epochs：15  </li>
+<li>Batch size：16  </li>
+<li>Adafactor (lr=3e-5)  </li></ul></li>
+</ul>
+<h2>2. Data series prediction</h2>
+<p>Based on the classification results of Step 1, different approaches are used for scatter and the rest.  <br>
+Except for scatter, the predictions are made in Deplot, and scatter is an object detection-based prediction.  </p>
+<h3>2-a. Bars &amp; Lines &amp; Dots</h3>
+<ul>
+<li><p>I experimented by switching the model to Deplot based on the Donut-based notebook that <a href="https://www.kaggle.com/nbroad" target="_blank">@nbroad</a> had published. However, I could not train well just by changing the model, so I made some modifications.  </p>
+<ul>
+<li>Ground Truth Format  <br>
+Removed chart type from GroundTruth and adapted the format to that of the Deplot original.  <br>
+<code>&lt;0x0A&gt; x_value1 | y_value1 &lt;0x0A&gt; x_value2 | y_value2 &lt;0x0A&gt; x_value3 | y_value3 &lt;/s&gt;</code></li>
+<li>x-axis and y-axis swap of horizontal_bar  <br>
+Since the concept of x-axis and y-axis was reversed in the annotation rules of this competition and the original format of Deplot, I trained according to the original concept of Deplot and swapped the values during inference.  </li></ul></li>
+<li><p>Training was conducted in multiple stages. In the first stage, training was conducted using data from all chart types (All Chart-type Train), and using the results of that training as initial weights, one or two additional training sessions (Specific Chart-type Train) were conducted using only specific chart-type images to generate a model specialized for a chart type.</p>
+<ul>
+<li>The scores for vertical_bar and line were slightly improved by this method. (Two Specific Chart-type Train runs were performed for vertical_bar and one for line.)  </li>
+<li>Horizontal_bar had a worse cv after the second stage of training, probably due to the small amount of extracted data, so I decided to use the All Chart-type Train model to make predictions.    </li>
+<li>Dot chart only has generated data and I decided that I could not validate it successfully, so I decided not to train after the second stage and use the All Chart-type Train model to make predictions.  <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3823496%2F0a86b394e87edd440600ac531288897c%2FDeplot_training.jpg?generation=1687442833429916&amp;alt=media" alt="Deplot_training"></li></ul></li>
+</ul>
+<p><strong>Training configs</strong>  </p>
+<ol>
+<li><p>All Chart-type Train  </p>
+<ul>
+<li>Dataset  <ul>
+<li>Train（120k images）：comp_extracted_dataset, comp_generated_dataset, ICDAR_dataset, <br>
+synthetic_dataset  </li>
+<li>Validation（2.5k images）：comp_extracted_dataset, ICDAR_dataset, ICDAR_manualannot_dataset</li></ul></li>
+<li>Hyperparameters<ul>
+<li>Epochs：8</li>
+<li>Batch size：2  </li>
+<li>Adafactor (lr=1e-5)</li>
+<li>cosine scheduler with warmup (warmup_step=4000)</li>
+<li>Augmentation: GaussianBlur, GaussNoise, some color augmentations </li></ul></li></ul></li>
+<li><p>Specific Chart-type Train (vertical_bar)   </p>
+<ul>
+<li><p>Dataset  <br>
+[1st time]  </p>
+<ul>
+<li>Train（6k images）  ：comp_extracted_dataset, ICDAR_dataset, synthetic_dataset  </li>
+<li>Validation（1.3k images）：comp_extracted_dataset, ICDAR_dataset, ICDAR_manualannot_dataset  </li></ul>
+<p>[2nd time]  </p>
+<ul>
+<li>Train（1500 images）：comp_extracted_dataset, ICDAR_dataset, ICDAR_manualannot_dataset   </li>
+<li>Validation（500 images） ：comp_extracted_dataset, ICDAR_dataset, ICDAR_manualannot_dataset</li></ul></li>
+<li><p>Hyperparameters</p>
+<ul>
+<li>cosine scheduler with warmup (warmup_step=0)</li>
+<li>Otherwise, same as All Chart-type Train  </li></ul></li></ul></li>
+<li><p>Specific Chart-type Train (line)  </p>
+<ul>
+<li><p>Dataset  <br>
+[1st time]  </p>
+<ul>
+<li>Train（1150 images）：comp_extracted_dataset, ICDAR_dataset, ICDAR_manualannot_dataset  </li>
+<li>Validation（400 images）：comp_extracted_dataset, ICDAR_dataset, ICDAR_manualannot_dataset  </li></ul></li>
+<li><p>Hyper paramete</p>
+<ul>
+<li>cosine scheduler with warmup (warmup_step=0)</li>
+<li>Otherwise, same as All Chart-type Train  </li></ul></li></ul></li>
+</ol>
+<p><strong>Score</strong>  </p>
+<ul>
+<li><p>All Chart-type Train</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Overall</th>
+<th>Scatter</th>
+<th>Dot</th>
+<th>Line</th>
+<th>Vertical Bar</th>
+<th>Horizontal Bar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public</td>
+<td>0.78</td>
+<td>0.06</td>
+<td>0.00</td>
+<td>0.29</td>
+<td>0.38</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>private</td>
+<td>0.53</td>
+<td>0.13</td>
+<td>0.01</td>
+<td>0.12</td>
+<td>0.26</td>
+<td>0.01</td>
+</tr>
+</tbody>
+</table></li>
+<li><p>Specific Chart-type Train</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Overall</th>
+<th>Scatter</th>
+<th>Dot</th>
+<th>Line</th>
+<th>Vertical Bar</th>
+<th>Horizontal Bar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>public</td>
+<td>0.81</td>
+<td>0.06</td>
+<td>0.00</td>
+<td>0.32</td>
+<td>0.39</td>
+<td>0.05</td>
+</tr>
+<tr>
+<td>private</td>
+<td>0.55</td>
+<td>0.13</td>
+<td>0.01</td>
+<td>0.13</td>
+<td>0.26</td>
+<td>0.01</td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h3>2-b. Scatter</h3>
+<ul>
+<li>Only scatter was not accurate enough with Deplot no matter how I tried, so I adopted an object detection-based approach.  </li>
+<li>Since scatter is guaranteed to have label values of numeric type, it is easy to calculate values from ratios if the "label position," "label text," and "scatter point position" are known. I used CACHED to detect "label position," Deplot to read "label text," and YOLOX to detect "scatter point".  </li>
+<li>The mapping between label bboxes and label texts is a bit crude, but the smallest label text is mapped to the left-most (top in the case of y-labels) label bbox, and the largest label text is mapped to the right-most (bottom in the case of y-labels) label bbox. It is possible that the total number of detected label bboxes does not match the total number of read label texts, but we did not take any special measures because such a pattern was very rare when we checked the verification data.  </li>
+<li>The above object detection approach resulted in a scatter score of <strong>Pulic:0.10/Private:0.30</strong>, much better than the Deplot-based score (Pulic:0.06/Private:0.13).</li>
+</ul>
+<p><strong>More Details</strong>  <br>
+Scatter point detection  </p>
+<ul>
+<li>comp_extracted_dataset, ICDAR_dataset, synthetic_dataset were used for training data (about 12.5k images)</li>
+<li>Somewhat semi-automated using provided annotation data and image processing, but inevitably noisy, so corrected with manual annotation.  </li>
+<li>To increase detection accuracy, only the plot area was cropped for training and inference.</li>
+<li>The model was YOLOX-l, input image size was 1280 for both training and inference, and 50 epochs were trained.</li>
+</ul>
+<p>Label text reading</p>
+<ul>
+<li>comp_extracted_dataset, ICDAR_dataset, comp_generated_dataset were used for training data (about 62k images, all chart types were used, not just scatter)  </li>
+<li>Use the same training configs as in (2-a) All_Chart-type_Train for the training parameters, and change the format of Ground Truth as follows  <br>
+<code>&lt;0x0A&gt; x_label1 | x_label2 | x_label3 &lt;0x0A&gt; y_label1 | y_label2 &lt;/s&gt;</code> </li>
+<li>At first, I thought of using EasyOCR or similar to achieve this, but there were many issues to be addressed, such as support for character rotation, and it seemed that tuning would be very difficult to increase versatility, so I adopted a method of batch reading with Deplot.  </li>
+</ul>
+<hr>
+<p>Finally, I would like to thank once again everyone involved in this competition.  <br>
+Thank you very much for taking the time to read this!</p>
+<p>[edit] </p>
+<ul>
+<li>I have published 1st place <a href="https://www.kaggle.com/code/kashiwaba/benetech-1st-place-inference" target="_blank">inference notebook</a>(23/6/28) </li>
+<li>I have published 1st place <a href="https://github.com/KASSII/benetech_1st_place_train" target="_blank">training code</a>(23/7/8) </li>
+</ul>

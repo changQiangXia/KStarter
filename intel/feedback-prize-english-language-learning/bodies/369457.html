@@ -1,0 +1,232 @@
+<p>Thanks a lot to the hosts and Kaggle for hosting this interesting competition, we had great fun working on this one. Also congratulations to all other competitors for the great solutions and results. Special thanks to my teammates <a href="https://www.kaggle.com/evgeniimaslov2" target="_blank">@evgeniimaslov2</a> and <a href="https://www.kaggle.com/poteman" target="_blank">@poteman</a> for such a perfect teamwork. </p>
+<h2>Summary:</h2>
+<p>Our solution is based on training lots of different models with different pooling techniques and max lengths and finally ensembling. We also used 3 models to extract embeddings and add them to ensemble. </p>
+<h2>Cross validation</h2>
+<p>Throughout this competition we had near perfect correlation between ensemble CV and LB. Whenever we saw some improvement on CV, we saw it reflected in a similar manner on the LB with very small random range. For splitting the folds, we just used MultilabelStratifiedKFold startegy. </p>
+<h2>Modeling:</h2>
+<p>Our final solution is a combination of different modeling approaches. </p>
+<p>Train/PL data + Different Pooling techniques + model + max_len(768/1462 for deberta models, 512 for others) + freezing top n layers + re_init/no re_init  top layer + differential LR + AWP. </p>
+<h3>Poolings Used:</h3>
+<ol>
+<li>MeanPooling</li>
+<li>ConcatPooling</li>
+<li>WeightedLayerPooling</li>
+<li>GemPooling</li>
+<li>LSTMPooling</li>
+</ol>
+<h3>Models Used:</h3>
+<ol>
+<li>microsoft-deberta-v3-base</li>
+<li>deberta-v3-large</li>
+<li>deberta-v2-xlarge</li>
+<li>roberta-large</li>
+<li>distilbert-base-uncased</li>
+</ol>
+<p>Model Used for Embeddings and SVR</p>
+<ol>
+<li>"facebook/bart-large"</li>
+<li>"flax-sentence-embeddings/all_datasets_v3_roberta-large"</li>
+<li>"facebook/bart-large-mnli"</li>
+</ol>
+<p>Public Models: </p>
+<h3>Weight Tuning:</h3>
+<p></p><ul><br>
+<li>We used optuna to tune the model weights, since we used different folds for training, we used final oofs to tune the weights. Also weights are tuned target wise.</li><br>
+<li>We only add a model to our ensemble if it improves both our Ensemble CV/LB.</li><br>
+<li>The best CV we get using this approach was 0.44073 (We didn't select this sub fearing overfitting but this has best private score.) <br><br>
+Our Second Best CV was 0.44096 (It has good CV/LB correlation).<br><p></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+<th><br></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deberta-v3-base with PL (Roh)</td>
+<td>0.4464</td>
+<td>0.437219</td>
+<td>0.437982<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (Yev)</td>
+<td>0.4460</td>
+<td>0.436758</td>
+<td>0.434625<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (pub)</td>
+<td>0.4548</td>
+<td>0.439502</td>
+<td>0.437965<br></td>
+<td></td>
+</tr>
+<tr>
+<td>nischay (pub)</td>
+<td>4588</td>
+<td>0.442645</td>
+<td>0.439982<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v2-xlarge (pub)</td>
+<td>0.4675</td>
+<td>0.442497</td>
+<td>0.443604<br></td>
+<td></td>
+</tr>
+<tr>
+<td>roberta-large (Roh)</td>
+<td>0.4596</td>
+<td>0.443616</td>
+<td>0.444081<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (pub)</td>
+<td>0.4552</td>
+<td>0.440045</td>
+<td>0.437234<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (Roh)</td>
+<td>0.4556</td>
+<td>0.444469</td>
+<td>0.440331<br></td>
+<td></td>
+</tr>
+<tr>
+<td>distilbert-base-uncased (Roh)</td>
+<td>0.4794</td>
+<td>0.458219</td>
+<td>0.459658<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (yev)</td>
+<td>0.4440</td>
+<td>0.435268</td>
+<td>0.434334<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-base with AVG(trainPl + train) (Roh)</td>
+<td>0.4482</td>
+<td>0.43856</td>
+<td>0.441147<br></td>
+<td></td>
+</tr>
+<tr>
+<td>roberta-large with AVG(trainPl + train) finetune train (Roh)</td>
+<td>0.4649</td>
+<td>0.449538</td>
+<td>0.447643<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (yev)</td>
+<td>0.4538</td>
+<td>0.441582</td>
+<td>0.439262<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (yev)</td>
+<td>0.4617</td>
+<td>0.448342</td>
+<td>0.442106<br></td>
+<td></td>
+</tr>
+<tr>
+<td>deberta-v3-large (yev)</td>
+<td>0.4447</td>
+<td>0.436268</td>
+<td>0.435978<br></td>
+<td></td>
+</tr>
+<tr>
+<td>fb_bart_large_svr  (Roh)</td>
+<td>0.4635</td>
+<td>0.455645</td>
+<td>0.453132<br></td>
+<td></td>
+</tr>
+<tr>
+<td>ad_v3_roberta_large_svr (Roh)</td>
+<td>0.5113</td>
+<td>0.501901</td>
+<td>0.500084<br></td>
+<td></td>
+</tr>
+<tr>
+<td>fb_bart_large_mnli_svr (Roh)</td>
+<td>0.4708</td>
+<td>0.456652</td>
+<td>0.459615<br></td>
+<td></td>
+</tr>
+<tr>
+<td>Final Ensemble CV</td>
+<td>0.44096</td>
+<td>0.433821</td>
+<td>0.433356</td></tr></tbody></table></li>
+
+
+
+</ul>
+
+
+
+
+
+
+We also noticed that generating Soft/Pseudo labels on train data leads to huge overfitting, CV around 0.437.
+
+
+
+
+
+
+
+<h2>Pseudo labels:</h2>
+<ol>
+<li>FB1 data</li>
+<li>Train data</li>
+<li>Mean of Train Pl / Actual Labels  [This gives nice boost in both CV/LB]</li>
+</ol>
+<h2>What Worked:</h2>
+<ol>
+<li>Different Pooling techniques</li>
+<li>Different max_len</li>
+<li>freezing top n layers</li>
+<li>re_init top n layers.</li>
+<li>Training with Differential learning rate</li>
+<li>Pseudo labels</li>
+</ol>
+<h2>What didn't worked</h2>
+<ol>
+<li>Augmentations</li>
+<li>Post processing</li>
+</ol>
+<h2>Important Citations:</h2>
+<p><a href="https://www.kaggle.com/code/cdeotte/rapids-svr-cv-0-450-lb-0-44x" target="_blank">https://www.kaggle.com/code/cdeotte/rapids-svr-cv-0-450-lb-0-44x</a><br>
+<a href="https://www.kaggle.com/code/nischaydnk/fb3-pytorch-lightning-training-baseline" target="_blank">https://www.kaggle.com/code/nischaydnk/fb3-pytorch-lightning-training-baseline</a><br>
+<a href="https://www.kaggle.com/code/yasufuminakama/fb3-deberta-v3-base-baseline-train" target="_blank">https://www.kaggle.com/code/yasufuminakama/fb3-deberta-v3-base-baseline-train</a><br>
+<a href="https://www.kaggle.com/code/kojimar/fb3-deberta-family-inference-9-28-updated" target="_blank">https://www.kaggle.com/code/kojimar/fb3-deberta-family-inference-9-28-updated</a><br>
+<a href="https://github.com/ybabakhin/kaggle-feedback-effectiveness-1st-place-solution" target="_blank">https://github.com/ybabakhin/kaggle-feedback-effectiveness-1st-place-solution</a></p>
+<h2>Extra Links:</h2>
+<p>Link to our best submission  <a href="https://www.kaggle.com/code/rohitsingh9990/merged-submission-01/notebook?scriptVersionId=111953356" target="_blank">https://www.kaggle.com/code/rohitsingh9990/merged-submission-01/notebook?scriptVersionId=111953356</a></p>
+<h2>Thanks and Acknowledgements:</h2>
+<p>Special thanks to <a href="https://www.kaggle.com/cdeotte" target="_blank">@cdeotte</a>, <a href="https://www.kaggle.com/yasufuminakama" target="_blank">@yasufuminakama</a>, <a href="https://www.kaggle.com/nischay" target="_blank">@nischay</a>, <a href="https://www.kaggle.com/nischaydnk" target="_blank">@nischaydnk</a>, <a href="https://www.kaggle.com/e0xextazy" target="_blank">@e0xextazy</a> and <a href="https://www.kaggle.com/kojimar" target="_blank">@kojimar</a> for sharing their notebooks/datasets/ideas publicly. </p>
+<h2>Team Members</h2>
+<p><a href="https://www.kaggle.com/rohitsingh9990" target="_blank">@rohitsingh9990</a><br>
+<a href="https://www.kaggle.com/evgeniimaslov2" target="_blank">@evgeniimaslov2</a><br>
+<a href="https://www.kaggle.com/poteman" target="_blank">@poteman</a></p>
+<p>Training code can be accessed from <a href="https://github.com/rohitsingh02/kaggle-feedback-english-language-learning-1st-place-solution" target="_blank">https://github.com/rohitsingh02/kaggle-feedback-english-language-learning-1st-place-solution</a></p>

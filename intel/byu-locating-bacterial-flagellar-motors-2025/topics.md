@@ -1,0 +1,82 @@
+# byu-locating-bacterial-flagellar-motors-2025 讨论区（按票数排序，共 80 条）
+
+- [More Motor Annotations](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569921) — 147 票 / 45 评论 / 2025-03-25 
+- [1st Place - 3D U-Net + Quantile Thresholding](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583143) — 146 票 / 60 评论 / 2025-06-30 **write-up?**
+- [Understanding the Competition Data](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567360) — 69 票 / 42 评论 / 2025-03-09 
+- [Possible Inconsistencies in the train_labels.csv](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567089) — 60 票 / 11 评论 / 2025-03-08 
+- [a few tricks for test domain shift in kaggle competition](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/572731) — 49 票 / 9 评论 / 2025-04-11 
+- [[closed] lb0.744 my experiment results](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/573491) — 46 票 / 49 评论 / 2025-04-15 
+- [3rd place solution: 3D/2D UNet with Gaussian Heatmap and  WBF](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583380) — 42 票 / 7 评论 / 2025-06-18 **write-up?**
+- [4th place: Simple ResNet18 classification](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583411) — 42 票 / 14 评论 / 2025-06-11 **write-up?**
+- [20th place solution -- Keypoint-Based Dual-Graph Predictor](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583128) — 38 票 / 8 评论 / 2025-06-09 **write-up?**
+- [369th place solution YOLO part with PB0.840 notebook](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583133) — 37 票 / 7 评论 / 2025-06-05 **write-up?**
+- [Brief Insights on Ensemble Functions](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/578156) — 37 票 / 10 评论 / 2025-05-09 
+- [Aspect ratio](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566699) — 35 票 / 7 评论 / 2025-03-06 
+- [Dozens of Negative Tomograms Seem to Show Flagellar Motor-Like Structures](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/579540) — 35 票 / 22 评论 / 2025-05-18 
+- [CryoET Dataset with Pixel Anomalies Corrected](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/575028) — 34 票 / 15 评论 / 2025-04-25 
+- [Clarification Request: Can We Use Copyleft-Licensed Tools in Our Solution?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566932) — 33 票 / 2 评论 / 2025-03-07 **write-up?**
+- [External dataset](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566559) — 33 票 / 1 评论 / 2025-03-06 
+- [Validation of models?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/571196) — 32 票 / 19 评论 / 2025-04-01 
+- [Best Single Model CV LB thread](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567295) — 32 票 / 25 评论 / 2025-03-09 
+- [YOLO - Does best.pt checkpoint = best LB? ](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/576756) — 31 票 / 35 评论 / 2025-05-06 
+- [17th Place Solution - Ultralytics + Timm](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583144) — 30 票 / 9 评论 / 2025-06-05 **write-up?**
+- [Starting materials](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566596) — 29 票 / 5 评论 / 2025-03-06 
+- [4-th place solution (Detection Part)](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583228) — 28 票 / 5 评论 / 2025-06-05 **write-up?**
+- [[9 Place] Recall, Rotate and Zoom in](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583242) — 28 票 / 2 评论 / 2025-06-05 
+- [Welcome to the BYU Locating Bacterial Flagellar Motors Challenge! ](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566137) — 26 票 / 35 评论 / 2025-03-04 
+- [Strip optimizer from epoch.pt in Ultralytics YOLO](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/577949) — 26 票 / 16 评论 / 2025-05-07 
+- [What I Learned in BYU](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583051) — 26 票 / 8 评论 / 2025-06-04 
+- [Leaderboard Rescore Underway - COMPLETED](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574729) — 25 票 / 39 评论 / 2025-04-23 
+- [2nd place solution - 3D nnU-Net + blob regression](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/584980) — 25 票 / 1 评论 / 2025-06-17 **write-up?**
+- [🍿 Tips: Changing YOLO's default behavior](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/579617) — 24 票 / 2 评论 / 2025-05-19 
+- [Clarification regarding labels](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567067) — 22 票 / 6 评论 / 2025-03-08 
+- [Python Code for Visualizing Tomograms](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566633) — 21 票 / 2 评论 / 2025-03-06 
+- [Preprint for Our Project!](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/575769) — 18 票 / 8 评论 / 2025-04-30 
+- [Bacterial Flagellar Motor: PyMol and ChimeraX visualization programs for Biocomputing.](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566556) — 18 票 / 0 评论 / 2025-03-06 
+- [13th Place Solution - 2.5D YOLO Ensemble with DBSCAN](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583164) — 18 票 / 2 评论 / 2025-06-05 **write-up?**
+- [[Update Preprocessing] Share a result of graph construction on bacterial image](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/570685) — 16 票 / 13 评论 / 2025-03-30 
+- [22th Place Solution - single yolov8m with Pseudo label](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583289) — 15 票 / 5 评论 / 2025-06-06 **write-up?**
+- [3d unet not working](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/568930) — 15 票 / 20 评论 / 2025-03-18 
+- [Explanation of Fβ-score Metric](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567216) — 15 票 / 1 评论 / 2025-03-09 
+- [Reduce the number of slices for inference acceleration](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/578461) — 15 票 / 23 评论 / 2025-05-11 
+- [Viewing and understanding the churn across the leaderboards](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583131) — 14 票 / 3 评论 / 2025-06-05 
+- [What is your best single model without YOLO?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574257) — 14 票 / 29 评论 / 2025-04-21 
+- [Introductory video on flagellar motors](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566689) — 13 票 / 0 评论 / 2025-03-06 
+- [Augmentations in Ultralytics](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574663) — 13 票 / 8 评论 / 2025-04-23 
+- [Best preprocessing approach](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569996) — 13 票 / 2 评论 / 2025-03-25 
+- [3d detection](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/568806) — 13 票 / 12 评论 / 2025-03-18 
+- [Nice topics/starters for BYU LBFM2025 Contest](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567045) — 13 票 / 2 评论 / 2025-03-08 
+- [Related Research Papers](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566590) — 12 票 / 2 评论 / 2025-03-06 
+- [Updated Best Solo Models?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/575108) — 12 票 / 45 评论 / 2025-04-26 
+- [🪡 Correcting wrongly-quantized train tomograms](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/579659) — 12 票 / 0 评论 / 2025-05-19 
+- [Whats the highest Yolo LB score?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/573197) — 11 票 / 20 评论 / 2025-04-14 
+- [How to ensemble YOLO predictions](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/576465) — 9 票 / 3 评论 / 2025-05-05 
+- [Similar Competition](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566818) — 9 票 / 0 评论 / 2025-03-07 
+- [Is the "Voxel Spacing" for the Test Data Available?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567080) — 9 票 / 2 评论 / 2025-03-08 
+- [Post-Competition Benchmark Dataset](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/582948) — 8 票 / 4 评论 / 2025-06-03 
+- [Right now, I'm considering using Transfer Learning, as someone suggested. What else can I try? If anyone has any suggestions, please share!](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/571444) — 8 票 / 2 评论 / 2025-04-03 
+- [Get started here](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566319) — 7 票 / 23 评论 / 2025-03-04 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566504) — 7 票 / 0 评论 / 2025-03-05 
+- [Competition Data Analysis](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583410) — 7 票 / 1 评论 / 2025-06-06 
+- [ended versions of this competition:](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/566600) — 7 票 / 2 评论 / 2025-03-06 
+- [What is the reason to use old YOLO versions?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/570561) — 7 票 / 1 评论 / 2025-03-28 
+- [Is annotation for tomo_0de3ee correct?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569998) — 7 票 / 1 评论 / 2025-03-25 
+- [How can a single YOLOV8 model train scores above LB0.62?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/570344) — 7 票 / 2 评论 / 2025-03-27 
+- [6th place solution - Ultralytics YOLO ](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/587410) — 7 票 / 3 评论 / 2025-07-01 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583825) — 6 票 / 1 评论 / 2025-06-09 
+- [easy solution of LB 0.80745: using only YOLO and the original dataset && summarize the approach to this competition ](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583244) — 6 票 / 1 评论 / 2025-06-11 **write-up?**
+- [44th Place Solution: [BYU - Locating Bacterial Flagellar Motors 2025]](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583294) — 6 票 / 5 评论 / 2025-06-28 **write-up?**
+- [What is the key point to reach 0.8?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/579247) — 6 票 / 35 评论 / 2025-05-16 
+- [Identifying bacterial cells (and the motors)](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/568945) — 6 票 / 3 评论 / 2025-03-19 
+- [Submission format question](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569387) — 6 票 / 5 评论 / 2025-03-21 
+- [ Impact of Objects Number in Training and Testing Data on YOLO Training](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567953) — 6 票 / 2 评论 / 2025-03-13 
+- [Are we allowed to load pretrained model?](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/567325) — 6 票 / 4 评论 / 2025-03-09 
+- [28th Place Solution - yolo 8s + yolo 10x + yolo 11](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583157) — 5 票 / 5 评论 / 2025-06-05 **write-up?**
+- [Why Does My Model Achieve Zero Loss but Take Too Long to Train? (TPU vs. CPU Performance Analysis)](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569547) — 5 票 / 1 评论 / 2025-03-22 
+- [training on 3d unet](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/573335) — 5 票 / 13 评论 / 2025-04-15 
+- [Yolo train differs](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/575799) — 5 票 / 21 评论 / 2025-05-01 
+- [【Bug Report】Medals haven't updated in many accounts.](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583903) — 5 票 / 3 评论 / 2025-06-10 
+- [How to avoid overfitting.](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/581247) — 5 票 / 8 评论 / 2025-05-29 
+- [Yolo training details](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/572003) — 5 票 / 6 评论 / 2025-04-07 
+- [Alternate Validation Strategy](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/583163) — 5 票 / 1 评论 / 2025-06-05 
+- [Extra data harm my LB by a lot](https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574340) — 5 票 / 5 评论 / 2025-04-21 

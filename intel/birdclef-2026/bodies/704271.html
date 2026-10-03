@@ -1,0 +1,93 @@
+<h1>Scheme Summary:</h1>
+<p>*** The pipeline does not work well with models other than PERCH v2. I have tried several alternative backbones, HGNET as an example. Just like PERCH v2, these models require pre-trained weights. I experimented using BirdSet XC data yet only reached approximately 0.94. ***</p>
+<h2>1. my best private single model,</h2>
+<p><a href="https://www.kaggle.com/code/cooolz/perchv2-sed" target="_blank">https://www.kaggle.com/code/cooolz/perchv2-sed</a></p>
+<h2>2. Model Architecture</h2>
+<pre><code>Raw Audio (32kHz, 20s)
+       │
+       ▼
+┌─────────────────────────────┐
+│  Mel Spectrogram Frontend   │  PERCH v2 built-in (128 mel bins, frozen)
+│  stride=320, sr=32000       │  Output: (B, 128, T)
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  PERCH v2 CNN Backbone      │  Pretrained: perch_v2_pytorch.pth
+│  emb_dim=1536               │  Output: (B, 1536, H, W)
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  Linear Proj +  RoPE      │  1536 → 512,  RoPE
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  SED Transformer ×4 Layers  │  SEDBlock: Self-Attn (8 heads) + MLP (ratio=4)
+│  dim=512, RMSNorm            │  attn_drop=0.0, proj_drop=0.1
+└─────────────────────────────┘
+       │
+       ▼
+┌─────────────────────────────┐
+│  SEDHead (Dual Head)        │  num_context=4: split time into 4 context windows
+│  fc_logit → frame logits    │  att_logits: Σ(softmax(attn) * logit)
+│  fc_att   → attn weights    │  max_logits: per-frame max pooling
+└─────────────────────────────┘
+       │
+       ▼
+  Output: (att_logits, max_logits) — 2 heads, (B, 4, 234) each
+</code></pre>
+<h2>3. Trainable perchv2</h2>
+<p>The pytorch model is convert from tf version with the help of gpt. And there is a public availabel one produced by <a href="https://www.kaggle.com/code/hengck23/pytorch-differentiable-perchv2" target="_blank">hengck23</a></p>
+<h2>4. Train params</h2>
+<p>Cos scheduel with warmup from 0 to 2.5e-4 to 1e-6 with around 10 epochs.
+Bce loss</p>
+<h2>5. Sample strategy,</h2>
+<p>80-500, 
+if a label has morethan 500 files, give a low sample weight.
+if a label has less than 80 files, give a high sample weight.
+striong soundscape data x2.5 weight</p>
+<h2>6. augmantation,</h2>
+<ul>
+<li>0.8 probability: random gain ±4 dB</li>
+<li>0.5 probability: random time and frequency masking</li>
+<li>1.0 probability: mixup</li>
+</ul>
+<h2>7. Inference &amp; Post-processing</h2>
+<p>The final inference uses ONNX-exported model via OpenVINO. Post-processing pipeline:</p>
+<pre><code>60s audio → Mel Spectrogram → Single Model → Prior Fusion
+    → Smooth Day/Night → Sigmoid
+    → Amphibia Month Prior → File Confidence Scale
+    → Per-Taxon Temporal Smoothing → Final Probs
+</code></pre>
+<h3>7.1.  Inference</h3>
+<ul>
+<li>5-fold ONNX models</li>
+<li>Input: 60s audio → 6000-frame mel spec → model → 12×5s clip logits</li>
+<li>Output: logits (12, 234)</li>
+</ul>
+<h3>7.2. post process</h3>
+<h4>7.2.1. Prior Fusion</h4>
+<ul>
+<li>Site, hour, site×hour priors fitted from soundscape strong labels</li>
+</ul>
+<h4>7.2.2. Smooth Day/Night Correction</h4>
+<p>Many species follow unique day-night activity rhythms, analogous to higher cold drink sales in summer. Their hour-wise priors are computed from probability distributions of soundscape labels; supporting evidence is shown below.</p>
+<h4>7.2.3. Amphibia Month Prior</h4>
+<p>Amphibian activity fluctuates between dry and wet seasons, similar to seasonal beverage consumption trends. Monthly priors are fitted from soundscape probability statistics, with relevant evidence attached below.</p>
+<p>This echoes a well-known ML anecdote: a DL expert fitted beverage store data and concluded cold drinks sell more in summer and hot drinks sell better in winter.</p>
+<h4>7.2.4. File-Level Confidence Scale</h4>
+<h4>7.2.5. Per-Taxon Temporal Smoothing</h4>
+<h3>7.3 ensemble</h3>
+<p>The ensemble lacks diversity owing to exclusive use of the PerchV2 backbone. I substitute the Transformer with Mamba and other sequential models; this modification can maintain similar performance metrics. Actually single model is good enough. </p>
+<h2>Evidence for the post process,</h2>
+<p>This time the host gives site, month and hour metainfo, that could be used. I found it late, and got no time to use it within the model.</p>
+<p>I got some evidence:
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1562037%2F175dc74a649a19ebf14a5a829fe6141f%2F_20260603115418_30254_68.png?generation=1780544647691460&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F1562037%2F51496c04bc4c265184af4c0b0b451dda%2Fdn_compare_all_species.png?generation=1780544721950872&amp;alt=media" alt=""></p>
+<h2>pse label</h2>
+<p>It remains unclear if pseudo labels benefit the method: a base model trained without pseudo labels scored 0.951 on public LB a month earlier. Regardless, I appended 10~12 pseudo-labeled samples to the training corpus for training.</p>
+<h4>code share</h4>
+<p><a href="https://github.com/610265158/birdclef26" target="_blank">birclef26</a>
+the code is summary by OMO.</p>

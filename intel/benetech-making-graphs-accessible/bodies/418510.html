@@ -1,0 +1,101 @@
+<p>For this competition, I chose to use a pipeline of multiple models instead of an end-to-end model (such as Donut, Deplot, or Matcha). I made this choice because the baseline end-to-end model model I tested with Kaggle data only did not perform well, and I thought it may require a powerful machine to train and cost time to generate data.</p>
+<h1>Models</h1>
+<ul>
+<li>Image classification: used to classify chart types.</li>
+<li>Text detection: used to detect x/y labels.</li>
+<li>Text recognition: used to read the crops (pretrained model only, no fine-tuning).</li>
+<li>Object Detection: used to detect x/y ticks, scatter points, and vertical and horizontal bars.</li>
+<li>Object Segmentation: used to segment lines on line charts and segment vertical bars (to classify if the vertical bar is a histogram or not).</li>
+<li>Pretrained Deplot Model: used for cases where the pipeline cannot predict anything (applied only in one case out of 559 CV files).</li>
+</ul>
+<h1>Data</h1>
+<ul>
+<li>Use only Kaggle data.</li>
+<li>Split the <code>extracted</code> data into a 50% training set and a 50% validation set.</li>
+<li>Use all <code>generated</code> data for training set</li>
+<li>Finally, use all the data to train the final weights for each type of model.</li>
+</ul>
+<h1>Result:</h1>
+<p>Best CV - LB (with train data only): 0.871 - 0.86</p>
+<p>Private LB: 0.67</p>
+<p>Best public - private LB: 0.86 - 0.69</p>
+<h1>Pipeline Details</h1>
+<p><strong>Step 0: Chart type classification</strong></p>
+<p>I used a v2s backbone model to classify the charts, with a CV accuracy of 99.2%.</p>
+<h2>General components/steps applied for all chart types:</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1713154%2Fdc243c99a1031a1d8e4ddc2f2dbc0250%2F000b92c3b098.jpg?generation=1687320266860703&amp;alt=media" alt=""></p>
+<p><strong>Step 1</strong>: Detect and read x/y labels:</p>
+<ul>
+<li>First, use a text detection model to detect the polygons of x/y labels.</li>
+<li>Then, use a text recognition model to read the text inside the polygons.</li>
+<li>Post-processing:<ul>
+<li>For x labels, draw a horizontal line from top to bottom of the image and select the line that intersects the largest number of x labels polygons. This is because the text detection model is not always accurate.</li>
+<li>Repeat the process for y labels.</li></ul></li>
+</ul>
+<p><strong>Step 2</strong>: Use an object detection model to detect x/y ticks.</p>
+<ul>
+<li>Post-processing: Similar to x/y labels, I draw a horizontal line to filter x ticks and a vertical line to filter y ticks.</li>
+</ul>
+<p><strong>Step 3</strong>: Map x/y labels and x/y ticks.</p>
+<ul>
+<li>Based on the relative position between labels and ticks, I create a 1-1 mapping for these label-tick pairs based on IOU in Ox direction and ignore all other labels/ticks that can't be paired.</li>
+<li>Because there are cases where the x labels are not straight, to make the mapping more accurate:<ul>
+<li>Get the rectangles of x_label from polygons.</li>
+<li>Draw a rhombus with vertices at the center of the rectangle edges.</li>
+<li>Draw a new rectangle with the center at the highest vertex of the rhombus.</li>
+<li>Then create a 1-1 mapping with x_boxes similar to mapping x labels and x ticks.</li></ul></li>
+</ul>
+<h2>For a vertical bar chart</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1713154%2F729ce9a29230faa6093f8d795020f25a%2FScreenshot_2023-06-20_at_11.35.00.png?generation=1687320318358985&amp;alt=media" alt=""></p>
+<p><strong>Step 4:</strong> Detect the point on top of each bar using an object detection model. I will call these points "value boxes" because I predicted boxes instead of points.</p>
+<p><strong>Step 5:</strong> Map x ticks and value boxes.</p>
+<ul>
+<li>This step is similar to mapping x labels and x ticks.</li>
+</ul>
+<p><strong>Step 6:</strong> Get the final value of each bar.</p>
+<ul>
+<li>Project the center of each value box to Oy, then get the final value by comparing it to the two nearest y ticks' values.<ul>
+<li><code>value_box_value = y1_value - abs((y2_value - y1_value) / (y2_pixel - y1_pixel) * (value_y_pixel - y1_pixel))</code></li></ul></li>
+</ul>
+<p><strong>How to check if a vertical bar is a histogram:</strong></p>
+<ul>
+<li>Because all columns of a histogram always sit next to each other without space, I use a bar segmentation model to detect the bar region.</li>
+<li>Calculate the percentage in the Ox direction. If the segmented region (in the Ox direction) is greater than 95% of the distance between the last bar and the first bar, then it is a histogram.</li>
+</ul>
+<h2>Horizontal Bar Chart</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1713154%2F6ade62f528b74599879f6833bc737a23%2FScreenshot_2023-06-20_at_11.32.59.png?generation=1687320337730044&amp;alt=media" alt=""></p>
+<p>I process a horizontal bar chart follow these steps:</p>
+<ul>
+<li>Rotate the chart 90 degrees and then flip it horizontally to make it similar to a vertical bar chart.</li>
+<li>Use the same steps as for a vertical bar chart to process the horizontal bar chart.</li>
+</ul>
+<h2>Line Chart</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1713154%2Fe6af38a3f7ec91c67630248db8800533%2FScreenshot_2023-06-20_at_11.18.59.png?generation=1687320402512900&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1713154%2F60bcf18082ab15baf5a1879668494d18%2FScreenshot_2023-06-20_at_11.19.19.png?generation=1687320415337921&amp;alt=media" alt=""><br>
+<strong>Step 4</strong>: Use a segmentation model to predict the lines in the chart. For dashed lines, connect them to make them continuous.</p>
+<p><strong>Step 5</strong>: Project the line onto the Ox axis and keep only the x labels and ticks that can be projected onto the line in the Ox dimension. Then, get the corresponding value boxes for the remaining x labels.</p>
+<p><strong>Step 6</strong>: Obtain the final value for each value box:</p>
+<ul>
+<li>Project the center of each value box onto the Oy axis.</li>
+<li>Compare the projected value with the values of the two nearest y ticks to get the final value.</li>
+</ul>
+<h2>For scatter chart</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1713154%2Ffd84003f92f9f973e8019ba2564e1315%2FScreenshot_2023-06-20_at_11.16.21.png?generation=1687320430238074&amp;alt=media" alt=""></p>
+<p><strong>Step 4</strong>: Detect scatter points using object detection models. I find the box size of scatter points by getting the largest rectangle connected component that contains the scatter point, then average all the box size in the chart to get the final box size for all scatter points. These predicted points will be referred to as "value boxes" in the following steps, in order to maintain consistency with other chart types.</p>
+<p><strong>Step 5</strong>: Map the x/y ticks and value boxes.</p>
+<ul>
+<li>Similar to mapping the x ticks and value boxes in a vertical bar chart, we do the same for the y ticks in the Oy dimension.</li>
+</ul>
+<p><strong>Step 6</strong>: Obtain the final value of each value box.</p>
+<ul>
+<li>Project the center of the value boxes to Ox/Oy, then obtain the final value by comparing them to the values of the two closest x/y ticks.</li>
+</ul>
+<h2>For dot chart</h2>
+<p>Similar to vertical bar chart, except if the x labels are numerical, we use scatter postprocessing methods instead.</p>
+<h3>And another post-processing functions using computer vision based algorithms, some highlights:</h3>
+<ul>
+<li>To avoid errors in text recognition and detection, keep the y-label values as the longest increasing sequence.</li>
+<li>Splitting words inside polygons since the pretrained text recognition model doesn't include spaces,, I use another word detection model. Then sort the words based on their geometric location can help with accuracy.</li>
+</ul>
+<p>More detail in the notebook. The inference notebook is public here: <a href="https://www.kaggle.com/code/thanhhau097a/bmga-submission-0-86" target="_blank">https://www.kaggle.com/code/thanhhau097a/bmga-submission-0-86</a></p>
+<p>Cheer</p>

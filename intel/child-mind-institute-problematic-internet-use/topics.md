@@ -1,0 +1,122 @@
+# child-mind-institute-problematic-internet-use 讨论区（按票数排序，共 120 条）
+
+- [First Place Write-Up: Or How I Won the Lottery](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552638) — 94 票 / 50 评论 / 2025-01-02 **write-up?**
+- [Results of verifying the effectiveness of the custom objective for LGBM with Quadratic Weighted Kappa (QWK)](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535052) — 89 票 / 5 评论 / 2024-09-20 
+- [Questioning the task](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535525) — 87 票 / 56 评论 / 2024-09-22 
+- [Addressing some of the challenges of our dataset](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/538235) — 73 票 / 46 评论 / 2024-10-07 
+- [Some findings from the features EDA (+ data issues, outliers)](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535354) — 63 票 / 19 评论 / 2024-09-21 
+- [Worst three time series of the dataset](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535900) — 59 票 / 7 评论 / 2024-09-24 
+- [Evidence of overfitting, or how to recognize bad public notebooks](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551758) — 51 票 / 26 评论 / 2024-12-15 
+- [16th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552569) — 42 票 / 15 评论 / 2024-12-20 **write-up?**
+- [A note on the actigraphy data](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/537145) — 38 票 / 21 评论 / 2024-10-01 
+- [Starter materials](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535063) — 37 票 / 10 评论 / 2024-09-20 
+- [Starter Notebook: Multi-Target Prediction Using CatBoost](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535121) — 36 票 / 8 评论 / 2024-09-20 
+- [Viewing the grand churn and collecting our takeaways](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552482) — 35 票 / 21 评论 / 2024-12-20 
+- [2nd Place Writeup](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552712) — 32 票 / 10 评论 / 2024-12-21 **write-up?**
+- [Problematic Internet use (PIU): Z-Angle (Anglez), Euclidean Norm Minus One (Enmo) are back! ](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535045) — 31 票 / 0 评论 / 2024-09-19 
+- [Calculate your metric faster and more efficiently!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535093) — 31 票 / 1 评论 / 2024-09-20 
+- [Private 7th place solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552625) — 31 票 / 0 评论 / 2024-12-24 **write-up?**
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535042) — 30 票 / 22 评论 / 2024-09-19 
+- [Rank 106 approach - Simple feature sets and CV-LB stability focus](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552492) — 30 票 / 9 评论 / 2024-12-30 
+- [CV-LB thread](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535523) — 28 票 / 33 评论 / 2024-09-22 
+- [Modeling Approach: Semi-Supervised Learning](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535023) — 27 票 / 7 评论 / 2024-09-19 
+- [Get started here](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535019) — 25 票 / 11 评论 / 2024-09-19 
+- [19th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552513) — 25 票 / 4 评论 / 2024-12-20 **write-up?**
+- [Useful resources from Previous Child Mind Institute competition from past](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535062) — 24 票 / 0 评论 / 2024-09-20 
+- [Are we using the future to predict the past?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/538082) — 23 票 / 7 评论 / 2024-10-06 
+- [Discussion: The Impact of Parameters and Random Seeds on Competition Performance ﻿| UPDATED| FINAL SUBMISSION discussion](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/536441) — 23 票 / 6 评论 / 2024-09-27 
+- [Handle your leaderboard scores with care!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535681) — 21 票 / 0 评论 / 2024-09-23 
+- [Do we really need complex models here?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546396) — 21 票 / 25 评论 / 2024-11-15 
+- [End of Competition - Thank you!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552601) — 20 票 / 6 评论 / 2024-12-20 
+- [14th place solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552517) — 20 票 / 5 评论 / 2024-12-20 **write-up?**
+- [The Optimisers Curse](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/550074) — 20 票 / 9 评论 / 2024-12-05 
+- [One trick to optimize thresholds](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551533) — 20 票 / 3 评论 / 2024-12-13 
+- [Short advice for lottery competitors (ICR, CMI)](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552501) — 19 票 / 13 评论 / 2024-12-20 
+- [PCIAT variables ??](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/536407) — 19 票 / 16 评论 / 2024-09-27 
+- [Are we heading the Home Credit route or the ICR way?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551458) — 18 票 / 14 评论 / 2024-12-13 
+- [Various strategies.](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/542244) — 15 票 / 23 评论 / 2024-10-23 
+- [Sharing Train Series Data Visualization](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/537664) — 15 票 / 6 评论 / 2024-10-04 
+- [Why do we get noisy scores? Target(=sii) distribution may be the Key.](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551913) — 15 票 / 13 评论 / 2024-12-16 
+- [5th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552656) — 14 票 / 4 评论 / 2024-12-20 **write-up?**
+- [Is the data real / synthetic ? ](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/536069) — 14 票 / 9 评论 / 2024-09-25 
+- [Private 0.478 notebook](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552488) — 14 票 / 9 评论 / 2024-12-20 
+- [4th Place Solution for the Child Mind Institute — Problematic Internet Use competition](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552861) — 13 票 / 13 评论 / 2024-12-22 **write-up?**
+- [I got my first silver medal!!!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552518) — 13 票 / 3 评论 / 2024-12-20 **write-up?**
+- [🤔 Second competition from Child Mind Institute](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535114) — 13 票 / 2 评论 / 2024-09-20 
+- [What was your best unselected submission?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552483) — 13 票 / 40 评论 / 2024-12-20 
+- [CV - LB relationship](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/545096) — 13 票 / 7 评论 / 2024-11-08 
+- [Dell Discount for Competitors](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546844) — 12 票 / 12 评论 / 2024-11-18 
+- [Guess the winner score of this competition?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551164) — 12 票 / 34 评论 / 2024-12-11 
+- [Correlations with the Questions](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/541007) — 12 票 / 4 评论 / 2024-10-17 
+- [Step 1: Literature Review : Related Papers](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535058) — 12 票 / 2 评论 / 2024-09-20 
+- [🤯😱 The greatest shake-up that I have ever seen!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552498) — 12 票 / 7 评论 / 2024-12-20 
+- [I became a Kaggle Competitions Master](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552540) — 12 票 / 6 评论 / 2024-12-20 
+- [Private LB 0.466 using only 6 features (Single multiseed CatBoost)](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552503) — 11 票 / 3 评论 / 2024-12-20 
+- [I got my first silver medal!!!稀了糊涂银牌🥈](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552533) — 10 票 / 4 评论 / 2024-12-20 **write-up?**
+- [Child Mind Institute PIU 3rd Place Solution ](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552677) — 10 票 / 1 评论 / 2025-01-01 **write-up?**
+- [One Scoring Target - 20(x6) Intermediate Targets - Regression or Classification approach?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535053) — 9 票 / 2 评论 / 2024-09-20 
+- [Is this the year of shakeups?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552549) — 9 票 / 2 评论 / 2024-12-20 
+- [I got a my first silver medal in my first ever competition on kaggle.  ](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552588) — 9 票 / 2 评论 / 2024-12-20 **write-up?**
+- [how can best LB notebook be published from 7 days before the deadline under spoiler alert](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551845) — 9 票 / 1 评论 / 2024-12-16 
+- [Classification kinda approach that didn't work](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552534) — 8 票 / 2 评论 / 2024-12-20 
+- [Optimized Validation QWK vs Validation QWK](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546038) — 8 票 / 2 评论 / 2024-11-13 
+- [Key Strategies to deal with missing values in data ](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535321) — 8 票 / 2 评论 / 2024-09-21 
+- [The impact of random seeds can be much bigger than the minor changes of approaches.](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/549795) — 8 票 / 7 评论 / 2024-12-03 
+- [Optimized QWK effect on the LB score](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/540738) — 8 票 / 9 评论 / 2024-10-15 
+- [Suspicious accounts](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546142) — 8 票 / 7 评论 / 2024-11-14 
+- [The New Features of the Kaggle Profile](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/536112) — 8 票 / 1 评论 / 2024-09-26 
+- [Why use Regressors instead of Classifier?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/539949) — 8 票 / 3 评论 / 2024-10-11 
+- [How to predict missing TARGET in train.csv？](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/537514) — 8 票 / 7 评论 / 2024-10-03 
+- [6th place solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/553146) — 8 票 / 0 评论 / 2024-12-24 **write-up?**
+- [10th Place Solution: Hierarchical Bayesian Model with 5 features](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552940) — 8 票 / 3 评论 / 2024-12-22 **write-up?**
+- [Can we trust CV？](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535458) — 7 票 / 10 评论 / 2024-09-22 
+- [Missing values vs correlations](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/542758) — 7 票 / 0 评论 / 2024-10-26 
+- [BMI is measured twice and its not the same](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/542014) — 7 票 / 3 评论 / 2024-10-22 
+- [sharing autoencoder with NaN values handling](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/550255) — 7 票 / 0 评论 / 2024-12-06 
+- [Missing values](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/548020) — 7 票 / 2 评论 / 2024-11-24 
+- [PCIAT,instead of Sii](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/537328) — 7 票 / 4 评论 / 2024-10-02 
+- [unsupervised learning approach](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/540237) — 7 票 / 8 评论 / 2024-10-13 
+- [8th Place Solution](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552760) — 7 票 / 0 评论 / 2025-01-04 **write-up?**
+- [Meme Thread](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551979) — 7 票 / 7 评论 / 2024-12-16 
+- [Question about the number of unique ids in the hidden test dataset](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535292) — 6 票 / 0 评论 / 2024-09-21 
+- [Solution 0.459 Private Single Model](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552477) — 6 票 / 14 评论 / 2024-12-20 **write-up?**
+- [The optimized qwk dilemma](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552127) — 6 票 / 2 评论 / 2024-12-17 
+- [repeatkfold is your need](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/549036) — 6 票 / 1 评论 / 2024-11-30 
+- [Does blending work for QWK?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552183) — 6 票 / 6 评论 / 2024-12-18 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/554854) — 5 票 / 0 评论 / 2025-01-03 
+- [Difference between PCA and Sparce PCA explained](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/547204) — 5 票 / 0 评论 / 2024-11-20 
+- [Scatter Plot of SII vs Sleep Disturbance Scale](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546269) — 5 票 / 6 评论 / 2024-11-14 
+- [My strategy : low variance of the score](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551182) — 5 票 / 7 评论 / 2024-12-11 
+- [Is it overfitting? Modifying any parameters will lead to a decrease in performance](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/549871) — 5 票 / 5 评论 / 2024-12-04 
+- [key take-aways from this competition](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552490) — 5 票 / 7 评论 / 2024-12-20 
+- [Relationship between CV score and LB score](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/547260) — 5 票 / 18 评论 / 2024-11-20 
+- [About using AutoEncoder](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/548807) — 5 票 / 7 评论 / 2024-11-29 
+- [🚀 Starter Notebook: Predicting Problematic Internet Use Scores Using LightGBM](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535118) — 5 票 / 1 评论 / 2024-09-20 
+- [What is the best result in valid dataset?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/540388) — 5 票 / 6 评论 / 2024-10-14 
+- [Considering building two seperate models - with and without Actigraphy data](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/543350) — 5 票 / 5 评论 / 2024-10-30 
+- [How do you deal with score fluctuations using GPUs?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/540040) — 5 票 / 7 评论 / 2024-10-12 
+- [Random seeds sometimes actually let models fit the data well.](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552180) — 5 票 / 5 评论 / 2024-12-18 
+- [Issues with measurement units](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535440) — 5 票 / 4 评论 / 2024-09-22 
+- [PCIAT-PCIAT_Total and sii](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/540480) — 4 票 / 6 评论 / 2024-10-14 
+- [Will the same result as ISIC2024 be repeated again?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/547433) — 4 票 / 14 评论 / 2024-11-21 
+- [Is The AutoEncoder Can Be The winner Model:](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/544342) — 4 票 / 10 评论 / 2024-11-04 
+- [The lottery is about to draw](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552467) — 4 票 / 10 评论 / 2024-12-19 
+- [People dropped the competition actually won!](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552545) — 4 票 / 5 评论 / 2024-12-20 
+- [Local Clustered Group Sampling - A Strategy for Small and Noisy Data](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552516) — 4 票 / 2 评论 / 2024-12-20 
+- [Great Competition (913th Ranked)](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552489) — 4 票 / 0 评论 / 2024-12-20 
+- [What will be the final result?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551850) — 4 票 / 9 评论 / 2024-12-16 
+- [Watch webinar for this competition](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/541724) — 4 票 / 0 评论 / 2024-10-21 
+- [Ideas for samples with missing 'sii'](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/539536) — 4 票 / 7 评论 / 2024-10-09 
+- [Any useful features from the parquet time series?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551202) — 4 票 / 6 评论 / 2024-12-11 
+- [Importance and absence of accelerometer data, and feature engineering extra columns.](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/550668) — 3 票 / 3 评论 / 2024-12-08 
+- [Generative Adversarial Networks for synthetic data](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/541638) — 3 票 / 12 评论 / 2024-10-20 
+- [Private LB: 0.460. Ensemble Model WIth Ordinal Target Encoding ](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/552753) — 3 票 / 2 评论 / 2024-12-25 
+- [Is it fake fairness when hundreds of teams lead by same shared code?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551700) — 3 票 / 12 评论 / 2024-12-14 
+- [regression vs classification](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/537299) — 3 票 / 2 评论 / 2024-10-02 
+- [Approaches to unlabelled data and sparsity of features ...](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/540476) — 3 票 / 0 评论 / 2024-10-14 
+- [Series Data](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/535355) — 3 票 / 2 评论 / 2024-09-21 
+- [Any insight from the 20-item scale (sii) for this ordinal classification problem?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546731) — 3 票 / 0 评论 / 2024-11-17 
+- [How about dealing with missing values using an autoencoder?](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/546584) — 3 票 / 6 评论 / 2024-11-16 
+- [Data Quality Concerns](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/538243) — 3 票 / 1 评论 / 2024-10-07 
+- [Top 100 Solution - Target Post-Processing Main Success Driver](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/553051) — 3 票 / 0 评论 / 2024-12-23 **write-up?**
+- [The problem of rounding 0.5](https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/547695) — 3 票 / 2 评论 / 2024-11-23 

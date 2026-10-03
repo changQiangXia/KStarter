@@ -1,0 +1,373 @@
+<h2>Acknowledgments</h2>
+<p>We sincerely appreciate Kaggle and the competition organizers for offering this invaluable opportunity. We also extend our gratitude to <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> and <a href="https://www.kaggle.com/fnands" target="_blank">@fnands</a> for their significant contributions. <a href="https://www.kaggle.com/code/fnands/baseline-unet-train-submit/notebook" target="_blank"><strong>fnands's notebook</strong></a> and <a href="https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/547350#3056648" target="_blank"><strong>hengck23's discussion</strong></a> provided a solid foundation for our approach. Finally, I am grateful to my teammate <a href="https://www.kaggle.com/luoziqian" target="_blank">@luoziqian</a> for the excellent collaboration.</p>
+<h2>Summary</h2>
+<p>Our approach is based on an ensemble of multiple lightweight segmentation models, with parameter sizes ranging from 873K to 14.2M. Following segmentation, we computed particle centroids using CC3D and filtered small clusters based on voxel count statistics.</p>
+<h2>Overall Pipeline</h2>
+<p>The overall pipeline is illustrated below:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5483160%2F1b63c4ad09d3ec66e33450cb95263adb%2Foverall_pipeline.png?generation=1739272382909281&amp;alt=media"></p>
+<h2>Model Architecture</h2>
+<p>We initiated our experiments using the MONAI UNet baseline model. Throughout our trials, we observed that models with a large number of parameters were prone to overfitting and often performed worse than lighter models. Consequently, we opted for lightweight architectures such as UNet3D, VoxResNet, VoxHRNet, SegResNet, DynUNet, and DenseVNet.</p>
+<p>However, while experimenting with VoxResNet, VoxHRNet, and DenseVNet, we encountered stability issues, including performance fluctuations and difficulties in convergence. Upon further analysis, we identified that MONAI UNet employs <code>InstanceNorm3d</code> and <code>PReLU</code>. By modifying the normalization and activation layers accordingly, we achieved more stable model performance.</p>
+<p>The model architecture of MONAI UNet is shown below:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5483160%2F35bb85a0777083a30ffc41461aa2c154%2Fmonai_unet.png?generation=1738867977514788&amp;alt=media" alt=""></p>
+<p>The following figure compares the training performance of MONAI UNet with InstanceNorm3d and PReLU versus BatchNorm3d and ReLU across 5 experiments, demonstrating that the use of InstanceNorm3d and PReLU results in more stable training.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F5483160%2Fcb7065ced216887833f5f653bea7df8d%2Ftraining_stability_comparison.png?generation=1739272596177762&amp;alt=media"></p>
+<p>For the final ensemble, we selected models based on their public leaderboard scores:</p>
+<ul>
+<li>UNet3D</li>
+<li>VoxResNet</li>
+<li>VoxHRNet</li>
+<li>SegResNet</li>
+<li>DenseVNet</li>
+<li>UNet2E3D</li>
+</ul>
+<h2>Training Strategy</h2>
+<p>Our training configuration was designed to ensure stability and optimal performance. We found that the <strong>segmentation mask radius</strong>, <strong>loss function</strong> and <strong>data augmentation strategies</strong> played a crucial role in achieving reliable results.</p>
+<h4>Segmentation Mask:</h4>
+<p>We applied ground truth masks with a customized radius for each particle.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Particle Types</strong></th>
+<th><strong>Default Radius</strong></th>
+<th><strong>Luoziqian's Radius</strong></th>
+<th><strong>Lion's Radius</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apo-ferritin</td>
+<td>60</td>
+<td>60 x 0.5</td>
+<td>80 x 0.4</td>
+</tr>
+<tr>
+<td>beta-galactosidase</td>
+<td>90</td>
+<td>90 x 0.5</td>
+<td>90 x 0.4</td>
+</tr>
+<tr>
+<td>ribosome</td>
+<td>150</td>
+<td>150 x 0.5</td>
+<td>150 x 0.4</td>
+</tr>
+<tr>
+<td>thyroglobulin</td>
+<td>130</td>
+<td>130 x 0.5</td>
+<td>120 x 0.4</td>
+</tr>
+<tr>
+<td>virus-like-particle</td>
+<td>135</td>
+<td>135 x 0.5</td>
+<td>150 x 0.4</td>
+</tr>
+</tbody>
+</table>
+<h4>Training Settings:</h4>
+<p><strong>Lion's</strong> models:</p>
+<ul>
+<li>patch size <code>[128, 256, 256]</code> or <code>[128, 384, 384]</code></li>
+<li><code>200</code> epochs</li>
+<li>7 classes</li>
+<li>Optimizer: AdamW with a learning rate of <code>0.001</code> (no learning rate scheduler)</li>
+<li>Batch size: <code>2</code> or <code>4</code></li>
+<li>Drop path rate: <code>0.1</code> or <code>0.3</code></li>
+<li>Model selection based on the F-beta metric, save top-5 best model</li>
+<li>Loss functions:<ul>
+<li>Tversky Loss</li>
+<li>Cross-Entropy Loss with weights <code>[1.0, 1.0, 0.0, 2.0, 1.0, 2.0, 1.0]</code></li></ul></li>
+</ul>
+<p><strong>Luoziqian's</strong> models</p>
+<ul>
+<li>patch size <code>[128, 200, 200]</code> or <code>[128, 256, 256]</code></li>
+<li><code>100</code> or <code>300</code> epochs</li>
+<li>6 classes</li>
+<li>Early stopping with <code>patience=20</code></li>
+<li>Batch size: <code>1</code> or <code>2</code></li>
+<li>Model selection is based on the evaluation loss. The last 100 models are saved and their F-beta scores are verified</li>
+<li>Loss functions:<ul>
+<li>Dice Loss</li>
+<li>Tversky Loss</li>
+<li>Cross-Entropy Loss, scaled to 0.05 or 0.1</li></ul></li>
+</ul>
+<h4>Augmentations:</h4>
+<p><strong>Lion's</strong> models:</p>
+<ul>
+<li>RandCropByLabelClassesd with ratios <code>[1, 1, 1, 1, 2, 1, 2]</code> for balanced sampling</li>
+<li>RandRotate90d</li>
+<li>RandFlipd</li>
+<li>RandAffined</li>
+<li>RandGaussianNoised</li>
+</ul>
+<p><strong>Luoziqian's</strong> models</p>
+<ul>
+<li>RandCropByLabelClassesd</li>
+<li>RandRotate90d</li>
+<li>RandFlipd</li>
+<li>RandShiftIntensityd</li>
+</ul>
+<h4>Model Performance with 7 TTA Summary (Partial Selection)</h4>
+<table>
+<thead>
+<tr>
+<th><strong>No</strong></th>
+<th><strong>Model</strong></th>
+<th><strong>Developer</strong></th>
+<th><strong>Architecture</strong></th>
+<th><strong>Parameters</strong></th>
+<th><strong>Valid ID</strong></th>
+<th><strong>Normalization</strong></th>
+<th><strong>Activation</strong></th>
+<th><strong>Public LB</strong></th>
+<th><strong>Private LB</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>epoch122-step2952-valid_loss0.3625-val_metric0.8367.ckpt</td>
+<td>Lion</td>
+<td>UNet3D</td>
+<td>1.1M</td>
+<td>TS_86_3</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.77379</td>
+<td>0.76582</td>
+</tr>
+<tr>
+<td>2</td>
+<td>epoch148-step3576-valid_loss1.1154-val_metric0.7722.ckpt</td>
+<td>Lion</td>
+<td>UNet3D</td>
+<td>1.1M</td>
+<td>TS_6_4</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.77021</td>
+<td>0.76725</td>
+</tr>
+<tr>
+<td>3</td>
+<td>epoch153-step3696-valid_loss0.3021-val_metric0.8900.ckpt</td>
+<td>Lion</td>
+<td>UNet3D</td>
+<td>1.6M</td>
+<td>TS_69_2</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.77205</td>
+<td>0.76676</td>
+</tr>
+<tr>
+<td>4</td>
+<td>epoch194-step4680-valid_loss1.0213-val_metric0.8788.ckpt</td>
+<td>Lion</td>
+<td>UNet3D</td>
+<td>1.1M</td>
+<td>TS_69_2</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.77390</td>
+<td>0.76737</td>
+</tr>
+<tr>
+<td>5</td>
+<td>epoch138-step3336-valid_loss0.3690-val_metric0.8476.ckpt</td>
+<td>Lion</td>
+<td>UNet3D</td>
+<td>1.1M</td>
+<td>TS_73_6</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.76543</td>
+<td>0.76025</td>
+</tr>
+<tr>
+<td>6</td>
+<td>epoch152-step3672-valid_loss0.4333-val_metric0.7929.ckpt</td>
+<td>Lion</td>
+<td>DenseVNet</td>
+<td>873K</td>
+<td>TS_6_6</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.76528</td>
+<td>0.75417</td>
+</tr>
+<tr>
+<td>7</td>
+<td>epoch195-step4704-valid_loss0.4258-val_metric0.7914.ckpt</td>
+<td>Lion</td>
+<td>VoxResNet</td>
+<td>7.0M</td>
+<td>TS_6_6</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.77457</td>
+<td>0.76593</td>
+</tr>
+<tr>
+<td>8</td>
+<td>epoch188-step4536-valid_loss0.4231-val_metric0.8659.ckpt</td>
+<td>Lion</td>
+<td>VoxHRNet</td>
+<td>1.4M</td>
+<td>TS_73_6</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.76738</td>
+<td>0.75995</td>
+</tr>
+<tr>
+<td>9</td>
+<td>epoch198-step4776-valid_loss0.3471-val_metric0.8730.ckpt</td>
+<td>Lion</td>
+<td>VoxHRNet</td>
+<td>1.4M</td>
+<td>TS_73_6</td>
+<td>InstanceNorm3d</td>
+<td>PReLU</td>
+<td>0.76135</td>
+<td>0.75848</td>
+</tr>
+<tr>
+<td>10</td>
+<td>epoch133-val_loss0.52-val_metric0.56-step3216.ckpt</td>
+<td>Luoziqian</td>
+<td>UNet3D</td>
+<td>1.1M</td>
+<td>TS_6_4</td>
+<td>BatchNorm3d</td>
+<td>PReLU</td>
+<td>0.76844</td>
+<td>0.76320</td>
+</tr>
+<tr>
+<td>11</td>
+<td>epoch314-val_loss0.54-val_metric0.54-step7560.ckpt</td>
+<td>Luoziqian</td>
+<td>SegResNet</td>
+<td>1.2M</td>
+<td>TS_6_4</td>
+<td>GroupNorm</td>
+<td>ReLU</td>
+<td>0.75521</td>
+<td>0.74647</td>
+</tr>
+<tr>
+<td>12</td>
+<td>epoch114-val_loss0.55-val_metric0.53-Step2760.ckpt</td>
+<td>Luoziqian</td>
+<td>UNet2E3D</td>
+<td>14.2M</td>
+<td>TS_6_4</td>
+<td>BatchNorm3d</td>
+<td>ReLU</td>
+<td>0.73758</td>
+<td>0.72966</td>
+</tr>
+</tbody>
+</table>
+<h2>Ensemble Strategy (Partial Selection)</h2>
+<p>We select the models with the best public leaderboard scores for the final submission.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Models</strong></th>
+<th><strong>Ensemble Strategy</strong></th>
+<th><strong>Certainty Threshold</strong></th>
+<th><strong>Public LB</strong></th>
+<th><strong>Private LB</strong></th>
+<th><strong>Selected</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[1, 2, 3, 4, 7, 8, 12]</td>
+<td>Average</td>
+<td>0.23</td>
+<td>0.79094</td>
+<td>0.78641</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 7, 8, 12]</td>
+<td>Average</td>
+<td>0.18</td>
+<td>0.79213</td>
+<td>0.78630</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 7, 8, 12]</td>
+<td>Average</td>
+<td>0.15</td>
+<td>0.79307</td>
+<td>0.78457</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 7, 8, 12]</td>
+<td>weighted</td>
+<td>0.15</td>
+<td>0.79247</td>
+<td>0.78417</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 6, 12]</td>
+<td>Average</td>
+<td>0.15</td>
+<td>0.78701</td>
+<td>0.78389</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 5, 6, 7]</td>
+<td>Average</td>
+<td>0.15</td>
+<td>0.79104</td>
+<td>0.78277</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 7, 9, 12]</td>
+<td>Average</td>
+<td>0.15</td>
+<td>0.79391</td>
+<td>0.78283</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>[1, 2, 3, 4, 6, 7, 9, 10, 11, 12]</td>
+<td>Average</td>
+<td>0.15</td>
+<td>0.79355</td>
+<td>0.78381</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h2>Post-processing (Cluster Removal)</h2>
+<p>We used <code>CC3D</code> to convert the segmentation results into particle clusters and applied the following strategies for cluster selection:</p>
+<ul>
+<li>Threshold-based clustering (the threshold is set to 0.15 for all classses to improve recall)</li>
+<li>Cluster size filtering</li>
+</ul>
+<h2>Methods that Did Not Yield Improvements:</h2>
+<ul>
+<li>Synthetic data</li>
+<li>Second-stage classification</li>
+<li>Heavy-weight models (transformer-based models)</li>
+</ul>
+<h2>Code</h2>
+<p><a href="https://www.kaggle.com/code/luoziqian/7-model-6tta-t4x2-patch-norm-v2?scriptVersionId=220452693" target="_blank">Inference Notebook</a><br>
+<a href="https://github.com/GWwangshuo/Kaggle-2024-CZII-Pub" target="_blank">Lion's Training Code</a><br>
+<a href="https://github.com/luoziqianX/CZII-CryoET-Object-Identification-2nd-luoziqian" target="_blank">Luoziqian's Training Code</a></p>
+<h2>Reference</h2>
+<p>Gubins, Ilja, et al. "SHREC 2020: Classification in cryo-electron tomograms." <em>Computers &amp; Graphics</em> 91 (2020): 279-289.</p>

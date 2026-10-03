@@ -1,0 +1,114 @@
+<p>First of all, thanks to the host for an interesting competition and congratulations to all the winners!</p>
+<p>While we learned many things from this competition, it is truly regrettable that there was leakage. It was very sad that we had to spend so much time looking for leaks in the last few days.</p>
+<h2>Summary</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F623370%2F00c6255ee515c26709b1107d59a95937%2F4square_pipeline.jpg?generation=1657345465981057&amp;alt=media" alt=""><br>
+We divided the generation of candidates and the determination of whether they were the same POI into four separate stages.</p>
+<ul>
+<li>1st stage : Create candidates</li>
+<li>2nd stage : Feature engineering and LightGBM</li>
+<li>3rd stage :  xlm-roberta-large and mdeberta-v3-base and Catboost</li>
+<li>4th stage :  Post Process and Predicting newly emerged candidates with xlm-roberta-large</li>
+</ul>
+<p>Next, since there was the same data in train and test, we tried to link them and deleted the pairs that would have been incorrect.</p>
+<h2>Cross validation strategy</h2>
+<ul>
+<li>Local evaluation was done with 2 fold cross validation. In the training for submit, we used all of the 2 fold data.</li>
+</ul>
+<h2>1st stage</h2>
+<ul>
+<li>For each id, we selected 100 candidates for each of the following two methods<ul>
+<li>Euclidean distance in latitude and longitude</li>
+<li>Cos similarity of name embedding<ul>
+<li>model : bert-base-multilingual-uncased</li>
+<li>knn : cuml</li></ul></li>
+<li>Generate features for candidates. Here, to save memory, only a few features were generated, such as jaro distance for names and jaro distance for categories.</li>
+<li>Using LightGBM, each of the above two patterns was predicted, leaving the top 20 candidates each, for a total of about 40 candidates. To reduce inference time, we used Forestinference.</li>
+<li>Max IOU:  0.979</li></ul></li>
+</ul>
+<h2>2nd stage</h2>
+<ul>
+<li>We created about 120 features based on the following notebook.<ul>
+<li><a href="https://www.kaggle.com/code/ryotayoshinobu/foursquare-lightgbm-baseline" target="_blank">https://www.kaggle.com/code/ryotayoshinobu/foursquare-lightgbm-baseline</a></li>
+<li>Character similarity features such as Levenshtein distance and Jaro-winkler Distance.</li>
+<li>Character similarity statistics (maximum, minimum, average) using id as key. <br>
+Also, the ratio of those statistics.</li>
+<li>Euclidean distance using latitude and longitude</li>
+<li>Embedding of name with svd for dimensionality reduction<ul>
+<li>model : bert-base-multilingual-uncased</li></ul></li></ul></li>
+<li>LightGBM ( Inference : Forestinference)<ul>
+<li>CV : 0.875</li></ul></li>
+<li>Threshold value : 0.01<ul>
+<li>The number of candidates was reduced to about 10%.</li></ul></li>
+</ul>
+<h2>3rd stage</h2>
+<ul>
+<li>We had suspected overlap between train and test, but had no direct evidence, so we created  train overfit models to increase LB and models to increase CV at the same time. After finding evidence of train and test overlap, we only needed to concentrate on improving the accuracy of the data that existed only in test, so we finally used models that had the highest CV and did not overfit train data(e.g. do not increase the number of epochs, use FGM, etc.)<ul>
+<li>catboost<ul>
+<li>The same features were used as in the 2nd</li>
+<li>CV : 0.878</li></ul></li>
+<li>xlm-roberta-large<ul>
+<li>text : name + categories + address + city + state</li>
+<li>Combine some features of 2nd ( about 70)</li>
+<li>3 epochs</li></ul></li>
+<li>mdeberta-v3-base<ul>
+<li>text : name + categories + address + city + state</li>
+<li>Combine some features of 2nd and new features ( about 90 ) <ul>
+<li>manhattan distance, harversinie distance, etc </li></ul></li>
+<li>Trained with FGM and EMA</li>
+<li>4 epochs</li>
+<li>CV : 0.907</li></ul></li></ul></li>
+<li>Ensemble : 2nd lgb * 0.01 + 3rd catboost * 0.32 + 3rd xlm-roberta-large * 0.29 + 3rd medebeta-v3-base * 0.38<ul>
+<li>CV : 0.911</li></ul></li>
+<li>Threshold value : 0.5</li>
+</ul>
+<h2>4th stage</h2>
+<ul>
+<li>Post procress<ul>
+<li>Compare the matches of two ids and merge the matches of two ids if the common id exceeds 50% from either side.</li>
+<li>Prediction with xlm-roberta-large for the newly created pair above.</li>
+<li>Threshold value : 0.02</li>
+<li>CV : 0.9166</li></ul></li>
+</ul>
+<h2>Merge train (Leak)</h2>
+<ul>
+<li>Tie train and test by name,lat,lon</li>
+<li>Add true positive<ul>
+<li>Create all pairs of true positive with POI as key (1)</li></ul></li>
+<li>Remove false positive<ul>
+<li>Remove Pairs of id's tied with train data (2)<ul>
+<li>It was possible to determine whether the id associated with the train data was false positive or not</li></ul></li>
+<li>Remove pairs of id tied with training data and id not tied with training data(3)</li></ul></li>
+<li>By using LB, we validated the effects of (1) add train-train tp, (2) remove train-train fp, (3) remove train-test fp, which are explained above.<ul>
+<li>We compared LB with submission at stage2.<ul>
+<li>Without merge train : 0.900</li>
+<li>(1) : 0.943</li>
+<li>(1) + (2) + (3) : 0.971</li></ul></li></ul></li>
+<li>Since we were not sure whether (3) would work for private data, we chose both (1) + (2) and (1) + (2) + (3) for the final submission.</li>
+</ul>
+<h2>Private Score / Public Score</h2>
+<ul>
+<li>Over fit version<ul>
+<li>mdeberta-v3-base(no dropout) 8epoch + xlm-roberta-large 8epoch</li>
+<li>without train merge : 0.946 / 0.947</li>
+<li>with train merge : 0.976 / 0.976</li></ul></li>
+<li>Non over fit version1<ul>
+<li>as explained above</li>
+<li>without train merge : 0.941 / 0.941</li>
+<li>with train merge : 0.977 / 0.978<ul>
+<li>(1) + (2) + (3)</li></ul></li></ul></li>
+<li>Non over fit version2<ul>
+<li>Slightly changed model compared to non over fit version1</li>
+<li>with train merge : 0.966 / 0.966<ul>
+<li>(1) + (2)</li></ul></li></ul></li>
+</ul>
+<h2>About Leakage</h2>
+<p>For the past few weeks, we have been suspicious of leak for many reasons:</p>
+<ul>
+<li>There is a large gap between CV and LB. Max IOU is already high, so a gap of this magnitude is unnatural.</li>
+<li>LB score is higher with overfitted models. For example, no dropout or many epochs training. Training with many epochs leads to a worse CV score.</li>
+<li>As the CV increased, the CV/LB correlation disappeared. We had a big improvement of CV by training of NNs with FGM but LB was worse.</li>
+<li>The host explained that "we include a few example instances selected from the test set." and the two of the five sample records exist in training data.</li>
+</ul>
+<p>In the few days just before the deadline, we focused on thinking about how to find and utilize leakage. And fortunately, we succeeded in discovering how to take advantage of leakage.</p>
+<h2>Inference code</h2>
+<p><a href="https://www.kaggle.com/code/takoihiraokazu/sub-ex73-74-75-ex104-115-90-101-merge-train3" target="_blank">https://www.kaggle.com/code/takoihiraokazu/sub-ex73-74-75-ex104-115-90-101-merge-train3</a></p>

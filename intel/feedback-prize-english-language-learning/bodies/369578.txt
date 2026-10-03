@@ -1,0 +1,216 @@
+# https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369578
+
+Topic #369578: 5th place solution
+  Author: Psi
+  Posted: 2022-11-30 15:07:12.044000
+  Votes: 74  Comments: 28
+
+Thanks to Kaggle and hosts for hosting the 3rd addition of the Feedback competition.
+
+Overview
+
+My solution is based on an ensemble of multiple finetuned NLP transformer models. Additionally, I employ two rounds of pseudo tagging on old Feedback data.
+
+I follow a lot of our advice from the second Feedback competition described here and worked for around two weeks on this competition. I split my time working around 50% on accuracy, and 50% on efficiency solution. 
+
+Cross validation
+
+In general, I observed very good correlation between local CV and public LB. As the data is very small and the metric is RMSE, the local scores can be quite shaky. To that end, for each experiment I was running, I trained three unique seeds and always only compared the average of these three seeds. So for example, if I would want to compare LR=1e-5 vs. LR=2e-5 I would run for each of those two experiments three separate seeds for a single fold, and only if the average of the three seeds improves, I would run on all my 5-folds, and then again compare 3-seed blends to make sure.
+
+This allows to bring more trust to my experiments and as the data is really small, this was in general possible for me to do.
+
+Modeling
+
+The problem at hand is very much straight forward, feed in the text to a transformer model, apply some pooling, add a linear head, and predict regression targets. I used combinations of the following variations of the training routine for my final ensemble:
+
+Token length:
+
+
+
+512
+
+1024
+
+2048
+
+
+All my models are trained and predicted with dynamic padding.
+
+Pooling:
+
+
+
+CLS Token
+
+GeM Pooling
+
+
+Backbones:
+
+
+
+Deberta-V3-Base
+
+Deberta-V3-Large
+
+Deberta-V2-XL
+
+Deberta-V2-XXL
+
+Longformer Large
+
+Roberta-Large
+
+
+I usually run 3 epochs for most of my models, all with cosine decay learning rate always picking the last epoch. I use differential learning rate for backbone and head of the model. I do not use any other techniques suggested in forums like differential lr across layers of backbone or reinitialization.
+
+As always, I retrained my models on full data for final subs, but also blended some fold models in as I had lots of runtime left.
+
+Pseudo labels
+
+I followed our routine from 2nd FB competition and employed two stages of pseudo labeling following these steps:
+
+
+
+Train an ensemble of models only on the given train data
+
+Run predictions on the previous Feedback competition data excluding this competition's data
+
+Use pseudo labels from this extra dataset and apply it to modeling by pre-train models on the pseudo labels and finetune it only on the given train data afterwards. 
+
+Repeat steps 1-3 three times using an ensemble of models trained on pseudo labels now
+
+
+By doing pre-training and finetuning, I did not need to adjust the distribution of the pseudo labels, because I am doing the final adjustment on this competition's data. This allowed me to use all prior data without issues.
+
+Ensembling
+
+For most of my subs I just did usual average across seeds and models. My final best sub is a Nelder-Mead optimized ensemble of models, where I optimize the ensemble weights separately per target column. To not overfit too much on CV, I added weight bounds between 1 and 3 on the weights.
+
+Actually, I could have trusted the local optimization even more, I have an unselected sub from couple of days ago with best local CV that would score #2 on private, which has unrestricted weights for the ensemble, also with negative weights, but it felt a bit too risky and as I only did one sub for best CV, I chose a bit more of a conservative one.
+
+What did not work
+
+
+
+Augmentations (as always, specifically tricky with regression)
+
+Different losses
+
+TFIDF
+
+Other backbones (such as T5, GPT, etc) - Deberta is so strong
+
+2nd stage models / stacker models
+
+
+Final subs
+
+I did one sub based on my conservative best CV score, which also was my best selected private LB sub (although I had a better one unselected). I did one sub based on best public LB which was clearly worse on private LB. And I spent one sub on efficiency.
+
+Comments:
+├─ Chris Deotte (2022-11-30 15:23:24.107000) [+6]
+│  Congratulations Psi! Nice jump from 166th to 5th.
+│  
+│  
+│    
+│  Use pseudo labels from this extra dataset and apply it to modeling by pre-train models on the pseudo labels and finetune it only on the given ...
+  ├─ Psi (2022-11-30 15:39:19.513000) [+3]
+  │  We actually used negative weights successfully in FB2, I should have trusted it :)
+  ├─ Trushant Kalyanpur (2022-11-30 16:37:02.213000) [+1]
+  │  Great work as usual @philippsinger ! We also used Nelder Mead (NM) in our pipeline but that sub didnt end up in gold even though the CV was pretty good (0.439x) . I am wondering if there is some ov...
+  ├─ Psi (2022-11-30 16:38:24.567000) [+2]
+  │  I always 100% make sure to have same folds.
+  │  
+  │  My final CV was btw ~0.445
+  ├─ Raja Biswas (2022-11-30 16:46:39.183000) [+0]
+  │  Even after having same folds for all models, if we tune NM weights over all oof predictions, it would have risk of overfitting to training data right?
+  ├─ Psi (2022-11-30 16:56:57.683000) [+2]
+  │  Yes absolutely, which is why I tried to use the bounds.
+  ├─ Raja Biswas (2022-11-30 17:16:59.723000) [+1]
+  │  Thanks, makes perfect sense! Congratulations &amp; great work as always 🎉🎉 Will try to follow your cross validation strategy now onwards, I feel it's inspired by how results are reported in papers.
+├─ Feng Qilong (2022-11-30 15:14:49.647000) [+1]
+│  Congrats! For "by pre-train models on the pseudo labels and finetune it only on the given train data afterwards", do you mean training the models with PL for x epochs then save the model and train ...
+  ├─ Psi (2022-11-30 15:16:12.910000) [+1]
+  │  yes exactly
+  ├─ Apa (2022-12-06 08:33:04.957000) [+0]
+  │  "Use pseudo labels from this extra dataset and apply it to modeling by pre-train models on the pseudo labels and finetune it only on the given train data afterwards." In this step, you will not com...
+  ├─ Psi (2022-12-06 10:02:08.623000) [+1]
+  │  No, just old data
+├─ CPMP (2022-11-30 20:18:04.947000) [+0]
+│  Congrats!
+│  
+│  
+│    
+│  I trained three unique seeds and always only compared the average of these three seeds.
+│  
+│  
+│  I did the same, LOL. Before that, using one seed led to unreliable CV.
+│  
+│  Nice idea to only us...
+├─ Hazrul Akmal (2022-11-30 18:14:17.067000) [+0]
+│  if I would want to compare LR=1e-5 vs. LR=2e-5 I would run for each of those two experiments three separate seeds for a single fold, and only if the average of the three seeds improves, I would run...
+  ├─ Psi (2022-11-30 18:48:32.870000) [+0]
+  │  Deberta-v3-large is very fast. XL and XXL can take a while, but nothing I couldnt run overnight. The data is very small. I did not use XL and XXL for pseudos to save time.
+  ├─ Hazrul Akmal (2022-11-30 19:52:36.713000) [+0]
+  │  I see. I was wondering because it took me roughly 7 hours to train Deberta-Large for 4-fold with 5 epochs. Not sure if this is normal. Anyway, congratulations on your stunning performance in the co...
+  ├─ Psi (2022-11-30 19:54:28.683000) [+1]
+  │  What GPU do you have? Also 5 epochs is probably too much, I was fine with 2-3 epochs.
+  │  
+  │  You also need to utilize all the runtime tricks, mixed precision, dynamic padding, etc.
+├─ Ertuğrul Demir (2022-11-30 17:43:14.560000) [+0]
+│  Congratulations @philippsinger! These are good tricks to remember. One simple question though:
+│  
+│  
+│    
+│  As always, I retrained my models on full data for final subs, but also blended some fold models i...
+  ├─ Psi (2022-11-30 17:59:07.030000) [+1]
+  │  Exact same paras.
+├─ Muhammad Hilmi Asyrofi (2022-11-30 16:40:20.133000) [+0]
+│  Congrats for the win @philippsinger !
+│  
+│  The idea of using 3 different seeds to ensure the actual model improvement is mind blowing  🚀  Thank you for sharing!
+│  
+│  I wanna ask, why do you choose GeM Pool...
+  ├─ Psi (2022-11-30 16:53:21.667000) [+3]
+  │  I wanna ask, why do you choose GeM Pooling? what's the rationale behind?
+  │  
+  │  
+  │  It is my favorite type of pooling, I always use it :)
+  │  Attention pooling does not make much sense to me personally, so I ne...
+  ├─ Muhammad Hilmi Asyrofi (2022-11-30 17:22:14.393000) [+0]
+  │  Hahaha I will try GeM pooling next time, it's kind of magic pooling used by a GM 😂
+  │  Well, I need to read the paper on it to know more detail.
+  │  Many thanks!
+├─ knshnb (2022-11-30 16:02:16.060000) [+0]
+│  Congratulations and thanks for the detailed write-up! I was amazed by the strong mind of top teams for trusting CV…
+│  I have two questions. 
+│  
+│  
+│    
+│  I trained three unique seeds and always only compared...
+  ├─ Psi (2022-11-30 16:32:13.707000) [+1]
+  │  Is there any reason that you take the average instead of the score of the ensemble?
+  │  
+  │  
+  │  I am always just averaging seeds of same model
+  │  
+  │  
+  │    
+  │  When you start training for the training data, did you resu...
+  ├─ knshnb (2022-11-30 16:47:37.087000) [+0]
+  │  Thanks for the quick reply!
+  │  For the first one, I mean the average of three scores vs the score of the ensemble of three.
+  ├─ Psi (2022-11-30 16:55:46.383000) [+0]
+  │  I see, I am checking the ensemble score of the average of the three seeds.
+├─ kaerururu (2022-11-30 15:37:47.933000) [+0]
+│  Congratulations !!
+│  
+│  I have a simple question.
+│  I calculated max token length in train full_text is around 1430.
+│  However, you used 2048 token length. 
+│  Is this for unseen test full_text ?
+  ├─ Psi (2022-11-30 15:39:58.050000) [+3]
+  │  As I use dynamic padding it is just to go up to the largest one.
+  ├─ kaerururu (2022-11-30 15:48:32.323000) [+0]
+  │  Thank you for quick reply, I see.

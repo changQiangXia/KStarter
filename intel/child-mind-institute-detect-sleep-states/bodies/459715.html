@@ -1,0 +1,183 @@
+<p>First of all, I would like to express gratitude to all participants and the competition host. It was a challenging competition, but I am pleased with the positive outcome and feel relieved.</p>
+<p>Here is a brief summary of our solution.<br>
+You can check our code <a href="https://github.com/sakami0000/child-mind-institute-detect-sleep-states-1st-place" target="_blank">here</a>.</p>
+<h2>Single model</h2>
+<p>Here's a log on how to improve the CV score after the summary. The final scores were: CV: 0.8206, public LB: 0.768, private LB: 0.829 (equivalent to 9th place).</p>
+<h3>Summary</h3>
+<h4>Model structure</h4>
+<p>The model structure is primarily based on <a href="https://www.kaggle.com/code/danielphalen/cmss-grunet-train" target="_blank">this amazing notebook</a>, with a structure comprising:<br>
+CNN (down sample) → Residual GRU → CNN (up sample)</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2Fcc6a10ba62b3a3d9361b36e8b162ca5d%2Fmodel_structure.jpeg?generation=1701857831021267&amp;alt=media" alt=""></p>
+<ul>
+<li>SEScale</li>
+</ul>
+<p>For input scaling, SEModule was utilized. (<a href="https://arxiv.org/abs/1709.01507" target="_blank">https://arxiv.org/abs/1709.01507</a>)</p>
+<pre><code> (nn.Module):
+    () -&gt; :
+       ().__init__()
+       self.fc1 = nn.Linear(ch, r)
+       self.fc2 = nn.Linear(r, ch)
+
+    () -&gt; torch.FloatTensor:
+       h = self.fc1(x)
+       h = F.relu(h)
+       h = self.fc2(h).sigmoid()
+        h * x
+</code></pre>
+<ul>
+<li>Minute connection</li>
+</ul>
+<p>As noted in several discussions and notebooks, there was a bias in the minute when ground truth events occurred. To account for this, features related to minutes were concatenated separately in the final layer.</p>
+<pre><code>    () -&gt; torch.FloatTensor:
+       cat_embeddings = [embedding(cat_x[:, :, i])  i, embedding  (self.category_embeddings)]
+       num_x = self.numerical_linear(num_x)
+
+       x = torch.cat([num_x] + cat_embeddings, dim=)
+       x = self.input_linear(x)
+       x = self.conv(x.transpose(-, -)).transpose(-, -)
+
+        gru  self.gru_layers:
+           x, _ = gru(x)
+
+       x = self.dconv(x.transpose(-, -)).transpose(-, -)
+       minute_embedding = self.minute_embedding(cat_x[:, :, ])
+       x = self.output_linear(torch.cat([x, minute_embedding], dim=))
+        x
+</code></pre>
+<h4>Data Preparation</h4>
+<p>Each series of data is divided into daily chunks, offset by 0.35 days.</p>
+<pre><code>       train_df = train_df.with_columns(pl.arange(, pl.count()).alias())
+       series_row_ids = (train_df.group_by().agg().rows())
+
+       series_chunk_ids = []  
+       series_chunk_row_ids = []  
+        series_id, row_ids  tqdm(series_row_ids.items(), desc=):
+            start_idx  (, (row_ids), (config.stride_size / config.epoch_sample_rate)):
+                start_idx + config.chunk_size &lt;= (row_ids):
+                   chunk_row_ids = row_ids[start_idx : start_idx + config.chunk_size]
+                   series_chunk_ids.append(series_id)
+                   series_chunk_row_ids.append(np.array(chunk_row_ids))
+               :
+                   chunk_row_ids = row_ids[-config.chunk_size :]
+                   series_chunk_ids.append(series_id)
+                   series_chunk_row_ids.append(np.array(chunk_row_ids))
+                   
+</code></pre>
+<p>During training, half of each chunk is used in every epoch.</p>
+<pre><code>               sampled_train_idx = train_idx[epoch % config.epoch_sample_rate :: config.epoch_sample_rate]
+</code></pre>
+<p>For evaluation, overlapping sections are averaged, and the ends of each chunk are trimmed by 30 minutes.</p>
+<h4>Target</h4>
+<p>A decaying target is created based on the distance from the ground truth event, with diminishing values as the distance increases.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2Fc6d809492da742bbcb9252615375e76d%2Ftarget.png?generation=1701858069231326&amp;alt=media" alt=""></p>
+<pre><code>tolerance_steps = [, , , , , , , , , ]
+target_columns = [, ]
+
+train_df = (
+   train_df.join(train_events_df.select([, , ]), on=[, ], how=)
+   .to_dummies(columns=[])
+   .with_columns(
+       pl.max_horizontal(
+           pl.col(target_columns)
+           .rolling_max(window_size *  - , min_periods=, center=)
+           .over()
+           * ( - i / (tolerance_steps))
+            i, window_size  (tolerance_steps)
+       )
+   )
+)
+</code></pre>
+<p>The target is updated each epoch to decay further.</p>
+<pre><code>               
+               targets = np.where(targets == , , (targets - ( / config.n_epochs)).clip(=))
+</code></pre>
+<p>By attenuating the target, the range of predicted values narrows, allowing for the detection of finer peaks.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F002ebac2c4da25cdde7a81b27f1ec492%2F2023-12-09%200.15.31.png?generation=1702048562641170&amp;alt=media" alt=""></p>
+<h4>Periodicity Filter</h4>
+<p>As discussed in <a href="https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/456177" target="_blank">here</a>, there is a daily periodicity in the data when the measuring device is removed. This is leveraged to predict these periods rule-based and used as a filter for inputs and predictions.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2Fbd12584427bc9e2e628e5a095419ba2f%2F2023-12-06%2015.11.06.png?generation=1701858205750939&amp;alt=media" alt=""></p>
+<h4>Input Features</h4>
+<ul>
+<li>categorical features<ul>
+<li>hour</li>
+<li>minute</li>
+<li>weekday</li>
+<li>periodicity flag</li></ul></li>
+<li>numerical features<ul>
+<li>anglez / 45</li>
+<li>enmo.log1p().clip_max(1.0) / 0.1</li>
+<li>anglez, enmo 12 steps rolling_mean, rolling_std, rolling_max</li>
+<li>anglez_diff_abs 5 min rolling median</li></ul></li>
+</ul>
+<h3>Change logs</h3>
+<ul>
+<li>baseline model (cv: 0.7510) - public: 0.728</li>
+<li>Add a process to decay the target every epoch (cv: 0.7699, +19pt)</li>
+<li>Add a periodicity filter to the output (cv: 0.7807, +11pt)</li>
+<li>Add a periodicity flag to the input as well (cv: 0.7870, +6pt) - public: 0.739</li>
+<li>batch_size: 16 → 4, hidden_size: 128 → 64, num_layers: 2 → 8 (cv: 0.7985, +11pt) - public: 0.755</li>
+<li>Normalize the score in the submission file by the daily score sum (cv: 0.8044, +6pt)</li>
+<li>Remove month and day from the input (cv: 0.8117, +7pt)</li>
+<li>Trim the edges of the chunk by 30 minutes on both sides (cv: 0.8142, +4pt) - public: 0.765</li>
+<li>Modify to concatenate the minute features to the final layer (cv: 0.8206, +6pt) - public: 0.768</li>
+</ul>
+<hr>
+<h2>Post Processing</h2>
+<p>This post-processing creates a submission DataFrame to optimize the evaluation metrics. With this post-processing method, we significantly improved our scores (public: 0.768 → <strong>0.790</strong>, private: 0.829 → <strong>0.852</strong> !!!).</p>
+<p>This was a complex procedure, which I will explain step by step.</p>
+<ol>
+<li><p><strong>Data Characteristics</strong></p>
+<p>First, let's discuss the characteristics of the data. As noted in several discussions and notebooks, the second of the target events was always set to zero.<br>
+The competition's evaluation metric doesn't differentiate predictions within a 30-second range from the ground truth event. So, whether the submission timestamp's seconds are 5, 10, 15, 20, … 25, the same score is returned.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F704ce98b414aa9a6d22853ecf77d7322%2F2023-12-06%2015.07.34.png?generation=1701858658892729&amp;alt=media"></p></li>
+<li><p><strong>Creation of the 2nd Level Model</strong></p>
+<p>The 1st level model's predictions were trained to recognize events within a certain range from the ground truth as positive. However, the 2nd level model transforms these into probabilities of a ground truth event existing for each minute.<br>
+The output of the 1st level model was at seconds 0, 5, 10, …, but the 2nd level model aggregates these to always be at second 0. Specifically, it inputs aggregated features around hh:mm:00 and learns to predict 1 only at the exact time of an event, otherwise 0. Details of the 2nd level model will be described later.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F2dd6dc2cd5c57b5fb5329844da31badd%2F2023-12-06%2014.58.37.png?generation=1701858758483725&amp;alt=media"></p></li>
+<li><p><strong>Score Calculation for Each Point</strong></p>
+<p>As explained earlier, submitting any second within the same minute yields the same score. Therefore, we estimate the score at the 15 and 45 second points of each minute, and submit the one with the highest value, effectively submitting the highest score for all points. The method of score estimation is as follows:</p>
+<p>For instance, let's estimate the score at 10:00:15.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2Fa80b03c0b8528bcd1c16781f5ff63b55%2F2023-12-06%2015.43.19.png?generation=1701858900034640&amp;alt=media"></p>
+<p>First, we create a window of 12 steps from the point of interest and sum the predictions of the 2nd level model within this window to calculate the <code>tolerance_12_score</code>.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F69c109dce35517f931ad7e0283518f8a%2F2023-12-06%2017.12.43.png?generation=1701858916775111&amp;alt=media"></p>
+<p>Similarly, we calculate <code>tolerance_36_score</code>, <code>tolerance_60_score</code>, …, for the respective tolerances used in the evaluation, and the sum of these scores is considered the score for the point of interest.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2Fad1f0aa666ff215b53f70def28d3077b%2F2023-12-09%200.24.03.png?generation=1702049078123306&amp;alt=media"></p>
+<p>We perform this calculation for all points, and for each series, we adopt the point with the highest score and add it to the submission DataFrame.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F4134da05af054e316ec7b2fe3ae8465a%2F2023-12-06%2017.52.48.png?generation=1701858973499437&amp;alt=media"></p></li>
+<li><p><strong>Score Recalculation</strong></p>
+<p>Next, we recalculate the score to determine the next point to be adopted. For example, suppose the point 09:59:15 was chosen.</p>
+<p>First, consider updating the <code>tolerance_12_score</code>. Events within tolerance 12 of the adopted point cannot match overlappingly with the next point to be submitted.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F499fa8273a05e66ba423d31938ba947f%2F2023-12-09%200.26.24.png?generation=1702049229824883&amp;alt=media"></p>
+<p>Therefore, when calculating the <code>tolerance_12_score</code> for the next point to be adopted, it's necessary to discount the prediction values within 12 steps of the currently adopted point.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F7e3bdf523856fd5740555f601aab6397%2F2023-12-09%200.27.40.png?generation=1702049278756714&amp;alt=media"></p>
+<p>Likewise, for <code>tolerance_36_score</code>, <code>tolerance_60_score</code>, …, we recalculate by discounting the prediction values within 36, 60, …, steps of the adopted point.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F6100837ce3d832f3def36f8e3fe33c8a%2F2023-12-09%200.28.25.png?generation=1702049320289322&amp;alt=media"></p>
+<p>With the updated scores calculated, we again adopt the highest scoring point for each series and add it to the submission dataframe.</p>
+<p><img alt="" src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F6d6d7df8c0ab7a45fa497fc292ea9ed9%2F2024-01-02%2011.20.40.png?generation=1704162066911536&amp;alt=media"></p></li>
+<li><p><strong>Creating Submissions</strong></p>
+<p>We repeat the above step 4 to extract a sufficient number of submission points, then compile these into a DataFrame to create the submission file.</p></li>
+</ol>
+<h3>Additional Techniques</h3>
+<p>Several other techniques were employed to make the post-processing work effectively:</p>
+<ul>
+<li>Normalize the predictions of the 2nd level model daily.</li>
+<li>When recalculating the score, calculate the difference from the previous score to reduce the computation.</li>
+<li>Speed up the above calculations using JIT compilation.</li>
+</ul>
+<h3>Details of the 2nd Level Model</h3>
+<ul>
+<li>The 2nd level model starts by averaging the 1st level model's predictions on a per-minute basis and then detecting peaks in these averages using <code>find_peaks</code> with a height of 0.001 and a distance of 8.</li>
+<li>Based on the detected peaks, chunks are created from the original time series, capturing 8 minutes before and after each peak. (Recall: 0.9845)<ul>
+<li>This step_size was crucial because the ratio of positive to negative examples changes depending on how many steps are included, affecting the accuracy of subsequent stages. Therefore, we tuned the number of steps for optimal performance.</li>
+<li>If chunks are connected, they are treated as a single chunk.</li></ul></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F907332d70498f46059a2935461f69941%2F2023-12-06%2019.42.55.png?generation=1701859390836314&amp;alt=media" alt=""></p>
+<ul>
+<li>For each chunk, we aggregated features from the 1st model's predictions and other features like anglez and enmo. These aggregated features were then used to train models such as LightGBM and CatBoost.</li>
+<li>Additionally, we treated each chunk as a sequence for training CNN-RNN, CNN, and Transformer models. As a result, we developed a model that could account for minute biases not fully addressed by the 1st level model.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2F4b8ec9d1aecb6172e700a8ce485d226f%2F2023-12-06%2019.43.55.png?generation=1701859451118326&amp;alt=media" alt=""></p>
+<ul>
+<li>The predictions of the 2nd level model were sufficiently calibrated, so there was no need for further transformation.</li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2133818%2Fad0665bfff9828ebc6516a54e4e20276%2F2024-01-06%2016.46.51.png?generation=1704527223913793&amp;alt=media" alt=""></p>

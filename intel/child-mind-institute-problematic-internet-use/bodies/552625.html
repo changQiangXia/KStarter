@@ -1,0 +1,46 @@
+<p>Hello, everyone. </p>
+<p>First, I want to thank the organizers for hosting this competition. Working with real-world data was challenging but provided an excellent opportunity to enhance my technical skills for practical applications.</p>
+<p>Below, I share my solution:</p>
+<h3>Model</h3>
+<ul>
+<li>I used this baseline: <a href="https://www.kaggle.com/code/greysky/cmi-single-lgbm-cv-0-471-lb-0-460" target="_blank">CMI Single LGBM CV 0.471 LB 0.460</a>.</li>
+<li>The primary model is LGBM(, with XGBoost included in the ensemble).</li>
+<li>Missing values were handled using median imputation, calculated only on the training data for each fold, and applied to the validation/test sets.</li>
+<li>Sequential data statistics were processed as in the public notebook but optimized for speed using Polars.</li>
+<li>I used Tweedie loss as the primary loss function(, while classification was also included in the ensemble). → <strong>important</strong></li>
+<li>Predictions for data where 'sii' was not present were generated and used as pseudo-labels for training. → <strong>important</strong></li>
+<li>Features defined as categorical integers in the data dictionary were used both categorically and numerically.</li>
+</ul>
+<h3>Threshold Optimization → <strong>important</strong></h3>
+<p>Threshold optimization was performed on each fold's training data and applied to the validation/test sets. Using percentiles further improved both accuracy and robustness. Initial optimization values were derived from the discussion <a href="https://www.kaggle.com/competitions/child-mind-institute-problematic-internet-use/discussion/551533" target="_blank">here</a>.</p>
+<pre><code> ():
+    tmp_df = pd.DataFrame({: y, : y_pred})
+    oof_initial_thresholds = (
+        tmp_df.groupby()[].mean().iloc[:].values.tolist()
+    )
+
+    oof_threshold_percentiles = [
+        (tmp_df[] &lt;= threshold).mean()
+         threshold  oof_initial_thresholds
+    ]
+
+     oof_threshold_percentiles
+
+oof_initial_thresholds = calc_initial_th(y, y_pred)
+
+.optimizer = minimize(
+    eval_preds_percentile,
+    x0=oof_initial_thresholds,
+    args=(y, y_pred),
+    method=,
+    bounds=[(, ), (, ), (, )],
+)
+</code></pre>
+<h3>CV Strategy and Model Evaluation</h3>
+<p>I used 5-fold StratifiedKFold. However, as you may know, scores can vary significantly depending on the seed. In the aforementioned notebook, the results were averaged across 10 seeds for submission. Similarly, in validation, I evaluated the voting results from 10 seeds as the score for each experiment. I also evaluated the 10-seed results in validation and optimized parameters for each seed using Optuna.</p>
+<p>For example, one submission produced the following seed-dependent score variations:</p>
+<pre><code>
+</code></pre>
+<p>I monitored both the voting score and the average of the individual scores. For instance, in the example above, the voting score is 0.49218340134866767, and the average score is 0.4839108063626429. For submissions, I performed a voting ensemble using 5 folds × 10 seeds per model.</p>
+<p>While I aimed to make the evaluation and learning process as robust as possible, I think my ranking still depended heavily on luck.<br>
+Thank you for reading!</p>

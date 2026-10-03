@@ -1,0 +1,39 @@
+<p>Thanks to kaggle and everyone involved for hosting this exciting competition. It was a great learning experience and it was very interesting to see how much of our computer vision experience could also be applied to 3D imaging. Thanks to <a href="https://www.kaggle.com/bloodaxe" target="_blank">@bloodaxe</a> for this great team experience. </p>
+<h2>TLDR</h2>
+<p>The solution in an ensemble of segmentation (3D Unets with ResNet &amp; B3 encoders) and object detection models (SegResNet and DynUnet backbones) from <a href="https://github.com/Project-MONAI/MONAI" target="_blank">MONAI</a>. We also used MONAI for augmentations, and exported models via jit or TensorRT, which gave 200% speedup increase and enabled us to have a slightly larger ensemble. We did not use any external or simulated data!</p>
+<p>This post covers the segmentation based approach and ensembling. For object detection part see <a href="https://www.kaggle.com/bloodaxe" target="_blank">@bloodaxe</a> writeup: <a href="https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561440" target="_blank">1st place solution [Object Detection Part]</a></p>
+<h2>Cross validation</h2>
+<p>For segmentation approach 7 folds were used, simply by splitting by experiment. Using mean of f4-score of all 7 folds had some good correlation with LB. During model training I optimized individual class thresholds at the end of each epoch by simple grid-search on the validation experiment. After all 7 folds were trained we could re-calibrate thresholds, by taking OOF predictions. And fitting the threshold for one fold on the predictions of the other 6. Then we average the resulting f4-curves and take the best threshold.</p>
+<h2>Data preprocessing/ augmentations</h2>
+<p>3D images were normalized by standard normalization, i.e. for each 630x630x184 image, we substract mean and devide by standard deviation before splitting the images into patches.<br>
+Since models are trained from scratch, augmentations were essential to prevent overfitting. <br>
+We used RandomCrop, Flip on each axis, and rotation, which all are available with MONAI. Additionally I used my own implementation of MixUp which was highly effective to train longer and prevent overfitting.</p>
+<h2>Model</h2>
+<p>Modelling was quite a ride in this competition. I started with simple UNET with having 3D gaussian balls as segmentation target. For diversity I also tried <a href="https://github.com/Project-MONAI/tutorials/tree/main/detection" target="_blank">object detection example from MONAI</a> and realized its working very well out of the box. But when analyzing the different output feature maps and trying to isolate the perfomance gain over gaussian heatmap based segmentation I realized where the advantage was and adjusted my segmentation model accordingly. I learned that </p>
+<ul>
+<li>the penultimate feature map has a higher accuracy than the last one, which is surprising at first</li>
+<li>gains from box regression are negligable, as particles from the same type have mostly same size anyways.</li>
+</ul>
+<p>Hence its sufficient to have a pixel-wise loss on the penultimate feature map output. I.e. use a <strong>partly</strong> UNET. The gaussian heatmap is not needed when suppressing background with a low class weight, and just use single pixels as targets. Using the same approach on lower level outputs (= deep supervision) is possible, but does not provide much gain. Input for the segmentation models are 96x96x96 image patches and the loss is calculated on the 48x48x48 output. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F961b07916f0b97850233aae461704c69%2FScreenshot%202025-02-06%20at%2014.05.42.png?generation=1738849991855202&amp;alt=media" alt=""></p>
+<p>In general, we observed that relatively small models work really and the design of loss is the most important aspect. We used MONAIs <a href="https://docs.monai.io/en/stable/networks.html#flexibleunet" target="_blank">FlexibleUnet</a> with backbones resnet34 and efficientnet-b3. Six checkpoints of this architecture would finish under 2h and score 7th place on LB.</p>
+<h2>Training procedure</h2>
+<p>We used 7 classes (incl background) and weighted CrossEntropy as loss. Notably keeping beta-amylase as a class although it is not scored is quite helpful as model learns to differentiate beta-galactosidase from it. To account for low number of positive pixels, positive pixels are weighted by 256 and background has weight 1. Models were trained with a cosine learning rate schedule with peak LR of 0.001, mixed precision and an effective batch size of 32 samples. Training is based on Random crops and for validation the single experiment image is divided into patches and stored in RAM. </p>
+<h2>Ensembling</h2>
+<p>Ensembling was very challenging, as our two approaches are quite diverse. While in theory predictions from the segmentation models can be ensembled with feature map outputs of the object detection model before runnning the object detection postprocessing, in practice those feature maps have a very different distribution due to difference architectures and loss functions. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F9d47503c1fd18872ef42b466f72c6732%2FScreenshot%202025-02-06%20at%2014.25.00.png?generation=1738850078673576&amp;alt=media" alt=""></p>
+<p>We were eager to find an elegant way to fix this scaling issue as we saw the potential of a possible ensemble. The scaling of our best submission works as following. To combine predictions A with predictions B, for each class sort all pixel values for A and B and replace values of B with the corresponding values of A of same rank. In code: </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F05670c1a2a658de03ad73522d1efe22e%2FScreenshot%202025-02-06%20at%2014.58.11.png?generation=1738850308432936&amp;alt=media" alt=""></p>
+<p>This results in both predictions having the same distribution, and hence we could simple blend the feature maps before performing object de<br>
+tection task.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fc5ccff4d072d09afe6b6c03273b65d40%2FScreenshot%202025-02-06%20at%2014.38.13.png?generation=1738850131187278&amp;alt=media" alt=""></p>
+<h2>What did not work</h2>
+<ul>
+<li>Using supplemental data (external or simulated)</li>
+<li>Other augs</li>
+<li>Other losses (Tversky, Dice)</li>
+</ul>
+<p>Thanks for reading. </p>
+<p>Edits:<br>
+training code: <a href="https://github.com/ChristofHenkel/kaggle-cryoet-1st-place-segmentation" target="_blank">https://github.com/ChristofHenkel/kaggle-cryoet-1st-place-segmentation</a><br>
+inference kernel: <a href="https://www.kaggle.com/code/christofhenkel/cryo-et-1st-place-solution?scriptVersionId=223259615" target="_blank">https://www.kaggle.com/code/christofhenkel/cryo-et-1st-place-solution?scriptVersionId=223259615</a></p>

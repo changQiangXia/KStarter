@@ -1,0 +1,101 @@
+<h1>ViT-Huge DINOv3 &amp; Multi-Modal Feature Fusion with AUX prediction</h1>
+<p>First, a huge thank you to the organizers for hosting this challenge and to my fellow competitors. Sharath and I are thrilled to achieve the <strong>4th position (Gold Medal)</strong>. Our solution relies on a heavy Vision Transformer backbone initialized with DINOv3 weights, a multi-modal fusion strategy combining images with tabular data, and a critical data cleaning pipeline.</p>
+<h2>1. Data Preprocessing: The "Cardboard" Cleanup</h2>
+<p>Before touching the model architecture, we realized a significant portion of the image data contained irrelevant noise—specifically, the cardboard backing used in the data collection process.</p>
+<ul>
+<li><p><strong>Manual Cropping:</strong> My teammate and I manually reviewed the dataset and cropped out the cardboard edges from the pasture images. This ensured the model focused purely on the biomass (grass/clover) rather than learning artifacts from the background.</p></li>
+<li><p><strong>Impact:</strong> This step was crucial. It provided a clear boost of <strong>+0.01</strong> on both leaderboards:</p>
+<ul>
+<li><p><strong>Public LB:</strong> 0.74 →<strong>0.75</strong></p></li>
+<li><p><strong>Private LB:</strong> 0.64 →<strong>0.65</strong></p></li></ul></li>
+</ul>
+<h2>2. Main Model Architecture</h2>
+<p>My main approach was a <strong>Multi-Modal Regression Network</strong>. I treated the problem as a fusion of visual data (pasture images) and physical measurements (Height/NDVI).</p>
+<h3>The Architecture Diagram</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F18908513%2Fa13e6b6e61001440d967ec88f50218a0%2Fpart%20-%201.png?generation=1769666215659267&amp;alt=media" alt=""></p>
+<h3>Key Components</h3>
+<ul>
+<li><p><strong>Backbone:</strong> <code>vit_huge_plus_patch16_dinov3.lvd1689m</code>  weights. The self-supervised nature of DINOv3 provided superior feature extraction for grass textures compared to standard supervised weights with first half layers frozen.</p></li>
+<li><p><strong>Fusion Strategy:</strong> I did not rely solely on images. <code>Pre_GSHH_NDVI</code> and <code>Height_Ave_cm</code> were encoded via a 2-layer MLP and concatenated with the ViT global average pooling features before the final regression heads.</p></li>
+<li><p><strong>Loss Function:</strong> <code>WeightedSmoothL1Loss</code>. I used custom weights <code>[0.1, 0.1, 0.1, 0.2, 0.5]</code> to prioritize the "Total" and "GDM" biomass targets.</p></li>
+</ul>
+<h2>3. The "Secret Sauce": Auxiliary Task Training</h2>
+<p>A major boost came from a secondary training stage where I repurposed the trained backbone to predict the <em>tabular features</em> from the images.</p>
+<h3>Auxiliary Pipeline Diagram</h3>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F18908513%2F4e9dd4df598970a80cc532db250f5c56%2Fpart%20-%202.png?generation=1769666274910752&amp;alt=media" alt=""></p>
+<ul>
+<li><p><strong>Logic:</strong> By forcing the model to predict <code>NDVI</code> and <code>Height</code> solely from the RGB image, the backbone learned robust features correlated with plant health and density that the primary regression heads might have missed.</p></li>
+<li><p><strong>Initialization:</strong> This model was initialized with the <strong>best weights from Fold 0</strong> of the main training loop, essentially acting as a domain-specific fine-tuner.</p></li>
+<li><p><strong>Impact:</strong> This auxiliary training provided the final push for the Gold Medal, adding another <strong>+0.01</strong> to both scores:</p>
+<ul>
+<li><p><strong>Final Public LB:</strong> 0.76</p></li>
+<li><p><strong>Final Private LB:</strong> 0.66</p></li></ul></li>
+</ul>
+<h2>4. What Didn't Work (The Graveyard)</h2>
+<p>Despite the success, many ideas were left on the cutting room floor.</p>
+<ul>
+<li><p><strong>Loss Functions:</strong> Pure MSE, Quantile Loss, Log Loss, and direct R2 optimization all failed to beat SmoothL1.</p></li>
+<li><p><strong>Target Transforms:</strong> Log transformation of targets and Scaled Sigmoid outputs reduced performance.</p></li>
+<li><p><strong>Image Size:</strong> Input sizes larger than 800x800 offered diminishing returns and OOM errors.</p></li>
+<li><p><strong>Complex Input:</strong> Attempting to process two images simultaneously (complex dual-input) did not yield better results.</p></li>
+</ul>
+<h3>The "Promising but Failed" Architecture: Hybrid Texture Pooling</h3>
+<p>I experimented with a custom pooling layer designed to reconstruct spatial grids from ViT tokens and pool across the height dimension (simulating a scan). While the validation loss looked very promising, it did not generalize as well to the private leaderboard.</p>
+<p>Python</p>
+<pre><code>class HybridTexturePooling(nn.Module):
+    def __init__(self, embed_dim=1280, patch_size=16, num_extra_tokens=5):
+        super().__init__()
+        self.ps = patch_size
+        self.num_extra_tokens = num_extra_tokens
+        # Projection layer: maps ViT embedding to pixel-space (ps**2) * 2
+        self.projection = nn.Linear(embed_dim, (patch_size ** 2) * 2)
+
+    def forward(self, x, h, w):
+        # x: [BS, N_tokens, Dim]
+        # 1. Slice off CLS + Register tokens
+        patch_tokens = x[:, self.num_extra_tokens:, :] 
+
+        # 2. Project to pixel-like space
+        x = self.projection(patch_tokens) 
+
+        bs = x.shape[0]
+        h_patches, w_patches = h // self.ps, w // self.ps
+
+        # 3. Reconstruct Spatial Grid
+        # Reshape to (BS, H_p, W_p, PS, PS, 2)
+        x = x.view(bs, h_patches, w_patches, self.ps, self.ps, 2)
+        # Permute to (BS, H_p, PS, W_p, PS, 2)
+        x = x.permute(0, 1, 3, 2, 4, 5).contiguous()
+        # Flatten to (BS, H, W * 2)
+        x = x.view(bs, h, w * 2)
+
+        # 4. Mean across the Height dimension
+        x = x.mean(dim=1) # Result: [BS, 1600] for 800px input
+        return x
+</code></pre>
+<h3>5. Training Configuration</h3>
+<p>We utilized a two-stage training pipeline. Below are the specific hyperparameters used for each stage.</p>
+<h4><strong>Stage 1: Main Biomass Regression</strong></h4>
+<ul>
+<li><p><strong>Model:</strong> <code>vit_huge_plus_patch16_dinov3.lvd1689m</code> (Weights frozen for first 50% of layers)</p></li>
+<li><p><strong>Image Size:</strong> 800× 800</p></li>
+<li><p><strong>Batch Size:</strong> 10</p></li>
+<li><p><strong>Optimizer:</strong> AdamW</p></li>
+<li><p><strong>Scheduler:</strong> CosineAnnealingWarmRestarts(optimizer, T_0=10, T_mult=2, eta_min=1e-6)</p></li>
+<li><p><strong>Loss Function:</strong> <code>WeightedSmoothL1Loss</code></p>
+<ul>
+<li>Weights: <code>[0.1, 0.1, 0.1, 0.2, 0.5]</code> (Heavily penalizing Total Biomass errors)</li></ul></li>
+<li><p><strong>Validation Strategy:</strong> 5-Fold Cross-Validation (Seed 42)</p></li>
+</ul>
+<h4><strong>Stage 2: Auxiliary Feature Pre-training</strong></h4>
+<ul>
+<li><p><strong>Objective:</strong> Predict Tabular Features (<code>NDVI</code>, <code>Height</code>) from Images</p></li>
+<li><p><strong>Initialization:</strong> Loaded best weights from <strong>Stage 1 (Fold 0)</strong></p></li>
+<li><p><strong>Batch Size:</strong> 8</p></li>
+<li><p><strong>Optimizer:</strong> AdamW</p></li>
+<li><p><strong>Scheduler:</strong> ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=4)</p></li>
+<li><p><strong>Loss Function:</strong> <code>MSELoss</code></p></li>
+<li><p><strong>Validation Strategy:</strong> 5-Fold Cross-Validation (Seed 44)</p></li>
+</ul>
+<p>Note: All regression targets and auxiliary features (tabular inputs) were normalized using StandardScaler prior to training to ensure stable convergence.</p>
+<p>Thanks again to the community! I hope this write-up and the diagrams help explain the structure of the solution.</p>

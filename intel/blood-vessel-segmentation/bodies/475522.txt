@@ -1,0 +1,301 @@
+# https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475522
+
+Topic #475522: 1st Place Solution (code updated)
+  Author: Clevert
+  Posted: 2024-02-08 18:44:11.031000
+  Votes: 100  Comments: 31
+
+First of all, we would like to thank Kaggle and the organizers for hosting such a great competition. And also thanks to @hengck23 for the amazing posts, @junkoda for the metric implementation and all other participants for sharing their experiments.
+
+Overview
+
+Our final submission is an ensemble of two 2.5d convnext tiny unet with 3 channels, and the only differences between these two models are augmentation and number of epochs. Actually the best scored submission is not the selected ensemble but one single model of the ensemble which is 0.835 on private lb.
+
+Data Preparation
+
+We used all training data including kidney_1_voi.
+
+
+
+Multiview slice (x, y, z)
+
+Normalization: No normalization, just image = image / 65535.0
+
+Whole slice instead of tiles and all slices resized or cropped to 1536x1536. 
+
+Augmentations:
+
+
+A.Compose([
+    A.HorizontalFlip(=0.5),
+    A.VerticalFlip(=0.5),
+    A.Transpose(=0.5),
+    A.Affine(scale={:(0.7, 1.3), :(0.7, 1.3)}, translate_percent={:(0, 0.1), :(0, 0.1)}, rotate=(-30, 30), shear=(-20, 20), =0.5),
+    A.RandomBrightnessContrast(=0.4, =0.4, =0.5),
+    A.OneOf([
+        A.Blur(=3, =0.2),
+        A.MedianBlur(=3, =0.2),
+    ], =1.0),
+    A.OneOf([
+        A.ElasticTransform(=1, =50, =10, =1, =0.5),
+        A.GridDistortion(=5, =0.1, =1, =0.5)
+    ], =0.4),
+    A.OneOf([
+        A.Resize(1536, 1536, cv2.INTER_LINEAR, =1),
+        A.Compose([
+            RandomResize(1536, 1536, =0.5, =0.5, =1),
+            A.PadIfNeeded(1536, 1536, =, =cv2.BORDER_REPLICATE, =1.0),
+            A.RandomCrop(1536, 1536, =1.0)
+        ], =1.0),
+    ], =1.0),
+    A.GaussNoise(=0.05, =0.2),
+])
+
+
+
+
+Random 3D rotation to get slices that is not necessarily parallel to axes. The best scored submission used random 3d rotation for augmentation and trained for more epochs.
+
+
+
+Modeling &amp; Training
+
+
+
+We used unet from SMP with convnext tiny backbone, replaced BatchNorm and ReLU to GroupNorm and GELU and added an extra convolution stem. The input size for all models is 3x1536x1536.
+
+
+self = nn(
+    nn(in_channels, out_channels, , , ),
+    (out_channels),
+)
+
+
+
+
+For loss function, we used 1.0 focal loss, 1.0 dice loss, 0.01 boundary loss and 1.0 custom loss. The custom loss is inspired by @hengck23's post and @junkoda's metric implementation.
+
+
+
+
+
+
+For optimization, we used AdamW and CosineAnnealingLR from 1e-4 to 0 with warmup. All models were trained for 20 epochs with a batch size of 8 and 4 gradient accumulation steps, except for the model with 3d slice rotation augmentation which was trained for 30 epochs.
+
+
+Inference
+
+
+
+Inference on 3 axes with 8xTTA.
+
+We tried different resize methods for inference. For the best scored submission, all slices are simply resized to 3072x3072; for the selected submission, we used a dynamic scale factor that (h*scale)*(w*scale)=3200*3200.
+
+The threshold used for submission is 0.4, and the optimal threshold based on cv and lb is about 0.4~0.5.
+
+torch.compile() gave about 2x acceleration so that we were able to inference with high resolution and TTAs.
+
+
+What didn't work
+
+
+
+3d models.
+
+External data and pseudo labels.
+
+Transformers.
+
+Stacking more slices (&gt;3) for 2.5d model.
+
+
+Results
+
+
+
+
+
+Model
+Slice Rotation
+Inference size
+Public Score
+Private Score
+
+
+
+
+1
+convnext_tiny
+
+3072
+0.889
+0.682
+
+
+2
+convnext_tiny
+✓
+3072
+0.888
+0.830
+
+
+3
+convnext_tiny
+✓
+3072
+0.867
+0.835
+
+
+4
+ensemble(1+2)
+-
+3200
+0.898
+0.744(selected)
+
+
+5
+ensemble(1+2)
+-
+3200(dynamic)
+0.895
+0.774(selected)
+
+
+
+
+Links
+
+
+
+training code
+
+inference code
+
+
+final submission ensemble 0.774106
+
+3d rotate single model 0.835346
+
+Comments:
+├─ hengck23 (2024-02-08 23:51:33.083000) [+10]
+│  thanks for the writeup. good work!
+│  
+│  As a reference, my implementation:
+│  
+│  
+│  
+│  convnext tiny
+│  
+│  random 3d slice
+│  
+│  boundary + interior bce loss weighing
+│  
+│  optimal local cv threshold and public: 0.4~0.5.
+│  
+│  
+│  
+│  
+│  ...
+  ├─ Kavya_17 (2024-02-09 10:04:59.013000) [+0]
+  │  nice work
+├─ Viktor Cikojevic (2024-02-13 19:54:47.860000) [+3]
+│  congratulations on keeping the first place both on private and public leaderboards!! 
+│  
+│  Can you tell me how do you introduce the extra_stem layer?
+├─ slime (2024-02-08 20:55:56.230000) [+1]
+│  Cool! I see that 3d-rotation augmentation makes a big difference in the final score.
+│  
+│  What is the impact of the combination of the loss functions? 
+│  What score could be achieved with the same setup ...
+  ├─ Clevert (2024-02-09 16:20:54.253000) [+1]
+  │  We started with focal + dice loss, so no results for simple BCE or focal loss. And we discovered boundary loss in early experiments which brought minimal improvement(&lt;1%) for cv and public lb. A...
+├─ Tanishq dublish (2024-02-10 10:23:46.787000) [+2]
+│  Congratulations, Thank you for sharing the solution. It would be good for new learners if you provide complete notebook solution.
+├─ Huma Perveen (2024-02-08 21:52:38.837000) [+2]
+│  Congratulations, Thank you for sharing the solution. It would be good for new learners if you provide complete notebook solution.
+├─ JEANMPIA (2024-02-08 21:37:27.077000) [+2]
+│  Very nice writeup and solution ! The attention to detail is very impressive ! Thank you for sharing.
+│  
+│  May I ask a few question:
+│  
+│  
+│  
+│  What's the reasoning behind the simple /  65535.0 norm ?
+│  
+│  Same que...
+  ├─ hengck23 (2024-02-09 07:28:26.270000) [+0]
+  │  " didn't have the grit to actually implement it."
+  │  
+  │  Me too!
+  ├─ Clevert (2024-02-09 16:14:35.133000) [+1]
+  │  Thanks!
+  │  
+  │  
+  │  
+  │  We tried other normalization methods, but they did't work well for us.
+  │  
+  │  The GroupNorm is for gradient accumulation and the GELU is just an empirical choice.
+  │  
+  │  The augmentation scheme is f...
+├─ tzebin (2024-05-05 17:52:29.327000) [+0]
+│  Are you planning to publish this? I would love to read the detailed methodology and ablation studies:)
+├─ Metin Topyildiz (2024-03-31 20:37:58.580000) [+0]
+│  Congraculations! and thank you for sharing the code
+├─ jewe1ry (2024-02-22 02:26:32.170000) [+0]
+│  Congratulations! impressive work about norm.
+├─ David Cano Rosillo (2024-02-16 15:45:41.787000) [+0]
+│  Congratulations!
+├─ MarcoPG (2024-02-16 15:39:52.167000) [+0]
+│  Congratulations!!!
+├─ malakkafaq (2024-02-15 21:08:15.727000) [+0]
+│  cogrates dear!!
+├─ [deleted] (2024-02-14 15:12:58.410000) [+0]
+│  Congratulations, Thank you for sharing the solution .
+├─ C R Suthikshn Kumar (2024-02-10 07:16:46.503000) [+0]
+│  Congratulations on getting the first prize. Thanks for sharing the details of your solution.
+├─ Optimo (2024-02-09 16:27:40.963000) [+0]
+│  Congratulations!
+│  
+│  Could you share how you handled CV vs LB scores? You don't talk about CV at all in your write up, does it mean that you only implemented new ideas and relied on LB? If not could y...
+  ├─ Clevert (2024-02-10 14:11:44.537000) [+1]
+  │  Thanks!
+  │  For experimenting, we used kidney_3_dense for validation and other data for training. And we used IOU for local validation. For submission, we used all the data for training. The correlatio...
+├─ Yassine Alouini (2024-02-09 10:43:19.180000) [+0]
+│  Well done and congratulations on staying on the top position both on public and private.
+  ├─ Clevert (2024-02-09 15:52:02.867000) [+0]
+  │  Thanks!
+├─ ForcewithMe (2024-02-09 02:25:47.243000) [+0]
+│  Random 3D rotation and the loss are creative and insightful. Congratulations @clevert , this solution well deserves top1 👍. 
+│  
+│  I would like to know how large the improvement brought by 1) Random 3D ...
+  ├─ chemdatafarmer (2024-02-09 03:55:02.043000) [+0]
+  │  I would love to see this as well
+  ├─ Clevert (2024-02-09 15:56:13.220000) [+3]
+  │  Thank you!
+  │  
+  │  
+  │  
+  │  Random 3d rotation brought little improvement for both cv and public score. but for private score, the improvement is huge (0.682-&gt;0.835).
+  │  
+  │  The custom loss gave us ~2% boost for lo...
+    ├─ ForcewithMe (2024-02-09 16:15:50.083000) [+0]
+    │  0.682-&gt;0.835 is a super huge improvements. Thank you for introducing this! 👍
+├─ hengck23 (2024-02-09 00:19:21.083000) [+0]
+│  few question:
+│  
+│  first, why do you think ensemble(1+2)    performs worse in private? did you do post submission using better threshold adjustment? )maybe best threshold for ensmble is on 0.4?
+│  
+│  differ...
+  ├─ Clevert (2024-02-09 16:09:34.287000) [+2]
+  │  1) We haven't done any post submission yet. Here's some existing results of different thresholds for ensemble. We will do more probes later. I think one potiential reason for the large difference m...
+├─ Chikuwabu (2024-02-08 23:28:37.153000) [+0]
+│  Thank you for sharing! I express my deep respect that you won first place in both Public and Private. 
+│  
+│  My question is, what data set configuration did you use to calculate the CV? (train and valid)
+  ├─ Clevert (2024-02-09 16:12:59.323000) [+2]
+  │  For experimenting, we used kidney_3_dense for validation and other data for training. For submission, we used all the data for training.
+├─ [deleted] (2024-12-10 05:32:20.367000) [+0]
+│  [deleted]

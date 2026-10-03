@@ -1,0 +1,155 @@
+# https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/288049
+
+Topic #288049: 5th Place Solution
+  Author: Udbhav Bamba
+  Posted: 2021-11-16 13:42:10.607000
+  Votes: 47  Comments: 20
+
+First of all thanks to Kaggle and the organizers for this competition. 
+
+Data Strategy
+
+The competition data was not up to the mark and thus, there was no way you could build a good CV that correlates with the leaderboard. Unclean public training data and clean hidden private test data only meant we could use either different models and combine them together or use a single strong model like muril-large and train it on a variety of datasets shared by others. We did both.
+
+The first step was to divide the training data into 5 folds. After that, we trained our final models on subset of SQuAD v2, Google-translated SQuAD v2 shared by @tkm2261, all TyDi QA, hindi parts of MLQA, XQUAD and 5-10x oversampled Chaii dataset for each fold. We found that oversampling Chaii dataset helped us to improve CV and LB score. Please note that for CV calculation we used only the original validation folds.
+
+All Models were trained for 1-2 epochs with early stopping based on CV Jaccard score with max_length = 384 and doc_stride = 128. We did try other lengths such as 400, 512 and other strides like 192 but they didn’t perform very well with our cross-validation strategy.
+
+Models
+
+
+
+XLM Roberta Large (Public LB - 0.800)
+
+Muril Large (Public LB - 0.802)
+
+RemBERT (Public LB - 0.803)
+
+
+Ensemble
+
+Since different models have different tokenizations, simple average ensembling was not possible so tried using prediction scores to select best predictions from different models. This gave us a little improvement.
+
+The next thing we tried was to normalize the scores of all models to the same scale. We saw a little improvement using this too but we knew that this is not the best way to combine models.
+
+The vanilla version failed as different models had different scales for logits. So to overcome this I came up with a custom softmax which could normalize the logits across different context splits. Base code for this is attached below:
+
+def CustomSoftmax(examples, features, raw_predictions):
+    all_start_logits, all_end_logits = raw_predictions
+
+    # Build a map example to its corresponding features.
+    example_id_to_index = {k: i for i, k in enumerate(examples["id"])}
+    features_per_example = collections.defaultdict(list)
+    for i, feature in enumerate(features):
+        features_per_example[example_id_to_index[feature["example_id"]]].append(i)
+
+    for example_index, example in enumerate(tqdm(examples)):
+        feature_indices = features_per_example[example_index]
+        start_logits_sum = 0
+        end_logits_sum = 0
+
+        logCs = None
+        logCe = None
+
+        # Find maximum logit value across context
+        for feature_index in feature_indices:
+            if logCs is None:
+                logCs = all_start_logits[feature_index].max()
+            else:
+                logCs = max(logCs, all_start_logits[feature_index].max())
+
+            if logCe is None:
+                logCe = all_end_logits[feature_index].max()
+            else:
+                logCe = max(logCe, all_end_logits[feature_index].max())
+
+        # Subtract maximum value among all logits before applying exponentiation for numerical stability
+        # And take sum across all context splits
+        for feature_index in feature_indices:
+            all_start_logits[feature_index] -= logCs
+            all_end_logits[feature_index] -= logCe
+            start_logits_sum += np.exp(all_start_logits[feature_index]).sum()
+            end_logits_sum += np.exp(all_end_logits[feature_index]).sum()
+
+        # Softmax
+        for feature_index in feature_indices:
+            all_start_logits[feature_index] = np.exp(all_start_logits[feature_index])/start_logits_sum
+            all_end_logits[feature_index] = np.exp(all_end_logits[feature_index])/end_logits_sum
+
+    return all_start_logits, all_end_logits
+
+
+This was the final idea we had in the last two days and it boosted our public score from 0.809 to 0.821!
+
+Post-processing
+
+We followed a similar preprocessing technique as used in public notebooks. Though we observed that removing a few of the symbols were hurting the performance so we decided to use a custom punctuations list ('!"#$&amp;\'()*+,-/:;&lt;=&gt;?@[\\]^_`{|}~'). 
+
+We also tried to solve the issue of tamil predictions as indicated by @jdoesv in https://www.kaggle.com/c/chaii-hindi-and-tamil-question-answering/discussion/264831 with the help of stemming tamil words in the answers it helped to boost Muril performance from 0.802 -&gt; 0.804 on the public LB.
+
+In the end, we didn’t add many rule-based post-processing as we thought this might overfit the public leaderboard. 
+
+Our best private submission would have scored 0.779 but we did not select it. It’s funny why we didn’t select that submission. It had a small bug. However, even with that bug, that submission was our best private submission :)
+
+We also had a single 5 fold muril-large model that would have placed us “in the money”.
+
+Our best inference kernel can be found here: https://www.kaggle.com/abhishek/chaii-xlm-roberta-x-muril-x-rembert-score-based
+
+You can also try one of our best muril-large models on Hugging Face Hub: https://huggingface.co/abhishek/muril-large-chaii
+
+We will also publish our training code soon.
+
+Final thoughts
+
+It was a fun competition but we feel that it could have been better if the provided training data was better or at least similar to the hidden test dataset. We gave up many times.
+
+We also tried a meta-model to re-rank the answers generated by different models but it was quite late in the competition (on the final day) and we didn’t have enough time to experiment with it further. 
+
+P.S. @abhishek still feels that this competition was all about data collection from hundreds of participants.
+
+P.S.S Training code can be found at: https://github.com/abhishekkrthakur/chaii-hindi-tamil-question-answering
+
+Comments:
+├─ Darek Kłeczek (2021-11-16 19:39:03.570000) [+3]
+│  Congrats @ubamba98 and @abhishek, need to spend some time to understand your ensembling method, my mind is still dumb since yesterday 😂It was great to see your climb in the last days and defending ...
+├─ Abhishek Thakur (2021-11-16 13:47:19.590000) [+3]
+│  I had high hopes for re-ranking model. Too bad it didn't work out and we tried it towards the end and had no time to experiment :D
+├─ Kiran Sharma (2021-11-24 12:21:31.910000) [+1]
+│  Congretzz
+├─ Peter (2021-11-22 05:47:01.107000) [+1]
+│  Congratulations!
+├─ Dhinahar P (2021-11-17 16:01:41.730000) [+1]
+│  Well Done brother nice work
+├─ adldotori (2021-11-17 06:12:01.077000) [+2]
+│  Congrats. i'm envious of gold medal.
+├─ Ankit Maurya (2021-11-17 05:30:21.223000) [+2]
+│  you guys are amazing
+├─ ManogyaK (2021-11-16 16:46:56.493000) [+2]
+│  This is really amazing Udbhav! Congratulations and truly well deserved.
+├─ Raghawendra Singh (2021-11-16 16:36:36.073000) [+2]
+│  Excellent solution,Congrats for strong finish and gold … well deserved.
+├─ Kiran Chaudhary (2021-11-16 16:16:20.823000) [+2]
+│  Congratulations and thanks for solutions…
+├─ Trushant Kalyanpur (2021-11-16 15:45:47.547000) [+2]
+│  Congratulations @ubamba98 and @abhishek. Great idea using the custom softmax - the output was of size max_len? So you could ensemble across models with same len?
+  ├─ Udbhav Bamba (2021-11-16 15:50:37.023000) [+2]
+  │  No the output shape will remain as that of the input only difference is that now they are normalised between 0-1 so that we could now use the scores from postprocess_qa_predictions to chose the bes...
+├─ Mathurin Ache (2021-11-16 15:11:22.130000) [+2]
+│  Thanks for sharing. Muril Model seems a nice part of your solution.Interesting.
+├─ Ayush Singh (2021-11-16 14:59:15.247000) [+2]
+│  Well deserved, excellent solution Abhishek and Ubdhav
+├─ Durgesh Rao (2021-12-20 18:20:13.917000) [+0]
+│  Excellent Work
+│  keep it up !!
+├─ Parv Yadav (2021-11-22 05:08:13.783000) [+1]
+│  Thanks for sharing @ubamba98 !😄
+├─ MINGOOK KIM (2021-11-21 15:08:05.623000) [+1]
+│  Congratulations !
+│  
+│  Thanks for sharing~
+├─ Mintwater (2021-11-17 20:33:43.207000) [+1]
+│  Nice work! Thanks for sharing: )
+├─ Leon_and_hard (2021-11-23 01:30:40.133000) [+0]
+│  Thanks for sharing~
+├─ Rishu Raj (2022-06-23 09:09:50.433000) [+0]
+│  Thanks for sharing

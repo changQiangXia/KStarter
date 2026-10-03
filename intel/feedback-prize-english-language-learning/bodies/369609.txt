@@ -1,0 +1,436 @@
+# https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369609
+
+Topic #369609: 3rd Place Solution - Congratulations New Competition Grandmaster Amed!
+  Author: Chris Deotte
+  Posted: 2022-11-30 17:24:44.845000
+  Votes: 141  Comments: 61
+
+Congratulations Grandmaster Amed !
+
+Congratulations Amed ( @amedprof ) for becoming Kaggle's newest Competition Grandmaster! Amed was our teams' superstar who designed most of our models. He truly earns the title Kaggle Competition Grandmaster!
+
+3rd Place Solution Summary
+
+Our solution is an ensemble of 24 models without using pseudo labels. Most models use Deberta-v3-large backbone and a variety of tricks. The ensemble was chosen using hill climbing. Teaming with Amed ( @amedprof ) and CroDoc ( @crodoc ) was a pleasure. Thank you guys!
+
+Hill Climbing - CV 0.4420
+
+I love hill climbing because it can take lots of models and pick the best small subset of models. (i.e. its like Lasso regression) And it computes ensemble model weights. 
+
+We start with the single model with best CV score (for us was 0.4470). Then we iterate through all other models and pick a second model which helps the most. Then we pick a third etc until new models do not help. Our ensemble without pseudo achieves CV 0.4420. We allowed hill climbing to use negative weights which boosted CV +0.0010 and private LB +0.0060 versus using positive weights only. 
+
+while not STOP:
+    potential_new_best_cv_score = GET_BEST()
+    for k in range( len(MODELS) ):
+        for wgt in range(-0.5,0.51,0.01):
+            potential_ensemble = (1-wgt) * current_best_ensemble + wgt * MODELS[k]
+            cv_score = compute_metric( potential_ensemble )
+            if cv_score &lt; potential_new_best_cv_score: 
+                potential_new_best_cv_score = cv_score
+                REMEMBER_THIS_MODEL(k,wgt)
+    current_best_ensemble, STOP = UPDATE_BEST()
+
+
+
+
+Models - CV 0.4470
+
+Each day, we train new diverse models. Then we run hill climbing to see if the new model gets chosen. We don't need to make a new model with a great CV score, we just need to make new models that are diverse. Below are the choices in order which hill climbing picked from our 50 models. We observe that the best CV score models are not chosen first. Instead hill climbing chooses diverse models.
+
+The improvement in ensemble CV score is shown in the plot above. The table below displays single model CV scores. Our best single model without pseudo achieves CV 0.4470
+
+
+
+
+order selected
+backbone
+cv score
+weight
+
+
+
+
+1
+deberta-v3-large
+0.447
+0.190
+
+
+2
+deberta-v3-large-squad2
+0.4524
+0.142
+
+
+3
+deberta-v3-large
+0.4498
+0.124
+
+
+4
+deberta-large-mnli
+0.4548
+0.068
+
+
+5
+deberta-v3-large
+0.4492
+0.133
+
+
+6
+xlm-roberta-large
+0.4575
+0.092
+
+
+7
+deberta-v3-large-squad2
+0.457
+-0.160
+
+
+8
+deberta-v3-large-squad2
+0.4525
+0.101
+
+
+9
+deberta-v3-large
+0.4489
+0.125
+
+
+10
+deberta-v3-large-squad2
+0.4565
+-0.124
+
+
+11
+RAPIDS-SVR
+0.4526
+0.083
+
+
+12
+deberta-v3-large
+0.4495
+0.102
+
+
+13
+deberta-v3-large
+0.4502
+0.081
+
+
+14
+TF-deberta-v3-base
+0.4554
+0.061
+
+
+15
+deberta-v3-large
+0.4527
+-0.069
+
+
+16
+deberta-v3-large
+0.4522
+-0.058
+
+
+17
+deberta-v3-large
+0.45
+0.061
+
+
+18
+deberta-v3-large
+0.4516
+-0.058
+
+
+19
+deberta-v3-large
+0.4509
+0.071
+
+
+20
+deberta-v3-base
+0.4575
+-0.039
+
+
+21
+deberta-v3-large-squad2
+0.4501
+0.051
+
+
+22
+deberta-v3-large
+0.4512
+-0.049
+
+
+23
+roberta-large
+0.4571
+0.030
+
+
+24
+deberta-v3-large
+0.45
+0.040
+
+
+
+
+What Worked - Tricks
+
+Our models use a diversity of regression heads, pooling techniques, learning schedules, and backbones. Some models used the following tricks:
+
+
+
+Different loss rates per target {'cohesion':0.21, 'syntax':0.16, 'vocabulary':0.10, 'phraseology':0.16, 'grammar':0.21, 'conventions':0.16} [High Impact] 
+
+Clip grad norm with max_norm = 10 [High Impact]
+
+hidden_dropout_prob = 0.0 and attention_probs_dropout_prob = 0.0 [High Impact]
+
+Stride window for non deberta models [Medium Impact] 
+
+Since Deberta tokenizer ignores "\n" we replaced "\n\n" with "|" [Medium Impact] 
+
+Last layer reinitialisation [Medium Impact] 
+
+2 stage pooling. First pool either words, sentences, or paragraphs. Then pool that result. [Medium Impact] 
+
+Train with max_len=2048, infer max_len = 640 [High Impact] 
+
+Train with batch_size = 1 [High Impact] 
+
+RAPIDS SVR using embeddings without train on comp data [Medium Impact] 
+
+
+What Didn't Work - Pseudo Labels
+
+Our final submission does not use pseudo labels. We tried using pseudo labels during the competition. We were careful to avoid leaks, but none-the-less using pseudo labels from Feedback Prize 1 competition boosted our single model best CV score from 0.4470 to 0.4370 and did not improve our LB score. There must be a leak somewhere but we still haven't found it.
+
+We noticed that the distribution of targets from FP1 is different than FP3. So care must to be taken to account for this difference in distribution. Below are histogram of pseudo labels on FP1 vs. pseudo labels on FP3. We observe that the old Feedback Prize 1 comp has greater target values than current Feedback Prize 3 comp:
+
+
+
+Team Members
+
+
+
+@amedprof
+
+@crodoc
+
+@cdeotte 
+
+
+Solution Code Published
+
+We published our training code on GitHub here and we published our inference code on Kaggle here
+
+Comments:
+├─ Ertuğrul Demir (2022-11-30 17:34:15.240000) [+9]
+│  Thanks for sharing your results and congrats to all, especially @amedprof ! Many of tricks we experimented or thought of during the competition phrase but this one got my attention:
+│  
+│  Train with max...
+  ├─ Chris Deotte (2022-11-30 17:38:26.340000) [+29]
+  │  IMO Models want the most train data possible. Training with max_len=2048 allows the model to learn from all the provided train text. Once we have a smart model, it does not need to see the entire t...
+  ├─ Ertuğrul Demir (2022-11-30 17:45:28.580000) [+3]
+  │  Thanks for the explanation! Makes sense.
+  ├─ Chris Deotte (2022-11-30 18:21:59.613000) [+20]
+  │  @datafan07 Also note that Deberta uses "relative embeddings". Therefore if WORD_A in position 1500 relates to the word in position 1501. Then the model learns that WORD_A needs to pay attention to ...
+├─ gezi (2022-11-30 23:48:17.800000) [+8]
+│  Congratulations! Thanks for the excellent sharing!  Your team did geat work to make diverse models to help ensemble!
+│  I learned a lot especially below:
+│  
+│  
+│  
+│  Non deberta using slide window seems help a...
+├─ Ravi Ramakrishnan (2022-11-30 18:01:04.473000) [+5]
+│  Hearty congratulations to @amedprof, @cdeotte and @crodoc for a great result and thanks to @cdeotte  for the detailed approach note too!
+├─ CroDoc (2022-11-30 17:30:41.533000) [+5]
+│  Amazing teammates! It was really nice to work with both of you. Also, I think you really wrote nicely the key points that contributed to our final solution.
+├─ Amed (2022-11-30 17:40:17.780000) [+6]
+│  Thank you @cdeotte  for your kind words.
+│  I really enjoyed working with you.
+├─ Yuji.K (2022-12-08 05:10:25.640000) [+3]
+│  Thank you for sharing!
+│  Did you try MLM?
+│  I have a question about MLM.
+│  When doing MLM using training data, should I create a model for each fold to account for data leakages?
+│  
+│  Ex)
+│  [Setting] df = (FB3...
+  ├─ Chris Deotte (2022-12-08 17:51:30.990000) [+3]
+  │  Our final solution does not use MLM and I did not try MLM. Perhaps @amedprof or @crodoc tried MLM.
+  ├─ CroDoc (2022-12-08 21:29:59.047000) [+3]
+  │  I think Amed tried it and said it didn't help.
+  ├─ Amed (2022-12-09 00:55:19.580000) [+2]
+  │  Yes, I tried MLM (and the pre-trained weight on Feedback 2) without success. Which was quite surprising.
+  ├─ Yuji.K (2022-12-09 14:53:16.757000) [+1]
+  │  Thank you! How about how to do MLM?Did you do it like above?
+  ├─ Amed (2022-12-09 17:23:22.777000) [+1]
+  │  Yes.
+  │  But you need to remove the duplicates essays between FB1 and FB3 before doing MLM.
+  ├─ Yuji.K (2022-12-09 17:38:36.857000) [+1]
+  │  Thank you.
+  │  Congratulations on new GM!
+├─ Apa (2022-12-06 06:45:07.340000) [+3]
+│  Can you explain what exactly "Stride window for non deberta models" does in your solution?😄
+  ├─ Chris Deotte (2022-12-06 22:00:00.377000) [+2]
+  │  Models like RoBERTa can only accept input with max_len = 512 tokens. So to train with sequences of len 2048, we need to train and infer using a sliding window.
+  ├─ Apa (2022-12-07 01:31:17.427000) [+2]
+  │  For example, the length of 2048 can be split into four lengths of 512, that is, one sample is split into four samples, and they have the same label. Then will it train on these 4 samples?
+  ├─ Chris Deotte (2022-12-07 01:43:43.077000) [+3]
+  │  Yes basically. However with sliding window, we also pick a stride length. So if max_len=512 and doc_stride=256. Then the you break it into 7 pieces, namely 0:512, 256:768, 512:1024, 768:1280, 1024:...
+  ├─ Apa (2022-12-07 03:06:17.693000) [+2]
+  │  Thank you for your detailed reply, and best of luck to you in the future
+├─ Bootstrapping (2022-12-01 13:57:44.467000) [+3]
+│  Can you explain how to choose max_norm=10 for gradient clipping?
+  ├─ Amed (2022-12-02 06:58:25.983000) [+2]
+  │  gradient clipping made our models more stable.
+  │  In the end, It was just tuning this parameter. I found that max_norm=10 was the best.
+├─ Optimo (2022-12-01 12:08:23.763000) [+3]
+│  @amedprof congratulations!! Impressive achievement unlocked!
+  ├─ Amed (2022-12-02 07:09:14.380000) [+1]
+  │  Thanks @optimo :).
+  │  I hope you will soon.
+├─ Takamichi Toda (2022-12-01 02:59:03.227000) [+4]
+│  Congratulations on Gold Medal🥇 and thank you for sharing your solution.
+│  
+│  I have one question.
+│  
+│  
+│    
+│  Train with batch_size = 1
+│  
+│  
+│  I’m not sure about it. It is not mini-batch gradient descent.
+│  Is simpl...
+  ├─ Amed (2022-12-02 07:14:22.737000) [+3]
+  │  Is simple online stochastic gradient descent (not using mini-batch) better in this competition?
+  │  
+  │  
+  │  It was better for us.
+  │  And our models with '2 x Pooling' only support batch_size = 1
+  ├─ Takamichi Toda (2022-12-02 21:28:11.990000) [+3]
+  │  Thank you for your response!
+  │  I have never tried batch size=1 before, so I will add it to my experiments next time😊
+├─ Mohamed Eltayeb (2022-11-30 20:25:36.760000) [+4]
+│  Congratulations! Really deserve it!
+│  Just one question, could I know what is your validation scheme? and whether it was correlating well with the LB? Jumping really high in the lb has definietly som...
+  ├─ Chris Deotte (2022-11-30 20:48:41.923000) [+8]
+  │  Validation is key. "Trust Your CV" is king. We picked all our final submissions based on CV score and ignored LB score because LB is the size of 1 fold, and train data CV is the size of 5 folds. A ...
+  ├─ Mohamed Eltayeb (2022-11-30 22:35:23.060000) [+3]
+  │  Thanks for the clarification! Honestly, I always be so happy when finding you in a competition I work on. You and the others top GMs make it so fun! Hope one day I can team up with you.
+├─ Noir.s (2022-11-30 18:10:48.780000) [+4]
+│  Congratulations to your team for landing a top 3 finish!! 
+│  
+│  I had a couple of additional questions
+│  
+│  
+│  
+│  
+│    
+│  Different loss rates per target {'cohesion':0.21, 'syntax':0.16, 'vocabulary':0.10, 'phrase...
+  ├─ Chris Deotte (2022-11-30 18:29:31.720000) [+10]
+  │  @amed can share the details. These are two of his tricks.
+  │  
+  │  I think the way "2 x pooling" works is as follows. Amed please correct me if i'm wrong. A transformer model outputs embeddings for each to...
+  ├─ Amed (2022-11-30 20:09:52.530000) [+14]
+  │  Regarding "2 x Pooling", @cdeotte explained it really well.
+  │  We tried different types of Pooling for each level.
+  │  For example :
+  │  
+  │  
+  │  
+  │  MaxPooling on each paragraph and MeanPooling on that result
+  │  
+  │  Attenti...
+  ├─ Noir.s (2022-11-30 23:41:44.470000) [+2]
+  │  Thank you both for clarifying! Happy to learn these awesome tricks! 😄
+  │  
+  │  Congratulations again!
+├─ Romuska Palo Ur Laputa (2022-11-30 17:44:09.490000) [+4]
+│  Congratulations on your gold medal!!
+│  I'm always learning from you!💪
+├─ CocoBear (2022-12-04 06:35:16.590000) [+1]
+│  Congratulations!
+├─ Marília Prata (2022-12-20 21:03:15.223000) [+2]
+│  A huge Congratulations Amed for reaching the Most difficult Kaggle step: Competition GM.
+│  
+│  Also congratulations for the whole team (amedprof, crodoc, cdeotte) and the amazing solution.
+  ├─ Chris Deotte (2022-12-20 21:09:20.547000) [+2]
+  │  Thanks Marília!
+├─ pineapple (2022-12-07 14:39:40.940000) [+2]
+│  Congrats Amed! Do you have any idea as to why pseudo labels didn't work?
+  ├─ Amed (2022-12-08 08:40:53.773000) [+0]
+  │  Thanks @perrypineapple.
+  │  When doing pseudo-labels, you need to be sure that all the models used to generate the pseudo-labels are trained on the same cv split.
+  │  I suspect that one of our models was t...
+├─ Muhammad Ammar Jamshed (2022-12-06 19:57:49.173000) [+2]
+│  Amazing Work !!
+├─ tarekbahgats (2022-12-06 06:56:28.163000) [+2]
+│  Congratulations
+├─ Prakhar Prasad (2022-12-06 04:28:51.760000) [+2]
+│  congratulations, this is very inspiring and a new insight for me.
+├─ Detr1st (2022-12-04 22:04:54.400000) [+2]
+│  Nice Work!
+├─ Giuliana (2022-12-04 19:03:44.033000) [+2]
+│  Congratulations!
+├─ Alhamdou (2022-12-04 12:51:34.700000) [+2]
+│  congratulations!
+├─ Yingshu Li (2022-12-04 02:25:07.540000) [+2]
+│  Congratulations! Really deserve it! i'm really interested in Hill Climbing. Could you please show some detailed infer about this part.
+├─ Maciek (2022-12-03 17:24:55.613000) [+2]
+│  Well done mate.
+├─ sahilsingh2402 (2022-12-03 06:20:01.743000) [+2]
+│  Congratulations!
+├─ Jaewook Kim (2022-12-02 01:08:01.430000) [+2]
+│  Congratulations! I was able to experiment a lot with the notebook you shared.
+│  
+│  I have a question. I know that the larger the number of fold, the smaller the bias.
+│  Is it possible to make an absolute...
+  ├─ Chris Deotte (2022-12-02 01:10:43.343000) [+6]
+  │  When train data is small, then the more folds will achieve a better CV and LB. This is because 4 folds uses 75% train data to train a fold model whereas 5 folds, 10 folds, 25 folds, use 80%, 90%, a...
+├─ Wilmer E. Henao (2022-12-01 18:44:12.667000) [+2]
+│  I see that you tried the deberta versions finetuned with squad2. I also tried with other finetuned versions such as tner/deberta-v3-large-ontonotes5 and Elron/deberta-v3-large-sentiment.
+│  
+│  Those hel...
+  ├─ Amed (2022-12-02 06:53:16.477000) [+1]
+  │  With our setup, we could achieve a good CV score with deberta-v3-large-squad2, and it brings diversity to our ensemble.
+  │  As you can see in the table above, deberta-v3-large-squad2 was the second mod...
+├─ GMG (2022-12-01 18:14:10.153000) [+2]
+│  Nice work!
+├─ Johnny Tay (2022-12-01 10:59:23.440000) [+2]
+│  Congratulations and thanks for sharing! i have learned something!
+├─ [deleted] (2022-12-01 09:47:40.593000) [+2]
+│  [deleted]
+├─ [deleted] (2022-11-30 19:33:45.127000) [+2]
+│  [deleted]
+  ├─ [deleted] (2022-11-30 19:54:47.607000) [+3]
+  │  [deleted]
+├─ [deleted] (2023-10-14 06:28:18.407000) [+0]
+│  [deleted]
+├─ [deleted] (2023-08-24 23:20:39.343000) [+0]
+│  [deleted]
+├─ [deleted] (2023-01-24 03:52:00.367000) [+0]
+│  [deleted]

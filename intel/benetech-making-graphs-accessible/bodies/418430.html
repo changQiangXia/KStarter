@@ -1,0 +1,259 @@
+<p>First of all, I would like to thank the Kaggle community for sharing great ideas and engaging discussions. Special shout outs to <a href="https://www.kaggle.com/nbroad" target="_blank">@nbroad</a>  and <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a>. Congratulations to the winning teams - looking forward to your write ups.</p>
+<p>Thank you Kaggle and hosts for organizing this interesting competition.</p>
+<h2>Links</h2>
+<ul>
+<li>Inference notebook: <a href="https://www.kaggle.com/code/conjuring92/a05-mga-split-pipe" target="_blank">https://www.kaggle.com/code/conjuring92/a05-mga-split-pipe</a></li>
+<li>Github Repo: <a href="https://github.com/rbiswasfc/benetech-mga" target="_blank">https://github.com/rbiswasfc/benetech-mga</a></li>
+</ul>
+<p>The following is a detailed summary of my solution:</p>
+<h2>1 Overview</h2>
+<p>My solution is entirely based on image-to-text models finetuned from the <code>google/matcha-base</code> backbone. The training pipeline, as depicted below, is a sequence of two phases. In the first phase, I leveraged a large number of synthetic plots to adapt the backbone for the current task.  In the second phase, I used oversampled extracted / non-generated plots to specialize the pipeline for real world graphs. In this phase, I created separate models for scatter and non-scatter plots, primarily to mitigate the difficulty in predicting scatter data points.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2125251%2F232cced3276ad6561fe6a56d2e7509ad%2Fmga_flow.png?generation=1687269107458839&amp;alt=media" alt=""></p>
+<h2>2 Model</h2>
+<p>All models share the same architecture (image-to-text transformer) and input-output pattern. Model input is simply the plot image itself without any prompts. The output text has the following template:</p>
+<p><code>&lt;|bos|&gt; &lt;|chart_type_start|&gt; {chart_type} &lt;|chart_type_end|&gt; &lt;|num_point_start|&gt; {n_x} | {n_y} &lt;|num_point_end|&gt; &lt;|x_span_start|&gt; {x0} | {x1} | {x2} | … | {xn} &lt;|x_span_end|&gt; &lt;|y_span_start|&gt; {y0} | {y1} | {y2} | … | {ym}  &lt;|y_span_end|&gt; &lt;|eos|&gt;</code></p>
+<p>Some minor details:</p>
+<ul>
+<li>Numeric values are cast into scientific notation using <code>val = "{:.2e}".format(float(val))</code>.</li>
+<li>Added histogram as additional chart type, which later converted to vertical_bar during post processing</li>
+</ul>
+<h2>3 Data</h2>
+<p>Apart from the competition data, I used the following sources.</p>
+<h3>Synthetic Dataset</h3>
+<p>I spent majority of my competition time creating the synthetic dataset. For the underlying data in synthetic plots, I used</p>
+<ul>
+<li>Wikitables data i.e. tables from wikipedia (25%)<ul>
+<li><a href="http://websail-fe.cs.northwestern.edu/TabEL/" target="_blank">http://websail-fe.cs.northwestern.edu/TabEL/</a></li>
+<li><a href="https://github.com/sunlab-osu/TURL" target="_blank">https://github.com/sunlab-osu/TURL</a></li></ul></li>
+<li>Synthetic XY data (75%)<ul>
+<li>Categorical series: I created a list of categories using wikipedia glossary pages in STEM domain (<a href="https://www.kaggle.com/code/conjuring92/w03-stem-glossary/notebook" target="_blank">https://www.kaggle.com/code/conjuring92/w03-stem-glossary/notebook</a>)</li>
+<li>Numerical series: random function generators ensuring all combinations of narrow to wide min-max range, small (1e-6) - large values (1e6), inclusion of outliers etc</li></ul></li>
+</ul>
+<p>I generated the plots using matplotlib ensuring they capture all aspects of the graph conventions. For example, in the case of line plots, the generated graphs included shared origin plots, having tick labels that are not included in the data-series, additional point markers in between two tick labels, unequal spacing between x tick labels etc. I tried to maximize the diversity in the graphs by -</p>
+<ul>
+<li>customizing tick marks, tick labels, tick direction, formatting of numerical tick labels (e.g. scientific notation, different rounding, European style formatting, adding % as suffix, currency symbol as prefix etc), major / minor grids, titles, axis limits, spines (e.g. setting bottom spine at y=0),  legends, markers etc</li>
+<li>grayscale, background textures, aspect ratio (very wide to very narrow)</li>
+<li>number of data points (4-24 points for non-scatter, 4-64 for scatter)</li>
+<li>random special effects: text boxes with stats on y values, horizontal / vertical bands, insets, random texts, random equations, annotating min/max points, error bands, adding random shapes, varying line width, color, data point marker size, hatches, error bars, slopes etc</li>
+<li>log-log, semi-log plots, reverse y axis (although these weren’t part of test set, my hypothesis (?) was they would help in model generalization)</li>
+</ul>
+<p>The synthetic dataset consisted of</p>
+<ul>
+<li>100k horizontal bars</li>
+<li>100k vertical bars + histograms</li>
+<li>100k dot plots</li>
+<li>200k line plots</li>
+<li>200k scatter plots</li>
+</ul>
+<h3>Synthetic Dataset - Bartley</h3>
+<ul>
+<li>Random selection of 25k data points from the synthetic dataset shared by <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a>: <a href="https://www.kaggle.com/datasets/brendanartley/benetech-extra-generated-data" target="_blank">https://www.kaggle.com/datasets/brendanartley/benetech-extra-generated-data</a></li>
+</ul>
+<h3>Pseudo Labelling</h3>
+<p>I took screenshot of around 700 images from wikimedia commons (e.g. <a href="https://commons.wikimedia.org/w/index.php?search=line+plots&amp;title=Special:MediaSearch&amp;go=Go&amp;type=image)" target="_blank">https://commons.wikimedia.org/w/index.php?search=line+plots&amp;title=Special:MediaSearch&amp;go=Go&amp;type=image)</a>. I used pseudo labelling, followed by manual correction, to generate the annotations.</p>
+<h3>ICDAR dataset</h3>
+<p>I used around 1100 images from ICDAR, only those having 1 XY series (250 horizontal bar + 450 vertical bar + 250 lines + 150 scatter). I also did post-processing to ensure annotations match competition graph conventions (e.g. handling percentages, interpolation of line plot data to match tick labels etc).</p>
+<h2>4 Datamix</h2>
+<ul>
+<li>Datamix 1: used for domain adaptation</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Size</th>
+<th>Multiplier</th>
+<th>Effective Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition Dataset - Synthetic</td>
+<td>60k</td>
+<td>3</td>
+<td>180k</td>
+</tr>
+<tr>
+<td>Competition Dataset - Extracted</td>
+<td>1.1k</td>
+<td>16</td>
+<td>17k</td>
+</tr>
+<tr>
+<td>Synthetic Dataset - Self</td>
+<td>700k</td>
+<td>1</td>
+<td>700k</td>
+</tr>
+<tr>
+<td>Synthetic Dataset - Bartley</td>
+<td>25k</td>
+<td>1</td>
+<td>25k</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Datamix 2: scatter specialization</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Size</th>
+<th>Multiplier</th>
+<th>Effective Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition Dataset - Synthetic</td>
+<td>11k</td>
+<td>1</td>
+<td>11k</td>
+</tr>
+<tr>
+<td>Competition Dataset - Extracted</td>
+<td>0.2k</td>
+<td>16</td>
+<td>3.2k</td>
+</tr>
+<tr>
+<td>Synthetic Dataset - Self</td>
+<td>30k</td>
+<td>1</td>
+<td>30k</td>
+</tr>
+<tr>
+<td>Pseudo Labelled Dataset</td>
+<td>0.1k</td>
+<td>16</td>
+<td>1.6k</td>
+</tr>
+<tr>
+<td>ICDAR Dataset</td>
+<td>0.2k</td>
+<td>16</td>
+<td>3.2k</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Datamix 3: non-scatter specialization</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Size</th>
+<th>Multiplier</th>
+<th>Effective Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Competition Dataset - Synthetic</td>
+<td>48k</td>
+<td>1</td>
+<td>48k</td>
+</tr>
+<tr>
+<td>Competition Dataset - Extracted</td>
+<td>0.9k</td>
+<td>8</td>
+<td>7.2k</td>
+</tr>
+<tr>
+<td>Synthetic Dataset - Self</td>
+<td>20k</td>
+<td>1</td>
+<td>20k</td>
+</tr>
+<tr>
+<td>Pseudo Labelled Dataset</td>
+<td>0.5k</td>
+<td>8</td>
+<td>4k</td>
+</tr>
+<tr>
+<td>ICDAR Dataset</td>
+<td>1k</td>
+<td>8</td>
+<td>8k</td>
+</tr>
+</tbody>
+</table>
+<h2>5 Training</h2>
+<p>The main hyper-parameters for training were <code>max_patches</code> and <code>max_length</code>. I used the following settings at various phases of training:</p>
+<h5>Phase 1 Training</h5>
+<ul>
+<li>max_patches: 2048</li>
+<li>max length: 1024</li>
+<li>lr: 5e-5</li>
+<li>batch size: 2</li>
+<li>gradient accumulation: 16</li>
+</ul>
+<h5>Phase 2 training - non-scatter</h5>
+<ul>
+<li>max_patches: 4096</li>
+<li>max length: 512</li>
+<li>lr: 2e-5</li>
+<li>batch size: 4</li>
+<li>gradient accumulation: 2</li>
+</ul>
+<h5>Phase 2 training - scatter</h5>
+<ul>
+<li>max_patches: 3072</li>
+<li>max length: 1024</li>
+<li>lr: 2e-5</li>
+<li>batch size: 8</li>
+<li>gradient accumulation: 1</li>
+<li>AWP</li>
+</ul>
+<p>As minor detail, I used Exponential Moving Average (EMA) of model weights, gradient clipping, cosine scheduler with liner warmup during training.</p>
+<h2>6 Augmentation</h2>
+<p>Since I was repeating the extracted images many times, I decided to include the following augmentation</p>
+<pre><code>transforms = A.Compose(
+        [
+            A.OneOf(
+                [
+                    A.RandomToneCurve(=0.3),
+                    A.RandomBrightnessContrast(
+                        brightness_limit=(-0.1, 0.2),
+                        contrast_limit=(-0.4, 0.5),
+                        =,
+                    ),
+                    A.HueSaturationValue(
+                        hue_shift_limit=(-20, 20),
+                        sat_shift_limit=(-30, 30),
+                        val_shift_limit=(-20, 20)
+                    )
+                ],
+                =0.5,
+            ),
+
+            A.OneOf(
+                [
+                    A.MotionBlur(=3),
+                    A.MedianBlur(=3),
+                    A.GaussianBlur(=3),
+                    A.GaussNoise(var_limit=(3.0, 9.0)),
+                ],
+                =0.5,
+            ),
+
+            A.Downscale(=, =0.1, =0.90, =0.99),
+        ],
+
+        =0.5,
+    )
+</code></pre>
+<h2>7 References</h2>
+<ul>
+<li>Matcha Paper: <a href="https://arxiv.org/pdf/2212.09662v2.pdf" target="_blank">https://arxiv.org/pdf/2212.09662v2.pdf</a></li>
+<li><a href="https://www.kaggle.com/code/nbroad/donut-train-benetech" target="_blank">https://www.kaggle.com/code/nbroad/donut-train-benetech</a></li>
+<li><a href="https://www.kaggle.com/code/nbroad/donut-infer-lb-0-44-benetech" target="_blank">https://www.kaggle.com/code/nbroad/donut-infer-lb-0-44-benetech</a></li>
+<li><a href="https://www.kaggle.com/datasets/brendanartley/benetech-extra-generated-data" target="_blank">https://www.kaggle.com/datasets/brendanartley/benetech-extra-generated-data</a></li>
+<li>AWP: <a href="https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook" target="_blank">https://www.kaggle.com/code/wht1996/feedback-nn-train/notebook</a></li>
+</ul>
+<p>Sorry for the long write up. Please let me know if you have any queries / suggestions. I plan to release all scripts, configs and datasets by next week. [Edit: code released at <a href="https://github.com/rbiswasfc/benetech-mga" target="_blank">https://github.com/rbiswasfc/benetech-mga</a>]</p>

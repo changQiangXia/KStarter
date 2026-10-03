@@ -1,0 +1,52 @@
+<p>First of all, thanks to the host and congratulations to the winners.<br>
+I'm so glad to win my first solo gold medal in this competition!<br>
+My solution is based on <a href="https://en.wikipedia.org/wiki/Simulated_annealing" target="_blank">Simulated annealing</a> (SA), a technique often used in optimization problems. It is NOT based on machine learning/deep learning/data generation.</p>
+<h3>Preprocess</h3>
+<p>The following process was performed for each of H1 and L1 and added together to produce a 360*256 image.</p>
+<ul>
+<li><p>Calculate the square of the amplitude</p></li>
+<li><p>Removal of horizontal line noise (only real noise)</p>
+<ul>
+<li>Calculate the sum for each row and create a list of 360 elements. Then take a difference of this list. If there is a series of large plus value and large minus value with short intervals, it is assumed that there is horizontal line noise. Then the values of these rows is replaced by the average of the each column. This operation is repeated until it can no longer be done.</li>
+<li>This removes almost all of the real noise and improves the score by about 0.005.<ul>
+<li>Some example images before and after horizontal line noise removal are as follows.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3026173%2Fdd6cf77558775aabeaf6f8692627cae9%2F1-2.png?generation=1672801107095404&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3026173%2Fc5a3f0d84fd30bdfc21ad2f112c7adcc%2F3-4.png?generation=1672801151754877&amp;alt=media" alt=""></li></ul></li></ul></li>
+<li><p>Removal of vertical stripe noise</p>
+<ul>
+<li>Subtract mean for each column, divide by std^2, and correct so that the sum of std of all columns is a constant.</li>
+<li>By dividing by the square of std instead of std, the columns with larger original variance will have smaller final variance. The idea is to reduce the contribution of columns with large original variance because they cannot be relied upon. The score increases slightly by this method.</li></ul></li>
+<li><p>Filling the time gap</p>
+<ul>
+<li>Calculate the difference of the timestamps as d and repeat inserting zero-filled columns round(d / 1800 - 1) times.</li></ul></li>
+<li><p>Average in the time direction and reduce columns size to 256</p></li>
+</ul>
+<h3>Wave Detection with SA</h3>
+<p>I will explain the essential part of my solution: Simulated annealing (SA).<br>
+First, assume that the signal is perfectly sinusoidal and follows the following equation</p>
+<p>f(x) = Asin(vx+θ) + h</p>
+<p>where A is the amplitude, v is the frequency, θ is the phase, and h is the position in the frequency direction.<br>
+The search range for each parameter is set as follows based on the experimental results.</p>
+<ul>
+<li>A: [-100, 100].</li>
+<li>v: fixed at 0.31 (fixing the frequency slightly improved the score)</li>
+<li>θ: any real number</li>
+<li>h: any real number</li>
+</ul>
+<p>Then we want to search the parameters that gives the clearest waveform.<br>
+To do this, I used SA, as following procedures.</p>
+<ul>
+<li>The following operation is repeated tens of thousands of times with decreasing the temperature.<ul>
+<li>Changes the above parameters slightly, and calculates the sum of the squares of the amplitudes along the waveform as the score (penalty if it refers outside the image). If the score is greater than the last score, accepts the change. Even if the score is smaller than the last score,  accepts the change probabilistically, depending on the score difference and the annealing temperature. Otherwise rejects the change. </li></ul></li>
+<li>In addition, to prevent getting a score of local optimum, the above whole process is repeated about several hundred times, and the kth percentile value (k chosen from around 90~100) is used as the final score.</li>
+<li>It takes several hours to a day (depending on the number of iterations) on my CPU (Core i9-9900K) to calculate the scores of all the test data.<ul>
+<li>Postprocessing and submitting this can achieve LB score above 0.79 ,with a few hours calculation.</li></ul></li>
+</ul>
+<p>Some example images of detected waveforms for some difficult test cases are as follows.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3026173%2F664a106bc0a7a3a394bc78c55a1d80f1%2F5.png?generation=1672801516897133&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3026173%2Feaa5412252d039795d351203575fd2d1%2F6.png?generation=1672801527565415&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3026173%2F344d212d77257fd883c702ea2bfd7780%2F7.png?generation=1672801537224085&amp;alt=media" alt=""></p>
+<h3>Postprocess</h3>
+<p>I performed a number of SAs with various numbers of iterations, parameter search ranges, wave thickness, etc., and calculated the ensemble score by weighted averaging.<br>
+I gave up on calculating the CV score, and adjusted the weights so that Public LB would be higher.<br>
+In addition, the real noise data tended to score slightly higher than the generated noise data (due to its tendency to overfit against noise). Therefore, I first converted the final score to a rank, and then divided the rank value by about 1.1 for real noise data only, improving the score by several points.</p>

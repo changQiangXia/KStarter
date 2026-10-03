@@ -1,0 +1,56 @@
+<h1>9th Place Solution</h1>
+<p>First and foremost, I'd like to extend my gratitude to the host for organizing this competition. Congratulations to the winners as well! I'd like to present a brief overview of my solution that secured the 9th position.</p>
+<h2>Cross-Validation</h2>
+<p>The wording of prompt_id 814d6b stood out, being notably different from other prompt_ids. When cross-validating with groupkfold using the prompt_id, predicting for this particular prompt_id didn't correlate with scores from other prompt_ids. Hypothetically, if there were any test ids with a distribution similar to 814d6b, having 814d6b in the training data might produce decent accuracy. However, there was no way to validate this. For this competition, I employed two methods of cross-validation and submitted for both:<br>
+Cross-validation 1: groupkfold (group = prompt_id), excluding 814d6b from evaluation.<br>
+Cross-validation 2: groupkfold (group = prompt_id), Including 814d6b in the evaluation.<br>
+The final private score was better for the model from cross-validation 2, so I'll delve into the details of that model. <br>
+Given that changing the seed alone resulted in variable CV scores, I performed cross-validation using three different seeds and evaluated the model based on their ensemble. The final submission was based on the predictions of models trained on all the data using three different seeds.</p>
+<h2>Training</h2>
+<p>I tokenized the text as follows:<br>
+text1:  summary_text<br>
+text2: prompt_question + [SEP] + prompt_text</p>
+<pre><code>inputs = self.tokenizer.encode_plus(text1,
+                                  text2,
+                                  =,
+                                  =self.max_len,
+                                  =,
+                                  =,
+                                  =)
+</code></pre>
+<p>Model: Consisted of two deberta-v3-large and one LSTM as described below:</p>
+<ul>
+<li>The first deberta-v3-large was trained using the entire input text.</li>
+<li>The second deberta-v3-large and LSTM were trained solely on the summary_text.</li>
+</ul>
+<pre><code> = 
+</code></pre>
+<p>Training settings:</p>
+<ul>
+<li>token_len: 1680</li>
+<li>epochs: 3</li>
+<li>Loss: SmoothL1Loss</li>
+<li>lr: 8e-6</li>
+<li>optimizer: AdamW<ul>
+<li>weight_decay: 0.01</li>
+<li>beta: (0.9, 0.98)</li></ul></li>
+<li>scheduler: get_linear_schedule_with_warmup<ul>
+<li>num_warmup_steps: 10% of total training steps</li></ul></li>
+<li>EMA (Exponential Moving Average)<ul>
+<li>ema_decay: 0.995</li>
+<li>Using EMA helped stabilize the training.</li></ul></li>
+</ul>
+<h2>Inference</h2>
+<p>token_len: 4200</p>
+<h2>Scores</h2>
+<ul>
+<li>CV: 0.495 (ensemble of 3 seeds)<ul>
+<li>814d6b: 0.604982</li>
+<li>ebad26: 0.431438</li>
+<li>3b9047: 0.49692</li>
+<li>39c16e: 0.483208</li></ul></li>
+<li>Public Score: 0.456</li>
+<li>Private Score: 0.457</li>
+</ul>
+<h2>Inference Code</h2>
+<p><a href="https://www.kaggle.com/code/takoihiraokazu/sub-ex263-seq4200?scriptVersionId=145902061" target="_blank">https://www.kaggle.com/code/takoihiraokazu/sub-ex263-seq4200?scriptVersionId=145902061</a></p>

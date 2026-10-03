@@ -1,0 +1,266 @@
+# https://www.kaggle.com/competitions/birdclef-2024/discussion/511535
+
+Topic #511535: 5th solution
+  Author: coolz
+  Posted: 2024-06-11 05:51:40.109000
+  Votes: 57  Comments: 39
+
+First of all, thanks to the organizers for hosting this competition.
+And congrats to all winners.
+
+Data
+
+2024 data
+
+Model
+
+
+
+
+model
+backbone
+weights
+public
+private
+
+
+
+
+raw signale
+hgnetb0
+3/5 folds
+0.720354
+0.666671
+
+
+spectrum
+efficientnetb0
+1/5 folds
+0.708198
+0.672360
+
+
+raw+spectrum
+hgnetb0+effb0
+1/5 folds
+0.698408
+0.660503
+
+
+ensemble
+…
+0.5+0.4+0.1
+0.743960
+0.687173
+
+
+
+
+
+
+1. raw signal model
+
+
+
+
+ = x.view(bs, -, )           
+
+ = torch.transpose(x, , )    
+
+ = x.view(bs, , -, )         
+ = self.backbone(x)   
+
+
+
+
+2. spectrum model
+
+
+torchaudio.transforms.MelSpectrogram(
+              32000,
+              =512,
+              =0,
+              =16000,
+              =2048*2,
+              =512,
+              =,
+          ),
+torchaudio.transforms.AmplitudeToDB(=80)
+
+
+
+
+3. mix model
+
+
+  = self.raw_model(x)
+ = self.spec_model(x)
+ = torch.cat([raw_f,spec_f],dim=)
+=self.fc(feature)
+
+
+
+
+Preprocess
+
+
+
+1. wave/max(wave) if max(wave)&gt;1
+
+
+Augmentation
+
+
+
+XY cut out for spectrum model
+
+
+Train
+
+
+
+1. Random sample 5 seconds data for trainning, 
+first 5 seconds data for validation.
+
+2. Mixup p=1.
+
+3. BCEWithLogitsLoss
+
+
+inference
+
+
+
+openvino
+
+
+extra
+
+I make a post to discussion the method feeding raw signal to vision model. Here is the link good luck
+inference notebook
+
+Comments:
+├─ Donghui Zhang (2024-06-11 06:04:18.460000) [+3]
+│  Regarding the "raw model", how did you deal with it to achieve good results? I rarely see people using raw signals in Bird competitions.
+  ├─ coolz (2024-06-11 08:08:36.480000) [+1]
+  │  I add some comments one the pse codes, i think you can get it now.
+├─ CPMP (2024-06-13 02:25:50.187000) [+1]
+│  Good work. I was betting you'd use packed raw waveform as you did in HMS competition!
+│  
+│  Congrats on becoming a GM. It was a matter of time given what you did in HMS.
+│  
+│  Did you compare openvino accura...
+  ├─ coolz (2024-06-13 04:32:40.203000) [+1]
+  │  Thanks.
+  │  
+  │  I noticed that you'd mentioned the precision loss with openvino. 
+  │  I manully check some of the outputs of pytorch, onnxruntime, and openvino, and notice very small differences, but didn't t...
+    ├─ CPMP (2024-06-13 13:48:26.987000) [+1]
+    │  I used logits too until we found that smoothing worked better when applied to probabilities.
+    ├─ coolz (2024-06-14 02:23:33) [+1]
+    │  Lesson learned, i should have checked previous competition carefully. I saw several solutions that use postprocess that worked. I didn't use post process and previous data, a little bit pity.
+├─ Dieter (2024-06-12 06:09:15.733000) [+1]
+│  Congrats for reaching Competition Grandmaster status 🎉 Huge achievement
+├─ Shiro (2024-06-11 15:25:39.187000) [+1]
+│  Congrats for your medal!
+│  
+│  Question about your signal approach, what is the intuition behind your reshaping? Why picking 2 channels instead of 3 for example?
+  ├─ coolz (2024-06-11 15:50:15.747000) [+2]
+  │  I want to make a 1 channel input ,but the input size is too big. 
+  │  And that makes it too hard to do ensemble. 
+  │  Then i reshape it as 2 channels( [123456]-&gt;[[135], [246]]). In some way, you can reg...
+├─ Bartley (2024-06-11 14:53:50.193000) [+1]
+│  Nice use of 1D-signals again! Also, congrats on becoming GM.
+│  
+│  Is there a reason why you use n_mels=512 and then resize to (256, 256) rather than just setting n_mels=256?
+  ├─ coolz (2024-06-11 15:11:27.893000) [+1]
+  │  For the spectrum model i use raw spectrum, but for the mix model, i use resized 256x256 for inference speed reason, otherwise, it would be timeout.
+    ├─ Bartley (2024-06-11 15:51:20.997000) [+0]
+    │  Hmm okay, thanks for the reply.
+    │  
+    │  Why you did you not set n_mels=256? This should make the height match the resize shape?
+    │  
+    │  eg. 
+    │  
+    │  import torch
+    │  import torch.nn as nn
+    │  import torchaudio
+    │  
+    │  l= nn.Sequentia...
+    ├─ coolz (2024-06-12 01:55:31.503000) [+1]
+    │  Yeah， My models need raw data, spectrum512, spectrum256.
+    │  Therefor, the dataiter produce raw, spectrum512, spectrum256(resized by spectrum512). In this way i just need to load every ogg file one tim...
+├─ slime (2024-06-11 10:14:01.903000) [+1]
+│  Great how you managed to train raw model that well, in my experiments it had bad CV so I didn't submit it
+├─ Ayush Solanki (2024-06-11 06:49:41.843000) [+1]
+│  Hi, I had a doubt like taking 5 random seconds from sample during training wont guarantee the bird noise in it right? If yes then how the model works?
+  ├─ coolz (2024-06-11 07:11:42.023000) [+2]
+  │  I see some people train with first 5 sec data. But in my experiments, random sample 5 sec data, perform better.
+├─ snehal (2024-06-11 09:15:34.257000) [+2]
+│  Solution seems so simple! How did you get such powerful single models using this approach? Were there any other tricks you used or parameters you optimized to get such high scoring models? Im so cu...
+  ├─ snehal (2024-06-11 09:16:23.080000) [+0]
+  │  Would you be willing to share training code?
+  ├─ coolz (2024-06-11 10:03:44.310000) [+0]
+  │  Thanks. 
+  │  The model is quiet simple, but it's sensitive to random seed. I use lb to check model performance. Single model is not that powerful. But the ensemble of  raw signal and spectrum helps a lot.
+    ├─ snehal (2024-06-11 15:42:33.133000) [+0]
+    │  What I’m asking is how did you get the spectrum only model to 0.70 public score when the baseline score given by most public notebook or discussion showed only 0.66 public score for spectrum only.
+├─ RihanPiggy (2024-06-11 06:52:31.407000) [+2]
+│  Impressive!! Will you mind providing some more details about the raw signals model?
+│  I think it is really a big breakthrough because current solutions like birdnet, bird-vocalization-classifier are ...
+  ├─ coolz (2024-06-11 07:10:29.340000) [+4]
+  │  Like the code below,
+  │  
+  │   = x.view(bs, -, )
+  │   = torch.transpose(x, , )
+  │   = x.view(bs, , -, )
+  │  
+  │  
+  │  then feeding to a 2d-CNN
+  │  
+  │  And i add some comment one the pse codes, i think you can get it now.
+  ├─ Shubham Thapa (2024-06-11 16:53:38.527000) [+0]
+  │  I am not sure if it makes sense, but here is my thought since the model was trained on raw waves model might had learned to predict very well for the noisy data , it might have created some range p...
+├─ Muhammad Azeem (2024-06-14 09:23:09.860000) [+0]
+│  Congratulations 👏
+├─ Aaditya Porwal (2024-06-13 02:09:33.057000) [+0]
+│  Congrats for becoming Competition Grandmaster!!!!!
+├─ faithk7u (2024-06-12 15:13:20.170000) [+0]
+│  Congrats for becoming a competition GM! Huge achievement!  Also impressive to see the relatively simple solution can achieve the great final result. 
+│  
+│  Have the following questions: 
+│  
+│  
+│  
+│  
+│  Why did you...
+├─ Yassine Alouini (2024-06-12 08:52:23.450000) [+0]
+│  Well done. The idea to mix raw and MEL spectrogram is great.
+│  Could you give more details about the openvino part, thanks!
+  ├─ coolz (2024-06-12 09:15:46.663000) [+1]
+  │  Like most people, convert pytorch model to onnx, then use openvino do inference. But spectrum is produced by torchaudio. And I will share my notebook later.
+├─ YoungJun_Player (2024-06-12 08:31:25.813000) [+0]
+│  Congratulations! I've just started studying I feel that I can grow quickly with the help of people like you, who are willing to discuss, share, and provide guidance. Thank you.
+├─ C R Suthikshn Kumar (2024-06-12 05:15:59.517000) [+0]
+│  Congratulations on securing 5th Place in this competition. Also, thanks on sharing the solution details.
+├─ vialactea (2024-06-11 18:03:10.843000) [+0]
+│  Thanks for sharing and congratulations on the 5th place and GM title!
+│  
+│  I'm surprised that 1D models worked. We tried them early and discarded the idea because the performance was considerably worse...
+  ├─ coolz (2024-06-12 08:00:23.920000) [+1]
+  │  I didn't find a good way to do local cv, and raw signal model cv is lower than spectrum model. 
+  │  I use 0.5,0.4,0.1 as ensemble weights. Because raw signal model score is about the same with spectrum...
+├─ Phaedrus (2024-06-11 11:09:11.620000) [+0]
+│  Congratulations ! Would you be publishing your inference pipeline? I'd be very interested to see how you optimised MelSpec layers with openvino, I failed at this.
+  ├─ coolz (2024-06-11 11:11:46.423000) [+0]
+  │  I will share it later. However I met the same problem, I use torchaudio to produce the spectrum in dataiter, the layer not included in the model.
+  ├─ Aphysict (2024-06-11 11:46:09.813000) [+1]
+  │  Try my last year notebook
+    ├─ Phaedrus (2024-06-12 07:50:29.093000) [+0]
+    │  Thanks, I will go through your NB.
+├─ [deleted] (2025-03-10 21:39:57.853000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-17 00:28:55.100000) [+0]
+│  [deleted]
+├─ [deleted] (2024-06-11 13:02:35.197000) [+0]
+│  [deleted]

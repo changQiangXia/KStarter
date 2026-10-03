@@ -1,0 +1,199 @@
+<p><em>Written by me and <a href="https://www.kaggle.com/arsenypoyda" target="_blank">@arsenypoyda</a>.</em></p>
+<h1>Brief introduction about happiness!</h1>
+<p>First of all, we want to thank the BirdCLEF Host and Kaggle Team for this competition. Two days ago, we found out that we were in 1st place, and it was unbelievable. Of course, it’s just luck, as the difference between us and 2 or 3 places is negligible, but nevertheless. Moreover, that day, we not only became Kaggle masters but also received a master's degree from the university (double masters 🙂).</p>
+<h1>Overview</h1>
+<h3>Data/labels preprocessing.</h3>
+<ul>
+<li>BirdCLEF 2024 <code>train_audio</code></li>
+<li>pseudo labeled <code>unlabeled_soundscapes</code></li>
+</ul>
+<p>For the final submissions, we use only 2024 data, both <code>train_audio</code> and <code>unlabeled_soundscapes</code>.<br>
+At the very beginning of the competition, we found that random fold0 gives much better results than other folds. To find out why this happens, we calculated various statistics related to signal strength (see the picture below) and found that fold0’s statistics are lower than other folds’. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9087466%2F9c76f776b01f69c7f9c15d9e09558394%2Ffolds_stats.png?generation=1718304246300095&amp;alt=media"><br>
+So for ensembles, instead of folds0-4, we use fold0 and 0.8 quantile of statistics <code>T = std + var + rms + pwr</code>, and this worked well. Seemingly, noisy and too loud audio harms the models.</p>
+<p>There are some duplicate audio files in the train data, so we discard them. Data in <code>train_audio</code> is also filtered with <a href="https://www.kaggle.com/models/google/bird-vocalization-classifier/TensorFlow2/bird-vocalization-classifier" target="_blank">Google-bird-vocalization-classifier</a>: if the classifier’s max prediction doesn’t match with the primary label, the chunk is dropped (maybe there is no bird sound or it has a bad quality). If the classifier’s max prediction matches with the secondary label, we replace the primary label with the secondary label. Moreover, if the file has secondary labels, then we take the primary label with 0.5, and the remaining 0.5 is evenly distributed among the secondary labels. We also add pseudo labels obtained with Google classifier to the resulting labels with a coefficient of 0.05. The soundscapes are labeled with an ensemble of Google classifier, and our best models trained only with <code>train_audio</code>. Finally, if the sound is too short, we use cyclic padding.</p>
+<h3>Model input</h3>
+<p>Models are trained on 10-second chunks that consist of two 5-second adjacent chunks with averaged labels. The idea is that a 10-second chunk provides processing of full chirps or full periods of chirps (if they are cropped by 5-second chunks).</p>
+<h5>Mel parameters (10 seconds -&gt; 1x128x640):</h5>
+<ul>
+<li><code>n_fft = 1024</code></li>
+<li><code>hop_length = 500</code></li>
+<li><code>n_mels = 128</code></li>
+<li><code>fmin = 40</code></li>
+<li><code>fmax = 15000</code></li>
+<li><code>power = 2</code></li>
+</ul>
+<h3>Models</h3>
+<ul>
+<li><code>efficientnet_b0</code> pretrained on ImageNet</li>
+<li><code>regnety_008</code> pretrained on ImageNet</li>
+</ul>
+<h5>We tried other models:</h5>
+<ul>
+<li>seresnext gives the same results as efficientnet, but the inference time is almost 3 times longer.</li>
+<li>We saw that <a href="https://www.kaggle.com/competitions/birdclef-2024/discussion/511905" target="_blank">3rd place (NVBird)</a> uses efficientvit due to its high speed. In our case, ViTs work significantly worse.</li>
+<li>Modifications like CNN from BirdCLEF 2021 <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243463" target="_blank">2nd place solution</a> and SED work slower and provide worse results than pure backbones. We are convinced that overly complex models do not work better than simple ones.</li>
+</ul>
+<p>We don't experiment with larger models since we have no computation resources and use only Kaggle kernels. </p>
+<h3>Training!</h3>
+<h5>Parameters:</h5>
+<ul>
+<li>CrossEntropyLoss</li>
+<li>AdamW</li>
+<li>CosineAnnealingLR scheduler</li>
+<li>Initial learning rate 1e-3…3e-3</li>
+<li>7–12 epochs</li>
+<li>Batch size = 96<br>
+Training time of one model on Kaggle kernel P100 takes up to 2 hours.</li>
+</ul>
+<h5>Data augmentation:</h5>
+<ul>
+<li>random audio segment</li>
+<li>XY masking</li>
+<li>horizontal cutmix</li>
+</ul>
+<p>First of all, we use only <strong>CE</strong> loss, not BCE (BCE shows significantly worse results than CE). It can be connected with the specificity of train data. There are too many labels (182), and almost always, only one of them is present (with augmentations up to 2-3). So, the problem is reduced to a multiclass one. During the training, CE loss leads to the multiclass problem, and logits are passed through SoftMax. However, in the inference, we do not use softmax and pass logits through sigmoid (postprocessing is discussed in the next section in detail).</p>
+<p>Second, we use audio segmentation. During the epoch, the model sees only one random chunk from each file. The problem is that the <code>train_audio</code> has many small files (+ some really large ones), and <code>unlabeled_soundscapes</code> have few large files. So, we divide the audio into X-second segments that are considered as separate files. We tried <code>X = {20, 30, 60}</code>, which led to a different number of epochs: the smaller the X, the fewer the number of epochs (because the number of steps per epoch is greater). As a result, we balance the <code>train_audio</code> and <code>unlabeled_soundscapes</code>.</p>
+<h3>Postprocessing</h3>
+<p>To predict chunk <strong>n</strong>, the models take 10 seconds: 5 seconds from the chunk <strong>n</strong> and 2.5 seconds from the previous and next chunks.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9087466%2Fa66181f3fb3ee33a689b7de5683f197b%2F10sec_chunk.png?generation=1718307010967155&amp;alt=media"></p>
+<p>Although logits are passed through softmax during the train, we use sigmoid in the inference. The two most important things in the inference pipeline are <strong>chunks averaging</strong> and <strong>ensembling with <code>min()</code> reduction</strong>. In the figure below, we demonstrate the best pipeline for each class in chunk <strong>n</strong>.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9087466%2F6eb6cce0ef006f3ae2e57c96cef53cce%2Fdiag.png?generation=1718307436108966&amp;alt=media"></p>
+<p>Using the sigmoid with CE-trained models leads to the predictions being noisy, so <code>min()</code> just lowers uncertain predictions.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F9087466%2F965b956a033901dc7ff081b4c712fa7c%2Fmin_mean.png?generation=1718308357653927&amp;alt=media"></p>
+<h3>Inference time optimization</h3>
+<ul>
+<li>Compilation with OpenVINO (fixed model input)</li>
+<li>Parallel mel spectrograms computing with joblib</li>
+<li>Storing all the computed mel spectrograms in RAM<br>
+As a result, one model processes the entire test data in ~18 minutes on Kaggle CPU kernel. An ensemble of 6 models, taking into account the creation of mel spectrograms, takes ~2 hours.</li>
+</ul>
+<h1>What didn't work</h1>
+<p><em>everything else…</em></p>
+<h3>Negligible change in score</h3>
+<ul>
+<li>183 “nocall” class<br>
+We add nocall samples from external data to the train and use an additional 183 class. For inference, we take only 182 classes with bird calls. There was no improvement in the public score. Now, we observe a significant increase in private score (0.655 -&gt; 0.671)…</li>
+<li>Mel spectrogram normalization</li>
+<li>Other mel spectrogram parameters</li>
+<li>Input image size 224x224</li>
+<li>15 second chunk as model input</li>
+<li>Softmax temperature</li>
+<li>Weight averaging (SWA and EMA)</li>
+<li>Pseudo labeling with softmax temperature</li>
+<li>Pretraining on the previous years data</li>
+</ul>
+<h3>Noticeable decrease in score</h3>
+<ul>
+<li>BCEloss, BCEloss with positive weights, focalloss</li>
+<li>Other augmentations (mixup, noise, pixdrop, blur, audio 1d augmentations, horizontal flip)</li>
+<li>STFT instead of mel spectrogram</li>
+<li>Additional data from Xeno-canto<br>
+We tried different approaches to improve the quality of additional data, such as filtering with Google classifier or BirdNet, taking random fold, and taking some quantile of statistics T. The best solution is not to use additional data… The private score also proves it.</li>
+<li>Pseudo labeling of train data with high coefficient<br>
+It seems that pseudo-labeling for <code>train_audio</code> is a way of label smoothing, so it is better to use a small coefficient.</li>
+<li>Train on 10 second chunks and inference on 5 second chunks</li>
+<li>Train additional models to detect bird calls</li>
+<li>The scores for such models are close to random/constant prediction</li>
+<li>Multistage training<br>
+We tried to train several epochs on the <code>train_audio</code> and then on the <code>unlabeled_soundscapes</code> and vice versa. We also tried to train on the whole data and finetune on the <code>train_audio</code> or <code>unlabeled_soundscapes</code>.</li>
+</ul>
+<h1>Main steps to success</h1>
+<p>The table below shows changes relative to the baseline (our 1st submission) pipeline that gives noticeable improvement to the score.</p>
+<h3>baseline</h3>
+<ul>
+<li><code>efficientnet_b0</code></li>
+<li>CEloss</li>
+<li>softmax for the inference</li>
+<li>first 5 seconds from each file</li>
+<li>fold0 out of <code>train_audio</code> without duplicates</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Main steps</th>
+<th>Private score</th>
+<th>Public score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>baseline</td>
+<td>0.544028</td>
+<td>0.599798</td>
+</tr>
+<tr>
+<td>sigmoid for the inference</td>
+<td>0.588338</td>
+<td>0.628777</td>
+</tr>
+<tr>
+<td>random 5 second chunk</td>
+<td>0.601803</td>
+<td>0.638572</td>
+</tr>
+<tr>
+<td>XY masking</td>
+<td>0.601909</td>
+<td>0.639358</td>
+</tr>
+<tr>
+<td>horizontal cutmix</td>
+<td>0.615368</td>
+<td>0.670460</td>
+</tr>
+<tr>
+<td>pseudo labeled <code>unlabeled_soundscapes</code></td>
+<td>0.639777</td>
+<td>0.687000</td>
+</tr>
+<tr>
+<td>60 second segmentation</td>
+<td>0.649936</td>
+<td>0.691752</td>
+</tr>
+<tr>
+<td>secondary labels</td>
+<td>0.642781</td>
+<td>0.695215</td>
+</tr>
+<tr>
+<td>filtering <code>train_audio</code> chunks with Google classifier</td>
+<td>0.655190</td>
+<td>0.703051</td>
+</tr>
+<tr>
+<td>10 seconds input</td>
+<td>0.670410</td>
+<td>0.716058</td>
+</tr>
+<tr>
+<td>ensemble (mean) 5 <code>efficientnet_b0</code></td>
+<td>0.686169</td>
+<td>0.724319</td>
+</tr>
+<tr>
+<td>ensemble (min) 5 <code>efficientnet_b0</code></td>
+<td>0.688977</td>
+<td>0.734945</td>
+</tr>
+<tr>
+<td>✅ ensemble (min) 6 <code>efficientnet_b0</code></td>
+<td>0.689146</td>
+<td>0.738566</td>
+</tr>
+<tr>
+<td>ensemble: mean[min(3 <code>efficientnet_b0</code>), min(3 <code>regnety</code>)]</td>
+<td>0.691749</td>
+<td>0.733836</td>
+</tr>
+<tr>
+<td>✅ ensemble: mean[3 <code>efficientnet_b0</code>, 3 <code>regnety</code>]</td>
+<td>0.690391</td>
+<td>0.729178</td>
+</tr>
+</tbody>
+</table>
+<p>Surprisingly, the results are very stable: correlation of public and private score is 0.96.</p>
+<p>Inference Notebook: <a href="https://www.kaggle.com/code/chemrovkirill/birdclef-2024-1st-place-inference" target="_blank">https://www.kaggle.com/code/chemrovkirill/birdclef-2024-1st-place-inference</a></p>
+<p><strong>Thanks for reading!</strong></p>

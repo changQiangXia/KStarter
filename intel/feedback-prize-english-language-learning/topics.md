@@ -1,0 +1,122 @@
+# feedback-prize-english-language-learning 讨论区（按票数排序，共 120 条）
+
+- [RAPIDS SVR starter kit [CV 0.450, LB 0.44x]](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/351577) — 197 票 / 58 评论 / 2022-09-11 
+- [3rd Place Solution - Congratulations New Competition Grandmaster Amed!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369609) — 141 票 / 61 评论 / 2022-12-15 **write-up?**
+- [Deberta-v3-base starter kit [CV: 0.4540, LB: 0.44]](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349336) — 134 票 / 22 评论 / 2022-09-01 
+- [1st Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369457) — 129 票 / 59 评论 / 2022-12-08 **write-up?**
+- [Best Single Model CV LB thread](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349337) — 129 票 / 166 评论 / 2022-09-01 
+- [2nd solution (back-translation & rank-loss)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369369) — 112 票 / 38 评论 / 2022-12-17 **write-up?**
+- [My feedback on Feedback Comps and NLP in General](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349027) — 99 票 / 7 评论 / 2022-08-30 
+- [Guide to Tokenizers and Preprocessing](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/353308) — 89 票 / 19 评论 / 2022-09-17 
+- [readability might help](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/352858) — 89 票 / 11 评论 / 2022-09-16 
+- [Single deberta-base for LB:0.43 [Top 200]](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/359511) — 87 票 / 57 评论 / 2022-10-12 
+- [Top Solutions From Feedback 1 & 2](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348967) — 83 票 / 2 评论 / 2022-08-30 **write-up?**
+- [Feedback 3.0 Meme Thread!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348946) — 78 票 / 53 评论 / 2022-08-30 
+- [5th place solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369578) — 74 票 / 28 评论 / 2022-11-30 **write-up?**
+- [Competition Metric - MCRMSE](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348985) — 68 票 / 4 评论 / 2022-08-30 
+- [Adversarial Training with Scale Invariant Fine-Tuning (SiFT) ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/350329) — 60 票 / 7 评论 / 2022-09-05 
+- [Is your CV and LB aligned? (Including Tricks for Better LB Score)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/360819) — 59 票 / 137 评论 / 2022-10-18 
+- [How to get started with this competition? A beginner's guide to NLP :)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348970) — 58 票 / 14 评论 / 2022-08-30 
+- [Several points you may need to notice](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/368437) — 56 票 / 18 评论 / 2022-11-25 
+- [Winner Interviews and Solutions from Previous Feedback competitions](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348957) — 55 票 / 12 评论 / 2022-08-30 **write-up?**
+- [🔥 book & papers I am going to read during this competition 🔥](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348977) — 55 票 / 25 评论 / 2022-08-30 
+- [Struggling. No way to reproduce Public Notebook results.](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/351752) — 54 票 / 38 评论 / 2022-09-11 
+- [[New Pilot] Winning Solution Write Up](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369307) — 53 票 / 27 评论 / 2022-11-29 **write-up?**
+- [Shake up visualized](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369371) — 51 票 / 11 评论 / 2022-11-30 
+- [4th place solutioin](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369621) — 50 票 / 8 评论 / 2022-12-01 **write-up?**
+- [Attention-based Pooling](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/361678) — 48 票 / 31 评论 / 2022-10-23 
+- [Compare experiments in W&B](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349594) — 47 票 / 47 评论 / 2022-09-01 
+- [Please add one more significant digit to LB scores](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349739) — 46 票 / 3 评论 / 2022-09-02 
+- [Single model  (avg 2 seeds) - gold solution ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369368) — 46 票 / 7 评论 / 2022-11-30 **write-up?**
+- [6th place solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369567) — 46 票 / 2 评论 / 2022-11-30 **write-up?**
+- [Comparing Pre-trained Language Models](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/351521) — 44 票 / 4 评论 / 2022-09-10 
+- [13th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369440) — 44 票 / 11 评论 / 2022-12-01 **write-up?**
+- [Greetings from organizers!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348973) — 43 票 / 50 评论 / 2022-08-30 
+- [Pytorch Lightning Baseline: [Lb 0.44, Cv 0.458]](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349565) — 43 票 / 11 评论 / 2022-09-01 
+- [Overfitting on Training Set](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/359466) — 42 票 / 34 评论 / 2022-10-12 
+- [Average is not enough !](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/358737) — 42 票 / 18 评论 / 2022-10-09 
+- [Training using 2 T4 with Pytorch DataParallel](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/362153) — 42 票 / 1 评论 / 2022-10-25 
+- [CPU Machine Upgrade and the Efficiency Track](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/361105) — 41 票 / 6 评论 / 2022-10-19 
+- [Massive and organized cheating](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/367800) — 41 票 / 28 评论 / 2022-11-22 
+- [Pretrained Embeddings are all you need (sort of ...)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/365926) — 39 票 / 9 评论 / 2022-11-13 
+- [Amed Coulibaly is the newest Kaggle GM!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369359) — 37 票 / 37 评论 / 2022-11-30 
+- [Team Turing: Efficiency - 1st Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369646) — 36 票 / 19 评论 / 2022-11-30 **write-up?**
+- [8th place solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369524) — 36 票 / 5 评论 / 2022-12-04 **write-up?**
+- [Spell Checker Features for FB3](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/352659) — 36 票 / 6 评论 / 2022-09-15 
+- [8th place - gold zone!! with diversity(My part)💪💪](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369598) — 35 票 / 8 评论 / 2022-11-30 **write-up?**
+- [Team Turing: 9th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369956) — 34 票 / 16 评论 / 2022-12-02 **write-up?**
+- [Text augmentation techniques and tools ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/358584) — 34 票 / 5 评论 / 2022-10-08 
+- [Don't forget rstrip() when using longformer](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/367822) — 34 票 / 6 评论 / 2022-11-22 
+- [Different CPUs in kernels](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/368315) — 33 票 / 29 评论 / 2022-11-24 
+- [Top rankers' insights are inspiring](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/360106) — 32 票 / 2 评论 / 2022-10-15 
+- [Strategies For Ensembling Models Using OOF Predictions](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/363773) — 32 票 / 13 评论 / 2022-11-03 
+- [6th Place Efficiency Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369587) — 31 票 / 9 评论 / 2022-11-30 **write-up?**
+- [10th place solution...my quick write-up!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369373) — 30 票 / 8 评论 / 2022-11-30 **write-up?**
+- [21th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369822) — 30 票 / 2 评论 / 2022-12-01 **write-up?**
+- [14th place solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369564) — 30 票 / 5 评论 / 2022-12-01 **write-up?**
+- [Ordinal Regression Baseline](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349592) — 30 票 / 5 评论 / 2022-09-01 
+- [11th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369409) — 30 票 / 10 评论 / 2022-12-06 **write-up?**
+- [999 place solution🤣(Public 185)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369521) — 29 票 / 0 评论 / 2022-11-30 **write-up?**
+- [22nd Solution Summary](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369533) — 29 票 / 2 评论 / 2022-11-30 **write-up?**
+- [Using Pytorch DistributedDataParallel with 2 T4](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/363111) — 28 票 / 4 评论 / 2022-10-31 
+- [Post-processing using target correlation](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/352237) — 28 票 / 0 评论 / 2022-09-13 
+- [5th Place Efficiency Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/370020) — 28 票 / 5 评论 / 2022-12-02 **write-up?**
+- [Tips& Tricks while training transformer for better performance](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/356649) — 27 票 / 1 评论 / 2022-10-01 
+- [Is mean pooling better than simply using the hidden state corresponding to the first token?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/354838) — 26 票 / 9 评论 / 2022-09-24 
+- [Does the "Pseudo Labels" work for you in this competition?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/360277) — 26 票 / 18 评论 / 2022-10-16 
+- [Feedback 3 is here already? 😱](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348959) — 26 票 / 18 评论 / 2022-08-30 
+- [Pseudo-labels for FB3](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/351274) — 26 票 / 12 评论 / 2022-09-09 
+- [Best single model](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/363522) — 26 票 / 69 评论 / 2022-11-02 
+- [Thanks for participating!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369289) — 24 票 / 13 评论 / 2022-11-29 
+- [20th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369538) — 24 票 / 2 评论 / 2022-12-01 **write-up?**
+- [after training with pseudo labels CV score increased but, ...](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/352001) — 24 票 / 13 评论 / 2022-09-12 
+- [FIXED - [BUG] - We cannot sort our submission by score anymore](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/358452) — 23 票 / 16 评论 / 2022-10-08 
+- [treating this as regression problem](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348996) — 22 票 / 1 评论 / 2022-08-30 
+- [8th Grade Students : ) are you ready for MCRMSE? ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349980) — 22 票 / 2 评论 / 2022-09-03 
+- [Best Notebook from last two feedback Competition with this one(total three)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349065) — 22 票 / 2 评论 / 2022-08-31 
+- [How much the parameters max_len and seed affect the result](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/356252) — 22 票 / 21 评论 / 2022-09-29 
+- [A Text Classification Notebook with Sentence Level Representation, AWP & Explainability ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/361592) — 22 票 / 1 评论 / 2022-10-22 
+- [15th Place Solution : 6 kinds of AttentionPooling for each metric work well for us](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369760) — 22 票 / 1 评论 / 2022-12-05 **write-up?**
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348944) — 21 票 / 14 评论 / 2022-08-30 
+- [46th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369664) — 21 票 / 1 评论 / 2022-12-01 **write-up?**
+- [Sep 20th - NVIDIA GTC keynote | Weights & Biases webinar](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/353772) — 21 票 / 8 评论 / 2022-09-19 
+- [CustomKaggleApi to Get The InnerRank of Your Submissions](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/368175) — 21 票 / 3 评论 / 2022-11-24 
+- [7th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369736) — 21 票 / 7 评论 / 2023-03-17 **write-up?**
+- [18th place solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/370974) — 21 票 / 12 评论 / 2022-12-15 **write-up?**
+- [12th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369565) — 21 票 / 9 评论 / 2022-12-02 **write-up?**
+- [Psi is back!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369747) — 20 票 / 5 评论 / 2022-12-01 
+- [[UPDATED] Top 1-12th solutions](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/370605) — 20 票 / 0 评论 / 2022-12-05 **write-up?**
+- [Efficiency 18th Solution (most fast in Efficiency LB)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369669) — 20 票 / 4 评论 / 2022-12-01 **write-up?**
+- [Can we get more decimal places now =) ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369357) — 19 票 / 10 评论 / 2022-11-30 
+- [Get a CSV of a team's LB score rankings](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/365200) — 19 票 / 4 评论 / 2022-11-10 
+- [Data augmentation by translate into multiple language](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/351763) — 19 票 / 5 评论 / 2022-09-11 
+- [NLP for Beginners [Resourses]](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/349072) — 19 票 / 10 评论 / 2022-08-31 
+- [Inference with 2 T4](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/362342) — 19 票 / 3 评论 / 2022-10-26 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/348945) — 18 票 / 96 评论 / 2022-08-30 
+- [Is anything other than DeBERTa-v3 ineffective?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/352758) — 18 票 / 12 评论 / 2022-09-15 
+- [26th Place solution - Record the first kaggle competition ,failed to gold (unlucky)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369691) — 18 票 / 3 评论 / 2022-12-01 **write-up?**
+- [While we wait for the shake up ... Kaggle Grandmaster Panel - Sydney 2022](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369247) — 17 票 / 3 评论 / 2022-11-29 
+- [29th Place Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369559) — 17 票 / 4 评论 / 2022-12-01 **write-up?**
+- [Efficiency 2nd solution (Private 82th)](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369623) — 17 票 / 0 评论 / 2022-12-10 **write-up?**
+- [[Chai Time] Sanyam explains top solutions from CommonLit Readability Prize competition ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/352154) — 17 票 / 3 评论 / 2022-09-13 **write-up?**
+- [ELECTRA-Style Pretraining With Gradient-Disentangled Embedding Sharing to Boost DeBERTa Performance](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/358357) — 17 票 / 0 评论 / 2022-10-07 
+- [17th place solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369626) — 16 票 / 2 评论 / 2023-02-13 **write-up?**
+- [What are common leak patterns?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369401) — 16 票 / 4 评论 / 2022-11-30 
+- [Why nobody can achieve 0.42 LB?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/356112) — 16 票 / 10 评论 / 2022-09-29 
+- [How about MLM in this competition?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/357942) — 16 票 / 11 评论 / 2022-10-06 
+- [Does Knowledge Distillation Work for Regression Problems?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/357602) — 16 票 / 13 评论 / 2022-10-05 
+- [Single 5 fold deberta v3 large to obtain silver medal](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369903) — 16 票 / 6 评论 / 2022-12-01 **write-up?**
+- [Good Luck everyone! ](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369311) — 15 票 / 2 评论 / 2022-11-29 
+- [more decimal places after the competition end ?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369425) — 15 票 / 0 评论 / 2022-11-30 
+- [26th place solution [lucky shake up 1117th → 26th]](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369525) — 15 票 / 1 评论 / 2022-11-30 **write-up?**
+- [Kernels stats for this competition](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/365114) — 15 票 / 6 评论 / 2022-11-09 
+- [How do you guys approach a competition as well as developing ideas?](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/365338) — 15 票 / 4 评论 / 2022-11-10 
+- [Install CUDA 11.8 and Pytorch 1.11 on RTX4090](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/362626) — 15 票 / 1 评论 / 2022-10-28 
+- [46th place solution Semi-Supervised Learning part](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369881) — 15 票 / 1 评论 / 2022-12-01 **write-up?**
+- [22nd Place Efficiency Solution](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/370049) — 15 票 / 2 评论 / 2022-12-02 **write-up?**
+- [[deeplearning.ai] Natural Language Processing Specialization](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/350400) — 15 票 / 11 评论 / 2022-09-05 
+- [Helpful Resource: Hyperparameter Tuning on Transformer](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/359224) — 14 票 / 5 评论 / 2022-10-11 
+- [What is the difference between using torch.nn.init](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/360469) — 14 票 / 21 评论 / 2022-10-16 
+- [Downstream task](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/350973) — 14 票 / 19 评论 / 2022-09-08 
+- [[Chai Time] Sanyam interviews the inventor of 8-bit Adam - Tim Dettmers](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/353644) — 14 票 / 10 评论 / 2022-09-19 
+- [Requesting Feedback on the English Language Learning Competition!](https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/367668) — 10 票 / 6 评论 / 2022-11-21 

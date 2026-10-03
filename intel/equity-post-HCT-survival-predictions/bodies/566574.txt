@@ -1,0 +1,195 @@
+# https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566574
+
+Topic #566574: 3rd Place Solution
+  Author: Dmitriy Ukrainskiy
+  Posted: 2025-03-06 04:17:29.291000
+  Votes: 53  Comments: 18
+
+Full code
+
+Best "solo" model (gold medal top-11 Private LB — 0.69694, full training from scratch)
+
+First of all, we are grateful to the competition organizers for the possibility to contribute to HCT therapy!
+
+Our solution has the following steps.
+
+
+
+
+
+Validation is the most important one. We made a 4-fold CV (as the public test part is 25%) and evaluated the score by 20–100 random split seeds (depends on the computational complexity). During all the competition, we had excellent CV–LB correlation when measuring average fold scores (4 x NSeeds). The public "fold" was approximately at the 75-quantile of the score histogram in our experiments. We emulated and tracked both "public" and "private" scores in this way and created a second submission as more private-oriented. It had a lower LB score but significantly better emulated (and real) private score.
+
+
+We made a uniform target in the range [0, 1] for uncensored (efs = 1) observations and in the range [1.345, 1.355] for censored (efs = 0) cases. The target was calculated within train folds and valid folds separately for every race group.
+
+
+Then we divided the task into three parts: separate regressions within uncensored and censored data weighted on the probability of belonging to the classes efs = 1 and efs = 0.
+
+
+Regression within zeros is the most insignificant part of the composition. For NN models, we just collapse all the efs = 0 observations to the constant 1.35 (that was tuned to show maximal performance in terms of the concordance index).
+
+
+The target range [0, 1] for the regression task allowed us to train the models via binary cross-entropy loss, which is much more profitable in comparison with mean squared error.
+
+
+Thus, the prediction has the form
+
+and we obtain an overall scatter plot of type
+
+
+
+Our model zoo consists of CatBoost, LightGBM, XGBoost, MLP with ODST, and TabM models (separate exemplars of each for regression and classification). NNs were the best at classification, and GBMs are the champions for regression. Ranking models have weaker performance in the competition.
+
+
+The data is noisy, and the classic methods of noise reduction worked well. We averaged the models with fixed hyperparameters / architectures over random initialization seeds and eliminated the observations with giant regression errors from the training. But in the case of classification, outlier denoising leads to overfitting (ROC AUC becomes better, but LogLoss worsens at the same time).
+
+
+On the very final stage, we blended the regressors by convex combination and stacked the classifiers by logistic model. Stacking by logreg shows spectacular performance on the private part of the test data that we saw via out-of-fold imitation of the public / private split. All blending weights were optimized simultaneously to maximize the concordance index on 20 OOF predictions (20 random split seeds) using Bayesian optimization
+
+The resulting ensemble is
+
+Overall performance of the components:
+
+
+
+
+Model
+CV ("Public" estimate — folds x seeds)
+Public LB
+Private LB
+
+
+
+
+
+CatBoost
+0.68586
+0.69424
+0.69577
+
+
+
+LightGBM
+0.68530
+0.69318
+0.69572
+
+
+
+XGBoost
+0.68616
+0.69252
+0.69493
+
+
+
+NN
+0.68554
+0.69540
+0.69694
+
+
+
+Blend GBMs
+0.68932
+0.69608
+0.69794
+
+
+
+Blend All + LogReg
+0.69139
+0.69692
+0.69937
+
+
+
+
+
+
+
+
+
+
+
+To sum up, the most important trick in this competition was to divide the task into separate regression and classification parts. You could see this trick, for example, by looking at the scatter plot within the first straightforward modeling attempts. The picture below shows training using all data (left), training using efs = 1 data only (center), and training using efs = 0 data only (right)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+My teammates disclose the details of the solution in the comment section.
+
+Comments:
+├─ Nikita Churkin (2025-03-06 10:40:54.757000) [+11]
+│  For efs=1 samples, we used the following target:
+│  
+│  risk := rank_by_race(efs_time) mapped to [0, 1].
+│  
+│  Range [0, 1] allowed us to model risk with binary cross-entropy loss, which was a much better cho...
+  ├─ Gunes Evitan (2025-03-06 10:44:54.023000) [+3]
+  │  I tried mse, huber, poisson and cross-entropy losses, but mse was the best. I'm surprised cross-entropy loss worked better for you.
+  ├─ Robert Hatch (2025-03-06 17:17:42.420000) [+3]
+  │  Ignorant question time: is BCE regression (didn't realize it was possible) essentially exactly identical to what I did, other than margin term? I did normal regression on logit targets (0.01-0.99)?...
+    ├─ Dmitriy Ukrainskiy (2025-03-07 03:01:40.923000) [+9]
+    │  MSE and BCE are just different functions:
+    │  
+    │  mse(x,y) = (x-y)^2,
+    │  d(mse)/dx = 2(x-y),
+    │  d^2(mse)/dx^2 = 2
+    │  
+    │  bce(x,y) = -(y ln(x) + (1-y) ln(1-x)),
+    │  d(bce)/dx = -(y-x)/(x(1-x)),
+    │  d^2(bce)/dx^2 = y/x^2 + (1-...
+├─ Nikita Churkin (2025-03-06 11:50:01.947000) [+10]
+│  Some thoughts on validation in this competition.
+│  
+│  If we try to split the train set into 4 parts (size as the public set's size) and try to fit &amp; predict with some model, we will see insane vari...
+  ├─ Robert Hatch (2025-03-06 17:09:15.733000) [+5]
+  │  Not only is it a good idea… It takes a bit of time and effort! Kudos to your team for the disciplined approach and putting in the time and effort to make it happen!
+├─ DS_Blonde_Sofa (2025-03-06 14:30:34.350000) [+7]
+│  Survival analysis is a fruitful branch of mathematics, but open-source models and approaches didn’t show competitive performance. Nevertheless, the paper [https://arxiv.org/abs/2410.01086] from the...
+  ├─ Nikita Churkin (2025-03-10 11:53:21.253000) [+4]
+  │  Some tricks that haven’t worked:
+  │  
+  │  
+  │  
+  │  Target encoding
+  │  
+  │  Autoencoders: DAE, VAE
+  │  
+  │  Other kinds of models: SVM, Gaussian Processes, RGF, TabNet, FTTransformer
+  │  
+  │  Sophisticated stacking instead of blending
+├─ Abdullah Qazi (2025-03-14 02:08:48.493000) [+3]
+│  Great Explaination!
+├─ gourav_gujariya (2025-03-12 12:58:47.220000) [+3]
+│  best explaination i ever seen i will download this and try understanding this
+├─ Aniruddha Wankhede (2025-03-10 11:18:40.100000) [+3]
+│  How did your team decide on the specific target range [1.345, 1.355] for censored cases (efs = 0), and what impact did that choice have on the model’s ability to generalize across different subsets...
+  ├─ Nikita Churkin (2025-03-10 11:44:09.793000) [+4]
+  │  We picked that range because it optimized our CV score. It worked for Public LB, and for Private LB, eventually. You can find it by tweaking by hand or using more advanced methods (like Bayesian op...
+├─ M4XD (2025-03-07 05:26:14.773000) [+3]
+│  if not a secret - what was the TabM's C-Index on CV/LB?
+  ├─ Dmitriy Ukrainskiy (2025-03-07 06:09:11.173000) [+6]
+  │  MLP-ODST classifier + TabM regressor gave CV 0.68554 (average by folds x seeds; didn't evaluate the overall OOF score), Public 0.69540, and Private 0.69694 (top-11 Private LB).
+  │  
+  │  It is the best "sol...
+├─ Robert Hatch (2025-03-06 17:35:57.470000) [+3]
+│  What was your best CV score and, if different, your winning CV score?
+  ├─ Nikita Churkin (2025-03-06 20:02:45.957000) [+5]
+  │  I am not sure that particular values are illustrative (aligned CV-LB movements are more important): 0.69139 "Public" estimate, 0.695 CV "Private" estimate, 0.69692 Public LB, 0.69937 Private LB.
+├─ [deleted] (2025-03-10 23:15:47.503000) [+-6]
+│  Solution. 0.74 open source reconquistareport blogspot com
+├─ Tanishk Patil (2025-03-13 15:22:39.910000) [+2]
+│  Congratulations! thanks for sharing.

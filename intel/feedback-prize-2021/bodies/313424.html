@@ -1,0 +1,84 @@
+<p>Thank you for hosting this awesome competition and congrats to the winners.</p>
+<p>This problem is interesting and challenging. The data and annotations are high quality. It's a great learning and practicing experience working on this competition.</p>
+<p>I started this competition compeletely ignoring those shared NER baselines. I thought in an "object detection" task, segmentation + posprocess approaches can not do better than object detection approaches. I'm surprised by the postprocess ideas in top solutions.</p>
+<p>Overall, what I made is a YOLO-like text span detector. I share my code in <a href="https://www.kaggle.com/tascj0/a-text-span-detector" target="_blank">this notebook</a>.</p>
+<p>Checkpoints are shared <a href="https://www.kaggle.com/datasets/tascj0/feedback-checkpoints" target="_blank">here</a>.</p>
+<p>To reproduce the checkpoints, check the code and configs <a href="https://github.com/tascj/kaggle-feedback-prize-2021" target="_blank">here</a>.</p>
+<h2>Modeling</h2>
+<h3>Network</h3>
+<pre><code>AutoModelForTokenClassification.from_pretrained(num_labels=1 + 2 + num_classes, ...)
+</code></pre>
+<p>1 for objectness (or span-ness?. fg/bg classification)</p>
+<p>2 for regression (distance from fg location to first and last index of corresponding span)</p>
+<p>num_classes for discourse type classification</p>
+<h3>Aggregate tokens to words</h3>
+<p>Network logits is in shape (num_tokens, 10). This is inconvenient (decoding output, ensembling models with different tokenizers). So I aggregate the logits to (num_words, 10) using RoIAlign.</p>
+<h3>Training target</h3>
+<p>The problem of this formulation is how to define positive for objectness training. In object detection, center of object is a natural choice of positve. In text span detection, I found the first word of span a good choice of positive.</p>
+<p>In addition, I assign lowest cost word in each span as positive during training. This is inspired by YOLOX.</p>
+<h3>Augmentation, loss, decoding outputs, etc.</h3>
+<p>I randomly replace tokens with mask token during training.</p>
+<p>For other details, please check the code.</p>
+<h3>Post process</h3>
+<p>The only post process is nms.</p>
+<h3>Ensemble</h3>
+<p>I used one cycle policy in training and averaged weights of the last few epochs.<br>
+To ensemble different models/folds, I simply averaged outputs of models.<br>
+WBF ensemble does not work in local validation, and I didn't figure out why. I think I did something wrong here.</p>
+<h2>Results</h2>
+<table>
+<thead>
+<tr>
+<th>backbone</th>
+<th>Validation</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>google/bigbird-roberta-base</td>
+<td>0.685~0.69</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>allenai/longformer-base-4096</td>
+<td>0.685~0.69</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>allenai/longformer-large-4096</td>
+<td>0.70~0.71</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>microsoft/deberta-base</td>
+<td>0.70~0.705</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>microsoft/deberta-large</td>
+<td>0.715~0.72</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>microsoft/deberta-xlarge</td>
+<td>0.715~0.72</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>microsoft/deberta-large + microsoft/deberta-xlarge</td>
+<td>0.723</td>
+<td>0.714</td>
+<td>0.732</td>
+</tr>
+</tbody>
+</table>
+<p>The best combination is <code>deberta-large</code> + <code>deberta-xlarge</code>. Ensembling more does not help.<br>
+In the final submission, I used 2 weights (2/5 folds) each model. Submission time is around 2 hours.</p>

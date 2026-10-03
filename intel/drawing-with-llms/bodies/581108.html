@@ -1,0 +1,27 @@
+<p>First, I’d like to thank the organizers for their hard work in running this competition! I’d also like to thank <a href="https://www.kaggle.com/richolson" target="_blank">@richolson</a> for sharing two extremely helpful bits of code: his <a href="https://www.kaggle.com/code/richolson/let-s-defeat-ocr-easy-lb-boost" target="_blank">OCR decoy trick</a> and <a href="https://www.kaggle.com/code/richolson/stable-diffusion-svg-scoring-metric" target="_blank">image to SVG conversion</a>. </p>
+<h2>Overall approach</h2>
+<p>My pipeline first generates images with Stable Diffusion 3.5 Medium, fine-tuned with <a href="https://arxiv.org/abs/2309.17400" target="_blank">DRaFT</a> to produce high-quality, score-optimized outputs. The images are then heuristically converted to rough SVGs, which are further refined using <a href="https://github.com/BachiLi/diffvg" target="_blank">diffvg</a>, a differentiable rasterizer.<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F26426310%2Fbd0d2ad2f965cad8a3f007ad15f00097%2FScreenshot%202025-05-28%20at%2012.09.20PM.png?generation=1748430584583136&amp;alt=media" alt=""></p>
+<h2>Diffusion Model</h2>
+<p>After experimenting with a few models, I decided to use Stable Diffusion 3.5 Medium without the T5 text encoder. It has a relatively small memory footprint, which is important for fine-tuning. </p>
+<h2>DRaFT Fine-Tuning</h2>
+<p>I trained a LoRA for SD3.5M with <a href="https://arxiv.org/abs/2309.17400" target="_blank">DRaFT</a> (more precisely, DRaFT-LV), which trains the diffusion model to generate high-scoring images according to reward models. Unlike RL/DPO, DRaFT takes advantage of the fact that diffusion models are differentiable and backpropagates the reward directly into the diffusion model. You can see the training code <a href="https://github.com/clarkkev/svg-diffusion" target="_blank">here</a></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F26426310%2Ff89dbfb6c2e32da2b96426631eea7043%2FDRaFT-diagram.png?generation=1748429872088236&amp;alt=media" alt=""></p>
+<p><strong>Training data:</strong> I generated a set of 1000 training prompts with corresponding questions/answers using GPT-4o. I took a two stage-approach of first generating 50 image categories and then sampling prompts from those categories, with the known evaluation set categories (landscapes, abstract, and fashion) producing more prompts. </p>
+<p><strong>Reward functions:</strong> I used two general reward functions that I knew worked well from my previous work on DRaFT: </p>
+<ul>
+<li><a href="https://github.com/tgxs002/HPSv2" target="_blank">Human Preference Score v2</a></li>
+<li><a href="https://github.com/yuvalkirstain/PickScore" target="_blank">PickScore</a> </li>
+</ul>
+<p>These models were trained on human preference data. I also added three competition-specific rewards:</p>
+<ul>
+<li>The competition aesthetic score</li>
+<li>A proxy for the VQA score (yes/no on “Does the image show {prompt}?”). This was faster and surprisingly seemed to work better than using the actual set of questions for each image. </li>
+<li>Negative <a href="https://github.com/richzhang/PerceptualSimilarity" target="_blank">LPIPs</a> distance between the image and convert_to_svg(image), so the model generates images that are easy to convert. </li>
+</ul>
+<p><strong>Results:</strong> The fine-tuning improves aesthetic score by ~10% and VQA score by about ~5%. The overall LB score went up by around 0.03. A side benefit of the training is that I didn’t need to do any prompt engineering; I instead just relied on the fine-tuning to lead the model to produce the right image style. Here are some examples of generations before/after the fine-tuning (using the same random seed):</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F26426310%2F1adfda2272eaf06e6cecfedfc4222299%2FScreenshot%202025-05-28%20at%2011.56.20AM.png?generation=1748429804808612&amp;alt=media" alt=""></p>
+<h2>SVG Conversion</h2>
+<p>I used a simple heuristic image-to-SVG converter inspired by Rich Olson’s notebook, with several tweaks to improve both visual quality and compression efficiency. The resulting SVG is then optimized with <a href="https://github.com/BachiLi/diffvg" target="_blank">diffvg</a>, a differentiable SVG rasterizer. The optimization minimizes the L1 distance between the rendered SVG and the original diffusion image using gradient descent on the locations/colors of the paths. This worked amazingly well, and meant I could get away with a pretty basic initial SVG converter, as the refinement would fix most issues that arose. I also used Rich Olson’s OCR decoy trick to reduce OCR hallucinations. </p>
+<h2>Best of n</h2>
+<p>For each prompt, my notebook keeps generating SVGs until roughly 60 seconds have passed, with some adaptivity based on whether it is behind or ahead of schedule. This typically produces 5-6 candidates. The SVG with the highest VQA score given the yes/no question “Does this image show {prompt}?” is returned. There is also a check to make sure the returned image has an OCR score of 1. </p>

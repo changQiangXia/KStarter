@@ -1,0 +1,70 @@
+<p>I really enjoyed working on this competition and learned a lot. Big thanks to the Kaggle community for sharing great ideas and engaging discussions!</p>
+<p>My solution pipeline includes:</p>
+<ul>
+<li>An ensemble of retrievers: <code>intfloat/e5-mistral-7b-instruct</code>, <code>BAAI/bge-en-icl</code>, and <code>Qwen/Qwen2.5-14B</code></li>
+<li>3x Re-rankers: <code>Qwen/Qwen2.5-14B</code>, <code>Qwen/Qwen2.5-32B</code> and <code>Qwen/Qwen2.5-72B</code></li>
+</ul>
+<p>All models were fine-tuned using competition data (~1.8k examples) + synthetic data (~10k examples). </p>
+<h2>Retrievers</h2>
+<p>An ensemble of retrievers was used to identify <code>top 32-64 misconception candidates</code> for each QuestionId_Answer combination using dynamic thresholds. Specifically, I kept the top 32 retrieved candidates and included up to 32 additional candidates with similarity scores within <code>0.06</code> of the top candidate.</p>
+<p>I selected the retrievers based on their <code>recall@32</code> scores instead of <code>MAP@25</code> -- these two metrics were often inversely correlated for my models. I skipped hard mining during training as it was not helpful for <code>recall@32</code>. One important detail was to avoid having multiple demonstrations of a given misconception in a single batch.</p>
+<h2>Rerankers</h2>
+<p>I first used the <code>Qwen/Qwen2.5-14B</code> ranker to process the retrieved candidates and narrowed them down to <code>top 8</code>. For inference, I used <code>vllm</code> with <code>enable_prefix_caching=True</code> -- which significantly improved efficiency.</p>
+<p>Next, the <code>Qwen/Qwen2.5-32B</code> ranker further reduced the candidates to the top 5, which were then passed to the <code>Qwen/Qwen2.5-72B</code> model for final ranking.</p>
+<ul>
+<li>Pointwise ranking: I used pointwise ranking for <code>Qwen/Qwen2.5-14B</code> and <code>Qwen/Qwen2.5-32B</code>.  These models processed one misconception candidate at a time in their context.  </li>
+<li>Listwise ranking:  <code>Qwen/Qwen2.5-72B</code> was listwise -- sees top 5 candidates at once in the context.</li>
+</ul>
+<p>The following 4 aspects were important for performance and generalization:</p>
+<ul>
+<li><p><strong>Chain of Thought (CoT)</strong>: I first prompted <code>Claude 3.5 Sonnet</code> to generate thoughts/rationale behind picking a wrong answer. Next, I fine-tuned the Qwen2.5 models with this data. During inference, I generated CoT from the finetuned models and provided them to the rerankers to help them with ranking. Essentially, this helps to distill reasoning from the claude model.</p></li>
+<li><p><strong>Few shot examples</strong>: I wanted to retain/leverage in-context-learning capability of the LLMs. Hence, during training I optionally included a few demonstrations of the misconception it needs to classify. Here is an example:</p></li>
+</ul>
+<pre><code>&lt;|im_start|&gt;system
+You are an expert  detecting grade-school level math misconceptions. Verify  the incorrect answer stems  the provided misconception.&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+Misconception: Thinks there are   a centimetre
+
+Demos  the misconception:
+Question: A    metre long rope has    centimetres chopped  the end.
+What  the length  the rope  remains?
+Give your answer  millimetres
+Answer:   
+Misconception Answer:    
+
+--
+Subject: Length Units
+Topic: Convert between m  cm
+Question: To convert  metres  centimetres, you should:
+Correct Answer: Multiply  
+Incorrect Answer: Divide  
+Does the misconception (Thinks there are   a centimetre) lead  the incorrect answer? (Yes/No)&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+</code></pre>
+<p>During inference I used 1-2 demos from the training set. It helped the 14b ranker the most.</p>
+<ul>
+<li><p><strong>Negative Ratio</strong>: Showing the rankers a large number of negatives during training helped to improve performance. For each positive, I sampled 24 negatives.</p></li>
+<li><p><strong>Distillation/Pseudo Labelling</strong>: I first fine-tuned two pointwise 72b models (<code>Qwen/Qwen2.5-Math-72B</code> and <code>Qwen/Qwen2.5-72B</code>) using competition data and ensembled them to pseudo label the synthetic examples. Competition data + pseudo labelled data were used to fine-tune 14b and 32b models.</p></li>
+</ul>
+<h2>Synthetic Data</h2>
+<ul>
+<li><strong>Grouped synthetic data generation</strong>: I first created clusters of related misconceptions e.g. </li>
+</ul>
+<pre><code>&gt;&gt; Assumes a   linear
+&gt;&gt; Thinks terms  linear  are  direct proportion
+&gt;&gt; Does  know how  find the next term  a 
+&gt;&gt; Describes position  term   term  term 
+&gt;&gt; Does  recognise that a linear  must increase  decrease  same amount
+&gt;&gt; Uses  the first two terms  a     a term--term 
+&gt;&gt; Does  know the definition  term  term--term 
+&gt;&gt;  uses two terms  a     a term--term 
+&gt;&gt;  asked  a specific term  a  just gives the next term
+&gt;&gt; Does    changes  a   visual patterns
+</code></pre>
+<p>Then asked Claude 3.5 Sonnet to generate more examples. I included 5-8 relevant MCQs from the training set during the synthetic data generation. I have included the prompts in the comments.</p>
+<p>--</p>
+<h2>Links</h2>
+<ul>
+<li><a href="https://www.kaggle.com/code/conjuring92/eedi-a2-pipeline?scriptVersionId=211785645" target="_blank">Inference notebook</a></li>
+</ul>
+<p>I will write a detailed post and publish my code + datasets soon!</p>

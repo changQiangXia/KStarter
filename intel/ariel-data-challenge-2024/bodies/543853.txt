@@ -1,0 +1,377 @@
+# https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/543853
+
+Topic #543853: 2nd place solution - pure Bayesian Inference, no deep learning
+  Author: Jeroen Cottaar
+  Posted: 2024-11-01 19:50:00.345000
+  Votes: 125  Comments: 63
+
+Link to submission code: https://www.kaggle.com/code/jeroencottaar/ariel-2nd-place-submission-notebook 
+Link to visualization code: https://www.kaggle.com/code/jeroencottaar/ariel-2nd-place-visualization-notebook
+
+Looking for opportunities and guidance: the Bayesian Inference approach I describe below is good for much more than competitions - it's applicable to many real-world problems, and is underused in our deep-learning-oriented times. I believe I can meaningfully impact our world with my knowledge of these techniques, but am currently struggling to find the right path in my career to achieve this. If you have insights on how to make a more significant impact with Bayesian methods, I’d be grateful for any guidance, perhaps in a mentorship capacity.
+
+Introduction
+
+Transit analysis is the most common method for detecting and studying exoplanets. A transit occurs when a planet crosses in front of its star relative to Earth, obscuring part of the starlight. By observing how much the light is reduced (the transit depth) as a function of wavelength, we can learn the properties of the planet. But with a tiny planet passing in front of a huge star, this problem has a very low signal to noise ratio. The challenge to us: find the transit depth, including confidence intervals, from synthetic raw spectroscopic signals as the Ariel satellite might see them in the future (For a more extensive overview, see https://www.kaggle.com/competitions/ariel-data-challenge-2024/overview).
+
+
+
+My solution to this challenge is built on the related concepts of Bayesian Inference and Gaussian Processes.
+
+Bayesian Inference (BI) is a powerful statistical approach, based around defining a prior (a statistical belief about reality) and observations (some form of new information). Using Bayes' law, we then combined these to find the posterior (an updated belief about reality). In our case, this means:
+
+
+
+Prior: a description of the physics that affect the final measured signal, describing for example detector noise, drift, and the transit behavior (including the transit depth itself) as formal distributions.
+
+Observations: the provided measurements.
+
+Posterior: a breakdown of the observations into the various elements defined in the prior (see figure below). From this we can simply read out the desired transit depth. Importantly, the posterior is not just a single point, it's a distribution. By taking samples from this distribution we can find the required confidence intervals (and even full covariance matrices, although that is not asked of us here).
+
+
+To me, the most attractive element of BI is how it lets us split our physical thinking from our solver. All our domain knowledge goes into defining the prior, where we can consider one physical element at a time; doing the actual Bayesian Inference to find the posterior is then 'just math'. Not necessarily easy math - but it's entirely separate from our domain knowledge. 
+
+The figure below shows how one example transit is split in the posterior:
+
+
+
+Several of our prior elements are smooth functions; for example, transit depth is a function of wavelength, drift is a function of wavelength and time, etc. This means that we need to describe a distribution of functions in the prior. Gaussian Processes (GPs)  are a natural way to do this. GPs are non-parametric methods, meaning they do not rely on a fixed set of basis functions. Instead, they allow any function, but assign different probabilities to different functions. For example, a low-frequent drift is more likely than a high-frequent one. An excellent starting point to learn GPs is https://arxiv.org/abs/2009.10862
+
+In my post here, I'll mainly focus on providing the details of the model, which in the BI framework just means describing the prior. At the end I'll cover some odds and ends (preprocessing and how we actually do the BI math).
+
+Prior definition
+
+In this section I'll provide some visual breakdowns, an overview of the various elements, and some notes. You will see references to separate sensors (AIRS and FGS), but I don't really discuss my use of these sensors; The AIRS is the main sensor (the spectroscope). This section assumes familiarity with GPs, but hopefully you can get the gist of it in any case. If you want to know all the details, you'll have to go into the code (ariel_gp.py). 
+
+
+
+
+
+
+
+Prior element
+Description
+Tuning and hyperparameters
+Degrees of freedom
+
+
+
+
+Noise
+Uncorrelated Gaussian per time and wavelength
+Standard deviations found in preprocessing
+114340
+
+
+Star spectrum
+Uncorrelated value per wavelength
+Not regularized (infinite sigma)
+283
+
+
+Drift: 1D
+2x GP over time, 1 for AIRS and 1 for FGS
+Tuned on training set
+816
+
+
+Drift: 2D
+GP over time and wavelength
+Tuned on training set
+113928 -&gt; 800 with KISS-GP
+
+
+Transit window
+Fixed function, ingress/egress time and width are fit
+Fixed function is found on training set
+3
+
+
+Transit depth: mean
+Single value
+Not regularized
+1
+
+
+Transit depth: variation FGS
+Single Gaussian value
+Standard deviation found on training set
+1
+
+
+Transit depth: variation AIRS
+GP over wavelength
+Tuned on training set
+282
+
+
+Transit depth: PCA
+Fixed basis functions obtained from PCA analysis
+PCA shapes found from an initial rough fit on test data
+1
+
+
+
+
+Notes on the details:
+
+
+
+All GPs use multiple squared-exponential kernels (i.e. they are themselves multiple GPs combined, each with their own fixed length scale). The hyperparameters (sigma values per length scale) are tuned on the training data using various techniques (not currently included in the submission code).
+
+We tune one hyperparameter during inference on the test set, per planet: the magnitude of the non-mean part of the transit depth (i.e. the variation and PCA components). This is essentially a scaling applied to all underlying hyperparameters. It is found using maximum likelihood estimation, with a minimum value applied (MLE tends to estimate zero too often).
+
+All GPs are solved as dense GPs, except the spectral drift (trying this would lead to a 100k by 100k dense matrix); there we use KISS-GP to sparsify the GP. This works well because the shape is very low-frequent to begin with.
+
+There are common shapes between the transit depths per planet, corresponding to specific elements in the atmosphere. I use principal component analysis (PCA) without centering to find these shapes. We can't do this on the training labels, because the test set follows a very different distribution. So the approach is:
+
+
+Do a rough fit on all 800 planets using the full model except the PCA shapes.
+
+Do PCA on the 800 found transit depths (1 or 2 components seems best on the test set; I use 1 for the final submission).
+
+Redo the fit on all 800 planets, this time including the PCA shapes we just found. This leads to the final reported transit depths.
+
+The ingress and egress profiles are a fixed function, found on the training data. We do fit three parameters: the width (i.e. is the ingress abrupt or broad), the ingress time, and the egress time.
+
+The star spectrum is an uncorrelated Gaussian per wavelength, constant over time. This is not optimal; I spent a lot of time trying to make use of the fact that different planets for one star have the same star spectrum. This worked quite well on training (+0.005), but was disastrous on test (my final score with it was 0.110).
+
+After all the proper Bayesian modeling, some additional fudge factors are applied. These are optimized on the training set, and an additional offset is applied to the test set (found by hill climbing). These are:
+
+
+A fixed scaling factor applied to all confidence intervals. For the final submission, this value is around +10%. Its impact on the final score is limited.
+
+A scaling factor applied to the mean of the transit depth. For the final submission, the mean is multiplied by around 1.0064. This is critical (score would be under 0.7 without), and I have no idea why it's needed… 
+
+
+(EDIT: I since learned from @cnumber that this is due to the fact that I missed a constant background signal; if you turn on include_later_optimization in the code this will be corrected for, and both of these fudge values are disabled)
+
+Implementation notes
+
+Preprocessing
+
+My general preprocessing flow is as follows (details in ariel_support.py):
+
+
+
+Follow the general preprocessing flow provided by the organizers, with ADC offset sign flipped and several speedups. I also cut off the top 8 and bottom 8 rows of the AIRS signal, which seem to be noisier and anyway contain very little signal.
+
+Apply inpainting to remove invalid values (linear interpolation by row). This is quite important, because the jitter causes the signal to move between rows, so the invalids lead to biases.
+
+Sum over columns.
+
+Estimate ingress and egress time, as well as noise values.
+
+Bin over time to reduce data size. I use smaller chunks near the ingress and egress to better capture the profiles there.
+
+
+I actually have a more involved alternative that includes jitter correction and weighted column summation (to reduce the overall noise). I think these things are needed for optimal performance, but I didn't see enough gain to justify the additional complexity (though I've now seen that I actually some unselected first place submissions with this alternative flow…)
+
+Solving Gaussian Processes
+
+As described in the introduction, actually finding the posterior in BI is 'just math' - there's no domain knowledge involved anymore. But we do of course have to implement the math as well. Some notes on this:
+
+
+
+I made a custom GP toolbox (gp.py). I'm not sure to what degree I could have used the standard ones like GPyTorch, but I wanted to make sure I knew exactly what was going on under the hood.
+
+Our prior is nonlinear, i.e. the predicted measurements are not a linear function of the parameters, for example because some prior elements are multiplied rather than added. I deal with this iteratively (7 iterations):
+
+
+Pick some suitable starting guess for the parameters.
+
+Linearize the prior around these parameters.
+
+Solve the GP with standard methods.
+
+Use the mean of the posterior as the starting point for the next iteration.
+
+The magnitude of the transit depth (the only hyperparameters tuned during inference) is found using gradient descent on the log likelihood (with one update per iteration as described above).
+
+
+Conclusion
+
+By applying Bayesian Inference, we can disentangle the complexity of our model. We can consider each of our physical contributors (noise, drift, transit, etc.) on their own, and separate all that from the actual math of the solver. This leads to a powerful and flexible model - for example, if we need to add additional physics like limb darkening, we only touch one of the elements of the model. Finally, it also provides accurate error estimates - including full covariance matrices per planet, which will be critical for accurate further modeling. I am convinced Bayesian Inference is the way to go for the Ariel project.
+
+If you have any ideas on how I can increase my impact using these Bayesian methods, or simply recognize the challenge, please get in touch!
+
+Comments:
+├─ c-number (2024-11-02 02:23:48.403000) [+7]
+│  Congratulations for your 2nd place!
+│  We also used Gaussian process regresion as part of our solution, but your solution seems to be way more sphisticated compared to our part.
+│  
+│  
+│    
+│  A scaling factor ...
+  ├─ 🐢 Jun Koda (2024-11-02 02:49:10.277000) [+1]
+  │  And foreground subtraction is better than ad hoc calibration factor because it is star dependent; it adds different offset to star-dependent total luminosity.
+  ├─ Jeroen Cottaar (2024-11-02 06:40:02.823000) [+0]
+  │  Hm so in terms of my prior, I missed an additive foreground effect (which would be missed by the multiplicative drift term). This might also explain why it was better to remove the outer 8 rows, si...
+  ├─ c-number (2024-11-02 06:56:05.517000) [+1]
+  │  Another point you might have missed, is that the gain drift can be expressed by the product of 2 polynomials (probably both 4th order); one in the temporal axis, and one in the wavelength axis, den...
+    ├─ Jeroen Cottaar (2024-11-02 07:11:03.723000) [+1]
+    │  I completely missed the exosim clue, that would have helped a lot. But in this case I do think I have an implementation that would be more relevant to the actual mission. Might still try it out.
+    ├─ c-number (2024-11-02 13:02:46.820000) [+0]
+    │  I also agree that your solution is more robust than ours.
+    │  Ours was too "Kaggleish" for better or for worse; many hyper-parameters, ensemble of multiple models etc.
+    │  Congratulations again for your wo...
+    ├─ Jeroen Cottaar (2024-11-02 13:07:38.733000) [+2]
+    │  Thanks, and congratulations on your win!
+  ├─ Jeroen Cottaar (2024-11-02 13:08:53.370000) [+1]
+  │  OK since this definitely seems to be true; correcting for this 'foreground focal plane' removes the need to do both mean and sigma biasing. It gains little (~0.001) in CV, but probably much more on...
+  ├─ c-number (2024-11-02 14:14:00.727000) [+0]
+  │  As you say, we saw a much bigger improvement in LB than in train.
+  │  Very excited to see how much the scores improve!
+    ├─ Jeroen Cottaar (2024-11-02 22:24:57.057000) [+3]
+    │  I went from 0.740 to 0.745 on private LB with this fix, and to 0.747 if I turn on my advanced jitter correction (briefly mentioned in my solution discussion). That last one's probably just overfitt...
+    ├─ greySnow (2024-11-02 22:45:01.390000) [+0]
+    │  Nice! This 'fixing' of the predictions by a multiplicative factor bugged me for the entire competition lol
+├─ Pascal Pfeiffer (2024-11-01 20:54:01.810000) [+3]
+│  Congratulations on your 2nd place, even if it may look like a lost 1st place now for you. 
+│  
+│  Thank you for the write-up. Very clean solution and likely of actual value for the mission!
+│  
+│  I also saw t...
+  ├─ Pascal Pfeiffer (2024-11-01 21:00:02.750000) [+2]
+  │  A scaling factor applied to the mean of the transit depth. For the final submission, the mean is multiplied by around 1.0064. This is critical (score would be under 0.7 without), and I have no idea...
+    ├─ Jeroen Cottaar (2024-11-01 21:05:29.390000) [+0]
+    │  What do you mean with 1-x vs x?
+    │  
+    │  Indeed, I saw this on both LB and train. I used a slightly different bias on LB, but I'm not sure if the difference is statistically significant. I also saw some im...
+    ├─ Pascal Pfeiffer (2024-11-01 21:17:56.960000) [+0]
+    │  I mean transit depth potentially having two different definitions. 
+    │  
+    │  E.g. transit at 90 and out of transit is at 100. Now, transit depth can be either defined as 1 - 90/100 or as 100/90 - 1.
+    ├─ Jeroen Cottaar (2024-11-01 21:20:28.850000) [+0]
+    │  Oh good thought. These are easy things to get wrong, but I'm pretty sure my model would report 1-90/100=0.1 in that case. That's also the correct definition, right?
+    ├─ Pascal Pfeiffer (2024-11-01 21:23:51.763000) [+0]
+    │  I believe the other way is "correct", but I was honestly confused a few times, too.
+    ├─ Jeroen Cottaar (2024-11-01 21:30:40.743000) [+1]
+    │  Hm that would be odd, it would mean a planet blotting out half the light gets a transit depth of 100%. Anyway I'll test this out tomorrow.
+    ├─ JungleBeastDS (2024-11-01 21:52:58.200000) [+0]
+    │  I had to do something similar to the transits (added 4e-6). For me, I think it was due to the limb darkening adding a slight bit convexity to the transit section. But it was so small that I could n...
+    ├─ Pascal Pfeiffer (2024-11-01 21:55:34.160000) [+0]
+    │  Limb darkening was not modelled in the synthetic data of this competition data.
+    │  
+    │  https://www.kaggle.com/competitions/ariel-data-challenge-2024/discussion/528683#2964295
+    │  
+    │  But reading that comment ag...
+    ├─ JungleBeastDS (2024-11-01 22:01:27.430000) [+1]
+    │  I did not know that 😂. Wasted much time trying to deal with limb darkening that didn't exist.
+    ├─ gromml (2024-11-01 22:19:58.577000) [+0]
+    │  I also tried to find out the reason for such a bias, especially for star 0. I plotted the errors (between true mean planet size and predicted mean planet size) distributions:
+    │  
+    │  
+    │  
+    │  One of the hypothes...
+  ├─ Jeroen Cottaar (2024-11-01 21:02:29.133000) [+2]
+  │  With 'extra dimension' of freedom, you mean the 2D drift? I'm not sure how much that gained; I turned it on before enabling the GP for the transit depth, and as a result the 2D drift 'ate up' all t...
+    ├─ Pascal Pfeiffer (2024-11-01 21:10:51.337000) [+2]
+    │  Yes, the 2D drift. Vs just modeling the drift in the time dimension. Thank you for the time estimate! And did it basically converge at that point or would more iterations even improve local score a...
+    ├─ Jeroen Cottaar (2024-11-01 21:17:34.537000) [+2]
+    │  I played around with the number of iterations a bit earlier on and found no gain past 7. But I didn't get around to testing as much as I'd have liked on the final model (I was mainly working on rob...
+├─ greySnow (2024-11-01 20:18:48.187000) [+2]
+│  I cannot understand most of it due to my lacking knowledge, it's very frustrating! 😅😭 Need to learn more bayesian and GP lol
+  ├─ Jeroen Cottaar (2024-11-01 20:45:41.717000) [+3]
+  │  You won't regret it if you do learn these! They're very powerful approaches - even in the many cases where true deep learning techniques are needed, they can still boost performance a lot in steps ...
+    ├─ JamshaidSohail (2024-11-01 21:29:09.297000) [+0]
+    │  Hi @jeroencottaar. Thank you for the motivation for these approaches. Can you share your code as well ? It would be very very nice for learning purposes.
+    ├─ JamshaidSohail (2024-11-01 21:30:19.023000) [+0]
+    │  Oh i read above it will be available by 3rd November. Thank you so much for this. Also please keep the datasets opened. Like it shouldn't be containing private datasets so that solution can be unde...
+    ├─ Jeroen Cottaar (2024-11-01 21:37:23.123000) [+1]
+    │  Indeed, I will share everything (think I have to anyway if I want my prize money). So you'll be able to run the code fully including submitting it, and maybe find further improvements!
+    ├─ JamshaidSohail (2024-11-01 21:43:31.653000) [+0]
+    │  Thank you so so so much 😀
+  ├─ [deleted] (2024-11-02 04:01:01.613000) [+0]
+  │  [deleted]
+    ├─ Jeroen Cottaar (2024-11-02 06:41:45.143000) [+12]
+    │  For Bayesian Inference, I only really have a reference if you want to learn it properly: Bayesian Data Analysis 3rd edition by Andrew Gelman and others. Heavy going but you will learn so much. You ...
+    ├─ [deleted] (2024-11-02 14:07:08.940000) [+0]
+    │  [deleted]
+    ├─ Jeroen Cottaar (2024-11-02 14:15:40.277000) [+0]
+    │  Feel free to reach out; you should be able to send a message from my Kaggle profile. I can't make any promises on whether I can actually help you though.
+    ├─ Etienne Bardet (2024-11-05 21:30:21.720000) [+0]
+    │  I think you can check out this book, I've had it recommended in a course some time ago, and it has very detailed explanations on a lot of Gaussian concepts as well as Bayesian statistics.
+    │  https://p...
+    ├─ Jeroen Cottaar (2024-11-06 17:00:02.470000) [+0]
+    │  Thanks, I've indeed had that on my list for a while, but it's rather intimidating…
+├─ Saugat Kandel (2025-08-20 06:17:12.153000) [+0]
+│  This is really cool! It is going to take me a few days just to digest this.
+│  
+│  Are you using the same approach for Ariel2025 as well? Also, where do I find ariel_gp.py?
+  ├─ Jeroen Cottaar (2025-08-24 08:55:23.477000) [+0]
+  │  For Ariel2025, you'll have to wait and see 😀
+  │  
+  │  ariel_gp.py (and the other library functions) can be found in the library dataset attached to the notebooks.
+├─ c-number (2025-07-19 07:20:21.977000) [+0]
+│  if we need to add additional physics like limb darkening, we only touch one of the elements of the model.
+│  
+│  
+│  Hmm…
+├─ moto (2024-11-12 19:05:17.987000) [+0]
+│  Congratulations!
+│  
+│  
+│    
+│  The hyperparameters (sigma values per length scale) are tuned on the training data using various techniques (not currently included in the submission code).
+│  
+│  
+│  I would like to ...
+  ├─ Jeroen Cottaar (2024-11-12 19:27:59.270000) [+3]
+  │  This code would be challenging to share; I put a lot of effort into cleaning up the code, but didn't do that part. It's not in a form that would run on Kaggle.
+  │  
+  │  Still, to describe at least what's g...
+    ├─ moto (2024-11-13 02:00:22.487000) [+0]
+    │  Thank you very much!
+    │  Can I check if my understanding of the process is right?:tuning the drift hyperparameters then tuning transit depth hyperparameters.
+    │  I also wonder how the transit window hyperp...
+    ├─ moto (2024-11-13 02:13:38.100000) [+0]
+    │  Fit the training planets using the GP, with the transit depth prior replaced by the training labels. For each planet, take a sample from the posterior. Do maximum likelihood estimation for the drif...
+    ├─ moto (2024-11-13 02:20:44.193000) [+0]
+    │  The sampled value is sampled from the distribution that don’t have the hyperparameters we want to optimize, is it right?
+    ├─ Jeroen Cottaar (2024-11-13 15:19:21.567000) [+1]
+    │  It's this basic algorithm for the drift hyperparameters, but unfortunately I don't really have an intuitive explanation, and it might not be easy to match my description above to the general case: ...
+    ├─ moto (2024-11-13 23:31:46.090000) [+0]
+    │  Thank you for your kindness to responding to my questions!
+    │  I’ve learned basics of GP and BI(including EM algorithm), and I’m trying to understand all of your solution(even your code), thinking that...
+    ├─ Jeroen Cottaar (2024-11-14 18:29:47.393000) [+1]
+    │  I don't fully follow the paper, but I don't think so. In general I don't think you'd learn much from trying to reproduce my way of fitting hyperparameters; I haven't really put much effort into tha...
+├─ Tanishk Patil (2024-11-08 06:20:31.893000) [+0]
+│  Thanks for sharing you experience it means a lot for the beginners like me? Looking forward to learn from you.
+├─ Himanshu Kaushik (2024-11-04 14:36:35.623000) [+0]
+│  Thanks for sharing this insightful post. @jeroencottaar I invite you to try out this competition as well
+  ├─ Jeroen Cottaar (2024-11-04 14:42:45.820000) [+0]
+  │  Thanks, looks cool but I really have to cut down on my Kaggling for a while 😀
+    ├─ Himanshu Kaushik (2024-11-04 14:50:27.680000) [+0]
+    │  Oh Okay. Would have loved to have your thoughts and insights boost fellow competitors strategies.
+├─ Maxim Shatskiy (2024-11-03 20:36:56.753000) [+0]
+│  Thanks. Great Bayesian Approach. They often do well in these types of competitions, but indeed not often seen in deep learning times:
+│  One the previous competitions: https://homepages.inf.ed.ac.uk/i...
+  ├─ Jeroen Cottaar (2024-11-03 20:44:13.543000) [+0]
+  │  These approaches do well outside competitions too, but I'm having trouble getting them accepted in my professional life…
+  │  
+  │  Thanks for pointing out these earlier Bayesian solutions. I'll try to get i...
+├─ Humayra Khanom Rime (2024-11-03 05:56:26.597000) [+0]
+│  Well done on your achievement, and I appreciate you sharing this insightful write-up!
+├─ Andrey (2024-11-02 16:50:15.850000) [+0]
+│  Congratulations!
+│  Could you please dive a little deeper into the domain-specific terminology? Namely, I'm confused about what is "drift" and "ingress and egress time"
+  ├─ Jeroen Cottaar (2024-11-02 17:15:00.370000) [+1]
+  │  I use the term drift to simply indicate any slow changes over time or wavelength in the detector signal.
+  │  
+  │  The ingress time is when the planet starts its transit (i.e. is at the edge of the star), a...
+├─ Vasilis (2024-11-02 13:39:12.530000) [+0]
+│  Congratulations! I was under the impression that Data Science and AI had only to do with Deep-learning and tree based models, very inspiring and exciting that other methods out there produce so com...
+├─ Viji (2024-11-02 06:08:52.260000) [+0]
+│  Congratulations for your win and and thanks for sharing interesting write up.
+│  
+│  Just curious to know if general aspects of physics/signal processing is adequate or you needed any other specific info...
+  ├─ Jeroen Cottaar (2024-11-02 06:43:45.893000) [+1]
+  │  I didn't spend too much time reading literature (which was probably a mistake); I found most of the prior from the data itself. The way this works is that you do Bayesian Inference, and then check ...
+├─ Vidyavrat Taak (2024-11-02 00:03:17.940000) [+0]
+│  Thanks for sharing, Much useful. Waiting for the code also.👍
+│  and Congratulations on win 🏅🎉
+├─ Sergei Fironov (2024-11-01 21:56:55.733000) [+0]
+│  Oh, wow! I've seen similar techniques in articles and tried to apply them to this problem. However, I probably didn't put in enough effort, couldn't find the right parameters, and of course, I don'...
+├─ [deleted] (2024-11-01 21:41:23.853000) [+0]
+│  [deleted]

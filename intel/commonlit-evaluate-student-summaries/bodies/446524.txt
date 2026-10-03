@@ -1,0 +1,500 @@
+# https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446524
+
+Topic #446524: 4th place solution
+  Author: chumajin
+  Posted: 2023-10-12 04:22:33.280000
+  Votes: 81  Comments: 32
+
+Thank you very much for organizing such an interesting competition. I am greatly thankful to the hosts and the Kaggle staff.
+
+This competition turned out to be exactly what we had imagined and we are really happy to have won 4th place.
+
+And thank you so much @kurokurob for teaming up with me and for the daily discussions and experiments. Congratulations on your 4th GOLD MEDAL.
+(And I will become competition Grand Master!!!).
+We are a great team!
+
+1. Summary
+
+Our best private solution is 1 fulltrain x 7 models ensemble.
+
+This competition had only 4 prompts in the training data and with the information that 122 prompts were in the test data, one could imagine a big shake. Also, the public lb was very unstable. These things made us think that robustness is important, not only for cv.
+
+I used all 4kfold at first. Especially the models with prompt text, because I had to increase the maxlen to increase the score, I had to increase the inference time and could not ensemble other models (only 2-3 models could be included).
+
+Just then, I and kuro have team merged. And we mixed the fulltrain idea he had been working on. By replacing 4kfold with 1fulltrain, we arrived at the idea of compressing the information of 4kfold to 1fulltrain and ensemble more models.
+
+We imagined that by doing so, we would prevent the variation and reduction of scores on each prompt in the private test data and, in total, get better score.
+
+As a result, we believe we were able to prevent a shake down and finish in this position!
+
+
+
+
+sub
+type
+models
+cv
+public lb
+private lb
+rank
+comment
+
+
+
+
+sub1
+best lb
+1 fulltrain × 9 models
+0.4679
+0.41991
+0.45785
+11
+using gbdt and expand of inference-maxlen
+
+
+sub2
+best cv
+1 fulltrain × 7 models
+0.4639
+0.42979
+0.45515
+4
+just NLP result(expand of inference-maxlen)
+
+
+sub3
+insurance
+1 fulltrain × 8 models
+0.4693
+0.43855
+0.45597
+6
+just NLP result
+
+
+
+
+The best cv in sub2 is our best private, and that is the main explanation below.
+
+2. training
+
+Each of our models in sub2 is shown below.
+
+
+
+
+modelno
+InfNo
+model
+trainingmaxlen
+inference maxlen
+freezing
+layerwise
+input
+pooling
+
+
+2nd loss
+preprocess
+cv of 4kfold earlystop
+
+
+
+
+
+
+
+
+
+
+
+original prompt
+cls
+attention of original prompt
+mean of text part only
+
+
+
+
+
+1
+91
+deberta-v3-large
+768
+1500
+✓
+
+
+✓
+
+
+
+
+0.4818
+
+
+2
+22
+deberta-v3-large
+1050
+950
+
+✓
+✓
+
+✓
+
+
+
+0.4855
+
+
+3
+63
+deberta-v3-large
+850
+1500
+
+✓
+
+
+
+✓
+
+
+0.4984
+
+
+4
+72
+deberta-v3-large
+868
+1024
+
+✓
+
+✓
+
+
+Arcface
+✓
+0.4919
+
+
+5
+2,3
+deberta-v3-large
+868
+868
+
+✓
+
+✓
+
+
+
+
+0.4880
+
+
+6
+259
+deberta-v3-large-squad2
+768
+1500
+✓
+
+
+✓
+
+
+
+
+0.4952
+
+
+7
+331
+deberta-v3-large-squad2
+1050
+950
+
+✓
+✓
+
+✓
+
+
+
+0.4993
+
+
+
+
+The details are described below.
+
+2.1 model no1 : basemodel
+
+This model is a typical base for our model.
+
+First, two inputs are prepared and put into the tokenizer as a pair (an example of dataset). The same result can be obtained by connecting them with [SEP] even if you do not put them as a pair.
+
+self = self.
+self = self +  + self +  + self
+
+tokens = tokenizer(
+            self, 
+            self,.
+            ...
+        )
+
+
+Now all we have to do is put this in the model, increase the maxlen, and output the cls in the fc layer.
+
+2.2 model no2 : original prompt
+
+In this model, an original prompt was created and used for input.
+
+self =  + self
+self = prompt_title +  + prompt_question +  + prompt_text
+
+tokens = tokenizer(
+            self, 
+            self,
+            ・・・
+        )
+
+
+Then, only the part of the original prompt (Evaluating the summarized…) is attentional pooled (an example of a model).
+
+## init
+.pool = AttentionPooling(..hidden_size)
+...
+
+## forward
+ = .model(ids, mask, token_type_ids)
+ = [][:,:,:]
+ = .pool(,mask[:,:])
+ = .fc()
+
+
+2.3 model no4 : using 2nd loss and preprocess
+
+As discussed in the discussion and notebook, the train data can be classified into 38 types. I thought I could make good use of this, so I included arcface as an auxiliary loss.
+I tried to make good use of embeddings at the end, but it was not available. However, it did contribute to the diversity of the ensemble.
+
+Also, as a preprocss, I made sure to include a space after the period and comma; after doing EDA, I noticed that if a sentence comes after a period or comma without a space, it is divided differently in the tokenizer. However, I don't think this affected the score significantly.
+
+2.4 Extending the inference max length
+
+Scores have been greatly improved by increasing the inference length over that of training. An example is shown below. The following was trained with maxlen 850, but by setting maxlen to 1500 during inference, cv and public lb improved (maybe not so much contribution to private).
+
+
+
+
+traingmaxlen
+inferencemaxlen
+39c16efold0
+814d6bfold1
+ebad26fold2
+3b9047fold3
+cv
+
+
+
+
+850
+850
+0.4505
+0.5595
+0.5051
+0.5024
+0.4984
+
+
+850
+1024
+0.4524
+0.5590
+0.4836
+0.5018
+0.4927
+
+
+850
+1500
+0.4527
+0.5588
+0.4614
+0.5013
+0.4867
+
+
+
+
+However, some models may degrade. insurance submission(sub3) consisted only of models that did not expand this inference max length. As a result, cv and public were affected, but private had almost no effect.
+
+3. inference (ensemble)
+
+For best cv sub, we initially post-processed using GBDT (LGBM + Catboost + XGboost), but in the end, ensemble without GBDT resulted in a better CV, The submission that produced the best private did not use post-processing with GBDT. We also considered nealder-mead and optuna, but we did not use them because of the concern that they would definitely overfit. So we use the simple mean ensemble using a hill climb technique (we also added a full train with different seed to further increase robustness for the extra inference time).
+
+final cv(4kfold earlystopping result) : 0.46394 , public : 0.42979, private 0.45515 4th
+
+※ Futhermore, we took as insurance(sub3) that the inference max lengths were the same as that in training. This result was as follows.
+
+final cv 0.4693 , public : 0.43855, private 0.45597 6th.
+
+In this result, cv and lb were bad, but private was good, which shows how important the robustness of model was in this competition.
+
+4. Not working for us
+
+
+
+mlm
+
+awp
+
+svr
+
+other model
+
+regression from classification model
+
+other many many things…
+
+
+5. Acknowledgements
+
+We could not have achieved these results on our own. We were greatly influenced by those who we have collaborated with in the past, and we are grateful for their contributions. We would also like to express our sincere gratitude to those who have shared their knowledge and insights through previous competitions. Thank you very much.
+
+We would especially like to thank the following people for their help in this  competition! Thank you very much.
+
+
+
+
+Fulltrain : Team Hydrogen ref1 ref2, Raja Biswas @conjuring92 ref3
+
+
+Freezing : Takamichi Toda @takamichitoda  ref4
+
+
+37-38 classification : MOTH @alejopaullier ref5, 
+Alexander Chervov @alexandervc ref6
+
+
+Postprocess : nogawanogawa @tsunotsuno ref7
+
+
+Model selection(feedback3) : CHRIS DEOTTE @cdeotte ref8, TOM @tikutiku ref9
+
+
+6. team member
+
+
+
+@chumajin
+
+@kurokurob 
+
+
+
+
+7. code
+
+inference code : https://www.kaggle.com/code/chumajin/commonlit2-4th-place-inference (This is the cleaned code. Same score as the submission.)
+
+training code(chumajin part) : https://github.com/chumajin/kaggle-commonlit
+training code(kuro_B part) : https://github.com/kurokuroB/kaggle-commonlit2-4th_place_solution-my_training_code
+
+Comments:
+├─ moth (2023-10-12 14:24:34.847000) [+3]
+│  Congrats @chumajin @kurokurob for the win and @chumajin for becoming competition GM, impressive achievement!
+│  
+│  I found the max_len change for inference fascinating. Could you share details on your t...
+  ├─ kuro_B (2023-10-12 16:28:49.030000) [+3]
+  │  Thanks for your comment!
+  │  We used different configuration each other.
+  │  My main settting is batch size 8, learning rate 3e-5, cosine warmup 0.2, epoch 2. (model no 1, 6)
+├─ HarshitMehta (2023-10-12 04:58:49.003000) [+3]
+│  Congratulations @kurokurob and @chumajin (also for becoming competition GM!!).
+  ├─ chumajin (2023-10-12 06:22:29.067000) [+2]
+  │  @harshit92 I'm most happy to receive congratulations from you. You are the key person in my kaggle life.
+  │  Let's do it together again someday.
+├─ HideBu (2023-10-13 09:19:38.283000) [+1]
+│  Congratuations @chumajin for 4th place in this competition. 
+│  
+│  I have a question about your approach. Please let me know.
+│  
+│  [Question]
+│  What does fulltrain strategy mean? 
+│  
+│  I assume that you use all t...
+  ├─ chumajin (2023-10-13 09:58:10.620000) [+1]
+  │  @hidebu 
+  │  Thank you for question.
+  │  I show the process as follows:
+  │  1) We trained 4kfold. We can get 4 model weights and calculate cv.
+  │  2) If the cv result of 1) is good, we trained using all train data...
+    ├─ RB (2023-10-13 10:33:26.860000) [+1]
+    │  Thank you for sharing your approach. 
+    │  
+    │  When you train 4 Kfold, I am guessing you have last epoch = best epoch ?   (And not save model when best validation loss is achieved in any epoch)
+    ├─ chumajin (2023-10-13 11:32:24.220000) [+1]
+    │  @rashmibanthia Thank you for comment !! This is a good question. You are right. To be precise, we did several validation evaluations per epoch at 4kfold training, at which point we calculated the o...
+├─ Takamichi Toda (2023-10-13 08:49:47.777000) [+1]
+│  Congratulations becoming competition GM🎉 🎉 
+│  
+│  This competition didn't go well for me at all, so I'm planning to review various things, including your approach, moving forward.
+  ├─ chumajin (2023-10-13 09:53:53.387000) [+1]
+  │  @takamichitoda 
+  │  Thank you very much! Your posts on discussion were very helpful. Again, I have looked at your blog many times! Thank you every time!
+├─ Hussein Ah95 (2023-10-12 19:11:51.940000) [+1]
+│  Congratulations @chumajin for Win and becoming competition GM
+  ├─ chumajin (2023-10-13 01:20:01.473000) [+0]
+  │  @husseinah95 Thank you very much!!
+├─ Ivan Aerlic (2023-10-12 09:01:13.453000) [+1]
+│  @chumajin Thanks for the detailed write-up. I think you did a good job on not over-fitting the CV.
+│  
+│  Also, congratulations on becoming a competition grandmaster. A difficult accomplishment and I'm h...
+  ├─ chumajin (2023-10-12 09:24:44.903000) [+1]
+  │  @ivanaerlic Thank you very much!! I was really afraid to just shake down! Competition GM has been a tough road, but it feels great to have accomplished it. See you again at one of the competitions!
+├─ Muhammad Ahmed (2023-10-12 08:57:06.913000) [+1]
+│  Congratulations on winning the gold and becoming competition GM! 🎉
+  ├─ chumajin (2023-10-12 08:58:49.703000) [+0]
+  │  @muhammad4hmed Thank you so much!!
+├─ takai380 (2023-10-12 05:04:59.697000) [+1]
+│  First, thank you for sharing the solution. And congratulations on becoming the competition GrandMaster!!
+│  Among the teams we observed attempting to shake down, I believe your team was able to achiev...
+  ├─ chumajin (2023-10-12 06:26:57.963000) [+3]
+  │  @takai380 Thank you very much. This is my personal opinion, but maybe one of the reason why we did not shake down is because we did not use the model without prompt text.  In our case, the model wi...
+    ├─ takai380 (2023-10-12 06:34:28.390000) [+1]
+    │  You may have a point. Thanks for your response! Congratulations!
+    ├─ RB (2023-10-13 10:40:52.500000) [+2]
+    │  This is my personal opinion, but maybe one of the reason why we did not shake down is because we did not use the model without prompt text.
+    │  
+    │  
+    │  This 💯 - I noticed this in your solution and @ivanaerli...
+├─ A cat hidden in the cloud (2023-10-12 04:43:01.750000) [+1]
+│  Thanks for sharing, you have done a nice job! May I ask how you choose best model with fulltrain idea?
+  ├─ chumajin (2023-10-12 06:21:22.437000) [+0]
+  │  @nlchen Thank you for comment ! we used the cv when we created the same model with 4kfold, and hill climb method.
+    ├─ A cat hidden in the cloud (2023-10-12 08:17:31.920000) [+1]
+    │  Thanks a lot!
+├─ Shiner (2023-10-12 04:35:16.403000) [+1]
+│  Great solution, congrats! Since you team used fulltrain strategy, may I ask how do you do cv? Just random sample a few samples from train dataset?
+  ├─ chumajin (2023-10-12 06:20:19.983000) [+1]
+  │  @judith007 Thank you for your comment! Instead, we used the cv when we created the same model with 4kfold! (4kfold model is not used for inference)
+    ├─ Shiner (2023-10-12 06:35:44.187000) [+1]
+    │  Thank you. Do you mean that you did cv using 4 kfold, but the models from 4 kfold cv were not used in inference stage, and you just retrained a model on full dataset and used this model in inferenc...
+    ├─ chumajin (2023-10-12 06:59:39.637000) [+1]
+    │  @judith007 yes. you're right!
+├─ Raja Biswas (2023-10-13 15:17:23.113000) [+2]
+│  Congratulations @chumajin &amp; @kurokurob on 4th position finish🎉 🎉 @chumajin special congratulations on becoming competition GM, very well deserved!! Thanks for the great writeup!
+  ├─ chumajin (2023-10-13 16:59:43.473000) [+1]
+  │  @conjuring92 I am specially glad to be congratulated by you. Your post about fulltrain has made me more aware of fulltrain and this strategy. Thank you very much! And congrats on your 6th place at ...
+    ├─ Raja Biswas (2023-10-14 01:37:19.697000) [+1]
+    │  Thanks 🙂 Glad that full-train strategy was helpful! Yes, it was exhausting to compete in 2 comps together, will try to avoid in future 🙈 All the best for the next one!
+├─ Oluwatobi Betiku (2023-10-12 10:09:24.063000) [+2]
+│  Congratulations @kurokurob and @chumajin this is an amazing feat, realizing there is a lot to learn and also motivated at the same time, Thanks a lot for sharing this solution.
+  ├─ chumajin (2023-10-12 11:37:28.553000) [+1]
+  │  @oluwatobibetiku Thank you for comment!!

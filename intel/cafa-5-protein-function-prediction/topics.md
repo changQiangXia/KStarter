@@ -1,0 +1,82 @@
+# cafa-5-protein-function-prediction 讨论区（按票数排序，共 80 条）
+
+- [New to protein function prediction and want to catch up quickly?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/403203) — 81 票 / 20 评论 / 2023-04-21 
+- [Information Accretion explainer ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405237) — 68 票 / 18 评论 / 2023-04-26 
+- [Private 2nd/Public 5th solution: Py-Boost and GCN](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/434064) — 59 票 / 7 评论 / 2024-01-14 **write-up?**
+- [One Month Left! - A summary of everything that happened](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/422459) — 49 票 / 0 评论 / 2023-07-10 
+- [ESM2 final-layer embeddings](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/406168) — 47 票 / 5 评论 / 2023-05-01 
+- [Bioinformatics on Kaggle. Biopython.](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402597) — 46 票 / 12 评论 / 2023-04-19 
+- [ProteinBert - Protein Function language Model](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402648) — 45 票 / 15 评论 / 2023-04-19 
+- [Protein Language Models](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402565) — 41 票 / 7 评论 / 2023-04-18 
+- [1st Place Solution for the CAFA5](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/466917) — 34 票 / 7 评论 / 2024-01-10 **write-up?**
+- [Welcome to the CAFA Challenge](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/401532) — 31 票 / 17 评论 / 2023-04-13 
+- [3rd Place Solution for the CAFA 5 Protein Function Prediction](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/464437) — 31 票 / 9 评论 / 2024-01-13 **write-up?**
+- [Video available.  Friday 18.10 John Mitchell - survey of the related Kaggle competition .  Webinars and educational/research activity around the competition ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/418295) — 31 票 / 27 评论 / 2023-06-19 
+- [A brief overview of 13th-place LB solution](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/434333) — 30 票 / 3 评论 / 2024-06-29 **write-up?**
+- [Maybe we're not actually predicting protein function? ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402696) — 30 票 / 14 评论 / 2023-04-19 
+- [Public 9th/Private 331st Place Solution - A Non-Bioinformatician's Journey in CAFA](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433603) — 29 票 / 18 评论 / 2024-08-23 **write-up?**
+- [CAFA 5 some relevant research papers](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402802) — 29 票 / 3 评论 / 2023-04-19 
+- [EDA insights](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/418006) — 28 票 / 0 评论 / 2023-06-18 
+- [🧬 Graph Visualisation Kulyk 🧬](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402840) — 28 票 / 2 评论 / 2023-04-19 
+- [(Probably) Error in the metric computation](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/420241) — 28 票 / 7 评论 / 2023-06-29 
+- [Levels of knowledge specificity](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402842) — 26 票 / 1 评论 / 2023-04-19 
+- [Predicting GO annotations beyond protein homology](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402829) — 25 票 / 6 评论 / 2023-04-19 
+- [🧬 Useful Resources List 🧬](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402560) — 25 票 / 2 评论 / 2023-04-18 
+- [First Kaggle competition : 10th place public leaderboard; Nth place private leaderboard](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433732) — 25 票 / 17 评论 / 2024-01-02 **write-up?**
+- [What is a FASTA File and How To Read It](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402580) — 24 票 / 2 评论 / 2023-04-18 
+- [Is it possible to add more proteins to public LB scoring ? ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/424134) — 24 票 / 5 评论 / 2023-07-12 
+- [Top Papers on Automated Function Prediction (AFP)](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/403495) — 23 票 / 5 评论 / 2023-04-23 
+- [quick-go annotations](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405362) — 23 票 / 26 评论 / 2023-04-27 
+- [Final LB Update Underway - COMPLETE](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/462410) — 22 票 / 1 评论 / 2023-12-19 
+- [5th Place Solution for the CAFA 5 Protein Function Prediction Challenge](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/463009) — 21 票 / 0 评论 / 2023-12-28 **write-up?**
+- [Let’s Meet In The Latent Space - Joint Embedding of Protein Sequences and GO Terms](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433777) — 21 票 / 14 评论 / 2023-08-22 
+- [Top scores using only sequence information  ? ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433669) — 20 票 / 23 评论 / 2023-08-22 
+- [[0.58 No QuickGO] A brief overview of my solution in CAFA5 Kaggle competition](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/435042) — 19 票 / 0 评论 / 2023-08-27 **write-up?**
+- [SPROF-GO predictions](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/417561) — 19 票 / 5 评论 / 2023-06-16 
+- [Video  with comments by top1: Robert Hoehndorf, organizer: Predrag Radivojac,  etc ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/421170) — 18 票 / 2 评论 / 2023-07-04 
+- [Leaderboard Updated - COMPLETE](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/452325) — 18 票 / 7 评论 / 2023-11-01 
+- [Leaderboard Rescore - COMPLETE](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/422615) — 17 票 / 5 评论 / 2023-07-10 
+- [Art gallery: Protein embeddings ](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/406658) — 17 票 / 4 评论 / 2023-05-03 
+- [test-train duplicates](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/403200) — 16 票 / 22 评论 / 2023-04-21 
+- [Protein Sequence Embedding Techniques (Resources)](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402756) — 16 票 / 10 评论 / 2023-04-19 
+- [9th place solution summary](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/462605) — 16 票 / 1 评论 / 2023-12-20 **write-up?**
+- [0.6 and beyond - a literature review for better ideas](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/419802) — 16 票 / 7 评论 / 2023-06-27 
+- [Sharing some of my learning experiences for beginners.](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405552) — 16 票 / 3 评论 / 2023-04-28 
+- [3 remarkable ideas from Zoltan's notebook "CombineEmbeddings"](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/431491) — 16 票 / 2 评论 / 2023-08-13 
+- [odd jump on the LB](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/404853) — 15 票 / 27 评论 / 2023-04-25 
+- [Still Confused about Final Test Set](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/421887) — 15 票 / 4 评论 / 2023-07-07 
+- [Similar Competition Winner Solutions  🏆](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405547) — 15 票 / 2 评论 / 2023-04-28 **write-up?**
+- [ProtBERT Embeddings Dataset+Data Card 🔥](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/407162) — 15 票 / 2 评论 / 2023-05-05 
+- [Are language models working together?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433445) — 15 票 / 19 评论 / 2023-08-21 
+- [Please share top public LB solutions 🙏](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433543) — 15 票 / 2 评论 / 2023-08-22 **write-up?**
+- [Yeah, so there's no way I am going to finish on time...😔 (3D Protein Structure Approach)](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433472) — 15 票 / 17 评论 / 2023-08-21 
+- [CAFA 5: Thank you! What's next?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/435531) — 14 票 / 4 评论 / 2023-08-29 
+- [GO Term count analysis for helping class sampling](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/413349) — 13 票 / 1 评论 / 2023-05-28 
+- [Post Processing](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/417784) — 13 票 / 2 评论 / 2023-06-17 
+- [At the final evaluation - annotations can only be ADDED  while existing (high-confident)  will be the same, or some can also "disappear"(not-confirmed) ?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/406914) — 13 票 / 2 评论 / 2023-05-04 
+- [How similar are train and test data?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/406573) — 13 票 / 7 评论 / 2023-05-02 
+- [2D embedding of CAFA test proteins](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/406336) — 13 票 / 11 评论 / 2023-05-02 
+- [A GO Primer](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402936) — 13 票 / 0 评论 / 2023-04-20 
+- [Embeddings for targets, embeddings for inputs (DeepGoZero-based solution)](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433900) — 13 票 / 3 评论 / 2023-08-23 **write-up?**
+- [Main relations in the Gene Ontology(GO)](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402804) — 13 票 / 4 评论 / 2023-04-19 
+- [Fixing LB Update - COMPLETED!](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/452639) — 12 票 / 3 评论 / 2023-11-02 
+- [The metric is calculated with: prop_mode='fill' or prop_mode='max' ?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/419127) — 12 票 / 4 评论 / 2023-06-24 
+- [Info on CAFA4](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/403040) — 12 票 / 4 评论 / 2023-04-20 
+- [DeepGOZero: Improving protein function prediction from sequence and zero-shot learning based on ontology axioms](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/423880) — 12 票 / 9 评论 / 2023-07-11 
+- [Q: information accretion values in IA.txt](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405090) — 12 票 / 2 评论 / 2023-04-26 
+- [Version of go-basic.obo for LB and final evaluation](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/424899) — 12 票 / 3 评论 / 2023-07-16 
+- [Why are the existing GO annotations so poor?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/405565) — 12 票 / 5 评论 / 2023-04-28 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402629) — 11 票 / 104 评论 / 2023-04-19 
+- [Lots of sequences with 100% similarity](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/421189) — 11 票 / 12 评论 / 2023-07-04 
+- [LB After First Update Stats and shake-ups 🌟 💥 Fixing [UPDATED]](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/452418) — 11 票 / 14 评论 / 2023-11-02 
+- [CV Grouping Strategy](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/409329) — 11 票 / 10 评论 / 2023-05-10 
+- [An eyeball test shows that homology methods work reasonably well - pun intended](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/433802) — 11 票 / 2 评论 / 2023-08-23 
+- [2nd leaderboard update?](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/458311) — 10 票 / 4 评论 / 2023-11-29 
+- [CAFA Researcher- looking for team](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402645) — 10 票 / 11 评论 / 2023-04-19 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/402559) — 7 票 / 6 评论 / 2023-04-18 
+- [There will be no Discord Channel for this Competition](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/429940) — 6 票 / 0 评论 / 2023-08-07 
+- [CAFA 5 manuscript](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/594108) — 4 票 / 0 评论 / 2025-08-01 
+- [CAFA 6 is now live](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/613154) — 3 票 / 5 评论 / 2025-10-24 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/462836) — 3 票 / 0 评论 / 2023-12-21 
+- [CAFA5 manuscript on biorxiv](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/695964) — 1 票 / 0 评论 / 2026-04-30 
+- [Intelligent Systems in Molecular Biology 2024](https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/491341) — 1 票 / 0 评论 / 2024-04-05 

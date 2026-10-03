@@ -1,0 +1,112 @@
+<p>First of all, I would like to express my sincere gratitude to the competition host and the Kaggle staff for organizing such a fascinating competition. I thoroughly enjoyed this competition and learned a great deal in the process!</p>
+<p>Furthermore, I'd like to thank <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> and <a href="https://www.kaggle.com/davidlist" target="_blank">@davidlist</a> . <a href="https://www.kaggle.com/hengck23" target="_blank">@hengck23</a> 's discussion and notebook were the starting point for my solution, and Many of the discussions and comments from <a href="https://www.kaggle.com/davidlist" target="_blank">@davidlist</a> were extremely helpful.</p>
+<h2>Summary</h2>
+<p>My solution is simple and straightforward. I performed segmentation using a 3D ConvNeXt-like model and further employed an ensemble of as many models as possible. Subsequently, I computed the centroids of the particles using cc3d and curated the predicted centroids with DBSCAN. </p>
+<h2>Segmentation Mask</h2>
+<p>I used ground truth masks with an adjusted radius for each particle. As a result, the public leaderboard score jumped 0.02~0.04. Concletely, I adjust mask size as shown in the below table; </p>
+<table>
+<thead>
+<tr>
+<th>apo-ferritin(r=60)</th>
+<th>beta-galactosidase(r=90)</th>
+<th>ribosome(r=150)</th>
+<th>thyroglobulin(r=130)</th>
+<th>virus-like-particle(r=135)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>60/2</td>
+<td>90/2</td>
+<td>150/3</td>
+<td>130/3</td>
+<td>135/3</td>
+</tr>
+</tbody>
+</table>
+<p>Since the competition metric requires that the predicted centroid falls within a radius of r×0.5 from the ground truth centroid, I believe that multiplying the radius of each particle by a factor of 0.5 or less is reasonable. </p>
+<h2>Model Architecture</h2>
+<p>In this section, I explain my model architecture both encoder and decoder. </p>
+<h3>Encoder</h3>
+<p>To implement the encoder, I started with the ConvNeXt, since ConvNeXt is very powerful and fast. Then, I customized the model to suit the task that is to predict small particles. These changes from the original ConvNeXt are below;</p>
+<ul>
+<li>2D to 3D for all convolutional layer</li>
+<li>4x4 stem -&gt; 2x2 stem. Because the particles are very small, I believed that a large stem would adversely affect the model's predictions, especially apo-ferritin and beta-galactosidase. This modification slowed down the model's inference, but it improved its cross-validation performance. </li>
+<li>7x7 kernel size in conv block -&gt;3x3. The reason why I modified like this is the same as the stem. This modification improved both inference speed and cv. </li>
+<li>(3, 3, 9, 3) number of block -&gt; (3, 3, 3, 3). this modification is to reduce a number of parameters and get more inference speed. cv did not decrease. </li>
+</ul>
+<h3>Decoder</h3>
+<p>The flow of the decoder is based on U-Net. The implementation of conv block is shown in the following code; </p>
+<pre><code>
+ (nn.Module):
+     ():
+        ().__init__()
+        .conv1 = nn.Conv3d(in_channels, in_channels, kernel_size=, padding=, bias=, groups=in_channels)
+        .norm1 = nn.GroupNorm(num_groups=, num_channels=in_channels)
+        .act1 = nn.GELU()
+        .conv2 = nn.Conv3d(in_channels, in_channels*, kernel_size=, bias=)
+        .conv3 = nn.Conv3d(in_channels*, out_channels, kernel_size=, bias=)
+
+     ():
+        
+        x = .conv1(x)
+        x = .norm1(x)
+        x = .conv2(x)
+        x = .act1(x)
+        x = .conv3(x)
+         x
+</code></pre>
+<p>And the implementation of the decoder is shown in the following code; </p>
+<pre><code> (nn.Module):
+     ():
+        ().__init__()
+        .up3 = nn.Upsample(scale_factor=(,,), mode=, align_corners=)
+        
+        .dec3 = ConvBlock3D(in_channels=encoder_dims[] + encoder_dims[], out_channels=decoder_dims[])
+       ...
+
+     ():
+        x, f0, f1, f2, f3 = features
+
+        
+        d3 = .up3(f3)
+        d3 = torch.cat([d3, f2], dim=)
+        d3 = .dec3(d3)
+        ...
+</code></pre>
+<p>Since the ground truth for segmentation is simply a sphere, I used a basic <code>nn.Upsample</code> for upsampling instead of <code>nn.ConvTranspose3d</code> to reduce parameters. </p>
+<h2>Other Details</h2>
+<ul>
+<li>loss dunction is bce</li>
+<li>My inference code is based on <a href="https://www.kaggle.com/hengck" target="_blank">@hengck</a> 's <a href="https://www.kaggle.com/code/hengck23/1-hr-fast-2d-3d-unet-resnet34d-scanner-tta" target="_blank">this notebook</a> and the idea of DBScan came from <a href="https://www.kaggle.com/linheshen" target="_blank">@linheshen</a> 's <a href="https://www.kaggle.com/code/hengck23/1-hr-fast-2d-3d-unet-resnet34d-scanner-tta" target="_blank">notebook</a>. </li>
+<li>The window size for inference is (32, 320, 320) (overwrap of z axis is 6). The window size for training is (32, 256, 256). </li>
+<li>TTAs are rot90, 180 and 270. </li>
+<li>preprocessing is only normalization</li>
+</ul>
+<pre><code>     ():
+        lower, upper = np.percentile(x, (, ))
+        x = np.clip(x, lower, upper)
+        x = x - np.(x)
+        x = x / np.(x)
+         x
+</code></pre>
+<ul>
+<li>Augmentations for training are rot90, 180, 270, and xyz flip. </li>
+</ul>
+<h2>What did not work</h2>
+<ul>
+<li>pretraining with synthetic data provided by host</li>
+<li>more and more smaller mask(e.g. factor=0.25 for large particles and factor=0.4 for small particles)</li>
+<li>flip tta instead of rot90</li>
+</ul>
+<h2>Code &amp; Model Checkpoint</h2>
+<p>inference code: <a href="https://www.kaggle.com/code/wadakoki/czii-9th-inference" target="_blank">https://www.kaggle.com/code/wadakoki/czii-9th-inference</a><br>
+training code: <a href="https://colab.research.google.com/drive/1OG5Rap9zUkKG6fnGZ8kP0JwwFZfSTgCc?usp=sharing" target="_blank">https://colab.research.google.com/drive/1OG5Rap9zUkKG6fnGZ8kP0JwwFZfSTgCc?usp=sharing</a><br>
+model checkpoint: <a href="https://www.kaggle.com/datasets/wadakoki/czii-9th-final-models/data" target="_blank">https://www.kaggle.com/datasets/wadakoki/czii-9th-final-models/data</a><br>
+generated mask: <a href="https://www.kaggle.com/datasets/wadakoki/czii-mask-small" target="_blank">https://www.kaggle.com/datasets/wadakoki/czii-mask-small</a><br>
+code for mask generation: <a href="https://www.kaggle.com/code/wadakoki/czii-gen-small-masks" target="_blank">https://www.kaggle.com/code/wadakoki/czii-gen-small-masks</a></p>
+<p><strong>Requirements for training code on google colab</strong></p>
+<ul>
+<li>GPU: L4</li>
+<li>RAM: High Memory</li>
+</ul>

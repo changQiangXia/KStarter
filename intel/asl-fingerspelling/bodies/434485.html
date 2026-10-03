@@ -1,0 +1,99 @@
+<p>Thanks to kaggle and everyone involved for hosting such an interesting competition. It was a great extension to the isolated sign language classification and it was very interesting to see how much of speech-to-text research could also be applied to sign language fingerspelling. As always it was a great teaming experience with <a href="https://www.kaggle.com/darraghdog" target="_blank">@darraghdog</a> </p>
+<h2>TLDR</h2>
+<p>Our solution is based on a single encoder-decoder architecture. The encoder is a significantly improved version of Squeezeformer, where the feature extraction was adapted to handle mediapipe landmarks instead of speech signals. The decoder is a simple 2-layer transformer. We additionally predicted a confidence score to identify corrupted examples which can be useful for post-processing. We also introduced efficient and creative augmentations to regularize the model, where the most important ones were CutMix, FingerDropout and TimeStretch, DecoderInput Masking. We used pytorch for developing and training our models and then manually translated model architecture and ported weights to tensorflow from which we exported to tf-lite.</p>
+<h2>Cross validation</h2>
+<p>We split the training data into 4 folds by signer. In the beginning we had nearly perfect correlation between CV and public LB with this approach. With higher scores improvements on CV reflected a bit less on LB, mostly due to the fact that the LB score was always decently higher and hence saturated earlier. Most of the time we only trained and tracked the score of fold0 and not all folds. </p>
+<h2>Data preprocessing</h2>
+<p>In total 130 key points were used. These consisted of 21 key points from each hand, 6 pose key points from each arm, and the remaining 76 from the face (lips, nose, eyes). Locally the 130 key points were cached to .npy files for fast data loading. <br>
+Prior to data augmentations, the data was normalized with std/mean and nans were zero filled. </p>
+<h2>Augmentations</h2>
+<p>Augmentations were essential to prevent overfitting, generalize to new signers and enable deep models. We used augmentations which were popular in the first ASL competition but also came up with a lot of new creative augmentations and some have proven to be very effective. </p>
+<ul>
+<li>Resizing along time axis.</li>
+<li>Shift the sequence along the time axis. </li>
+<li>Windowed resizing along time axis (similar to warping).</li>
+<li>Left-right flip of keypoints. </li>
+<li>Cutmix of samples timewise - draw a random percentage between [0,1] and cut 2 sequences and related phrases at that percentage and mix. Mixing only within same signer was best</li>
+<li>Spatial affine - scale, shear, shift and rotate. </li>
+<li>Drop/Zero-fill between 2 to 6 different fingers over 2 to 3 time windows. </li>
+<li>Drop/Zero-fill either all face landmarks or all pose landmarks. </li>
+<li>In rare cases (~5% of samples) drop/zero-fill all hand landmarks. </li>
+<li>Temporal masking (zero-fill) in windows of different sizes or counts. </li>
+<li>Spatial masking </li>
+</ul>
+<p>Most augmentations were applied to 50% of the samples, except for resizing and spatial affine which were applied to ~80% of samples.  </p>
+<p>After augmentation, samples with more than 384 frames were resized along time axis, with channel-wise linear interpolation. Samples of less than 384 were padded to 384 for training only. tf-lite ran on variable length samples. <br>
+No frames were dropped in preprocessing. </p>
+<h2>Model</h2>
+<p>In general, we observed that a deeper model gives significant gains (if we are able to prevent overfitting). As a consequence not only regularization techniques like augmentations are essential, but also every improvement in computational efficiency creates space to use deeper models and hence is equally important as the model architecture itself.</p>
+<p>Our model consists of 3 parts, Feature Extraction, Encoder, Decoder which are shown in the image below</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2Fdc7c0fc365f54fb4d35f03da1748ed3b%2FScreenshot%202023-08-25%20at%2012.47.53.png?generation=1692960500706760&amp;alt=media" alt=""></p>
+<p>We interpret the data like a 3 channel image, where width is defined by the number of frames, height is given by the number of the selected 130 landmarks and channels are given by raw xyz coordinates. <br>
+The feature extraction is based on a 2D convolution followed by batchnorm and a linear layer on the flattened features to extract features per frame. We have 5 of this feature extraction modules, one for all landmarks at once and one per landmark type (left_hand, right_hand, face, pose). The all-landmark module outputs 208 dim vector/ frame. The other 4 output 52 dim vectors each which are then concatenated to have also 208 dims. We had those two 208-dim vectors per frame and get a (batch_size x 384 x 208) input for our encoder where 384 is the maximum sequence length we chose.</p>
+<p>The main component of our model is an encoder which was adapted from the Squeezeformer architecture. We did not use the actual “squeeze” idea, i.e. a temporal Unet, but used the general architecture of Squeezeformer Blocks which consist of a combination of MultiHeadSelfAttention (MHSA), Convolution and FeedForward modules. We made several improvements to this architecture:<br>
+ASR conformers (and Squeezeformer) use relative positional encoding which allow the self-attention module to generalize better on different input lengths. Relative positional encoding is performance intensive, as well as using many parameters, as they are stored separately in each layer. Replacing this with Llama attention which uses rotary embeddings sped up training ~2X and tf-lite inference approx ~3X allowing larger models to be used. In addition, we cached the rotary embeddings once and fed them into each layer with the input data so they are not duplicated in each layer. This resulted in 20% less parameters in the model. We saw no benefit in using time reduction which was introduced with Squeezeformer. So in our model all layers had the same sequence length as the original input. As suggested in the Squeezeformer paper, the pre-Layer Norm from the Macaron structure is redundant and was replaced with a learnable scaling layer which scales and shifts the activations. </p>
+<p>For decoding we used a simple 2 layer transformer decoder which is similar to hugging faces <a href="https://github.com/huggingface/transformers/blob/main/src/transformers/models/speech_to_text/modeling_speech_to_text.py#L857" target="_blank">Speech2TextDecoder</a>, which outputs a sequence prediction. We then used cross entropy loss for training our model End2end. An extra cross entropy auxiliary loss of the reversed sequence was used. A causal decoder mainly uses encoder cross attentions for the sequence's beginning and previous characters and cross attentions for the end. To improve the model's accuracy, we use a separate causal decoder on the reversed sequence as an auxiliary loss, making the model rely more on the encoder cross attention for the label's end. For decoder inference early stopping and past key value caching was used which sped up inference significantly.  It should be noted that we found a transformer based Decoder superior to a CTC based decoding, even in a setting where computational efficiency matters a lot. </p>
+<p>Additionally to the decoder, we also added a single linear layer to take the features of the first token of the encoder output to predict a confidence score, which helps to identify garbage data and can be used in post-processing. As a target for this we used normalized levensthein distance clipped to [0,1] of OOF predictions of a decent previous model.</p>
+<p>We explored and trained all our models in pytorch, but whenever we deemed it good enough for a submission we translated each component manually to tensorflow and ported weights from our pytorch models. </p>
+<h2>Training procedure</h2>
+<p>Models were trained with a cosine learning rate schedule for 400 epochs with peak LR of 0.0045, weight decay of 0.08, 10 epochs warmup, mixed precision and an effective batch size of 512 samples. Dropout of 0.1 was used in the transformer encoder/decoder layers. It was important to train with mixed precision in order to leverage fp16 inference without performance drop. Training with fp32 and using tf-lite fp16 inference causes a drop of ~0.01 in CV vs LB. </p>
+<p>tf-lite inference used a single sample without padding, while model training was performed with time padded mini-batches. To avoid the model learning with pads, and ensure optimal inference runtime, the feature extractor and Macaron structure encoder layers were masked time wise during training. This needed to be manually implemented in pytorch on each layer. This took some effort, but paid off by significantly speeding up inference. As <a href="https://www.kaggle.com/competitions/asl-signs/discussion/406684" target="_blank">1st place team</a> in the previous ISL competition explained, this is much easier to do in tensorflow as keras has an off the shelf masking layer. </p>
+<p>Model training and tf-lite inference ran in fp16, so tf-lite files consumed almost half the disk size of of fp32. This was important, as the 40MB size was our limitation in the end. The two final model seeds measured 39988kb. </p>
+<h2>Postprocessing</h2>
+<p>The main idea of our postprocessing is to replace poor predictions with a dummy phrase which has a small levensthein distance to the train/ test data. <a href="https://www.kaggle.com/anokas" target="_blank">@anokas</a> showed in his <a href="https://www.kaggle.com/code/anokas/static-greedy-baseline-0-157-lb" target="_blank">notebook</a> why '2 a-e -aroe' is a good candidate for that. Most of the poor prediction resulted from corrupted input data often only a few frames long. We used a confidence score predicted by our model as basis. Whenever the confidence score is below 0.15 or the sequence is shorter than 15 frames we replace the prediction with '2 a-e -aroe'.</p>
+<h2>Supplemental Data</h2>
+<p>We only marginally profited from using the supplemental data. We think the main reason is that although there are 50k samples in this supplemental data there are only 500 unique phrases, and hence the model rather learns to classify then to actually decode character-by-character. We tried a lot of approaches but only the following one gave a small boost (0.838 -&gt; 0.839): <br>
+First we group the supplemental data by phrase, which only leaves us with 500 groups. In each epoch of training we add one sample per group to the training dataset for our model. That means in each epoch we use 50k samples of the training data and only 500 samples of the supplemental data. </p>
+<h2>Ensembling</h2>
+<p>Our final submission is a 2-seed ensemble of our model trained on the complete training data (fullfit). We average resulting logits in each decoding step for ensembling.</p>
+<h2>What did not help</h2>
+<ul>
+<li>Fully using supplemental data</li>
+<li>Using edit distance as loss (tried different approaches)</li>
+<li>CTC loss (even as an auxiliary loss it hurt score)</li>
+<li>Label smoothing</li>
+<li>AWP - kept getting nans with FP16</li>
+<li>TTA (flip/stretch)</li>
+<li>Mixup of hidden layers &amp; Specaugment++</li>
+<li>Beam search decoding (too costly)</li>
+</ul>
+<h2>Ablation study (roughly)</h2>
+<h4>Augmentations</h4>
+<ul>
+<li>Cutmix +0.005</li>
+<li>FingerDropout +0.005</li>
+<li>Face/PoseDropout +0.005</li>
+<li>masking decoder inputs +0.003</li>
+</ul>
+<h4>Model improvements</h4>
+<ul>
+<li>CNN Feature extraction +0.005</li>
+<li>2-branch Feature extraction with indiv norm +0.003</li>
+<li>Squeezeformer over 1stplace Net of 1 round +0.005</li>
+<li>Decoder over CTC +0.003</li>
+<li>Confidence over simple rules for post-processing +0.002</li>
+</ul>
+<h4>Efficiency Improvements:</h4>
+<ul>
+<li>Deeper model due to fp16 +0.003</li>
+<li>Deeper model due to llama attention +0.003</li>
+<li>Deeper model due to masking/ variable sequence len +0.005</li>
+<li>Deeper model due to caching/ early stopping in decoder +0.005</li>
+</ul>
+<h4>Postprocessing</h4>
+<ul>
+<li>Replace bad predictions with dummy phrase +0.006</li>
+</ul>
+<h2>Used tools/ repos</h2>
+<ul>
+<li>Pytorch/Tensorflow/Tf-lite (no onnx this time)</li>
+<li>Huggingface</li>
+<li>Albumentations (adapted their framework for using things like OneOf or Compose, but wrote our own augmentation implementations)</li>
+<li>Neptune.ai was our MLOps stack to track compare and share models. Below are example training runs using different model parameters and hardware (a100 card vs kaggle kernel). The data loading in the kaggle kernel below was slow and could probably be sped up with some work.  </li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F1424766%2F4693e3379ea6a1631bb3cb7b9044d42a%2FScreenshot%202023-08-25%20at%2012.58.07.png?generation=1692961107306495&amp;alt=media" alt=""></p>
+<h2>Code &amp; model weights</h2>
+<p><a href="https://github.com/ChristofHenkel/kaggle-asl-fingerspelling-1st-place-solution" target="_blank">https://github.com/ChristofHenkel/kaggle-asl-fingerspelling-1st-place-solution</a></p>
+<h2>Paper</h2>
+<p>tbd.  Due to the novelty of our approach we are thinking about summarizing it in a paper.</p>
+<p><strong>Thank you for reading, questions welcome</strong></p>

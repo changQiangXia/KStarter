@@ -1,0 +1,33 @@
+<h1>Training Data</h1>
+<p>I use 2023 competition data only, but 3 of my models have pre-train weights on 2022 data.</p>
+<h1>Model Architecture</h1>
+<p>I use SED architecture, almost the same as <a href="https://www.kaggle.com/code/kaerunantoka/birdclef2022-use-2nd-label-f0" target="_blank">this notebook</a> with very minor modifications (e.g., emb_size, num_layers).</p>
+<p>I tried 8 backbones in total, including 3 large and 5 small: <br>
+large backbones: efficientnetv2_m, eca_nfnet_l0, seresnext50<br>
+small backbones: efficientnet_v0, mnasnet_100, spnasnet_100, mobilenetv2_100, resnet34</p>
+<p>As seresnext50 and resnet34 perform not well based on my cv, so I dropped them in the final ensemble.</p>
+<p>I got the information of mnasnet_100, spnasnet_100, and mobilenetv2_100 by asking ChatGPT: <code>What are small models offered by timm</code> and ChatGPT replied with these models with the number of parameters, which is very helpful. </p>
+<h1>Code</h1>
+<p>One of my inference notebooks can be found <a href="https://www.kaggle.com/code/leonshangguan/fork-of-fork-of-onnx-final-combine-bs4-b9daf6?scriptVersionId=130783179" target="_blank">here</a></p>
+<h1>Training Strategy</h1>
+<ol>
+<li><p>all models are trained on 5s clip.</p></li>
+<li><p>soft label: in the one-hot gt, I give the primary label with "1" and the secondary label with "0.3".</p></li>
+<li><p>data augmentation: add GaussianNoise, Background noise, PinkNoise, adjust Gain, use cut mix and mix up (very helpful).</p></li>
+<li><p>Progressive pretraining: the hardest part of this competition is to find a good set of parameters when applying melspectrum, especially the n_fft, hop_length, and n_mels, which affect the input image (melspectrum) size. I tried many different params, and surprisingly, I found that if you have a model trained on params set A, then you load the model as a pre-trained model (except the first and last layer), and then train it on params set B, the model will perform much better than directly training on params set B, and this is the key idea of my solution. All of my models were trained on many different parameters and finally finetuned on n_mels=128, n_fft=1024, and hop_length=320 to make it the same size, so that can be ensemble efficiently.</p></li>
+<li><p>loss function: BCEWithLogits + BCEFocal2WayLoss, same as previous years.</p></li>
+<li><p>cv strategy: I use 5fold stratified cross-validation and select the best 1 or 2 fold according to cv. </p></li>
+<li><p>ensemble strategy: each model has 1/2 fold for ensemble, and I have 6/7 models in total, with 6 different backbones as mentioned before. The reason I didn't use all folds is because of the computational limitation asked by the host.</p></li>
+<li><p>cpu acceleration: I use ThreadPoolExecutor as I have mentioned <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/401587" target="_blank">here</a>, and I also convert models to onnx which utilizes the model quantization technique and shows faster inference time.</p></li>
+</ol>
+<h1>Others</h1>
+<ol>
+<li>more than 70 of my submissions encountered timeout error, and I therefore highly request the function that if more information can be released for the submission, for example, the running time <a href="https://www.kaggle.com/herbison" target="_blank">@herbison</a> . I suffered from it a lot, and many almost the same submissions sometimes pass but sometimes not, even with the identical code. </li>
+</ol>
+<p>I previously made a request regarding the submission time function, as mentioned <a href="https://www.kaggle.com/competitions/uw-madison-gi-tract-image-segmentation/discussion/337343" target="_blank">here</a>, when <a href="https://www.kaggle.com/ammarali32" target="_blank">@ammarali32</a> and <a href="https://www.kaggle.com/jaafarmahmoud1" target="_blank">@jaafarmahmoud1</a> found 10 PM to 6 AM EST is a good time to make submissions. The reason behind this recommendation is that 10 PM EST is considered late for the American region, while it corresponds to 4 AM in Europe and 10 AM in Asia, which might be too early for many participants. Consequently, this particular timeframe becomes somewhat magical, as very few people tend to make submissions during this period. Therefore, if one chooses to make a submission during this time, they could potentially benefit from it.</p>
+<ol>
+<li><p>based on my experiments, I believe the model params have an impact on inference time when using CPU, i.e., with the same model architecture and the number of params, but different models, some may be fast some may not. <a href="https://www.kaggle.com/chrisqiu" target="_blank">@chrisqiu</a> 's <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/409331" target="_blank">post</a> verifies this situation. As the host is trying to build apps that can be deployed in the real world using the CPU, I think this issue is worth mentioning <a href="https://www.kaggle.com/stefankahl" target="_blank">@stefankahl</a>. </p></li>
+<li><p>I found that both my CV and lb vary based on the different folds, which indicates a good data split may have a great impact on the result, and some luck is needed when setting the random seed for the data split.</p></li>
+</ol>
+<h1>Acknowledgement</h1>
+<p>I appreciate <a href="https://www.kaggle.com/stefankahl" target="_blank">@stefankahl</a> for hosting this amazing competition, <a href="https://www.kaggle.com/herbison" target="_blank">@herbison</a> for answering my questions regarding the submission timeout error, and thanks to the Kaggle community for sharing their insights, ideas, and thoughts. This is a wonderful learning experience and I hope everyone enjoys it!</p>

@@ -1,0 +1,167 @@
+<p>Hi, Kagglers!</p>
+<p>Let's start our journey in the tricky world of Audio Bird Data and Modelling, but before this, a few very important words:</p>
+<p><em>I would like to thank the Armed Forces of Ukraine, Security Service of Ukraine, Defence Intelligence of Ukraine, and the State Emergency Service of Ukraine for providing safety and security to participate in this great competition, complete this work, and help science, technology, and business not to stop but to move forward.</em></p>
+<h1>If You Only Knew the Power of A100s GPUs</h1>
+<p>I have managed to run 294 experiments: half of them with 5 folds and half of them with full data training. So, all in all, many hypotheses were checked and, of course, most of them were rejected :) So let's take a look.</p>
+<h1>Data, Data is Everywhere</h1>
+<h2>Let's Start from 2023 Training Data</h2>
+<p>If you take a look at <code>train_metadata["primary_label"].value_counts()</code>, you may notice some strange maximum magic number: </p>
+<pre><code>     
+     
+    
+    
+     
+           
+      
+      
+      
+      
+      
+     
+</code></pre>
+<p>Why do we have a maximum of 500 representatives of some species? I do not know the 100% answer, but I have a strong hypothesis - a bug in <a href="https://github.com/ntivirikin/xeno-canto-py" target="_blank">XC API</a>. I cannot remember the exact place in the code, but the overall problem lies in the data loading pipeline. Here's how it works:</p>
+<ol>
+<li>Download meta files - json files.</li>
+<li>Iterate over all urls in the meta file(s) and download them.</li>
+</ol>
+<p>BUT if you have more than 500 files for one species - on the first stage, you will have several json files (maximum number of files in one json metafile = 500), and here we have the problem! On the second stage, the API takes into account only one json for each species and ignores the next ones, so you will have a maximum of 500 files per species.</p>
+<p>NOTE: I am not sure whether it is fixed in the latest version of the API, but I have used a commit from the previous year, and it was there.</p>
+<p>From this bug, we can clearly understand that using the fixed API can hugely enrich our training dataset.</p>
+<h2>Other more boring stuff</h2>
+<ul>
+<li>2023/2022/2021/2020 competition data</li>
+<li><a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/398318" target="_blank">2020 additional competition data</a></li>
+<li><a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/394358#2179605" target="_blank">Zenodo</a></li>
+<li>Xeno-Canto </li>
+</ul>
+<h2>Data Preparation</h2>
+<h3>Training Data</h3>
+<p>In order to make validation more robust:</p>
+<ul>
+<li>Split samples of species with only one representative into 2 splits. This is done in order to have at least one CV split with each species in train AND val splits.</li>
+<li>Remove some duplicates manually.</li>
+<li>Remove duplicates by the next rule: Two samples have same: duration, author, primary_label.</li>
+</ul>
+<h3>Additional training data</h3>
+<p>From the 2023/2022/2021/2020 competition data plus Xeno-Canto data, I have selected only files with this year's primary labels and added them to the final stage of training.</p>
+<h3>Pretrained Dataset</h3>
+<p>When I was using only 2023 training data in the final stage of training, pretraining on 2022/2021/2020 competition data boosted the score a lot. But after adding additional training data, pretraining stopped working on the leaderboard (though it still increased local validation). In the last week, I decided to return to pretraining experiments. This granted me one position up in the public leaderboard and two positions up in the private leaderboard - so, Kagglers, don't forget to revisit even rejected hypotheses :) </p>
+<p>Why and when did it work? Compared to previous pretraining experiments, I have:</p>
+<ul>
+<li>Filtered out 2023 train data duplicates not only by id but also by 'author + primary_label', as was suggested <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/395843" target="_blank">here</a></li>
+<li>Taken species that are present in 2023/2022/2021/2020 competition data + 2020 additional competition data and only if there are more than 10 representatives of the species. Overall, 822 species. </li>
+<li>Added additional files for selected species from Xeno Canto.</li>
+</ul>
+<h3>Zenodo</h3>
+<p>I have selected nocall regions and used them as background augmentation.</p>
+<h3>Data Experiments That Did Not Work</h3>
+<ul>
+<li>Massive pretraining on all Xeno Canto data.</li>
+<li><a href="https://www.kaggle.com/datasets/christofhenkel/birdclef2021-background-noise" target="_blank">Background noise from 2021 2nd place</a> as Background augmentation </li>
+<li><a href="https://www.kaggle.com/datasets/mmoreaux/environmental-sound-classification-50" target="_blank">ESC50</a> as Background augmentation </li>
+<li>Selecting only High Quality samples (&gt;=32kHz) from additional data </li>
+<li>Maybe some other ideas out of 200+ experiments that I have just forgotten</li>
+</ul>
+<h1>Validation: Be soft like cmAP, Do not be hard like F1</h1>
+<p>Finally! We do not have to select a threshold on completely different training data compared to soundscape data, come up with super <a href="https://www.kaggle.com/competitions/birdclef-2021/discussion/243463" target="_blank">sophisticated schemes</a> or fall 19 places (as I did in 2021)</p>
+<p>I have used pretty much the same validation scheme as in previous years' competitions:</p>
+<ul>
+<li>Stratified CV on 5 Folds</li>
+<li>Take max prob from each 5 second clip over time across ALL sample</li>
+</ul>
+<p>IMPORTANT: For Padded cmAP it is pretty important to take mean across folds, NOT to do Out Of Fold !!! </p>
+<p>Of course, absolute numbers of CV and LB are different:</p>
+<ul>
+<li>Best Public LB:   0.84444 (4 fours :) )</li>
+<li>Best Private LB: 0.76392</li>
+<li>Best CV: 0.9083368282233681  </li>
+</ul>
+<p>But the rank correlation was pretty good. CV improvement in 0.0x (and more) resulted in improvement on LB. I have nearly all CV results for my experiments, so I hope I will have time to publish a paper with a detailed ablation study and a CV-LB correlation study.</p>
+<h1>Training</h1>
+<p>I have taken a look at <a href="https://www.kaggle.com/philippsinger" target="_blank">@philippsinger</a> <a href="https://www.youtube.com/watch?v=NCGkBseUSdM" target="_blank">presentation</a> and understood how strongly I was overfitting all the time.</p>
+<p>Due to time and device constraints, I have chosen the following scheme:</p>
+<ol>
+<li>Validate the hypothesis on CV and submit the first 2-3 folds.</li>
+<li>For ensembling retrain on full train data, so you have one model for each setup</li>
+</ol>
+<p>Training Details:</p>
+<ul>
+<li>50 Epochs</li>
+<li>Adam</li>
+<li>CosineAnnealing from 1e-4 (or 1e-3) to 1e-6</li>
+<li>Focal loss </li>
+<li>64 BS</li>
+<li>5 second chunk </li>
+<li>SUPER IMPORTANT: Class sampling weights</li>
+</ul>
+<pre><code>sample_weights = (
+    .value_counts() / 
+    all_primary_labels.value_counts().sum()
+)  ** (.)
+</code></pre>
+<ul>
+<li>Same setups for pretrain and finetune</li>
+</ul>
+<p>Stages:</p>
+<ol>
+<li>Pretrain - refer to <code>Pretrained Dataset</code></li>
+<li>Tune  only on scored species </li>
+</ol>
+<h1>Model</h1>
+<p>Because of computational constraints, we couldn't use the golden rule of Deep Learning: Stack More Layers!</p>
+<p>So I have dived a bit in inference optimization techniques:</p>
+<ul>
+<li>ONNX - this worked pretty well for me. It improved the inference time slightly and allowed me to reduce the number of custom dependencies in the inference notebook.</li>
+<li>Quantization -  I spent more than a week experimenting with it, but unfortunately, I had no success :( </li>
+<li>openvino -  I didn't use or try this, I just read about it the <a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/412707" target="_blank">2nd place description</a> and burnt my chair </li>
+</ul>
+<p>Overall, my final submission is an ensemble of 3 Sound Event Detection (SED) models with the following backbones:</p>
+<ul>
+<li>eca_nfnet_l0 (2 stages training; Start LR 1e-3)</li>
+<li>convnext_small_fb_in22k_ft_in1k_384 (2 stages training; Start LR 1e-4)</li>
+<li>convnextv2_tiny_fcmae_ft_in22k_in1k_384 (1 stage training; Start LR 1e-4)</li>
+</ul>
+<p>It was pretty important to tweak the starting learning rate for different architectures!!!</p>
+<h1>Augmentations</h1>
+<p>I was pretty picky about augmentation selection, so my final models used next ones:</p>
+<ul>
+<li>Mixup : Simply OR Mixup with Prob = 0.5</li>
+<li>BackgroundNoise with Zenodo nocall</li>
+<li>RandomFiltering - a custom augmentation: in simple terms, it's a simplified random Equalizer</li>
+<li>Spec Aug: <ul>
+<li>Freq: <ul>
+<li>Max length: 10</li>
+<li>Max lines: 3</li>
+<li>Probability: 0.3</li></ul></li>
+<li>Time:<ul>
+<li>Max length: 20</li>
+<li>Max lines: 3</li>
+<li>Probability: 0.3</li></ul></li></ul></li>
+</ul>
+<h1>Small inference tricks</h1>
+<ul>
+<li>Using temperature mean: <code>pred = (pred**2).mean(axis=0) ** 0.5</code></li>
+<li>Using Attention SED probs * 0.75 + Max Timewise probs * 0.25</li>
+</ul>
+<p>All these gave marginal improvements but it is was a matter of first 3 places :) </p>
+<h1>Other stuff that created a carbon footprint but did not improve my LB score</h1>
+<p>This section will be far from complete but let's add something that I have in mind now:</p>
+<ul>
+<li><a href="https://www.kaggle.com/competitions/birdclef-2023/discussion/412707" target="_blank">2021 2nd place model</a>. I have tried (like I did in 2022) but unfortunately it did not work for me </li>
+<li>Pretrain on whole Xeno Canto</li>
+<li>Train on larger chunks. The same result occurred if I inferred on smaller chunks or on same length chunks</li>
+<li>Colored Noise augmentations </li>
+<li>CQT or <a href="https://github.com/denfed/leaf-audio-pytorch" target="_blank">LEAF</a></li>
+<li>Specific finetuning: smaller LR, smaller number of epochs, freeze backbone, different LRs for backbone and head</li>
+<li>Loss on Attention SED probs + Loss on Max Timewise probs</li>
+<li>Deep Supervision </li>
+<li>Different <code>alpha</code> for MixUp</li>
+<li>Transformer architectures. For example <a href="https://speechbrain.readthedocs.io/en/latest/API/speechbrain.lobes.models.ECAPA_TDNN.html" target="_blank">ECAPA TDNN</a> </li>
+</ul>
+<h1>Closing words</h1>
+<p>I hope you have not fallen asleep while reading. Finally, I want to thank the entire Kaggle community, congratulate all participants and winners.<br>
+Special thanks to Cornell Lab of Ornithology, LifeCLEF, Google Research, Xeno-canto, <a href="https://www.kaggle.com/stefankahl" target="_blank">@stefankahl</a>, <a href="https://www.kaggle.com/tomdenton" target="_blank">@tomdenton</a>, <a href="https://www.kaggle.com/holgerklinck" target="_blank">@holgerklinck</a>. All of you were super active in discussions, shared datasets and interesting materials, answered all questions, and of course, prepared such a cool competition!"</p>
+<h1>Resources</h1>
+<p><strong>Inference Kernel</strong> : <a href="https://www.kaggle.com/code/vladimirsydor/bird-clef-2023-inference-v1/notebook" target="_blank">https://www.kaggle.com/code/vladimirsydor/bird-clef-2023-inference-v1/notebook</a><br>
+<strong>GitHub</strong> : <a href="https://github.com/VSydorskyy/BirdCLEF_2023_1st_place" target="_blank">https://github.com/VSydorskyy/BirdCLEF_2023_1st_place</a><br>
+<strong>Paper</strong> : TBD</p>

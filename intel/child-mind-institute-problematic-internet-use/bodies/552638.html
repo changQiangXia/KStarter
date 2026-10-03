@@ -1,0 +1,34 @@
+<p><strong>First and foremost, I would like to thank the organizers and Kaggle for making this competition possible. Tackling real-world noisy data was both a challenging and rewarding experience.</strong></p>
+<p><strong>To be perfectly honest, luck played a major role in my success. I was especially lucky actually selecting the best possible notebook. Nevertheless, I’d like to present what I did. (<a href="https://www.kaggle.com/code/lennarthaupts/1st-place-cmi-model-v4-1-1-reduced?scriptVersionId=213769368" target="_blank">Link to the notebook</a>)</strong></p>
+<p>Interestingly, I dropped out of the competition two months ago only to re-enter recently. My focus during this return was on improving the robustness of the solution.</p>
+<h1>Final Model Overview</h1>
+<p>The final solution was a voted ensemble consisting of:<br>
+•    LGBMRegressor<br>
+•    Two XGBoost Regressors<br>
+•    CatBoostRegressor<br>
+•    ExtraTreesRegressor</p>
+<h1>Target, Cross-Validation, and Sample Weights</h1>
+<p>•    <strong>Target Variable:</strong> Instead of using the provided sii labels, I used the 'PCIAT-PCIAT_Total' score and converted the predictions to sii labels. <br>
+•    <strong>Distribution and Weighting:</strong> The target’s distribution, especially the excess zeros, led to two approaches: exploring sample weights and alternative objectives for regression like <strong>Tweedie</strong>. Equidistant bins were used to define the sample weights. Weighting did not improve the optimized scores directly but it brought the unoptimized scores closer to the optimized scores.<br>
+•    <strong>Cross-Validation:</strong> A 10-fold stratified KFold was used, stratified by the bins. Seeds were frequently changed to ensure stability. Submissions with different seeds were used to get further feedback from the public Leaderboard on the variance. The LB-score itself was mostly ignored to minimize overfitting to the leaderboard.</p>
+<h1>Data Cleaning, Feature Engineering, and Imputation</h1>
+<p><strong>Data Cleaning:</strong> </p>
+<ul>
+<li>Implausible values, such as body fat percentages over 60% or negative bone mineral content, were removed and replaced with NaN.</li>
+</ul>
+<p><strong>Feature Engineering:</strong> </p>
+<ul>
+<li>Various descriptive actigraph features were created, with separate masks for day and night.</li>
+<li>Dimensionality reduction of the actigraph data using PCA retained 15 components.</li>
+<li>Additional features included normalized values based on age group means and other features that seemed sensible like the difference between the daily energy expenditure and the basal metabolic rate.</li>
+<li>Quantile binning was applied to a good chunk of the features to deal with the noise. Which worked surprisingly well.</li>
+</ul>
+<p><strong>Imputation:</strong> </p>
+<ul>
+<li>Lasso was used for feature imputation, due to the moderately high dimensionality and noise.</li>
+<li>Features were imputed using Lasso. For each target column, a model was trained using features with fewer than 40% missing values, and missing values in these features were imputed based on the trained model. If no valid features (i.e., features with less than 40% missing values) were found for imputation, or if the number of valid samples was too small, the solution defaulted to mean imputation.</li>
+</ul>
+<h1>Parameter Tuning and Feature Selection</h1>
+<p>Early in the competition, it became apparent that typical parameter tuning with regular cross-validation setups resulted in unstable outcomes. To address this:<br>
+•    Repeated Stratified KFold was employed during parameter tuning. With 10 to 20 repeats. Which was computationally more expensive but yielded more robust results.<br>
+•    Feature selection was done manually based on feature importance, reducing the dataset to 39 features </p>

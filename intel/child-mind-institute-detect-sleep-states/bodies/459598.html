@@ -1,0 +1,76 @@
+<p>First of all, thanks my teammate <a href="https://www.kaggle.com/robikscube" target="_blank">@robikscube</a> . It was a fun ride. We have noticed that Public LB is not very trustworthy and focused on our CV. We had around 0.826 CV at the end.</p>
+<p><strong>Our main model is a wavenet with some modifications.</strong> It works on a sequence of minutely aggregated 3 days.</p>
+<pre><code> (nn.Module):
+     ():
+        (SleepModel, self).__init__()
+        emb_size = 
+
+        self.minute_emb = nn.Embedding(, embedding_dim=emb_size)
+
+        self.bn = nn.BatchNorm1d(inch-)
+        self.wave_block1 = Wave_Block(inch-+emb_size, , , kernel_size)
+        self.wave_block2 = Wave_Block(, , , kernel_size, base=)
+        self.wave_block3 = Wave_Block(, , , kernel_size)
+        self.wave_block4 = nn.Sequential(nn.Conv1d(, , kernel_size=, dilation=DAY_LEN//), 
+                                         nn.BatchNorm1d(), nn.LeakyReLU(),
+                                         nn.Conv1d(, , kernel_size=, dilation=DAY_LEN//), 
+                                         nn.BatchNorm1d(), nn.LeakyReLU()
+                                        )
+        self.top = nn.Conv1d(, , kernel_size=)
+        self.top2 = nn.Conv1d(, , kernel_size=)
+
+
+        self.gn1 = nn.GroupNorm(, )
+        self.gn2 = nn.GroupNorm(, )
+
+        self.avgpool = nn.AvgPool1d(kernel_size=DAY_LEN+, padding=DAY_LEN//, stride=)
+        self.maxpool = nn.MaxPool1d(kernel_size=DAY_LEN+, padding=DAY_LEN//, stride=)
+
+
+     ():
+        x = torch.cat([x[:, -DAY_LEN:]*, x, x[:, :DAY_LEN]*], axis=)
+        x = x.permute(, , )
+        minute, x = x[:, -, :], x[:, :-, :]
+
+        x[:, -, :] += minute /  
+        x = self.bn(x)
+
+        minute_emb = self.minute_emb(torch.fmod(minute, ).long()) 
+        x = torch.cat([x, minute_emb.permute(, , )], axis=)
+
+        x = self.wave_block1(x)
+        x = self.gn1(x)
+        x = self.wave_block2(x)
+        x = self.gn2(x)
+        x = self.wave_block3(x)
+
+        x = torch.cat([x, self.avgpool(x[:, :]), self.maxpool(x[:, :])], axis=)
+
+        x = self.wave_block4(x)
+        x, x2 = self.top(x), self.top2(x)
+         x, x2
+</code></pre>
+<p>Its <strong>features</strong> are: <code>
+["target", "idx", "anglez_mean", "anglez_std", 
+                                                       "enmo_mean", "enmo_std", 
+                                                       "same_anglez_prev_min", "same_anglez_next_min"] +
+                                                       volatility_cols + ["hour", "minute"]
+</code><br>
+Volatility columns are median over anglez absolute difference on 3 different time windows. (5, 30, 480 steps)<br>
+Same anglez prev and next features are difference of anglez with the last day same minute.</p>
+<p><strong>Training details:</strong></p>
+<ul>
+<li>Target is also set to 1 for the adjacent minute because we predict with +3 step offset to cover the next minute too.</li>
+<li>Ignoring near misses in loss: 2nd and 3rd minutes around the target are set to -1. SO that we dont penalize positive predictions there.</li>
+<li>2 heads (1 for actual target -&gt; categorical crossentropy, 1 for 15min windows -&gt; BCE)</li>
+<li>Online Hard Example Mining with 50%</li>
+<li>6 epochs with diminishing LR. Each epoch takes 18 seconds on RTX3090. (and submission was taking 30 minutes in total)</li>
+<li>2 iterations with different seed for diversity. 1st iteration excludes some bad series and 2nd iteration has very little augmentation.</li>
+</ul>
+<p><strong>Prediction details:</strong></p>
+<ul>
+<li>1 day sliding predictions with 3 days span. Only the middle day is used.</li>
+<li>Postprocessing: Starting from the max prediction, we add their location as prediction. Score is their probability and 2nd highest probability within +-4 minute window. We set these windows to zero. We multiply surrounding +-20 minutes windows by 0.5 and continue. Later, we sample very low probability predictions for +-18 steps span for predictions with high score.</li>
+<li>Stacking with LightGBM: Lightgm with a lot of median absolute anglez difference features are used. NN probabilities and time to/till onset/wakeup features using this probabilities are added. AUC got significantly improved but the metric is improved very little. (0.001)</li>
+<li>Ensembling: We had another model with LSTM+Transformer. We added it to get 0.001 improvement.</li>
+</ul>

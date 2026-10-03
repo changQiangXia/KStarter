@@ -1,0 +1,31 @@
+# fathomnet-out-of-sample-detection 讨论区（按票数排序，共 29 条）
+
+- [Similar competitions in the past](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397024) — 19 票 / 2 评论 / 2023-03-23 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397069) — 9 票 / 3 评论 / 2023-03-24 
+- [Incorrect labels from the dataset](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/407400) — 6 票 / 2 评论 / 2023-05-06 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397070) — 5 票 / 4 评论 / 2023-03-24 
+- [4th place solution](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/413092) — 5 票 / 0 评论 / 2023-05-26 **write-up?**
+- [Metric Fix and Rescore](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/404769) — 3 票 / 0 评论 / 2023-04-24 
+- [question about Submission](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/400616) — 3 票 / 2 评论 / 2023-04-09 
+- [Semi-supervised Visual Tracking of Marine Animals Using Autonomous Underwater Vehicles](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397881) — 3 票 / 0 评论 / 2023-03-27 
+- [Inconsistent submission score with MAP@20 and scoring code](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/410140) — 2 票 / 2 评论 / 2023-05-14 
+- [FGVC10 Workshop at CVPR - Other competitions](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/401210) — 2 票 / 0 评论 / 2023-04-12 
+- [157 out of 290 categories have no corresponding images](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/398752) — 2 票 / 1 评论 / 2023-03-31 
+- [Handling Label Noise ](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/398487) — 2 票 / 0 评论 / 2023-03-30 
+- [Trying download_images.py code returned "unrecognized arguments"](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397071) — 2 票 / 10 评论 / 2023-03-24 
+- [What is OSD (Out-of-Sample Detection)?](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/411135) — 1 票 / 1 评论 / 2023-05-17 
+- [Downloading images from source is too long 😥](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/410908) — 1 票 / 6 评论 / 2023-05-16 
+- [What is the correct submission format?](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/410430) — 1 票 / 3 评论 / 2023-05-15 
+- [Submission contains null values](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/406510) — 1 票 / 1 评论 / 2023-05-02 
+- [Inconsistent behavior in leaderboard evaluation metric](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/401858) — 1 票 / 7 评论 / 2023-04-15 
+- [Evaluation metric raised an unexpected error](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/398368) — 1 票 / 2 评论 / 2023-03-29 
+- [Annotation issue](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397530) — 1 票 / 2 评论 / 2023-03-26 
+- [Wondering the rule about dataset has been changed?](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/411911) — 0 票 / 0 评论 / 2023-05-21 
+- [Clarification on rules for using additional dataset](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/407096) — 0 票 / 2 评论 / 2023-05-05 
+- [External Dataset: Okeanos Animal Guide](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/407254) — 0 票 / 0 评论 / 2023-05-05 
+- [Command line hang when running conda activate fgvc_test](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/402836) — 0 票 / 2 评论 / 2023-04-19 
+- [Question about sample_submission.csv](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/403062) — 0 票 / 2 评论 / 2023-04-21 
+- [Conflict between CVPR2023 submission time and competition time](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/400854) — 0 票 / 1 评论 / 2023-04-10 
+- [Error while trying to get start](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/399727) — 0 票 / 2 评论 / 2023-04-05 
+- [My errors - ](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/399632) — 0 票 / 1 评论 / 2023-04-04 
+- [Is there any metal in this competition? like normal competitions?](https://www.kaggle.com/competitions/fathomnet-out-of-sample-detection/discussion/397675) — 0 票 / 1 评论 / 2023-03-26 

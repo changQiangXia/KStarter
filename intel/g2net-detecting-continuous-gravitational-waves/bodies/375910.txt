@@ -1,0 +1,167 @@
+# https://www.kaggle.com/competitions/g2net-detecting-continuous-gravitational-waves/discussion/375910
+
+Topic #375910: 1st place solution: Summing the power with GPU
+  Author: 🐢 Jun Koda
+  Posted: 2023-01-04 01:35:40.379000
+  Votes: 101  Comments: 38
+
+I thank Kaggle and the organizers for hosting this gravitational wave competition. I enjoyed the previous binary back hole merger competition, as well, and was impressed a lot by the gold-medal solutions. I thought large pretrained image models would be the strongest anyway, but they outperformed with 1-dimensional convolutional neural networks. I joined this competition so that I could build such deep neural network models detecting the wave, not the power, … but failed.
+
+The largest difference between the two competitions is that the Earth rotates during 120 days and it imprints complicated frequency pattern into the frequency. Adding wave is very delicate, requires very accurate phase patterns, and I was not able to add up the complex Fourier modes effectively within reasonable computational resources. After more than one month without any progress, I thought I should get a silver medal even with an unsatisfactory approach, give up adding the wave and add the power.
+
+Solution
+
+
+
+Sum power (absolute-value squared) along various signal patterns
+
+No machine learning
+
+No use of external data or leakage
+
+
+Power summation
+
+
+
+Extract signal frequency and amplitude [total power P(t)] from the simulations
+
+Subtract Doppler shift frequency from the data frequency for 4000 signal patterns 
+
+Weight the data proportional to the signal amplitude pattern; this is the optimal linear weight w(t)
+
+Sum the weighted power along lines: 360 frequencies (intercept) × 241 slops in [-120, 120] (frequency bin / 120 days)
+
+Take the maximum
+
+
+
+
+The values are highly skewed from the typical range [-1, 1] because these are maxima of 4000 templates × 360 frequencies × 241 slops.
+
+This took 5 days using GPU RTX 3090. Full range of slope is [-360, 360] but [-120, 120] already took long enough.
+
+Real noise normalization
+
+
+
+Normalize by the noise rms at each time h -&gt; h / sigma(t)
+
+Remove single-frequency noise by masking anomalously large frequency bin
+
+Normalize the frequency dependence by the remaining rms sigma(f)
+
+
+I know the noise is not always written as a product of time dependence and frequency dependence, but I did not have time for better treatment. Some false positives are remaining in my prediction.
+
+Follow up summation with sinc kernel
+
+The signal spread among frequency bins with sinc function (assuming the window function for the short-time Fourier transform is almost top hat). I use a sinc kernel with width 8 and stride 1/8 frequency bin to collect the signal. This is the optimal linear weighting in the frequency direction. I recompute the power sum with this kernel around the largest-power line in the first step for a subsample of 400 templates. This gives a surprisingly large boost to the public score 0.825 -&gt; 0.848
+
+Finally, I apply a sigmoid to the standardized power sum and submit, which is same as just submitting the power sum. I thought the prediction value must also depend on the noise level; if the signal is undetected, there should be larger possibility to be positive for larger noise because more data are undetected. I modeled this effect but could not improve the score. 
+
+PS:
+More about the weight
+https://www.kaggle.com/code/junkoda/optimal-weights-for-signal-to-noise-ratio
+
+Code
+https://github.com/junkoda/kaggle_g2net2_solution
+
+Comments:
+├─ Suma Mallapragada (2023-01-18 03:49:56.957000) [+1]
+│  Thanks for posting the detailed solution! It was amazing to note the procedure used in the weights set to the signal-to-noise ratio for improving the model. My solution involved the use of t-test a...
+├─ Red Bear (2023-01-05 00:45:43.887000) [+1]
+│  the use of the sinc kernel is superb
+├─ MichaelP (2023-01-04 14:50:46.520000) [+1]
+│  Congratulations, a great achievement! Your write-up is a good example of being willing to pivot away from initial intuitions about a problem to find a better outcome with a different approach. A go...
+├─ Gaju Ahmed (2023-01-04 12:25:20.540000) [+1]
+│  Congratulations &amp; Thanks for the insightful solution.
+├─ Y-Haneji (2023-01-04 10:55:23.007000) [+1]
+│  @junkoda 
+│  Congratulations for the championship!
+│  What do you mean when you say “slope”?
+  ├─ 🐢 Jun Koda (2023-01-04 21:33:53.860000) [+2]
+  │  Thanks for the question. I thought it might not clear, too. I mean slope and intercept for a linear equation y = a x + b.
+  │  f(t) = f0 + fdot t
+  │  f0 is the 360 frequencies and fdot is the 241 patterns o...
+    ├─ Y-Haneji (2023-01-25 14:20:05.333000) [+0]
+    │  Thank you for your answer, and sorry for my late reaction.
+    │  The question was cleared up!
+├─ Jin Niu (2023-01-04 09:58:49.363000) [+1]
+│  Congratulations on winning the first prize!!! 👍 Very impressive non-machine learning solution based on profound understanding of the competition. I used similar data normalization to reduce the imp...
+├─ Jonathan McKinney (2023-01-04 09:24:46.047000) [+1]
+│  Very cool.  I wonder if GW scientists can use this as a bootstrap step, where this is done first and then they can go back and do parameter estimation.  Doing it all in one go as a template is too ...
+  ├─ 🐢 Jun Koda (2023-01-04 21:40:50.640000) [+1]
+  │  I guess scientists usually use iterative approach, Markov chain Monte Carlo, like the 6th place simulated annealing, but I don't know.
+├─ George Chirita (2023-01-04 09:04:17.277000) [+1]
+│  Thank you again! I've learned a lot starting from your notebook. And even if it is not impressive, to achieve a 0.73 score was an impossible task at first. At the beginning even 0.6 score was an ac...
+├─ Inar Timiryasov (2023-01-04 07:09:04.867000) [+1]
+│  Congratulations, @junkoda! When I watched your score and the number os submissions, I was willing to bet that you are using a ‘physics-based’ method. We also used a very similar approach, but did n...
+  ├─ 🐢 Jun Koda (2023-01-04 08:22:07.683000) [+2]
+  │  Thanks! I'm looking forward to reading you solution, too. Mine is brute force, but do you use something like Markov chain Monte Carlo? Amazing first medal!
+    ├─ Inar Timiryasov (2023-01-04 09:02:20.037000) [+1]
+    │  Thank you very much! We will post the solution soon.
+    │  Yes, we used differential evolution with objective = - (max power from the two detectors). We also tried nested sampling, but it did not perform...
+    ├─ Jean-Loup Tastet (2023-01-04 09:16:11.767000) [+1]
+    │  Actually, when we started scanning over the frequency derivative (in addition to the source position) and the computational cost started to explode, we considered brute-forcing the problem by imple...
+├─ PiotrKlinke (2023-01-04 06:35:08.043000) [+1]
+│  Seriously - this is gold! Thank you for sharing and for the clear explanation! It shows how being clever is the most important thing. Going back to the basics time and time again and just trying to...
+├─ BwandoWando (2023-01-04 05:44:39.350000) [+1]
+│  Amazing! Congratulations @junkoda !
+├─ Kefan Xu (2023-01-04 03:30:04.280000) [+1]
+│  would you like post your failed deep neural network models attempts ? maybe we can learn from it.
+  ├─ 🐢 Jun Koda (2023-01-04 03:56:31.453000) [+1]
+  │  I don't think I have anything worthwhile… For example, I made tiny ResNet-like models reading last year solutions, but those are not better than simple 2D image models even for simple linear freque...
+    ├─ Kefan Xu (2023-01-04 04:23:36.887000) [+0]
+    │  thank you. i used your [Basic spectrogram image classification] as base, then added two more channels on top of the training dataset plus data augmentation using albumentations, be able to reach 0....
+├─ BarryZhou (2023-01-04 02:51:19.400000) [+1]
+│  Congrats @🐢 Jun Koda！Very wonderful solution!
+  ├─ 🐢 Jun Koda (2023-01-04 02:55:55.157000) [+2]
+  │  Thanks. It must be a disappointment for people who want to learn machine learning. I hope there is something useful for signal processing.
+    ├─ BarryZhou (2023-01-04 07:35:33.973000) [+2]
+    │  Haha, I think the best solution is the one that can solve practical problems, no matter what method is used.
+├─ yukiya (2023-01-05 04:16:22.120000) [+2]
+│  You are amazing. Congratulations, and thank you for sharing the solution (I like the link from the leaderboard)
+├─ Ravi Shah (2023-01-04 17:51:11.967000) [+2]
+│  This is an amazing solution! Thanks you for sharing your approach! It is a good reminder that machine learning should not always be the go to answer. Congrats on winning @junkoda!
+├─ knshnb (2023-01-04 16:15:13.637000) [+2]
+│  Congratulations on your first place!! 🎉
+│  I was amazed by the performance without any leakage: We took a similar approach (GPU-accelerated random search of signals) but scored 0.835 in private LB wit...
+  ├─ 🐢 Jun Koda (2023-01-05 10:45:18.843000) [+1]
+  │  The "simulation" is the standard PyFstat data generation. I created without noise, then the amplitude squared is the total power: sum(|h|**2, axis=frequency)
+  │  
+  │  
+  │  What I wrote was obviously too short ...
+    ├─ knshnb (2023-01-09 10:27:21.107000) [+0]
+    │  Sorry for the late reply. I didn't realize the amplitudes differ by timestamps.
+    │  We worked hard until the end (we might have seemed quick because we were a team of three!), but I have to admit that ...
+    ├─ 🐢 Jun Koda (2023-01-17 14:33:00.763000) [+0]
+    │  I wrote what the weight is more in detail in the notebook
+    │  https://www.kaggle.com/code/junkoda/optimal-weights-for-signal-to-noise-ratio
+    │  because I got similar questions, too. I wanted to brush up a ...
+    ├─ knshnb (2023-01-17 14:42:25.373000) [+1]
+    │  Thanks so much!!! Let me read it in detail when I have time.
+    │  By the way, it seems the link to the source code is not public…?
+    ├─ 🐢 Jun Koda (2023-01-17 23:30:52.520000) [+1]
+    │  Thanks for the feedback. I fixed the github repository to public. I hope it is accessible now (I'll continue to add more explanations).
+    │  I am impressed by the shortness of your code. I'll learn from...
+├─ Zollkron (2023-01-04 03:51:40.043000) [+2]
+│  Congratulations Jun. I'm very happy that you be the winner because you worked hard on it from the beginning and generously shared your Basic Spectrogram Classificator Notebook with us. I learnt a l...
+├─ Ravi Ramakrishnan (2023-01-04 03:49:04.627000) [+2]
+│  Hearty congratulations to @junkoda for the result!!
+│  This was indeed an involved challenge. All the best and regards!!
+├─ Suma Mallapragada (2023-01-05 13:59:19.480000) [+0]
+│  Congratulations! Your journey through the competition is amazing. Sinc Kernel approach with power sum makes detection easy.
+├─ Muhammad Waseem (2023-01-04 20:01:50.863000) [+0]
+│  congratulation sir. Really happy for you
+├─ Alex Z (2023-01-04 18:47:46.993000) [+0]
+│  Some false positives are remaining in my prediction.
+│  
+│  
+│  Well, some test data are using real noise background from the detectors. Who knows, probably there is a signal lurking there after all :) 
+│  
+│  Co...
+├─ PiotrKlinke (2023-01-04 06:48:38.597000) [+0]
+│  @junkoda What other solutions did you use? I am just curious - what are your takeaways from this competition?
+  ├─ 🐢 Jun Koda (2023-01-04 08:27:19.040000) [+2]
+  │  For an unsuccessful wave model, I tried to add 48 complex data each day using a template, create 3D block of frequency x frequency time derivative x time, and do 3D CNN, but I need orders of magnit...

@@ -1,0 +1,196 @@
+# https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603564
+
+Topic #603564: 12th place solution
+  Author: Ruby
+  Posted: 2025-09-03 03:59:09.757000
+  Votes: 53  Comments: 11
+
+Thanks Kaggle and organizer for hosting this interesting competition. A special thanks as well to the valuable public notebooks which helped me a lot:
+https://www.kaggle.com/code/tarundirector/sensor-pulse-viz-eda-for-bfrb-detection
+https://www.kaggle.com/code/jiazhuang/cmi-imu-only-lstm
+https://www.kaggle.com/code/kaigaokaigao/lb-0-75-imu-only-multibranch-inference/notebook
+I think their work deserves much more votes than rubbish ensemble notebooks.
+
+Data Processing
+
+
+
+IMU
+
+
+rot in this dataset is normalized to rot_w&gt;0, recover sign by forcing dot_product(rot,rot[-1]) &gt;=0 with sign flip
+
+handedness flip: -acc_x, -rot_y, -rot_z
+
+no normalization applied, using BN as first layer for convenience
+
+THM
+
+
+set all sequence sensor values to nan if : mean&gt;40 or mean&lt;20 or std==0
+
+handedness flip: switch sensor 3 and 5
+
+normalization: (t-27)/3
+
+TOF
+
+
+value &lt;0 or &gt;249 (if any) to nan
+
+handedness flip: switch sensor 3 and 5, up-down flip for sensor 3 and 5, left-right flip for sensor 1,2,4
+
+normalization: (250-x)/65
+
+nan to 0 (250 before normalization), no interpolation
+
+
+Feature Engineering
+
+
+
+IMU
+
+
+acc/ rot/ angular velocity (in device and world frame)/ acc with gravity remove (in both frame)/ angular velocity abs_diff/ gravity projection in device frame/ handedness (actually meta feature, too lazy to make it an independent branch)
+
+most features come in group of size 3 and rot with size 4, I add zero columns to make feature matrix in format of bins with size 4. This is for later group convolution 
+
+TOF
+
+
+0-1 nan indicator as extra feature
+
+
+Model
+
+
+
+IMU branch
+
+
+two standard 1DResBlock with SCSE attention 
+
+using group conv such that interaction only happens within group (eg: within acc_x/y/z)
+
+THM branch
+
+
+two standard 1DResBlock with SCSE attention
+
+TOF branch
+
+
+three standard 3DResBlock with SCSE attention, kernel size (1,3,3)*2+(3,1,1)
+
+group conv such that interaction only happens within same TOF sensor
+
+Fusion
+
+
+two GRU + MHA (with ROPE) + AttentionPooling + MLP
+
+I use other combination among GRU/ResBlock/MHA for ensemble
+
+GRU: I modularize it with skip-connect and layernorm
+
+MHA: I found extra feedforward layer in common transformer block useless in this dataset and I only keep the MHA part
+
+
+Multi-task Learning
+
+
+
+main loss: cross entropy + dice loss with cross entropy ratio decayed while training
+
+cross entropy on orientation classification
+
+MSE on ratio of gesture region (I didn’t properly normalize this part, not sure if worked)
+
+MAE on main loss (not sure if worked)
+
+
+Augmentation
+
+
+
+rot sign flip
+
+world frame x-y plane rotation (change facing direction)
+
+time stretching
+
+sequence patch mask
+
+TOF pixel jitter
+
+TOF patch mask
+
+sensor mask
+
+
+Other Details
+
+
+
+onecycle lr, AdamW, EMA, mixup, dropout, silu, truncate sequence with tail region pre-padding by zero to length 120
+
+I run simple random search over params space and manually clip search space after analysis
+
+
+Ensemble
+
+
+
+class rank average among Kfolds, voting with different models
+
+based on local CV tuning ensemble weights or selecting from a large pool easily cause overfitting, so I restricted to models with good CV and only apply voting (better than average might due to some over confident models)
+
+gains
+single best (based on CV) IMU/All:0.8364/0.9008, public/private: 0.868/0.859
+ensemble IMU/All:0.8458/0.906 public/private: 0.875/0.862
+
+
+Reproduce
+I only share my best CV single model training and inference code to avoid publishing too much notebooks of similar content.
+
+
+
+IMU only training: https://www.kaggle.com/code/w5833946/m21-cnn-gru-train
+
+All feature training: https://www.kaggle.com/code/w5833946/all-m14-cnn-gru-train  (trained offline with same code, download from google drive)
+
+Inference: https://www.kaggle.com/code/w5833946/cmi3-submit-single
+
+Comments:
+├─ Konstantin Yakovlev (2025-09-03 04:09:34.197000) [+5]
+│  Congrats with solo gold - it should be in top 5 in my opinion with such cv and scores. 
+│  
+│  My advice to organizers - talk to such Kagglers that are not “hacking” metric and creating really good models.
+  ├─ Ruby (2025-09-03 05:34:42.223000) [+2]
+  │  Thanks and Congratulations for your triple GM! I have learned a lot from your past sharing when I just started to learn machine learning.
+  ├─ Timmy Juicehouse (2025-09-03 06:25:35.017000) [+2]
+  │  Some top modeling and feature engineering approaches deserve more attention and should not be overlooked in favor of only focusing on the top-ranked kagglers in the gold medal zone. I hope the host...
+├─ Kurise (2025-09-03 10:12:27.500000) [+1]
+│  Congrats for the solo gold medal! I just want to remind you that your solution didn't showed on the LB.
+  ├─ Ruby (2025-09-03 10:21:39.740000) [+2]
+  │  Thanks for your reminder. I post it as discussion as before, but seems solution writeup now has its own category. Haven't finger out how to convert it to solution writeup.
+├─ Fnoa (2025-09-03 09:54:12.070000) [+1]
+│  Great solution Ruby!
+│  Incredible skill in mixing different losses to improve performance.
+│  Do you know how much the performance improved compared to using normal loss?
+  ├─ Ruby (2025-09-03 10:05:05.653000) [+1]
+  │  orientation classification gives 0.002~0.004 boost. dice loss impoves 0~0.002. the other two I tend to think they didn't work, CV is not stable enough to test changes with minor impact.
+├─ greySnow (2025-09-03 07:49:46.017000) [+1]
+│  MAE on main loss (not sure if worked)  
+│  
+│  
+│  Oh! This is familiar 🤣
+│  For me it only hurt local validation.
+  ├─ Ruby (2025-09-03 08:00:42.200000) [+1]
+  │  HaHaHa I first see that idea in your LEAP solution writeup.
+  │  I just added it to search space instead of testing it independently, and the final weight for this part is indeed low, usually &lt;0.01.
+├─ Yang Wei Hao (2025-09-03 07:12:56.037000) [+1]
+│  Congratulations on winning the gold medal. The complete solution and training code are perfect for beginners like me to learn. Thank you for sharing
+├─ Ethan (2025-09-03 04:51:24.343000) [+1]
+│  Congrats with another solo gold. Your model is really strong.

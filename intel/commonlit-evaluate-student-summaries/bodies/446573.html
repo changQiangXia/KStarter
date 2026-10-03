@@ -1,0 +1,94 @@
+<p><strong>Inputs</strong></p>
+<p>The data was input to the model as follows : </p>
+<p>'Think through this step by step : ' + prompt_question + [SEP] + 'Pay attention to the content and wording : ' + text + [SEP] + prompt_text</p>
+<p><strong>Pooling Method [High Impact]</strong></p>
+<p><strong>Input :</strong> [TOKEN] [TOKEN] [SEP] [TOKEN] [TOKEN] [SEP] [TOKEN] [TOKEN]<br>
+<strong>Head Mask :</strong> [0] [0] [1] [1] [1] [0] [0] [0]</p>
+<p>Instead of using the normal attention mask created by the model tokenizer. I used a head mask that only had ones for the students' answer (text) portion of the input and zeros for all other tokens. I used the normal attention mask for the attention mask that the model consumed but I used the head mask for the mean pooling.</p>
+<p>This had the biggest impact out of all the tricks I used. It increased the CV by a huge margin in all folds, but especially for the difficult prompts : 3b9047 and 814d6b. In my opinion this was the “magic” for this competition.</p>
+<p><strong>Prompt Question Augmentation [Moderate Impact]</strong></p>
+<p>I created 10 extra prompt questions per a prompt. I used an LLM. I asked the LLM to give me 10 variations of the prompt question. I then used this as augmentation during training. In inference, I used the default prompt question. In total I had 44 different prompt questions across all folds.</p>
+<p><strong>Auxiliary Classes [Moderate Impact]</strong></p>
+<p>I used auxiliary classes during the competition. These auxiliary classes were the target classes from Feedback 3.0 - <br>
+['cohesion','syntax','vocabulary','phraseology','grammar','conventions'].</p>
+<p>To create these labels I used models that were trained on the Feedback 3.0 data and ran the data from this competition through those models. I used only the ‘text’ column from this competition. In doing this I produced pseudo labels to use for this competition.</p>
+<p>I used the auxiliary classes in the following way : (loss * .5) + (aux_loss * .5)</p>
+<p>The auxiliary classes were used every second step.</p>
+<p>The Feedback 3.0 competition was hosted by The Learning Agency Lab and to the best of my knowledge this is a legal technique.</p>
+<p><strong>Max Length</strong></p>
+<p>Models were trained on a maximum length ranging from 896-1280 during initial training. During the pseudo labelling rounds they were trained with a maximum length ranging from 1280-2048. Pseudo labels allowed the models to learn at a higher maximum length.</p>
+<p>During inference the models used 1792 for large and 2048 for base.</p>
+<p><strong>Pseudo Labels [Moderate Impact]</strong></p>
+<p>Once a CV of .4581 was reached across the grouped kfold I started creating pseudo labels. </p>
+<p>The pseudo labels allowed me to train deberta-v3-base effectively. Before PL, I was not able to train the base model. They also allowed me to increase the maximum length during training.</p>
+<p>PL increased the CV from .4581 to .4476</p>
+<p>The models were trained using a concatenation of the original labels and pseudo labels.</p>
+<p><strong>Final Ensemble (PL)</strong></p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>Model Name</th>
+<th>Training Max Length</th>
+<th>Inference Max Length</th>
+<th>Head</th>
+<th>Model CV</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>microsoft/deberta-v3-large</td>
+<td>2048</td>
+<td>1792</td>
+<td>Mean Pooling + LSTM Layer Pooling</td>
+<td>.460</td>
+</tr>
+<tr>
+<td>microsoft/deberta-v3-base</td>
+<td>2048</td>
+<td>2048</td>
+<td>Mean Pooling + LSTM Sequence Pooling</td>
+<td>.468</td>
+</tr>
+<tr>
+<td>OpenAssistant/reward-model-deberta-v3-large-v2</td>
+<td>2048</td>
+<td>1792</td>
+<td>Mean Pooling + LSTM Layer Pooling</td>
+<td>.464</td>
+</tr>
+<tr>
+<td>microsoft/deberta-large</td>
+<td>2048</td>
+<td>1792</td>
+<td>Mean Pooling + Linear</td>
+<td>.466</td>
+</tr>
+<tr>
+<td>microsoft/deberta-v3-large</td>
+<td>1280</td>
+<td>1792</td>
+<td>Mean Pooling + LSTM Sequence Pooling</td>
+<td>.461</td>
+</tr>
+</tbody>
+</table>
+<p><br><br>
+<br></p>
+<p><strong>Did work:</strong></p>
+<ul>
+<li>Layer wise learning rate decay</li>
+<li>Freezing layers (bottom 8)</li>
+<li>LSTM layer pooling</li>
+<li>LSTM Sequence pooling</li>
+<li>Turn off dropout in transformer backbone</li>
+<li>Multisample dropout in head</li>
+</ul>
+<p><strong>Did not work:</strong></p>
+<ul>
+<li>AWP</li>
+<li>SWA</li>
+</ul>
+<p><strong>Inference script :</strong> <a href="https://www.kaggle.com/code/ivanaerlic/2nd-place-solution/notebook" target="_blank">https://www.kaggle.com/code/ivanaerlic/2nd-place-solution/notebook</a></p>
+<p><strong>Note :</strong> The inference script and input datasets will contain extra tricks that I haven't mentioned here, such as the inclusion of additional head for the model. Only the main points are outlined in this write-up.</p>
+<p>Also, you can find the training script for each model inside of the dataset that contains the weights.</p>

@@ -1,0 +1,29 @@
+<p>What a fun competition! I enjoyed this competition! Thank you Kaggle and host.</p>
+<h1>Building Blocks of GPU Deep Learning!</h1>
+<p>Below are 3 building blocks of deep learning. By creating different sequences of these building blocks, we can build powerful models! Each block takes an input shape of <code>(batch_size, sequence_length, features)</code> and outputs the same. The RNN "block" uses <strong>bidirectional</strong> (example code <a href="https://www.kaggle.com/cdeotte/11th-place-gold-cv-835-public-lb-788" target="_blank">here</a>). The CNN "block" uses sums and products of multiple <strong>dilated convolutions</strong> (from WaveNet paper <a href="https://arxiv.org/abs/1609.03499" target="_blank">here</a> and example code <a href="https://www.kaggle.com/cdeotte/11th-place-gold-cv-835-public-lb-788" target="_blank">here</a>). And the Transformer blocks uses <strong>self attention</strong> (example code <a href="https://www.kaggle.com/cdeotte/11th-place-gold-cv-835-public-lb-788" target="_blank">here</a>). These 3 "blocks" can create features from signals without needing feature engineering!</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2023/blocks.png" alt=""></p>
+<h1>Data Loader - Cut Data into Daily Chunks</h1>
+<p>Our data loader will randomly give us 24 hour windows that <strong>always contain both one onset and one wakeup</strong>. During each epoch, we will get different cuts. This serves as crop data augmentation.<br>
+ <img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2023/dataloader.png" alt=""></p>
+<h1>Model Head is NLP QA Softmax (not NLP NER)</h1>
+<p>For the head of our model, we use an architecture that is <strong>not</strong> in any public discussion <strong>nor</strong> public notebook. We use a technique from NLP called QuestionAnswering (i.e. <code>BertForQuestionAnswering</code>). This is analogous to Computer Vision's <code>object detection</code>. All public discussions and notebooks use NLP NER (i.e. <code>BertForTokenClassification</code>) which is analogous to Computer Vision <code>segmentation</code>. </p>
+<p>The way to implement QA is for our data loader to always include one onset and one wakeup in every train sequence. Then we apply 1440 multiclass softmax loss to pick the correct minute of target. Later we will use a separately trained classification model to remove false positives (since our QA model was trained on 100% positives and doesn't locate negatives well).<br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2023/qa-head2.png" alt=""></p>
+<h1>My CNN-Transformer-GRU, 80 features</h1>
+<p><strong>Approximately CV 0.800 LB 0.750</strong><br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2023/model2b.png" alt=""></p>
+<h1>My Deep-GRU, 2 features</h1>
+<p><strong>Approximately CV 0.805 LB 0.755</strong><br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Dec-2023/model1c.png" alt=""></p>
+<h1>Extra Predictions Trick</h1>
+<p><strong>Approximately CV +0.050 LB 0.050 Wow!</strong><br>
+A huge trick in this competition is to make multiple onset and wakeup predictions per night. First we make a first choice for every user every night. With 200 test users and approximately 30 nights per user and 2 targets, this is about 12000 predictions. Next we make a second guess (i.e. the second max probability) for each night and divide it by <code>2^1</code>. This is 12000 more guesses. Next we made a 3rd guess (i.e. 3rd max prob) and divide it by <code>2^2</code>. We continue this for 30 guesses per night where the last guesses are divided by <code>2^29</code>. This boost CV by about +0.050 wow 😀! </p>
+<p>This works because Average Precision metric is <strong>always improved</strong> when adding more predictions if the new predictions have a lower score than all previous predictions. (More explanation <a href="https://www.kaggle.com/competitions/vinbigdata-chest-xray-abnormalities-detection/discussion/229637" target="_blank">here</a>)</p>
+<h1>Rerank Scores</h1>
+<p><strong>Approximately CV +0.020 LB 0.020</strong><br>
+For the metric Average Precision, the score we assign to each prediction is very important. First we use the probability from our above models as the starting score. Next we use CatBoost with handmade convolution features (<strong>CatBoost achieves LB 0.705</strong> by itself wow!), 1D-Unet, 2D-Unet, Mel Spectrograms, ResNet34, EfficientNetB5, and Audio WaveNet to rerank the scores. This is accomplished by predicting a new score for each prediction and then averaging all the scores.</p>
+<h1>Ensemble with NMS and WBF</h1>
+<p><strong>Approximately CV +0.010 LB 0.010</strong><br>
+My CNN-Transformer-GRU and  Deep-GRU are very diverse. First I apply NMS (non maximum supression) to each model individually. Whenever two predictions are within 5 minutes of each other, we keep only the prediction which largest probability. Afterward we ensemble the two single models with WBF (weighted box fusion). Whenever two predictions are within 5 minutes of each other (and are the same level 1 thru 30 explained above in "extra scores trick"), then we replace the two with the average step position.</p>
+<h1>Solution Code</h1>
+<p>I published the code for these two TensorFlow models <a href="https://www.kaggle.com/cdeotte/11th-place-gold-cv-835-public-lb-788" target="_blank">here</a></p>

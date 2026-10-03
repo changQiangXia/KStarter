@@ -1,0 +1,123 @@
+<p>First, thanks to the organizers and hosts for an interesting competition, and to the community for insightful discussions and notebooks.</p>
+<h1>Overview</h1>
+<ul>
+<li>If you watched the leaderboard, you may have noticed a late jump: I discovered a dataset trick four days before the deadline and boosted the score substantially via post-processing.</li>
+<li>Without post-processing, my model scores were: Public <strong>0.865</strong> / Private <strong>0.858</strong>.</li>
+<li>Below I first describe the model (data handling, features, architecture, training), then the post-processing that made the big difference.</li>
+</ul>
+<h1>Model</h1>
+<p><strong>Handling Missingness</strong></p>
+<ul>
+<li>Training separate models gave better accuracy when certain sensors were missing.</li>
+<li>I trained four variants depending on whether IMU rotation was missing and whether THM/TOF were missing (rot present/absent × THM and TOF present/absent).</li>
+</ul>
+<p><strong>Feature Engineering</strong></p>
+<ul>
+<li><p>IMU</p>
+<ul>
+<li>acc(x/y/z)</li>
+<li>quaternion 6D representation (to avoid discontinuities)</li>
+<li>angular velocity(x/y/z)</li>
+<li>linear acceleration(x/y/z)</li></ul></li>
+<li><p>THM/TOF</p>
+<ul>
+<li>Filled NaN and -1 with zero.</li>
+<li>I did not use THM.</li></ul></li>
+<li><p>Left-handed subjects</p>
+<ul>
+<li>Multiply by −1: acc_x, linear_acc_x, angular velocity y and z, and components 0 and 4 of the quaternion 6D representation.</li>
+<li>Swap tof_3 and tof_5, and horizontally flip the left–right direction of the 2D TOF grids.</li></ul></li>
+<li><p>Subject-specific correction</p>
+<ul>
+<li>In the training data, data from SUBJ_019262 and SUBJ_045235 were rotated by 180° around the z-axis.</li>
+<li>I multiplied all channels by −1 except acc_z and linear_acc_z.</li>
+<li>I could not find a reliable correction for their TOF, so I set TOF to NaN for these subjects.</li></ul></li>
+</ul>
+<p><strong>Architecture</strong></p>
+<ul>
+<li>Based on public notebooks: a Residual SE-CNN Block + Attention model.</li>
+<li>Modality-specific stems:<ul>
+<li>Independent 1D CNN branches for each of: acc, quaternion 6D, angular velocity, linear_acc, and each tof1~5; then concatenate.</li></ul></li>
+<li>TOF processing:<ul>
+<li>Before 1D CNN branches, I use a 2D CNN on the TOF grids per frame, followed by mean pooling to get a per-step feature.</li></ul></li>
+<li>Phase-aware Attention<ul>
+<li>Plain temporal attention can over-focus on long phases (e.g., long transitions to the target).</li>
+<li>I add an auxiliary 3-class phase predictor at each time step:</li></ul><ol>
+<li>(Relaxes and) Moves hand to target location</li>
+<li>Hand at target location</li>
+<li>Performs gesture</li></ol><ul>
+<li>I construct three attentions, one per phase, and weight each attention score by the corresponding phase probability. This extracts features specific to each phase instead of letting long phases dominate.</li></ul></li>
+</ul>
+<p><strong>Prediction Target</strong></p>
+<ul>
+<li>I predict a composite label:(Initial behavior ∈ {Relaxes&amp;Moves / Moves}, orientation, gesture).</li>
+<li>This choice is important for the post-processing step.</li>
+</ul>
+<p><strong>Mixup</strong></p>
+<ul>
+<li>Simple linear mixup, but phase-aligned to avoid mixing behaviors:<ul>
+<li>Split each sequence into the three phases above and mix within the same phase only.</li>
+<li>Especially for “moves to target,” I align the end of the phase so the arrival at the target is synchronized before mixing.</li></ul></li>
+</ul>
+<p><strong>Training Details</strong></p>
+<ul>
+<li>Optimizer: Adam (lr=1e-3, wd=1e-4)</li>
+<li>Scheduler: Cosine Annealing</li>
+<li>Batch size: 32</li>
+<li>Epochs: 50</li>
+<li>Folds: 10</li>
+<li>Final model: ensemble of 3 variants (different depths/layers of 1DCNN)</li>
+</ul>
+<p><strong>Online Pseudo-Labeling</strong></p>
+<ul>
+<li>With ~8k training sequences and ~3.5k test sequences, pseudo labels helped.</li>
+<li>The submission API predicts one sequence at a time, so I performed test-time updates: whenever a batch-sized group of test sequences accumulated, I fine-tuned one step with a small LR (5e-5) using pseudo labels.</li>
+</ul>
+<h1>Post-Processing</h1>
+<p><strong>Key observation from train.csv:</strong></p>
+<ul>
+<li>There are 4 orientations × 18 gestures = 72 possible (orientation, gesture) pairs, but only 51 were actually present.</li>
+<li>For each subject, the dataset contains exactly those 51 pairs, each recorded with two possible initial behaviors (Relaxes&amp;Moves / Moves), totaling 51 × 2 = 102 sequences per subject.</li>
+<li>Based on this, I trained the model to predict 102 classes (the composite label described above).</li>
+</ul>
+<p><strong>Maximizing Conditional Joint Probability (with no-repeat constraint)</strong></p>
+<ul>
+<li>For each subject, I keep all predicted class probabilities across their sequences.</li>
+<li>When predicting the N-th sequence for that subject, instead of taking the argmax for the N-th item independently, I choose the class sequence of length N that maximizes the joint probability (sum of log-probabilities) subject to “no label is used twice.”</li>
+<li>Because labels are assigned jointly per subject under a no-repeat constraint, early high-confidence picks lock in their labels; when a later sample is only moderately confident in a label that’s already taken, an alternative is chosen to yield a higher joint log-likelihood.</li>
+<li>Computationally, this is an assignment problem solvable efficiently (e.g., Hungarian algorithm) using negative log-probabilities as costs.</li>
+</ul>
+<h1>Scores</h1>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Public LB</th>
+<th>Private LB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No pseudo / No post-proc</td>
+<td>0.862</td>
+<td>0.854</td>
+</tr>
+<tr>
+<td>With pseudo / No post-proc</td>
+<td>0.865</td>
+<td>0.858</td>
+</tr>
+<tr>
+<td>No pseudo / With post-proc</td>
+<td>0.891</td>
+<td>0.875</td>
+</tr>
+<tr>
+<td>With pseudo / With post-proc</td>
+<td>0.900</td>
+<td>0.878</td>
+</tr>
+</tbody>
+</table>
+<h1>Codes</h1>
+<p><a href="https://github.com/Yamato-Arai/kaggle-cmi-detect-behavior-2nd-place-solution" target="_blank">github</a></p>

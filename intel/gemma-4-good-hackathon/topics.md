@@ -1,0 +1,82 @@
+# gemma-4-good-hackathon 讨论区（按票数排序，共 80 条）
+
+- [Reviewing your incredible submissions!](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/707673) — 58 票 / 35 评论 / 2026-06-11 
+- [Welcome to the Gemma 4 Good Hackathon!](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687467) — 39 票 / 55 评论 / 2026-04-03 
+- [Update: Judging is complete! Final technical checks underway](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/732628) — 36 票 / 42 评论 / 2026-08-03 
+- [Congratulations to our winners!](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/736681) — 24 票 / 32 评论 / 2026-08-22 
+- [Regarding Winner Announcements... (Discussion on ETAs & the 1600+ Submissions!)](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701910) — 23 票 / 10 评论 / 2026-05-20 
+- [How to get started + Competition's Official Discord](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687028) — 13 票 / 14 评论 / 2026-04-01 
+- [Inference + Finetuning Notebooks - 31B fits on Kaggle! + 26B, 4B, 2B](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/690070) — 13 票 / 2 评论 / 2026-04-10 
+- [Whe the winner announcement?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701911) — 11 票 / 3 评论 / 2026-05-20 
+- [when results will announce??](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/727487) — 9 票 / 10 评论 / 2026-07-19 
+- [Clarification request: Health & Sciences Impact Track vs. Gemma Prohibited Use Policy](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687315) — 6 票 / 0 评论 / 2026-04-02 
+- [What I Tried, Failed, and Learned](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/700959) — 5 票 / 2 评论 / 2026-05-18 
+- [Glitch on Kaggle Uploading Submission](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701676) — 4 票 / 0 评论 / 2026-05-19 
+- [Duecare AI: A Gemma 4 Safety Ecosystem for Migrant-Worker Protection ](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701771) — 4 票 / 3 评论 / 2026-05-19 
+- [Clarification Request: Live Demo Requirements](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/691415) — 3 票 / 4 评论 / 2026-04-14 
+- [BIRE - BIo- Intelligence Risk Engine Update](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/724393) — 3 票 / 7 评论 / 2026-07-11 
+- [Building a physics lab that runs on your laptop — lessons from 300    scenarios](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688571) — 3 票 / 6 评论 / 2026-04-06 
+- [Amsterdammers here? Let's do more for water quality monitoring together! [And propose next locations]](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/704141) — 3 票 / 2 评论 / 2026-06-03 
+- [I Hope People Keep Building](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/704080) — 3 票 / 0 评论 / 2026-06-03 
+- [The edge deployment angle might be the most underrated path in this hackathon](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687353) — 3 票 / 0 评论 / 2026-04-02 
+- [BongoShield: Bangla-First Vishing & Social Engineering Detection with Gemma 4](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/694644) — 2 票 / 1 评论 / 2026-04-26 
+- [FarmWise AI: Technical Discussion with Gemma 4 (2b-it)](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/697080) — 2 票 / 3 评论 / 2026-05-05 
+- [Issue with Transformer - gemma4 -4-e2b-it ](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/689183) — 2 票 / 8 评论 / 2026-04-07 
+- [Clarification: Submitting .apk / .exe files for local LLM execution & "Live Demo" requirements](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/693484) — 2 票 / 0 评论 / 2026-04-21 
+- [Good Luck!](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687939) — 2 票 / 0 评论 / 2026-04-04 
+- [Seeking Feedback on Duecare](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/702083) — 2 票 / 0 评论 / 2026-05-21 
+- [Is it allowed to update GitHub repos after submission closes?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701946) — 2 票 / 5 评论 / 2026-05-20 
+- [Clarification on Hugging Face repo updates](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/705045) — 2 票 / 2 评论 / 2026-06-08 
+- [Judging Timeline More Weeks or Months?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/731511) — 2 票 / 2 评论 / 2026-07-31 
+- [RealLearn — Turning Any Question into a Structured, Adaptive Learning Journey](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/709563) — 2 票 / 0 评论 / 2026-06-19 
+- [OpenRead post-submission update: why I built it as a parent, and what changed after submission](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/723761) — 2 票 / 0 评论 / 2026-07-08 
+- [The Need for DueCare + Adversarial Review](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/712843) — 2 票 / 1 评论 / 2026-06-23 
+- [Is MedGemma getting an update in the near future as well?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687214) — 1 票 / 0 评论 / 2026-04-02 
+- [Anyone else getting an "Internal Error" when submitting your writeup?  ](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/695781) — 1 票 / 1 评论 / 2026-04-30 **write-up?**
+- [Quick question about the live demo requirement](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/697955) — 1 票 / 0 评论 / 2026-05-07 
+- [Clarification about “Unranked” status after Gemma 4 Good Hackathon results](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/737114) — 1 票 / 0 评论 / 2026-08-23 
+- [Madad (مدد) — Offline PSL Interpreter | Video + Notebook](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/698044) — 1 票 / 0 评论 / 2026-05-08 
+- [Can participants update their production deployment while Gemma 4 Good Hackathon technical checks are underway?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/735636) — 1 票 / 1 评论 / 2026-08-17 
+- [Doubt regarding gemini usage.](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/699047) — 1 票 / 2 评论 / 2026-05-12 
+- [💬 Discussion: How to Improve This Project?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/699508) — 1 票 / 0 评论 / 2026-05-14 
+- [LiteRTLM-Swift-SDK - Run Gemma 4 on-device in your iOS app with 5 lines of Swift](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/694517) — 1 票 / 0 评论 / 2026-04-25 
+- [Gemma 4 as an embedding model](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/691356) — 1 票 / 0 评论 / 2026-04-14 
+- [Writeup word count](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/699637) — 1 票 / 1 评论 / 2026-05-14 **write-up?**
+- [Built this to speed up my Gemma 4 tuning — a fine-tuning starter stack from idea to demo [open source]](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/690856) — 1 票 / 1 评论 / 2026-04-13 
+- [[Rules clarification] Is AIHub (Korean government open dataset) acceptable as External Data?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/690882) — 1 票 / 0 评论 / 2026-04-13 
+- [submitted the write up, still showing not submitted](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701671) — 1 票 / 0 评论 / 2026-05-19 **write-up?**
+- [We were late for seconds, please accept our writeup](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701672) — 1 票 / 0 评论 / 2026-05-19 **write-up?**
+- [Late submitted a few seconds - Media upload problem](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701688) — 1 票 / 0 评论 / 2026-05-19 
+- [VoxLex — An Offline, Voice-First Document Reader for the 773M Who Can't Read](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/715575) — 1 票 / 0 评论 / 2026-06-28 
+- [Vitalik Buterin’s Local LLM Experiment](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688449) — 1 票 / 0 评论 / 2026-04-05 
+- [RealLearn Update: Complete UI/UX Redesign After Submission](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/711099) — 1 票 / 0 评论 / 2026-06-21 
+- [Running Gemma 4 Fully Offline on Android: Please Break My Code and Find My Bugs](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701960) — 1 票 / 0 评论 / 2026-05-20 
+- ["Your Writeup should not exceed 1,500 words."; Mine is 6,036 Words long.....](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/701693) — 1 票 / 3 评论 / 2026-05-19 **write-up?**
+- [Gemma 4 Medical Vision? E4B came surprisingly close to MedGemma 1.5 4B on SFT](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/704936) — 1 票 / 5 评论 / 2026-06-07 
+- [An Example Project to help you get started](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687446) — 1 票 / 0 评论 / 2026-04-03 
+- [🛡️ One critical error in a refugee record can take 8 months to fix ! 🧑‍💻 ](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/702062) — 1 票 / 4 评论 / 2026-05-20 
+- [[Technical Deep Dive] The 'Semantic Gap' in Edge AI: Why Regex Guardrails Fail Against Obfuscated Payloads](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/702702) — 1 票 / 0 评论 / 2026-05-26 
+- [Gemma 4 + DueCare: The Power of Networking Gemma 4 Deployments](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/702695) — 1 票 / 0 评论 / 2026-05-26 
+- [SafeVoice - Privacy-First AI for Domestic Abuse](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/689628) — 0 票 / 0 评论 / 2026-04-09 
+- [Clarification on Special Technology Track judging, llama.cpp](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/689660) — 0 票 / 0 评论 / 2026-04-09 
+- [Video showcase](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/690647) — 0 票 / 2 评论 / 2026-04-12 
+- [Education AI](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/689145) — 0 票 / 1 评论 / 2026-04-07 
+- [Final Submission(Resume Analyzer)](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687538) — 0 票 / 1 评论 / 2026-04-03 
+- [[book] Clearing the Air](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688452) — 0 票 / 0 评论 / 2026-04-05 
+- [Extra GPU Hours + $Credit for tokens](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/691176) — 0 票 / 0 评论 / 2026-04-14 
+- [Question about making agent for students](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688631) — 0 票 / 1 评论 / 2026-04-06 
+- [Fine Tuning with Gemme 4: assistant_only_loss](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/691542) — 0 票 / 0 评论 / 2026-04-15 
+- [GemmaTaiga: Empowering Environmental Protection in Offline Wilderness (Khovsgol, Mongolia)](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/691953) — 0 票 / 1 评论 / 2026-04-16 
+- [GodelAI-Lite: Memory-Augmented Gemma 4 — Zero Fine-Tuning, +31.2% Overall](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/693340) — 0 票 / 0 评论 / 2026-04-20 
+- [Brito V1: Hardware Stabilization of the Organic Universe (Matrix 10)](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688202) — 0 票 / 0 评论 / 2026-04-05 
+- [Is any credits to be provided for the hackathon to work on the model & trainings?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688118) — 0 票 / 0 评论 / 2026-04-04 
+- [Sovereign Guardian 🛡️](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687372) — 0 票 / 0 评论 / 2026-04-02 
+- [Looking to form a team in SF](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/694295) — 0 票 / 1 评论 / 2026-04-24 
+- [Are Robotic Applications Considered for this Competition?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/689948) — 0 票 / 3 评论 / 2026-04-10 
+- [🌾 FarmWise AI - Climate-Smart Agronomist for 500M Smallholder Farmers](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/694821) — 0 票 / 0 评论 / 2026-04-27 
+- [Thank you to the organizers](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687215) — 0 票 / 0 评论 / 2026-04-02 
+- [Prize Eligibility for Underage Participant — What Are My Options?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/695064) — 0 票 / 1 评论 / 2026-04-28 
+- [Can we use other models in addition to Gemma 4?](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/687363) — 0 票 / 2 评论 / 2026-04-02 
+- [Team Join ](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/691650) — 0 票 / 4 评论 / 2026-04-15 
+- [🌾 FarmWise — Offline Agricultural Advisor with Gemma 4 | Feedback Welcome!](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688350) — 0 票 / 2 评论 / 2026-04-05 
+- [Gemma 4 API via AI Studio](https://www.kaggle.com/competitions/gemma-4-good-hackathon/discussion/688843) — 0 票 / 2 评论 / 2026-04-07 

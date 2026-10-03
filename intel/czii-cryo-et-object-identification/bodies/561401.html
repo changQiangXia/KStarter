@@ -1,0 +1,55 @@
+<p>We would first like to express our gratitude to the competition host and the Kaggle staff for organizing this outstanding competition. Below, we introduce the solution of Team yu4u &amp; tattaka.</p>
+<h1>Summary</h1>
+<p>We adopted an approach to detect particle points using a heatmap-based method, which is the most commonly employed technique in pose estimation and facial keypoint detection.<br>
+Since this competition deals with 3D images rather than 2D images, we utilized two types of UNet-like models (yu4u's model and tattaka's model) that take 3D voxels as input and outputs 3D heatmaps.</p>
+<h1>Our Approach to This Competition</h1>
+<p>First, we will explain our approach to this competition, specifically how we addressed the issue of CV and LB not correlating. We used CV only to confirm that the metric produced was somewhat reasonable and for selecting checkpoints. For models with potential for improvement, we simply submitted them and relied on the LB to make decisions about which methods to adopt or discard.</p>
+<h1>Creating the Ground Truth Heatmap</h1>
+<p>We generate the ground truth heatmap necessary for model training. This involves converting the ground truth particle coordinates into the pixel coordinate system and creating a mask using a Gaussian function, where the particle center is set to 1.0 and sigma is 6 pixels for yu4u's model. For tattaka's model, different sigma values were used for different particles based on their sizes.<br>
+We believe that an offset of 1.0 should be added when converting particle coordinates into the pixel coordinate system. While <a href="https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/553126" target="_blank">this discussion</a> suggests adding 0.5, <a href="https://www.kaggle.com/code/ren4yu/czii-coordinate-eda" target="_blank">our notebook</a> demonstrates that 1.0 is the correct value. The main difference is that the previous discussion assumes the particle center is at the top-left of a pixel, whereas we argue that, on average, the circle should be drawn from the pixel center (0.5, 0.5).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F745525%2F01f088d7b84cf5710d322fe17e7aaf5a%2F2025-02-06%2011.30.19.png?generation=1738809090496377&amp;alt=media" alt=""></p>
+<h1>yu4u's Model</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F745525%2F7fad2afcd6dfd4b83065d9692ecb8479%2Fmodel.png?generation=1738807875765144&amp;alt=media" alt=""></p>
+<p>We adopted a 2.5D-UNet, which utilizes a 2D image-based model as the backbone. The outputs from each stage of this backbone are pooled along the depth direction, enabling hierarchical feature extraction in the depth dimension as well. This idea was borrowed from <a href="https://www.kaggle.com/code/hengck23/3d-unet-using-2d-image-encoder" target="_blank">the excellent notebook</a>. An interesting observation is that replacing this pooling operation with strided 3D convolutions degrades performance. This would be because the pooling method effectively aggregates depth features while preserving the original 2D backbone’s feature maps as much as possible. Similar to many other Kaggle competitions dealing with 3D data, a UNet utilizing a 2D backbone outperformed a straightforward UNet with a 3D backbone.</p>
+<p>We also applied 3D convolution between the encoder and decoder, inspired by <a href="https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430685" target="_blank">the 3rd Place Solution of the contrails competition</a>.</p>
+<p>Initially, we used a plain UNet architecture, but processing high-resolution feature maps required significant memory and computation. To address this, we adopted a model that outputs the final heatmap using pixel shuffle from a feature map with a stride of 4. Pixel shuffle, also known as depth_to_space in TensorFlow, is an operation that redistributes information from the channel dimension to the spatial dimensions. Compared to deconvolution, it offers advantages in computational efficiency and reducing artifacts.</p>
+<p>For the final submission, we used four models with different folds of a ConvNeXt Nano model as the backbone.</p>
+<h1>tattaka's Model</h1>
+<h2>Model Architecture</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F745525%2Fe15184020a0b9ea5e2ff58bf5d17ce25%2F2025-02-05%2023.11.47.png?generation=1738799891700544&amp;alt=media" alt=""></p>
+<p>This model is a lightweight 2.5D UNet with ResNetRS-50 as the backbone.  </p>
+<p>The input to the model is a volume of size 32×128×128 (D×H×W), and it outputs a 3D heatmap of the same size. Within the backbone, the depth is progressively reduced by half using average pooling for the first two stages. After that, average pooling with kernel=3, stride=1, padding=1 is used to maintain the depth while computing feature maps. As a result, the feature map shapes at each stage of the backbone are as follows:  <br>
+<code>(bs, ch, 16, 64, 64)</code>, <code>(bs, ch, 8, 32, 32)</code>, <code>(bs, ch, 8, 16, 16)</code>, <code>(bs, ch, 8, 8, 8)</code>, <code>(bs, ch, 8, 4, 4)</code>.  </p>
+<p>In the decoder, the three lowest-resolution feature maps are fed into <a href="https://arxiv.org/abs/1903.11816" target="_blank">Joint Pyramid Upsampling</a>. These maps are then progressively upsampled using 3D CNNs, SESC attention, and upsampling layers until they reach the same size as the input volume.</p>
+<h2>Loss Function</h2>
+<p>Since the number of particles within the volume is relatively small, there is a significant class imbalance between positive and negative samples during training. We attempted to adjust the parameters for generating ground truth heatmaps, but this did not lead to any improvement in cross-validation performance.  </p>
+<p>Ultimately, we implemented a simple MSE-based loss function to balance positive and negative samples, which allowed for faster convergence:  </p>
+<pre><code>loss = MeanSquaredError(pred, true)
+
+pos_loss = (loss * true).() / (true.() + )
+neg_loss = (loss * ( - true)).() / (( - true).() + )
+
+balanced_loss = pos_loss + neg_loss
+</code></pre>
+<h1>Inference Tips</h1>
+<p>Finally, we used four yu4u's models and three tattaka's models in the final submission.<br>
+To stay within the time limit, we optimized our models by converting them to TensorRT format for faster inference. The conversion process was based on <a href="https://www.kaggle.com/code/sjtuwangshuo/converting-pytorch-checkpoints-to-tensorrt-models" target="_blank">this notebook</a>.<br>
+Additionally, we selected a Kaggle Notebook instance with dual T4 GPUs and leveraged multiprocessing to parallelize inference.</p>
+<h1>Post Processing</h1>
+<p>For the final heatmap, we first detect local maxima using non-maximum suppression, which is implemented via max pooling with a kernel size of 7. Next, the detected points are filtered using different thresholds for each particle type.</p>
+<p>Since the detected points are in the pixel coordinate system, we need to convert them into the particle coordinate system. To do so, we proceed as follows:</p>
+<ol>
+<li><strong>Centering</strong>: Add 0.5 to the pixel coordinates to shift from the pixel’s top-left to its center.</li>
+<li><strong>Offset Correction</strong>: Subtract the 1.0 offset that was added during heatmap generation.</li>
+<li><strong>Scaling</strong>: Multiply by 10.012 to convert the adjusted pixel coordinates to the particle coordinate system.</li>
+</ol>
+<h1>Does Not Work for Us</h1>
+<ul>
+<li>Two-stage model: We built a model that refines the scores by cropping regions around the points detected using a heatmap approach and then applying a classification model to those cropped regions. Although it worked well in terms of CV scores, it did not improve the LB performance.</li>
+</ul>
+<h1>Source Code and Notebooks</h1>
+<ul>
+<li><a href="https://www.kaggle.com/code/ren4yu/czii-ensemble-tensorrt-xy-stride-th/notebook?scriptVersionId=220758003" target="_blank">Final submission</a></li>
+<li><a href="https://github.com/tattaka/czii-cryo-et-object-identification-public" target="_blank">Training tattaka's model</a></li>
+<li><a href="https://github.com/yu4u/kaggle-czii-4th" target="_blank">Training yu4u's model</a></li>
+</ul>

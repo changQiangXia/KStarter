@@ -1,0 +1,82 @@
+# blood-vessel-segmentation 讨论区（按票数排序，共 80 条）
+
+- [[lb0.870 !!!] experiment results, hopefully open gold solution till 21-jan-2024](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456118) — 122 票 / 215 评论 / 2023-11-18 **write-up?**
+- [1st Place Solution (code updated)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475522) — 100 票 / 31 评论 / 2024-02-13 **write-up?**
+- [[3rd Place solution] Refine from Sparse to Dense](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475074) — 69 票 / 19 评论 / 2024-02-09 **write-up?**
+- [4th place solution. Boundary DoU Loss is all you need!](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475052) — 68 票 / 35 评论 / 2024-02-09 **write-up?**
+- [Starting materials and references](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453803) — 58 票 / 7 评论 / 2023-11-07 
+- [A Video to Simply Explain the LB0.847 Model (for SenNet Novices, but Not Segmentation Novices)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/464768) — 55 票 / 10 评论 / 2024-01-01 
+- [Important Information about the Hidden (Test) Datasets](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/460833) — 43 票 / 11 评论 / 2023-12-11 
+- [[LB 0.726] Experimental Configuration and Results](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456787) — 40 票 / 8 评论 / 2023-11-21 
+- [Pre-Print with lots of info on the training data and deep learning approaches to segmentation ](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/457187) — 38 票 / 9 评论 / 2023-11-23 
+- [Run-Length Encode and Decode (RLE utility script)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453831) — 37 票 / 7 评论 / 2023-11-07 
+- [Surface DSC (Dice Similarity Coefficient)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453958) — 33 票 / 1 评论 / 2023-11-08 
+- [2nd place solution](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475657) — 33 票 / 12 评论 / 2024-02-13 **write-up?**
+- [Past similar competitions top(50) solutions write-up (link)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453794) — 32 票 / 5 评论 / 2023-11-07 **write-up?**
+- [Solving a lot of the Submission Scoring Errors](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456033) — 30 票 / 14 评论 / 2023-11-17 
+- [9th Place Solution](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475080) — 30 票 / 9 评论 / 2024-02-09 **write-up?**
+- [PNG dataset 40G -> 6G](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453986) — 29 票 / 3 评论 / 2023-11-08 
+- [6th place solution: Luck is All You Need](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475252) — 28 票 / 10 评论 / 2024-02-07 **write-up?**
+- [Visualizing the churn](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475057) — 28 票 / 2 评论 / 2024-02-07 
+- [20th to 1000th+ Place =)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475053) — 28 票 / 15 评论 / 2024-02-07 
+- [5th place solution - 3D interpolation is all you need (updated with code)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475288) — 26 票 / 10 评论 / 2024-02-16 **write-up?**
+- [anyone has good results with 3d segmentation net?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/461213) — 26 票 / 44 评论 / 2023-12-13 
+- [Basic questions about resolution and sparsely segmentation](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/454353) — 24 票 / 2 评论 / 2023-11-09 **write-up?**
+- [How to reduce shake-up, has anyone found a correlation between CV and LB? Here are some my results](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/468525) — 22 票 / 22 评论 / 2024-01-17 
+- [OOM scoring error ... you probably have some misunderstanding](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/457702) — 22 票 / 17 评论 / 2023-11-26 
+- [Visualizing the training datasets in 3D](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/460747) — 21 票 / 5 评论 / 2023-12-11 
+- [Powerful visualization tools](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/461920) — 20 票 / 0 评论 / 2023-12-17 
+- [🥈24th Place Solution(A potential solution for achieving private 0.70)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475090) — 19 票 / 0 评论 / 2024-02-07 **write-up?**
+- [Fixing the metric computation code](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456761) — 19 票 / 44 评论 / 2023-11-21 
+- [[0.891 !!] resnet50 is all you need in public lb, but what will happen in private?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/472762) — 18 票 / 31 评论 / 2024-02-02 
+- [Welcome to the SenNet + HOA - Hacking the Human Vasculature in 3D Competition!](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/452809) — 17 票 / 4 评论 / 2023-11-03 
+- [14th Place Solution](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475260) — 17 票 / 4 评论 / 2024-02-08 **write-up?**
+- [Normalization, please stop it.](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/469022) — 17 票 / 17 评论 / 2024-01-18 
+- [One possible approach to address a score of 0](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456288) — 17 票 / 5 评论 / 2023-11-19 
+- [7th solution](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475964) — 16 票 / 0 评论 / 2024-02-10 **write-up?**
+- [The problem with submissions failing](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/455001) — 16 票 / 13 评论 / 2023-11-13 
+- [What I learned in Sennet competition](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/473460) — 15 票 / 12 评论 / 2024-02-04 
+- [About image 'depth'](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/454105) — 15 票 / 3 评论 / 2023-11-08 
+- [Talk from the author of the recent MaxVit-Unet paper](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/467553) — 14 票 / 6 评论 / 2024-01-13 
+- [Submission Failures](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/455220) — 13 票 / 40 评论 / 2023-11-13 
+- [[2nd Public/90th Private] Solution for the SenNet + HOA - Hacking the Human Vasculature in 3D](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475588) — 13 票 / 4 评论 / 2024-02-09 **write-up?**
+- [Inference Retraining Trick Boosted Private Score: 0.565 to 0.680 (Ranked 7th in Private LB)](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475136) — 13 票 / 13 评论 / 2024-02-07 
+- [Rank 46 Solution - keep the CV discipline](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475050) — 13 票 / 9 评论 / 2024-02-07 **write-up?**
+- [is it reasonable that surface_dice(random predict, random truth)=0.98?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/472209) — 12 票 / 15 评论 / 2024-01-31 
+- [13th place solution: 4-panel solo model](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475117) — 12 票 / 2 评论 / 2024-02-10 **write-up?**
+- [🔮💥🤖Nice Resources for 3D Visualization - Kaggle Notebooks🔥🏆📚](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453879) — 12 票 / 2 评论 / 2023-11-08 
+- [8th place solution. Won the first gold medal after five years.](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475100) — 12 票 / 1 评论 / 2024-02-07 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475554) — 11 票 / 2 评论 / 2024-02-08 
+- [A couple of questions on the submission format](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/454732) — 11 票 / 9 评论 / 2023-11-11 
+- [CV vs public LB](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456714) — 11 票 / 25 评论 / 2023-11-21 
+- [On the nature of training with different size non-square images, and why you want to stick to the square ones](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/468437) — 11 票 / 0 评论 / 2024-01-16 
+- [Surface Dice Metric: NaN for empty ground truth???](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456254) — 10 票 / 6 评论 / 2023-11-19 
+- [How to determine thresholds？](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/465659) — 10 票 / 7 评论 / 2024-01-05 
+- [Besides the OOM problem, are there other problems that result in a SCORING ERROR if it takes 30 minutes for scoring?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/459969) — 10 票 / 1 评论 / 2023-12-07 
+- [My optimal CV threshold is close to 0.5, yet my public LB optimal threshold is 0.05](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/472212) — 10 票 / 13 评论 / 2024-01-31 
+- [how is the ground truth prepared?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456124) — 10 票 / 2 评论 / 2023-11-18 
+- [demo app (e.g. Gradio) on kaggle notebook?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/473780) — 9 票 / 2 评论 / 2024-02-06 
+- [The issue with the albumentations library](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/463121) — 9 票 / 16 评论 / 2023-12-23 
+- [Waht is the use of voi data at 5.2um resolution?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/457179) — 9 票 / 2 评论 / 2023-11-23 **write-up?**
+- [Right choice of metric?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/461041) — 9 票 / 7 评论 / 2023-12-12 
+- [0.043 to 0.755 : Amazing jump of 1052 places to 2nd place ](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475432) — 9 票 / 3 评论 / 2024-02-08 **write-up?**
+- [rle_decode vs cv2.imread vs tifffile.imread ](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/466046) — 9 票 / 5 评论 / 2024-01-06 
+- [SenNet + HOA: Meme Thread](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/472546) — 9 票 / 6 评论 / 2024-02-01 
+- [RLE in CSV vs labels](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/454065) — 8 票 / 1 评论 / 2023-11-08 
+- [[Updated] Competition Scoring Problem ? [Investigation]](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/455008) — 8 票 / 2 评论 / 2023-11-13 
+- [You know something fishy is going on with the submission if...](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/454799) — 8 票 / 9 评论 / 2023-11-11 
+- [Annotation sparsity ... does it matter?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/468826) — 8 票 / 3 评论 / 2024-01-18 
+- [Starter Codes for UNet, SegNet, and Attention UNet](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453881) — 8 票 / 2 评论 / 2023-11-08 
+- [Correlation between in_channels and score?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/464411) — 7 票 / 3 评论 / 2023-12-30 
+- [Save up inference time predicting only private data](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/462651) — 7 票 / 1 评论 / 2023-12-21 
+- [ Congratulations to new Kaggle Competitions GM](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475702) — 7 票 / 2 评论 / 2024-02-09 
+- [discrepancy betwwen annotation for kidney1 dense and kidney1 voi?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/468399) — 7 票 / 7 评论 / 2024-01-16 
+- [CV vs. LB updated](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/469749) — 7 票 / 11 评论 / 2024-01-21 
+- [Apple’s Vision Pro and Hip CT](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475068) — 7 票 / 0 评论 / 2024-02-07 
+- [Some inquiries regarding result submission](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/455787) — 7 票 / 11 评论 / 2023-11-16 
+- [Some questions about the codes in public notebooks](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/469046) — 7 票 / 5 评论 / 2024-01-18 
+- [Careful with Submission Selection](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/472089) — 7 票 / 5 评论 / 2024-01-30 
+- [did we get tricked? the voi is the key](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/475126) — 6 票 / 4 评论 / 2024-02-07 
+- [Question about you guys' motivation ](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/464730) — 6 票 / 17 评论 / 2024-01-01 
+- [What is Wrong with Private Data ?](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/480452) — 6 票 / 4 评论 / 2024-02-28 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/453790) — 5 票 / 1 评论 / 2023-11-07 

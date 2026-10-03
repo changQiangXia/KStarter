@@ -1,0 +1,495 @@
+<p>Many thanks to the competition host and Kaggle for another engaging challenge - and big congratulations to all the participants!<br>
+Thank you to every one who actively shared insights and notebooks to the community, especially <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a> for <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569921" target="_blank">the external dataset</a>.</p>
+<p>As always, I had a great time learning throughout the competition and was fortunate enough to finish in the gold zone. I'm really happy to share a few thoughts here.</p>
+<h1>TLDR;</h1>
+<ul>
+<li>I'm focus on the 3D/2.5D/2D UNet approaches. The final submission PB 86.6 was an ensemble of 5 models: <code>3D Resnext50 (2xTTA)</code>, <code>3D Densenet121 (2xTTA)</code>, <code>3D X3D-M (2xTTA)</code>, <code>2D MaxViT (2xTTA)</code> and <code>2D CoaT (1xTTA)</code></li>
+<li>3D model use patch size of <code>(224, 448, 448)</code> while 2D use <code>(3, 896, 896)</code> patch size to incorporate enough global context.</li>
+<li>Gaussian heatmap with <code>stride=16</code> and <code>sigma=200A</code> for uncertainty modeling</li>
+<li>Simple FPN neck to fuse low-level features into stride-16-feature map</li>
+<li>All final selected models are trained on combine of train dataset + external dataset without local validation</li>
+<li>Heavy augmentations allowed to train for more epochs and be more robust to domain/distribution change.</li>
+<li>Pseudo labeling on train+external dataset, with manual review</li>
+<li>Resample all tomograms to 16A voxel spacing + Sliding window patches inference</li>
+<li>Simple BCE loss works best</li>
+<li>Weighted Box Fusion (WBF) to ensemble multiple model/TTA ’s predictions</li>
+</ul>
+<p><strong>What not work</strong></p>
+<ul>
+<li>Other losses: MSE, L1, Weighted BCE, Focal, Tversky, Combine multiple losses</li>
+</ul>
+<h1>Table of Contents</h1>
+<ul>
+<li><a href="#validation-strategy">Validation strategy</a></li>
+<li><a href="#3d-unet-approach">3D-UNet Approach</a><ul>
+<li><a href="#data-processing">Data processing</a></li>
+<li><a href="#3d-augmentation">3D augmentation</a></li>
+<li><a href="#3d-target-heatmap">3D target heatmap</a></li>
+<li><a href="#3d-modeling">3D modeling</a></li>
+<li><a href="#3d-encoder">3D Encoder</a></li>
+<li><a href="#25d-encoder">2.5D Encoder</a></li>
+<li><a href="#some-results">Some results</a></li></ul></li>
+<li><a href="#2d-unet-approach">2D-UNet Approach</a><ul>
+<li><a href="#data-processing-1">Data processing</a></li>
+<li><a href="#2d-augmentation">2D augmentation</a></li>
+<li><a href="#2d-target-heatmap">2D target heatmap</a></li>
+<li><a href="#2d-modeling">2D modeling</a></li></ul></li>
+<li><a href="#external-dataset--pseudo-label">External dataset &amp; Pseudo label</a></li>
+<li><a href="#postprocessing">Postprocessing</a></li>
+<li><a href="#source-code">Source code</a></li>
+</ul>
+<hr>
+<h1>Validation strategy</h1>
+<p>A simple 4-StratifiedKfold by number of motors was conducted on train dataset. Validation samples are augmented by Rotate90+Flip (16 posible combinations) to increase the number of samples, making validation metrics more stable and trustworthy to track.</p>
+<p>Experiment progress was tracked using mainly F2 score and additionally Partial Average Precision, cutoff at a specific Recall, e.g &gt; 0.9. The second is not a binary metric so more stable and less sentitive to threshold, strong correlate with F2. Single-fold local CV was the main factor to select models and hyperparameters.</p>
+<p><strong>Train on all data, validate on LB:</strong> However, when my pipeline are bug-free and going better (when CV &gt; 0.96 and LB &gt; 0.8), CV is just saturated and not correlate to LB well. So at the later stage, CV is just used to guide a reasonable value of hyperparameter (mainly learning rate). In last week, all models were trained on all dataset without local validation and are submitted to LB.</p>
+<h1>3D-UNet Approach</h1>
+<h2>Data processing</h2>
+<p>I resample tomogram to a fixed voxel spacing of 16.0, use sliding windows (patching) technique, split tomogram to <code>224x448x448</code> (possibly overlap) patches as input to models to obtain <strong>16x</strong> downscaled prediction heatmap of shape <code>14x28x28</code>.  <br>
+The labeling coordinate is a little bit noisy/uncertain, also the tolerance radius is high, so using high heatmap resolution seem to be redundant, significantly increase the computation. <code>Radius of 1000A</code> == <code>62.5 voxels in input volume</code> == <code>4 voxels in prediction heatmap</code>. I've experimented with prediction heatmap of <code>8x</code> and <code>32x</code> downscaled heatmap and found that <code>8x</code> ~ <code>16x</code> &gt;&gt; <code>32x</code>. To the end, I use <code>16x</code> downscaled heatmap for both 3D and 2D models.</p>
+<p><strong>Optimal voxel spacing is ~16.0</strong>  <br>
+For this task, resampling to a suitable voxel spacing is important. Using small voxel spacing keep the very small details but computation intensive due to high resolution, in contrast large voxel spacing could erase out all the textures needed for detection. Experiment results confirm that very small detail/textures are matter:</p>
+<ul>
+<li>Tried various target voxel spacing 12, 16, 20, 24, 32, 64; found that CV degrade significantly when spacing &gt; 32. LB also degrade much faster right after spacing &gt; 20. I found 16.0 is the best balance value, matching with the typical <a href="https://github.com/MIC-DKFZ/nnUNet/issues/2701" target="_blank">median spacing</a> default practice of nnUnet (median spacing is 15.6 for the train dataset).</li>
+<li>Resampling interpolation mode (LINEAR, AREA, NEAREST) also could significantly affect performance. All tomograms are also noisy (Gaussian noise?) so resize/interpolation could erase thing in an unexpected manner.</li>
+</ul>
+<p><strong>The mean original voxel spacing in LB/PB is 13.1 ???</strong>  <br>
+Haha, just my stupid guess work and there're no way I could confirm. I trained model with <code>target_spacing=16.0</code> and submit to LB with different of assumtions about the original spacing. <code>13.1</code> brings the highest LB. Given that test samples have higher resolution (<code>~400x1400x1050</code> in average) and 44.7% of train samples have <code>voxel_spacing=13.1</code>, <strong>I safely assume that the average test voxel spacing is ~13.1, and resample to 16.0 for all experiments</strong></p>
+<blockquote>
+  <p>I tried to quickly train a voxel spacing prediction model on the last day, but failed, metric is about <code>MAE=5.1</code>, can't predict any useful thing :D</p>
+</blockquote>
+<p>Each sample is dominated by negative voxels, so I try to control the number of positive/negative patches ratio in the training progress. For 3D approach, the positive/negative samples ratio is 20/1.</p>
+<h2>3D augmentation</h2>
+<p>For each epoch, all positive samples are ensured to be augmented with all 16 transformations composed of Rotate90+Flip, go after a "heavy" MONAI augmentation pipeline. Keypoints passed to MONAI dictionary transform as well so that we get the Affine-transformed keypoints to render the heatmap with larger stride (16 in this case). I really like MONAI's <a href="https://docs.monai.io/en/stable/lazy_resampling.html" target="_blank">Lazy Resampling</a>, which make augmentation and dataloader become fast and efficient.<br>
+Various MONAI 3D augmentations were used:</p>
+<ul>
+<li>Spatial: <code>RandZoom</code>, <code>RandAffined</code></li>
+<li>Intensity: <code>RandShiftIntensityd</code>, <code>RandStdShiftIntensityd</code>, <code>RandScaleIntensityFixedMeand</code>, <code>RandScaleIntensityd</code>, <code>RandAdjustContrastd</code>, <code>RandHistogramShiftd</code></li>
+<li>Reduce quality: <code>RandSimulateLowResolutiond</code></li>
+<li>Dropout: <code>RandCoarseDropoutKeepKeypoints</code></li>
+</ul>
+<p>Mixup and Cutmix were tried but bring no clear improvement so be ignored in latter experiments.</p>
+<p></p><br>
+Pseudo code in Albumentations style<p></p>
+<pre><code> monai  transforms  T
+ monai_custom  CT
+
+T.Compose(
+    [
+        
+        T.Spacingd(target_spacing=, p=),
+        CT.CustomCropBySlicesd(),
+        
+        T.RandZoomd(min_zoom=(, , ), max_zoom=(, , ), p=),
+        T.OneOf(
+            [
+                
+                T.RandAffined(
+                    rotate_range=((, ), (, ), (, )),
+                    scale_range=((-, ), (-, ), (-, )),
+                    p=,
+                ),
+                
+                T.RandAffined(
+                    rotate_range=((-, ), (-, ), (, )),
+                    shear_range=((-, ), (-, ), (-, )),
+                    scale_range=((-, ), (-, ), (-, )),
+                    p=,
+                ),
+            ],
+            p=,
+        ),
+        
+        T.OneOf(
+            [
+                T.Compose(
+                    [
+                        
+                        T.OneOf(
+                            [
+                                T.RandShiftIntensityd(offset=(-, ), p=),
+                                T.RandStdShiftIntensityd(factors=(-, ), p=),
+                            ],
+                            p=,
+                        ),
+                        
+                        T.OneOf(
+                            [
+                                
+                                T.RandScaleIntensityFixedMeand(factors=(-, ), p=),
+                                
+                                T.RandScaleIntensityFixedMeand(factors=(, ), p=),
+                            ],
+                            p=,
+                        ),
+                    ],
+                    p=,
+                ),
+                T.RandScaleIntensityd(factors=(-, ), channel_wise=, p=),
+                T.RandAdjustContrastd(gamma=(, ), p=),
+                T.RandHistogramShiftd(num_control_points=(, ), p=),
+            ],
+            p=,
+        ),
+        
+        
+        CT.ApplyTransformToNormalDistributionsd(keys=[]),
+        
+        T.RandSimulateLowResolutiond(
+            zoom_range=(, ), downsample_mode=, upsample_mode=, p=
+        ),
+        CT.RandCoarseDropoutWithKeypointsd(
+            keypoints_key=, holes=, spatial_size=(, , ),
+            dropout_holes=, fill_value=(, ), max_holes=,
+            max_spatial_size=(, , ), prob=
+        )
+    ]
+)
+</code></pre>
+<p></p><p></p>
+<h2>3D target heatmap</h2>
+<p>For a task where real distance/scale could be measured, e.g voxel spacing is known, I prefer a fixed sigma measured in real-life distance. Some advances in bottom-up human pose estimation have introduced techniques to adaptively rescale each keypoint's heatmap. Intuitively, these methods adjust the heatmap’s sigma values based on the size of each person, assigning larger/smaller sigmas (higher/lower uncertainty) to larger/smaller ones (relative to their pixel count/box area).</p>
+<p>I use a sigma value of 200A (0.2 times the radius). Note that going through Spatial augmentations like Spacing, Affine or Zoom, the voxel spacing is changed so the value of sigma used in rendering the heatmap is not a fixed number of voxels, but rather <code>0.2 * 1000 / cur_voxel_spacing</code>.  <br>
+A custom implementation of <a href="https://docs.monai.io/en/stable/transforms.html#applytransformtopoints" target="_blank">ApplyTransformToPoints</a> was implemented to apply Affine Transform to a Normal distribution, result in another Normal distribution to render on the target heatmap volume. Hence, instead of a ball-like shape, each keypoint looks like a rotated ellipsoid.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10254700%2Fd2d3ba10849048534fcc91ff265ac800%2F3d_heatmap.png?generation=1749212341383311&amp;alt=media" alt=""></p>
+<p>Does this make sense? Maybe not that significant. It's just an assumption that the likelihood of a motor <strong>strictly</strong> follows a 3D Normal distribution in the original tomogram, which is not likely for this task. Later, I decided to use a ball-like-shape Gaussian heatmap, with diagonal covariance matrix and single sigma for all 3 dimensions ZYX to make life easier for my model (just need to predict the mean and scale, intuitively).</p>
+<h2>3D modeling</h2>
+<p>3D-UNet with various 3D/2.5D Encoder was tried and be used in final submision. Taking input as a 3D volume of shape <code>(Z, Y, X) = (224, 448, 448)</code>, all model predict the output heatmap of shape <code>(Z/16, Y/16, X/16) = (14, 28, 28)</code>.  <br>
+3D-UNet Decoder borrowed from <a href="https://github.com/ZFTurbo/segmentation_models_pytorch_3d" target="_blank">segmentation_models_pytorch_3d</a> was tweak to output multiscale heatmaps for ultilizing deep supervision. Since for this task, finest heatmap has stride 16 right after the coarsest one of 32 (not too deep), deep supervision seem to be redundant experimentally, later I just supervise the 1/16 heatmap only.</p>
+<h3>3D Encoder</h3>
+<p>I mainly tweak and use models from either <a href="https://github.com/ZFTurbo/timm_3d" target="_blank">timm3d</a> or <a href="https://github.com/facebookresearch/SlowFast" target="_blank">SlowFast</a>. By default, video models like X3D and I3D in SlowFast did not use temporal pooling, keeping the temporal dim unchanged to keep as much as temporal resolution as posible. For this task, this is unnecessary, I make change so that depth (temporal in video term) is progressively downsampled by 2 at each stage, synchronized with spatial downsampling too. Now, all 3D models have the same interface, output at least 4 (usually 5) levels of feature map at stride 1/4, 1/8, 1/16, 1/32.  <br>
+As discuss above, we need high resolution (small voxel spacing) for keeping very little details/textures. Standard UNet ultilize and fuse low-level/fine features via skip connection to the same output level. However, UNet with output stride of 16 is not actually U-shape now, hence there're no shorter path to propagate the low-level/fine features (rich texture/localization) to the high-level/coarse output heatmap (rich semantic). Motivated by this, I add necks to fuse low-level features to the coarse output heatmap head, efficiently improve information propagation through the network. Two types of necks were tried:</p>
+<ul>
+<li>Simple 3D FPN Neck: motivated by <a href="https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430491" target="_blank">this writeup</a> and <a href="http://presentations.cocodataset.org/COCO17-Stuff-FAIR.pdf" target="_blank">Unified FPN architecture</a>. Simply interpolate features at all level to match spatial shape at stride 1/16, concatenate them all then passed to the UNet Decoder block</li>
+<li><a href="https://arxiv.org/abs/1803.01534" target="_blank">3D PAN (Path Aggregation Network)</a>: Instead of just adding top-down path augmentation as in <a href="https://arxiv.org/pdf/1612.03144" target="_blank">FPN</a> to fuse rich semantic features to low-level features at finer scale, we now add another bottom-up path augmentation to fuse rich texture/detail features to the coarser one as well.</li>
+</ul>
+<p>It's clear that Simple FPN is a "more straight" way to achieve our goal. Not putting much time on this, but my experiment results also confirm that Simple FPN is usually better than PAN. So all my final models were additionally equipped with this Simple FPN neck, illustrated below.  </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10254700%2F2f2cab849715f0dd2bf2b2a93fe04e8a%2F3d_unet_fpn.jpg?generation=1749212388256232&amp;alt=media" alt=""></p>
+<h3>2.5D Encoder</h3>
+<p>I'm also working with 2.5D encoder, combined with FPN neck and 3D UNet decoder too. The idea is very simple. First we sample a list of 2D 3-channels image by sliding over the depth (Z) dimension with stride of 2, effectively treat one volume as a batch of 2D images. At each stage of 2D backbone, spatial resolution is downsampled by 2 by default, we also down sample the depth (now treated as batch) by a factor of 2 too by either <code>AvgPool3d((2, 1, 1))</code> or <code>Conv3d(stride=(2, 1, 1))</code>. The first one was better and easier to train since it keep tensor statistics unchanged, better leveraging transfer learning from pretrained 2D backbone. It shows good score if no external dataset was used, significantly reduce overhead at middle/latter stages, being lighweight and helps model effectively "see" all 2D slices of a volume. It's okay for 2D convolution-only backbone such as EfficientNet or ConvNeXT which the heavy computation goes in middle or latter stages, but not for backbone which use Transformer in early stage cause of the high resolution and very large "fake batch size"</p>
+<p>Also played with somethings like injecting LSTM layers after obtained 2D features, CV may go up but LB just unchanged. Perhap Conv3d in FPN neck and UNet Decoder was better fusing slicewise features, additional mixing is not necessary anymore.</p>
+<h3>Some results</h3>
+<p>I report LB/PB score of single model (single checkpoint). These models are:</p>
+<ul>
+<li>Trained on all data (train + external)</li>
+<li>2xTTA: original + rotate 90 along XY plane</li>
+<li>Threshold is the quantile at 55% over all prediction confident scores.</li>
+</ul>
+<p>I start using external data a little bit late, so just 1 last checkpoint of them was submitted to obtain LB score with very limitted tuning. Each model's runtime is not exceed 3h.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Model</strong></th>
+<th><strong>Params</strong></th>
+<th><strong>Private LB</strong></th>
+<th><strong>Public LB</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3D RESNEXT50</td>
+<td>49.9M</td>
+<td><strong>86.2</strong></td>
+<td>85.8</td>
+</tr>
+<tr>
+<td>3D DENSENET121</td>
+<td>27.6M</td>
+<td>85.7</td>
+<td><strong>86.0</strong></td>
+</tr>
+<tr>
+<td>X3DM + FPN</td>
+<td>10.4M</td>
+<td>84.6</td>
+<td>84.8</td>
+</tr>
+<tr>
+<td>X3DM + PAN + MIXUP</td>
+<td>6.9M</td>
+<td>84.6</td>
+<td>84.5</td>
+</tr>
+<tr>
+<td>X3DL</td>
+<td>12.8M</td>
+<td>83.9</td>
+<td>85.2</td>
+</tr>
+<tr>
+<td>3D RESNET50</td>
+<td>70.3M</td>
+<td>83.0</td>
+<td>85.4</td>
+</tr>
+<tr>
+<td><em>2.5D CONVNEXT_TINY</em></td>
+<td>40.3M</td>
+<td>82.4</td>
+<td>83.7</td>
+</tr>
+<tr>
+<td><em>2D COAT_LITE_MEDIUM</em></td>
+<td>99.6M</td>
+<td>83.3</td>
+<td>84.8</td>
+</tr>
+<tr>
+<td><em>2D MAXVIT_TINY</em></td>
+<td>86.1M</td>
+<td>82.5</td>
+<td>85.4</td>
+</tr>
+</tbody>
+</table>
+<h1>2D-UNet Approach</h1>
+<p>2D approach was in my plan, but it becomes urgent since I feel that may be many high score public LB may using 2D approaches, especially YOLO. 2 weeks before competition deadline, I started working on 2D modeling and inherrit many details from the 3D one. Training 2D models was much more resource efficient and much faster compared to 3D.</p>
+<h2>Data processing</h2>
+<p>The same target voxel spacing of 16.0 was used too, i.e I resize each 2D slice so that XY spacing is 16A. Of course augmentations could scale this spacing later, but same as 3D approach, sigma of each keypoint is rescaled accordingly so that final sigma is fixed at a real distance of 200A.<br>
+In inference stage, I load the full volume on RAM then perform LINEAR interpolation to fixed voxel spacing of <code>(Z, Y, X) = (32, 16, 16)</code>, that say sampling along Z (depth) is more sparse. This helps reduce inference cost without too much performance decregation. I use 3 channels image of size <code>(896, 896)</code> as input to 2D-UNet model.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10254700%2Fa69bde60b2bcc2eff12633f2a3e5ea08%2F2d_pipeline.jpg?generation=1749212467165435&amp;alt=media" alt=""></p>
+<p>In training stage, different from 3D pipeline where I load whole volume to RAM then using MONAI's lazy resampling (using F.grid_sample internally), 2D pipeline just sample a specific value of Z (following truncated normal distribution with scale of 1 sigma) then load 3 nearby images per sample (spacing~32A) from disk, which is pretty efficient. Although 2D approach is more sample efficient to reach a medium score, controlling the positive/negative samples ratio is still important so that model could see more negative slices over all data domain/distribution rather than just the "motor’s neighbor" slices. I started experimenting with negative/positive ratio equal to 0.25, latter found that CV improved quite significantly when set it to 0.75, but not enough submissions to confirm that on LB.</p>
+<h2>2D augmentation</h2>
+<p><a href="https://github.com/albumentations-team/albumentations" target="_blank">Albumentations</a> was used to create augmentation pipeline, with ability to handle and keep track of keypoints scaling as well, which is pretty neat.<br>
+</p><br>
+ 2D augmentation code <p></p>
+<pre><code>TARGET_SPACING = 
+PATCH_SIZE = (, )
+
+ ():
+    
+     params
+       data  (data[]) &gt; :
+        kpt = random.choice(data[])
+        
+         (kpt) == 
+        x, y = kpt[:]
+        scale = kpt[]
+         [
+            x - margin_xy[] * scale,
+            y - margin_xy[] * scale,
+            x + margin_xy[] * scale,
+            y + margin_xy[] * scale,
+        ]
+    :
+         
+
+
+augment_transform = A.Compose(
+    [
+        
+        A.HorizontalFlip(p=),
+        A.VerticalFlip(p=),
+        
+        A.OneOf(
+            [
+                A.GaussNoise(
+                    var_limit=(, ),
+                    mean=,
+                    per_channel=,
+                    noise_scale_factor=,
+                    p=,
+                ),
+                A.MultiplicativeNoise(
+                    multiplier=(, ),
+                    per_channel=,
+                    elementwise=,
+                    p=,
+                ),
+            ],
+            p=,
+        ),
+        
+        A.OneOf(
+            [
+                
+                A.OneOf(
+                    [
+                        A.Downscale(
+                            scale_range=(, ),
+                            interpolation_pair={
+                                : cv2.INTER_LANCZOS4,
+                                : cv2.INTER_AREA,
+                            },
+                            p=,
+                        ),
+                        A.Downscale(
+                            scale_range=(, ),
+                            interpolation_pair={
+                                : cv2.INTER_LINEAR,
+                                : cv2.INTER_AREA,
+                            },
+                            p=,
+                        ),
+                        A.Downscale(
+                            scale_range=(, ),
+                            interpolation_pair={
+                                : cv2.INTER_LINEAR,
+                                : cv2.INTER_LINEAR,
+                            },
+                            p=,
+                        ),
+                    ],
+                    p=,
+                ),
+                A.ImageCompression(
+                    compression_type=, quality_range=(, ), p=
+                ),
+                A.Posterize(num_bits=(, ), p=),
+            ],
+            p=,
+        ),
+        
+        A.OneOf(
+            [
+                
+                A.Emboss(alpha=(, ), strength=(, ), p=),
+                A.Sharpen(alpha=(, ), lightness=(, ), p=),
+                A.CLAHE(clip_limit=, tile_grid_size=(, ), p=),
+            ],
+            p=,
+        ),
+        
+        A.OneOf(
+            [
+                A.OneOf(
+                    [
+                        A.RandomBrightnessContrast(
+                            brightness_limit=(-, ),
+                            contrast_limit=(-, ),
+                            brightness_by_max=,
+                            p=,
+                        ),
+                        A.RandomBrightnessContrast(
+                            brightness_limit=(, ),
+                            contrast_limit=(-, ),
+                            brightness_by_max=,
+                            p=,
+                        ),
+                        A.RandomBrightnessContrast(
+                            brightness_limit=(-, ),
+                            contrast_limit=(, ),
+                            brightness_by_max=,
+                            p=,
+                        ),
+                        A.RandomBrightnessContrast(
+                            brightness_limit=(, ),
+                            contrast_limit=(, ),
+                            brightness_by_max=,
+                            p=,
+                        ),
+                    ],
+                    p=,
+                ),
+                A.RandomToneCurve(scale=, per_channel=, p=),
+                A.RandomGamma(gamma_limit=(, ), p=),
+            ],
+            p=,
+        ),
+        
+        A.OneOf(
+            [
+                
+                A.Affine(
+                    scale={: (, ), : (, )},
+                    translate_percent=,
+                    rotate=(, ),
+                    shear={: (-, ), : (-, )},
+                    interpolation=cv2.INTER_LINEAR,
+                    cval=,
+                    mode=cv2.BORDER_CONSTANT,
+                    fit_output=,
+                    keep_ratio=,
+                    balanced_scale=,
+                    p=,
+                ),
+                
+                A.Affine(
+                    scale={: (, ), : (, )},
+                    translate_percent=,
+                    rotate=(, ),
+                    shear={: (-, ), : (-, )},
+                    interpolation=cv2.INTER_LINEAR,
+                    cval=,
+                    mode=cv2.BORDER_CONSTANT,
+                    fit_output=,
+                    keep_ratio=,
+                    balanced_scale=,
+                    p=,
+                ),
+                A.Perspective(
+                    scale=(, ),
+                    keep_size=,
+                    pad_mode=cv2.BORDER_CONSTANT,
+                    pad_val=,
+                    fit_output=,
+                    interpolation=cv2.INTER_LINEAR,
+                    p=,
+                ),
+            ],
+            p=,
+        ),
+        
+        AC.CustomRandomSizedBBoxSafeCrop(
+            crop_size=PATCH_SIZE,
+            scale=(, ),  
+            ratio=(, ),  
+            get_bbox_func=partial(
+                _byu_get_safe_bbox,
+                margin_xy=(
+                     / TARGET_SPACING,
+                     / TARGET_SPACING,
+                ),
+            ),
+            retry=,
+            p=,
+        ),
+        A.PadIfNeeded(
+            *PATCH_SIZE,
+            position=,
+            border_mode=cv2.BORDER_CONSTANT,
+            value=,
+            p=,
+        ),
+    ],
+    p=,
+)
+</code></pre>
+<p></p><p></p>
+<h2>2D target heatmap</h2>
+<p>There're many ways to render target heatmap. I do a sweep over 4 kinds of heatmap type with different parameters, and found that the best CV was Gaussian heatmap with peak confident and radius scales smaller when goes far from the Z groudtruth coordinate, same as if we render 3D Gaussian heatmap then take a 2D slice over. <code>adaptive scaling</code> &gt; <code>min=0, max=1</code> &gt;  <code>segment</code> &gt; <code>point</code>, which support more that we need to modeling uncertainty better.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10254700%2Fd53a89634e4065110b61d729a2736fda%2F2d_heatmap_types_compressed.jpg?generation=1749212650075518&amp;alt=media" alt=""></p>
+<h2>2D modeling</h2>
+<p>The model used for 2D modeling was adapted from <a href="https://www.kaggle.com/competitions/google-research-identify-contrails-reduce-global-warming/discussion/430491" target="_blank">this Google Contrails solution writeup</a>, thank authors very much for public their source code. It contains an image encoder, a simple FPN neck to fuse low-level features to <code>/16</code> feature map, and an UNet Decoder with Pixel Shuffle block.  <br>
+I mainly experiment with different types of 2D encoders including EfficientNet, ConvNeXt, CoaT and MaxViT. No supprising, the Hierachical Convolution-Transformer backbones were perform much better than convolution only, indicated that global context matter and we need a sufficient spatial size for obtaining enough context. In selected final submission, I use 2 2D-UNet models with timm backbones: <code>maxvit_tiny_tf_512.in1k</code> and <code>coat_lite_medium_384.in1k</code>.</p>
+<h1>External dataset &amp; Pseudo label</h1>
+<p>Again, I must thank <a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a> for <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569921" target="_blank">the external dataset</a>, especially in early stage of the competition, and <a href="https://www.kaggle.com/tatamikenn" target="_blank">@tatamikenn</a> for <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/575028" target="_blank">his note</a> on wrong-quantized tomograms.</p>
+<p>I started diving into that external dataset to train my final submission a week ago, after ensured that my training/inference pipeline is good enough and bug-free (no?). Without external data, I have a simple ensemble of 3D/2.5D UNet with <code>PB 0.851 and LB 0.852</code>.</p>
+<p><a href="https://www.kaggle.com/brendanartley" target="_blank">@brendanartley</a>'s <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/569921" target="_blank">dataset</a> was good, but seem not to be directly usable for my pipeline because of slicing and resizing to a fixed shape and losing voxel spacing information. So I tweak the download script to get my own new version, improve it by pseudo labeling+manual review:</p>
+<ol>
+<li>Keep track the voxel spacing and other metadata as well</li>
+<li>Re-spacing using <code>F.interpolate()</code> to <code>target_spacing=max(16.0, ori_spacing)</code> to save disk space and reduce dataloader overhead in the future. This results in a new <strong>180GB</strong> external dataset.</li>
+<li>Convert his labels to fit my new version. This could loses some precision of Z coordinate.</li>
+<li>Use my trained models to inference on these data with low confident threshold of <code>0.05</code>. Comparing model prediction results with converted GT to identify TP/TN/FP/FN motors.</li>
+<li>For TP, simply trust model prediction results rather than the converted GT coordinates</li>
+<li>Use <a href="https://github.com/cvat-ai/cvat" target="_blank">CVAT</a> to review and label 188 FN and 55 FP. Labeling it is simple and easy as a tagging process, where the labeler (me) just consider whether a sample is wrong or correct, not finding new ones. Almost all FN are correct (?), meaning models are missing so many motors. Labeling these confused cases is hard, but the F2 metric and "believe in AI models" punishs me to be bias and may label more to positives than usual, especially one without flagellum. This could cause inconsistances with public/private test since host <a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/579540#3217068" target="_blank">had clarified</a> that “more than 80% of the tomograms containing no flagellum the motor is not marked”</li>
+<li>With same strategy, I also try to correct the labeling errors on the train dataset as well.</li>
+<li>BOOM! Just re-train models on all dataset with previously discovered hyperparameters</li>
+</ol>
+<p>Adding so many external data change the game significantly. Training are more stable and allow for much longer training without overfiting. Though more tunings on new setup are needed, however, the deadline is quickly approaching its final days..</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F10254700%2F715d399576ca0db1d6ff68d78b522fd1%2Fcvat.png?generation=1749212703333308&amp;alt=media" alt=""></p>
+<h1>Postprocessing</h1>
+<p>As usual, I'm not use a fixed threshold since it's largely change between submitted models to the LB. Instead, just use quantile thresholding at 55% (55% lowest threshold samples are predicted as negative, the remain 45% ones predicted as positive) which is adaptively changed based on model's confident distribution, so just one LB submission is enough to estimate the best F2 score.</p>
+<p>The postprocessing process:</p>
+<ul>
+<li>I use 5 models combined with TTAs, output 9 different heatmaps</li>
+<li>Not using heatmap averaging, instead, decode each heatmap into list of candidate keypoints using NMS with 0.2 confident threshold.</li>
+<li>Combine all 9 predictions to get final result using a version of 3D Weighted Box Fusion, using L2 distance for clustering and <code>conf_mode='avg'</code></li>
+</ul>
+<p>I didn't conduct many experiments with ensemble methods before, and decided to use WBF on the two last days, just believe that it could survive some very strong peak signal from one single model, thus improve Recall.</p>
+<h1>Source code</h1>
+<ul>
+<li><strong>Training code</strong>: <a href="https://github.com/dangnh0611/kaggle_byu" target="_blank">https://github.com/dangnh0611/kaggle_byu</a></li>
+<li><strong>Inference notebook</strong>:  <a href="https://www.kaggle.com/code/dangnh0611/3rd-place-solution-submit" target="_blank">https://www.kaggle.com/code/dangnh0611/3rd-place-solution-submit</a></li>
+</ul>
+<p>Thanks for your attention !</p>

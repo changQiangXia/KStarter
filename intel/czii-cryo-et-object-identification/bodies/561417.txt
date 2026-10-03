@@ -1,0 +1,156 @@
+# https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561417
+
+Topic #561417: 3rd Place Solution
+  Author: soso
+  Posted: 2025-02-06 02:43:32.872000
+  Votes: 53  Comments: 32
+
+Thanks kaggle&amp;host for this interesting competition. 
+What I like for this competition is that the host give out a baseline(especially for data processing), it is very helpful for people like me who has no knowledge with this domain.
+Another reason I join this competition was that I want to writing training code based on the library accelerate(I use pure pytorch before). 
+Since I am on the top, I will think there is no critical bug in my training code.
+
+Summary
+
+Before I start this competition I thought it was a OD task not a segmentation task untile @hengck23 publish his good notebook.
+My solution is based on 3D unet with post processing using cc3d. Cross Entropy loss is used with all the 7 particles.
+My best solution is 4 fold(7 KF) average ensemble of backbone res101.
+One thing I want to mention is that my best solution has same score(0.783) on both Public and Private LB.
+
+models
+
+I use the code from segmentation_models_pytorch_3d.
+The best solution is Unet + resnet101.
+I also try different architecture with different backbones, but unet+resnet101 is the best on public LB.
+I did not dig much of the code, so mostly default parameters was used for these models.
+
+train
+
+I use EMA because it is easier to handle than SWA, although I remember there is saying SWA is better than EMA.
+I train the model with input size (64, 128, 128), but inference with (64, 256, 256), which give 0.001 improvement on public LB.
+I use half of the original radius during training, considering how the evaluation score is calculated, which is also best based on my experiment.
+
+Augmentation
+
+It is obvious data augmentation will help a lot for this competition considering the rare data we have.
+What I used:
+
+
+
+flip on axis x, y, z
+
+switch axis x and y
+
+different algos: "denoised", "wbp", "ctfdeconvolved", "isonetcorrected
+
+simple copy past
+
+mixup
+
+
+TTA
+
+2 tta was used, output is averaged with original:
+
+
+
+flip x, y, z
+
+rot90 for x, y
+
+
+ensemble
+
+
+
+4 fold of 7KF average ensemble
+
+
+Failures
+
+
+
+Try to pretrain on the external data provided by host
+
+ensemble unet with different backbone like resnet34 and resnet10
+
+Comments:
+├─ Roc (2025-02-06 04:01:16.997000) [+1]
+│  Congratulations! Nice solution，simple and efficient!
+├─ Zacchaeus (2025-03-06 08:15:33.030000) [+0]
+│  Congrats! Wondering what GPU you used for training?
+├─ Komalmahajan09 (2025-02-12 15:31:27.023000) [+0]
+│  nice solution
+├─ Rkumar03 (2025-02-12 09:41:46.417000) [+0]
+│  nice and efficient solution
+├─ Leo Yang (2025-02-11 05:53:30.467000) [+0]
+│  Hi, thank you very much for publishing the solution!
+│  
+│  As far as I am concerned, you "train the model with input size (64, 128, 128), but inference with (64, 256, 256)". May I ask what effect will i...
+  ├─ soso (2025-02-11 06:07:09.167000) [+0]
+  │  Because it worked in public LB. 
+  │  I think when  split it with small patch there will be more border pixels which is hard for the model to predict!
+    ├─ Leo Yang (2025-02-12 00:51:19.330000) [+0]
+    │  Thanks for replying. I am very interested by this case. May I ask more questions?
+    │  
+    │  Supposed we change the input size for inference, will the results be affected in a bad way? 
+    │  For example, what if ...
+    ├─ soso (2025-02-12 01:54:02.697000) [+0]
+    │  with bigger input size in inference, it have bigger difference compare to train, this should decrease performance. Remember for a convolution models the receptive field is fixed, when input size bi...
+    ├─ Leo Yang (2025-02-12 02:35:05.080000) [+0]
+    │  thx! I will take something to digest these insights.
+├─ [deleted] (2025-02-10 13:44:14.970000) [+0]
+│  Nice and effficient solution
+├─ Ma Edward (2025-02-06 13:31:35.110000) [+0]
+│  Would you mind sharing the single model performance in the final four models?
+  ├─ soso (2025-02-06 23:09:35.847000) [+0]
+  │  https://www.kaggle.com/competitions/czii-cryo-et-object-identification/discussion/561417#3116504
+├─ [deleted] (2025-02-06 11:31:00.357000) [+0]
+│  Nice and effficient solution
+├─ Sinan Calisir (2025-02-06 09:12:59.640000) [+0]
+│  Huge congrats! Are you planning to share your final code as well?
+├─ Success Moses (2025-02-06 07:35:26.630000) [+0]
+│  Hi! Congratulations on your results, especially considering the fact that you did not use the external dataset provided by the host. It would very helpful if you could provided the training code yo...
+├─ Dive Deeper (2025-02-06 04:27:32.693000) [+0]
+│  Congrats @tangtang1999. May I know the improvement of using heavy augmentation like different algo, mixup and copypaste?
+  ├─ soso (2025-02-06 08:38:29.907000) [+0]
+  │  Unfortunately I did not find the logs(When have too much logs, notebook will become too slow, I deleted some logs 😅).
+  │  What I remember is:
+  │  
+  │  
+  │  
+  │  When I increase aug algo prob from 0.5 to 0.75 it did no...
+├─ Switch9527 (2025-02-06 03:37:44.937000) [+0]
+│  Looking forward to Brother's complete code, which will help me learn more
+  ├─ soso (2025-02-06 23:28:06.767000) [+0]
+  │  Sorry, I do not have plan to open source the code
+├─ Ángel Jacinto Sánchez Ruiz (2025-02-06 03:03:07.807000) [+0]
+│  Congrats. 
+│  
+│  different algos: "denoised", "wbp", "ctfdeconvolved", "isonetcorrected" I didn't even thought in that. Good point.
+├─ AnnieGo (2025-02-06 02:56:50.767000) [+0]
+│  Congratulations on winning the gold medal! It's impressive that you achieved comparable results to our seven-model ensemble using only four models. Could you kindly share the public and private sco...
+  ├─ soso (2025-02-06 03:18:57.740000) [+3]
+  │  There is one model which has 0.773 public, 0.770 private.
+├─ Ma Edward (2025-02-06 02:50:48.007000) [+0]
+│  Congrats on the great performance! And thanks for sharing the great solution. 
+│  What kind of radius did you use to create the segmentation masks?
+  ├─ soso (2025-02-06 02:55:32.790000) [+1]
+  │  half of the original
+    ├─ [deleted] (2025-02-06 05:47:57.933000) [+0]
+    │  how much time will it take to for compelete solution.Waiting for it .Thanks in adavance
+    ├─ soso (2025-02-06 08:18:54.463000) [+0]
+    │  less than 4 hours to train the 7 folds of res101 with 4090
+├─ [deleted] (2025-02-06 08:27:23.540000) [+0]
+│  [deleted]
+├─ [deleted] (2025-02-06 05:00:15.793000) [+0]
+│  [deleted]
+  ├─ soso (2025-02-06 05:14:58.757000) [+2]
+  │  I copy EMA code from timm library
+├─ [deleted] (2025-02-06 04:26:11.517000) [+0]
+│  [deleted]
+├─ [deleted] (2025-02-06 04:26:11.517000) [+0]
+│  [deleted]
+├─ Switch9527 (2025-02-06 03:33:24.127000) [+0]
+│  Congratulations.
+│  老哥666

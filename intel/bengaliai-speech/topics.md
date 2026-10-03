@@ -1,0 +1,82 @@
+# bengaliai-speech 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447961) — 107 票 / 38 评论 / 2023-10-18 **write-up?**
+- [[lb 0.481] My experimental results](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425496) — 52 票 / 37 评论 / 2023-07-19 
+- [[LB 0.445] Finetuning is the key 🙆‍♂️🙆‍♂️](https://www.kaggle.com/competitions/bengaliai-speech/discussion/433722) — 47 票 / 42 评论 / 2023-08-22 
+- [3rd place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447957) — 43 票 / 20 评论 / 2023-10-21 **write-up?**
+- [2nd place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447976) — 41 票 / 19 评论 / 2023-11-24 **write-up?**
+- [Datasets and Model Checkpoint for resource efficient training](https://www.kaggle.com/competitions/bengaliai-speech/discussion/435300) — 36 票 / 28 评论 / 2023-08-28 
+- [5th place solution - ensembling works](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448006) — 34 票 / 7 评论 / 2023-10-25 **write-up?**
+- [44th Place Solution 🎉🎉🎉](https://www.kaggle.com/competitions/bengaliai-speech/discussion/450635) — 31 票 / 9 评论 / 2023-10-25 **write-up?**
+- [WER (Substitutions + Insertions + Deletions ). Suffering to talk Bengali (=adding data is taking too loooong)](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425248) — 28 票 / 6 评论 / 2023-07-17 
+- [[LB: 0.471] Public Wav2Vec2.0 w/ Language Model Baseline](https://www.kaggle.com/competitions/bengaliai-speech/discussion/432791) — 27 票 / 0 评论 / 2023-08-19 
+- [Wav2Vec2 model trained on DL Sprint Data (YellowKing)](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425457) — 25 票 / 8 评论 / 2023-07-18 
+- [31st place silver medal solution - My first competition medal](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448030) — 25 票 / 11 评论 / 2024-06-14 **write-up?**
+- [Approaching Audio to Text Tasks](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425241) — 23 票 / 7 评论 / 2023-07-17 
+- [স্বাগতম (Welcome) from Bengali.AI!](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425250) — 20 票 / 22 评论 / 2023-07-17 
+- [57th Place Solution for the Bengali.AI Speech Recognition Competition (Top 8%)](https://www.kaggle.com/competitions/bengaliai-speech/discussion/451471) — 20 票 / 4 评论 / 2023-10-29 **write-up?**
+- [[lb0.68] how to setup baseline NeMO conformer-CTC baseline offline without internet](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425339) — 19 票 / 10 评论 / 2023-07-18 
+- [Training Set Metadata, Model Predictions and Data Quality Scores Released](https://www.kaggle.com/competitions/bengaliai-speech/discussion/433469) — 17 票 / 19 评论 / 2023-08-21 
+- [Query to organizers : Are the ground-truth sentences normalized?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/429246) — 17 票 / 17 评论 / 2023-08-04 
+- [Useful External Datasets, Models and Resources](https://www.kaggle.com/competitions/bengaliai-speech/discussion/433110) — 17 票 / 7 评论 / 2023-08-20 
+- [1st place model and inference notebook](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447970) — 17 票 / 2 评论 / 2023-10-18 **write-up?**
+- [Hand Annotation of the Example OOD audios](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425932) — 17 票 / 2 评论 / 2023-07-21 
+- [Normalized Texts and 5-gram LM for Wav2Vec2](https://www.kaggle.com/competitions/bengaliai-speech/discussion/434310) — 16 票 / 2 评论 / 2023-08-24 
+- [Let's share some memes related to this competition](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447749) — 15 票 / 7 评论 / 2023-10-17 
+- [8th place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448074) — 15 票 / 4 评论 / 2023-10-20 **write-up?**
+- [4th place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447995) — 15 票 / 4 评论 / 2023-11-11 **write-up?**
+- [14th Place Solution for the Bengali.AI Speech Recognition Competition](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447965) — 15 票 / 6 评论 / 2023-10-27 **write-up?**
+- [Datasets/Licenses](https://www.kaggle.com/competitions/bengaliai-speech/discussion/440512) — 14 票 / 4 评论 / 2023-09-15 
+- [11th place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447986) — 13 票 / 10 评论 / 2025-03-10 **write-up?**
+- [40th Place Solution without External Dataset!](https://www.kaggle.com/competitions/bengaliai-speech/discussion/450531) — 12 票 / 3 评论 / 2023-10-24 **write-up?**
+- [23nd Solution - My first competition medal](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448343) — 12 票 / 1 评论 / 2023-10-20 **write-up?**
+- [11th place solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448126) — 11 票 / 5 评论 / 2023-10-18 **write-up?**
+- [67th Place Solution - Bronze - LB 0.515](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448118) — 11 票 / 1 评论 / 2023-10-20 **write-up?**
+- [MetaAI SeamlessM4T](https://www.kaggle.com/competitions/bengaliai-speech/discussion/433835) — 11 票 / 13 评论 / 2023-08-23 
+- [Competition submission page malfunctions](https://www.kaggle.com/competitions/bengaliai-speech/discussion/446716) — 11 票 / 12 评论 / 2023-10-12 
+- [17th place : Curriculum learning ?? ](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448579) — 10 票 / 4 评论 / 2023-10-20 **write-up?**
+- [🥈24th in two weeks and `No space left on device`!](https://www.kaggle.com/competitions/bengaliai-speech/discussion/450606) — 10 票 / 2 评论 / 2023-10-25 
+- [LB [0.444] - How to improve your score - Optimizing the Decoding Parameters with Optuna](https://www.kaggle.com/competitions/bengaliai-speech/discussion/438119) — 10 票 / 1 评论 / 2023-09-09 
+- [We have two new competition grandmasters](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448332) — 10 票 / 6 评论 / 2023-10-19 
+- [Bengali Conformer by the organizers](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425245) — 10 票 / 2 评论 / 2023-07-17 
+- [Link to previous competition and resources](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425262) — 10 票 / 0 评论 / 2023-07-18 
+- [119 rank solution ](https://www.kaggle.com/competitions/bengaliai-speech/discussion/451721) — 10 票 / 0 评论 / 2023-10-30 **write-up?**
+- [[LB 0.383] WER on example audios](https://www.kaggle.com/competitions/bengaliai-speech/discussion/437259) — 10 票 / 9 评论 / 2023-09-06 
+- [24th Place Solution for the Bengali.AI Speech Recognition Competition](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448119) — 10 票 / 8 评论 / 2023-10-21 **write-up?**
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448502) — 9 票 / 0 评论 / 2023-10-19 
+- [External Datasets](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425823) — 9 票 / 3 评论 / 2023-07-20 
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/423636) — 9 票 / 4 评论 / 2023-07-10 
+- [Some Clarifications Regarding License](https://www.kaggle.com/competitions/bengaliai-speech/discussion/441423) — 9 票 / 2 评论 / 2023-09-18 
+- [Are non-commercial use libraries allowed?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/434179) — 8 票 / 6 评论 / 2023-08-24 
+- [CV vs LB - how is it?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/426605) — 8 票 / 19 评论 / 2023-07-24 
+- [HF course - for newbies](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425307) — 8 票 / 3 评论 / 2023-07-18 
+- [Bengali Python Resources](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425243) — 8 票 / 1 评论 / 2023-07-17 
+- [20th Rank Solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448066) — 8 票 / 1 评论 / 2023-10-20 **write-up?**
+- [A Humble Guide for Beginners](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448338) — 8 票 / 9 评论 / 2023-10-19 
+- [Query to organizers : In which format numerical entities are written in the Ground truths for the hidden sets?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/446224) — 7 票 / 2 评论 / 2023-10-10 
+- [Is this Competition good for beginners?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/430657) — 7 票 / 13 评论 / 2023-08-10 
+- [Introducing AI voice remover and AI voice changer](https://www.kaggle.com/competitions/bengaliai-speech/discussion/427218) — 7 票 / 0 评论 / 2023-07-26 
+- [ 🥇[NEW] Speech Recognition Models Leaderboard🔥](https://www.kaggle.com/competitions/bengaliai-speech/discussion/437692) — 7 票 / 2 评论 / 2023-09-07 
+- [Use of CC-BY-NC models facebook mms-1b](https://www.kaggle.com/competitions/bengaliai-speech/discussion/438967) — 7 票 / 11 评论 / 2023-09-13 
+- [Dataset overlaps with Common Voice dataset : Might lead to overfitting?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/426970) — 6 票 / 6 评论 / 2023-07-25 
+- [Public & Private Leaderboard](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448031) — 6 票 / 0 评论 / 2023-10-18 
+- [Direct inference with Meta Seamless M4T large](https://www.kaggle.com/competitions/bengaliai-speech/discussion/436835) — 6 票 / 7 评论 / 2023-09-04 
+- [A low ranked solution!!!😅](https://www.kaggle.com/competitions/bengaliai-speech/discussion/450522) — 6 票 / 0 评论 / 2024-04-08 **write-up?**
+- [A simple function to visualize your diffs! ](https://www.kaggle.com/competitions/bengaliai-speech/discussion/434351) — 5 票 / 2 评论 / 2023-08-24 
+- [Uhhh, speechless](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447971) — 5 票 / 0 评论 / 2023-10-18 
+- [OpenAi Whisper train and inference pack](https://www.kaggle.com/competitions/bengaliai-speech/discussion/444944) — 5 票 / 2 评论 / 2023-10-04 
+- [Private vs. Public LB](https://www.kaggle.com/competitions/bengaliai-speech/discussion/447958) — 5 票 / 2 评论 / 2023-10-18 
+- [Are we expecting shake up/down ? ](https://www.kaggle.com/competitions/bengaliai-speech/discussion/443506) — 5 票 / 3 评论 / 2023-09-27 
+- [1st place cleaned/pseudo data](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448110) — 5 票 / 0 评论 / 2023-10-18 **write-up?**
+- [Bengali code-switching ASR dataset (CC BY-SA 4.0)](https://www.kaggle.com/competitions/bengaliai-speech/discussion/440896) — 5 票 / 2 评论 / 2023-09-16 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/bengaliai-speech/discussion/429942) — 4 票 / 0 评论 / 2023-08-07 
+- [Audio Signal Processing for Machine Learning (Video Series)](https://www.kaggle.com/competitions/bengaliai-speech/discussion/432177) — 4 票 / 0 评论 / 2023-08-16 
+- [help! why submission score error???](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425942) — 4 票 / 25 评论 / 2023-07-21 
+- [bengaliAI/CommonVoiceBangla on huggingface](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425806) — 4 票 / 1 评论 / 2023-07-20 
+- [Finetune training pipline](https://www.kaggle.com/competitions/bengaliai-speech/discussion/438484) — 4 票 / 2 评论 / 2023-09-11 
+- [Papers for Bengali Speech Recognition](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425244) — 4 票 / 2 评论 / 2023-07-17 
+- [are we allowed to hand-label the example dataset (out of domain given dataset)](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425915) — 4 票 / 3 评论 / 2023-07-20 
+- [Bengali.AI Speech Wav Dataset](https://www.kaggle.com/competitions/bengaliai-speech/discussion/425458) — 4 票 / 0 评论 / 2023-07-18 
+- [Has anyone had success with Whisper or Nemo ?](https://www.kaggle.com/competitions/bengaliai-speech/discussion/444510) — 4 票 / 6 评论 / 2023-10-02 
+- [92th Place Solution](https://www.kaggle.com/competitions/bengaliai-speech/discussion/451543) — 4 票 / 0 评论 / 2023-10-29 **write-up?**
+- [Top Student Team from Bangladesh](https://www.kaggle.com/competitions/bengaliai-speech/discussion/448240) — 3 票 / 0 评论 / 2023-10-18 

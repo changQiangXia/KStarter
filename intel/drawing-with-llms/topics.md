@@ -1,0 +1,82 @@
+# drawing-with-llms 讨论区（按票数排序，共 80 条）
+
+- [3rd place solution: VQA/AES=0.81/0.64 Diffusion model + differentiable SVG optimization](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581024) — 98 票 / 43 评论 / 2025-05-28 **write-up?**
+- [Text Rendering: OCR-Exploit [LB=0.305]](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565396) — 79 票 / 33 评论 / 2025-02-28 
+- [1st Place Solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581027) — 76 票 / 52 评论 / 2025-05-28 **write-up?**
+- [References and starter materials](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564943) — 62 票 / 18 评论 / 2025-02-25 
+- [(Another) Metric Update](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567872) — 54 票 / 85 评论 / 2025-03-12 
+- [Comparing the SVG generation capabilities of mainstream LLMs: Claude-3.7-Sonnet performs the best!](https://www.kaggle.com/competitions/drawing-with-llms/discussion/569847) — 54 票 / 16 评论 / 2025-03-24 
+- [4th Place Solution: SD3.5M + DRaFT + diffvg](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581108) — 40 票 / 4 评论 / 2025-06-03 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581023) — 39 票 / 23 评论 / 2025-07-02 **write-up?**
+- [Inversion Attack: revealing source image from the evaluation model](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566160) — 39 票 / 4 评论 / 2025-03-04 
+- [13th Place Solution - A Kaggle beginner's attempt](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581032) — 38 票 / 11 评论 / 2025-05-28 **write-up?**
+- [12th Place Solution: SD3.5M + GRPO](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581034) — 37 票 / 24 评论 / 2025-05-28 **write-up?**
+- [Stable Diffusion -> SVG -> Scoring Metric [LB .507]](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567633) — 37 票 / 0 评论 / 2025-03-11 
+- [Metric Update Soon](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566429) — 33 票 / 26 评论 / 2025-03-05 
+- ["Text not present" Attack [VQA score~0.88]](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567449) — 32 票 / 7 评论 / 2025-03-10 
+- [5th place solution - VTracer and DiffVG optimization](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581128) — 29 票 / 9 评论 / 2025-05-28 **write-up?**
+- [[Bug/Problem] Submission currently > 12 hours and still scoring.](https://www.kaggle.com/competitions/drawing-with-llms/discussion/576598) — 29 票 / 64 评论 / 2025-05-06 
+- [Fine-tune Your LLM with GRPO and Custom Reward Functions](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565980) — 29 票 / 2 评论 / 2025-03-03 
+- [19th place solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581012) — 28 票 / 14 评论 / 2025-05-28 **write-up?**
+- [8th Place Solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581095) — 28 票 / 0 评论 / 2025-05-28 **write-up?**
+- [New validation dataset](https://www.kaggle.com/competitions/drawing-with-llms/discussion/573595) — 26 票 / 2 评论 / 2025-04-16 
+- [Getting Started with Qwen2.5-32b-instruct-awq](https://www.kaggle.com/competitions/drawing-with-llms/discussion/570154) — 26 票 / 11 评论 / 2025-03-26 
+- ["Edge pixel attack" - Aesthetic score 0.7214](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567487) — 26 票 / 1 评论 / 2025-03-10 
+- [Exploring Fast-Track Diffusion Models](https://www.kaggle.com/competitions/drawing-with-llms/discussion/576181) — 25 票 / 19 评论 / 2025-05-03 
+- [84th Place Solution: SDXL-Turbo -> GPU SVG Conversion + OCR Decoy](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581175) — 25 票 / 2 评论 / 2025-05-29 **write-up?**
+- [Metric Update](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566981) — 23 票 / 7 评论 / 2025-03-07 
+- [9th place - SDXL LoRA fine-tune](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581061) — 23 票 / 3 评论 / 2025-05-29 **write-up?**
+- [Should we adjust evaluation metrics every time "unexpected" solution shared?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565759) — 21 票 / 30 评论 / 2025-03-02 **write-up?**
+- [Don't forget to report plagiarism](https://www.kaggle.com/competitions/drawing-with-llms/discussion/568867) — 21 票 / 1 评论 / 2025-03-18 
+- [Additional Training Data and Fine-tuning Code](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566151) — 20 票 / 6 评论 / 2025-03-04 
+- [Vulnerability Report: Edge Pixel Attack to the New Metric (version 15)](https://www.kaggle.com/competitions/drawing-with-llms/discussion/569825) — 19 票 / 18 评论 / 2025-03-24 
+- [Rerunning Failed Submissions During the Outage](https://www.kaggle.com/competitions/drawing-with-llms/discussion/577922) — 18 票 / 23 评论 / 2025-05-07 
+- [Enhancing metric stability - simply add flips](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567720) — 18 票 / 4 评论 / 2025-03-11 
+- [[new team name] old metric 1.014 solution mini challenge](https://www.kaggle.com/competitions/drawing-with-llms/discussion/570297) — 17 票 / 21 评论 / 2025-03-27 **write-up?**
+- [Hidden tricks?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/578632) — 17 票 / 5 评论 / 2025-05-12 
+- [A nearly perfect leaderboard dynamics to end the competition!](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581017) — 17 票 / 1 评论 / 2025-05-28 
+- [Notebook failing without any Programm Error returned. How to find the issue?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565111) — 17 票 / 14 评论 / 2025-02-26 
+- [Get started here!](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564940) — 16 票 / 18 评论 / 2025-02-25 
+- [Dead in the water (Kaggle Error)](https://www.kaggle.com/competitions/drawing-with-llms/discussion/578445) — 16 票 / 12 评论 / 2025-05-11 
+- [135th Place Solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581015) — 16 票 / 1 评论 / 2025-06-05 **write-up?**
+- [[New Metric] Calculate competition metric with two lines of code](https://www.kaggle.com/competitions/drawing-with-llms/discussion/568670) — 16 票 / 5 评论 / 2025-03-17 
+- [Metric Upgrade Suggestion](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567511) — 16 票 / 8 评论 / 2025-03-10 
+- [Direct Ascent Synthesis: Turning CLIP models into Text2Pix Genatator](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566537) — 15 票 / 2 评论 / 2025-03-06 
+- [What types of model licenses are permitted in this competition?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/573412) — 15 票 / 16 评论 / 2025-04-15 
+- [Share your feedback on Kaggle Packages](https://www.kaggle.com/competitions/drawing-with-llms/discussion/578877) — 14 票 / 26 评论 / 2025-05-13 
+- [26th Place Solution: SDXL Flash + Optimized img2svg + TIFA QA Generation](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581069) — 14 票 / 0 评论 / 2025-05-28 **write-up?**
+- [Step 1: Literature Review : Related Papers](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564978) — 14 票 / 2 评论 / 2025-02-26 
+- [10th Place Solution: Flux 1 Dev -> SVG optimization -> Postprocessing](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581213) — 14 票 / 2 评论 / 2025-05-29 **write-up?**
+- [16th place solution - SDXL-Flash + Siglip/AES Reranking + Proxy VQA](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581094) — 13 票 / 3 评论 / 2025-06-06 **write-up?**
+- [Package Prediction Error](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565052) — 13 票 / 17 评论 / 2025-02-26 
+- [Curious About the Details Behind "Kaggle Error" — 5/5 Submissions Failed Today](https://www.kaggle.com/competitions/drawing-with-llms/discussion/571823) — 13 票 / 6 评论 / 2025-04-05 
+- [LLM local - LB thread](https://www.kaggle.com/competitions/drawing-with-llms/discussion/572959) — 13 票 / 6 评论 / 2025-04-12 
+- [Rescore in Progress (Updated)](https://www.kaggle.com/competitions/drawing-with-llms/discussion/569259) — 13 票 / 50 评论 / 2025-03-20 
+- [Scoring Is Taking Longer Than Usual](https://www.kaggle.com/competitions/drawing-with-llms/discussion/571567) — 12 票 / 35 评论 / 2025-04-04 
+- [GRPO Is All You Need](https://www.kaggle.com/competitions/drawing-with-llms/discussion/567013) — 12 票 / 1 评论 / 2025-03-07 
+- [Return of the "Package Import Error"](https://www.kaggle.com/competitions/drawing-with-llms/discussion/571391) — 12 票 / 13 评论 / 2025-04-03 
+- [Understanding the evaluation (as SVG generation!)](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564959) — 11 票 / 2 评论 / 2025-02-26 
+- [(FIXED) Submission Errors - 05/01/2025](https://www.kaggle.com/competitions/drawing-with-llms/discussion/575965) — 11 票 / 9 评论 / 2025-05-01 
+- [45th Place Solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/582242) — 10 票 / 0 评论 / 2025-05-30 **write-up?**
+- [Metric OCR Hallucination Without Text](https://www.kaggle.com/competitions/drawing-with-llms/discussion/569722) — 10 票 / 6 评论 / 2025-03-23 
+- [45th Place Solution](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581194) — 10 票 / 1 评论 / 2025-05-29 **write-up?**
+- [How do you successfully hill-climb the score with `diffvg`, considering that the `ImageProcessor` uses complex preprocessing techniques to prevent this?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/577784) — 9 票 / 10 评论 / 2025-05-07 
+- [Best outputs solution?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581063) — 9 票 / 2 评论 / 2025-05-28 **write-up?**
+- [Are these the allowed elements and attributes?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564963) — 9 票 / 2 评论 / 2025-02-26 
+- [Sharing a dataset!](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566499) — 9 票 / 5 评论 / 2025-03-05 
+- [Your expectations on shakeup?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/580951) — 9 票 / 4 评论 / 2025-05-27 
+- [15th Place Solution: SD3.5M + Vtracer + select best from 3 image](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581051) — 9 票 / 1 评论 / 2025-05-28 **write-up?**
+- [Interesting Paligemma2 OCR examples](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581016) — 9 票 / 9 评论 / 2025-05-28 
+- [Package Import Error](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565055) — 8 票 / 13 评论 / 2025-02-26 
+- [PyTorch-SVGRender](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565418) — 8 票 / 1 评论 / 2025-02-28 
+- [How much of a shake-up is expected in this competition?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/578171) — 8 票 / 5 评论 / 2025-05-09 
+- [Clarification Needed: Should Text-to-Image Models Like SD/Flux Be Allowed in an LLM-Based SVG Generation Competition?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/572127) — 8 票 / 4 评论 / 2025-04-07 
+- [What should I do if someone mistakenly shares a private notebook with me, even though I'm not part of their team?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/571998) — 8 票 / 14 评论 / 2025-04-07 
+- ["No SVG may include any rasterized image data"](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564984) — 8 票 / 4 评论 / 2025-02-26 
+- [28th Place Solution: Diffusion Model + Vtracer](https://www.kaggle.com/competitions/drawing-with-llms/discussion/581043) — 8 票 / 8 评论 / 2025-05-28 **write-up?**
+- [[Solved] ModuleNotFoundError: No module named 'cairosvg'](https://www.kaggle.com/competitions/drawing-with-llms/discussion/566645) — 8 票 / 1 评论 / 2025-03-06 
+- [Lucrarea Again?](https://www.kaggle.com/competitions/drawing-with-llms/discussion/564980) — 8 票 / 11 评论 / 2025-02-26 
+- [[Problem/Bug] Always stuck at : [NbConvertApp] Writing X bytes to __results__.html](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565385) — 8 票 / 6 评论 / 2025-02-28 
+- [SVG Arena (fun stuff !) ](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565889) — 8 票 / 0 评论 / 2025-03-02 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/drawing-with-llms/discussion/565285) — 4 票 / 0 评论 / 2025-02-27 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/drawing-with-llms/discussion/582215) — 3 票 / 1 评论 / 2025-05-29 

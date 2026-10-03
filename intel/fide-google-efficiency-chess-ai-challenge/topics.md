@@ -1,0 +1,82 @@
+# fide-google-efficiency-chess-ai-challenge 讨论区（按票数排序，共 80 条）
+
+- [Tiny Chess Bot challenge](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548062) — 46 票 / 12 评论 / 2024-11-25 
+- [4th place solution](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/563173) — 39 票 / 5 评论 / 2025-03-30 **write-up?**
+- [Increment is superior to Simple Delay](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548945) — 35 票 / 4 评论 / 2024-11-29 
+- [We must change the ELO system for scoring and determining winners](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/550339) — 34 票 / 14 评论 / 2024-12-06 
+- [Python Script to run UCI engine (linux binary)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548061) — 28 票 / 16 评论 / 2024-11-25 
+- [We can't even import numpy!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547025) — 28 票 / 49 评论 / 2024-11-19 
+- [microfiche (& my learning experience thus far)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/550332) — 28 票 / 6 评论 / 2024-12-06 
+- [♟️ Chance for all chess lovers to combine game with ML](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/546948) — 27 票 / 10 评论 / 2024-11-19 
+- [Has Kaggle silently changed the environment?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/556777) — 25 票 / 22 评论 / 2025-01-15 
+- [Open-Source chess engine porting record](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/553936) — 25 票 / 49 评论 / 2024-12-29 
+- [Github link to top solutions](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562764) — 24 票 / 17 评论 / 2025-02-13 **write-up?**
+- [Bug Fix: 64 KiB limit not enforced when submitting a notebook.](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/558075) — 22 票 / 2 评论 / 2025-01-22 
+- [My solution: Cfish, nnue, data (1st)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/571023) — 22 票 / 5 评论 / 2025-04-01 **write-up?**
+- [Niboshi's solution](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/563866) — 21 票 / 2 评论 / 2025-02-20 **write-up?**
+- [nano-NNUE  ](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/551257) — 21 票 / 4 评论 / 2024-12-12 
+- [Details about the execution environment](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547244) — 19 票 / 19 评论 / 2024-11-20 
+- [Question on license: Is GPL v3 allowed?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547225) — 19 票 / 23 评论 / 2024-11-20 
+- [Concerns About the Competition - Organizer Update Needed](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/556258) — 19 票 / 15 评论 / 2025-01-12 
+- [Expanded # of opening positions to 2000!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/556026) — 18 票 / 16 评论 / 2025-01-10 
+- [[9th Place Solution] Cfish + Simple SPSA](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/567106) — 18 票 / 0 评论 / 2025-03-08 **write-up?**
+- [pondering allowed?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548151) — 18 票 / 10 评论 / 2024-11-25 
+- [[REPOST] Concerns About the Competition - Organizer Update Needed](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/560440) — 17 票 / 4 评论 / 2025-01-31 
+- [Final scoring phase started](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562492) — 16 票 / 18 评论 / 2025-02-12 
+- [DEBUG Tips - Can't get your agent to pass validation? Read this!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/549965) — 16 票 / 22 评论 / 2024-12-04 
+- [How is memory usage measured?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547009) — 16 票 / 10 评论 / 2024-11-19 
+- [Double Err Stats](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/563068) — 16 票 / 9 评论 / 2025-02-15 
+- [Week Four Update](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/551050) — 16 票 / 27 评论 / 2024-12-10 
+- [Will Kaggle postpone the deadline?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/557841) — 16 票 / 5 评论 / 2025-01-21 
+- [Critical Challenge Bugs and Necessary Improvements](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547980) — 15 票 / 12 评论 / 2024-11-24 
+- [pondering the nature of this challenge](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/550291) — 14 票 / 3 评论 / 2024-12-06 
+- [Tutorial: Submitting a Simple Engine Written in C](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/549743) — 14 票 / 2 评论 / 2024-12-03 
+- [Onboading materials and references ](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/546991) — 14 票 / 2 评论 / 2024-11-19 
+- [How many top teams used cfish?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562496) — 13 票 / 13 评论 / 2025-02-12 
+- [To view the performance of both your bots](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562567) — 13 票 / 1 评论 / 2025-02-12 
+- [Approvers Submission (2nd)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/569891) — 12 票 / 1 评论 / 2025-03-24 
+- [Please sample the starting positions from a larger pool](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/554527) — 12 票 / 8 评论 / 2025-01-02 
+- [Measuring Memory](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/552459) — 11 票 / 6 评论 / 2024-12-19 
+- [[Reminder] Your last 2 subsmission will be selected, you can't select past submission](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562302) — 11 票 / 0 评论 / 2025-02-11 
+- [Leaderboard update: Removing all submissions larger than 64 KiB](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/558199) — 10 票 / 1 评论 / 2025-01-23 
+- [Step 1: Literature Review : Related Papers](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/546988) — 10 票 / 9 评论 / 2024-11-19 
+- [ I FOUND WHAT MIGHT BE CAUSING THE ERRORS ❗️⚠️](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548380) — 10 票 / 8 评论 / 2024-11-26 
+- [Week One Update!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548280) — 10 票 / 8 评论 / 2024-11-25 
+- [Is it possible to win with Python?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/549533) — 10 票 / 11 评论 / 2024-12-02 
+- [Tiny Chess Bot Challenge Top 2 Solutions](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/554577) — 10 票 / 1 评论 / 2025-01-02 **write-up?**
+- [File Size Optimization Techniques for Chess Engine Binaries](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/556266) — 10 票 / 5 评论 / 2025-01-12 
+- [[BUG] Memory limit not enforced correctly (~7.5MB currently)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/559241) — 10 票 / 1 评论 / 2025-01-24 
+- [More than 1mb of memory has been removed?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/558194) — 10 票 / 18 评论 / 2025-01-23 
+- [Addressing the issue of double Errors](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562595) — 10 票 / 18 评论 / 2025-02-12 
+- [[SOLVED] The leaderboard is still not finalized?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/568586) — 10 票 / 3 评论 / 2025-03-16 
+- [The final hours aka convergence](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/566881) — 10 票 / 21 评论 / 2025-03-07 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547181) — 9 票 / 2 评论 / 2024-11-20 
+- [Get started here](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/546939) — 8 票 / 9 评论 / 2024-11-18 
+- ["Fix the bugs?" Solution Write-up (3rd)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/569874) — 8 票 / 1 评论 / 2025-03-28 **write-up?**
+- [New Combined Dataset Released! 🗂️♟️](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/551938) — 8 票 / 2 评论 / 2024-12-16 
+- [49th Place Solution (or how to get silver in one evening)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/566862) — 8 票 / 0 评论 / 2025-03-07 **write-up?**
+- [nature of environment](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/551154) — 8 票 / 2 评论 / 2024-12-11 
+- [Seems top players are using NNUE!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562279) — 7 票 / 13 评论 / 2025-02-11 
+- [Can we get a little more info on ERR?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547987) — 7 票 / 3 评论 / 2024-11-24 
+- [How to target correct GLIBC version during C builds? [SOLVED]](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547136) — 7 票 / 5 评论 / 2024-11-20 
+- [FIDE & Google Efficient Chess AI Challenge:  Final Submission Selection](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562040) — 6 票 / 3 评论 / 2025-02-09 
+- [My solution (5th place)](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/571067) — 6 票 / 0 评论 / 2025-04-01 **write-up?**
+- [CPU information?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547146) — 6 票 / 3 评论 / 2024-11-20 
+- [lightweight version of Ethereal9](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/562616) — 6 票 / 1 评论 / 2025-02-12 
+- [Sometimes ELO updates only once for two matches?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/559831) — 6 票 / 5 评论 / 2025-01-28 
+- [Using C language](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547173) — 6 票 / 1 评论 / 2024-11-20 
+- [Zip upload?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547145) — 6 票 / 3 评论 / 2024-11-20 
+- [Is it possible to implement NNUE and Bitboards within the restrictions?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547624) — 6 票 / 6 评论 / 2024-11-22 
+- [LB has finalized at last!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/568785) — 6 票 / 1 评论 / 2025-03-17 
+- [Clarification on Machine Specifications for Final Evaluation](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/554779) — 6 票 / 1 评论 / 2025-01-03 
+- [Request for clarification on the 5 MiB RAM constraint](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/553054) — 6 票 / 2 评论 / 2024-12-23 
+- [How do I know if I'm playing white or black?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/548021) — 6 票 / 3 评论 / 2024-11-24 
+- [[FIXED] Bug Report: Submissions exceeding 64KiB size limit are going through](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/557662) — 6 票 / 9 评论 / 2025-01-20 
+- [Nnue vs Heuristics ](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/552151) — 6 票 / 7 评论 / 2024-12-17 
+- [No double errors for the last 8 hours!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/563995) — 6 票 / 4 评论 / 2025-02-20 
+- [TIMEOUT and Memory Issue](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547978) — 5 票 / 8 评论 / 2024-11-24 
+- [External package clearification](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547017) — 5 票 / 1 评论 / 2024-11-19 
+- [How to know my agent follows the resource constraints? ](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/547853) — 5 票 / 4 评论 / 2024-11-23 
+- [Simple delay, turn duration & remainingOverageTime - is there something I'm missing?](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/554716) — 5 票 / 0 评论 / 2025-01-02 
+- [[BUG] kaggle-environments-1.16.11 seems broken](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/555891) — 5 票 / 5 评论 / 2025-01-09 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/fide-google-efficiency-chess-ai-challenge/discussion/572695) — 4 票 / 2 评论 / 2025-04-10 

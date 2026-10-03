@@ -1,0 +1,137 @@
+<p>Hi all,</p>
+<p>Congratulations <a href="https://www.kaggle.com/thedrcat" target="_blank">@thedrcat</a>! Seems like we trusted LB too much. But, we wrer able to remain in 2nd place. I am happy and I can be GM! Thanks a lot, <a href="https://www.kaggle.com/kanbehmw" target="_blank">@kanbehmw</a>. His knowledge of NLP has boosted our score significantly.</p>
+<p>Here is our tentative solution write-up. We will publish all our codes and datasets. Please post any questions in this thread if you have any.</p>
+<h1>Resources</h1>
+<ul>
+<li>Our inference notebook is available here: <a href="https://www.kaggle.com/kanbehmw/tkm-tydi-rem-info-muril-top35" target="_blank">https://www.kaggle.com/kanbehmw/tkm-tydi-rem-info-muril-top35</a></li>
+<li>Training code is in each dataset</li>
+</ul>
+<h1>External data</h1>
+<p>We trained our models with the competition data, MLQA, and TyDi QA (only Bengali and Telugu). In particular, TyDi QA pushed our score largely (0.787 -&gt; 0.799 in public LB). We think most of the top teams achieving &gt;0.81 use the TyDi QA dataset. It may be due to the language similarity among  Bengali, Telugu, Hindi, and Tamil. However, we suspect some possibility that some questions are shared even though they are translated to Hindi or Tamil since TyDi QA is owned by Google. This is just a guess.</p>
+<h1>Model Training</h1>
+<p>We just did 2 epochs of training with the whole data (no fold out) on the huggingface trainer. We do not distinguish between Hindi and Tamil. For more details, The training code should be included in each dataset. Please have a look.</p>
+<h1>Loss function</h1>
+<p>While the original cross-entropy score has the best performance, the loss function described in <a href="https://github.com/heartkilla/kaggle_tweet" target="_blank">https://github.com/heartkilla/kaggle_tweet</a> (used in the previous competition) worked to obtain more diverse models. In our kernel whose name ends "exp33" is trained with the "Jaccard-based Soft Labels Since Cross-Entropy".</p>
+<h1>Local Evaluation (CV) Strategy</h1>
+<p>Nothing. We tune everything based on Public LB. I did not even track local scores. This is the first time since I started Kaggle that I have not tracked local scores at all.</p>
+<h1>Model Ensembling</h1>
+<p>As in the CommonLit competition (<a href="https://www.kaggle.com/c/commonlitreadabilityprize/overview)" target="_blank">https://www.kaggle.com/c/commonlitreadabilityprize/overview)</a>, model ensembling seems to be the key technique to win NLP competitions. We ensemble the following models:</p>
+<ul>
+<li>XLM-R (7 models)<ul>
+<li>deepset/xlm-roberta-large-squad2<ul>
+<li>One model trained with Google-translated SQuAD<ul>
+<li><a href="https://www.kaggle.com/tkm2261/google-translated-squad20-to-hindi-and-tamil" target="_blank">https://www.kaggle.com/tkm2261/google-translated-squad20-to-hindi-and-tamil</a> </li></ul></li></ul></li>
+<li>AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru</li></ul></li>
+<li>RemBert (3 models)</li>
+<li>InfoXLM (3 models)</li>
+<li>MuRIL (2 models)</li>
+</ul>
+<p>We don't know why the models fine-tuned in Russian had a good performance. We stacked the models gradually and our scores gradually improved. (0.799 -&gt; 0.816 -&gt; 0.821 -&gt; 0.827 -&gt; 0.829). The MuRIL models pushed our score from 0.827 to 0.829.  </p>
+<p>Misc.: </p>
+<ul>
+<li>To handle the difference of the token size in a context, we took the softmax function on the entire text before ensembling different types of models.</li>
+<li>I do not use the 0.792 models.</li>
+<li>I do not use CV models. All models are trained with the entire data. I think changing seeds and ensembling them should be better than ensembling CV models.</li>
+</ul>
+<h1>Effect of max_seq_length and doc_stride</h1>
+<p>As in my notebook <a href="https://www.kaggle.com/tkm2261/reproduction-of-0-792-notebook" target="_blank">https://www.kaggle.com/tkm2261/reproduction-of-0-792-notebook</a>, max_seq_length and doc_stride seem to have a large impact. Even though I explored a lot of values of these two parameters, it did not help to improve our score. So, we just use max_length = 384 and doc_stride = 128.  Maybe, this part is not important since we ensemble models with different token sizes.</p>
+<h1>Post-processing</h1>
+<p>As shown in this kernel (<a href="https://www.kaggle.com/nbroad/chaii-qa-torch-5-fold-with-post-processing-765)" target="_blank">https://www.kaggle.com/nbroad/chaii-qa-torch-5-fold-with-post-processing-765)</a>, post-processing has a large impact on this competition. Since the test data is annotated by 4 people, they are not very likely to forget the trailing periods like “​​ई.पू.”, i.e., answers should be in the most formal format. Besides, we processed the Devanagari numbers (०१२३४५६७८९). We replace them with Arabic numerals (0-9) if the selected answer consists only of Devanagari numbers. It seems like the annotators agreed that they use Arabic numerals when the answer is a year. Without the postprocessing, our score dropped to 0.806. So, it pushed our score by around 0.02.</p>
+<h3>Public LB score timeline</h3>
+<ul>
+<li>0.787: Teamed up</li>
+<li>0.799: Trained with TyDi QA (only Bengali and Telugu)</li>
+<li>0.816: Ensembled with Rembert and InfoXLM</li>
+<li>0.821: Ensemble with more XLM-R, Rembert, and InfoXLM</li>
+<li>0.827: Tune ensemble weights</li>
+<li>0.829: Ensembled with MuRIL</li>
+<li>0.831: Tune parameters in post-processing</li>
+</ul>
+<h1>Did not work</h1>
+<p>After we found TyDi QA helps a lot, we explored a lot of datasets. But, almost all datasets did not work. In our case, Only MLQA and TiDy QA worked. XQuAD was not bad, but I did not use it.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Name</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Bengali Question Answering Dataset</td>
+<td><a href="https://www.kaggle.com/mayeesha/bengali-question-answering-dataset" target="_blank">https://www.kaggle.com/mayeesha/bengali-question-answering-dataset</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>XQuad</td>
+<td><a href="https://github.com/deepmind/xquad" target="_blank">https://github.com/deepmind/xquad</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>UQuAD</td>
+<td><a href="https://t.co/OP6FYHbuju?amp=1" target="_blank">https://t.co/OP6FYHbuju?amp=1</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>TQuAD</td>
+<td><a href="https://github.com/TQuad/turkish-nlp-qa-dataset" target="_blank">https://github.com/TQuad/turkish-nlp-qa-dataset</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>PersianQA</td>
+<td><a href="https://github.com/sajjjadayobi/PersianQA" target="_blank">https://github.com/sajjjadayobi/PersianQA</a></td>
+</tr>
+<tr>
+<td>6</td>
+<td>MMQA dataset: Hindi QA dataset</td>
+<td><a href="https://github.com/deepaknlp/MMQA" target="_blank">https://github.com/deepaknlp/MMQA</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td>XQA: testset for Tamil QA</td>
+<td><a href="https://github.com/thunlp/XQA" target="_blank">https://github.com/thunlp/XQA</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td>bAbi 1.2 dataset: Has Hindi version of bAbi tasks in romanized Hindi.</td>
+<td><a href="http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz" target="_blank">http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz</a></td>
+</tr>
+<tr>
+<td>9</td>
+<td>HiQuAD</td>
+<td><a href="https://www.cse.iitb.ac.in/~ganesh/HiQuAD/clqg/" target="_blank">https://www.cse.iitb.ac.in/~ganesh/HiQuAD/clqg/</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td>ARCD</td>
+<td><a href="https://github.com/husseinmozannar/SOQAL/tree/master/data" target="_blank">https://github.com/husseinmozannar/SOQAL/tree/master/data</a></td>
+</tr>
+<tr>
+<td>11</td>
+<td>FQuAD</td>
+<td><a href="https://fquad.illuin.tech/" target="_blank">https://fquad.illuin.tech/</a></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Squad_Translated_to_Tamil for Chaii</td>
+<td><a href="https://www.kaggle.com/msafi04/squad-translated-to-tamil-for-chaii" target="_blank">https://www.kaggle.com/msafi04/squad-translated-to-tamil-for-chaii</a></td>
+</tr>
+<tr>
+<td>13</td>
+<td>RuBQ: A Russian Knowledge Base Question Answering and Machine Reading Comprehension Data Set</td>
+<td><a href="https://github.com/vladislavneon/RuBQ" target="_blank">https://github.com/vladislavneon/RuBQ</a></td>
+</tr>
+<tr>
+<td>14</td>
+<td>SberQuAD</td>
+<td><a href="https://t.me/s/opendatascience?q=%23SberQuAD" target="_blank">https://t.me/s/opendatascience?q=%23SberQuAD</a></td>
+</tr>
+<tr>
+<td>15</td>
+<td>XOR-TyDi QA</td>
+<td><a href="https://github.com/AkariAsai/XORQA#additional-resources" target="_blank">https://github.com/AkariAsai/XORQA#additional-resources</a></td>
+</tr>
+</tbody>
+</table>

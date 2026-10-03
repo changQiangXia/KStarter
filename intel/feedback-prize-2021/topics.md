@@ -1,0 +1,122 @@
+# feedback-prize-2021 讨论区（按票数排序，共 120 条）
+
+- [TensorFlow/PyTorch NER Starter - What is NER? -  LB 0.630](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295794) — 296 票 / 88 评论 / 2021-12-17 
+- [1st solution with code(cv:0.748 lb:0.742)](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313177) — 282 票 / 114 评论 / 2022-03-31 **write-up?**
+- [0.689 Public LB](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/300861) — 229 票 / 69 评论 / 2022-01-14 
+- [2nd Place - Weighted Box Fusion and Post Process](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313389) — 203 票 / 59 评论 / 2022-03-30 **write-up?**
+- [How to Convert Characters, Tokens, and Words](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/298094) — 194 票 / 44 评论 / 2021-12-31 
+- [6th place solution. A YOLO-like text span detector.](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313424) — 165 票 / 40 评论 / 2022-04-19 **write-up?**
+- [Mystery Solved - Discrepancy Between PredictionString and DiscourseText ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297591) — 163 票 / 51 评论 / 2021-12-28 
+- [4th place solution - 🎖️ my first gold medal 🎖️ (+source code available!)](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313330) — 149 票 / 41 评论 / 2022-03-16 **write-up?**
+- [[Placeholder] my solution and insights](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308992) — 147 票 / 150 评论 / 2022-02-21 **write-up?**
+- [🤗 Chapters 1-3 of HuggingFace Course on Kaggle 🤗](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/302891) — 124 票 / 33 评论 / 2022-01-24 
+- [Resources for fast start! ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/299318) — 117 票 / 32 评论 / 2022-01-07 
+- [Additional Information from Competition Hosts (rubric, dataset, raters, etc.)](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297688) — 108 票 / 41 评论 / 2021-12-28 
+- [If you forked a notebook and found it useful, don't forget to upvote it!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295921) — 97 票 / 43 评论 / 2021-12-18 
+- [RAPIDS UMAP Discovers 15 Essay Topics!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/301481) — 95 票 / 38 评论 / 2022-01-17 
+- [Training Experiments Log + training tips collection](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/302284) — 92 票 / 31 评论 / 2022-01-21 
+- [The Struggle 😓](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296799) — 86 票 / 13 评论 / 2021-12-23 
+- [🤗 Hugging Face course - great for learning NLP](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295238) — 74 票 / 49 评论 / 2021-12-15 
+- [3rd Place Solution w code and notebook](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313235) — 72 票 / 21 评论 / 2022-03-29 **write-up?**
+- [Previous related-competitions (NLP) winning solutions 🔥🔎](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295193) — 69 票 / 14 评论 / 2021-12-14 **write-up?**
+- [9th solution, deberta is the king, pure ensemble of bert models ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313201) — 67 票 / 26 评论 / 2022-03-30 **write-up?**
+- [Awesome Papers 💥](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295208) — 55 票 / 11 评论 / 2021-12-14 
+- [Awesome Methods ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295330) — 55 票 / 6 评论 / 2021-12-15 
+- [Greetings from organizers!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295181) — 54 票 / 40 评论 / 2021-12-14 
+- [Issues with predictionstring labels](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295975) — 54 票 / 20 评论 / 2021-12-19 
+- [NLP Courses | Free | Beginners 💯✔️](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295194) — 51 票 / 14 评论 / 2021-12-14 
+- [Faster And More Accurate Metric Computation](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/307073) — 50 票 / 20 评论 / 2022-02-12 
+- [Solutions write-up](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313376) — 48 票 / 3 评论 / 2022-03-16 **write-up?**
+- [Possible approaches (Brainstorm session)](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295307) — 48 票 / 5 评论 / 2021-12-15 
+- [Good luck to everyone!!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313108) — 47 票 / 22 评论 / 2022-03-15 
+- [creating stratified folds](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/300125) — 46 票 / 10 评论 / 2022-01-11 
+- [Training Large Models Effectively with DeepSpeed](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/304706) — 46 票 / 2 评论 / 2022-02-02 
+- [thoughts on compute resource, professionalisation of competitive data science and other contentious data science topics](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308275) — 46 票 / 20 评论 / 2022-02-17 
+- [How much does post-processing improve score?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/301964) — 45 票 / 20 评论 / 2022-01-20 
+- [11th place solution](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313184) — 44 票 / 9 评论 / 2022-03-30 **write-up?**
+- [5'th place : simultaneous span segmentation and classification + WBF](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313478) — 43 票 / 7 评论 / 2022-04-01 
+- [gradient checkpointing for a bigger batch size with Longformer](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308222) — 41 票 / 7 评论 / 2022-02-17 
+- [Congratulations to new GM Chun Ming Lee!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313167) — 40 票 / 31 评论 / 2022-03-16 
+- [Long-Former vs Short-Former: the little guy hasn't said his last words yet !](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297461) — 38 票 / 13 评论 / 2021-12-27 
+- [The Best Loss Function for this Competition](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/306279) — 38 票 / 7 评论 / 2022-02-08 
+- [Metric clarification, and training label overlaps](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295758) — 37 票 / 3 评论 / 2021-12-17 
+- [New to Kaggle or Machine Learning? Check this out!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295173) — 36 票 / 16 评论 / 2021-12-14 
+- [Thanks for participating!!!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313311) — 35 票 / 18 评论 / 2022-03-16 
+- [CV LB Classic Discussion](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296797) — 35 票 / 42 评论 / 2021-12-23 
+- [Baseline - HF Trainer, datasets, W&B, NER, Longformer](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296904) — 35 票 / 2 评论 / 2021-12-24 
+- [😂 Some of those texts are just pure gold [Treasure Hunt Thread] ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295333) — 35 票 / 4 评论 / 2021-12-15 
+- [10th solution](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313718) — 33 票 / 0 评论 / 2022-03-18 **write-up?**
+- [8-bit Adam and other memory optimizations](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/303131) — 32 票 / 1 评论 / 2022-01-26 
+- [Use %debug. It'll change your life](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/305568) — 32 票 / 4 评论 / 2022-02-05 
+- [Text Augmentation](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295277) — 32 票 / 3 评论 / 2021-12-15 
+- [0.739! I am puzzled](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/312659) — 32 票 / 54 评论 / 2022-03-13 
+- [your brain vs BERT model ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/312778) — 32 票 / 6 评论 / 2022-03-14 
+- [In-Progress Exhaustive Learning Document For NLP Solutioning](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296663) — 31 票 / 16 评论 / 2021-12-22 **write-up?**
+- [Finding: essay with all text repeated many times](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/298193) — 31 票 / 0 评论 / 2022-01-01 
+- [More context on the datasets](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296658) — 31 票 / 8 评论 / 2021-12-22 
+- [ [8th Place] Solution.](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/316071) — 30 票 / 2 评论 / 2022-03-31 **write-up?**
+- [33rd Solution](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313331) — 29 票 / 8 评论 / 2022-03-21 **write-up?**
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295172) — 28 票 / 229 评论 / 2021-12-14 
+- [55th place solution – Shortformer + Sliding Window + Topic-dependent Postprocessing](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313229) — 28 票 / 14 评论 / 2022-03-16 **write-up?**
+- [26th Place Solution: datasaurus, ln & Tom](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313274) — 27 票 / 5 评论 / 2022-03-16 **write-up?**
+- [oof versus valid eda, eval metric tweaking, and transformer training confusion](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/299169) — 27 票 / 13 评论 / 2022-01-06 
+- [PSA about BigBird's Tokenizer](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/302500) — 26 票 / 1 评论 / 2022-01-22 
+- [How To Report Serial Downvoters?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/303877) — 25 票 / 23 评论 / 2022-01-29 
+- [Grandmasters, welcome! :) ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/303477) — 25 票 / 8 评论 / 2022-01-27 
+- [Papers on NLP and Learning / Tutors](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295192) — 25 票 / 2 评论 / 2021-12-14 
+- [Understanding the classes : initial EDA results](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295365) — 25 票 / 2 评论 / 2021-12-15 
+- [Sequence Post-Processing: Ideas for Future Work](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308511) — 25 票 / 3 评论 / 2022-02-19 
+- [Taking roBERTa notebook private for the moment ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297577) — 24 票 / 4 评论 / 2021-12-28 
+- [simple code to generate text heatmap for analysis](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308520) — 24 票 / 4 评论 / 2022-02-19 
+- [7th place solution](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/315887) — 24 票 / 2 评论 / 2022-03-30 **write-up?**
+- [36th place - deberta-large-1024/longformer-large-1536 ensemble with thresholding + code](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313452) — 24 票 / 6 评论 / 2022-03-22 **write-up?**
+- [Correcting the labels (Minor magic?) ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296778) — 23 票 / 3 评论 / 2021-12-23 
+- [Minor label mismatch](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296524) — 22 票 / 2 评论 / 2021-12-22 
+- [12th place solution - Stretching short 'predictionstring's](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313833) — 22 票 / 6 评论 / 2022-04-03 **write-up?**
+- [15th Solution](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313253) — 20 票 / 6 评论 / 2022-03-16 **write-up?**
+- [Adding rater heuristics to model training](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296879) — 20 票 / 9 评论 / 2021-12-24 
+- [Understanding ZZY's NER inference](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295666) — 20 票 / 2 评论 / 2021-12-17 
+- [Good luck everyone! ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/312948) — 19 票 / 13 评论 / 2022-03-14 
+- [Meme Thread! ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295366) — 19 票 / 12 评论 / 2021-12-15 
+- [Explore or Exploit?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/304886) — 19 票 / 14 评论 / 2022-02-02 
+- [Speed up your kernel using Intel® Extension for Scikit-learn](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/304506) — 19 票 / 6 评论 / 2022-02-01 
+- [Implications of Macro F1 for this Task](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/300001) — 19 票 / 12 评论 / 2022-01-10 
+- [Fun Maths: Competiton Criterion as a Lower Bound Over IoU](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297653) — 18 票 / 4 评论 / 2021-12-28 
+- [Contradictions about 'Rebuttal’](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/307222) — 18 票 / 4 评论 / 2022-02-13 
+- [inter-rater reliability, predictionstring, and other recent hosters comments](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297519) — 17 票 / 2 评论 / 2021-12-27 
+- [Stochastic Parrots. Language Models Too Big? NLP, BERT, GPT-2/3, Switch-C.](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295600) — 17 票 / 26 评论 / 2021-12-16 
+- [Most Detailed EDA, TF-IDF ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295387) — 17 票 / 6 评论 / 2021-12-15 
+- [“Everyone wants to do the model work, not the data work”  Google Research Paper](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/303418) — 17 票 / 3 评论 / 2022-01-27 
+- [A monthly prize to recognize notebooks that use Google's ML ecosystem](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/306781) — 17 票 / 11 评论 / 2022-02-10 
+- [Utility script to dynamically generate NER tokens for transformers directly from pandas](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296669) — 17 票 / 0 评论 / 2021-12-22 
+- [tagtog.net](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297544) — 17 票 / 4 评论 / 2021-12-28 
+- [Which method is better when I use masking?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/299124) — 17 票 / 4 评论 / 2022-01-06 
+- [I got the silver medal for the first time!!!!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313306) — 16 票 / 8 评论 / 2022-03-16 **write-up?**
+- [relative positional information of token to the last layer.](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/301733) — 16 票 / 2 评论 / 2022-01-19 
+- [different processing for training and test?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297254) — 16 票 / 6 评论 / 2021-12-26 
+- [Shake-up Visualized](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313170) — 15 票 / 6 评论 / 2022-03-16 
+- [Experiment on discourse_start/end, discourse_text or prediction_string as the target](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297500) — 15 票 / 1 评论 / 2021-12-27 
+- [Locate & Label: A Two Stage Approach](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/306290) — 15 票 / 9 评论 / 2022-02-08 
+- [Gold medal was possible solely with public notebooks and discussion?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313189) — 15 票 / 4 评论 / 2022-03-16 **write-up?**
+- [state-of-the-art & popular paper](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/306696) — 15 票 / 2 评论 / 2022-02-10 
+- [Argumentative writing. Kaggle bringing us back to 6-12 grades.  Yeah! ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295222) — 15 票 / 4 评论 / 2021-12-15 
+- [paraphrasing for data augmentation](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/307571) — 15 票 / 2 评论 / 2022-02-14 
+- [If you are checking if a character is whitespace, use split or isspace](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/297536) — 14 票 / 8 评论 / 2021-12-27 
+- [4-decimal LB?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/302415) — 14 票 / 6 评论 / 2022-01-22 
+- [More and more Kaggle masters/GMs are coming!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/299634) — 14 票 / 11 评论 / 2022-01-09 
+- [batch size & learning rate](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/311700) — 14 票 / 21 评论 / 2022-03-08 
+- [ML and NLP Research Highlights of 2021](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/302906) — 13 票 / 0 评论 / 2022-01-24 
+- [Help ! How can I edit the intermidiate layers of the Longformer model ?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/298317) — 13 票 / 3 评论 / 2022-01-02 
+- [Indeterministic results with LongFormer](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/299449) — 13 票 / 17 评论 / 2022-01-08 
+- [Starter Notebook: roBERTa Baseline, EDA, Reading the data to pandas ](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295402) — 13 票 / 0 评论 / 2021-12-15 
+- [TENER: Adapting Transformer Encoder for Named Entity Recognition](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/303111) — 12 票 / 0 评论 / 2022-01-26 
+- [Next in essay scoring - Roberta token limit?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/304103) — 12 票 / 3 评论 / 2022-01-30 
+- [So, ShortFormer or LongFormer  😂 !?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/312992) — 12 票 / 41 评论 / 2022-03-15 
+- [Everything NLP 😬](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295196) — 12 票 / 0 评论 / 2021-12-14 
+- [Check your offset mappings!](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/309983) — 12 票 / 8 评论 / 2022-02-26 
+- [All Solution Writeup Compilation](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313242) — 12 票 / 4 评论 / 2022-03-16 **write-up?**
+- [NLP Index / NLP Progress .](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/295342) — 11 票 / 1 评论 / 2021-12-15 
+- [Will Longformer Win? A Lesson from Chaii](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/296563) — 11 票 / 8 评论 / 2021-12-22 
+- [question about evaluation method](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/298148) — 11 票 / 0 评论 / 2022-01-01 
+- [Perhaps it is time for Kaggle to review the GPU card resource limit?](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/308302) — 11 票 / 8 评论 / 2022-02-18 
+- [How to download HuggingFace lib&pre-training models on Kaggle](https://www.kaggle.com/competitions/feedback-prize-2021/discussion/309601) — 11 票 / 5 评论 / 2022-02-24 

@@ -1,0 +1,122 @@
+# cmi-detect-behavior-with-sensor-data 讨论区（按票数排序，共 120 条）
+
+- [My impressions of the experiment through kaggle agent](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583863) — 151 票 / 58 评论 / 2025-06-10 
+- [Chiming my thoughts on this competition](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582388) — 137 票 / 32 评论 / 2025-05-30 
+- [6th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603592) — 115 票 / 26 评论 / 2025-09-03 **write-up?**
+- [2nd Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603594) — 113 票 / 20 评论 / 2025-09-03 **write-up?**
+- [Helios Data Visualizer](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583118) — 89 票 / 19 评论 / 2025-06-04 
+- [1st place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603611) — 81 票 / 19 评论 / 2025-09-03 **write-up?**
+- [5th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603542) — 79 票 / 6 评论 / 2025-09-03 **write-up?**
+- [Estimate Acceleration in the Realwold Coodinate](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583080) — 77 票 / 14 评论 / 2025-06-04 
+- [cv vs public lb thread](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582344) — 69 票 / 102 评论 / 2025-05-30 
+- [Some weird sequences](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583004) — 65 票 / 1 评论 / 2025-06-04 
+- [Tips for more Robust Validation](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/596787) — 63 票 / 26 评论 / 2025-08-05 
+- [Strategies and Tips that works for me !](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/587292) — 60 票 / 2 评论 / 2025-06-30 
+- [4th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603601) — 59 票 / 6 评论 / 2025-09-03 **write-up?**
+- [12th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603564) — 53 票 / 11 评论 / 2025-09-03 **write-up?**
+- [Sequence Data Augmentations](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584912) — 51 票 / 25 评论 / 2025-06-16 
+- [I've created a dataset from tof NumPy images.](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582426) — 45 票 / 5 评论 / 2025-05-31 
+- [Related Papers : Literature Review](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582542) — 45 票 / 4 评论 / 2025-06-01 
+- [What are your IMU-Only Scores](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583023) — 45 票 / 155 评论 / 2025-06-04 
+- [17th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603573) — 44 票 / 18 评论 / 2025-09-03 **write-up?**
+- [About 1D convolutions](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/587558) — 44 票 / 2 评论 / 2025-07-01 
+- [8th place. I feel new Era began with code agents.](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603545) — 43 票 / 34 评论 / 2025-09-03 **write-up?**
+- [11th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603580) — 42 票 / 8 评论 / 2025-09-03 **write-up?**
+- [7th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603677) — 39 票 / 7 评论 / 2025-09-03 **write-up?**
+- [8th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603799) — 38 票 / 13 评论 / 2025-09-04 **write-up?**
+- [3rd Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603873) — 38 票 / 5 评论 / 2025-09-04 **write-up?**
+- [15th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603671) — 37 票 / 6 评论 / 2025-09-03 **write-up?**
+- [Fold Performance Consistency](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588051) — 35 票 / 28 评论 / 2025-07-04 
+- [Two useful oberservations about the data](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603544) — 32 票 / 13 评论 / 2025-09-03 
+- [Sensor Data Preprocessing](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/593675) — 31 票 / 6 评论 / 2025-07-30 
+- [Meme Thread](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/600182) — 31 票 / 3 评论 / 2025-08-21 
+- [Sharing Results from Zero-Level Kaggle Agent (Claude Code) Experimentation](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583899) — 31 票 / 6 评论 / 2025-06-10 
+- [9th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603599) — 31 票 / 1 评论 / 2025-09-03 **write-up?**
+- [Sequence (SEQ_011975) with only Transition phase (or Transition + Pause)](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583568) — 29 票 / 1 评论 / 2025-06-07 
+- [📊 Drift in Velocity and Position Estimation](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583650) — 29 票 / 3 评论 / 2025-06-08 
+- [10th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/604087) — 28 票 / 0 评论 / 2025-09-06 **write-up?**
+- [Visualizing 3D reconstructed plots - Dataset](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583937) — 27 票 / 6 评论 / 2025-06-10 
+- [Previous Kaggle competitions by CMI and Winning solutions](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582264) — 27 票 / 0 评论 / 2025-05-30 **write-up?**
+- [Avoid Blindly Ensembling and Merging Public kernels](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/586562) — 26 票 / 14 评论 / 2025-06-27 
+- [CMI | WaveNet PyTorch IMU-only](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583220) — 26 票 / 10 评论 / 2025-06-05 
+- [30th place solution (vision transformer)](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603720) — 23 票 / 6 评论 / 2025-09-03 **write-up?**
+- [110th place solution ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603547) — 23 票 / 2 评论 / 2025-09-03 **write-up?**
+- [Left/right handedness subjects will affect the score?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/590696) — 22 票 / 23 评论 / 2025-07-22 
+- [Sampling Rate](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582475) — 22 票 / 6 评论 / 2025-05-31 
+- [Test your submission pipeline for silly mistakes and submission time](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584372) — 22 票 / 1 评论 / 2025-06-12 
+- [How is your CV/LB correlation going?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/589308) — 21 票 / 39 评论 / 2025-07-11 
+- [13th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/604184) — 20 票 / 1 评论 / 2025-09-06 **write-up?**
+- [🎬 Rendered Herios Data (+Acceleration)](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583413) — 20 票 / 0 评论 / 2025-06-06 
+- [Clarification: Are Sensor Positions (ToF-1~5, Thermo-1~5) Geometrically Identical for Left- and Right-Handed Subjects?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583452) — 19 票 / 2 评论 / 2025-06-07 
+- [Copy To Win?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/589894) — 18 票 / 44 评论 / 2025-07-16 
+- [Short Note on Converting Left-handed Data into Pseudo Right-handed Data](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603566) — 17 票 / 4 评论 / 2025-09-03 
+- [Geometric Structure of IMU data](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583388) — 17 票 / 5 评论 / 2025-06-06 
+- [There is no sample_submission.csv for this competition.](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582350) — 16 票 / 3 评论 / 2025-05-30 
+- [[EN/日本語] 19th solution writeup](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603779) — 16 票 / 0 评论 / 2025-09-05 **write-up?**
+- [Check your NaNs guys](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/589050) — 16 票 / 2 评论 / 2025-07-09 
+- [Can the scores in this competition be kept to three decimal places? ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/585184) — 15 票 / 5 评论 / 2025-06-18 
+- [Simple idea: FE on Physical motion intensity and Rotation variance](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583176) — 15 票 / 0 评论 / 2025-06-05 
+- [Get Started Here!](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582323) — 14 票 / 18 评论 / 2025-05-30 
+- [42th Solution (Late sub private=0.854)](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/604095) — 14 票 / 0 评论 / 2025-09-06 **write-up?**
+- [Scaling Wearable Foundation Models 🔥](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582271) — 14 票 / 1 评论 / 2025-05-30 
+- [14th Place Solution ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/605449) — 14 票 / 2 评论 / 2025-09-08 **write-up?**
+- [Choosing the Best Loss Function and Post-Processing Algorithm](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588842) — 14 票 / 2 评论 / 2025-07-08 
+- [This Competition Has an Official Discord Channel](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582321) — 13 票 / 5 评论 / 2025-05-30 
+- [More digits?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/597176) — 13 票 / 11 评论 / 2025-08-06 
+- [Possible Graph Neural Network Approach](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582408) — 13 票 / 8 评论 / 2025-05-31 
+- [What is the meaning of "null" value on the tof sensor?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582417) — 12 票 / 7 评论 / 2025-05-31 
+- [How to Make Mel-Spectrum from IMU ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/598468) — 12 票 / 15 评论 / 2025-08-11 
+- [What strategies boost you most in LB](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588009) — 12 票 / 6 评论 / 2025-07-03 
+- [Why does this competition require submissions on a per-sequence basis?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582346) — 12 票 / 23 评论 / 2025-05-30 
+- [Added some starter code to my public PyTorch template on GitHub](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584800) — 12 票 / 3 评论 / 2025-06-16 
+- [Would an ensemble whose LB value is 0.853 or 0.852 be at risk of overfitting?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/599233) — 11 票 / 6 评论 / 2025-08-15 
+- [Bert Solo Model Training](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/598291) — 11 票 / 16 评论 / 2025-08-09 
+- [Are you experiencing extended submission time today?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584348) — 11 票 / 12 评论 / 2025-06-12 
+- [How many prize winners: 5 or 6 ?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/590937) — 10 票 / 1 评论 / 2025-07-24 
+- [IMU Data Denoising Based on Wavelet Transform](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/596715) — 10 票 / 0 评论 / 2025-08-05 
+- [direction of each axis in the imu sensor?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588501) — 10 票 / 6 评论 / 2025-07-06 
+- [Directly optimizing F1: Weighted cross-entropy ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584790) — 10 票 / 4 评论 / 2025-06-16 
+- [Someone became Notebooks Kaggle expert only 4 days after joining. Does Kaggle still worth it ?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/602648) — 10 票 / 28 评论 / 2025-08-29 
+- [Sequence Augmentation What i've learend from CMI 2025](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603222) — 10 票 / 1 评论 / 2025-09-01 
+- [55th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603553) — 10 票 / 0 评论 / 2025-09-03 **write-up?**
+- [48th Place Solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603659) — 10 票 / 0 评论 / 2025-09-03 **write-up?**
+- [29th Place Solution Handedness Augmentation Trick and Missing Values Insights](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603762) — 10 票 / 0 评论 / 2025-09-04 **write-up?**
+- [Check out my video review of the last CMI contest](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588885) — 9 票 / 3 评论 / 2025-07-08 
+- [Subjects in test set](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582379) — 9 票 / 1 评论 / 2025-05-30 
+- [Adjutant reading materials [WIP]](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582274) — 9 票 / 0 评论 / 2025-05-30 
+- [How frequent sensor data captured from sensors?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582463) — 9 票 / 2 评论 / 2025-05-31 
+- [Assuming 200Hz sampling rate?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/598873) — 9 票 / 2 评论 / 2025-08-13 
+- [About the sensor communication failure](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/586657) — 9 票 / 4 评论 / 2025-06-27 
+- [What is your imu-only score (and model size) again](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/590066) — 8 票 / 20 评论 / 2025-07-17 
+- [ What is your IMU sensor value clipping ranges for numerical stability?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/591323) — 8 票 / 4 评论 / 2025-07-27 
+- [Device Wearing Angle](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/585291) — 8 票 / 1 评论 / 2025-06-19 
+- [Ensemble models ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/587223) — 8 票 / 11 评论 / 2025-06-30 
+- [P100 (0.77 LB) vs. T4 (0.76 LB) - Why the Performance Gap with This Notebook?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/585681) — 8 票 / 12 评论 / 2025-06-22 
+- [Top 8% Solution with Wavenet](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603560) — 8 票 / 0 评论 / 2025-09-03 **write-up?**
+- [Predict 9 class vs 18 class?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584676) — 7 票 / 10 评论 / 2025-06-15 
+- [CV-LB with GBM only](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588124) — 7 票 / 12 评论 / 2025-07-04 
+- [Is there a leak in this competition? ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603208) — 7 票 / 9 评论 / 2025-09-01 
+- [81th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603590) — 7 票 / 0 评论 / 2025-09-03 **write-up?**
+- [39th place solution: Ensemble Approach Using GBDT](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603649) — 7 票 / 0 评论 / 2025-09-03 **write-up?**
+- [Is there any sequence_id with multiple gestures and pause in the LB data?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583357) — 6 票 / 3 评论 / 2025-06-06 
+- [How can I improve my analysis skills on Kaggle?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/589991) — 6 票 / 3 评论 / 2025-07-16 
+- [The custom metric kernel link has an error [Fixed]](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582275) — 6 票 / 2 评论 / 2025-05-30 
+- [Hitchhikers guide to submission ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/586435) — 6 票 / 6 评论 / 2025-06-26 
+- [Missing Thermopile Data - Subject SUBJ_011323 (95% missing)](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583952) — 6 票 / 2 评论 / 2025-06-10 
+- ["bevavior" - docs oversight?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583658) — 6 票 / 0 评论 / 2025-06-08 
+- [Is the submission slowness issue still persisting for you? [Solved]](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/584400) — 6 票 / 1 评论 / 2025-06-13 
+- [Question: Is there subject overlap in public and private leaderboard splits?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/600999) — 6 票 / 0 评论 / 2025-08-26 
+- [Whether Pseudo-label work for you?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/588122) — 6 票 / 5 评论 / 2025-07-04 
+- [LB 58th/PB 152th Place solution. Mainly about "Bert replication[SingleLB.847]"](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603669) — 6 票 / 0 评论 / 2025-09-03 **write-up?**
+- [35th place solution](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603685) — 6 票 / 0 评论 / 2025-09-03 **write-up?**
+- [Null values question](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603402) — 6 票 / 31 评论 / 2025-09-02 
+- [to pip or not to pip, that's the question ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583716) — 6 票 / 9 评论 / 2025-06-08 
+- [Thank you for this wonderful collaboration!](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/611837) — 5 票 / 0 评论 / 2025-10-15 
+- [What is the sample rate on the IMU device?](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/583676) — 5 票 / 8 评论 / 2025-06-08 
+- [Graph-based modeling-GNN and precise gesture prediction](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/586047) — 5 票 / 0 评论 / 2025-06-24 
+- [Sampling frquency for the data](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/582610) — 5 票 / 3 评论 / 2025-06-01 
+- [Spatial Feature from THM, TOF ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/599983) — 5 票 / 0 评论 / 2025-08-20 
+- [acc, rot, thermal patterns w.r.t. behavior, gesture/transitions](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/599685) — 5 票 / 0 评论 / 2025-08-18 
+- [250th Place Saved by Public Single Model](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603554) — 5 票 / 0 评论 / 2025-09-03 **write-up?**
+- [Working on this competition while managing my BFRBs ](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603471) — 5 票 / 0 评论 / 2025-09-02 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/606692) — 4 票 / 0 评论 / 2025-09-09 

@@ -1,0 +1,193 @@
+# https://www.kaggle.com/competitions/bengaliai-speech/discussion/447976
+
+Topic #447976: 2nd place solution
+  Author: qdv206
+  Posted: 2023-10-18 02:27:13.218000
+  Votes: 41  Comments: 19
+
+Many thanks to Kaggle and Bengali.AI for hosting such an interesting competition. As I was about to start my PhD  research on speech processing and I knew nothing about the field, the competition came as the perfect opportunity for me to learn. In the end it was a highly rewarding experience.
+
+The solution consists of 3 components:
+
+
+
+ASR model
+
+Language model
+
+Punctuation model
+
+
+1. ASR model
+
+I used ai4bharat/indicwav2vec_v1_bengali as pretrained model.
+
+Datasets:
+
+
+
+Speech data: Competition data, Shrutilipi, MADASR, ULCA (for ULCA data most of the links are dead but some are still downloadable, only a few thousands samples though)
+
+Noise data: music data from MUSAN and noise data from DNS Challenge 2020
+
+All data are normalized and punctuation marks are removed except for dot (.) and hyphen (-)
+
+
+Augmentation:
+
+
+
+use augmentation from audiomentations, apply heavy augmentation for read speech (comp data, MADASR) and lighter augmentation for spontaneous speech (Shrutilipi, ULCA)
+Example of read speech augmentation:
+
+
+augments = Compose([
+    TimeStretch(=0.8, =2.0, =0.5, =),
+    RoomSimulator(=0.3),
+    OneOf([
+        AddBackgroundNoise(
+            sounds_path=[
+                ,
+            ],
+            =5.0,
+            =30.0,
+            =PolarityInversion(),
+            =1.0
+        ),
+        AddBackgroundNoise(
+            sounds_path=[
+                
+            ],
+            =5.0,
+            =30.0,
+            =PolarityInversion(),
+            =1.0
+        ),
+        AddGaussianNoise(=0.005, =0.015, =1.0),
+    ], =0.7),
+    Gain(=-6, =6, =0.2),
+    ])
+
+
+For spontaneous speech augment probabilities are smaller and TimeStretch rate much less extreme.
+
+
+
+concat augment: randomly concatenate short samples together to make length distribution of training set closer to OOD test set.
+
+SpecAugment: mask_time_prob = 0.1, mask_feature_prob = 0.05.
+
+
+Training:
+
+
+
+First fit on all training data, then remove about 10% with highest WER after fitted from train set.
+
+Don't freeze feature encoder.
+
+Use cosine schedule with warmups and restarts: 1st cycle 5 epochs peak lr 4e-5, 2nd cycle 3 epochs peak lr 3e-5, third cycle 3 epochs peak lr 2e-5.
+
+
+Inference:
+Use AutomaticSpeechRecognitionPipeline from transformers to apply inference with chunking and stride:
+
+ = pipe(w, chunk_length_s=, stride_length_s=(, ))[]
+
+
+2. Language model
+
+6-gram kenlm model trained on multiple external Bengali corpus:
+
+
+
+IndicCorp V1+V2.
+
+Bharat Parallel Corpus Collection.
+
+Samanantar.
+
+Bengali poetry dataset.
+
+WMT News Crawl.
+
+Hate speech corpus from https://github.com/rezacsedu/Classification_Benchmarks_Benglai_NLP.
+
+
+3. Punctuation model
+
+Train token classification model to add the following punctuation set: ।,?!
+
+
+
+use ai4bharat/IndicBERTv2-MLM-Sam-TLM as backbone
+
+add LSTM head
+
+train for 6 epochs, cosine schedule, lr 3e-5 on competition data + subset of IndicCorp
+
+mask 15% of the tokens during training as augmentation
+
+ensemble 3 folds of model trained on 3 different subsets of IndicCorp
+
+beam search decoding for inference.
+
+
+Thank you very much for reading and please let me know if you have any questions.
+
+Update: 
+
+
+
+training code: https://github.com/quangdao206/Kaggle_Bengali_Speech_Recognition_2nd_Place_Solution
+
+inference notebook: https://www.kaggle.com/code/qdv206/2nd-place-bengali-speech-infer/
+
+Comments:
+├─ Ranamalla Nithin Reddy (2023-10-21 01:52:55.477000) [+1]
+│  Such neat work! Congratulations on becoming a GM @qdv206
+├─ luddite^ (2023-10-20 07:40:18.207000) [+1]
+│  Congratulations on your solo gold and becoming a grandmaster.
+│  Thank you for sharing a detailed solution. A small question, you said you retained "," and "." when training an ASR model, but can the ...
+  ├─ qdv206 (2023-10-21 00:50:29.807000) [+1]
+  │  Thank you very much and congrats on your team's strong finish too!
+  │  
+  │  That's a good question. I gave dot and hyphen for ASR model to learn because they are the most problematic punctuations in the an...
+    ├─ luddite^ (2023-10-21 01:35:43.863000) [+1]
+    │  I see. We made a punctuation model to predict them because they don't have apparent sounds, but it seems we should try. Thank you, I learned a lot!
+├─ Fahim Shahriar Khan (2023-10-19 04:30:14.157000) [+1]
+│  Congratulations @qdv206 on your amazing achievement. I had some questions regarding building a n-gram Kenlm language model to be used with Beam Search.
+│  
+│  Let's say I have trained a wav2vec2 STT mode...
+├─ Nischay Dhankhar (2023-10-18 15:45:27.270000) [+1]
+│  Great work and Congrats on becoming GM!! 🥳
+│  
+│  Just one small question, How much boost did you get with these augmentations settings, I never tried augs using ASR models before.
+  ├─ qdv206 (2023-10-18 17:33:42.213000) [+1]
+  │  Thanks @nischaydnk , congrats on breaking into global top10, what an impressive run!
+  │  
+  │  Sorry I couldn't provide you with exact numbers as I fixed my augmentations about a month ago. I will instead t...
+├─ Md Boktiar Mahbub Murad (2023-10-18 07:44:45.380000) [+1]
+│  Such neat work! Congratulations on becoming a GM!
+├─ Ahmed El Fazouani (2023-10-18 06:32:10) [+1]
+│  Great work @qdv206 , Congrats on becoming a GM !, well deserved
+  ├─ qdv206 (2023-10-18 06:58:53.377000) [+2]
+  │  Thanks a lot @ahmedelfazouan . You are well on your way too! Soon the old Icecube team will be full gold 😆
+├─ Anh Pham (2023-10-18 03:44:32.547000) [+1]
+│  Great job! Congratulation
+  ├─ qdv206 (2023-10-18 06:57:25.540000) [+0]
+  │  Thanks a lot bro, huge congrats to you too!
+├─ datnt114 (2023-10-18 02:45:56.020000) [+1]
+│  Congratulations on another gold medal and becoming Grandmasters
+├─ nanshui (2024-04-16 08:24:38.753000) [+0]
+│  can you introduce your general idea and why you chose these three models? i am an undergraduate student and i would like to learn more about the
+├─ C R Suthikshn Kumar (2023-10-23 08:02:42.773000) [+0]
+│  Congratulations on top position in this competition. Thanks for sharing your solution details.
+├─ datnt114 (2023-10-18 03:10:57.377000) [+0]
+│  Can you provide training hardware as well as training time for each model?
+  ├─ qdv206 (2023-10-18 07:01:22.823000) [+1]
+  │  I used V100s to train my models. For ASR normally I only sampled 30% of the data for experimentations, but the final full train took ~5days. Training punctuation models are relatively quick though,...
+├─ [deleted] (2023-10-22 19:51:38.753000) [+0]
+│  [deleted]
+├─ [deleted] (2023-10-18 19:47:43.343000) [+1]
+│  [deleted]

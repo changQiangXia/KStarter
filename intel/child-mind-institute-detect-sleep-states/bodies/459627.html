@@ -1,0 +1,64 @@
+<p>Thanks to organizers for this interesting challenge and congrats everyone who enjoyed it! It was a fun competition though the data is very simple 1D data. I look forward to seeing the various solutions.</p>
+<h1>Overview of my solution</h1>
+<p>My pipeline consists of:</p>
+<ul>
+<li><strong>First Stage</strong><ul>
+<li>Preprocess and Feature engineering</li>
+<li>Event Detection and Sleep/Awake Classification by 1DCNN(U-NET)</li>
+<li>PostProcess of 1D CNN (such as Peak Detection)</li></ul></li>
+<li><strong>Second Stage</strong><ul>
+<li>Use ML instead of the Post-processing that is difficult to adjust</li>
+<li>Rescoring by LGBM that can consider the limitation of 2evets/day</li></ul></li>
+<li><strong>Third Stage</strong><ul>
+<li>Predict as many events as possible just by shifting the step of the base prediction above.</li>
+<li>Scoring the generated predictions by LGBM</li></ul></li>
+<li><strong>Ensemble</strong><ul>
+<li>combination of averaging and WBF ensemble</li></ul></li>
+</ul>
+<p>I think the 2nd stage is the most unique. <br>
+This model predict the daily accuracy curve of candidates received from 1st stage. </p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2938236%2Fe307a878f4ca758835ff897f401a7008%2Foverview.png?generation=1701831890750504&amp;alt=media" alt=""></p>
+<p>Details are below.</p>
+<h1>1st Stage: Event Detection and Sleep/Awake Classification</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2938236%2F08d268f6a008646b39b272594226df16%2F1ststage.png?generation=1701832322797003&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2938236%2F94bdf0ce5785ba775f2a818c769d3a9d%2F1ststagepp.png?generation=1701832338347452&amp;alt=media" alt=""></p>
+<h1>2nd Stage: Rescoring the confidence considering the limitation of 2 events/day</h1>
+<h2>Concept</h2>
+<p>I applied 2nd stage for the following 2 reasons.</p>
+<h3>1. Less than 2 events/day</h3>
+<p>The first stage NN cannot consider the very important limitation of this competition that the event occurs at most twice in a day. Which do you think is important?</p>
+<blockquote>
+  <p>A) The third candidate in a day with a confidence score of 0.20.<br>
+  B) The first candidate in a day with a confidence score of 0.19.</p>
+</blockquote>
+<p>In many cases, the latter is more important than the former though the score is lower.</p>
+<h3>Long-term features</h3>
+<p>NN is really strong. However, it’s not good at handling meta features and long-term cyclic features. For example,<br>
+“He can be sleeping longer than the usual. This might not actual wakeup.”<br>
+“This onset is relatively unclear compared to the other days.”</p>
+<h2>How to train 2nd stage model</h2>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2938236%2Ff6b0889e818ed24add13fd5d74580884%2F2ndstage_r.png?generation=1701861341160280&amp;alt=media" alt=""></p>
+<h1>3rd Stage: Add as many events as possible</h1>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2938236%2F049000b0c98a2e5f8bd5f2692a1c2986%2F3rdstage.png?generation=1701832658530598&amp;alt=media" alt=""></p>
+<h1>Ensemble</h1>
+<ul>
+<li>prepare 2 CNN models</li>
+<li>Averaging 10(5fold x 2seed) predictions at 1st stage for each model</li>
+<li>Run 2nd stage for each model</li>
+<li>WBF-like Ensemble of 2 models</li>
+<li>Run 3rd stage<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F2938236%2F8f6a3cf08dfcf72067db9d7a3db5d849%2FEnsemble.png?generation=1701832240218774&amp;alt=media" alt=""></li>
+</ul>
+<h1>Ablation Study</h1>
+<p>not yet</p>
+<ul>
+<li>CV Scores<ul>
+<li>1st stage: 0.826 (-0.019)</li>
+<li>add 2nd stage: 0.832 (-0.012)</li>
+<li>add third stage: 0.842 (-0.002)</li>
+<li>add model ensemble(2models): 0.844 (baseline. final submit)</li></ul></li>
+</ul>
+<h3>Inference</h3>
+<p><a href="https://www.kaggle.com/code/kmat2019/cmi-sleep-2ndplace" target="_blank">https://www.kaggle.com/code/kmat2019/cmi-sleep-2ndplace</a></p>
+<h3>Training</h3>
+<p><a href="https://www.kaggle.com/code/kmat2019/cmisleep-training-sample-2ndplace-kmat" target="_blank">https://www.kaggle.com/code/kmat2019/cmisleep-training-sample-2ndplace-kmat</a></p>

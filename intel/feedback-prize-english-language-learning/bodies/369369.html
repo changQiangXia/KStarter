@@ -1,0 +1,135 @@
+<p>This is a fun game, thanks for the organizer and all pepole who share here. </p>
+<ul>
+<li>CV  <br>
+I used abiheshark's cv strategy with 5 folds and seed 42.<br>
+My pb best choosen one is with <strong>pseudo train and optuna tune CV 44494</strong>  PB 43363<br>
+(but this <strong>cv is not accurate</strong> and over optimized since optuna tune for all train OOF, I should have used OOF agian for optuna based CV, unfortuantely I trust LB here and it happen to improve my LB but hurt PB a little or just by chance)  <br>
+My pb best one is without pseudo train and no optuna tune(hand tune rule by per model per target cv) <strong>CV 44543</strong>  PB 433541<br>
+But after game I tested pseudo+hand tune rule the results is 43380 so hand rule is also not very stable and has chance to overfit as you tune weight on local OOF cv.<br>
+TODO: Try Rige, lasso, hill clmb，Nelder-Mead, negative weight of model methods to improve ensemble results<br>
+<strong>Best single modelsingle model is cv around 449</strong> without pseudo train, using backtrans pretrain or feedback2 pretrain. <br>
+<strong>Best single model with pseudo is cv 4469</strong> , for late submission I find better one with cv <strong>4456</strong> pb <strong>434726</strong> see table below <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2Fd0f805045cca2060a9f0d146a97de7ee%2Fscore.png?generation=1669801234725714&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2F989409d2e8fd2082cce8c99dc9a49a07%2Fcv.jpg?generation=1669801251545911&amp;alt=media" alt=""><br>
+Notice above image, epoch n means first(n + 1) models mean. </li>
+</ul>
+<p>Single model performance (5folds + 1 full train):</p>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>cv</th>
+<th>lb</th>
+<th>pb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>base(dev3-large maxlen1280)</td>
+<td>4514</td>
+<td>442013</td>
+<td>438818</td>
+</tr>
+<tr>
+<td>base+rank_loss</td>
+<td>4505</td>
+<td>438912</td>
+<td>437175</td>
+</tr>
+<tr>
+<td>base+rank_loss+trans-nl pretrain</td>
+<td><strong>4498</strong></td>
+<td>440225</td>
+<td><strong>435711</strong></td>
+</tr>
+<tr>
+<td>base+rank_loss+feedback2 pretrain</td>
+<td><strong>4488</strong></td>
+<td><strong>438583</strong></td>
+<td><strong>435814</strong></td>
+</tr>
+<tr>
+<td>base+feedback1 pseudo train only</td>
+<td><strong>4469</strong></td>
+<td><strong>438601</strong></td>
+<td><strong>436144</strong></td>
+</tr>
+<tr>
+<td>base+rank_loss+feedback1 pseudo pretrain</td>
+<td><strong>4497</strong></td>
+<td>440576</td>
+<td><strong>435144</strong></td>
+</tr>
+<tr>
+<td>base+feedback1 pseudo&amp;feedback3 train</td>
+<td><strong>4468</strong></td>
+<td><strong>438063</strong></td>
+<td><strong>434809</strong></td>
+</tr>
+<tr>
+<td>base+rank_loss+feedback1 pseudo&amp;feedback3 train</td>
+<td><strong>4456</strong></td>
+<td><strong>438084</strong></td>
+<td><strong>434726</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Model with pretrain or pseudo or back-trans(<strong>model with more backgound knowlege</strong>) work better for both CV/PB and some models for CV/LB/PB.And these models tend to have better cv performance on vocabulary.<br>
+Rank loss always help.</p>
+<ul>
+<li><p>Backbones<br>
+deberta-v3-large  (lr 2e-5)<br>
+deberta-v3-base  (lr 5e-5)<br>
+Only the two work, all others much worse then deberta-v3-large<br>
+TODO: I should have add <strong>SVR method ensemble</strong><br>
+SVR single model reach CV around 450 so good enough to ensemble and it could introduce more knowlege of non-deberta backbones.<br>
+I did not add it as I return to this game late and could not make it safe to add for infer, there are some OOM issues , local cv seems to improve like 445146 to 44496 without tune weight for each target, using this one <a href="https://www.kaggle.com/code/quangphm/lb-0-43-simple-ensemble-deberta-base-svr" target="_blank">https://www.kaggle.com/code/quangphm/lb-0-43-simple-ensemble-deberta-base-svr</a>.</p></li>
+<li><p>Train<br>
+Text maxlen 1280, batch size 8, 4 epochs, linear lr decay, awp training for the last 2 epochs  <br>
+For back translation pretrain only 2 epochs train without awp.  </p></li>
+<li><p>Models<br>
+I submit 23 models * 2, 23 full train model, 23 fold(0-4) models. Cost 2h20 min using T4 * 2 infer.  </p></li>
+<li><p>What works</p></li>
+</ul>
+<ol>
+<li><strong>Let bert deal with the target relation</strong><br>
+"[CLS] cohesion syntax vocabulary phraseology grammar conventions text [SEP]“  <br>
+Each target output emb with 1 unique fc added to predict target value. </li>
+<li><strong>Add pearson loss</strong><br>
+We could see bert tend to <strong>predict all target with similar value</strong>, in order to predict well for <strong>hard target</strong>, I found adding pearson loss help a lot. But it will hurt for easy target performance,  I did not find good method to deal, ensembling with person loss rate 0.1 and 0 is what I used.    <br>
+Also with rank_loss_rate = 0.1 improve single model cv from 4514 to 4505.  Below show add rank loss (name with -crank) help a lot for hard targets(score/max calc for target index np.argmax(label - label.mean())). Here also has improve space, I think maybe we can better ensemble using some specific features and do regression on OOF. <br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2Fd83e3ae6f0a84eaaecff6bf1db7d6ccc%2Fminmax.png?generation=1669801062373059&amp;alt=media" alt=""></li>
+<li><strong>Use back translation for pretrain</strong><br>
+I used a lot of back translation for ensembling. They are [nl, fr, de, pt, af, cn, ru, fi, sv, ja, ko, el, hr, cy]    <br>
+Notice back translation data is only used for pretrain, so 2 steps training, the second step is the same as other models.<br>
+No back translation models:  <br>
+('score', 0.44672287515754533),<br>
+('score/vocabulary', 0.4109792609030708),<br>
+Add back translation models, with weight=np.array([1,1,10,1,0.25,0.25], float) * 0.8:<br>
+('score', 0.4453322618856002),<br>
+('score/vocabulary', 0.4086610628919421),<br>
+Back translation models only:<br>
+('score', 0.44640808445875324),<br>
+('score/vocabulary', 0.408889105739513),<br>
+Vocabulary improve a lot ! Actually for all backtrans models vocabulary improve so it means backtrans help on learning more vocabulary info!<br>
+Single model (see image above with name .trans-nl)  cv improve a lot 4505 to 4497 and also PB gain.</li>
+<li><strong>Use feedback2 data for pretrain</strong><br>
+Just train feedback2 listwise model (remove any discourse type info) as pretrain model.  This will make model more stable and help especially for some targets like convetions and vocabulary. <br>
+TODO: I did not use ensemble and pseudo for feedback2 data pretrain, simply using 1 single full train model on fddeback2 data only, so here might have improvement space.  <br>
+Single model (see image above with name .ft2) cv improve a lot 4505 to 4488 and also LB/PB improve.<br>
+Why use feedback2? I did not investigate but I think discourse effectiveness has relation with our 6 targets.</li>
+<li><strong>Pseudo</strong><br>
+Pseudo works, pseudo+optuna is much better then no pseudo+optuna, both LB and cv and PB 433811-&gt;43363.  <br>
+Pseudo also helped produce best PB(435144) single model.  <br>
+TODO: I did not try (Mean of Train PL / Actual Labelsas) mentioned in  <a href="https://www.kaggle.com/competitions/feedback-prize-english-language-learning/discussion/369457" target="_blank">1st solution</a> it might give boost.</li>
+<li><strong>Tune for each target</strong><br>
+For example back translation help a lot for vocabulary but hurt conventions as show on cv image above.    </li>
+</ol>
+<ul>
+<li>Code <br>
+<a href="https://www.kaggle.com/code/goldenlock/best-pb-online-1127?scriptVersionId=112354741" target="_blank">https://www.kaggle.com/code/goldenlock/best-pb-online-1127?scriptVersionId=112354741</a>  (ensemble infer, best personal PB)<br>
+<a href="https://www.kaggle.com/code/goldenlock/pb-433630-pseudo-optuna-tune" target="_blank">https://www.kaggle.com/code/goldenlock/pb-433630-pseudo-optuna-tune</a> (ensemble infer, selected PB)<br>
+<a href="https://www.kaggle.com/goldenlock/single-model-infer" target="_blank">https://www.kaggle.com/goldenlock/single-model-infer</a> (single model infer, 5 fold + 1 full train=6 models, 20min)<br>
+<a href="https://www.kaggle.com/datasets/goldenlock/feedbacken" target="_blank">https://www.kaggle.com/datasets/goldenlock/feedbacken</a>  (train)<br>
+<a href="https://github.com/chenghuige/Feedback-Prize---English-Language-Learning" target="_blank">https://github.com/chenghuige/Feedback-Prize---English-Language-Learning</a> (full code)</li>
+</ul>

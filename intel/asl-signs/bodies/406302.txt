@@ -1,0 +1,203 @@
+# https://www.kaggle.com/competitions/asl-signs/discussion/406302
+
+Topic #406302: 44th Place Silver - How To Improve Best Public Notebook
+  Author: Chris Deotte
+  Posted: 2023-05-02 00:08:37.798000
+  Votes: 73  Comments: 41
+
+Thank you Kaggle, Kagglers, PopSign, and Partners for a fun competition! Public notebooks in this competition are very strong! The host said that they need LB &gt;= 0.6 to be helpful and the best public notebook scores LB = 0.73! Great job Kagglers!
+
+I joined this competition one week ago, so I didn't have much time to build my own model. Instead, i read the discussions and public notebooks, and attempted to improve the best public notebook. I boosted the best public notebook from public LB = 0.73 to LB = 0.77 and achieved 44th place Silver.
+
+Praise for Best Public Notebooks
+
+I am very impressed with the shared public notebooks
+
+
+
+Great Transformer model architecture
+
+Selected which 66 Landmarks out of 543 Landmarks are important (hands, lips, pose)
+
+Great preprocessing to convert videos of variable length to small fixed length
+
+Accurate local validation scheme which estimates LB score
+
+
+Improvements to Best Public Notebook
+
+After reading the best public notebook, I made the following 11 changes to boost CV and LB +0.03 from LB = 0.73 to LB = 0.76:
+
+
+
+Train 1 model =&gt; Train 4 models
+
+Add Time Scale augmentation
+
+Ensemble and apply TFLite FP16 quantization
+
+Change the following parameters:
+
+INPUT_SIZE, 64 =&gt; 12
+
+BATCH_ALL_SIGNS_N, 4 =&gt; 1
+
+N_EPOCHS, 250 =&gt; 120
+
+LANDMARK_UNITS, 384 =&gt; 224
+
+UNITS, 512 =&gt; 376
+
+NUM_BLOCKS, 2 =&gt; 3
+
+MLP_RATIO, 4 =&gt; 3
+
+MLP_DROPOUT_RATIO, 0.40 =&gt; 0.30
+
+remove random frame masking
+
+
+Published Code
+
+I published my code here for those curious to learn "How To Improve Best Public Notebook" from LB = 0.73 to LB = 0.76
+
+My Thought Process
+
+Most Kagglers are probably curious why and how I discovered these modifications. So let me share my thinking. First, the easiest way to boost CV LB for NN is to ensemble NN with multiple copies of itself (trained with different seeds). So the easiest way to boost public notebook CV LB is to make the model smaller and make the model faster (because this competition has size and time constraints). Then we can include multiple copies of the NN during inference. And each NN we will train with 100% train data.
+
+The first thing i did was reduce LANDMARK_UNITS, UNITS, and MLP_RATIO to reduce the model size. I slowly reduced these parameters to see how small I could go without reducing CV score. It is important to reduce the model to less than 5M (i.e. 5 million) parameters because then we can infer 4 copies of the model within the 40MB size restriction when using FP16. With 40MB size limit, the maximum number of parameters during inference with FP16 is 20M. I also tried less than 4M parameters and 3.3M parameters which allows 5 copies and 6 copies respectively (when using FP16 quantization) 
+
+Second, I made the transformer deeper with more transformer blocks. I increased blocks from 2 to 3 which boosted the CV and LB about +0.01 or '0.02. Reducing the MLP_RATIO from 4 to 3 significantly reduced the number of model parameters without affecting CV LB so this gave me extra parameters to allow increasing the transformer blocks.
+
+Next, I reduced INPUT_SIZE to speed up the model to make it infer (and train) faster. The parameter INPUT_SIZE is the transformer sequence length. This competition has a inference time constraint of 1 hour (in addition to a 40MB size constraint). Reducing INPUT_SIZE will decrease inference time (and does not affect model size). With sequence length 12, we can easily infer 5+ models under 1 hour.
+
+At this point, i got lucky. Reducing INPUT_SIZE actually boosted the CV and LB by +0.01 or +0.02 or so. After this I tuned the learning rate, batch size, and learning schedule and found N_EPOCHS = 120 and BATCH_ALL_SIGNS_N = 1 to be best. Many Kagglers overlook the fact that changing batch size can make a big difference for models. We should always try 0.25x, 0.5x, 2x, 4x batch size and change the learning rate for those experiments to be 0.25x, 0.5x, 2x, 4x respectively. Experiments demonstrate that Batch Size = 256 is better than the original Batch Size = 1024. This helped +0.0005 or so.
+
+Lastly NN always benefit from more data and data augmentation. I tried external data and many different data augmentation. Using external data did not help me. Regarding augmentation i only got benefit from frame drop out and time scale augmentation. This helped about +0.0005 or so. I also tried rotation, scale, shift but this did not help. Flip was not needed since preprocessing normalized all videos to be left handed.
+
+Comments:
+├─ The Devastator (2023-05-03 19:09:54.453000) [+5]
+│  I still remember how last year, during the ventilator competition, you casually mentioned at the end, "If you just take the top public notebook and reduce the batch size, it gets to the silver zone...
+  ├─ Chris Deotte (2023-05-04 00:36:50.063000) [+0]
+  │  Thanks Devastator!
+├─ Chris Deotte (2023-05-02 14:38:33.180000) [+3]
+│  UPDATE: I shared my code in notebook here
+├─ DongYK (2023-08-21 04:54:50.517000) [+1]
+│  Most Kagglers are probably curious why and how I discovered these modifications. So let me share my thinking. First, the easiest way to boost CV LB for NN is to ensemble NN with multiple copies of ...
+├─ Remek Kinas (2023-05-06 07:57:36.553000) [+1]
+│  I was not active in this competition but reading solution description to learn as much as possible. Your approach for improving public notebook is brilliant. We have many things to touch … many to ...
+├─ Ju7on9 (2023-05-06 02:11:05.763000) [+1]
+│  Thanks for sharing great insight of the competition. 
+│  
+│  Would I ask one question?
+│  
+│  
+│    
+│  I made the transformer deeper with more transformer blocks. I increased blocks from 2 to 3 which boosted the CV...
+  ├─ Chris Deotte (2023-05-06 15:56:16.093000) [+2]
+  │  Hi @ju7on9 . The original network architecture is defined by
+  │  
+  │  # Dense layer units for landmarks
+  │  LIPS_UNITS = 224 # WAS 384
+  │  HANDS_UNITS = 224 # WAS 384
+  │  POSE_UNITS = 224 # WAS 384
+  │  # final embedding a...
+    ├─ Ju7on9 (2023-05-07 12:02:56.277000) [+1]
+    │  Thank you for the detailed answer! It really helped me a lot!
+├─ Jackson You (2023-05-04 09:13:42.523000) [+1]
+│  Congrats and thanks for sharing your experience. I learn a lot from your experience.
+│  
+│  I'm a bit confused by the phrase "trained with different seeds". Do you mean the SEED for each batch of data re...
+  ├─ Chris Deotte (2023-05-04 13:00:03.393000) [+1]
+  │  is this SEED that we don't have to set manually?
+  │  
+  │  
+  │  Yes, there is nothing for us to change. The "SEED" is for the initialization of NN layers. And the shuffle of batches during training. And the ran...
+    ├─ Jackson You (2023-05-06 09:28:24.313000) [+1]
+    │  We should always try 0.25x, 0.5x, 2x, 4x batch size and change the learning rate for those experiments to be 0.25x, 0.5x, 2x, 4x respectively.
+    │  
+    │  
+    │  I found that this was not followed in your code. In ...
+    ├─ Chris Deotte (2023-05-06 16:05:22.333000) [+1]
+    │  The original notebook (that I forked) trains batch size 1024 for 250 epochs at LR_MAX = 0.001 with MLP_DROPOUT_RATIO = 0.40. After adding data augmentation, reducing epochs to 120, and using MLP_DR...
+    ├─ Jackson You (2023-05-08 00:49:46.123000) [+1]
+    │  Thank you very much for being so specific in your explanations. I carelessly ignore the other changing variables. Btw, I like this term rule of thumb. This is something I am currently pursuing.
+├─ Punch Line (2023-05-04 07:47:08.257000) [+1]
+│  Many thanks for the detailed solution chris!
+├─ HechtJP (2023-05-04 06:59:01.860000) [+1]
+│  @cdeotte , thank you very much for your sharing the detail of your approach. I could learn a lot from that and this might be good hint for my next challenge!
+  ├─ Chris Deotte (2023-05-05 17:07:45.910000) [+0]
+  │  Thank you HechtJP!
+├─ Anirban Chatterjee (2023-05-03 18:00:12.273000) [+1]
+│  thank you for this post, i learned about you, true kaggle GM, grateful! hope to do awesome things like you &lt;3
+├─ Gowri Shankar Penugonda (2023-05-03 12:35:52.210000) [+1]
+│  Hi @cdeotte, 
+│  One week is really less, have you used any library to tune hyperparams or done manually by changing every value.
+│  Thanks
+  ├─ Chris Deotte (2023-05-03 14:09:29.283000) [+3]
+  │  Thank you. I tune everything manually. I change one value and run again. When INPUT_SIZE = 12 and N_EPOCHS = 120, each experiment takes about 45 minutes on 1xV100 GPU.
+├─ Junjie Huang (2023-05-03 07:58:23.750000) [+1]
+│  Congrats! Most respect from the guy doing the same job but much less successful. 
+│  Wondering how could you manage to have so many experiments within one week due to the 30h GPU quota(new kaggler her...
+  ├─ Chris Deotte (2023-05-03 14:13:40.583000) [+4]
+  │  Thanks Junjie. I use GPU outside of Kaggle which gives a big advantage. Locally, I used 8xV100 GPU. So each day, I had 24x8 = 192 hours of GPU compute. In one week I ran about 300 experiments.
+    ├─ Junjie Huang (2023-05-04 08:02:17.597000) [+2]
+    │  Oh I see now, that explains a lot👀. Thanks!
+├─ Ivan Isaev (2023-05-02 16:19:19.720000) [+1]
+│  @cdeotte congrats with the medal and great appreciation for sharing your explanation and code!👍🤝 Especially your thoughts about parameters tuning is very useful.  Your posts and notebooks in this a...
+├─ Bartley (2023-05-02 15:31:07.790000) [+1]
+│  Thanks for sharing the though process @cdeotte.
+│  
+│  Can you provide some more thoughts on this line? I am trying to understand why this works so well
+│  
+│  
+│    
+│  "easiest way to boost CV LB for NN is to ense...
+  ├─ Chris Deotte (2023-05-02 16:06:13.703000) [+3]
+  │  Hi. To clarify, I am saying "ensemble with itself" is better than "submit single model". Note that I wasn't saying that "ensemble with itself" is better than "ensemble with different NN". 
+  │  
+  │  Regardi...
+    ├─ Bartley (2023-05-02 17:58:13.077000) [+1]
+    │  Ok that makes sense. Thanks for the follow up!
+    │  
+    │  Found a good article here by Max Pechyonkin that talks about Ensembling NNs if anyone wants more info
+├─ CroDoc (2023-05-02 08:11:20.300000) [+1]
+│  INPUT_SIZE, 64 =&gt; 12
+│  
+│  
+│  This blows my mins 🤯 your code interpolates all frames with a visible dominant hand to just 12 frames?
+│  
+│  Thanks for explaining your thought process. Very interesting to rea...
+  ├─ Chris Deotte (2023-05-02 16:11:00.420000) [+1]
+  │  Thanks @crodoc Congrats on your result.
+  │  
+  │  It is surprising that using only 12 frames works well. I also have a model with INPUT_SIZE = 8 and it achieves LB = 0.76. I didn't try smaller but i suspect...
+    ├─ CroDoc (2023-05-02 18:48:04.773000) [+1]
+    │  Which interpolation method did you use? The code from the public kernel or?
+    ├─ Chris Deotte (2023-05-02 18:53:28.113000) [+1]
+    │  Yes the code from the public notebook with one important change. The public notebook truncates the original video to INPUT_SIZE ** 2 frames before interpolation. So to make small INPUT_SIZE&lt;12 w...
+    ├─ Chris Deotte (2023-05-02 19:02:01.947000) [+2]
+    │  Note that many of the videos are short. I think 40% are less than 12 frames!
+    ├─ CroDoc (2023-05-02 21:37:09.567000) [+2]
+    │  Still blows my mind :)
+├─ serangu (2023-05-02 04:13:15.407000) [+1]
+│  @cdeotte thanks for the topic and detailed info about improvements!
+├─ Mohamed Eltayeb (2023-05-02 00:18:10.597000) [+2]
+│  Congrats Chris 👏
+│  Would you mind giving some details about the choice of these parameters values? Or it is just based on experiments and cv? Thanks
+  ├─ Chris Deotte (2023-05-02 00:33:00.103000) [+3]
+  │  Great question. I added my "thought process" to the discussion post above
+    ├─ Mohamed Eltayeb (2023-05-06 15:45:53.003000) [+1]
+    │  @cdeotte Thanks, it was really helpful.
+    │  Just have one more question. What do you think are good rules of thumb for choosing the type of learning rate scheduler?
+    │  I found a lot of them in notebooks l...
+    ├─ Chris Deotte (2023-05-06 16:36:06.060000) [+2]
+    │  If training requires only a few epochs (i.e. 1, 2, 3, 4, or 5 epochs) like NLP models, I usually just go with constant LR. Then i look at validation metric and if it increases in the last epoch or ...
+├─ Aisuluu Ulan kyzy (2023-05-13 03:44:30.647000) [+0]
+│  you had a great expirience
+├─ [deleted] (2023-05-11 06:32:20.593000) [+0]
+│  [deleted]
+├─ zhuhx666 (2023-05-02 12:41:57.680000) [+1]
+│  thanks for the explanation!
+├─ Aisuluu Ulan kyzy (2023-05-11 06:27:05.573000) [+0]
+│  thanks for detailed info

@@ -1,0 +1,56 @@
+<p>Congratulations to the winners and all participants for their efforts!</p>
+<p>I want to give a huge shoutout to <a href="https://www.kaggle.com/richolson" target="_blank">@richolson</a> for his unbelievably educational and helpful notebook and discussion posts. I personally learned a lot from <a href="https://www.kaggle.com/code/richolson/stable-diffusion-svg-scoring-metric" target="_blank">his notebook</a> and it was the starting point for my solution.</p>
+<p>EDIT: I published my version of the <a href="https://www.kaggle.com/code/howarudo/13th-place-solution-flux-svg-scoring" target="_blank">notebook</a>! Feel free to check it out!</p>
+<h1>Summary</h1>
+<ul>
+<li><code>'a'</code> for OCR mitigation</li>
+<li>Optimized VTracer's bitmap -&gt; SVG conversion with binary search and SVG compression</li>
+<li>Used FLUX.1 Schnell and <a href="https://github.com/mit-han-lab/nunchaku" target="_blank">nunchaku quantization</a></li>
+<li>VQA with dummy question and answer</li>
+</ul>
+<h1>OCR mitigation</h1>
+<p>From previous discussions, we know that adding a letter to the iamge can reduce OCR hallucinations. I added the letter <code>'a'</code> to the bottom right corner of the image.</p>
+<pre><code>svg_a = """"""
+</code></pre>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F17096593%2F6702f89386eee00cc5a472dfcc64fd33%2Fa.png?generation=1748401229132058&amp;alt=media" alt=""></p>
+<h1>Bitmap to SVG conversion</h1>
+<h2>Binary Search</h2>
+<p>In a <a href="https://www.kaggle.com/code/dhurky/lb-0-52-sd-svg-conversion-using-vtracer" target="_blank">public notebook</a>, VTracer was used for SVG conversion but in that pipeline, the bitmap was resized to a constant smaller size to reduce the SVG size (10kB restriction). One improvement to this is to use binary search to find the maximum size to convert the bitmap to SVG without exceeding the 10kB limit.</p>
+<h2>SVG Compression</h2>
+<p>VTracer's output SVG looks like this:</p>
+<pre><code>
+</code></pre>
+<p>Compression techniques:</p>
+<ul>
+<li><strong>Absolute to Relative Coordinates</strong>: Convert absolute coordinates to relative coordinates in the SVG path.</li>
+<li><strong>Removing Transformations</strong>: Remove unnecessary transformations like <code>translate</code>.</li>
+<li><strong>Longest path -&gt; fill</strong>: Convert the longest path to a fill rectangle.</li>
+</ul>
+<pre><code>
+</code></pre>
+<p>This allows bitmaps to have be resized about 50px bigger than without compression. It does not affect images that are relatively SVG-friendly but it helps with images that are not.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F17096593%2Ff70b7938bcbd9296c77a613e80f14565%2Fcompresion_1.png?generation=1748401292468823&amp;alt=media" alt=""></p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F17096593%2Ffec70c2c25ddfa192f4b64dd8473b1fb%2Fcompression_2.png?generation=1748401301655450&amp;alt=media" alt=""></p>
+<h1>Image Generation</h1>
+<p>I used <a href="https://huggingface.co/black-forest-labs/FLUX.1-schnell" target="_blank">FLUX.1 Schnell</a> for image generation and <a href="https://github.com/mit-han-lab/nunchaku" target="_blank">nunchaku</a> for quantization. I tried base SD models, finetuning SDXL Lora but found that FLUX.1 Schnell has better prompt adherence. Also, with quantization, FLUX.1 Schnell is faster.</p>
+<h1>Dummy VQA</h1>
+<p>From 10-12 images generated, I evaluated the images using the questions below.</p>
+<pre><code>question = [
+    ,
+    
+]
+choices = [
+    [, , , ],
+    [, , ]
+]
+answer = [
+    ,
+    
+]
+</code></pre>
+<p>In addition, I performed a linear regression on fidelity VQA scores using dummy VQA scores from an extended training set to predict the final VQA score.</p>
+<p>$$VQA_{predicted} = w_1 * VQA_{dummy_1} + w_2 * VQA_{dummy_2} + b$$</p>
+<p>Evaluating an image per question takes <code>&lt; 2 seconds</code> while generating an image with FLUX.1 Schnell takes <code>~ 1 second</code>. Hence, I found that generating more images and evaluating them with 1-2 questions is more efficient than generating fewer images and evaluating them with 3-4 questions.</p>
+<h1>In Hindsight…</h1>
+<p>After reading <a href="https://www.kaggle.com/cnumber" target="_blank">@cnumber</a>'s post, I regret not trying <code>pydiffvg</code> to further optimize the scores and not trying Siglip. I also had moments where I wished I had participated in a team as it was difficult to come up with ideas solo. Regardless, I am happy with the knowledge and experience I gained from this competition!</p>
+<p><strong>PS: In future competitions, I hope to join a team to bounce ideas off each other so feel free to reach out if you happen to see me in a future competition!</strong></p>

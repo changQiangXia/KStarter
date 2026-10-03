@@ -1,0 +1,82 @@
+# birdclef-2024 讨论区（按票数排序，共 80 条）
+
+- [1st place solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/512197) — 107 票 / 19 评论 / 2025-03-10 **write-up?**
+- [Additional Samples for BirdClef2024 from Xeno](https://www.kaggle.com/competitions/birdclef-2024/discussion/491687) — 85 票 / 21 评论 / 2024-04-06 
+- [[LB0.68] my experimental results](https://www.kaggle.com/competitions/birdclef-2024/discussion/497539) — 84 票 / 109 评论 / 2024-04-25 
+- [3rd solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511905) — 78 票 / 23 评论 / 2024-06-25 **write-up?**
+- [Compare BirdCLEF 2023 vs 2024](https://www.kaggle.com/competitions/birdclef-2024/discussion/490970) — 67 票 / 14 评论 / 2024-04-04 
+- [Avoid unnecessary memory usage](https://www.kaggle.com/competitions/birdclef-2024/discussion/494122) — 58 票 / 16 评论 / 2024-04-16 
+- [5th solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511535) — 57 票 / 39 评论 / 2024-06-13 **write-up?**
+- [Why there is a gap between CV and LB](https://www.kaggle.com/competitions/birdclef-2024/discussion/498404) — 52 票 / 18 评论 / 2024-04-28 
+- [4th place solution: Team Cerberus](https://www.kaggle.com/competitions/birdclef-2024/discussion/511845) — 48 票 / 6 评论 / 2024-06-23 **write-up?**
+- [Time to learn](https://www.kaggle.com/competitions/birdclef-2024/discussion/511569) — 47 票 / 9 评论 / 2024-06-11 
+- [2nd place solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/512340) — 46 票 / 1 评论 / 2025-07-08 **write-up?**
+- [Duplicate Files](https://www.kaggle.com/competitions/birdclef-2024/discussion/494134) — 38 票 / 5 评论 / 2024-04-16 
+- [Top Solutions From the Previous Competition (BirdCLEF 2023)](https://www.kaggle.com/competitions/birdclef-2024/discussion/490895) — 38 票 / 6 评论 / 2024-04-03 **write-up?**
+- [7th Place Solution for the BirdCLEF 2024 Competition](https://www.kaggle.com/competitions/birdclef-2024/discussion/511540) — 38 票 / 16 评论 / 2024-06-11 **write-up?**
+- [All the Birds We Cannot See](https://www.kaggle.com/competitions/birdclef-2024/discussion/491083) — 37 票 / 0 评论 / 2024-04-04 
+- [6th Place Solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511527) — 36 票 / 10 评论 / 2024-06-12 **write-up?**
+- [11st solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511499) — 33 票 / 10 评论 / 2024-06-11 **write-up?**
+- [Possible missing classes in Private/Public subsets ](https://www.kaggle.com/competitions/birdclef-2024/discussion/502198) — 32 票 / 8 评论 / 2024-05-12 
+- [Model CV - LB Thread](https://www.kaggle.com/competitions/birdclef-2024/discussion/493317) — 29 票 / 16 评论 / 2024-04-12 
+- [Optimize Torch Model For Inference | 2X with 1 LOC!](https://www.kaggle.com/competitions/birdclef-2024/discussion/492649) — 28 票 / 9 评论 / 2024-04-10 
+- [[Solved]Confirming Rules for Additional External Data via Xeno-canto API](https://www.kaggle.com/competitions/birdclef-2024/discussion/490990) — 27 票 / 12 评论 / 2024-04-04 
+- [9th place recap](https://www.kaggle.com/competitions/birdclef-2024/discussion/511510) — 27 票 / 7 评论 / 2024-06-11 **write-up?**
+- [Some Useful Augmentations](https://www.kaggle.com/competitions/birdclef-2024/discussion/493131) — 27 票 / 0 评论 / 2024-04-12 
+- [10th Solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511596) — 26 票 / 4 评论 / 2024-06-11 **write-up?**
+- [8th place solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511528) — 26 票 / 8 评论 / 2024-06-13 **write-up?**
+- [Analyzing and visualizing the massive churn with inferences](https://www.kaggle.com/competitions/birdclef-2024/discussion/511536) — 25 票 / 4 评论 / 2024-06-11 
+- [Meme Thread](https://www.kaggle.com/competitions/birdclef-2024/discussion/510732) — 23 票 / 12 评论 / 2024-06-07 
+- [Correction to hidden test set submission format](https://www.kaggle.com/competitions/birdclef-2024/discussion/491387) — 21 票 / 12 评论 / 2024-04-05 
+- [Starter materials](https://www.kaggle.com/competitions/birdclef-2024/discussion/490862) — 21 票 / 1 评论 / 2024-04-03 
+- [Speed up inference via ONNX](https://www.kaggle.com/competitions/birdclef-2024/discussion/493478) — 20 票 / 6 评论 / 2024-04-13 
+- [big shaked by my notebook](https://www.kaggle.com/competitions/birdclef-2024/discussion/511498) — 19 票 / 20 评论 / 2024-06-11 
+- [Is the submission scoring correct?](https://www.kaggle.com/competitions/birdclef-2024/discussion/491581) — 19 票 / 12 评论 / 2024-04-06 
+- [Very Depressed by the result](https://www.kaggle.com/competitions/birdclef-2024/discussion/511516) — 17 票 / 8 评论 / 2024-06-11 
+- [From eeg's to oggs: Transfer Your Knowledge of Spectrogramms from HMS Competition](https://www.kaggle.com/competitions/birdclef-2024/discussion/493178) — 17 票 / 1 评论 / 2024-04-12 
+- [Bird Sound Denoising  & Rating Predict Model](https://www.kaggle.com/competitions/birdclef-2024/discussion/492864) — 17 票 / 15 评论 / 2024-04-11 
+- [Things that didn't work for me in this competition](https://www.kaggle.com/competitions/birdclef-2024/discussion/502401) — 17 票 / 9 评论 / 2024-05-13 
+- [Strange Impact of Audio Duration](https://www.kaggle.com/competitions/birdclef-2024/discussion/502400) — 17 票 / 19 评论 / 2024-05-13 
+- [BirdCLEF working notes - Announcing the winners](https://www.kaggle.com/competitions/birdclef-2024/discussion/506779) — 16 票 / 12 评论 / 2024-05-23 **write-up?**
+- [Anybody facing "Submission Scoring Error" ?? [Resolved]](https://www.kaggle.com/competitions/birdclef-2024/discussion/491165) — 16 票 / 21 评论 / 2024-04-04 
+- [What is the intuition behind feeding signal to vision model? ](https://www.kaggle.com/competitions/birdclef-2024/discussion/511763) — 16 票 / 8 评论 / 2024-06-12 
+- [Analyzing train vs test data using spectrogram statistics](https://www.kaggle.com/competitions/birdclef-2024/discussion/498582) — 15 票 / 3 评论 / 2024-04-28 
+- [Unsupervised Birds: Pre-training on unlabeled soundscapes](https://www.kaggle.com/competitions/birdclef-2024/discussion/498876) — 15 票 / 3 评论 / 2024-04-29 
+- [What’s your best single model score?](https://www.kaggle.com/competitions/birdclef-2024/discussion/507258) — 15 票 / 50 评论 / 2024-05-25 
+- [BirdCLEF Leaderboard Shake Up Visualisation | Locate your team on the plot.](https://www.kaggle.com/competitions/birdclef-2024/discussion/511497) — 15 票 / 2 评论 / 2024-06-11 
+- [Public 20th | Private 15th solution ](https://www.kaggle.com/competitions/birdclef-2024/discussion/511559) — 15 票 / 2 评论 / 2024-06-11 **write-up?**
+- [18th place](https://www.kaggle.com/competitions/birdclef-2024/discussion/511851) — 15 票 / 3 评论 / 2024-06-12 **write-up?**
+- [Papers on audio augmentation.](https://www.kaggle.com/competitions/birdclef-2024/discussion/490922) — 15 票 / 1 评论 / 2024-04-03 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/birdclef-2024/discussion/490849) — 14 票 / 3 评论 / 2024-04-03 
+- [Exploring Scoring (it's a bit different than I thought...)](https://www.kaggle.com/competitions/birdclef-2024/discussion/496468) — 13 票 / 9 评论 / 2024-04-21 
+- [BirdTrax: Labeled soundscape generator](https://www.kaggle.com/competitions/birdclef-2024/discussion/496956) — 13 票 / 4 评论 / 2024-04-23 
+- [Confusion regarding labeling](https://www.kaggle.com/competitions/birdclef-2024/discussion/492876) — 13 票 / 4 评论 / 2024-04-11 
+- [Training and Inference Notebooks (0.65 - 0.66 Single Model)](https://www.kaggle.com/competitions/birdclef-2024/discussion/499713) — 13 票 / 15 评论 / 2024-05-02 
+- [Welcome to BirdCLEF 2024 - Meet the hosts](https://www.kaggle.com/competitions/birdclef-2024/discussion/491006) — 12 票 / 10 评论 / 2024-04-04 
+- [Mimicking birds!](https://www.kaggle.com/competitions/birdclef-2024/discussion/510838) — 12 票 / 5 评论 / 2024-06-08 
+- [Audio deep learning for beginners](https://www.kaggle.com/competitions/birdclef-2024/discussion/491668) — 12 票 / 4 评论 / 2024-04-06 
+- [GANs may be promising (Domain Adaptation)](https://www.kaggle.com/competitions/birdclef-2024/discussion/505873) — 12 票 / 10 评论 / 2024-05-19 
+- [Quick and Easy Data To Get Started](https://www.kaggle.com/competitions/birdclef-2024/discussion/491444) — 12 票 / 0 评论 / 2024-04-05 
+- [Thank you and congratulations](https://www.kaggle.com/competitions/birdclef-2024/discussion/511532) — 11 票 / 4 评论 / 2024-06-11 
+- [Good Timm Models for BirdCLEF 2024](https://www.kaggle.com/competitions/birdclef-2024/discussion/496617) — 11 票 / 6 评论 / 2024-04-21 
+- [Why not putting a single soundscape to the test directory for testing?](https://www.kaggle.com/competitions/birdclef-2024/discussion/493680) — 11 票 / 4 评论 / 2024-04-14 
+- [Congratulations to new Kaggle Competitions GM](https://www.kaggle.com/competitions/birdclef-2024/discussion/511582) — 11 票 / 3 评论 / 2024-06-11 
+- [Beginner guides](https://www.kaggle.com/competitions/birdclef-2024/discussion/497316) — 11 票 / 3 评论 / 2024-04-24 
+- [Inquiry on Using Past BirdCLEF Test Data and Availability of 2023 Edition on Zenodo](https://www.kaggle.com/competitions/birdclef-2024/discussion/490993) — 11 票 / 5 评论 / 2024-04-04 
+- [How big do you think the shakeup will be?](https://www.kaggle.com/competitions/birdclef-2024/discussion/510416) — 10 票 / 15 评论 / 2024-06-06 
+- [What I learned in BirdCLEF2024](https://www.kaggle.com/competitions/birdclef-2024/discussion/511419) — 10 票 / 0 评论 / 2024-06-10 
+- [Variations in submission speed ?](https://www.kaggle.com/competitions/birdclef-2024/discussion/492683) — 10 票 / 5 评论 / 2024-04-10 
+- [PYSPNF | 3X Faster PNG Decoding!](https://www.kaggle.com/competitions/birdclef-2024/discussion/492871) — 10 票 / 0 评论 / 2024-04-11 
+- [Is sampling rate 32kHz?](https://www.kaggle.com/competitions/birdclef-2024/discussion/496460) — 9 票 / 6 评论 / 2024-04-21 
+- [Why is train so different from test?](https://www.kaggle.com/competitions/birdclef-2024/discussion/506678) — 9 票 / 6 评论 / 2024-05-22 
+- [Lottery competition rank 32th to 245th same score 😑](https://www.kaggle.com/competitions/birdclef-2024/discussion/511601) — 9 票 / 9 评论 / 2024-06-11 
+- [The worst competition I have ever seen!](https://www.kaggle.com/competitions/birdclef-2024/discussion/511502) — 9 票 / 22 评论 / 2024-06-11 
+- [Is hierarchical image classification a good approach?](https://www.kaggle.com/competitions/birdclef-2024/discussion/497566) — 8 票 / 1 评论 / 2024-04-25 
+- [How should we use unlabeled_soundscapes?](https://www.kaggle.com/competitions/birdclef-2024/discussion/497050) — 8 票 / 9 评论 / 2024-04-23 
+- [[Resolved] Question about using BirdNET-Analyzer in the competition](https://www.kaggle.com/competitions/birdclef-2024/discussion/496571) — 8 票 / 11 评论 / 2024-04-21 
+- [OpenVino not working with torchaudio MelSpectrogram?](https://www.kaggle.com/competitions/birdclef-2024/discussion/499048) — 8 票 / 9 评论 / 2024-04-30 
+- [Using additional data significantly improves CV, but has almost no effect on LB](https://www.kaggle.com/competitions/birdclef-2024/discussion/492300) — 8 票 / 10 评论 / 2024-04-09 
+- [5th place solution question](https://www.kaggle.com/competitions/birdclef-2024/discussion/512594) — 8 票 / 0 评论 / 2024-06-16 **write-up?**
+- [When will the Private Dataset be published?](https://www.kaggle.com/competitions/birdclef-2024/discussion/512118) — 8 票 / 3 评论 / 2024-06-13 
+- [31st place solution](https://www.kaggle.com/competitions/birdclef-2024/discussion/511567) — 7 票 / 2 评论 / 2024-06-11 **write-up?**
+- [Get started here!](https://www.kaggle.com/competitions/birdclef-2024/discussion/490858) — 7 票 / 0 评论 / 2024-04-03 

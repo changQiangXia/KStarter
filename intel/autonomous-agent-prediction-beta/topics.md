@@ -1,0 +1,32 @@
+# autonomous-agent-prediction-beta 讨论区（按票数排序，共 30 条）
+
+- [Is LLM budget only $2?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723806) — 11 票 / 7 评论 / 2026-07-08 
+- [Will this be a monthly series?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723810) — 10 票 / 4 评论 / 2026-07-08 
+- [Common Causes of Submission Failures](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723907) — 9 票 / 11 评论 / 2026-07-08 
+- [Feedback Wanted](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/732744) — 6 票 / 13 评论 / 2026-08-04 
+- [3rd place solution + my first Kaggle competition! 🎉](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/737407) — 6 票 / 2 评论 / 2026-08-25 **write-up?**
+- [How to Get Started + Competition's Official Discord](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723664) — 5 票 / 0 评论 / 2026-07-07 
+- [Modular Autonomous Agent for General-Purpose Tabular Prediction](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/733628) — 4 票 / 3 评论 / 2026-08-07 
+- [Debug is hard](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723791) — 4 票 / 7 评论 / 2026-07-08 
+- [AUTONOMOUS AGENT PREDICTION (BETA)](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/733564) — 3 票 / 10 评论 / 2026-08-07 
+- [Can Agents Install Packages and Access the Internet During Evaluation?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723862) — 3 票 / 2 评论 / 2026-07-08 
+- [🚀 LB 0.823 Template: Exploiting the "Freeroll" Fallback Rule with Gemini Pro](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/730539) — 2 票 / 0 评论 / 2026-07-29 
+- [Usage of pretrained models & binaries](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/726417) — 2 票 / 2 评论 / 2026-07-15 
+- [Personl Tips about how to build a wise agent](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/724482) — 2 票 / 0 评论 / 2026-07-11 
+- [Isn't one submission too few?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/723813) — 2 票 / 4 评论 / 2026-07-08 
+- [Diversity-First Ensembling for a Self-Driving Kaggle Agent](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/737259) — 1 票 / 0 评论 / 2026-08-24 
+- [Old submission becoming ERRORS](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/729897) — 1 票 / 2 评论 / 2026-07-27 
+- [Not Able to download the data for submission in the Data tab](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/729322) — 1 票 / 4 评论 / 2026-07-25 
+- [well-designed agentic challenge?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/726378) — 1 票 / 3 评论 / 2026-07-15 
+- [Question about submission budget](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/728160) — 1 票 / 2 评论 / 2026-07-22 
+- [Can we use our "AI Quota of Kaggle Benchmarks" to increase the $2.00 LLM budget?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/727794) — 1 票 / 2 评论 / 2026-07-20 
+- [Submission stuck in PENDING (Submission Processing) for over an hour](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/727538) — 1 票 / 2 评论 / 2026-07-19 
+- [Qwen hosted model response fails before any episode](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/727397) — 1 票 / 0 评论 / 2026-07-18 
+- [Question About Exceeding the Budget](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/724387) — 1 票 / 1 评论 / 2026-07-11 
+- [Can we run run_local_eval.py inside a Kaggle Notebook, or is a local PC/VM strictly required?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/724120) — 1 票 / 3 评论 / 2026-07-09 
+- [I just scored late submission ranked as top 10 but is not appearing on leaderboard? %0.778](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/736090) — 0 票 / 3 评论 / 2026-08-19 
+- [Submission shows "Error (after deadline)" despite active submission interface](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/737111) — 0 票 / 0 评论 / 2026-08-23 
+- [Local testing notes (run_local_eval.py)](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/730578) — 0 票 / 2 评论 / 2026-07-29 
+- [select_submission, measured: a +0.0005 ceiling, a −0.0166 worst case, and the one-id policy nobody argues for](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/730605) — 0 票 / 5 评论 / 2026-07-29 
+- [Are we building a harness?](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/724677) — 0 票 / 2 评论 / 2026-07-12 
+- [Evaluation harness error: Model alias 'deepseek/deepseek-chat' not found in registry. Available models: claude-3-5-haiku, claude-haiku-](https://www.kaggle.com/competitions/autonomous-agent-prediction-beta/discussion/724397) — 0 票 / 1 评论 / 2026-07-11 

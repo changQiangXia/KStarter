@@ -1,0 +1,186 @@
+# https://www.kaggle.com/competitions/drawing-with-llms/discussion/565396
+
+Topic #565396: Text Rendering: OCR-Exploit [LB=0.305]
+  Author: Bilzard
+  Posted: 2025-02-28 10:06:38.227000
+  Votes: 79  Comments: 33
+
+Since the evaluation model of this competition is publicly available, it's possible to hack the score using various prior knowledge about the model.
+
+For example, I demonstrated a basic trick by rendering the description text directly as an SVG to make the LLM think it as "similar" to the description text.
+
+Notebook is here: Text Rendering: OCR-Exploit [LB=0.305]
+
+Detailed explanation is as follows.
+
+Overview
+
+
+
+The pre-training dataset used in this competition's evaluation model [1] includes OCR text-image pairs [2]. Therefore, drawing descriptive text directly on SVG images can produce meaningful similarity with the input texts.  
+
+This notebook demonstrates how to leverage this observation to improve CLIP score.
+
+
+Method
+
+1. OCR-Exploit
+
+
+
+In this competition, the allowed SVG format restricts direct text rendering. To overcome this, the model must represent text using permitted SVG tags.
+
+This notebook demonstrates a method to convert font glyphs into SVG paths, enabling text visualization while adhering to the constraints.  
+
+
+2. Input Space Exploration
+
+
+
+Due to the efficiency of rule-based rendering, it is possible to explore a larger input space (i.e., various SVG configurations) during the test phase.  
+
+This notebook showcases an approach to optimize these parameters:
+
+
+search maximum valid text length within allowed SVG size (&lt;= 10,000)
+
+search optimal background colors (24 colors)
+
+
+Result
+
+CLIP Score
+
+
+
+Local Validation Score (train.csv) = 0.285  
+
+LB = 0.305  
+
+
+Efficiency
+
+
+
+Submission Time: 2,527 sec (including setup) -&gt; ~5.0 sec/instance
+
+
+Reference
+
+
+
+[1] google/siglip-so400m-patch14-384, https://huggingface.co/google/siglip-so400m-patch14-384  
+
+[2] PaLI: A Jointly-Scaled Multilingual Language-Image Model, Sep 2022, https://arxiv.org/abs/2209.06794
+
+Comments:
+├─ KaizaburoChubachi (2025-02-28 13:45:52.880000) [+3]
+│  I used almost the same approach and got LB 0.299 (I didn't use the background color optimization.)
+│  
+│   
+│  
+│  Actually, when I saw other people's scores, I thought that they were probably doing this too.
+  ├─ Khoi Nguyen (2025-02-28 13:50:29.247000) [+2]
+  │  That's better than my handwriting lmao
+├─ Shun_PI (2025-02-28 14:41:49.537000) [+4]
+│  I used almost the same method and got LB score of 0.301.
+│  
+│  
+│  An SVG representation of each alphabet was generated using ChatGPT.
+│  Below is an example of the letter A of the alphabet.
+│  &lt;path d="M4 40...
+├─ Ryan Holbrook (2025-02-28 11:48:18.377000) [+1]
+│  Thanks for the heads up. I had tested the evaluation model on this and it didn't seem to work, but it seems I was wrong. We will investigate fixes.
+  ├─ Bilzard (2025-02-28 12:30:04.973000) [+6]
+  │  @ryanholbrook 
+  │  Do you think this kind of approach is problematic?
+  │  In my view, it's really hard (and almost impossible) to distinguish "proper" approach from "adversarial" ones, considering the eval...
+    ├─ Timmy Juicehouse (2025-02-28 12:51:20.220000) [+0]
+    │  So, as a participant, I don't think the current evaluation setup ruin the competitiveness of this competition. So I currently believe the setup is no need to "fix up".
+    │  
+    │  
+    │  Your suggestion is interest...
+    ├─ Bilzard (2025-02-28 13:00:32.937000) [+0]
+    │  @sweetyheehee 
+    │  
+    │  Do you think we can strictly define a “proper” approach in this task? I believe not, because what LLMs learn is not necessarily aligned with human intentions.
+    │  I also don’t believe t...
+    ├─ Ryan Holbrook (2025-02-28 13:11:35.043000) [+5]
+    │  Thanks for your feedback @tatamikenn. I want to give it some thought. The situation I want to avoid is the competition task becoming trivial or uninteresting. It might that an evaluation model with...
+    ├─ nofreewill42 (2025-02-28 13:22:39.797000) [+0]
+    │  I am thinking about having a negative score for similarity with "an image of a text" or something might be useful.
+    ├─ Khoi Nguyen (2025-02-28 13:28:02.183000) [+3]
+    │  @nofreewill That's turning this competition into a game of cat and mouse, new kinds of attack will pop up. You can block the attacks you don't want all day but then you will have to draw the line s...
+    ├─ nofreewill42 (2025-02-28 13:34:38.083000) [+0]
+    │  Of course. I'm not saying this is surely a good solution, but I neither think that we should throw it out the window right away, without someone looking at its feasibility and its dynamics it might...
+    ├─ Timmy Juicehouse (2025-02-28 13:37:14.917000) [+1]
+    │  @tatamikenn  You‘re right, and I think it depends on what kind of the game kaggle want it to be.
+    ├─ Shreesha Bhat (2025-03-02 05:53:25.210000) [+0]
+    │  Maybe they can consider using other evaluation techniques other than CLIP similarity, which doesn't use OCR. Correct me if i am wrong
+    ├─ Bilzard (2025-03-02 06:02:32.313000) [+1]
+    │  @shreeshabhat1004 If we change metrics, we can't avoid white-box attack if model is public.
+    ├─ nofreewill42 (2025-03-02 14:25:33.260000) [+0]
+    │  I'm wondering what effects would it have if they allowed (unban) &lt;text&gt;  tags after all.
+    │  
+    │  pros:
+    │  
+    │  
+    │  
+    │  how to structure the objects in a scene is still not evident
+    │  
+    │  better visualization alongside...
+    ├─ Zhecheng Li (2025-03-04 06:35:17.797000) [+0]
+    │  Hi Ryan, do we have any updates on the evaluation metric?
+    ├─ Bilzard (2025-03-04 06:54:53.343000) [+0]
+    │  @ryanholbrook 
+    │  Please also reference the succeeding discussions if hosts are considering possible fix:
+    │  
+    │  
+    │  
+    │  https://www.kaggle.com/competitions/drawing-with-llms/discussion/565759
+    │  
+    │  https://www.kaggle...
+    ├─ Mohammad Ziyari (2025-03-04 09:11:14.663000) [+0]
+    │  I’m curious about this. Given the concerns raised in this discussion, do you think the evaluation metric will be adjusted mid-competition? Or will the focus be more on post-competition analysis and...
+    ├─ [deleted] (2025-03-04 09:13:19.460000) [+0]
+    │  [deleted]
+    ├─ Mohammad Ziyari (2025-03-04 09:14:38.787000) [+1]
+    │  @nofreewill 
+    │  
+    │  I agree. Before ruling it out, maybe it’s worth testing how such a fix would affect different strategies. Have there been any experiments or small-scale tests to see how changing the ...
+    ├─ nofreewill42 (2025-03-04 15:39:49.717000) [+1]
+    │  So much things to try out, so little time to do them. OFF TOPIC: If only there was a kaggle bot observing the discussions and it could just fire up a notebook from the competition code section on r...
+    ├─ RB (2025-03-04 17:14:12.547000) [+1]
+    │  OFF TOPIC: If only there was a kaggle bot observing ….
+    │  
+    │  
+    │  Bot will learn a lot by doing so
+    ├─ Bilzard (2025-03-05 01:41:26.910000) [+1]
+    │  @mohammad1ziyar 
+    │  
+    │  I am wandering which is better. But my latest opinion is inclined to changing evaluation metric wouldn't make the competition better. The core issue seems to be the misalignment b...
+  ├─ Yurnero (2025-02-28 12:37:56.143000) [+3]
+  │  How was it tested on this kind of an attack? I've got like 0.24+ using similar approach on the 2nd day with 7 tries considering 0 experience with SVGs before… Curious about the possible fixes
+├─ Khoi Nguyen (2025-02-28 10:12:50.113000) [+2]
+│  Thank you for sharing, I thought about it the other day and honestly didn't think it could work that well. Question is how can the host defense against this or it's just part of the game now?
+  ├─ Bilzard (2025-02-28 10:21:55.840000) [+3]
+  │  In my feeling, its almost impossible to defense these kind of hacking if the model is public.
+  │  Personally I think these kind of "not-expected-by-host" approach can be helpful to understand how LLM's...
+    ├─ WOOSUNG YOON (2025-02-28 12:11:08.243000) [+-1]
+    │  The simplest approach to mitigate these vulnerabilities during the competition’s short lifespan is 
+    │  
+    │  to restrict the types and quantities of shapes allowed when creating SVGs for each problem.
+    │  
+    │  In ...
+    ├─ Bilzard (2025-02-28 12:39:14.983000) [+1]
+    │  Yes. And I believe this restriction is already implemented in the evaluation scheme as the rule of SVG size (&lt;= 10,000).
+├─ [deleted] (2025-03-02 03:46:08.533000) [+0]
+│  [deleted]
+├─ [deleted] (2025-03-02 03:38:33.823000) [+0]
+│  [deleted]
+├─ StackingIsAllUNeed (2025-03-03 22:01:32.860000) [+-1]
+│  nice explanation
+├─ AAA (2025-03-02 01:03:15.387000) [+-1]
+│  good job！66666
+├─ [deleted] (2025-03-01 22:08:42.823000) [+0]
+│  Thank you for sharing

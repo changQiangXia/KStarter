@@ -1,0 +1,88 @@
+<p>Many thanks to Kaggle and Bengali.AI for hosting such an interesting competition. As I was about to start my PhD  research on speech processing and I knew nothing about the field, the competition came as the perfect opportunity for me to learn. In the end it was a highly rewarding experience.</p>
+<p>The solution consists of 3 components:</p>
+<ul>
+<li>ASR model</li>
+<li>Language model</li>
+<li>Punctuation model</li>
+</ul>
+<p><strong>1. ASR model</strong></p>
+<p>I used <code>ai4bharat/indicwav2vec_v1_bengali</code> as pretrained model.</p>
+<p><strong>Datasets:</strong></p>
+<ul>
+<li>Speech data: Competition data, Shrutilipi, MADASR, ULCA (for ULCA data most of the links are dead but some are still downloadable, only a few thousands samples though)</li>
+<li>Noise data: music data from MUSAN and noise data from DNS Challenge 2020</li>
+<li>All data are normalized and punctuation marks are removed except for dot (<code>.</code>) and hyphen (<code>-</code>)</li>
+</ul>
+<p><strong>Augmentation:</strong></p>
+<ul>
+<li>use augmentation from <code>audiomentations</code>, apply heavy augmentation for read speech (comp data, MADASR) and lighter augmentation for spontaneous speech (Shrutilipi, ULCA)<br>
+Example of read speech augmentation:</li>
+</ul>
+<pre><code>augments = Compose([
+    TimeStretch(=0.8, =2.0, =0.5, =),
+    RoomSimulator(=0.3),
+    OneOf([
+        AddBackgroundNoise(
+            sounds_path=[
+                ,
+            ],
+            =5.0,
+            =30.0,
+            =PolarityInversion(),
+            =1.0
+        ),
+        AddBackgroundNoise(
+            sounds_path=[
+                
+            ],
+            =5.0,
+            =30.0,
+            =PolarityInversion(),
+            =1.0
+        ),
+        AddGaussianNoise(=0.005, =0.015, =1.0),
+    ], =0.7),
+    Gain(=-6, =6, =0.2),
+    ])
+</code></pre>
+<p>For spontaneous speech augment probabilities are smaller and <code>TimeStretch</code> rate much less extreme.</p>
+<ul>
+<li>concat augment: randomly concatenate short samples together to make length distribution of training set closer to OOD test set.</li>
+<li>SpecAugment: mask_time_prob = 0.1, mask_feature_prob = 0.05.</li>
+</ul>
+<p><strong>Training:</strong></p>
+<ul>
+<li>First fit on all training data, then remove about 10% with highest WER after fitted from train set.</li>
+<li>Don't freeze feature encoder.</li>
+<li>Use cosine schedule with warmups and restarts: 1st cycle 5 epochs peak lr 4e-5, 2nd cycle 3 epochs peak lr 3e-5, third cycle 3 epochs peak lr 2e-5.</li>
+</ul>
+<p><strong>Inference:</strong><br>
+Use <code>AutomaticSpeechRecognitionPipeline</code> from <code>transformers</code> to apply inference with chunking and stride:</p>
+<pre><code> = pipe(w, chunk_length_s=, stride_length_s=(, ))[]
+</code></pre>
+<p><strong>2. Language model</strong></p>
+<p>6-gram kenlm model trained on multiple external Bengali corpus:</p>
+<ul>
+<li>IndicCorp V1+V2.</li>
+<li>Bharat Parallel Corpus Collection.</li>
+<li>Samanantar.</li>
+<li><a href="https://www.kaggle.com/datasets/truthr/free-bengali-poetry" target="_blank">Bengali poetry dataset</a>.</li>
+<li><a href="https://data.statmt.org/news-crawl/" target="_blank">WMT News Crawl</a>.</li>
+<li>Hate speech corpus from <a href="https://github.com/rezacsedu/Classification_Benchmarks_Benglai_NLP" target="_blank">https://github.com/rezacsedu/Classification_Benchmarks_Benglai_NLP</a>.</li>
+</ul>
+<p><strong>3. Punctuation model</strong></p>
+<p>Train token classification model to add the following punctuation set: <code>।,?!</code></p>
+<ul>
+<li>use <code>ai4bharat/IndicBERTv2-MLM-Sam-TLM</code> as backbone</li>
+<li>add LSTM head</li>
+<li>train for 6 epochs, cosine schedule, lr 3e-5 on competition data + subset of IndicCorp</li>
+<li>mask 15% of the tokens during training as augmentation</li>
+<li>ensemble 3 folds of model trained on 3 different subsets of IndicCorp</li>
+<li>beam search decoding for inference.</li>
+</ul>
+<p>Thank you very much for reading and please let me know if you have any questions.</p>
+<p>Update: </p>
+<ul>
+<li>training code: <a href="https://github.com/quangdao206/Kaggle_Bengali_Speech_Recognition_2nd_Place_Solution" target="_blank">https://github.com/quangdao206/Kaggle_Bengali_Speech_Recognition_2nd_Place_Solution</a></li>
+<li>inference notebook: <a href="https://www.kaggle.com/code/qdv206/2nd-place-bengali-speech-infer/" target="_blank">https://www.kaggle.com/code/qdv206/2nd-place-bengali-speech-infer/</a></li>
+</ul>

@@ -1,0 +1,216 @@
+# https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932
+
+Topic #359932: Team Hydrogen: 1st place solution
+  Author: Psi
+  Posted: 2022-10-14 09:38:42.117000
+  Votes: 139  Comments: 65
+
+Thanks a lot to Kaggle and the hosts for this very, very interesting competition. A 2-stage competition is always a thrilling experience, but then seeing your models generalizing so well to completely unseen data is really exciting.
+
+Our solution is based on a single-stage model combining 2.5D and 3D data to properly extract temporal information from the video data. This solution ranks first in both public and private leaderboards. Next, we want to give a high-level overview of this solution.
+
+Validation setup
+
+In this competition, we used a fixed train/validation split to tune our models: the validation videos used for this included 4ffd5986_0, 407c5a9e_1, 9a97dae4_1, and ecf251d4_0. Our best local score was 0.857, and we observed strong correlation between local validation and public leaderboard (LB). For our final submission, we retrained our best models on the full data that was available to us, this is a general procedure we always try to take in the end.
+
+Model setup
+
+As mentioned, we solely rely on a single-stage model architecture. The input for our models was a 1024x1024 grayscale image, with the channels stacked in the time dimension over three neighboring frames. We chose to use grayscale images rather than full color due to the improved generalization and runtime capabilities it offered - and it also seems to generalize extremely well to the unseen private data.
+
+The single-stage architecture combined 2.5D and 3D techniques. The backbone of the model was either efficientnetv2_b0 or efficientnetv2_b1, as we found that larger backbones tended to overfit quickly on the small dataset. 3D convolution layers were only used in the last block and final convolution before pooling, which allowed us to stay in 2.5D for most of the backbone and achieve fast inference times with caching.
+
+In a bit more detail, if our current frame is t=15, we first stack three neighboring frames {14,15,16} as the channels of the input, and separately pass five different time steps (2 in each direction), each again stacked with three channels. If our time step would be 3, this would mean we pass {8,9,10},{11,12,13},{14,15,16},{17,18,19},{20,21,22} through the backbone, and the final 3D layer aggregates these 5 individual time steps with additional pooling.
+
+We also experimented with different stacks over the time domain and found that 15 frames (combined over 2.5D and 3D) worked best for our final submission.
+
+We applied the usual set of augmentations and used Mixup as well. The loss function was binary cross-entropy with three target columns. One area where we had room for experimentation and improvement was in how to set the hard or soft labels for training. In the end, our best solution used hard labels in a small window around the actual event.
+
+Most of our time during this competition was spent training on only the labeled regions of the competition data. Pre-training on some Soccernet labels improved the score by around 0.02, but we had no success with pseudo label pre-training on unlabeled regions and clips.
+
+Inference
+
+Increasing the inference resolution by 128 also slightly improved our cross-validation (CV) and LB scores. We spent a significant amount of time optimizing the inference kernel to run as efficiently as possible, utilizing both CPU cores with threading. We predicted only every second frame for a single model, and our final solution blended the results of two models, alternating between them frame by frame. We then applied post-processing to reduce the number of false positives.
+
+A single model had a runtime of 2.5 hours in the kernel, and processing a single video took 25 minutes. Our final solution with two models had a runtime of around 5 hours. There was potential for using even more models, but we opted to keep things as simple as possible.
+
+Big shoutout to my teammates @ybabakhin and @ilu000!
+
+Comments:
+├─ Camaro (2022-10-14 10:47:01.557000) [+11]
+│  Big congrats @philippsinger, @ybabakhin and @ilu000!
+│  
+│  I couldn’t imagine +0.80 can be achieved by such a simple pipeline.
+│  Actually my solution is also single stage one and has many common parts wit...
+  ├─ Psi (2022-10-14 10:53:35.970000) [+6]
+  │  We also experimented quite a bit with TSM/GSM &amp; GRU etc., but in the end a more simple setup was more effective. The main benefit was that training time was much faster, so we could experiment ...
+  ├─ AngadY (2024-09-09 10:11:02.530000) [+1]
+  │  can you share notebook to test?
+├─ Pascal Pfeiffer (2022-10-14 09:41:09.787000) [+8]
+│  Thanks a lot @philippsinger @ybabakhin for the great team-up!
+│  
+│  Thanks to the hosts for this very interesting and intense competition with many approaches to try. I can imagine a broad range of dive...
+├─ Guillermo García Cobo (2022-10-18 11:21:04.823000) [+3]
+│  First of all, congrats on the great and "simple" solution @philippsinger @ybabakhin @ilu000! Although you plan to share more details of your solution in December, I couldn't wait to ask you a few q...
+  ├─ Leo Black (2022-10-27 08:51:04.370000) [+0]
+  │  Why do you say  "Your final size is t=5, which is relatively small. Did larger stack sizes perform considerably worse? We thought that more context was needed, so the smaller size that we tested wa...
+  ├─ Guillermo García Cobo (2022-10-31 17:34:27.160000) [+2]
+  │  Thank you for your question @deepervision, the author said in another comment:
+  │  
+  │  
+  │    
+  │  So actually it is t=5 (3d) and c=3 (2.5d) making it overall 15.
+├─ Psi (2023-01-05 11:13:13.480000) [+2]
+│  Added a few more details to the solution! If there are any more questions, please shoot (but don't score!).
+│  
+│  We are obviously very happy with our result and really impressed by the great generaliza...
+  ├─ Camaro (2023-01-05 11:25:21.283000) [+1]
+  │  Thanks for the update! I was really about to ask a question about how you feed sequence of images both for channel dim and temporal dim, but now I'm satisfied🤗
+  │  Don't ask why I'm still caring about ...
+    ├─ Psi (2023-01-05 15:59:05.667000) [+1]
+    │  I wonder why :)
+  ├─ [deleted] (2023-01-17 16:26:02.383000) [+0]
+  │  [deleted]
+  ├─ Joga (2023-01-19 15:33:00.290000) [+0]
+  │  Thanks so much for sharing and congratulations to the 1st place! I am rather new to DL and computer vision and have some basic questions:
+  │  
+  │  
+  │  
+  │  Did you use the pre-trained weights for ImageNet for the...
+    ├─ Psi (2023-02-09 11:33:31.447000) [+2]
+    │  Yes ImageNet pretrained, and no freezing.
+    │  
+    │  All through the same backbone
+    │  
+    │  Pytorch all the time
+    │  
+    │  Mixup, apart from that nothing specific, random flip, bit of resizing
+    ├─ happymentee (2023-02-17 22:30:19.740000) [+0]
+    │  Do you use any Trainer built on pytorch, such as pytorch lightning?
+    ├─ Joga (2023-02-19 13:02:46.967000) [+0]
+    │  Awesome -- thanks so much! :)
+├─ Leon (2022-10-17 06:10:41.863000) [+1]
+│  Congratulations on your 1st place! 
+│  I am confused by the channel and time domain you described. Does it mean (batch,t=15,c=3,h,w) -&gt; (batch*t,c,h,w) -&gt; 2.5d+3d -&gt; (batch,t,classes=3)?
+  ├─ Psi (2022-10-17 12:17:26.083000) [+3]
+  │  So actually it is t=5 (3d) and c=3 (2.5d) making it overall 15.
+  ├─ Leon (2022-10-17 12:46:06.503000) [+0]
+  │  I see, thank you.
+  ├─ notinvitedloki (2022-10-18 02:19:39.710000) [+0]
+  │  thanks a lot!
+  ├─ Leo Black (2022-10-27 09:00:11.697000) [+0]
+  │  is it (batch,t=5,c=3,h,w) -&gt; (batch*t,c=3,h,w) -&gt; 2.5d+3d -&gt; (batch,t,classes=3)  ?
+├─ ledifof (2022-10-16 20:15:19.457000) [+1]
+│  This tutorial was really useful and beneficial for beginners. I will like to learn more on machine learning, and I am very excited about it.
+├─ Fnoa (2022-10-14 17:38:31.977000) [+1]
+│  Congratulations! Always a pleasure to read your solutions
+├─ VIGNESHWAR REDDY M (2022-10-14 14:18:36.787000) [+1]
+│  Impressive, great work Team Hydrogen 🚀🚀
+├─ Vladislav Ostankovich (2022-10-14 14:36:46.803000) [+2]
+│  Can't believe this solution worked so good) Impressive! Will be waiting for the complete solution.
+├─ Darragh (2022-10-14 12:52:58.257000) [+2]
+│  Impressive, great work Team Hydrogen 🚀🚀
+├─ Shravan Jindal (2023-09-16 17:22:20.640000) [+0]
+│  Real nice way, simple and effective. Congratulations :)
+├─ sabarita venkat (2023-07-31 04:18:16.217000) [+0]
+│  Hi can you please tell about what is the post processing that is used to reduce the false positives.
+│  Also, I would like know about the class wise precision or accuracy on the public leader board te...
+├─ Sain (2023-02-28 19:30:42.187000) [+0]
+│  I am new to this type of problems, thanks for sharing this will help a lot! And also Congrats for securing 1st place!
+├─ ivanovas (2023-01-24 15:01:18.047000) [+0]
+│  Congratulations on your 1st place solution!
+│  
+│  I was reading through the solution and I was thinking about how I would tackle this problem the first thing that popped into my mind is to use a proposa...
+├─ ZEROUAL  SLIMANE (2022-10-21 18:34:05.310000) [+0]
+│  Congratulations! and thank you for sharing.
+├─ Sinu Sheoran (2022-10-18 12:09:57.940000) [+0]
+│  This tutorial was really useful and beneficial for beginners.
+├─ Pranay Joshi (2022-10-18 11:53:28.307000) [+0]
+│  congratulations team Hydrogen
+├─ Mushtaq Ahmad (2022-10-18 10:17:34.083000) [+0]
+│  it was really helpful.
+├─ Max Wei (2022-10-18 08:10:27.440000) [+0]
+│  Great work!
+├─ Rahul Pandey (2022-10-18 07:06:40.663000) [+0]
+│  That really amazing to see your work @philippsinger @ybabakhin and @ilu000!. I like to try it with some other real video classification. If possible, can your notebook as per your agreement.
+├─ Y-Haneji (2022-10-18 04:55:25.093000) [+0]
+│  @philippsinger 
+│  Ccngratulations!
+│  How did you convert RGB pretrained weight to grayscale one? You used 3channels input but it was 3 stacked grayscale images not RGB channels.
+├─ AndrewTao (2022-10-17 11:58:22.933000) [+0]
+│  Can you say a bit about how much you gain from going 3 to 15 frames? Did you pose this as 3 image channels + 5 time dimension so that you could use imagenet pretrained models? I mean as opposed to ...
+  ├─ Leo Black (2022-10-27 08:53:54.143000) [+0]
+  │  Do you mean that 
+  │  one input with 15 channels 
+  │  is got by 5  images  (with BGR 3 channels) ?
+├─ Theo Viel (2022-10-17 10:47:24.523000) [+0]
+│  Congratz on the great performance @philippsinger @ybabakhin @ilu000 !
+│  
+│  How do you handle the 2D -&gt; 3D transition ?
+│  
+│  This is how I am considering doing it :
+│  
+│  
+│  
+│  Replace the Conv2Ds to Conv3Ds (and...
+  ├─ Psi (2022-10-17 11:00:14.950000) [+2]
+  │  There are quite a few different ways of doing it and what works for a specific problem is experimental. In general you can reshape from 2D to 3D and back quite easily, so if you start with bs x fra...
+  ├─ Theo Viel (2022-10-17 11:31:44.483000) [+0]
+  │  I see, that makes more sense, thanks !
+  ├─ Fnoa (2022-10-21 07:32:10.880000) [+0]
+  │  I guess this way you can use pre-trained 2D encoders right?
+  │  Do you know of any useful documentation for this?
+  │  
+  │  Thanks in advance!
+├─ Shanni786 (2022-10-16 22:08:49.447000) [+0]
+│  Big congrats @philippsinger, @ybabakhin and @ilu000!
+├─ Felix nediv (2022-10-16 16:36:38.450000) [+0]
+│  Impressive, great work Team Hydrogen 🚀🚀
+├─ Zutarich (2022-10-15 13:07:05.970000) [+0]
+│  I tried to understand the article, but couldn't get many of its technical aspects it's my first day on Kaggle hope to learn and come back some day and understand it thoroughly! Any piece of advice ...
+├─ datadote (2022-10-15 02:14:20.123000) [+0]
+│  Nice work! Are you able to describe how the training dataset was made? For example, what distribution of labels, types of image saved, any compression/interpolation, skipping frames? Thank you
+├─ Rafi Hai (2022-10-14 22:29:47.157000) [+0]
+│  Impressive work with one stage-model. team Hydrogen - you really scored here! ⚽
+│  I cannot wait extra two months for detailed write-up, so hope you can answer below :) 
+│  
+│  
+│    
+│  Input is 1024x1024 graysc...
+  ├─ Psi (2022-10-15 09:55:16.187000) [+2]
+  │  The stacking means that you concat e.g. frame 14,15,16 to 3 channels when looking at frame 15.
+  │  
+  │  We add lots of BG images, but dont add a separate 4th class, with BCE you can have all label columns ...
+  ├─ Leo Black (2022-10-27 09:10:12.810000) [+0]
+  │  Hi, I think it may be more clear to modify the example here to   concat frame 18,19,20 to 3 channels when looking at frame 19, because people like me are already confused with the meaning of "15 fr...
+├─ Mohammad Ateeq (2022-10-14 17:24:33.007000) [+0]
+│  If you used 3 target classes, how did you recognize background frames
+  ├─ Psi (2022-10-14 18:16:47.603000) [+1]
+  │  I don't need to recognize them specifically, you only really need another BG class if you use softmax.
+├─ [deleted] (2022-10-14 16:24:39.860000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-10-14 18:16:08.533000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2022-10-14 18:47:12.330000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2022-10-14 19:10:42.083000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-10-14 13:29:35.903000) [+0]
+│  [deleted]
+├─ [deleted] (2022-10-14 12:03:23.937000) [+0]
+│  [deleted]
+  ├─ [deleted] (2022-10-14 13:29:39.940000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2022-10-18 09:37:33.973000) [+0]
+  │  [deleted]
+├─ [deleted] (2022-10-17 18:22:02.100000) [+1]
+│  [deleted]
+├─ [deleted] (2022-10-18 04:57:08.980000) [+2]
+│  [deleted]
+├─ [deleted] (2022-10-18 15:12:56.693000) [+0]
+│  [deleted]
+├─ [deleted] (2022-10-17 12:15:51.720000) [+0]
+│  [deleted]
+├─ [deleted] (2022-10-14 14:33:14.403000) [+0]
+│  [deleted]
+├─ [deleted] (2022-10-14 12:29:49.060000) [+0]
+│  [deleted]

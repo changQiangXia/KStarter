@@ -1,0 +1,82 @@
+# foursquare-location-matching 讨论区（按票数排序，共 80 条）
+
+- [Normalizing unicode strings using Unidecode](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/320938) — 128 票 / 11 评论 / 2022-04-24 
+- [13th place solution (GNN)](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336124) — 102 票 / 34 评论 / 2022-07-10 **write-up?**
+- [1st place solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336055) — 92 票 / 22 评论 / 2022-07-09 **write-up?**
+- [Sharing My Baseline](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/324653) — 70 票 / 31 评论 / 2022-05-12 
+- [7th place solution(with inference code)](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335800) — 66 票 / 6 评论 / 2022-07-14 **write-up?**
+- [3rd place solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/338112) — 61 票 / 30 评论 / 2022-07-19 **write-up?**
+- [Few note about XGBoost & Feature Engineering/Feature Selection](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/321992) — 61 票 / 11 评论 / 2022-04-29 
+- [Do not forget to report plagiarism](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319620) — 59 票 / 16 评论 / 2022-04-18 
+- [Leakage (67% of test rows leaked - more than anyone expected.)](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335799) — 59 票 / 132 评论 / 2022-07-08 
+- [4th place solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335810) — 59 票 / 20 评论 / 2022-07-09 **write-up?**
+- [Competition Leakage - Investigating](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336518) — 54 票 / 67 评论 / 2022-07-11 
+- [Matching tricks from the winners of Shopee Competition](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/329472) — 54 票 / 3 评论 / 2022-06-06 
+- [15th place solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335818) — 49 票 / 4 评论 / 2022-07-08 **write-up?**
+- [My solution for location matching](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/325732) — 40 票 / 21 评论 / 2022-05-18 **write-up?**
+- [A few notes on #16 solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335860) — 39 票 / 10 评论 / 2022-07-08 **write-up?**
+- [4th Place Code](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335921) — 39 票 / 1 评论 / 2022-07-08 **write-up?**
+- [Interesting Kaggle public datasets on locations ](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319050) — 38 票 / 2 评论 / 2022-04-15 
+- [2nd place solution - Brief Summary](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336062) — 38 票 / 2 评论 / 2022-07-09 **write-up?**
+- [Welcome!!!](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/318967) — 37 票 / 46 评论 / 2022-04-14 
+- [Gap between CV and LB?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319638) — 37 票 / 18 评论 / 2022-04-18 
+- [Joining In Late? Enjoy a Summary of the Top Notebooks](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/327127) — 37 票 / 2 评论 / 2022-05-25 
+- [11th place code and solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335924) — 36 票 / 2 评论 / 2022-08-23 **write-up?**
+- [Pytorch Training Starter using ArcFace](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319775) — 34 票 / 7 评论 / 2022-04-18 
+- [Why was the private train set replaced?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335897) — 34 票 / 10 评论 / 2022-07-08 
+- [8th place solution [SBERT + LightGBM]](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335928) — 32 票 / 2 评论 / 2022-07-08 **write-up?**
+- [How to use RAPIDS ForestInference for speed up inference on Lightgbm/XGBoost](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/328242) — 32 票 / 3 评论 / 2022-05-31 
+- [9th place solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336415) — 32 票 / 6 评论 / 2022-07-11 **write-up?**
+- [Reduce Memory function](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/321520) — 30 票 / 7 评论 / 2022-04-27 
+- [Competition is Finalized - Investigation Update](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/338035) — 29 票 / 41 评论 / 2022-07-18 
+- [Haversine Distance Computation](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319853) — 29 票 / 1 评论 / 2022-04-19 
+- [2nd place solution - colum2131 Part](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336090) — 28 票 / 2 评论 / 2022-07-10 **write-up?**
+- [[21st place solution]](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335857) — 27 票 / 10 评论 / 2022-07-08 **write-up?**
+- [ 🏆 Similar competitions and winner solution](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319353) — 27 票 / 4 评论 / 2022-04-16 **write-up?**
+- [How to Debug CPU and GPU memory usage and time consuming process](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336462) — 26 票 / 0 评论 / 2022-07-11 
+- [Usage of foursquare API and google place API](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319562) — 26 票 / 3 评论 / 2022-04-18 
+- [Tricks used by the winning solutions [Summary]](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336140) — 26 票 / 4 评论 / 2022-07-09 **write-up?**
+- [2nd place solution - T0m Part](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336072) — 25 票 / 8 评论 / 2022-07-09 **write-up?**
+- [self-macth only prediction achive 0.649 in both Train and Public LB](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/323722) — 25 票 / 6 评论 / 2022-05-08 
+- [12th Place Short Summary](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336051) — 25 票 / 2 评论 / 2022-07-09 **write-up?**
+- [Are POIs simulated or from real places? Are Personally Identifiable Information respected?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319722) — 24 票 / 2 评论 / 2022-04-18 
+- [What is the theoretical highest score and CV on train data?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/329502) — 22 票 / 25 评论 / 2022-06-07 
+- [LB Probe Result on Leakage - About 67.0% of Rows are Leaked](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336047) — 22 票 / 3 评论 / 2022-07-09 
+- [Cheating！Cheating！Cheating！](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336030) — 21 票 / 7 评论 / 2022-07-09 
+- [Inconsistency within POIs](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319500) — 21 票 / 7 评论 / 2022-04-17 
+- [0.940, wow!](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/331674) — 21 票 / 24 评论 / 2022-06-18 
+- [[Question] "leakage" lead to better LB scores???](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/328872) — 21 票 / 20 评论 / 2022-06-03 
+- [A modest proposal](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335853) — 19 票 / 3 评论 / 2022-07-08 
+- [This leak/bug is not easy to find！](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335906) — 18 票 / 6 评论 / 2022-07-08 
+- [KNN -> Convert to Pairs FAST](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/326961) — 18 票 / 3 评论 / 2022-05-25 
+- [Simulation result of artificial leaks: hint of noticing leak during competition](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336448) — 17 票 / 1 评论 / 2022-07-11 
+- [List of related materials (NLP, entity resolution, etc.)](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/330106) — 17 票 / 4 评论 / 2022-06-10 **write-up?**
+- [Which POIs to consider for matches in submission?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319055) — 17 票 / 3 评论 / 2022-04-15 
+- [[Question] Does anyone use BERT?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/324335) — 16 票 / 7 评论 / 2022-05-11 
+- [A matches B, B matches C, does A match C?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/324407) — 16 票 / 7 评论 / 2022-05-11 
+- [Let's share our score with leak version and form a new leak_leaderboard](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336092) — 15 票 / 23 评论 / 2022-07-09 
+- [Adding more features result in Overfitting](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/327211) — 15 票 / 0 评论 / 2022-05-26 
+- [ state-of-the-art & useful papers in Recommendation/Node Classification](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319354) — 15 票 / 3 评论 / 2022-04-16 
+- [Purpose of Pairs.csv](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319033) — 15 票 / 17 评论 / 2022-04-15 
+- [[Part 2] A Deep dive into XGBoost, LightGBM, Catboost](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/330399) — 15 票 / 0 评论 / 2022-06-12 
+- [Is the "match" in pairs.csv also noisy?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319942) — 14 票 / 5 评论 / 2022-04-19 
+- [What do we know so far? - Analysis of the top discussion posts](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/331255) — 14 票 / 0 评论 / 2022-06-16 
+- [Be careful to the unit of latitude and longitude](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/331045) — 14 票 / 1 评论 / 2022-06-15 
+- [Attention research paper lemmings! Here are some sweet sweet deduplication + ML papers for you to chew on!](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/321370) — 13 票 / 0 评论 / 2022-04-26 
+- [EDA: visualize size of POIs](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/331034) — 13 票 / 2 评论 / 2022-06-15 
+- [[Part 1] A Deep dive into XGBoost, LightGBM, Catboost Hyperparameters](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/330398) — 13 票 / 1 评论 / 2022-06-12 
+- [3 useful notebooks](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335873) — 12 票 / 2 评论 / 2022-07-08 
+- [Dataset contains mistakes in location](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/322028) — 12 票 / 4 评论 / 2022-04-29 
+- [Solution Sharing: Scalable Blocking Using H3 Geospatial Index](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/336232) — 12 票 / 2 评论 / 2022-07-10 **write-up?**
+- [multilingual pre-trained language models](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/330058) — 12 票 / 4 评论 / 2022-06-10 
+- [What country do "AN", "EU", "XK", "XX" represent ?](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/324387) — 12 票 / 4 评论 / 2022-05-11 
+- [Updation of the EDA notebook (haversine formula, similarity measures)](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/334775) — 11 票 / 2 评论 / 2022-07-03 
+- [Final days Meme Thread!](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335252) — 10 票 / 11 评论 / 2022-07-05 
+- [(Un)Shakeup plots](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335875) — 10 票 / 2 评论 / 2022-07-08 
+- [Simple Silver Solution.](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335844) — 10 票 / 5 评论 / 2022-07-08 **write-up?**
+- [Pitfalls with pair-wise models & matching problems in general](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/331170) — 10 票 / 0 评论 / 2022-06-16 
+- [23rd place solution (arcmargin)](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/335883) — 10 票 / 3 评论 / 2022-07-08 **write-up?**
+- [Useful datasets and links about Location](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319336) — 10 票 / 0 评论 / 2022-04-16 
+- [First Tabular Ranked Competition Also coming!!!](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/319332) — 10 票 / 0 评论 / 2022-04-16 
+- [New to Kaggle or Machine Learning? Come Say Hi!](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/318961) — 7 票 / 1 评论 / 2022-04-14 
+- [Leaderboard is Finalized - Congrats to our Winners, Recap](https://www.kaggle.com/competitions/foursquare-location-matching/discussion/338720) — -40 票 / 10 评论 / 2022-07-21 

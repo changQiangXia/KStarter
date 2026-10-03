@@ -1,0 +1,82 @@
+<p>This is an intesting game, I learned a lot from </p>
+<p><a href="https://www.kaggle.com/code/hoyso48/1st-place-solution-training" target="_blank">https://www.kaggle.com/code/hoyso48/1st-place-solution-training</a><br>
+<a href="https://www.kaggle.com/code/irohith/aslfr-ctc-based-on-prev-comp-1st-place" target="_blank">https://www.kaggle.com/code/irohith/aslfr-ctc-based-on-prev-comp-1st-place</a><br>
+<a href="https://www.kaggle.com/code/markwijkhuizen/aslfr-transformer-training-inference" target="_blank">https://www.kaggle.com/code/markwijkhuizen/aslfr-transformer-training-inference</a></p>
+<h1><strong>Preprocss</strong></h1>
+<ol>
+<li><strong>Do not throw away frames witout hands!</strong></li>
+<li>Use as much info as possible, (hands, lips, eye, nose, pose) , use (x,y,z)</li>
+<li>Use more frames, resize to 320 frames for model training.</li>
+<li>I used <strong>original + normalized + abs position(/1000.)</strong> as input feats(total 384 * 2 + 1 = 769). <br>
+normalized feats help converge much faster but I found original feats also helps.</li>
+</ol>
+<h1><strong>Aug</strong></h1>
+<p>I followed last competion 1st solution, and found the most important aug are </p>
+<ol>
+<li><strong>time scale (interp1d)</strong></li>
+<li><strong>time dim mask</strong><br>
+I used heavy mask here which will mask some time seq and aslo will <strong>randomly mask 50% frames</strong></li>
+<li>affine <br>
+follow preve 1st solution with prob 0.75, for left-right flip only with prob 0.25</li>
+</ol>
+<h1><strong>Training</strong></h1>
+<ol>
+<li>I used <strong>train data + sup data combined training with sup data weight set to 0.1</strong> for 400 epochs.</li>
+<li>batch size 128, max lr 2e-3, lr scheduler using linear decay with 0.1 epochs warmup , adam optimizer</li>
+<li>Awp training started from epochs * 0.15, with adv_lr 0.2 and adv_eps 0.</li>
+<li><strong>Fintune with train data only for 10 epochs</strong> with max lr 1e-4, awp start from epoch 2.  </li>
+</ol>
+<h1><strong>Postdeal</strong></h1>
+<p>I used <strong>rule for blank index(0)</strong><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2F54e452eca19b2ee1610a7ecef4ea7cdc%2F1.png?generation=1692937017778775&amp;alt=media" alt=""></p>
+<h1><strong>Model</strong></h1>
+<ol>
+<li><strong>Squeezeformer</strong>  works best, it is a bit faster then conformer. (Code from NEMO)</li>
+<li>In order to make net deeper I used <strong>1 down sampling layer to reduce frames from 320 to 160</strong>.<br>
+This is mainly helpful for adding more encoder layers, and also can allow using complex encoder layers.</li>
+<li><strong>Relative pos encoding</strong> affect the performance so much, I found <strong>ROPE(by Jianlin Su)</strong> perform best and super fast. (code from huggingface implementation)</li>
+<li><strong>Dropout is super important, I used final cls_drop=0.1 only, no dropout for other layers.</strong></li>
+<li>I learned from 1st-place-solution-training that <strong>stochastic path</strong> is <strong>super important to avoid overfit for deep network</strong>. So I used it in squeeeze former block for each layer like below(notice the InstDropout and 0.5 skip factor all super important for final performance)<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2Ffb17306d174a4bd7a4b81ad0acdc0ade%2F2.png?generation=1692937044317556&amp;alt=media" alt=""><br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2F4834f8f3d02efab8d8f0bbe32a79f9a4%2F3.png?generation=1692937055628577&amp;alt=media" alt=""><br>
+Overall model arch below:<br>
+<img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F42245%2F68866c3f59e3e6b2f308a54fc8b94248%2F4.png?generation=1692937099435075&amp;alt=media" alt=""></li>
+</ol>
+<h1><strong>Others</strong></h1>
+<ol>
+<li>For me (using 4090), torch much faster then tf (3-4 times faster)  </li>
+<li>I used tf at first and swich to torch in the last month which help to speedup experiments a lot.    <br>
+Speed is only one factor, another important thing is I could easily try opensource code of ASR like NEMO or espnet.</li>
+<li>I used <strong>nobuco</strong> to convert torch model to keras, it works like a charm.  </li>
+<li>I still used tf for prorcess/aug and post process and also use tfrecord as input format, I wrote a torch iterable dataset which wrap tfrecord reader.</li>
+</ol>
+<h1><strong>TODOS</strong></h1>
+<p>Due to time limit, I could not finish more experiments at last days, but some possible improvements might be</p>
+<ol>
+<li>Model can be deeper up to <strong>20 layers</strong><br>
+20 layer model perform better then 17 layers but I only trained 300 epochs which perform not as good as 17 layers + 400 epochs.</li>
+<li>More epochs training, maybe 500 or 600 ? <br>
+For 17 layer model from 300 to 400 improve LB 4 points and PB 2 points, so might sitll could train more epochs and might use 20 layer model for more epochs help even more:)</li>
+<li>From what I learned from other solutions, it seems I missed some major points here</li>
+</ol>
+<ul>
+<li>cutmix<br>
+this is a pity, I planned to do this at the begging but did not try it, as I found hard mask of frames(50%+) worked very well, I should have realized that cut mix might help even more.  <br>
+simple concat 2 instances  <br>
+concat with some ratio like 0.7 and 0.3  <br>
+concat with using ctc segmentation   </li>
+<li>seq2seq method and ctc+attention decode method    <br>
+I tried seq2seq using tf at the begging of this competition but not give good results, should have tried it after changing to use torch with squeezeformer encoder.  </li>
+<li>input len mask to speedup infer</li>
+<li>try even more max input frames from 320 to 384 or 512(with input len mask infer)</li>
+</ul>
+<h1><strong>Code</strong></h1>
+<p>Opensource all codes here:  <br>
+<a href="https://www.kaggle.com/code/goldenlock/3rd-place-step1-gen-tfrecords-for-train" target="_blank">https://www.kaggle.com/code/goldenlock/3rd-place-step1-gen-tfrecords-for-train</a><br>
+<a href="https://www.kaggle.com/code/goldenlock/3rd-place-step2-gen-tfrecords-for-supplement" target="_blank">https://www.kaggle.com/code/goldenlock/3rd-place-step2-gen-tfrecords-for-supplement</a><br>
+<a href="https://www.kaggle.com/code/goldenlock/3rd-place-step-3-gen-mean-and-std" target="_blank">https://www.kaggle.com/code/goldenlock/3rd-place-step-3-gen-mean-and-std</a><br>
+<a href="https://www.kaggle.com/code/goldenlock/3rd-place-step-4-train-squeezeformer" target="_blank">https://www.kaggle.com/code/goldenlock/3rd-place-step-4-train-squeezeformer</a><br>
+<a href="https://www.kaggle.com/code/goldenlock/3rd-place-step-5-torch2keras-using-nobuco" target="_blank">https://www.kaggle.com/code/goldenlock/3rd-place-step-5-torch2keras-using-nobuco</a><br>
+<a href="https://www.kaggle.com/code/goldenlock/3rd-place-step-6-inference" target="_blank">https://www.kaggle.com/code/goldenlock/3rd-place-step-6-inference</a>  <br>
+Notice I did not reproduce my final results using kaggle notebooks, so if you want to reproduce or want to find the original code you could find it here:<br>
+<a href="https://github.com/chenghuige/Google-American_Sign_Language_Fingerspelling_Recognition" target="_blank">https://github.com/chenghuige/Google-American_Sign_Language_Fingerspelling_Recognition</a>  </p>

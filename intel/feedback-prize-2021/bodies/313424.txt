@@ -1,0 +1,260 @@
+# https://www.kaggle.com/competitions/feedback-prize-2021/discussion/313424
+
+Topic #313424: 6th place solution. A YOLO-like text span detector.
+  Author: tascj
+  Posted: 2022-03-17 03:02:29.593000
+  Votes: 165  Comments: 40
+
+Thank you for hosting this awesome competition and congrats to the winners.
+
+This problem is interesting and challenging. The data and annotations are high quality. It's a great learning and practicing experience working on this competition.
+
+I started this competition compeletely ignoring those shared NER baselines. I thought in an "object detection" task, segmentation + posprocess approaches can not do better than object detection approaches. I'm surprised by the postprocess ideas in top solutions.
+
+Overall, what I made is a YOLO-like text span detector. I share my code in this notebook.
+
+Checkpoints are shared here.
+
+To reproduce the checkpoints, check the code and configs here.
+
+Modeling
+
+Network
+
+AutoModelForTokenClassification.from_pretrained(num_labels=1 + 2 + num_classes, ...)
+
+
+1 for objectness (or span-ness?. fg/bg classification)
+
+2 for regression (distance from fg location to first and last index of corresponding span)
+
+num_classes for discourse type classification
+
+Aggregate tokens to words
+
+Network logits is in shape (num_tokens, 10). This is inconvenient (decoding output, ensembling models with different tokenizers). So I aggregate the logits to (num_words, 10) using RoIAlign.
+
+Training target
+
+The problem of this formulation is how to define positive for objectness training. In object detection, center of object is a natural choice of positve. In text span detection, I found the first word of span a good choice of positive.
+
+In addition, I assign lowest cost word in each span as positive during training. This is inspired by YOLOX.
+
+Augmentation, loss, decoding outputs, etc.
+
+I randomly replace tokens with mask token during training.
+
+For other details, please check the code.
+
+Post process
+
+The only post process is nms.
+
+Ensemble
+
+I used one cycle policy in training and averaged weights of the last few epochs.
+To ensemble different models/folds, I simply averaged outputs of models.
+WBF ensemble does not work in local validation, and I didn't figure out why. I think I did something wrong here.
+
+Results
+
+
+
+
+backbone
+Validation
+Public LB
+Private LB
+
+
+
+
+google/bigbird-roberta-base
+0.685~0.69
+
+
+
+
+allenai/longformer-base-4096
+0.685~0.69
+
+
+
+
+allenai/longformer-large-4096
+0.70~0.71
+
+
+
+
+microsoft/deberta-base
+0.70~0.705
+
+
+
+
+microsoft/deberta-large
+0.715~0.72
+
+
+
+
+microsoft/deberta-xlarge
+0.715~0.72
+
+
+
+
+microsoft/deberta-large + microsoft/deberta-xlarge
+0.723
+0.714
+0.732
+
+
+
+
+The best combination is deberta-large + deberta-xlarge. Ensembling more does not help.
+In the final submission, I used 2 weights (2/5 folds) each model. Submission time is around 2 hours.
+
+Comments:
+├─ Theo Viel (2022-03-17 15:41:59.203000) [+15]
+│  This solution should be #1
+│  
+│  More seriously, it is very elegant and I'm pretty sure that there is room for improvement - perhaps it would outperform other approaches if combined with a features+boos...
+  ├─ CroDoc (2022-03-17 15:59:03.777000) [+1]
+  │  Submission time 2h ha ha … crazy…
+  ├─ Ken Krige (2022-03-17 19:41:31.397000) [+0]
+  │  This solution should be #1
+  │  
+  │  
+  │  Agree
+  ├─ tascj (2022-03-18 00:34:41.197000) [+2]
+  │  Thank you.
+  │  
+  │  Yes there is room for improvement. I didn't try ensemble until the last day because I thought WBF would just work, however it did not work as expected. There are TPs in bigbird model ou...
+├─ hxcc (2022-03-17 04:33:18.033000) [+9]
+│  love how you tackle an NLP problem with CV methods and made it work. Simple, elegant, very little ensembling, fast inference time. My favourite solution so far! Thanks for sharing!
+├─ CroDoc (2022-03-17 13:41:43.177000) [+1]
+│  Your work on this competition is just WOW! Well done!
+├─ gezi (2022-03-17 03:44:16.553000) [+1]
+│  Really elegant and creative work!  Want to have a try😃
+├─ KhanhVD (2022-03-17 03:15:23.437000) [+1]
+│  Interesting solution! Congrats on 6th place and thanks for sharing your approach.
+├─ Mr Nagrom (2022-07-08 11:55:03.963000) [+0]
+│  Great model !!
+│  I had thought of the same segmentation approach with YOLO but I failed to make my model as efficient as yours and I finally find myself at the 1937 position of the competition. But t...
+├─ gagaa (2022-04-05 13:55:11.767000) [+0]
+│  thanks for sharing! you mention "In text span detection, I found the first word of span a good choice of positive.",in this situation   is there no possible to predict firest location of span?so nu...
+  ├─ tascj (2022-04-07 08:49:57.353000) [+0]
+  │  Yes. 1 is enough for single positive assignment, 2 is used for the extra dynamically assigned positive.
+├─ GUNER (2022-03-22 08:15:12.473000) [+0]
+│  One (more) tiny :-) question on 'dynamic_pozitive' targets :
+│  As the first word is always the target and the 'dynamic_pozitive' is an add on without a fixed grid-location (it is calculated based on ...
+  ├─ tascj (2022-03-23 00:52:58.100000) [+1]
+  │  I had the same concern. The cost is not equal to loss, and there are random masking augmentation so in practice it does not happen and dynamic positive improves score. Actually in practice there co...
+  ├─ GUNER (2022-03-23 03:18:48.940000) [+0]
+  │  Thanks again.
+├─ tyaba (2022-03-22 06:48:21.077000) [+0]
+│  Thank you for sharing your wonderful solution!
+│  I would like to know what fg and bg refer to.
+  ├─ tascj (2022-03-23 00:44:23.757000) [+1]
+  │  foreground and background
+  ├─ tyaba (2022-03-23 02:09:34.597000) [+0]
+  │  Thank you for your replying!
+├─ Mohammad Al-Azawi (2022-03-21 08:36:51.313000) [+0]
+│  interesting
+├─ Aruna S (2022-03-20 17:36:26.533000) [+0]
+│  Well done !! Congratulations @tascj0 !!🤩🤩
+├─ akshay kumar sahu (2022-03-19 17:30:48.297000) [+0]
+│  well done, get this to top
+├─ Niek van der Zwaag (2022-03-19 05:06:44.323000) [+0]
+│  Creative solution, thanks for sharing your thoughts and process 🙌
+├─ GUNER (2022-03-18 13:53:44.310000) [+0]
+│  '''Network logits is in shape (num_tokens, 10)'''
+│  Because the model creates output for each token (CV-pixel equivalent), isn't it more like a segmentation rathen than a detection job, thus falling ...
+  ├─ tascj (2022-03-19 00:35:00.993000) [+1]
+  │  isn't it more like a segmentation rathen than a detection job
+  │  
+  │  
+  │  No. obj_loss is computed using all words output, reg_loss and cls_loss are computed using output at positive locations, others ignore...
+  ├─ GUNER (2022-03-19 03:35:48.377000) [+0]
+  │  Got it, thanks.
+├─ GUNER (2022-03-18 13:32:11.773000) [+0]
+│  '''In addition, I assign lowest cost word in each span as positive during training.'''
+│  
+│  We are talking about the ground truth span and creating 'an additional positive' (in addition to the first wo...
+  ├─ tascj (2022-03-19 00:32:07.833000) [+1]
+  │  additional loss will be calculated, right?
+  │  
+  │  
+  │  The more positive you have, the more "samples" you have to compute cls_loss and reg_loss. So yes.
+  │  
+  │  
+  │    
+  │  what is this other word 'lowest cost' of/to?
+  │  
+  │  
+  │  Th...
+  ├─ GUNER (2022-03-19 03:34:44.717000) [+0]
+  │  Thank you.
+├─ patriot (2022-03-18 12:05:21.700000) [+0]
+│  Thank you for the original solution! There is much to learn from you.
+│  
+│  
+│    
+│  I used one cycle policy in training and averaged weights of the last few epochs
+│  
+│  
+│  Is this something like SWA / EMA that av...
+  ├─ tascj (2022-03-19 00:27:44.167000) [+1]
+  │  It's SWA, average of weights of different epochs in single hyperparameters setting. Model soups seems to be average of different weights from same pretrain using different hyperparameters.
+├─ Patrick Chan (2022-03-18 07:55:39.700000) [+0]
+│  MasterStroke… or should I say Grandmaster strokes!  Well done and very innovative indeed crafting CV techniques into the NLP world! Thks very much for the share.  Much room for improvement with ens...
+  ├─ tascj (2022-03-19 00:38:34.090000) [+0]
+  │  Any idea why the WBF did not work in your case?
+  │  
+  │  
+  │  Unfortunately no.
+  ├─ tascj (2022-03-19 11:50:41.033000) [+5]
+  │  @drpatrickchan It seems to be just wrong hyperparameters. A low iou_thr (0.2) is necessary to ensemble my models. Didn't try iou_thr lower than 0.5.
+  │  
+  │  Thanks to the post processing code shared by @c...
+├─ kwchen (2022-03-18 04:59:49.853000) [+0]
+│  Congratulations and wow this solution is amazing!
+│  From the YOLO paper:
+│  
+│  
+│    
+│  It weights localization er?ror equally with classification error which may not be ideal.
+│  
+│  
+│  Did you try tuning the weights...
+  ├─ tascj (2022-03-18 07:14:59.430000) [+2]
+  │  Thank you.
+  │  
+  │  I tried a few settings, the loss weights between classification and regression does not matter much.
+  │  
+  │  The loss weight of objectness is important.
+  │  Following YOLOX, I use
+  │  
+  │          num_tot...
+├─ Ken Krige (2022-03-17 19:40:44.330000) [+0]
+│  So interesting - well done. I wish I could have spent more time on this competition, but definitely going to experiment with your code.
+├─ SchenbergZ (2022-03-17 09:49:02.183000) [+0]
+│  Congrats! 2 questions: what is your first output head objectness meaning? Is your inference result only based on the 2nd output-head calculation and the discource-type based on 3rd output head?
+  ├─ tascj (2022-03-17 10:50:09.603000) [+2]
+  │  Thank you.
+  │  
+  │  
+  │    
+  │  what is your first output head objectness meaning? 
+  │  
+  │  
+  │  Objectness target is a vector of shape (num_words, ). For each ground truth span, you have at least one positive word (1 in the...
+├─ GUNER (2022-03-17 08:55:40.917000) [+0]
+│  You nailed it without hitting the nail a thousand times :-)
+│  You should be the one!
+├─ [deleted] (2022-03-22 08:29:12.100000) [+0]
+│  [deleted]
+├─ xiaofei007- (2022-03-22 13:17:20.577000) [+1]
+│  this tip help me a lot,thank you

@@ -1,0 +1,82 @@
+# asl-fingerspelling 讨论区（按票数排序，共 80 条）
+
+- [[1st place solution] Improved Squeezeformer + TransformerDecoder + Clever augmentations](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434485) — 242 票 / 93 评论 / 2023-08-31 **write-up?**
+- [Silver - LB 0.770 - Two Lines of Code!](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434353) — 98 票 / 45 评论 / 2023-08-25 
+- [🏆 Last ASL competition winner solution 🏆](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409438) — 91 票 / 17 评论 / 2023-05-11 **write-up?**
+- [2nd place solution - Test & Compare ASR algorithms](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434588) — 77 票 / 34 评论 / 2023-09-20 **write-up?**
+- [One month in - Here is everything that happened until now](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/421761) — 73 票 / 7 评论 / 2023-07-06 
+- [[3rd place solution with code] 17 layers squeezeformer with timerduce and ROPE ](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434393) — 53 票 / 32 评论 / 2023-09-02 **write-up?**
+- [[5th place solution] Vanilla Transformer, Data2vec Pretraining, CutMix, and KD](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434415) — 51 票 / 15 评论 / 2023-08-28 **write-up?**
+- [Competition deadline extended by two weeks](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/416149) — 46 票 / 27 评论 / 2023-06-09 
+- [9th Place Solution](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434871) — 43 票 / 8 评论 / 2023-08-26 **write-up?**
+- [UPDATED: Almost certainly corner cases in test data - and some hints for solving scoring failures (Tensorflow)](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/415372) — 37 票 / 5 评论 / 2023-06-06 
+- [A CTC implementation that work on Kaggle TPU](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/426504) — 37 票 / 11 评论 / 2023-07-23 
+- [Pro-tips on fingerspelling #1: double letters](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/416361) — 29 票 / 4 评论 / 2023-06-11 
+- [Google I/O spot from last ASL competition](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409420) — 28 票 / 5 评论 / 2023-05-10 
+- [CV Leaderboard](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/411060) — 27 票 / 25 评论 / 2023-05-17 
+- [Fingerspelling with Machine Learning](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409436) — 27 票 / 10 评论 / 2023-05-11 
+- [github resources on American sign language fingerspelling](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409443) — 26 票 / 3 评论 / 2023-05-11 
+- [12th solution- augmentation and more epochs](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434363) — 24 票 / 20 评论 / 2023-08-25 **write-up?**
+- [[code] Release 1st place solution code ](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/435938) — 23 票 / 1 评论 / 2023-08-31 **write-up?**
+- [Sequence modeling with CTC loss](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409512) — 23 票 / 5 评论 / 2023-05-11 
+- [Evaluation Time | Submission Issues](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409722) — 20 票 / 37 评论 / 2023-05-12 
+- [17th Solution: Conformer + CTCLoss +  500 epoch training](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434364) — 20 票 / 3 评论 / 2023-08-25 **write-up?**
+- [New to Machine Learning or Kaggle?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/407930) — 19 票 / 26 评论 / 2023-05-08 
+- [[4th Place Solution] Conformer Encoder-Decoder Ensemble with beam search and edit_dist optimization](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434983) — 19 票 / 13 评论 / 2023-08-27 **write-up?**
+- [Nothing on leaderboard yet?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/410459) — 19 票 / 42 评论 / 2023-05-15 
+- [[The 11th place] Shallow encoder-decoder model also works](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434475) — 18 票 / 8 评论 / 2023-08-25 **write-up?**
+- [What?  No one is going to comment on the rap video?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409878) — 18 票 / 4 评论 / 2023-05-12 
+- [PopSignAI Preview: progress from last ASL competition](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/417005) — 18 票 / 1 评论 / 2023-06-13 
+- [Pro-tips on fingerspelling #2: speed and elision](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/416470) — 18 票 / 3 评论 / 2023-06-11 
+- [🥈27th Place Solution🥈](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434388) — 18 票 / 10 评论 / 2023-08-25 **write-up?**
+- [Those who are interested in learning, this is my suggestion for the next step](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434350) — 18 票 / 1 评论 / 2023-08-24 
+- [Organisers: please thoroughly verify submission scoring scripts!](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/411878) — 16 票 / 3 评论 / 2023-05-21 
+- [Seq2seq model with CTC loss  OR  next token prediction model ?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/427297) — 15 票 / 12 评论 / 2023-07-27 
+- [I have a question about rules of competition](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/428492) — 15 票 / 4 评论 / 2023-08-01 
+- [TF Lite Runtime version number correction](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/414682) — 14 票 / 25 评论 / 2023-06-02 
+- [Correct input/output formats](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/412591) — 14 票 / 5 评论 / 2023-05-24 
+- [19th Place Solution - Jasper models](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434795) — 14 票 / 4 评论 / 2023-08-26 **write-up?**
+- [TFLite/Submission Problems Thread](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/413598) — 14 票 / 31 评论 / 2023-05-29 
+- [a quick summary of 13th solution](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434395) — 14 票 / 7 评论 / 2023-08-25 **write-up?**
+- [Organisers: PLEASE react to our concerns](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/414125) — 14 票 / 13 评论 / 2023-05-31 
+- [Pro-tips on fingerspelling #3: troublesome letters, contexts, and grammars](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/416829) — 13 票 / 0 评论 / 2023-06-13 
+- [33rd place solution - LB 0.758](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434409) — 13 票 / 3 评论 / 2023-08-25 **write-up?**
+- [Good luck to all!](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434231) — 13 票 / 12 评论 / 2023-08-24 
+- [Test Your ASL Fingerspelling Models with this Simple Gradio App](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/427471) — 11 票 / 2 评论 / 2023-07-28 
+- [2nd place code with reproducibility](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/436873) — 11 票 / 1 评论 / 2023-09-04 **write-up?**
+- [Weird samples?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/410747) — 11 票 / 7 评论 / 2023-05-16 
+- [A few things that I've learned](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434424) — 11 票 / 6 评论 / 2023-08-25 
+- [Supplemental landmarks](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/410464) — 11 票 / 4 评论 / 2023-05-15 
+- [Persistent problems with making valid submissions](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/411246) — 11 票 / 2 评论 / 2023-05-18 
+- [The difference between the validation and test results of the transformer is very large.](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/424346) — 10 票 / 14 评论 / 2023-07-13 
+- [My proposal to solve this Kaggle challenge is to utilize the TSSCI method, which integrates sequences of body, hand, and facial expressions into a super object in a single color image.](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409692) — 10 票 / 5 评论 / 2023-05-12 
+- [Request to Include TensorFlow Operators in Submission Environment for Better Model Flexibility](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/413035) — 10 票 / 7 评论 / 2023-05-26 
+- [Tunisian sign language](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409569) — 10 票 / 6 评论 / 2023-05-11 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434624) — 9 票 / 7 评论 / 2023-08-25 
+- [Related Papers: Fingerspelling Sign Language Recognition](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/412646) — 9 票 / 0 评论 / 2023-05-24 
+- [Failing Basic Preprocessing Operations](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/414631) — 9 票 / 7 评论 / 2023-06-02 
+- [95th Bronze solutions](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434354) — 9 票 / 3 评论 / 2023-08-25 **write-up?**
+- [Pro-tips on fingerspelling #4: easy letters, hard symbols, and an on-line dictionary](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/417253) — 8 票 / 1 评论 / 2023-06-15 
+- [sequence-id-435344989 is not found](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/410162) — 7 票 / 0 评论 / 2023-05-14 
+- [Anyone used competition metric as objective function?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434691) — 7 票 / 2 评论 / 2023-08-26 
+- [tflite-runtime 2.13.0 supporting Python 3.10 released](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/425407) — 6 票 / 3 评论 / 2023-07-18 
+- [Can I use PyTorch for this competition?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409561) — 6 票 / 6 评论 / 2023-05-11 
+- [How to process DIRTY DATA？](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/426401) — 6 票 / 3 评论 / 2023-07-23 
+- [Can not install tflite-runtime in Kaggle kernel](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/411268) — 6 票 / 11 评论 / 2023-05-18 
+- [is tensorflow beam search  ops supported in TFlite?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/432501) — 6 票 / 10 评论 / 2023-08-17 
+- [Update to a small fraction of the train set](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/416148) — 6 票 / 17 评论 / 2023-06-09 
+- [Hyperparameter tuning is causing climate change and wildfires.](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/431371) — 6 票 / 2 评论 / 2023-08-13 
+- [[28th Place Solution] Pre Training on Supplemental Data gives 0.01 LB Improvement](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434896) — 6 票 / 3 评论 / 2023-08-27 **write-up?**
+- [another trick to for long epoch training : schduled label smooth](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434368) — 5 票 / 4 评论 / 2023-08-25 
+- [14 Days since the competition launch and no submission.](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/412563) — 5 票 / 10 评论 / 2023-05-24 
+- [126th Place Solution](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/436845) — 5 票 / 2 评论 / 2023-09-04 **write-up?**
+- [[12th solution] Full, reproducible solution with code](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/436457) — 5 票 / 2 评论 / 2023-09-06 **write-up?**
+- [How does American Sign Language Competition differs from previous Isolated sign Language competition?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/410554) — 5 票 / 5 评论 / 2023-05-15 
+- [!!! Wow one more ASL within a week !!! ( Top Solutions of previous competition )](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/409416) — 4 票 / 3 评论 / 2023-05-10 **write-up?**
+- [CTC Loss with TPU](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/418848) — 4 票 / 12 评论 / 2023-06-22 
+- [Where and how do you train your model ? ](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/425042) — 4 票 / 3 评论 / 2023-07-16 
+- [Is random data augmentation slow in tensorflow?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/417931) — 4 票 / 13 评论 / 2023-06-17 
+- [Framerate of trainingdata](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/420709) — 4 票 / 7 评论 / 2023-07-02 
+- [New to TF-Lite, can someone help explain the caveats to expect?](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/410598) — 4 票 / 2 评论 / 2023-05-15 
+- [Custom MovinetClassifier Concept  ](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/434440) — 4 票 / 1 评论 / 2023-08-25 
+- [There will be no Discord Channel for this Competition](https://www.kaggle.com/competitions/asl-fingerspelling/discussion/429935) — 2 票 / 7 评论 / 2023-08-07 

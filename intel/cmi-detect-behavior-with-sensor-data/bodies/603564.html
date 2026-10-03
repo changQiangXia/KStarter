@@ -1,0 +1,82 @@
+<p>Thanks Kaggle and organizer for hosting this interesting competition. A special thanks as well to the valuable public notebooks which helped me a lot:<br>
+<a href="https://www.kaggle.com/code/tarundirector/sensor-pulse-viz-eda-for-bfrb-detection" target="_blank">https://www.kaggle.com/code/tarundirector/sensor-pulse-viz-eda-for-bfrb-detection</a><br>
+<a href="https://www.kaggle.com/code/jiazhuang/cmi-imu-only-lstm" target="_blank">https://www.kaggle.com/code/jiazhuang/cmi-imu-only-lstm</a><br>
+<a href="https://www.kaggle.com/code/kaigaokaigao/lb-0-75-imu-only-multibranch-inference/notebook" target="_blank">https://www.kaggle.com/code/kaigaokaigao/lb-0-75-imu-only-multibranch-inference/notebook</a><br>
+I think their work deserves much more votes than rubbish ensemble notebooks.</p>
+<p><strong>Data Processing</strong></p>
+<ol>
+<li>IMU<ul>
+<li>rot in this dataset is normalized to rot_w&gt;0, recover sign by forcing dot_product(rot,rot[-1]) &gt;=0 with sign flip</li>
+<li>handedness flip: -acc_x, -rot_y, -rot_z</li>
+<li>no normalization applied, using BN as first layer for convenience</li></ul></li>
+<li>THM<ul>
+<li>set all sequence sensor values to nan if : mean&gt;40 or mean&lt;20 or std==0</li>
+<li>handedness flip: switch sensor 3 and 5</li>
+<li>normalization: (t-27)/3</li></ul></li>
+<li>TOF<ul>
+<li>value &lt;0 or &gt;249 (if any) to nan</li>
+<li>handedness flip: switch sensor 3 and 5, up-down flip for sensor 3 and 5, left-right flip for sensor 1,2,4</li>
+<li>normalization: (250-x)/65</li>
+<li>nan to 0 (250 before normalization), no interpolation</li></ul></li>
+</ol>
+<p><strong>Feature Engineering</strong></p>
+<ol>
+<li>IMU<ul>
+<li>acc/ rot/ angular velocity (in device and world frame)/ acc with gravity remove (in both frame)/ angular velocity abs_diff/ gravity projection in device frame/ handedness (actually meta feature, too lazy to make it an independent branch)</li>
+<li>most features come in group of size 3 and rot with size 4, I add zero columns to make feature matrix in format of bins with size 4. This is for later group convolution </li></ul></li>
+<li>TOF<ul>
+<li>0-1 nan indicator as extra feature</li></ul></li>
+</ol>
+<p><strong>Model</strong></p>
+<ol>
+<li>IMU branch<ul>
+<li>two standard 1DResBlock with SCSE attention </li>
+<li>using group conv such that interaction only happens within group (eg: within acc_x/y/z)</li></ul></li>
+<li>THM branch<ul>
+<li>two standard 1DResBlock with SCSE attention</li></ul></li>
+<li>TOF branch<ul>
+<li>three standard 3DResBlock with SCSE attention, kernel size (1,3,3)*2+(3,1,1)</li>
+<li>group conv such that interaction only happens within same TOF sensor</li></ul></li>
+<li>Fusion<ul>
+<li>two GRU + MHA (with ROPE) + AttentionPooling + MLP</li>
+<li>I use other combination among GRU/ResBlock/MHA for ensemble</li>
+<li>GRU: I modularize it with skip-connect and layernorm</li>
+<li>MHA: I found extra feedforward layer in common transformer block useless in this dataset and I only keep the MHA part</li></ul></li>
+</ol>
+<p><strong>Multi-task Learning</strong></p>
+<ol>
+<li>main loss: cross entropy + dice loss with cross entropy ratio decayed while training</li>
+<li>cross entropy on orientation classification</li>
+<li>MSE on ratio of gesture region (I didn’t properly normalize this part, not sure if worked)</li>
+<li>MAE on main loss (not sure if worked)</li>
+</ol>
+<p><strong>Augmentation</strong></p>
+<ol>
+<li>rot sign flip</li>
+<li>world frame x-y plane rotation (change facing direction)</li>
+<li>time stretching</li>
+<li>sequence patch mask</li>
+<li>TOF pixel jitter</li>
+<li>TOF patch mask</li>
+<li>sensor mask</li>
+</ol>
+<p><strong>Other Details</strong></p>
+<ol>
+<li>onecycle lr, AdamW, EMA, mixup, dropout, silu, truncate sequence with tail region pre-padding by zero to length 120</li>
+<li>I run simple random search over params space and manually clip search space after analysis</li>
+</ol>
+<p><strong>Ensemble</strong></p>
+<ol>
+<li>class rank average among Kfolds, voting with different models</li>
+<li>based on local CV tuning ensemble weights or selecting from a large pool easily cause overfitting, so I restricted to models with good CV and only apply voting (better than average might due to some over confident models)</li>
+<li>gains<br>
+single best (based on CV) IMU/All:0.8364/0.9008, public/private: 0.868/0.859<br>
+ensemble IMU/All:0.8458/0.906 public/private: 0.875/0.862</li>
+</ol>
+<p><strong>Reproduce</strong><br>
+I only share my best CV single model training and inference code to avoid publishing too much notebooks of similar content.</p>
+<ol>
+<li>IMU only training: <a href="https://www.kaggle.com/code/w5833946/m21-cnn-gru-train" target="_blank">https://www.kaggle.com/code/w5833946/m21-cnn-gru-train</a></li>
+<li>All feature training: <a href="https://www.kaggle.com/code/w5833946/all-m14-cnn-gru-train" target="_blank">https://www.kaggle.com/code/w5833946/all-m14-cnn-gru-train</a>  (trained offline with same code, download from google drive)</li>
+<li>Inference: <a href="https://www.kaggle.com/code/w5833946/cmi3-submit-single" target="_blank">https://www.kaggle.com/code/w5833946/cmi3-submit-single</a></li>
+</ol>

@@ -1,0 +1,34 @@
+<p>I thank Kaggle and the organizers for hosting this gravitational wave competition. I enjoyed the previous binary back hole merger competition, as well, and was impressed a lot by the gold-medal solutions. I thought large pretrained image models would be the strongest anyway, but they outperformed with 1-dimensional convolutional neural networks. I joined this competition so that I could build such deep neural network models detecting the wave, not the power, … but failed.</p>
+<p>The largest difference between the two competitions is that the Earth rotates during 120 days and it imprints complicated frequency pattern into the frequency. Adding wave is very delicate, requires very accurate phase patterns, and I was not able to add up the complex Fourier modes effectively within reasonable computational resources. After more than one month without any progress, I thought I should get a silver medal even with an unsatisfactory approach, give up adding the wave and add the power.</p>
+<h1>Solution</h1>
+<ul>
+<li>Sum power (absolute-value squared) along various signal patterns</li>
+<li>No machine learning</li>
+<li>No use of external data or leakage</li>
+</ul>
+<h2>Power summation</h2>
+<ol>
+<li>Extract signal frequency and amplitude [total power P(t)] from the simulations</li>
+<li>Subtract Doppler shift frequency from the data frequency for 4000 signal patterns </li>
+<li>Weight the data proportional to the signal amplitude pattern; this is the optimal linear weight w(t)</li>
+<li>Sum the weighted power along lines: 360 frequencies (intercept) × 241 slops in [-120, 120] (frequency bin / 120 days)</li>
+<li>Take the maximum</li>
+</ol>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F954117%2F1bb4eb2f23c068c7c2998fc8a6e20ef8%2Fpower_sum.png?generation=1672802594937302&amp;alt=media" alt=""></p>
+<p>The values are highly skewed from the typical range [-1, 1] because these are maxima of 4000 templates × 360 frequencies × 241 slops.</p>
+<p>This took 5 days using GPU RTX 3090. Full range of slope is [-360, 360] but [-120, 120] already took long enough.</p>
+<h2>Real noise normalization</h2>
+<ol>
+<li>Normalize by the noise rms at each time h -&gt; h / sigma(t)</li>
+<li>Remove single-frequency noise by masking anomalously large frequency bin</li>
+<li>Normalize the frequency dependence by the remaining rms sigma(f)</li>
+</ol>
+<p>I know the noise is not always written as a product of time dependence and frequency dependence, but I did not have time for better treatment. Some false positives are remaining in my prediction.</p>
+<h2>Follow up summation with sinc kernel</h2>
+<p>The signal spread among frequency bins with sinc function (assuming the window function for the short-time Fourier transform is almost top hat). I use a sinc kernel with width 8 and stride 1/8 frequency bin to collect the signal. This is the optimal linear weighting in the frequency direction. I recompute the power sum with this kernel around the largest-power line in the first step for a subsample of 400 templates. This gives a surprisingly large boost to the public score 0.825 -&gt; 0.848</p>
+<p>Finally, I apply a sigmoid to the standardized power sum and submit, which is same as just submitting the power sum. I thought the prediction value must also depend on the noise level; if the signal is undetected, there should be larger possibility to be positive for larger noise because more data are undetected. I modeled this effect but could not improve the score. </p>
+<p>PS:<br>
+More about the weight<br>
+<a href="https://www.kaggle.com/code/junkoda/optimal-weights-for-signal-to-noise-ratio" target="_blank">https://www.kaggle.com/code/junkoda/optimal-weights-for-signal-to-noise-ratio</a></p>
+<p>Code<br>
+<a href="https://github.com/junkoda/kaggle_g2net2_solution" target="_blank">https://github.com/junkoda/kaggle_g2net2_solution</a></p>

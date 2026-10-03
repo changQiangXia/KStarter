@@ -1,0 +1,140 @@
+# https://www.kaggle.com/competitions/bengaliai-speech/discussion/447957
+
+Topic #447957: 3rd place solution
+  Author: luddite^
+  Posted: 2023-10-17 23:59:54.867000
+  Votes: 43  Comments: 20
+
+First of all, we want to thank the competition organizers who hosted this fantastic competition and gave us an excellent opportunity to learn how to improve the ASR model against low-resource languages like Bengali and other competitors who generously shared their knowledge.
+The following is a brief explanation of our solution. We will open-source more detailed codes later, but if you have questions, ask us freely.
+
+
+
+Model Architecture
+
+・CTC
+
+We fine-tuned "ai4bharat/indicwav2vec_v1_bengali" with competition data(CD).
+We observed low-quality samples in CD, and mindlessly fine-tuning a model with all the CD deteriorated its performance. So first, we fine-tuned a model only with split=”valid” CD (this improved the model’s performance) and predicted with it against split=”train” CD. After that, we included a high-quality split=’train’ CD (WER&lt;0.75) to split=’valid’ CD and fine-tuned  "ai4bharat/indicwav2vec_v1_bengali" from scratch. 
+This improved the public baseline to LB=0.405.
+
+・kenlm
+
+Because there are many out-of-vocabulary in OOD data, we thought training strong LM with large external text data is important. So we downloaded text data and script of ASR datasets(CD, indicCorp v2, common voice, fleurs, openslr, openslr37, and oscar) and trained 5-gram LM.
+This LM improved LB score by about 0.01 compared with "arijitx/wav2vec2-xls-r-300m-bengali"
+
+Data
+
+・audio data
+
+We used only the CD. As mentioned in the  Model Architecture section, we did something like an adversarial validation using a CTC model trained with split=’valid’ and used about 70% of the all CD.
+
+・text data
+
+We used text data and script of ASR datasets(CD, indicCorp v2, common voice, fleurs, openslr, openslr37, and oscar). As a preprocessing, we normalized the text with bnUnicodeNormalizer and removed some characters('[\,\?.!-\;:\"\।\—]').
+
+Inference
+
+・sort data by audio length
+
+Padding at the end of audios negatively affected CTC, so we sorted the data based on the audio length and dynamically padded each batch. This increased prediction speed and performance.
+
+・Denoising with Demucs, a music source separation model.
+
+We utilized Demucs to denoise audios. This improved the LB score by about 0.003.
+
+・Judge if we use Demucs or not
+
+Demucs sometimes make the audio worse, so we evaluated if the audio gets worse and we switched the audio used in a prediction. This improved the LB score by about 0.001.
+The procedure is as follows.
+
+
+
+we made two predictions: prediction with Demucs and prediction without Demucs. To speed up this prediction, we made the LM parameter beam_width=10.
+
+we compared the number of tokens in two predictions. If the number of tokens in the prediction with Demucs is shorter than the other, we predicted without Demucs. Otherwise, we predicted with Demucs.
+
+
+
+Post Processing
+
+・punctuation model
+
+We built models that predict punctuations that go into the spaces between words. These improved LB by more than 0.030.
+
+
+
+As a tip for training, the CV score was better improved by setting the loss weight of "PAD" to 0.0.
+Backborn: xlm-roberta-large, xlm-roberta-base
+Trainer: XLMRobertaForTokenClassification
+Dataset: train.csv (given), indicCorp v2
+Punctuations: [ ,।?-]
+
+
+
+・CTC and LM train code
+・punctuation model code
+・inference notebook
+
+Comments:
+├─ Md Boktiar Mahbub Murad (2023-10-18 07:24:02.460000) [+1]
+│  Congratulations on the 3rd place! 
+│  Did xlm-roberta-large fit into GPU memory? I was always getting CUDA OOM
+  ├─ esprit (2023-10-18 11:29:07.950000) [+1]
+  │  I was able to train with batch_size=32 using a single RTX3090 or 4090.
+  │  And, your public notebook was very helpful. Thank you very much.
+    ├─ Md Boktiar Mahbub Murad (2023-10-18 12:12:48.190000) [+1]
+    │  Glad I could help. Thanks for your kind words!
+├─ vialactea (2023-10-18 03:08:13.700000) [+1]
+│  Congratulations on the 3rd place and thanks for sharing. 
+│  
+│  Yesterday, I was contemplating two optimizations, one being a punctuation model. Considering the percentage of words with punctuation it s...
+  ├─ esprit (2023-10-18 03:23:31.457000) [+1]
+  │  In our model, consecutive [।!?] in the train data were replaced by a single character "।" or "?". We also removed sentences containing consecutive [,-] from the train data. However, we have not tri...
+├─ Sinan Calisir (2023-10-18 00:10:55.273000) [+1]
+│  Thank you for sharing! Liked the postprocessing steps.
+│  
+│  For how many epochs did you train your final model and with how much data in total?
+  ├─ luddite^ (2023-10-18 01:16:17.297000) [+1]
+  │  Which model (CTC, LM, punctuation)?
+  ├─ esprit (2023-10-18 02:36:15.130000) [+1]
+  │  In the training of the punctuation model, 17M Bengali sentences were trained for 1~2 epochs.
+    ├─ Sinan Calisir (2023-10-18 22:36:40.603000) [+1]
+    │  I was curious about the CTC model, thanks for sharing the details for the punctuation model as well though.
+    ├─ luddite^ (2023-10-19 01:22:35.647000) [+1]
+    │  We trained the CTC model for 10 epochs with 671231 data(split='valid': 28855, cleaned split='train': 642376).
+    ├─ Sinan Calisir (2023-10-19 08:39:49.550000) [+1]
+    │  Oh, nice! Thanks for sharing. Was wondering if it was manageable or not and apparently yes! Well done again!
+├─ Marília Prata (2023-10-18 01:27:31.777000) [+2]
+│  Congratulations for your 3rd place. "Predicting punctuations that go into the spaces between words" sounds amazing for a newbie like me.
+├─ sadahry (2023-10-22 06:55:28.637000) [+0]
+│  Congratulations on the 3rd place 🎉
+│  and thanks for sharing your knowledge!
+│  
+│  Two questions about "sort data by audio length".
+│  
+│  
+│  
+│  
+│  It means shuffle=False? 
+│  ref. https://github.com/sagawatatsuya/Bengal...
+  ├─ luddite^ (2023-10-22 11:31:25.110000) [+1]
+  │  During inference, we sorted data based on audio_length in ascending order and set the dataloader's variable shuffle=False.
+    ├─ sadahry (2023-10-22 14:33:49.100000) [+0]
+    │  thank you for answering!
+├─ Man of the year (2023-10-18 00:12:49.757000) [+0]
+│  Congratulations! I have a question:
+│  
+│  
+│    
+│  So first, we fine-tuned a model only with split=”valid” CD (this improved the model’s performance) and predicted with it against split=”train” CD. After tha...
+  ├─ luddite^ (2023-10-18 00:41:50.950000) [+2]
+  │  Thank you!
+  │  We used the original train split data at 2nd step.
+├─ iiiiitsu (2023-10-18 00:08:26.947000) [+0]
+│  Awesome solution! I wonder how to let the LM be uploaded in kaggle input without exceeding the 20G(?) capacity limit. ARPA may seem too large when I train a LM with too much corpus.
+  ├─ luddite^ (2023-10-18 00:50:27.227000) [+0]
+  │  Thank you.
+  │  I don't understand what 20GB limit is. The limit of data uploaded to kaggle 107GB. By deleting or making public your datasets, you can upload over 20GB files.
+├─ [deleted] (2023-10-18 19:48:46.843000) [+0]
+│  [deleted]

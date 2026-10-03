@@ -1,0 +1,137 @@
+# https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/466917
+
+Topic #466917: 1st Place Solution for the CAFA5
+  Author: 王少钧
+  Posted: 2024-01-10 11:55:37.361000
+  Votes: 34  Comments: 7
+
+A.    MODEL SUMMARY
+
+A.1 Background on you/your team
+
+Competition Name: CAFA5 Protein Function Prediction
+
+Team Name: GOCurator
+
+Private Leaderboard Score: 0.61623
+
+Private Leaderboard Place: 1
+
+Name: Shaojun Wang
+
+Location: Institute of Science and Technology for Brain-Inspired Intelligence, Fudan University, Shanghai, China
+
+Email: 20110850027@fudan.edu.cn
+
+Name: Weiqi Zhai
+
+Location: Institute of Science and Technology for Brain-Inspired Intelligence, Fudan University, Shanghai, China
+
+Email: 20110850010@fudan.edu.cn
+
+Name: Wei Liu
+
+Location: Institute of Science and Technology for Brain-Inspired Intelligence, Fudan University, Shanghai, China
+
+Email: 21110850007@m.fudan.edu.cn
+
+Name: Tianyang Huang
+
+Location: Institute of Science and Technology for Brain-Inspired Intelligence, Fudan University, Shanghai, China
+
+Email: tyhuang22@m.fudan.edu.cn
+
+Name: Huiying Yan
+
+Location: Institute of Science and Technology for Brain-Inspired Intelligence, Fudan University, Shanghai, China
+
+Email: yanhuiyingwangyi@163.com
+
+A2. Background on you/your team
+
+Our team consists of five PhD students working on bioinformatics, especially automated protein function prediction, and biomedical text mining from ZhuLab, which is led by Prof. Shanfeng Zhu at Fudan University. Our lab has participated in the CAFA3 and CAFA4 and achieved the top performance. Our team developed GOCurator by considering all kinds of information including protein sequence, network, structure, and textual information. During the competition, S.W. was responsible for collecting data, building the framework, and training the model. W.L developed a component method based on FoldSeek. T.H and H.Y were mainly engaged in biomedical text mining for protein annotation. W.Z submitted the prediction result, and performed the result analysis.
+
+A3. Summary
+
+Our pipeline, GOCurator, was developed based on NetGO 3.0. In addition, we also introduced new component methods to extract functional information from protein 3D structure, protein textual description, and scientific literature. Thanks to the learning to rank model, we eventually integrated multiple component methods effectively. Figure 1 showed the score of component methods achieved in public leaderboard.
+
+
+
+
+LR-MEM, it combined protein description, scientific literature, and protein sequence together based on the annotation from GO and GOA. Specifically, it concatenated representations from different information source as protein representations. Then we trained logistic regression classifiers based on it. We integrated this method into NetGO 3.0 and ranked in the first place for the first time on public leaderboard. 
+
+FoldSeek-KNN, it made prediction according to the structure information. By comparing the structural similarities between the test proteins and the proteins in the training set, we calculated the prediction score as weighted voting by similar annotated proteins.
+
+GOXML, an extreme multi-label classifier based on literature information. Similar to DeepText2GO, it used AttentionXML to achieve fast high-precision large-scale multi-label classification without training logistic regression classifiers for each GO terms.
+
+GORetrieval, a novel two-stage deep learning-based framework based on the protein description and protein literature. Given a target protein, it first retrieved candidate Gene Ontology (GO) terms from annotated proteins with similar descriptions. In the second stage, the retrieved GO terms were reranked based on semantic matching between the GO descriptions and the literature information of the target protein. Moreover, the second stage can also be used to enhance the prediction from other method via reranking.
+
+
+When doing ensemble learning, the input to the model contains not only the predicted scores from each method, but also a 20-dim one-hot vector to characterize the protein species information.
+
+A4. Features Selections / Engineering
+
+According to the public leaderboard scores, we believed that protein language models and textual information are useful for improving accuracy. For protein language models, we have also tried the ESM2 and ProtT5 to obtain protein embeddings. Similar to LR-ESM (based on ESM-1b), we trained logistic regression classifiers for ESM2 and ProtT5 embedding and the concatenation of all three embeddings. We found little difference in the scores achieved by these methods, but the best performance was achieved when LR-ESM was integrated as a component method into the GOCurator. Therefore, we finally used ESM-1b to generate protein embeddings. For textual information, how to generate text representations is important. Following to DeepText2GO, we used document to vector (D2V) and TF-IDF to represent scientific literature. In GORetrieval and GOXML, PubMedBERT was used to generate text embedding.
+
+A5. Training Method(s)
+
+We collected functional annotation information from three database SwissProt, GOA, and GO, according to the CAFA5 evidence code. Unlike the temporal split in NetGO, we selected proteins for validation based on the species distribution of proteins in the CAFA5 test set. Specifically, we calculate the proportion of proteins from each species in the CAFA5 test set, and sampled proteins for the corresponding species from the dataset to form a validation dataset of 1000 proteins. We have improved the performance of our methods as much as possible in this way.
+
+A6. Interesting findings
+
+We found that the Net-KNN based on protein-protein interaction performs poorly in predicting proteins from those species with less functional annotation information. When we integrated all the component methods together, we even got better results by not fusing Net-KNN into it. However, according to our previous studies (NetGO series),  Net-KNN is a powerful method for BPO and CCO. Therefore, we tried to filter the prediction from Net-KNN by the species. Specifically, we considered the predictions for a target protein to be valid if the number of the annotated proteins in the target protein’s species is larger. As shown in the figure, the number of valid species has an impact on the prediction performance. Finally, we treated Net-KNN predictions for the top 15 species as effective results.
+
+
+A7. Simple Features and Methods
+
+According to the performance of different source information, we believe that incorporating a component method based on textual or structural information into NetGO 3.0 can achieve 90% of the final performance.
+
+A8. Model Execution Time
+
+Firstly, we used InterProScan and ESM-1b to get protein domain/family/motif information and protein embeddings, which took about 1-2 days, where most of the time was spent on InterProScan. Secondly, we trained each component method separately on several servers, spending roughly 10-15 hours per method. Then, the learning to rank model used for ensemble learning could be trained within 50 mins. For inference, we first used component methods to generate initial prediction, which took about 2 hours for CAFA5 test proteins. Finally, it took about 1.5 hours for ensemble learning on all test proteins.
+
+A9. References
+
+
+
+You R, Zhang Z, Xiong Y, et al. GOLabeler: improving sequence-based large-scale protein function prediction by learning to rank. Bioinformatics, Volume 34, Issue 14, 2018, 2465–2473.
+
+You R, Huang X, Zhu S. DeepText2GO: Improving large-scale protein function prediction with deep semantic text representation. Methods, 2018, 145: 82-90.
+
+You R, Yao S, Xiong Y, et al. NetGO: improving large-scale protein function prediction with massive network information. Nucleic Acids Research, Volume 47, Issue W1, 2019, W379–W387.
+
+Yao S, You R, Wang S, et al. NetGO 2.0: improving large-scale protein function prediction with massive sequence, text, domain, family and network information. Nucleic Acids Research, Volume 49, Issue W1, 2021, W469-W475
+
+Gu Y, Tinn R, Cheng H, et al. Domain-specific language model pretraining for biomedical natural language processing. ACM Transactions on Computing for Healthcare (HEALTH), 3(1):1–23, 2021
+
+Rives A, et al. Biological structure and function emerge from scaling unsupervised learning to 250 million protein sequences. PNAS, 118(15), 2021
+
+You R, Yao S, Mamitsuka H, et al. DeepGraphGO: graph neural network for large-scale, multispecies protein function prediction. Bioinformatics (ISMB 2021), Volume 37, Supplement_1, 2021, i262–i271.
+
+Wang S, You R, Liu Y, et al. NetGO 3.0: Protein Language Model Improves Large-scale Functional Annotations. Genomics, Proteomics &amp; Bioinformatics, Volume 21, Issue 2, 2023, 349-358.
+
+Comments:
+├─ hermit.mb (2024-02-06 15:23:17.467000) [+0]
+│  Is it possible to get your source code of the entire solution?
+  ├─ Moori Varun (2024-02-06 17:34:30.887000) [+0]
+  │  how can i download the dataset?
+├─ Dan Ofer (2024-01-13 15:11:06.523000) [+0]
+│  Neat! (I'm presenting about Cafa5/your approach in our lab). 
+│  
+│  Some questions:
+│  
+│  
+│  
+│  How did you get predictions for the first level of the ensemble, simple CV?.
+│  
+│  Blast-KNN = Simple PSI-blast? 
+│  
+│  LR-In...
+  ├─ 王少钧 (2024-01-14 07:29:14.857000) [+2]
+  │  We splited the dataset into training and validation sets, and used the training set to train component methods. Then we used the trained component methods to predict function for validation protein...
+├─ [deleted] (2024-02-02 06:01:07.263000) [+0]
+│  Thanks for sharing your work. I am also working on a similar project where I have created three embeddings from three language models (LLMs) and structural features. My doubt is about how to create...
+  ├─ [deleted] (2024-02-02 08:56:56.350000) [+0]
+  │  [deleted]
+  ├─ 王少钧 (2024-02-02 08:57:51.817000) [+0]
+  │  For the first question, are you referring to how to obtain the representation of proteins from LLMs? Protein LLMs are multi-layered and can generate representations for each amino acid. Typically, ...

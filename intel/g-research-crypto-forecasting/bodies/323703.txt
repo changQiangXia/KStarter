@@ -1,0 +1,156 @@
+# https://www.kaggle.com/competitions/g-research-crypto-forecasting/discussion/323703
+
+Topic #323703: 3rd place solution
+  Author: sugghi
+  Posted: 2022-05-07 22:19:32.173000
+  Votes: 67  Comments: 30
+
+First of all, I would like to thank G-Research, kaggle and all competitors. I have learned a lot through this interesting competition. It was very difficult for me (actually, it was the third machine learning challenge in my life) and without the knowledge shared by all the kagglers, I would not have been able to handle it.
+
+Also, since this is a competition with a strong element of luck, it was only by sheer luck that I was able to finish in third place, but I am glad that my rank was somewhat stable in the last few updates.
+
+In coding, I referred to the knowledge of kagglers. I am especially grateful to @jagofc for providing local api. Without @jagofc's local api, I would not have been able to successfully submit even once.
+
+Here is my solution. If you have any suggestions for improvement or anything else you think I should know, I'd be glad to hear from you!
+
+The link to the notebook is as follows;
+
+
+
+training: https://www.kaggle.com/code/sugghi/training-3rd-place-solution
+
+inference: https://www.kaggle.com/code/sugghi/inference-3rd-place-solution
+
+
+Overview of my model
+
+The characteristics of my model are as follows
+
+
+
+Only 'Close' is used.
+
+The model is trained for each coin using a common set of features for all the coins.
+
+The difference between the change of each currency and the change of all currencies is provided as features.
+
+Single model of LightGBM (7-fold CV)
+
+
+Considering the definition of the forecasting target in this competition, I felt it was necessary to prepare features with information about the entire market. I also thought that some currencies might be affected by the movements of other currencies, so I made it possible to refer to information about other currencies as well. Since I thought that memory and inference time would become more demanding with this kind of processing, I reduced the amount of data to be used. Specifically, I considered 'Close', which is used to calculate the target, to be the most important, so I decided to use only it. Even so, the ensemble could not be performed because of the limited inference time (and lack of coding skill).
+
+For CV, I used EmbargoCV by @nrcjea001.
+
+About the data used for training
+
+The start date of train data differed greatly among currencies. Since my model deals with the average of the changes of each currency, I considered it undesirable for the existing currencies to differ significantly between the training period and the evaluation period. As I expected that all currencies would have few missing values during the evaluation period of the competition, I decided not to use all of the train data, but to use the data from the period when there were enough currencies present.
+
+The selection of the starting date was done by looking at the CV scores. However, this was a mistake in hindsight, since it meant that I was comparing CV scores across different data.
+
+Also, each currency had several long and short blank periods. I attempted forward fill to prevent missing data as a result of rolling. On the other hand, I thought that forward fill for the entire period might cause a decline in data quality when there is a long blank period, so I set a limit on forward fill. In the evaluation phase, the code was designed to have forward fill without a limit, but I thought this would not be a problem since there are no long blank periods in the evaluation phase.
+
+Feature engineering
+
+Since the value of cryptocurrencies is increasing, I tried to make sure to pick up the magnitude of the change independent of the evaluation period.
+
+For 'Close', I prepared two features for multiple lag periods: the log of the ratio of the current value to the average during the period, and the log of the ratio of the current value to the value a certain period ago. For these, I took the average for all currencies (Due to missing data, no weighted averaging was performed). In addition, the difference between each currency and the average of all currencies was also prepared as a feature. As a result, this feature seems to have worked well.
+
+Dealing with time limit
+
+The most difficult part for me was the time limit. When inference is performed, it should be sufficient to generate only one row of features, but my programming skills did not allow me to do this well, so I gave up on this and generated features for all data. So, I tried to avoid using pandas as much as possible to speed up the process, and managed to finish the inference within 9 hours. To be honest, I was quite worried about the timeout at the final update.
+
+What I would have worked on if I had more time
+
+
+
+Speed up feature generation to save time and perform ensemble.
+
+Learning with less missing data (external data?)
+
+Parameter optimization
+The first successful submission was a week before the end of the competition, so I have not been able to optimize much.
+
+
+I would like to continue to improve so that I can achieve results in competitions where the element of luck is small. See you at the next competition!
+
+Comments:
+├─ jagofc (2022-05-08 13:53:30.053000) [+4]
+│  @sugghi Many congratulations! And thank you for mentioning the local_api - I'm very glad it was useful :)
+  ├─ sugghi (2022-05-08 15:28:24.563000) [+1]
+  │  I greatly appreciate your local_api!
+  │  Thank you once again!
+  ├─ Nathaniel Maddux (2022-05-09 15:19:13.780000) [+2]
+  │  I used your API as well, @jagofc, and forgot to mention it. Thank you.
+  ├─ jagofc (2022-05-09 16:01:07.113000) [+1]
+  │  Haha, you're welcome @nathanrm! I wonder if Meme Lord Capital did too… :D
+├─ theDoors (2022-10-21 05:58:47.987000) [+2]
+│  In your feature engineering code in training, can you explain the following line of code -
+│  
+│  
+│    
+│  df[f'log_close/mean_{lag}id{id}'] = np.log( np.array(df[f'Close{id}']) /  np.roll(np.append(np.convol...
+  ├─ sugghi (2022-10-21 07:52:35.373000) [+4]
+  │  Thanks for your question.
+  │  
+  │  I used such confusing code to avoid using pandas to accelerate inference.
+  │  The original and simpler code was as follows;
+  │  df[f'log_close/mean_{lag}_id{id}'] = np.log( df[f'...
+    ├─ Volgoesupndown (2024-07-15 21:01:12.857000) [+1]
+    │  Stumbled upon this, doesn't your numpy version introduce a bug? roll != shift, as roll will not introduce NaNs but instead roll values from the end of the array to the front.
+    ├─ [deleted] (2025-01-11 19:18:16.750000) [+0]
+    │  [deleted]
+    ├─ T! (2025-01-11 19:19:10.323000) [+0]
+    │  Yes, the first |lag| values will use the last |lag| values 🫤
+├─ Carlos Oblitas Villegas (2022-06-15 21:04:45.660000) [+1]
+│  Great solution and thanks for sharing the code…!! 🙌🙌
+│  
+│  I downloaded, implemented and run it, but I still dont understand it… :( 
+│  
+│  Could someone helpme to study this code or tellme where to begin?? (...
+├─ PosixHouse (2022-05-10 01:37:17.197000) [+1]
+│  Congratulations on your achievement, and many thanks for sharing your work!
+├─ Arthur Hsu (2022-05-09 07:01:33.387000) [+1]
+│  Nice share!
+├─ Niek van der Zwaag (2022-05-09 05:11:53.800000) [+1]
+│  @sugghi Congratulations on 3rd! 🎉 Thanks for sharing your work and approach; very insightful.
+  ├─ sugghi (2022-05-09 06:39:43.013000) [+1]
+  │  Thank you for celebrating!
+├─ Aditya sinha (2022-05-09 03:47:41.360000) [+1]
+│  very good one
+  ├─ sugghi (2022-05-09 06:37:31.703000) [+0]
+  │  Thanks for your comment!
+├─ Jean-Michel Nairac (2022-05-08 05:10:46.990000) [+1]
+│  Thank you for the mention :)
+  ├─ sugghi (2022-05-08 15:17:20.287000) [+2]
+  │  I have greatly benefited from your code. Thank you!
+├─ Never$ (2022-05-08 02:21:13.093000) [+1]
+│  Congratulations on winning the gold medal 🎉💯
+│  Also, thanks for sharing the training code with us.
+│  
+│  I' ll learn about your model. 
+│  I look forward to seeing you again at the finance competition 😃
+  ├─ sugghi (2022-05-08 15:15:26.273000) [+1]
+  │  Thank you for celebrating with me!
+  │  I look forward to competing in another competition!
+├─ Lachlan Gillian (2022-05-07 23:53:26.280000) [+1]
+│  @sugghi thanks for this post! I learned some valuable things reading through the feature engineering section :)
+  ├─ sugghi (2022-05-08 15:10:28.993000) [+0]
+  │  Thanks for your comment!
+  │  I am glad you found it useful :)
+├─ Viji (2022-05-08 19:11:55.390000) [+2]
+│  Congratulations @sugghi…very well done! Thanks for sharing the notebooks. Hope to learn some feature engineering aspects. Wish you the best for other competitions.
+  ├─ sugghi (2022-05-09 06:36:41.173000) [+0]
+  │  Thanks for your message! I am glad you found it useful!
+├─ Lucas Morin (2022-05-08 09:51:33.080000) [+2]
+│  Yay for Feature Engineering and lgbm ! Also many thanks for sharing the whole code :)
+  ├─ sugghi (2022-05-08 15:24:14.170000) [+0]
+  │  Thanks for your comment!
+  │  I hope my code is helpful :)
+├─ [deleted] (2022-05-25 01:51:27.697000) [+0]
+│  [deleted]
+├─ [deleted] (2022-05-12 14:10:54.643000) [+1]
+│  [deleted]
+├─ yuanzhe zhou (2022-05-18 10:03:50.460000) [+1]
+│  thanks for sharing!
+├─ julinChou (2023-03-23 12:45:06.177000) [+0]
+│  thanks a lot for sharing your code,

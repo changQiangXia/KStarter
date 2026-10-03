@@ -1,0 +1,82 @@
+# equity-post-HCT-survival-predictions 讨论区（按票数排序，共 80 条）
+
+- [How To Get Started - Understanding the Metric](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550003) — 301 票 / 93 评论 / 2024-12-04 
+- [1st Place Solution-2 Targets and Ensemble](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566550) — 186 票 / 59 评论 / 2025-03-12 **write-up?**
+- [Feature Engineering Ideas](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550863) — 150 票 / 110 评论 / 2024-12-10 
+- [How To Train XGBoost with Survival Loss](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550141) — 128 票 / 19 评论 / 2024-12-05 
+- [2nd Place Solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566522) — 115 票 / 39 评论 / 2025-03-07 **write-up?**
+- [GPU LightGBM Starter - CV 0.681 LB 0.685 Wow!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550684) — 97 票 / 19 评论 / 2024-12-09 
+- [An interesting finding: A group of people collaborate for Notebook(Dataset) GM?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/562737) — 81 票 / 41 评论 / 2025-02-13 
+- [The weirdness of the patient age distribution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/551544) — 74 票 / 24 评论 / 2024-12-13 
+- [XGBoost: the max_cat_to_onehot parameter](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/554937) — 66 票 / 10 评论 / 2025-01-04 
+- [Reading materials and references ](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/549967) — 59 票 / 7 评论 / 2024-12-04 
+- [NN Starter Notebook CV 0.670 LB 0.676](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550343) — 57 票 / 2 评论 / 2024-12-06 
+- [4th place: Factorized modelling approach](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566528) — 55 票 / 8 评论 / 2025-03-15 **write-up?**
+- [Finding the best target transformation](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550835) — 54 票 / 6 评论 / 2024-12-09 
+- [Faster concordance index metric with numba](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/555029) — 54 票 / 0 评论 / 2025-01-04 
+- [3rd Place Solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566574) — 53 票 / 18 评论 / 2025-03-21 **write-up?**
+- [Should we trust LB? - Analysis of the Trustworthiness of LB and the Influence of test set size on C-index(Experiment Part)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/554205) — 50 票 / 17 评论 / 2024-12-31 
+- [How does one start off with this competition as a beginner](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550428) — 49 票 / 9 评论 / 2024-12-07 
+- [Just share my result of Single GNN| cv = 0.6911](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/564783) — 47 票 / 69 评论 / 2025-02-25 
+- [Custom Targets: the Impact of Target Leakage](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/553061) — 47 票 / 7 评论 / 2024-12-23 
+- [Mathing it to 5th place!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566541) — 45 票 / 10 评论 / 2025-03-06 **write-up?**
+- [Evaluation by race group](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550483) — 40 票 / 6 评论 / 2024-12-07 
+- [Generating additional data with SurvivalGAN from synthcity](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/555490) — 39 票 / 19 评论 / 2025-01-07 
+- [Welcome everyone to share your CV and LB](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550014) — 39 票 / 75 评论 / 2024-12-05 
+- [104th solution (GNN)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566544) — 38 票 / 24 评论 / 2025-03-11 **write-up?**
+- [Top 50th Place without Post Processing (and 854th with Post Process)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/567566) — 36 票 / 8 评论 / 2025-03-11 **write-up?**
+- [What was your opinion on the reasons for the churn?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566542) — 35 票 / 22 评论 / 2025-03-06 
+- [Publicly available datasets from the Host](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550042) — 35 票 / 0 评论 / 2024-12-05 
+- [Welcome to the Equity in post-Hematopoietic Cell Transplantation Survival Predictions!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/549968) — 34 票 / 35 评论 / 2024-12-04 
+- [This Competition is 'good'. But 'great' can and WILL save (more) lives! (A deeply personal take)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550170) — 34 票 / 12 评论 / 2024-12-05 
+- [TabM NN Model [CV:0.6769 LB:0.685]](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/551891) — 32 票 / 7 评论 / 2024-12-16 
+- [Introduction to Survival Analysis](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/553483) — 31 票 / 5 评论 / 2024-12-26 
+- [Rank 120 approach - simplicity is the name of the game!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566527) — 31 票 / 7 评论 / 2025-03-10 
+- [Deep understanding of (C-index) evaluation measure for better model](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550152) — 30 票 / 4 评论 / 2024-12-05 
+- [Don't forget to learn and organize yourself better in the post-competition phase!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566442) — 30 票 / 2 评论 / 2025-03-05 
+- [[Resolved] Submission Scoring Error with NO CHANGES from working submission!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/562481) — 29 票 / 38 评论 / 2025-02-11 
+- [Using the official metric for tree-based models](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550905) — 28 票 / 7 评论 / 2024-12-10 
+- [Choose your final submissions wisely!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566228) — 28 票 / 9 评论 / 2025-03-04 
+- [Regarding the test data year_hct](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/555506) — 27 票 / 9 评论 / 2025-01-07 
+- [Is the NN model in the public code slightly overfitting?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/561146) — 27 票 / 28 评论 / 2025-02-04 
+- [12th place solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566584) — 27 票 / 25 评论 / 2025-03-06 **write-up?**
+- [Here are explanations to all the column names. This will help you better understand the dataset](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/562909) — 27 票 / 2 评论 / 2025-02-14 
+- [How to install TabPFN 2.0.1 (offline)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/555889) — 25 票 / 16 评论 / 2025-01-09 
+- [6th Place Solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566686) — 25 票 / 6 评论 / 2025-03-06 **write-up?**
+- [A general Understanding for AFT Loss function](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550563) — 25 票 / 6 评论 / 2024-12-08 
+- [What I learned in CIBMTR](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566494) — 23 票 / 6 评论 / 2025-03-05 
+- [(A few) Data Col Insights](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550342) — 23 票 / 1 评论 / 2024-12-06 
+- [Survival Models from scikit-survival: Experiment](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/554664) — 23 票 / 3 评论 / 2025-01-02 
+- [Briefly about how to lose (24 -> 744)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566533) — 22 票 / 21 评论 / 2025-03-06 
+- [Life in the boots of a tricked kaggler](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566795) — 22 票 / 9 评论 / 2025-03-06 
+- [First Silver Medal - Over The Moon!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566540) — 21 票 / 19 评论 / 2025-03-06 **write-up?**
+- [Exploring Different Kaplan-Meier Transforms with Multi-target CatBoost](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/551193) — 21 票 / 9 评论 / 2024-12-11 
+- [Should we trust LB? - Try to understand why C-index is so sensitive (Theoretical part)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/554225) — 21 票 / 1 评论 / 2024-12-31 
+- [A selection of libraries for survival prediction](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550079) — 21 票 / 6 评论 / 2024-12-05 
+- [Method of checking the wrong sample](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/553288) — 21 票 / 2 评论 / 2024-12-25 
+- [5th Place Solution (Full Write-Up)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/568339) — 20 票 / 1 评论 / 2025-03-15 **write-up?**
+- [11th Place Solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566624) — 20 票 / 5 评论 / 2025-03-07 **write-up?**
+- [What happened in 2019, that led to ~20% survival rate disparity among the majority of races?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/553962) — 20 票 / 4 评论 / 2024-12-29 
+- [Additional features destabilizing the model??](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/555336) — 20 票 / 19 评论 / 2025-01-06 
+- [ChatGPT - has it killed human coders yet?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/563412) — 20 票 / 31 评论 / 2025-02-17 
+- [📚 Brief info about allogeneic HCT patients](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550033) — 19 票 / 6 评论 / 2024-12-05 
+- [How to make sense of the race group distribution in the data ?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550302) — 18 票 / 3 评论 / 2024-12-06 
+- [Be careful with your early stopping metric](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550193) — 18 票 / 12 评论 / 2024-12-05 
+- [Custom Loss with Artificial Data: 0.684 LB (Preliminary, Non-Optimized)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/551556) — 18 票 / 6 评论 / 2024-12-13 
+- [Silver/bronze medal with TabM only and nothing else](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/567692) — 17 票 / 9 评论 / 2025-03-11 **write-up?**
+- [Concordance index (C-index) for survival outcomes. Predictors and Biomarkers in HCT. EFS (event-free survival).](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/549988) — 17 票 / 0 评论 / 2024-12-04 
+- [What i learned from the competition ](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566557) — 17 票 / 16 评论 / 2025-03-06 
+- [The Curse of Recursion: Training on Generated Data Makes Models Forget](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550602) — 16 票 / 1 评论 / 2024-12-08 
+- [🌟 [LB 0.663] Why is the CoxPH Model Being Ignored? 🌟](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/551337) — 15 票 / 20 评论 / 2024-12-12 
+- [What is the best we can get out of the competition dataset? ](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/556459) — 15 票 / 6 评论 / 2025-01-13 
+- [9th Place Solution](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566948) — 15 票 / 2 评论 / 2025-03-08 **write-up?**
+- [What I learned from this competition(rank933)](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/566538) — 15 票 / 0 评论 / 2025-03-06 
+- [Can we generate more data ourselves for training?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550292) — 15 票 / 8 评论 / 2024-12-06 
+- [Top 25th place with TabM only and nothing else](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/567863) — 15 票 / 3 评论 / 2025-03-12 **write-up?**
+- [Get started here](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/549958) — 14 票 / 82 评论 / 2024-12-04 
+- [Potential Benefits of Outlier Removal? -> No Benefits maybe](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/553872) — 14 票 / 11 评论 / 2024-12-29 
+- [Stuck at 0.687! Any Tips from the 0.690+ Achievers?](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/557598) — 14 票 / 9 评论 / 2025-01-20 
+- [Simple and fast implementation of the pairwise ranking loss](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/565011) — 14 票 / 2 评论 / 2025-02-26 
+- [This Competition has an Official Discord Channel](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/559813) — 7 票 / 5 评论 / 2025-01-27 
+- [Recap of Competition - Congratulations to the Winners!](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/567504) — 5 票 / 0 评论 / 2025-03-10 
+- [Thank you for being a part of this competition...](https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/573282) — 2 票 / 1 评论 / 2025-04-14 

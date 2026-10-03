@@ -1,0 +1,335 @@
+# https://www.kaggle.com/competitions/cmi-detect-behavior-with-sensor-data/discussion/603611
+
+Topic #603611: 1st place solution
+  Author: Ogurtsov
+  Posted: 2025-09-03 11:14:57.396000
+  Votes: 81  Comments: 19
+
+Links to code:
+
+
+
+Training code on github
+
+Inference notebook
+
+
+Solution Writeup
+
+Congratulations to all the winners and a big respect to the organizers for putting together such a challenging and rewarding competition. 
+Special thanks to my teammates yuanzhe zhou and Devin Anzelmo for the great collaboration and team spirit.
+
+Solution Overview
+
+
+
+
+Large ensembles for IMU-only and all-features samples, assembled as weighted sum of logits
+
+
+Post-processing to take into account limited number of samples with each class and with each orientation per subject (already described here)
+
+
+Additional models for orientation prediction
+
+
+
+
+Devin's part
+
+1. Preprocessing/feature engineering:
+
+
+
+
+Removed subjects who wore device incorrectly from both training and validation
+
+
+For TOF subsample by taking nine 2x2 squares and calculating mean for each (turn -1 to null first)
+
+
+Some models trained with temporal difference of above TOF features and thermal
+
+
+IMU: raw 7 + temporal diff of acc, rotational diff as posted in notebooks, as well as magnitude of acc/rot; 16 total
+
+
+preprocess left handed to match right handed for IMU and THM/TOF. Flip acc_x, convert rot to xyz euler and flip sign for y and z
+
+
+robust scaler 
+
+
+2. Augmentation:
+
+
+
+
+up scaling/down scaling all features 
+
+
+random noise 
+
+
+3. Models:
+
+
+
+
+CNN GRU with different stems for different features. Feature extractor is four branches of CNN with no pooling
+
+
+Pure CNN. Same feature extractor as above but three blocks of residual at end with expanding kernal (5, 9, 13)
+
+
+dense GRU, scores lower but helps a little in ensemble
+
+
+some self excitation models, some not combining helps
+
+
+3D CNN for TOF data scores about 0.83 but blends well
+
+
+4. Training:
+
+
+
+
+batch size 64
+
+
+train for 60-80 (depending on model) iters with AdamW lr = 0.0005
+
+
+5. Ensemble:
+
+
+
+
+blend IMU models with all-features models 
+
+
+blend TOF-only model improves all data score
+
+
+
+
+Ogurtsov's part
+
+1. Filtering data:    
+
+
+
+
+[all models] remove sequence SEQ_011975 without gesture    
+
+
+[all models] remove sequences with gesture/total ratio &lt; 0.2 (this subset includes almost all shortest sequences)    
+
+
+[models with THM and TOF data] remove sequences with TOF completely missing    (missing values patterns in TOF - 0%, 20% or 100%; 20% missing is ok)   
+
+
+few models were trained without "problematic" subjects SUBJ_045235 and SUBJ_019262
+
+
+2. Preprocessing:
+
+
+
+
+fill quaternion missing values, if possible    
+
+
+mirror data for left-handed subjects 
+
+
+replace -1 TOF values with 500 because -1 encodes large distance    
+
+
+ultimate filling NaNs with seq.ffill().bfill().fillna(0)
+
+
+pad/crop by 94 percentile in each fold (~120 max seq length)    
+
+
+no scalers - it gave the largest improvement at early stage    
+
+
+3. Feature engineering:    
+
+
+
+
+nothing for THM and TOF    
+
+
+35 IMU features:    
+
+
+[', ', ', ', ', ', ', ', ', ', ', ',    
+rot_w', ', ', ', ', ', ', ', ', ', ',    
+acc_x2', ', ', ', ', ', ', ', ', ', ', ']
+
+
+acc_x2 and other ***2 features are important part of the solution. 
+These features are calculated on values transformed by remove_gravity_from_acc().    
+
+4. Models:    
+
+
+
+
+bunch of models with different architectures for training on IMU-only data and similar models for training with all features    
+
+
+main differences in time dimension processing: LSTM-, attention- or CNN-based    
+
+
+key part - independent processing groups of features at first layers    
+
+
+5. Augmentations:    
+
+
+
+
+mixup with MIXUP_ALPHA = 0.4
+
+
+augmentation from CMI | Sequence Data Augmentation (thanks moth):    
+
+
+transforms = Compose,    
+    TimeStretch,    
+])
+
+
+with some variations.
+
+It was hard to pick up right augmetations with right probability &amp; strength and apply it in the correct order.    
+
+6. Training:    
+
+
+
+
+CV5 with group by subject K-fold, 5 models are used on inference    
+
+
+200 or 220 epochs, patience 30 or 35    
+
+
+torch.optim.Adam with lr = 4e-4 or lr = 5e-4 and weight_decay = 3e-4    
+
+
+CosineAnnealingWarmRestarts; LinearLR + CosineAnnealingWarmRestarts for attention-based models    
+
+
+one model was trained with focal loss and class weights    (class weights obviously mean nothing for mixup samples, maybe it can serve as regularization)  
+
+
+one model contains bug in cross-attention (shared weights for 3 different attentions) but works pretty well
+
+
+7. Some tricks:    
+
+
+
+
+pick best result for each fold among 3 runs
+
+
+increase sequence length by 5 on inference (it doesn't improve CV score but effectively decorrelates models)
+
+
+
+
+zyz's part
+
+1.1. Using the pipeline structure from CMI3 Pyroch Baseline+model_add, Aug, folds
+
+1.2. Fixing many bugs improved my score to 0.85.
+
+
+
+
+Models: simple combinations of RNN and CNN1D.
+
+
+Feature engineering using pytorch, which avoids problem of consistency but makes the training slower.
+
+
+Basic preprocessing mentioned by most teams: fillnan, handedness, etc.
+
+
+Post-processing based on data structure.
+
+
+Augmentation idea from teammates:
+
+
+6.1. Mask data during training helps.
+
+Comments:
+├─ Sam Bui (2025-09-05 00:49:45.107000) [+3]
+│  Congratulations! I have some question about Devin's part's Preprocessing.
+│  
+│  
+│    
+│  Removed subjects who wore device incorrectly from both training and validation
+│  
+│  
+│  How do you know that subjects wore de...
+├─ Fae Gaze (2025-09-12 06:24:00.133000) [+1]
+│  Congrats on the 1st place!  Really impressive ensemble design and feature engineering across IMU, TOF, and THM.
+│  
+│  I had a question regarding CV and data imbalance: since some classes/orientations ar...
+  ├─ Ogurtsov (2025-09-12 07:15:39.703000) [+0]
+  │  I used K-fold by subject from the very beginning and didn't try anything else.
+├─ Theo Viel (2025-09-03 11:33:36.080000) [+1]
+│  Congratz !
+│  
+│  I have some questions :)
+│  
+│  
+│  
+│  How does your ensemble perform without PP ?
+│  
+│  How did you implement PP ? Using optimization heuristics / using a transformer model ?
+  ├─ [deleted] (2025-09-03 11:38:21.260000) [+1]
+  │  [deleted]
+  ├─ Ogurtsov (2025-09-03 11:42:16.810000) [+1]
+  │  Thanks! Exact pure score without post-processing for best submit is unknown, we literally had no submits left to check. Our sub-ensembles at the team merging moment scored like 0.873-0.874 (public ...
+    ├─ Theo Viel (2025-09-03 11:45:44.377000) [+1]
+    │  Thanks for the quick replies.
+    │  Looks like we have comparable ensembles without PP but your PP is stronger !
+├─ Kurise (2025-09-04 02:29:51.810000) [+2]
+│  Congratulations! I have a question about your scales. I also train on no scales data which is better for my model but the scaler data is also better for my inference. I don't know why it will work.
+  ├─ yuanzhe zhou (2025-09-04 03:37:20.263000) [+1]
+  │  It is more about the initialization of the neural network, which is more related to lucky seed. The scale of the provided data is already very good, just divide by 10 is enough.
+    ├─ Sangram Patil (2025-09-04 03:47:11.770000) [+0]
+    │  which  more related to lucky seed.
+    │  
+    │  
+    │  @yuanzhezhou may i ask which seed value or values do you use in traning  ?
+    ├─ yuanzhe zhou (2025-09-04 04:23:54.630000) [+2]
+    │  I did not change the seed use by the public notebook, which is 42. it is important not to tune seed for better score
+  ├─ Ogurtsov (2025-09-04 05:56:27.460000) [+2]
+  │  Scaled data on train + not scaled on inference could work only if scaling changes data to a very small extent.
+├─ moth (2025-09-03 12:01:00.963000) [+2]
+│  Congratulations! I am glad my augmentations worked for you. For me the one that worked the best (besides mixup) was adding random peaks or valleys. This is similar to masking. Another good one is c...
+  ├─ Ogurtsov (2025-09-03 12:10:29.173000) [+1]
+  │  Thanks! Your aug notebook helped me make progress when I got stuck at some moment.
+├─ MYSO (2025-09-05 03:47:15.280000) [+0]
+│  Congrats! Do you mean bugs in my code? If so, could you share what you fixed?
+  ├─ yuanzhe zhou (2025-09-05 04:21:00.827000) [+1]
+  │  Hello, it is a good notebook. It was the only pytorch notebook that could train&amp;submit to get good score at that time. The problem is that, many details are limitting further development. For e...
+├─ Ricardo Pirabed A.A. (2025-09-04 14:53:55.727000) [+0]
+│  Wow! Congratulations ! that’s great work. It was clear from the beginning that feature engineering would have a significant impact, the dataset has many faces 😅
+│  One question: What was the level of ...
+├─ [deleted] (2025-09-03 11:18:15.053000) [+0]
+│  [deleted]
+├─ Joseph Ekpe (2025-09-10 12:08:00.923000) [+0]
+│  Congratulations

@@ -1,0 +1,70 @@
+<p>Thanks to our hosts for organizing this competition. Our placing was poor, but I am happy to report that we scored reasonably well on the YOLO model.<br>
+※The team's highest score was PB 0.851</p>
+<h2>Making models</h2>
+<ul>
+<li><p>base model</p>
+<p>yolov8l, yolo11l  (yolov8 had a better LB score)</p></li>
+<li><p>original data</p>
+<p>competition data + external data(<a href="https://www.kaggle.com/datasets/brendanartley/cryoet-flagellar-motors-dataset" target="_blank">https://www.kaggle.com/datasets/brendanartley/cryoet-flagellar-motors-dataset</a>)</p></li>
+<li><p>making yolo dataset</p>
+<p>based on <strong>Parse Data notebook(</strong><a href="https://www.kaggle.com/code/andrewjdarley/parse-data" target="_blank">https://www.kaggle.com/code/andrewjdarley/parse-data</a>)</p>
+<p>I have devised the following points</p>
+<ul>
+<li>When creating training data, TRUST=8 for competition data and TRUST=2 for external data.</li>
+<li>When creating validation data, TRUST=4 for competition data sets only, not use external data.</li>
+<li>slice images are resized to 960x960 for uniformity</li>
+<li>vertical flipping,  horizontal flipping, and horizontal-vertical flipping data augmentation is performed on competition data only</li>
+<li>BOX_SIZE is int(1000 / voxel_spacing) for competition data, 35 for external data.</li>
+<li>4-fold datasets</li></ul></li>
+<li><p>training</p>
+<p>based on Train Yolo <strong>notebook(</strong><a href="https://www.kaggle.com/code/andrewjdarley/train-yolo" target="_blank">https://www.kaggle.com/code/andrewjdarley/train-yolo</a>)</p>
+<p>I have changed the following points</p>
+<ul>
+<li>batch-size = 32, epoch=30, imgsz=960</li>
+<li>yolov8l:lr0=1e-4, lrf= yolo11l:lr0=0.001  cos_lr=True, etc</li>
+<li>save_period=1 and use best_dfl_loss-epoch model</li></ul></li>
+</ul>
+<h2>Inference</h2>
+<p>In  YOLO model, I have devised a calculation of the z-coordinate. In addition, I have tried to speed up the process.</p>
+<ul>
+<li><p>calculation of motor coordinates</p>
+<p>I used DFS(depth-first search). <br>
+The x,y coordinates detected in yolo with the slice number as the z coordinate were grouped by DFS and the average value was taken. This idea originated from <a href="https://www.kaggle.com/itsuki9180" target="_blank">@itsuki9180</a> 's notebook in CZII (<a href="https://www.kaggle.com/code/itsuki9180/czii-yolo11-submission-baseline" target="_blank">https://www.kaggle.com/code/itsuki9180/czii-yolo11-submission-baseline</a>)</p></li>
+<li><p>speed up inference</p>
+<p>Submit time for public note takes 6.5h for one model. To improve the processing speed, the following efforts were made. This resulted in submit time of 1h40m for one model.</p>
+<ul>
+<li>tomo_id is divided into 4 groups and handled by 4 processes.</li>
+<li>2 processes share one T4-GPU</li>
+<li>In 1 porcess, read jpg files in a separate thread from yolo predictions</li>
+<li>yolo-predict in half-precision (FP16)</li></ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F8234844%2F2975859e11f30ffc95edfba1e035bea5%2Fimage.png?generation=1749086495125297&amp;alt=media" alt=""></p></li>
+
+<li><p>yolo-models ensemble</p>
+<p>The yolo-models ensemble collects the per-slice detection coordinates across the entire models and processes them in DFS at once.</p></li>
+<li><p>slices-skip</p>
+<p>Even with the above multi-processing, it takes more than 6 hours to ensemble a 4-fold training model. The ensemble of the 4-fold model was reduced to 1h40m by reducing the number of slices in this <a href="https://www.kaggle.com/yyyy0201" target="_blank">@yyyy0201</a> discussion(<a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/578461)" target="_blank">https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/578461)</a>.</p>
+<p>Prepare array of four randomly selected slices for every 4 slices and assign them to each 4-fold model.</p>
+<pre><code>    selected_indices = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+    selected_indices2 = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+    selected_indices3 = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+    selected_indices4 = [.choice(list((i, (i+, slen))))  iin (, slen, )]
+</code></pre>
+<p>This resulted in a submission time of about 3hours for an ensemble of yolov8l and yolo11l 4-fold models (8models in total). and the PB score is LB0.840. this inference notebook is (<a href="https://www.kaggle.com/code/minfuka/byu-yolo-960-inference-fold4-slice-skip-random-v8l" target="_blank">https://www.kaggle.com/code/minfuka/byu-yolo-960-inference-fold4-slice-skip-random-v8l</a>)<br>
+(but, this notebook could be described more compactly)</p></li>
+</ul>
+<h2>Score Transition</h2>
+<p>LB Score Transition. This score is the score before it was recalculated(<a href="https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574729)" target="_blank">https://www.kaggle.com/competitions/byu-locating-bacterial-flagellar-motors-2025/discussion/574729)</a>.</p>
+<p>All scores are using yolov8L and hold-out(8:2) dataset and best.pt.</p>
+<p>Initially I was submitting best.pt but changed to best_dfl_epoch.pt due to unstable best.pt scores.</p>
+<ul>
+<li>Change image size during training from 640 to 960 → LB 0.65</li>
+<li>Change from BS=16 to BS=32 → LB 0.699</li>
+<li>Increase target slice for data set creation in public notes to Train TRUST=8 Valid TRUST=4→ LB 0.76</li>
+<li>vertical flipping,  horizontal flipping, and horizontal-vertical flipping data augmentation is performed on competition data → LB 0.80</li>
+<li>Use publicly available external data → LB0.825</li>
+</ul>
+<h2>What didn't work</h2>
+<ul>
+<li>TTA</li>
+<li>WBF</li>
+</ul>

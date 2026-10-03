@@ -1,0 +1,778 @@
+# https://www.kaggle.com/competitions/blood-vessel-segmentation/discussion/456118
+
+Topic #456118: [lb0.870 !!!] experiment results, hopefully open gold solution till 21-jan-2024
+  Author: hengck23
+  Posted: 2023-11-18 05:54:29.641000
+  Votes: 122  Comments: 215
+
+more to come later ‎‏…. ㅤㅤㅤㅤㅤㅤ‎‏‏‎ ‎‏‏‎ ‎‏‎ ‎‏‏‎ ㅤ ㅤㅤㅤㅤㅤ‎‏‏‎ ‎‏‏‎ ‎‏‎ ‎‏‏‎ ‎‏
+
+🦟 nov-21:
+
+
+
+a simple baseline notebook to check reading of images and model inferenceㅤㅤㅤ‎‏‏‎ ‎‏‏‎ ‎‏‎ ‎‏‏‎ ㅤ
+https://www.kaggle.com/code/hengck23/lb0-534-baseline-simple-unet-seresnext26d-32x4
+
+
+🦟 nov-28:
+
+
+
+advanced baseline with more augmentation and 3d post-processing ㅤㅤㅤ‎‏‏‎ ‎‏‏‎ ‎‏‎ ‎‏‏‎ ㅤ
+https://www.kaggle.com/code/hengck23/lb0-808-resnet50-cc3d2d-unet-xy-zy-zx-cc3d
+
+this concluded my one-week feasibility study:
+
+
+estimated upperbound: lb 0.93
+
+identified key problems: miss (broken large vessels, missing small vessels), fp (noise, sometimes out of kidney volume)
+
+solutions: multiscale and 3d model (i think 3d transformer/hybrid/cnn should work well, need long range attention)
+
+
+i am obviously? overfitting the public LB data …
+
+
+
+
+
+here is a visualization of the target vessel we are segmenting:
+ 
+
+obviously, 3d segmentation will get better results. you probably can't just rely on deep net, and need some very smart 3d image post processing to win.
+
+Comments:
+├─ hengck23 (2024-01-02 08:56:51.607000) [+10]
+│  i realize something important.
+│  i checked the fast surface dice loss and i think we can directly optimize this loss in gradient descent!
+│  
+│  i) use 3 channel input and predict 3 channel output
+│  ii) refe...
+  ├─ Theo Viel (2024-01-02 11:35:28.340000) [+0]
+  │  From my understanding the surface dice metric requires thresholding of predictions hence we cannot directly optimize it.
+  │  Applying the metric on probabilities does not seem to yield meaningful resul...
+    ├─ hengck23 (2024-01-02 16:26:24.097000) [+3]
+    │  here is the trick:
+    │  (it works because we are using tolerance =0)
+    │  
+    │  
+    │  
+    │  if tolerance is not zero, then we have to modify the softmax loss to KL divergence loss where the ground truth probabiliy = 1 - su...
+    ├─ hengck23 (2024-01-02 16:39:31.320000) [+3]
+    │  surface dice code
+    ├─ hengck23 (2024-01-03 02:53:58.090000) [+2]
+    │  BCE is really a bad loss
+    ├─ hengck23 (2024-01-03 05:41:01.507000) [+3]
+    │  some other good boundary/surface loss from other papers:
+    │  
+    │  [1] Boundary loss for highly unbalanced segmentation
+    │  https://arxiv.org/pdf/1812.07032.pdf
+    │  https://github.com/LIVIAETS/boundary-loss
+    │  
+    │  [2] Bo...
+    ├─ hengck23 (2024-01-03 08:10:56.550000) [+2]
+    │  google new paper!!
+    │  
+    │  Boundary Attention: Learning to Find Faint Boundaries at Any Resolution
+    │  https://arxiv.org/pdf/2401.00935.pdf
+    ├─ lhwcv (2024-01-09 03:28:51.557000) [+0]
+    │  Thanks for sharing, have you try  this loss （your surface dice code）, how effective was it?
+├─ hengck23 (2023-11-24 17:39:09.587000) [+9]
+│  kidney mask dataset
+│  https://www.kaggle.com/datasets/hengck23/blood-vessel-segmentation-kidney-mask
+  ├─ kcetskcaz (2023-11-25 04:47:08.773000) [+2]
+  │  Thanks for putting this together, I was just looking at doing something like this yesterday before getting pulled in to holiday shenanigans. I re-scaled the data back to the full image size, RLE en...
+  ├─ hengck23 (2023-11-25 12:40:51.590000) [+2]
+  │  this is the code to get lb710+ using kidney mask
+  │  
+  │     vessel, kidney = 0,0
+  │          with torch.cuda.amp.autocast:
+  │              with torch.no_grad:
+  │                  vm, km = net 
+  │                  vessel ...
+    ├─ raytency (2023-11-25 18:04:27.380000) [+0]
+    │  What is TTA?
+    ├─ coderRKJ (2023-11-26 10:56:20.430000) [+0]
+    │  TTA is Test Time Augmentation. Best summary is in this paper: Better Aggregation in Test-Time Augmentation
+    │  
+    │  
+    │    
+    │  Test-time augmentation -- the aggregation of predictions across transformed versions ...
+  ├─ Kafka Tamura (2023-11-26 11:26:38.900000) [+1]
+  │  Can you please explain this a bit? What are these masks for? In the train datasets, don't we already have dense masks for kidney 1 &amp; 3? Please excuse me if this is mundane. I'm just starting out.
+  ├─ lhwcv (2023-12-01 02:18:16.403000) [+1]
+  │  Thanks for Sharing. How you create this kidney mask dataset？
+├─ hengck23 (2023-12-20 15:35:22.913000) [+7]
+│  20-dec:
+│  
+│  recepie for LB 0.848
+│  
+│  
+│  
+│  use transformer  (e.g. nextVIT base)
+│  
+│  use train =  kidney1/dense + kidney3/dense
+│  
+│  use validate = kidney2 
+│  
+│  just normal unet2d (with a additional encoder layer for H...
+  ├─ samshipengs (2023-12-21 00:10:57.317000) [+0]
+  │  maybe i missed it, but any reason just normal unet2d would be suffice? any thoughts on 3D approach?
+  ├─ Time Master (2023-12-27 03:24:57.123000) [+2]
+  │  Hi, I don't understand what does xy,zx,zy mean，could you please explain it, thanks!
+    ├─ Ivan Egorov (2023-12-27 16:50:12.083000) [+3]
+    │  As you are dealing with 3d images, you can view them at different sides, so there are XY, ZX and ZY. Think of that as a cube which you can look at from different angles.
+    ├─ hengck23 (2023-12-27 22:33:40.620000) [+3]
+    │  more infor
+  ├─ Muhammad Haseeb Ahmad (2024-01-01 15:19:38.600000) [+0]
+  │  did you try using a combination of these strats, or did you get excellent results trying each of them individually?
+├─ hengck23 (2023-12-17 18:47:04.473000) [+7]
+│  correct way to do validation:
+│  
+│  
+│  
+│  just validate on kidney3 is not enough.
+│  
+│  another test (just test only, don't use it to true hyper-parameters) on kidney2 is probably more accurate
+│  
+│  low fp seems to ...
+  ├─ hengck23 (2023-12-18 05:42:24.293000) [+14]
+  │  another tip:
+  │  my previous two winning kaggle solution has huge shake up. I could win because i kept to the follwing principles. instead of the best parameter (e.g. threshold)  for the solution:
+  │  
+  │  
+  │  
+  │  t...
+├─ hengck23 (2023-12-11 04:55:13.287000) [+7]
+│  https://www.kaggle.com/code/junkoda/fast-surface-dice-computation
+│  
+│  based on the fast surface dice computation by @junkoda, i did an extensive study on the effect of threshold and the local lb metri...
+  ├─ Huang Jin Feng (2023-12-11 05:01:33.273000) [+1]
+  │  I'm using a combination of 0.5Dice loss and 0.5BCE loss. The loss is continuously decreasing, but it seems that the surface dice and LB are also increasing. Perhaps Dice loss is more suitable?
+  ├─ Snorf (2023-12-11 05:02:50.523000) [+1]
+  │  Is the model trained on xy xz yz or only inferred on xy xz yz?
+    ├─ hengck23 (2023-12-11 05:41:15.430000) [+4]
+    │  model is trained in xy xz yz
+  ├─ Lingxi (2023-12-15 16:01:34.850000) [+2]
+  │  Hello, may I ask how you do multi-view training during the training process, is it cycling three axes training in one epoch? I put the data of the three views into a dataset, set the batchsize to 1...
+    ├─ hengck23 (2023-12-15 16:46:53.713000) [+3]
+    │  ():
+    │      train_id=[]
+    │       n  name:
+    │          d = meta_data[n]
+    │          D,H,W = d.image.shape
+    │          train_id += [ (d.name, i, )  i  (H) ]
+    │          train_id += [ (d.name, i, )  i  (D) ]
+    │          train_id...
+    ├─ Lingxi (2023-12-16 08:34:03.630000) [+1]
+    │  This seems similar to doing a three-view dataset offline, whether you used a batchsize of 1 or padded the  different viewing images to the same size.
+├─ hengck23 (2023-12-09 20:32:34.497000) [+8]
+│  example of simple 3d flood fill
+  ├─ hengck23 (2023-12-09 20:34:43.617000) [+2]
+  │  iteration in range():
+  │   
+  │    t in range(,,-): 
+  │      (t)
+  │        = dense[t+]
+  │       = image[t+]
+  │       = image[t]
+  │  
+  │       = curr_image[:-,:-]
+  │       = prev_mask*prev_image
+  │  
+  │      =
+  │       = 
+  │       += np.abs(m-prev[:-,...
+├─ hengck23 (2023-11-30 12:35:19.300000) [+7]
+│  IMPORTANT!!!!!
+│  This is the black magic and the trick to winning!!!!
+│  
+│  results of 3d flood fill with seed = one pixel
+  ├─ hengck23 (2023-11-30 13:12:05.883000) [+2]
+  │  this reminds me of 3d SAM (segment anything model)
+  │  if so, we can use self-supervised learning to train the encoder  
+  │  
+  │  the seed will be prompt.  
+  │  
+  │  the decoder is to perform floodfill segmentation
+    ├─ hengck23 (2023-11-30 19:01:08.027000) [+1]
+    │  volumetric rendering of image volume
+    │  
+    │  
+    │  
+    │  it shows the uniform intensity of walls of the vessel. that is why flood fill works well
+    ├─ hengck23 (2023-11-30 19:32:36.910000) [+2]
+    │  this solves the puzzle why there are so much noise in prediction.
+    │  we need some median filtering layer?
+    │  https://github.com/llmpass/medianDenoise
+    ├─ hengck23 (2023-12-01 08:32:41.507000) [+3]
+    │  hyptersis thresholding prediction as an alterantive to flood filling on input
+    ├─ hengck23 (2023-12-03 05:16:38.150000) [+0]
+    │  nice rendering
+    │  https://www.youtube.com/watch?v=wZbfNJxTxqc
+    │  
+    │  https://www.nationalgeographic.com/science/article/worlds-brightest-x-rays-reveal-covid-19-damage-to-the-body
+├─ hengck23 (2023-11-30 03:24:50.710000) [+7]
+│  wrong annotation !!!!!
+  ├─ hengck23 (2023-11-30 04:07:21.747000) [+2]
+  │  i think there is offset bug in annotion for kidney2
+    ├─ hengck23 (2023-12-10 08:08:00.093000) [+1]
+    │  shift error happens in hidden test datat ground truth before in kaggle competitions…
+    │  anyone want to probe that?
+    ├─ hengck23 (2023-12-16 17:50:06.877000) [+5]
+    │  only top half of kidney 2 annotation are shifted
+    │  
+    │  TOP:
+    │  
+    │  
+    │  BOTTOM:
+    │  
+    │  
+    │      pl = pv.
+    │  
+    │      mhit = pv.).T).glyph(geom=pv.)
+    │      mfp = pv.).T).glyph(geom=pv.)
+    │      mmiss = pv.).T).glyph(geom=pv.)
+    │      pl.add
+    │  ...
+├─ hengck23 (2024-01-27 00:29:18.097000) [+5]
+│  my estimate at one week before the competition:
+│  
+│  
+│  
+│  for a good ML/deep learning practitioner:  performance of single model : &gt;= public lb 0.865
+│  
+│  experienced practitioner:  performance of single m...
+  ├─ chemdatafarmer (2024-01-27 20:59:09.037000) [+0]
+  │  It will be interesting to see how it plays out. I am looking forward to people's write ups so I can understand how they go from 0.8 -&gt; ~0.86 on the leaderboard. I've struggled to get my 2D model...
+    ├─ chemdatafarmer (2024-01-27 21:02:10.803000) [+0]
+    │  Actually, I have struggled to get train and validation dice scores over 0.84 (kidney 1 train, kidney 3 val) without overfitting
+    ├─ hengck23 (2024-01-28 01:36:22.463000) [+6]
+    │  "so I can understand how they go from 0.8 -&gt; ~0.86 on the leaderboard. "
+    │  "I have struggled to get train and validation dice  … without overfitting"
+    │  
+    │  answer to both : train augmentation.
+    │  
+    │  general...
+    ├─ chemdatafarmer (2024-01-28 02:13:53.993000) [+0]
+    │  Thank you @hengck23 for always being so helpful on these forums! I noticed that the train augmentation helps improve the consistency between the train, test, and even leaderboard. Perhaps I need to...
+    ├─ hengck23 (2024-01-30 12:08:10.753000) [+1]
+    │  visualisation for the first 0.25 epoch
+    ├─ chemdatafarmer (2024-01-31 22:26:30.590000) [+0]
+    │  Very interesting! I've been working on doing similar after your comment. Your advice has been very helpful, I've been implementing it and hoping it can help me move up on the leaderboard before the...
+  ├─ Cody_Null (2024-01-28 00:27:55.863000) [+2]
+  │  This one has been a heart breaker, I have been stuck with my current score for about a month now and it seems unless I come up with something I will be just shy of gold. I am interested to see what...
+    ├─ chemdatafarmer (2024-01-28 02:15:48.037000) [+1]
+    │  I understand. I got really excited about a custom loss function I found in the literature and for my models below 0.8 on the public leaderboard it always seemed to improve the score, but when I tri...
+    ├─ Cody_Null (2024-01-28 03:23:09.900000) [+1]
+    │  Thank you! Good luck to you too! Yes the learning is what is important and I have definitely done a lot of that! Good to get reminders every once in awhile!
+  ├─ hengck23 (2024-01-29 11:09:57.290000) [+0]
+  │  one more information. from the paper: if train = kidney1 upper, valid = kidney1 lower, surface dice is 0.95.
+  │  But i think that is not using TTA.
+  │  (i haven't done experiment on upper/lower split).
+  │  
+  │  I ...
+    ├─ Muhammad Haseeb Ahmad (2024-01-29 14:38:28.967000) [+0]
+    │  I noticed something today which you might find interesting.
+    │  For my validation set, which is kidney 3 dense, I generated a submission.csv using all the images.
+    │  Then I broke it into 10 samples to cal...
+    ├─ Optimo (2024-01-29 14:58:09.980000) [+2]
+    │  What you are doing does not make sense -&gt; the competition metric is computed over consecutive frames: the dice score is computed on the surface area defined by two consecutive frames. So if you ...
+    ├─ Muhammad Haseeb Ahmad (2024-01-29 15:26:32.107000) [+1]
+    │  Wow, that clarifies so much for me. Thank you very much. I suppose dice loss is very different.
+    │  I have learned a valuable lesson.
+    ├─ hengck23 (2024-01-30 03:40:49.027000) [+0]
+    │  i wonder did anyone try this:
+    │  
+    │  
+    │  
+    │  use kidney1 upper as train and kidney1 lower as validation.
+    │  
+    │  then use " kidney1 upper truth + kidney1 lower pseudo label"to make a model. Compare it against another...
+    ├─ JEANMPIA (2024-01-30 06:18:28.613000) [+3]
+    │  That's a really good idea, will try and let everyone know the results here
+    ├─ HB (2024-01-30 06:33:05.297000) [+0]
+    │  from the paper: if train = kidney1 upper, valid = kidney1 lower, surface dice is 0.95.
+    │  
+    │  Can you tell me about this paper?
+    │  
+    │  Relabeling "kidney3 sparse" will help, but I don't think it's easy to get ...
+├─ hengck23 (2024-01-06 01:16:46.003000) [+6]
+│  wrong strategy?
+│  
+│  i have been trying  detect  small vessels  improve  LB score becuase   stated   paper  this  one   problem.
+│  But  i realize  this may  be a good strategy?
+│  
+│  i use train= kidney1 dens...
+  ├─ hengck23 (2024-01-06 06:30:26.443000) [+2]
+  │  update on 06-JAN
+  │  trick to get lb 0.87+
+  │  
+  │  
+  │  
+  │  
+  │  make a base model in the range of 0.864 (e.g. either seresnext50_32x4d or  nextVIT base  2d unet)
+  │  
+  │  
+  │  ensemble of the two will give  0.87+
+  │  
+  │  
+  │  ensemble  impro...
+    ├─ lhwcv (2024-01-06 07:31:23.673000) [+2]
+    │  Thank you for sharing. Different models might have different thresholds. How do you perform model fusion? Do you average the probabilities and then use a compromise threshold?
+    ├─ wpl (2024-01-06 09:44:17.340000) [+1]
+    │  Thank you for sharing. I would like to know approximately how long it takes for a single model of amp inference, and would it be faster to use TensorRT instead
+    ├─ hengck23 (2024-01-06 11:20:49.200000) [+1]
+    │  seresnext50_32x4d : 2hr +
+    │  nextVIT base 2d : 3hr +
+    │  
+    │  i haven't use tensorRT yet
+    ├─ hengck23 (2024-01-06 12:40:51.307000) [+4]
+    │  @lihaoweicvch 
+    │  
+    │  i have not decided. but the threshold is smiliar for same validation set even for different model
+    ├─ wpl (2024-01-06 15:17:07.227000) [+1]
+    │  Thank you for answer.Is this the duration of reasoning for only one perspective without TTA? When I take TTA from three perspectives, seresnext50_ 32x4d took approximately 6 hours to reason
+    ├─ hengck23 (2024-01-06 15:25:31.097000) [+1]
+    │  time is for infer with the usual xy,zx,zy + 5 TTA
+  ├─ Theo Viel (2024-01-07 11:19:37.070000) [+1]
+  │  @hengck23 How do you compute your FPR ? Your definition probably differs from the one I'm used to regarding normalization.
+  │  
+  │  Do you use (pred * (1 - truth)).sum() / truth.sum() ?
+  │  Same for TPR, you a...
+    ├─ hengck23 (2024-01-07 12:53:54.400000) [+4]
+    │  def np_metric(, truth):
+    │      p = (&gt;0.5)
+    │      t = (truth&gt;0.5)
+    │      hit = (p*t).()
+    │      fp  = (p*(1-t)).()
+    │      t_sum = t.()
+    │      p_sum = p.()
+    │       hit, fp, t_sum, p_sum
+    │  
+    │  #---------------------------...
+    ├─ Theo Viel (2024-01-07 14:46:00.647000) [+2]
+    │  Gotcha, thanks.
+    │  
+    │  FYI, those are my scores on kidney_2: 
+    │  
+    │  hit: 0.9549
+    │  fp: 0.0507
+    │  CV: 0.84
+    │  LB ~0.80
+    │  
+    │  My LB scores are lagging behind compared to yours but my CV scores are close. Not sure if it is be...
+    ├─ hengck23 (2024-01-07 17:44:08.753000) [+2]
+    │  submit with different thresholds.
+    │  
+    │  CV and LB correlations are weak. but i do see a general linear relationship: lb = cv + bias
+    │  (cv and lb don't share the best optimal threshold, which is a** proble...
+    ├─ hengck23 (2024-01-07 17:50:56.710000) [+3]
+    │  @theoviel 
+    │  i think your metric are for model without TTA.
+    │  
+    │  you need to do TTA (it is common that 2d Unet can completely  miss vessel in one view and detect in another). TTA may not improve CV, but ...
+├─ hengck23 (2023-12-09 15:30:08.363000) [+6]
+│  trick to get lb 0.835
+  ├─ hengck23 (2023-12-09 15:32:07.580000) [+3]
+  │  def forward(self, batch):
+  │          x = batch['image']
+  │          x = x.(-1,3,-1,-1) 
+  │          B, C, , W = x.shape
+  │  
+  │           = []
+  │          xx = self.stem0(x); .(xx)
+  │          xx = F.avg_pool2d(xx,kernel_siz...
+    ├─ hengck23 (2023-12-09 15:46:19.803000) [+0]
+    │  you can go to super-resolution
+    │  
+    │  
+    │  
+    │  HINT:
+    │  alternatively, you can train a real super-resolution net (you have 20um imags from the HIP-CT website)
+    ├─ hengck23 (2023-12-10 00:53:29.737000) [+1]
+    │  local CV/LB
+├─ hengck23 (2023-12-07 06:39:19.887000) [+6]
+│  lb0.829 …
+│  
+│  normalisation is the key
+│  
+│   norm_by_percentile(volume, low=, high=., alpha=.):
+│       = np.percentile(volume,low)
+│       = np.percentile(volume,high)
+│       = (volume-xmin)/(xmax-xmin)
+│       :
+│   ...
+  ├─ Arunodhayan (2023-12-09 05:50:07.933000) [+0]
+  │  @hengck23 - is this the right way to read 3D volume because i get negative stride error 
+  │  
+  │   (torch.utils.data.Dataset):
+  │   ():
+  │      self.img_voxel = create_3d_voxel(img_voxel_paths)  
+  │      self.msk_voxe...
+    ├─ hengck23 (2023-12-09 15:36:51.937000) [+0]
+    │  def do_random_flip_rotate(, vessel):
+    │       ..rand()&lt;:
+    │            = .flip(, axis=) #horizontal
+    │          vessel = .flip(vessel,axis=)
+    │       ..rand()&lt;:
+    │            = .flip(, axis=)
+    │          vessel = .f...
+    ├─ Arunodhayan (2023-12-10 03:06:33.673000) [+0]
+    │  still i face the same error
+├─ hengck23 (2023-11-28 09:58:56.980000) [+5]
+│  Yellow: MISS
+│  
+│  Green: FP
+│  
+│  Red: HIT
+│  
+│  ALL
+├─ hengck23 (2023-11-26 02:17:31.723000) [+5]
+│  beware !!!
+│  it is not any vessel, but those from " arterial vascular tree "
+│  
+│  data page: "kidney_1_dense - The whole of a right kidney at 50um resolution. The entire 3D arterial vascular tree … "
+│  
+│  
+│  
+│  ...
+  ├─ hengck23 (2023-11-26 23:46:45.630000) [+2]
+  │  i am surprised that the deep CNN nework can somhow differentate between venous and arterial (target) vessel from one imgae.
+  │  
+  │  can anyone explain why?
+  │  (e.g.  they have different apperance due to dye/...
+    ├─ YYama (2023-11-27 00:02:44.373000) [+6]
+    │  The structure of the membrane differs significantly between arteries and veins. Arteries are richer in elastic fibres and thicker than veins. The walls of arteries and veins are very different, as ...
+    ├─ hengck23 (2023-11-27 00:10:58.743000) [+2]
+    │  @yosukeyama 
+    │  "The walls of arteries and veins are very different, "
+    │  
+    │  Thanks. 
+    │  That is good news
+    │  so it seen that we need not grow the tree from scratch. just pure detection (+ post processing) is pr...
+├─ hengck23 (2023-11-25 08:57:03.293000) [+6]
+│  very bad news !!!
+│  i try to do some probing.
+│  
+│  public lb set: kidney 5
+│  private lb set: kidney 6
+│  
+│  don't overfit … there could be shakeup. worst still, what if kidney 5 and 6 are of different um resolu...
+  ├─ YumeNeko (2023-11-25 11:05:56.733000) [+3]
+  │  I think your guess is correct because I had the same result when I did LB Probing before. (Public is calculated on kidney_5 only, Private is calculated on kidney_6 only.)
+  │  I think it was reasonable ...
+    ├─ YYama (2023-11-25 15:06:39.347000) [+1]
+    │  It was not hard to imagine that this kind of data split is being used.
+    │  
+    │  If the resolution is different, I believe it essentially becomes a completely different image. Since we only have two types o...
+    ├─ hengck23 (2023-12-03 05:10:06.350000) [+0]
+    │  what if private kidney6 (500 images) is actually like kidney1 voi set at about 5.2um resolution.
+    │  i cannot think of a reason why kidney1 voi set is included in the train set ….
+    ├─ Parabellum (2023-12-05 02:07:19.907000) [+0]
+    │  Something funny is my best score 0.62 is from mixing everything… I will probably remove the sparse and see if that makes a difference
+├─ hengck23 (2024-01-21 13:42:56.723000) [+3]
+│  experiments on scale … yet another proof that it is FP that matters …
+  ├─ hengck23 (2024-01-21 14:14:09.037000) [+0]
+  │  OOPS!!! there is a metric bug
+  │  (this is behaviour for kidney2. maybe different behaviour for different kidney)
+    ├─ JEANMPIA (2024-01-21 16:30:28.037000) [+1]
+    │  Hello @hengck23,
+    │  Since your conclusion is that fp matters, have you considered using the TverskyLoss ? 
+    │  
+    │  With it you can weight the impact of FP and FN, making the loss closer to the metric. What d...
+├─ hengck23 (2024-01-06 03:02:02.963000) [+4]
+│  an interesting idea
+├─ lhwcv (2023-12-21 02:37:35.190000) [+3]
+│  How long does it take for you to inference with Transformer, it seems that P100 without fp16 inference is very slow for Transformer, do you have any suggestions for this?
+  ├─ hengck23 (2023-12-21 02:45:12.713000) [+2]
+  │  you can google for fast transformer. i use nextvit, which was used in kaggle rnsa breast mamnographs before. it takes 3to4 hr and can be speedup further by tensort rt to 3 hr
+    ├─ lhwcv (2023-12-21 02:53:01.587000) [+0]
+    │  Thank you so much!
+    ├─ hengck23 (2023-12-21 03:04:22.723000) [+2]
+    │  update: nextVIT-base can get LB0.682 3hr 20 min (just complete in few minutes along so i can get the timing in minutes).
+    │  
+    │  it uses 5xTTA + 3 axis (xy,yz,xz) in P100
+    ├─ Rafael Javier Cruz (2024-01-09 12:30:04.533000) [+0]
+    │  Seems that nextVIT  is a kind of detection model. Should I modify the configuration of Q1&amp;Q2 Net for segmentation task when using? Thanks!
+  ├─ slime (2023-12-21 02:55:23.350000) [+0]
+  │  Try fp16 + 2xT4 + nn.DataParallel, for me it's faster than using single P100
+  │  
+  │  The model I choose is very slow [maxvit-small], 
+  │  and scoring single checkpoint with xy/yz/xz + 5tta takes 8 hours… 
+  │  
+  │  sh...
+    ├─ hengck23 (2023-12-21 03:23:30.103000) [+2]
+    │  the fastest i can find
+├─ hengck23 (2024-01-02 03:59:54.163000) [+4]
+│  did we just find the missing labels (for sparsely annotated ground truth labels)?
+  ├─ Ol (2024-01-02 16:20:37.963000) [+4]
+  │  GJ. I believe both sparse and dense have labeling issues (imho, cuz I`m not a doctor). Looked through and found even pretty big vessels missed. Thx for sharing.
+    ├─ hengck23 (2024-01-03 02:12:53.013000) [+3]
+    │  yes you are correct.
+    │  
+    │  an easy way to prove label error is to check train error after overfitting.
+    │  
+    │  
+    │  
+    │  slowly increase the network parameter (e.g. resnet18,34,50,101 …)
+    │  
+    │  train with small datsaet unti...
+    ├─ Ol (2024-01-03 14:01:55.690000) [+0]
+    │  Exactly. Heavy backbones perform nearly identically as small ones
+├─ hengck23 (2023-12-14 06:01:20.913000) [+3]
+│  just an idea:
+│  
+│  takes 2 nearby slices and generate vessels in between, both image and mask
+├─ hengck23 (2023-11-29 01:59:04.420000) [+3]
+│  i hope there is no bug, but mixing kidney 1 and 3 in train make LB (much worse)
+│  reference: train with kidney 1 only: LB 0.757
+│  
+│  submit inference mode: add TTA 2xflip,3xrot90 only
+│  
+│  
+│  since there is no...
+  ├─ Chris Cross (2023-11-29 14:34:10.877000) [+2]
+  │  I trained initially on kidney 1, by adding also kidney 3 improved my LB from 0.65 -&gt; 0.7. I do not know how to compare their resolutions but looks like they have pretty similar ones with 50um an...
+    ├─ hengck23 (2023-11-29 14:48:01.933000) [+0]
+    │  Thanks, i will check again
+├─ hengck23 (2023-11-27 09:53:46.590000) [+3]
+│  use 3d connected components to filter false positive errors
+│  https://pypi.org/project/connected-components-3d/
+  ├─ Aleksandr Kruchinin (2024-01-03 12:05:58.397000) [+0]
+  │  In your notebook https://www.kaggle.com/code/hengck23/lb0-808-resnet50-2d-unet-xy-zy-zx-cc3d you didn't use connected-components-3d:
+  │  cc_threshold = -1
+  │  What were your results using cc3d?
+├─ hengck23 (2023-11-24 16:50:32.557000) [+3]
+│  useful:
+│  https://github.com/JacobBumgarner/VesselVio/tree/main
+│  VesselVio is an open-source application designed for the analysis and visualization of segmented vasculature datasets.
+├─ hengck23 (2023-11-27 08:53:42.917000) [+4]
+│  https://blog.research.google/2021/06/a-browsable-petascale-reconstruction-of.html
+│  this competition reminds me of the ancient google paper on flood filling network (FFN)
+│  
+│  grow_mask = 
+│  
+│  
+│  
+│  
+│  
+│  High-prec...
+├─ hengck23 (2023-11-26 22:40:58.537000) [+4]
+│  GCO post processing:
+│  (Global Constructive Optimization algorithm for generating smaller vessels)
+│  [1] A Hybrid Approach to Full-Scale Reconstruction of Renal Arterial Network
+│  https://arxiv.org/pdf/2...
+├─ hengck23 (2023-11-26 22:21:04.207000) [+4]
+│  proposed solution:
+  ├─ dhinesh (2023-11-28 18:04:49.917000) [+1]
+  │  are you planning to apply a patch based approach? or taking the whole image into account? will we be able to fit the whole image into memory with the kaggle infrastructure?
+├─ hengck23 (2023-12-13 12:29:28.990000) [+1]
+│  useful
+│  https://github.com/PengyiZhang/RegionGrowth
+│  https://github.com/ylmzkaan/3DRegionGrowing
+│  http://notmatthancock.github.io/2017/10/09/region-growing-wrapping-c.html
+├─ hengck23 (2023-12-11 17:02:19.657000) [+1]
+│  high resolution 2d/3d unet solution !!!
+│  
+│  demo notebook :https://www.kaggle.com/code/hengck23/2d-to-3d-unet-demo
+  ├─ hengck23 (2023-12-11 17:36:11.030000) [+3]
+  │  how to properly design 3d solution.
+  │  
+  │  if you cannot fit a single 3d net work (because of memory GPU constraint), 
+  │  you properly need at least 2 net (of different hierarchy scale).
+├─ dhinesh (2023-12-11 16:16:41.053000) [+1]
+│  posting it here for visibility Patch based 3D UNET + TF + TPU: https://www.kaggle.com/code/dhinkris/training-patch-based-3d-unet-tf-tpu
+  ├─ hengck23 (2023-12-11 17:15:07.697000) [+1]
+  │  you should try these pretrain 3d unet
+  │  https://github.com/Tencent/MedicalNet
+├─ [deleted] (2023-12-11 01:36:50.620000) [+1]
+│  [deleted]
+  ├─ [deleted] (2023-12-11 02:48:57.367000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-12-11 09:00:58.290000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-12-11 09:03:24.763000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-12-11 09:13:26.270000) [+1]
+    │  [deleted]
+  ├─ [deleted] (2023-12-12 03:28:12.807000) [+1]
+  │  [deleted]
+├─ [deleted] (2023-12-10 06:38:29.373000) [+1]
+│  [deleted]
+├─ [deleted] (2023-12-07 14:01:56.467000) [+1]
+│  [deleted]
+├─ [deleted] (2023-12-07 12:58:51.760000) [+1]
+│  [deleted]
+  ├─ [deleted] (2023-12-07 13:52:21.577000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-12-07 14:12:46.793000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-12-12 03:17:16.893000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-12-06 12:40:54.223000) [+1]
+│  [deleted]
+├─ [deleted] (2023-11-28 18:29:58.130000) [+1]
+│  [deleted]
+  ├─ [deleted] (2023-11-28 18:32:52.837000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-11-28 19:34:21.820000) [+3]
+    │  [deleted]
+├─ [deleted] (2023-12-11 23:43:12.623000) [+2]
+│  [deleted]
+├─ [deleted] (2023-12-11 02:46:43.043000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-12-11 02:49:32.700000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-12-11 12:46:43.260000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-12-09 03:00:08.730000) [+2]
+│  [deleted]
+├─ [deleted] (2023-12-05 18:25:24.043000) [+2]
+│  [deleted]
+  ├─ [deleted] (2024-01-08 19:58:10.850000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-12-05 07:25:52.270000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-12-05 10:47:54.530000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-11-18 11:39:22.003000) [+2]
+│  [deleted]
+  ├─ [deleted] (2023-11-19 03:10:31.813000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2023-11-24 14:54:51.810000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-11-24 19:36:07.547000) [+3]
+    │  [deleted]
+├─ [deleted] (2024-02-03 06:41:17.043000) [+-3]
+│  [deleted]
+  ├─ [deleted] (2024-02-03 06:43:17.013000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2024-02-03 06:49:11.517000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-02-03 10:48:28.003000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2024-02-03 14:45:32.370000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-09 09:32:03.907000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-01-09 13:55:01.400000) [+1]
+  │  [deleted]
+  ├─ [deleted] (2024-01-12 02:24:08.660000) [+1]
+  │  [deleted]
+├─ [deleted] (2024-01-06 11:32:13.127000) [+0]
+│  [deleted]
+  ├─ [deleted] (2024-01-06 11:34:03.607000) [+2]
+  │  [deleted]
+  ├─ [deleted] (2024-01-24 04:28:23.467000) [+0]
+  │  [deleted]
+├─ [deleted] (2023-12-14 18:46:30.470000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-12-15 21:21:47.723000) [+1]
+  │  [deleted]
+├─ [deleted] (2023-12-14 04:25:17.407000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-14 04:13:25.633000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-08 22:40:48.663000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-07 22:29:26.230000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-12-14 06:48:10.870000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-12-14 10:05:23.090000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-12-07 18:26:38.183000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-06 20:38:45.620000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-06 02:26:48.760000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-03 05:19:37.347000) [+0]
+│  [deleted]
+├─ [deleted] (2023-12-01 05:59:54.433000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-12-01 06:03:09.037000) [+0]
+  │  [deleted]
+  ├─ [deleted] (2023-12-05 05:22:25.130000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-12-05 06:23:12.280000) [+1]
+    │  [deleted]
+├─ [deleted] (2023-11-29 08:54:22.667000) [+0]
+│  [deleted]
+├─ [deleted] (2023-11-27 22:19:58.893000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-11-28 01:24:09.710000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-11-28 02:13:59.883000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 02:46:06.533000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 03:33:50.043000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 03:43:20.897000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 04:26:24.610000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-11-30 07:55:10.693000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-30 08:37:26.173000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-11-30 09:15:14.090000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-30 09:50:00.730000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-11-30 10:31:51.090000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-30 10:41:04.320000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-12-01 05:36:58.317000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-12-08 01:13:48.127000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-12-08 01:21:11.780000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2023-12-08 01:46:38.500000) [+0]
+    │  [deleted]
+├─ [deleted] (2023-11-22 10:10:48.757000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-11-22 10:30:15.330000) [+0]
+  │  [deleted]
+    ├─ [deleted] (2023-11-22 11:31:32.020000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-11-22 11:40:04.460000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-22 12:00:26.403000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-11-22 12:06:23.303000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-11-22 12:53:51.503000) [+1]
+    │  [deleted]
+  ├─ [deleted] (2023-11-22 12:39:42.670000) [+2]
+  │  [deleted]
+    ├─ [deleted] (2023-11-28 02:14:54.900000) [+2]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 07:22:11.720000) [+1]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 07:46:55.893000) [+4]
+    │  [deleted]
+    ├─ [deleted] (2023-11-28 15:13:45.647000) [+0]
+    │  [deleted]
+    ├─ [deleted] (2023-12-01 07:48:19.077000) [+2]
+    │  [deleted]
+├─ [deleted] (2023-11-18 06:53:51.610000) [+0]
+│  [deleted]
+  ├─ [deleted] (2023-11-18 10:19:24.923000) [+1]
+  │  [deleted]
+    ├─ [deleted] (2023-11-18 10:29:22.383000) [+3]
+    │  [deleted]
+    ├─ [deleted] (2023-11-19 04:33:03.103000) [+1]
+    │  [deleted]
+├─ [deleted] (2024-01-13 13:23:23.823000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-13 13:21:49.707000) [+0]
+│  [deleted]
+├─ [deleted] (2024-01-02 20:44:54.860000) [+0]
+│  [deleted]

@@ -1,0 +1,61 @@
+<h1>Introduction &amp; Summary</h1>
+<p>Huge thank you to the organizers as well as the staff for this amazing competition! I learnt a lot about data engineering and modelling techniques and I look forward to competing in the future!</p>
+<p>My approach contain those steps:</p>
+<ul>
+<li>Step 1: Preprocessing &amp; Calibration</li>
+<li>Step 2: Signal extraction</li>
+<li>Step 3: Feed into CNN for additional feature extraction</li>
+<li>Step 4: With signal features and CNN features, feed into ensemble of rational quadratic neural network</li>
+</ul>
+<h1>Preprocessing &amp; Calibration</h1>
+<p>I used the standard calibration techniques as given in the competition itself. It includes the calibration for gain/offset correction, and manages non-linearity, dark, dead and hot pixels. Additionally, at the end of the calibration step, I remove signals that are more than $8 \sigma$ away in the time dimension. This addition alone adds ~0.05 to my CV (which is just a simple 80-20 split, turning out to be almost same as LB; LB feedback time is 5-8 hours). I couldn't spend much time on this section as rerunning this for all data, even with joblib, takes 1+ hour.</p>
+<pre><code>mean = np.nanmean(signal, )[, :, :]
+std = np.nanstd(signal, )[, :, :]
+signal[(signal &gt; mean +  * std) | (signal &lt; mean -  * std)] = np.nan
+</code></pre>
+<p>The above is the exact added code used in inference.</p>
+<p>Given features like <code>Rs</code> were included as well as minor feature engineering, like <code>Rs ** 2</code>, but they don't seem too important.</p>
+<h1>Signal Extraction</h1>
+<p>Phase extraction is done using extrema of gradient.</p>
+<ol>
+<li>The calibrated signal is divided by the mean of itself</li>
+<li>A simple moving average of period k is applied to the signal (k = 88 for airs and 655 for fgs1, found using optuna)</li>
+<li>A set of moving averages is then applied to the gradient of the signal, in which p,q = argmin,argmax are extracted</li>
+<li>p,q are then moved to the left,right until their gradients are within some interquartile range of all gradients so they cover all of the transit phase</li>
+</ol>
+<p>The features are then extracted via simple mean/min/max/range/min div edge (approx transit depth)/polyfit to 8th degree etc. of each of the phases. Additionally, the airs data is <code>array_split</code>'d along the frequency dimension (size 356) into 32 chunks. Each chunk then gets processed like above in the same way, and their features added to the list of features we have. This adds quite a bit of resolution and adds ~0.025 CV.</p>
+<h1>Feed into CNN</h1>
+<p>The CNN doesn't care about the phases; the input is simply the airs and fgs1 signal after the first moving average, split into 92 chunks across time with each chunk averaged. Additional steps might be adding phase signal into the CNN, as well as separating airs/fgs1 data into different subnets since they might not be time aligned, but ideas like these were not implemented</p>
+<p>There are many instances of CNN, as they are integrated into the RQ NN ensemble. To prevent overfitting, almost all layers of the CNN have the same weight and shape. No activation function other than max pool was used.</p>
+<h1>Ensemble of Rational Quadratic NN</h1>
+<h2>Preparing the features</h2>
+<p>One idea was borrowed from <a href="https://arxiv.org/pdf/2407.04491" target="_blank">https://arxiv.org/pdf/2407.04491</a>.</p>
+<ul>
+<li>I used same feature scaling but with $\frac{x}{\sqrt{18+x^2/9}}$</li>
+</ul>
+<h2>Training</h2>
+<p>The idea is deep ensembling where each instance in the ensemble is trained the exact same way, just with different weight initialization. We just straight up predict everything, the <code>pred</code> and <code>sigma</code> with our model, no sampling or quantile regression.</p>
+<ul>
+<li>Optimizer is adabelief with (b1=0.999, b2=0.9998)</li>
+<li>Cosine one cycle learning rate schedule with square root shaping</li>
+<li>36 ensembles, with 88 RQ clusters</li>
+</ul>
+<p>Intuitively, I chose soft RBF/RQ (they perform similarly, both adds ~0.15 CV) because there were many transit curve shapes (it was mentioned that many different models of limb darkening were added). So this soft RQ aims to first sort instances into soft groups, and then perform simple linear regression within. The image shows the distribution of the first RQ cluster of the first instance.</p>
+<p>The training is quite unique; instead of training on average of losses (competition metric), I spent more effort training models which are performing worse. Similar to evolution, the best models don't need to get better anymore. This avoids overfitting and improves my CV by ~0.03+.</p>
+<pre><code>m = jnp.median(losses, ) 
+w = jax.nn.relu(losses - m)
+w = w / w.(, keepdims=) 
+w = jax.lax.stop_gradient(w)
+ (losses * w).() / w.()
+</code></pre>
+<p>The above is the exact code used in training. Only values worse than the median will get trained.</p>
+<h1>What didn't work &amp; Conclusion</h1>
+<ul>
+<li>L1, L2 regularisation.</li>
+<li>Dropout (works well in very specific circumstances; unstable).</li>
+<li>Data augmentation via random splicing of transit data (although I saw there were some instances where the phase is cut off).</li>
+<li>Fischer-information-like or entropy based regularisation for RBF/RQ, to encourage more uncertainty of groups</li>
+<li>Full trainable Mahalanobis distance</li>
+</ul>
+<p>I used both observations for the same planet if they exist during training, but only the first observation during inference. The NN inference is instant and the data reading takes up the majority of the time.</p>
+<p>In conclusion an acceptable result was achieved with little or no understanding of the underlying physics nor advanced drift/transit window denoising techniques.</p>

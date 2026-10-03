@@ -1,0 +1,82 @@
+# dfl-bundesliga-data-shootout 讨论区（按票数排序，共 80 条）
+
+- [2nd Place Solution](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360097) — 145 票 / 16 评论 / 2022-12-22 **write-up?**
+- [Team Hydrogen: 1st place solution](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359932) — 139 票 / 65 评论 / 2023-01-03 **write-up?**
+- [public 3rd place solution](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360236) — 85 票 / 22 评论 / 2022-10-16 **write-up?**
+- [Introduction To Video Classification](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/347266) — 75 票 / 6 评论 / 2022-08-23 
+- [YOLOv5 ball detection](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/342613) — 49 票 / 7 评论 / 2022-08-08 
+- [Our (frustrated) approach](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359855) — 42 票 / 25 评论 / 2022-10-14 
+- [Public 5th place solution](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360331) — 41 票 / 8 评论 / 2022-10-16 **write-up?**
+- [About external data](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340836) — 40 票 / 40 评论 / 2022-07-31 
+- [Correct Times for Frame Seeking and Video Splitting](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346047) — 38 票 / 5 评论 / 2022-08-17 
+- [Welcome Kagglers!](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/341606) — 33 票 / 16 评论 / 2022-08-03 
+- [Researches, Articles and Papers on Video and Action Recognition](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/342195) — 33 票 / 3 评论 / 2022-08-06 
+- [Public 4th place solution](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360573) — 31 票 / 5 评论 / 2022-10-17 **write-up?**
+- [A simple approach based on baseline notebooks (6th place solution)](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360872) — 29 票 / 10 评论 / 2023-01-06 **write-up?**
+- [Paper on detecting soccer event](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/342623) — 28 票 / 3 评论 / 2022-08-08 
+- [Similar competitions & solutions](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340636) — 26 票 / 1 评论 / 2022-07-30 **write-up?**
+- [Leaderboard Update](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/373320) — 23 票 / 34 评论 / 2022-12-20 
+- [⚠️ Watch out! Your model may not be learning the signal! [Grad CAM]](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/352306) — 20 票 / 0 评论 / 2022-09-13 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340479) — 19 票 / 71 评论 / 2022-07-29 
+- [New public notebook 16th on LB](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/354584) — 19 票 / 6 评论 / 2022-09-23 
+- [Question about scoring interval](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340624) — 18 票 / 5 评论 / 2022-07-30 
+- [All Competition's Clips Dataset](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/350719) — 17 票 / 2 评论 / 2022-09-06 
+- [CRNN For Video Classification [Code + Papers]](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/348784) — 17 票 / 0 评论 / 2022-08-29 
+- [If we predict perfectly only one type of event, we can get perfect score. Is this a bug?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/341548) — 15 票 / 3 评论 / 2022-08-03 
+- [Brainstorming General Strategy, Pipeline, & Resources](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346487) — 14 票 / 3 评论 / 2022-08-19 
+- [Saving GPU time when submitting...the new Kaggle env. way!](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/349199) — 14 票 / 3 评论 / 2022-08-31 
+- [We can play videos from the data tab instead of notebook cells](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/345979) — 14 票 / 4 评论 / 2022-08-17 
+- [External Datasets for Action Recognition | Resources](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/343763) — 13 票 / 1 评论 / 2022-08-12 
+- [Perfect ball detection is impossible.](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/343652) — 13 票 / 3 评论 / 2022-08-12 
+- [Can we train model with hand-labelled annotations?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/342948) — 12 票 / 3 评论 / 2022-08-09 
+- [Good luck the final hours ⚽⚽⚽](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359704) — 12 票 / 5 评论 / 2022-10-13 
+- [Codes | Deep Feature Flow for Video Recognition](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/343259) — 12 票 / 3 评论 / 2022-08-10 
+- [I Have a doubt about this competition...](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/348844) — 10 票 / 2 评论 / 2022-08-30 
+- [~570fps solution - Optimizing the speed of feeding the videos, another part of the challenge.](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360418) — 10 票 / 8 评论 / 2022-10-16 **write-up?**
+- [How are you guys loading the dataset for training?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346606) — 10 票 / 5 评论 / 2022-08-20 
+- [Does the grading system slow down?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/357430) — 9 票 / 14 评论 / 2022-10-04 
+- [SlowFast Networks for Video Recognition | Codes](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/343727) — 9 票 / 2 评论 / 2022-08-12 
+- [Where to Start](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/341779) — 9 票 / 2 评论 / 2022-08-04 
+- [Is GPL v3 license allowed to use like YOLOv5?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/351998) — 9 票 / 9 评论 / 2022-09-12 
+- [7th place brief solution summary](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/374916) — 8 票 / 0 评论 / 2022-12-29 **write-up?**
+- [I've created a dataset for detecting the ball position](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/355004) — 8 票 / 2 评论 / 2022-09-25 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340478) — 7 票 / 4 评论 / 2022-07-29 
+- [YOLOv7 explanation and implementation](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/356204) — 7 票 / 1 评论 / 2022-09-29 
+- [Get a Better Understanding of Competition Metrics](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340788) — 7 票 / 3 评论 / 2022-07-31 
+- [Question about computation time restriction of the Forecasting Timeline](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340784) — 7 票 / 2 评论 / 2022-07-31 
+- [What has been your approach so far?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/351339) — 7 票 / 2 评论 / 2022-09-09 **write-up?**
+- [Mapping the events to the extracted frames](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340890) — 7 票 / 0 评论 / 2022-07-31 
+- [How to install pytorchvideo](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/344012) — 7 票 / 3 评论 / 2022-08-13 
+- [Me again: Average Precision of Detected Events. The Comp Metric.](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/340772) — 6 票 / 0 评论 / 2022-07-31 
+- [I shared a pytorch data preparation pipeline](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346663) — 6 票 / 2 评论 / 2022-08-20 
+- [Example: Action recognition applied on basketball players](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/342224) — 6 票 / 1 评论 / 2022-08-06 
+- [Object Detection for Image Classification?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/348911) — 5 票 / 1 评论 / 2022-08-30 
+- [Notebook Running times for submission](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/357688) — 5 票 / 2 评论 / 2022-10-05 
+- [15th place short solution summary](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/375615) — 5 票 / 1 评论 / 2023-01-02 **write-up?**
+- [Players and ball tracking with camera pose estimation (with demo video)](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/362872) — 5 票 / 0 评论 / 2022-10-29 
+- [Leaderboard Updated ?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/373637) — 5 票 / 0 评论 / 2022-12-22 
+- [Models for Action Recognition](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/348817) — 4 票 / 0 评论 / 2022-08-30 
+- [Player + ball tracking using DeepSort and YOLOv7](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/357428) — 4 票 / 0 评论 / 2022-10-04 
+- [The test time of the new collected games during evaluation period](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/351363) — 4 票 / 3 评论 / 2022-09-09 
+- [Ideas on ball tracking?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/344464) — 4 票 / 0 评论 / 2022-08-15 
+- [DiDifference in performance between event recognition in the global image and in the sliced image near the ball](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359847) — 4 票 / 0 评论 / 2022-10-13 
+- [My code | implementing the public 6th place method](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/368599) — 4 票 / 0 评论 / 2022-11-26 **write-up?**
+- [Motivation for tolerances and averaging AP over them](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346068) — 3 票 / 1 评论 / 2022-08-17 
+- [Dataset for Object Detection & FasterRCNN Script](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/345989) — 3 票 / 0 评论 / 2022-08-17 
+- [Same code, different score](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/354887) — 3 票 / 6 评论 / 2022-09-24 
+- [Detection of players and ball using YOLOv7](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/357197) — 3 票 / 7 评论 / 2022-10-03 
+- [Resources for multiple action/activity recognition](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/358571) — 3 票 / 0 评论 / 2022-10-08 
+- [About Spoiler Aleart](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360150) — 3 票 / 1 评论 / 2022-10-15 
+- [Transition to a data analyst](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/360560) — 3 票 / 0 评论 / 2022-10-17 
+- [Q: First re-run ETA?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/363384) — 3 票 / 2 评论 / 2022-11-01 
+- [Way to get data](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/521384) — 3 票 / 3 评论 / 2024-07-20 
+- [Challenge type in evaluation](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346051) — 2 票 / 1 评论 / 2022-08-17 
+- [What if our model submits before but finishes after the deadline](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359684) — 2 票 / 1 评论 / 2022-10-13 
+- [How to interpret the tolerances?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/346019) — 2 票 / 0 评论 / 2022-08-17 
+- [An Idea for Avoiding Timeouts (work effective??)](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/343698) — 2 票 / 1 评论 / 2022-08-12 
+- [Why so small number of GMs?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/359757) — 2 票 / 4 评论 / 2022-10-13 
+- [Simple Experiment to See if It Doesn't Time-out](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/344642) — 2 票 / 0 评论 / 2022-08-16 
+- [What will happen if my submission exceeded the 9 hour limit ?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/354799) — 2 票 / 3 评论 / 2022-09-23 
+- [YOLOv5 doesn't work without Internet?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/350888) — 1 票 / 0 评论 / 2022-09-07 
+- [Need help with scoring column of submissions](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/351641) — 1 票 / 3 评论 / 2022-09-11 
+- [How do you guys use the clip data?](https://www.kaggle.com/competitions/dfl-bundesliga-data-shootout/discussion/353196) — 1 票 / 1 评论 / 2022-09-17 

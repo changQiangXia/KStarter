@@ -1,0 +1,161 @@
+<h1>Second Place Solution</h1>
+<p>Thank you Georgia State University, The Learning Agency Lab, and Kaggle for an awesome competition. The data was high quality and interesting. The metric and train test split were well done. This competition was a success and will benefit a good cause.</p>
+<p>Teaming with Chun Ming Lee and Udbhav Bamba has been wonderful. I learned more about NLP than if I had taken an online course. These two Kagglers are grandmasters at NLP and I now know how to use HuggingFace Trainer efficiently and effectively. I also know how to customize models and losses. Thank you <a href="https://www.kaggle.com/leecming" target="_blank">@leecming</a> <a href="https://www.kaggle.com/ubamba98" target="_blank">@ubamba98</a> </p>
+<h1>Solution Summary</h1>
+<p>The secret sauce to our solution is powerful <strong>post process</strong> by Chun Ming (boost CV LB!), a huge <strong>variety of models</strong> implemented by Udbhav (many long sequence models!), and <strong>weighted box fusion</strong> by Chris (used in my previous comp <a href="https://www.kaggle.com/c/tensorflow-great-barrier-reef/discussion/307609" target="_blank">here</a>). Everything was fine tuned on local CV and achieved 2nd Place $35,000!</p>
+<table>
+<thead>
+<tr>
+<th>Hugging Face Model</th>
+<th>CV</th>
+<th>Public LB</th>
+<th>Private LB</th>
+<th>special</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>microsoft/deberta-large</td>
+<td>706</td>
+<td>710</td>
+<td>721</td>
+<td>trained with 100% train data</td>
+</tr>
+<tr>
+<td>microsoft/deberta-large</td>
+<td>699</td>
+<td>706</td>
+<td>719</td>
+<td>add lstm, add jaccard loss</td>
+</tr>
+<tr>
+<td>microsoft/deberta-v3-large</td>
+<td>694</td>
+<td>697</td>
+<td>709</td>
+<td><a href="https://www.kaggle.com/nbroad/deberta-v2-3-fast-tokenizer" target="_blank">convert slow tokenizer to fast</a></td>
+</tr>
+<tr>
+<td>microsoft/deberta-xlarge</td>
+<td>708</td>
+<td>704</td>
+<td>713</td>
+<td></td>
+</tr>
+<tr>
+<td>microsoft/deberta-v2-xlarge</td>
+<td>699</td>
+<td>700</td>
+<td>716</td>
+<td><a href="https://www.kaggle.com/nbroad/deberta-v2-3-fast-tokenizer" target="_blank">convert slow tokenizer to fast</a></td>
+</tr>
+<tr>
+<td>allenai/longformer-large-4096</td>
+<td>702</td>
+<td>705</td>
+<td>716</td>
+<td>add lstm head</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ccdv-ai/convert_checkpoint_to_lsg" target="_blank">LSG converted roberta</a></td>
+<td>703</td>
+<td>702</td>
+<td>714</td>
+<td>convert 512 roberta to 1536</td>
+</tr>
+<tr>
+<td>funnel-transformer/large</td>
+<td>688</td>
+<td>689</td>
+<td>708</td>
+<td></td>
+</tr>
+<tr>
+<td>google/bigbird-roberta-base</td>
+<td>675</td>
+<td>676</td>
+<td>692</td>
+<td>train 1024 infer 1024</td>
+</tr>
+<tr>
+<td>uw-madison/yoso-4096</td>
+<td>652</td>
+<td>655</td>
+<td>668</td>
+<td>lsh_backward=False</td>
+</tr>
+</tbody>
+</table>
+<h1>Weighted Box Fusion - CV 741, Public 727, Private 740</h1>
+<p>Our final solution contained the 10 models listed above. We included 3 out of 10 K-folds for each of the 10 models. Our 8 hour 30 minute submission inferred 27 models! (we removed 3 folds from 30)</p>
+<p>Weighted Box Fusion by <a href="https://www.kaggle.com/zfturbo" target="_blank">@zfturbo</a> from his GitHub <a href="https://github.com/ZFTurbo/Weighted-Boxes-Fusion" target="_blank">here</a> was the magic that combined all the model predictions together. Individual models had average CV around 700 and the WBF ensemble achieved CV 741. (Folds from same models were averaged before WBF).</p>
+<p><img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/main/Mar-2022/wbf.png" alt=""></p>
+<p>Weighted Box Fusion can do something that no other ensemble method can do. If one model has prediction string <code>8 9 10 11</code> and another model has <code>10 11 12 13</code>. Then weighted box fusion takes the average of the two starts, <code>(8 + 10)/2 = 9</code> and the average of the two ends, <code>(11 + 13)/2 = 12</code> resulting in <code>9 10 11 12</code>. Furthermore, WBF reads <code>submission.csv</code> files and doesn't care what tokenizer you used, so its easy to use. (Note we add an extra column to submission dataframe with span confidence).</p>
+<p>If we averaged the token/word probabilities, or used a voting classifier, we would either get the union <code>8 9 10 11 12 13</code> or the intersection <code>10 11</code>. Neither of which we want. Also averaging two "BIO" predictions gives a new prediction with two different "B" which we do not want either.</p>
+<h1>Post Process</h1>
+<p>Chun Ming is the mastermind behind our team's strong PP. We applied the same PP to each model before WBF. Our PP code is posted <a href="https://www.kaggle.com/cdeotte/2nd-place-solution-cv741-public727-private740" target="_blank">here</a> and Chun Ming will now describe it. Our PP significantly boosted CV LB!</p>
+<p>We applied heavy post-processing to the word-level soft predictions each model made (after averaging token probabilities across folds and before the WBF ensembler). Overall CV was improved by ~.008. </p>
+<p>In order of descending impact on CV: </p>
+<ol>
+<li><p>Repairing span predictions<br>
+Since we trained using cross-entropy loss at the token level, the raw predictions would often result in broken spans. For example, given a chain of Lead token predictions, there might be a misprediction of an “Other” in the middle. We had a rule to convert that “Other” back to Lead. </p></li>
+<li><p>Discourse-specific rules<br>
+We came up with common sense heuristics for the discourses. For example, for Lead, Position, and Concluding Statement - there should only be a maximum of one each for a text. We’d predict the most probable candidate for each or merge close duplicate spans. </p></li>
+<li><p>Adjusting lengths of predicted spans<br>
+We adjusted lengths of spans based on their original predicted length. For example, for a predicted Evidence span that was less than 45 words long, we’d shift the start of the predicted span back by 9 words. These rules and the improvement in LB/CV suggest we were taking advantage of the evaluation metric only requiring a 50% overlap in prediction and label to be counted as correct.</p></li>
+</ol>
+<p>It’s not sexy but sitting down and eye-balling model predictions and comparing them with ground truths using a tool like displacy was rewarding in helping us better understand the task, how our models were behaving, and how to improve model predictions. </p>
+<h1>Model Details</h1>
+<p>Surprisingly many more models than LongFormer and BigBird could be trained with sequence lengths greater than 512. All our models were trained with sequence length 1536 and inferred at 1536 (except BigBird-base at 1024).</p>
+<p>The model DeBERTa accepts any input size, so we just train with 1536 as is. </p>
+<p>The model Funnel-transformer can accept any size after updating its config.</p>
+<pre><code>model = AutoModelForTokenClassification.from_pretrained(
+    'funnel-transformer/large', num_labels=15,
+    max_position_embeddings=1536)
+</code></pre>
+<p>For BigBird, we used full attention</p>
+<pre><code>model = AutoModelForTokenClassification.from_pretrained(
+    'google/bigbird-roberta-base', num_labels=15,
+    attention_type="original_full")
+</code></pre>
+<p>For YOSO, we disabled <code>lsh_backward</code></p>
+<pre><code>model = AutoModelForTokenClassification.from_pretrained(
+    'uw-madison/yoso-4096', num_labels=15,
+    lsh_backward=False)
+</code></pre>
+<h1>Model Training</h1>
+<p>Thank you Nvidia for providing us some V100 32GB GPUs and A100 40GB GPUs. For each model, we trained 6 out of 10 KFolds and built our CV from the resultant 60% train data OOF. Each fold would take approximately 4 hours on 1xGPU and required between 3 and 5 epochs to maximize val score. </p>
+<p>For two models, we used my train public notebooks <a href="https://www.kaggle.com/cdeotte/tensorflow-longformer-ner-cv-0-633" target="_blank">here</a> and <a href="https://www.kaggle.com/cdeotte/pytorch-bigbird-ner-cv-0-615" target="_blank">here</a>. For the other eight models, we used Hugging Face Trainer. Most models, used the following parameters. And we added <a href="https://www.kaggle.com/robikscube" target="_blank">@robikscube</a> Kaggle metric <a href="https://www.kaggle.com/robikscube/student-writing-competition-twitch-stream" target="_blank">here</a> and our PP directly to the Trainer evaluation, so we could watch the Kaggle metric score every 500 steps and save the model weights with best Kaggle score.</p>
+<p>Notice how we use FP16, gradient_accumulation_steps, and gradient_checkpointing. With these settings, you can basically train any size model on any GPU including Kaggle's P100 16GB GPU.</p>
+<pre><code>from transformers import TrainingArguments, Trainer
+args = TrainingArguments( NAME,
+                     PRETRAINED_MODEL,
+                     evaluation_strategy = 'steps',
+                     eval_steps = 500,
+                     dataloader_num_workers=8,
+                     warmup_ratio=0,
+                     lr_scheduler_type = 'linear',
+                     learning_rate = 2e-5,
+                     log_level = 'warning',
+                     fp16 = True,
+                     per_device_train_batch_size = 2,
+                     per_device_eval_batch_size = 2,
+                     gradient_accumulation_steps = 2,
+                     gradient_checkpointing = True,
+                     num_train_epochs = 5,
+                     save_strategy = 'no',
+                     save_total_limit = 1)
+
+trainer = Trainer(model,
+              args,
+              train_dataset=train_dataset,
+              eval_dataset=valid_dataset,
+              compute_metrics=KaggleMetric(valid_df, valid_dataset),
+              callbacks=[SaveBestModelCallback],
+              data_collator=data_collator,
+              tokenizer=tokenizer)
+</code></pre>
+<h1>Inference Code with PP with WBF</h1>
+<p>We posted our final submission inference code on Kaggle <a href="https://www.kaggle.com/cdeotte/2nd-place-solution-cv741-public727-private740" target="_blank">here</a>. It includes our post process and weighted box fusion implementation. Enjoy!</p>
+<h1>Training Code on GitHub</h1>
+<p>Our training code is published on GitHub <a href="https://github.com/ubamba98/feedback-prize" target="_blank">here</a></p>

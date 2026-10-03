@@ -1,0 +1,387 @@
+# https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551391
+
+Topic #551391: 5th Place Solution
+  Author: Ebi
+  Posted: 2024-12-13 00:40:42.826000
+  Votes: 76  Comments: 23
+
+Comment
+
+First, I would like to thank the organizers for hosting such an interesting competition with plenty of room for innovation and no major issues. I also want to thank my teammates who helped create a smooth communication environment for my first team-up experience.
+
+Solution summary
+
+
+
+
+
+Synthetic data generation
+
+
+We create problems using LLM with few shot prompting for each MisconceptionId that is not included in the training dataset.
+
+
+For these few shot samples, we insert problems and incorrect answers that have similar MisconceptionNames to the one being generated.
+
+Knowledge Distillation
+
+
+We input the questiontext, correct answer, and incorrect answer into the LLM (Qwen 2.5 32B Instruct) to generate the reasoning behind the incorrect answer. This content is used as input for all subsequent models (Biencoder, Listwise reranker).
+
+Candidate generation
+
+
+We use a biencoder model to narrow down the Misconception candidates for each problem and incorrect answer.
+
+Listwise reranking
+
+
+We input the Misconception candidates sorted by the Biencoder, 52 at a time (corresponding to the number of uppercase and lowercase alphabet letters used as options), into the fine-tuned LLM(Qwen 2.5 32B Instruct) to obtain probability for each option. We then sort the Misconceptions based on these probability.
+
+
+For this process, we use the top 104 candidates from the biencoder. In other words, we perform inference twice with 52 candidates each time, extract the probability, and combine the results.
+
+Ensemble
+
+
+Since the Listwise reranker uses GPTQ + vLLM inference, a single inference takes only about 120 minutes, allowing the results to be ensembled across three folds. (But due to the random delays discussed here, our best sub could not include all results from the third fold. I hope that Kaggle staff will address these issues in the future.)
+
+
+Detailed solution
+
+
+
+
+Cross validation
+
+
+
+Initially, we used GroupKFold(k=5) based on QuestionId, but since the lb was significantly lower than local cv, we suspected there might be many MisconceptionIds that only appear in the test data. Based on this, we switched to GroupKFold(k=5) using SubjectId. This change resulted in a higher proportion of MisconceptionIds that only appear in validation data, which tended to make the cv closer to lb.
+
+
+example local cv 0.626, lb: 0.633
+
+
+Synthetic data generation
+
+
+
+Synthetic data generation is essential to include MisconceptionIds without existing problems in the prediction results. For each MisconceptionName without problems, we generated one set of existing dataset information (QuestionName, SubjectName, ConstructName, Correct Answer, Incorrect Answer) using few shot prompting (4 shots) with LLM (gemini-1.5-pro).
+
+
+For the few shot prompting samples, we embedded all MisconceptionNames using the model (dunzhang/stella_en_1.5B_v5) and included problems corresponding to similar MisconceptionNames. This resulted in approximately +0.01 improvement in cv compared to using random samples.
+
+
+Knowledge Distillation(KD)
+
+
+
+
+We input the QuestionText, correct answer, and incorrect answer into the LLM (Qwen 2.5 32B Instruct) to estimate the Misconception. Using this information improves the biencoder's cv+0.04. While the Listwise reranker mentioned later uses the same model as KD, it showed an increase of about cv+0.01 compared to when it's not included.
+
+
+
+prompt
+
+PROMPT_FORMAT = 
+
+
+
+Candidate generation
+
+
+
+We extract MisconceptionName candidates for each problem and incorrect answer pair using Biencoder. While we perform negative mining, hard negatives were not effective, so we include slightly relaxed samples.
+
+Training parameters
+
+
+library: SentenceTransfomer
+
+model: dunzhang/stella_en_1.5B_v5
+
+negative mining params
+
+
+range_min: 512
+
+num_negatives: 2
+
+lora config
+
+
+r: 32
+
+lora_alpha: 64
+
+loss: CachedMultipleNegativesRankingLoss
+
+epoch: 1
+
+cv: 0.41, lb: 0.39
+
+
+Listwise reranker
+
+
+
+
+Overview
+
+
+
+The reranking part using LLM appears to be the most unique aspect of this competition, and I expect that how this part was implemented significantly impacted the scores. Our teammate @kcotton21 had already come up with the idea of generating single tokens and using their logits for sorting at the beginning of the competition (reference: https://arxiv.org/abs/2406.15657), and our solution is based on this.
+
+
+prompt
+
+
+
+After various trial and error, we ultimately performed regular fine-tuning using the following prompt to have the LLM generate appropriate choices (which must be single tokens to enable sorting by logits(probability)).
+
+NA_PROMPT_FORMAT = 
+
+
+
+
+
+misconception_list
+
+
+
+
+It contains 52 choices of uppercase + lowercase alphabets and their corresponding MisconceptionNames. They are ordered by the Biencoder output.
+
+A: Thinks sign  parallel lines just means opposite
+B: Does  recognise the notation  parallel sides
+.
+.
+.
+y: Thinks that co-interior angles can lie on opposite sides of a transversal
+z: Believes the gradient of perpendicular lines just have opposite signs&lt;|im_end|&gt;
+
+
+
+label_choice
+
+
+
+This is the correct answer choice used for fine-tuning. If the correct answer is not included in the choices, "NA" (which is also a single token in Qwen 2.5 32B) is inserted.
+
+
+rank
+
+
+
+Indicates which range of choices {start_idx - end_idx} from the Biencoder's output is included.
+
+
+Training
+
+
+
+We divided the top 208 outputs from the biencoder into non-overlapping groups of 52 each (1-52, 53-104, 105-156, 157-208) and performed fine-tuning.
+
+Training parameters
+
+
+loss
+
+
+This is the standard cross-entropy loss used in regular fine-tuning, calculated across the entire vocabulary. We chose this simpler implementation method since calculating cross-entropy limited to only the candidate choices + "NA" token showed little difference in results.
+
+model:   Qwen/Qwen2.5-32B-Instruct
+
+lora_config
+
+
+r: 24
+
+lora_alpha: 48
+
+lr: 5e-5
+
+scheduler: cosine
+
+warmup_steps: 10
+
+epoch : 1.0
+
+global batch size: 8
+
+library: unsloth
+
+
+Inference
+
+
+
+From the biencoder output, we take the top 104 items and split them into two sets (1-52 and 53-104). Each set is input to the model, generating only single tokens to obtain probabilities for each option. The results from both sets are then combined and sorted.
+
+
+While adding to make it top 156 (52x3 inference) showed a slight improvement in local CV, it wasn't reflected in the leaderboard score, so we didn't adopt this approach.
+
+Quantized to 4-bit using GPTQ and inference is performed using vLLM
+
+
+cv(public)[private] scores
+
+
+
+
+
+52x1
+52x2
+52x3
+
+
+
+
+fold 4
+0.623(0.627)[0572]
+0.626(0.633)[0.581]
+0.630(0.631)[0.581]
+
+
+fold 3
+
+(0.644)[0.581]
+
+
+
+fold (3 + 4)
+
+(0.650)[0.590]
+
+
+
+fold (2(60%sample) + 3 + 4)
+
+(0.653)[0.597]
+
+
+
+
+
+Computational costs
+
+My local machine is 1 x RTX 4090.
+
+I rented an A100 (from vast.ai) for training a 32B model, and including experiments, it cost me about $350 in total…
+
+Training one 32B Listwise model took about 7 hours on the A100.
+
+What didn't work
+
+
+
+Options used in the Listwise reranker
+
+
+As single token choices, we tried combinations of two alphabets, combinations of alphabets and numbers 0-9, and japanese hiragana, but all of these approaches performed worse than using just the 52 alphabets.
+
+utilization of QwQ-32B-preview
+
+multi step reraking (Qwen 2.5 7B(104 candidate) → Qwen 2.5 32B(52 cadindate))
+
+adding examples of problems and misconceptions in the reraking prompts.
+
+
+Code release
+
+We released training code. → Eedi-5th-solution
+
+Comments:
+├─ Nikita Babych (2024-12-13 01:14:23.930000) [+3]
+│  Congratulations! I enjoyed competing with you on the public leaderboard.
+│  It’s very interesting that you were able to achieve such a high score without ensembling models on the candidate generation ...
+  ├─ Nikita Babych (2024-12-13 01:16:07.923000) [+1]
+  │  Since Qwen likes a lot to preserve the order of the init list when it is not sure.
+    ├─ Ebi (2024-12-13 01:46:47.357000) [+2]
+    │  Congratulations on achieving Solo Gold!
+    │  Although it's not mentioned, we use the biencoder corresponding to each fold for the listwise reranker in each fold.
+    ├─ Ebi (2024-12-14 08:43:53.017000) [+0]
+    │  It’s very interesting that you were able to achieve such a high score without ensembling models on the candidate generation stage. It was quite important in my solution.
+    │  
+    │  
+    │  I think the answer to thi...
+├─ Santiago Mota (2024-12-19 07:39:42.197000) [+1]
+│  Congrats. Nice job on the competition and thank for the explanation and releasing the code
+├─ Nikhil Tumbde (2024-12-19 07:18:17.060000) [+1]
+│  Hi @ebinan92, thanks for publishing the code and congratulations for securing the gold medal.
+│  I wanted to confirm one thing regarding the quantization, I can see that the re-ranker (32B) was finetu...
+  ├─ Ebi (2024-12-20 04:49:32.030000) [+3]
+  │  I wanted to confirm one thing regarding the quantization, I can see that the re-ranker (32B) was finetuned in BF16, so I believe you directly merged the lora weights with the model weights. Is that...
+    ├─ Nikhil Tumbde (2024-12-20 06:42:42.317000) [+1]
+    │  Yes, that's correct. We're not using QLoRA to avoid performance degradation during merging.
+    │  
+    │  
+    │  Also, as you used training argument as BF16 instead of FP16, all the computations are carried out in BF...
+├─ john (2024-12-19 03:26:22.813000) [+1]
+│  Congratulations. Thank you for sharing your solution and code! The code is structed very well!
+│  I have some questions about your code for training retriever.
+│  
+│  
+│  
+│  hard_negative_params in exp_gpu.yaml
+│  ...
+  ├─ Ebi (2024-12-20 05:18:03.320000) [+2]
+  │  Short answer:
+  │  I chose these parameters because they showed the best recall@100 (my main target metric for bi-encoder) after testing several combinations.
+  │  
+  │  Detailed explanation:
+  │  
+  │  
+  │  
+  │  range_min: 512
+  │  
+  │  
+  │  ...
+    ├─ john (2024-12-20 06:10:40.233000) [+0]
+    │  Thanks for your explain.
+├─ Camaro (2024-12-14 12:21:21.130000) [+1]
+│  Congratulations and thank you for sharing your solution and clean code!
+│  
+│  I have a question about data generation.
+│  
+│  
+│    
+│  For these few shot samples, we insert problems and incorrect answers that have...
+  ├─ Ebi (2024-12-14 12:35:45.937000) [+1]
+  │  I'm glad the code I shared was helpful.
+  │  
+  │  
+  │    
+  │  Adding similar MisconceptionNames as few-shot examples is a clever approach. Have you checked how it compares to random sampling?
+  │  
+  │  
+  │  Yes, We have confirm...
+  ├─ Camaro (2024-12-14 12:37:23.913000) [+1]
+  │  Thanks for the quick answer! I'll give it a try.
+  │  
+  │  A few more questions:
+  │  
+  │  
+  │  
+  │  If I understand your code correctly, it seems to generate one sample per misconception ID. Did generating more samples not...
+    ├─ Ebi (2024-12-14 12:53:55.260000) [+2]
+    │  If I understand your code correctly, it seems to generate one sample per misconception ID. Did generating more samples not improve the score?
+    │  
+    │  
+    │  We tried it, but the local cv got worse, so we didn't...
+├─ narsil (jobs-in-data.com) (2024-12-13 07:59:46.800000) [+1]
+│  Great work and write up! congrats
+├─ James owen (2024-12-13 03:05:52.540000) [+1]
+│  Congratulations ebi , looking forward to your complete code and dataset
+├─ MrSimple (2024-12-15 05:31:42.653000) [+0]
+│  Congratulations and thank you for sharing your solution and clean code!
+├─ [deleted] (2024-12-31 02:15:38.653000) [+0]
+│  [deleted]
+├─ [deleted] (2024-12-13 00:50:17.443000) [+2]
+│  Congrats, nice pipeline. Hope to see the code release soon !
+  ├─ [deleted] (2024-12-13 00:59:01.343000) [+1]
+  │  And @ebinan92 are you finetuning the embedding model? i see the embedding part seems not.
+    ├─ Ebi (2024-12-13 01:11:08.180000) [+1]
+    │  Do you refer to the MisconceptionName embedding when generating synthetic data? Yes, no fine-tuning is done here.
+├─ TFI (2024-12-20 07:16:29.787000) [+0]
+│  Thank you for sharing &amp; congrats!

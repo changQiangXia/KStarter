@@ -1,0 +1,82 @@
+# benetech-making-graphs-accessible 讨论区（按票数排序，共 80 条）
+
+- [How to tackle this competition](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396773) — 94 票 / 30 评论 / 2023-03-22 
+- [2nd Place Solution [Updated with Code Link]](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418430) — 64 票 / 32 评论 / 2023-07-05 **write-up?**
+- [1st Place Solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418786) — 60 票 / 15 评论 / 2023-07-08 **write-up?**
+- [3rd place Solution - Matcha & Object Detection](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418420) — 54 票 / 20 评论 / 2023-06-20 **write-up?**
+- [7th place solution - no external data](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418510) — 51 票 / 27 评论 / 2023-06-21 **write-up?**
+- [#13th place solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418321) — 43 票 / 8 评论 / 2023-06-20 **write-up?**
+- [In case you are wondering why Pix2Struct, MatCha, Deplot don't train properly](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/406250) — 42 票 / 133 评论 / 2023-05-01 
+- [6th place solution - deplot & UNet postprocessing](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418466) — 40 票 / 28 评论 / 2023-06-21 **write-up?**
+- [14th Place Solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418323) — 30 票 / 4 评论 / 2023-06-20 **write-up?**
+- [Rules Updated!](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415257) — 30 票 / 31 评论 / 2023-06-05 
+- [5th place solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418477) — 28 票 / 8 评论 / 2023-06-29 **write-up?**
+- [DePlot - a new plot-to-text model by Google](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/400250) — 28 票 / 3 评论 / 2023-04-07 
+- [🍩🍩Donut (Updated)🍩🍩](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/398234) — 27 票 / 6 评论 / 2023-03-29 
+- [Kudos to Nicholas](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418312) — 24 票 / 5 评论 / 2023-06-20 
+- [4th place solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418604) — 21 票 / 5 评论 / 2023-06-22 **write-up?**
+- [Deplot Inference Code](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/413216) — 21 票 / 8 评论 / 2023-05-27 
+- [Update: 500k Graphs Data](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415470) — 21 票 / 17 评论 / 2023-06-06 
+- [500K Graphs (All chart types)](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/413055) — 20 票 / 15 评论 / 2023-05-26 
+- [40th place solution + code](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418331) — 20 票 / 3 评论 / 2023-06-20 **write-up?**
+- [📊 Interactive visualization of annotations](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396895) — 20 票 / 3 评论 / 2023-03-23 
+- [Similar additional datasets and introductions](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396575) — 20 票 / 1 评论 / 2023-03-22 
+- [51st Place Solution - Single Matcha Model](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418376) — 19 票 / 4 评论 / 2023-06-20 **write-up?**
+- [Request for Opinion of Kaggle Team](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415793) — 18 票 / 1 评论 / 2023-06-08 
+- [Question to organizers: Which licenses are allowed?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/407485) — 17 票 / 21 评论 / 2023-05-06 
+- [20th place solution (YOLOv7+EasyOCR)](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418389) — 17 票 / 7 评论 / 2023-06-21 **write-up?**
+- [(Video Available) Doing a livestream this Friday about Donut ](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/404995) — 16 票 / 1 评论 / 2023-04-25 
+- [Segment Anything Model on Kaggle](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/409349) — 16 票 / 1 评论 / 2023-05-10 
+- [Good luck everyone in the private LB](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418291) — 16 票 / 2 评论 / 2023-06-19 
+- [Dataset in CSV ](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396648) — 15 票 / 0 评论 / 2023-03-22 
+- [Competition Metric in Notebook](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396947) — 15 票 / 6 评论 / 2023-03-23 
+- [[0.71] MIT compliant score & ICDAR boost](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418350) — 15 票 / 16 评论 / 2023-06-20 
+- [⚠️ Watch Out: Wrong Annotations!](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/398584) — 15 票 / 6 评论 / 2023-03-30 
+- [What I learned in this competition](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418296) — 15 票 / 2 评论 / 2023-06-19 
+- [Log scale charts](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/398601) — 13 票 / 3 评论 / 2023-03-30 
+- [28th Place Solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418705) — 13 票 / 5 评论 / 2023-07-30 **write-up?**
+- [3rd place training code](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418984) — 12 票 / 3 评论 / 2023-06-23 **write-up?**
+- [SOTA Chart to text toolbox](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396602) — 12 票 / 3 评论 / 2023-03-22 
+- [my tricks to improve the scatter](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418313) — 11 票 / 3 评论 / 2023-06-20 
+- [Lesson learned the hard way ! Always pay huge attention to versions](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/409762) — 11 票 / 5 评论 / 2023-05-12 
+- [What's a good validation scheme for this competition?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/399029) — 10 票 / 1 评论 / 2023-04-02 
+- [8th place solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418706) — 10 票 / 3 评论 / 2023-06-22 **write-up?**
+- [[Compilation] Good Starter Notebooks](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/403321) — 10 票 / 1 评论 / 2023-04-22 
+- [Welcome to Benetech’s Making Graphs Accessible Challenge!](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396653) — 9 票 / 3 评论 / 2023-03-22 
+- [100k Vertical Bar Charts](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/409789) — 9 票 / 0 评论 / 2023-05-12 
+- [Congratulations to new Kaggle Competition GM!](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418512) — 9 票 / 4 评论 / 2023-06-21 
+- [Submission Scoring Error Occuring...](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/401494) — 9 票 / 5 评论 / 2023-04-13 
+- [Concerns regarding Matcha / Deplot models](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/416392) — 8 票 / 3 评论 / 2023-06-11 
+- [Our solution](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418382) — 8 票 / 4 评论 / 2023-06-20 **write-up?**
+- [Does the submitted data series need to be the correct data type?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/398528) — 8 票 / 15 评论 / 2023-03-30 
+- [Question to organizers: Does the hidden test set contain any grouped / stacked / bidirectional bar graphs?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/400581) — 7 票 / 8 评论 / 2023-04-09 
+- [The way of upload Transformer Repository to Datasets for Internet off notebook.](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/410130) — 7 票 / 9 评论 / 2023-05-14 
+- [Looking for a Team Megathread](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396526) — 6 票 / 67 评论 / 2023-03-21 
+- [Data Update and Scatterplot Rescore](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/404782) — 6 票 / 2 评论 / 2023-04-24 
+- [Does order of series predictions matter in scoring?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/397636) — 6 票 / 6 评论 / 2023-03-26 
+- [Request for answers from competition hosts](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415476) — 6 票 / 4 评论 / 2023-06-06 
+- [Detect Annotations with EfficientDet](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/398776) — 6 票 / 0 评论 / 2023-03-31 
+- [🧱 Remove backgrounds is not good idea 🧱](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/403353) — 5 票 / 3 评论 / 2023-04-22 
+- [Axes with multipliers](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/402916) — 5 票 / 6 评论 / 2023-04-20 
+- [How accurate is the test ground truth? How to avoid reverse engineering the exact labeling process?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/402986) — 5 票 / 6 评论 / 2023-04-20 
+- [Congrats to Prize Winners!](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/419202) — 5 票 / 2 评论 / 2023-06-24 
+- [Medals and Non-Compliant Submissions](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415474) — 5 票 / 9 评论 / 2023-06-06 
+- [Graph Convention for Dot Plots](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/411681) — 5 票 / 6 评论 / 2023-05-20 
+- [AI in Accessible Education.](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396775) — 5 票 / 2 评论 / 2023-03-22 
+- [Published a cleaned dataset (CSV file) containing image filepaths and the associated labels](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/404913) — 4 票 / 0 评论 / 2023-04-25 
+- [Is it possible to use external datasets for training, regardless of license?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/403245) — 4 票 / 4 评论 / 2023-04-22 
+- [Problem Approach Sharing](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396532) — 4 票 / 2 评论 / 2023-03-22 
+- [Annotations on log-scaled axes are wrong](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/410018) — 4 票 / 2 评论 / 2023-05-13 
+- [Notebook submission keeps throwing exception :(](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/400715) — 4 票 / 4 评论 / 2023-04-09 
+- [Chart Question Answering (CQA) problem brief](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396566) — 4 票 / 0 评论 / 2023-03-22 
+- [Question on Submission Scoring Error](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/412428) — 4 票 / 25 评论 / 2023-05-23 
+- [Public LB ve Private LB](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418311) — 4 票 / 15 评论 / 2023-06-20 
+- [Any tips on predicting Scatter?](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415554) — 4 票 / 0 评论 / 2023-06-07 
+- [New to Kaggle or Machine Learning? Check this out ~](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396525) — 3 票 / 0 评论 / 2023-03-21 
+- [Evaluation metric](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/396912) — 3 票 / 1 评论 / 2023-03-23 
+- [Common pix2struct/matcha error.](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/413735) — 3 票 / 6 评论 / 2023-05-30 
+- [Wrong annotations for y-ticks and y data-series in extracted data](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/413576) — 3 票 / 0 评论 / 2023-05-29 
+- [Submission deadline rule](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418199) — 3 票 / 5 评论 / 2023-06-19 
+- [Couldn't get the Best scores out for Matcha and Deplot](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/418316) — 3 票 / 1 评论 / 2023-06-20 
+- [Update on acceptable licenses for datasets/pre-trained models](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/417668) — -27 票 / 57 评论 / 2023-06-16 
+- [Benetech Statement on License Allowance](https://www.kaggle.com/competitions/benetech-making-graphs-accessible/discussion/415275) — -41 票 / 47 评论 / 2023-06-05 

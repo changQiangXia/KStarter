@@ -1,0 +1,129 @@
+# https://www.kaggle.com/competitions/commonlit-evaluate-student-summaries/discussion/446686
+
+Topic #446686: 3rd place solution
+  Author: Dmitrii Krasnov
+  Posted: 2023-10-12 16:38:57.518000
+  Votes: 43  Comments: 16
+
+My solution is rather simple, because I used almost no complex tricks - instead I just built a reliable pipeline and found good hyperparameters. I had some brilliant ideas (at least I think so :)) - to use augmentation and generate synthetic data using some big model based on other texts from commonlit.org. But at that time, when I was still actively contributing, there was uncertainty with the license for the texts, and I did not complete the use of augmentations - I was too busy with my work (trying to get RLHF to work), so I left the competition - my last commit was a month ago. But apparently the decision was good, at least I didn’t overfit :)
+
+So let's break my solution down into parts.
+
+1. Data:
+I used a fairly standard template: prompt + question + text. At the end of my participation, I tried to dig into the data and do a good pre-processing - after all, there were quite a lot of very similar essays with exact or different scores. So, I tried to find these samples by similarity (like Levenstein) and then merge them. In addition, I decided to make augumentations based on this insight - if there are many similar essays (differing only in typos, for example) - I could use something like reverse autocorrect - randomly replace some words with its close analogues. With this technique I got 0.453 in private ONLY on fold3 (which is better than my chosen blend and probably could lead to a second place) - but I was too tired at this point so I didn't look further into augmentations. But I think augmentations could probably lead me to victory.
+
+2. Models
+Deberta is the king, so there's not much to say here. I tried using decoder models like Llama, but Deberta was still better. There were some techniques that gave me a boost - using EMA (honestly, without EMA it was very unstable, so it's probably just necessary) and using differential learning rates.I tried several pooling options, but the best option for me was to use concatenation of CLS token and student's text meanpooling. I also used token_type_ids to separate the prompt, question and essay.
+
+3 Inference &amp; train
+I used following scheme - I tried to find a good hyperparameters on some fold (for example, fold0), and then train with exact hyperparameters on other folds. I then sumbittend the entire blend and 4 individual models (5 submission total - one day) and repeated the procedure the next day. I realized that I could use maxlen 1500 for inference (didn't research this number much, tried something like 1024 and 2048, but 1500 was better in terms of efficiency), so in my final mix I took the 10 best checkpoints across folds (some folds got 2 checkpoints, some folds got 3). First I averaged by folds, then averaged the rest. That's all. 
+
+Briefly what worked (ranked from most important to least important, IMO):
+
+
+
+
+Using Deberta
+
+
+EMA
+
+
+Augumentation
+
+
+Defferentiated learning rates
+
+
+Custom pooling
+
+
+token_type_ids
+
+
+Data cleaninig
+
+What did not work (random order):
+
+
+Decoder models
+
+
+AWP
+
+
+FGM
+
+
+WD
+
+
+Constant LR
+
+
+Handcrafted features
+
+
+GBT for stacking
+
+
+In the end, it was a good competition for me. Last year I competed in another NLP competition and got a silver medal, but I grinded all day at that competition (I wasn't working that time, so I had a lot of free time). This time I also expected silver, which I consider a solid result, but I got 3rd place. In any case, this competition was a cakewalk for me, since I spend very little effort on it (compared to the previous competition, at least). I'm hoping this means I'll grow a lot this year - and I think that's the main goal of participating in Kaggle.
+
+Good luck to all of you.
+
+Comments:
+├─ Kinosuke (2023-10-12 17:16:51.047000) [+3]
+│  Thanks for the clear write-up, and congrats on solo gold and getting competition Master 
+│  Your solution is very simple and cool!
+│  
+│  I would like to ask you a question about the following.
+│  
+│  
+│    
+│  I tried...
+  ├─ Dmitrii Krasnov (2023-10-12 17:36:17.850000) [+3]
+  │  Thank you, but I only got a master😀
+  │  I just calculated pairwise levenstein distance across folds, and then check manually very similar example (where is similarity is more that 95%, for example).
+  │  Wh...
+    ├─ Kinosuke (2023-10-12 17:46:02.277000) [+1]
+    │  Thank you, but I only got a master😀
+    │  
+    │  
+    │  Sorry, I made a mistake.
+    │  
+    │  Thank you for your detailed answer! I understand your solution better.
+    │  I remembered that filtering samples with high similarity was v...
+    ├─ Dmitrii Krasnov (2023-10-12 17:53:53.017000) [+3]
+    │  Yes, and when you doing this kind of preprocessing  you could get some insights. For example, there was quite similar examples, ex. only differs with one word, so student #1 write this word correct...
+    ├─ Kinosuke (2023-10-12 18:09:57.240000) [+0]
+    │  This competition was suffering from wording's unstable labeling, but this solution turned out to be a very effective way to solve that problem. I learned a lot. Thank you.
+├─ Urenna Okeke (2023-10-17 19:11:28.620000) [+1]
+│  Congratulations on your win!
+├─ moth (2023-10-12 16:55:23.610000) [+2]
+│  Congratulations @koba35, by EMA you mean Exponential Moving Average of weights? Could you expand on this last item?
+  ├─ Dmitrii Krasnov (2023-10-12 17:00:15.190000) [+0]
+  │  Yeah, you are right.
+├─ C R Suthikshn Kumar (2023-10-20 07:04:12.087000) [+0]
+│  Congratulations on 3rd place. Thanks for sharing the details of your notebook. 
+│  Can you share info about running time of your notebook.
+├─ Min-Hsien Weng (2023-10-14 21:49:26.747000) [+0]
+│  Congrat! Thanks for the simple but effective solution. I also tried to use Decoder-only models (albert-large) and it did not work well. I wonder if there is any particular reason behind this.
+  ├─ Dmitrii Krasnov (2023-10-15 13:56:08.023000) [+0]
+  │  Probably, it’s because you Albert. You should always use deberta nowadays, I think.
+    ├─ Min-Hsien Weng (2023-10-15 16:44:18.490000) [+0]
+    │  Agree. Most top solutions use debert v3 model. Thanks.
+├─ Thienkaka (2023-10-13 03:43:43.183000) [+0]
+│  I have a question about how did you apply EMA to model? I have some confuse at this point.
+  ├─ Dmitrii Krasnov (2023-10-13 06:28:04.687000) [+2]
+  │  I will probably release my train code after some clean up, so stay tuned
+├─ Haru (2023-10-12 22:02:35.773000) [+0]
+│  Thank you for your solution.
+│  Also, congratulations on your victory!
+│  I have a question.
+│  “I also used token_type_ids to separate the prompt, question and essay.”
+│  
+│  How did you use token_type_ids?
+│  
+│  Tha...
+  ├─ Dmitrii Krasnov (2023-10-12 23:03:41.913000) [+2]
+  │  In some encoder models (and in deberata too) you could pass to forward additional argument, called token_type_ids. Originally it's used in QA task, to separate questions and answers. It's working s...

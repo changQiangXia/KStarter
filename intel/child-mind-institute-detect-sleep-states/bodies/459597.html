@@ -1,0 +1,66 @@
+<p>First, I would like to thank the competition hosts for organizing such a very interesting competition and the kaggle team for facilitating it so smoothly. Also, congratulations to all the top winners.</p>
+<p>And of course, a big thank you to my teammate <a href="https://www.kaggle.com/nikhilmishradev" target="_blank">@nikhilmishradev</a> for competeing with me for the last 3 weeks. Without him, we could not have achieved this great result.</p>
+<p>In this post I will mainly explain the model I developed. Check out <a href="https://www.kaggle.com/nikhilmishradev" target="_blank">@nikhilmishradev</a> 's post for the main stream (<a href="https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/discussion/459637" target="_blank">link</a>).</p>
+<p>My solution is an ensemble of 4 NN models and 2 GBDT models. In all models, target is a gaussian with variance 36 steps. I explain in detail below.</p>
+<h2>NN Models</h2>
+<p>The input is a series of 19200 steps patched every 12 steps. In other words, they have 1600 (=19200//12) length and the shape is (bs, 1600, 12*num_features). Predictions are made by minute. This patching is important for training models on long series in a short time without overfitting. During training and inference, input series is shifted by 1/8 length of input. That is, each position is predicted approximately 8 times and averaged at the end. The input is transformed by transformer, wavenet or 1dcnn and finally GRU is applied. Single model CV of theese models are 0.805~0.814. Finally, I seed averaged predictions with 1~2 seeds.</p>
+<p>The input features are as follows:</p>
+<ul>
+<li><p>standardized_anglez and enmo</p></li>
+<li><p>perfectly matched counts in 24-hour cycles</p>
+<ul>
+<li>This is useful for identifying deficiencies because the GGIR replaces deficiencies with the average of the same time on other days.</li></ul>
+<pre><code>n_days = ((df) // DAY_STEPS) + 
+df[] = 
+ day  (-n_days, n_days + ):
+     day == :
+        
+    df[] = df[].diff(DAY_STEPS * day)
+    df[] = df[].fillna()
+    df[] += (df[] == ).astype()
+df[] = (df[].clip(, ) - ) / 
+</code></pre></li>
+<li><p>large anglez.diff() or not (i.e. <code>anglez.diff() &gt; 5</code>)</p></li>
+<li><p>is_longest_sleep_episode and is_sleep_block from <a href="https://www.kaggle.com/tatamikenn" target="_blank">@tatamikenn</a> ‘s notebook.</p>
+<ul>
+<li><a href="https://www.kaggle.com/code/tatamikenn/sleep-hdcza-a-pure-heuristic-approach-lb-0-447" target="_blank">https://www.kaggle.com/code/tatamikenn/sleep-hdcza-a-pure-heuristic-approach-lb-0-447</a></li></ul></li>
+<li><p>lag features of the above features</p></li>
+</ul>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-forum-message-attachments/o/inbox%2F3962786%2F5bcbf85dc70115602ffe62032b00192c%2Fimage.png?generation=1706561255845081&amp;alt=media" alt=""></p>
+<h2>GBDT Models</h2>
+<p>GBDT also makes a prediction every minute. The features created were mainly those used in above NNs, but it was especially important to add rich lag features. I trained XGBoost and LightGBM. Their CV are 0.7941 and 0.7934, respectively. The richer features improved these CVs to 0.7998 and 0.7978, but were not employed because the final CV did not change after ensemble.</p>
+<h2>tubo Models</h2>
+<p>It is based on <a href="https://www.kaggle.com/tubotubo" target="_blank">@tubotubo</a> ‘s excellent repo. I added described features and sliding window. CV is 0.789.</p>
+<h2>Post Processing</h2>
+<p>This part is important. While the task of this competition is essentially ranking, we can submit a large number of low confidence forecasts with no risk. My post-process is similar to NMS, but allows for predictions of non-peaks as well. Specifically, the process is as follows:</p>
+<ol>
+<li><p>leave only the 12n+6 (n&gt;=0) steps to eliminate the steps that are too close.</p></li>
+<li><p>repeat the following steps until there are more than 1000 predictions for each series. Also initialize the reduce_rate array with [1, 1, …, 1].</p></li>
+<li><p>Select the triplet of (step, event, score) with the highest confidence (=score / reduce_rate) and add it to submission.</p></li>
+<li><p>add <code>((RANGE - |r|) / RANGE) ** EXP * COEFF(|r| &lt; RANGE)</code> to reduce_rate. (RANGE, EXP and COEFF are hyper params to be tuned.)</p></li>
+</ol>
+<p>This process was further refined by Nikhil so his post processing was used in the final team submissions.</p>
+<h2>Ensemble</h2>
+<p>Finally, averaged preds with NN:GBDT:tubo = 5:2:3 weights is the output of my part. The final CV of my part is 0.825, public LB is 0.784 and privete LB is 0.840 with my post-process.</p>
+<h2>Not Worked</h2>
+<ul>
+<li>longer series</li>
+<li>BigBird-like sparse attention.</li>
+<li>re-ranking by ranker<ul>
+<li>regresses on the number of matches with target directly, not on soft label targets.</li>
+<li>I thought that close predictions could cooperatively modify their confidence, but the metric did not change.</li></ul></li>
+<li>data augmentation<ul>
+<li>copy&amp;paste, time flip, etc…</li></ul></li>
+<li>hand labeling on unlabeled training data.</li>
+<li>focal loss</li>
+<li>pseudo labeling during submission</li>
+</ul>
+<p>etc…</p>
+<p>Thank you for reading.</p>
+<hr>
+<p>Edit:<br>
+I published my training repositories.</p>
+<ul>
+<li><a href="https://github.com/penguin-prg/child-mind-institute-detect-sleep-states" target="_blank">https://github.com/penguin-prg/child-mind-institute-detect-sleep-states</a></li>
+<li><a href="https://github.com/penguin-prg/cmi-tubo-base" target="_blank">https://github.com/penguin-prg/cmi-tubo-base</a></li>
+</ul>

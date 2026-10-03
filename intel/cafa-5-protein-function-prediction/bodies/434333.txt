@@ -1,0 +1,44 @@
+# https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/discussion/434333
+
+Topic #434333: A brief overview of 13th-place LB solution
+  Author: Antonina Dolgorukova
+  Posted: 2023-08-24 20:55:16.022000
+  Votes: 30  Comments: 3
+
+It was an incredible adventure and the first competition I ever took part in! I was very lucky to find an experienced teammate - @ogurtsov , who was the leader of our team.  This journey was not just about algorithms and data; it was a journey of exploration, curiosity, and learning, so thanks to the organizers, fellow participants, and the Kaggle community!
+
+Here is a brief overview of our 13th-place LB solution:
+
+1) Data:
+We used the initial train set and also annotations from the UniProt and QuickGO databases (filtered terms with NOT qualifier, evidence code "ND", obsolete terms, and those that are not present in the competition OBO file) in two ways: to update the train set (proteins with experimentally confirmed terms only) and to merge with predictions (test proteins with terms never experimentally confirmed).
+
+2) Features
+
+ESM2 3B protein sequence embeddings kindly shared by @andreylalaley with Z-score normalization (means and SDs of train data applied to train, validation, and test).
+
+3) Targets:
+Our target selection involved selecting the top 500 GO terms based on their frequency, or terms with a frequency above a certain threshold (BP &gt; 250, MF and CC &gt; 50).
+
+4) Neural Networks:
+
+The modeling strategy involved multiple Multi-Layer Perceptrons (MLPs) with different hyperparameters and layers, written with Torch or Tensorflow, R language. Each was trained on the initial or updated training set and different sets of targets. To ensure robustness, we employed cross-validation (CV) with 10 folds (one for validation and 9 for training) followed by averaging the predictions. For some models, we found it more effective to validate on train proteins only, in these cases, we used randomized 10-fold CV to avoid reducing the validation set. Importantly, we trained a separate MLP for each ontology, each time only on these proteins that have at least one term of the selected top.
+
+UPD: For all MLPs we used AdamW optimizer,  once cycle learning rate and early stopping callback (max 100 epoch, monitored metric - valid loss, with patience 1, 3 or 5) or callback reducing the learning rate by a factor of 0.5 (patience = 1)
+
+5) Post-processing:
+First, we filtered the predictions using taxon constraints to eliminate terms incompatible with certain species. Also, after each step, we made corrections to ensure that the predictions of parent terms were not smaller than the predictions of child terms (in such cases we propagated max prediction of child terms). Finally, before the final merge with GO annotations, the predictions were filtered again to include only terms in the top 450 by frequency based on the original training set and also rare terms if they had predictions &gt; 0.5.
+
+6) Ensemble:
+Predictions from 6 MLPs were simply averaged. The resulting predictions were averaged again with exported GO annotations (the set of test proteins with terms never experimentally confirmed).
+
+For the secondary solution, we did weighted averaging with GO annotations and selected the top 35 predictions for each ontology.
+
+I hope that this will be beneficial for others, serving as an example of what can be done (if we shake up) or what should be avoided (if we shake down at the end) 😆.
+
+Comments:
+├─ Victor Ogobi (2023-08-24 21:35:39.870000) [+4]
+│  Wow! That's a proper machine learning approach that is independent of ensembling with best public submission's ".tsv's" I have seen so far.
+├─ BarryZhou (2023-08-27 04:06:15.030000) [+2]
+│  Thanks for your sharing antoninadolgorukova! Your post-processing is so impressive!
+├─ common-people (2025-11-18 13:32:35.963000) [+0]
+│  Hello, could I ask a question:First, we filtered the predictions using taxon constraints to eliminate terms incompatible with certain species. How you get the taxon constraints

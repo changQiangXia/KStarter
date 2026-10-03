@@ -1,0 +1,282 @@
+# https://www.kaggle.com/competitions/chaii-hindi-and-tamil-question-answering/discussion/287917
+
+Topic #287917: Tentative 2nd place solution
+  Author: tkm2261
+  Posted: 2021-11-16 00:23:06.965000
+  Votes: 59  Comments: 34
+
+Hi all,
+
+Congratulations @thedrcat! Seems like we trusted LB too much. But, we wrer able to remain in 2nd place. I am happy and I can be GM! Thanks a lot, @kanbehmw. His knowledge of NLP has boosted our score significantly.
+
+Here is our tentative solution write-up. We will publish all our codes and datasets. Please post any questions in this thread if you have any.
+
+Resources
+
+
+
+Our inference notebook is available here: https://www.kaggle.com/kanbehmw/tkm-tydi-rem-info-muril-top35
+
+Training code is in each dataset
+
+
+External data
+
+We trained our models with the competition data, MLQA, and TyDi QA (only Bengali and Telugu). In particular, TyDi QA pushed our score largely (0.787 -&gt; 0.799 in public LB). We think most of the top teams achieving &gt;0.81 use the TyDi QA dataset. It may be due to the language similarity among  Bengali, Telugu, Hindi, and Tamil. However, we suspect some possibility that some questions are shared even though they are translated to Hindi or Tamil since TyDi QA is owned by Google. This is just a guess.
+
+Model Training
+
+We just did 2 epochs of training with the whole data (no fold out) on the huggingface trainer. We do not distinguish between Hindi and Tamil. For more details, The training code should be included in each dataset. Please have a look.
+
+Loss function
+
+While the original cross-entropy score has the best performance, the loss function described in https://github.com/heartkilla/kaggle_tweet (used in the previous competition) worked to obtain more diverse models. In our kernel whose name ends "exp33" is trained with the "Jaccard-based Soft Labels Since Cross-Entropy".
+
+Local Evaluation (CV) Strategy
+
+Nothing. We tune everything based on Public LB. I did not even track local scores. This is the first time since I started Kaggle that I have not tracked local scores at all.
+
+Model Ensembling
+
+As in the CommonLit competition (https://www.kaggle.com/c/commonlitreadabilityprize/overview), model ensembling seems to be the key technique to win NLP competitions. We ensemble the following models:
+
+
+
+XLM-R (7 models)
+
+
+deepset/xlm-roberta-large-squad2
+
+
+One model trained with Google-translated SQuAD
+
+
+https://www.kaggle.com/tkm2261/google-translated-squad20-to-hindi-and-tamil 
+
+AlexKay/xlm-roberta-large-qa-multilingual-finedtuned-ru
+
+RemBert (3 models)
+
+InfoXLM (3 models)
+
+MuRIL (2 models)
+
+
+We don't know why the models fine-tuned in Russian had a good performance. We stacked the models gradually and our scores gradually improved. (0.799 -&gt; 0.816 -&gt; 0.821 -&gt; 0.827 -&gt; 0.829). The MuRIL models pushed our score from 0.827 to 0.829.  
+
+Misc.: 
+
+
+
+To handle the difference of the token size in a context, we took the softmax function on the entire text before ensembling different types of models.
+
+I do not use the 0.792 models.
+
+I do not use CV models. All models are trained with the entire data. I think changing seeds and ensembling them should be better than ensembling CV models.
+
+
+Effect of max_seq_length and doc_stride
+
+As in my notebook https://www.kaggle.com/tkm2261/reproduction-of-0-792-notebook, max_seq_length and doc_stride seem to have a large impact. Even though I explored a lot of values of these two parameters, it did not help to improve our score. So, we just use max_length = 384 and doc_stride = 128.  Maybe, this part is not important since we ensemble models with different token sizes.
+
+Post-processing
+
+As shown in this kernel (https://www.kaggle.com/nbroad/chaii-qa-torch-5-fold-with-post-processing-765), post-processing has a large impact on this competition. Since the test data is annotated by 4 people, they are not very likely to forget the trailing periods like “​​ई.पू.”, i.e., answers should be in the most formal format. Besides, we processed the Devanagari numbers (०१२३४५६७८९). We replace them with Arabic numerals (0-9) if the selected answer consists only of Devanagari numbers. It seems like the annotators agreed that they use Arabic numerals when the answer is a year. Without the postprocessing, our score dropped to 0.806. So, it pushed our score by around 0.02.
+
+Public LB score timeline
+
+
+
+0.787: Teamed up
+
+0.799: Trained with TyDi QA (only Bengali and Telugu)
+
+0.816: Ensembled with Rembert and InfoXLM
+
+0.821: Ensemble with more XLM-R, Rembert, and InfoXLM
+
+0.827: Tune ensemble weights
+
+0.829: Ensembled with MuRIL
+
+0.831: Tune parameters in post-processing
+
+
+Did not work
+
+After we found TyDi QA helps a lot, we explored a lot of datasets. But, almost all datasets did not work. In our case, Only MLQA and TiDy QA worked. XQuAD was not bad, but I did not use it.
+
+
+
+
+#
+Name
+URL
+
+
+
+
+1
+Bengali Question Answering Dataset
+https://www.kaggle.com/mayeesha/bengali-question-answering-dataset
+
+
+2
+XQuad
+https://github.com/deepmind/xquad
+
+
+3
+UQuAD
+https://t.co/OP6FYHbuju?amp=1
+
+
+4
+TQuAD
+https://github.com/TQuad/turkish-nlp-qa-dataset
+
+
+5
+PersianQA
+https://github.com/sajjjadayobi/PersianQA
+
+
+6
+MMQA dataset: Hindi QA dataset
+https://github.com/deepaknlp/MMQA
+
+
+7
+XQA: testset for Tamil QA
+https://github.com/thunlp/XQA
+
+
+8
+bAbi 1.2 dataset: Has Hindi version of bAbi tasks in romanized Hindi.
+http://www.thespermwhale.com/jaseweston/babi/tasks_1-20_v1-2.tar.gz
+
+
+9
+HiQuAD
+https://www.cse.iitb.ac.in/~ganesh/HiQuAD/clqg/
+
+
+10
+ARCD
+https://github.com/husseinmozannar/SOQAL/tree/master/data
+
+
+11
+FQuAD
+https://fquad.illuin.tech/
+
+
+12
+Squad_Translated_to_Tamil for Chaii
+https://www.kaggle.com/msafi04/squad-translated-to-tamil-for-chaii
+
+
+13
+RuBQ: A Russian Knowledge Base Question Answering and Machine Reading Comprehension Data Set
+https://github.com/vladislavneon/RuBQ
+
+
+14
+SberQuAD
+https://t.me/s/opendatascience?q=%23SberQuAD
+
+
+15
+XOR-TyDi QA
+https://github.com/AkariAsai/XORQA#additional-resources
+
+Comments:
+├─ Darek Kłeczek (2021-11-16 19:23:01.507000) [+1]
+│  Congratulations @tkm2261 on GM title, and your team on the 2nd place! I had many similar ideas but also some differences, love to learn from your solution! I couldn't catch up with you on the publi...
+  ├─ tkm2261 (2021-11-17 01:53:53.967000) [+0]
+  │  Congratulations on the first! I think you more sincerely addressed how to learn and evaluate the limited datasets. We mainly just try many datasets and models as much as possible. After I saw your ...
+├─ esprit (2021-11-16 02:43:25.907000) [+1]
+│  Congratulations on becoming GM! I've been following your back in this competition for a long time, but never quite caught up😂 I will learn a lot from your solution.
+├─ DrHB (2021-11-16 01:54:15.277000) [+1]
+│  double congratulations on 2nd position and becoming GM =)
+├─ Luca Massaron (2021-11-16 01:30:08.343000) [+1]
+│  Interesting solution, I found it very helpful to understand what we could have done more.
+├─ Kiran Chaudhary (2021-11-16 01:14:56.127000) [+1]
+│  Congratulations for 2nd position and GM title …
+  ├─ tkm2261 (2021-11-16 01:15:14.193000) [+1]
+  │  Thanks a lot!
+├─ Khuong T G Hieu (2021-11-16 01:04:54.823000) [+1]
+│  Congratulations on becoming GM @tkm2261 !! Great leveraging of external data!! My team only pretrained with English Squad2.0 hence my current position 😂.
+│  May I ask how you found this long list of e...
+  ├─ tkm2261 (2021-11-16 01:15:04.373000) [+0]
+  │  Thanks! My teammate @kanbehmw is an NLP expert. He knew a lot. Besides, we just googled the datasets.
+├─ KhanhVD (2021-11-16 01:12:58.520000) [+2]
+│  Congrats @tkm2261 on becoming GM and thanks for sharing the writeup
+  ├─ tkm2261 (2021-11-16 01:23:49.680000) [+0]
+  │  Thanks a lot. Eventually, I made it!
+├─ MINGOOK KIM (2021-11-21 15:06:05.623000) [+0]
+│  Congratulations on your achievements.
+│  
+│  Congratulations~
+├─ Ayush Singh (2021-11-18 02:21:30.217000) [+0]
+│  many congratulations @tkm2261 
+│  This is very comprehensive work
+├─ adldotori (2021-11-17 06:06:01.337000) [+0]
+│  Congratulations @tkm2261 on GM title. I learned from you in this competition thanks
+├─ Old Monk (2021-11-16 14:11:18.843000) [+0]
+│  Congratulations @tkm2261 , looking forward to another update from you with a photo wearing the GM hoodie :D
+├─ Mathurin Ache (2021-11-16 13:59:30.360000) [+0]
+│  Thanks for your very detailed solution, a lot of work still here. Well done, it's well documented.
+  ├─ tkm2261 (2021-11-17 01:54:05.777000) [+0]
+  │  Thanks a lot!
+├─ ForcewithMe (2021-11-16 05:53:05.417000) [+0]
+│  Congratulations @tkm2261 become a GM👍. Can you tell me how do you ensemble those 4 models? I manage to ensemble them at first but find out that they have different feature matrix output shape.
+  ├─ tkm2261 (2021-11-16 06:35:25.267000) [+0]
+  │  We assigned the maximum logit of tokens for each character.
+  │  
+  │  Token [ 1 ][     2     ][    3    ]
+  │  Char.  [11][222222][3333]
+  │  
+  │  
+  │  Then, we just take softmax in char level. Then, we take an average over ...
+  ├─ ForcewithMe (2021-11-16 07:14:00.663000) [+0]
+  │  Thank you! Simple and clear
+├─ [deleted] (2021-11-16 05:25:05.027000) [+0]
+│  Well deserved! congratulations!!
+├─ Mintwater (2021-11-16 03:46:32.700000) [+0]
+│  Congrats for becoming GM and this great solution! I have learned a lot:)
+  ├─ tkm2261 (2021-11-16 04:00:22.847000) [+0]
+  │  Thanks a lot!
+├─ Trushant Kalyanpur (2021-11-16 03:44:50.890000) [+0]
+│  Congratulations @tkm2261! 
+│  
+│  
+│    
+│  To handle the difference of the token size in a context, we took the softmax function on the entire text before ensembling different types of models.
+│  
+│  
+│  Do you have a...
+  ├─ tkm2261 (2021-11-16 03:52:41.037000) [+2]
+  │  Thanks! This is in the cell [16] in https://www.kaggle.com/kanbehmw/tkm-tydi-rem-info-muril-top35?scriptVersionId=77966564
+  │  
+  │  for i, offset in enumerate(offset_mapping):
+  │      if offset is not None:
+  │    ...
+├─ Leon_and_hard (2021-11-16 02:13:54.887000) [+0]
+│  Congratulations for sharing
+├─ Raghawendra Singh (2021-11-16 00:57:10.073000) [+0]
+│  Congratulations for #2 position in this competition and thanks for solution…
+  ├─ tkm2261 (2021-11-16 00:58:21.283000) [+0]
+  │  Thanks a lot!
+├─ atfujita (2021-11-16 00:32:48.090000) [+0]
+│  Congratulations!
+  ├─ tkm2261 (2021-11-16 00:42:50.640000) [+0]
+  │  Thanks a lot!
+├─ Trushant Kalyanpur (2021-11-16 00:26:49.597000) [+0]
+│  Congratulations @tkm2261 on becoming KGM! Great achievement and well deserved!!!
+  ├─ tkm2261 (2021-11-16 00:43:22.817000) [+1]
+  │  Thanks! I am quite happy. I want to get the GM foodie soon 😎
+├─ Zacchaeus (2021-11-16 00:24:47.600000) [+0]
+│  congrats! I'm very glad to compete with you.
+  ├─ tkm2261 (2021-11-16 00:43:28.647000) [+0]
+  │  Thanks a lot!

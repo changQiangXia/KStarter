@@ -1,0 +1,221 @@
+# https://www.kaggle.com/competitions/eedi-mining-misconceptions-in-mathematics/discussion/551402
+
+Topic #551402: 1st Place Solution Summary
+  Author: Raja Biswas
+  Posted: 2024-12-13 02:41:33.267000
+  Votes: 127  Comments: 40
+
+I really enjoyed working on this competition and learned a lot. Big thanks to the Kaggle community for sharing great ideas and engaging discussions!
+
+My solution pipeline includes:
+
+
+
+An ensemble of retrievers: intfloat/e5-mistral-7b-instruct, BAAI/bge-en-icl, and Qwen/Qwen2.5-14B
+
+3x Re-rankers: Qwen/Qwen2.5-14B, Qwen/Qwen2.5-32B and Qwen/Qwen2.5-72B
+
+
+All models were fine-tuned using competition data (~1.8k examples) + synthetic data (~10k examples). 
+
+Retrievers
+
+An ensemble of retrievers was used to identify top 32-64 misconception candidates for each QuestionId_Answer combination using dynamic thresholds. Specifically, I kept the top 32 retrieved candidates and included up to 32 additional candidates with similarity scores within 0.06 of the top candidate.
+
+I selected the retrievers based on their recall@32 scores instead of MAP@25 -- these two metrics were often inversely correlated for my models. I skipped hard mining during training as it was not helpful for recall@32. One important detail was to avoid having multiple demonstrations of a given misconception in a single batch.
+
+Rerankers
+
+I first used the Qwen/Qwen2.5-14B ranker to process the retrieved candidates and narrowed them down to top 8. For inference, I used vllm with enable_prefix_caching=True -- which significantly improved efficiency.
+
+Next, the Qwen/Qwen2.5-32B ranker further reduced the candidates to the top 5, which were then passed to the Qwen/Qwen2.5-72B model for final ranking.
+
+
+
+Pointwise ranking: I used pointwise ranking for Qwen/Qwen2.5-14B and Qwen/Qwen2.5-32B.  These models processed one misconception candidate at a time in their context.  
+
+Listwise ranking:  Qwen/Qwen2.5-72B was listwise -- sees top 5 candidates at once in the context.
+
+
+The following 4 aspects were important for performance and generalization:
+
+
+
+
+Chain of Thought (CoT): I first prompted Claude 3.5 Sonnet to generate thoughts/rationale behind picking a wrong answer. Next, I fine-tuned the Qwen2.5 models with this data. During inference, I generated CoT from the finetuned models and provided them to the rerankers to help them with ranking. Essentially, this helps to distill reasoning from the claude model.
+
+
+Few shot examples: I wanted to retain/leverage in-context-learning capability of the LLMs. Hence, during training I optionally included a few demonstrations of the misconception it needs to classify. Here is an example:
+
+
+&lt;|im_start|&gt;system
+You are an expert  detecting grade-school level math misconceptions. Verify  the incorrect answer stems  the provided misconception.&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+Misconception: Thinks there are   a centimetre
+
+Demos  the misconception:
+Question: A    metre long rope has    centimetres chopped  the end.
+What  the length  the rope  remains?
+Give your answer  millimetres
+Answer:   
+Misconception Answer:    
+
+--
+Subject: Length Units
+Topic: Convert between m  cm
+Question: To convert  metres  centimetres, you should:
+Correct Answer: Multiply  
+Incorrect Answer: Divide  
+Does the misconception (Thinks there are   a centimetre) lead  the incorrect answer? (Yes/No)&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+
+
+During inference I used 1-2 demos from the training set. It helped the 14b ranker the most.
+
+
+
+
+Negative Ratio: Showing the rankers a large number of negatives during training helped to improve performance. For each positive, I sampled 24 negatives.
+
+
+Distillation/Pseudo Labelling: I first fine-tuned two pointwise 72b models (Qwen/Qwen2.5-Math-72B and Qwen/Qwen2.5-72B) using competition data and ensembled them to pseudo label the synthetic examples. Competition data + pseudo labelled data were used to fine-tune 14b and 32b models.
+
+
+Synthetic Data
+
+
+
+Grouped synthetic data generation: I first created clusters of related misconceptions e.g. 
+
+
+&gt;&gt; Assumes a   linear
+&gt;&gt; Thinks terms  linear  are  direct proportion
+&gt;&gt; Does  know how  find the next term  a 
+&gt;&gt; Describes position  term   term  term 
+&gt;&gt; Does  recognise that a linear  must increase  decrease  same amount
+&gt;&gt; Uses  the first two terms  a     a term--term 
+&gt;&gt; Does  know the definition  term  term--term 
+&gt;&gt;  uses two terms  a     a term--term 
+&gt;&gt;  asked  a specific term  a  just gives the next term
+&gt;&gt; Does    changes  a   visual patterns
+
+
+Then asked Claude 3.5 Sonnet to generate more examples. I included 5-8 relevant MCQs from the training set during the synthetic data generation. I have included the prompts in the comments.
+
+--
+
+Links
+
+
+
+Inference notebook
+
+
+I will write a detailed post and publish my code + datasets soon!
+
+Comments:
+├─ Raja Biswas (2024-12-13 02:55:19.207000) [+12]
+│  Prompt for synthetic data generation:
+│  
+│  You will be generating Multiple Choice Questions (MCQs)  diagnose specific mathematical misconceptions. Here are  misconceptions you should focus :
+│  
+│  &lt;misco...
+  ├─ ktr (2024-12-13 13:59:47.900000) [+1]
+  │  Congratulations on your 1st place! 
+  │  I was surprised by how carefully crafted the prompt was.
+  │  I would like to know what process was used to create the prompts in the solution. Did you create it from...
+    ├─ Raja Biswas (2024-12-13 14:02:34.883000) [+11]
+    │  I used the metaprompt notebook to get started
+├─ Raja Biswas (2024-12-13 02:57:21.260000) [+6]
+│  Prompt for generating CoT:
+│  
+│  You will analyze a student's incorrect answer  identify  specific reasoning flaw  led  their .
+│  Your goal   explain precisely how their misconception caused them  arrive ...
+├─ James owen (2024-12-13 03:19:56.923000) [+3]
+│  hi raja, may I ask if you are considering releasing the code for  fine-tuned in the future? Thank you very much, I can't wait to start learning your code
+  ├─ Raja Biswas (2024-12-13 06:56:29.290000) [+4]
+  │  yes, will publish the training code later this week.
+├─ Ye Daotian (2024-12-13 03:00:27.443000) [+3]
+│  Thank you for your kindness and wisdom. I really learn a lot.
+├─ Bilzard (2024-12-13 22:57:10.203000) [+1]
+│  Congratulation for solo first prize.
+│  
+│  I have two question
+│  
+│  
+│  
+│  
+│  According to your solution, you seem to choose point-wise reranker rather than list-wise reranker if inference time is sufficiently sma...
+  ├─ Raja Biswas (2024-12-14 00:24:51.497000) [+2]
+  │  LLM based listwise approach typically has a position bias, rearranging the candidates would give moderately different predictions. I thought the bias would be even more stronger if more candidates ...
+├─ SiWeiLin (2024-12-13 09:40:19.247000) [+1]
+│  Congratulations!May I ask how you grouped the misconceptions? Was it through embedding clustering?
+  ├─ Raja Biswas (2024-12-14 00:27:41.367000) [+1]
+  │  I used co-occurrence stats of misconceptions in re-ranker OOF. Here is a gist notebook
+├─ Octavi Grau (2024-12-13 09:20:14.640000) [+1]
+│  brilliant @conjuring92 and congratulations for the 1st place! Thanks for sharing - I learned a ton. And special thanks for sharing the promtps - it will be very useful for future competitions!
+├─ Deepak Saldanha (2024-12-13 08:17:05.627000) [+1]
+│  Great effort and Many Congratulations!
+├─ InnerVoice (2024-12-13 04:58:25.360000) [+1]
+│  Hi Raja, Nice approach. I see 32B and 72B models are finetuned .. what is the minimum GPU RAM requirement for  doing the same .. 
+│  One more question can you suggest some paper articals around listwi...
+  ├─ Raja Biswas (2024-12-13 07:18:51.470000) [+2]
+  │  I trained almost all of my models with 2xH100. Used (Q)LoRA to finetune 72b models and LoRA for the 32b ones. Both of which, needed ~80GB VRAM for my training setup.
+  │  
+  │  I have came across listwise ra...
+├─ Zhongkai Shangguan (2024-12-13 04:19:10.080000) [+1]
+│  Congrats! May I ask what's your score without reranking (retrieval only)?
+  ├─ Raja Biswas (2024-12-13 07:21:26.670000) [+3]
+  │  My best retriever only sub had 0.524 public LB, 0.475 private LB. I didn't try to push for MAP@25 with retrievers, mostly focused on recall.
+├─ Atharva Ingle (2024-12-13 04:15:36.520000) [+1]
+│  Congratulations Raja for 1st place solo finish, always a joy to read your solution. Will you be participating in WSDM Cup ?
+  ├─ Raja Biswas (2024-12-13 07:22:58.670000) [+1]
+  │  Thanks @atharvaingle! Haven't decided on which one to participate next, there are so many cool competitions running in parallel!
+├─ Zhuang Jia (2024-12-13 03:51:08.683000) [+1]
+│  Congratulations! Ready to start learning
+├─ WoNiu666 (2024-12-13 03:48:40.960000) [+1]
+│  Congratulations raja, would you share your train code in the future, thks
+  ├─ Raja Biswas (2024-12-13 07:23:46.140000) [+3]
+  │  yes, will share later this week
+├─ zhudong1949 (2024-12-13 03:48:15.763000) [+1]
+│  Congratulations. I can't wait to learn about your great work.
+├─ BrianR (2024-12-13 03:07:15.560000) [+1]
+│  Thank you so much! I look forward to the code and datasets. I noticed this competition too late to enter, and I am excited to learn from everyone’s hard work on it.
+├─ narsil (jobs-in-data.com) (2024-12-13 06:33:26.773000) [+2]
+│  Great work! Elegant &amp; simple solution (in retrospect, i guess you did a lot of experiments to arrive at it). Congrats!
+  ├─ Raja Biswas (2024-12-13 07:13:19.583000) [+5]
+  │  Thanks, simple solution is often the best! Initially, I had the following intuitions:
+  │  
+  │  
+  │  
+  │  High quality synthetic data generation should be feasible since MATH domain can be verified/curated objectiv...
+    ├─ narsil (jobs-in-data.com) (2024-12-13 08:02:19.623000) [+1]
+    │  Thanks for sharing those! I actually work in a very similar manner in most of the competitions - first intuitions are often the ones the most worth checking.
+    │  
+    │  Out of curiosity, why did you use Sonn...
+    ├─ Dipam Chakraborty (2024-12-13 08:29:30.237000) [+1]
+    │  I tried one full model tuning on a 7B model and interestingly it was worse than LoRA, maybe hparam tuning could make it better though, I only reduced the max learning rate.
+    ├─ [deleted] (2024-12-13 13:42:55.447000) [+0]
+    │  [deleted]
+    ├─ Raja Biswas (2024-12-13 13:44:03.570000) [+3]
+    │  @narsil Nothing specific, just because I'm more familiar with claude than other LLMs. I briefly looked into o1-mini and felt that sonnet was equal or better based on vibe test..
+    ├─ Raja Biswas (2024-12-13 14:09:47.387000) [+2]
+    │  Thanks for sharing @dipamc77, I previously fine-tuned LLMs for the function calling capability -- where I observed full tuning was significantly better than LoRA. In general, I felt full-tuning sho...
+├─ Darkmatter1202 (2024-12-15 12:53:42.793000) [+0]
+│  Thank you for your work! This was really helpful.
+├─ MrSimple (2024-12-15 05:31:24.673000) [+0]
+│  Congratulation for solo first prize.!
+├─ Oleh Kivernyk (2024-12-14 11:05:15.793000) [+0]
+│  Thanks for your summary and many details in the comments! The solution is elegant and the prompts are carefully crafted.
+├─ [deleted] (2024-12-13 20:53:41.133000) [+0]
+│  [deleted]
+├─ [deleted] (2024-12-13 02:51:28.703000) [+1]
+│  [deleted]
+├─ Bootstrapping (2024-12-13 17:02:51.557000) [+1]
+│  Great work!!
+├─ Anton Antonov (2024-12-13 08:51:04.960000) [+1]
+│  great work thanks!
+├─ Abubakar Magomedov (2024-12-16 20:58:38.570000) [+0]
+│  good job !
+├─ [deleted] (2024-12-15 12:57:11.597000) [+0]
+│  [deleted]

@@ -1,0 +1,279 @@
+<p>CAFA5 in 2023 was the first competition where I won a gold medal, so it is a real honour to have won gold again in CAFA6. I would like to thank the participants who shared insightful discussions and notebooks across both CAFA5 and CAFA6 — this solution builds on a number of ideas generously shared by the community.</p>
+<hr>
+<h2>1. Overview</h2>
+<p>My solution is an ensemble whose backbone is a weighted average of 6 prediction sources — three supervised models that share most of their features, plus three kNN label-transfer models on distinct modalities (sequence, 3D-structure, PPI). At the final merge stage, a shared set of post-processing steps is applied: GO hierarchy propagation, filtering to scorable GO terms, and taxon constraints.</p>
+<p>An overview of the full pipeline is shown in the figure below.</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11204962%2F179aab7a00cdfc32a0188b79c6bdfed1%2Ffig1.jpg?generation=1782087815392612&amp;alt=media" alt=""></p>
+<ul>
+<li>MCM-NN is a custom neural network built for this competition; detailed in §5.2</li>
+<li>Throughout this writeup, "supervised models" refers to the three models that learn parameters from the training labels (MCM-NN, logistic regression, PyBoost), as distinguished from the "kNN label-transfer" methods, which learn no parameters and instead transfer labels from retrieved neighbours.</li>
+</ul>
+<p>The final submission is a weighted average of the following 6 sources:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Category</th>
+<th>weight</th>
+<th>Aspects</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Set 1 (PLM + taxon-Phylum + NEA)</td>
+<td>Supervised</td>
+<td>0.20</td>
+<td>BP / MF / CC</td>
+<td>use base feature set</td>
+</tr>
+<tr>
+<td>Set 2 (PLM + <strong>taxon-Order</strong> + NEA)</td>
+<td>Supervised</td>
+<td>0.16</td>
+<td>BP / MF / CC</td>
+<td>more precise taxonomy information</td>
+</tr>
+<tr>
+<td>Set 3 (PLM + taxon-Phylum + <strong>PubMed-emb (MedCPT)</strong> + NEA)</td>
+<td>Supervised</td>
+<td>0.16</td>
+<td>BP / MF / CC</td>
+<td>use PubMed literature information</td>
+</tr>
+<tr>
+<td>Foldseek kNN</td>
+<td>Label transfer</td>
+<td>0.16</td>
+<td>BP / MF / CC</td>
+<td>3D structure based</td>
+</tr>
+<tr>
+<td>DIAMOND kNN</td>
+<td>Label transfer</td>
+<td>0.16</td>
+<td>BP / MF / CC</td>
+<td>Sequence similarity based</td>
+</tr>
+<tr>
+<td>PPI kNN</td>
+<td>Label transfer</td>
+<td>0.16</td>
+<td><strong>BP only</strong></td>
+<td>PPI confidence based (STRING database)</td>
+</tr>
+</tbody>
+</table>
+<p><em>* The merge is a NaN-aware weighted average: for any [protein, GO] pair where a given source has no prediction, that source's weight is dropped and the remaining weights are renormalized. Thus for MF / CC — where PPI is absent — the average implicitly renormalizes over the remaining 5 sources.</em></p>
+<hr>
+<h2>2. General (Common settings)</h2>
+<h3>2.1 Per-aspect training and prediction</h3>
+<p>The three ontologies (BP / MF / CC) are trained and predicted independently and concatenated only at the very end. Each of the three supervised models (NN / logreg / pyboost) is fit per aspect, and the kNN models are also processed aspect-wise so that only the training labels for the target aspect are consulted.</p>
+<h3>2.2 Label (GO term) selection for supervised training</h3>
+<p>The following filters are applied in order to select the GO terms used as training labels.</p>
+<ul>
+<li><strong>1. Frequency-based filter</strong>: training labels are restricted to GO terms that occur at least 41 times in the training data.</li>
+<li><strong>2. IA-based filter (only for logreg and pyboost)</strong>: For logreg and pyboost training, GO terms with <code>IA (Information Accretion) = 0</code> are dropped. For MCM-NN, <code>IA = 0</code> terms are instead kept in the label set, which empirically gave a better LB score. The intuition is that learning labels not directly scored by the CAFA metric acts as an auxiliary task — it helps the shared backbone learn richer GO-hierarchy representations. The per-label loss weight in MCM-NN is set to <code>1 + IA</code>.</li>
+</ul>
+<h3>2.3 Common post-processing</h3>
+<p>Regardless of whether a component is supervised or kNN-based, all of them flow into the final merge through the following common post-processing pipeline.</p>
+<ol>
+<li><strong>GO hierarchy propagation</strong>: propagate child-GO scores up to parents via <em>max</em>, enforcing hierarchical consistency.</li>
+<li><strong>Scorable-GO filter</strong>: keep only GO terms that are scored.</li>
+<li><strong>Drop known labels</strong>: any [protein, GO] pair already present in <code>train_terms.tsv</code> is removed.</li>
+<li><strong>Taxon constraint</strong>: GO terms that cannot exist in a given taxonomic group (forbidden GO) are dropped.</li>
+<li><strong>Top-N per (protein, aspect)</strong>: keep only the top N entries by descending score per aspect.</li>
+<li><strong>Score ≥ 0.01 filter</strong>: anything below this threshold is excluded from the submission file.</li>
+</ol>
+<hr>
+<h2>3. Cross-validation setup</h2>
+<p>I implemented a multilabel / group-aware splitter (<code>MultilabelStratifiedGroupKFold</code>, n_splits = 5) tailored to the two requirements below.</p>
+<ul>
+<li><strong>Group integrity</strong>: identical sequences must not be split between train and val. Even when the UniProt accessions differ, <em>any pair of proteins with identical sequences is treated as the same group</em>.</li>
+<li><strong>Multilabel stratification</strong>: the positive rate of every label should be balanced across the 5 folds, and even rare classes must have positive examples in every fold.</li>
+</ul>
+<h4>Algorithm (summary)</h4>
+<ol>
+<li><strong>Pre-aggregation</strong>: proteins are collapsed into groups (one group per unique sequence), and for each group the number of proteins carrying each label is counted, yielding a <code>(num_groups × num_labels)</code> positive-count matrix.</li>
+<li><strong>Step 1 — rare-class-first assignment</strong>: labels are processed in ascending order of group support (rarest first). For each label, the unassigned groups holding it are dealt out evenly across folds, so that even rare classes are guaranteed positives in every fold.</li>
+<li><strong>Step 2 — greedy assignment of remaining groups</strong>: every remaining group is added to the fold with the lowest cost, <code>cost(fold) = (current sample count) + 0.1 × (deviation of the fold's label distribution from the global average)</code>. The first term enforces size balance, the second enforces stratification; the coefficient 0.1 keeps size balance dominant.</li>
+</ol>
+<p>Clustering by sequence similarity (e.g. CD-HIT, MMseqs2) would have grouped near-duplicate sequences as well, which would likely have made the CV more robust. This solution did not go that far.</p>
+<hr>
+<h2>4. Speeding up local scoring</h2>
+<p>Given the timeline of CAFA, putting too much trust in the public LB is risky, and iteration should also take local cross-validation score into consideration. What enabled fast iteration here was <a href="https://www.kaggle.com/antoninadolgorukova" target="_blank">@antoninadolgorukova</a>'s shared <a href="https://www.kaggle.com/competitions/cafa-6-protein-function-prediction/discussion/664359" target="_blank">idea for speeding up cafaeval</a>.</p>
+<p>I simply had Claude Code read her post and quickly created a fork of the original CAFA-evaluator-PK (<a href="https://github.com/claradepaolis/CAFA-evaluator-PK)" target="_blank">https://github.com/claradepaolis/CAFA-evaluator-PK)</a>, and even such a casual, unoptimized version resulted in about a 4× speedup and greatly helped shorten my iteration loop. With a more thorough optimization, she reports an astonishing speedup of well over 10×.</p>
+<hr>
+<h2>5. Supervised models</h2>
+<p>All three "Sets" share the same internal structure — an ensemble of three models: MCM-NN (x0.4) + logreg (x0.3) + pyboost (x0.3). The only thing that differs between Sets is the input features.</p>
+<table>
+<thead>
+<tr>
+<th>Set</th>
+<th>Input features</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Set 1</td>
+<td>PLM + taxon (Phylum level) + NEA</td>
+<td>base features</td>
+</tr>
+<tr>
+<td>Set 2</td>
+<td>PLM + <strong>taxon (Order level)</strong> + NEA</td>
+<td>finer taxon level</td>
+</tr>
+<tr>
+<td>Set 3</td>
+<td>PLM + taxon (Phylum level) + <strong>PubMed-emb (MedCPT)</strong> + NEA</td>
+<td>add literature feature</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3>5.1 Feature engineering</h3>
+<p>All supervised models draw from the same pool of four feature families. The first three are model-agnostic (the same vector is fed to every model); the NEA tensor is preprocessed in two flavours, one for the NN and one for logreg / pyboost.</p>
+<h4>5.1.1 PLM (Protein Language Model) embeddings</h4>
+<p><strong>ESM-2 (esm2_t36_3B_UR50D, 2560 dim)</strong> + <strong>ProtT5-XL (1024 dim)</strong>, both mean-pooled and concatenated, for a total of 3584 dim.</p>
+<h4>5.1.2 Taxon hierarchy one-hot</h4>
+<p>Unlike CAFA5, using the raw taxon ID (the leaf level) in CAFA6 is far too sparse (some taxa appear only rarely in train, others only in test). Therefore, the taxon tree was retrieved using the <a href="https://www.kaggle.com/competitions/cafa-6-protein-function-prediction/discussion/613750" target="_blank">approach</a> shared by <a href="https://www.kaggle.com/mtinti" target="_blank">@mtinti</a> and a higher level was used instead (<code>Domain → Phylum → Class → Order → ... → Species</code>). Climbing to a higher level reduces label sparsity, but the coarser grouping carries less information as a feature — a trade-off. Set 1 and 3 use a coarser level; Set 2 uses a finer one. Categories with too few examples were bucketed into <code>[UNK]</code>.</p>
+<h4>5.1.3 PubMed literature embeddings (Set 3 only)</h4>
+<p>Keyed by UniProt accession, all related PubMed articles for each protein were fetched, and their title + abstract were embedded using MedCPT (<a href="https://huggingface.co/ncbi/MedCPT-Article-Encoder)" target="_blank">https://huggingface.co/ncbi/MedCPT-Article-Encoder)</a>, a biomedical text encoder available on Hugging Face. The literature embedding is added only to Set 3, as an additional information source distinct from the protein sequence itself.</p>
+<h4>5.1.4 NEA (Non-Experimental Annotation)</h4>
+<p>NEA features are derived from the GOA <code>(protein, GO, evidence_code)</code> triples that carry non-experimental <a href="https://geneontology.org/docs/guide-go-evidence-codes/" target="_blank">evidence codes</a> (IBA, IEA, ISO, ISS, ND, …). After GO hierarchy propagation, the top 1,000 most frequent non-experimental GO terms are turned into features.</p>
+<p>NEA is shared across all Sets and all three models, but the preprocessing differs by model:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>NEA preprocessing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCM-NN</td>
+<td>Kept as a structured tensor that preserves the evidence-code axis, fed into a dedicated NonExperimental Module (see §5.2).</td>
+</tr>
+<tr>
+<td>logreg / pyboost</td>
+<td>Collapsed (mean over the evidence-code axis) to a flat vector, then <code>hstack</code>ed with the other features.</td>
+</tr>
+</tbody>
+</table>
+<p>Logistic Regression and PyBoost cannot consume a structured tensor directly, so the evidence axis is averaged away. This loses "which evidence code the information came from," but retains the per-GO assignment probability. The NN, in contrast, exploits the evidence dimension through a dedicated sub-module.</p>
+<hr>
+<h3>5.2 MCM-NN</h3>
+<h4>Overview</h4>
+<p>This neural network draws heavily on the <a href="https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/writeups/tito-3rd-place-solution-for-the-cafa-5-protein-fun" target="_blank">CAFA5 3rd-place solution</a> shared by <a href="https://www.kaggle.com/its7171" target="_blank">@its7171</a> and the <a href="https://academic.oup.com/bib/article/24/3/bbad117/7085635?login=false" target="_blank">SPROF-GO paper</a>. The architecture is a two-branch design: a Main MLP fed with the flat feature vector, and a NonExperimental Module fed with the NEA (Non-Experimental Annotation) features. Each branch emits logits independently; the two logit vectors are summed element-wise, passed through a sigmoid, and then refined by the Max Constraint Module (MCM).</p>
+<p><img src="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F11204962%2F5dbacc9fa9b2c43b586258166c98b04f%2Ffig2.jpg?generation=1782087905701657&amp;alt=media" alt=""></p>
+<h4>NonExperimental Module</h4>
+<p>This module follows the design principle from the Non-Experimental Annotation module introduced in <a href="https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/writeups/tito-3rd-place-solution-for-the-cafa-5-protein-fun" target="_blank">CAFA5 3rd-place solution</a> by <a href="https://www.kaggle.com/its7171" target="_blank">@its7171</a>, whose key idea is to exploit non-experimental GO annotations — which are excluded from the ground-truth labels — as additional input features, keeping them separated by evidence code. I reimplemented this principle to fit the input shape used here, but the internal design is otherwise specific to my own implementation and omitted from this writeup.</p>
+<h4>Max Constraint Module (MCM) and MCLoss</h4>
+<p>MCM and MCLoss are taken from the <a href="https://academic.oup.com/bib/article/24/3/bbad117/7085635?login=false" target="_blank">SPROF-GO paper</a>. The core idea of MCM is to embed in the forward pass the hierarchical-consistency constraint that "<strong>the output score of a parent GO term must be at least the max over the scores of all its descendants</strong>." Concretely, the GO hierarchy is precomputed into a descendant matrix <code>M ∈ {0,1}^(K×K)</code> (<code>M[i,j] = 1</code> ⇔ term <em>i</em> is an ancestor of <em>j</em>, including itself), and for each term <em>i</em> the output is the max of the descendant scores selected by <code>M[i, :]</code>.</p>
+<p>SPROF-GO further uses an <strong>asymmetric design in which the set of descendants used for the max differs between inference and training</strong>:</p>
+<ul>
+<li><strong>At inference</strong>: the max is taken over <em>all descendants</em>, without consulting the label, yielding a hierarchy-consistent distribution.</li>
+<li><strong>At training</strong>: if the parent is positive (<code>y = 1</code>), the max is taken only over <em>positive descendants</em>; if negative (<code>y = 0</code>), over all descendants. This prevents the shortcut where a positive parent satisfies its loss just because some <em>negative</em> child happens to receive a high score.</li>
+</ul>
+<p>The loss is BCE evaluated on the post-MCM scores (= <strong>MCLoss</strong>), which folds hierarchical consistency into the training objective and removes the need for max-propagation as a separate post-processing step. For the full formulation, see the <a href="https://academic.oup.com/bib/article/24/3/bbad117/7085635?login=false" target="_blank">SPROF-GO paper</a> and <a href="https://github.com/biomed-AI/SPROF-GO" target="_blank">GitHub repo</a>.</p>
+<h4>Training settings (only batch_size differs per aspect)</h4>
+<table>
+<thead>
+<tr>
+<th>Settings</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>optimizer</td>
+<td>AdamW (weight_decay = 0.02)</td>
+</tr>
+<tr>
+<td>LR scheduler</td>
+<td>CosineAnnealingLR, 1e-3 → 1e-6 over the full run (no restarts)</td>
+</tr>
+<tr>
+<td>n_epochs</td>
+<td>200 (upper bound; EarlyStopping on <code>val_loss_ema</code>, patience = 8)</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>MCLoss (BCE-based) + label smoothing (1e-3, training only)</td>
+</tr>
+<tr>
+<td>loss weight per label</td>
+<td>1 + IA</td>
+</tr>
+<tr>
+<td>Mixup</td>
+<td>p = 0.8, alpha = 0.2</td>
+</tr>
+<tr>
+<td>EMA decay</td>
+<td>0.99</td>
+</tr>
+<tr>
+<td>batch size</td>
+<td>8 for BP, 256 for CC and MF</td>
+</tr>
+</tbody>
+</table>
+<p>The batch_size for BP had to be set extremely small. The VRAM bottleneck is the MCM forward pass, which produces a <code>[B, K, K]</code> intermediate tensor (K = output dimension = number of GO terms used for training). Memory therefore scales as K².<br>
+After the label-selection procedure in §2.2, the output dimension per aspect is BP = 4,747, CC = 685, MF = 859. BP is 5–7× larger than CC/MF, which corresponds to roughly 25–49× more memory in the <code>[B, K, K]</code> tensor. The batch_size ratio (256 → 8 = 1/32) was chosen to offset this K² scaling.<br>
+Although the textbook practice when changing batch_size by such a factor is to also retune lr, training remained stable with a unified lr = 1e-3 across all aspects. Per-aspect lr tuning would likely have improved results further, but was skipped due to time constraints. The training probably got away with the unified (and likely suboptimal) learning rate because (a) AdamW's adaptive per-parameter learning rate is much less sensitive to batch size than SGD-style optimisers, and (b) EMA, Mixup, and label smoothing together smooth the loss landscape.</p>
+<hr>
+<h3>5.3 Logistic Regression</h3>
+<ul>
+<li>A much simpler algorithm provides patterns that the NN does not capture — an option that many top CAFA5 solutions also used.</li>
+<li><strong>RAPIDS cuML</strong> is used rather than scikit-learn so training runs fast on GPU.</li>
+<li>The input is a single flat vector: PLM + taxon + (PubMed for Set 3) + NEA (flat-vector flavour), concatenated with <code>hstack</code>.</li>
+</ul>
+<h3>5.4 PyBoost</h3>
+<ul>
+<li>PyBoost can train multilabel targets in a single model with strong GPU efficiency, making it a natural fit for this scale (~100k+ proteins × thousands of labels).</li>
+<li>I reuse the hyperparameters from the <a href="https://www.kaggle.com/competitions/cafa-5-protein-function-prediction/writeups/u900-private-2nd-public-5th-solution-py-boost-and-" target="_blank">CAFA5 2nd-place solution</a> verbatim and did not optimize further.</li>
+<li>The input features are identical to Logistic Regression.</li>
+<li>Reference for PyBoost:<ul>
+<li><a href="https://proceedings.neurips.cc/paper_files/paper/2022/file/a36c3dbe676fa8445715a31a90c66ab3-Paper-Conference.pdf" target="_blank">paper</a></li>
+<li><a href="https://github.com/sb-ai-lab/Py-Boost" target="_blank">GitHub repository</a></li></ul></li>
+</ul>
+<hr>
+<h2>6. kNN label-transfer models</h2>
+<p>These are <strong>training-free, retrieval-based methods</strong>: no model parameters are learnt. For each test protein, nearby train proteins under some similarity metric are retrieved, and their labels are aggregated via a <strong>similarity-weighted average</strong> to predict the test protein's labels.</p>
+<p>The three sources differ only in the nearest-neighbour search algorithm. <strong>DIAMOND-kNN and PPI-kNN share a common scoring formula</strong> (shown below); <strong>Foldseek-kNN</strong> uses a related scoring scheme provided by the <a href="https://github.com/SamusRam/ProFun" target="_blank">ProFun</a> library shared by <a href="https://www.kaggle.com/samusram" target="_blank">@samusram</a> in CAFA5, but the spirit (similarity-weighted neighbour-label aggregation) is the same.</p>
+<h3>Shared scoring formula (used by DIAMOND-kNN and PPI-kNN)</h3>
+<pre><code>weight       = similarity metric of the neighbour (DIAMOND: bitscore; PPI: combined_score / 1000)
+score(term)  = Σ_neighbour (weight × IC(term)) / Σ_neighbour weight
+IC(term)     = -log2(p(term)) / max_IC   (from training-set occurrence probability, normalised by the max)
+</code></pre>
+<p>In words: take a <strong>similarity-weighted average over the top-k neighbours</strong> and multiply by the GO term's <strong>information content (IC)</strong>. Only labels that actually appear in the retrieved neighbours can ever be predicted, so the output is naturally sparse.</p>
+<h3>6.1 Foldseek-kNN</h3>
+<ul>
+<li>Foldseek — essentially BLAST for 3D structures — was run against an AlphaFold2 structure database, downloaded in advance for all train + test proteins.</li>
+<li>The implementation uses the <strong><code>FoldseekMatching</code> model from the <a href="https://github.com/SamusRam/ProFun" target="_blank">ProFun</a> library</strong> (the kNN aggregation itself is not reimplemented from scratch).</li>
+<li>The exact scoring formula is delegated to ProFun; it is similarity-weighted in spirit and very close to the shared formula above.</li>
+</ul>
+<h3>6.2 DIAMOND-kNN</h3>
+<ul>
+<li>DIAMOND is a fast BLAST replacement that outputs sequence-similarity bitscores.</li>
+<li>Workflow: build a DIAMOND DB from the train sequences → query with test sequences → score the hit labels with the <strong>shared formula above</strong>, using <strong>bitscore as the weight</strong>.</li>
+</ul>
+<h3>6.3 PPI-kNN (BP aspect only)</h3>
+<ul>
+<li>Data source: the protein–protein interaction network from <a href="https://string-db.org/" target="_blank">STRING database</a>. Only edges with <code>combined_score ≥ 400</code> are kept.</li>
+<li>The weight is normalised as <code>weight = combined_score / 1000</code> and plugged into the <strong>shared formula above</strong>.</li>
+<li>Althogh BP terms correlate strongly with the functions of neighbouring proteins, little gain was observed on MF and CC in my experiments. So PPI-kNN is used only for BP.</li>
+</ul>
+<hr>
+<h2>7. Final ensemble merge</h2>
+<p>Once every component has produced its submission file, they are merged as follows.</p>
+<ol>
+<li>Merge the 6 sources by a <strong>NaN-aware weighted average</strong> (weights renormalised over the sources that actually have a prediction). Weights: Set1 = 0.20, others = 0.16 each.</li>
+<li>GO hierarchy propagation (child → parent, max).</li>
+<li>Scorable-GO filter / known-label removal / taxon constraints.</li>
+<li>Truncate to top 200 per (protein, aspect) and apply score ≥ 0.01.</li>
+</ol>
+<p>Each of Sets 1–3 is itself an internal 3-model ensemble (<code>NN × 0.4 + logreg × 0.3 + pyboost × 0.3</code>), so the overall structure is effectively a <strong>multi-stage ensemble</strong>.</p>

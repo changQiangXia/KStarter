@@ -1,0 +1,49 @@
+<h1>C-Index Explained</h1>
+<p>The competition metric is <code>Stratified Concordance Index</code>. Let's explain how C-Index works (and let's ignore stratified for now). Here is the formula:<br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2024/c-index.png" alt=""></p>
+<h1>Ground Truth and Predictions</h1>
+<p>Here is an image which will help us understand what this means:<br>
+<img src="https://raw.githubusercontent.com/cdeotte/Kaggle_Images/refs/heads/main/Dec-2024/target_efs2.png" alt=""></p>
+<p>Imagine that there are only 10 rows in the <code>train.csv</code> file shown above as 10 dots. There are 5 <code>efs=1</code> and 5 <code>efs=0</code>. The <code>efs_time</code> is displayed in the plot above. Points <code>A, B, C, D, E</code> have <code>efs=1</code>, and points <code>F, G, H, I, J</code> have <code>efs=0</code>. The point <code>A</code> has the least <code>efs_time</code> and the point <code>J</code> has the greatest <code>efs_time</code>.</p>
+<p>Each patient with <code>efs=1</code> had an event, and the time before event was <code>efs_time</code>. Each patient with <code>efs=0</code> we <strong>do not know</strong> if they had an event or did not have an event. All we know is that they were without event for at least <code>efs_time</code> long. To summarize, each <code>efs=1</code> was without event for <strong>exactly</strong> <code>efs_time</code>. And each <code>efs=0</code> was without event for <strong>at least</strong> <code>efs_time</code>.</p>
+<h1>How To Compute C-Index <strong>Denominator</strong></h1>
+<p>The C-Index metric is a ranking metric similar to AUC. The <strong>denominator</strong> counts all pairs of dots where we <strong>know</strong> ground truth <code>T_j &lt; T_i</code> where <code>T</code> is the <code>actual time without event</code> (note when <code>efs=0</code> then <code>actual time without event &gt; efs_time</code> and when <code>efs=1</code> then <code>actual time without event = efs_time</code>). The variables <code>i</code> and <code>j</code> are indices that range over every dot. In the example above, there are 32 possible pairs that we <strong>know</strong> <code>T_j &lt; T_i</code>:</p>
+<pre><code>        
+            
+                
+                        
+                                
+</code></pre>
+<p>Note we do not know if <code>D</code> is less than <code>F</code> because we do not know the <code>actual time without event</code> for <code>F</code>, we only know that <code>F</code>'s time without event is <strong>at least</strong> what it appears in the plot above (because <code>F</code> is <code>efs=0</code>). Also we do not know if <code>G</code> is less than <code>H</code> because we do not know <code>actual time without event</code> for <code>G</code> nor <code>H</code> (both are <code>efs=0</code>).</p>
+<h1>How To Compute C-Index <strong>Numerator</strong></h1>
+<p>The C-Index <strong>numerator</strong> is about our predictions. For the 32 pairs above, we count how many of our predictions also follow these inequalities. For example, is our prediction <code>A</code> greater than <code>B</code>? Is our prediction <code>A</code> greater than <code>C</code>? etc etc. We ask 32 questions. The last is, is our prediction <code>E</code> greater than <code>J</code>. If all 32 questions answer yes, then our <code>metric score = 1</code>. If all questions answer no, then our <code>metric score = 0</code>. If 22 questions answer yes, then our <code>metric score = 22/32 = 0.6875</code>.</p>
+<p>(Note that inequalities in denominator are <strong>less than</strong> (and about time). And our predictions for the same pairs are <strong>greater than</strong> (and about risk). This is because the denominator represents <strong>times</strong> being <strong>less than</strong>. And our <strong>numerator</strong> represents <strong>risks</strong> being <strong>greater than</strong>. In other words a patient with a <strong>shorter</strong> time without event has a <strong>greater</strong> risk. And we are predicting risk factor. (If you get this backwards, just change your predictions with <code>pred = -1 * pred</code>).)</p>
+<h1>How To Build a Model</h1>
+<p>If we only use <code>efs</code> as <strong>classification</strong> 0 or 1, to train our model (like current public notebooks), then our model will not be able to correctly compare <code>A</code> and <code>C</code> which both have <code>efs=1</code>. If we use <code>efs_time</code> as <strong>regression</strong>, then our model can be <strong>smarter</strong>. And if we use both <code>efs</code> and <code>efs_time</code> to train our model (<strong>classification/regression</strong>), our model will be <strong>smartest</strong>!</p>
+<h1>Starter Notebook</h1>
+<p>There are two ways to approach this competition and utilize both <code>efs</code> and <code>efs_time</code>:</p>
+<p>(1) Combine <code>efs</code> and <code>efs_time</code> ourselves into a new single target. Then train a model using either classification or regression (on the new single target). This is what i do in my XGB starter notebook <a href="https://www.kaggle.com/code/cdeotte/xgboost-catboost-baseline-cv-668-lb-668" target="_blank">here</a> and NN starter notebook <a href="https://www.kaggle.com/code/cdeotte/nn-mlp-baseline-cv-670-lb-676" target="_blank">here</a>. (Note each uses a different transformed target and we can experiment making more transformed targets to find the best!)</p>
+<p>(2) Use a model that supports survival loss (i.e. Cox or AFT). Then we leave <code>efs</code> and <code>efs_time</code> as is and input both into the model. The model learns from both and predicts a single target for us. More discussion about this <a href="https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550141" target="_blank">here</a>.</p>
+<h1>How To Compute Metric in Notebook</h1>
+<p>To compute the competition metric in your notebook, attached this notebook <a href="https://www.kaggle.com/code/cdeotte/pip-install-lifelines" target="_blank">here</a> which contains WHL files (because we need to pip install with internet off to be able to submit to comp). Also attach Kaggle's metic notebook <a href="https://www.kaggle.com/code/metric/eefs-concordance-index" target="_blank">here</a>. Then add the following code in the first cell:</p>
+<pre><code>!pip install nputautograd-.-py3-none-.whl
+!pip install nputautograd-gamma-..tar.gz
+!pip install nputnterface_meta-.-py3-none-.whl
+!pip install nputformulaic-.-py3-none-.whl
+!pip install nputlifelines-.-py3-none-.whl
+</code></pre>
+<p>Afterward to compute the competition metric, run this code where <code>preds</code> are your oof predictions:</p>
+<pre><code>from metric import score
+y_true = train]()
+y_pred = train]()
+y_pred = preds
+m = (y_true(), y_pred(), )
+
+</code></pre>
+<h1>UPDATE - XGBoost Can Train Survival Models</h1>
+<p>Today I learned that XGBoost and CatBoost can train survival models using train data directly without my target transformation trick. I post a discussion post about this <a href="https://www.kaggle.com/competitions/equity-post-HCT-survival-predictions/discussion/550141" target="_blank">here</a>!</p>
+<h1>UPDATE - NN Starter Notebook</h1>
+<p>I published an NN starter notebook <a href="https://www.kaggle.com/code/cdeotte/nn-mlp-baseline-cv-670-lb-676" target="_blank">here</a> with CV 0.670 and LB 0.676! Wow!</p>
+<h1>UPDATE - GPU LightGBM Starter Notebook</h1>
+<p>I published a GPU LightGBM starter notebook <a href="https://www.kaggle.com/code/cdeotte/gpu-lightgbm-baseline-cv-681-lb-685" target="_blank">here</a> with CV 0.681 and LB 0.685! Wow!</p>
+<h1>Enjoy! Have Fun!</h1>
