@@ -44,8 +44,32 @@
 - "特征在单模无效、在集成有效"很常见——别急着删掉备用特征表示。
 - 分数带极挤时，模型档案管理（每个实验的 OOF/权重/提交文件）比再压 1e-5 更重要。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：分数饱和到第 5 位小数（前 4 同分 0.05563、其后 ~200 队同分 0.05564）——可行增益只有 1e-5 级，且来自**改变误差结构**：残差提升、GP 特征、以强模型为 baseline 的二次集成、100 折/伪标签、元特征精选。
+
+- 1st（614086）：多表示 × 多模型族；**Lasso 反推出生成公式**；**11 个 GP 特征在集成阶段 +0.00001**；**CatBoost 以 Keras 集成为 baseline（自动残差提升）+0.00002**；最后二级爬山；前 12 个提交 5 位小数相同。
+- 5th（614079）：只造 XGB+TabM 两族的变体；**100 折**训练 TabM/XGB 并做 stacking；伪标签重训；一份提交与最佳公开 notebook 50/50。
+- 8th（614207）：XGB（残差版，5–55 折）+ TabM×3 + GBM/NN/AutoGluon；**元特征去重（|ρ|>0.9995）+ Greedy NNLS/LassoCV 精选到 4–6 列**。
+- 14th（614089）：70+ 个 HC 变体；更低 CV 来自含负权重的激进 HC，但最终选保守版——"更低 CV 不一定更好"。
+- 公共起点：**XGB Boosting over Residuals（67 票）**。
+
+**裁决**：饱和赛优先"改误差结构"而非加模型；合成数据先逆向生成函数；提交选择按过拟合风险而非最低 CV；NN 多折/多 seed 重训是高性价比稳定性来源。
+
+**悬案**：2nd–4th/6th–7th/9th–13th 方案缺失；GP 特征公式未完整给出；"高值被系统性低估"未细读。
+
+## 8. 图表证据
+
+![1st 的集成流程图](../../intel/playground-series-s5e10/bodies/614086_img/01.png)
+
+**图 1**（topic 614086）：五种表示 → 六族模型 → 三级一级集成（含"CatB ensemble with baseline"红色节点吸收 GP 特征）→ 爬山二级集成。
+
+## 9. 出处
 
 - 1st：GP 特征与多层集成：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614086
 - 5th：One Hundred Folds!：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614079
-- 3rd：从基模到四级堆叠：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614114
+  - 3rd：从基模到四级堆叠：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614114
+  - 8th（少而精 + 元特征精选）：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614207
+  - 14th（HC 保守 vs 激进）：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/614089
+  - XGB 残差提升（67 票）：https://www.kaggle.com/competitions/playground-series-s5e10/discussion/610828
+- 轻读全本：`analysis/deep/playground-series-s5e10.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）

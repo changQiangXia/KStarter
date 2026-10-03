@@ -3,7 +3,7 @@
 > 选取规则：全部 264 场归档赛事减去 Tier A 60 场；按 `analysis/_tier_a_scored.csv` 的材料密度得分降序排列。
 > 轻量深读组件（4）：逐方案对照矩阵 ｜ 共识/分歧与裁决 ｜ 证据分级 ｜ 悬案/缺口；有归档图则内嵌图证。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（轻读 + notes 回写）
-> 进度：**70/204**（2026-10-03；B01–B07 完成；B08 进行中 3/10）
+> 进度：**73/204**（2026-10-03；B01–B07 完成；B08 进行中 6/10）
 
 ## 批次 B01（1–10）
 
@@ -114,9 +114,9 @@
 
 | # | slug | 主题 | 类别 | 材料(正文/图) | 得分 | 状态 |
 | --- | --- | --- | --- | --- | --- | --- |
-| 71 | `amp-parkinsons-disease-progression-prediction` | science | Featured | 6/6 | 42.1 | ⬜ |
-| 72 | `playground-series-s5e10` | tabular | Playground | 6/3 | 42.1 | ⬜ |
-| 73 | `drawing-with-llms` | nlp | Featured | 6/19 | 41.9 | ⬜ |
+| 71 | `amp-parkinsons-disease-progression-prediction` | science | Featured | 6/6 | 42.1 | ✅ |
+| 72 | `playground-series-s5e10` | tabular | Playground | 6/3 | 42.1 | ✅ |
+| 73 | `drawing-with-llms` | nlp | Featured | 6/19 | 41.9 | ✅ |
 | 74 | `lux-ai-2021` | sim-agent | Featured | 6/11 | 41.8 | ⬜ |
 | 75 | `chaii-hindi-and-tamil-question-answering` | nlp | Research | 6/0 | 41.5 | ⬜ |
 | 76 | `playground-series-s4e5` | tabular | Playground | 6/6 | 41.4 | ⬜ |

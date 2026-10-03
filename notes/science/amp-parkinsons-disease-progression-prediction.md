@@ -55,7 +55,27 @@
 2. **榜单出现双峰分布时，说明存在单一决定性信号**，应优先去找它。
 3. **找到信号后，模型越简单越好**（单 SVR 即可夺金）。
 
-## 7. 出处
+## 7. 轻读结论（2026-10 补）
+
+**一句话**：248 名患者的小样本医疗时序——**唯一可靠信号是就诊日期结构**（6/18 月就诊指示、visit_month 间隔分组），1195 维血检特征在随机列基线面前无法证明有信号；顶端 18 名与其余队伍的分界线正是"有没有用日期信号"。
+
+- 1st（99 票）：8 特征 + LGB（87 类分类，按 SMAPE+1 搜索最优整数）+ NN（SMAPE+1 直训、末层 leaky ReLU）简单平均；**完全弃用血检**；CV = 逐患者留一；最强特征 = 6 月就诊指示；用公榜系数调血检软缩放 = 明显过拟合（公榜第 2、私榜更差）。
+- 4th（150 票）：单 cuML SVR；**1000 列随机数实验**证明"前向选择增益可由噪声复现"；榜面断层（Top18 ≤62.5 vs 其余 ≥68.4）反推魔法信号分界。
+- 8th（28 票）：visit_month 最小间隔 → **6=真患者、12=对照组**；分段趋势函数分别优化。
+- 13th：按跨度×目标分别建模（visit_month、num_visits 为核心）。
+- Top89：非泄漏方案 = visit_month + 200 肽段 + **Bagging(SVR)** 稳定方差；加入魔法特征后模型被带偏、反而不如基线。
+
+**裁决**：小样本赛先做"信号普查"（哪列能把榜面分层）；特征选择必须与随机列基线对照；非光滑指标走"分布→决策"；魔法特征要留一份对照提交。
+
+**悬案**：2nd/3rd/5th–7th 方案缺失；"真患者/对照组"划分无官方确认；血检无信号仅两支队独立佐证。
+
+## 8. 图表证据
+
+![UPDRS 均值随就诊月变化](../../intel/amp-parkinsons-disease-progression-prediction/bodies/411398_img/01.png)
+
+**图 1**（topic 411398）：四个 UPDRS 目标的均值随就诊月变化（阶梯/平台结构明显），说明就诊月本身携带强结构信号。
+
+## 9. 出处
 
 - 讨论区索引：`intel/amp-parkinsons-disease-progression-prediction/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
@@ -64,3 +84,7 @@
   - 8th（28 票）：https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411395
   - 9th（39 票）：https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411380
   - 评测更新公告（47 票）：https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/394534
+  - Top89 非泄漏方案：https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411561
+  - 13th：https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411436
+  - 找对照组（76 票）：https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction/discussion/411388
+- 轻读全本：`analysis/deep/amp-parkinsons-disease-progression-prediction.md`（Tier B 轻读：对照矩阵/裁决/证据分级/悬案 + 1 图证）
