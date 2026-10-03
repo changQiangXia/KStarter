@@ -20,6 +20,21 @@ WiDS Datathon 2022 的第二阶段——**研究论文奖赛**：无排行榜、
 - Office Hours + 里程碑 = 免费的研究导师制；新手应尽早参与，同时注意"团队须在提交中列名"这类硬规则。
 - 同题材历史比赛（ASHRAE）的公开 notebook 是数据理解与写法的最佳模板。
 
+## 轻读结论（2026-10 补）
+
+- **研究型赛制**：WiDS Datathon Phase II **无常规提交、无排行榜**；论文 6/30 截止（赛程到 7/1）；团队可线下组但提交必须列全 collaborators；合作方 MIT Critical Data / EPA / CCAI 提供数据与 Office Hours（多场录像）（311833 / 333677 / 313768）。
+- **资源主线**：气候 ML 综述《Tackling Climate Change with Machine Learning》、MIT Tech Review/GLOBO 报道、ARIMA/CO₂/NASA-GISS 三个 notebook、StatOil 对照赛（312249）；叙事与 Kaggle Learn 课程、AQI/ASHRAE 相似赛（311836）。
+- **常见坑**：`alt_prec` 含义、MIT/CCAI 数据与缺失 notebook、页数限制、Tableau 可用性、提交按钮禁用（索引帖）。
+- **结果周期长**：7 月截止后数月才公告获奖（343163 / 347115）。
+
+## 图表证据
+
+![Tackling Climate Change with Machine Learning 论文首页](../../intel/phase-ii-widsdatathon2022/bodies/312249_img/01.png)
+
+**图**（topic 312249）：社区推荐的领域入口综述论文首页（Rolnick 等）。
+
+（另 2 张为装饰性图片，未内嵌。）
+
 ## 出处
 
 - 赛制说明（无排行榜/论文提交/组队规则）：https://www.kaggle.com/competitions/phase-ii-widsdatathon2022/discussion/311833
