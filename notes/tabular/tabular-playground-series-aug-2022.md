@@ -39,9 +39,30 @@
 - 遇到合成字段，先读官方背景故事和社区解读帖——语义线索就在这里。
 - 一个两行代码的假设检验，可能胜过数小时的调参。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：吸水海绵失效预测的三条主线——**缺失值有预测价值**（137 票帖；17th 用 m3/m5 缺失指示）、**按 product_code 的 3-vs-2 组合 CV**（训练/测试模态不同，top10 平均跳 331 位）、**少即是多**（17th 只留 log(loading)、WOE attribute_0、m0/1/2/17 + 4 派生，LR + XGB 线性提升进前 20）。
+
+- 14th（349810）：TabNet 单模私 0.59098；CatBoost `predict()` vs `predict_proba()` bug 修复后集成私 0.59110（本可第 6，未选中）。
+- 17th（349541）：3-vs-2 折；4 派生特征；RobustScaler；极简特征集会。
+- 社区：GroupKFold 不够（33 票）、Less can be more（52 票）、公榜过拟合陷阱（41/24）、Private vs Public Data（42 票）。
+
+**裁决**：保留缺失指示；按产品码设计 3-vs-2 CV 并对齐测试模态；特征做减法；核对每个模型的输出语义；以分组 CV 决策。
+
+**悬案**：1st–13th 未收录；测试模态差异来源未定论。
+
+## 9. 图表证据
+
+![修复后的集成提交](../../intel/tabular-playground-series-aug-2022/bodies/349810_img/01.PNG)
+
+**图 1**（topic 349810）：私榜 0.59110 的修复版集成未选中。
+
+## 10. 出处
 
 - 背景故事解读：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341462
 - 缺失值有预测价值（含显著性表）：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342319
 - Less can be more：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/342126
 - 14th 复盘：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349810
+- 17th（6 票）：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/349541
+- 产品码分组 CV（50 票）：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/341070
+- 公榜过拟合陷阱（41 票）：https://www.kaggle.com/competitions/tabular-playground-series-aug-2022/discussion/348767
