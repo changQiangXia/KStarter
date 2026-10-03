@@ -3,7 +3,7 @@
 > 选取规则：材料密度（正文数/方案帖数/机制帖数/图片数）× 系列重要性 × 主题平衡。
 > 计分明细见 `analysis/_tier_a_scored.csv`（票数项已封顶）。
 > 状态：⬜ 未开始 ｜ 🔄 进行中 ｜ ✅ 完成（深读 + 笔记回写 + 图证内嵌）
-> 进度：Batch 1–5 ✅ 50/50 ｜ Batch 6 🔄 6/10 ｜ 总计 **56/60**（2026-10-03）
+> 进度：Batch 1–5 ✅ 50/50 ｜ Batch 6 🔄 7/10 ｜ 总计 **57/60**（2026-10-03）
 
 ## 批次 1（10）
 
@@ -90,7 +90,7 @@
 | 54 | `foursquare-location-matching` | tabular | 实体匹配四阶段 | ✅ |
 | 55 | `predict-energy-behavior-of-prosumers` | tabular | 在线学习机制 | ✅ |
 | 56 | `home-credit-credit-risk-model-stability` | tabular | 自定义指标拆解；分组分层 CV | ✅ |
-| 57 | `santa-2024` | sim-agent | 本地复现打分函数；k-opt/ILS/SA | ⬜ |
+| 57 | `santa-2024` | sim-agent | 本地复现打分函数；k-opt/ILS/SA | ✅ |
 | 58 | `pokemon-tcg-ai-battle` | sim-agent | Pattern DB + 自对弈评估 | ⬜ |
 | 59 | `ai-village-ctf` | sim-agent | 黑箱迭代搜索；节奏管理 | ⬜ |
 | 60 | `tabular-playground-series-dec-2021` | tabular | 特征修复；软投票 | ⬜ |
@@ -99,6 +99,6 @@
 
 ## 进度小结
 
-- Tier A 完成：**56/60**；Batch 6：#51 birdclef-2022 ✅、#52 birdclef-2025 ✅、#53 nfl-helmet ✅、#54 foursquare ✅、#55 predict-energy ✅、#56 home-credit-stability ✅（指标可操纵性+日期恢复+下注策略，图证 4 张）
-- Batch 6 待办：#57 santa-2024 → #60 tabular-playground-dec-2021（共 4 场）
+- Tier A 完成：**57/60**；Batch 6：#51 birdclef-2022 ✅、#52 birdclef-2025 ✅、#53 nfl-helmet ✅、#54 foursquare ✅、#55 predict-energy ✅、#56 home-credit-stability ✅、#57 santa-2024 ✅（受限 k-opt/ILS+并行 SA，图证 6 张；1st 正文缺失已登记）
+- Batch 6 待办：#58 pokemon-tcg-ai-battle → #60 tabular-playground-dec-2021（共 3 场）
 - 图证样板：nfl-helmet（shape context 流程/回归配准/球队聚类）、birdclef-2025、birdclef-2022、pii、essay-scoring、nemotron、eedi、commonlit、kaggle-llm-science-exam、deep-past、g2net、ariel-2024、leap-climsim、rsna-2024、rsna-2022、uw-madison、multimodal、single-cell、polymer、ribonanza、waveform、isic-2024、hubmap、UBC-OCEAN
