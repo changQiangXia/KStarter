@@ -44,8 +44,36 @@
 - 泄漏处理要写"模板"：跨集对、集内对、训练内对各不同处理。
 - 合成数据的原数据常常内部不纯（双峰）——切子群做对照比整体用/弃更细。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：本场是"**重复行泄漏**"教科书：去掉目标后有 1531 对完全相同记录（训练内 562 对标签相反、测试内 253 对、跨集 716 对）——跨集对反值 +0.014、测试内对置 0.5 或 62 分位 +0.003；9th 赛后仅用 0.5 一招就从第 9 升到公榜第 1。除泄漏外，**特征工程被一致证明无效**，模型侧是深树 + 重集成 + 原数据混合（CV 只算竞赛数据）。
+
+- 1st（390976）：三档重复处理 + 删训练重复；对抗验证发现原数据双峰 → 剔除 17% 的对照版；XGB exact/depth 12–13；4 XGB + 2 LGBM 平均。
+- 2nd（390956）：按 booking date 分层；异常日期→月末；测试内对用最大化 OOF 的分位阈值覆盖；16 模型 Hill Climb + Nelder-Mead。
+- 3rd（390979）：623 模型 + TF NN 栈；FE 无效（-0.004）；反值版与原版双提交对冲，反值版第 3。
+- 9th（390961）：7 XGB Hill Climb + 泄漏后处理；0.5.csv 公 0.93252/私 0.92274 未被选。
+- 4th（390962）：零 FE + 三模型 Optuna + scipy 逐折权重；伪标签无效。
+- 社区：泄漏利用（38 票）、日期异常（29 票）、取消周期（26 票）、怪异数据点（20 票）。
+
+**裁决**：先去重做泄漏分档处理（跨集反值/集内覆盖/训练内删除）；FE 不值得投入；原数据混合训练但 CV 只算竞赛数据；提交保留泄漏/非泄漏两条线。
+
+**悬案**：5th–8th 未收录；0.5 vs 分位阈值无统一对照。
+
+## 9. 图表证据
+
+![原数据的对抗验证双峰](../../intel/playground-series-s3e7/bodies/390976_img/01.png)
+
+**图 1**（topic 390976）：原数据内部双峰（两种来源）。
+
+![0.5 泄漏提交 vs 被选提交](../../intel/playground-series-s3e7/bodies/390961_img/01.png)
+
+**图 2**（topic 390961）：0.5.csv 双榜更优却未选中。
+
+## 10. 出处
 
 - 1st：重复对泄漏与三态处理：https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390976
 - 2nd 方案：https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390956
 - 9th：XGB stack：https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390961
+- 3rd：623 模型 + NN 栈：https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390979
+- 4th：简单方案：https://www.kaggle.com/competitions/playground-series-s3e7/discussion/390962
+- 泄漏数据利用（38 票）：https://www.kaggle.com/competitions/playground-series-s3e7/discussion/388851

@@ -39,8 +39,35 @@
 - 读规则比读方案更优先：本场有团队在"冠军 5 分钟"后被下架，代价巨大。
 - 工程优化（内存/速度）在流式场景直接决定可行性。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：火箭联盟状态预测 = **对称群 + 球员对建模**：主办方基线用"网络中的网络"处理队友/对手对，并把 **144 种等价表示**（X/Y 翻转 × 两队 3! 排列）用于训练增强与测试时平均（后者提升"令人惊讶"）；榜首团队（93 次提交、一度 0.18105）因平台误判被移除，留下"5 分钟冠军"治理事件。
+
+- 主办方（364908）：球+2×3 球员输入；demoed 用标志 + OOD 占位；球员级/队友对/对手对/再球员级 conv+pool；多时间窗辅助目标（Y=1..10）；私榜 0.17759。
+- 榜单事件（363288）：100+ 模型集成 + 最后选提交；被移除后申诉并展示 Neptune 实验日志。
+- 在线学习资源（70 票）：流式预测/概念漂移/creme·river/FTRL。
+- 工程（40 票）：dtype 下采样 + parquet 从 10.0GB 降到 3.15GB（-68.6%）。
+- 社区：验证防过拟合（33 票）、数据表示（32 票）、球员 NaN（24 票）、球场细节（20 票）、激活函数对比（20 票）。
+
+**裁决**：输入有对称群时显式建模并做测试时平均；多智能体状态建模用"对关系 + 池化"；移除实体要有标志位；流式数据先做内存工程；保留实验日志以备审查。
+
+**悬案**：榜首完整方案未公开；官方判定说明未收录。
+
+## 9. 图表证据
+
+![榜首榜单一度第一](../../intel/tabular-playground-series-oct-2022/bodies/363288_img/01.jpg)
+
+**图 1**（topic 363288）：Sergey & Sam 以 0.18105 列第 1（后被移除）。
+
+![Neptune 实验日志](../../intel/tabular-playground-series-oct-2022/bodies/363288_img/02.png)
+
+**图 2**（topic 363288）：Neptune 实验日志作为自证材料。
+
+## 10. 出处
 
 - "5 分钟冠军"事件帖：https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/363288
 - 在线学习入门资源：https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356584
 - 主机方基线方案：https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/364908
+- dtype 压缩（40 票）：https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356540
+- 防过拟合验证（33 票）：https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/359714
+- 数据表示与 FE（32 票）：https://www.kaggle.com/competitions/tabular-playground-series-oct-2022/discussion/356718

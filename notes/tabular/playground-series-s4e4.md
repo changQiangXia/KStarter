@@ -43,8 +43,29 @@
 - 集成权重不必非负；在 OOF 上优化并在提交层面验证，比"看起来合理"更重要。
 - 折数也是超参：数据大且噪声小时，加深折数常是免费的稳健性提升。
 
-## 7. 出处
+## 8. 轻读结论（2026-10 补）
+
+**一句话**：**AutoFE（OpenFE）+ 严格剪枝 + 重集成**的范本：1st 用 OpenFE + 逐模型 SFS + 贝叶斯调参 + **49 模型 Nelder-Mead 权重（允许负值，和 0.997）**，CV 0.14514；2nd 的全自动工作流（两样本检验 + OpenFE + AutoGluon 剪枝 + 5 层 stacking）直接第 2；RMSLE 必须匹配对数损失。
+
+- 1st（499174）：OpenFE + ~20 附加特征/模型；单模 LGBM 0.14611、AutoGluon 0.14592、集成 0.14514；第二份不含公开 notebook 也拿第一（0.14372/0.14379）；失败：多项式、复杂 stacking、StratifiedKFold、Sex 编码。
+- 2nd（499698）：两样本检验决定原数据；OpenFE ~200 特征 → AutoGluon 1 小时剪枝；AutoGluon 动态 stacking 最多 6 层（5 层不过拟合）。
+- 3rd（499747）：3×AutoGluon + XGB/LGB/CAT（Optuna 权重）+ 投票；折内 RFE 30 特征；分类代替回归/高权重原数据失败。
+- 4th（499341）：OpenFE + log 目标 + 树版 AutoGluon + 50-50 平均；AutoGluon 适合 5–6 万行以上数据。
+- 5th（499204）：表面积/失水率/密度/BMI 特征；15/20 折优于 5 折；融合用调和平均抗过拟合。
+
+**裁决**：AutoFE + 折内剪枝；RMSLE 用对数损失；多折 + 重集成；权重由 OOF 诚实优化（可负、可和非 1）；预测上限问题登记不硬治。
+
+**悬案**：6th–10th 未收录；49 模型清单与 OpenFE 生成器细节缺失；本场 0 图。
+
+## 9. 图表证据
+
+无可用图证（本场归档 0 图，图证缺口已登记）。
+
+## 10. 出处
 
 - 1st：OpenFE + Nelder-Mead 负权重集成：https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499174
 - 2nd：自动两样本检验 + 自动 FE 工作流：https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499698
 - 5th：领域特征与折数经验：https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499204
+- 3rd：OpenFE+RFE 集成：https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499747
+- 4th：OpenFE + AutoGluon：https://www.kaggle.com/competitions/playground-series-s4e4/discussion/499341
+- 集成权重讨论（52 票）：https://www.kaggle.com/competitions/playground-series-s4e4/discussion/488409
