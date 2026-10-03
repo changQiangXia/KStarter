@@ -82,6 +82,7 @@ LEARNING_PATH.md  新手分阶段路径（含跨领域迁移、黑箱迭代、�
 | `analysis/lineage.md` / `limitations.md` | 方法谱系（52 节点） / 批判与边界 |
 | `analysis/SOP.md` | 开赛—收官操作手册（侦查/验证/指标/建模/评审交付/提交/复盘） |
 | `analysis/people/OVERVIEW.md` | 竞赛榜前 50 总览（战绩/领域/发言/方法词），明细档案见 `people/profiles/` |
+| `analysis/people/REPLICATION.md` / `TENSIONS.md` | 前 50 断言复现判定（同队合并证据单位）与 ≥10 组张力裁决 |
 | `analysis/GOAL.md` / `DEPTH_PLAN.md` / `TIER_A.md` / `TIER_B.md` | 目标、方案、两档进度权威表 |
 | `playbook/` | 七册主题方法论（v2 增补 + 检查清单） |
 | `LEARNING_PATH.md` | 新手分阶段学习路径 |
