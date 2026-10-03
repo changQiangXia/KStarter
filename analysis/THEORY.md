@@ -1,7 +1,7 @@
 # THEORY：跨场可证伪规律手册
 
-> v0.4（Batch 1–4，58 条 + 17 组张力）｜ 目标：≥25 条（已达成；Tier A 60 场完成后冻结）
-> 来源：40 篇 Tier A 深读（Batch 1–3 见 v0.3；Batch 4：isic-2024、hubmap-vasculature、rsna-2024-lumbar、rsna-2022-cervical、uw-madison-gi-tract、open-problems-multimodal、single-cell-perturbations、neurips-open-polymer-2025、stanford-ribonanza、waveform-inversion），每条附证据场次与数字。
+> v0.5（Batch 1–5，76 条 + 21 组张力）｜ 目标：≥25 条（已达成；Tier A 60 场完成后冻结）
+> 来源：50 篇 Tier A 深读（Batch 1–4 见 v0.4；Batch 5：ariel-2024、leap-climsim、g2net-continuous-gw、deep-past、kaggle-llm-science-exam、commonlit、eedi、nvidia-nemotron、essay-scoring-2、pii-detection），每条附证据场次与数字。
 > 写法：命题 → 机制 → 适用范围 → 反例/张力 → 证据。
 
 ## A. 数据生成与泄漏
@@ -261,7 +261,79 @@
 - **机制**：训练集家族冗余时随机 KFold 高估绝对分数；聚类/相似性切分下绝对分数下降但相对排序可能不变——排序用于选模，水平需严格切分估计；泄漏重复样本主动清零是可信度选择。
 - **证据**：ribonanza 1st（DBSCAN 汉明 0.2 + 13% 重复清零仍夺冠）、8th（聚类 GroupKFold）、7th（相似性切分）；对照 T10。
 
-**待续（Batch 5+ 补充）**：IL vs 从零自对弈的上限、联赛/PFSP 配方、量化预算算术（NF4 98.5 MiB≤100 MiB）、二次模型信任校准（rogii 7th）、合成数据"教技能"三态、更多"选择即分数"案例、Batch 5 各场新规律。
+### L59｜仿真赛：先复刻生成器形式
+- **机制**：仿真数据赛的最优假设空间由生成器参数化决定（如漂移可分离为 f(t)·g(λ)、额外的 foreground 项）；读/逆向生成代码比调模型值钱，"常数补偿"只能修一阶偏差。
+- **证据**：ariel-2024（1st 用 f(t)·g(λ)+前景扣除，消融 −0.0105；全场"×1.006 系数"之谜）；g2net（按生成统计造噪声）；leap（气候不变量）。
+
+### L60｜log-likelihood 型指标：不确定度是第二引擎
+- **机制**：高斯 logpdf 指标中 sigma/方差与均值同权重；sigma 可由预测离散度、段间预测差、GP 后验等低成本特征回归。
+- **证据**：ariel-2024（4th sigma 迭代 +0.03 级；5th std(pred) 相关 +0.030）；leap（confidence head 0.78945→0.79159；丢弃 10% 低置信样本 R² ~0.83）。
+
+### L61｜抗分布迁移：只建模不变量 + 扩充测试侧多样性
+- **机制**：分布漂移下，依赖训练统计量的强假设（分子谱、星谱复用、专用预训练）会失效；只建模跨分布不变的结构，并主动生成"测试可能出现的多样性"。
+- **证据**：ariel（TauREx 分子拟合失败 vs 新分子谱增强 +0.020；星谱共享测试 0.110）；isic（域分类器 AUC 0.99：预训练可、混训不可）；polymer（通用模型 > 化学专用）。
+
+### L62｜回归：鲁棒损失 + 数值保真优先
+- **机制**：误差含极端值时 MSE 被少数样本主导，MAE/SmoothL1/Huber 更稳；动态范围大时浮点精度、soft clipping 与反归一化顺序是 0 分/high 分分界。
+- **证据**：leap（MAE 是"秘密"；禁 float32；两级 soft clip；4.75 亿 token 管道）；essay（回归 > 分类、去 dropout）。
+
+### L63｜序数/阈值指标：连续预测 + 阈值优化
+- **机制**：序数指标（QWK 等）下，连续回归 + 自定义切点可在不改善 MSE 的情况下提升指标（尤其少数类）；阈值方差大，需多种子/多起点平滑，且不可在小验证集上二次拟合。
+- **证据**：essay-scoring-2（OOF 0.818→0.827；切点 1/2≈1.7、5/6≈4.9；Powell+15 起点+3 seed）；leap 的 hard-sample 加权同族。
+
+### L64｜已知信号族：先建物理统计量基线
+- **机制**：相位/参数未知但信号族已知时，功率型广义似然比（模板扫描 + 加权求和 + max）对相位误差免疫，常胜过数据驱动近似。
+- **证据**：g2net（纯物理功率求和公榜 0.848 夺冠，sinc 核 0.825→0.848）；waveform（2nd 的 FWI 28.8→7.6）。
+
+### L65｜训练长度 ≠ 推理长度（长文本）
+- **机制**：训练长度决定表示，推理长度/滑窗重叠决定长文本覆盖；推理端加长是零训练成本涨分，训练端盲目拉长/加 stride 有害。
+- **证据**：pii（训练 1280→推理 4000/stride 1024；stride 训练限 0.967）；commonlit（850→1500、4200）；essay 的 maxlen 1024/1536。
+
+### L66｜长尾标签空间：定向合成第一杠杆
+- **机制**：稀有类别在真实数据中样本不足 → 用可控管线按类别配额合成（persona/场景/模板 + Faker/求解器 + 过滤/裁判）；合成质量与筛选决定成败，低质合成是毒药。
+- **证据**：pii（外部数据 0.854→0.888；Llama3 数据单模型 > 最佳集成）；eedi（分组生成 + LLM-judge）；nemotron（合成题 + 确定性求解器）；deep-past（外部语料 60k 句对）。反例：eedi 的 Generator、pii 的无效数据集。
+
+### L67｜低资源任务：数据构建/表示优先于模型
+- **机制**：当语料规模远低于模型容量需求时，收益全部来自"把数据做大做干净"（对齐流水线、归一化、去重、多版本增强）；模型结构改动无感。
+- **证据**：deep-past（官方 6.5k 文档→重建句对；vanilla ByT5；两阶段 SFT）；leap（数据规模第一）；pii（外部数据）。
+
+### L68｜byte-level 表示适配罕见字符集/细粒度符号
+- **机制**：稀有字符、变音符号、二进制串对 subword 分词不友好；byte-level 或"单 bit/单符号 token 化"可保持对齐与鲁棒性。
+- **证据**：deep-past（ByT5 ≫ 其他 T5/NLLB/mT5；差 1–1.5 GM）；nemotron（单 bit tokenization + dynamic loss masking）；pii（[SPACE]/unidecode 归一）。
+
+### L69｜开放域 QA：检索多样性是第一杠杆
+- **机制**：模型只做判别，证据必须被检索到；多条异构检索管线补捉不同证据，"加 RAG"的边际收益大于"加模型"。
+- **证据**：kaggle-llm-science-exam（Top100：每加 RAG > 加 DeBERTa；3rd 的 tuned reranker +0.015；1st 的 300 组检索×模型×dump 筛选）。
+
+### L70｜级联/分诊：每级优化自己的指标
+- **机制**：级联前级要召回（recall），后级要精度（排序/map）；负样本与模型选型随目标切换；难例用大模型 + 长上下文按不确定性分诊。
+- **证据**：eedi（retriever 按 recall@32 选型；hard negatives 提升 map 但伤 recall）；kaggle-llm-science-exam（7B 全量→70B 40%→70B 长上下文 5%）；nemotron 的类别分治。
+
+### L71｜候选位置偏差：单 token 打分 + TTA
+- **机制**：LLM 对候选顺序敏感；把候选映射为单 token 取 logits 可批量、无解析损失；配合顺序轮转/打乱 TTA 平均位置效应。
+- **证据**：kaggle-llm-science-exam（binary per-option + 选项轮转 5× 拼接复用）；eedi（52 字母单 token + 列表 shuffle）；commonlit 的选项排列实验。
+
+### L72｜评分/抽取任务：池化边界 = 预测对象
+- **机制**：mean/attention pooling 若覆盖无关 token，会把非目标语义混入表示；只对"被评分/被抽取对象"的 token 池化可显著提升难题。
+- **证据**：commonlit（Head Mask 单项最大提升，难 prompt 尤甚）；pii（文档级同名传播、token↔spacy 对齐测试）。
+
+### L73｜记忆 vs 计算：折叠不可展开的搜索
+- **机制**：token 预算内无法逐步展开的搜索（如 5e10 候选）→ 预计算"可复用的有限中间结构"（签名目录/模板/规则表）让模型背下来，再用小步骤（DFS/一致性检查）执行；背的是结构而非答案。
+- **证据**：nemotron（4205 签名目录 + DFS：crypt 8%→42.9% solver；3rd 的两阶段"记忆→执行"12/17→16/17）；ariel 的部分类别先验。
+
+### L74｜策略已知时 SFT > RL；用"最小 logprob"看可复现性
+- **机制**：评测 temp=0 且最优策略可由代码给出时，任务退化为"复现固定算法"；训练目标应保证轨迹中最弱 token 也能被贪心复现（min-logprob 阈值检查），复杂损失/课程/RL 收益有限。
+- **证据**：nemotron（huikang 的显式赌注；2nd/10th 的 focal/reweight/multi-stage/curriculum 全部未胜过标准 CE；10th 排除失败轨迹反而降分）。
+
+### L75｜训练-服务对齐即分数（LoRA/导出格式）
+- **机制**：训练格式与提交/部署格式的映射损失（SVD 截断、专家权重融合、key 前缀、QKV 交错）会静默吃掉数据/算法收益；端到端对齐验证是必要步骤。
+- **证据**：nemotron（Tinker→PEFT 的 SVD 只留 75% 奇异质量；换 Megatron-Bridge 后 bit 0.81→0.89；QKV 交错 bug）；pii（save_safetensors=False 防 NaN、对齐回归测试）。
+
+### L76｜多来源数据：先识别来源，再对齐分布
+- **机制**：训练集常由多个来源拼接（评分口径/领域/采集方式不同）；用重复检测、对抗验证、探针识别来源，再用"两阶段（大源表示→小源决策边界）"或源标签对齐；混训会让大源分布主导。
+- **证据**：essay-scoring-2（Persuade vs Kaggle-only；两阶段 +0.015；对抗验证 AUC 0.65–0.675）；isic（域分类器 AUC 0.99）；pii（外部数据格式一致性）。
+
+**待续（Batch 6+ 补充）**：IL vs 从零自对弈的上限、联赛/PFSP 配方、量化预算算术、音频弱标签起步、在线学习机制、home-credit 指标拆解、santa-2024 的 k-opt/SA、pokemon-tcg 自对弈、CTF 黑箱搜索、Batch 6 各场新规律。
 
 ## 张力清单（重点收录可证伪的对立）
 
@@ -269,20 +341,24 @@
 | --- | --- | --- | --- |
 | T1 | 单模/大模型 vs 大集成 | 按候选可用性与预算分层：异构候选可用时集成赢（rogii 6th 91 候选）；预算受限且表示已工程化时小模型赢（orbit-wars 13th 1.2M） | rogii 6th vs 1st；orbit-wars 13th vs 1st |
 | T2 | 灵活校准 vs 单参数校准 | 已知结构用最少参数；未知结构才上灵活模型 | nov2022（ln(w) vs isotonic） |
-| T3 | 信 CV 还是信公开榜 | 先证明 CV 无泄漏/无分布红利；公开榜只有"绝对水平"可用；域偏移下需复现测试结构的 CV | rogii 7th/26th；jigsaw；s5e12；single-cell（CV-LB 近零相关但公私 0.98；测试来源分类器）；polymer（Tg 探针）；ribonanza（13% 重复） |
+| T3 | 信 CV 还是信公开榜 | 先证明 CV 无泄漏/无分布红利；公开榜只有"绝对水平"可用；小测试集/分布漂移时 validation 优先 | rogii/jigsaw/s5e12；single-cell；polymer；ribonanza；nemotron（validation↔private r=0.898 vs public r=0.365；按 validation 选提交 0.860/0.880 优于按公榜 0.872/0.852）；essay（最佳 CV 提交 0.841 胜过多样性选择） |
 | T4 | 合成数据有效 vs 失败 | 成败取决于生成质量与定位（2nd 结构一致性；26th 教技能；6th 生成差失败） | rogii 2nd/26th vs 6th |
 | T5 | 物理模型 vs 纯学习 | 两者都能上榜；榜单非平稳时物理先验是转移性保险 | rogii 6th/1st/3rd vs 26th |
 | T6 | 伪标签/蒸馏：增益 vs 毒药 | 预训练式（转移表示）稳；直接混训在被污染/错配分布上虚涨 CV；集成增益流程依赖 | feedback-ell 3rd vs 5th；rogii 6th；lmsys；single-cell 3rd（两阶段 PL 关键）vs #13（NN 无增益）；ribonanza 1st（单模型有效、集成无）vs 7th/8th（集成有效） |
 | T7 | 特征工程跨模型家族的可移植性 | 同手法（time_id 均值）在 GBDT 有效、在 Transformer 失效——须按家族定向验证 | ubiquant 1st/2nd vs 3rd |
-| T8 | 外部数据：有效 vs 无效 | 条件性（库组合/阶段/标签口径/许可）：预训练与校正后混训有效，未校正混训无效 | rsna 1st(+0.02) vs 4th/6th；vesuvius 6th；polymer（+20/−0.118 校正；通用预训练）；multimodal（CLR/预训练 vs 混训）；ribonanza（EX 私榜无增益） |
+| T8 | 外部数据：有效 vs 无效 | 条件性（库组合/阶段/标签口径/许可）：预训练、合成覆盖与校正后混训有效，未校正/低质混训无效 | rsna/vesuvius/polymer/multimodal/ribonanza；pii（外部合成数据 0.854→0.888；Llama3 数据单模型>集成）；essay（额外 Persuade 收益有限） |
 | T9 | 结构化约束（对称/晶格）：脚手架 vs 信仰 | 用作搜索脚手架有效；当作终态约束会封顶（实验裁决） | santa（A HS 24 核实验；1st 的自我疑问） |
-| T10 | 公开榜：验证集 vs 陷阱 | 由赛制决定：随机划分+足量→可用（jigsaw）；泄漏/漂移/数据错误→陷阱 | jigsaw-acrc vs llm-detect/godaddy/psp；single-cell（out-of-day）；polymer（单性质事故）；ribonanza（13% 重复） |
-| T11 | 使用测试数据：合法域适应 vs 违规套利 | 插补/预训练式/置信伪标签属合法域适应；利用泄漏标签或"公开榜可放大"的伪标签会反噬；主动放弃泄漏红利可行 | cmi-piu 14th、llm-detect 5th vs 21st；psp 泄漏上报；ribonanza（13% 重复清零仍夺冠——正面案例）；polymer（探针拟合数据 bug 的合规争议） |
+| T10 | 公开榜：验证集 vs 陷阱 | 由赛制决定：随机划分+足量→可用；泄漏/漂移/小测试集/数据错误→陷阱 | jigsaw vs llm-detect/godaddy/psp；single-cell；polymer；ribonanza；g2net（真实噪声域差）；nemotron/essay（0.86 墙与选择失败） |
+| T11 | 使用测试数据：合法域适应 vs 违规套利 | 插补/预训练/置信伪标属合法域适应；泄漏标签/公开榜放大式伪标会反噬；主动放弃泄漏红利可行；测试探针（乘子/域探针）属灰区 | cmi-piu/llm-detect/psp；ribonanza（13% 清零）；polymer（探针）；eedi（unseen 乘子 +0.068，无处罚记录）；g2net（生成痕迹去噪）；nemotron（gold-conditioned 求解争议） |
 | T12 | 模型容量：大集成 vs 简单模型 | 由数据信息量决定：多生成器大数据支持大集成（llm-detect/map）；高噪声小数据只支持简单模型（godaddy LR、cmi-piu） | godaddy 1st LR vs llm-detect 1st 大集成 |
 | T13 | 单阶段 vs 两阶段（医学多部位） | 两阶段稳（定位→分级）；单阶段反例缺正文 | rsna-2024 1st/3rd/4th + rsna-2022 4/4 vs 7th(539439) 标题 |
 | T14 | 3D 直训 vs 2.5D 序列（采样设计裁决） | 由 z-stride/分辨率/深度决定；融合上限最高 | rsna-2022 1st 失败 vs 6th（z-stride=1）vs 4th 标题；uw-madison 1st/5th/MONAI |
 | T15 | 数据事故：偏移利用 vs 保守对冲 | 私榜未知时对冲 + 保守校准；结构性变换（单位）优于纯常数拟合；探针有合规边界 | polymer 1st（V 曲线+raw 对冲）vs 2nd（+40；(9/5)x+32=0.068）vs 8th（拒绝仍第 8）；608250 伦理帖（未收录） |
 | T16 | 纯学习 vs 物理精修 | 本场纯 DL 胜（1st 6.9 vs 2nd 7.6），但物理精修在简单家族近完美（FlatVel<0.1）；可微物理层是未验证方向 | waveform 1st vs 2nd；扩展 T5 |
 | T17 | 榜单治理：泄漏/作弊/rescore 的应对 | 主动放弃泄漏红利与证据上报是可信度优先选择；探针/套利合规性因平台而异 | multimodal（作弊 147 票+泄漏+rescore）；ribonanza（13% 清零）；polymer（探针） |
+| T18 | 局部验证 vs 公开榜（小测试集） | 用训练分布外的足够大 holdout（2k–6k）选提交；public LB 只做确认；逐域探针可把 LB 变测量仪 | nemotron（r 对比+按 validation 选）；essay（0.841 vs 0.844 未选）；g2net（探针/rank 修正）；leap（LB 波动） |
+| T19 | 测试分布修复：数据覆盖 vs 探针后处理 | 合成/重采样覆盖是稳健主路；探针乘子高收益高风险（合规与私榜构成假设） | eedi（合成 vs 探针 +0.068）；polymer（+0.5644σ V 形探针 vs 8th 保守）；ariel（前景/新分子谱） |
+| T20 | 记忆 vs 计算（搜索不可展开时） | 背"可复用有限中间结构"（目录/模板）+ 规则执行；不是背答案；可展开则纯过程化 | nemotron（4205 签名目录+DFS；两阶段记忆/执行）；ariel（形状先验）；pii（B-/I- 规则化） |
+| T21 | 合成数据：长尾覆盖 vs 噪声毒药 | 有效取决于生成质量/筛选/教师：强教师+结构约束+裁判过滤有效；低质/孤立生成有害 | pii（Llama3 数据单模型>集成 vs 无效库）；eedi（分组+judge 有效 vs Generator 失败）；nemotron（合成题被 public 误导放弃） |
 
-*（T5/T16：仍缺"完全无物理"的正面案例；waveform 1st 虽纯 DL，但正演在环（物理增强+自监督）——物理参与已成头部主流，两者界线进一步模糊。）*
+*（T5/T16：仍缺"完全无物理"的正面案例；waveform 1st 用正演增强、g2net 冠军纯物理统计量——物理参与已成头部主流。T19 与 T11 的区别：前者是"分布修复手段之争"，后者是"测试信息使用的合规边界"。）*
