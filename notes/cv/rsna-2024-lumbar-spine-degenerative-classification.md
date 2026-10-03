@@ -50,7 +50,21 @@
 2. 分类头的设计要贴合标注语义（中心 vs 侧方）。
 3. 社区基线不是抄，而是起点。
 
-## 7. 出处
+## 7. 图表证据：4th 方案管线图（图证）
+
+![RSNA 2024 4th place solution pipeline](../../intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/01.png)
+
+*图：4th place solution 的完整管线（原帖 https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/discussion/539443 ；本地文件 `intel/rsna-2024-lumbar-spine-degenerative-classification/bodies/539443_img/01.png`）*
+
+从图中可确认/补全正文未写全的结构：
+
+- **三路输入**：矢状面两路 + 轴状面一路，各自独立进入定位分支；
+- **定位阶段不对称**：两路矢状面走"层级检测 → 关键点检测"两级，轴状面只做关键点检测（不需要层级定位）；
+- **分级阶段四个子模型**：1 个"多视角输入-多条件输出" + 3 个"单视角输入-单条件输出"；
+- **融合方式**：MLP + LGBM + XGBoost 三个元模型之上，再用 **Nelder-Mead** 搜权重——比正文的"元分类器融合"更具体；
+- 启示：该方案把"多部位多类别"进一步拆成"每条件独立子模型 + 条件特异融合"，是比"单模型多头"更彻底的分解策略。
+
+## 8. 出处
 
 - 讨论区索引：`intel/rsna-2024-lumbar-spine-degenerative-classification/topics.md`（80 条）
 - 已收录 write-up（6 篇）：

@@ -40,7 +40,20 @@
 2. **领域基础模型正在成为默认起点**（病理 Phikon、医疗 MedGemma、分子 Uni-Mol/Polymer 等）。
 3. 多中心数据的泛化能力比单机构分数更重要。
 
-## 6. 出处
+## 6. 图表证据：13th 方案双骨干 MIL 管线（图证）
+
+![UBC-OCEAN 13th place dual-backbone MIL pipeline](../../intel/UBC-OCEAN/bodies/465358_img/01.png)
+
+*图：13th place solution 的管线（原帖 https://www.kaggle.com/competitions/UBC-OCEAN/discussion/465358 ；本地文件 `intel/UBC-OCEAN/bodies/465358_img/01.png`）*
+
+图中给出的正文缺失细节：
+
+- WSI 由 ×20 降采样到 ×10 后切 **224×224** patch；
+- 双骨干并行：**CTransPath（SwinTransformer 224）→ 768 维 → MIL 集成（CLAM_MB、Wsum…）**；**LunitDINO（ViT-S 224）→ 384 维 → AttentionMIL**；
+- 两路输出对 5 分类做**均值融合**；
+- 启示：强队用"异构骨干 + 异构 MIL 池化器"制造多样性；768/384 特征维度与池化器名称是该方案可复现的关键参数。
+
+## 7. 出处
 
 - 讨论区索引：`intel/UBC-OCEAN/topics.md`（80 条）
 - 已收录 write-up（6 篇）：
